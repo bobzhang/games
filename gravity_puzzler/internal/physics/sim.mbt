@@ -122,6 +122,10 @@ fn process_entity_collisions(
           other.active = false
           level.gems_collected = level.gems_collected + 1
         }
+        Enemy => {
+          // Player walked into an enemy - death
+          level.player_dead = true
+        }
         _ => ()
       }
     }
@@ -334,6 +338,18 @@ pub fn try_move_player(
           level.moves = level.moves + 1
           process_tile_effects(level, player)
           process_entity_collisions(level, player)
+          return true
+        }
+        Enemy => {
+          // Walking into an enemy kills the player
+          game.undo_stack.push(@types.save_snapshot(level))
+          player.from_x = player.x
+          player.from_y = player.y
+          player.x = nx
+          player.y = ny
+          player.slide_timer = 1.0
+          level.moves = level.moves + 1
+          level.player_dead = true
           return true
         }
         _ => return false

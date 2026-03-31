@@ -6,6 +6,8 @@ pub(all) enum Screen {
   WorldSelect
   LevelSelect
   Paused
+  Editor
+  Statistics
 } derive(Eq, Show)
 
 ///|
@@ -28,6 +30,11 @@ pub(all) enum TileKind {
   Gate(Int)
   Crumble
   Conveyor(GravityDir)
+  PressurePlate(Int)
+  Mirror(Int)
+  GravityWell
+  TimedLava
+  WindGust(GravityDir)
 } derive(Eq, Show)
 
 ///|
@@ -37,6 +44,7 @@ pub(all) enum EntityKind {
   Boulder
   Key
   Gem
+  Enemy
 } derive(Eq, Show)
 
 ///|
@@ -46,4 +54,30 @@ pub(all) enum WorldTheme {
   Void
   Magma
   Sky
+} derive(Eq, Show)
+
+///|
+pub(all) enum AchievementKind {
+  FirstStep
+  WorldMaster(Int)
+  Speedster
+  Perfectionist
+  NoHints
+  GemCollector
+  KeyMaster
+  Minimalist
+  Explorer
+  GhostRacer
+  UndoFree
+  AllWorlds
+  GravitySpinner
+  IceSlider
+  Completionist
+} derive(Eq, Show)
+
+///|
+pub(all) enum AccessibilityMode {
+  Normal
+  HighContrast
+  LargeText
 } derive(Eq, Show)

@@ -62,6 +62,10 @@ pub fn parse_level(
           next_id = next_id + 1
           gems_total = gems_total + 1
         }
+        'N' => {
+          entities.push(@types.Entity::new(next_id, Enemy, x, y))
+          next_id = next_id + 1
+        }
         _ => ()
       }
     }
@@ -163,6 +167,69 @@ pub fn get_level(world : Int, level : Int) -> @types.Level {
     47 => w5_l08()
     48 => w5_l09()
     _ => w5_l10()
+  }
+}
+
+///|
+/// Get a hint text for a specific level
+pub fn get_level_hint(world : Int, level : Int) -> String {
+  let index = world * @types.levels_per_world + level
+  match index {
+    // World 1: Stone Ruins
+    0 => "Try rotating gravity left to reach the exit"
+    1 => "Use gravity rotation to get over the walls"
+    2 => "Collect the gem before reaching the exit"
+    3 => "Navigate through the corridors with gravity shifts"
+    4 => "Push the box out of your path with gravity"
+    5 => "Use boxes as stepping stones after rotation"
+    6 => "Collect both gems by planning your gravity rotations"
+    7 => "Alternate between gravity directions to navigate the maze"
+    8 => "Use a zigzag pattern with gravity changes"
+    9 => "Combine box pushing with gravity rotation"
+    // World 2: Crystal Caverns
+    10 => "Ice tiles are slippery - plan your path carefully"
+    11 => "Use ice and walls together to control your slide"
+    12 => "Portals teleport you - use them to bypass walls"
+    13 => "Combine portals with gravity to reach the gem"
+    14 => "Ice and portals together create tricky paths"
+    15 => "Watch for ice near portals - you might slide past"
+    16 => "Mirror Cave has tricky portal and ice combos"
+    17 => "Slip Stream requires careful ice navigation"
+    18 => "Two portal pairs - plan which to use first"
+    19 => "Crystal Peak combines all Crystal Cavern mechanics"
+    // World 3: Void Expanse
+    20 => "Crumble tiles break after you leave - no going back"
+    21 => "Plan your path over crumble tiles carefully"
+    22 => "Hit the switch to open the gate"
+    23 => "Get to the switch before the gate blocks your path"
+    24 => "Crumble tiles limit your options - choose wisely"
+    25 => "Two switches control two gates"
+    26 => "Combine crumble paths with switch timing"
+    27 => "Chain reactions: switches open paths to more switches"
+    28 => "Dark Matter requires precise crumble and switch play"
+    29 => "Void Heart is the ultimate crumble-switch challenge"
+    // World 4: Magma Depths
+    30 => "Avoid spikes - they are instant death"
+    31 => "Route around spikes using gravity rotation"
+    32 => "Conveyors push you automatically - use them wisely"
+    33 => "Boulders roll and can block spikes"
+    34 => "Conveyors and spikes together - time your moves"
+    35 => "Drop the boulder to clear a path"
+    36 => "Watch out for enemies - they chase you!"
+    37 => "Enemies can be crushed by boulders"
+    38 => "Lure enemies into boulders for a safe path"
+    39 => "Magma Core combines all dangers - stay sharp"
+    // World 5: Sky Citadel
+    40 => "All mechanics combined - use what you have learned"
+    41 => "Crumble and gates together require planning"
+    42 => "Spikes with portals - teleport past the danger"
+    43 => "Ice and crumble are a dangerous combination"
+    44 => "Keys and portals unlock new possibilities"
+    45 => "Watch out for the enemy while dodging hazards"
+    46 => "Complex puzzles need step-by-step thinking"
+    47 => "Enemies add pressure - crush them with boulders"
+    48 => "The Citadel tests everything you know"
+    _ => "Use all your skills to complete the Final Ascent"
   }
 }
 
@@ -556,7 +623,7 @@ fn w2_l08() -> @types.Level {
     #|############
     #|#P..II.....#
     #|#....##....#
-    #|#..1.......#
+    #|#..1....N..#
     #|#..........#
     #|#.......1..#
     #|#....##....#
@@ -600,7 +667,7 @@ fn w2_l10() -> @types.Level {
     #|############
     #|#P...B.....#
     #|#..1..II...#
-    #|#..###.....#
+    #|#..###..N..#
     #|#..........#
     #|#.....###..#
     #|#...II..1..#
@@ -780,7 +847,7 @@ fn w3_l08() -> @types.Level {
     #|############
     #|#P..CC.....#
     #|#....###...#
-    #|#..W.......#
+    #|#..W....N..#
     #|#.....D....#
     #|#.......W..#
     #|#...###....#
@@ -825,7 +892,7 @@ fn w3_l10() -> @types.Level {
     #|#P...B.....#
     #|#..CCC..D..#
     #|#..###..W..#
-    #|#..........#
+    #|#.....N....#
     #|#..W..###..#
     #|#..D..CCC..#
     #|#.G..B...E.#
@@ -983,7 +1050,7 @@ fn w4_l07() -> @types.Level {
     #|#P.........#
     #|#..>>..SS..#
     #|#..###.....#
-    #|#..........#
+    #|#.......N..#
     #|#.....###..#
     #|#..SS..<<..#
     #|#........E.#
@@ -1027,7 +1094,7 @@ fn w4_l09() -> @types.Level {
     #|#P.........#
     #|#.R..>>..S.#
     #|#..####....#
-    #|#..........#
+    #|#.....N....#
     #|#....####..#
     #|#.S..<<..R.#
     #|#.G......E.#
@@ -1049,7 +1116,7 @@ fn w4_l10() -> @types.Level {
     #|#P...R..B..#
     #|#..>>..SS..#
     #|#..###.....#
-    #|#..........#
+    #|#.........N#
     #|#.....###..#
     #|#..SS..<<..#
     #|#.G..B...E.#
@@ -1185,7 +1252,7 @@ fn w5_l06() -> @types.Level {
     #|#P.........#
     #|#..R..>>...#
     #|#..###..SS.#
-    #|#....CC....#
+    #|#....CC.N..#
     #|#.SS..###..#
     #|#...<<..R..#
     #|#.G......E.#
@@ -1229,7 +1296,7 @@ fn w5_l08() -> @types.Level {
     #|#P..R..B...#
     #|#..CC..>>..#
     #|#..###..SS.#
-    #|#.....D....#
+    #|#..N..D....#
     #|#.SS..###..#
     #|#..<<..CC..#
     #|#.G..K...E.#
@@ -1273,7 +1340,7 @@ fn w5_l10() -> @types.Level {
     #|#P..R..B...#
     #|#.1.CC.>>.D#
     #|#..###.W.SS#
-    #|#..SS.D....#
+    #|#..SS.D..N.#
     #|#....W.###.#
     #|#D.<<.CC.1.#
     #|#G.B.K.G.E.#
@@ -1286,4 +1353,205 @@ fn w5_l10() -> @types.Level {
     "Final Ascent",
     12,
   )
+}
+
+// ══════════════════════════════════════════════════════════════
+// Level design helper data: tile and entity legend
+// ══════════════════════════════════════════════════════════════
+// Tiles:
+//   # = Wall, E = Exit, S = Spike, I = Ice, C = Crumble
+//   1/2/3 = Portal(id), W/X = Switch(1/2), D/F = Gate(1/2)
+//   < > ^ v = Conveyor(dir), p = PressurePlate
+//   O = GravityWell, L = TimedLava, ~ = WindGust
+// Entities:
+//   P = Player, B = Box, R = Boulder, K = Key, G = Gem, N = Enemy
+// ══════════════════════════════════════════════════════════════
+
+///|
+/// Get par moves for a specific level (useful for persistence)
+pub fn get_par_moves(world : Int, level : Int) -> Int {
+  let index = world * @types.levels_per_world + level
+  match index {
+    // World 1
+    0 => 2
+    1 => 3
+    2 => 4
+    3 => 4
+    4 => 5
+    5 => 6
+    6 => 5
+    7 => 7
+    8 => 6
+    9 => 8
+    // World 2
+    10 => 3
+    11 => 4
+    12 => 3
+    13 => 5
+    14 => 5
+    15 => 6
+    16 => 6
+    17 => 7
+    18 => 7
+    19 => 9
+    // World 3
+    20 => 3
+    21 => 4
+    22 => 4
+    23 => 5
+    24 => 5
+    25 => 6
+    26 => 7
+    27 => 7
+    28 => 8
+    29 => 10
+    // World 4
+    30 => 3
+    31 => 4
+    32 => 4
+    33 => 5
+    34 => 6
+    35 => 6
+    36 => 7
+    37 => 8
+    38 => 9
+    39 => 10
+    // World 5
+    40 => 5
+    41 => 6
+    42 => 6
+    43 => 7
+    44 => 8
+    45 => 8
+    46 => 9
+    47 => 10
+    48 => 11
+    _ => 12
+  }
+}
+
+///|
+/// Get level name by index
+pub fn get_level_name(world : Int, level : Int) -> String {
+  let index = world * @types.levels_per_world + level
+  match index {
+    0 => "First Steps"
+    1 => "Over the Wall"
+    2 => "Gem Hunt"
+    3 => "Corridors"
+    4 => "Box Intro"
+    5 => "Push Around"
+    6 => "Twin Gems"
+    7 => "Gravity Maze"
+    8 => "Zigzag"
+    9 => "Stone Summit"
+    10 => "Ice Floor"
+    11 => "Frozen Path"
+    12 => "Portal Leap"
+    13 => "Warp Gem"
+    14 => "Ice Portal"
+    15 => "Crystal Slide"
+    16 => "Mirror Cave"
+    17 => "Slip Stream"
+    18 => "Dual Portals"
+    19 => "Crystal Peak"
+    20 => "Crumble Walk"
+    21 => "Fragile Floor"
+    22 => "Switch Intro"
+    23 => "Gate Keeper"
+    24 => "Void Path"
+    25 => "Dual Switch"
+    26 => "Void Maze"
+    27 => "Chain React"
+    28 => "Dark Matter"
+    29 => "Void Heart"
+    30 => "Spike Intro"
+    31 => "Lava Dodge"
+    32 => "Conveyor Belt"
+    33 => "Rolling Rock"
+    34 => "Hot Conveyor"
+    35 => "Boulder Drop"
+    36 => "Magma Flow"
+    37 => "Danger Zone"
+    38 => "Inferno Run"
+    39 => "Magma Core"
+    40 => "Sky Gate"
+    41 => "Crumble Gate"
+    42 => "Spike Warp"
+    43 => "Ice Crumble"
+    44 => "Key Master"
+    45 => "Gauntlet"
+    46 => "Complex"
+    47 => "Sky Fortress"
+    48 => "Citadel"
+    _ => "Final Ascent"
+  }
+}
+
+///|
+/// Validate that a level has required elements (player and exit)
+pub fn validate_level(level : @types.Level) -> Bool {
+  let has_player = match @types.find_player(level) {
+    Some(_) => true
+    None => false
+  }
+  let mut has_exit = false
+  for y in 0..<level.height {
+    for x in 0..<level.width {
+      if @types.get_tile(level, x, y) == Exit {
+        has_exit = true
+      }
+    }
+  }
+  has_player && has_exit
+}
+
+///|
+/// Count total entities of each kind in a level
+pub fn count_entities_by_kind(level : @types.Level) -> (Int, Int, Int, Int, Int, Int) {
+  let mut players = 0
+  let mut boxes = 0
+  let mut boulders = 0
+  let mut keys = 0
+  let mut gems = 0
+  let mut enemies = 0
+  for i in 0..<level.entities.length() {
+    let e = level.entities[i]
+    if e.active {
+      match e.kind {
+        Player => players = players + 1
+        Box => boxes = boxes + 1
+        Boulder => boulders = boulders + 1
+        Key => keys = keys + 1
+        Gem => gems = gems + 1
+        Enemy => enemies = enemies + 1
+      }
+    }
+  }
+  (players, boxes, boulders, keys, gems, enemies)
+}
+
+///|
+/// Count total tiles of each special kind in a level
+pub fn count_special_tiles(level : @types.Level) -> (Int, Int, Int, Int, Int, Int) {
+  let mut portals = 0
+  let mut switches = 0
+  let mut gates = 0
+  let mut ice = 0
+  let mut spikes = 0
+  let mut crumble = 0
+  for y in 0..<level.height {
+    for x in 0..<level.width {
+      match @types.get_tile(level, x, y) {
+        Portal(_) => portals = portals + 1
+        Switch(_) => switches = switches + 1
+        Gate(_) => gates = gates + 1
+        Ice => ice = ice + 1
+        Spike => spikes = spikes + 1
+        Crumble => crumble = crumble + 1
+        _ => ()
+      }
+    }
+  }
+  (portals, switches, gates, ice, spikes, crumble)
 }

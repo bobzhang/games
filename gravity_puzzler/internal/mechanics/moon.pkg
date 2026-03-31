@@ -1,0 +1,6 @@
+import {
+  "moonbitlang/core/math",
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

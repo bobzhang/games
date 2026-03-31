@@ -3,6 +3,13 @@ import {
   "tonyfettes/raylib",
   "bobzhang/games/gravity_puzzler/internal/types",
   "bobzhang/games/utils/draw",
+  "bobzhang/games/gravity_puzzler/internal/particles",
+  "bobzhang/games/gravity_puzzler/internal/replay",
+  "bobzhang/games/gravity_puzzler/internal/hints",
+  "bobzhang/games/gravity_puzzler/internal/effects",
+  "bobzhang/games/gravity_puzzler/internal/editor",
+  "bobzhang/games/gravity_puzzler/internal/game",
+  "bobzhang/games/gravity_puzzler/internal/content",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"

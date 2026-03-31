@@ -56,7 +56,90 @@ pub fn set_tile(level : Level, x : Int, y : Int, tile : TileKind) -> Unit {
 pub fn is_solid(tile : TileKind) -> Bool {
   match tile {
     Wall | Gate(_) => true
+    TimedLava => true
     _ => false
+  }
+}
+
+///|
+pub fn gravity_dir_to_angle(dir : GravityDir) -> Float {
+  match dir {
+    Down => 0.0
+    Left => 90.0
+    Up => 180.0
+    Right => 270.0
+  }
+}
+
+///|
+pub fn mirror_reflect(dir : GravityDir, mirror_id : Int) -> GravityDir {
+  // mirror_id 1 = "/" diagonal, mirror_id 2 = "\" diagonal
+  match (dir, mirror_id) {
+    (Down, 1) => Left
+    (Up, 1) => Right
+    (Left, 1) => Down
+    (Right, 1) => Up
+    (Down, 2) => Right
+    (Up, 2) => Left
+    (Left, 2) => Up
+    (Right, 2) => Down
+    (_, _) => dir
+  }
+}
+
+///|
+pub fn tile_kind_index(tile : TileKind) -> Int {
+  match tile {
+    Empty => 0
+    Wall => 1
+    Exit => 2
+    Spike => 3
+    Ice => 4
+    Portal(_) => 5
+    Switch(_) => 7
+    Gate(_) => 8
+    Crumble => 9
+    Conveyor(_) => 10
+    PressurePlate(_) => 11
+    Mirror(_) => 12
+    GravityWell => 13
+    TimedLava => 14
+    WindGust(_) => 15
+  }
+}
+
+///|
+pub fn tile_from_index(idx : Int) -> TileKind {
+  match idx {
+    0 => Empty
+    1 => Wall
+    2 => Exit
+    3 => Spike
+    4 => Ice
+    5 => Portal(1)
+    6 => Portal(2)
+    7 => Switch(1)
+    8 => Gate(1)
+    9 => Crumble
+    10 => Conveyor(Right)
+    11 => PressurePlate(1)
+    12 => Mirror(1)
+    13 => GravityWell
+    14 => TimedLava
+    15 => WindGust(Right)
+    _ => Empty
+  }
+}
+
+///|
+pub fn entity_kind_from_index(idx : Int) -> EntityKind {
+  match idx {
+    0 => Player
+    1 => Box
+    2 => Boulder
+    3 => Key
+    4 => Gem
+    _ => Enemy
   }
 }
 
@@ -105,6 +188,30 @@ pub fn find_player(level : Level) -> Entity? {
     }
   }
   None
+}
+
+///|
+pub fn find_enemies(level : Level) -> Array[Entity] {
+  let result : Array[Entity] = []
+  for i in 0..<level.entities.length() {
+    let e = level.entities[i]
+    if e.active && e.kind == Enemy {
+      result.push(e)
+    }
+  }
+  result
+}
+
+///|
+pub fn count_active_enemies(level : Level) -> Int {
+  let mut count = 0
+  for i in 0..<level.entities.length() {
+    let e = level.entities[i]
+    if e.active && e.kind == Enemy {
+      count = count + 1
+    }
+  }
+  count
 }
 
 ///|

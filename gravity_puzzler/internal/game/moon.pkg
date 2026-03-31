@@ -3,6 +3,12 @@ import {
   "bobzhang/games/gravity_puzzler/internal/types",
   "bobzhang/games/gravity_puzzler/internal/physics",
   "bobzhang/games/gravity_puzzler/internal/content",
+  "bobzhang/games/gravity_puzzler/internal/particles",
+  "bobzhang/games/gravity_puzzler/internal/replay",
+  "bobzhang/games/gravity_puzzler/internal/hints",
+  "bobzhang/games/gravity_puzzler/internal/mechanics",
+  "bobzhang/games/gravity_puzzler/internal/editor",
+  "bobzhang/games/gravity_puzzler/internal/effects",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"

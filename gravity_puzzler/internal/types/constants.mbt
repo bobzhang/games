@@ -151,3 +151,57 @@ pub let color_star_bronze : @raylib.Color = @raylib.Color::new(205, 127, 50, 255
 
 ///|
 pub let color_star_empty : @raylib.Color = @raylib.Color::new(80, 80, 80, 255)
+
+///|
+pub let color_pressure_plate : @raylib.Color = @raylib.Color::new(200, 180, 120, 255)
+
+///|
+pub let color_mirror : @raylib.Color = @raylib.Color::new(220, 240, 255, 255)
+
+///|
+pub let color_gravity_well : @raylib.Color = @raylib.Color::new(100, 0, 200, 255)
+
+///|
+pub let color_timed_lava : @raylib.Color = @raylib.Color::new(255, 100, 20, 255)
+
+///|
+pub let color_wind_gust : @raylib.Color = @raylib.Color::new(200, 230, 255, 255)
+
+///|
+pub let ghost_replay_speed : Float = 0.4
+
+///|
+pub let hint_display_duration : Float = 2.5
+
+///|
+pub let lava_cycle_period : Float = 4.0
+
+///|
+pub let wind_beat_period : Float = 2.0
+
+///|
+pub let ambient_spawn_rate : Float = 0.15
+
+///|
+pub let max_particles : Int = 256
+
+///|
+pub let gravity_rot_speed : Float = 6.0
+
+///|
+pub let bounce_duration : Float = 0.3
+
+///|
+pub let editor_tile_count : Int = 15
+
+///|
+pub let editor_entity_count : Int = 6
+
+///|
+pub let color_enemy : @raylib.Color = @raylib.Color::new(220, 50, 50, 255)
+
+///|
+pub let toast_display_duration : Float = 2.5
+
+///|
+pub let toast_slide_speed : Float = 4.0

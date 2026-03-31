@@ -1,0 +1,9 @@
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+  "bobzhang/games/gravity_puzzler/internal/physics",
+  "bobzhang/games/gravity_puzzler/internal/content",
+  "bobzhang/games/gravity_puzzler/internal/mechanics",
+  "bobzhang/games/gravity_puzzler/internal/game",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
