@@ -1,0 +1,14 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/rhythm_tactics/internal/types",
+  "bobzhang/games/rhythm_tactics/internal/game",
+  "bobzhang/games/rhythm_tactics/internal/render",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

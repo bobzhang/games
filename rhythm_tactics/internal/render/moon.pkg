@@ -1,0 +1,10 @@
+import {
+  "moonbitlang/core/math",
+  "tonyfettes/raylib",
+  "bobzhang/games/rhythm_tactics/internal/types",
+  "bobzhang/games/rhythm_tactics/internal/content",
+  "bobzhang/games/rhythm_tactics/internal/beat",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

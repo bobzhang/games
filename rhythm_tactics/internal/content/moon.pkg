@@ -1,0 +1,5 @@
+import {
+  "bobzhang/games/rhythm_tactics/internal/types",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

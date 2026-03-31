@@ -1,0 +1,21 @@
+///|
+fn main {
+  @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
+  @raylib.init_window(
+    @types.screen_w, @types.screen_h, "Rhythm Tactics - Move to the Beat!",
+  )
+  @raylib.set_target_fps(60)
+  @draw.init_font()
+  let game = @types.Game::new()
+  while !@raylib.window_should_close() {
+    let frame_dt = @raylib.get_frame_time()
+    let dt : Float = if frame_dt > 0.05F { 0.05F } else { frame_dt }
+    @game.update_game(game, dt)
+    @raylib.begin_drawing()
+    @render.draw_frame(game)
+    @fps.draw()
+    @raylib.end_drawing()
+  }
+  @draw.cleanup()
+  @raylib.close_window()
+}
