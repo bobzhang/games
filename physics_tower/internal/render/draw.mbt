@@ -9,15 +9,21 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     Results => draw_results(game)
     LevelSelect => draw_level_select(game)
     Sandbox => draw_sandbox(game)
+    Upgrades => draw_upgrade_screen(game)
+    ChallengeSelect => draw_challenge_select(game)
+    Challenge => draw_challenge_screen(game)
+    ChallengeResults => draw_challenge_results_screen(game)
+    StatsScreen => draw_stats_screen(game)
+    ReplayPlayback => draw_replay_screen(game)
   }
   draw_message(game)
 }
 
 ///|
 fn draw_background(game : @types.Game) -> Unit {
-  ignore(game)
-  @raylib.clear_background(@raylib.Color::new(18, 22, 32, 255))
-  // Subtle gradient strips
+  let (br, bg_c, bb) = @content.world_bg_color(game.current_world)
+  @raylib.clear_background(@raylib.Color::new(br, bg_c, bb, 255))
+  // Subtle gradient strips themed to world
   for i in 0..<20 {
     let y = i * 49
     let a = 8 + i * 2 % 16
@@ -26,7 +32,12 @@ fn draw_background(game : @types.Game) -> Unit {
       y,
       @types.screen_w,
       49,
-      @raylib.Color::new(20 + i * 3 % 20, 24 + i * 5 % 18, 38 + i * 7 % 22, a),
+      @raylib.Color::new(
+        br + 2 + i * 3 % 20,
+        bg_c + 2 + i * 5 % 18,
+        bb + 6 + i * 7 % 22,
+        a,
+      ),
     )
   }
 }
@@ -81,22 +92,98 @@ fn draw_title(game : @types.Game) -> Unit {
 
 ///|
 fn draw_level_select(game : @types.Game) -> Unit {
+  let worlds = @content.get_worlds()
+  let current_w = game.current_world
+  let w = worlds[current_w]
+  let (ar, ag, ab) = @content.world_accent_color(current_w)
+  // World header with navigation
   @draw.draw_text(
     "SELECT LEVEL",
     @types.screen_w / 2 - 140,
-    60,
-    40,
+    20,
+    36,
     @raylib.Color::new(240, 200, 60, 255),
   )
+  // World name and nav arrows
+  let world_name = w.name
+  @draw.draw_text(
+    world_name,
+    @types.screen_w / 2 - 100,
+    64,
+    28,
+    @raylib.Color::new(ar, ag, ab, 255),
+  )
+  @draw.draw_text(
+    w.description,
+    @types.screen_w / 2 - 200,
+    98,
+    16,
+    @raylib.Color::new(160, 170, 190, 180),
+  )
+  // Left arrow
+  if current_w > 0 {
+    @draw.draw_text(
+      "<",
+      120,
+      64,
+      32,
+      @raylib.Color::new(200, 200, 220, 255),
+    )
+  }
+  // Right arrow
+  if current_w + 1 < worlds.length() {
+    let next_unlocked = @content.is_world_unlocked(
+      current_w + 1,
+      game.statistics.stars_earned,
+    )
+    let arrow_color = if next_unlocked {
+      @raylib.Color::new(200, 200, 220, 255)
+    } else {
+      @raylib.Color::new(100, 100, 120, 120)
+    }
+    @draw.draw_text(
+      ">",
+      @types.screen_w - 140,
+      64,
+      32,
+      arrow_color,
+    )
+    if !(next_unlocked) {
+      let next_w = worlds[current_w + 1]
+      @draw.draw_text(
+        "Need " + next_w.stars_required.to_string() + " stars",
+        @types.screen_w - 240,
+        96,
+        14,
+        @raylib.Color::new(180, 100, 100, 180),
+      )
+    }
+  }
+  // Star count
+  let total_s = @game.total_stars(game)
+  @draw.draw_text(
+    "Stars: " + total_s.to_string(),
+    @types.screen_w - 200,
+    24,
+    20,
+    @raylib.Color::new(255, 220, 60, 220),
+  )
+  // Display levels for current world
   let all_levels = @content.get_levels()
-  for i in 0..<all_levels.length() {
+  let world_start = w.level_start
+  let world_end = w.level_end
+  let mut local_idx = 0
+  for i = world_start; i <= world_end; i = i + 1 {
+    if i >= all_levels.length() {
+      break
+    }
     let level = all_levels[i]
-    let row = i / 2
-    let col = i % 2
+    let row = local_idx / 2
+    let col = local_idx % 2
     let bx = 300 + col * 560
-    let by = 160 + row * 120
+    let by = 140 + row * 110
     let bw = 500
-    let bh = 100
+    let bh = 95
     let hover = @types.pointer_in_rect(
       Float::from_int(@raylib.get_mouse_x()),
       Float::from_int(@raylib.get_mouse_y()),
@@ -106,7 +193,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
       bh,
     )
     let bg = if hover {
-      @raylib.Color::new(60, 80, 120, 200)
+      @raylib.Color::new(ar / 3, ag / 3, ab / 3, 200)
     } else {
       @raylib.Color::new(36, 44, 64, 200)
     }
@@ -116,83 +203,200 @@ fn draw_level_select(game : @types.Game) -> Unit {
       by,
       bw,
       bh,
-      @raylib.Color::new(100, 140, 200, 180),
+      @raylib.Color::new(ar, ag, ab, 140),
     )
-    let num_str = (i + 1).to_string()
+    let num_str = (local_idx + 1).to_string()
     @draw.draw_text(
       num_str + ". " + level.name,
       bx + 16,
-      by + 12,
-      24,
+      by + 10,
+      22,
       @raylib.Color::new(220, 220, 240, 255),
     )
     @draw.draw_text(
       level.description,
       bx + 16,
-      by + 44,
-      18,
+      by + 38,
+      16,
       @raylib.Color::new(160, 170, 190, 200),
     )
     let ht = (level.target_height + 0.5).to_int()
     @draw.draw_text(
       "Target: " + ht.to_string() + "px  Budget: " + level.budget.to_string(),
       bx + 16,
-      by + 70,
-      16,
+      by + 60,
+      14,
       @raylib.Color::new(120, 200, 160, 200),
     )
+    // Draw stars earned for this level
+    let level_stars = @game.stars_for_level(game, i)
+    if level_stars > 0 {
+      for s in 0..<level_stars {
+        @draw.draw_text(
+          "*",
+          bx + bw - 60 + s * 16,
+          by + 10,
+          20,
+          @raylib.Color::new(255, 220, 60, 255),
+        )
+      }
+    }
+    local_idx = local_idx + 1
   }
-  // Sandbox button
+  // Bottom row: Sandbox, Upgrades, Challenges, Stats
+  @raylib.draw_rectangle(
+    60,
+    780,
+    240,
+    70,
+    @raylib.Color::new(80, 60, 120, 200),
+  )
+  @raylib.draw_rectangle_lines(
+    60,
+    780,
+    240,
+    70,
+    @raylib.Color::new(160, 120, 220, 180),
+  )
+  @draw.draw_text(
+    "S - SANDBOX",
+    80,
+    798,
+    20,
+    @raylib.Color::new(200, 180, 240, 255),
+  )
+  // Upgrades button
+  @raylib.draw_rectangle(
+    330,
+    780,
+    240,
+    70,
+    @raylib.Color::new(60, 100, 60, 200),
+  )
+  @raylib.draw_rectangle_lines(
+    330,
+    780,
+    240,
+    70,
+    @raylib.Color::new(100, 200, 100, 180),
+  )
+  @draw.draw_text(
+    "U - UPGRADES",
+    350,
+    790,
+    20,
+    @raylib.Color::new(140, 220, 140, 255),
+  )
+  @draw.draw_text(
+    "Score: " + game.total_score.to_string(),
+    350,
+    818,
+    14,
+    @raylib.Color::new(100, 180, 100, 200),
+  )
+  // Challenges button
   @raylib.draw_rectangle(
     600,
     780,
-    500,
-    80,
-    @raylib.Color::new(80, 60, 120, 200),
+    260,
+    70,
+    @raylib.Color::new(100, 70, 40, 200),
   )
   @raylib.draw_rectangle_lines(
     600,
     780,
-    500,
-    80,
-    @raylib.Color::new(160, 120, 220, 180),
+    260,
+    70,
+    @raylib.Color::new(220, 150, 60, 180),
   )
   @draw.draw_text(
-    "S - SANDBOX MODE",
-    640,
-    800,
-    28,
-    @raylib.Color::new(200, 180, 240, 255),
+    "C - CHALLENGES",
+    620,
+    798,
+    20,
+    @raylib.Color::new(240, 180, 80, 255),
   )
-  ignore(game)
+  // Stats button
+  @raylib.draw_rectangle(
+    890,
+    780,
+    260,
+    70,
+    @raylib.Color::new(50, 60, 90, 200),
+  )
+  @raylib.draw_rectangle_lines(
+    890,
+    780,
+    260,
+    70,
+    @raylib.Color::new(120, 150, 200, 180),
+  )
+  @draw.draw_text(
+    "Tab - STATISTICS",
+    910,
+    798,
+    20,
+    @raylib.Color::new(160, 180, 220, 255),
+  )
+  // World navigation hint
+  @draw.draw_text(
+    "[Left/Right] Change World  [1-9] Select Level",
+    @types.screen_w / 2 - 260,
+    @types.screen_h - 20,
+    14,
+    @raylib.Color::new(120, 130, 150, 140),
+  )
 }
 
 ///|
 fn draw_build(game : @types.Game) -> Unit {
   draw_world(game)
-  draw_ghost(game)
+  draw_ghost_tower(game)
+  draw_combo_indicators(game)
+  if game.selected_blueprint >= 0 {
+    draw_blueprint_ghost(game)
+  } else {
+    draw_ghost(game)
+  }
   draw_panel(game)
   draw_build_hud(game)
+  draw_combo_hud(game, 110)
+  draw_stress_heatmap(game)
+  draw_tutorial_overlay(game)
 }
 
 ///|
 fn draw_sandbox(game : @types.Game) -> Unit {
   draw_world(game)
-  draw_ghost(game)
+  if game.selected_blueprint >= 0 {
+    draw_blueprint_ghost(game)
+  } else {
+    draw_ghost(game)
+  }
   draw_panel(game)
   draw_sandbox_hud(game)
+  draw_stress_heatmap(game)
+  draw_wind_particles(game)
 }
 
 ///|
 fn draw_test(game : @types.Game) -> Unit {
   draw_world(game)
+  draw_stress_heatmap(game)
+  draw_wind_particles(game)
+  draw_earthquake_effects(game)
+  draw_impact_effects(game)
+  draw_slow_motion_indicator(game)
+  draw_replay_overlay(game)
   draw_test_hud(game)
 }
 
 ///|
 fn draw_results(game : @types.Game) -> Unit {
   draw_world(game)
+  draw_stress_heatmap(game)
   draw_results_overlay(game)
+  draw_star_tally(game)
 }
 
 ///|
@@ -531,11 +735,21 @@ fn draw_build_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(180, 180, 200, 180),
   )
+  if game.selected_blueprint >= 0 && game.selected_blueprint < game.blueprints.length() {
+    let bp = game.blueprints[game.selected_blueprint]
+    @draw.draw_text(
+      "Blueprint: " + bp.name + " [" + bp.cost.to_string() + " pieces]",
+      20,
+      88,
+      16,
+      @raylib.Color::new(100, 255, 100, 200),
+    )
+  }
   @draw.draw_text(
-    "[Click] Place  [R] Rotate  [Z] Undo  [Tab] Cycle  [T/Enter] Test  [Esc] Back",
+    "[Click] Place  [R] Rotate  [Z] Undo  [Tab] Cycle  [B] Blueprint  [F5] Save  [T/Enter] Test  [Esc] Back",
     20,
     @types.screen_h - 30,
-    16,
+    14,
     @raylib.Color::new(140, 150, 170, 160),
   )
 }
@@ -676,16 +890,20 @@ fn draw_results_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(160, 180, 200, 200),
   )
   // Retry button
-  @raylib.draw_rectangle(560, 600, 280, 60, @raylib.Color::new(60, 120, 200, 220))
-  @raylib.draw_rectangle_lines(560, 600, 280, 60, @raylib.Color::new(100, 180, 255, 255))
-  @draw.draw_text("RETRY (R)", 620, 616, 24, @raylib.Color::new(255, 255, 255, 255))
+  @raylib.draw_rectangle(460, 600, 240, 60, @raylib.Color::new(60, 120, 200, 220))
+  @raylib.draw_rectangle_lines(460, 600, 240, 60, @raylib.Color::new(100, 180, 255, 255))
+  @draw.draw_text("RETRY (R)", 510, 616, 24, @raylib.Color::new(255, 255, 255, 255))
   // Next level button
-  @raylib.draw_rectangle(880, 600, 280, 60, @raylib.Color::new(60, 160, 80, 220))
-  @raylib.draw_rectangle_lines(880, 600, 280, 60, @raylib.Color::new(100, 220, 120, 255))
-  @draw.draw_text("NEXT LEVEL", 930, 616, 24, @raylib.Color::new(255, 255, 255, 255))
+  @raylib.draw_rectangle(740, 600, 240, 60, @raylib.Color::new(60, 160, 80, 220))
+  @raylib.draw_rectangle_lines(740, 600, 240, 60, @raylib.Color::new(100, 220, 120, 255))
+  @draw.draw_text("NEXT LEVEL", 780, 616, 24, @raylib.Color::new(255, 255, 255, 255))
+  // Replay button
+  @raylib.draw_rectangle(1020, 600, 240, 60, @raylib.Color::new(120, 80, 40, 220))
+  @raylib.draw_rectangle_lines(1020, 600, 240, 60, @raylib.Color::new(220, 160, 80, 255))
+  @draw.draw_text("REPLAY (P)", 1064, 616, 24, @raylib.Color::new(255, 255, 255, 255))
   @draw.draw_text(
-    "[Enter/Space] Level Select  [R] Retry  [Esc] Back",
-    @types.screen_w / 2 - 280,
+    "[Enter/Space] Level Select  [R] Retry  [P] Replay  [Esc] Back",
+    @types.screen_w / 2 - 340,
     @types.screen_h - 40,
     18,
     @raylib.Color::new(140, 150, 170, 160),
@@ -758,6 +976,28 @@ fn draw_message(game : @types.Game) -> Unit {
     24,
     @raylib.Color::new(255, 240, 200, alpha),
   )
+}
+
+///|
+fn draw_challenge_screen(game : @types.Game) -> Unit {
+  draw_world(game)
+  if game.selected_blueprint >= 0 {
+    draw_blueprint_ghost(game)
+  } else {
+    draw_ghost(game)
+  }
+  draw_panel(game)
+  draw_stress_heatmap(game)
+  draw_wind_particles(game)
+  draw_earthquake_effects(game)
+  draw_challenge_hud(game)
+  draw_slow_motion_indicator(game)
+}
+
+///|
+fn draw_challenge_results_screen(game : @types.Game) -> Unit {
+  draw_world(game)
+  draw_challenge_results(game)
 }
 
 ///|

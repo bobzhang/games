@@ -1,0 +1,5 @@
+import {
+  "bobzhang/games/physics_tower/internal/types",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

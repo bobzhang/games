@@ -120,3 +120,57 @@ pub let joint_stiffness : Float = 0.8
 
 ///|
 pub let auto_joint_radius : Float = 30.0
+
+///|
+pub let max_particles : Int = 256
+
+///|
+pub let particle_life : Float = 2.0
+
+///|
+pub let slow_motion_duration : Float = 1.5
+
+///|
+pub let camera_shake_decay : Float = 5.0
+
+///|
+pub let chain_break_radius : Float = 80.0
+
+///|
+pub let reinforce_bonus : Float = 1.5
+
+///|
+pub let lightweight_factor : Float = 0.7
+
+///|
+pub let flex_joint_bonus : Float = 1.8
+
+///|
+pub let time_attack_duration : Float = 60.0
+
+///|
+pub let precision_tolerance : Float = 1.0
+
+///|
+pub let survival_rounds : Int = 5
+
+///|
+pub let upgrade_cost_reinforce : Int = 300
+
+///|
+pub let upgrade_cost_lightweight : Int = 250
+
+///|
+pub let upgrade_cost_flex : Int = 400
+
+///|
+pub let upgrade_cost_foundation : Int = 350
+
+///|
+pub let wind_particle_count : Int = 20
+
+///|
+pub let debris_per_break : Int = 8
+
+///|
+pub let star_anim_duration : Float = 2.0

@@ -2,6 +2,10 @@ import {
   "bobzhang/games/physics_tower/internal/types",
   "bobzhang/games/physics_tower/internal/physics",
   "bobzhang/games/physics_tower/internal/content",
+  "bobzhang/games/physics_tower/internal/blueprint",
+  "bobzhang/games/physics_tower/internal/destruction",
+  "bobzhang/games/physics_tower/internal/challenge",
+  "bobzhang/games/physics_tower/internal/upgrades",
   "tonyfettes/raylib",
   "moonbitlang/core/math",
 }
