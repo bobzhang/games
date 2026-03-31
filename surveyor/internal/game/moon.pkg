@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/surveyor/internal/types",
+  "bobzhang/games/surveyor/internal/solver",
+  "bobzhang/games/surveyor/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
