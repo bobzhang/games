@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/bonsai/internal/types",
+  "bobzhang/games/bonsai/internal/growth",
+  "bobzhang/games/bonsai/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
