@@ -4,6 +4,7 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
   if @types.is_boss_floor(floor_num) {
     return generate_boss_floor(game, floor_num)
   }
+  let theme = @types.floor_theme(floor_num)
   let w = @types.grid_w
   let h = @types.grid_h
   let grid = @types.Grid::new(w, h)
@@ -22,50 +23,12 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
   for _ in 0..<wall_count {
     let wx = @types.rand_range(rng, 2, w - 3)
     let wy = @types.rand_range(rng, 2, h - 3)
-    // Don't place wall on player start or exit
     if !(wx == 1 && wy == 1) && !(wx == w - 2 && wy == h - 2) {
       @types.grid_set_kind(grid, wx, wy, Wall)
     }
   }
-  // Place some spikes on later floors
-  if floor_num >= 3 {
-    let spike_count = floor_num / 3
-    for _ in 0..<spike_count {
-      let sx = @types.rand_range(rng, 1, w - 2)
-      let sy = @types.rand_range(rng, 1, h - 2)
-      if @types.grid_is_walkable(grid, sx, sy) &&
-        !(sx == 1 && sy == 1) &&
-        !(sx == w - 2 && sy == h - 2) {
-        @types.grid_set_kind(grid, sx, sy, Spike)
-      }
-    }
-  }
-  // Place ice on later floors
-  if floor_num >= 5 {
-    let ice_count = floor_num / 5
-    for _ in 0..<ice_count {
-      let ix = @types.rand_range(rng, 1, w - 2)
-      let iy = @types.rand_range(rng, 1, h - 2)
-      if @types.grid_is_walkable(grid, ix, iy) &&
-        !(ix == 1 && iy == 1) &&
-        !(ix == w - 2 && iy == h - 2) {
-        @types.grid_set_kind(grid, ix, iy, Ice)
-      }
-    }
-  }
-  // Place pits on later floors
-  if floor_num >= 7 {
-    let pit_count = floor_num / 7
-    for _ in 0..<pit_count {
-      let px = @types.rand_range(rng, 2, w - 3)
-      let py = @types.rand_range(rng, 2, h - 3)
-      if @types.grid_is_walkable(grid, px, py) &&
-        !(px == 1 && py == 1) &&
-        !(px == w - 2 && py == h - 2) {
-        @types.grid_set_kind(grid, px, py, Pit)
-      }
-    }
-  }
+  // Theme-specific hazard placement
+  place_theme_hazards(grid, rng, floor_num, theme, w, h)
   // Place exit
   let exit_x = w - 2
   let exit_y = h - 2
@@ -73,12 +36,15 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
   // Place varied items on floor tiles
   let item_count = 3 + floor_num / 2
   place_items(grid, rng, item_count, w, h, exit_x, exit_y)
-  // Spawn enemies
-  let kinds = floor_enemy_kinds(floor_num)
+  // Place weapon pickups on some floors
+  if floor_num % 3 == 0 {
+    place_weapon_item(grid, rng, w, h, exit_x, exit_y)
+  }
+  // Spawn enemies using themed rosters
+  let kinds = themed_enemy_kinds(floor_num, theme)
   let count = floor_enemy_count(floor_num)
   let enemies : Array[@types.Enemy] = []
   for i in 0..<count {
-    // Find a valid spawn position
     for attempt = 0; attempt < 50; attempt = attempt + 1 {
       let ex = @types.rand_range(rng, 2, w - 3)
       let ey = @types.rand_range(rng, 2, h - 3)
@@ -94,7 +60,149 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
     }
   }
   @types.sync_rng(game, rng)
+  // Set the floor theme on game
+  game.floor_theme = Some(@types.theme_data(theme))
   { grid, enemies, floor_num, exit_x, exit_y }
+}
+
+///|
+/// Place hazards based on floor theme.
+fn place_theme_hazards(
+  grid : @types.Grid,
+  rng : Ref[Int],
+  floor_num : Int,
+  theme : @types.FloorTheme,
+  w : Int,
+  h : Int,
+) -> Unit {
+  match theme {
+    Meadow => {
+      // Light spikes on floor 2
+      if floor_num >= 2 {
+        let spike_count = 2
+        for _ in 0..<spike_count {
+          let sx = @types.rand_range(rng, 1, w - 2)
+          let sy = @types.rand_range(rng, 1, h - 2)
+          if @types.grid_is_walkable(grid, sx, sy) &&
+            !(sx == 1 && sy == 1) &&
+            !(sx == w - 2 && sy == h - 2) {
+            @types.grid_set_kind(grid, sx, sy, Spike)
+          }
+        }
+      }
+    }
+    Cave => {
+      // Spikes and pits
+      let spike_count = 2 + floor_num / 2
+      for _ in 0..<spike_count {
+        let sx = @types.rand_range(rng, 1, w - 2)
+        let sy = @types.rand_range(rng, 1, h - 2)
+        if @types.grid_is_walkable(grid, sx, sy) &&
+          !(sx == 1 && sy == 1) &&
+          !(sx == w - 2 && sy == h - 2) {
+          @types.grid_set_kind(grid, sx, sy, Spike)
+        }
+      }
+      let pit_count = floor_num / 3
+      for _ in 0..<pit_count {
+        let px = @types.rand_range(rng, 2, w - 3)
+        let py = @types.rand_range(rng, 2, h - 3)
+        if @types.grid_is_walkable(grid, px, py) &&
+          !(px == 1 && py == 1) &&
+          !(px == w - 2 && py == h - 2) {
+          @types.grid_set_kind(grid, px, py, Pit)
+        }
+      }
+    }
+    IceDungeon => {
+      // Lots of ice + some spikes
+      let ice_count = 6 + floor_num
+      for _ in 0..<ice_count {
+        let ix = @types.rand_range(rng, 1, w - 2)
+        let iy = @types.rand_range(rng, 1, h - 2)
+        if @types.grid_is_walkable(grid, ix, iy) &&
+          !(ix == 1 && iy == 1) &&
+          !(ix == w - 2 && iy == h - 2) {
+          @types.grid_set_kind(grid, ix, iy, Ice)
+        }
+      }
+      let spike_count = 2
+      for _ in 0..<spike_count {
+        let sx = @types.rand_range(rng, 1, w - 2)
+        let sy = @types.rand_range(rng, 1, h - 2)
+        if @types.grid_is_walkable(grid, sx, sy) &&
+          !(sx == 1 && sy == 1) &&
+          !(sx == w - 2 && sy == h - 2) {
+          @types.grid_set_kind(grid, sx, sy, Spike)
+        }
+      }
+    }
+    Volcano => {
+      // Lava tiles and spikes
+      let lava_count = 4 + floor_num
+      for _ in 0..<lava_count {
+        let lx = @types.rand_range(rng, 1, w - 2)
+        let ly = @types.rand_range(rng, 1, h - 2)
+        if @types.grid_is_walkable(grid, lx, ly) &&
+          !(lx == 1 && ly == 1) &&
+          !(lx == w - 2 && ly == h - 2) {
+          @types.grid_set_kind(grid, lx, ly, Lava)
+        }
+      }
+      let spike_count = floor_num / 2
+      for _ in 0..<spike_count {
+        let sx = @types.rand_range(rng, 1, w - 2)
+        let sy = @types.rand_range(rng, 1, h - 2)
+        if @types.grid_is_walkable(grid, sx, sy) &&
+          !(sx == 1 && sy == 1) &&
+          !(sx == w - 2 && sy == h - 2) {
+          @types.grid_set_kind(grid, sx, sy, Spike)
+        }
+      }
+    }
+    BossArena | FinalArena => ()
+  }
+}
+
+///|
+/// Get themed enemy roster for a floor.
+fn themed_enemy_kinds(
+  floor_num : Int,
+  theme : @types.FloorTheme,
+) -> Array[@types.EnemyKind] {
+  match theme {
+    Meadow => [Slime, Bat]
+    Cave => [Slime, Bat, Skeleton, Mimic]
+    IceDungeon => [Skeleton, Wraith, Golem]
+    Volcano => [Dragon, Wraith, Golem]
+    _ => floor_enemy_kinds(floor_num)
+  }
+}
+
+///|
+/// Place a weapon item pickup on the floor.
+fn place_weapon_item(
+  grid : @types.Grid,
+  rng : Ref[Int],
+  w : Int,
+  h : Int,
+  exit_x : Int,
+  exit_y : Int,
+) -> Unit {
+  for _ in 0..<20 {
+    let ix = @types.rand_range(rng, 1, w - 2)
+    let iy = @types.rand_range(rng, 1, h - 2)
+    let idx = @types.grid_index(ix, iy, w)
+    let tile = grid.tiles[idx]
+    if tile.kind == Floor && !(tile.has_item) &&
+      !(ix == 1 && iy == 1) &&
+      !(ix == exit_x && iy == exit_y) {
+      tile.has_item = true
+      tile.item = Some(WeaponUpgrade)
+      tile.item_kind = 99
+      break
+    }
+  }
 }
 
 ///|

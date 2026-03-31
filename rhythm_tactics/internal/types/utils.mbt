@@ -29,7 +29,7 @@ pub fn grid_is_walkable(grid : Grid, x : Int, y : Int) -> Bool {
   match grid_get(grid, x, y) {
     Some(tile) =>
       match tile.kind {
-        Floor | Ice | Exit | Spike => true
+        Floor | Ice | Exit | Spike | Lava => true
         Wall | Pit => false
       }
     None => false
@@ -222,6 +222,7 @@ pub fn tile_color(kind : TileKind) -> @raylib.Color {
     Spike => color_spike
     Ice => color_ice
     Exit => color_exit
+    Lava => color_lava
   }
 }
 
@@ -321,6 +322,7 @@ pub fn shop_item_name(kind : ShopItemKind) -> String {
     ShopWeaponUpgrade => "Weapon Upgrade"
     ShopSpecialCharge => "Special Charge"
     ShopBeatWindow => "Beat Window+"
+    ShopWeapon(wk) => weapon_data(wk).name
   }
 }
 
@@ -332,6 +334,10 @@ pub fn shop_item_desc(kind : ShopItemKind) -> String {
     ShopWeaponUpgrade => "+1 Weapon Damage"
     ShopSpecialCharge => "+1 Special"
     ShopBeatWindow => "Wider beat window"
+    ShopWeapon(wk) => {
+      let wd = weapon_data(wk)
+      "DMG:\{wd.damage} RNG:\{wd.range} CD:\{wd.beat_cost}"
+    }
   }
 }
 
@@ -343,6 +349,7 @@ pub fn shop_item_price(kind : ShopItemKind) -> Int {
     ShopWeaponUpgrade => price_weapon_upgrade
     ShopSpecialCharge => price_special_charge
     ShopBeatWindow => price_beat_window
+    ShopWeapon(_) => 40
   }
 }
 
@@ -472,4 +479,356 @@ pub fn cos_approx(angle : Float) -> Float {
 ///|
 pub fn sin_approx(angle : Float) -> Float {
   cos_approx(angle - 1.5708F)
+}
+
+// === Weapon System ===
+
+///|
+pub fn weapon_data(kind : WeaponKind) -> Weapon {
+  match kind {
+    Sword => { kind: Sword, damage: 2, range: 1, beat_cost: 1, name: "Sword" }
+    Spear => { kind: Spear, damage: 2, range: 2, beat_cost: 1, name: "Spear" }
+    Whip => { kind: Whip, damage: 1, range: 1, beat_cost: 1, name: "Whip" }
+    Hammer =>
+      { kind: Hammer, damage: 4, range: 1, beat_cost: 2, name: "Hammer" }
+    Bow => { kind: Bow, damage: 2, range: 3, beat_cost: 1, name: "Bow" }
+    Staff => { kind: Staff, damage: 1, range: 1, beat_cost: 3, name: "Staff" }
+  }
+}
+
+///|
+/// Returns true if the weapon can fire this beat (respects beat_cost cadence).
+pub fn weapon_can_attack(kind : WeaponKind, beat_counter : Int) -> Bool {
+  let data = weapon_data(kind)
+  beat_counter % data.beat_cost == 0
+}
+
+///|
+/// Get the list of (dx,dy) offsets a weapon hits relative to the attacker facing a direction.
+pub fn weapon_attack_cells(
+  kind : WeaponKind,
+  dir : Direction,
+) -> Array[(Int, Int)] {
+  let dx = dir_dx(dir)
+  let dy = dir_dy(dir)
+  match kind {
+    Sword => [(dx, dy)]
+    Spear => [(dx, dy), (dx * 2, dy * 2)]
+    Whip => {
+      // 3 tiles: forward + two diagonals beside forward
+      let pdx = dir_dy(dir)
+      let pdy = 0 - dir_dx(dir)
+      [(dx, dy), (dx + pdx, dy + pdy), (dx - pdx, dy - pdy)]
+    }
+    Hammer => [(dx, dy)]
+    Bow => [(dx, dy), (dx * 2, dy * 2), (dx * 3, dy * 3)]
+    Staff => {
+      // 3x3 AoE centered on the tile in front
+      let cells : Array[(Int, Int)] = []
+      for oy = -1; oy <= 1; oy = oy + 1 {
+        for ox = -1; ox <= 1; ox = ox + 1 {
+          cells.push((dx + ox, dy + oy))
+        }
+      }
+      cells
+    }
+  }
+}
+
+///|
+pub fn weapon_base_damage(kind : WeaponKind) -> Int {
+  weapon_data(kind).damage
+}
+
+///|
+pub fn weapon_color(kind : WeaponKind) -> @raylib.Color {
+  match kind {
+    Sword => @raylib.Color::new(200, 200, 220, 255)
+    Spear => @raylib.Color::new(180, 160, 100, 255)
+    Whip => @raylib.Color::new(160, 100, 60, 255)
+    Hammer => @raylib.Color::new(180, 180, 200, 255)
+    Bow => @raylib.Color::new(120, 180, 80, 255)
+    Staff => @raylib.Color::new(160, 100, 255, 255)
+  }
+}
+
+// === Ability System ===
+
+///|
+pub fn ability_name(kind : AbilityKind) -> String {
+  match kind {
+    DoubleStep => "Double Step"
+    CounterAttack => "Counter Attack"
+    HealBeat => "Heal Beat"
+    ShadowDodge => "Shadow Dodge"
+    RhythmShield => "Rhythm Shield"
+  }
+}
+
+///|
+pub fn ability_desc(kind : AbilityKind) -> String {
+  match kind {
+    DoubleStep => "Move 2 tiles on Perfect beats"
+    CounterAttack => "Auto-attack enemies that miss you"
+    HealBeat => "Heal 1 HP every 16 Perfect beats"
+    ShadowDodge => "30% dodge chance on Good beats"
+    RhythmShield => "+1 shield every 8 combo streak"
+  }
+}
+
+///|
+pub fn has_ability(player : Player, kind : AbilityKind) -> Bool {
+  for a in player.abilities {
+    if a == kind {
+      return true
+    }
+  }
+  false
+}
+
+///|
+pub fn make_ability_choice(kind : AbilityKind) -> AbilityChoice {
+  { ability: kind, name: ability_name(kind), desc: ability_desc(kind) }
+}
+
+// === Floor Theme System ===
+
+///|
+pub fn floor_theme(floor_num : Int) -> FloorTheme {
+  if floor_num <= 2 {
+    Meadow
+  } else if floor_num <= 4 {
+    Cave
+  } else if floor_num == 5 {
+    BossArena
+  } else if floor_num <= 7 {
+    IceDungeon
+  } else if floor_num <= 9 {
+    Volcano
+  } else {
+    FinalArena
+  }
+}
+
+///|
+pub fn theme_data(theme : FloorTheme) -> FloorThemeData {
+  match theme {
+    Meadow =>
+      {
+        theme,
+        bg_color: @raylib.Color::new(15, 25, 15, 255),
+        floor_color: @raylib.Color::new(25, 45, 25, 255),
+        wall_color: @raylib.Color::new(60, 80, 50, 255),
+        accent_color: @raylib.Color::new(80, 180, 80, 255),
+        name: "Meadow",
+      }
+    Cave =>
+      {
+        theme,
+        bg_color: @raylib.Color::new(10, 10, 18, 255),
+        floor_color: @raylib.Color::new(20, 20, 35, 255),
+        wall_color: @raylib.Color::new(60, 55, 70, 255),
+        accent_color: @raylib.Color::new(140, 120, 160, 255),
+        name: "Dark Cave",
+      }
+    BossArena =>
+      {
+        theme,
+        bg_color: @raylib.Color::new(30, 10, 10, 255),
+        floor_color: @raylib.Color::new(40, 20, 20, 255),
+        wall_color: @raylib.Color::new(100, 40, 40, 255),
+        accent_color: @raylib.Color::new(255, 60, 40, 255),
+        name: "Boss Arena",
+      }
+    IceDungeon =>
+      {
+        theme,
+        bg_color: @raylib.Color::new(10, 15, 30, 255),
+        floor_color: @raylib.Color::new(20, 30, 55, 255),
+        wall_color: @raylib.Color::new(60, 80, 120, 255),
+        accent_color: @raylib.Color::new(150, 220, 255, 255),
+        name: "Ice Dungeon",
+      }
+    Volcano =>
+      {
+        theme,
+        bg_color: @raylib.Color::new(30, 10, 5, 255),
+        floor_color: @raylib.Color::new(45, 20, 15, 255),
+        wall_color: @raylib.Color::new(100, 50, 30, 255),
+        accent_color: @raylib.Color::new(255, 100, 30, 255),
+        name: "Volcano",
+      }
+    FinalArena =>
+      {
+        theme,
+        bg_color: @raylib.Color::new(15, 5, 25, 255),
+        floor_color: @raylib.Color::new(25, 10, 40, 255),
+        wall_color: @raylib.Color::new(70, 30, 100, 255),
+        accent_color: @raylib.Color::new(180, 60, 255, 255),
+        name: "Final Arena",
+      }
+  }
+}
+
+///|
+pub fn themed_tile_color(
+  kind : TileKind,
+  theme : FloorThemeData?,
+) -> @raylib.Color {
+  match theme {
+    Some(td) =>
+      match kind {
+        Floor => td.floor_color
+        Wall => td.wall_color
+        Lava => color_lava
+        _ => tile_color(kind)
+      }
+    None => tile_color(kind)
+  }
+}
+
+// === Combo Milestone System ===
+
+///|
+pub fn check_combo_milestone(combo : Int) -> ComboMilestone {
+  if combo == 50 {
+    PerfectStorm
+  } else if combo == 25 {
+    Frenzy
+  } else if combo == 10 {
+    Fever
+  } else {
+    NoMilestone
+  }
+}
+
+///|
+pub fn combo_visual_level(combo : Int) -> Int {
+  // 0: 0-4, 1: 5-14, 2: 15-29, 3: 30+
+  if combo >= 30 {
+    3
+  } else if combo >= 15 {
+    2
+  } else if combo >= 5 {
+    1
+  } else {
+    0
+  }
+}
+
+///|
+pub fn milestone_text(ms : ComboMilestone) -> String {
+  match ms {
+    Fever => "FEVER!"
+    Frenzy => "FRENZY!"
+    PerfectStorm => "PERFECT STORM!"
+    NoMilestone => ""
+  }
+}
+
+///|
+pub fn milestone_color(ms : ComboMilestone) -> @raylib.Color {
+  match ms {
+    Fever => @raylib.Color::new(255, 200, 0, 255)
+    Frenzy => @raylib.Color::new(255, 100, 50, 255)
+    PerfectStorm => @raylib.Color::new(255, 50, 255, 255)
+    NoMilestone => @raylib.white
+  }
+}
+
+// === Meta Progression ===
+
+///|
+pub fn update_meta_after_run(
+  meta : MetaProgress,
+  score : Int,
+  max_combo_val : Int,
+  floors : Int,
+  bosses : Int,
+  kills : Int,
+  perfects : Int,
+  weapon : WeaponKind,
+) -> Unit {
+  meta.total_runs = meta.total_runs + 1
+  meta.total_kills = meta.total_kills + kills
+  meta.total_perfects = meta.total_perfects + perfects
+  if score > meta.best_score {
+    meta.best_score = score
+  }
+  if max_combo_val > meta.highest_combo {
+    meta.highest_combo = max_combo_val
+  }
+  if floors > meta.floors_cleared {
+    meta.floors_cleared = floors
+  }
+  meta.bosses_defeated = meta.bosses_defeated + bosses
+  // Record run
+  let grade = compute_score_grade(score)
+  let record : RunRecord = { score, max_combo: max_combo_val, floors, weapon, grade }
+  meta.run_history.push(record)
+  // Cap history at 20
+  while meta.run_history.length() > 20 {
+    let _ = meta.run_history.pop()
+  }
+  // Unlock weapons based on floors cleared
+  check_weapon_unlocks(meta, floors)
+}
+
+///|
+pub fn check_weapon_unlocks(meta : MetaProgress, floors : Int) -> Unit {
+  let unlocks : Array[(Int, WeaponKind)] = [
+    (2, Spear), (4, Whip), (5, Hammer), (7, Bow), (10, Staff),
+  ]
+  for pair in unlocks {
+    let (req_floor, wk) = pair
+    if floors >= req_floor {
+      let mut found = false
+      for w in meta.unlocked_weapons {
+        if w == wk {
+          found = true
+          break
+        }
+      }
+      if !found {
+        meta.unlocked_weapons.push(wk)
+      }
+    }
+  }
+}
+
+///|
+pub fn update_floor_mastery(
+  meta : MetaProgress,
+  floor_num : Int,
+  perfect_pct : Int,
+) -> Unit {
+  if floor_num >= 1 && floor_num <= max_floor {
+    let idx = floor_num - 1
+    if perfect_pct > meta.floor_mastery[idx] {
+      meta.floor_mastery[idx] = perfect_pct
+    }
+  }
+}
+
+///|
+pub fn mastery_rating(pct : Int) -> String {
+  if pct >= 90 {
+    "S"
+  } else if pct >= 70 {
+    "A"
+  } else if pct >= 50 {
+    "B"
+  } else {
+    "C"
+  }
+}
+
+///|
+pub fn all_weapon_kinds() -> Array[WeaponKind] {
+  [Sword, Spear, Whip, Hammer, Bow, Staff]
+}
+
+///|
+pub fn all_ability_kinds() -> Array[AbilityKind] {
+  [DoubleStep, CounterAttack, HealBeat, ShadowDodge, RhythmShield]
 }

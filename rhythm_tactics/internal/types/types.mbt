@@ -63,6 +63,15 @@ pub fn Enemy::new(
 }
 
 ///|
+pub(all) struct Weapon {
+  kind : WeaponKind
+  damage : Int
+  range : Int
+  beat_cost : Int
+  name : String
+} derive(Show)
+
+///|
 pub(all) struct Player {
   mut x : Int
   mut y : Int
@@ -77,6 +86,13 @@ pub(all) struct Player {
   mut beat_multiplier : Float
   mut speed_boost_beats : Int
   mut beat_freeze_beats : Int
+  mut weapon : WeaponKind
+  mut weapon_beat_counter : Int
+  abilities : Array[AbilityKind]
+  mut consecutive_perfects : Int
+  mut facing : Direction
+  mut invincible_beats : Int
+  mut double_damage_beats : Int
 } derive(Show)
 
 ///|
@@ -95,6 +111,13 @@ pub fn Player::new() -> Player {
     beat_multiplier: 1.0,
     speed_boost_beats: 0,
     beat_freeze_beats: 0,
+    weapon: Sword,
+    weapon_beat_counter: 0,
+    abilities: [],
+    consecutive_perfects: 0,
+    facing: South,
+    invincible_beats: 0,
+    double_damage_beats: 0,
   }
 }
 
@@ -201,6 +224,90 @@ pub fn ScoreState::new() -> ScoreState {
 }
 
 ///|
+pub(all) struct FloorThemeData {
+  theme : FloorTheme
+  bg_color : @raylib.Color
+  floor_color : @raylib.Color
+  wall_color : @raylib.Color
+  accent_color : @raylib.Color
+  name : String
+} derive(Show)
+
+///|
+pub(all) struct ComboState {
+  mut fever_active : Bool
+  mut fever_beats : Int
+  mut frenzy_active : Bool
+  mut frenzy_beats : Int
+  mut storm_triggered : Bool
+  mut last_milestone : ComboMilestone
+  mut milestone_flash_timer : Float
+} derive(Show)
+
+///|
+pub fn ComboState::new() -> ComboState {
+  {
+    fever_active: false,
+    fever_beats: 0,
+    frenzy_active: false,
+    frenzy_beats: 0,
+    storm_triggered: false,
+    last_milestone: NoMilestone,
+    milestone_flash_timer: 0.0,
+  }
+}
+
+///|
+pub(all) struct MetaProgress {
+  mut best_score : Int
+  mut highest_combo : Int
+  mut floors_cleared : Int
+  mut bosses_defeated : Int
+  mut total_runs : Int
+  mut total_kills : Int
+  mut total_perfects : Int
+  unlocked_weapons : Array[WeaponKind]
+  floor_mastery : Array[Int]
+  run_history : Array[RunRecord]
+} derive(Show)
+
+///|
+pub fn MetaProgress::new() -> MetaProgress {
+  let mastery : Array[Int] = []
+  for _ in 0..<max_floor {
+    mastery.push(0)
+  }
+  {
+    best_score: 0,
+    highest_combo: 0,
+    floors_cleared: 0,
+    bosses_defeated: 0,
+    total_runs: 0,
+    total_kills: 0,
+    total_perfects: 0,
+    unlocked_weapons: [Sword],
+    floor_mastery: mastery,
+    run_history: [],
+  }
+}
+
+///|
+pub(all) struct RunRecord {
+  score : Int
+  max_combo : Int
+  floors : Int
+  weapon : WeaponKind
+  grade : ScoreGrade
+} derive(Show)
+
+///|
+pub(all) struct AbilityChoice {
+  ability : AbilityKind
+  name : String
+  desc : String
+} derive(Show)
+
+///|
 pub(all) struct Game {
   mut screen : Screen
   player : Player
@@ -225,6 +332,15 @@ pub(all) struct Game {
   mut shop_cursor : Int
   score_state : ScoreState
   mut is_boss_floor : Bool
+  combo_state : ComboState
+  meta : MetaProgress
+  mut floor_theme : FloorThemeData?
+  ability_choices : Array[AbilityChoice]
+  mut ability_cursor : Int
+  mut choosing_ability : Bool
+  mut combo_visual_intensity : Float
+  mut run_perfects : Int
+  mut run_kills : Int
 } derive(Show)
 
 ///|
@@ -253,5 +369,14 @@ pub fn Game::new() -> Game {
     shop_cursor: 0,
     score_state: ScoreState::new(),
     is_boss_floor: false,
+    combo_state: ComboState::new(),
+    meta: MetaProgress::new(),
+    floor_theme: None,
+    ability_choices: [],
+    ability_cursor: 0,
+    choosing_ability: false,
+    combo_visual_intensity: 0.0,
+    run_perfects: 0,
+    run_kills: 0,
   }
 }

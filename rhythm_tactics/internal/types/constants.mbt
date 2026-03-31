@@ -230,3 +230,23 @@ pub let color_shop_bg : @raylib.Color = @raylib.Color::new(25, 20, 40, 255)
 
 ///|
 pub let color_shop_highlight : @raylib.Color = @raylib.Color::new(60, 50, 90, 255)
+
+// --- Combo milestone constants ---
+
+///|
+pub let fever_duration : Int = 2
+
+///|
+pub let frenzy_duration : Int = 4
+
+///|
+pub let heal_beat_threshold : Int = 16
+
+///|
+pub let shield_combo_threshold : Int = 8
+
+///|
+pub let shadow_dodge_chance : Int = 30
+
+///|
+pub let lava_damage : Int = 2

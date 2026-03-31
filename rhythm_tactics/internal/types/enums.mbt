@@ -9,6 +9,8 @@ pub(all) enum Screen {
   Shop
   FloorTransition
   BossIntro
+  AbilityChoice
+  RunSummary
 } derive(Eq, Show)
 
 ///|
@@ -19,6 +21,7 @@ pub(all) enum TileKind {
   Spike
   Ice
   Exit
+  Lava
 } derive(Eq, Show)
 
 ///|
@@ -88,7 +91,45 @@ pub(all) enum ShopItemKind {
   ShopWeaponUpgrade
   ShopSpecialCharge
   ShopBeatWindow
+  ShopWeapon(WeaponKind)
 } derive(Show)
+
+///|
+pub(all) enum WeaponKind {
+  Sword
+  Spear
+  Whip
+  Hammer
+  Bow
+  Staff
+} derive(Eq, Show)
+
+///|
+pub(all) enum AbilityKind {
+  DoubleStep
+  CounterAttack
+  HealBeat
+  ShadowDodge
+  RhythmShield
+} derive(Eq, Show)
+
+///|
+pub(all) enum FloorTheme {
+  Meadow
+  Cave
+  BossArena
+  IceDungeon
+  Volcano
+  FinalArena
+} derive(Eq, Show)
+
+///|
+pub(all) enum ComboMilestone {
+  Fever
+  Frenzy
+  PerfectStorm
+  NoMilestone
+} derive(Eq, Show)
 
 ///|
 pub(all) enum ScoreGrade {
