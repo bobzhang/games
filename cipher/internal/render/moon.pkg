@@ -1,0 +1,10 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/cipher/internal/types",
+  "bobzhang/games/cipher/internal/levels",
+  "bobzhang/games/cipher/internal/crypto",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
