@@ -18,6 +18,9 @@ pub fn simulate_turn(
   state.turn_log = []
   state.turn_log.push("=== Turn \{state.turn} ===")
 
+  // Track damage for "no damage" combo
+  state.damage_taken_this_turn = false
+
   // Phase 1: Execute player commands
   state.turn_log.push("-- Player Phase --")
   for i = 0; i < commands.length(); i = i + 1 {
@@ -28,6 +31,9 @@ pub fn simulate_turn(
   state.turn_log.push("-- Enemy Phase --")
   resolve_all_enemy_intents(state)
 
+  // Phase 2.5: Sentinel Overwatch (tier >= 2)
+  resolve_overwatch(state)
+
   // Phase 3: Apply hazard damage to all units
   state.turn_log.push("-- Hazard Phase --")
   apply_hazard_damage(state)
@@ -35,8 +41,18 @@ pub fn simulate_turn(
   // Phase 4: End-of-turn cleanup
   cleanup_turn(state)
 
+  // Phase 4.5: No Damage Turn combo
+  if !state.damage_taken_this_turn {
+    add_combo_score(state, 100, "FLAWLESS!")
+  }
+
   // Phase 5: Check conditions
   check_battle_conditions(state)
+
+  // Phase 5.5: Process status effects (fire DoT, immobilize decay)
+  // Placed after intent resolution so that Immobilized applied this turn
+  // is checked during the NEXT intent generation before it expires.
+  process_statuses(state)
 
   // Generate enemy intents for next turn (visible to player)
   generate_enemy_intents(state)
@@ -152,6 +168,11 @@ fn check_battle_conditions(battle : @types.BattleState) -> Unit {
   match battle.objective {
     DefendGrid(turns) => {
       if enemies_alive == 0 {
+        // Objective bonus: turns remaining * 300
+        let turns_left = turns - battle.turn
+        if turns_left > 0 {
+          add_combo_score(battle, turns_left * 300, "EARLY VICTORY!")
+        }
         battle.phase = Victory
         battle.turn_log.push("VICTORY - All enemies eliminated!")
       } else if battle.turn >= turns {
@@ -219,6 +240,39 @@ fn check_battle_conditions(battle : @types.BattleState) -> Unit {
       if escorted {
         battle.phase = Victory
         battle.turn_log.push("VICTORY - Escort reached destination!")
+      }
+    }
+  }
+}
+
+///|
+/// Sentinel Overwatch (tier >= 2): after enemy intents resolve, any Sentinel
+/// with upgrade_tier >= 2 that hasn't acted this turn auto-attacks the first
+/// enemy within cannon range (4 tiles, line of sight required).
+fn resolve_overwatch(battle : @types.BattleState) -> Unit {
+  for i = 0; i < battle.units.length(); i = i + 1 {
+    let u = battle.units[i]
+    if u.active && u.hp > 0 && u.team == Player && u.mech_class == Sentinel &&
+      u.upgrade_tier >= 2 && !u.acted_this_turn {
+      // Find first enemy in cannon range with LOS
+      let mut target_id = -1
+      for j = 0; j < battle.units.length(); j = j + 1 {
+        let e = battle.units[j]
+        if e.active && e.hp > 0 && e.team == Enemy {
+          let dist = @types.manhattan(u.x, u.y, e.x, e.y)
+          if dist <= 4 && has_line_of_sight(battle, u.x, u.y, e.x, e.y) {
+            target_id = j
+            break
+          }
+        }
+      }
+      if target_id >= 0 {
+        let name = get_unit_name(battle, i)
+        let target_name = get_unit_name(battle, target_id)
+        let _ = apply_damage_from(battle, target_id, 2, i)
+        battle.turn_log.push(
+          "\{name} Overwatch! Auto-fires at \{target_name} for 2 damage!",
+        )
       }
     }
   }

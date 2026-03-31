@@ -10,12 +10,29 @@ pub fn update(game : @types.Game, dt : Float) -> Unit {
       game.message_text = ""
     }
   }
+  // Decay combo timer
+  match game.battle {
+    Some(b) => {
+      if b.combo_timer > 0.0 {
+        b.combo_timer -= dt
+        if b.combo_timer < 0.0 {
+          b.combo_timer = 0.0
+          b.combo_text = ""
+        }
+      }
+    }
+    None => ()
+  }
   match game.screen {
     Title => update_title(game)
     Campaign => update_campaign(game)
     Battle => update_battle(game, dt)
     EnemyTurn => update_enemy_turn(game, dt)
     Reward => update_reward(game)
+    UpgradeScreen => update_upgrade_screen(game)
+    MissionBriefing => update_mission_briefing(game)
+    MissionDebrief => update_mission_debrief(game)
+    RunSummary => update_run_summary(game)
     GameOver | Victory => update_end_screen(game)
     _ => ()
   }
@@ -77,6 +94,9 @@ fn setup_battle(game : @types.Game, mission_id : Int) -> Unit {
       mech_class: classes[i],
       enemy_type: Rammer,
       intent: March(px, py),
+      statuses: [],
+      upgrade_tier: 0,
+      orbital_used: false,
     }
     battle.units.push(u)
     if battle.grid.in_bounds(px, py) {
@@ -251,6 +271,9 @@ fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
       mech_class: Vanguard,
       enemy_type: etype,
       intent: March(ex, ey),
+      statuses: [],
+      upgrade_tier: 0,
+      orbital_used: false,
     }
     battle.units.push(eu)
     if battle.grid.in_bounds(ex, ey) {
@@ -288,6 +311,9 @@ fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
         mech_class: Vanguard,
         enemy_type: Boss,
         intent: March(bx, by),
+        statuses: [],
+        upgrade_tier: 0,
+        orbital_used: false,
       }
       battle.units.push(bu)
       battle.grid.set(
@@ -533,8 +559,25 @@ fn update_battle(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyP) {
     handle_push(game, battle)
   }
-  // --- Escape to cancel/undo ---
-  if @raylib.is_key_pressed(@raylib.KeyEscape) {
+  // --- B: Barricade (Vanguard) ---
+  if @raylib.is_key_pressed(@raylib.KeyB) {
+    handle_terrain_ability(game, battle, 6)
+  }
+  // --- D: Detonate (Striker) ---
+  if @raylib.is_key_pressed(@raylib.KeyD) {
+    handle_terrain_ability(game, battle, 7)
+  }
+  // --- M: Deploy Mine (Sentinel) ---
+  if @raylib.is_key_pressed(@raylib.KeyM) {
+    handle_terrain_ability(game, battle, 8)
+  }
+  // --- F: Fortress Mode (Vanguard T2) ---
+  if @raylib.is_key_pressed(@raylib.KeyF) {
+    handle_upgrade_ability(game, battle)
+  }
+  // --- Escape/Z to cancel/undo ---
+  if @raylib.is_key_pressed(@raylib.KeyEscape) ||
+    @raylib.is_key_pressed(@raylib.KeyZ) {
     handle_cancel(game, battle)
   }
 }
@@ -645,6 +688,19 @@ fn cycle_selected_mech(battle : @types.BattleState) -> Unit {
   // All acted, just cycle normally
   let next = (current_idx + 1) % player_ids.length()
   battle.selected_mech = player_ids[next]
+}
+
+///|
+/// Count how many player mechs died in this battle.
+fn count_dead_player_mechs(battle : @types.BattleState) -> Int {
+  let mut count = 0
+  for i = 0; i < battle.units.length(); i = i + 1 {
+    let u = battle.units[i]
+    if u.team == Player && (!u.active || u.hp <= 0) {
+      count += 1
+    }
+  }
+  count
 }
 
 ///|
@@ -834,21 +890,9 @@ fn handle_push(game : @types.Game, battle : @types.BattleState) -> Unit {
 
 ///|
 fn handle_cancel(game : @types.Game, battle : @types.BattleState) -> Unit {
-  if battle.player_commands.length() > 0 {
-    // Undo last command
-    let _cmd = battle.player_commands.pop()
-    // Un-act the previous mech
-    let prev_idx = battle.player_commands.length()
-    let player_ids = get_player_ids(battle)
-    if prev_idx < player_ids.length() {
-      let uid = player_ids[prev_idx]
-      if uid < battle.units.length() {
-        battle.units[uid].acted_this_turn = false
-        battle.units[uid].moved_this_turn = false
-        battle.selected_mech = uid
-      }
-    }
-    game.message_text = "Command undone."
+  // Use snapshot-based undo: restore full state from undo stack
+  if @sim.pop_undo(battle) {
+    game.message_text = "Undo (Z) - Command undone."
     game.message_timer = 1.0
   } else {
     game.message_text = "Nothing to undo."
@@ -862,6 +906,8 @@ fn issue_command(
   battle : @types.BattleState,
   cmd : @types.Command,
 ) -> Unit {
+  // Save snapshot before executing command (for undo)
+  @sim.push_undo(battle)
   battle.player_commands.push(cmd)
   let sid = battle.selected_mech
   if sid < battle.units.length() {
@@ -919,6 +965,8 @@ fn execute_player_commands(
   game : @types.Game,
   battle : @types.BattleState,
 ) -> Unit {
+  // Clear undo stack - turn is confirmed
+  @sim.clear_undo_stack(battle)
   // simulate_turn writes directly to battle.turn_log; no need to append
   let _ = @sim.simulate_turn(battle, battle.player_commands)
   battle.player_commands = []
@@ -965,13 +1013,22 @@ fn update_enemy_turn(game : @types.Game, dt : Float) -> Unit {
     // Check for game-over / victory set by simulate_turn
     match battle.phase {
       GameOver => {
-        game.screen = GameOver
+        // Track stats for run summary
+        game.run.total_turns += battle.turn
+        game.run.total_score += battle.score
+        game.run.mechs_lost += count_dead_player_mechs(battle)
+        if battle.score > game.run.best_combo {
+          game.run.best_combo = battle.score
+        }
+        game.screen = RunSummary
         return
       }
       Victory => {
-        game.screen = Reward
-        game.message_text = "Mission complete! Choose reward."
-        game.message_timer = 3.0
+        // Stats are tracked in advance_mission (via Reward flow)
+        // to avoid double-counting total_turns.
+        game.screen = MissionDebrief
+        game.message_text = ""
+        game.message_timer = 0.0
         return
       }
       _ => ()
@@ -1073,14 +1130,82 @@ fn update_reward(game : @types.Game) -> Unit {
 }
 
 ///|
+fn update_upgrade_screen(game : @types.Game) -> Unit {
+  // Key 1: Upgrade Vanguard
+  if @raylib.is_key_pressed(@raylib.KeyOne) {
+    if @content.try_purchase_upgrade(game.run, Vanguard) {
+      let tier = @content.get_upgrade_tier(game.run, Vanguard)
+      let def = @content.get_upgrade_def(Vanguard, tier)
+      game.message_text = "Vanguard: \{def.name}!"
+      game.message_timer = 2.0
+    } else {
+      game.message_text = "Cannot upgrade (max tier or insufficient GP)."
+      game.message_timer = 1.5
+    }
+  }
+  // Key 2: Upgrade Striker
+  if @raylib.is_key_pressed(@raylib.KeyTwo) {
+    if @content.try_purchase_upgrade(game.run, Striker) {
+      let tier = @content.get_upgrade_tier(game.run, Striker)
+      let def = @content.get_upgrade_def(Striker, tier)
+      game.message_text = "Striker: \{def.name}!"
+      game.message_timer = 2.0
+    } else {
+      game.message_text = "Cannot upgrade (max tier or insufficient GP)."
+      game.message_timer = 1.5
+    }
+  }
+  // Key 3: Upgrade Sentinel
+  if @raylib.is_key_pressed(@raylib.KeyThree) {
+    if @content.try_purchase_upgrade(game.run, Sentinel) {
+      let tier = @content.get_upgrade_tier(game.run, Sentinel)
+      let def = @content.get_upgrade_def(Sentinel, tier)
+      game.message_text = "Sentinel: \{def.name}!"
+      game.message_timer = 2.0
+    } else {
+      game.message_text = "Cannot upgrade (max tier or insufficient GP)."
+      game.message_timer = 1.5
+    }
+  }
+  // Enter/Space: Continue to next mission
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
+    go_to_next_mission(game)
+  }
+}
+
+///|
 fn advance_mission(game : @types.Game) -> Unit {
-  // Mark campaign node as completed
+  // Mark campaign node as completed, accumulate score
   complete_campaign_node(game)
+  match game.battle {
+    Some(b) => {
+      game.run.total_score += b.score
+      game.run.total_turns += b.turn
+      game.run.mechs_lost += count_dead_player_mechs(b)
+      if b.score > game.run.best_combo {
+        game.run.best_combo = b.score
+      }
+    }
+    None => ()
+  }
   game.run.current_mission += 1
   // Check if campaign is over (final boss beaten)
   if game.screen == Victory {
     return
   }
+  // Go to upgrade screen if player has grid power
+  if game.run.grid_power >= 2 {
+    game.screen = UpgradeScreen
+    game.message_text = "Spend Grid Power to upgrade mechs."
+    game.message_timer = 3.0
+    return
+  }
+  go_to_next_mission(game)
+}
+
+///|
+fn go_to_next_mission(game : @types.Game) -> Unit {
   match game.run.campaign {
     Some(_) => {
       // Return to campaign map for next mission choice
@@ -1091,7 +1216,7 @@ fn advance_mission(game : @types.Game) -> Unit {
     None => {
       // Fallback: linear progression
       if game.run.current_mission >= @types.total_missions {
-        game.screen = Victory
+        game.screen = RunSummary
         match game.battle {
           Some(b) => b.phase = Victory
           None => ()
@@ -1100,6 +1225,90 @@ fn advance_mission(game : @types.Game) -> Unit {
         setup_battle(game, game.run.current_mission)
         game.screen = Battle
       }
+    }
+  }
+}
+
+///|
+fn handle_terrain_ability(
+  game : @types.Game,
+  battle : @types.BattleState,
+  ability_id : Int,
+) -> Unit {
+  let mech = match get_selected_unit(battle) {
+    Some(u) => u
+    None => return
+  }
+  if mech.acted_this_turn {
+    game.message_text = "Mech already acted."
+    game.message_timer = 1.0
+    return
+  }
+  // Check class matches ability
+  let valid = match ability_id {
+    6 => mech.mech_class == Vanguard  // Barricade
+    7 => mech.mech_class == Striker   // Detonate
+    8 => mech.mech_class == Sentinel  // Deploy Mine
+    _ => false
+  }
+  if !valid {
+    let ability_name = match ability_id {
+      6 => "Barricade (Vanguard only)"
+      7 => "Detonate (Striker only)"
+      _ => "Deploy Mine (Sentinel only)"
+    }
+    game.message_text = ability_name
+    game.message_timer = 1.5
+    return
+  }
+  let tx = battle.cursor_x
+  let ty = battle.cursor_y
+  issue_command(game, battle, Attack(ability_id, tx, ty))
+}
+
+///|
+fn handle_upgrade_ability(
+  game : @types.Game,
+  battle : @types.BattleState,
+) -> Unit {
+  let mech = match get_selected_unit(battle) {
+    Some(u) => u
+    None => return
+  }
+  if mech.acted_this_turn {
+    game.message_text = "Mech already acted."
+    game.message_timer = 1.0
+    return
+  }
+  match mech.mech_class {
+    Vanguard => {
+      if mech.upgrade_tier >= 3 {
+        // Gravity Well
+        issue_command(game, battle, Attack(11, mech.x, mech.y))
+      } else if mech.upgrade_tier >= 2 {
+        // Fortress Mode
+        issue_command(game, battle, Attack(10, mech.x, mech.y))
+      } else {
+        game.message_text = "No upgrade ability available."
+        game.message_timer = 1.5
+      }
+    }
+    Sentinel => {
+      if mech.upgrade_tier >= 3 && !mech.orbital_used {
+        let tx = battle.cursor_x
+        let ty = battle.cursor_y
+        issue_command(game, battle, Attack(12, tx, ty))
+      } else if mech.upgrade_tier >= 3 {
+        game.message_text = "Orbital Strike already used!"
+        game.message_timer = 1.5
+      } else {
+        game.message_text = "No upgrade ability available."
+        game.message_timer = 1.5
+      }
+    }
+    _ => {
+      game.message_text = "No special ability (use F)."
+      game.message_timer = 1.5
     }
   }
 }
@@ -1121,6 +1330,61 @@ fn update_end_screen(game : @types.Game) -> Unit {
       reputation: 0,
       campaign: None,
       offered_augments: [],
+      upgrade_tiers: [0, 0, 0],
+      total_score: 0,
+      mechs_lost: 0,
+      best_combo: 0,
+      total_turns: 0,
+    }
+  }
+}
+
+
+///|
+fn update_mission_briefing(game : @types.Game) -> Unit {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) ||
+    @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
+    game.screen = Battle
+    game.message_text = "Deploy your squad!"
+    game.message_timer = 2.0
+  }
+}
+
+///|
+fn update_mission_debrief(game : @types.Game) -> Unit {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) ||
+    @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
+    // Transition to reward screen
+    game.screen = Reward
+    game.message_text = "Mission complete! Choose reward."
+    game.message_timer = 3.0
+  }
+}
+
+///|
+fn update_run_summary(game : @types.Game) -> Unit {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) ||
+    @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
+    game.screen = Title
+    game.battle = None
+    game.anim_timer = 0.0
+    game.run = {
+      current_mission: 0,
+      missions_completed: 0,
+      squad: [0, 1, 2],
+      augments: [],
+      grid_power: 3,
+      reputation: 0,
+      campaign: None,
+      offered_augments: [],
+      upgrade_tiers: [0, 0, 0],
+      total_score: 0,
+      mechs_lost: 0,
+      best_combo: 0,
+      total_turns: 0,
     }
   }
 }

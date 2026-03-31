@@ -137,8 +137,8 @@ pub fn update_campaign(game : @types.Game) -> Unit {
   }
   let available = get_available_nodes(campaign)
   if available.length() == 0 {
-    // All nodes completed - victory
-    game.screen = Victory
+    // All nodes completed - run victory summary
+    game.screen = RunSummary
     return
   }
   // Navigate between available nodes
@@ -179,9 +179,9 @@ pub fn update_campaign(game : @types.Game) -> Unit {
       if mission_id >= 0 {
         game.run.current_mission = mission_id
         setup_mission_from_def(game, mission_id)
-        game.screen = Battle
-        game.message_text = @content.get_mission_def(mission_id).name
-        game.message_timer = 3.0
+        game.screen = MissionBriefing
+        game.message_text = ""
+        game.message_timer = 0.0
       }
     }
   }
@@ -228,6 +228,12 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
       classes[i],
       game.run.augments,
     )
+    let tier = @content.get_upgrade_tier(game.run, classes[i])
+    // Apply tier 1 stat bonuses
+    let (hp, move_range, _ability_range, _ability_damage) = @content.apply_upgrade_stats(
+      classes[i], tier, stats.hp, stats.move_range, stats.ability_range, stats.ability_damage,
+    )
+    ignore(move_range)
     let px = 1
     let py = 1 + i * 3
     let mut shield = 0
@@ -241,8 +247,8 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
       team: Player,
       x: px,
       y: py,
-      hp: stats.hp,
-      max_hp: stats.hp,
+      hp,
+      max_hp: hp,
       shield,
       heat: 0,
       max_heat: stats.max_heat,
@@ -252,6 +258,9 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
       mech_class: classes[i],
       enemy_type: Rammer,
       intent: March(px, py),
+      statuses: [],
+      upgrade_tier: tier,
+      orbital_used: false,
     }
     battle.units.push(u)
     if battle.grid.in_bounds(px, py) {
@@ -323,6 +332,9 @@ fn spawn_mission_enemies(
       mech_class: Vanguard,
       enemy_type: etype,
       intent: March(actual_x, actual_y),
+      statuses: [],
+      upgrade_tier: 0,
+      orbital_used: false,
     }
     battle.units.push(eu)
     if battle.grid.in_bounds(actual_x, actual_y) {
@@ -345,8 +357,8 @@ pub fn complete_campaign_node(game : @types.Game) -> Unit {
       let node = campaign.nodes[campaign.selected_node]
       match node.kind {
         Boss(8) => {
-          // Final boss defeated - game victory
-          game.screen = Victory
+          // Final boss defeated - run summary
+          game.screen = RunSummary
           return
         }
         _ => ()

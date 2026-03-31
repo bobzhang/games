@@ -77,6 +77,10 @@ pub fn apply_damage_from(
     u.shield = 0
   }
   u.hp -= remaining
+  // Track damage taken by player for FLAWLESS combo
+  if u.team == Player && remaining > 0 {
+    battle.damage_taken_this_turn = true
+  }
   let was_killed = u.hp <= 0
   if was_killed {
     u.hp = 0
@@ -244,7 +248,8 @@ pub fn apply_heat(
 
 ///|
 /// Push a unit in direction (dx, dy) for up to `distance` tiles.
-/// Handles wall collision, chasm kills, chain pushes, and ice sliding.
+/// Handles wall collision, chasm kills, chain pushes, ice sliding,
+/// lava burn, water immobilize, mine trigger, and environmental combos.
 /// OverchargedPush augment adds +1 distance.
 pub fn try_push(
   battle : @types.BattleState,
@@ -279,6 +284,16 @@ pub fn try_push(
     let tile = battle.grid.get(nx, ny)
     // Hit a wall
     if tile.kind == Wall {
+      // Check: wall adjacent to chasm -> wall falls, creating new chasm
+      let wall_nx = nx + dx
+      let wall_ny = ny + dy
+      if battle.grid.in_bounds(wall_nx, wall_ny) {
+        let beyond = battle.grid.get(wall_nx, wall_ny)
+        if beyond.kind == Chasm {
+          battle.grid.set(nx, ny, { kind: Chasm, hazard: None, occupied_by: -1 })
+          battle.turn_log.push("Wall crumbles into the chasm!")
+        }
+      }
       let _ = apply_damage(battle, unit_id, 1)
       battle.turn_log.push("\{name} slams into a wall!")
       return
@@ -286,6 +301,10 @@ pub fn try_push(
     // Fall into chasm
     if tile.kind == Chasm {
       battle.turn_log.push("\{name} falls into a chasm!")
+      // Combo: VOID KILL for enemies pushed into chasm
+      if u.team == Enemy {
+        add_combo_score(battle, 200, "VOID KILL!")
+      }
       kill_unit(battle, unit_id)
       return
     }
@@ -298,6 +317,10 @@ pub fn try_push(
       battle.turn_log.push(
         "\{name} collides with \{other_name}!",
       )
+      // Combo: CHAIN! for pushing enemy into another
+      if u.team == Enemy {
+        add_combo_score(battle, 100, "CHAIN!")
+      }
       // Chain push: the blocking unit gets pushed 1 tile
       try_push(battle, other_id, dx, dy, 1)
       return
@@ -305,12 +328,120 @@ pub fn try_push(
     // Move to new tile
     move_unit_to(battle, unit_id, nx, ny)
     steps_remaining -= 1
-    // Ice: keep sliding until hitting something
-    if tile.kind == Ice && steps_remaining == 0 {
-      steps_remaining = 1
-      battle.turn_log.push("\{name} slides on ice!")
+    // Environmental interactions on landing tile
+    match tile.kind {
+      Lava => {
+        // Lava: 3 damage + on-fire status (1 damage/turn for 2 turns)
+        let _ = apply_damage(battle, unit_id, 3)
+        battle.turn_log.push("\{name} is pushed into lava for 3 damage!")
+        apply_status(battle, unit_id, OnFire(2))
+      }
+      Water => {
+        // Water: immobilized for 1 turn
+        battle.turn_log.push("\{name} is pushed into water! Immobilized!")
+        apply_status(battle, unit_id, Immobilized(1))
+        return // Stop movement in water
+      }
+      Ice => {
+        // Ice: keep sliding until hitting wall/unit
+        if steps_remaining == 0 {
+          steps_remaining = 1
+          battle.turn_log.push("\{name} slides on ice!")
+        }
+      }
+      _ => ()
+    }
+    // Mine hazard on tile
+    if tile.hazard == Mine {
+      let _ = apply_damage(battle, unit_id, 3)
+      battle.turn_log.push("\{name} pushed onto a mine! 3 damage!")
+      battle.grid.set(nx, ny, { ..battle.grid.get(nx, ny), hazard: None })
+      return
+    }
+    // Fire on ice -> melts to water
+    if tile.kind == Ice && tile.hazard == Fire {
+      battle.grid.set(nx, ny, { kind: Water, hazard: None, occupied_by: battle.grid.get(nx, ny).occupied_by })
+      battle.turn_log.push("Fire melts ice into water!")
     }
   }
+}
+
+///|
+/// Apply a status effect to a unit.
+pub fn apply_status(
+  battle : @types.BattleState,
+  unit_id : Int,
+  status : @types.StatusEffect,
+) -> Unit {
+  if unit_id < 0 || unit_id >= battle.units.length() {
+    return
+  }
+  let u = battle.units[unit_id]
+  if !u.active {
+    return
+  }
+  u.statuses.push(status)
+}
+
+///|
+/// Process status effects at end of turn (fire damage, immobilize expiry).
+pub fn process_statuses(battle : @types.BattleState) -> Unit {
+  for i = 0; i < battle.units.length(); i = i + 1 {
+    let u = battle.units[i]
+    if !u.active || u.hp <= 0 {
+      continue i + 1
+    }
+    let name = get_unit_name(battle, i)
+    let mut j = 0
+    while j < u.statuses.length() {
+      match u.statuses[j] {
+        OnFire(turns) => {
+          let _ = apply_damage(battle, i, 1)
+          battle.turn_log.push("\{name} burns for 1 fire damage!")
+          if turns <= 1 {
+            let _ = u.statuses.remove(j)
+          } else {
+            u.statuses[j] = OnFire(turns - 1)
+            j += 1
+          }
+        }
+        Immobilized(turns) => {
+          if turns <= 1 {
+            let _ = u.statuses.remove(j)
+            battle.turn_log.push("\{name} is no longer immobilized.")
+          } else {
+            u.statuses[j] = Immobilized(turns - 1)
+            j += 1
+          }
+        }
+      }
+    }
+  }
+}
+
+///|
+/// Check if a unit is immobilized.
+pub fn is_immobilized(u : @types.CombatUnit) -> Bool {
+  for i = 0; i < u.statuses.length(); i = i + 1 {
+    match u.statuses[i] {
+      Immobilized(_) => return true
+      _ => ()
+    }
+  }
+  false
+}
+
+///|
+/// Add combo score with floating text.
+pub fn add_combo_score(
+  battle : @types.BattleState,
+  points : Int,
+  text : String,
+) -> Unit {
+  battle.score += points
+  battle.combo_text = text
+  battle.combo_timer = 2.0
+  battle.turn_log.push("+\{points} \{text}")
 }
 
 ///|

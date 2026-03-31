@@ -29,6 +29,9 @@ pub(all) struct CombatUnit {
   mech_class : MechClass
   enemy_type : EnemyType
   mut intent : Intent
+  mut statuses : Array[StatusEffect]
+  mut upgrade_tier : Int
+  mut orbital_used : Bool
 }
 
 ///|
@@ -135,6 +138,42 @@ pub(all) struct BattleState {
   mut mission_id : Int
   // Augment flags (copied from RunState at battle start for sim access)
   mut augments : Array[AugmentKind]
+  // Combo scoring
+  mut score : Int
+  mut combo_text : String
+  mut combo_timer : Float
+  mut damage_taken_this_turn : Bool
+  // Undo system
+  mut undo_stack : Array[BattleSnapshot]
+}
+
+///|
+pub(all) struct BattleSnapshot {
+  unit_states : Array[UnitSnapshot]
+  tile_states : Array[Tile]
+  grid_width : Int
+  grid_height : Int
+  selected_mech : Int
+  cursor_x : Int
+  cursor_y : Int
+  commands : Array[Command]
+}
+
+///|
+pub(all) struct UnitSnapshot {
+  id : Int
+  active : Bool
+  x : Int
+  y : Int
+  hp : Int
+  max_hp : Int
+  shield : Int
+  heat : Int
+  max_heat : Int
+  stunned : Bool
+  moved_this_turn : Bool
+  acted_this_turn : Bool
+  statuses : Array[StatusEffect]
 }
 
 ///|
@@ -171,6 +210,11 @@ pub(all) struct RunState {
   mut reputation : Int
   mut campaign : CampaignMap?
   mut offered_augments : Array[AugmentKind]
+  mut upgrade_tiers : Array[Int]  // [vanguard_tier, striker_tier, sentinel_tier]
+  mut total_score : Int
+  mut mechs_lost : Int
+  mut best_combo : Int
+  mut total_turns : Int
 }
 
 ///|
@@ -203,6 +247,11 @@ pub fn Game::new() -> Game {
       reputation: 0,
       campaign: None,
       offered_augments: [],
+      upgrade_tiers: [0, 0, 0],
+      total_score: 0,
+      mechs_lost: 0,
+      best_combo: 0,
+      total_turns: 0,
     },
     frame_count: 0,
     rng_state: 0xA3B7C1D5U,

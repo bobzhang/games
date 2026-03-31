@@ -197,3 +197,9 @@ pub fn get_augmented_mech_stats(
     ability_damage: base.ability_damage,
   }
 }
+
+///|
+/// Get a human-readable name for an augment kind.
+pub fn get_augment_name(kind : @types.AugmentKind) -> String {
+  get_augment_def(kind).name
+}

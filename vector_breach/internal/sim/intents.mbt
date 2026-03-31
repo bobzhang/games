@@ -16,11 +16,17 @@ pub fn generate_enemy_intents(battle : @types.BattleState) -> Unit {
 ///|
 /// Generate a single intent for an enemy unit based on its type.
 /// Late-mission enemies get upgraded abilities.
+/// Immobilized enemies skip movement intents (March/Leap/Charge) but can still
+/// Fire/Summon/AreaBlast/MinePlace.
 fn generate_intent_for(
   battle : @types.BattleState,
   unit_id : Int,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
+  // Immobilized enemies can only perform stationary actions
+  if is_immobilized(u) {
+    return generate_immobilized_intent(battle, unit_id)
+  }
   let mission = battle.mission_id
   match u.enemy_type {
     Rammer =>
@@ -512,6 +518,34 @@ fn resolve_mine_place(
         "\{name} cannot place mine at (\{tx}, \{ty})",
       )
     }
+  }
+}
+
+///|
+/// Generate intent for an immobilized enemy: skip movement (March/Leap/Charge),
+/// fall back to stationary attacks if possible.
+fn generate_immobilized_intent(
+  battle : @types.BattleState,
+  unit_id : Int,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  match u.enemy_type {
+    Artillery => generate_artillery_intent(battle, unit_id)
+    BeamTurret => generate_beam_turret_intent(battle, unit_id)
+    MineLayer => generate_mine_layer_intent(battle, unit_id)
+    ShieldDrone => generate_shield_drone_intent(battle, unit_id)
+    Boss => {
+      // Boss can still fire area blasts while immobilized
+      let target_id = find_nearest_unit(battle, u.x, u.y, Player)
+      if target_id >= 0 {
+        let target = battle.units[target_id]
+        AreaBlast(target.x, target.y, 1)
+      } else {
+        March(u.x, u.y) // Stay in place
+      }
+    }
+    // Rammer, Leaper, Splitter have no ranged attack: stay in place
+    _ => March(u.x, u.y)
   }
 }
 

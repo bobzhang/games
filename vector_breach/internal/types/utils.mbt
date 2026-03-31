@@ -195,6 +195,9 @@ pub fn make_default_unit(
     mech_class,
     enemy_type,
     intent: March(x, y),
+    statuses: [],
+    upgrade_tier: 0,
+    orbital_used: false,
   }
 }
 
@@ -229,6 +232,11 @@ pub fn new_battle(objective : Objective) -> BattleState {
     },
     mission_id: 1,
     augments: [],
+    score: 0,
+    combo_text: "",
+    combo_timer: 0.0,
+    damage_taken_this_turn: false,
+    undo_stack: [],
   }
 }
 

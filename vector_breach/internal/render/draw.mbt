@@ -4,9 +4,13 @@ pub fn draw(game : @types.Game) -> Unit {
   match game.screen {
     Title => draw_title(game)
     Campaign => draw_campaign(game)
+    MissionBriefing => draw_mission_briefing(game)
     Battle => draw_battle(game)
     EnemyTurn => draw_battle_enemy_phase(game)
     Reward => draw_reward(game)
+    UpgradeScreen => draw_upgrade_screen(game)
+    MissionDebrief => draw_mission_debrief(game)
+    RunSummary => draw_run_summary(game)
     GameOver => draw_end(game, "GAME OVER", @types.color_enemy)
     Victory => draw_end(game, "VICTORY", @types.color_player)
     _ => draw_title(game)
@@ -1367,13 +1371,21 @@ fn draw_ui_panel(battle : @types.BattleState, game : @types.Game) -> Unit {
     @raylib.Color::new(15, 18, 30, 240),
   )
   @raylib.draw_line(px, 0, px, @types.screen_h, @types.color_grid_line)
-  // Turn counter
+  // Turn counter + Score
   @types.draw_shadow_text(
     "Turn \{battle.turn}",
     px + 10,
     10,
     @types.font_body,
     @types.color_text,
+  )
+  // Score display
+  @types.draw_shadow_text(
+    "Score: \{battle.score}",
+    px + 120,
+    10,
+    @types.font_body,
+    @raylib.Color::new(255, 220, 80, 220),
   )
   // Phase indicator
   let phase_text = match game.screen {
@@ -1388,6 +1400,21 @@ fn draw_ui_panel(battle : @types.BattleState, game : @types.Game) -> Unit {
     @types.font_small,
     @types.color_text_dim,
   )
+  // Combo text (floating in main area, not panel)
+  if battle.combo_timer > 0.0 {
+    let combo_alpha = ((battle.combo_timer / 2.0) * 255.0).to_int().clamp(
+      min=0,
+      max=255,
+    )
+    let combo_color = @raylib.Color::new(255, 220, 40, combo_alpha)
+    @types.draw_center_text(
+      battle.combo_text,
+      @types.grid_offset_x + @types.grid_w * @types.tile_size / 2,
+      @types.grid_offset_y + @types.grid_h * @types.tile_size + 20,
+      @types.font_title - 10,
+      combo_color,
+    )
+  }
   // Objective progress
   draw_objective_info(battle, px + 10, 56)
   // Objective progress bar
@@ -1587,7 +1614,7 @@ fn draw_controls_legend(x : Int, y : Int) -> Unit {
     @types.color_text_dim,
   )
   @types.draw_shadow_text(
-    "Space:Wait  Q:Overclock  P:Push  Esc:Undo",
+    "Space:Wait Q:OC P:Push Z:Undo B:Wall D:Det M:Mine",
     x,
     y + 14,
     @types.font_small - 4,
@@ -1626,10 +1653,23 @@ fn draw_reward(game : @types.Game) -> Unit {
     @types.font_title,
     @raylib.Color::new(80, 220, 120, 255),
   )
+  // Score summary
+  match game.battle {
+    Some(b) => {
+      @types.draw_center_text(
+        "Mission Score: \{b.score}",
+        cx,
+        @types.screen_h / 6 + 50,
+        @types.font_body,
+        @raylib.Color::new(255, 220, 80, 220),
+      )
+    }
+    None => ()
+  }
   @types.draw_center_text(
     "Choose your reward:",
     cx,
-    @types.screen_h / 6 + 50,
+    @types.screen_h / 6 + 76,
     @types.font_body,
     @types.color_text,
   )
@@ -1767,6 +1807,122 @@ fn draw_reward_card(
 }
 
 // ============================================================================
+// Upgrade screen
+// ============================================================================
+
+///|
+fn draw_upgrade_screen(game : @types.Game) -> Unit {
+  // Dark background
+  @raylib.draw_rectangle(0, 0, @types.screen_w, @types.screen_h, @raylib.Color::new(10, 12, 20, 255))
+  let cx = @types.screen_w / 2
+  // Title
+  @types.draw_center_text(
+    "MECH UPGRADES",
+    cx,
+    40,
+    @types.font_title - 8,
+    @types.color_player,
+  )
+  @types.draw_center_text(
+    "Grid Power: \{game.run.grid_power}",
+    cx,
+    80,
+    @types.font_body,
+    @raylib.Color::new(200, 140, 255, 255),
+  )
+  // Three upgrade cards
+  let card_w = 260
+  let card_h = 260
+  let gap = 20
+  let total_w = card_w * 3 + gap * 2
+  let start_x = cx - total_w / 2
+  let card_y = 120
+  let classes : Array[@types.MechClass] = [Vanguard, Striker, Sentinel]
+  let class_names = ["Vanguard", "Striker", "Sentinel"]
+  let key_labels = ["1", "2", "3"]
+  for i = 0; i < 3; i = i + 1 {
+    let x = start_x + i * (card_w + gap)
+    let current_tier = game.run.upgrade_tiers[i]
+    let class_color = @types.color_player
+    // Card background
+    @raylib.draw_rectangle(x, card_y, card_w, card_h, @raylib.Color::new(20, 25, 40, 220))
+    @raylib.draw_rectangle_lines(x, card_y, card_w, card_h, class_color)
+    // Class name
+    @types.draw_shadow_text(
+      "\{key_labels[i]}: \{class_names[i]}",
+      x + 10,
+      card_y + 10,
+      @types.font_body,
+      class_color,
+    )
+    // Current tier
+    @types.draw_shadow_text(
+      "Tier: \{current_tier}/3",
+      x + 10,
+      card_y + 36,
+      @types.font_small,
+      @types.color_text_dim,
+    )
+    // Show all tiers
+    for t = 1; t <= 3; t = t + 1 {
+      let def = @content.get_upgrade_def(classes[i], t)
+      let ty = card_y + 56 + (t - 1) * 60
+      let tier_color = if t <= current_tier {
+        @raylib.Color::new(80, 200, 120, 220) // Owned - green
+      } else if t == current_tier + 1 {
+        @types.color_text // Next available
+      } else {
+        @types.color_text_dim // Locked
+      }
+      let status = if t <= current_tier {
+        "[OWNED]"
+      } else if t == current_tier + 1 {
+        "[\{def.cost} GP]"
+      } else {
+        "[LOCKED]"
+      }
+      @types.draw_shadow_text(
+        "T\{t}: \{def.name} \{status}",
+        x + 10,
+        ty,
+        @types.font_small - 2,
+        tier_color,
+      )
+      @types.draw_shadow_text(
+        def.description,
+        x + 10,
+        ty + 16,
+        @types.font_small - 4,
+        @types.color_text_dim,
+      )
+    }
+  }
+  // Mission score summary
+  match game.battle {
+    Some(b) => {
+      let score_y = card_y + card_h + 20
+      @types.draw_center_text(
+        "Mission Score: \{b.score}  |  Total Score: \{game.run.total_score}",
+        cx,
+        score_y,
+        @types.font_body,
+        @raylib.Color::new(255, 220, 80, 220),
+      )
+    }
+    None => ()
+  }
+  // Instructions
+  @types.draw_center_text(
+    "Press 1/2/3 to upgrade, Enter to continue",
+    cx,
+    @types.screen_h - 50,
+    @types.font_body,
+    @types.color_text_dim,
+  )
+  draw_message(game)
+}
+
+// ============================================================================
 // End screens (Game Over / Victory)
 // ============================================================================
 
@@ -1797,11 +1953,11 @@ fn draw_end(game : @types.Game, title : String, color : @raylib.Color) -> Unit {
     @types.font_title,
     color,
   )
-  // Stats summary
+  // Stats summary with score
   match game.battle {
     Some(b) => {
       @types.draw_center_text(
-        "Turns: \{b.turn}  Missions: \{game.run.missions_completed}",
+        "Turns: \{b.turn}  Missions: \{game.run.missions_completed}  Score: \{game.run.total_score + b.score}",
         cx,
         @types.screen_h / 3 + 60,
         @types.font_body,
@@ -1824,4 +1980,5 @@ fn draw_end(game : @types.Game, title : String, color : @raylib.Color) -> Unit {
     )
   }
 }
+
 

@@ -4,9 +4,13 @@ pub(all) enum Screen {
   MapSelect
   MechSelect
   Campaign
+  MissionBriefing
   Battle
   EnemyTurn
   Reward
+  UpgradeScreen
+  MissionDebrief
+  RunSummary
   GameOver
   Victory
 } derive(Eq, Show)
@@ -155,4 +159,10 @@ pub(all) enum AnimKind {
   AnimPush
   AnimDeath
   AnimIntentReveal
+} derive(Eq, Show)
+
+///|
+pub(all) enum StatusEffect {
+  OnFire(Int)        // turns remaining
+  Immobilized(Int)   // turns remaining
 } derive(Eq, Show)
