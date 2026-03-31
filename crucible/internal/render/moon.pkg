@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/crucible/internal/types",
+  "bobzhang/games/crucible/internal/levels",
+  "bobzhang/games/crucible/internal/alchemy",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

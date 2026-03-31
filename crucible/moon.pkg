@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/crucible/internal/types",
+  "bobzhang/games/crucible/internal/game",
+  "bobzhang/games/crucible/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)
