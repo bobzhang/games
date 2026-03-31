@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/chronicle/internal/types",
+  "bobzhang/games/chronicle/internal/levels",
+  "bobzhang/games/utils/draw",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
