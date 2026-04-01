@@ -1345,6 +1345,7 @@ fn @types.Game::draw_world(
   cam_y : Float,
 ) -> Unit {
   game.draw_afterimages(cam_x, cam_y)
+  game.draw_hazards(cam_x, cam_y)
   game.draw_rings(cam_x, cam_y)
   game.draw_entities(cam_x, cam_y)
   game.draw_bullets(cam_x, cam_y)
@@ -1378,9 +1379,17 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     )
   }
 
+  // Oil slick screen effect
+  game.draw_oil_effect()
+
   match game.state {
     Title => ()
-    _ => game.draw_hud()
+    _ => {
+      game.draw_hud()
+      game.draw_weapon_hud()
+      game.draw_cooldown_indicators()
+      game.draw_combo_stinger()
+    }
   }
 
   match game.state {
@@ -1394,4 +1403,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     StageClear => game.draw_stage_clear_overlay()
     GameOver => game.draw_game_over_overlay()
   }
+
+  // Stage transition flash
+  game.draw_stage_transition()
 }

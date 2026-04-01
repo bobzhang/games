@@ -486,10 +486,19 @@ fn @types.Game::spawn_step(game : @types.Game, dt : Float) -> Unit {
   game.next_spawn_y = game.next_spawn_y + game.scroll_speed * dt
   game.formation_cd = @types.maxf(0.0, game.formation_cd - dt)
 
+  // Balance: wider spacing in early stages for gentler start
+  let space_bonus : Float = if game.stage <= 2 {
+    30.0
+  } else {
+    0.0
+  }
   let mut spawn_count = 0
   while game.next_spawn_y >= 0.0 && spawn_count < 18 {
     game.next_spawn_y = game.next_spawn_y -
-      @types.randf(@types.spawn_spacing_min, @types.spawn_spacing_max)
+      @types.randf(
+        @types.spawn_spacing_min + space_bonus,
+        @types.spawn_spacing_max + space_bonus,
+      )
     game.encounter_spawn(game.next_spawn_y)
     game.spawn_hazard_pack(game.next_spawn_y)
     spawn_count = spawn_count + 1
