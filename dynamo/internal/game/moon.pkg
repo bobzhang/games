@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/dynamo/internal/types",
+  "bobzhang/games/dynamo/internal/circuit",
+  "bobzhang/games/dynamo/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

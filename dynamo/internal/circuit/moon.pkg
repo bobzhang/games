@@ -1,0 +1,5 @@
+import {
+  "bobzhang/games/dynamo/internal/types",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
