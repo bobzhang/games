@@ -1,6 +1,6 @@
 {
   "name": "bobzhang/games",
-  "version": "0.9.31",
+  "version": "0.9.32",
   "deps": {
     "tonyfettes/raylib": "0.3.1",
     "moonbitlang/async": "0.16.8"
