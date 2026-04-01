@@ -26,7 +26,8 @@ pub fn calc_damage(
   let def_terrain = battle.map.tiles[def_terrain_idx].terrain
   let terrain_atk = @types.terrain_atk_bonus(atk_terrain, def_terrain)
   let terrain_def = @types.terrain_def_bonus(def_terrain, defender.kind)
-  let total = base_atk + type_bonus + terrain_atk - terrain_def
+  let unit_def = defender.def
+  let total = base_atk + type_bonus + terrain_atk - terrain_def - unit_def
   @types.maxi(1, total)
 }
 

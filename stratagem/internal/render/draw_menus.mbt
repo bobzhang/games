@@ -91,17 +91,40 @@ fn draw_campaign(game : @types.Game) -> Unit {
       },
     )
     let num = (i + 1).to_string()
-    let label = if unlocked { num + ". Level " + num } else { "LOCKED" }
+    let level_def = @levels.get_campaign_level(i)
+    let label = if unlocked { num + ". " + level_def.name } else { "LOCKED" }
     let text_color = if unlocked {
       @raylib.Color::new(200, 210, 230, 255)
     } else {
       @raylib.Color::new(80, 80, 90, 200)
     }
     @draw.draw_text(label, bx + 10, by + 10, 22, text_color)
+    if unlocked {
+      // Show description
+      @draw.draw_text(
+        level_def.description,
+        bx + 10,
+        by + 38,
+        13,
+        @raylib.Color::new(140, 145, 160, 180),
+      )
+      // Victory condition indicator
+      let vc_text = match level_def.victory {
+        EliminateAll => "Eliminate All"
+        CaptureFlag(_, _) => "Capture Flag"
+      }
+      @draw.draw_text(
+        vc_text,
+        bx + 10,
+        by + 56,
+        12,
+        @raylib.Color::new(180, 150, 80, 180),
+      )
+    }
     if camp.level_scores[i] > 0 {
       let sc = "Score: " + camp.level_scores[i].to_string()
       @draw.draw_text(
-        sc, bx + 10, by + 70, 16, @raylib.Color::new(200, 180, 80, 200),
+        sc, bx + 10, by + 78, 16, @raylib.Color::new(200, 180, 80, 200),
       )
     }
   }
@@ -169,33 +192,109 @@ fn draw_skirmish(game : @types.Game) -> Unit {
 fn draw_results(game : @types.Game) -> Unit {
   let w = @types.screen_width
   let h = @types.screen_height
+  let time : Float = Float::from_int(game.frame_count) * 0.02
   // Background overlay
-  @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(10, 10, 20, 230))
+  @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(10, 10, 20, 240))
+  // Animated background particles for victory
+  if game.last_was_victory {
+    for i in 0..<20 {
+      let fi : Float = Float::from_int(i)
+      let px = @types.sinf(time * 0.7 + fi * 1.3) * 400.0 + Float::from_int(
+          w / 2,
+        )
+      let py = @types.cosf(time * 0.5 + fi * 0.9) * 250.0 + Float::from_int(
+          h / 2,
+        )
+      let alpha_f : Float = @types.sinf(time + fi) * 40.0 + 50.0
+      let alpha = @types.mini(@types.maxi(alpha_f.to_int(), 10), 90)
+      @raylib.draw_circle(
+        px.to_int(),
+        py.to_int(),
+        3.0,
+        @raylib.Color::new(255, 215, 0, alpha),
+      )
+    }
+  }
   let title = if game.last_was_victory { "VICTORY!" } else { "DEFEAT" }
   let title_color = if game.last_was_victory {
-    @types.color_gold
+    // Pulsing gold for victory
+    let pulse : Float = @types.sinf(time * 3.0) * 30.0 + 225.0
+    @raylib.Color::new(
+      @types.mini(pulse.to_int(), 255),
+      @types.mini((pulse * 0.84).to_int(), 255),
+      0,
+      255,
+    )
   } else {
-    @types.color_enemy
+    // Pulsing red for defeat
+    let pulse : Float = @types.sinf(time * 2.0) * 30.0 + 200.0
+    @raylib.Color::new(@types.mini(pulse.to_int(), 255), 40, 40, 255)
   }
   let tw = @draw.measure_text(title, 64)
+  // Title shadow
+  @draw.draw_text(
+    title,
+    (w - tw) / 2 + 2,
+    h / 4 + 2,
+    64,
+    @raylib.Color::new(0, 0, 0, 180),
+  )
   @draw.draw_text(title, (w - tw) / 2, h / 4, 64, title_color)
-  // Stats
-  let cy = h / 2 - 40
+  // Decorative line under title
+  let line_w = 300
+  let line_x = (w - line_w) / 2
+  let line_y = h / 4 + 75
+  @raylib.draw_rectangle(
+    line_x,
+    line_y,
+    line_w,
+    2,
+    @raylib.Color::new(120, 120, 140, 150),
+  )
+  // Stats with staggered reveal
+  let cy = h / 2 - 30
   let stats = [
-    "Turns: " + game.last_turns.to_string(),
-    "Units Remaining: " + game.last_units_remaining.to_string(),
-    "Score: " + game.last_score.to_string(),
+    ("Turns", game.last_turns.to_string()),
+    ("Units Remaining", game.last_units_remaining.to_string()),
+    ("Score", game.last_score.to_string()),
   ]
   for i in 0..<stats.length() {
-    let sw = @draw.measure_text(stats[i], 24)
+    let (label, value) = stats[i]
+    let text = label + ": " + value
+    let sw = @draw.measure_text(text, 24)
+    // Label
     @draw.draw_text(
-      stats[i], (w - sw) / 2, cy + i * 40, 24, @types.color_hud_text,
+      label + ":",
+      (w - sw) / 2,
+      cy + i * 45,
+      24,
+      @raylib.Color::new(160, 170, 190, 200),
+    )
+    // Value highlighted
+    let label_w = @draw.measure_text(label + ": ", 24)
+    let value_color = if i == 2 {
+      @types.color_gold
+    } else {
+      @types.color_hud_text
+    }
+    @draw.draw_text(
+      value,
+      (w - sw) / 2 + label_w,
+      cy + i * 45,
+      24,
+      value_color,
     )
   }
   // Navigation
   let nav = "[ENTER] Continue  [ESC] Main Menu"
   let nw = @draw.measure_text(nav, 20)
+  let nav_alpha_f : Float = @types.sinf(time * 2.0) * 40.0 + 180.0
+  let nav_alpha = @types.mini(nav_alpha_f.to_int(), 220)
   @draw.draw_text(
-    nav, (w - nw) / 2, h - 80, 20, @raylib.Color::new(160, 170, 190, 200),
+    nav,
+    (w - nw) / 2,
+    h - 80,
+    20,
+    @raylib.Color::new(160, 170, 190, nav_alpha),
   )
 }

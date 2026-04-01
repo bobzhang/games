@@ -330,6 +330,15 @@ pub fn terrain_name(t : Terrain) -> String {
 // Constructors
 
 ///|
+pub fn unit_base_def(kind : UnitKind) -> Int {
+  match kind {
+    Infantry => 1
+    Cavalry => 0
+    Artillery => 0
+  }
+}
+
+///|
 pub fn new_unit(
   id : Int,
   kind : UnitKind,
@@ -346,7 +355,7 @@ pub fn new_unit(
     hp: unit_base_hp(kind),
     max_hp: unit_base_hp(kind),
     atk: unit_base_atk(kind),
-    def: 0,
+    def: unit_base_def(kind),
     move_range: move_r,
     attack_range: unit_base_range(kind),
     sight_range: unit_base_sight(kind),
@@ -387,6 +396,14 @@ pub fn new_battle() -> Battle {
     anim_timer: 0.0,
     anim_message: "",
     next_unit_id: 0,
+    attack_flash_timer: 0.0,
+    attack_flash_pos: None,
+    hit_shake_timer: 0.0,
+    hit_shake_target: None,
+    damage_popup_timer: 0.0,
+    damage_popup_pos: None,
+    damage_popup_value: 0,
+    turn_banner_timer: 0.0,
   }
 }
 
@@ -543,14 +560,12 @@ pub fn update_fog_of_war(battle : Battle) -> Unit {
 
 ///|
 pub fn terrain_def_bonus(terrain : Terrain, kind : UnitKind) -> Int {
-  match terrain {
-    Forest =>
-      if kind == Infantry {
-        2
-      } else {
-        1
-      }
-    Hills => 0
+  match (terrain, kind) {
+    (Forest, Infantry) => 2
+    (Forest, _) => 1
+    (Hills, Artillery) => 1
+    (Hills, Infantry) => 1
+    (Hills, _) => 0
     _ => 0
   }
 }

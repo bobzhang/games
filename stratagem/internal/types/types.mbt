@@ -64,6 +64,15 @@ pub(all) struct Battle {
   mut anim_timer : Float
   mut anim_message : String
   mut next_unit_id : Int
+  // Visual feedback state
+  mut attack_flash_timer : Float
+  mut attack_flash_pos : HexCoord?
+  mut hit_shake_timer : Float
+  mut hit_shake_target : HexCoord?
+  mut damage_popup_timer : Float
+  mut damage_popup_pos : HexCoord?
+  mut damage_popup_value : Int
+  mut turn_banner_timer : Float
 }
 
 ///|

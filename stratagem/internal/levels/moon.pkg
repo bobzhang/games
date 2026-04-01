@@ -2,4 +2,9 @@ import {
   "bobzhang/games/stratagem/internal/types",
 }
 
+import {
+  "bobzhang/games/stratagem/internal/types",
+  "bobzhang/games/stratagem/internal/levels",
+} for "test"
+
 warnings = "-missing_doc+unnecessary_annotation"

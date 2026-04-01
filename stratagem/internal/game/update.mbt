@@ -117,6 +117,8 @@ fn setup_battle_from_def(
   @types.seed_rng(game.rng + game.frame_count)
   // Initial fog update
   @types.update_fog_of_war(battle)
+  // Show initial turn banner
+  battle.turn_banner_timer = 1.0
   battle
 }
 
@@ -188,9 +190,37 @@ fn update_playing(game : @types.Game) -> Unit {
   if battle.result != Ongoing {
     return
   }
+  // Update visual effect timers
+  let dt : Float = 1.0 / 60.0
+  if battle.attack_flash_timer > 0.0 {
+    battle.attack_flash_timer = battle.attack_flash_timer - dt
+    if battle.attack_flash_timer <= 0.0 {
+      battle.attack_flash_timer = 0.0
+      battle.attack_flash_pos = None
+    }
+  }
+  if battle.hit_shake_timer > 0.0 {
+    battle.hit_shake_timer = battle.hit_shake_timer - dt
+    if battle.hit_shake_timer <= 0.0 {
+      battle.hit_shake_timer = 0.0
+      battle.hit_shake_target = None
+    }
+  }
+  if battle.damage_popup_timer > 0.0 {
+    battle.damage_popup_timer = battle.damage_popup_timer - dt
+    if battle.damage_popup_timer <= 0.0 {
+      battle.damage_popup_timer = 0.0
+      battle.damage_popup_pos = None
+    }
+  }
+  if battle.turn_banner_timer > 0.0 {
+    battle.turn_banner_timer = battle.turn_banner_timer - dt
+    if battle.turn_banner_timer <= 0.0 {
+      battle.turn_banner_timer = 0.0
+    }
+  }
   // Handle animation timer
   if battle.anim_timer > 0.0 {
-    let dt : Float = 1.0 / 60.0
     battle.anim_timer = battle.anim_timer - dt
     if battle.anim_timer <= 0.0 {
       battle.anim_timer = 0.0
@@ -209,6 +239,8 @@ fn update_playing(game : @types.Game) -> Unit {
         battle.turn = battle.turn + 1
         @types.reset_team_turn(battle, Player)
         @types.update_fog_of_war(battle)
+        // Show turn banner
+        battle.turn_banner_timer = 1.0
       }
     }
     return
@@ -231,6 +263,7 @@ fn update_select(game : @types.Game, battle : @types.Battle) -> Unit {
     battle.selected_unit = -1
     battle.move_targets = []
     battle.attack_targets = []
+    battle.turn_banner_timer = 0.8
     return
   }
   // Tab to next available unit
@@ -421,6 +454,14 @@ fn update_attack(game : @types.Game, battle : @types.Battle) -> Unit {
           if is_attack_target {
             match @types.get_unit_at(battle, hc) {
               Some(target) => {
+                // Trigger attack flash at attacker position
+                match @types.get_unit(battle, battle.selected_unit) {
+                  Some(attacker) => {
+                    battle.attack_flash_timer = 0.3
+                    battle.attack_flash_pos = Some(attacker.pos)
+                  }
+                  None => ()
+                }
                 let (dmg, killed) = @combat.resolve_attack(
                   battle, battle.selected_unit, target.id,
                 )
@@ -432,6 +473,13 @@ fn update_attack(game : @types.Game, battle : @types.Battle) -> Unit {
                   }
                   battle.anim_message = msg
                   battle.anim_timer = 1.0
+                  // Trigger hit shake on defender
+                  battle.hit_shake_timer = 0.4
+                  battle.hit_shake_target = Some(hc)
+                  // Trigger damage popup
+                  battle.damage_popup_timer = 0.8
+                  battle.damage_popup_pos = Some(hc)
+                  battle.damage_popup_value = dmg
                 }
                 // Check victory
                 let result = @combat.check_victory(battle)
@@ -457,9 +505,9 @@ fn update_attack(game : @types.Game, battle : @types.Battle) -> Unit {
 }
 
 ///|
-fn update_enemy_turn(_game : @types.Game, battle : @types.Battle) -> Unit {
+fn update_enemy_turn(game : @types.Game, battle : @types.Battle) -> Unit {
   @types.reset_team_turn(battle, Enemy)
-  let messages = @ai.execute_ai_turn(battle, Normal)
+  let messages = @ai.execute_ai_turn(battle, game.difficulty)
   // Show first message as animation
   if messages.length() > 0 {
     battle.anim_message = messages[0]
