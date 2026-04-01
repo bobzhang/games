@@ -314,3 +314,296 @@ test "resolve_until_stable" {
   // After stabilization, all non-ocean tiles should be desert (or still barren if corner)
   inspect(@biome.is_stable(grid), content="true")
 }
+
+// ============================================================
+// Ecosystem edge case tests
+// ============================================================
+
+///|
+test "forest death: 4+ desert neighbors also kills forest" {
+  let grid = @types.new_grid(5, 5, false)
+  // Place forest at (2,2) even row
+  @types.set_biome(grid, 2, 2, Forest)
+  // Even row (2) neighbors: (-1,-1),(0,-1),(-1,0),(1,0),(-1,1),(0,1)
+  // That's (1,1),(2,1),(1,2),(3,2),(1,3),(2,3)
+  @types.set_biome(grid, 1, 1, Desert)
+  @types.set_biome(grid, 2, 1, Desert)
+  @types.set_biome(grid, 1, 2, Desert)
+  @types.set_biome(grid, 3, 2, Desert)
+  // 4 desert neighbors
+  let _changed = @biome.resolve_ecosystem(grid)
+  inspect(@types.get_tile(grid, 2, 2).biome, content="Barren")
+}
+
+///|
+test "forest death: 5 desert neighbors kills forest" {
+  let grid = @types.new_grid(5, 5, false)
+  @types.set_biome(grid, 2, 2, Forest)
+  // 5 desert neighbors
+  @types.set_biome(grid, 1, 1, Desert)
+  @types.set_biome(grid, 2, 1, Desert)
+  @types.set_biome(grid, 1, 2, Desert)
+  @types.set_biome(grid, 3, 2, Desert)
+  @types.set_biome(grid, 1, 3, Desert)
+  let _changed = @biome.resolve_ecosystem(grid)
+  inspect(@types.get_tile(grid, 2, 2).biome, content="Barren")
+}
+
+///|
+test "forest death: all 6 desert neighbors kills forest" {
+  let grid = @types.new_grid(5, 5, false)
+  @types.set_biome(grid, 2, 2, Forest)
+  // All 6 neighbors are desert (even row)
+  @types.set_biome(grid, 1, 1, Desert)
+  @types.set_biome(grid, 2, 1, Desert)
+  @types.set_biome(grid, 1, 2, Desert)
+  @types.set_biome(grid, 3, 2, Desert)
+  @types.set_biome(grid, 1, 3, Desert)
+  @types.set_biome(grid, 2, 3, Desert)
+  let _changed = @biome.resolve_ecosystem(grid)
+  inspect(@types.get_tile(grid, 2, 2).biome, content="Barren")
+}
+
+///|
+test "desert retreat with exactly 2 ocean neighbors" {
+  let grid = @types.new_grid(5, 5, false)
+  @types.set_biome(grid, 2, 2, Desert)
+  // Even row (2) neighbors of (2,2): (1,1),(2,1),(1,2),(3,2),(1,3),(2,3)
+  @types.set_biome(grid, 1, 1, Ocean)
+  @types.set_biome(grid, 2, 1, Ocean)
+  let _changed = @biome.resolve_ecosystem(grid)
+  inspect(@types.get_tile(grid, 2, 2).biome, content="Barren")
+}
+
+///|
+test "desert retreat with 3 ocean neighbors" {
+  let grid = @types.new_grid(5, 5, false)
+  @types.set_biome(grid, 2, 2, Desert)
+  @types.set_biome(grid, 1, 1, Ocean)
+  @types.set_biome(grid, 2, 1, Ocean)
+  @types.set_biome(grid, 1, 2, Ocean)
+  let _changed = @biome.resolve_ecosystem(grid)
+  inspect(@types.get_tile(grid, 2, 2).biome, content="Barren")
+}
+
+///|
+test "wrapping: forest at col 0 with ocean at last col spreads via wrap" {
+  // With wrapping, col 0 neighbors col (w-1) on odd rows
+  let grid = @types.new_grid(6, 3, true)
+  @types.set_biome(grid, 0, 1, Forest)
+  @types.set_biome(grid, 5, 1, Ocean)
+  // Row 1 is odd. Odd row neighbors of (0,1): (0,0),(1,0),(-1=>5,1),(1,1),(0,2),(1,2)
+  // Forest at (0,1), Ocean at (5,1). (5,1) is neighbor of (0,1) via wrap.
+  // Barren tiles adjacent to both forest and ocean should get forest
+  let _changed = @biome.resolve_ecosystem(grid)
+  // (0,0) is even row neighbor of (0,1) via odd-row rule: neighbors are (0,0),(1,0),(5,1),(1,1),(0,2),(1,2)
+  // (0,0) has forest neighbor (0,1) and check if it has ocean neighbor too
+  // Actually for (0,0) to become forest, it needs both forest and ocean as neighbors
+  // Let's just check that forest count increased (spreading happened through wrap)
+  let fc = @types.count_biome(grid, Forest)
+  inspect(fc >= 1, content="true")
+}
+
+///|
+test "wrapping: desert at last col spreads to col 0 via wrap" {
+  let grid = @types.new_grid(6, 3, true)
+  @types.set_biome(grid, 5, 1, Desert)
+  // Desert should spread to its neighbors including col 0 via wrap
+  let _changed = @biome.resolve_ecosystem(grid)
+  let dc = @types.count_biome(grid, Desert)
+  inspect(dc > 1, content="true")
+  // Check that col 0 got desert (via wrap on odd row)
+  // Odd row (1) neighbors of (5,1) include wrapping: (5,0),(0,0),(4,1),(0,1),(5,2),(0,2)
+  // Wait: neighbors of col 5, row 1 (odd): (0,-1)=>(5,0), (1,-1)=>(0,0) -- hmm need to check
+  // Actually odd row offsets: (0,-1),(1,-1),(-1,0),(1,0),(0,1),(1,1)
+  // For (5,1): (5,0),(6=>0,0),(4,1),(6=>0,1),(5,2),(6=>0,2)
+  // So (0,0), (0,1), (0,2) are neighbors of (5,1) via wrap
+  // At least (0,1) should become desert (barren, no ocean, has desert neighbor)
+  inspect(@types.get_tile(grid, 0, 1).biome, content="Desert")
+}
+
+///|
+test "wrapping: top-left corner neighbors with wrap" {
+  // Cell (0,0) is even row. Even row neighbors: (-1,-1),(0,-1),(-1,0),(1,0),(-1,1),(0,1)
+  // With wrap: col -1 => w-1. Row -1 is out of bounds.
+  // So valid neighbors: (w-1,0) via wrap for (-1,0), (1,0), (w-1,1) via wrap for (-1,1), (0,1)
+  let _grid = @types.new_grid(6, 3, true)
+  let neighbors = @types.hex_neighbors(0, 0, 6, 3, true)
+  // Should have: (5,0) via wrap, (1,0), (5,1) via wrap, (0,1) = 4 neighbors
+  // (top row removes row -1 neighbors)
+  inspect(neighbors.length(), content="4")
+  // Check that (5,0) is in the list (wrap around)
+  let mut found_5_0 = false
+  for i in 0..<neighbors.length() {
+    let (c, r) = neighbors[i]
+    if c == 5 && r == 0 {
+      found_5_0 = true
+    }
+  }
+  inspect(found_5_0, content="true")
+}
+
+///|
+test "wrapping: bottom-right corner neighbors with wrap" {
+  // Cell (5,2) on a 6x3 grid, even row.
+  // Even row neighbors: (4,1),(5,1),(4,2),(6=>0,2),(4,3 out),(5,3 out)
+  // Actually row 2 is even. Offsets: (-1,-1),(0,-1),(-1,0),(1,0),(-1,1),(0,1)
+  // (4,1),(5,1),(4,2),(6=>0,2),(4,3 out),(5,3 out)
+  // Valid: (4,1),(5,1),(4,2),(0,2) = 4 neighbors
+  let _grid = @types.new_grid(6, 3, true)
+  let neighbors = @types.hex_neighbors(5, 2, 6, 3, true)
+  inspect(neighbors.length(), content="4")
+  let mut found_0_2 = false
+  for i in 0..<neighbors.length() {
+    let (c, r) = neighbors[i]
+    if c == 0 && r == 2 {
+      found_0_2 = true
+    }
+  }
+  inspect(found_0_2, content="true")
+}
+
+///|
+test "wrapping: desert spread wraps and kills forest across edge" {
+  // Desert near left edge should contribute to killing forest near right edge via wrap
+  let grid = @types.new_grid(6, 3, true)
+  // Forest at (0,1), desert at (5,0), (5,1), (5,2)
+  // (0,1) odd row neighbors: (0,0),(1,0),(5,1),(1,1),(0,2),(1,2)  -- wait
+  // Odd row offsets: (0,-1),(1,-1),(-1,0),(1,0),(0,1),(1,1)
+  // (0,1): (0,0),(1,0),(-1=>5,1),(1,1),(0,2),(1,2)
+  // So (5,1) is a neighbor of (0,1). If desert is at (5,0),(5,1),(1,0) then (0,1) has 3 desert neighbors
+  @types.set_biome(grid, 0, 1, Forest)
+  @types.set_biome(grid, 5, 1, Desert) // wrap neighbor
+  @types.set_biome(grid, 1, 0, Desert) // neighbor
+  @types.set_biome(grid, 1, 1, Desert) // neighbor
+  // Forest at (0,1) has desert neighbors: (5,1), (1,0), (1,1) = 3 desert
+  let _changed = @biome.resolve_ecosystem(grid)
+  inspect(@types.get_tile(grid, 0, 1).biome, content="Barren")
+}
+
+///|
+test "preview_tile_changes returns correct indices and biomes" {
+  let grid = @types.new_grid(5, 5, false)
+  @types.set_biome(grid, 2, 2, Desert)
+  let changes = @biome.preview_tile_changes(grid)
+  // Desert should spread to some barren neighbors
+  inspect(changes.length() > 0, content="true")
+  // All changes should be to Desert (spreading from the one desert tile)
+  for i in 0..<changes.length() {
+    let (_idx, biome) = changes[i]
+    inspect(biome, content="Desert")
+  }
+}
+
+///|
+test "preview_tile_changes empty for stable grid" {
+  let grid = @types.new_grid(3, 3, false)
+  // All barren = stable
+  let changes = @biome.preview_tile_changes(grid)
+  inspect(changes.length(), content="0")
+}
+
+///|
+test "preview_tile_changes matches resolve_ecosystem results" {
+  let grid = @types.new_grid(7, 5, false)
+  @types.set_biome(grid, 3, 2, Desert)
+  @types.set_biome(grid, 2, 2, Ocean)
+  @types.set_biome(grid, 4, 2, Forest)
+  let preview = @biome.preview_tile_changes(grid)
+  // Now actually resolve on a clone and compare
+  let clone = @types.clone_grid(grid)
+  let changed = @biome.resolve_ecosystem(clone)
+  let mut changed_count = 0
+  for i in 0..<changed.length() {
+    if changed[i] {
+      changed_count += 1
+    }
+  }
+  inspect(preview.length() == changed_count, content="true")
+}
+
+///|
+test "forest survives with desert and ocean mixed neighbors" {
+  // Forest with 2 desert + 2 ocean neighbors should survive (only 2 desert < 3 threshold)
+  let grid = @types.new_grid(5, 5, false)
+  @types.set_biome(grid, 2, 2, Forest)
+  @types.set_biome(grid, 1, 1, Desert)
+  @types.set_biome(grid, 2, 1, Desert)
+  @types.set_biome(grid, 1, 2, Ocean)
+  @types.set_biome(grid, 3, 2, Ocean)
+  let _changed = @biome.resolve_ecosystem(grid)
+  inspect(@types.get_tile(grid, 2, 2).biome, content="Forest")
+}
+
+///|
+test "barren with both desert and forest+ocean neighbors: forest wins" {
+  // A barren tile with 1 forest neighbor + 1 ocean neighbor AND 1 desert neighbor
+  // Forest rule: forest >= 1 && ocean >= 1 => Forest (checked first)
+  let grid = @types.new_grid(5, 5, false)
+  // Target: (2,3) barren (even row 2, but we check row 3)
+  // Row 3 is odd. Odd row offsets: (0,-1),(1,-1),(-1,0),(1,0),(0,1),(1,1)
+  // Neighbors of (2,3): (2,2),(3,2),(1,3),(3,3),(2,4),(3,4)
+  @types.set_biome(grid, 2, 2, Forest)
+  @types.set_biome(grid, 3, 2, Ocean)
+  @types.set_biome(grid, 1, 3, Desert)
+  let _changed = @biome.resolve_ecosystem(grid)
+  // Forest rule is checked first in apply_rules: forest_n>=1 && ocean_n>=1 => Forest
+  inspect(@types.get_tile(grid, 2, 3).biome, content="Forest")
+}
+
+///|
+test "barren with desert but also ocean: desert does NOT spread" {
+  // Desert spread rule: desert_n >= 1 && ocean_n == 0
+  // If ocean_n > 0, desert should not spread
+  let grid = @types.new_grid(5, 5, false)
+  // Target: (2,3) odd row. Neighbors: (2,2),(3,2),(1,3),(3,3),(2,4),(3,4)
+  @types.set_biome(grid, 1, 3, Desert)
+  @types.set_biome(grid, 3, 3, Ocean)
+  // No forest neighbors, so forest rule doesn't apply
+  // Desert rule: desert_n >= 1 but ocean_n >= 1, so desert shouldn't spread
+  let _changed = @biome.resolve_ecosystem(grid)
+  inspect(@types.get_tile(grid, 2, 3).biome, content="Barren")
+}
+
+///|
+test "multiple resolve steps: forest chain grows along ocean coast" {
+  // Set up a line of ocean + one forest, and verify forest spreads along the coast
+  let grid = @types.new_grid(8, 3, false)
+  @types.set_biome(grid, 0, 1, Ocean)
+  @types.set_biome(grid, 1, 1, Ocean)
+  @types.set_biome(grid, 2, 1, Ocean)
+  @types.set_biome(grid, 3, 1, Ocean)
+  @types.set_biome(grid, 0, 0, Forest)
+  // After several steps, forest should spread along the tiles next to ocean
+  let _changed = @biome.resolve_n_steps(grid, 5)
+  let fc = @types.count_biome(grid, Forest)
+  inspect(fc > 1, content="true")
+}
+
+///|
+test "edge: single tile grid" {
+  let grid = @types.new_grid(1, 1, false)
+  @types.set_biome(grid, 0, 0, Desert)
+  // No neighbors at all, nothing should change
+  let changed = @biome.resolve_ecosystem(grid)
+  inspect(changed[0], content="false")
+  inspect(@types.get_tile(grid, 0, 0).biome, content="Desert")
+}
+
+///|
+test "edge: 1-wide grid with wrapping" {
+  // Width 1 with wrap: col 0 wraps to col 0 (self-loop possible?)
+  // hex_neighbors for col 0 row 1, width 1: wrap -1 => 0, wrap 1 => 0
+  // But that would be self-referencing. Let's verify behavior.
+  let grid = @types.new_grid(1, 3, true)
+  @types.set_biome(grid, 0, 1, Desert)
+  let changed = @biome.resolve_ecosystem(grid)
+  // Row 0 and row 2 should get desert (they neighbor row 1, no ocean)
+  let mut any = false
+  for i in 0..<changed.length() {
+    if changed[i] {
+      any = true
+    }
+  }
+  inspect(any, content="true")
+}

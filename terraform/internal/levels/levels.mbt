@@ -185,9 +185,9 @@ fn level_3() -> @types.Level {
       (4, 0, Ocean, true),
       (5, 5, Ocean, true),
     ],
-    budget: @types.new_budget(5, 2, 0),
-    targets: @types.new_targets(0.20, 0.50, 0.05, 0.30, 0.0, 0.10),
-    par_turns: 10,
+    budget: @types.new_budget(5, 3, 0),
+    targets: @types.new_targets(0.18, 0.50, 0.05, 0.30, 0.0, 0.10),
+    par_turns: 12,
   }
 }
 
@@ -493,7 +493,7 @@ fn level_18() -> @types.Level {
       (3, 3, Forest, false), (4, 4, Forest, false),
     ],
     budget: @types.new_budget(4, 5, 1),
-    targets: @types.new_targets(0.12, 0.22, 0.10, 0.20, 0.0, 0.08),
+    targets: @types.new_targets(0.12, 0.22, 0.10, 0.20, 0.0, 0.10),
     par_turns: 16,
   }
 }
