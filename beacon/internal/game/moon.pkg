@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/beacon/internal/types",
+  "bobzhang/games/beacon/internal/signal",
+  "bobzhang/games/beacon/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
