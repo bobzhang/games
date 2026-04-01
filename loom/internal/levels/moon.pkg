@@ -1,0 +1,6 @@
+import {
+  "bobzhang/games/loom/internal/types",
+  "bobzhang/games/loom/internal/weave",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

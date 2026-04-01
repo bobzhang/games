@@ -1,0 +1,7 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/loom/internal/types",
+  "bobzhang/games/loom/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
