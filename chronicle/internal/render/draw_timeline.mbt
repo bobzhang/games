@@ -489,7 +489,7 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
       let dx = mx - fx
       let dy = my - fy
       let len = Float::from_double(
-        @math.sqrt((dx * dx + dy * dy).to_double()),
+        (dx * dx + dy * dy).to_double().sqrt(),
       )
       if len > 10.0 {
         let nx = dx / len
