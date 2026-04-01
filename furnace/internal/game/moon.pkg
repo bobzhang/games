@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/furnace/internal/types",
+  "bobzhang/games/furnace/internal/heat",
+  "bobzhang/games/furnace/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

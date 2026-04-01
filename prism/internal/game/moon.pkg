@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/prism/internal/types",
+  "bobzhang/games/prism/internal/optics",
+  "bobzhang/games/prism/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
