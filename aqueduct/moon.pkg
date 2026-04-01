@@ -1,0 +1,14 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/aqueduct/internal/types",
+  "bobzhang/games/aqueduct/internal/levels",
+  "bobzhang/games/aqueduct/internal/game",
+  "bobzhang/games/aqueduct/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

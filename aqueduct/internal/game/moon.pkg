@@ -1,0 +1,7 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/aqueduct/internal/types",
+  "bobzhang/games/aqueduct/internal/water",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
