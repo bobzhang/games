@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/patina/internal/types",
+  "bobzhang/games/patina/internal/restoration",
+  "bobzhang/games/patina/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
