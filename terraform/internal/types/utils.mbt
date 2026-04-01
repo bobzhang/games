@@ -341,6 +341,21 @@ pub fn snapshot_biomes(grid : HexGrid) -> Array[BiomeKind] {
 }
 
 ///|
+pub fn new_resolve_snapshot(
+  grid : HexGrid,
+  budget : PaintBudget,
+  turn : Int
+) -> ResolveSnapshot {
+  {
+    biomes: snapshot_biomes(grid),
+    budget_forest: budget.forest,
+    budget_ocean: budget.ocean,
+    budget_desert: budget.desert,
+    turn,
+  }
+}
+
+///|
 pub fn new_budget(forest : Int, ocean : Int, desert : Int) -> PaintBudget {
   { forest, ocean, desert }
 }
@@ -434,5 +449,15 @@ pub fn new_game() -> Game {
     frame_count: 0,
     prev_snapshot: [],
     changed_tiles: [],
+    resolve_undo_stack: [],
+    spread_queue: [],
+    spread_index: 0,
+    spread_timer: 0.0,
+    show_preview: false,
+    preview_tiles: [],
+    transition_tiles: [],
+    transition_timer: 0.0,
+    ratio_pulse_timer: 0.0,
+    ratio_just_entered: [false, false, false],
   }
 }

@@ -63,6 +63,16 @@ pub(all) struct UndoEntry {
 } derive(Show)
 
 ///|
+/// Full grid snapshot for undoing ecosystem resolution steps.
+pub(all) struct ResolveSnapshot {
+  biomes : Array[BiomeKind]
+  budget_forest : Int
+  budget_ocean : Int
+  budget_desert : Int
+  turn : Int
+} derive(Show)
+
+///|
 pub(all) struct Game {
   mut screen : Screen
   mut play_state : PlayState
@@ -87,4 +97,19 @@ pub(all) struct Game {
   mut frame_count : Int
   mut prev_snapshot : Array[BiomeKind]
   mut changed_tiles : Array[Bool]
+  // Ecosystem undo stack: snapshots taken before each resolve cycle
+  mut resolve_undo_stack : Array[ResolveSnapshot]
+  // Spread animation: tiles animate one-by-one during resolve
+  mut spread_queue : Array[Int]
+  mut spread_index : Int
+  mut spread_timer : Float
+  // Preview overlay: show which tiles will change before committing
+  mut show_preview : Bool
+  mut preview_tiles : Array[(Int, BiomeKind)]
+  // Transition indicators: track recently changed tiles for fade effect
+  mut transition_tiles : Array[Int]
+  mut transition_timer : Float
+  // Target ratio pulse feedback
+  mut ratio_pulse_timer : Float
+  mut ratio_just_entered : Array[Bool]
 } derive(Show)

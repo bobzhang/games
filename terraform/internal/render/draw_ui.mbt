@@ -120,17 +120,17 @@ fn draw_turn_info(game : @types.Game) -> Unit {
   @draw.draw_text(state_text, tx, ty + 42, 18, state_color)
   // Controls
   @draw.draw_text(
-    "[R] Restart  [U] Undo",
+    "[R] Restart  [U] Undo  [Shift+U] Undo Resolve",
     tx, ty + 68, 14, @types.color_text_dim,
   )
   @draw.draw_text(
-    "[Esc] Back to levels",
+    "[P] Preview  [Esc] Back to levels",
     tx, ty + 86, 14, @types.color_text_dim,
   )
 }
 
 ///|
-fn draw_biome_rules_panel(game : @types.Game) -> Unit {
+fn draw_biome_rules_panel(_game : @types.Game) -> Unit {
   let px = 950
   let py = 660
   // Compact rules reference
@@ -189,6 +189,22 @@ fn draw_undo_stack_indicator(game : @types.Game) -> Unit {
       ""
     })
     @draw.draw_text(text, 20, @types.screen_height - 30, 14, @types.color_text_dim)
+  }
+  // Resolve undo indicator
+  let rcount = game.resolve_undo_stack.length()
+  if rcount > 0 {
+    let rtext = "Resolve undo: " + rcount.to_string() + " step" +
+      (if rcount > 1 { "s" } else { "" })
+    @draw.draw_text(
+      rtext, 20, @types.screen_height - 14, 12, @types.color_text_dim,
+    )
+  }
+  // Preview mode indicator
+  if game.show_preview {
+    @draw.draw_text(
+      "[P] Preview ON", 140, @types.screen_height - 30, 14,
+      @types.color_accent,
+    )
   }
 }
 

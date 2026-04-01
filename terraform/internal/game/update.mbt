@@ -7,6 +7,17 @@ pub fn update(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     game.message_timer = game.message_timer - dt
   }
+  // Transition fade timer
+  if game.transition_timer > 0.0 {
+    game.transition_timer = game.transition_timer - dt
+    if game.transition_timer <= 0.0 {
+      game.transition_tiles = []
+    }
+  }
+  // Ratio pulse timer
+  if game.ratio_pulse_timer > 0.0 {
+    game.ratio_pulse_timer = game.ratio_pulse_timer - dt
+  }
   match game.screen {
     Title => update_title(game)
     TierSelect => update_tier_select(game)
@@ -141,6 +152,16 @@ fn start_level(game : @types.Game, level_idx : Int) -> Unit {
   game.resolve_step = 0
   game.prev_snapshot = []
   game.changed_tiles = []
+  game.resolve_undo_stack = []
+  game.spread_queue = []
+  game.spread_index = 0
+  game.spread_timer = 0.0
+  game.show_preview = false
+  game.preview_tiles = []
+  game.transition_tiles = []
+  game.transition_timer = 0.0
+  game.ratio_pulse_timer = 0.0
+  game.ratio_just_entered = [false, false, false]
   game.screen = Playing
   game.message = @types.level_name(level_idx)
   game.message_timer = 2.0
@@ -275,9 +296,33 @@ fn update_painting(game : @types.Game) -> Unit {
       game.message_timer = 1.0
     }
   }
-  // Undo
+  // Undo paint
   if @raylib.is_key_pressed(@raylib.KeyU) {
-    undo_last(game)
+    if @raylib.is_key_down(@raylib.KeyLeftShift) || @raylib.is_key_down(
+      @raylib.KeyRightShift,
+    ) {
+      undo_resolve(game)
+    } else {
+      undo_last(game)
+    }
+  }
+  // Preview toggle
+  if @raylib.is_key_pressed(@raylib.KeyP) {
+    game.show_preview = !game.show_preview
+    if game.show_preview {
+      game.preview_tiles = @biome.preview_tile_changes(game.grid)
+      game.message = "Preview: " + game.preview_tiles.length().to_string() +
+        " tiles will change"
+      game.message_timer = 1.0
+    } else {
+      game.preview_tiles = []
+      game.message = "Preview off"
+      game.message_timer = 0.6
+    }
+  }
+  // Update preview when hovering changes (always keep it fresh if on)
+  if game.show_preview {
+    game.preview_tiles = @biome.preview_tile_changes(game.grid)
   }
   // Restart
   if @raylib.is_key_pressed(@raylib.KeyR) {
@@ -334,39 +379,93 @@ fn try_paint(game : @types.Game, col : Int, row : Int) -> Unit {
 
 ///|
 fn begin_resolve(game : @types.Game) -> Unit {
+  // Save a full snapshot so we can undo the entire resolve cycle
+  game.resolve_undo_stack.push(
+    @types.new_resolve_snapshot(game.grid, game.budget, game.current_turn),
+  )
   game.play_state = Resolving
   game.resolve_timer = 0.0
   game.resolve_step = 0
   game.prev_snapshot = @types.snapshot_biomes(game.grid)
+  game.spread_queue = []
+  game.spread_index = 0
+  game.spread_timer = 0.0
+  game.show_preview = false
+  game.preview_tiles = []
 }
 
 ///|
 fn update_resolving(game : @types.Game, dt : Float) -> Unit {
+  // If we have a spread queue in progress, animate one-by-one
+  if game.spread_queue.length() > 0 {
+    game.spread_timer = game.spread_timer + dt
+    let spread_delay : Float = 0.04 // time between each tile flip
+    while game.spread_timer >= spread_delay && game.spread_index < game.spread_queue.length() {
+      let idx = game.spread_queue[game.spread_index]
+      // Mark this tile as changed for visual feedback
+      if idx < game.changed_tiles.length() {
+        game.changed_tiles[idx] = true
+      }
+      // Record as transition tile for fade effect
+      game.transition_tiles.push(idx)
+      game.spread_index += 1
+      game.spread_timer = game.spread_timer - spread_delay
+    }
+    if game.spread_index >= game.spread_queue.length() {
+      // This step's spread animation is done
+      game.spread_queue = []
+      game.spread_index = 0
+      game.spread_timer = 0.0
+      // Check if we need more resolve steps
+      if game.resolve_step >= @types.resolve_steps {
+        finish_resolve(game)
+      } else {
+        // Brief pause before next step
+        game.resolve_timer = 0.0
+      }
+    }
+    return
+  }
+  // Wait for delay, then compute next step
   game.resolve_timer = game.resolve_timer + dt
   if game.resolve_timer >= @types.resolve_delay {
     game.resolve_timer = 0.0
     game.resolve_step += 1
     // Apply one ecosystem step
     game.changed_tiles = @biome.resolve_ecosystem(game.grid)
-    // Check if anything changed
+    // Build spread queue from changed tiles for one-by-one animation
+    let queue : Array[Int] = []
     let mut any_change = false
     for i in 0..<game.changed_tiles.length() {
       if game.changed_tiles[i] {
+        queue.push(i)
         any_change = true
-        break
       }
     }
-    if !any_change || game.resolve_step >= @types.resolve_steps {
-      // Resolution complete
+    if !any_change {
+      // No changes this step - we're done
       finish_resolve(game)
+    } else if game.resolve_step >= @types.resolve_steps {
+      // Last step, but animate then finish
+      game.spread_queue = queue
+      game.spread_index = 0
+      game.spread_timer = 0.0
+      // Reset changed_tiles so animation reveals them one by one
+      game.changed_tiles = Array::make(game.grid.width * game.grid.height, false)
+    } else {
+      // Intermediate step - animate spread
+      game.spread_queue = queue
+      game.spread_index = 0
+      game.spread_timer = 0.0
+      game.changed_tiles = Array::make(game.grid.width * game.grid.height, false)
     }
   }
 }
 
 ///|
 fn finish_resolve(game : @types.Game) -> Unit {
-  // Count how many tiles changed this resolution
-  let mut changes = 0
+  // Count how many tiles changed this resolution (from transition tiles too)
+  let mut changes = game.transition_tiles.length()
   for i in 0..<game.changed_tiles.length() {
     if game.changed_tiles[i] {
       changes += 1
@@ -380,6 +479,18 @@ fn finish_resolve(game : @types.Game) -> Unit {
     }) + " changed"
     game.message_timer = 1.0
   }
+  // Start transition fade timer
+  game.transition_timer = 1.0
+  // Check ratio pulse: did any biome just enter range?
+  let (fs, os, ds) = @biome.ratio_status(game.grid, game.targets)
+  let new_in = [fs == 0, os == 0, ds == 0]
+  for i in 0..<3 {
+    if new_in[i] && !game.ratio_just_entered[i] {
+      // This biome just entered target range!
+      game.ratio_pulse_timer = 1.5
+    }
+  }
+  game.ratio_just_entered = new_in
   // Check win condition
   if @biome.check_targets(game.grid, game.targets) {
     // Win!
@@ -443,6 +554,40 @@ fn undo_last(game : @types.Game) -> Unit {
       }
       game.changed_tiles = []
       game.message = "Undid " + @types.biome_name(e.biome_used) + " paint"
+      game.message_timer = 1.0
+    }
+    None => ()
+  }
+}
+
+///|
+fn undo_resolve(game : @types.Game) -> Unit {
+  if game.resolve_undo_stack.length() == 0 {
+    game.message = "No ecosystem steps to undo"
+    game.message_timer = 0.8
+    return
+  }
+  let snap = game.resolve_undo_stack.pop()
+  match snap {
+    Some(s) => {
+      // Restore full grid state
+      for i in 0..<s.biomes.length() {
+        if !game.grid.tiles[i].locked {
+          game.grid.tiles[i].biome = s.biomes[i]
+        }
+      }
+      game.budget.forest = s.budget_forest
+      game.budget.ocean = s.budget_ocean
+      game.budget.desert = s.budget_desert
+      game.current_turn = s.turn
+      // Also pop the corresponding paint undo entry
+      if game.undo_stack.length() > 0 {
+        let _ = game.undo_stack.pop()
+      }
+      game.changed_tiles = []
+      game.transition_tiles = []
+      game.play_state = Painting
+      game.message = "Undid ecosystem resolve"
       game.message_timer = 1.0
     }
     None => ()

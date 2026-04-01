@@ -57,12 +57,46 @@ fn update_guard_detection(
 }
 
 ///|
+/// Generate search offsets around the investigation point
+fn generate_search_offsets(
+  g : @types.Guard,
+  tiles : Array[Array[@types.TileKind]]
+) -> Array[@types.Vec2i] {
+  let offsets : Array[@types.Vec2i] = []
+  // Search in a pattern around the investigation point: cardinal then diagonal
+  let candidates : Array[@types.Vec2i] = [
+    { x: g.investigate_x, y: g.investigate_y },
+    { x: g.investigate_x + 1, y: g.investigate_y },
+    { x: g.investigate_x - 1, y: g.investigate_y },
+    { x: g.investigate_x, y: g.investigate_y + 1 },
+    { x: g.investigate_x, y: g.investigate_y - 1 },
+    { x: g.investigate_x + 1, y: g.investigate_y + 1 },
+    { x: g.investigate_x - 1, y: g.investigate_y - 1 },
+  ]
+  for i in 0..<candidates.length() {
+    let c = candidates[i]
+    if @types.in_bounds(c.x, c.y) && @types.tile_walkable(tiles[c.y][c.x]) {
+      offsets.push(c)
+    }
+  }
+  offsets
+}
+
+///|
 /// Update guard state machine
 fn update_guard_state(g : @types.Guard, game : @types.Game, dt : Float) -> Unit {
   match g.alert_state {
     Patrolling => ()
     Suspicious => {
       g.suspicious_timer -= dt
+      // Handle look timer: guard pauses to look around at each search point
+      if g.look_timer > 0.0 {
+        g.look_timer -= dt
+        // Rotate while looking
+        g.facing_angle = normalize_angle(g.facing_angle + 1.5 * dt)
+        update_facing_from_angle(g)
+        return
+      }
       if g.suspicious_timer <= 0.0 {
         // Check if can still see player
         let can_see = point_in_vision_cone(
@@ -83,7 +117,18 @@ fn update_guard_state(g : @types.Guard, game : @types.Game, dt : Float) -> Unit 
           // Return to patrol
           g.alert_state = Patrolling
           g.detection_meter = 0.0
+          g.searching = false
+          g.search_index = 0
         }
+      }
+      // Start searching if reached investigation point and not already searching
+      if !g.searching &&
+        g.gx == g.investigate_x &&
+        g.gy == g.investigate_y {
+        g.searching = true
+        g.search_offsets = generate_search_offsets(g, game.level.tiles)
+        g.search_index = 0
+        g.look_timer = @types.search_look_duration
       }
     }
     Alert => {
@@ -104,6 +149,8 @@ fn update_guard_state(g : @types.Guard, game : @types.Game, dt : Float) -> Unit 
         g.alert_state = Suspicious
         g.suspicious_timer = @types.suspicious_duration
         g.detection_meter = 0.3
+        g.searching = false
+        g.search_index = 0
       }
     }
   }
@@ -128,7 +175,29 @@ fn update_guard_movement(
   g.move_timer = interval
   match g.alert_state {
     Patrolling => move_guard_patrol(g, game)
-    Suspicious | Alert => move_guard_toward(g, g.investigate_x, g.investigate_y, game)
+    Suspicious => move_guard_search(g, game)
+    Alert => move_guard_toward(g, g.investigate_x, g.investigate_y, game)
+  }
+}
+
+///|
+/// Move guard during suspicious search behavior
+fn move_guard_search(g : @types.Guard, game : @types.Game) -> Unit {
+  if g.searching && g.search_offsets.length() > 0 {
+    let target = g.search_offsets[g.search_index]
+    if g.gx == target.x && g.gy == target.y {
+      // Reached search point, pause to look around then move to next
+      g.search_index += 1
+      if g.search_index >= g.search_offsets.length() {
+        g.search_index = 0 // loop search pattern
+      }
+      g.look_timer = @types.search_look_duration
+      return
+    }
+    step_toward(g, target.x, target.y, game)
+  } else {
+    // Not searching yet, walk to investigation point
+    move_guard_toward(g, g.investigate_x, g.investigate_y, game)
   }
 }
 
@@ -288,11 +357,16 @@ pub fn guards_hear_noise(
           g.suspicious_timer = @types.suspicious_duration
           g.investigate_x = nx
           g.investigate_y = ny
+          g.searching = false
+          g.search_index = 0
         }
         Suspicious => {
           g.investigate_x = nx
           g.investigate_y = ny
           g.suspicious_timer = @types.suspicious_duration
+          // Redirect search to new noise location
+          g.searching = false
+          g.search_index = 0
         }
         Alert => {
           g.investigate_x = nx

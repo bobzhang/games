@@ -133,3 +133,178 @@ test "detection_speed_at varies by tile" {
     content="true",
   )
 }
+
+///|
+test "alert_nearby_guards propagates to nearby patrolling guards" {
+  let game = @types.new_game()
+  let tiles : Array[Array[@types.TileKind]] = Array::new(
+    capacity=@types.grid_height,
+  )
+  for _y in 0..<@types.grid_height {
+    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    for _x in 0..<@types.grid_width {
+      row.push(Floor)
+    }
+    tiles.push(row)
+  }
+  game.level.tiles = tiles
+  // g1 is within radio range (<=8), g2 is out of range, g3 is already suspicious
+  let g1 = @types.new_guard(3, 3, Patrol, [{ x: 3, y: 3 }])
+  let g2 = @types.new_guard(15, 15, Patrol, [{ x: 15, y: 15 }])
+  let g3 = @types.new_guard(4, 4, Patrol, [{ x: 4, y: 4 }])
+  g3.alert_state = Suspicious
+  game.level.guards = [g1, g2, g3]
+  // Alert at position (5,5)
+  @guard.alert_nearby_guards(game, 5, 5)
+  // g1 is 4 manhattan distance away - should become suspicious
+  inspect(g1.alert_state, content="Suspicious")
+  inspect(g1.investigate_x, content="5")
+  inspect(g1.investigate_y, content="5")
+  // g2 is far away - should remain patrolling
+  inspect(g2.alert_state, content="Patrolling")
+  // g3 was already suspicious - alert_nearby_guards only affects Patrolling
+  inspect(g3.alert_state, content="Suspicious")
+}
+
+///|
+test "alert_nearby_guards does not affect alert guards" {
+  let game = @types.new_game()
+  let tiles : Array[Array[@types.TileKind]] = Array::new(
+    capacity=@types.grid_height,
+  )
+  for _y in 0..<@types.grid_height {
+    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    for _x in 0..<@types.grid_width {
+      row.push(Floor)
+    }
+    tiles.push(row)
+  }
+  game.level.tiles = tiles
+  let g1 = @types.new_guard(3, 3, Patrol, [{ x: 3, y: 3 }])
+  g1.alert_state = Alert
+  g1.investigate_x = 10
+  g1.investigate_y = 10
+  game.level.guards = [g1]
+  @guard.alert_nearby_guards(game, 5, 5)
+  // Already alert - investigate position should NOT change
+  inspect(g1.alert_state, content="Alert")
+  inspect(g1.investigate_x, content="10")
+}
+
+///|
+test "guards_hear_noise updates suspicious guard investigate target" {
+  let game = @types.new_game()
+  let tiles : Array[Array[@types.TileKind]] = Array::new(
+    capacity=@types.grid_height,
+  )
+  for _y in 0..<@types.grid_height {
+    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    for _x in 0..<@types.grid_width {
+      row.push(Floor)
+    }
+    tiles.push(row)
+  }
+  game.level.tiles = tiles
+  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  g1.alert_state = Suspicious
+  g1.investigate_x = 3
+  g1.investigate_y = 3
+  g1.suspicious_timer = 1.0
+  game.level.guards = [g1]
+  // Noise at new position within radius
+  @guard.guards_hear_noise(game, 7, 7, 4)
+  // Should update investigate target and reset timer
+  inspect(g1.investigate_x, content="7")
+  inspect(g1.investigate_y, content="7")
+  inspect(g1.suspicious_timer == @types.suspicious_duration, content="true")
+}
+
+///|
+test "guards_hear_noise updates alert guard investigate target" {
+  let game = @types.new_game()
+  let tiles : Array[Array[@types.TileKind]] = Array::new(
+    capacity=@types.grid_height,
+  )
+  for _y in 0..<@types.grid_height {
+    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    for _x in 0..<@types.grid_width {
+      row.push(Floor)
+    }
+    tiles.push(row)
+  }
+  game.level.tiles = tiles
+  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  g1.alert_state = Alert
+  g1.investigate_x = 1
+  g1.investigate_y = 1
+  game.level.guards = [g1]
+  @guard.guards_hear_noise(game, 6, 6, 3)
+  // Alert guards get their investigate target updated
+  inspect(g1.investigate_x, content="6")
+  inspect(g1.investigate_y, content="6")
+}
+
+///|
+test "guards_hear_noise ignores inactive guards" {
+  let game = @types.new_game()
+  let tiles : Array[Array[@types.TileKind]] = Array::new(
+    capacity=@types.grid_height,
+  )
+  for _y in 0..<@types.grid_height {
+    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    for _x in 0..<@types.grid_width {
+      row.push(Floor)
+    }
+    tiles.push(row)
+  }
+  game.level.tiles = tiles
+  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  g1.active = false
+  game.level.guards = [g1]
+  @guard.guards_hear_noise(game, 5, 5, 3)
+  inspect(g1.alert_state, content="Patrolling")
+}
+
+///|
+test "guards_hear_noise only reaches guards within radius" {
+  let game = @types.new_game()
+  let tiles : Array[Array[@types.TileKind]] = Array::new(
+    capacity=@types.grid_height,
+  )
+  for _y in 0..<@types.grid_height {
+    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    for _x in 0..<@types.grid_width {
+      row.push(Floor)
+    }
+    tiles.push(row)
+  }
+  game.level.tiles = tiles
+  let g_near = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  let g_far = @types.new_guard(12, 12, Patrol, [{ x: 12, y: 12 }])
+  game.level.guards = [g_near, g_far]
+  // Noise at (4,4) with radius 3
+  @guard.guards_hear_noise(game, 4, 4, 3)
+  inspect(g_near.alert_state, content="Suspicious")
+  inspect(g_far.alert_state, content="Patrolling")
+}
+
+///|
+test "point_in_camera_vision checks powered state" {
+  let tiles : Array[Array[@types.TileKind]] = Array::new(
+    capacity=@types.grid_height,
+  )
+  for _y in 0..<@types.grid_height {
+    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    for _x in 0..<@types.grid_width {
+      row.push(Floor)
+    }
+    tiles.push(row)
+  }
+  let cam = @types.new_camera(5, 5)
+  cam.facing_angle = 0.0
+  // Camera powered - should see target in front
+  inspect(@guard.point_in_camera_vision(cam, 7, 5, tiles), content="true")
+  // Disable camera power
+  cam.powered = false
+  inspect(@guard.point_in_camera_vision(cam, 7, 5, tiles), content="false")
+}

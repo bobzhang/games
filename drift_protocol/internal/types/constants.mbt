@@ -80,6 +80,15 @@ pub let camera_vision_range : Float = 5.0
 pub let total_levels : Int = 8
 
 ///|
+pub let search_look_duration : Float = 0.6
+
+///|
+pub let detection_pause_duration : Float = 0.3
+
+///|
+pub let camera_smooth_speed : Float = 6.0
+
+///|
 pub let pi : Float = 3.14159265
 
 // Cyberpunk neon color theme

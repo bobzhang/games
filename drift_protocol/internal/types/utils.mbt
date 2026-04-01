@@ -314,6 +314,10 @@ pub fn new_guard(
     active: true,
     speed: spd,
     move_timer: 0.0,
+    search_offsets: [],
+    search_index: 0,
+    searching: false,
+    look_timer: 0.0,
   }
 }
 
@@ -462,6 +466,9 @@ pub fn new_game() -> Game {
     noise_y: 0,
     noise_radius: 0,
     noise_timer: 0.0,
+    detection_pause: 0.0,
+    camera_offset_x: 0.0,
+    camera_offset_y: 0.0,
   }
 }
 

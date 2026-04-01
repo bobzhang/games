@@ -68,3 +68,86 @@ test "complete_hack marks terminal and increments count" {
   inspect(t.hacked, content="true")
   inspect(game.player.hacked_terminals, content="1")
 }
+
+///|
+test "toggle_power_node flips connected camera" {
+  let game = @types.new_game()
+  let cam = @types.new_camera(8, 5)
+  game.level.cameras = [cam]
+  // Power node with camera connection (offset 1000 + index)
+  let pn = @types.new_power_node(5, 5, 10, [1000])
+  game.level.power_nodes = [pn]
+  // Camera starts powered
+  inspect(cam.powered, content="true")
+  // Toggle power node off
+  @hacking.toggle_power_node(game, 0)
+  inspect(pn.powered, content="false")
+  inspect(cam.powered, content="false")
+  // Toggle back on
+  @hacking.toggle_power_node(game, 0)
+  inspect(pn.powered, content="true")
+  inspect(cam.powered, content="true")
+}
+
+///|
+test "toggle_power_node flips door laser and camera together" {
+  let game = @types.new_game()
+  let door = @types.new_door(7, 5, 20)
+  let laser = @types.new_laser(9, 5, 30, true, 2)
+  let cam = @types.new_camera(6, 5)
+  game.level.doors = [door]
+  game.level.lasers = [laser]
+  game.level.cameras = [cam]
+  // Power node connected to all three via their power_ids
+  let pn = @types.new_power_node(5, 5, 10, [20, 30, 1000])
+  game.level.power_nodes = [pn]
+  // Initial state: powered, door closed/locked, laser active, camera on
+  inspect(door.open, content="false")
+  inspect(door.locked, content="true")
+  inspect(laser.active, content="true")
+  inspect(cam.powered, content="true")
+  // Toggle off
+  @hacking.toggle_power_node(game, 0)
+  inspect(door.open, content="true")
+  inspect(door.locked, content="false")
+  inspect(laser.active, content="false")
+  inspect(cam.powered, content="false")
+  // Toggle on again
+  @hacking.toggle_power_node(game, 0)
+  inspect(door.open, content="false")
+  inspect(door.locked, content="true")
+  inspect(laser.active, content="true")
+  inspect(cam.powered, content="true")
+}
+
+///|
+test "toggle_power_node emits correct sounds" {
+  let game = @types.new_game()
+  let door = @types.new_door(7, 5, 20)
+  let laser = @types.new_laser(9, 5, 30, true, 2)
+  game.level.doors = [door]
+  game.level.lasers = [laser]
+  let pn = @types.new_power_node(5, 5, 10, [20, 30])
+  game.level.power_nodes = [pn]
+  game.sound_queue = []
+  // Toggle off: should emit Hack + DoorOpen + LaserOff
+  @hacking.toggle_power_node(game, 0)
+  inspect(game.sound_queue.length(), content="3")
+  inspect(game.sound_queue[0], content="Hack")
+  inspect(game.sound_queue[1], content="DoorOpen")
+  inspect(game.sound_queue[2], content="LaserOff")
+}
+
+///|
+test "toggle_power_node with no connections" {
+  let game = @types.new_game()
+  let pn = @types.new_power_node(5, 5, 10, [])
+  game.level.power_nodes = [pn]
+  inspect(pn.powered, content="true")
+  @hacking.toggle_power_node(game, 0)
+  inspect(pn.powered, content="false")
+  inspect(game.message, content="Power node deactivated")
+  @hacking.toggle_power_node(game, 0)
+  inspect(pn.powered, content="true")
+  inspect(game.message, content="Power node activated")
+}

@@ -46,6 +46,11 @@ pub(all) struct Guard {
   mut active : Bool
   mut speed : Float
   mut move_timer : Float
+  // Search behavior: guards investigate nearby offsets before returning to patrol
+  mut search_offsets : Array[Vec2i]
+  mut search_index : Int
+  mut searching : Bool
+  mut look_timer : Float
 } derive(Show)
 
 ///|
@@ -174,4 +179,9 @@ pub(all) struct Game {
   mut noise_y : Int
   mut noise_radius : Int
   mut noise_timer : Float
+  // Game feel: brief pause on detection
+  mut detection_pause : Float
+  // Smooth camera offset
+  mut camera_offset_x : Float
+  mut camera_offset_y : Float
 } derive(Show)

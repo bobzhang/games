@@ -160,6 +160,47 @@ pub fn resolve_until_stable(
 }
 
 ///|
+/// Get per-tile predictions for the next ecosystem step.
+/// Returns an array of (grid_index, new_biome) for tiles that will change.
+pub fn preview_tile_changes(grid : @types.HexGrid) -> Array[(Int, @types.BiomeKind)] {
+  let w = grid.width
+  let h = grid.height
+  let snapshot = @types.snapshot_biomes(grid)
+  let result : Array[(Int, @types.BiomeKind)] = []
+  for row in 0..<h {
+    for col in 0..<w {
+      let idx = @types.grid_index(col, row, w)
+      if grid.tiles[idx].locked {
+        continue
+      }
+      let current = snapshot[idx]
+      let neighbors = @types.hex_neighbors(
+        col, row, w, h, grid.wraps_horizontal,
+      )
+      let mut ocean_n = 0
+      let mut desert_n = 0
+      let mut forest_n = 0
+      let mut barren_n = 0
+      for i in 0..<neighbors.length() {
+        let (nc, nr) = neighbors[i]
+        let ni = @types.grid_index(nc, nr, w)
+        match snapshot[ni] {
+          Ocean => ocean_n += 1
+          Desert => desert_n += 1
+          Forest => forest_n += 1
+          Barren => barren_n += 1
+        }
+      }
+      let new_biome = apply_rules(current, ocean_n, desert_n, forest_n, barren_n)
+      if new_biome != current {
+        result.push((idx, new_biome))
+      }
+    }
+  }
+  result
+}
+
+///|
 /// Get a summary of what would happen in the next step.
 /// Returns (tiles_gaining_forest, tiles_losing_forest, tiles_gaining_desert,
 ///          tiles_losing_desert).

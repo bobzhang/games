@@ -202,10 +202,81 @@ fn draw_grid(game : @types.Game) -> Unit {
       if tile.locked {
         draw_locked_indicator(cx, cy)
       }
+      // Biome transition border: highlight edges between different biomes
+      if tile.biome != Barren {
+        let neighbors = @types.hex_neighbors(
+          col, row, w, h, grid.wraps_horizontal,
+        )
+        let mut diff_count = 0
+        for ni in 0..<neighbors.length() {
+          let (nc, nr) = neighbors[ni]
+          let ntile = @types.get_tile(grid, nc, nr)
+          if ntile.biome != tile.biome && ntile.biome != Barren {
+            diff_count += 1
+          }
+        }
+        if diff_count >= 2 {
+          // Contested tile: outline in white to show transition zone
+          let contest_alpha = (@types.sinf(time * 2.0) * 20.0 + 35.0).to_int()
+          draw_hex_outline(
+            cx, cy, @types.hex_size * 0.88,
+            @raylib.Color::new(255, 255, 255, contest_alpha),
+          )
+        }
+      }
       // Grid outline
       let outline_alpha = if tile.biome == Barren { 120 } else { 180 }
       let outline_color = @raylib.Color::new(40, 38, 55, outline_alpha)
       draw_hex_outline(cx, cy, @types.hex_size * 0.92, outline_color)
+    }
+  }
+  // Draw transition fade effect on recently changed tiles
+  if game.transition_timer > 0.0 && game.transition_tiles.length() > 0 {
+    let fade_alpha = @types.clampf(game.transition_timer, 0.0, 1.0)
+    for t in 0..<game.transition_tiles.length() {
+      let tidx = game.transition_tiles[t]
+      if tidx < w * h {
+        let tc = tidx % w
+        let tr = tidx / w
+        let (tcx, tcy) = @types.hex_to_pixel(tc, tr)
+        let pulse = @types.sinf(time * 5.0 + Float::from_int(t) * 0.3) * 0.3 +
+          0.7
+        let a = (fade_alpha * pulse * 120.0).to_int()
+        draw_hex_outline(
+          tcx, tcy, @types.hex_size * 0.96,
+          @raylib.Color::new(255, 255, 255, a),
+        )
+      }
+    }
+  }
+  // Draw preview overlay when enabled
+  if game.show_preview && game.preview_tiles.length() > 0 {
+    for p in 0..<game.preview_tiles.length() {
+      let (pidx, new_biome) = game.preview_tiles[p]
+      if pidx < w * h {
+        let pc = pidx % w
+        let pr = pidx / w
+        let (pcx, pcy) = @types.hex_to_pixel(pc, pr)
+        let preview_c = @types.biome_color(new_biome)
+        let blink = @types.sinf(time * 3.0 + Float::from_int(p) * 0.5) * 0.3 +
+          0.5
+        let a = (blink * 160.0).to_int()
+        draw_hex(
+          pcx, pcy, @types.hex_size * 0.7,
+          alpha_color(preview_c, a),
+        )
+        // Arrow indicator showing direction of change
+        let arrow = match new_biome {
+          Forest => "+"
+          Desert => "+"
+          Barren => "-"
+          _ => "~"
+        }
+        @draw.draw_text(
+          arrow, (pcx - 4.0).to_int(), (pcy - 6.0).to_int(), 14,
+          @raylib.Color::new(255, 255, 255, a),
+        )
+      }
     }
   }
   // Wrapping visualization: draw faded hexes at edges
@@ -261,6 +332,7 @@ fn draw_wrap_indicators(game : @types.Game) -> Unit {
   let h = grid.height
   let w = grid.width
   let hex_w = @types.hex_size * @types.sqrtf(3.0)
+  let time = Float::from_int(game.frame_count) * 0.02
   // Draw faded copies of edge columns to show wrapping
   for row in 0..<h {
     let x_offset_row = if row % 2 == 1 { hex_w / 2.0 } else { 0.0 }
@@ -270,18 +342,63 @@ fn draw_wrap_indicators(game : @types.Game) -> Unit {
     let left_x = @types.grid_offset_x + hex_w / 2.0 - hex_w
     let lx = left_x + x_offset_row
     let c1 = @types.biome_color(tile_right.biome)
-    let faded1 = alpha_color(c1, 40)
-    draw_hex(lx, cy, @types.hex_size * 0.65, faded1)
-    draw_hex_outline(lx, cy, @types.hex_size * 0.65, alpha_color(c1, 25))
+    let fade_pulse = @types.sinf(time * 1.5 + Float::from_int(row) * 0.4) *
+      0.15 + 0.35
+    let alpha1 = (fade_pulse * 120.0).to_int()
+    let faded1 = alpha_color(c1, alpha1)
+    draw_hex(lx, cy, @types.hex_size * 0.7, faded1)
+    draw_hex_outline(
+      lx, cy, @types.hex_size * 0.7,
+      alpha_color(c1, alpha1 / 2),
+    )
+    // Connecting dashed line from ghost to real tile
+    let (real_lx, _) = @types.hex_to_pixel(0, row)
+    let dash_alpha = (fade_pulse * 80.0).to_int()
+    @raylib.draw_line_ex(
+      @raylib.Vector2::new(lx + @types.hex_size * 0.7, cy),
+      @raylib.Vector2::new(real_lx - @types.hex_size * 0.92, cy),
+      1.0,
+      alpha_color(c1, dash_alpha),
+    )
     // Right edge: show column 0 faded to the right
     let tile_left = @types.get_tile(grid, 0, row)
     let rx = @types.grid_offset_x + Float::from_int(w) * hex_w + x_offset_row +
       hex_w / 2.0
     let c2 = @types.biome_color(tile_left.biome)
-    let faded2 = alpha_color(c2, 40)
-    draw_hex(rx, cy, @types.hex_size * 0.65, faded2)
-    draw_hex_outline(rx, cy, @types.hex_size * 0.65, alpha_color(c2, 25))
+    let alpha2 = (fade_pulse * 120.0).to_int()
+    let faded2 = alpha_color(c2, alpha2)
+    draw_hex(rx, cy, @types.hex_size * 0.7, faded2)
+    draw_hex_outline(
+      rx, cy, @types.hex_size * 0.7,
+      alpha_color(c2, alpha2 / 2),
+    )
+    // Connecting line from real tile to ghost
+    let (real_rx, _) = @types.hex_to_pixel(w - 1, row)
+    @raylib.draw_line_ex(
+      @raylib.Vector2::new(real_rx + @types.hex_size * 0.92, cy),
+      @raylib.Vector2::new(rx - @types.hex_size * 0.7, cy),
+      1.0,
+      alpha_color(c2, dash_alpha),
+    )
   }
+  // Wrap label at top
+  let wrap_label_alpha = (@types.sinf(time * 2.0) * 40.0 + 100.0).to_int()
+  let total_w = Float::from_int(w) * hex_w + hex_w
+  let mid_y_top = @types.grid_offset_y - 8.0
+  @draw.draw_text(
+    "wrap",
+    (@types.grid_offset_x - 45.0).to_int(),
+    mid_y_top.to_int(),
+    12,
+    @raylib.Color::new(80, 200, 255, wrap_label_alpha),
+  )
+  @draw.draw_text(
+    "wrap",
+    (@types.grid_offset_x + total_w + 5.0).to_int(),
+    mid_y_top.to_int(),
+    12,
+    @raylib.Color::new(80, 200, 255, wrap_label_alpha),
+  )
 }
 
 ///|

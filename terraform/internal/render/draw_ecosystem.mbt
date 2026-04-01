@@ -126,9 +126,32 @@ fn draw_single_ratio_bar(
   }
   let pct_str = pct.to_string() + "%"
   @draw.draw_text(pct_str, x + w + 8, y + 4, 18, pct_color)
-  // Status icon
+  // Status icon with pulse effect when in range
   let icon = if in_range { "OK" } else { "--" }
+  if in_range && game.ratio_pulse_timer > 0.0 {
+    // Pulse glow effect
+    let pulse = @types.sinf(time * 6.0) * 0.4 + 0.8
+    let glow_alpha = (pulse * game.ratio_pulse_timer / 1.5 * 255.0).to_int()
+    @raylib.draw_rectangle(
+      x - 2, y - 2, w + 4, h + 4,
+      @raylib.Color::new(50, 220, 80, glow_alpha / 4),
+    )
+  }
   @draw.draw_text(icon, x + w + 50, y + 4, 18, pct_color)
+  // Distance to target range indicator
+  if !in_range {
+    let dist = if current < target_min {
+      target_min - current
+    } else {
+      current - target_max
+    }
+    let dist_pct = (dist * 100.0).to_int()
+    let dir = if current < target_min { "need +" } else { "need -" }
+    @draw.draw_text(
+      dir + dist_pct.to_string() + "%",
+      x + w + 80, y + 6, 12, @types.color_text_dim,
+    )
+  }
   // Border
   @raylib.draw_rectangle_lines(x, y, w, h, @types.color_text_dim)
 }
