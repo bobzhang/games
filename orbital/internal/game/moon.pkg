@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/orbital/internal/types",
+  "bobzhang/games/orbital/internal/physics",
+  "bobzhang/games/orbital/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
