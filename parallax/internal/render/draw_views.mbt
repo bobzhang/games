@@ -63,7 +63,7 @@ fn draw_view_panel(
       @raylib.draw_rectangle_lines(cx, cy, cs, cs, @types.color_grid_line)
     }
   }
-  // Hover highlight
+  // Hover highlight with strong pulsing effect
   if game.hover.active && game.play_state == Editing {
     let (hover_col, hover_row) = match view {
       Top => (game.hover.vx, game.hover.vz)
@@ -73,7 +73,48 @@ fn draw_view_panel(
     if hover_col >= 0 && hover_col < size && hover_row >= 0 && hover_row < size {
       let hx = panel_x + hover_col * cs
       let hy = panel_y + hover_row * cs
-      @raylib.draw_rectangle(hx + 1, hy + 1, cs - 2, cs - 2, @types.color_hover)
+      // Pulsing highlight for the hovered cell
+      let t : Float = Float::from_int(game.frame_count) * 0.12
+      let pulse = Float::from_double(@math.sin(t.to_double())) * 40.0 + 120.0
+      let alpha = pulse.to_int()
+      let is_in_this_view = game.hover.view == view
+      if is_in_this_view {
+        // Strong yellow highlight for the active view
+        let highlight = @raylib.Color::new(255, 255, 100, alpha)
+        @raylib.draw_rectangle(hx + 1, hy + 1, cs - 2, cs - 2, highlight)
+        // Bright border
+        let border = @raylib.Color::new(255, 255, 180, 200)
+        @raylib.draw_rectangle_lines(hx, hy, cs, cs, border)
+        @raylib.draw_rectangle_lines(hx - 1, hy - 1, cs + 2, cs + 2, border)
+      } else {
+        // Softer highlight for cross-view preview (shows the projection)
+        let cross_highlight = @raylib.Color::new(200, 200, 255, alpha / 2)
+        @raylib.draw_rectangle(
+          hx + 1, hy + 1, cs - 2, cs - 2, cross_highlight,
+        )
+        let cross_border = @raylib.Color::new(150, 150, 220, 140)
+        @raylib.draw_rectangle_lines(hx, hy, cs, cs, cross_border)
+      }
+      // Draw crosshair lines through the hovered cell for easier alignment
+      if is_in_this_view {
+        let line_color = @raylib.Color::new(255, 255, 200, 40)
+        // Horizontal guide
+        @raylib.draw_rectangle(
+          panel_x,
+          hy + cs / 2,
+          size * cs,
+          1,
+          line_color,
+        )
+        // Vertical guide
+        @raylib.draw_rectangle(
+          hx + cs / 2,
+          panel_y,
+          1,
+          size * cs,
+          line_color,
+        )
+      }
     }
   }
   // Match indicator

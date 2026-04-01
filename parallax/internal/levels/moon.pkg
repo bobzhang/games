@@ -2,4 +2,8 @@ import {
   "bobzhang/games/parallax/internal/types",
 }
 
+import {
+  "bobzhang/games/parallax/internal/voxel",
+} for "test"
+
 warnings = "-missing_doc+unnecessary_annotation"

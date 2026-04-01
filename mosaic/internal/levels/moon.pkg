@@ -2,4 +2,8 @@ import {
   "bobzhang/games/mosaic/internal/types",
 }
 
+import {
+  "bobzhang/games/mosaic/internal/symmetry",
+} for "test"
+
 warnings = "-missing_doc+unnecessary_annotation"
