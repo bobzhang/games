@@ -119,10 +119,7 @@ pub fn get_levels() -> Array[@types.Level] {
       target_height: 200.0,
       budget: 8,
       test_kinds: [],
-      available_pieces: [
-        (Block, Wood, 4),
-        (Beam, Wood, 4),
-      ],
+      available_pieces: [(Block, Wood, 4), (Beam, Wood, 4)],
       world_index: 0,
     },
     // Level 2: Gentle Breeze
@@ -132,10 +129,7 @@ pub fn get_levels() -> Array[@types.Level] {
       target_height: 250.0,
       budget: 10,
       test_kinds: [Wind],
-      available_pieces: [
-        (Block, Wood, 5),
-        (Beam, Wood, 5),
-      ],
+      available_pieces: [(Block, Wood, 5), (Beam, Wood, 5)],
       world_index: 0,
     },
     // Level 3: Stone Foundation
@@ -145,11 +139,7 @@ pub fn get_levels() -> Array[@types.Level] {
       target_height: 300.0,
       budget: 12,
       test_kinds: [Wind],
-      available_pieces: [
-        (Block, Stone, 4),
-        (Block, Wood, 4),
-        (Beam, Wood, 4),
-      ],
+      available_pieces: [(Block, Stone, 4), (Block, Wood, 4), (Beam, Wood, 4)],
       world_index: 0,
     },
     // Level 4: Tremors
@@ -159,11 +149,7 @@ pub fn get_levels() -> Array[@types.Level] {
       target_height: 250.0,
       budget: 12,
       test_kinds: [Earthquake],
-      available_pieces: [
-        (Block, Stone, 4),
-        (Block, Wood, 4),
-        (Beam, Wood, 4),
-      ],
+      available_pieces: [(Block, Stone, 4), (Block, Wood, 4), (Beam, Wood, 4)],
       world_index: 0,
     },
     // Level 5: Triangle Power
@@ -223,11 +209,7 @@ pub fn get_levels() -> Array[@types.Level] {
       target_height: 280.0,
       budget: 12,
       test_kinds: [Wind],
-      available_pieces: [
-        (Block, Stone, 5),
-        (Beam, Wood, 4),
-        (Block, Wood, 3),
-      ],
+      available_pieces: [(Block, Stone, 5), (Beam, Wood, 4), (Block, Wood, 3)],
       world_index: 1,
     },
     // Level 9: Sandstorm Surge
@@ -337,11 +319,7 @@ pub fn get_levels() -> Array[@types.Level] {
       target_height: 250.0,
       budget: 12,
       test_kinds: [Wind],
-      available_pieces: [
-        (Block, Stone, 5),
-        (Block, Wood, 4),
-        (Beam, Steel, 3),
-      ],
+      available_pieces: [(Block, Stone, 5), (Block, Wood, 4), (Beam, Steel, 3)],
       world_index: 2,
     },
     // Level 16: Snow Load
@@ -429,7 +407,9 @@ pub fn get_levels() -> Array[@types.Level] {
 }
 
 ///|
-pub fn get_sandbox_inventory() -> Array[(@types.PieceKind, @types.Material, Int)] {
+pub fn get_sandbox_inventory() -> Array[
+  (@types.PieceKind, @types.Material, Int),
+] {
   [
     (Block, Wood, 99),
     (Block, Stone, 99),

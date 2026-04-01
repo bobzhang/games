@@ -25,7 +25,7 @@ pub fn update_ship_physics(ship : @types.Ship, dt : Float) -> Unit {
 
 ///|
 pub fn update_projectile_physics(proj : @types.Projectile, dt : Float) -> Unit {
-  if !(proj.active) {
+  if !proj.active {
     return
   }
   proj.pos.x = proj.pos.x + proj.vel.x * dt
@@ -38,7 +38,7 @@ pub fn update_projectile_physics(proj : @types.Projectile, dt : Float) -> Unit {
 
 ///|
 pub fn update_enemy_physics(enemy : @types.Enemy, dt : Float) -> Unit {
-  if !(enemy.active) {
+  if !enemy.active {
     return
   }
   if enemy.frozen_timer > 0.0 {
@@ -51,7 +51,7 @@ pub fn update_enemy_physics(enemy : @types.Enemy, dt : Float) -> Unit {
 
 ///|
 pub fn update_asteroid_physics(ast : @types.Asteroid, dt : Float) -> Unit {
-  if !(ast.active) {
+  if !ast.active {
     return
   }
   ast.pos.x = ast.pos.x + ast.vel.x * dt
@@ -64,7 +64,7 @@ pub fn clamp_to_arena(
   pos : @types.Vec2,
   radius : Float,
   w : Float,
-  h : Float
+  h : Float,
 ) -> Unit {
   pos.x = @types.clampf(pos.x, radius, w - radius)
   pos.y = @types.clampf(pos.y, radius, h - radius)
@@ -77,7 +77,7 @@ pub fn circles_overlap(
   ar : Float,
   bx : Float,
   by : Float,
-  br : Float
+  br : Float,
 ) -> Bool {
   let dx = ax - bx
   let dy = ay - by
@@ -89,9 +89,9 @@ pub fn circles_overlap(
 pub fn apply_homing(
   proj : @types.Projectile,
   enemies : Array[@types.Enemy],
-  dt : Float
+  dt : Float,
 ) -> Unit {
-  if proj.homing_strength <= 0.0 || !(proj.active) {
+  if proj.homing_strength <= 0.0 || !proj.active {
     return
   }
   // Find nearest enemy

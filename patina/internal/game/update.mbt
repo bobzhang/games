@@ -24,8 +24,7 @@ pub fn update(game : @types.Game) -> Unit {
 
 ///|
 fn update_title(game : @types.Game) -> Unit {
-  game.title_anim_timer = game.title_anim_timer +
-    @raylib.get_frame_time()
+  game.title_anim_timer = game.title_anim_timer + @raylib.get_frame_time()
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.screen = TierSelect
@@ -172,9 +171,8 @@ fn update_playing(game : @types.Game) -> Unit {
         }
       }
       // Check level completion
-      if game.play_state == Selecting && @restoration.is_level_complete(
-        level.artwork,
-      ) {
+      if game.play_state == Selecting &&
+        @restoration.is_level_complete(level.artwork) {
         complete_level(game, level)
       }
     }
@@ -216,7 +214,7 @@ fn get_region_at(mx : Int, my : Int) -> Int {
 fn try_apply_tool(
   game : @types.Game,
   level : @types.Level,
-  region_idx : Int
+  region_idx : Int,
 ) -> Unit {
   let budget = match game.current_budget {
     Some(b) => b
@@ -264,9 +262,7 @@ fn try_apply_tool(
       _ => ()
     }
   } else {
-    game.message = "Cannot apply " +
-      @types.tool_name(tool) +
-      " here"
+    game.message = "Cannot apply " + @types.tool_name(tool) + " here"
     game.message_timer = 1.0
   }
 }
@@ -291,14 +287,18 @@ fn undo_last(game : @types.Game) -> Unit {
       // For simplicity, remove the last treatment and restore state
       while region.treatments_applied.length() > 0 {
         let _ = region.treatments_applied.pop()
-
       }
       for i in 0..<entry.prev_treatments.length() {
         region.treatments_applied.push(entry.prev_treatments[i])
       }
       // We also need to restore the damage_types. Since we can't perfectly
       // reconstruct, we reload the original region's damage types and replay.
-      restore_region_damage(game, level, entry.region_index, entry.prev_treatments)
+      restore_region_damage(
+        game,
+        level,
+        entry.region_index,
+        entry.prev_treatments,
+      )
       // Restore budget
       match game.current_budget {
         Some(b) => @types.restore_budget(b, entry.tool_used)
@@ -316,7 +316,7 @@ fn restore_region_damage(
   game : @types.Game,
   _level : @types.Level,
   region_idx : Int,
-  _prev_treatments : Array[@types.ToolKind]
+  _prev_treatments : Array[@types.ToolKind],
 ) -> Unit {
   // Get the original level data to restore damage types
   let orig_level = @levels.get_level(game.selected_level)
@@ -328,7 +328,6 @@ fn restore_region_damage(
         // Clear current damage types
         while region.damage_types.length() > 0 {
           let _ = region.damage_types.pop()
-
         }
         // Restore original damage
         for i in 0..<orig.damage_types.length() {
@@ -345,7 +344,6 @@ fn restore_region_damage(
         region.stain_permanent = false
         while region.treatments_applied.length() > 0 {
           let _ = region.treatments_applied.pop()
-
         }
         // Re-read the saved treatments from the undo entry's prev state
         // The prev_treatments were saved before the tool was applied
@@ -354,7 +352,6 @@ fn restore_region_damage(
         // Restore original damage again (replay will modify it)
         while region.damage_types.length() > 0 {
           let _ = region.damage_types.pop()
-
         }
         for i in 0..<orig.damage_types.length() {
           region.damage_types.push(orig.damage_types[i])
@@ -369,7 +366,6 @@ fn restore_region_damage(
         // Replay treatments
         for i in 0..<saved_treats.length() {
           let _ = @restoration.apply_tool(region, saved_treats[i])
-
         }
       }
       None => ()

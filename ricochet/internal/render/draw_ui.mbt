@@ -16,19 +16,28 @@ pub fn draw_hud(game : @types.Game) -> Unit {
   }
   @draw.draw_text(
     "World: \{world_label}  Level: \{game.level_index + 1}",
-    left_x, top_y, 18, @types.color_hud_text,
+    left_x,
+    top_y,
+    18,
+    @types.color_hud_text,
   )
   // Bounces
   @draw.draw_text(
     "Bounces: \{game.total_bounces} / Par: \{level.par_bounces}",
-    left_x, top_y + 25, 18, @types.color_hud_text,
+    left_x,
+    top_y + 25,
+    18,
+    @types.color_hud_text,
   )
   // Targets
   let hit = @types.count_targets_hit(level)
   let total = level.targets.length()
   @draw.draw_text(
     "Targets: \{hit} / \{total}",
-    left_x, top_y + 50, 18, @types.color_target,
+    left_x,
+    top_y + 50,
+    18,
+    @types.color_target,
   )
   // Ball state
   let state_text = match game.ball_state {
@@ -44,17 +53,26 @@ pub fn draw_hud(game : @types.Game) -> Unit {
     Aiming =>
       @draw.draw_text(
         "LEFT/RIGHT: Aim  |  SPACE: Launch  |  ESC: Pause",
-        left_x, cy, 14, @raylib.Color::new(150, 150, 180, 200),
+        left_x,
+        cy,
+        14,
+        @raylib.Color::new(150, 150, 180, 200),
       )
     Moving =>
       @draw.draw_text(
         "R: Restart  |  ESC: Pause",
-        left_x, cy, 14, @raylib.Color::new(150, 150, 180, 200),
+        left_x,
+        cy,
+        14,
+        @raylib.Color::new(150, 150, 180, 200),
       )
     _ =>
       @draw.draw_text(
         "SPACE: Continue  |  R: Retry  |  ESC: Back",
-        left_x, cy, 14, @raylib.Color::new(150, 150, 180, 200),
+        left_x,
+        cy,
+        14,
+        @raylib.Color::new(150, 150, 180, 200),
       )
   }
   // Message overlay

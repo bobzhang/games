@@ -4,7 +4,7 @@ fn mk(
   y : Int,
   kind : @types.DominoKind,
   o : @types.Orientation,
-  target : Bool
+  target : Bool,
 ) -> @types.Domino {
   @types.new_domino(@types.vec2i(x, y), kind, o, target, false)
 }
@@ -35,10 +35,7 @@ fn level_0() -> @types.Level {
 ///|
 fn level_1() -> @types.Level {
   // "Straight Line" - 5 sockets in a row, place middle ones
-  let dominoes = [
-    mk_starter(2, 6, E),
-    mk(6, 6, Normal, E, true),
-  ]
+  let dominoes = [mk_starter(2, 6, E), mk(6, 6, Normal, E, true)]
   {
     id: 1,
     tier: Chains,
@@ -202,10 +199,7 @@ fn level_8() -> @types.Level {
 ///|
 fn level_9() -> @types.Level {
   // "Heavy Reach" - heavy domino reaches across a gap
-  let dominoes = [
-    mk_starter(2, 6, E),
-    mk(6, 6, Normal, E, true),
-  ]
+  let dominoes = [mk_starter(2, 6, E), mk(6, 6, Normal, E, true)]
   {
     id: 9,
     tier: Splits,
@@ -583,7 +577,10 @@ pub fn level_name(index : Int) -> String {
 }
 
 ///|
-pub fn tier_unlocked(scores : Array[@types.LevelScore], tier : @types.Tier) -> Bool {
+pub fn tier_unlocked(
+  scores : Array[@types.LevelScore],
+  tier : @types.Tier,
+) -> Bool {
   match tier {
     Chains => true
     Splits => {

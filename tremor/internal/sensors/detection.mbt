@@ -2,7 +2,7 @@
 pub fn compute_reading(
   sensor : @types.Sensor,
   epicenter : @types.Vec2i,
-  tile_kind : @types.TileKind
+  tile_kind : @types.TileKind,
 ) -> @types.SensorReading? {
   let dist = @types.dist_i(sensor.pos, epicenter)
   let range = @types.sensor_range(sensor.kind)
@@ -21,23 +21,21 @@ pub fn compute_reading(
     Directional => @types.directional_angle
     _ => 360.0
   }
-  Some(
-    {
-      center: sensor.pos,
-      min_dist: min_d,
-      max_dist: max_d,
-      direction: sensor.direction,
-      angle,
-      kind: sensor.kind,
-    },
-  )
+  Some({
+    center: sensor.pos,
+    min_dist: min_d,
+    max_dist: max_d,
+    direction: sensor.direction,
+    angle,
+    kind: sensor.kind,
+  })
 }
 
 ///|
 pub fn compute_all_readings(
   sensors : Array[@types.Sensor],
   epicenter : @types.Vec2i,
-  grid : Array[Array[@types.TileInfo]]
+  grid : Array[Array[@types.TileInfo]],
 ) -> Array[@types.SensorReading] {
   let result : Array[@types.SensorReading] = []
   for i in 0..<sensors.length() {
@@ -61,7 +59,7 @@ pub fn compute_all_readings(
 ///|
 pub fn point_in_ring(
   reading : @types.SensorReading,
-  point : @types.Vec2i
+  point : @types.Vec2i,
 ) -> Bool {
   let dist = @types.dist_i(reading.center, point)
   if dist < reading.min_dist || dist > reading.max_dist {
@@ -76,7 +74,7 @@ pub fn point_in_ring(
 ///|
 pub fn point_in_wedge(
   reading : @types.SensorReading,
-  point : @types.Vec2i
+  point : @types.Vec2i,
 ) -> Bool {
   let dx = Float::from_int(point.x - reading.center.x)
   let dy = Float::from_int(point.y - reading.center.y)
@@ -105,7 +103,7 @@ pub fn normalize_angle(a : Float) -> Float {
 ///|
 pub fn point_in_all_readings(
   readings : Array[@types.SensorReading],
-  point : @types.Vec2i
+  point : @types.Vec2i,
 ) -> Bool {
   if readings.length() == 0 {
     return false
@@ -120,7 +118,7 @@ pub fn point_in_all_readings(
 
 ///|
 pub fn compute_overlap_tiles(
-  readings : Array[@types.SensorReading]
+  readings : Array[@types.SensorReading],
 ) -> Array[@types.Vec2i] {
   let result : Array[@types.Vec2i] = []
   if readings.length() == 0 {
@@ -141,7 +139,7 @@ pub fn compute_overlap_tiles(
 pub fn check_guess(
   guess : @types.Vec2i,
   epicenter : @types.Vec2i,
-  tolerance : Float
+  tolerance : Float,
 ) -> Bool {
   let dist = @types.dist_i(guess, epicenter)
   dist <= tolerance
@@ -151,7 +149,7 @@ pub fn check_guess(
 pub fn check_all_epicenters(
   guess : @types.Vec2i,
   epicenters : Array[@types.Epicenter],
-  tolerance : Float
+  tolerance : Float,
 ) -> Int {
   let mut found_index = -1
   for i in 0..<epicenters.length() {

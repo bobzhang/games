@@ -80,6 +80,7 @@ pub let bucket_height : Float = 28.0
 pub let rope_thickness : Float = 2.5
 
 // Colors - warm workshop/clocktower theme
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(35, 25, 20, 255)
 
@@ -90,16 +91,24 @@ pub let color_grid_bg : @raylib.Color = @raylib.Color::new(45, 35, 28, 255)
 pub let color_grid_line : @raylib.Color = @raylib.Color::new(60, 48, 38, 255)
 
 ///|
-pub let color_pulley_brass : @raylib.Color = @raylib.Color::new(205, 175, 100, 255)
+pub let color_pulley_brass : @raylib.Color = @raylib.Color::new(
+  205, 175, 100, 255,
+)
 
 ///|
-pub let color_pulley_center : @raylib.Color = @raylib.Color::new(170, 140, 70, 255)
+pub let color_pulley_center : @raylib.Color = @raylib.Color::new(
+  170, 140, 70, 255,
+)
 
 ///|
-pub let color_anchor_gray : @raylib.Color = @raylib.Color::new(140, 140, 150, 255)
+pub let color_anchor_gray : @raylib.Color = @raylib.Color::new(
+  140, 140, 150, 255,
+)
 
 ///|
-pub let color_weight_iron : @raylib.Color = @raylib.Color::new(100, 105, 115, 255)
+pub let color_weight_iron : @raylib.Color = @raylib.Color::new(
+  100, 105, 115, 255,
+)
 
 ///|
 pub let color_weight_dark : @raylib.Color = @raylib.Color::new(70, 75, 85, 255)
@@ -111,7 +120,9 @@ pub let color_crate_wood : @raylib.Color = @raylib.Color::new(180, 130, 70, 255)
 pub let color_crate_dark : @raylib.Color = @raylib.Color::new(140, 95, 45, 255)
 
 ///|
-pub let color_target_gold : @raylib.Color = @raylib.Color::new(255, 215, 50, 255)
+pub let color_target_gold : @raylib.Color = @raylib.Color::new(
+  255, 215, 50, 255,
+)
 
 ///|
 pub let color_target_glow : @raylib.Color = @raylib.Color::new(255, 215, 50, 80)
@@ -147,7 +158,9 @@ pub let color_hud_bg : @raylib.Color = @raylib.Color::new(25, 18, 14, 200)
 pub let color_hud_text : @raylib.Color = @raylib.Color::new(220, 200, 170, 255)
 
 ///|
-pub let color_title_text : @raylib.Color = @raylib.Color::new(255, 225, 150, 255)
+pub let color_title_text : @raylib.Color = @raylib.Color::new(
+  255, 225, 150, 255,
+)
 
 ///|
 pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 200, 50, 255)
@@ -159,22 +172,32 @@ pub let color_star_empty : @raylib.Color = @raylib.Color::new(80, 65, 50, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(140, 110, 60, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(180, 145, 75, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  180, 145, 75, 255,
+)
 
 ///|
-pub let color_button_text : @raylib.Color = @raylib.Color::new(255, 240, 210, 255)
+pub let color_button_text : @raylib.Color = @raylib.Color::new(
+  255, 240, 210, 255,
+)
 
 ///|
 pub let color_success : @raylib.Color = @raylib.Color::new(80, 200, 80, 255)
 
 ///|
-pub let color_hook_highlight : @raylib.Color = @raylib.Color::new(255, 255, 150, 180)
+pub let color_hook_highlight : @raylib.Color = @raylib.Color::new(
+  255, 255, 150, 180,
+)
 
 ///|
-pub let color_connect_line : @raylib.Color = @raylib.Color::new(255, 220, 100, 150)
+pub let color_connect_line : @raylib.Color = @raylib.Color::new(
+  255, 220, 100, 150,
+)
 
 ///|
-pub let color_weight_hook : @raylib.Color = @raylib.Color::new(130, 130, 145, 255)
+pub let color_weight_hook : @raylib.Color = @raylib.Color::new(
+  130, 130, 145, 255,
+)
 
 ///|
 pub let color_crate_hook : @raylib.Color = @raylib.Color::new(160, 120, 60, 255)

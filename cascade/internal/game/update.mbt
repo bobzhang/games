@@ -201,7 +201,8 @@ fn update_editing(game : @types.Game) -> Unit {
     place_domino(game, gx, gy)
   }
   // Remove domino on right click or backspace
-  if @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight) && game.show_hover {
+  if @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight) &&
+    game.show_hover {
     remove_domino(game, gx, gy)
   }
   if @raylib.is_key_pressed(@raylib.KeyBackspace) && game.show_hover {
@@ -246,16 +247,26 @@ fn place_domino(game : @types.Game, gx : Int, gy : Int) -> Unit {
     None => ()
     Some(level) => {
       let remaining = @types.budget_remaining(
-        level.budget, game.dominoes, game.selected_kind,
+        level.budget,
+        game.dominoes,
+        game.selected_kind,
       )
       if remaining <= 0 {
-        game.message = "No more " + @types.kind_name(game.selected_kind) + " dominoes!"
+        game.message = "No more " +
+          @types.kind_name(game.selected_kind) +
+          " dominoes!"
         game.message_timer = 1.5
         return
       }
     }
   }
-  let d = @types.new_domino(pos, game.selected_kind, game.hover_orientation, false, false)
+  let d = @types.new_domino(
+    pos,
+    game.selected_kind,
+    game.hover_orientation,
+    false,
+    false,
+  )
   game.dominoes.push(d)
   game.dominoes_placed += 1
 }
@@ -361,7 +372,11 @@ fn finish_simulation(game : @types.Game) -> Unit {
       None => ()
       Some(level) => {
         let stars = @physics.calculate_stars(
-          true, placed, game.max_tick, level.par_count, level.par_ticks,
+          true,
+          placed,
+          game.max_tick,
+          level.par_count,
+          level.par_ticks,
         )
         let idx = level.id
         if idx < game.scores.length() {
@@ -423,9 +438,7 @@ fn update_failed(game : @types.Game) -> Unit {
 ///|
 fn reset_level(game : @types.Game) -> Unit {
   match game.current_level {
-    None => {
-      game.screen = LevelSelect
-    }
+    None => game.screen = LevelSelect
     Some(level) => {
       game.dominoes = @types.clone_dominoes(level.dominoes)
       game.events = []
@@ -477,7 +490,9 @@ fn update_domino_animations(game : @types.Game, dt : Float) -> Unit {
           @types.anim_speed * 0.8
         }
         d.anim_progress = @types.clampf(
-          d.anim_progress + dt * speed_mult, 0.0, 1.0,
+          d.anim_progress + dt * speed_mult,
+          0.0,
+          1.0,
         )
       }
     } else if d.state == Fallen {

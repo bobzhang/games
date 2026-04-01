@@ -12,7 +12,7 @@ pub fn set_voxel(
   x : Int,
   y : Int,
   z : Int,
-  val : Bool
+  val : Bool,
 ) -> Unit {
   if x >= 0 && x < g.size && y >= 0 && y < g.size && z >= 0 && z < g.size {
     g.cells[@types.xyz_to_idx(x, y, z, g.size)] = val
@@ -32,6 +32,7 @@ pub fn count_filled(g : @types.VoxelGrid) -> Int {
 
 // Compute silhouette for Top view (X-Z plane, looking down Y axis)
 // For each (x, z), silhouette is true if any y has a voxel
+
 ///|
 pub fn compute_top_silhouette(g : @types.VoxelGrid) -> @types.Silhouette {
   let s = @types.new_silhouette(g.size, g.size)
@@ -50,6 +51,7 @@ pub fn compute_top_silhouette(g : @types.VoxelGrid) -> @types.Silhouette {
 
 // Compute silhouette for Front view (X-Y plane, looking along Z axis)
 // For each (x, y), silhouette is true if any z has a voxel
+
 ///|
 pub fn compute_front_silhouette(g : @types.VoxelGrid) -> @types.Silhouette {
   let s = @types.new_silhouette(g.size, g.size)
@@ -69,6 +71,7 @@ pub fn compute_front_silhouette(g : @types.VoxelGrid) -> @types.Silhouette {
 
 // Compute silhouette for Side view (Z-Y plane, looking along X axis)
 // For each (z, y), silhouette is true if any x has a voxel
+
 ///|
 pub fn compute_side_silhouette(g : @types.VoxelGrid) -> @types.Silhouette {
   let s = @types.new_silhouette(g.size, g.size)
@@ -89,7 +92,7 @@ pub fn compute_side_silhouette(g : @types.VoxelGrid) -> @types.Silhouette {
 ///|
 pub fn compute_silhouette(
   g : @types.VoxelGrid,
-  view : @types.ViewKind
+  view : @types.ViewKind,
 ) -> @types.Silhouette {
   match view {
     Top => compute_top_silhouette(g)
@@ -99,10 +102,7 @@ pub fn compute_silhouette(
 }
 
 ///|
-pub fn silhouettes_match(
-  a : @types.Silhouette,
-  b : @types.Silhouette
-) -> Bool {
+pub fn silhouettes_match(a : @types.Silhouette, b : @types.Silhouette) -> Bool {
   if a.width != b.width || a.height != b.height {
     return false
   }
@@ -117,7 +117,7 @@ pub fn silhouettes_match(
 ///|
 pub fn check_completion(
   g : @types.VoxelGrid,
-  targets : @types.TargetSet
+  targets : @types.TargetSet,
 ) -> Bool {
   let top = compute_top_silhouette(g)
   let front = compute_front_silhouette(g)
@@ -129,11 +129,12 @@ pub fn check_completion(
 
 // Ray toggle for Top view: click at grid cell (col, row) = (x, z)
 // Toggle voxels along Y axis
+
 ///|
 pub fn ray_toggle_top(
   g : @types.VoxelGrid,
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Vec3i? {
   let x = col
   let z = row
@@ -156,11 +157,12 @@ pub fn ray_toggle_top(
 
 // Ray toggle for Front view: click at grid cell (col, row) = (x, inverted y)
 // Toggle voxels along Z axis
+
 ///|
 pub fn ray_toggle_front(
   g : @types.VoxelGrid,
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Vec3i? {
   let x = col
   let y = g.size - 1 - row
@@ -183,11 +185,12 @@ pub fn ray_toggle_front(
 
 // Ray toggle for Side view: click at grid cell (col, row) = (z, inverted y)
 // Toggle voxels along X axis
+
 ///|
 pub fn ray_toggle_side(
   g : @types.VoxelGrid,
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Vec3i? {
   let z = col
   let y = g.size - 1 - row
@@ -213,7 +216,7 @@ pub fn ray_toggle(
   g : @types.VoxelGrid,
   view : @types.ViewKind,
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Vec3i? {
   match view {
     Top => ray_toggle_top(g, col, row)
@@ -223,11 +226,12 @@ pub fn ray_toggle(
 }
 
 // Find what voxel would be toggled (for preview) without actually toggling
+
 ///|
 pub fn ray_preview_top(
   g : @types.VoxelGrid,
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Vec3i? {
   let x = col
   let z = row
@@ -248,7 +252,7 @@ pub fn ray_preview_top(
 pub fn ray_preview_front(
   g : @types.VoxelGrid,
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Vec3i? {
   let x = col
   let y = g.size - 1 - row
@@ -269,7 +273,7 @@ pub fn ray_preview_front(
 pub fn ray_preview_side(
   g : @types.VoxelGrid,
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Vec3i? {
   let z = col
   let y = g.size - 1 - row
@@ -291,7 +295,7 @@ pub fn ray_preview(
   g : @types.VoxelGrid,
   view : @types.ViewKind,
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Vec3i? {
   match view {
     Top => ray_preview_top(g, col, row)
@@ -301,6 +305,7 @@ pub fn ray_preview(
 }
 
 // Connectivity check using flood fill
+
 ///|
 pub fn check_connected(g : @types.VoxelGrid) -> Bool {
   let count = count_filled(g)

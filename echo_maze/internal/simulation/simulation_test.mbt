@@ -57,7 +57,11 @@ test "ghost replays recorded moves" {
   let ms = @types.new_maze_state(maze)
   // Level 1-1 ASCII: "#########\n#S......#\n#.######.#\n#.......X#\n##########"
   // Start at (1,1). East moves along row 1 which is all floor.
-  let recording : Array[@types.Direction?] = [Some(East), Some(East), Some(East)]
+  let recording : Array[@types.Direction?] = [
+    Some(East),
+    Some(East),
+    Some(East),
+  ]
   let ghost = @types.new_ghost(recording, Green, maze.start)
   let start_pos = ghost.pos
   // Tick 0: move east
@@ -79,11 +83,7 @@ test "guard advances along patrol" {
     @types.vec2i(5, 3),
     @types.vec2i(6, 3),
   ]
-  let guard_def : @types.GuardDef = {
-    patrol,
-    patrol_index: 0,
-    forward: true,
-  }
+  let guard_def : @types.GuardDef = { patrol, patrol_index: 0, forward: true }
   let guard_state : @types.GuardState = {
     pos: patrol[0],
     patrol_index: 0,

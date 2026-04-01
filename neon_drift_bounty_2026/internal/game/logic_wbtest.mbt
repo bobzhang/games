@@ -132,7 +132,9 @@ test "scaled_foe_hp: diminishing returns after stage 4" {
   inspect(hp4, content="27")
   // Later stages: sqrt scaling, much less than linear would give
   // hp8 should be less than what pure linear (18 + 7*3 = 39) would give
-  guard hp8 < 39.0 else { fail("hp8 should be less than linear 39, got \{hp8}") }
+  guard hp8 < 39.0 else {
+    fail("hp8 should be less than linear 39, got \{hp8}")
+  }
   // Gap between hp8 and hp12 should be smaller than gap between hp1 and hp4
   let early_gap = hp4 - hp1
   let late_gap = hp12 - hp8

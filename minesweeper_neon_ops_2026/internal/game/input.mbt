@@ -38,8 +38,8 @@ fn @types.Game::update_title_input(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace)
 
   let click_start : Bool = @raylib.is_mouse_button_pressed(
-    @raylib.MouseButtonLeft,
-  ) &&
+      @raylib.MouseButtonLeft,
+    ) &&
     @types.pointer_on_rect(game.mouse_x, game.mouse_y, true, 0, x, y, w, h)
 
   let tap_start : Bool = game.touch_cd <= 0.0 && game.title_hover()
@@ -59,8 +59,8 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeyR)
 
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
-    @raylib.MouseButtonLeft,
-  ) &&
+      @raylib.MouseButtonLeft,
+    ) &&
     @types.pointer_on_rect(game.mouse_x, game.mouse_y, true, 0, x, y, w, h)
 
   let tap_retry : Bool = game.touch_cd <= 0.0 && game.result_hover()

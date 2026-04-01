@@ -36,7 +36,12 @@ fn draw_grid(game : @types.Game) -> Unit {
         )
         let alpha_val : Int = (tile.amplitude * 180.0).to_int()
         let alpha = @types.mini(alpha_val, 255)
-        let wave_color = @raylib.Color::new(adj_r, adj_g, base_color.b.to_int(), alpha)
+        let wave_color = @raylib.Color::new(
+          adj_r,
+          adj_g,
+          base_color.b.to_int(),
+          alpha,
+        )
         @raylib.draw_rectangle(
           sx.to_int() + 1,
           sy.to_int() + 1,
@@ -45,7 +50,8 @@ fn draw_grid(game : @types.Game) -> Unit {
           wave_color,
         )
         // Animated ripple rings when simulating
-        let is_sim = game.play_state == Simulating || game.play_state == Stepping
+        let is_sim = game.play_state == Simulating ||
+          game.play_state == Stepping
         if is_sim && tile.amplitude > 0.1 {
           let cx = sx + ts / 2.0
           let cy = sy + ts / 2.0
@@ -54,8 +60,9 @@ fn draw_grid(game : @types.Game) -> Unit {
           let ripple_r : Float = (ts / 2.0 - 4.0) *
             @types.absf(@types.sinf(ripple_phase))
           if ripple_r > 2.0 {
-            let ripple_alpha : Int = (tile.amplitude * 100.0 *
-              @types.absf(@types.cosf(ripple_phase))).to_int()
+            let ripple_alpha : Int = (tile.amplitude *
+            100.0 *
+            @types.absf(@types.cosf(ripple_phase))).to_int()
             let ra = @types.mini(@types.maxi(ripple_alpha, 0), 255)
             let ripple_col = @raylib.Color::new(
               base_color.r.to_int(),
@@ -92,13 +99,13 @@ fn draw_tile_object(
   sx : Float,
   sy : Float,
   ts : Float,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let cx = sx + ts / 2.0
   let cy = sy + ts / 2.0
   let r : Float = ts / 2.0 - 4.0
   match tile.object {
-    Wall => {
+    Wall =>
       @raylib.draw_rectangle(
         (sx + 2.0).to_int(),
         (sy + 2.0).to_int(),
@@ -106,7 +113,6 @@ fn draw_tile_object(
         @types.tile_size - 4,
         @types.color_wall,
       )
-    }
     Target => {
       // Ring shape with pulsing animation for unsatisfied
       let col = if tile.target_satisfied {
@@ -119,12 +125,7 @@ fn draw_tile_object(
       } else {
         @types.sinf(Float::from_int(frame) * 0.08) * 2.0
       }
-      @raylib.draw_circle_lines(
-        cx.to_int(),
-        cy.to_int(),
-        r + pulse_offset,
-        col,
-      )
+      @raylib.draw_circle_lines(cx.to_int(), cy.to_int(), r + pulse_offset, col)
       @raylib.draw_circle_lines(
         cx.to_int(),
         cy.to_int(),
@@ -155,7 +156,8 @@ fn draw_tile_object(
         @types.color_target_amp_bar_range,
       )
       // Current amplitude marker
-      let amp_x : Float = bar_x + @types.clampf(tile.amplitude, 0.0, 1.0) * bar_w
+      let amp_x : Float = bar_x +
+        @types.clampf(tile.amplitude, 0.0, 1.0) * bar_w
       let marker_col = if tile.target_satisfied {
         @types.color_target_ring_sat
       } else {
@@ -201,10 +203,7 @@ fn draw_tile_object(
     }
     Emitter(phase) => {
       // Pulsing circle
-      let pulse : Float = @types.sinf(
-          Float::from_int(frame) * 0.1,
-        ) *
-        3.0
+      let pulse : Float = @types.sinf(Float::from_int(frame) * 0.1) * 3.0
       let ecol = @types.phase_color(phase)
       @raylib.draw_circle(cx.to_int(), cy.to_int(), r - 2.0 + pulse, ecol)
       // Inner circle darker

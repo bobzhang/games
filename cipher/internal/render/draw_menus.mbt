@@ -8,9 +8,10 @@ fn draw_title(game : @types.Game) -> Unit {
     for col in 0..<52 {
       let seed = row * 52 + col
       let offset = (Float::from_int(seed) * 7.3 + time * 30.0).to_int()
-      let ch_idx = ((offset % 26) + 26) % 26
+      let ch_idx = (offset % 26 + 26) % 26
       let ch = @types.idx_to_char(ch_idx)
-      let alpha = 20 + ((@types.sinf(Float::from_int(seed) * 0.5 + time) + 1.0) * 15.0).to_int()
+      let alpha = 20 +
+        ((@types.sinf(Float::from_int(seed) * 0.5 + time) + 1.0) * 15.0).to_int()
       @draw.draw_text(
         ch.to_string(),
         col * 25,
@@ -69,8 +70,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text(title, (w - tw) / 2, 40, 36, @types.color_green)
   let tiers : Array[@types.Tier] = [Recruit, Agent, Cryptographer]
   let descs : Array[String] = [
-    "Caesar Cipher - 8 Missions", "Substitution Cipher - 9 Missions",
-    "Vigenere Cipher - 8 Missions",
+    "Caesar Cipher - 8 Missions", "Substitution Cipher - 9 Missions", "Vigenere Cipher - 8 Missions",
   ]
   let tier_icons : Array[String] = ["[I]", "[II]", "[III]"]
   for t in 0..<3 {
@@ -95,7 +95,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       by,
       bw,
       bh,
-      if is_selected { @types.color_green } else { @types.color_panel_border },
+      if is_selected {
+        @types.color_green
+      } else {
+        @types.color_panel_border
+      },
     )
     // Tier icon and name
     let tier_label = tier_icons[t] + " " + @types.tier_name(tiers[t])
@@ -117,7 +121,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       (end_ - start + 1).to_string() +
       " complete"
     @draw.draw_text(progress, bx + 20, by + 85, 14, @types.color_dim)
-    let star_txt = total_stars.to_string() + "/" + max_stars.to_string() + " stars"
+    let star_txt = total_stars.to_string() +
+      "/" +
+      max_stars.to_string() +
+      " stars"
     @draw.draw_text(star_txt, bx + 250, by + 85, 14, @types.color_star_gold)
   }
   @draw.draw_text("ESC = Back", 20, h - 30, 14, @types.color_dim)
@@ -164,7 +171,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
       by,
       cell_w,
       cell_h,
-      if selected { @types.color_green } else { @types.color_panel_border },
+      if selected {
+        @types.color_green
+      } else {
+        @types.color_panel_border
+      },
     )
     // Mission number
     let num_str = "CASE " + (level_id + 1).to_string()
@@ -209,7 +220,11 @@ fn draw_results(game : @types.Game) -> Unit {
   let level = @levels.get_level(game.current_level)
   // Background overlay
   @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(5, 8, 12, 230))
-  let title = if game.play_state == Solved { "CASE DECODED" } else { "CASE FAILED" }
+  let title = if game.play_state == Solved {
+    "CASE DECODED"
+  } else {
+    "CASE FAILED"
+  }
   let tc = if game.play_state == Solved {
     @types.color_green
   } else {
@@ -219,10 +234,20 @@ fn draw_results(game : @types.Game) -> Unit {
   @draw.draw_text(title, (w - tw) / 2, h / 4 - 30, 48, tc)
   // Plaintext reveal
   let ptw = @draw.measure_text(level.plaintext, 20)
-  @draw.draw_text(level.plaintext, (w - ptw) / 2, h / 4 + 40, 20, @types.color_amber)
+  @draw.draw_text(
+    level.plaintext,
+    (w - ptw) / 2,
+    h / 4 + 40,
+    20,
+    @types.color_amber,
+  )
   // Stats
   if game.play_state == Solved {
-    let stars = @types.calc_stars(game.swap_count, level.par_swaps, game.hints_used)
+    let stars = @types.calc_stars(
+      game.swap_count,
+      level.par_swaps,
+      game.hints_used,
+    )
     // Draw stars
     for s in 0..<3 {
       let sx = w / 2 - 60 + s * 50

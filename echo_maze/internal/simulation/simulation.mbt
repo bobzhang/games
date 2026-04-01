@@ -13,7 +13,11 @@ pub fn load_maze(world : Int, level : Int) -> (@types.Maze, @types.MazeState)? {
 
 ///|
 /// Check whether a position is walkable (not a wall, not a closed door)
-pub fn is_walkable(maze : @types.Maze, maze_state : @types.MazeState, pos : @types.Vec2i) -> Bool {
+pub fn is_walkable(
+  maze : @types.Maze,
+  maze_state : @types.MazeState,
+  pos : @types.Vec2i,
+) -> Bool {
   if !@types.in_bounds(pos, maze.width, maze.height) {
     return false
   }
@@ -43,7 +47,7 @@ pub fn try_move_player(
   maze : @types.Maze,
   maze_state : @types.MazeState,
   player : @types.Player,
-  dir : @types.Direction
+  dir : @types.Direction,
 ) -> Bool {
   let delta = @types.dir_to_delta(dir)
   let new_pos = @types.vec2i_add(player.pos, delta)
@@ -61,7 +65,7 @@ pub fn advance_ghost(
   ghost : @types.Ghost,
   maze : @types.Maze,
   maze_state : @types.MazeState,
-  tick : Int
+  tick : Int,
 ) -> Unit {
   if !ghost.active {
     return
@@ -93,7 +97,7 @@ pub fn update_buttons(
   maze : @types.Maze,
   maze_state : @types.MazeState,
   player : @types.Player,
-  ghosts : Array[@types.Ghost]
+  ghosts : Array[@types.Ghost],
 ) -> Unit {
   // Reset all button pressed states
   for i in 0..<maze_state.button_pressed.length() {
@@ -131,10 +135,7 @@ fn mark_button_pressed(maze_state : @types.MazeState, btn_id : Int) -> Unit {
 
 ///|
 /// Update door states based on button press state and button links
-pub fn update_doors(
-  maze : @types.Maze,
-  maze_state : @types.MazeState
-) -> Unit {
+pub fn update_doors(maze : @types.Maze, maze_state : @types.MazeState) -> Unit {
   // First close all non-timed doors
   for ds in maze_state.door_states {
     // Check if this door is timed
@@ -142,10 +143,7 @@ pub fn update_doors(
     for y in 0..<maze.height {
       for x in 0..<maze.width {
         match maze.tiles[y][x].kind {
-          TimedDoor(id, _) =>
-            if id == ds.door_id {
-              is_timed = true
-            }
+          TimedDoor(id, _) => if id == ds.door_id { is_timed = true }
           _ => ()
         }
       }
@@ -168,7 +166,7 @@ pub fn update_doors(
 pub fn update_timed_doors(
   maze : @types.Maze,
   maze_state : @types.MazeState,
-  tick : Int
+  tick : Int,
 ) -> Unit {
   for y in 0..<maze.height {
     for x in 0..<maze.width {
@@ -187,7 +185,11 @@ pub fn update_timed_doors(
 }
 
 ///|
-fn set_door_open(maze_state : @types.MazeState, door_id : Int, open : Bool) -> Unit {
+fn set_door_open(
+  maze_state : @types.MazeState,
+  door_id : Int,
+  open : Bool,
+) -> Unit {
   for ds in maze_state.door_states {
     if ds.door_id == door_id {
       ds.open = open
@@ -211,7 +213,7 @@ pub fn update_guards(maze_state : @types.MazeState) -> Unit {
 /// Advance a single guard along its patrol path
 pub fn advance_guard(
   guard_def : @types.GuardDef,
-  guard_state : @types.GuardState
+  guard_state : @types.GuardState,
 ) -> Unit {
   let patrol = guard_def.patrol
   if patrol.length() <= 1 {
@@ -239,7 +241,7 @@ pub fn advance_guard(
 /// Also updates guard alert states based on proximity
 pub fn check_guard_collision(
   player : @types.Player,
-  maze_state : @types.MazeState
+  maze_state : @types.MazeState,
 ) -> Bool {
   if !player.alive {
     return false
@@ -255,7 +257,11 @@ pub fn check_guard_collision(
       // Adjacent check (1-tile detection range, cardinal only)
       let dx = player.pos.x - gs.pos.x
       let dy = player.pos.y - gs.pos.y
-      if dx >= -1 && dx <= 1 && dy >= -1 && dy <= 1 && (dx != 0 || dy != 0) &&
+      if dx >= -1 &&
+        dx <= 1 &&
+        dy >= -1 &&
+        dy <= 1 &&
+        (dx != 0 || dy != 0) &&
         (dx == 0 || dy == 0) {
         gs.alert = Chasing
         gs.alert_timer = 2.0
@@ -264,11 +270,9 @@ pub fn check_guard_collision(
         // Near detection range - alert state
         gs.alert = Alert
         gs.alert_timer = 1.0
-      } else {
         // Decay alert
-        if gs.alert_timer <= 0.0 {
-          gs.alert = Idle
-        }
+      } else if gs.alert_timer <= 0.0 {
+        gs.alert = Idle
       }
     }
   }
@@ -279,7 +283,7 @@ pub fn check_guard_collision(
 /// Check if ghost collides with guard (ghost gets deactivated)
 pub fn check_ghost_guard_collision(
   ghosts : Array[@types.Ghost],
-  maze_state : @types.MazeState
+  maze_state : @types.MazeState,
 ) -> Unit {
   for ghost in ghosts {
     if !ghost.active {
@@ -304,7 +308,7 @@ pub fn check_exit(player : @types.Player, maze : @types.Maze) -> Bool {
 pub fn check_collectibles(
   player : @types.Player,
   maze : @types.Maze,
-  maze_state : @types.MazeState
+  maze_state : @types.MazeState,
 ) -> Int {
   let mut collected = 0
   for i in 0..<maze.collectible_positions.length() {
@@ -325,13 +329,12 @@ pub fn run_tick(
   player : @types.Player,
   ghosts : Array[@types.Ghost],
   tick : Int,
-  move_dir : @types.Direction?
+  move_dir : @types.Direction?,
 ) -> TickResult {
   // 1. Move player
   match move_dir {
     Some(dir) => {
       let _ = try_move_player(maze, maze_state, player, dir)
-
     }
     None => ()
   }
@@ -390,7 +393,7 @@ pub fn count_collectibles(maze_state : @types.MazeState) -> Int {
 /// Detect which ghosts are pressing which buttons this tick
 pub fn detect_ghost_button_presses(
   maze : @types.Maze,
-  ghosts : Array[@types.Ghost]
+  ghosts : Array[@types.Ghost],
 ) -> Array[(Int, Int)] {
   let result : Array[(Int, Int)] = [] // (ghost_index, button_id)
   for y in 0..<maze.height {
@@ -416,7 +419,7 @@ pub fn detect_ghost_button_presses(
 /// Returns array of (ghost_index, guard_index) collision pairs
 pub fn preview_ghost_guard_collisions(
   ghosts : Array[@types.Ghost],
-  maze_state : @types.MazeState
+  maze_state : @types.MazeState,
 ) -> Array[(Int, Int)] {
   let collisions : Array[(Int, Int)] = []
   for gi, ghost in ghosts {
@@ -436,7 +439,7 @@ pub fn preview_ghost_guard_collisions(
 /// Update guard alert timers (called per frame with dt)
 pub fn update_guard_alert_timers(
   maze_state : @types.MazeState,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   for gs in maze_state.guard_states {
     if gs.alert_timer > 0.0 {
@@ -452,7 +455,7 @@ pub fn update_guard_alert_timers(
 /// Validate that a maze is structurally sound for gameplay
 pub fn validate_level_structure(
   maze : @types.Maze,
-  level_def : @types.LevelDef
+  level_def : @types.LevelDef,
 ) -> Array[String] {
   let errors : Array[String] = []
   // Check start tile is actually Start
@@ -482,13 +485,17 @@ pub fn validate_level_structure(
         match maze.tiles[y][x].kind {
           Button(id) => if id == link.button_id { found_button = true }
           Door(id) | TimedDoor(id, _) =>
-            if id == link.door_id { found_door = true }
+            if id == link.door_id {
+              found_door = true
+            }
           _ => ()
         }
       }
     }
     if !found_button {
-      errors.push("Button link references non-existent button \{link.button_id}")
+      errors.push(
+        "Button link references non-existent button \{link.button_id}",
+      )
     }
     if !found_door {
       errors.push("Button link references non-existent door \{link.door_id}")
@@ -500,7 +507,9 @@ pub fn validate_level_structure(
       errors.push("Guard patrol \{pi} has fewer than 2 waypoints")
     }
     for wi, waypoint in patrol {
-      if waypoint.y >= maze.height || waypoint.x >= maze.width || waypoint.y < 0 ||
+      if waypoint.y >= maze.height ||
+        waypoint.x >= maze.width ||
+        waypoint.y < 0 ||
         waypoint.x < 0 {
         errors.push(
           "Guard patrol \{pi} waypoint \{wi} is out of bounds: (\{waypoint.x}, \{waypoint.y})",
@@ -526,14 +535,20 @@ pub fn validate_level_structure(
 
 ///|
 /// Calculate star rating for a completed level
-pub fn calculate_stars(loop_count : Int, par_loops : Int, collectibles_got : Int, collectibles_total : Int) -> Int {
+pub fn calculate_stars(
+  loop_count : Int,
+  par_loops : Int,
+  collectibles_got : Int,
+  collectibles_total : Int,
+) -> Int {
   let mut stars = 1 // 1 star for completing
   // 2 stars if completed within par
   if loop_count <= par_loops {
     stars = 2
   }
   // 3 stars if within par AND all collectibles
-  if loop_count <= par_loops && (collectibles_total == 0 || collectibles_got >= collectibles_total) {
+  if loop_count <= par_loops &&
+    (collectibles_total == 0 || collectibles_got >= collectibles_total) {
     stars = 3
   }
   stars

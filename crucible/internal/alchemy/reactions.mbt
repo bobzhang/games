@@ -1,7 +1,10 @@
 ///|
 /// Pure reaction engine. Given current substance + added element, return result.
 /// This encodes all 12 key reactions plus destruction rules.
-pub fn react(current : @types.Element, added : @types.Element) -> @types.ReactionResult {
+pub fn react(
+  current : @types.Element,
+  added : @types.Element,
+) -> @types.ReactionResult {
   // 12 key reactions (order-dependent: added is the new element, current is in cauldron)
   match (current, added) {
     // Fire + Water -> Steam
@@ -61,14 +64,16 @@ pub fn react(current : @types.Element, added : @types.Element) -> @types.Reactio
 /// Returns None if no known reaction.
 pub fn get_reaction_result(
   substance : @types.Element,
-  input : @types.Element
+  input : @types.Element,
 ) -> @types.ReactionResult {
   react(substance, input)
 }
 
 ///|
 /// All known valid reactions as (substance, input, result) tuples
-pub fn all_reactions() -> Array[(@types.Element, @types.Element, @types.Element)] {
+pub fn all_reactions() -> Array[
+  (@types.Element, @types.Element, @types.Element),
+] {
   [
     (Fire, Water, Steam),
     (Water, Fire, Steam),

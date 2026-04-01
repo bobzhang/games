@@ -105,7 +105,13 @@ fn draw_ui_panel(game : @types.Game, level : @types.Level) -> Unit {
   }
   // Controls help
   let ctrl_y = py + 400
-  @draw.draw_text("--- Controls ---", px + 15, ctrl_y, 18, @types.color_hud_text)
+  @draw.draw_text(
+    "--- Controls ---",
+    px + 15,
+    ctrl_y,
+    18,
+    @types.color_hud_text,
+  )
   @draw.draw_text(
     "Click grid: place sensor / guess",
     px + 15,
@@ -168,11 +174,7 @@ fn draw_ui_panel(game : @types.Game, level : @types.Level) -> Unit {
 }
 
 ///|
-fn draw_sensor_palette(
-  game : @types.Game,
-  x : Int,
-  y : Int
-) -> Unit {
+fn draw_sensor_palette(game : @types.Game, x : Int, y : Int) -> Unit {
   let sensors : Array[@types.SensorKind] = [Broad, Precise, Directional]
   let names : Array[String] = ["1: Broad", "2: Precise", "3: Directional"]
   let costs : Array[String] = ["Cost: 1", "Cost: 2", "Cost: 3"]
@@ -186,10 +188,20 @@ fn draw_sensor_palette(
     let is_selected = game.selected_sensor == kind
     // Selection background
     if is_selected {
-      @raylib.draw_rectangle(sx - 4, y - 4, 170, 130, @raylib.Color::new(
-          40, 50, 80, 200,
-        ))
-      @raylib.draw_rectangle_lines(sx - 4, y - 4, 170, 130, @types.color_selected)
+      @raylib.draw_rectangle(
+        sx - 4,
+        y - 4,
+        170,
+        130,
+        @raylib.Color::new(40, 50, 80, 200),
+      )
+      @raylib.draw_rectangle_lines(
+        sx - 4,
+        y - 4,
+        170,
+        130,
+        @types.color_selected,
+      )
     }
     // Sensor icon
     let icon_x = Float::from_int(sx + 20)

@@ -7,21 +7,20 @@ fn draw_title(game : @types.Game) -> Unit {
   for i in 0..<40 {
     let fi = Float::from_int(i)
     let px = ((fi * 97.3 + time * 30.0) % Float::from_int(w)).to_int()
-    let py = ((fi * 63.7 + time * 15.0 * (fi % 3.0 + 1.0)) % Float::from_int(
-        h,
-      )).to_int()
+    let py = ((fi * 63.7 + time * 15.0 * (fi % 3.0 + 1.0)) % Float::from_int(h)).to_int()
     let kind = i % 4
     if kind == 0 {
       @raylib.draw_circle(px, py, 3.0, @raylib.Color::new(255, 220, 60, 80))
     } else if kind == 1 {
-      @raylib.draw_line(px, py, px, py + 6, @raylib.Color::new(70, 130, 230, 80))
-    } else if kind == 2 {
-      @raylib.draw_circle(
+      @raylib.draw_line(
         px,
         py,
-        5.0,
-        @raylib.Color::new(160, 160, 170, 48),
+        px,
+        py + 6,
+        @raylib.Color::new(70, 130, 230, 80),
       )
+    } else if kind == 2 {
+      @raylib.draw_circle(px, py, 5.0, @raylib.Color::new(160, 160, 170, 48))
     } else {
       @raylib.draw_line(
         px,
@@ -58,10 +57,7 @@ fn draw_title(game : @types.Game) -> Unit {
   let icon_y = h / 2 - 20
   let icons = ["Sun", "Rain", "Cloud", "Wind", "Storm"]
   let colors : Array[@raylib.Color] = [
-    @types.color_sunny,
-    @types.color_rainy,
-    @types.color_cloudy,
-    @types.color_windy,
+    @types.color_sunny, @types.color_rainy, @types.color_cloudy, @types.color_windy,
     @types.color_stormy,
   ]
   for i in 0..<icons.length() {
@@ -96,9 +92,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   // Three tier boxes
   let tiers : Array[@types.Tier] = [Spring, Summer, Monsoon]
   let descs = [
-    "Sun & Rain basics",
-    "Wind, Clouds & Hills",
-    "Storms & Complex terrain",
+    "Sun & Rain basics", "Wind, Clouds & Hills", "Storms & Complex terrain",
   ]
   for i in 0..<tiers.length() {
     let tier = tiers[i]
@@ -151,7 +145,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
         total_stars += game.level_scores[li].stars
       }
     }
-    let star_text = total_stars.to_string() + "/" + ((end - start) * 3).to_string() + " stars"
+    let star_text = total_stars.to_string() +
+      "/" +
+      ((end - start) * 3).to_string() +
+      " stars"
     let sw = @draw.measure_text(star_text, 14)
     @draw.draw_text(
       star_text,
@@ -209,7 +206,12 @@ fn draw_level_select(game : @types.Game) -> Unit {
     let level = @levels.get_level(li)
     let score = game.level_scores[li]
     let bg = if selected {
-      @raylib.Color::new(tier_col.r.to_int(), tier_col.g.to_int(), tier_col.b.to_int(), 50)
+      @raylib.Color::new(
+        tier_col.r.to_int(),
+        tier_col.g.to_int(),
+        tier_col.b.to_int(),
+        50,
+      )
     } else {
       @raylib.Color::new(30, 35, 50, 200)
     }
@@ -283,13 +285,7 @@ fn draw_results(game : @types.Game) -> Unit {
   let ppx = (w - pw) / 2
   let ppy = (h - ph) / 2
   @raylib.draw_rectangle(ppx, ppy, pw, ph, @types.color_hud_bg)
-  @raylib.draw_rectangle_lines(
-    ppx,
-    ppy,
-    pw,
-    ph,
-    @types.tier_color(level.tier),
-  )
+  @raylib.draw_rectangle_lines(ppx, ppy, pw, ph, @types.tier_color(level.tier))
   // Title
   let completed = score.completed
   let title = if completed { "LEVEL COMPLETE!" } else { "LEVEL FAILED" }

@@ -163,7 +163,7 @@ pub fn cell_candidates(
   grid : Grid,
   row : Int,
   col : Int,
-  constraints : Array[Constraint]
+  constraints : Array[Constraint],
 ) -> Array[Bool] {
   // Returns array of size 10 where index n is true if n is a valid candidate
   let valid : Array[Bool] = Array::make(10, true)

@@ -86,12 +86,7 @@ test "combo count function" {
     { kind: FlexCombo, body_a_id: 0, body_b_id: 1, bonus_value: 1.5 },
     { kind: FlexCombo, body_a_id: 2, body_b_id: 3, bonus_value: 1.5 },
     { kind: MonolithCombo, body_a_id: 4, body_b_id: 5, bonus_value: 1.3 },
-    {
-      kind: ReinforcedCombo,
-      body_a_id: 6,
-      body_b_id: 7,
-      bonus_value: 0.8,
-    },
+    { kind: ReinforcedCombo, body_a_id: 6, body_b_id: 7, bonus_value: 0.8 },
   ]
   let (flex, mono, rein, light) = @game.count_combos(combos)
   inspect(flex, content="2")
@@ -403,9 +398,12 @@ test "world_max_stars for each world" {
 test "update_game_combos clears and recalculates" {
   let game = @types.new_game()
   // Add some fake combos
-  game.active_combos.push(
-    { kind: FlexCombo, body_a_id: 0, body_b_id: 1, bonus_value: 1.5 },
-  )
+  game.active_combos.push({
+    kind: FlexCombo,
+    body_a_id: 0,
+    body_b_id: 1,
+    bonus_value: 1.5,
+  })
   inspect(game.active_combos.length(), content="1")
   // Update with empty world
   @game.update_game_combos(game)
@@ -414,14 +412,8 @@ test "update_game_combos clears and recalculates" {
 
 ///|
 test "combo description returns non-empty" {
-  inspect(
-    @game.combo_description(FlexCombo).length() > 0,
-    content="true",
-  )
-  inspect(
-    @game.combo_description(MonolithCombo).length() > 0,
-    content="true",
-  )
+  inspect(@game.combo_description(FlexCombo).length() > 0, content="true")
+  inspect(@game.combo_description(MonolithCombo).length() > 0, content="true")
 }
 
 ///|

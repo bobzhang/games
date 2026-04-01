@@ -45,10 +45,10 @@ fn draw_title(game : @types.Game) -> Unit {
   let sub_size = get_text_size(game, 20)
   let small_size = get_text_size(game, 18)
   @draw.draw_text("GRAVITY PUZZLER", 200, 150, text_size, title_blue)
-  @draw.draw_text("Rotate gravity to solve puzzles!", 220, 230, sub_size, light_gray)
   @draw.draw_text(
-    "Get the orb to the exit.", 280, 270, sub_size, light_gray,
+    "Rotate gravity to solve puzzles!", 220, 230, sub_size, light_gray,
   )
+  @draw.draw_text("Get the orb to the exit.", 280, 270, sub_size, light_gray)
   // Draw a spinning gravity indicator
   let cx = @types.screen_w / 2
   let cy = 400
@@ -57,20 +57,33 @@ fn draw_title(game : @types.Game) -> Unit {
   @raylib.draw_circle(cx, cy, 12.0, @types.color_player)
   // Gravity arrow pointing down
   @raylib.draw_triangle(
-    @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy) + radius + 20.0),
     @raylib.Vector2::new(
-      Float::from_int(cx) - 12.0, Float::from_int(cy) + radius + 4.0,
+      Float::from_int(cx),
+      Float::from_int(cy) + radius + 20.0,
     ),
     @raylib.Vector2::new(
-      Float::from_int(cx) + 12.0, Float::from_int(cy) + radius + 4.0,
+      Float::from_int(cx) - 12.0,
+      Float::from_int(cy) + radius + 4.0,
+    ),
+    @raylib.Vector2::new(
+      Float::from_int(cx) + 12.0,
+      Float::from_int(cy) + radius + 4.0,
     ),
     gravity_arrow_color,
   )
   @draw.draw_text("[ENTER] Start", 380, 490, 24, white)
-  @draw.draw_text("[L] Level Editor  [T] Speedrun Timer", 240, 528, small_size, light_gray)
-  @draw.draw_text("[A] Accessibility  [S] Statistics", 260, 558, small_size, light_gray)
-  @draw.draw_text("Q/E: Rotate Gravity  Arrows: Move", 220, 588, small_size, light_gray)
-  @draw.draw_text("Z: Undo  R: Restart  H: Hint  V: Ghost", 210, 618, small_size, light_gray)
+  @draw.draw_text(
+    "[L] Level Editor  [T] Speedrun Timer", 240, 528, small_size, light_gray,
+  )
+  @draw.draw_text(
+    "[A] Accessibility  [S] Statistics", 260, 558, small_size, light_gray,
+  )
+  @draw.draw_text(
+    "Q/E: Rotate Gravity  Arrows: Move", 220, 588, small_size, light_gray,
+  )
+  @draw.draw_text(
+    "Z: Undo  R: Restart  H: Hint  V: Ghost", 210, 618, small_size, light_gray,
+  )
   // Accessibility mode indicator
   let mode_text = match game.accessibility {
     Normal => ""
@@ -78,7 +91,13 @@ fn draw_title(game : @types.Game) -> Unit {
     LargeText => "[Large Text Mode]"
   }
   if mode_text.length() > 0 {
-    @draw.draw_text(mode_text, 350, 660, 16, @raylib.Color::new(255, 255, 100, 180))
+    @draw.draw_text(
+      mode_text,
+      350,
+      660,
+      16,
+      @raylib.Color::new(255, 255, 100, 180),
+    )
   }
 }
 
@@ -86,7 +105,7 @@ fn draw_title(game : @types.Game) -> Unit {
 fn draw_world_select(game : @types.Game) -> Unit {
   @raylib.clear_background(dark_gray)
   @draw.draw_text("SELECT WORLD", 320, 40, get_text_size(game, 36), white)
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     let bx = 80 + w * 160
     let by = 160
     let bw = 140
@@ -116,36 +135,81 @@ fn draw_world_select(game : @types.Game) -> Unit {
     } else {
       unlocked.to_string() + "/10"
     }
-    @draw.draw_text(status, bx + 10, by + 55, get_text_size(game, 20), light_gray)
+    @draw.draw_text(
+      status,
+      bx + 10,
+      by + 55,
+      get_text_size(game, 20),
+      light_gray,
+    )
     // Show stars for this world
     let mut world_stars = 0
-    for l in 0..< @types.levels_per_world {
+    for l in 0..<@types.levels_per_world {
       let idx = w * @types.levels_per_world + l
       if idx < game.level_stars.length() {
         world_stars = world_stars + game.level_stars[idx]
       }
     }
     let star_text = world_stars.to_string() + "/30 stars"
-    @draw.draw_text(star_text, bx + 10, by + 95, get_text_size(game, 14), @types.color_star_gold)
+    @draw.draw_text(
+      star_text,
+      bx + 10,
+      by + 95,
+      get_text_size(game, 14),
+      @types.color_star_gold,
+    )
     // Completion percentage
     if unlocked > 0 {
       let max_stars = @types.levels_per_world * 3
       let pct = if max_stars > 0 { world_stars * 100 / max_stars } else { 0 }
       let pct_text = pct.to_string() + "%"
-      @draw.draw_text(pct_text, bx + 10, by + 120, get_text_size(game, 14), light_gray)
+      @draw.draw_text(
+        pct_text,
+        bx + 10,
+        by + 120,
+        get_text_size(game, 14),
+        light_gray,
+      )
     }
   }
   @draw.draw_text(
-    "Total Stars: " + game.total_stars.to_string() + "/" + (@types.total_levels * 3).to_string(),
-    310, 400, get_text_size(game, 24), @types.color_star_gold,
+    "Total Stars: " +
+    game.total_stars.to_string() +
+    "/" +
+    (@types.total_levels * 3).to_string(),
+    310,
+    400,
+    get_text_size(game, 24),
+    @types.color_star_gold,
   )
   // Achievement progress
   let ach_count = count_achievements_unlocked(game)
   let ach_total = game.achievement_state.achievements.length()
-  let ach_text = "Achievements: " + ach_count.to_string() + "/" + ach_total.to_string()
-  @draw.draw_text(ach_text, 340, 440, get_text_size(game, 18), @raylib.Color::new(255, 215, 0, 200))
-  @draw.draw_text("[ENTER] Select  [ESC] Back", 300, 520, get_text_size(game, 20), light_gray)
-  @draw.draw_text("[LEFT/RIGHT] Navigate", 340, 560, get_text_size(game, 18), light_gray)
+  let ach_text = "Achievements: " +
+    ach_count.to_string() +
+    "/" +
+    ach_total.to_string()
+  @draw.draw_text(
+    ach_text,
+    340,
+    440,
+    get_text_size(game, 18),
+    @raylib.Color::new(255, 215, 0, 200),
+  )
+  @draw.draw_text(
+    "[ENTER] Select  [ESC] Back",
+    300,
+    520,
+    get_text_size(game, 20),
+    light_gray,
+  )
+  @draw.draw_text(
+    "[LEFT/RIGHT] Navigate",
+    340,
+    560,
+    get_text_size(game, 18),
+    light_gray,
+  )
 }
 
 ///|
@@ -155,7 +219,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   let name = @types.world_name(game.current_world)
   @draw.draw_text(name, 360, 30, 32, white)
   let unlocked = game.levels_unlocked[game.current_world]
-  for l in 0..< @types.levels_per_world {
+  for l in 0..<@types.levels_per_world {
     let col = l % 5
     let row = l / 5
     let bx = 160 + col * 130
@@ -177,7 +241,15 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
     let label = (l + 1).to_string()
     @draw.draw_text(
-      label, bx + 45, by + 15, 28, if is_unlocked { white } else { light_gray },
+      label,
+      bx + 45,
+      by + 15,
+      28,
+      if is_unlocked {
+        white
+      } else {
+        light_gray
+      },
     )
     // Draw stars and best moves
     if is_unlocked {
@@ -204,17 +276,25 @@ fn draw_level_select(game : @types.Game) -> Unit {
   }
   // Show selected level name and hint
   let sel_name = @content.get_level_name(game.current_world, game.current_level)
-  @draw.draw_text(
-    sel_name, 370, 460, get_text_size(game, 22), white,
-  )
+  @draw.draw_text(sel_name, 370, 460, get_text_size(game, 22), white)
   // Show level-specific hint text
-  let hint_text = @content.get_level_hint(game.current_world, game.current_level)
+  let hint_text = @content.get_level_hint(
+    game.current_world,
+    game.current_level,
+  )
   @draw.draw_text(
-    hint_text, 200, 490, get_text_size(game, 14),
+    hint_text,
+    200,
+    490,
+    get_text_size(game, 14),
     @raylib.Color::new(200, 200, 150, 180),
   )
   @draw.draw_text(
-    "[ENTER] Play  [ESC] Back", 310, 530, get_text_size(game, 20), light_gray,
+    "[ENTER] Play  [ESC] Back",
+    310,
+    530,
+    get_text_size(game, 20),
+    light_gray,
   )
 }
 
@@ -278,7 +358,7 @@ fn draw_playing(game : @types.Game) -> Unit {
 fn draw_grid_with_access(
   level : @types.Level,
   theme : @types.WorldTheme,
-  accessibility : @types.AccessibilityMode
+  accessibility : @types.AccessibilityMode,
 ) -> Unit {
   let wall_color = @types.world_wall_color(theme)
   let floor_color = @types.world_floor_color(theme)
@@ -290,7 +370,9 @@ fn draw_grid_with_access(
       let tile = @types.get_tile(level, x, y)
       match tile {
         Wall => {
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, wall_color)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, wall_color,
+          )
           // Wall border
           let border = if high_contrast {
             @raylib.Color::new(255, 255, 255, 120)
@@ -303,27 +385,53 @@ fn draw_grid_with_access(
           // High contrast: cross-hatch pattern on walls
           if high_contrast {
             let line_color = @raylib.Color::new(255, 255, 255, 40)
-            @raylib.draw_line(px, py, px + @types.tile_size, py + @types.tile_size, line_color)
-            @raylib.draw_line(px + @types.tile_size, py, px, py + @types.tile_size, line_color)
+            @raylib.draw_line(
+              px,
+              py,
+              px + @types.tile_size,
+              py + @types.tile_size,
+              line_color,
+            )
+            @raylib.draw_line(
+              px + @types.tile_size,
+              py,
+              px,
+              py + @types.tile_size,
+              line_color,
+            )
           }
         }
         Empty =>
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, floor_color)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, floor_color,
+          )
         Exit => {
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, floor_color)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, floor_color,
+          )
           // Exit marker - pulsing green circle
           let pulse_d = @math.sin(Float::from_int(px + py).to_double() * 0.1)
           let pulse = Float::from_double(pulse_d.abs()) * 0.3 + 0.7
           let radius = @types.tile_sizef * 0.35 * pulse
           let cx = Float::from_int(px) + @types.tile_sizef * 0.5
           let cy = Float::from_int(py) + @types.tile_sizef * 0.5
-          @raylib.draw_circle(cx.to_int(), cy.to_int(), radius, @types.color_exit)
+          @raylib.draw_circle(
+            cx.to_int(),
+            cy.to_int(),
+            radius,
+            @types.color_exit,
+          )
           @raylib.draw_circle_lines(
-            cx.to_int(), cy.to_int(), @types.tile_sizef * 0.4, white,
+            cx.to_int(),
+            cy.to_int(),
+            @types.tile_sizef * 0.4,
+            white,
           )
         }
         Spike => {
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, floor_color)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, floor_color,
+          )
           // Draw spike triangles
           let x1 = Float::from_int(px) + @types.tile_sizef * 0.5
           let y1 = Float::from_int(py) + 4.0
@@ -339,17 +447,17 @@ fn draw_grid_with_access(
           )
         }
         Ice => {
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, @types.color_ice)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, @types.color_ice,
+          )
           // Ice shimmer lines
-          @raylib.draw_line(
-            px + 8, py + 12, px + 20, py + 8, white,
-          )
-          @raylib.draw_line(
-            px + 28, py + 24, px + 40, py + 20, white,
-          )
+          @raylib.draw_line(px + 8, py + 12, px + 20, py + 8, white)
+          @raylib.draw_line(px + 28, py + 24, px + 40, py + 20, white)
         }
         Portal(id) => {
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, floor_color)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, floor_color,
+          )
           // Portal ring
           let cx = Float::from_int(px) + @types.tile_sizef * 0.5
           let cy = Float::from_int(py) + @types.tile_sizef * 0.5
@@ -364,7 +472,9 @@ fn draw_grid_with_access(
           @draw.draw_text(label, cx.to_int() - 4, cy.to_int() - 8, 16, c)
         }
         Switch(id) => {
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, floor_color)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, floor_color,
+          )
           // Switch button
           @raylib.draw_rectangle(px + 12, py + 12, 24, 24, @types.color_switch)
           let label = id.to_string()
@@ -372,12 +482,18 @@ fn draw_grid_with_access(
         }
         Gate(id) => {
           // Gate bars
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, @types.color_gate)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, @types.color_gate,
+          )
           // Vertical bars
           for i in 0..<4 {
             let bx = px + 6 + i * 12
             @raylib.draw_rectangle(
-              bx, py + 2, 4, @types.tile_size - 4, @raylib.Color::new(200, 140, 20, 255),
+              bx,
+              py + 2,
+              4,
+              @types.tile_size - 4,
+              @raylib.Color::new(200, 140, 20, 255),
             )
           }
           let label = id.to_string()
@@ -389,15 +505,9 @@ fn draw_grid_with_access(
             px, py, @types.tile_size, @types.tile_size, @types.color_crumble,
           )
           // Crack lines
-          @raylib.draw_line(
-            px + 8, py + 8, px + 24, py + 24, shadow_color,
-          )
-          @raylib.draw_line(
-            px + 32, py + 4, px + 20, py + 36, shadow_color,
-          )
-          @raylib.draw_line(
-            px + 4, py + 28, px + 16, py + 40, shadow_color,
-          )
+          @raylib.draw_line(px + 8, py + 8, px + 24, py + 24, shadow_color)
+          @raylib.draw_line(px + 32, py + 4, px + 20, py + 36, shadow_color)
+          @raylib.draw_line(px + 4, py + 28, px + 16, py + 40, shadow_color)
         }
         Conveyor(dir) => {
           @raylib.draw_rectangle(
@@ -410,12 +520,18 @@ fn draw_grid_with_access(
           let ax = cx + Float::from_int(adx) * 12.0
           let ay = cy + Float::from_int(ady) * 12.0
           @raylib.draw_line(
-            cx.to_int(), cy.to_int(), ax.to_int(), ay.to_int(), white,
+            cx.to_int(),
+            cy.to_int(),
+            ax.to_int(),
+            ay.to_int(),
+            white,
           )
         }
         // World-specific tiles: base floor drawn here, detail in effects
         PressurePlate(_) | Mirror(_) | GravityWell | TimedLava | WindGust(_) =>
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, floor_color)
+          @raylib.draw_rectangle(
+            px, py, @types.tile_size, @types.tile_size, floor_color,
+          )
       }
     }
   }
@@ -425,19 +541,24 @@ fn draw_grid_with_access(
 fn draw_entities(level : @types.Level, game : @types.Game) -> Unit {
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
-    if !(e.active) {
+    if !e.active {
       continue
     }
     // Calculate animated position
     let t : Float = 1.0 - e.slide_timer
     let px = @types.lerp(
-      @types.tile_to_pixel_x(e.from_x), @types.tile_to_pixel_x(e.x), t,
+      @types.tile_to_pixel_x(e.from_x),
+      @types.tile_to_pixel_x(e.x),
+      t,
     )
     // Apply bounce offset
     let bounce_off = @effects.get_bounce_offset(game, e.id)
     let py = @types.lerp(
-      @types.tile_to_pixel_y(e.from_y), @types.tile_to_pixel_y(e.y), t,
-    ) - bounce_off
+        @types.tile_to_pixel_y(e.from_y),
+        @types.tile_to_pixel_y(e.y),
+        t,
+      ) -
+      bounce_off
     let cx = px + @types.tile_sizef * 0.5
     let cy = py + @types.tile_sizef * 0.5
     let half = @types.tile_sizef * 0.38
@@ -446,11 +567,14 @@ fn draw_entities(level : @types.Level, game : @types.Game) -> Unit {
         // Player orb - glowing circle
         let pulse_d = @math.sin(game.frame_count.to_double() * 0.1)
         let pulse : Float = Float::from_double(pulse_d.abs()) * 4.0 + half
-        @raylib.draw_circle(cx.to_int(), cy.to_int(), pulse, @types.color_player)
-        // Inner highlight
         @raylib.draw_circle(
-          cx.to_int() - 4, cy.to_int() - 4, half * 0.4, white,
+          cx.to_int(),
+          cy.to_int(),
+          pulse,
+          @types.color_player,
         )
+        // Inner highlight
+        @raylib.draw_circle(cx.to_int() - 4, cy.to_int() - 4, half * 0.4, white)
       }
       Box => {
         // Box - filled square
@@ -458,16 +582,27 @@ fn draw_entities(level : @types.Level, game : @types.Game) -> Unit {
         let by = py + @types.tile_sizef * 0.12
         let bs = @types.tile_sizef * 0.76
         @raylib.draw_rectangle(
-          bx.to_int(), by.to_int(), bs.to_int(), bs.to_int(), @types.color_box,
+          bx.to_int(),
+          by.to_int(),
+          bs.to_int(),
+          bs.to_int(),
+          @types.color_box,
         )
         @raylib.draw_rectangle_lines(
-          bx.to_int(), by.to_int(), bs.to_int(), bs.to_int(), shadow_color,
+          bx.to_int(),
+          by.to_int(),
+          bs.to_int(),
+          bs.to_int(),
+          shadow_color,
         )
       }
       Boulder => {
         // Boulder - pentagon approximated as circle with cross
         @raylib.draw_circle(
-          cx.to_int(), cy.to_int(), half, @types.color_boulder,
+          cx.to_int(),
+          cy.to_int(),
+          half,
+          @types.color_boulder,
         )
         @raylib.draw_line(
           (cx - half * 0.5).to_int(),
@@ -503,9 +638,7 @@ fn draw_entities(level : @types.Level, game : @types.Game) -> Unit {
       Gem => {
         // Gem - star shape (simplified as a bright diamond + circle)
         let s = half * 0.6
-        @raylib.draw_circle(
-          cx.to_int(), cy.to_int(), s, @types.color_gem,
-        )
+        @raylib.draw_circle(cx.to_int(), cy.to_int(), s, @types.color_gem)
         @raylib.draw_triangle(
           @raylib.Vector2::new(cx, cy - half),
           @raylib.Vector2::new(cx - s * 0.5, cy),
@@ -521,9 +654,17 @@ fn draw_entities(level : @types.Level, game : @types.Game) -> Unit {
       }
       Enemy => {
         // Enemy - red spiky circle with angry expression
-        let enemy_pulse = Float::from_double(@math.sin(game.frame_count.to_double() * 0.12).abs()) * 3.0
+        let enemy_pulse = Float::from_double(
+            @math.sin(game.frame_count.to_double() * 0.12).abs(),
+          ) *
+          3.0
         let radius = half + enemy_pulse
-        @raylib.draw_circle(cx.to_int(), cy.to_int(), radius, @types.color_enemy)
+        @raylib.draw_circle(
+          cx.to_int(),
+          cy.to_int(),
+          radius,
+          @types.color_enemy,
+        )
         // Draw "spikes" around the enemy (4 triangular protrusions)
         let spike_len = half * 0.4
         // Top spike
@@ -556,16 +697,28 @@ fn draw_entities(level : @types.Level, game : @types.Game) -> Unit {
         )
         // Eyes (white dots with dark pupils)
         @raylib.draw_circle(
-          (cx - 5.0).to_int(), (cy - 3.0).to_int(), 4.0, white,
+          (cx - 5.0).to_int(),
+          (cy - 3.0).to_int(),
+          4.0,
+          white,
         )
         @raylib.draw_circle(
-          (cx + 5.0).to_int(), (cy - 3.0).to_int(), 4.0, white,
+          (cx + 5.0).to_int(),
+          (cy - 3.0).to_int(),
+          4.0,
+          white,
         )
         @raylib.draw_circle(
-          (cx - 5.0).to_int(), (cy - 3.0).to_int(), 2.0, black,
+          (cx - 5.0).to_int(),
+          (cy - 3.0).to_int(),
+          2.0,
+          black,
         )
         @raylib.draw_circle(
-          (cx + 5.0).to_int(), (cy - 3.0).to_int(), 2.0, black,
+          (cx + 5.0).to_int(),
+          (cy - 3.0).to_int(),
+          2.0,
+          black,
         )
       }
     }
@@ -573,7 +726,12 @@ fn draw_entities(level : @types.Level, game : @types.Game) -> Unit {
     match game.accessibility {
       HighContrast => {
         let border_color = @raylib.Color::new(255, 255, 255, 200)
-        @raylib.draw_circle_lines(cx.to_int(), cy.to_int(), half + 2.0, border_color)
+        @raylib.draw_circle_lines(
+          cx.to_int(),
+          cy.to_int(),
+          half + 2.0,
+          border_color,
+        )
       }
       _ => ()
     }
@@ -606,7 +764,8 @@ fn draw_gravity_indicator(level : @types.Level, game : @types.Game) -> Unit {
   @draw.draw_text(dir_label, ix - 4, iy - 8, 18, gravity_arrow_color)
   // Gravity rotation animation
   if game.gravity_anim_timer > 0.0 {
-    let progress : Float = 1.0 - game.gravity_anim_timer / @types.gravity_anim_duration
+    let progress : Float = 1.0 -
+      game.gravity_anim_timer / @types.gravity_anim_duration
     let fade : Float = 1.0 - progress
     let alpha = (fade * 128.0).to_int()
     let c = @raylib.Color::new(255, 255, 100, alpha)
@@ -651,15 +810,17 @@ fn draw_hud(level : @types.Level, game : @types.Game) -> Unit {
   let hints_left = @hints.hints_remaining(game)
   let hint_text = "Hints: " + hints_left.to_string()
   @draw.draw_text(
-    hint_text, 660, 36, sub_size, @raylib.Color::new(255, 255, 100, 180),
+    hint_text,
+    660,
+    36,
+    sub_size,
+    @raylib.Color::new(255, 255, 100, 180),
   )
   // Enemy count if enemies present
   let enemy_count = @types.count_active_enemies(level)
   if enemy_count > 0 {
     let enemy_text = "Enemies: " + enemy_count.to_string()
-    @draw.draw_text(
-      enemy_text, 660, 56, sub_size, @types.color_enemy,
-    )
+    @draw.draw_text(enemy_text, 660, 56, sub_size, @types.color_enemy)
   }
   // Bottom controls hint
   @draw.draw_text(
@@ -717,7 +878,13 @@ fn draw_level_complete(game : @types.Game) -> Unit {
   draw_entities(level, game)
   // Overlay
   @raylib.draw_rectangle(0, 0, @types.screen_w, @types.screen_h, shadow_color)
-  @draw.draw_text("LEVEL COMPLETE!", 280, 170, get_text_size(game, 40), @types.color_exit)
+  @draw.draw_text(
+    "LEVEL COMPLETE!",
+    280,
+    170,
+    get_text_size(game, 40),
+    @types.color_exit,
+  )
   let moves_text = "Moves: " +
     level.moves.to_string() +
     "  (Par: " +
@@ -739,27 +906,45 @@ fn draw_level_complete(game : @types.Game) -> Unit {
     1 => "Good"
     _ => "Complete"
   }
-  @draw.draw_text(rating, 400, 360, get_text_size(game, 28), @types.color_star_gold)
+  @draw.draw_text(
+    rating,
+    400,
+    360,
+    get_text_size(game, 28),
+    @types.color_star_gold,
+  )
   // Gems info
   if level.gems_total > 0 {
     let gems_text = "Gems: " +
       level.gems_collected.to_string() +
       "/" +
       level.gems_total.to_string()
-    @draw.draw_text(gems_text, 400, 400, get_text_size(game, 20), @types.color_gem)
+    @draw.draw_text(
+      gems_text,
+      400,
+      400,
+      get_text_size(game, 20),
+      @types.color_gem,
+    )
   }
   // No-undo and no-hint badges
   let mut badge_y = 430
-  if !(game.used_undo_this_level) {
+  if !game.used_undo_this_level {
     @draw.draw_text(
-      "No Undo!", 400, badge_y, get_text_size(game, 16),
+      "No Undo!",
+      400,
+      badge_y,
+      get_text_size(game, 16),
       @raylib.Color::new(100, 255, 200, 255),
     )
     badge_y = badge_y + 22
   }
-  if !(game.used_hint_this_level) {
+  if !game.used_hint_this_level {
     @draw.draw_text(
-      "No Hints!", 400, badge_y, get_text_size(game, 16),
+      "No Hints!",
+      400,
+      badge_y,
+      get_text_size(game, 16),
       @raylib.Color::new(255, 255, 100, 255),
     )
   }
@@ -775,11 +960,21 @@ fn draw_level_complete(game : @types.Game) -> Unit {
 ///|
 fn draw_pause_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0, 0, @types.screen_w, @types.screen_h, @raylib.Color::new(0, 0, 0, 160),
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(0, 0, 0, 160),
   )
   @draw.draw_text("PAUSED", 390, 280, get_text_size(game, 48), white)
   @draw.draw_text("[ESC] Resume", 380, 360, get_text_size(game, 24), light_gray)
-  @draw.draw_text("[Q] Quit to Level Select", 340, 400, get_text_size(game, 20), light_gray)
+  @draw.draw_text(
+    "[Q] Quit to Level Select",
+    340,
+    400,
+    get_text_size(game, 20),
+    light_gray,
+  )
 }
 
 ///|
@@ -799,39 +994,73 @@ fn draw_statistics(game : @types.Game) -> Unit {
   @draw.draw_text("-- Gameplay --", sx, sy, heading_size, @types.color_player)
   sy = sy + gap + 4
   @draw.draw_text(
-    "Total Moves: " + stats.total_moves.to_string(), sx, sy, text_size, light_gray,
+    "Total Moves: " + stats.total_moves.to_string(),
+    sx,
+    sy,
+    text_size,
+    light_gray,
   )
   sy = sy + gap
   @draw.draw_text(
-    "Gravity Rotations: " + stats.total_gravity_rotations.to_string(), sx, sy, text_size, light_gray,
+    "Gravity Rotations: " + stats.total_gravity_rotations.to_string(),
+    sx,
+    sy,
+    text_size,
+    light_gray,
   )
   sy = sy + gap
   @draw.draw_text(
-    "Levels Completed: " + stats.total_levels_completed.to_string(), sx, sy, text_size, light_gray,
+    "Levels Completed: " + stats.total_levels_completed.to_string(),
+    sx,
+    sy,
+    text_size,
+    light_gray,
   )
   sy = sy + gap
   @draw.draw_text(
-    "Total Stars: " + game.total_stars.to_string() + "/" + (@types.total_levels * 3).to_string(),
-    sx, sy, text_size, @types.color_star_gold,
+    "Total Stars: " +
+    game.total_stars.to_string() +
+    "/" +
+    (@types.total_levels * 3).to_string(),
+    sx,
+    sy,
+    text_size,
+    @types.color_star_gold,
   )
   sy = sy + gap
   @draw.draw_text(
-    "3-Star Levels: " + stats.levels_with_3_stars.to_string(), sx, sy, text_size, light_gray,
+    "3-Star Levels: " + stats.levels_with_3_stars.to_string(),
+    sx,
+    sy,
+    text_size,
+    light_gray,
   )
   sy = sy + gap
   @draw.draw_text(
-    "Best 3-Star Streak: " + stats.best_streak.to_string(), sx, sy, text_size, light_gray,
+    "Best 3-Star Streak: " + stats.best_streak.to_string(),
+    sx,
+    sy,
+    text_size,
+    light_gray,
   )
   // Section: Collection Stats
   sy = sy + gap + 10
   @draw.draw_text("-- Collection --", sx, sy, heading_size, @types.color_gem)
   sy = sy + gap + 4
   @draw.draw_text(
-    "Gems Collected: " + stats.total_gems_collected.to_string(), sx, sy, text_size, @types.color_gem,
+    "Gems Collected: " + stats.total_gems_collected.to_string(),
+    sx,
+    sy,
+    text_size,
+    @types.color_gem,
   )
   sy = sy + gap
   @draw.draw_text(
-    "Keys Collected: " + stats.total_keys_collected.to_string(), sx, sy, text_size, @types.color_key,
+    "Keys Collected: " + stats.total_keys_collected.to_string(),
+    sx,
+    sy,
+    text_size,
+    @types.color_key,
   )
   // Right column
   let rx = 550
@@ -840,19 +1069,35 @@ fn draw_statistics(game : @types.Game) -> Unit {
   @draw.draw_text("-- Challenge --", rx, ry, heading_size, @types.color_spike)
   ry = ry + gap + 4
   @draw.draw_text(
-    "Deaths: " + stats.total_deaths.to_string(), rx, ry, text_size, @types.color_spike,
+    "Deaths: " + stats.total_deaths.to_string(),
+    rx,
+    ry,
+    text_size,
+    @types.color_spike,
   )
   ry = ry + gap
   @draw.draw_text(
-    "Undos Used: " + stats.total_undos.to_string(), rx, ry, text_size, light_gray,
+    "Undos Used: " + stats.total_undos.to_string(),
+    rx,
+    ry,
+    text_size,
+    light_gray,
   )
   ry = ry + gap
   @draw.draw_text(
-    "Hints Used: " + stats.hint_uses.to_string(), rx, ry, text_size, light_gray,
+    "Hints Used: " + stats.hint_uses.to_string(),
+    rx,
+    ry,
+    text_size,
+    light_gray,
   )
   ry = ry + gap
   @draw.draw_text(
-    "Ice Slides: " + stats.total_ice_slides.to_string(), rx, ry, text_size, light_gray,
+    "Ice Slides: " + stats.total_ice_slides.to_string(),
+    rx,
+    ry,
+    text_size,
+    light_gray,
   )
   // Time played
   ry = ry + gap + 10
@@ -863,27 +1108,43 @@ fn draw_statistics(game : @types.Game) -> Unit {
   let secs = total_secs % 60
   let hours = mins / 60
   let time_text = if hours > 0 {
-    hours.to_string() + "h " + (mins % 60).to_string() + "m " + secs.to_string() + "s"
+    hours.to_string() +
+    "h " +
+    (mins % 60).to_string() +
+    "m " +
+    secs.to_string() +
+    "s"
   } else {
     mins.to_string() + "m " + secs.to_string() + "s"
   }
-  @draw.draw_text(
-    "Time Played: " + time_text, rx, ry, text_size, light_gray,
-  )
+  @draw.draw_text("Time Played: " + time_text, rx, ry, text_size, light_gray)
   // Favorite world
   ry = ry + gap
   let fav = @game.get_favorite_world(game)
   @draw.draw_text(
-    "Favorite World: " + @types.world_name(fav), rx, ry, text_size, light_gray,
+    "Favorite World: " + @types.world_name(fav),
+    rx,
+    ry,
+    text_size,
+    light_gray,
   )
   // Achievement summary
   ry = ry + gap + 10
-  @draw.draw_text("-- Achievements --", rx, ry, heading_size, @raylib.Color::new(255, 215, 0, 255))
+  @draw.draw_text(
+    "-- Achievements --",
+    rx,
+    ry,
+    heading_size,
+    @raylib.Color::new(255, 215, 0, 255),
+  )
   ry = ry + gap + 4
   let ach_count = count_achievements_unlocked(game)
   let ach_total = game.achievement_state.achievements.length()
   @draw.draw_text(
-    "Unlocked: " + ach_count.to_string() + "/" + ach_total.to_string(), rx, ry, text_size,
+    "Unlocked: " + ach_count.to_string() + "/" + ach_total.to_string(),
+    rx,
+    ry,
+    text_size,
     @raylib.Color::new(255, 215, 0, 200),
   )
   // Show individual achievements
@@ -897,7 +1158,10 @@ fn draw_statistics(game : @types.Game) -> Unit {
     let ach = game.achievement_state.achievements[i]
     if ach.unlocked {
       @draw.draw_text(
-        "* " + ach.name, rx, ry, small_size,
+        "* " + ach.name,
+        rx,
+        ry,
+        small_size,
         @raylib.Color::new(255, 215, 0, 160),
       )
       ry = ry + 22
@@ -908,7 +1172,9 @@ fn draw_statistics(game : @types.Game) -> Unit {
   let completion = @game.get_total_completion(game)
   @draw.draw_text(
     "Overall Completion: " + completion.to_string() + "%",
-    350, 600, get_text_size(game, 22),
+    350,
+    600,
+    get_text_size(game, 22),
     @types.color_star_gold,
   )
   // Draw completion bar
@@ -929,16 +1195,18 @@ fn draw_statistics(game : @types.Game) -> Unit {
 
 ///|
 /// Draw the level select screen with best moves info
-fn draw_level_best_info(game : @types.Game, bx : Int, by : Int, world : Int, level : Int) -> Unit {
+fn draw_level_best_info(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  world : Int,
+  level : Int,
+) -> Unit {
   let best = @game.get_best_moves(game, world, level)
   if best < 999 {
     let par = @content.get_par_moves(world, level)
     let text = "Best:" + best.to_string() + "/" + par.to_string()
-    let color = if best <= par {
-      @types.color_star_gold
-    } else {
-      light_gray
-    }
+    let color = if best <= par { @types.color_star_gold } else { light_gray }
     @draw.draw_text(text, bx + 8, by + 95, get_text_size(game, 11), color)
   }
 }
@@ -996,11 +1264,13 @@ fn draw_achievement_toast(game : @types.Game) -> Unit {
   let text_size = get_text_size(game, 14)
   let name_size = get_text_size(game, 18)
   @draw.draw_text(
-    "Achievement Unlocked!", toast_x + 55, toast_y + 10, text_size, gold,
+    "Achievement Unlocked!",
+    toast_x + 55,
+    toast_y + 10,
+    text_size,
+    gold,
   )
-  @draw.draw_text(
-    ach.name, toast_x + 55, toast_y + 35, name_size, white,
-  )
+  @draw.draw_text(ach.name, toast_x + 55, toast_y + 35, name_size, white)
 }
 
 ///|

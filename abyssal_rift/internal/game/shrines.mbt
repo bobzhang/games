@@ -16,7 +16,7 @@ fn setup_shrine(game : @types.Game) -> Unit {
 
 ///|
 pub fn update_shrine(game : @types.Game, input : InputState) -> Unit {
-  if !(game.shrine_active) || game.shrine_used {
+  if !game.shrine_active || game.shrine_used {
     return
   }
   match game.floor {

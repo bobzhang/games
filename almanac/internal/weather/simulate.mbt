@@ -1,7 +1,7 @@
 ///|
 pub fn simulate_turn(
   grid : @types.Grid,
-  sources : Array[@types.Source]
+  sources : Array[@types.Source],
 ) -> Unit {
   let w = grid.width
   let h = grid.height
@@ -198,7 +198,7 @@ pub fn simulate_turn(
           let wr = sources[si].row
           let dist_c = if wc > c { wc - c } else { c - wc }
           let dist_r = if wr > r { wr - r } else { r - wr }
-          if (dist_c + dist_r) <= 1 {
+          if dist_c + dist_r <= 1 {
             has_wind = true
           }
         }
@@ -215,7 +215,7 @@ pub fn simulate_turn(
           let rr = sources[si].row
           let dist_c = if rc > c { rc - c } else { c - rc }
           let dist_r = if rr > r { rr - r } else { r - rr }
-          if (dist_c + dist_r) <= 1 {
+          if dist_c + dist_r <= 1 {
             has_rain = true
           }
         }
@@ -238,7 +238,7 @@ pub fn simulate_turn(
           let rr = sources[si].row
           let dist_c = if rc > c { rc - c } else { c - rc }
           let dist_r = if rr > r { rr - r } else { r - rr }
-          if (dist_c + dist_r) <= 1 {
+          if dist_c + dist_r <= 1 {
             let rain_h = grid.tiles[@types.grid_index(rc, rr, w)].height
             let tile_h = grid.tiles[i].height
             if tile_h <= rain_h {
@@ -259,7 +259,7 @@ pub fn simulate_turn(
           let sr2 = sources[si].row
           let dist_c = if sc2 > c { sc2 - c } else { c - sc2 }
           let dist_r = if sr2 > r { sr2 - r } else { r - sr2 }
-          if (dist_c + dist_r) <= 1 {
+          if dist_c + dist_r <= 1 {
             // Check not blocked by cloud
             let ni2 = @types.grid_index(c, r, w)
             if next[ni2] != Cloudy {

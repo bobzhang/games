@@ -115,10 +115,7 @@ fn start_level(game : @types.Game, level_idx : Int) -> Unit {
 
 ///|
 fn check_connectivity(game : @types.Game) -> Unit {
-  let connected = @terrain.all_settlements_connected(
-    game.grid,
-    game.sea_level,
-  )
+  let connected = @terrain.all_settlements_connected(game.grid, game.sea_level)
   if !connected {
     game.never_disconnected = false
   }

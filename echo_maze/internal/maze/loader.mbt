@@ -65,10 +65,9 @@ pub fn parse_maze(level_def : @types.LevelDef) -> @types.Maze {
           let dur = find_timed_duration(timed_durations, id)
           TimedDoor(id, dur)
         }
-        'G' => {
+        'G' =>
           // Guard tile is floor underneath
           Floor
-        }
         'C' => {
           collectible_positions.push(@types.vec2i(x, y))
           Collectible

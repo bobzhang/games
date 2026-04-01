@@ -170,7 +170,9 @@ test "line of sight through forest" {
   map.tiles[idx].terrain = Forest
   // LOS from (1,3) to (5,3) should be blocked by forest at (3,3)
   let has_los = @types.has_line_of_sight(
-    map, @types.hex(1, 3), @types.hex(5, 3),
+    map,
+    @types.hex(1, 3),
+    @types.hex(5, 3),
   )
   inspect(has_los, content="false")
 }
@@ -179,7 +181,9 @@ test "line of sight through forest" {
 test "line of sight without obstacle" {
   let map = @types.new_hex_map(10, 8)
   let has_los = @types.has_line_of_sight(
-    map, @types.hex(1, 3), @types.hex(5, 3),
+    map,
+    @types.hex(1, 3),
+    @types.hex(5, 3),
   )
   inspect(has_los, content="true")
 }
@@ -276,7 +280,7 @@ test "hex_neighbors edge has some out of bounds" {
   let n = @types.hex_neighbors(c)
   let mut out_count = 0
   for i in 0..<n.length() {
-    if !(@types.hex_valid(n[i], 10, 8)) {
+    if !@types.hex_valid(n[i], 10, 8) {
       out_count = out_count + 1
     }
   }
@@ -335,10 +339,22 @@ test "unit base stats form triangle" {
   // Infantry: high HP (3), low ATK (2), medium move (2), melee
   // Cavalry: low HP (2), medium ATK (3), high move (4), melee
   // Artillery: low HP (2), high ATK (4), low move (1), ranged
-  inspect(@types.unit_base_hp(Infantry) > @types.unit_base_hp(Cavalry), content="true")
-  inspect(@types.unit_base_atk(Artillery) > @types.unit_base_atk(Cavalry), content="true")
-  inspect(@types.unit_base_move(Cavalry) > @types.unit_base_move(Infantry), content="true")
-  inspect(@types.unit_base_range(Artillery) > @types.unit_base_range(Infantry), content="true")
+  inspect(
+    @types.unit_base_hp(Infantry) > @types.unit_base_hp(Cavalry),
+    content="true",
+  )
+  inspect(
+    @types.unit_base_atk(Artillery) > @types.unit_base_atk(Cavalry),
+    content="true",
+  )
+  inspect(
+    @types.unit_base_move(Cavalry) > @types.unit_base_move(Infantry),
+    content="true",
+  )
+  inspect(
+    @types.unit_base_range(Artillery) > @types.unit_base_range(Infantry),
+    content="true",
+  )
 }
 
 ///|

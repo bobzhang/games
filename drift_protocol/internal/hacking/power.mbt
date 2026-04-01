@@ -32,7 +32,7 @@ pub fn toggle_power_node(game : @types.Game, node_index : Int) -> Unit {
 fn toggle_door_by_power_id(
   game : @types.Game,
   power_id : Int,
-  powered : Bool
+  powered : Bool,
 ) -> Unit {
   for i in 0..<game.level.doors.length() {
     let d = game.level.doors[i]
@@ -50,7 +50,7 @@ fn toggle_door_by_power_id(
 fn toggle_laser_by_power_id(
   game : @types.Game,
   power_id : Int,
-  powered : Bool
+  powered : Bool,
 ) -> Unit {
   for i in 0..<game.level.lasers.length() {
     let l = game.level.lasers[i]

@@ -108,7 +108,7 @@ pub fn new_clue(
   kind : ClueKind,
   param_a : Int,
   param_b : Int,
-  text : String
+  text : String,
 ) -> Clue {
   { kind, param_a, param_b, text, satisfied: false }
 }
@@ -119,7 +119,7 @@ pub fn new_level(
   name : String,
   rocks : Array[RockKind],
   clues : Array[Clue],
-  par_moves : Int
+  par_moves : Int,
 ) -> Level {
   { tier, name, rocks, clues, par_moves }
 }

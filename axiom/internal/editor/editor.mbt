@@ -1,7 +1,7 @@
 ///|
 pub fn init_editor(
   editor : @types.EditorState,
-  available : Array[@types.CommandKind]
+  available : Array[@types.CommandKind],
 ) -> Unit {
   editor.cursor = 0
   editor.palette_cursor = 0
@@ -26,7 +26,7 @@ pub fn cursor_up(editor : @types.EditorState, program : @types.Program) -> Unit 
 ///|
 pub fn cursor_down(
   editor : @types.EditorState,
-  program : @types.Program
+  program : @types.Program,
 ) -> Unit {
   if editor.palette_open {
     if editor.palette_cursor < editor.palette_commands.length() - 1 {
@@ -56,7 +56,7 @@ pub fn close_palette(editor : @types.EditorState) -> Unit {
 ///|
 pub fn select_from_palette(
   editor : @types.EditorState,
-  program : @types.Program
+  program : @types.Program,
 ) -> Bool {
   if !editor.palette_open {
     return false
@@ -79,7 +79,7 @@ pub fn select_from_palette(
 ///|
 pub fn delete_at_cursor(
   editor : @types.EditorState,
-  program : @types.Program
+  program : @types.Program,
 ) -> Bool {
   if program.commands.length() == 0 {
     return false
@@ -94,7 +94,7 @@ pub fn delete_at_cursor(
 ///|
 pub fn move_cmd_up(
   editor : @types.EditorState,
-  program : @types.Program
+  program : @types.Program,
 ) -> Bool {
   if @commands.program_move_up(program, editor.cursor) {
     editor.cursor -= 1
@@ -106,7 +106,7 @@ pub fn move_cmd_up(
 ///|
 pub fn move_cmd_down(
   editor : @types.EditorState,
-  program : @types.Program
+  program : @types.Program,
 ) -> Bool {
   if @commands.program_move_down(program, editor.cursor) {
     editor.cursor += 1
@@ -118,7 +118,7 @@ pub fn move_cmd_down(
 ///|
 pub fn clear_program(
   editor : @types.EditorState,
-  program : @types.Program
+  program : @types.Program,
 ) -> Unit {
   @commands.program_clear(program)
   editor.cursor = 0
@@ -128,7 +128,7 @@ pub fn clear_program(
 pub fn add_command_by_index(
   editor : @types.EditorState,
   program : @types.Program,
-  index : Int
+  index : Int,
 ) -> Bool {
   if index >= 0 && index < editor.palette_commands.length() {
     let kind = editor.palette_commands[index]
@@ -144,7 +144,7 @@ pub fn add_command_by_index(
 ///|
 pub fn clamp_cursor(
   editor : @types.EditorState,
-  program : @types.Program
+  program : @types.Program,
 ) -> Unit {
   if editor.cursor < 0 {
     editor.cursor = 0
@@ -157,7 +157,7 @@ pub fn clamp_cursor(
 ///|
 pub fn get_current_command(
   editor : @types.EditorState,
-  program : @types.Program
+  program : @types.Program,
 ) -> @types.CommandKind? {
   if editor.cursor >= 0 && editor.cursor < program.commands.length() {
     Some(program.commands[editor.cursor].kind)

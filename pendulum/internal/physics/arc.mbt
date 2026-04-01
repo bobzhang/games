@@ -1,7 +1,7 @@
 ///|
 pub fn compute_arc(
   anchor : @types.Vec2i,
-  length : Int
+  length : Int,
 ) -> Array[@types.ArcPoint] {
   @types.compute_arc_points(anchor, length)
 }
@@ -25,7 +25,7 @@ pub fn find_bottom_index(arc : Array[@types.ArcPoint]) -> Int {
 ///|
 pub fn compute_swing_extent(
   arc : Array[@types.ArcPoint],
-  bottom_index : Int
+  bottom_index : Int,
 ) -> (Int, Int) {
   // Returns (left_limit, right_limit) indices
   // Gravity effect: weight swings less far up.
@@ -46,7 +46,7 @@ pub fn check_peg_wrap(
   rope_anchor : @types.Vec2i,
   weight_pos : @types.Vec2i,
   pegs : Array[@types.Vec2i],
-  wrapped : Array[@types.Vec2i]
+  wrapped : Array[@types.Vec2i],
 ) -> @types.Vec2i? {
   // Check if the rope line from anchor to weight passes near a peg
   // If so, the rope wraps around that peg
@@ -102,13 +102,11 @@ pub fn check_peg_wrap(
 ///|
 pub fn compute_new_rope_length(
   new_anchor : @types.Vec2i,
-  weight_pos : @types.Vec2i
+  weight_pos : @types.Vec2i,
 ) -> Int {
   let dx = @types.absi(weight_pos.x - new_anchor.x)
   let dy = @types.absi(weight_pos.y - new_anchor.y)
-  let dist = @types.sqrtf(
-    Float::from_int(dx * dx + dy * dy),
-  )
+  let dist = @types.sqrtf(Float::from_int(dx * dx + dy * dy))
   let len = @types.roundf(dist)
   @types.maxi(1, len)
 }

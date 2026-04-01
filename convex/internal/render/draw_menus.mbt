@@ -26,13 +26,7 @@ fn draw_title(game : @types.Game) -> Unit {
   if blink > 0.0 {
     let start = "CLICK OR PRESS ENTER TO START"
     let stw = @draw.measure_text(start, 20)
-    @draw.draw_text(
-      start,
-      (w - stw) / 2,
-      h * 3 / 4,
-      20,
-      @types.color_ui_text,
-    )
+    @draw.draw_text(start, (w - stw) / 2, h * 3 / 4, 20, @types.color_ui_text)
   }
 }
 
@@ -51,8 +45,7 @@ fn draw_animated_hull_bg(w : Int, h : Int, time : Float) -> Unit {
     let x1 = cx + r * @types.cosf(angle)
     let y1 = cy + r * @types.sinf(angle)
     let next_angle = (fi + 1.0) * 2.0 * @types.pi / fn_ + time * 0.3
-    let next_r = base_r +
-      @types.sinf(time * 0.7 + (fi + 1.0) * 1.5) * 40.0
+    let next_r = base_r + @types.sinf(time * 0.7 + (fi + 1.0) * 1.5) * 40.0
     let x2 = cx + next_r * @types.cosf(next_angle)
     let y2 = cy + next_r * @types.sinf(next_angle)
     @raylib.draw_line_ex(
@@ -62,9 +55,12 @@ fn draw_animated_hull_bg(w : Int, h : Int, time : Float) -> Unit {
       @raylib.Color::new(40, 60, 100, 60),
     )
     // Vertex dot
-    @raylib.draw_circle(x1.to_int(), y1.to_int(), 3.0, @raylib.Color::new(
-      60, 100, 160, 80,
-    ))
+    @raylib.draw_circle(
+      x1.to_int(),
+      y1.to_int(),
+      3.0,
+      @raylib.Color::new(60, 100, 160, 80),
+    )
   }
 }
 
@@ -85,14 +81,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   let by = @types.screen_height / 2 - box_h / 2
   let tiers : Array[@types.Tier] = [Vertices, Edges, Sculpt]
   let descs : Array[String] = [
-    "Simple shapes - place points at corners",
-    "Tricky edges with interior distractors",
+    "Simple shapes - place points at corners", "Tricky edges with interior distractors",
     "Remove excess points to sculpt the hull",
   ]
   let counts : Array[Int] = [
-    @types.tier1_count,
-    @types.tier2_count,
-    @types.tier3_count,
+    @types.tier1_count, @types.tier2_count, @types.tier3_count,
   ]
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()

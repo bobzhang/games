@@ -33,11 +33,11 @@ fn draw_grid_background() -> Unit {
   // Grid background
   @raylib.draw_rectangle(ox - 4, oy - 4, gw + 8, gh + 8, @types.color_grid_bg)
   // Grid lines
-  for i in 0..=@types.grid_cols {
+  for i in 0..<=@types.grid_cols {
     let x = ox + i * cs
     @raylib.draw_line(x, oy, x, oy + gh, @types.color_grid_line)
   }
-  for i in 0..=@types.grid_rows {
+  for i in 0..<=@types.grid_rows {
     let y = oy + i * cs
     @raylib.draw_line(ox, y, ox + gw, y, @types.color_grid_line)
   }
@@ -79,7 +79,7 @@ fn draw_tile_at(
   px : Int,
   py : Int,
   cs : Int,
-  alpha : Int
+  alpha : Int,
 ) -> Unit {
   let color = @types.tile_color_to_raylib(tile.color)
   let r = color.r.to_int()
@@ -90,12 +90,8 @@ fn draw_tile_at(
   let cy = Float::from_int(py + cs / 2)
   let half = Float::from_int(cs) / 2.0 - 3.0
   match tile.shape {
-    Square => {
-      @raylib.draw_rectangle(px + 2, py + 2, cs - 4, cs - 4, c)
-    }
-    Circle => {
-      @raylib.draw_circle(cx.to_int(), cy.to_int(), half, c)
-    }
+    Square => @raylib.draw_rectangle(px + 2, py + 2, cs - 4, cs - 4, c)
+    Circle => @raylib.draw_circle(cx.to_int(), cy.to_int(), half, c)
     Diamond => {
       // Draw diamond as rotated square using lines/triangles
       let top_x = cx
@@ -139,12 +135,8 @@ fn draw_tile_at(
         c,
       )
     }
-    Triangle => {
-      draw_oriented_triangle(cx, cy, half, tile.orientation, c)
-    }
-    Arrow => {
-      draw_oriented_arrow(cx, cy, half, tile.orientation, c)
-    }
+    Triangle => draw_oriented_triangle(cx, cy, half, tile.orientation, c)
+    Arrow => draw_oriented_arrow(cx, cy, half, tile.orientation, c)
   }
 }
 
@@ -154,29 +146,33 @@ fn draw_oriented_triangle(
   cy : Float,
   half : Float,
   orient : @types.Orientation,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let (p1, p2, p3) = match orient {
-    N => (
-      @raylib.Vector2::new(cx, cy - half),
-      @raylib.Vector2::new(cx - half, cy + half),
-      @raylib.Vector2::new(cx + half, cy + half),
-    )
-    E => (
-      @raylib.Vector2::new(cx + half, cy),
-      @raylib.Vector2::new(cx - half, cy - half),
-      @raylib.Vector2::new(cx - half, cy + half),
-    )
-    S => (
-      @raylib.Vector2::new(cx, cy + half),
-      @raylib.Vector2::new(cx + half, cy - half),
-      @raylib.Vector2::new(cx - half, cy - half),
-    )
-    W => (
-      @raylib.Vector2::new(cx - half, cy),
-      @raylib.Vector2::new(cx + half, cy + half),
-      @raylib.Vector2::new(cx + half, cy - half),
-    )
+    N =>
+      (
+        @raylib.Vector2::new(cx, cy - half),
+        @raylib.Vector2::new(cx - half, cy + half),
+        @raylib.Vector2::new(cx + half, cy + half),
+      )
+    E =>
+      (
+        @raylib.Vector2::new(cx + half, cy),
+        @raylib.Vector2::new(cx - half, cy - half),
+        @raylib.Vector2::new(cx - half, cy + half),
+      )
+    S =>
+      (
+        @raylib.Vector2::new(cx, cy + half),
+        @raylib.Vector2::new(cx + half, cy - half),
+        @raylib.Vector2::new(cx - half, cy - half),
+      )
+    W =>
+      (
+        @raylib.Vector2::new(cx - half, cy),
+        @raylib.Vector2::new(cx + half, cy + half),
+        @raylib.Vector2::new(cx + half, cy - half),
+      )
   }
   @raylib.draw_triangle(p1, p2, p3, color)
 }
@@ -187,7 +183,7 @@ fn draw_oriented_arrow(
   cy : Float,
   half : Float,
   orient : @types.Orientation,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let shaft_w = half * 0.3
   match orient {
@@ -301,7 +297,7 @@ fn draw_holes(game : @types.Game, level : @types.Level) -> Unit {
 ///|
 fn draw_placed_tiles_validation(
   game : @types.Game,
-  level : @types.Level
+  level : @types.Level,
 ) -> Unit {
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
@@ -310,7 +306,10 @@ fn draw_placed_tiles_validation(
   for i in 0..<total {
     let (pos, tile) = game.placed_tiles[i]
     let valid = @symmetry.validate_placement(
-      level.grid, pos, tile, level.symmetry,
+      level.grid,
+      pos,
+      tile,
+      level.symmetry,
     )
     let glow_color = if valid {
       @types.color_correct_glow
@@ -325,9 +324,7 @@ fn draw_placed_tiles_validation(
     if is_newest {
       // Animated glow ring that expands and fades
       let anim_t = game.anim_timer * 4.0
-      let floored : Float = Float::from_double(
-        @math.floor(anim_t.to_double()),
-      )
+      let floored : Float = Float::from_double(@math.floor(anim_t.to_double()))
       let ring_phase = anim_t - floored
       if ring_phase < 1.0 {
         let ring_size = Float::from_int(cs) * (0.5 + ring_phase * 0.8)
@@ -358,20 +355,8 @@ fn draw_placed_tiles_validation(
       let check_alpha = if is_newest { 255 } else { 180 }
       let check_color = @raylib.Color::new(50, 255, 120, check_alpha)
       // Small check in top-right corner
-      @raylib.draw_line(
-        px + cs - 14,
-        py + 6,
-        px + cs - 9,
-        py + 11,
-        check_color,
-      )
-      @raylib.draw_line(
-        px + cs - 9,
-        py + 11,
-        px + cs - 3,
-        py + 3,
-        check_color,
-      )
+      @raylib.draw_line(px + cs - 14, py + 6, px + cs - 9, py + 11, check_color)
+      @raylib.draw_line(px + cs - 9, py + 11, px + cs - 3, py + 3, check_color)
     } else {
       // X mark for incorrect
       let x_color = @raylib.Color::new(255, 60, 60, 200)
@@ -387,7 +372,7 @@ fn draw_hover_preview(game : @types.Game, level : @types.Level) -> Unit {
     None => ()
     Some(cell) => {
       // Check it's a hole and not filled
-      if !(@types.is_hole(level.grid, cell)) {
+      if !@types.is_hole(level.grid, cell) {
         return
       }
       let mut already_filled = false
@@ -411,7 +396,9 @@ fn draw_hover_preview(game : @types.Game, level : @types.Level) -> Unit {
       let pulse = sinf(t) * 20.0 + 110.0
       let alpha = pulse.to_int()
       let preview = @types.new_tile(
-        game.selected_color, game.selected_shape, game.selected_orientation,
+        game.selected_color,
+        game.selected_shape,
+        game.selected_orientation,
       )
       // Draw with slight scale animation (shrink/grow)
       let scale_pulse = sinf(t * 2.0) * 0.06 + 1.0
@@ -422,7 +409,11 @@ fn draw_hover_preview(game : @types.Game, level : @types.Level) -> Unit {
       let border_alpha = (sinf(t * 3.0) * 60.0 + 160.0).to_int()
       let border_color = @raylib.Color::new(255, 255, 255, border_alpha)
       @raylib.draw_rectangle_lines(
-        px + offset, py + offset, scaled_cs, scaled_cs, border_color,
+        px + offset,
+        py + offset,
+        scaled_cs,
+        scaled_cs,
+        border_color,
       )
       // Corner markers for emphasis
       let corner_size = 6
@@ -434,10 +425,18 @@ fn draw_hover_preview(game : @types.Game, level : @types.Level) -> Unit {
       @raylib.draw_rectangle(px, py + cs - 2, corner_size, 2, cc)
       @raylib.draw_rectangle(px, py + cs - corner_size, 2, corner_size, cc)
       @raylib.draw_rectangle(
-        px + cs - corner_size, py + cs - 2, corner_size, 2, cc,
+        px + cs - corner_size,
+        py + cs - 2,
+        corner_size,
+        2,
+        cc,
       )
       @raylib.draw_rectangle(
-        px + cs - 2, py + cs - corner_size, 2, corner_size, cc,
+        px + cs - 2,
+        py + cs - corner_size,
+        2,
+        corner_size,
+        cc,
       )
     }
   }
@@ -459,7 +458,7 @@ fn draw_symmetry_indicator(game : @types.Game, level : @types.Level) -> Unit {
   let alpha = alpha_f.to_int()
   let indicator_color = @raylib.Color::new(255, 255, 100, alpha)
   let glow_color = @raylib.Color::new(255, 255, 100, alpha / 3)
-  let dash_phase = (game.frame_count / 8) % 16
+  let dash_phase = game.frame_count / 8 % 16
   match level.symmetry {
     MirrorH => {
       // Horizontal axis with glow band and dashed line
@@ -478,13 +477,7 @@ fn draw_symmetry_indicator(game : @types.Game, level : @types.Level) -> Unit {
       draw_axis_arrow(ox - 12, cy, 0, indicator_color)
       draw_axis_arrow(ox + gw + 12, cy, 2, indicator_color)
       // Label
-      @draw.draw_text(
-        "H",
-        ox + gw + 18,
-        cy - 8,
-        16,
-        indicator_color,
-      )
+      @draw.draw_text("H", ox + gw + 18, cy - 8, 16, indicator_color)
       // Reflection hint lines (dashed perpendicular ticks)
       for i in 0..<@types.grid_cols {
         let tx = ox + i * cs + cs / 2
@@ -506,13 +499,7 @@ fn draw_symmetry_indicator(game : @types.Game, level : @types.Level) -> Unit {
       )
       draw_axis_arrow(cx, oy - 12, 1, indicator_color)
       draw_axis_arrow(cx, oy + gh + 12, 3, indicator_color)
-      @draw.draw_text(
-        "V",
-        cx - 4,
-        oy + gh + 18,
-        16,
-        indicator_color,
-      )
+      @draw.draw_text("V", cx - 4, oy + gh + 18, 16, indicator_color)
       for i in 0..<@types.grid_rows {
         let ty = oy + i * cs + cs / 2
         if (i + dash_phase) % 3 == 0 {
@@ -539,15 +526,9 @@ fn draw_symmetry_indicator(game : @types.Game, level : @types.Level) -> Unit {
         3.0,
         indicator_color,
       )
-      @draw.draw_text(
-        "D",
-        ox + gw + 12,
-        oy + gh + 4,
-        16,
-        indicator_color,
-      )
+      @draw.draw_text("D", ox + gw + 12, oy + gh + 4, 16, indicator_color)
       // Diamond markers along diagonal
-      for i in 0..=@types.grid_cols {
+      for i in 0..<=@types.grid_cols {
         let t_val = Float::from_int(i) / Float::from_int(@types.grid_cols)
         let dx = ox_f + t_val * gw_f
         let dy = oy_f + t_val * gh_f
@@ -664,7 +645,8 @@ fn draw_symmetry_indicator(game : @types.Game, level : @types.Level) -> Unit {
         dx += dash_len + gap_len
       }
       // Animated shift arrows that slide along
-      let shift_offset = Float::from_int(game.frame_count % 120) / 120.0 *
+      let shift_offset = Float::from_int(game.frame_count % 120) /
+        120.0 *
         Float::from_int(cs * 2)
       for i in 0..<5 {
         let ax = Float::from_int(ox) +
@@ -676,9 +658,7 @@ fn draw_symmetry_indicator(game : @types.Game, level : @types.Level) -> Unit {
           // Lower arrow pointing right (shifted by half period)
           let lower_x = ax + Float::from_int(cs)
           if lower_x.to_int() >= ox && lower_x.to_int() <= ox + gw - 10 {
-            draw_shift_arrow(
-              lower_x.to_int(), cy + 8, true, indicator_color,
-            )
+            draw_shift_arrow(lower_x.to_int(), cy + 8, true, indicator_color)
           }
         }
       }
@@ -692,24 +672,19 @@ fn draw_symmetry_indicator(game : @types.Game, level : @types.Level) -> Unit {
         cy + 16,
         flip_color,
       )
-      @draw.draw_text(
-        "Glide",
-        ox + gw + 12,
-        cy - 8,
-        14,
-        indicator_color,
-      )
+      @draw.draw_text("Glide", ox + gw + 12, cy - 8, 14, indicator_color)
     }
   }
 }
 
 // Draw an arrow cap for axis endpoints
+
 ///|
 fn draw_axis_arrow(
   x : Int,
   y : Int,
   direction : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let s : Float = 8.0
   let cx = Float::from_int(x)
@@ -751,12 +726,13 @@ fn draw_axis_arrow(
 }
 
 // Draw a small diamond marker
+
 ///|
 fn draw_diamond_marker(
   x : Int,
   y : Int,
   size : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let cx = Float::from_int(x)
   let cy = Float::from_int(y)
@@ -776,12 +752,13 @@ fn draw_diamond_marker(
 }
 
 // Draw an animated shift arrow for glide reflection
+
 ///|
 fn draw_shift_arrow(
   x : Int,
   y : Int,
   _right : Bool,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let cx = Float::from_int(x)
   let cy = Float::from_int(y)

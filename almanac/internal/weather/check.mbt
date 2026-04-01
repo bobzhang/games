@@ -30,7 +30,7 @@ pub fn count_targets_met(grid : @types.Grid) -> (Int, Int) {
 ///|
 pub fn check_stable(
   grid : @types.Grid,
-  prev : Array[@types.WeatherState]
+  prev : Array[@types.WeatherState],
 ) -> Bool {
   if prev.length() != grid.tiles.length() {
     return false
@@ -49,7 +49,7 @@ pub fn calculate_stars(
   sources_used : Int,
   turns_taken : Int,
   par_sources : Int,
-  par_turns : Int
+  par_turns : Int,
 ) -> Int {
   if !targets_met {
     return 0

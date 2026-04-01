@@ -35,11 +35,7 @@ fn draw_playing(game : @types.Game) -> Unit {
 ///|
 fn draw_title_bar(game : @types.Game, case_ : @types.Case) -> Unit {
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    50,
-    @types.color_clue_panel_bg,
+    0, 0, @types.screen_width, 50, @types.color_clue_panel_bg,
   )
   @draw.draw_text(case_.title, 20, 12, 24, @types.color_title)
   @draw.draw_text(case_.theme, 350, 16, 18, @types.color_subtitle)
@@ -48,11 +44,7 @@ fn draw_title_bar(game : @types.Game, case_ : @types.Case) -> Unit {
   @draw.draw_text(rewind_str, 700, 16, 18, @types.color_hud)
   // Controls hint
   @draw.draw_text(
-    "Tab:mode | Enter:check | R:restart | Z:undo",
-    20,
-    35,
-    12,
-    @types.color_subtitle,
+    "Tab:mode | Enter:check | R:restart | Z:undo", 20, 35, 12, @types.color_subtitle,
   )
 }
 
@@ -61,9 +53,12 @@ fn draw_timeline_slots(game : @types.Game, case_ : @types.Case) -> Unit {
   let num_slots = case_.cards.length()
   let total_width = Float::from_int(num_slots) * @types.slot_width +
     Float::from_int(num_slots - 1) * @types.card_gap
-  let start_x = (Float::from_int(@types.screen_width) - total_width -
-    @types.clue_panel_width) /
-  2.0
+  let start_x = (
+      Float::from_int(@types.screen_width) -
+      total_width -
+      @types.clue_panel_width
+    ) /
+    2.0
   // Timeline line
   let line_y = Float::to_int(@types.timeline_y + @types.slot_height / 2.0)
   @raylib.draw_line(
@@ -75,7 +70,8 @@ fn draw_timeline_slots(game : @types.Game, case_ : @types.Case) -> Unit {
   )
   // Slot numbers
   for i in 0..<num_slots {
-    let sx = start_x + Float::from_int(i) * (@types.slot_width + @types.card_gap)
+    let sx = start_x +
+      Float::from_int(i) * (@types.slot_width + @types.card_gap)
     let sy = @types.timeline_y
     let is_hover = game.hover_slot == i
     let slot_color = if is_hover {
@@ -120,9 +116,12 @@ fn draw_placed_cards(game : @types.Game, case_ : @types.Case) -> Unit {
   let num_slots = case_.cards.length()
   let total_width = Float::from_int(num_slots) * @types.slot_width +
     Float::from_int(num_slots - 1) * @types.card_gap
-  let start_x = (Float::from_int(@types.screen_width) - total_width -
-    @types.clue_panel_width) /
-  2.0
+  let start_x = (
+      Float::from_int(@types.screen_width) -
+      total_width -
+      @types.clue_panel_width
+    ) /
+    2.0
   for i in 0..<game.timeline_slots.length() {
     let card_id = game.timeline_slots[i]
     if card_id >= 0 {
@@ -136,9 +135,7 @@ fn draw_placed_cards(game : @types.Game, case_ : @types.Case) -> Unit {
             game.link_from == card_id
           // Don't draw if being dragged
           if !(game.dragging && game.drag_card_id == card_id) {
-            draw_card_at(
-              card, sx + 5.0, sy, false, is_anchor, is_selected,
-            )
+            draw_card_at(card, sx + 5.0, sy, false, is_anchor, is_selected)
           }
         }
         None => ()
@@ -172,7 +169,8 @@ fn draw_card_tray(game : @types.Game, case_ : @types.Case) -> Unit {
     let card = case_.cards[i]
     if !@types.is_card_placed(game.timeline_slots, card.id) {
       if !(game.dragging && game.drag_card_id == card.id) {
-        let cx : Float = 20.0 + Float::from_int(col) * (@types.card_width + 10.0)
+        let cx : Float = 20.0 +
+          Float::from_int(col) * (@types.card_width + 10.0)
         let cy : Float = @types.tray_y + 25.0
         let is_selected = game.selected_card == card.id ||
           game.link_from == card.id
@@ -190,7 +188,7 @@ fn draw_card_at(
   y : Float,
   is_drag : Bool,
   is_anchor : Bool,
-  is_selected : Bool
+  is_selected : Bool,
 ) -> Unit {
   let bg = if is_drag {
     @raylib.Color::new(255, 245, 220, 230)
@@ -204,7 +202,13 @@ fn draw_card_at(
   let iw = Float::to_int(@types.card_width)
   let ih = Float::to_int(@types.card_height)
   // Shadow
-  @raylib.draw_rectangle(ix + 3, iy + 3, iw, ih, @raylib.Color::new(0, 0, 0, 60))
+  @raylib.draw_rectangle(
+    ix + 3,
+    iy + 3,
+    iw,
+    ih,
+    @raylib.Color::new(0, 0, 0, 60),
+  )
   // Card body
   @raylib.draw_rectangle(ix, iy, iw, ih, bg)
   // Border
@@ -240,7 +244,13 @@ fn draw_card_at(
   )
   // Anchor indicator
   if is_anchor {
-    @draw.draw_text("FIXED", ix + iw - 45, iy + ih - 18, 11, @raylib.Color::new(160, 80, 80, 255))
+    @draw.draw_text(
+      "FIXED",
+      ix + iw - 45,
+      iy + ih - 18,
+      11,
+      @raylib.Color::new(160, 80, 80, 255),
+    )
   }
   // ID badge
   let id_str = "#" + card.id.to_string()
@@ -267,9 +277,12 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
   let num_slots = case_.cards.length()
   let total_width = Float::from_int(num_slots) * @types.slot_width +
     Float::from_int(num_slots - 1) * @types.card_gap
-  let start_x = (Float::from_int(@types.screen_width) - total_width -
-    @types.clue_panel_width) /
-  2.0
+  let start_x = (
+      Float::from_int(@types.screen_width) -
+      total_width -
+      @types.clue_panel_width
+    ) /
+    2.0
   for i in 0..<game.placed_links.length() {
     let link = game.placed_links[i]
     let from_slot = @types.card_in_slot(game.timeline_slots, link.from_id)
@@ -284,7 +297,8 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
         @types.slot_width / 2.0
       let ty = @types.timeline_y - 5.0
       // Curved arrow above timeline
-      let mid_y = fy - 30.0 -
+      let mid_y = fy -
+        30.0 -
         Float::from_int(@types.absf(tx - fx).to_int()) * 0.15
       // Draw arrow line segments
       let color = if game.play_state == Validated {
@@ -363,7 +377,7 @@ fn bezier_point(p0 : Float, p1 : Float, p2 : Float, t : Float) -> Float {
 ///|
 fn is_link_correct(
   link : @types.CauseLink,
-  solution : Array[@types.CauseLink]
+  solution : Array[@types.CauseLink],
 ) -> Bool {
   for i in 0..<solution.length() {
     if solution[i].from_id == link.from_id && solution[i].to_id == link.to_id {
@@ -418,13 +432,7 @@ fn draw_clue_panel(game : @types.Game, case_ : @types.Case) -> Unit {
       }
       // Clue text (may wrap)
       let clue_text = truncate_text(clue.text, 40)
-      @draw.draw_text(
-        clue_text,
-        px + 10,
-        cy + 24,
-        14,
-        @types.color_hud,
-      )
+      @draw.draw_text(clue_text, px + 10, cy + 24, 14, @types.color_hud)
       // Card references
       let ref_str = "[#" +
         clue.card_a.to_string() +

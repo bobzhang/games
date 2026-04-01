@@ -9,30 +9,35 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   // Turn counter
   @draw.draw_text(
     "Turn: " + game.turn.to_string(),
-    panel_x, 55, 20, @types.color_subtitle,
+    panel_x,
+    55,
+    20,
+    @types.color_subtitle,
   )
   // Drops used vs par
   @draw.draw_text(
-    "Drops: " + game.drops_used.to_string() + " / par " + game.par_drops.to_string(),
-    panel_x, 80, 18, @types.color_subtitle,
+    "Drops: " +
+    game.drops_used.to_string() +
+    " / par " +
+    game.par_drops.to_string(),
+    panel_x,
+    80,
+    18,
+    @types.color_subtitle,
   )
   // Ink Palette
   @draw.draw_text("INK PALETTE", panel_x, 120, 18, @types.color_title_text)
-  draw_ink_button(
-    game, Cyan, panel_x, 145, panel_w, game.budget.cyan,
-  )
-  draw_ink_button(
-    game, Magenta, panel_x, 195, panel_w, game.budget.magenta,
-  )
-  draw_ink_button(
-    game, Yellow, panel_x, 245, panel_w, game.budget.yellow,
-  )
+  draw_ink_button(game, Cyan, panel_x, 145, panel_w, game.budget.cyan)
+  draw_ink_button(game, Magenta, panel_x, 195, panel_w, game.budget.magenta)
+  draw_ink_button(game, Yellow, panel_x, 245, panel_w, game.budget.yellow)
   // Target Progress
   let (satisfied, total) = @ink.count_targets_satisfied(g)
   @draw.draw_text("TARGETS", panel_x, 310, 18, @types.color_title_text)
   @draw.draw_text(
     satisfied.to_string() + " / " + total.to_string() + " complete",
-    panel_x, 335, 18,
+    panel_x,
+    335,
+    18,
     if satisfied == total {
       @raylib.Color::new(50, 160, 80, 255)
     } else {
@@ -44,15 +49,48 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   // Controls help
   let help_y = @types.screen_height - 140
   @draw.draw_text("CONTROLS", panel_x, help_y, 16, @types.color_title_text)
-  @draw.draw_text("Click: drop ink", panel_x, help_y + 22, 14, @types.color_subtitle)
-  @draw.draw_text("Space: spread ink", panel_x, help_y + 40, 14, @types.color_subtitle)
-  @draw.draw_text("1/2/3: select ink", panel_x, help_y + 58, 14, @types.color_subtitle)
-  @draw.draw_text("Z: undo  R: restart", panel_x, help_y + 76, 14, @types.color_subtitle)
-  @draw.draw_text("Esc: back to menu", panel_x, help_y + 94, 14, @types.color_subtitle)
+  @draw.draw_text(
+    "Click: drop ink",
+    panel_x,
+    help_y + 22,
+    14,
+    @types.color_subtitle,
+  )
+  @draw.draw_text(
+    "Space: spread ink",
+    panel_x,
+    help_y + 40,
+    14,
+    @types.color_subtitle,
+  )
+  @draw.draw_text(
+    "1/2/3: select ink",
+    panel_x,
+    help_y + 58,
+    14,
+    @types.color_subtitle,
+  )
+  @draw.draw_text(
+    "Z: undo  R: restart",
+    panel_x,
+    help_y + 76,
+    14,
+    @types.color_subtitle,
+  )
+  @draw.draw_text(
+    "Esc: back to menu",
+    panel_x,
+    help_y + 94,
+    14,
+    @types.color_subtitle,
+  )
   // Play state indicator
   if game.play_state == Spreading {
     @draw.draw_text(
-      "Spreading...", panel_x, help_y - 30, 20,
+      "Spreading...",
+      panel_x,
+      help_y - 30,
+      20,
       @raylib.Color::new(50, 130, 200, 255),
     )
   }
@@ -60,7 +98,11 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(0, 0, @types.screen_width, 4, @types.color_hud_bg)
   // Bottom bar
   @raylib.draw_rectangle(
-    0, @types.screen_height - 4, @types.screen_width, 4, @types.color_hud_bg,
+    0,
+    @types.screen_height - 4,
+    @types.screen_width,
+    4,
+    @types.color_hud_bg,
   )
 }
 
@@ -71,7 +113,7 @@ fn draw_ink_button(
   x : Int,
   y : Int,
   w : Int,
-  remaining : Int
+  remaining : Int,
 ) -> Unit {
   let h = 40
   let is_selected = game.selected_channel == channel
@@ -90,7 +132,9 @@ fn draw_ink_button(
   @draw.draw_text(name, x + 42, y + 4, 18, @types.color_title_text)
   @draw.draw_text(
     "x" + remaining.to_string(),
-    x + 42, y + 22, 16,
+    x + 42,
+    y + 22,
+    16,
     if remaining > 0 {
       @types.color_subtitle
     } else {
@@ -101,7 +145,11 @@ fn draw_ink_button(
   if is_selected {
     @raylib.draw_rectangle_lines(x, y, w, h, @types.color_selected_border)
     @raylib.draw_rectangle_lines(
-      x - 1, y - 1, w + 2, h + 2, @types.color_selected_border,
+      x - 1,
+      y - 1,
+      w + 2,
+      h + 2,
+      @types.color_selected_border,
     )
   } else {
     @raylib.draw_rectangle_lines(x, y, w, h, @types.color_grid_line)
@@ -109,11 +157,7 @@ fn draw_ink_button(
 }
 
 ///|
-fn draw_target_list(
-  game : @types.Game,
-  x : Int,
-  start_y : Int
-) -> Unit {
+fn draw_target_list(game : @types.Game, x : Int, start_y : Int) -> Unit {
   let g = game.grid
   let mut y = start_y
   let mut count = 0
@@ -126,19 +170,20 @@ fn draw_target_list(
         // Small color swatch
         @raylib.draw_rectangle(x, y, 16, 16, target_col)
         @raylib.draw_rectangle_lines(
-          x, y, 16, 16,
+          x,
+          y,
+          16,
+          16,
           @raylib.Color::new(0, 0, 0, 80),
         )
         // Target name
         let tname = @types.ink_display_name(tile.target_color)
-        let label = "(" +
-          col.to_string() +
-          "," +
-          row.to_string() +
-          ") " +
-          tname
+        let label = "(" + col.to_string() + "," + row.to_string() + ") " + tname
         @draw.draw_text(
-          label, x + 22, y, 14,
+          label,
+          x + 22,
+          y,
+          14,
           if satisfied {
             @raylib.Color::new(50, 160, 80, 255)
           } else {
@@ -147,7 +192,10 @@ fn draw_target_list(
         )
         if satisfied {
           @draw.draw_text(
-            " [OK]", x + 22 + @draw.measure_text(label, 14), y, 14,
+            " [OK]",
+            x + 22 + @draw.measure_text(label, 14),
+            y,
+            14,
             @raylib.Color::new(50, 160, 80, 255),
           )
         }

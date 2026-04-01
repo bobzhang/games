@@ -45,8 +45,8 @@ pub fn compute_hull(points : Array[@types.Point]) -> Array[@types.Point] {
     // Skip points with same angle, keeping the farthest
     let mut j = i
     while j + 1 < sorted.length() &&
-      @types.absf(@types.cross_product(pivot, sorted[j], sorted[j + 1])) <
-        0.001 {
+          @types.absf(@types.cross_product(pivot, sorted[j], sorted[j + 1])) <
+          0.001 {
       j += 1
     }
     filtered.push(sorted[j])
@@ -81,7 +81,7 @@ pub fn compute_hull(points : Array[@types.Point]) -> Array[@types.Point] {
 fn compare_angle(
   pivot : @types.Point,
   a : @types.Point,
-  b : @types.Point
+  b : @types.Point,
 ) -> Int {
   let cross = @types.cross_product(pivot, a, b)
   if @types.absf(cross) < 0.001 {
@@ -108,10 +108,7 @@ pub fn hull_edge_count(hull : Array[@types.Point]) -> Int {
 }
 
 ///|
-pub fn is_point_on_hull(
-  p : @types.Point,
-  hull : Array[@types.Point]
-) -> Bool {
+pub fn is_point_on_hull(p : @types.Point, hull : Array[@types.Point]) -> Bool {
   let n = hull.length()
   if n < 2 {
     return false

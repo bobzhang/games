@@ -6,17 +6,18 @@ fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let (start_x, start_y, start_w, start_h) = @types.title_start_button()
 
   let click_start : Bool = @raylib.is_mouse_button_pressed(
-    @raylib.MouseButtonLeft,
-  ) && @types.pointer_on_rect(
-    game.mouse_x,
-    game.mouse_y,
-    true,
-    0,
-    start_x,
-    start_y,
-    start_w,
-    start_h,
-  )
+      @raylib.MouseButtonLeft,
+    ) &&
+    @types.pointer_on_rect(
+      game.mouse_x,
+      game.mouse_y,
+      true,
+      0,
+      start_x,
+      start_y,
+      start_w,
+      start_h,
+    )
 
   let tap_start : Bool = game.touch_cd <= 0.0 &&
     @types.title_start_hover(
@@ -41,17 +42,18 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let (retry_x, retry_y, retry_w, retry_h) = @types.retry_button()
 
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
-    @raylib.MouseButtonLeft,
-  ) && @types.pointer_on_rect(
-    game.mouse_x,
-    game.mouse_y,
-    true,
-    0,
-    retry_x,
-    retry_y,
-    retry_w,
-    retry_h,
-  )
+      @raylib.MouseButtonLeft,
+    ) &&
+    @types.pointer_on_rect(
+      game.mouse_x,
+      game.mouse_y,
+      true,
+      0,
+      retry_x,
+      retry_y,
+      retry_w,
+      retry_h,
+    )
 
   let tap_retry : Bool = game.touch_cd <= 0.0 &&
     @types.result_retry_hover(

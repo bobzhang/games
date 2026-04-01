@@ -193,9 +193,7 @@ fn attack_vanguard_ram(
   // Deal 2 damage
   let _ = apply_damage_from(battle, target_id, 2, unit_id)
   let target_name = get_unit_name(battle, target_id)
-  battle.turn_log.push(
-    "\{name} rams \{target_name} for 2 damage!",
-  )
+  battle.turn_log.push("\{name} rams \{target_name} for 2 damage!")
   // ChainLightning augment
   if @types.battle_has_augment(battle, ChainLightning) {
     apply_chain_lightning(battle, target_id, unit_id)
@@ -204,9 +202,7 @@ fn attack_vanguard_ram(
   let push_dist = 2 + (if u.upgrade_tier >= 1 { 1 } else { 0 })
   if target.active && target.hp > 0 {
     try_push(battle, target_id, pdx, pdy, push_dist)
-    battle.turn_log.push(
-      "\{name} pushes \{target_name} \{push_dist} tiles!",
-    )
+    battle.turn_log.push("\{name} pushes \{target_name} \{push_dist} tiles!")
   }
 }
 
@@ -231,9 +227,7 @@ fn attack_vanguard_tractor(
     return
   }
   let target_name = get_unit_name(battle, target_id)
-  battle.turn_log.push(
-    "\{name} pulls \{target_name} with Tractor Beam!",
-  )
+  battle.turn_log.push("\{name} pulls \{target_name} with Tractor Beam!")
   try_pull(battle, target_id, u.x, u.y, 2)
 }
 
@@ -272,9 +266,7 @@ fn attack_striker_blade(
     }
   }
   let _ = apply_damage_from(battle, target_id, dmg, unit_id)
-  battle.turn_log.push(
-    "\{name} slashes \{target_name} for \{dmg} damage!",
-  )
+  battle.turn_log.push("\{name} slashes \{target_name} for \{dmg} damage!")
   // ChainLightning augment
   if @types.battle_has_augment(battle, ChainLightning) {
     apply_chain_lightning(battle, target_id, unit_id)
@@ -348,8 +340,7 @@ fn attack_striker_dash(
       let (sdx, sdy) = step_toward(u.x, u.y, tx, ty)
       let stop_x = tx - sdx
       let stop_y = ty - sdy
-      if (stop_x != u.x || stop_y != u.y) &&
-        is_walkable(battle, stop_x, stop_y) {
+      if (stop_x != u.x || stop_y != u.y) && is_walkable(battle, stop_x, stop_y) {
         move_unit_to(battle, unit_id, stop_x, stop_y)
       }
       let target_name = get_unit_name(battle, target_id)
@@ -409,9 +400,7 @@ fn attack_sentinel_cannon(
   }
   let target_name = get_unit_name(battle, target_id)
   let _ = apply_damage_from(battle, target_id, 3, unit_id)
-  battle.turn_log.push(
-    "\{name} fires cannon at \{target_name} for 3 damage!",
-  )
+  battle.turn_log.push("\{name} fires cannon at \{target_name} for 3 damage!")
   // ChainLightning augment
   if @types.battle_has_augment(battle, ChainLightning) {
     apply_chain_lightning(battle, target_id, unit_id)
@@ -440,9 +429,7 @@ fn attack_sentinel_artillery(
     battle.turn_log.push("\{name} target out of artillery range!")
     return
   }
-  battle.turn_log.push(
-    "\{name} fires artillery at (\{tx}, \{ty})!",
-  )
+  battle.turn_log.push("\{name} fires artillery at (\{tx}, \{ty})!")
   // 3x3 area centered on target (Sentinel T1 also gives +1 radius)
   let art_radius = 1 + (if u.upgrade_tier >= 1 { 1 } else { 0 })
   for dy = -art_radius; dy <= art_radius; dy = dy + 1 {
@@ -454,9 +441,7 @@ fn attack_sentinel_artillery(
         if hit_id >= 0 && hit_id != unit_id {
           let hit_name = get_unit_name(battle, hit_id)
           let _ = apply_damage_from(battle, hit_id, 2, unit_id)
-          battle.turn_log.push(
-            "  Artillery hits \{hit_name} for 2 damage!",
-          )
+          battle.turn_log.push("  Artillery hits \{hit_name} for 2 damage!")
         }
       }
     }
@@ -486,7 +471,17 @@ fn execute_overclock(
   @types.emit_flash(battle, 80, 140, 255, 100)
   @types.emit_tint(battle, 40, 80, 200, 40, 0.4)
   @types.emit_ring(battle, u.x, u.y, 50.0, 0.5, 80, 180, 255)
-  @types.emit_float_text(battle, u.x, u.y, "OVERCLOCK!", 80, 180, 255, 1.5, true)
+  @types.emit_float_text(
+    battle,
+    u.x,
+    u.y,
+    "OVERCLOCK!",
+    80,
+    180,
+    255,
+    1.5,
+    true,
+  )
   // Re-execute the ability targeting the nearest enemy
   let target_id = find_nearest_unit(battle, u.x, u.y, Enemy)
   if target_id >= 0 {
@@ -504,9 +499,7 @@ fn execute_wait(battle : @types.BattleState, unit_id : Int) -> Unit {
   let name = get_unit_name(battle, unit_id)
   if u.heat > 0 {
     u.heat -= 1
-    battle.turn_log.push(
-      "\{name} waits. Heat cools to \{u.heat}.",
-    )
+    battle.turn_log.push("\{name} waits. Heat cools to \{u.heat}.")
   } else {
     battle.turn_log.push("\{name} waits.")
   }
@@ -526,9 +519,7 @@ fn execute_push_command(
   // Must be adjacent to target
   let dist = @types.manhattan(u.x, u.y, tx, ty)
   if dist > 1 {
-    battle.turn_log.push(
-      "\{name} cannot push - target not adjacent!",
-    )
+    battle.turn_log.push("\{name} cannot push - target not adjacent!")
     return
   }
   let target_id = unit_at(battle, tx, ty)
@@ -539,9 +530,7 @@ fn execute_push_command(
   let target_name = get_unit_name(battle, target_id)
   // Decode direction from int (0=N, 1=S, 2=E, 3=W)
   let (dx, dy) = decode_direction(dir)
-  battle.turn_log.push(
-    "\{name} pushes \{target_name}!",
-  )
+  battle.turn_log.push("\{name} pushes \{target_name}!")
   try_push(battle, target_id, dx, dy, 2)
 }
 
@@ -572,7 +561,9 @@ fn find_adjacent_enemy(
     let uid = unit_at(battle, nx, ny)
     if uid >= 0 && uid != self_id {
       let other = battle.units[uid]
-      if other.team != battle.units[self_id].team && other.active && other.hp > 0 {
+      if other.team != battle.units[self_id].team &&
+        other.active &&
+        other.hp > 0 {
         return uid
       }
     }
@@ -608,9 +599,7 @@ fn check_hazard_on_tile(
       // Mine is consumed
       battle.grid.set(x, y, { ..tile, hazard: None })
     }
-    Smoke => {
-      battle.turn_log.push("\{name} enters smoke.")
-    }
+    Smoke => battle.turn_log.push("\{name} enters smoke.")
     None => ()
   }
 }
@@ -731,10 +720,7 @@ fn ability_deploy_mine(
 
 ///|
 /// Vanguard Tier 2: Fortress Mode - skip move, gain 3 shield.
-fn ability_fortress_mode(
-  battle : @types.BattleState,
-  unit_id : Int,
-) -> Unit {
+fn ability_fortress_mode(battle : @types.BattleState, unit_id : Int) -> Unit {
   let name = get_unit_name(battle, unit_id)
   apply_shield(battle, unit_id, 3)
   battle.turn_log.push("\{name} enters Fortress Mode! +3 Shield!")
@@ -742,10 +728,7 @@ fn ability_fortress_mode(
 
 ///|
 /// Vanguard Tier 3: Gravity Well - pull ALL adjacent enemies 1 tile toward self.
-fn ability_gravity_well(
-  battle : @types.BattleState,
-  unit_id : Int,
-) -> Unit {
+fn ability_gravity_well(battle : @types.BattleState, unit_id : Int) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
   battle.turn_log.push("\{name} activates Gravity Well!")

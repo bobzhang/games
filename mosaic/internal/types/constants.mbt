@@ -44,10 +44,14 @@ pub let color_grid_line : @raylib.Color = @raylib.Color::new(60, 55, 75, 255)
 pub let color_hole : @raylib.Color = @raylib.Color::new(18, 16, 26, 255)
 
 ///|
-pub let color_hole_border : @raylib.Color = @raylib.Color::new(100, 90, 130, 255)
+pub let color_hole_border : @raylib.Color = @raylib.Color::new(
+  100, 90, 130, 255,
+)
 
 ///|
-pub let color_correct_glow : @raylib.Color = @raylib.Color::new(50, 255, 120, 180)
+pub let color_correct_glow : @raylib.Color = @raylib.Color::new(
+  50, 255, 120, 180,
+)
 
 ///|
 pub let color_wrong_glow : @raylib.Color = @raylib.Color::new(255, 50, 60, 180)
@@ -62,7 +66,9 @@ pub let color_hud_text : @raylib.Color = @raylib.Color::new(210, 205, 230, 255)
 pub let color_hud_dim : @raylib.Color = @raylib.Color::new(140, 135, 160, 200)
 
 ///|
-pub let color_title_accent : @raylib.Color = @raylib.Color::new(180, 120, 255, 255)
+pub let color_title_accent : @raylib.Color = @raylib.Color::new(
+  180, 120, 255, 255,
+)
 
 ///|
 pub let color_star_on : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
@@ -74,13 +80,19 @@ pub let color_star_off : @raylib.Color = @raylib.Color::new(80, 75, 95, 255)
 pub let color_selected : @raylib.Color = @raylib.Color::new(255, 255, 255, 255)
 
 ///|
-pub let color_tier_repair : @raylib.Color = @raylib.Color::new(100, 200, 255, 255)
+pub let color_tier_repair : @raylib.Color = @raylib.Color::new(
+  100, 200, 255, 255,
+)
 
 ///|
-pub let color_tier_restore : @raylib.Color = @raylib.Color::new(255, 180, 60, 255)
+pub let color_tier_restore : @raylib.Color = @raylib.Color::new(
+  255, 180, 60, 255,
+)
 
 ///|
-pub let color_tier_master : @raylib.Color = @raylib.Color::new(255, 80, 180, 255)
+pub let color_tier_master : @raylib.Color = @raylib.Color::new(
+  255, 80, 180, 255,
+)
 
 ///|
 pub fn tile_color_to_raylib(c : TileColor) -> @raylib.Color {

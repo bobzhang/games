@@ -25,9 +25,12 @@ fn draw_tablet_background() -> Unit {
   @raylib.draw_rectangle(tx, ty, tw, th, @types.color_stone)
   // Inner border
   @raylib.draw_rectangle_lines_ex(
-    @raylib.Rectangle::new(Float::from_int(tx + 8), Float::from_int(ty + 8), Float::from_int(
-        tw - 16,
-      ), Float::from_int(th - 16)),
+    @raylib.Rectangle::new(
+      Float::from_int(tx + 8),
+      Float::from_int(ty + 8),
+      Float::from_int(tw - 16),
+      Float::from_int(th - 16),
+    ),
     2.0,
     @types.color_stone_dark,
   )

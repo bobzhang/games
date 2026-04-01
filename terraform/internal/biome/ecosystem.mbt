@@ -18,7 +18,11 @@ pub fn resolve_ecosystem(grid : @types.HexGrid) -> Array[Bool] {
       }
       let current = snapshot[idx]
       let neighbors = @types.hex_neighbors(
-        col, row, w, h, grid.wraps_horizontal,
+        col,
+        row,
+        w,
+        h,
+        grid.wraps_horizontal,
       )
       // Count neighbors by biome from snapshot
       let mut ocean_n = 0
@@ -53,11 +57,11 @@ fn apply_rules(
   ocean_n : Int,
   desert_n : Int,
   forest_n : Int,
-  barren_n : Int
+  barren_n : Int,
 ) -> @types.BiomeKind {
   ignore(barren_n)
   match current {
-    Barren => {
+    Barren =>
       // Desert spreads to barren with 0 ocean neighbors
       // Forest spreads to barren with at least 1 ocean neighbor AND at least 1 forest neighbor
       if forest_n >= 1 && ocean_n >= 1 {
@@ -67,27 +71,23 @@ fn apply_rules(
       } else {
         Barren
       }
-    }
-    Forest => {
+    Forest =>
       // Dies if surrounded by 3+ desert
       if desert_n >= 3 {
         Barren
       } else {
         Forest
       }
-    }
-    Ocean => {
+    Ocean =>
       // Stable, never changes
       Ocean
-    }
-    Desert => {
+    Desert =>
       // Retreats if 2+ ocean neighbors
       if ocean_n >= 2 {
         Barren
       } else {
         Desert
       }
-    }
   }
 }
 
@@ -95,7 +95,8 @@ fn apply_rules(
 /// Run multiple resolution steps, returning the changed tiles from the last step.
 pub fn resolve_n_steps(grid : @types.HexGrid, steps : Int) -> Array[Bool] {
   let mut last_changed : Array[Bool] = Array::make(
-    grid.width * grid.height, false,
+    grid.width * grid.height,
+    false,
   )
   for _s in 0..<steps {
     last_changed = resolve_ecosystem(grid)
@@ -135,11 +136,12 @@ pub fn count_pending_changes(grid : @types.HexGrid) -> Int {
 /// Returns the number of steps taken and the final changed tiles.
 pub fn resolve_until_stable(
   grid : @types.HexGrid,
-  max_steps : Int
+  max_steps : Int,
 ) -> (Int, Array[Bool]) {
   let mut steps = 0
   let mut last_changed : Array[Bool] = Array::make(
-    grid.width * grid.height, false,
+    grid.width * grid.height,
+    false,
   )
   for _s in 0..<max_steps {
     let changed = resolve_ecosystem(grid)
@@ -162,7 +164,9 @@ pub fn resolve_until_stable(
 ///|
 /// Get per-tile predictions for the next ecosystem step.
 /// Returns an array of (grid_index, new_biome) for tiles that will change.
-pub fn preview_tile_changes(grid : @types.HexGrid) -> Array[(Int, @types.BiomeKind)] {
+pub fn preview_tile_changes(
+  grid : @types.HexGrid,
+) -> Array[(Int, @types.BiomeKind)] {
   let w = grid.width
   let h = grid.height
   let snapshot = @types.snapshot_biomes(grid)
@@ -175,7 +179,11 @@ pub fn preview_tile_changes(grid : @types.HexGrid) -> Array[(Int, @types.BiomeKi
       }
       let current = snapshot[idx]
       let neighbors = @types.hex_neighbors(
-        col, row, w, h, grid.wraps_horizontal,
+        col,
+        row,
+        w,
+        h,
+        grid.wraps_horizontal,
       )
       let mut ocean_n = 0
       let mut desert_n = 0
@@ -191,7 +199,9 @@ pub fn preview_tile_changes(grid : @types.HexGrid) -> Array[(Int, @types.BiomeKi
           Barren => barren_n += 1
         }
       }
-      let new_biome = apply_rules(current, ocean_n, desert_n, forest_n, barren_n)
+      let new_biome = apply_rules(
+        current, ocean_n, desert_n, forest_n, barren_n,
+      )
       if new_biome != current {
         result.push((idx, new_biome))
       }
@@ -220,7 +230,11 @@ pub fn preview_next_step(grid : @types.HexGrid) -> (Int, Int, Int, Int) {
       }
       let current = snapshot[idx]
       let neighbors = @types.hex_neighbors(
-        col, row, w, h, grid.wraps_horizontal,
+        col,
+        row,
+        w,
+        h,
+        grid.wraps_horizontal,
       )
       let mut ocean_n = 0
       let mut desert_n = 0
@@ -236,7 +250,9 @@ pub fn preview_next_step(grid : @types.HexGrid) -> (Int, Int, Int, Int) {
           Barren => barren_n += 1
         }
       }
-      let new_biome = apply_rules(current, ocean_n, desert_n, forest_n, barren_n)
+      let new_biome = apply_rules(
+        current, ocean_n, desert_n, forest_n, barren_n,
+      )
       if new_biome != current {
         match new_biome {
           Forest => gain_forest += 1

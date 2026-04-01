@@ -114,8 +114,10 @@ test "no duplicate positions within a level" {
 test "budget has at least some dominoes to place" {
   for i in 0..<24 {
     let level = @levels.get_level(i)
-    let total_budget = level.budget.normal + level.budget.heavy +
-      level.budget.splitter + level.budget.delay
+    let total_budget = level.budget.normal +
+      level.budget.heavy +
+      level.budget.splitter +
+      level.budget.delay
     inspect(total_budget > 0, content="true")
   }
 }

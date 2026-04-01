@@ -5,7 +5,13 @@ fn draw_mode_indicator(game : @types.Game) -> Unit {
   let bar_w = Float::to_int(
     Float::from_int(@types.screen_width) - @types.clue_panel_width,
   )
-  @raylib.draw_rectangle(0, bar_y, bar_w, 35, @raylib.Color::new(30, 25, 35, 230))
+  @raylib.draw_rectangle(
+    0,
+    bar_y,
+    bar_w,
+    35,
+    @raylib.Color::new(30, 25, 35, 230),
+  )
   let mode_str = match game.play_state {
     Arranging => "MODE: ARRANGE (drag cards to timeline)"
     Linking => "MODE: LINK (click two cards to connect cause->effect)"
@@ -21,10 +27,7 @@ fn draw_mode_indicator(game : @types.Game) -> Unit {
   let case_ = @levels.get_case(game.current_tier, game.current_case_index)
   let placed = @types.count_placed(game.timeline_slots)
   let total = case_.cards.length()
-  let count_str = "Cards: " +
-    placed.to_string() +
-    "/" +
-    total.to_string()
+  let count_str = "Cards: " + placed.to_string() + "/" + total.to_string()
   @draw.draw_text(count_str, 500, bar_y + 8, 18, @types.color_hud)
   // Link count
   let link_str = "Links: " + game.placed_links.length().to_string()

@@ -653,7 +653,11 @@ pub fn ordinal_suffix(n : Int) -> String {
 ///|
 /// Returns the angle (in degrees) between two consecutive track segments A->B and B->C.
 /// A larger angle means a tighter corner.
-pub fn angle_between_segments(a : Waypoint, b : Waypoint, c : Waypoint) -> Float {
+pub fn angle_between_segments(
+  a : Waypoint,
+  b : Waypoint,
+  c : Waypoint,
+) -> Float {
   let dx1 = b.x - a.x
   let dz1 = b.z - a.z
   let dx2 = c.x - b.x
@@ -806,19 +810,17 @@ pub fn roll_position_weighted_item(game : Game, place : Int) -> PowerupKind {
     } else {
       Banana
     }
-  } else {
     // 6th-8th: Star 25%, TripleMushroom 25%, Missile 20%, Lightning 10%, Boost 20%
-    if roll <= 25 {
-      Star
-    } else if roll <= 50 {
-      TripleMushroom
-    } else if roll <= 70 {
-      Missile
-    } else if roll <= 80 {
-      Lightning
-    } else {
-      Boost
-    }
+  } else if roll <= 25 {
+    Star
+  } else if roll <= 50 {
+    TripleMushroom
+  } else if roll <= 70 {
+    Missile
+  } else if roll <= 80 {
+    Lightning
+  } else {
+    Boost
   }
 }
 
@@ -872,11 +874,7 @@ pub fn turn_direction(a : Waypoint, b : Waypoint, c : Waypoint) -> Float {
 
 ///|
 /// Returns the distance from kart's current position to a specific waypoint index.
-pub fn distance_to_waypoint(
-  game : Game,
-  kart : Kart,
-  wp_idx : Int,
-) -> Float {
+pub fn distance_to_waypoint(game : Game, kart : Kart, wp_idx : Int) -> Float {
   let wp = get_waypoint(game, wp_idx)
   distance2d(kart.x, kart.z, wp.x, wp.z)
 }

@@ -52,12 +52,10 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     lerp_speed,
   )
   // Smooth camera offset towards player position
-  let target_cam_x = game.player.px - @types.tile_to_pixel_x(
-    @types.grid_width / 2,
-  )
-  let target_cam_y = game.player.py - @types.tile_to_pixel_y(
-    @types.grid_height / 2,
-  )
+  let target_cam_x = game.player.px -
+    @types.tile_to_pixel_x(@types.grid_width / 2)
+  let target_cam_y = game.player.py -
+    @types.tile_to_pixel_y(@types.grid_height / 2)
   let cam_lerp : Float = @types.camera_smooth_speed * dt
   game.camera_offset_x = @types.lerpf(
     game.camera_offset_x,

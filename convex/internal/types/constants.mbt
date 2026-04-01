@@ -128,6 +128,4 @@ pub let color_panel : @raylib.Color = @raylib.Color::new(25, 28, 45, 240)
 pub let color_button : @raylib.Color = @raylib.Color::new(40, 45, 70, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(
-  55, 60, 90, 255,
-)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(55, 60, 90, 255)

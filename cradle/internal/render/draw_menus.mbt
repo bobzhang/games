@@ -120,13 +120,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     }
     // Tier name
     let tnw = @draw.measure_text(tier_names[i], 32)
-    @draw.draw_text(
-      tier_names[i],
-      cx + (card_w - tnw) / 2,
-      card_y + 30,
-      32,
-      tc,
-    )
+    @draw.draw_text(tier_names[i], cx + (card_w - tnw) / 2, card_y + 30, 32, tc)
     // Description
     let dw = @draw.measure_text(tier_descs[i], 16)
     @draw.draw_text(
@@ -174,12 +168,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       dcx.to_int(),
       dcy.to_int(),
       dr,
-      @raylib.Color::new(
-        tc.r.to_int(),
-        tc.g.to_int(),
-        tc.b.to_int(),
-        60,
-      ),
+      @raylib.Color::new(tc.r.to_int(), tc.g.to_int(), tc.b.to_int(), 60),
     )
     for k in 0..<line_count {
       let fk = Float::from_int(k)
@@ -194,12 +183,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
         @raylib.Vector2::new(x1, y1),
         @raylib.Vector2::new(x2, y2),
         1.0,
-        @raylib.Color::new(
-          tc.r.to_int(),
-          tc.g.to_int(),
-          tc.b.to_int(),
-          80,
-        ),
+        @raylib.Color::new(tc.r.to_int(), tc.g.to_int(), tc.b.to_int(), 80),
       )
     }
     // Click handler indicator

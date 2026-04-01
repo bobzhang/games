@@ -3,7 +3,7 @@ fn make_test_level(
   ascii : Array[String],
   start_x : Int,
   start_y : Int,
-  start_dir : @types.Direction
+  start_dir : @types.Direction,
 ) -> @types.Level {
   let grid = @types.new_grid(@types.grid_width, @types.grid_height)
   let goals : Array[@types.Vec2i] = []
@@ -59,9 +59,8 @@ fn make_program(kinds : Array[@types.CommandKind]) -> @types.Program {
 test "move forward reaches goal" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S..G#####",
+      "############", "############", "############", "###S..G#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -69,17 +68,16 @@ test "move forward reaches goal" {
   )
   let program = make_program([Move, Move, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
-  assert_eq!(trace.fail_reason, "")
+  assert_true(trace.success)
+  assert_eq(trace.fail_reason, "")
 }
 
 ///|
 test "move into wall fails" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.#G#####",
+      "############", "############", "############", "###S.#G#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -87,17 +85,16 @@ test "move into wall fails" {
   )
   let program = make_program([Move, Move])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Robot walked into a wall!")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Robot walked into a wall!")
 }
 
 ///|
 test "move into gap fails" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S._G#####",
+      "############", "############", "############", "###S._G#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -105,8 +102,8 @@ test "move into gap fails" {
   )
   let program = make_program([Move, Move])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Robot fell into a gap!")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Robot fell into a gap!")
 }
 
 // ===== Turn tests =====
@@ -115,9 +112,8 @@ test "move into gap fails" {
 test "turn left from east faces north" {
   let level = make_test_level(
     [
-      "############", "############", "###.G.######", "###.S.######",
+      "############", "############", "###.G.######", "###.S.######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     4,
     3,
@@ -125,16 +121,15 @@ test "turn left from east faces north" {
   )
   let program = make_program([TurnLeft, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "turn right from east faces south" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###.S.######",
-      "###.G.######", "############", "############", "############",
-      "############",
+      "############", "############", "############", "###.S.######", "###.G.######",
+      "############", "############", "############", "############",
     ],
     4,
     3,
@@ -142,24 +137,30 @@ test "turn right from east faces south" {
   )
   let program = make_program([TurnRight, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "four left turns returns to original direction" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.G######",
+      "############", "############", "############", "###S.G######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
     East,
   )
-  let program = make_program([TurnLeft, TurnLeft, TurnLeft, TurnLeft, Move, Move])
+  let program = make_program([
+    TurnLeft,
+    TurnLeft,
+    TurnLeft,
+    TurnLeft,
+    Move,
+    Move,
+  ])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 // ===== Jump tests =====
@@ -168,9 +169,8 @@ test "four left turns returns to original direction" {
 test "jump over gap" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S._G#####",
+      "############", "############", "############", "###S._G#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -178,16 +178,15 @@ test "jump over gap" {
   )
   let program = make_program([Move, Jump])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "jump over wall" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.#G#####",
+      "############", "############", "############", "###S.#G#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -195,16 +194,15 @@ test "jump over wall" {
   )
   let program = make_program([Move, Jump])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "jump landing on gap fails" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.._#####",
+      "############", "############", "############", "###S.._#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -212,17 +210,16 @@ test "jump landing on gap fails" {
   )
   let program = make_program([Move, Jump])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Robot landed in a gap!")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Robot landed in a gap!")
 }
 
 ///|
 test "jump out of bounds fails" {
   let level = make_test_level(
     [
-      "############", "############", "############", "##########S.",
+      "############", "############", "############", "##########S.", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     11,
     3,
@@ -230,8 +227,8 @@ test "jump out of bounds fails" {
   )
   let program = make_program([Jump])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Robot jumped out of bounds!")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Robot jumped out of bounds!")
 }
 
 // ===== Push tests =====
@@ -240,9 +237,8 @@ test "jump out of bounds fails" {
 test "push block forward" {
   let level = make_test_level(
     [
-      "############", "############", "############", "##S.O..G####",
+      "############", "############", "############", "##S.O..G####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     2,
     3,
@@ -256,9 +252,8 @@ test "push block forward" {
   let _ = level
   let level2 = make_test_level(
     [
-      "############", "############", "############", "#S..O...G###",
+      "############", "############", "############", "#S..O...G###", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     1,
     3,
@@ -270,9 +265,8 @@ test "push block forward" {
   let _ = level2
   let level3 = make_test_level(
     [
-      "############", "############", "###..O######", "###S...G####",
+      "############", "############", "###..O######", "###S...G####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -283,9 +277,8 @@ test "push block forward" {
   let _ = level3
   let level4 = make_test_level(
     [
-      "############", "############", "###...######", "###.O.######",
-      "###S..G#####", "############", "############", "############",
-      "############",
+      "############", "############", "###...######", "###.O.######", "###S..G#####",
+      "############", "############", "############", "############",
     ],
     3,
     4,
@@ -295,16 +288,15 @@ test "push block forward" {
   // TurnRight -> E. Move to (5,4). Move to (6,4). Goal at (6,4).
   let program = make_program([Move, TurnLeft, Push, TurnRight, Move, Move])
   let trace = simulate(program, level4)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "push block into gap fills it" {
   let level = make_test_level(
     [
-      "############", "############", "############", "#S.O_..G####",
+      "############", "############", "############", "#S.O_..G####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     1,
     3,
@@ -315,16 +307,15 @@ test "push block into gap fills it" {
   // Move(2->3), Move(3->4 filled), Move(4->5), Move(5->6), Move(6->7)=G
   let program = make_program([Move, Push, Move, Move, Move, Move, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "push nothing fails" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S..G#####",
+      "############", "############", "############", "###S..G#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -332,17 +323,16 @@ test "push nothing fails" {
   )
   let program = make_program([Push])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Nothing to push!")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Nothing to push!")
 }
 
 ///|
 test "push block into wall fails" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.O#G####",
+      "############", "############", "############", "###S.O#G####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -350,8 +340,8 @@ test "push block into wall fails" {
   )
   let program = make_program([Move, Push])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Can't push block there!")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Can't push block there!")
 }
 
 // ===== If condition tests =====
@@ -361,9 +351,8 @@ test "if wall ahead skips next command" {
   // Robot faces wall, so If(WallAhead) is true -> execute next command (TurnLeft)
   let level = make_test_level(
     [
-      "############", "############", "###.G.######", "###.S#######",
+      "############", "############", "###.G.######", "###.S#######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     4,
     3,
@@ -372,7 +361,7 @@ test "if wall ahead skips next command" {
   // WallAhead is true (wall at 5,3), so TurnLeft executes, then Move goes north
   let program = make_program([If(WallAhead), TurnLeft, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
@@ -380,9 +369,8 @@ test "if condition false skips next command" {
   // Robot faces open path, so If(WallAhead) is false -> skip TurnLeft
   let level = make_test_level(
     [
-      "############", "############", "############", "###S..G#####",
+      "############", "############", "############", "###S..G#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -391,16 +379,15 @@ test "if condition false skips next command" {
   // WallAhead is false (floor ahead), so TurnLeft is skipped, then Move goes east
   let program = make_program([If(WallAhead), TurnLeft, Move, Move, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "if path ahead" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.G######",
+      "############", "############", "############", "###S.G######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -409,16 +396,15 @@ test "if path ahead" {
   // PathAhead is true, so Move executes
   let program = make_program([If(PathAhead), Move, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "if on color red" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.RG#####",
+      "############", "############", "############", "###S.RG#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -427,7 +413,7 @@ test "if on color red" {
   // Move to (4,3) floor, Move to (5,3) red, If(OnColor(Red)) true, Move to (6,3) goal
   let program = make_program([Move, Move, If(OnColor(Red)), Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 // ===== Loop tests =====
@@ -436,9 +422,8 @@ test "if on color red" {
 test "loop repeats next command" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S...G####",
+      "############", "############", "############", "###S...G####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -447,16 +432,15 @@ test "loop repeats next command" {
   // Loop(4) repeats Move 4 times -> 4 steps east from (3,3) to (7,3) = G
   let program = make_program([Loop(4), Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "loop without following command does nothing" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###SG.######",
+      "############", "############", "############", "###SG.######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -465,7 +449,7 @@ test "loop without following command does nothing" {
   // Loop at end has no next command, then Move
   let program = make_program([Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 // ===== Multiple goals tests =====
@@ -474,9 +458,8 @@ test "loop without following command does nothing" {
 test "collect two goals" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.G.G####",
+      "############", "############", "############", "###S.G.G####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -484,16 +467,15 @@ test "collect two goals" {
   )
   let program = make_program([Move, Move, Move, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "missing one goal fails" {
   let level = make_test_level(
     [
-      "############", "############", "###..G######", "###S..G#####",
+      "############", "############", "###..G######", "###S..G#####", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -502,8 +484,8 @@ test "missing one goal fails" {
   // Only goes east, reaches one goal but misses the one above
   let program = make_program([Move, Move, Move])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Not all goals collected!")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Not all goals collected!")
 }
 
 // ===== Empty program test =====
@@ -512,9 +494,8 @@ test "missing one goal fails" {
 test "empty program fails" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###SG.######",
+      "############", "############", "############", "###SG.######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -522,8 +503,8 @@ test "empty program fails" {
   )
   let program = make_program([])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Empty program")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Empty program")
 }
 
 // ===== Trace state tests =====
@@ -532,9 +513,8 @@ test "empty program fails" {
 test "trace records initial state" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###SG.######",
+      "############", "############", "############", "###SG.######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -543,20 +523,19 @@ test "trace records initial state" {
   let program = make_program([Move])
   let trace = simulate(program, level)
   // Initial state + 1 move = 2 states
-  assert_true!(trace.states.length() >= 2)
+  assert_true(trace.states.length() >= 2)
   // First state should be at start position
-  assert_eq!(trace.states[0].pos.x, 3)
-  assert_eq!(trace.states[0].pos.y, 3)
-  assert_true!(trace.states[0].alive)
+  assert_eq(trace.states[0].pos.x, 3)
+  assert_eq(trace.states[0].pos.y, 3)
+  assert_true(trace.states[0].alive)
 }
 
 ///|
 test "trace records final position" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###S.G######",
+      "############", "############", "############", "###S.G######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -564,10 +543,10 @@ test "trace records final position" {
   )
   let program = make_program([Move, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
   let last = trace.states[trace.states.length() - 1]
-  assert_eq!(last.pos.x, 5)
-  assert_eq!(last.pos.y, 3)
+  assert_eq(last.pos.x, 5)
+  assert_eq(last.pos.y, 3)
 }
 
 // ===== Direction tests =====
@@ -576,9 +555,8 @@ test "trace records final position" {
 test "move in all four directions" {
   let level = make_test_level(
     [
-      "############", "############", "###.G.######", "###.S.######",
-      "###...######", "############", "############", "############",
-      "############",
+      "############", "############", "###.G.######", "###.S.######", "###...######",
+      "############", "############", "############", "############",
     ],
     4,
     3,
@@ -588,7 +566,7 @@ test "move in all four directions" {
   // Should reach G at (4,2)
   let program = make_program([Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 // ===== Complex scenario =====
@@ -597,9 +575,8 @@ test "move in all four directions" {
 test "l-shape path with turn" {
   let level = make_test_level(
     [
-      "############", "############", "####.G######", "####..######",
-      "####S.######", "############", "############", "############",
-      "############",
+      "############", "############", "####.G######", "####..######", "####S.######",
+      "############", "############", "############", "############",
     ],
     4,
     4,
@@ -607,16 +584,15 @@ test "l-shape path with turn" {
   )
   let program = make_program([Move, Move, TurnRight, Move])
   let trace = simulate(program, level)
-  assert_true!(trace.success)
+  assert_true(trace.success)
 }
 
 ///|
 test "walk into block fails" {
   let level = make_test_level(
     [
-      "############", "############", "############", "###SOG######",
+      "############", "############", "############", "###SOG######", "############",
       "############", "############", "############", "############",
-      "############",
     ],
     3,
     3,
@@ -624,6 +600,6 @@ test "walk into block fails" {
   )
   let program = make_program([Move])
   let trace = simulate(program, level)
-  assert_true!(!trace.success)
-  assert_eq!(trace.fail_reason, "Robot walked into a block!")
+  assert_true(!trace.success)
+  assert_eq(trace.fail_reason, "Robot walked into a block!")
 }

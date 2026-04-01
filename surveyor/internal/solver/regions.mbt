@@ -4,7 +4,7 @@ pub fn has_fence_between(
   x1 : Int,
   y1 : Int,
   x2 : Int,
-  y2 : Int
+  y2 : Int,
 ) -> Bool {
   // Moving right: vertical fence at (y1, x2, Vertical)
   if x2 == x1 + 1 && y2 == y1 {
@@ -28,7 +28,7 @@ pub fn has_fence_between(
 ///|
 pub fn flood_fill_regions(
   grid : @types.Grid,
-  fences : Array[@types.FenceEdge]
+  fences : Array[@types.FenceEdge],
 ) -> Array[@types.Region] {
   let w = grid.width
   let h = grid.height
@@ -40,7 +40,7 @@ pub fn flood_fill_regions(
   let regions : Array[@types.Region] = []
   for y in 0..<h {
     for x in 0..<w {
-      if !(visited[y * w + x]) {
+      if !visited[y * w + x] {
         // BFS from this cell
         let tiles : Array[@types.Vec2i] = []
         let queue : Array[@types.Vec2i] = [@types.vec2i(x, y)]
@@ -63,8 +63,8 @@ pub fn flood_fill_regions(
           for d in 0..<dirs.length() {
             let nx = cur.x + dirs[d].x
             let ny = cur.y + dirs[d].y
-            if nx >= 0 && nx < w && ny >= 0 && ny < h && !(visited[ny * w + nx]) {
-              if !(has_fence_between(fences, cur.x, cur.y, nx, ny)) {
+            if nx >= 0 && nx < w && ny >= 0 && ny < h && !visited[ny * w + nx] {
+              if !has_fence_between(fences, cur.x, cur.y, nx, ny) {
                 visited[ny * w + nx] = true
                 queue.push(@types.vec2i(nx, ny))
               }
@@ -82,9 +82,7 @@ pub fn flood_fill_regions(
             _ => ()
           }
         }
-        regions.push(
-          { tiles, houses, has_road, area: tiles.length() },
-        )
+        regions.push({ tiles, houses, has_road, area: tiles.length() })
       }
     }
   }
@@ -95,7 +93,7 @@ pub fn flood_fill_regions(
 pub fn find_region_for_tile(
   regions : Array[@types.Region],
   x : Int,
-  y : Int
+  y : Int,
 ) -> Int {
   for i in 0..<regions.length() {
     let r = regions[i]

@@ -2,13 +2,23 @@
 fn draw_title(game : @types.Game) -> Unit {
   let _ = game
   // Dark background
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg,
+  )
   // Decorative border
   @raylib.draw_rectangle_lines(
-    20, 20, @types.screen_width - 40, @types.screen_height - 40, @types.color_desert,
+    20,
+    20,
+    @types.screen_width - 40,
+    @types.screen_height - 40,
+    @types.color_desert,
   )
   @raylib.draw_rectangle_lines(
-    24, 24, @types.screen_width - 48, @types.screen_height - 48, @types.color_desert,
+    24,
+    24,
+    @types.screen_width - 48,
+    @types.screen_height - 48,
+    @types.color_desert,
   )
   // Title
   let title = "CARTOGRAPHER"
@@ -31,18 +41,10 @@ fn draw_title(game : @types.Game) -> Unit {
     @types.color_parchment,
   )
   // Decorative map elements
-  draw_feature(
-    @types.screen_width / 2 - 120, 380, Mountain, 40,
-  )
-  draw_feature(
-    @types.screen_width / 2 - 40, 380, Forest, 40,
-  )
-  draw_feature(
-    @types.screen_width / 2 + 40, 380, Town, 40,
-  )
-  draw_feature(
-    @types.screen_width / 2 + 120, 380, Lake, 40,
-  )
+  draw_feature(@types.screen_width / 2 - 120, 380, Mountain, 40)
+  draw_feature(@types.screen_width / 2 - 40, 380, Forest, 40)
+  draw_feature(@types.screen_width / 2 + 40, 380, Town, 40)
+  draw_feature(@types.screen_width / 2 + 120, 380, Lake, 40)
   // Start prompt
   let prompt = "Press ENTER to begin"
   let pw = @draw.measure_text(prompt, 28)
@@ -65,7 +67,9 @@ fn draw_title(game : @types.Game) -> Unit {
 
 ///|
 fn draw_tier_select(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg,
+  )
   let title = "Select Tier"
   let tw = @draw.measure_text(title, 40)
   @draw.draw_text(
@@ -126,7 +130,9 @@ fn draw_tier_select(game : @types.Game) -> Unit {
 
 ///|
 fn draw_level_select(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg,
+  )
   let tier_str = @types.tier_name(game.current_tier)
   let title = "Select Level - \{tier_str}"
   let tw = @draw.measure_text(title, 36)
@@ -179,7 +185,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @types.color_parchment,
     )
     if score.completed {
-      @draw.draw_text("Completed", bx + 10, by + 55, 14, @types.color_clue_satisfied)
+      @draw.draw_text(
+        "Completed",
+        bx + 10,
+        by + 55,
+        14,
+        @types.color_clue_satisfied,
+      )
     }
     draw_stars_inline(bx + 10, by + 75, score.stars, 3)
   }
@@ -194,7 +206,9 @@ fn draw_level_select(game : @types.Game) -> Unit {
 
 ///|
 fn draw_results(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg,
+  )
   let level = game.levels[game.current_level]
   let score = game.scores[game.current_level]
   let title = "Level Complete!"

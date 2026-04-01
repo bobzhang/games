@@ -3,7 +3,7 @@
 pub fn check_wall_collision(
   ball_pos : @types.Vec2,
   ball_radius : Float,
-  wall : @types.Wall
+  wall : @types.Wall,
 ) -> (Bool, @types.Vec2, @types.Vec2) {
   let (dist, t) = @types.point_to_segment_dist(ball_pos, wall.p1, wall.p2)
   if dist < ball_radius {
@@ -29,7 +29,7 @@ pub fn check_circle_collision(
   ball_pos : @types.Vec2,
   ball_radius : Float,
   obj_pos : @types.Vec2,
-  obj_radius : Float
+  obj_radius : Float,
 ) -> Bool {
   let dist = @types.vec2_dist(ball_pos, obj_pos)
   dist < ball_radius + obj_radius
@@ -42,7 +42,7 @@ pub fn check_gate(
   ball_pos : @types.Vec2,
   ball_vel : @types.Vec2,
   ball_radius : Float,
-  gate : @types.Gate
+  gate : @types.Gate,
 ) -> (Bool, Bool) {
   let (dist, _t) = @types.point_to_segment_dist(ball_pos, gate.p1, gate.p2)
   if dist < ball_radius {
@@ -65,7 +65,7 @@ pub fn simulate_step(game : @types.Game, dt : Float) -> Unit {
   let new_balls : Array[@types.Ball] = []
   for i in 0..<game.balls.length() {
     let ball = game.balls[i]
-    if !(ball.active) {
+    if !ball.active {
       continue
     }
     // Store trail
@@ -109,7 +109,9 @@ pub fn simulate_step(game : @types.Game, dt : Float) -> Unit {
     // Check wall collisions
     for w in 0..<level.walls.length() {
       let (hit, normal, _contact) = check_wall_collision(
-        ball.pos, br, level.walls[w],
+        ball.pos,
+        br,
+        level.walls[w],
       )
       if hit {
         let reflected = @types.vec2_reflect(ball.vel, normal)
@@ -125,7 +127,7 @@ pub fn simulate_step(game : @types.Game, dt : Float) -> Unit {
     // Check target collisions
     for t in 0..<level.targets.length() {
       let target = level.targets[t]
-      if !(target.hit) &&
+      if !target.hit &&
         check_circle_collision(ball.pos, br, target.pos, target.radius) {
         target.hit = true
         target.hit_timer = 1.0
@@ -148,15 +150,9 @@ pub fn simulate_step(game : @types.Game, dt : Float) -> Unit {
             sp.radius + br + 2.0,
           )
           let spawn_pos = @types.vec2_add(sp.pos, push)
-          let b1 = @types.new_ball(
-            spawn_pos,
-            @types.vec2_scale(dir1, speed),
-          )
+          let b1 = @types.new_ball(spawn_pos, @types.vec2_scale(dir1, speed))
           b1.bounce_count = ball.bounce_count
-          let b2 = @types.new_ball(
-            spawn_pos,
-            @types.vec2_scale(dir2, speed),
-          )
+          let b2 = @types.new_ball(spawn_pos, @types.vec2_scale(dir2, speed))
           b2.bounce_count = ball.bounce_count
           new_balls.push(b1)
           new_balls.push(b2)
@@ -169,9 +165,7 @@ pub fn simulate_step(game : @types.Game, dt : Float) -> Unit {
       if check_circle_collision(ball.pos, br, bump.pos, bump.radius) {
         bump.hit_timer = 0.3
         // Amplified bounce: reflect away from bumper center with speed boost
-        let away = @types.vec2_normalize(
-          @types.vec2_sub(ball.pos, bump.pos),
-        )
+        let away = @types.vec2_normalize(@types.vec2_sub(ball.pos, bump.pos))
         let speed : Float = @types.vec2_len(ball.vel) * 1.2
         let clamped : Float = @types.minf(speed, @types.ball_speed * 1.5)
         ball.vel.x = away.x * clamped
@@ -206,7 +200,7 @@ pub fn simulate_step(game : @types.Game, dt : Float) -> Unit {
     // Check pickup collisions
     for p in 0..<level.pickups.length() {
       let pk = level.pickups[p]
-      if !(pk.collected) &&
+      if !pk.collected &&
         check_circle_collision(ball.pos, br, pk.pos, pk.radius) {
         pk.collected = true
       }

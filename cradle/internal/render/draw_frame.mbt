@@ -139,12 +139,7 @@ fn draw_targets(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 60, 60, alpha),
       )
       // Inner dot
-      @raylib.draw_circle(
-        px,
-        py,
-        2.0,
-        @raylib.Color::new(255, 200, 200, 255),
-      )
+      @raylib.draw_circle(px, py, 2.0, @raylib.Color::new(255, 200, 200, 255))
     }
   }
 }

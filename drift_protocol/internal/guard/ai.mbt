@@ -22,7 +22,7 @@ pub fn update_guards(game : @types.Game, dt : Float) -> Unit {
 fn update_guard_detection(
   g : @types.Guard,
   game : @types.Game,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   let can_see = point_in_vision_cone(
     g,
@@ -60,7 +60,7 @@ fn update_guard_detection(
 /// Generate search offsets around the investigation point
 fn generate_search_offsets(
   g : @types.Guard,
-  tiles : Array[Array[@types.TileKind]]
+  tiles : Array[Array[@types.TileKind]],
 ) -> Array[@types.Vec2i] {
   let offsets : Array[@types.Vec2i] = []
   // Search in a pattern around the investigation point: cardinal then diagonal
@@ -122,9 +122,7 @@ fn update_guard_state(g : @types.Guard, game : @types.Game, dt : Float) -> Unit 
         }
       }
       // Start searching if reached investigation point and not already searching
-      if !g.searching &&
-        g.gx == g.investigate_x &&
-        g.gy == g.investigate_y {
+      if !g.searching && g.gx == g.investigate_x && g.gy == g.investigate_y {
         g.searching = true
         g.search_offsets = generate_search_offsets(g, game.level.tiles)
         g.search_index = 0
@@ -161,7 +159,7 @@ fn update_guard_state(g : @types.Guard, game : @types.Game, dt : Float) -> Unit 
 fn update_guard_movement(
   g : @types.Guard,
   game : @types.Game,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   g.move_timer -= dt
   if g.move_timer > 0.0 {
@@ -243,14 +241,19 @@ fn move_guard_toward(
   g : @types.Guard,
   tx : Int,
   ty : Int,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   step_toward(g, tx, ty, game)
 }
 
 ///|
 /// Take one step toward target
-fn step_toward(g : @types.Guard, tx : Int, ty : Int, game : @types.Game) -> Unit {
+fn step_toward(
+  g : @types.Guard,
+  tx : Int,
+  ty : Int,
+  game : @types.Game,
+) -> Unit {
   let dx = tx - g.gx
   let dy = ty - g.gy
   // Prefer axis with larger distance
@@ -264,14 +267,12 @@ fn step_toward(g : @types.Guard, tx : Int, ty : Int, game : @types.Game) -> Unit
       nx -= 1
       g.facing = Left
     }
-  } else {
-    if dy > 0 {
-      ny += 1
-      g.facing = Down
-    } else if dy < 0 {
-      ny -= 1
-      g.facing = Up
-    }
+  } else if dy > 0 {
+    ny += 1
+    g.facing = Down
+  } else if dy < 0 {
+    ny -= 1
+    g.facing = Up
   }
   g.facing_angle = @types.direction_angle(g.facing)
   // Check if can move
@@ -342,7 +343,7 @@ pub fn guards_hear_noise(
   game : @types.Game,
   nx : Int,
   ny : Int,
-  radius : Int
+  radius : Int,
 ) -> Unit {
   for i in 0..<game.level.guards.length() {
     let g = game.level.guards[i]
@@ -388,11 +389,11 @@ pub fn update_cameras(game : @types.Game, dt : Float) -> Unit {
       )
       // Check if camera sees player
       if point_in_camera_vision(
-        cam,
-        game.player.gx,
-        game.player.gy,
-        game.level.tiles,
-      ) {
+          cam,
+          game.player.gx,
+          game.player.gy,
+          game.level.tiles,
+        ) {
         // Camera detection triggers suspicion in nearby guards
         alert_nearby_guards(game, game.player.gx, game.player.gy)
         game.player.detected_count += 1

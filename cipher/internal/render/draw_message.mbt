@@ -85,13 +85,7 @@ fn draw_message_area(game : @types.Game, level : @types.Level) -> Unit {
   )
   // Label
   @draw.draw_text("CIPHERTEXT:", base_x, base_y, 14, @types.color_dim)
-  @draw.draw_text(
-    "DECODED:",
-    base_x,
-    base_y + cell_h + 5,
-    14,
-    @types.color_dim,
-  )
+  @draw.draw_text("DECODED:", base_x, base_y + cell_h + 5, 14, @types.color_dim)
   let ct = level.ciphertext
   let mut col = 0
   let mut row = 0
@@ -159,7 +153,13 @@ fn draw_message_area(game : @types.Game, level : @types.Level) -> Unit {
         }
       } else {
         // Space or punctuation
-        @draw.draw_text(c.to_string(), x + 6, cipher_y + 6, 20, @types.color_dim)
+        @draw.draw_text(
+          c.to_string(),
+          x + 6,
+          cipher_y + 6,
+          20,
+          @types.color_dim,
+        )
         @draw.draw_text(c.to_string(), x + 6, plain_y + 6, 20, @types.color_dim)
       }
     }

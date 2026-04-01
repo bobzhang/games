@@ -10,7 +10,13 @@ fn draw_tray(game : @types.Game) -> Unit {
   let rows = (tray_count + cols - 1) / cols
   let tray_w = cols * (ps + gap) + gap
   let tray_h = rows * (ps + gap) + gap + 30
-  @raylib.draw_rectangle(tx - gap, ty - 30, tray_w, tray_h, @types.color_tray_bg)
+  @raylib.draw_rectangle(
+    tx - gap,
+    ty - 30,
+    tray_w,
+    tray_h,
+    @types.color_tray_bg,
+  )
   @raylib.draw_rectangle_lines(
     tx - gap,
     ty - 30,
@@ -30,7 +36,13 @@ fn draw_tray(game : @types.Game) -> Unit {
     draw_mini_patch(patch, px, py, ps)
     // Highlight selected
     if game.selected_tray == i {
-      @raylib.draw_rectangle(px - 1, py - 1, ps + 2, ps + 2, @types.color_selected)
+      @raylib.draw_rectangle(
+        px - 1,
+        py - 1,
+        ps + 2,
+        ps + 2,
+        @types.color_selected,
+      )
     }
   }
   // Controls help below tray
@@ -64,7 +76,13 @@ fn draw_mini_patch(patch : @types.Patch, x : Int, y : Int, size : Int) -> Unit {
   @raylib.draw_rectangle(x, y + m, t, size - m * 2, wc)
   // Pinned indicator
   if patch.pinned {
-    @draw.draw_text("P", x + size / 2 - 4, y + size / 2 - 6, 12, @types.color_text)
+    @draw.draw_text(
+      "P",
+      x + size / 2 - 4,
+      y + size / 2 - 6,
+      12,
+      @types.color_text,
+    )
   }
 }
 
@@ -83,7 +101,10 @@ fn draw_hud(game : @types.Game) -> Unit {
   let title = if game.is_daily {
     "Daily Quilt"
   } else {
-    "Level " + game.current_level.to_string() + " - " + @types.tier_name(game.current_tier)
+    "Level " +
+    game.current_level.to_string() +
+    " - " +
+    @types.tier_name(game.current_tier)
   }
   @draw.draw_text(title, @types.grid_offset_x, 10, 28, @types.color_title)
   // Rotation and swap counters
@@ -116,11 +137,14 @@ fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(bar_x, bar_y, bar_w, bar_h, @types.color_progress_bg)
   if total_pairs > 0 {
     let fill_w = matched_pairs * bar_w / total_pairs
-    @raylib.draw_rectangle(bar_x, bar_y, fill_w, bar_h, @types.color_progress_fill)
+    @raylib.draw_rectangle(
+      bar_x, bar_y, fill_w, bar_h, @types.color_progress_fill,
+    )
   }
-  @raylib.draw_rectangle_lines(bar_x, bar_y, bar_w, bar_h, @types.color_grid_line)
-  let progress_text =
-    matched_pairs.to_string() +
+  @raylib.draw_rectangle_lines(
+    bar_x, bar_y, bar_w, bar_h, @types.color_grid_line,
+  )
+  let progress_text = matched_pairs.to_string() +
     "/" +
     total_pairs.to_string() +
     " edges matched  |  " +
@@ -128,7 +152,13 @@ fn draw_hud(game : @types.Game) -> Unit {
     "/" +
     total_cells.to_string() +
     " placed"
-  @draw.draw_text(progress_text, bar_x + bar_w + 10, bar_y - 1, 14, @types.color_text_light)
+  @draw.draw_text(
+    progress_text,
+    bar_x + bar_w + 10,
+    bar_y - 1,
+    14,
+    @types.color_text_light,
+  )
   // Play state indicator
   let state_text = match game.play_state {
     Placing => "Click tray patch, then grid cell"
@@ -149,7 +179,10 @@ fn draw_hud(game : @types.Game) -> Unit {
 
 ///|
 fn draw_controls_help(x : Int, y : Int) -> Unit {
-  @draw.draw_text("[R] Rotate  [Click] Place/Select  [Right-click] Remove  [Esc] Back", x, y, 13, @types.color_text_light)
+  @draw.draw_text(
+    "[R] Rotate  [Click] Place/Select  [Right-click] Remove  [Esc] Back", x, y, 13,
+    @types.color_text_light,
+  )
 }
 
 ///|
@@ -164,7 +197,13 @@ fn draw_legend() -> Unit {
     let c = @types.pattern_color(patterns[i])
     @raylib.draw_rectangle(px, py + 2, 14, 14, c)
     @raylib.draw_rectangle_lines(px, py + 2, 14, 14, @types.color_grid_line)
-    @draw.draw_text(@types.pattern_name(patterns[i]), px + 20, py, 16, @types.color_text)
+    @draw.draw_text(
+      @types.pattern_name(patterns[i]),
+      px + 20,
+      py,
+      16,
+      @types.color_text,
+    )
   }
   // Wildcard
   let wy = ly + 24 + patterns.length() * 22
@@ -189,13 +228,12 @@ fn draw_stars(x : Int, y : Int, count : Int, size : Int) -> Unit {
       @types.color_star_empty
     }
     // Simple star as filled circle + text
-    @raylib.draw_circle(sx + size / 2, y + size / 2, Float::from_int(size / 2), c)
-    @draw.draw_text(
-      "*",
-      sx + size / 2 - 4,
-      y + size / 2 - 8,
-      16,
-      @raylib.white,
+    @raylib.draw_circle(
+      sx + size / 2,
+      y + size / 2,
+      Float::from_int(size / 2),
+      c,
     )
+    @draw.draw_text("*", sx + size / 2 - 4, y + size / 2 - 8, 16, @raylib.white)
   }
 }

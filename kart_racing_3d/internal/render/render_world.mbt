@@ -1799,27 +1799,15 @@ fn @types.Game::draw_hazard_overlays(game : @types.Game) -> Unit {
         let lava_color = @raylib.Color::new(r_val, g_val, 10, alpha)
         let ov_y = mid_y + 0.04
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(
-            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp0.x + px * half_w, ov_y, wp0.z + pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
-          ),
+          @raylib.Vector3::new(wp0.x - px * half_w, ov_y, wp0.z - pz * half_w),
+          @raylib.Vector3::new(wp0.x + px * half_w, ov_y, wp0.z + pz * half_w),
+          @raylib.Vector3::new(wp1.x + px * half_w, ov_y, wp1.z + pz * half_w),
           lava_color,
         )
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(
-            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x - px * half_w, ov_y, wp1.z - pz * half_w,
-          ),
+          @raylib.Vector3::new(wp0.x - px * half_w, ov_y, wp0.z - pz * half_w),
+          @raylib.Vector3::new(wp1.x + px * half_w, ov_y, wp1.z + pz * half_w),
+          @raylib.Vector3::new(wp1.x - px * half_w, ov_y, wp1.z - pz * half_w),
           lava_color,
         )
         // Lava particles when active
@@ -1841,7 +1829,7 @@ fn @types.Game::draw_hazard_overlays(game : @types.Game) -> Unit {
           )
         }
       }
-      FallingRocks => {
+      FallingRocks =>
         // Draw dark cube obstacles at falling rock positions
         for r in 0..<game.falling_rocks_count {
           let rock = game.falling_rocks[r]
@@ -1864,7 +1852,6 @@ fn @types.Game::draw_hazard_overlays(game : @types.Game) -> Unit {
             @raylib.Color::new(50, 45, 40, 200),
           )
         }
-      }
       WaterCurrent => {
         // Blue overlay with animated arrow decals
         let water_alpha_f : Float = 100.0 + @math.sinf(time_f * 3.0) * 30.0
@@ -1872,33 +1859,21 @@ fn @types.Game::draw_hazard_overlays(game : @types.Game) -> Unit {
         let water_color = @raylib.Color::new(50, 120, 220, water_alpha)
         let ov_y = mid_y + 0.04
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(
-            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp0.x + px * half_w, ov_y, wp0.z + pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
-          ),
+          @raylib.Vector3::new(wp0.x - px * half_w, ov_y, wp0.z - pz * half_w),
+          @raylib.Vector3::new(wp0.x + px * half_w, ov_y, wp0.z + pz * half_w),
+          @raylib.Vector3::new(wp1.x + px * half_w, ov_y, wp1.z + pz * half_w),
           water_color,
         )
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(
-            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x - px * half_w, ov_y, wp1.z - pz * half_w,
-          ),
+          @raylib.Vector3::new(wp0.x - px * half_w, ov_y, wp0.z - pz * half_w),
+          @raylib.Vector3::new(wp1.x + px * half_w, ov_y, wp1.z + pz * half_w),
+          @raylib.Vector3::new(wp1.x - px * half_w, ov_y, wp1.z - pz * half_w),
           water_color,
         )
         // Animated arrow chevrons
         let arrow_color = @raylib.Color::new(100, 180, 255, water_alpha)
         let num_arrows = 3
-        let anim_offset = (time_f * 2.0) % 1.0
+        let anim_offset = time_f * 2.0 % 1.0
         for ai in 0..<num_arrows {
           let at = (Float::from_int(ai) + anim_offset) /
             Float::from_int(num_arrows)
@@ -1911,10 +1886,14 @@ fn @types.Game::draw_hazard_overlays(game : @types.Game) -> Unit {
           let fwd_off : Float = 0.4
           @raylib.draw_triangle_3d(
             @raylib.Vector3::new(
-              ax - dx / dist * fwd_off, ay, az - dz / dist * fwd_off,
+              ax - dx / dist * fwd_off,
+              ay,
+              az - dz / dist * fwd_off,
             ),
             @raylib.Vector3::new(
-              ax + dx / dist * fwd_off, ay, az + dz / dist * fwd_off,
+              ax + dx / dist * fwd_off,
+              ay,
+              az + dz / dist * fwd_off,
             ),
             @raylib.Vector3::new(tip_x, ay, tip_z),
             arrow_color,
@@ -1929,27 +1908,15 @@ fn @types.Game::draw_hazard_overlays(game : @types.Game) -> Unit {
         let ice_color = @raylib.Color::new(200, 220, 255, ice_alpha)
         let ov_y = mid_y + 0.04
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(
-            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp0.x + px * half_w, ov_y, wp0.z + pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
-          ),
+          @raylib.Vector3::new(wp0.x - px * half_w, ov_y, wp0.z - pz * half_w),
+          @raylib.Vector3::new(wp0.x + px * half_w, ov_y, wp0.z + pz * half_w),
+          @raylib.Vector3::new(wp1.x + px * half_w, ov_y, wp1.z + pz * half_w),
           ice_color,
         )
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(
-            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
-          ),
-          @raylib.Vector3::new(
-            wp1.x - px * half_w, ov_y, wp1.z - pz * half_w,
-          ),
+          @raylib.Vector3::new(wp0.x - px * half_w, ov_y, wp0.z - pz * half_w),
+          @raylib.Vector3::new(wp1.x + px * half_w, ov_y, wp1.z + pz * half_w),
+          @raylib.Vector3::new(wp1.x - px * half_w, ov_y, wp1.z - pz * half_w),
           ice_color,
         )
         // Specular highlight stripe
@@ -1976,27 +1943,15 @@ fn @types.Game::draw_hazard_overlays(game : @types.Game) -> Unit {
         let ov_y = mid_y + 0.04
         let sc_hw = half_w * 0.7
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(
-            wp0.x - px * sc_hw, ov_y, wp0.z - pz * sc_hw,
-          ),
-          @raylib.Vector3::new(
-            wp0.x + px * sc_hw, ov_y, wp0.z + pz * sc_hw,
-          ),
-          @raylib.Vector3::new(
-            wp1.x + px * sc_hw, ov_y, wp1.z + pz * sc_hw,
-          ),
+          @raylib.Vector3::new(wp0.x - px * sc_hw, ov_y, wp0.z - pz * sc_hw),
+          @raylib.Vector3::new(wp0.x + px * sc_hw, ov_y, wp0.z + pz * sc_hw),
+          @raylib.Vector3::new(wp1.x + px * sc_hw, ov_y, wp1.z + pz * sc_hw),
           gold_color,
         )
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(
-            wp0.x - px * sc_hw, ov_y, wp0.z - pz * sc_hw,
-          ),
-          @raylib.Vector3::new(
-            wp1.x + px * sc_hw, ov_y, wp1.z + pz * sc_hw,
-          ),
-          @raylib.Vector3::new(
-            wp1.x - px * sc_hw, ov_y, wp1.z - pz * sc_hw,
-          ),
+          @raylib.Vector3::new(wp0.x - px * sc_hw, ov_y, wp0.z - pz * sc_hw),
+          @raylib.Vector3::new(wp1.x + px * sc_hw, ov_y, wp1.z + pz * sc_hw),
+          @raylib.Vector3::new(wp1.x - px * sc_hw, ov_y, wp1.z - pz * sc_hw),
           gold_color,
         )
         // Gold dashed center line

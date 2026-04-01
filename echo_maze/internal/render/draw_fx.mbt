@@ -6,15 +6,9 @@ pub fn draw_scanlines(game : @types.Game) -> Unit {
   let step = 4
   for y_idx in 0..<(sh / step) {
     let y = y_idx * step
-    let offset = (game.frame_count / 4) % step
+    let offset = game.frame_count / 4 % step
     if (y + offset) % (step * 2) < step {
-      @raylib.draw_line(
-        0,
-        y,
-        sw,
-        y,
-        @raylib.Color::new(0, 0, 0, 8),
-      )
+      @raylib.draw_line(0, y, sw, y, @raylib.Color::new(0, 0, 0, 8))
     }
   }
 }
@@ -22,9 +16,8 @@ pub fn draw_scanlines(game : @types.Game) -> Unit {
 ///|
 /// Draw a pulsing border when player is in danger (near max ticks)
 pub fn draw_danger_border(game : @types.Game) -> Unit {
-  let ratio : Float = Float::from_int(game.tick) / Float::from_int(
-    game.max_ticks,
-  )
+  let ratio : Float = Float::from_int(game.tick) /
+    Float::from_int(game.max_ticks)
   if ratio < 0.75 {
     return
   }
@@ -63,7 +56,13 @@ pub fn draw_failed_overlay(game : @types.Game) -> Unit {
   // Red flash
   let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.15) * 0.5 + 0.5
   let alpha_f : Float = 40.0 * pulse
-  @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(240, 20, 20, alpha_f.to_int()))
+  @raylib.draw_rectangle(
+    0,
+    0,
+    sw,
+    sh,
+    @raylib.Color::new(240, 20, 20, alpha_f.to_int()),
+  )
   // Text
   let text = "CAUGHT!"
   let size = 48
@@ -77,13 +76,7 @@ pub fn draw_failed_overlay(game : @types.Game) -> Unit {
   )
   let hint = "Press R to retry"
   let hw = @draw.measure_text(hint, 18)
-  @draw.draw_text(
-    hint,
-    sw / 2 - hw / 2,
-    sh / 3 + 60,
-    18,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(hint, sw / 2 - hw / 2, sh / 3 + 60, 18, @types.color_hud_text)
 }
 
 ///|
@@ -189,9 +182,8 @@ pub fn draw_ghost_collision_preview(game : @types.Game) -> Unit {
           let gx = Float::from_int(ox + ghost.pos.x * ts + ts / 2)
           let gy = Float::from_int(oy + ghost.pos.y * ts + ts / 2)
           // Warning ring around ghost about to be caught
-          let pulse = @types.sinf(
-            Float::from_int(game.frame_count) * 0.4,
-          ) * 4.0 + 20.0
+          let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.4) * 4.0 +
+            20.0
           @raylib.draw_circle_lines_v(
             @raylib.Vector2::new(gx, gy),
             pulse,
@@ -219,7 +211,7 @@ pub fn draw_ghost_button_feedback(game : @types.Game) -> Unit {
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
   match game.maze {
-    Some(maze) => {
+    Some(maze) =>
       for fb in game.ghost_button_feedback {
         if fb.ghost_index >= game.ghosts.length() {
           continue
@@ -233,7 +225,7 @@ pub fn draw_ghost_button_feedback(game : @types.Game) -> Unit {
               let bx = Float::from_int(ox + x * ts + ts / 2)
               let by = Float::from_int(oy + y * ts + ts / 2)
               // Expanding ring effect with ghost's color
-              let progress = (1.0 - fb.timer.to_double() / 0.8)
+              let progress = 1.0 - fb.timer.to_double() / 0.8
               let radius = Float::from_double(8.0 + 20.0 * progress)
               let alpha = (200.0 * (1.0 - progress)).to_int()
               let gr = ghost_color.r.to_int()
@@ -259,7 +251,6 @@ pub fn draw_ghost_button_feedback(game : @types.Game) -> Unit {
           }
         }
       }
-    }
     None => ()
   }
 }

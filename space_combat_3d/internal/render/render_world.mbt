@@ -57,11 +57,7 @@ fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
 
   // Use ship orientation basis for camera with lag
   // Camera lag on yaw/pitch via interpolating camera direction
-  game.cam_yaw = @types.lerpf(
-    game.cam_yaw,
-    p.yaw,
-    1.0 - @types.camera_lag_yaw,
-  )
+  game.cam_yaw = @types.lerpf(game.cam_yaw, p.yaw, 1.0 - @types.camera_lag_yaw)
   game.cam_pitch = @types.lerpf(
     game.cam_pitch,
     p.pitch,
@@ -1324,7 +1320,8 @@ fn @types.Game::draw_shock_rings(game : @types.Game) -> Unit {
     // Ring edge cubes for visible ring shape
     let segments = 12
     for s in 0..<segments {
-      let angle = Float::from_int(s) * (@types.two_pi / Float::from_int(segments))
+      let angle = Float::from_int(s) *
+        (@types.two_pi / Float::from_int(segments))
       let rx = ring.x + @math.cosf(angle) * ring.radius
       let rz = ring.z + @math.sinf(angle) * ring.radius
       @raylib.draw_cube(

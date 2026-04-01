@@ -1,6 +1,9 @@
 ///|
 /// Check if current biome ratios meet the target ratios.
-pub fn check_targets(grid : @types.HexGrid, targets : @types.TargetRatio) -> Bool {
+pub fn check_targets(
+  grid : @types.HexGrid,
+  targets : @types.TargetRatio,
+) -> Bool {
   let forest_r = @types.biome_ratio(grid, Forest)
   let ocean_r = @types.biome_ratio(grid, Ocean)
   let desert_r = @types.biome_ratio(grid, Desert)
@@ -16,7 +19,7 @@ pub fn check_targets(grid : @types.HexGrid, targets : @types.TargetRatio) -> Boo
 /// Get ratio status for each biome: -1 = below min, 0 = in range, 1 = above max.
 pub fn ratio_status(
   grid : @types.HexGrid,
-  targets : @types.TargetRatio
+  targets : @types.TargetRatio,
 ) -> (Int, Int, Int) {
   let forest_r = @types.biome_ratio(grid, Forest)
   let ocean_r = @types.biome_ratio(grid, Ocean)
@@ -51,7 +54,7 @@ pub fn ratio_status(
 pub fn check_failure(
   grid : @types.HexGrid,
   budget : @types.PaintBudget,
-  targets : @types.TargetRatio
+  targets : @types.TargetRatio,
 ) -> Bool {
   if check_targets(grid, targets) {
     return false
@@ -88,7 +91,7 @@ pub fn calculate_stars(
   targets : @types.TargetRatio,
   budget : @types.PaintBudget,
   turns : Int,
-  par : Int
+  par : Int,
 ) -> Int {
   if !check_targets(grid, targets) {
     return 0

@@ -14,7 +14,7 @@ fn make_level(
   wind~ : Int,
   frost~ : Int,
   heat~ : Int,
-  par~ : Int
+  par~ : Int,
 ) -> @types.Level {
   let size = 8
   {

@@ -193,7 +193,10 @@ test "total_stars" {
 
 ///|
 test "find_node_at" {
-  let nodes : Array[Node] = [new_node(0, 2, 3, Pulley), new_node(1, 5, 7, Anchor)]
+  let nodes : Array[Node] = [
+    new_node(0, 2, 3, Pulley),
+    new_node(1, 5, 7, Anchor),
+  ]
   inspect(find_node_at(nodes, 2, 3), content="0")
   inspect(find_node_at(nodes, 5, 7), content="1")
   inspect(find_node_at(nodes, 0, 0), content="-1")

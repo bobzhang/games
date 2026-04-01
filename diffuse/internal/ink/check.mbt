@@ -51,7 +51,7 @@ pub fn count_waste(grid : @types.Grid) -> Int {
 pub fn compute_stars(
   grid : @types.Grid,
   drops_used : Int,
-  par_drops : Int
+  par_drops : Int,
 ) -> @types.StarRating {
   if !all_targets_satisfied(grid) {
     return Zero

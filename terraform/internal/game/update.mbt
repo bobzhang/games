@@ -73,12 +73,12 @@ fn update_tier_select(game : @types.Game) -> Unit {
       if mx >= start_x && mx <= start_x + card_w {
         game.current_tier = Seeds
         game.screen = LevelSelect
-      } else if mx >= start_x + card_w + card_gap && mx <= start_x + card_w *
-        2 + card_gap {
+      } else if mx >= start_x + card_w + card_gap &&
+        mx <= start_x + card_w * 2 + card_gap {
         game.current_tier = Balance
         game.screen = LevelSelect
-      } else if mx >= start_x + (card_w + card_gap) * 2 && mx <= start_x +
-        card_w * 3 + card_gap * 2 {
+      } else if mx >= start_x + (card_w + card_gap) * 2 &&
+        mx <= start_x + card_w * 3 + card_gap * 2 {
         game.current_tier = Harmony
         game.screen = LevelSelect
       }
@@ -96,8 +96,14 @@ fn update_level_select(game : @types.Game) -> Unit {
   let count = end_idx - start_idx
   // Number keys 1-9 select levels
   let keys = [
-    @raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree, @raylib.KeyFour,
-    @raylib.KeyFive, @raylib.KeySix, @raylib.KeySeven, @raylib.KeyEight,
+    @raylib.KeyOne,
+    @raylib.KeyTwo,
+    @raylib.KeyThree,
+    @raylib.KeyFour,
+    @raylib.KeyFive,
+    @raylib.KeySix,
+    @raylib.KeySeven,
+    @raylib.KeyEight,
     @raylib.KeyNine,
   ]
   for i in 0..<@types.mini(count, keys.length()) {
@@ -139,7 +145,9 @@ fn start_level(game : @types.Game, level_idx : Int) -> Unit {
   game.current_tier = level.tier
   game.grid = @levels.init_grid_from_level(level)
   game.budget = @types.new_budget(
-    level.budget.forest, level.budget.ocean, level.budget.desert,
+    level.budget.forest,
+    level.budget.ocean,
+    level.budget.desert,
   )
   game.targets = level.targets
   game.par_turns = level.par_turns
@@ -258,9 +266,8 @@ fn update_painting(game : @types.Game) -> Unit {
   }
   // Tab to cycle biomes
   if @raylib.is_key_pressed(@raylib.KeyTab) {
-    if @raylib.is_key_down(@raylib.KeyLeftShift) || @raylib.is_key_down(
-      @raylib.KeyRightShift,
-    ) {
+    if @raylib.is_key_down(@raylib.KeyLeftShift) ||
+      @raylib.is_key_down(@raylib.KeyRightShift) {
       cycle_biome_backward(game)
     } else {
       cycle_biome_forward(game)
@@ -298,9 +305,8 @@ fn update_painting(game : @types.Game) -> Unit {
   }
   // Undo paint
   if @raylib.is_key_pressed(@raylib.KeyU) {
-    if @raylib.is_key_down(@raylib.KeyLeftShift) || @raylib.is_key_down(
-      @raylib.KeyRightShift,
-    ) {
+    if @raylib.is_key_down(@raylib.KeyLeftShift) ||
+      @raylib.is_key_down(@raylib.KeyRightShift) {
       undo_resolve(game)
     } else {
       undo_last(game)
@@ -311,7 +317,8 @@ fn update_painting(game : @types.Game) -> Unit {
     game.show_preview = !game.show_preview
     if game.show_preview {
       game.preview_tiles = @biome.preview_tile_changes(game.grid)
-      game.message = "Preview: " + game.preview_tiles.length().to_string() +
+      game.message = "Preview: " +
+        game.preview_tiles.length().to_string() +
         " tiles will change"
       game.message_timer = 1.0
     } else {
@@ -362,9 +369,7 @@ fn try_paint(game : @types.Game, col : Int, row : Int) -> Unit {
     return
   }
   // Save undo entry
-  game.undo_stack.push(
-    { col, row, prev_biome: tile.biome, biome_used: biome },
-  )
+  game.undo_stack.push({ col, row, prev_biome: tile.biome, biome_used: biome })
   // Apply paint
   @types.set_biome(game.grid, col, row, biome)
   @types.deduct_budget(game.budget, biome)
@@ -400,7 +405,8 @@ fn update_resolving(game : @types.Game, dt : Float) -> Unit {
   if game.spread_queue.length() > 0 {
     game.spread_timer = game.spread_timer + dt
     let spread_delay : Float = 0.04 // time between each tile flip
-    while game.spread_timer >= spread_delay && game.spread_index < game.spread_queue.length() {
+    while game.spread_timer >= spread_delay &&
+          game.spread_index < game.spread_queue.length() {
       let idx = game.spread_queue[game.spread_index]
       // Mark this tile as changed for visual feedback
       if idx < game.changed_tiles.length() {
@@ -451,13 +457,19 @@ fn update_resolving(game : @types.Game, dt : Float) -> Unit {
       game.spread_index = 0
       game.spread_timer = 0.0
       // Reset changed_tiles so animation reveals them one by one
-      game.changed_tiles = Array::make(game.grid.width * game.grid.height, false)
+      game.changed_tiles = Array::make(
+        game.grid.width * game.grid.height,
+        false,
+      )
     } else {
       // Intermediate step - animate spread
       game.spread_queue = queue
       game.spread_index = 0
       game.spread_timer = 0.0
-      game.changed_tiles = Array::make(game.grid.width * game.grid.height, false)
+      game.changed_tiles = Array::make(
+        game.grid.width * game.grid.height,
+        false,
+      )
     }
   }
 }
@@ -472,11 +484,10 @@ fn finish_resolve(game : @types.Game) -> Unit {
     }
   }
   if changes > 0 {
-    game.message = changes.to_string() + " tile" + (if changes > 1 {
-      "s"
-    } else {
-      ""
-    }) + " changed"
+    game.message = changes.to_string() +
+      " tile" +
+      (if changes > 1 { "s" } else { "" }) +
+      " changed"
     game.message_timer = 1.0
   }
   // Start transition fade timer
@@ -495,7 +506,11 @@ fn finish_resolve(game : @types.Game) -> Unit {
   if @biome.check_targets(game.grid, game.targets) {
     // Win!
     let stars = @biome.calculate_stars(
-      game.grid, game.targets, game.budget, game.current_turn, game.par_turns,
+      game.grid,
+      game.targets,
+      game.budget,
+      game.current_turn,
+      game.par_turns,
     )
     let score = game.level_scores[game.current_level]
     if stars > score.stars {
@@ -597,9 +612,8 @@ fn undo_resolve(game : @types.Game) -> Unit {
 ///|
 fn update_complete(game : @types.Game) -> Unit {
   // Enter -> next level
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-    @raylib.KeySpace,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     let next = game.current_level + 1
     if next < @types.total_levels {
       start_level(game, next)
@@ -629,9 +643,9 @@ fn update_complete(game : @types.Game) -> Unit {
 ///|
 fn update_failed(game : @types.Game) -> Unit {
   // R -> retry
-  if @raylib.is_key_pressed(@raylib.KeyR) || @raylib.is_key_pressed(
-    @raylib.KeyEnter,
-  ) || @raylib.is_key_pressed(@raylib.KeySpace) {
+  if @raylib.is_key_pressed(@raylib.KeyR) ||
+    @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     start_level(game, game.current_level)
   }
   // Esc -> back to level select

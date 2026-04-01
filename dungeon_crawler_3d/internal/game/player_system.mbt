@@ -289,7 +289,16 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
     if game.weapon_affix == AffixVampiric {
       let vamp_heal = (1).max(final_damage * 5 / 100)
       game.player_hp = (game.player_hp + vamp_heal).min(game.player_max_hp)
-      @types.spawn_particles(game, game.player_x, 1.5, game.player_z, 2, 50, 200, 50)
+      @types.spawn_particles(
+        game,
+        game.player_x,
+        1.5,
+        game.player_z,
+        2,
+        50,
+        200,
+        50,
+      )
     }
     // Flaming: apply fire DOT
     if game.weapon_affix == AffixFlaming {
@@ -1403,15 +1412,9 @@ fn @types.Game::level_up(game : @types.Game) -> Unit {
   game.player_def += 1
   // Stat bonuses based on class
   match game.player_class {
-    Warrior => {
-      game.player_str += 1
-    }
-    Rogue => {
-      game.player_dex += 1
-    }
-    Mage => {
-      game.player_int_stat += 1
-    }
+    Warrior => game.player_str += 1
+    Rogue => game.player_dex += 1
+    Mage => game.player_int_stat += 1
   }
   // Roll 3 random level-up card choices
   @types.roll_levelup_cards(game)
@@ -1452,7 +1455,16 @@ pub fn damage_player(game : @types.Game, raw_damage : Int) -> Unit {
     game.player_mana -= absorb
     damage -= absorb
     if absorb > 0 {
-      @types.spawn_particles(game, game.player_x, 1.5, game.player_z, 4, 80, 120, 255)
+      @types.spawn_particles(
+        game,
+        game.player_x,
+        1.5,
+        game.player_z,
+        4,
+        80,
+        120,
+        255,
+      )
     }
   }
   if damage < 1 {

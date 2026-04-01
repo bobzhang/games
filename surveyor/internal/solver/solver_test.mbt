@@ -34,7 +34,15 @@ test "flood fill: horizontal fence splits into two regions" {
 ///|
 test "single house per region: satisfied" {
   let tiles : Array[@types.TileKind] = [
-    House(0), Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+    House(0),
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
   ]
   let grid = @types.make_grid(3, 3, tiles)
   let houses = [@types.make_house(0, 0, 0, 9)]
@@ -58,7 +66,15 @@ test "single house per region: satisfied" {
 ///|
 test "area constraint: violated when wrong" {
   let tiles : Array[@types.TileKind] = [
-    House(0), Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+    House(0),
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
   ]
   let grid = @types.make_grid(3, 3, tiles)
   let houses = [@types.make_house(0, 0, 0, 5)] // wants area 5, but whole grid is 9
@@ -80,7 +96,15 @@ test "area constraint: violated when wrong" {
 ///|
 test "road access: satisfied when region has road tile" {
   let tiles : Array[@types.TileKind] = [
-    House(0), Road, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+    House(0),
+    Road,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
   ]
   let grid = @types.make_grid(3, 3, tiles)
   let houses = [@types.make_house(0, 0, 0, 9)]
@@ -103,13 +127,18 @@ test "road access: satisfied when region has road tile" {
 test "road access: violated when region lacks road" {
   // Grid has road but region with house doesn't touch it
   let tiles : Array[@types.TileKind] = [
-    House(0), Empty, Empty, Empty, Empty, Empty, Road, Empty, House(1),
+    House(0),
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Empty,
+    Road,
+    Empty,
+    House(1),
   ]
   let grid = @types.make_grid(3, 3, tiles)
-  let houses = [
-    @types.make_house(0, 0, 0, 4),
-    @types.make_house(2, 2, 1, 4),
-  ]
+  let houses = [@types.make_house(0, 0, 0, 4), @types.make_house(2, 2, 1, 4)]
   let level = @types.make_level(
     grid,
     houses,
@@ -145,14 +174,9 @@ test "fence placement and removal" {
 
 ///|
 test "multiple houses in one region: violated" {
-  let tiles : Array[@types.TileKind] = [
-    House(0), House(1), Empty, Empty,
-  ]
+  let tiles : Array[@types.TileKind] = [House(0), House(1), Empty, Empty]
   let grid = @types.make_grid(2, 2, tiles)
-  let houses = [
-    @types.make_house(0, 0, 0, 4),
-    @types.make_house(1, 0, 1, 4),
-  ]
+  let houses = [@types.make_house(0, 0, 0, 4), @types.make_house(1, 0, 1, 4)]
   let level = @types.make_level(
     grid,
     houses,
@@ -178,12 +202,7 @@ test "rectangular region check" {
     @types.vec2i(1, 0),
     @types.vec2i(0, 1),
   ]
-  let region : @types.Region = {
-    tiles,
-    houses: [],
-    has_road: false,
-    area: 3,
-  }
+  let region : @types.Region = { tiles, houses: [], has_road: false, area: 3 }
   assert_eq(@types.is_region_rectangular(region), false)
   // 2x2 region is rectangular
   let tiles2 : Array[@types.Vec2i] = [

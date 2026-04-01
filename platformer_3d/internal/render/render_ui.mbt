@@ -151,13 +151,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     game.current_world,
     game.current_level,
   )
-  @draw.draw_text(
-    level_name,
-    10,
-    8,
-    20,
-    @raylib.Color::new(200, 220, 255, 255),
-  )
+  @draw.draw_text(level_name, 10, 8, 20, @raylib.Color::new(200, 220, 255, 255))
   // Gems
   @draw.draw_text(
     "Gems: \{game.gems_collected}/\{game.gems_total}",
@@ -485,13 +479,7 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 255, 100, 15),
       )
     }
-    @draw.draw_text(
-      item_text,
-      (@types.screen_width - item_w) / 2,
-      y,
-      24,
-      color,
-    )
+    @draw.draw_text(item_text, (@types.screen_width - item_w) / 2, y, 24, color)
   }
   // Controls
   let hint = "Arrows: Select | Enter: Choose | P: Resume"

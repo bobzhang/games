@@ -3,15 +3,9 @@ fn draw_hex(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
-  @raylib.draw_poly(
-    @raylib.Vector2::new(cx, cy),
-    6,
-    size,
-    0.0,
-    color,
-  )
+  @raylib.draw_poly(@raylib.Vector2::new(cx, cy), 6, size, 0.0, color)
 }
 
 ///|
@@ -19,7 +13,7 @@ fn draw_hex_outline(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   @raylib.draw_poly_lines_ex(
     @raylib.Vector2::new(cx, cy),
@@ -50,7 +44,7 @@ fn draw_tile_icon(
   cy : Float,
   size : Float,
   kind : @types.TileKind,
-  anim : Float
+  anim : Float,
 ) -> Unit {
   let s = size * 0.35
   match kind {
@@ -81,7 +75,12 @@ fn draw_tile_icon(
     Oasis => {
       // Water ripple
       let pulse = @types.sinf(anim * 3.0) * 2.0
-      @raylib.draw_circle(cx.to_int(), cy.to_int(), s * 0.5 + pulse, @types.color_oasis_light)
+      @raylib.draw_circle(
+        cx.to_int(),
+        cy.to_int(),
+        s * 0.5 + pulse,
+        @types.color_oasis_light,
+      )
       // Palm tree
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx, cy + s * 0.4),
@@ -285,5 +284,10 @@ fn draw_caravan(game : @types.Game) -> Unit {
     @raylib.Color::new(240, 120, 60, 255),
   )
   // Direction indicator dot
-  @raylib.draw_circle(cx.to_int(), (cy - r * 0.3).to_int(), 3.0, @raylib.Color::new(255, 255, 255, 200))
+  @raylib.draw_circle(
+    cx.to_int(),
+    (cy - r * 0.3).to_int(),
+    3.0,
+    @raylib.Color::new(255, 255, 255, 200),
+  )
 }

@@ -10,7 +10,7 @@ pub(all) struct AiAction {
 fn evaluate_attack(
   battle : @types.Battle,
   unit : @types.GameUnit,
-  target : @types.GameUnit
+  target : @types.GameUnit,
 ) -> Int {
   let type_bonus = @combat.type_advantage(unit.kind, target.kind)
   let damage = @combat.calc_damage(battle, unit, target)
@@ -25,7 +25,7 @@ fn evaluate_attack(
 fn evaluate_position_hard(
   battle : @types.Battle,
   unit : @types.GameUnit,
-  pos : @types.HexCoord
+  pos : @types.HexCoord,
 ) -> Int {
   let mut score = 0
   let w = battle.map.width
@@ -78,10 +78,7 @@ fn evaluate_position_hard(
 // Evaluate whether a unit should retreat (for Hard AI)
 
 ///|
-fn should_retreat_hard(
-  battle : @types.Battle,
-  unit : @types.GameUnit
-) -> Bool {
+fn should_retreat_hard(battle : @types.Battle, unit : @types.GameUnit) -> Bool {
   // Retreat when HP is low and enemies are nearby
   let hp_ratio = unit.hp * 100 / unit.max_hp
   if hp_ratio > 50 {
@@ -106,7 +103,7 @@ fn should_retreat_hard(
 ///|
 fn find_retreat_position(
   battle : @types.Battle,
-  unit : @types.GameUnit
+  unit : @types.GameUnit,
 ) -> @types.HexCoord? {
   let moves = @combat.compute_move_range(battle, unit)
   let mut best_move : @types.HexCoord? = None
@@ -124,9 +121,8 @@ fn find_retreat_position(
       }
     }
     // Score: distance from enemies + terrain defense
-    let pos_score = min_enemy_dist * 10 + evaluate_position_hard(
-        battle, unit, move_hex,
-      )
+    let pos_score = min_enemy_dist * 10 +
+      evaluate_position_hard(battle, unit, move_hex)
     if pos_score > best_score {
       best_score = pos_score
       best_move = Some(move_hex)
@@ -139,26 +135,29 @@ fn find_retreat_position(
 fn find_best_actions(
   battle : @types.Battle,
   unit : @types.GameUnit,
-  difficulty : @types.Difficulty
+  difficulty : @types.Difficulty,
 ) -> Array[AiAction] {
   let actions : Array[AiAction] = []
   // Option 1: Attack from current position
-  if !(unit.attacked) {
+  if !unit.attacked {
     let targets = @combat.compute_attack_targets(battle, unit)
     for t in 0..<targets.length() {
       match @types.get_unit_at(battle, targets[t]) {
         Some(target) => {
           let score = evaluate_attack(battle, unit, target)
-          actions.push(
-            { unit_id: unit.id, move_to: None, attack_target: target.id, score },
-          )
+          actions.push({
+            unit_id: unit.id,
+            move_to: None,
+            attack_target: target.id,
+            score,
+          })
         }
         None => ()
       }
     }
   }
   // Option 2: Move then attack
-  if !(unit.moved) {
+  if !unit.moved {
     let moves = @combat.compute_move_range(battle, unit)
     for m in 0..<moves.length() {
       let move_hex = moves[m]
@@ -188,14 +187,12 @@ fn find_best_actions(
                       Hard => evaluate_position_hard(battle, unit, move_hex)
                       _ => 0
                     }
-                    actions.push(
-                      {
-                        unit_id: unit.id,
-                        move_to: Some(move_hex),
-                        attack_target: target.id,
-                        score: atk_score + pos_score,
-                      },
-                    )
+                    actions.push({
+                      unit_id: unit.id,
+                      move_to: Some(move_hex),
+                      attack_target: target.id,
+                      score: atk_score + pos_score,
+                    })
                   }
                 }
               None => ()
@@ -210,22 +207,20 @@ fn find_best_actions(
     }
   }
   // Option 3: Hard AI retreat when wounded
-  if !(unit.moved) && difficulty == Hard && should_retreat_hard(battle, unit) {
+  if !unit.moved && difficulty == Hard && should_retreat_hard(battle, unit) {
     match find_retreat_position(battle, unit) {
       Some(target) =>
-        actions.push(
-          {
-            unit_id: unit.id,
-            move_to: Some(target),
-            attack_target: -1,
-            score: 25,
-          },
-        )
+        actions.push({
+          unit_id: unit.id,
+          move_to: Some(target),
+          attack_target: -1,
+          score: 25,
+        })
       None => ()
     }
   }
   // Option 4: Move toward nearest enemy (with terrain awareness for Hard)
-  if !(unit.moved) && actions.length() == 0 {
+  if !unit.moved && actions.length() == 0 {
     let moves = @combat.compute_move_range(battle, unit)
     let mut best_move : @types.HexCoord? = None
     let mut best_score = -9999
@@ -256,19 +251,17 @@ fn find_best_actions(
     }
     match best_move {
       Some(target) =>
-        actions.push(
-          {
-            unit_id: unit.id,
-            move_to: Some(target),
-            attack_target: -1,
-            score: 5,
-          },
-        )
+        actions.push({
+          unit_id: unit.id,
+          move_to: Some(target),
+          attack_target: -1,
+          score: 5,
+        })
       None => ()
     }
   }
   // Option 5: Retreat if low HP (Normal/Easy)
-  if !(unit.moved) && unit.hp == 1 && difficulty != Hard {
+  if !unit.moved && unit.hp == 1 && difficulty != Hard {
     let moves = @combat.compute_move_range(battle, unit)
     let mut best_move : @types.HexCoord? = None
     let mut best_dist = 0
@@ -291,14 +284,12 @@ fn find_best_actions(
     }
     match best_move {
       Some(target) =>
-        actions.push(
-          {
-            unit_id: unit.id,
-            move_to: Some(target),
-            attack_target: -1,
-            score: 3,
-          },
-        )
+        actions.push({
+          unit_id: unit.id,
+          move_to: Some(target),
+          attack_target: -1,
+          score: 3,
+        })
       None => ()
     }
   }
@@ -341,13 +332,13 @@ fn sort_actions(actions : Array[AiAction]) -> Unit {
 ///|
 pub fn execute_ai_turn(
   battle : @types.Battle,
-  difficulty : @types.Difficulty
+  difficulty : @types.Difficulty,
 ) -> Array[String] {
   let messages : Array[String] = []
   let unit_count = battle.units.length()
   for i = 0; i < unit_count; i = i + 1 {
     let unit = battle.units[i]
-    if !(unit.active) || unit.team != Enemy {
+    if !unit.active || unit.team != Enemy {
       continue
     }
     if unit.moved && unit.attacked {
@@ -361,7 +352,11 @@ pub fn execute_ai_turn(
         Some(target) => {
           let _ = @combat.move_unit(battle, unit.id, target)
           messages.push(
-            @types.unit_kind_name(unit.kind) + " moves to " + target.col.to_string() + "," + target.row.to_string(),
+            @types.unit_kind_name(unit.kind) +
+            " moves to " +
+            target.col.to_string() +
+            "," +
+            target.row.to_string(),
           )
         }
         None => ()
@@ -369,20 +364,28 @@ pub fn execute_ai_turn(
       // Execute attack
       if action.attack_target >= 0 {
         let (dmg, killed) = @combat.resolve_attack(
-          battle, unit.id, action.attack_target,
+          battle,
+          unit.id,
+          action.attack_target,
         )
         if dmg > 0 {
           match @types.get_unit(battle, action.attack_target) {
             Some(target) => {
-              let msg = @types.unit_kind_name(unit.kind) + " attacks " + @types.unit_kind_name(
-                  target.kind,
-                ) + " for " + dmg.to_string() + " dmg"
+              let msg = @types.unit_kind_name(unit.kind) +
+                " attacks " +
+                @types.unit_kind_name(target.kind) +
+                " for " +
+                dmg.to_string() +
+                " dmg"
               let final_msg = if killed { msg + " - DESTROYED!" } else { msg }
               messages.push(final_msg)
             }
             None =>
               messages.push(
-                @types.unit_kind_name(unit.kind) + " attacks for " + dmg.to_string() + " dmg - DESTROYED!",
+                @types.unit_kind_name(unit.kind) +
+                " attacks for " +
+                dmg.to_string() +
+                " dmg - DESTROYED!",
               )
           }
         }

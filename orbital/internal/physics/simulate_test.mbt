@@ -125,11 +125,7 @@ test "max ticks detection" {
   let station = @types.make_station(9999.0, 9999.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
   let result = @physics.simulate_tick(
-    probe,
-    planets,
-    station,
-    waypoints,
-    @types.max_ticks,
+    probe, planets, station, waypoints, @types.max_ticks,
   )
   inspect(result, content="MaxTicks")
 }

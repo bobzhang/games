@@ -9,25 +9,23 @@ pub fn draw_ui_panel(game : @types.Game) -> Unit {
       let panel_w = 600
       let panel_h = 600
       @raylib.draw_rectangle(
-        panel_x,
-        panel_y,
-        panel_w,
-        panel_h,
-        @types.color_ui_bg,
+        panel_x, panel_y, panel_w, panel_h, @types.color_ui_bg,
       )
       @raylib.draw_rectangle_lines(
-        panel_x,
-        panel_y,
-        panel_w,
-        panel_h,
-        @types.color_fence,
+        panel_x, panel_y, panel_w, panel_h, @types.color_fence,
       )
       // Level name
       let name_str = "Level " +
         (game.current_level_idx + 1).to_string() +
         ": " +
         level.name
-      @draw.draw_text(name_str, panel_x + 20, panel_y + 15, 24, @types.color_title)
+      @draw.draw_text(
+        name_str,
+        panel_x + 20,
+        panel_y + 15,
+        24,
+        @types.color_title,
+      )
       // Tier info
       let tier_str = @types.tier_name(level.tier)
       @draw.draw_text(
@@ -43,10 +41,22 @@ pub fn draw_ui_panel(game : @types.Game) -> Unit {
         " / " +
         level.par_fences.to_string() +
         " (par)"
-      @draw.draw_text(fence_str, panel_x + 20, panel_y + 55, 20, @types.color_ui_text)
+      @draw.draw_text(
+        fence_str,
+        panel_x + 20,
+        panel_y + 55,
+        20,
+        @types.color_ui_text,
+      )
       // Star targets
       let star_str = "3-star: <= " + level.par_length.to_string() + " fences"
-      @draw.draw_text(star_str, panel_x + 20, panel_y + 82, 16, @types.color_star)
+      @draw.draw_text(
+        star_str,
+        panel_x + 20,
+        panel_y + 82,
+        16,
+        @types.color_star,
+      )
       // Constraints info
       @draw.draw_text(
         "Constraints:",
@@ -147,7 +157,13 @@ pub fn draw_constraint_panel(game : @types.Game) -> Unit {
         let hcolor = @types.house_color(house.color_id)
         // House indicator square
         @raylib.draw_rectangle(panel_x + 20, y, 20, 20, hcolor)
-        @raylib.draw_rectangle_lines(panel_x + 20, y, 20, 20, @types.color_fence)
+        @raylib.draw_rectangle_lines(
+          panel_x + 20,
+          y,
+          20,
+          20,
+          @types.color_fence,
+        )
         // House label
         let label = "Area: " + house.required_area.to_string()
         @draw.draw_text(label, panel_x + 48, y + 2, 16, @types.color_ui_text)
@@ -178,7 +194,7 @@ fn draw_constraint_dot(
   x : Int,
   y : Int,
   result : @types.ConstraintResult,
-  label : String
+  label : String,
 ) -> Unit {
   let color = match result {
     Satisfied => @types.color_satisfied
@@ -194,10 +210,7 @@ pub fn draw_controls_hint(game : @types.Game) -> Unit {
   let _ = game
   let y = @types.screen_height - 30
   @draw.draw_text(
-    "Click edges to place fences | Z: Undo | R: Restart | ESC: Back",
-    20,
-    y,
-    16,
+    "Click edges to place fences | Z: Undo | R: Restart | ESC: Back", 20, y, 16,
     @types.color_ui_dim,
   )
 }

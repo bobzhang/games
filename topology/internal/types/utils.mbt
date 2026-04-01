@@ -138,7 +138,7 @@ pub fn shape_exact_match(a : Shape, b : Shape) -> Bool {
     return false
   }
   for i in 0..<a.cells.length() {
-    if !(shape_contains(b, a.cells[i])) {
+    if !shape_contains(b, a.cells[i]) {
       return false
     }
   }
@@ -168,7 +168,7 @@ pub fn shape_adjacent_empty(s : Shape) -> Array[Vec2i] {
         neighbor.x < grid_cols &&
         neighbor.y >= 0 &&
         neighbor.y < grid_rows &&
-        !(shape_contains(s, neighbor)) {
+        !shape_contains(s, neighbor) {
         let mut found = false
         for r in 0..<result.length() {
           if result[r].x == neighbor.x && result[r].y == neighbor.y {
@@ -194,7 +194,7 @@ pub fn shape_edge_cells(s : Shape) -> Array[Vec2i] {
     let mut has_empty_neighbor = false
     for d in 0..<dirs.length() {
       let neighbor = vec2i(c.x + dirs[d].x, c.y + dirs[d].y)
-      if !(shape_contains(s, neighbor)) {
+      if !shape_contains(s, neighbor) {
         has_empty_neighbor = true
         break
       }

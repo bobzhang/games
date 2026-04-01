@@ -100,7 +100,13 @@ fn draw_detection_bar(game : @types.Game, x : Int, y : Int) -> Unit {
   let bar_w = 150
   let bar_h = 10
   // Background
-  @raylib.draw_rectangle(x, y + 16, bar_w, bar_h, @raylib.Color::new(30, 30, 50, 255))
+  @raylib.draw_rectangle(
+    x,
+    y + 16,
+    bar_w,
+    bar_h,
+    @raylib.Color::new(30, 30, 50, 255),
+  )
   // Find max detection
   let mut max_det : Float = 0.0
   for i in 0..<game.level.guards.length() {
@@ -167,11 +173,41 @@ fn draw_controls_hint(panel_x : Int, panel_w : Int) -> Unit {
   let x = panel_x + 10
   let y = 420
   @draw.draw_text("CONTROLS", x, y, 10, @types.color_dim_text)
-  @draw.draw_text("WASD Move", x, y + 14, 10, @raylib.Color::new(100, 110, 130, 255))
-  @draw.draw_text("SHIFT Run", x + panel_w / 2 - 10, y + 14, 10, @raylib.Color::new(100, 110, 130, 255))
-  @draw.draw_text("E Interact", x, y + 26, 10, @raylib.Color::new(100, 110, 130, 255))
-  @draw.draw_text("Q Coin", x + panel_w / 2 - 10, y + 26, 10, @raylib.Color::new(100, 110, 130, 255))
-  @draw.draw_text("ESC Pause", x, y + 38, 10, @raylib.Color::new(100, 110, 130, 255))
+  @draw.draw_text(
+    "WASD Move",
+    x,
+    y + 14,
+    10,
+    @raylib.Color::new(100, 110, 130, 255),
+  )
+  @draw.draw_text(
+    "SHIFT Run",
+    x + panel_w / 2 - 10,
+    y + 14,
+    10,
+    @raylib.Color::new(100, 110, 130, 255),
+  )
+  @draw.draw_text(
+    "E Interact",
+    x,
+    y + 26,
+    10,
+    @raylib.Color::new(100, 110, 130, 255),
+  )
+  @draw.draw_text(
+    "Q Coin",
+    x + panel_w / 2 - 10,
+    y + 26,
+    10,
+    @raylib.Color::new(100, 110, 130, 255),
+  )
+  @draw.draw_text(
+    "ESC Pause",
+    x,
+    y + 38,
+    10,
+    @raylib.Color::new(100, 110, 130, 255),
+  )
 }
 
 ///|
@@ -230,11 +266,19 @@ fn draw_message(game : @types.Game) -> Unit {
   let text = game.message
   let size = 24
   let tw = @draw.measure_text(text, size)
-  let cx = @types.grid_offset_x + @types.grid_width * @types.tile_size / 2 -
+  let cx = @types.grid_offset_x +
+    @types.grid_width * @types.tile_size / 2 -
     tw / 2
-  let cy = @types.grid_offset_y + @types.grid_height * @types.tile_size / 2 -
+  let cy = @types.grid_offset_y +
+    @types.grid_height * @types.tile_size / 2 -
     size / 2
   // Background
-  @raylib.draw_rectangle(cx - 10, cy - 5, tw + 20, size + 10, @types.color_hud_bg)
+  @raylib.draw_rectangle(
+    cx - 10,
+    cy - 5,
+    tw + 20,
+    size + 10,
+    @types.color_hud_bg,
+  )
   @draw.draw_text(text, cx, cy, size, @types.color_cyan)
 }

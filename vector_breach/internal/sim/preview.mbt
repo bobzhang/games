@@ -68,7 +68,13 @@ fn preview_move(
     let tile = battle.grid.get(tx, ty)
     match tile.hazard {
       None => ()
-      _ => result.push({ x: tx, y: ty, effect: HazardPreview, affected_unit: unit_id })
+      _ =>
+        result.push({
+          x: tx,
+          y: ty,
+          effect: HazardPreview,
+          affected_unit: unit_id,
+        })
     }
   }
 }
@@ -129,7 +135,12 @@ fn preview_vanguard_ram(
   let step_x = u.x + sdx
   let step_y = u.y + sdy
   if is_walkable(battle, step_x, step_y) {
-    result.push({ x: step_x, y: step_y, effect: MovePreview, affected_unit: unit_id })
+    result.push({
+      x: step_x,
+      y: step_y,
+      effect: MovePreview,
+      affected_unit: unit_id,
+    })
   }
   // Show damage on target
   result.push({ x: tx, y: ty, effect: DamagePreview, affected_unit: target_id })
@@ -178,7 +189,12 @@ fn preview_striker_blade(
 ) -> Unit {
   let target_id = unit_at(battle, tx, ty)
   if target_id >= 0 {
-    result.push({ x: tx, y: ty, effect: DamagePreview, affected_unit: target_id })
+    result.push({
+      x: tx,
+      y: ty,
+      effect: DamagePreview,
+      affected_unit: target_id,
+    })
   } else {
     result.push({ x: tx, y: ty, effect: DamagePreview, affected_unit: -1 })
   }
@@ -204,8 +220,18 @@ fn preview_striker_dash(
     let (sdx, sdy) = step_toward(u.x, u.y, tx, ty)
     let stop_x = tx - sdx
     let stop_y = ty - sdy
-    result.push({ x: stop_x, y: stop_y, effect: MovePreview, affected_unit: unit_id })
-    result.push({ x: tx, y: ty, effect: DamagePreview, affected_unit: target_id })
+    result.push({
+      x: stop_x,
+      y: stop_y,
+      effect: MovePreview,
+      affected_unit: unit_id,
+    })
+    result.push({
+      x: tx,
+      y: ty,
+      effect: DamagePreview,
+      affected_unit: target_id,
+    })
   } else {
     result.push({ x: tx, y: ty, effect: MovePreview, affected_unit: unit_id })
   }
@@ -229,12 +255,7 @@ fn preview_sentinel_cannon(
     return
   }
   let target_id = unit_at(battle, tx, ty)
-  result.push({
-    x: tx,
-    y: ty,
-    effect: DamagePreview,
-    affected_unit: target_id,
-  })
+  result.push({ x: tx, y: ty, effect: DamagePreview, affected_unit: target_id })
 }
 
 ///|
@@ -258,7 +279,12 @@ fn preview_sentinel_artillery(
       if battle.grid.in_bounds(ax, ay) {
         let hit_id = unit_at(battle, ax, ay)
         if hit_id >= 0 && hit_id != unit_id {
-          result.push({ x: ax, y: ay, effect: DamagePreview, affected_unit: hit_id })
+          result.push({
+            x: ax,
+            y: ay,
+            effect: DamagePreview,
+            affected_unit: hit_id,
+          })
         } else {
           result.push({ x: ax, y: ay, effect: DamagePreview, affected_unit: -1 })
         }
@@ -331,12 +357,22 @@ fn preview_push_trajectory(
     let ny = cy + dy
     if !battle.grid.in_bounds(nx, ny) {
       // Would slam into edge
-      result.push({ x: cx, y: cy, effect: CollisionPreview, affected_unit: unit_id })
+      result.push({
+        x: cx,
+        y: cy,
+        effect: CollisionPreview,
+        affected_unit: unit_id,
+      })
       return
     }
     let tile = battle.grid.get(nx, ny)
     if tile.kind == Wall {
-      result.push({ x: cx, y: cy, effect: CollisionPreview, affected_unit: unit_id })
+      result.push({
+        x: cx,
+        y: cy,
+        effect: CollisionPreview,
+        affected_unit: unit_id,
+      })
       return
     }
     if tile.kind == Chasm {
@@ -402,7 +438,12 @@ fn preview_single_intent(
           })
           break
         }
-        result.push({ x: cx, y: cy, effect: MovePreview, affected_unit: unit_id })
+        result.push({
+          x: cx,
+          y: cy,
+          effect: MovePreview,
+          affected_unit: unit_id,
+        })
         cx += dx
         cy += dy
         steps += 1
@@ -445,13 +486,18 @@ fn preview_single_intent(
           if hit_id >= 0 {
             let hit_unit = battle.units[hit_id]
             if hit_unit.team == Player && hit_unit.active {
-              result.push({ x: ax, y: ay, effect: DamagePreview, affected_unit: hit_id })
+              result.push({
+                x: ax,
+                y: ay,
+                effect: DamagePreview,
+                affected_unit: hit_id,
+              })
             }
           }
         }
       }
     }
-    AreaBlast(tx, ty, radius) => {
+    AreaBlast(tx, ty, radius) =>
       for dy = -radius; dy <= radius; dy = dy + 1 {
         for dx = -radius; dx <= radius; dx = dx + 1 {
           let ax = tx + dx
@@ -467,7 +513,6 @@ fn preview_single_intent(
           }
         }
       }
-    }
     Summon(tx, ty, _amount) =>
       result.push({ x: tx, y: ty, effect: MovePreview, affected_unit: -1 })
     MinePlace(tx, ty) =>

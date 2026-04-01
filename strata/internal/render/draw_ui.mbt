@@ -42,7 +42,9 @@ fn draw_tray(game : @types.Game) -> Unit {
       )
     }
     // Border
-    @raylib.draw_rectangle_lines(rx, ry, rock_w, rock_h, @types.color_slot_border)
+    @raylib.draw_rectangle_lines(
+      rx, ry, rock_w, rock_h, @types.color_slot_border,
+    )
     // Key hint
     let key = (i + 1).to_string()
     @draw.draw_text(key, rx + 4, ry + 2, 12, @types.color_text_dim)
@@ -82,18 +84,11 @@ fn draw_hud(game : @types.Game, level : @types.Level) -> Unit {
   @draw.draw_text(state_text, w - 500, 680, 16, state_color)
   // Controls
   @draw.draw_text(
-    "R-Reset  Z-Undo  ENTER-Check  ESC-Back",
-    20,
-    15,
-    14,
-    @types.color_text_dim,
+    "R-Reset  Z-Undo  ENTER-Check  ESC-Back", 20, 15, 14, @types.color_text_dim,
   )
   // Filled count
   let filled = @types.count_filled_slots(game.slots)
   let total = game.slots.length()
-  let filled_text = "Placed: " +
-    filled.to_string() +
-    "/" +
-    total.to_string()
+  let filled_text = "Placed: " + filled.to_string() + "/" + total.to_string()
   @draw.draw_text(filled_text, w - 250, 65, 16, @types.color_text_dim)
 }

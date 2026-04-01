@@ -47,9 +47,9 @@ test "level completion check" {
     start_pos: @types.vec2(50.0, 50.0),
     par_bounces: 5,
   }
-  assert_true(!(@types.all_targets_hit(level)))
+  assert_true(!@types.all_targets_hit(level))
   level.targets[0].hit = true
-  assert_true(!(@types.all_targets_hit(level)))
+  assert_true(!@types.all_targets_hit(level))
   level.targets[1].hit = true
   assert_true(@types.all_targets_hit(level))
 }
@@ -66,7 +66,7 @@ test "pickup collection tracking" {
     start_pos: @types.vec2(50.0, 50.0),
     par_bounces: 5,
   }
-  assert_true(!(@types.pickup_collected(level)))
+  assert_true(!@types.pickup_collected(level))
   level.pickups[0].collected = true
   assert_true(@types.pickup_collected(level))
 }

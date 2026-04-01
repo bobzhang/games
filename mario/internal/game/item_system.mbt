@@ -3,7 +3,7 @@
 fn update_items(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.items.length() {
     let it = game.items[i]
-    if !(it.active) {
+    if !it.active {
       continue
     }
     if it.emerging {
@@ -111,7 +111,7 @@ fn update_items(game : @types.Game, dt : Float) -> Unit {
 fn update_fireballs(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.fireballs.length() {
     let fb = game.fireballs[i]
-    if !(fb.active) {
+    if !fb.active {
       continue
     }
     // Gravity
@@ -155,7 +155,7 @@ fn check_fireball_enemy_hit(game : @types.Game, fb_index : Int) -> Unit {
   let fb_r : Float = 8.0
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if !(e.active) || e.dead {
+    if !e.active || e.dead {
       continue
     }
     let ehw = e.width / 2.0
@@ -217,7 +217,7 @@ fn spawn_fireball_poof(game : @types.Game, wx : Float, wy : Float) -> Unit {
     if count >= 4 {
       break
     }
-    if !(game.particles[i].active) {
+    if !game.particles[i].active {
       let p = game.particles[i]
       p.active = true
       p.x = wx + @types.rand_rangef(game, -6.0, 6.0)

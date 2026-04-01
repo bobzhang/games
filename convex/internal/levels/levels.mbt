@@ -43,13 +43,11 @@ fn level_01() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx - 120.0, cy + 100.0),
-        @types.pt(cx + 120.0, cy + 100.0),
-        @types.pt(cx - 120.0, cy - 100.0),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx - 120.0, cy + 100.0),
+      @types.pt(cx + 120.0, cy + 100.0),
+      @types.pt(cx - 120.0, cy - 100.0),
+    ]),
     pre_placed_points: [],
     par_points: 4,
     min_points: 3,
@@ -64,13 +62,11 @@ fn level_02() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx, cy - 140.0),
-        @types.pt(cx + 140.0, cy + 100.0),
-        @types.pt(cx - 140.0, cy + 100.0),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx, cy - 140.0),
+      @types.pt(cx + 140.0, cy + 100.0),
+      @types.pt(cx - 140.0, cy + 100.0),
+    ]),
     pre_placed_points: [],
     par_points: 4,
     min_points: 3,
@@ -86,14 +82,12 @@ fn level_03() -> @types.Level {
   let cy : Float = 360.0
   let s : Float = 120.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx - s, cy - s),
-        @types.pt(cx + s, cy - s),
-        @types.pt(cx + s, cy + s),
-        @types.pt(cx - s, cy + s),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx - s, cy - s),
+      @types.pt(cx + s, cy - s),
+      @types.pt(cx + s, cy + s),
+      @types.pt(cx - s, cy + s),
+    ]),
     pre_placed_points: [],
     par_points: 5,
     min_points: 4,
@@ -108,14 +102,12 @@ fn level_04() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx - 180.0, cy - 80.0),
-        @types.pt(cx + 180.0, cy - 80.0),
-        @types.pt(cx + 180.0, cy + 80.0),
-        @types.pt(cx - 180.0, cy + 80.0),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx - 180.0, cy - 80.0),
+      @types.pt(cx + 180.0, cy - 80.0),
+      @types.pt(cx + 180.0, cy + 80.0),
+      @types.pt(cx - 180.0, cy + 80.0),
+    ]),
     pre_placed_points: [],
     par_points: 5,
     min_points: 4,
@@ -133,7 +125,9 @@ fn level_05() -> @types.Level {
   let verts : Array[@types.Point] = Array::new(capacity=5)
   for i in 0..<5 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 5.0 - @types.pi / 2.0
-    verts.push(@types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)))
+    verts.push(
+      @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
+    )
   }
   {
     target_polygon: @types.make_polygon(verts),
@@ -154,7 +148,9 @@ fn level_06() -> @types.Level {
   let verts : Array[@types.Point] = Array::new(capacity=6)
   for i in 0..<6 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 6.0
-    verts.push(@types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)))
+    verts.push(
+      @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
+    )
   }
   {
     target_polygon: @types.make_polygon(verts),
@@ -172,14 +168,12 @@ fn level_07() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx, cy - 160.0),
-        @types.pt(cx + 120.0, cy),
-        @types.pt(cx, cy + 160.0),
-        @types.pt(cx - 120.0, cy),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx, cy - 160.0),
+      @types.pt(cx + 120.0, cy),
+      @types.pt(cx, cy + 160.0),
+      @types.pt(cx - 120.0, cy),
+    ]),
     pre_placed_points: [],
     par_points: 5,
     min_points: 4,
@@ -197,7 +191,9 @@ fn level_08() -> @types.Level {
   let verts : Array[@types.Point] = Array::new(capacity=8)
   for i in 0..<8 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 8.0 + @types.pi / 8.0
-    verts.push(@types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)))
+    verts.push(
+      @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
+    )
   }
   {
     target_polygon: @types.make_polygon(verts),
@@ -218,13 +214,11 @@ fn level_09() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx, cy - 140.0),
-        @types.pt(cx + 160.0, cy + 120.0),
-        @types.pt(cx - 160.0, cy + 120.0),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx, cy - 140.0),
+      @types.pt(cx + 160.0, cy + 120.0),
+      @types.pt(cx - 160.0, cy + 120.0),
+    ]),
     pre_placed_points: [@types.pt(cx, cy)],
     par_points: 4,
     min_points: 3,
@@ -239,14 +233,12 @@ fn level_10() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx - 80.0, cy - 100.0),
-        @types.pt(cx + 80.0, cy - 100.0),
-        @types.pt(cx + 160.0, cy + 100.0),
-        @types.pt(cx - 160.0, cy + 100.0),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx - 80.0, cy - 100.0),
+      @types.pt(cx + 80.0, cy - 100.0),
+      @types.pt(cx + 160.0, cy + 100.0),
+      @types.pt(cx - 160.0, cy + 100.0),
+    ]),
     pre_placed_points: [@types.pt(cx, cy)],
     par_points: 5,
     min_points: 4,
@@ -261,14 +253,12 @@ fn level_11() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx, cy - 180.0),
-        @types.pt(cx + 100.0, cy - 40.0),
-        @types.pt(cx, cy + 140.0),
-        @types.pt(cx - 100.0, cy - 40.0),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx, cy - 180.0),
+      @types.pt(cx + 100.0, cy - 40.0),
+      @types.pt(cx, cy + 140.0),
+      @types.pt(cx - 100.0, cy - 40.0),
+    ]),
     pre_placed_points: [
       @types.pt(cx + 20.0, cy - 60.0),
       @types.pt(cx - 20.0, cy + 20.0),
@@ -286,19 +276,14 @@ fn level_12() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx + 180.0, cy),
-        @types.pt(cx + 40.0, cy - 120.0),
-        @types.pt(cx - 140.0, cy - 60.0),
-        @types.pt(cx - 140.0, cy + 60.0),
-        @types.pt(cx + 40.0, cy + 120.0),
-      ],
-    ),
-    pre_placed_points: [
-      @types.pt(cx - 40.0, cy),
-      @types.pt(cx + 60.0, cy),
-    ],
+    target_polygon: @types.make_polygon([
+      @types.pt(cx + 180.0, cy),
+      @types.pt(cx + 40.0, cy - 120.0),
+      @types.pt(cx - 140.0, cy - 60.0),
+      @types.pt(cx - 140.0, cy + 60.0),
+      @types.pt(cx + 40.0, cy + 120.0),
+    ]),
+    pre_placed_points: [@types.pt(cx - 40.0, cy), @types.pt(cx + 60.0, cy)],
     par_points: 6,
     min_points: 5,
     tier: Edges,
@@ -339,17 +324,13 @@ fn level_14() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx - 120.0, cy - 80.0),
-        @types.pt(cx + 60.0, cy - 80.0),
-        @types.pt(cx + 120.0, cy + 80.0),
-        @types.pt(cx - 60.0, cy + 80.0),
-      ],
-    ),
-    pre_placed_points: [
-      @types.pt(cx, cy),
-    ],
+    target_polygon: @types.make_polygon([
+      @types.pt(cx - 120.0, cy - 80.0),
+      @types.pt(cx + 60.0, cy - 80.0),
+      @types.pt(cx + 120.0, cy + 80.0),
+      @types.pt(cx - 60.0, cy + 80.0),
+    ]),
+    pre_placed_points: [@types.pt(cx, cy)],
     par_points: 5,
     min_points: 4,
     tier: Edges,
@@ -363,19 +344,14 @@ fn level_15() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx, cy - 160.0),
-        @types.pt(cx + 140.0, cy - 40.0),
-        @types.pt(cx + 140.0, cy + 120.0),
-        @types.pt(cx - 140.0, cy + 120.0),
-        @types.pt(cx - 140.0, cy - 40.0),
-      ],
-    ),
-    pre_placed_points: [
-      @types.pt(cx, cy + 40.0),
-      @types.pt(cx + 60.0, cy),
-    ],
+    target_polygon: @types.make_polygon([
+      @types.pt(cx, cy - 160.0),
+      @types.pt(cx + 140.0, cy - 40.0),
+      @types.pt(cx + 140.0, cy + 120.0),
+      @types.pt(cx - 140.0, cy + 120.0),
+      @types.pt(cx - 140.0, cy - 40.0),
+    ]),
+    pre_placed_points: [@types.pt(cx, cy + 40.0), @types.pt(cx + 60.0, cy)],
     par_points: 6,
     min_points: 5,
     tier: Edges,
@@ -392,7 +368,9 @@ fn level_16() -> @types.Level {
   let verts : Array[@types.Point] = Array::new(capacity=7)
   for i in 0..<7 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 7.0 - @types.pi / 2.0
-    verts.push(@types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)))
+    verts.push(
+      @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
+    )
   }
   {
     target_polygon: @types.make_polygon(verts),
@@ -414,17 +392,12 @@ fn level_17() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx - 200.0, cy + 60.0),
-        @types.pt(cx + 200.0, cy + 60.0),
-        @types.pt(cx, cy - 160.0),
-      ],
-    ),
-    pre_placed_points: [
-      @types.pt(cx - 60.0, cy),
-      @types.pt(cx + 60.0, cy),
-    ],
+    target_polygon: @types.make_polygon([
+      @types.pt(cx - 200.0, cy + 60.0),
+      @types.pt(cx + 200.0, cy + 60.0),
+      @types.pt(cx, cy - 160.0),
+    ]),
+    pre_placed_points: [@types.pt(cx - 60.0, cy), @types.pt(cx + 60.0, cy)],
     par_points: 4,
     min_points: 3,
     tier: Edges,
@@ -442,14 +415,12 @@ fn level_18() -> @types.Level {
   let cy : Float = 360.0
   let s : Float = 100.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx - s, cy - s),
-        @types.pt(cx + s, cy - s),
-        @types.pt(cx + s, cy + s),
-        @types.pt(cx - s, cy + s),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx - s, cy - s),
+      @types.pt(cx + s, cy - s),
+      @types.pt(cx + s, cy + s),
+      @types.pt(cx - s, cy + s),
+    ]),
     pre_placed_points: [
       @types.pt(cx - s, cy - s),
       @types.pt(cx + s, cy - s),
@@ -474,7 +445,9 @@ fn level_19() -> @types.Level {
   let verts : Array[@types.Point] = Array::new(capacity=5)
   for i in 0..<5 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 5.0 - @types.pi / 2.0
-    verts.push(@types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)))
+    verts.push(
+      @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
+    )
   }
   let pre : Array[@types.Point] = Array::new(capacity=8)
   for i in 0..<5 {
@@ -500,13 +473,11 @@ fn level_20() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx, cy - 140.0),
-        @types.pt(cx + 160.0, cy + 100.0),
-        @types.pt(cx - 160.0, cy + 100.0),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx, cy - 140.0),
+      @types.pt(cx + 160.0, cy + 100.0),
+      @types.pt(cx - 160.0, cy + 100.0),
+    ]),
     pre_placed_points: [
       @types.pt(cx, cy - 140.0),
       @types.pt(cx + 160.0, cy + 100.0),
@@ -532,7 +503,9 @@ fn level_21() -> @types.Level {
   let verts : Array[@types.Point] = Array::new(capacity=6)
   for i in 0..<6 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 6.0
-    verts.push(@types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)))
+    verts.push(
+      @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
+    )
   }
   let pre : Array[@types.Point] = Array::new(capacity=10)
   for i in 0..<6 {
@@ -559,14 +532,12 @@ fn level_22() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx - 140.0, cy - 80.0),
-        @types.pt(cx + 140.0, cy - 80.0),
-        @types.pt(cx + 140.0, cy + 80.0),
-        @types.pt(cx - 140.0, cy + 80.0),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx - 140.0, cy - 80.0),
+      @types.pt(cx + 140.0, cy - 80.0),
+      @types.pt(cx + 140.0, cy + 80.0),
+      @types.pt(cx - 140.0, cy + 80.0),
+    ]),
     pre_placed_points: [
       @types.pt(cx - 140.0, cy - 80.0),
       @types.pt(cx + 140.0, cy - 80.0),
@@ -591,14 +562,12 @@ fn level_23() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   {
-    target_polygon: @types.make_polygon(
-      [
-        @types.pt(cx, cy - 180.0),
-        @types.pt(cx + 80.0, cy),
-        @types.pt(cx, cy + 180.0),
-        @types.pt(cx - 80.0, cy),
-      ],
-    ),
+    target_polygon: @types.make_polygon([
+      @types.pt(cx, cy - 180.0),
+      @types.pt(cx + 80.0, cy),
+      @types.pt(cx, cy + 180.0),
+      @types.pt(cx - 80.0, cy),
+    ]),
     pre_placed_points: [
       @types.pt(cx, cy - 180.0),
       @types.pt(cx + 80.0, cy),
@@ -625,7 +594,9 @@ fn level_24() -> @types.Level {
   let verts : Array[@types.Point] = Array::new(capacity=8)
   for i in 0..<8 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 8.0 + @types.pi / 8.0
-    verts.push(@types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)))
+    verts.push(
+      @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
+    )
   }
   let pre : Array[@types.Point] = Array::new(capacity=14)
   for i in 0..<8 {

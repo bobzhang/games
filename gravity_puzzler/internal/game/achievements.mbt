@@ -17,7 +17,7 @@ pub fn check_achievements_on_complete(game : @types.Game) -> Unit {
     try_unlock_achievement(game, Minimalist)
   }
   // UndoFree: complete without using undo
-  if !(game.used_undo_this_level) {
+  if !game.used_undo_this_level {
     try_unlock_achievement(game, UndoFree)
   }
   // GhostRacer: beat ghost replay best
@@ -25,7 +25,7 @@ pub fn check_achievements_on_complete(game : @types.Game) -> Unit {
     try_unlock_achievement(game, GhostRacer)
   }
   // NoHints: complete a level without hints
-  if !(game.used_hint_this_level) {
+  if !game.used_hint_this_level {
     check_no_hints_world(game)
   }
   // Perfectionist: 3 stars on 10+ levels
@@ -136,11 +136,14 @@ pub fn track_hint_used(game : @types.Game) -> Unit {
 
 ///|
 /// Try to unlock an achievement; if newly unlocked, queue a toast
-fn try_unlock_achievement(game : @types.Game, kind : @types.AchievementKind) -> Unit {
+fn try_unlock_achievement(
+  game : @types.Game,
+  kind : @types.AchievementKind,
+) -> Unit {
   let ach_state = game.achievement_state
   for i in 0..<ach_state.achievements.length() {
     let ach = ach_state.achievements[i]
-    if ach.kind == kind && !(ach.unlocked) {
+    if ach.kind == kind && !ach.unlocked {
       ach.unlocked = true
       ach_state.toast_queue.push(i)
       // Also mark in save data
@@ -157,7 +160,7 @@ fn try_unlock_achievement(game : @types.Game, kind : @types.AchievementKind) -> 
 fn check_world_master(game : @types.Game, world : Int) -> Unit {
   let start = world * @types.levels_per_world
   let mut all_3_stars = true
-  for l in 0..< @types.levels_per_world {
+  for l in 0..<@types.levels_per_world {
     let idx = start + l
     if idx < game.level_stars.length() {
       if game.level_stars[idx] < 3 {
@@ -178,7 +181,7 @@ fn check_world_master(game : @types.Game, world : Int) -> Unit {
 /// Check if all worlds are unlocked
 fn check_all_worlds(game : @types.Game) -> Unit {
   let mut all_unlocked = true
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     if game.levels_unlocked[w] <= 0 {
       all_unlocked = false
       break
@@ -201,7 +204,7 @@ fn check_no_hints_world(game : @types.Game) -> Unit {
       // Verify every level in this world has been completed
       let start = world * @types.levels_per_world
       let mut all_completed = true
-      for l in 0..< @types.levels_per_world {
+      for l in 0..<@types.levels_per_world {
         let idx = start + l
         if idx < game.level_stars.length() {
           if game.level_stars[idx] <= 0 {
@@ -224,7 +227,7 @@ fn check_no_hints_world(game : @types.Game) -> Unit {
 /// Check if player has all 3 stars on all 50 levels
 fn check_completionist(game : @types.Game) -> Unit {
   let mut all_perfect = true
-  for i in 0..< @types.total_levels {
+  for i in 0..<@types.total_levels {
     if i < game.level_stars.length() {
       if game.level_stars[i] < 3 {
         all_perfect = false

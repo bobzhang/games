@@ -185,8 +185,8 @@ fn update_playing(game : @types.Game) -> Unit {
       // Don't place on top of existing point
       let mut too_close = false
       for i in 0..<game.placed_points.length() {
-        if @types.point_dist(snapped, game.placed_points[i]) < @types.grid_snap *
-          0.5 {
+        if @types.point_dist(snapped, game.placed_points[i]) <
+          @types.grid_snap * 0.5 {
           too_close = true
           break
         }

@@ -3,7 +3,7 @@ pub fn spawn_enemy(
   game : @types.Game,
   kind : @types.EnemyKind,
   x : Float,
-  y : Float
+  y : Float,
 ) -> Unit {
   let idx = @types.alloc_enemy(game.enemies)
   if idx < 0 {
@@ -31,9 +31,7 @@ pub fn spawn_enemy(
 }
 
 ///|
-fn enemy_stats(
-  kind : @types.EnemyKind
-) -> (Int, Int, Float, Float, Float, Int) {
+fn enemy_stats(kind : @types.EnemyKind) -> (Int, Int, Float, Float, Float, Int) {
   // (hp, damage, speed, fire_rate, radius, score)
   match kind {
     Drone => (2, 1, 150.0, 2.0, 14.0, 10)
@@ -51,9 +49,9 @@ fn enemy_stats(
 pub fn update_enemy_ai(
   game : @types.Game,
   enemy : @types.Enemy,
-  dt : Float
+  dt : Float,
 ) -> Unit {
-  if !(enemy.active) || enemy.frozen_timer > 0.0 {
+  if !enemy.active || enemy.frozen_timer > 0.0 {
     return
   }
   let ship = game.ship
@@ -71,7 +69,11 @@ pub fn update_enemy_ai(
       if enemy.fire_timer <= 0.0 && dist < 400.0 {
         enemy.fire_timer = enemy.fire_rate
         @weapons.fire_enemy_projectile(
-          game, enemy.pos, ship.pos, 250.0, enemy.damage,
+          game,
+          enemy.pos,
+          ship.pos,
+          250.0,
+          enemy.damage,
         )
       }
     }
@@ -90,7 +92,11 @@ pub fn update_enemy_ai(
       if enemy.fire_timer <= 0.0 && dist < 500.0 {
         enemy.fire_timer = enemy.fire_rate
         @weapons.fire_enemy_projectile(
-          game, enemy.pos, ship.pos, 300.0, enemy.damage,
+          game,
+          enemy.pos,
+          ship.pos,
+          300.0,
+          enemy.damage,
         )
       }
     }
@@ -114,7 +120,11 @@ pub fn update_enemy_ai(
       if enemy.fire_timer <= 0.0 {
         enemy.fire_timer = enemy.fire_rate
         @weapons.fire_enemy_projectile(
-          game, enemy.pos, ship.pos, 350.0, enemy.damage,
+          game,
+          enemy.pos,
+          ship.pos,
+          350.0,
+          enemy.damage,
         )
       }
     }
@@ -140,7 +150,11 @@ pub fn update_enemy_ai(
             enemy.pos.y + @types.sinf(angle) * 300.0,
           )
           @weapons.fire_enemy_projectile(
-            game, enemy.pos, target, 280.0, enemy.damage,
+            game,
+            enemy.pos,
+            target,
+            280.0,
+            enemy.damage,
           )
         }
       }
@@ -190,7 +204,11 @@ pub fn update_enemy_ai(
       if enemy.fire_timer <= 0.0 && dist < 400.0 {
         enemy.fire_timer = enemy.fire_rate
         @weapons.fire_enemy_projectile(
-          game, enemy.pos, ship.pos, 220.0, enemy.damage,
+          game,
+          enemy.pos,
+          ship.pos,
+          220.0,
+          enemy.damage,
         )
       }
     }
@@ -198,7 +216,11 @@ pub fn update_enemy_ai(
 }
 
 ///|
-pub fn spawn_wave(game : @types.Game, wave : Int, sector_kind : @types.SectorKind) -> Unit {
+pub fn spawn_wave(
+  game : @types.Game,
+  wave : Int,
+  sector_kind : @types.SectorKind,
+) -> Unit {
   let count = @types.base_wave_enemies + wave
   let kinds = wave_enemy_pool(wave, sector_kind)
   for _i in 0..<count {
@@ -225,7 +247,7 @@ pub fn spawn_wave(game : @types.Game, wave : Int, sector_kind : @types.SectorKin
 ///|
 fn wave_enemy_pool(
   wave : Int,
-  sector_kind : @types.SectorKind
+  sector_kind : @types.SectorKind,
 ) -> Array[@types.EnemyKind] {
   let base : Array[@types.EnemyKind] = match sector_kind {
     Asteroids => [Drone, Swarm]

@@ -94,19 +94,27 @@ pub let color_town : @raylib.Color = @raylib.Color::new(255, 210, 60, 255)
 pub let color_noisy : @raylib.Color = @raylib.Color::new(80, 50, 70, 255)
 
 ///|
-pub let color_sensor_broad : @raylib.Color = @raylib.Color::new(40, 200, 120, 255)
+pub let color_sensor_broad : @raylib.Color = @raylib.Color::new(
+  40, 200, 120, 255,
+)
 
 ///|
-pub let color_sensor_precise : @raylib.Color = @raylib.Color::new(60, 150, 255, 255)
+pub let color_sensor_precise : @raylib.Color = @raylib.Color::new(
+  60, 150, 255, 255,
+)
 
 ///|
-pub let color_sensor_dir : @raylib.Color = @raylib.Color::new(200, 100, 255, 255)
+pub let color_sensor_dir : @raylib.Color = @raylib.Color::new(
+  200, 100, 255, 255,
+)
 
 ///|
 pub let color_ring_broad : @raylib.Color = @raylib.Color::new(40, 200, 120, 80)
 
 ///|
-pub let color_ring_precise : @raylib.Color = @raylib.Color::new(60, 150, 255, 80)
+pub let color_ring_precise : @raylib.Color = @raylib.Color::new(
+  60, 150, 255, 80,
+)
 
 ///|
 pub let color_ring_dir : @raylib.Color = @raylib.Color::new(200, 100, 255, 80)
@@ -127,10 +135,14 @@ pub let color_hud_bg : @raylib.Color = @raylib.Color::new(15, 18, 35, 230)
 pub let color_hud_text : @raylib.Color = @raylib.Color::new(200, 210, 230, 255)
 
 ///|
-pub let color_title_accent : @raylib.Color = @raylib.Color::new(255, 80, 60, 255)
+pub let color_title_accent : @raylib.Color = @raylib.Color::new(
+  255, 80, 60, 255,
+)
 
 ///|
-pub let color_star_filled : @raylib.Color = @raylib.Color::new(255, 210, 60, 255)
+pub let color_star_filled : @raylib.Color = @raylib.Color::new(
+  255, 210, 60, 255,
+)
 
 ///|
 pub let color_star_empty : @raylib.Color = @raylib.Color::new(60, 65, 80, 255)
@@ -142,7 +154,9 @@ pub let color_selected : @raylib.Color = @raylib.Color::new(255, 255, 255, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(40, 60, 100, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(60, 90, 140, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  60, 90, 140, 255,
+)
 
 ///|
 pub let pi : Float = 3.14159265

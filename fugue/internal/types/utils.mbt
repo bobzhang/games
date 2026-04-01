@@ -207,7 +207,7 @@ pub fn count_notes_in_grid(grid : Grid) -> Int {
   let mut count = 0
   for c in 0..<grid.cols {
     for r in 0..<grid.rows {
-      if grid.cells[c][r].has_note && !(grid.cells[c][r].is_locked) {
+      if grid.cells[c][r].has_note && !grid.cells[c][r].is_locked {
         count += 1
       }
     }

@@ -1,12 +1,19 @@
 // Isometric projection: convert 3D voxel coords to 2D screen position
+
 ///|
-fn iso_project(x : Float, y : Float, z : Float, scale : Float) -> (Float, Float) {
+fn iso_project(
+  x : Float,
+  y : Float,
+  z : Float,
+  scale : Float,
+) -> (Float, Float) {
   let sx = (x - z) * scale * @types.iso_x_factor
   let sy = (x + z) * scale * @types.iso_y_factor - y * scale
   (sx, sy)
 }
 
 // Draw a filled quad using two triangles
+
 ///|
 fn draw_quad(
   x0 : Int,
@@ -17,7 +24,7 @@ fn draw_quad(
   y2 : Int,
   x3 : Int,
   y3 : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let v0 = @raylib.Vector2::new(Float::from_int(x0), Float::from_int(y0))
   let v1 = @raylib.Vector2::new(Float::from_int(x1), Float::from_int(y1))
@@ -28,6 +35,7 @@ fn draw_quad(
 }
 
 // Draw quad outline for edge definition
+
 ///|
 fn draw_quad_outline(
   x0 : Int,
@@ -38,7 +46,7 @@ fn draw_quad_outline(
   y2 : Int,
   x3 : Int,
   y3 : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   @raylib.draw_line(x0, y0, x1, y1, color)
   @raylib.draw_line(x1, y1, x2, y2, color)
@@ -48,18 +56,9 @@ fn draw_quad_outline(
 
 ///|
 fn shade_color(base : @raylib.Color, factor : Float) -> @raylib.Color {
-  let r = @types.mini(
-    (Float::from_int(base.r.to_int()) * factor).to_int(),
-    255,
-  )
-  let g = @types.mini(
-    (Float::from_int(base.g.to_int()) * factor).to_int(),
-    255,
-  )
-  let b = @types.mini(
-    (Float::from_int(base.b.to_int()) * factor).to_int(),
-    255,
-  )
+  let r = @types.mini((Float::from_int(base.r.to_int()) * factor).to_int(), 255)
+  let g = @types.mini((Float::from_int(base.g.to_int()) * factor).to_int(), 255)
+  let b = @types.mini((Float::from_int(base.b.to_int()) * factor).to_int(), 255)
   @raylib.Color::new(r, g, b, 255)
 }
 
@@ -72,12 +71,13 @@ fn lighten_color(base : @raylib.Color, amount : Int) -> @raylib.Color {
 }
 
 // Check if a face should be visible (not occluded by another voxel)
+
 ///|
 fn is_top_face_visible(
   grid : @types.VoxelGrid,
   x : Int,
   y : Int,
-  z : Int
+  z : Int,
 ) -> Bool {
   !@voxel.get_voxel(grid, x, y + 1, z)
 }
@@ -87,7 +87,7 @@ fn is_left_face_visible(
   grid : @types.VoxelGrid,
   x : Int,
   y : Int,
-  z : Int
+  z : Int,
 ) -> Bool {
   !@voxel.get_voxel(grid, x - 1, y, z)
 }
@@ -97,12 +97,13 @@ fn is_right_face_visible(
   grid : @types.VoxelGrid,
   x : Int,
   y : Int,
-  z : Int
+  z : Int,
 ) -> Bool {
   !@voxel.get_voxel(grid, x, y, z + 1)
 }
 
 // Draw a single isometric voxel cube with edge outlines and face visibility
+
 ///|
 fn draw_iso_cube(
   cx : Int,
@@ -114,11 +115,11 @@ fn draw_iso_cube(
   top_color : @raylib.Color,
   left_color : @raylib.Color,
   right_color : @raylib.Color,
-  draw_edges~ : Bool = true,
+  draw_edges? : Bool = true,
   grid? : @types.VoxelGrid,
   vx? : Int,
   vy? : Int,
-  vz? : Int
+  vz? : Int,
 ) -> Unit {
   let (sx, sy) = iso_project(x, y, z, scale)
   let px = Float::from_int(cx) + sx
@@ -169,37 +170,79 @@ fn draw_iso_cube(
   if show_top {
     // Top face: brightest, with a slight highlight gradient
     draw_quad(
-      tx0.to_int(), ty0.to_int(), tx1.to_int(), ty1.to_int(), tx2.to_int(),
-      ty2.to_int(), tx3.to_int(), ty3.to_int(), top_color,
+      tx0.to_int(),
+      ty0.to_int(),
+      tx1.to_int(),
+      ty1.to_int(),
+      tx2.to_int(),
+      ty2.to_int(),
+      tx3.to_int(),
+      ty3.to_int(),
+      top_color,
     )
     if draw_edges {
       draw_quad_outline(
-        tx0.to_int(), ty0.to_int(), tx1.to_int(), ty1.to_int(), tx2.to_int(),
-        ty2.to_int(), tx3.to_int(), ty3.to_int(), highlight_edge,
+        tx0.to_int(),
+        ty0.to_int(),
+        tx1.to_int(),
+        ty1.to_int(),
+        tx2.to_int(),
+        ty2.to_int(),
+        tx3.to_int(),
+        ty3.to_int(),
+        highlight_edge,
       )
     }
   }
   if show_left {
     draw_quad(
-      lx0.to_int(), ly0.to_int(), lx1.to_int(), ly1.to_int(), lx2.to_int(),
-      ly2.to_int(), lx3.to_int(), ly3.to_int(), left_color,
+      lx0.to_int(),
+      ly0.to_int(),
+      lx1.to_int(),
+      ly1.to_int(),
+      lx2.to_int(),
+      ly2.to_int(),
+      lx3.to_int(),
+      ly3.to_int(),
+      left_color,
     )
     if draw_edges {
       draw_quad_outline(
-        lx0.to_int(), ly0.to_int(), lx1.to_int(), ly1.to_int(), lx2.to_int(),
-        ly2.to_int(), lx3.to_int(), ly3.to_int(), edge_color,
+        lx0.to_int(),
+        ly0.to_int(),
+        lx1.to_int(),
+        ly1.to_int(),
+        lx2.to_int(),
+        ly2.to_int(),
+        lx3.to_int(),
+        ly3.to_int(),
+        edge_color,
       )
     }
   }
   if show_right {
     draw_quad(
-      rx0.to_int(), ry0.to_int(), rx1.to_int(), ry1.to_int(), rx2.to_int(),
-      ry2.to_int(), rx3.to_int(), ry3.to_int(), right_color,
+      rx0.to_int(),
+      ry0.to_int(),
+      rx1.to_int(),
+      ry1.to_int(),
+      rx2.to_int(),
+      ry2.to_int(),
+      rx3.to_int(),
+      ry3.to_int(),
+      right_color,
     )
     if draw_edges {
       draw_quad_outline(
-        rx0.to_int(), ry0.to_int(), rx1.to_int(), ry1.to_int(), rx2.to_int(),
-        ry2.to_int(), rx3.to_int(), ry3.to_int(), edge_color,
+        rx0.to_int(),
+        ry0.to_int(),
+        rx1.to_int(),
+        ry1.to_int(),
+        rx2.to_int(),
+        ry2.to_int(),
+        rx3.to_int(),
+        ry3.to_int(),
+        edge_color,
       )
     }
   }
@@ -251,9 +294,7 @@ pub fn draw_isometric_view(game : @types.Game, level : @types.Level) -> Unit {
           // Left face: medium (side-lit)
           let left_c = shade_color(@types.color_iso_left, height_factor * 0.85)
           // Right face: darkest (shadow side)
-          let right_c = shade_color(
-            @types.color_iso_right, height_factor * 0.7,
-          )
+          let right_c = shade_color(@types.color_iso_right, height_factor * 0.7)
           draw_iso_cube(
             cx,
             cy,
@@ -279,7 +320,10 @@ pub fn draw_isometric_view(game : @types.Game, level : @types.Level) -> Unit {
     let hy = Float::from_int(game.hover.vy)
     let hz = Float::from_int(game.hover.vz)
     let is_filled = @voxel.get_voxel(
-      game.grid, game.hover.vx, game.hover.vy, game.hover.vz,
+      game.grid,
+      game.hover.vx,
+      game.hover.vy,
+      game.hover.vz,
     )
     if !is_filled {
       // Pulsing alpha for preview
@@ -290,7 +334,15 @@ pub fn draw_isometric_view(game : @types.Game, level : @types.Level) -> Unit {
       let preview_left = @raylib.Color::new(200, 200, 60, alpha)
       let preview_right = @raylib.Color::new(160, 160, 40, alpha)
       draw_iso_cube(
-        cx, cy, hx, hy, hz, scale, preview_top, preview_left, preview_right,
+        cx,
+        cy,
+        hx,
+        hy,
+        hz,
+        scale,
+        preview_top,
+        preview_left,
+        preview_right,
         draw_edges=true,
       )
     } else {
@@ -300,7 +352,15 @@ pub fn draw_isometric_view(game : @types.Game, level : @types.Level) -> Unit {
       let alpha = pulse.to_int()
       let remove_color = @raylib.Color::new(255, 60, 60, alpha)
       draw_iso_cube(
-        cx, cy, hx, hy, hz, scale, remove_color, remove_color, remove_color,
+        cx,
+        cy,
+        hx,
+        hy,
+        hz,
+        scale,
+        remove_color,
+        remove_color,
+        remove_color,
         draw_edges=true,
       )
     }

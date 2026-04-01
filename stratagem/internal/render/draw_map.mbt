@@ -1,16 +1,14 @@
 ///|
 fn hex_corner_x(cx : Float, size : Float, i : Int) -> Float {
-  let angle = Float::from_double(@math.PI) / 3.0 * Float::from_int(i) + Float::from_double(
-      @math.PI,
-    ) / 6.0
+  let angle = Float::from_double(@math.PI) / 3.0 * Float::from_int(i) +
+    Float::from_double(@math.PI) / 6.0
   cx + size * @types.cosf(angle)
 }
 
 ///|
 fn hex_corner_y(cy : Float, size : Float, i : Int) -> Float {
-  let angle = Float::from_double(@math.PI) / 3.0 * Float::from_int(i) + Float::from_double(
-      @math.PI,
-    ) / 6.0
+  let angle = Float::from_double(@math.PI) / 3.0 * Float::from_int(i) +
+    Float::from_double(@math.PI) / 6.0
   cy + size * @types.sinf(angle)
 }
 
@@ -19,7 +17,7 @@ fn draw_hex_filled(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   for i = 0; i < 6; i = i + 1 {
     let x1 = hex_corner_x(cx, size, i)
@@ -41,7 +39,7 @@ fn draw_hex_outline(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   for i = 0; i < 6; i = i + 1 {
     let x1 = hex_corner_x(cx, size, i)
@@ -67,7 +65,7 @@ fn terrain_color(t : @types.Terrain) -> @raylib.Color {
 fn draw_terrain_indicator(
   cx : Float,
   cy : Float,
-  terrain : @types.Terrain
+  terrain : @types.Terrain,
 ) -> Unit {
   let ix = cx.to_int()
   let iy = cy.to_int()
@@ -162,7 +160,10 @@ fn draw_hex_map(battle : @types.Battle) -> Unit {
           draw_hex_filled(cx, cy, size, @raylib.Color::new(0, 0, 0, 120))
           // Dim purple tint for "memory" effect
           draw_hex_filled(
-            cx, cy, size - 2.0, @raylib.Color::new(20, 10, 30, 60),
+            cx,
+            cy,
+            size - 2.0,
+            @raylib.Color::new(20, 10, 30, 60),
           )
         }
         Visible => ()
@@ -212,10 +213,16 @@ fn draw_selected_highlight(battle : @types.Battle) -> Unit {
         let (cx, cy) = @types.hex_to_pixel(unit.pos)
         let size = @types.hex_size
         draw_hex_outline(
-          cx, cy, size + 2.0, @raylib.Color::new(255, 255, 100, 200),
+          cx,
+          cy,
+          size + 2.0,
+          @raylib.Color::new(255, 255, 100, 200),
         )
         draw_hex_outline(
-          cx, cy, size + 4.0, @raylib.Color::new(255, 255, 100, 100),
+          cx,
+          cy,
+          size + 4.0,
+          @raylib.Color::new(255, 255, 100, 100),
         )
       }
       None => ()
@@ -228,7 +235,7 @@ fn draw_units_with_shake(battle : @types.Battle) -> Unit {
   let map = battle.map
   for i in 0..<battle.units.length() {
     let unit = battle.units[i]
-    if !(unit.active) {
+    if !unit.active {
       continue
     }
     let idx = @types.hex_index(unit.pos, map.width)
@@ -248,7 +255,7 @@ fn draw_single_unit(
   _battle : @types.Battle,
   unit : @types.GameUnit,
   cx : Float,
-  cy : Float
+  cy : Float,
 ) -> Unit {
   // Team color
   let team_color = if unit.team == Player {
@@ -286,7 +293,7 @@ fn draw_unit_icon(
   cx : Float,
   cy : Float,
   kind : @types.UnitKind,
-  size : Float
+  size : Float,
 ) -> Unit {
   let white = @raylib.Color::new(240, 240, 240, 255)
   let ix = cx.to_int()
@@ -324,7 +331,7 @@ fn draw_hp_bar(
   cy : Float,
   hp : Int,
   max_hp : Int,
-  unit_size : Float
+  unit_size : Float,
 ) -> Unit {
   let bar_w = (unit_size * 1.8).to_int()
   let bar_h = 5
@@ -332,7 +339,11 @@ fn draw_hp_bar(
   let by = cy.to_int() - (unit_size * 0.9).to_int() - bar_h - 3
   // Background with border
   @raylib.draw_rectangle(
-    bx - 1, by - 1, bar_w + 2, bar_h + 2, @raylib.Color::new(0, 0, 0, 180),
+    bx - 1,
+    by - 1,
+    bar_w + 2,
+    bar_h + 2,
+    @raylib.Color::new(0, 0, 0, 180),
   )
   @raylib.draw_rectangle(bx, by, bar_w, bar_h, @types.color_hp_bar_bg)
   // Filled portion with color gradient based on HP
@@ -361,7 +372,7 @@ fn draw_hp_bar(
 ///|
 fn draw_hover_info(game : @types.Game, battle : @types.Battle) -> Unit {
   match game.hover_hex {
-    Some(hc) => {
+    Some(hc) =>
       if @types.hex_valid(hc, battle.map.width, battle.map.height) {
         let idx = @types.hex_index(hc, battle.map.width)
         let tile = battle.map.tiles[idx]
@@ -376,7 +387,6 @@ fn draw_hover_info(game : @types.Game, battle : @types.Battle) -> Unit {
           )
         }
       }
-    }
     None => ()
   }
 }
@@ -405,18 +415,19 @@ fn draw_attack_flash(battle : @types.Battle) -> Unit {
 }
 
 ///|
-fn draw_hit_shake_offset(battle : @types.Battle, pos : @types.HexCoord) -> (Float, Float) {
+fn draw_hit_shake_offset(
+  battle : @types.Battle,
+  pos : @types.HexCoord,
+) -> (Float, Float) {
   if battle.hit_shake_timer > 0.0 {
     match battle.hit_shake_target {
       Some(target) =>
         if target.col == pos.col && target.row == pos.row {
           let intensity = battle.hit_shake_timer / 0.4 * 6.0
-          let shake_x = @types.sinf(
-              battle.hit_shake_timer * 50.0,
-            ) * intensity
-          let shake_y = @types.cosf(
-              battle.hit_shake_timer * 37.0,
-            ) * intensity * 0.7
+          let shake_x = @types.sinf(battle.hit_shake_timer * 50.0) * intensity
+          let shake_y = @types.cosf(battle.hit_shake_timer * 37.0) *
+            intensity *
+            0.7
           return (shake_x, shake_y)
         }
       None => ()

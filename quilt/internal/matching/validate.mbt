@@ -31,11 +31,11 @@ pub fn count_matched_pairs(board : @types.Board) -> Int {
             match @types.board_get(board, row, col + 1) {
               Some(right) =>
                 if @types.edges_match(
-                  patch.edges[1],
-                  patch.wildcard_edges[1],
-                  right.edges[3],
-                  right.wildcard_edges[3],
-                ) {
+                    patch.edges[1],
+                    patch.wildcard_edges[1],
+                    right.edges[3],
+                    right.wildcard_edges[3],
+                  ) {
                   matched += 1
                 }
               None => ()
@@ -46,11 +46,11 @@ pub fn count_matched_pairs(board : @types.Board) -> Int {
             match @types.board_get(board, row + 1, col) {
               Some(below) =>
                 if @types.edges_match(
-                  patch.edges[2],
-                  patch.wildcard_edges[2],
-                  below.edges[0],
-                  below.wildcard_edges[0],
-                ) {
+                    patch.edges[2],
+                    patch.wildcard_edges[2],
+                    below.edges[0],
+                    below.wildcard_edges[0],
+                  ) {
                   matched += 1
                 }
               None => ()
@@ -105,7 +105,7 @@ pub fn edge_matched_at(
   board : @types.Board,
   row : Int,
   col : Int,
-  dir : @types.Direction
+  dir : @types.Direction,
 ) -> Bool {
   match @types.board_get(board, row, col) {
     None => false
@@ -176,11 +176,7 @@ pub fn edge_matched_at(
 }
 
 ///|
-pub fn compute_stars(
-  level : @types.Level,
-  rotations : Int,
-  swaps : Int
-) -> Int {
+pub fn compute_stars(level : @types.Level, rotations : Int, swaps : Int) -> Int {
   // 1 star: all matched
   // 2 stars: within par rotations
   // 3 stars: par rotations + par swaps

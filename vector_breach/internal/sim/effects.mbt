@@ -14,11 +14,7 @@ pub fn move_unit_to(
   if battle.grid.in_bounds(u.x, u.y) {
     let old_tile = battle.grid.get(u.x, u.y)
     if old_tile.occupied_by == unit_id {
-      battle.grid.set(
-        u.x,
-        u.y,
-        { ..old_tile, occupied_by: -1 },
-      )
+      battle.grid.set(u.x, u.y, { ..old_tile, occupied_by: -1 })
     }
   }
   // Set new position
@@ -26,11 +22,7 @@ pub fn move_unit_to(
   u.y = ny
   // Mark new tile
   if battle.grid.in_bounds(nx, ny) {
-    battle.grid.set(
-      nx,
-      ny,
-      { ..battle.grid.get(nx, ny), occupied_by: unit_id },
-    )
+    battle.grid.set(nx, ny, { ..battle.grid.get(nx, ny), occupied_by: unit_id })
   }
 }
 
@@ -62,15 +54,15 @@ pub fn apply_damage_from(
   }
   let mut remaining = amount
   // Hivemind Phase 1: damage to boss is halved while minions are alive
-  if u.enemy_type == Boss && battle.mission_id == 8 && battle.boss_phase == 1 &&
+  if u.enemy_type == Boss &&
+    battle.mission_id == 8 &&
+    battle.boss_phase == 1 &&
     hivemind_has_minions(battle) {
     remaining = remaining / 2
     if remaining < 1 && amount > 0 {
       remaining = 1
     }
-    battle.turn_log.push(
-      "Hivemind link halves damage to \{remaining}!",
-    )
+    battle.turn_log.push("Hivemind link halves damage to \{remaining}!")
   }
   // Shield absorbs first
   if u.shield > 0 {
@@ -82,9 +74,7 @@ pub fn apply_damage_from(
       return 0
     }
     remaining -= u.shield
-    battle.turn_log.push(
-      "Shield absorbs \{u.shield} damage on unit \{unit_id}",
-    )
+    battle.turn_log.push("Shield absorbs \{u.shield} damage on unit \{unit_id}")
     u.shield = 0
   }
   u.hp -= remaining
@@ -104,7 +94,8 @@ pub fn apply_damage_from(
     // VampireCore augment: heal attacker 1 HP on kill
     if attacker_id >= 0 && attacker_id < battle.units.length() {
       let attacker = battle.units[attacker_id]
-      if attacker.active && attacker.team == Player &&
+      if attacker.active &&
+        attacker.team == Player &&
         @types.battle_has_augment(battle, VampireCore) {
         apply_vampire_heal(battle, attacker_id)
       }
@@ -115,10 +106,7 @@ pub fn apply_damage_from(
 
 ///|
 /// VampireCore heal effect: heal 1 HP on kill (capped at max).
-fn apply_vampire_heal(
-  battle : @types.BattleState,
-  unit_id : Int,
-) -> Unit {
+fn apply_vampire_heal(battle : @types.BattleState, unit_id : Int) -> Unit {
   let u = battle.units[unit_id]
   if u.hp < u.max_hp {
     u.hp += 1
@@ -200,11 +188,7 @@ pub fn kill_unit(battle : @types.BattleState, unit_id : Int) -> Unit {
   if battle.grid.in_bounds(u.x, u.y) {
     let tile = battle.grid.get(u.x, u.y)
     if tile.occupied_by == unit_id {
-      battle.grid.set(
-        u.x,
-        u.y,
-        { ..tile, occupied_by: -1 },
-      )
+      battle.grid.set(u.x, u.y, { ..tile, occupied_by: -1 })
     }
   }
   let name = get_unit_name(battle, unit_id)
@@ -353,9 +337,7 @@ pub fn try_push(
       let other_name = get_unit_name(battle, other_id)
       let _ = apply_damage(battle, unit_id, 1)
       let _ = apply_damage(battle, other_id, 1)
-      battle.turn_log.push(
-        "\{name} collides with \{other_name}!",
-      )
+      battle.turn_log.push("\{name} collides with \{other_name}!")
       // Collision burst FX
       @types.emit_hitstop(battle, 0.08)
       @types.emit_shake(battle, 4.0 + Float::from_int(distance))
@@ -363,7 +345,17 @@ pub fn try_push(
       // Combo: CHAIN! for pushing enemy into another (escalating)
       if u.team == Enemy {
         add_combo_score(battle, 100, "CHAIN!")
-        @types.emit_float_text(battle, nx, ny, "CHAIN x\{distance}!", 255, 200, 40, 1.0 + Float::from_int(distance) * 0.15, true)
+        @types.emit_float_text(
+          battle,
+          nx,
+          ny,
+          "CHAIN x\{distance}!",
+          255,
+          200,
+          40,
+          1.0 + Float::from_int(distance) * 0.15,
+          true,
+        )
       }
       // Chain push: the blocking unit gets pushed 1 tile
       try_push(battle, other_id, dx, dy, 1)
@@ -386,13 +378,12 @@ pub fn try_push(
         apply_status(battle, unit_id, Immobilized(1))
         return // Stop movement in water
       }
-      Ice => {
+      Ice =>
         // Ice: keep sliding until hitting wall/unit
         if steps_remaining == 0 {
           steps_remaining = 1
           battle.turn_log.push("\{name} slides on ice!")
         }
-      }
       _ => ()
     }
     // Mine hazard on tile
@@ -404,7 +395,11 @@ pub fn try_push(
     }
     // Fire on ice -> melts to water
     if tile.kind == Ice && tile.hazard == Fire {
-      battle.grid.set(nx, ny, { kind: Water, hazard: None, occupied_by: battle.grid.get(nx, ny).occupied_by })
+      battle.grid.set(nx, ny, {
+        kind: Water,
+        hazard: None,
+        occupied_by: battle.grid.get(nx, ny).occupied_by,
+      })
       battle.turn_log.push("Fire melts ice into water!")
     }
   }
@@ -449,7 +444,7 @@ pub fn process_statuses(battle : @types.BattleState) -> Unit {
             j += 1
           }
         }
-        Immobilized(turns) => {
+        Immobilized(turns) =>
           if turns <= 1 {
             let _ = u.statuses.remove(j)
             battle.turn_log.push("\{name} is no longer immobilized.")
@@ -457,7 +452,6 @@ pub fn process_statuses(battle : @types.BattleState) -> Unit {
             u.statuses[j] = Immobilized(turns - 1)
             j += 1
           }
-        }
       }
     }
   }
@@ -489,7 +483,17 @@ pub fn add_combo_score(
   // Gold glow popoff at grid center
   let cx = @types.grid_w / 2
   let cy = @types.grid_h / 2
-  @types.emit_float_text(battle, cx, cy, "+\{points} \{text}", 255, 220, 40, 1.5, true)
+  @types.emit_float_text(
+    battle,
+    cx,
+    cy,
+    "+\{points} \{text}",
+    255,
+    220,
+    40,
+    1.5,
+    true,
+  )
 }
 
 ///|
@@ -537,7 +541,7 @@ pub fn place_hazard(
   if tile.kind == Wall || tile.kind == Chasm {
     return
   }
-  battle.grid.set(x, y, { ..tile, hazard })
+  battle.grid.set(x, y, { ..tile, hazard, })
 }
 
 ///|

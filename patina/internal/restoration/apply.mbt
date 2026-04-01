@@ -164,7 +164,6 @@ fn remove_damage(region : @types.Region, kind : @types.DamageKind) -> Unit {
   // Replace the array contents
   while region.damage_types.length() > 0 {
     let _ = region.damage_types.pop()
-
   }
   for i in 0..<new_damages.length() {
     region.damage_types.push(new_damages[i])
@@ -175,7 +174,7 @@ fn remove_damage(region : @types.Region, kind : @types.DamageKind) -> Unit {
 fn replace_damage(
   region : @types.Region,
   old_kind : @types.DamageKind,
-  new_kind : @types.DamageKind
+  new_kind : @types.DamageKind,
 ) -> Unit {
   let mut replaced = false
   for i in 0..<region.damage_types.length() {

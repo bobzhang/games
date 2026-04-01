@@ -12,11 +12,7 @@ fn draw_title(game : @types.Game) -> Unit {
       @types.sinf(xf * freq + t * 2.0) * amp
     let y2 : Float = Float::from_int(wave_y) +
       @types.sinf(xf * freq + t * 2.0 + 0.1) * amp
-    let alpha = @types.clampf(
-      1.0 - @types.absf(xf - 640.0) / 640.0,
-      0.1,
-      1.0,
-    )
+    let alpha = @types.clampf(1.0 - @types.absf(xf - 640.0) / 640.0, 0.1, 1.0)
     let a = (alpha * 255.0).to_int()
     @raylib.draw_line_ex(
       @raylib.Vector2::new(xf, y1),
@@ -33,13 +29,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Title text
   let title = "TREMOR"
   let title_w = @draw.measure_text(title, 72)
-  @draw.draw_text(
-    title,
-    640 - title_w / 2,
-    160,
-    72,
-    @types.color_title_accent,
-  )
+  @draw.draw_text(title, 640 - title_w / 2, 160, 72, @types.color_title_accent)
   // Subtitle
   let sub = "Seismograph Triangulation Puzzle"
   let sub_w = @draw.measure_text(sub, 24)
@@ -57,11 +47,7 @@ fn draw_title(game : @types.Game) -> Unit {
   )
   // Version / credits
   @draw.draw_text(
-    "Place sensors. Find the epicenter.",
-    440,
-    550,
-    20,
-    @types.color_grid_line,
+    "Place sensors. Find the epicenter.", 440, 550, 20, @types.color_grid_line,
   )
 }
 
@@ -70,8 +56,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text("SELECT TIER", 490, 60, 36, @types.color_hud_text)
   let tiers : Array[@types.Tier] = [Detection, Precision, Crisis]
   let tier_descs : Array[String] = [
-    "Single quake, broad sensors, generous budget",
-    "All sensors, tighter budgets, blocked zones",
+    "Single quake, broad sensors, generous budget", "All sensors, tighter budgets, blocked zones",
     "Dual quakes, noisy zones, all sensor types",
   ]
   for i in 0..<tiers.length() {
@@ -83,13 +68,8 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let unlocked = @types.tier_unlocked(game, tier)
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
-    let hover = mx >= bx && mx < bx + bw && my >= by && my < by + bh &&
-      unlocked
-    let bg = if hover {
-      @types.color_button_hover
-    } else {
-      @types.color_button
-    }
+    let hover = mx >= bx && mx < bx + bw && my >= by && my < by + bh && unlocked
+    let bg = if hover { @types.color_button_hover } else { @types.color_button }
     @raylib.draw_rectangle(bx, by, bw, bh, bg)
     @raylib.draw_rectangle_lines(bx, by, bw, bh, @types.color_grid_line)
     let name = @types.tier_name(tier)
@@ -118,7 +98,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       total_stars += game.level_scores[j].stars
     }
     @draw.draw_text(
-      completed.to_string() + "/" + count.to_string() + " complete  Stars: " +
+      completed.to_string() +
+      "/" +
+      count.to_string() +
+      " complete  Stars: " +
       total_stars.to_string() +
       "/" +
       (count * 3).to_string(),
@@ -131,13 +114,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       @draw.draw_text("LOCKED", bx + 480, by + 50, 24, @types.color_epicenter)
     }
   }
-  @draw.draw_text(
-    "Esc: back to title",
-    40,
-    670,
-    18,
-    @types.color_grid_line,
-  )
+  @draw.draw_text("Esc: back to title", 40, 670, 18, @types.color_grid_line)
 }
 
 ///|
@@ -169,8 +146,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
     let score = game.level_scores[idx]
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
-    let hover = mx >= bx && mx < bx + bw && my >= by && my < by + bh &&
-      unlocked
+    let hover = mx >= bx && mx < bx + bw && my >= by && my < by + bh && unlocked
     let bg = if hover {
       @types.color_button_hover
     } else if unlocked {
@@ -204,13 +180,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @draw.draw_text("LOCKED", bx + 60, by + 35, 20, @types.color_epicenter)
     }
   }
-  @draw.draw_text(
-    "Esc: back to tiers",
-    40,
-    670,
-    18,
-    @types.color_grid_line,
-  )
+  @draw.draw_text("Esc: back to tiers", 40, 670, 18, @types.color_grid_line)
 }
 
 ///|
@@ -250,9 +220,7 @@ fn draw_results(game : @types.Game) -> Unit {
     Some(level) => {
       let score = game.level_scores[level.level_index]
       // Dark overlay
-      @raylib.draw_rectangle(0, 0, 1280, 720, @raylib.Color::new(
-          0, 0, 0, 180,
-        ))
+      @raylib.draw_rectangle(0, 0, 1280, 720, @raylib.Color::new(0, 0, 0, 180))
       // Results panel
       let px = 340
       let py = 120
@@ -320,7 +288,13 @@ fn draw_results(game : @types.Game) -> Unit {
       )
       // Stars
       if all_found {
-        @draw.draw_text("Stars earned:", px + 30, py + 240, 24, @types.color_star_filled)
+        @draw.draw_text(
+          "Stars earned:",
+          px + 30,
+          py + 240,
+          24,
+          @types.color_star_filled,
+        )
         draw_stars(px + 230, py + 240, score.stars, 3)
         // Star explanations
         @draw.draw_text(

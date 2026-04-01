@@ -94,9 +94,11 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
             }
           }
           if !already_tracked {
-            game.ghost_button_feedback.push(
-              { ghost_index: press.0, button_id: press.1, timer: 0.8 },
-            )
+            game.ghost_button_feedback.push({
+              ghost_index: press.0,
+              button_id: press.1,
+              timer: 0.8,
+            })
           }
         }
       }
@@ -217,13 +219,15 @@ fn process_title_input(game : @types.Game) -> Unit {
 
 ///|
 fn process_world_select_input(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyUp) || @raylib.is_key_pressed(@raylib.KeyW) {
+  if @raylib.is_key_pressed(@raylib.KeyUp) ||
+    @raylib.is_key_pressed(@raylib.KeyW) {
     game.selected_world -= 1
     if game.selected_world < 0 {
       game.selected_world = @types.num_worlds - 1
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyDown) || @raylib.is_key_pressed(@raylib.KeyS) {
+  if @raylib.is_key_pressed(@raylib.KeyDown) ||
+    @raylib.is_key_pressed(@raylib.KeyS) {
     game.selected_world += 1
     if game.selected_world >= @types.num_worlds {
       game.selected_world = 0
@@ -246,13 +250,15 @@ fn process_world_select_input(game : @types.Game) -> Unit {
 
 ///|
 fn process_level_select_input(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyUp) || @raylib.is_key_pressed(@raylib.KeyW) {
+  if @raylib.is_key_pressed(@raylib.KeyUp) ||
+    @raylib.is_key_pressed(@raylib.KeyW) {
     game.selected_level -= 1
     if game.selected_level < 0 {
       game.selected_level = @types.levels_per_world - 1
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyDown) || @raylib.is_key_pressed(@raylib.KeyS) {
+  if @raylib.is_key_pressed(@raylib.KeyDown) ||
+    @raylib.is_key_pressed(@raylib.KeyS) {
     game.selected_level += 1
     if game.selected_level >= @types.levels_per_world {
       game.selected_level = 0

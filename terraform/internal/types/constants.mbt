@@ -38,6 +38,7 @@ pub let resolve_steps : Int = 3
 pub let pi : Float = 3.14159265
 
 // Grid offset for centering
+
 ///|
 pub let grid_offset_x : Float = 180.0
 
@@ -45,6 +46,7 @@ pub let grid_offset_x : Float = 180.0
 pub let grid_offset_y : Float = 80.0
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(12, 10, 28, 255)
 
@@ -91,22 +93,32 @@ pub let color_success : @raylib.Color = @raylib.Color::new(50, 220, 80, 255)
 pub let color_fail : @raylib.Color = @raylib.Color::new(220, 50, 50, 255)
 
 ///|
-pub let color_forest_light : @raylib.Color = @raylib.Color::new(60, 200, 90, 255)
+pub let color_forest_light : @raylib.Color = @raylib.Color::new(
+  60, 200, 90, 255,
+)
 
 ///|
-pub let color_ocean_light : @raylib.Color = @raylib.Color::new(60, 140, 240, 255)
+pub let color_ocean_light : @raylib.Color = @raylib.Color::new(
+  60, 140, 240, 255,
+)
 
 ///|
-pub let color_desert_light : @raylib.Color = @raylib.Color::new(240, 210, 80, 255)
+pub let color_desert_light : @raylib.Color = @raylib.Color::new(
+  240, 210, 80, 255,
+)
 
 ///|
 pub let color_tier_seeds : @raylib.Color = @raylib.Color::new(80, 200, 80, 255)
 
 ///|
-pub let color_tier_balance : @raylib.Color = @raylib.Color::new(200, 160, 50, 255)
+pub let color_tier_balance : @raylib.Color = @raylib.Color::new(
+  200, 160, 50, 255,
+)
 
 ///|
-pub let color_tier_harmony : @raylib.Color = @raylib.Color::new(180, 80, 220, 255)
+pub let color_tier_harmony : @raylib.Color = @raylib.Color::new(
+  180, 80, 220, 255,
+)
 
 ///|
 pub let color_bar_bg : @raylib.Color = @raylib.Color::new(40, 35, 50, 200)

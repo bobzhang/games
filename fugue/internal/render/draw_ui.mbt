@@ -41,7 +41,13 @@ fn draw_play_ui(game : @types.Game) -> Unit {
     let bar_y = harm_y + 55
     let bar_w = 150
     let bar_h = 12
-    @raylib.draw_rectangle(panel_x, bar_y, bar_w, bar_h, @raylib.Color::new(40, 40, 60, 255))
+    @raylib.draw_rectangle(
+      panel_x,
+      bar_y,
+      bar_w,
+      bar_h,
+      @raylib.Color::new(40, 40, 60, 255),
+    )
     // Thresholds
     let max_val = if level.harmony_threshold_3star > 0 {
       level.harmony_threshold_3star + 4
@@ -51,19 +57,45 @@ fn draw_play_ui(game : @types.Game) -> Unit {
     if harmony > 0 {
       let fill_w = harmony * bar_w / max_val
       let clamped_w = if fill_w > bar_w { bar_w } else { fill_w }
-      @raylib.draw_rectangle(panel_x, bar_y, clamped_w, bar_h, @types.color_consonant)
+      @raylib.draw_rectangle(
+        panel_x, bar_y, clamped_w, bar_h, @types.color_consonant,
+      )
     }
     // 2-star threshold line
     if level.harmony_threshold_2star > 0 {
       let t2x = panel_x + level.harmony_threshold_2star * bar_w / max_val
-      @raylib.draw_line(t2x, bar_y - 2, t2x, bar_y + bar_h + 2, @types.color_star_on)
-      @draw.draw_text("2*", t2x - 6, bar_y + bar_h + 4, 12, @types.color_star_on)
+      @raylib.draw_line(
+        t2x,
+        bar_y - 2,
+        t2x,
+        bar_y + bar_h + 2,
+        @types.color_star_on,
+      )
+      @draw.draw_text(
+        "2*",
+        t2x - 6,
+        bar_y + bar_h + 4,
+        12,
+        @types.color_star_on,
+      )
     }
     // 3-star threshold line
     if level.harmony_threshold_3star > 0 {
       let t3x = panel_x + level.harmony_threshold_3star * bar_w / max_val
-      @raylib.draw_line(t3x, bar_y - 2, t3x, bar_y + bar_h + 2, @types.color_star_on)
-      @draw.draw_text("3*", t3x - 6, bar_y + bar_h + 4, 12, @types.color_star_on)
+      @raylib.draw_line(
+        t3x,
+        bar_y - 2,
+        t3x,
+        bar_y + bar_h + 2,
+        @types.color_star_on,
+      )
+      @draw.draw_text(
+        "3*",
+        t3x - 6,
+        bar_y + bar_h + 4,
+        12,
+        @types.color_star_on,
+      )
     }
   }
   // Targets matched
@@ -86,14 +118,40 @@ fn draw_play_ui(game : @types.Game) -> Unit {
   // Controls help
   let help_y = @types.screen_height - 160
   @draw.draw_text("Controls", panel_x, help_y, 18, @types.color_text_dim)
-  @draw.draw_text("Click: Toggle note", panel_x, help_y + 24, 14, @types.color_text_dim)
-  @draw.draw_text("Space: Play/Stop", panel_x, help_y + 42, 14, @types.color_text_dim)
-  @draw.draw_text("R: Restart level", panel_x, help_y + 60, 14, @types.color_text_dim)
+  @draw.draw_text(
+    "Click: Toggle note",
+    panel_x,
+    help_y + 24,
+    14,
+    @types.color_text_dim,
+  )
+  @draw.draw_text(
+    "Space: Play/Stop",
+    panel_x,
+    help_y + 42,
+    14,
+    @types.color_text_dim,
+  )
+  @draw.draw_text(
+    "R: Restart level",
+    panel_x,
+    help_y + 60,
+    14,
+    @types.color_text_dim,
+  )
   @draw.draw_text("Z: Undo", panel_x, help_y + 78, 14, @types.color_text_dim)
-  @draw.draw_text("Enter: Submit", panel_x, help_y + 96, 14, @types.color_text_dim)
+  @draw.draw_text(
+    "Enter: Submit",
+    panel_x,
+    help_y + 96,
+    14,
+    @types.color_text_dim,
+  )
   @draw.draw_text("Esc: Back", panel_x, help_y + 114, 14, @types.color_text_dim)
   // Playback state
-  let state_y = @types.grid_offset_y + @types.cell_height * @types.grid_rows + 20
+  let state_y = @types.grid_offset_y +
+    @types.cell_height * @types.grid_rows +
+    20
   let state_str = match game.play_state {
     Idle => "Ready"
     Playing => "Playing col " + (game.playback_col + 1).to_string()

@@ -79,12 +79,7 @@ test "is_piece_used" {
       rotation: 0,
       flipped: false,
     },
-    {
-      piece_index: 2,
-      position: @types.vec2i(3, 3),
-      rotation: 1,
-      flipped: true,
-    },
+    { piece_index: 2, position: @types.vec2i(3, 3), rotation: 1, flipped: true },
   ]
   inspect(@packing.is_piece_used(placed, 0), content="true")
   inspect(@packing.is_piece_used(placed, 1), content="false")
@@ -105,13 +100,11 @@ test "calculate_stars" {
 test "count_placed" {
   let placed : Array[@types.PlacedPiece] = []
   inspect(@packing.count_placed(placed), content="0")
-  placed.push(
-    {
-      piece_index: 0,
-      position: @types.vec2i(0, 0),
-      rotation: 0,
-      flipped: false,
-    },
-  )
+  placed.push({
+    piece_index: 0,
+    position: @types.vec2i(0, 0),
+    rotation: 0,
+    flipped: false,
+  })
   inspect(@packing.count_placed(placed), content="1")
 }

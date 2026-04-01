@@ -1,6 +1,9 @@
 ///|
 /// Record a gravity rotation move into the move history
-pub fn record_gravity_rotate(game : @types.Game, dir : @types.GravityDir) -> Unit {
+pub fn record_gravity_rotate(
+  game : @types.Game,
+  dir : @types.GravityDir,
+) -> Unit {
   let frame : @types.ReplayFrame = {
     direction: dir,
     move_type: 0,
@@ -13,12 +16,7 @@ pub fn record_gravity_rotate(game : @types.Game, dir : @types.GravityDir) -> Uni
 ///|
 /// Record a player movement into the move history
 pub fn record_player_move(game : @types.Game, dx : Int, dy : Int) -> Unit {
-  let frame : @types.ReplayFrame = {
-    direction: Down,
-    move_type: 1,
-    dx,
-    dy,
-  }
+  let frame : @types.ReplayFrame = { direction: Down, move_type: 1, dx, dy }
   game.move_history.push(frame)
 }
 
@@ -79,7 +77,7 @@ pub fn stop_ghost_replay(game : @types.Game) -> Unit {
 /// Update ghost replay state each frame
 pub fn update_ghost(game : @types.Game, dt : Float) -> Unit {
   let ghost = game.ghost
-  if !(ghost.active) {
+  if !ghost.active {
     return
   }
   if ghost.frame_index >= ghost.replay_frames.length() {
@@ -111,7 +109,7 @@ pub fn update_ghost(game : @types.Game, dt : Float) -> Unit {
 /// Draw the ghost entity on the grid
 pub fn draw_ghost(game : @types.Game) -> Unit {
   let ghost = game.ghost
-  if !(ghost.active) {
+  if !ghost.active {
     return
   }
   let px = @types.tile_to_pixel_x(ghost.ghost_x) + @types.tile_sizef * 0.5
@@ -200,7 +198,12 @@ pub fn decode_replay(data : String) -> Array[@types.ReplayFrame] {
       'M' => {
         // Parse Mdx:dy
         let coords = parse_move_coords(part)
-        frames.push({ direction: Down, move_type: 1, dx: coords.0, dy: coords.1 })
+        frames.push({
+          direction: Down,
+          move_type: 1,
+          dx: coords.0,
+          dy: coords.1,
+        })
       }
       _ => ()
     }

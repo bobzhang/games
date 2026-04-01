@@ -89,7 +89,7 @@ fn draw_region(
   x : Int,
   y : Int,
   size : Int,
-  idx : Int
+  idx : Int,
 ) -> Unit {
   let fx = Float::from_int(x)
   let fy = Float::from_int(y)
@@ -106,7 +106,8 @@ fn draw_region(
   @raylib.draw_rectangle(x, y, size, size, base_color)
   // Draw damage overlays
   match region.state {
-    Damaged | Treated => draw_damage_overlay(region, x, y, size, game.frame_count)
+    Damaged | Treated =>
+      draw_damage_overlay(region, x, y, size, game.frame_count)
     Worsened => {
       draw_damage_overlay(region, x, y, size, game.frame_count)
       // Red X for worsened
@@ -197,7 +198,7 @@ fn draw_damage_overlay(
   x : Int,
   y : Int,
   size : Int,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let fx = Float::from_int(x)
   let fy = Float::from_int(y)
@@ -249,7 +250,7 @@ fn draw_damage_overlay(
           @types.color_stain,
         )
       }
-      Fade => {
+      Fade =>
         // Pale wash overlay
         @raylib.draw_rectangle(
           x + 3,
@@ -258,16 +259,9 @@ fn draw_damage_overlay(
           size - 6,
           @types.color_fade,
         )
-      }
       Flake => {
         // Missing paint chunks
-        @raylib.draw_rectangle(
-          x + 8,
-          y + 12,
-          18,
-          14,
-          @types.color_flake,
-        )
+        @raylib.draw_rectangle(x + 8, y + 12, 18, 14, @types.color_flake)
         @raylib.draw_rectangle(
           x + size - 28,
           y + size - 26,

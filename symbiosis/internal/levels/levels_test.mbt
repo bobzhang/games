@@ -46,8 +46,8 @@ test "level grid dimensions are correct" {
 ///|
 test "parse_grid identifies walls" {
   let lines = [
-    "############", "############", "############", "############",
-    "############", "############", "############", "############",
+    "############", "############", "############", "############", "############",
+    "############", "############", "############",
   ]
   let (grid, _start, _exit, _gems) = parse_grid(lines)
   inspect(grid[0][0], content="Wall")
@@ -57,8 +57,8 @@ test "parse_grid identifies walls" {
 ///|
 test "parse_grid identifies floor and start" {
   let lines = [
-    "############", "#@.........#", "############", "############",
-    "############", "############", "############", "############",
+    "############", "#@.........#", "############", "############", "############",
+    "############", "############", "############",
   ]
   let (grid, start, _exit, _gems) = parse_grid(lines)
   inspect(grid[1][1], content="Floor") // @ becomes Floor
@@ -70,8 +70,8 @@ test "parse_grid identifies floor and start" {
 ///|
 test "parse_grid identifies exit" {
   let lines = [
-    "############", "#.........X#", "############", "############",
-    "############", "############", "############", "############",
+    "############", "#.........X#", "############", "############", "############",
+    "############", "############", "############",
   ]
   let (_grid, _start, exit, _gems) = parse_grid(lines)
   inspect(exit.x, content="10")
@@ -81,8 +81,8 @@ test "parse_grid identifies exit" {
 ///|
 test "parse_grid identifies gems" {
   let lines = [
-    "############", "#..G.......#", "#.......G..#", "############",
-    "############", "############", "############", "############",
+    "############", "#..G.......#", "#.......G..#", "############", "############",
+    "############", "############", "############",
   ]
   let (_grid, _start, _exit, gems) = parse_grid(lines)
   inspect(gems.length(), content="2")
@@ -95,8 +95,8 @@ test "parse_grid identifies gems" {
 ///|
 test "parse_grid identifies switches and doors" {
   let lines = [
-    "############", "#.0..a.....#", "#.1..b.....#", "############",
-    "############", "############", "############", "############",
+    "############", "#.0..a.....#", "#.1..b.....#", "############", "############",
+    "############", "############", "############",
   ]
   let (grid, _start, _exit, _gems) = parse_grid(lines)
   inspect(grid[1][2], content="Switch(0)")
@@ -108,8 +108,8 @@ test "parse_grid identifies switches and doors" {
 ///|
 test "parse_grid identifies special tiles" {
   let lines = [
-    "############", "#.P.I.A....#", "############", "############",
-    "############", "############", "############", "############",
+    "############", "#.P.I.A....#", "############", "############", "############",
+    "############", "############", "############",
   ]
   let (grid, _start, _exit, _gems) = parse_grid(lines)
   inspect(grid[1][2], content="Pit")
@@ -120,7 +120,7 @@ test "parse_grid identifies special tiles" {
 ///|
 test "world 2 levels have switch_links" {
   let level = get_level(1, 0)
-  assert_true!(level.switch_links.length() > 0)
+  assert_true(level.switch_links.length() > 0)
   // First level of world 2 should have switch 0 -> door 0
   inspect(level.switch_links[0].switch_id, content="0")
   inspect(level.switch_links[0].door_id, content="0")
@@ -146,8 +146,8 @@ test "world_unlocked first world always unlocked" {
     }
     scores.push(ws)
   }
-  assert_true!(world_unlocked(scores, 0))
-  assert_false!(world_unlocked(scores, 1))
+  assert_true(world_unlocked(scores, 0))
+  assert_false(world_unlocked(scores, 1))
 }
 
 ///|
@@ -164,10 +164,10 @@ test "world_unlocked requires 4 completed in previous world" {
   for i in 0..<3 {
     scores[0][i].completed = true
   }
-  assert_false!(world_unlocked(scores, 1))
+  assert_false(world_unlocked(scores, 1))
   // Complete 4th level - now enough
   scores[0][3].completed = true
-  assert_true!(world_unlocked(scores, 1))
+  assert_true(world_unlocked(scores, 1))
 }
 
 ///|
@@ -181,12 +181,12 @@ test "level_unlocked requires previous level completed" {
     scores.push(ws)
   }
   // First level of first world should be unlocked
-  assert_true!(level_unlocked(scores, 0, 0))
+  assert_true(level_unlocked(scores, 0, 0))
   // Second level should be locked (first not completed)
-  assert_false!(level_unlocked(scores, 0, 1))
+  assert_false(level_unlocked(scores, 0, 1))
   // Complete first level
   scores[0][0].completed = true
-  assert_true!(level_unlocked(scores, 0, 1))
+  assert_true(level_unlocked(scores, 0, 1))
 }
 
 ///|
@@ -200,7 +200,7 @@ test "level_unlocked respects world locking" {
     scores.push(ws)
   }
   // World 1 is locked, so level 0 of world 1 is locked
-  assert_false!(level_unlocked(scores, 1, 0))
+  assert_false(level_unlocked(scores, 1, 0))
 }
 
 ///|
@@ -208,7 +208,7 @@ test "all levels have positive par_moves" {
   for w in 0..<4 {
     for l in 0..<7 {
       let level = get_level(w, l)
-      assert_true!(level.par_moves > 0)
+      assert_true(level.par_moves > 0)
     }
   }
 }
@@ -216,5 +216,5 @@ test "all levels have positive par_moves" {
 ///|
 test "level_1_6 has gems on floor" {
   let level = get_level(0, 5)
-  assert_true!(level.gems.length() > 0)
+  assert_true(level.gems.length() > 0)
 }

@@ -205,7 +205,11 @@ pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
   } else {
     // Degenerate segment, fall back to distance check
     let dist_next = @types.distance2d(kart.x, kart.z, next_wp.x, next_wp.z)
-    if dist_next < @types.road_width { 1.0 } else { 0.0 }
+    if dist_next < @types.road_width {
+      1.0
+    } else {
+      0.0
+    }
   }
   // Advance if projection exceeds 0.8 (80% of segment traversed)
   if proj > 0.8 {

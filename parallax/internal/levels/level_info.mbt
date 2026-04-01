@@ -1,4 +1,5 @@
 // Level descriptions for display in level select
+
 ///|
 pub fn get_level_description(index : Int) -> String {
   match index {
@@ -36,6 +37,7 @@ pub fn get_level_description(index : Int) -> String {
 }
 
 // Tier descriptions with constraints explained
+
 ///|
 pub fn get_tier_description(tier : Int) -> String {
   match tier {
@@ -50,6 +52,7 @@ pub fn get_tier_description(tier : Int) -> String {
 
 // Validate that a level's targets are self-consistent
 // (there exists at least one grid configuration that satisfies all three)
+
 ///|
 pub fn validate_level_targets(level : @types.Level) -> Bool {
   // Basic check: target dimensions match grid size
@@ -84,6 +87,7 @@ pub fn validate_level_targets(level : @types.Level) -> Bool {
 }
 
 // Get difficulty rating for a level (1-5)
+
 ///|
 pub fn get_difficulty(index : Int) -> Int {
   let level = get_level(index)
@@ -107,6 +111,7 @@ pub fn get_difficulty(index : Int) -> Int {
 }
 
 // Count total filled cells across all three targets
+
 ///|
 pub fn target_cell_count(level : @types.Level) -> Int {
   let s = level.size

@@ -20,7 +20,7 @@ pub fn match_percentage(current : @types.Shape, target : @types.Shape) -> Int {
 pub fn calculate_stars(
   cost : Int,
   par : Int,
-  min_cost : Int
+  min_cost : Int,
 ) -> @types.StarRating {
   if cost <= min_cost {
     Three

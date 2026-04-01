@@ -274,14 +274,12 @@ fn make_move(game : @types.Game, coord : @types.HexCoord) -> Unit {
     }
     let cx = sum_x / Float::from_int(captured.length())
     let cy = sum_y / Float::from_int(captured.length())
-    game.score_anims.push(
-      {
-        x: cx,
-        y: cy - 20.0,
-        text: "+" + captured.length().to_string() + " cap",
-        timer: @types.score_anim_time,
-      },
-    )
+    game.score_anims.push({
+      x: cx,
+      y: cy - 20.0,
+      text: "+" + captured.length().to_string() + " cap",
+      timer: @types.score_anim_time,
+    })
   }
   match player {
     Black => game.black_captures = game.black_captures + captured.length()
@@ -299,9 +297,11 @@ fn make_move(game : @types.Game, coord : @types.HexCoord) -> Unit {
   game.patterns_found = new_patterns
   for i in 0..<new_patterns.length() {
     let p = new_patterns[i]
-    game.pattern_anims.push(
-      { kind: p.kind, positions: p.positions, timer: @types.pattern_anim_time },
-    )
+    game.pattern_anims.push({
+      kind: p.kind,
+      positions: p.positions,
+      timer: @types.pattern_anim_time,
+    })
     // Create floating score animation at pattern center
     if p.positions.length() > 0 {
       let mut sum_x : Float = 0.0
@@ -313,14 +313,12 @@ fn make_move(game : @types.Game, coord : @types.HexCoord) -> Unit {
       }
       let cx = sum_x / Float::from_int(p.positions.length())
       let cy = sum_y / Float::from_int(p.positions.length())
-      game.score_anims.push(
-        {
-          x: cx,
-          y: cy,
-          text: "+" + p.points.to_string(),
-          timer: @types.score_anim_time,
-        },
-      )
+      game.score_anims.push({
+        x: cx,
+        y: cy,
+        text: "+" + p.points.to_string(),
+        timer: @types.score_anim_time,
+      })
     }
   }
   // Puzzle mode: check score from this single move

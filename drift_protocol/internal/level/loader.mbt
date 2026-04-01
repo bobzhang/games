@@ -3,7 +3,7 @@ pub fn parse_level(
   name : String,
   tier : @types.Tier,
   ascii : Array[String],
-  par_time : Float
+  par_time : Float,
 ) -> @types.Level {
   let level = @types.new_empty_level()
   level.name = name
@@ -31,16 +31,12 @@ pub fn parse_level(
       } else if ch == 'T' {
         level.tiles[y][x] = Terminal
         terminal_count += 1
-        level.terminals.push(
-          @types.new_terminal(x, y, false, power_id_counter),
-        )
+        level.terminals.push(@types.new_terminal(x, y, false, power_id_counter))
         power_id_counter += 1
       } else if ch == 'H' {
         level.tiles[y][x] = HighTerminal
         terminal_count += 1
-        level.terminals.push(
-          @types.new_terminal(x, y, true, power_id_counter),
-        )
+        level.terminals.push(@types.new_terminal(x, y, true, power_id_counter))
         power_id_counter += 1
       } else if ch == 'D' {
         level.tiles[y][x] = Door
@@ -48,9 +44,7 @@ pub fn parse_level(
         power_id_counter += 1
       } else if ch == 'L' {
         level.tiles[y][x] = LaserGrid
-        level.lasers.push(
-          @types.new_laser(x, y, power_id_counter, true, 1),
-        )
+        level.lasers.push(@types.new_laser(x, y, power_id_counter, true, 1))
         power_id_counter += 1
       } else if ch == 'P' {
         level.tiles[y][x] = PowerNode
@@ -67,21 +61,15 @@ pub fn parse_level(
         level.start_y = y
       } else if ch == 'G' {
         // Patrol guard
-        level.guards.push(
-          @types.new_guard(x, y, Patrol, [{ x, y: y }]),
-        )
+        level.guards.push(@types.new_guard(x, y, Patrol, [{ x, y }]))
         guard_id += 1
       } else if ch == 'N' {
         // Sentinel guard
-        level.guards.push(
-          @types.new_guard(x, y, Sentinel, []),
-        )
+        level.guards.push(@types.new_guard(x, y, Sentinel, []))
         guard_id += 1
       } else if ch == 'U' {
         // Hunter guard
-        level.guards.push(
-          @types.new_guard(x, y, Hunter, [{ x, y: y }]),
-        )
+        level.guards.push(@types.new_guard(x, y, Hunter, [{ x, y }]))
         guard_id += 1
       } else if ch == 'C' {
         level.tiles[y][x] = CameraTile

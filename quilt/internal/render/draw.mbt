@@ -14,7 +14,13 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     let tw = @draw.measure_text(game.message, 24)
     let mx = (@types.screen_width - tw) / 2
-    @raylib.draw_rectangle(mx - 12, 680, tw + 24, 34, @raylib.Color::new(0, 0, 0, 160))
+    @raylib.draw_rectangle(
+      mx - 12,
+      680,
+      tw + 24,
+      34,
+      @raylib.Color::new(0, 0, 0, 160),
+    )
     @draw.draw_text(game.message, mx, 685, 24, @raylib.white)
   }
   @raylib.end_drawing()

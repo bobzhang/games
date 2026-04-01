@@ -3,7 +3,7 @@ fn p(
   n : @types.EdgePattern,
   e : @types.EdgePattern,
   s : @types.EdgePattern,
-  w : @types.EdgePattern
+  w : @types.EdgePattern,
 ) -> @types.Patch {
   @types.new_patch(n, e, s, w)
 }
@@ -13,7 +13,7 @@ fn pp(
   n : @types.EdgePattern,
   e : @types.EdgePattern,
   s : @types.EdgePattern,
-  w : @types.EdgePattern
+  w : @types.EdgePattern,
 ) -> @types.Patch {
   @types.new_patch_pinned(n, e, s, w)
 }
@@ -27,7 +27,7 @@ fn pw(
   wn : Bool,
   we : Bool,
   ws : Bool,
-  ww : Bool
+  ww : Bool,
 ) -> @types.Patch {
   @types.new_patch_wildcard(n, e, s, w, wn, we, ws, ww)
 }
@@ -834,11 +834,7 @@ fn level_22() -> @types.Level {
       p(w, s, d, d),
     ],
     pinned_positions: [0, 12, 24],
-    pinned_patches: [
-      pp(t, s, w, z),
-      pp(d, w, z, s),
-      pp(w, s, d, d),
-    ],
+    pinned_patches: [pp(t, s, w, z), pp(d, w, z, s), pp(w, s, d, d)],
     par_rotations: 34,
     par_swaps: 16,
     tier: Masterwork,

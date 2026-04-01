@@ -229,9 +229,11 @@ pub fn link_exists(links : Array[CauseLink], from : Int, to : Int) -> Bool {
 }
 
 ///|
-pub fn remove_link(links : Array[CauseLink], from : Int, to : Int) -> Array[
-  CauseLink,
-] {
+pub fn remove_link(
+  links : Array[CauseLink],
+  from : Int,
+  to : Int,
+) -> Array[CauseLink] {
   let result : Array[CauseLink] = []
   for i in 0..<links.length() {
     if !(links[i].from_id == from && links[i].to_id == to) {
@@ -247,7 +249,7 @@ pub fn make_event_card(
   actor : String,
   action : String,
   time_hint : String,
-  fixed_slot : Int
+  fixed_slot : Int,
 ) -> EventCard {
   let text = actor + " - " + action
   { id, text, actor, action, time_hint, fixed_slot }
@@ -258,7 +260,7 @@ pub fn make_clue(
   kind : ClueKind,
   card_a : Int,
   card_b : Int,
-  text : String
+  text : String,
 ) -> Clue {
   { kind, card_a, card_b, text }
 }

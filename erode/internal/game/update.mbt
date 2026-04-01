@@ -72,11 +72,7 @@ fn update_level_select(game : @types.Game) -> Unit {
   let count = end - start + 1
   // Keys 1-9 and 0 for levels 1-10
   for i in 0..<count {
-    let key = if i < 9 {
-      @raylib.KeyOne + i
-    } else {
-      @raylib.KeyZero
-    }
+    let key = if i < 9 { @raylib.KeyOne + i } else { @raylib.KeyZero }
     if @raylib.is_key_pressed(key) {
       let level_idx = start + i
       start_level(game, level_idx)
@@ -173,13 +169,12 @@ fn update_playing(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeySpace) {
     match game.play_state {
       Previewing(kind) => apply_selected_force(game, kind)
-      Selecting => {
+      Selecting =>
         // If budget remaining for selected force, preview it
         if @types.force_budget_remaining(game.budget, game.selected_force) > 0 {
           update_preview(game)
           game.play_state = Previewing(game.selected_force)
         }
-      }
       _ => ()
     }
   }
@@ -280,7 +275,11 @@ fn check_level_complete(game : @types.Game) -> Unit {
     let stars = if game.forces_used <= game.par_forces { 3 } else { 1 }
     // Check for over-erosion (shouldn't happen on perfect match, but just in case)
     let result = @erosion.compare_grids(game.grid, game.target)
-    let final_stars = if result.over_eroded > 0 && stars == 3 { 2 } else { stars }
+    let final_stars = if result.over_eroded > 0 && stars == 3 {
+      2
+    } else {
+      stars
+    }
     if final_stars > game.level_scores[game.current_level].stars {
       game.level_scores[game.current_level].stars = final_stars
     }

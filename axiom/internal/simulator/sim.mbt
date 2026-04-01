@@ -2,7 +2,7 @@
 fn eval_condition(
   cond : @types.Condition,
   robot : @types.Robot,
-  level : @types.Level
+  level : @types.Level,
 ) -> Bool {
   match cond {
     PathAhead => {
@@ -14,7 +14,7 @@ fn eval_condition(
       }
       let tile = @types.grid_get(level.grid, nx, ny)
       @types.is_tile_walkable(tile) &&
-        !@types.has_block_at(level.blocks, nx, ny)
+      !@types.has_block_at(level.blocks, nx, ny)
     }
     WallAhead => {
       let delta = @types.dir_delta(robot.dir)
@@ -28,7 +28,8 @@ fn eval_condition(
     }
     AtGoal => {
       for i in 0..<level.goals.length() {
-        if @types.vec2i_eq(level.goals[i], robot.pos) && !level.goals_collected[i] {
+        if @types.vec2i_eq(level.goals[i], robot.pos) &&
+          !level.goals_collected[i] {
           return true
         }
       }
@@ -48,7 +49,7 @@ fn eval_condition(
 fn try_collect_goals(
   robot : @types.Robot,
   goals : Array[@types.Vec2i],
-  collected : Array[Bool]
+  collected : Array[Bool],
 ) -> Unit {
   for i in 0..<goals.length() {
     if !collected[i] && @types.vec2i_eq(goals[i], robot.pos) {
@@ -59,13 +60,13 @@ fn try_collect_goals(
 
 ///|
 fn expand_program(
-  commands : Array[@types.Command]
+  commands : Array[@types.Command],
 ) -> Array[@types.CommandKind] {
   let expanded : Array[@types.CommandKind] = []
   let mut i = 0
   while i < commands.length() {
     match commands[i].kind {
-      Loop(n) => {
+      Loop(n) =>
         // Collect the commands following the Loop that it applies to
         // Loop repeats the next command n times
         if i + 1 < commands.length() {
@@ -77,7 +78,6 @@ fn expand_program(
           // No command after loop - skip
           i += 1
         }
-      }
       other => {
         expanded.push(other)
         i += 1
@@ -90,23 +90,17 @@ fn expand_program(
 ///|
 pub fn simulate(
   program : @types.Program,
-  level : @types.Level
+  level : @types.Level,
 ) -> @types.ExecutionTrace {
   let robot = @types.clone_robot(level.robot)
   let goals_collected = @types.clone_goals_collected(level.goals_collected)
   let blocks = @types.clone_blocks(level.blocks)
   let states : Array[@types.RobotState] = []
   // Record initial state
-  states.push(
-    @types.make_robot_state(robot, goals_collected, blocks, -1),
-  )
+  states.push(@types.make_robot_state(robot, goals_collected, blocks, -1))
   let expanded = expand_program(program.commands)
   if expanded.length() == 0 {
-    return {
-      states,
-      success: false,
-      fail_reason: "Empty program",
-    }
+    return { states, success: false, fail_reason: "Empty program" }
   }
   let mut step = 0
   let mut cmd_idx = 0
@@ -262,11 +256,7 @@ pub fn simulate(
           states.push(
             @types.make_robot_state(robot, goals_collected, blocks, cmd_idx),
           )
-          return {
-            states,
-            success: false,
-            fail_reason: "Nothing to push!",
-          }
+          return { states, success: false, fail_reason: "Nothing to push!" }
         }
         let push_x = bx + delta.x
         let push_y = by + delta.y
@@ -323,10 +313,6 @@ pub fn simulate(
     }
   }
   let success = @types.all_goals_collected(goals_collected)
-  let fail_reason = if success {
-    ""
-  } else {
-    "Not all goals collected!"
-  }
+  let fail_reason = if success { "" } else { "Not all goals collected!" }
   { states, success, fail_reason }
 }

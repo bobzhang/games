@@ -1,6 +1,9 @@
 ///|
 /// Stone Ruins: Pressure plates - step on to permanently open a gate
-pub fn process_pressure_plate(level : @types.Level, entity : @types.Entity) -> Unit {
+pub fn process_pressure_plate(
+  level : @types.Level,
+  entity : @types.Entity,
+) -> Unit {
   let tile = @types.get_tile(level, entity.x, entity.y)
   match tile {
     PressurePlate(id) => {
@@ -16,7 +19,11 @@ pub fn process_pressure_plate(level : @types.Level, entity : @types.Entity) -> U
 ///|
 /// Crystal Caverns: Mirror - redirect entity movement at 90 degrees
 /// Returns the new direction for an entity passing through a mirror tile
-pub fn process_mirror(level : @types.Level, entity : @types.Entity, dir : @types.GravityDir) -> @types.GravityDir {
+pub fn process_mirror(
+  level : @types.Level,
+  entity : @types.Entity,
+  dir : @types.GravityDir,
+) -> @types.GravityDir {
   let tile = @types.get_tile(level, entity.x, entity.y)
   match tile {
     Mirror(id) => @types.mirror_reflect(dir, id)
@@ -29,7 +36,7 @@ pub fn process_mirror(level : @types.Level, entity : @types.Entity, dir : @types
 pub fn apply_mirror_movement(
   level : @types.Level,
   entity : @types.Entity,
-  current_dir : @types.GravityDir
+  current_dir : @types.GravityDir,
 ) -> Bool {
   let tile = @types.get_tile(level, entity.x, entity.y)
   match tile {
@@ -42,7 +49,7 @@ pub fn apply_mirror_movement(
         nx < level.width &&
         ny >= 0 &&
         ny < level.height &&
-        !(@types.is_solid(@types.get_tile(level, nx, ny))) {
+        !@types.is_solid(@types.get_tile(level, nx, ny)) {
         // Check no entity blocking
         match @types.entity_at_except(level, nx, ny, entity.id) {
           Some(_) => false
@@ -82,7 +89,7 @@ pub fn apply_gravity_wells(level : @types.Level) -> Bool {
   // For each entity, pull toward nearest gravity well (1 tile step)
   for i in 0..<level.entities.length() {
     let entity = level.entities[i]
-    if !(entity.active) {
+    if !entity.active {
       continue
     }
     // Find nearest well
@@ -97,20 +104,8 @@ pub fn apply_gravity_wells(level : @types.Level) -> Bool {
       if dist > 0.5 && dist < best_dist && dist <= 4.0 {
         best_dist = dist
         // Move one step toward well
-        best_dx = if ddx > 0 {
-          1
-        } else if ddx < 0 {
-          -1
-        } else {
-          0
-        }
-        best_dy = if ddy > 0 {
-          1
-        } else if ddy < 0 {
-          -1
-        } else {
-          0
-        }
+        best_dx = if ddx > 0 { 1 } else if ddx < 0 { -1 } else { 0 }
+        best_dy = if ddy > 0 { 1 } else if ddy < 0 { -1 } else { 0 }
       }
     }
     if best_dx != 0 || best_dy != 0 {
@@ -120,7 +115,7 @@ pub fn apply_gravity_wells(level : @types.Level) -> Bool {
         nx < level.width &&
         ny >= 0 &&
         ny < level.height &&
-        !(@types.is_solid(@types.get_tile(level, nx, ny))) {
+        !@types.is_solid(@types.get_tile(level, nx, ny)) {
         match @types.entity_at_except(level, nx, ny, entity.id) {
           Some(_) => ()
           None => {
@@ -148,15 +143,14 @@ pub fn update_timed_lava(level : @types.Level, lava_timer : Float) -> Unit {
     for x in 0..<level.width {
       let tile = @types.get_tile(level, x, y)
       match tile {
-        TimedLava => {
+        TimedLava =>
           // If lava is active, it acts as solid (already handled by is_solid)
           // If inactive, treat as spike (dangerous but passable during active phase)
-          if !(is_active) {
+          if !is_active {
             // When lava recedes, make it passable but still dangerous
             // We use the existing tile, just check differently
             ()
           }
-        }
         _ => ()
       }
     }
@@ -189,11 +183,11 @@ pub fn apply_wind_gusts(level : @types.Level, wind_beat : Int) -> Bool {
     for x in 0..<level.width {
       let tile = @types.get_tile(level, x, y)
       match tile {
-        WindGust(dir) => {
+        WindGust(dir) =>
           // Push any entity on this tile in the wind direction
           for i in 0..<level.entities.length() {
             let entity = level.entities[i]
-            if !(entity.active) || entity.x != x || entity.y != y {
+            if !entity.active || entity.x != x || entity.y != y {
               continue
             }
             let (dx, dy) = @types.gravity_vector(dir)
@@ -203,7 +197,7 @@ pub fn apply_wind_gusts(level : @types.Level, wind_beat : Int) -> Bool {
               nx < level.width &&
               ny >= 0 &&
               ny < level.height &&
-              !(@types.is_solid(@types.get_tile(level, nx, ny))) {
+              !@types.is_solid(@types.get_tile(level, nx, ny)) {
               match @types.entity_at_except(level, nx, ny, entity.id) {
                 Some(_) => ()
                 None => {
@@ -217,7 +211,6 @@ pub fn apply_wind_gusts(level : @types.Level, wind_beat : Int) -> Bool {
               }
             }
           }
-        }
         _ => ()
       }
     }
@@ -229,7 +222,7 @@ pub fn apply_wind_gusts(level : @types.Level, wind_beat : Int) -> Bool {
 /// Process all world-specific mechanics after settling
 pub fn process_world_mechanics(
   level : @types.Level,
-  game : @types.Game
+  game : @types.Game,
 ) -> Bool {
   let mut any_moved = false
   // Process pressure plates for all entities
@@ -264,7 +257,7 @@ pub fn process_enemies(level : @types.Level, game : @types.Game) -> Bool {
   let mut any_moved = false
   for i in 0..<level.entities.length() {
     let entity = level.entities[i]
-    if !(entity.active) || entity.kind != Enemy {
+    if !entity.active || entity.kind != Enemy {
       continue
     }
     // Calculate direction toward player
@@ -287,7 +280,7 @@ pub fn process_enemies(level : @types.Level, game : @types.Game) -> Bool {
         nx < level.width &&
         ny >= 0 &&
         ny < level.height &&
-        !(@types.is_solid(@types.get_tile(level, nx, ny))) {
+        !@types.is_solid(@types.get_tile(level, nx, ny)) {
         // Check if target is blocked by a non-player entity
         let mut blocked = false
         for j in 0..<level.entities.length() {
@@ -303,7 +296,7 @@ pub fn process_enemies(level : @types.Level, game : @types.Game) -> Bool {
             break
           }
         }
-        if !(blocked) {
+        if !blocked {
           entity.from_x = entity.x
           entity.from_y = entity.y
           entity.x = nx
@@ -339,7 +332,7 @@ pub fn check_enemy_player_collision(level : @types.Level) -> Unit {
 pub fn check_boulder_crush_enemies(level : @types.Level) -> Unit {
   for i in 0..<level.entities.length() {
     let boulder = level.entities[i]
-    if !(boulder.active) || boulder.kind != Boulder {
+    if !boulder.active || boulder.kind != Boulder {
       continue
     }
     for j in 0..<level.entities.length() {

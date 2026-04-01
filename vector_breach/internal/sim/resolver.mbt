@@ -110,9 +110,7 @@ fn apply_hazard_damage(battle : @types.BattleState) -> Unit {
         }
         Mine => {
           let _ = apply_damage(battle, i, 3)
-          battle.turn_log.push(
-            "\{name} triggers a mine for 3 damage!",
-          )
+          battle.turn_log.push("\{name} triggers a mine for 3 damage!")
           // Mine is consumed
           battle.grid.set(u.x, u.y, { ..tile, hazard: None })
         }
@@ -121,9 +119,7 @@ fn apply_hazard_damage(battle : @types.BattleState) -> Unit {
       // Lava tiles
       if tile.kind == Lava {
         let _ = apply_damage(battle, i, 2)
-        battle.turn_log.push(
-          "\{name} takes 2 lava damage!",
-        )
+        battle.turn_log.push("\{name} takes 2 lava damage!")
       }
       // Water tiles slow (no damage, but note for future)
     }
@@ -134,10 +130,7 @@ fn apply_hazard_damage(battle : @types.BattleState) -> Unit {
 /// End-of-turn cleanup: clear stun after skipping, cool heat, reset flags.
 /// Also applies end-of-turn augment effects.
 fn cleanup_turn(battle : @types.BattleState) -> Unit {
-  let has_emergency_repair = @types.battle_has_augment(
-    battle,
-    EmergencyRepair,
-  )
+  let has_emergency_repair = @types.battle_has_augment(battle, EmergencyRepair)
   for i = 0; i < battle.units.length(); i = i + 1 {
     let u = battle.units[i]
     if !u.active {
@@ -172,7 +165,7 @@ fn check_battle_conditions(battle : @types.BattleState) -> Unit {
 
   // Victory conditions depend on objective
   match battle.objective {
-    DefendGrid(turns) => {
+    DefendGrid(turns) =>
       if enemies_alive == 0 {
         // Objective bonus: turns remaining * 300
         let turns_left = turns - battle.turn
@@ -183,34 +176,25 @@ fn check_battle_conditions(battle : @types.BattleState) -> Unit {
         battle.turn_log.push("VICTORY - All enemies eliminated!")
       } else if battle.turn >= turns {
         battle.phase = Victory
-        battle.turn_log.push(
-          "VICTORY - Grid defended for \{turns} turns!",
-        )
+        battle.turn_log.push("VICTORY - Grid defended for \{turns} turns!")
       }
-    }
-    Survive(turns) => {
+    Survive(turns) =>
       if battle.turn >= turns {
         battle.phase = Victory
-        battle.turn_log.push(
-          "VICTORY - Survived \{turns} turns!",
-        )
+        battle.turn_log.push("VICTORY - Survived \{turns} turns!")
       }
-    }
-    Assassinate(target_id) => {
+    Assassinate(target_id) =>
       // Check if the specific target unit is dead
       if target_id >= 0 && target_id < battle.units.length() {
         if !battle.units[target_id].active || battle.units[target_id].hp <= 0 {
           battle.phase = Victory
           battle.turn_log.push("VICTORY - Target eliminated!")
         }
-      } else {
         // Fallback: clear all enemies if target_id is invalid
-        if enemies_alive == 0 {
-          battle.phase = Victory
-          battle.turn_log.push("VICTORY - All enemies eliminated!")
-        }
+      } else if enemies_alive == 0 {
+        battle.phase = Victory
+        battle.turn_log.push("VICTORY - All enemies eliminated!")
       }
-    }
     CapturePoints(needed) => {
       // Count how many control points are occupied by player units
       let mut captured = 0
@@ -228,9 +212,7 @@ fn check_battle_conditions(battle : @types.BattleState) -> Unit {
       battle.objective_progress = captured
       if captured >= needed {
         battle.phase = Victory
-        battle.turn_log.push(
-          "VICTORY - \{captured} control points captured!",
-        )
+        battle.turn_log.push("VICTORY - \{captured} control points captured!")
       }
     }
     Escort(_target_id, dest_x) => {
@@ -258,8 +240,12 @@ fn check_battle_conditions(battle : @types.BattleState) -> Unit {
 fn resolve_overwatch(battle : @types.BattleState) -> Unit {
   for i = 0; i < battle.units.length(); i = i + 1 {
     let u = battle.units[i]
-    if u.active && u.hp > 0 && u.team == Player && u.mech_class == Sentinel &&
-      u.upgrade_tier >= 2 && !u.acted_this_turn {
+    if u.active &&
+      u.hp > 0 &&
+      u.team == Player &&
+      u.mech_class == Sentinel &&
+      u.upgrade_tier >= 2 &&
+      !u.acted_this_turn {
       // Find first enemy in cannon range with LOS
       let mut target_id = -1
       for j = 0; j < battle.units.length(); j = j + 1 {

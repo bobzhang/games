@@ -60,11 +60,7 @@ fn draw_hud(game : @types.Game, level : @types.Level) -> Unit {
   let bot_y = @types.screen_height - 40
   @raylib.draw_rectangle(0, bot_y - 8, sw, 48, @types.color_hud_bg)
   @draw.draw_text(
-    "[Space] Tick  [C] Cut  [Z] Undo  [R] Restart  [Esc] Back",
-    16,
-    bot_y,
-    18,
-    @types.color_text_dim,
+    "[Space] Tick  [C] Cut  [Z] Undo  [R] Restart  [Esc] Back", 16, bot_y, 18, @types.color_text_dim,
   )
   // Message
   if game.message_timer > 0.0 {

@@ -60,7 +60,10 @@ fn case_01_warehouse_fire() -> @types.Case {
     clues: [
       @types.make_clue(Before, 0, 2, "Rewiring happened before the sparks"),
       @types.make_clue(
-        Because, 1, 2, "Disabled alarm allowed fire to spread unnoticed",
+        Because,
+        1,
+        2,
+        "Disabled alarm allowed fire to spread unnoticed",
       ),
       @types.make_clue(After, 4, 3, "Fire dept came after smoke was noticed"),
     ],
@@ -88,7 +91,10 @@ fn case_02_missing_shipment() -> @types.Case {
     solution_links: [@types.make_link(1, 2)],
     clues: [
       @types.make_clue(
-        Because, 1, 2, "Route change caused driver to take detour",
+        Because,
+        1,
+        2,
+        "Route change caused driver to take detour",
       ),
       @types.make_clue(Before, 4, 3, "Unloading happened before truck found"),
       @types.make_clue(After, 2, 1, "Detour was after route change"),
@@ -116,9 +122,7 @@ fn case_03_office_break_in() -> @types.Case {
     solution_order: [1, 0, 2, 3, 4, 5],
     solution_links: [@types.make_link(0, 2), @types.make_link(2, 3)],
     clues: [
-      @types.make_clue(
-        Because, 0, 2, "Unlocked door allowed intruder entry",
-      ),
+      @types.make_clue(Because, 0, 2, "Unlocked door allowed intruder entry"),
       @types.make_clue(Before, 2, 3, "Entry came before copying files"),
       @types.make_clue(After, 4, 3, "Alarm triggered after file copy"),
     ],
@@ -145,12 +149,8 @@ fn case_04_food_poisoning() -> @types.Case {
     solution_order: [0, 1, 2, 3, 4, 5],
     solution_links: [@types.make_link(0, 2), @types.make_link(1, 2)],
     clues: [
-      @types.make_clue(
-        Because, 0, 2, "Expired ingredients went into the lunch",
-      ),
-      @types.make_clue(
-        Because, 1, 2, "Skipped check let bad food through",
-      ),
+      @types.make_clue(Because, 0, 2, "Expired ingredients went into the lunch"),
+      @types.make_clue(Because, 1, 2, "Skipped check let bad food through"),
       @types.make_clue(After, 4, 3, "Pain reported after eating"),
     ],
     anchors: [0, 5],
@@ -204,7 +204,10 @@ fn case_06_power_outage() -> @types.Case {
     solution_links: [@types.make_link(2, 3)],
     clues: [
       @types.make_clue(
-        Before, 0, 2, "Skipped check happened before overheating",
+        Before,
+        0,
+        2,
+        "Skipped check happened before overheating",
       ),
       @types.make_clue(Because, 2, 3, "Overheated transformer caused shutdown"),
       @types.make_clue(After, 4, 3, "Hospital switched after grid went down"),
@@ -232,12 +235,8 @@ fn case_07_museum_theft() -> @types.Case {
     solution_order: [0, 1, 2, 3, 4, 5],
     solution_links: [@types.make_link(0, 2), @types.make_link(1, 2)],
     clues: [
-      @types.make_clue(
-        Because, 0, 2, "Guard leaving allowed skylight entry",
-      ),
-      @types.make_clue(
-        Because, 1, 2, "Looped camera hid the entry",
-      ),
+      @types.make_clue(Because, 0, 2, "Guard leaving allowed skylight entry"),
+      @types.make_clue(Because, 1, 2, "Looped camera hid the entry"),
       @types.make_clue(Before, 3, 4, "Painting taken before alarm"),
     ],
     anchors: [0, 5],
@@ -272,9 +271,7 @@ fn case_08_lab_incident() -> @types.Case {
       @types.make_link(2, 5),
     ],
     clues: [
-      @types.make_clue(
-        Because, 0, 1, "Mislabeled batch caused wrong mix",
-      ),
+      @types.make_clue(Because, 0, 1, "Mislabeled batch caused wrong mix"),
       @types.make_clue(Because, 1, 2, "Wrong chemicals produced fumes"),
       @types.make_clue(Before, 3, 4, "Smell reported before evacuation"),
       @types.make_clue(Because, 2, 5, "Fumes caused hospitalizations"),
@@ -367,17 +364,10 @@ fn case_11_expedition_failure() -> @types.Case {
   {
     cards,
     solution_order: [0, 1, 2, 3, 4, 5, 6],
-    solution_links: [
-      @types.make_link(0, 4),
-      @types.make_link(1, 5),
-    ],
+    solution_links: [@types.make_link(0, 4), @types.make_link(1, 5)],
     clues: [
-      @types.make_clue(
-        Because, 0, 4, "Budget cuts meant cheap radio equipment",
-      ),
-      @types.make_clue(
-        Because, 1, 5, "Backup guide chose wrong route",
-      ),
+      @types.make_clue(Because, 0, 4, "Budget cuts meant cheap radio equipment"),
+      @types.make_clue(Because, 1, 5, "Backup guide chose wrong route"),
       @types.make_clue(Before, 3, 4, "Storm came before radio failure"),
       @types.make_clue(After, 5, 4, "Wrong route taken after radio died"),
     ],
@@ -469,10 +459,7 @@ fn case_14_train_delay() -> @types.Case {
   {
     cards,
     solution_order: [0, 1, 2, 3, 5, 4, 6],
-    solution_links: [
-      @types.make_link(0, 2),
-      @types.make_link(2, 3),
-    ],
+    solution_links: [@types.make_link(0, 2), @types.make_link(2, 3)],
     clues: [
       @types.make_clue(Because, 0, 2, "Faulty relay caused stuck signal"),
       @types.make_clue(Because, 2, 3, "Red signal halted the express"),
@@ -514,7 +501,10 @@ fn case_15_political_coverup() -> @types.Case {
     ],
     clues: [
       @types.make_clue(
-        Because, 0, 1, "Leaked docs triggered the shredding order",
+        Because,
+        0,
+        1,
+        "Leaked docs triggered the shredding order",
       ),
       @types.make_clue(Because, 2, 3, "Whistleblower enabled the exposé"),
       @types.make_clue(Because, 3, 4, "Exposé forced the denial"),
@@ -588,9 +578,7 @@ fn case_17_reactor_meltdown() -> @types.Case {
     clues: [
       @types.make_clue(Because, 1, 2, "False reading led to reduced coolant"),
       @types.make_clue(Because, 2, 3, "Low coolant caused temp rise"),
-      @types.make_clue(
-        Because, 0, 4, "Ignored audit left backup unmaintained",
-      ),
+      @types.make_clue(Because, 0, 4, "Ignored audit left backup unmaintained"),
       @types.make_clue(Because, 3, 5, "High temp triggered meltdown"),
       @types.make_clue(Before, 5, 6, "Meltdown before emergency response"),
     ],
@@ -625,7 +613,10 @@ fn case_18_art_forgery() -> @types.Case {
     ],
     clues: [
       @types.make_clue(
-        Because, 0, 1, "Forger supplied painting for authentication",
+        Because,
+        0,
+        1,
+        "Forger supplied painting for authentication",
       ),
       @types.make_clue(Because, 1, 2, "Authentication enabled the sale"),
       @types.make_clue(Because, 3, 4, "Anomaly prompted lab testing"),
@@ -666,7 +657,12 @@ fn case_19_double_agent() -> @types.Case {
       @types.make_clue(Because, 1, 2, "Leaked intel compromised operation"),
       @types.make_clue(Because, 3, 4, "Pattern detection led to the trap"),
       @types.make_clue(Because, 5, 6, "False intel tricked the handler"),
-      @types.make_clue(NotAdjacent, 2, 5, "Compromised op and false intel far apart"),
+      @types.make_clue(
+        NotAdjacent,
+        2,
+        5,
+        "Compromised op and false intel far apart",
+      ),
     ],
     anchors: [0, 7],
     tier: ColdCases,

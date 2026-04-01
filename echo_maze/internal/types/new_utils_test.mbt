@@ -1,9 +1,21 @@
 ///|
 test "manhattan_dist basic cases" {
-  inspect(@types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(0, 0)), content="0")
-  inspect(@types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(1, 0)), content="1")
-  inspect(@types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(0, 1)), content="1")
-  inspect(@types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(3, 4)), content="7")
+  inspect(
+    @types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(0, 0)),
+    content="0",
+  )
+  inspect(
+    @types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(1, 0)),
+    content="1",
+  )
+  inspect(
+    @types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(0, 1)),
+    content="1",
+  )
+  inspect(
+    @types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(3, 4)),
+    content="7",
+  )
   inspect(
     @types.manhattan_dist(@types.vec2i(5, 5), @types.vec2i(2, 1)),
     content="7",
@@ -65,13 +77,7 @@ test "new_maze_state guard states have alert fields" {
 test "update_door_animations opens smoothly" {
   let ms : @types.MazeState = {
     door_states: [
-      {
-        door_id: 0,
-        open: true,
-        timer: 0,
-        anim_progress: 0.0,
-        prev_open: false,
-      },
+      { door_id: 0, open: true, timer: 0, anim_progress: 0.0, prev_open: false },
     ],
     button_pressed: [],
     guard_states: [],
@@ -87,13 +93,7 @@ test "update_door_animations opens smoothly" {
 test "update_door_animations closes smoothly" {
   let ms : @types.MazeState = {
     door_states: [
-      {
-        door_id: 0,
-        open: false,
-        timer: 0,
-        anim_progress: 1.0,
-        prev_open: true,
-      },
+      { door_id: 0, open: false, timer: 0, anim_progress: 1.0, prev_open: true },
     ],
     button_pressed: [],
     guard_states: [],

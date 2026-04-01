@@ -80,10 +80,14 @@ pub let color_selected : @raylib.Color = @raylib.Color::new(255, 255, 100, 255)
 pub let color_source_sun : @raylib.Color = @raylib.Color::new(255, 200, 0, 255)
 
 ///|
-pub let color_source_rain : @raylib.Color = @raylib.Color::new(50, 120, 255, 255)
+pub let color_source_rain : @raylib.Color = @raylib.Color::new(
+  50, 120, 255, 255,
+)
 
 ///|
-pub let color_source_wind : @raylib.Color = @raylib.Color::new(200, 230, 255, 255)
+pub let color_source_wind : @raylib.Color = @raylib.Color::new(
+  200, 230, 255, 255,
+)
 
 ///|
 pub let color_star_on : @raylib.Color = @raylib.Color::new(255, 220, 50, 255)

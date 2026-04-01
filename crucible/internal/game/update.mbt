@@ -52,8 +52,10 @@ fn update_tier_select(game : @types.Game) -> Unit {
       let card_h = 200
       let card_x = (w - card_w * 3 - 60) / 2 + i * (card_w + 30)
       let card_y = h / 2 - card_h / 2
-      if mx >= card_x && mx <= card_x + card_w && my >= card_y && my <= card_y +
-        card_h {
+      if mx >= card_x &&
+        mx <= card_x + card_w &&
+        my >= card_y &&
+        my <= card_y + card_h {
         if @levels.is_tier_unlocked(tier, game.level_scores) {
           game.current_tier = tier
           game.screen = LevelSelect
@@ -144,7 +146,7 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   // Tab - toggle recipe book
   if @raylib.is_key_pressed(@raylib.KeyTab) {
-    game.show_recipe_book = !(game.show_recipe_book)
+    game.show_recipe_book = !game.show_recipe_book
     return
   }
   // Z - undo last addition
@@ -195,8 +197,11 @@ fn detect_palette_click(game : @types.Game) -> @types.Element? {
 ///|
 fn add_element_to_cauldron(game : @types.Game, elem : @types.Element) -> Unit {
   // Try to spend from budget
-  if !(@types.budget_spend(game.budget, elem)) {
-    @types.set_message(game, "No more " + @types.element_name(elem) + " remaining!")
+  if !@types.budget_spend(game.budget, elem) {
+    @types.set_message(
+      game,
+      "No more " + @types.element_name(elem) + " remaining!",
+    )
     return
   }
   game.steps_taken += 1
@@ -209,7 +214,8 @@ fn add_element_to_cauldron(game : @types.Game, elem : @types.Element) -> Unit {
       // Start add animation
       let elem_idx = element_palette_index(elem)
       game.add_anim_element = Some(elem)
-      game.add_anim_y = @types.palette_y + Float::from_int(elem_idx) * @types.palette_spacing
+      game.add_anim_y = @types.palette_y +
+        Float::from_int(elem_idx) * @types.palette_spacing
       @types.start_anim(game, AddElement, @types.add_anim_duration)
     }
     Some(current) => {
@@ -217,7 +223,10 @@ fn add_element_to_cauldron(game : @types.Game, elem : @types.Element) -> Unit {
       let result = @alchemy.react(current, elem)
       // Discover the reaction
       let is_new = @alchemy.discover_reaction(
-        game.recipe_book, current, elem, result,
+        game.recipe_book,
+        current,
+        elem,
+        result,
       )
       // Also discover reverse direction
       ignore(
@@ -232,7 +241,9 @@ fn add_element_to_cauldron(game : @types.Game, elem : @types.Element) -> Unit {
           game.cauldron_history.push(elem)
           @types.set_message(
             game,
-            @types.element_name(current) + " + " + @types.element_name(elem) +
+            @types.element_name(current) +
+            " + " +
+            @types.element_name(elem) +
             " = " +
             @types.element_name(new_elem) +
             (if is_new { " (NEW!)" } else { "" }),
@@ -240,7 +251,8 @@ fn add_element_to_cauldron(game : @types.Game, elem : @types.Element) -> Unit {
           // Start add animation
           let elem_idx = element_palette_index(elem)
           game.add_anim_element = Some(elem)
-          game.add_anim_y = @types.palette_y + Float::from_int(elem_idx) * @types.palette_spacing
+          game.add_anim_y = @types.palette_y +
+            Float::from_int(elem_idx) * @types.palette_spacing
           @types.start_anim(game, AddElement, @types.add_anim_duration)
           // Check if target produced
           let level = @levels.get_level(game.current_level_index)

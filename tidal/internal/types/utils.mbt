@@ -155,20 +155,18 @@ pub fn clone_grid(src : WaveGrid) -> WaveGrid {
   let tiles : Array[WaveTile] = Array::new(capacity=src.tiles.length())
   for i in 0..<src.tiles.length() {
     let t = src.tiles[i]
-    tiles.push(
-      {
-        amplitude: t.amplitude,
-        phase: t.phase,
-        has_wall: t.has_wall,
-        object: t.object,
-        is_target: t.is_target,
-        target_min: t.target_min,
-        target_max: t.target_max,
-        target_phase: t.target_phase,
-        target_satisfied: t.target_satisfied,
-        wave_fronts: [],
-      },
-    )
+    tiles.push({
+      amplitude: t.amplitude,
+      phase: t.phase,
+      has_wall: t.has_wall,
+      object: t.object,
+      is_target: t.is_target,
+      target_min: t.target_min,
+      target_max: t.target_max,
+      target_phase: t.target_phase,
+      target_satisfied: t.target_satisfied,
+      wave_fronts: [],
+    })
   }
   { width: src.width, height: src.height, tiles }
 }
@@ -240,6 +238,7 @@ pub fn tile_kind_name(k : TileKind) -> String {
 }
 
 // Direction helpers: dx, dy for direction index 0-3
+
 ///|
 pub fn dir_dx(d : Int) -> Int {
   match d {

@@ -4,7 +4,7 @@ fn draw_parchment_texture(
   y : Int,
   w : Int,
   h : Int,
-  seed : Int
+  seed : Int,
 ) -> Unit {
   // Deterministic pseudo-random stipple dots for aged paper effect
   let dot_color = @types.color_parchment_dark
@@ -21,7 +21,7 @@ fn draw_parchment_texture(
       let dy = y + row * spacing + spacing / 2 + offset_y
       if dx >= x && dx < x + w && dy >= y && dy < y + h {
         // Only draw every other dot for subtlety
-        if (hash % 3) == 0 {
+        if hash % 3 == 0 {
           @raylib.draw_pixel(dx, dy, dot_color)
           @raylib.draw_pixel(dx + 1, dy, dot_color)
         }
@@ -45,4 +45,3 @@ fn draw_corner_flourish(cx : Int, cy : Int) -> Unit {
   @raylib.draw_line(cx - s, cy, cx + s, cy, color)
   @raylib.draw_line(cx, cy - s, cx, cy + s, color)
 }
-

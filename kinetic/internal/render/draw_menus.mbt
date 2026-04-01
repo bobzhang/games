@@ -27,7 +27,13 @@ fn draw_title(game : @types.Game) -> Unit {
   let prompt_color = @raylib.fade(@types.color_text, prompt_alpha_f)
   let prompt = "Press ENTER to start"
   let ptw = @draw.measure_text(prompt, 24)
-  @draw.draw_text(prompt, @types.screen_width / 2 - ptw / 2, 400, 24, prompt_color)
+  @draw.draw_text(
+    prompt,
+    @types.screen_width / 2 - ptw / 2,
+    400,
+    24,
+    prompt_color,
+  )
   // Credits
   @draw.draw_text(
     "A puzzle of gears, ratios and direction",
@@ -45,10 +51,17 @@ fn draw_title_gears(game : @types.Game) -> Unit {
   draw_title_single_gear(200.0, 350.0, 40.0, 10, @types.color_gear_small, angle)
   // Gear 2 (middle medium, reversed)
   draw_title_single_gear(
-    280.0, 350.0, 55.0, 14, @types.color_gear_medium, -angle,
+    280.0,
+    350.0,
+    55.0,
+    14,
+    @types.color_gear_medium,
+    -angle,
   )
   // Gear 3 (right small)
-  draw_title_single_gear(1000.0, 350.0, 40.0, 10, @types.color_gear_small, angle)
+  draw_title_single_gear(
+    1000.0, 350.0, 40.0, 10, @types.color_gear_small, angle,
+  )
 }
 
 ///|
@@ -58,7 +71,7 @@ fn draw_title_single_gear(
   r : Float,
   teeth : Int,
   color : @raylib.Color,
-  a : Float
+  a : Float,
 ) -> Unit {
   @raylib.draw_circle(cx.to_int(), cy.to_int(), r, color)
   @raylib.draw_circle(cx.to_int(), cy.to_int(), 6.0, @types.color_title_bg)
@@ -81,11 +94,7 @@ fn draw_title_single_gear(
 fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text("SELECT TIER", 100, 40, 36, @types.color_highlight)
   @draw.draw_text(
-    "Choose a difficulty tier",
-    100,
-    85,
-    18,
-    @types.color_text_dim,
+    "Choose a difficulty tier", 100, 85, 18, @types.color_text_dim,
   )
   let tiers : Array[@types.Tier] = [Gears, Trains, Workshop]
   for i in 0..<tiers.length() {
@@ -123,11 +132,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   }
   // Navigation hints
   @draw.draw_text(
-    "Up/Down: Select   Enter: Choose   Esc: Back",
-    100,
-    660,
-    16,
-    @types.color_text_dim,
+    "Up/Down: Select   Enter: Choose   Esc: Back", 100, 660, 16, @types.color_text_dim,
   )
   // Decorative gears on right side
   draw_decorative_gears(game.anim_timer)
@@ -152,10 +157,8 @@ fn draw_decorative_gears(anim_timer : Float) -> Unit {
 fn tier_description(tier : @types.Tier) -> String {
   match tier {
     Gears => "8 levels: Learn meshing and speed ratios with 2 gear sizes"
-    Trains =>
-      "9 levels: Gear trains, belts, and 2 outputs with 3 sizes"
-    Workshop =>
-      "8 levels: All parts including ratchets, up to 3 outputs"
+    Trains => "9 levels: Gear trains, belts, and 2 outputs with 3 sizes"
+    Workshop => "8 levels: All parts including ratchets, up to 3 outputs"
   }
 }
 
@@ -217,16 +220,17 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
   }
   @draw.draw_text(
-    "Arrow keys: Select   Enter: Play   Esc: Back",
-    100,
-    660,
-    16,
-    @types.color_text_dim,
+    "Arrow keys: Select   Enter: Play   Esc: Back", 100, 660, 16, @types.color_text_dim,
   )
 }
 
 ///|
-fn draw_star(cx : Float, cy : Float, size : Float, color : @raylib.Color) -> Unit {
+fn draw_star(
+  cx : Float,
+  cy : Float,
+  size : Float,
+  color : @raylib.Color,
+) -> Unit {
   // Simple 5-point star
   let points = 5
   for i in 0..<points {
@@ -262,13 +266,7 @@ fn draw_results(game : @types.Game) -> Unit {
     Some(l) => l
     None => return
   }
-  @raylib.draw_rectangle(
-    200,
-    100,
-    880,
-    520,
-    @types.color_panel,
-  )
+  @raylib.draw_rectangle(200, 100, 880, 520, @types.color_panel)
   @draw.draw_text("LEVEL COMPLETE!", 340, 130, 42, @types.color_highlight)
   @draw.draw_text(level.name, 340, 185, 24, @types.color_text)
   let score = game.scores[game.selected_level]
@@ -281,12 +279,7 @@ fn draw_results(game : @types.Game) -> Unit {
       @types.color_star_empty
     }
     let sx = 480 + i * 80
-    draw_star(
-      Float::from_int(sx),
-      Float::from_int(star_y),
-      24.0,
-      star_color,
-    )
+    draw_star(Float::from_int(sx), Float::from_int(star_y), 24.0, star_color)
   }
   // Star descriptions
   @draw.draw_text(
@@ -294,21 +287,33 @@ fn draw_results(game : @types.Game) -> Unit {
     340,
     300,
     18,
-    if score.stars >= 1 { @types.color_output_ok } else { @types.color_text_dim },
+    if score.stars >= 1 {
+      @types.color_output_ok
+    } else {
+      @types.color_text_dim
+    },
   )
   @draw.draw_text(
     "2 Stars: Within par (" + level.par_gears.to_string() + " gears)",
     340,
     330,
     18,
-    if score.stars >= 2 { @types.color_output_ok } else { @types.color_text_dim },
+    if score.stars >= 2 {
+      @types.color_output_ok
+    } else {
+      @types.color_text_dim
+    },
   )
   @draw.draw_text(
     "3 Stars: Par + minimum energy loss",
     340,
     360,
     18,
-    if score.stars >= 3 { @types.color_output_ok } else { @types.color_text_dim },
+    if score.stars >= 3 {
+      @types.color_output_ok
+    } else {
+      @types.color_text_dim
+    },
   )
   // Stats
   @draw.draw_text(
@@ -327,10 +332,6 @@ fn draw_results(game : @types.Game) -> Unit {
   )
   // Navigation
   @draw.draw_text(
-    "Enter: Next Level   Esc: Level Select   R: Retry",
-    340,
-    530,
-    18,
-    @types.color_text_dim,
+    "Enter: Next Level   Esc: Level Select   R: Retry", 340, 530, 18, @types.color_text_dim,
   )
 }

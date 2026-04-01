@@ -583,14 +583,18 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   )
   @draw.draw_text(
     "Classic Sokoban reimagined with mobile controls,",
-    @types.screen_w / 2 - @draw.measure_text("Classic Sokoban reimagined with mobile controls,", 34) / 2,
+    @types.screen_w / 2 -
+    @draw.measure_text("Classic Sokoban reimagined with mobile controls,", 34) /
+    2,
     236,
     34,
     @raylib.Color::new(194, 218, 237, 238),
   )
   @draw.draw_text(
     "undo tactics, and 12 handcrafted warehouse stages.",
-    @types.screen_w / 2 - @draw.measure_text("undo tactics, and 12 handcrafted warehouse stages.", 34) / 2,
+    @types.screen_w / 2 -
+    @draw.measure_text("undo tactics, and 12 handcrafted warehouse stages.", 34) /
+    2,
     278,
     34,
     @raylib.Color::new(194, 218, 237, 238),
@@ -637,14 +641,19 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
 
   @draw.draw_text(
     "Move crates onto all goal marks.",
-    @types.screen_w / 2 - @draw.measure_text("Move crates onto all goal marks.", 30) / 2,
+    @types.screen_w / 2 -
+    @draw.measure_text("Move crates onto all goal marks.", 30) / 2,
     418,
     30,
     @raylib.Color::new(224, 234, 245, 236),
   )
   @draw.draw_text(
     "Don't trap crates against walls unless the tile is a goal.",
-    @types.screen_w / 2 - @draw.measure_text("Don't trap crates against walls unless the tile is a goal.", 30) / 2,
+    @types.screen_w / 2 -
+    @draw.measure_text(
+      "Don't trap crates against walls unless the tile is a goal.", 30,
+    ) /
+    2,
     456,
     30,
     @raylib.Color::new(224, 234, 245, 236),

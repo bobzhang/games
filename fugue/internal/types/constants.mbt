@@ -32,6 +32,7 @@ pub let playback_speed : Float = 0.4
 pub let total_levels : Int = 20
 
 // Interval scores
+
 ///|
 pub let score_unison : Int = 0
 
@@ -54,6 +55,7 @@ pub let score_sixth : Int = 2
 pub let score_seventh : Int = -1
 
 // Note colors (rainbow per pitch)
+
 ///|
 pub let color_note_c : @raylib.Color = @raylib.Color::new(255, 80, 80, 255)
 
@@ -76,6 +78,7 @@ pub let color_note_a : @raylib.Color = @raylib.Color::new(140, 80, 255, 255)
 pub let color_note_b : @raylib.Color = @raylib.Color::new(220, 80, 220, 255)
 
 // UI colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(18, 18, 32, 255)
 
@@ -119,13 +122,21 @@ pub let color_dissonant : @raylib.Color = @raylib.Color::new(255, 80, 80, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(60, 50, 100, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(90, 70, 140, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  90, 70, 140, 255,
+)
 
 ///|
-pub let color_melody_tier : @raylib.Color = @raylib.Color::new(100, 200, 255, 255)
+pub let color_melody_tier : @raylib.Color = @raylib.Color::new(
+  100, 200, 255, 255,
+)
 
 ///|
-pub let color_harmony_tier : @raylib.Color = @raylib.Color::new(100, 255, 150, 255)
+pub let color_harmony_tier : @raylib.Color = @raylib.Color::new(
+  100, 255, 150, 255,
+)
 
 ///|
-pub let color_counterpoint_tier : @raylib.Color = @raylib.Color::new(255, 180, 100, 255)
+pub let color_counterpoint_tier : @raylib.Color = @raylib.Color::new(
+  255, 180, 100, 255,
+)

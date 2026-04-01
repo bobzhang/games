@@ -2,11 +2,7 @@
 /// Calculate adjacency bonus for a crop at (col, row)
 /// Same-type neighbors give +1 each
 /// Special combos: Wheat+Corn=+2, Berry+Flower=+3
-pub fn adjacency_bonus(
-  grid : @types.HexGrid,
-  col : Int,
-  row : Int
-) -> Int {
+pub fn adjacency_bonus(grid : @types.HexGrid, col : Int, row : Int) -> Int {
   let tile = grid.tiles[row][col]
   let crop_kind = match tile.crop {
     Some(k) => k
@@ -43,10 +39,7 @@ pub fn adjacency_bonus(
   // Berry+Flower: garden synergy (+2 each)
   // Corn+Berry: harvest synergy (+1 each) - rewards mixed planting
   match crop_kind {
-    Wheat =>
-      if has_corn {
-        bonus += 2
-      }
+    Wheat => if has_corn { bonus += 2 }
     Corn => {
       if has_wheat {
         bonus += 2
@@ -63,10 +56,7 @@ pub fn adjacency_bonus(
         bonus += 1
       }
     }
-    Flower =>
-      if has_berry {
-        bonus += 2
-      }
+    Flower => if has_berry { bonus += 2 }
   }
   bonus
 }
@@ -153,9 +143,7 @@ pub fn projected_yield(grid : @types.HexGrid) -> Int {
 
 ///|
 /// Count crops in each state
-pub fn count_crops(
-  grid : @types.HexGrid
-) -> (Int, Int, Int, Int) {
+pub fn count_crops(grid : @types.HexGrid) -> (Int, Int, Int, Int) {
   let mut seeds = 0
   let mut growing = 0
   let mut mature = 0
@@ -184,7 +172,7 @@ pub fn adjacency_preview(
   grid : @types.HexGrid,
   col : Int,
   row : Int,
-  kind : @types.CropKind
+  kind : @types.CropKind,
 ) -> Array[(Int, Int)] {
   let neighbors = @hex.valid_neighbors(col, row)
   let result : Array[(Int, Int)] = []
@@ -204,8 +192,7 @@ pub fn adjacency_preview(
           | (Berry, Flower)
           | (Flower, Berry)
           | (Corn, Berry)
-          | (Berry, Corn) =>
-            true
+          | (Berry, Corn) => true
           _ => false
         }
         if is_combo {

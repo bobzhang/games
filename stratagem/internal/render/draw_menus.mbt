@@ -12,9 +12,7 @@ fn draw_title(game : @types.Game) -> Unit {
       let sv : Float = @types.sinf(time + Float::from_int(row * col))
       let av : Float = 30.0 + sv * 20.0
       let alpha = av.to_int()
-      draw_hex_outline(
-        hx, hy, 40.0, @raylib.Color::new(60, 80, 120, alpha),
-      )
+      draw_hex_outline(hx, hy, 40.0, @raylib.Color::new(60, 80, 120, alpha))
     }
   }
   // Title
@@ -23,14 +21,16 @@ fn draw_title(game : @types.Game) -> Unit {
   let pulse = @types.sinf(time * 2.0) * 0.1 + 0.9
   let alpha = (pulse * 255.0).to_int()
   @draw.draw_text(
-    title, (w - title_w) / 2, h / 5, 72, @raylib.Color::new(220, 200, 140, alpha),
+    title,
+    (w - title_w) / 2,
+    h / 5,
+    72,
+    @raylib.Color::new(220, 200, 140, alpha),
   )
   // Subtitle
   let sub = "A HEX WARGAME"
   let sub_w = @draw.measure_text(sub, 20)
-  @draw.draw_text(
-    sub, (w - sub_w) / 2, h / 5 + 80, 20, @types.color_hud_text,
-  )
+  @draw.draw_text(sub, (w - sub_w) / 2, h / 5 + 80, 20, @types.color_hud_text)
   // Menu items
   let items = ["[C] Campaign", "[S] Skirmish", "[Q] Quit"]
   for i in 0..<items.length() {
@@ -38,11 +38,21 @@ fn draw_title(game : @types.Game) -> Unit {
     let iw = @draw.measure_text(item, 28)
     let iy = h / 2 + 40 + i * 55
     @draw.draw_text(
-      item, (w - iw) / 2, iy, 28, @raylib.Color::new(180, 190, 210, 255),
+      item,
+      (w - iw) / 2,
+      iy,
+      28,
+      @raylib.Color::new(180, 190, 210, 255),
     )
   }
   // Version
-  @draw.draw_text("v1.0", 10, h - 30, 16, @raylib.Color::new(100, 100, 120, 200))
+  @draw.draw_text(
+    "v1.0",
+    10,
+    h - 30,
+    16,
+    @raylib.Color::new(100, 100, 120, 200),
+  )
 }
 
 ///|
@@ -57,9 +67,7 @@ fn draw_campaign(game : @types.Game) -> Unit {
   // Score
   let score_text = "Total Score: " + camp.total_score.to_string()
   let stw = @draw.measure_text(score_text, 20)
-  @draw.draw_text(
-    score_text, (w - stw) / 2, 85, 20, @types.color_hud_text,
-  )
+  @draw.draw_text(score_text, (w - stw) / 2, 85, 20, @types.color_hud_text)
   // Level grid (3 columns x 4 rows)
   let cols = 3
   let box_w = 350
@@ -124,7 +132,11 @@ fn draw_campaign(game : @types.Game) -> Unit {
     if camp.level_scores[i] > 0 {
       let sc = "Score: " + camp.level_scores[i].to_string()
       @draw.draw_text(
-        sc, bx + 10, by + 78, 16, @raylib.Color::new(200, 180, 80, 200),
+        sc,
+        bx + 10,
+        by + 78,
+        16,
+        @raylib.Color::new(200, 180, 80, 200),
       )
     }
   }
@@ -149,7 +161,11 @@ fn draw_skirmish(game : @types.Game) -> Unit {
   let map_name = @levels.skirmish_map_name(setup.map_index)
   @draw.draw_text("Map:", w / 4, cy, 24, @types.color_hud_text)
   @draw.draw_text(
-    "< " + map_name + " >", w / 4 + 120, cy, 24, @types.color_gold,
+    "< " + map_name + " >",
+    w / 4 + 120,
+    cy,
+    24,
+    @types.color_gold,
   )
   // Army size
   @draw.draw_text("Army Size:", w / 4, cy + 60, 24, @types.color_hud_text)
@@ -168,13 +184,15 @@ fn draw_skirmish(game : @types.Game) -> Unit {
   }
   @draw.draw_text("Difficulty:", w / 4, cy + 120, 24, @types.color_hud_text)
   @draw.draw_text(
-    "< " + diff_name + " >", w / 4 + 220, cy + 120, 24, @types.color_gold,
+    "< " + diff_name + " >",
+    w / 4 + 220,
+    cy + 120,
+    24,
+    @types.color_gold,
   )
   // Controls
   let controls = [
-    "[LEFT/RIGHT] Change Selection",
-    "[UP/DOWN] Switch Option",
-    "[ENTER] Start Battle",
+    "[LEFT/RIGHT] Change Selection", "[UP/DOWN] Switch Option", "[ENTER] Start Battle",
     "[ESC] Back",
   ]
   for i in 0..<controls.length() {
@@ -199,12 +217,10 @@ fn draw_results(game : @types.Game) -> Unit {
   if game.last_was_victory {
     for i in 0..<20 {
       let fi : Float = Float::from_int(i)
-      let px = @types.sinf(time * 0.7 + fi * 1.3) * 400.0 + Float::from_int(
-          w / 2,
-        )
-      let py = @types.cosf(time * 0.5 + fi * 0.9) * 250.0 + Float::from_int(
-          h / 2,
-        )
+      let px = @types.sinf(time * 0.7 + fi * 1.3) * 400.0 +
+        Float::from_int(w / 2)
+      let py = @types.cosf(time * 0.5 + fi * 0.9) * 250.0 +
+        Float::from_int(h / 2)
       let alpha_f : Float = @types.sinf(time + fi) * 40.0 + 50.0
       let alpha = @types.mini(@types.maxi(alpha_f.to_int(), 10), 90)
       @raylib.draw_circle(
@@ -277,13 +293,7 @@ fn draw_results(game : @types.Game) -> Unit {
     } else {
       @types.color_hud_text
     }
-    @draw.draw_text(
-      value,
-      (w - sw) / 2 + label_w,
-      cy + i * 45,
-      24,
-      value_color,
-    )
+    @draw.draw_text(value, (w - sw) / 2 + label_w, cy + i * 45, 24, value_color)
   }
   // Navigation
   let nav = "[ENTER] Continue  [ESC] Main Menu"

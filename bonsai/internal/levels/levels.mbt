@@ -118,10 +118,7 @@ fn pine_5() -> @types.Level {
     species: Pine,
     initial_branches: [{ x: 5, y: 15, dir: Up }],
     zones: [
-      {
-        positions: [{ x: 5, y: 4 }, { x: 5, y: 5 }],
-        kind: Required,
-      },
+      { positions: [{ x: 5, y: 4 }, { x: 5, y: 5 }], kind: Required },
       {
         positions: [
           { x: 3, y: 8 },
@@ -149,14 +146,8 @@ fn pine_6() -> @types.Level {
     species: Pine,
     initial_branches: [{ x: 3, y: 15, dir: Up }, { x: 3, y: 14, dir: UpRight }],
     zones: [
-      {
-        positions: [{ x: 6, y: 8 }, { x: 7, y: 7 }],
-        kind: Required,
-      },
-      {
-        positions: [{ x: 1, y: 8 }, { x: 0, y: 7 }],
-        kind: Forbidden,
-      },
+      { positions: [{ x: 6, y: 8 }, { x: 7, y: 7 }], kind: Required },
+      { positions: [{ x: 1, y: 8 }, { x: 0, y: 7 }], kind: Forbidden },
     ],
     max_turns: 10,
     prune_budget_per_turn: 2,
@@ -198,10 +189,7 @@ fn pine_8() -> @types.Level {
       },
       { positions: [{ x: 3, y: 3 }], kind: TipTarget },
       { positions: [{ x: 7, y: 3 }], kind: TipTarget },
-      {
-        positions: [{ x: 5, y: 2 }, { x: 5, y: 1 }],
-        kind: Forbidden,
-      },
+      { positions: [{ x: 5, y: 2 }, { x: 5, y: 1 }], kind: Forbidden },
     ],
     max_turns: 14,
     prune_budget_per_turn: 3,
@@ -221,12 +209,7 @@ fn maple_1() -> @types.Level {
   {
     species: Maple,
     initial_branches: [{ x: 5, y: 15, dir: Up }],
-    zones: [
-      {
-        positions: [{ x: 3, y: 9 }, { x: 7, y: 9 }],
-        kind: Required,
-      },
-    ],
+    zones: [{ positions: [{ x: 3, y: 9 }, { x: 7, y: 9 }], kind: Required }],
     max_turns: 8,
     prune_budget_per_turn: 2,
     par_prunes: 0,
@@ -296,10 +279,7 @@ fn maple_4() -> @types.Level {
     species: Maple,
     initial_branches: [{ x: 8, y: 15, dir: Up }],
     zones: [
-      {
-        positions: [{ x: 3, y: 7 }, { x: 2, y: 6 }],
-        kind: Required,
-      },
+      { positions: [{ x: 3, y: 7 }, { x: 2, y: 6 }], kind: Required },
       { positions: [{ x: 10, y: 7 }, { x: 11, y: 7 }], kind: Forbidden },
     ],
     max_turns: 10,
@@ -390,10 +370,7 @@ fn maple_8() -> @types.Level {
     species: Maple,
     initial_branches: [{ x: 5, y: 15, dir: Up }],
     zones: [
-      {
-        positions: [{ x: 3, y: 5 }, { x: 7, y: 5 }],
-        kind: Required,
-      },
+      { positions: [{ x: 3, y: 5 }, { x: 7, y: 5 }], kind: Required },
       {
         positions: [
           { x: 4, y: 5 },
@@ -431,10 +408,7 @@ fn maple_9() -> @types.Level {
       },
       { positions: [{ x: 2, y: 3 }], kind: TipTarget },
       { positions: [{ x: 8, y: 3 }], kind: TipTarget },
-      {
-        positions: [{ x: 5, y: 3 }, { x: 5, y: 2 }],
-        kind: Forbidden,
-      },
+      { positions: [{ x: 5, y: 3 }, { x: 5, y: 2 }], kind: Forbidden },
     ],
     max_turns: 14,
     prune_budget_per_turn: 3,
@@ -574,10 +548,7 @@ fn cherry_6() -> @types.Level {
       { positions: [{ x: 8, y: 5 }], kind: TipTarget },
       { positions: [{ x: 2, y: 9 }], kind: TipTarget },
       { positions: [{ x: 8, y: 9 }], kind: TipTarget },
-      {
-        positions: [{ x: 5, y: 4 }, { x: 5, y: 3 }],
-        kind: Forbidden,
-      },
+      { positions: [{ x: 5, y: 4 }, { x: 5, y: 3 }], kind: Forbidden },
     ],
     max_turns: 14,
     prune_budget_per_turn: 3,
@@ -605,10 +576,7 @@ fn cherry_7() -> @types.Level {
       },
       { positions: [{ x: 3, y: 2 }], kind: TipTarget },
       { positions: [{ x: 7, y: 2 }], kind: TipTarget },
-      {
-        positions: [{ x: 5, y: 2 }, { x: 5, y: 1 }],
-        kind: Forbidden,
-      },
+      { positions: [{ x: 5, y: 2 }, { x: 5, y: 1 }], kind: Forbidden },
     ],
     max_turns: 14,
     prune_budget_per_turn: 3,

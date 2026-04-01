@@ -3,7 +3,7 @@ pub fn spawn_gravity_trail(
   game : @types.Game,
   x : Float,
   y : Float,
-  dir : @types.GravityDir
+  dir : @types.GravityDir,
 ) -> Unit {
   let (dx, dy) = @types.gravity_vector(dir)
   let fdx = Float::from_int(dx)
@@ -13,9 +13,16 @@ pub fn spawn_gravity_trail(
     let vx = -fdx * 40.0 + rand_float(game) * 20.0 - 10.0
     let vy = -fdy * 40.0 + rand_float(game) * 20.0 - 10.0
     let p = @types.Particle::new(
-      x + fi * 2.0, y + fi * 2.0, vx, vy,
-      0.5 + rand_float(game) * 0.3, 3.0 + rand_float(game) * 2.0,
-      200, 200, 255, 0,
+      x + fi * 2.0,
+      y + fi * 2.0,
+      vx,
+      vy,
+      0.5 + rand_float(game) * 0.3,
+      3.0 + rand_float(game) * 2.0,
+      200,
+      200,
+      255,
+      0,
     )
     add_particle(game, p)
   }
@@ -29,8 +36,16 @@ pub fn spawn_gem_sparkle(game : @types.Game, x : Float, y : Float) -> Unit {
     let vx : Float = cos_f(angle) * speed
     let vy : Float = sin_f(angle) * speed
     let p = @types.Particle::new(
-      x, y, vx, vy, 0.6 + rand_float(game) * 0.4,
-      2.0 + rand_float(game) * 3.0, 100, 255, 100, 1,
+      x,
+      y,
+      vx,
+      vy,
+      0.6 + rand_float(game) * 0.4,
+      2.0 + rand_float(game) * 3.0,
+      100,
+      255,
+      100,
+      1,
     )
     add_particle(game, p)
   }
@@ -43,9 +58,7 @@ pub fn spawn_key_ring(game : @types.Game, x : Float, y : Float) -> Unit {
     let speed : Float = 50.0
     let vx : Float = cos_f(angle) * speed
     let vy : Float = sin_f(angle) * speed
-    let p = @types.Particle::new(
-      x, y, vx, vy, 0.8, 4.0, 255, 220, 40, 2,
-    )
+    let p = @types.Particle::new(x, y, vx, vy, 0.8, 4.0, 255, 220, 40, 2)
     add_particle(game, p)
   }
 }
@@ -58,8 +71,16 @@ pub fn spawn_spike_death(game : @types.Game, x : Float, y : Float) -> Unit {
     let vx : Float = cos_f(angle) * speed
     let vy : Float = sin_f(angle) * speed
     let p = @types.Particle::new(
-      x, y, vx, vy, 0.8 + rand_float(game) * 0.4,
-      3.0 + rand_float(game) * 4.0, 255, 60, 60, 3,
+      x,
+      y,
+      vx,
+      vy,
+      0.8 + rand_float(game) * 0.4,
+      3.0 + rand_float(game) * 4.0,
+      255,
+      60,
+      60,
+      3,
     )
     add_particle(game, p)
   }
@@ -70,7 +91,7 @@ pub fn spawn_portal_swirl(
   game : @types.Game,
   x : Float,
   y : Float,
-  portal_id : Int
+  portal_id : Int,
 ) -> Unit {
   let (r, g, b) = match portal_id {
     1 => (200, 100, 255)
@@ -84,9 +105,7 @@ pub fn spawn_portal_swirl(
     let py : Float = y + sin_f(angle) * rad
     let vx : Float = cos_f(angle + 1.57) * 30.0
     let vy : Float = sin_f(angle + 1.57) * 30.0
-    let p = @types.Particle::new(
-      px, py, vx, vy, 0.6, 3.0, r, g, b, 4,
-    )
+    let p = @types.Particle::new(px, py, vx, vy, 0.6, 3.0, r, g, b, 4)
     add_particle(game, p)
   }
 }
@@ -97,10 +116,16 @@ pub fn spawn_crumble_debris(game : @types.Game, x : Float, y : Float) -> Unit {
     let vx : Float = rand_float(game) * 40.0 - 20.0
     let vy : Float = rand_float(game) * 40.0 + 20.0
     let p = @types.Particle::new(
-      x + rand_float(game) * 30.0, y + rand_float(game) * 10.0,
-      vx, vy,
-      0.8 + rand_float(game) * 0.5, 4.0 + rand_float(game) * 3.0,
-      160, 140, 100, 5,
+      x + rand_float(game) * 30.0,
+      y + rand_float(game) * 10.0,
+      vx,
+      vy,
+      0.8 + rand_float(game) * 0.5,
+      4.0 + rand_float(game) * 3.0,
+      160,
+      140,
+      100,
+      5,
     )
     add_particle(game, p)
   }
@@ -117,8 +142,16 @@ pub fn spawn_celebration(game : @types.Game, x : Float, y : Float) -> Unit {
     let g = 128 + (rand_float(game) * 127.0).to_int()
     let b = 128 + (rand_float(game) * 127.0).to_int()
     let p = @types.Particle::new(
-      x, y, vx, vy, 1.0 + rand_float(game) * 0.5,
-      3.0 + rand_float(game) * 4.0, r, g, b, 6,
+      x,
+      y,
+      vx,
+      vy,
+      1.0 + rand_float(game) * 0.5,
+      3.0 + rand_float(game) * 4.0,
+      r,
+      g,
+      b,
+      6,
     )
     add_particle(game, p)
   }
@@ -181,8 +214,16 @@ pub fn spawn_enemy_crush(game : @types.Game, x : Float, y : Float) -> Unit {
     let vx : Float = cos_f(angle) * speed
     let vy : Float = sin_f(angle) * speed
     let p = @types.Particle::new(
-      x, y, vx, vy, 0.7 + rand_float(game) * 0.3,
-      3.0 + rand_float(game) * 3.0, 220, 50, 50, 7,
+      x,
+      y,
+      vx,
+      vy,
+      0.7 + rand_float(game) * 0.3,
+      3.0 + rand_float(game) * 3.0,
+      220,
+      50,
+      50,
+      7,
     )
     add_particle(game, p)
   }
@@ -198,9 +239,16 @@ pub fn spawn_achievement_sparkle(game : @types.Game) -> Unit {
     let vx : Float = cos_f(angle) * speed
     let vy : Float = sin_f(angle) * speed
     let p = @types.Particle::new(
-      cx + rand_float(game) * 100.0 - 50.0, cy,
-      vx, vy, 0.8 + rand_float(game) * 0.3,
-      2.0 + rand_float(game) * 2.0, 255, 215, 0, 8,
+      cx + rand_float(game) * 100.0 - 50.0,
+      cy,
+      vx,
+      vy,
+      0.8 + rand_float(game) * 0.3,
+      2.0 + rand_float(game) * 2.0,
+      255,
+      215,
+      0,
+      8,
     )
     add_particle(game, p)
   }

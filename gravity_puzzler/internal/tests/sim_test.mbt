@@ -15,7 +15,10 @@ fn player_pos(level : @types.Level) -> (Int, Int) {
 
 ///|
 /// Helper: find entity of given kind
-fn find_entity_kind(level : @types.Level, kind : @types.EntityKind) -> @types.Entity? {
+fn find_entity_kind(
+  level : @types.Level,
+  kind : @types.EntityKind,
+) -> @types.Entity? {
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
     if e.active && e.kind == kind {
@@ -28,9 +31,7 @@ fn find_entity_kind(level : @types.Level, kind : @types.EntityKind) -> @types.En
 ///|
 /// Test: gravity pulls player down
 test "gravity_down" {
-  let level = make_test_level(
-    "#####\n#P..#\n#...#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#P..#\n#...#\n#...#\n#####")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let (px, py) = player_pos(level)
@@ -41,9 +42,7 @@ test "gravity_down" {
 ///|
 /// Test: gravity pulls player up
 test "gravity_up" {
-  let level = make_test_level(
-    "#####\n#...#\n#...#\n#..P#\n#####",
-  )
+  let level = make_test_level("#####\n#...#\n#...#\n#..P#\n#####")
   level.gravity = Up
   ignore(@physics.settle_all(level))
   let (px, py) = player_pos(level)
@@ -54,9 +53,7 @@ test "gravity_up" {
 ///|
 /// Test: gravity pulls player left
 test "gravity_left" {
-  let level = make_test_level(
-    "#####\n#..P#\n#...#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#..P#\n#...#\n#...#\n#####")
   level.gravity = Left
   ignore(@physics.settle_all(level))
   let (px, py) = player_pos(level)
@@ -67,9 +64,7 @@ test "gravity_left" {
 ///|
 /// Test: gravity pulls player right
 test "gravity_right" {
-  let level = make_test_level(
-    "#####\n#P..#\n#...#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#P..#\n#...#\n#...#\n#####")
   level.gravity = Right
   ignore(@physics.settle_all(level))
   let (px, py) = player_pos(level)
@@ -80,9 +75,7 @@ test "gravity_right" {
 ///|
 /// Test: box blocks entity movement
 test "box_blocks_player" {
-  let level = make_test_level(
-    "#####\n#P..#\n#B..#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#P..#\n#B..#\n#...#\n#####")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let (px, py) = player_pos(level)
@@ -101,28 +94,20 @@ test "box_blocks_player" {
 ///|
 /// Test: key blocked by gate
 test "key_blocked_by_gate" {
-  let level = make_test_level(
-    "######\n#P.K.#\n#..D.#\n#...E#\n######",
-  )
+  let level = make_test_level("######\n#P.K.#\n#..D.#\n#...E#\n######")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let key_e = find_entity_kind(level, Key)
   match key_e {
-    Some(k) => {
-      assert_eq(k.y, 1)
-    }
-    None => {
-      assert_eq(level.keys_collected >= 0, true)
-    }
+    Some(k) => assert_eq(k.y, 1)
+    None => assert_eq(level.keys_collected >= 0, true)
   }
 }
 
 ///|
 /// Test: portal teleports entity
 test "portal_teleport" {
-  let level = make_test_level(
-    "#######\n#P.1.1#\n#.....#\n#.....#\n#######",
-  )
+  let level = make_test_level("#######\n#P.1.1#\n#.....#\n#.....#\n#######")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let (px, py) = player_pos(level)
@@ -133,9 +118,7 @@ test "portal_teleport" {
 ///|
 /// Test: ice makes entity slide through
 test "ice_sliding" {
-  let level = make_test_level(
-    "#######\n#P....#\n#IIIII#\n#.....#\n#######",
-  )
+  let level = make_test_level("#######\n#P....#\n#IIIII#\n#.....#\n#######")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let (px, py) = player_pos(level)
@@ -146,9 +129,7 @@ test "ice_sliding" {
 ///|
 /// Test: crumble tile disappears after entity exits
 test "crumble_disappears" {
-  let level = make_test_level(
-    "#####\n#P..#\n#C..#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#P..#\n#C..#\n#...#\n#####")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let tile = @types.get_tile(level, 1, 2)
@@ -171,9 +152,7 @@ test "star_rating" {
 ///|
 /// Test: snapshot save and restore preserves state
 test "snapshot_save_restore" {
-  let level = make_test_level(
-    "#####\n#P..#\n#...#\n#..E#\n#####",
-  )
+  let level = make_test_level("#####\n#P..#\n#...#\n#..E#\n#####")
   level.gravity = Down
   level.moves = 3
   level.gems_collected = 1
@@ -190,9 +169,7 @@ test "snapshot_save_restore" {
 ///|
 /// Test: boulder behavior under gravity
 test "boulder_falls" {
-  let level = make_test_level(
-    "#####\n#.R.#\n#...#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#.R.#\n#...#\n#...#\n#####")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let boulder = find_entity_kind(level, Boulder)
@@ -208,9 +185,7 @@ test "boulder_falls" {
 ///|
 /// Test: level parsing produces correct dimensions
 test "level_parsing" {
-  let level = make_test_level(
-    "####\n#P.#\n#.E#\n####",
-  )
+  let level = make_test_level("####\n#P.#\n#.E#\n####")
   assert_eq(level.width, 4)
   assert_eq(level.height, 4)
   assert_eq(level.entities.length(), 1)
@@ -241,9 +216,7 @@ test "gravity_rotation" {
 ///|
 /// Test: enemy entity falls with gravity
 test "enemy_falls_with_gravity" {
-  let level = make_test_level(
-    "#####\n#.N.#\n#...#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#.N.#\n#...#\n#...#\n#####")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let enemy = find_entity_kind(level, Enemy)
@@ -259,9 +232,7 @@ test "enemy_falls_with_gravity" {
 ///|
 /// Test: enemy kills player on collision
 test "enemy_kills_player" {
-  let level = make_test_level(
-    "#####\n#P.N#\n#...#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#P.N#\n#...#\n#...#\n#####")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   // Both should fall to bottom row
@@ -272,9 +243,7 @@ test "enemy_kills_player" {
 ///|
 /// Test: enemy walks into player causes death
 test "enemy_player_same_tile" {
-  let level = make_test_level(
-    "#####\n#PN.#\n#...#\n#####\n#####",
-  )
+  let level = make_test_level("#####\n#PN.#\n#...#\n#####\n#####")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   // Player at (1,2), Enemy at (2,2) - next to each other
@@ -290,9 +259,7 @@ test "enemy_player_same_tile" {
 ///|
 /// Test: boulder crushes enemy
 test "boulder_crushes_enemy" {
-  let level = make_test_level(
-    "#####\n#R..#\n#N..#\n#...#\n#####",
-  )
+  let level = make_test_level("#####\n#R..#\n#N..#\n#...#\n#####")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   // Boulder and enemy both fall - boulder at (1,2), enemy at (1,3) or vice versa
@@ -302,7 +269,7 @@ test "boulder_crushes_enemy" {
   let enemy = find_entity_kind(level, Enemy)
   let boulder = find_entity_kind(level, Boulder)
   match (enemy, boulder) {
-    (Some(e), Some(b)) => {
+    (Some(e), Some(b)) =>
       // If they ended up on same tile, enemy should be deactivated
       if e.x == b.x && e.y == b.y {
         assert_eq(e.active, false)
@@ -310,7 +277,6 @@ test "boulder_crushes_enemy" {
         // They might have different positions which is also valid
         assert_eq(true, true)
       }
-    }
     _ => assert_eq(true, true)
   }
 }
@@ -340,7 +306,7 @@ test "save_data_init" {
   let save = game.save_data
   assert_eq(save.star_ratings.length(), @types.num_worlds)
   assert_eq(save.best_moves.length(), @types.num_worlds)
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     assert_eq(save.star_ratings[w].length(), @types.levels_per_world)
     assert_eq(save.best_moves[w].length(), @types.levels_per_world)
   }
@@ -405,8 +371,8 @@ test "persistence_round_trip" {
 ///|
 /// Test: level hint text exists for all levels
 test "level_hints_complete" {
-  for w in 0..< @types.num_worlds {
-    for l in 0..< @types.levels_per_world {
+  for w in 0..<@types.num_worlds {
+    for l in 0..<@types.levels_per_world {
       let hint = @content.get_level_hint(w, l)
       assert_eq(hint.length() > 0, true)
     }
@@ -416,9 +382,7 @@ test "level_hints_complete" {
 ///|
 /// Test: enemy entity parsing from level data
 test "enemy_parsing" {
-  let level = make_test_level(
-    "#####\n#P.N#\n#...#\n#####\n#####",
-  )
+  let level = make_test_level("#####\n#P.N#\n#...#\n#####\n#####")
   // Should have 2 entities: player and enemy
   assert_eq(level.entities.length(), 2)
   let enemy = find_entity_kind(level, Enemy)
@@ -435,9 +399,7 @@ test "enemy_parsing" {
 ///|
 /// Test: find_enemies utility function
 test "find_enemies" {
-  let level = make_test_level(
-    "######\n#P.NN#\n#....#\n######",
-  )
+  let level = make_test_level("######\n#P.NN#\n#....#\n######")
   let enemies = @types.find_enemies(level)
   assert_eq(enemies.length(), 2)
   assert_eq(@types.count_active_enemies(level), 2)
@@ -510,8 +472,8 @@ test "gem_key_tracking" {
 ///|
 /// Test: hint text available for all levels
 test "hint_text_coverage" {
-  for w in 0..< @types.num_worlds {
-    for l in 0..< @types.levels_per_world {
+  for w in 0..<@types.num_worlds {
+    for l in 0..<@types.levels_per_world {
       let hint = @content.get_level_hint(w, l)
       assert_eq(hint.length() > 5, true)
     }
@@ -521,8 +483,8 @@ test "hint_text_coverage" {
 ///|
 /// Test: par moves data available for all levels
 test "par_moves_coverage" {
-  for w in 0..< @types.num_worlds {
-    for l in 0..< @types.levels_per_world {
+  for w in 0..<@types.num_worlds {
+    for l in 0..<@types.levels_per_world {
       let par = @content.get_par_moves(w, l)
       // Par should be between 2 and 15
       assert_eq(par >= 2, true)
@@ -534,8 +496,8 @@ test "par_moves_coverage" {
 ///|
 /// Test: level name data available for all levels
 test "level_name_coverage" {
-  for w in 0..< @types.num_worlds {
-    for l in 0..< @types.levels_per_world {
+  for w in 0..<@types.num_worlds {
+    for l in 0..<@types.levels_per_world {
       let name = @content.get_level_name(w, l)
       assert_eq(name.length() > 0, true)
     }
@@ -545,8 +507,8 @@ test "level_name_coverage" {
 ///|
 /// Test: level validation for all levels
 test "all_levels_valid" {
-  for w in 0..< @types.num_worlds {
-    for l in 0..< @types.levels_per_world {
+  for w in 0..<@types.num_worlds {
+    for l in 0..<@types.levels_per_world {
       let level = @content.get_level(w, l)
       assert_eq(@content.validate_level(level), true)
     }
@@ -569,9 +531,7 @@ test "enemy_levels" {
 ///|
 /// Test: conveyor belt pushes entity
 test "conveyor_belt" {
-  let level = make_test_level(
-    "#######\n#P....#\n#.>>..#\n#.....#\n#######",
-  )
+  let level = make_test_level("#######\n#P....#\n#.>>..#\n#.....#\n#######")
   level.gravity = Down
   ignore(@physics.settle_all(level))
   let (px, py) = player_pos(level)
@@ -582,9 +542,7 @@ test "conveyor_belt" {
 ///|
 /// Test: switch opens gate
 test "switch_opens_gate" {
-  let level = make_test_level(
-    "#######\n#P.W.D#\n#.....#\n#....E#\n#######",
-  )
+  let level = make_test_level("#######\n#P.W.D#\n#.....#\n#....E#\n#######")
   // Initially gate should be present
   let gate_tile = @types.get_tile(level, 5, 1)
   assert_eq(gate_tile, Gate(1))
@@ -593,9 +551,7 @@ test "switch_opens_gate" {
 ///|
 /// Test: count_special_tiles
 test "count_special_tiles" {
-  let level = make_test_level(
-    "#######\n#PISSD#\n#.CW..#\n#...1E#\n#######",
-  )
+  let level = make_test_level("#######\n#PISSD#\n#.CW..#\n#...1E#\n#######")
   let (portals, switches, gates, ice, spikes, crumble) = @content.count_special_tiles(
     level,
   )

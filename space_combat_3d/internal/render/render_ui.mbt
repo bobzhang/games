@@ -639,7 +639,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     if game.near_miss_dir_x > 0.3 {
       // Right edge flash
       @raylib.draw_rectangle(
-        @types.screen_width - edge_w, 0, edge_w, @types.screen_height, nm_color,
+        @types.screen_width - edge_w,
+        0,
+        edge_w,
+        @types.screen_height,
+        nm_color,
       )
     } else if game.near_miss_dir_x < -0.3 {
       // Left edge flash
@@ -651,7 +655,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     } else if game.near_miss_dir_y < -0.3 {
       // Bottom edge flash (projectile behind)
       @raylib.draw_rectangle(
-        0, @types.screen_height - edge_w, @types.screen_width, edge_w, nm_color,
+        0,
+        @types.screen_height - edge_w,
+        @types.screen_width,
+        edge_w,
+        nm_color,
       )
     }
     // "NEAR MISS" text
@@ -673,7 +681,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       let wp_panel_x = @types.screen_width / 2 + 110
       let wp_panel_y = @types.screen_height - 100
       @raylib.draw_rectangle(
-        wp_panel_x, wp_panel_y, 120, 55, @raylib.Color::new(0, 0, 0, 140),
+        wp_panel_x,
+        wp_panel_y,
+        120,
+        55,
+        @raylib.Color::new(0, 0, 0, 140),
       )
       @draw.draw_text(
         "WEAK POINTS",
@@ -700,7 +712,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
           @raylib.Color::new(40, 0, 0, 200),
         )
         @raylib.draw_rectangle(
-          wp_panel_x + 5, wp_panel_y + 18, wp_fill, 10, wp_bar_color,
+          wp_panel_x + 5,
+          wp_panel_y + 18,
+          wp_fill,
+          10,
+          wp_bar_color,
         )
         let wp_hp_text = "HP: \{tgt.weak_point_hp.to_int()}"
         @draw.draw_text(
@@ -740,7 +756,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
         @raylib.Color::new(100, 200, 255, 255)
       }
       @draw.draw_text(
-        phase_text, wp_panel_x + 5, wp_panel_y + 42, 10, phase_color,
+        phase_text,
+        wp_panel_x + 5,
+        wp_panel_y + 42,
+        10,
+        phase_color,
       )
     }
   }

@@ -14,22 +14,35 @@ pub fn draw_grid(game : @types.Game) -> Unit {
           match tile {
             Floor => {
               @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_floor)
-              @raylib.draw_rectangle_lines(sx, sy, sz, sz, @types.color_grid_line)
+              @raylib.draw_rectangle_lines(
+                sx, sy, sz, sz, @types.color_grid_line,
+              )
             }
             Wall => {
               // Wall with shadow
-              @raylib.draw_rectangle(sx + 2, sy + 2, sz, sz, @types.color_wall_shadow)
+              @raylib.draw_rectangle(
+                sx + 2,
+                sy + 2,
+                sz,
+                sz,
+                @types.color_wall_shadow,
+              )
               @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_wall)
             }
-            Gap =>
-              @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_gap)
+            Gap => @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_gap)
             Goal => {
               @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_floor)
               // Check if already collected
               let collected = is_goal_collected(game, x, y)
               if collected {
                 // Dim collected goal
-                @raylib.draw_rectangle(sx + 4, sy + 4, sz - 8, sz - 8, @types.color_goal_dim)
+                @raylib.draw_rectangle(
+                  sx + 4,
+                  sy + 4,
+                  sz - 8,
+                  sz - 8,
+                  @types.color_goal_dim,
+                )
               } else {
                 // Pulsing goal
                 let t = Float::from_int(game.frame_count) * 0.05
@@ -43,27 +56,39 @@ pub fn draw_grid(game : @types.Game) -> Unit {
                   @types.color_goal,
                 )
               }
-              @raylib.draw_rectangle_lines(sx, sy, sz, sz, @types.color_grid_line)
+              @raylib.draw_rectangle_lines(
+                sx, sy, sz, sz, @types.color_grid_line,
+              )
             }
             ColorTile(Red) => {
               @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_red_tile)
-              @raylib.draw_rectangle_lines(sx, sy, sz, sz, @types.color_grid_line)
+              @raylib.draw_rectangle_lines(
+                sx, sy, sz, sz, @types.color_grid_line,
+              )
             }
             ColorTile(Blue) => {
               @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_blue_tile)
-              @raylib.draw_rectangle_lines(sx, sy, sz, sz, @types.color_grid_line)
+              @raylib.draw_rectangle_lines(
+                sx, sy, sz, sz, @types.color_grid_line,
+              )
             }
             ColorTile(Green) => {
               @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_green_tile)
-              @raylib.draw_rectangle_lines(sx, sy, sz, sz, @types.color_grid_line)
+              @raylib.draw_rectangle_lines(
+                sx, sy, sz, sz, @types.color_grid_line,
+              )
             }
             Block => {
               @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_floor)
-              @raylib.draw_rectangle_lines(sx, sy, sz, sz, @types.color_grid_line)
+              @raylib.draw_rectangle_lines(
+                sx, sy, sz, sz, @types.color_grid_line,
+              )
             }
             Start => {
               @raylib.draw_rectangle(sx, sy, sz, sz, @types.color_start)
-              @raylib.draw_rectangle_lines(sx, sy, sz, sz, @types.color_grid_line)
+              @raylib.draw_rectangle_lines(
+                sx, sy, sz, sz, @types.color_grid_line,
+              )
             }
           }
         }
@@ -79,13 +104,14 @@ pub fn draw_grid(game : @types.Game) -> Unit {
 ///|
 fn is_goal_collected(game : @types.Game, x : Int, y : Int) -> Bool {
   match game.trace {
-    Some(trace) => {
+    Some(trace) =>
       if game.trace_step >= 0 && game.trace_step < trace.states.length() {
         let state = trace.states[game.trace_step]
         match game.level {
           Some(level) => {
             for i in 0..<level.goals.length() {
-              if level.goals[i].x == x && level.goals[i].y == y &&
+              if level.goals[i].x == x &&
+                level.goals[i].y == y &&
                 i < state.goals_collected.length() {
                 return state.goals_collected[i]
               }
@@ -97,7 +123,6 @@ fn is_goal_collected(game : @types.Game, x : Int, y : Int) -> Bool {
       } else {
         false
       }
-    }
     None =>
       match game.level {
         Some(level) => {
@@ -121,12 +146,30 @@ fn draw_blocks(game : @types.Game) -> Unit {
     let bx = @types.tile_screen_x(blocks[i].x)
     let by = @types.tile_screen_y(blocks[i].y)
     // Shadow
-    @raylib.draw_rectangle(bx + 3, by + 3, sz - 2, sz - 2, @types.color_wall_shadow)
+    @raylib.draw_rectangle(
+      bx + 3,
+      by + 3,
+      sz - 2,
+      sz - 2,
+      @types.color_wall_shadow,
+    )
     // Block body
     @raylib.draw_rectangle(bx + 2, by + 2, sz - 4, sz - 4, @types.color_block)
     // Inner detail
-    @raylib.draw_rectangle(bx + 8, by + 8, sz - 16, sz - 16, @raylib.Color::new(200, 160, 80, 255))
-    @raylib.draw_rectangle_lines(bx + 2, by + 2, sz - 4, sz - 4, @raylib.Color::new(140, 100, 40, 255))
+    @raylib.draw_rectangle(
+      bx + 8,
+      by + 8,
+      sz - 16,
+      sz - 16,
+      @raylib.Color::new(200, 160, 80, 255),
+    )
+    @raylib.draw_rectangle_lines(
+      bx + 2,
+      by + 2,
+      sz - 4,
+      sz - 4,
+      @raylib.Color::new(140, 100, 40, 255),
+    )
   }
 }
 
@@ -184,7 +227,12 @@ fn draw_robot(game : @types.Game) -> Unit {
   let v2x = (base_x - px * sz * 0.5).to_int()
   let v2y = (base_y - py * sz * 0.5).to_int()
   // Glow behind robot
-  @raylib.draw_circle(cx.to_int(), cy.to_int(), sz + 4.0, @types.color_robot_trail)
+  @raylib.draw_circle(
+    cx.to_int(),
+    cy.to_int(),
+    sz + 4.0,
+    @types.color_robot_trail,
+  )
   // Triangle body
   @raylib.draw_triangle(
     @raylib.Vector2::new(tip_x, tip_y),
@@ -199,9 +247,7 @@ fn draw_robot(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_robot_state(
-  game : @types.Game
-) -> (Int, Int, @types.Direction, Bool) {
+fn get_robot_state(game : @types.Game) -> (Int, Int, @types.Direction, Bool) {
   match game.trace {
     Some(trace) =>
       if game.trace_step >= 0 && game.trace_step < trace.states.length() {
@@ -215,11 +261,10 @@ fn get_robot_state(
 }
 
 ///|
-fn get_level_robot(
-  game : @types.Game
-) -> (Int, Int, @types.Direction, Bool) {
+fn get_level_robot(game : @types.Game) -> (Int, Int, @types.Direction, Bool) {
   match game.level {
-    Some(level) => (level.robot.pos.x, level.robot.pos.y, level.robot.dir, level.robot.alive)
+    Some(level) =>
+      (level.robot.pos.x, level.robot.pos.y, level.robot.dir, level.robot.alive)
     None => (0, 0, East, false)
   }
 }

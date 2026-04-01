@@ -21,13 +21,7 @@ fn draw_grid(_game : @types.Game, level : @types.Level) -> Unit {
       let py = oy + r * cs
       if region.active[r][c] {
         @raylib.draw_rectangle(px, py, cs, cs, @types.color_active)
-        @raylib.draw_rectangle_lines(
-          px,
-          py,
-          cs,
-          cs,
-          @types.color_grid_line,
-        )
+        @raylib.draw_rectangle_lines(px, py, cs, cs, @types.color_grid_line)
       } else {
         @raylib.draw_rectangle(px, py, cs, cs, @types.color_inactive)
       }
@@ -124,13 +118,7 @@ fn draw_palette(game : @types.Game, level : @types.Level) -> Unit {
     }
     @raylib.draw_rectangle(bx, by, 110, 100, bg)
     if selected {
-      @raylib.draw_rectangle_lines(
-        bx,
-        by,
-        110,
-        100,
-        @types.color_selected,
-      )
+      @raylib.draw_rectangle_lines(bx, by, 110, 100, @types.color_selected)
     } else {
       @raylib.draw_rectangle_lines(
         bx,
@@ -166,7 +154,13 @@ fn draw_palette(game : @types.Game, level : @types.Level) -> Unit {
     let label = (i + 1).to_string()
     @draw.draw_text(label, bx + 4, by + 82, 14, @types.color_text)
     if used {
-      @draw.draw_text("used", bx + 40, by + 82, 14, @raylib.Color::new(150, 150, 150, 200))
+      @draw.draw_text(
+        "used",
+        bx + 40,
+        by + 82,
+        14,
+        @raylib.Color::new(150, 150, 150, 200),
+      )
     }
   }
 }

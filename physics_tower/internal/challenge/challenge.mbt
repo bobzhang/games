@@ -9,7 +9,7 @@ pub fn start_challenge(mode : @types.ChallengeMode) -> @types.ChallengeState {
 pub fn update_challenge(
   cs : @types.ChallengeState,
   world : @types.World,
-  dt : Float
+  dt : Float,
 ) -> Bool {
   if cs.completed {
     return false
@@ -27,7 +27,7 @@ pub fn update_challenge(
 fn update_time_attack(
   cs : @types.ChallengeState,
   world : @types.World,
-  dt : Float
+  dt : Float,
 ) -> Bool {
   cs.time_left = cs.time_left - dt
   if cs.time_left <= 0.0 {
@@ -46,7 +46,7 @@ fn update_time_attack(
 fn update_budget_mode(
   cs : @types.ChallengeState,
   world : @types.World,
-  dt : Float
+  dt : Float,
 ) -> Bool {
   ignore(dt)
   let height = @physics.measure_tower_height(world)
@@ -79,7 +79,7 @@ fn update_budget_mode(
 fn update_survival(
   cs : @types.ChallengeState,
   world : @types.World,
-  dt : Float
+  dt : Float,
 ) -> Bool {
   if cs.hazard_round >= @types.survival_rounds {
     cs.completed = true
@@ -113,7 +113,7 @@ fn update_survival(
 fn update_precision(
   cs : @types.ChallengeState,
   world : @types.World,
-  dt : Float
+  dt : Float,
 ) -> Bool {
   cs.time_left = cs.time_left - dt
   let height = @physics.measure_tower_height(world)
@@ -144,7 +144,7 @@ fn update_precision(
 fn apply_survival_hazard(
   world : @types.World,
   round : Int,
-  intensity : Float
+  intensity : Float,
 ) -> Unit {
   // Rounds alternate between wind, earthquake, and impact with increasing intensity
   let hazard_type = round % 3

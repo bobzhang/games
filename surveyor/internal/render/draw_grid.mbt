@@ -20,28 +20,25 @@ pub fn draw_grid(game : @types.Game) -> Unit {
           let tile = @types.grid_get(grid, x, y)
           // Base tile color
           let base_color = match tile {
-            Empty => {
+            Empty =>
               if (x + y) % 2 == 0 {
                 @types.color_grass
               } else {
                 @types.color_grass_alt
               }
-            }
-            House(_) => {
+            House(_) =>
               if (x + y) % 2 == 0 {
                 @types.color_grass
               } else {
                 @types.color_grass_alt
               }
-            }
             Road => @types.color_road
-            Water => {
+            Water =>
               if (x + y) % 2 == 0 {
                 @types.color_water
               } else {
                 @types.color_water_dark
               }
-            }
           }
           @raylib.draw_rectangle(px, py, cs, cs, base_color)
           // Draw grid lines
@@ -118,7 +115,7 @@ fn draw_house_tile(
   py : Int,
   cs : Int,
   cid : Int,
-  houses : Array[@types.House]
+  houses : Array[@types.House],
 ) -> Unit {
   let color = @types.house_color(cid)
   let margin = 8
@@ -231,7 +228,7 @@ pub fn draw_fences(game : @types.Game) -> Unit {
 pub fn draw_hover_fence(game : @types.Game) -> Unit {
   match game.hover_fence {
     None => ()
-    Some(f) => {
+    Some(f) =>
       if game.play_state != Complete {
         let ox = @types.grid_offset_x
         let oy = @types.grid_offset_y
@@ -257,7 +254,6 @@ pub fn draw_hover_fence(game : @types.Game) -> Unit {
           }
         }
       }
-    }
   }
 }
 

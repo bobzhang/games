@@ -76,8 +76,9 @@ pub fn draw_ghosts(game : @types.Game, maze : @types.Maze) -> Unit {
     for s in 0..<segments {
       let sx = px - half + Float::from_int(s) * seg_w
       let wave = @types.sinf(
-        Float::from_int(s * 2 + game.frame_count) * wave_freq,
-      ) * wave_amp
+          Float::from_int(s * 2 + game.frame_count) * wave_freq,
+        ) *
+        wave_amp
       @raylib.draw_rectangle(
         sx.to_int(),
         (wave_y + wave).to_int(),
@@ -115,15 +116,22 @@ pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
       Idle => @types.color_guard
       Alert => {
         // Pulsing orange-red for alert
-        let pulse = (@types.sinf(Float::from_int(game.frame_count) * 0.3) * 0.3 + 0.7).to_double()
+        let pulse = (@types.sinf(Float::from_int(game.frame_count) * 0.3) * 0.3 +
+        0.7).to_double()
         let r = (240.0 * pulse).to_int()
         let g = (120.0 * pulse).to_int()
         @raylib.Color::new(r, g, 20, 255)
       }
       Chasing => {
         // Bright flashing red for chasing
-        let flash = (@types.sinf(Float::from_int(game.frame_count) * 0.5) * 0.4 + 0.6).to_double()
-        @raylib.Color::new(255, (30.0 * flash).to_int(), (30.0 * flash).to_int(), 255)
+        let flash = (@types.sinf(Float::from_int(game.frame_count) * 0.5) * 0.4 +
+        0.6).to_double()
+        @raylib.Color::new(
+          255,
+          (30.0 * flash).to_int(),
+          (30.0 * flash).to_int(),
+          255,
+        )
       }
     }
     // Determine patrol direction for visual indicator
@@ -149,7 +157,7 @@ pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
       Chasing => 60
     }
     let dir_x : Int = if gs.forward { 1 } else { -1 }
-    for v in 1..=vision_range {
+    for v in 1..<=vision_range {
       let vx = gs.pos.x + dir_x * v
       let vy = gs.pos.y
       if vx >= 0 && vx < 16 && vy >= 0 && vy < 12 {
@@ -173,7 +181,8 @@ pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
       Alert => 4.0
       Chasing => 6.0
     }
-    let pulse = @types.sinf(Float::from_int(game.frame_count) * pulse_speed) * pulse_size
+    let pulse = @types.sinf(Float::from_int(game.frame_count) * pulse_speed) *
+      pulse_size
     let ring_alpha : Int = match gs.alert {
       Idle => 30
       Alert => 60

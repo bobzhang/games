@@ -149,10 +149,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
       if game.play_state == Checking {
         game.checking_timer -= dt
         if game.checking_timer <= 0.0 {
-          let all_sat = @constraints.validate_all(
-            level.grid,
-            level.constraints,
-          )
+          let all_sat = @constraints.validate_all(level.grid, level.constraints)
           if all_sat {
             game.play_state = Solved
             // Calculate stars
@@ -222,7 +219,7 @@ fn handle_grid_click(
   game : @types.Game,
   level : @types.Level,
   mx : Int,
-  my : Int
+  my : Int,
 ) -> Unit {
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
@@ -243,7 +240,7 @@ fn handle_palette_click(
   game : @types.Game,
   level : @types.Level,
   mx : Int,
-  my : Int
+  my : Int,
 ) -> Unit {
   let px = @types.palette_x
   let py = @types.palette_y
@@ -303,7 +300,8 @@ fn place_number(game : @types.Game, level : @types.Level, num : Int) -> Unit {
   game.undo_stack.push({ row, col, old_value: old_val })
   @types.grid_set(level.grid, row, col, num)
   // Check for conflicts (incremental)
-  if num > 0 && @constraints.check_cell_conflicts(level.grid, row, col, level.constraints) {
+  if num > 0 &&
+    @constraints.check_cell_conflicts(level.grid, row, col, level.constraints) {
     game.incorrect_placements += 1
     game.message = "Conflict detected!"
     game.message_timer = 1.0

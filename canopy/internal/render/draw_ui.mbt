@@ -44,16 +44,27 @@ fn draw_target_status(game : @types.Game) -> Unit {
   let panel_x = @types.grid_offset_x + @types.grid_cols * @types.cell_size + 20
   let panel_y = @types.grid_offset_y
   // Target panel
-  @raylib.draw_rectangle(panel_x, panel_y, 200, 30 + game.targets.length() * 35, @types.color_hud_bg)
+  @raylib.draw_rectangle(
+    panel_x,
+    panel_y,
+    200,
+    30 + game.targets.length() * 35,
+    @types.color_hud_bg,
+  )
   @draw.draw_text("Targets", panel_x + 10, panel_y + 6, 16, @types.color_sun)
   for i in 0..<game.targets.length() {
     let target = game.targets[i]
     let y = panel_y + 30 + i * 35
     let met = @growth.target_met(game, i)
-    let color = if met { @types.color_target_met } else { @types.color_target_marker }
+    let color = if met {
+      @types.color_target_met
+    } else {
+      @types.color_target_marker
+    }
     let tree_label = "Tree " + (target.tree_index + 1).to_string()
     @draw.draw_text(tree_label, panel_x + 10, y + 2, 14, @types.color_hud_text)
-    let height_label = if target.tree_index >= 0 && target.tree_index < game.trees.length() {
+    let height_label = if target.tree_index >= 0 &&
+      target.tree_index < game.trees.length() {
       game.trees[target.tree_index].height.to_string() +
       "/" +
       target.required_height.to_string()
@@ -113,16 +124,34 @@ fn draw_play_state_overlay(game : @types.Game) -> Unit {
       draw_stars(stars, sw / 2, sh / 3 + 60)
       let cont = "Press ENTER to continue"
       let cw = @draw.measure_text(cont, 18)
-      @draw.draw_text(cont, (sw - cw) / 2, sh / 3 + 120, 18, @types.color_hud_text)
+      @draw.draw_text(
+        cont,
+        (sw - cw) / 2,
+        sh / 3 + 120,
+        18,
+        @types.color_hud_text,
+      )
     }
     Lost => {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 120))
       let msg = "Out of turns!"
       let mw = @draw.measure_text(msg, 36)
-      @draw.draw_text(msg, (sw - mw) / 2, sh / 3, 36, @types.color_target_marker)
+      @draw.draw_text(
+        msg,
+        (sw - mw) / 2,
+        sh / 3,
+        36,
+        @types.color_target_marker,
+      )
       let cont = "Press R to retry or ESC for menu"
       let cw = @draw.measure_text(cont, 18)
-      @draw.draw_text(cont, (sw - cw) / 2, sh / 3 + 60, 18, @types.color_hud_text)
+      @draw.draw_text(
+        cont,
+        (sw - cw) / 2,
+        sh / 3 + 60,
+        18,
+        @types.color_hud_text,
+      )
     }
     _ => ()
   }
@@ -132,12 +161,21 @@ fn draw_play_state_overlay(game : @types.Game) -> Unit {
 fn draw_stars(count : Int, cx : Int, cy : Int) -> Unit {
   for i in 0..<3 {
     let x = cx - 60 + i * 45
-    let color = if i < count { @types.color_star_gold } else { @types.color_star_empty }
+    let color = if i < count {
+      @types.color_star_gold
+    } else {
+      @types.color_star_empty
+    }
     // Draw star as a filled circle with points
     @raylib.draw_circle(x, cy, 15.0, color)
     // Small highlight
     if i < count {
-      @raylib.draw_circle(x - 3, cy - 3, 5.0, @raylib.Color::new(255, 240, 180, 180))
+      @raylib.draw_circle(
+        x - 3,
+        cy - 3,
+        5.0,
+        @raylib.Color::new(255, 240, 180, 180),
+      )
     }
   }
 }

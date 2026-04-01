@@ -12,13 +12,7 @@ pub fn draw_title(game : @types.Game) -> Unit {
   @draw.draw_text(sub, cx - sw / 2, 230, 24, @types.color_ui_text)
   // Decorative fence illustration
   let fence_y = 290
-  @raylib.draw_rectangle(
-    cx - 200,
-    fence_y,
-    400,
-    4,
-    @types.color_fence,
-  )
+  @raylib.draw_rectangle(cx - 200, fence_y, 400, 4, @types.color_fence)
   for i in 0..<9 {
     let fx = cx - 200 + i * 50
     @raylib.draw_rectangle(fx - 2, fence_y - 12, 4, 28, @types.color_fence)
@@ -55,8 +49,7 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
   // Three tier buttons
   let tiers : Array[@types.Tier] = [Plots, Districts, Zoning]
   let tier_descriptions : Array[String] = [
-    "8 levels - Simple plots with 2-3 houses",
-    "9 levels - Districts with road requirements",
+    "8 levels - Simple plots with 2-3 houses", "9 levels - Districts with road requirements",
     "8 levels - Complex zoning with constraints",
   ]
   for i in 0..<3 {
@@ -75,13 +68,7 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
       @types.color_button
     }
     @raylib.draw_rectangle(card_x, y, card_w, card_h, bg)
-    @raylib.draw_rectangle_lines(
-      card_x,
-      y,
-      card_w,
-      card_h,
-      @types.color_fence,
-    )
+    @raylib.draw_rectangle_lines(card_x, y, card_w, card_h, @types.color_fence)
     // Tier name
     @draw.draw_text(name, card_x + 20, y + 15, 30, @types.color_title)
     // Description
@@ -96,7 +83,10 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
         total_stars += game.level_scores[j].stars
       }
     }
-    let star_str = total_stars.to_string() + "/" + max_stars.to_string() + " stars"
+    let star_str = total_stars.to_string() +
+      "/" +
+      max_stars.to_string() +
+      " stars"
     @draw.draw_text(
       star_str,
       card_x + card_w - 140,
@@ -149,7 +139,13 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     // Level number
     let num_str = (level_idx + 1).to_string()
     let nw = @draw.measure_text(num_str, 28)
-    @draw.draw_text(num_str, x + btn_w / 2 - nw / 2, y + 12, 28, @types.color_title)
+    @draw.draw_text(
+      num_str,
+      x + btn_w / 2 - nw / 2,
+      y + 12,
+      28,
+      @types.color_title,
+    )
     // Stars
     if level_idx < game.level_scores.length() {
       let score = game.level_scores[level_idx]
@@ -196,11 +192,7 @@ pub fn draw_results(game : @types.Game) -> Unit {
   let panel_y = 160
   @raylib.draw_rectangle(panel_x, panel_y, panel_w, panel_h, @types.color_ui_bg)
   @raylib.draw_rectangle_lines(
-    panel_x,
-    panel_y,
-    panel_w,
-    panel_h,
-    @types.color_fence,
+    panel_x, panel_y, panel_w, panel_h, @types.color_fence,
   )
   // Title
   let title = if game.result_stars > 0 {
@@ -229,7 +221,13 @@ pub fn draw_results(game : @types.Game) -> Unit {
   // Fence count
   let fence_str = "Fences used: " + game.result_fence_count.to_string()
   let fw = @draw.measure_text(fence_str, 22)
-  @draw.draw_text(fence_str, cx - fw / 2, panel_y + 140, 22, @types.color_ui_text)
+  @draw.draw_text(
+    fence_str,
+    cx - fw / 2,
+    panel_y + 140,
+    22,
+    @types.color_ui_text,
+  )
   // Par info
   match game.current_level {
     Some(level) => {
@@ -238,7 +236,13 @@ pub fn draw_results(game : @types.Game) -> Unit {
         " fences, 3-star: " +
         level.par_length.to_string()
       let pw = @draw.measure_text(par_str, 18)
-      @draw.draw_text(par_str, cx - pw / 2, panel_y + 175, 18, @types.color_ui_dim)
+      @draw.draw_text(
+        par_str,
+        cx - pw / 2,
+        panel_y + 175,
+        18,
+        @types.color_ui_dim,
+      )
     }
     None => ()
   }
@@ -265,7 +269,7 @@ fn draw_button(
   w : Int,
   h : Int,
   text : String,
-  enabled : Bool
+  enabled : Bool,
 ) -> Unit {
   let hover = is_mouse_in_rect(x, y, w, h) && enabled
   let bg = if hover {

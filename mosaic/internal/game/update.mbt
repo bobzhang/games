@@ -154,7 +154,7 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   // Toggle symmetry hint
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    game.show_symmetry_hint = !(game.show_symmetry_hint)
+    game.show_symmetry_hint = !game.show_symmetry_hint
   }
   // Color selection (1-6)
   let colors = @types.all_colors()
@@ -165,7 +165,11 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   // Shape selection (Q W E R T Y)
   let shape_keys = [
-    @raylib.KeyQ, @raylib.KeyW, @raylib.KeyE, @raylib.KeyR, @raylib.KeyT,
+    @raylib.KeyQ,
+    @raylib.KeyW,
+    @raylib.KeyE,
+    @raylib.KeyR,
+    @raylib.KeyT,
     @raylib.KeyY,
   ]
   let shapes = @types.all_shapes()
@@ -229,7 +233,7 @@ fn handle_tile_placement(game : @types.Game) -> Unit {
     Some(cell) => {
       let level = game.levels[game.current_level]
       // Must be a hole
-      if !(@types.is_hole(level.grid, cell)) {
+      if !@types.is_hole(level.grid, cell) {
         return
       }
       // Check if already filled by player
@@ -254,7 +258,10 @@ fn handle_tile_placement(game : @types.Game) -> Unit {
           )
           // Validate
           let valid = @symmetry.validate_placement(
-            level.grid, cell, new_tile, level.symmetry,
+            level.grid,
+            cell,
+            new_tile,
+            level.symmetry,
           )
           if !valid {
             game.errors = game.errors + 1
@@ -284,7 +291,10 @@ fn handle_tile_placement(game : @types.Game) -> Unit {
       )
       // Validate
       let valid = @symmetry.validate_placement(
-        level.grid, cell, new_tile, level.symmetry,
+        level.grid,
+        cell,
+        new_tile,
+        level.symmetry,
       )
       if !valid {
         game.errors = game.errors + 1
@@ -303,11 +313,15 @@ fn check_completion(game : @types.Game) -> Unit {
   let level = game.levels[game.current_level]
   if @symmetry.check_all_holes_filled(level.grid) {
     let all_correct = @symmetry.check_all_correct(
-      level.grid, game.placed_tiles, level.symmetry,
+      level.grid,
+      game.placed_tiles,
+      level.symmetry,
     )
     if all_correct {
       game.play_state = GuessSymmetry
-      @types.set_message(game, "All tiles placed! Now guess the symmetry type.", 2.0)
+      @types.set_message(
+        game, "All tiles placed! Now guess the symmetry type.", 2.0,
+      )
     }
   }
 }
@@ -336,8 +350,10 @@ fn handle_symmetry_guess(game : @types.Game) -> Unit {
     let confirm_y = by + 24 + 3 * (btn_h + 6) + 6
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
-    if mx >= px && mx < px + btn_w * 2 + 10 && my >= confirm_y && my < confirm_y +
-    btn_h {
+    if mx >= px &&
+      mx < px + btn_w * 2 + 10 &&
+      my >= confirm_y &&
+      my < confirm_y + btn_h {
       // Confirm guess
       match game.symmetry_guess {
         None => @types.set_message(game, "Select a symmetry type first!", 1.5)
@@ -370,7 +386,10 @@ fn complete_level(game : @types.Game) -> Unit {
     score.stars = stars
   }
   let suffix = if stars > 1 { "s" } else { "" }
-  let star_msg = stars.to_string() + " Star" + suffix + "! Press ENTER for results."
+  let star_msg = stars.to_string() +
+    " Star" +
+    suffix +
+    "! Press ENTER for results."
   @types.set_message(game, star_msg, 3.0)
 }
 
@@ -436,7 +455,8 @@ fn update_results(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     // Go to next level
     let level_indices = @types.levels_for_tier(
-      game, game.levels[game.current_level].tier,
+      game,
+      game.levels[game.current_level].tier,
     )
     let mut next = -1
     for i in 0..<level_indices.length() {

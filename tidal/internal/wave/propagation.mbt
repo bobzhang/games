@@ -5,7 +5,9 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
   let w = grid.width
   let h = grid.height
   // Track contributions for interference
-  let contributions : Array[Array[@types.WaveFront]] = Array::new(capacity=w * h)
+  let contributions : Array[Array[@types.WaveFront]] = Array::new(
+    capacity=w * h,
+  )
   for _i in 0..<(w * h) {
     contributions.push([])
   }
@@ -18,9 +20,7 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
       match tile.object {
         Emitter(ep) => {
           // The emitter tile itself has amplitude 1.0
-          contributions[idx].push(
-            { amplitude: 1.0, phase: ep, direction: -1 },
-          )
+          contributions[idx].push({ amplitude: 1.0, phase: ep, direction: -1 })
           // Send waves to adjacent tiles
           for d in 0..<4 {
             let nx = x + @types.dir_dx(d)
@@ -28,10 +28,13 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
             if @types.grid_in_bounds(nx, ny) {
               let ni = ny * w + nx
               let ntile = grid.tiles[ni]
-              if !ntile.has_wall &&
-                !is_blocking_object(ntile.object) {
+              if !ntile.has_wall && !is_blocking_object(ntile.object) {
                 let amp : Float = 1.0 - @types.decay_rate
-                contributions[ni].push({ amplitude: amp, phase: ep, direction: d })
+                contributions[ni].push({
+                  amplitude: amp,
+                  phase: ep,
+                  direction: d,
+                })
               }
             }
           }
@@ -42,7 +45,7 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
       if tile.amplitude > 0.01 {
         match tile.object {
           Emitter(_) => () // emitter handled above
-          Reflector => {
+          Reflector =>
             // Reflector bounces wave back
             // Look at each incoming wave front and bounce it
             for wf in tile.wave_fronts {
@@ -53,13 +56,14 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
                 if @types.grid_in_bounds(nx, ny) {
                   let ni = ny * w + nx
                   let ntile = grid.tiles[ni]
-                  if !ntile.has_wall &&
-                    !is_blocking_object(ntile.object) {
+                  if !ntile.has_wall && !is_blocking_object(ntile.object) {
                     let amp : Float = wf.amplitude - @types.decay_rate
                     if amp > 0.01 {
-                      contributions[ni].push(
-                        { amplitude: amp, phase: wf.phase, direction: bounce_dir },
-                      )
+                      contributions[ni].push({
+                        amplitude: amp,
+                        phase: wf.phase,
+                        direction: bounce_dir,
+                      })
                     }
                   }
                 }
@@ -71,21 +75,21 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
                   if @types.grid_in_bounds(nx, ny) {
                     let ni = ny * w + nx
                     let ntile = grid.tiles[ni]
-                    if !ntile.has_wall &&
-                      !is_blocking_object(ntile.object) {
+                    if !ntile.has_wall && !is_blocking_object(ntile.object) {
                       let amp : Float = wf.amplitude - @types.decay_rate
                       if amp > 0.01 {
-                        contributions[ni].push(
-                          { amplitude: amp, phase: wf.phase, direction: d },
-                        )
+                        contributions[ni].push({
+                          amplitude: amp,
+                          phase: wf.phase,
+                          direction: d,
+                        })
                       }
                     }
                   }
                 }
               }
             }
-          }
-          PhaseShifter => {
+          PhaseShifter =>
             // Phase shifter: shift phase by +1 and continue
             for wf in tile.wave_fronts {
               let shifted_phase = (wf.phase + 1) % 4
@@ -96,17 +100,14 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
                 if @types.grid_in_bounds(nx, ny) {
                   let ni = ny * w + nx
                   let ntile = grid.tiles[ni]
-                  if !ntile.has_wall &&
-                    !is_blocking_object(ntile.object) {
+                  if !ntile.has_wall && !is_blocking_object(ntile.object) {
                     let amp : Float = wf.amplitude - @types.decay_rate
                     if amp > 0.01 {
-                      contributions[ni].push(
-                        {
-                          amplitude: amp,
-                          phase: shifted_phase,
-                          direction: wf.direction,
-                        },
-                      )
+                      contributions[ni].push({
+                        amplitude: amp,
+                        phase: shifted_phase,
+                        direction: wf.direction,
+                      })
                     }
                   }
                 }
@@ -117,26 +118,22 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
                   if @types.grid_in_bounds(nx, ny) {
                     let ni = ny * w + nx
                     let ntile = grid.tiles[ni]
-                    if !ntile.has_wall &&
-                      !is_blocking_object(ntile.object) {
+                    if !ntile.has_wall && !is_blocking_object(ntile.object) {
                       let amp : Float = wf.amplitude - @types.decay_rate
                       if amp > 0.01 {
-                        contributions[ni].push(
-                          {
-                            amplitude: amp,
-                            phase: shifted_phase,
-                            direction: d,
-                          },
-                        )
+                        contributions[ni].push({
+                          amplitude: amp,
+                          phase: shifted_phase,
+                          direction: d,
+                        })
                       }
                     }
                   }
                 }
               }
             }
-          }
           Absorber => () // Absorber eats waves, no propagation
-          _ => {
+          _ =>
             // Normal tile or target: propagate in all 4 directions
             for d in 0..<4 {
               let nx = x + @types.dir_dx(d)
@@ -144,18 +141,18 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
               if @types.grid_in_bounds(nx, ny) {
                 let ni = ny * w + nx
                 let ntile = grid.tiles[ni]
-                if !ntile.has_wall &&
-                  !is_blocking_object(ntile.object) {
+                if !ntile.has_wall && !is_blocking_object(ntile.object) {
                   let amp : Float = tile.amplitude - @types.decay_rate
                   if amp > 0.01 {
-                    contributions[ni].push(
-                      { amplitude: amp, phase: tile.phase, direction: d },
-                    )
+                    contributions[ni].push({
+                      amplitude: amp,
+                      phase: tile.phase,
+                      direction: d,
+                    })
                   }
                 }
               }
             }
-          }
         }
       }
     }
@@ -197,9 +194,7 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
 }
 
 ///|
-fn resolve_interference(
-  contribs : Array[@types.WaveFront]
-) -> (Float, Int) {
+fn resolve_interference(contribs : Array[@types.WaveFront]) -> (Float, Int) {
   // Use vector addition with phase as angle
   // phase 0 = 0 deg, 1 = 90 deg, 2 = 180 deg, 3 = 270 deg
   let mut sum_x : Float = 0.0
@@ -210,7 +205,10 @@ fn resolve_interference(
     sum_y += c.amplitude * @types.sinf(angle)
   }
   let result_amp : Float = @types.clampf(
-    Float::from_double((sum_x.to_double() * sum_x.to_double() + sum_y.to_double() * sum_y.to_double()).sqrt()),
+    Float::from_double(
+      (sum_x.to_double() * sum_x.to_double() +
+      sum_y.to_double() * sum_y.to_double()).sqrt(),
+    ),
     0.0,
     1.0,
   )

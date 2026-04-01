@@ -21,15 +21,21 @@ fn draw_hud(game : @types.Game) -> Unit {
   @draw.draw_text(par_text, 480, 12, 22, par_color)
   // Pickups
   if level.pickups_total > 0 {
-    let pickup_text = "Pickups: " + game.pickups_count.to_string() + "/" +
+    let pickup_text = "Pickups: " +
+      game.pickups_count.to_string() +
+      "/" +
       level.pickups_total.to_string()
     @draw.draw_text(pickup_text, 640, 12, 22, @types.color_pickup)
   }
   // Token positions
-  let cw_text = "CW: " + game.cw_pos.to_string() + "/" +
+  let cw_text = "CW: " +
+    game.cw_pos.to_string() +
+    "/" +
     (level.cw_spiral.cells.length() - 1).to_string()
   @draw.draw_text(cw_text, 880, 12, 18, @types.color_cw_token)
-  let ccw_text = "CCW: " + game.ccw_pos.to_string() + "/" +
+  let ccw_text = "CCW: " +
+    game.ccw_pos.to_string() +
+    "/" +
     (level.ccw_spiral.cells.length() - 1).to_string()
   @draw.draw_text(ccw_text, 1060, 12, 18, @types.color_ccw_token)
   // Bottom bar - gate status
@@ -80,12 +86,6 @@ fn draw_hud(game : @types.Game) -> Unit {
       30,
       @types.color_hud_bg,
     )
-    @draw.draw_text(
-      game.message,
-      640 - mw / 2,
-      624,
-      22,
-      @types.color_star_gold,
-    )
+    @draw.draw_text(game.message, 640 - mw / 2, 624, 22, @types.color_star_gold)
   }
 }

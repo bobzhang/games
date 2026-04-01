@@ -1,25 +1,23 @@
 ///|
 pub fn spawn_boss(game : @types.Game, kind : @types.BossKind) -> Unit {
   let stats = boss_stats(kind)
-  game.boss = Some(
-    {
-      active: true,
-      kind,
-      pos: @types.vec2(game.arena_width / 2.0, 200.0),
-      vel: @types.vec2_zero(),
-      hp: stats.0,
-      max_hp: stats.0,
-      phase: 1,
-      phase_timer: 0.0,
-      attack_timer: 2.0,
-      pattern_index: 0,
-      radius: stats.1,
-      shield: stats.2,
-      enraged: false,
-      spawn_timer: 0.0,
-      score_value: stats.3,
-    },
-  )
+  game.boss = Some({
+    active: true,
+    kind,
+    pos: @types.vec2(game.arena_width / 2.0, 200.0),
+    vel: @types.vec2_zero(),
+    hp: stats.0,
+    max_hp: stats.0,
+    phase: 1,
+    phase_timer: 0.0,
+    attack_timer: 2.0,
+    pattern_index: 0,
+    radius: stats.1,
+    shield: stats.2,
+    enraged: false,
+    spawn_timer: 0.0,
+    score_value: stats.3,
+  })
 }
 
 ///|
@@ -37,7 +35,7 @@ pub fn update_boss(game : @types.Game, dt : Float) -> Unit {
   match game.boss {
     None => ()
     Some(boss) => {
-      if !(boss.active) {
+      if !boss.active {
         return
       }
       let ship = game.ship
@@ -63,7 +61,10 @@ pub fn update_boss(game : @types.Game, dt : Float) -> Unit {
       }
       // Clamp to arena
       @physics.clamp_to_arena(
-        boss.pos, boss.radius, game.arena_width, game.arena_height,
+        boss.pos,
+        boss.radius,
+        game.arena_width,
+        game.arena_height,
       )
     }
   }
@@ -74,7 +75,7 @@ fn update_leviathan(
   game : @types.Game,
   boss : @types.Boss,
   ship : @types.Ship,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   // Leviathan: charges at player, fires spread shots
   let to_player = @types.vec2_normalize(@types.vec2_sub(ship.pos, boss.pos))
@@ -114,7 +115,7 @@ fn update_hive(
   game : @types.Game,
   boss : @types.Boss,
   ship : @types.Ship,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   // Hive: spawns drones, retreats when close
   let dist = @types.vec2_dist(boss.pos, ship.pos)
@@ -167,7 +168,7 @@ fn update_dreadnought(
   game : @types.Game,
   boss : @types.Boss,
   ship : @types.Ship,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   // Dreadnought: slow, heavily shielded, powerful attacks
   let dir = @types.vec2_normalize(@types.vec2_sub(ship.pos, boss.pos))
@@ -193,9 +194,7 @@ fn update_dreadnought(
         // Heavy aimed shot
         let rate0 : Float = if boss.enraged { 1.0 } else { 2.0 }
         boss.attack_timer = rate0
-        @weapons.fire_enemy_projectile(
-          game, boss.pos, ship.pos, 350.0, 4,
-        )
+        @weapons.fire_enemy_projectile(game, boss.pos, ship.pos, 350.0, 4)
         @types.add_shake(game.shake, 3.0)
       }
       1 => {

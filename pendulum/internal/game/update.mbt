@@ -173,7 +173,10 @@ fn update_playing(game : @types.Game) -> Unit {
           // Save history before cut
           game.history.push(
             @types.new_history_entry(
-              game.weight, game.rope, game.tick_count, game.collected,
+              game.weight,
+              game.rope,
+              game.tick_count,
+              game.collected,
             ),
           )
           @physics.cut_rope(game.weight, game.rope, game.arc_points)
@@ -187,7 +190,10 @@ fn update_playing(game : @types.Game) -> Unit {
           // Save history
           game.history.push(
             @types.new_history_entry(
-              game.weight, game.rope, game.tick_count, game.collected,
+              game.weight,
+              game.rope,
+              game.tick_count,
+              game.collected,
             ),
           )
           game.tick_count = game.tick_count + 1
@@ -204,7 +210,8 @@ fn update_playing(game : @types.Game) -> Unit {
           // Check if arc changed due to wrap
           if game.weight.state == Swinging {
             let new_arc = @physics.compute_arc(
-              game.rope.anchor, game.rope.length,
+              game.rope.anchor,
+              game.rope.length,
             )
             if new_arc.length() != game.arc_points.length() {
               // Arc changed due to peg wrap
@@ -262,7 +269,10 @@ fn undo_tick(game : @types.Game) -> Unit {
   }
   let entry = game.history.unsafe_pop()
   game.tick_count = @types.restore_from_history(
-    entry, game.weight, game.rope, game.collected,
+    entry,
+    game.weight,
+    game.rope,
+    game.collected,
   )
   // Recompute arc
   let arc = @physics.compute_arc(game.rope.anchor, game.rope.length)

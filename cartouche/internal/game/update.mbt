@@ -56,8 +56,14 @@ fn update_tablet_select(game : @types.Game) -> Unit {
   let offset = @types.tier_tablet_offset(game.current_tier)
   // Number keys 1-9 to select tablet
   let keys = [
-    @raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree, @raylib.KeyFour,
-    @raylib.KeyFive, @raylib.KeySix, @raylib.KeySeven, @raylib.KeyEight,
+    @raylib.KeyOne,
+    @raylib.KeyTwo,
+    @raylib.KeyThree,
+    @raylib.KeyFour,
+    @raylib.KeyFive,
+    @raylib.KeySix,
+    @raylib.KeySeven,
+    @raylib.KeyEight,
     @raylib.KeyNine,
   ]
   for i in 0..<@types.mini(count, 9) {
@@ -137,10 +143,26 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   // Keyboard letter assignment A-T
   let letter_keys = [
-    @raylib.KeyA, @raylib.KeyB, @raylib.KeyC, @raylib.KeyD, @raylib.KeyE,
-    @raylib.KeyF, @raylib.KeyG, @raylib.KeyH, @raylib.KeyI, @raylib.KeyJ,
-    @raylib.KeyK, @raylib.KeyL, @raylib.KeyM, @raylib.KeyN, @raylib.KeyO,
-    @raylib.KeyP, @raylib.KeyQ, @raylib.KeyR, @raylib.KeyS, @raylib.KeyT,
+    @raylib.KeyA,
+    @raylib.KeyB,
+    @raylib.KeyC,
+    @raylib.KeyD,
+    @raylib.KeyE,
+    @raylib.KeyF,
+    @raylib.KeyG,
+    @raylib.KeyH,
+    @raylib.KeyI,
+    @raylib.KeyJ,
+    @raylib.KeyK,
+    @raylib.KeyL,
+    @raylib.KeyM,
+    @raylib.KeyN,
+    @raylib.KeyO,
+    @raylib.KeyP,
+    @raylib.KeyQ,
+    @raylib.KeyR,
+    @raylib.KeyS,
+    @raylib.KeyT,
   ]
   for i in 0..<letter_keys.length() {
     if @raylib.is_key_pressed(letter_keys[i]) {
@@ -157,7 +179,7 @@ fn update_playing(game : @types.Game) -> Unit {
 fn handle_assign_letter(
   game : @types.Game,
   tablet : @types.Tablet,
-  letter_idx : Int
+  letter_idx : Int,
 ) -> Unit {
   match game.selected_symbol {
     None => @types.set_message(game, "Select a symbol first", 1.5)
@@ -167,13 +189,18 @@ fn handle_assign_letter(
         return
       }
       // Check if this letter is already used by another symbol
-      let existing = @types.find_symbol_for_letter(game.current_mapping, letter_idx)
+      let existing = @types.find_symbol_for_letter(
+        game.current_mapping,
+        letter_idx,
+      )
       if existing >= 0 {
         let existing_sym = @types.symbol_from_index(existing)
         if existing_sym != sym {
           // Check if the existing mapping is given
           if @types.is_given_symbol(tablet, existing_sym) {
-            @types.set_message(game, "Letter already used by a given symbol", 1.5)
+            @types.set_message(
+              game, "Letter already used by a given symbol", 1.5,
+            )
             return
           }
           // Clear the existing mapping
@@ -191,10 +218,10 @@ fn handle_assign_letter(
       game.guesses = game.guesses + 1
       // Check if wrong
       if @decoder.check_mapping_wrong(
-        game.current_mapping,
-        tablet.solution_mapping,
-        sym,
-      ) {
+          game.current_mapping,
+          tablet.solution_mapping,
+          sym,
+        ) {
         game.wrong_count = game.wrong_count + 1
         @types.set_message(game, "Wrong mapping!", 1.0)
       } else {
@@ -202,12 +229,16 @@ fn handle_assign_letter(
       }
       // Check if fully decoded
       if @decoder.is_fully_decoded(
-        game.current_mapping,
-        tablet.solution_mapping,
-        tablet.inscription,
-      ) {
+          game.current_mapping,
+          tablet.solution_mapping,
+          tablet.inscription,
+        ) {
         game.play_state = Solved
-        let stars = @decoder.compute_stars(tablet, game.guesses, game.wrong_count)
+        let stars = @decoder.compute_stars(
+          tablet,
+          game.guesses,
+          game.wrong_count,
+        )
         let score = game.scores[game.current_tablet_index]
         score.solved = true
         score.guesses_used = game.guesses
@@ -285,7 +316,7 @@ fn handle_clear(game : @types.Game, tablet : @types.Tablet) -> Unit {
 fn find_clicked_symbol(
   tablet : @types.Tablet,
   mouse_x : Int,
-  mouse_y : Int
+  mouse_y : Int,
 ) -> @types.Symbol? {
   let inscription = tablet.inscription
   let base_x = @types.tablet_x + 30
@@ -311,8 +342,10 @@ fn find_clicked_symbol(
         }
         let sx = base_x + cx
         let sy = base_y + cy
-        if mouse_x >= sx && mouse_x <= sx + size && mouse_y >= sy && mouse_y <=
-          sy + size {
+        if mouse_x >= sx &&
+          mouse_x <= sx + size &&
+          mouse_y >= sy &&
+          mouse_y <= sy + size {
           return Some(sym)
         }
         cx = cx + @types.symbol_spacing
@@ -333,8 +366,10 @@ fn find_clicked_letter(mouse_x : Int, mouse_y : Int) -> Int {
     let col = i % cols
     let bx = px + col * (btn_size + 6)
     let by = py + row * (btn_size + 6)
-    if mouse_x >= bx && mouse_x <= bx + btn_size && mouse_y >= by && mouse_y <=
-      by + btn_size {
+    if mouse_x >= bx &&
+      mouse_x <= bx + btn_size &&
+      mouse_y >= by &&
+      mouse_y <= by + btn_size {
       return i
     }
   }

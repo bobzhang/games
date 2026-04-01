@@ -81,7 +81,11 @@ pub fn new_player(start : Vec2i) -> Player {
 }
 
 ///|
-pub fn new_ghost(rec : Array[Direction?], color : GhostColor, start : Vec2i) -> Ghost {
+pub fn new_ghost(
+  rec : Array[Direction?],
+  color : GhostColor,
+  start : Vec2i,
+) -> Ghost {
   { recording: rec, color, pos: start, active: true, trail_positions: [start] }
 }
 
@@ -109,9 +113,13 @@ pub fn new_maze_state(maze : Maze) -> MazeState {
   }
   let door_states : Array[DoorState] = []
   for did in door_ids {
-    door_states.push(
-      { door_id: did, open: false, timer: 0, anim_progress: 0.0, prev_open: false },
-    )
+    door_states.push({
+      door_id: did,
+      open: false,
+      timer: 0,
+      anim_progress: 0.0,
+      prev_open: false,
+    })
   }
   let button_pressed : Array[Bool] = Array::make(
     maze.button_links.length(),
@@ -119,15 +127,13 @@ pub fn new_maze_state(maze : Maze) -> MazeState {
   )
   let guard_states : Array[GuardState] = []
   for gd in maze.guard_defs {
-    guard_states.push(
-      {
-        pos: gd.patrol[0],
-        patrol_index: 0,
-        forward: true,
-        alert: Idle,
-        alert_timer: 0.0,
-      },
-    )
+    guard_states.push({
+      pos: gd.patrol[0],
+      patrol_index: 0,
+      forward: true,
+      alert: Idle,
+      alert_timer: 0.0,
+    })
   }
   let collectibles_collected : Array[Bool] = Array::make(
     maze.collectible_positions.length(),

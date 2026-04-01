@@ -30,7 +30,7 @@ pub fn save_progress(game : @types.Game) -> Unit {
     }
   }
   // Sync levels_unlocked
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     if w < save.levels_unlocked.length() && w < game.levels_unlocked.length() {
       if game.levels_unlocked[w] > save.levels_unlocked[w] {
         save.levels_unlocked[w] = game.levels_unlocked[w]
@@ -52,7 +52,7 @@ pub fn save_progress(game : @types.Game) -> Unit {
 pub fn load_progress(game : @types.Game) -> Unit {
   let save = game.save_data
   // Restore levels_unlocked
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     if w < save.levels_unlocked.length() && w < game.levels_unlocked.length() {
       if save.levels_unlocked[w] > game.levels_unlocked[w] {
         game.levels_unlocked[w] = save.levels_unlocked[w]
@@ -61,11 +61,11 @@ pub fn load_progress(game : @types.Game) -> Unit {
   }
   // Restore star ratings to level_stars array
   let mut total = 0
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     if w >= save.star_ratings.length() {
       continue
     }
-    for l in 0..< @types.levels_per_world {
+    for l in 0..<@types.levels_per_world {
       if l >= save.star_ratings[w].length() {
         continue
       }
@@ -140,7 +140,7 @@ pub fn get_world_completion(game : @types.Game, world : Int) -> Int {
 pub fn get_total_completion(game : @types.Game) -> Int {
   let max_stars = @types.total_levels * 3
   let mut earned = 0
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     earned = earned + get_world_stars(game, w)
   }
   if max_stars > 0 {
@@ -154,7 +154,7 @@ pub fn get_total_completion(game : @types.Game) -> Int {
 /// Count completed levels (any star)
 pub fn count_completed_levels(game : @types.Game) -> Int {
   let mut count = 0
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     if w < game.save_data.star_ratings.length() {
       let row = game.save_data.star_ratings[w]
       for l in 0..<row.length() {
@@ -172,7 +172,7 @@ pub fn count_completed_levels(game : @types.Game) -> Int {
 pub fn get_favorite_world(game : @types.Game) -> Int {
   let mut best_world = 0
   let mut best_count = 0
-  for w in 0..< @types.num_worlds {
+  for w in 0..<@types.num_worlds {
     if w < game.save_data.star_ratings.length() {
       let row = game.save_data.star_ratings[w]
       let mut count = 0

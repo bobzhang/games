@@ -61,13 +61,7 @@ pub fn draw_title(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 220, 240, alpha),
   )
   // Version
-  @draw.draw_text(
-    "v1.0",
-    10,
-    sh - 25,
-    14,
-    @raylib.Color::new(80, 75, 100, 200),
-  )
+  @draw.draw_text("v1.0", 10, sh - 25, 14, @raylib.Color::new(80, 75, 100, 200))
 }
 
 ///|
@@ -82,7 +76,8 @@ fn draw_echo_background(game : @types.Game) -> Unit {
   for i in 0..<ring_count {
     let base_r : Float = Float::from_int(i * 80 + 50)
     let time_offset = Float::from_int(game.frame_count) * 0.02
-    let radius = base_r + @types.sinf(time_offset + Float::from_int(i) * 0.5) * 20.0
+    let radius = base_r +
+      @types.sinf(time_offset + Float::from_int(i) * 0.5) * 20.0
     let alpha_f : Float = 15.0 - Float::from_int(i) * 1.5
     let alpha = @types.clampi(alpha_f.to_int(), 2, 30)
     @raylib.draw_circle_lines_v(
@@ -94,9 +89,8 @@ fn draw_echo_background(game : @types.Game) -> Unit {
   // Horizontal scan lines
   for i in 0..<(sh / 6) {
     let y = i * 6
-    let alpha = 6 + (
-      @types.sinf(Float::from_int(y + game.frame_count * 2) * 0.015) * 4.0
-    ).to_int()
+    let alpha = 6 +
+      (@types.sinf(Float::from_int(y + game.frame_count * 2) * 0.015) * 4.0).to_int()
     @raylib.draw_line(
       0,
       y,
@@ -127,9 +121,7 @@ pub fn draw_world_select(game : @types.Game) -> Unit {
   // World list
   let world_names = ["Foundations", "Timing", "Mastery"]
   let world_descs = [
-    "Buttons, doors, and your first ghosts",
-    "Timed doors and guard patrols",
-    "All mechanics combined",
+    "Buttons, doors, and your first ghosts", "Timed doors and guard patrols", "All mechanics combined",
   ]
   let start_y = 140
   let item_h = 120
@@ -263,13 +255,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     } else {
       @types.color_hud_text
     }
-    @draw.draw_text(
-      "\{num_str}: \{level_name}",
-      sw / 4,
-      y + 2,
-      16,
-      name_color,
-    )
+    @draw.draw_text("\{num_str}: \{level_name}", sw / 4, y + 2, 16, name_color)
     // Par loops
     @draw.draw_text(
       "Par: \{par} loops",
@@ -371,7 +357,13 @@ pub fn draw_planning_overlay(game : @types.Game) -> Unit {
     let bar_gap = 8
     let bx = sw / 2 - bar_w - bar_gap / 2
     let by = 12
-    @raylib.draw_rectangle(bx, by, bar_w, bar_h, @raylib.Color::new(240, 220, 40, bar_alpha))
+    @raylib.draw_rectangle(
+      bx,
+      by,
+      bar_w,
+      bar_h,
+      @raylib.Color::new(240, 220, 40, bar_alpha),
+    )
     @raylib.draw_rectangle(
       bx + bar_w + bar_gap,
       by,
@@ -471,24 +463,12 @@ pub fn draw_planning_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(120, 115, 140, 200),
   )
   let ticks_label = "\{game.planning_tick} / \{game.timeline.length()}"
-  @draw.draw_text(
-    ticks_label,
-    nx + panel_w - 80,
-    y,
-    12,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(ticks_label, nx + panel_w - 80, y, 12, @types.color_hud_text)
   y += 16
   let tl_w = panel_w - 50
   let tl_h = 24
   // Timeline background with tick marks
-  @raylib.draw_rectangle(
-    nx,
-    y,
-    tl_w,
-    tl_h,
-    @types.color_timeline_bg,
-  )
+  @raylib.draw_rectangle(nx, y, tl_w, tl_h, @types.color_timeline_bg)
   @raylib.draw_rectangle_lines(
     nx,
     y,
@@ -497,9 +477,8 @@ pub fn draw_planning_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(80, 65, 120, 100),
   )
   if game.timeline.length() > 0 {
-    let tick_w : Float = Float::from_int(tl_w) / Float::from_int(
-      game.timeline.length(),
-    )
+    let tick_w : Float = Float::from_int(tl_w) /
+      Float::from_int(game.timeline.length())
     // Draw ghost activity markers along timeline
     for ti in 0..<game.timeline.length() {
       let entry = game.timeline[ti]
@@ -513,7 +492,13 @@ pub fn draw_planning_overlay(game : @types.Game) -> Unit {
           Orange => @raylib.Color::new(240, 140, 40, 60)
         }
         let dot_y = y + 4 + gi * 5
-        @raylib.draw_rectangle(tx, dot_y, @types.maxi(tick_w.to_int(), 1), 3, dot_color)
+        @raylib.draw_rectangle(
+          tx,
+          dot_y,
+          @types.maxi(tick_w.to_int(), 1),
+          3,
+          dot_color,
+        )
       }
       // Mark button press events
       for bi in 0..<entry.buttons_pressed.length() {
@@ -611,13 +596,7 @@ pub fn draw_pause(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 220, 240, 255),
   )
   let options_x = sw / 2 - 80
-  @draw.draw_text(
-    "ESC  Resume",
-    options_x,
-    sh / 2,
-    18,
-    @types.color_hud_text,
-  )
+  @draw.draw_text("ESC  Resume", options_x, sh / 2, 18, @types.color_hud_text)
   @draw.draw_text(
     "R  Restart Level",
     options_x,
@@ -654,18 +633,13 @@ pub fn draw_results(game : @types.Game) -> Unit {
     @raylib.Color::new(50, 255, 120, 255),
   )
   // Level name
-  let level_name = match @maze.get_level(game.current_world, game.current_level) {
+  let level_name = match
+    @maze.get_level(game.current_world, game.current_level) {
     Some(ld) => ld.name
     None => "Unknown"
   }
   let nw = @draw.measure_text(level_name, 20)
-  @draw.draw_text(
-    level_name,
-    sw / 2 - nw / 2,
-    105,
-    20,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(level_name, sw / 2 - nw / 2, 105, 20, @types.color_hud_text)
   // Score breakdown
   let col_x = sw / 3
   let mut y = 160
@@ -705,7 +679,8 @@ pub fn draw_results(game : @types.Game) -> Unit {
   if game.result_total_collectibles > 0 {
     @draw.draw_text("Collectibles:", col_x, y, 18, @types.color_hud_text)
     let coll_str = "\{game.result_collectibles}/\{game.result_total_collectibles}"
-    let coll_color = if game.result_collectibles >= game.result_total_collectibles {
+    let coll_color = if game.result_collectibles >=
+      game.result_total_collectibles {
       @types.color_collectible
     } else {
       @types.color_hud_text

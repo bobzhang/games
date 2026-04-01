@@ -38,6 +38,7 @@ pub let tier3_count : Int = 8
 pub let spread_anim_time : Float = 0.3
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(245, 240, 230, 255)
 
@@ -87,25 +88,35 @@ pub let color_highlight : @raylib.Color = @raylib.Color::new(255, 200, 60, 255)
 pub let color_target_ring : @raylib.Color = @raylib.Color::new(255, 80, 80, 200)
 
 ///|
-pub let color_star_filled : @raylib.Color = @raylib.Color::new(255, 200, 30, 255)
+pub let color_star_filled : @raylib.Color = @raylib.Color::new(
+  255, 200, 30, 255,
+)
 
 ///|
-pub let color_star_empty : @raylib.Color = @raylib.Color::new(180, 175, 165, 255)
+pub let color_star_empty : @raylib.Color = @raylib.Color::new(
+  180, 175, 165, 255,
+)
 
 ///|
 pub let color_button : @raylib.Color = @raylib.Color::new(80, 130, 180, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(100, 155, 210, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  100, 155, 210, 255,
+)
 
 ///|
-pub let color_button_text : @raylib.Color = @raylib.Color::new(255, 255, 255, 255)
+pub let color_button_text : @raylib.Color = @raylib.Color::new(
+  255, 255, 255, 255,
+)
 
 ///|
 pub let color_preview : @raylib.Color = @raylib.Color::new(150, 150, 150, 80)
 
 ///|
-pub let color_selected_border : @raylib.Color = @raylib.Color::new(255, 120, 30, 255)
+pub let color_selected_border : @raylib.Color = @raylib.Color::new(
+  255, 120, 30, 255,
+)
 
 ///|
 pub let color_hud_bg : @raylib.Color = @raylib.Color::new(40, 35, 30, 200)

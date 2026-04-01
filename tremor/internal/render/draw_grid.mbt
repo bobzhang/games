@@ -42,21 +42,25 @@ fn draw_grid(game : @types.Game, level : @types.Level) -> Unit {
       let tile = level.grid[row][col]
       match tile.kind {
         Blocked =>
-          @raylib.draw_rectangle(tx + 1, ty + 1, cs - 2, cs - 2, @types.color_blocked)
+          @raylib.draw_rectangle(
+            tx + 1,
+            ty + 1,
+            cs - 2,
+            cs - 2,
+            @types.color_blocked,
+          )
         Town => {
-          @raylib.draw_rectangle(tx + 1, ty + 1, cs - 2, cs - 2, @raylib.Color::new(
-              40, 35, 20, 255,
-            ))
+          @raylib.draw_rectangle(
+            tx + 1,
+            ty + 1,
+            cs - 2,
+            cs - 2,
+            @raylib.Color::new(40, 35, 20, 255),
+          )
           // Town indicator - small house shape
           let cx = tx + cs / 2
           let cy = ty + cs / 2
-          @raylib.draw_rectangle(
-            cx - 8,
-            cy - 2,
-            16,
-            12,
-            @types.color_town,
-          )
+          @raylib.draw_rectangle(cx - 8, cy - 2, 16, 12, @types.color_town)
           @raylib.draw_triangle(
             @raylib.Vector2::new(
               Float::from_int(cx - 10),
@@ -71,7 +75,13 @@ fn draw_grid(game : @types.Game, level : @types.Level) -> Unit {
           )
         }
         Noisy => {
-          @raylib.draw_rectangle(tx + 1, ty + 1, cs - 2, cs - 2, @types.color_noisy)
+          @raylib.draw_rectangle(
+            tx + 1,
+            ty + 1,
+            cs - 2,
+            cs - 2,
+            @types.color_noisy,
+          )
           // Draw noise stripes
           let stripe_color = @raylib.Color::new(100, 60, 85, 255)
           for s in 0..<4 {
@@ -92,7 +102,7 @@ fn draw_grid(game : @types.Game, level : @types.Level) -> Unit {
     }
   }
   // Draw grid lines
-  for row in 0..=@types.grid_rows {
+  for row in 0..<=@types.grid_rows {
     let y = oy + row * cs
     @raylib.draw_line_ex(
       @raylib.Vector2::new(Float::from_int(ox), Float::from_int(y)),
@@ -104,7 +114,7 @@ fn draw_grid(game : @types.Game, level : @types.Level) -> Unit {
       @types.color_grid_line,
     )
   }
-  for col in 0..=@types.grid_cols {
+  for col in 0..<=@types.grid_cols {
     let x = ox + col * cs
     @raylib.draw_line_ex(
       @raylib.Vector2::new(Float::from_int(x), Float::from_int(oy)),
@@ -128,9 +138,7 @@ fn draw_sensors(game : @types.Game) -> Unit {
     match s.kind {
       Broad =>
         // Circle for broad sensor
-        @raylib.draw_circle(
-          cx.to_int(), cy.to_int(), 14.0, color,
-        )
+        @raylib.draw_circle(cx.to_int(), cy.to_int(), 14.0, color)
       Precise => {
         // Diamond shape for precise sensor
         let size : Float = 12.0
@@ -318,10 +326,18 @@ fn draw_guess(game : @types.Game) -> Unit {
       // Pulsing guess marker
       let pulse : Float = @types.sinf(game.anim_timer * 4.0) * 0.3 + 0.7
       let size : Float = 10.0 + pulse * 5.0
-      @raylib.draw_circle(cx.to_int(), cy.to_int(), size, @raylib.fade(
-          @types.color_guess, pulse,
-        ))
-      @raylib.draw_circle_lines(cx.to_int(), cy.to_int(), size + 3.0, @types.color_guess)
+      @raylib.draw_circle(
+        cx.to_int(),
+        cy.to_int(),
+        size,
+        @raylib.fade(@types.color_guess, pulse),
+      )
+      @raylib.draw_circle_lines(
+        cx.to_int(),
+        cy.to_int(),
+        size + 3.0,
+        @types.color_guess,
+      )
     }
   }
 }

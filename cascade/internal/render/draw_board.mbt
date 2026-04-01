@@ -44,8 +44,18 @@ fn draw_topple_sequence(game : @types.Game, display_tick : Int) -> Unit {
     let badge_y = sy - 16
     // Background circle for the badge
     let alpha = if evt.tick == display_tick { 240 } else { 180 }
-    @raylib.draw_circle(badge_x, badge_y, 9.0, @raylib.Color::new(20, 20, 40, alpha))
-    @raylib.draw_circle_lines(badge_x, badge_y, 9.0, @raylib.Color::new(100, 180, 255, alpha))
+    @raylib.draw_circle(
+      badge_x,
+      badge_y,
+      9.0,
+      @raylib.Color::new(20, 20, 40, alpha),
+    )
+    @raylib.draw_circle_lines(
+      badge_x,
+      badge_y,
+      9.0,
+      @raylib.Color::new(100, 180, 255, alpha),
+    )
     // Draw the sequence number
     let num_text = order.to_string()
     let font_size = if order < 10 { 12 } else { 10 }
@@ -98,7 +108,7 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
   }
   let color = match d.state {
     Standing => base_color
-    Toppling => {
+    Toppling =>
       if d.topple_tick <= display_tick {
         // Blend from base color toward toppling color based on progress
         let t = @types.clampf(d.anim_progress, 0.0, 1.0)
@@ -121,13 +131,12 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
       } else {
         base_color
       }
-    }
     Fallen => @types.color_fallen
   }
   // Calculate tilt with smooth easing and slight height compression
   let tilt : Float = match d.state {
     Standing => 0.0
-    Toppling => {
+    Toppling =>
       if d.topple_tick <= display_tick {
         let t = @types.clampf(d.anim_progress, 0.0, 1.0)
         let eased = ease_out_bounce(t)
@@ -135,14 +144,13 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
       } else {
         0.0
       }
-    }
     Fallen => 85.0
   }
   let final_angle = angle + tilt
   // Compute height scale for perspective effect during topple
   let height_scale : Float = match d.state {
     Standing => 1.0
-    Toppling => {
+    Toppling =>
       if d.topple_tick <= display_tick {
         let t = @types.clampf(d.anim_progress, 0.0, 1.0)
         // Shrink height slightly as domino falls (perspective)
@@ -150,7 +158,6 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
       } else {
         1.0
       }
-    }
     Fallen => 0.85
   }
   // Draw target glow - pulsing ring
@@ -186,11 +193,7 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
     let pulse : Float = @types.absf(pulse_v / 30.0 - 1.0)
     let pa : Float = 40.0 + pulse * 60.0
     let starter_glow = @raylib.Color::new(255, 180, 0, pa.to_int())
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(sx, sy),
-      22.0,
-      starter_glow,
-    )
+    @raylib.draw_circle_v(@raylib.Vector2::new(sx, sy), 22.0, starter_glow)
   }
   // Draw shadow beneath domino (offset by tilt)
   if d.state != Standing {
@@ -215,7 +218,10 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
   let hw = @types.domino_width / 2.0
   let hh = @types.domino_height * height_scale / 2.0
   let rec = @raylib.Rectangle::new(
-    sx - hw, sy - hh, @types.domino_width, @types.domino_height * height_scale,
+    sx - hw,
+    sy - hh,
+    @types.domino_width,
+    @types.domino_height * height_scale,
   )
   @raylib.draw_rectangle_pro(
     rec,
@@ -333,7 +339,10 @@ fn draw_hover_preview(game : @types.Game) -> Unit {
   let hw = @types.domino_width / 2.0
   let hh = @types.domino_height / 2.0
   let rec = @raylib.Rectangle::new(
-    sx - hw, sy - hh, @types.domino_width, @types.domino_height,
+    sx - hw,
+    sy - hh,
+    @types.domino_width,
+    @types.domino_height,
   )
   @raylib.draw_rectangle_pro(
     rec,

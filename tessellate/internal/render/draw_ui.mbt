@@ -17,8 +17,17 @@ fn draw_game_ui(game : @types.Game, level : @types.Level) -> Unit {
   // Empty cells count
   let empty = @packing.count_empty_cells(level.region, game.grid)
   let total = @types.count_active_cells(level.region)
-  let fill_text = "Filled: " + (total - empty).to_string() + "/" + total.to_string()
-  @draw.draw_text(fill_text, 40, @types.screen_height - 35, 20, @types.color_text)
+  let fill_text = "Filled: " +
+    (total - empty).to_string() +
+    "/" +
+    total.to_string()
+  @draw.draw_text(
+    fill_text,
+    40,
+    @types.screen_height - 35,
+    20,
+    @types.color_text,
+  )
   // Level info
   let level_num = game.current_level + 1
   let tier_name = @types.tier_name(game.current_tier)
@@ -53,7 +62,11 @@ fn draw_game_ui(game : @types.Game, level : @types.Level) -> Unit {
   // Current piece info
   if game.selected_piece >= 0 && game.selected_piece < level.pieces.length() {
     let piece = level.pieces[game.selected_piece]
-    let sel_text = "Selected: Piece " + (game.selected_piece + 1).to_string() + " (" + piece.cells.length().to_string() + " cells)"
+    let sel_text = "Selected: Piece " +
+      (game.selected_piece + 1).to_string() +
+      " (" +
+      piece.cells.length().to_string() +
+      " cells)"
     @draw.draw_text(
       sel_text,
       40,
@@ -61,7 +74,10 @@ fn draw_game_ui(game : @types.Game, level : @types.Level) -> Unit {
       18,
       @types.color_selected,
     )
-    let rot_info = "Rot: " + (game.rotation * 90).to_string() + "deg" + (if game.flipped { " Flipped" } else { "" })
+    let rot_info = "Rot: " +
+      (game.rotation * 90).to_string() +
+      "deg" +
+      (if game.flipped { " Flipped" } else { "" })
     @draw.draw_text(
       rot_info,
       300,

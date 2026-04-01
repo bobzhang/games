@@ -2,7 +2,7 @@
 fn t(
   c : @types.TileColor,
   s : @types.TileShape,
-  o : @types.Orientation
+  o : @types.Orientation,
 ) -> @types.Tile? {
   Some(@types.new_tile(c, s, o))
 }
@@ -19,7 +19,7 @@ fn build_level(
   sym : @types.SymmetryKind,
   par : Int,
   tier : @types.Tier,
-  name : String
+  name : String,
 ) -> @types.Level {
   let grid : @types.MosaicGrid = {
     width: 8,
@@ -256,9 +256,7 @@ fn level_09() -> @types.Level {
   tiles[@types.grid_index(0, 7, 8)] = ts(Green, Diamond)
   build_level(
     tiles,
-    [
-      v(0, 0), v(7, 7), v(7, 0), v(0, 7), v(1, 1), v(6, 6), v(2, 0), v(5, 7),
-    ],
+    [v(0, 0), v(7, 7), v(7, 0), v(0, 7), v(1, 1), v(6, 6), v(2, 0), v(5, 7)],
     Rotate2,
     1,
     Restore,
@@ -290,8 +288,16 @@ fn level_10() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 0), v(7, 7), v(1, 1), v(6, 6), v(2, 2), v(5, 5), v(0, 2), v(7, 5),
-      v(6, 0), v(1, 7),
+      v(0, 0),
+      v(7, 7),
+      v(1, 1),
+      v(6, 6),
+      v(2, 2),
+      v(5, 5),
+      v(0, 2),
+      v(7, 5),
+      v(6, 0),
+      v(1, 7),
     ],
     Rotate2,
     2,
@@ -311,9 +317,18 @@ fn level_11() -> @types.Level {
   }
   // 4 symmetric quadrant accents
   let accent_positions : Array[(Int, Int, @types.TileColor)] = [
-    (1, 1, Red), (6, 1, Red), (1, 6, Red), (6, 6, Red),
-    (2, 1, Green), (6, 2, Green), (5, 6, Green), (1, 5, Green),
-    (1, 2, Gold), (5, 1, Gold), (6, 5, Gold), (2, 6, Gold),
+    (1, 1, Red),
+    (6, 1, Red),
+    (1, 6, Red),
+    (6, 6, Red),
+    (2, 1, Green),
+    (6, 2, Green),
+    (5, 6, Green),
+    (1, 5, Green),
+    (1, 2, Gold),
+    (5, 1, Gold),
+    (6, 5, Gold),
+    (2, 6, Gold),
   ]
   for i in 0..<accent_positions.length() {
     let (ax, ay, ac) = accent_positions[i]
@@ -321,9 +336,7 @@ fn level_11() -> @types.Level {
   }
   build_level(
     tiles,
-    [
-      v(1, 1), v(6, 1), v(1, 6), v(6, 6), v(2, 1), v(6, 2), v(5, 6), v(1, 5),
-    ],
+    [v(1, 1), v(6, 1), v(1, 6), v(6, 6), v(2, 1), v(6, 2), v(5, 6), v(1, 5)],
     Rotate4,
     2,
     Restore,
@@ -350,8 +363,16 @@ fn level_12() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 0), v(7, 7), v(1, 0), v(6, 7), v(0, 1), v(7, 6), v(2, 2), v(5, 5),
-      v(3, 1), v(4, 6),
+      v(0, 0),
+      v(7, 7),
+      v(1, 0),
+      v(6, 7),
+      v(0, 1),
+      v(7, 6),
+      v(2, 2),
+      v(5, 5),
+      v(3, 1),
+      v(4, 6),
     ],
     Rotate2,
     2,
@@ -386,8 +407,16 @@ fn level_13() -> @types.Level {
   build_level(
     tiles,
     [
-      v(4, 1), v(6, 4), v(3, 6), v(1, 3), v(3, 3), v(4, 4), v(3, 1), v(6, 3),
-      v(4, 6), v(1, 4),
+      v(4, 1),
+      v(6, 4),
+      v(3, 6),
+      v(1, 3),
+      v(3, 3),
+      v(4, 4),
+      v(3, 1),
+      v(6, 3),
+      v(4, 6),
+      v(1, 4),
     ],
     Rotate4,
     2,
@@ -415,8 +444,18 @@ fn level_14() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 0), v(7, 7), v(1, 0), v(6, 7), v(2, 1), v(5, 6), v(0, 3), v(7, 4),
-      v(3, 2), v(4, 5), v(6, 0), v(1, 7),
+      v(0, 0),
+      v(7, 7),
+      v(1, 0),
+      v(6, 7),
+      v(2, 1),
+      v(5, 6),
+      v(0, 3),
+      v(7, 4),
+      v(3, 2),
+      v(4, 5),
+      v(6, 0),
+      v(1, 7),
     ],
     Rotate2,
     2,
@@ -446,8 +485,18 @@ fn level_15() -> @types.Level {
   build_level(
     tiles,
     [
-      v(3, 1), v(6, 3), v(4, 6), v(1, 4), v(3, 0), v(7, 3), v(4, 7), v(0, 4),
-      v(2, 2), v(5, 2), v(5, 5), v(2, 5),
+      v(3, 1),
+      v(6, 3),
+      v(4, 6),
+      v(1, 4),
+      v(3, 0),
+      v(7, 3),
+      v(4, 7),
+      v(0, 4),
+      v(2, 2),
+      v(5, 2),
+      v(5, 5),
+      v(2, 5),
     ],
     Rotate4,
     2,
@@ -468,20 +517,26 @@ fn level_16() -> @types.Level {
         } else {
           tiles[@types.grid_index(x, y, 8)] = t(Green, Triangle, N)
         }
+      } else if x < 4 {
+        tiles[@types.grid_index(x, y, 8)] = t(Green, Triangle, S)
       } else {
-        if x < 4 {
-          tiles[@types.grid_index(x, y, 8)] = t(Green, Triangle, S)
-        } else {
-          tiles[@types.grid_index(x, y, 8)] = t(Red, Triangle, S)
-        }
+        tiles[@types.grid_index(x, y, 8)] = t(Red, Triangle, S)
       }
     }
   }
   build_level(
     tiles,
     [
-      v(0, 0), v(7, 7), v(1, 1), v(6, 6), v(5, 0), v(2, 7), v(7, 2), v(0, 5),
-      v(3, 0), v(4, 7),
+      v(0, 0),
+      v(7, 7),
+      v(1, 1),
+      v(6, 6),
+      v(5, 0),
+      v(2, 7),
+      v(7, 2),
+      v(0, 5),
+      v(3, 0),
+      v(4, 7),
     ],
     Rotate2,
     2,
@@ -501,23 +556,47 @@ fn level_17() -> @types.Level {
   }
   // Spiral arms in 4-fold symmetry
   let arm : Array[(Int, Int, @types.Orientation)] = [
-    (3, 0, N), (3, 1, N), (3, 2, N),
+    (3, 0, N),
+    (3, 1, N),
+    (3, 2, N),
   ]
   for i in 0..<arm.length() {
     let (ax, ay, ao) = arm[i]
     tiles[@types.grid_index(ax, ay, 8)] = t(Purple, Arrow, ao)
     // 90 rotation: (x,y) -> (7-y, x) and orient +90
-    tiles[@types.grid_index(7 - ay, ax, 8)] = t(Purple, Arrow, @types.rotate_orientation(ao, 1))
+    tiles[@types.grid_index(7 - ay, ax, 8)] = t(
+      Purple,
+      Arrow,
+      @types.rotate_orientation(ao, 1),
+    )
     // 180 rotation
-    tiles[@types.grid_index(7 - ax, 7 - ay, 8)] = t(Purple, Arrow, @types.rotate_orientation(ao, 2))
+    tiles[@types.grid_index(7 - ax, 7 - ay, 8)] = t(
+      Purple,
+      Arrow,
+      @types.rotate_orientation(ao, 2),
+    )
     // 270 rotation
-    tiles[@types.grid_index(ay, 7 - ax, 8)] = t(Purple, Arrow, @types.rotate_orientation(ao, 3))
+    tiles[@types.grid_index(ay, 7 - ax, 8)] = t(
+      Purple,
+      Arrow,
+      @types.rotate_orientation(ao, 3),
+    )
   }
   build_level(
     tiles,
     [
-      v(3, 0), v(7, 3), v(4, 7), v(0, 4), v(3, 1), v(6, 3), v(4, 6), v(1, 4),
-      v(3, 2), v(5, 3), v(4, 5), v(2, 4),
+      v(3, 0),
+      v(7, 3),
+      v(4, 7),
+      v(0, 4),
+      v(3, 1),
+      v(6, 3),
+      v(4, 6),
+      v(1, 4),
+      v(3, 2),
+      v(5, 3),
+      v(4, 5),
+      v(2, 4),
     ],
     Rotate4,
     3,
@@ -547,8 +626,18 @@ fn level_18() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 0), v(4, 7), v(1, 0), v(5, 7), v(2, 1), v(6, 6), v(3, 1), v(7, 6),
-      v(0, 2), v(4, 5), v(1, 3), v(5, 4),
+      v(0, 0),
+      v(4, 7),
+      v(1, 0),
+      v(5, 7),
+      v(2, 1),
+      v(6, 6),
+      v(3, 1),
+      v(7, 6),
+      v(0, 2),
+      v(4, 5),
+      v(1, 3),
+      v(5, 4),
     ],
     Glide,
     2,
@@ -574,8 +663,7 @@ fn level_19() -> @types.Level {
       let src_x = (x + 4) % 8
       let src_y = 7 - y
       match tiles[@types.grid_index(src_x, src_y, 8)] {
-        Some(st) =>
-          tiles[@types.grid_index(x, y, 8)] = ts(st.color, st.shape)
+        Some(st) => tiles[@types.grid_index(x, y, 8)] = ts(st.color, st.shape)
         None => ()
       }
     }
@@ -583,8 +671,20 @@ fn level_19() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 5), v(4, 2), v(1, 6), v(5, 1), v(2, 7), v(6, 0), v(3, 5), v(7, 2),
-      v(0, 4), v(4, 3), v(1, 7), v(5, 0), v(6, 6), v(2, 1),
+      v(0, 5),
+      v(4, 2),
+      v(1, 6),
+      v(5, 1),
+      v(2, 7),
+      v(6, 0),
+      v(3, 5),
+      v(7, 2),
+      v(0, 4),
+      v(4, 3),
+      v(1, 7),
+      v(5, 0),
+      v(6, 6),
+      v(2, 1),
     ],
     Glide,
     3,
@@ -613,8 +713,20 @@ fn level_20() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 0), v(7, 0), v(1, 1), v(6, 1), v(0, 3), v(7, 3), v(2, 4), v(5, 4),
-      v(1, 5), v(6, 5), v(0, 6), v(7, 6), v(3, 7), v(4, 7),
+      v(0, 0),
+      v(7, 0),
+      v(1, 1),
+      v(6, 1),
+      v(0, 3),
+      v(7, 3),
+      v(2, 4),
+      v(5, 4),
+      v(1, 5),
+      v(6, 5),
+      v(0, 6),
+      v(7, 6),
+      v(3, 7),
+      v(4, 7),
     ],
     MirrorV,
     3,
@@ -629,8 +741,8 @@ fn level_21() -> @types.Level {
   let tiles : Array[@types.Tile?] = Array::make(64, None)
   for y in 0..<8 {
     for x in 0..<8 {
-      let in_ring1 = (x == 0 || x == 7) && (y >= 0 && y <= 7)
-      let in_ring2 = (y == 0 || y == 7) && (x >= 0 && x <= 7)
+      let in_ring1 = (x == 0 || x == 7) && y >= 0 && y <= 7
+      let in_ring2 = (y == 0 || y == 7) && x >= 0 && x <= 7
       if in_ring1 || in_ring2 {
         tiles[@types.grid_index(x, y, 8)] = ts(Purple, Cross)
       } else {
@@ -647,8 +759,20 @@ fn level_21() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 0), v(7, 0), v(0, 7), v(7, 7), v(3, 0), v(7, 3), v(4, 7), v(0, 4),
-      v(2, 2), v(5, 2), v(5, 5), v(2, 5), v(3, 3), v(4, 4),
+      v(0, 0),
+      v(7, 0),
+      v(0, 7),
+      v(7, 7),
+      v(3, 0),
+      v(7, 3),
+      v(4, 7),
+      v(0, 4),
+      v(2, 2),
+      v(5, 2),
+      v(5, 5),
+      v(2, 5),
+      v(3, 3),
+      v(4, 4),
     ],
     Rotate4,
     3,
@@ -677,8 +801,22 @@ fn level_22() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 0), v(4, 7), v(1, 1), v(5, 6), v(2, 0), v(6, 7), v(3, 2), v(7, 5),
-      v(0, 3), v(4, 4), v(5, 1), v(1, 6), v(6, 0), v(2, 7), v(7, 2), v(3, 5),
+      v(0, 0),
+      v(4, 7),
+      v(1, 1),
+      v(5, 6),
+      v(2, 0),
+      v(6, 7),
+      v(3, 2),
+      v(7, 5),
+      v(0, 3),
+      v(4, 4),
+      v(5, 1),
+      v(1, 6),
+      v(6, 0),
+      v(2, 7),
+      v(7, 2),
+      v(3, 5),
     ],
     Glide,
     3,
@@ -710,8 +848,20 @@ fn level_23() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 1), v(1, 0), v(0, 3), v(3, 0), v(1, 4), v(4, 1), v(2, 5), v(5, 2),
-      v(0, 7), v(7, 0), v(3, 6), v(6, 3), v(1, 6), v(6, 1),
+      v(0, 1),
+      v(1, 0),
+      v(0, 3),
+      v(3, 0),
+      v(1, 4),
+      v(4, 1),
+      v(2, 5),
+      v(5, 2),
+      v(0, 7),
+      v(7, 0),
+      v(3, 6),
+      v(6, 3),
+      v(1, 6),
+      v(6, 1),
     ],
     MirrorD,
     3,
@@ -725,7 +875,12 @@ fn level_24() -> @types.Level {
   // Rotate2 complex with many shapes
   let tiles : Array[@types.Tile?] = Array::make(64, None)
   let shapes : Array[@types.TileShape] = [
-    Square, Triangle, Arrow, Diamond, Circle, Cross,
+    Square,
+    Triangle,
+    Arrow,
+    Diamond,
+    Circle,
+    Cross,
   ]
   for y in 0..<8 {
     for x in 0..<8 {
@@ -742,8 +897,7 @@ fn level_24() -> @types.Level {
       let mx = 7 - x
       let my = 7 - y
       match tiles[@types.grid_index(x, y, 8)] {
-        Some(st) =>
-          tiles[@types.grid_index(mx, my, 8)] = ts(st.color, st.shape)
+        Some(st) => tiles[@types.grid_index(mx, my, 8)] = ts(st.color, st.shape)
         None => ()
       }
     }
@@ -751,8 +905,22 @@ fn level_24() -> @types.Level {
   build_level(
     tiles,
     [
-      v(0, 0), v(7, 7), v(1, 0), v(6, 7), v(2, 1), v(5, 6), v(3, 2), v(4, 5),
-      v(0, 3), v(7, 4), v(6, 0), v(1, 7), v(5, 1), v(2, 6), v(7, 3), v(0, 4),
+      v(0, 0),
+      v(7, 7),
+      v(1, 0),
+      v(6, 7),
+      v(2, 1),
+      v(5, 6),
+      v(3, 2),
+      v(4, 5),
+      v(0, 3),
+      v(7, 4),
+      v(6, 0),
+      v(1, 7),
+      v(5, 1),
+      v(2, 6),
+      v(7, 3),
+      v(0, 4),
     ],
     Rotate2,
     3,
@@ -778,18 +946,30 @@ fn level_25() -> @types.Level {
       let src_x = (x + 4) % 8
       let src_y = 7 - y
       match tiles[@types.grid_index(src_x, src_y, 8)] {
-        Some(st) =>
-          tiles[@types.grid_index(x, y, 8)] = ts(st.color, Diamond)
-        None =>
-          tiles[@types.grid_index(x, y, 8)] = ts(colors[0], Diamond)
+        Some(st) => tiles[@types.grid_index(x, y, 8)] = ts(st.color, Diamond)
+        None => tiles[@types.grid_index(x, y, 8)] = ts(colors[0], Diamond)
       }
     }
   }
   build_level(
     tiles,
     [
-      v(0, 0), v(4, 7), v(1, 0), v(5, 7), v(2, 1), v(6, 6), v(3, 1), v(7, 6),
-      v(0, 2), v(4, 5), v(1, 3), v(5, 4), v(6, 0), v(2, 7), v(7, 1), v(3, 6),
+      v(0, 0),
+      v(4, 7),
+      v(1, 0),
+      v(5, 7),
+      v(2, 1),
+      v(6, 6),
+      v(3, 1),
+      v(7, 6),
+      v(0, 2),
+      v(4, 5),
+      v(1, 3),
+      v(5, 4),
+      v(6, 0),
+      v(2, 7),
+      v(7, 1),
+      v(3, 6),
     ],
     Glide,
     3,

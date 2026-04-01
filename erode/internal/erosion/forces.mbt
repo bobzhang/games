@@ -106,7 +106,7 @@ pub fn apply_force(grid : @types.Grid, kind : @types.ForceKind) -> @types.Grid {
 /// Returns an array of booleans where true means that cell would be removed.
 pub fn preview_force(
   grid : @types.Grid,
-  kind : @types.ForceKind
+  kind : @types.ForceKind,
 ) -> Array[Bool] {
   let new_grid = apply_force(grid, kind)
   let size = grid.size

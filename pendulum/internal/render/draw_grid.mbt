@@ -56,12 +56,9 @@ fn draw_grid_cells(level : @types.Level) -> Unit {
       let cx = @types.grid_offset_x + col * cs + half
       let cy = @types.grid_offset_y + row * cs + half
       match level.grid[row][col] {
-        Anchor =>
-          draw_anchor(cx, cy)
-        Peg =>
-          draw_peg(cx, cy)
-        Goal =>
-          draw_goal(cx, cy)
+        Anchor => draw_anchor(cx, cy)
+        Peg => draw_peg(cx, cy)
+        Goal => draw_goal(cx, cy)
         Wall =>
           @raylib.draw_rectangle(
             @types.grid_offset_x + col * cs + 2,
@@ -70,8 +67,7 @@ fn draw_grid_cells(level : @types.Level) -> Unit {
             cs - 4,
             @types.color_wall,
           )
-        Collectible =>
-          draw_collectible(cx, cy)
+        Collectible => draw_collectible(cx, cy)
         Empty => ()
       }
     }
@@ -97,8 +93,8 @@ fn draw_goal(cx : Int, cy : Int) -> Unit {
   // Draw a star shape
   for i = 0; i < 5; i = i + 1 {
     let angle1 = Float::from_int(i) * @types.pi * 2.0 / 5.0 - @types.pi / 2.0
-    let angle2 = Float::from_int(i + 1) * @types.pi * 2.0 / 5.0 - @types.pi /
-      2.0
+    let angle2 = Float::from_int(i + 1) * @types.pi * 2.0 / 5.0 -
+      @types.pi / 2.0
     let x1 = fcx + @types.cosf(angle1) * 16.0
     let y1 = fcy + @types.sinf(angle1) * 16.0
     let x2 = fcx + @types.cosf(angle2) * 16.0
@@ -116,12 +112,7 @@ fn draw_goal(cx : Int, cy : Int) -> Unit {
 ///|
 fn draw_collectible(cx : Int, cy : Int) -> Unit {
   @raylib.draw_circle(cx, cy, 8.0, @types.color_collectible)
-  @raylib.draw_circle(
-    cx,
-    cy,
-    4.0,
-    @types.color_bg,
-  )
+  @raylib.draw_circle(cx, cy, 4.0, @types.color_bg)
 }
 
 ///|
@@ -179,12 +170,7 @@ fn draw_weight(game : @types.Game) -> Unit {
     // Draw stopped weight as dimmed
     let sx = @types.grid_to_screen_x(game.weight.pos.x).to_int()
     let sy = @types.grid_to_screen_y(game.weight.pos.y).to_int()
-    @raylib.draw_circle(
-      sx,
-      sy,
-      12.0,
-      @raylib.Color::new(180, 140, 40, 200),
-    )
+    @raylib.draw_circle(sx, sy, 12.0, @raylib.Color::new(180, 140, 40, 200))
     return
   }
   if game.weight.state == AtGoal {
@@ -195,24 +181,14 @@ fn draw_weight(game : @types.Game) -> Unit {
       @types.sinf(Float::from_int(game.frame_count) * 0.1),
     )
     let r : Float = 12.0 + pulse * 4.0
-    @raylib.draw_circle(
-      sx,
-      sy,
-      r + 4.0,
-      @raylib.Color::new(50, 220, 100, 80),
-    )
+    @raylib.draw_circle(sx, sy, r + 4.0, @raylib.Color::new(50, 220, 100, 80))
     @raylib.draw_circle(sx, sy, r, @types.color_goal)
     return
   }
   let sx = @types.grid_to_screen_x(game.weight.pos.x).to_int()
   let sy = @types.grid_to_screen_y(game.weight.pos.y).to_int()
   // Glow
-  @raylib.draw_circle(
-    sx,
-    sy,
-    18.0,
-    @raylib.Color::new(255, 200, 50, 40),
-  )
+  @raylib.draw_circle(sx, sy, 18.0, @raylib.Color::new(255, 200, 50, 40))
   // Weight
   @raylib.draw_circle(sx, sy, 12.0, @types.color_weight)
   @raylib.draw_circle(sx, sy, 6.0, @raylib.Color::new(255, 230, 120, 255))
@@ -225,7 +201,9 @@ fn draw_launch_preview(game : @types.Game) -> Unit {
   }
   // Show where the weight would go if cut now
   let vel = @types.compute_launch_velocity(
-    game.rope.anchor, game.weight.pos, game.weight.swing_dir,
+    game.rope.anchor,
+    game.weight.pos,
+    game.weight.swing_dir,
   )
   let mut px = Float::from_int(game.weight.pos.x)
   let mut py = Float::from_int(game.weight.pos.y)

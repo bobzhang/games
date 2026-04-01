@@ -3,7 +3,7 @@
 /// Returns a MatchResult with counts of matching, over-eroded, and under-eroded cells.
 pub fn compare_grids(
   current : @types.Grid,
-  target : @types.Grid
+  target : @types.Grid,
 ) -> @types.MatchResult {
   let size = current.size
   let mut matching = 0
@@ -40,19 +40,13 @@ pub fn compare_grids(
 
 ///|
 /// Check if the current grid perfectly matches the target.
-pub fn is_perfect_match(
-  current : @types.Grid,
-  target : @types.Grid
-) -> Bool {
+pub fn is_perfect_match(current : @types.Grid, target : @types.Grid) -> Bool {
   @types.grids_match(current, target)
 }
 
 ///|
 /// Calculate match percentage (0-100).
-pub fn match_percentage(
-  current : @types.Grid,
-  target : @types.Grid
-) -> Int {
+pub fn match_percentage(current : @types.Grid, target : @types.Grid) -> Int {
   let result = compare_grids(current, target)
   let total = result.matching + result.over_eroded + result.under_eroded
   if total == 0 {
@@ -71,7 +65,7 @@ pub fn calculate_stars(
   current : @types.Grid,
   target : @types.Grid,
   forces_used : Int,
-  par_forces : Int
+  par_forces : Int,
 ) -> Int {
   let result = compare_grids(current, target)
   if result.under_eroded > 0 || result.over_eroded > 0 {
@@ -94,7 +88,7 @@ pub fn calculate_stars(
 pub fn is_stuck(
   current : @types.Grid,
   target : @types.Grid,
-  budget : @types.ForceBudget
+  budget : @types.ForceBudget,
 ) -> Bool {
   let total_remaining = budget.water + budget.wind + budget.frost + budget.heat
   if total_remaining > 0 {

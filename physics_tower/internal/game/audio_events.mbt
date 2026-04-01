@@ -18,10 +18,7 @@ pub fn get_sound_queue(game : @types.Game) -> Array[@types.SoundEvent] {
 
 ///|
 /// Returns true if the queue contains a specific event type.
-pub fn has_sound_event(
-  game : @types.Game,
-  target : @types.SoundEvent
-) -> Bool {
+pub fn has_sound_event(game : @types.Game, target : @types.SoundEvent) -> Bool {
   for event in game.sound_queue {
     if event == target {
       return true
@@ -34,7 +31,7 @@ pub fn has_sound_event(
 /// Returns the count of events of a specific type in the queue.
 pub fn count_sound_events(
   game : @types.Game,
-  target : @types.SoundEvent
+  target : @types.SoundEvent,
 ) -> Int {
   let mut count = 0
   for event in game.sound_queue {
@@ -89,7 +86,10 @@ pub fn sound_event_priority(event : @types.SoundEvent) -> Int {
 ///|
 /// Filters the sound queue to only the highest priority events
 /// when too many events are queued in a single frame.
-pub fn filter_sound_queue(game : @types.Game, max_events : Int) -> Array[@types.SoundEvent] {
+pub fn filter_sound_queue(
+  game : @types.Game,
+  max_events : Int,
+) -> Array[@types.SoundEvent] {
   let queue = game.sound_queue
   if queue.length() <= max_events {
     return queue
@@ -132,7 +132,7 @@ pub fn emit_break_sounds(game : @types.Game) -> Unit {
   }
   // Check for newly broken joints
   for joint in game.world.joints {
-    if joint.broken && !(joint.active) {
+    if joint.broken && !joint.active {
       push_sound(game, JointBreak)
     }
   }
@@ -143,12 +143,12 @@ pub fn emit_break_sounds(game : @types.Game) -> Unit {
 pub fn emit_hazard_sounds(game : @types.Game) -> Unit {
   let world = game.world
   if @types.absf(world.wind_force) > 0.1 {
-    if !(has_sound_event(game, WindStart)) {
+    if !has_sound_event(game, WindStart) {
       push_sound(game, WindStart)
     }
   }
   if world.quake_timer > 0.0 {
-    if !(has_sound_event(game, EarthquakeStart)) {
+    if !has_sound_event(game, EarthquakeStart) {
       push_sound(game, EarthquakeStart)
     }
   }

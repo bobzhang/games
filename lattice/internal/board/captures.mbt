@@ -1,9 +1,6 @@
 ///|
 /// Count liberties (empty adjacent cells) for a group containing the given stone
-pub fn count_liberties(
-  board : @types.HexBoard,
-  coord : @types.HexCoord
-) -> Int {
+pub fn count_liberties(board : @types.HexBoard, coord : @types.HexCoord) -> Int {
   let state = @types.get_cell(board, coord)
   match state {
     Empty => 0
@@ -33,7 +30,7 @@ pub fn count_liberties(
 pub fn find_group(
   board : @types.HexBoard,
   start : @types.HexCoord,
-  player : @types.Player
+  player : @types.Player,
 ) -> Array[@types.HexCoord] {
   let group : Array[@types.HexCoord] = []
   let stack : Array[@types.HexCoord] = [start]
@@ -62,7 +59,7 @@ pub fn find_group(
 /// Returns the number of stones captured and their positions.
 pub fn resolve_captures(
   board : @types.HexBoard,
-  last_player : @types.Player
+  last_player : @types.Player,
 ) -> Array[@types.HexCoord] {
   let captured : Array[@types.HexCoord] = []
   let opp = @types.opponent(last_player)
@@ -97,7 +94,7 @@ pub fn resolve_captures(
 /// Count liberties for a pre-found group
 fn count_group_liberties(
   board : @types.HexBoard,
-  group : Array[@types.HexCoord]
+  group : Array[@types.HexCoord],
 ) -> Int {
   let mut liberties = 0
   let counted : Array[@types.HexCoord] = []
@@ -121,7 +118,7 @@ fn count_group_liberties(
 /// space that causes another group to lose all liberties
 pub fn resolve_captures_cascading(
   board : @types.HexBoard,
-  last_player : @types.Player
+  last_player : @types.Player,
 ) -> Array[@types.HexCoord] {
   let all_captured : Array[@types.HexCoord] = []
   // First capture opponent stones
@@ -151,7 +148,7 @@ pub fn resolve_captures_cascading(
 pub fn evaluate_captures(
   board : @types.HexBoard,
   coord : @types.HexCoord,
-  player : @types.Player
+  player : @types.Player,
 ) -> Int {
   let test_board = @types.clone_board(board)
   @types.set_cell(test_board, coord, Occupied(player))

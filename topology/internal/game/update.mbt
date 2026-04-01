@@ -195,8 +195,12 @@ fn update_hover(game : @types.Game) -> Unit {
   let cs = @types.cell_size
   let gx = (mx - ox) / cs
   let gy = (my - oy) / cs
-  if gx >= 0 && gx < @types.grid_cols && gy >= 0 && gy < @types.grid_rows && mx >=
-  ox && my >= oy {
+  if gx >= 0 &&
+    gx < @types.grid_cols &&
+    gy >= 0 &&
+    gy < @types.grid_rows &&
+    mx >= ox &&
+    my >= oy {
     game.hover_cell = Some(@types.vec2i(gx, gy))
   } else {
     game.hover_cell = None
@@ -207,7 +211,10 @@ fn update_hover(game : @types.Game) -> Unit {
 fn handle_op_keys(game : @types.Game) -> Unit {
   let ops : Array[@types.OpKind] = [Shift, Rotate, Flip, Grow, Shrink]
   let keys = [
-    @raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree, @raylib.KeyFour,
+    @raylib.KeyOne,
+    @raylib.KeyTwo,
+    @raylib.KeyThree,
+    @raylib.KeyFour,
     @raylib.KeyFive,
   ]
   let available = @types.get_level_available_ops(game.current_level_idx)
@@ -224,7 +231,7 @@ fn handle_op_keys(game : @types.Game) -> Unit {
 
 ///|
 fn handle_op_click(game : @types.Game) -> Unit {
-  if !(@raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)) {
+  if !@raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     return
   }
   let mx = @raylib.get_mouse_x()
@@ -249,7 +256,10 @@ fn handle_op_click(game : @types.Game) -> Unit {
 }
 
 ///|
-fn op_is_available(op : @types.OpKind, available : Array[@types.OpKind]) -> Bool {
+fn op_is_available(
+  op : @types.OpKind,
+  available : Array[@types.OpKind],
+) -> Bool {
   for i in 0..<available.length() {
     if available[i] == op {
       return true
@@ -263,10 +273,9 @@ fn select_operation(game : @types.Game, op : @types.OpKind) -> Unit {
   game.selected_op = Some(op)
   match op {
     Shift => game.play_state = SelectingDirection
-    Rotate => {
+    Rotate =>
       // Apply immediately
       apply_rotate(game)
-    }
     Flip => game.play_state = SelectingFlipAxis
     Grow => game.play_state = SelectingGrowCell
     Shrink => game.play_state = SelectingShrinkCell
@@ -276,21 +285,17 @@ fn select_operation(game : @types.Game, op : @types.OpKind) -> Unit {
 ///|
 fn handle_direction_input(game : @types.Game) -> Unit {
   let mut dir : @types.Direction? = None
-  if @raylib.is_key_pressed(@raylib.KeyW) || @raylib.is_key_pressed(
-    @raylib.KeyUp,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyW) ||
+    @raylib.is_key_pressed(@raylib.KeyUp) {
     dir = Some(N)
-  } else if @raylib.is_key_pressed(@raylib.KeyD) || @raylib.is_key_pressed(
-    @raylib.KeyRight,
-  ) {
+  } else if @raylib.is_key_pressed(@raylib.KeyD) ||
+    @raylib.is_key_pressed(@raylib.KeyRight) {
     dir = Some(E)
-  } else if @raylib.is_key_pressed(@raylib.KeyS) || @raylib.is_key_pressed(
-    @raylib.KeyDown,
-  ) {
+  } else if @raylib.is_key_pressed(@raylib.KeyS) ||
+    @raylib.is_key_pressed(@raylib.KeyDown) {
     dir = Some(S)
-  } else if @raylib.is_key_pressed(@raylib.KeyA) || @raylib.is_key_pressed(
-    @raylib.KeyLeft,
-  ) {
+  } else if @raylib.is_key_pressed(@raylib.KeyA) ||
+    @raylib.is_key_pressed(@raylib.KeyLeft) {
     dir = Some(W)
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
@@ -440,7 +445,7 @@ fn apply_shrink(game : @types.Game, cell : @types.Vec2i) -> Unit {
 fn record_op(
   game : @types.Game,
   kind : @types.OpKind,
-  before : @types.Shape
+  before : @types.Shape,
 ) -> Unit {
   let cost = @types.op_cost(kind)
   game.ops_history.push({ kind, cost })

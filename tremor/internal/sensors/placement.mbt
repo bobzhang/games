@@ -1,12 +1,12 @@
 ///|
-pub fn can_place_sensor(
-  game : @types.Game,
-  pos : @types.Vec2i
-) -> Bool {
+pub fn can_place_sensor(game : @types.Game, pos : @types.Vec2i) -> Bool {
   match game.level {
     None => false
     Some(level) => {
-      if pos.x < 0 || pos.x >= @types.grid_cols || pos.y < 0 || pos.y >= @types.grid_rows {
+      if pos.x < 0 ||
+        pos.x >= @types.grid_cols ||
+        pos.y < 0 ||
+        pos.y >= @types.grid_rows {
         return false
       }
       let tile = level.grid[pos.y][pos.x]

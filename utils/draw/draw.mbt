@@ -11,8 +11,7 @@ pub fn init_font() -> Unit {
   // On web (Emscripten): files are embedded at the @-mapped virtual path,
   // but CWD may vary. Try both absolute and relative paths.
   let paths = [
-    "utils/draw/resources/anonymous_pro_bold.ttf",
-    "/utils/draw/resources/anonymous_pro_bold.ttf",
+    "utils/draw/resources/anonymous_pro_bold.ttf", "/utils/draw/resources/anonymous_pro_bold.ttf",
     "./utils/draw/resources/anonymous_pro_bold.ttf",
   ]
   for i in 0..<paths.length() {

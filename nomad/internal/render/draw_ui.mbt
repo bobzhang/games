@@ -45,10 +45,20 @@ fn draw_hud(game : @types.Game) -> Unit {
   let panel_y = 60
   let panel_w = 400
   let panel_h = 600
-  @raylib.draw_rectangle(panel_x, panel_y, panel_w, panel_h, @types.color_hud_bg)
-  @raylib.draw_rectangle_lines(panel_x, panel_y, panel_w, panel_h, @types.color_hex_outline)
+  @raylib.draw_rectangle(
+    panel_x, panel_y, panel_w, panel_h, @types.color_hud_bg,
+  )
+  @raylib.draw_rectangle_lines(
+    panel_x, panel_y, panel_w, panel_h, @types.color_hex_outline,
+  )
   // Level name
-  @draw.draw_text(level.name, panel_x + 15, panel_y + 10, 26, @types.color_title_text)
+  @draw.draw_text(
+    level.name,
+    panel_x + 15,
+    panel_y + 10,
+    26,
+    @types.color_title_text,
+  )
   // Tier
   @draw.draw_text(
     @types.tier_name(level.tier),
@@ -70,7 +80,9 @@ fn draw_hud(game : @types.Game) -> Unit {
   }
   let fill_w = (fi(bar_w) * @types.clampf(water_frac, 0.0, 1.0)).to_int()
   @raylib.draw_rectangle(bar_x, bar_y, fill_w, bar_h, @types.color_water_bar)
-  @raylib.draw_rectangle_lines(bar_x, bar_y, bar_w, bar_h, @types.color_hex_outline)
+  @raylib.draw_rectangle_lines(
+    bar_x, bar_y, bar_w, bar_h, @types.color_hex_outline,
+  )
   @draw.draw_text(
     "Water: \{game.caravan.water}/\{game.caravan.max_water}",
     bar_x + 8,
@@ -159,7 +171,9 @@ fn draw_hud(game : @types.Game) -> Unit {
   @draw.draw_text(state_text, bar_x, state_y, 16, state_color)
   // Tile legend
   let legend_y = state_y + 50
-  @draw.draw_text("-- Tile Legend --", bar_x, legend_y, 18, @types.color_title_text)
+  @draw.draw_text(
+    "-- Tile Legend --", bar_x, legend_y, 18, @types.color_title_text,
+  )
   let legends : Array[(String, String, @raylib.Color)] = [
     ("Sand", "1 water", @types.color_sand),
     ("Dunes", "2 water", @types.color_dunes),
@@ -178,7 +192,9 @@ fn draw_hud(game : @types.Game) -> Unit {
   }
   // Star targets
   let star_y = legend_y + 26 + 7 * 22 + 10
-  @draw.draw_text("-- Star Targets --", bar_x, star_y, 18, @types.color_title_text)
+  @draw.draw_text(
+    "-- Star Targets --", bar_x, star_y, 18, @types.color_title_text,
+  )
   @draw.draw_text(
     "1 star: Reach destination",
     bar_x,
@@ -219,7 +235,13 @@ fn draw_tooltip(game : @types.Game) -> Unit {
         let mx = mouse.x.to_int()
         let my = mouse.y.to_int()
         let tw = @draw.measure_text(text, 16)
-        @raylib.draw_rectangle(mx + 15, my - 25, tw + 10, 22, @types.color_hud_bg)
+        @raylib.draw_rectangle(
+          mx + 15,
+          my - 25,
+          tw + 10,
+          22,
+          @types.color_hud_bg,
+        )
         @draw.draw_text(text, mx + 20, my - 23, 16, @types.color_hud_text)
       }
     None => ()

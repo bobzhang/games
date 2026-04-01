@@ -73,11 +73,7 @@ test "fortress detects center with 4+ neighbors" {
 test "wall detects 4 stones on edge" {
   let board = @types.new_board(7)
   for c in 0..<4 {
-    @types.set_cell(
-      board,
-      { row: 0, col: c },
-      Occupied(Black),
-    )
+    @types.set_cell(board, { row: 0, col: c }, Occupied(Black))
   }
   let patterns = find_all_patterns(board, Black)
   let mut found_wall = false
@@ -155,21 +151,9 @@ test "resolve_captures removes surrounded stone" {
 test "score_patterns adds up correctly" {
   let board = @types.new_board(7)
   // Chain of 3
-  @types.set_cell(
-    board,
-    { row: 3, col: 1 },
-    Occupied(Black),
-  )
-  @types.set_cell(
-    board,
-    { row: 3, col: 2 },
-    Occupied(Black),
-  )
-  @types.set_cell(
-    board,
-    { row: 3, col: 3 },
-    Occupied(Black),
-  )
+  @types.set_cell(board, { row: 3, col: 1 }, Occupied(Black))
+  @types.set_cell(board, { row: 3, col: 2 }, Occupied(Black))
+  @types.set_cell(board, { row: 3, col: 3 }, Occupied(Black))
   let score = score_patterns(board, Black)
   assert_true(score >= @types.chain_points)
 }

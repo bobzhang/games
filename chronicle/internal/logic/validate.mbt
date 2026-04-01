@@ -1,8 +1,5 @@
 ///|
-pub fn check_order(
-  timeline : Array[Int],
-  solution_order : Array[Int]
-) -> Bool {
+pub fn check_order(timeline : Array[Int], solution_order : Array[Int]) -> Bool {
   if timeline.length() != solution_order.length() {
     return false
   }
@@ -17,7 +14,7 @@ pub fn check_order(
 ///|
 pub fn count_correct_positions(
   timeline : Array[Int],
-  solution_order : Array[Int]
+  solution_order : Array[Int],
 ) -> Int {
   let mut count = 0
   let len = @types.mini(timeline.length(), solution_order.length())
@@ -32,7 +29,7 @@ pub fn count_correct_positions(
 ///|
 pub fn check_links(
   placed : Array[@types.CauseLink],
-  solution : Array[@types.CauseLink]
+  solution : Array[@types.CauseLink],
 ) -> Bool {
   if placed.length() != solution.length() {
     return false
@@ -71,7 +68,7 @@ pub fn check_links(
 ///|
 pub fn count_correct_links(
   placed : Array[@types.CauseLink],
-  solution : Array[@types.CauseLink]
+  solution : Array[@types.CauseLink],
 ) -> Int {
   let mut count = 0
   for i in 0..<placed.length() {
@@ -87,10 +84,7 @@ pub fn count_correct_links(
 }
 
 ///|
-pub fn check_clue_satisfied(
-  clue : @types.Clue,
-  timeline : Array[Int]
-) -> Bool {
+pub fn check_clue_satisfied(clue : @types.Clue, timeline : Array[Int]) -> Bool {
   let pos_a = @types.card_in_slot(timeline, clue.card_a)
   let pos_b = @types.card_in_slot(timeline, clue.card_b)
   if pos_a < 0 || pos_b < 0 {
@@ -117,7 +111,7 @@ pub fn check_clue_satisfied(
 ///|
 pub fn check_all_clues(
   clues : Array[@types.Clue],
-  timeline : Array[Int]
+  timeline : Array[Int],
 ) -> Bool {
   for i in 0..<clues.length() {
     if !check_clue_satisfied(clues[i], timeline) {
@@ -128,10 +122,7 @@ pub fn check_all_clues(
 }
 
 ///|
-pub fn check_anchors(
-  case_ : @types.Case,
-  timeline : Array[Int]
-) -> Bool {
+pub fn check_anchors(case_ : @types.Case, timeline : Array[Int]) -> Bool {
   for i in 0..<case_.anchors.length() {
     let card_id = case_.anchors[i]
     let fixed = @types.get_fixed_slot(case_.cards, card_id)
@@ -150,7 +141,7 @@ pub fn compute_score(
   case_ : @types.Case,
   timeline : Array[Int],
   placed_links : Array[@types.CauseLink],
-  rewinds : Int
+  rewinds : Int,
 ) -> @types.CaseScore {
   let order_ok = check_order(timeline, case_.solution_order)
   let links_ok = check_links(placed_links, case_.solution_links)

@@ -26,6 +26,7 @@ pub let grid_offset_y : Int = 60
 pub let total_levels : Int = 20
 
 // Water colors by depth (deeper = darker blue)
+
 ///|
 pub let color_water_shallow : @raylib.Color = @raylib.Color::new(
   100, 180, 255, 255,
@@ -38,6 +39,7 @@ pub let color_water_mid : @raylib.Color = @raylib.Color::new(50, 120, 220, 255)
 pub let color_water_deep : @raylib.Color = @raylib.Color::new(20, 60, 160, 255)
 
 // Land colors by height (lower = darker green/brown)
+
 ///|
 pub let color_land_low : @raylib.Color = @raylib.Color::new(80, 140, 60, 255)
 
@@ -100,9 +102,7 @@ pub let color_hover_valid : @raylib.Color = @raylib.Color::new(
 )
 
 ///|
-pub let color_hover_invalid : @raylib.Color = @raylib.Color::new(
-  255, 0, 0, 80,
-)
+pub let color_hover_invalid : @raylib.Color = @raylib.Color::new(255, 0, 0, 80)
 
 ///|
 pub let color_tier_shores : @raylib.Color = @raylib.Color::new(

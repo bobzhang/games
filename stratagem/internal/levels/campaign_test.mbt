@@ -16,10 +16,7 @@ test "campaign level dimensions match terrain array" {
   for i in 0..<@types.total_campaign_levels {
     let level = @levels.get_campaign_level(i)
     let expected = level.width * level.height
-    inspect(
-      level.terrain.length() == expected,
-      content="true",
-    )
+    inspect(level.terrain.length() == expected, content="true")
   }
 }
 
@@ -157,7 +154,7 @@ test "campaign victory conditions are solvable - player can reach enemies" {
         let nb = neighbors[n]
         if nb.col >= 0 && nb.col < w && nb.row >= 0 && nb.row < h {
           let nb_idx = nb.row * w + nb.col
-          if !(visited[nb_idx]) && level.terrain[nb_idx] != 3 {
+          if !visited[nb_idx] && level.terrain[nb_idx] != 3 {
             visited[nb_idx] = true
             queue.push((nb.col, nb.row))
           }

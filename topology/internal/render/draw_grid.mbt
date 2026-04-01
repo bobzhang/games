@@ -15,19 +15,13 @@ fn draw_grid(_game : @types.Game) -> Unit {
   let cols = @types.grid_cols
   let rows = @types.grid_rows
   // Grid background
-  @raylib.draw_rectangle(
-    ox,
-    oy,
-    cols * cs,
-    rows * cs,
-    @types.color_grid_bg,
-  )
+  @raylib.draw_rectangle(ox, oy, cols * cs, rows * cs, @types.color_grid_bg)
   // Grid lines
-  for i in 0..=cols {
+  for i in 0..<=cols {
     let x = ox + i * cs
     @raylib.draw_line(x, oy, x, oy + rows * cs, @types.color_grid_line)
   }
-  for i in 0..=rows {
+  for i in 0..<=rows {
     let y = oy + i * cs
     @raylib.draw_line(ox, y, ox + cols * cs, y, @types.color_grid_line)
   }
@@ -46,7 +40,13 @@ fn draw_target_shape(game : @types.Game) -> Unit {
     // Check if current shape also has this cell
     let is_overlap = @types.shape_contains(game.current_shape, c)
     if is_overlap {
-      @raylib.draw_rectangle(px + 2, py + 2, cs - 4, cs - 4, @types.color_overlap)
+      @raylib.draw_rectangle(
+        px + 2,
+        py + 2,
+        cs - 4,
+        cs - 4,
+        @types.color_overlap,
+      )
     } else {
       // Target outline only
       @raylib.draw_rectangle(
@@ -78,7 +78,7 @@ fn draw_current_shape(game : @types.Game) -> Unit {
     let px = ox + c.x * cs
     let py = oy + c.y * cs
     // Don't draw if overlap (already drawn)
-    if !(@types.shape_contains(game.target_shape, c)) {
+    if !@types.shape_contains(game.target_shape, c) {
       @raylib.draw_rectangle(px + 2, py + 2, cs - 4, cs - 4, @types.color_shape)
     }
   }

@@ -1,7 +1,17 @@
 ///|
 pub fn new_region(damages : Array[DamageKind]) -> Region {
-  let state : RegionState = if damages.length() == 0 { Pristine } else { Damaged }
-  { state, damage_types: damages, treatments_applied: [], fragile: false, stain_permanent: false }
+  let state : RegionState = if damages.length() == 0 {
+    Pristine
+  } else {
+    Damaged
+  }
+  {
+    state,
+    damage_types: damages,
+    treatments_applied: [],
+    fragile: false,
+    stain_permanent: false,
+  }
 }
 
 ///|
@@ -10,7 +20,12 @@ pub fn new_artwork(w : Int, h : Int, regions : Array[Region]) -> Artwork {
 }
 
 ///|
-pub fn new_budget(clean : Int, fill : Int, retouch : Int, seal : Int) -> ToolBudget {
+pub fn new_budget(
+  clean : Int,
+  fill : Int,
+  retouch : Int,
+  seal : Int,
+) -> ToolBudget {
   { clean, fill, retouch, seal }
 }
 
@@ -25,7 +40,7 @@ pub fn new_level(
   name : String,
   regions : Array[Region],
   budget : ToolBudget,
-  par_tools : Int
+  par_tools : Int,
 ) -> Level {
   let art = new_artwork(grid_cols, grid_rows, regions)
   { tier, name, artwork: art, budget, par_tools }
@@ -33,7 +48,13 @@ pub fn new_level(
 
 ///|
 pub fn new_score() -> LevelScore {
-  { stars: 0, restored_count: 0, worsened_count: 0, sealed_count: 0, total_tools_used: 0 }
+  {
+    stars: 0,
+    restored_count: 0,
+    worsened_count: 0,
+    sealed_count: 0,
+    total_tools_used: 0,
+  }
 }
 
 ///|

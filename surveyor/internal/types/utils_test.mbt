@@ -59,9 +59,9 @@ test "fence_eq compares fences correctly" {
   let b = make_fence(1, 2, Horizontal)
   let c = make_fence(1, 2, Vertical)
   let d = make_fence(1, 3, Horizontal)
-  assert_true!(fence_eq(a, b))
-  assert_false!(fence_eq(a, c))
-  assert_false!(fence_eq(a, d))
+  assert_true(fence_eq(a, b))
+  assert_false(fence_eq(a, c))
+  assert_false(fence_eq(a, d))
 }
 
 ///|
@@ -70,10 +70,10 @@ test "has_fence finds existing fence" {
     make_fence(0, 0, Horizontal),
     make_fence(1, 2, Vertical),
   ]
-  assert_true!(has_fence(fences, make_fence(0, 0, Horizontal)))
-  assert_true!(has_fence(fences, make_fence(1, 2, Vertical)))
-  assert_false!(has_fence(fences, make_fence(0, 0, Vertical)))
-  assert_false!(has_fence(fences, make_fence(2, 2, Vertical)))
+  assert_true(has_fence(fences, make_fence(0, 0, Horizontal)))
+  assert_true(has_fence(fences, make_fence(1, 2, Vertical)))
+  assert_false(has_fence(fences, make_fence(0, 0, Vertical)))
+  assert_false(has_fence(fences, make_fence(2, 2, Vertical)))
 }
 
 ///|
@@ -83,11 +83,11 @@ test "toggle_fence adds when absent and removes when present" {
   // Add
   toggle_fence(fences, f)
   inspect(fences.length(), content="1")
-  assert_true!(has_fence(fences, f))
+  assert_true(has_fence(fences, f))
   // Remove
   toggle_fence(fences, f)
   inspect(fences.length(), content="0")
-  assert_false!(has_fence(fences, f))
+  assert_false(has_fence(fences, f))
 }
 
 ///|
@@ -98,7 +98,7 @@ test "copy_fences creates independent copy" {
   ]
   let copied = copy_fences(fences)
   inspect(copied.length(), content="2")
-  assert_true!(fence_eq(copied[0], fences[0]))
+  assert_true(fence_eq(copied[0], fences[0]))
   // Modifying original should not affect copy
   toggle_fence(fences, make_fence(0, 0, Horizontal))
   inspect(fences.length(), content="1")
@@ -117,11 +117,11 @@ test "make_house creates house with correct fields" {
 ///|
 test "make_constraint creates correct constraint" {
   let c1 = make_constraint(true, false)
-  assert_true!(c1.must_be_rectangular)
-  assert_false!(c1.must_not_touch_water)
+  assert_true(c1.must_be_rectangular)
+  assert_false(c1.must_not_touch_water)
   let c2 = make_constraint(false, true)
-  assert_false!(c2.must_be_rectangular)
-  assert_true!(c2.must_not_touch_water)
+  assert_false(c2.must_be_rectangular)
+  assert_true(c2.must_not_touch_water)
 }
 
 ///|
@@ -133,7 +133,7 @@ test "is_region_rectangular detects rectangles" {
     has_road: false,
     area: 4,
   }
-  assert_true!(is_region_rectangular(r1))
+  assert_true(is_region_rectangular(r1))
   // L-shape is not rectangular
   let r2 : Region = {
     tiles: [vec2i(0, 0), vec2i(1, 0), vec2i(0, 1)],
@@ -141,10 +141,10 @@ test "is_region_rectangular detects rectangles" {
     has_road: false,
     area: 3,
   }
-  assert_false!(is_region_rectangular(r2))
+  assert_false(is_region_rectangular(r2))
   // Empty region is rectangular
   let r3 : Region = { tiles: [], houses: [], has_road: false, area: 0 }
-  assert_true!(is_region_rectangular(r3))
+  assert_true(is_region_rectangular(r3))
 }
 
 ///|
@@ -155,7 +155,7 @@ test "is_region_rectangular single tile" {
     has_road: false,
     area: 1,
   }
-  assert_true!(is_region_rectangular(r))
+  assert_true(is_region_rectangular(r))
 }
 
 ///|
@@ -170,7 +170,7 @@ test "region_touches_water detects adjacent water" {
     has_road: false,
     area: 1,
   }
-  assert_true!(region_touches_water(r1, g))
+  assert_true(region_touches_water(r1, g))
   // Region at (1,1) is adjacent to water at (1,0)
   let r2 : Region = {
     tiles: [vec2i(1, 1)],
@@ -178,7 +178,7 @@ test "region_touches_water detects adjacent water" {
     has_road: false,
     area: 1,
   }
-  assert_true!(region_touches_water(r2, g))
+  assert_true(region_touches_water(r2, g))
 }
 
 ///|
@@ -191,7 +191,7 @@ test "region_touches_water returns false when no adjacent water" {
     has_road: false,
     area: 1,
   }
-  assert_false!(region_touches_water(r, g))
+  assert_false(region_touches_water(r, g))
 }
 
 ///|

@@ -38,6 +38,7 @@ pub let cherry_fork_interval : Int = 2
 pub let leaf_stagnant_threshold : Int = 2
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(32, 28, 24, 255)
 
@@ -48,10 +49,14 @@ pub let color_trunk : @raylib.Color = @raylib.Color::new(101, 67, 33, 255)
 pub let color_branch_pine : @raylib.Color = @raylib.Color::new(34, 120, 50, 255)
 
 ///|
-pub let color_branch_maple : @raylib.Color = @raylib.Color::new(60, 140, 40, 255)
+pub let color_branch_maple : @raylib.Color = @raylib.Color::new(
+  60, 140, 40, 255,
+)
 
 ///|
-pub let color_branch_cherry : @raylib.Color = @raylib.Color::new(80, 100, 50, 255)
+pub let color_branch_cherry : @raylib.Color = @raylib.Color::new(
+  80, 100, 50, 255,
+)
 
 ///|
 pub let color_leaf_pine : @raylib.Color = @raylib.Color::new(50, 160, 60, 255)
@@ -60,7 +65,9 @@ pub let color_leaf_pine : @raylib.Color = @raylib.Color::new(50, 160, 60, 255)
 pub let color_leaf_maple : @raylib.Color = @raylib.Color::new(200, 80, 30, 255)
 
 ///|
-pub let color_leaf_cherry : @raylib.Color = @raylib.Color::new(255, 150, 180, 255)
+pub let color_leaf_cherry : @raylib.Color = @raylib.Color::new(
+  255, 150, 180, 255,
+)
 
 ///|
 pub let color_pruned : @raylib.Color = @raylib.Color::new(90, 70, 55, 120)
@@ -106,7 +113,9 @@ pub let color_star_off : @raylib.Color = @raylib.Color::new(100, 90, 70, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(70, 130, 70, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(90, 170, 90, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  90, 170, 90, 255,
+)
 
 ///|
 pub let color_locked : @raylib.Color = @raylib.Color::new(80, 80, 80, 255)

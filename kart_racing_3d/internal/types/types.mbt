@@ -617,7 +617,10 @@ pub fn Game::new() -> Game {
     skid_mark_count: 0,
     hit_flash_timer: 0.0,
     hazard_timer: 0.0,
-    falling_rocks: Array::make(max_waypoints * falling_rocks_max, (0, 0.0, 0.0, false)),
+    falling_rocks: Array::make(
+      max_waypoints * falling_rocks_max,
+      (0, 0.0, 0.0, false),
+    ),
     falling_rocks_count: 0,
   }
 }

@@ -6,8 +6,7 @@ fn draw_title(game : @types.Game) -> Unit {
     for col in 0..<20 {
       let fx = Float::from_int(col) * 64.0 + 32.0
       let fy = Float::from_int(row) * 48.0 + 24.0
-      let offset = (Float::from_int(col) + Float::from_int(row)) * 0.3 + t *
-        2.0
+      let offset = (Float::from_int(col) + Float::from_int(row)) * 0.3 + t * 2.0
       let pulse_raw = offset - Float::from_int(offset.to_int())
       let pulse : Float = @types.absf(pulse_raw * 2.0 - 1.0)
       let alpha_f : Float = 20.0 + pulse * 40.0
@@ -53,12 +52,7 @@ fn draw_title(game : @types.Game) -> Unit {
       @types.domino_width,
       @types.domino_height,
     )
-    @raylib.draw_rectangle_pro(
-      rec,
-      @raylib.Vector2::new(hw, hh),
-      tilt,
-      c,
-    )
+    @raylib.draw_rectangle_pro(rec, @raylib.Vector2::new(hw, hh), tilt, c)
   }
   // Start prompt
   let blink_raw = t * 2.0 - Float::from_int((t * 2.0).to_int())
@@ -74,8 +68,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text("SELECT TIER", 470, 60, 36, @types.color_ui_highlight)
   let tiers : Array[@types.Tier] = [Chains, Splits, Timing]
   let descriptions = [
-    "Normal dominoes, Simple chains and turns",
-    "Splitters and heavy, Parallel chains",
+    "Normal dominoes, Simple chains and turns", "Splitters and heavy, Parallel chains",
     "Delay dominoes, Precise timing",
   ]
   for i in 0..<3 {
@@ -265,11 +258,7 @@ fn draw_results(game : @types.Game) -> Unit {
   let anim_t = @types.clampf(game.result_anim * 2.0, 0.0, 1.0)
   // Background
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
   )
   // Results panel
   let panel_w = 600
@@ -279,11 +268,7 @@ fn draw_results(game : @types.Game) -> Unit {
   let slide_y = py + (Float::from_int(panel_h) * (1.0 - anim_t)).to_int()
   @raylib.draw_rectangle(px, slide_y, panel_w, panel_h, @types.color_ui_bg)
   @raylib.draw_rectangle_lines(
-    px,
-    slide_y,
-    panel_w,
-    panel_h,
-    @types.color_success,
+    px, slide_y, panel_w, panel_h, @types.color_success,
   )
   @draw.draw_text(
     "LEVEL COMPLETE",
@@ -324,10 +309,10 @@ fn draw_results(game : @types.Game) -> Unit {
         )
         @draw.draw_text(
           "Par: " +
-            level.par_count.to_string() +
-            " dominoes / " +
-            level.par_ticks.to_string() +
-            " ticks",
+          level.par_count.to_string() +
+          " dominoes / " +
+          level.par_ticks.to_string() +
+          " ticks",
           px + 50,
           slide_y + 260,
           20,

@@ -38,6 +38,7 @@ pub let total_levels : Int = 30
 pub let levels_per_tier : Int = 10
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(8, 12, 32, 255)
 
@@ -72,7 +73,9 @@ pub let color_emitter_p3 : @raylib.Color = @raylib.Color::new(220, 80, 255, 255)
 pub let color_reflector : @raylib.Color = @raylib.Color::new(60, 200, 160, 255)
 
 ///|
-pub let color_phase_shifter : @raylib.Color = @raylib.Color::new(180, 80, 255, 255)
+pub let color_phase_shifter : @raylib.Color = @raylib.Color::new(
+  180, 80, 255, 255,
+)
 
 ///|
 pub let color_absorber : @raylib.Color = @raylib.Color::new(60, 60, 70, 255)
@@ -84,7 +87,9 @@ pub let color_ui_text : @raylib.Color = @raylib.Color::new(200, 220, 255, 255)
 pub let color_ui_dim : @raylib.Color = @raylib.Color::new(100, 120, 150, 255)
 
 ///|
-pub let color_ui_highlight : @raylib.Color = @raylib.Color::new(0, 200, 255, 255)
+pub let color_ui_highlight : @raylib.Color = @raylib.Color::new(
+  0, 200, 255, 255,
+)
 
 ///|
 pub let color_ui_panel : @raylib.Color = @raylib.Color::new(15, 20, 45, 220)
@@ -96,9 +101,12 @@ pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
 pub let color_star_empty : @raylib.Color = @raylib.Color::new(60, 65, 80, 255)
 
 ///|
-pub let color_title_accent : @raylib.Color = @raylib.Color::new(0, 180, 255, 255)
+pub let color_title_accent : @raylib.Color = @raylib.Color::new(
+  0, 180, 255, 255,
+)
 
 // Palette panel
+
 ///|
 pub let palette_x : Int = 730
 
@@ -112,6 +120,7 @@ pub let palette_w : Int = 530
 pub let palette_h : Int = 660
 
 // Wave visualization colors
+
 ///|
 pub let color_wave_ripple_0 : @raylib.Color = @raylib.Color::new(
   0, 200, 255, 120,
@@ -133,6 +142,7 @@ pub let color_wave_ripple_3 : @raylib.Color = @raylib.Color::new(
 )
 
 // Target indicator colors
+
 ///|
 pub let color_target_ring_sat : @raylib.Color = @raylib.Color::new(
   50, 255, 100, 255,

@@ -6,10 +6,12 @@ fn draw_title(game : @types.Game) -> Unit {
   // Animated bubbling cauldron in background
   for i in 0..<20 {
     let fi : Float = Float::from_int(i)
-    let bx : Float = Float::from_int(w) / 2.0 + @types.sinf(fi * 0.7 + time) * 80.0
-    let by : Float = Float::from_int(h) / 2.0 + 60.0 - fi * 8.0 + @types.sinf(
-        time + fi,
-      ) * 10.0
+    let bx : Float = Float::from_int(w) / 2.0 +
+      @types.sinf(fi * 0.7 + time) * 80.0
+    let by : Float = Float::from_int(h) / 2.0 +
+      60.0 -
+      fi * 8.0 +
+      @types.sinf(time + fi) * 10.0
     let size : Float = 6.0 + @types.sinf(fi + time * 2.0) * 3.0
     let alpha_f : Float = 180.0 - fi * 8.0
     let alpha : Int = alpha_f.to_int()
@@ -22,18 +24,8 @@ fn draw_title(game : @types.Game) -> Unit {
     )
   }
   // Large cauldron silhouette
-  @raylib.draw_circle(
-    w / 2,
-    h / 2 + 80,
-    100.0,
-    @types.color_cauldron_rim,
-  )
-  @raylib.draw_circle(
-    w / 2,
-    h / 2 + 80,
-    85.0,
-    @types.color_cauldron_inner,
-  )
+  @raylib.draw_circle(w / 2, h / 2 + 80, 100.0, @types.color_cauldron_rim)
+  @raylib.draw_circle(w / 2, h / 2 + 80, 85.0, @types.color_cauldron_inner)
   // Glowing liquid
   let glow_f : Float = 180.0 + @types.sinf(time * 2.0) * 60.0
   let glow_alpha : Int = glow_f.to_int()
@@ -58,13 +50,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Subtitle
   let sub = "An Alchemy Puzzle"
   let sub_w = @draw.measure_text(sub, 22)
-  @draw.draw_text(
-    sub,
-    (w - sub_w) / 2,
-    h / 6 + 75,
-    22,
-    @types.color_text_dim,
-  )
+  @draw.draw_text(sub, (w - sub_w) / 2, h / 6 + 75, 22, @types.color_text_dim)
   // Start prompt
   let start = "PRESS ENTER TO BEGIN"
   let start_w = @draw.measure_text(start, 26)
@@ -85,13 +71,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   // Header
   let header = "SELECT TIER"
   let hw = @draw.measure_text(header, 40)
-  @draw.draw_text(
-    header,
-    (w - hw) / 2,
-    50,
-    40,
-    @types.color_text_bright,
-  )
+  @draw.draw_text(header, (w - hw) / 2, 50, 40, @types.color_text_bright)
   // Three tier cards
   let tiers : Array[@types.Tier] = [Apprentice, Journeyman, Master]
   for i in 0..<3 {
@@ -102,16 +82,14 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let card_y = h / 2 - card_h / 2
     let unlocked = @levels.is_tier_unlocked(tier, game.level_scores)
     // Card background
-    let bg = if unlocked { @types.color_button } else {
+    let bg = if unlocked {
+      @types.color_button
+    } else {
       @raylib.Color::new(40, 35, 45, 255)
     }
     @raylib.draw_rectangle(card_x, card_y, card_w, card_h, bg)
     @raylib.draw_rectangle_lines(
-      card_x,
-      card_y,
-      card_w,
-      card_h,
-      @types.color_panel_border,
+      card_x, card_y, card_w, card_h, @types.color_panel_border,
     )
     // Tier name
     let name = @types.tier_name(tier)
@@ -149,7 +127,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       text_color,
     )
     // Stars
-    let star_text = "Stars: " + total_stars.to_string() + "/" + (count * 3).to_string()
+    let star_text = "Stars: " +
+      total_stars.to_string() +
+      "/" +
+      (count * 3).to_string()
     let sw = @draw.measure_text(star_text, 16)
     @draw.draw_text(
       star_text,
@@ -172,8 +153,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       // Hover hint
       let mx = @raylib.get_mouse_x()
       let my = @raylib.get_mouse_y()
-      if mx >= card_x && mx <= card_x + card_w && my >= card_y && my <= card_y +
-        card_h {
+      if mx >= card_x &&
+        mx <= card_x + card_w &&
+        my >= card_y &&
+        my <= card_y + card_h {
         @raylib.draw_rectangle_lines(
           card_x - 2,
           card_y - 2,
@@ -205,13 +188,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   // Header
   let header = @types.tier_name(game.current_tier) + " - Select Level"
   let hw = @draw.measure_text(header, 36)
-  @draw.draw_text(
-    header,
-    (w - hw) / 2,
-    40,
-    36,
-    @types.color_text_bright,
-  )
+  @draw.draw_text(header, (w - hw) / 2, 40, 36, @types.color_text_bright)
   let start = @types.tier_start_index(game.current_tier)
   let count = @types.tier_level_count(game.current_tier)
   // Grid of level buttons
@@ -238,11 +215,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(bx, by, btn_w, btn_h, bg)
     @raylib.draw_rectangle_lines(
-      bx,
-      by,
-      btn_w,
-      btn_h,
-      @types.color_panel_border,
+      bx, by, btn_w, btn_h, @types.color_panel_border,
     )
     // Level number
     let num = "Level " + (i + 1).to_string()
@@ -293,7 +266,10 @@ fn draw_level_select(game : @types.Game) -> Unit {
   let nav = "ESC - Back to Tiers"
   @draw.draw_text(nav, 20, h - 40, 16, @types.color_text_dim)
   // Discovery progress
-  let disc = "Recipes: " + game.discovered_count.to_string() + "/" + @types.total_reactions.to_string()
+  let disc = "Recipes: " +
+    game.discovered_count.to_string() +
+    "/" +
+    @types.total_reactions.to_string()
   let dw = @draw.measure_text(disc, 16)
   @draw.draw_text(disc, w - dw - 20, h - 40, 16, @types.color_text_dim)
 }
@@ -304,36 +280,18 @@ fn draw_results(game : @types.Game) -> Unit {
   let h = @types.screen_height
   let time = Float::from_int(game.frame_count) * 0.03
   // Background overlay
-  @raylib.draw_rectangle(
-    0,
-    0,
-    w,
-    h,
-    @raylib.Color::new(10, 8, 20, 220),
-  )
+  @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(10, 8, 20, 220))
   // Result panel
   let pw = 500
   let ph = 400
   let px = (w - pw) / 2
   let py = (h - ph) / 2
   @raylib.draw_rectangle(px, py, pw, ph, @types.color_panel_bg)
-  @raylib.draw_rectangle_lines(
-    px,
-    py,
-    pw,
-    ph,
-    @types.color_panel_border,
-  )
+  @raylib.draw_rectangle_lines(px, py, pw, ph, @types.color_panel_border)
   // Title
   let title = "Level Complete!"
   let tw = @draw.measure_text(title, 36)
-  @draw.draw_text(
-    title,
-    (w - tw) / 2,
-    py + 30,
-    36,
-    @types.color_success,
-  )
+  @draw.draw_text(title, (w - tw) / 2, py + 30, 36, @types.color_success)
   // Target produced
   let level = @levels.get_level(game.current_level_index)
   let target_text = "Target: " + @types.element_name(level.target)
@@ -346,7 +304,10 @@ fn draw_results(game : @types.Game) -> Unit {
     @types.element_color(level.target),
   )
   // Steps
-  let steps = "Steps: " + game.result_steps.to_string() + " (par: " + level.par_steps.to_string() +
+  let steps = "Steps: " +
+    game.result_steps.to_string() +
+    " (par: " +
+    level.par_steps.to_string() +
     ")"
   let stw = @draw.measure_text(steps, 20)
   @draw.draw_text(steps, (w - stw) / 2, py + 140, 20, @types.color_text)
@@ -354,7 +315,8 @@ fn draw_results(game : @types.Game) -> Unit {
   for i in 0..<3 {
     let star_x = w / 2 - 60 + i * 50
     let star_y = py + 190
-    let star_size : Float = 30.0 + @types.sinf(time * 3.0 + Float::from_int(i)) * 3.0
+    let star_size : Float = 30.0 +
+      @types.sinf(time * 3.0 + Float::from_int(i)) * 3.0
     let star_color = if i < game.result_stars {
       @types.color_star_gold
     } else {

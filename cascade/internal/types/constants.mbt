@@ -44,6 +44,7 @@ pub let total_levels : Int = 24
 pub let levels_per_tier : Int = 8
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(20, 20, 35, 255)
 
@@ -81,7 +82,9 @@ pub let color_ui_bg : @raylib.Color = @raylib.Color::new(30, 30, 50, 230)
 pub let color_ui_text : @raylib.Color = @raylib.Color::new(200, 210, 230, 255)
 
 ///|
-pub let color_ui_highlight : @raylib.Color = @raylib.Color::new(100, 180, 255, 255)
+pub let color_ui_highlight : @raylib.Color = @raylib.Color::new(
+  100, 180, 255, 255,
+)
 
 ///|
 pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
@@ -96,13 +99,21 @@ pub let color_success : @raylib.Color = @raylib.Color::new(50, 220, 100, 255)
 pub let color_fail : @raylib.Color = @raylib.Color::new(220, 50, 50, 255)
 
 ///|
-pub let color_socket_hover : @raylib.Color = @raylib.Color::new(100, 180, 255, 120)
+pub let color_socket_hover : @raylib.Color = @raylib.Color::new(
+  100, 180, 255, 120,
+)
 
 ///|
-pub let color_tier_chains : @raylib.Color = @raylib.Color::new(100, 200, 100, 255)
+pub let color_tier_chains : @raylib.Color = @raylib.Color::new(
+  100, 200, 100, 255,
+)
 
 ///|
-pub let color_tier_splits : @raylib.Color = @raylib.Color::new(200, 160, 60, 255)
+pub let color_tier_splits : @raylib.Color = @raylib.Color::new(
+  200, 160, 60, 255,
+)
 
 ///|
-pub let color_tier_timing : @raylib.Color = @raylib.Color::new(180, 80, 200, 255)
+pub let color_tier_timing : @raylib.Color = @raylib.Color::new(
+  180, 80, 200, 255,
+)

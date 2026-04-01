@@ -96,7 +96,8 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
         }
         // Speed multiplier: wrong tool = 4x slower
         let speed_mult = @types.mining_speed_multiplier(
-          player.equipped_tool, block,
+          player.equipped_tool,
+          block,
         )
         // Check inventory full before mining
         if drop != @types.block_air && player.inventory.is_full() {
@@ -170,11 +171,15 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
             }
             if !can_mine {
               @types.show_message(
-                game, "Need better pickaxe for \{@types.block_name(block)}!", 2.0,
+                game,
+                "Need better pickaxe for \{@types.block_name(block)}!",
+                2.0,
               )
             } else {
               @types.show_message(
-                game, "Broke \{@types.block_name(block)}", 1.0,
+                game,
+                "Broke \{@types.block_name(block)}",
+                1.0,
               )
             }
           }
@@ -233,7 +238,9 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
                 item_id,
               )
               @types.show_message(
-                game, "Equipped \{@types.tool_name(item_id)}", 1.0,
+                game,
+                "Equipped \{@types.tool_name(item_id)}",
+                1.0,
               )
               slot.count -= 1
               if slot.count <= 0 {

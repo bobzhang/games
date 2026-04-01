@@ -36,7 +36,7 @@ pub fn new_patch(
   n : EdgePattern,
   e : EdgePattern,
   s : EdgePattern,
-  w : EdgePattern
+  w : EdgePattern,
 ) -> Patch {
   {
     edges: [n, e, s, w],
@@ -50,7 +50,7 @@ pub fn new_patch_pinned(
   n : EdgePattern,
   e : EdgePattern,
   s : EdgePattern,
-  w : EdgePattern
+  w : EdgePattern,
 ) -> Patch {
   {
     edges: [n, e, s, w],
@@ -68,13 +68,9 @@ pub fn new_patch_wildcard(
   wn : Bool,
   we : Bool,
   ws : Bool,
-  ww : Bool
+  ww : Bool,
 ) -> Patch {
-  {
-    edges: [n, e, s, w],
-    wildcard_edges: [wn, we, ws, ww],
-    pinned: false,
-  }
+  { edges: [n, e, s, w], wildcard_edges: [wn, we, ws, ww], pinned: false }
 }
 
 ///|
@@ -98,7 +94,7 @@ pub fn edges_match(
   pattern_a : EdgePattern,
   wildcard_a : Bool,
   pattern_b : EdgePattern,
-  wildcard_b : Bool
+  wildcard_b : Bool,
 ) -> Bool {
   if wildcard_a || wildcard_b {
     true

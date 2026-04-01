@@ -1,7 +1,6 @@
 import {
   "tonyfettes/raylib",
   "bobzhang/games/refract/internal/types",
-
   "bobzhang/games/refract/internal/levels",
   "bobzhang/games/utils/draw",
   "bobzhang/games/utils/fps",

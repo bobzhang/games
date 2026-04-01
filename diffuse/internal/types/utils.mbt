@@ -161,7 +161,11 @@ pub fn clone_tile(t : Tile) -> Tile {
   {
     kind: t.kind,
     ink: { c: t.ink.c, m: t.ink.m, y: t.ink.y },
-    target_color: { c: t.target_color.c, m: t.target_color.m, y: t.target_color.y },
+    target_color: {
+      c: t.target_color.c,
+      m: t.target_color.m,
+      y: t.target_color.y,
+    },
   }
 }
 

@@ -85,13 +85,17 @@ pub let color_splitter : @raylib.Color = @raylib.Color::new(255, 255, 0, 255)
 pub let color_gate : @raylib.Color = @raylib.Color::new(0, 255, 100, 255)
 
 ///|
-pub let color_gate_blocked : @raylib.Color = @raylib.Color::new(255, 60, 60, 255)
+pub let color_gate_blocked : @raylib.Color = @raylib.Color::new(
+  255, 60, 60, 255,
+)
 
 ///|
 pub let color_bumper : @raylib.Color = @raylib.Color::new(255, 160, 0, 255)
 
 ///|
-pub let color_pickup_item : @raylib.Color = @raylib.Color::new(180, 100, 255, 255)
+pub let color_pickup_item : @raylib.Color = @raylib.Color::new(
+  180, 100, 255, 255,
+)
 
 ///|
 pub let color_wall : @raylib.Color = @raylib.Color::new(220, 220, 255, 255)
@@ -121,7 +125,9 @@ pub let color_title : @raylib.Color = @raylib.Color::new(0, 255, 255, 255)
 pub let color_menu_item : @raylib.Color = @raylib.Color::new(180, 200, 255, 255)
 
 ///|
-pub let color_menu_highlight : @raylib.Color = @raylib.Color::new(255, 255, 0, 255)
+pub let color_menu_highlight : @raylib.Color = @raylib.Color::new(
+  255, 255, 0, 255,
+)
 
 ///|
 pub let total_levels : Int = 30

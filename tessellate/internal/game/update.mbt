@@ -117,7 +117,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
       }
       // Flip piece
       if @raylib.is_key_pressed(@raylib.KeyF) {
-        game.flipped = !(game.flipped)
+        game.flipped = !game.flipped
         game.rotation_count = game.rotation_count + 1
       }
       // Clear all placed pieces
@@ -172,7 +172,7 @@ fn update_piece_selection(game : @types.Game, level : @types.Level) -> Unit {
   // Number keys 1-9 for piece selection
   for i in 0..<9 {
     if i < level.pieces.length() && @raylib.is_key_pressed(@raylib.KeyOne + i) {
-      if !(@packing.is_piece_used(game.placed_pieces, i)) {
+      if !@packing.is_piece_used(game.placed_pieces, i) {
         game.selected_piece = i
         game.rotation = 0
         game.flipped = false
@@ -192,7 +192,7 @@ fn update_piece_selection(game : @types.Game, level : @types.Level) -> Unit {
       let bx = px + col * 120
       let by = py + row * 110
       if mx >= bx && mx < bx + 110 && my >= by && my < by + 100 {
-        if !(@packing.is_piece_used(game.placed_pieces, i)) {
+        if !@packing.is_piece_used(game.placed_pieces, i) {
           game.selected_piece = i
           game.rotation = 0
           game.flipped = false
@@ -217,14 +217,12 @@ fn try_place_piece(game : @types.Game, level : @types.Level) -> Unit {
   if @packing.can_place_piece(level.region, game.grid, cells, pos) {
     let placed_id = game.placed_pieces.length()
     @packing.place_piece(game.grid, cells, pos, placed_id)
-    game.placed_pieces.push(
-      {
-        piece_index: game.selected_piece,
-        position: pos,
-        rotation: game.rotation,
-        flipped: game.flipped,
-      },
-    )
+    game.placed_pieces.push({
+      piece_index: game.selected_piece,
+      position: pos,
+      rotation: game.rotation,
+      flipped: game.flipped,
+    })
     game.selected_piece = -1
     game.rotation = 0
     game.flipped = false

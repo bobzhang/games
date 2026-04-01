@@ -41,7 +41,7 @@ test "level indices within tier are sequential" {
 test "all levels have at least one target" {
   let levels = @levels.get_all_levels()
   for level in levels {
-    assert_true!(level.targets.length() > 0)
+    assert_true(level.targets.length() > 0)
   }
 }
 
@@ -50,7 +50,7 @@ test "all targets within grid bounds" {
   let levels = @levels.get_all_levels()
   for level in levels {
     for target in level.targets {
-      assert_true!(@types.grid_in_bounds(target.x, target.y))
+      assert_true(@types.grid_in_bounds(target.x, target.y))
     }
   }
 }
@@ -60,7 +60,7 @@ test "all pre-placed objects within grid bounds" {
   let levels = @levels.get_all_levels()
   for level in levels {
     for pp in level.pre_placed {
-      assert_true!(@types.grid_in_bounds(pp.x, pp.y))
+      assert_true(@types.grid_in_bounds(pp.x, pp.y))
     }
   }
 }
@@ -70,9 +70,9 @@ test "target amplitude ranges are valid" {
   let levels = @levels.get_all_levels()
   for level in levels {
     for target in level.targets {
-      assert_true!(target.min_amp >= 0.0)
-      assert_true!(target.max_amp <= 1.0)
-      assert_true!(target.min_amp <= target.max_amp)
+      assert_true(target.min_amp >= 0.0)
+      assert_true(target.max_amp <= 1.0)
+      assert_true(target.min_amp <= target.max_amp)
     }
   }
 }
@@ -83,7 +83,7 @@ test "target phases are valid" {
   for level in levels {
     for target in level.targets {
       // phase: -1 means any, 0-3 are valid phases
-      assert_true!(target.phase >= -1 && target.phase <= 3)
+      assert_true(target.phase >= -1 && target.phase <= 3)
     }
   }
 }
@@ -92,7 +92,7 @@ test "target phases are valid" {
 test "all levels have at least one budget slot" {
   let levels = @levels.get_all_levels()
   for level in levels {
-    assert_true!(level.budget.length() > 0)
+    assert_true(level.budget.length() > 0)
   }
 }
 
@@ -101,7 +101,7 @@ test "budget totals are positive" {
   let levels = @levels.get_all_levels()
   for level in levels {
     for b in level.budget {
-      assert_true!(b.total > 0)
+      assert_true(b.total > 0)
     }
   }
 }
@@ -120,8 +120,8 @@ test "budget used starts at zero" {
 test "par values are positive" {
   let levels = @levels.get_all_levels()
   for level in levels {
-    assert_true!(level.par_objects > 0)
-    assert_true!(level.par_ticks > 0)
+    assert_true(level.par_objects > 0)
+    assert_true(level.par_ticks > 0)
   }
 }
 
@@ -133,7 +133,7 @@ test "par objects does not exceed total budget" {
     for b in level.budget {
       total_budget += b.total
     }
-    assert_true!(level.par_objects <= total_budget)
+    assert_true(level.par_objects <= total_budget)
   }
 }
 
@@ -141,7 +141,7 @@ test "par objects does not exceed total budget" {
 test "par ticks within max tick limit" {
   let levels = @levels.get_all_levels()
   for level in levels {
-    assert_true!(level.par_ticks <= @types.max_ticks)
+    assert_true(level.par_ticks <= @types.max_ticks)
   }
 }
 
@@ -154,7 +154,7 @@ test "targets do not overlap with pre-placed walls" {
         if target.x == pp.x && target.y == pp.y {
           // Target should not share position with a wall
           match pp.kind {
-            Wall => assert_true!(false)
+            Wall => assert_true(false)
             _ => ()
           }
         }
@@ -167,7 +167,7 @@ test "targets do not overlap with pre-placed walls" {
 test "level names are not empty" {
   let levels = @levels.get_all_levels()
   for level in levels {
-    assert_true!(level.name.length() > 0)
+    assert_true(level.name.length() > 0)
   }
 }
 
@@ -196,7 +196,7 @@ test "tier 1 levels only have emitter budget" {
   for i in 0..<10 {
     let level = levels[i]
     for b in level.budget {
-      assert_true!(b.kind == PlaceEmitter)
+      assert_true(b.kind == PlaceEmitter)
     }
   }
 }
@@ -210,7 +210,7 @@ test "pre-placed emitters do not overlap with targets" {
         Emitter(_) =>
           for target in level.targets {
             let same = pp.x == target.x && pp.y == target.y
-            assert_true!(!same)
+            assert_true(!same)
           }
         _ => ()
       }

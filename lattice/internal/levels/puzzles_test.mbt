@@ -48,9 +48,7 @@ test "all puzzles have at least one stone placed" {
     let p = puzzles[i]
     let empty_count = @types.count_empty(p.board)
     let total = @types.board_size * @types.board_size
-    assert_true(
-      empty_count < total,
-    )
+    assert_true(empty_count < total)
   }
 }
 
@@ -210,8 +208,7 @@ test "all puzzles have stones only at valid positions" {
       for c in 0..<p.board.size {
         let cell = p.board.cells[r][c]
         match cell {
-          Occupied(player) =>
-            assert_true(player == Black || player == White)
+          Occupied(player) => assert_true(player == Black || player == White)
           Empty => ()
         }
       }

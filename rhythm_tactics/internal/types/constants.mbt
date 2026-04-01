@@ -229,7 +229,9 @@ pub let color_lava : @raylib.Color = @raylib.Color::new(255, 80, 20, 255)
 pub let color_shop_bg : @raylib.Color = @raylib.Color::new(25, 20, 40, 255)
 
 ///|
-pub let color_shop_highlight : @raylib.Color = @raylib.Color::new(60, 50, 90, 255)
+pub let color_shop_highlight : @raylib.Color = @raylib.Color::new(
+  60, 50, 90, 255,
+)
 
 // --- Combo milestone constants ---
 
@@ -284,7 +286,9 @@ pub let trail_particle_life : Float = 0.3
 pub let trail_particle_count : Int = 3
 
 ///|
-pub let color_elite_outline : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
+pub let color_elite_outline : @raylib.Color = @raylib.Color::new(
+  255, 215, 0, 255,
+)
 
 ///|
 pub let curse_bpm_bonus_pct : Float = 0.2

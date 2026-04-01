@@ -49,9 +49,8 @@ fn draw_title(game : @types.Game) -> Unit {
 fn draw_decorative_notes(y : Int) -> Unit {
   let notes = ["C", "D", "E", "F", "G", "A", "B"]
   let colors = [
-    @types.color_note_c, @types.color_note_d, @types.color_note_e,
-    @types.color_note_f, @types.color_note_g, @types.color_note_a,
-    @types.color_note_b,
+    @types.color_note_c, @types.color_note_d, @types.color_note_e, @types.color_note_f,
+    @types.color_note_g, @types.color_note_a, @types.color_note_b,
   ]
   let total_w = notes.length() * 50
   let start_x = (@types.screen_width - total_w) / 2
@@ -104,7 +103,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     // Star count for completed levels
     let (lo, hi) = @types.tier_level_range(tier)
     let mut total_stars = 0
-    for lvl in lo..=hi {
+    for lvl in lo..<=hi {
       if lvl < game.level_scores.length() {
         total_stars += game.level_scores[lvl].stars
       }
@@ -273,7 +272,9 @@ fn draw_results(game : @types.Game) -> Unit {
     detail_x,
     detail_y + 40,
     24,
-    if harm > 0 { @types.color_consonant } else if harm < 0 {
+    if harm > 0 {
+      @types.color_consonant
+    } else if harm < 0 {
       @types.color_dissonant
     } else {
       @types.color_text
@@ -281,7 +282,10 @@ fn draw_results(game : @types.Game) -> Unit {
   )
   let notes_used = @types.count_notes_in_grid(game.grid)
   @draw.draw_text(
-    "Notes Used: " + notes_used.to_string() + "/" + level.note_budget.to_string(),
+    "Notes Used: " +
+    notes_used.to_string() +
+    "/" +
+    level.note_budget.to_string(),
     detail_x,
     detail_y + 80,
     24,

@@ -28,7 +28,7 @@ fn tile_color(
   tile : @types.TileKind,
   game : @types.Game,
   x : Int,
-  y : Int
+  y : Int,
 ) -> @raylib.Color {
   match tile {
     Floor => @types.color_floor
@@ -135,9 +135,7 @@ pub fn draw_laser_beams(game : @types.Game) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
-  let pulse : Float = @types.sinf(
-    Float::from_int(game.frame_count) * 0.15,
-  )
+  let pulse : Float = @types.sinf(Float::from_int(game.frame_count) * 0.15)
   let alpha = 150 + (pulse * 50.0).to_int()
   let beam_color = @raylib.Color::new(255, 30, 30, alpha)
   for i in 0..<game.level.lasers.length() {
@@ -224,8 +222,7 @@ pub fn draw_terminal_glow(game : @types.Game) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
-  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.08) * 0.3 +
-    0.7
+  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.08) * 0.3 + 0.7
   for i in 0..<game.level.terminals.length() {
     let t = game.level.terminals[i]
     if t.hacked {
@@ -234,7 +231,11 @@ pub fn draw_terminal_glow(game : @types.Game) -> Unit {
     let cx = Float::from_int(ox + t.gx * ts + ts / 2)
     let cy = Float::from_int(oy + t.gy * ts + ts / 2)
     let radius = Float::from_int(ts / 2) + 4.0 * pulse
-    let glow_a : Float = if t.high_security { 30.0 * pulse } else { 25.0 * pulse }
+    let glow_a : Float = if t.high_security {
+      30.0 * pulse
+    } else {
+      25.0 * pulse
+    }
     let color = if t.high_security {
       @raylib.Color::new(255, 200, 0, glow_a.to_int())
     } else {
@@ -250,15 +251,17 @@ pub fn draw_exit_glow(game : @types.Game) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
-  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.1) * 0.4 +
-    0.6
+  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.1) * 0.4 + 0.6
   let cx = Float::from_int(ox + game.level.exit_x * ts + ts / 2)
   let cy = Float::from_int(oy + game.level.exit_y * ts + ts / 2)
   let radius = Float::from_int(ts / 2) + 6.0 * pulse
   @raylib.draw_circle_v(
     @raylib.Vector2::new(cx, cy),
     radius,
-    { let a : Float = 25.0 * pulse; @raylib.Color::new(0, 200, 255, a.to_int()) },
+    {
+      let a : Float = 25.0 * pulse
+      @raylib.Color::new(0, 200, 255, a.to_int())
+    },
   )
 }
 
@@ -301,8 +304,8 @@ pub fn draw_noise_ring(game : @types.Game) -> Unit {
   let tile_alpha_f : Float = 20.0 * alpha_ratio
   let tile_alpha = tile_alpha_f.to_int()
   if tile_alpha > 0 {
-    for dy in -nr..=nr {
-      for dx in -nr..=nr {
+    for dy in -nr..<=nr {
+      for dx in -nr..<=nr {
         let tx = game.noise_x + dx
         let ty = game.noise_y + dy
         if @types.in_bounds(tx, ty) &&
@@ -333,11 +336,6 @@ pub fn draw_coin(game : @types.Game) -> Unit {
   let oy = @types.grid_offset_y
   let cx = Float::from_int(ox + game.coin_target_x * ts + ts / 2)
   let cy = Float::from_int(oy + game.coin_target_y * ts + ts / 2)
-  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.3) * 2.0 +
-    6.0
-  @raylib.draw_circle_v(
-    @raylib.Vector2::new(cx, cy),
-    pulse,
-    @types.color_coin,
-  )
+  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.3) * 2.0 + 6.0
+  @raylib.draw_circle_v(@raylib.Vector2::new(cx, cy), pulse, @types.color_coin)
 }

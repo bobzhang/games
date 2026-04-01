@@ -7,9 +7,7 @@ fn draw_title(game : @types.Game) -> Unit {
   for i in 0..<40 {
     let fi = Float::from_int(i)
     let sx = ((fi * 137.5 + time * 8.0) % Float::from_int(w)).to_int()
-    let sy = ((fi * 91.3 + time * 4.0 * (fi % 3.0 + 1.0)) % Float::from_int(
-        h,
-      )).to_int()
+    let sy = ((fi * 91.3 + time * 4.0 * (fi % 3.0 + 1.0)) % Float::from_int(h)).to_int()
     let alpha = 30 + (fi * 7.0 % 40.0).to_int()
     @raylib.draw_circle(
       sx,
@@ -22,16 +20,22 @@ fn draw_title(game : @types.Game) -> Unit {
   let border_alpha = ((@types.sinf(time) * 0.3 + 0.7) * 255.0).to_int()
   let border_color = @raylib.Color::new(218, 165, 32, border_alpha)
   @raylib.draw_rectangle_lines_ex(
-    @raylib.Rectangle::new(20.0, 20.0, Float::from_int(w - 40), Float::from_int(
-        h - 40,
-      )),
+    @raylib.Rectangle::new(
+      20.0,
+      20.0,
+      Float::from_int(w - 40),
+      Float::from_int(h - 40),
+    ),
     3.0,
     border_color,
   )
   @raylib.draw_rectangle_lines_ex(
-    @raylib.Rectangle::new(30.0, 30.0, Float::from_int(w - 60), Float::from_int(
-        h - 60,
-      )),
+    @raylib.Rectangle::new(
+      30.0,
+      30.0,
+      Float::from_int(w - 60),
+      Float::from_int(h - 60),
+    ),
     1.0,
     border_color,
   )
@@ -99,13 +103,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   let hdr_w = @draw.measure_text(hdr, 40)
   @draw.draw_text(hdr, (w - hdr_w) / 2, 40, 40, @types.color_gold)
   // Decorative line
-  @raylib.draw_line(
-    w / 2 - 200,
-    90,
-    w / 2 + 200,
-    90,
-    @types.color_gold_dim,
-  )
+  @raylib.draw_line(w / 2 - 200, 90, w / 2 + 200, 90, @types.color_gold_dim)
   // Three tier boxes
   let tiers : Array[@types.Tier] = [Fragments, Scrolls, Monuments]
   for i in 0..<3 {
@@ -118,9 +116,12 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     // Background panel
     @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(50, 40, 30, 200))
     @raylib.draw_rectangle_lines_ex(
-      @raylib.Rectangle::new(Float::from_int(bx), Float::from_int(by), Float::from_int(
-          bw,
-        ), Float::from_int(bh)),
+      @raylib.Rectangle::new(
+        Float::from_int(bx),
+        Float::from_int(by),
+        Float::from_int(bw),
+        Float::from_int(bh),
+      ),
       2.0,
       tc,
     )
@@ -168,7 +169,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
         bx + 15,
         ty + 2,
         16,
-        if score.solved { @types.color_correct } else { @types.color_text },
+        if score.solved {
+          @types.color_correct
+        } else {
+          @types.color_text
+        },
       )
       // Stars
       for s in 0..<3 {
@@ -203,7 +208,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     )
   }
   // Back hint
-  @draw.draw_text("ESC: Back", 20, @types.screen_height - 30, 16, @types.color_text_dim)
+  @draw.draw_text(
+    "ESC: Back",
+    20,
+    @types.screen_height - 30,
+    16,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -214,13 +225,7 @@ fn draw_tablet_select(game : @types.Game) -> Unit {
   let hdr = @types.tier_name(game.current_tier) + " - Select Tablet"
   let hdr_w = @draw.measure_text(hdr, 36)
   @draw.draw_text(hdr, (w - hdr_w) / 2, 40, 36, tc)
-  @raylib.draw_line(
-    w / 2 - 250,
-    85,
-    w / 2 + 250,
-    85,
-    @types.color_gold_dim,
-  )
+  @raylib.draw_line(w / 2 - 250, 85, w / 2 + 250, 85, @types.color_gold_dim)
   let offset = @types.tier_tablet_offset(game.current_tier)
   let count = @types.tier_tablet_count(game.current_tier)
   for j in 0..<count {
@@ -238,11 +243,18 @@ fn draw_tablet_select(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(bx, by, bw, bh, bg)
     @raylib.draw_rectangle_lines_ex(
-      @raylib.Rectangle::new(Float::from_int(bx), Float::from_int(by), Float::from_int(
-          bw,
-        ), Float::from_int(bh)),
+      @raylib.Rectangle::new(
+        Float::from_int(bx),
+        Float::from_int(by),
+        Float::from_int(bw),
+        Float::from_int(bh),
+      ),
       1.0,
-      if score.solved { @types.color_correct } else { @types.color_stone_dark },
+      if score.solved {
+        @types.color_correct
+      } else {
+        @types.color_stone_dark
+      },
     )
     // Key
     let key = (j + 1).to_string()
@@ -265,13 +277,7 @@ fn draw_tablet_select(game : @types.Game) -> Unit {
     }
     // Status
     if score.solved {
-      @draw.draw_text(
-        "SOLVED",
-        bx + bw - 160,
-        by + 8,
-        14,
-        @types.color_correct,
-      )
+      @draw.draw_text("SOLVED", bx + bw - 160, by + 8, 14, @types.color_correct)
     }
   }
   @draw.draw_text(
@@ -299,12 +305,7 @@ fn draw_results(game : @types.Game) -> Unit {
     @raylib.Color::new(40, 30, 25, 230),
   )
   @raylib.draw_rectangle_lines_ex(
-    @raylib.Rectangle::new(
-      Float::from_int(w / 2 - 300),
-      80.0,
-      600.0,
-      520.0,
-    ),
+    @raylib.Rectangle::new(Float::from_int(w / 2 - 300), 80.0, 600.0, 520.0),
     2.0,
     @types.color_gold,
   )
@@ -327,13 +328,7 @@ fn draw_results(game : @types.Game) -> Unit {
     tablet.solution_mapping,
   )
   let dec_w = @draw.measure_text(decoded, 22)
-  @draw.draw_text(
-    decoded,
-    (w - dec_w) / 2,
-    210,
-    22,
-    @types.color_stone_light,
-  )
+  @draw.draw_text(decoded, (w - dec_w) / 2, 210, 22, @types.color_stone_light)
   // Stats
   @draw.draw_text(
     "Guesses: " + score.guesses_used.to_string(),
@@ -347,7 +342,11 @@ fn draw_results(game : @types.Game) -> Unit {
     w / 2 - 120,
     300,
     22,
-    if score.wrong_count == 0 { @types.color_correct } else { @types.color_wrong },
+    if score.wrong_count == 0 {
+      @types.color_correct
+    } else {
+      @types.color_wrong
+    },
   )
   @draw.draw_text(
     "Par: " + tablet.par_guesses.to_string(),
@@ -379,9 +378,21 @@ fn draw_results(game : @types.Game) -> Unit {
   let desc1 = "Decoded"
   let desc2 = "Within Par"
   let desc3 = "Perfect"
-  let d1c = if score.stars >= 1 { @types.color_correct } else { @types.color_text_dim }
-  let d2c = if score.stars >= 2 { @types.color_correct } else { @types.color_text_dim }
-  let d3c = if score.stars >= 3 { @types.color_correct } else { @types.color_text_dim }
+  let d1c = if score.stars >= 1 {
+    @types.color_correct
+  } else {
+    @types.color_text_dim
+  }
+  let d2c = if score.stars >= 2 {
+    @types.color_correct
+  } else {
+    @types.color_text_dim
+  }
+  let d3c = if score.stars >= 3 {
+    @types.color_correct
+  } else {
+    @types.color_text_dim
+  }
   @draw.draw_text(desc1, w / 2 - 70, 420, 14, d1c)
   @draw.draw_text(desc2, w / 2 - 15, 420, 14, d2c)
   @draw.draw_text(desc3, w / 2 + 42, 420, 14, d3c)
@@ -407,7 +418,7 @@ fn draw_star_shape(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   // 5-pointed star
   let outer = size

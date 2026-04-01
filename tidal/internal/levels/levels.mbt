@@ -139,10 +139,7 @@ fn tier1_level5() -> @types.Level {
     name: "Strong Signal",
     grid_template: [],
     targets: [{ x: 6, y: 5, min_amp: 0.8, max_amp: 1.0, phase: -1 }],
-    pre_placed: [
-      { x: 6, y: 3, kind: Wall },
-      { x: 6, y: 7, kind: Wall },
-    ],
+    pre_placed: [{ x: 6, y: 3, kind: Wall }, { x: 6, y: 7, kind: Wall }],
     budget: [{ kind: PlaceEmitter, total: 1, used: 0 }],
     par_objects: 1,
     par_ticks: 2,
@@ -242,9 +239,7 @@ fn tier1_level9() -> @types.Level {
     index: 8,
     name: "Whisper",
     grid_template: [],
-    targets: [
-      { x: 6, y: 5, min_amp: 0.1, max_amp: 0.4, phase: -1 },
-    ],
+    targets: [{ x: 6, y: 5, min_amp: 0.1, max_amp: 0.4, phase: -1 }],
     pre_placed: [],
     budget: [{ kind: PlaceEmitter, total: 1, used: 0 }],
     par_objects: 1,
@@ -445,9 +440,7 @@ fn tier2_level8() -> @types.Level {
     index: 7,
     name: "Mirror Maze",
     grid_template: [],
-    targets: [
-      { x: 1, y: 8, min_amp: 0.05, max_amp: 1.0, phase: -1 },
-    ],
+    targets: [{ x: 1, y: 8, min_amp: 0.05, max_amp: 1.0, phase: -1 }],
     pre_placed: [
       { x: 10, y: 1, kind: Emitter(0) },
       { x: 5, y: 0, kind: Wall },
@@ -459,9 +452,7 @@ fn tier2_level8() -> @types.Level {
       { x: 5, y: 8, kind: Wall },
       { x: 5, y: 9, kind: Wall },
     ],
-    budget: [
-      { kind: PlaceReflector, total: 4, used: 0 },
-    ],
+    budget: [{ kind: PlaceReflector, total: 4, used: 0 }],
     par_objects: 3,
     par_ticks: 14,
   }
@@ -692,10 +683,7 @@ fn tier3_level9() -> @types.Level {
       { x: 10, y: 8, min_amp: 0.2, max_amp: 1.0, phase: 2 },
       { x: 1, y: 8, min_amp: 0.0, max_amp: 0.1, phase: -1 },
     ],
-    pre_placed: [
-      { x: 5, y: 5, kind: Wall },
-      { x: 6, y: 5, kind: Wall },
-    ],
+    pre_placed: [{ x: 5, y: 5, kind: Wall }, { x: 6, y: 5, kind: Wall }],
     budget: [
       { kind: PlaceEmitter, total: 3, used: 0 },
       { kind: PlaceReflector, total: 2, used: 0 },

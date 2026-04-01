@@ -10,7 +10,7 @@ pub(all) enum TickResult {
 ///|
 fn compute_total_gravity(
   pos : @types.Vec2f,
-  planets : Array[@types.Planet]
+  planets : Array[@types.Planet],
 ) -> @types.Vec2f {
   let mut ax : Float = 0.0
   let mut ay : Float = 0.0
@@ -26,7 +26,7 @@ fn compute_total_gravity(
 ///|
 fn check_planet_collision(
   pos : @types.Vec2f,
-  planets : Array[@types.Planet]
+  planets : Array[@types.Planet],
 ) -> Bool {
   for i in 0..<planets.length() {
     let p = planets[i]
@@ -39,10 +39,7 @@ fn check_planet_collision(
 }
 
 ///|
-fn check_station_arrival(
-  pos : @types.Vec2f,
-  station : @types.Station
-) -> Bool {
+fn check_station_arrival(pos : @types.Vec2f, station : @types.Station) -> Bool {
   let dist = @types.vec2f_dist(pos, station.pos)
   dist < station.radius
 }
@@ -59,7 +56,7 @@ fn check_bounds(pos : @types.Vec2f) -> Bool {
 ///|
 fn check_waypoints(
   pos : @types.Vec2f,
-  waypoints : Array[@types.Waypoint]
+  waypoints : Array[@types.Waypoint],
 ) -> Unit {
   for i in 0..<waypoints.length() {
     let wp = waypoints[i]
@@ -78,7 +75,7 @@ pub fn simulate_tick(
   planets : Array[@types.Planet],
   station : @types.Station,
   waypoints : Array[@types.Waypoint],
-  tick : Int
+  tick : Int,
 ) -> TickResult {
   if !probe.active {
     return Continue
@@ -118,7 +115,7 @@ pub fn compute_preview(
   start_pos : @types.Vec2f,
   angle : Float,
   planets : Array[@types.Planet],
-  station : @types.Station
+  station : @types.Station,
 ) -> Array[@types.Vec2f] {
   let positions : Array[@types.Vec2f] = []
   let vel_x = @types.cosf(angle) * @types.launch_speed

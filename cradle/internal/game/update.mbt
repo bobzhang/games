@@ -138,36 +138,34 @@ fn update_playing(game : @types.Game) -> Unit {
       } else if closest == game.selected_peg {
         // Deselect
         game.selected_peg = -1
-      } else {
         // Create string between selected and clicked peg
-        if game.strings.length() < @types.max_strings {
-          // Check if string already exists
-          let mut exists = false
-          for i in 0..<game.strings.length() {
-            let s = game.strings[i]
-            if (s.peg_a == game.selected_peg && s.peg_b == closest) ||
-              (s.peg_a == closest && s.peg_b == game.selected_peg) {
-              exists = true
-              break
-            }
+      } else if game.strings.length() < @types.max_strings {
+        // Check if string already exists
+        let mut exists = false
+        for i in 0..<game.strings.length() {
+          let s = game.strings[i]
+          if (s.peg_a == game.selected_peg && s.peg_b == closest) ||
+            (s.peg_a == closest && s.peg_b == game.selected_peg) {
+            exists = true
+            break
           }
-          if !exists {
-            let new_string : @types.StringLine = {
-              peg_a: game.selected_peg,
-              peg_b: closest,
-            }
-            game.strings.push(new_string)
-            game.selected_peg = -1
-            recalculate_intersections(game)
-            check_completion(game)
-          } else {
-            @types.set_message(game, "String already exists!", 1.5)
-            game.selected_peg = -1
+        }
+        if !exists {
+          let new_string : @types.StringLine = {
+            peg_a: game.selected_peg,
+            peg_b: closest,
           }
+          game.strings.push(new_string)
+          game.selected_peg = -1
+          recalculate_intersections(game)
+          check_completion(game)
         } else {
-          @types.set_message(game, "Max strings reached!", 1.5)
+          @types.set_message(game, "String already exists!", 1.5)
           game.selected_peg = -1
         }
+      } else {
+        @types.set_message(game, "Max strings reached!", 1.5)
+        game.selected_peg = -1
       }
     } else {
       // Clicked empty space: deselect

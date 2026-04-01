@@ -46,12 +46,12 @@ test "grid_index computes row-major index" {
 
 ///|
 test "in_bounds checks boundary conditions" {
-  assert_true!(in_bounds(0, 0, 10, 8))
-  assert_true!(in_bounds(9, 7, 10, 8))
-  assert_false!(in_bounds(-1, 0, 10, 8))
-  assert_false!(in_bounds(10, 0, 10, 8))
-  assert_false!(in_bounds(0, -1, 10, 8))
-  assert_false!(in_bounds(0, 8, 10, 8))
+  assert_true(in_bounds(0, 0, 10, 8))
+  assert_true(in_bounds(9, 7, 10, 8))
+  assert_false(in_bounds(-1, 0, 10, 8))
+  assert_false(in_bounds(10, 0, 10, 8))
+  assert_false(in_bounds(0, -1, 10, 8))
+  assert_false(in_bounds(0, 8, 10, 8))
 }
 
 ///|
@@ -85,15 +85,15 @@ test "make_grid marks targets correctly" {
   let g = make_grid(3, 2, [0, 0, 0, 0, 0, 0], [(1, 0, Sunny), (2, 1, Rainy)])
   // Tile at col=1, row=0 should be target with Sunny
   let t1 = grid_get(g, 1, 0)
-  assert_true!(t1.is_target)
-  assert_eq!(t1.target_weather, Sunny)
+  assert_true(t1.is_target)
+  assert_eq(t1.target_weather, Sunny)
   // Tile at col=2, row=1 should be target with Rainy
   let t2 = grid_get(g, 2, 1)
-  assert_true!(t2.is_target)
-  assert_eq!(t2.target_weather, Rainy)
+  assert_true(t2.is_target)
+  assert_eq(t2.target_weather, Rainy)
   // Tile at col=0, row=0 should not be target
   let t0 = grid_get(g, 0, 0)
-  assert_false!(t0.is_target)
+  assert_false(t0.is_target)
 }
 
 ///|

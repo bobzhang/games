@@ -265,7 +265,7 @@ fn handle_grid_click(game : @types.Game, row : Int, col : Int) -> Unit {
   let board = game.board
   let idx = row * board.size + col
   match game.play_state {
-    Placing => {
+    Placing =>
       // If we have a tray selection and cell is empty, place it
       if game.selected_tray >= 0 && game.selected_tray < game.tray.length() {
         match @types.board_get(board, row, col) {
@@ -283,13 +283,12 @@ fn handle_grid_click(game : @types.Game, row : Int, col : Int) -> Unit {
             game.selected_tray = -1
             check_completion(game)
           }
-          Some(existing) => {
+          Some(existing) =>
             // Cell occupied - if not pinned, select for potential swap
             if !existing.pinned {
               game.selected_board = idx
               game.play_state = Selecting
             }
-          }
         }
       } else {
         // No tray selection, click on board cell to select for swap
@@ -302,11 +301,10 @@ fn handle_grid_click(game : @types.Game, row : Int, col : Int) -> Unit {
           None => ()
         }
       }
-    }
-    Selecting => {
+    Selecting =>
       // Click on second patch to swap
       match @types.board_get(board, row, col) {
-        Some(existing) => {
+        Some(existing) =>
           if idx == game.selected_board {
             // Deselect
             game.selected_board = -1
@@ -324,7 +322,6 @@ fn handle_grid_click(game : @types.Game, row : Int, col : Int) -> Unit {
             game.play_state = Placing
             check_completion(game)
           }
-        }
         None => {
           // Move selected patch to empty cell
           let sel_row = game.selected_board / board.size
@@ -338,7 +335,6 @@ fn handle_grid_click(game : @types.Game, row : Int, col : Int) -> Unit {
           check_completion(game)
         }
       }
-    }
     Swapping => {
       game.play_state = Placing
       game.selected_board = -1

@@ -74,12 +74,10 @@ pub fn direction_from_delta(dx : Int, dy : Int) -> Direction {
     } else {
       West
     }
+  } else if dy >= 0 {
+    South
   } else {
-    if dy >= 0 {
-      South
-    } else {
-      North
-    }
+    North
   }
 }
 
@@ -236,10 +234,7 @@ pub fn new_battle(objective : Objective) -> BattleState {
 }
 
 ///|
-pub fn battle_has_augment(
-  battle : BattleState,
-  kind : AugmentKind,
-) -> Bool {
+pub fn battle_has_augment(battle : BattleState, kind : AugmentKind) -> Bool {
   for i = 0; i < battle.augments.length(); i = i + 1 {
     if battle.augments[i] == kind {
       return true
@@ -249,7 +244,14 @@ pub fn battle_has_augment(
 }
 
 ///|
-pub fn new_anim(kind : AnimKind, unit_id : Int, sx : Int, sy : Int, tx : Int, ty : Int) -> AnimState {
+pub fn new_anim(
+  kind : AnimKind,
+  unit_id : Int,
+  sx : Int,
+  sy : Int,
+  tx : Int,
+  ty : Int,
+) -> AnimState {
   {
     playing: false,
     timer: 0.0,
@@ -286,7 +288,13 @@ pub fn emit_shake(battle : BattleState, intensity : Float) -> Unit {
 
 ///|
 /// Emit a screen flash.
-pub fn emit_flash(battle : BattleState, r : Int, g : Int, b : Int, alpha : Int) -> Unit {
+pub fn emit_flash(
+  battle : BattleState,
+  r : Int,
+  g : Int,
+  b : Int,
+  alpha : Int,
+) -> Unit {
   battle.screen_fx.flash_timer = flash_duration
   battle.screen_fx.flash_r = r
   battle.screen_fx.flash_g = g
@@ -304,7 +312,14 @@ pub fn emit_slowmo(battle : BattleState, seconds : Float) -> Unit {
 
 ///|
 /// Emit a screen tint overlay.
-pub fn emit_tint(battle : BattleState, r : Int, g : Int, b : Int, alpha : Int, dur : Float) -> Unit {
+pub fn emit_tint(
+  battle : BattleState,
+  r : Int,
+  g : Int,
+  b : Int,
+  alpha : Int,
+  dur : Float,
+) -> Unit {
   battle.screen_fx.tint_timer = dur
   battle.screen_fx.tint_r = r
   battle.screen_fx.tint_g = g
@@ -314,7 +329,16 @@ pub fn emit_tint(battle : BattleState, r : Int, g : Int, b : Int, alpha : Int, d
 
 ///|
 /// Emit an expanding ring effect at grid position.
-pub fn emit_ring(battle : BattleState, gx : Int, gy : Int, max_r : Float, dur : Float, r : Int, g : Int, b : Int) -> Unit {
+pub fn emit_ring(
+  battle : BattleState,
+  gx : Int,
+  gy : Int,
+  max_r : Float,
+  dur : Float,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
   let cx = Float::from_int(tile_center_x(gx))
   let cy = Float::from_int(tile_center_y(gy))
   battle.rings.push({
@@ -332,7 +356,17 @@ pub fn emit_ring(battle : BattleState, gx : Int, gy : Int, max_r : Float, dur : 
 
 ///|
 /// Emit a floating text at grid position.
-pub fn emit_float_text(battle : BattleState, gx : Int, gy : Int, text : String, r : Int, g : Int, b : Int, sc : Float, gl : Bool) -> Unit {
+pub fn emit_float_text(
+  battle : BattleState,
+  gx : Int,
+  gy : Int,
+  text : String,
+  r : Int,
+  g : Int,
+  b : Int,
+  sc : Float,
+  gl : Bool,
+) -> Unit {
   let sx = Float::from_int(tile_center_x(gx))
   let sy = Float::from_int(tile_center_y(gy)) - 30.0
   battle.floating_texts.push({

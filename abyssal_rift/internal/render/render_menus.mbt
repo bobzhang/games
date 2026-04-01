@@ -581,7 +581,7 @@ pub fn draw_meta_screen(game : @types.Game) -> Unit {
     let cost = base_costs[i] * (level + 1)
     let y = 150 + i * 55
     let maxed = level >= max_levels[i]
-    let can_afford = meta.abyss_tokens >= cost && !(maxed)
+    let can_afford = meta.abyss_tokens >= cost && !maxed
     let color = if maxed {
       @raylib.Color::new(100, 200, 100, 255)
     } else if can_afford {
@@ -680,8 +680,7 @@ pub fn draw_starter_select(game : @types.Game) -> Unit {
   let kit_weapons = ["Sword", "Daggers", "Staff"]
   let kit_passives = ["Defense Up", "Pickup Range", "Chain Lightning"]
   let kit_specials = [
-    "Shield +10 on room clear", "+30 starting gold, weaker potions",
-    "-20 max HP",
+    "Shield +10 on room clear", "+30 starting gold, weaker potions", "-20 max HP",
   ]
   let kit_colors : Array[@raylib.Color] = [
     @raylib.Color::new(100, 180, 255, 255),
@@ -692,7 +691,7 @@ pub fn draw_starter_select(game : @types.Game) -> Unit {
   let card_h = 280
   let card_spacing = 30
   let total_w = card_w * 3 + card_spacing * 2
-  let start_x = ((@types.screen_w - total_w) / 2)
+  let start_x = (@types.screen_w - total_w) / 2
   let card_y = 120
   for i in 0..<3 {
     let card_x = start_x + i * (card_w + card_spacing)
@@ -791,8 +790,7 @@ pub fn draw_starter_select(game : @types.Game) -> Unit {
     }
   }
   // Controls prompt
-  let prompt_pulse = Float::from_double(@math.sin((t * 2.0).to_double())) *
-    0.3 +
+  let prompt_pulse = Float::from_double(@math.sin((t * 2.0).to_double())) * 0.3 +
     0.7
   let prompt_alpha = (prompt_pulse * 255.0).to_int()
   let prompt = "A/D to browse | 1-3 to select | ENTER to confirm"
@@ -843,7 +841,7 @@ pub fn draw_pact_offer(game : @types.Game) -> Unit {
   let card_h = 200
   let spacing = 40
   let total = card_w * count + spacing * (count - 1)
-  let start_x = ((@types.screen_w - total) / 2)
+  let start_x = (@types.screen_w - total) / 2
   let card_y = 200
   for i in 0..<count {
     let pact = game.pact_offers[i]
@@ -923,10 +921,8 @@ fn pact_info(pact : @types.PactKind) -> (String, String, String) {
     BloodPrice => ("BLOOD PRICE", "+25% damage", "Potions cost HP instead")
     GlassStep =>
       ("GLASS STEP", "Dash resets on kill", "Shield no longer regenerates")
-    MerchantsDebt =>
-      ("MERCHANT'S DEBT", "+1 shop item slot", "All prices +50%")
-    CursedStrength =>
-      ("CURSED STRENGTH", "+40% damage", "Take 15% more damage")
+    MerchantsDebt => ("MERCHANT'S DEBT", "+1 shop item slot", "All prices +50%")
+    CursedStrength => ("CURSED STRENGTH", "+40% damage", "Take 15% more damage")
     VoidHeart => ("VOID HEART", "Double gold drops", "Max HP reduced by 30")
   }
 }

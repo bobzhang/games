@@ -99,10 +99,10 @@ pub fn new_cell(kind : CellKind) -> Cell {
 ///|
 pub fn make_cell(
   kind : CellKind,
-  gate_open~ : Bool = true,
-  switch_link_id~ : Int = -1,
-  arrow_offset~ : Int = 0,
-  has_pickup~ : Bool = false
+  gate_open? : Bool = true,
+  switch_link_id? : Int = -1,
+  arrow_offset? : Int = 0,
+  has_pickup? : Bool = false,
 ) -> Cell {
   { kind, gate_open, switch_link_id, arrow_offset, has_pickup }
 }
@@ -117,7 +117,7 @@ pub fn new_switch_link(
   cw : Int,
   ccw : Int,
   gcw : Array[Int],
-  gccw : Array[Int]
+  gccw : Array[Int],
 ) -> SwitchLink {
   {
     switch_cell_cw: cw,
@@ -134,7 +134,7 @@ pub fn new_level(
   links : Array[SwitchLink],
   par : Int,
   pickups : Int,
-  name : String
+  name : String,
 ) -> Level {
   {
     cw_spiral: cw,
@@ -184,16 +184,13 @@ pub fn cell_pos_on_spiral(
   total : Int,
   is_cw : Bool,
   cx : Float,
-  cy : Float
+  cy : Float,
 ) -> (Float, Float) {
   let base_radius : Float = 60.0
   let max_rings : Float = 8.0
-  let progress = Float::from_int(index) / Float::from_int(if total > 1 {
-    total - 1
-  } else {
-    1
-  })
-  let radius = base_radius + (max_rings * ring_spacing) * (1.0 - progress)
+  let progress = Float::from_int(index) /
+    Float::from_int(if total > 1 { total - 1 } else { 1 })
+  let radius = base_radius + max_rings * ring_spacing * (1.0 - progress)
   let total_turns : Float = 3.0
   let angle = if is_cw {
     progress * total_turns * 2.0 * pi
@@ -279,17 +276,15 @@ pub fn save_history(game : Game) -> Unit {
       for i in 0..<game.pickups_collected.length() {
         pc.push(game.pickups_collected[i])
       }
-      game.history.push(
-        {
-          cw_pos: game.cw_pos,
-          ccw_pos: game.ccw_pos,
-          gate_states_cw: gcw,
-          gate_states_ccw: gccw,
-          oneshot_used: ou,
-          pickups_collected: pc,
-          pickups_count: game.pickups_count,
-        },
-      )
+      game.history.push({
+        cw_pos: game.cw_pos,
+        ccw_pos: game.ccw_pos,
+        gate_states_cw: gcw,
+        gate_states_ccw: gccw,
+        oneshot_used: ou,
+        pickups_collected: pc,
+        pickups_count: game.pickups_count,
+      })
     }
   }
 }
@@ -329,7 +324,7 @@ pub fn calculate_stars(
   steps : Int,
   par : Int,
   pickups : Int,
-  total_pickups : Int
+  total_pickups : Int,
 ) -> Int {
   if steps <= par && pickups >= total_pickups {
     3

@@ -4,7 +4,7 @@ pub fn parse_level(
   world : Int,
   level_num : Int,
   name : String,
-  par_moves : Int
+  par_moves : Int,
 ) -> @types.Level {
   let rows = split_lines(data)
   let height = rows.length()
@@ -250,13 +250,7 @@ fn w1_l01() -> @types.Level {
     #|#....E.#
     #|########
 
-  parse_level(
-    data,
-    0,
-    0,
-    "First Steps",
-    2,
-  )
+  parse_level(data, 0, 0, "First Steps", 2)
 }
 
 ///|
@@ -272,13 +266,7 @@ fn w1_l02() -> @types.Level {
     #|#....E.#
     #|########
 
-  parse_level(
-    data,
-    0,
-    1,
-    "Over the Wall",
-    3,
-  )
+  parse_level(data, 0, 1, "Over the Wall", 3)
 }
 
 ///|
@@ -294,13 +282,7 @@ fn w1_l03() -> @types.Level {
     #|#.G....E.#
     #|##########
 
-  parse_level(
-    data,
-    0,
-    2,
-    "Gem Hunt",
-    4,
-  )
+  parse_level(data, 0, 2, "Gem Hunt", 4)
 }
 
 ///|
@@ -316,13 +298,7 @@ fn w1_l04() -> @types.Level {
     #|#..G...E.#
     #|##########
 
-  parse_level(
-    data,
-    0,
-    3,
-    "Corridors",
-    4,
-  )
+  parse_level(data, 0, 3, "Corridors", 4)
 }
 
 ///|
@@ -338,13 +314,7 @@ fn w1_l05() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    0,
-    4,
-    "Box Intro",
-    5,
-  )
+  parse_level(data, 0, 4, "Box Intro", 5)
 }
 
 ///|
@@ -360,13 +330,7 @@ fn w1_l06() -> @types.Level {
     #|#.G....E.#
     #|##########
 
-  parse_level(
-    data,
-    0,
-    5,
-    "Push Around",
-    6,
-  )
+  parse_level(data, 0, 5, "Push Around", 6)
 }
 
 ///|
@@ -382,13 +346,7 @@ fn w1_l07() -> @types.Level {
     #|#.......E#
     #|##########
 
-  parse_level(
-    data,
-    0,
-    6,
-    "Twin Gems",
-    5,
-  )
+  parse_level(data, 0, 6, "Twin Gems", 5)
 }
 
 ///|
@@ -404,13 +362,7 @@ fn w1_l08() -> @types.Level {
     #|#B.....E.#
     #|##########
 
-  parse_level(
-    data,
-    0,
-    7,
-    "Gravity Maze",
-    7,
-  )
+  parse_level(data, 0, 7, "Gravity Maze", 7)
 }
 
 ///|
@@ -427,13 +379,7 @@ fn w1_l09() -> @types.Level {
     #|#.....G..E.#
     #|############
 
-  parse_level(
-    data,
-    0,
-    8,
-    "Zigzag",
-    6,
-  )
+  parse_level(data, 0, 8, "Zigzag", 6)
 }
 
 ///|
@@ -450,13 +396,7 @@ fn w1_l10() -> @types.Level {
     #|#.G......E.#
     #|############
 
-  parse_level(
-    data,
-    0,
-    9,
-    "Stone Summit",
-    8,
-  )
+  parse_level(data, 0, 9, "Stone Summit", 8)
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -476,13 +416,7 @@ fn w2_l01() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    1,
-    0,
-    "Ice Floor",
-    3,
-  )
+  parse_level(data, 1, 0, "Ice Floor", 3)
 }
 
 ///|
@@ -498,13 +432,7 @@ fn w2_l02() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    1,
-    1,
-    "Frozen Path",
-    4,
-  )
+  parse_level(data, 1, 1, "Frozen Path", 4)
 }
 
 ///|
@@ -520,13 +448,7 @@ fn w2_l03() -> @types.Level {
     #|#.1....E.#
     #|##########
 
-  parse_level(
-    data,
-    1,
-    2,
-    "Portal Leap",
-    3,
-  )
+  parse_level(data, 1, 2, "Portal Leap", 3)
 }
 
 ///|
@@ -542,13 +464,7 @@ fn w2_l04() -> @types.Level {
     #|#..G...E.#
     #|##########
 
-  parse_level(
-    data,
-    1,
-    3,
-    "Warp Gem",
-    5,
-  )
+  parse_level(data, 1, 3, "Warp Gem", 5)
 }
 
 ///|
@@ -564,13 +480,7 @@ fn w2_l05() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    1,
-    4,
-    "Ice Portal",
-    5,
-  )
+  parse_level(data, 1, 4, "Ice Portal", 5)
 }
 
 ///|
@@ -586,13 +496,7 @@ fn w2_l06() -> @types.Level {
     #|#.G....E.#
     #|##########
 
-  parse_level(
-    data,
-    1,
-    5,
-    "Crystal Slide",
-    6,
-  )
+  parse_level(data, 1, 5, "Crystal Slide", 6)
 }
 
 ///|
@@ -608,13 +512,7 @@ fn w2_l07() -> @types.Level {
     #|#....G...E.#
     #|############
 
-  parse_level(
-    data,
-    1,
-    6,
-    "Mirror Cave",
-    6,
-  )
+  parse_level(data, 1, 6, "Mirror Cave", 6)
 }
 
 ///|
@@ -630,13 +528,7 @@ fn w2_l08() -> @types.Level {
     #|#.....II.E.#
     #|############
 
-  parse_level(
-    data,
-    1,
-    7,
-    "Slip Stream",
-    7,
-  )
+  parse_level(data, 1, 7, "Slip Stream", 7)
 }
 
 ///|
@@ -652,13 +544,7 @@ fn w2_l09() -> @types.Level {
     #|#.G......E.#
     #|############
 
-  parse_level(
-    data,
-    1,
-    8,
-    "Dual Portals",
-    7,
-  )
+  parse_level(data, 1, 8, "Dual Portals", 7)
 }
 
 ///|
@@ -674,13 +560,7 @@ fn w2_l10() -> @types.Level {
     #|#.G..B...E.#
     #|############
 
-  parse_level(
-    data,
-    1,
-    9,
-    "Crystal Peak",
-    9,
-  )
+  parse_level(data, 1, 9, "Crystal Peak", 9)
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -700,13 +580,7 @@ fn w3_l01() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    2,
-    0,
-    "Crumble Walk",
-    3,
-  )
+  parse_level(data, 2, 0, "Crumble Walk", 3)
 }
 
 ///|
@@ -722,13 +596,7 @@ fn w3_l02() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    2,
-    1,
-    "Fragile Floor",
-    4,
-  )
+  parse_level(data, 2, 1, "Fragile Floor", 4)
 }
 
 ///|
@@ -744,13 +612,7 @@ fn w3_l03() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    2,
-    2,
-    "Switch Intro",
-    4,
-  )
+  parse_level(data, 2, 2, "Switch Intro", 4)
 }
 
 ///|
@@ -766,13 +628,7 @@ fn w3_l04() -> @types.Level {
     #|#.G....E.#
     #|##########
 
-  parse_level(
-    data,
-    2,
-    3,
-    "Gate Keeper",
-    5,
-  )
+  parse_level(data, 2, 3, "Gate Keeper", 5)
 }
 
 ///|
@@ -788,13 +644,7 @@ fn w3_l05() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    2,
-    4,
-    "Void Path",
-    5,
-  )
+  parse_level(data, 2, 4, "Void Path", 5)
 }
 
 ///|
@@ -810,13 +660,7 @@ fn w3_l06() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    2,
-    5,
-    "Dual Switch",
-    6,
-  )
+  parse_level(data, 2, 5, "Dual Switch", 6)
 }
 
 ///|
@@ -832,13 +676,7 @@ fn w3_l07() -> @types.Level {
     #|#..W.....E.#
     #|############
 
-  parse_level(
-    data,
-    2,
-    6,
-    "Void Maze",
-    7,
-  )
+  parse_level(data, 2, 6, "Void Maze", 7)
 }
 
 ///|
@@ -854,13 +692,7 @@ fn w3_l08() -> @types.Level {
     #|#.....CC.E.#
     #|############
 
-  parse_level(
-    data,
-    2,
-    7,
-    "Chain React",
-    7,
-  )
+  parse_level(data, 2, 7, "Chain React", 7)
 }
 
 ///|
@@ -876,13 +708,7 @@ fn w3_l09() -> @types.Level {
     #|#.G......E.#
     #|############
 
-  parse_level(
-    data,
-    2,
-    8,
-    "Dark Matter",
-    8,
-  )
+  parse_level(data, 2, 8, "Dark Matter", 8)
 }
 
 ///|
@@ -898,13 +724,7 @@ fn w3_l10() -> @types.Level {
     #|#.G..B...E.#
     #|############
 
-  parse_level(
-    data,
-    2,
-    9,
-    "Void Heart",
-    10,
-  )
+  parse_level(data, 2, 9, "Void Heart", 10)
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -924,13 +744,7 @@ fn w4_l01() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    3,
-    0,
-    "Spike Intro",
-    3,
-  )
+  parse_level(data, 3, 0, "Spike Intro", 3)
 }
 
 ///|
@@ -946,13 +760,7 @@ fn w4_l02() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    3,
-    1,
-    "Lava Dodge",
-    4,
-  )
+  parse_level(data, 3, 1, "Lava Dodge", 4)
 }
 
 ///|
@@ -968,13 +776,7 @@ fn w4_l03() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    3,
-    2,
-    "Conveyor Belt",
-    4,
-  )
+  parse_level(data, 3, 2, "Conveyor Belt", 4)
 }
 
 ///|
@@ -990,13 +792,7 @@ fn w4_l04() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    3,
-    3,
-    "Rolling Rock",
-    5,
-  )
+  parse_level(data, 3, 3, "Rolling Rock", 5)
 }
 
 ///|
@@ -1012,13 +808,7 @@ fn w4_l05() -> @types.Level {
     #|#..G...E.#
     #|##########
 
-  parse_level(
-    data,
-    3,
-    4,
-    "Hot Conveyor",
-    6,
-  )
+  parse_level(data, 3, 4, "Hot Conveyor", 6)
 }
 
 ///|
@@ -1034,13 +824,7 @@ fn w4_l06() -> @types.Level {
     #|#......E.#
     #|##########
 
-  parse_level(
-    data,
-    3,
-    5,
-    "Boulder Drop",
-    6,
-  )
+  parse_level(data, 3, 5, "Boulder Drop", 6)
 }
 
 ///|
@@ -1056,13 +840,7 @@ fn w4_l07() -> @types.Level {
     #|#........E.#
     #|############
 
-  parse_level(
-    data,
-    3,
-    6,
-    "Magma Flow",
-    7,
-  )
+  parse_level(data, 3, 6, "Magma Flow", 7)
 }
 
 ///|
@@ -1078,13 +856,7 @@ fn w4_l08() -> @types.Level {
     #|#.G......E.#
     #|############
 
-  parse_level(
-    data,
-    3,
-    7,
-    "Danger Zone",
-    8,
-  )
+  parse_level(data, 3, 7, "Danger Zone", 8)
 }
 
 ///|
@@ -1100,13 +872,7 @@ fn w4_l09() -> @types.Level {
     #|#.G......E.#
     #|############
 
-  parse_level(
-    data,
-    3,
-    8,
-    "Inferno Run",
-    9,
-  )
+  parse_level(data, 3, 8, "Inferno Run", 9)
 }
 
 ///|
@@ -1122,13 +888,7 @@ fn w4_l10() -> @types.Level {
     #|#.G..B...E.#
     #|############
 
-  parse_level(
-    data,
-    3,
-    9,
-    "Magma Core",
-    10,
-  )
+  parse_level(data, 3, 9, "Magma Core", 10)
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1148,13 +908,7 @@ fn w5_l01() -> @types.Level {
     #|#........E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    0,
-    "Sky Gate",
-    5,
-  )
+  parse_level(data, 4, 0, "Sky Gate", 5)
 }
 
 ///|
@@ -1170,13 +924,7 @@ fn w5_l02() -> @types.Level {
     #|#........E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    1,
-    "Crumble Gate",
-    6,
-  )
+  parse_level(data, 4, 1, "Crumble Gate", 6)
 }
 
 ///|
@@ -1192,13 +940,7 @@ fn w5_l03() -> @types.Level {
     #|#........E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    2,
-    "Spike Warp",
-    6,
-  )
+  parse_level(data, 4, 2, "Spike Warp", 6)
 }
 
 ///|
@@ -1214,13 +956,7 @@ fn w5_l04() -> @types.Level {
     #|#.G......E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    3,
-    "Ice Crumble",
-    7,
-  )
+  parse_level(data, 4, 3, "Ice Crumble", 7)
 }
 
 ///|
@@ -1236,13 +972,7 @@ fn w5_l05() -> @types.Level {
     #|#.G..B...E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    4,
-    "Key Master",
-    8,
-  )
+  parse_level(data, 4, 4, "Key Master", 8)
 }
 
 ///|
@@ -1258,13 +988,7 @@ fn w5_l06() -> @types.Level {
     #|#.G......E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    5,
-    "Gauntlet",
-    8,
-  )
+  parse_level(data, 4, 5, "Gauntlet", 8)
 }
 
 ///|
@@ -1280,13 +1004,7 @@ fn w5_l07() -> @types.Level {
     #|#.G..B...E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    6,
-    "Complex",
-    9,
-  )
+  parse_level(data, 4, 6, "Complex", 9)
 }
 
 ///|
@@ -1302,13 +1020,7 @@ fn w5_l08() -> @types.Level {
     #|#.G..K...E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    7,
-    "Sky Fortress",
-    10,
-  )
+  parse_level(data, 4, 7, "Sky Fortress", 10)
 }
 
 ///|
@@ -1324,13 +1036,7 @@ fn w5_l09() -> @types.Level {
     #|#.G..B.K.E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    8,
-    "Citadel",
-    11,
-  )
+  parse_level(data, 4, 8, "Citadel", 11)
 }
 
 ///|
@@ -1346,13 +1052,7 @@ fn w5_l10() -> @types.Level {
     #|#G.B.K.G.E.#
     #|############
 
-  parse_level(
-    data,
-    4,
-    9,
-    "Final Ascent",
-    12,
-  )
+  parse_level(data, 4, 9, "Final Ascent", 12)
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1508,7 +1208,9 @@ pub fn validate_level(level : @types.Level) -> Bool {
 
 ///|
 /// Count total entities of each kind in a level
-pub fn count_entities_by_kind(level : @types.Level) -> (Int, Int, Int, Int, Int, Int) {
+pub fn count_entities_by_kind(
+  level : @types.Level,
+) -> (Int, Int, Int, Int, Int, Int) {
   let mut players = 0
   let mut boxes = 0
   let mut boulders = 0
@@ -1533,7 +1235,9 @@ pub fn count_entities_by_kind(level : @types.Level) -> (Int, Int, Int, Int, Int,
 
 ///|
 /// Count total tiles of each special kind in a level
-pub fn count_special_tiles(level : @types.Level) -> (Int, Int, Int, Int, Int, Int) {
+pub fn count_special_tiles(
+  level : @types.Level,
+) -> (Int, Int, Int, Int, Int, Int) {
   let mut portals = 0
   let mut switches = 0
   let mut gates = 0

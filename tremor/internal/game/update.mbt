@@ -313,8 +313,7 @@ fn update_results(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     let next_idx = game.current_level_index + 1
-    if next_idx < @types.total_levels &&
-      @types.level_unlocked(game, next_idx) {
+    if next_idx < @types.total_levels && @types.level_unlocked(game, next_idx) {
       start_level(game, next_idx)
     } else {
       game.screen = LevelSelect

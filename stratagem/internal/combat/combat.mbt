@@ -1,5 +1,8 @@
 ///|
-pub fn type_advantage(attacker : @types.UnitKind, defender : @types.UnitKind) -> Int {
+pub fn type_advantage(
+  attacker : @types.UnitKind,
+  defender : @types.UnitKind,
+) -> Int {
   match (attacker, defender) {
     (Infantry, Artillery) => 2
     (Cavalry, Infantry) => 2
@@ -15,7 +18,7 @@ pub fn type_advantage(attacker : @types.UnitKind, defender : @types.UnitKind) ->
 pub fn calc_damage(
   battle : @types.Battle,
   attacker : @types.GameUnit,
-  defender : @types.GameUnit
+  defender : @types.GameUnit,
 ) -> Int {
   let base_atk = attacker.atk
   let type_bonus = type_advantage(attacker.kind, defender.kind)
@@ -35,7 +38,7 @@ pub fn calc_damage(
 pub fn can_attack(
   battle : @types.Battle,
   attacker : @types.GameUnit,
-  defender : @types.GameUnit
+  defender : @types.GameUnit,
 ) -> Bool {
   if attacker.attacked {
     return false
@@ -43,7 +46,7 @@ pub fn can_attack(
   if attacker.team == defender.team {
     return false
   }
-  if !(defender.active) {
+  if !defender.active {
     return false
   }
   let dist = @types.hex_distance(attacker.pos, defender.pos)
@@ -62,7 +65,7 @@ pub fn can_attack(
 pub fn resolve_attack(
   battle : @types.Battle,
   attacker_id : Int,
-  defender_id : Int
+  defender_id : Int,
 ) -> (Int, Bool) {
   // Returns (damage_dealt, defender_killed)
   let attacker = match @types.get_unit(battle, attacker_id) {
@@ -73,7 +76,7 @@ pub fn resolve_attack(
     Some(u) => u
     None => return (0, false)
   }
-  if !(can_attack(battle, attacker, defender)) {
+  if !can_attack(battle, attacker, defender) {
     return (0, false)
   }
   let damage = calc_damage(battle, attacker, defender)
@@ -96,7 +99,7 @@ pub fn resolve_attack(
 ///|
 pub fn compute_move_range(
   battle : @types.Battle,
-  unit : @types.GameUnit
+  unit : @types.GameUnit,
 ) -> Array[@types.HexCoord] {
   let result : Array[@types.HexCoord] = []
   let max_move = @types.effective_move_range(battle, unit)
@@ -136,10 +139,7 @@ pub fn compute_move_range(
           let occupant = battle.map.tiles[nb_idx].unit_id
           if occupant >= 0 {
             match @types.get_unit(battle, occupant) {
-              Some(occ) =>
-                if occ.team != unit.team {
-                  continue
-                }
+              Some(occ) => if occ.team != unit.team { continue }
               None => ()
             }
           }
@@ -170,7 +170,7 @@ pub fn compute_move_range(
 ///|
 pub fn compute_attack_targets(
   battle : @types.Battle,
-  unit : @types.GameUnit
+  unit : @types.GameUnit,
 ) -> Array[@types.HexCoord] {
   let result : Array[@types.HexCoord] = []
   let range = @types.effective_attack_range(battle, unit)
@@ -202,7 +202,7 @@ pub fn compute_attack_targets(
 pub fn move_unit(
   battle : @types.Battle,
   unit_id : Int,
-  target : @types.HexCoord
+  target : @types.HexCoord,
 ) -> Bool {
   let unit = match @types.get_unit(battle, unit_id) {
     Some(u) => u
@@ -220,7 +220,7 @@ pub fn move_unit(
       break
     }
   }
-  if !(valid) {
+  if !valid {
     return false
   }
   // Remove from old position
@@ -255,12 +255,7 @@ pub fn check_victory(battle : @types.Battle) -> @types.GameResult {
       let uid = battle.map.tiles[idx].unit_id
       if uid >= 0 {
         match @types.get_unit(battle, uid) {
-          Some(u) =>
-            if u.team == Player {
-              Victory
-            } else {
-              Ongoing
-            }
+          Some(u) => if u.team == Player { Victory } else { Ongoing }
           None => Ongoing
         }
       } else {
@@ -273,11 +268,8 @@ pub fn check_victory(battle : @types.Battle) -> @types.GameResult {
 // Calculate score for a battle
 
 ///|
-pub fn calc_score(
-  battle : @types.Battle,
-  was_victory : Bool
-) -> Int {
-  if !(was_victory) {
+pub fn calc_score(battle : @types.Battle, was_victory : Bool) -> Int {
+  if !was_victory {
     return 0
   }
   let base = 1000

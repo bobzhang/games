@@ -37,25 +37,13 @@ fn draw_title(game : @types.Game) -> Unit {
   )
   // Controls hint
   @draw.draw_text(
-    "Move both characters with one input.",
-    380,
-    520,
-    18,
-    @types.color_hud_dim,
+    "Move both characters with one input.", 380, 520, 18, @types.color_hud_dim,
   )
   @draw.draw_text(
-    "Luna walks on the floor. Sol walks on the ceiling.",
-    320,
-    550,
-    18,
-    @types.color_hud_dim,
+    "Luna walks on the floor. Sol walks on the ceiling.", 320, 550, 18, @types.color_hud_dim,
   )
   @draw.draw_text(
-    "Left/Right is MIRRORED for Sol!",
-    420,
-    580,
-    18,
-    @types.color_highlight,
+    "Left/Right is MIRRORED for Sol!", 420, 580, 18, @types.color_highlight,
   )
 }
 
@@ -117,10 +105,7 @@ fn draw_world_select(game : @types.Game) -> Unit {
 fn draw_level_select(game : @types.Game) -> Unit {
   let world_name = @types.world_name(game.selected_world)
   @draw.draw_text(
-    "World " +
-    (game.selected_world + 1).to_string() +
-    ": " +
-    world_name,
+    "World " + (game.selected_world + 1).to_string() + ": " + world_name,
     440,
     60,
     32,
@@ -128,11 +113,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   )
   for l in 0..<@types.levels_per_world {
     let y = 140 + l * 70
-    let unlocked = @levels.level_unlocked(
-      game.scores,
-      game.selected_world,
-      l,
-    )
+    let unlocked = @levels.level_unlocked(game.scores, game.selected_world, l)
     let label = "Level " + (l + 1).to_string()
     let color = if l == game.selected_level {
       @types.color_highlight
@@ -158,7 +139,9 @@ fn draw_level_select(game : @types.Game) -> Unit {
     } else {
       // Show stars
       let w = game.selected_world
-      if w >= 0 && w < game.scores.length() && l >= 0 &&
+      if w >= 0 &&
+        w < game.scores.length() &&
+        l >= 0 &&
         l < game.scores[w].length() {
         let score = game.scores[w][l]
         if score.completed {
@@ -222,11 +205,7 @@ fn draw_results(game : @types.Game) -> Unit {
         @draw.draw_text("Gems: Missing", 470, 380, 22, @types.color_hud_dim)
       }
       @draw.draw_text(
-        "Enter: Next Level  R: Retry  Esc: Level Select",
-        340,
-        480,
-        20,
-        @types.color_hud_dim,
+        "Enter: Next Level  R: Retry  Esc: Level Select", 340, 480, 20, @types.color_hud_dim,
       )
     }
   }

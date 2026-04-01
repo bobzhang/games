@@ -74,10 +74,12 @@ fn update_hover(game : @types.Game) -> Unit {
 ///|
 /// Process title screen input
 fn process_title_input(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyDown) || @raylib.is_key_pressed(@raylib.KeyS) {
+  if @raylib.is_key_pressed(@raylib.KeyDown) ||
+    @raylib.is_key_pressed(@raylib.KeyS) {
     game.menu_selection = (game.menu_selection + 1) % 2
   }
-  if @raylib.is_key_pressed(@raylib.KeyUp) || @raylib.is_key_pressed(@raylib.KeyW) {
+  if @raylib.is_key_pressed(@raylib.KeyUp) ||
+    @raylib.is_key_pressed(@raylib.KeyW) {
     game.menu_selection = (game.menu_selection + 1) % 2
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
@@ -93,11 +95,14 @@ fn process_title_input(game : @types.Game) -> Unit {
 
 ///|
 fn process_world_select_input(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyRight) || @raylib.is_key_pressed(@raylib.KeyD) {
+  if @raylib.is_key_pressed(@raylib.KeyRight) ||
+    @raylib.is_key_pressed(@raylib.KeyD) {
     game.menu_selection = (game.menu_selection + 1) % @types.total_worlds
   }
-  if @raylib.is_key_pressed(@raylib.KeyLeft) || @raylib.is_key_pressed(@raylib.KeyA) {
-    game.menu_selection = (game.menu_selection + @types.total_worlds - 1) % @types.total_worlds
+  if @raylib.is_key_pressed(@raylib.KeyLeft) ||
+    @raylib.is_key_pressed(@raylib.KeyA) {
+    game.menu_selection = (game.menu_selection + @types.total_worlds - 1) %
+      @types.total_worlds
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
     game.world_index = game.menu_selection
@@ -113,26 +118,32 @@ fn process_world_select_input(game : @types.Game) -> Unit {
 ///|
 fn process_level_select_input(game : @types.Game) -> Unit {
   // Navigate 4x2 grid
-  if @raylib.is_key_pressed(@raylib.KeyRight) || @raylib.is_key_pressed(@raylib.KeyD) {
+  if @raylib.is_key_pressed(@raylib.KeyRight) ||
+    @raylib.is_key_pressed(@raylib.KeyD) {
     game.menu_selection = (game.menu_selection + 1) % @types.levels_per_world
   }
-  if @raylib.is_key_pressed(@raylib.KeyLeft) || @raylib.is_key_pressed(@raylib.KeyA) {
-    game.menu_selection = (game.menu_selection + @types.levels_per_world - 1) % @types.levels_per_world
+  if @raylib.is_key_pressed(@raylib.KeyLeft) ||
+    @raylib.is_key_pressed(@raylib.KeyA) {
+    game.menu_selection = (game.menu_selection + @types.levels_per_world - 1) %
+      @types.levels_per_world
   }
-  if @raylib.is_key_pressed(@raylib.KeyDown) || @raylib.is_key_pressed(@raylib.KeyS) {
+  if @raylib.is_key_pressed(@raylib.KeyDown) ||
+    @raylib.is_key_pressed(@raylib.KeyS) {
     let next = game.menu_selection + 4
     if next < @types.levels_per_world {
       game.menu_selection = next
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyUp) || @raylib.is_key_pressed(@raylib.KeyW) {
+  if @raylib.is_key_pressed(@raylib.KeyUp) ||
+    @raylib.is_key_pressed(@raylib.KeyW) {
     let prev = game.menu_selection - 4
     if prev >= 0 {
       game.menu_selection = prev
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
-    let global_index = game.world_index * @types.levels_per_world + game.menu_selection
+    let global_index = game.world_index * @types.levels_per_world +
+      game.menu_selection
     start_level(game, global_index)
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
@@ -214,7 +225,8 @@ fn process_playing_input(game : @types.Game) -> Unit {
   }
   // Restart level
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    let global_index = game.world_index * @types.levels_per_world + game.level_index % @types.levels_per_world
+    let global_index = game.world_index * @types.levels_per_world +
+      game.level_index % @types.levels_per_world
     start_level(game, global_index)
   }
   // Back to menu
@@ -313,10 +325,7 @@ pub fn check_goals(game : @types.Game) -> Unit {
     let tile = game.level.grid.tiles[goal.row][goal.col]
     // Goal is "collected" if a crop was harvested there
     match tile.crop {
-      Some(_) =>
-        if tile.crop_state == Harvested {
-          goals_done += 1
-        }
+      Some(_) => if tile.crop_state == Harvested { goals_done += 1 }
       None => ()
     }
   }
@@ -380,13 +389,17 @@ pub fn calculate_score(game : @types.Game) -> @types.LevelScore {
     stars = 1
   }
   // Star 2: reach target within par turns
-  if game.yield_collected >= game.level.target_yield && game.turn <= game.level.par_turns {
+  if game.yield_collected >= game.level.target_yield &&
+    game.turn <= game.level.par_turns {
     stars = 2
   }
   // Star 3: all goals collected
   if game.yield_collected >= game.level.target_yield &&
     game.turn <= game.level.par_turns &&
-    (game.level.goals.length() == 0 || game.goals_collected >= game.level.goals.length()) {
+    (
+      game.level.goals.length() == 0 ||
+      game.goals_collected >= game.level.goals.length()
+    ) {
     stars = 3
   }
   {
@@ -408,7 +421,8 @@ fn process_results_input(game : @types.Game) -> Unit {
     game.menu_selection = game.level_index % @types.levels_per_world
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    let global_index = game.world_index * @types.levels_per_world + game.level_index % @types.levels_per_world
+    let global_index = game.world_index * @types.levels_per_world +
+      game.level_index % @types.levels_per_world
     start_level(game, global_index)
   }
 }

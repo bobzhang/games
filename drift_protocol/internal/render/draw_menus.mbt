@@ -28,8 +28,7 @@ pub fn draw_title(game : @types.Game) -> Unit {
     @types.color_neon_pink,
   )
   // Prompt
-  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.06) * 0.5 +
-    0.5
+  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.06) * 0.5 + 0.5
   let alpha_f : Float = 180.0 * pulse
   let alpha = alpha_f.to_int() + 75
   let prompt = "PRESS ENTER TO BEGIN"
@@ -53,9 +52,8 @@ fn draw_cyber_background(game : @types.Game) -> Unit {
   // Horizontal scan lines
   for i in 0..<(sh / 4) {
     let y = i * 4
-    let alpha = 10 + (
-      @types.sinf(Float::from_int(y + game.frame_count * 2) * 0.02) * 8.0
-    ).to_int()
+    let alpha = 10 +
+      (@types.sinf(Float::from_int(y + game.frame_count * 2) * 0.02) * 8.0).to_int()
     @raylib.draw_line(
       0,
       y,
@@ -68,9 +66,7 @@ fn draw_cyber_background(game : @types.Game) -> Unit {
   let line_count = 8
   for i in 0..<line_count {
     let x = sw * (i + 1) / (line_count + 1)
-    let offset = @types.sinf(
-      Float::from_int(i * 37 + game.frame_count) * 0.03,
-    )
+    let offset = @types.sinf(Float::from_int(i * 37 + game.frame_count) * 0.03)
     let alpha = 15 + (offset * 10.0).to_int()
     @raylib.draw_line(
       x,
@@ -93,13 +89,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
   let title = "SELECT MISSION"
   let title_size = 32
   let tw = @draw.measure_text(title, title_size)
-  @draw.draw_text(
-    title,
-    sw / 2 - tw / 2,
-    40,
-    title_size,
-    @types.color_cyan,
-  )
+  @draw.draw_text(title, sw / 2 - tw / 2, 40, title_size, @types.color_cyan)
   // Level list
   let start_y = 100
   let item_h = 60
@@ -131,7 +121,11 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     }
     // Level name
     let name_str = "\{i + 1}. \{level_name_for(i)}"
-    let name_color = if selected { @types.color_white } else { @types.color_hud_text }
+    let name_color = if selected {
+      @types.color_white
+    } else {
+      @types.color_hud_text
+    }
     @draw.draw_text(name_str, sw / 4, y, 18, name_color)
     // Tier badge
     @draw.draw_text(tier, sw / 4, y + 22, 10, tier_col)
@@ -222,20 +216,8 @@ pub fn draw_pause(game : @types.Game) -> Unit {
   let title = "PAUSED"
   let title_size = 40
   let tw = @draw.measure_text(title, title_size)
-  @draw.draw_text(
-    title,
-    sw / 2 - tw / 2,
-    sh / 3,
-    title_size,
-    @types.color_cyan,
-  )
-  @draw.draw_text(
-    "ESC Resume",
-    sw / 2 - 60,
-    sh / 2,
-    18,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(title, sw / 2 - tw / 2, sh / 3, title_size, @types.color_cyan)
+  @draw.draw_text("ESC Resume", sw / 2 - 60, sh / 2, 18, @types.color_hud_text)
   @draw.draw_text(
     "Q Quit to Menu",
     sw / 2 - 70,
@@ -259,23 +241,11 @@ pub fn draw_results(game : @types.Game) -> Unit {
   let title = "MISSION COMPLETE"
   let title_size = 36
   let tw = @draw.measure_text(title, title_size)
-  @draw.draw_text(
-    title,
-    sw / 2 - tw / 2,
-    40,
-    title_size,
-    @types.color_cyan,
-  )
+  @draw.draw_text(title, sw / 2 - tw / 2, 40, title_size, @types.color_cyan)
   // Level name
   let name = game.level.name
   let nw = @draw.measure_text(name, 20)
-  @draw.draw_text(
-    name,
-    sw / 2 - nw / 2,
-    85,
-    20,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(name, sw / 2 - nw / 2, 85, 20, @types.color_hud_text)
   // Score breakdown
   let col_x = sw / 3
   let mut y = 130
@@ -283,7 +253,13 @@ pub fn draw_results(game : @types.Game) -> Unit {
   draw_score_line("Base Score", s.base_score, col_x, y, @types.color_hud_text)
   y += line_h
   if s.ghost {
-    draw_score_line("Ghost Bonus", s.ghost_bonus, col_x, y, @types.color_grade_s)
+    draw_score_line(
+      "Ghost Bonus",
+      s.ghost_bonus,
+      col_x,
+      y,
+      @types.color_grade_s,
+    )
   } else {
     draw_score_line("Ghost Bonus", 0, col_x, y, @types.color_dim_text)
   }
@@ -305,7 +281,11 @@ pub fn draw_results(game : @types.Game) -> Unit {
     s.speed_bonus,
     col_x,
     y,
-    if s.speed_bonus > 0 { @types.color_cyan } else { @types.color_dim_text },
+    if s.speed_bonus > 0 {
+      @types.color_cyan
+    } else {
+      @types.color_dim_text
+    },
   )
   y += line_h
   draw_score_line(
@@ -313,7 +293,11 @@ pub fn draw_results(game : @types.Game) -> Unit {
     s.data_bonus,
     col_x,
     y,
-    if s.all_data { @types.color_terminal } else { @types.color_dim_text },
+    if s.all_data {
+      @types.color_terminal
+    } else {
+      @types.color_dim_text
+    },
   )
   y += line_h + 10
   // Separator
@@ -356,7 +340,7 @@ fn draw_score_line(
   value : Int,
   x : Int,
   y : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   @draw.draw_text(label, x, y, 18, color)
   let val_str = "+\{value}"
@@ -382,10 +366,22 @@ pub fn draw_hack_overlay(game : @types.Game) -> Unit {
   let panel_h = 250
   let px = sw / 2 - panel_w / 2
   let py = sh / 2 - panel_h / 2
-  @raylib.draw_rectangle(px, py, panel_w, panel_h, @raylib.Color::new(10, 10, 30, 240))
+  @raylib.draw_rectangle(
+    px,
+    py,
+    panel_w,
+    panel_h,
+    @raylib.Color::new(10, 10, 30, 240),
+  )
   @raylib.draw_rectangle_lines(px, py, panel_w, panel_h, @types.color_cyan)
   // Title
-  @draw.draw_text("HIGH SECURITY HACK", px + 80, py + 15, 20, @types.color_neon_pink)
+  @draw.draw_text(
+    "HIGH SECURITY HACK",
+    px + 80,
+    py + 15,
+    20,
+    @types.color_neon_pink,
+  )
   // Timer bar with animated segments
   let bar_w = panel_w - 40
   let bar_h = 12
@@ -410,9 +406,7 @@ pub fn draw_hack_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(px + 20, py + 50, fill_w, bar_h, bar_color)
   // Glowing edge on the fill bar
   if fill_w > 2 {
-    let pulse = @types.sinf(
-      Float::from_int(game.frame_count) * 0.2,
-    ) * 0.4 + 0.6
+    let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.2) * 0.4 + 0.6
     let glow_alpha_f : Float = 180.0 * pulse
     let glow_alpha = glow_alpha_f.to_int()
     @raylib.draw_rectangle(
@@ -444,7 +438,13 @@ pub fn draw_hack_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(80, 80, 120, 255),
   )
   // Sequence display
-  @draw.draw_text("MATCH THE SEQUENCE:", px + 100, py + 80, 14, @types.color_hud_text)
+  @draw.draw_text(
+    "MATCH THE SEQUENCE:",
+    px + 100,
+    py + 80,
+    14,
+    @types.color_hud_text,
+  )
   // Target sequence
   let seq_y = py + 110
   let bit_w = 50
@@ -460,13 +460,7 @@ pub fn draw_hack_overlay(game : @types.Game) -> Unit {
       40,
       @raylib.Color::new(20, 20, 40, 255),
     )
-    @raylib.draw_rectangle_lines(
-      bx,
-      seq_y,
-      bit_w - 4,
-      40,
-      @types.color_cyan,
-    )
+    @raylib.draw_rectangle_lines(bx, seq_y, bit_w - 4, 40, @types.color_cyan)
     @draw.draw_text(text, bx + 18, seq_y + 8, 24, @types.color_neon_green)
   }
   // Input progress
@@ -482,7 +476,13 @@ pub fn draw_hack_overlay(game : @types.Game) -> Unit {
       } else {
         @types.color_guard_alert
       }
-      @raylib.draw_rectangle(bx, input_y, bit_w - 4, 30, @raylib.Color::new(20, 20, 40, 255))
+      @raylib.draw_rectangle(
+        bx,
+        input_y,
+        bit_w - 4,
+        30,
+        @raylib.Color::new(20, 20, 40, 255),
+      )
       @draw.draw_text(text, bx + 18, input_y + 4, 20, color)
     } else {
       @raylib.draw_rectangle(
@@ -560,33 +560,15 @@ pub fn draw_victory(game : @types.Game) -> Unit {
       Some(s) => {
         let grade_str = grade_to_string(s.grade)
         let line = "\{name}: \{grade_str} (\{s.total})"
-        @draw.draw_text(
-          line,
-          sw / 3,
-          y,
-          14,
-          @types.grade_color(s.grade),
-        )
+        @draw.draw_text(line, sw / 3, y, 14, @types.grade_color(s.grade))
       }
       None =>
-        @draw.draw_text(
-          "\{name}: ---",
-          sw / 3,
-          y,
-          14,
-          @types.color_dim_text,
-        )
+        @draw.draw_text("\{name}: ---", sw / 3, y, 14, @types.color_dim_text)
     }
     y += 22
   }
   // Prompt
   let prompt = "PRESS ENTER"
   let pw = @draw.measure_text(prompt, 20)
-  @draw.draw_text(
-    prompt,
-    sw / 2 - pw / 2,
-    sh - 60,
-    20,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(prompt, sw / 2 - pw / 2, sh - 60, 20, @types.color_hud_text)
 }

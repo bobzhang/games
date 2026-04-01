@@ -17,9 +17,8 @@ pub fn update(game : @types.Game) -> Unit {
 
 ///|
 fn update_title(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-    @raylib.KeySpace,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     game.screen = TierSelect
   }
 }
@@ -40,9 +39,8 @@ fn update_tier_select(game : @types.Game) -> Unit {
       DoubleHelix => Coil
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-    @raylib.KeySpace,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     game.selected_level = 0
     game.screen = LevelSelect
   }
@@ -73,9 +71,8 @@ fn update_level_select(game : @types.Game) -> Unit {
       game.selected_level = prev
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-    @raylib.KeySpace,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     let level_idx = @types.tier_start_index(game.selected_tier) +
       game.selected_level
     start_level(game, level_idx)
@@ -119,9 +116,8 @@ fn start_level(game : @types.Game, level_idx : Int) -> Unit {
 fn update_playing(game : @types.Game) -> Unit {
   // Step forward
   if game.play_state == Moving {
-    if @raylib.is_key_pressed(@raylib.KeySpace) || @raylib.is_key_pressed(
-      @raylib.KeyEnter,
-    ) {
+    if @raylib.is_key_pressed(@raylib.KeySpace) ||
+      @raylib.is_key_pressed(@raylib.KeyEnter) {
       @spiral.step(game)
       // Check if blocked after step
       if game.play_state != Won && @spiral.check_blocked(game) {
@@ -151,9 +147,8 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   // Go to results on win
   if game.play_state == Won {
-    if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-      @raylib.KeySpace,
-    ) {
+    if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+      @raylib.is_key_pressed(@raylib.KeySpace) {
       // Save score
       let level_idx = @types.tier_start_index(game.selected_tier) +
         game.selected_level
@@ -185,9 +180,8 @@ fn update_playing(game : @types.Game) -> Unit {
 
 ///|
 fn update_results(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-    @raylib.KeySpace,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     // Next level
     let count = @types.tier_level_count(game.selected_tier)
     if game.selected_level + 1 < count {

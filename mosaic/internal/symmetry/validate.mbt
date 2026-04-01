@@ -3,21 +3,19 @@ pub fn validate_placement(
   grid : @types.MosaicGrid,
   pos : @types.Vec2i,
   tile : @types.Tile,
-  sym : @types.SymmetryKind
+  sym : @types.SymmetryKind,
 ) -> Bool {
   match sym {
-    Rotate4 => {
+    Rotate4 =>
       match get_expected_for_rotate4(grid, pos) {
         Some(expected) => @types.tile_eq(tile, expected)
         None => true
       }
-    }
-    _ => {
+    _ =>
       match expected_tile_at(grid, pos, sym) {
         Some(expected) => @types.tile_eq(tile, expected)
         None => true
       }
-    }
   }
 }
 
@@ -25,7 +23,7 @@ pub fn validate_placement(
 pub fn compute_solution_tile(
   grid : @types.MosaicGrid,
   hole : @types.Vec2i,
-  sym : @types.SymmetryKind
+  sym : @types.SymmetryKind,
 ) -> @types.Tile? {
   match sym {
     Rotate4 => get_expected_for_rotate4(grid, hole)
@@ -49,7 +47,7 @@ pub fn check_all_holes_filled(grid : @types.MosaicGrid) -> Bool {
 pub fn check_all_correct(
   grid : @types.MosaicGrid,
   placed : Array[(@types.Vec2i, @types.Tile)],
-  sym : @types.SymmetryKind
+  sym : @types.SymmetryKind,
 ) -> Bool {
   for i in 0..<placed.length() {
     let (pos, tile) = placed[i]
@@ -64,7 +62,7 @@ pub fn check_all_correct(
 pub fn count_correct_placements(
   grid : @types.MosaicGrid,
   placed : Array[(@types.Vec2i, @types.Tile)],
-  sym : @types.SymmetryKind
+  sym : @types.SymmetryKind,
 ) -> Int {
   let mut correct = 0
   for i in 0..<placed.length() {

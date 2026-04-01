@@ -479,7 +479,10 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
           0.03,
           ground_size,
           @raylib.Color::new(
-            glow_color.0, glow_color.1, glow_color.2, glow_alpha / 4,
+            glow_color.0,
+            glow_color.1,
+            glow_color.2,
+            glow_alpha / 4,
           ),
         )
       }
@@ -493,7 +496,10 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
           0.15,
           0.15,
           @raylib.Color::new(
-            glow_color.0, glow_color.1, glow_color.2, glow_alpha,
+            glow_color.0,
+            glow_color.1,
+            glow_color.2,
+            glow_alpha,
           ),
         )
         @raylib.draw_cube(
@@ -502,7 +508,10 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
           0.1,
           0.1,
           @raylib.Color::new(
-            glow_color.0, glow_color.1, glow_color.2, glow_alpha / 2,
+            glow_color.0,
+            glow_color.1,
+            glow_color.2,
+            glow_alpha / 2,
           ),
         )
         // Line along direction for cone attacks
@@ -513,7 +522,10 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
             0.08,
             0.08,
             @raylib.Color::new(
-              glow_color.0, glow_color.1, glow_color.2, glow_alpha / 3,
+              glow_color.0,
+              glow_color.1,
+              glow_color.2,
+              glow_alpha / 3,
             ),
           )
         }

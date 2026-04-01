@@ -7,12 +7,11 @@ pub fn tick_swing(
   walls : Array[@types.Vec2i],
   goal : @types.Vec2i,
   collectibles : Array[@types.Vec2i],
-  collected : Array[Bool]
+  collected : Array[Bool],
 ) -> Unit {
   match weight.state {
     Swinging => tick_swinging(weight, rope, arc, pegs, collectibles, collected)
-    Launched =>
-      tick_launched(weight, walls, goal, collectibles, collected)
+    Launched => tick_launched(weight, walls, goal, collectibles, collected)
     Stopped | AtGoal => ()
   }
 }
@@ -24,7 +23,7 @@ fn tick_swinging(
   arc : Array[@types.ArcPoint],
   pegs : Array[@types.Vec2i],
   collectibles : Array[@types.Vec2i],
-  collected : Array[Bool]
+  collected : Array[Bool],
 ) -> Unit {
   if arc.length() == 0 {
     weight.state = Stopped
@@ -80,7 +79,7 @@ fn tick_launched(
   walls : Array[@types.Vec2i],
   goal : @types.Vec2i,
   collectibles : Array[@types.Vec2i],
-  collected : Array[Bool]
+  collected : Array[Bool],
 ) -> Unit {
   // Move along launch velocity
   let new_x = weight.launch_pos.x + weight.launch_vel.x
@@ -119,10 +118,10 @@ fn tick_launched(
 fn check_collectibles(
   pos : @types.Vec2i,
   collectibles : Array[@types.Vec2i],
-  collected : Array[Bool]
+  collected : Array[Bool],
 ) -> Unit {
   for i = 0; i < collectibles.length(); i = i + 1 {
-    if i < collected.length() && !(collected[i]) {
+    if i < collected.length() && !collected[i] {
       if collectibles[i].x == pos.x && collectibles[i].y == pos.y {
         collected[i] = true
       }
@@ -134,14 +133,16 @@ fn check_collectibles(
 pub fn cut_rope(
   weight : @types.Weight,
   rope : @types.Rope,
-  arc : Array[@types.ArcPoint]
+  arc : Array[@types.ArcPoint],
 ) -> Unit {
   if weight.state != Swinging {
     return
   }
   // Compute launch velocity from current position and swing direction
   let vel = @types.compute_launch_velocity(
-    rope.anchor, weight.pos, weight.swing_dir,
+    rope.anchor,
+    weight.pos,
+    weight.swing_dir,
   )
   weight.launch_vel = vel
   weight.launch_pos = @types.vec2f(
@@ -153,10 +154,7 @@ pub fn cut_rope(
 }
 
 ///|
-pub fn check_goal_on_swing(
-  weight : @types.Weight,
-  goal : @types.Vec2i
-) -> Unit {
+pub fn check_goal_on_swing(weight : @types.Weight, goal : @types.Vec2i) -> Unit {
   if weight.state == Swinging {
     if weight.pos.x == goal.x && weight.pos.y == goal.y {
       weight.state = AtGoal
@@ -169,7 +167,7 @@ pub fn compute_stars(
   ticks : Int,
   par : Int,
   collectibles_total : Int,
-  collectibles_got : Int
+  collectibles_got : Int,
 ) -> Int {
   let mut stars = 1 // reached goal
   if ticks <= par {

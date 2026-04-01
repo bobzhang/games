@@ -43,7 +43,7 @@ pub fn init_editor(game : @types.Game) -> Unit {
 /// Update editor state
 pub fn update_editor(game : @types.Game) -> Unit {
   let ed = game.editor
-  if !(ed.active) {
+  if !ed.active {
     return
   }
   // Test play mode
@@ -109,9 +109,8 @@ pub fn update_editor(game : @types.Game) -> Unit {
     }
   }
   // Place tile/entity with Enter or Space
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-    @raylib.KeySpace,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     if ed.mode == 0 {
       // Place tile
       let tile = @types.tile_from_index(ed.selected_tile)
@@ -125,15 +124,12 @@ pub fn update_editor(game : @types.Game) -> Unit {
       let eid = ed.entities.length()
       // Remove any entity at this position first
       remove_entity_at(ed, ed.cursor_x, ed.cursor_y)
-      ed.entities.push(
-        @types.Entity::new(eid, kind, ed.cursor_x, ed.cursor_y),
-      )
+      ed.entities.push(@types.Entity::new(eid, kind, ed.cursor_x, ed.cursor_y))
     }
   }
   // Delete tile/entity with D or Backspace
-  if @raylib.is_key_pressed(@raylib.KeyD) || @raylib.is_key_pressed(
-    @raylib.KeyBackspace,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyD) ||
+    @raylib.is_key_pressed(@raylib.KeyBackspace) {
     if ed.mode == 0 {
       let idx = ed.cursor_y * ed.grid_w + ed.cursor_x
       if idx >= 0 && idx < ed.tiles.length() {
@@ -190,7 +186,7 @@ fn test_play_editor_level(game : @types.Game) -> Unit {
       has_player = true
     }
   }
-  if !(has_player) {
+  if !has_player {
     game.message_text = "Place a Player (P) first!"
     game.message_timer = @types.message_duration
     return
@@ -242,7 +238,7 @@ fn test_play_editor_level(game : @types.Game) -> Unit {
 /// Draw the editor UI
 pub fn draw_editor(game : @types.Game) -> Unit {
   let ed = game.editor
-  if !(ed.active) {
+  if !ed.active {
     return
   }
   @raylib.clear_background(dark_gray)
@@ -254,11 +250,7 @@ pub fn draw_editor(game : @types.Game) -> Unit {
       let px = @types.grid_offset_x + x * @types.tile_size
       let py = @types.grid_offset_y + y * @types.tile_size
       let idx = y * ed.grid_w + x
-      let tile = if idx < ed.tiles.length() {
-        ed.tiles[idx]
-      } else {
-        Empty
-      }
+      let tile = if idx < ed.tiles.length() { ed.tiles[idx] } else { Empty }
       let color = match tile {
         Wall => wall_color
         Exit => @types.color_exit
@@ -278,7 +270,11 @@ pub fn draw_editor(game : @types.Game) -> Unit {
       }
       @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, color)
       @raylib.draw_rectangle_lines(
-        px, py, @types.tile_size, @types.tile_size, @raylib.Color::new(50, 50, 50, 100),
+        px,
+        py,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(50, 50, 50, 100),
       )
     }
   }
@@ -315,7 +311,11 @@ pub fn draw_editor(game : @types.Game) -> Unit {
     cpx, cpy, @types.tile_size, @types.tile_size, cursor_color,
   )
   @raylib.draw_rectangle_lines(
-    cpx + 1, cpy + 1, @types.tile_size - 2, @types.tile_size - 2, cursor_color,
+    cpx + 1,
+    cpy + 1,
+    @types.tile_size - 2,
+    @types.tile_size - 2,
+    cursor_color,
   )
   // Draw panel
   draw_editor_panel(ed)
@@ -355,9 +355,8 @@ fn draw_editor_panel(ed : @types.EditorState) -> Unit {
   if ed.mode == 0 {
     // Show tile types
     let tile_names = [
-      "Empty", "Wall", "Exit", "Spike", "Ice", "Portal 1", "Portal 2",
-      "Switch", "Gate", "Crumble", "Conveyor", "Pressure", "Mirror",
-      "Grav Well", "Lava",
+      "Empty", "Wall", "Exit", "Spike", "Ice", "Portal 1", "Portal 2", "Switch",
+      "Gate", "Crumble", "Conveyor", "Pressure", "Mirror", "Grav Well", "Lava",
     ]
     for i in 0..<tile_names.length() {
       let ty = panel_y + 40 + i * 22
@@ -382,9 +381,7 @@ fn draw_editor_panel(ed : @types.EditorState) -> Unit {
         light_gray
       }
       let prefix = if selected { "> " } else { "  " }
-      @draw.draw_text(
-        prefix + entity_names[i], panel_x + 10, ty, 14, color,
-      )
+      @draw.draw_text(prefix + entity_names[i], panel_x + 10, ty, 14, color)
     }
   }
   // Show gravity direction
@@ -394,13 +391,25 @@ fn draw_editor_panel(ed : @types.EditorState) -> Unit {
     Left => "Gravity: LEFT"
     Right => "Gravity: RIGHT"
   }
-  @draw.draw_text(grav_text, panel_x + 10, panel_y + panel_h - 60, 16, light_gray)
+  @draw.draw_text(
+    grav_text,
+    panel_x + 10,
+    panel_y + panel_h - 60,
+    16,
+    light_gray,
+  )
   // Show cursor position
   let pos_text = "Cursor: " +
     ed.cursor_x.to_string() +
     "," +
     ed.cursor_y.to_string()
-  @draw.draw_text(pos_text, panel_x + 10, panel_y + panel_h - 35, 14, light_gray)
+  @draw.draw_text(
+    pos_text,
+    panel_x + 10,
+    panel_y + panel_h - 35,
+    14,
+    light_gray,
+  )
 }
 
 ///|
@@ -424,11 +433,7 @@ pub fn encode_editor_level(ed : @types.EditorState) -> String {
   for y in 0..<ed.grid_h {
     for x in 0..<ed.grid_w {
       let idx = y * ed.grid_w + x
-      let tile = if idx < ed.tiles.length() {
-        ed.tiles[idx]
-      } else {
-        Empty
-      }
+      let tile = if idx < ed.tiles.length() { ed.tiles[idx] } else { Empty }
       // Check for entity at this position
       let mut entity_ch : Char = '\u0000'
       for i in 0..<ed.entities.length() {

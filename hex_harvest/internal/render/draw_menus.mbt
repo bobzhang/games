@@ -3,11 +3,7 @@
 fn draw_title(game : @types.Game) -> Unit {
   // Background gradient
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_title_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg,
   )
   // Decorative hex pattern
   let size : Float = 60.0
@@ -33,7 +29,13 @@ fn draw_title(game : @types.Game) -> Unit {
   // Subtitle
   let sub = "A Farming Puzzle"
   let sw = @draw.measure_text(sub, 24)
-  @draw.draw_text(sub, (@types.screen_width - sw) / 2, 260, 24, @raylib.Color::new(200, 220, 180, 255))
+  @draw.draw_text(
+    sub,
+    (@types.screen_width - sw) / 2,
+    260,
+    24,
+    @raylib.Color::new(200, 220, 180, 255),
+  )
   // Menu items
   let items = ["Play", "Quit"]
   for i in 0..<items.length() {
@@ -61,7 +63,11 @@ fn draw_title(game : @types.Game) -> Unit {
   // Instructions
   @draw.draw_text(
     "Up/Down to select, Enter to confirm",
-    (@types.screen_width - @draw.measure_text("Up/Down to select, Enter to confirm", 16)) / 2,
+    (
+      @types.screen_width -
+      @draw.measure_text("Up/Down to select, Enter to confirm", 16)
+    ) /
+    2,
     560,
     16,
     @raylib.Color::new(140, 160, 130, 180),
@@ -72,16 +78,18 @@ fn draw_title(game : @types.Game) -> Unit {
 /// Draw world select screen
 fn draw_world_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
   )
   // Title
   let title = "Select World"
   let tw = @draw.measure_text(title, 40)
-  @draw.draw_text(title, (@types.screen_width - tw) / 2, 40, 40, @types.color_dark_text)
+  @draw.draw_text(
+    title,
+    (@types.screen_width - tw) / 2,
+    40,
+    40,
+    @types.color_dark_text,
+  )
   // World cards
   let worlds = ["Valley", "Hills", "Peaks"]
   let card_w = 300
@@ -112,7 +120,13 @@ fn draw_world_select(game : @types.Game) -> Unit {
     }
     // World name
     let name_w = @draw.measure_text(worlds[i], 32)
-    @draw.draw_text(worlds[i], x + (card_w - name_w) / 2, y + 20, 32, @types.color_white)
+    @draw.draw_text(
+      worlds[i],
+      x + (card_w - name_w) / 2,
+      y + 20,
+      32,
+      @types.color_white,
+    )
     // Stars count for this world
     let mut total_stars = 0
     for l in 0..<@types.levels_per_world {
@@ -121,25 +135,49 @@ fn draw_world_select(game : @types.Game) -> Unit {
         None => ()
       }
     }
-    let stars_text = total_stars.to_string() + "/" + (@types.levels_per_world * 3).to_string() + " Stars"
+    let stars_text = total_stars.to_string() +
+      "/" +
+      (@types.levels_per_world * 3).to_string() +
+      " Stars"
     let stars_w = @draw.measure_text(stars_text, 18)
-    @draw.draw_text(stars_text, x + (card_w - stars_w) / 2, y + 70, 18, @types.color_star_gold)
+    @draw.draw_text(
+      stars_text,
+      x + (card_w - stars_w) / 2,
+      y + 70,
+      18,
+      @types.color_star_gold,
+    )
     // Description
     let desc = match i {
       0 => "Flat terrain, basic\nwater flow"
       1 => "Height variation,\nchannel puzzles"
       _ => "Complex terrain,\nall mechanics"
     }
-    @draw.draw_text(desc, x + 20, y + 110, 16, @raylib.Color::new(240, 230, 210, 200))
+    @draw.draw_text(
+      desc,
+      x + 20,
+      y + 110,
+      16,
+      @raylib.Color::new(240, 230, 210, 200),
+    )
     // Draw decorative hex
     let hex_cx = Float::from_int(x + card_w / 2)
     let hex_cy = Float::from_int(y + card_h - 25)
-    draw_hex_outline(hex_cx, hex_cy, 18.0, @raylib.Color::new(255, 255, 255, 80))
+    draw_hex_outline(
+      hex_cx,
+      hex_cy,
+      18.0,
+      @raylib.Color::new(255, 255, 255, 80),
+    )
   }
   // Back button
   @draw.draw_text(
     "Esc: Back | Left/Right: Select | Enter: Confirm",
-    (@types.screen_width - @draw.measure_text("Esc: Back | Left/Right: Select | Enter: Confirm", 16)) / 2,
+    (
+      @types.screen_width -
+      @draw.measure_text("Esc: Back | Left/Right: Select | Enter: Confirm", 16)
+    ) /
+    2,
     400,
     16,
     @raylib.Color::new(120, 110, 90, 200),
@@ -150,17 +188,19 @@ fn draw_world_select(game : @types.Game) -> Unit {
 /// Draw level select screen
 fn draw_level_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
   )
   // Title
   let world = @types.world_name(game.world_index)
   let title = world + " - Select Level"
   let tw = @draw.measure_text(title, 36)
-  @draw.draw_text(title, (@types.screen_width - tw) / 2, 30, 36, @types.color_dark_text)
+  @draw.draw_text(
+    title,
+    (@types.screen_width - tw) / 2,
+    30,
+    36,
+    @types.color_dark_text,
+  )
   // Level grid (4x2)
   let cell_w = 200
   let cell_h = 120
@@ -208,9 +248,15 @@ fn draw_level_select(game : @types.Game) -> Unit {
         }
         // Score text
         let score_text = score.yield_collected.to_string() + " yield"
-        @draw.draw_text(score_text, x + 10, y + cell_h - 28, 14, @raylib.Color::new(100, 90, 70, 200))
+        @draw.draw_text(
+          score_text,
+          x + 10,
+          y + cell_h - 28,
+          14,
+          @raylib.Color::new(100, 90, 70, 200),
+        )
       }
-      None => {
+      None =>
         // Show empty stars
         for s in 0..<3 {
           let sx = x + 10 + s * 30
@@ -222,13 +268,16 @@ fn draw_level_select(game : @types.Game) -> Unit {
             @types.color_star_empty,
           )
         }
-      }
     }
   }
   // Navigation help
   @draw.draw_text(
     "Arrow keys: Navigate | Enter: Play | Esc: Back",
-    (@types.screen_width - @draw.measure_text("Arrow keys: Navigate | Enter: Play | Esc: Back", 16)) / 2,
+    (
+      @types.screen_width -
+      @draw.measure_text("Arrow keys: Navigate | Enter: Play | Esc: Back", 16)
+    ) /
+    2,
     380,
     16,
     @raylib.Color::new(120, 110, 90, 200),
@@ -239,21 +288,31 @@ fn draw_level_select(game : @types.Game) -> Unit {
 /// Draw results screen
 fn draw_results(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
+  )
+  // Overlay
+  @raylib.draw_rectangle(
     0,
     0,
     @types.screen_width,
     @types.screen_height,
-    @types.color_bg,
+    @raylib.Color::new(0, 0, 0, 80),
   )
-  // Overlay
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @raylib.Color::new(0, 0, 0, 80))
   // Results panel
   let panel_w = 500
   let panel_h = 400
   let panel_x = (@types.screen_width - panel_w) / 2
   let panel_y = (@types.screen_height - panel_h) / 2
-  @raylib.draw_rectangle(panel_x, panel_y, panel_w, panel_h, @types.color_panel_bg)
-  @raylib.draw_rectangle_lines(panel_x, panel_y, panel_w, panel_h, @raylib.Color::new(180, 170, 140, 255))
+  @raylib.draw_rectangle(
+    panel_x, panel_y, panel_w, panel_h, @types.color_panel_bg,
+  )
+  @raylib.draw_rectangle_lines(
+    panel_x,
+    panel_y,
+    panel_w,
+    panel_h,
+    @raylib.Color::new(180, 170, 140, 255),
+  )
   // Title
   let completed = game.yield_collected >= game.level.target_yield
   let title = if completed { "Level Complete!" } else { "Out of Turns!" }
@@ -263,12 +322,21 @@ fn draw_results(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 80, 80, 255)
   }
   let tw = @draw.measure_text(title, 36)
-  @draw.draw_text(title, panel_x + (panel_w - tw) / 2, panel_y + 20, 36, title_color)
+  @draw.draw_text(
+    title,
+    panel_x + (panel_w - tw) / 2,
+    panel_y + 20,
+    36,
+    title_color,
+  )
   // Stats
   let stat_x = panel_x + 40
   let mut stat_y = panel_y + 80
   @draw.draw_text(
-    "Yield: " + game.yield_collected.to_string() + " / " + game.level.target_yield.to_string(),
+    "Yield: " +
+    game.yield_collected.to_string() +
+    " / " +
+    game.level.target_yield.to_string(),
     stat_x,
     stat_y,
     22,
@@ -276,7 +344,10 @@ fn draw_results(game : @types.Game) -> Unit {
   )
   stat_y += 35
   @draw.draw_text(
-    "Turns: " + game.turn.to_string() + " / " + game.level.turn_budget.to_string(),
+    "Turns: " +
+    game.turn.to_string() +
+    " / " +
+    game.level.turn_budget.to_string(),
     stat_x,
     stat_y,
     22,
@@ -285,7 +356,10 @@ fn draw_results(game : @types.Game) -> Unit {
   stat_y += 35
   if game.level.goals.length() > 0 {
     @draw.draw_text(
-      "Goals: " + game.goals_collected.to_string() + " / " + game.level.goals.length().to_string(),
+      "Goals: " +
+      game.goals_collected.to_string() +
+      " / " +
+      game.level.goals.length().to_string(),
       stat_x,
       stat_y,
       22,
@@ -311,11 +385,31 @@ fn draw_results(game : @types.Game) -> Unit {
     stat_y += 60
     // Star explanations
     let star1 = "* Reach target yield"
-    let star2 = "** Finish within " + game.level.par_turns.to_string() + " turns"
+    let star2 = "** Finish within " +
+      game.level.par_turns.to_string() +
+      " turns"
     let star3 = "*** Collect all bonus goals"
-    @draw.draw_text(star1, stat_x, stat_y, 14, @raylib.Color::new(200, 190, 170, 200))
-    @draw.draw_text(star2, stat_x, stat_y + 18, 14, @raylib.Color::new(200, 190, 170, 200))
-    @draw.draw_text(star3, stat_x, stat_y + 36, 14, @raylib.Color::new(200, 190, 170, 200))
+    @draw.draw_text(
+      star1,
+      stat_x,
+      stat_y,
+      14,
+      @raylib.Color::new(200, 190, 170, 200),
+    )
+    @draw.draw_text(
+      star2,
+      stat_x,
+      stat_y + 18,
+      14,
+      @raylib.Color::new(200, 190, 170, 200),
+    )
+    @draw.draw_text(
+      star3,
+      stat_x,
+      stat_y + 36,
+      14,
+      @raylib.Color::new(200, 190, 170, 200),
+    )
   }
   // Navigation
   let nav_text = "Enter: Continue | R: Retry"

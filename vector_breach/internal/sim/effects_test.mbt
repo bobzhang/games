@@ -6,8 +6,8 @@
 fn make_test_battle(
   width : Int,
   height : Int,
-  tiles~ : Array[(Int, Int, @types.TileKind)] = [],
-  hazards~ : Array[(Int, Int, @types.HazardKind)] = [],
+  tiles? : Array[(Int, Int, @types.TileKind)] = [],
+  hazards? : Array[(Int, Int, @types.HazardKind)] = [],
 ) -> @types.BattleState {
   let battle = @types.new_battle(DefendGrid(5))
   // Replace the grid with a custom-sized one
@@ -23,12 +23,7 @@ fn make_test_battle(
     let tile = grid.get(x, y)
     grid.set(x, y, { ..tile, hazard: haz })
   }
-  {
-    ..battle,
-    grid,
-    units: [],
-    turn_log: [],
-  }
+  { ..battle, grid, units: [], turn_log: [] }
 }
 
 ///|
@@ -38,13 +33,13 @@ fn add_unit(
   team : @types.UnitTeam,
   x : Int,
   y : Int,
-  hp~ : Int = 5,
-  shield~ : Int = 0,
-  heat~ : Int = 0,
-  max_heat~ : Int = 3,
-  stunned~ : Bool = false,
-  mech_class~ : @types.MechClass = Vanguard,
-  enemy_type~ : @types.EnemyType = Rammer,
+  hp? : Int = 5,
+  shield? : Int = 0,
+  heat? : Int = 0,
+  max_heat? : Int = 3,
+  stunned? : Bool = false,
+  mech_class? : @types.MechClass = Vanguard,
+  enemy_type? : @types.EnemyType = Rammer,
 ) -> Int {
   let id = battle.units.length()
   let u : @types.CombatUnit = {
@@ -70,11 +65,7 @@ fn add_unit(
   }
   battle.units.push(u)
   if battle.grid.in_bounds(x, y) {
-    battle.grid.set(
-      x,
-      y,
-      { ..battle.grid.get(x, y), occupied_by: id },
-    )
+    battle.grid.set(x, y, { ..battle.grid.get(x, y), occupied_by: id })
   }
   id
 }
@@ -82,11 +73,7 @@ fn add_unit(
 ///|
 test "push into wall deals collision damage" {
   // Unit at (1,0), wall at (0,0), push west
-  let battle = make_test_battle(
-    4,
-    4,
-    tiles=[(0, 0, Wall)],
-  )
+  let battle = make_test_battle(4, 4, tiles=[(0, 0, Wall)])
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
   try_push(battle, uid, -1, 0, 1)
   // Unit should still be at (1,0) and took 1 collision damage
@@ -107,11 +94,7 @@ test "push into map edge deals collision damage" {
 
 ///|
 test "push into chasm kills unit" {
-  let battle = make_test_battle(
-    4,
-    4,
-    tiles=[(2, 0, Chasm)],
-  )
+  let battle = make_test_battle(4, 4, tiles=[(2, 0, Chasm)])
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
   try_push(battle, uid, 1, 0, 1)
   // Unit fell into chasm: hp=0, inactive
@@ -150,11 +133,11 @@ test "push distance 2 moves unit 2 tiles" {
 ///|
 test "ice slide continues until wall" {
   // Ice at (2,0), (3,0). Wall at (4,0). Unit pushed east onto ice from (1,0).
-  let battle = make_test_battle(
-    6,
-    4,
-    tiles=[(2, 0, Ice), (3, 0, Ice), (4, 0, Wall)],
-  )
+  let battle = make_test_battle(6, 4, tiles=[
+    (2, 0, Ice),
+    (3, 0, Ice),
+    (4, 0, Wall),
+  ])
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
   try_push(battle, uid, 1, 0, 1)
   // Unit slides on ice at (2,0), continues, slides on ice at (3,0),
@@ -166,11 +149,7 @@ test "ice slide continues until wall" {
 ///|
 test "ice slide to open space stops at edge of ice" {
   // Ice at (2,0), floor at (3,0). Unit pushed east from (1,0).
-  let battle = make_test_battle(
-    6,
-    4,
-    tiles=[(2, 0, Ice)],
-  )
+  let battle = make_test_battle(6, 4, tiles=[(2, 0, Ice)])
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
   try_push(battle, uid, 1, 0, 1)
   // Lands on ice at (2,0), slides one more step to (3,0) which is floor
@@ -231,7 +210,13 @@ test "overheat stuns and resets heat" {
 test "stun prevents action via player command" {
   let battle = make_test_battle(8, 8)
   let uid = add_unit(
-    battle, Player, 1, 1, hp=5, stunned=true, mech_class=Vanguard,
+    battle,
+    Player,
+    1,
+    1,
+    hp=5,
+    stunned=true,
+    mech_class=Vanguard,
   )
   let original_x = battle.units[uid].x
   let original_y = battle.units[uid].y
@@ -292,11 +277,7 @@ test "unit_at finds occupant" {
 
 ///|
 test "is_walkable checks floors and occupancy" {
-  let battle = make_test_battle(
-    4,
-    4,
-    tiles=[(1, 0, Wall), (2, 0, Chasm)],
-  )
+  let battle = make_test_battle(4, 4, tiles=[(1, 0, Wall), (2, 0, Chasm)])
   let _ = add_unit(battle, Enemy, 0, 0, hp=5)
   inspect(is_walkable(battle, 0, 0), content="false") // occupied
   inspect(is_walkable(battle, 1, 0), content="false") // wall
@@ -336,11 +317,7 @@ test "simulate_turn advances turn counter" {
 
 ///|
 test "hazard damage applies to units on fire" {
-  let battle = make_test_battle(
-    4,
-    4,
-    hazards=[(1, 1, Fire)],
-  )
+  let battle = make_test_battle(4, 4, hazards=[(1, 1, Fire)])
   let uid = add_unit(battle, Enemy, 1, 1, hp=5)
   let _ = simulate_turn(battle, [])
   // Unit should have taken 1 fire hazard damage

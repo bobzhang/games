@@ -18,7 +18,7 @@ pub fn step(world : @types.World, dt : Float) -> Unit {
 ///|
 fn apply_gravity(world : @types.World, dt : Float) -> Unit {
   for body in world.bodies {
-    if body.active && !(body.broken) && !(body.grounded) {
+    if body.active && !body.broken && !body.grounded {
       body.vy = body.vy + world.gravity * dt
     }
   }
@@ -30,7 +30,7 @@ fn apply_wind(world : @types.World, dt : Float) -> Unit {
     return
   }
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       let area = body.height * 0.01
       let force = world.wind_force * area / body.mass
       body.vx = body.vx + force * dt
@@ -50,7 +50,7 @@ fn apply_earthquake(world : @types.World, dt : Float) -> Unit {
     return
   }
   for body in world.bodies {
-    if body.active && !(body.broken) && body.grounded {
+    if body.active && !body.broken && body.grounded {
       let shake_x = @types.randf(-1.0, 1.0) * world.quake_intensity * dt
       let shake_y = @types.randf(-0.5, 0.5) * world.quake_intensity * dt
       body.vx = body.vx + shake_x
@@ -63,7 +63,7 @@ fn apply_earthquake(world : @types.World, dt : Float) -> Unit {
 ///|
 fn integrate(world : @types.World, dt : Float) -> Unit {
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       body.x = body.x + body.vx * dt
       body.y = body.y + body.vy * dt
       body.angle = body.angle + body.angular_vel * dt
@@ -74,7 +74,7 @@ fn integrate(world : @types.World, dt : Float) -> Unit {
 ///|
 fn resolve_ground(world : @types.World) -> Unit {
   for body in world.bodies {
-    if !(body.active) || body.broken {
+    if !body.active || body.broken {
       continue
     }
     let half_h = body.height * 0.5
@@ -95,7 +95,8 @@ fn resolve_ground(world : @types.World) -> Unit {
           body.grounded = true
         }
         // Friction slows horizontal motion
-        body.vx = body.vx * (1.0 - @types.friction_coeff * world.friction_mult * 0.5)
+        body.vx = body.vx *
+          (1.0 - @types.friction_coeff * world.friction_mult * 0.5)
         body.angular_vel = body.angular_vel * 0.8
       }
       // Add stress from impact
@@ -125,12 +126,12 @@ fn resolve_collisions(world : @types.World) -> Unit {
   let n = world.bodies.length()
   for i in 0..<n {
     let a = world.bodies[i]
-    if !(a.active) || a.broken {
+    if !a.active || a.broken {
       continue
     }
     for j = i + 1; j < n; j = j + 1 {
       let b = world.bodies[j]
-      if !(b.active) || b.broken {
+      if !b.active || b.broken {
         continue
       }
       resolve_pair(a, b, world.friction_mult)
@@ -139,7 +140,11 @@ fn resolve_collisions(world : @types.World) -> Unit {
 }
 
 ///|
-fn resolve_pair(a : @types.Body, b : @types.Body, friction_mult : Float) -> Unit {
+fn resolve_pair(
+  a : @types.Body,
+  b : @types.Body,
+  friction_mult : Float,
+) -> Unit {
   // Use OBB approximation: compute axis-aligned bounding boxes of rotated rects
   let (a_half_w, a_half_h) = obb_half_extents(a)
   let (b_half_w, b_half_h) = obb_half_extents(b)
@@ -228,14 +233,14 @@ fn obb_half_extents(body : @types.Body) -> (Float, Float) {
 ///|
 fn enforce_joints(world : @types.World, dt : Float) -> Unit {
   for joint in world.joints {
-    if !(joint.active) || joint.broken {
+    if !joint.active || joint.broken {
       continue
     }
     let body_a = find_body(world, joint.body_a)
     let body_b = find_body(world, joint.body_b)
     match (body_a, body_b) {
       (Some(a), Some(b)) => {
-        if !(a.active) || a.broken || !(b.active) || b.broken {
+        if !a.active || a.broken || !b.active || b.broken {
           joint.active = false
           continue
         }
@@ -279,9 +284,7 @@ fn enforce_joints(world : @types.World, dt : Float) -> Unit {
         let force_mag = dist * stiffness * @types.maxf(a.mass, b.mass)
         joint.stress = joint.stress + force_mag * dt
       }
-      _ => {
-        joint.active = false
-      }
+      _ => joint.active = false
     }
   }
 }
@@ -290,7 +293,7 @@ fn enforce_joints(world : @types.World, dt : Float) -> Unit {
 fn compute_stress(world : @types.World) -> Unit {
   // Each frame, decay existing body stress slightly (so transient forces fade)
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       body.stress = body.stress * 0.99
     }
   }
@@ -298,12 +301,12 @@ fn compute_stress(world : @types.World) -> Unit {
   let n = world.bodies.length()
   for i in 0..<n {
     let a = world.bodies[i]
-    if !(a.active) || a.broken {
+    if !a.active || a.broken {
       continue
     }
     for j = i + 1; j < n; j = j + 1 {
       let b = world.bodies[j]
-      if !(b.active) || b.broken {
+      if !b.active || b.broken {
         continue
       }
       // Check if they overlap horizontally and one is above the other
@@ -327,7 +330,7 @@ fn compute_stress(world : @types.World) -> Unit {
 fn check_breaks(world : @types.World) -> Unit {
   // Check joints
   for joint in world.joints {
-    if joint.active && !(joint.broken) {
+    if joint.active && !joint.broken {
       if joint.stress > joint.strength {
         joint.broken = true
         joint.active = false
@@ -336,7 +339,7 @@ fn check_breaks(world : @types.World) -> Unit {
   }
   // Check bodies
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       let threshold = @types.material_strength(body.material)
       if body.stress > threshold {
         body.broken = true
@@ -352,7 +355,7 @@ fn check_breaks(world : @types.World) -> Unit {
 ///|
 fn apply_damping(world : @types.World) -> Unit {
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       body.vx = body.vx * @types.damping
       body.vy = body.vy * @types.damping
       body.angular_vel = body.angular_vel * @types.angular_damping
@@ -372,8 +375,12 @@ fn apply_damping(world : @types.World) -> Unit {
 
 ///|
 /// Fires a projectile impact at a specific body.
-pub fn apply_impact(body : @types.Body, force_x : Float, force_y : Float) -> Unit {
-  if !(body.active) || body.broken {
+pub fn apply_impact(
+  body : @types.Body,
+  force_x : Float,
+  force_y : Float,
+) -> Unit {
+  if !body.active || body.broken {
     return
   }
   body.vx = body.vx + force_x / body.mass
@@ -399,7 +406,7 @@ pub fn stop_wind(world : @types.World) -> Unit {
 pub fn start_earthquake(
   world : @types.World,
   duration : Float,
-  intensity : Float
+  intensity : Float,
 ) -> Unit {
   world.quake_timer = duration
   world.quake_intensity = intensity
@@ -411,7 +418,7 @@ pub fn fire_impact(world : @types.World, force : Float) -> Unit {
   let mut best_x : Float = -1.0
   let mut best_idx : Int = -1
   for i, body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       // Find the tallest body (lowest y means highest)
       if best_idx < 0 || body.y < world.bodies[best_idx].y {
         best_x = body.x
@@ -430,7 +437,7 @@ pub fn fire_impact(world : @types.World, force : Float) -> Unit {
 pub fn measure_tower_height(world : @types.World) -> Float {
   let mut min_y = world.ground_y
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       let (_, hh) = obb_half_extents(body)
       let top = body.y - hh
       if top < min_y {
@@ -446,7 +453,7 @@ pub fn measure_tower_height(world : @types.World) -> Float {
 pub fn count_active_bodies(world : @types.World) -> Int {
   let mut count = 0
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       count = count + 1
     }
   }
@@ -469,7 +476,7 @@ pub fn count_broken_bodies(world : @types.World) -> Int {
 /// Checks if the tower is settled (all velocities near zero).
 pub fn is_settled(world : @types.World) -> Bool {
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       if @types.absf(body.vx) > 2.0 || @types.absf(body.vy) > 2.0 {
         return false
       }
@@ -514,7 +521,7 @@ pub fn add_body(
   material : @types.Material,
   x : Float,
   y : Float,
-  angle : Float
+  angle : Float,
 ) -> Int {
   let id = world.bodies.length()
   let body = @types.new_body(id, kind, material, x, y, angle)
@@ -528,7 +535,7 @@ pub fn auto_join(world : @types.World, new_id : Int) -> Unit {
   let new_body = world.bodies[new_id]
   let radius = @types.auto_joint_radius
   for body in world.bodies {
-    if body.id == new_id || !(body.active) || body.broken {
+    if body.id == new_id || !body.active || body.broken {
       continue
     }
     let dx = new_body.x - body.x
@@ -570,11 +577,15 @@ pub fn find_body(world : @types.World, id : Int) -> @types.Body? {
 
 ///|
 /// Finds the body closest to a point (for clicking).
-pub fn find_body_at(world : @types.World, px : Float, py : Float) -> @types.Body? {
+pub fn find_body_at(
+  world : @types.World,
+  px : Float,
+  py : Float,
+) -> @types.Body? {
   let mut best : @types.Body? = None
   let mut best_dist : Float = 999999.0
   for body in world.bodies {
-    if !(body.active) || body.broken {
+    if !body.active || body.broken {
       continue
     }
     let dx = px - body.x
@@ -614,7 +625,7 @@ fn sqrtf(v : Float) -> Float {
 pub fn local_to_world(
   body : @types.Body,
   lx : Float,
-  ly : Float
+  ly : Float,
 ) -> (Float, Float) {
   let c = cosf(body.angle)
   let s = sinf(body.angle)

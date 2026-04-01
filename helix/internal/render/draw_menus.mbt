@@ -78,13 +78,12 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       @types.color_text_dim
     }
     @raylib.draw_rectangle_lines_ex(
-      @raylib.Rectangle::new(
-        340.0,
-        Float::from_int(y),
-        600.0,
-        120.0,
-      ),
-      if selected { 3.0 } else { 1.0 },
+      @raylib.Rectangle::new(340.0, Float::from_int(y), 600.0, 120.0),
+      if selected {
+        3.0
+      } else {
+        1.0
+      },
       box_color,
     )
     if selected {
@@ -116,16 +115,12 @@ fn draw_tier_select(game : @types.Game) -> Unit {
         completed += 1
       }
     }
-    let progress = completed.to_string() + "/" + count.to_string() +
+    let progress = completed.to_string() +
+      "/" +
+      count.to_string() +
       " completed"
     let prw = @draw.measure_text(progress, 16)
-    @draw.draw_text(
-      progress,
-      640 - prw / 2,
-      y + 90,
-      16,
-      @types.color_text_dim,
-    )
+    @draw.draw_text(progress, 640 - prw / 2, y + 90, 16, @types.color_text_dim)
   }
   let nav = "Up/Down = Select | Enter = Confirm | Escape = Back"
   let nw = @draw.measure_text(nav, 16)
@@ -168,7 +163,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
         Float::from_int(cell_w),
         Float::from_int(cell_h),
       ),
-      if selected { 3.0 } else { 1.0 },
+      if selected {
+        3.0
+      } else {
+        1.0
+      },
       border,
     )
     if selected {
@@ -232,22 +231,21 @@ fn draw_results(game : @types.Game) -> Unit {
   let nw = @draw.measure_text(level.name, 28)
   @draw.draw_text(level.name, 640 - nw / 2, 170, 28, @types.color_text)
   // Steps
-  let step_text = "Steps: " + game.steps.to_string() + " (Par: " +
-    level.par_steps.to_string() + ")"
+  let step_text = "Steps: " +
+    game.steps.to_string() +
+    " (Par: " +
+    level.par_steps.to_string() +
+    ")"
   let stw = @draw.measure_text(step_text, 24)
   @draw.draw_text(step_text, 640 - stw / 2, 230, 24, @types.color_text)
   // Pickups
   if level.pickups_total > 0 {
-    let pickup_text = "Pickups: " + game.pickups_count.to_string() + "/" +
+    let pickup_text = "Pickups: " +
+      game.pickups_count.to_string() +
+      "/" +
       level.pickups_total.to_string()
     let ptw = @draw.measure_text(pickup_text, 24)
-    @draw.draw_text(
-      pickup_text,
-      640 - ptw / 2,
-      270,
-      24,
-      @types.color_pickup,
-    )
+    @draw.draw_text(pickup_text, 640 - ptw / 2, 270, 24, @types.color_pickup)
   }
   // Stars
   let stars = @types.calculate_stars(

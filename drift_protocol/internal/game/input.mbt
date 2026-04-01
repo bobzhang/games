@@ -77,13 +77,15 @@ pub fn process_title_input(game : @types.Game) -> Unit {
 ///|
 /// Process input on level select screen
 pub fn process_level_select_input(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyUp) || @raylib.is_key_pressed(@raylib.KeyW) {
+  if @raylib.is_key_pressed(@raylib.KeyUp) ||
+    @raylib.is_key_pressed(@raylib.KeyW) {
     game.menu_selection -= 1
     if game.menu_selection < 0 {
       game.menu_selection = @types.total_levels - 1
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyDown) || @raylib.is_key_pressed(@raylib.KeyS) {
+  if @raylib.is_key_pressed(@raylib.KeyDown) ||
+    @raylib.is_key_pressed(@raylib.KeyS) {
     game.menu_selection += 1
     if game.menu_selection >= @types.total_levels {
       game.menu_selection = 0
@@ -130,10 +132,12 @@ pub fn process_results_input(game : @types.Game) -> Unit {
 ///|
 /// Process hack minigame input
 pub fn process_hack_input(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyLeft) || @raylib.is_key_pressed(@raylib.KeyA) {
+  if @raylib.is_key_pressed(@raylib.KeyLeft) ||
+    @raylib.is_key_pressed(@raylib.KeyA) {
     @hacking.hack_input(game, 0)
   }
-  if @raylib.is_key_pressed(@raylib.KeyRight) || @raylib.is_key_pressed(@raylib.KeyD) {
+  if @raylib.is_key_pressed(@raylib.KeyRight) ||
+    @raylib.is_key_pressed(@raylib.KeyD) {
     @hacking.hack_input(game, 1)
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {

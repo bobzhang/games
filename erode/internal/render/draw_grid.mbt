@@ -5,7 +5,7 @@ fn draw_single_grid(
   oy : Int,
   label : String,
   preview : Array[Bool]?,
-  target : @types.Grid?
+  target : @types.Grid?,
 ) -> Unit {
   let cs = @types.cell_size
   let size = grid.size
@@ -93,7 +93,13 @@ fn draw_single_grid(
           let tgt_solid = tgt.cells[idx]
           if tgt_solid && !solid {
             // Over-eroded: target wants solid, we removed it
-            @raylib.draw_rectangle(x + 2, y + 2, cs - 4, cs - 4, @types.color_over_eroded)
+            @raylib.draw_rectangle(
+              x + 2,
+              y + 2,
+              cs - 4,
+              cs - 4,
+              @types.color_over_eroded,
+            )
           } else if !tgt_solid && solid {
             // Under-eroded: target wants empty, still solid
             @raylib.draw_rectangle(
@@ -110,7 +116,7 @@ fn draw_single_grid(
     }
   }
   // Draw grid lines
-  for i in 0..=size {
+  for i in 0..<=size {
     let x = ox + i * cs
     let y = oy + i * cs
     @raylib.draw_line(x, oy, x, oy + size * cs, @types.color_grid_line)
@@ -119,11 +125,7 @@ fn draw_single_grid(
 }
 
 ///|
-fn draw_target_grid(
-  target : @types.Grid,
-  ox : Int,
-  oy : Int
-) -> Unit {
+fn draw_target_grid(target : @types.Grid, ox : Int, oy : Int) -> Unit {
   let cs = @types.cell_size
   let size = target.size
   let label = "TARGET"
@@ -163,7 +165,7 @@ fn draw_target_grid(
       }
     }
   }
-  for i in 0..=size {
+  for i in 0..<=size {
     let x = ox + i * cs
     let y = oy + i * cs
     @raylib.draw_line(x, oy, x, oy + size * cs, @types.color_grid_line)
@@ -202,11 +204,7 @@ fn draw_playing(game : @types.Game) -> Unit {
     Some(game.target),
   )
   // Target grid
-  draw_target_grid(
-    game.target,
-    @types.grid_right_x,
-    @types.grid_top_y,
-  )
+  draw_target_grid(game.target, @types.grid_right_x, @types.grid_top_y)
   // Draw UI elements
   draw_force_palette(game)
   draw_match_info(game)

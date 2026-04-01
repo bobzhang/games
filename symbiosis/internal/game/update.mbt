@@ -66,10 +66,10 @@ fn update_level_select(game : @types.Game) -> Unit {
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
     if @levels.level_unlocked(
-      game.scores,
-      game.selected_world,
-      game.selected_level,
-    ) {
+        game.scores,
+        game.selected_world,
+        game.selected_level,
+      ) {
       start_level(game, game.selected_world, game.selected_level)
     }
   }
@@ -145,12 +145,11 @@ fn update_playing(game : @types.Game) -> Unit {
         game.screen = LevelSelect
       }
     }
-    Paused => {
+    Paused =>
       if @raylib.is_key_pressed(@raylib.KeyEscape) ||
         @raylib.is_key_pressed(@raylib.KeyP) {
         game.play_state = Active
       }
-    }
   }
 }
 

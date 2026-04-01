@@ -6,22 +6,15 @@ fn draw_title(game : @types.Game) -> Unit {
   // Rainbow beam animation across top
   let beam_y = h / 3 - 40
   let colors = [
-    @types.color_beam_red,
-    @types.color_beam_green,
-    @types.color_beam_blue,
-    @types.color_beam_yellow,
-    @types.color_beam_magenta,
-    @types.color_beam_cyan,
-    @types.color_beam_white,
+    @types.color_beam_red, @types.color_beam_green, @types.color_beam_blue, @types.color_beam_yellow,
+    @types.color_beam_magenta, @types.color_beam_cyan, @types.color_beam_white,
   ]
   for i in 0..<7 {
     let fi = Float::from_int(i)
     let offset = Float::from_double(@math.sin((time + fi * 0.5).to_double())) *
       30.0
     let y = beam_y + (fi * 8.0 + offset).to_int()
-    @raylib.draw_rectangle(
-      0, y, w, 3, fade_color(colors[i], 180),
-    )
+    @raylib.draw_rectangle(0, y, w, 3, fade_color(colors[i], 180))
   }
   // Title
   let title = "REFRACT"
@@ -55,7 +48,11 @@ fn draw_title(game : @types.Game) -> Unit {
   let hint = "Click to place - R to rotate - 1-6 select component"
   let hint_w = @draw.measure_text(hint, 14)
   @draw.draw_text(
-    hint, (w - hint_w) / 2, h * 2 / 3 + 50, 14, @types.color_text_dim,
+    hint,
+    (w - hint_w) / 2,
+    h * 2 / 3 + 50,
+    14,
+    @types.color_text_dim,
   )
 }
 
@@ -65,9 +62,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   let h = @types.screen_height
   let title = "SELECT TIER"
   let title_w = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title, (w - title_w) / 2, 60, 40, @types.color_text,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 60, 40, @types.color_text)
   let tiers : Array[(@types.Tier, String, @raylib.Color)] = [
     (Spectrum, "Mirrors & Filters", @types.color_beam_cyan),
     (Prisms, "Light Splitting", @types.color_beam_yellow),
@@ -87,7 +82,15 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(bx, by, box_w, box_h, bg)
     @raylib.draw_rectangle_lines(
-      bx, by, box_w, box_h, if selected { color } else { @types.color_cell_border },
+      bx,
+      by,
+      box_w,
+      box_h,
+      if selected {
+        color
+      } else {
+        @types.color_cell_border
+      },
     )
     // Tier name
     let name = @types.tier_name(tier)
@@ -96,7 +99,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     // Description
     let desc_w = @draw.measure_text(desc, 16)
     @draw.draw_text(
-      desc, bx + (box_w - desc_w) / 2, by + 60, 16, @types.color_text_dim,
+      desc,
+      bx + (box_w - desc_w) / 2,
+      by + 60,
+      16,
+      @types.color_text_dim,
     )
     // Stars earned for this tier
     let (start_idx, end_idx) = @levels.tier_level_range(tier)
@@ -109,7 +116,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let star_text = total_stars.to_string() + " / 24 Stars"
     let star_w = @draw.measure_text(star_text, 16)
     @draw.draw_text(
-      star_text, bx + (box_w - star_w) / 2, by + 100, 16, @types.color_star_filled,
+      star_text,
+      bx + (box_w - star_w) / 2,
+      by + 100,
+      16,
+      @types.color_star_filled,
     )
   }
   // Nav hint
@@ -153,15 +164,26 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(bx, by, box_w, box_h, bg)
     @raylib.draw_rectangle_lines(
-      bx, by, box_w, box_h,
-      if selected { @types.color_accent } else { @types.color_cell_border },
+      bx,
+      by,
+      box_w,
+      box_h,
+      if selected {
+        @types.color_accent
+      } else {
+        @types.color_cell_border
+      },
     )
     // Level name
     if level_idx < levels.length() {
       let name = levels[level_idx].name
       let name_w = @draw.measure_text(name, 18)
       @draw.draw_text(
-        name, bx + (box_w - name_w) / 2, by + 15, 18, @types.color_text,
+        name,
+        bx + (box_w - name_w) / 2,
+        by + 15,
+        18,
+        @types.color_text,
       )
     }
     // Stars
@@ -179,7 +201,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
     // Solved indicator
     if score.solved {
       @draw.draw_text(
-        "SOLVED", bx + box_w / 2 - 24, by + 80, 14, @types.color_success,
+        "SOLVED",
+        bx + box_w / 2 - 24,
+        by + 80,
+        14,
+        @types.color_success,
       )
     }
   }
@@ -212,7 +238,11 @@ fn draw_results(game : @types.Game) -> Unit {
   // Level name
   let name_w = @draw.measure_text(game.level_name, 24)
   @draw.draw_text(
-    game.level_name, (w - name_w) / 2, h / 4 + 20, 24, @types.color_text,
+    game.level_name,
+    (w - name_w) / 2,
+    h / 4 + 20,
+    24,
+    @types.color_text,
   )
   if score.solved {
     // Stars
@@ -234,12 +264,20 @@ fn draw_results(game : @types.Game) -> Unit {
       " par"
     let comp_w = @draw.measure_text(comp_text, 20)
     @draw.draw_text(
-      comp_text, (w - comp_w) / 2, h / 2 + 20, 20, @types.color_text,
+      comp_text,
+      (w - comp_w) / 2,
+      h / 2 + 20,
+      20,
+      @types.color_text,
     )
     let cross_text = "Beam crossings: " + score.beam_crossings.to_string()
     let cross_w = @draw.measure_text(cross_text, 20)
     @draw.draw_text(
-      cross_text, (w - cross_w) / 2, h / 2 + 50, 20, @types.color_text,
+      cross_text,
+      (w - cross_w) / 2,
+      h / 2 + 50,
+      20,
+      @types.color_text,
     )
   }
   // Navigation
@@ -250,7 +288,11 @@ fn draw_results(game : @types.Game) -> Unit {
   }
   let next_w = @draw.measure_text(next_text, 18)
   @draw.draw_text(
-    next_text, (w - next_w) / 2, h * 3 / 4, 18, @types.color_accent,
+    next_text,
+    (w - next_w) / 2,
+    h * 3 / 4,
+    18,
+    @types.color_accent,
   )
 }
 
@@ -259,7 +301,7 @@ fn draw_star_shape(
   cx : Int,
   cy : Int,
   size : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   // Simple 5-pointed star approximation using triangles
   let s = Float::from_int(size)
@@ -275,9 +317,7 @@ fn draw_star_shape(
       Float::from_double(@math.cos(angle.to_double())) * (s + point_len)
     let py = fcy +
       Float::from_double(@math.sin(angle.to_double())) * (s + point_len)
-    @raylib.draw_line(
-      cx, cy, px.to_int(), py.to_int(), color,
-    )
+    @raylib.draw_line(cx, cy, px.to_int(), py.to_int(), color)
   }
 }
 

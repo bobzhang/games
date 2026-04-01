@@ -183,7 +183,13 @@ fn draw_completion_banner(game : @types.Game) -> Unit {
 }
 
 ///|
-pub fn draw_stars(x : Int, y : Int, count : Int, max_stars : Int, size : Int) -> Unit {
+pub fn draw_stars(
+  x : Int,
+  y : Int,
+  count : Int,
+  max_stars : Int,
+  size : Int,
+) -> Unit {
   for i in 0..<max_stars {
     let sx = x + i * (size + 4)
     let color = if i < count {
@@ -209,18 +215,12 @@ fn draw_star_shape(x : Int, y : Int, size : Int, color : @raylib.Color) -> Unit 
       pi / 5.0 -
       pi / 2.0
     let angle3 : Float = Float::from_int(i + 1) * pi * 2.0 / 5.0 - pi / 2.0
-    let ox1 = cx +
-      outer * Float::from_double(@math.cos(angle1.to_double()))
-    let oy1 = cy +
-      outer * Float::from_double(@math.sin(angle1.to_double()))
-    let ix1 = cx +
-      inner * Float::from_double(@math.cos(angle2.to_double()))
-    let iy1 = cy +
-      inner * Float::from_double(@math.sin(angle2.to_double()))
-    let ox2 = cx +
-      outer * Float::from_double(@math.cos(angle3.to_double()))
-    let oy2 = cy +
-      outer * Float::from_double(@math.sin(angle3.to_double()))
+    let ox1 = cx + outer * Float::from_double(@math.cos(angle1.to_double()))
+    let oy1 = cy + outer * Float::from_double(@math.sin(angle1.to_double()))
+    let ix1 = cx + inner * Float::from_double(@math.cos(angle2.to_double()))
+    let iy1 = cy + inner * Float::from_double(@math.sin(angle2.to_double()))
+    let ox2 = cx + outer * Float::from_double(@math.cos(angle3.to_double()))
+    let oy2 = cy + outer * Float::from_double(@math.sin(angle3.to_double()))
     let v0 = @raylib.Vector2::new(cx, cy)
     let v1 = @raylib.Vector2::new(ox1, oy1)
     let v2 = @raylib.Vector2::new(ix1, iy1)

@@ -38,13 +38,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Subtitle
   let sub = "HEX PATTERN STRATEGY"
   let sub_w = @draw.measure_text(sub, 20)
-  @draw.draw_text(
-    sub,
-    (w - sub_w) / 2,
-    h / 4 + 60,
-    20,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(sub, (w - sub_w) / 2, h / 4 + 60, 20, @types.color_hud_text)
   // Decorative hex pattern
   let center_x = w / 2
   let center_y = h / 2 + 30
@@ -62,10 +56,7 @@ fn draw_title(game : @types.Game) -> Unit {
     )
   }
   @raylib.draw_poly(
-    @raylib.Vector2::new(
-      Float::from_int(center_x),
-      Float::from_int(center_y),
-    ),
+    @raylib.Vector2::new(Float::from_int(center_x), Float::from_int(center_y)),
     6,
     18.0,
     30.0,
@@ -74,7 +65,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Start prompt
   let start = "Press ENTER or SPACE to start"
   let start_w = @draw.measure_text(start, 22)
-  let blink = (((@types.sinf(time * 3.0) + 1.0) / 2.0) * 255.0).to_int()
+  let blink = ((@types.sinf(time * 3.0) + 1.0) / 2.0 * 255.0).to_int()
   @draw.draw_text(
     start,
     (w - start_w) / 2,
@@ -98,17 +89,10 @@ fn draw_mode_select(game : @types.Game) -> Unit {
   let h = @types.screen_height
   let title = "SELECT MODE"
   let title_w = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    100,
-    40,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 100, 40, @types.color_title)
   let modes = ["vs AI", "Puzzle Mode", "Local 2 Player"]
   let descs = [
-    "Play against the computer", "Solve board puzzles for points",
-    "Two players, same device",
+    "Play against the computer", "Solve board puzzles for points", "Two players, same device",
   ]
   for i in 0..<modes.length() {
     let y = 220 + i * 120
@@ -154,17 +138,10 @@ fn draw_difficulty_select(game : @types.Game) -> Unit {
   let h = @types.screen_height
   let title = "SELECT DIFFICULTY"
   let title_w = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    100,
-    40,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 100, 40, @types.color_title)
   let diffs = ["Easy", "Normal", "Hard"]
   let descs = [
-    "Random moves - learn the game", "Evaluates immediate score",
-    "Looks ahead 2 turns (minimax)",
+    "Random moves - learn the game", "Evaluates immediate score", "Looks ahead 2 turns (minimax)",
   ]
   for i in 0..<diffs.length() {
     let y = 220 + i * 120
@@ -210,13 +187,7 @@ fn draw_puzzle_select(game : @types.Game) -> Unit {
   let h = @types.screen_height
   let title = "SELECT PUZZLE"
   let title_w = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    60,
-    40,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 60, 40, @types.color_title)
   // Draw puzzle grid (4x5)
   let cols = 5
   let cell_w = 180
@@ -252,7 +223,11 @@ fn draw_puzzle_select(game : @types.Game) -> Unit {
       x + (cell_w - num_w) / 2,
       y + 14,
       28,
-      if is_selected { @types.color_accent } else { @types.color_hud_text },
+      if is_selected {
+        @types.color_accent
+      } else {
+        @types.color_hud_text
+      },
     )
     if i < game.puzzle_levels.length() {
       let puzzle = game.puzzle_levels[i]
@@ -293,23 +268,11 @@ fn draw_results(game : @types.Game) -> Unit {
   // Title
   let title = "GAME OVER"
   let title_w = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    py + 20,
-    40,
-    @types.color_accent,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, py + 20, 40, @types.color_accent)
   // Winner
   let winner_text = game.result_message
   let ww = @draw.measure_text(winner_text, 28)
-  @draw.draw_text(
-    winner_text,
-    (w - ww) / 2,
-    py + 80,
-    28,
-    @types.color_title,
-  )
+  @draw.draw_text(winner_text, (w - ww) / 2, py + 80, 28, @types.color_title)
   // Scores
   @draw.draw_text(
     "Black: " + game.black_score.to_string() + " points",

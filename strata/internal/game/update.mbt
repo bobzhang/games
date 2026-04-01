@@ -53,8 +53,14 @@ fn update_level_select(game : @types.Game) -> Unit {
   let count = range.1 - range.0 + 1
   // Number key selection
   let keys = [
-    @raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree, @raylib.KeyFour,
-    @raylib.KeyFive, @raylib.KeySix, @raylib.KeySeven, @raylib.KeyEight,
+    @raylib.KeyOne,
+    @raylib.KeyTwo,
+    @raylib.KeyThree,
+    @raylib.KeyFour,
+    @raylib.KeyFive,
+    @raylib.KeySix,
+    @raylib.KeySeven,
+    @raylib.KeyEight,
     @raylib.KeyNine,
   ]
   for i in 0..<@types.mini(count, keys.length()) {
@@ -152,7 +158,6 @@ fn update_playing(game : @types.Game) -> Unit {
       // Re-validate
       let level = @levels.get_level(game.current_level)
       let _ = @geology.validate_all(level.clues, game.slots)
-
     }
     return
   }
@@ -177,7 +182,6 @@ fn update_playing(game : @types.Game) -> Unit {
   // Auto-validate clues after each change
   let level = @levels.get_level(game.current_level)
   let _ = @geology.validate_all(level.clues, game.slots)
-
 }
 
 ///|
@@ -188,8 +192,14 @@ fn handle_tray_keys(game : @types.Game) -> Unit {
     return
   }
   let keys = [
-    @raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree, @raylib.KeyFour,
-    @raylib.KeyFive, @raylib.KeySix, @raylib.KeySeven, @raylib.KeyEight,
+    @raylib.KeyOne,
+    @raylib.KeyTwo,
+    @raylib.KeyThree,
+    @raylib.KeyFour,
+    @raylib.KeyFive,
+    @raylib.KeySix,
+    @raylib.KeySeven,
+    @raylib.KeyEight,
     @raylib.KeyNine,
   ]
   for i in 0..<@types.mini(game.tray.length(), keys.length()) {
@@ -280,7 +290,7 @@ fn handle_mouse_input(game : @types.Game) -> Unit {
     } else {
       // Click on slot: select/deselect for swapping or return to tray
       match game.slots[slot_idx] {
-        Some(_) => {
+        Some(_) =>
           if game.selected_slot >= 0 && game.selected_slot != slot_idx {
             // Swap two slots
             swap_slots(game, game.selected_slot, slot_idx)
@@ -291,7 +301,6 @@ fn handle_mouse_input(game : @types.Game) -> Unit {
             game.selected_slot = slot_idx
             game.selected_tray = -1
           }
-        }
         None =>
           if game.selected_slot >= 0 {
             // Move from filled slot to empty slot
@@ -458,8 +467,7 @@ fn update_results(game : @types.Game) -> Unit {
     start_level(game, game.current_level)
     return
   }
-  if game.play_state == Solved &&
-    @raylib.is_key_pressed(@raylib.KeyEnter) {
+  if game.play_state == Solved && @raylib.is_key_pressed(@raylib.KeyEnter) {
     // Next level
     let next = game.current_level + 1
     if next < @types.total_levels {

@@ -17,7 +17,12 @@ fn draw_title(game : @types.Game) -> Unit {
       }
       let pat_idx = (row + col) % 6
       let base_c = @types.pattern_color(@types.pattern_at(pat_idx))
-      let c = @raylib.Color::new(base_c.r.to_int(), base_c.g.to_int(), base_c.b.to_int(), alpha_val)
+      let c = @raylib.Color::new(
+        base_c.r.to_int(),
+        base_c.g.to_int(),
+        base_c.b.to_int(),
+        alpha_val,
+      )
       @raylib.draw_rectangle(px, py, 80, 80, c)
     }
   }
@@ -30,7 +35,13 @@ fn draw_title(game : @types.Game) -> Unit {
   // Subtitle
   let sub = "Edge-Matching Puzzle"
   let sw = @draw.measure_text(sub, 28)
-  @draw.draw_text(sub, (@types.screen_width - sw) / 2, 235, 28, @types.color_text)
+  @draw.draw_text(
+    sub,
+    (@types.screen_width - sw) / 2,
+    235,
+    28,
+    @types.color_text,
+  )
   // Menu options
   let menu_y = 340
   draw_menu_button("Play", @types.screen_width / 2, menu_y, 36)
@@ -38,7 +49,10 @@ fn draw_title(game : @types.Game) -> Unit {
   // Instructions
   @draw.draw_text(
     "Match edge patterns between neighboring patches",
-    (@types.screen_width - @draw.measure_text("Match edge patterns between neighboring patches", 18)) /
+    (
+      @types.screen_width -
+      @draw.measure_text("Match edge patterns between neighboring patches", 18)
+    ) /
     2,
     560,
     18,
@@ -46,7 +60,10 @@ fn draw_title(game : @types.Game) -> Unit {
   )
   @draw.draw_text(
     "Rotate and place to solve each quilt!",
-    (@types.screen_width - @draw.measure_text("Rotate and place to solve each quilt!", 18)) /
+    (
+      @types.screen_width -
+      @draw.measure_text("Rotate and place to solve each quilt!", 18)
+    ) /
     2,
     585,
     18,
@@ -55,7 +72,10 @@ fn draw_title(game : @types.Game) -> Unit {
   // Controls
   @draw.draw_text(
     "[ENTER] Play    [D] Daily    [ESC] Quit",
-    (@types.screen_width - @draw.measure_text("[ENTER] Play    [D] Daily    [ESC] Quit", 20)) /
+    (
+      @types.screen_width -
+      @draw.measure_text("[ENTER] Play    [D] Daily    [ESC] Quit", 20)
+    ) /
     2,
     650,
     20,
@@ -73,11 +93,7 @@ fn draw_menu_button(text : String, cx : Int, y : Int, size : Int) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   let hover = mx >= bx && mx <= bx + bw && my >= by && my <= by + bh
-  let bg = if hover {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let bg = if hover { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(bx, by, bw, bh, bg)
   @raylib.draw_rectangle_lines(bx, by, bw, bh, @types.color_grid_line)
   @draw.draw_text(text, cx - tw / 2, y, size, @raylib.white)
@@ -88,8 +104,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text("Select Tier", 100, 40, 36, @types.color_title)
   let tiers : Array[@types.Tier] = [Scraps, Quilting, Masterwork]
   let tier_descs = [
-    "3x3 grids, 3-4 patterns, learn the basics",
-    "4x4 grids, all patterns, pinned patches",
+    "3x3 grids, 3-4 patterns, learn the basics", "4x4 grids, all patterns, pinned patches",
     "4x4/5x5 grids, wildcards, master challenge",
   ]
   let tier_sizes = ["8 levels", "9 levels", "8 levels"]
@@ -142,11 +157,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     )
   }
   @draw.draw_text(
-    "[1/2/3] Select Tier    [ESC] Back",
-    100,
-    660,
-    20,
-    @types.color_text_light,
+    "[1/2/3] Select Tier    [ESC] Back", 100, 660, 20, @types.color_text_light,
   )
 }
 
@@ -186,11 +197,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(cx, cy, cell_w, cell_h, bg)
     @raylib.draw_rectangle_lines(cx, cy, cell_w, cell_h, @types.color_grid_line)
-    let text_c = if hover {
-      @raylib.white
-    } else {
-      @types.color_text
-    }
+    let text_c = if hover { @raylib.white } else { @types.color_text }
     @draw.draw_text(
       "Level " + (i + 1).to_string(),
       cx + 10,
@@ -213,32 +220,42 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
   }
   @draw.draw_text(
-    "[1-9] or Click to select    [ESC] Back",
-    100,
-    660,
-    20,
-    @types.color_text_light,
+    "[1-9] or Click to select    [ESC] Back", 100, 660, 20, @types.color_text_light,
   )
 }
 
 ///|
 fn draw_results(game : @types.Game) -> Unit {
   // Semi-transparent overlay
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @raylib.Color::new(0, 0, 0, 100))
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
+    @raylib.Color::new(0, 0, 0, 100),
+  )
   // Results card
   let card_w = 500
   let card_h = 400
   let card_x = (@types.screen_width - card_w) / 2
   let card_y = (@types.screen_height - card_h) / 2
   @raylib.draw_rectangle(card_x, card_y, card_w, card_h, @types.color_bg)
-  @raylib.draw_rectangle_lines(card_x, card_y, card_w, card_h, @types.color_grid_line)
+  @raylib.draw_rectangle_lines(
+    card_x, card_y, card_w, card_h, @types.color_grid_line,
+  )
   let title = if game.is_daily {
     "Daily Quilt Complete!"
   } else {
     "Level " + game.current_level.to_string() + " Complete!"
   }
   let tw = @draw.measure_text(title, 32)
-  @draw.draw_text(title, card_x + (card_w - tw) / 2, card_y + 20, 32, @types.color_title)
+  @draw.draw_text(
+    title,
+    card_x + (card_w - tw) / 2,
+    card_y + 20,
+    32,
+    @types.color_title,
+  )
   // Stars
   let level = @levels.get_level(game.current_level - 1)
   let stars = @matching.compute_stars(level, game.rotations, game.swaps)

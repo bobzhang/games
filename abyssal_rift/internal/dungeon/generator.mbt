@@ -52,7 +52,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     let result = @types.rng_int(state, 0, cell_count - 1)
     state = result.0
     let idx = result.1
-    if !(grid[idx]) {
+    if !grid[idx] {
       grid[idx] = true
       occupied = occupied + 1
     }
@@ -241,7 +241,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     if gx + 1 < grid_cols && grid[gy * grid_cols + gx + 1] {
       let key_a = idx
       let key_b = gy * grid_cols + gx + 1
-      if !(corridor_exists(corridor_set, key_a, key_b)) {
+      if !corridor_exists(corridor_set, key_a, key_b) {
         corridor_set.push((key_a, key_b))
         // room_a's Right door -> room_b's Left door
         let door_key_a = key_a * 4 + 3 // Right = 3
@@ -263,7 +263,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     if gy + 1 < grid_rows && grid[(gy + 1) * grid_cols + gx] {
       let key_a = idx
       let key_b = (gy + 1) * grid_cols + gx
-      if !(corridor_exists(corridor_set, key_a, key_b)) {
+      if !corridor_exists(corridor_set, key_a, key_b) {
         corridor_set.push((key_a, key_b))
         // room_a's Down door -> room_b's Up door
         let door_key_a = key_a * 4 + 1 // Down = 1
@@ -510,7 +510,7 @@ fn ensure_connectivity(grid : Array[Bool], cols : Int, rows : Int) -> Unit {
     }
     for n in 0..<neighbours.length() {
       let ni = neighbours[n]
-      if grid[ni] && !(visited[ni]) {
+      if grid[ni] && !visited[ni] {
         visited[ni] = true
         queue.push(ni)
       }
@@ -519,11 +519,11 @@ fn ensure_connectivity(grid : Array[Bool], cols : Int, rows : Int) -> Unit {
 
   // For every occupied-but-unvisited cell, carve a path towards cell 0
   for i in 0..<count {
-    if grid[i] && !(visited[i]) {
+    if grid[i] && !visited[i] {
       // Walk towards 0,0 enabling cells until we hit a visited cell
       let mut cx = i % cols
       let mut cy = i / cols
-      while !(visited[cy * cols + cx]) {
+      while !visited[cy * cols + cx] {
         let ci = cy * cols + cx
         grid[ci] = true
         visited[ci] = true

@@ -88,7 +88,13 @@ test "new_cell switch" {
 
 ///|
 test "make_cell with custom fields" {
-  let c = make_cell(Gate, gate_open=true, switch_link_id=2, arrow_offset=1, has_pickup=true)
+  let c = make_cell(
+    Gate,
+    gate_open=true,
+    switch_link_id=2,
+    arrow_offset=1,
+    has_pickup=true,
+  )
   inspect(c.kind, content="Gate")
   inspect(c.gate_open, content="true")
   inspect(c.switch_link_id, content="2")

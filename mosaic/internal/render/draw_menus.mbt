@@ -58,16 +58,10 @@ fn draw_title(game : @types.Game) -> Unit {
   for i in 0..<8 {
     let fi = Float::from_int(i)
     let mx = w / 2 - 4 * 36 + i * 36
-    let ci = (i + (game.frame_count / 30)) % 6
+    let ci = (i + game.frame_count / 30) % 6
     let tc = @types.tile_color_to_raylib(@types.index_to_tile_color(ci))
     let bob = sinf(time * 3.0 + fi * 0.8) * 5.0
-    @raylib.draw_rectangle(
-      mx,
-      mosaic_y + bob.to_int(),
-      32,
-      32,
-      tc,
-    )
+    @raylib.draw_rectangle(mx, mosaic_y + bob.to_int(), 32, 32, tc)
   }
   // Start prompt
   let start_text = "PRESS ENTER TO START"
@@ -99,9 +93,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text(title, (w - tw) / 2, 40, 36, @types.color_hud_text)
   let tiers : Array[@types.Tier] = [Repair, Restore, Master]
   let tier_descs = [
-    "Mirror symmetry - 8 levels",
-    "Rotational symmetry - 9 levels",
-    "All symmetries - 8 levels",
+    "Mirror symmetry - 8 levels", "Rotational symmetry - 9 levels", "All symmetries - 8 levels",
   ]
   let tier_level_counts = [8, 9, 8]
   let card_w = 320
@@ -148,7 +140,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       }
     }
     let max_stars = tier_level_counts[i] * 3
-    let star_str = total_stars.to_string() + "/" + max_stars.to_string() + " Stars"
+    let star_str = total_stars.to_string() +
+      "/" +
+      max_stars.to_string() +
+      " Stars"
     let sw = @draw.measure_text(star_str, 18)
     @draw.draw_text(
       star_str,
@@ -158,7 +153,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       @types.color_star_on,
     )
     // Progress
-    let prog_str = completed.to_string() + "/" + tier_level_counts[i].to_string() + " Complete"
+    let prog_str = completed.to_string() +
+      "/" +
+      tier_level_counts[i].to_string() +
+      " Complete"
     let pw = @draw.measure_text(prog_str, 16)
     @draw.draw_text(
       prog_str,
@@ -240,9 +238,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(cx, cy, card_w, card_h, bg)
     if score.completed {
-      @raylib.draw_rectangle_lines(cx, cy, card_w, card_h, @types.color_correct_glow)
+      @raylib.draw_rectangle_lines(
+        cx, cy, card_w, card_h, @types.color_correct_glow,
+      )
     } else {
-      @raylib.draw_rectangle_lines(cx, cy, card_w, card_h, @types.color_grid_line)
+      @raylib.draw_rectangle_lines(
+        cx, cy, card_w, card_h, @types.color_grid_line,
+      )
     }
     // Level number
     let num_str = (i + 1).to_string()
@@ -352,9 +354,7 @@ fn draw_results(game : @types.Game) -> Unit {
   // Star descriptions
   let desc_y = star_y + 40
   let star_descs = [
-    "Complete the level",
-    "No incorrect placements",
-    "Identify symmetry type",
+    "Complete the level", "No incorrect placements", "Identify symmetry type",
   ]
   for i in 0..<3 {
     let check = if i < score.stars { "[X] " } else { "[ ] " }

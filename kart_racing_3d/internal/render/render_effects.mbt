@@ -264,7 +264,9 @@ fn @types.Game::draw_trailing_items(game : @types.Game) -> Unit {
     let tz = kart.z - cos_a * trail_dist
     let ty = kart.y + 0.3
     // Bobbing animation
-    let bob = @math.sinf(Float::from_int(game.frame_counter) * 0.15 + Float::from_int(i) * 2.0) *
+    let bob = @math.sinf(
+        Float::from_int(game.frame_counter) * 0.15 + Float::from_int(i) * 2.0,
+      ) *
       0.08
     match kart.held_powerup {
       Banana => {
@@ -284,14 +286,13 @@ fn @types.Game::draw_trailing_items(game : @types.Game) -> Unit {
           @raylib.Color::new(140, 100, 30, 220),
         )
       }
-      OilSlick => {
+      OilSlick =>
         // Dark orb trailing behind
         @raylib.draw_sphere(
           @raylib.Vector3::new(tx, ty + bob, tz),
           0.2,
           @raylib.Color::new(30, 30, 40, 200),
         )
-      }
       Missile => {
         // Small red shell/missile trailing behind
         @raylib.draw_cube(

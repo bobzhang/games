@@ -133,7 +133,7 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   // Help toggle
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    game.show_help = !(game.show_help)
+    game.show_help = !game.show_help
   }
   // Escape to go back
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
@@ -174,7 +174,7 @@ fn update_playing(game : @types.Game) -> Unit {
     if game.hover_x >= 0 && game.hover_y >= 0 {
       match @types.grid_get(game.grid, game.hover_x, game.hover_y) {
         Some(cell) =>
-          if !(cell.locked) {
+          if !cell.locked {
             match cell.component {
               Some(_) => {
                 cell.direction = @types.direction_cw(cell.direction)
@@ -217,7 +217,7 @@ fn handle_grid_click(game : @types.Game, gx : Int, gy : Int) -> Unit {
             run_simulation(game)
           }
         }
-        None => {
+        None =>
           // Place component from palette
           if game.selected_palette >= 0 &&
             game.selected_palette < game.palette.length() {
@@ -233,7 +233,6 @@ fn handle_grid_click(game : @types.Game, gx : Int, gy : Int) -> Unit {
               }
             }
           }
-        }
       }
     }
     None => ()

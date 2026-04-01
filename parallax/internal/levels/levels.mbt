@@ -1,4 +1,5 @@
 // Helper to make a 3x3 level
+
 ///|
 fn mk3(
   name : String,
@@ -9,7 +10,7 @@ fn mk3(
   connected : Bool,
   par_moves : Int,
   par_voxels : Int,
-  tier : @types.Tier
+  tier : @types.Tier,
 ) -> @types.Level {
   let t = @types.silhouette_from_bits(3, 3, top)
   let f = @types.silhouette_from_bits(3, 3, front)
@@ -27,6 +28,7 @@ fn mk3(
 }
 
 // Helper to make a 4x4 level
+
 ///|
 fn mk4(
   name : String,
@@ -37,7 +39,7 @@ fn mk4(
   connected : Bool,
   par_moves : Int,
   par_voxels : Int,
-  tier : @types.Tier
+  tier : @types.Tier,
 ) -> @types.Level {
   let t = @types.silhouette_from_bits(4, 4, top)
   let f = @types.silhouette_from_bits(4, 4, front)
@@ -55,6 +57,7 @@ fn mk4(
 }
 
 // Helper to make a 5x5 level
+
 ///|
 fn mk5(
   name : String,
@@ -65,7 +68,7 @@ fn mk5(
   connected : Bool,
   par_moves : Int,
   par_voxels : Int,
-  tier : @types.Tier
+  tier : @types.Tier,
 ) -> @types.Level {
   let t = @types.silhouette_from_bits(5, 5, top)
   let f = @types.silhouette_from_bits(5, 5, front)

@@ -29,8 +29,11 @@ pub fn calculate_score(game : @types.Game) -> @types.LevelScore {
     score.data_bonus += 200 // Bonus for getting all data
   }
   // Total
-  score.total = score.base_score + score.ghost_bonus + score.no_alert_bonus +
-    score.speed_bonus + score.data_bonus
+  score.total = score.base_score +
+    score.ghost_bonus +
+    score.no_alert_bonus +
+    score.speed_bonus +
+    score.data_bonus
   // Grade
   score.grade = if score.total >= 2200 {
     S
@@ -66,14 +69,8 @@ pub fn best_grade(game : @types.Game) -> @types.ScoreGrade {
       Some(s) =>
         match s.grade {
           S => best = S
-          A =>
-            if best is (B | C) {
-              best = A
-            }
-          B =>
-            if best is C {
-              best = B
-            }
+          A => if best is (B | C) { best = A }
+          B => if best is C { best = B }
           _ => ()
         }
       None => ()

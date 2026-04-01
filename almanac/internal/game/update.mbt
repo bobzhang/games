@@ -164,7 +164,7 @@ fn update_playing(game : @types.Game) -> Unit {
         score.stars = stars
       }
     }
-    Failed => {
+    Failed =>
       if @raylib.is_key_pressed(@raylib.KeySpace) ||
         @raylib.is_key_pressed(@raylib.KeyEnter) {
         // Allow re-simulating or restart
@@ -175,7 +175,6 @@ fn update_playing(game : @types.Game) -> Unit {
         game.prev_weather = []
         game.stable = false
       }
-    }
   }
 }
 
@@ -208,13 +207,16 @@ fn update_placing(game : @types.Game) -> Unit {
     game.cursor_row = mr
   }
   // Source selection via number keys
-  if @raylib.is_key_pressed(@raylib.KeyOne) && game.available_sources.length() > 0 {
+  if @raylib.is_key_pressed(@raylib.KeyOne) &&
+    game.available_sources.length() > 0 {
     game.selected_source = 0
   }
-  if @raylib.is_key_pressed(@raylib.KeyTwo) && game.available_sources.length() > 1 {
+  if @raylib.is_key_pressed(@raylib.KeyTwo) &&
+    game.available_sources.length() > 1 {
     game.selected_source = 1
   }
-  if @raylib.is_key_pressed(@raylib.KeyThree) && game.available_sources.length() > 2 {
+  if @raylib.is_key_pressed(@raylib.KeyThree) &&
+    game.available_sources.length() > 2 {
     game.selected_source = 2
   }
   // Wind direction toggle
@@ -237,7 +239,8 @@ fn update_placing(game : @types.Game) -> Unit {
   // Place source via Enter or left mouse button
   let place = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  if place && game.available_sources.length() > 0 &&
+  if place &&
+    game.available_sources.length() > 0 &&
     game.selected_source < game.available_sources.length() {
     let (kind, count) = game.available_sources[game.selected_source]
     if count > 0 {
@@ -256,9 +259,7 @@ fn update_placing(game : @types.Game) -> Unit {
         for i in 0..<game.placed_sources.length() {
           hist_sources.push(game.placed_sources[i])
         }
-        game.history.push(
-          { tiles: hist_tiles, sources: hist_sources },
-        )
+        game.history.push({ tiles: hist_tiles, sources: hist_sources })
         // Place the source
         let src : @types.Source = {
           kind,
@@ -346,14 +347,22 @@ fn update_simulating(game : @types.Game) -> Unit {
   } else if stable {
     // Weather stabilized but targets not met
     game.play_state = Failed
-    @types.set_message(game, "Weather stabilized - targets not met. Space to retry, R to restart.", 3.0)
+    @types.set_message(
+      game, "Weather stabilized - targets not met. Space to retry, R to restart.",
+      3.0,
+    )
   } else {
     // Continue - go back to placing state, press Space again for next turn
     game.play_state = Placing
     let (met, total) = @weather.count_targets_met(game.grid)
     @types.set_message(
       game,
-      "Turn " + game.turn_count.to_string() + " - Targets: " + met.to_string() + "/" + total.to_string(),
+      "Turn " +
+      game.turn_count.to_string() +
+      " - Targets: " +
+      met.to_string() +
+      "/" +
+      total.to_string(),
       1.5,
     )
   }

@@ -176,22 +176,20 @@ fn draw_guard_body(g : @types.Guard) -> Unit {
   )
   // Guard type indicator
   match g.kind {
-    Sentinel => {
+    Sentinel =>
       // Ring around sentinel
       @raylib.draw_circle_lines_v(
         @raylib.Vector2::new(g.px, g.py),
         half + 2.0,
         color,
       )
-    }
-    Hunter => {
+    Hunter =>
       // Small dot for hunter
       @raylib.draw_circle_v(
         @raylib.Vector2::new(g.px, g.py),
         3.0,
         @types.color_white,
       )
-    }
     Patrol => ()
   }
 }

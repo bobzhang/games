@@ -4,10 +4,7 @@ test "all 24 levels load and parse correctly" {
   inspect(levels.length(), content="24")
   for l in levels {
     let maze = @maze.parse_maze(l)
-    inspect(
-      @maze.validate_maze(maze),
-      content="true",
-    )
+    inspect(@maze.validate_maze(maze), content="true")
   }
 }
 
@@ -18,7 +15,10 @@ test "all levels have valid start position on Start tile" {
     let maze = @maze.parse_maze(l)
     let start = maze.start
     inspect(
-      start.x >= 0 && start.x < maze.width && start.y >= 0 && start.y < maze.height,
+      start.x >= 0 &&
+      start.x < maze.width &&
+      start.y >= 0 &&
+      start.y < maze.height,
       content="true",
     )
     inspect(maze.tiles[start.y][start.x].kind is Start, content="true")
@@ -123,7 +123,9 @@ test "guard patrol routes are all valid - on floor tiles" {
       for waypoint in patrol {
         // All waypoints must be in bounds
         inspect(
-          waypoint.x >= 0 && waypoint.x < maze.width && waypoint.y >= 0 &&
+          waypoint.x >= 0 &&
+          waypoint.x < maze.width &&
+          waypoint.y >= 0 &&
           waypoint.y < maze.height,
           content="true",
         )
@@ -252,18 +254,12 @@ test "maze borders are all walls" {
     // Top and bottom rows should be all walls
     for x in 0..<maze.width {
       inspect(maze.tiles[0][x].kind is Wall, content="true")
-      inspect(
-        maze.tiles[maze.height - 1][x].kind is Wall,
-        content="true",
-      )
+      inspect(maze.tiles[maze.height - 1][x].kind is Wall, content="true")
     }
     // Left and right columns should be all walls
     for y in 0..<maze.height {
       inspect(maze.tiles[y][0].kind is Wall, content="true")
-      inspect(
-        maze.tiles[y][maze.width - 1].kind is Wall,
-        content="true",
-      )
+      inspect(maze.tiles[y][maze.width - 1].kind is Wall, content="true")
     }
   }
 }
@@ -302,10 +298,7 @@ test "collectible positions are on Collectible tiles" {
         pos.x >= 0 && pos.x < maze.width && pos.y >= 0 && pos.y < maze.height,
         content="true",
       )
-      inspect(
-        maze.tiles[pos.y][pos.x].kind is Collectible,
-        content="true",
-      )
+      inspect(maze.tiles[pos.y][pos.x].kind is Collectible, content="true")
     }
   }
 }

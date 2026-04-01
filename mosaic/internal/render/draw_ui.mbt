@@ -14,12 +14,30 @@ fn draw_palette(game : @types.Game) -> Unit {
     let c = @types.tile_color_to_raylib(colors[i])
     @raylib.draw_rectangle(sx, sy, ss, ss, c)
     if colors[i] == game.selected_color {
-      @raylib.draw_rectangle_lines(sx - 2, sy - 2, ss + 4, ss + 4, @types.color_selected)
-      @raylib.draw_rectangle_lines(sx - 3, sy - 3, ss + 6, ss + 6, @types.color_selected)
+      @raylib.draw_rectangle_lines(
+        sx - 2,
+        sy - 2,
+        ss + 4,
+        ss + 4,
+        @types.color_selected,
+      )
+      @raylib.draw_rectangle_lines(
+        sx - 3,
+        sy - 3,
+        ss + 6,
+        ss + 6,
+        @types.color_selected,
+      )
     }
     // Key hint
     let key_str = (i + 1).to_string()
-    @draw.draw_text(key_str, sx + ss / 2 - 4, sy + ss + 2, 12, @types.color_hud_dim)
+    @draw.draw_text(
+      key_str,
+      sx + ss / 2 - 4,
+      sy + ss + 2,
+      12,
+      @types.color_hud_dim,
+    )
   }
   // Shape swatches
   let shape_y = py + 100
@@ -34,13 +52,31 @@ fn draw_palette(game : @types.Game) -> Unit {
     let preview = @types.new_tile(White, shapes[i], N)
     draw_tile_at(preview, sx, sy, ss, 220)
     if shapes[i] == game.selected_shape {
-      @raylib.draw_rectangle_lines(sx - 2, sy - 2, ss + 4, ss + 4, @types.color_selected)
-      @raylib.draw_rectangle_lines(sx - 3, sy - 3, ss + 6, ss + 6, @types.color_selected)
+      @raylib.draw_rectangle_lines(
+        sx - 2,
+        sy - 2,
+        ss + 4,
+        ss + 4,
+        @types.color_selected,
+      )
+      @raylib.draw_rectangle_lines(
+        sx - 3,
+        sy - 3,
+        ss + 6,
+        ss + 6,
+        @types.color_selected,
+      )
     }
     // Key hint - Q W E R T Y
     let keys = ["Q", "W", "E", "R", "T", "Y"]
     if i < keys.length() {
-      @draw.draw_text(keys[i], sx + ss / 2 - 4, sy + ss + 2, 12, @types.color_hud_dim)
+      @draw.draw_text(
+        keys[i],
+        sx + ss / 2 - 4,
+        sy + ss + 2,
+        12,
+        @types.color_hud_dim,
+      )
     }
   }
   // Orientation
@@ -57,10 +93,28 @@ fn draw_palette(game : @types.Game) -> Unit {
     let preview = @types.new_tile(White, Arrow, orients[i])
     draw_tile_at(preview, sx, sy, ss, 220)
     if orients[i] == game.selected_orientation {
-      @raylib.draw_rectangle_lines(sx - 2, sy - 2, ss + 4, ss + 4, @types.color_selected)
-      @raylib.draw_rectangle_lines(sx - 3, sy - 3, ss + 6, ss + 6, @types.color_selected)
+      @raylib.draw_rectangle_lines(
+        sx - 2,
+        sy - 2,
+        ss + 4,
+        ss + 4,
+        @types.color_selected,
+      )
+      @raylib.draw_rectangle_lines(
+        sx - 3,
+        sy - 3,
+        ss + 6,
+        ss + 6,
+        @types.color_selected,
+      )
     }
-    @draw.draw_text(orient_labels[i], sx + ss / 2 - 4, sy + ss + 2, 12, @types.color_hud_dim)
+    @draw.draw_text(
+      orient_labels[i],
+      sx + ss / 2 - 4,
+      sy + ss + 2,
+      12,
+      @types.color_hud_dim,
+    )
   }
   // Preview
   let prev_y = orient_y + 110
@@ -74,7 +128,13 @@ fn draw_palette(game : @types.Game) -> Unit {
     game.selected_orientation,
   )
   draw_tile_at(preview_tile, px, prev_y + 20, prev_size, 255)
-  @raylib.draw_rectangle_lines(px - 1, prev_y + 19, prev_size + 2, prev_size + 2, @types.color_grid_line)
+  @raylib.draw_rectangle_lines(
+    px - 1,
+    prev_y + 19,
+    prev_size + 2,
+    prev_size + 2,
+    @types.color_grid_line,
+  )
   // Symmetry guess buttons
   if game.play_state == GuessSymmetry {
     draw_symmetry_guess_ui(game)
@@ -82,11 +142,7 @@ fn draw_palette(game : @types.Game) -> Unit {
   // Controls help
   let help_y = @types.screen_height - 80
   @draw.draw_text(
-    "LMB: Place tile   Z: Undo   R: Restart   H: Toggle hint",
-    px,
-    help_y,
-    13,
-    @types.color_hud_dim,
+    "LMB: Place tile   Z: Undo   R: Restart   H: Toggle hint", px, help_y, 13, @types.color_hud_dim,
   )
   @draw.draw_text(
     "1-6: Color   QWERTY: Shape   Arrow keys: Rotate",
@@ -102,15 +158,10 @@ fn draw_symmetry_guess_ui(game : @types.Game) -> Unit {
   let px = @types.palette_x
   let by = @types.palette_y + 440
   @draw.draw_text(
-    "Identify the symmetry type:",
-    px,
-    by,
-    16,
-    @types.color_title_accent,
+    "Identify the symmetry type:", px, by, 16, @types.color_title_accent,
   )
   let sym_names = [
-    "Mirror H", "Mirror V", "Mirror D", "Rotate 180", "Rotate 90",
-    "Glide",
+    "Mirror H", "Mirror V", "Mirror D", "Rotate 180", "Rotate 90", "Glide",
   ]
   let btn_w = 140
   let btn_h = 30

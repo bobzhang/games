@@ -132,7 +132,15 @@ fn update_playing(game : @types.Game) -> Unit {
   let my = @raylib.get_mouse_y()
   game.hover.active = false
   // Check each view panel
-  check_view_interaction(game, Top, @types.view_top_x, @types.view_top_y, level, mx, my)
+  check_view_interaction(
+    game,
+    Top,
+    @types.view_top_x,
+    @types.view_top_y,
+    level,
+    mx,
+    my,
+  )
   check_view_interaction(
     game,
     Front,
@@ -161,14 +169,17 @@ fn check_view_interaction(
   panel_y : Int,
   level : @types.Level,
   mx : Int,
-  my : Int
+  my : Int,
 ) -> Unit {
   let size = level.size
   let cs = @types.cell_size_for_grid(size)
   let grid_w = size * cs
   let grid_h = size * cs
   // Check if mouse is in this panel
-  if mx >= panel_x && mx < panel_x + grid_w && my >= panel_y && my < panel_y + grid_h {
+  if mx >= panel_x &&
+    mx < panel_x + grid_w &&
+    my >= panel_y &&
+    my < panel_y + grid_h {
     let col = (mx - panel_x) / cs
     let row = (my - panel_y) / cs
     if col >= 0 && col < size && row >= 0 && row < size {
@@ -198,7 +209,7 @@ fn do_toggle(
   view : @types.ViewKind,
   col : Int,
   row : Int,
-  level : @types.Level
+  level : @types.Level,
 ) -> Unit {
   // Check voxel budget before adding
   let preview = @voxel.ray_preview(game.grid, view, col, row)
@@ -219,9 +230,12 @@ fn do_toggle(
       match result {
         Some(toggled) => {
           // Push undo entry
-          game.undo_stack.push(
-            { x: toggled.x, y: toggled.y, z: toggled.z, was_filled },
-          )
+          game.undo_stack.push({
+            x: toggled.x,
+            y: toggled.y,
+            z: toggled.z,
+            was_filled,
+          })
           game.moves += 1
           // Check connectivity constraint
           if level.requires_connected {

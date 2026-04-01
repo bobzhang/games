@@ -100,16 +100,14 @@ pub fn select_formation(stage : Int, roll : Int) -> Formation {
     } else {
       FlankingPairs
     }
-  } else {
     // Late game: all formations
-    if roll < 15 {
-      Random
-    } else if roll < 40 {
-      VShape
-    } else if roll < 65 {
-      ColumnRush
-    } else {
-      FlankingPairs
-    }
+  } else if roll < 15 {
+    Random
+  } else if roll < 40 {
+    VShape
+  } else if roll < 65 {
+    ColumnRush
+  } else {
+    FlankingPairs
   }
 }

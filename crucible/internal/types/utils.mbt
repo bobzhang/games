@@ -84,7 +84,7 @@ pub fn new_budget(
   earth : Int,
   air : Int,
   light : Int,
-  shadow : Int
+  shadow : Int,
 ) -> ElementBudget {
   { fire, water, earth, air, light, shadow }
 }

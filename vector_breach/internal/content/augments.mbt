@@ -6,7 +6,7 @@ pub(all) struct AugmentDef {
   kind : @types.AugmentKind
   name : String
   description : String
-  icon : String   // single character icon for display
+  icon : String // single character icon for display
 }
 
 ///|

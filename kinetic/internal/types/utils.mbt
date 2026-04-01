@@ -137,12 +137,10 @@ pub fn peg_screen_y(row : Int) -> Float {
 ///|
 pub fn screen_to_grid(sx : Float, sy : Float) -> Vec2i? {
   let half = Float::from_int(peg_spacing) / 2.0
-  let col = ((sx - Float::from_int(grid_offset_x) + half) / Float::from_int(
-      peg_spacing,
-    )).to_int()
-  let row = ((sy - Float::from_int(grid_offset_y) + half) / Float::from_int(
-      peg_spacing,
-    )).to_int()
+  let col = ((sx - Float::from_int(grid_offset_x) + half) /
+  Float::from_int(peg_spacing)).to_int()
+  let row = ((sy - Float::from_int(grid_offset_y) + half) /
+  Float::from_int(peg_spacing)).to_int()
   if col >= 0 && col < grid_cols && row >= 0 && row < grid_rows {
     let px = peg_screen_x(col)
     let py = peg_screen_y(row)
@@ -183,7 +181,11 @@ pub fn new_gear(pos : Vec2i, kind : GearKind) -> Gear {
 }
 
 ///|
-pub fn new_output(pos : Vec2i, target_rpm : Float, target_dir : RotDir) -> Output {
+pub fn new_output(
+  pos : Vec2i,
+  target_rpm : Float,
+  target_dir : RotDir,
+) -> Output {
   { pos, target_rpm, target_dir, satisfied: false }
 }
 

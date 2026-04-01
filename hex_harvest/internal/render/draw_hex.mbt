@@ -4,7 +4,7 @@ fn draw_hex_filled(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let corners = @hex.hex_corners(cx, cy, size)
   // Draw as 4 triangles from center
@@ -27,7 +27,7 @@ fn draw_hex_outline(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let corners = @hex.hex_corners(cx, cy, size)
   for i in 0..<6 {
@@ -80,9 +80,19 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
       // Draw outline - thicker for height edges
       let has_height_edge = has_adjacent_height_diff(grid, c, r)
       if has_height_edge {
-        draw_hex_outline(cx, cy, size * 0.95, @raylib.Color::new(50, 40, 30, 255))
+        draw_hex_outline(
+          cx,
+          cy,
+          size * 0.95,
+          @raylib.Color::new(50, 40, 30, 255),
+        )
         // Inner contour line for strong depth effect
-        draw_hex_outline(cx, cy, size * 0.88, @raylib.Color::new(60, 50, 35, 80))
+        draw_hex_outline(
+          cx,
+          cy,
+          size * 0.88,
+          @raylib.Color::new(60, 50, 35, 80),
+        )
       } else {
         draw_hex_outline(cx, cy, size * 0.95, @types.color_hex_outline)
       }
@@ -92,7 +102,11 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
 
 ///|
 /// Check if a tile has any neighbor with a different height
-fn has_adjacent_height_diff(grid : @types.HexGrid, col : Int, row : Int) -> Bool {
+fn has_adjacent_height_diff(
+  grid : @types.HexGrid,
+  col : Int,
+  row : Int,
+) -> Bool {
   let h = grid.tiles[row][col].height
   let neighbors = @hex.valid_neighbors(col, row)
   for i in 0..<neighbors.length() {
@@ -120,7 +134,8 @@ fn draw_water_overlays(game : @types.Game) -> Unit {
             // Animate newly watered tiles
             let mut alpha = 120
             for i in 0..<game.newly_watered.length() {
-              if game.newly_watered[i].col == c && game.newly_watered[i].row == r {
+              if game.newly_watered[i].col == c &&
+                game.newly_watered[i].row == r {
                 let t = game.water_anim_timer
                 alpha = (t * 200.0).to_int()
                 alpha = @types.clampi(alpha, 40, 120)
@@ -168,9 +183,8 @@ fn draw_channels(game : @types.Game) -> Unit {
             )
             // Draw wavy water lines across the channel
             let line_len = size * 0.25
-            let wave = @types.sinf(
-              Float::from_int(game.frame_count) * 0.06,
-            ) * 2.0
+            let wave = @types.sinf(Float::from_int(game.frame_count) * 0.06) *
+              2.0
             @raylib.draw_line_ex(
               @raylib.Vector2::new(cx - line_len, cy + wave),
               @raylib.Vector2::new(cx + line_len, cy + wave),
@@ -178,8 +192,14 @@ fn draw_channels(game : @types.Game) -> Unit {
               @raylib.Color::new(100, 170, 240, 200),
             )
             @raylib.draw_line_ex(
-              @raylib.Vector2::new(cx - line_len * 0.6, cy - line_len * 0.4 - wave * 0.5),
-              @raylib.Vector2::new(cx + line_len * 0.6, cy - line_len * 0.4 - wave * 0.5),
+              @raylib.Vector2::new(
+                cx - line_len * 0.6,
+                cy - line_len * 0.4 - wave * 0.5,
+              ),
+              @raylib.Vector2::new(
+                cx + line_len * 0.6,
+                cy - line_len * 0.4 - wave * 0.5,
+              ),
               2.0,
               @raylib.Color::new(100, 170, 240, 150),
             )
@@ -200,9 +220,7 @@ fn draw_goals(game : @types.Game) -> Unit {
       if grid.tiles[r][c].kind == Goal {
         let (cx, cy) = @hex.hex_screen_pos(c, r)
         // Pulsing glow
-        let pulse = @types.sinf(
-          Float::from_int(game.frame_count) * 0.05,
-        )
+        let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.05)
         let glow_size = size * (0.7 + pulse * 0.1)
         draw_hex_filled(cx, cy, glow_size, @types.color_goal_glow)
         // Star shape for goal
@@ -218,7 +236,7 @@ fn draw_star(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   // Vertical diamond
   @raylib.draw_triangle(
@@ -261,7 +279,15 @@ fn draw_crops(game : @types.Game) -> Unit {
           let (cx, cy) = @hex.hex_screen_pos(c, r)
           match tile.crop_state {
             Seed => draw_crop_seed(cx, cy, size, kind)
-            Growing => draw_crop_growing(cx, cy, size, kind, tile.crop_turns, game.frame_count)
+            Growing =>
+              draw_crop_growing(
+                cx,
+                cy,
+                size,
+                kind,
+                tile.crop_turns,
+                game.frame_count,
+              )
             Mature => draw_crop_mature(cx, cy, size, kind, game.frame_count)
             Harvested => draw_crop_harvested(cx, cy, size, kind)
           }
@@ -277,7 +303,7 @@ fn draw_crop_seed(
   cx : Float,
   cy : Float,
   hex_size : Float,
-  kind : @types.CropKind
+  kind : @types.CropKind,
 ) -> Unit {
   let color = @types.crop_seed_color(kind)
   let s = hex_size * 0.15
@@ -299,7 +325,7 @@ fn draw_crop_growing(
   hex_size : Float,
   kind : @types.CropKind,
   turns : Int,
-  _frame : Int
+  _frame : Int,
 ) -> Unit {
   let color = @types.crop_color(kind)
   let grow_time = @types.crop_grow_time(kind)
@@ -357,12 +383,7 @@ fn draw_crop_growing(
         2.0,
         @raylib.Color::new(80, 160, 60, 255),
       )
-      @raylib.draw_circle(
-        cx.to_int(),
-        (cy - s * 0.5).to_int(),
-        s * 0.3,
-        color,
-      )
+      @raylib.draw_circle(cx.to_int(), (cy - s * 0.5).to_int(), s * 0.3, color)
     }
   }
 }
@@ -373,7 +394,7 @@ fn draw_crop_mature(
   cy : Float,
   hex_size : Float,
   kind : @types.CropKind,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let color = @types.crop_color(kind)
   let s = hex_size * 0.4
@@ -388,12 +409,7 @@ fn draw_crop_mature(
         color,
       )
       // Grain head
-      @raylib.draw_circle(
-        cx.to_int(),
-        (cy - s + bob).to_int(),
-        s * 0.35,
-        color,
-      )
+      @raylib.draw_circle(cx.to_int(), (cy - s + bob).to_int(), s * 0.35, color)
       @raylib.draw_circle(
         (cx - s * 0.15).to_int(),
         (cy - s * 0.7 + bob).to_int(),
@@ -454,7 +470,7 @@ fn draw_crop_mature(
         @raylib.Color::new(200, 60, 160, 255),
       )
       @raylib.draw_circle(
-        (cx).to_int(),
+        cx.to_int(),
         (cy + s * 0.2 + bob * 0.5).to_int(),
         s * 0.15,
         @raylib.Color::new(200, 60, 160, 255),
@@ -492,7 +508,7 @@ fn draw_crop_harvested(
   cx : Float,
   cy : Float,
   hex_size : Float,
-  _kind : @types.CropKind
+  _kind : @types.CropKind,
 ) -> Unit {
   let s = hex_size * 0.2
   // Just a stub remaining

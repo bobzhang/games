@@ -6,11 +6,13 @@ test "hint_computation_forced_cell" {
   grid[2 * 8 + 2] = Some(Mountain)
   let features : Array[@types.FeatureKind] = [Mountain, Town]
   let clues = [
+    @types.new_clue(Distance, Mountain, feature_b=Town, distance=3, text="dist"),
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=3, text="dist",
-    ),
-    @types.new_clue(
-      Direction, Town, feature_b=Mountain, direction=E, text="dir east",
+      Direction,
+      Town,
+      feature_b=Mountain,
+      direction=E,
+      text="dir east",
     ),
     @types.new_clue(Not, Town, direction=N, row_col=0, text="not row 1"),
     @types.new_clue(Not, Town, direction=N, row_col=1, text="not row 2"),
@@ -34,9 +36,7 @@ test "hint_no_forced_cells" {
   grid[2 * 8 + 2] = Some(Mountain)
   let features : Array[@types.FeatureKind] = [Mountain, Town]
   let clues = [
-    @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=3, text="dist",
-    ),
+    @types.new_clue(Distance, Mountain, feature_b=Town, distance=3, text="dist"),
   ]
   let hints = @solver.compute_hints(grid, 8, features, clues)
   // Multiple positions at distance 3, no forced cell

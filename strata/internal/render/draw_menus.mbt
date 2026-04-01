@@ -5,13 +5,8 @@ fn draw_title(game : @types.Game) -> Unit {
   let time = Float::from_int(game.frame_count) * 0.03
   // Draw layered earth background
   let layer_colors = [
-    @types.color_sandstone,
-    @types.color_limestone,
-    @types.color_shale,
-    @types.color_granite,
-    @types.color_basalt,
-    @types.color_coal,
-    @types.color_slate,
+    @types.color_sandstone, @types.color_limestone, @types.color_shale, @types.color_granite,
+    @types.color_basalt, @types.color_coal, @types.color_slate,
   ]
   for i in 0..<layer_colors.length() {
     let fi = Float::from_int(i)
@@ -58,13 +53,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Bottom text
   let bot = "Arrange rock layers to match geological clues"
   let bot_w = @draw.measure_text(bot, 16)
-  @draw.draw_text(
-    bot,
-    (w - bot_w) / 2,
-    h - 40,
-    16,
-    @types.color_text_dim,
-  )
+  @draw.draw_text(bot, (w - bot_w) / 2, h - 40, 16, @types.color_text_dim)
 }
 
 ///|
@@ -96,7 +85,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let count = range.1 - range.0 + 1
     let info = count.to_string() + " levels"
     let iw = @draw.measure_text(info, 18)
-    @draw.draw_text(info, bx + (bw - iw) / 2, by + 60, 18, @types.color_text_dim)
+    @draw.draw_text(
+      info,
+      bx + (bw - iw) / 2,
+      by + 60,
+      18,
+      @types.color_text_dim,
+    )
     // Completion stats
     let mut completed = 0
     let mut total_stars = 0
@@ -106,7 +101,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       }
       total_stars += game.scores[j].stars
     }
-    let comp_text = completed.to_string() + "/" + count.to_string() + " complete"
+    let comp_text = completed.to_string() +
+      "/" +
+      count.to_string() +
+      " complete"
     let cw = @draw.measure_text(comp_text, 16)
     @draw.draw_text(
       comp_text,
@@ -225,11 +223,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   // Controls
   @draw.draw_text("ESC - Back", 20, 680, 16, @types.color_text_dim)
   @draw.draw_text(
-    "Click or press 1-9 to select level",
-    400,
-    680,
-    16,
-    @types.color_text_dim,
+    "Click or press 1-9 to select level", 400, 680, 16, @types.color_text_dim,
   )
 }
 

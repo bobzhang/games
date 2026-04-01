@@ -39,7 +39,13 @@ fn draw_plane_bg() -> Unit {
     gy += grid
   }
   // Border
-  @raylib.draw_rectangle_lines(px - 1, py - 1, pw + 2, ph + 2, @types.color_ui_dim)
+  @raylib.draw_rectangle_lines(
+    px - 1,
+    py - 1,
+    pw + 2,
+    ph + 2,
+    @types.color_ui_dim,
+  )
 }
 
 ///|
@@ -97,7 +103,7 @@ fn draw_dashed_line(
   x2 : Float,
   y2 : Float,
   color : @raylib.Color,
-  time_offset : Float
+  time_offset : Float,
 ) -> Unit {
   let dx = x2 - x1
   let dy = y2 - y1
@@ -110,7 +116,7 @@ fn draw_dashed_line(
   let cycle = dash_len + gap_len
   let nx = dx / len
   let ny = dy / len
-  let mut t : Float = (time_offset * 3.0) % cycle - cycle
+  let mut t : Float = time_offset * 3.0 % cycle - cycle
   while t < len {
     let start = @types.maxf(t, 0.0)
     let end = @types.minf(t + dash_len, len)
@@ -159,11 +165,7 @@ fn draw_hull(game : @types.Game) -> Unit {
   for i in 0..<n {
     let a = hull[i]
     let b = hull[(i + 1) % n]
-    let edge_color = if edge_matches_any_target(
-      a,
-      b,
-      game.target.vertices,
-    ) {
+    let edge_color = if edge_matches_any_target(a, b, game.target.vertices) {
       @types.color_match
     } else {
       @types.color_hull
@@ -181,7 +183,7 @@ fn draw_hull(game : @types.Game) -> Unit {
 fn edge_matches_any_target(
   ha : @types.Point,
   hb : @types.Point,
-  target_verts : Array[@types.Point]
+  target_verts : Array[@types.Point],
 ) -> Bool {
   let tn = target_verts.length()
   if tn < 2 {

@@ -151,7 +151,12 @@ fn is_in_firing_cone(
   let to_target_y = dy * inv_dist
   let to_target_z = dz * inv_dist
   let dot = @types.dot3d(
-    efwd.0, efwd.1, efwd.2, to_target_x, to_target_y, to_target_z,
+    efwd.0,
+    efwd.1,
+    efwd.2,
+    to_target_x,
+    to_target_y,
+    to_target_z,
   )
   // cos(30 deg) ~ 0.866; using the cone constant
   dot > @math.cosf(@types.enemy_fire_cone_half)
@@ -415,7 +420,8 @@ fn @types.Game::update_fighter_ai(
       let trail_x : Float = if pv_len > 1.0 {
         game.player.x - pvx / pv_len * @types.attack_run_trail_dist
       } else {
-        game.player.x - dx / @types.maxf(dist, 1.0) * @types.attack_run_trail_dist
+        game.player.x -
+        dx / @types.maxf(dist, 1.0) * @types.attack_run_trail_dist
       }
       let trail_y : Float = if pv_len > 1.0 {
         game.player.y - pvy / pv_len * @types.attack_run_trail_dist
@@ -425,7 +431,8 @@ fn @types.Game::update_fighter_ai(
       let trail_z : Float = if pv_len > 1.0 {
         game.player.z - pvz / pv_len * @types.attack_run_trail_dist
       } else {
-        game.player.z - dz / @types.maxf(dist, 1.0) * @types.attack_run_trail_dist
+        game.player.z -
+        dz / @types.maxf(dist, 1.0) * @types.attack_run_trail_dist
       }
       let tdx = trail_x - e.x
       let tdy = trail_y - e.y
@@ -642,7 +649,9 @@ fn @types.Game::update_interceptor_ai(
       let cross = @types.cross3d(norm.0, norm.1, norm.2, 0.0, 1.0, 0.0)
       let side : Float = if e.formation_index % 2 == 0 { 1.0 } else { -1.0 }
       let fd = @types.normalize3d(
-        cross.0 * side + norm.0 * 0.5, 0.0, cross.2 * side + norm.2 * 0.5,
+        cross.0 * side + norm.0 * 0.5,
+        0.0,
+        cross.2 * side + norm.2 * 0.5,
       )
       e.vx = @types.lerpf(e.vx, fd.0 * spd * 1.2, 3.0 * dt)
       e.vy = @types.lerpf(e.vy, fd.1 * spd * 1.2, 3.0 * dt)
@@ -1032,7 +1041,17 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
     let exp_dy = e.y - game.player.y
     let exp_dz = e.z - game.player.z
     @types.spawn_directional_explosion(
-      game, e.x, e.y, e.z, exp_dx, exp_dy, exp_dz, exp_count, r, g, 50,
+      game,
+      e.x,
+      e.y,
+      e.z,
+      exp_dx,
+      exp_dy,
+      exp_dz,
+      exp_count,
+      r,
+      g,
+      50,
     )
 
     // Burning debris with fire trails

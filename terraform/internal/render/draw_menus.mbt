@@ -10,7 +10,9 @@ fn draw_title(game : @types.Game) -> Unit {
     let sy = ((fi * 91.3 + time * 8.0 * (fi % 3.0 + 1.0)) % Float::from_int(h)).to_int()
     let brightness = 60 + (fi * 17.0 % 140.0).to_int()
     @raylib.draw_circle(
-      sx, sy, 1.0 + fi % 2.0,
+      sx,
+      sy,
+      1.0 + fi % 2.0,
       @raylib.Color::new(brightness, brightness, brightness + 30, 200),
     )
   }
@@ -20,7 +22,9 @@ fn draw_title(game : @types.Game) -> Unit {
   let planet_r : Float = 120.0
   // Planet body
   @raylib.draw_circle(
-    planet_cx.to_int(), planet_cy.to_int(), planet_r,
+    planet_cx.to_int(),
+    planet_cy.to_int(),
+    planet_r,
     @raylib.Color::new(40, 60, 90, 255),
   )
   // Biome bands on planet
@@ -40,14 +44,18 @@ fn draw_title(game : @types.Game) -> Unit {
         _ => @types.color_barren
       }
       @raylib.draw_circle(
-        bx.to_int(), by.to_int(), 15.0 + fi % 5.0,
+        bx.to_int(),
+        by.to_int(),
+        15.0 + fi % 5.0,
         @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 150),
       )
     }
   }
   // Planet outline glow
   @raylib.draw_circle_lines(
-    planet_cx.to_int(), planet_cy.to_int(), planet_r + 2.0,
+    planet_cx.to_int(),
+    planet_cy.to_int(),
+    planet_r + 2.0,
     @types.color_accent,
   )
   // Title text
@@ -98,8 +106,18 @@ fn draw_title_orbits(game : @types.Game) -> Unit {
   let m1y = planet_cy + orbit1_r * 0.3 * @types.sinf(m1_angle)
   // Only draw if in front of planet (simple z-ordering)
   if @types.sinf(m1_angle) > -0.3 {
-    @raylib.draw_circle(m1x.to_int(), m1y.to_int(), 6.0, @raylib.Color::new(180, 180, 200, 200))
-    @raylib.draw_circle(m1x.to_int(), m1y.to_int(), 4.0, @raylib.Color::new(220, 220, 240, 255))
+    @raylib.draw_circle(
+      m1x.to_int(),
+      m1y.to_int(),
+      6.0,
+      @raylib.Color::new(180, 180, 200, 200),
+    )
+    @raylib.draw_circle(
+      m1x.to_int(),
+      m1y.to_int(),
+      4.0,
+      @raylib.Color::new(220, 220, 240, 255),
+    )
   }
   // Outer orbit - larger moon
   let orbit2_r = planet_r + 80.0
@@ -107,8 +125,18 @@ fn draw_title_orbits(game : @types.Game) -> Unit {
   let m2x = planet_cx + orbit2_r * @types.cosf(m2_angle)
   let m2y = planet_cy + orbit2_r * 0.25 * @types.sinf(m2_angle)
   if @types.sinf(m2_angle) > -0.3 {
-    @raylib.draw_circle(m2x.to_int(), m2y.to_int(), 10.0, @raylib.Color::new(160, 150, 140, 200))
-    @raylib.draw_circle(m2x.to_int(), m2y.to_int(), 7.0, @raylib.Color::new(200, 190, 180, 255))
+    @raylib.draw_circle(
+      m2x.to_int(),
+      m2y.to_int(),
+      10.0,
+      @raylib.Color::new(160, 150, 140, 200),
+    )
+    @raylib.draw_circle(
+      m2x.to_int(),
+      m2y.to_int(),
+      7.0,
+      @raylib.Color::new(200, 190, 180, 255),
+    )
   }
   // Orbit trails (dashed ellipses)
   draw_orbit_trail(planet_cx, planet_cy, orbit1_r, orbit1_r * 0.3, time, 40)
@@ -122,7 +150,7 @@ fn draw_orbit_trail(
   rx : Float,
   ry : Float,
   _time : Float,
-  segments : Int
+  segments : Int,
 ) -> Unit {
   for i in 0..<segments {
     let a = Float::from_int(i) * @types.pi * 2.0 / Float::from_int(segments)
@@ -130,7 +158,8 @@ fn draw_orbit_trail(
     let y = cy + ry * @types.sinf(a)
     if i % 3 == 0 {
       @raylib.draw_pixel(
-        x.to_int(), y.to_int(),
+        x.to_int(),
+        y.to_int(),
         @raylib.Color::new(80, 80, 100, 60),
       )
     }
@@ -160,25 +189,46 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   let harmony_completed = count_tier_completed(game, Harmony)
   // Seeds
   draw_tier_card(
-    start_x, card_y, card_w, card_h,
-    "Seeds", "Learn the basics of\nbiome interaction.\n8 levels.",
+    start_x, card_y, card_w, card_h, "Seeds", "Learn the basics of\nbiome interaction.\n8 levels.",
     @types.color_tier_seeds, 1, seeds_stars, seeds_completed, 8,
   )
   // Balance
   draw_tier_card(
-    start_x + card_w + card_gap, card_y, card_w, card_h,
-    "Balance", "Tighter targets and\nlimited resources.\n9 levels.",
-    @types.color_tier_balance, 2, balance_stars, balance_completed, 9,
+    start_x + card_w + card_gap,
+    card_y,
+    card_w,
+    card_h,
+    "Balance",
+    "Tighter targets and\nlimited resources.\n9 levels.",
+    @types.color_tier_balance,
+    2,
+    balance_stars,
+    balance_completed,
+    9,
   )
   // Harmony
   draw_tier_card(
-    start_x + (card_w + card_gap) * 2, card_y, card_w, card_h,
-    "Harmony", "Master all mechanics.\nPrecise ratios.\n8 levels.",
-    @types.color_tier_harmony, 3, harmony_stars, harmony_completed, 8,
+    start_x + (card_w + card_gap) * 2,
+    card_y,
+    card_w,
+    card_h,
+    "Harmony",
+    "Master all mechanics.\nPrecise ratios.\n8 levels.",
+    @types.color_tier_harmony,
+    3,
+    harmony_stars,
+    harmony_completed,
+    8,
   )
   let hint = "[1] Seeds   [2] Balance   [3] Harmony   [Esc] Back"
   let hw = @draw.measure_text(hint, 18)
-  @draw.draw_text(hint, (w - hw) / 2, card_y + card_h + 40, 18, @types.color_text_dim)
+  @draw.draw_text(
+    hint,
+    (w - hw) / 2,
+    card_y + card_h + 40,
+    18,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -193,7 +243,7 @@ fn draw_tier_card(
   num : Int,
   stars : Int,
   completed : Int,
-  total : Int
+  total : Int,
 ) -> Unit {
   // Card background
   @raylib.draw_rectangle(x, y, w, h, @types.color_panel)
@@ -202,7 +252,10 @@ fn draw_tier_card(
   let num_str = num.to_string()
   let nw = @draw.measure_text(num_str, 80)
   @draw.draw_text(
-    num_str, x + (w - nw) / 2, y + 20, 80,
+    num_str,
+    x + (w - nw) / 2,
+    y + 20,
+    80,
     @raylib.Color::new(color.r.to_int(), color.g.to_int(), color.b.to_int(), 60),
   )
   // Name
@@ -213,7 +266,11 @@ fn draw_tier_card(
   for i in 0..<lines.length() {
     let lw = @draw.measure_text(lines[i], 18)
     @draw.draw_text(
-      lines[i], x + (w - lw) / 2, y + 180 + i * 26, 18, @types.color_text,
+      lines[i],
+      x + (w - lw) / 2,
+      y + 180 + i * 26,
+      18,
+      @types.color_text,
     )
   }
   // Progress bar
@@ -226,19 +283,31 @@ fn draw_tier_card(
     let fill = bar_w * completed / total
     @raylib.draw_rectangle(bar_x, bar_y, fill, bar_h, color)
   }
-  @raylib.draw_rectangle_lines(bar_x, bar_y, bar_w, bar_h, @types.color_text_dim)
+  @raylib.draw_rectangle_lines(
+    bar_x, bar_y, bar_w, bar_h, @types.color_text_dim,
+  )
   // Completion text
-  let progress_text = completed.to_string() + "/" + total.to_string() +
+  let progress_text = completed.to_string() +
+    "/" +
+    total.to_string() +
     " complete"
   let ptw = @draw.measure_text(progress_text, 14)
   @draw.draw_text(
-    progress_text, x + (w - ptw) / 2, bar_y + 14, 14, @types.color_text_dim,
+    progress_text,
+    x + (w - ptw) / 2,
+    bar_y + 14,
+    14,
+    @types.color_text_dim,
   )
   // Star count
   let star_text = stars.to_string() + "/" + (total * 3).to_string() + " stars"
   let stw = @draw.measure_text(star_text, 14)
   @draw.draw_text(
-    star_text, x + (w - stw) / 2, bar_y + 30, 14, @types.color_star_gold,
+    star_text,
+    x + (w - stw) / 2,
+    bar_y + 30,
+    14,
+    @types.color_star_gold,
   )
 }
 
@@ -328,7 +397,7 @@ fn draw_level_card(
   h : Int,
   num : Int,
   score : @types.LevelScore,
-  tier_color : @raylib.Color
+  tier_color : @raylib.Color,
 ) -> Unit {
   // Background
   let bg = if score.completed {
@@ -345,9 +414,7 @@ fn draw_level_card(
   // Level name
   let name = @types.level_name(num - 1)
   let name_w = @draw.measure_text(name, 12)
-  @draw.draw_text(
-    name, x + (w - name_w) / 2, y + 42, 12, @types.color_text_dim,
-  )
+  @draw.draw_text(name, x + (w - name_w) / 2, y + 42, 12, @types.color_text_dim)
   // Stars
   let star_y = y + 62
   let star_size = 16
@@ -367,7 +434,11 @@ fn draw_level_card(
     let best_text = "Best: " + score.best_turns.to_string() + " turns"
     let btw = @draw.measure_text(best_text, 12)
     @draw.draw_text(
-      best_text, x + (w - btw) / 2, y + h - 22, 12, @types.color_text_dim,
+      best_text,
+      x + (w - btw) / 2,
+      y + h - 22,
+      12,
+      @types.color_text_dim,
     )
     // Completion checkmark
     @draw.draw_text("OK", x + w - 24, y + 4, 12, @types.color_success)
@@ -430,45 +501,45 @@ fn draw_results(game : @types.Game) -> Unit {
   // Top-left
   @raylib.draw_line_ex(
     @raylib.Vector2::new(Float::from_int(px), Float::from_int(py)),
-    @raylib.Vector2::new(
-      Float::from_int(px + corner_size), Float::from_int(py),
-    ),
-    2.0, border_color,
+    @raylib.Vector2::new(Float::from_int(px + corner_size), Float::from_int(py)),
+    2.0,
+    border_color,
   )
   @raylib.draw_line_ex(
     @raylib.Vector2::new(Float::from_int(px), Float::from_int(py)),
-    @raylib.Vector2::new(
-      Float::from_int(px), Float::from_int(py + corner_size),
-    ),
-    2.0, border_color,
+    @raylib.Vector2::new(Float::from_int(px), Float::from_int(py + corner_size)),
+    2.0,
+    border_color,
   )
   // Bottom-right
   @raylib.draw_line_ex(
     @raylib.Vector2::new(
-      Float::from_int(px + panel_w), Float::from_int(py + panel_h),
+      Float::from_int(px + panel_w),
+      Float::from_int(py + panel_h),
     ),
     @raylib.Vector2::new(
       Float::from_int(px + panel_w - corner_size),
       Float::from_int(py + panel_h),
     ),
-    2.0, border_color,
+    2.0,
+    border_color,
   )
   @raylib.draw_line_ex(
     @raylib.Vector2::new(
-      Float::from_int(px + panel_w), Float::from_int(py + panel_h),
+      Float::from_int(px + panel_w),
+      Float::from_int(py + panel_h),
     ),
     @raylib.Vector2::new(
       Float::from_int(px + panel_w),
       Float::from_int(py + panel_h - corner_size),
     ),
-    2.0, border_color,
+    2.0,
+    border_color,
   )
   // Level name
   let level_name = @types.level_name(game.current_level)
   let lnw = @draw.measure_text(level_name, 18)
-  @draw.draw_text(
-    level_name, (w - lnw) / 2, py + 12, 18, @types.color_text_dim,
-  )
+  @draw.draw_text(level_name, (w - lnw) / 2, py + 12, 18, @types.color_text_dim)
   // Title
   let title = if is_win { "Level Complete!" } else { "Level Failed" }
   let title_color = if is_win {
@@ -510,7 +581,10 @@ fn draw_results(game : @types.Game) -> Unit {
     }
     let sdw = @draw.measure_text(star_desc, 16)
     @draw.draw_text(
-      star_desc, (w - sdw) / 2, star_y + star_size + 10, 16,
+      star_desc,
+      (w - sdw) / 2,
+      star_y + star_size + 10,
+      16,
       @types.color_star_gold,
     )
     // Stats
@@ -520,9 +594,14 @@ fn draw_results(game : @types.Game) -> Unit {
       @types.color_text
     }
     @draw.draw_text(
-      "Turns: " + game.current_turn.to_string() + " / Par: " +
+      "Turns: " +
+      game.current_turn.to_string() +
+      " / Par: " +
       game.par_turns.to_string(),
-      px + 50, py + 190, 22, turns_color,
+      px + 50,
+      py + 190,
+      22,
+      turns_color,
     )
     let budget_left = @types.total_budget(game.budget)
     let budget_color = if budget_left > 0 {
@@ -532,23 +611,38 @@ fn draw_results(game : @types.Game) -> Unit {
     }
     @draw.draw_text(
       "Paints remaining: " + budget_left.to_string(),
-      px + 50, py + 220, 22, budget_color,
+      px + 50,
+      py + 220,
+      22,
+      budget_color,
     )
     // Ratio results
     draw_result_ratio(
-      px + 50, py + 260, "Forest",
+      px + 50,
+      py + 260,
+      "Forest",
       @types.biome_ratio(game.grid, Forest),
-      game.targets.forest_min, game.targets.forest_max, @types.color_forest,
+      game.targets.forest_min,
+      game.targets.forest_max,
+      @types.color_forest,
     )
     draw_result_ratio(
-      px + 50, py + 290, "Ocean",
+      px + 50,
+      py + 290,
+      "Ocean",
       @types.biome_ratio(game.grid, Ocean),
-      game.targets.ocean_min, game.targets.ocean_max, @types.color_ocean,
+      game.targets.ocean_min,
+      game.targets.ocean_max,
+      @types.color_ocean,
     )
     draw_result_ratio(
-      px + 50, py + 320, "Desert",
+      px + 50,
+      py + 320,
+      "Desert",
       @types.biome_ratio(game.grid, Desert),
-      game.targets.desert_min, game.targets.desert_max, @types.color_desert,
+      game.targets.desert_min,
+      game.targets.desert_max,
+      @types.color_desert,
     )
     // Mini planet on results
     draw_mini_planet(px + panel_w - 55, py + 200, game.grid)
@@ -556,11 +650,17 @@ fn draw_results(game : @types.Game) -> Unit {
     // Failure screen
     @draw.draw_text(
       "The ecosystem could not reach",
-      px + 50, py + 120, 22, @types.color_text,
+      px + 50,
+      py + 120,
+      22,
+      @types.color_text,
     )
     @draw.draw_text(
       "the target biome ratios.",
-      px + 50, py + 150, 22, @types.color_text,
+      px + 50,
+      py + 150,
+      22,
+      @types.color_text,
     )
     // Show what was wrong
     let (fs, os, ds) = @biome.ratio_status(game.grid, game.targets)
@@ -568,21 +668,27 @@ fn draw_results(game : @types.Game) -> Unit {
     if fs != 0 {
       let dir = if fs < 0 { "too low" } else { "too high" }
       @draw.draw_text(
-        "Forest: " + dir, px + 70, fail_y, 20, @types.color_forest,
+        "Forest: " + dir,
+        px + 70,
+        fail_y,
+        20,
+        @types.color_forest,
       )
       fail_y += 28
     }
     if os != 0 {
       let dir = if os < 0 { "too low" } else { "too high" }
-      @draw.draw_text(
-        "Ocean: " + dir, px + 70, fail_y, 20, @types.color_ocean,
-      )
+      @draw.draw_text("Ocean: " + dir, px + 70, fail_y, 20, @types.color_ocean)
       fail_y += 28
     }
     if ds != 0 {
       let dir = if ds < 0 { "too low" } else { "too high" }
       @draw.draw_text(
-        "Desert: " + dir, px + 70, fail_y, 20, @types.color_desert,
+        "Desert: " + dir,
+        px + 70,
+        fail_y,
+        20,
+        @types.color_desert,
       )
     }
     ignore(fail_y)
@@ -595,7 +701,11 @@ fn draw_results(game : @types.Game) -> Unit {
   }
   let pw = @draw.measure_text(prompt, 18)
   @draw.draw_text(
-    prompt, (w - pw) / 2, py + panel_h - 40, 18, @types.color_text_dim,
+    prompt,
+    (w - pw) / 2,
+    py + panel_h - 40,
+    18,
+    @types.color_text_dim,
   )
 }
 
@@ -607,7 +717,7 @@ fn draw_result_ratio(
   current : Float,
   min : Float,
   max : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let pct = (current * 100.0).to_int()
   let min_pct = (min * 100.0).to_int()
@@ -619,10 +729,20 @@ fn draw_result_ratio(
   } else {
     @types.color_fail
   }
-  let text = label + ": " + pct.to_string() + "% [" + min_pct.to_string() +
-    "-" + max_pct.to_string() + "%]"
+  let text = label +
+    ": " +
+    pct.to_string() +
+    "% [" +
+    min_pct.to_string() +
+    "-" +
+    max_pct.to_string() +
+    "%]"
   @draw.draw_text(text, x, y, 18, color)
   @draw.draw_text(
-    status, x + @draw.measure_text(text, 18) + 5, y, 18, status_color,
+    status,
+    x + @draw.measure_text(text, 18) + 5,
+    y,
+    18,
+    status_color,
   )
 }

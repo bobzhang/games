@@ -150,14 +150,12 @@ test "start_level_resets_state" {
   game.turn = 99
   game.yield_collected = 99
   game.goals_collected = 99
-  game.undo_stack.push(
-    {
-      tiles: @types.clone_grid_tiles(game.level.grid),
-      turn: 0,
-      yield_collected: 0,
-      goals_collected: 0,
-    },
-  )
+  game.undo_stack.push({
+    tiles: @types.clone_grid_tiles(game.level.grid),
+    turn: 0,
+    yield_collected: 0,
+    goals_collected: 0,
+  })
   // Start level
   @game.start_level(game, 0)
   assert_eq(game.turn, 0)

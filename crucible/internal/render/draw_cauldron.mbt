@@ -30,13 +30,12 @@ fn draw_cauldron(game : @types.Game) -> Unit {
       for i in 0..<8 {
         let fi : Float = Float::from_int(i)
         let angle : Float = fi * 0.785 + time * 0.5
-        let br : Float = (r - 25.0) * (0.3 + @types.absf(
-            @types.sinf(fi * 1.3 + time),
-          ) * 0.5)
+        let br : Float = (r - 25.0) *
+          (0.3 + @types.absf(@types.sinf(fi * 1.3 + time)) * 0.5)
         let bx : Float = @types.cauldron_x + @types.cosf(angle) * br
-        let by : Float = @types.cauldron_y + @types.sinf(angle) * br - @types.absf(
-            @types.sinf(time * 2.0 + fi),
-          ) * 15.0
+        let by : Float = @types.cauldron_y +
+          @types.sinf(angle) * br -
+          @types.absf(@types.sinf(time * 2.0 + fi)) * 15.0
         let bubble_size : Float = 4.0 + @types.sinf(fi + time) * 2.0
         let lighter = @raylib.Color::new(
           @types.mini(color.r.to_int() + 60, 255),
@@ -128,7 +127,11 @@ fn draw_palette(game : @types.Game) -> Unit {
       (base_x + radius + 10.0).to_int(),
       ey.to_int() - 9,
       16,
-      if remaining > 0 { color } else { @types.color_text_dim },
+      if remaining > 0 {
+        color
+      } else {
+        @types.color_text_dim
+      },
     )
     // Count
     let count_text = remaining.to_string() + "/" + total.to_string()
@@ -149,15 +152,17 @@ fn draw_hud(game : @types.Game) -> Unit {
   // Level info bar at top
   @raylib.draw_rectangle(0, 0, w, 40, @types.color_panel_bg)
   // Level number
-  let level_num = "Level " + (game.current_level_index - @types.tier_start_index(
-      game.current_tier,
-    ) + 1).to_string()
+  let level_num = "Level " +
+    (game.current_level_index - @types.tier_start_index(game.current_tier) + 1).to_string()
   @draw.draw_text(level_num, 15, 8, 20, @types.color_text_bright)
   // Target
   let target_text = "Target: " + @types.element_name(level.target)
   @draw.draw_text(target_text, 180, 8, 20, @types.element_color(level.target))
   // Steps
-  let steps = "Steps: " + game.steps_taken.to_string() + " / Par: " + level.par_steps.to_string()
+  let steps = "Steps: " +
+    game.steps_taken.to_string() +
+    " / Par: " +
+    level.par_steps.to_string()
   @draw.draw_text(steps, 450, 8, 18, @types.color_text)
   // Attempts
   let attempts = "Failures: " + game.failed_attempts.to_string()
@@ -207,7 +212,7 @@ fn draw_message(game : @types.Game) -> Unit {
 
 ///|
 fn draw_animations(game : @types.Game) -> Unit {
-  if !(game.anim.active) {
+  if !game.anim.active {
     return
   }
   let cx = @types.cauldron_x
@@ -268,7 +273,7 @@ fn draw_animations(game : @types.Game) -> Unit {
         @raylib.Color::new(200, 255, 200, a),
       )
     }
-    AddElement => {
+    AddElement =>
       // Element dropping into cauldron
       match game.add_anim_element {
         Some(elem) => {
@@ -292,7 +297,6 @@ fn draw_animations(game : @types.Game) -> Unit {
         }
         None => ()
       }
-    }
     _ => ()
   }
 }

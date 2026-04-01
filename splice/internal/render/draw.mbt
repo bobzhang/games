@@ -19,12 +19,20 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     let msg_w = @draw.measure_text(game.message, 20)
     let mx = (@types.screen_width - msg_w) / 2
     let my = @types.screen_height - 60
-    @raylib.draw_rectangle(mx - 12, my - 6, msg_w + 24, 32, @raylib.Color::new(
-      0, 0, 0, 180,
-    ))
-    @draw.draw_text(game.message, mx, my, 20, @raylib.Color::new(
-      255, 220, 100, alpha,
-    ))
+    @raylib.draw_rectangle(
+      mx - 12,
+      my - 6,
+      msg_w + 24,
+      32,
+      @raylib.Color::new(0, 0, 0, 180),
+    )
+    @draw.draw_text(
+      game.message,
+      mx,
+      my,
+      20,
+      @raylib.Color::new(255, 220, 100, alpha),
+    )
   }
   @raylib.end_drawing()
 }

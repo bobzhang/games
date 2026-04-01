@@ -1,10 +1,5 @@
 ///|
-fn c(
-  kind : @types.ClueKind,
-  a : Int,
-  b : Int,
-  text : String
-) -> @types.Clue {
+fn c(kind : @types.ClueKind, a : Int, b : Int, text : String) -> @types.Clue {
   @types.new_clue(kind, a, b, text)
 }
 

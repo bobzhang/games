@@ -11,7 +11,11 @@ fn draw_title(game : @types.Game) -> Unit {
     let size = 20 + (fi * 13.0 % 30.0).to_int()
     let alpha = 15 + (fi * 7.0 % 25.0).to_int()
     @raylib.draw_rectangle(
-      bx, by, size, size, @raylib.Color::new(245, 240, 230, alpha),
+      bx,
+      by,
+      size,
+      size,
+      @raylib.Color::new(245, 240, 230, alpha),
     )
   }
   // Title
@@ -29,9 +33,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Subtitle
   let sub = "Paper Folding Puzzle"
   let sw = @draw.measure_text(sub, 24)
-  @draw.draw_text(
-    sub, (w - sw) / 2, h / 4 + 80, 24, @types.color_subtitle,
-  )
+  @draw.draw_text(sub, (w - sw) / 2, h / 4 + 80, 24, @types.color_subtitle)
   // Animated folding paper illustration
   let cx = w / 2
   let cy = h / 2 + 20
@@ -98,11 +100,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let bx = start_x + i * (tier_w + gap)
     let col = @types.tier_color(tier)
     let is_hover = game.hover_button == i
-    let bg = if is_hover {
-      @types.color_btn_hover
-    } else {
-      @types.color_btn
-    }
+    let bg = if is_hover { @types.color_btn_hover } else { @types.color_btn }
     @raylib.draw_rectangle(bx, tier_y, tier_w, tier_h, bg)
     @raylib.draw_rectangle_lines(bx, tier_y, tier_w, tier_h, col)
     // Tier name
@@ -113,7 +111,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let count_txt = @types.tier_level_count(tier).to_string() + " Levels"
     let cw = @draw.measure_text(count_txt, 18)
     @draw.draw_text(
-      count_txt, bx + (tier_w - cw) / 2, tier_y + 60, 18, @types.color_subtitle,
+      count_txt,
+      bx + (tier_w - cw) / 2,
+      tier_y + 60,
+      18,
+      @types.color_subtitle,
     )
     // Completed count
     let start_idx = @types.tier_start_index(tier)
@@ -127,14 +129,21 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let comp_txt = completed.to_string() + " / " + count.to_string() + " done"
     let cpw = @draw.measure_text(comp_txt, 16)
     @draw.draw_text(
-      comp_txt, bx + (tier_w - cpw) / 2, tier_y + 90, 16, @types.color_subtitle,
+      comp_txt,
+      bx + (tier_w - cpw) / 2,
+      tier_y + 90,
+      16,
+      @types.color_subtitle,
     )
     // Total stars
     let mut total_stars = 0
     for j in start_idx..<(start_idx + count) {
       total_stars += star_value(game.scores[j].stars)
     }
-    let star_txt = total_stars.to_string() + " / " + (count * 3).to_string() + " stars"
+    let star_txt = total_stars.to_string() +
+      " / " +
+      (count * 3).to_string() +
+      " stars"
     let stw = @draw.measure_text(star_txt, 16)
     @draw.draw_text(
       star_txt,
@@ -193,11 +202,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
     let score = game.scores[lvl_idx]
     let level = @levels.get_level(lvl_idx)
     let is_hover = game.hover_button == i
-    let bg = if is_hover {
-      @types.color_btn_hover
-    } else {
-      @types.color_btn
-    }
+    let bg = if is_hover { @types.color_btn_hover } else { @types.color_btn }
     @raylib.draw_rectangle(bx, by, btn_w, btn_h, bg)
     if score.completed {
       @raylib.draw_rectangle_lines(bx, by, btn_w, btn_h, @types.color_check_ok)
@@ -212,7 +217,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
     let name = level.name
     let name_w = @draw.measure_text(name, 14)
     @draw.draw_text(
-      name, bx + (btn_w - name_w) / 2, by + 36, 14, @types.color_subtitle,
+      name,
+      bx + (btn_w - name_w) / 2,
+      by + 36,
+      14,
+      @types.color_subtitle,
     )
     // Stars
     draw_stars_row(bx + btn_w / 2 - 30, by + 62, score.stars, 20)
@@ -250,7 +259,11 @@ fn draw_results(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_lines(px, py, panel_w, panel_h, @types.color_accent)
   // Title
   let result = @fold.check_completion(game.current_paper, game.target)
-  let title = if result.silhouette_match { "Level Complete!" } else { "Not Quite..." }
+  let title = if result.silhouette_match {
+    "Level Complete!"
+  } else {
+    "Not Quite..."
+  }
   let title_col = if result.silhouette_match {
     @types.color_check_ok
   } else {
@@ -262,16 +275,26 @@ fn draw_results(game : @types.Game) -> Unit {
   let name = game.target.name
   let nw = @draw.measure_text(name, 20)
   @draw.draw_text(
-    name, px + (panel_w - nw) / 2, py + 60, 20, @types.color_subtitle,
+    name,
+    px + (panel_w - nw) / 2,
+    py + 60,
+    20,
+    @types.color_subtitle,
   )
   // Folds used
   let folds = game.fold_history.length()
-  let fold_txt =
-    "Folds used: " + folds.to_string() + " (par: " + game.target.par_folds.to_string() +
+  let fold_txt = "Folds used: " +
+    folds.to_string() +
+    " (par: " +
+    game.target.par_folds.to_string() +
     ")"
   let fw = @draw.measure_text(fold_txt, 18)
   @draw.draw_text(
-    fold_txt, px + (panel_w - fw) / 2, py + 100, 18, @types.color_subtitle,
+    fold_txt,
+    px + (panel_w - fw) / 2,
+    py + 100,
+    18,
+    @types.color_subtitle,
   )
   // Silhouette check
   let sil_txt = if result.silhouette_match {

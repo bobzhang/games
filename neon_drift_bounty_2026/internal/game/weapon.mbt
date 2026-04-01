@@ -32,7 +32,8 @@ fn @types.Game::shoot_upgraded_bullet(game : @types.Game) -> Unit {
   match game.weapon {
     Some(Spread) => {
       // Spread: wider shot pattern, more bullets at higher levels
-      let angle = @types.spread_angle * (1.0 + Float::from_int(game.weapon_level) * 0.3)
+      let angle = @types.spread_angle *
+        (1.0 + Float::from_int(game.weapon_level) * 0.3)
       let rad = angle * 3.14159 / 180.0
       // Center bullet
       game.spawn_bullet(

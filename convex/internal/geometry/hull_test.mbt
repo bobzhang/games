@@ -43,10 +43,12 @@ test "graham scan pentagon" {
   let pts : Array[@types.Point] = []
   for i in 0..<5 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 5.0
-    pts.push(@types.pt(
-      100.0 + 50.0 * @types.cosf(angle),
-      100.0 + 50.0 * @types.sinf(angle),
-    ))
+    pts.push(
+      @types.pt(
+        100.0 + 50.0 * @types.cosf(angle),
+        100.0 + 50.0 * @types.sinf(angle),
+      ),
+    )
   }
   let hull = compute_hull(pts)
   inspect(hull.length(), content="5")
@@ -129,10 +131,7 @@ test "point in polygon" {
   ]
   inspect(@types.point_in_polygon(@types.pt(5.0, 5.0), poly), content="true")
   inspect(@types.point_in_polygon(@types.pt(15.0, 5.0), poly), content="false")
-  inspect(
-    @types.point_in_polygon(@types.pt(-1.0, -1.0), poly),
-    content="false",
-  )
+  inspect(@types.point_in_polygon(@types.pt(-1.0, -1.0), poly), content="false")
 }
 
 ///|
@@ -159,10 +158,7 @@ test "empty and small inputs" {
   let one : Array[@types.Point] = [@types.pt(5.0, 5.0)]
   let hull1 = compute_hull(one)
   inspect(hull1.length(), content="1")
-  let two : Array[@types.Point] = [
-    @types.pt(0.0, 0.0),
-    @types.pt(10.0, 0.0),
-  ]
+  let two : Array[@types.Point] = [@types.pt(0.0, 0.0), @types.pt(10.0, 0.0)]
   let hull2 = compute_hull(two)
   inspect(hull2.length(), content="2")
 }

@@ -269,10 +269,7 @@ pub fn resolve_all_enemy_intents(battle : @types.BattleState) -> Unit {
 
 ///|
 /// Resolve a single enemy's intent.
-fn resolve_single_intent(
-  battle : @types.BattleState,
-  unit_id : Int,
-) -> Unit {
+fn resolve_single_intent(battle : @types.BattleState, unit_id : Int) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
   match u.intent {
@@ -314,9 +311,7 @@ fn resolve_march(
       let cur_dist = @types.manhattan(u.x, u.y, tx, ty)
       if alt_dist < cur_dist && is_walkable(battle, alt_x, alt_y) {
         move_unit_to(battle, unit_id, alt_x, alt_y)
-        battle.turn_log.push(
-          "\{name} marches to (\{alt_x}, \{alt_y})",
-        )
+        battle.turn_log.push("\{name} marches to (\{alt_x}, \{alt_y})")
         check_hazard_on_tile(battle, unit_id, alt_x, alt_y)
         return
       }
@@ -355,9 +350,7 @@ fn resolve_charge(
       let hit_id = tile.occupied_by
       let hit_name = get_unit_name(battle, hit_id)
       let _ = apply_damage(battle, hit_id, 2)
-      battle.turn_log.push(
-        "\{name} charges into \{hit_name} for 2 damage!",
-      )
+      battle.turn_log.push("\{name} charges into \{hit_name} for 2 damage!")
       try_push(battle, hit_id, dx, dy, 1)
       break
     }
@@ -396,9 +389,7 @@ fn resolve_fire_line(
       let hit_id = tile.occupied_by
       let hit_name = get_unit_name(battle, hit_id)
       let _ = apply_damage(battle, hit_id, 2)
-      battle.turn_log.push(
-        "  Beam hits \{hit_name} for 2 damage!",
-      )
+      battle.turn_log.push("  Beam hits \{hit_name} for 2 damage!")
       // Beam continues through units
     }
     cx += dx
@@ -452,9 +443,7 @@ fn resolve_area_blast(
   ty : Int,
   radius : Int,
 ) -> Unit {
-  battle.turn_log.push(
-    "\{name} fires area blast at (\{tx}, \{ty})!",
-  )
+  battle.turn_log.push("\{name} fires area blast at (\{tx}, \{ty})!")
   for dy = -radius; dy <= radius; dy = dy + 1 {
     for dx = -radius; dx <= radius; dx = dx + 1 {
       let ax = tx + dx
@@ -466,9 +455,7 @@ fn resolve_area_blast(
           if hit_unit.active && hit_unit.hp > 0 {
             let hit_name = get_unit_name(battle, hit_id)
             let _ = apply_damage(battle, hit_id, 2)
-            battle.turn_log.push(
-              "  Blast hits \{hit_name} for 2 damage!",
-            )
+            battle.turn_log.push("  Blast hits \{hit_name} for 2 damage!")
           }
         }
       }
@@ -490,9 +477,7 @@ fn resolve_summon(
   if ally_id >= 0 {
     apply_shield(battle, ally_id, amount)
     let ally_name = get_unit_name(battle, ally_id)
-    battle.turn_log.push(
-      "\{name} grants \{amount} shield to \{ally_name}",
-    )
+    battle.turn_log.push("\{name} grants \{amount} shield to \{ally_name}")
   } else {
     battle.turn_log.push("\{name} tries to shield but no ally found")
   }
@@ -510,13 +495,9 @@ fn resolve_mine_place(
     let tile = battle.grid.get(tx, ty)
     if tile.kind != Wall && tile.kind != Chasm {
       place_hazard(battle, tx, ty, Mine)
-      battle.turn_log.push(
-        "\{name} places a mine at (\{tx}, \{ty})",
-      )
+      battle.turn_log.push("\{name} places a mine at (\{tx}, \{ty})")
     } else {
-      battle.turn_log.push(
-        "\{name} cannot place mine at (\{tx}, \{ty})",
-      )
+      battle.turn_log.push("\{name} cannot place mine at (\{tx}, \{ty})")
     }
   }
 }
@@ -667,7 +648,11 @@ fn generate_siege_phase1(
     let dy = sign(target.y - u.y)
     let adx = @types.abs_int(target.x - u.x)
     let ady = @types.abs_int(target.y - u.y)
-    if adx >= ady { Charge(dx, 0) } else { Charge(0, dy) }
+    if adx >= ady {
+      Charge(dx, 0)
+    } else {
+      Charge(0, dy)
+    }
   } else {
     // 3x3 artillery blast at target
     AreaBlast(target.x, target.y, 1)
@@ -720,7 +705,11 @@ fn generate_siege_phase3(
     let dy = sign(target.y - u.y)
     let adx = @types.abs_int(target.x - u.x)
     let ady = @types.abs_int(target.y - u.y)
-    if adx >= ady { Charge(dx, 0) } else { Charge(0, dy) }
+    if adx >= ady {
+      Charge(dx, 0)
+    } else {
+      Charge(0, dy)
+    }
   } else {
     // Fire at target location with larger radius
     AreaBlast(target.x, target.y, 2)

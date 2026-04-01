@@ -45,7 +45,9 @@ fn draw_controls_panel(game : @types.Game) -> Unit {
   let panel_w = 240
   let panel_h = 110
   // Background
-  @raylib.draw_rectangle(panel_x, panel_y, panel_w, panel_h, @types.color_hud_bg)
+  @raylib.draw_rectangle(
+    panel_x, panel_y, panel_w, panel_h, @types.color_hud_bg,
+  )
   @raylib.draw_rectangle_lines(
     panel_x, panel_y, panel_w, panel_h, @types.color_grid_line,
   )
@@ -53,16 +55,23 @@ fn draw_controls_panel(game : @types.Game) -> Unit {
   let level_name = game.target.name
   let name_w = @draw.measure_text(level_name, 18)
   @draw.draw_text(
-    level_name, panel_x + (panel_w - name_w) / 2, panel_y + 5, 18, @types.color_title,
+    level_name,
+    panel_x + (panel_w - name_w) / 2,
+    panel_y + 5,
+    18,
+    @types.color_title,
   )
-  let fold_txt =
-    "Folds: " +
+  let fold_txt = "Folds: " +
     game.fold_history.length().to_string() +
     " / Par: " +
     game.target.par_folds.to_string()
   let ft_w = @draw.measure_text(fold_txt, 16)
   @draw.draw_text(
-    fold_txt, panel_x + (panel_w - ft_w) / 2, panel_y + 28, 16, @types.color_subtitle,
+    fold_txt,
+    panel_x + (panel_w - ft_w) / 2,
+    panel_y + 28,
+    16,
+    @types.color_subtitle,
   )
   // Direction buttons row
   let btn_y = panel_y + 50
@@ -124,7 +133,7 @@ fn draw_stars_row(
   x : Int,
   y : Int,
   rating : @types.StarRating,
-  size : Int
+  size : Int,
 ) -> Unit {
   let gap = size + 4
   let star_count = match rating {

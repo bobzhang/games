@@ -146,17 +146,15 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     return
   }
   match game.play_state {
-    Won => {
+    Won =>
       if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) ||
         @raylib.is_key_pressed(@raylib.KeyEnter) {
         game.screen = Results
       }
-    }
-    Failed => {
+    Failed =>
       if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
         load_level(game, game.current_level)
       }
-    }
     Settling => {
       game.settle_timer = game.settle_timer + dt
       let settled = @physics.animate_settling(game, dt)

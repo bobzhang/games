@@ -4,15 +4,37 @@ pub fn draw_hud(game : @types.Game) -> Unit {
     None => ()
     Some(def) => {
       // Level name header
-      let header = "World " + (def.world + 1).to_string() + "-" + (def.index + 1).to_string() + ": " + def.name
-      @draw.draw_text(header, @types.grid_offset_x, 8, 20, @types.color_text_bright)
+      let header = "World " +
+        (def.world + 1).to_string() +
+        "-" +
+        (def.index + 1).to_string() +
+        ": " +
+        def.name
+      @draw.draw_text(
+        header, @types.grid_offset_x, 8, 20, @types.color_text_bright,
+      )
       // Goal progress
       draw_goal_progress(game)
       // Par info
-      let par_text = "Par: " + def.par.to_string() + "  Optimal: " + def.optimal.to_string()
-      @draw.draw_text(par_text, @types.grid_offset_x, @types.screen_height - 70, 14, @types.color_text_dim)
+      let par_text = "Par: " +
+        def.par.to_string() +
+        "  Optimal: " +
+        def.optimal.to_string()
+      @draw.draw_text(
+        par_text,
+        @types.grid_offset_x,
+        @types.screen_height - 70,
+        14,
+        @types.color_text_dim,
+      )
       // Hint
-      @draw.draw_text(def.hint, @types.grid_offset_x, @types.screen_height - 48, 13, @types.color_text_dim)
+      @draw.draw_text(
+        def.hint,
+        @types.grid_offset_x,
+        @types.screen_height - 48,
+        13,
+        @types.color_text_dim,
+      )
       // Medal display
       draw_medal_info(game, def)
     }
@@ -26,19 +48,16 @@ fn draw_goal_progress(game : @types.Game) -> Unit {
     Some(level) => {
       let total = level.goals.length()
       let collected = get_current_goals_count(game)
-      let progress_text = "Goals: " + collected.to_string() + "/" + total.to_string()
+      let progress_text = "Goals: " +
+        collected.to_string() +
+        "/" +
+        total.to_string()
       let col = if collected == total {
         @types.color_success
       } else {
         @types.color_goal
       }
-      @draw.draw_text(
-        progress_text,
-        @types.grid_offset_x + 400,
-        8,
-        18,
-        col,
-      )
+      @draw.draw_text(progress_text, @types.grid_offset_x + 400, 8, 18, col)
     }
   }
 }
@@ -48,7 +67,9 @@ fn get_current_goals_count(game : @types.Game) -> Int {
   match game.trace {
     Some(trace) =>
       if game.trace_step >= 0 && game.trace_step < trace.states.length() {
-        @types.count_goals_collected(trace.states[game.trace_step].goals_collected)
+        @types.count_goals_collected(
+          trace.states[game.trace_step].goals_collected,
+        )
       } else {
         0
       }
@@ -81,11 +102,7 @@ fn draw_medal_info(game : @types.Game, def : @types.LevelDef) -> Unit {
 
 ///|
 pub fn draw_star(x : Int, y : Int, filled : Bool) -> Unit {
-  let col = if filled {
-    @types.color_gold
-  } else {
-    @types.color_text_dim
-  }
+  let col = if filled { @types.color_gold } else { @types.color_text_dim }
   // Simple star as a small filled circle for now
   @raylib.draw_circle(x, y, 8.0, col)
   if !filled {

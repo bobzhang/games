@@ -125,7 +125,7 @@ pub fn make_grid(
   width : Int,
   height : Int,
   heights : Array[Int],
-  targets : Array[(Int, Int, WeatherState)]
+  targets : Array[(Int, Int, WeatherState)],
 ) -> Grid {
   let tiles : Array[Tile] = []
   for r in 0..<height {
@@ -141,7 +141,12 @@ pub fn make_grid(
           tw = tw2
         }
       }
-      tiles.push({ weather: Clear, height: h, is_target: is_t, target_weather: tw })
+      tiles.push({
+        weather: Clear,
+        height: h,
+        is_target: is_t,
+        target_weather: tw,
+      })
     }
   }
   { width, height, tiles }

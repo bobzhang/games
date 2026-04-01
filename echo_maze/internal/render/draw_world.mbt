@@ -26,7 +26,7 @@ pub fn draw_tiles(maze : @types.Maze, maze_state : @types.MazeState) -> Unit {
 ///|
 fn tile_color(
   kind : @types.TileKind,
-  maze_state : @types.MazeState
+  maze_state : @types.MazeState,
 ) -> @raylib.Color {
   match kind {
     Floor => @types.color_floor
@@ -72,7 +72,7 @@ fn tile_color(
 /// Draw door animation effects (sliding open/close visual)
 pub fn draw_door_animations(
   maze : @types.Maze,
-  maze_state : @types.MazeState
+  maze_state : @types.MazeState,
 ) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
@@ -116,7 +116,11 @@ pub fn draw_door_animations(
               panel_color,
             )
             // Spark effect at center during transition
-            let mid_dist = if anim_f > 0.5 { anim_f - 0.5 } else { 0.5 - anim_f }
+            let mid_dist = if anim_f > 0.5 {
+              anim_f - 0.5
+            } else {
+              0.5 - anim_f
+            }
             let spark_alpha = (150.0 * (1.0 - mid_dist * 2.0)).to_int()
             let cx = Float::from_int(px + ts / 2)
             let cy = Float::from_int(py + ts / 2)
@@ -218,7 +222,7 @@ pub fn draw_exit_glow(maze : @types.Maze, game : @types.Game) -> Unit {
 pub fn draw_button_glow(
   maze : @types.Maze,
   maze_state : @types.MazeState,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
@@ -278,7 +282,7 @@ pub fn draw_button_glow(
 pub fn draw_collectibles(
   maze : @types.Maze,
   maze_state : @types.MazeState,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
@@ -317,7 +321,7 @@ pub fn draw_collectibles(
 /// Draw door labels
 pub fn draw_door_labels(
   maze : @types.Maze,
-  maze_state : @types.MazeState
+  maze_state : @types.MazeState,
 ) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
@@ -384,7 +388,7 @@ pub fn draw_start_marker(maze : @types.Maze, game : @types.Game) -> Unit {
 pub fn draw_timed_door_indicators(
   maze : @types.Maze,
   maze_state : @types.MazeState,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
@@ -420,13 +424,7 @@ pub fn draw_timed_door_indicators(
           } else {
             @raylib.Color::new(200, 60, 220, 200)
           }
-          @raylib.draw_rectangle(
-            px + 2,
-            py + ts - 5,
-            fill_w,
-            bar_h,
-            bar_color,
-          )
+          @raylib.draw_rectangle(px + 2, py + ts - 5, fill_w, bar_h, bar_color)
         }
         _ => ()
       }

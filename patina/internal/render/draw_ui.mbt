@@ -54,13 +54,7 @@ fn draw_tool_palette(game : @types.Game) -> Unit {
     @draw.draw_text(budget_str, bx + btn_w - 40, by + 8, 20, budget_color)
     // Hotkey hint
     let key_str = (i + 1).to_string()
-    @draw.draw_text(
-      key_str,
-      bx + 16,
-      by + 35,
-      14,
-      @types.color_text_dim,
-    )
+    @draw.draw_text(key_str, bx + 16, by + 35, 14, @types.color_text_dim)
     // Tool description
     let desc = match tool {
       Clean => "Removes stains"
@@ -79,11 +73,7 @@ fn draw_region_info(game : @types.Game, level : @types.Level) -> Unit {
   let panel_w = 200
   let panel_h = 160
   @raylib.draw_rectangle(
-    info_x,
-    info_y,
-    panel_w,
-    panel_h,
-    @types.color_panel_bg,
+    info_x, info_y, panel_w, panel_h, @types.color_panel_bg,
   )
   @raylib.draw_rectangle_lines_ex(
     @raylib.Rectangle::new(
@@ -96,7 +86,8 @@ fn draw_region_info(game : @types.Game, level : @types.Level) -> Unit {
     @types.color_frame,
   )
   @draw.draw_text("REGION INFO", info_x + 10, info_y + 8, 16, @types.color_text)
-  if game.hover_region >= 0 && game.hover_region < level.artwork.regions.length() {
+  if game.hover_region >= 0 &&
+    game.hover_region < level.artwork.regions.length() {
     let region = level.artwork.regions[game.hover_region]
     // State
     let state_str = "State: " + @types.state_name(region.state)
@@ -116,7 +107,13 @@ fn draw_region_info(game : @types.Game, level : @types.Level) -> Unit {
         }
         dmg_str = dmg_str + @types.damage_name(region.damage_types[i])
       }
-      @draw.draw_text(dmg_str, info_x + 10, info_y + 52, 14, @types.color_text_dim)
+      @draw.draw_text(
+        dmg_str,
+        info_x + 10,
+        info_y + 52,
+        14,
+        @types.color_text_dim,
+      )
     } else if region.state != Pristine {
       @draw.draw_text(
         "Damage: none remaining",
@@ -221,18 +218,9 @@ fn draw_progress_bar(game : @types.Game, level : @types.Level) -> Unit {
       )
     }
   }
-  @raylib.draw_rectangle_lines(
-    bar_x,
-    bar_y,
-    bar_w,
-    bar_h,
-    @types.color_frame,
-  )
+  @raylib.draw_rectangle_lines(bar_x, bar_y, bar_w, bar_h, @types.color_frame)
   // Label
-  let label = "Progress: " +
-    done.to_string() +
-    " / " +
-    total.to_string()
+  let label = "Progress: " + done.to_string() + " / " + total.to_string()
   @draw.draw_text(label, bar_x, bar_y - 20, 14, @types.color_text_dim)
   // Tools used
   let tools_str = "Tools used: " + game.total_tools_used.to_string()
@@ -246,10 +234,7 @@ fn draw_progress_bar(game : @types.Game, level : @types.Level) -> Unit {
 fn draw_controls_hint(_game : @types.Game) -> Unit {
   let y = @types.screen_height - 35
   @draw.draw_text(
-    "1-4: Select Tool   Click: Apply   Z: Undo   R: Restart   ESC: Back",
-    20,
-    y,
-    14,
-    @types.color_text_dim,
+    "1-4: Select Tool   Click: Apply   Z: Undo   R: Restart   ESC: Back", 20, y,
+    14, @types.color_text_dim,
   )
 }

@@ -47,6 +47,7 @@ pub let tier2_count : Int = 9
 pub let tier3_count : Int = 8
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(6, 6, 18, 255)
 
@@ -95,7 +96,9 @@ pub let color_hud : @raylib.Color = @raylib.Color::new(200, 210, 230, 220)
 pub let color_title : @raylib.Color = @raylib.Color::new(80, 220, 255, 255)
 
 ///|
-pub let color_tier_launch : @raylib.Color = @raylib.Color::new(100, 200, 100, 255)
+pub let color_tier_launch : @raylib.Color = @raylib.Color::new(
+  100, 200, 100, 255,
+)
 
 ///|
 pub let color_tier_sling : @raylib.Color = @raylib.Color::new(200, 180, 60, 255)

@@ -76,14 +76,12 @@ test "find_symbol_for_letter" {
 
 ///|
 test "decode_inscription partial" {
-  let inscription = @types.new_inscription(
-    [
-      @types.make_symbol(Circle),
-      @types.make_symbol(Triangle),
-      @types.make_space(),
-      @types.make_symbol(Square),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+    @types.make_space(),
+    @types.make_symbol(Square),
+  ])
   let m = @types.new_mapping()
   @types.mapping_set(m, Circle, 0) // A
   // Triangle unmapped, Square unmapped
@@ -93,14 +91,12 @@ test "decode_inscription partial" {
 
 ///|
 test "decode_inscription full" {
-  let inscription = @types.new_inscription(
-    [
-      @types.make_symbol(Circle),
-      @types.make_symbol(Triangle),
-      @types.make_space(),
-      @types.make_symbol(Square),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+    @types.make_space(),
+    @types.make_symbol(Square),
+  ])
   let m = @types.new_mapping()
   @types.mapping_set(m, Circle, 0) // A
   @types.mapping_set(m, Triangle, 1) // B
@@ -111,15 +107,13 @@ test "decode_inscription full" {
 
 ///|
 test "get_inscription_symbols_unique" {
-  let inscription = @types.new_inscription(
-    [
-      @types.make_symbol(Circle),
-      @types.make_symbol(Triangle),
-      @types.make_space(),
-      @types.make_symbol(Circle),
-      @types.make_symbol(Star),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+    @types.make_space(),
+    @types.make_symbol(Circle),
+    @types.make_symbol(Star),
+  ])
   let unique = @types.get_inscription_symbols_unique(inscription)
   inspect(unique.length(), content="3")
 }

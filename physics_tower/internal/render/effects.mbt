@@ -4,7 +4,7 @@
 pub fn draw_stress_heatmap(game : @types.Game) -> Unit {
   let world = game.world
   for body in world.bodies {
-    if !(body.active) || body.broken {
+    if !body.active || body.broken {
       continue
     }
     let threshold = @types.material_strength(body.material)
@@ -89,7 +89,10 @@ pub fn draw_earthquake_effects(game : @types.Game) -> Unit {
   let ground_y = world.ground_y.to_int()
   for i in 0..<8 {
     let x1 = @types.build_area_left.to_int() +
-      @raylib.get_random_value(0, (@types.build_area_right - @types.build_area_left).to_int())
+      @raylib.get_random_value(
+        0,
+        (@types.build_area_right - @types.build_area_left).to_int(),
+      )
     let shake = @raylib.get_random_value(-3, 3)
     @raylib.draw_line(
       x1,
@@ -115,10 +118,9 @@ pub fn draw_impact_effects(game : @types.Game) -> Unit {
       if alpha_ratio > 0.7 {
         // Recent -- draw glow
         let glow_size = p.size * 3.0
-        let alpha = ((alpha_ratio - 0.7) * 3.333 * 80.0).to_int().clamp(
-          min=0,
-          max=80,
-        )
+        let alpha = ((alpha_ratio - 0.7) * 3.333 * 80.0)
+          .to_int()
+          .clamp(min=0, max=80)
         @raylib.draw_circle(
           p.x.to_int(),
           p.y.to_int(),
@@ -139,11 +141,11 @@ pub fn draw_slow_motion_indicator(game : @types.Game) -> Unit {
     return
   }
   let alpha = (@types.clampf(
-      dest.slow_motion / @types.slow_motion_duration,
-      0.0,
-      1.0,
-    ) *
-    180.0).to_int()
+    dest.slow_motion / @types.slow_motion_duration,
+    0.0,
+    1.0,
+  ) *
+  180.0).to_int()
   @draw.draw_text(
     "SLOW MOTION",
     @types.screen_w / 2 - 80,
@@ -197,23 +199,23 @@ pub fn draw_star_tally(game : @types.Game) -> Unit {
     let star_x = @types.screen_w / 2 - 100 + i * 100
     let star_y = 490
     let filled = i < stars
-    let star_anim = @types.clampf(
-      anim_t * 3.0 - Float::from_int(i),
-      0.0,
-      1.0,
-    )
+    let star_anim = @types.clampf(anim_t * 3.0 - Float::from_int(i), 0.0, 1.0)
     if filled && star_anim > 0.0 {
       // Animated filled star
       let scale = 0.5F + star_anim * 0.5F
       let size = (30.0F * scale + 0.5F).to_int()
       let alpha = (star_anim * 255.0).to_int().clamp(min=0, max=255)
-      draw_star_shape(star_x, star_y, size, @raylib.Color::new(255, 220, 60, alpha))
+      draw_star_shape(
+        star_x,
+        star_y,
+        size,
+        @raylib.Color::new(255, 220, 60, alpha),
+      )
       // Sparkle effect during animation
       if star_anim > 0.3 && star_anim < 0.9 {
-        let sparkle_alpha = ((star_anim - 0.3) * 200.0).to_int().clamp(
-          min=0,
-          max=150,
-        )
+        let sparkle_alpha = ((star_anim - 0.3) * 200.0)
+          .to_int()
+          .clamp(min=0, max=150)
         @raylib.draw_circle(
           star_x,
           star_y,
@@ -221,7 +223,7 @@ pub fn draw_star_tally(game : @types.Game) -> Unit {
           @raylib.Color::new(255, 255, 200, sparkle_alpha / 3),
         )
       }
-    } else if !(filled) {
+    } else if !filled {
       // Empty star outline
       draw_star_shape(star_x, star_y, 30, @raylib.Color::new(80, 80, 100, 120))
     }
@@ -230,7 +232,12 @@ pub fn draw_star_tally(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a simple star shape using triangles.
-fn draw_star_shape(cx : Int, cy : Int, size : Int, color : @raylib.Color) -> Unit {
+fn draw_star_shape(
+  cx : Int,
+  cy : Int,
+  size : Int,
+  color : @raylib.Color,
+) -> Unit {
   let s = Float::from_int(size)
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
@@ -556,22 +563,23 @@ pub fn draw_challenge_results(game : @types.Game) -> Unit {
 
 ///|
 /// Draws stars at a specific position with animation.
-fn draw_star_tally_at(x : Int, y : Int, stars : Int, anim_timer : Float) -> Unit {
+fn draw_star_tally_at(
+  x : Int,
+  y : Int,
+  stars : Int,
+  anim_timer : Float,
+) -> Unit {
   let anim_t = @types.clampf(anim_timer / @types.star_anim_duration, 0.0, 1.0)
   for i in 0..<3 {
     let star_x = x + i * 100
     let filled = i < stars
-    let star_anim = @types.clampf(
-      anim_t * 3.0 - Float::from_int(i),
-      0.0,
-      1.0,
-    )
+    let star_anim = @types.clampf(anim_t * 3.0 - Float::from_int(i), 0.0, 1.0)
     if filled && star_anim > 0.0 {
       let scale = 0.5F + star_anim * 0.5F
       let size = (25.0F * scale + 0.5F).to_int()
       let alpha = (star_anim * 255.0).to_int().clamp(min=0, max=255)
       draw_star_shape(star_x, y, size, @raylib.Color::new(255, 220, 60, alpha))
-    } else if !(filled) {
+    } else if !filled {
       draw_star_shape(star_x, y, 25, @raylib.Color::new(80, 80, 100, 120))
     }
   }
@@ -623,15 +631,10 @@ pub fn draw_blueprint_ghost(game : @types.Game) -> Unit {
 /// Draws the collapse replay overlay.
 pub fn draw_replay_overlay(game : @types.Game) -> Unit {
   let dest = game.destruction
-  if !(dest.replay_active) {
+  if !dest.replay_active {
     return
   }
-  let alpha = (@types.clampf(
-      dest.replay_timer / 3.0,
-      0.0,
-      1.0,
-    ) *
-    200.0).to_int()
+  let alpha = (@types.clampf(dest.replay_timer / 3.0, 0.0, 1.0) * 200.0).to_int()
   @draw.draw_text(
     "REPLAY",
     @types.screen_w / 2 - 50,

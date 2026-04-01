@@ -38,6 +38,7 @@ pub let tier2_count : Int = 9
 pub let tier3_count : Int = 8
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(18, 18, 32, 255)
 
@@ -66,13 +67,19 @@ pub let color_goal : @raylib.Color = @raylib.Color::new(50, 220, 100, 255)
 pub let color_wall : @raylib.Color = @raylib.Color::new(80, 80, 100, 255)
 
 ///|
-pub let color_collectible : @raylib.Color = @raylib.Color::new(255, 150, 50, 255)
+pub let color_collectible : @raylib.Color = @raylib.Color::new(
+  255, 150, 50, 255,
+)
 
 ///|
-pub let color_arc_preview : @raylib.Color = @raylib.Color::new(100, 100, 150, 80)
+pub let color_arc_preview : @raylib.Color = @raylib.Color::new(
+  100, 100, 150, 80,
+)
 
 ///|
-pub let color_launch_preview : @raylib.Color = @raylib.Color::new(255, 100, 100, 120)
+pub let color_launch_preview : @raylib.Color = @raylib.Color::new(
+  255, 100, 100, 120,
+)
 
 ///|
 pub let color_text : @raylib.Color = @raylib.Color::new(220, 220, 240, 255)
@@ -93,13 +100,17 @@ pub let color_tier_swing : @raylib.Color = @raylib.Color::new(80, 180, 255, 255)
 pub let color_tier_wrap : @raylib.Color = @raylib.Color::new(180, 100, 255, 255)
 
 ///|
-pub let color_tier_launch : @raylib.Color = @raylib.Color::new(255, 100, 80, 255)
+pub let color_tier_launch : @raylib.Color = @raylib.Color::new(
+  255, 100, 80, 255,
+)
 
 ///|
 pub let color_button : @raylib.Color = @raylib.Color::new(50, 50, 80, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(70, 70, 110, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  70, 70, 110, 255,
+)
 
 ///|
 pub let color_hud_bg : @raylib.Color = @raylib.Color::new(0, 0, 0, 150)

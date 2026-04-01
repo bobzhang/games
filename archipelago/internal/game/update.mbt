@@ -150,9 +150,7 @@ fn update_playing(game : @types.Game) -> Unit {
 
 ///|
 fn handle_left_click(game : @types.Game, mx : Int, my : Int) -> Unit {
-  let clicked = @types.find_nearest_island(
-    game.islands, game.grid_size, mx, my,
-  )
+  let clicked = @types.find_nearest_island(game.islands, game.grid_size, mx, my)
   if game.selected_island < 0 {
     // Nothing selected - select island
     if clicked >= 0 {
@@ -173,7 +171,12 @@ fn handle_left_click(game : @types.Game, mx : Int, my : Int) -> Unit {
   }
   // Try to connect selected to clicked
   let target = @types.find_connectable_island_at(
-    game.islands, game.bridges, game.selected_island, game.grid_size, mx, my,
+    game.islands,
+    game.bridges,
+    game.selected_island,
+    game.grid_size,
+    mx,
+    my,
   )
   if target < 0 {
     // Can't connect, select the clicked island instead
@@ -195,7 +198,9 @@ fn handle_left_click(game : @types.Game, mx : Int, my : Int) -> Unit {
     }
   } else {
     let dir = @types.bridge_direction(
-      game.islands, game.selected_island, target,
+      game.islands,
+      game.selected_island,
+      target,
     )
     game.bridges.push(@types.new_bridge(game.selected_island, target, dir))
   }
@@ -254,7 +259,7 @@ fn point_to_segment_dist(
   ax : Float,
   ay : Float,
   bx : Float,
-  by : Float
+  by : Float,
 ) -> Float {
   let dx = bx - ax
   let dy = by - ay
@@ -274,7 +279,9 @@ fn point_to_segment_dist(
   let proj_y = ay + t * dy
   let ex = px - proj_x
   let ey = py - proj_y
-  Float::from_double((ex.to_double() * ex.to_double() + ey.to_double() * ey.to_double()).sqrt())
+  Float::from_double(
+    (ex.to_double() * ex.to_double() + ey.to_double() * ey.to_double()).sqrt(),
+  )
 }
 
 ///|
@@ -283,7 +290,9 @@ fn check_solution(game : @types.Game) -> Unit {
     game.play_state = Solved
     // Compute stars
     let stars = @solver.compute_stars(
-      game.bridges, game.par_bridges, game.removal_count,
+      game.bridges,
+      game.par_bridges,
+      game.removal_count,
     )
     let score = game.level_scores[game.current_level]
     score.completed = true

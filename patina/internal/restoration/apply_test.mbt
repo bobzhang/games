@@ -3,12 +3,12 @@
 test "crack_fill_seal_restores" {
   let region = @types.new_region([Crack])
   let applied = apply_tool(region, Fill)
-  assert_true!(applied)
-  assert_eq!(region.state, Treated)
-  assert_eq!(region.damage_types.length(), 0)
+  assert_true(applied)
+  assert_eq(region.state, Treated)
+  assert_eq(region.damage_types.length(), 0)
   let sealed_ok = apply_tool(region, Seal)
-  assert_true!(sealed_ok)
-  assert_eq!(region.state, Restored)
+  assert_true(sealed_ok)
+  assert_eq(region.state, Restored)
 }
 
 ///|
@@ -16,11 +16,11 @@ test "crack_fill_seal_restores" {
 test "stain_clean_seal_restores" {
   let region = @types.new_region([Stain])
   let applied = apply_tool(region, Clean)
-  assert_true!(applied)
-  assert_eq!(region.state, Treated)
+  assert_true(applied)
+  assert_eq(region.state, Treated)
   let sealed_ok = apply_tool(region, Seal)
-  assert_true!(sealed_ok)
-  assert_eq!(region.state, Restored)
+  assert_true(sealed_ok)
+  assert_eq(region.state, Restored)
 }
 
 ///|
@@ -28,11 +28,11 @@ test "stain_clean_seal_restores" {
 test "fade_retouch_seal_restores" {
   let region = @types.new_region([Fade])
   let applied = apply_tool(region, Retouch)
-  assert_true!(applied)
-  assert_eq!(region.state, Treated)
+  assert_true(applied)
+  assert_eq(region.state, Treated)
   let sealed_ok = apply_tool(region, Seal)
-  assert_true!(sealed_ok)
-  assert_eq!(region.state, Restored)
+  assert_true(sealed_ok)
+  assert_eq(region.state, Restored)
 }
 
 ///|
@@ -40,14 +40,14 @@ test "fade_retouch_seal_restores" {
 test "flake_fill_retouch_seal_restores" {
   let region = @types.new_region([Flake])
   let applied = apply_tool(region, Fill)
-  assert_true!(applied)
-  assert_eq!(region.state, Treated)
+  assert_true(applied)
+  assert_eq(region.state, Treated)
   // After fill, flake damage removed but needs retouch
   let retouched = apply_tool(region, Retouch)
-  assert_true!(retouched)
+  assert_true(retouched)
   let sealed_ok = apply_tool(region, Seal)
-  assert_true!(sealed_ok)
-  assert_eq!(region.state, Restored)
+  assert_true(sealed_ok)
+  assert_eq(region.state, Restored)
 }
 
 ///|
@@ -55,11 +55,11 @@ test "flake_fill_retouch_seal_restores" {
 test "clean_on_crack_worsens" {
   let region = @types.new_region([Crack])
   let applied = apply_tool(region, Clean)
-  assert_true!(applied)
-  assert_eq!(region.state, Worsened)
+  assert_true(applied)
+  assert_eq(region.state, Worsened)
   // Crack should now be Flake
-  assert_true!(@types.region_has_damage(region, Flake))
-  assert_false!(@types.region_has_damage(region, Crack))
+  assert_true(@types.region_has_damage(region, Flake))
+  assert_false(@types.region_has_damage(region, Crack))
 }
 
 ///|
@@ -67,9 +67,9 @@ test "clean_on_crack_worsens" {
 test "fill_on_stain_worsens" {
   let region = @types.new_region([Stain])
   let applied = apply_tool(region, Fill)
-  assert_true!(applied)
-  assert_eq!(region.state, Worsened)
-  assert_true!(region.stain_permanent)
+  assert_true(applied)
+  assert_eq(region.state, Worsened)
+  assert_true(region.stain_permanent)
 }
 
 ///|
@@ -77,12 +77,12 @@ test "fill_on_stain_worsens" {
 test "retouch_on_flake_is_fragile" {
   let region = @types.new_region([Flake])
   let applied = apply_tool(region, Retouch)
-  assert_true!(applied)
-  assert_true!(region.fragile)
+  assert_true(applied)
+  assert_true(region.fragile)
   // Sealing fragile region -> sealed, not restored
   let sealed_ok = apply_tool(region, Seal)
-  assert_true!(sealed_ok)
-  assert_eq!(region.state, Sealed)
+  assert_true(sealed_ok)
+  assert_eq(region.state, Sealed)
 }
 
 ///|
@@ -90,8 +90,8 @@ test "retouch_on_flake_is_fragile" {
 test "seal_on_damaged_seals_damage" {
   let region = @types.new_region([Crack])
   let applied = apply_tool(region, Seal)
-  assert_true!(applied)
-  assert_eq!(region.state, Sealed)
+  assert_true(applied)
+  assert_eq(region.state, Sealed)
 }
 
 ///|
@@ -99,7 +99,7 @@ test "seal_on_damaged_seals_damage" {
 test "cannot_apply_to_pristine" {
   let region = @types.new_region([])
   let applied = apply_tool(region, Clean)
-  assert_false!(applied)
+  assert_false(applied)
 }
 
 ///|
@@ -108,9 +108,9 @@ test "cannot_apply_to_restored" {
   let region = @types.new_region([Stain])
   let _ = apply_tool(region, Clean)
   let _ = apply_tool(region, Seal)
-  assert_eq!(region.state, Restored)
+  assert_eq(region.state, Restored)
   let applied = apply_tool(region, Clean)
-  assert_false!(applied)
+  assert_false(applied)
 }
 
 ///|
@@ -118,9 +118,9 @@ test "cannot_apply_to_restored" {
 test "cannot_apply_to_sealed" {
   let region = @types.new_region([Crack])
   let _ = apply_tool(region, Seal)
-  assert_eq!(region.state, Sealed)
+  assert_eq(region.state, Sealed)
   let applied = apply_tool(region, Fill)
-  assert_false!(applied)
+  assert_false(applied)
 }
 
 ///|
@@ -129,14 +129,14 @@ test "crack_stain_fill_clean_seal" {
   let region = @types.new_region([Crack, Stain])
   // Must fill first to fix crack, then clean stain
   let filled = apply_tool(region, Fill)
-  assert_true!(filled)
-  assert_eq!(region.state, Treated)
+  assert_true(filled)
+  assert_eq(region.state, Treated)
   let cleaned = apply_tool(region, Clean)
-  assert_true!(cleaned)
-  assert_eq!(region.state, Treated)
+  assert_true(cleaned)
+  assert_eq(region.state, Treated)
   let sealed_ok = apply_tool(region, Seal)
-  assert_true!(sealed_ok)
-  assert_eq!(region.state, Restored)
+  assert_true(sealed_ok)
+  assert_eq(region.state, Restored)
 }
 
 ///|
@@ -144,6 +144,6 @@ test "crack_stain_fill_clean_seal" {
 test "crack_stain_clean_first_worsens" {
   let region = @types.new_region([Crack, Stain])
   let cleaned = apply_tool(region, Clean)
-  assert_true!(cleaned)
-  assert_eq!(region.state, Worsened)
+  assert_true(cleaned)
+  assert_eq(region.state, Worsened)
 }

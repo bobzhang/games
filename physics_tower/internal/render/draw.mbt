@@ -80,7 +80,13 @@ fn draw_title(game : @types.Game) -> Unit {
   let bw = 320
   let bh = 70
   @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(60, 120, 200, 220))
-  @raylib.draw_rectangle_lines(bx, by, bw, bh, @raylib.Color::new(100, 180, 255, 255))
+  @raylib.draw_rectangle_lines(
+    bx,
+    by,
+    bw,
+    bh,
+    @raylib.Color::new(100, 180, 255, 255),
+  )
   @draw.draw_text(
     "PRESS ENTER / CLICK",
     bx + 30,
@@ -122,13 +128,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   )
   // Left arrow
   if current_w > 0 {
-    @draw.draw_text(
-      "<",
-      120,
-      64,
-      32,
-      @raylib.Color::new(200, 200, 220, 255),
-    )
+    @draw.draw_text("<", 120, 64, 32, @raylib.Color::new(200, 200, 220, 255))
   }
   // Right arrow
   if current_w + 1 < worlds.length() {
@@ -141,14 +141,8 @@ fn draw_level_select(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(100, 100, 120, 120)
     }
-    @draw.draw_text(
-      ">",
-      @types.screen_w - 140,
-      64,
-      32,
-      arrow_color,
-    )
-    if !(next_unlocked) {
+    @draw.draw_text(">", @types.screen_w - 140, 64, 32, arrow_color)
+    if !next_unlocked {
       let next_w = worlds[current_w + 1]
       @draw.draw_text(
         "Need " + next_w.stars_required.to_string() + " stars",
@@ -244,13 +238,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
     local_idx = local_idx + 1
   }
   // Bottom row: Sandbox, Upgrades, Challenges, Stats
-  @raylib.draw_rectangle(
-    60,
-    780,
-    240,
-    70,
-    @raylib.Color::new(80, 60, 120, 200),
-  )
+  @raylib.draw_rectangle(60, 780, 240, 70, @raylib.Color::new(80, 60, 120, 200))
   @raylib.draw_rectangle_lines(
     60,
     780,
@@ -317,13 +305,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
     @raylib.Color::new(240, 180, 80, 255),
   )
   // Stats button
-  @raylib.draw_rectangle(
-    890,
-    780,
-    260,
-    70,
-    @raylib.Color::new(50, 60, 90, 200),
-  )
+  @raylib.draw_rectangle(890, 780, 260, 70, @raylib.Color::new(50, 60, 90, 200))
   @raylib.draw_rectangle_lines(
     890,
     780,
@@ -434,15 +416,23 @@ fn draw_world(game : @types.Game) -> Unit {
   )
   // Draw joints
   for joint in world.joints {
-    if !(joint.active) || joint.broken {
+    if !joint.active || joint.broken {
       continue
     }
     let a_opt = @physics.find_body(world, joint.body_a)
     let b_opt = @physics.find_body(world, joint.body_b)
     match (a_opt, b_opt) {
       (Some(a), Some(b)) => {
-        let (ax, ay) = @physics.local_to_world(a, joint.local_x_a, joint.local_y_a)
-        let (bx, by) = @physics.local_to_world(b, joint.local_x_b, joint.local_y_b)
+        let (ax, ay) = @physics.local_to_world(
+          a,
+          joint.local_x_a,
+          joint.local_y_a,
+        )
+        let (bx, by) = @physics.local_to_world(
+          b,
+          joint.local_x_b,
+          joint.local_y_b,
+        )
         let stress_ratio : Float = joint.stress / joint.strength
         let r = (100.0F + stress_ratio * 155.0F).to_int().clamp(min=0, max=255)
         let g = (180.0F - stress_ratio * 150.0F).to_int().clamp(min=0, max=255)
@@ -459,7 +449,7 @@ fn draw_world(game : @types.Game) -> Unit {
   }
   // Draw bodies
   for body in world.bodies {
-    if !(body.active) {
+    if !body.active {
       continue
     }
     draw_body(body)
@@ -508,7 +498,8 @@ fn draw_body(body : @types.Body) -> Unit {
     let threshold = @types.material_strength(body.material)
     @types.clampf(body.stress / threshold, 0.0, 1.0)
   }
-  let r = (Float::from_int(base_r) + stress_ratio * Float::from_int(255 - base_r)).to_int()
+  let r = (Float::from_int(base_r) +
+  stress_ratio * Float::from_int(255 - base_r)).to_int()
   let g = (Float::from_int(base_g) * (1.0F - stress_ratio * 0.7F)).to_int()
   let b = (Float::from_int(base_b) * (1.0F - stress_ratio * 0.5F)).to_int()
   let alpha = if body.broken { 120 } else { 230 }
@@ -521,16 +512,17 @@ fn draw_body(body : @types.Body) -> Unit {
   if @types.absf(body.angle) < 0.01 {
     // Axis-aligned: use simple rectangle
     @raylib.draw_rectangle(cx - hw, cy - hh, hw * 2, hh * 2, color)
-    @raylib.draw_rectangle_lines(cx - hw, cy - hh, hw * 2, hh * 2, outline_color(body.material))
+    @raylib.draw_rectangle_lines(
+      cx - hw,
+      cy - hh,
+      hw * 2,
+      hh * 2,
+      outline_color(body.material),
+    )
   } else {
     // Rotated: draw as rotated rectangle using raylib
     @raylib.draw_rectangle_pro(
-      @raylib.Rectangle::new(
-        body.x,
-        body.y,
-        body.width,
-        body.height,
-      ),
+      @raylib.Rectangle::new(body.x, body.y, body.width, body.height),
       @raylib.Vector2::new(body.width * 0.5, body.height * 0.5),
       body.angle * 57.2957795, // radians to degrees
       color,
@@ -538,7 +530,7 @@ fn draw_body(body : @types.Body) -> Unit {
   }
   // Draw piece kind indicator
   match body.kind {
-    Triangle => {
+    Triangle =>
       // Small triangle marker
       @raylib.draw_triangle(
         @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy - hh / 2)),
@@ -552,12 +544,15 @@ fn draw_body(body : @types.Body) -> Unit {
         ),
         @raylib.Color::new(255, 255, 255, 40),
       )
-    }
-    Arch => {
+    Arch =>
       // Small arch marker (circle on top)
-      @raylib.draw_circle(cx, cy - hh / 3, Float::from_int(hw / 3), @raylib.Color::new(255, 255, 255, 30))
-    }
-    Cable => {
+      @raylib.draw_circle(
+        cx,
+        cy - hh / 3,
+        Float::from_int(hw / 3),
+        @raylib.Color::new(255, 255, 255, 30),
+      )
+    Cable =>
       // Dashed line appearance
       @raylib.draw_line(
         cx - hw,
@@ -566,7 +561,6 @@ fn draw_body(body : @types.Body) -> Unit {
         cy,
         @raylib.Color::new(255, 255, 255, 60),
       )
-    }
     _ => ()
   }
   // Broken X marker
@@ -590,7 +584,8 @@ fn draw_body(body : @types.Body) -> Unit {
 
 ///|
 fn draw_ghost(game : @types.Game) -> Unit {
-  if game.inventory.length() == 0 || game.selected_piece >= game.inventory.length() {
+  if game.inventory.length() == 0 ||
+    game.selected_piece >= game.inventory.length() {
     return
   }
   let (kind, _material, count) = game.inventory[game.selected_piece]
@@ -735,7 +730,8 @@ fn draw_build_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(180, 180, 200, 180),
   )
-  if game.selected_blueprint >= 0 && game.selected_blueprint < game.blueprints.length() {
+  if game.selected_blueprint >= 0 &&
+    game.selected_blueprint < game.blueprints.length() {
     let bp = game.blueprints[game.selected_blueprint]
     @draw.draw_text(
       "Blueprint: " + bp.name + " [" + bp.cost.to_string() + " pieces]",
@@ -807,13 +803,7 @@ fn draw_test_hud(game : @types.Game) -> Unit {
     }
     _ => "TEST"
   }
-  @draw.draw_text(
-    phase_name,
-    20,
-    10,
-    28,
-    @raylib.Color::new(255, 120, 80, 255),
-  )
+  @draw.draw_text(phase_name, 20, 10, 28, @raylib.Color::new(255, 120, 80, 255))
   let timer_str = (game.test_timer + 0.5).to_int().to_string()
   @draw.draw_text(
     "Time: " + timer_str + "s",
@@ -890,17 +880,71 @@ fn draw_results_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(160, 180, 200, 200),
   )
   // Retry button
-  @raylib.draw_rectangle(460, 600, 240, 60, @raylib.Color::new(60, 120, 200, 220))
-  @raylib.draw_rectangle_lines(460, 600, 240, 60, @raylib.Color::new(100, 180, 255, 255))
-  @draw.draw_text("RETRY (R)", 510, 616, 24, @raylib.Color::new(255, 255, 255, 255))
+  @raylib.draw_rectangle(
+    460,
+    600,
+    240,
+    60,
+    @raylib.Color::new(60, 120, 200, 220),
+  )
+  @raylib.draw_rectangle_lines(
+    460,
+    600,
+    240,
+    60,
+    @raylib.Color::new(100, 180, 255, 255),
+  )
+  @draw.draw_text(
+    "RETRY (R)",
+    510,
+    616,
+    24,
+    @raylib.Color::new(255, 255, 255, 255),
+  )
   // Next level button
-  @raylib.draw_rectangle(740, 600, 240, 60, @raylib.Color::new(60, 160, 80, 220))
-  @raylib.draw_rectangle_lines(740, 600, 240, 60, @raylib.Color::new(100, 220, 120, 255))
-  @draw.draw_text("NEXT LEVEL", 780, 616, 24, @raylib.Color::new(255, 255, 255, 255))
+  @raylib.draw_rectangle(
+    740,
+    600,
+    240,
+    60,
+    @raylib.Color::new(60, 160, 80, 220),
+  )
+  @raylib.draw_rectangle_lines(
+    740,
+    600,
+    240,
+    60,
+    @raylib.Color::new(100, 220, 120, 255),
+  )
+  @draw.draw_text(
+    "NEXT LEVEL",
+    780,
+    616,
+    24,
+    @raylib.Color::new(255, 255, 255, 255),
+  )
   // Replay button
-  @raylib.draw_rectangle(1020, 600, 240, 60, @raylib.Color::new(120, 80, 40, 220))
-  @raylib.draw_rectangle_lines(1020, 600, 240, 60, @raylib.Color::new(220, 160, 80, 255))
-  @draw.draw_text("REPLAY (P)", 1064, 616, 24, @raylib.Color::new(255, 255, 255, 255))
+  @raylib.draw_rectangle(
+    1020,
+    600,
+    240,
+    60,
+    @raylib.Color::new(120, 80, 40, 220),
+  )
+  @raylib.draw_rectangle_lines(
+    1020,
+    600,
+    240,
+    60,
+    @raylib.Color::new(220, 160, 80, 255),
+  )
+  @draw.draw_text(
+    "REPLAY (P)",
+    1064,
+    616,
+    24,
+    @raylib.Color::new(255, 255, 255, 255),
+  )
   @draw.draw_text(
     "[Enter/Space] Level Select  [R] Retry  [P] Replay  [Esc] Back",
     @types.screen_w / 2 - 340,
@@ -915,7 +959,9 @@ fn draw_wind_indicator(world : @types.World) -> Unit {
   let dir = if world.wind_force > 0.0 { 1 } else { -1 }
   let cx = @types.screen_w / 2
   let cy = 30
-  let len = (@types.absf(world.wind_force) * 0.5).to_int().clamp(min=10, max=200)
+  let len = (@types.absf(world.wind_force) * 0.5)
+    .to_int()
+    .clamp(min=10, max=200)
   @raylib.draw_line(
     cx,
     cy,
@@ -938,7 +984,13 @@ fn draw_wind_indicator(world : @types.World) -> Unit {
     cy + 6,
     @raylib.Color::new(100, 180, 255, 200),
   )
-  @draw.draw_text("WIND", cx - 20, cy - 18, 14, @raylib.Color::new(100, 180, 255, 180))
+  @draw.draw_text(
+    "WIND",
+    cx - 20,
+    cy - 18,
+    14,
+    @raylib.Color::new(100, 180, 255, 180),
+  )
 }
 
 ///|

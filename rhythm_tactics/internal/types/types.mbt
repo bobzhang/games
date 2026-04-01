@@ -386,12 +386,42 @@ pub(all) struct AchievementToast {
 ///|
 pub fn AchievementState::new() -> AchievementState {
   let achs : Array[Achievement] = [
-    { kind: FirstBlood, name: "First Blood", desc: "Kill first enemy", unlocked: false },
-    { kind: Perfect10, name: "Perfect 10", desc: "10 Perfects in a row", unlocked: false },
-    { kind: BossSlayer, name: "Boss Slayer", desc: "Defeat first boss", unlocked: false },
-    { kind: ComboKing, name: "Combo King", desc: "Reach 50 combo", unlocked: false },
-    { kind: SpeedDemon, name: "Speed Demon", desc: "Clear floor 10 under 200 beats", unlocked: false },
-    { kind: Pacifist, name: "Pacifist", desc: "Clear a floor without attacking", unlocked: false },
+    {
+      kind: FirstBlood,
+      name: "First Blood",
+      desc: "Kill first enemy",
+      unlocked: false,
+    },
+    {
+      kind: Perfect10,
+      name: "Perfect 10",
+      desc: "10 Perfects in a row",
+      unlocked: false,
+    },
+    {
+      kind: BossSlayer,
+      name: "Boss Slayer",
+      desc: "Defeat first boss",
+      unlocked: false,
+    },
+    {
+      kind: ComboKing,
+      name: "Combo King",
+      desc: "Reach 50 combo",
+      unlocked: false,
+    },
+    {
+      kind: SpeedDemon,
+      name: "Speed Demon",
+      desc: "Clear floor 10 under 200 beats",
+      unlocked: false,
+    },
+    {
+      kind: Pacifist,
+      name: "Pacifist",
+      desc: "Clear a floor without attacking",
+      unlocked: false,
+    },
   ]
   { achievements: achs, toasts: [] }
 }
@@ -497,7 +527,14 @@ pub(all) struct RunStats {
 pub fn RunStats::new() -> RunStats {
   {
     floor_history: [],
-    weapon_usage: [(Sword, 0), (Spear, 0), (Whip, 0), (Hammer, 0), (Bow, 0), (Staff, 0)],
+    weapon_usage: [
+      (Sword, 0),
+      (Spear, 0),
+      (Whip, 0),
+      (Hammer, 0),
+      (Bow, 0),
+      (Staff, 0),
+    ],
     spell_usage: [],
     total_items: 0,
     total_spells_cast: 0,

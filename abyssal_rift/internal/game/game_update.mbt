@@ -293,7 +293,11 @@ fn advance_floor(game : @types.Game) -> Unit {
 fn show_path_choices(game : @types.Game) -> Unit {
   game.path_choices.clear()
   let all_paths : Array[@types.FloorPath] = [
-    Hunter, Pilgrim, Rot, Forge, Gauntlet,
+    Hunter,
+    Pilgrim,
+    Rot,
+    Forge,
+    Gauntlet,
   ]
   // Fisher-Yates shuffle to pick 3 unique paths
   let pool : Array[@types.FloorPath] = []
@@ -391,9 +395,8 @@ fn apply_path_to_floor(game : @types.Game) -> Unit {
               for i in 0..<floor.rooms.length() {
                 let r = floor.rooms[i]
                 if r.kind != Start && r.kind != Boss && r.kind != Corridor {
-                  r.enemies_remaining = (
-                    Float::from_int(3 + game.floor_num) * 1.5
-                  ).to_int()
+                  r.enemies_remaining = (Float::from_int(3 + game.floor_num) *
+                  1.5).to_int()
                 }
               }
           }

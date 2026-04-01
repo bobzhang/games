@@ -22,6 +22,12 @@ fn draw_playing(game : @types.Game) -> Unit {
     let msg = game.message
     let tw = @draw.measure_text(msg, 28)
     let x = (@types.screen_width - tw) / 2
-    @draw.draw_text(msg, x, @types.screen_height - 60, 28, @types.color_ui_highlight)
+    @draw.draw_text(
+      msg,
+      x,
+      @types.screen_height - 60,
+      28,
+      @types.color_ui_highlight,
+    )
   }
 }

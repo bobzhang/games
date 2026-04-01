@@ -122,13 +122,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       @types.color_button
     }
     @raylib.draw_rectangle(bx, by, bw, bh, bg)
-    @raylib.draw_rectangle_lines(
-      bx,
-      by,
-      bw,
-      bh,
-      @types.color_hex_outline,
-    )
+    @raylib.draw_rectangle_lines(bx, by, bw, bh, @types.color_hex_outline)
     @draw.draw_text(name, bx + 20, by + 15, 28, @types.color_title_text)
     @draw.draw_text(desc, bx + 20, by + 50, 16, @types.color_hud_text)
     @draw.draw_text(
@@ -189,13 +183,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @types.color_button
     }
     @raylib.draw_rectangle(bx, by, btn_w, btn_h, bg)
-    @raylib.draw_rectangle_lines(
-      bx,
-      by,
-      btn_w,
-      btn_h,
-      @types.color_hex_outline,
-    )
+    @raylib.draw_rectangle_lines(bx, by, btn_w, btn_h, @types.color_hex_outline)
     @draw.draw_text(
       "\{level_idx + 1}. \{level.name}",
       bx + 10,
@@ -211,13 +199,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @types.color_hud_text,
     )
     if score.completed {
-      @draw.draw_text(
-        "Completed",
-        bx + 10,
-        by + 55,
-        14,
-        @types.color_success,
-      )
+      @draw.draw_text("Completed", bx + 10, by + 55, 14, @types.color_success)
     }
     draw_stars_inline(bx + 10, by + 75, score.stars, 3)
   }
@@ -249,13 +231,7 @@ fn draw_results(game : @types.Game) -> Unit {
   } else {
     @types.color_gold_text
   }
-  @draw.draw_text(
-    title,
-    @types.screen_width / 2 - tw / 2,
-    100,
-    48,
-    title_color,
-  )
+  @draw.draw_text(title, @types.screen_width / 2 - tw / 2, 100, 48, title_color)
   // Level name
   let name_w = @draw.measure_text(level.name, 28)
   @draw.draw_text(
@@ -361,12 +337,6 @@ fn draw_stars_inline(x : Int, y : Int, filled : Int, total : Int) -> Unit {
     } else {
       @types.color_star_empty
     }
-    @raylib.draw_poly(
-      @raylib.Vector2::new(fi(sx), fi(y)),
-      5,
-      6.0,
-      0.0,
-      color,
-    )
+    @raylib.draw_poly(@raylib.Vector2::new(fi(sx), fi(y)), 5, 6.0, 0.0, color)
   }
 }

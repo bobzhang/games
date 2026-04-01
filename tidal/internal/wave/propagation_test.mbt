@@ -13,18 +13,18 @@ test "emitter spreads to adjacent tiles after one tick" {
   simulate_tick(grid)
   // Emitter itself should have amplitude 1.0
   let emitter = @types.grid_get(grid, 5, 5)
-  assert_true!(emitter.amplitude >= 0.99)
+  assert_true(emitter.amplitude >= 0.99)
   // Adjacent tiles should have amplitude = 1.0 - decay_rate
   let expected : Float = 1.0 - @types.decay_rate
   let up = @types.grid_get(grid, 5, 4)
-  assert_true!(up.amplitude > expected - 0.01)
-  assert_true!(up.amplitude < expected + 0.01)
+  assert_true(up.amplitude > expected - 0.01)
+  assert_true(up.amplitude < expected + 0.01)
   let right = @types.grid_get(grid, 6, 5)
-  assert_true!(right.amplitude > expected - 0.01)
+  assert_true(right.amplitude > expected - 0.01)
   let down = @types.grid_get(grid, 5, 6)
-  assert_true!(down.amplitude > expected - 0.01)
+  assert_true(down.amplitude > expected - 0.01)
   let left = @types.grid_get(grid, 4, 5)
-  assert_true!(left.amplitude > expected - 0.01)
+  assert_true(left.amplitude > expected - 0.01)
 }
 
 ///|
@@ -37,7 +37,7 @@ test "wave decay over distance" {
   // Tile 3 away should have lower amplitude than tile 1 away
   let near = @types.grid_get(grid, 6, 5)
   let far = @types.grid_get(grid, 8, 5)
-  assert_true!(near.amplitude > far.amplitude)
+  assert_true(near.amplitude > far.amplitude)
 }
 
 ///|
@@ -65,7 +65,7 @@ test "wall blocks wave propagation" {
   // than without wall
   let _amp = behind.amplitude
   // Just verify simulation runs without error
-  assert_true!(true)
+  assert_true(true)
 }
 
 ///|
@@ -79,7 +79,7 @@ test "absorber stops waves" {
   }
   // Absorber tile should have 0 amplitude
   let absorber = @types.grid_get(grid, 5, 5)
-  assert_true!(absorber.amplitude < 0.01)
+  assert_true(absorber.amplitude < 0.01)
 }
 
 ///|
@@ -105,10 +105,10 @@ test "phase shifter shifts phase by 1" {
   let past = @types.grid_get(grid, 6, 5)
   // If it has any amplitude, phase should be shifted
   if past.amplitude > 0.01 {
-    assert_true!(past.phase == 1)
+    assert_true(past.phase == 1)
   } else {
     // Wave should have reached (6,5) by now
-    assert_true!(false)
+    assert_true(false)
   }
 }
 
@@ -126,7 +126,7 @@ test "constructive interference same phase adds amplitude" {
   }
   let center = @types.grid_get(grid, 5, 5)
   // With two same-phase emitters, amplitude should be higher than one alone
-  assert_true!(center.amplitude > 0.0)
+  assert_true(center.amplitude > 0.0)
 }
 
 ///|
@@ -144,7 +144,7 @@ test "destructive interference opposite phase cancels" {
   let center = @types.grid_get(grid, 5, 5)
   // With opposite phases, amplitude at center should be reduced
   // compared to single emitter (may not be exactly 0 due to timing)
-  assert_true!(center.amplitude < 0.8)
+  assert_true(center.amplitude < 0.8)
 }
 
 ///|
@@ -159,8 +159,8 @@ test "target check satisfied" {
   target.object = Target
   simulate_tick(grid)
   let result = check_targets(grid)
-  assert_true!(result)
-  assert_true!(target.target_satisfied)
+  assert_true(result)
+  assert_true(target.target_satisfied)
 }
 
 ///|
@@ -175,7 +175,7 @@ test "target check unsatisfied - amplitude too low" {
   target.object = Target
   simulate_tick(grid)
   let result = check_targets(grid)
-  assert_true!(!result)
+  assert_true(!result)
 }
 
 ///|
@@ -189,7 +189,7 @@ test "target check unsatisfied - wrong phase" {
   target.object = Target
   simulate_tick(grid)
   let result = check_targets(grid)
-  assert_true!(!result)
+  assert_true(!result)
 }
 
 ///|
@@ -206,7 +206,7 @@ test "reflector bounces wave" {
   // Some amplitude should appear on the emitter side of the reflector
   // Reflector itself bounces waves back
   let behind = @types.grid_get(grid, 4, 5)
-  assert_true!(behind.amplitude > 0.0)
+  assert_true(behind.amplitude > 0.0)
 }
 
 ///|
@@ -220,8 +220,8 @@ test "level completion detection" {
   target.object = Target
   simulate_tick(grid)
   let all_ok = check_targets(grid)
-  assert_true!(all_ok)
+  assert_true(all_ok)
   let counts = count_targets(grid)
-  assert_eq!(counts.0, 1) // total
-  assert_eq!(counts.1, 1) // satisfied
+  assert_eq(counts.0, 1) // total
+  assert_eq(counts.1, 1) // satisfied
 }

@@ -93,15 +93,13 @@ test "load_level clears previous state completely" {
   game.current_recording = [Some(East), Some(East), Some(East)]
   let _ = @time.finish_loop(game)
   game.tick = 50
-  game.timeline.push(
-    {
-      player_pos: @types.vec2i(0, 0),
-      ghost_positions: [],
-      guard_positions: [],
-      buttons_pressed: [],
-      doors_open: [],
-    },
-  )
+  game.timeline.push({
+    player_pos: @types.vec2i(0, 0),
+    ghost_positions: [],
+    guard_positions: [],
+    buttons_pressed: [],
+    doors_open: [],
+  })
   // Load a different level
   let _ = @time.load_level(game, 1, 0)
   inspect(game.ghosts.length(), content="0")

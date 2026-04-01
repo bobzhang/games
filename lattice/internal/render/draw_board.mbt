@@ -33,9 +33,7 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
     Some(lm) => {
       let (lx, ly) = @types.hex_to_pixel(lm, size)
       let time = Float::from_int(game.frame_count) * 0.05
-      let pulse = Float::from_double(
-        @math.sin(time.to_double()) * 0.15 + 0.85,
-      )
+      let pulse = Float::from_double(@math.sin(time.to_double()) * 0.15 + 0.85)
       let outer_radius = size * 0.9 * pulse
       let inner_radius = size * 0.75 * pulse
       // Outer ring
@@ -71,7 +69,12 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hexagon_filled(cx : Int, cy : Int, radius : Float, color : @raylib.Color) -> Unit {
+fn draw_hexagon_filled(
+  cx : Int,
+  cy : Int,
+  radius : Float,
+  color : @raylib.Color,
+) -> Unit {
   @raylib.draw_poly(
     @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy)),
     6,
@@ -86,7 +89,7 @@ fn draw_hexagon_outline(
   cx : Int,
   cy : Int,
   radius : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   @raylib.draw_poly_lines(
     @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy)),
@@ -104,7 +107,12 @@ fn draw_stone(cx : Int, cy : Int, hex_size : Float, is_black : Bool) -> Unit {
   let fcy = Float::from_int(cy)
   if is_black {
     // Black stone with highlight
-    @raylib.draw_circle(cx, cy, stone_radius + 1.0, @types.color_black_highlight)
+    @raylib.draw_circle(
+      cx,
+      cy,
+      stone_radius + 1.0,
+      @types.color_black_highlight,
+    )
     @raylib.draw_circle(cx, cy, stone_radius, @types.color_black_stone)
     // Shine effect
     @raylib.draw_circle(
@@ -242,7 +250,7 @@ fn draw_capture_anims(game : @types.Game) -> Unit {
     let anim = game.capture_anims[i]
     let t = anim.timer / @types.capture_anim_time
     let scale : Float = 1.0 - t
-    let alpha = ((scale) * 255.0).to_int()
+    let alpha = (scale * 255.0).to_int()
     let (px, py) = @types.hex_to_pixel(anim.pos, size)
     @raylib.draw_circle(
       px.to_int(),
@@ -295,7 +303,12 @@ fn draw_game_ui(game : @types.Game) -> Unit {
   let score_y = 90
   @draw.draw_text("SCORES", panel_x + 20, score_y, 22, @types.color_hud_text)
   // Black score
-  @raylib.draw_circle(panel_x + 30, score_y + 40, 10.0, @types.color_black_stone)
+  @raylib.draw_circle(
+    panel_x + 30,
+    score_y + 40,
+    10.0,
+    @types.color_black_stone,
+  )
   @draw.draw_text(
     "Black: " + game.black_score.to_string(),
     panel_x + 50,
@@ -333,15 +346,16 @@ fn draw_game_ui(game : @types.Game) -> Unit {
   )
   // Pattern legend
   let legend_y = 210
-  @draw.draw_text(
-    "PATTERNS",
-    panel_x + 20,
-    legend_y,
-    22,
-    @types.color_hud_text,
-  )
+  @draw.draw_text("PATTERNS", panel_x + 20, legend_y, 22, @types.color_hud_text)
   let pattern_kinds : Array[@types.PatternKind] = [
-    Bridge, Chain, Triangle, Diamond, Fortress, Ring, Star, Wall,
+    Bridge,
+    Chain,
+    Triangle,
+    Diamond,
+    Fortress,
+    Ring,
+    Star,
+    Wall,
   ]
   for i in 0..<pattern_kinds.length() {
     let kind = pattern_kinds[i]

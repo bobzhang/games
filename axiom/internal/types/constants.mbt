@@ -53,6 +53,7 @@ pub let palette_x : Int = 700
 pub let palette_y : Int = 500
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(18, 18, 32, 255)
 
@@ -126,7 +127,9 @@ pub let color_slot_bg : @raylib.Color = @raylib.Color::new(35, 35, 55, 255)
 pub let color_slot_active : @raylib.Color = @raylib.Color::new(55, 55, 85, 255)
 
 ///|
-pub let color_slot_highlight : @raylib.Color = @raylib.Color::new(0, 180, 255, 60)
+pub let color_slot_highlight : @raylib.Color = @raylib.Color::new(
+  0, 180, 255, 60,
+)
 
 ///|
 pub let color_text : @raylib.Color = @raylib.Color::new(220, 225, 240, 255)
@@ -135,7 +138,9 @@ pub let color_text : @raylib.Color = @raylib.Color::new(220, 225, 240, 255)
 pub let color_text_dim : @raylib.Color = @raylib.Color::new(140, 145, 160, 255)
 
 ///|
-pub let color_text_bright : @raylib.Color = @raylib.Color::new(255, 255, 255, 255)
+pub let color_text_bright : @raylib.Color = @raylib.Color::new(
+  255, 255, 255, 255,
+)
 
 ///|
 pub let color_gold : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
@@ -156,7 +161,9 @@ pub let color_fail : @raylib.Color = @raylib.Color::new(255, 60, 60, 255)
 pub let color_grid_line : @raylib.Color = @raylib.Color::new(55, 55, 75, 255)
 
 ///|
-pub let color_exec_highlight : @raylib.Color = @raylib.Color::new(255, 255, 100, 120)
+pub let color_exec_highlight : @raylib.Color = @raylib.Color::new(
+  255, 255, 100, 120,
+)
 
 ///|
 pub let color_world1 : @raylib.Color = @raylib.Color::new(80, 200, 255, 255)

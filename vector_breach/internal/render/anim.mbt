@@ -152,25 +152,49 @@ fn update_particles(battle : @types.BattleState, dt : Float) -> Unit {
 // ============================================================================
 
 ///|
-pub fn queue_move_anim(battle : @types.BattleState, unit_id : Int, sx : Int, sy : Int, tx : Int, ty : Int) -> Unit {
+pub fn queue_move_anim(
+  battle : @types.BattleState,
+  unit_id : Int,
+  sx : Int,
+  sy : Int,
+  tx : Int,
+  ty : Int,
+) -> Unit {
   let anim = @types.new_anim(AnimMove, unit_id, sx, sy, tx, ty)
   battle.anim_queue.push(anim)
 }
 
 ///|
-pub fn queue_attack_anim(battle : @types.BattleState, unit_id : Int, tx : Int, ty : Int) -> Unit {
+pub fn queue_attack_anim(
+  battle : @types.BattleState,
+  unit_id : Int,
+  tx : Int,
+  ty : Int,
+) -> Unit {
   let anim = @types.new_anim(AnimAttack, unit_id, tx, ty, tx, ty)
   battle.anim_queue.push(anim)
 }
 
 ///|
-pub fn queue_push_anim(battle : @types.BattleState, unit_id : Int, sx : Int, sy : Int, tx : Int, ty : Int) -> Unit {
+pub fn queue_push_anim(
+  battle : @types.BattleState,
+  unit_id : Int,
+  sx : Int,
+  sy : Int,
+  tx : Int,
+  ty : Int,
+) -> Unit {
   let anim = @types.new_anim(AnimPush, unit_id, sx, sy, tx, ty)
   battle.anim_queue.push(anim)
 }
 
 ///|
-pub fn queue_death_anim(battle : @types.BattleState, unit_id : Int, x : Int, y : Int) -> Unit {
+pub fn queue_death_anim(
+  battle : @types.BattleState,
+  unit_id : Int,
+  x : Int,
+  y : Int,
+) -> Unit {
   let anim = @types.new_anim(AnimDeath, unit_id, x, y, x, y)
   battle.anim_queue.push(anim)
 }
@@ -192,7 +216,13 @@ pub fn trigger_shake(battle : @types.BattleState, intensity : Float) -> Unit {
 }
 
 ///|
-pub fn trigger_flash(battle : @types.BattleState, r : Int, g : Int, b : Int, alpha : Int) -> Unit {
+pub fn trigger_flash(
+  battle : @types.BattleState,
+  r : Int,
+  g : Int,
+  b : Int,
+  alpha : Int,
+) -> Unit {
   battle.screen_fx.flash_timer = @types.flash_duration
   battle.screen_fx.flash_r = r
   battle.screen_fx.flash_g = g
@@ -215,7 +245,12 @@ pub fn trigger_pulse(battle : @types.BattleState) -> Unit {
 // ============================================================================
 
 ///|
-pub fn spawn_damage_text(battle : @types.BattleState, x : Int, y : Int, amount : Int) -> Unit {
+pub fn spawn_damage_text(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+  amount : Int,
+) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 20.0F
   let ft : @types.FloatingText = {
@@ -253,14 +288,15 @@ pub fn spawn_shield_text(battle : @types.BattleState, x : Int, y : Int) -> Unit 
 }
 
 ///|
-pub fn spawn_chain_text(battle : @types.BattleState, x : Int, y : Int, chain_count : Int) -> Unit {
+pub fn spawn_chain_text(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+  chain_count : Int,
+) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 20.0F
-  let label = if chain_count > 1 {
-    "CHAIN x\{chain_count}!"
-  } else {
-    "CHAIN!"
-  }
+  let label = if chain_count > 1 { "CHAIN x\{chain_count}!" } else { "CHAIN!" }
   let ft : @types.FloatingText = {
     text: label,
     x: sx,
@@ -319,7 +355,11 @@ pub fn spawn_kill_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 }
 
 ///|
-pub fn spawn_overclock_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn spawn_overclock_text(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 35.0F
   let ft : @types.FloatingText = {
@@ -338,7 +378,12 @@ pub fn spawn_overclock_text(battle : @types.BattleState, x : Int, y : Int) -> Un
 }
 
 ///|
-pub fn spawn_combo_text(battle : @types.BattleState, text : String, x : Int, y : Int) -> Unit {
+pub fn spawn_combo_text(
+  battle : @types.BattleState,
+  text : String,
+  x : Int,
+  y : Int,
+) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 40.0F
   let ft : @types.FloatingText = {
@@ -361,7 +406,16 @@ pub fn spawn_combo_text(battle : @types.BattleState, text : String, x : Int, y :
 // ============================================================================
 
 ///|
-pub fn spawn_ring(battle : @types.BattleState, x : Int, y : Int, max_r : Float, dur : Float, r : Int, g : Int, b : Int) -> Unit {
+pub fn spawn_ring(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+  max_r : Float,
+  dur : Float,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
   let ring : @types.RingEffect = {
@@ -401,15 +455,24 @@ pub fn draw_rings(battle : @types.BattleState) -> Unit {
     let t = ring.timer / ring.duration
     let alpha = ((1.0F - t) * 200.0F).to_int().clamp(min=0, max=200)
     @raylib.draw_circle_lines(
-      ring.x.to_int(), ring.y.to_int(), ring.radius,
+      ring.x.to_int(),
+      ring.y.to_int(),
+      ring.radius,
       @raylib.Color::new(ring.color_r, ring.color_g, ring.color_b, alpha),
     )
     // Secondary inner ring for glow
     if ring.radius > 4.0 {
       let inner_alpha = alpha / 3
       @raylib.draw_circle_lines(
-        ring.x.to_int(), ring.y.to_int(), ring.radius - 3.0,
-        @raylib.Color::new(ring.color_r, ring.color_g, ring.color_b, inner_alpha),
+        ring.x.to_int(),
+        ring.y.to_int(),
+        ring.radius - 3.0,
+        @raylib.Color::new(
+          ring.color_r,
+          ring.color_g,
+          ring.color_b,
+          inner_alpha,
+        ),
       )
     }
   }
@@ -425,7 +488,14 @@ pub fn trigger_hitstop(battle : @types.BattleState, ms : Float) -> Unit {
 }
 
 ///|
-pub fn trigger_tint(battle : @types.BattleState, r : Int, g : Int, b : Int, alpha : Int, duration : Float) -> Unit {
+pub fn trigger_tint(
+  battle : @types.BattleState,
+  r : Int,
+  g : Int,
+  b : Int,
+  alpha : Int,
+  duration : Float,
+) -> Unit {
   battle.screen_fx.tint_timer = duration
   battle.screen_fx.tint_r = r
   battle.screen_fx.tint_g = g
@@ -447,7 +517,13 @@ pub fn fx_normal_hit(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 
 ///|
 /// Push collision: 80ms hitstop + larger burst + shake
-pub fn fx_push_collision(battle : @types.BattleState, x : Int, y : Int, dx : Int, dy : Int) -> Unit {
+pub fn fx_push_collision(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+  dx : Int,
+  dy : Int,
+) -> Unit {
   trigger_hitstop(battle, 80.0)
   trigger_shake(battle, 4.0)
   spawn_directional_particles(battle, x, y, dx, dy, 25, 255, 140, 40)
@@ -466,7 +542,11 @@ pub fn fx_chasm_kill(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 
 ///|
 /// Boss phase transition: 150ms hitstop + screen flash
-pub fn fx_boss_phase_transition(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn fx_boss_phase_transition(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+) -> Unit {
   trigger_hitstop(battle, 150.0)
   trigger_flash(battle, 255, 255, 255, 180)
   trigger_shake(battle, 8.0)
@@ -487,7 +567,12 @@ pub fn fx_overclock(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 
 ///|
 /// Kill flourish: ring + colored explosion + slowmo + text
-pub fn fx_kill(battle : @types.BattleState, x : Int, y : Int, is_enemy : Bool) -> Unit {
+pub fn fx_kill(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+  is_enemy : Bool,
+) -> Unit {
   trigger_hitstop(battle, 60.0)
   trigger_slowmo(battle, 0.2)
   trigger_shake(battle, 3.0)
@@ -502,7 +587,14 @@ pub fn fx_kill(battle : @types.BattleState, x : Int, y : Int, is_enemy : Bool) -
 // ============================================================================
 
 ///|
-pub fn spawn_death_particles(battle : @types.BattleState, x : Int, y : Int, r : Int, g : Int, b : Int) -> Unit {
+pub fn spawn_death_particles(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
   let seed : Ref[UInt] = { val: (x * 31 + y * 97 + 42).reinterpret_as_uint() }
@@ -528,12 +620,20 @@ pub fn spawn_death_particles(battle : @types.BattleState, x : Int, y : Int, r : 
 }
 
 ///|
-pub fn spawn_explosion_particles(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn spawn_explosion_particles(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+) -> Unit {
   spawn_death_particles(battle, x, y, 255, 140, 40)
 }
 
 ///|
-pub fn spawn_lava_particles(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn spawn_lava_particles(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+) -> Unit {
   spawn_death_particles(battle, x, y, 255, 80, 20)
 }
 
@@ -552,17 +652,24 @@ pub fn spawn_directional_particles(
 ) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
-  let seed : Ref[UInt] = { val: (x * 47 + y * 83 + count * 13).reinterpret_as_uint() }
+  let seed : Ref[UInt] = {
+    val: (x * 47 + y * 83 + count * 13).reinterpret_as_uint(),
+  }
   let base_angle : Float = if dx == 0 && dy == 0 {
     0.0F
   } else {
     Float::from_double(
-      @math.atan2(Float::from_int(dy).to_double(), Float::from_int(dx).to_double()),
+      @math.atan2(
+        Float::from_int(dy).to_double(),
+        Float::from_int(dx).to_double(),
+      ),
     )
   }
   for i = 0; i < count; i = i + 1 {
     ignore(i)
-    let spread = Float::from_int(@types.rand_range(seed, -100, 100)) / 100.0F * 1.2F
+    let spread = Float::from_int(@types.rand_range(seed, -100, 100)) /
+      100.0F *
+      1.2F
     let angle = if dx == 0 && dy == 0 {
       Float::from_int(@types.rand_range(seed, 0, 628)) / 100.0F
     } else {
@@ -588,7 +695,11 @@ pub fn spawn_directional_particles(
 
 ///|
 /// Heat particles rising upward from a mech (for overclock).
-pub fn spawn_heat_particles(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn spawn_heat_particles(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
   let seed : Ref[UInt] = { val: (x * 19 + y * 53 + 7).reinterpret_as_uint() }
@@ -623,7 +734,10 @@ pub fn draw_screen_effects(battle : @types.BattleState) -> Unit {
     let fade = fx.flash_timer / @types.flash_duration
     let alpha = (Float::from_int(fx.flash_alpha) * fade).to_int()
     @raylib.draw_rectangle(
-      0, 0, @types.screen_w, @types.screen_h,
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
       @raylib.Color::new(fx.flash_r, fx.flash_g, fx.flash_b, alpha),
     )
   }
@@ -631,7 +745,10 @@ pub fn draw_screen_effects(battle : @types.BattleState) -> Unit {
   if fx.pulse_timer > 0.0F {
     let pulse_alpha = (fx.pulse_timer / 0.5F * 30.0F).to_int()
     @raylib.draw_rectangle(
-      0, 0, @types.screen_w, @types.screen_h,
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
       @raylib.Color::new(80, 120, 200, pulse_alpha),
     )
   }
@@ -640,7 +757,10 @@ pub fn draw_screen_effects(battle : @types.BattleState) -> Unit {
     let fade = fx.tint_timer / 0.4 // fade over duration
     let alpha = (Float::from_int(fx.tint_alpha) * @types.minf(fade, 1.0)).to_int()
     @raylib.draw_rectangle(
-      0, 0, @types.screen_w, @types.screen_h,
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
       @raylib.Color::new(fx.tint_r, fx.tint_g, fx.tint_b, alpha),
     )
   }
@@ -665,7 +785,12 @@ pub fn draw_floating_texts(battle : @types.BattleState) -> Unit {
     // Glow: draw a larger blurred version behind
     if ft.glow {
       let glow_alpha = (alpha / 3).clamp(min=0, max=80)
-      let glow_color = @raylib.Color::new(ft.color_r, ft.color_g, ft.color_b, glow_alpha)
+      let glow_color = @raylib.Color::new(
+        ft.color_r,
+        ft.color_g,
+        ft.color_b,
+        glow_alpha,
+      )
       @types.draw_shadow_text(ft.text, ix - 1, iy - 1, size + 2, glow_color)
     }
     @types.draw_shadow_text(ft.text, ix, iy, size, color)
@@ -676,10 +801,12 @@ pub fn draw_floating_texts(battle : @types.BattleState) -> Unit {
 pub fn draw_particles(battle : @types.BattleState) -> Unit {
   for i = 0; i < battle.particles.length(); i = i + 1 {
     let p = battle.particles[i]
-    let alpha = ((p.life / p.max_life) * 255.0).to_int().clamp(min=0, max=255)
-    let size = (p.life / p.max_life) * 4.0 + 1.0
+    let alpha = (p.life / p.max_life * 255.0).to_int().clamp(min=0, max=255)
+    let size = p.life / p.max_life * 4.0 + 1.0
     @raylib.draw_circle(
-      p.x.to_int(), p.y.to_int(), size,
+      p.x.to_int(),
+      p.y.to_int(),
+      size,
       @raylib.Color::new(p.color_r, p.color_g, p.color_b, alpha),
     )
   }
@@ -733,7 +860,10 @@ fn draw_anim_attack(anim : @types.AnimState, t : Float) -> Unit {
   let flash_t = if t < 0.5F { t * 2.0F } else { (1.0F - t) * 2.0F }
   let alpha = (flash_t * 200.0F).to_int()
   @raylib.draw_rectangle(
-    tx, ty, @types.tile_size, @types.tile_size,
+    tx,
+    ty,
+    @types.tile_size,
+    @types.tile_size,
     @raylib.Color::new(255, 255, 200, alpha),
   )
 }
@@ -746,12 +876,11 @@ fn draw_anim_death(anim : @types.AnimState, t : Float) -> Unit {
   let scale = 1.0F - ease_in_quad(t)
   let radius = 16.0F * scale
   let alpha = ((1.0F - t) * 255.0F).to_int()
-  @raylib.draw_circle(
-    cx, cy, radius,
-    @raylib.Color::new(220, 60, 60, alpha),
-  )
+  @raylib.draw_circle(cx, cy, radius, @raylib.Color::new(220, 60, 60, alpha))
   @raylib.draw_circle_lines(
-    cx, cy, radius + 4.0F,
+    cx,
+    cy,
+    radius + 4.0F,
     @raylib.Color::new(255, 200, 80, alpha / 2),
   )
 }
@@ -803,7 +932,12 @@ pub fn get_shake_offset(fx : @types.ScreenFX) -> (Int, Int) {
 // ============================================================================
 
 ///|
-pub fn draw_objective_progress_bar(battle : @types.BattleState, x : Int, y : Int, w : Int) -> Unit {
+pub fn draw_objective_progress_bar(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+  w : Int,
+) -> Unit {
   let (current, target) = match battle.objective {
     DefendGrid(n) => (battle.turn, n)
     Survive(n) => (battle.turn, n)
@@ -829,20 +963,37 @@ pub fn draw_objective_progress_bar(battle : @types.BattleState, x : Int, y : Int
   // Fill
   let fill_w = if target > 0 { w * current / target } else { 0 }
   let clamped = if fill_w > w { w } else { fill_w }
-  @raylib.draw_rectangle(x, y, clamped, bar_h, @raylib.Color::new(80, 200, 120, 220))
+  @raylib.draw_rectangle(
+    x,
+    y,
+    clamped,
+    bar_h,
+    @raylib.Color::new(80, 200, 120, 220),
+  )
   // Border
-  @raylib.draw_rectangle_lines(x, y, w, bar_h, @raylib.Color::new(100, 200, 100, 120))
+  @raylib.draw_rectangle_lines(
+    x,
+    y,
+    w,
+    bar_h,
+    @raylib.Color::new(100, 200, 100, 120),
+  )
   // Progress text
   @types.draw_shadow_text(
     "\{current}/\{target}",
-    x + w + 6, y - 2,
+    x + w + 6,
+    y - 2,
     @types.font_small - 4,
     @raylib.Color::new(100, 200, 100, 220),
   )
 }
 
 ///|
-pub fn draw_turn_countdown(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn draw_turn_countdown(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+) -> Unit {
   let remaining = match battle.objective {
     DefendGrid(n) => n - battle.turn + 1
     Survive(n) => n - battle.turn + 1

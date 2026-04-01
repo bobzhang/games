@@ -1,6 +1,7 @@
 // Visual effects for the game
 
 // Draw animated grid background for menus
+
 ///|
 pub fn draw_grid_background(frame : Int) -> Unit {
   let spacing = 40
@@ -21,6 +22,7 @@ pub fn draw_grid_background(frame : Int) -> Unit {
 }
 
 // Draw a pulsing border around a rectangle
+
 ///|
 pub fn draw_pulse_border(
   x : Int,
@@ -28,7 +30,7 @@ pub fn draw_pulse_border(
   w : Int,
   h : Int,
   frame : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let t : Float = Float::from_int(frame) * 0.05
   let pulse = Float::from_double(@math.sin(t.to_double())) * 0.3 + 0.7
@@ -44,6 +46,7 @@ pub fn draw_pulse_border(
 }
 
 // Draw difficulty dots
+
 ///|
 pub fn draw_difficulty(x : Int, y : Int, rating : Int) -> Unit {
   for i in 0..<5 {
@@ -58,6 +61,7 @@ pub fn draw_difficulty(x : Int, y : Int, rating : Int) -> Unit {
 }
 
 // Draw a progress bar
+
 ///|
 pub fn draw_progress_bar(
   x : Int,
@@ -66,7 +70,7 @@ pub fn draw_progress_bar(
   h : Int,
   progress : Float,
   bar_color : @raylib.Color,
-  bg_color : @raylib.Color
+  bg_color : @raylib.Color,
 ) -> Unit {
   @raylib.draw_rectangle(x, y, w, h, bg_color)
   let fill_w = (Float::from_int(w) * @types.clampf(progress, 0.0, 1.0)).to_int()
@@ -75,13 +79,16 @@ pub fn draw_progress_bar(
 }
 
 // Draw completion celebration effect
+
 ///|
 pub fn draw_completion_particles(cx : Int, cy : Int, frame : Int) -> Unit {
   let pi : Float = 3.14159265
   let particle_count = 12
   let t : Float = Float::from_int(frame) * 0.04
   for i in 0..<particle_count {
-    let angle : Float = Float::from_int(i) * pi * 2.0 /
+    let angle : Float = Float::from_int(i) *
+      pi *
+      2.0 /
       Float::from_int(particle_count) +
       t
     let radius : Float = 40.0 +
@@ -98,6 +105,7 @@ pub fn draw_completion_particles(cx : Int, cy : Int, frame : Int) -> Unit {
 }
 
 // Simple HSV to RGB conversion for celebration colors
+
 ///|
 fn hue_to_color(hue : Int) -> @raylib.Color {
   let h = hue % 360
@@ -118,13 +126,14 @@ fn hue_to_color(hue : Int) -> @raylib.Color {
 }
 
 // Draw a view label with icon
+
 ///|
 pub fn draw_view_label(
   x : Int,
   y : Int,
   label : String,
   icon_type : @types.ViewKind,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   // Draw small axis indicator
   match icon_type {
@@ -154,6 +163,7 @@ pub fn draw_view_label(
 }
 
 // Draw a tooltip box
+
 ///|
 pub fn draw_tooltip(x : Int, y : Int, text : String) -> Unit {
   let tw = @draw.measure_text(text, 14)
@@ -168,12 +178,13 @@ pub fn draw_tooltip(x : Int, y : Int, text : String) -> Unit {
 }
 
 // Draw a voxel count display with bar
+
 ///|
 pub fn draw_voxel_budget_bar(
   x : Int,
   y : Int,
   filled : Int,
-  budget : Int
+  budget : Int,
 ) -> Unit {
   let w = 120
   let h = 12
@@ -199,6 +210,7 @@ pub fn draw_voxel_budget_bar(
 }
 
 // Animate text appearance (fade in character by character)
+
 ///|
 pub fn draw_animated_text(
   text : String,
@@ -206,7 +218,7 @@ pub fn draw_animated_text(
   y : Int,
   size : Int,
   color : @raylib.Color,
-  reveal_count : Int
+  reveal_count : Int,
 ) -> Unit {
   // Simple: draw the full text if reveal_count exceeds length
   let len = text.length()
@@ -220,6 +232,7 @@ pub fn draw_animated_text(
 }
 
 // Draw connection lines between two points
+
 ///|
 pub fn draw_connection_indicator(
   x1 : Int,
@@ -227,7 +240,7 @@ pub fn draw_connection_indicator(
   x2 : Int,
   y2 : Int,
   connected : Bool,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let color = if connected {
     @types.color_matched
@@ -240,14 +253,20 @@ pub fn draw_connection_indicator(
     // Draw dashed line for disconnected
     let segments = 8
     for i in 0..<segments {
-      if i % 2 == (frame / 10 % 2) {
+      if i % 2 == frame / 10 % 2 {
         let t1 : Float = Float::from_int(i) / Float::from_int(segments)
         let t2 : Float = Float::from_int(i + 1) / Float::from_int(segments)
         let sx = Float::from_int(x1) + Float::from_int(x2 - x1) * t1
         let sy = Float::from_int(y1) + Float::from_int(y2 - y1) * t1
         let ex = Float::from_int(x1) + Float::from_int(x2 - x1) * t2
         let ey = Float::from_int(y1) + Float::from_int(y2 - y1) * t2
-        @raylib.draw_line(sx.to_int(), sy.to_int(), ex.to_int(), ey.to_int(), color)
+        @raylib.draw_line(
+          sx.to_int(),
+          sy.to_int(),
+          ex.to_int(),
+          ey.to_int(),
+          color,
+        )
       }
     }
   }

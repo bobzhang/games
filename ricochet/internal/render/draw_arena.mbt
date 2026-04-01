@@ -14,15 +14,11 @@ fn draw_grid() -> Unit {
   let ioy = oy.to_int()
   // Vertical grid lines
   for x = 0; x <= aw; x = x + grid_spacing {
-    @raylib.draw_line(
-      iox + x, ioy, iox + x, ioy + ah, @types.color_grid,
-    )
+    @raylib.draw_line(iox + x, ioy, iox + x, ioy + ah, @types.color_grid)
   }
   // Horizontal grid lines
   for y = 0; y <= ah; y = y + grid_spacing {
-    @raylib.draw_line(
-      iox, ioy + y, iox + aw, ioy + y, @types.color_grid,
-    )
+    @raylib.draw_line(iox, ioy + y, iox + aw, ioy + y, @types.color_grid)
   }
 }
 
@@ -35,14 +31,17 @@ fn draw_arena_border() -> Unit {
   let ah = @types.arena_height.to_int()
   // Glow border
   @raylib.draw_rectangle_lines_ex(
-    @raylib.Rectangle::new(ox - 2.0, oy - 2.0, @types.arena_width + 4.0, @types.arena_height + 4.0),
+    @raylib.Rectangle::new(
+      ox - 2.0,
+      oy - 2.0,
+      @types.arena_width + 4.0,
+      @types.arena_height + 4.0,
+    ),
     3.0,
     @types.color_wall_glow,
   )
   // Main border
-  @raylib.draw_rectangle_lines(
-    iox, ioy, aw, ah, @types.color_wall,
-  )
+  @raylib.draw_rectangle_lines(iox, ioy, aw, ah, @types.color_wall)
 }
 
 ///|
@@ -72,7 +71,7 @@ pub fn draw_walls(level : @types.Level) -> Unit {
 }
 
 ///|
-/// Draw targets as pulsing rings.
+/// Draw targets as pulsing rings with expanding hit animation.
 pub fn draw_targets(level : @types.Level, anim : Float) -> Unit {
   for i in 0..<level.targets.length() {
     let t = level.targets[i]
@@ -83,11 +82,60 @@ pub fn draw_targets(level : @types.Level, anim : Float) -> Unit {
       // Hit: filled with low alpha
       @raylib.draw_circle(tx, ty, t.radius, @types.color_target_hit)
       @raylib.draw_circle_lines(tx, ty, t.radius, @types.color_target_hit)
+      // Expanding ring effect on fresh hit
+      if t.hit_timer > 0.0 {
+        // Multiple expanding rings at different phases
+        let progress : Float = 1.0 - t.hit_timer
+        // Ring 1: fast expanding
+        let ring1_radius : Float = t.radius + progress * 60.0
+        let ring1_alpha : Int = (t.hit_timer * 255.0).to_int()
+        @raylib.draw_circle_lines(
+          tx,
+          ty,
+          ring1_radius,
+          @raylib.Color::new(255, 0, 180, ring1_alpha),
+        )
+        // Ring 2: slower, delayed
+        if progress > 0.15 {
+          let ring2_progress : Float = progress - 0.15
+          let ring2_radius : Float = t.radius + ring2_progress * 45.0
+          let ring2_alpha : Int = ((t.hit_timer + 0.15) * 200.0).to_int()
+          let clamped_alpha = if ring2_alpha > 255 { 255 } else { ring2_alpha }
+          @raylib.draw_circle_lines(
+            tx,
+            ty,
+            ring2_radius,
+            @raylib.Color::new(255, 100, 220, clamped_alpha),
+          )
+        }
+        // Ring 3: slowest, most delayed
+        if progress > 0.3 {
+          let ring3_progress : Float = progress - 0.3
+          let ring3_radius : Float = t.radius + ring3_progress * 30.0
+          let ring3_alpha : Int = ((t.hit_timer + 0.3) * 150.0).to_int()
+          let clamped_alpha3 = if ring3_alpha > 255 { 255 } else { ring3_alpha }
+          @raylib.draw_circle_lines(
+            tx,
+            ty,
+            ring3_radius,
+            @raylib.Color::new(255, 180, 240, clamped_alpha3),
+          )
+        }
+        // Flash fill at impact moment
+        if t.hit_timer > 0.8 {
+          let flash_alpha : Int = ((t.hit_timer - 0.8) * 5.0 * 100.0).to_int()
+          @raylib.draw_circle(
+            tx,
+            ty,
+            t.radius * 1.5,
+            @raylib.Color::new(255, 200, 255, flash_alpha),
+          )
+        }
+      }
     } else {
       // Pulsing ring
-      let pulse : Float = 1.0 + 0.15 * @types.sinf(
-          anim * 3.0 + Float::from_int(i) * 1.5,
-        )
+      let pulse : Float = 1.0 +
+        0.15 * @types.sinf(anim * 3.0 + Float::from_int(i) * 1.5)
       let pr = Float::from_int(r) * pulse
       @raylib.draw_circle_lines(tx, ty, pr, @types.color_target)
       @raylib.draw_circle_lines(tx, ty, pr - 3.0, @types.color_target)
@@ -181,10 +229,7 @@ pub fn draw_bumpers(level : @types.Level, anim : Float) -> Unit {
     }
     let r = b.radius * pulse
     // Outer glow
-    @raylib.draw_circle(
-      bx, by, r + 4.0,
-      @raylib.Color::new(255, 160, 0, 40),
-    )
+    @raylib.draw_circle(bx, by, r + 4.0, @raylib.Color::new(255, 160, 0, 40))
     // Ring
     @raylib.draw_circle_lines(bx, by, r, @types.color_bumper)
     @raylib.draw_circle_lines(bx, by, r - 3.0, @types.color_bumper)
@@ -207,11 +252,15 @@ pub fn draw_pickups(level : @types.Level, anim : Float) -> Unit {
     let draw_y = Float::from_int(py) + bob
     // Star-like shape
     @raylib.draw_circle(
-      px, draw_y.to_int(), p.radius,
+      px,
+      draw_y.to_int(),
+      p.radius,
       @raylib.Color::new(180, 100, 255, 60),
     )
     @raylib.draw_circle_lines(
-      px, draw_y.to_int(), p.radius,
+      px,
+      draw_y.to_int(),
+      p.radius,
       @types.color_pickup_item,
     )
     @raylib.draw_circle(px, draw_y.to_int(), 3.0, @types.color_pickup_item)

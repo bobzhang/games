@@ -15,7 +15,7 @@ fn draw_sky(game : @types.Game) -> Unit {
   // Sun rays from top
   for i in 0..<8 {
     let fi = Float::from_int(i)
-    let rx = gx + (gw * (i * 2 + 1)) / 16
+    let rx = gx + gw * (i * 2 + 1) / 16
     let ray_alpha = (sinf(time + fi * 0.5) * 20.0 + 40.0).to_int()
     let color = @raylib.Color::new(255, 220, 80, ray_alpha)
     @raylib.draw_line_ex(
@@ -36,14 +36,26 @@ fn draw_grid_lines(_game : @types.Game) -> Unit {
   let gy = @types.grid_offset_y
   let cs = @types.cell_size
   // Vertical lines
-  for c in 0..=@types.grid_cols {
+  for c in 0..<=@types.grid_cols {
     let x = gx + c * cs
-    @raylib.draw_line(x, gy, x, gy + @types.grid_rows * cs, @types.color_grid_line)
+    @raylib.draw_line(
+      x,
+      gy,
+      x,
+      gy + @types.grid_rows * cs,
+      @types.color_grid_line,
+    )
   }
   // Horizontal lines
-  for r in 0..=@types.grid_rows {
+  for r in 0..<=@types.grid_rows {
     let y = gy + r * cs
-    @raylib.draw_line(gx, y, gx + @types.grid_cols * cs, y, @types.color_grid_line)
+    @raylib.draw_line(
+      gx,
+      y,
+      gx + @types.grid_cols * cs,
+      y,
+      @types.color_grid_line,
+    )
   }
 }
 
@@ -60,7 +72,13 @@ fn draw_cells(game : @types.Game) -> Unit {
       match game.grid.cells[r][c] {
         Trunk => {
           // Brown trunk with bark detail
-          @raylib.draw_rectangle(x + 12, y + 1, cs - 24, cs - 2, @types.color_trunk)
+          @raylib.draw_rectangle(
+            x + 12,
+            y + 1,
+            cs - 24,
+            cs - 2,
+            @types.color_trunk,
+          )
           // Bark lines
           @raylib.draw_line(
             x + 16,
@@ -72,7 +90,13 @@ fn draw_cells(game : @types.Game) -> Unit {
         }
         Branch => {
           // Branch
-          @raylib.draw_rectangle(x + 2, y + 14, cs - 4, cs - 28, @types.color_branch)
+          @raylib.draw_rectangle(
+            x + 2,
+            y + 14,
+            cs - 4,
+            cs - 28,
+            @types.color_branch,
+          )
           // Leaves on branch
           let leaf_pulse = sinf(time + Float::from_int(c * 3 + r * 7)) * 2.0
           let lx = Float::from_int(x + cs / 2)
@@ -97,10 +121,9 @@ fn draw_cells(game : @types.Game) -> Unit {
             @types.color_leaf_dark,
           )
         }
-        Shadow => {
+        Shadow =>
           // Shadow overlay
           @raylib.draw_rectangle(x, y, cs, cs, @types.color_shadow)
-        }
         Empty => ()
       }
     }
@@ -143,7 +166,11 @@ fn draw_target_markers(game : @types.Game) -> Unit {
       let x = gx + tree.col * cs
       let y = gy + target_row * cs
       let met = @growth.target_met(game, i)
-      let color = if met { @types.color_target_met } else { @types.color_target_marker }
+      let color = if met {
+        @types.color_target_met
+      } else {
+        @types.color_target_marker
+      }
       // Draw dashed line at target height
       let mut dx = x - 10
       while dx < x + cs + 10 {
@@ -152,7 +179,10 @@ fn draw_target_markers(game : @types.Game) -> Unit {
       }
       // Arrow marker
       @raylib.draw_triangle(
-        @raylib.Vector2::new(Float::from_int(x - 12), Float::from_int(y + cs / 2)),
+        @raylib.Vector2::new(
+          Float::from_int(x - 12),
+          Float::from_int(y + cs / 2),
+        ),
         @raylib.Vector2::new(
           Float::from_int(x - 4),
           Float::from_int(y + cs / 2 - 5),
@@ -172,8 +202,10 @@ fn draw_target_markers(game : @types.Game) -> Unit {
 
 ///|
 fn draw_hover_highlight(game : @types.Game) -> Unit {
-  if game.hover_col >= 0 && game.hover_col < @types.grid_cols && game.hover_row >=
-  0 && game.hover_row < @types.grid_rows {
+  if game.hover_col >= 0 &&
+    game.hover_col < @types.grid_cols &&
+    game.hover_row >= 0 &&
+    game.hover_row < @types.grid_rows {
     let gx = @types.grid_offset_x
     let gy = @types.grid_offset_y
     let cs = @types.cell_size
@@ -190,9 +222,13 @@ fn draw_hover_highlight(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 100, 100, 200),
       )
       // Scissors icon text
-      @draw.draw_text("X", x + cs / 2 - 4, y + cs / 2 - 6, 14, @raylib.Color::new(
-        255, 80, 80, 200,
-      ))
+      @draw.draw_text(
+        "X",
+        x + cs / 2 - 4,
+        y + cs / 2 - 6,
+        14,
+        @raylib.Color::new(255, 80, 80, 200),
+      )
     }
   }
 }

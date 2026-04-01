@@ -92,14 +92,22 @@ pub fn load_level(game : @types.Game, world : Int, level : Int) -> Bool {
 
 ///|
 /// Advance simulation by one tick during recording
-pub fn advance_tick(game : @types.Game, move_dir : @types.Direction?) -> @simulation.TickResult {
+pub fn advance_tick(
+  game : @types.Game,
+  move_dir : @types.Direction?,
+) -> @simulation.TickResult {
   let maze = game.maze.unwrap()
   let maze_state = game.maze_state.unwrap()
   // Record the move
   record_move(game, move_dir)
   // Run simulation
   let result = @simulation.run_tick(
-    maze, maze_state, game.player, game.ghosts, game.tick, move_dir,
+    maze,
+    maze_state,
+    game.player,
+    game.ghosts,
+    game.tick,
+    move_dir,
   )
   // Save timeline entry
   let ghost_positions : Array[@types.Vec2i] = []
@@ -115,15 +123,13 @@ pub fn advance_tick(game : @types.Game, move_dir : @types.Direction?) -> @simula
   for ds in maze_state.door_states {
     doors_open.push(ds.open)
   }
-  game.timeline.push(
-    {
-      player_pos: game.player.pos,
-      ghost_positions,
-      guard_positions,
-      buttons_pressed,
-      doors_open,
-    },
-  )
+  game.timeline.push({
+    player_pos: game.player.pos,
+    ghost_positions,
+    guard_positions,
+    buttons_pressed,
+    doors_open,
+  })
   game.tick += 1
   result
 }
@@ -177,7 +183,10 @@ pub fn complete_current_level(game : @types.Game) -> Unit {
     if stars > score.stars {
       score.stars = stars
     }
-    score.collectibles_got = @types.maxi(score.collectibles_got, collectibles_got)
+    score.collectibles_got = @types.maxi(
+      score.collectibles_got,
+      collectibles_got,
+    )
     score.collectibles_total = collectibles_total
   }
   // Set result data

@@ -486,8 +486,8 @@ fn generate_structures_in_chunk(chunk : Chunk, game : Game) -> Unit {
 
   // Ruined camp: ~3-5 per world (roughly 1 in 15 chunks)
   if structure_roll < 65 {
-    let cx_local = (chunk_hash / 7) % (chunk_x - 6) + 3
-    let cz_local = (chunk_hash / 13) % (chunk_z - 6) + 3
+    let cx_local = chunk_hash / 7 % (chunk_x - 6) + 3
+    let cz_local = chunk_hash / 13 % (chunk_z - 6) + 3
     let wx = base_wx + cx_local
     let wz = base_wz + cz_local
     let local_biome = get_biome_at(wx, wz)
@@ -498,10 +498,11 @@ fn generate_structures_in_chunk(chunk : Chunk, game : Game) -> Unit {
   }
 
   // Watchtower: ~1-2 per world (roughly 1 in 35 chunks)
-  let tower_roll = hash_int(chunk.cx * 73721 + chunk.cz * 33391 + seed + 1) % 1000
+  let tower_roll = hash_int(chunk.cx * 73721 + chunk.cz * 33391 + seed + 1) %
+    1000
   if tower_roll < 30 {
-    let tx = (tower_roll / 3) % (chunk_x - 4) + 2
-    let tz = (tower_roll / 5) % (chunk_z - 4) + 2
+    let tx = tower_roll / 3 % (chunk_x - 4) + 2
+    let tz = tower_roll / 5 % (chunk_z - 4) + 2
     let wx = base_wx + tx
     let wz = base_wz + tz
     let local_biome = get_biome_at(wx, wz)
@@ -512,27 +513,32 @@ fn generate_structures_in_chunk(chunk : Chunk, game : Game) -> Unit {
   }
 
   // Abandoned mine entrance: ~1-2 per world (roughly 1 in 40 chunks)
-  let mine_roll = hash_int(chunk.cx * 12289 + chunk.cz * 24593 + seed + 2) % 1000
+  let mine_roll = hash_int(chunk.cx * 12289 + chunk.cz * 24593 + seed + 2) %
+    1000
   if mine_roll < 25 {
-    let mx = (mine_roll / 3) % (chunk_x - 6) + 3
-    let mz = (mine_roll / 7) % (chunk_z - 6) + 3
+    let mx = mine_roll / 3 % (chunk_x - 6) + 3
+    let mz = mine_roll / 7 % (chunk_z - 6) + 3
     let wx = base_wx + mx
     let wz = base_wz + mz
     let local_biome = get_biome_at(wx, wz)
     let height = get_biome_terrain_height(wx, wz, local_biome)
-    if height >= base_height && height < chunk_y - 10 &&
-      (local_biome == Mountains || local_biome == Plains || local_biome == Forest) {
+    if height >= base_height &&
+      height < chunk_y - 10 &&
+      (
+        local_biome == Mountains ||
+        local_biome == Plains ||
+        local_biome == Forest
+      ) {
       place_abandoned_mine(chunk, mx, mz, height)
     }
   }
 
   // Shrine: ~1 per world (roughly 1 in 60 chunks)
-  let shrine_roll = hash_int(
-    chunk.cx * 6151 + chunk.cz * 12343 + seed + 3,
-  ) % 1000
+  let shrine_roll = hash_int(chunk.cx * 6151 + chunk.cz * 12343 + seed + 3) %
+    1000
   if shrine_roll < 16 {
-    let sx = (shrine_roll / 3) % (chunk_x - 8) + 4
-    let sz = (shrine_roll / 5) % (chunk_z - 8) + 4
+    let sx = shrine_roll / 3 % (chunk_x - 8) + 4
+    let sz = shrine_roll / 5 % (chunk_z - 8) + 4
     let wx = base_wx + sx
     let wz = base_wz + sz
     let local_biome = get_biome_at(wx, wz)
@@ -545,10 +551,10 @@ fn generate_structures_in_chunk(chunk : Chunk, game : Game) -> Unit {
   // Ore pocket: ~3-5 per world (roughly 1 in 13 chunks)
   let ore_roll = hash_int(chunk.cx * 3079 + chunk.cz * 7919 + seed + 4) % 1000
   if ore_roll < 75 {
-    let ox = (ore_roll / 3) % (chunk_x - 4) + 2
-    let oz = (ore_roll / 7) % (chunk_z - 4) + 2
+    let ox = ore_roll / 3 % (chunk_x - 4) + 2
+    let oz = ore_roll / 7 % (chunk_z - 4) + 2
     // Place deep underground between y=5 and y=25
-    let oy = 5 + (ore_roll / 11) % 20
+    let oy = 5 + ore_roll / 11 % 20
     place_ore_pocket(chunk, ox, oy, oz, ore_roll)
   }
 }
@@ -639,13 +645,19 @@ fn place_watchtower(chunk : Chunk, lx : Int, lz : Int, height : Int) -> Unit {
       if lx - 1 >= 0 && lz + d >= 0 && lz + d < chunk_z && top_y + 1 < chunk_y {
         chunk.set_block(lx - 1, top_y + 1, lz + d, block_cobblestone)
       }
-      if lx + 1 < chunk_x && lz + d >= 0 && lz + d < chunk_z && top_y + 1 < chunk_y {
+      if lx + 1 < chunk_x &&
+        lz + d >= 0 &&
+        lz + d < chunk_z &&
+        top_y + 1 < chunk_y {
         chunk.set_block(lx + 1, top_y + 1, lz + d, block_cobblestone)
       }
       if lx + d >= 0 && lx + d < chunk_x && lz - 1 >= 0 && top_y + 1 < chunk_y {
         chunk.set_block(lx + d, top_y + 1, lz - 1, block_cobblestone)
       }
-      if lx + d >= 0 && lx + d < chunk_x && lz + 1 < chunk_z && top_y + 1 < chunk_y {
+      if lx + d >= 0 &&
+        lx + d < chunk_x &&
+        lz + 1 < chunk_z &&
+        top_y + 1 < chunk_y {
         chunk.set_block(lx + d, top_y + 1, lz + 1, block_cobblestone)
       }
     }
@@ -705,7 +717,11 @@ fn place_abandoned_mine(
     }
     // Rails on floor
     let floor_y = height - depth
-    if floor_y >= 1 && floor_y < chunk_y && lx >= 0 && lx < chunk_x && tz < chunk_z {
+    if floor_y >= 1 &&
+      floor_y < chunk_y &&
+      lx >= 0 &&
+      lx < chunk_x &&
+      tz < chunk_z {
       chunk.set_block(lx, floor_y, tz, block_rail)
     }
     // Exposed ore in walls at deeper levels
@@ -1420,8 +1436,7 @@ pub fn get_block_drop(block : Int) -> Int {
     item_coal
   } else if block == block_shrine_stone {
     block_stone
-  } else if block == block_rail ||
-    block == block_ladder {
+  } else if block == block_rail || block == block_ladder {
     block_air
   } else {
     block

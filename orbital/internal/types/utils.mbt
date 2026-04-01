@@ -114,7 +114,7 @@ pub fn vec2f_normalize(v : Vec2f) -> Vec2f {
 pub fn gravity_accel(
   probe_pos : Vec2f,
   planet_pos : Vec2f,
-  planet_mass : Float
+  planet_mass : Float,
 ) -> Vec2f {
   let diff = vec2f_sub(planet_pos, probe_pos)
   let dist_sq = vec2f_dist_sq(probe_pos, planet_pos)
@@ -128,7 +128,12 @@ pub fn gravity_accel(
 }
 
 ///|
-pub fn make_planet(x : Float, y : Float, mass : Float, radius : Float) -> Planet {
+pub fn make_planet(
+  x : Float,
+  y : Float,
+  mass : Float,
+  radius : Float,
+) -> Planet {
   { pos: vec2f(x, y), mass, radius }
 }
 
@@ -151,7 +156,7 @@ pub fn make_level(
   launch_y : Float,
   par_ticks : Int,
   name : String,
-  tier : Tier
+  tier : Tier,
 ) -> Level {
   {
     planets,

@@ -15,7 +15,11 @@ test "island creation" {
 
 ///|
 test "count bridges for island" {
-  let islands = [@types.island(0, 0, 3), @types.island(2, 0, 2), @types.island(0, 2, 1)]
+  let islands = [
+    @types.island(0, 0, 3),
+    @types.island(2, 0, 2),
+    @types.island(0, 2, 1),
+  ]
   let bridges = [
     @types.new_bridge(0, 1, Horizontal),
     @types.new_bridge(0, 2, Vertical),

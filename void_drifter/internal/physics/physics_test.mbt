@@ -1,17 +1,32 @@
 ///|
 test "circles_overlap detects collision" {
-  inspect(@physics.circles_overlap(0.0, 0.0, 10.0, 5.0, 0.0, 10.0), content="true")
-  inspect(@physics.circles_overlap(0.0, 0.0, 5.0, 20.0, 0.0, 5.0), content="false")
+  inspect(
+    @physics.circles_overlap(0.0, 0.0, 10.0, 5.0, 0.0, 10.0),
+    content="true",
+  )
+  inspect(
+    @physics.circles_overlap(0.0, 0.0, 5.0, 20.0, 0.0, 5.0),
+    content="false",
+  )
   // Touching edges - not overlapping (equal distance)
-  inspect(@physics.circles_overlap(0.0, 0.0, 5.0, 10.0, 0.0, 5.0), content="false")
+  inspect(
+    @physics.circles_overlap(0.0, 0.0, 5.0, 10.0, 0.0, 5.0),
+    content="false",
+  )
 }
 
 ///|
 test "circles_overlap edge cases" {
   // Same position
-  inspect(@physics.circles_overlap(5.0, 5.0, 1.0, 5.0, 5.0, 1.0), content="true")
+  inspect(
+    @physics.circles_overlap(5.0, 5.0, 1.0, 5.0, 5.0, 1.0),
+    content="true",
+  )
   // Very far apart
-  inspect(@physics.circles_overlap(0.0, 0.0, 1.0, 1000.0, 1000.0, 1.0), content="false")
+  inspect(
+    @physics.circles_overlap(0.0, 0.0, 1.0, 1000.0, 1000.0, 1.0),
+    content="false",
+  )
 }
 
 ///|

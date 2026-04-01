@@ -166,7 +166,12 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
         if dist < hit_radius {
           // Apply damage - check weak points for capital ships
           let actual_damage = check_weak_point_hit(
-            game, j, proj.x, proj.y, proj.z, proj.damage,
+            game,
+            j,
+            proj.x,
+            proj.y,
+            proj.z,
+            proj.damage,
           )
           damage_enemy(game, j, actual_damage)
           game.player.shots_hit += 1
@@ -481,7 +486,16 @@ fn check_weak_point_hit(
       e.weak_point_hp -= wp_damage
       // Spark effect at weak point
       @types.spawn_particles(game, wp_x, wp_y, wp_z, 8, 255, 255, 50)
-      @types.spawn_damage_number(game, wp_x, wp_y + 1.0, wp_z, wp_damage.to_int(), 255, 100, 50)
+      @types.spawn_damage_number(
+        game,
+        wp_x,
+        wp_y + 1.0,
+        wp_z,
+        wp_damage.to_int(),
+        255,
+        100,
+        50,
+      )
       if e.weak_point_hp <= 0.0 {
         // Weak point destroyed - massive damage
         e.weak_point_hp = 0.0

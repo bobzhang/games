@@ -27,12 +27,7 @@ fn draw_title(game : @types.Game) -> Unit {
   let start_text = "Click or Press ENTER to Start"
   let stw = @draw.measure_text(start_text, 20)
   let start_alpha = (@types.sinf(time * 3.0) * 100.0 + 155.0).to_int()
-  let start_color = @raylib.Color::new(
-    200,
-    180,
-    140,
-    start_alpha,
-  )
+  let start_color = @raylib.Color::new(200, 180, 140, start_alpha)
   @draw.draw_text(start_text, (w - stw) / 2, 420, 20, start_color)
   // Stars count
   let stars = @types.total_stars(game.scores)
@@ -47,7 +42,7 @@ fn draw_gear(
   cy : Int,
   radius : Float,
   angle : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let teeth = 8
   let fcx = Float::from_int(cx)
@@ -57,8 +52,7 @@ fn draw_gear(
   @raylib.draw_circle(cx, cy, radius * 0.25, @types.color_bg)
   // Draw teeth
   for i in 0..<teeth {
-    let a = angle +
-      Float::from_int(i) * 6.28318 / Float::from_int(teeth)
+    let a = angle + Float::from_int(i) * 6.28318 / Float::from_int(teeth)
     let tx = fcx + @types.cosf(a) * radius
     let ty = fcy + @types.sinf(a) * radius
     @raylib.draw_circle(tx.to_int(), ty.to_int(), radius * 0.2, color)
@@ -73,9 +67,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text(title, (w - tw) / 2, 80, 40, @types.color_title_text)
   let tier_names = ["Basics", "Chains", "Workshop"]
   let tier_descs = [
-    "Simple pulleys & weights",
-    "Chained pulleys & ratchets",
-    "Breakable ropes & buckets",
+    "Simple pulleys & weights", "Chained pulleys & ratchets", "Breakable ropes & buckets",
   ]
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
@@ -97,7 +89,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     @raylib.draw_rectangle_lines(bx, by, bw, bh, @types.color_pulley_brass)
     let name = tier_names[t]
     let nw = @draw.measure_text(name, 24)
-    @draw.draw_text(name, bx + (bw - nw) / 2, by + 20, 24, @types.color_button_text)
+    @draw.draw_text(
+      name,
+      bx + (bw - nw) / 2,
+      by + 20,
+      24,
+      @types.color_button_text,
+    )
     let desc = tier_descs[t]
     let dw = @draw.measure_text(desc, 14)
     @draw.draw_text(
@@ -117,7 +115,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       }
     }
     let max_stars = tier_count * 3
-    let star_str = tier_stars.to_string() + "/" + max_stars.to_string() + " Stars"
+    let star_str = tier_stars.to_string() +
+      "/" +
+      max_stars.to_string() +
+      " Stars"
     let ssw = @draw.measure_text(star_str, 16)
     @draw.draw_text(
       star_str,
@@ -139,7 +140,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     }
   }
   // Back hint
-  @draw.draw_text("ESC: Back", 20, @types.screen_height - 40, 16, @types.color_hud_text)
+  @draw.draw_text(
+    "ESC: Back",
+    20,
+    @types.screen_height - 40,
+    16,
+    @types.color_hud_text,
+  )
   // Message
   if game.message_timer > 0.0 {
     let msgw = @draw.measure_text(game.message, 20)
@@ -180,17 +187,19 @@ fn draw_level_select(game : @types.Game) -> Unit {
     let by = start_y + row * (bh + gap)
     let level_idx = @types.level_index_for_tier(game.selected_tier, i)
     let hover = mx >= bx && mx < bx + bw && my >= by && my < by + bh
-    let bg = if hover {
-      @types.color_button_hover
-    } else {
-      @types.color_button
-    }
+    let bg = if hover { @types.color_button_hover } else { @types.color_button }
     @raylib.draw_rectangle(bx, by, bw, bh, bg)
     @raylib.draw_rectangle_lines(bx, by, bw, bh, @types.color_pulley_brass)
     // Level number
     let num = (i + 1).to_string()
     let nw = @draw.measure_text(num, 28)
-    @draw.draw_text(num, bx + (bw - nw) / 2, by + 8, 28, @types.color_button_text)
+    @draw.draw_text(
+      num,
+      bx + (bw - nw) / 2,
+      by + 8,
+      28,
+      @types.color_button_text,
+    )
     // Stars
     if level_idx < game.scores.length() {
       let score = game.scores[level_idx]
@@ -207,7 +216,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
       }
     }
   }
-  @draw.draw_text("ESC: Back", 20, @types.screen_height - 40, 16, @types.color_hud_text)
+  @draw.draw_text(
+    "ESC: Back",
+    20,
+    @types.screen_height - 40,
+    16,
+    @types.color_hud_text,
+  )
 }
 
 ///|
@@ -294,11 +309,7 @@ fn draw_results(game : @types.Game) -> Unit {
   let nbw = 180
   let nbh = 50
   let nhover = mx >= nbx && mx < nbx + nbw && my >= nby && my < nby + nbh
-  let nbg = if nhover {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let nbg = if nhover { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(nbx, nby, nbw, nbh, nbg)
   @raylib.draw_rectangle_lines(nbx, nby, nbw, nbh, @types.color_pulley_brass)
   let ntxt = if game.current_level + 1 < @types.total_levels {
@@ -317,11 +328,7 @@ fn draw_results(game : @types.Game) -> Unit {
   // Replay button
   let rbx = 660
   let rhover = mx >= rbx && mx < rbx + nbw && my >= nby && my < nby + nbh
-  let rbg = if rhover {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let rbg = if rhover { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(rbx, nby, nbw, nbh, rbg)
   @raylib.draw_rectangle_lines(rbx, nby, nbw, nbh, @types.color_pulley_brass)
   let rtxt = "Replay"
@@ -336,14 +343,15 @@ fn draw_results(game : @types.Game) -> Unit {
   // Back
   let backx = 540
   let backy = 520
-  let bhover = mx >= backx && mx < backx + nbw && my >= backy && my < backy + nbh
-  let bbg = if bhover {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let bhover = mx >= backx &&
+    mx < backx + nbw &&
+    my >= backy &&
+    my < backy + nbh
+  let bbg = if bhover { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(backx, backy, nbw, nbh, bbg)
-  @raylib.draw_rectangle_lines(backx, backy, nbw, nbh, @types.color_pulley_brass)
+  @raylib.draw_rectangle_lines(
+    backx, backy, nbw, nbh, @types.color_pulley_brass,
+  )
   let btxt = "Level Select"
   let bbtw = @draw.measure_text(btxt, 20)
   @draw.draw_text(

@@ -851,9 +851,7 @@ fn @types.Game::drop_mob_loot(game : @types.Game, ent : @types.Entity) -> Unit {
     // Zombie drops: Rotten Flesh (1-2)
     let count = 1 + @types.rand_next(game) % 2
     ignore(inv.add_item(@types.item_rotten_flesh, count))
-    @types.show_message(
-      game, "Killed Zombie! Got \{count} Rotten Flesh.", 2.0,
-    )
+    @types.show_message(game, "Killed Zombie! Got \{count} Rotten Flesh.", 2.0)
   } else if kind == @types.entity_skeleton {
     // Skeleton drops: Bones (1-2) + Arrows (1-3)
     let bone_count = 1 + @types.rand_next(game) % 2
@@ -869,14 +867,16 @@ fn @types.Game::drop_mob_loot(game : @types.Game, ent : @types.Entity) -> Unit {
     // Spider drops: String (1-3)
     let count = 1 + @types.rand_next(game) % 3
     ignore(inv.add_item(@types.item_string, count))
-    @types.show_message(
-      game, "Killed Spider! Got \{count} String.", 2.0,
-    )
+    @types.show_message(game, "Killed Spider! Got \{count} String.", 2.0)
   } else if kind == @types.entity_pig ||
     kind == @types.entity_cow ||
     kind == @types.entity_chicken {
     // Passive mobs drop: Raw Meat (1-2)
-    let count = if kind == @types.entity_chicken { 1 } else { 1 + @types.rand_next(game) % 2 }
+    let count = if kind == @types.entity_chicken {
+      1
+    } else {
+      1 + @types.rand_next(game) % 2
+    }
     ignore(inv.add_item(@types.item_raw_meat, count))
     @types.show_message(
       game,
@@ -884,9 +884,7 @@ fn @types.Game::drop_mob_loot(game : @types.Game, ent : @types.Entity) -> Unit {
       2.0,
     )
   } else {
-    @types.show_message(
-      game, "Killed \{@types.entity_name(kind)}!", 1.5,
-    )
+    @types.show_message(game, "Killed \{@types.entity_name(kind)}!", 1.5)
   }
 }
 
@@ -961,7 +959,8 @@ pub fn handle_food_consumption(game : @types.Game) -> Unit {
 fn @types.Game::update_night_danger(game : @types.Game, dt : Float) -> Unit {
   // Sunset warning: "Night is falling..."
   let t = game.day_timer / @types.day_length
-  if t > @types.dusk_warning_time && t < @types.late_dusk_end &&
+  if t > @types.dusk_warning_time &&
+    t < @types.late_dusk_end &&
     game.night_warning_timer <= 0.0 {
     game.night_warning_timer = 3.0
     @types.show_message(game, "Night is falling...", 3.0)

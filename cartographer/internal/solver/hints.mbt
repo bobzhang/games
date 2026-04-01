@@ -3,7 +3,7 @@ pub fn compute_hints(
   grid : Array[@types.FeatureKind?],
   size : Int,
   features_to_place : Array[@types.FeatureKind],
-  clues : Array[@types.Clue]
+  clues : Array[@types.Clue],
 ) -> Array[@types.Vec2i] {
   let hints : Array[@types.Vec2i] = []
   // Find features that still need to be placed
@@ -33,7 +33,7 @@ pub fn compute_hints(
 ///|
 fn get_needed_features(
   grid : Array[@types.FeatureKind?],
-  features_to_place : Array[@types.FeatureKind]
+  features_to_place : Array[@types.FeatureKind],
 ) -> Array[@types.FeatureKind] {
   let needed : Array[@types.FeatureKind] = []
   // Count how many of each feature type we need
@@ -64,7 +64,7 @@ fn find_valid_positions(
   grid : Array[@types.FeatureKind?],
   size : Int,
   clues : Array[@types.Clue],
-  feature : @types.FeatureKind
+  feature : @types.FeatureKind,
 ) -> Array[@types.Vec2i] {
   let valid : Array[@types.Vec2i] = []
   for row in 0..<size {
@@ -88,7 +88,7 @@ fn find_valid_positions(
 ///|
 pub fn get_feature_placement_count(
   features_to_place : Array[@types.FeatureKind],
-  kind : @types.FeatureKind
+  kind : @types.FeatureKind,
 ) -> Int {
   let mut count = 0
   for i in 0..<features_to_place.length() {
@@ -104,7 +104,7 @@ pub fn compute_narrow_hint(
   grid : Array[@types.FeatureKind?],
   size : Int,
   features_to_place : Array[@types.FeatureKind],
-  clues : Array[@types.Clue]
+  clues : Array[@types.Clue],
 ) -> (Array[@types.Vec2i], @types.FeatureKind?) {
   // Find the feature with the fewest valid positions (most constrained)
   let needed = get_needed_features(grid, features_to_place)
@@ -128,7 +128,7 @@ pub fn compute_reveal_hint(
   grid : Array[@types.FeatureKind?],
   size : Int,
   features_to_place : Array[@types.FeatureKind],
-  clues : Array[@types.Clue]
+  clues : Array[@types.Clue],
 ) -> (@types.Vec2i?, @types.FeatureKind?) {
   // Try to find a feature with exactly one valid position
   let needed = get_needed_features(grid, features_to_place)
@@ -140,7 +140,9 @@ pub fn compute_reveal_hint(
     }
   }
   // Fallback: pick the most constrained feature, reveal its first valid position
-  let (positions, feat) = compute_narrow_hint(grid, size, features_to_place, clues)
+  let (positions, feat) = compute_narrow_hint(
+    grid, size, features_to_place, clues,
+  )
   if positions.length() > 0 {
     (Some(positions[0]), feat)
   } else {
@@ -151,7 +153,7 @@ pub fn compute_reveal_hint(
 ///|
 pub fn get_needed_features_pub(
   grid : Array[@types.FeatureKind?],
-  features_to_place : Array[@types.FeatureKind]
+  features_to_place : Array[@types.FeatureKind],
 ) -> Array[@types.FeatureKind] {
   get_needed_features(grid, features_to_place)
 }
@@ -161,7 +163,7 @@ pub fn find_valid_positions_pub(
   grid : Array[@types.FeatureKind?],
   size : Int,
   clues : Array[@types.Clue],
-  feature : @types.FeatureKind
+  feature : @types.FeatureKind,
 ) -> Array[@types.Vec2i] {
   find_valid_positions(grid, size, clues, feature)
 }

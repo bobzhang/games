@@ -1,7 +1,7 @@
 ///|
 fn sort_indices_by_gravity(
   entities : Array[@types.Entity],
-  dir : @types.GravityDir
+  dir : @types.GravityDir,
 ) -> Array[Int] {
   let indices : Array[Int] = []
   for i in 0..<entities.length() {
@@ -35,7 +35,7 @@ fn can_move_to(
   level : @types.Level,
   entity : @types.Entity,
   nx : Int,
-  ny : Int
+  ny : Int,
 ) -> Bool {
   if nx < 0 || nx >= level.width || ny < 0 || ny >= level.height {
     return false
@@ -69,14 +69,8 @@ fn can_push_to(level : @types.Level, nx : Int, ny : Int) -> Bool {
 fn process_tile_effects(level : @types.Level, entity : @types.Entity) -> Unit {
   let tile = @types.get_tile(level, entity.x, entity.y)
   match tile {
-    Exit =>
-      if entity.kind == Player {
-        level.completed = true
-      }
-    Spike =>
-      if entity.kind == Player {
-        level.player_dead = true
-      }
+    Exit => if entity.kind == Player { level.completed = true }
+    Spike => if entity.kind == Player { level.player_dead = true }
     Portal(id) => {
       let (px, py) = @types.find_matching_portal(level, id, entity.x, entity.y)
       if px != entity.x || py != entity.y {
@@ -98,7 +92,7 @@ fn process_tile_effects(level : @types.Level, entity : @types.Entity) -> Unit {
 ///|
 fn process_entity_collisions(
   level : @types.Level,
-  entity : @types.Entity
+  entity : @types.Entity,
 ) -> Unit {
   if entity.kind != Player {
     return
@@ -107,7 +101,7 @@ fn process_entity_collisions(
   // but keys/gems can be stepped on)
   for i in 0..<level.entities.length() {
     let other = level.entities[i]
-    if !(other.active) || other.id == entity.id {
+    if !other.active || other.id == entity.id {
       continue
     }
     if other.x == entity.x && other.y == entity.y {
@@ -122,10 +116,9 @@ fn process_entity_collisions(
           other.active = false
           level.gems_collected = level.gems_collected + 1
         }
-        Enemy => {
+        Enemy =>
           // Player walked into an enemy - death
           level.player_dead = true
-        }
         _ => ()
       }
     }
@@ -139,7 +132,7 @@ pub fn step_gravity(level : @types.Level) -> Bool {
   let order = sort_indices_by_gravity(level.entities, level.gravity)
   for idx in order {
     let entity = level.entities[idx]
-    if !(entity.active) {
+    if !entity.active {
       continue
     }
     let nx = entity.x + dx
@@ -154,73 +147,69 @@ pub fn step_gravity(level : @types.Level) -> Bool {
       moved = true
       process_tile_effects(level, entity)
       process_entity_collisions(level, entity)
-    } else {
       // Boulder rolling logic: if resting on something, try to slide sideways
-      if entity.kind == Boulder && !(entity.falling) {
-        let (perp1, perp2) = @types.gravity_perp_vectors(level.gravity)
-        let (p1x, p1y) = perp1
-        let (p2x, p2y) = perp2
-        // Try left perpendicular first
-        let sx1 = entity.x + p1x
-        let sy1 = entity.y + p1y
-        let sx1d = sx1 + dx
-        let sy1d = sy1 + dy
-        if can_move_to(level, entity, sx1, sy1) &&
-          can_push_to(level, sx1d, sy1d) {
+    } else if entity.kind == Boulder && !entity.falling {
+      let (perp1, perp2) = @types.gravity_perp_vectors(level.gravity)
+      let (p1x, p1y) = perp1
+      let (p2x, p2y) = perp2
+      // Try left perpendicular first
+      let sx1 = entity.x + p1x
+      let sy1 = entity.y + p1y
+      let sx1d = sx1 + dx
+      let sy1d = sy1 + dy
+      if can_move_to(level, entity, sx1, sy1) && can_push_to(level, sx1d, sy1d) {
+        entity.from_x = entity.x
+        entity.from_y = entity.y
+        entity.x = sx1
+        entity.y = sy1
+        entity.falling = true
+        entity.slide_timer = 1.0
+        moved = true
+        process_tile_effects(level, entity)
+      } else {
+        // Try right perpendicular
+        let sx2 = entity.x + p2x
+        let sy2 = entity.y + p2y
+        let sx2d = sx2 + dx
+        let sy2d = sy2 + dy
+        if can_move_to(level, entity, sx2, sy2) &&
+          can_push_to(level, sx2d, sy2d) {
           entity.from_x = entity.x
           entity.from_y = entity.y
-          entity.x = sx1
-          entity.y = sy1
+          entity.x = sx2
+          entity.y = sy2
           entity.falling = true
           entity.slide_timer = 1.0
           moved = true
           process_tile_effects(level, entity)
         } else {
-          // Try right perpendicular
-          let sx2 = entity.x + p2x
-          let sy2 = entity.y + p2y
-          let sx2d = sx2 + dx
-          let sy2d = sy2 + dy
-          if can_move_to(level, entity, sx2, sy2) &&
-            can_push_to(level, sx2d, sy2d) {
-            entity.from_x = entity.x
-            entity.from_y = entity.y
-            entity.x = sx2
-            entity.y = sy2
-            entity.falling = true
-            entity.slide_timer = 1.0
-            moved = true
-            process_tile_effects(level, entity)
-          } else {
-            entity.falling = false
-          }
+          entity.falling = false
         }
-      } else {
-        entity.falling = false
       }
+    } else {
+      entity.falling = false
     }
   }
   // Handle ice sliding: entities on ice keep moving in gravity direction
   for idx in order {
     let entity = level.entities[idx]
-    if !(entity.active) || entity.falling {
+    if !entity.active || entity.falling {
       continue
     }
     let tile = @types.get_tile(level, entity.x, entity.y)
     match tile {
-      Ice => {
+      Ice =>
         // On ice, try to slide perpendicular to last movement
         // Ice makes the entity slippery - it continues in gravity direction
         // This is handled by the main gravity step already
         ()
-      }
       _ => ()
     }
   }
   // Handle conveyor belt effects
   for i in 0..<level.entities.length() {
     let entity = level.entities[i]
-    if !(entity.active) || entity.falling {
+    if !entity.active || entity.falling {
       continue
     }
     let tile = @types.get_tile(level, entity.x, entity.y)
@@ -246,7 +235,7 @@ pub fn step_gravity(level : @types.Level) -> Bool {
   // Handle crumble tiles: mark tiles that entities just left
   for i in 0..<level.entities.length() {
     let entity = level.entities[i]
-    if !(entity.active) {
+    if !entity.active {
       continue
     }
     if entity.from_x != entity.x || entity.from_y != entity.y {
@@ -264,7 +253,7 @@ pub fn step_gravity(level : @types.Level) -> Bool {
 pub fn rotate_gravity(
   level : @types.Level,
   game : @types.Game,
-  new_dir : @types.GravityDir
+  new_dir : @types.GravityDir,
 ) -> Unit {
   if level.gravity == new_dir {
     return
@@ -282,7 +271,7 @@ pub fn try_move_player(
   level : @types.Level,
   game : @types.Game,
   dx : Int,
-  dy : Int
+  dy : Int,
 ) -> Bool {
   let player = match @types.find_player(level) {
     Some(p) => p

@@ -693,7 +693,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @draw.draw_text(
     "Fast snake duels with AI rivals, traps, combo scoring, and boost management.",
     @types.screen_w / 2 -
-    @draw.measure_text("Fast snake duels with AI rivals, traps, combo scoring, and boost management.", 34) /
+    @draw.measure_text(
+      "Fast snake duels with AI rivals, traps, combo scoring, and boost management.",
+      34,
+    ) /
     2,
     250,
     34,
@@ -701,7 +704,9 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   )
   @draw.draw_text(
     "Touch controls are available for mobile web play.",
-    @types.screen_w / 2 - @draw.measure_text("Touch controls are available for mobile web play.", 34) / 2,
+    @types.screen_w / 2 -
+    @draw.measure_text("Touch controls are available for mobile web play.", 34) /
+    2,
     292,
     34,
     @raylib.Color::new(196, 220, 244, 238),

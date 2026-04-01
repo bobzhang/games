@@ -105,7 +105,9 @@ test "level_difficulty_progression_within_worlds" {
   // Within each world, target yield should generally increase
   for w in 0..<@types.total_worlds {
     let first = load_level(w * @types.levels_per_world)
-    let last = load_level(w * @types.levels_per_world + @types.levels_per_world - 1)
+    let last = load_level(
+      w * @types.levels_per_world + @types.levels_per_world - 1,
+    )
     assert_true(last.target_yield >= first.target_yield)
   }
 }

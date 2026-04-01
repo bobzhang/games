@@ -75,7 +75,7 @@ pub fn preview_water_flow(grid : @types.HexGrid) -> Array[@types.HexCoord] {
 pub fn would_channel_bring_water(
   grid : @types.HexGrid,
   col : Int,
-  row : Int
+  row : Int,
 ) -> Bool {
   let tile = grid.tiles[row][col]
   // Check if any neighbor is watered and at higher or equal height

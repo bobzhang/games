@@ -127,9 +127,7 @@ test "validate all clues" {
   ]
   let clues : Array[@types.Clue] = [
     @types.new_clue(Dating, 3, 0, "Granite is the bottom layer"),
-    @types.new_clue(
-      Superposition, 2, 3, "Shale sits directly above granite",
-    ),
+    @types.new_clue(Superposition, 2, 3, "Shale sits directly above granite"),
     @types.new_clue(FossilAge, 2, 0, "Shale is older than sandstone"),
     @types.new_clue(Dating, 1, 3, "Limestone is the top layer"),
   ]
@@ -168,22 +166,24 @@ test "check_clue dispatches correctly" {
   let clue_dating = @types.new_clue(Dating, 0, 0, "Sandstone at bottom")
   inspect(check_clue(clue_dating, slots), content="true")
   let clue_super = @types.new_clue(
-    Superposition, 1, 0, "Limestone above sandstone",
+    Superposition,
+    1,
+    0,
+    "Limestone above sandstone",
   )
   inspect(check_clue(clue_super, slots), content="true")
   let clue_intrusion = @types.new_clue(
-    Intrusion, 4, 0, "Basalt intrudes sandstone",
+    Intrusion,
+    4,
+    0,
+    "Basalt intrudes sandstone",
   )
   inspect(check_clue(clue_intrusion, slots), content="true")
 }
 
 ///|
 test "find_rock_slot" {
-  let slots : Array[@types.RockKind?] = [
-    Some(Granite),
-    None,
-    Some(Sandstone),
-  ]
+  let slots : Array[@types.RockKind?] = [Some(Granite), None, Some(Sandstone)]
   inspect(@types.find_rock_slot(slots, Granite), content="0")
   inspect(@types.find_rock_slot(slots, Sandstone), content="2")
   inspect(@types.find_rock_slot(slots, Coal), content="-1")

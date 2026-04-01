@@ -3,7 +3,7 @@ pub fn can_place_sand(
   grid : @types.Grid,
   x : Int,
   y : Int,
-  sea_level : Int
+  sea_level : Int,
 ) -> Bool {
   if !@types.grid_in_bounds(grid, x, y) {
     return false
@@ -24,7 +24,7 @@ fn has_adjacent_land(
   grid : @types.Grid,
   x : Int,
   y : Int,
-  sea_level : Int
+  sea_level : Int,
 ) -> Bool {
   let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
   for i in 0..<dirs.length() {
@@ -46,7 +46,7 @@ pub fn place_sand(
   grid : @types.Grid,
   x : Int,
   y : Int,
-  sea_level : Int
+  sea_level : Int,
 ) -> Bool {
   if !can_place_sand(grid, x, y, sea_level) {
     return false
@@ -67,7 +67,7 @@ pub fn place_sand(
 ///|
 pub fn valid_placements(
   grid : @types.Grid,
-  sea_level : Int
+  sea_level : Int,
 ) -> Array[(Int, Int)] {
   let result : Array[(Int, Int)] = []
   for y in 0..<grid.height {

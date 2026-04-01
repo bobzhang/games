@@ -1,7 +1,7 @@
 ///|
 pub fn find_forced_bridge(
   islands : Array[@types.Island],
-  bridges : Array[@types.Bridge]
+  bridges : Array[@types.Bridge],
 ) -> (Int, Int) {
   // For each unsatisfied island, check if it has only enough possible
   // connections to exactly meet its requirement
@@ -27,7 +27,11 @@ pub fn find_forced_bridge(
         continue
       }
       let existing = @types.find_bridge(bridges, i, j)
-      let current_count = if existing >= 0 { bridges[existing].count } else { 0 }
+      let current_count = if existing >= 0 {
+        bridges[existing].count
+      } else {
+        0
+      }
       let can_add = 2 - current_count
       if can_add > 0 {
         possible.push((j, can_add))
@@ -53,7 +57,7 @@ pub fn find_forced_bridge(
 ///|
 pub fn find_hint(
   islands : Array[@types.Island],
-  bridges : Array[@types.Bridge]
+  bridges : Array[@types.Bridge],
 ) -> (Int, Int) {
   // First try forced bridges
   let (a, b) = find_forced_bridge(islands, bridges)
@@ -80,7 +84,11 @@ pub fn find_hint(
         continue
       }
       let existing = @types.find_bridge(bridges, i, j)
-      let current_count = if existing >= 0 { bridges[existing].count } else { 0 }
+      let current_count = if existing >= 0 {
+        bridges[existing].count
+      } else {
+        0
+      }
       if current_count < 2 {
         return (i, j)
       }

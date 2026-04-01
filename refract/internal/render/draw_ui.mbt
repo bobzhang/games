@@ -6,11 +6,17 @@ fn draw_palette(game : @types.Game) -> Unit {
   let panel_w = 240
   // Panel background
   @raylib.draw_rectangle(
-    px - 10, py - 40, panel_w + 20, 50 + game.palette.length() * item_h + 20,
+    px - 10,
+    py - 40,
+    panel_w + 20,
+    50 + game.palette.length() * item_h + 20,
     @types.color_palette_bg,
   )
   @raylib.draw_rectangle_lines(
-    px - 10, py - 40, panel_w + 20, 50 + game.palette.length() * item_h + 20,
+    px - 10,
+    py - 40,
+    panel_w + 20,
+    50 + game.palette.length() * item_h + 20,
     @types.color_cell_border,
   )
   // Title
@@ -21,11 +27,20 @@ fn draw_palette(game : @types.Game) -> Unit {
     // Selection highlight
     let selected = i == game.selected_palette
     if selected {
-      @raylib.draw_rectangle(px - 4, iy, panel_w + 8, item_h - 4, @types.color_palette_sel)
+      @raylib.draw_rectangle(
+        px - 4,
+        iy,
+        panel_w + 8,
+        item_h - 4,
+        @types.color_palette_sel,
+      )
     }
     // Component name with filter color if applicable
     let name = match item.filter_color {
-      Some(fc) => @types.filter_color_name(fc) + " " + @types.component_kind_name(item.kind)
+      Some(fc) =>
+        @types.filter_color_name(fc) +
+        " " +
+        @types.component_kind_name(item.kind)
       None => @types.component_kind_name(item.kind)
     }
     let name_color = if item.count > 0 {
@@ -44,9 +59,7 @@ fn draw_palette(game : @types.Game) -> Unit {
     @draw.draw_text(count_text, px + panel_w - 40, iy + 6, 16, count_color)
     // Hotkey
     let key = (i + 1).to_string()
-    @draw.draw_text(
-      key, px + panel_w - 10, iy + 6, 14, @types.color_text_dim,
-    )
+    @draw.draw_text(key, px + panel_w - 10, iy + 6, 14, @types.color_text_dim)
   }
 }
 
@@ -79,9 +92,7 @@ fn draw_playing_ui(game : @types.Game) -> Unit {
   let controls = "CLICK: Place/Remove  R: Rotate  SPACE: Simulate  ESC: Back"
   @draw.draw_text(controls, 80, 580, 14, @types.color_text_dim)
   // Help toggle
-  @draw.draw_text(
-    "H: Help", w - 100, 10, 14, @types.color_text_dim,
-  )
+  @draw.draw_text("H: Help", w - 100, 10, 14, @types.color_text_dim)
   if game.show_help {
     draw_help_overlay()
   }
@@ -95,31 +106,30 @@ fn draw_help_overlay() -> Unit {
   let panel_h = 340
   let px = (w - panel_w) / 2
   let py = (h - panel_h) / 2
-  @raylib.draw_rectangle(px, py, panel_w, panel_h, @raylib.Color::new(10, 10, 20, 240))
-  @raylib.draw_rectangle_lines(
-    px, py, panel_w, panel_h, @types.color_accent,
+  @raylib.draw_rectangle(
+    px,
+    py,
+    panel_w,
+    panel_h,
+    @raylib.Color::new(10, 10, 20, 240),
   )
+  @raylib.draw_rectangle_lines(px, py, panel_w, panel_h, @types.color_accent)
   @draw.draw_text("HOW TO PLAY", px + 20, py + 15, 24, @types.color_accent)
   let lines = [
-    "Source: Emits light in a direction",
-    "Mirror: Reflects beam 90 degrees (R to rotate)",
-    "  N/S = / slash, E/W = \\ backslash",
-    "Prism: Splits beam into color channels",
-    "Filter: Removes one color channel",
-    "Combiner: Merges beams into one output",
-    "Receiver: Must get the exact target color",
-    "",
-    "Click empty socket to place component",
-    "Click placed component to remove it",
-    "SPACE to simulate beams",
-    "All receivers satisfied = level complete!",
+    "Source: Emits light in a direction", "Mirror: Reflects beam 90 degrees (R to rotate)",
+    "  N/S = / slash, E/W = \\ backslash", "Prism: Splits beam into color channels",
+    "Filter: Removes one color channel", "Combiner: Merges beams into one output",
+    "Receiver: Must get the exact target color", "", "Click empty socket to place component",
+    "Click placed component to remove it", "SPACE to simulate beams", "All receivers satisfied = level complete!",
   ]
   for i in 0..<lines.length() {
-    @draw.draw_text(
-      lines[i], px + 20, py + 50 + i * 22, 14, @types.color_text,
-    )
+    @draw.draw_text(lines[i], px + 20, py + 50 + i * 22, 14, @types.color_text)
   }
   @draw.draw_text(
-    "Press H to close", px + 20, py + panel_h - 30, 14, @types.color_text_dim,
+    "Press H to close",
+    px + 20,
+    py + panel_h - 30,
+    14,
+    @types.color_text_dim,
   )
 }

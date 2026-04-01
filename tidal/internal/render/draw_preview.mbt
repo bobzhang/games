@@ -7,14 +7,26 @@ fn draw_preview(game : @types.Game) -> Unit {
         game.sim_tick.to_string() +
         " / " +
         @types.max_ticks.to_string()
-      @draw.draw_text(tick_text, @types.palette_x + 10, 530, 22, @types.color_ui_text)
+      @draw.draw_text(
+        tick_text,
+        @types.palette_x + 10,
+        530,
+        22,
+        @types.color_ui_text,
+      )
       // Show target status
       let targets = @types.count_target_info(game.grid)
       let tgt_text = "Targets: " +
         targets.0.to_string() +
         " / " +
         targets.1.to_string()
-      @draw.draw_text(tgt_text, @types.palette_x + 10, 560, 22, @types.color_ui_text)
+      @draw.draw_text(
+        tgt_text,
+        @types.palette_x + 10,
+        560,
+        22,
+        @types.color_ui_text,
+      )
       // Controls hint
       match game.play_state {
         Stepping =>
@@ -80,7 +92,9 @@ fn draw_preview(game : @types.Game) -> Unit {
     Complete => {
       // Victory overlay
       let overlay = @raylib.Color::new(0, 0, 0, 120)
-      @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, overlay)
+      @raylib.draw_rectangle(
+        0, 0, @types.screen_width, @types.screen_height, overlay,
+      )
       let text = "Level Complete!"
       let tw = @draw.measure_text(text, 48)
       @draw.draw_text(
@@ -110,7 +124,9 @@ fn draw_preview(game : @types.Game) -> Unit {
     }
     Failed => {
       let overlay = @raylib.Color::new(0, 0, 0, 120)
-      @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, overlay)
+      @raylib.draw_rectangle(
+        0, 0, @types.screen_width, @types.screen_height, overlay,
+      )
       let text = "Simulation Failed"
       let tw = @draw.measure_text(text, 48)
       @draw.draw_text(

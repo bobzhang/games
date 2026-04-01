@@ -62,7 +62,9 @@ pub let color_exit : @raylib.Color = @raylib.Color::new(50, 200, 80, 255)
 pub let color_switch : @raylib.Color = @raylib.Color::new(180, 80, 220, 255)
 
 ///|
-pub let color_door_closed : @raylib.Color = @raylib.Color::new(80, 200, 220, 255)
+pub let color_door_closed : @raylib.Color = @raylib.Color::new(
+  80, 200, 220, 255,
+)
 
 ///|
 pub let color_door_open : @raylib.Color = @raylib.Color::new(40, 100, 110, 120)

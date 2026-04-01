@@ -132,10 +132,7 @@ test "compute stars - 3 stars" {
 ///|
 test "forced bridge detection" {
   // Island 0 needs 1, only one neighbor possible
-  let islands = [
-    @types.island(0, 0, 1),
-    @types.island(2, 0, 1),
-  ]
+  let islands = [@types.island(0, 0, 1), @types.island(2, 0, 1)]
   let bridges : Array[@types.Bridge] = []
   let (a, b) = @solver.find_forced_bridge(islands, bridges)
   inspect(a >= 0, content="true")

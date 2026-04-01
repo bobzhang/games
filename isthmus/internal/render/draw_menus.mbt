@@ -6,8 +6,8 @@ fn draw_title(game : @types.Game) -> Unit {
     for x in 0..<(@types.screen_width / 20) {
       let wave = Float::from_double(
         @math.sin(
-          (Float::from_int(x * 20 + frame * 2)).to_double() * 0.02 +
-          (Float::from_int(y * 20)).to_double() * 0.03,
+          Float::from_int(x * 20 + frame * 2).to_double() * 0.02 +
+          Float::from_int(y * 20).to_double() * 0.03,
         ),
       )
       let base_b = 120 + (wave * 40.0).to_int()
@@ -17,7 +17,13 @@ fn draw_title(game : @types.Game) -> Unit {
     }
   }
   // Title overlay
-  @raylib.draw_rectangle(0, 180, @types.screen_width, 200, @raylib.Color::new(0, 0, 0, 150))
+  @raylib.draw_rectangle(
+    0,
+    180,
+    @types.screen_width,
+    200,
+    @raylib.Color::new(0, 0, 0, 150),
+  )
   // Title text
   let title = "ISTHMUS"
   let tw = @draw.measure_text(title, 72)
@@ -101,7 +107,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     }
     // Box background
     let bg_alpha = if unlocked { 200 } else { 80 }
-    @raylib.draw_rectangle(bx, by, box_w, box_h, @raylib.Color::new(30, 35, 55, bg_alpha))
+    @raylib.draw_rectangle(
+      bx,
+      by,
+      box_w,
+      box_h,
+      @raylib.Color::new(30, 35, 55, bg_alpha),
+    )
     @raylib.draw_rectangle_lines(bx, by, box_w, box_h, tier_color)
     // Tier name
     let tname = @types.tier_name(tier)
@@ -111,14 +123,26 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let count = @types.tier_level_count(tier)
     let desc = count.to_string() + " levels"
     let dw = @draw.measure_text(desc, 20)
-    @draw.draw_text(desc, bx + (box_w - dw) / 2, by + 65, 20, @types.color_ui_text)
+    @draw.draw_text(
+      desc,
+      bx + (box_w - dw) / 2,
+      by + 65,
+      20,
+      @types.color_ui_text,
+    )
     // Tier description
     let flavor = match tier {
       Shores => "Gentle slopes\nGenerous sand"
       Straits => "Steep drops\nTighter budget"
       Archipelago => "Scattered islands\nMinimal sand"
     }
-    @draw.draw_text(flavor, bx + 20, by + 110, 18, @raylib.Color::new(180, 190, 210, 255))
+    @draw.draw_text(
+      flavor,
+      bx + 20,
+      by + 110,
+      18,
+      @raylib.Color::new(180, 190, 210, 255),
+    )
     // Stars earned
     let (earned, possible) = tier_stars(game, tier)
     let stars_str = "Stars: " +
@@ -140,7 +164,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     }
     if !unlocked {
       // Locked overlay
-      @raylib.draw_rectangle(bx, by, box_w, box_h, @raylib.Color::new(0, 0, 0, 150))
+      @raylib.draw_rectangle(
+        bx,
+        by,
+        box_w,
+        box_h,
+        @raylib.Color::new(0, 0, 0, 150),
+      )
       let lock_str = "LOCKED"
       let lw = @draw.measure_text(lock_str, 28)
       @draw.draw_text(
@@ -154,7 +184,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     // Number key hint
     let key_str = "[" + (i + 1).to_string() + "]"
     let kw = @draw.measure_text(key_str, 20)
-    @draw.draw_text(key_str, bx + (box_w - kw) / 2, by + box_h - 35, 20, @raylib.Color::new(150, 160, 180, 255))
+    @draw.draw_text(
+      key_str,
+      bx + (box_w - kw) / 2,
+      by + box_h - 35,
+      20,
+      @raylib.Color::new(150, 160, 180, 255),
+    )
   }
   // Back hint
   @draw.draw_text(
@@ -198,10 +234,7 @@ fn is_tier_unlocked(game : @types.Game, tier : @types.Tier) -> Bool {
 }
 
 ///|
-fn tier_stars(
-  game : @types.Game,
-  tier : @types.Tier
-) -> (Int, Int) {
+fn tier_stars(game : @types.Game, tier : @types.Tier) -> (Int, Int) {
   let start = @types.tier_start_level(tier)
   let count = @types.tier_level_count(tier)
   let mut earned = 0
@@ -223,13 +256,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   // Header
   let header = @types.tier_name(tier) + " - Select Level"
   let hw = @draw.measure_text(header, 36)
-  @draw.draw_text(
-    header,
-    (@types.screen_width - hw) / 2,
-    30,
-    36,
-    tier_color,
-  )
+  @draw.draw_text(header, (@types.screen_width - hw) / 2, 30, 36, tier_color)
   let start = @types.tier_start_level(tier)
   let count = @types.tier_level_count(tier)
   // Grid of level buttons
@@ -265,7 +292,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
       level.max_sea_level.to_string() +
       "  Sand: " +
       level.sand_budget.to_string()
-    @draw.draw_text(info, bx + 10, by + 38, 14, @raylib.Color::new(150, 160, 180, 255))
+    @draw.draw_text(
+      info,
+      bx + 10,
+      by + 38,
+      14,
+      @raylib.Color::new(150, 160, 180, 255),
+    )
     let settle_count = level.settlements.length()
     let settle_str = settle_count.to_string() + " settlements"
     @draw.draw_text(settle_str, bx + 10, by + 58, 14, @types.color_settlement)
@@ -281,11 +314,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @raylib.draw_circle(sx + 8, sy + 8, 8.0, sc)
     }
     // Key hint
-    let key_char = if i < 9 {
-      (i + 1).to_string()
-    } else {
-      "0"
-    }
+    let key_char = if i < 9 { (i + 1).to_string() } else { "0" }
     @draw.draw_text(
       "[" + key_char + "]",
       bx + btn_w - 35,
@@ -307,7 +336,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
 ///|
 fn draw_results(game : @types.Game) -> Unit {
   // Background overlay
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @raylib.Color::new(0, 0, 0, 180))
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
+    @raylib.Color::new(0, 0, 0, 180),
+  )
   let level = @levels.get_level(game.selected_level)
   let won = game.play_state == Won
   // Result box
@@ -315,7 +350,13 @@ fn draw_results(game : @types.Game) -> Unit {
   let box_h = 400
   let bx = (@types.screen_width - box_w) / 2
   let by = (@types.screen_height - box_h) / 2
-  @raylib.draw_rectangle(bx, by, box_w, box_h, @raylib.Color::new(25, 30, 50, 240))
+  @raylib.draw_rectangle(
+    bx,
+    by,
+    box_w,
+    box_h,
+    @raylib.Color::new(25, 30, 50, 240),
+  )
   let border_color = if won {
     @types.color_star_gold
   } else {
@@ -330,14 +371,26 @@ fn draw_results(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 80, 80, 255)
   }
   let rtw = @draw.measure_text(result_title, 48)
-  @draw.draw_text(result_title, bx + (box_w - rtw) / 2, by + 20, 48, title_color)
+  @draw.draw_text(
+    result_title,
+    bx + (box_w - rtw) / 2,
+    by + 20,
+    48,
+    title_color,
+  )
   // Level name
   let name_str = "Level " +
     (game.selected_level + 1).to_string() +
     ": " +
     level.name
   let nw = @draw.measure_text(name_str, 22)
-  @draw.draw_text(name_str, bx + (box_w - nw) / 2, by + 80, 22, @types.color_ui_text)
+  @draw.draw_text(
+    name_str,
+    bx + (box_w - nw) / 2,
+    by + 80,
+    22,
+    @types.color_ui_text,
+  )
   if won {
     // Stars display
     let stars = compute_stars(game)
@@ -383,29 +436,27 @@ fn draw_results(game : @types.Game) -> Unit {
       @types.color_star_empty
     }
     @draw.draw_text(star3_str, bx + 40, desc_y + 56, 18, s3_color)
-  } else {
     // Loss info
-    if @terrain.any_settlement_flooded(game.grid, game.sea_level) {
-      let lost_str = "A settlement was flooded!"
-      let lw = @draw.measure_text(lost_str, 22)
-      @draw.draw_text(
-        lost_str,
-        bx + (box_w - lw) / 2,
-        by + 140,
-        22,
-        @raylib.Color::new(255, 100, 100, 255),
-      )
-    } else {
-      let lost_str = "Settlements disconnected at final turn"
-      let lw = @draw.measure_text(lost_str, 20)
-      @draw.draw_text(
-        lost_str,
-        bx + (box_w - lw) / 2,
-        by + 140,
-        20,
-        @raylib.Color::new(255, 100, 100, 255),
-      )
-    }
+  } else if @terrain.any_settlement_flooded(game.grid, game.sea_level) {
+    let lost_str = "A settlement was flooded!"
+    let lw = @draw.measure_text(lost_str, 22)
+    @draw.draw_text(
+      lost_str,
+      bx + (box_w - lw) / 2,
+      by + 140,
+      22,
+      @raylib.Color::new(255, 100, 100, 255),
+    )
+  } else {
+    let lost_str = "Settlements disconnected at final turn"
+    let lw = @draw.measure_text(lost_str, 20)
+    @draw.draw_text(
+      lost_str,
+      bx + (box_w - lw) / 2,
+      by + 140,
+      20,
+      @raylib.Color::new(255, 100, 100, 255),
+    )
   }
   // Options
   @draw.draw_text(

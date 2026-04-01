@@ -26,7 +26,9 @@ fn draw_title(game : @types.Game) -> Unit {
     @types.color_frame,
   )
   // Canvas area
-  @raylib.draw_rectangle(frame_x, frame_y, frame_w, frame_h, @types.color_canvas)
+  @raylib.draw_rectangle(
+    frame_x, frame_y, frame_w, frame_h, @types.color_canvas,
+  )
   // Animated "restoration" effect - regions appearing clean
   let anim_phase = (time * 0.5).to_int() % 12
   let cell_w = frame_w / 6
@@ -39,13 +41,13 @@ fn draw_title(game : @types.Game) -> Unit {
       if idx < anim_phase {
         // Restored - nice color
         let hue = Float::from_int(idx) * 30.0 + time * 20.0
-        let r = ((@types.sinf(hue * 0.01) * 40.0 + 160.0).to_int()).land(255)
-        let g = ((@types.sinf(hue * 0.013 + 2.0) * 40.0 + 170.0).to_int()).land(
-          255,
-        )
-        let b = ((@types.sinf(hue * 0.017 + 4.0) * 30.0 + 140.0).to_int()).land(
-          255,
-        )
+        let r = (@types.sinf(hue * 0.01) * 40.0 + 160.0).to_int().land(255)
+        let g = (@types.sinf(hue * 0.013 + 2.0) * 40.0 + 170.0)
+          .to_int()
+          .land(255)
+        let b = (@types.sinf(hue * 0.017 + 4.0) * 30.0 + 140.0)
+          .to_int()
+          .land(255)
         @raylib.draw_rectangle(
           cx + 1,
           cy + 1,
@@ -140,7 +142,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
         Float::from_int(card_w),
         Float::from_int(card_h),
       ),
-      if selected { 3.0 } else { 1.0 },
+      if selected {
+        3.0
+      } else {
+        1.0
+      },
       border_color,
     )
     // Tier name
@@ -151,7 +157,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       cx + (card_w - nw) / 2,
       cy + 20,
       28,
-      if selected { @types.color_highlight } else { @types.color_text },
+      if selected {
+        @types.color_highlight
+      } else {
+        @types.color_text
+      },
     )
     // Tier description
     let desc = match tier {
@@ -253,11 +263,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(cx, cy, card_w, card_h, bg)
     // Border
-    let bc = if selected {
-      @types.color_frame_gold
-    } else {
-      @types.color_frame
-    }
+    let bc = if selected { @types.color_frame_gold } else { @types.color_frame }
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(
         Float::from_int(cx),
@@ -265,7 +271,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
         Float::from_int(card_w),
         Float::from_int(card_h),
       ),
-      if selected { 2.0 } else { 1.0 },
+      if selected {
+        2.0
+      } else {
+        1.0
+      },
       bc,
     )
     // Level number
@@ -275,7 +285,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
       cx + 10,
       cy + 10,
       18,
-      if selected { @types.color_highlight } else { @types.color_text },
+      if selected {
+        @types.color_highlight
+      } else {
+        @types.color_text
+      },
     )
     // Stars
     let stars = game.level_scores[level_idx]
@@ -380,7 +394,13 @@ fn draw_results(game : @types.Game) -> Unit {
         _ => "NEEDS MORE PRACTICE"
       }
       let rw = @draw.measure_text(rating, 24)
-      @draw.draw_text(rating, (w - rw) / 2, cy + 200, 24, @types.color_highlight)
+      @draw.draw_text(
+        rating,
+        (w - rw) / 2,
+        cy + 200,
+        24,
+        @types.color_highlight,
+      )
     }
   }
   // Navigation

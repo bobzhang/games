@@ -35,6 +35,7 @@ pub let total_campaign_levels : Int = 12
 pub let total_skirmish_maps : Int = 4
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(20, 22, 30, 255)
 
@@ -57,7 +58,9 @@ pub let color_hills : @raylib.Color = @raylib.Color::new(160, 120, 70, 255)
 pub let color_water : @raylib.Color = @raylib.Color::new(40, 90, 180, 255)
 
 ///|
-pub let color_move_overlay : @raylib.Color = @raylib.Color::new(60, 120, 255, 80)
+pub let color_move_overlay : @raylib.Color = @raylib.Color::new(
+  60, 120, 255, 80,
+)
 
 ///|
 pub let color_attack_overlay : @raylib.Color = @raylib.Color::new(

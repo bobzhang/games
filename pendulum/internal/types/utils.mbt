@@ -145,10 +145,7 @@ pub fn roundf(v : Float) -> Int {
 }
 
 ///|
-pub fn compute_arc_points(
-  anchor : Vec2i,
-  length : Int
-) -> Array[ArcPoint] {
+pub fn compute_arc_points(anchor : Vec2i, length : Int) -> Array[ArcPoint] {
   let points : Array[ArcPoint] = []
   if length <= 0 {
     return points
@@ -170,10 +167,7 @@ pub fn compute_arc_points(
         // For discrete grid, we allow dist_sq to be within +-r of r_sq
         let diff = absi(dist_sq - r_sq)
         if diff <= r {
-          let angle = atan2f(
-            Float::from_int(dy),
-            Float::from_int(dx),
-          )
+          let angle = atan2f(Float::from_int(dy), Float::from_int(dx))
           points.push({ gx, gy, angle })
         }
       }
@@ -217,7 +211,6 @@ fn dedupe_arc_points(points : Array[ArcPoint]) -> Unit {
   // Truncate
   while points.length() > write {
     let _ = points.pop()
-
   }
 }
 
@@ -225,7 +218,7 @@ fn dedupe_arc_points(points : Array[ArcPoint]) -> Unit {
 pub fn compute_launch_velocity(
   anchor : Vec2i,
   weight_pos : Vec2i,
-  swing_dir : SwingDir
+  swing_dir : SwingDir,
 ) -> Vec2f {
   let dx = Float::from_int(weight_pos.x - anchor.x)
   let dy = Float::from_int(weight_pos.y - anchor.y)
@@ -283,7 +276,7 @@ pub fn new_history_entry(
   w : Weight,
   r : Rope,
   tick : Int,
-  collected : Array[Bool]
+  collected : Array[Bool],
 ) -> HistoryEntry {
   let wp : Array[Vec2i] = []
   for i = 0; i < r.wrapped_pegs.length(); i = i + 1 {
@@ -313,7 +306,7 @@ pub fn restore_from_history(
   entry : HistoryEntry,
   w : Weight,
   r : Rope,
-  collected : Array[Bool]
+  collected : Array[Bool],
 ) -> Int {
   w.pos = entry.weight_pos
   w.state = entry.weight_state
@@ -397,10 +390,7 @@ pub fn tier_level_offset(t : Tier) -> Int {
 }
 
 ///|
-pub fn find_arc_index_for_pos(
-  arc : Array[ArcPoint],
-  pos : Vec2i
-) -> Int {
+pub fn find_arc_index_for_pos(arc : Array[ArcPoint], pos : Vec2i) -> Int {
   for i = 0; i < arc.length(); i = i + 1 {
     if arc[i].gx == pos.x && arc[i].gy == pos.y {
       return i

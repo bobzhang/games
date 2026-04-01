@@ -1,7 +1,7 @@
 ///|
 pub fn find_hint(
   tablet : @types.Tablet,
-  current : @types.Mapping
+  current : @types.Mapping,
 ) -> @types.Symbol? {
   // Find an unmapped symbol that appears in the inscription
   // Prioritize symbols that appear most frequently
@@ -37,9 +37,6 @@ pub fn find_hint(
 }
 
 ///|
-pub fn get_hint_letter(
-  tablet : @types.Tablet,
-  sym : @types.Symbol
-) -> Int {
+pub fn get_hint_letter(tablet : @types.Tablet, sym : @types.Symbol) -> Int {
   @types.mapping_get(tablet.solution_mapping, sym)
 }

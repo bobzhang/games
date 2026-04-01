@@ -155,7 +155,7 @@ pub fn make_robot_state(
   robot : Robot,
   goals_collected : Array[Bool],
   blocks : Array[Vec2i],
-  cmd_index : Int
+  cmd_index : Int,
 ) -> RobotState {
   {
     pos: vec2i(robot.pos.x, robot.pos.y),

@@ -25,7 +25,7 @@ pub fn simulate_move(game : @types.Game, input : @types.MoveInput) -> Unit {
           game.luna.on_anchor = false
           game.sol.on_anchor = false
           // Move Luna (unless anchored)
-          if !(luna_on_anchor) {
+          if !luna_on_anchor {
             let luna_target = @types.vec2i_add(game.luna.pos, luna_delta)
             if can_move_to(level.floor_tiles, luna_target, game.door_states) {
               game.luna.pos = luna_target
@@ -39,7 +39,7 @@ pub fn simulate_move(game : @types.Game, input : @types.MoveInput) -> Unit {
             }
           }
           // Move Sol (unless anchored)
-          if !(sol_on_anchor) {
+          if !sol_on_anchor {
             let sol_target = @types.vec2i_add(game.sol.pos, sol_delta)
             if can_move_to(level.ceiling_tiles, sol_target, game.door_states) {
               game.sol.pos = sol_target
@@ -128,9 +128,9 @@ pub fn simulate_move(game : @types.Game, input : @types.MoveInput) -> Unit {
 fn can_move_to(
   grid : Array[Array[@types.TileKind]],
   pos : @types.Vec2i,
-  door_states : Array[Bool]
+  door_states : Array[Bool],
 ) -> Bool {
-  if !(@types.in_bounds(pos)) {
+  if !@types.in_bounds(pos) {
     return false
   }
   let tile = @types.tile_at(grid, pos)
@@ -142,7 +142,7 @@ fn slide_on_ice(
   character : @types.Character,
   grid : Array[Array[@types.TileKind]],
   delta : @types.Vec2i,
-  door_states : Array[Bool]
+  door_states : Array[Bool],
 ) -> Unit {
   // If current tile is ice, keep sliding
   let mut count = 0
@@ -180,14 +180,14 @@ fn check_switches(game : @types.Game, level : @types.Level) -> Unit {
 fn toggle_linked_doors(
   game : @types.Game,
   level : @types.Level,
-  switch_id : Int
+  switch_id : Int,
 ) -> Unit {
   for i in 0..<level.switch_links.length() {
     let link = level.switch_links[i]
     if link.switch_id == switch_id {
       let did = link.door_id
       if did >= 0 && did < game.door_states.length() {
-        game.door_states[did] = !(game.door_states[did])
+        game.door_states[did] = !game.door_states[did]
       }
     }
   }
@@ -197,8 +197,7 @@ fn toggle_linked_doors(
 fn check_gems(game : @types.Game, level : @types.Level) -> Unit {
   // Check Luna picking up floor gems
   for i in 0..<level.gems.length() {
-    if i < game.floor_gems_collected.length() &&
-      !(game.floor_gems_collected[i]) {
+    if i < game.floor_gems_collected.length() && !game.floor_gems_collected[i] {
       if level.gems[i] == game.luna.pos {
         game.floor_gems_collected[i] = true
       }
@@ -207,7 +206,7 @@ fn check_gems(game : @types.Game, level : @types.Level) -> Unit {
   // Check Sol picking up ceiling gems
   for i in 0..<level.ceiling_gems.length() {
     if i < game.ceiling_gems_collected.length() &&
-      !(game.ceiling_gems_collected[i]) {
+      !game.ceiling_gems_collected[i] {
       if level.ceiling_gems[i] == game.sol.pos {
         game.ceiling_gems_collected[i] = true
       }

@@ -10,9 +10,7 @@ pub fn level_11() -> @types.Level {
       @types.new_target(200.0, 150.0, @types.target_radius),
       @types.new_target(800.0, 150.0, @types.target_radius),
     ],
-    splitters: [
-      @types.new_splitter(500.0, 350.0, @types.splitter_radius),
-    ],
+    splitters: [@types.new_splitter(500.0, 350.0, @types.splitter_radius)],
     gates: [],
     bumpers: [],
     pickups: [],
@@ -33,9 +31,7 @@ pub fn level_12() -> @types.Level {
       @types.new_target(100.0, 100.0, @types.target_radius),
       @types.new_target(900.0, 100.0, @types.target_radius),
     ],
-    splitters: [
-      @types.new_splitter(500.0, 400.0, @types.splitter_radius),
-    ],
+    splitters: [@types.new_splitter(500.0, 400.0, @types.splitter_radius)],
     gates: [],
     bumpers: [],
     pickups: [@types.new_pickup(500.0, 200.0, @types.pickup_radius)],
@@ -48,9 +44,7 @@ pub fn level_12() -> @types.Level {
 pub fn level_13() -> @types.Level {
   // Two splitters in sequence
   {
-    walls: [
-      @types.new_wall(300.0, 250.0, 700.0, 250.0),
-    ],
+    walls: [@types.new_wall(300.0, 250.0, 700.0, 250.0)],
     targets: [
       @types.new_target(150.0, 100.0, @types.target_radius),
       @types.new_target(500.0, 100.0, @types.target_radius),
@@ -72,17 +66,13 @@ pub fn level_13() -> @types.Level {
 pub fn level_14() -> @types.Level {
   // Splitter behind a wall - bounce to reach it
   {
-    walls: [
-      @types.new_wall(350.0, 350.0, 650.0, 350.0),
-    ],
+    walls: [@types.new_wall(350.0, 350.0, 650.0, 350.0)],
     targets: [
       @types.new_target(250.0, 150.0, @types.target_radius),
       @types.new_target(750.0, 150.0, @types.target_radius),
       @types.new_target(500.0, 500.0, @types.target_radius),
     ],
-    splitters: [
-      @types.new_splitter(500.0, 250.0, @types.splitter_radius),
-    ],
+    splitters: [@types.new_splitter(500.0, 250.0, @types.splitter_radius)],
     gates: [],
     bumpers: [],
     pickups: [@types.new_pickup(500.0, 100.0, @types.pickup_radius)],
@@ -152,9 +142,7 @@ pub fn level_17() -> @types.Level {
       @types.new_target(800.0, 100.0, @types.target_radius),
       @types.new_target(500.0, 650.0, @types.target_radius),
     ],
-    splitters: [
-      @types.new_splitter(500.0, 200.0, @types.splitter_radius),
-    ],
+    splitters: [@types.new_splitter(500.0, 200.0, @types.splitter_radius)],
     gates: [],
     bumpers: [],
     pickups: [],
@@ -179,9 +167,7 @@ pub fn level_18() -> @types.Level {
       @types.new_target(900.0, 100.0, @types.target_radius),
       @types.new_target(500.0, 550.0, @types.target_radius),
     ],
-    splitters: [
-      @types.new_splitter(500.0, 300.0, @types.splitter_radius),
-    ],
+    splitters: [@types.new_splitter(500.0, 300.0, @types.splitter_radius)],
     gates: [],
     bumpers: [],
     pickups: [@types.new_pickup(500.0, 450.0, @types.pickup_radius)],

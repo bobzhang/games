@@ -4,7 +4,13 @@ fn draw_ui_panel(game : @types.Game, level : @types.Level) -> Unit {
   @raylib.draw_rectangle(750, 0, 530, @types.screen_height, @types.color_panel)
   // Level name
   @draw.draw_text(level.name, 770, 20, 28, @types.color_highlight)
-  @draw.draw_text(@types.tier_name(level.tier), 770, 52, 16, @types.color_text_dim)
+  @draw.draw_text(
+    @types.tier_name(level.tier),
+    770,
+    52,
+    16,
+    @types.color_text_dim,
+  )
   // Hint text
   @draw.draw_text(level.hint, 770, 78, 14, @types.color_text_dim)
   // Gear palette
@@ -61,7 +67,13 @@ fn draw_gear_palette(game : @types.Game, level : @types.Level) -> Unit {
       Belt => " (connects distant)"
       Ratchet => " (one-way)"
     }
-    @draw.draw_text(name + size_label, slot_x + 8, slot_y + 8, 14, @raylib.black)
+    @draw.draw_text(
+      name + size_label,
+      slot_x + 8,
+      slot_y + 8,
+      14,
+      @raylib.black,
+    )
     // Keybind hint
     let key_hint = (i + 1).to_string()
     @draw.draw_text(
@@ -132,7 +144,13 @@ fn draw_controls_help(game : @types.Game) -> Unit {
   @draw.draw_text("R: Restart level", 770, y0 + 70, 13, @types.color_text_dim)
   @draw.draw_text("Esc: Back to menu", 770, y0 + 86, 13, @types.color_text_dim)
   if game.play_state == Solved {
-    @draw.draw_text("Enter: See results", 770, y0 + 102, 13, @types.color_highlight)
+    @draw.draw_text(
+      "Enter: See results",
+      770,
+      y0 + 102,
+      13,
+      @types.color_highlight,
+    )
   }
   // State indicator
   let state_text = match game.play_state {

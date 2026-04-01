@@ -5,9 +5,7 @@ fn draw_worlds(game : @types.Game) -> Unit {
     Some(level) => {
       // Draw floor world (left side)
       draw_grid_bg(
-        @types.left_grid_x,
-        @types.left_grid_y,
-        @types.color_floor_tint,
+        @types.left_grid_x, @types.left_grid_y, @types.color_floor_tint,
       )
       draw_grid(
         level.floor_tiles,
@@ -32,9 +30,7 @@ fn draw_worlds(game : @types.Game) -> Unit {
       )
       // Draw ceiling world (right side)
       draw_grid_bg(
-        @types.right_grid_x,
-        @types.right_grid_y,
-        @types.color_ceiling_tint,
+        @types.right_grid_x, @types.right_grid_y, @types.color_ceiling_tint,
       )
       draw_grid(
         level.ceiling_tiles,
@@ -108,7 +104,7 @@ fn draw_grid(
   ox : Int,
   oy : Int,
   door_states : Array[Bool],
-  frame_count : Int
+  frame_count : Int,
 ) -> Unit {
   let ts = @types.tile_size
   for y in 0..<@types.grid_height {
@@ -145,15 +141,9 @@ fn draw_grid(
           ignore(cx)
           ignore(cy)
         }
-        Switch(_) => {
+        Switch(_) =>
           // Draw a circle
-          @raylib.draw_circle(
-            px + ts / 2,
-            py + ts / 2,
-            8.0,
-            @raylib.white,
-          )
-        }
+          @raylib.draw_circle(px + ts / 2, py + ts / 2, 8.0, @raylib.white)
         Door(id) => {
           let is_open = if id >= 0 && id < door_states.length() {
             door_states[id]
@@ -168,7 +158,7 @@ fn draw_grid(
             }
           }
         }
-        Pit => {
+        Pit =>
           // Draw skull-like pattern
           @raylib.draw_circle(
             px + ts / 2,
@@ -176,7 +166,6 @@ fn draw_grid(
             10.0,
             @raylib.Color::new(40, 0, 0, 255),
           )
-        }
         Ice => {
           // Draw sparkle lines
           let cx = px + ts / 2
@@ -188,7 +177,12 @@ fn draw_grid(
           // Draw anchor symbol
           let cx = px + ts / 2
           let cy = py + ts / 2
-          @raylib.draw_circle(cx, cy, 6.0, @raylib.Color::new(180, 160, 30, 255))
+          @raylib.draw_circle(
+            cx,
+            cy,
+            6.0,
+            @raylib.Color::new(180, 160, 30, 255),
+          )
           @raylib.draw_circle(cx, cy, 3.0, @types.color_anchor)
         }
         _ => ()
@@ -201,7 +195,7 @@ fn draw_grid(
 fn tile_color(
   tile : @types.TileKind,
   door_states : Array[Bool],
-  _frame_count : Int
+  _frame_count : Int,
 ) -> @raylib.Color {
   match tile {
     Floor => @types.color_floor
@@ -233,11 +227,11 @@ fn draw_gems(
   collected : Array[Bool],
   ox : Int,
   oy : Int,
-  frame_count : Int
+  frame_count : Int,
 ) -> Unit {
   let ts = @types.tile_size
   for i in 0..<gems.length() {
-    if i < collected.length() && !(collected[i]) {
+    if i < collected.length() && !collected[i] {
       let gp = gems[i]
       let px = ox + gp.x * ts + ts / 2
       let py = oy + gp.y * ts + ts / 2
@@ -261,9 +255,9 @@ fn draw_character(
   ox : Int,
   oy : Int,
   color : @raylib.Color,
-  label : String
+  label : String,
 ) -> Unit {
-  if !(ch.alive) {
+  if !ch.alive {
     return
   }
   let ts = @types.tile_size

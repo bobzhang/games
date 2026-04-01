@@ -52,7 +52,8 @@ fn compute_stars(game : @types.Game, level : @types.Level) -> Int {
     }
     if all_collected && level.waypoints.length() > 0 {
       stars = 3
-    } else if level.waypoints.length() == 0 && game.tick_count <= level.par_ticks {
+    } else if level.waypoints.length() == 0 &&
+      game.tick_count <= level.par_ticks {
       stars = 3
     }
   }
@@ -77,9 +78,8 @@ fn handle_win(game : @types.Game) -> Unit {
 
 ///|
 fn update_title(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-      @raylib.KeyEnter,
-    ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeyEnter) {
     game.screen = TierSelect
   }
 }
@@ -171,7 +171,7 @@ fn update_playing(game : @types.Game) -> Unit {
         launch_probe(game)
       }
     }
-    Flying => {
+    Flying =>
       // Auto-tick simulation
       for _t in 0..<@types.tick_rate {
         if !game.probe.active {
@@ -179,9 +179,7 @@ fn update_playing(game : @types.Game) -> Unit {
         }
         game.tick_count += 1
         // Record trail position before simulation step
-        game.trail.push(
-          @types.vec2f(game.probe.pos.x, game.probe.pos.y),
-        )
+        game.trail.push(@types.vec2f(game.probe.pos.x, game.probe.pos.y))
         if game.trail.length() > @types.trail_max {
           let new_trail : Array[@types.Vec2f] = []
           for j in 1..<game.trail.length() {
@@ -219,14 +217,11 @@ fn update_playing(game : @types.Game) -> Unit {
           }
         }
       }
-    }
-    Won => {
-      if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-          @raylib.KeyEnter,
-        ) {
+    Won =>
+      if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+        @raylib.is_key_pressed(@raylib.KeyEnter) {
         game.screen = Results
       }
-    }
     Failed => ()
   }
   // Decrease message timer
@@ -247,9 +242,8 @@ fn update_results(game : @types.Game) -> Unit {
     reset_level(game)
     return
   }
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-      @raylib.KeyEnter,
-    ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeyEnter) {
     // Go to next level if available
     let count = @types.tier_level_count(game.current_tier)
     let start = @types.tier_start_index(game.current_tier)

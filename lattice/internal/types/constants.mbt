@@ -74,13 +74,19 @@ pub let color_hex_hover : @raylib.Color = @raylib.Color::new(90, 100, 125, 255)
 pub let color_black_stone : @raylib.Color = @raylib.Color::new(30, 30, 35, 255)
 
 ///|
-pub let color_white_stone : @raylib.Color = @raylib.Color::new(230, 230, 240, 255)
+pub let color_white_stone : @raylib.Color = @raylib.Color::new(
+  230, 230, 240, 255,
+)
 
 ///|
-pub let color_black_highlight : @raylib.Color = @raylib.Color::new(60, 60, 70, 255)
+pub let color_black_highlight : @raylib.Color = @raylib.Color::new(
+  60, 60, 70, 255,
+)
 
 ///|
-pub let color_white_highlight : @raylib.Color = @raylib.Color::new(200, 200, 215, 255)
+pub let color_white_highlight : @raylib.Color = @raylib.Color::new(
+  200, 200, 215, 255,
+)
 
 ///|
 pub let color_hud_text : @raylib.Color = @raylib.Color::new(200, 210, 230, 255)
@@ -140,4 +146,6 @@ pub let color_panel : @raylib.Color = @raylib.Color::new(35, 40, 55, 230)
 pub let color_button : @raylib.Color = @raylib.Color::new(60, 70, 95, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(80, 95, 130, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  80, 95, 130, 255,
+)

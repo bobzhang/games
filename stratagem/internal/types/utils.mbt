@@ -150,7 +150,7 @@ pub fn hex_neighbors(c : HexCoord) -> Array[HexCoord] {
 
 ///|
 pub fn hex_to_cube(c : HexCoord) -> (Int, Int, Int) {
-  let x = c.col - (c.row - (c.row % 2)) / 2
+  let x = c.col - (c.row - c.row % 2) / 2
   let z = c.row
   let y = -x - z
   (x, y, z)
@@ -214,15 +214,16 @@ pub fn hex_line(a : HexCoord, b : HexCoord) -> Array[HexCoord] {
   }
   let (ax, ay) = hex_to_pixel(a)
   let (bx, by) = hex_to_pixel(b)
-  for i in 0..=n {
+  for i in 0..<=n {
     let t = Float::from_int(i) / Float::from_int(n)
     let px = ax + (bx - ax) * t
     let py = ay + (by - ay) * t
     let h = pixel_to_hex(px, py)
-    if result.length() == 0 || {
-      let last = result[result.length() - 1]
-      last.col != h.col || last.row != h.row
-    } {
+    if result.length() == 0 ||
+      ({
+        let last = result[result.length() - 1]
+        last.col != h.col || last.row != h.row
+      }) {
       result.push(h)
     }
   }
@@ -230,11 +231,7 @@ pub fn hex_line(a : HexCoord, b : HexCoord) -> Array[HexCoord] {
 }
 
 ///|
-pub fn has_line_of_sight(
-  map : HexMap,
-  from : HexCoord,
-  to : HexCoord
-) -> Bool {
+pub fn has_line_of_sight(map : HexMap, from : HexCoord, to : HexCoord) -> Bool {
   let line = hex_line(from, to)
   let len = line.length()
   for i = 1; i < len - 1; i = i + 1 {
@@ -344,7 +341,7 @@ pub fn new_unit(
   kind : UnitKind,
   team : Team,
   col : Int,
-  row : Int
+  row : Int,
 ) -> GameUnit {
   let move_r = unit_base_move(kind)
   {
@@ -575,7 +572,7 @@ pub fn terrain_def_bonus(terrain : Terrain, kind : UnitKind) -> Int {
 ///|
 pub fn terrain_atk_bonus(
   attacker_terrain : Terrain,
-  _defender_terrain : Terrain
+  _defender_terrain : Terrain,
 ) -> Int {
   match attacker_terrain {
     Hills => 1

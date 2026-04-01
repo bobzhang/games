@@ -106,9 +106,8 @@ fn start_sandbox(game : @types.Game) -> Unit {
     index: 0,
     name: "Sandbox",
     ascii: [
+      "............", "............", "............", "............", ".....S......",
       "............", "............", "............", "............",
-      ".....S......", "............", "............", "............",
-      "............",
     ],
     start_x: 5,
     start_y: 4,
@@ -117,9 +116,20 @@ fn start_sandbox(game : @types.Game) -> Unit {
     optimal: 1,
     hint: "Free play! Experiment with commands.",
     available_commands: [
-      Move, TurnLeft, TurnRight, Jump, Push, If(PathAhead), If(WallAhead),
-      If(AtGoal), If(OnColor(Red)), If(OnColor(Blue)), Loop(2), Loop(3),
-      Loop(4), Loop(5),
+      Move,
+      TurnLeft,
+      TurnRight,
+      Jump,
+      Push,
+      If(PathAhead),
+      If(WallAhead),
+      If(AtGoal),
+      If(OnColor(Red)),
+      If(OnColor(Blue)),
+      Loop(2),
+      Loop(3),
+      Loop(4),
+      Loop(5),
     ],
   }
   let level = @levels.parse_level(def)
@@ -175,9 +185,8 @@ fn update_editing(game : @types.Game) -> Unit {
     }
   }
   // Backspace / Delete - remove command
-  if @raylib.is_key_pressed(@raylib.KeyBackspace) || @raylib.is_key_pressed(
-    @raylib.KeyDelete,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyBackspace) ||
+    @raylib.is_key_pressed(@raylib.KeyDelete) {
     @editor.delete_at_cursor(game.editor, game.program) |> ignore
   }
   // W/S - move command up/down
@@ -197,8 +206,14 @@ fn update_editing(game : @types.Game) -> Unit {
   }
   // Quick add: number keys 1-9 to add command from palette
   let number_keys = [
-    @raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree, @raylib.KeyFour,
-    @raylib.KeyFive, @raylib.KeySix, @raylib.KeySeven, @raylib.KeyEight,
+    @raylib.KeyOne,
+    @raylib.KeyTwo,
+    @raylib.KeyThree,
+    @raylib.KeyFour,
+    @raylib.KeyFive,
+    @raylib.KeySix,
+    @raylib.KeySeven,
+    @raylib.KeyEight,
     @raylib.KeyNine,
   ]
   for i in 0..<number_keys.length() {
@@ -332,7 +347,7 @@ fn update_stepping(game : @types.Game) -> Unit {
 fn advance_trace(game : @types.Game) -> Unit {
   match game.trace {
     None => ()
-    Some(trace) => {
+    Some(trace) =>
       if game.trace_step < trace.states.length() - 1 {
         game.trace_step += 1
         // Check if last state and robot is dead
@@ -340,15 +355,12 @@ fn advance_trace(game : @types.Game) -> Unit {
         if !state.alive {
           game.run_state = Failed(trace.fail_reason)
         }
-      } else {
         // Reached end of trace
-        if trace.success {
-          complete_level(game)
-        } else {
-          game.run_state = Failed(trace.fail_reason)
-        }
+      } else if trace.success {
+        complete_level(game)
+      } else {
+        game.run_state = Failed(trace.fail_reason)
       }
-    }
   }
 }
 
@@ -364,7 +376,11 @@ fn complete_level(game : @types.Game) -> Unit {
     None => ()
     Some(def) => {
       let cmd_count = game.program.commands.length()
-      let medal = @types.medal_from_instructions(cmd_count, def.par, def.optimal)
+      let medal = @types.medal_from_instructions(
+        cmd_count,
+        def.par,
+        def.optimal,
+      )
       let score = game.scores[def.world][def.index]
       score.completed = true
       if cmd_count < score.best_instructions {
@@ -406,9 +422,8 @@ fn update_complete(game : @types.Game) -> Unit {
 
 ///|
 fn update_failed(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyR) || @raylib.is_key_pressed(
-    @raylib.KeyEnter,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyR) ||
+    @raylib.is_key_pressed(@raylib.KeyEnter) {
     reset_level(game)
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {

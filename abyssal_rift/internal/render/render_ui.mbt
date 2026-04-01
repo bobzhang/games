@@ -243,13 +243,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
     Some(p) => {
       let pname = @types.path_name(p)
       let pcolor = path_card_color(p)
-      @raylib.draw_text(
-        "Path: \{pname}",
-        @types.screen_w - 180,
-        28,
-        14,
-        pcolor,
-      )
+      @raylib.draw_text("Path: \{pname}", @types.screen_w - 180, 28, 14, pcolor)
     }
     None => ()
   }
@@ -583,31 +577,23 @@ fn path_card_icon(path : @types.FloorPath) -> String {
 ///|
 fn path_card_bullets(path : @types.FloorPath) -> Array[String] {
   match path {
-    Hunter => [
-      "+1 EliteVault room",
-      "BossRush/SniperNest more common",
-      "Elite drops upgraded",
-    ]
-    Pilgrim => [
-      "+1 Shrine + Treasure room",
-      "Shop prices -30%",
-      "Health potions more frequent",
-    ]
-    Rot => [
-      "Spider/Slime enemies favored",
-      "PoisonNest/Swarm encounters",
-      "More cursed rewards",
-    ]
-    Forge => [
-      "+1 shop w/ weapon focus",
-      "Gold drops +30%",
-      "Enemy HP +20%",
-    ]
-    Gauntlet => [
-      "All rooms become combat",
-      "Enemy budget x1.5",
-      "Weapon reward every clear",
-    ]
+    Hunter =>
+      [
+        "+1 EliteVault room", "BossRush/SniperNest more common", "Elite drops upgraded",
+      ]
+    Pilgrim =>
+      [
+        "+1 Shrine + Treasure room", "Shop prices -30%", "Health potions more frequent",
+      ]
+    Rot =>
+      [
+        "Spider/Slime enemies favored", "PoisonNest/Swarm encounters", "More cursed rewards",
+      ]
+    Forge => ["+1 shop w/ weapon focus", "Gold drops +30%", "Enemy HP +20%"]
+    Gauntlet =>
+      [
+        "All rooms become combat", "Enemy budget x1.5", "Weapon reward every clear",
+      ]
   }
 }
 
@@ -669,12 +655,18 @@ pub fn draw_path_cards(game : @types.Game) -> Unit {
     // Color border
     @raylib.draw_rectangle_lines(cx, card_y, card_w, card_h, color)
     // Colored top bar
-    @raylib.draw_rectangle(cx + 1, card_y + 1, card_w - 2, 50, @raylib.Color::new(
-      color.r.to_int(),
-      color.g.to_int(),
-      color.b.to_int(),
-      60,
-    ))
+    @raylib.draw_rectangle(
+      cx + 1,
+      card_y + 1,
+      card_w - 2,
+      50,
+      @raylib.Color::new(
+        color.r.to_int(),
+        color.g.to_int(),
+        color.b.to_int(),
+        60,
+      ),
+    )
     // Key number
     let key_text = "[\{i + 1}]"
     @raylib.draw_text(
@@ -686,22 +678,10 @@ pub fn draw_path_cards(game : @types.Game) -> Unit {
     )
     // Icon
     let iw = @raylib.measure_text(icon, 28)
-    @raylib.draw_text(
-      icon,
-      cx + card_w / 2 - iw / 2,
-      card_y + 70,
-      28,
-      color,
-    )
+    @raylib.draw_text(icon, cx + card_w / 2 - iw / 2, card_y + 70, 28, color)
     // Name
     let nw = @raylib.measure_text(name, 26)
-    @raylib.draw_text(
-      name,
-      cx + card_w / 2 - nw / 2,
-      card_y + 110,
-      26,
-      color,
-    )
+    @raylib.draw_text(name, cx + card_w / 2 - nw / 2, card_y + 110, 26, color)
     // Separator line
     @raylib.draw_line(
       cx + 20,

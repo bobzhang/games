@@ -121,13 +121,19 @@ pub let color_player_dim : @raylib.Color = @raylib.Color::new(0, 180, 160, 180)
 pub let color_terminal : @raylib.Color = @raylib.Color::new(0, 255, 100, 255)
 
 ///|
-pub let color_terminal_hacked : @raylib.Color = @raylib.Color::new(100, 100, 100, 255)
+pub let color_terminal_hacked : @raylib.Color = @raylib.Color::new(
+  100, 100, 100, 255,
+)
 
 ///|
-pub let color_high_terminal : @raylib.Color = @raylib.Color::new(255, 200, 0, 255)
+pub let color_high_terminal : @raylib.Color = @raylib.Color::new(
+  255, 200, 0, 255,
+)
 
 ///|
-pub let color_door_closed : @raylib.Color = @raylib.Color::new(200, 100, 50, 255)
+pub let color_door_closed : @raylib.Color = @raylib.Color::new(
+  200, 100, 50, 255,
+)
 
 ///|
 pub let color_door_open : @raylib.Color = @raylib.Color::new(80, 160, 80, 255)
@@ -148,19 +154,27 @@ pub let color_power_off : @raylib.Color = @raylib.Color::new(100, 60, 0, 255)
 pub let color_exit : @raylib.Color = @raylib.Color::new(0, 200, 255, 255)
 
 ///|
-pub let color_camera_tile : @raylib.Color = @raylib.Color::new(200, 200, 200, 255)
+pub let color_camera_tile : @raylib.Color = @raylib.Color::new(
+  200, 200, 200, 255,
+)
 
 ///|
-pub let color_guard_patrol : @raylib.Color = @raylib.Color::new(50, 200, 50, 255)
+pub let color_guard_patrol : @raylib.Color = @raylib.Color::new(
+  50, 200, 50, 255,
+)
 
 ///|
-pub let color_guard_suspicious : @raylib.Color = @raylib.Color::new(255, 255, 50, 255)
+pub let color_guard_suspicious : @raylib.Color = @raylib.Color::new(
+  255, 255, 50, 255,
+)
 
 ///|
 pub let color_guard_alert : @raylib.Color = @raylib.Color::new(255, 50, 50, 255)
 
 ///|
-pub let color_vision_cone : @raylib.Color = @raylib.Color::new(255, 255, 100, 30)
+pub let color_vision_cone : @raylib.Color = @raylib.Color::new(
+  255, 255, 100, 30,
+)
 
 ///|
 pub let color_vision_alert : @raylib.Color = @raylib.Color::new(255, 50, 50, 40)

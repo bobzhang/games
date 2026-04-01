@@ -157,7 +157,7 @@ fn update_editing(game : @types.Game) -> Unit {
       // Can't place on walls, targets, or pre-placed emitters
       if !tile.has_wall && !tile.is_target {
         match tile.object {
-          Empty => {
+          Empty =>
             // Place object from budget
             if game.selected_slot < num_slots {
               let budget = level.budget[game.selected_slot]
@@ -173,7 +173,6 @@ fn update_editing(game : @types.Game) -> Unit {
                 game.objects_placed += 1
               }
             }
-          }
           Emitter(_) | Reflector | PhaseShifter | Absorber => {
             // Remove if it was player-placed (not pre-placed)
             let is_pre = is_pre_placed(level, gx, gy)

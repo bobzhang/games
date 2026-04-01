@@ -35,7 +35,7 @@ test "level indices are sequential" {
 test "all levels have at least one constraint" {
   for i in 0..<25 {
     let level = @levels.get_level(i)
-    assert_true!(level.constraints.length() > 0)
+    assert_true(level.constraints.length() > 0)
   }
 }
 
@@ -48,35 +48,35 @@ test "all constraint params reference valid grid positions" {
       match c.kind {
         RowSum => {
           let row = c.params[0]
-          assert_true!(row >= 0 && row < gs)
-          assert_true!(c.params[1] > 0) // sum must be positive
+          assert_true(row >= 0 && row < gs)
+          assert_true(c.params[1] > 0) // sum must be positive
         }
         ColProduct => {
           let col = c.params[0]
-          assert_true!(col >= 0 && col < gs)
-          assert_true!(c.params[1] > 0) // product must be positive
+          assert_true(col >= 0 && col < gs)
+          assert_true(c.params[1] > 0) // product must be positive
         }
         Adjacent => {
-          assert_true!(c.params[0] >= 0 && c.params[0] < gs) // row1
-          assert_true!(c.params[1] >= 0 && c.params[1] < gs) // col1
-          assert_true!(c.params[2] >= 0 && c.params[2] < gs) // row2
-          assert_true!(c.params[3] >= 0 && c.params[3] < gs) // col2
+          assert_true(c.params[0] >= 0 && c.params[0] < gs) // row1
+          assert_true(c.params[1] >= 0 && c.params[1] < gs) // col1
+          assert_true(c.params[2] >= 0 && c.params[2] < gs) // row2
+          assert_true(c.params[3] >= 0 && c.params[3] < gs) // col2
         }
         NoPrimePair => {
           let row = c.params[0]
-          assert_true!(row >= 0 && row < gs)
+          assert_true(row >= 0 && row < gs)
         }
         Divisible => {
-          assert_true!(c.params[0] >= 0 && c.params[0] < gs) // row_a
-          assert_true!(c.params[1] >= 0 && c.params[1] < gs) // col_a
-          assert_true!(c.params[2] >= 0 && c.params[2] < gs) // row_b
-          assert_true!(c.params[3] >= 0 && c.params[3] < gs) // col_b
+          assert_true(c.params[0] >= 0 && c.params[0] < gs) // row_a
+          assert_true(c.params[1] >= 0 && c.params[1] < gs) // col_a
+          assert_true(c.params[2] >= 0 && c.params[2] < gs) // row_b
+          assert_true(c.params[3] >= 0 && c.params[3] < gs) // col_b
         }
         Unique => {
           let axis = c.params[0]
-          assert_true!(axis == 0 || axis == 1) // 0=row, 1=col
+          assert_true(axis == 0 || axis == 1) // 0=row, 1=col
           let index = c.params[1]
-          assert_true!(index >= 0 && index < gs)
+          assert_true(index >= 0 && index < gs)
         }
       }
     }
@@ -91,7 +91,7 @@ test "pre-filled cells are within value range 1-9" {
       for c in 0..<@types.grid_size {
         let val = @types.grid_get(level.grid, r, c)
         if @types.grid_is_locked(level.grid, r, c) {
-          assert_true!(val >= 1 && val <= 9)
+          assert_true(val >= 1 && val <= 9)
         }
       }
     }
@@ -116,7 +116,7 @@ test "pre-filled cells within grid bounds" {
 test "par times are positive" {
   for i in 0..<25 {
     let level = @levels.get_level(i)
-    assert_true!(level.par_time > 0.0)
+    assert_true(level.par_time > 0.0)
   }
 }
 
@@ -132,7 +132,7 @@ test "each level has at least some empty cells to fill" {
         }
       }
     }
-    assert_true!(empty_count > 0)
+    assert_true(empty_count > 0)
   }
 }
 
@@ -141,17 +141,17 @@ test "tier assignment matches tier index ranges" {
   // Levels 0-7 should be Primes
   for i in 0..<8 {
     let level = @levels.get_level(i)
-    assert_true!(level.tier == Primes)
+    assert_true(level.tier == Primes)
   }
   // Levels 8-16 should be Factors
   for i in 8..<17 {
     let level = @levels.get_level(i)
-    assert_true!(level.tier == Factors)
+    assert_true(level.tier == Factors)
   }
   // Levels 17-24 should be Theorem
   for i in 17..<25 {
     let level = @levels.get_level(i)
-    assert_true!(level.tier == Theorem)
+    assert_true(level.tier == Theorem)
   }
 }
 
@@ -164,8 +164,8 @@ test "RowSum targets are achievable with values 1-9" {
       match c.kind {
         RowSum => {
           let target = c.params[1]
-          assert_true!(target >= 5)
-          assert_true!(target <= 45)
+          assert_true(target >= 5)
+          assert_true(target <= 45)
         }
         _ => ()
       }
@@ -186,7 +186,7 @@ test "Adjacent constraint cells are actually adjacent" {
           let c2 = c.params[3]
           // Manhattan distance should be 1 for adjacent cells
           let dist = @types.absi(r1 - r2) + @types.absi(c1 - c2)
-          assert_true!(dist == 1)
+          assert_true(dist == 1)
         }
         _ => ()
       }
@@ -203,7 +203,7 @@ test "Divisible constraint cells are distinct" {
         Divisible => {
           // The two cells should not be the same
           let same = c.params[0] == c.params[2] && c.params[1] == c.params[3]
-          assert_true!(!same)
+          assert_true(!same)
         }
         _ => ()
       }

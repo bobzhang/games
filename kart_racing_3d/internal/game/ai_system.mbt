@@ -80,7 +80,8 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
     // Blend primary (next wp) and secondary (lookahead wp) targets
     let primary_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)
     let secondary_wp = @types.get_waypoint(
-      game, (kart.waypoint_idx + look_ahead) % wc,
+      game,
+      (kart.waypoint_idx + look_ahead) % wc,
     )
     let blend_x = primary_wp.x * 0.7 + secondary_wp.x * 0.3
     let blend_z = primary_wp.z * 0.7 + secondary_wp.z * 0.3
@@ -100,7 +101,8 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
     }
     // --- Improvement 2: Pack Racing - overtake/block offsets ---
     if kart.ai_overtake_side.abs() > 0.1 {
-      line_offset = line_offset + kart.ai_overtake_side * @types.ai_overtake_offset
+      line_offset = line_offset +
+        kart.ai_overtake_side * @types.ai_overtake_offset
     }
     // --- Improvement 3: Hazard avoidance offset ---
     if kart.ai_hazard_offset.abs() > 0.1 {
@@ -216,7 +218,8 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
     if kart.on_ground {
       let steer_angle = kart.steer + kart.drift_angle
       let lateral_force = steer_angle * kart.speed * 0.06
-      kart.lateral_vel = kart.lateral_vel + lateral_force * @types.lateral_build_rate * dt
+      kart.lateral_vel = kart.lateral_vel +
+        lateral_force * @types.lateral_build_rate * dt
       let lat_damp = @types.get_lateral_damp(kart.on_surface_type)
       kart.lateral_vel = kart.lateral_vel * (1.0 - lat_damp * dt)
       let max_lat : Float = kart.speed * 0.3
@@ -287,7 +290,9 @@ fn update_ai_timers(kart : @types.Kart, dt : Float) -> Unit {
   }
   // Decay draft boost
   if kart.ai_draft_boost > 0.0 {
-    kart.ai_draft_boost -= dt * @types.ai_draft_boost_power / @types.ai_draft_boost_duration
+    kart.ai_draft_boost -= dt *
+      @types.ai_draft_boost_power /
+      @types.ai_draft_boost_duration
     if kart.ai_draft_boost < 0.0 {
       kart.ai_draft_boost = 0.0
     }
@@ -338,7 +343,8 @@ fn ai_scan_corners(
     let wp_c = @types.get_waypoint(game, (seg_idx + 2) % wc)
     let angle_deg = @types.angle_between_segments(wp_a, wp_b, wp_c)
     if s > 0 {
-      dist_accum = dist_accum + @types.segment_length(game, (kart.waypoint_idx + s - 1) % wc)
+      dist_accum = dist_accum +
+        @types.segment_length(game, (kart.waypoint_idx + s - 1) % wc)
     }
     if angle_deg > sharpest_angle {
       sharpest_angle = angle_deg
@@ -355,7 +361,9 @@ fn ai_scan_corners(
   } else {
     @types.ai_gentle_corner_speed
   }
-  (speed_frac, sharpest_idx, sharpest_angle, sharpest_turn_sign, dist_to_sharpest)
+  (
+    speed_frac, sharpest_idx, sharpest_angle, sharpest_turn_sign, dist_to_sharpest,
+  )
 }
 
 // =====================================================================
@@ -522,7 +530,9 @@ fn ai_update_pack_racing(
       let side_dot = to_rival_x * perp.0 + to_rival_z * perp.1
       // Shift toward the rival to block
       let block_dir : Float = if side_dot > 0.0 { 1.0 } else { -1.0 }
-      kart.ai_overtake_side = block_dir * @types.ai_block_offset / @types.ai_overtake_offset
+      kart.ai_overtake_side = block_dir *
+        @types.ai_block_offset /
+        @types.ai_overtake_offset
       kart.ai_overtake_timer = 0.5 // short block bursts
     }
   }
@@ -547,12 +557,14 @@ fn ai_update_pack_racing(
       let strength = @types.ai_avoidance_strength *
         (1.0 - dist / @types.ai_avoidance_dist)
       // Steer away from the other kart
-      avoid_steer = avoid_steer + (if side > 0.0 { -strength } else { strength })
+      avoid_steer = avoid_steer +
+        (if side > 0.0 { -strength } else { strength })
     }
   }
   if avoid_steer.abs() > 0.01 {
     let handling = @types.get_kart_handling(kart)
-    kart.steer = kart.steer + @types.clampf(avoid_steer, -handling * 0.3, handling * 0.3)
+    kart.steer = kart.steer +
+      @types.clampf(avoid_steer, -handling * 0.3, handling * 0.3)
   }
 }
 
@@ -619,7 +631,9 @@ fn ai_update_hazard_avoidance(
             let px = -seg_dz / dist
             let pz = seg_dx / dist
             // Apply counter-offset proportional to current strength
-            let counter_strength = @types.water_current_force * 0.3 * diff_stats.2
+            let counter_strength = @types.water_current_force *
+              0.3 *
+              diff_stats.2
             kart.ai_hazard_offset = @types.lerpf(
               kart.ai_hazard_offset,
               -px * counter_strength,
@@ -696,7 +710,8 @@ fn ai_avoid_falling_rocks(
       // Check if rock is in our forward cone
       let to_rock_x = rock.1 - kart.x
       let to_rock_z = rock.2 - kart.z
-      let fwd_dot = to_rock_x * @math.sinf(kart.angle) + to_rock_z * @math.cosf(kart.angle)
+      let fwd_dot = to_rock_x * @math.sinf(kart.angle) +
+        to_rock_z * @math.cosf(kart.angle)
       if fwd_dot > 0.0 {
         // Rock is ahead, steer away
         let perp_x = @math.cosf(kart.angle)

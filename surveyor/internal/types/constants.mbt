@@ -41,6 +41,7 @@ pub let tier2_count : Int = 9
 pub let tier3_count : Int = 8
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(62, 99, 52, 255)
 
@@ -63,7 +64,9 @@ pub let color_water_dark : @raylib.Color = @raylib.Color::new(50, 100, 170, 255)
 pub let color_fence : @raylib.Color = @raylib.Color::new(240, 230, 210, 255)
 
 ///|
-pub let color_fence_hover : @raylib.Color = @raylib.Color::new(255, 255, 180, 180)
+pub let color_fence_hover : @raylib.Color = @raylib.Color::new(
+  255, 255, 180, 180,
+)
 
 ///|
 pub let color_grid_line : @raylib.Color = @raylib.Color::new(50, 80, 42, 120)
@@ -99,9 +102,12 @@ pub let color_unchecked : @raylib.Color = @raylib.Color::new(180, 180, 160, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(90, 140, 75, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(110, 170, 90, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  110, 170, 90, 255,
+)
 
 // House colors (for different color_id values)
+
 ///|
 pub fn house_color(id : Int) -> @raylib.Color {
   match id {

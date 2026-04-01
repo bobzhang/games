@@ -5,14 +5,7 @@ pub fn init_recipe_book(book : Array[@types.Recipe]) -> Unit {
   let reactions = all_reactions()
   for i in 0..<reactions.length() {
     let (substance, input, output) = reactions[i]
-    book.push(
-      {
-        discovered: false,
-        input,
-        substance,
-        output: Transform(output),
-      },
-    )
+    book.push({ discovered: false, input, substance, output: Transform(output) })
   }
 }
 
@@ -23,13 +16,13 @@ pub fn discover_reaction(
   book : Array[@types.Recipe],
   substance : @types.Element,
   input : @types.Element,
-  result : @types.ReactionResult
+  result : @types.ReactionResult,
 ) -> Bool {
   ignore(result)
   for i in 0..<book.length() {
     let r = book[i]
     if r.substance == substance && r.input == input {
-      if !(r.discovered) {
+      if !r.discovered {
         r.discovered = true
         return true
       }
@@ -62,7 +55,7 @@ pub fn count_total() -> Int {
 ///|
 /// Get all discovered recipes for display (deduplicated).
 pub fn get_discovered_recipes(
-  book : Array[@types.Recipe]
+  book : Array[@types.Recipe],
 ) -> Array[@types.Recipe] {
   let result : Array[@types.Recipe] = []
   let seen : Array[String] = []
@@ -89,7 +82,7 @@ pub fn get_discovered_recipes(
 ///|
 /// Get all recipes (for display, deduplicated).
 pub fn get_all_recipes_deduped(
-  book : Array[@types.Recipe]
+  book : Array[@types.Recipe],
 ) -> Array[@types.Recipe] {
   let result : Array[@types.Recipe] = []
   let seen : Array[String] = []

@@ -258,7 +258,7 @@ pub fn get_tier_levels(tier : @types.Tier) -> Array[@types.Level] {
 /// Check if a tier is unlocked (first tier always unlocked, others need previous tier completed).
 pub fn is_tier_unlocked(
   tier : @types.Tier,
-  scores : Array[@types.LevelScore]
+  scores : Array[@types.LevelScore],
 ) -> Bool {
   match tier {
     Apprentice => true

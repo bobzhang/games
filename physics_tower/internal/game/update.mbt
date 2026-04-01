@@ -190,7 +190,7 @@ fn start_level(game : @types.Game, level : @types.Level) -> Unit {
   // Start recording for replay
   start_recording(game)
   // Initialize tutorial for level 1
-  if game.current_level == 0 && !(game.tutorial_shown) {
+  if game.current_level == 0 && !game.tutorial_shown {
     init_tutorial(game)
   }
   show_message(game, level.name + ": " + level.description, 3.0)
@@ -233,7 +233,11 @@ fn update_build(game : @types.Game, dt : Float) -> Unit {
     @types.build_area_left + 40.0,
     @types.build_area_right - 40.0,
   )
-  game.ghost_y = @types.clampf(game.ghost_y, @types.build_area_top, @types.ground_y - 10.0)
+  game.ghost_y = @types.clampf(
+    game.ghost_y,
+    @types.build_area_top,
+    @types.ground_y - 10.0,
+  )
   // Rotate with R or scroll
   if @raylib.is_key_pressed(@raylib.KeyR) {
     game.ghost_angle = game.ghost_angle + 1.5707963 // PI/2
@@ -272,7 +276,11 @@ fn update_build(game : @types.Game, dt : Float) -> Unit {
         @blueprint.load_custom_blueprints(game)
         show_message(
           game,
-          "Saved blueprint: " + bp.name + " (" + bp.pieces.length().to_string() + " pieces)",
+          "Saved blueprint: " +
+          bp.name +
+          " (" +
+          bp.pieces.length().to_string() +
+          " pieces)",
           2.0,
         )
       }
@@ -308,7 +316,11 @@ fn update_sandbox(game : @types.Game, dt : Float) -> Unit {
     @types.build_area_left + 40.0,
     @types.build_area_right - 40.0,
   )
-  game.ghost_y = @types.clampf(game.ghost_y, @types.build_area_top, @types.ground_y - 10.0)
+  game.ghost_y = @types.clampf(
+    game.ghost_y,
+    @types.build_area_top,
+    @types.ground_y - 10.0,
+  )
   if @raylib.is_key_pressed(@raylib.KeyR) {
     game.ghost_angle = game.ghost_angle + 1.5707963
     if game.ghost_angle > 6.28 {
@@ -458,10 +470,7 @@ fn start_test_phase(game : @types.Game, kind : @types.TestKind) -> Unit {
   match kind {
     Wind => {
       let dir : Float = if game.frame_count % 2 == 0 { 1.0 } else { -1.0 }
-      @physics.start_wind(
-        game.world,
-        @types.wind_test_force * dir * wind_mult,
-      )
+      @physics.start_wind(game.world, @types.wind_test_force * dir * wind_mult)
       push_sound(game, WindStart)
       show_message(game, "WIND!", 1.5)
     }
@@ -489,11 +498,7 @@ fn finish_test(game : @types.Game) -> Unit {
   let active = @physics.count_active_bodies(game.world)
   let broken = @physics.count_broken_bodies(game.world)
   let total = active + broken
-  let survival_pct = if total > 0 {
-    active * 100 / total
-  } else {
-    0
-  }
+  let survival_pct = if total > 0 { active * 100 / total } else { 0 }
   let levels = @content.get_levels()
   let level = levels[game.current_level]
   let height = @physics.measure_tower_height(game.world)
@@ -524,7 +529,11 @@ fn finish_test(game : @types.Game) -> Unit {
   // Record statistics
   record_breaks(game, broken)
   record_level_result(
-    game, game.current_level, height, game.result_stars, passed,
+    game,
+    game.current_level,
+    height,
+    game.result_stars,
+    passed,
   )
   // Stop recording replay
   stop_recording(game, height, game.score, passed)
@@ -657,7 +666,14 @@ fn try_place_piece(game : @types.Game) -> Unit {
   // Decrease inventory count
   game.inventory[game.selected_piece] = (kind, material, count - 1)
   // Record for replay and stats
-  record_place(game, kind, material, game.ghost_x, game.ghost_y, game.ghost_angle)
+  record_place(
+    game,
+    kind,
+    material,
+    game.ghost_x,
+    game.ghost_y,
+    game.ghost_angle,
+  )
   record_piece_placed(game, material)
   push_sound(game, PlacePiece)
   // Settle it with a few physics steps
@@ -746,7 +762,10 @@ fn update_challenge_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_challenge_mode(game : @types.Game, mode : @types.ChallengeMode) -> Unit {
+fn start_challenge_mode(
+  game : @types.Game,
+  mode : @types.ChallengeMode,
+) -> Unit {
   @physics.clear_world(game.world)
   @destruction.clear_destruction(game.destruction)
   game.screen = Challenge
@@ -778,7 +797,11 @@ fn update_challenge(game : @types.Game, dt : Float) -> Unit {
     @types.build_area_left + 40.0,
     @types.build_area_right - 40.0,
   )
-  game.ghost_y = @types.clampf(game.ghost_y, @types.build_area_top, @types.ground_y - 10.0)
+  game.ghost_y = @types.clampf(
+    game.ghost_y,
+    @types.build_area_top,
+    @types.ground_y - 10.0,
+  )
   if @raylib.is_key_pressed(@raylib.KeyR) {
     game.ghost_angle = game.ghost_angle + 1.5707963
     if game.ghost_angle > 6.28 {
@@ -893,7 +916,7 @@ fn try_place_blueprint(game : @types.Game) -> Unit {
     return
   }
   let bp = game.blueprints[game.selected_blueprint]
-  if !(@blueprint.can_afford_blueprint(bp, game)) {
+  if !@blueprint.can_afford_blueprint(bp, game) {
     show_message(game, "Not enough pieces for blueprint!", 1.0)
     return
   }

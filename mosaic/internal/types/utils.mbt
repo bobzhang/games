@@ -40,7 +40,11 @@ pub fn tile_eq(a : Tile, b : Tile) -> Bool {
 }
 
 ///|
-pub fn new_tile(color : TileColor, shape : TileShape, orientation : Orientation) -> Tile {
+pub fn new_tile(
+  color : TileColor,
+  shape : TileShape,
+  orientation : Orientation,
+) -> Tile {
   { color, shape, orientation }
 }
 
@@ -289,7 +293,7 @@ pub fn levels_for_tier(game : Game, tier : Tier) -> Array[Int] {
 pub fn tier_completed(game : Game, tier : Tier) -> Bool {
   let lvls = levels_for_tier(game, tier)
   for i in 0..<lvls.length() {
-    if !(game.scores[lvls[i]].completed) {
+    if !game.scores[lvls[i]].completed {
       return false
     }
   }

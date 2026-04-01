@@ -1,7 +1,7 @@
 ///|
 pub fn match_hull_to_target(
   hull : Array[@types.Point],
-  target : @types.Polygon
+  target : @types.Polygon,
 ) -> Float {
   let target_verts = target.vertices
   let tn = target_verts.length()
@@ -28,7 +28,7 @@ pub fn match_hull_to_target(
 fn edge_matches_hull(
   ta : @types.Point,
   tb : @types.Point,
-  hull : Array[@types.Point]
+  hull : Array[@types.Point],
 ) -> Bool {
   let hn = hull.length()
   if hn < 2 {
@@ -50,7 +50,7 @@ fn edges_match(
   ta : @types.Point,
   tb : @types.Point,
   ha : @types.Point,
-  hb : @types.Point
+  hb : @types.Point,
 ) -> Bool {
   // Both endpoints of target edge must be close to hull edge, and vice versa
   let tol = @types.tolerance
@@ -64,7 +64,7 @@ fn edges_match(
 ///|
 pub fn hull_matches_target(
   hull : Array[@types.Point],
-  target : @types.Polygon
+  target : @types.Polygon,
 ) -> Bool {
   let pct = match_hull_to_target(hull, target)
   pct >= 99.9

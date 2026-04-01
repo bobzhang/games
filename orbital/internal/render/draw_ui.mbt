@@ -4,13 +4,7 @@ fn draw_play_hud(game : @types.Game, level : @types.Level) -> Unit {
   // Top bar background
   @raylib.draw_rectangle(0, 0, w, 40, @raylib.Color::new(0, 0, 0, 150))
   // Level name
-  @draw.draw_text(
-    level.name,
-    10,
-    10,
-    18,
-    @types.tier_color(level.tier),
-  )
+  @draw.draw_text(level.name, 10, 10, 18, @types.tier_color(level.tier))
   // Tier label
   let tier_str = @types.tier_name(level.tier)
   @draw.draw_text(
@@ -21,7 +15,10 @@ fn draw_play_hud(game : @types.Game, level : @types.Level) -> Unit {
     @raylib.Color::new(150, 150, 170, 180),
   )
   // Tick counter
-  let tick_str = "Ticks: " + game.tick_count.to_string() + " / " + level.par_ticks.to_string()
+  let tick_str = "Ticks: " +
+    game.tick_count.to_string() +
+    " / " +
+    level.par_ticks.to_string()
   let tw = @draw.measure_text(tick_str, 16)
   @draw.draw_text(tick_str, w - tw - 10, 12, 16, @types.color_hud)
   // Star indicators (par)

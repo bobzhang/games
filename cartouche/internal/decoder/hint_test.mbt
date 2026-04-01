@@ -1,12 +1,10 @@
 ///|
 test "find_hint returns unmapped symbol" {
-  let inscription = @types.new_inscription(
-    [
-      @types.make_symbol(Circle),
-      @types.make_symbol(Triangle),
-      @types.make_symbol(Circle),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+    @types.make_symbol(Circle),
+  ])
   let solution = @types.new_mapping()
   @types.mapping_set(solution, Circle, 0)
   @types.mapping_set(solution, Triangle, 1)
@@ -30,12 +28,10 @@ test "find_hint returns unmapped symbol" {
 
 ///|
 test "find_hint skips given symbols" {
-  let inscription = @types.new_inscription(
-    [
-      @types.make_symbol(Circle),
-      @types.make_symbol(Triangle),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+  ])
   let solution = @types.new_mapping()
   @types.mapping_set(solution, Circle, 0)
   @types.mapping_set(solution, Triangle, 1)
@@ -60,9 +56,7 @@ test "find_hint skips given symbols" {
 
 ///|
 test "find_hint returns None when all mapped" {
-  let inscription = @types.new_inscription(
-    [@types.make_symbol(Circle)],
-  )
+  let inscription = @types.new_inscription([@types.make_symbol(Circle)])
   let solution = @types.new_mapping()
   @types.mapping_set(solution, Circle, 0)
   let given = @types.new_mapping()

@@ -6,7 +6,7 @@ pub fn check_combos(world : @types.World) -> Array[@types.ActiveCombo] {
   // Track which body pairs we have already evaluated to avoid duplicates
   let checked : Array[(Int, Int)] = Array::new(capacity=64)
   for joint in world.joints {
-    if !(joint.active) || joint.broken {
+    if !joint.active || joint.broken {
       continue
     }
     let id_a = joint.body_a
@@ -29,10 +29,7 @@ pub fn check_combos(world : @types.World) -> Array[@types.ActiveCombo] {
     let body_b_opt = @physics.find_body(world, id_b)
     match (body_a_opt, body_b_opt) {
       (Some(body_a), Some(body_b)) => {
-        if !(body_a.active) ||
-          body_a.broken ||
-          !(body_b.active) ||
-          body_b.broken {
+        if !body_a.active || body_a.broken || !body_b.active || body_b.broken {
           continue
         }
         let combo = detect_combo(body_a.material, body_b.material, id_a, id_b)
@@ -53,49 +50,41 @@ fn detect_combo(
   mat_a : @types.Material,
   mat_b : @types.Material,
   id_a : Int,
-  id_b : Int
+  id_b : Int,
 ) -> @types.ActiveCombo? {
   match (mat_a, mat_b) {
     // Wood+Steel or Steel+Wood: flex bonus (joint strength *1.5)
     (Wood, Steel) | (Steel, Wood) =>
-      Some(
-        {
-          kind: FlexCombo,
-          body_a_id: id_a,
-          body_b_id: id_b,
-          bonus_value: 1.5,
-        },
-      )
+      Some({
+        kind: FlexCombo,
+        body_a_id: id_a,
+        body_b_id: id_b,
+        bonus_value: 1.5,
+      })
     // Stone+Stone: monolith bonus (stress tolerance *1.3)
     (Stone, Stone) =>
-      Some(
-        {
-          kind: MonolithCombo,
-          body_a_id: id_a,
-          body_b_id: id_b,
-          bonus_value: 1.3,
-        },
-      )
+      Some({
+        kind: MonolithCombo,
+        body_a_id: id_a,
+        body_b_id: id_b,
+        bonus_value: 1.3,
+      })
     // Steel+Steel: reinforced bonus (mass -20%)
     (Steel, Steel) =>
-      Some(
-        {
-          kind: ReinforcedCombo,
-          body_a_id: id_a,
-          body_b_id: id_b,
-          bonus_value: 0.8,
-        },
-      )
+      Some({
+        kind: ReinforcedCombo,
+        body_a_id: id_a,
+        body_b_id: id_b,
+        bonus_value: 0.8,
+      })
     // Wood+Wood: lightweight bonus (cost -1)
     (Wood, Wood) =>
-      Some(
-        {
-          kind: LightweightCombo,
-          body_a_id: id_a,
-          body_b_id: id_b,
-          bonus_value: 1.0,
-        },
-      )
+      Some({
+        kind: LightweightCombo,
+        body_a_id: id_a,
+        body_b_id: id_b,
+        bonus_value: 1.0,
+      })
     _ => None
   }
 }
@@ -105,20 +94,33 @@ fn detect_combo(
 /// Call this after pieces are placed or during test setup.
 pub fn apply_combo_bonuses(
   world : @types.World,
-  combos : Array[@types.ActiveCombo]
+  combos : Array[@types.ActiveCombo],
 ) -> Unit {
   for combo in combos {
     match combo.kind {
       FlexCombo =>
         // Strengthen joints between wood and steel bodies
-        apply_flex_combo(world, combo.body_a_id, combo.body_b_id, combo.bonus_value)
+        apply_flex_combo(
+          world,
+          combo.body_a_id,
+          combo.body_b_id,
+          combo.bonus_value,
+        )
       MonolithCombo =>
         // Increase stress tolerance on stone-stone pairs
-        apply_monolith_combo(world, combo.body_a_id, combo.body_b_id, combo.bonus_value)
+        apply_monolith_combo(
+          world,
+          combo.body_a_id,
+          combo.body_b_id,
+          combo.bonus_value,
+        )
       ReinforcedCombo =>
         // Reduce mass on steel-steel pairs
         apply_reinforced_combo(
-          world, combo.body_a_id, combo.body_b_id, combo.bonus_value,
+          world,
+          combo.body_a_id,
+          combo.body_b_id,
+          combo.bonus_value,
         )
       LightweightCombo =>
         // Wood-wood pairs get mass reduction
@@ -133,10 +135,10 @@ fn apply_flex_combo(
   world : @types.World,
   id_a : Int,
   id_b : Int,
-  mult : Float
+  mult : Float,
 ) -> Unit {
   for joint in world.joints {
-    if !(joint.active) || joint.broken {
+    if !joint.active || joint.broken {
       continue
     }
     if (joint.body_a == id_a && joint.body_b == id_b) ||
@@ -153,11 +155,11 @@ fn apply_monolith_combo(
   world : @types.World,
   id_a : Int,
   id_b : Int,
-  mult : Float
+  mult : Float,
 ) -> Unit {
   for body in world.bodies {
     if body.id == id_a || body.id == id_b {
-      if body.active && !(body.broken) {
+      if body.active && !body.broken {
         // Reduce effective stress (simulates higher tolerance)
         body.stress = body.stress / mult
       }
@@ -171,11 +173,11 @@ fn apply_reinforced_combo(
   world : @types.World,
   id_a : Int,
   id_b : Int,
-  mass_mult : Float
+  mass_mult : Float,
 ) -> Unit {
   for body in world.bodies {
     if body.id == id_a || body.id == id_b {
-      if body.active && !(body.broken) && body.material == Steel {
+      if body.active && !body.broken && body.material == Steel {
         // Apply mass reduction only if not already reduced
         let base_mass = @types.material_mass(body.material) *
           body.width *
@@ -195,11 +197,11 @@ fn apply_reinforced_combo(
 fn apply_lightweight_combo(
   world : @types.World,
   id_a : Int,
-  id_b : Int
+  id_b : Int,
 ) -> Unit {
   for body in world.bodies {
     if body.id == id_a || body.id == id_b {
-      if body.active && !(body.broken) && body.material == Wood {
+      if body.active && !body.broken && body.material == Wood {
         let base_mass = @types.material_mass(body.material) *
           body.width *
           body.height *

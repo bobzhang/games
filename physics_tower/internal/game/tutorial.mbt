@@ -28,7 +28,7 @@ pub fn init_tutorial(game : @types.Game) -> Unit {
 fn setup_tutorial_step(
   tut : @types.TutorialState,
   step : Int,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   ignore(game)
   tut.step = step
@@ -89,28 +89,25 @@ pub fn update_tutorial(game : @types.Game, dt : Float) -> Bool {
   }
   // Check for step completion conditions
   match tut.step {
-    0 => {
+    0 =>
       // Step 1 completes when a piece is placed (bodies > 0)
       if game.world.bodies.length() > 0 {
         advance_tutorial(game)
         return false
       }
-    }
-    1 => {
+    1 =>
       // Step 2 completes when R is pressed
       if @raylib.is_key_pressed(@raylib.KeyR) {
         advance_tutorial(game)
         return false
       }
-    }
-    2 => {
+    2 =>
       // Step 3 completes when T is pressed (will also trigger test)
       if @raylib.is_key_pressed(@raylib.KeyT) ||
         @raylib.is_key_pressed(@raylib.KeyEnter) {
         finish_tutorial(game)
         return false
       }
-    }
     _ => ()
   }
   false
@@ -140,7 +137,7 @@ fn finish_tutorial(game : @types.Game) -> Unit {
 ///|
 /// Checks if the tutorial should be shown for the current level.
 pub fn should_show_tutorial(game : @types.Game) -> Bool {
-  game.current_level == 0 && !(game.tutorial_shown) && !(game.tutorial.completed)
+  game.current_level == 0 && !game.tutorial_shown && !game.tutorial.completed
 }
 
 ///|
@@ -188,9 +185,7 @@ pub fn tutorial_highlight_visible(game : @types.Game) -> Bool {
 
 ///|
 /// Returns the highlight rectangle for the current tutorial step.
-pub fn tutorial_highlight_rect(
-  game : @types.Game
-) -> (Int, Int, Int, Int) {
+pub fn tutorial_highlight_rect(game : @types.Game) -> (Int, Int, Int, Int) {
   let tut = game.tutorial
   (tut.highlight_x, tut.highlight_y, tut.highlight_w, tut.highlight_h)
 }

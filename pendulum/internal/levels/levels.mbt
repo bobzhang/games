@@ -9,7 +9,7 @@ fn build_level(
   walls : Array[@types.Vec2i],
   collectibles : Array[@types.Vec2i],
   par_ticks : Int,
-  rope_length : Int
+  rope_length : Int,
 ) -> @types.Level {
   let grid = @types.new_empty_grid()
   grid[anchor.y][anchor.x] = Anchor
@@ -49,18 +49,7 @@ fn p(x : Int, y : Int) -> @types.Vec2i {
 
 ///|
 fn level_1_1() -> @types.Level {
-  build_level(
-    0,
-    Swing,
-    "First Swing",
-    p(8, 1),
-    p(12, 6),
-    [],
-    [],
-    [],
-    15,
-    5,
-  )
+  build_level(0, Swing, "First Swing", p(8, 1), p(12, 6), [], [], [], 15, 5)
 }
 
 ///|
@@ -97,50 +86,17 @@ fn level_1_3() -> @types.Level {
 
 ///|
 fn level_1_4() -> @types.Level {
-  build_level(
-    3,
-    Swing,
-    "Long Drop",
-    p(8, 0),
-    p(14, 9),
-    [],
-    [],
-    [],
-    25,
-    8,
-  )
+  build_level(3, Swing, "Long Drop", p(8, 0), p(14, 9), [], [], [], 25, 8)
 }
 
 ///|
 fn level_1_5() -> @types.Level {
-  build_level(
-    4,
-    Swing,
-    "Cut Launch",
-    p(8, 2),
-    p(15, 2),
-    [],
-    [],
-    [],
-    12,
-    5,
-  )
+  build_level(4, Swing, "Cut Launch", p(8, 2), p(15, 2), [], [], [], 12, 5)
 }
 
 ///|
 fn level_1_6() -> @types.Level {
-  build_level(
-    5,
-    Swing,
-    "High Arc",
-    p(4, 1),
-    p(12, 4),
-    [],
-    [],
-    [p(8, 6)],
-    20,
-    7,
-  )
+  build_level(5, Swing, "High Arc", p(4, 1), p(12, 4), [], [], [p(8, 6)], 20, 7)
 }
 
 ///|
@@ -181,18 +137,7 @@ fn level_1_8() -> @types.Level {
 
 ///|
 fn level_2_1() -> @types.Level {
-  build_level(
-    8,
-    Wrap,
-    "First Peg",
-    p(4, 1),
-    p(10, 6),
-    [p(7, 4)],
-    [],
-    [],
-    18,
-    6,
-  )
+  build_level(8, Wrap, "First Peg", p(4, 1), p(10, 6), [p(7, 4)], [], [], 18, 6)
 }
 
 ///|
@@ -384,9 +329,7 @@ fn level_3_4() -> @types.Level {
     p(8, 0),
     p(2, 10),
     [p(6, 3), p(10, 5)],
-    [
-      p(4, 6), p(4, 7), p(4, 8), p(13, 4), p(13, 5), p(13, 6),
-    ],
+    [p(4, 6), p(4, 7), p(4, 8), p(13, 4), p(13, 5), p(13, 6)],
     [p(12, 3), p(5, 9)],
     24,
     6,
@@ -418,9 +361,7 @@ fn level_3_6() -> @types.Level {
     p(2, 0),
     p(14, 10),
     [p(5, 3), p(8, 5), p(11, 7)],
-    [
-      p(7, 2), p(7, 3), p(10, 4), p(10, 5), p(13, 6), p(13, 7),
-    ],
+    [p(7, 2), p(7, 3), p(10, 4), p(10, 5), p(13, 6), p(13, 7)],
     [p(6, 4), p(9, 6), p(12, 8)],
     28,
     6,
@@ -453,7 +394,13 @@ fn level_3_8() -> @types.Level {
     p(15, 11),
     [p(4, 2), p(7, 4), p(10, 6), p(13, 8)],
     [
-      p(6, 1), p(6, 2), p(9, 3), p(9, 4), p(12, 5), p(12, 6), p(14, 10),
+      p(6, 1),
+      p(6, 2),
+      p(9, 3),
+      p(9, 4),
+      p(12, 5),
+      p(12, 6),
+      p(14, 10),
       p(15, 10),
     ],
     [p(5, 3), p(8, 5), p(11, 7), p(14, 9)],

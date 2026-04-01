@@ -7,7 +7,7 @@ pub fn vec2i(x : Int, y : Int) -> Vec2i {
 pub fn rotate_cell(cell : Vec2i, times : Int) -> Vec2i {
   let mut cx = cell.x
   let mut cy = cell.y
-  let n = ((times % 4) + 4) % 4
+  let n = (times % 4 + 4) % 4
   for _i in 0..<n {
     let tmp = cx
     cx = -cy
@@ -18,14 +18,14 @@ pub fn rotate_cell(cell : Vec2i, times : Int) -> Vec2i {
 
 ///|
 pub fn flip_cell(cell : Vec2i) -> Vec2i {
-  { x: -(cell.x), y: cell.y }
+  { x: -cell.x, y: cell.y }
 }
 
 ///|
 pub fn transform_cells(
   cells : Array[Vec2i],
   rotation : Int,
-  flipped : Bool
+  flipped : Bool,
 ) -> Array[Vec2i] {
   let result : Array[Vec2i] = []
   for i in 0..<cells.length() {
@@ -40,9 +40,7 @@ pub fn transform_cells(
 }
 
 ///|
-pub fn piece_bounds(
-  cells : Array[Vec2i]
-) -> (Int, Int, Int, Int) {
+pub fn piece_bounds(cells : Array[Vec2i]) -> (Int, Int, Int, Int) {
   let mut min_x = 100
   let mut min_y = 100
   let mut max_x = -100
@@ -66,7 +64,11 @@ pub fn piece_bounds(
 }
 
 ///|
-pub fn new_region(width : Int, height : Int, active_cells : Array[Vec2i]) -> Region {
+pub fn new_region(
+  width : Int,
+  height : Int,
+  active_cells : Array[Vec2i],
+) -> Region {
   let active : Array[Array[Bool]] = []
   for _r in 0..<height {
     let row : Array[Bool] = []
@@ -150,58 +152,37 @@ pub fn triomino_l(color : @raylib.Color) -> Piece {
 
 ///|
 pub fn tetromino_i(color : @raylib.Color) -> Piece {
-  make_piece(
-    [vec2i(-1, 0), vec2i(0, 0), vec2i(1, 0), vec2i(2, 0)],
-    color,
-  )
+  make_piece([vec2i(-1, 0), vec2i(0, 0), vec2i(1, 0), vec2i(2, 0)], color)
 }
 
 ///|
 pub fn tetromino_o(color : @raylib.Color) -> Piece {
-  make_piece(
-    [vec2i(0, 0), vec2i(1, 0), vec2i(0, 1), vec2i(1, 1)],
-    color,
-  )
+  make_piece([vec2i(0, 0), vec2i(1, 0), vec2i(0, 1), vec2i(1, 1)], color)
 }
 
 ///|
 pub fn tetromino_t(color : @raylib.Color) -> Piece {
-  make_piece(
-    [vec2i(-1, 0), vec2i(0, 0), vec2i(1, 0), vec2i(0, 1)],
-    color,
-  )
+  make_piece([vec2i(-1, 0), vec2i(0, 0), vec2i(1, 0), vec2i(0, 1)], color)
 }
 
 ///|
 pub fn tetromino_s(color : @raylib.Color) -> Piece {
-  make_piece(
-    [vec2i(0, 0), vec2i(1, 0), vec2i(-1, 1), vec2i(0, 1)],
-    color,
-  )
+  make_piece([vec2i(0, 0), vec2i(1, 0), vec2i(-1, 1), vec2i(0, 1)], color)
 }
 
 ///|
 pub fn tetromino_z(color : @raylib.Color) -> Piece {
-  make_piece(
-    [vec2i(-1, 0), vec2i(0, 0), vec2i(0, 1), vec2i(1, 1)],
-    color,
-  )
+  make_piece([vec2i(-1, 0), vec2i(0, 0), vec2i(0, 1), vec2i(1, 1)], color)
 }
 
 ///|
 pub fn tetromino_l(color : @raylib.Color) -> Piece {
-  make_piece(
-    [vec2i(-1, 0), vec2i(0, 0), vec2i(1, 0), vec2i(1, 1)],
-    color,
-  )
+  make_piece([vec2i(-1, 0), vec2i(0, 0), vec2i(1, 0), vec2i(1, 1)], color)
 }
 
 ///|
 pub fn tetromino_j(color : @raylib.Color) -> Piece {
-  make_piece(
-    [vec2i(-1, 0), vec2i(0, 0), vec2i(1, 0), vec2i(-1, 1)],
-    color,
-  )
+  make_piece([vec2i(-1, 0), vec2i(0, 0), vec2i(1, 0), vec2i(-1, 1)], color)
 }
 
 // Pentominoes
@@ -399,18 +380,9 @@ pub fn level_index(tier : Tier, level_in_tier : Int) -> Int {
 ///|
 pub fn piece_color_by_index(index : Int) -> @raylib.Color {
   let colors : Array[@raylib.Color] = [
-    piece_color_red,
-    piece_color_blue,
-    piece_color_green,
-    piece_color_yellow,
-    piece_color_purple,
-    piece_color_orange,
-    piece_color_cyan,
-    piece_color_pink,
-    piece_color_lime,
-    piece_color_teal,
-    piece_color_brown,
-    piece_color_magenta,
+    piece_color_red, piece_color_blue, piece_color_green, piece_color_yellow, piece_color_purple,
+    piece_color_orange, piece_color_cyan, piece_color_pink, piece_color_lime, piece_color_teal,
+    piece_color_brown, piece_color_magenta,
   ]
   colors[index % colors.length()]
 }

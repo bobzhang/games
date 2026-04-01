@@ -7,7 +7,13 @@ fn draw_playing(game : @types.Game) -> Unit {
   let grid_w = board.size * cs
   let grid_h = board.size * cs
   // Draw grid background
-  @raylib.draw_rectangle(gx - 4, gy - 4, grid_w + 8, grid_h + 8, @types.color_grid_line)
+  @raylib.draw_rectangle(
+    gx - 4,
+    gy - 4,
+    grid_w + 8,
+    grid_h + 8,
+    @types.color_grid_line,
+  )
   @raylib.draw_rectangle(gx, gy, grid_w, grid_h, @types.color_grid_bg)
   // Draw cells
   for row in 0..<board.size {
@@ -28,7 +34,13 @@ fn draw_playing(game : @types.Game) -> Unit {
       }
       // Highlight selected board cell
       if game.selected_board == row * board.size + col {
-        @raylib.draw_rectangle(cx + 2, cy + 2, cs - 4, cs - 4, @types.color_selected)
+        @raylib.draw_rectangle(
+          cx + 2,
+          cy + 2,
+          cs - 4,
+          cs - 4,
+          @types.color_selected,
+        )
       }
     }
   }
@@ -46,7 +58,7 @@ fn draw_patch(
   y : Int,
   size : Int,
   row : Int,
-  col : Int
+  col : Int,
 ) -> Unit {
   let base_color = if patch.pinned {
     @types.color_pinned
@@ -93,7 +105,7 @@ fn draw_edge_pattern(
   edge_idx : Int,
   board : @types.Board,
   row : Int,
-  col : Int
+  col : Int,
 ) -> Unit {
   let pattern = patch.edges[edge_idx]
   let is_wildcard = patch.wildcard_edges[edge_idx]
@@ -138,7 +150,15 @@ fn draw_edge_pattern(
         1,
         @raylib.Color::new(0, 0, 0, 40),
       )
-      draw_pattern_marks(pattern, is_wildcard, x + margin, y + 1, size - margin * 2, thickness, true)
+      draw_pattern_marks(
+        pattern,
+        is_wildcard,
+        x + margin,
+        y + 1,
+        size - margin * 2,
+        thickness,
+        true,
+      )
     }
     1 => {
       // East
@@ -208,7 +228,15 @@ fn draw_edge_pattern(
         size - margin * 2,
         @raylib.Color::new(0, 0, 0, 40),
       )
-      draw_pattern_marks(pattern, is_wildcard, x + 1, y + margin, thickness, size - margin * 2, false)
+      draw_pattern_marks(
+        pattern,
+        is_wildcard,
+        x + 1,
+        y + margin,
+        thickness,
+        size - margin * 2,
+        false,
+      )
     }
   }
   // Match/mismatch indicator - larger and more visible
@@ -251,7 +279,7 @@ fn draw_pattern_marks(
   y : Int,
   w : Int,
   h : Int,
-  horizontal : Bool
+  horizontal : Bool,
 ) -> Unit {
   let mark_color = @raylib.Color::new(255, 255, 255, 200)
   let mark_shadow = @raylib.Color::new(0, 0, 0, 60)
@@ -455,7 +483,19 @@ fn draw_pattern_marks(
 fn draw_lock_icon(x : Int, y : Int) -> Unit {
   // Simple lock icon
   @raylib.draw_rectangle(x, y + 5, 12, 8, @raylib.Color::new(100, 90, 80, 200))
-  @raylib.draw_rectangle_lines(x, y + 5, 12, 8, @raylib.Color::new(60, 50, 40, 255))
+  @raylib.draw_rectangle_lines(
+    x,
+    y + 5,
+    12,
+    8,
+    @raylib.Color::new(60, 50, 40, 255),
+  )
   // Lock shackle
-  @raylib.draw_rectangle_lines(x + 2, y, 8, 7, @raylib.Color::new(60, 50, 40, 255))
+  @raylib.draw_rectangle_lines(
+    x + 2,
+    y,
+    8,
+    7,
+    @raylib.Color::new(60, 50, 40, 255),
+  )
 }

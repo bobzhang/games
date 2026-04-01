@@ -33,11 +33,23 @@ fn draw_grid_background() -> Unit {
     @raylib.Color::new(40, 36, 30, 255),
   )
   // Grid lines
-  for x in 0..=w {
-    @raylib.draw_line(ox + x * cs, oy, ox + x * cs, oy + h * cs, @types.color_grid_line)
+  for x in 0..<=w {
+    @raylib.draw_line(
+      ox + x * cs,
+      oy,
+      ox + x * cs,
+      oy + h * cs,
+      @types.color_grid_line,
+    )
   }
-  for y in 0..=h {
-    @raylib.draw_line(ox, oy + y * cs, ox + w * cs, oy + y * cs, @types.color_grid_line)
+  for y in 0..<=h {
+    @raylib.draw_line(
+      ox,
+      oy + y * cs,
+      ox + w * cs,
+      oy + y * cs,
+      @types.color_grid_line,
+    )
   }
   // Ground line
   @raylib.draw_rectangle(
@@ -80,8 +92,20 @@ fn draw_zones(zones : Array[@types.Zone]) -> Unit {
         }
         Forbidden => {
           // Small "x" sign
-          @raylib.draw_line(sx + 6, sy + 6, sx + cs - 6, sy + cs - 6, border_color)
-          @raylib.draw_line(sx + cs - 6, sy + 6, sx + 6, sy + cs - 6, border_color)
+          @raylib.draw_line(
+            sx + 6,
+            sy + 6,
+            sx + cs - 6,
+            sy + cs - 6,
+            border_color,
+          )
+          @raylib.draw_line(
+            sx + cs - 6,
+            sy + 6,
+            sx + 6,
+            sy + cs - 6,
+            border_color,
+          )
         }
         TipTarget => {
           // Small diamond
@@ -142,12 +166,14 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
             @raylib.draw_rectangle(sx + pad, sy, cs - pad * 2, cs / 2, bcolor)
             if dx > 0 {
               @raylib.draw_rectangle(
-                sx + cs / 2, sy + pad, cs / 2, cs - pad * 2, bcolor,
+                sx + cs / 2,
+                sy + pad,
+                cs / 2,
+                cs - pad * 2,
+                bcolor,
               )
             } else {
-              @raylib.draw_rectangle(
-                sx, sy + pad, cs / 2, cs - pad * 2, bcolor,
-              )
+              @raylib.draw_rectangle(sx, sy + pad, cs / 2, cs - pad * 2, bcolor)
             }
           }
         }
@@ -170,7 +196,7 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
             ),
           )
         }
-        Pruned => {
+        Pruned =>
           // Faint mark
           @raylib.draw_rectangle(
             sx + cs / 4,
@@ -179,7 +205,6 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
             cs / 2,
             @types.color_pruned,
           )
-        }
         Empty => ()
       }
     }
@@ -208,7 +233,13 @@ fn draw_ghost_tree(ghost : @types.TreeGrid, species : @types.Species) -> Unit {
         Branch => {
           let _ = species
           let pad = cs / 4
-          @raylib.draw_rectangle(sx + pad, sy + pad, cs - pad * 2, cs - pad * 2, ghost_color)
+          @raylib.draw_rectangle(
+            sx + pad,
+            sy + pad,
+            cs - pad * 2,
+            cs - pad * 2,
+            ghost_color,
+          )
         }
         Leaf => {
           let cx = sx + cs / 2
@@ -225,7 +256,7 @@ fn draw_ghost_tree(ghost : @types.TreeGrid, species : @types.Species) -> Unit {
 fn draw_hover(game : @types.Game) -> Unit {
   match game.hover_cell {
     None => ()
-    Some(pos) => {
+    Some(pos) =>
       if @types.grid_in_bounds(game.tree, pos.x, pos.y) {
         let cell = @types.grid_get(game.tree, pos.x, pos.y)
         if cell.kind == Branch || cell.kind == Leaf {
@@ -242,6 +273,5 @@ fn draw_hover(game : @types.Game) -> Unit {
           )
         }
       }
-    }
   }
 }

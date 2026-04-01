@@ -67,14 +67,12 @@ pub fn is_control_flow(kind : @types.CommandKind) -> Bool {
 
 ///|
 pub fn validate_program(program : @types.Program) -> Bool {
-  program.commands.length() > 0 && program.commands.length() <= program.max_slots
+  program.commands.length() > 0 &&
+  program.commands.length() <= program.max_slots
 }
 
 ///|
-pub fn program_add(
-  program : @types.Program,
-  kind : @types.CommandKind
-) -> Bool {
+pub fn program_add(program : @types.Program, kind : @types.CommandKind) -> Bool {
   if program.commands.length() < program.max_slots {
     program.commands.push(new_command(kind))
     true
@@ -87,10 +85,11 @@ pub fn program_add(
 pub fn program_insert(
   program : @types.Program,
   index : Int,
-  kind : @types.CommandKind
+  kind : @types.CommandKind,
 ) -> Bool {
-  if program.commands.length() < program.max_slots && index >= 0 && index <=
-    program.commands.length() {
+  if program.commands.length() < program.max_slots &&
+    index >= 0 &&
+    index <= program.commands.length() {
     program.commands.insert(index, new_command(kind))
     true
   } else {
@@ -155,7 +154,13 @@ pub fn leap_commands() -> Array[@types.CommandKind] {
 ///|
 pub fn logic_commands() -> Array[@types.CommandKind] {
   [
-    Move, TurnLeft, TurnRight, Jump, If(PathAhead), If(WallAhead), If(AtGoal),
+    Move,
+    TurnLeft,
+    TurnRight,
+    Jump,
+    If(PathAhead),
+    If(WallAhead),
+    If(AtGoal),
     If(OnColor(Red)),
   ]
 }
@@ -163,7 +168,14 @@ pub fn logic_commands() -> Array[@types.CommandKind] {
 ///|
 pub fn mastery_commands() -> Array[@types.CommandKind] {
   [
-    Move, TurnLeft, TurnRight, Jump, Push, If(PathAhead), If(WallAhead), Loop(2),
+    Move,
+    TurnLeft,
+    TurnRight,
+    Jump,
+    Push,
+    If(PathAhead),
+    If(WallAhead),
+    Loop(2),
     Loop(3),
   ]
 }

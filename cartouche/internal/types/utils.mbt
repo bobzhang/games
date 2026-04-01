@@ -121,8 +121,26 @@ pub fn symbol_from_index(i : Int) -> Symbol {
 ///|
 pub fn all_symbols() -> Array[Symbol] {
   [
-    Circle, Triangle, Square, Diamond, Star, Cross, Arrow, Wave, Spiral, Dot,
-    Crescent, Lightning, Eye, Hand, Sun, MoonSym, Mountain, River, Tree, Flame,
+    Circle,
+    Triangle,
+    Square,
+    Diamond,
+    Star,
+    Cross,
+    Arrow,
+    Wave,
+    Spiral,
+    Dot,
+    Crescent,
+    Lightning,
+    Eye,
+    Hand,
+    Sun,
+    MoonSym,
+    Mountain,
+    River,
+    Tree,
+    Flame,
   ]
 }
 
@@ -252,7 +270,7 @@ pub fn make_space() -> InscriptionSymbol {
 ///|
 pub fn decode_inscription(
   inscription : Inscription,
-  mapping : Mapping
+  mapping : Mapping,
 ) -> String {
   let mut result = ""
   for i in 0..<inscription.symbols.length() {
@@ -272,7 +290,9 @@ pub fn decode_inscription(
 }
 
 ///|
-pub fn get_inscription_symbols_unique(inscription : Inscription) -> Array[Symbol] {
+pub fn get_inscription_symbols_unique(
+  inscription : Inscription,
+) -> Array[Symbol] {
   let result : Array[Symbol] = []
   for i in 0..<inscription.symbols.length() {
     match inscription.symbols[i].symbol {

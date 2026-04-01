@@ -88,7 +88,12 @@ pub fn hex_to_pixel(col : Int, row : Int) -> (Float, Float) {
 }
 
 ///|
-pub fn pixel_to_hex(px : Float, py : Float, grid_width : Int, grid_height : Int) -> (Int, Int) {
+pub fn pixel_to_hex(
+  px : Float,
+  py : Float,
+  grid_width : Int,
+  grid_height : Int,
+) -> (Int, Int) {
   let w = hex_size * sqrtf(3.0)
   let h = hex_size * 2.0
   // Rough row estimate
@@ -99,7 +104,7 @@ pub fn pixel_to_hex(px : Float, py : Float, grid_width : Int, grid_height : Int)
   // Search nearby cells
   let r_lo = maxi(0, approx_row - 1)
   let r_hi = mini(grid_height - 1, approx_row + 1)
-  for r in r_lo..=r_hi {
+  for r in r_lo..<=r_hi {
     let x_offset = if r % 2 == 1 { w / 2.0 } else { 0.0 }
     for c in 0..<grid_width {
       let cx = grid_offset_x + Float::from_int(c) * w + x_offset + w / 2.0
@@ -131,7 +136,7 @@ pub fn hex_neighbors(
   row : Int,
   width : Int,
   height : Int,
-  wrap_h : Bool
+  wrap_h : Bool,
 ) -> Array[(Int, Int)] {
   let result : Array[(Int, Int)] = []
   // odd-r neighbor offsets
@@ -157,10 +162,8 @@ pub fn hex_neighbors(
       } else if nc >= width {
         nc = nc - width
       }
-    } else {
-      if nc < 0 || nc >= width {
-        continue
-      }
+    } else if nc < 0 || nc >= width {
+      continue
     }
     result.push((nc, nr))
   }
@@ -189,7 +192,12 @@ pub fn get_tile(grid : HexGrid, col : Int, row : Int) -> HexTile {
 }
 
 ///|
-pub fn set_biome(grid : HexGrid, col : Int, row : Int, biome : BiomeKind) -> Unit {
+pub fn set_biome(
+  grid : HexGrid,
+  col : Int,
+  row : Int,
+  biome : BiomeKind,
+) -> Unit {
   grid.tiles[grid_index(col, row, grid.width)].biome = biome
 }
 
@@ -209,10 +217,14 @@ pub fn count_neighbor_biome(
   grid : HexGrid,
   col : Int,
   row : Int,
-  biome : BiomeKind
+  biome : BiomeKind,
 ) -> Int {
   let neighbors = hex_neighbors(
-    col, row, grid.width, grid.height, grid.wraps_horizontal,
+    col,
+    row,
+    grid.width,
+    grid.height,
+    grid.wraps_horizontal,
   )
   let mut count = 0
   for i in 0..<neighbors.length() {
@@ -328,7 +340,12 @@ pub fn clone_grid(grid : HexGrid) -> HexGrid {
   for i in 0..<grid.tiles.length() {
     tiles.push({ biome: grid.tiles[i].biome, locked: grid.tiles[i].locked })
   }
-  { width: grid.width, height: grid.height, tiles, wraps_horizontal: grid.wraps_horizontal }
+  {
+    width: grid.width,
+    height: grid.height,
+    tiles,
+    wraps_horizontal: grid.wraps_horizontal,
+  }
 }
 
 ///|
@@ -344,7 +361,7 @@ pub fn snapshot_biomes(grid : HexGrid) -> Array[BiomeKind] {
 pub fn new_resolve_snapshot(
   grid : HexGrid,
   budget : PaintBudget,
-  turn : Int
+  turn : Int,
 ) -> ResolveSnapshot {
   {
     biomes: snapshot_biomes(grid),
@@ -367,7 +384,7 @@ pub fn new_targets(
   o_min : Float,
   o_max : Float,
   d_min : Float,
-  d_max : Float
+  d_max : Float,
 ) -> TargetRatio {
   {
     forest_min: f_min,

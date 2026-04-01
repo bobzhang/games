@@ -83,7 +83,7 @@ pub fn island_screen_y(isl : Island, grid : Int) -> Int {
 ///|
 pub fn count_bridges_for_island(
   bridges : Array[Bridge],
-  island_idx : Int
+  island_idx : Int,
 ) -> Int {
   let mut total = 0
   for b in bridges {
@@ -95,11 +95,7 @@ pub fn count_bridges_for_island(
 }
 
 ///|
-pub fn find_bridge(
-  bridges : Array[Bridge],
-  a : Int,
-  b : Int
-) -> Int {
+pub fn find_bridge(bridges : Array[Bridge], a : Int, b : Int) -> Int {
   for i, br in bridges {
     if (br.island_a == a && br.island_b == b) ||
       (br.island_a == b && br.island_b == a) {
@@ -128,11 +124,7 @@ pub fn can_connect(islands : Array[Island], a : Int, b : Int) -> Bool {
 }
 
 ///|
-pub fn has_island_between(
-  islands : Array[Island],
-  a : Int,
-  b : Int
-) -> Bool {
+pub fn has_island_between(islands : Array[Island], a : Int, b : Int) -> Bool {
   let pa = islands[a].pos
   let pb = islands[b].pos
   if pa.y == pb.y {
@@ -140,7 +132,10 @@ pub fn has_island_between(
     let min_x = if pa.x < pb.x { pa.x } else { pb.x }
     let max_x = if pa.x > pb.x { pa.x } else { pb.x }
     for i, isl in islands {
-      if i != a && i != b && isl.pos.y == pa.y && isl.pos.x > min_x &&
+      if i != a &&
+        i != b &&
+        isl.pos.y == pa.y &&
+        isl.pos.x > min_x &&
         isl.pos.x < max_x {
         return true
       }
@@ -151,7 +146,10 @@ pub fn has_island_between(
     let min_y = if pa.y < pb.y { pa.y } else { pb.y }
     let max_y = if pa.y > pb.y { pa.y } else { pb.y }
     for i, isl in islands {
-      if i != a && i != b && isl.pos.x == pa.x && isl.pos.y > min_y &&
+      if i != a &&
+        i != b &&
+        isl.pos.x == pa.x &&
+        isl.pos.y > min_y &&
         isl.pos.y < max_y {
         return true
       }
@@ -168,7 +166,7 @@ pub fn bridges_cross(
   br1_a : Int,
   br1_b : Int,
   br2_a : Int,
-  br2_b : Int
+  br2_b : Int,
 ) -> Bool {
   let a1 = islands[br1_a].pos
   let b1 = islands[br1_b].pos
@@ -203,7 +201,7 @@ pub fn would_cross_existing(
   islands : Array[Island],
   bridges : Array[Bridge],
   a : Int,
-  b : Int
+  b : Int,
 ) -> Bool {
   for br in bridges {
     if bridges_cross(islands, a, b, br.island_a, br.island_b) {
@@ -269,9 +267,12 @@ pub fn total_bridge_segments(bridges : Array[Bridge]) -> Int {
 pub fn clone_bridges(bridges : Array[Bridge]) -> Array[Bridge] {
   let result : Array[Bridge] = []
   for b in bridges {
-    result.push(
-      { island_a: b.island_a, island_b: b.island_b, count: b.count, direction: b.direction },
-    )
+    result.push({
+      island_a: b.island_a,
+      island_b: b.island_b,
+      count: b.count,
+      direction: b.direction,
+    })
   }
   result
 }
@@ -374,7 +375,7 @@ pub fn find_nearest_island(
   islands : Array[Island],
   grid_size : Int,
   mx : Int,
-  my : Int
+  my : Int,
 ) -> Int {
   let radius = island_radius_for_grid(grid_size)
   let click_radius = radius + 10.0
@@ -401,7 +402,7 @@ pub fn find_connectable_island_at(
   selected : Int,
   grid_size : Int,
   mx : Int,
-  my : Int
+  my : Int,
 ) -> Int {
   let idx = find_nearest_island(islands, grid_size, mx, my)
   if idx < 0 || idx == selected {

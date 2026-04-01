@@ -55,13 +55,11 @@ fn draw_palette(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(200, 190, 170, 255)
     }
-    @raylib.draw_rectangle(cell_x, cell_y, @types.palette_cell, @types.palette_cell, bg)
+    @raylib.draw_rectangle(
+      cell_x, cell_y, @types.palette_cell, @types.palette_cell, bg,
+    )
     @raylib.draw_rectangle_lines(
-      cell_x,
-      cell_y,
-      @types.palette_cell,
-      @types.palette_cell,
-      @types.color_grid_line,
+      cell_x, cell_y, @types.palette_cell, @types.palette_cell, @types.color_grid_line,
     )
     // Draw feature icon
     draw_feature(

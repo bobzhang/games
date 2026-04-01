@@ -14,7 +14,11 @@ fn draw_tool_panel(game : @types.Game, level : @types.Level) -> Unit {
   for t in 0..<3 {
     let tx = px + t * tab_w
     let is_active = tools[t] == game.active_tool
-    let bg = if is_active { @types.color_highlight } else { @types.color_button }
+    let bg = if is_active {
+      @types.color_highlight
+    } else {
+      @types.color_button
+    }
     @raylib.draw_rectangle(tx, py, tab_w, 30, bg)
     @raylib.draw_rectangle_lines(tx, py, tab_w, 30, @types.color_panel_border)
     let tc = if is_active { @types.color_green } else { @types.color_dim }
@@ -40,7 +44,7 @@ fn draw_frequency_chart(
   level : @types.Level,
   px : Int,
   py : Int,
-  pw : Int
+  pw : Int,
 ) -> Unit {
   @draw.draw_text("LETTER FREQUENCY", px + 10, py, 14, @types.color_text)
   let cipher_freq = @crypto.letter_frequency_pct(level.ciphertext)
@@ -61,7 +65,9 @@ fn draw_frequency_chart(
   for i in 0..<26 {
     let bx = chart_x + i * bar_w
     // English expected (background bar)
-    let eng_h = (@types.english_freq[i] / max_freq * Float::from_int(chart_h - 40)).to_int()
+    let eng_h = (@types.english_freq[i] /
+    max_freq *
+    Float::from_int(chart_h - 40)).to_int()
     @raylib.draw_rectangle(
       bx,
       chart_y + chart_h - 40 - eng_h,
@@ -92,7 +98,13 @@ fn draw_frequency_chart(
   let legend_y = chart_y + chart_h - 10
   @raylib.draw_rectangle(chart_x, legend_y, 12, 12, @types.color_bar_english)
   @draw.draw_text("English", chart_x + 16, legend_y, 11, @types.color_dim)
-  @raylib.draw_rectangle(chart_x + 100, legend_y, 12, 12, @types.color_bar_cipher)
+  @raylib.draw_rectangle(
+    chart_x + 100,
+    legend_y,
+    12,
+    12,
+    @types.color_bar_cipher,
+  )
   @draw.draw_text("Cipher", chart_x + 116, legend_y, 11, @types.color_dim)
   // Frequency comparison tip
   let tip_y = legend_y + 25
@@ -118,7 +130,7 @@ fn draw_letter_swap(
   level : @types.Level,
   px : Int,
   py : Int,
-  _pw : Int
+  _pw : Int,
 ) -> Unit {
   ignore(level)
   @draw.draw_text("LETTER MAPPING", px + 10, py, 14, @types.color_text)
@@ -152,11 +164,7 @@ fn draw_letter_swap(
     let gy = grid_y + row * (cell + 4)
     let letter = @types.idx_to_char(i)
     let used = game.mapping.plain_used[i]
-    let bg = if used {
-      @types.color_dark_green
-    } else {
-      @types.color_button
-    }
+    let bg = if used { @types.color_dark_green } else { @types.color_button }
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
     let hover = mx >= gx && mx < gx + cell && my >= gy && my < gy + cell
@@ -200,7 +208,7 @@ fn draw_pattern_finder(
   level : @types.Level,
   px : Int,
   py : Int,
-  _pw : Int
+  _pw : Int,
 ) -> Unit {
   @draw.draw_text("PATTERN ANALYSIS", px + 10, py, 14, @types.color_text)
   // Show cipher kind info
@@ -288,16 +296,12 @@ fn draw_button(
   w : Int,
   h : Int,
   text : String,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   let hover = mx >= x && mx < x + w && my >= y && my < y + h
-  let bg = if hover {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let bg = if hover { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(x, y, w, h, bg)
   @raylib.draw_rectangle_lines(x, y, w, h, color)
   let tw = @draw.measure_text(text, 14)

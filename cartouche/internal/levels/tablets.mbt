@@ -30,18 +30,31 @@ fn tablet_01() -> @types.Tablet {
   // A=Circle, B=Triangle, L=Lightning, E=Star
   // D=Diamond, I=Spiral, C=Square,
   // uses: A(0),B(1),L(11),E(4),D(3),I(8),C(2)
-  let inscription = @types.new_inscription(
-    [
-      sym(Circle), sym(Triangle), sym(Lightning), sym(Star), gap(), sym(Diamond),
-      sym(Spiral), sym(Square), sym(Star), gap(), sym(Triangle), sym(Star),
-      sym(Circle), sym(Diamond),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (0, 0), (1, 1), (11, 11), (4, 4), (3, 3), (8, 8), (2, 2),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Circle),
+    sym(Triangle),
+    sym(Lightning),
+    sym(Star),
+    gap(),
+    sym(Diamond),
+    sym(Spiral),
+    sym(Square),
+    sym(Star),
+    gap(),
+    sym(Triangle),
+    sym(Star),
+    sym(Circle),
+    sym(Diamond),
+  ])
+  let solution = build_mapping([
+    (0, 0),
+    (1, 1),
+    (11, 11),
+    (4, 4),
+    (3, 3),
+    (8, 8),
+    (2, 2),
+  ])
   // 40% of 7 unique = 3 given
   let given = build_mapping([(0, 0), (4, 4), (3, 3)])
   {
@@ -58,16 +71,23 @@ fn tablet_01() -> @types.Tablet {
 fn tablet_02() -> @types.Tablet {
   // "FACE CAGE AGED" - 3 words
   // F=Cross, A=Circle, C=Square, E=Star, G=Arrow, D=Diamond
-  let inscription = @types.new_inscription(
-    [
-      sym(Cross), sym(Circle), sym(Square), sym(Star), gap(), sym(Square),
-      sym(Circle), sym(Arrow), sym(Star), gap(), sym(Circle), sym(Arrow),
-      sym(Star), sym(Diamond),
-    ],
-  )
-  let solution = build_mapping(
-    [(5, 5), (0, 0), (2, 2), (4, 4), (6, 6), (3, 3)],
-  )
+  let inscription = @types.new_inscription([
+    sym(Cross),
+    sym(Circle),
+    sym(Square),
+    sym(Star),
+    gap(),
+    sym(Square),
+    sym(Circle),
+    sym(Arrow),
+    sym(Star),
+    gap(),
+    sym(Circle),
+    sym(Arrow),
+    sym(Star),
+    sym(Diamond),
+  ])
+  let solution = build_mapping([(5, 5), (0, 0), (2, 2), (4, 4), (6, 6), (3, 3)])
   let given = build_mapping([(5, 5), (0, 0), (4, 4)])
   {
     inscription,
@@ -83,16 +103,30 @@ fn tablet_02() -> @types.Tablet {
 fn tablet_03() -> @types.Tablet {
   // "HIKE LIKE SILK" - 3 words
   // H=Wave, I=Spiral, K=Crescent, E=Star, L=Lightning, S=Tree
-  let inscription = @types.new_inscription(
-    [
-      sym(Wave), sym(Spiral), sym(Crescent), sym(Star), gap(), sym(Lightning),
-      sym(Spiral), sym(Crescent), sym(Star), gap(), sym(Tree), sym(Spiral),
-      sym(Lightning), sym(Crescent),
-    ],
-  )
-  let solution = build_mapping(
-    [(7, 7), (8, 8), (10, 10), (4, 4), (11, 11), (18, 18)],
-  )
+  let inscription = @types.new_inscription([
+    sym(Wave),
+    sym(Spiral),
+    sym(Crescent),
+    sym(Star),
+    gap(),
+    sym(Lightning),
+    sym(Spiral),
+    sym(Crescent),
+    sym(Star),
+    gap(),
+    sym(Tree),
+    sym(Spiral),
+    sym(Lightning),
+    sym(Crescent),
+  ])
+  let solution = build_mapping([
+    (7, 7),
+    (8, 8),
+    (10, 10),
+    (4, 4),
+    (11, 11),
+    (18, 18),
+  ])
   let given = build_mapping([(7, 7), (4, 4), (11, 11)])
   {
     inscription,
@@ -108,17 +142,36 @@ fn tablet_03() -> @types.Tablet {
 fn tablet_04() -> @types.Tablet {
   // "BOLD GOLD TOLD COLD" - 4 words
   // B=Triangle, O=Sun, L=Lightning, D=Diamond, G=Arrow, T=Flame, C=Square
-  let inscription = @types.new_inscription(
-    [
-      sym(Triangle), sym(Sun), sym(Lightning), sym(Diamond), gap(), sym(Arrow),
-      sym(Sun), sym(Lightning), sym(Diamond), gap(), sym(Flame), sym(Sun),
-      sym(Lightning), sym(Diamond), gap(), sym(Square), sym(Sun),
-      sym(Lightning), sym(Diamond),
-    ],
-  )
-  let solution = build_mapping(
-    [(1, 1), (14, 14), (11, 11), (3, 3), (6, 6), (19, 19), (2, 2)],
-  )
+  let inscription = @types.new_inscription([
+    sym(Triangle),
+    sym(Sun),
+    sym(Lightning),
+    sym(Diamond),
+    gap(),
+    sym(Arrow),
+    sym(Sun),
+    sym(Lightning),
+    sym(Diamond),
+    gap(),
+    sym(Flame),
+    sym(Sun),
+    sym(Lightning),
+    sym(Diamond),
+    gap(),
+    sym(Square),
+    sym(Sun),
+    sym(Lightning),
+    sym(Diamond),
+  ])
+  let solution = build_mapping([
+    (1, 1),
+    (14, 14),
+    (11, 11),
+    (3, 3),
+    (6, 6),
+    (19, 19),
+    (2, 2),
+  ])
   let given = build_mapping([(14, 14), (11, 11), (3, 3)])
   {
     inscription,
@@ -134,16 +187,23 @@ fn tablet_04() -> @types.Tablet {
 fn tablet_05() -> @types.Tablet {
   // "LIFE FIRE RIFE" - 3 words
   // L=Lightning, I=Spiral, F=Cross, E=Star, R=River
-  let inscription = @types.new_inscription(
-    [
-      sym(Lightning), sym(Spiral), sym(Cross), sym(Star), gap(), sym(Cross),
-      sym(Spiral), sym(River), sym(Star), gap(), sym(River), sym(Spiral),
-      sym(Cross), sym(Star),
-    ],
-  )
-  let solution = build_mapping(
-    [(11, 11), (8, 8), (5, 5), (4, 4), (17, 17)],
-  )
+  let inscription = @types.new_inscription([
+    sym(Lightning),
+    sym(Spiral),
+    sym(Cross),
+    sym(Star),
+    gap(),
+    sym(Cross),
+    sym(Spiral),
+    sym(River),
+    sym(Star),
+    gap(),
+    sym(River),
+    sym(Spiral),
+    sym(Cross),
+    sym(Star),
+  ])
+  let solution = build_mapping([(11, 11), (8, 8), (5, 5), (4, 4), (17, 17)])
   let given = build_mapping([(11, 11), (4, 4)])
   {
     inscription,
@@ -159,16 +219,30 @@ fn tablet_05() -> @types.Tablet {
 fn tablet_06() -> @types.Tablet {
   // "JADE FADE MADE" - 3 words
   // J=Dot, A=Circle, D=Diamond, E=Star, F=Cross, M=Eye
-  let inscription = @types.new_inscription(
-    [
-      sym(Dot), sym(Circle), sym(Diamond), sym(Star), gap(), sym(Cross),
-      sym(Circle), sym(Diamond), sym(Star), gap(), sym(Eye), sym(Circle),
-      sym(Diamond), sym(Star),
-    ],
-  )
-  let solution = build_mapping(
-    [(9, 9), (0, 0), (3, 3), (4, 4), (5, 5), (12, 12)],
-  )
+  let inscription = @types.new_inscription([
+    sym(Dot),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+    gap(),
+    sym(Cross),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+    gap(),
+    sym(Eye),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+  ])
+  let solution = build_mapping([
+    (9, 9),
+    (0, 0),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (12, 12),
+  ])
   let given = build_mapping([(0, 0), (3, 3), (4, 4)])
   {
     inscription,
@@ -184,17 +258,36 @@ fn tablet_06() -> @types.Tablet {
 fn tablet_07() -> @types.Tablet {
   // "KING SING RING DING" - 4 words
   // K=Crescent, I=Spiral, N=Hand, G=Arrow, S=Tree, R=River, D=Diamond
-  let inscription = @types.new_inscription(
-    [
-      sym(Crescent), sym(Spiral), sym(Hand), sym(Arrow), gap(), sym(Tree),
-      sym(Spiral), sym(Hand), sym(Arrow), gap(), sym(River), sym(Spiral),
-      sym(Hand), sym(Arrow), gap(), sym(Diamond), sym(Spiral), sym(Hand),
-      sym(Arrow),
-    ],
-  )
-  let solution = build_mapping(
-    [(10, 10), (8, 8), (13, 13), (6, 6), (18, 18), (17, 17), (3, 3)],
-  )
+  let inscription = @types.new_inscription([
+    sym(Crescent),
+    sym(Spiral),
+    sym(Hand),
+    sym(Arrow),
+    gap(),
+    sym(Tree),
+    sym(Spiral),
+    sym(Hand),
+    sym(Arrow),
+    gap(),
+    sym(River),
+    sym(Spiral),
+    sym(Hand),
+    sym(Arrow),
+    gap(),
+    sym(Diamond),
+    sym(Spiral),
+    sym(Hand),
+    sym(Arrow),
+  ])
+  let solution = build_mapping([
+    (10, 10),
+    (8, 8),
+    (13, 13),
+    (6, 6),
+    (18, 18),
+    (17, 17),
+    (3, 3),
+  ])
   let given = build_mapping([(8, 8), (13, 13), (6, 6)])
   {
     inscription,
@@ -214,20 +307,49 @@ fn tablet_08() -> @types.Tablet {
   // Let's do: "SAGE BONE MIST DARK HOPE" - 5 words
   // S=Tree, A=Circle, G=Arrow, E=Star, B=Triangle, O=Sun, N=Hand,
   // M=Eye, I=Spiral, T=Flame, D=Diamond, R=River, K=Crescent, H=Wave, P=MoonSym
-  let inscription = @types.new_inscription(
-    [
-      sym(Tree), sym(Circle), sym(Arrow), sym(Star), gap(), sym(Triangle),
-      sym(Sun), sym(Hand), sym(Star), gap(), sym(Eye), sym(Spiral), sym(Tree),
-      sym(Flame), gap(), sym(Diamond), sym(Circle), sym(River), sym(Crescent),
-      gap(), sym(Wave), sym(Sun), sym(MoonSym), sym(Star),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (18, 18), (0, 0), (6, 6), (4, 4), (1, 1), (14, 14), (13, 13), (12, 12),
-      (8, 8), (19, 19), (3, 3), (17, 17), (10, 10), (7, 7), (15, 15),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Tree),
+    sym(Circle),
+    sym(Arrow),
+    sym(Star),
+    gap(),
+    sym(Triangle),
+    sym(Sun),
+    sym(Hand),
+    sym(Star),
+    gap(),
+    sym(Eye),
+    sym(Spiral),
+    sym(Tree),
+    sym(Flame),
+    gap(),
+    sym(Diamond),
+    sym(Circle),
+    sym(River),
+    sym(Crescent),
+    gap(),
+    sym(Wave),
+    sym(Sun),
+    sym(MoonSym),
+    sym(Star),
+  ])
+  let solution = build_mapping([
+    (18, 18),
+    (0, 0),
+    (6, 6),
+    (4, 4),
+    (1, 1),
+    (14, 14),
+    (13, 13),
+    (12, 12),
+    (8, 8),
+    (19, 19),
+    (3, 3),
+    (17, 17),
+    (10, 10),
+    (7, 7),
+    (15, 15),
+  ])
   // 25% of 15 unique = 4 given
   let given = build_mapping([(0, 0), (4, 4), (14, 14), (19, 19)])
   {
@@ -247,21 +369,54 @@ fn tablet_09() -> @types.Tablet {
   // N=Hand, I=Spiral, G=Arrow, H=Wave, T=Flame
   // D=Diamond, R=River, M=Eye
   // O=Sun, S=Tree
-  let inscription = @types.new_inscription(
-    [
-      sym(Cross), sym(Circle), sym(Triangle), sym(Lightning), sym(Star), gap(),
-      sym(Hand), sym(Spiral), sym(Arrow), sym(Wave), sym(Flame), gap(),
-      sym(Diamond), sym(River), sym(Star), sym(Circle), sym(Eye), gap(),
-      sym(Arrow), sym(Wave), sym(Sun), sym(Tree), sym(Flame), gap(), sym(Tree),
-      sym(Wave), sym(Sun), sym(River), sym(Star),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (5, 5), (0, 0), (1, 1), (11, 11), (4, 4), (13, 13), (8, 8), (6, 6),
-      (7, 7), (19, 19), (3, 3), (17, 17), (12, 12), (14, 14), (18, 18),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Cross),
+    sym(Circle),
+    sym(Triangle),
+    sym(Lightning),
+    sym(Star),
+    gap(),
+    sym(Hand),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Wave),
+    sym(Flame),
+    gap(),
+    sym(Diamond),
+    sym(River),
+    sym(Star),
+    sym(Circle),
+    sym(Eye),
+    gap(),
+    sym(Arrow),
+    sym(Wave),
+    sym(Sun),
+    sym(Tree),
+    sym(Flame),
+    gap(),
+    sym(Tree),
+    sym(Wave),
+    sym(Sun),
+    sym(River),
+    sym(Star),
+  ])
+  let solution = build_mapping([
+    (5, 5),
+    (0, 0),
+    (1, 1),
+    (11, 11),
+    (4, 4),
+    (13, 13),
+    (8, 8),
+    (6, 6),
+    (7, 7),
+    (19, 19),
+    (3, 3),
+    (17, 17),
+    (12, 12),
+    (14, 14),
+    (18, 18),
+  ])
   let given = build_mapping([(0, 0), (4, 4), (7, 7), (18, 18)])
   {
     inscription,
@@ -280,21 +435,54 @@ fn tablet_10() -> @types.Tablet {
   // F=Cross, O=Sun, R=River, G=Arrow
   // S=Tree, M=Eye, I=Spiral, T=Flame, H=Wave
   // C=Square, K=Crescent (not used)
-  let inscription = @types.new_inscription(
-    [
-      sym(Triangle), sym(Lightning), sym(Circle), sym(Diamond), sym(Star), gap(),
-      sym(Cross), sym(Sun), sym(River), sym(Arrow), sym(Star), gap(), sym(Tree),
-      sym(Eye), sym(Spiral), sym(Flame), sym(Wave), gap(), sym(Square),
-      sym(River), sym(Circle), sym(Cross), sym(Flame), gap(), sym(Tree),
-      sym(Flame), sym(Star), sym(Star), sym(Lightning),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (1, 1), (11, 11), (0, 0), (3, 3), (4, 4), (5, 5), (14, 14), (17, 17),
-      (6, 6), (18, 18), (12, 12), (8, 8), (19, 19), (7, 7), (2, 2),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Triangle),
+    sym(Lightning),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+    gap(),
+    sym(Cross),
+    sym(Sun),
+    sym(River),
+    sym(Arrow),
+    sym(Star),
+    gap(),
+    sym(Tree),
+    sym(Eye),
+    sym(Spiral),
+    sym(Flame),
+    sym(Wave),
+    gap(),
+    sym(Square),
+    sym(River),
+    sym(Circle),
+    sym(Cross),
+    sym(Flame),
+    gap(),
+    sym(Tree),
+    sym(Flame),
+    sym(Star),
+    sym(Star),
+    sym(Lightning),
+  ])
+  let solution = build_mapping([
+    (1, 1),
+    (11, 11),
+    (0, 0),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (14, 14),
+    (17, 17),
+    (6, 6),
+    (18, 18),
+    (12, 12),
+    (8, 8),
+    (19, 19),
+    (7, 7),
+    (2, 2),
+  ])
   let given = build_mapping([(1, 1), (4, 4), (17, 17), (19, 19)])
   {
     inscription,
@@ -313,21 +501,54 @@ fn tablet_11() -> @types.Tablet {
   // S=Tree, T=Flame, O=Sun, N=Hand
   // I=Spiral, G=Arrow, H=Wave
   // B=Triangle, R=River, D=Diamond
-  let inscription = @types.new_inscription(
-    [
-      sym(Cross), sym(Lightning), sym(Circle), sym(Eye), sym(Star), gap(),
-      sym(Tree), sym(Flame), sym(Sun), sym(Hand), sym(Star), gap(),
-      sym(Lightning), sym(Spiral), sym(Arrow), sym(Wave), sym(Flame), gap(),
-      sym(Star), sym(Eye), sym(Triangle), sym(Star), sym(River), gap(),
-      sym(Arrow), sym(Lightning), sym(Circle), sym(Diamond), sym(Star),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (5, 5), (11, 11), (0, 0), (12, 12), (4, 4), (18, 18), (19, 19),
-      (14, 14), (13, 13), (8, 8), (6, 6), (7, 7), (1, 1), (17, 17), (3, 3),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Cross),
+    sym(Lightning),
+    sym(Circle),
+    sym(Eye),
+    sym(Star),
+    gap(),
+    sym(Tree),
+    sym(Flame),
+    sym(Sun),
+    sym(Hand),
+    sym(Star),
+    gap(),
+    sym(Lightning),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Wave),
+    sym(Flame),
+    gap(),
+    sym(Star),
+    sym(Eye),
+    sym(Triangle),
+    sym(Star),
+    sym(River),
+    gap(),
+    sym(Arrow),
+    sym(Lightning),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+  ])
+  let solution = build_mapping([
+    (5, 5),
+    (11, 11),
+    (0, 0),
+    (12, 12),
+    (4, 4),
+    (18, 18),
+    (19, 19),
+    (14, 14),
+    (13, 13),
+    (8, 8),
+    (6, 6),
+    (7, 7),
+    (1, 1),
+    (17, 17),
+    (3, 3),
+  ])
   let given = build_mapping([(11, 11), (4, 4), (14, 14), (19, 19)])
   {
     inscription,
@@ -348,22 +569,61 @@ fn tablet_12() -> @types.Tablet {
   // T=Flame, H=Wave, R=River, O=Sun, N=Hand, E=Star
   // B=Triangle, L=Lightning, C=Square, A=Circle, M=Eye
   // F=Cross, I=Spiral, G=Arrow, S=Tree
-  let inscription = @types.new_inscription(
-    [
-      sym(Flame), sym(Wave), sym(River), sym(Sun), sym(Hand), sym(Star), gap(),
-      sym(Hand), sym(Sun), sym(Triangle), sym(Lightning), sym(Star), gap(),
-      sym(Square), sym(Wave), sym(Circle), sym(River), sym(Eye), gap(),
-      sym(Cross), sym(Circle), sym(Spiral), sym(Flame), sym(Wave), gap(),
-      sym(Arrow), sym(River), sym(Circle), sym(Square), sym(Star), gap(),
-      sym(Tree), sym(Flame), sym(Sun), sym(Hand), sym(Star),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (19, 19), (7, 7), (17, 17), (14, 14), (13, 13), (4, 4), (1, 1),
-      (11, 11), (2, 2), (0, 0), (12, 12), (5, 5), (8, 8), (6, 6), (18, 18),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Flame),
+    sym(Wave),
+    sym(River),
+    sym(Sun),
+    sym(Hand),
+    sym(Star),
+    gap(),
+    sym(Hand),
+    sym(Sun),
+    sym(Triangle),
+    sym(Lightning),
+    sym(Star),
+    gap(),
+    sym(Square),
+    sym(Wave),
+    sym(Circle),
+    sym(River),
+    sym(Eye),
+    gap(),
+    sym(Cross),
+    sym(Circle),
+    sym(Spiral),
+    sym(Flame),
+    sym(Wave),
+    gap(),
+    sym(Arrow),
+    sym(River),
+    sym(Circle),
+    sym(Square),
+    sym(Star),
+    gap(),
+    sym(Tree),
+    sym(Flame),
+    sym(Sun),
+    sym(Hand),
+    sym(Star),
+  ])
+  let solution = build_mapping([
+    (19, 19),
+    (7, 7),
+    (17, 17),
+    (14, 14),
+    (13, 13),
+    (4, 4),
+    (1, 1),
+    (11, 11),
+    (2, 2),
+    (0, 0),
+    (12, 12),
+    (5, 5),
+    (8, 8),
+    (6, 6),
+    (18, 18),
+  ])
   // 25% of 15 = 4 given
   let given = build_mapping([(4, 4), (14, 14), (7, 7), (19, 19)])
   {
@@ -385,21 +645,53 @@ fn tablet_13() -> @types.Tablet {
   // B=Triangle, E=Star, H=Wave
   // D=Diamond, I=Spiral, F=Cross, T=Flame
   // M=Eye, S=Tree
-  let inscription = @types.new_inscription(
-    [
-      sym(Square), sym(Sun), sym(River), sym(Circle), sym(Lightning), gap(),
-      sym(Triangle), sym(Star), sym(Circle), sym(Square), sym(Wave), gap(),
-      sym(Diamond), sym(River), sym(Spiral), sym(Cross), sym(Flame), gap(),
-      sym(Circle), sym(Eye), sym(Triangle), sym(Star), sym(River), gap(),
-      sym(Tree), sym(Wave), sym(Star), sym(Lightning), sym(Lightning),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (2, 2), (14, 14), (17, 17), (0, 0), (11, 11), (1, 1), (4, 4), (7, 7),
-      (3, 3), (8, 8), (5, 5), (19, 19), (12, 12), (18, 18),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Square),
+    sym(Sun),
+    sym(River),
+    sym(Circle),
+    sym(Lightning),
+    gap(),
+    sym(Triangle),
+    sym(Star),
+    sym(Circle),
+    sym(Square),
+    sym(Wave),
+    gap(),
+    sym(Diamond),
+    sym(River),
+    sym(Spiral),
+    sym(Cross),
+    sym(Flame),
+    gap(),
+    sym(Circle),
+    sym(Eye),
+    sym(Triangle),
+    sym(Star),
+    sym(River),
+    gap(),
+    sym(Tree),
+    sym(Wave),
+    sym(Star),
+    sym(Lightning),
+    sym(Lightning),
+  ])
+  let solution = build_mapping([
+    (2, 2),
+    (14, 14),
+    (17, 17),
+    (0, 0),
+    (11, 11),
+    (1, 1),
+    (4, 4),
+    (7, 7),
+    (3, 3),
+    (8, 8),
+    (5, 5),
+    (19, 19),
+    (12, 12),
+    (18, 18),
+  ])
   let given = build_mapping([(0, 0), (4, 4), (14, 14), (17, 17)])
   {
     inscription,
@@ -419,22 +711,60 @@ fn tablet_14() -> @types.Tablet {
   // E=Star, I=Spiral, G=Arrow, N=Hand
   // B=Triangle, L=Lightning, A=Circle, D=Diamond
   // F=Cross, H=Wave
-  let inscription = @types.new_inscription(
-    [
-      sym(Tree), sym(Flame), sym(Sun), sym(River), sym(Eye), gap(), sym(River),
-      sym(Star), sym(Spiral), sym(Arrow), sym(Hand), gap(), sym(Triangle),
-      sym(Lightning), sym(Circle), sym(Diamond), sym(Star), gap(), sym(Cross),
-      sym(River), sym(Sun), sym(Tree), sym(Flame), gap(), sym(Hand), sym(Spiral),
-      sym(Arrow), sym(Wave), sym(Flame), gap(), sym(Arrow), sym(Lightning),
-      sym(Star), sym(Circle), sym(Eye),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (18, 18), (19, 19), (14, 14), (17, 17), (12, 12), (4, 4), (8, 8),
-      (6, 6), (13, 13), (1, 1), (11, 11), (0, 0), (3, 3), (5, 5), (7, 7),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Tree),
+    sym(Flame),
+    sym(Sun),
+    sym(River),
+    sym(Eye),
+    gap(),
+    sym(River),
+    sym(Star),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Hand),
+    gap(),
+    sym(Triangle),
+    sym(Lightning),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+    gap(),
+    sym(Cross),
+    sym(River),
+    sym(Sun),
+    sym(Tree),
+    sym(Flame),
+    gap(),
+    sym(Hand),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Wave),
+    sym(Flame),
+    gap(),
+    sym(Arrow),
+    sym(Lightning),
+    sym(Star),
+    sym(Circle),
+    sym(Eye),
+  ])
+  let solution = build_mapping([
+    (18, 18),
+    (19, 19),
+    (14, 14),
+    (17, 17),
+    (12, 12),
+    (4, 4),
+    (8, 8),
+    (6, 6),
+    (13, 13),
+    (1, 1),
+    (11, 11),
+    (0, 0),
+    (3, 3),
+    (5, 5),
+    (7, 7),
+  ])
   // 25% of 15 = 4 given
   let given = build_mapping([(4, 4), (14, 14), (17, 17), (19, 19)])
   {
@@ -458,23 +788,67 @@ fn tablet_15() -> @types.Tablet {
   // D=Diamond, I=Spiral, F=Cross, T=Flame
   // C=Square, A=Circle, L=Lightning
   // M=Eye, B=Triangle, N=Hand, G=Arrow
-  let inscription = @types.new_inscription(
-    [
-      sym(Tree), sym(Wave), sym(Sun), sym(River), sym(Star), gap(), sym(Diamond),
-      sym(River), sym(Spiral), sym(Cross), sym(Flame), gap(), sym(Square),
-      sym(Sun), sym(River), sym(Circle), sym(Lightning), gap(), sym(Circle),
-      sym(Eye), sym(Triangle), sym(Star), sym(River), gap(), sym(Cross),
-      sym(Lightning), sym(Circle), sym(Eye), sym(Star), gap(), sym(Tree),
-      sym(Flame), sym(Sun), sym(Hand), sym(Star), gap(), sym(Lightning),
-      sym(Spiral), sym(Arrow), sym(Wave), sym(Flame),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (18, 18), (7, 7), (14, 14), (17, 17), (4, 4), (3, 3), (8, 8), (5, 5),
-      (19, 19), (2, 2), (0, 0), (11, 11), (12, 12), (1, 1), (13, 13), (6, 6),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Tree),
+    sym(Wave),
+    sym(Sun),
+    sym(River),
+    sym(Star),
+    gap(),
+    sym(Diamond),
+    sym(River),
+    sym(Spiral),
+    sym(Cross),
+    sym(Flame),
+    gap(),
+    sym(Square),
+    sym(Sun),
+    sym(River),
+    sym(Circle),
+    sym(Lightning),
+    gap(),
+    sym(Circle),
+    sym(Eye),
+    sym(Triangle),
+    sym(Star),
+    sym(River),
+    gap(),
+    sym(Cross),
+    sym(Lightning),
+    sym(Circle),
+    sym(Eye),
+    sym(Star),
+    gap(),
+    sym(Tree),
+    sym(Flame),
+    sym(Sun),
+    sym(Hand),
+    sym(Star),
+    gap(),
+    sym(Lightning),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Wave),
+    sym(Flame),
+  ])
+  let solution = build_mapping([
+    (18, 18),
+    (7, 7),
+    (14, 14),
+    (17, 17),
+    (4, 4),
+    (3, 3),
+    (8, 8),
+    (5, 5),
+    (19, 19),
+    (2, 2),
+    (0, 0),
+    (11, 11),
+    (12, 12),
+    (1, 1),
+    (13, 13),
+    (6, 6),
+  ])
   // 15% of 16 = 2-3 given
   let given = build_mapping([(4, 4), (14, 14), (17, 17)])
   {
@@ -495,24 +869,68 @@ fn tablet_16() -> @types.Tablet {
   // F=Cross, A=Circle, L=Lightning, C=Square, O=Sun, N=Hand
   // G=Arrow, R=River, I=Spiral, T=Flame
   // S=Tree, M=Eye, B=Triangle, D=Diamond, E=Star, H=Wave
-  let inscription = @types.new_inscription(
-    [
-      sym(Cross), sym(Circle), sym(Lightning), sym(Square), sym(Sun),
-      sym(Hand), gap(), sym(Arrow), sym(River), sym(Circle), sym(Spiral),
-      sym(Lightning), gap(), sym(Tree), sym(Flame), sym(Sun), sym(River),
-      sym(Eye), gap(), sym(Triangle), sym(Lightning), sym(Circle), sym(Diamond),
-      sym(Star), gap(), sym(Hand), sym(Spiral), sym(Arrow), sym(Wave),
-      sym(Flame), gap(), sym(Cross), sym(Sun), sym(River), sym(Arrow),
-      sym(Star), gap(), sym(Square), sym(River), sym(Star), sym(Tree),
-      sym(Flame),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (5, 5), (0, 0), (11, 11), (2, 2), (14, 14), (13, 13), (6, 6), (17, 17),
-      (8, 8), (19, 19), (18, 18), (12, 12), (1, 1), (3, 3), (4, 4), (7, 7),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Cross),
+    sym(Circle),
+    sym(Lightning),
+    sym(Square),
+    sym(Sun),
+    sym(Hand),
+    gap(),
+    sym(Arrow),
+    sym(River),
+    sym(Circle),
+    sym(Spiral),
+    sym(Lightning),
+    gap(),
+    sym(Tree),
+    sym(Flame),
+    sym(Sun),
+    sym(River),
+    sym(Eye),
+    gap(),
+    sym(Triangle),
+    sym(Lightning),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+    gap(),
+    sym(Hand),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Wave),
+    sym(Flame),
+    gap(),
+    sym(Cross),
+    sym(Sun),
+    sym(River),
+    sym(Arrow),
+    sym(Star),
+    gap(),
+    sym(Square),
+    sym(River),
+    sym(Star),
+    sym(Tree),
+    sym(Flame),
+  ])
+  let solution = build_mapping([
+    (5, 5),
+    (0, 0),
+    (11, 11),
+    (2, 2),
+    (14, 14),
+    (13, 13),
+    (6, 6),
+    (17, 17),
+    (8, 8),
+    (19, 19),
+    (18, 18),
+    (12, 12),
+    (1, 1),
+    (3, 3),
+    (4, 4),
+    (7, 7),
+  ])
   let given = build_mapping([(4, 4), (14, 14)])
   {
     inscription,
@@ -535,24 +953,67 @@ fn tablet_17() -> @types.Tablet {
   // C=Square, R=River, G=Arrow
   // F=Cross, D=Diamond, P=MoonSym, H=Wave (not used in these words)
   // Actually: PLOT uses P,L,O,T
-  let inscription = @types.new_inscription(
-    [
-      sym(Eye), sym(Spiral), sym(Tree), sym(Flame), gap(), sym(Triangle),
-      sym(Sun), sym(Hand), sym(Star), gap(), sym(Lightning), sym(Circle),
-      sym(Crescent), sym(Star), gap(), sym(Square), sym(River), sym(Circle),
-      sym(Arrow), gap(), sym(Cross), sym(Star), sym(River), sym(Hand), gap(),
-      sym(Tree), sym(Spiral), sym(Lightning), sym(Crescent), gap(), sym(Dot),
-      sym(Circle), sym(Diamond), sym(Star), gap(), sym(MoonSym), sym(Lightning),
-      sym(Sun), sym(Flame),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (12, 12), (8, 8), (18, 18), (19, 19), (1, 1), (14, 14), (13, 13),
-      (4, 4), (11, 11), (0, 0), (10, 10), (2, 2), (17, 17), (6, 6), (5, 5),
-      (3, 3), (9, 9), (15, 15),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Eye),
+    sym(Spiral),
+    sym(Tree),
+    sym(Flame),
+    gap(),
+    sym(Triangle),
+    sym(Sun),
+    sym(Hand),
+    sym(Star),
+    gap(),
+    sym(Lightning),
+    sym(Circle),
+    sym(Crescent),
+    sym(Star),
+    gap(),
+    sym(Square),
+    sym(River),
+    sym(Circle),
+    sym(Arrow),
+    gap(),
+    sym(Cross),
+    sym(Star),
+    sym(River),
+    sym(Hand),
+    gap(),
+    sym(Tree),
+    sym(Spiral),
+    sym(Lightning),
+    sym(Crescent),
+    gap(),
+    sym(Dot),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+    gap(),
+    sym(MoonSym),
+    sym(Lightning),
+    sym(Sun),
+    sym(Flame),
+  ])
+  let solution = build_mapping([
+    (12, 12),
+    (8, 8),
+    (18, 18),
+    (19, 19),
+    (1, 1),
+    (14, 14),
+    (13, 13),
+    (4, 4),
+    (11, 11),
+    (0, 0),
+    (10, 10),
+    (2, 2),
+    (17, 17),
+    (6, 6),
+    (5, 5),
+    (3, 3),
+    (9, 9),
+    (15, 15),
+  ])
   // 15% of 18 = 3 given
   let given = build_mapping([(4, 4), (14, 14), (18, 18)])
   {
@@ -572,23 +1033,67 @@ fn tablet_18() -> @types.Tablet {
   // F=Cross, R=River, O=Sun, S=Tree, T=Flame
   // G=Arrow, M=Eye, H=Wave, I=Spiral, N=Hand
   // C=Square
-  let inscription = @types.new_inscription(
-    [
-      sym(Triangle), sym(Lightning), sym(Circle), sym(Diamond), sym(Star), gap(),
-      sym(Cross), sym(River), sym(Sun), sym(Tree), sym(Flame), gap(), sym(Arrow),
-      sym(Lightning), sym(Star), sym(Circle), sym(Eye), gap(), sym(Tree),
-      sym(Wave), sym(Spiral), sym(Hand), sym(Star), gap(), sym(Square),
-      sym(Sun), sym(River), sym(Circle), sym(Lightning), gap(), sym(Diamond),
-      sym(River), sym(Spiral), sym(Cross), sym(Flame), gap(), sym(Hand),
-      sym(Spiral), sym(Arrow), sym(Wave), sym(Flame),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (1, 1), (11, 11), (0, 0), (3, 3), (4, 4), (5, 5), (17, 17), (14, 14),
-      (18, 18), (19, 19), (6, 6), (12, 12), (7, 7), (8, 8), (13, 13), (2, 2),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Triangle),
+    sym(Lightning),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+    gap(),
+    sym(Cross),
+    sym(River),
+    sym(Sun),
+    sym(Tree),
+    sym(Flame),
+    gap(),
+    sym(Arrow),
+    sym(Lightning),
+    sym(Star),
+    sym(Circle),
+    sym(Eye),
+    gap(),
+    sym(Tree),
+    sym(Wave),
+    sym(Spiral),
+    sym(Hand),
+    sym(Star),
+    gap(),
+    sym(Square),
+    sym(Sun),
+    sym(River),
+    sym(Circle),
+    sym(Lightning),
+    gap(),
+    sym(Diamond),
+    sym(River),
+    sym(Spiral),
+    sym(Cross),
+    sym(Flame),
+    gap(),
+    sym(Hand),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Wave),
+    sym(Flame),
+  ])
+  let solution = build_mapping([
+    (1, 1),
+    (11, 11),
+    (0, 0),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (17, 17),
+    (14, 14),
+    (18, 18),
+    (19, 19),
+    (6, 6),
+    (12, 12),
+    (7, 7),
+    (8, 8),
+    (13, 13),
+    (2, 2),
+  ])
   let given = build_mapping([(4, 4), (14, 14)])
   {
     inscription,
@@ -608,24 +1113,73 @@ fn tablet_19() -> @types.Tablet {
   // C=Square, S=Tree, T=Flame
   // I=Spiral, H=Wave, M=Eye
   // A=Circle, D=Diamond
-  let inscription = @types.new_inscription(
-    [
-      sym(Hand), sym(Sun), sym(Triangle), sym(Lightning), sym(Star), gap(),
-      sym(Cross), sym(Sun), sym(River), sym(Arrow), sym(Star), gap(),
-      sym(Square), sym(River), sym(Star), sym(Tree), sym(Flame), gap(),
-      sym(Lightning), sym(Spiral), sym(Arrow), sym(Wave), sym(Flame), gap(),
-      sym(Tree), sym(Flame), sym(Sun), sym(River), sym(Eye), gap(),
-      sym(Triangle), sym(Lightning), sym(Circle), sym(Diamond), sym(Star), gap(),
-      sym(River), sym(Star), sym(Spiral), sym(Arrow), sym(Hand), gap(),
-      sym(Arrow), sym(Wave), sym(Sun), sym(Tree), sym(Flame),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (13, 13), (14, 14), (1, 1), (11, 11), (4, 4), (5, 5), (17, 17), (6, 6),
-      (2, 2), (18, 18), (19, 19), (8, 8), (7, 7), (12, 12), (0, 0), (3, 3),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Hand),
+    sym(Sun),
+    sym(Triangle),
+    sym(Lightning),
+    sym(Star),
+    gap(),
+    sym(Cross),
+    sym(Sun),
+    sym(River),
+    sym(Arrow),
+    sym(Star),
+    gap(),
+    sym(Square),
+    sym(River),
+    sym(Star),
+    sym(Tree),
+    sym(Flame),
+    gap(),
+    sym(Lightning),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Wave),
+    sym(Flame),
+    gap(),
+    sym(Tree),
+    sym(Flame),
+    sym(Sun),
+    sym(River),
+    sym(Eye),
+    gap(),
+    sym(Triangle),
+    sym(Lightning),
+    sym(Circle),
+    sym(Diamond),
+    sym(Star),
+    gap(),
+    sym(River),
+    sym(Star),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Hand),
+    gap(),
+    sym(Arrow),
+    sym(Wave),
+    sym(Sun),
+    sym(Tree),
+    sym(Flame),
+  ])
+  let solution = build_mapping([
+    (13, 13),
+    (14, 14),
+    (1, 1),
+    (11, 11),
+    (4, 4),
+    (5, 5),
+    (17, 17),
+    (6, 6),
+    (2, 2),
+    (18, 18),
+    (19, 19),
+    (8, 8),
+    (7, 7),
+    (12, 12),
+    (0, 0),
+    (3, 3),
+  ])
   // 15% of 16 = 2-3 given
   let given = build_mapping([(4, 4), (14, 14), (19, 19)])
   {
@@ -648,25 +1202,74 @@ fn tablet_20() -> @types.Tablet {
   // C=Square, A=Circle, K=Crescent
   // L=Lightning, G=Arrow, H=Wave
   // D=Diamond, M=Eye, B=Triangle
-  let inscription = @types.new_inscription(
-    [
-      sym(Cross), sym(Spiral), sym(River), sym(Tree), sym(Flame), gap(),
-      sym(Tree), sym(Flame), sym(Sun), sym(Hand), sym(Star), gap(), sym(Square),
-      sym(River), sym(Circle), sym(Square), sym(Crescent), gap(),
-      sym(Lightning), sym(Spiral), sym(Arrow), sym(Wave), sym(Flame), gap(),
-      sym(Diamond), sym(River), sym(Spiral), sym(Cross), sym(Flame), gap(),
-      sym(Circle), sym(Eye), sym(Triangle), sym(Star), sym(River), gap(),
-      sym(Cross), sym(Sun), sym(River), sym(Arrow), sym(Star), gap(),
-      sym(Triangle), sym(Lightning), sym(Star), sym(Hand), sym(Diamond),
-    ],
-  )
-  let solution = build_mapping(
-    [
-      (5, 5), (8, 8), (17, 17), (18, 18), (19, 19), (14, 14), (13, 13),
-      (4, 4), (2, 2), (0, 0), (10, 10), (11, 11), (6, 6), (7, 7), (3, 3),
-      (12, 12), (1, 1),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    sym(Cross),
+    sym(Spiral),
+    sym(River),
+    sym(Tree),
+    sym(Flame),
+    gap(),
+    sym(Tree),
+    sym(Flame),
+    sym(Sun),
+    sym(Hand),
+    sym(Star),
+    gap(),
+    sym(Square),
+    sym(River),
+    sym(Circle),
+    sym(Square),
+    sym(Crescent),
+    gap(),
+    sym(Lightning),
+    sym(Spiral),
+    sym(Arrow),
+    sym(Wave),
+    sym(Flame),
+    gap(),
+    sym(Diamond),
+    sym(River),
+    sym(Spiral),
+    sym(Cross),
+    sym(Flame),
+    gap(),
+    sym(Circle),
+    sym(Eye),
+    sym(Triangle),
+    sym(Star),
+    sym(River),
+    gap(),
+    sym(Cross),
+    sym(Sun),
+    sym(River),
+    sym(Arrow),
+    sym(Star),
+    gap(),
+    sym(Triangle),
+    sym(Lightning),
+    sym(Star),
+    sym(Hand),
+    sym(Diamond),
+  ])
+  let solution = build_mapping([
+    (5, 5),
+    (8, 8),
+    (17, 17),
+    (18, 18),
+    (19, 19),
+    (14, 14),
+    (13, 13),
+    (4, 4),
+    (2, 2),
+    (0, 0),
+    (10, 10),
+    (11, 11),
+    (6, 6),
+    (7, 7),
+    (3, 3),
+    (12, 12),
+    (1, 1),
+  ])
   // 15% of 17 = 2-3 given
   let given = build_mapping([(4, 4), (14, 14)])
   {

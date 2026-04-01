@@ -38,25 +38,22 @@ pub fn tile_at(grid : Array[Array[TileKind]], pos : Vec2i) -> TileKind {
 }
 
 ///|
-pub fn is_walkable(
-  tile : TileKind,
-  door_states : Array[Bool]
-) -> Bool {
+pub fn is_walkable(tile : TileKind, door_states : Array[Bool]) -> Bool {
   match tile {
     Wall => false
-    Door(id) => if id >= 0 && id < door_states.length() { door_states[id] } else { false }
+    Door(id) =>
+      if id >= 0 && id < door_states.length() {
+        door_states[id]
+      } else {
+        false
+      }
     _ => true
   }
 }
 
 ///|
 pub fn new_character(pos : Vec2i) -> Character {
-  {
-    pos,
-    on_anchor: false,
-    reached_exit: false,
-    alive: true,
-  }
+  { pos, on_anchor: false, reached_exit: false, alive: true }
 }
 
 ///|
@@ -74,7 +71,9 @@ pub fn make_snapshot(game : Game) -> Snapshot {
   for i in 0..<game.floor_gems_collected.length() {
     fg.push(game.floor_gems_collected[i])
   }
-  let cg : Array[Bool] = Array::new(capacity=game.ceiling_gems_collected.length())
+  let cg : Array[Bool] = Array::new(
+    capacity=game.ceiling_gems_collected.length(),
+  )
   for i in 0..<game.ceiling_gems_collected.length() {
     cg.push(game.ceiling_gems_collected[i])
   }
@@ -170,7 +169,7 @@ pub fn init_level(game : Game, level : Level) -> Unit {
 ///|
 pub fn all_floor_gems_collected(game : Game) -> Bool {
   for i in 0..<game.floor_gems_collected.length() {
-    if !(game.floor_gems_collected[i]) {
+    if !game.floor_gems_collected[i] {
       return false
     }
   }
@@ -180,7 +179,7 @@ pub fn all_floor_gems_collected(game : Game) -> Bool {
 ///|
 pub fn all_ceiling_gems_collected(game : Game) -> Bool {
   for i in 0..<game.ceiling_gems_collected.length() {
-    if !(game.ceiling_gems_collected[i]) {
+    if !game.ceiling_gems_collected[i] {
       return false
     }
   }

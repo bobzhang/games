@@ -34,8 +34,7 @@ pub fn draw_title(game : @types.Game) -> Unit {
   )
   // How to play hints
   let hints = [
-    "Click cells in TOP, FRONT, or SIDE views to toggle voxels",
-    "Match all 3 target silhouettes to complete each puzzle",
+    "Click cells in TOP, FRONT, or SIDE views to toggle voxels", "Match all 3 target silhouettes to complete each puzzle",
     "30 levels across 3 tiers of increasing difficulty",
   ]
   for i in 0..<hints.length() {
@@ -107,7 +106,11 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
     let name = @types.tier_name(tier)
     // Card background
     let hovered = mx >= cx && mx < cx + card_w && my >= cy && my < cy + card_h
-    let bg = if hovered { @types.color_button_hover } else { @types.color_button }
+    let bg = if hovered {
+      @types.color_button_hover
+    } else {
+      @types.color_button
+    }
     @raylib.draw_rectangle(cx, cy, card_w, card_h, bg)
     @raylib.draw_rectangle_lines(cx, cy, card_w, card_h, tier_col)
     if hovered {
@@ -115,7 +118,13 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
     }
     // Tier number badge
     let badge_text = "TIER " + (tier + 1).to_string()
-    @draw.draw_text(badge_text, cx + 15, cy + 12, 14, @raylib.Color::new(150, 150, 180, 255))
+    @draw.draw_text(
+      badge_text,
+      cx + 15,
+      cy + 12,
+      14,
+      @raylib.Color::new(150, 150, 180, 255),
+    )
     // Tier name
     let nw = @draw.measure_text(name, 28)
     @draw.draw_text(name, cx + (card_w - nw) / 2, cy + 35, 28, tier_col)
@@ -160,10 +169,22 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
     )
     // Constraint icons
     if tier >= 1 {
-      @draw.draw_text("Budget limit", cx + 20, cy + 165, 14, @raylib.Color::new(255, 200, 80, 255))
+      @draw.draw_text(
+        "Budget limit",
+        cx + 20,
+        cy + 165,
+        14,
+        @raylib.Color::new(255, 200, 80, 255),
+      )
     }
     if tier >= 2 {
-      @draw.draw_text("Connected required", cx + 20, cy + 185, 14, @raylib.Color::new(200, 100, 255, 255))
+      @draw.draw_text(
+        "Connected required",
+        cx + 20,
+        cy + 185,
+        14,
+        @raylib.Color::new(200, 100, 255, 255),
+      )
     }
     // Star count for tier
     let mut total_stars = 0
@@ -176,7 +197,8 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
       }
     }
     // Progress bar
-    let progress_f : Float = Float::from_int(completed) / Float::from_int(@types.levels_per_tier)
+    let progress_f : Float = Float::from_int(completed) /
+      Float::from_int(@types.levels_per_tier)
     draw_progress_bar(
       cx + 20,
       cy + 220,
@@ -236,13 +258,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
   // Header
   let header = "TIER " + (tier + 1).to_string() + ": " + tier_name_str
   let hw = @draw.measure_text(header, 32)
-  @draw.draw_text(
-    header,
-    (@types.screen_width - hw) / 2,
-    30,
-    32,
-    tier_col,
-  )
+  @draw.draw_text(header, (@types.screen_width - hw) / 2, 30, 32, tier_col)
   // Tier total progress
   let mut tier_stars = 0
   let mut tier_complete = 0
@@ -291,7 +307,11 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     if hovered {
       hovered_idx = idx
     }
-    let bg = if hovered { @types.color_button_hover } else { @types.color_button }
+    let bg = if hovered {
+      @types.color_button_hover
+    } else {
+      @types.color_button
+    }
     @raylib.draw_rectangle(bx, by, btn_w, btn_h, bg)
     // Border color based on completion
     let border_col = if score.completed {
@@ -302,13 +322,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     @raylib.draw_rectangle_lines(bx, by, btn_w, btn_h, border_col)
     if score.completed {
       // Checkmark in corner
-      @draw.draw_text(
-        "OK",
-        bx + btn_w - 30,
-        by + 5,
-        12,
-        @types.color_matched,
-      )
+      @draw.draw_text("OK", bx + btn_w - 30, by + 5, 12, @types.color_matched)
     }
     // Level number
     let num_text = (i + 1).to_string()
@@ -332,7 +346,13 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     let mut cy = by + 58
     if level.voxel_budget > 0 {
       let budget_text = "Budget: " + level.voxel_budget.to_string()
-      @draw.draw_text(budget_text, bx + 10, cy, 12, @raylib.Color::new(255, 200, 80, 200))
+      @draw.draw_text(
+        budget_text,
+        bx + 10,
+        cy,
+        12,
+        @raylib.Color::new(255, 200, 80, 200),
+      )
       cy += 16
     }
     if level.requires_connected {
@@ -460,10 +480,7 @@ pub fn draw_results(game : @types.Game) -> Unit {
     @types.color_complete,
   )
   // Level name
-  let name_text = "Level " +
-    (idx + 1).to_string() +
-    ": " +
-    level.name
+  let name_text = "Level " + (idx + 1).to_string() + ": " + level.name
   let nw = @draw.measure_text(name_text, 22)
   @draw.draw_text(
     name_text,
@@ -506,7 +523,13 @@ pub fn draw_results(game : @types.Game) -> Unit {
   let mut sy = card_y + 185
   // Moves comparison
   let move_label = "Moves:"
-  @draw.draw_text(move_label, stats_x, sy, 18, @raylib.Color::new(150, 160, 180, 255))
+  @draw.draw_text(
+    move_label,
+    stats_x,
+    sy,
+    18,
+    @raylib.Color::new(150, 160, 180, 255),
+  )
   let move_val = game.moves.to_string()
   let move_col = if game.moves <= level.par_moves {
     @types.color_matched
@@ -515,11 +538,23 @@ pub fn draw_results(game : @types.Game) -> Unit {
   }
   @draw.draw_text(move_val, stats_x + 100, sy, 20, move_col)
   let par_text = "(par: " + level.par_moves.to_string() + ")"
-  @draw.draw_text(par_text, stats_x + 150, sy, 16, @raylib.Color::new(130, 140, 160, 255))
+  @draw.draw_text(
+    par_text,
+    stats_x + 150,
+    sy,
+    16,
+    @raylib.Color::new(130, 140, 160, 255),
+  )
   sy += 30
   // Voxels comparison
   let filled = @voxel.count_filled(game.grid)
-  @draw.draw_text("Voxels:", stats_x, sy, 18, @raylib.Color::new(150, 160, 180, 255))
+  @draw.draw_text(
+    "Voxels:",
+    stats_x,
+    sy,
+    18,
+    @raylib.Color::new(150, 160, 180, 255),
+  )
   let vox_col = if filled <= level.par_voxels {
     @types.color_matched
   } else {
@@ -527,11 +562,23 @@ pub fn draw_results(game : @types.Game) -> Unit {
   }
   @draw.draw_text(filled.to_string(), stats_x + 100, sy, 20, vox_col)
   let pvox_text = "(par: " + level.par_voxels.to_string() + ")"
-  @draw.draw_text(pvox_text, stats_x + 150, sy, 16, @raylib.Color::new(130, 140, 160, 255))
+  @draw.draw_text(
+    pvox_text,
+    stats_x + 150,
+    sy,
+    16,
+    @raylib.Color::new(130, 140, 160, 255),
+  )
   sy += 30
   // Budget if applicable
   if level.voxel_budget > 0 {
-    @draw.draw_text("Budget:", stats_x, sy, 18, @raylib.Color::new(150, 160, 180, 255))
+    @draw.draw_text(
+      "Budget:",
+      stats_x,
+      sy,
+      18,
+      @raylib.Color::new(150, 160, 180, 255),
+    )
     draw_voxel_budget_bar(stats_x + 100, sy + 3, filled, level.voxel_budget)
     sy += 30
   }
@@ -554,20 +601,22 @@ pub fn draw_results(game : @types.Game) -> Unit {
   sy += 22
   let got_s2 = game.moves <= level.par_moves
   let check2 = if got_s2 { "[X]" } else { "[ ]" }
-  let s2 = check2 +
-    " Within " +
-    level.par_moves.to_string() +
-    " moves"
-  let s2_col = if got_s2 { @types.color_matched } else { @types.color_unmatched }
+  let s2 = check2 + " Within " + level.par_moves.to_string() + " moves"
+  let s2_col = if got_s2 {
+    @types.color_matched
+  } else {
+    @types.color_unmatched
+  }
   @draw.draw_text(s2, stats_x + 10, sy, 15, s2_col)
   sy += 22
   let got_s3 = got_s2 && filled <= level.par_voxels
   let check3 = if got_s3 { "[X]" } else { "[ ]" }
-  let s3 = check3 +
-    " Use <= " +
-    level.par_voxels.to_string() +
-    " voxels"
-  let s3_col = if got_s3 { @types.color_matched } else { @types.color_unmatched }
+  let s3 = check3 + " Use <= " + level.par_voxels.to_string() + " voxels"
+  let s3_col = if got_s3 {
+    @types.color_matched
+  } else {
+    @types.color_unmatched
+  }
   @draw.draw_text(s3, stats_x + 10, sy, 15, s3_col)
   // Buttons
   let btn_y = card_y + card_h - 60
@@ -606,7 +655,7 @@ fn draw_button(
   h : Int,
   text : String,
   size : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()

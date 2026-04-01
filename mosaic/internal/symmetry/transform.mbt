@@ -14,7 +14,11 @@ pub fn mirror_d_pos(pos : @types.Vec2i) -> @types.Vec2i {
 }
 
 ///|
-pub fn rotate2_pos(pos : @types.Vec2i, grid_w : Int, grid_h : Int) -> @types.Vec2i {
+pub fn rotate2_pos(
+  pos : @types.Vec2i,
+  grid_w : Int,
+  grid_h : Int,
+) -> @types.Vec2i {
   @types.vec2i(grid_w - 1 - pos.x, grid_h - 1 - pos.y)
 }
 
@@ -22,7 +26,7 @@ pub fn rotate2_pos(pos : @types.Vec2i, grid_w : Int, grid_h : Int) -> @types.Vec
 pub fn rotate4_pos_90(
   pos : @types.Vec2i,
   grid_w : Int,
-  _grid_h : Int
+  _grid_h : Int,
 ) -> @types.Vec2i {
   @types.vec2i(grid_w - 1 - pos.y, pos.x)
 }
@@ -31,7 +35,7 @@ pub fn rotate4_pos_90(
 pub fn rotate4_pos_180(
   pos : @types.Vec2i,
   grid_w : Int,
-  grid_h : Int
+  grid_h : Int,
 ) -> @types.Vec2i {
   rotate2_pos(pos, grid_w, grid_h)
 }
@@ -40,7 +44,7 @@ pub fn rotate4_pos_180(
 pub fn rotate4_pos_270(
   pos : @types.Vec2i,
   _grid_w : Int,
-  grid_h : Int
+  grid_h : Int,
 ) -> @types.Vec2i {
   @types.vec2i(pos.y, grid_h - 1 - pos.x)
 }
@@ -54,7 +58,7 @@ pub fn glide_pos(pos : @types.Vec2i, grid_w : Int) -> @types.Vec2i {
 ///|
 pub fn transform_tile(
   tile : @types.Tile,
-  sym : @types.SymmetryKind
+  sym : @types.SymmetryKind,
 ) -> @types.Tile {
   let c = tile.color
   let s = tile.shape
@@ -77,18 +81,19 @@ pub fn get_symmetric_pos(
   pos : @types.Vec2i,
   sym : @types.SymmetryKind,
   grid_w : Int,
-  grid_h : Int
+  grid_h : Int,
 ) -> Array[@types.Vec2i] {
   match sym {
     MirrorH => [mirror_h_pos(pos, grid_h)]
     MirrorV => [mirror_v_pos(pos, grid_w)]
     MirrorD => [mirror_d_pos(pos)]
     Rotate2 => [rotate2_pos(pos, grid_w, grid_h)]
-    Rotate4 => [
-      rotate4_pos_90(pos, grid_w, grid_h),
-      rotate4_pos_180(pos, grid_w, grid_h),
-      rotate4_pos_270(pos, grid_w, grid_h),
-    ]
+    Rotate4 =>
+      [
+        rotate4_pos_90(pos, grid_w, grid_h),
+        rotate4_pos_180(pos, grid_w, grid_h),
+        rotate4_pos_270(pos, grid_w, grid_h),
+      ]
     Glide => [glide_pos(pos, grid_w)]
   }
 }
@@ -97,7 +102,7 @@ pub fn get_symmetric_pos(
 pub fn expected_tile_at(
   grid : @types.MosaicGrid,
   hole : @types.Vec2i,
-  sym : @types.SymmetryKind
+  sym : @types.SymmetryKind,
 ) -> @types.Tile? {
   let partners = get_symmetric_pos(hole, sym, grid.width, grid.height)
   for i in 0..<partners.length() {
@@ -116,7 +121,7 @@ pub fn expected_tile_at(
 ///|
 pub fn get_expected_for_rotate4(
   grid : @types.MosaicGrid,
-  hole : @types.Vec2i
+  hole : @types.Vec2i,
 ) -> @types.Tile? {
   let w = grid.width
   let h = grid.height

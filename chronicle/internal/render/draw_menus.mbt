@@ -1,7 +1,9 @@
 ///|
 fn draw_title(game : @types.Game) -> Unit {
   // Background
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
+  )
   // Decorative lines
   for i in 0..<5 {
     let y = 100 + i * 120
@@ -14,24 +16,30 @@ fn draw_title(game : @types.Game) -> Unit {
     )
   }
   // Title
-  let pulse = Float::from_double(
-    @math.sin(game.title_pulse.to_double() * 2.0),
-  )
+  let pulse = Float::from_double(@math.sin(game.title_pulse.to_double() * 2.0))
   let alpha = 200 + Float::to_int(pulse * 55.0)
   let title_color = @raylib.Color::new(220, 200, 160, alpha)
   let title = "CHRONICLE"
   let tw = @draw.measure_text(title, 64)
-  @draw.draw_text(
-    title, (@types.screen_width - tw) / 2, 180, 64, title_color,
-  )
+  @draw.draw_text(title, (@types.screen_width - tw) / 2, 180, 64, title_color)
   // Subtitle
   let sub = "Causality Reconstruction Puzzle"
   let sw = @draw.measure_text(sub, 24)
   @draw.draw_text(
-    sub, (@types.screen_width - sw) / 2, 260, 24, @types.color_subtitle,
+    sub,
+    (@types.screen_width - sw) / 2,
+    260,
+    24,
+    @types.color_subtitle,
   )
   // Case file decorations
-  @raylib.draw_rectangle(440, 320, 400, 200, @raylib.Color::new(50, 45, 60, 200))
+  @raylib.draw_rectangle(
+    440,
+    320,
+    400,
+    200,
+    @raylib.Color::new(50, 45, 60, 200),
+  )
   @raylib.draw_rectangle_lines(440, 320, 400, 200, @types.color_subtitle)
   @draw.draw_text("CASE FILES", 540, 340, 28, @types.color_title)
   @draw.draw_text("20 Cases  |  3 Tiers", 520, 380, 18, @types.color_subtitle)
@@ -67,23 +75,15 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text("SELECT TIER", 520, 40, 36, @types.color_title)
   let tiers : Array[@types.Tier] = [Reports, Investigations, ColdCases]
   let tier_colors = [
-    @types.color_tier_reports,
-    @types.color_tier_investigations,
-    @types.color_tier_cold,
+    @types.color_tier_reports, @types.color_tier_investigations, @types.color_tier_cold,
   ]
   let tier_descs = [
-    "6-card cases, simple ordering",
-    "7-card cases, misleading clues",
-    "8-card cases, complex chains",
+    "6-card cases, simple ordering", "7-card cases, misleading clues", "8-card cases, complex chains",
   ]
   for i in 0..<3 {
     let y = 150 + i * 170
     let selected = @types.tier_index(game.current_tier) == i
-    let box_color = if selected {
-      tier_colors[i]
-    } else {
-      @types.color_button
-    }
+    let box_color = if selected { tier_colors[i] } else { @types.color_button }
     @raylib.draw_rectangle(340, y, 600, 140, box_color)
     if selected {
       @raylib.draw_rectangle_lines(340, y, 600, 140, @types.color_white)
@@ -105,15 +105,14 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       total_stars += game.case_scores[ti][j].stars
     }
     let max_stars = game.case_scores[ti].length() * 3
-    let star_text = total_stars.to_string() + "/" + max_stars.to_string() + " stars"
+    let star_text = total_stars.to_string() +
+      "/" +
+      max_stars.to_string() +
+      " stars"
     @draw.draw_text(star_text, 780, y + 20, 20, @types.color_star)
   }
   @draw.draw_text(
-    "Up/Down to select | Enter to choose | Esc to go back",
-    350,
-    680,
-    16,
-    @types.color_subtitle,
+    "Up/Down to select | Enter to choose | Esc to go back", 350, 680, 16, @types.color_subtitle,
   )
 }
 
@@ -170,11 +169,7 @@ fn draw_case_select(game : @types.Game) -> Unit {
     @draw.draw_text(clue_str, x + 10, y + 170, 16, @types.color_clue)
   }
   @draw.draw_text(
-    "Arrows to select | Enter to play | Esc to go back",
-    360,
-    680,
-    16,
-    @types.color_subtitle,
+    "Arrows to select | Enter to play | Esc to go back", 360, 680, 16, @types.color_subtitle,
   )
 }
 
@@ -198,9 +193,7 @@ fn draw_results(game : @types.Game) -> Unit {
   let order_text = if score.order_correct {
     "Timeline Order: CORRECT"
   } else {
-    "Timeline Order: INCORRECT (" +
-    score.order_count.to_string() +
-    " in place)"
+    "Timeline Order: INCORRECT (" + score.order_count.to_string() + " in place)"
   }
   let order_col = if score.order_correct {
     @types.color_correct
@@ -236,13 +229,7 @@ fn draw_results(game : @types.Game) -> Unit {
   @draw.draw_text(
     "3 stars: Order + links + no rewinds", 420, 476, 18, @types.color_subtitle,
   )
-  @draw.draw_text(
-    "Enter: Continue | R: Retry",
-    500,
-    560,
-    20,
-    @types.color_hud,
-  )
+  @draw.draw_text("Enter: Continue | R: Retry", 500, 560, 20, @types.color_hud)
 }
 
 ///|

@@ -129,11 +129,7 @@ pub fn vec2_neg(v : Vec2) -> Vec2 {
 ///|
 /// Distance from point p to line segment (a, b).
 /// Returns (distance, closest_point_t_parameter).
-pub fn point_to_segment_dist(
-  p : Vec2,
-  a : Vec2,
-  b : Vec2
-) -> (Float, Float) {
+pub fn point_to_segment_dist(p : Vec2, a : Vec2, b : Vec2) -> (Float, Float) {
   let ab = vec2_sub(b, a)
   let ap = vec2_sub(p, a)
   let ab_len_sq = vec2_dot(ab, ab)
@@ -156,12 +152,7 @@ pub fn segment_normal(a : Vec2, b : Vec2) -> Vec2 {
 ///|
 /// Check if two line segments intersect.
 /// Returns Some(t) where t is parameter along first segment, or None.
-pub fn segment_intersect(
-  p1 : Vec2,
-  p2 : Vec2,
-  p3 : Vec2,
-  p4 : Vec2
-) -> Float? {
+pub fn segment_intersect(p1 : Vec2, p2 : Vec2, p3 : Vec2, p4 : Vec2) -> Float? {
   let d1 = vec2_sub(p2, p1)
   let d2 = vec2_sub(p4, p3)
   let cross = d1.x * d2.y - d1.y * d2.x
@@ -237,9 +228,13 @@ pub fn new_gate(
   x2 : Float,
   y2 : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Gate {
-  { p1: vec2(x1, y1), p2: vec2(x2, y2), direction: vec2_normalize(vec2(dx, dy)) }
+  {
+    p1: vec2(x1, y1),
+    p2: vec2(x2, y2),
+    direction: vec2_normalize(vec2(dx, dy)),
+  }
 }
 
 ///|
@@ -316,7 +311,7 @@ pub fn reset_level(game : Game) -> Unit {
 ///|
 pub fn all_targets_hit(level : Level) -> Bool {
   for i in 0..<level.targets.length() {
-    if !(level.targets[i].hit) {
+    if !level.targets[i].hit {
       return false
     }
   }

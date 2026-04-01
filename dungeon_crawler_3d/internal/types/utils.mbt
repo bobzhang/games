@@ -1156,7 +1156,7 @@ pub fn roll_levelup_cards(game : Game) -> Unit {
   game.levelup_cards[2] = rand_range(game, 0, levelup_card_count - 1)
   // Avoid duplicates with first two
   while game.levelup_cards[2] == game.levelup_cards[0] ||
-    game.levelup_cards[2] == game.levelup_cards[1] {
+        game.levelup_cards[2] == game.levelup_cards[1] {
     game.levelup_cards[2] = rand_range(game, 0, levelup_card_count - 1)
   }
 }

@@ -237,8 +237,9 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 
 ///|
 pub fn has_selection(game : Game) -> Bool {
-  game.selection_start >= 0 && game.selection_end >= 0 && game.selection_start !=
-  game.selection_end
+  game.selection_start >= 0 &&
+  game.selection_end >= 0 &&
+  game.selection_start != game.selection_end
 }
 
 ///|

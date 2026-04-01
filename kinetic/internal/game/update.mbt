@@ -207,7 +207,7 @@ fn handle_left_click(game : @types.Game) -> Unit {
   if game.selected_gear_kind == Belt {
     // Belt placement: two clicks
     match game.belt_start {
-      None => {
+      None =>
         // First click: start of belt
         if @types.find_gear_at(game.placed_gears, pos) >= 0 {
           game.belt_start = Some(pos)
@@ -215,7 +215,6 @@ fn handle_left_click(game : @types.Game) -> Unit {
         } else {
           @types.set_message(game, "Belt must connect to a gear", 1.5)
         }
-      }
       Some(start) => {
         // Second click: end of belt
         if pos == start {
@@ -233,27 +232,25 @@ fn handle_left_click(game : @types.Game) -> Unit {
         }
       }
     }
-  } else {
     // Normal gear placement
-    if @mechanics.can_place_gear(game, pos, game.selected_gear_kind) {
-      let gear = @types.new_gear(pos, game.selected_gear_kind)
-      game.placed_gears.push(gear)
-      @mechanics.simulate(game)
-      if game.play_state == Solved {
-        @types.set_message(game, "Puzzle Solved!", 3.0)
-      }
+  } else if @mechanics.can_place_gear(game, pos, game.selected_gear_kind) {
+    let gear = @types.new_gear(pos, game.selected_gear_kind)
+    game.placed_gears.push(gear)
+    @mechanics.simulate(game)
+    if game.play_state == Solved {
+      @types.set_message(game, "Puzzle Solved!", 3.0)
+    }
+  } else {
+    // Check reason
+    let existing = @types.find_gear_at(game.placed_gears, pos)
+    if existing >= 0 {
+      @types.set_message(game, "Peg already occupied", 1.0)
     } else {
-      // Check reason
-      let existing = @types.find_gear_at(game.placed_gears, pos)
-      if existing >= 0 {
-        @types.set_message(game, "Peg already occupied", 1.0)
+      let used = @types.count_placed_gears(game.placed_gears)
+      if used >= level.gear_budget {
+        @types.set_message(game, "Budget exceeded!", 1.0)
       } else {
-        let used = @types.count_placed_gears(game.placed_gears)
-        if used >= level.gear_budget {
-          @types.set_message(game, "Budget exceeded!", 1.0)
-        } else {
-          @types.set_message(game, "Cannot place here", 1.0)
-        }
+        @types.set_message(game, "Cannot place here", 1.0)
       }
     }
   }

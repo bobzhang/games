@@ -289,4 +289,3 @@ test "artillery needs line of sight" {
   inspect(los, content="false")
   inspect(@combat.can_attack(b, attacker, defender), content="false")
 }
-

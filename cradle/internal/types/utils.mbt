@@ -174,11 +174,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn count_stars(
-  game : Game,
-  level_index : Int,
-  strings_used : Int
-) -> Int {
+pub fn count_stars(game : Game, level_index : Int, strings_used : Int) -> Int {
   let level = game.level_data[level_index]
   // Check all targets hit
   let mut all_hit = true

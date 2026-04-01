@@ -27,16 +27,24 @@ fn draw_grid(game : @types.Game) -> Unit {
             @types.color_cell_empty
           }
           @raylib.draw_rectangle(px + 1, py + 1, cs - 2, cs - 2, bg)
-          @raylib.draw_rectangle_lines(
-            px, py, cs, cs, @types.color_cell_border,
-          )
+          @raylib.draw_rectangle_lines(px, py, cs, cs, @types.color_cell_border)
           // Draw component
           match cell.component {
             Some(kind) =>
-              draw_component(px, py, cs, kind, cell.direction, cell.filter_color, cell.target_color, cell.received_color, cell.locked)
-            None => {
+              draw_component(
+                px,
+                py,
+                cs,
+                kind,
+                cell.direction,
+                cell.filter_color,
+                cell.target_color,
+                cell.received_color,
+                cell.locked,
+              )
+            None =>
               // Draw socket indicator for empty unlocked cells
-              if !(cell.locked) {
+              if !cell.locked {
                 let center_x = px + cs / 2
                 let center_y = py + cs / 2
                 @raylib.draw_circle(
@@ -46,7 +54,6 @@ fn draw_grid(game : @types.Game) -> Unit {
                   @raylib.Color::new(60, 60, 80, 100),
                 )
               }
-            }
           }
         }
         None => ()
@@ -65,7 +72,7 @@ fn draw_component(
   filter_color : @types.FilterColor?,
   target_color : @types.BeamColor?,
   received_color : @types.BeamColor?,
-  locked : Bool
+  locked : Bool,
 ) -> Unit {
   let cx = px + cs / 2
   let cy = py + cs / 2
@@ -83,7 +90,10 @@ fn draw_component(
       draw_direction_arrow(cx, cy, half, dir, sc)
       if locked {
         @raylib.draw_circle(
-          cx, cy, fhalf * 0.3, @raylib.Color::new(255, 255, 200, 200),
+          cx,
+          cy,
+          fhalf * 0.3,
+          @raylib.Color::new(255, 255, 200, 200),
         )
       }
     }
@@ -93,26 +103,24 @@ fn draw_component(
       match dir {
         N | S => {
           // "/" slash mirror
-          @raylib.draw_line(
-            px + 8, py + cs - 8, px + cs - 8, py + 8, color,
-          )
-          @raylib.draw_line(
-            px + 9, py + cs - 8, px + cs - 7, py + 8, color,
-          )
+          @raylib.draw_line(px + 8, py + cs - 8, px + cs - 8, py + 8, color)
+          @raylib.draw_line(px + 9, py + cs - 8, px + cs - 7, py + 8, color)
         }
         E | W => {
           // "\" backslash mirror
-          @raylib.draw_line(
-            px + 8, py + 8, px + cs - 8, py + cs - 8, color,
-          )
-          @raylib.draw_line(
-            px + 9, py + 8, px + cs - 7, py + cs - 8, color,
-          )
+          @raylib.draw_line(px + 8, py + 8, px + cs - 8, py + cs - 8, color)
+          @raylib.draw_line(px + 9, py + 8, px + cs - 7, py + cs - 8, color)
         }
       }
       // Small rotation indicator
-      if !(locked) {
-        @draw.draw_text("R", px + 2, py + 2, 10, @raylib.Color::new(80, 80, 100, 120))
+      if !locked {
+        @draw.draw_text(
+          "R",
+          px + 2,
+          py + 2,
+          10,
+          @raylib.Color::new(80, 80, 100, 120),
+        )
       }
     }
     Prism => {
@@ -131,9 +139,7 @@ fn draw_component(
         color,
       )
       // Inner highlight
-      @raylib.draw_circle(
-        cx, cy + 4, 4.0, fade_color(color, 100),
-      )
+      @raylib.draw_circle(cx, cy + 4, 4.0, fade_color(color, 100))
     }
     Filter => {
       // Colored X shape indicating which channel is blocked
@@ -144,27 +150,17 @@ fn draw_component(
         None => @types.color_text_dim
       }
       // X shape
-      @raylib.draw_line(
-        px + 10, py + 10, px + cs - 10, py + cs - 10, fc,
-      )
-      @raylib.draw_line(
-        px + cs - 10, py + 10, px + 10, py + cs - 10, fc,
-      )
-      @raylib.draw_line(
-        px + 11, py + 10, px + cs - 9, py + cs - 10, fc,
-      )
-      @raylib.draw_line(
-        px + cs - 9, py + 10, px + 11, py + cs - 10, fc,
-      )
+      @raylib.draw_line(px + 10, py + 10, px + cs - 10, py + cs - 10, fc)
+      @raylib.draw_line(px + cs - 10, py + 10, px + 10, py + cs - 10, fc)
+      @raylib.draw_line(px + 11, py + 10, px + cs - 9, py + cs - 10, fc)
+      @raylib.draw_line(px + cs - 9, py + 10, px + 11, py + cs - 10, fc)
       // Label
       let label = match filter_color {
         Some(f) => @types.filter_color_name(f)
         None => "?"
       }
       let lw = @draw.measure_text(label, 10)
-      @draw.draw_text(
-        label, cx - lw / 2, py + cs - 14, 10, fade_color(fc, 180),
-      )
+      @draw.draw_text(label, cx - lw / 2, py + cs - 14, 10, fade_color(fc, 180))
     }
     Combiner => {
       // Circle with arrows pointing inward
@@ -188,22 +184,25 @@ fn draw_component(
         (Some(target), Some(received)) =>
           if target == received {
             // Green check
-            @raylib.draw_circle(
-              px + cs - 10, py + 6, 6.0, @types.color_success,
-            )
+            @raylib.draw_circle(px + cs - 10, py + 6, 6.0, @types.color_success)
             @draw.draw_text(
-              "ok", px + cs - 16, py + 1, 10, @raylib.Color::new(0, 0, 0, 255),
+              "ok",
+              px + cs - 16,
+              py + 1,
+              10,
+              @raylib.Color::new(0, 0, 0, 255),
             )
           } else {
             // Red X
-            @raylib.draw_circle(
-              px + cs - 10, py + 6, 6.0, @types.color_failure,
-            )
+            @raylib.draw_circle(px + cs - 10, py + 6, 6.0, @types.color_failure)
           }
         (Some(_), None) =>
           // No light yet
           @raylib.draw_circle(
-            px + cs - 10, py + 6, 6.0, @types.color_star_empty,
+            px + cs - 10,
+            py + 6,
+            6.0,
+            @types.color_star_empty,
           )
         _ => ()
       }
@@ -213,7 +212,11 @@ fn draw_component(
           let name = @types.beam_color_display_name(tc2)
           let nw = @draw.measure_text(name, 9)
           @draw.draw_text(
-            name, cx - nw / 2, py + cs - 12, 9, fade_color(tc, 200),
+            name,
+            cx - nw / 2,
+            py + cs - 12,
+            9,
+            fade_color(tc, 200),
           )
         }
         None => ()
@@ -228,7 +231,7 @@ fn draw_direction_arrow(
   cy : Int,
   half : Int,
   dir : @types.Direction,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let h = half - 2
   match dir {

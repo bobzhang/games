@@ -41,6 +41,7 @@ pub let palette_cell : Int = 50
 pub let total_levels : Int = 25
 
 // Colors - Parchment/cartography aesthetic
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(245, 235, 220, 255)
 
@@ -81,13 +82,19 @@ pub let color_text : @raylib.Color = @raylib.Color::new(60, 40, 20, 255)
 pub let color_text_light : @raylib.Color = @raylib.Color::new(120, 100, 70, 255)
 
 ///|
-pub let color_clue_satisfied : @raylib.Color = @raylib.Color::new(34, 139, 34, 255)
+pub let color_clue_satisfied : @raylib.Color = @raylib.Color::new(
+  34, 139, 34, 255,
+)
 
 ///|
-pub let color_clue_violated : @raylib.Color = @raylib.Color::new(200, 30, 30, 255)
+pub let color_clue_violated : @raylib.Color = @raylib.Color::new(
+  200, 30, 30, 255,
+)
 
 ///|
-pub let color_clue_pending : @raylib.Color = @raylib.Color::new(160, 150, 130, 255)
+pub let color_clue_pending : @raylib.Color = @raylib.Color::new(
+  160, 150, 130, 255,
+)
 
 ///|
 pub let color_hover : @raylib.Color = @raylib.Color::new(255, 220, 100, 80)
@@ -105,13 +112,17 @@ pub let color_title_bg : @raylib.Color = @raylib.Color::new(62, 48, 33, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(160, 120, 70, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(190, 150, 90, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  190, 150, 90, 255,
+)
 
 ///|
 pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 200, 50, 255)
 
 ///|
-pub let color_star_empty : @raylib.Color = @raylib.Color::new(180, 170, 150, 255)
+pub let color_star_empty : @raylib.Color = @raylib.Color::new(
+  180, 170, 150, 255,
+)
 
 ///|
 pub let color_white : @raylib.Color = @raylib.Color::new(255, 255, 255, 255)
@@ -120,7 +131,9 @@ pub let color_white : @raylib.Color = @raylib.Color::new(255, 255, 255, 255)
 pub let color_black : @raylib.Color = @raylib.Color::new(0, 0, 0, 255)
 
 ///|
-pub let color_incorrect_flash : @raylib.Color = @raylib.Color::new(255, 50, 50, 120)
+pub let color_incorrect_flash : @raylib.Color = @raylib.Color::new(
+  255, 50, 50, 120,
+)
 
 ///|
 pub let color_clue_highlight : @raylib.Color = @raylib.Color::new(
@@ -152,10 +165,14 @@ pub let color_flash_error : @raylib.Color = @raylib.Color::new(255, 50, 50, 150)
 pub let color_compass_n : @raylib.Color = @raylib.Color::new(180, 30, 30, 255)
 
 ///|
-pub let color_compass_body : @raylib.Color = @raylib.Color::new(139, 90, 43, 255)
+pub let color_compass_body : @raylib.Color = @raylib.Color::new(
+  139, 90, 43, 255,
+)
 
 ///|
-pub let color_compass_ring : @raylib.Color = @raylib.Color::new(100, 70, 35, 255)
+pub let color_compass_ring : @raylib.Color = @raylib.Color::new(
+  100, 70, 35, 255,
+)
 
 ///|
 pub let color_parchment_dark : @raylib.Color = @raylib.Color::new(

@@ -2,7 +2,7 @@
 pub fn validate_route_step(
   map : @types.HexMap,
   from : @types.HexCoord,
-  to : @types.HexCoord
+  to : @types.HexCoord,
 ) -> Bool {
   // Must be adjacent
   if !@types.hex_are_adjacent(from, to) {
@@ -23,7 +23,7 @@ pub fn validate_route_step(
 ///|
 pub fn calculate_route_water_cost(
   map : @types.HexMap,
-  route : Array[@types.HexCoord]
+  route : Array[@types.HexCoord],
 ) -> Int {
   let mut total = 0
   for i in 0..<route.length() {
@@ -39,7 +39,7 @@ pub fn calculate_route_water_cost(
 ///|
 pub fn execute_route_step(
   caravan : @types.Caravan,
-  map : @types.HexMap
+  map : @types.HexMap,
 ) -> @types.PlayState {
   if caravan.route_index >= caravan.route.length() {
     // Check if we reached destination
@@ -60,7 +60,7 @@ pub fn execute_route_step(
   // Apply tile effects
   match tile.kind {
     Oasis => caravan.water = caravan.max_water
-    TradePost => {
+    TradePost =>
       // Sell artifacts for gold, or gain some gold
       if caravan.artifacts > 0 {
         caravan.gold += caravan.artifacts * 15
@@ -68,7 +68,6 @@ pub fn execute_route_step(
       } else {
         caravan.gold += 5
       }
-    }
     Ruins => {
       // Collect artifact, but 30% sandstorm risk
       caravan.artifacts += 1
@@ -97,7 +96,7 @@ pub fn execute_route_step(
 pub fn is_route_valid(
   map : @types.HexMap,
   route : Array[@types.HexCoord],
-  start : @types.HexCoord
+  start : @types.HexCoord,
 ) -> Bool {
   if route.length() == 0 {
     return false
@@ -121,7 +120,7 @@ pub fn calculate_stars(
   gold : Int,
   gold_target : Int,
   artifacts : Int,
-  total_artifacts : Int
+  total_artifacts : Int,
 ) -> Int {
   if !reached_dest {
     return 0

@@ -88,7 +88,7 @@ pub fn make_level(
   par_fences : Int,
   par_length : Int,
   tier : Tier,
-  name : String
+  name : String,
 ) -> LevelDef {
   { grid, houses, constraints, par_fences, par_length, tier, name }
 }

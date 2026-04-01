@@ -440,7 +440,7 @@ pub fn clone_grid_tiles(grid : HexGrid) -> Array[Array[HexTile]] {
 ///|
 pub fn restore_grid_tiles(
   grid : HexGrid,
-  saved : Array[Array[HexTile]]
+  saved : Array[Array[HexTile]],
 ) -> Unit {
   for r in 0..<grid.height {
     for c in 0..<grid.width {
@@ -470,7 +470,10 @@ pub fn height_color_mod(height : Int) -> Int {
 }
 
 ///|
-pub fn tile_color_with_height(base : @raylib.Color, height : Int) -> @raylib.Color {
+pub fn tile_color_with_height(
+  base : @raylib.Color,
+  height : Int,
+) -> @raylib.Color {
   let m = height_color_mod(height)
   @raylib.Color::new(
     clampi(base.r.to_int() + m, 0, 255),

@@ -23,7 +23,13 @@ fn draw_workshop_bg(game : @types.Game) -> Unit {
   let gw = @types.grid_cols * @types.cell_size
   let gh = @types.grid_rows * @types.cell_size
   // Workshop panel background
-  @raylib.draw_rectangle(ox - 10, oy - 10, gw + 20, gh + 20, @types.color_grid_bg)
+  @raylib.draw_rectangle(
+    ox - 10,
+    oy - 10,
+    gw + 20,
+    gh + 20,
+    @types.color_grid_bg,
+  )
   @raylib.draw_rectangle_lines(
     ox - 10,
     oy - 10,
@@ -45,7 +51,7 @@ fn draw_bg_gear(
   cy : Int,
   radius : Float,
   angle : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
@@ -64,7 +70,7 @@ fn draw_grid(game : @types.Game) -> Unit {
   let ox = game.grid_offset_x
   let oy = game.grid_offset_y
   let cs = @types.cell_size
-  for row in 0..=@types.grid_rows {
+  for row in 0..<=@types.grid_rows {
     let y = oy + row * cs
     @raylib.draw_line(
       ox,
@@ -74,7 +80,7 @@ fn draw_grid(game : @types.Game) -> Unit {
       @types.color_grid_line,
     )
   }
-  for col in 0..=@types.grid_cols {
+  for col in 0..<=@types.grid_cols {
     let x = ox + col * cs
     @raylib.draw_line(
       x,
@@ -110,7 +116,7 @@ fn draw_pulley_node(
   cx : Int,
   cy : Int,
   hover : Bool,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   let r = @types.node_radius
   if hover {
@@ -130,7 +136,13 @@ fn draw_pulley_node(
     let a = time + Float::from_int(i) * 1.5708
     let sx = fcx + @types.cosf(a) * r * 0.6
     let sy = fcy + @types.sinf(a) * r * 0.6
-    @raylib.draw_line(cx, cy, sx.to_int(), sy.to_int(), @types.color_pulley_center)
+    @raylib.draw_line(
+      cx,
+      cy,
+      sx.to_int(),
+      sy.to_int(),
+      @types.color_pulley_center,
+    )
   }
 }
 
@@ -142,7 +154,13 @@ fn draw_anchor_node(cx : Int, cy : Int, hover : Bool) -> Unit {
   }
   // Square anchor
   let half = r.to_int()
-  @raylib.draw_rectangle(cx - half, cy - half, half * 2, half * 2, @types.color_anchor_gray)
+  @raylib.draw_rectangle(
+    cx - half,
+    cy - half,
+    half * 2,
+    half * 2,
+    @types.color_anchor_gray,
+  )
   @raylib.draw_rectangle_lines(
     cx - half,
     cy - half,
@@ -161,7 +179,7 @@ fn draw_hook_node(
   cx : Int,
   cy : Int,
   hover : Bool,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let r = @types.node_radius * 0.6
   if hover {
@@ -177,7 +195,7 @@ fn draw_ratchet_node(
   cx : Int,
   cy : Int,
   hover : Bool,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   let r = @types.node_radius
   if hover {
@@ -362,7 +380,13 @@ fn draw_crates(game : @types.Game) -> Unit {
         cs,
         @types.color_crate_wood,
       )
-      @raylib.draw_rectangle_lines(nx - cs / 2, ny - cs / 2, cs, cs, border_color)
+      @raylib.draw_rectangle_lines(
+        nx - cs / 2,
+        ny - cs / 2,
+        cs,
+        cs,
+        border_color,
+      )
       // Wood grain lines
       @raylib.draw_line(
         nx - cs / 2 + 5,
@@ -443,7 +467,8 @@ fn draw_buckets(game : @types.Game) -> Unit {
       } else {
         0.0
       }
-      let fill_h = (Float::from_int(bh - 4) * @types.clampf(fill_ratio, 0.0, 1.0)).to_int()
+      let fill_h = (Float::from_int(bh - 4) *
+      @types.clampf(fill_ratio, 0.0, 1.0)).to_int()
       if fill_h > 0 {
         @raylib.draw_rectangle(
           nx - bw / 2 + 2,
@@ -478,13 +503,7 @@ fn draw_platforms(game : @types.Game) -> Unit {
       let nx = @types.node_screen_x(node, ox)
       let ny = @types.node_screen_y(node, oy)
       let hw = (p.width / 2.0).to_int()
-      @raylib.draw_rectangle(
-        nx - hw,
-        ny - 4,
-        hw * 2,
-        8,
-        @types.color_platform,
-      )
+      @raylib.draw_rectangle(nx - hw, ny - 4, hw * 2, 8, @types.color_platform)
       @raylib.draw_rectangle_lines(
         nx - hw,
         ny - 4,
@@ -516,13 +535,7 @@ fn draw_target_indicators(game : @types.Game) -> Unit {
         let line_w = 40
         for d in 0..<(line_w / 8) {
           let dx = nx - line_w / 2 + d * 8 + dash_offset
-          @raylib.draw_line(
-            dx,
-            ty,
-            dx + 4,
-            ty,
-            @types.color_target_gold,
-          )
+          @raylib.draw_line(dx, ty, dx + 4, ty, @types.color_target_gold)
         }
         // Target marker
         @raylib.draw_circle(
@@ -553,9 +566,9 @@ fn draw_waterfall(game : @types.Game) -> Unit {
     let y = oy + row * @types.cell_size
     for s in 0..<3 {
       let offset = (@types.sinf(
-            time + Float::from_int(row) * 0.5 + Float::from_int(s),
-          ) *
-          3.0).to_int()
+        time + Float::from_int(row) * 0.5 + Float::from_int(s),
+      ) *
+      3.0).to_int()
       let sx = wx + offset + (s - 1) * 4
       @raylib.draw_line(
         sx,

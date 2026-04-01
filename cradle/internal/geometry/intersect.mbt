@@ -6,7 +6,7 @@ pub fn segment_intersection(
   p1 : @types.Vec2f,
   p2 : @types.Vec2f,
   p3 : @types.Vec2f,
-  p4 : @types.Vec2f
+  p4 : @types.Vec2f,
 ) -> @types.Vec2f? {
   let x1 = p1.x
   let y1 = p1.y
@@ -37,7 +37,7 @@ pub fn segment_intersection(
 /// Compute all intersection points from a set of strings on the peg frame.
 pub fn compute_all_intersections(
   strings : Array[@types.StringLine],
-  pegs : Array[@types.Peg]
+  pegs : Array[@types.Peg],
 ) -> Array[@types.Intersection] {
   let result : Array[@types.Intersection] = []
   for i in 0..<strings.length() {
@@ -61,7 +61,7 @@ pub fn compute_all_intersections(
 /// Match intersections to target dots. Returns how many targets were hit.
 pub fn match_intersections_to_targets(
   intersections : Array[@types.Intersection],
-  targets : Array[@types.TargetDot]
+  targets : Array[@types.TargetDot],
 ) -> Int {
   // Reset all
   for i in 0..<targets.length() {

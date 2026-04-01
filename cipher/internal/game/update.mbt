@@ -192,7 +192,8 @@ fn update_playing(game : @types.Game) -> Unit {
     // Check tool tab clicks
     if my >= 55 && my < 85 {
       let tab_w = @types.tool_panel_w / 3
-      if mx >= @types.tool_panel_x && mx < @types.tool_panel_x + @types.tool_panel_w {
+      if mx >= @types.tool_panel_x &&
+        mx < @types.tool_panel_x + @types.tool_panel_w {
         let tab = (mx - @types.tool_panel_x) / tab_w
         game.active_tool = match tab {
           0 => FrequencyChart
@@ -202,8 +203,10 @@ fn update_playing(game : @types.Game) -> Unit {
       }
     }
     // Check message area clicks (select cipher letter)
-    if mx >= @types.msg_area_x && mx < @types.msg_area_x + @types.msg_area_w && my >=
-    @types.msg_area_y && my < @types.screen_height - 70 {
+    if mx >= @types.msg_area_x &&
+      mx < @types.msg_area_x + @types.msg_area_w &&
+      my >= @types.msg_area_y &&
+      my < @types.screen_height - 70 {
       handle_message_click(game, level, mx, my)
     }
     // Check alphabet strip clicks
@@ -313,7 +316,7 @@ fn handle_message_click(
   game : @types.Game,
   level : @types.Level,
   mx : Int,
-  my : Int
+  my : Int,
 ) -> Unit {
   let base_x = @types.msg_area_x
   let base_y = @types.msg_area_y + 20
@@ -356,7 +359,7 @@ fn handle_message_click(
 fn handle_cipher_select(
   game : @types.Game,
   level : @types.Level,
-  plain_idx : Int
+  plain_idx : Int,
 ) -> Unit {
   let entry = @types.assign_mapping(
     game.mapping,

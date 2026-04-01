@@ -6,12 +6,7 @@ fn draw_title(game : @types.Game) -> Unit {
     let fi : Float = Float::from_int(i)
     let y_base : Float = 200.0 + fi * 80.0
     let alpha : Int = 30 - i * 3
-    let col = @raylib.Color::new(
-      0,
-      180,
-      255,
-      if alpha > 0 { alpha } else { 5 },
-    )
+    let col = @raylib.Color::new(0, 180, 255, if alpha > 0 { alpha } else { 5 })
     for x in 0..<128 {
       let xf : Float = Float::from_int(x) * 10.0
       let wave_y = y_base + @types.sinf(xf * 0.02 + frame_f * 0.03 + fi) * 30.0
@@ -31,7 +26,13 @@ fn draw_title(game : @types.Game) -> Unit {
   // Subtitle
   let sub = "Wave Propagation Puzzles"
   let sw = @draw.measure_text(sub, 24)
-  @draw.draw_text(sub, (@types.screen_width - sw) / 2, 270, 24, @types.color_ui_text)
+  @draw.draw_text(
+    sub,
+    (@types.screen_width - sw) / 2,
+    270,
+    24,
+    @types.color_ui_text,
+  )
   // Prompt
   let prompt = "Press ENTER to start"
   let pulse : Float = @types.absf(@types.sinf(frame_f * 0.05))
@@ -47,15 +48,19 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   let _ = game
   let title = "Select Tier"
   let tw = @draw.measure_text(title, 40)
-  @draw.draw_text(title, (@types.screen_width - tw) / 2, 80, 40, @types.color_ui_highlight)
+  @draw.draw_text(
+    title,
+    (@types.screen_width - tw) / 2,
+    80,
+    40,
+    @types.color_ui_highlight,
+  )
   let tier_names = ["1: Propagation", "2: Reflection", "3: Phase"]
   let tier_descs = [
     "Emitters + Walls", "Reflectors + Absorbers", "Phase Shifters + Interference",
   ]
   let tier_colors : Array[@raylib.Color] = [
-    @types.color_emitter_p0,
-    @types.color_reflector,
-    @types.color_phase_shifter,
+    @types.color_emitter_p0, @types.color_reflector, @types.color_phase_shifter,
   ]
   for t in 0..<3 {
     let bx = 200 + t * 320
@@ -72,7 +77,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     // Level count hint
     @draw.draw_text("10 levels", bx + 20, by + 140, 16, @types.color_ui_text)
   }
-  @draw.draw_text("ESC: back", 20, @types.screen_height - 40, 16, @types.color_ui_dim)
+  @draw.draw_text(
+    "ESC: back",
+    20,
+    @types.screen_height - 40,
+    16,
+    @types.color_ui_dim,
+  )
 }
 
 ///|
@@ -82,7 +93,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
     ": " +
     @levels.tier_name(game.current_tier)
   let tlw = @draw.measure_text(tier_label, 36)
-  @draw.draw_text(tier_label, (@types.screen_width - tlw) / 2, 60, 36, @types.color_ui_highlight)
+  @draw.draw_text(
+    tier_label,
+    (@types.screen_width - tlw) / 2,
+    60,
+    36,
+    @types.color_ui_highlight,
+  )
   let tier_offset = game.current_tier * @types.levels_per_tier
   let levels = @levels.get_all_levels()
   for i in 0..<10 {
@@ -116,7 +133,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
     // Stars
     draw_stars(bx + 10, by + 75, score.stars)
     // Par info
-    let par = "Par: " + level.par_objects.to_string() + " obj / " + level.par_ticks.to_string() + " ticks"
+    let par = "Par: " +
+      level.par_objects.to_string() +
+      " obj / " +
+      level.par_ticks.to_string() +
+      " ticks"
     @draw.draw_text(par, bx + 10, by + 110, 12, @types.color_ui_dim)
     if score.completed {
       let done = score.objects_used.to_string() +
@@ -126,7 +147,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @draw.draw_text(done, bx + 10, by + 130, 12, @types.color_target_ok)
     }
   }
-  @draw.draw_text("Click level or press 1-0  |  ESC: back", 20, @types.screen_height - 40, 16, @types.color_ui_dim)
+  @draw.draw_text(
+    "Click level or press 1-0  |  ESC: back",
+    20,
+    @types.screen_height - 40,
+    16,
+    @types.color_ui_dim,
+  )
 }
 
 ///|
@@ -136,50 +163,52 @@ fn draw_results(game : @types.Game) -> Unit {
   // Title
   let title = "Results: " + level.name
   let tw = @draw.measure_text(title, 36)
-  @draw.draw_text(title, (@types.screen_width - tw) / 2, 120, 36, @types.color_ui_highlight)
+  @draw.draw_text(
+    title,
+    (@types.screen_width - tw) / 2,
+    120,
+    36,
+    @types.color_ui_highlight,
+  )
   // Stars
   draw_stars((@types.screen_width - 100) / 2, 200, score.stars)
   // Stats
   let stat_x = (@types.screen_width - 300) / 2
   @draw.draw_text(
-    "Objects used: " + score.objects_used.to_string() +
-    " (par: " + level.par_objects.to_string() + ")",
+    "Objects used: " +
+    score.objects_used.to_string() +
+    " (par: " +
+    level.par_objects.to_string() +
+    ")",
     stat_x,
     270,
     22,
     @types.color_ui_text,
   )
   @draw.draw_text(
-    "Ticks used: " + score.ticks_used.to_string() +
-    " (par: " + level.par_ticks.to_string() + ")",
+    "Ticks used: " +
+    score.ticks_used.to_string() +
+    " (par: " +
+    level.par_ticks.to_string() +
+    ")",
     stat_x,
     305,
     22,
     @types.color_ui_text,
   )
   // Star explanations
-  @draw.draw_text("1 star: Complete level", stat_x, 370, 16, @types.color_ui_dim)
   @draw.draw_text(
-    "2 stars: Within par objects",
-    stat_x,
-    395,
-    16,
-    @types.color_ui_dim,
+    "1 star: Complete level", stat_x, 370, 16, @types.color_ui_dim,
   )
   @draw.draw_text(
-    "3 stars: Within par objects and ticks",
-    stat_x,
-    420,
-    16,
-    @types.color_ui_dim,
+    "2 stars: Within par objects", stat_x, 395, 16, @types.color_ui_dim,
+  )
+  @draw.draw_text(
+    "3 stars: Within par objects and ticks", stat_x, 420, 16, @types.color_ui_dim,
   )
   // Navigation
   @draw.draw_text(
-    "ENTER/N: next level  R: retry  ESC: level select",
-    stat_x,
-    500,
-    18,
-    @types.color_ui_dim,
+    "ENTER/N: next level  R: retry  ESC: level select", stat_x, 500, 18, @types.color_ui_dim,
   )
 }
 

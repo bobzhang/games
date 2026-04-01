@@ -92,10 +92,7 @@ test "sector map pre-boss layer connects to boss node" {
   let pre_boss_start = 1 + (layers - 2) * per_layer
   for i in 0..<per_layer {
     let idx = pre_boss_start + i
-    inspect(
-      map.nodes[idx].connections.contains(map.boss_node),
-      content="true",
-    )
+    inspect(map.nodes[idx].connections.contains(map.boss_node), content="true")
   }
 }
 
@@ -162,16 +159,10 @@ test "shop items have correct costs" {
   let game = @types.new_game()
   @sectors.generate_shop_items(game)
   inspect(game.shop_items[0].cost, content=@types.shop_heal_cost.to_string())
-  inspect(
-    game.shop_items[1].cost,
-    content=@types.shop_shield_cost.to_string(),
-  )
+  inspect(game.shop_items[1].cost, content=@types.shop_shield_cost.to_string())
   inspect(game.shop_items[2].cost, content=@types.shop_mod_cost.to_string())
   inspect(game.shop_items[3].cost, content=@types.shop_mod_cost.to_string())
-  inspect(
-    game.shop_items[4].cost,
-    content=@types.shop_weapon_cost.to_string(),
-  )
+  inspect(game.shop_items[4].cost, content=@types.shop_weapon_cost.to_string())
 }
 
 ///|

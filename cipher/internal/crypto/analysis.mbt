@@ -51,7 +51,7 @@ pub fn count_letters(text : String) -> Int {
 pub fn find_repeated_patterns(
   text : String,
   min_len : Int,
-  max_len : Int
+  max_len : Int,
 ) -> Array[@types.PatternMatch] {
   let results : Array[@types.PatternMatch] = []
   let letters = StringBuilder::new()
@@ -106,13 +106,11 @@ pub fn find_repeated_patterns(
     }
     for j in 0..<seen_patterns.length() {
       if seen_positions[j].length() >= 2 {
-        results.push(
-          {
-            pattern: seen_patterns[j],
-            positions: seen_positions[j],
-            count: seen_positions[j].length(),
-          },
-        )
+        results.push({
+          pattern: seen_patterns[j],
+          positions: seen_positions[j],
+          count: seen_positions[j].length(),
+        })
       }
     }
   }
@@ -152,7 +150,7 @@ pub fn suggest_caesar_shift(ciphertext : String) -> Int {
 pub fn get_hint_mapping(
   ciphertext : String,
   plaintext : String,
-  current : @types.Mapping
+  current : @types.Mapping,
 ) -> (Int, Int) {
   for i in 0..<ciphertext.length() {
     let c = @types.str_char_at(ciphertext, i)

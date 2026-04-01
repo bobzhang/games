@@ -127,7 +127,8 @@ pub fn count_coin_tiles(game : Game) -> Int {
   let mut count = 0
   for i in 0..<game.map_tiles.length() {
     match game.map_tiles[i] {
-      CoinTile | QuestionCoin | HiddenCoin | HiddenBonusCoin => count = count + 1
+      CoinTile | QuestionCoin | HiddenCoin | HiddenBonusCoin =>
+        count = count + 1
       _ => ()
     }
   }

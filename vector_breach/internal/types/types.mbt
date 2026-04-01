@@ -43,10 +43,7 @@ pub(all) struct Grid {
 
 ///|
 pub fn Grid::new(w : Int, h : Int) -> Grid {
-  let tiles = Array::make(
-    w * h,
-    { kind: Floor, hazard: None, occupied_by: -1 },
-  )
+  let tiles = Array::make(w * h, { kind: Floor, hazard: None, occupied_by: -1 })
   { width: w, height: h, tiles }
 }
 
@@ -215,12 +212,12 @@ pub(all) struct PreviewTile {
 pub(all) struct CampaignNode {
   id : Int
   kind : CampaignNodeKind
-  x : Int                        // display x position (0-4 columns)
-  y : Int                        // display y position (row in that column)
-  connections : Array[Int]       // ids of nodes this connects to
-  difficulty : Int               // 1-3 stars
-  reward_icon : String           // "A"=augment, "G"=GP, "R"=repair, "?"=random
-  theme : BranchTheme            // path theme modifier
+  x : Int // display x position (0-4 columns)
+  y : Int // display y position (row in that column)
+  connections : Array[Int] // ids of nodes this connects to
+  difficulty : Int // 1-3 stars
+  reward_icon : String // "A"=augment, "G"=GP, "R"=repair, "?"=random
+  theme : BranchTheme // path theme modifier
 }
 
 ///|
@@ -240,13 +237,13 @@ pub(all) struct RunState {
   mut reputation : Int
   mut campaign : CampaignMap?
   mut offered_augments : Array[AugmentKind]
-  mut upgrade_tiers : Array[Int]  // [vanguard_tier, striker_tier, sentinel_tier]
+  mut upgrade_tiers : Array[Int] // [vanguard_tier, striker_tier, sentinel_tier]
   mut total_score : Int
   mut mechs_lost : Int
   mut best_combo : Int
   mut total_turns : Int
-  mut mech_hp : Array[Int]        // persistent HP for [vanguard, striker, sentinel]
-  mut event_choice : Int          // 0=none, 1=pay, 2=fight for events
+  mut mech_hp : Array[Int] // persistent HP for [vanguard, striker, sentinel]
+  mut event_choice : Int // 0=none, 1=pay, 2=fight for events
 }
 
 ///|

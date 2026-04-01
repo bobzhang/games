@@ -6,10 +6,18 @@ test "hint_narrow_most_constrained" {
   let features : Array[@types.FeatureKind] = [Mountain, Town]
   let clues = [
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=3, text="dist 3",
+      Distance,
+      Mountain,
+      feature_b=Town,
+      distance=3,
+      text="dist 3",
     ),
     @types.new_clue(
-      Direction, Town, feature_b=Mountain, direction=E, text="town east",
+      Direction,
+      Town,
+      feature_b=Mountain,
+      direction=E,
+      text="town east",
     ),
     @types.new_clue(Not, Town, direction=N, row_col=0, text="no town row 1"),
     @types.new_clue(Not, Town, direction=N, row_col=1, text="no town row 2"),
@@ -26,9 +34,7 @@ test "hint_narrow_empty_grid" {
   let grid : Array[@types.FeatureKind?] = Array::make(64, None)
   let features : Array[@types.FeatureKind] = [Mountain, Town]
   let clues = [
-    @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=3, text="test",
-    ),
+    @types.new_clue(Distance, Mountain, feature_b=Town, distance=3, text="test"),
   ]
   let (cells, feat) = @solver.compute_narrow_hint(grid, 8, features, clues)
   // Both features need placement; should return cells for one of them
@@ -42,11 +48,13 @@ test "hint_reveal_forced_cell" {
   grid[2 * 8 + 2] = Some(Mountain)
   let features : Array[@types.FeatureKind] = [Mountain, Town]
   let clues = [
+    @types.new_clue(Distance, Mountain, feature_b=Town, distance=3, text="dist"),
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=3, text="dist",
-    ),
-    @types.new_clue(
-      Direction, Town, feature_b=Mountain, direction=E, text="east",
+      Direction,
+      Town,
+      feature_b=Mountain,
+      direction=E,
+      text="east",
     ),
     @types.new_clue(Not, Town, direction=N, row_col=0, text="no row 1"),
     @types.new_clue(Not, Town, direction=N, row_col=1, text="no row 2"),
@@ -70,7 +78,11 @@ test "hint_reveal_no_features_needed" {
   let features : Array[@types.FeatureKind] = [Mountain, Town]
   let clues = [
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=1, text="dist 1",
+      Distance,
+      Mountain,
+      feature_b=Town,
+      distance=1,
+      text="dist 1",
     ),
   ]
   let (cell, feat) = @solver.compute_reveal_hint(grid, 8, features, clues)
@@ -85,9 +97,7 @@ test "hint_all_features_placed_empty_hints" {
   grid[1] = Some(Town)
   let features : Array[@types.FeatureKind] = [Mountain, Town]
   let clues = [
-    @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=1, text="test",
-    ),
+    @types.new_clue(Distance, Mountain, feature_b=Town, distance=1, text="test"),
   ]
   let hints = @solver.compute_hints(grid, 8, features, clues)
   inspect(hints.length(), content="0")
@@ -129,10 +139,18 @@ test "valid_positions_highly_constrained" {
   grid[2 * 8 + 2] = Some(Mountain)
   let clues = [
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=1, text="dist 1",
+      Distance,
+      Mountain,
+      feature_b=Town,
+      distance=1,
+      text="dist 1",
     ),
     @types.new_clue(
-      Direction, Town, feature_b=Mountain, direction=E, text="east",
+      Direction,
+      Town,
+      feature_b=Mountain,
+      direction=E,
+      text="east",
     ),
   ]
   let valid = @solver.find_valid_positions_pub(grid, 8, clues, Town)
@@ -166,51 +184,33 @@ test "count_solutions_simple_level" {
   let features : Array[@types.FeatureKind] = [Mountain, Town]
   let clues = [
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=1, text="dist 1",
+      Distance,
+      Mountain,
+      feature_b=Town,
+      distance=1,
+      text="dist 1",
     ),
     @types.new_clue(
-      Direction, Town, feature_b=Mountain, direction=E, text="east",
+      Direction,
+      Town,
+      feature_b=Mountain,
+      direction=E,
+      text="east",
     ),
     @types.new_clue(Not, Mountain, direction=N, row_col=0, text="no row 1"),
-    @types.new_clue(
-      Not, Mountain, direction=N, row_col=1, text="no row 2",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=N, row_col=2, text="no row 3",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=N, row_col=4, text="no row 5",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=N, row_col=5, text="no row 6",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=N, row_col=6, text="no row 7",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=N, row_col=7, text="no row 8",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=S, row_col=0, text="no col 1",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=S, row_col=1, text="no col 2",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=S, row_col=3, text="no col 4",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=S, row_col=4, text="no col 5",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=S, row_col=5, text="no col 6",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=S, row_col=6, text="no col 7",
-    ),
-    @types.new_clue(
-      Not, Mountain, direction=S, row_col=7, text="no col 8",
-    ),
+    @types.new_clue(Not, Mountain, direction=N, row_col=1, text="no row 2"),
+    @types.new_clue(Not, Mountain, direction=N, row_col=2, text="no row 3"),
+    @types.new_clue(Not, Mountain, direction=N, row_col=4, text="no row 5"),
+    @types.new_clue(Not, Mountain, direction=N, row_col=5, text="no row 6"),
+    @types.new_clue(Not, Mountain, direction=N, row_col=6, text="no row 7"),
+    @types.new_clue(Not, Mountain, direction=N, row_col=7, text="no row 8"),
+    @types.new_clue(Not, Mountain, direction=S, row_col=0, text="no col 1"),
+    @types.new_clue(Not, Mountain, direction=S, row_col=1, text="no col 2"),
+    @types.new_clue(Not, Mountain, direction=S, row_col=3, text="no col 4"),
+    @types.new_clue(Not, Mountain, direction=S, row_col=4, text="no col 5"),
+    @types.new_clue(Not, Mountain, direction=S, row_col=5, text="no col 6"),
+    @types.new_clue(Not, Mountain, direction=S, row_col=6, text="no col 7"),
+    @types.new_clue(Not, Mountain, direction=S, row_col=7, text="no col 8"),
   ]
   // Mountain forced to (2,3), Town must be at (3,3)
   let count = @solver.count_solutions(8, features, clues, max_solutions=3)

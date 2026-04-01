@@ -35,6 +35,7 @@ pub let clue_panel_y : Int = 80
 pub let total_levels : Int = 25
 
 // Earth-tone palette
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(35, 30, 25, 255)
 
@@ -75,6 +76,7 @@ pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
 pub let color_star_empty : @raylib.Color = @raylib.Color::new(80, 70, 60, 255)
 
 // Rock colors
+
 ///|
 pub let color_sandstone : @raylib.Color = @raylib.Color::new(220, 195, 100, 255)
 
@@ -100,6 +102,7 @@ pub let color_chalk : @raylib.Color = @raylib.Color::new(240, 238, 230, 255)
 pub let color_slate : @raylib.Color = @raylib.Color::new(120, 130, 150, 255)
 
 // Tier colors
+
 ///|
 pub let color_tier_surface : @raylib.Color = @raylib.Color::new(
   140, 180, 100, 255,

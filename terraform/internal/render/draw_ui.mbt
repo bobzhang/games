@@ -5,15 +5,27 @@ fn draw_paint_palette(game : @types.Game) -> Unit {
   @draw.draw_text("Paint Palette", px, py, 22, @types.color_accent)
   // Forest
   draw_palette_entry(
-    px, py + 35, Forest, game.budget.forest, game.selected_biome == Forest,
+    px,
+    py + 35,
+    Forest,
+    game.budget.forest,
+    game.selected_biome == Forest,
   )
   // Ocean
   draw_palette_entry(
-    px, py + 80, Ocean, game.budget.ocean, game.selected_biome == Ocean,
+    px,
+    py + 80,
+    Ocean,
+    game.budget.ocean,
+    game.selected_biome == Ocean,
   )
   // Desert
   draw_palette_entry(
-    px, py + 125, Desert, game.budget.desert, game.selected_biome == Desert,
+    px,
+    py + 125,
+    Desert,
+    game.budget.desert,
+    game.selected_biome == Desert,
   )
   // Total remaining
   let total = @types.total_budget(game.budget)
@@ -27,7 +39,10 @@ fn draw_paint_palette(game : @types.Game) -> Unit {
   // Controls hint
   @draw.draw_text(
     "[1] Forest  [2] Ocean  [3] Desert",
-    px, py + 195, 14, @types.color_text_dim,
+    px,
+    py + 195,
+    14,
+    @types.color_text_dim,
   )
 }
 
@@ -37,14 +52,17 @@ fn draw_palette_entry(
   y : Int,
   biome : @types.BiomeKind,
   remaining : Int,
-  selected : Bool
+  selected : Bool,
 ) -> Unit {
   let color = @types.biome_color(biome)
   let name = @types.biome_name(biome)
   // Selection indicator
   if selected {
     @raylib.draw_rectangle(
-      x - 5, y - 3, 250, 36,
+      x - 5,
+      y - 3,
+      250,
+      36,
       @raylib.Color::new(255, 255, 255, 20),
     )
     @raylib.draw_rectangle_lines(x - 5, y - 3, 250, 36, @types.color_accent)
@@ -66,9 +84,7 @@ fn draw_palette_entry(
   let dot_y = y + 28
   for d in 0..<remaining {
     if d < 10 {
-      @raylib.draw_circle(
-        x + 32 + d * 14, dot_y, 4.0, color,
-      )
+      @raylib.draw_circle(x + 32 + d * 14, dot_y, 4.0, color)
     }
   }
 }
@@ -79,9 +95,14 @@ fn draw_turn_info(game : @types.Game) -> Unit {
   let ty = 555
   // Turn counter with progress bar
   @draw.draw_text(
-    "Turn: " + game.current_turn.to_string() + " / Par: " +
+    "Turn: " +
+    game.current_turn.to_string() +
+    " / Par: " +
     game.par_turns.to_string(),
-    tx, ty, 20, @types.color_text,
+    tx,
+    ty,
+    20,
+    @types.color_text,
   )
   // Turn progress bar
   let bar_w = 200
@@ -121,11 +142,17 @@ fn draw_turn_info(game : @types.Game) -> Unit {
   // Controls
   @draw.draw_text(
     "[R] Restart  [U] Undo  [Shift+U] Undo Resolve",
-    tx, ty + 68, 14, @types.color_text_dim,
+    tx,
+    ty + 68,
+    14,
+    @types.color_text_dim,
   )
   @draw.draw_text(
     "[P] Preview  [Esc] Back to levels",
-    tx, ty + 86, 14, @types.color_text_dim,
+    tx,
+    ty + 86,
+    14,
+    @types.color_text_dim,
   )
 }
 
@@ -137,15 +164,24 @@ fn draw_biome_rules_panel(_game : @types.Game) -> Unit {
   @draw.draw_text("Rules:", px, py, 14, @types.color_accent)
   @draw.draw_text(
     "Forest: spreads near water, dies near 3+ desert",
-    px, py + 18, 12, @types.color_text_dim,
+    px,
+    py + 18,
+    12,
+    @types.color_text_dim,
   )
   @draw.draw_text(
     "Desert: spreads without water, retreats near 2+ ocean",
-    px, py + 32, 12, @types.color_text_dim,
+    px,
+    py + 32,
+    12,
+    @types.color_text_dim,
   )
   @draw.draw_text(
     "Ocean: stable, placed by you",
-    px, py + 46, 12, @types.color_text_dim,
+    px,
+    py + 46,
+    12,
+    @types.color_text_dim,
   )
 }
 
@@ -183,26 +219,40 @@ fn draw_level_name(game : @types.Game) -> Unit {
 fn draw_undo_stack_indicator(game : @types.Game) -> Unit {
   let count = game.undo_stack.length()
   if count > 0 {
-    let text = "Undo: " + count.to_string() + " action" + (if count > 1 {
-      "s"
-    } else {
-      ""
-    })
-    @draw.draw_text(text, 20, @types.screen_height - 30, 14, @types.color_text_dim)
+    let text = "Undo: " +
+      count.to_string() +
+      " action" +
+      (if count > 1 { "s" } else { "" })
+    @draw.draw_text(
+      text,
+      20,
+      @types.screen_height - 30,
+      14,
+      @types.color_text_dim,
+    )
   }
   // Resolve undo indicator
   let rcount = game.resolve_undo_stack.length()
   if rcount > 0 {
-    let rtext = "Resolve undo: " + rcount.to_string() + " step" +
+    let rtext = "Resolve undo: " +
+      rcount.to_string() +
+      " step" +
       (if rcount > 1 { "s" } else { "" })
     @draw.draw_text(
-      rtext, 20, @types.screen_height - 14, 12, @types.color_text_dim,
+      rtext,
+      20,
+      @types.screen_height - 14,
+      12,
+      @types.color_text_dim,
     )
   }
   // Preview mode indicator
   if game.show_preview {
     @draw.draw_text(
-      "[P] Preview ON", 140, @types.screen_height - 30, 14,
+      "[P] Preview ON",
+      140,
+      @types.screen_height - 30,
+      14,
       @types.color_accent,
     )
   }
@@ -212,9 +262,18 @@ fn draw_undo_stack_indicator(game : @types.Game) -> Unit {
 fn draw_grid_coords(game : @types.Game) -> Unit {
   // Show hovered tile coordinates
   if game.hover_col >= 0 && game.hover_row >= 0 {
-    let text = "(" + game.hover_col.to_string() + "," + game.hover_row.to_string() +
+    let text = "(" +
+      game.hover_col.to_string() +
+      "," +
+      game.hover_row.to_string() +
       ")"
-    @draw.draw_text(text, 20, @types.screen_height - 50, 14, @types.color_text_dim)
+    @draw.draw_text(
+      text,
+      20,
+      @types.screen_height - 50,
+      14,
+      @types.color_text_dim,
+    )
     // Show tile info
     if game.hover_col < game.grid.width && game.hover_row < game.grid.height {
       let tile = @types.get_tile(game.grid, game.hover_col, game.hover_row)
@@ -222,22 +281,42 @@ fn draw_grid_coords(game : @types.Game) -> Unit {
       let lock_text = if tile.locked { " [locked]" } else { "" }
       @draw.draw_text(
         biome_text + lock_text,
-        20, @types.screen_height - 68, 14, @types.biome_color(tile.biome),
+        20,
+        @types.screen_height - 68,
+        14,
+        @types.biome_color(tile.biome),
       )
       // Show neighbor counts
       let forest_n = @types.count_neighbor_biome(
-        game.grid, game.hover_col, game.hover_row, Forest,
+        game.grid,
+        game.hover_col,
+        game.hover_row,
+        Forest,
       )
       let ocean_n = @types.count_neighbor_biome(
-        game.grid, game.hover_col, game.hover_row, Ocean,
+        game.grid,
+        game.hover_col,
+        game.hover_row,
+        Ocean,
       )
       let desert_n = @types.count_neighbor_biome(
-        game.grid, game.hover_col, game.hover_row, Desert,
+        game.grid,
+        game.hover_col,
+        game.hover_row,
+        Desert,
       )
-      let info = "Neighbors: F:" + forest_n.to_string() + " O:" +
-        ocean_n.to_string() + " D:" + desert_n.to_string()
+      let info = "Neighbors: F:" +
+        forest_n.to_string() +
+        " O:" +
+        ocean_n.to_string() +
+        " D:" +
+        desert_n.to_string()
       @draw.draw_text(
-        info, 20, @types.screen_height - 86, 12, @types.color_text_dim,
+        info,
+        20,
+        @types.screen_height - 86,
+        12,
+        @types.color_text_dim,
       )
     }
   }
@@ -281,10 +360,18 @@ fn draw_planet_border(game : @types.Game) -> Unit {
   // Wrap arrows on left and right
   let mid_y = (@types.grid_offset_y + total_h / 2.0).to_int()
   @draw.draw_text(
-    "<<", (left - 20.0).to_int(), mid_y, 16, @types.color_text_dim,
+    "<<",
+    (left - 20.0).to_int(),
+    mid_y,
+    16,
+    @types.color_text_dim,
   )
   @draw.draw_text(
-    ">>", (left + total_w + 25.0).to_int(), mid_y, 16, @types.color_text_dim,
+    ">>",
+    (left + total_w + 25.0).to_int(),
+    mid_y,
+    16,
+    @types.color_text_dim,
   )
 }
 
@@ -297,12 +384,11 @@ fn draw_starfield_bg(game : @types.Game) -> Unit {
   for i in 0..<40 {
     let fi = Float::from_int(i)
     let sx = ((fi * 173.7 + time * 5.0) % Float::from_int(w)).to_int()
-    let sy = ((fi * 67.9 + time * 3.0 * (fi % 2.0 + 0.5)) % Float::from_int(
-        h,
-      )).to_int()
+    let sy = ((fi * 67.9 + time * 3.0 * (fi % 2.0 + 0.5)) % Float::from_int(h)).to_int()
     let brightness = 30 + (fi * 11.0 % 50.0).to_int()
     @raylib.draw_pixel(
-      sx, sy,
+      sx,
+      sy,
       @raylib.Color::new(brightness, brightness, brightness + 20, 150),
     )
   }
@@ -316,7 +402,10 @@ fn draw_playing(game : @types.Game) -> Unit {
   let level_num = game.current_level + 1
   @draw.draw_text(
     "Level " + level_num.to_string(),
-    20, 15, 28, @types.color_accent,
+    20,
+    15,
+    28,
+    @types.color_accent,
   )
   draw_level_name(game)
   // Planet border effect

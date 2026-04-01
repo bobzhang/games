@@ -10,8 +10,7 @@ pub fn check_targets(grid : @types.WaveGrid) -> Bool {
       if tile.is_target {
         let amp_ok = tile.amplitude >= tile.target_min &&
           tile.amplitude <= tile.target_max
-        let phase_ok = tile.target_phase < 0 ||
-          tile.target_phase == tile.phase
+        let phase_ok = tile.target_phase < 0 || tile.target_phase == tile.phase
         tile.target_satisfied = amp_ok && phase_ok
         if !tile.target_satisfied {
           all_ok = false

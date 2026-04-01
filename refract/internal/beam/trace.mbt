@@ -4,7 +4,8 @@ pub fn trace_all_beams(grid : @types.Grid) -> Array[@types.BeamSegment] {
   @types.grid_clear_received(grid)
   let total = grid.width * grid.height
   let combiner_input_colors : Array[@types.BeamColor] = Array::make(
-    total, @types.beam_color_black(),
+    total,
+    @types.beam_color_black(),
   )
   // Find all sources and trace beams from them
   for y in 0..<grid.height {
@@ -18,8 +19,14 @@ pub fn trace_all_beams(grid : @types.Grid) -> Array[@types.BeamSegment] {
                 None => @types.beam_color_white()
               }
               trace_beam(
-                grid, x, y, cell.direction, source_color, segments,
-                combiner_input_colors, 0,
+                grid,
+                x,
+                y,
+                cell.direction,
+                source_color,
+                segments,
+                combiner_input_colors,
+                0,
               )
             }
             _ => ()
@@ -37,10 +44,16 @@ pub fn trace_all_beams(grid : @types.Grid) -> Array[@types.BeamSegment] {
             Some(Combiner) => {
               let idx = y * grid.width + x
               let combined = combiner_input_colors[idx]
-              if !(@types.beam_color_is_black(combined)) {
+              if !@types.beam_color_is_black(combined) {
                 trace_beam(
-                  grid, x, y, cell.direction, combined, segments,
-                  combiner_input_colors, 0,
+                  grid,
+                  x,
+                  y,
+                  cell.direction,
+                  combined,
+                  segments,
+                  combiner_input_colors,
+                  0,
                 )
               }
             }
@@ -62,7 +75,7 @@ fn trace_beam(
   color : @types.BeamColor,
   segments : Array[@types.BeamSegment],
   combiner_inputs : Array[@types.BeamColor],
-  depth : Int
+  depth : Int,
 ) -> Unit {
   if depth > 50 || @types.beam_color_is_black(color) {
     return
@@ -72,30 +85,26 @@ fn trace_beam(
   let dy = @types.direction_dy(dir)
   let nx = start_x + dx
   let ny = start_y + dy
-  if !(@types.grid_in_bounds(grid, nx, ny)) {
-    segments.push(
-      {
-        start: @types.vec2i(start_x, start_y),
-        end_: @types.vec2i(start_x, start_y),
-        color,
-        direction: dir,
-      },
-    )
+  if !@types.grid_in_bounds(grid, nx, ny) {
+    segments.push({
+      start: @types.vec2i(start_x, start_y),
+      end_: @types.vec2i(start_x, start_y),
+      color,
+      direction: dir,
+    })
     return
   }
   let mut cx = nx
   let mut cy = ny
   let mut steps = 1
   while steps < max_steps {
-    if !(@types.grid_in_bounds(grid, cx, cy)) {
-      segments.push(
-        {
-          start: @types.vec2i(start_x, start_y),
-          end_: @types.vec2i(cx - dx, cy - dy),
-          color,
-          direction: dir,
-        },
-      )
+    if !@types.grid_in_bounds(grid, cx, cy) {
+      segments.push({
+        start: @types.vec2i(start_x, start_y),
+        end_: @types.vec2i(cx - dx, cy - dy),
+        color,
+        direction: dir,
+      })
       break
     }
     match @types.grid_get(grid, cx, cy) {
@@ -104,33 +113,35 @@ fn trace_beam(
           None => {
             let next_x = cx + dx
             let next_y = cy + dy
-            if !(@types.grid_in_bounds(grid, next_x, next_y)) {
-              segments.push(
-                {
-                  start: @types.vec2i(start_x, start_y),
-                  end_: @types.vec2i(cx, cy),
-                  color,
-                  direction: dir,
-                },
-              )
+            if !@types.grid_in_bounds(grid, next_x, next_y) {
+              segments.push({
+                start: @types.vec2i(start_x, start_y),
+                end_: @types.vec2i(cx, cy),
+                color,
+                direction: dir,
+              })
               break
             }
             cx = next_x
             cy = next_y
           }
           Some(Mirror) => {
-            segments.push(
-              {
-                start: @types.vec2i(start_x, start_y),
-                end_: @types.vec2i(cx, cy),
-                color,
-                direction: dir,
-              },
-            )
+            segments.push({
+              start: @types.vec2i(start_x, start_y),
+              end_: @types.vec2i(cx, cy),
+              color,
+              direction: dir,
+            })
             match @types.mirror_reflect(dir, cell.direction) {
               Some(new_dir) =>
                 trace_beam(
-                  grid, cx, cy, new_dir, color, segments, combiner_inputs,
+                  grid,
+                  cx,
+                  cy,
+                  new_dir,
+                  color,
+                  segments,
+                  combiner_inputs,
                   depth + 1,
                 )
               None => ()
@@ -138,42 +149,65 @@ fn trace_beam(
             break
           }
           Some(Prism) => {
-            segments.push(
-              {
-                start: @types.vec2i(start_x, start_y),
-                end_: @types.vec2i(cx, cy),
-                color,
-                direction: dir,
-              },
-            )
+            segments.push({
+              start: @types.vec2i(start_x, start_y),
+              end_: @types.vec2i(cx, cy),
+              color,
+              direction: dir,
+            })
             let channels = @types.beam_color_channel_count(color)
             if channels <= 1 {
               trace_beam(
-                grid, cx, cy, dir, color, segments, combiner_inputs, depth + 1,
+                grid,
+                cx,
+                cy,
+                dir,
+                color,
+                segments,
+                combiner_inputs,
+                depth + 1,
               )
             } else {
               let mut dir_idx = 0
               if color.r {
                 let split_dir = get_split_direction(dir, dir_idx)
                 trace_beam(
-                  grid, cx, cy, split_dir, @types.beam_color_red(), segments,
-                  combiner_inputs, depth + 1,
+                  grid,
+                  cx,
+                  cy,
+                  split_dir,
+                  @types.beam_color_red(),
+                  segments,
+                  combiner_inputs,
+                  depth + 1,
                 )
                 dir_idx += 1
               }
               if color.g {
                 let split_dir = get_split_direction(dir, dir_idx)
                 trace_beam(
-                  grid, cx, cy, split_dir, @types.beam_color_green(), segments,
-                  combiner_inputs, depth + 1,
+                  grid,
+                  cx,
+                  cy,
+                  split_dir,
+                  @types.beam_color_green(),
+                  segments,
+                  combiner_inputs,
+                  depth + 1,
                 )
                 dir_idx += 1
               }
               if color.b {
                 let split_dir = get_split_direction(dir, dir_idx)
                 trace_beam(
-                  grid, cx, cy, split_dir, @types.beam_color_blue(), segments,
-                  combiner_inputs, depth + 1,
+                  grid,
+                  cx,
+                  cy,
+                  split_dir,
+                  @types.beam_color_blue(),
+                  segments,
+                  combiner_inputs,
+                  depth + 1,
                 )
                 ignore(dir_idx)
               }
@@ -181,20 +215,24 @@ fn trace_beam(
             break
           }
           Some(Filter) => {
-            segments.push(
-              {
-                start: @types.vec2i(start_x, start_y),
-                end_: @types.vec2i(cx, cy),
-                color,
-                direction: dir,
-              },
-            )
+            segments.push({
+              start: @types.vec2i(start_x, start_y),
+              end_: @types.vec2i(cx, cy),
+              color,
+              direction: dir,
+            })
             match cell.filter_color {
               Some(fc) => {
                 let filtered = @types.beam_color_remove_channel(color, fc)
-                if !(@types.beam_color_is_black(filtered)) {
+                if !@types.beam_color_is_black(filtered) {
                   trace_beam(
-                    grid, cx, cy, dir, filtered, segments, combiner_inputs,
+                    grid,
+                    cx,
+                    cy,
+                    dir,
+                    filtered,
+                    segments,
+                    combiner_inputs,
                     depth + 1,
                   )
                 }
@@ -204,29 +242,26 @@ fn trace_beam(
             break
           }
           Some(Combiner) => {
-            segments.push(
-              {
-                start: @types.vec2i(start_x, start_y),
-                end_: @types.vec2i(cx, cy),
-                color,
-                direction: dir,
-              },
-            )
+            segments.push({
+              start: @types.vec2i(start_x, start_y),
+              end_: @types.vec2i(cx, cy),
+              color,
+              direction: dir,
+            })
             let idx = cy * grid.width + cx
             combiner_inputs[idx] = @types.beam_color_add(
-              combiner_inputs[idx], color,
+              combiner_inputs[idx],
+              color,
             )
             break
           }
           Some(Receiver) => {
-            segments.push(
-              {
-                start: @types.vec2i(start_x, start_y),
-                end_: @types.vec2i(cx, cy),
-                color,
-                direction: dir,
-              },
-            )
+            segments.push({
+              start: @types.vec2i(start_x, start_y),
+              end_: @types.vec2i(cx, cy),
+              color,
+              direction: dir,
+            })
             match cell.received_color {
               Some(existing) =>
                 cell.received_color = Some(
@@ -237,14 +272,12 @@ fn trace_beam(
             break
           }
           Some(Source) => {
-            segments.push(
-              {
-                start: @types.vec2i(start_x, start_y),
-                end_: @types.vec2i(cx, cy),
-                color,
-                direction: dir,
-              },
-            )
+            segments.push({
+              start: @types.vec2i(start_x, start_y),
+              end_: @types.vec2i(cx, cy),
+              color,
+              direction: dir,
+            })
             break
           }
         }
@@ -257,7 +290,7 @@ fn trace_beam(
 ///|
 fn get_split_direction(
   incoming : @types.Direction,
-  index : Int
+  index : Int,
 ) -> @types.Direction {
   match index {
     0 => incoming

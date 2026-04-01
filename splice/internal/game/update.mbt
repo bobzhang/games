@@ -20,9 +20,8 @@ pub fn update(game : @types.Game) -> Unit {
 
 ///|
 fn update_title(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-      @raylib.KeySpace,
-    ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     game.screen = TierSelect
   }
 }
@@ -45,9 +44,8 @@ fn update_tier_select(game : @types.Game) -> Unit {
       game.current_tier = 0
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-      @raylib.KeySpace,
-    ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     if @levels.is_tier_unlocked(game.current_tier, game.level_scores) {
       game.current_level = 0
       game.screen = LevelSelect
@@ -88,9 +86,8 @@ fn update_level_select(game : @types.Game) -> Unit {
       game.current_level = count - 1
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-      @raylib.KeySpace,
-    ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     start_level(game)
   }
 }
@@ -150,9 +147,8 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   // Cursor movement
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
-    if @raylib.is_key_down(@raylib.KeyLeftShift) || @raylib.is_key_down(
-        @raylib.KeyRightShift,
-      ) {
+    if @raylib.is_key_down(@raylib.KeyLeftShift) ||
+      @raylib.is_key_down(@raylib.KeyRightShift) {
       // Extend selection
       if game.selection_start < 0 {
         game.selection_start = game.cursor
@@ -168,9 +164,8 @@ fn update_playing(game : @types.Game) -> Unit {
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyRight) {
-    if @raylib.is_key_down(@raylib.KeyLeftShift) || @raylib.is_key_down(
-        @raylib.KeyRightShift,
-      ) {
+    if @raylib.is_key_down(@raylib.KeyLeftShift) ||
+      @raylib.is_key_down(@raylib.KeyRightShift) {
       if game.selection_start < 0 {
         game.selection_start = game.cursor
         game.selection_end = game.cursor
@@ -383,10 +378,7 @@ fn undo_last(game : @types.Game) -> Unit {
         }
         Insert => {
           // Remove the inserted base
-          game.current_sequence = @dna.cut(
-            game.current_sequence,
-            edit.position,
-          )
+          game.current_sequence = @dna.cut(game.current_sequence, edit.position)
           game.cursor = edit.position
         }
         Duplicate => {
@@ -398,14 +390,13 @@ fn undo_last(game : @types.Game) -> Unit {
             edit.range_end + dup_len,
           )
         }
-        Invert => {
+        Invert =>
           // Invert again to restore
           game.current_sequence = @dna.invert(
             game.current_sequence,
             edit.range_start,
             edit.range_end,
           )
-        }
         Delete => {
           // Re-insert the deleted bases
           let mut pos = edit.position
@@ -460,7 +451,10 @@ fn verify_sequence(game : @types.Game) -> Unit {
     let total = level.target_traits.length()
     @types.set_message(
       game,
-      match_count.to_string() + "/" + total.to_string() + " traits match. Keep editing!",
+      match_count.to_string() +
+      "/" +
+      total.to_string() +
+      " traits match. Keep editing!",
       2.0,
     )
     // Reset to editing so player can continue
@@ -470,9 +464,8 @@ fn verify_sequence(game : @types.Game) -> Unit {
 
 ///|
 fn update_results(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(
-      @raylib.KeySpace,
-    ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     // Go to next level or back to level select
     let count = @types.tier_level_count(game.current_tier)
     if game.current_level + 1 < count {

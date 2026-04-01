@@ -32,7 +32,7 @@ pub fn clear_mapping(m : Mapping) -> Unit {
 pub fn assign_mapping(
   m : Mapping,
   cipher_idx : Int,
-  plain_idx : Int
+  plain_idx : Int,
 ) -> UndoEntry {
   let old_plain = m.cipher_to_plain[cipher_idx]
   let mut old_displaced_cipher = -1
@@ -52,12 +52,7 @@ pub fn assign_mapping(
   }
   m.cipher_to_plain[cipher_idx] = plain_idx
   m.plain_used[plain_idx] = true
-  {
-    cipher_idx,
-    old_plain,
-    old_displaced_cipher,
-    old_displaced_plain,
-  }
+  { cipher_idx, old_plain, old_displaced_cipher, old_displaced_plain }
 }
 
 ///|
@@ -133,7 +128,7 @@ pub fn apply_mapping_to_text(ciphertext : String, m : Mapping) -> String {
 pub fn check_solution(
   ciphertext : String,
   plaintext : String,
-  m : Mapping
+  m : Mapping,
 ) -> Bool {
   for i in 0..<ciphertext.length() {
     let c = str_char_at(ciphertext, i)
@@ -156,7 +151,7 @@ pub fn check_solution(
 pub fn count_correct(
   ciphertext : String,
   plaintext : String,
-  m : Mapping
+  m : Mapping,
 ) -> Int {
   let mut count = 0
   let checked : Array[Bool] = Array::new(capacity=alphabet_size)

@@ -124,46 +124,46 @@ pub(all) enum EffectKind {
 
 ///|
 pub(all) enum AugmentKind {
-  ExtendedBarrel     // +1 range on ranged attacks
-  HeavyFrame         // +2 max HP, -1 move range
-  OverchargedPush    // push distance +1
-  ShieldGenerator    // start each battle with 2 shield
-  HeatSink           // +1 max heat capacity
-  ChainLightning     // attacks chain to adjacent enemy for 1 damage
-  VampireCore        // heal 1 HP on kill
-  FortifiedGrid      // grid objectives take 1 less damage
-  ReflexBoost        // first mech each turn gets +1 move range
-  EmergencyRepair    // auto-heal 1 HP when below 25%
+  ExtendedBarrel // +1 range on ranged attacks
+  HeavyFrame // +2 max HP, -1 move range
+  OverchargedPush // push distance +1
+  ShieldGenerator // start each battle with 2 shield
+  HeatSink // +1 max heat capacity
+  ChainLightning // attacks chain to adjacent enemy for 1 damage
+  VampireCore // heal 1 HP on kill
+  FortifiedGrid // grid objectives take 1 less damage
+  ReflexBoost // first mech each turn gets +1 move range
+  EmergencyRepair // auto-heal 1 HP when below 25%
 } derive(Eq, Show)
 
 ///|
 pub(all) enum CampaignNodeKind {
-  Mission(Int)       // mission def index
-  Boss(Int)          // boss mission def index
-  Rest               // heal opportunity
-  Shop               // buy augments
-  Event              // random risk/reward event
-  Elite(Int)         // harder mission with guaranteed rare augment
+  Mission(Int) // mission def index
+  Boss(Int) // boss mission def index
+  Rest // heal opportunity
+  Shop // buy augments
+  Event // random risk/reward event
+  Elite(Int) // harder mission with guaranteed rare augment
 } derive(Eq, Show)
 
 ///|
 pub(all) enum EventKind {
-  Scavenger          // pay 2 GP for random augment, or fight for free augment
-  Ambush             // surprise battle with extra enemies but double reward
-  Intel              // see next 2 missions' enemies + objectives
+  Scavenger // pay 2 GP for random augment, or fight for free augment
+  Ambush // surprise battle with extra enemies but double reward
+  Intel // see next 2 missions' enemies + objectives
 } derive(Eq, Show)
 
 ///|
 pub(all) enum BranchTheme {
-  ScorchedEarth      // more lava/fire tiles, fire-themed rewards
-  IceProtocol        // more ice tiles, mobility-themed rewards
-  VoidZone           // more chasms, push-themed rewards
-  Neutral            // no special theme
+  ScorchedEarth // more lava/fire tiles, fire-themed rewards
+  IceProtocol // more ice tiles, mobility-themed rewards
+  VoidZone // more chasms, push-themed rewards
+  Neutral // no special theme
 } derive(Eq, Show)
 
 ///|
 pub(all) enum RewardChoice {
-  PickAugment(Int)   // index into offered augments
+  PickAugment(Int) // index into offered augments
   RepairAll
   GainGridPower
 } derive(Eq, Show)
@@ -180,6 +180,6 @@ pub(all) enum AnimKind {
 
 ///|
 pub(all) enum StatusEffect {
-  OnFire(Int)        // turns remaining
-  Immobilized(Int)   // turns remaining
+  OnFire(Int) // turns remaining
+  Immobilized(Int) // turns remaining
 } derive(Eq, Show)

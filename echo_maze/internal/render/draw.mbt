@@ -24,7 +24,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
 ///|
 fn draw_playing(game : @types.Game) -> Unit {
   match game.maze {
-    Some(maze) => {
+    Some(maze) =>
       match game.maze_state {
         Some(maze_state) => {
           // Draw world
@@ -58,7 +58,6 @@ fn draw_playing(game : @types.Game) -> Unit {
         }
         None => ()
       }
-    }
     None => ()
   }
 }

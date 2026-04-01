@@ -88,7 +88,10 @@ test "preview path returns points" {
     par_bounces: 0,
   }
   let points = @physics.compute_preview(
-    level, level.start_pos, -@types.pi / 4.0, 5,
+    level,
+    level.start_pos,
+    -@types.pi / 4.0,
+    5,
   )
   // Should have at least start point and end point
   assert_true(points.length() >= 2)
@@ -110,7 +113,8 @@ test "target hit detection in simulation" {
   game.current_level = Some(level)
   // Create ball heading straight at target
   let ball = @types.new_ball(
-    @types.vec2(500.0, 130.0), @types.vec2(0.0, -@types.ball_speed),
+    @types.vec2(500.0, 130.0),
+    @types.vec2(0.0, -@types.ball_speed),
   )
   game.balls.push(ball)
   // Simulate several steps

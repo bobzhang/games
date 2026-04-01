@@ -7,15 +7,9 @@ pub fn draw_scanlines(game : @types.Game) -> Unit {
   let step = 3
   for y_idx in 0..<(sh / step) {
     let y = y_idx * step
-    let offset = (game.frame_count / 3) % step
+    let offset = game.frame_count / 3 % step
     if (y + offset) % (step * 2) < step {
-      @raylib.draw_line(
-        0,
-        y,
-        sw,
-        y,
-        @raylib.Color::new(0, 0, 0, 12),
-      )
+      @raylib.draw_line(0, y, sw, y, @raylib.Color::new(0, 0, 0, 12))
     }
   }
 }
@@ -37,8 +31,7 @@ pub fn draw_alert_border(game : @types.Game) -> Unit {
   let oy = @types.grid_offset_y
   let gw = @types.grid_width * @types.tile_size
   let gh = @types.grid_height * @types.tile_size
-  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.15) * 0.5 +
-    0.5
+  let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.15) * 0.5 + 0.5
   let alpha_f : Float = 40.0 + 40.0 * pulse
   let alert_color = @raylib.Color::new(255, 30, 30, alpha_f.to_int())
   // Inner border
@@ -129,13 +122,7 @@ pub fn draw_interaction_prompt(game : @types.Game) -> Unit {
       let cy = oy + t.gy * ts - 5
       let label = if t.high_security { "E: HACK [SEC]" } else { "E: HACK" }
       let lw = @draw.measure_text(label, 10)
-      @draw.draw_text(
-        label,
-        cx - lw / 2,
-        cy,
-        10,
-        @types.color_neon_green,
-      )
+      @draw.draw_text(label, cx - lw / 2, cy, 10, @types.color_neon_green)
       return
     }
   }
@@ -147,13 +134,7 @@ pub fn draw_interaction_prompt(game : @types.Game) -> Unit {
       let cy = oy + pn.gy * ts - 5
       let label = "E: TOGGLE"
       let lw = @draw.measure_text(label, 10)
-      @draw.draw_text(
-        label,
-        cx - lw / 2,
-        cy,
-        10,
-        @types.color_power_node,
-      )
+      @draw.draw_text(label, cx - lw / 2, cy, 10, @types.color_power_node)
       return
     }
   }
@@ -172,23 +153,11 @@ pub fn draw_door_labels(game : @types.Game) -> Unit {
     if d.open {
       let label = "O"
       let lw = @draw.measure_text(label, 10)
-      @draw.draw_text(
-        label,
-        cx - lw / 2,
-        cy - 5,
-        10,
-        @types.color_door_open,
-      )
+      @draw.draw_text(label, cx - lw / 2, cy - 5, 10, @types.color_door_open)
     } else {
       let label = "X"
       let lw = @draw.measure_text(label, 10)
-      @draw.draw_text(
-        label,
-        cx - lw / 2,
-        cy - 5,
-        10,
-        @types.color_door_closed,
-      )
+      @draw.draw_text(label, cx - lw / 2, cy - 5, 10, @types.color_door_closed)
     }
   }
 }
@@ -205,9 +174,7 @@ pub fn draw_power_indicators(game : @types.Game) -> Unit {
     let cy = Float::from_int(oy + pn.gy * ts + ts / 2)
     if pn.powered {
       // Glowing ring
-      let pulse = @types.sinf(
-        Float::from_int(game.frame_count) * 0.12,
-      ) * 3.0 +
+      let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.12) * 3.0 +
         Float::from_int(ts / 2 - 2)
       @raylib.draw_circle_lines_v(
         @raylib.Vector2::new(cx, cy),

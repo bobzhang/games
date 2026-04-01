@@ -41,11 +41,13 @@ pub fn is_level_complete(artwork : @types.Artwork) -> Bool {
 pub fn calculate_stars(
   artwork : @types.Artwork,
   tools_used : Int,
-  par_tools : Int
+  par_tools : Int,
 ) -> Int {
   let score = check_completion(artwork)
   // Must have some restored or sealed regions
-  let total_damaged = score.restored_count + score.worsened_count + score.sealed_count
+  let total_damaged = score.restored_count +
+    score.worsened_count +
+    score.sealed_count
   if total_damaged == 0 {
     return 0
   }
@@ -70,7 +72,9 @@ pub fn calculate_stars(
     stars = 2
   }
   // 3 stars: perfect restoration + within par tool uses
-  if score.worsened_count == 0 && score.sealed_count == 0 && tools_used <= par_tools {
+  if score.worsened_count == 0 &&
+    score.sealed_count == 0 &&
+    tools_used <= par_tools {
     stars = 3
   }
   stars
@@ -91,9 +95,7 @@ pub fn count_damaged(artwork : @types.Artwork) -> Int {
 
 ///|
 /// Count regions in each state.
-pub fn count_states(
-  artwork : @types.Artwork
-) -> (Int, Int, Int, Int, Int, Int) {
+pub fn count_states(artwork : @types.Artwork) -> (Int, Int, Int, Int, Int, Int) {
   let mut pristine = 0
   let mut damaged = 0
   let mut treated = 0

@@ -172,7 +172,10 @@ test "validate_placement with mirror_h" {
   // Expected: orientation S (mirror_orient_h(N) = S)
   let test_tile = @types.new_tile(Blue, Arrow, S)
   let valid = @symmetry.validate_placement(
-    grid, @types.vec2i(3, 6), test_tile, MirrorH,
+    grid,
+    @types.vec2i(3, 6),
+    test_tile,
+    MirrorH,
   )
   inspect(valid, content="true")
 }
@@ -184,7 +187,10 @@ test "validate_placement with rotate2" {
   // Rotate2 of (1,1) in 8x8 = (6,6), expected orient: S (180 flip of N)
   let test_tile = @types.new_tile(Gold, Arrow, S)
   let valid = @symmetry.validate_placement(
-    grid, @types.vec2i(6, 6), test_tile, Rotate2,
+    grid,
+    @types.vec2i(6, 6),
+    test_tile,
+    Rotate2,
   )
   inspect(valid, content="true")
 }

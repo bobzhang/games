@@ -1,6 +1,9 @@
 ///|
 /// Records a piece placement in the statistics.
-pub fn record_piece_placed(game : @types.Game, material : @types.Material) -> Unit {
+pub fn record_piece_placed(
+  game : @types.Game,
+  material : @types.Material,
+) -> Unit {
   let stats = game.statistics
   stats.total_pieces_placed = stats.total_pieces_placed + 1
   let mat_idx = material_index(material)
@@ -27,7 +30,7 @@ pub fn record_level_result(
   level_idx : Int,
   height : Float,
   stars : Int,
-  passed : Bool
+  passed : Bool,
 ) -> Unit {
   let stats = game.statistics
   // Check if level was previously completed BEFORE updating best height/stars
@@ -50,7 +53,7 @@ pub fn record_level_result(
       stats.stars_earned = stats.stars_earned + (stars - old_stars)
     }
   }
-  if passed && !(already_completed) {
+  if passed && !already_completed {
     stats.levels_completed = stats.levels_completed + 1
   }
 }
@@ -58,7 +61,8 @@ pub fn record_level_result(
 ///|
 /// Records a challenge completion.
 pub fn record_challenge_complete(game : @types.Game) -> Unit {
-  game.statistics.challenges_completed = game.statistics.challenges_completed + 1
+  game.statistics.challenges_completed = game.statistics.challenges_completed +
+    1
 }
 
 ///|

@@ -93,7 +93,10 @@ fn update_preview(game : @types.Game) -> Unit {
     None => return
   }
   let points = @physics.compute_preview(
-    level, level.start_pos, game.aim_angle, @types.preview_bounces,
+    level,
+    level.start_pos,
+    game.aim_angle,
+    @types.preview_bounces,
   )
   game.preview_points.clear()
   for p in points {
@@ -203,7 +206,7 @@ fn update_moving(game : @types.Game, dt : Float) -> Unit {
     if stars > score.stars {
       score.stars = stars
     }
-  } else if !(@types.any_ball_active(game.balls)) {
+  } else if !@types.any_ball_active(game.balls) {
     game.ball_state = Failed
     game.result_timer = 0.5
   }

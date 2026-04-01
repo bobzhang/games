@@ -7,10 +7,22 @@ fn rotate_orientation(p : @types.Player, dt : Float) -> Unit {
   if p.ang_vx.abs() > 0.0001 {
     let angle = p.ang_vx * dt
     let nf = @types.rotate_around_axis(
-      p.ori_fx, p.ori_fy, p.ori_fz, p.ori_rx, p.ori_ry, p.ori_rz, angle,
+      p.ori_fx,
+      p.ori_fy,
+      p.ori_fz,
+      p.ori_rx,
+      p.ori_ry,
+      p.ori_rz,
+      angle,
     )
     let nu = @types.rotate_around_axis(
-      p.ori_ux, p.ori_uy, p.ori_uz, p.ori_rx, p.ori_ry, p.ori_rz, angle,
+      p.ori_ux,
+      p.ori_uy,
+      p.ori_uz,
+      p.ori_rx,
+      p.ori_ry,
+      p.ori_rz,
+      angle,
     )
     p.ori_fx = nf.0
     p.ori_fy = nf.1
@@ -23,10 +35,22 @@ fn rotate_orientation(p : @types.Player, dt : Float) -> Unit {
   if p.ang_vy.abs() > 0.0001 {
     let angle = p.ang_vy * dt
     let nf = @types.rotate_around_axis(
-      p.ori_fx, p.ori_fy, p.ori_fz, p.ori_ux, p.ori_uy, p.ori_uz, angle,
+      p.ori_fx,
+      p.ori_fy,
+      p.ori_fz,
+      p.ori_ux,
+      p.ori_uy,
+      p.ori_uz,
+      angle,
     )
     let nr = @types.rotate_around_axis(
-      p.ori_rx, p.ori_ry, p.ori_rz, p.ori_ux, p.ori_uy, p.ori_uz, angle,
+      p.ori_rx,
+      p.ori_ry,
+      p.ori_rz,
+      p.ori_ux,
+      p.ori_uy,
+      p.ori_uz,
+      angle,
     )
     p.ori_fx = nf.0
     p.ori_fy = nf.1
@@ -39,10 +63,22 @@ fn rotate_orientation(p : @types.Player, dt : Float) -> Unit {
   if p.ang_vz.abs() > 0.0001 {
     let angle = p.ang_vz * dt
     let nu = @types.rotate_around_axis(
-      p.ori_ux, p.ori_uy, p.ori_uz, p.ori_fx, p.ori_fy, p.ori_fz, angle,
+      p.ori_ux,
+      p.ori_uy,
+      p.ori_uz,
+      p.ori_fx,
+      p.ori_fy,
+      p.ori_fz,
+      angle,
     )
     let nr = @types.rotate_around_axis(
-      p.ori_rx, p.ori_ry, p.ori_rz, p.ori_fx, p.ori_fy, p.ori_fz, angle,
+      p.ori_rx,
+      p.ori_ry,
+      p.ori_rz,
+      p.ori_fx,
+      p.ori_fy,
+      p.ori_fz,
+      angle,
     )
     p.ori_ux = nu.0
     p.ori_uy = nu.1
@@ -58,7 +94,12 @@ fn rotate_orientation(p : @types.Player, dt : Float) -> Unit {
   p.ori_fz = fn2.2
   // Right = cross(forward, up), then normalize
   let rn = @types.cross3d(
-    p.ori_fx, p.ori_fy, p.ori_fz, p.ori_ux, p.ori_uy, p.ori_uz,
+    p.ori_fx,
+    p.ori_fy,
+    p.ori_fz,
+    p.ori_ux,
+    p.ori_uy,
+    p.ori_uz,
   )
   let rn2 = @types.normalize3d(rn.0, rn.1, rn.2)
   p.ori_rx = rn2.0
@@ -66,7 +107,12 @@ fn rotate_orientation(p : @types.Player, dt : Float) -> Unit {
   p.ori_rz = rn2.2
   // Up = cross(right, forward)
   let un = @types.cross3d(
-    p.ori_rx, p.ori_ry, p.ori_rz, p.ori_fx, p.ori_fy, p.ori_fz,
+    p.ori_rx,
+    p.ori_ry,
+    p.ori_rz,
+    p.ori_fx,
+    p.ori_fy,
+    p.ori_fz,
   )
   let un2 = @types.normalize3d(un.0, un.1, un.2)
   p.ori_ux = un2.0
@@ -240,9 +286,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   // Flight assist: auto-level and kill lateral drift
   if p.flight_assist {
     // Kill lateral drift (velocity component not along forward axis)
-    let fwd_speed = @types.dot3d(
-      p.vx, p.vy, p.vz, p.ori_fx, p.ori_fy, p.ori_fz,
-    )
+    let fwd_speed = @types.dot3d(p.vx, p.vy, p.vz, p.ori_fx, p.ori_fy, p.ori_fz)
     let lateral_vx = p.vx - p.ori_fx * fwd_speed
     let lateral_vy = p.vy - p.ori_fy * fwd_speed
     let lateral_vz = p.vz - p.ori_fz * fwd_speed

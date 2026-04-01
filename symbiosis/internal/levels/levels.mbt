@@ -34,7 +34,10 @@ pub fn get_level(world : Int, index : Int) -> @types.Level {
 }
 
 ///|
-pub fn world_unlocked(scores : Array[Array[@types.LevelScore]], world : Int) -> Bool {
+pub fn world_unlocked(
+  scores : Array[Array[@types.LevelScore]],
+  world : Int,
+) -> Bool {
   if world <= 0 {
     return true
   }
@@ -56,16 +59,18 @@ pub fn world_unlocked(scores : Array[Array[@types.LevelScore]], world : Int) -> 
 pub fn level_unlocked(
   scores : Array[Array[@types.LevelScore]],
   world : Int,
-  level : Int
+  level : Int,
 ) -> Bool {
-  if !(world_unlocked(scores, world)) {
+  if !world_unlocked(scores, world) {
     return false
   }
   if level <= 0 {
     return true
   }
   // Previous level must be completed
-  if world >= 0 && world < scores.length() && level - 1 >= 0 &&
+  if world >= 0 &&
+    world < scores.length() &&
+    level - 1 >= 0 &&
     level - 1 < scores[world].length() {
     scores[world][level - 1].completed
   } else {

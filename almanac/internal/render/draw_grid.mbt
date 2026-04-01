@@ -57,7 +57,7 @@ fn draw_weather_icon(
   x : Int,
   y : Int,
   cs : Int,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let cx = x + cs / 2
   let cy = y + cs / 2
@@ -67,7 +67,12 @@ fn draw_weather_icon(
     Sunny => {
       // Sun rays
       let col = @types.color_sunny
-      @raylib.draw_circle(cx, cy, 10.0, @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 180))
+      @raylib.draw_circle(
+        cx,
+        cy,
+        10.0,
+        @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 180),
+      )
       // Animated rays
       for i in 0..<8 {
         let angle = Float::from_int(i) * 0.785 + time
@@ -124,7 +129,12 @@ fn draw_weather_icon(
       // Storm: cloud + lightning
       let col = @types.color_stormy
       let flash = if frame % 30 < 5 { 255 } else { 180 }
-      let flash_col = @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), flash)
+      let flash_col = @raylib.Color::new(
+        col.r.to_int(),
+        col.g.to_int(),
+        col.b.to_int(),
+        flash,
+      )
       // Cloud base
       @raylib.draw_circle(cx - 6, cy - 8, 7.0, @types.color_cloudy)
       @raylib.draw_circle(cx + 4, cy - 6, 8.0, @types.color_cloudy)
@@ -145,7 +155,7 @@ fn draw_target_indicator(
   x : Int,
   y : Int,
   cs : Int,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let pulse = @types.sinf(Float::from_int(frame) * 0.08) * 0.3 + 0.7
   let alpha = (pulse * 200.0).to_int()
@@ -167,20 +177,8 @@ fn draw_target_indicator(
   @raylib.draw_line(x + 2, y + cs - 2, x + sz, y + cs - 2, ring_color)
   @raylib.draw_line(x + 2, y + cs - 2, x + 2, y + cs - sz, ring_color)
   // Bottom-right
-  @raylib.draw_line(
-    x + cs - 2,
-    y + cs - 2,
-    x + cs - sz,
-    y + cs - 2,
-    ring_color,
-  )
-  @raylib.draw_line(
-    x + cs - 2,
-    y + cs - 2,
-    x + cs - 2,
-    y + cs - sz,
-    ring_color,
-  )
+  @raylib.draw_line(x + cs - 2, y + cs - 2, x + cs - sz, y + cs - 2, ring_color)
+  @raylib.draw_line(x + cs - 2, y + cs - 2, x + cs - 2, y + cs - sz, ring_color)
   // Target weather label (small, at bottom)
   let label = @types.weather_name(tile.target_weather)
   let lw = @draw.measure_text(label, 10)

@@ -12,9 +12,7 @@ pub fn level_21() -> @types.Level {
     ],
     splitters: [],
     gates: [],
-    bumpers: [
-      @types.new_bumper(500.0, 350.0, @types.bumper_radius),
-    ],
+    bumpers: [@types.new_bumper(500.0, 350.0, @types.bumper_radius)],
     pickups: [],
     start_pos: @types.vec2(500.0, 600.0),
     par_bounces: 3,
@@ -25,9 +23,7 @@ pub fn level_21() -> @types.Level {
 pub fn level_22() -> @types.Level {
   // Bumper chain
   {
-    walls: [
-      @types.new_wall(300.0, 200.0, 700.0, 200.0),
-    ],
+    walls: [@types.new_wall(300.0, 200.0, 700.0, 200.0)],
     targets: [
       @types.new_target(500.0, 80.0, @types.target_radius),
       @types.new_target(150.0, 350.0, @types.target_radius),
@@ -79,12 +75,8 @@ pub fn level_24() -> @types.Level {
       @types.new_target(500.0, 400.0, @types.target_radius),
     ],
     splitters: [],
-    gates: [
-      @types.new_gate(400.0, 350.0, 600.0, 350.0, 0.0, -1.0),
-    ],
-    bumpers: [
-      @types.new_bumper(500.0, 200.0, @types.bumper_radius),
-    ],
+    gates: [@types.new_gate(400.0, 350.0, 600.0, 350.0, 0.0, -1.0)],
+    bumpers: [@types.new_bumper(500.0, 200.0, @types.bumper_radius)],
     pickups: [@types.new_pickup(500.0, 150.0, @types.pickup_radius)],
     start_pos: @types.vec2(500.0, 600.0),
     par_bounces: 5,
@@ -129,12 +121,8 @@ pub fn level_26() -> @types.Level {
       @types.new_target(900.0, 100.0, @types.target_radius),
       @types.new_target(500.0, 500.0, @types.target_radius),
     ],
-    splitters: [
-      @types.new_splitter(500.0, 350.0, @types.splitter_radius),
-    ],
-    gates: [
-      @types.new_gate(400.0, 450.0, 600.0, 450.0, 0.0, 1.0),
-    ],
+    splitters: [@types.new_splitter(500.0, 350.0, @types.splitter_radius)],
+    gates: [@types.new_gate(400.0, 450.0, 600.0, 450.0, 0.0, 1.0)],
     bumpers: [],
     pickups: [@types.new_pickup(500.0, 150.0, @types.pickup_radius)],
     start_pos: @types.vec2(500.0, 650.0),
@@ -156,12 +144,8 @@ pub fn level_27() -> @types.Level {
       @types.new_target(850.0, 150.0, @types.target_radius),
       @types.new_target(500.0, 550.0, @types.target_radius),
     ],
-    splitters: [
-      @types.new_splitter(500.0, 250.0, @types.splitter_radius),
-    ],
-    gates: [
-      @types.new_gate(350.0, 500.0, 650.0, 500.0, 0.0, 1.0),
-    ],
+    splitters: [@types.new_splitter(500.0, 250.0, @types.splitter_radius)],
+    gates: [@types.new_gate(350.0, 500.0, 650.0, 500.0, 0.0, 1.0)],
     bumpers: [
       @types.new_bumper(300.0, 150.0, @types.bumper_radius),
       @types.new_bumper(700.0, 150.0, @types.bumper_radius),
@@ -196,9 +180,7 @@ pub fn level_28() -> @types.Level {
       @types.new_gate(350.0, 450.0, 500.0, 450.0, 0.0, 1.0),
       @types.new_gate(500.0, 450.0, 650.0, 450.0, 0.0, 1.0),
     ],
-    bumpers: [
-      @types.new_bumper(500.0, 200.0, @types.bumper_radius),
-    ],
+    bumpers: [@types.new_bumper(500.0, 200.0, @types.bumper_radius)],
     pickups: [@types.new_pickup(500.0, 300.0, @types.pickup_radius)],
     start_pos: @types.vec2(500.0, 650.0),
     par_bounces: 7,
@@ -220,12 +202,8 @@ pub fn level_29() -> @types.Level {
       @types.new_target(200.0, 500.0, @types.target_radius),
       @types.new_target(800.0, 500.0, @types.target_radius),
     ],
-    splitters: [
-      @types.new_splitter(500.0, 350.0, @types.splitter_radius),
-    ],
-    gates: [
-      @types.new_gate(400.0, 200.0, 600.0, 200.0, 0.0, -1.0),
-    ],
+    splitters: [@types.new_splitter(500.0, 350.0, @types.splitter_radius)],
+    gates: [@types.new_gate(400.0, 200.0, 600.0, 200.0, 0.0, -1.0)],
     bumpers: [
       @types.new_bumper(350.0, 150.0, @types.bumper_radius),
       @types.new_bumper(650.0, 150.0, @types.bumper_radius),

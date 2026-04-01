@@ -14,15 +14,15 @@ fn draw_playing_ui(game : @types.Game) -> Unit {
   @draw.draw_text(lev.name, px + 10, py + 10, 18, @types.color_ui_text)
   // Tier
   let tier_c = @types.tier_color(lev.tier)
-  @draw.draw_text(
-    @types.tier_name(lev.tier),
-    px + 10,
-    py + 35,
-    14,
-    tier_c,
-  )
+  @draw.draw_text(@types.tier_name(lev.tier), px + 10, py + 35, 14, tier_c)
   // Divider
-  @raylib.draw_line(px + 10, py + 58, px + pw - 10, py + 58, @types.color_ui_dim)
+  @raylib.draw_line(
+    px + 10,
+    py + 58,
+    px + pw - 10,
+    py + 58,
+    @types.color_ui_dim,
+  )
   // Points info
   let pts_text = "Points: " + game.placed_points.length().to_string()
   @draw.draw_text(pts_text, px + 10, py + 68, 16, @types.color_ui_text)
@@ -38,11 +38,9 @@ fn draw_playing_ui(game : @types.Game) -> Unit {
     py + 144,
     @types.color_ui_dim,
   )
-  let hull_text = "Hull vertices: " +
-    game.current_hull.length().to_string()
+  let hull_text = "Hull vertices: " + game.current_hull.length().to_string()
   @draw.draw_text(hull_text, px + 10, py + 154, 16, @types.color_hull)
-  let target_text = "Target edges: " +
-    game.target.vertices.length().to_string()
+  let target_text = "Target edges: " + game.target.vertices.length().to_string()
   @draw.draw_text(target_text, px + 10, py + 178, 16, @types.color_target)
   // Match percentage
   @raylib.draw_line(
@@ -99,7 +97,13 @@ fn draw_playing_ui(game : @types.Game) -> Unit {
     12,
     @types.color_ui_dim,
   )
-  @draw.draw_text("Z: Undo  R: Reset", px + 10, py + 338, 12, @types.color_ui_dim)
+  @draw.draw_text(
+    "Z: Undo  R: Reset",
+    px + 10,
+    py + 338,
+    12,
+    @types.color_ui_dim,
+  )
   // Top bar with level number
   @raylib.draw_rectangle(0, 0, @types.screen_width, 50, @types.color_panel)
   let level_label = "Level " +
@@ -132,7 +136,13 @@ fn draw_playing_ui(game : @types.Game) -> Unit {
   if game.message.length() > 0 {
     let mw = @draw.measure_text(game.message, 28)
     let mx = (@types.screen_width - mw) / 2
-    @draw.draw_text(game.message, mx, @types.screen_height - 60, 28, @types.color_match)
+    @draw.draw_text(
+      game.message,
+      mx,
+      @types.screen_height - 60,
+      28,
+      @types.color_match,
+    )
   }
 }
 
@@ -167,11 +177,10 @@ fn get_level_tier(index : Int) -> @types.Tier {
 fn get_level_name_str(index : Int) -> String {
   // Names for each level
   let names : Array[String] = [
-    "Right Triangle", "Tall Triangle", "Square", "Rectangle", "Pentagon",
-    "Hexagon", "Diamond", "Octagon", "Centered Triangle", "Trapezoid",
-    "Kite", "Arrow", "Wide Hexagon", "Parallelogram", "House", "Heptagon",
-    "Flat Triangle", "Trim Square", "Prune Pentagon", "Clean Triangle",
-    "Trim Hexagon", "Inner Rectangle", "Slim Diamond", "Spike Octagon",
+    "Right Triangle", "Tall Triangle", "Square", "Rectangle", "Pentagon", "Hexagon",
+    "Diamond", "Octagon", "Centered Triangle", "Trapezoid", "Kite", "Arrow", "Wide Hexagon",
+    "Parallelogram", "House", "Heptagon", "Flat Triangle", "Trim Square", "Prune Pentagon",
+    "Clean Triangle", "Trim Hexagon", "Inner Rectangle", "Slim Diamond", "Spike Octagon",
     "Grand Decagon",
   ]
   if index >= 0 && index < names.length() {
@@ -184,8 +193,7 @@ fn get_level_name_str(index : Int) -> String {
 ///|
 fn get_level_par(index : Int) -> Int {
   let pars : Array[Int] = [
-    4, 4, 5, 5, 6, 7, 5, 9, 4, 5, 5, 6, 7, 5, 6, 8, 4, 5, 6, 4, 7, 5, 5,
-    9, 11,
+    4, 4, 5, 5, 6, 7, 5, 9, 4, 5, 5, 6, 7, 5, 6, 8, 4, 5, 6, 4, 7, 5, 5, 9, 11,
   ]
   if index >= 0 && index < pars.length() {
     pars[index]
@@ -197,8 +205,7 @@ fn get_level_par(index : Int) -> Int {
 ///|
 fn get_level_min(index : Int) -> Int {
   let mins : Array[Int] = [
-    3, 3, 4, 4, 5, 6, 4, 8, 3, 4, 4, 5, 6, 4, 5, 7, 3, 4, 5, 3, 6, 4, 4,
-    8, 10,
+    3, 3, 4, 4, 5, 6, 4, 8, 3, 4, 4, 5, 6, 4, 5, 7, 3, 4, 5, 3, 6, 4, 4, 8, 10,
   ]
   if index >= 0 && index < mins.length() {
     mins[index]
@@ -208,12 +215,7 @@ fn get_level_min(index : Int) -> Int {
 }
 
 ///|
-fn draw_stars(
-  x : Int,
-  y : Int,
-  filled : Int,
-  total : Int
-) -> Unit {
+fn draw_stars(x : Int, y : Int, filled : Int, total : Int) -> Unit {
   for i in 0..<total {
     let sx = x + i * 28
     let color = if i < filled {
@@ -230,7 +232,7 @@ fn draw_star_shape(
   cx : Int,
   cy : Int,
   radius : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
@@ -259,5 +261,7 @@ fn draw_star_shape(
 fn format_pct(v : Float) -> String {
   let whole = v.to_int()
   let frac = ((v - Float::from_int(whole)) * 10.0).to_int()
-  whole.to_string() + "." + @types.absf(Float::from_int(frac)).to_int().to_string()
+  whole.to_string() +
+  "." +
+  @types.absf(Float::from_int(frac)).to_int().to_string()
 }

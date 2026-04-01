@@ -24,15 +24,13 @@ pub fn check_boss_phase_transition(battle : @types.BattleState) -> Unit {
     } else {
       1
     }
-  } else {
     // Hivemind thresholds: 50%, 25%
-    if hp_pct <= 25 {
-      3
-    } else if hp_pct <= 50 {
-      2
-    } else {
-      1
-    }
+  } else if hp_pct <= 25 {
+    3
+  } else if hp_pct <= 50 {
+    2
+  } else {
+    1
   }
   if new_phase != old_phase && new_phase > old_phase {
     battle.boss_phase = new_phase
@@ -53,7 +51,17 @@ fn apply_phase_transition(
   @types.emit_hitstop(battle, 0.15)
   let boss = battle.units[boss_id]
   @types.emit_ring(battle, boss.x, boss.y, 80.0, 0.8, 255, 80, 40)
-  @types.emit_float_text(battle, boss.x, boss.y, "PHASE \{new_phase}!", 255, 200, 40, 1.5, true)
+  @types.emit_float_text(
+    battle,
+    boss.x,
+    boss.y,
+    "PHASE \{new_phase}!",
+    255,
+    200,
+    40,
+    1.5,
+    true,
+  )
   // Set narrative text
   if battle.mission_id == 4 {
     apply_siege_engine_transition(battle, boss_id, new_phase)
@@ -174,11 +182,7 @@ fn explode_deployed_walls(battle : @types.BattleState) -> Unit {
     let (wx, wy) = walls[w]
     if battle.grid.in_bounds(wx, wy) {
       // Destroy the wall
-      battle.grid.set(
-        wx,
-        wy,
-        { kind: Floor, hazard: Fire, occupied_by: -1 },
-      )
+      battle.grid.set(wx, wy, { kind: Floor, hazard: Fire, occupied_by: -1 })
       battle.turn_log.push("  Wall at (\{wx}, \{wy}) EXPLODES!")
       // Damage adjacent units
       let dx_arr = [0, 0, 1, -1]
@@ -209,7 +213,11 @@ fn spawn_lava_hazard(battle : @types.BattleState, x : Int, y : Int) -> Unit {
   if battle.grid.in_bounds(x, y) {
     let tile = battle.grid.get(x, y)
     if tile.kind != Wall && tile.kind != Chasm {
-      battle.grid.set(x, y, { kind: Lava, hazard: Fire, occupied_by: tile.occupied_by })
+      battle.grid.set(x, y, {
+        kind: Lava,
+        hazard: Fire,
+        occupied_by: tile.occupied_by,
+      })
       battle.turn_log.push("  Lava erupts at (\{x}, \{y})!")
     }
   }
@@ -234,9 +242,7 @@ fn absorb_minions(battle : @types.BattleState, boss_id : Int) -> Unit {
     if boss.hp > boss.max_hp {
       boss.max_hp = boss.hp
     }
-    battle.turn_log.push(
-      "  Hivemind absorbed \{absorbed_hp} total HP!",
-    )
+    battle.turn_log.push("  Hivemind absorbed \{absorbed_hp} total HP!")
   }
 }
 
@@ -266,18 +272,17 @@ fn resolve_siege_turn_effects(
 ) -> Unit {
   let boss = battle.units[boss_id]
   match battle.boss_phase {
-    1 => {
+    1 =>
       // Phase 1: summon Rammer every 3 turns
       if battle.turn % 3 == 0 {
         spawn_boss_minion(battle, boss.x - 1, boss.y + 1, Rammer)
       }
-    }
     2 => {
       // Phase 2: deploy 2 wall tiles per turn, fire beam (handled by intent)
       let wall_x1 = boss.x - 1
-      let wall_y1 = boss.y + (battle.turn % 3) - 1
+      let wall_y1 = boss.y + battle.turn % 3 - 1
       let wall_x2 = boss.x + 1
-      let wall_y2 = boss.y - (battle.turn % 3) + 1
+      let wall_y2 = boss.y - battle.turn % 3 + 1
       deploy_wall(battle, wall_x1, wall_y1)
       deploy_wall(battle, wall_x2, wall_y2)
       // Regenerate 1 shield per turn in fortify mode
@@ -303,13 +308,12 @@ fn resolve_hivemind_turn_effects(
 ) -> Unit {
   let boss = battle.units[boss_id]
   match battle.boss_phase {
-    1 => {
+    1 =>
       // Phase 1: summon minions. Alternate Rammer and Splitter.
       if battle.turn % 2 == 0 {
         spawn_boss_minion(battle, boss.x - 1, boss.y - 1, Rammer)
         spawn_boss_minion(battle, boss.x - 1, boss.y + 1, Splitter)
       }
-    }
     2 => {
       // Phase 2: spread acid from Hivemind's position each turn
       let dx_arr = [1, -1, 0, 0]
@@ -439,11 +443,7 @@ fn spawn_boss_minion(
   }
   battle.units.push(eu)
   if battle.grid.in_bounds(sx, sy) {
-    battle.grid.set(
-      sx,
-      sy,
-      { ..battle.grid.get(sx, sy), occupied_by: eu.id },
-    )
+    battle.grid.set(sx, sy, { ..battle.grid.get(sx, sy), occupied_by: eu.id })
   }
   let etype_name = @content.get_enemy_name(etype)
   battle.turn_log.push("  Boss summons \{etype_name} at (\{sx}, \{sy})!")

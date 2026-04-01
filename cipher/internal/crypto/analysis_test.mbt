@@ -47,8 +47,7 @@ test "find repeated patterns none" {
 test "suggest caesar shift" {
   // Encrypt with shift 3, then check suggestion
   let cipher = @crypto.caesar_encrypt(
-    "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG",
-    3,
+    "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 3,
   )
   let suggested = @crypto.suggest_caesar_shift(cipher)
   inspect(suggested, content="3")

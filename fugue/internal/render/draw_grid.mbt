@@ -38,11 +38,11 @@ fn draw_grid(game : @types.Game) -> Unit {
     @types.color_grid_bg,
   )
   // Grid lines
-  for c in 0..=grid.cols {
+  for c in 0..<=grid.cols {
     let x = ox + c * cw
     @raylib.draw_line(x, oy, x, oy + ch * grid.rows, @types.color_grid_line)
   }
-  for r in 0..=grid.rows {
+  for r in 0..<=grid.rows {
     let y = oy + r * ch
     @raylib.draw_line(ox, y, ox + cw * grid.cols, y, @types.color_grid_line)
   }
@@ -59,8 +59,20 @@ fn draw_grid(game : @types.Game) -> Unit {
       let y = oy + r * ch
       // Target indicator (border)
       if cell.is_target {
-        @raylib.draw_rectangle_lines(x + 2, y + 2, cw - 4, ch - 4, @types.color_target)
-        @raylib.draw_rectangle_lines(x + 3, y + 3, cw - 6, ch - 6, @types.color_target)
+        @raylib.draw_rectangle_lines(
+          x + 2,
+          y + 2,
+          cw - 4,
+          ch - 4,
+          @types.color_target,
+        )
+        @raylib.draw_rectangle_lines(
+          x + 3,
+          y + 3,
+          cw - 6,
+          ch - 6,
+          @types.color_target,
+        )
       }
       // Filled note
       if cell.has_note {
@@ -115,12 +127,15 @@ fn draw_grid(game : @types.Game) -> Unit {
   // Hover highlight
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
-  if mx >= ox && mx < ox + cw * grid.cols && my >= oy && my < oy + ch * grid.rows {
+  if mx >= ox &&
+    mx < ox + cw * grid.cols &&
+    my >= oy &&
+    my < oy + ch * grid.rows {
     let hc = (mx - ox) / cw
     let hr = (my - oy) / ch
     if hc >= 0 && hc < grid.cols && hr >= 0 && hr < grid.rows {
       let cell = grid.cells[hc][hr]
-      if !(cell.is_locked) {
+      if !cell.is_locked {
         let hx = ox + hc * cw
         let hy = oy + hr * ch
         @raylib.draw_rectangle_lines(

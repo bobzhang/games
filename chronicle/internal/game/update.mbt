@@ -131,7 +131,10 @@ fn update_playing(game : @types.Game) -> Unit {
     let placed = @types.count_placed(game.timeline_slots)
     if placed == case_.cards.length() {
       let score = @logic.compute_score(
-        case_, game.timeline_slots, game.placed_links, game.rewinds,
+        case_,
+        game.timeline_slots,
+        game.placed_links,
+        game.rewinds,
       )
       game.result_score = score
       // Save score if better
@@ -178,7 +181,7 @@ fn update_arranging(
   game : @types.Game,
   case_ : @types.Case,
   mx : Float,
-  my : Float
+  my : Float,
 ) -> Unit {
   // Left click to pick up / place card
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
@@ -245,7 +248,7 @@ fn update_linking(
   game : @types.Game,
   case_ : @types.Case,
   mx : Float,
-  my : Float
+  my : Float,
 ) -> Unit {
   ignore(case_)
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
@@ -309,11 +312,15 @@ fn get_slot_at(case_ : @types.Case, mx : Float, my : Float) -> Int {
   let num_slots = case_.cards.length()
   let total_width = Float::from_int(num_slots) * @types.slot_width +
     Float::from_int(num_slots - 1) * @types.card_gap
-  let start_x = (Float::from_int(@types.screen_width) - total_width -
-    @types.clue_panel_width) /
-  2.0
+  let start_x = (
+      Float::from_int(@types.screen_width) -
+      total_width -
+      @types.clue_panel_width
+    ) /
+    2.0
   for i in 0..<num_slots {
-    let sx = start_x + Float::from_int(i) * (@types.slot_width + @types.card_gap)
+    let sx = start_x +
+      Float::from_int(i) * (@types.slot_width + @types.card_gap)
     let sy = @types.timeline_y
     if mx >= sx &&
       mx <= sx + @types.slot_width &&
@@ -330,7 +337,7 @@ fn get_tray_card_at(
   game : @types.Game,
   case_ : @types.Case,
   mx : Float,
-  my : Float
+  my : Float,
 ) -> Int {
   let mut col = 0
   for i in 0..<case_.cards.length() {
@@ -351,19 +358,18 @@ fn get_tray_card_at(
 }
 
 ///|
-fn get_timeline_card_at(
-  game : @types.Game,
-  mx : Float,
-  my : Float
-) -> Int {
+fn get_timeline_card_at(game : @types.Game, mx : Float, my : Float) -> Int {
   // Check if mouse is over any card in the timeline
   let case_ = @levels.get_case(game.current_tier, game.current_case_index)
   let num_slots = case_.cards.length()
   let total_width = Float::from_int(num_slots) * @types.slot_width +
     Float::from_int(num_slots - 1) * @types.card_gap
-  let start_x = (Float::from_int(@types.screen_width) - total_width -
-    @types.clue_panel_width) /
-  2.0
+  let start_x = (
+      Float::from_int(@types.screen_width) -
+      total_width -
+      @types.clue_panel_width
+    ) /
+    2.0
   for i in 0..<game.timeline_slots.length() {
     if game.timeline_slots[i] >= 0 {
       let sx = start_x +

@@ -17,9 +17,7 @@ fn draw_ui_panel(game : @types.Game, battle : @types.Battle) -> Unit {
     EnemyTurn => "Enemy Turn..."
     Animating => "..."
   }
-  @draw.draw_text(
-    phase_text, px + 15, 50, 18, @types.color_hud_text,
-  )
+  @draw.draw_text(phase_text, px + 15, 50, 18, @types.color_hud_text)
   // Team indicator
   let team_text = if battle.phase == EnemyTurn || battle.phase == Animating {
     "RED TEAM"
@@ -54,7 +52,10 @@ fn draw_ui_panel(game : @types.Game, battle : @types.Battle) -> Unit {
         @draw.draw_text(kind_text, px + 15, info_y, 24, tc)
         info_y = info_y + 32
         // Stats
-        let hp_text = "HP: " + unit.hp.to_string() + "/" + unit.max_hp.to_string()
+        let hp_text = "HP: " +
+          unit.hp.to_string() +
+          "/" +
+          unit.max_hp.to_string()
         @draw.draw_text(hp_text, px + 15, info_y, 18, @types.color_hp_bar)
         info_y = info_y + 24
         let atk_text = "ATK: " + unit.atk.to_string()
@@ -66,7 +67,8 @@ fn draw_ui_panel(game : @types.Game, battle : @types.Battle) -> Unit {
           @raylib.Color::new(220, 100, 100, 255),
         )
         info_y = info_y + 24
-        let move_text = "Move: " + @types.effective_move_range(battle, unit).to_string()
+        let move_text = "Move: " +
+          @types.effective_move_range(battle, unit).to_string()
         @draw.draw_text(
           move_text,
           px + 15,
@@ -75,9 +77,8 @@ fn draw_ui_panel(game : @types.Game, battle : @types.Battle) -> Unit {
           @raylib.Color::new(100, 150, 220, 255),
         )
         info_y = info_y + 24
-        let range_text = "Range: " + @types.effective_attack_range(
-            battle, unit,
-          ).to_string()
+        let range_text = "Range: " +
+          @types.effective_attack_range(battle, unit).to_string()
         @draw.draw_text(
           range_text,
           px + 15,
@@ -122,15 +123,25 @@ fn draw_ui_panel(game : @types.Game, battle : @types.Battle) -> Unit {
   info_y = info_y + 20
   // Hover terrain info
   match game.hover_hex {
-    Some(hc) => {
+    Some(hc) =>
       if @types.hex_valid(hc, battle.map.width, battle.map.height) {
         let idx = @types.hex_index(hc, battle.map.width)
         let tile = battle.map.tiles[idx]
         if tile.fog_player != Hidden {
           let tname = @types.terrain_name(tile.terrain)
-          @draw.draw_text(tname, px + 15, info_y, 18, terrain_color(tile.terrain))
+          @draw.draw_text(
+            tname,
+            px + 15,
+            info_y,
+            18,
+            terrain_color(tile.terrain),
+          )
           info_y = info_y + 24
-          let coord_text = "(" + hc.col.to_string() + ", " + hc.row.to_string() + ")"
+          let coord_text = "(" +
+            hc.col.to_string() +
+            ", " +
+            hc.row.to_string() +
+            ")"
           @draw.draw_text(
             coord_text,
             px + 15,
@@ -175,7 +186,7 @@ fn draw_ui_panel(game : @types.Game, battle : @types.Battle) -> Unit {
                 @raylib.Color::new(100, 180, 100, 200),
               )
             }
-            Water => {
+            Water =>
               @draw.draw_text(
                 "Impassable",
                 px + 15,
@@ -183,12 +194,10 @@ fn draw_ui_panel(game : @types.Game, battle : @types.Battle) -> Unit {
                 14,
                 @raylib.Color::new(180, 100, 100, 200),
               )
-            }
             _ => ()
           }
         }
       }
-    }
     None => ()
   }
   // Bottom: Unit count and controls

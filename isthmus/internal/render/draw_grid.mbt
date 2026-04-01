@@ -29,7 +29,7 @@ fn draw_tile(
   y : Int,
   tile : @types.Tile,
   sea_level : Int,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let px = @types.grid_offset_x + x * @types.cell_size
   let py = @types.grid_offset_y + y * @types.cell_size
@@ -40,7 +40,7 @@ fn draw_tile(
     let base = water_color(depth)
     // Slight wave animation
     let wave = Float::from_double(
-      @math.sin((Float::from_int(x + frame / 10)).to_double() * 0.5),
+      @math.sin(Float::from_int(x + frame / 10).to_double() * 0.5),
     )
     let brightness : Float = 1.0 + wave * 0.05
     let r = (Float::from_int(base.r.to_int()) * brightness).to_int()
@@ -63,7 +63,13 @@ fn draw_tile(
     @raylib.draw_rectangle(px, py, cs, cs, @types.color_sand)
     // Height indicator
     let h_text = tile.height.to_string()
-    @draw.draw_text(h_text, px + cs / 2 - 4, py + cs / 2 - 6, 12, @types.color_bg)
+    @draw.draw_text(
+      h_text,
+      px + cs / 2 - 4,
+      py + cs / 2 - 6,
+      12,
+      @types.color_bg,
+    )
   } else {
     // Regular land
     let lc = land_color(tile.height, sea_level)
@@ -95,13 +101,25 @@ fn draw_settlement(px : Int, py : Int, cs : Int) -> Unit {
   // Roof (triangle)
   let roof_color = @raylib.Color::new(200, 150, 30, 255)
   @raylib.draw_triangle(
-    @raylib.Vector2::new(Float::from_int(cx - size - 2), Float::from_int(cy - size / 2)),
-    @raylib.Vector2::new(Float::from_int(cx + size + 2), Float::from_int(cy - size / 2)),
+    @raylib.Vector2::new(
+      Float::from_int(cx - size - 2),
+      Float::from_int(cy - size / 2),
+    ),
+    @raylib.Vector2::new(
+      Float::from_int(cx + size + 2),
+      Float::from_int(cy - size / 2),
+    ),
     @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy - size - 4)),
     roof_color,
   )
   // Door
-  @raylib.draw_rectangle(cx - 2, cy + 2, 4, size - 2, @raylib.Color::new(100, 60, 20, 255))
+  @raylib.draw_rectangle(
+    cx - 2,
+    cy + 2,
+    4,
+    size - 2,
+    @raylib.Color::new(100, 60, 20, 255),
+  )
 }
 
 ///|
@@ -122,11 +140,7 @@ fn draw_grid(game : @types.Game) -> Unit {
       let px = @types.grid_offset_x + fx * @types.cell_size
       let py = @types.grid_offset_y + fy * @types.cell_size
       @raylib.draw_rectangle(
-        px,
-        py,
-        @types.cell_size,
-        @types.cell_size,
-        @types.color_flood_preview,
+        px, py, @types.cell_size, @types.cell_size, @types.color_flood_preview,
       )
     }
   }
@@ -146,11 +160,7 @@ fn draw_grid(game : @types.Game) -> Unit {
       @types.color_hover_invalid
     }
     @raylib.draw_rectangle(
-      px,
-      py,
-      @types.cell_size,
-      @types.cell_size,
-      hover_color,
+      px, py, @types.cell_size, @types.cell_size, hover_color,
     )
   }
   // Draw connectivity lines between settlements
@@ -174,10 +184,18 @@ fn draw_connectivity(game : @types.Game) -> Unit {
   for i in 0..<pair_count {
     let (x1, y1) = @types.index_to_xy(game.grid, settlements[i])
     let (x2, y2) = @types.index_to_xy(game.grid, settlements[i + 1])
-    let px1 = @types.grid_offset_x + x1 * @types.cell_size + @types.cell_size / 2
-    let py1 = @types.grid_offset_y + y1 * @types.cell_size + @types.cell_size / 2
-    let px2 = @types.grid_offset_x + x2 * @types.cell_size + @types.cell_size / 2
-    let py2 = @types.grid_offset_y + y2 * @types.cell_size + @types.cell_size / 2
+    let px1 = @types.grid_offset_x +
+      x1 * @types.cell_size +
+      @types.cell_size / 2
+    let py1 = @types.grid_offset_y +
+      y1 * @types.cell_size +
+      @types.cell_size / 2
+    let px2 = @types.grid_offset_x +
+      x2 * @types.cell_size +
+      @types.cell_size / 2
+    let py2 = @types.grid_offset_y +
+      y2 * @types.cell_size +
+      @types.cell_size / 2
     @raylib.draw_line(px1, py1, px2, py2, line_color)
   }
 }

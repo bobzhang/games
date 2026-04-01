@@ -96,7 +96,7 @@ pub fn new_body(
   material : Material,
   x : Float,
   y : Float,
-  angle : Float
+  angle : Float,
 ) -> Body {
   let (w, h) = piece_dimensions(kind)
   let m = material_mass(material) * w * h * 0.001
@@ -129,7 +129,7 @@ pub fn new_joint(
   lya : Float,
   lxb : Float,
   lyb : Float,
-  strength : Float
+  strength : Float,
 ) -> Joint {
   {
     active: true,
@@ -151,7 +151,7 @@ pub fn new_world() -> World {
   {
     bodies: Array::new(capacity=max_bodies),
     joints: Array::new(capacity=max_joints),
-    gravity: gravity,
+    gravity,
     ground_y,
     wind_force: 0.0,
     quake_timer: 0.0,
@@ -170,7 +170,7 @@ pub fn new_particle(
   size : Float,
   r : Int,
   g : Int,
-  b : Int
+  b : Int,
 ) -> Particle {
   { x, y, vx, vy, life, max_life: life, size, r, g, b }
 }
@@ -436,7 +436,7 @@ pub fn pointer_in_rect(
   rx : Int,
   ry : Int,
   rw : Int,
-  rh : Int
+  rh : Int,
 ) -> Bool {
   let x0 = Float::from_int(rx)
   let y0 = Float::from_int(ry)

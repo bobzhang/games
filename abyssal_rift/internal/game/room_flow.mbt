@@ -17,18 +17,17 @@ pub fn update_room_flow(game : @types.Game, dt : Float) -> Unit {
               room.kind == EliteVault ||
               room.kind == Challenge
             ) &&
-            !(has_been_cleared(floor, floor.current_room)) {
+            !has_been_cleared(floor, floor.current_room) {
             seal_room(game)
           }
           // Shop for treasure rooms
           if room.kind == Treasure &&
-            !(has_been_cleared(floor, floor.current_room)) {
+            !has_been_cleared(floor, floor.current_room) {
             setup_shop(game)
             room.state = Cleared
           }
           // Shrine rooms
-          if room.kind == Shrine &&
-            !(has_been_cleared(floor, floor.current_room)) {
+          if room.kind == Shrine && !has_been_cleared(floor, floor.current_room) {
             setup_shrine(game)
             room.state = Cleared
           }
@@ -695,7 +694,11 @@ fn setup_shop(game : @types.Game) -> Unit {
 fn offer_pact(game : @types.Game) -> Unit {
   // Pick 2 random pacts the player doesn't already have
   let all_pacts : Array[@types.PactKind] = [
-    BloodPrice, GlassStep, MerchantsDebt, CursedStrength, VoidHeart,
+    BloodPrice,
+    GlassStep,
+    MerchantsDebt,
+    CursedStrength,
+    VoidHeart,
   ]
   let available : Array[@types.PactKind] = []
   for i in 0..<all_pacts.length() {

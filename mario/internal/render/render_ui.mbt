@@ -291,12 +291,20 @@ fn draw_level_tally_screen(game : @types.Game) -> Unit {
   let box_x = 200
   let box_y = 150
   let box_w = 560
-  @raylib.draw_rectangle(box_x, box_y, box_w, 380, @raylib.Color::new(
-    20, 20, 60, 240,
-  ))
-  @raylib.draw_rectangle(box_x + 2, box_y + 2, box_w - 4, 376, @raylib.Color::new(
-    10, 10, 40, 240,
-  ))
+  @raylib.draw_rectangle(
+    box_x,
+    box_y,
+    box_w,
+    380,
+    @raylib.Color::new(20, 20, 60, 240),
+  )
+  @raylib.draw_rectangle(
+    box_x + 2,
+    box_y + 2,
+    box_w - 4,
+    376,
+    @raylib.Color::new(10, 10, 40, 240),
+  )
   let label_x = box_x + 40
   let value_x = box_x + box_w - 120
   let mut row_y = box_y + 30
@@ -330,9 +338,7 @@ fn draw_level_tally_screen(game : @types.Game) -> Unit {
   row_y = row_y + 50
   // Enemy bonus
   if game.tally_phase >= 3 {
-    let enemy_label = "ENEMIES: " +
-      game.enemies_defeated.to_string() +
-      " x 100"
+    let enemy_label = "ENEMIES: " + game.enemies_defeated.to_string() + " x 100"
     @draw.draw_text(enemy_label, label_x, row_y, 24, hud_white)
     @draw.draw_text(
       game.tally_enemy_bonus.to_string(),

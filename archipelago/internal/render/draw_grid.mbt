@@ -17,7 +17,8 @@ fn draw_ocean_bg(game : @types.Game) -> Unit {
     let fy = Float::from_int(row)
     let wave = @types.sinf(time + fy * 0.3) * 4.0
     let y = (fy * 20.0 + wave).to_int()
-    let alpha = 15 + ((@types.sinf(time * 0.5 + fy * 0.2) + 1.0) * 10.0).to_int()
+    let alpha = 15 +
+      ((@types.sinf(time * 0.5 + fy * 0.2) + 1.0) * 10.0).to_int()
     let a = if alpha > 40 { 40 } else { alpha }
     @raylib.draw_rectangle(
       0,
@@ -46,7 +47,7 @@ fn draw_grid_lines(game : @types.Game) -> Unit {
     @raylib.Color::new(15, 35, 65, 200),
   )
   // Grid lines
-  for i in 0..=gs {
+  for i in 0..<=gs {
     let x = ox + i * cs
     @raylib.draw_line(x, oy, x, oy + gs * cs, @types.color_grid_line)
     let y = oy + i * cs
@@ -115,7 +116,12 @@ fn draw_bridge_preview(game : @types.Game) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   let target = @types.find_connectable_island_at(
-    game.islands, game.bridges, game.selected_island, game.grid_size, mx, my,
+    game.islands,
+    game.bridges,
+    game.selected_island,
+    game.grid_size,
+    mx,
+    my,
   )
   if target < 0 {
     return
@@ -193,15 +199,25 @@ fn draw_islands(game : @types.Game) -> Unit {
     @raylib.draw_circle(sx, sy, r, fill_color)
     // Selection glow
     if selected {
-      let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.1) * 0.3 + 0.7
+      let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.1) * 0.3 +
+        0.7
       let glow_alpha = (pulse * 100.0).to_int()
       @raylib.draw_circle(
-        sx, sy, r + 8.0, @raylib.Color::new(255, 220, 100, glow_alpha),
+        sx,
+        sy,
+        r + 8.0,
+        @raylib.Color::new(255, 220, 100, glow_alpha),
       )
     }
     // Number
     let num = isl.required_count.to_string()
-    let font_size = if game.grid_size <= 5 { 28 } else if game.grid_size <= 7 { 22 } else { 18 }
+    let font_size = if game.grid_size <= 5 {
+      28
+    } else if game.grid_size <= 7 {
+      22
+    } else {
+      18
+    }
     let nw = @draw.measure_text(num, font_size)
     let text_color = if over {
       @raylib.Color::new(255, 200, 200, 255)

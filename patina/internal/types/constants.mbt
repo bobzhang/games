@@ -34,7 +34,9 @@ pub let color_bg : @raylib.Color = @raylib.Color::new(45, 40, 35, 255)
 pub let color_canvas : @raylib.Color = @raylib.Color::new(235, 225, 205, 255)
 
 ///|
-pub let color_canvas_dark : @raylib.Color = @raylib.Color::new(200, 190, 170, 255)
+pub let color_canvas_dark : @raylib.Color = @raylib.Color::new(
+  200, 190, 170, 255,
+)
 
 ///|
 pub let color_frame : @raylib.Color = @raylib.Color::new(120, 90, 50, 255)
@@ -59,13 +61,17 @@ pub let color_flake : @raylib.Color = @raylib.Color::new(180, 160, 130, 200)
 // Tool colors
 
 ///|
-pub let color_tool_clean : @raylib.Color = @raylib.Color::new(100, 180, 230, 255)
+pub let color_tool_clean : @raylib.Color = @raylib.Color::new(
+  100, 180, 230, 255,
+)
 
 ///|
 pub let color_tool_fill : @raylib.Color = @raylib.Color::new(180, 130, 70, 255)
 
 ///|
-pub let color_tool_retouch : @raylib.Color = @raylib.Color::new(70, 170, 100, 255)
+pub let color_tool_retouch : @raylib.Color = @raylib.Color::new(
+  70, 170, 100, 255,
+)
 
 ///|
 pub let color_tool_seal : @raylib.Color = @raylib.Color::new(200, 180, 60, 255)

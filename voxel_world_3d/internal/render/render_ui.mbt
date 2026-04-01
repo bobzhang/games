@@ -1586,13 +1586,7 @@ fn @types.Game::draw_enemy_count_indicator(game : @types.Game) -> Unit {
   // Pulsing warning color
   let pulse = @math.sinf(game.day_timer * 4.0)
   let pr : Int = if pulse > 0.0 { 255 } else { 200 }
-  @draw.draw_text(
-    text,
-    tx,
-    ty,
-    16,
-    @raylib.Color::new(pr, 80, 80, 240),
-  )
+  @draw.draw_text(text, tx, ty, 16, @raylib.Color::new(pr, 80, 80, 240))
 }
 
 // ========== Poison indicator ==========

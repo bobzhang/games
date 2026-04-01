@@ -68,14 +68,12 @@ pub fn effective_mass(game : @types.Game, mat : @types.Material) -> Float {
 
 ///|
 /// Returns the effective joint strength multiplier for hinge joints.
-pub fn effective_joint_strength(game : @types.Game, kind : @types.JointKind) -> Float {
+pub fn effective_joint_strength(
+  game : @types.Game,
+  kind : @types.JointKind,
+) -> Float {
   match kind {
-    Hinge =>
-      if game.flex_joints {
-        @types.flex_joint_bonus
-      } else {
-        1.0
-      }
+    Hinge => if game.flex_joints { @types.flex_joint_bonus } else { 1.0 }
     _ => 1.0
   }
 }
@@ -106,11 +104,10 @@ pub fn apply_joint_upgrades(game : @types.Game, joint : @types.Joint) -> Unit {
   // Flex joints: hinges get strength bonus
   if game.flex_joints {
     match joint.kind {
-      Hinge => {
+      Hinge =>
         // We can't change strength directly since it's immutable,
         // but we track this in the check_breaks logic
         ignore(joint)
-      }
       _ => ()
     }
   }
@@ -122,7 +119,7 @@ pub fn apply_joint_upgrades(game : @types.Game, joint : @types.Joint) -> Unit {
 pub fn available_upgrade_count(game : @types.Game) -> Int {
   let mut count = 0
   for upgrade in game.upgrades {
-    if !(upgrade.purchased) {
+    if !upgrade.purchased {
       count = count + 1
     }
   }
@@ -145,10 +142,10 @@ pub fn purchased_upgrade_count(game : @types.Game) -> Int {
 /// Returns upgrade info formatted for display.
 pub fn upgrade_display_info(
   upgrade : @types.Upgrade,
-  total_score : Int
+  total_score : Int,
 ) -> (String, String, Bool) {
   let name_with_cost = upgrade.name + " [" + upgrade.cost.to_string() + "]"
-  let can_buy = !(upgrade.purchased) && total_score >= upgrade.cost
+  let can_buy = !upgrade.purchased && total_score >= upgrade.cost
   (name_with_cost, upgrade.description, can_buy)
 }
 

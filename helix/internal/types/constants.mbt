@@ -26,6 +26,7 @@ pub let token_radius : Float = 14.0
 pub let pi : Float = 3.14159265
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(15, 15, 30, 255)
 

@@ -100,7 +100,11 @@ fn apply_rain(game : @types.Game) -> Unit {
 }
 
 ///|
-pub fn prune_branch(game : @types.Game, tree_index : Int, branch_index : Int) -> Bool {
+pub fn prune_branch(
+  game : @types.Game,
+  tree_index : Int,
+  branch_index : Int,
+) -> Bool {
   if tree_index < 0 || tree_index >= game.trees.length() {
     return false
   }
@@ -129,14 +133,14 @@ pub fn prune_branch(game : @types.Game, tree_index : Int, branch_index : Int) ->
 pub fn find_branch_at(
   game : @types.Game,
   grid_col : Int,
-  grid_row : Int
+  grid_row : Int,
 ) -> (Int, Int) {
   // Returns (tree_index, branch_index) or (-1, -1)
   for i in 0..<game.trees.length() {
     let tree = game.trees[i]
     for b in 0..<tree.branches.length() {
       let branch = tree.branches[b]
-      if !(branch.pruned) {
+      if !branch.pruned {
         let brow = game.grid.height - 1 - branch.row
         let bcol = tree.col + branch.col_offset
         if brow == grid_row && bcol == grid_col {

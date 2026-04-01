@@ -58,14 +58,7 @@ pub fn simulate(game : @types.Game) -> Unit {
         let new_dir = @types.flip_dir(curr_gear.dir)
         other.rpm = new_rpm
         other.dir = new_dir
-        game.connections.push(
-          {
-            from: curr,
-            to: j,
-            ratio,
-            flips_dir: true,
-          },
-        )
+        game.connections.push({ from: curr, to: j, ratio, flips_dir: true })
         visited[j] = true
         queue.push(j)
       }
@@ -84,14 +77,12 @@ pub fn simulate(game : @types.Game) -> Unit {
         // Belt preserves direction
         target_gear.rpm = new_rpm
         target_gear.dir = curr_gear.dir
-        game.connections.push(
-          {
-            from: curr,
-            to: target_idx,
-            ratio,
-            flips_dir: false,
-          },
-        )
+        game.connections.push({
+          from: curr,
+          to: target_idx,
+          ratio,
+          flips_dir: false,
+        })
         visited[target_idx] = true
         queue.push(target_idx)
       }
@@ -106,7 +97,7 @@ fn find_belt_target(
   game : @types.Game,
   curr_idx : Int,
   curr_gear : @types.Gear,
-  belt : @types.BeltLink
+  belt : @types.BeltLink,
 ) -> Int {
   if curr_gear.pos == belt.from_pos {
     let idx = @types.find_gear_at(game.placed_gears, belt.to_pos)
@@ -201,14 +192,16 @@ pub fn update_gear_angles(game : @types.Game, dt : Float) -> Unit {
 pub fn can_place_gear(
   game : @types.Game,
   pos : @types.Vec2i,
-  kind : @types.GearKind
+  kind : @types.GearKind,
 ) -> Bool {
   let level = match game.current_level {
     Some(l) => l
     None => return false
   }
   // Check if within grid
-  if pos.x < 0 || pos.x >= @types.grid_cols || pos.y < 0 ||
+  if pos.x < 0 ||
+    pos.x >= @types.grid_cols ||
+    pos.y < 0 ||
     pos.y >= @types.grid_rows {
     return false
   }
@@ -235,9 +228,8 @@ pub fn can_place_gear(
   // Check overlap with existing gears
   let new_gear = @types.new_gear(pos, kind)
   for i in 0..<game.placed_gears.length() {
-    if game.placed_gears[i].active && @types.gears_overlap(
-        new_gear, game.placed_gears[i],
-      ) {
+    if game.placed_gears[i].active &&
+      @types.gears_overlap(new_gear, game.placed_gears[i]) {
       return false
     }
   }

@@ -1,11 +1,12 @@
 // Draw a single 2D view panel
+
 ///|
 fn draw_view_panel(
   game : @types.Game,
   view : @types.ViewKind,
   panel_x : Int,
   panel_y : Int,
-  level : @types.Level
+  level : @types.Level,
 ) -> Unit {
   let size = level.size
   let cs = @types.cell_size_for_grid(size)
@@ -45,7 +46,13 @@ fn draw_view_panel(
       @raylib.draw_rectangle(cx + 1, cy + 1, cs - 2, cs - 2, @types.color_empty)
       // Target overlay (faded)
       if tgt {
-        @raylib.draw_rectangle(cx + 1, cy + 1, cs - 2, cs - 2, @types.color_target)
+        @raylib.draw_rectangle(
+          cx + 1,
+          cy + 1,
+          cs - 2,
+          cs - 2,
+          @types.color_target,
+        )
       }
       // Current silhouette
       if cur {
@@ -57,7 +64,13 @@ fn draw_view_panel(
         @raylib.draw_rectangle(cx + 2, cy + 2, cs - 4, cs - 4, cell_color)
       } else if tgt {
         // Target but not filled: show as outline
-        @raylib.draw_rectangle_lines(cx + 2, cy + 2, cs - 4, cs - 4, @types.color_target)
+        @raylib.draw_rectangle_lines(
+          cx + 2,
+          cy + 2,
+          cs - 4,
+          cs - 4,
+          @types.color_target,
+        )
       }
       // Grid lines
       @raylib.draw_rectangle_lines(cx, cy, cs, cs, @types.color_grid_line)
@@ -89,9 +102,7 @@ fn draw_view_panel(
       } else {
         // Softer highlight for cross-view preview (shows the projection)
         let cross_highlight = @raylib.Color::new(200, 200, 255, alpha / 2)
-        @raylib.draw_rectangle(
-          hx + 1, hy + 1, cs - 2, cs - 2, cross_highlight,
-        )
+        @raylib.draw_rectangle(hx + 1, hy + 1, cs - 2, cs - 2, cross_highlight)
         let cross_border = @raylib.Color::new(150, 150, 220, 140)
         @raylib.draw_rectangle_lines(hx, hy, cs, cs, cross_border)
       }
@@ -99,21 +110,9 @@ fn draw_view_panel(
       if is_in_this_view {
         let line_color = @raylib.Color::new(255, 255, 200, 40)
         // Horizontal guide
-        @raylib.draw_rectangle(
-          panel_x,
-          hy + cs / 2,
-          size * cs,
-          1,
-          line_color,
-        )
+        @raylib.draw_rectangle(panel_x, hy + cs / 2, size * cs, 1, line_color)
         // Vertical guide
-        @raylib.draw_rectangle(
-          hx + cs / 2,
-          panel_y,
-          1,
-          size * cs,
-          line_color,
-        )
+        @raylib.draw_rectangle(hx + cs / 2, panel_y, 1, size * cs, line_color)
       }
     }
   }
@@ -136,25 +135,7 @@ fn draw_view_panel(
 
 ///|
 pub fn draw_all_views(game : @types.Game, level : @types.Level) -> Unit {
-  draw_view_panel(
-    game,
-    Top,
-    @types.view_top_x,
-    @types.view_top_y,
-    level,
-  )
-  draw_view_panel(
-    game,
-    Front,
-    @types.view_front_x,
-    @types.view_front_y,
-    level,
-  )
-  draw_view_panel(
-    game,
-    Side,
-    @types.view_side_x,
-    @types.view_side_y,
-    level,
-  )
+  draw_view_panel(game, Top, @types.view_top_x, @types.view_top_y, level)
+  draw_view_panel(game, Front, @types.view_front_x, @types.view_front_y, level)
+  draw_view_panel(game, Side, @types.view_side_x, @types.view_side_y, level)
 }

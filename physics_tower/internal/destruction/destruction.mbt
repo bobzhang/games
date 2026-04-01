@@ -15,8 +15,7 @@ pub fn update_destruction(game : @types.Game, dt : Float) -> Unit {
   if dest.camera_shake > 0.0 {
     dest.shake_x = @types.randf(-1.0, 1.0) * dest.camera_shake
     dest.shake_y = @types.randf(-1.0, 1.0) * dest.camera_shake
-    dest.camera_shake = dest.camera_shake -
-      dt * @types.camera_shake_decay
+    dest.camera_shake = dest.camera_shake - dt * @types.camera_shake_decay
     if dest.camera_shake < 0.0 {
       dest.camera_shake = 0.0
       dest.shake_x = 0.0
@@ -103,7 +102,7 @@ pub fn spawn_dust(dest : @types.DestructionState, ground_y : Float) -> Unit {
 /// Spawns wind visualization particles.
 pub fn spawn_wind_particles(
   dest : @types.DestructionState,
-  wind_force : Float
+  wind_force : Float,
 ) -> Unit {
   if dest.particles.length() >= @types.max_particles - 4 {
     return
@@ -137,7 +136,7 @@ pub fn spawn_wind_particles(
 pub fn spawn_impact_trail(
   dest : @types.DestructionState,
   x : Float,
-  y : Float
+  y : Float,
 ) -> Unit {
   let count = 12
   for _i in 0..<count {
@@ -155,14 +154,17 @@ pub fn spawn_impact_trail(
 
 ///|
 /// Processes chain reaction: falling/broken pieces damage nearby joints.
-pub fn process_chain_reaction(world : @types.World, dest : @types.DestructionState) -> Unit {
+pub fn process_chain_reaction(
+  world : @types.World,
+  dest : @types.DestructionState,
+) -> Unit {
   dest.chain_breaks = 0
   let mut any_break = false
   for body in world.bodies {
     if body.broken && body.active {
       // Check if this broken body is near joints that could break
       for joint in world.joints {
-        if !(joint.active) || joint.broken {
+        if !joint.active || joint.broken {
           continue
         }
         // Find the joint's connected bodies
@@ -170,8 +172,16 @@ pub fn process_chain_reaction(world : @types.World, dest : @types.DestructionSta
         let b_opt = @physics.find_body(world, joint.body_b)
         match (a_opt, b_opt) {
           (Some(a), Some(b)) => {
-            let (ax, ay) = @physics.local_to_world(a, joint.local_x_a, joint.local_y_a)
-            let (bx, by) = @physics.local_to_world(b, joint.local_x_b, joint.local_y_b)
+            let (ax, ay) = @physics.local_to_world(
+              a,
+              joint.local_x_a,
+              joint.local_y_a,
+            )
+            let (bx, by) = @physics.local_to_world(
+              b,
+              joint.local_x_b,
+              joint.local_y_b,
+            )
             let mid_x = (ax + bx) * 0.5
             let mid_y = (ay + by) * 0.5
             let dx = body.x - mid_x
@@ -180,9 +190,7 @@ pub fn process_chain_reaction(world : @types.World, dest : @types.DestructionSta
             let radius = @types.chain_break_radius
             if dist_sq < radius * radius {
               // Apply stress from nearby broken body
-              let stress_add = body.mass *
-                @types.absf(body.vx + body.vy) *
-                0.02
+              let stress_add = body.mass * @types.absf(body.vx + body.vy) * 0.02
               joint.stress = joint.stress + stress_add
               if joint.stress > joint.strength {
                 joint.broken = true
@@ -209,13 +217,19 @@ pub fn process_chain_reaction(world : @types.World, dest : @types.DestructionSta
 
 ///|
 /// Triggers camera shake with given intensity.
-pub fn trigger_camera_shake(dest : @types.DestructionState, intensity : Float) -> Unit {
+pub fn trigger_camera_shake(
+  dest : @types.DestructionState,
+  intensity : Float,
+) -> Unit {
   dest.camera_shake = @types.maxf(dest.camera_shake, intensity)
 }
 
 ///|
 /// Triggers slow-motion effect.
-pub fn trigger_slow_motion(dest : @types.DestructionState, duration : Float) -> Unit {
+pub fn trigger_slow_motion(
+  dest : @types.DestructionState,
+  duration : Float,
+) -> Unit {
   dest.slow_motion = @types.maxf(dest.slow_motion, duration)
 }
 
@@ -275,7 +289,7 @@ pub fn particle_count(dest : @types.DestructionState) -> Int {
 /// Detects new breaks in the world and spawns appropriate effects.
 pub fn detect_breaks_and_spawn(
   world : @types.World,
-  dest : @types.DestructionState
+  dest : @types.DestructionState,
 ) -> Unit {
   let mut total_break_mass : Float = 0.0
   for body in world.bodies {

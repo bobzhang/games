@@ -27,7 +27,9 @@ pub fn orientation_dy(o : Orientation) -> Int {
 }
 
 ///|
-pub fn perpendicular_orientations(o : Orientation) -> (Orientation, Orientation) {
+pub fn perpendicular_orientations(
+  o : Orientation,
+) -> (Orientation, Orientation) {
   match o {
     N | S => (W, E)
     E | W => (N, S)
@@ -192,7 +194,7 @@ pub fn new_domino(
   kind : DominoKind,
   orientation : Orientation,
   is_target : Bool,
-  is_starter : Bool
+  is_starter : Bool,
 ) -> Domino {
   {
     pos,
@@ -277,12 +279,14 @@ pub fn budget_for_kind(budget : DominoBudget, kind : DominoKind) -> Int {
 pub fn budget_remaining(
   budget : DominoBudget,
   dominoes : Array[Domino],
-  kind : DominoKind
+  kind : DominoKind,
 ) -> Int {
   let total = budget_for_kind(budget, kind)
   let mut placed = 0
   for i in 0..<dominoes.length() {
-    if dominoes[i].kind == kind && !dominoes[i].is_target && !dominoes[i].is_starter {
+    if dominoes[i].kind == kind &&
+      !dominoes[i].is_target &&
+      !dominoes[i].is_starter {
       placed += 1
     }
   }
@@ -294,7 +298,7 @@ pub fn new_budget(
   normal : Int,
   heavy : Int,
   splitter : Int,
-  delay : Int
+  delay : Int,
 ) -> DominoBudget {
   { normal, heavy, splitter, delay }
 }

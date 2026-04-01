@@ -48,7 +48,8 @@ fn draw_playing(game : @types.Game) -> Unit {
   draw_hud(game)
   // Detection pause flash
   if game.detection_pause > 0.0 {
-    let flash_ratio : Float = game.detection_pause / @types.detection_pause_duration
+    let flash_ratio : Float = game.detection_pause /
+      @types.detection_pause_duration
     let flash_alpha_f : Float = 80.0 * flash_ratio
     @raylib.draw_rectangle(
       0,

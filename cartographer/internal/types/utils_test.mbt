@@ -192,7 +192,13 @@ test "new_game initializes correctly" {
       Surveyor,
       [Mountain, Town],
       [
-        @types.new_clue(Distance, Mountain, feature_b=Town, distance=3, text="test"),
+        @types.new_clue(
+          Distance,
+          Mountain,
+          feature_b=Town,
+          distance=3,
+          text="test",
+        ),
       ],
       2,
     ),
@@ -207,12 +213,14 @@ test "new_game initializes correctly" {
 ///|
 test "reset_level clears state" {
   let clue = @types.new_clue(
-    Distance, Mountain, feature_b=Town, distance=3, text="test",
+    Distance,
+    Mountain,
+    feature_b=Town,
+    distance=3,
+    text="test",
   )
   clue.status = Satisfied
-  let levels = [
-    @types.new_level("Test", Surveyor, [Mountain, Town], [clue], 2),
-  ]
+  let levels = [@types.new_level("Test", Surveyor, [Mountain, Town], [clue], 2)]
   let game = @types.new_game(levels)
   game.grid[5] = Some(Mountain)
   game.total_placements = 5

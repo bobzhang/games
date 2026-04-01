@@ -33,7 +33,7 @@ pub fn grid_set_kind(
   x : Int,
   y : Int,
   kind : CellKind,
-  dir : GrowthDir
+  dir : GrowthDir,
 ) -> Unit {
   let idx = grid_index(g, x, y)
   g.cells[idx].kind = kind
@@ -47,9 +47,12 @@ pub fn clone_grid(g : TreeGrid) -> TreeGrid {
   let cells : Array[TreeCell] = Array::new(capacity=g.cells.length())
   for i in 0..<g.cells.length() {
     let c = g.cells[i]
-    cells.push(
-      { kind: c.kind, growth_dir: c.growth_dir, age: c.age, stagnant_turns: c.stagnant_turns },
-    )
+    cells.push({
+      kind: c.kind,
+      growth_dir: c.growth_dir,
+      age: c.age,
+      stagnant_turns: c.stagnant_turns,
+    })
   }
   { width: g.width, height: g.height, cells }
 }
@@ -59,9 +62,12 @@ pub fn snapshot_grid(g : TreeGrid) -> GridSnapshot {
   let cells : Array[TreeCell] = Array::new(capacity=g.cells.length())
   for i in 0..<g.cells.length() {
     let c = g.cells[i]
-    cells.push(
-      { kind: c.kind, growth_dir: c.growth_dir, age: c.age, stagnant_turns: c.stagnant_turns },
-    )
+    cells.push({
+      kind: c.kind,
+      growth_dir: c.growth_dir,
+      age: c.age,
+      stagnant_turns: c.stagnant_turns,
+    })
   }
   { cells, }
 }

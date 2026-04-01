@@ -595,7 +595,14 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
               kart.spin_timer = @types.lava_burst_spin_time
             }
             @types.spawn_particles(
-              game, kart.x, kart.y + 0.3, kart.z, 8, 255, 80, 20,
+              game,
+              kart.x,
+              kart.y + 0.3,
+              kart.z,
+              8,
+              255,
+              80,
+              20,
             )
             if i == @types.player_kart {
               game.hit_flash_timer = 0.5
@@ -664,7 +671,8 @@ fn @types.Game::spawn_falling_rocks(game : @types.Game) -> Unit {
         break
       }
       // Place rocks at random positions along and across the segment
-      let t = (Float::from_int(r) + 0.5) / Float::from_int(@types.falling_rocks_max)
+      let t = (Float::from_int(r) + 0.5) /
+        Float::from_int(@types.falling_rocks_max)
       let cx = @types.lerpf(wp0.x, wp1.x, t)
       let cz = @types.lerpf(wp0.z, wp1.z, t)
       // Offset across the road using perpendicular
@@ -706,7 +714,14 @@ fn @types.Game::check_falling_rock_collision(
         // Destroy the rock
         game.falling_rocks[r] = (rock.0, rock.1, rock.2, false)
         @types.spawn_particles(
-          game, rock.1, kart.y + 0.5, rock.2, 6, 100, 90, 80,
+          game,
+          rock.1,
+          kart.y + 0.5,
+          rock.2,
+          6,
+          100,
+          90,
+          80,
         )
         continue
       }
@@ -718,7 +733,14 @@ fn @types.Game::check_falling_rock_collision(
       kart.speed = kart.speed * @types.falling_rock_speed_penalty
       kart.spin_timer = @types.falling_rock_spin_time
       @types.spawn_particles(
-        game, kart.x, kart.y + 0.5, kart.z, 8, 120, 100, 80,
+        game,
+        kart.x,
+        kart.y + 0.5,
+        kart.z,
+        8,
+        120,
+        100,
+        80,
       )
       if kart_idx == @types.player_kart {
         game.hit_flash_timer = 0.5
@@ -788,7 +810,16 @@ fn @types.Game::check_fall_reset(game : @types.Game) -> Unit {
         game.hit_flash_timer = 1.0
         game.camera_shake = 0.5
       }
-      @types.spawn_particles(game, kart.x, kart.y + 0.5, kart.z, 10, 255, 255, 200)
+      @types.spawn_particles(
+        game,
+        kart.x,
+        kart.y + 0.5,
+        kart.z,
+        10,
+        255,
+        255,
+        200,
+      )
     }
   }
 }

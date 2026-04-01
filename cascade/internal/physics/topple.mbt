@@ -2,16 +2,16 @@
 /// Run the full deterministic toppling simulation.
 /// Takes an array of dominoes (with starter already set to Toppling at tick 0).
 /// Returns the array of topple events and the final tick count.
-pub fn simulate(dominoes : Array[@types.Domino]) -> (Array[@types.ToppleEvent], Int) {
+pub fn simulate(
+  dominoes : Array[@types.Domino],
+) -> (Array[@types.ToppleEvent], Int) {
   let events : Array[@types.ToppleEvent] = []
   // Find the starter and begin it toppling
   for i in 0..<dominoes.length() {
     if dominoes[i].is_starter && dominoes[i].state == Standing {
       dominoes[i].state = Toppling
       dominoes[i].topple_tick = 0
-      events.push(
-        { pos: dominoes[i].pos, tick: 0, kind: dominoes[i].kind },
-      )
+      events.push({ pos: dominoes[i].pos, tick: 0, kind: dominoes[i].kind })
     }
   }
   let mut current_tick = 0
@@ -37,16 +37,33 @@ pub fn simulate(dominoes : Array[@types.Domino]) -> (Array[@types.ToppleEvent], 
           Normal | Heavy | Delay => {
             let range = @types.kind_range(d.kind)
             trigger_in_direction(
-              dominoes, d.pos, d.orientation, range, current_tick, events,
+              dominoes,
+              d.pos,
+              d.orientation,
+              range,
+              current_tick,
+              events,
             )
           }
           Splitter => {
-            let (perp1, perp2) = @types.perpendicular_orientations(d.orientation)
-            trigger_in_direction(
-              dominoes, d.pos, perp1, 1, current_tick, events,
+            let (perp1, perp2) = @types.perpendicular_orientations(
+              d.orientation,
             )
             trigger_in_direction(
-              dominoes, d.pos, perp2, 1, current_tick, events,
+              dominoes,
+              d.pos,
+              perp1,
+              1,
+              current_tick,
+              events,
+            )
+            trigger_in_direction(
+              dominoes,
+              d.pos,
+              perp2,
+              1,
+              current_tick,
+              events,
             )
           }
         }
@@ -81,11 +98,11 @@ fn trigger_in_direction(
   orientation : @types.Orientation,
   range : Int,
   tick : Int,
-  events : Array[@types.ToppleEvent]
+  events : Array[@types.ToppleEvent],
 ) -> Unit {
   let dx = @types.orientation_dx(orientation)
   let dy = @types.orientation_dy(orientation)
-  for r in 1..=range {
+  for r in 1..<=range {
     let nx = from.x + dx * r
     let ny = from.y + dy * r
     if !@types.in_grid(nx, ny) {
@@ -139,7 +156,7 @@ pub fn calculate_stars(
   dominoes_used : Int,
   ticks_taken : Int,
   par_count : Int,
-  par_ticks : Int
+  par_ticks : Int,
 ) -> Int {
   if !all_hit {
     return 0

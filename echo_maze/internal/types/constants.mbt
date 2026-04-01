@@ -38,6 +38,7 @@ pub let levels_per_world : Int = 8
 pub let tick_interval : Float = 0.12
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(20, 12, 40, 255)
 
@@ -57,10 +58,14 @@ pub let color_player : @raylib.Color = @raylib.Color::new(0, 220, 240, 255)
 pub let color_ghost_green : @raylib.Color = @raylib.Color::new(60, 220, 80, 180)
 
 ///|
-pub let color_ghost_yellow : @raylib.Color = @raylib.Color::new(240, 220, 40, 180)
+pub let color_ghost_yellow : @raylib.Color = @raylib.Color::new(
+  240, 220, 40, 180,
+)
 
 ///|
-pub let color_ghost_orange : @raylib.Color = @raylib.Color::new(240, 140, 40, 180)
+pub let color_ghost_orange : @raylib.Color = @raylib.Color::new(
+  240, 140, 40, 180,
+)
 
 ///|
 pub let color_exit : @raylib.Color = @raylib.Color::new(50, 255, 120, 255)
@@ -69,10 +74,14 @@ pub let color_exit : @raylib.Color = @raylib.Color::new(50, 255, 120, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(255, 200, 40, 255)
 
 ///|
-pub let color_button_pressed : @raylib.Color = @raylib.Color::new(180, 140, 30, 255)
+pub let color_button_pressed : @raylib.Color = @raylib.Color::new(
+  180, 140, 30, 255,
+)
 
 ///|
-pub let color_door_closed : @raylib.Color = @raylib.Color::new(60, 100, 220, 255)
+pub let color_door_closed : @raylib.Color = @raylib.Color::new(
+  60, 100, 220, 255,
+)
 
 ///|
 pub let color_door_open : @raylib.Color = @raylib.Color::new(60, 100, 220, 60)

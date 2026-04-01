@@ -4,7 +4,7 @@ fn make_level(
   level_index : Int,
   prefilled : Array[(Int, Int, Int)],
   constraints : Array[@types.Constraint],
-  par_time : Float
+  par_time : Float,
 ) -> @types.Level {
   let grid = @types.new_grid()
   for i in 0..<prefilled.length() {

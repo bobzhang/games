@@ -168,7 +168,7 @@ pub fn entity_at_except(
   level : Level,
   x : Int,
   y : Int,
-  exclude_id : Int
+  exclude_id : Int,
 ) -> Entity? {
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
@@ -303,7 +303,12 @@ pub fn rand_next(game : Game) -> UInt {
 }
 
 ///|
-pub fn find_matching_portal(level : Level, id : Int, ex : Int, ey : Int) -> (Int, Int) {
+pub fn find_matching_portal(
+  level : Level,
+  id : Int,
+  ex : Int,
+  ey : Int,
+) -> (Int, Int) {
   for y in 0..<level.height {
     for x in 0..<level.width {
       if (x != ex || y != ey) && get_tile(level, x, y) == Portal(id) {

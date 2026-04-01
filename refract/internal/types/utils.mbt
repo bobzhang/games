@@ -46,7 +46,7 @@ pub fn beam_color_add(a : BeamColor, b : BeamColor) -> BeamColor {
 ///|
 pub fn beam_color_remove_channel(
   color : BeamColor,
-  filter : FilterColor
+  filter : FilterColor,
 ) -> BeamColor {
   match filter {
     Red => { r: false, g: color.g, b: color.b }
@@ -57,7 +57,7 @@ pub fn beam_color_remove_channel(
 
 ///|
 pub fn beam_color_is_black(c : BeamColor) -> Bool {
-  !(c.r) && !(c.g) && !(c.b)
+  !c.r && !c.g && !c.b
 }
 
 ///|
@@ -327,7 +327,7 @@ pub fn count_placed_components(grid : Grid) -> Int {
     let cell = grid.cells[i]
     match cell.component {
       Some(kind) =>
-        if !(cell.locked) {
+        if !cell.locked {
           match kind {
             Source | Receiver => ()
             _ => count += 1

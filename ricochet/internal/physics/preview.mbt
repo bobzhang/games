@@ -5,7 +5,7 @@ pub fn compute_preview(
   level : @types.Level,
   start_pos : @types.Vec2,
   aim_angle : Float,
-  max_preview_bounces : Int
+  max_preview_bounces : Int,
 ) -> Array[@types.PreviewPoint] {
   let points : Array[@types.PreviewPoint] = []
   let mut px = start_pos.x
@@ -46,9 +46,7 @@ pub fn compute_preview(
       let (dist, t) = @types.point_to_segment_dist(ball_pos, wall.p1, wall.p2)
       if dist < br {
         let seg = @types.vec2_sub(wall.p2, wall.p1)
-        let _contact = @types.vec2_add(
-          wall.p1, @types.vec2_scale(seg, t),
-        )
+        let _contact = @types.vec2_add(wall.p1, @types.vec2_scale(seg, t))
         let normal = @types.segment_normal(wall.p1, wall.p2)
         let vel = @types.vec2(dx, dy)
         let to_ball = @types.vec2_sub(ball_pos, _contact)
@@ -78,9 +76,7 @@ pub fn compute_preview(
     for g in 0..<level.gates.length() {
       let gate = level.gates[g]
       let ball_pos = @types.vec2(nx, ny)
-      let (dist, _t) = @types.point_to_segment_dist(
-        ball_pos, gate.p1, gate.p2,
-      )
+      let (dist, _t) = @types.point_to_segment_dist(ball_pos, gate.p1, gate.p2)
       if dist < br {
         let vel_dir = @types.vec2_normalize(@types.vec2(dx, dy))
         let dot = @types.vec2_dot(vel_dir, gate.direction)
@@ -90,11 +86,7 @@ pub fn compute_preview(
           let vel = @types.vec2(dx, dy)
           let to_ball = @types.vec2_sub(ball_pos, gate.p1)
           let d = @types.vec2_dot(to_ball, normal)
-          let n = if d < 0.0 {
-            @types.vec2_neg(normal)
-          } else {
-            normal
-          }
+          let n = if d < 0.0 { @types.vec2_neg(normal) } else { normal }
           let reflected = @types.vec2_reflect(vel, n)
           dx = reflected.x
           dy = reflected.y

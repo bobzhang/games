@@ -171,12 +171,11 @@ fn update_playing(game : @types.Game) -> Unit {
         return
       }
     }
-    Won => {
+    Won =>
       if @raylib.is_key_pressed(@raylib.KeyEnter) {
         game.screen = Results
         return
       }
-    }
     Lost => {
       if @raylib.is_key_pressed(@raylib.KeyR) {
         @levels.load_level(game, game.current_level)

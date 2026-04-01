@@ -13,9 +13,7 @@ test "find_card found" {
 
 ///|
 test "find_card not found" {
-  let cards = [
-    make_event_card(0, "A", "act1", "t1", -1),
-  ]
+  let cards = [make_event_card(0, "A", "act1", "t1", -1)]
   match find_card(cards, 5) {
     Some(_) => fail("should not find card 5")
     None => ()

@@ -13,38 +13,60 @@ fn draw_ratio_bars(game : @types.Game) -> Unit {
   @raylib.draw_line_ex(
     @raylib.Vector2::new(Float::from_int(bar_x), Float::from_int(bar_y - 20)),
     @raylib.Vector2::new(
-      Float::from_int(bar_x + bar_w), Float::from_int(bar_y - 20),
+      Float::from_int(bar_x + bar_w),
+      Float::from_int(bar_y - 20),
     ),
     1.0,
     @types.color_text_dim,
   )
   // Forest bar
   draw_single_ratio_bar(
-    bar_x, bar_y, bar_w, bar_h, "Forest",
+    bar_x,
+    bar_y,
+    bar_w,
+    bar_h,
+    "Forest",
     @types.biome_ratio(grid, Forest),
-    targets.forest_min, targets.forest_max,
-    @types.color_forest, game,
+    targets.forest_min,
+    targets.forest_max,
+    @types.color_forest,
+    game,
   )
   // Ocean bar
   draw_single_ratio_bar(
-    bar_x, bar_y + spacing, bar_w, bar_h, "Ocean",
+    bar_x,
+    bar_y + spacing,
+    bar_w,
+    bar_h,
+    "Ocean",
     @types.biome_ratio(grid, Ocean),
-    targets.ocean_min, targets.ocean_max,
-    @types.color_ocean, game,
+    targets.ocean_min,
+    targets.ocean_max,
+    @types.color_ocean,
+    game,
   )
   // Desert bar
   draw_single_ratio_bar(
-    bar_x, bar_y + spacing * 2, bar_w, bar_h, "Desert",
+    bar_x,
+    bar_y + spacing * 2,
+    bar_w,
+    bar_h,
+    "Desert",
     @types.biome_ratio(grid, Desert),
-    targets.desert_min, targets.desert_max,
-    @types.color_desert, game,
+    targets.desert_min,
+    targets.desert_max,
+    @types.color_desert,
+    game,
   )
   // Barren info
   let barren_r = @types.biome_ratio(grid, Barren)
   let barren_pct = (barren_r * 100.0).to_int()
   @draw.draw_text(
     "Barren: " + barren_pct.to_string() + "%",
-    bar_x, bar_y + spacing * 3, 18, @types.color_text_dim,
+    bar_x,
+    bar_y + spacing * 3,
+    18,
+    @types.color_text_dim,
   )
   // Total tile count
   let total = grid.width * grid.height
@@ -52,12 +74,22 @@ fn draw_ratio_bars(game : @types.Game) -> Unit {
   let ocean_c = @types.count_biome(grid, Ocean)
   let desert_c = @types.count_biome(grid, Desert)
   let barren_c = @types.count_biome(grid, Barren)
-  let counts_text = "F:" + forest_c.to_string() + " O:" + ocean_c.to_string() +
-    " D:" + desert_c.to_string() + " B:" + barren_c.to_string() + " /" +
+  let counts_text = "F:" +
+    forest_c.to_string() +
+    " O:" +
+    ocean_c.to_string() +
+    " D:" +
+    desert_c.to_string() +
+    " B:" +
+    barren_c.to_string() +
+    " /" +
     total.to_string()
   @draw.draw_text(
     counts_text,
-    bar_x, bar_y + spacing * 3 + 22, 14, @types.color_text_dim,
+    bar_x,
+    bar_y + spacing * 3 + 22,
+    14,
+    @types.color_text_dim,
   )
 }
 
@@ -72,7 +104,7 @@ fn draw_single_ratio_bar(
   target_min : Float,
   target_max : Float,
   color : @raylib.Color,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   let time = Float::from_int(game.frame_count) * 0.03
   // Label
@@ -88,10 +120,13 @@ fn draw_single_ratio_bar(
   @raylib.draw_rectangle(x, y, fill_w, h, color)
   // Shimmer effect on fill
   if fill_w > 4 {
-    let shimmer_x = x + ((time * 60.0).to_int() % fill_w)
+    let shimmer_x = x + (time * 60.0).to_int() % fill_w
     if shimmer_x < x + fill_w - 2 {
       @raylib.draw_rectangle(
-        shimmer_x, y, 3, h,
+        shimmer_x,
+        y,
+        3,
+        h,
         @raylib.Color::new(255, 255, 255, 30),
       )
     }
@@ -133,7 +168,10 @@ fn draw_single_ratio_bar(
     let pulse = @types.sinf(time * 6.0) * 0.4 + 0.8
     let glow_alpha = (pulse * game.ratio_pulse_timer / 1.5 * 255.0).to_int()
     @raylib.draw_rectangle(
-      x - 2, y - 2, w + 4, h + 4,
+      x - 2,
+      y - 2,
+      w + 4,
+      h + 4,
       @raylib.Color::new(50, 220, 80, glow_alpha / 4),
     )
   }
@@ -149,7 +187,10 @@ fn draw_single_ratio_bar(
     let dir = if current < target_min { "need +" } else { "need -" }
     @draw.draw_text(
       dir + dist_pct.to_string() + "%",
-      x + w + 80, y + 6, 12, @types.color_text_dim,
+      x + w + 80,
+      y + 6,
+      12,
+      @types.color_text_dim,
     )
   }
   // Border
@@ -194,7 +235,9 @@ fn draw_resolve_overlay(game : @types.Game) -> Unit {
       @raylib.Color::new(80, 200, 255, alpha),
     )
     // Step indicator
-    let step_text = "Step " + game.resolve_step.to_string() + "/" +
+    let step_text = "Step " +
+      game.resolve_step.to_string() +
+      "/" +
       @types.resolve_steps.to_string()
     let stw = @draw.measure_text(step_text, 18)
     @draw.draw_text(
@@ -234,28 +277,40 @@ fn draw_ecosystem_forecast(game : @types.Game) -> Unit {
     if gf > 0 {
       @draw.draw_text(
         "+" + gf.to_string() + " Forest",
-        px + 10, offset_y, 12, @types.color_forest,
+        px + 10,
+        offset_y,
+        12,
+        @types.color_forest,
       )
       offset_y += 16
     }
     if lf > 0 {
       @draw.draw_text(
         "-" + lf.to_string() + " Forest",
-        px + 10, offset_y, 12, @types.color_fail,
+        px + 10,
+        offset_y,
+        12,
+        @types.color_fail,
       )
       offset_y += 16
     }
     if gd > 0 {
       @draw.draw_text(
         "+" + gd.to_string() + " Desert",
-        px + 10, offset_y, 12, @types.color_desert,
+        px + 10,
+        offset_y,
+        12,
+        @types.color_desert,
       )
       offset_y += 16
     }
     if ld > 0 {
       @draw.draw_text(
         "-" + ld.to_string() + " Desert",
-        px + 10, offset_y, 12, @types.color_success,
+        px + 10,
+        offset_y,
+        12,
+        @types.color_success,
       )
       offset_y += 16
     }
@@ -277,10 +332,7 @@ fn draw_completion_sparkles(game : @types.Game) -> Unit {
       let sy = ((fi * 53.7 + time * 25.0 * (fi % 3.0 + 1.0)) % h).to_int()
       let size : Float = 2.0 + @types.sinf(time * 3.0 + fi) * 1.5
       let alpha = ((@types.sinf(time * 2.0 + fi * 0.5) * 0.5 + 0.5) * 200.0).to_int()
-      @raylib.draw_circle(
-        sx, sy, size,
-        @raylib.Color::new(255, 215, 0, alpha),
-      )
+      @raylib.draw_circle(sx, sy, size, @raylib.Color::new(255, 215, 0, alpha))
     }
   }
 }

@@ -89,7 +89,7 @@ fn update_title(game : @types.Game) -> Unit {
   }
   // T key toggles speedrun timer
   if @raylib.is_key_pressed(@raylib.KeyT) {
-    game.speedrun_active = !(game.speedrun_active)
+    game.speedrun_active = !game.speedrun_active
     if game.speedrun_active {
       game.speedrun_timer = 0.0
     }
@@ -330,7 +330,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
           @replay.record_player_move(game, p1x, p1y)
         }
       }
-      if @raylib.is_key_pressed(@raylib.KeyRight) && !(moved) {
+      if @raylib.is_key_pressed(@raylib.KeyRight) && !moved {
         moved = @physics.try_move_player(level, game, p2x, p2y)
         if moved {
           @replay.record_player_move(game, p2x, p2y)
@@ -344,7 +344,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
           @replay.record_player_move(game, p1x, p1y)
         }
       }
-      if @raylib.is_key_pressed(@raylib.KeyDown) && !(moved) {
+      if @raylib.is_key_pressed(@raylib.KeyDown) && !moved {
         moved = @physics.try_move_player(level, game, p2x, p2y)
         if moved {
           @replay.record_player_move(game, p2x, p2y)
@@ -378,7 +378,7 @@ fn spawn_movement_particles(game : @types.Game, level : @types.Level) -> Unit {
 fn trigger_landing_bounces(game : @types.Game, level : @types.Level) -> Unit {
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
-    if e.active && !(e.falling) && e.from_x == e.x && e.from_y == e.y {
+    if e.active && !e.falling && e.from_x == e.x && e.from_y == e.y {
       @effects.trigger_bounce(game, e.id)
     }
   }
@@ -388,7 +388,7 @@ fn trigger_landing_bounces(game : @types.Game, level : @types.Level) -> Unit {
 fn check_collection_particles(game : @types.Game, level : @types.Level) -> Unit {
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
-    if !(e.active) {
+    if !e.active {
       let px = @types.tile_to_pixel_x(e.x) + @types.tile_sizef * 0.5
       let py = @types.tile_to_pixel_y(e.y) + @types.tile_sizef * 0.5
       match e.kind {
@@ -402,7 +402,7 @@ fn check_collection_particles(game : @types.Game, level : @types.Level) -> Unit 
 
 ///|
 fn check_lava_death(level : @types.Level, game : @types.Game) -> Unit {
-  if !(@mechanics.is_lava_deadly(game.lava_timer)) {
+  if !@mechanics.is_lava_deadly(game.lava_timer) {
     return
   }
   let player = match @types.find_player(level) {
@@ -464,7 +464,8 @@ fn complete_level(game : @types.Game) -> Unit {
   } else {
     0
   }
-  if global_idx < game.level_stars.length() && stars > game.level_stars[global_idx] {
+  if global_idx < game.level_stars.length() &&
+    stars > game.level_stars[global_idx] {
     game.total_stars = game.total_stars - game.level_stars[global_idx] + stars
     game.level_stars[global_idx] = stars
   }
@@ -518,4 +519,3 @@ fn update_statistics(game : @types.Game) -> Unit {
     game.screen = Title
   }
 }
-

@@ -6,7 +6,7 @@ pub fn xyz_to_idx(x : Int, y : Int, z : Int, size : Int) -> Int {
 ///|
 pub fn idx_to_xyz(idx : Int, size : Int) -> Vec3i {
   let x = idx % size
-  let y = (idx / size) % size
+  let y = idx / size % size
   let z = idx / (size * size)
   { x, y, z }
 }
@@ -37,7 +37,7 @@ pub fn new_silhouette(width : Int, height : Int) -> Silhouette {
 pub fn silhouette_from_bits(
   width : Int,
   height : Int,
-  bits : Array[Int]
+  bits : Array[Int],
 ) -> Silhouette {
   let cells : Array[Bool] = Array::make(width * height, false)
   for row = 0; row < height; row = row + 1 {
@@ -56,7 +56,7 @@ pub fn silhouette_from_bits(
 pub fn new_target_set(
   top : Silhouette,
   front : Silhouette,
-  side : Silhouette
+  side : Silhouette,
 ) -> TargetSet {
   { top, front, side }
 }

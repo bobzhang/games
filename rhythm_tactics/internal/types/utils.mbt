@@ -153,12 +153,7 @@ pub fn manhattan_dist(x1 : Int, y1 : Int, x2 : Int, y2 : Int) -> Int {
 }
 
 ///|
-pub fn direction_from_to(
-  fx : Int,
-  fy : Int,
-  tx : Int,
-  ty : Int,
-) -> Direction {
+pub fn direction_from_to(fx : Int, fy : Int, tx : Int, ty : Int) -> Direction {
   let dx = tx - fx
   let dy = ty - fy
   let adx = if dx < 0 { -dx } else { dx }
@@ -423,7 +418,9 @@ pub fn spawn_death_particles(
 ) -> Unit {
   let rng = game_rng(game)
   for i in 0..<particle_count_death {
-    let angle = Float::from_int(i) * 6.28F / Float::from_int(particle_count_death)
+    let angle = Float::from_int(i) *
+      6.28F /
+      Float::from_int(particle_count_death)
     let speed = 40.0F + Float::from_int(rand_range(rng, 0, 40))
     let vx = speed * cos_approx(angle)
     let vy = speed * sin_approx(angle)
@@ -773,7 +770,13 @@ pub fn update_meta_after_run(
   meta.bosses_defeated = meta.bosses_defeated + bosses
   // Record run
   let grade = compute_score_grade(score)
-  let record : RunRecord = { score, max_combo: max_combo_val, floors, weapon, grade }
+  let record : RunRecord = {
+    score,
+    max_combo: max_combo_val,
+    floors,
+    weapon,
+    grade,
+  }
   meta.run_history.push(record)
   // Cap history at 20
   while meta.run_history.length() > 20 {
@@ -786,7 +789,11 @@ pub fn update_meta_after_run(
 ///|
 pub fn check_weapon_unlocks(meta : MetaProgress, floors : Int) -> Unit {
   let unlocks : Array[(Int, WeaponKind)] = [
-    (2, Spear), (4, Whip), (5, Hammer), (7, Bow), (10, Staff),
+    (2, Spear),
+    (4, Whip),
+    (5, Hammer),
+    (7, Bow),
+    (10, Staff),
   ]
   for pair in unlocks {
     let (req_floor, wk) = pair
@@ -851,43 +858,99 @@ pub fn spell_data(kind : SpellKind) -> SpellData {
   match kind {
     Fireball =>
       {
-        kind, element: Fire, name: "Fireball", desc: "3 dmg, 1 tile range",
-        mana_cost: 3, beat_cooldown: 2, damage: 3, range: 1, aoe_radius: 0,
+        kind,
+        element: Fire,
+        name: "Fireball",
+        desc: "3 dmg, 1 tile range",
+        mana_cost: 3,
+        beat_cooldown: 2,
+        damage: 3,
+        range: 1,
+        aoe_radius: 0,
       }
     FrostNova =>
       {
-        kind, element: Ice, name: "Frost Nova", desc: "1 dmg, freezes adjacent",
-        mana_cost: 4, beat_cooldown: 3, damage: 1, range: 0, aoe_radius: 1,
+        kind,
+        element: Ice,
+        name: "Frost Nova",
+        desc: "1 dmg, freezes adjacent",
+        mana_cost: 4,
+        beat_cooldown: 3,
+        damage: 1,
+        range: 0,
+        aoe_radius: 1,
       }
     ChainLightning =>
       {
-        kind, element: Lightning, name: "Chain Lightning", desc: "2 dmg, chains to 3",
-        mana_cost: 5, beat_cooldown: 3, damage: 2, range: 3, aoe_radius: 0,
+        kind,
+        element: Lightning,
+        name: "Chain Lightning",
+        desc: "2 dmg, chains to 3",
+        mana_cost: 5,
+        beat_cooldown: 3,
+        damage: 2,
+        range: 3,
+        aoe_radius: 0,
       }
     ShadowStep =>
       {
-        kind, element: Dark, name: "Shadow Step", desc: "Teleport to empty tile",
-        mana_cost: 2, beat_cooldown: 2, damage: 0, range: 5, aoe_radius: 0,
+        kind,
+        element: Dark,
+        name: "Shadow Step",
+        desc: "Teleport to empty tile",
+        mana_cost: 2,
+        beat_cooldown: 2,
+        damage: 0,
+        range: 5,
+        aoe_radius: 0,
       }
     Inferno =>
       {
-        kind, element: Fire, name: "Inferno", desc: "3x3 area, 2 dmg",
-        mana_cost: 6, beat_cooldown: 4, damage: 2, range: 2, aoe_radius: 1,
+        kind,
+        element: Fire,
+        name: "Inferno",
+        desc: "3x3 area, 2 dmg",
+        mana_cost: 6,
+        beat_cooldown: 4,
+        damage: 2,
+        range: 2,
+        aoe_radius: 1,
       }
     Blizzard =>
       {
-        kind, element: Ice, name: "Blizzard", desc: "Freeze all enemies 2 beats",
-        mana_cost: 7, beat_cooldown: 5, damage: 0, range: 99, aoe_radius: 99,
+        kind,
+        element: Ice,
+        name: "Blizzard",
+        desc: "Freeze all enemies 2 beats",
+        mana_cost: 7,
+        beat_cooldown: 5,
+        damage: 0,
+        range: 99,
+        aoe_radius: 99,
       }
     ThunderStrike =>
       {
-        kind, element: Lightning, name: "Thunder Strike", desc: "5 dmg, single, stuns",
-        mana_cost: 6, beat_cooldown: 4, damage: 5, range: 2, aoe_radius: 0,
+        kind,
+        element: Lightning,
+        name: "Thunder Strike",
+        desc: "5 dmg, single, stuns",
+        mana_cost: 6,
+        beat_cooldown: 4,
+        damage: 5,
+        range: 2,
+        aoe_radius: 0,
       }
     VoidPulse =>
       {
-        kind, element: Dark, name: "Void Pulse", desc: "Push adjacent enemies 2 tiles",
-        mana_cost: 4, beat_cooldown: 3, damage: 1, range: 0, aoe_radius: 1,
+        kind,
+        element: Dark,
+        name: "Void Pulse",
+        desc: "Push adjacent enemies 2 tiles",
+        mana_cost: 4,
+        beat_cooldown: 3,
+        damage: 1,
+        range: 0,
+        aoe_radius: 1,
       }
   }
 }
@@ -948,7 +1011,16 @@ pub fn has_spell(player : Player, kind : SpellKind) -> Bool {
 
 ///|
 pub fn all_spell_kinds() -> Array[SpellKind] {
-  [Fireball, FrostNova, ChainLightning, ShadowStep, Inferno, Blizzard, ThunderStrike, VoidPulse]
+  [
+    Fireball,
+    FrostNova,
+    ChainLightning,
+    ShadowStep,
+    Inferno,
+    Blizzard,
+    ThunderStrike,
+    VoidPulse,
+  ]
 }
 
 ///|
@@ -1051,7 +1123,7 @@ pub fn check_achievement(
   kind : AchievementKind,
 ) -> Bool {
   for a in state.achievements {
-    if a.kind == kind && !(a.unlocked) {
+    if a.kind == kind && !a.unlocked {
       a.unlocked = true
       state.toasts.push({ text: "Achievement: " + a.name, timer: 3.0 })
       return true
@@ -1061,7 +1133,10 @@ pub fn check_achievement(
 }
 
 ///|
-pub fn is_achievement_unlocked(state : AchievementState, kind : AchievementKind) -> Bool {
+pub fn is_achievement_unlocked(
+  state : AchievementState,
+  kind : AchievementKind,
+) -> Bool {
   for a in state.achievements {
     if a.kind == kind {
       return a.unlocked
@@ -1569,7 +1644,11 @@ pub fn weapon_effect_color(kind : WeaponKind) -> @raylib.Color {
 // ============================================================
 
 ///|
-pub fn boss_phase_from_hp(kind : EnemyKind, hp : Int, max_hp : Int) -> BossPhase {
+pub fn boss_phase_from_hp(
+  kind : EnemyKind,
+  hp : Int,
+  max_hp : Int,
+) -> BossPhase {
   let frac = Float::from_int(hp) / Float::from_int(max_hp)
   match kind {
     BeatDragon =>
@@ -1716,7 +1795,8 @@ pub fn record_spell_usage(game : Game, kind : SpellKind) -> Unit {
   }
   game.run_stats.spell_usage = new_usage
   game.run_stats.total_spells_cast = game.run_stats.total_spells_cast + 1
-  game.current_floor_stats.spells_cast = game.current_floor_stats.spells_cast + 1
+  game.current_floor_stats.spells_cast = game.current_floor_stats.spells_cast +
+    1
 }
 
 ///|
@@ -1752,7 +1832,14 @@ pub fn grade_distance_text(score : Int) -> String {
 ///|
 pub fn reset_run_stats(game : Game) -> Unit {
   game.run_stats.floor_history.clear()
-  game.run_stats.weapon_usage = [(Sword, 0), (Spear, 0), (Whip, 0), (Hammer, 0), (Bow, 0), (Staff, 0)]
+  game.run_stats.weapon_usage = [
+    (Sword, 0),
+    (Spear, 0),
+    (Whip, 0),
+    (Hammer, 0),
+    (Bow, 0),
+    (Staff, 0),
+  ]
   game.run_stats.spell_usage.clear()
   game.run_stats.total_items = 0
   game.run_stats.total_spells_cast = 0

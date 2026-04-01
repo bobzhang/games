@@ -14,13 +14,15 @@ pub let alphabet_size : Int = 26
 pub let unmapped : Int = -1
 
 // English letter frequencies (percent, A-Z)
+
 ///|
 pub let english_freq : Array[Float] = [
-  8.2, 1.5, 2.8, 4.3, 12.7, 2.2, 2.0, 6.1, 7.0, 0.2, 0.8, 4.0, 2.4, 6.7, 7.5,
-  1.9, 0.1, 6.0, 6.3, 9.1, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1,
+  8.2, 1.5, 2.8, 4.3, 12.7, 2.2, 2.0, 6.1, 7.0, 0.2, 0.8, 4.0, 2.4, 6.7, 7.5, 1.9,
+  0.1, 6.0, 6.3, 9.1, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1,
 ]
 
 // Spy theme colors - dark terminal aesthetic
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(10, 12, 18, 255)
 
@@ -70,12 +72,15 @@ pub let color_bar_cipher : @raylib.Color = @raylib.Color::new(0, 180, 80, 200)
 pub let color_button : @raylib.Color = @raylib.Color::new(30, 45, 65, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(50, 70, 100, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  50, 70, 100, 255,
+)
 
 ///|
 pub let color_white : @raylib.Color = @raylib.Color::new(240, 245, 255, 255)
 
 // Layout constants
+
 ///|
 pub let msg_area_x : Int = 40
 

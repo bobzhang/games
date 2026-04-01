@@ -2,7 +2,7 @@
 pub fn validate_level(
   level : @types.LevelDef,
   fences : Array[@types.FenceEdge],
-  regions : Array[@types.Region]
+  regions : Array[@types.Region],
 ) -> Array[@types.ConstraintStatus] {
   let statuses : Array[@types.ConstraintStatus] = []
   for i in 0..<level.houses.length() {
@@ -81,7 +81,7 @@ fn grid_has_road(grid : @types.Grid) -> Bool {
 
 ///|
 pub fn all_constraints_satisfied(
-  statuses : Array[@types.ConstraintStatus]
+  statuses : Array[@types.ConstraintStatus],
 ) -> Bool {
   for i in 0..<statuses.length() {
     let s = statuses[i]
@@ -99,9 +99,9 @@ pub fn all_constraints_satisfied(
 pub fn compute_stars(
   level : @types.LevelDef,
   fence_count : Int,
-  satisfied : Bool
+  satisfied : Bool,
 ) -> Int {
-  if !(satisfied) {
+  if !satisfied {
     return 0
   }
   // 1 star: all constraints met

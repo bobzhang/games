@@ -116,8 +116,7 @@ pub fn point_in_polygon(p : Point, poly : Array[Point]) -> Bool {
     let pi = poly[i]
     let pj = poly[j]
     if (pi.y > p.y) != (pj.y > p.y) {
-      let x_intersect = pj.x +
-        (p.y - pj.y) / (pi.y - pj.y) * (pi.x - pj.x)
+      let x_intersect = pj.x + (p.y - pj.y) / (pi.y - pj.y) * (pi.x - pj.x)
       if p.x < x_intersect {
         inside = !inside
       }
@@ -128,11 +127,7 @@ pub fn point_in_polygon(p : Point, poly : Array[Point]) -> Bool {
 }
 
 ///|
-pub fn point_to_segment_dist(
-  p : Point,
-  a : Point,
-  b : Point
-) -> Float {
+pub fn point_to_segment_dist(p : Point, a : Point, b : Point) -> Float {
   let dx = b.x - a.x
   let dy = b.y - a.y
   let len_sq = dx * dx + dy * dy
@@ -279,5 +274,8 @@ pub let pi : Float = 3.14159265
 
 ///|
 pub fn floorf(v : Float) -> Float {
-  Float::from_int(v.to_int() - (if v < 0.0 && v != Float::from_int(v.to_int()) { 1 } else { 0 }))
+  Float::from_int(
+    v.to_int() -
+    (if v < 0.0 && v != Float::from_int(v.to_int()) { 1 } else { 0 }),
+  )
 }

@@ -11,7 +11,7 @@ fn setup_level(
   input_dir : @types.RotDir,
   input_radius : Int,
   outputs : Array[@types.Output],
-  budget : Int
+  budget : Int,
 ) -> Unit {
   let input_kind : @types.GearKind = match input_radius {
     1 => Small
@@ -21,7 +21,12 @@ fn setup_level(
   let level : @types.Level = {
     name: "Test",
     tier: Gears,
-    input: { pos: input_pos, rpm: input_rpm, dir: input_dir, radius: input_radius },
+    input: {
+      pos: input_pos,
+      rpm: input_rpm,
+      dir: input_dir,
+      radius: input_radius,
+    },
     outputs,
     available_gears: [Small, Medium, Large, Belt, Ratchet],
     gear_budget: budget,
@@ -64,15 +69,7 @@ test "simulate propagates to single adjacent gear" {
 ///|
 test "simulate direction flips each mesh" {
   let game = make_test_game()
-  setup_level(
-    game,
-    { x: 0, y: 0 },
-    60.0,
-    CW,
-    2,
-    [],
-    6,
-  )
+  setup_level(game, { x: 0, y: 0 }, 60.0, CW, 2, [], 6)
   // Place Medium at (4,0): dist=4 = 2+2, meshes
   let g1 = @types.new_gear({ x: 4, y: 0 }, Medium)
   game.placed_gears.push(g1)
@@ -89,15 +86,7 @@ test "simulate direction flips each mesh" {
 ///|
 test "simulate speed ratio small to large" {
   let game = make_test_game()
-  setup_level(
-    game,
-    { x: 0, y: 0 },
-    60.0,
-    CW,
-    1,
-    [],
-    4,
-  )
+  setup_level(game, { x: 0, y: 0 }, 60.0, CW, 1, [], 4)
   // Place Large at (4,0): dist=4 = 1+3, meshes
   let g = @types.new_gear({ x: 4, y: 0 }, Large)
   game.placed_gears.push(g)
@@ -109,15 +98,7 @@ test "simulate speed ratio small to large" {
 ///|
 test "simulate speed ratio large to small" {
   let game = make_test_game()
-  setup_level(
-    game,
-    { x: 0, y: 0 },
-    60.0,
-    CW,
-    3,
-    [],
-    4,
-  )
+  setup_level(game, { x: 0, y: 0 }, 60.0, CW, 3, [], 4)
   // Place Small at (4,0): dist=4 = 3+1, meshes
   let g = @types.new_gear({ x: 4, y: 0 }, Small)
   game.placed_gears.push(g)
@@ -129,15 +110,7 @@ test "simulate speed ratio large to small" {
 ///|
 test "simulate belt preserves direction" {
   let game = make_test_game()
-  setup_level(
-    game,
-    { x: 0, y: 0 },
-    60.0,
-    CW,
-    2,
-    [],
-    4,
-  )
+  setup_level(game, { x: 0, y: 0 }, 60.0, CW, 2, [], 4)
   // Place Medium at (8,0): too far to mesh (dist=8 > 2+2=4)
   let g = @types.new_gear({ x: 8, y: 0 }, Medium)
   game.placed_gears.push(g)
@@ -154,15 +127,7 @@ test "simulate belt preserves direction" {
 test "simulate output satisfaction" {
   let game = make_test_game()
   let out = @types.new_output({ x: 5, y: 0 }, 30.0, CCW)
-  setup_level(
-    game,
-    { x: 2, y: 0 },
-    60.0,
-    CW,
-    1,
-    [out],
-    4,
-  )
+  setup_level(game, { x: 2, y: 0 }, 60.0, CW, 1, [out], 4)
   // Place Medium at output position
   let g = @types.new_gear({ x: 5, y: 0 }, Medium)
   game.placed_gears.push(g)
@@ -176,15 +141,7 @@ test "simulate output satisfaction" {
 test "simulate unsatisfied output wrong direction" {
   let game = make_test_game()
   let out = @types.new_output({ x: 5, y: 0 }, 30.0, CW) // wants CW but will get CCW
-  setup_level(
-    game,
-    { x: 2, y: 0 },
-    60.0,
-    CW,
-    1,
-    [out],
-    4,
-  )
+  setup_level(game, { x: 2, y: 0 }, 60.0, CW, 1, [out], 4)
   let g = @types.new_gear({ x: 5, y: 0 }, Medium)
   game.placed_gears.push(g)
   simulate(game)
@@ -215,15 +172,7 @@ test "can_place_gear checks budget" {
 ///|
 test "can_place_gear checks overlap" {
   let game = make_test_game()
-  setup_level(
-    game,
-    { x: 0, y: 0 },
-    60.0,
-    CW,
-    2,
-    [],
-    10,
-  )
+  setup_level(game, { x: 0, y: 0 }, 60.0, CW, 2, [], 10)
   // Try to place Medium at (1,0): overlaps with input Medium at (0,0)
   // dist=1, min_dist = 2+2 = 4, 1 < 16 so overlap
   inspect(can_place_gear(game, { x: 1, y: 0 }, Medium), content="false")
@@ -234,15 +183,7 @@ test "can_place_gear checks overlap" {
 ///|
 test "can_place_gear checks occupied" {
   let game = make_test_game()
-  setup_level(
-    game,
-    { x: 0, y: 0 },
-    60.0,
-    CW,
-    2,
-    [],
-    10,
-  )
+  setup_level(game, { x: 0, y: 0 }, 60.0, CW, 2, [], 10)
   // Input gear is at (0,0)
   inspect(can_place_gear(game, { x: 0, y: 0 }, Small), content="false")
 }
@@ -250,15 +191,7 @@ test "can_place_gear checks occupied" {
 ///|
 test "simulate multi-gear chain" {
   let game = make_test_game()
-  setup_level(
-    game,
-    { x: 0, y: 0 },
-    120.0,
-    CW,
-    2,
-    [],
-    6,
-  )
+  setup_level(game, { x: 0, y: 0 }, 120.0, CW, 2, [], 6)
   // Medium(0,0) -> Medium(4,0) -> Small(7,0)
   // dist 4,0 to 0,0 = 4 = 2+2 ok
   let g1 = @types.new_gear({ x: 4, y: 0 }, Medium)

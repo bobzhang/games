@@ -22,7 +22,7 @@ pub fn stop_recording(
   game : @types.Game,
   height : Float,
   score : Int,
-  passed : Bool
+  passed : Bool,
 ) -> Unit {
   let replay = game.replay
   replay.is_recording = false
@@ -39,9 +39,9 @@ pub fn record_place(
   material : @types.Material,
   x : Float,
   y : Float,
-  angle : Float
+  angle : Float,
 ) -> Unit {
-  if !(game.replay.is_recording) {
+  if !game.replay.is_recording {
     return
   }
   game.replay.actions.push(Place(kind, material, x, y, angle))
@@ -50,7 +50,7 @@ pub fn record_place(
 ///|
 /// Records a piece rotation action.
 pub fn record_rotate(game : @types.Game, body_id : Int) -> Unit {
-  if !(game.replay.is_recording) {
+  if !game.replay.is_recording {
     return
   }
   game.replay.actions.push(Rotate(body_id))
@@ -62,9 +62,9 @@ pub fn record_blueprint(
   game : @types.Game,
   bp_kind : @types.BlueprintKind,
   x : Float,
-  y : Float
+  y : Float,
 ) -> Unit {
-  if !(game.replay.is_recording) {
+  if !game.replay.is_recording {
     return
   }
   game.replay.actions.push(BlueprintPlace(bp_kind, x, y))
@@ -89,7 +89,7 @@ pub fn start_playback(game : @types.Game) -> Unit {
 /// Returns true when playback is complete.
 pub fn update_playback(game : @types.Game, dt : Float) -> Bool {
   let replay = game.replay
-  if !(replay.is_playing) {
+  if !replay.is_playing {
     return true
   }
   replay.playback_timer = replay.playback_timer + dt * replay.playback_speed
@@ -98,7 +98,7 @@ pub fn update_playback(game : @types.Game, dt : Float) -> Bool {
   let target_idx = (replay.playback_timer / interval).to_int()
   // Process any new actions
   while replay.playback_index < target_idx &&
-    replay.playback_index < replay.actions.length() {
+        replay.playback_index < replay.actions.length() {
     let action = replay.actions[replay.playback_index]
     execute_replay_action(game, action)
     replay.playback_index = replay.playback_index + 1
@@ -113,7 +113,10 @@ pub fn update_playback(game : @types.Game, dt : Float) -> Bool {
 
 ///|
 /// Executes a single replay action by placing the piece in the world.
-fn execute_replay_action(game : @types.Game, action : @types.ReplayAction) -> Unit {
+fn execute_replay_action(
+  game : @types.Game,
+  action : @types.ReplayAction,
+) -> Unit {
   match action {
     Place(kind, material, x, y, angle) => {
       let id = @physics.add_body(game.world, kind, material, x, y, angle)
@@ -123,15 +126,13 @@ fn execute_replay_action(game : @types.Game, action : @types.ReplayAction) -> Un
         @physics.step(game.world, 0.016)
       }
     }
-    Rotate(_body_id) => {
+    Rotate(_body_id) =>
       // During replay, rotation is cosmetic - the placed angle already includes it
       ()
-    }
-    BlueprintPlace(_bp_kind, _x, _y) => {
+    BlueprintPlace(_bp_kind, _x, _y) =>
       // Blueprint placement is decomposed into individual Place actions during recording
       // This action is recorded for metadata purposes
       ()
-    }
   }
 }
 
@@ -149,7 +150,7 @@ pub fn save_ghost_tower(game : @types.Game) -> Unit {
   let replay = game.replay
   replay.ghost_pieces.clear()
   for body in game.world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       replay.ghost_pieces.push(
         (body.kind, body.material, body.x, body.y, body.angle),
       )
@@ -169,7 +170,7 @@ pub fn clear_ghost_tower(game : @types.Game) -> Unit {
 /// Toggles ghost tower visibility.
 pub fn toggle_ghost(game : @types.Game) -> Unit {
   if game.replay.ghost_pieces.length() > 0 {
-    game.replay.ghost_visible = !(game.replay.ghost_visible)
+    game.replay.ghost_visible = !game.replay.ghost_visible
   }
 }
 
@@ -198,7 +199,7 @@ pub fn ghost_visible(game : @types.Game) -> Bool {
 ///|
 /// Returns the ghost pieces for rendering.
 pub fn ghost_pieces(
-  game : @types.Game
+  game : @types.Game,
 ) -> Array[(@types.PieceKind, @types.Material, Float, Float, Float)] {
   game.replay.ghost_pieces
 }

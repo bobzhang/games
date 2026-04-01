@@ -4,7 +4,7 @@ pub fn fire_weapon(
   weapon : @types.Weapon,
   origin : @types.Vec2,
   aim_angle : Float,
-  mod_kind~ : @types.ModKind? = None
+  mod_kind? : @types.ModKind? = None,
 ) -> Unit {
   if weapon.fire_timer > 0.0 {
     return
@@ -58,10 +58,9 @@ fn apply_mod(proj : @types.Projectile, mod_kind : @types.ModKind?) -> Unit {
     None => ()
     Some(Piercing) => proj.piercing = true
     Some(Homing) => proj.homing_strength = 3.0
-    Some(Split) => {
+    Some(Split) =>
       // Split handled on hit
       proj.chain_count = 2
-    }
     Some(Chain) => proj.chain_count = 3
     Some(Explosive) => proj.explosive_radius = 60.0
     Some(Freezing) => proj.freezing = true
@@ -86,7 +85,7 @@ pub fn fire_enemy_projectile(
   origin : @types.Vec2,
   target : @types.Vec2,
   speed : Float,
-  damage : Int
+  damage : Int,
 ) -> Unit {
   let idx = @types.alloc_projectile(game.projectiles)
   if idx < 0 {

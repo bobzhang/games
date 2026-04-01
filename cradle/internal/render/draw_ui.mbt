@@ -2,7 +2,9 @@
 fn draw_playing_ui(game : @types.Game) -> Unit {
   let level = game.level_data[game.current_level]
   // Right panel background
-  @raylib.draw_rectangle(800, 0, 480, @types.screen_height, @types.color_panel_bg)
+  @raylib.draw_rectangle(
+    800, 0, 480, @types.screen_height, @types.color_panel_bg,
+  )
   @raylib.draw_line_ex(
     @raylib.Vector2::new(800.0, 0.0),
     @raylib.Vector2::new(800.0, 720.0),
@@ -73,18 +75,10 @@ fn draw_playing_ui(game : @types.Game) -> Unit {
   draw_separator(460)
   @draw.draw_text("CONTROLS", 830, 475, 18, @types.color_hud_text)
   @draw.draw_text(
-    "Click peg to select/connect",
-    830,
-    500,
-    14,
-    @types.color_dim_text,
+    "Click peg to select/connect", 830, 500, 14, @types.color_dim_text,
   )
   @draw.draw_text(
-    "Right-click: undo last string",
-    830,
-    520,
-    14,
-    @types.color_dim_text,
+    "Right-click: undo last string", 830, 520, 14, @types.color_dim_text,
   )
   @draw.draw_text("R: restart level", 830, 540, 14, @types.color_dim_text)
   @draw.draw_text("ESC: back to menu", 830, 560, 14, @types.color_dim_text)
@@ -94,11 +88,7 @@ fn draw_playing_ui(game : @types.Game) -> Unit {
     let tw = @draw.measure_text(msg, 32)
     @draw.draw_text(msg, 830 + (430 - tw) / 2, 620, 32, @types.color_target_hit)
     @draw.draw_text(
-      "Press ENTER for results",
-      870,
-      660,
-      16,
-      @types.color_dim_text,
+      "Press ENTER for results", 870, 660, 16, @types.color_dim_text,
     )
   }
 }

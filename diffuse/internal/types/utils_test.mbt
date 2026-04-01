@@ -1,119 +1,119 @@
 ///|
 test "ink_empty has no channels" {
   let ink = ink_empty()
-  assert_false!(ink.c)
-  assert_false!(ink.m)
-  assert_false!(ink.y)
-  assert_true!(ink_is_empty(ink))
+  assert_false(ink.c)
+  assert_false(ink.m)
+  assert_false(ink.y)
+  assert_true(ink_is_empty(ink))
 }
 
 ///|
 test "ink_cyan has only cyan channel" {
   let ink = ink_cyan()
-  assert_true!(ink.c)
-  assert_false!(ink.m)
-  assert_false!(ink.y)
+  assert_true(ink.c)
+  assert_false(ink.m)
+  assert_false(ink.y)
 }
 
 ///|
 test "ink_magenta has only magenta channel" {
   let ink = ink_magenta()
-  assert_false!(ink.c)
-  assert_true!(ink.m)
-  assert_false!(ink.y)
+  assert_false(ink.c)
+  assert_true(ink.m)
+  assert_false(ink.y)
 }
 
 ///|
 test "ink_yellow has only yellow channel" {
   let ink = ink_yellow()
-  assert_false!(ink.c)
-  assert_false!(ink.m)
-  assert_true!(ink.y)
+  assert_false(ink.c)
+  assert_false(ink.m)
+  assert_true(ink.y)
 }
 
 ///|
 test "ink_blue is cyan plus magenta" {
   let ink = ink_blue()
-  assert_true!(ink.c)
-  assert_true!(ink.m)
-  assert_false!(ink.y)
+  assert_true(ink.c)
+  assert_true(ink.m)
+  assert_false(ink.y)
 }
 
 ///|
 test "ink_green is cyan plus yellow" {
   let ink = ink_green()
-  assert_true!(ink.c)
-  assert_false!(ink.m)
-  assert_true!(ink.y)
+  assert_true(ink.c)
+  assert_false(ink.m)
+  assert_true(ink.y)
 }
 
 ///|
 test "ink_red is magenta plus yellow" {
   let ink = ink_red()
-  assert_false!(ink.c)
-  assert_true!(ink.m)
-  assert_true!(ink.y)
+  assert_false(ink.c)
+  assert_true(ink.m)
+  assert_true(ink.y)
 }
 
 ///|
 test "ink_black has all channels" {
   let ink = ink_black()
-  assert_true!(ink.c)
-  assert_true!(ink.m)
-  assert_true!(ink.y)
-  assert_false!(ink_is_empty(ink))
+  assert_true(ink.c)
+  assert_true(ink.m)
+  assert_true(ink.y)
+  assert_false(ink_is_empty(ink))
 }
 
 ///|
 test "ink_from_channel creates correct colors" {
-  assert_true!(ink_equals(ink_from_channel(Cyan), ink_cyan()))
-  assert_true!(ink_equals(ink_from_channel(Magenta), ink_magenta()))
-  assert_true!(ink_equals(ink_from_channel(Yellow), ink_yellow()))
+  assert_true(ink_equals(ink_from_channel(Cyan), ink_cyan()))
+  assert_true(ink_equals(ink_from_channel(Magenta), ink_magenta()))
+  assert_true(ink_equals(ink_from_channel(Yellow), ink_yellow()))
 }
 
 ///|
 test "ink_mix combines channels with OR" {
   // cyan + magenta = blue
   let blue = ink_mix(ink_cyan(), ink_magenta())
-  assert_true!(ink_equals(blue, ink_blue()))
+  assert_true(ink_equals(blue, ink_blue()))
   // cyan + yellow = green
   let green = ink_mix(ink_cyan(), ink_yellow())
-  assert_true!(ink_equals(green, ink_green()))
+  assert_true(ink_equals(green, ink_green()))
   // magenta + yellow = red
   let red = ink_mix(ink_magenta(), ink_yellow())
-  assert_true!(ink_equals(red, ink_red()))
+  assert_true(ink_equals(red, ink_red()))
   // cyan + red (m+y) = black
   let black = ink_mix(ink_cyan(), ink_red())
-  assert_true!(ink_equals(black, ink_black()))
+  assert_true(ink_equals(black, ink_black()))
   // empty + empty = empty
   let empty = ink_mix(ink_empty(), ink_empty())
-  assert_true!(ink_is_empty(empty))
+  assert_true(ink_is_empty(empty))
 }
 
 ///|
 test "ink_add_channel adds single channel" {
   let ink = ink_empty()
   let with_c = ink_add_channel(ink, Cyan)
-  assert_true!(ink_equals(with_c, ink_cyan()))
+  assert_true(ink_equals(with_c, ink_cyan()))
   let with_cm = ink_add_channel(with_c, Magenta)
-  assert_true!(ink_equals(with_cm, ink_blue()))
+  assert_true(ink_equals(with_cm, ink_blue()))
   let with_cmy = ink_add_channel(with_cm, Yellow)
-  assert_true!(ink_equals(with_cmy, ink_black()))
+  assert_true(ink_equals(with_cmy, ink_black()))
 }
 
 ///|
 test "ink_add_channel is idempotent" {
   let ink = ink_cyan()
   let result = ink_add_channel(ink, Cyan)
-  assert_true!(ink_equals(result, ink_cyan()))
+  assert_true(ink_equals(result, ink_cyan()))
 }
 
 ///|
 test "ink_equals checks all channels" {
-  assert_true!(ink_equals(ink_empty(), ink_empty()))
-  assert_true!(ink_equals(ink_black(), ink_black()))
-  assert_false!(ink_equals(ink_cyan(), ink_magenta()))
-  assert_false!(ink_equals(ink_empty(), ink_cyan()))
+  assert_true(ink_equals(ink_empty(), ink_empty()))
+  assert_true(ink_equals(ink_black(), ink_black()))
+  assert_false(ink_equals(ink_cyan(), ink_magenta()))
+  assert_false(ink_equals(ink_empty(), ink_cyan()))
 }
 
 ///|
@@ -139,16 +139,16 @@ test "channel_name returns correct names" {
 test "make_tile creates paper tile with empty ink" {
   let t = make_tile(Paper)
   inspect(t.kind, content="Paper")
-  assert_true!(ink_is_empty(t.ink))
-  assert_true!(ink_is_empty(t.target_color))
+  assert_true(ink_is_empty(t.ink))
+  assert_true(ink_is_empty(t.target_color))
 }
 
 ///|
 test "make_target_tile creates target with specified color" {
   let t = make_target_tile(ink_blue())
   inspect(t.kind, content="Target")
-  assert_true!(ink_is_empty(t.ink))
-  assert_true!(ink_equals(t.target_color, ink_blue()))
+  assert_true(ink_is_empty(t.ink))
+  assert_true(ink_equals(t.target_color, ink_blue()))
 }
 
 ///|
@@ -159,7 +159,7 @@ test "make_grid creates grid with correct dimensions" {
   inspect(g.tiles.length(), content="12")
   // All tiles should be paper with empty ink
   inspect(g.tiles[0].kind, content="Paper")
-  assert_true!(ink_is_empty(g.tiles[0].ink))
+  assert_true(ink_is_empty(g.tiles[0].ink))
 }
 
 ///|
@@ -178,18 +178,18 @@ test "grid_get and grid_set round-trip" {
   grid_set(g, 1, 2, t)
   let result = grid_get(g, 1, 2)
   inspect(result.kind, content="Target")
-  assert_true!(ink_equals(result.target_color, ink_cyan()))
+  assert_true(ink_equals(result.target_color, ink_cyan()))
 }
 
 ///|
 test "grid_in_bounds checks boundaries" {
   let g = make_grid(4, 3)
-  assert_true!(grid_in_bounds(g, 0, 0))
-  assert_true!(grid_in_bounds(g, 3, 2))
-  assert_false!(grid_in_bounds(g, -1, 0))
-  assert_false!(grid_in_bounds(g, 4, 0))
-  assert_false!(grid_in_bounds(g, 0, -1))
-  assert_false!(grid_in_bounds(g, 0, 3))
+  assert_true(grid_in_bounds(g, 0, 0))
+  assert_true(grid_in_bounds(g, 3, 2))
+  assert_false(grid_in_bounds(g, -1, 0))
+  assert_false(grid_in_bounds(g, 4, 0))
+  assert_false(grid_in_bounds(g, 0, -1))
+  assert_false(grid_in_bounds(g, 0, 3))
 }
 
 ///|
@@ -197,10 +197,10 @@ test "clone_tile creates independent copy" {
   let t = make_tile(Paper)
   t.ink = ink_cyan()
   let c = clone_tile(t)
-  assert_true!(ink_equals(c.ink, ink_cyan()))
+  assert_true(ink_equals(c.ink, ink_cyan()))
   // Modifying original should not affect clone
   t.ink = ink_magenta()
-  assert_true!(ink_equals(c.ink, ink_cyan()))
+  assert_true(ink_equals(c.ink, ink_cyan()))
 }
 
 ///|
@@ -209,11 +209,11 @@ test "clone_tiles creates independent array" {
   tiles[0].ink = ink_yellow()
   let cloned = clone_tiles(tiles)
   inspect(cloned.length(), content="2")
-  assert_true!(ink_equals(cloned[0].ink, ink_yellow()))
+  assert_true(ink_equals(cloned[0].ink, ink_yellow()))
   inspect(cloned[1].kind, content="Barrier")
   // Modify original
   tiles[0].ink = ink_black()
-  assert_true!(ink_equals(cloned[0].ink, ink_yellow()))
+  assert_true(ink_equals(cloned[0].ink, ink_yellow()))
 }
 
 ///|
@@ -288,7 +288,7 @@ test "star_count converts rating to int" {
 ///|
 test "new_level_score has zero values" {
   let s = new_level_score()
-  assert_false!(s.completed)
+  assert_false(s.completed)
   inspect(s.stars, content="Zero")
   inspect(s.drops_used, content="0")
 }

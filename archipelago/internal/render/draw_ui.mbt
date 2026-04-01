@@ -6,7 +6,13 @@ fn draw_ui(game : @types.Game) -> Unit {
   let pw = 290
   let ph = 600
   @raylib.draw_rectangle(px, py, pw, ph, @types.color_panel_bg)
-  @raylib.draw_rectangle_lines(px, py, pw, ph, @raylib.Color::new(60, 100, 160, 200))
+  @raylib.draw_rectangle_lines(
+    px,
+    py,
+    pw,
+    ph,
+    @raylib.Color::new(60, 100, 160, 200),
+  )
   // Level info
   let level_num = game.current_level + 1
   let tier = @types.tier_for_level(game.current_level)
@@ -37,7 +43,8 @@ fn draw_ui(game : @types.Game) -> Unit {
   )
   // Island satisfaction
   let (satisfied, total) = @solver.satisfaction_counts(
-    game.islands, game.bridges,
+    game.islands,
+    game.bridges,
   )
   @draw.draw_text(
     "Islands: " + satisfied.to_string() + "/" + total.to_string(),
@@ -51,7 +58,13 @@ fn draw_ui(game : @types.Game) -> Unit {
   let bar_y = py + 190
   let bar_w = pw - 30
   let bar_h = 12
-  @raylib.draw_rectangle(bar_x, bar_y, bar_w, bar_h, @raylib.Color::new(20, 30, 50, 255))
+  @raylib.draw_rectangle(
+    bar_x,
+    bar_y,
+    bar_w,
+    bar_h,
+    @raylib.Color::new(20, 30, 50, 255),
+  )
   if total > 0 {
     let fill_w = bar_w * satisfied / total
     let bar_color = if satisfied == total {
@@ -61,7 +74,13 @@ fn draw_ui(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(bar_x, bar_y, fill_w, bar_h, bar_color)
   }
-  @raylib.draw_rectangle_lines(bar_x, bar_y, bar_w, bar_h, @raylib.Color::new(60, 100, 160, 200))
+  @raylib.draw_rectangle_lines(
+    bar_x,
+    bar_y,
+    bar_w,
+    bar_h,
+    @raylib.Color::new(60, 100, 160, 200),
+  )
   // Removals
   @draw.draw_text(
     "Removals: " + game.removal_count.to_string(),
@@ -92,17 +111,11 @@ fn draw_ui(game : @types.Game) -> Unit {
   // Controls
   @draw.draw_text("Controls:", px + 15, py + 310, 20, @types.color_text)
   let controls = [
-    "LMB: Select/Connect", "RMB: Remove bridge", "H: Hint", "Z: Undo",
-    "R: Restart", "ESC: Back",
+    "LMB: Select/Connect", "RMB: Remove bridge", "H: Hint", "Z: Undo", "R: Restart",
+    "ESC: Back",
   ]
   for i, ctrl in controls {
-    @draw.draw_text(
-      ctrl,
-      px + 15,
-      py + 340 + i * 25,
-      16,
-      @types.color_text_dim,
-    )
+    @draw.draw_text(ctrl, px + 15, py + 340 + i * 25, 16, @types.color_text_dim)
   }
   // Message
   if game.message_timer > 0.0 {
@@ -130,7 +143,13 @@ fn draw_island_status(game : @types.Game) -> Unit {
   let max_show = @types.min_int(game.islands.length(), 20)
   let ph = 40 + max_show * 28
   @raylib.draw_rectangle(px, py, pw, ph, @types.color_panel_bg)
-  @raylib.draw_rectangle_lines(px, py, pw, ph, @raylib.Color::new(60, 100, 160, 200))
+  @raylib.draw_rectangle_lines(
+    px,
+    py,
+    pw,
+    ph,
+    @raylib.Color::new(60, 100, 160, 200),
+  )
   @draw.draw_text("Island Status", px + 15, py + 10, 20, @types.color_text)
   for i in 0..<max_show {
     let isl = game.islands[i]
@@ -145,7 +164,12 @@ fn draw_island_status(game : @types.Game) -> Unit {
     } else {
       @types.color_text_dim
     }
-    let text = "#" + (i + 1).to_string() + ": " + current.to_string() + "/" + required.to_string()
+    let text = "#" +
+      (i + 1).to_string() +
+      ": " +
+      current.to_string() +
+      "/" +
+      required.to_string()
     @draw.draw_text(text, px + 15, py + 38 + i * 28, 16, color)
     // Small indicator circle
     let ind_color = if satisfied {

@@ -63,7 +63,7 @@ fn draw_flow_arrow(
   cx : Float,
   cy : Float,
   size : Float,
-  alpha : Int
+  alpha : Int,
 ) -> Unit {
   let neighbors = @hex.valid_neighbors(col, row)
   for i in 0..<neighbors.length() {
@@ -184,12 +184,7 @@ fn draw_click_feedback(game : @types.Game) -> Unit {
   let ring_size : Float = size * (0.5 + t * 0.6)
   let fade : Float = 1.0 - t
   let alpha = @types.clampi((fade * 200.0).to_int(), 0, 200)
-  draw_hex_outline(
-    cx,
-    cy,
-    ring_size,
-    @raylib.Color::new(255, 255, 200, alpha),
-  )
+  draw_hex_outline(cx, cy, ring_size, @raylib.Color::new(255, 255, 200, alpha))
 }
 
 ///|
@@ -246,11 +241,7 @@ fn draw_message(game : @types.Game) -> Unit {
   if game.message_timer <= 0.0 {
     return
   }
-  let alpha = @types.clampi(
-    (game.message_timer * 255.0).to_int(),
-    0,
-    255,
-  )
+  let alpha = @types.clampi((game.message_timer * 255.0).to_int(), 0, 255)
   let w = @draw.measure_text(game.message, 28)
   let x = (@types.screen_width - w) / 2
   let y = @types.screen_height / 2 - 40

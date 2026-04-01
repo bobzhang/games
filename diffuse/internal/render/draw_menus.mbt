@@ -20,7 +20,9 @@ pub fn draw_title(game : @types.Game) -> Unit {
   let btn_y = 380
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
-  let hovering = mx >= btn_x && mx <= btn_x + btn_w && my >= btn_y &&
+  let hovering = mx >= btn_x &&
+    mx <= btn_x + btn_w &&
+    my >= btn_y &&
     my <= btn_y + btn_h
   let btn_color = if hovering {
     @types.color_button_hover
@@ -30,7 +32,10 @@ pub fn draw_title(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(btn_x, btn_y, btn_w, btn_h, btn_color)
   let btw = @draw.measure_text(btn_text, 28)
   @draw.draw_text(
-    btn_text, btn_x + btn_w / 2 - btw / 2, btn_y + 10, 28,
+    btn_text,
+    btn_x + btn_w / 2 - btw / 2,
+    btn_y + 10,
+    28,
     @types.color_button_text,
   )
   // Color legend
@@ -39,7 +44,11 @@ pub fn draw_title(game : @types.Game) -> Unit {
   let footer = "Moon + Raylib"
   let fw = @draw.measure_text(footer, 16)
   @draw.draw_text(
-    footer, cx - fw / 2, @types.screen_height - 40, 16, @types.color_subtitle,
+    footer,
+    cx - fw / 2,
+    @types.screen_height - 40,
+    16,
+    @types.color_subtitle,
   )
 }
 
@@ -48,18 +57,14 @@ fn draw_title_drops(frame : Int) -> Unit {
   let t : Float = Float::from_int(frame) * 0.02
   // Animated colored circles
   let colors = [
-    @types.color_cyan, @types.color_magenta, @types.color_yellow,
-    @types.color_blue, @types.color_green, @types.color_red,
+    @types.color_cyan, @types.color_magenta, @types.color_yellow, @types.color_blue,
+    @types.color_green, @types.color_red,
   ]
   for i in 0..<colors.length() {
     let fi : Float = Float::from_int(i)
     let angle : Float = t + fi * 1.047
-    let sin_val : Float = Float::from_double(
-      @math.sin(angle.to_double()),
-    )
-    let cos_val : Float = Float::from_double(
-      @math.cos(angle.to_double()),
-    )
+    let sin_val : Float = Float::from_double(@math.sin(angle.to_double()))
+    let cos_val : Float = Float::from_double(@math.cos(angle.to_double()))
     let x : Float = 640.0 + cos_val * 250.0
     let y : Float = 120.0 + sin_val * 40.0
     let r : Float = 15.0 + sin_val * 5.0
@@ -145,10 +150,19 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(bx, by, bw, bh, bg)
     @draw.draw_text(name, bx + 20, by + 15, 28, @types.color_button_text)
-    @draw.draw_text(desc, bx + 20, by + 50, 16, @raylib.Color::new(220, 230, 255, 255))
+    @draw.draw_text(
+      desc,
+      bx + 20,
+      by + 50,
+      16,
+      @raylib.Color::new(220, 230, 255, 255),
+    )
     let prog = completed.to_string() + "/" + count.to_string() + " completed"
     @draw.draw_text(
-      prog, bx + 20, by + 75, 16,
+      prog,
+      bx + 20,
+      by + 75,
+      16,
       @raylib.Color::new(200, 220, 180, 255),
     )
     // Stars earned
@@ -161,7 +175,11 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
       (count * 3).to_string() +
       " stars"
     @draw.draw_text(
-      star_text, bx + bw - 120, by + 15, 16, @types.color_star_filled,
+      star_text,
+      bx + bw - 120,
+      by + 15,
+      16,
+      @types.color_star_filled,
     )
   }
   // Back button
@@ -193,7 +211,9 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     let by = sy + row * (btn_size + gap)
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
-    let hovering = mx >= bx && mx <= bx + btn_size && my >= by &&
+    let hovering = mx >= bx &&
+      mx <= bx + btn_size &&
+      my >= by &&
       my <= by + btn_size
     let score = game.scores[level_idx]
     let bg = if hovering {
@@ -208,7 +228,11 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     let num = (i + 1).to_string()
     let nw = @draw.measure_text(num, 32)
     @draw.draw_text(
-      num, bx + btn_size / 2 - nw / 2, by + 15, 32, @types.color_button_text,
+      num,
+      bx + btn_size / 2 - nw / 2,
+      by + 15,
+      32,
+      @types.color_button_text,
     )
     // Stars
     let star_y = by + btn_size - 30
@@ -224,7 +248,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     }
   }
   // Level info on hover
-  let info_y = sy + ((count + cols - 1) / cols) * (btn_size + gap) + 20
+  let info_y = sy + (count + cols - 1) / cols * (btn_size + gap) + 20
   let mx2 = @raylib.get_mouse_x()
   let my2 = @raylib.get_mouse_y()
   for i = 0; i < count; i = i + 1 {
@@ -243,7 +267,13 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
         level.budget.magenta.to_string() +
         " Y=" +
         level.budget.yellow.to_string()
-      @draw.draw_text(budget_str, cx - 100, info_y + 50, 16, @types.color_subtitle)
+      @draw.draw_text(
+        budget_str,
+        cx - 100,
+        info_y + 50,
+        16,
+        @types.color_subtitle,
+      )
       break
     }
   }
@@ -254,7 +284,10 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
 pub fn draw_results_overlay(game : @types.Game) -> Unit {
   // Semi-transparent overlay
   @raylib.draw_rectangle(
-    0, 0, @types.screen_width, @types.screen_height,
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
     @raylib.Color::new(0, 0, 0, 140),
   )
   let cx = @types.screen_width / 2
@@ -277,9 +310,7 @@ pub fn draw_results_overlay(game : @types.Game) -> Unit {
     let tw = @draw.measure_text(title, 32)
     @draw.draw_text(title, cx - tw / 2, py + 20, 32, @types.color_button_text)
     // Stars
-    let stars = @ink.compute_stars(
-      game.grid, game.drops_used, game.par_drops,
-    )
+    let stars = @ink.compute_stars(game.grid, game.drops_used, game.par_drops)
     let star_c = @types.star_count(stars)
     let star_y = py + 70
     for s = 0; s < 3; s = s + 1 {
@@ -298,11 +329,23 @@ pub fn draw_results_overlay(game : @types.Game) -> Unit {
       game.par_drops.to_string() +
       ")"
     let dw = @draw.measure_text(drops_text, 18)
-    @draw.draw_text(drops_text, cx - dw / 2, py + 120, 18, @types.color_button_text)
+    @draw.draw_text(
+      drops_text,
+      cx - dw / 2,
+      py + 120,
+      18,
+      @types.color_button_text,
+    )
     let waste = @ink.count_waste(game.grid)
     let waste_text = "Wasted tiles: " + waste.to_string()
     let ww = @draw.measure_text(waste_text, 18)
-    @draw.draw_text(waste_text, cx - ww / 2, py + 145, 18, @types.color_button_text)
+    @draw.draw_text(
+      waste_text,
+      cx - ww / 2,
+      py + 145,
+      18,
+      @types.color_button_text,
+    )
   } else {
     let title = "Puzzle Failed"
     let tw = @draw.measure_text(title, 32)
@@ -322,31 +365,57 @@ pub fn draw_results_overlay(game : @types.Game) -> Unit {
   let retry_h = 40
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
-  let rh = mx >= retry_x && mx <= retry_x + retry_w && my >= btn_y &&
+  let rh = mx >= retry_x &&
+    mx <= retry_x + retry_w &&
+    my >= btn_y &&
     my <= btn_y + retry_h
   @raylib.draw_rectangle(
-    retry_x, btn_y, retry_w, retry_h,
-    if rh { @types.color_button_hover } else { @types.color_button },
+    retry_x,
+    btn_y,
+    retry_w,
+    retry_h,
+    if rh {
+      @types.color_button_hover
+    } else {
+      @types.color_button
+    },
   )
   let rt = "Retry"
   let rtw = @draw.measure_text(rt, 20)
   @draw.draw_text(
-    rt, retry_x + retry_w / 2 - rtw / 2, btn_y + 8, 20, @types.color_button_text,
+    rt,
+    retry_x + retry_w / 2 - rtw / 2,
+    btn_y + 8,
+    20,
+    @types.color_button_text,
   )
   // Next / Menu
   let next_x = cx + 30
   let next_w = 150
   let next_h = 40
-  let nh = mx >= next_x && mx <= next_x + next_w && my >= btn_y &&
+  let nh = mx >= next_x &&
+    mx <= next_x + next_w &&
+    my >= btn_y &&
     my <= btn_y + next_h
   @raylib.draw_rectangle(
-    next_x, btn_y, next_w, next_h,
-    if nh { @types.color_button_hover } else { @types.color_button },
+    next_x,
+    btn_y,
+    next_w,
+    next_h,
+    if nh {
+      @types.color_button_hover
+    } else {
+      @types.color_button
+    },
   )
   let nt = if game.play_state == Won { "Next" } else { "Menu" }
   let ntw = @draw.measure_text(nt, 20)
   @draw.draw_text(
-    nt, next_x + next_w / 2 - ntw / 2, btn_y + 8, 20, @types.color_button_text,
+    nt,
+    next_x + next_w / 2 - ntw / 2,
+    btn_y + 8,
+    20,
+    @types.color_button_text,
   )
 }
 
@@ -366,8 +435,15 @@ fn draw_back_button() -> Unit {
   let my = @raylib.get_mouse_y()
   let hovering = mx >= bx && mx <= bx + bw && my >= by && my <= by + bh
   @raylib.draw_rectangle(
-    bx, by, bw, bh,
-    if hovering { @types.color_button_hover } else { @types.color_button },
+    bx,
+    by,
+    bw,
+    bh,
+    if hovering {
+      @types.color_button_hover
+    } else {
+      @types.color_button
+    },
   )
   let t = "Back"
   let tw = @draw.measure_text(t, 20)

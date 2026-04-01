@@ -23,7 +23,7 @@ pub fn can_afford_blueprint(bp : @types.Blueprint, game : @types.Game) -> Bool {
         break
       }
     }
-    if !(found) {
+    if !found {
       needs.push(((kind, mat), 1))
     }
   }
@@ -51,9 +51,9 @@ pub fn place_blueprint(
   bp : @types.Blueprint,
   game : @types.Game,
   cx : Float,
-  cy : Float
+  cy : Float,
 ) -> Int {
-  if !(can_afford_blueprint(bp, game)) {
+  if !can_afford_blueprint(bp, game) {
     return 0
   }
   let mut placed = 0
@@ -68,8 +68,19 @@ pub fn place_blueprint(
       @types.build_area_left + 40.0,
       @types.build_area_right - 40.0,
     )
-    let clamped_y = @types.clampf(wy, @types.build_area_top, @types.ground_y - 10.0)
-    let id = @physics.add_body(game.world, kind, mat, clamped_x, clamped_y, angle)
+    let clamped_y = @types.clampf(
+      wy,
+      @types.build_area_top,
+      @types.ground_y - 10.0,
+    )
+    let id = @physics.add_body(
+      game.world,
+      kind,
+      mat,
+      clamped_x,
+      clamped_y,
+      angle,
+    )
     ids.push(id)
     // Deduct from inventory
     deduct_inventory(game, kind, mat)
@@ -91,7 +102,7 @@ pub fn place_blueprint(
 fn deduct_inventory(
   game : @types.Game,
   kind : @types.PieceKind,
-  mat : @types.Material
+  mat : @types.Material,
 ) -> Unit {
   for i in 0..<game.inventory.length() {
     let (ik, im, ic) = game.inventory[i]
@@ -107,7 +118,7 @@ fn deduct_inventory(
 /// Records positions relative to centroid of all active bodies.
 pub fn save_custom_blueprint(
   game : @types.Game,
-  name : String
+  name : String,
 ) -> @types.Blueprint? {
   let world = game.world
   if world.bodies.length() == 0 {
@@ -118,7 +129,7 @@ pub fn save_custom_blueprint(
   let mut sum_y : Float = 0.0
   let mut count = 0
   for body in world.bodies {
-    if body.active && !(body.broken) {
+    if body.active && !body.broken {
       sum_x = sum_x + body.x
       sum_y = sum_y + body.y
       count = count + 1
@@ -133,17 +144,14 @@ pub fn save_custom_blueprint(
     capacity=count,
   )
   for body in world.bodies {
-    if body.active && !(body.broken) {
-      pieces.push((body.kind, body.material, body.x - cx, body.y - cy, body.angle))
+    if body.active && !body.broken {
+      pieces.push(
+        (body.kind, body.material, body.x - cx, body.y - cy, body.angle),
+      )
     }
   }
   let idx = game.custom_blueprints.length()
-  let bp : @types.Blueprint = {
-    kind: Custom(idx),
-    name,
-    pieces,
-    cost: count,
-  }
+  let bp : @types.Blueprint = { kind: Custom(idx), name, pieces, cost: count }
   game.custom_blueprints.push(bp)
   Some(bp)
 }
@@ -188,9 +196,7 @@ pub fn blueprint_kind_name(kind : @types.BlueprintKind) -> String {
 
 ///|
 /// Computes the bounding box of a blueprint for ghost preview.
-pub fn blueprint_bounds(
-  bp : @types.Blueprint
-) -> (Float, Float, Float, Float) {
+pub fn blueprint_bounds(bp : @types.Blueprint) -> (Float, Float, Float, Float) {
   let mut min_x : Float = 99999.0
   let mut min_y : Float = 99999.0
   let mut max_x : Float = -99999.0
@@ -271,7 +277,7 @@ pub fn make_foundation(mat : @types.Material) -> @types.Blueprint {
 /// Creates an archway blueprint with column and beam materials.
 pub fn make_archway(
   col_mat : @types.Material,
-  beam_mat : @types.Material
+  beam_mat : @types.Material,
 ) -> @types.Blueprint {
   let pieces : Array[(@types.PieceKind, @types.Material, Float, Float, Float)] = [
     (Block, col_mat, -70.0, 0.0, 0.0),

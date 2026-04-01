@@ -10,28 +10,30 @@ pub fn save_snapshot(battle : @types.BattleState) -> @types.BattleSnapshot {
     for j = 0; j < u.statuses.length(); j = j + 1 {
       statuses_copy.push(u.statuses[j])
     }
-    unit_states.push(
-      {
-        id: u.id,
-        active: u.active,
-        x: u.x,
-        y: u.y,
-        hp: u.hp,
-        max_hp: u.max_hp,
-        shield: u.shield,
-        heat: u.heat,
-        max_heat: u.max_heat,
-        stunned: u.stunned,
-        moved_this_turn: u.moved_this_turn,
-        acted_this_turn: u.acted_this_turn,
-        statuses: statuses_copy,
-      },
-    )
+    unit_states.push({
+      id: u.id,
+      active: u.active,
+      x: u.x,
+      y: u.y,
+      hp: u.hp,
+      max_hp: u.max_hp,
+      shield: u.shield,
+      heat: u.heat,
+      max_heat: u.max_heat,
+      stunned: u.stunned,
+      moved_this_turn: u.moved_this_turn,
+      acted_this_turn: u.acted_this_turn,
+      statuses: statuses_copy,
+    })
   }
   let tile_states : Array[@types.Tile] = []
   for i = 0; i < battle.grid.tiles.length(); i = i + 1 {
     let t = battle.grid.tiles[i]
-    tile_states.push({ kind: t.kind, hazard: t.hazard, occupied_by: t.occupied_by })
+    tile_states.push({
+      kind: t.kind,
+      hazard: t.hazard,
+      occupied_by: t.occupied_by,
+    })
   }
   let cmds : Array[@types.Command] = []
   for i = 0; i < battle.player_commands.length(); i = i + 1 {
@@ -56,7 +58,9 @@ pub fn restore_snapshot(
   snap : @types.BattleSnapshot,
 ) -> Unit {
   // Restore unit states
-  for i = 0; i < snap.unit_states.length() && i < battle.units.length(); i = i + 1 {
+  for i = 0
+      i < snap.unit_states.length() && i < battle.units.length()
+      i = i + 1 {
     let u = battle.units[i]
     let s = snap.unit_states[i]
     u.active = s.active
@@ -76,9 +80,15 @@ pub fn restore_snapshot(
     }
   }
   // Restore grid tiles
-  for i = 0; i < snap.tile_states.length() && i < battle.grid.tiles.length(); i = i + 1 {
+  for i = 0
+      i < snap.tile_states.length() && i < battle.grid.tiles.length()
+      i = i + 1 {
     let t = snap.tile_states[i]
-    battle.grid.tiles[i] = { kind: t.kind, hazard: t.hazard, occupied_by: t.occupied_by }
+    battle.grid.tiles[i] = {
+      kind: t.kind,
+      hazard: t.hazard,
+      occupied_by: t.occupied_by,
+    }
   }
   // Restore commands
   battle.player_commands = []

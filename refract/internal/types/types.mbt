@@ -47,7 +47,9 @@ pub(all) struct AvailableComponent {
 pub(all) struct Level {
   name : String
   tier : Tier
-  grid_template : Array[(Int, Int, ComponentKind, Direction, FilterColor?, BeamColor?)]
+  grid_template : Array[
+    (Int, Int, ComponentKind, Direction, FilterColor?, BeamColor?),
+  ]
   available : Array[AvailableComponent]
   par_count : Int
 }

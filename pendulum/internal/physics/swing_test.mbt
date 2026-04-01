@@ -13,7 +13,10 @@ test "swing direction reversal at arc ends" {
     let (_, right_limit) = compute_swing_extent(arc, bottom)
     weight.arc_index = right_limit - 1
     weight.swing_dir = Right
-    weight.pos = @types.vec2i(arc[weight.arc_index].gx, arc[weight.arc_index].gy)
+    weight.pos = @types.vec2i(
+      arc[weight.arc_index].gx,
+      arc[weight.arc_index].gy,
+    )
     weight.state = Swinging
     // Tick - should reach limit and reverse
     tick_swing(weight, rope, arc, [], [], goal, [], [])
@@ -105,14 +108,14 @@ test "collectible pickup" {
   let collected : Array[Bool] = [false, false]
   // Manually check
   for i = 0; i < collectibles.length(); i = i + 1 {
-    if !(collected[i]) {
+    if !collected[i] {
       if collectibles[i].x == weight.pos.x && collectibles[i].y == weight.pos.y {
         collected[i] = true
       }
     }
   }
   assert_true(collected[0])
-  assert_true(!(collected[1]))
+  assert_true(!collected[1])
 }
 
 ///|

@@ -5,33 +5,15 @@ fn draw_title(_game : @types.Game) -> Unit {
   // Title
   let title = "TESSELLATE"
   let title_w = @draw.measure_text(title, 64)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    h / 4 - 20,
-    64,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, h / 4 - 20, 64, @types.color_title)
   // Subtitle
   let sub = "A Polyomino Packing Puzzle"
   let sub_w = @draw.measure_text(sub, 24)
-  @draw.draw_text(
-    sub,
-    (w - sub_w) / 2,
-    h / 4 + 60,
-    24,
-    @types.color_text,
-  )
+  @draw.draw_text(sub, (w - sub_w) / 2, h / 4 + 60, 24, @types.color_text)
   // Instructions
   let inst = "Press ENTER to Play"
   let inst_w = @draw.measure_text(inst, 28)
-  @draw.draw_text(
-    inst,
-    (w - inst_w) / 2,
-    h * 3 / 5,
-    28,
-    @types.color_button,
-  )
+  @draw.draw_text(inst, (w - inst_w) / 2, h * 3 / 5, 28, @types.color_button)
   // Controls info
   let ctrl = "R: Rotate  |  F: Flip  |  Click: Place  |  Right-Click: Remove"
   let ctrl_w = @draw.measure_text(ctrl, 18)
@@ -50,18 +32,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   let h = @types.screen_height
   let title = "Select Tier"
   let title_w = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    50,
-    40,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 50, 40, @types.color_title)
   let tiers : Array[@types.Tier] = [Squares, Shapes, Art]
   let tier_descs : Array[String] = [
-    "Rectangular regions, simple pieces",
-    "L/T/cross regions, pentominoes",
-    "Stars, hearts, diamonds - tight fits",
+    "Rectangular regions, simple pieces", "L/T/cross regions, pentominoes", "Stars, hearts, diamonds - tight fits",
   ]
   for i in 0..<3 {
     let bx = w / 2 - 200
@@ -77,22 +51,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       @types.color_button
     }
     @raylib.draw_rectangle(bx, by, bw, bh, col)
-    @raylib.draw_rectangle_lines(
-      bx,
-      by,
-      bw,
-      bh,
-      @types.color_text,
-    )
+    @raylib.draw_rectangle_lines(bx, by, bw, bh, @types.color_text)
     let name = @types.tier_name(tiers[i])
     let name_w = @draw.measure_text(name, 32)
-    @draw.draw_text(
-      name,
-      bx + (bw - name_w) / 2,
-      by + 15,
-      32,
-      @raylib.white,
-    )
+    @draw.draw_text(name, bx + (bw - name_w) / 2, by + 15, 32, @raylib.white)
     let desc = tier_descs[i]
     let desc_w = @draw.measure_text(desc, 18)
     @draw.draw_text(
@@ -108,7 +70,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     for j in 0..<@types.levels_per_tier {
       total_stars += game.level_scores[base + j].stars
     }
-    let star_text = total_stars.to_string() + " / " + (@types.levels_per_tier * 3).to_string() + " stars"
+    let star_text = total_stars.to_string() +
+      " / " +
+      (@types.levels_per_tier * 3).to_string() +
+      " stars"
     let star_w = @draw.measure_text(star_text, 18)
     @draw.draw_text(
       star_text,
@@ -129,13 +94,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   let tier_name = @types.tier_name(game.current_tier)
   let title = tier_name + " - Select Level"
   let title_w = @draw.measure_text(title, 36)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    40,
-    36,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 40, 36, @types.color_title)
   let base = @types.tier_index(game.current_tier) * @types.levels_per_tier
   let cols = 5
   let cell_w = 160
@@ -157,22 +116,10 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @types.color_button
     }
     @raylib.draw_rectangle(bx, by, cell_w, cell_h, bg_col)
-    @raylib.draw_rectangle_lines(
-      bx,
-      by,
-      cell_w,
-      cell_h,
-      @types.color_text,
-    )
+    @raylib.draw_rectangle_lines(bx, by, cell_w, cell_h, @types.color_text)
     let num = "Level " + (i + 1).to_string()
     let num_w = @draw.measure_text(num, 22)
-    @draw.draw_text(
-      num,
-      bx + (cell_w - num_w) / 2,
-      by + 15,
-      22,
-      @raylib.white,
-    )
+    @draw.draw_text(num, bx + (cell_w - num_w) / 2, by + 15, 22, @raylib.white)
     // Draw stars
     let score = game.level_scores[base + i]
     let star_y = by + 55

@@ -37,7 +37,9 @@ pub let color_stone : @raylib.Color = @raylib.Color::new(180, 160, 130, 255)
 pub let color_stone_dark : @raylib.Color = @raylib.Color::new(120, 105, 85, 255)
 
 ///|
-pub let color_stone_light : @raylib.Color = @raylib.Color::new(210, 195, 165, 255)
+pub let color_stone_light : @raylib.Color = @raylib.Color::new(
+  210, 195, 165, 255,
+)
 
 ///|
 pub let color_inscription : @raylib.Color = @raylib.Color::new(60, 40, 25, 255)

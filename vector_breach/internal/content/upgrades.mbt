@@ -12,10 +12,7 @@ pub(all) struct UpgradeDef {
 
 ///|
 /// Get upgrade definition for a mech class at a specific tier (1-3).
-pub fn get_upgrade_def(
-  class_ : @types.MechClass,
-  tier : Int,
-) -> UpgradeDef {
+pub fn get_upgrade_def(class_ : @types.MechClass, tier : Int) -> UpgradeDef {
   match class_ {
     Vanguard =>
       match tier {
@@ -108,7 +105,7 @@ pub fn get_next_upgrade_cost(current_tier : Int) -> Int {
     0 => 2
     1 => 4
     2 => 6
-    _ => 0  // Already maxed
+    _ => 0 // Already maxed
   }
 }
 

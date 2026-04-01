@@ -76,7 +76,7 @@ fn start_campaign_battle(game : @types.Game, level : Int) -> Unit {
 ///|
 fn setup_battle_from_def(
   game : @types.Game,
-  def : @types.LevelDef
+  def : @types.LevelDef,
 ) -> @types.Battle {
   let battle = @types.new_battle()
   // Setup terrain
@@ -133,7 +133,8 @@ fn update_skirmish(game : @types.Game) -> Unit {
     setup.map_index = (setup.map_index + 1) % @types.total_skirmish_maps
   }
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
-    setup.map_index = (setup.map_index + @types.total_skirmish_maps - 1) % @types.total_skirmish_maps
+    setup.map_index = (setup.map_index + @types.total_skirmish_maps - 1) %
+      @types.total_skirmish_maps
   }
   if @raylib.is_key_pressed(@raylib.KeyUp) {
     setup.army_size = @types.mini(setup.army_size + 1, 8)
@@ -281,19 +282,19 @@ fn update_select(game : @types.Game, battle : @types.Battle) -> Unit {
   // Mouse click
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     match game.hover_hex {
-      Some(hc) => {
+      Some(hc) =>
         if @types.hex_valid(hc, battle.map.width, battle.map.height) {
           match @types.get_unit_at(battle, hc) {
             Some(unit) =>
               if unit.team == Player && unit.active {
                 battle.selected_unit = unit.id
                 // Compute available moves and attacks
-                if !(unit.moved) {
+                if !unit.moved {
                   battle.move_targets = @combat.compute_move_range(battle, unit)
                 } else {
                   battle.move_targets = []
                 }
-                if !(unit.attacked) {
+                if !unit.attacked {
                   battle.attack_targets = @combat.compute_attack_targets(
                     battle, unit,
                   )
@@ -314,7 +315,6 @@ fn update_select(game : @types.Game, battle : @types.Battle) -> Unit {
             }
           }
         }
-      }
       None => ()
     }
   }
@@ -332,12 +332,13 @@ fn update_move(game : @types.Game, battle : @types.Battle) -> Unit {
   }
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     match game.hover_hex {
-      Some(hc) => {
+      Some(hc) =>
         if @types.hex_valid(hc, battle.map.width, battle.map.height) {
           // Check if clicking on a move target
           let mut is_move_target = false
           for i in 0..<battle.move_targets.length() {
-            if battle.move_targets[i].col == hc.col && battle.move_targets[i].row == hc.row {
+            if battle.move_targets[i].col == hc.col &&
+              battle.move_targets[i].row == hc.row {
               is_move_target = true
               break
             }
@@ -348,7 +349,7 @@ fn update_move(game : @types.Game, battle : @types.Battle) -> Unit {
             match @types.get_unit(battle, battle.selected_unit) {
               Some(unit) => {
                 battle.move_targets = []
-                if !(unit.attacked) {
+                if !unit.attacked {
                   battle.attack_targets = @combat.compute_attack_targets(
                     battle, unit,
                   )
@@ -382,14 +383,14 @@ fn update_move(game : @types.Game, battle : @types.Battle) -> Unit {
               Some(unit) =>
                 if unit.team == Player && unit.active {
                   battle.selected_unit = unit.id
-                  if !(unit.moved) {
+                  if !unit.moved {
                     battle.move_targets = @combat.compute_move_range(
                       battle, unit,
                     )
                   } else {
                     battle.move_targets = []
                   }
-                  if !(unit.attacked) {
+                  if !unit.attacked {
                     battle.attack_targets = @combat.compute_attack_targets(
                       battle, unit,
                     )
@@ -419,7 +420,6 @@ fn update_move(game : @types.Game, battle : @types.Battle) -> Unit {
             }
           }
         }
-      }
       None => ()
     }
   }
@@ -441,12 +441,13 @@ fn update_attack(game : @types.Game, battle : @types.Battle) -> Unit {
   }
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     match game.hover_hex {
-      Some(hc) => {
+      Some(hc) =>
         if @types.hex_valid(hc, battle.map.width, battle.map.height) {
           // Check if clicking on attack target
           let mut is_attack_target = false
           for i in 0..<battle.attack_targets.length() {
-            if battle.attack_targets[i].col == hc.col && battle.attack_targets[i].row == hc.row {
+            if battle.attack_targets[i].col == hc.col &&
+              battle.attack_targets[i].row == hc.row {
               is_attack_target = true
               break
             }
@@ -463,7 +464,9 @@ fn update_attack(game : @types.Game, battle : @types.Battle) -> Unit {
                   None => ()
                 }
                 let (dmg, killed) = @combat.resolve_attack(
-                  battle, battle.selected_unit, target.id,
+                  battle,
+                  battle.selected_unit,
+                  target.id,
                 )
                 if dmg > 0 {
                   let msg = if killed {
@@ -498,7 +501,6 @@ fn update_attack(game : @types.Game, battle : @types.Battle) -> Unit {
             @types.update_fog_of_war(battle)
           }
         }
-      }
       None => ()
     }
   }
@@ -531,12 +533,12 @@ fn select_next_unit(battle : @types.Battle) -> Unit {
     let u = battle.units[idx]
     if u.active && u.team == Player && !(u.moved && u.attacked) {
       battle.selected_unit = u.id
-      if !(u.moved) {
+      if !u.moved {
         battle.move_targets = @combat.compute_move_range(battle, u)
       } else {
         battle.move_targets = []
       }
-      if !(u.attacked) {
+      if !u.attacked {
         battle.attack_targets = @combat.compute_attack_targets(battle, u)
       } else {
         battle.attack_targets = []
@@ -565,7 +567,8 @@ fn finish_battle(game : @types.Game, battle : @types.Battle) -> Unit {
     if score > game.campaign.level_scores[lvl] {
       game.campaign.level_scores[lvl] = score
     }
-    if lvl + 1 < @types.total_campaign_levels && lvl + 1 >= game.campaign.levels_unlocked {
+    if lvl + 1 < @types.total_campaign_levels &&
+      lvl + 1 >= game.campaign.levels_unlocked {
       game.campaign.levels_unlocked = lvl + 2
     }
     // Recalculate total score

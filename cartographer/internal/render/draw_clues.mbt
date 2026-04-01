@@ -12,12 +12,20 @@ fn draw_clues_panel(game : @types.Game) -> Unit {
     px, py, pw, panel_height, @types.color_compass_ring,
   )
   @raylib.draw_rectangle_lines(
-    px + 2, py + 2, pw - 4, panel_height - 4, @types.color_parchment_border,
+    px + 2,
+    py + 2,
+    pw - 4,
+    panel_height - 4,
+    @types.color_parchment_border,
   )
   // Title with decorative line
   @draw.draw_text("Clues", px + 10, py + 10, 22, @types.color_text)
   @raylib.draw_line(
-    px + 10, py + 35, px + pw - 10, py + 35, @types.color_parchment_border,
+    px + 10,
+    py + 35,
+    px + pw - 10,
+    py + 35,
+    @types.color_parchment_border,
   )
   // Draw each clue
   for i in 0..<clue_count {
@@ -44,11 +52,19 @@ fn draw_clues_panel(game : @types.Game) -> Unit {
     // Highlight background for hovered or feature-linked clues
     if is_hovered {
       @raylib.draw_rectangle(
-        px + 4, cy - 2, pw - 8, 30, @types.color_clue_highlight,
+        px + 4,
+        cy - 2,
+        pw - 8,
+        30,
+        @types.color_clue_highlight,
       )
     } else if is_feature_highlighted {
       @raylib.draw_rectangle(
-        px + 4, cy - 2, pw - 8, 30, @types.color_feature_highlight,
+        px + 4,
+        cy - 2,
+        pw - 8,
+        30,
+        @types.color_feature_highlight,
       )
     }
     // Satisfaction animation: flash glow effect
@@ -105,7 +121,11 @@ fn draw_clues_panel(game : @types.Game) -> Unit {
   let bar_w = pw - 20
   let bar_h = 6
   @raylib.draw_rectangle(
-    px + 10, summary_y, bar_w, bar_h, @types.color_parchment_dark,
+    px + 10,
+    summary_y,
+    bar_w,
+    bar_h,
+    @types.color_parchment_dark,
   )
   if total > 0 {
     let fill_w = bar_w * satisfied / total
@@ -121,7 +141,9 @@ fn draw_clues_panel(game : @types.Game) -> Unit {
     px + 10,
     summary_y + 10,
     16,
-    if satisfied == total { @types.color_clue_satisfied } else {
+    if satisfied == total {
+      @types.color_clue_satisfied
+    } else {
       @types.color_text_light
     },
   )

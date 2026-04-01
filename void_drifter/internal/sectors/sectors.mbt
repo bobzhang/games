@@ -4,21 +4,19 @@ pub fn generate_sector_map(depth : Int) -> @types.SectorMap {
   let layers = @types.sector_map_layers
   let per_layer = @types.nodes_per_layer
   // Layer 0: start node
-  nodes.push(
-    {
-      kind: EmptySpace,
-      x: 0,
-      y: 1,
-      cleared: true,
-      connections: [],
-      enemy_count: 0,
-      has_shop: false,
-      reward_tier: 0,
-      elite: false,
-    },
-  )
+  nodes.push({
+    kind: EmptySpace,
+    x: 0,
+    y: 1,
+    cleared: true,
+    connections: [],
+    enemy_count: 0,
+    has_shop: false,
+    reward_tier: 0,
+    elite: false,
+  })
   // Middle layers
-  for layer in 1..=layers {
+  for layer in 1..<=layers {
     for i in 0..<per_layer {
       let kind = if layer == layers {
         @types.SectorKind::BossArena
@@ -26,20 +24,18 @@ pub fn generate_sector_map(depth : Int) -> @types.SectorMap {
         random_sector_kind(depth + layer)
       }
       let elite = layer >= 2 && @types.rng_int(100) < 20
-      let has_shop = !(elite) && @types.rng_int(100) < 30
-      nodes.push(
-        {
-          kind,
-          x: layer,
-          y: i,
-          cleared: false,
-          connections: [],
-          enemy_count: 3 + layer + depth,
-          has_shop,
-          reward_tier: layer,
-          elite,
-        },
-      )
+      let has_shop = !elite && @types.rng_int(100) < 30
+      nodes.push({
+        kind,
+        x: layer,
+        y: i,
+        cleared: false,
+        connections: [],
+        enemy_count: 3 + layer + depth,
+        has_shop,
+        reward_tier: layer,
+        elite,
+      })
     }
   }
   // Connect layers
@@ -65,9 +61,11 @@ pub fn generate_sector_map(depth : Int) -> @types.SectorMap {
         } else {
           next_start + i - 1
         }
-        if alt >= next_start && alt < next_start + per_layer && alt < nodes.length() {
+        if alt >= next_start &&
+          alt < next_start + per_layer &&
+          alt < nodes.length() {
           let already = nodes[node_idx].connections.contains(alt)
-          if !(already) {
+          if !already {
             nodes[node_idx].connections.push(alt)
           }
         }
@@ -80,7 +78,7 @@ pub fn generate_sector_map(depth : Int) -> @types.SectorMap {
   let pre_boss_start = 1 + (layers - 2) * per_layer
   for i in 0..<per_layer {
     let idx = pre_boss_start + i
-    if idx < nodes.length() && !(nodes[idx].connections.contains(boss_node)) {
+    if idx < nodes.length() && !nodes[idx].connections.contains(boss_node) {
       nodes[idx].connections.push(boss_node)
     }
   }
@@ -167,7 +165,7 @@ pub fn enter_sector(game : @types.Game, node_idx : Int) -> Unit {
 fn spawn_asteroids(game : @types.Game, count : Int) -> Unit {
   for _i in 0..<count {
     for j in 0..<game.asteroids.length() {
-      if !(game.asteroids[j].active) {
+      if !game.asteroids[j].active {
         let ast = game.asteroids[j]
         ast.active = true
         ast.pos = @types.vec2(
@@ -192,65 +190,70 @@ fn spawn_asteroids(game : @types.Game, count : Int) -> Unit {
 pub fn generate_shop_items(game : @types.Game) -> Unit {
   game.shop_items = []
   // Health
-  game.shop_items.push(
-    {
-      name: "REPAIR KIT",
-      description: "+2 HP",
-      cost: @types.shop_heal_cost,
-      purchased: false,
-      effect: HealthPack,
-    },
-  )
+  game.shop_items.push({
+    name: "REPAIR KIT",
+    description: "+2 HP",
+    cost: @types.shop_heal_cost,
+    purchased: false,
+    effect: HealthPack,
+  })
   // Shield
-  game.shop_items.push(
-    {
-      name: "SHIELD CELL",
-      description: "+2 Shield",
-      cost: @types.shop_shield_cost,
-      purchased: false,
-      effect: ShieldRecharge,
-    },
-  )
+  game.shop_items.push({
+    name: "SHIELD CELL",
+    description: "+2 Shield",
+    cost: @types.shop_shield_cost,
+    purchased: false,
+    effect: ShieldRecharge,
+  })
   // Random weapon mod
   let mods : Array[@types.ModKind] = [
-    Piercing, Homing, Split, Chain, Explosive, Freezing, Bouncing, Overcharge,
+    Piercing,
+    Homing,
+    Split,
+    Chain,
+    Explosive,
+    Freezing,
+    Bouncing,
+    Overcharge,
   ]
   let mod_kind = mods[@types.rng_int(mods.length())]
-  game.shop_items.push(
-    {
-      name: @weapons.mod_name(mod_kind),
-      description: "Primary weapon mod",
-      cost: @types.shop_mod_cost,
-      purchased: false,
-      effect: WeaponMod(mod_kind),
-    },
-  )
+  game.shop_items.push({
+    name: @weapons.mod_name(mod_kind),
+    description: "Primary weapon mod",
+    cost: @types.shop_mod_cost,
+    purchased: false,
+    effect: WeaponMod(mod_kind),
+  })
   // Random utility mod
   let utils : Array[@types.UtilityMod] = [
-    ShieldDrain, Vampire, HeatSink, Accelerator,
+    ShieldDrain,
+    Vampire,
+    HeatSink,
+    Accelerator,
   ]
   let util_kind = utils[@types.rng_int(utils.length())]
-  game.shop_items.push(
-    {
-      name: @weapons.utility_name(util_kind),
-      description: "Utility slot",
-      cost: @types.shop_mod_cost,
-      purchased: false,
-      effect: UtilityPickup(util_kind),
-    },
-  )
+  game.shop_items.push({
+    name: @weapons.utility_name(util_kind),
+    description: "Utility slot",
+    cost: @types.shop_mod_cost,
+    purchased: false,
+    effect: UtilityPickup(util_kind),
+  })
   // Random weapon
   let weapons : Array[@types.WeaponKind] = [
-    Laser, Shotgun, Missile, Railgun, Flak, Beam,
+    Laser,
+    Shotgun,
+    Missile,
+    Railgun,
+    Flak,
+    Beam,
   ]
   let wpn = weapons[@types.rng_int(weapons.length())]
-  game.shop_items.push(
-    {
-      name: @weapons.weapon_name(wpn),
-      description: "Secondary weapon",
-      cost: @types.shop_weapon_cost,
-      purchased: false,
-      effect: WeaponDrop(wpn),
-    },
-  )
+  game.shop_items.push({
+    name: @weapons.weapon_name(wpn),
+    description: "Secondary weapon",
+    cost: @types.shop_weapon_cost,
+    purchased: false,
+    effect: WeaponDrop(wpn),
+  })
 }

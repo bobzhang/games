@@ -12,13 +12,7 @@ pub fn draw_stats_screen(game : @types.Game) -> Unit {
   // Left column: general stats
   let lx = 120
   let mut ly = 120
-  @draw.draw_text(
-    "GENERAL",
-    lx,
-    ly,
-    24,
-    @raylib.Color::new(180, 200, 240, 255),
-  )
+  @draw.draw_text("GENERAL", lx, ly, 24, @raylib.Color::new(180, 200, 240, 255))
   ly = ly + 40
   draw_stat_line(lx, ly, "Pieces Placed", stats.total_pieces_placed.to_string())
   ly = ly + 30
@@ -28,12 +22,7 @@ pub fn draw_stats_screen(game : @types.Game) -> Unit {
   ly = ly + 30
   draw_stat_line(lx, ly, "Total Breaks", stats.total_breaks.to_string())
   ly = ly + 30
-  draw_stat_line(
-    lx,
-    ly,
-    "Levels Completed",
-    stats.levels_completed.to_string(),
-  )
+  draw_stat_line(lx, ly, "Levels Completed", stats.levels_completed.to_string())
   ly = ly + 30
   draw_stat_line(lx, ly, "Stars Earned", stats.stars_earned.to_string())
   ly = ly + 30
@@ -87,12 +76,7 @@ pub fn draw_stats_screen(game : @types.Game) -> Unit {
     let unlocked = @content.is_world_unlocked(i, stats.stars_earned)
     let name = w.name
     let status = if unlocked {
-      name +
-      ": " +
-      earned.to_string() +
-      "/" +
-      max_s.to_string() +
-      " stars"
+      name + ": " + earned.to_string() + "/" + max_s.to_string() + " stars"
     } else {
       name + ": LOCKED (need " + w.stars_required.to_string() + " stars)"
     }
@@ -140,11 +124,7 @@ pub fn draw_stats_screen(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(120, 130, 150, 180)
     }
-    let text = (i + 1).to_string() +
-      ". " +
-      ht.to_string() +
-      "px" +
-      star_str
+    let text = (i + 1).to_string() + ". " + ht.to_string() + "px" + star_str
     @draw.draw_text(text, cx, cy, 16, color)
   }
   // Footer
@@ -167,24 +147,12 @@ fn draw_stat_line(x : Int, y : Int, label : String, value : String) -> Unit {
     18,
     @raylib.Color::new(160, 170, 190, 220),
   )
-  @draw.draw_text(
-    value,
-    x + 220,
-    y,
-    18,
-    @raylib.Color::new(220, 230, 245, 255),
-  )
+  @draw.draw_text(value, x + 220, y, 18, @raylib.Color::new(220, 230, 245, 255))
 }
 
 ///|
 /// Draws a horizontal progress bar.
-fn draw_progress_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
-  percent : Int
-) -> Unit {
+fn draw_progress_bar(x : Int, y : Int, w : Int, h : Int, percent : Int) -> Unit {
   let pct = percent.clamp(min=0, max=100)
   // Background
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(30, 36, 52, 200))
@@ -220,15 +188,9 @@ fn draw_material_bar(
   max_w : Int,
   r : Int,
   g : Int,
-  b : Int
+  b : Int,
 ) -> Unit {
-  @draw.draw_text(
-    name,
-    x,
-    y,
-    18,
-    @raylib.Color::new(200, 210, 230, 255),
-  )
+  @draw.draw_text(name, x, y, 18, @raylib.Color::new(200, 210, 230, 255))
   let bar_x = x + 80
   let bar_y = y + 2
   let bar_h = 18
@@ -269,19 +231,13 @@ pub fn draw_combo_indicators(game : @types.Game) -> Unit {
     // Draw outline on body A
     let body_a = @physics.find_body(game.world, combo.body_a_id)
     match body_a {
-      Some(a) =>
-        if a.active && !(a.broken) {
-          draw_combo_outline(a, cr, cg, cb)
-        }
+      Some(a) => if a.active && !a.broken { draw_combo_outline(a, cr, cg, cb) }
       None => ()
     }
     // Draw outline on body B
     let body_b = @physics.find_body(game.world, combo.body_b_id)
     match body_b {
-      Some(b) =>
-        if b.active && !(b.broken) {
-          draw_combo_outline(b, cr, cg, cb)
-        }
+      Some(b) => if b.active && !b.broken { draw_combo_outline(b, cr, cg, cb) }
       None => ()
     }
   }
@@ -289,12 +245,7 @@ pub fn draw_combo_indicators(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a colored outline around a body to indicate a combo.
-fn draw_combo_outline(
-  body : @types.Body,
-  r : Int,
-  g : Int,
-  b : Int
-) -> Unit {
+fn draw_combo_outline(body : @types.Body, r : Int, g : Int, b : Int) -> Unit {
   let cx = body.x.to_int()
   let cy = body.y.to_int()
   let hw = (body.width * 0.5).to_int() + 3
@@ -323,10 +274,7 @@ fn draw_combo_outline(
         body.width + 6.0,
         body.height + 6.0,
       ),
-      @raylib.Vector2::new(
-        (body.width + 6.0) * 0.5,
-        (body.height + 6.0) * 0.5,
-      ),
+      @raylib.Vector2::new((body.width + 6.0) * 0.5, (body.height + 6.0) * 0.5),
       body.angle * 57.2957795,
       @raylib.Color::new(r, g, b, 60),
     )
@@ -386,7 +334,7 @@ pub fn draw_combo_hud(game : @types.Game, y_offset : Int) -> Unit {
 ///|
 /// Draws the tutorial overlay during build phase.
 pub fn draw_tutorial_overlay(game : @types.Game) -> Unit {
-  if !(@game.should_show_tutorial(game)) {
+  if !@game.should_show_tutorial(game) {
     return
   }
   let msg = @game.tutorial_message(game)
@@ -404,10 +352,7 @@ pub fn draw_tutorial_overlay(game : @types.Game) -> Unit {
   // Step indicator
   let step_num = @game.tutorial_step_number(game)
   let total = @game.tutorial_total()
-  let step_text = "Step " +
-    step_num.to_string() +
-    "/" +
-    total.to_string()
+  let step_text = "Step " + step_num.to_string() + "/" + total.to_string()
   @draw.draw_text(
     step_text,
     @types.screen_w / 2 - 40,
@@ -447,18 +392,9 @@ pub fn draw_tutorial_overlay(game : @types.Game) -> Unit {
   if show_arrow {
     // Simple arrow pointing right
     @raylib.draw_triangle(
-      @raylib.Vector2::new(
-        Float::from_int(ax),
-        Float::from_int(ay - 8),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(ax),
-        Float::from_int(ay + 8),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(ax + 16),
-        Float::from_int(ay),
-      ),
+      @raylib.Vector2::new(Float::from_int(ax), Float::from_int(ay - 8)),
+      @raylib.Vector2::new(Float::from_int(ax), Float::from_int(ay + 8)),
+      @raylib.Vector2::new(Float::from_int(ax + 16), Float::from_int(ay)),
       @raylib.Color::new(255, 220, 60, 200),
     )
   }
@@ -467,7 +403,7 @@ pub fn draw_tutorial_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the ghost tower overlay (transparent best solution).
 pub fn draw_ghost_tower(game : @types.Game) -> Unit {
-  if !(@game.ghost_visible(game)) {
+  if !@game.ghost_visible(game) {
     return
   }
   let pieces = @game.ghost_pieces(game)
@@ -614,7 +550,7 @@ fn draw_world_internal(game : @types.Game) -> Unit {
   )
   // Draw bodies
   for body in world.bodies {
-    if !(body.active) {
+    if !body.active {
       continue
     }
     let cx = body.x.to_int()

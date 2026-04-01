@@ -6,13 +6,7 @@ fn draw_recipe_panel(game : @types.Game) -> Unit {
   let ph = @types.recipe_panel_height.to_int()
   // Panel background
   @raylib.draw_rectangle(px, py, pw, ph, @types.color_panel_bg)
-  @raylib.draw_rectangle_lines(
-    px,
-    py,
-    pw,
-    ph,
-    @types.color_panel_border,
-  )
+  @raylib.draw_rectangle_lines(px, py, pw, ph, @types.color_panel_border)
   // Title
   let title = "Recipe Book"
   let tw = @draw.measure_text(title, 24)
@@ -24,16 +18,12 @@ fn draw_recipe_panel(game : @types.Game) -> Unit {
     @types.color_text_bright,
   )
   // Discovery count
-  let disc = game.discovered_count.to_string() + "/" + @types.total_reactions.to_string() +
+  let disc = game.discovered_count.to_string() +
+    "/" +
+    @types.total_reactions.to_string() +
     " Discovered"
   let dw = @draw.measure_text(disc, 14)
-  @draw.draw_text(
-    disc,
-    px + (pw - dw) / 2,
-    py + 40,
-    14,
-    @types.color_text_dim,
-  )
+  @draw.draw_text(disc, px + (pw - dw) / 2, py + 40, 14, @types.color_text_dim)
   // List all recipes (deduplicated)
   let recipes = @alchemy.get_all_recipes_deduped(game.recipe_book)
   let row_height = 32
@@ -59,28 +49,13 @@ fn draw_recipe_panel(game : @types.Game) -> Unit {
         NoReaction => @types.color_text_dim
       }
       // Draw colored circles for each element
-      @raylib.draw_circle(
-        px + 20,
-        ry + 10,
-        8.0,
-        substance_color,
-      )
+      @raylib.draw_circle(px + 20, ry + 10, 8.0, substance_color)
       @draw.draw_text(substance_name, px + 35, ry + 2, 14, substance_color)
       @draw.draw_text("+", px + 115, ry + 2, 14, @types.color_text_dim)
-      @raylib.draw_circle(
-        px + 140,
-        ry + 10,
-        8.0,
-        input_color,
-      )
+      @raylib.draw_circle(px + 140, ry + 10, 8.0, input_color)
       @draw.draw_text(input_name, px + 155, ry + 2, 14, input_color)
       @draw.draw_text("=", px + 250, ry + 2, 14, @types.color_text_dim)
-      @raylib.draw_circle(
-        px + 275,
-        ry + 10,
-        8.0,
-        output_color,
-      )
+      @raylib.draw_circle(px + 275, ry + 10, 8.0, output_color)
       @draw.draw_text(output_name, px + 290, ry + 2, 14, output_color)
     } else {
       // Undiscovered - show ???

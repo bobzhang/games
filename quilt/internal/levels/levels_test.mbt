@@ -9,7 +9,10 @@ test "all 25 levels exist and are retrievable" {
 ///|
 test "total levels matches constant" {
   // tier1_count(8) + tier2_count(9) + tier3_count(8) = 25
-  inspect(@types.tier1_count + @types.tier2_count + @types.tier3_count, content="25")
+  inspect(
+    @types.tier1_count + @types.tier2_count + @types.tier3_count,
+    content="25",
+  )
   inspect(@types.total_levels, content="25")
 }
 
@@ -36,10 +39,7 @@ test "tier 3 levels have valid board sizes (4 or 5)" {
   let start = @types.tier1_count + @types.tier2_count
   for i in start..<(start + @types.tier3_count) {
     let level = @levels.get_level(i)
-    inspect(
-      level.board_size == 4 || level.board_size == 5,
-      content="true",
-    )
+    inspect(level.board_size == 4 || level.board_size == 5, content="true")
     inspect(level.tier, content="Masterwork")
   }
 }
@@ -182,10 +182,7 @@ test "solvable: each level has enough matching edge potential" {
     }
     // The total edge budget must be sufficient:
     // patches * 4 edges >= board_size * board_size * 4
-    inspect(
-      level.patches.length() * 4 >= total_cells * 4,
-      content="true",
-    )
+    inspect(level.patches.length() * 4 >= total_cells * 4, content="true")
     // Wildcards provide flexibility
     inspect(wildcard_count >= 0, content="true")
   }

@@ -460,7 +460,7 @@ fn @types.Game::spawn_arrow_projectile(
     let proj = game.projectiles[i]
     if !proj.active {
       let dx = player.x - ent.x
-      let dy = (player.y + 0.8) - (ent.y + 1.0)
+      let dy = player.y + 0.8 - (ent.y + 1.0)
       let dz = player.z - ent.z
       let dist = (dx * dx + dy * dy + dz * dz).sqrt()
       if dist < 0.1 {

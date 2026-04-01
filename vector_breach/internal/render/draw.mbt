@@ -30,11 +30,7 @@ fn draw_title(game : @types.Game) -> Unit {
   draw_title_decorations(game)
   // Main title
   @types.draw_center_text(
-    "VECTOR BREACH",
-    cx,
-    cy_title,
-    @types.font_title,
-    @types.color_player,
+    "VECTOR BREACH", cx, cy_title, @types.font_title, @types.color_player,
   )
   // Subtitle
   @types.draw_center_text(
@@ -47,9 +43,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Animated mech silhouettes
   draw_title_mechs(game, cx, @types.screen_h / 2 - 20)
   // Blinking prompt
-  let blink = Float::from_double(
-    @math.sin(game.anim_timer.to_double() * 3.0),
-  )
+  let blink = Float::from_double(@math.sin(game.anim_timer.to_double() * 3.0))
   if blink > 0.0 {
     @types.draw_center_text(
       "Press ENTER to deploy",
@@ -74,7 +68,10 @@ fn draw_title(game : @types.Game) -> Unit {
 // ============================================================================
 
 ///|
-fn campaign_node_completed(campaign : @types.CampaignMap, node_id : Int) -> Bool {
+fn campaign_node_completed(
+  campaign : @types.CampaignMap,
+  node_id : Int,
+) -> Bool {
   for i = 0; i < campaign.completed_nodes.length(); i = i + 1 {
     if campaign.completed_nodes[i] == node_id {
       return true
@@ -84,7 +81,10 @@ fn campaign_node_completed(campaign : @types.CampaignMap, node_id : Int) -> Bool
 }
 
 ///|
-fn campaign_node_available(campaign : @types.CampaignMap, node_id : Int) -> Bool {
+fn campaign_node_available(
+  campaign : @types.CampaignMap,
+  node_id : Int,
+) -> Bool {
   if campaign.completed_nodes.length() == 0 && node_id == 0 {
     return true
   }
@@ -202,7 +202,13 @@ fn draw_campaign(game : @types.Game) -> Unit {
     } else {
       @types.color_text_dim
     }
-    @types.draw_shadow_text(name, nx + 6, ny + 6, @types.font_small - 2, name_color)
+    @types.draw_shadow_text(
+      name,
+      nx + 6,
+      ny + 6,
+      @types.font_small - 2,
+      name_color,
+    )
     // Node type label + reward icon
     let type_label = match n.kind {
       Mission(_) => "Mission"
@@ -219,14 +225,26 @@ fn draw_campaign(game : @types.Game) -> Unit {
       Event => @raylib.Color::new(180, 120, 255, 200)
       _ => @types.color_text_dim
     }
-    @types.draw_shadow_text(type_label, nx + 6, ny + 20, @types.font_small - 4, type_color)
+    @types.draw_shadow_text(
+      type_label,
+      nx + 6,
+      ny + 20,
+      @types.font_small - 4,
+      type_color,
+    )
     // Difficulty stars
     if n.difficulty > 0 {
       let mut stars = ""
       for s = 0; s < n.difficulty; s = s + 1 {
         stars = stars + "*"
       }
-      @types.draw_shadow_text(stars, nx + 6, ny + 34, @types.font_small - 4, @raylib.Color::new(255, 200, 80, 180))
+      @types.draw_shadow_text(
+        stars,
+        nx + 6,
+        ny + 34,
+        @types.font_small - 4,
+        @raylib.Color::new(255, 200, 80, 180),
+      )
     }
     // Reward icon
     if n.reward_icon != "" {
@@ -236,7 +254,13 @@ fn draw_campaign(game : @types.Game) -> Unit {
         "R" => @raylib.Color::new(80, 200, 120, 200)
         _ => @raylib.Color::new(180, 120, 255, 180)
       }
-      @types.draw_shadow_text(n.reward_icon, nx + node_w - 18, ny + 34, @types.font_small - 2, ri_color)
+      @types.draw_shadow_text(
+        n.reward_icon,
+        nx + node_w - 18,
+        ny + 34,
+        @types.font_small - 2,
+        ri_color,
+      )
     }
     // Theme indicator
     let theme_label = match n.theme {
@@ -246,11 +270,23 @@ fn draw_campaign(game : @types.Game) -> Unit {
       Neutral => ""
     }
     if theme_label != "" {
-      @types.draw_shadow_text(theme_label, nx + node_w - 18, ny + 46, @types.font_small - 4, @types.color_text_dim)
+      @types.draw_shadow_text(
+        theme_label,
+        nx + node_w - 18,
+        ny + 46,
+        @types.font_small - 4,
+        @types.color_text_dim,
+      )
     }
     // Completed checkmark
     if completed {
-      @types.draw_shadow_text("OK", nx + node_w - 24, ny + 6, @types.font_small - 4, @raylib.Color::new(80, 200, 120, 200))
+      @types.draw_shadow_text(
+        "OK",
+        nx + node_w - 24,
+        ny + 6,
+        @types.font_small - 4,
+        @raylib.Color::new(80, 200, 120, 200),
+      )
     }
     // Selected indicator
     if selected && available {
@@ -259,7 +295,10 @@ fn draw_campaign(game : @types.Game) -> Unit {
       )
       let glow_alpha = 40 + (pulse * 20.0).to_int()
       @raylib.draw_rectangle(
-        nx - 2, ny - 2, node_w + 4, node_h + 4,
+        nx - 2,
+        ny - 2,
+        node_w + 4,
+        node_h + 4,
         @raylib.Color::new(255, 220, 80, glow_alpha),
       )
     }
@@ -344,7 +383,13 @@ fn draw_title_mechs(game : @types.Game, cx : Int, cy : Int) -> Unit {
     0.0,
     @types.color_player,
   )
-  @draw.draw_text("V", cx - 108, cy + bob.to_int() - 7, @types.font_body, @raylib.white)
+  @draw.draw_text(
+    "V",
+    cx - 108,
+    cy + bob.to_int() - 7,
+    @types.font_body,
+    @raylib.white,
+  )
   // Striker - diamond (center)
   @raylib.draw_poly(
     @raylib.Vector2::new(fcx, fcy - 4.0),
@@ -360,7 +405,13 @@ fn draw_title_mechs(game : @types.Game, cx : Int, cy : Int) -> Unit {
     45.0,
     @types.color_player,
   )
-  @draw.draw_text("S", cx - 6, cy + bob.to_int() - 11, @types.font_body, @raylib.white)
+  @draw.draw_text(
+    "S",
+    cx - 6,
+    cy + bob.to_int() - 11,
+    @types.font_body,
+    @raylib.white,
+  )
   // Sentinel - circle with crosshair (right)
   @raylib.draw_circle(
     cx + 100,
@@ -388,7 +439,13 @@ fn draw_title_mechs(game : @types.Game, cx : Int, cy : Int) -> Unit {
     cy + bob.to_int() + 16,
     @types.color_player,
   )
-  @draw.draw_text("T", cx + 93, cy + bob.to_int() - 7, @types.font_body, @raylib.white)
+  @draw.draw_text(
+    "T",
+    cx + 93,
+    cy + bob.to_int() - 7,
+    @types.font_body,
+    @raylib.white,
+  )
 }
 
 // ============================================================================
@@ -405,7 +462,10 @@ fn draw_battle(game : @types.Game) -> Unit {
   if shake_x != 0 || shake_y != 0 {
     @raylib.begin_mode_2d(
       @raylib.Camera2D::new(
-        @raylib.Vector2::new(Float::from_int(-shake_x), Float::from_int(-shake_y)),
+        @raylib.Vector2::new(
+          Float::from_int(-shake_x),
+          Float::from_int(-shake_y),
+        ),
         @raylib.Vector2::new(0.0, 0.0),
         0.0,
         1.0,
@@ -441,7 +501,10 @@ fn draw_battle_enemy_phase(game : @types.Game) -> Unit {
   if shake_x != 0 || shake_y != 0 {
     @raylib.begin_mode_2d(
       @raylib.Camera2D::new(
-        @raylib.Vector2::new(Float::from_int(-shake_x), Float::from_int(-shake_y)),
+        @raylib.Vector2::new(
+          Float::from_int(-shake_x),
+          Float::from_int(-shake_y),
+        ),
         @raylib.Vector2::new(0.0, 0.0),
         0.0,
         1.0,
@@ -462,9 +525,7 @@ fn draw_battle_enemy_phase(game : @types.Game) -> Unit {
   draw_ui_panel(battle, game)
   draw_screen_effects(battle)
   // Enemy turn overlay text
-  let pulse = Float::from_double(
-    @math.sin(game.anim_timer.to_double() * 4.0),
-  )
+  let pulse = Float::from_double(@math.sin(game.anim_timer.to_double() * 4.0))
   let alpha = 180 + (pulse * 60.0).to_int()
   let overlay_color = @raylib.Color::new(255, 80, 80, alpha)
   @types.draw_center_text(
@@ -508,17 +569,21 @@ fn draw_boss_narrative(battle : @types.BattleState, game : @types.Game) -> Unit 
     @raylib.Color::new(0, 0, 0, 200),
   )
   @raylib.draw_line(
-    0, bar_y, @types.screen_w, bar_y,
+    0,
+    bar_y,
+    @types.screen_w,
+    bar_y,
     @raylib.Color::new(255, 80, 80, 200),
   )
   @raylib.draw_line(
-    0, bar_y + bar_h, @types.screen_w, bar_y + bar_h,
+    0,
+    bar_y + bar_h,
+    @types.screen_w,
+    bar_y + bar_h,
     @raylib.Color::new(255, 80, 80, 200),
   )
   // Pulsing text color
-  let pulse = Float::from_double(
-    @math.sin(game.anim_timer.to_double() * 5.0),
-  )
+  let pulse = Float::from_double(@math.sin(game.anim_timer.to_double() * 5.0))
   let text_alpha = 200 + (pulse * 55.0).to_int()
   let text_color = if battle.boss_phase == 3 {
     @raylib.Color::new(255, 80, 40, text_alpha)
@@ -563,11 +628,7 @@ fn draw_grid(battle : @types.BattleState) -> Unit {
       draw_hazard_overlay(tile.hazard, sx, sy)
       // Grid lines with subtle glow
       @raylib.draw_rectangle_lines(
-        sx,
-        sy,
-        @types.tile_size,
-        @types.tile_size,
-        @types.color_grid_line,
+        sx, sy, @types.tile_size, @types.tile_size, @types.color_grid_line,
       )
     }
   }
@@ -599,14 +660,38 @@ fn draw_tile_detail(
     Wall => {
       // Cross-hatch pattern for walls
       let ts = @types.tile_size
-      @raylib.draw_line(sx + 4, sy + 4, sx + ts - 4, sy + ts - 4, @raylib.Color::new(80, 85, 100, 120))
-      @raylib.draw_line(sx + ts - 4, sy + 4, sx + 4, sy + ts - 4, @raylib.Color::new(80, 85, 100, 120))
+      @raylib.draw_line(
+        sx + 4,
+        sy + 4,
+        sx + ts - 4,
+        sy + ts - 4,
+        @raylib.Color::new(80, 85, 100, 120),
+      )
+      @raylib.draw_line(
+        sx + ts - 4,
+        sy + 4,
+        sx + 4,
+        sy + ts - 4,
+        @raylib.Color::new(80, 85, 100, 120),
+      )
     }
     Water => {
       // Wave lines for water
       let mid_y = sy + @types.tile_size / 2
-      @raylib.draw_line(sx + 8, mid_y - 2, sx + @types.tile_size - 8, mid_y - 2, @raylib.Color::new(40, 80, 140, 100))
-      @raylib.draw_line(sx + 12, mid_y + 4, sx + @types.tile_size - 12, mid_y + 4, @raylib.Color::new(40, 80, 140, 80))
+      @raylib.draw_line(
+        sx + 8,
+        mid_y - 2,
+        sx + @types.tile_size - 8,
+        mid_y - 2,
+        @raylib.Color::new(40, 80, 140, 100),
+      )
+      @raylib.draw_line(
+        sx + 12,
+        mid_y + 4,
+        sx + @types.tile_size - 12,
+        mid_y + 4,
+        @raylib.Color::new(40, 80, 140, 80),
+      )
     }
     Lava => {
       // Glowing center for lava
@@ -617,11 +702,26 @@ fn draw_tile_detail(
     }
     Ice => {
       // Sparkle dots for ice
-      @raylib.draw_circle(sx + 16, sy + 12, 2.0, @raylib.Color::new(220, 240, 255, 120))
-      @raylib.draw_circle(sx + 40, sy + 28, 2.0, @raylib.Color::new(220, 240, 255, 100))
-      @raylib.draw_circle(sx + 24, sy + 48, 2.0, @raylib.Color::new(220, 240, 255, 80))
+      @raylib.draw_circle(
+        sx + 16,
+        sy + 12,
+        2.0,
+        @raylib.Color::new(220, 240, 255, 120),
+      )
+      @raylib.draw_circle(
+        sx + 40,
+        sy + 28,
+        2.0,
+        @raylib.Color::new(220, 240, 255, 100),
+      )
+      @raylib.draw_circle(
+        sx + 24,
+        sy + 48,
+        2.0,
+        @raylib.Color::new(220, 240, 255, 80),
+      )
     }
-    Chasm => {
+    Chasm =>
       // Dark gradient to suggest depth
       @raylib.draw_rectangle(
         sx + 4,
@@ -630,7 +730,6 @@ fn draw_tile_detail(
         @types.tile_size - 8,
         @raylib.Color::new(0, 0, 0, 100),
       )
-    }
     ControlPoint => {
       // Diamond marker
       let cx = sx + @types.tile_size / 2
@@ -652,15 +751,27 @@ fn draw_hazard_overlay(hazard : @types.HazardKind, sx : Int, sy : Int) -> Unit {
   match hazard {
     Fire =>
       @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size, @raylib.Color::new(200, 60, 20, 80),
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(200, 60, 20, 80),
       )
     Acid =>
       @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size, @raylib.Color::new(40, 200, 40, 60),
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(40, 200, 40, 60),
       )
     Mine => {
       @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size, @raylib.Color::new(200, 200, 40, 40),
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(200, 200, 40, 40),
       )
       // Warning triangle
       let cx = Float::from_int(sx + @types.tile_size / 2)
@@ -674,7 +785,11 @@ fn draw_hazard_overlay(hazard : @types.HazardKind, sx : Int, sy : Int) -> Unit {
     }
     Smoke =>
       @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size, @raylib.Color::new(100, 100, 100, 80),
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(100, 100, 100, 80),
       )
     None => ()
   }
@@ -787,8 +902,20 @@ fn draw_intent_fireline(
         fire_color,
       )
       // Draw X pattern to indicate danger
-      @raylib.draw_line(sx + 6, sy + 6, sx + @types.tile_size - 6, sy + @types.tile_size - 6, line_color)
-      @raylib.draw_line(sx + @types.tile_size - 6, sy + 6, sx + 6, sy + @types.tile_size - 6, line_color)
+      @raylib.draw_line(
+        sx + 6,
+        sy + 6,
+        sx + @types.tile_size - 6,
+        sy + @types.tile_size - 6,
+        line_color,
+      )
+      @raylib.draw_line(
+        sx + @types.tile_size - 6,
+        sy + 6,
+        sx + 6,
+        sy + @types.tile_size - 6,
+        line_color,
+      )
     }
   }
 }
@@ -808,11 +935,7 @@ fn draw_intent_leap(u : @types.CombatUnit, tx : Int, ty : Int) -> Unit {
     let px = from_x + (to_x - from_x) * t
     let arc_height = -(4.0F * t * (1.0F - t)) * 40.0F
     let py = from_y + (to_y - from_y) * t + arc_height
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(px, py),
-      2.0,
-      leap_color,
-    )
+    @raylib.draw_circle_v(@raylib.Vector2::new(px, py), 2.0, leap_color)
   }
   // Landing zone outline
   let target_sx = @types.tile_to_screen_x(tx)
@@ -863,8 +986,11 @@ fn draw_intent_charge(u : @types.CombatUnit, cdx : Int, cdy : Int) -> Unit {
   let mut cx = u.x + cdx
   let mut cy = u.y + cdy
   let mut steps = 0
-  while cx >= 0 && cx < @types.grid_w && cy >= 0 && cy < @types.grid_h &&
-    steps < 6 {
+  while cx >= 0 &&
+        cx < @types.grid_w &&
+        cy >= 0 &&
+        cy < @types.grid_h &&
+        steps < 6 {
     let sx = @types.tile_to_screen_x(cx)
     let sy = @types.tile_to_screen_y(cx)
     ignore(sy)
@@ -920,7 +1046,9 @@ fn draw_intent_mine(mx : Int, my : Int) -> Unit {
 
 ///|
 fn draw_intent_summon(sx_grid : Int, sy_grid : Int) -> Unit {
-  if sx_grid >= 0 && sx_grid < @types.grid_w && sy_grid >= 0 &&
+  if sx_grid >= 0 &&
+    sx_grid < @types.grid_w &&
+    sy_grid >= 0 &&
     sy_grid < @types.grid_h {
     let sx = @types.tile_to_screen_x(sx_grid)
     let sy = @types.tile_to_screen_y(sy_grid)
@@ -1165,12 +1293,15 @@ fn draw_player_mech(
   }
   // Selected mech golden glow
   if selected {
-    let pulse = Float::from_double(
-      @math.sin(game.anim_timer.to_double() * 4.0),
-    )
+    let pulse = Float::from_double(@math.sin(game.anim_timer.to_double() * 4.0))
     let glow_r = radius + 4.0 + pulse * 2.0
     @raylib.draw_circle_lines(cx, cy, glow_r, @types.color_selected)
-    @raylib.draw_circle_lines(cx, cy, glow_r + 2.0, @raylib.Color::new(255, 220, 80, 80))
+    @raylib.draw_circle_lines(
+      cx,
+      cy,
+      glow_r + 2.0,
+      @raylib.Color::new(255, 220, 80, 80),
+    )
   }
 }
 
@@ -1304,7 +1435,10 @@ fn draw_enemy_unit(
       @raylib.draw_circle_lines(cx + 4, cy, small_r, edge_color)
       @draw.draw_text("P", cx - 4, cy - 6, @types.font_small - 2, @raylib.white)
     }
-    Boss => draw_boss_unit(fcx, fcy, cx, cy, radius, fill_color, edge_color, battle, game)
+    Boss =>
+      draw_boss_unit(
+        fcx, fcy, cx, cy, radius, fill_color, edge_color, battle, game,
+      )
   }
 }
 
@@ -1354,9 +1488,7 @@ fn draw_boss_unit(
   )
   // Phase 1: pulsing outline
   if phase == 1 {
-    let pulse = Float::from_double(
-      @math.sin(game.anim_timer.to_double() * 3.0),
-    )
+    let pulse = Float::from_double(@math.sin(game.anim_timer.to_double() * 3.0))
     let glow_r = boss_radius + 3.0 + pulse * 2.0
     let glow_alpha = 120 + (pulse * 60.0).to_int()
     @raylib.draw_poly_lines(
@@ -1398,11 +1530,17 @@ fn draw_boss_unit(
     // Diagonal fire lines
     let diag = (6.0F + fire_pulse * 3.0F).to_int()
     @raylib.draw_line(
-      cx - diag, cy - diag, cx + diag, cy + diag,
+      cx - diag,
+      cy - diag,
+      cx + diag,
+      cy + diag,
       @raylib.Color::new(255, 60, 10, 120),
     )
     @raylib.draw_line(
-      cx + diag, cy - diag, cx - diag, cy + diag,
+      cx + diag,
+      cy - diag,
+      cx - diag,
+      cy + diag,
       @raylib.Color::new(255, 60, 10, 120),
     )
   }
@@ -1421,7 +1559,13 @@ fn draw_boss_unit(
     _ => "X"
   }
   let label_offset = if label.length() > 1 { -8 } else { -5 }
-  @draw.draw_text(label, cx + label_offset, cy - 7, @types.font_small, @raylib.white)
+  @draw.draw_text(
+    label,
+    cx + label_offset,
+    cy - 7,
+    @types.font_small,
+    @raylib.white,
+  )
 }
 
 // ============================================================================
@@ -1489,8 +1633,7 @@ fn draw_stun_indicator(cx : Int, cy : Int, game : @types.Game) -> Unit {
   for s = 0; s < 3; s = s + 1 {
     let angle = t * 3.0 + Float::from_int(s).to_double() * 2.094
     let sx = cx + (Float::from_double(@math.cos(angle)) * 10.0).to_int()
-    let sy = offset_y +
-      (Float::from_double(@math.sin(angle)) * 4.0).to_int()
+    let sy = offset_y + (Float::from_double(@math.sin(angle)) * 4.0).to_int()
     @draw.draw_text("*", sx - 3, sy - 4, @types.font_small - 4, stun_color)
   }
 }
@@ -1515,18 +1658,12 @@ fn draw_acted_indicator(cx : Int, cy : Int) -> Unit {
 fn draw_cursor(battle : @types.BattleState, game : @types.Game) -> Unit {
   let sx = @types.tile_to_screen_x(battle.cursor_x)
   let sy = @types.tile_to_screen_y(battle.cursor_y)
-  let pulse = Float::from_double(
-    @math.sin(game.anim_timer.to_double() * 5.0),
-  )
+  let pulse = Float::from_double(@math.sin(game.anim_timer.to_double() * 5.0))
   let alpha = 160 + (pulse * 60.0).to_int()
   let cursor_color = @raylib.Color::new(255, 255, 255, alpha)
   // Outer border
   @raylib.draw_rectangle_lines(
-    sx,
-    sy,
-    @types.tile_size,
-    @types.tile_size,
-    cursor_color,
+    sx, sy, @types.tile_size, @types.tile_size, cursor_color,
   )
   // Corner brackets for emphasis
   let bracket_len = 10
@@ -1535,14 +1672,50 @@ fn draw_cursor(battle : @types.BattleState, game : @types.Game) -> Unit {
   @raylib.draw_line(sx, sy, sx + bracket_len, sy, bracket_color)
   @raylib.draw_line(sx, sy, sx, sy + bracket_len, bracket_color)
   // Top-right
-  @raylib.draw_line(sx + @types.tile_size, sy, sx + @types.tile_size - bracket_len, sy, bracket_color)
-  @raylib.draw_line(sx + @types.tile_size, sy, sx + @types.tile_size, sy + bracket_len, bracket_color)
+  @raylib.draw_line(
+    sx + @types.tile_size,
+    sy,
+    sx + @types.tile_size - bracket_len,
+    sy,
+    bracket_color,
+  )
+  @raylib.draw_line(
+    sx + @types.tile_size,
+    sy,
+    sx + @types.tile_size,
+    sy + bracket_len,
+    bracket_color,
+  )
   // Bottom-left
-  @raylib.draw_line(sx, sy + @types.tile_size, sx + bracket_len, sy + @types.tile_size, bracket_color)
-  @raylib.draw_line(sx, sy + @types.tile_size, sx, sy + @types.tile_size - bracket_len, bracket_color)
+  @raylib.draw_line(
+    sx,
+    sy + @types.tile_size,
+    sx + bracket_len,
+    sy + @types.tile_size,
+    bracket_color,
+  )
+  @raylib.draw_line(
+    sx,
+    sy + @types.tile_size,
+    sx,
+    sy + @types.tile_size - bracket_len,
+    bracket_color,
+  )
   // Bottom-right
-  @raylib.draw_line(sx + @types.tile_size, sy + @types.tile_size, sx + @types.tile_size - bracket_len, sy + @types.tile_size, bracket_color)
-  @raylib.draw_line(sx + @types.tile_size, sy + @types.tile_size, sx + @types.tile_size, sy + @types.tile_size - bracket_len, bracket_color)
+  @raylib.draw_line(
+    sx + @types.tile_size,
+    sy + @types.tile_size,
+    sx + @types.tile_size - bracket_len,
+    sy + @types.tile_size,
+    bracket_color,
+  )
+  @raylib.draw_line(
+    sx + @types.tile_size,
+    sy + @types.tile_size,
+    sx + @types.tile_size,
+    sy + @types.tile_size - bracket_len,
+    bracket_color,
+  )
 }
 
 // ============================================================================
@@ -1593,10 +1766,9 @@ fn draw_ui_panel(battle : @types.BattleState, game : @types.Game) -> Unit {
   )
   // Combo text (floating in main area, not panel)
   if battle.combo_timer > 0.0 {
-    let combo_alpha = ((battle.combo_timer / 2.0) * 255.0).to_int().clamp(
-      min=0,
-      max=255,
-    )
+    let combo_alpha = (battle.combo_timer / 2.0 * 255.0)
+      .to_int()
+      .clamp(min=0, max=255)
     let combo_color = @raylib.Color::new(255, 220, 40, combo_alpha)
     @types.draw_center_text(
       battle.combo_text,
@@ -1613,13 +1785,7 @@ fn draw_ui_panel(battle : @types.BattleState, game : @types.Game) -> Unit {
   // Turn countdown for survive/defend
   draw_turn_countdown(battle, px + 10, 90)
   // Separator
-  @raylib.draw_line(
-    px + 10,
-    106,
-    px + pw - 10,
-    106,
-    @types.color_grid_line,
-  )
+  @raylib.draw_line(px + 10, 106, px + pw - 10, 106, @types.color_grid_line)
   // Mech roster
   let mut y = 114
   for i = 0; i < battle.units.length(); i = i + 1 {
@@ -1630,13 +1796,7 @@ fn draw_ui_panel(battle : @types.BattleState, game : @types.Game) -> Unit {
     y = draw_mech_card(battle, u, i, px + 8, y)
   }
   // Separator before hover info
-  @raylib.draw_line(
-    px + 10,
-    y + 4,
-    px + pw - 10,
-    y + 4,
-    @types.color_grid_line,
-  )
+  @raylib.draw_line(px + 10, y + 4, px + pw - 10, y + 4, @types.color_grid_line)
   // Hover info
   if game.hover_info.length() > 0 {
     @types.draw_shadow_text(
@@ -1654,11 +1814,7 @@ fn draw_ui_panel(battle : @types.BattleState, game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_objective_info(
-  battle : @types.BattleState,
-  x : Int,
-  y : Int,
-) -> Unit {
+fn draw_objective_info(battle : @types.BattleState, x : Int, y : Int) -> Unit {
   let obj_text = match battle.objective {
     DefendGrid(n) => "Objective: Defend (\{battle.objective_progress}/\{n})"
     Survive(n) => "Objective: Survive \{n} turns (\{battle.turn}/\{n})"
@@ -1759,11 +1915,7 @@ fn draw_mech_card(
 }
 
 ///|
-fn draw_turn_log(
-  battle : @types.BattleState,
-  x : Int,
-  y : Int,
-) -> Unit {
+fn draw_turn_log(battle : @types.BattleState, x : Int, y : Int) -> Unit {
   @types.draw_shadow_text(
     "-- Log --",
     x,
@@ -1846,7 +1998,7 @@ fn draw_reward(game : @types.Game) -> Unit {
   )
   // Score summary
   match game.battle {
-    Some(b) => {
+    Some(b) =>
       @types.draw_center_text(
         "Mission Score: \{b.score}",
         cx,
@@ -1854,7 +2006,6 @@ fn draw_reward(game : @types.Game) -> Unit {
         @types.font_body,
         @raylib.Color::new(255, 220, 80, 220),
       )
-    }
     None => ()
   }
   @types.draw_center_text(
@@ -2004,7 +2155,13 @@ fn draw_reward_card(
 ///|
 fn draw_upgrade_screen(game : @types.Game) -> Unit {
   // Dark background
-  @raylib.draw_rectangle(0, 0, @types.screen_w, @types.screen_h, @raylib.Color::new(10, 12, 20, 255))
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(10, 12, 20, 255),
+  )
   let cx = @types.screen_w / 2
   // Title
   @types.draw_center_text(
@@ -2036,7 +2193,13 @@ fn draw_upgrade_screen(game : @types.Game) -> Unit {
     let current_tier = game.run.upgrade_tiers[i]
     let class_color = @types.color_player
     // Card background
-    @raylib.draw_rectangle(x, card_y, card_w, card_h, @raylib.Color::new(20, 25, 40, 220))
+    @raylib.draw_rectangle(
+      x,
+      card_y,
+      card_w,
+      card_h,
+      @raylib.Color::new(20, 25, 40, 220),
+    )
     @raylib.draw_rectangle_lines(x, card_y, card_w, card_h, class_color)
     // Class name
     @types.draw_shadow_text(
@@ -2146,7 +2309,7 @@ fn draw_end(game : @types.Game, title : String, color : @raylib.Color) -> Unit {
   )
   // Stats summary with score
   match game.battle {
-    Some(b) => {
+    Some(b) =>
       @types.draw_center_text(
         "Turns: \{b.turn}  Missions: \{game.run.missions_completed}  Score: \{game.run.total_score + b.score}",
         cx,
@@ -2154,13 +2317,10 @@ fn draw_end(game : @types.Game, title : String, color : @raylib.Color) -> Unit {
         @types.font_body,
         @types.color_text_dim,
       )
-    }
     None => ()
   }
   // Blinking prompt
-  let blink = Float::from_double(
-    @math.sin(game.anim_timer.to_double() * 3.0),
-  )
+  let blink = Float::from_double(@math.sin(game.anim_timer.to_double() * 3.0))
   if blink > 0.0 {
     @types.draw_center_text(
       "Press ENTER to return",
@@ -2171,5 +2331,3 @@ fn draw_end(game : @types.Game, title : String, color : @raylib.Color) -> Unit {
     )
   }
 }
-
-

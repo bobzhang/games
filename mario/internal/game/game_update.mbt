@@ -132,7 +132,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   }
   // Check death pit
   let pit_y = Float::from_int(game.map_height * @types.tile_size + 100)
-  if game.player.y > pit_y && !(game.player.dead) {
+  if game.player.y > pit_y && !game.player.dead {
     kill_player(game)
   }
 }
@@ -148,7 +148,7 @@ fn update_paused(game : @types.Game) -> Unit {
 ///|
 fn update_level_clear(game : @types.Game, dt : Float) -> Unit {
   // Animate flag sliding down and Mario sliding with it
-  if !(game.flag_done) {
+  if !game.flag_done {
     let slide_speed : Float = 300.0
     game.flag_y = game.flag_y + slide_speed * dt
     let p = game.player
@@ -275,16 +275,14 @@ fn update_player_died(game : @types.Game, dt : Float) -> Unit {
     if game.lives <= 0 {
       game.state = GameOver
       game.game_over_timer = 0.0
-    } else {
       // Check for checkpoint respawn
-      if game.checkpoint_active {
-        load_level(game, game.level_index)
-        game.player.x = game.checkpoint_x
-        game.player.y = game.checkpoint_y
-        game.state = Playing
-      } else {
-        start_level_intro(game)
-      }
+    } else if game.checkpoint_active {
+      load_level(game, game.level_index)
+      game.player.x = game.checkpoint_x
+      game.player.y = game.checkpoint_y
+      game.state = Playing
+    } else {
+      start_level_intro(game)
     }
   }
 }
@@ -391,7 +389,7 @@ pub fn start_hitstop(game : @types.Game, duration : Float) -> Unit {
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.particles.length() {
     let p = game.particles[i]
-    if !(p.active) {
+    if !p.active {
       continue
     }
     p.life = p.life - dt
@@ -411,7 +409,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 fn update_score_popups(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.score_popups.length() {
     let s = game.score_popups[i]
-    if !(s.active) {
+    if !s.active {
       continue
     }
     s.life = s.life - dt
@@ -427,7 +425,7 @@ fn update_score_popups(game : @types.Game, dt : Float) -> Unit {
 fn update_bumped_blocks(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.bumped_blocks.length() {
     let b = game.bumped_blocks[i]
-    if !(b.active) {
+    if !b.active {
       continue
     }
     b.offset_y = b.offset_y + b.velocity * dt
@@ -448,7 +446,7 @@ pub fn spawn_score_popup(
   text : String,
 ) -> Unit {
   for i in 0..<game.score_popups.length() {
-    if !(game.score_popups[i].active) {
+    if !game.score_popups[i].active {
       let s = game.score_popups[i]
       s.active = true
       s.x = x
@@ -474,7 +472,7 @@ pub fn spawn_brick_particles(
     if count >= 8 {
       break
     }
-    if !(game.particles[i].active) {
+    if !game.particles[i].active {
       let p = game.particles[i]
       p.active = true
       p.x = wx + @types.rand_rangef(game, -8.0, 8.0)
@@ -499,7 +497,7 @@ pub fn spawn_stomp_poof(game : @types.Game, wx : Float, wy : Float) -> Unit {
     if count >= 6 {
       break
     }
-    if !(game.particles[i].active) {
+    if !game.particles[i].active {
       let p = game.particles[i]
       p.active = true
       p.x = wx + @types.rand_rangef(game, -12.0, 12.0)
@@ -524,7 +522,7 @@ pub fn spawn_landing_dust(game : @types.Game, wx : Float, wy : Float) -> Unit {
     if count >= 4 {
       break
     }
-    if !(game.particles[i].active) {
+    if !game.particles[i].active {
       let p = game.particles[i]
       p.active = true
       p.x = wx + @types.rand_rangef(game, -10.0, 10.0)
@@ -549,7 +547,7 @@ pub fn spawn_skid_dust(game : @types.Game, wx : Float, wy : Float) -> Unit {
     if count >= 2 {
       break
     }
-    if !(game.particles[i].active) {
+    if !game.particles[i].active {
       let p = game.particles[i]
       p.active = true
       p.x = wx + @types.rand_rangef(game, -6.0, 6.0)
@@ -570,7 +568,7 @@ pub fn spawn_skid_dust(game : @types.Game, wx : Float, wy : Float) -> Unit {
 /// Start a block bump animation.
 pub fn bump_block(game : @types.Game, tx : Int, ty : Int) -> Unit {
   for i in 0..<game.bumped_blocks.length() {
-    if !(game.bumped_blocks[i].active) {
+    if !game.bumped_blocks[i].active {
       let b = game.bumped_blocks[i]
       b.active = true
       b.tile_x = tx
@@ -590,7 +588,7 @@ pub fn spawn_coin_sparkle(game : @types.Game, wx : Float, wy : Float) -> Unit {
     if count >= 6 {
       break
     }
-    if !(game.particles[i].active) {
+    if !game.particles[i].active {
       let p = game.particles[i]
       p.active = true
       p.x = wx + @types.rand_rangef(game, -10.0, 10.0)
@@ -870,7 +868,7 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
       }
     }
   }
-  if !(player_set) {
+  if !player_set {
     game.player.x = 120.0
     game.player.y = Float::from_int(12 * @types.tile_size)
   }
@@ -898,13 +896,9 @@ fn spawn_level_platforms(game : @types.Game, level_index : Int) -> Unit {
     1 => {
       // 1-2: Two horizontal platforms in the underground section
       let gap1_y = tile_f(10)
-      spawn_platform(
-        game, tile_f(48), gap1_y, tile_f(50), gap1_y, 96.0, 0.35,
-      )
+      spawn_platform(game, tile_f(48), gap1_y, tile_f(50), gap1_y, 96.0, 0.35)
       let gap2_y = tile_f(10)
-      spawn_platform(
-        game, tile_f(88), gap2_y, tile_f(90), gap2_y, 96.0, 0.45,
-      )
+      spawn_platform(game, tile_f(88), gap2_y, tile_f(90), gap2_y, 96.0, 0.45)
     }
     2 => {
       // 1-3: Three vertical lift platforms between floating island layers
@@ -915,9 +909,7 @@ fn spawn_level_platforms(game : @types.Game, level_index : Int) -> Unit {
     _ => {
       // 1-4: Collapsing bridge before Bowser + one horizontal platform over pit
       let pit_y = tile_f(10)
-      spawn_platform(
-        game, tile_f(82), pit_y, tile_f(84), pit_y, 96.0, 0.4,
-      )
+      spawn_platform(game, tile_f(82), pit_y, tile_f(84), pit_y, 96.0, 0.4)
     }
   }
 }
@@ -962,7 +954,7 @@ fn spawn_enemy_at(
   ty : Int,
 ) -> Unit {
   for i in 0..<game.enemies.length() {
-    if !(game.enemies[i].active) {
+    if !game.enemies[i].active {
       let ex = Float::from_int(tx * @types.tile_size + @types.tile_size / 2)
       let ey = Float::from_int(ty * @types.tile_size + @types.tile_size)
       let e = @types.Enemy::new(kind, ex, ey)
@@ -978,7 +970,7 @@ fn update_platforms(game : @types.Game, dt : Float) -> Unit {
   let p = game.player
   for i in 0..<game.platforms.length() {
     let plat = game.platforms[i]
-    if !(plat.active) {
+    if !plat.active {
       continue
     }
     // Save previous position for carrying the player
@@ -998,7 +990,7 @@ fn update_platforms(game : @types.Game, dt : Float) -> Unit {
     plat.x = @utils.lerpf(plat.start_x, plat.end_x, plat.progress)
     plat.y = @utils.lerpf(plat.start_y, plat.end_y, plat.progress)
     // Carry player if standing on platform (one-way: top only)
-    if !(p.dead) {
+    if !p.dead {
       let plat_left = plat.x - plat.width / 2.0
       let plat_right = plat.x + plat.width / 2.0
       let plat_top = plat.y
@@ -1029,12 +1021,12 @@ fn update_lifts(game : @types.Game, dt : Float) -> Unit {
   let p = game.player
   for i in 0..<game.lifts.length() {
     let lift = game.lifts[i]
-    if !(lift.active) {
+    if !lift.active {
       continue
     }
     lift.prev_y = lift.y
     // Check if player is on this lift to trigger it
-    if !(p.dead) {
+    if !p.dead {
       let lift_left = lift.x - lift.width / 2.0
       let lift_right = lift.x + lift.width / 2.0
       let lift_top = lift.y
@@ -1047,7 +1039,7 @@ fn update_lifts(game : @types.Game, dt : Float) -> Unit {
         p.y <= lift_top + foot_margin &&
         p.vy >= 0.0 {
         // Player is on this lift
-        if !(lift.triggered) {
+        if !lift.triggered {
           lift.triggered = true
         }
         // Snap player to top
@@ -1064,7 +1056,7 @@ fn update_lifts(game : @types.Game, dt : Float) -> Unit {
         lift.y = lift.target_y
       }
       // Carry the player along
-      if !(p.dead) {
+      if !p.dead {
         let lift_left = lift.x - lift.width / 2.0
         let lift_right = lift.x + lift.width / 2.0
         let foot_margin : Float = 8.0
@@ -1101,7 +1093,7 @@ fn update_bridges(game : @types.Game, dt : Float) -> Unit {
   // Update active bridge states
   for i in 0..<game.bridges.length() {
     let b = game.bridges[i]
-    if !(b.active) {
+    if !b.active {
       continue
     }
     b.timer = b.timer + dt
@@ -1144,7 +1136,7 @@ fn start_bridge_collapse(game : @types.Game, tx : Int, ty : Int) -> Unit {
     return
   }
   for i in 0..<game.bridges.length() {
-    if !(game.bridges[i].active) {
+    if !game.bridges[i].active {
       let b = game.bridges[i]
       b.active = true
       b.tile_x = tx
@@ -1170,7 +1162,7 @@ fn chain_bridge_collapse(game : @types.Game, tx : Int, ty : Int) -> Unit {
     }
   }
   for i in 0..<game.bridges.length() {
-    if !(game.bridges[i].active) {
+    if !game.bridges[i].active {
       let b = game.bridges[i]
       b.active = true
       b.tile_x = tx
@@ -1195,7 +1187,7 @@ pub fn spawn_platform(
   speed : Float,
 ) -> Unit {
   for i in 0..<game.platforms.length() {
-    if !(game.platforms[i].active) {
+    if !game.platforms[i].active {
       game.platforms[i] = {
         active: true,
         x: sx,
@@ -1227,7 +1219,7 @@ pub fn spawn_lift(
   speed : Float,
 ) -> Unit {
   for i in 0..<game.lifts.length() {
-    if !(game.lifts[i].active) {
+    if !game.lifts[i].active {
       game.lifts[i] = {
         active: true,
         x,

@@ -1,7 +1,7 @@
 ///|
 pub fn read_and_compare(
   seq : Array[@types.Base],
-  target : Array[@types.Trait]
+  target : Array[@types.Trait],
 ) -> (Array[@types.Trait], Bool) {
   let result = @types.read_sequence(seq)
   let matched = @types.traits_match(result.traits, target)
@@ -38,15 +38,14 @@ pub fn get_codon_groups(seq : Array[@types.Base]) -> Array[@types.CodonResult] {
     return groups
   }
   // Add the Start codon
-  groups.push(
-    { trait_: Start, bases: [seq[start], seq[start + 1], seq[start + 2]] },
-  )
+  groups.push({
+    trait_: Start,
+    bases: [seq[start], seq[start + 1], seq[start + 2]],
+  })
   let mut pos = start + 3
   while pos + 2 < seq.length() {
     let tr = @types.codon_to_trait(seq[pos], seq[pos + 1], seq[pos + 2])
-    groups.push(
-      { trait_: tr, bases: [seq[pos], seq[pos + 1], seq[pos + 2]] },
-    )
+    groups.push({ trait_: tr, bases: [seq[pos], seq[pos + 1], seq[pos + 2]] })
     if tr == Stop {
       break
     }
@@ -58,7 +57,7 @@ pub fn get_codon_groups(seq : Array[@types.Base]) -> Array[@types.CodonResult] {
 ///|
 pub fn count_matching_traits(
   produced : Array[@types.Trait],
-  target : Array[@types.Trait]
+  target : Array[@types.Trait],
 ) -> Int {
   let mut count = 0
   let len = if produced.length() < target.length() {

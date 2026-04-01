@@ -112,7 +112,10 @@ fn update_level_select(game : @types.Game) -> Unit {
   // Click
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) &&
     game.hover_button >= 0 {
-    start_level(game, @types.tier_start_index(game.current_tier) + game.hover_button)
+    start_level(
+      game,
+      @types.tier_start_index(game.current_tier) + game.hover_button,
+    )
     return
   }
   // Keyboard 1-9
@@ -227,7 +230,9 @@ fn execute_fold_action(game : @types.Game) -> Unit {
   game.fold_history.push(action)
   // Execute fold
   let new_paper = @fold.execute_fold(
-    game.current_paper, game.fold_dir, game.fold_line,
+    game.current_paper,
+    game.fold_dir,
+    game.fold_line,
   )
   // Copy result
   for i in 0..<new_paper.cells.length() {
@@ -245,7 +250,9 @@ fn execute_fold_action(game : @types.Game) -> Unit {
     game.screen = Results
     // Save score
     let stars = @fold.compute_stars(
-      result, game.fold_history.length(), game.target.par_folds,
+      result,
+      game.fold_history.length(),
+      game.target.par_folds,
     )
     let score = game.scores[game.current_level_index]
     score.completed = true
@@ -276,13 +283,12 @@ fn undo_fold(game : @types.Game) -> Unit {
   }
   let action = game.fold_history.pop()
   match action {
-    Some(act) => {
+    Some(act) =>
       // Restore paper
       for i in 0..<act.paper_before.cells.length() {
         game.current_paper.cells[i].has_paper = act.paper_before.cells[i].has_paper
         game.current_paper.cells[i].layers = act.paper_before.cells[i].layers
       }
-    }
     None => ()
   }
 }
@@ -308,16 +314,18 @@ fn handle_playing_click(game : @types.Game) -> Unit {
       game.fold_dir = dirs[i]
       // Reset fold line to center for new direction
       match game.fold_dir {
-        Left | Right => {
+        Left | Right =>
           game.fold_line = @types.clamp_int(
-            game.fold_line, 1, game.current_paper.width - 1,
+            game.fold_line,
+            1,
+            game.current_paper.width - 1,
           )
-        }
-        Up | Down => {
+        Up | Down =>
           game.fold_line = @types.clamp_int(
-            game.fold_line, 1, game.current_paper.height - 1,
+            game.fold_line,
+            1,
+            game.current_paper.height - 1,
           )
-        }
       }
       return
     }

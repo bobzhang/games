@@ -20,9 +20,13 @@ fn draw_title(game : @types.Game) -> Unit {
   let title_w = @draw.measure_text(title, 72)
   let pulse = sinf(time * 2.0) * 0.15 + 0.85
   let alpha = (pulse * 255.0).to_int()
-  @draw.draw_text(title, (w - title_w) / 2, h / 4 - 20, 72, @raylib.Color::new(
-    0, 220, 180, alpha,
-  ))
+  @draw.draw_text(
+    title,
+    (w - title_w) / 2,
+    h / 4 - 20,
+    72,
+    @raylib.Color::new(0, 220, 180, alpha),
+  )
   // Subtitle
   let sub = "DNA SEQUENCE EDITING PUZZLE"
   let sub_w = @draw.measure_text(sub, 20)
@@ -61,10 +65,7 @@ fn draw_helix_background(time : Float, w : Int, h : Int) -> Unit {
   let cy = Float::from_int(h) / 2.0
   let bases = ["A", "T", "G", "C"]
   let colors = [
-    @types.color_base_a,
-    @types.color_base_t,
-    @types.color_base_g,
-    @types.color_base_c,
+    @types.color_base_a, @types.color_base_t, @types.color_base_g, @types.color_base_c,
   ]
   for i in 0..<20 {
     let fi = Float::from_int(i)
@@ -135,8 +136,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   // Draw tiers
   let tier_names = ["LAB BASICS", "GENE EDITING", "MASTERY"]
   let tier_descs = [
-    "Learn Cut and Insert (8 levels)", "Add Duplicate and Delete (9 levels)",
-    "Master all 5 operations (8 levels)",
+    "Learn Cut and Insert (8 levels)", "Add Duplicate and Delete (9 levels)", "Master all 5 operations (8 levels)",
   ]
   for i in 0..<3 {
     let y = 140 + i * 170
@@ -161,19 +161,29 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     if !unlocked {
       // Draw lock overlay
       @raylib.draw_rectangle(bx, y, bw, bh, @raylib.Color::new(0, 0, 0, 150))
-      @draw.draw_text("LOCKED", bx + bw / 2 - 35, y + bh / 2 - 10, 22, @raylib.Color::new(
-        150, 150, 150, 200,
-      ))
+      @draw.draw_text(
+        "LOCKED",
+        bx + bw / 2 - 35,
+        y + bh / 2 - 10,
+        22,
+        @raylib.Color::new(150, 150, 150, 200),
+      )
     } else {
       // Tier number
       let tier_num = "TIER " + (i + 1).to_string()
       @draw.draw_text(tier_num, bx + 20, y + 15, 16, @types.color_text_dim)
       // Tier name
-      @draw.draw_text(tier_names[i], bx + 20, y + 40, 28, if selected {
-        @types.color_highlight
-      } else {
-        @types.color_text
-      })
+      @draw.draw_text(
+        tier_names[i],
+        bx + 20,
+        y + 40,
+        28,
+        if selected {
+          @types.color_highlight
+        } else {
+          @types.color_text
+        },
+      )
       // Description
       @draw.draw_text(tier_descs[i], bx + 20, y + 75, 16, @types.color_text_dim)
       // Stars and completion
@@ -246,11 +256,17 @@ fn draw_level_select(game : @types.Game) -> Unit {
     let num = (i + 1).to_string()
     @draw.draw_text(num, x + 10, y + 8, 14, @types.color_text_dim)
     // Level name
-    @draw.draw_text(level.name, x + 10, y + 28, 18, if selected {
-      @types.color_highlight
-    } else {
-      @types.color_text
-    })
+    @draw.draw_text(
+      level.name,
+      x + 10,
+      y + 28,
+      18,
+      if selected {
+        @types.color_highlight
+      } else {
+        @types.color_text
+      },
+    )
     // Budget info
     let budget = "Budget: " + level.edit_budget.to_string() + " edits"
     @draw.draw_text(budget, x + 10, y + 55, 14, @types.color_text_dim)
@@ -264,17 +280,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
   }
   // Selected level description
   let sel_level = @levels.get_level(offset + game.current_level)
-  let desc_y = start_y + ((count + cols - 1) / cols) * (cell_h + gap) + 10
+  let desc_y = start_y + (count + cols - 1) / cols * (cell_h + gap) + 10
   @draw.draw_text(sel_level.description, start_x, desc_y, 18, @types.color_text)
   // Target traits
   let target_label = "Target: "
-  @draw.draw_text(
-    target_label,
-    start_x,
-    desc_y + 30,
-    16,
-    @types.color_text_dim,
-  )
+  @draw.draw_text(target_label, start_x, desc_y + 30, 16, @types.color_text_dim)
   let mut tx = start_x + @draw.measure_text(target_label, 16) + 5
   for i in 0..<sel_level.target_traits.length() {
     let tr = sel_level.target_traits[i]
@@ -294,16 +304,14 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars(
-  x : Int,
-  y : Int,
-  filled : Int,
-  total : Int,
-  size : Int
-) -> Unit {
+fn draw_stars(x : Int, y : Int, filled : Int, total : Int, size : Int) -> Unit {
   for i in 0..<total {
     let sx = x + i * (size + 4)
-    let color = if i < filled { @types.color_star } else { @types.color_star_empty }
+    let color = if i < filled {
+      @types.color_star
+    } else {
+      @types.color_star_empty
+    }
     @draw.draw_text("*", sx, y, size, color)
   }
 }
@@ -326,24 +334,15 @@ fn draw_results(game : @types.Game) -> Unit {
   // Title
   let title = "LEVEL COMPLETE!"
   let title_w = @draw.measure_text(title, 36)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    py + 30,
-    36,
-    @types.color_success,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, py + 30, 36, @types.color_success)
   // Level name
   let name_w = @draw.measure_text(level.name, 24)
-  @draw.draw_text(
-    level.name,
-    (w - name_w) / 2,
-    py + 80,
-    24,
-    @types.color_text,
-  )
+  @draw.draw_text(level.name, (w - name_w) / 2, py + 80, 24, @types.color_text)
   // Edits used
-  let edits_text = "Edits used: " + game.edit_count.to_string() + " / " + level.edit_budget.to_string()
+  let edits_text = "Edits used: " +
+    game.edit_count.to_string() +
+    " / " +
+    level.edit_budget.to_string()
   let edits_w = @draw.measure_text(edits_text, 20)
   @draw.draw_text(
     edits_text,
@@ -353,7 +352,10 @@ fn draw_results(game : @types.Game) -> Unit {
     @types.color_text,
   )
   // Par
-  let par_text = "Par: " + level.par_edits.to_string() + "  Min: " + level.min_edits.to_string()
+  let par_text = "Par: " +
+    level.par_edits.to_string() +
+    "  Min: " +
+    level.min_edits.to_string()
   let par_w = @draw.measure_text(par_text, 18)
   @draw.draw_text(
     par_text,

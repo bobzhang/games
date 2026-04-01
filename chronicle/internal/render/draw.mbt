@@ -13,7 +13,13 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     let tw = @draw.measure_text(game.message, 24)
     let mx = (@types.screen_width - tw) / 2
-    @raylib.draw_rectangle(mx - 10, 340, tw + 20, 40, @types.color_clue_panel_bg)
+    @raylib.draw_rectangle(
+      mx - 10,
+      340,
+      tw + 20,
+      40,
+      @types.color_clue_panel_bg,
+    )
     @draw.draw_text(game.message, mx, 348, 24, @types.color_clue)
   }
   @raylib.end_drawing()

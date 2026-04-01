@@ -7,7 +7,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     100.0
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if !(e.active) {
+    if !e.active {
       continue
     }
     // Dead enemies: animate then remove
@@ -133,7 +133,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
         @types.world_to_tile_x(check_x),
         check_ty,
       )
-      if !(@types.is_solid(ground_ahead)) {
+      if !@types.is_solid(ground_ahead) {
         e.vx = -e.vx
       }
     }
@@ -152,11 +152,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Update BowserLite: patrol left/right, shoot fire.
-fn update_bowser_lite(
-  game : @types.Game,
-  e : @types.Enemy,
-  dt : Float,
-) -> Unit {
+fn update_bowser_lite(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
   // Gravity
   e.vy = e.vy + @types.gravity_high * dt
   if e.vy > @types.max_fall_speed {
@@ -207,7 +203,7 @@ fn update_bowser_lite(
 /// Spawn a Bowser fire breath projectile.
 fn spawn_bowser_fireball(game : @types.Game, e : @types.Enemy) -> Unit {
   for i in 0..<game.bowser_fireballs.length() {
-    if !(game.bowser_fireballs[i].active) {
+    if !game.bowser_fireballs[i].active {
       let bf = game.bowser_fireballs[i]
       bf.active = true
       let dir : Float = if e.vx >= 0.0 { 1.0 } else { -1.0 }
@@ -224,7 +220,7 @@ fn spawn_bowser_fireball(game : @types.Game, e : @types.Enemy) -> Unit {
 fn update_bowser_fireballs(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.bowser_fireballs.length() {
     let bf = game.bowser_fireballs[i]
-    if !(bf.active) {
+    if !bf.active {
       continue
     }
     bf.x = bf.x + bf.vx * dt
@@ -310,7 +306,7 @@ fn check_shell_enemy_hits(game : @types.Game, shell_index : Int) -> Unit {
       continue
     }
     let e = game.enemies[i]
-    if !(e.active) || e.dead {
+    if !e.active || e.dead {
       continue
     }
     let ehw = e.width / 2.0

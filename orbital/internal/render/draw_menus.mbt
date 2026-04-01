@@ -33,12 +33,7 @@ fn draw_title(game : @types.Game) -> Unit {
   let cy = Float::from_int(h / 5) + 30.0
   let dot_x = cx + @types.cosf(time * 1.5) * orbit_r
   let dot_y = cy + @types.sinf(time * 1.5) * orbit_r * 0.4
-  @raylib.draw_circle(
-    dot_x.to_int(),
-    dot_y.to_int(),
-    3.0,
-    @types.color_probe,
-  )
+  @raylib.draw_circle(dot_x.to_int(), dot_y.to_int(), 3.0, @types.color_probe)
   // Controls info
   let ctrl1 = "Left/Right - Aim    Space - Launch    R - Restart"
   let c1w = @draw.measure_text(ctrl1, 14)
@@ -89,7 +84,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let y = tier_y_start + i * tier_h
     let unlocked = @types.tier_unlocked(tier, game.scores)
     let name = @types.tier_name(tier)
-    let color = if unlocked { @types.tier_color(tier) } else { @types.color_locked }
+    let color = if unlocked {
+      @types.tier_color(tier)
+    } else {
+      @types.color_locked
+    }
     // Box
     let box_x = w / 2 - 200
     let box_w = 400
@@ -130,7 +129,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       }
       total_stars += game.scores[j].stars
     }
-    let prog_str = completed.to_string() + "/" + count.to_string() + " completed  Stars: " + total_stars.to_string() +
+    let prog_str = completed.to_string() +
+      "/" +
+      count.to_string() +
+      " completed  Stars: " +
+      total_stars.to_string() +
       "/" +
       (count * 3).to_string()
     let pw = @draw.measure_text(prog_str, 14)
@@ -301,13 +304,7 @@ fn draw_results(game : @types.Game) -> Unit {
     box_h,
     @raylib.Color::new(10, 10, 25, 220),
   )
-  @raylib.draw_rectangle_lines(
-    box_x,
-    box_y,
-    box_w,
-    box_h,
-    @types.color_title,
-  )
+  @raylib.draw_rectangle_lines(box_x, box_y, box_w, box_h, @types.color_title)
   // Ticks used
   let ticks_str = "Ticks: " + game.tick_count.to_string()
   @draw.draw_text(ticks_str, box_x + 20, box_y + 20, 20, @types.color_hud)
@@ -338,17 +335,14 @@ fn draw_results(game : @types.Game) -> Unit {
       wp_got += 1
     }
   }
-  let wp_str = "Waypoints: " + wp_got.to_string() + "/" + level.waypoints.length().to_string()
+  let wp_str = "Waypoints: " +
+    wp_got.to_string() +
+    "/" +
+    level.waypoints.length().to_string()
   @draw.draw_text(wp_str, box_x + 20, box_y + 80, 18, @types.color_waypoint)
   // Stars
   let star_str = "Stars Earned:"
-  @draw.draw_text(
-    star_str,
-    box_x + 20,
-    box_y + 120,
-    18,
-    @types.color_hud,
-  )
+  @draw.draw_text(star_str, box_x + 20, box_y + 120, 18, @types.color_hud)
   for s in 0..<3 {
     let sx = box_x + 20 + @draw.measure_text(star_str, 18) + 15 + s * 30
     let star_color = if s < score.stars {

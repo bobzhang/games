@@ -29,14 +29,19 @@ pub let tier3_count : Int = 8
 pub let anim_duration : Float = 0.3
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(35, 35, 50, 255)
 
 ///|
-pub let color_paper_base : @raylib.Color = @raylib.Color::new(245, 240, 230, 255)
+pub let color_paper_base : @raylib.Color = @raylib.Color::new(
+  245, 240, 230, 255,
+)
 
 ///|
-pub let color_paper_dark : @raylib.Color = @raylib.Color::new(180, 170, 155, 255)
+pub let color_paper_dark : @raylib.Color = @raylib.Color::new(
+  180, 170, 155, 255,
+)
 
 ///|
 pub let color_grid_line : @raylib.Color = @raylib.Color::new(60, 60, 80, 255)
@@ -45,13 +50,19 @@ pub let color_grid_line : @raylib.Color = @raylib.Color::new(60, 60, 80, 255)
 pub let color_fold_line : @raylib.Color = @raylib.Color::new(220, 50, 50, 255)
 
 ///|
-pub let color_fold_preview : @raylib.Color = @raylib.Color::new(220, 50, 50, 120)
+pub let color_fold_preview : @raylib.Color = @raylib.Color::new(
+  220, 50, 50, 120,
+)
 
 ///|
-pub let color_target_ghost : @raylib.Color = @raylib.Color::new(100, 200, 255, 60)
+pub let color_target_ghost : @raylib.Color = @raylib.Color::new(
+  100, 200, 255, 60,
+)
 
 ///|
-pub let color_target_outline : @raylib.Color = @raylib.Color::new(100, 200, 255, 180)
+pub let color_target_outline : @raylib.Color = @raylib.Color::new(
+  100, 200, 255, 180,
+)
 
 ///|
 pub let color_check_gold : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
@@ -87,10 +98,14 @@ pub let color_subtitle : @raylib.Color = @raylib.Color::new(180, 180, 200, 255)
 pub let color_accent : @raylib.Color = @raylib.Color::new(255, 140, 60, 255)
 
 ///|
-pub let color_tier_folds : @raylib.Color = @raylib.Color::new(100, 200, 255, 255)
+pub let color_tier_folds : @raylib.Color = @raylib.Color::new(
+  100, 200, 255, 255,
+)
 
 ///|
-pub let color_tier_layers : @raylib.Color = @raylib.Color::new(255, 180, 60, 255)
+pub let color_tier_layers : @raylib.Color = @raylib.Color::new(
+  255, 180, 60, 255,
+)
 
 ///|
 pub let color_tier_craft : @raylib.Color = @raylib.Color::new(220, 80, 180, 255)

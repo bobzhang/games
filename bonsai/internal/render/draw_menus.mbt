@@ -4,13 +4,7 @@ fn draw_title(game : @types.Game) -> Unit {
   let sh = @types.screen_height
   let time = game.anim_timer
   // Dark nature background
-  @raylib.draw_rectangle(
-    0,
-    0,
-    sw,
-    sh,
-    @raylib.Color::new(25, 22, 18, 255),
-  )
+  @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(25, 22, 18, 255))
   // Animated decorative tree in center
   draw_title_tree(sw / 2, sh / 2 + 40, time)
   // Title text
@@ -50,13 +44,7 @@ fn draw_title_tree(cx : Int, cy : Int, time : Float) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   // Trunk
-  @raylib.draw_rectangle(
-    cx - 6,
-    cy - 20,
-    12,
-    120,
-    @types.color_trunk,
-  )
+  @raylib.draw_rectangle(cx - 6, cy - 20, 12, 120, @types.color_trunk)
   // Animated branches
   let branch_count = 7
   for i in 0..<branch_count {
@@ -98,13 +86,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   // Title
   let title = "Select a Grove"
   let tw = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (sw - tw) / 2,
-    80,
-    40,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (sw - tw) / 2, 80, 40, @types.color_title)
   // Tier buttons
   let tiers : Array[@types.Tier] = [Tier1, Tier2, Tier3]
   let mx = @raylib.get_mouse_x()
@@ -150,7 +132,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     for j in 0..<count {
       total_stars = total_stars + game.scores[offset + j].stars
     }
-    let star_str = total_stars.to_string() + " / " + max_stars.to_string() + " stars"
+    let star_str = total_stars.to_string() +
+      " / " +
+      max_stars.to_string() +
+      " stars"
     let sw2 = @draw.measure_text(star_str, 18)
     @draw.draw_text(
       star_str,
@@ -197,24 +182,12 @@ fn draw_level_select(game : @types.Game) -> Unit {
   // Title
   let title = @types.tier_name(game.current_tier)
   let tw = @draw.measure_text(title, 36)
-  @draw.draw_text(
-    title,
-    (sw - tw) / 2,
-    60,
-    36,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (sw - tw) / 2, 60, 36, @types.color_title)
   // Subtitle
   let species = @types.tier_species(game.current_tier)
   let sub = "Species: " + @types.species_name(species)
   let sub_w = @draw.measure_text(sub, 22)
-  @draw.draw_text(
-    sub,
-    (sw - sub_w) / 2,
-    105,
-    22,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(sub, (sw - sub_w) / 2, 105, 22, @types.color_hud_text)
   // Level buttons
   let offset = @types.tier_level_offset(game.current_tier)
   let count = @types.tier_level_count(game.current_tier)
@@ -302,7 +275,11 @@ fn draw_results(game : @types.Game) -> Unit {
       let won = game.play_state == Won
       let title = if won { "Level Complete!" } else { "Try Again" }
       let tw = @draw.measure_text(title, 44)
-      let title_color = if won { @types.color_title } else { @raylib.Color::new(200, 60, 40, 255) }
+      let title_color = if won {
+        @types.color_title
+      } else {
+        @raylib.Color::new(200, 60, 40, 255)
+      }
       @draw.draw_text(title, (sw - tw) / 2, 80, 44, title_color)
       // Stars
       let stars = game.scores[game.selected_level].stars
@@ -328,9 +305,9 @@ fn draw_results(game : @types.Game) -> Unit {
       ty = ty + 35
       @draw.draw_text(
         "Turns Used: " +
-          game.turn.to_string() +
-          " / " +
-          level.max_turns.to_string(),
+        game.turn.to_string() +
+        " / " +
+        level.max_turns.to_string(),
         sw / 2 - 120,
         ty,
         22,
@@ -344,10 +321,10 @@ fn draw_results(game : @types.Game) -> Unit {
       }
       @draw.draw_text(
         "Total Prunes: " +
-          game.total_prunes.to_string() +
-          " (par: " +
-          level.par_prunes.to_string() +
-          ")",
+        game.total_prunes.to_string() +
+        " (par: " +
+        level.par_prunes.to_string() +
+        ")",
         sw / 2 - 120,
         ty,
         22,
@@ -356,7 +333,8 @@ fn draw_results(game : @types.Game) -> Unit {
       ty = ty + 35
       // Zone results
       let (req_ok, forb_ok, tip_ok) = @growth.check_zones(
-        game.tree, level.zones,
+        game.tree,
+        level.zones,
       )
       let ok_color = @raylib.Color::new(50, 200, 80, 255)
       let fail_color = @raylib.Color::new(200, 50, 50, 255)
@@ -365,7 +343,11 @@ fn draw_results(game : @types.Game) -> Unit {
         sw / 2 - 120,
         ty,
         22,
-        if req_ok { ok_color } else { fail_color },
+        if req_ok {
+          ok_color
+        } else {
+          fail_color
+        },
       )
       ty = ty + 30
       @draw.draw_text(
@@ -373,7 +355,11 @@ fn draw_results(game : @types.Game) -> Unit {
         sw / 2 - 120,
         ty,
         22,
-        if forb_ok { ok_color } else { fail_color },
+        if forb_ok {
+          ok_color
+        } else {
+          fail_color
+        },
       )
       ty = ty + 30
       @draw.draw_text(
@@ -381,7 +367,11 @@ fn draw_results(game : @types.Game) -> Unit {
         sw / 2 - 120,
         ty,
         22,
-        if tip_ok { ok_color } else { fail_color },
+        if tip_ok {
+          ok_color
+        } else {
+          fail_color
+        },
       )
       ty = ty + 50
       // Actions

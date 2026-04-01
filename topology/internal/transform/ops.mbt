@@ -156,7 +156,7 @@ pub fn grow(s : @types.Shape, cell : @types.Vec2i) -> @types.Shape {
 
 ///|
 pub fn shrink(s : @types.Shape, cell : @types.Vec2i) -> @types.Shape {
-  if !(@types.shape_contains(s, cell)) {
+  if !@types.shape_contains(s, cell) {
     return @types.shape_clone(s)
   }
   if s.cells.length() <= 1 {

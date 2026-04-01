@@ -74,13 +74,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Title text
   let title = "CANOPY"
   let tw = @draw.measure_text(title, 72)
-  @draw.draw_text(
-    title,
-    (sw - tw) / 2,
-    60,
-    72,
-    @types.color_title_green,
-  )
+  @draw.draw_text(title, (sw - tw) / 2, 60, 72, @types.color_title_green)
   // Subtitle
   let sub = "A Tree Growth Puzzle"
   let sub_w = @draw.measure_text(sub, 22)
@@ -114,14 +108,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text(title, (sw - tw) / 2, 50, 36, @types.color_hud_text)
   let tiers = ["Seedling", "Grove", "Forest"]
   let tier_colors = [
-    @types.color_tier_seedling,
-    @types.color_tier_grove,
-    @types.color_tier_forest,
+    @types.color_tier_seedling, @types.color_tier_grove, @types.color_tier_forest,
   ]
   let descs = [
-    "7 levels - Learn growth & water",
-    "7 levels - Shadow competition",
-    "6 levels - Dense forests & precision",
+    "7 levels - Learn growth & water", "7 levels - Shadow competition", "6 levels - Dense forests & precision",
   ]
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
@@ -136,7 +126,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     @raylib.draw_rectangle_lines(bx, by, bw, bh, tier_colors[i])
     // Tier name
     let name_w = @draw.measure_text(tiers[i], 28)
-    @draw.draw_text(tiers[i], bx + (bw - name_w) / 2, by + 15, 28, tier_colors[i])
+    @draw.draw_text(
+      tiers[i],
+      bx + (bw - name_w) / 2,
+      by + 15,
+      28,
+      tier_colors[i],
+    )
     // Description
     let dw = @draw.measure_text(descs[i], 14)
     @draw.draw_text(
@@ -161,7 +157,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       }
     }
     let count = tier_count
-    let prog = total_stars.to_string() + "/" + (count * 3).to_string() + " stars"
+    let prog = total_stars.to_string() +
+      "/" +
+      (count * 3).to_string() +
+      " stars"
     let prog_w = @draw.measure_text(prog, 14)
     @draw.draw_text(
       prog,
@@ -265,7 +264,11 @@ fn draw_results(game : @types.Game) -> Unit {
     0
   }
   let title = if stars > 0 { "Level Complete!" } else { "Level Failed" }
-  let tc = if stars > 0 { @types.color_target_met } else { @types.color_target_marker }
+  let tc = if stars > 0 {
+    @types.color_target_met
+  } else {
+    @types.color_target_marker
+  }
   let tw = @draw.measure_text(title, 42)
   @draw.draw_text(title, (sw - tw) / 2, 80, 42, tc)
   // Stars display
@@ -291,7 +294,8 @@ fn draw_results(game : @types.Game) -> Unit {
     let target = game.targets[i]
     let met = @growth.target_met(game, i)
     let y = 360 + i * 28
-    let tree_h = if target.tree_index >= 0 && target.tree_index < game.trees.length() {
+    let tree_h = if target.tree_index >= 0 &&
+      target.tree_index < game.trees.length() {
       game.trees[target.tree_index].height
     } else {
       0
@@ -302,7 +306,11 @@ fn draw_results(game : @types.Game) -> Unit {
       tree_h.to_string() +
       "/" +
       target.required_height.to_string()
-    let sc = if met { @types.color_target_met } else { @types.color_target_marker }
+    let sc = if met {
+      @types.color_target_met
+    } else {
+      @types.color_target_marker
+    }
     let status_w = @draw.measure_text(status, 16)
     @draw.draw_text(status, (sw - status_w) / 2, y, 16, sc)
   }
@@ -311,7 +319,13 @@ fn draw_results(game : @types.Game) -> Unit {
   if stars > 0 && game.current_level < @types.total_levels - 1 {
     let next_str = "ENTER: Next Level"
     let nw = @draw.measure_text(next_str, 20)
-    @draw.draw_text(next_str, (sw - nw) / 2, next_y, 20, @types.color_target_met)
+    @draw.draw_text(
+      next_str,
+      (sw - nw) / 2,
+      next_y,
+      20,
+      @types.color_target_met,
+    )
   }
   let retry_str = "R: Retry | ESC: Level Select"
   let rw = @draw.measure_text(retry_str, 16)

@@ -1,8 +1,5 @@
 ///|
-pub fn validate_constraint(
-  grid : @types.Grid,
-  c : @types.Constraint
-) -> Bool {
+pub fn validate_constraint(grid : @types.Grid, c : @types.Constraint) -> Bool {
   match c.kind {
     RowSum => validate_row_sum(grid, c.params)
     ColProduct => validate_col_product(grid, c.params)
@@ -16,7 +13,7 @@ pub fn validate_constraint(
 ///|
 pub fn validate_all(
   grid : @types.Grid,
-  constraints : Array[@types.Constraint]
+  constraints : Array[@types.Constraint],
 ) -> Bool {
   let mut all_sat = true
   for i in 0..<constraints.length() {
@@ -167,7 +164,7 @@ pub fn check_cell_conflicts(
   grid : @types.Grid,
   row : Int,
   col : Int,
-  constraints : Array[@types.Constraint]
+  constraints : Array[@types.Constraint],
 ) -> Bool {
   // Check if placing a value at (row,col) causes any currently-checkable conflict
   let val = @types.grid_get(grid, row, col)

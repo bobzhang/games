@@ -30,9 +30,7 @@ fn draw_title(game : @types.Game) -> Unit {
   for i in 0..<60 {
     let fi = Float::from_int(i)
     let sx = ((fi * 137.5 + time * 20.0) % Float::from_int(w)).to_int()
-    let sy = ((fi * 91.3 + time * 10.0 * (fi % 3.0 + 1.0)) % Float::from_int(
-        h,
-      )).to_int()
+    let sy = ((fi * 91.3 + time * 10.0 * (fi % 3.0 + 1.0)) % Float::from_int(h)).to_int()
     let brightness = 80 + (fi * 17.0 % 120.0).to_int()
     @raylib.draw_circle(
       sx,
@@ -86,7 +84,10 @@ fn draw_title(game : @types.Game) -> Unit {
   // Meta stats
   if game.meta.total_runs > 0 {
     @draw.draw_text(
-      "Best: " + game.meta.best_score.to_string() + "  Kills: " + game.meta.total_kills.to_string() +
+      "Best: " +
+      game.meta.best_score.to_string() +
+      "  Kills: " +
+      game.meta.total_kills.to_string() +
       "  Runs: " +
       game.meta.total_runs.to_string(),
       20,
@@ -110,28 +111,23 @@ fn draw_weapon_select(game : @types.Game) -> Unit {
     @types.color_player,
   )
   let weapons : Array[@types.WeaponKind] = [
-    Laser, Shotgun, Missile, Railgun, Flak, Beam,
+    Laser,
+    Shotgun,
+    Missile,
+    Railgun,
+    Flak,
+    Beam,
   ]
   let descriptions = [
-    "Fast, precise, low heat",
-    "Wide spread, close range",
-    "Slow, high damage, homing ready",
-    "Piercing beam, long charge",
-    "Area denial, many pellets",
-    "Rapid fire stream",
+    "Fast, precise, low heat", "Wide spread, close range", "Slow, high damage, homing ready",
+    "Piercing beam, long charge", "Area denial, many pellets", "Rapid fire stream",
   ]
   for i in 0..<weapons.length() {
     let y = 160 + i * 70
     let color = @types.weapon_color(weapons[i])
     let num = (i + 1).to_string()
     @draw.draw_text(num + ".", w / 2 - 180, y, 24, color)
-    @draw.draw_text(
-      @weapons.weapon_name(weapons[i]),
-      w / 2 - 140,
-      y,
-      24,
-      color,
-    )
+    @draw.draw_text(@weapons.weapon_name(weapons[i]), w / 2 - 140, y, 24, color)
     @draw.draw_text(
       descriptions[i],
       w / 2 - 140,
@@ -151,7 +147,7 @@ fn draw_playing(game : @types.Game) -> Unit {
   // Asteroids
   for i in 0..<game.asteroids.length() {
     let ast = game.asteroids[i]
-    if !(ast.active) {
+    if !ast.active {
       continue
     }
     draw_asteroid(ast, ox, oy)
@@ -159,7 +155,7 @@ fn draw_playing(game : @types.Game) -> Unit {
   // Pickups
   for i in 0..<game.pickups.length() {
     let pk = game.pickups[i]
-    if !(pk.active) {
+    if !pk.active {
       continue
     }
     draw_pickup(pk, ox, oy)
@@ -167,23 +163,20 @@ fn draw_playing(game : @types.Game) -> Unit {
   // Enemies
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if !(e.active) {
+    if !e.active {
       continue
     }
     draw_enemy(e, ox, oy)
   }
   // Boss
   match game.boss {
-    Some(boss) =>
-      if boss.active {
-        draw_boss(game, boss, ox, oy)
-      }
+    Some(boss) => if boss.active { draw_boss(game, boss, ox, oy) }
     None => ()
   }
   // Projectiles
   for i in 0..<game.projectiles.length() {
     let p = game.projectiles[i]
-    if !(p.active) {
+    if !p.active {
       continue
     }
     draw_projectile(p, game, ox, oy)
@@ -191,16 +184,17 @@ fn draw_playing(game : @types.Game) -> Unit {
   // Particles
   for i in 0..<game.particles.length() {
     let p = game.particles[i]
-    if !(p.active) {
+    if !p.active {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
-    let size = if p.shrink {
-      p.size * p.life / p.max_life
-    } else {
-      p.size
-    }
-    let c = @raylib.Color::new(p.color.r.to_int(), p.color.g.to_int(), p.color.b.to_int(), alpha)
+    let size = if p.shrink { p.size * p.life / p.max_life } else { p.size }
+    let c = @raylib.Color::new(
+      p.color.r.to_int(),
+      p.color.g.to_int(),
+      p.color.b.to_int(),
+      alpha,
+    )
     @raylib.draw_circle(
       (p.pos.x + ox).to_int(),
       (p.pos.y + oy).to_int(),
@@ -213,11 +207,16 @@ fn draw_playing(game : @types.Game) -> Unit {
   // Damage numbers
   for i in 0..<game.damage_numbers.length() {
     let dn = game.damage_numbers[i]
-    if !(dn.active) {
+    if !dn.active {
       continue
     }
     let alpha = (dn.life / @types.damage_number_life * 255.0).to_int()
-    let c = @raylib.Color::new(dn.color.r.to_int(), dn.color.g.to_int(), dn.color.b.to_int(), alpha)
+    let c = @raylib.Color::new(
+      dn.color.r.to_int(),
+      dn.color.g.to_int(),
+      dn.color.b.to_int(),
+      alpha,
+    )
     @draw.draw_text(
       dn.value.to_string(),
       (dn.pos.x + ox).to_int(),
@@ -289,18 +288,12 @@ fn draw_ship(game : @types.Game, ox : Float, oy : Float) -> Unit {
   let sx = (ship.pos.x + ox).to_int()
   let sy = (ship.pos.y + oy).to_int()
   // Invincibility flash
-  if ship.invincible_timer > 0.0 &&
-    game.frame_count % 6 < 3 {
+  if ship.invincible_timer > 0.0 && game.frame_count % 6 < 3 {
     return
   }
   // Shield circle
   if ship.shield > 0 {
-    @raylib.draw_circle(
-      sx,
-      sy,
-      18.0,
-      @types.color_player_shield,
-    )
+    @raylib.draw_circle(sx, sy, 18.0, @types.color_player_shield)
   }
   // Ship body - triangle pointing in aim direction
   let size : Float = 12.0
@@ -339,17 +332,10 @@ fn draw_enemy(e : @types.Enemy, ox : Float, oy : Float) -> Unit {
   }
   // Draw as polygon based on enemy type
   let sides = @enemies.enemy_shape_sides(e.kind)
-  draw_polygon(
-    e.pos.x + ox, e.pos.y + oy, e.radius, sides, e.angle, color,
-  )
+  draw_polygon(e.pos.x + ox, e.pos.y + oy, e.radius, sides, e.angle, color)
   // Shield indicator
   if e.shield > 0 {
-    @raylib.draw_circle_lines(
-      ex,
-      ey,
-      e.radius + 3.0,
-      @types.color_enemy_shield,
-    )
+    @raylib.draw_circle_lines(ex, ey, e.radius + 3.0, @types.color_enemy_shield)
   }
   // HP bar for larger enemies
   if e.max_hp > 2 {
@@ -373,7 +359,12 @@ fn draw_enemy(e : @types.Enemy, ox : Float, oy : Float) -> Unit {
 }
 
 ///|
-fn draw_boss(game : @types.Game, boss : @types.Boss, ox : Float, oy : Float) -> Unit {
+fn draw_boss(
+  game : @types.Game,
+  boss : @types.Boss,
+  ox : Float,
+  oy : Float,
+) -> Unit {
   let bx = boss.pos.x + ox
   let by = boss.pos.y + oy
   // Outer glow
@@ -390,7 +381,14 @@ fn draw_boss(game : @types.Game, boss : @types.Boss, ox : Float, oy : Float) -> 
     Hive => 8
     Dreadnought => 6
   }
-  draw_polygon(bx, by, boss.radius, sides, boss.phase_timer * 0.5, @types.color_boss)
+  draw_polygon(
+    bx,
+    by,
+    boss.radius,
+    sides,
+    boss.phase_timer * 0.5,
+    @types.color_boss,
+  )
   // Inner core
   @raylib.draw_circle(
     bx.to_int(),
@@ -421,28 +419,32 @@ fn draw_boss(game : @types.Game, boss : @types.Boss, ox : Float, oy : Float) -> 
   let hp_pct = Float::from_int(boss.hp) / Float::from_int(boss.max_hp)
   let bar_x = (bx - bar_w / 2.0).to_int()
   let bar_y = (by - boss.radius - 20.0).to_int()
-  @raylib.draw_rectangle(bar_x, bar_y, bar_w.to_int(), 6, @raylib.Color::new(40, 10, 10, 200))
   @raylib.draw_rectangle(
-    bar_x, bar_y, (bar_w * hp_pct).to_int(), 6, @types.color_boss,
+    bar_x,
+    bar_y,
+    bar_w.to_int(),
+    6,
+    @raylib.Color::new(40, 10, 10, 200),
+  )
+  @raylib.draw_rectangle(
+    bar_x,
+    bar_y,
+    (bar_w * hp_pct).to_int(),
+    6,
+    @types.color_boss,
   )
   // Boss name
   let name = @bosses.boss_name(boss.kind)
   let nw = @draw.measure_text(name, 14)
-  @draw.draw_text(
-    name,
-    (bx).to_int() - nw / 2,
-    bar_y - 16,
-    14,
-    @types.color_boss,
-  )
+  @draw.draw_text(name, bx.to_int() - nw / 2, bar_y - 16, 14, @types.color_boss)
 }
 
 ///|
 fn draw_projectile(
   p : @types.Projectile,
-  game : @types.Game,
+  _game : @types.Game,
   ox : Float,
-  oy : Float
+  oy : Float,
 ) -> Unit {
   let px = (p.pos.x + ox).to_int()
   let py = (p.pos.y + oy).to_int()
@@ -457,7 +459,7 @@ fn draw_projectile(
   let speed = @types.vec2_len(p.vel)
   if speed > 10.0 {
     let dir = @types.vec2_normalize(p.vel)
-    for t in 1..=trail_len {
+    for t in 1..<=trail_len {
       let ft = Float::from_int(t)
       let tx = p.pos.x - dir.x * ft * 4.0 + ox
       let ty = p.pos.y - dir.y * ft * 4.0 + oy
@@ -467,7 +469,12 @@ fn draw_projectile(
         tx.to_int(),
         ty.to_int(),
         r,
-        @raylib.Color::new(color.r.to_int(), color.g.to_int(), color.b.to_int(), alpha),
+        @raylib.Color::new(
+          color.r.to_int(),
+          color.g.to_int(),
+          color.b.to_int(),
+          alpha,
+        ),
       )
     }
   }
@@ -504,7 +511,12 @@ fn draw_pickup(pk : @types.Pickup, ox : Float, oy : Float) -> Unit {
     WeaponDrop(_) => @raylib.Color::new(255, 255, 100, 230)
   }
   // Outer glow
-  @raylib.draw_circle(px, py, pk.radius + pulse + 4.0, @raylib.Color::new(color.r.to_int(), color.g.to_int(), color.b.to_int(), 40))
+  @raylib.draw_circle(
+    px,
+    py,
+    pk.radius + pulse + 4.0,
+    @raylib.Color::new(color.r.to_int(), color.g.to_int(), color.b.to_int(), 40),
+  )
   // Core
   @raylib.draw_circle(px, py, pk.radius + pulse, color)
   @raylib.draw_circle(px, py, pk.radius * 0.4, @raylib.white)
@@ -517,7 +529,7 @@ fn draw_polygon(
   radius : Float,
   sides : Int,
   angle : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   if sides < 3 {
     @raylib.draw_circle(cx.to_int(), cy.to_int(), radius, color)
@@ -529,8 +541,14 @@ fn draw_polygon(
     let a2 = angle + step * Float::from_int(i + 1)
     @raylib.draw_triangle(
       @raylib.Vector2::new(cx, cy),
-      @raylib.Vector2::new(cx + @types.cosf(a1) * radius, cy + @types.sinf(a1) * radius),
-      @raylib.Vector2::new(cx + @types.cosf(a2) * radius, cy + @types.sinf(a2) * radius),
+      @raylib.Vector2::new(
+        cx + @types.cosf(a1) * radius,
+        cy + @types.sinf(a1) * radius,
+      ),
+      @raylib.Vector2::new(
+        cx + @types.cosf(a2) * radius,
+        cy + @types.sinf(a2) * radius,
+      ),
       color,
     )
   }
@@ -563,17 +581,17 @@ fn draw_hud(game : @types.Game) -> Unit {
   @draw.draw_text("HP", 10, 8, 14, @raylib.red)
   let hp_pct = Float::from_int(ship.hp) / Float::from_int(ship.max_hp)
   @raylib.draw_rectangle(40, 10, 150, 10, @raylib.Color::new(40, 10, 10, 200))
-  @raylib.draw_rectangle(40, 10, (150.0 * hp_pct.to_double()).to_int(), 10, @raylib.red)
+  @raylib.draw_rectangle(
+    40,
+    10,
+    (150.0 * hp_pct.to_double()).to_int(),
+    10,
+    @raylib.red,
+  )
   // Shield bar
   @draw.draw_text("SH", 10, 26, 14, @raylib.Color::new(80, 180, 255, 230))
   let sh_pct = Float::from_int(ship.shield) / Float::from_int(ship.max_shield)
-  @raylib.draw_rectangle(
-    40,
-    28,
-    150,
-    10,
-    @raylib.Color::new(10, 20, 40, 200),
-  )
+  @raylib.draw_rectangle(40, 28, 150, 10, @raylib.Color::new(10, 20, 40, 200))
   @raylib.draw_rectangle(
     40,
     28,
@@ -589,14 +607,14 @@ fn draw_hud(game : @types.Game) -> Unit {
     @types.color_heat_bar
   }
   @draw.draw_text("HT", 10, 44, 14, heat_color)
+  @raylib.draw_rectangle(40, 46, 150, 10, @raylib.Color::new(30, 15, 5, 200))
   @raylib.draw_rectangle(
     40,
     46,
-    150,
+    (150.0 * heat_pct.to_double()).to_int(),
     10,
-    @raylib.Color::new(30, 15, 5, 200),
+    heat_color,
   )
-  @raylib.draw_rectangle(40, 46, (150.0 * heat_pct.to_double()).to_int(), 10, heat_color)
   // Top-right: Score and kills
   @raylib.draw_rectangle(w - 205, 5, 200, 55, @types.color_hud_bg)
   @draw.draw_text(
@@ -624,7 +642,13 @@ fn draw_hud(game : @types.Game) -> Unit {
     )
   }
   // Bottom: Weapon info
-  @raylib.draw_rectangle(5, @types.screen_height - 40, 300, 35, @types.color_hud_bg)
+  @raylib.draw_rectangle(
+    5,
+    @types.screen_height - 40,
+    300,
+    35,
+    @types.color_hud_bg,
+  )
   let wpn_color = @types.weapon_color(ship.weapon.kind)
   @draw.draw_text(
     @weapons.weapon_name(ship.weapon.kind),
@@ -688,13 +712,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     game.sector_enemies_killed.to_string() +
     "/" +
     game.sector_enemies_total.to_string()
-  @draw.draw_text(
-    progress_text,
-    w / 2 - 50,
-    8,
-    14,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(progress_text, w / 2 - 50, 8, 14, @types.color_hud_text)
 }
 
 ///|
@@ -744,7 +762,7 @@ fn draw_sector_map(game : @types.Game) -> Unit {
         }
         let radius : Float = if is_current { 20.0 } else { 15.0 }
         @raylib.draw_circle(nx, ny, radius, color)
-        if is_reachable && !(node.cleared) {
+        if is_reachable && !node.cleared {
           @raylib.draw_circle_lines(nx, ny, radius + 3.0, @types.color_player)
         }
         // Label
@@ -758,7 +776,7 @@ fn draw_sector_map(game : @types.Game) -> Unit {
           @raylib.Color::new(180, 190, 200, 200),
         )
         // Reachable number hint
-        if is_reachable && !(node.cleared) {
+        if is_reachable && !node.cleared {
           let current_node = map.nodes[map.current]
           for ci in 0..<current_node.connections.length() {
             if current_node.connections[ci] == i {
@@ -773,7 +791,7 @@ fn draw_sector_map(game : @types.Game) -> Unit {
           }
         }
         // Difficulty indicator: skulls/dots under the node label
-        if !(node.cleared) && i != 0 {
+        if !node.cleared && i != 0 {
           let difficulty = node.enemy_count
           let tier = if difficulty <= 4 {
             1
@@ -792,14 +810,9 @@ fn draw_sector_map(game : @types.Game) -> Unit {
           }
           // Draw difficulty pips
           let pip_y = ny + 36
-          let pip_start_x = nx - (tier * 5)
+          let pip_start_x = nx - tier * 5
           for p in 0..<tier {
-            @raylib.draw_circle(
-              pip_start_x + p * 10,
-              pip_y,
-              3.0,
-              tier_color,
-            )
+            @raylib.draw_circle(pip_start_x + p * 10, pip_y, 3.0, tier_color)
           }
           // Elite badge
           if node.elite {
@@ -813,13 +826,7 @@ fn draw_sector_map(game : @types.Game) -> Unit {
           }
           // Shop badge
           if node.has_shop {
-            @draw.draw_text(
-              "$",
-              nx - 22,
-              ny - 10,
-              12,
-              @types.color_credits,
-            )
+            @draw.draw_text("$", nx - 22, ny - 10, 12, @types.color_credits)
           }
         }
       }
@@ -827,20 +834,86 @@ fn draw_sector_map(game : @types.Game) -> Unit {
   }
   // Legend
   let legend_y = @types.screen_height - 75
-  @draw.draw_text("Difficulty:", 20, legend_y, 12, @raylib.Color::new(150, 160, 180, 180))
-  @raylib.draw_circle(100, legend_y + 6, 3.0, @raylib.Color::new(100, 200, 100, 200))
-  @draw.draw_text("Low", 108, legend_y, 12, @raylib.Color::new(100, 200, 100, 180))
-  @raylib.draw_circle(150, legend_y + 6, 3.0, @raylib.Color::new(220, 200, 50, 200))
-  @raylib.draw_circle(160, legend_y + 6, 3.0, @raylib.Color::new(220, 200, 50, 200))
-  @draw.draw_text("Med", 170, legend_y, 12, @raylib.Color::new(220, 200, 50, 180))
-  @raylib.draw_circle(210, legend_y + 6, 3.0, @raylib.Color::new(255, 120, 40, 200))
-  @raylib.draw_circle(220, legend_y + 6, 3.0, @raylib.Color::new(255, 120, 40, 200))
-  @raylib.draw_circle(230, legend_y + 6, 3.0, @raylib.Color::new(255, 120, 40, 200))
-  @draw.draw_text("Hard", 240, legend_y, 12, @raylib.Color::new(255, 120, 40, 180))
+  @draw.draw_text(
+    "Difficulty:",
+    20,
+    legend_y,
+    12,
+    @raylib.Color::new(150, 160, 180, 180),
+  )
+  @raylib.draw_circle(
+    100,
+    legend_y + 6,
+    3.0,
+    @raylib.Color::new(100, 200, 100, 200),
+  )
+  @draw.draw_text(
+    "Low",
+    108,
+    legend_y,
+    12,
+    @raylib.Color::new(100, 200, 100, 180),
+  )
+  @raylib.draw_circle(
+    150,
+    legend_y + 6,
+    3.0,
+    @raylib.Color::new(220, 200, 50, 200),
+  )
+  @raylib.draw_circle(
+    160,
+    legend_y + 6,
+    3.0,
+    @raylib.Color::new(220, 200, 50, 200),
+  )
+  @draw.draw_text(
+    "Med",
+    170,
+    legend_y,
+    12,
+    @raylib.Color::new(220, 200, 50, 180),
+  )
+  @raylib.draw_circle(
+    210,
+    legend_y + 6,
+    3.0,
+    @raylib.Color::new(255, 120, 40, 200),
+  )
+  @raylib.draw_circle(
+    220,
+    legend_y + 6,
+    3.0,
+    @raylib.Color::new(255, 120, 40, 200),
+  )
+  @raylib.draw_circle(
+    230,
+    legend_y + 6,
+    3.0,
+    @raylib.Color::new(255, 120, 40, 200),
+  )
+  @draw.draw_text(
+    "Hard",
+    240,
+    legend_y,
+    12,
+    @raylib.Color::new(255, 120, 40, 180),
+  )
   @draw.draw_text("E", 290, legend_y, 12, @raylib.Color::new(255, 200, 50, 200))
-  @draw.draw_text("=Elite", 302, legend_y, 12, @raylib.Color::new(150, 160, 180, 180))
+  @draw.draw_text(
+    "=Elite",
+    302,
+    legend_y,
+    12,
+    @raylib.Color::new(150, 160, 180, 180),
+  )
   @draw.draw_text("$", 360, legend_y, 12, @types.color_credits)
-  @draw.draw_text("=Shop", 372, legend_y, 12, @raylib.Color::new(150, 160, 180, 180))
+  @draw.draw_text(
+    "=Shop",
+    372,
+    legend_y,
+    12,
+    @raylib.Color::new(150, 160, 180, 180),
+  )
   // Instructions
   @draw.draw_text(
     "Press 1-3 or click a highlighted node to travel",
@@ -890,7 +963,13 @@ fn draw_shop(game : @types.Game) -> Unit {
       @raylib.Color::new(140, 150, 160, 180),
     )
     if item.purchased {
-      @draw.draw_text("SOLD", w / 2 + 170, y, 16, @raylib.Color::new(60, 100, 60, 200))
+      @draw.draw_text(
+        "SOLD",
+        w / 2 + 170,
+        y,
+        16,
+        @raylib.Color::new(60, 100, 60, 200),
+      )
     }
   }
   @draw.draw_text(
@@ -1076,13 +1155,7 @@ fn draw_victory(game : @types.Game) -> Unit {
   let w = @types.screen_width
   let h = @types.screen_height
   ignore(game)
-  @draw.draw_text(
-    "VICTORY!",
-    w / 2 - 60,
-    h / 3,
-    48,
-    @types.color_player,
-  )
+  @draw.draw_text("VICTORY!", w / 2 - 60, h / 3, 48, @types.color_player)
   @draw.draw_text(
     "The void has been pacified... for now.",
     w / 2 - 160,
@@ -1090,11 +1163,5 @@ fn draw_victory(game : @types.Game) -> Unit {
     18,
     @types.color_hud_text,
   )
-  @draw.draw_text(
-    "PRESS ENTER",
-    w / 2 - 60,
-    h * 3 / 4,
-    20,
-    @types.color_player,
-  )
+  @draw.draw_text("PRESS ENTER", w / 2 - 60, h * 3 / 4, 20, @types.color_player)
 }

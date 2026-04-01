@@ -144,22 +144,30 @@ pub let color_conveyor : @raylib.Color = @raylib.Color::new(100, 180, 200, 255)
 pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
 
 ///|
-pub let color_star_silver : @raylib.Color = @raylib.Color::new(192, 192, 192, 255)
+pub let color_star_silver : @raylib.Color = @raylib.Color::new(
+  192, 192, 192, 255,
+)
 
 ///|
-pub let color_star_bronze : @raylib.Color = @raylib.Color::new(205, 127, 50, 255)
+pub let color_star_bronze : @raylib.Color = @raylib.Color::new(
+  205, 127, 50, 255,
+)
 
 ///|
 pub let color_star_empty : @raylib.Color = @raylib.Color::new(80, 80, 80, 255)
 
 ///|
-pub let color_pressure_plate : @raylib.Color = @raylib.Color::new(200, 180, 120, 255)
+pub let color_pressure_plate : @raylib.Color = @raylib.Color::new(
+  200, 180, 120, 255,
+)
 
 ///|
 pub let color_mirror : @raylib.Color = @raylib.Color::new(220, 240, 255, 255)
 
 ///|
-pub let color_gravity_well : @raylib.Color = @raylib.Color::new(100, 0, 200, 255)
+pub let color_gravity_well : @raylib.Color = @raylib.Color::new(
+  100, 0, 200, 255,
+)
 
 ///|
 pub let color_timed_lava : @raylib.Color = @raylib.Color::new(255, 100, 20, 255)

@@ -17,7 +17,9 @@ test "token advancement on empty path" {
   let level = @types.new_level(cw, ccw, [], 5, 0, "test")
   let game = @types.new_game()
   game.current_level = Some(level)
-  game.pickups_collected = [false, false, false, false, false, false, false, false, false, false]
+  game.pickups_collected = [
+    false, false, false, false, false, false, false, false, false, false,
+  ]
   game.oneshot_used = []
   game.screen = Playing
   game.play_state = Moving
@@ -49,7 +51,9 @@ test "gate blocking when closed" {
   let level = @types.new_level(cw, ccw, [], 5, 0, "test")
   let game = @types.new_game()
   game.current_level = Some(level)
-  game.pickups_collected = [false, false, false, false, false, false, false, false, false, false]
+  game.pickups_collected = [
+    false, false, false, false, false, false, false, false, false, false,
+  ]
   game.oneshot_used = []
   game.play_state = Moving
   @spiral.step(game)
@@ -84,7 +88,9 @@ test "switch toggles gates" {
   )
   let game = @types.new_game()
   game.current_level = Some(level)
-  game.pickups_collected = [false, false, false, false, false, false, false, false, false, false]
+  game.pickups_collected = [
+    false, false, false, false, false, false, false, false, false, false,
+  ]
   game.oneshot_used = [false]
   game.play_state = Moving
   // Initially gate at ccw[2] is closed
@@ -146,7 +152,9 @@ test "one-shot switch permanent activation" {
   )
   let game = @types.new_game()
   game.current_level = Some(level)
-  game.pickups_collected = [false, false, false, false, false, false, false, false, false, false]
+  game.pickups_collected = [
+    false, false, false, false, false, false, false, false, false, false,
+  ]
   game.oneshot_used = [false]
   game.play_state = Moving
   inspect(level.ccw_spiral.cells[2].gate_open, content="false")
@@ -177,7 +185,10 @@ test "arrow offset skip" {
   let level = @types.new_level(cw, ccw, [], 6, 0, "test")
   let game = @types.new_game()
   game.current_level = Some(level)
-  game.pickups_collected = [false, false, false, false, false, false, false, false, false, false, false, false]
+  game.pickups_collected = [
+    false, false, false, false, false, false, false, false, false, false, false,
+    false,
+  ]
   game.oneshot_used = []
   game.play_state = Moving
   // Step to pos 1, arrow pushes +2 to pos 3

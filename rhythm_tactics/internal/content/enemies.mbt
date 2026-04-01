@@ -176,7 +176,7 @@ pub fn elite_slime_split(
     let nx = dead_x + dx
     let ny = dead_y + dy
     if @types.grid_is_walkable(floor.grid, nx, ny) &&
-      !(@types.has_enemy_at(floor.enemies, nx, ny)) {
+      !@types.has_enemy_at(floor.enemies, nx, ny) {
       let mini = make_slime(next_id + spawned, nx, ny)
       result.push(mini)
       spawned = spawned + 1
@@ -192,7 +192,7 @@ pub fn elite_skeleton_cross_cells(ex : Int, ey : Int) -> Array[(Int, Int)] {
   let dirs : Array[(Int, Int)] = [(1, 0), (-1, 0), (0, 1), (0, -1)]
   for dir in dirs {
     let (dx, dy) = dir
-    for r in 1..=2 {
+    for r in 1..<=2 {
       cells.push((ex + dx * r, ey + dy * r))
     }
   }
@@ -213,7 +213,7 @@ pub fn elite_bat_double_move(
       let nx = enemy.x + @types.dir_dx(dir)
       let ny = enemy.y + @types.dir_dy(dir)
       if @types.grid_is_walkable(floor.grid, nx, ny) &&
-        !(@types.has_enemy_at(floor.enemies, nx, ny)) &&
+        !@types.has_enemy_at(floor.enemies, nx, ny) &&
         !(nx == px && ny == py) {
         enemy.x = nx
         enemy.y = ny
@@ -233,7 +233,7 @@ pub fn elite_dragon_breath_cells(
   let cells : Array[(Int, Int)] = []
   let dx = @types.dir_dx(dir)
   let dy = @types.dir_dy(dir)
-  for i in 1..=4 {
+  for i in 1..<=4 {
     cells.push((ex + dx * i, ey + dy * i))
   }
   cells
@@ -284,7 +284,11 @@ pub fn enemy_drop_count(enemy : @types.Enemy) -> Int {
 /// Get the XP value of an enemy (for future progression).
 pub fn enemy_xp_value(enemy : @types.Enemy) -> Int {
   let base = enemy.max_hp * 2 + enemy.damage * 3
-  if enemy.is_elite { base * 2 } else { base }
+  if enemy.is_elite {
+    base * 2
+  } else {
+    base
+  }
 }
 
 ///|

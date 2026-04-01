@@ -5,7 +5,11 @@ test "distance_clue_satisfied" {
   grid[2 * 8 + 2] = Some(Mountain)
   grid[2 * 8 + 5] = Some(Town)
   let clue = @types.new_clue(
-    Distance, Mountain, feature_b=Town, distance=3, text="test",
+    Distance,
+    Mountain,
+    feature_b=Town,
+    distance=3,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
@@ -18,7 +22,11 @@ test "distance_clue_violated" {
   grid[2 * 8 + 2] = Some(Mountain)
   grid[2 * 8 + 6] = Some(Town)
   let clue = @types.new_clue(
-    Distance, Mountain, feature_b=Town, distance=3, text="test",
+    Distance,
+    Mountain,
+    feature_b=Town,
+    distance=3,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Violated")
@@ -30,7 +38,11 @@ test "distance_clue_pending" {
   grid[2 * 8 + 2] = Some(Mountain)
   // Town not placed yet
   let clue = @types.new_clue(
-    Distance, Mountain, feature_b=Town, distance=3, text="test",
+    Distance,
+    Mountain,
+    feature_b=Town,
+    distance=3,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Pending")
@@ -43,7 +55,11 @@ test "direction_clue_north_satisfied" {
   grid[1 * 8 + 3] = Some(Forest)
   grid[5 * 8 + 3] = Some(Lake)
   let clue = @types.new_clue(
-    Direction, Forest, feature_b=Lake, direction=N, text="test",
+    Direction,
+    Forest,
+    feature_b=Lake,
+    direction=N,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
@@ -56,7 +72,11 @@ test "direction_clue_north_violated" {
   grid[5 * 8 + 3] = Some(Forest)
   grid[1 * 8 + 3] = Some(Lake)
   let clue = @types.new_clue(
-    Direction, Forest, feature_b=Lake, direction=N, text="test",
+    Direction,
+    Forest,
+    feature_b=Lake,
+    direction=N,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Violated")
@@ -68,7 +88,11 @@ test "direction_clue_east" {
   grid[2 * 8 + 5] = Some(Town)
   grid[2 * 8 + 2] = Some(Mountain)
   let clue = @types.new_clue(
-    Direction, Town, feature_b=Mountain, direction=E, text="test",
+    Direction,
+    Town,
+    feature_b=Mountain,
+    direction=E,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
@@ -80,7 +104,11 @@ test "direction_clue_west" {
   grid[3 * 8 + 1] = Some(Forest)
   grid[3 * 8 + 5] = Some(Lake)
   let clue = @types.new_clue(
-    Direction, Forest, feature_b=Lake, direction=W, text="test",
+    Direction,
+    Forest,
+    feature_b=Lake,
+    direction=W,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
@@ -92,7 +120,11 @@ test "direction_clue_south" {
   grid[5 * 8 + 3] = Some(River)
   grid[2 * 8 + 3] = Some(Mountain)
   let clue = @types.new_clue(
-    Direction, River, feature_b=Mountain, direction=S, text="test",
+    Direction,
+    River,
+    feature_b=Mountain,
+    direction=S,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
@@ -135,7 +167,12 @@ test "count_clue_row_satisfied" {
   grid[2 * 8 + 1] = Some(Forest)
   grid[2 * 8 + 5] = Some(Forest)
   let clue = @types.new_clue(
-    Count, Forest, direction=N, row_col=2, count=2, text="test",
+    Count,
+    Forest,
+    direction=N,
+    row_col=2,
+    count=2,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
@@ -149,7 +186,12 @@ test "count_clue_row_violated" {
   grid[2 * 8 + 3] = Some(Forest)
   grid[2 * 8 + 5] = Some(Forest)
   let clue = @types.new_clue(
-    Count, Forest, direction=N, row_col=2, count=2, text="test",
+    Count,
+    Forest,
+    direction=N,
+    row_col=2,
+    count=2,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Violated")
@@ -161,7 +203,12 @@ test "count_clue_column" {
   // 1 town in column 3 (index 2)
   grid[1 * 8 + 2] = Some(Town)
   let clue = @types.new_clue(
-    Count, Town, direction=S, row_col=2, count=1, text="test",
+    Count,
+    Town,
+    direction=S,
+    row_col=2,
+    count=1,
+    text="test",
   )
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
@@ -172,9 +219,7 @@ test "not_clue_satisfied" {
   let grid : Array[@types.FeatureKind?] = Array::make(64, None)
   // No mountains in column 5
   grid[2 * 8 + 3] = Some(Mountain)
-  let clue = @types.new_clue(
-    Not, Mountain, direction=S, row_col=4, text="test",
-  )
+  let clue = @types.new_clue(Not, Mountain, direction=S, row_col=4, text="test")
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
 }
@@ -184,9 +229,7 @@ test "not_clue_violated" {
   let grid : Array[@types.FeatureKind?] = Array::make(64, None)
   // Mountain in column 5 (index 4)
   grid[2 * 8 + 4] = Some(Mountain)
-  let clue = @types.new_clue(
-    Not, Mountain, direction=S, row_col=4, text="test",
-  )
+  let clue = @types.new_clue(Not, Mountain, direction=S, row_col=4, text="test")
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Violated")
 }
@@ -196,9 +239,7 @@ test "not_clue_row" {
   let grid : Array[@types.FeatureKind?] = Array::make(64, None)
   // No rivers in row 1 (index 0)
   grid[3 * 8 + 2] = Some(River)
-  let clue = @types.new_clue(
-    Not, River, direction=N, row_col=0, text="test",
-  )
+  let clue = @types.new_clue(Not, River, direction=N, row_col=0, text="test")
   let status = @solver.check_clue(clue, grid, 8)
   inspect(status, content="Satisfied")
 }
@@ -209,11 +250,13 @@ test "validate_all_clues" {
   grid[2 * 8 + 2] = Some(Mountain)
   grid[2 * 8 + 5] = Some(Town)
   let clues = [
+    @types.new_clue(Distance, Mountain, feature_b=Town, distance=3, text="dist"),
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=3, text="dist",
-    ),
-    @types.new_clue(
-      Direction, Town, feature_b=Mountain, direction=E, text="dir",
+      Direction,
+      Town,
+      feature_b=Mountain,
+      direction=E,
+      text="dir",
     ),
   ]
   @solver.validate_all_clues(clues, grid, 8)
@@ -252,21 +295,31 @@ test "check_placement_consistent" {
   let grid : Array[@types.FeatureKind?] = Array::make(64, None)
   grid[2 * 8 + 2] = Some(Mountain)
   let clues = [
+    @types.new_clue(Distance, Mountain, feature_b=Town, distance=3, text="test"),
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=3, text="test",
-    ),
-    @types.new_clue(
-      Direction, Town, feature_b=Mountain, direction=E, text="test",
+      Direction,
+      Town,
+      feature_b=Mountain,
+      direction=E,
+      text="test",
     ),
   ]
   // Placing town at (5,2) should be consistent (distance 3, east)
   let ok = @solver.check_placement_consistent(
-    grid, 8, clues, @types.vec2i(5, 2), Town,
+    grid,
+    8,
+    clues,
+    @types.vec2i(5, 2),
+    Town,
   )
   inspect(ok, content="true")
   // Placing town at (1,2) violates direction (west, not east)
   let bad = @solver.check_placement_consistent(
-    grid, 8, clues, @types.vec2i(1, 2), Town,
+    grid,
+    8,
+    clues,
+    @types.vec2i(1, 2),
+    Town,
   )
   inspect(bad, content="false")
 }
@@ -309,11 +362,13 @@ test "full_level_validation" {
   grid[2 * 8 + 2] = Some(Mountain)
   grid[2 * 8 + 5] = Some(Town)
   let clues = [
+    @types.new_clue(Distance, Mountain, feature_b=Town, distance=3, text="dist"),
     @types.new_clue(
-      Distance, Mountain, feature_b=Town, distance=3, text="dist",
-    ),
-    @types.new_clue(
-      Direction, Town, feature_b=Mountain, direction=E, text="dir",
+      Direction,
+      Town,
+      feature_b=Mountain,
+      direction=E,
+      text="dir",
     ),
     @types.new_clue(Not, Mountain, direction=N, row_col=0, text="not"),
   ]

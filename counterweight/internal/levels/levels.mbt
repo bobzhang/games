@@ -3,7 +3,7 @@ fn make_rope(
   from_n : Int,
   to_n : Int,
   from_s : @types.RopeSide,
-  to_s : @types.RopeSide
+  to_s : @types.RopeSide,
 ) -> @types.Rope {
   {
     active: true,
@@ -23,7 +23,7 @@ fn make_breakable_rope(
   to_n : Int,
   from_s : @types.RopeSide,
   to_s : @types.RopeSide,
-  max_load : Float
+  max_load : Float,
 ) -> @types.Rope {
   {
     active: true,
@@ -140,10 +140,7 @@ fn level_02() -> @types.LevelDef {
     @types.new_node(2, 7, 3, CrateHook),
     @types.new_node(3, 2, 5, WeightHook),
   ]
-  let weights = [
-    @types.new_weight(1, 2.0),
-    @types.new_weight(3, 3.0),
-  ]
+  let weights = [@types.new_weight(1, 2.0), @types.new_weight(3, 3.0)]
   let crates = [@types.new_crate(2, 1.0, -1.0)]
   {
     tier: Basics,
@@ -174,14 +171,8 @@ fn level_03() -> @types.LevelDef {
     @types.new_node(4, 6, 3, WeightHook),
     @types.new_node(5, 8, 3, CrateHook),
   ]
-  let weights = [
-    @types.new_weight(2, 3.0),
-    @types.new_weight(4, 2.0),
-  ]
-  let crates = [
-    @types.new_crate(3, 2.0, -0.5),
-    @types.new_crate(5, 1.0, -0.5),
-  ]
+  let weights = [@types.new_weight(2, 3.0), @types.new_weight(4, 2.0)]
+  let crates = [@types.new_crate(3, 2.0, -0.5), @types.new_crate(5, 1.0, -0.5)]
   {
     tier: Basics,
     index: 2,
@@ -248,14 +239,8 @@ fn level_05() -> @types.LevelDef {
     @types.new_node(4, 6, 4, CrateHook),
     @types.new_node(5, 8, 4, WeightHook),
   ]
-  let weights = [
-    @types.new_weight(2, 4.0),
-    @types.new_weight(5, 2.0),
-  ]
-  let crates = [
-    @types.new_crate(3, 3.0, -0.5),
-    @types.new_crate(4, 1.0, -0.5),
-  ]
+  let weights = [@types.new_weight(2, 4.0), @types.new_weight(5, 2.0)]
+  let crates = [@types.new_crate(3, 3.0, -0.5), @types.new_crate(4, 1.0, -0.5)]
   {
     tier: Basics,
     index: 4,
@@ -414,14 +399,8 @@ fn level_10() -> @types.LevelDef {
     @types.new_node(4, 6, 4, WeightHook),
     @types.new_node(5, 8, 4, CrateHook),
   ]
-  let weights = [
-    @types.new_weight(2, 3.0),
-    @types.new_weight(4, 3.0),
-  ]
-  let crates = [
-    @types.new_crate(3, 2.0, -0.5),
-    @types.new_crate(5, 2.0, -0.5),
-  ]
+  let weights = [@types.new_weight(2, 3.0), @types.new_weight(4, 3.0)]
+  let crates = [@types.new_crate(3, 2.0, -0.5), @types.new_crate(5, 2.0, -0.5)]
   {
     tier: Chains,
     index: 1,
@@ -512,14 +491,8 @@ fn level_13() -> @types.LevelDef {
     @types.new_node(4, 6, 4, WeightHook),
     @types.new_node(5, 8, 4, CrateHook),
   ]
-  let weights = [
-    @types.new_weight(2, 3.0),
-    @types.new_weight(4, 4.0),
-  ]
-  let crates = [
-    @types.new_crate(3, 2.0, -0.5),
-    @types.new_crate(5, 2.0, -1.0),
-  ]
+  let weights = [@types.new_weight(2, 3.0), @types.new_weight(4, 4.0)]
+  let crates = [@types.new_crate(3, 2.0, -0.5), @types.new_crate(5, 2.0, -1.0)]
   {
     tier: Chains,
     index: 4,
@@ -622,14 +595,8 @@ fn level_16() -> @types.LevelDef {
     @types.new_node(4, 6, 4, WeightHook),
     @types.new_node(5, 8, 4, CrateHook),
   ]
-  let weights = [
-    @types.new_weight(2, 4.0),
-    @types.new_weight(4, 3.0),
-  ]
-  let crates = [
-    @types.new_crate(3, 2.0, -1.0),
-    @types.new_crate(5, 2.0, -0.5),
-  ]
+  let weights = [@types.new_weight(2, 4.0), @types.new_weight(4, 3.0)]
+  let crates = [@types.new_crate(3, 2.0, -1.0), @types.new_crate(5, 2.0, -0.5)]
   {
     tier: Chains,
     index: 7,
@@ -669,10 +636,7 @@ fn level_17() -> @types.LevelDef {
     @types.new_weight(4, 2.0),
     @types.new_weight(7, 5.0),
   ]
-  let crates = [
-    @types.new_crate(5, 2.0, -0.5),
-    @types.new_crate(6, 1.0, -1.0),
-  ]
+  let crates = [@types.new_crate(5, 2.0, -0.5), @types.new_crate(6, 1.0, -1.0)]
   {
     tier: Chains,
     index: 8,
@@ -707,10 +671,7 @@ fn level_18() -> @types.LevelDef {
     @types.new_node(2, 7, 3, CrateHook),
     @types.new_node(3, 5, 5, WeightHook),
   ]
-  let weights = [
-    @types.new_weight(1, 2.0),
-    @types.new_weight(3, 5.0),
-  ]
+  let weights = [@types.new_weight(1, 2.0), @types.new_weight(3, 5.0)]
   let crates = [@types.new_crate(2, 1.0, 0.5)]
   {
     tier: Workshop,
@@ -741,22 +702,14 @@ fn level_19() -> @types.LevelDef {
     @types.new_node(4, 6, 4, WeightHook),
     @types.new_node(5, 8, 4, CrateHook),
   ]
-  let weights = [
-    @types.new_weight(2, 5.0),
-    @types.new_weight(4, 4.0),
-  ]
-  let crates = [
-    @types.new_crate(3, 1.0, -1.0),
-    @types.new_crate(5, 2.0, 0.5),
-  ]
+  let weights = [@types.new_weight(2, 5.0), @types.new_weight(4, 4.0)]
+  let crates = [@types.new_crate(3, 1.0, -1.0), @types.new_crate(5, 2.0, 0.5)]
   {
     tier: Workshop,
     index: 1,
     name: "Snap Decision",
     nodes,
-    ropes: [
-      make_breakable_rope(0, 2, LeftSide, LeftSide, 4.0),
-    ],
+    ropes: [make_breakable_rope(0, 2, LeftSide, LeftSide, 4.0)],
     weights,
     crates,
     platforms: [],
@@ -840,19 +793,14 @@ fn level_22() -> @types.LevelDef {
     @types.new_node(4, 6, 4, CrateHook),
     @types.new_node(5, 9, 4, WeightHook),
   ]
-  let weights = [
-    @types.new_weight(3, 4.0),
-    @types.new_weight(5, 3.0),
-  ]
+  let weights = [@types.new_weight(3, 4.0), @types.new_weight(5, 3.0)]
   let crates = [@types.new_crate(4, 2.0, -0.5)]
   {
     tier: Workshop,
     index: 4,
     name: "Chain Break",
     nodes,
-    ropes: [
-      make_breakable_rope(1, 2, RightSide, LeftSide, 5.0),
-    ],
+    ropes: [make_breakable_rope(1, 2, RightSide, LeftSide, 5.0)],
     weights,
     crates,
     platforms: [],
@@ -883,10 +831,7 @@ fn level_23() -> @types.LevelDef {
     @types.new_weight(5, 2.0),
     @types.new_weight(7, 3.0),
   ]
-  let crates = [
-    @types.new_crate(4, 2.0, -1.0),
-    @types.new_crate(6, 1.0, -0.5),
-  ]
+  let crates = [@types.new_crate(4, 2.0, -1.0), @types.new_crate(6, 1.0, -0.5)]
   {
     tier: Workshop,
     index: 5,
@@ -928,18 +873,13 @@ fn level_24() -> @types.LevelDef {
     @types.new_weight(7, 3.0),
     @types.new_weight(8, 4.0),
   ]
-  let crates = [
-    @types.new_crate(4, 2.0, -1.0),
-    @types.new_crate(6, 3.0, -0.5),
-  ]
+  let crates = [@types.new_crate(4, 2.0, -1.0), @types.new_crate(6, 3.0, -0.5)]
   {
     tier: Workshop,
     index: 6,
     name: "Master Chain",
     nodes,
-    ropes: [
-      make_breakable_rope(1, 5, RightSide, LeftSide, 4.0),
-    ],
+    ropes: [make_breakable_rope(1, 5, RightSide, LeftSide, 4.0)],
     weights,
     crates,
     platforms: [],
@@ -976,19 +916,14 @@ fn level_25() -> @types.LevelDef {
     @types.new_weight(7, 5.0),
     @types.new_weight(8, 2.0),
   ]
-  let crates = [
-    @types.new_crate(4, 2.0, -1.0),
-    @types.new_crate(6, 2.0, -1.5),
-  ]
+  let crates = [@types.new_crate(4, 2.0, -1.0), @types.new_crate(6, 2.0, -1.5)]
   let buckets = [@types.new_bucket(5, 1.0, 6.0, 0.2)]
   {
     tier: Workshop,
     index: 7,
     name: "Clocktower",
     nodes,
-    ropes: [
-      make_breakable_rope(0, 3, LeftSide, LeftSide, 5.0),
-    ],
+    ropes: [make_breakable_rope(0, 3, LeftSide, LeftSide, 5.0)],
     weights,
     crates,
     platforms: [],

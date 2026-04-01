@@ -4,7 +4,7 @@
 pub fn compute_preview(
   g : @types.TreeGrid,
   species : @types.Species,
-  turns : Int
+  turns : Int,
 ) -> @types.TreeGrid {
   let mut current = @types.clone_grid(g)
   for _i in 0..<turns {
@@ -17,7 +17,7 @@ pub fn compute_preview(
 /// Compute a single turn preview
 pub fn preview_one_turn(
   g : @types.TreeGrid,
-  species : @types.Species
+  species : @types.Species,
 ) -> @types.TreeGrid {
   compute_preview(g, species, 1)
 }
@@ -26,7 +26,7 @@ pub fn preview_one_turn(
 /// Compute a two turn preview
 pub fn preview_two_turns(
   g : @types.TreeGrid,
-  species : @types.Species
+  species : @types.Species,
 ) -> @types.TreeGrid {
   compute_preview(g, species, 2)
 }

@@ -245,7 +245,6 @@ fn update_playing(game : @types.Game) -> Unit {
             } else {
               // Undo the snapshot since nothing was pruned
               let _ = game.history.unsafe_pop()
-
             }
           } else if cell.kind == Trunk {
             @types.set_message(game, "Can't prune the trunk!", 1.5)
@@ -281,7 +280,10 @@ fn advance_turn(game : @types.Game, level : @types.Level) -> Unit {
   if game.turn >= level.max_turns {
     // Game over - check zones
     let stars = @growth.calculate_stars(
-      game.tree, level.zones, game.total_prunes, level.par_prunes,
+      game.tree,
+      level.zones,
+      game.total_prunes,
+      level.par_prunes,
     )
     if stars > 0 {
       game.play_state = Won

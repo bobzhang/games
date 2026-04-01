@@ -9,12 +9,12 @@ pub(all) struct MissionDef {
   briefing : String
   debrief : String
   objective : @types.Objective
-  grid_template : Int             // terrain layout id
-  enemy_types : Array[(@types.EnemyType, Int, Int)]  // (type, x, y)
-  special_tiles : Array[(Int, Int, @types.TileKind)]  // (x, y, tile kind)
+  grid_template : Int // terrain layout id
+  enemy_types : Array[(@types.EnemyType, Int, Int)] // (type, x, y)
+  special_tiles : Array[(Int, Int, @types.TileKind)] // (x, y, tile kind)
   hazard_tiles : Array[(Int, Int, @types.HazardKind)] // (x, y, hazard)
   turns_limit : Int
-  reward_tier : Int               // 1=basic, 2=good, 3=great
+  reward_tier : Int // 1=basic, 2=good, 3=great
 }
 
 ///|
@@ -49,11 +49,7 @@ fn mission_first_contact() -> MissionDef {
     debrief: "First engagement survived. Your squad handled the pressure well. Hostile signatures are increasing across the sector - prepare for escalation.",
     objective: Survive(4),
     grid_template: 0,
-    enemy_types: [
-      (Rammer, 6, 1),
-      (Rammer, 6, 4),
-      (Rammer, 7, 3),
-    ],
+    enemy_types: [(Rammer, 6, 1), (Rammer, 6, 4), (Rammer, 7, 3)],
     special_tiles: [],
     hazard_tiles: [],
     turns_limit: 6,
@@ -72,18 +68,9 @@ fn mission_minefield() -> MissionDef {
     debrief: "Mine Layer neutralized. The sector is clear of explosive hazards. Scans show more complex threats ahead - the enemy is adapting to our tactics.",
     objective: Assassinate(0),
     grid_template: 1,
-    enemy_types: [
-      (MineLayer, 6, 3),
-      (Rammer, 7, 1),
-      (Rammer, 7, 5),
-    ],
+    enemy_types: [(MineLayer, 6, 3), (Rammer, 7, 1), (Rammer, 7, 5)],
     special_tiles: [],
-    hazard_tiles: [
-      (3, 2, Mine),
-      (4, 4, Mine),
-      (5, 1, Mine),
-      (5, 5, Mine),
-    ],
+    hazard_tiles: [(3, 2, Mine), (4, 4, Mine), (5, 1, Mine), (5, 5, Mine)],
     turns_limit: 8,
     reward_tier: 1,
   }
@@ -100,11 +87,7 @@ fn mission_beam_gauntlet() -> MissionDef {
     debrief: "Corridor secured. Those turrets were well-positioned, but nothing your squad cannot handle. Intelligence reports heavier resistance in the next sector.",
     objective: Assassinate(0),
     grid_template: 2,
-    enemy_types: [
-      (BeamTurret, 6, 2),
-      (BeamTurret, 6, 5),
-      (Leaper, 7, 4),
-    ],
+    enemy_types: [(BeamTurret, 6, 2), (BeamTurret, 6, 5), (Leaper, 7, 4)],
     special_tiles: [
       (3, 0, Wall),
       (3, 1, Wall),
@@ -154,11 +137,7 @@ fn mission_boss_siege_engine() -> MissionDef {
     debrief: "The Siege Engine has been reduced to scrap. That was a hard-won victory, Commander. Your squad has proven it can handle the worst the enemy has to offer.",
     objective: Assassinate(0),
     grid_template: 4,
-    enemy_types: [
-      (Boss, 6, 3),
-      (Rammer, 7, 1),
-      (Artillery, 7, 6),
-    ],
+    enemy_types: [(Boss, 6, 3), (Rammer, 7, 1), (Artillery, 7, 6)],
     special_tiles: [(3, 3, Wall), (3, 4, Wall)],
     hazard_tiles: [(5, 2, Fire), (5, 5, Fire)],
     turns_limit: 10,
@@ -270,9 +249,9 @@ fn mission_boss_hivemind() -> MissionDef {
 /// Get the boss HP for a specific boss mission.
 pub fn get_boss_hp(mission_id : Int) -> Int {
   match mission_id {
-    4 => 12   // Siege Engine - tanky
-    8 => 10   // Hivemind - moderate but regenerates
-    _ => 8    // Default boss HP
+    4 => 12 // Siege Engine - tanky
+    8 => 10 // Hivemind - moderate but regenerates
+    _ => 8 // Default boss HP
   }
 }
 

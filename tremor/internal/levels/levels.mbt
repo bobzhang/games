@@ -1,7 +1,7 @@
 ///|
 fn set_blocked(
   grid : Array[Array[@types.TileInfo]],
-  positions : Array[@types.Vec2i]
+  positions : Array[@types.Vec2i],
 ) -> Unit {
   for i in 0..<positions.length() {
     let p = positions[i]
@@ -14,7 +14,7 @@ fn set_blocked(
 ///|
 fn set_town(
   grid : Array[Array[@types.TileInfo]],
-  positions : Array[@types.Vec2i]
+  positions : Array[@types.Vec2i],
 ) -> Array[@types.Vec2i] {
   let towns : Array[@types.Vec2i] = []
   for i in 0..<positions.length() {
@@ -30,7 +30,7 @@ fn set_town(
 ///|
 fn set_noisy(
   grid : Array[Array[@types.TileInfo]],
-  positions : Array[@types.Vec2i]
+  positions : Array[@types.Vec2i],
 ) -> Unit {
   for i in 0..<positions.length() {
     let p = positions[i]
@@ -158,13 +158,13 @@ fn level_05() -> @types.Level {
 ///|
 fn level_06() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(3, 3), @types.vec2i(4, 3), @types.vec2i(3, 4),
-      @types.vec2i(8, 7), @types.vec2i(9, 7),
-    ],
-  )
+  set_blocked(grid, [
+    @types.vec2i(3, 3),
+    @types.vec2i(4, 3),
+    @types.vec2i(3, 4),
+    @types.vec2i(8, 7),
+    @types.vec2i(9, 7),
+  ])
   {
     grid,
     epicenters: [@types.new_epicenter(6, 8)],
@@ -197,14 +197,16 @@ fn level_07() -> @types.Level {
 ///|
 fn level_08() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(0, 0), @types.vec2i(1, 0), @types.vec2i(11, 0),
-      @types.vec2i(10, 0), @types.vec2i(0, 9), @types.vec2i(1, 9),
-      @types.vec2i(10, 9), @types.vec2i(11, 9),
-    ],
-  )
+  set_blocked(grid, [
+    @types.vec2i(0, 0),
+    @types.vec2i(1, 0),
+    @types.vec2i(11, 0),
+    @types.vec2i(10, 0),
+    @types.vec2i(0, 9),
+    @types.vec2i(1, 9),
+    @types.vec2i(10, 9),
+    @types.vec2i(11, 9),
+  ])
   {
     grid,
     epicenters: [@types.new_epicenter(5, 4)],
@@ -240,13 +242,14 @@ fn level_09() -> @types.Level {
 ///|
 fn level_10() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(4, 3), @types.vec2i(5, 3), @types.vec2i(6, 3),
-      @types.vec2i(4, 6), @types.vec2i(5, 6), @types.vec2i(6, 6),
-    ],
-  )
+  set_blocked(grid, [
+    @types.vec2i(4, 3),
+    @types.vec2i(5, 3),
+    @types.vec2i(6, 3),
+    @types.vec2i(4, 6),
+    @types.vec2i(5, 6),
+    @types.vec2i(6, 6),
+  ])
   {
     grid,
     epicenters: [@types.new_epicenter(5, 5)],
@@ -279,14 +282,16 @@ fn level_11() -> @types.Level {
 ///|
 fn level_12() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(2, 2), @types.vec2i(3, 2), @types.vec2i(2, 3),
-      @types.vec2i(3, 3), @types.vec2i(8, 6), @types.vec2i(9, 6),
-      @types.vec2i(8, 7), @types.vec2i(9, 7),
-    ],
-  )
+  set_blocked(grid, [
+    @types.vec2i(2, 2),
+    @types.vec2i(3, 2),
+    @types.vec2i(2, 3),
+    @types.vec2i(3, 3),
+    @types.vec2i(8, 6),
+    @types.vec2i(9, 6),
+    @types.vec2i(8, 7),
+    @types.vec2i(9, 7),
+  ])
   {
     grid,
     epicenters: [@types.new_epicenter(6, 3)],
@@ -303,10 +308,7 @@ fn level_12() -> @types.Level {
 ///|
 fn level_13() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  let towns = set_town(
-    grid,
-    [@types.vec2i(3, 2), @types.vec2i(8, 7)],
-  )
+  let towns = set_town(grid, [@types.vec2i(3, 2), @types.vec2i(8, 7)])
   {
     grid,
     epicenters: [@types.new_epicenter(5, 5)],
@@ -323,13 +325,14 @@ fn level_13() -> @types.Level {
 ///|
 fn level_14() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_noisy(
-    grid,
-    [
-      @types.vec2i(4, 4), @types.vec2i(5, 4), @types.vec2i(4, 5),
-      @types.vec2i(5, 5), @types.vec2i(6, 4), @types.vec2i(6, 5),
-    ],
-  )
+  set_noisy(grid, [
+    @types.vec2i(4, 4),
+    @types.vec2i(5, 4),
+    @types.vec2i(4, 5),
+    @types.vec2i(5, 5),
+    @types.vec2i(6, 4),
+    @types.vec2i(6, 5),
+  ])
   {
     grid,
     epicenters: [@types.new_epicenter(8, 3)],
@@ -346,14 +349,16 @@ fn level_14() -> @types.Level {
 ///|
 fn level_15() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(1, 4), @types.vec2i(2, 4), @types.vec2i(3, 4),
-      @types.vec2i(4, 4), @types.vec2i(7, 4), @types.vec2i(8, 4),
-      @types.vec2i(9, 4), @types.vec2i(10, 4),
-    ],
-  )
+  set_blocked(grid, [
+    @types.vec2i(1, 4),
+    @types.vec2i(2, 4),
+    @types.vec2i(3, 4),
+    @types.vec2i(4, 4),
+    @types.vec2i(7, 4),
+    @types.vec2i(8, 4),
+    @types.vec2i(9, 4),
+    @types.vec2i(10, 4),
+  ])
   {
     grid,
     epicenters: [@types.new_epicenter(4, 7)],
@@ -370,14 +375,16 @@ fn level_15() -> @types.Level {
 ///|
 fn level_16() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_noisy(
-    grid,
-    [
-      @types.vec2i(0, 0), @types.vec2i(1, 0), @types.vec2i(0, 1),
-      @types.vec2i(1, 1), @types.vec2i(10, 8), @types.vec2i(11, 8),
-      @types.vec2i(10, 9), @types.vec2i(11, 9),
-    ],
-  )
+  set_noisy(grid, [
+    @types.vec2i(0, 0),
+    @types.vec2i(1, 0),
+    @types.vec2i(0, 1),
+    @types.vec2i(1, 1),
+    @types.vec2i(10, 8),
+    @types.vec2i(11, 8),
+    @types.vec2i(10, 9),
+    @types.vec2i(11, 9),
+  ])
   set_blocked(grid, [@types.vec2i(5, 5), @types.vec2i(6, 5)])
   {
     grid,
@@ -395,15 +402,18 @@ fn level_16() -> @types.Level {
 ///|
 fn level_17() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(3, 1), @types.vec2i(4, 1), @types.vec2i(5, 1),
-      @types.vec2i(3, 8), @types.vec2i(4, 8), @types.vec2i(5, 8),
-      @types.vec2i(7, 3), @types.vec2i(8, 3), @types.vec2i(7, 6),
-      @types.vec2i(8, 6),
-    ],
-  )
+  set_blocked(grid, [
+    @types.vec2i(3, 1),
+    @types.vec2i(4, 1),
+    @types.vec2i(5, 1),
+    @types.vec2i(3, 8),
+    @types.vec2i(4, 8),
+    @types.vec2i(5, 8),
+    @types.vec2i(7, 3),
+    @types.vec2i(8, 3),
+    @types.vec2i(7, 6),
+    @types.vec2i(8, 6),
+  ])
   let towns = set_town(grid, [@types.vec2i(1, 5)])
   {
     grid,
@@ -426,10 +436,7 @@ fn level_18() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
   {
     grid,
-    epicenters: [
-      @types.new_epicenter(3, 3),
-      @types.new_epicenter(9, 7),
-    ],
+    epicenters: [@types.new_epicenter(3, 3), @types.new_epicenter(9, 7)],
     sensor_budget: 10,
     par_budget: 6,
     par_guesses: 2,
@@ -443,23 +450,16 @@ fn level_18() -> @types.Level {
 ///|
 fn level_19() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(5, 3), @types.vec2i(6, 3), @types.vec2i(5, 6),
-      @types.vec2i(6, 6),
-    ],
-  )
-  let towns = set_town(
-    grid,
-    [@types.vec2i(1, 1), @types.vec2i(10, 8)],
-  )
+  set_blocked(grid, [
+    @types.vec2i(5, 3),
+    @types.vec2i(6, 3),
+    @types.vec2i(5, 6),
+    @types.vec2i(6, 6),
+  ])
+  let towns = set_town(grid, [@types.vec2i(1, 1), @types.vec2i(10, 8)])
   {
     grid,
-    epicenters: [
-      @types.new_epicenter(2, 4),
-      @types.new_epicenter(9, 5),
-    ],
+    epicenters: [@types.new_epicenter(2, 4), @types.new_epicenter(9, 5)],
     sensor_budget: 10,
     par_budget: 7,
     par_guesses: 2,
@@ -473,20 +473,20 @@ fn level_19() -> @types.Level {
 ///|
 fn level_20() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_noisy(
-    grid,
-    [
-      @types.vec2i(3, 3), @types.vec2i(4, 3), @types.vec2i(5, 3),
-      @types.vec2i(3, 4), @types.vec2i(4, 4), @types.vec2i(5, 4),
-      @types.vec2i(3, 5), @types.vec2i(4, 5), @types.vec2i(5, 5),
-    ],
-  )
+  set_noisy(grid, [
+    @types.vec2i(3, 3),
+    @types.vec2i(4, 3),
+    @types.vec2i(5, 3),
+    @types.vec2i(3, 4),
+    @types.vec2i(4, 4),
+    @types.vec2i(5, 4),
+    @types.vec2i(3, 5),
+    @types.vec2i(4, 5),
+    @types.vec2i(5, 5),
+  ])
   {
     grid,
-    epicenters: [
-      @types.new_epicenter(2, 2),
-      @types.new_epicenter(10, 7),
-    ],
+    epicenters: [@types.new_epicenter(2, 2), @types.new_epicenter(10, 7)],
     sensor_budget: 10,
     par_budget: 7,
     par_guesses: 2,
@@ -500,23 +500,18 @@ fn level_20() -> @types.Level {
 ///|
 fn level_21() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(0, 4), @types.vec2i(1, 4), @types.vec2i(2, 4),
-      @types.vec2i(9, 4), @types.vec2i(10, 4), @types.vec2i(11, 4),
-    ],
-  )
-  let towns = set_town(
-    grid,
-    [@types.vec2i(6, 2), @types.vec2i(6, 7)],
-  )
+  set_blocked(grid, [
+    @types.vec2i(0, 4),
+    @types.vec2i(1, 4),
+    @types.vec2i(2, 4),
+    @types.vec2i(9, 4),
+    @types.vec2i(10, 4),
+    @types.vec2i(11, 4),
+  ])
+  let towns = set_town(grid, [@types.vec2i(6, 2), @types.vec2i(6, 7)])
   {
     grid,
-    epicenters: [
-      @types.new_epicenter(3, 1),
-      @types.new_epicenter(8, 8),
-    ],
+    epicenters: [@types.new_epicenter(3, 1), @types.new_epicenter(8, 8)],
     sensor_budget: 10,
     par_budget: 7,
     par_guesses: 2,
@@ -530,28 +525,29 @@ fn level_21() -> @types.Level {
 ///|
 fn level_22() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_noisy(
-    grid,
-    [
-      @types.vec2i(0, 0), @types.vec2i(1, 0), @types.vec2i(2, 0),
-      @types.vec2i(0, 1), @types.vec2i(1, 1), @types.vec2i(2, 1),
-      @types.vec2i(9, 8), @types.vec2i(10, 8), @types.vec2i(11, 8),
-      @types.vec2i(9, 9), @types.vec2i(10, 9), @types.vec2i(11, 9),
-    ],
-  )
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(5, 4), @types.vec2i(6, 4), @types.vec2i(5, 5),
-      @types.vec2i(6, 5),
-    ],
-  )
+  set_noisy(grid, [
+    @types.vec2i(0, 0),
+    @types.vec2i(1, 0),
+    @types.vec2i(2, 0),
+    @types.vec2i(0, 1),
+    @types.vec2i(1, 1),
+    @types.vec2i(2, 1),
+    @types.vec2i(9, 8),
+    @types.vec2i(10, 8),
+    @types.vec2i(11, 8),
+    @types.vec2i(9, 9),
+    @types.vec2i(10, 9),
+    @types.vec2i(11, 9),
+  ])
+  set_blocked(grid, [
+    @types.vec2i(5, 4),
+    @types.vec2i(6, 4),
+    @types.vec2i(5, 5),
+    @types.vec2i(6, 5),
+  ])
   {
     grid,
-    epicenters: [
-      @types.new_epicenter(1, 8),
-      @types.new_epicenter(10, 2),
-    ],
+    epicenters: [@types.new_epicenter(1, 8), @types.new_epicenter(10, 2)],
     sensor_budget: 11,
     par_budget: 7,
     par_guesses: 2,
@@ -565,23 +561,22 @@ fn level_22() -> @types.Level {
 ///|
 fn level_23() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(3, 2), @types.vec2i(4, 2), @types.vec2i(3, 3),
-      @types.vec2i(7, 6), @types.vec2i(8, 6), @types.vec2i(8, 7),
-    ],
-  )
-  let towns = set_town(
-    grid,
-    [@types.vec2i(1, 5), @types.vec2i(10, 4), @types.vec2i(6, 9)],
-  )
+  set_blocked(grid, [
+    @types.vec2i(3, 2),
+    @types.vec2i(4, 2),
+    @types.vec2i(3, 3),
+    @types.vec2i(7, 6),
+    @types.vec2i(8, 6),
+    @types.vec2i(8, 7),
+  ])
+  let towns = set_town(grid, [
+    @types.vec2i(1, 5),
+    @types.vec2i(10, 4),
+    @types.vec2i(6, 9),
+  ])
   {
     grid,
-    epicenters: [
-      @types.new_epicenter(4, 7),
-      @types.new_epicenter(9, 2),
-    ],
+    epicenters: [@types.new_epicenter(4, 7), @types.new_epicenter(9, 2)],
     sensor_budget: 11,
     par_budget: 8,
     par_guesses: 2,
@@ -595,31 +590,25 @@ fn level_23() -> @types.Level {
 ///|
 fn level_24() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_noisy(
-    grid,
-    [
-      @types.vec2i(5, 3), @types.vec2i(6, 3), @types.vec2i(7, 3),
-      @types.vec2i(5, 4), @types.vec2i(6, 4), @types.vec2i(7, 4),
-      @types.vec2i(5, 5), @types.vec2i(6, 5), @types.vec2i(7, 5),
-      @types.vec2i(5, 6), @types.vec2i(6, 6), @types.vec2i(7, 6),
-    ],
-  )
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(2, 1), @types.vec2i(9, 8),
-    ],
-  )
-  let towns = set_town(
-    grid,
-    [@types.vec2i(0, 5), @types.vec2i(11, 5)],
-  )
+  set_noisy(grid, [
+    @types.vec2i(5, 3),
+    @types.vec2i(6, 3),
+    @types.vec2i(7, 3),
+    @types.vec2i(5, 4),
+    @types.vec2i(6, 4),
+    @types.vec2i(7, 4),
+    @types.vec2i(5, 5),
+    @types.vec2i(6, 5),
+    @types.vec2i(7, 5),
+    @types.vec2i(5, 6),
+    @types.vec2i(6, 6),
+    @types.vec2i(7, 6),
+  ])
+  set_blocked(grid, [@types.vec2i(2, 1), @types.vec2i(9, 8)])
+  let towns = set_town(grid, [@types.vec2i(0, 5), @types.vec2i(11, 5)])
   {
     grid,
-    epicenters: [
-      @types.new_epicenter(3, 7),
-      @types.new_epicenter(10, 2),
-    ],
+    epicenters: [@types.new_epicenter(3, 7), @types.new_epicenter(10, 2)],
     sensor_budget: 12,
     par_budget: 8,
     par_guesses: 2,
@@ -633,37 +622,41 @@ fn level_24() -> @types.Level {
 ///|
 fn level_25() -> @types.Level {
   let grid = @types.make_grid(@types.grid_rows, @types.grid_cols)
-  set_noisy(
-    grid,
-    [
-      @types.vec2i(4, 3), @types.vec2i(5, 3), @types.vec2i(6, 3),
-      @types.vec2i(7, 3), @types.vec2i(4, 4), @types.vec2i(5, 4),
-      @types.vec2i(6, 4), @types.vec2i(7, 4), @types.vec2i(4, 5),
-      @types.vec2i(5, 5), @types.vec2i(6, 5), @types.vec2i(7, 5),
-      @types.vec2i(4, 6), @types.vec2i(5, 6), @types.vec2i(6, 6),
-      @types.vec2i(7, 6),
-    ],
-  )
-  set_blocked(
-    grid,
-    [
-      @types.vec2i(0, 0), @types.vec2i(11, 0), @types.vec2i(0, 9),
-      @types.vec2i(11, 9), @types.vec2i(2, 2), @types.vec2i(9, 7),
-    ],
-  )
-  let towns = set_town(
-    grid,
-    [
-      @types.vec2i(1, 1), @types.vec2i(10, 1), @types.vec2i(1, 8),
-      @types.vec2i(10, 8),
-    ],
-  )
+  set_noisy(grid, [
+    @types.vec2i(4, 3),
+    @types.vec2i(5, 3),
+    @types.vec2i(6, 3),
+    @types.vec2i(7, 3),
+    @types.vec2i(4, 4),
+    @types.vec2i(5, 4),
+    @types.vec2i(6, 4),
+    @types.vec2i(7, 4),
+    @types.vec2i(4, 5),
+    @types.vec2i(5, 5),
+    @types.vec2i(6, 5),
+    @types.vec2i(7, 5),
+    @types.vec2i(4, 6),
+    @types.vec2i(5, 6),
+    @types.vec2i(6, 6),
+    @types.vec2i(7, 6),
+  ])
+  set_blocked(grid, [
+    @types.vec2i(0, 0),
+    @types.vec2i(11, 0),
+    @types.vec2i(0, 9),
+    @types.vec2i(11, 9),
+    @types.vec2i(2, 2),
+    @types.vec2i(9, 7),
+  ])
+  let towns = set_town(grid, [
+    @types.vec2i(1, 1),
+    @types.vec2i(10, 1),
+    @types.vec2i(1, 8),
+    @types.vec2i(10, 8),
+  ])
   {
     grid,
-    epicenters: [
-      @types.new_epicenter(3, 8),
-      @types.new_epicenter(8, 1),
-    ],
+    epicenters: [@types.new_epicenter(3, 8), @types.new_epicenter(8, 1)],
     sensor_budget: 12,
     par_budget: 8,
     par_guesses: 2,

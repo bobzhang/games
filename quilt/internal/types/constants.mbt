@@ -61,7 +61,9 @@ pub let color_grid_bg : @raylib.Color = @raylib.Color::new(255, 252, 245, 255)
 pub let color_grid_line : @raylib.Color = @raylib.Color::new(180, 170, 155, 255)
 
 ///|
-pub let color_patch_base : @raylib.Color = @raylib.Color::new(235, 225, 210, 255)
+pub let color_patch_base : @raylib.Color = @raylib.Color::new(
+  235, 225, 210, 255,
+)
 
 ///|
 pub let color_selected : @raylib.Color = @raylib.Color::new(100, 180, 255, 180)
@@ -82,7 +84,9 @@ pub let color_wildcard : @raylib.Color = @raylib.Color::new(255, 200, 50, 255)
 pub let color_text : @raylib.Color = @raylib.Color::new(60, 50, 40, 255)
 
 ///|
-pub let color_text_light : @raylib.Color = @raylib.Color::new(130, 120, 110, 255)
+pub let color_text_light : @raylib.Color = @raylib.Color::new(
+  130, 120, 110, 255,
+)
 
 ///|
 pub let color_title : @raylib.Color = @raylib.Color::new(140, 60, 40, 255)
@@ -91,22 +95,30 @@ pub let color_title : @raylib.Color = @raylib.Color::new(140, 60, 40, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(180, 120, 80, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(200, 140, 90, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  200, 140, 90, 255,
+)
 
 ///|
 pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 200, 50, 255)
 
 ///|
-pub let color_star_empty : @raylib.Color = @raylib.Color::new(200, 190, 175, 255)
+pub let color_star_empty : @raylib.Color = @raylib.Color::new(
+  200, 190, 175, 255,
+)
 
 ///|
 pub let color_tray_bg : @raylib.Color = @raylib.Color::new(220, 210, 195, 255)
 
 ///|
-pub let color_progress_bg : @raylib.Color = @raylib.Color::new(200, 190, 175, 255)
+pub let color_progress_bg : @raylib.Color = @raylib.Color::new(
+  200, 190, 175, 255,
+)
 
 ///|
-pub let color_progress_fill : @raylib.Color = @raylib.Color::new(80, 200, 120, 255)
+pub let color_progress_fill : @raylib.Color = @raylib.Color::new(
+  80, 200, 120, 255,
+)
 
 // Pattern colors - each distinct
 

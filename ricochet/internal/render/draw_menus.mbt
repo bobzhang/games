@@ -10,7 +10,10 @@ pub fn draw_title(game : @types.Game) -> Unit {
   let tx = (@types.screen_width - tw) / 2
   // Glow behind
   @draw.draw_text(
-    title, tx - 1, 180 - 1, title_size,
+    title,
+    tx - 1,
+    180 - 1,
+    title_size,
     @raylib.Color::new(0, 255, 255, 40),
   )
   @draw.draw_text(title, tx, 180, title_size, @types.color_title)
@@ -85,20 +88,17 @@ pub fn draw_world_select(game : @types.Game) -> Unit {
     @raylib.draw_rectangle_lines(bx, by, bw, bh, border_col)
     if is_selected {
       @raylib.draw_rectangle(
-        bx + 1, by + 1, bw - 2, bh - 2,
+        bx + 1,
+        by + 1,
+        bw - 2,
+        bh - 2,
         @raylib.Color::new(255, 255, 0, 20),
       )
     }
     // World name
     let name = world_names[i]
     let nw = @draw.measure_text(name, 22)
-    @draw.draw_text(
-      name,
-      bx + (bw - nw) / 2,
-      by + 30,
-      22,
-      border_col,
-    )
+    @draw.draw_text(name, bx + (bw - nw) / 2, by + 30, 22, border_col)
     // Stars earned for this world
     let mut total_stars = 0
     let start_idx = i * @types.levels_per_world
@@ -134,7 +134,10 @@ pub fn draw_world_select(game : @types.Game) -> Unit {
   // Controls
   @draw.draw_text(
     "LEFT/RIGHT: Select  |  SPACE: Enter  |  ESC: Back",
-    320, 520, 18, @raylib.Color::new(150, 150, 180, 200),
+    320,
+    520,
+    18,
+    @raylib.Color::new(150, 150, 180, 200),
   )
 }
 
@@ -182,7 +185,10 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     @raylib.draw_rectangle_lines(cx, cy, cell_w - 10, cell_h, border_col)
     if is_selected {
       @raylib.draw_rectangle(
-        cx + 1, cy + 1, cell_w - 12, cell_h - 2,
+        cx + 1,
+        cy + 1,
+        cell_w - 12,
+        cell_h - 2,
         @raylib.Color::new(255, 255, 0, 15),
       )
     }
@@ -215,7 +221,10 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
   // Controls
   @draw.draw_text(
     "ARROWS: Navigate  |  SPACE: Play  |  ESC: Back",
-    330, 440, 18, @raylib.Color::new(150, 150, 180, 200),
+    330,
+    440,
+    18,
+    @raylib.Color::new(150, 150, 180, 200),
   )
 }
 
@@ -228,7 +237,10 @@ pub fn draw_results(game : @types.Game) -> Unit {
   }
   // Dim background
   @raylib.draw_rectangle(
-    0, 0, @types.screen_width, @types.screen_height,
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
     @raylib.Color::new(10, 10, 26, 200),
   )
   let all_hit = @types.all_targets_hit(level)
@@ -239,13 +251,7 @@ pub fn draw_results(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 60, 60, 255)
   }
   let tw = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (@types.screen_width - tw) / 2,
-    150,
-    40,
-    title_col,
-  )
+  @draw.draw_text(title, (@types.screen_width - tw) / 2, 150, 40, title_col)
   if all_hit {
     // Bounces info
     let bounce_text = "Bounces: \{game.total_bounces}  |  Par: \{level.par_bounces}"
@@ -273,25 +279,19 @@ pub fn draw_results(game : @types.Game) -> Unit {
     let sx = (@types.screen_width - star_total_w) / 2
     draw_stars(sx, 280, stars, star_size)
     // Star explanations
-    @draw.draw_text(
-      "Hit all targets", 480, 340, 16, @types.color_hud_text,
-    )
+    @draw.draw_text("Hit all targets", 480, 340, 16, @types.color_hud_text)
     let par_col = if under_par {
       @types.color_star_filled
     } else {
       @types.color_star_empty
     }
-    @draw.draw_text(
-      "Under par bounces", 480, 365, 16, par_col,
-    )
+    @draw.draw_text("Under par bounces", 480, 365, 16, par_col)
     let pk_col = if has_pickup {
       @types.color_star_filled
     } else {
       @types.color_star_empty
     }
-    @draw.draw_text(
-      "Collected pickup", 480, 390, 16, pk_col,
-    )
+    @draw.draw_text("Collected pickup", 480, 390, 16, pk_col)
   } else {
     // Failure info
     let hit = @types.count_targets_hit(level)
@@ -320,7 +320,10 @@ pub fn draw_results(game : @types.Game) -> Unit {
 /// Draw pause overlay.
 pub fn draw_pause_overlay(_game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0, 0, @types.screen_width, @types.screen_height,
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
     @raylib.Color::new(10, 10, 26, 180),
   )
   let title = "PAUSED"

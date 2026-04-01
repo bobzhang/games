@@ -46,20 +46,11 @@ fn draw_header(game : @types.Game, level : @types.Level) -> Unit {
   // Level description
   @draw.draw_text(level.description, 20, 50, 14, @types.color_text_dim)
   // Separator
-  @raylib.draw_line(
-    20,
-    75,
-    w - 20,
-    75,
-    @types.color_panel_border,
-  )
+  @raylib.draw_line(20, 75, w - 20, 75, @types.color_panel_border)
   // Controls hint
   @draw.draw_text(
     "Arrows:move  Shift+Arrow:select  Enter:apply  V:verify  Z:undo  R:restart  H:help  Tab:base  Esc:back",
-    20,
-    80,
-    12,
-    @types.color_text_dim,
+    20, 80, 12, @types.color_text_dim,
   )
 }
 
@@ -104,7 +95,13 @@ fn draw_sequence(game : @types.Game) -> Unit {
     let e = @types.selection_max(game)
     let sel_x = sx_start + s * (base_size + gap) - 2
     let sel_w = (e - s) * (base_size + gap) + 4
-    @raylib.draw_rectangle(sel_x, sy - 2, sel_w, base_size + 4, @types.color_selection)
+    @raylib.draw_rectangle(
+      sel_x,
+      sy - 2,
+      sel_w,
+      base_size + 4,
+      @types.color_selection,
+    )
   }
   // Draw bases
   for i in 0..<seq.length() {
@@ -116,9 +113,18 @@ fn draw_sequence(game : @types.Game) -> Unit {
     let base = seq[i]
     let color = @types.base_color(base)
     // Base background
-    @raylib.draw_rectangle(bx, sy, base_size, base_size, @raylib.Color::new(
-      color.r.to_int(), color.g.to_int(), color.b.to_int(), 60,
-    ))
+    @raylib.draw_rectangle(
+      bx,
+      sy,
+      base_size,
+      base_size,
+      @raylib.Color::new(
+        color.r.to_int(),
+        color.g.to_int(),
+        color.b.to_int(),
+        60,
+      ),
+    )
     @raylib.draw_rectangle_lines(bx, sy, base_size, base_size, color)
     // Base letter
     let letter = @types.base_char(base)
@@ -156,13 +162,7 @@ fn draw_sequence(game : @types.Game) -> Unit {
   // Current operation indicator at cursor
   let op_color = @types.op_color(game.selected_op)
   let op_label = @types.op_name(game.selected_op)
-  @draw.draw_text(
-    op_label,
-    cursor_x - 10,
-    sy + base_size + 20,
-    12,
-    op_color,
-  )
+  @draw.draw_text(op_label, cursor_x - 10, sy + base_size + 20, 12, op_color)
   // If insert mode, show which base will be inserted
   if game.selected_op == Insert {
     let ins_label = "[" + @types.base_char(game.insert_base) + "]"
@@ -217,11 +217,7 @@ fn draw_trait_readout(game : @types.Game) -> Unit {
   @draw.draw_text("TRAITS:", 20, ty - 25, 16, @types.color_text_dim)
   if groups.length() == 0 {
     @draw.draw_text(
-      "No valid reading frame (ATG start codon not found)",
-      20,
-      ty,
-      16,
-      @types.color_fail,
+      "No valid reading frame (ATG start codon not found)", 20, ty, 16, @types.color_fail,
     )
     return
   }
@@ -232,22 +228,25 @@ fn draw_trait_readout(game : @types.Game) -> Unit {
     let name = @types.trait_name(group.trait_)
     // Trait box
     let box_w = @draw.measure_text(name, 18) + 20
-    @raylib.draw_rectangle(tx, ty, box_w, 30, @raylib.Color::new(
-      color.r.to_int(), color.g.to_int(), color.b.to_int(), 40,
-    ))
+    @raylib.draw_rectangle(
+      tx,
+      ty,
+      box_w,
+      30,
+      @raylib.Color::new(
+        color.r.to_int(),
+        color.g.to_int(),
+        color.b.to_int(),
+        40,
+      ),
+    )
     @raylib.draw_rectangle_lines(tx, ty, box_w, 30, color)
     @draw.draw_text(name, tx + 10, ty + 6, 18, color)
     // Codon bases below
     let mut bx = tx + 2
     for j in 0..<group.bases.length() {
       let bc = @types.base_color(group.bases[j])
-      @draw.draw_text(
-        @types.base_char(group.bases[j]),
-        bx,
-        ty + 34,
-        12,
-        bc,
-      )
+      @draw.draw_text(@types.base_char(group.bases[j]), bx, ty + 34, 12, bc)
       bx += 12
     }
     // Arrow between traits

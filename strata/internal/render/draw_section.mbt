@@ -70,18 +70,29 @@ fn draw_cross_section(game : @types.Game, _level : @types.Level) -> Unit {
       )
     }
     // Slot border
-    @raylib.draw_rectangle_lines(sx, slot_y, sw, sh - 2, @types.color_slot_border)
+    @raylib.draw_rectangle_lines(
+      sx,
+      slot_y,
+      sw,
+      sh - 2,
+      @types.color_slot_border,
+    )
     // Slot number label
     let label = (i + 1).to_string()
-    @draw.draw_text(label, sx - 25, slot_y + (sh - 18) / 2, 16, @types.color_text_dim)
+    @draw.draw_text(
+      label,
+      sx - 25,
+      slot_y + (sh - 18) / 2,
+      16,
+      @types.color_text_dim,
+    )
   }
 }
 
 ///|
 fn rock_text_color(rock : @types.RockKind) -> @raylib.Color {
   match rock {
-    Coal | Basalt | Shale | Slate =>
-      @raylib.Color::new(220, 215, 205, 255)
+    Coal | Basalt | Shale | Slate => @raylib.Color::new(220, 215, 205, 255)
     _ => @raylib.Color::new(40, 35, 30, 255)
   }
 }
@@ -92,7 +103,7 @@ fn draw_rock_texture(
   y : Int,
   w : Int,
   h : Int,
-  rock : @types.RockKind
+  rock : @types.RockKind,
 ) -> Unit {
   match rock {
     Sandstone => {

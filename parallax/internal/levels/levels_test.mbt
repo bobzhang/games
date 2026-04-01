@@ -127,11 +127,7 @@ test "par_moves and par_voxels are positive" {
 
 ///|
 test "silhouette_from_bits creates correct 4x4 pattern" {
-  let s = @types.silhouette_from_bits(
-    4,
-    4,
-    [0b1111, 0b1001, 0b1001, 0b1111],
-  )
+  let s = @types.silhouette_from_bits(4, 4, [0b1111, 0b1001, 0b1001, 0b1111])
   // Top row: all filled
   inspect(s.cells[0], content="true")
   inspect(s.cells[1], content="true")
@@ -151,11 +147,9 @@ test "silhouette_from_bits creates correct 4x4 pattern" {
 
 ///|
 test "silhouette_from_bits 5x5" {
-  let s = @types.silhouette_from_bits(
-    5,
-    5,
-    [0b11111, 0b10001, 0b10101, 0b10001, 0b11111],
-  )
+  let s = @types.silhouette_from_bits(5, 5, [
+    0b11111, 0b10001, 0b10101, 0b10001, 0b11111,
+  ])
   inspect(s.width, content="5")
   inspect(s.height, content="5")
   // Center cell
@@ -172,6 +166,7 @@ test "silhouette_from_bits 5x5" {
 
 // Build the maximal grid: fill every cell where all three projections
 // require it. This is a valid (possibly partial) solution.
+
 ///|
 fn build_maximal_grid(level : @types.Level) -> @types.VoxelGrid {
   let s = level.size
@@ -296,10 +291,7 @@ test "all silhouette cells arrays have correct length" {
       levels[i].targets.front.cells.length(),
       content=expected.to_string(),
     )
-    inspect(
-      levels[i].targets.side.cells.length(),
-      content=expected.to_string(),
-    )
+    inspect(levels[i].targets.side.cells.length(), content=expected.to_string())
   }
 }
 

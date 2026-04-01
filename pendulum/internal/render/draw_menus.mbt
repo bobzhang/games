@@ -15,9 +15,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Start prompt
   let prompt = "Press ENTER to Start"
   let pw = @draw.measure_text(prompt, 28)
-  let alpha = @types.absf(
-    @types.sinf(Float::from_int(game.frame_count) * 0.05),
-  )
+  let alpha = @types.absf(@types.sinf(Float::from_int(game.frame_count) * 0.05))
   let a_byte = (alpha * 255.0).to_int()
   let a_clamped = if a_byte < 0 {
     0
@@ -55,12 +53,7 @@ fn draw_title_pendulum(game : @types.Game, cx : Int, cy : Int) -> Unit {
   // Anchor
   @raylib.draw_circle(cx, cy, 8.0, @types.color_anchor)
   // Weight
-  @raylib.draw_circle(
-    wx.to_int(),
-    wy.to_int(),
-    16.0,
-    @types.color_weight,
-  )
+  @raylib.draw_circle(wx.to_int(), wy.to_int(), 16.0, @types.color_weight)
   @raylib.draw_circle(
     wx.to_int(),
     wy.to_int(),

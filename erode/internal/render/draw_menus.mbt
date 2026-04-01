@@ -11,7 +11,13 @@ fn draw_title(_game : @types.Game) -> Unit {
   )
   let sub = "Erosion Sculpting Puzzle"
   let sw = @draw.measure_text(sub, 24)
-  @draw.draw_text(sub, (@types.screen_width - sw) / 2, 260, 24, @types.color_text)
+  @draw.draw_text(
+    sub,
+    (@types.screen_width - sw) / 2,
+    260,
+    24,
+    @types.color_text,
+  )
   let prompt = "Press ENTER to start"
   let pw = @draw.measure_text(prompt, 22)
   @draw.draw_text(
@@ -39,14 +45,26 @@ fn draw_title(_game : @types.Game) -> Unit {
   // Instructions at bottom
   let inst = "Sculpt blocks to match targets using erosion forces"
   let iw = @draw.measure_text(inst, 18)
-  @draw.draw_text(inst, (@types.screen_width - iw) / 2, 500, 18, @types.color_text_dim)
+  @draw.draw_text(
+    inst,
+    (@types.screen_width - iw) / 2,
+    500,
+    18,
+    @types.color_text_dim,
+  )
 }
 
 ///|
 fn draw_tier_select(game : @types.Game) -> Unit {
   let title = "SELECT TIER"
   let tw = @draw.measure_text(title, 40)
-  @draw.draw_text(title, (@types.screen_width - tw) / 2, 60, 40, @types.color_text)
+  @draw.draw_text(
+    title,
+    (@types.screen_width - tw) / 2,
+    60,
+    40,
+    @types.color_text,
+  )
   let tiers : Array[@types.Tier] = [Clay, Stone, Crystal]
   let tier_descs : Array[String] = [
     "Water + Wind (7 levels)", "+ Frost (7 levels)", "All Forces (6 levels)",
@@ -58,14 +76,26 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let bh = 130
     // Check if tier is unlocked (previous tier has at least 1 star on all levels)
     let unlocked = is_tier_unlocked(game, tier)
-    let bg = if unlocked { @types.color_button } else { @raylib.Color::new(30, 30, 35, 255) }
+    let bg = if unlocked {
+      @types.color_button
+    } else {
+      @raylib.Color::new(30, 30, 35, 255)
+    }
     @raylib.draw_rectangle(bx, by, bw, bh, bg)
     let border = @types.tier_color(tier)
     @raylib.draw_rectangle_lines(bx, by, bw, bh, border)
     let name = @types.tier_name(tier)
-    let name_color = if unlocked { @types.tier_color(tier) } else { @types.color_text_dim }
+    let name_color = if unlocked {
+      @types.tier_color(tier)
+    } else {
+      @types.color_text_dim
+    }
     @draw.draw_text(name, bx + 30, by + 15, 36, name_color)
-    let desc_color = if unlocked { @types.color_text } else { @types.color_text_dim }
+    let desc_color = if unlocked {
+      @types.color_text
+    } else {
+      @types.color_text_dim
+    }
     @draw.draw_text(tier_descs[i], bx + 30, by + 60, 20, desc_color)
     // Star count for this tier
     let (start, end) = @types.tier_level_range(tier)
@@ -78,12 +108,30 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let star_text = "Stars: \{total_stars}/\{max_stars}"
     @draw.draw_text(star_text, bx + 30, by + 88, 18, desc_color)
     if !unlocked {
-      @draw.draw_text("LOCKED", bx + bw - 120, by + 50, 22, @types.color_text_dim)
+      @draw.draw_text(
+        "LOCKED",
+        bx + bw - 120,
+        by + 50,
+        22,
+        @types.color_text_dim,
+      )
     }
     // Key hint
-    @draw.draw_text("\{i + 1}", bx + bw - 40, by + 10, 20, @types.color_text_dim)
+    @draw.draw_text(
+      "\{i + 1}",
+      bx + bw - 40,
+      by + 10,
+      20,
+      @types.color_text_dim,
+    )
   }
-  @draw.draw_text("[ESC] Back", 20, @types.screen_height - 30, 16, @types.color_text_dim)
+  @draw.draw_text(
+    "[ESC] Back",
+    20,
+    @types.screen_height - 30,
+    16,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -159,10 +207,22 @@ fn draw_level_select(game : @types.Game) -> Unit {
     // Stars
     draw_stars(x + 10, y + 80, score.stars, 3)
     if score.completed {
-      @draw.draw_text("DONE", x + card_w - 55, y + 85, 16, @types.color_target_match)
+      @draw.draw_text(
+        "DONE",
+        x + card_w - 55,
+        y + 85,
+        16,
+        @types.color_target_match,
+      )
     }
   }
-  @draw.draw_text("[ESC] Back", 20, @types.screen_height - 30, 16, @types.color_text_dim)
+  @draw.draw_text(
+    "[ESC] Back",
+    20,
+    @types.screen_height - 30,
+    16,
+    @types.color_text_dim,
+  )
   @draw.draw_text(
     "Press level number to play",
     (@types.screen_width - @draw.measure_text("Press level number to play", 18)) /
@@ -180,15 +240,28 @@ fn draw_results(game : @types.Game) -> Unit {
   // Title
   let title = "RESULTS"
   let tw = @draw.measure_text(title, 48)
-  @draw.draw_text(title, (@types.screen_width - tw) / 2, 80, 48, @types.color_text)
+  @draw.draw_text(
+    title,
+    (@types.screen_width - tw) / 2,
+    80,
+    48,
+    @types.color_text,
+  )
   // Level name
   let name = "Level \{game.current_level + 1}: \{level.name}"
   let nw = @draw.measure_text(name, 28)
-  @draw.draw_text(name, (@types.screen_width - nw) / 2, 150, 28, @types.color_text_highlight)
+  @draw.draw_text(
+    name,
+    (@types.screen_width - nw) / 2,
+    150,
+    28,
+    @types.color_text_highlight,
+  )
   // Match result
   let result = @erosion.compare_grids(game.grid, game.target)
-  let pct = result.matching * 100 / (result.matching + result.over_eroded +
-  result.under_eroded)
+  let pct = result.matching *
+    100 /
+    (result.matching + result.over_eroded + result.under_eroded)
   let pct_text = "Match: \{pct}%"
   let pw = @draw.measure_text(pct_text, 32)
   let pct_color = if pct == 100 {
@@ -200,7 +273,13 @@ fn draw_results(game : @types.Game) -> Unit {
   // Forces used
   let forces_text = "Forces Used: \{game.forces_used} (Par: \{game.par_forces})"
   let fw = @draw.measure_text(forces_text, 24)
-  @draw.draw_text(forces_text, (@types.screen_width - fw) / 2, 270, 24, @types.color_text)
+  @draw.draw_text(
+    forces_text,
+    (@types.screen_width - fw) / 2,
+    270,
+    24,
+    @types.color_text,
+  )
   // Over/under erosion
   if result.over_eroded > 0 {
     let over_text = "Over-eroded: \{result.over_eroded} cells"
@@ -237,9 +316,7 @@ fn draw_results(game : @types.Game) -> Unit {
     @draw.draw_text("*", sx, 390, 48, color)
   }
   // Star descriptions
-  let descs = [
-    "Match target", "Within par forces", "No over-erosion",
-  ]
+  let descs = ["Match target", "Within par forces", "No over-erosion"]
   for i in 0..<3 {
     let check = if i < stars { "[X]" } else { "[ ]" }
     let desc = "\{check} \{descs[i]}"
@@ -255,7 +332,10 @@ fn draw_results(game : @types.Game) -> Unit {
   // Draw prompts
   @draw.draw_text(
     "[ENTER] Continue  [R] Retry",
-    (@types.screen_width - @draw.measure_text("[ENTER] Continue  [R] Retry", 22)) /
+    (
+      @types.screen_width -
+      @draw.measure_text("[ENTER] Continue  [R] Retry", 22)
+    ) /
     2,
     600,
     22,

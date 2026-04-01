@@ -167,7 +167,7 @@ fn update_playing(game : @types.Game) -> Unit {
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     match game.hover_fence {
       None => ()
-      Some(f) => {
+      Some(f) =>
         if game.play_state != Complete {
           // Save undo state
           game.undo_stack.push({ fences: @types.copy_fences(game.fences) })
@@ -176,7 +176,6 @@ fn update_playing(game : @types.Game) -> Unit {
           // Recompute
           recompute_regions(game)
         }
-      }
     }
   }
 }
@@ -184,9 +183,7 @@ fn update_playing(game : @types.Game) -> Unit {
 ///|
 fn update_hover(game : @types.Game) -> Unit {
   match game.current_level {
-    None => {
-      game.hover_fence = None
-    }
+    None => game.hover_fence = None
     Some(level) => {
       let mx = @raylib.get_mouse_x()
       let my = @raylib.get_mouse_y()
@@ -205,10 +202,7 @@ fn update_hover(game : @types.Game) -> Unit {
           let ey = oy + row * cs
           let dx = mx - ex
           let dy = my - ey
-          if dx > -(cs / 2) &&
-            dx < cs / 2 &&
-            dy > -snap_dist &&
-            dy < snap_dist {
+          if dx > -(cs / 2) && dx < cs / 2 && dy > -snap_dist && dy < snap_dist {
             game.hover_fence = Some(@types.make_fence(row, col, Horizontal))
             return
           }
@@ -221,10 +215,7 @@ fn update_hover(game : @types.Game) -> Unit {
           let ey = oy + row * cs + cs / 2
           let dx = mx - ex
           let dy = my - ey
-          if dx > -snap_dist &&
-            dx < snap_dist &&
-            dy > -(cs / 2) &&
-            dy < cs / 2 {
+          if dx > -snap_dist && dx < snap_dist && dy > -(cs / 2) && dy < cs / 2 {
             game.hover_fence = Some(@types.make_fence(row, col, Vertical))
             return
           }

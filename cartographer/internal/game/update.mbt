@@ -147,7 +147,10 @@ fn update_playing(game : @types.Game) -> Unit {
       None => {
         // First hint: narrow down possibilities
         let (cells, feat) = @solver.compute_narrow_hint(
-          game.grid, @types.grid_size, level.features_to_place, level.clues,
+          game.grid,
+          @types.grid_size,
+          level.features_to_place,
+          level.clues,
         )
         game.hint_level = Narrow
         game.hint_narrow_cells = cells
@@ -163,7 +166,10 @@ fn update_playing(game : @types.Game) -> Unit {
       Narrow => {
         // Second hint: reveal a specific cell
         let (cell, feat) = @solver.compute_reveal_hint(
-          game.grid, @types.grid_size, level.features_to_place, level.clues,
+          game.grid,
+          @types.grid_size,
+          level.features_to_place,
+          level.clues,
         )
         game.hint_level = Reveal
         game.hint_reveal_cell = cell
@@ -194,7 +200,9 @@ fn update_playing(game : @types.Game) -> Unit {
                 game.grid[idx] = Some(feat)
                 game.total_placements += 1
                 @solver.validate_all_clues(
-                  level.clues, game.grid, @types.grid_size,
+                  level.clues,
+                  game.grid,
+                  @types.grid_size,
                 )
                 // Trigger satisfied clue animation
                 let newly_satisfied : Array[Int] = []
@@ -259,7 +267,8 @@ fn update_playing(game : @types.Game) -> Unit {
       Some(feat) => {
         let level = game.levels[game.current_level]
         game.highlighted_clue_indices = @types.clues_referencing_feature(
-          level.clues, feat,
+          level.clues,
+          feat,
         )
       }
       None => game.highlighted_clue_indices = []
@@ -278,11 +287,15 @@ fn update_playing(game : @types.Game) -> Unit {
   game.highlighted_cells = []
   for ci in 0..<clue_count {
     let cy = cpy + 40 + ci * 32
-    if mx >= cpx && mx < cpx + @types.clue_panel_width && my >= cy && my < cy +
-      32 {
+    if mx >= cpx &&
+      mx < cpx + @types.clue_panel_width &&
+      my >= cy &&
+      my < cy + 32 {
       game.hover_clue_index = ci
       game.highlighted_cells = @types.cells_referenced_by_clue(
-        level.clues[ci], game.grid, @types.grid_size,
+        level.clues[ci],
+        game.grid,
+        @types.grid_size,
       )
       break
     }
@@ -330,9 +343,7 @@ fn update_playing(game : @types.Game) -> Unit {
             game.grid[idx] = None
             // Revalidate
             let level = game.levels[game.current_level]
-            @solver.validate_all_clues(
-              level.clues, game.grid, @types.grid_size,
-            )
+            @solver.validate_all_clues(level.clues, game.grid, @types.grid_size)
             game.show_hints = false
           }
           None => ()
@@ -348,14 +359,12 @@ fn handle_grid_click(game : @types.Game, pos : @types.Vec2i) -> Unit {
   let level = game.levels[game.current_level]
   let idx = @types.pos_to_index(pos, @types.grid_size)
   match game.selected_feature {
-    None => {
+    None =>
       // If there's a feature here, remove it
       match game.grid[idx] {
         Some(_) => {
           game.grid[idx] = None
-          @solver.validate_all_clues(
-            level.clues, game.grid, @types.grid_size,
-          )
+          @solver.validate_all_clues(level.clues, game.grid, @types.grid_size)
           game.show_hints = false
           // Reset hint cycle when board changes
           game.hint_level = None
@@ -364,16 +373,13 @@ fn handle_grid_click(game : @types.Game, pos : @types.Vec2i) -> Unit {
         }
         None => ()
       }
-    }
     Some(feat) => {
       // Check if same feature already placed here - remove it
       match game.grid[idx] {
         Some(existing) =>
           if existing == feat {
             game.grid[idx] = None
-            @solver.validate_all_clues(
-              level.clues, game.grid, @types.grid_size,
-            )
+            @solver.validate_all_clues(level.clues, game.grid, @types.grid_size)
             game.show_hints = false
             game.hint_level = None
             game.hint_narrow_cells = []
@@ -385,7 +391,8 @@ fn handle_grid_click(game : @types.Game, pos : @types.Vec2i) -> Unit {
       // Check if we can place more of this type
       let placed_count = @solver.count_placed_features(game.grid, feat)
       let needed_count = @solver.get_feature_placement_count(
-        level.features_to_place, feat,
+        level.features_to_place,
+        feat,
       )
       if placed_count >= needed_count {
         game.message = "All \{@types.feature_name(feat)}s already placed"
@@ -410,7 +417,8 @@ fn handle_grid_click(game : @types.Game, pos : @types.Vec2i) -> Unit {
       }
       // Record which clues were satisfied before placement
       let prev_satisfied : Array[Bool] = Array::make(
-        level.clues.length(), false,
+        level.clues.length(),
+        false,
       )
       for ci in 0..<level.clues.length() {
         prev_satisfied[ci] = level.clues[ci].status == Satisfied
@@ -480,7 +488,7 @@ fn check_level_complete(game : @types.Game) -> Unit {
 
 ///|
 fn get_unique_features(
-  features : Array[@types.FeatureKind]
+  features : Array[@types.FeatureKind],
 ) -> Array[@types.FeatureKind] {
   let result : Array[@types.FeatureKind] = []
   for i in 0..<features.length() {

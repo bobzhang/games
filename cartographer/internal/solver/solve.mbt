@@ -7,7 +7,7 @@ pub fn solve(
   size : Int,
   features_to_place : Array[@types.FeatureKind],
   clues : Array[@types.Clue],
-  max_solutions~ : Int = 2
+  max_solutions? : Int = 2,
 ) -> Array[Array[@types.FeatureKind?]] {
   let solutions : Array[Array[@types.FeatureKind?]] = []
   let needed = get_needed_features(grid, features_to_place)
@@ -35,7 +35,7 @@ fn solve_recursive(
   idx : Int,
   clues : Array[@types.Clue],
   solutions : Array[Array[@types.FeatureKind?]],
-  max_solutions : Int
+  max_solutions : Int,
 ) -> Unit {
   if solutions.length() >= max_solutions {
     return
@@ -64,7 +64,13 @@ fn solve_recursive(
         if check_placement_consistent(grid, size, clues, pos, feature) {
           grid[cell] = Some(feature)
           solve_recursive(
-            grid, size, needed, idx + 1, clues, solutions, max_solutions,
+            grid,
+            size,
+            needed,
+            idx + 1,
+            clues,
+            solutions,
+            max_solutions,
           )
           grid[cell] = None
         }
@@ -79,12 +85,10 @@ pub fn count_solutions(
   size : Int,
   features_to_place : Array[@types.FeatureKind],
   clues : Array[@types.Clue],
-  max_solutions~ : Int = 2
+  max_solutions? : Int = 2,
 ) -> Int {
   let grid : Array[@types.FeatureKind?] = Array::make(size * size, None)
-  let solutions = solve(
-    grid, size, features_to_place, clues, max_solutions~,
-  )
+  let solutions = solve(grid, size, features_to_place, clues, max_solutions~)
   // Reset clue statuses
   for i in 0..<clues.length() {
     clues[i].status = Pending

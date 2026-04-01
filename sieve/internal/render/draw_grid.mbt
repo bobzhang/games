@@ -149,7 +149,7 @@ fn draw_candidates(game : @types.Game, level : @types.Level) -> Unit {
   let x = ox + col * cs
   let y = oy + row * cs
   // Draw small candidate numbers in a 3x3 sub-grid within the cell
-  for n in 1..=9 {
+  for n in 1..<=9 {
     let sub_col = (n - 1) % 3
     let sub_row = (n - 1) / 3
     let cx = x + 6 + sub_col * 24
@@ -158,13 +158,7 @@ fn draw_candidates(game : @types.Game, level : @types.Level) -> Unit {
     if candidates[n] {
       @draw.draw_text(text, cx, cy, 16, @types.color_candidate_text)
     } else {
-      @draw.draw_text(
-        text,
-        cx,
-        cy,
-        16,
-        @raylib.Color::new(80, 50, 50, 100),
-      )
+      @draw.draw_text(text, cx, cy, 16, @raylib.Color::new(80, 50, 50, 100))
     }
   }
 }
@@ -318,7 +312,11 @@ fn draw_number_palette(game : @types.Game, level : @types.Level) -> Unit {
         Float::from_int(pc),
         Float::from_int(pc),
       ),
-      if has_candidates && is_valid { 2.0 } else { 1.0 },
+      if has_candidates && is_valid {
+        2.0
+      } else {
+        1.0
+      },
       border,
     )
     // Number
@@ -408,11 +406,7 @@ fn draw_constraint_panel(game : @types.Game, level : @types.Level) -> Unit {
     let bar_w = panel_w - 20
     let bar_h = 6
     @raylib.draw_rectangle(
-      bar_x,
-      bar_y,
-      bar_w,
-      bar_h,
-      @types.color_constraint_bar_bg,
+      bar_x, bar_y, bar_w, bar_h, @types.color_constraint_bar_bg,
     )
     if total > 0 {
       let fill_w = bar_w * sat_count / total
@@ -469,9 +463,16 @@ fn draw_constraint_panel(game : @types.Game, level : @types.Level) -> Unit {
 ///|
 fn constraint_description(c : @types.Constraint) -> String {
   match c.kind {
-    RowSum => "Row " + (c.params[0] + 1).to_string() + " sums to " + c.params[1].to_string()
+    RowSum =>
+      "Row " +
+      (c.params[0] + 1).to_string() +
+      " sums to " +
+      c.params[1].to_string()
     ColProduct =>
-      "Col " + (c.params[0] + 1).to_string() + " product = " + c.params[1].to_string()
+      "Col " +
+      (c.params[0] + 1).to_string() +
+      " product = " +
+      c.params[1].to_string()
     Adjacent =>
       "(" +
       (c.params[0] + 1).to_string() +
@@ -482,7 +483,8 @@ fn constraint_description(c : @types.Constraint) -> String {
       "," +
       (c.params[3] + 1).to_string() +
       ") differ by 1"
-    NoPrimePair => "Row " + (c.params[0] + 1).to_string() + ": no adjacent primes"
+    NoPrimePair =>
+      "Row " + (c.params[0] + 1).to_string() + ": no adjacent primes"
     Divisible =>
       "(" +
       (c.params[0] + 1).to_string() +
@@ -545,19 +547,11 @@ fn draw_game_hud(game : @types.Game, level : @types.Level) -> Unit {
   match game.play_state {
     Solved =>
       @draw.draw_text(
-        "SOLVED! Press Enter for results",
-        @types.grid_offset_x,
-        65,
-        20,
-        @types.color_constraint_sat,
+        "SOLVED! Press Enter for results", @types.grid_offset_x, 65, 20, @types.color_constraint_sat,
       )
     Failed =>
       @draw.draw_text(
-        "Some constraints failed. Keep trying!",
-        @types.grid_offset_x,
-        65,
-        20,
-        @types.color_constraint_unsat,
+        "Some constraints failed. Keep trying!", @types.grid_offset_x, 65, 20, @types.color_constraint_unsat,
       )
     _ => ()
   }

@@ -63,7 +63,9 @@ fn draw_edit_ui(game : @types.Game) -> Unit {
       None => ()
       Some(level) => {
         let remaining = @types.budget_remaining(
-          level.budget, game.dominoes, kind,
+          level.budget,
+          game.dominoes,
+          kind,
         )
         let budget_text = "x" + remaining.to_string()
         let bc = if remaining > 0 {
@@ -142,11 +144,12 @@ fn draw_run_ui(game : @types.Game) -> Unit {
     let bar_w = @types.screen_width - 20
     let bar_h = 12
     @raylib.draw_rectangle(bar_x, bar_y, bar_w, bar_h, @types.color_ui_bg)
-    let progress = Float::from_int(game.current_tick) / Float::from_int(
-        game.max_tick,
-      )
+    let progress = Float::from_int(game.current_tick) /
+      Float::from_int(game.max_tick)
     let fill_w = (Float::from_int(bar_w) * progress).to_int()
-    @raylib.draw_rectangle(bar_x, bar_y, fill_w, bar_h, @types.color_ui_highlight)
+    @raylib.draw_rectangle(
+      bar_x, bar_y, fill_w, bar_h, @types.color_ui_highlight,
+    )
   }
   // Bottom controls
   let step_text = if game.play_state == Stepping {
@@ -189,7 +192,13 @@ fn draw_complete_ui(game : @types.Game) -> Unit {
     360,
     @types.color_success,
   )
-  @draw.draw_text("CASCADE COMPLETE!", 380, banner_y + 20, 36, @types.color_success)
+  @draw.draw_text(
+    "CASCADE COMPLETE!",
+    380,
+    banner_y + 20,
+    36,
+    @types.color_success,
+  )
   // Stars
   match game.current_level {
     None => ()

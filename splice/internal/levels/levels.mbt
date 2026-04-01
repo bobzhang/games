@@ -196,7 +196,26 @@ pub fn get_level(index : Int) -> @types.Level {
     15 =>
       {
         start_sequence: [
-          A, T, G, A, A, A, C, T, G, G, G, T, T, T, A, T, C, T, G, A,
+          A,
+          T,
+          G,
+          A,
+          A,
+          A,
+          C,
+          T,
+          G,
+          G,
+          G,
+          T,
+          T,
+          T,
+          A,
+          T,
+          C,
+          T,
+          G,
+          A,
         ],
         target_traits: [Start, Strength, Shield, Speed, Heal, Stop],
         edit_budget: 5,
@@ -294,9 +313,7 @@ pub fn get_level(index : Int) -> @types.Level {
     // Level 24: Full challenge
     23 =>
       {
-        start_sequence: [
-          A, T, G, T, T, T, C, C, C, A, A, A, G, G, G, T, G, A,
-        ],
+        start_sequence: [A, T, G, T, T, T, C, C, C, A, A, A, G, G, G, T, G, A],
         target_traits: [Start, Strength, Speed, Shield, Stealth, Stop],
         edit_budget: 5,
         par_edits: 3,
@@ -308,9 +325,7 @@ pub fn get_level(index : Int) -> @types.Level {
     // Level 25: Ultimate puzzle
     _ =>
       {
-        start_sequence: [
-          A, T, G, A, G, C, G, A, T, A, T, C, T, C, A, T, G, A,
-        ],
+        start_sequence: [A, T, G, A, G, C, G, A, T, A, T, C, T, C, A, T, G, A],
         target_traits: [Start, Vision, Poison, Heal, Armor, Stop],
         edit_budget: 4,
         par_edits: 2,
@@ -334,10 +349,7 @@ pub fn get_tier_levels(tier : Int) -> Array[Int] {
 }
 
 ///|
-pub fn is_tier_unlocked(
-  tier : Int,
-  scores : Array[@types.LevelScore]
-) -> Bool {
+pub fn is_tier_unlocked(tier : Int, scores : Array[@types.LevelScore]) -> Bool {
   if tier == 0 {
     return true
   }

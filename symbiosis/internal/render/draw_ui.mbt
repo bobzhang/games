@@ -34,11 +34,8 @@ fn draw_ui(game : @types.Game) -> Unit {
       // Bottom controls
       let bottom_y = @types.screen_height - 60
       @draw.draw_text(
-        "WASD/Arrows: Move  Space: Wait  Z: Undo  R: Restart  Esc: Back",
-        20,
-        bottom_y,
-        16,
-        @types.color_hud_dim,
+        "WASD/Arrows: Move  Space: Wait  Z: Undo  R: Restart  Esc: Back", 20, bottom_y,
+        16, @types.color_hud_dim,
       )
       // Play state messages
       match game.play_state {
@@ -65,12 +62,11 @@ fn draw_ui(game : @types.Game) -> Unit {
           )
         }
         Paused => draw_center_message("PAUSED", @types.color_hud_text)
-        Active => {
+        Active =>
           // Show message if any
           if game.message_timer > 0.0 {
             draw_center_message(game.message, @types.color_highlight)
           }
-        }
       }
     }
   }

@@ -111,22 +111,31 @@ pub fn rebuild_grid(game : Game) -> Unit {
     // Tree height grows up from bottom
     for h in 0..<tree.height {
       let row = game.grid.height - 1 - h
-      if row >= 0 && row < game.grid.height && tree.col >= 0 && tree.col < game.grid.width {
+      if row >= 0 &&
+        row < game.grid.height &&
+        tree.col >= 0 &&
+        tree.col < game.grid.width {
         game.grid.cells[row][tree.col] = Trunk
       }
     }
     // Branch cells
     for b in 0..<tree.branches.length() {
       let branch = tree.branches[b]
-      if !(branch.pruned) {
+      if !branch.pruned {
         let row = game.grid.height - 1 - branch.row
         let bcol = tree.col + branch.col_offset
-        if row >= 0 && row < game.grid.height && bcol >= 0 && bcol < game.grid.width {
+        if row >= 0 &&
+          row < game.grid.height &&
+          bcol >= 0 &&
+          bcol < game.grid.width {
           game.grid.cells[row][bcol] = Branch
         }
         // Add leaf on top of branch
         let leaf_row = row - 1
-        if leaf_row >= 0 && leaf_row < game.grid.height && bcol >= 0 && bcol < game.grid.width {
+        if leaf_row >= 0 &&
+          leaf_row < game.grid.height &&
+          bcol >= 0 &&
+          bcol < game.grid.width {
           if game.grid.cells[leaf_row][bcol] == Empty {
             game.grid.cells[leaf_row][bcol] = Leaf
           }
@@ -136,7 +145,10 @@ pub fn rebuild_grid(game : Game) -> Unit {
     // Leaf at top of trunk
     if tree.height > 0 {
       let top_row = game.grid.height - 1 - tree.height
-      if top_row >= 0 && top_row < game.grid.height && tree.col >= 0 && tree.col < game.grid.width {
+      if top_row >= 0 &&
+        top_row < game.grid.height &&
+        tree.col >= 0 &&
+        tree.col < game.grid.width {
         if game.grid.cells[top_row][tree.col] == Empty {
           game.grid.cells[top_row][tree.col] = Leaf
         }
@@ -166,7 +178,7 @@ pub fn compute_shadows(game : Game) -> Unit {
     let canopy_cols : Array[Vec2i] = [] // x=col, y=row (grid row)
     for b in 0..<tree.branches.length() {
       let branch = tree.branches[b]
-      if !(branch.pruned) {
+      if !branch.pruned {
         let bcol = tree.col + branch.col_offset
         let brow = game.grid.height - 1 - branch.row
         canopy_cols.push(vec2i(bcol, brow))
@@ -214,7 +226,7 @@ pub fn compute_shadows(game : Game) -> Unit {
             let mut from_self = false
             for b in 0..<tree.branches.length() {
               let branch = tree.branches[b]
-              if !(branch.pruned) {
+              if !branch.pruned {
                 let bcol = tree.col + branch.col_offset
                 let brow = game.grid.height - 1 - branch.row
                 if bcol == tree.col && (brow == r || brow - 1 == r) {
@@ -227,7 +239,7 @@ pub fn compute_shadows(game : Game) -> Unit {
             if my_top == r && tree.col == tree.col {
               from_self = true
             }
-            if !(from_self) {
+            if !from_self {
               has_shadow_above = true
             }
           }
@@ -243,7 +255,7 @@ pub fn water_consumption(tree : Tree) -> Int {
   // Base consumption of 1, plus 1 for every 2 active branches
   let mut active_branches = 0
   for b in 0..<tree.branches.length() {
-    if !(tree.branches[b].pruned) {
+    if !tree.branches[b].pruned {
       active_branches += 1
     }
   }

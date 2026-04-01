@@ -33,14 +33,12 @@ test "count_wrong" {
 
 ///|
 test "is_fully_decoded" {
-  let inscription = @types.new_inscription(
-    [
-      @types.make_symbol(Circle),
-      @types.make_symbol(Triangle),
-      @types.make_space(),
-      @types.make_symbol(Circle),
-    ],
-  )
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+    @types.make_space(),
+    @types.make_symbol(Circle),
+  ])
   let current = @types.new_mapping()
   let solution = @types.new_mapping()
   @types.mapping_set(solution, Circle, 0)
@@ -83,10 +81,7 @@ test "check_mapping_correct and wrong" {
     @decoder.check_mapping_correct(current, solution, Star),
     content="false",
   )
-  inspect(
-    @decoder.check_mapping_wrong(current, solution, Star),
-    content="true",
-  )
+  inspect(@decoder.check_mapping_wrong(current, solution, Star), content="true")
 }
 
 ///|

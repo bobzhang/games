@@ -8,7 +8,7 @@ fn draw_title(game : @types.Game) -> Unit {
     let fi = Float::from_int(i)
     let sx = ((fi * 137.5 + time * 15.0) % Float::from_int(w)).to_int()
     let sy = ((fi * 91.3 + time * 8.0 * (fi % 3.0 + 1.0)) % Float::from_int(h)).to_int()
-    let num = (i % 9) + 1
+    let num = i % 9 + 1
     let alpha = 30 + (fi * 13.0 % 40.0).to_int()
     @draw.draw_text(
       num.to_string(),
@@ -199,7 +199,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
     // Level number
     let num = (i + 1).to_string()
     let nw = @draw.measure_text(num, 28)
-    @draw.draw_text(num, x + (btn_w - nw) / 2, y + 10, 28, @types.color_button_text)
+    @draw.draw_text(
+      num,
+      x + (btn_w - nw) / 2,
+      y + 10,
+      28,
+      @types.color_button_text,
+    )
     // Stars
     let star_y = y + 48
     for s in 0..<3 {
@@ -234,13 +240,7 @@ fn draw_results(game : @types.Game) -> Unit {
   let ph = 400
   let px = (w - pw) / 2
   let py = (h - ph) / 2
-  @raylib.draw_rectangle(
-    px,
-    py,
-    pw,
-    ph,
-    @raylib.Color::new(30, 34, 52, 255),
-  )
+  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(30, 34, 52, 255))
   @raylib.draw_rectangle_lines_ex(
     @raylib.Rectangle::new(
       Float::from_int(px),
@@ -254,13 +254,7 @@ fn draw_results(game : @types.Game) -> Unit {
   // Title
   let title = "LEVEL COMPLETE!"
   let tw = @draw.measure_text(title, 36)
-  @draw.draw_text(
-    title,
-    (w - tw) / 2,
-    py + 25,
-    36,
-    @types.color_constraint_sat,
-  )
+  @draw.draw_text(title, (w - tw) / 2, py + 25, 36, @types.color_constraint_sat)
   // Time
   let minutes = (game.timer / 60.0).to_int()
   let seconds = (game.timer % 60.0).to_int()
@@ -310,9 +304,7 @@ fn draw_results(game : @types.Game) -> Unit {
   }
   // Star explanations
   let explanations = [
-    "1 star: Solved",
-    "2 stars: Under par time",
-    "3 stars: Par time + no mistakes",
+    "1 star: Solved", "2 stars: Under par time", "3 stars: Par time + no mistakes",
   ]
   for i in 0..<3 {
     let ew = @draw.measure_text(explanations[i], 16)
@@ -352,16 +344,12 @@ fn draw_button(
   h : Int,
   text : String,
   font_size : Int,
-  _game : @types.Game
+  _game : @types.Game,
 ) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   let hover = mx >= x && mx <= x + w && my >= y && my <= y + h
-  let bg = if hover {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let bg = if hover { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(x, y, w, h, bg)
   @raylib.draw_rectangle_lines_ex(
     @raylib.Rectangle::new(

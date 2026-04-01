@@ -12,11 +12,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
   let panel_y = 30
   let panel_h = 660
   @raylib.draw_rectangle(
-    panel_x,
-    panel_y,
-    panel_w,
-    panel_h,
-    @types.color_hud_bg,
+    panel_x, panel_y, panel_w, panel_h, @types.color_hud_bg,
   )
   @raylib.draw_rectangle_lines(
     panel_x,
@@ -28,7 +24,8 @@ pub fn draw_hud(game : @types.Game) -> Unit {
   let nx = panel_x + 12
   let mut y = panel_y + 10
   // Level name
-  let level_name = match @maze.get_level(game.current_world, game.current_level) {
+  let level_name = match
+    @maze.get_level(game.current_world, game.current_level) {
     Some(ld) => ld.name
     None => "Unknown"
   }
@@ -80,9 +77,8 @@ pub fn draw_hud(game : @types.Game) -> Unit {
     bar_h,
     @raylib.Color::new(30, 25, 50, 200),
   )
-  let fill_ratio : Float = Float::from_int(game.tick) / Float::from_int(
-    game.max_ticks,
-  )
+  let fill_ratio : Float = Float::from_int(game.tick) /
+    Float::from_int(game.max_ticks)
   let fill_w = (Float::from_int(bar_w) * fill_ratio).to_int()
   let bar_color = if fill_ratio > 0.8 {
     @raylib.Color::new(240, 50, 50, 255)
@@ -112,7 +108,12 @@ pub fn draw_hud(game : @types.Game) -> Unit {
       let color = @types.ghost_color_value(ghost.color)
       @raylib.draw_circle(gx + 10, y + 10, 10.0, color)
       if ghost.active {
-        @raylib.draw_circle(gx + 10, y + 10, 4.0, @raylib.Color::new(255, 255, 255, 180))
+        @raylib.draw_circle(
+          gx + 10,
+          y + 10,
+          4.0,
+          @raylib.Color::new(255, 255, 255, 180),
+        )
       } else {
         // X through deactivated ghost
         @draw.draw_text(
@@ -170,13 +171,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
     y += 26
   }
   // Play state
-  @draw.draw_text(
-    "STATE",
-    nx,
-    y,
-    11,
-    @raylib.Color::new(120, 110, 150, 255),
-  )
+  @draw.draw_text("STATE", nx, y, 11, @raylib.Color::new(120, 110, 150, 255))
   y += 16
   let state_str = match game.play_state {
     Recording => "RECORDING"
@@ -231,7 +226,12 @@ fn draw_controls_hint(x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_minimap(game : @types.Game, maze : @types.Maze, x : Int, y : Int) -> Unit {
+fn draw_minimap(
+  game : @types.Game,
+  maze : @types.Maze,
+  x : Int,
+  y : Int,
+) -> Unit {
   let scale = 4
   let w = maze.width * scale
   let h = maze.height * scale

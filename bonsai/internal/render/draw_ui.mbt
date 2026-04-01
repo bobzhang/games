@@ -1,7 +1,8 @@
 ///|
 fn draw_playing_ui(game : @types.Game, level : @types.Level) -> Unit {
   let sw = @types.screen_width
-  let panel_x = @types.grid_offset_x + @types.grid_width * @types.cell_render_size +
+  let panel_x = @types.grid_offset_x +
+    @types.grid_width * @types.cell_render_size +
     30
   let panel_w = sw - panel_x - 20
   // Background panel
@@ -89,9 +90,7 @@ fn draw_playing_ui(game : @types.Game, level : @types.Level) -> Unit {
   // Zone status
   @draw.draw_text("-- Zones --", tx, ty, 20, @types.color_hud_text)
   ty = ty + 28
-  let (req_ok, forb_ok, tip_ok) = @growth.check_zones(
-    game.tree, level.zones,
-  )
+  let (req_ok, forb_ok, tip_ok) = @growth.check_zones(game.tree, level.zones)
   // Count zone types
   let mut req_count = 0
   let mut forb_count = 0
@@ -136,40 +135,27 @@ fn draw_playing_ui(game : @types.Game, level : @types.Level) -> Unit {
   ty = ty + 15
   // Ghost status
   let ghost_str = if game.show_ghost { "Ghost: ON" } else { "Ghost: OFF" }
-  @draw.draw_text(
-    ghost_str,
-    tx,
-    ty,
-    18,
-    @raylib.Color::new(150, 200, 150, 200),
-  )
+  @draw.draw_text(ghost_str, tx, ty, 18, @raylib.Color::new(150, 200, 150, 200))
   ty = ty + 35
   // Controls
   @draw.draw_text("-- Controls --", tx, ty, 20, @types.color_hud_text)
   ty = ty + 28
   let controls = [
-    "SPACE  Grow tree",
-    "CLICK  Prune branch",
-    "G      Toggle ghost",
-    "Z      Undo prune",
-    "R      Restart",
-    "ESC    Back",
+    "SPACE  Grow tree", "CLICK  Prune branch", "G      Toggle ghost", "Z      Undo prune",
+    "R      Restart", "ESC    Back",
   ]
   for line in controls {
-    @draw.draw_text(
-      line,
-      tx,
-      ty,
-      16,
-      @raylib.Color::new(160, 150, 135, 200),
-    )
+    @draw.draw_text(line, tx, ty, 16, @raylib.Color::new(160, 150, 135, 200))
     ty = ty + 22
   }
   // Play state overlay
   match game.play_state {
     Won => {
       let stars = @growth.calculate_stars(
-        game.tree, level.zones, game.total_prunes, level.par_prunes,
+        game.tree,
+        level.zones,
+        game.total_prunes,
+        level.par_prunes,
       )
       draw_result_overlay("Level Complete!", stars)
     }
@@ -210,13 +196,7 @@ fn draw_result_overlay(text : String, stars : Int) -> Unit {
   let bh = 200
   let bx = (sw - bw) / 2
   let by = (sh - bh) / 2
-  @raylib.draw_rectangle(
-    bx,
-    by,
-    bw,
-    bh,
-    @raylib.Color::new(40, 36, 30, 240),
-  )
+  @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(40, 36, 30, 240))
   @raylib.draw_rectangle_lines(
     bx,
     by,
@@ -226,18 +206,16 @@ fn draw_result_overlay(text : String, stars : Int) -> Unit {
   )
   // Text
   let tw = @draw.measure_text(text, 30)
-  @draw.draw_text(
-    text,
-    (sw - tw) / 2,
-    by + 30,
-    30,
-    @types.color_title,
-  )
+  @draw.draw_text(text, (sw - tw) / 2, by + 30, 30, @types.color_title)
   // Stars
   for i in 0..<3 {
     let star_x = bx + bw / 2 - 60 + i * 50
     let star_y = by + 80
-    let color = if i < stars { @types.color_star_on } else { @types.color_star_off }
+    let color = if i < stars {
+      @types.color_star_on
+    } else {
+      @types.color_star_off
+    }
     draw_star(star_x, star_y, 18.0, color)
   }
   // Continue prompt

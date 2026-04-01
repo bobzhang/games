@@ -40,7 +40,16 @@ test "rotate_patch 4 times returns original" {
 
 ///|
 test "rotate_patch preserves wildcard_edges" {
-  let p = @types.new_patch_wildcard(Zigzag, Dots, Stripes, Waves, true, false, false, true)
+  let p = @types.new_patch_wildcard(
+    Zigzag,
+    Dots,
+    Stripes,
+    Waves,
+    true,
+    false,
+    false,
+    true,
+  )
   let r = @types.rotate_patch(p)
   // Wildcard N(true) -> E, E(false) -> S, S(false) -> W, W(true) -> N
   inspect(r.wildcard_edges[0], content="true")

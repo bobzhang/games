@@ -40,7 +40,14 @@ fn level_01() -> @types.Level {
   let init = @types.full_paper(8, 8)
   let target = @types.make_rect_paper(8, 8, 0, 0, 4, 8)
   set_target_layers(target, 2)
-  { initial_paper: init, target_silhouette: target, layer_checks: [], par_folds: 1, tier: Folds, name: "Half" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: [],
+    par_folds: 1,
+    tier: Folds,
+    name: "Half",
+  }
 }
 
 ///|
@@ -49,7 +56,14 @@ fn level_02() -> @types.Level {
   let init = @types.full_paper(8, 8)
   let target = @types.make_rect_paper(8, 8, 0, 0, 8, 4)
   set_target_layers(target, 2)
-  { initial_paper: init, target_silhouette: target, layer_checks: [], par_folds: 1, tier: Folds, name: "Horizon" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: [],
+    par_folds: 1,
+    tier: Folds,
+    name: "Horizon",
+  }
 }
 
 ///|
@@ -58,7 +72,14 @@ fn level_03() -> @types.Level {
   let init = @types.full_paper(8, 8)
   let target = @types.make_rect_paper(8, 8, 0, 0, 4, 4)
   set_target_layers(target, 4)
-  { initial_paper: init, target_silhouette: target, layer_checks: [], par_folds: 2, tier: Folds, name: "Quarter" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: [],
+    par_folds: 2,
+    tier: Folds,
+    name: "Quarter",
+  }
 }
 
 ///|
@@ -67,7 +88,14 @@ fn level_04() -> @types.Level {
   let init = @types.full_paper(8, 8)
   let target = @types.make_rect_paper(8, 8, 4, 0, 8, 8)
   set_target_layers(target, 2)
-  { initial_paper: init, target_silhouette: target, layer_checks: [], par_folds: 1, tier: Folds, name: "Mirror" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: [],
+    par_folds: 1,
+    tier: Folds,
+    name: "Mirror",
+  }
 }
 
 ///|
@@ -76,7 +104,14 @@ fn level_05() -> @types.Level {
   let init = @types.full_paper(8, 8)
   let target = @types.make_rect_paper(8, 8, 0, 4, 8, 8)
   set_target_layers(target, 2)
-  { initial_paper: init, target_silhouette: target, layer_checks: [], par_folds: 1, tier: Folds, name: "Flip" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: [],
+    par_folds: 1,
+    tier: Folds,
+    name: "Flip",
+  }
 }
 
 ///|
@@ -126,7 +161,14 @@ fn level_06() -> @types.Level {
   // y=0 mirrors y=7 (vertical only)
   @types.set_cell(target, 3, 0, true, 2)
   @types.set_cell(target, 4, 0, true, 2)
-  { initial_paper: init, target_silhouette: target, layer_checks: [], par_folds: 1, tier: Folds, name: "Cross Fold" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: [],
+    par_folds: 1,
+    tier: Folds,
+    name: "Cross Fold",
+  }
 }
 
 ///|
@@ -154,7 +196,14 @@ fn level_07() -> @types.Level {
   for y in 0..<7 {
     @types.set_cell(target, 0, y, true, 1)
   }
-  { initial_paper: init, target_silhouette: target, layer_checks: [], par_folds: 1, tier: Folds, name: "L-Bend" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: [],
+    par_folds: 1,
+    tier: Folds,
+    name: "L-Bend",
+  }
 }
 
 ///|
@@ -163,7 +212,14 @@ fn level_08() -> @types.Level {
   let init = @types.full_paper(8, 8)
   let target = @types.make_rect_paper(8, 8, 0, 4, 4, 8)
   set_target_layers(target, 4)
-  { initial_paper: init, target_silhouette: target, layer_checks: [], par_folds: 2, tier: Folds, name: "Compact" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: [],
+    par_folds: 2,
+    tier: Folds,
+    name: "Compact",
+  }
 }
 
 // ============================================================
@@ -188,7 +244,14 @@ fn level_09() -> @types.Level {
     { pos: { x: 5, y: 4 }, required_layers: 2 },
     { pos: { x: 2, y: 4 }, required_layers: 1 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 1, tier: Layers, name: "Edge Fold" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 1,
+    tier: Layers,
+    name: "Edge Fold",
+  }
 }
 
 ///|
@@ -208,7 +271,14 @@ fn level_10() -> @types.Level {
   let checks : Array[@types.LayerCheck] = [
     { pos: { x: 4, y: 5 }, required_layers: 2 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 1, tier: Layers, name: "Hem" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 1,
+    tier: Layers,
+    name: "Hem",
+  }
 }
 
 ///|
@@ -225,7 +295,14 @@ fn level_11() -> @types.Level {
     { pos: { x: 0, y: 0 }, required_layers: 2 },
     { pos: { x: 1, y: 7 }, required_layers: 2 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 1, tier: Layers, name: "Narrow" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 1,
+    tier: Layers,
+    name: "Narrow",
+  }
 }
 
 ///|
@@ -246,7 +323,14 @@ fn level_12() -> @types.Level {
     { pos: { x: 2, y: 3 }, required_layers: 2 },
     { pos: { x: 6, y: 3 }, required_layers: 1 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 1, tier: Layers, name: "Shift" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 1,
+    tier: Layers,
+    name: "Shift",
+  }
 }
 
 ///|
@@ -259,7 +343,14 @@ fn level_13() -> @types.Level {
     { pos: { x: 2, y: 2 }, required_layers: 4 },
     { pos: { x: 0, y: 0 }, required_layers: 4 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 2, tier: Layers, name: "Quad" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 2,
+    tier: Layers,
+    name: "Quad",
+  }
 }
 
 ///|
@@ -279,7 +370,14 @@ fn level_14() -> @types.Level {
     { pos: { x: 2, y: 0 }, required_layers: 3 },
     { pos: { x: 0, y: 0 }, required_layers: 1 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 2, tier: Layers, name: "Stack" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 2,
+    tier: Layers,
+    name: "Stack",
+  }
 }
 
 ///|
@@ -296,7 +394,14 @@ fn level_15() -> @types.Level {
     { pos: { x: 4, y: 0 }, required_layers: 2 },
     { pos: { x: 4, y: 1 }, required_layers: 2 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 1, tier: Layers, name: "Thin Strip" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 1,
+    tier: Layers,
+    name: "Thin Strip",
+  }
 }
 
 ///|
@@ -319,7 +424,14 @@ fn level_16() -> @types.Level {
     { pos: { x: 2, y: 5 }, required_layers: 4 },
     { pos: { x: 2, y: 1 }, required_layers: 2 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 2, tier: Layers, name: "Frame" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 2,
+    tier: Layers,
+    name: "Frame",
+  }
 }
 
 // ============================================================
@@ -336,7 +448,14 @@ fn level_17() -> @types.Level {
     { pos: { x: 0, y: 0 }, required_layers: 8 },
     { pos: { x: 1, y: 3 }, required_layers: 8 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 3, tier: Craft, name: "Tight Pack" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 3,
+    tier: Craft,
+    name: "Tight Pack",
+  }
 }
 
 ///|
@@ -349,7 +468,14 @@ fn level_18() -> @types.Level {
     { pos: { x: 0, y: 0 }, required_layers: 16 },
     { pos: { x: 1, y: 1 }, required_layers: 16 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 4, tier: Craft, name: "Ultra Pack" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 4,
+    tier: Craft,
+    name: "Ultra Pack",
+  }
 }
 
 ///|
@@ -367,7 +493,14 @@ fn level_19() -> @types.Level {
     { pos: { x: 3, y: 0 }, required_layers: 6 },
     { pos: { x: 0, y: 0 }, required_layers: 2 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 3, tier: Craft, name: "Layered Stack" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 3,
+    tier: Craft,
+    name: "Layered Stack",
+  }
 }
 
 ///|
@@ -387,7 +520,14 @@ fn level_20() -> @types.Level {
   let checks : Array[@types.LayerCheck] = [
     { pos: { x: 2, y: 2 }, required_layers: 4 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 2, tier: Craft, name: "Center Piece" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 2,
+    tier: Craft,
+    name: "Center Piece",
+  }
 }
 
 ///|
@@ -410,7 +550,14 @@ fn level_21() -> @types.Level {
     { pos: { x: 6, y: 2 }, required_layers: 4 },
     { pos: { x: 7, y: 6 }, required_layers: 2 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 2, tier: Craft, name: "Corner" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 2,
+    tier: Craft,
+    name: "Corner",
+  }
 }
 
 ///|
@@ -434,7 +581,14 @@ fn level_22() -> @types.Level {
     { pos: { x: 1, y: 0 }, required_layers: 2 },
     { pos: { x: 1, y: 3 }, required_layers: 6 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 3, tier: Craft, name: "Triple Fold" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 3,
+    tier: Craft,
+    name: "Triple Fold",
+  }
 }
 
 ///|
@@ -463,7 +617,14 @@ fn level_23() -> @types.Level {
     { pos: { x: 0, y: 6 }, required_layers: 2 },
     { pos: { x: 3, y: 6 }, required_layers: 4 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 3, tier: Craft, name: "Complex" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 3,
+    tier: Craft,
+    name: "Complex",
+  }
 }
 
 ///|
@@ -482,7 +643,14 @@ fn level_24() -> @types.Level {
     { pos: { x: 0, y: 4 }, required_layers: 8 },
     { pos: { x: 1, y: 7 }, required_layers: 8 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 3, tier: Craft, name: "Origami Master" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 3,
+    tier: Craft,
+    name: "Origami Master",
+  }
 }
 
 ///|
@@ -502,10 +670,18 @@ fn level_25() -> @types.Level {
     { pos: { x: 0, y: 1 }, required_layers: 16 },
     { pos: { x: 1, y: 1 }, required_layers: 16 },
   ]
-  { initial_paper: init, target_silhouette: target, layer_checks: checks, par_folds: 4, tier: Craft, name: "Grand Finale" }
+  {
+    initial_paper: init,
+    target_silhouette: target,
+    layer_checks: checks,
+    par_folds: 4,
+    tier: Craft,
+    name: "Grand Finale",
+  }
 }
 
 // Helper to set all paper cells in a target to a uniform layer count
+
 ///|
 fn set_target_layers(paper : @types.Paper, layers : Int) -> Unit {
   for i in 0..<paper.cells.length() {

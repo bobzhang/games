@@ -123,7 +123,7 @@ test "non-hole cells have tiles" {
     let grid = levels[i].grid
     for y in 0..<grid.height {
       for x in 0..<grid.width {
-        if !(@types.is_hole(grid, @types.vec2i(x, y))) {
+        if !@types.is_hole(grid, @types.vec2i(x, y)) {
           let tile = @types.get_tile(grid, x, y)
           let has_tile = match tile {
             Some(_) => true
@@ -171,6 +171,7 @@ test "par_errors is non-negative for all levels" {
 // Solvability: for each hole, its symmetric partners are valid positions
 // within the grid. Some partner positions may also be holes (creating
 // mutual dependencies that the player resolves via pattern recognition).
+
 ///|
 test "symmetric partners of holes are within grid bounds" {
   let levels = @levels.create_all_levels()
@@ -181,7 +182,10 @@ test "symmetric partners of holes are within grid bounds" {
     for j in 0..<grid.holes.length() {
       let hole = grid.holes[j]
       let partners = @symmetry.get_symmetric_pos(
-        hole, sym, grid.width, grid.height,
+        hole,
+        sym,
+        grid.width,
+        grid.height,
       )
       for k in 0..<partners.length() {
         let p = partners[k]
@@ -193,6 +197,7 @@ test "symmetric partners of holes are within grid bounds" {
 }
 
 // Verify that resolved holes produce valid tiles under symmetry.
+
 ///|
 test "iteratively resolved holes have valid placements" {
   let levels = @levels.create_all_levels()
@@ -211,9 +216,7 @@ test "iteratively resolved holes have valid placements" {
             let solution = @symmetry.compute_solution_tile(grid, h, sym)
             match solution {
               Some(tile) => {
-                @types.set_tile(
-                  grid, h.x, h.y, Some(@types.copy_tile(tile)),
-                )
+                @types.set_tile(grid, h.x, h.y, Some(@types.copy_tile(tile)))
                 filled_holes.push((h, @types.copy_tile(tile)))
               }
               None => ()
@@ -239,6 +242,7 @@ test "iteratively resolved holes have valid placements" {
 
 // Verify that for mirror symmetry levels, hole partners are also holes
 // or have tiles that determine the solution.
+
 ///|
 test "mirror symmetry holes have valid partner positions" {
   let levels = @levels.create_all_levels()
@@ -249,7 +253,10 @@ test "mirror symmetry holes have valid partner positions" {
     for j in 0..<grid.holes.length() {
       let hole = grid.holes[j]
       let partners = @symmetry.get_symmetric_pos(
-        hole, sym, grid.width, grid.height,
+        hole,
+        sym,
+        grid.width,
+        grid.height,
       )
       // All partner positions must be within bounds
       for k in 0..<partners.length() {
@@ -306,10 +313,7 @@ test "tier difficulty progression: repair par <= restore par <= master par" {
   for i in 0..<levels.length() {
     let holes = levels[i].grid.holes.length()
     match levels[i].tier {
-      Repair =>
-        if holes > repair_max {
-          repair_max = holes
-        }
+      Repair => if holes > repair_max { repair_max = holes }
       Restore => {
         if holes < restore_min {
           restore_min = holes
@@ -318,10 +322,7 @@ test "tier difficulty progression: repair par <= restore par <= master par" {
           restore_max = holes
         }
       }
-      Master =>
-        if holes < master_min {
-          master_min = holes
-        }
+      Master => if holes < master_min { master_min = holes }
     }
   }
   // Tier 2 should generally have more holes than tier 1

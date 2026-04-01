@@ -152,9 +152,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 12: Pruning competition
       {
         seed_columns: [4, 5, 7],
-        targets: [
-          { tree_index: 1, required_height: 7 },
-        ],
+        targets: [{ tree_index: 1, required_height: 7 }],
         turn_limit: 12,
         prune_budget: 4,
         par_prunes: 3,
@@ -181,9 +179,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 14: The tall one
       {
         seed_columns: [3, 6, 9],
-        targets: [
-          { tree_index: 1, required_height: 8 },
-        ],
+        targets: [{ tree_index: 1, required_height: 8 }],
         turn_limit: 14,
         prune_budget: 5,
         par_prunes: 3,

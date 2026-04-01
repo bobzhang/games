@@ -1,7 +1,12 @@
 ///|
 pub fn parse_grid(
-  lines : Array[String]
-) -> (Array[Array[@types.TileKind]], @types.Vec2i, @types.Vec2i, Array[@types.Vec2i]) {
+  lines : Array[String],
+) -> (
+  Array[Array[@types.TileKind]],
+  @types.Vec2i,
+  @types.Vec2i,
+  Array[@types.Vec2i],
+) {
   let grid : Array[Array[@types.TileKind]] = []
   let mut start : @types.Vec2i = { x: 0, y: 0 }
   let mut exit : @types.Vec2i = { x: 0, y: 0 }
@@ -10,11 +15,7 @@ pub fn parse_grid(
     let row : Array[@types.TileKind] = []
     let line = if y < lines.length() { lines[y] } else { "############" }
     for x in 0..<@types.grid_width {
-      let ch = if x < line.length() {
-        line[x]
-      } else {
-        '#'
-      }
+      let ch = if x < line.length() { line[x] } else { '#' }
       match ch {
         '#' => row.push(Wall)
         '.' => row.push(Floor)
@@ -43,7 +44,6 @@ pub fn parse_grid(
         'd' => row.push(Door(3))
         _ => row.push(Floor)
       }
-
     }
     grid.push(row)
   }
@@ -58,7 +58,7 @@ pub fn make_level(
   ceiling_lines : Array[String],
   switch_links : Array[@types.SwitchLink],
   goal : @types.GoalKind,
-  par_moves : Int
+  par_moves : Int,
 ) -> @types.Level {
   let (floor_tiles, floor_start, floor_exit, floor_gems) = parse_grid(
     floor_lines,

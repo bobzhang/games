@@ -1,7 +1,7 @@
 ///|
 pub fn caesar_encrypt(plaintext : String, shift : Int) -> String {
   let buf = StringBuilder::new()
-  let s = ((shift % 26) + 26) % 26
+  let s = (shift % 26 + 26) % 26
   for i in 0..<plaintext.length() {
     let c = @types.str_char_at(plaintext, i)
     if @types.is_upper(c) {
@@ -17,7 +17,7 @@ pub fn caesar_encrypt(plaintext : String, shift : Int) -> String {
 
 ///|
 pub fn caesar_decrypt(ciphertext : String, shift : Int) -> String {
-  caesar_encrypt(ciphertext, 26 - (((shift % 26) + 26) % 26))
+  caesar_encrypt(ciphertext, 26 - (shift % 26 + 26) % 26)
 }
 
 ///|
@@ -77,7 +77,7 @@ pub fn vigenere_decrypt(ciphertext : String, key : String) -> String {
     if @types.is_upper(c) {
       let ci = @types.char_to_idx(c)
       let shift = @types.char_to_idx(@types.str_char_at(key, ki % key_len))
-      let pi = ((ci - shift) + 26) % 26
+      let pi = (ci - shift + 26) % 26
       buf.write_char(@types.idx_to_char(pi))
       ki += 1
     } else {

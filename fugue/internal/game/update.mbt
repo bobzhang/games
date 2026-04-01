@@ -198,7 +198,10 @@ fn handle_grid_click(game : @types.Game) -> Unit {
   let cw = @types.cell_width
   let ch = @types.cell_height
   let grid = game.grid
-  if mx >= ox && mx < ox + cw * grid.cols && my >= oy && my < oy + ch * grid.rows {
+  if mx >= ox &&
+    mx < ox + cw * grid.cols &&
+    my >= oy &&
+    my < oy + ch * grid.rows {
     let col = (mx - ox) / cw
     let row = (my - oy) / ch
     if col >= 0 && col < grid.cols && row >= 0 && row < grid.rows {

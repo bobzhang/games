@@ -180,7 +180,7 @@ pub fn has_line_of_sight(
   x0 : Int,
   y0 : Int,
   x1 : Int,
-  y1 : Int
+  y1 : Int,
 ) -> Bool {
   let dx = absi(x1 - x0)
   let dy = absi(y1 - y0)
@@ -275,7 +275,7 @@ pub fn new_guard(
   gx : Int,
   gy : Int,
   kind : GuardKind,
-  patrol : Array[Vec2i]
+  patrol : Array[Vec2i],
 ) -> Guard {
   let range : Float = match kind {
     Patrol => 4.0
@@ -339,7 +339,7 @@ pub fn new_terminal(
   gx : Int,
   gy : Int,
   high_security : Bool,
-  connected_id : Int
+  connected_id : Int,
 ) -> Terminal {
   { gx, gy, hacked: false, high_security, connected_id, data_value: 100 }
 }
@@ -355,7 +355,7 @@ pub fn new_laser(
   gy : Int,
   power_id : Int,
   horizontal : Bool,
-  length : Int
+  length : Int,
 ) -> LaserGrid {
   { gx, gy, active: true, power_id, horizontal, length }
 }
@@ -365,7 +365,7 @@ pub fn new_power_node(
   gx : Int,
   gy : Int,
   node_id : Int,
-  connected : Array[Int]
+  connected : Array[Int],
 ) -> PowerNode {
   { gx, gy, powered: true, node_id, connected_ids: connected }
 }
@@ -525,10 +525,8 @@ pub fn find_laser_at(level : Level, gx : Int, gy : Int) -> Int {
       if l.gy == gy && gx >= l.gx && gx < l.gx + l.length {
         return i
       }
-    } else {
-      if l.gx == gx && gy >= l.gy && gy < l.gy + l.length {
-        return i
-      }
+    } else if l.gx == gx && gy >= l.gy && gy < l.gy + l.length {
+      return i
     }
   }
   -1

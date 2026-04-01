@@ -51,7 +51,7 @@ fn draw_paper_grid(
   paper : @types.Paper,
   ox : Int,
   oy : Int,
-  show_layers : Bool
+  show_layers : Bool,
 ) -> Unit {
   let cs = @types.cell_size
   let max_l = @types.max_layers(paper)
@@ -84,11 +84,7 @@ fn draw_paper_grid(
 }
 
 ///|
-fn draw_target_ghost(
-  target : @types.Paper,
-  ox : Int,
-  oy : Int
-) -> Unit {
+fn draw_target_ghost(target : @types.Paper, ox : Int, oy : Int) -> Unit {
   let cs = @types.cell_size
   for y in 0..<target.height {
     for x in 0..<target.width {
@@ -97,18 +93,16 @@ fn draw_target_ghost(
       let py = oy + y * cs
       if cell.has_paper {
         @raylib.draw_rectangle(px, py, cs, cs, @types.color_target_ghost)
-        @raylib.draw_rectangle_lines(px, py, cs, cs, @types.color_target_outline)
+        @raylib.draw_rectangle_lines(
+          px, py, cs, cs, @types.color_target_outline,
+        )
       }
     }
   }
 }
 
 ///|
-fn draw_fold_line_preview(
-  game : @types.Game,
-  ox : Int,
-  oy : Int
-) -> Unit {
+fn draw_fold_line_preview(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cs = @types.cell_size
   let gs = @types.grid_size
   let line = game.fold_line
@@ -139,11 +133,16 @@ fn draw_fold_line_preview(
 }
 
 ///|
-fn draw_fold_arrow(dir : @types.FoldDir, cx : Int, cy : Int, size : Int) -> Unit {
+fn draw_fold_arrow(
+  dir : @types.FoldDir,
+  cx : Int,
+  cy : Int,
+  size : Int,
+) -> Unit {
   let s = size / 3
   let col = @types.color_fold_line
   match dir {
-    Left => {
+    Left =>
       // Arrow pointing left
       @raylib.draw_triangle(
         @raylib.Vector2::new(Float::from_int(cx - s), Float::from_int(cy)),
@@ -157,8 +156,7 @@ fn draw_fold_arrow(dir : @types.FoldDir, cx : Int, cy : Int, size : Int) -> Unit
         ),
         col,
       )
-    }
-    Right => {
+    Right =>
       @raylib.draw_triangle(
         @raylib.Vector2::new(Float::from_int(cx + s), Float::from_int(cy)),
         @raylib.Vector2::new(
@@ -171,8 +169,7 @@ fn draw_fold_arrow(dir : @types.FoldDir, cx : Int, cy : Int, size : Int) -> Unit
         ),
         col,
       )
-    }
-    Up => {
+    Up =>
       @raylib.draw_triangle(
         @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy - s)),
         @raylib.Vector2::new(
@@ -185,8 +182,7 @@ fn draw_fold_arrow(dir : @types.FoldDir, cx : Int, cy : Int, size : Int) -> Unit
         ),
         col,
       )
-    }
-    Down => {
+    Down =>
       @raylib.draw_triangle(
         @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy + s)),
         @raylib.Vector2::new(
@@ -199,16 +195,11 @@ fn draw_fold_arrow(dir : @types.FoldDir, cx : Int, cy : Int, size : Int) -> Unit
         ),
         col,
       )
-    }
   }
 }
 
 ///|
-fn draw_layer_checks(
-  game : @types.Game,
-  ox : Int,
-  oy : Int
-) -> Unit {
+fn draw_layer_checks(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cs = @types.cell_size
   let checks = game.target.layer_checks
   for i in 0..<checks.length() {
@@ -216,7 +207,11 @@ fn draw_layer_checks(
     let px = ox + chk.pos.x * cs
     let py = oy + chk.pos.y * cs
     let ok = @types.single_layer_check_ok(game.current_paper, chk)
-    let border_col = if ok { @types.color_check_ok } else { @types.color_check_gold }
+    let border_col = if ok {
+      @types.color_check_ok
+    } else {
+      @types.color_check_gold
+    }
     // Draw gold/green border around cell
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(
@@ -231,17 +226,17 @@ fn draw_layer_checks(
     // Draw required layer number
     let txt = chk.required_layers.to_string()
     let tw = @draw.measure_text(txt, 18)
-    let text_col = if ok { @types.color_check_ok } else { @types.color_check_fail }
+    let text_col = if ok {
+      @types.color_check_ok
+    } else {
+      @types.color_check_fail
+    }
     @draw.draw_text(txt, px + (cs - tw) / 2, py + 2, 18, text_col)
   }
 }
 
 ///|
-fn draw_target_layer_checks(
-  game : @types.Game,
-  ox : Int,
-  oy : Int
-) -> Unit {
+fn draw_target_layer_checks(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cs = @types.cell_size
   let checks = game.target.layer_checks
   for i in 0..<checks.length() {
@@ -261,6 +256,12 @@ fn draw_target_layer_checks(
     )
     let txt = chk.required_layers.to_string()
     let tw = @draw.measure_text(txt, 18)
-    @draw.draw_text(txt, px + (cs - tw) / 2, py + 2, 18, @types.color_check_gold)
+    @draw.draw_text(
+      txt,
+      px + (cs - tw) / 2,
+      py + 2,
+      18,
+      @types.color_check_gold,
+    )
   }
 }

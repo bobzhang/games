@@ -48,15 +48,11 @@ pub fn direction_check(from : Vec2i, to : Vec2i, dir : CompassDir) -> Bool {
 pub fn is_adjacent(a : Vec2i, b : Vec2i) -> Bool {
   let dx = absi(a.x - b.x)
   let dy = absi(a.y - b.y)
-  (dx + dy == 1) || (dx == 1 && dy == 1)
+  dx + dy == 1 || (dx == 1 && dy == 1)
 }
 
 ///|
-pub fn is_between(
-  target : Vec2i,
-  end_a : Vec2i,
-  end_b : Vec2i
-) -> Bool {
+pub fn is_between(target : Vec2i, end_a : Vec2i, end_b : Vec2i) -> Bool {
   // Check if target is on the line between end_a and end_b
   // Must be collinear and between the two endpoints
   let dx_ab = end_b.x - end_a.x
@@ -145,12 +141,12 @@ pub fn compass_name(dir : CompassDir) -> String {
 pub fn new_clue(
   kind : ClueKind,
   feature_a : FeatureKind,
-  feature_b~ : FeatureKind = Mountain,
-  distance~ : Int = 0,
-  direction~ : CompassDir = N,
-  row_col~ : Int = 0,
-  count~ : Int = 0,
-  text~ : String = ""
+  feature_b? : FeatureKind = Mountain,
+  distance? : Int = 0,
+  direction? : CompassDir = N,
+  row_col? : Int = 0,
+  count? : Int = 0,
+  text? : String = "",
 ) -> Clue {
   {
     kind,
@@ -172,7 +168,7 @@ pub fn new_level(
   features : Array[FeatureKind],
   clues : Array[Clue],
   par : Int,
-  description~ : String = ""
+  description? : String = "",
 ) -> Level {
   {
     name,
@@ -265,7 +261,7 @@ pub fn reset_level(game : Game) -> Unit {
 pub fn find_feature_pos(
   grid : Array[FeatureKind?],
   size : Int,
-  kind : FeatureKind
+  kind : FeatureKind,
 ) -> Vec2i? {
   for i in 0..<grid.length() {
     match grid[i] {
@@ -280,7 +276,7 @@ pub fn find_feature_pos(
 pub fn find_all_feature_positions(
   grid : Array[FeatureKind?],
   size : Int,
-  kind : FeatureKind
+  kind : FeatureKind,
 ) -> Array[Vec2i] {
   let result : Array[Vec2i] = []
   for i in 0..<grid.length() {
@@ -309,7 +305,7 @@ pub fn clue_references_feature(clue : Clue, kind : FeatureKind) -> Bool {
 ///|
 pub fn clues_referencing_feature(
   clues : Array[Clue],
-  kind : FeatureKind
+  kind : FeatureKind,
 ) -> Array[Int] {
   let result : Array[Int] = []
   for i in 0..<clues.length() {
@@ -324,7 +320,7 @@ pub fn clues_referencing_feature(
 pub fn cells_referenced_by_clue(
   clue : Clue,
   grid : Array[FeatureKind?],
-  size : Int
+  size : Int,
 ) -> Array[Vec2i] {
   let cells : Array[Vec2i] = []
   // Always include positions of feature_a and feature_b if placed

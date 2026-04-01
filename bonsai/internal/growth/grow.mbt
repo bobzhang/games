@@ -17,7 +17,13 @@ pub fn find_tips(g : @types.TreeGrid) -> Array[@types.Vec2i] {
         if is_tip {
           // Also check that no adjacent cell has this as parent
           let mut has_child = false
-          let dirs : Array[@types.GrowthDir] = [Up, UpLeft, UpRight, Left, Right]
+          let dirs : Array[@types.GrowthDir] = [
+            Up,
+            UpLeft,
+            UpRight,
+            Left,
+            Right,
+          ]
           for d in dirs {
             let cx = x + @types.dir_dx(d)
             let cy = y + @types.dir_dy(d)
@@ -109,7 +115,7 @@ pub fn cherry_curve(dir : @types.GrowthDir, age : Int) -> @types.GrowthDir {
 /// Grow the tree by one turn. Returns a new grid (the original is not modified in place).
 pub fn grow_one_turn(
   g : @types.TreeGrid,
-  species : @types.Species
+  species : @types.Species,
 ) -> @types.TreeGrid {
   let result = @types.clone_grid(g)
   let tips = find_growth_tips(g)
@@ -265,7 +271,7 @@ pub fn prune_at(g : @types.TreeGrid, x : Int, y : Int) -> Int {
 /// Returns (required_ok, forbidden_ok, tips_ok)
 pub fn check_zones(
   g : @types.TreeGrid,
-  zones : Array[@types.Zone]
+  zones : Array[@types.Zone],
 ) -> (Bool, Bool, Bool) {
   let mut req_ok = true
   let mut forb_ok = true
@@ -347,7 +353,7 @@ pub fn calculate_stars(
   g : @types.TreeGrid,
   zones : Array[@types.Zone],
   total_prunes : Int,
-  par : Int
+  par : Int,
 ) -> Int {
   let (req_ok, forb_ok, tip_ok) = check_zones(g, zones)
   if req_ok && forb_ok {

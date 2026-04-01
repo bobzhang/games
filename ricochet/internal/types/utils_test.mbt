@@ -100,7 +100,7 @@ test "all_targets_hit with none hit" {
     start_pos: @types.vec2(50.0, 50.0),
     par_bounces: 5,
   }
-  assert_true(!(@types.all_targets_hit(level)))
+  assert_true(!@types.all_targets_hit(level))
 }
 
 ///|

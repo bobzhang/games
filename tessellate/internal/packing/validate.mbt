@@ -3,7 +3,7 @@ pub fn can_place_piece(
   region : @types.Region,
   grid : Array[Array[Int]],
   cells : Array[@types.Vec2i],
-  pos : @types.Vec2i
+  pos : @types.Vec2i,
 ) -> Bool {
   for i in 0..<cells.length() {
     let gx = pos.x + cells[i].x
@@ -11,7 +11,7 @@ pub fn can_place_piece(
     if gx < 0 || gx >= region.width || gy < 0 || gy >= region.height {
       return false
     }
-    if !(region.active[gy][gx]) {
+    if !region.active[gy][gx] {
       return false
     }
     if grid[gy][gx] >= 0 {
@@ -26,7 +26,7 @@ pub fn place_piece(
   grid : Array[Array[Int]],
   cells : Array[@types.Vec2i],
   pos : @types.Vec2i,
-  piece_id : Int
+  piece_id : Int,
 ) -> Unit {
   for i in 0..<cells.length() {
     let gx = pos.x + cells[i].x
@@ -36,10 +36,7 @@ pub fn place_piece(
 }
 
 ///|
-pub fn remove_piece(
-  grid : Array[Array[Int]],
-  piece_id : Int
-) -> Unit {
+pub fn remove_piece(grid : Array[Array[Int]], piece_id : Int) -> Unit {
   for r in 0..<grid.length() {
     for c in 0..<grid[r].length() {
       if grid[r][c] == piece_id {
@@ -52,7 +49,7 @@ pub fn remove_piece(
 ///|
 pub fn is_region_complete(
   region : @types.Region,
-  grid : Array[Array[Int]]
+  grid : Array[Array[Int]],
 ) -> Bool {
   for r in 0..<region.height {
     for c in 0..<region.width {
@@ -67,7 +64,7 @@ pub fn is_region_complete(
 ///|
 pub fn count_empty_cells(
   region : @types.Region,
-  grid : Array[Array[Int]]
+  grid : Array[Array[Int]],
 ) -> Int {
   let mut count = 0
   for r in 0..<region.height {
@@ -83,7 +80,7 @@ pub fn count_empty_cells(
 ///|
 pub fn is_piece_used(
   placed : Array[@types.PlacedPiece],
-  piece_index : Int
+  piece_index : Int,
 ) -> Bool {
   for i in 0..<placed.length() {
     if placed[i].piece_index == piece_index {
@@ -103,7 +100,7 @@ pub fn calculate_stars(
   time_seconds : Int,
   rotations : Int,
   par_time : Int,
-  par_rotations : Int
+  par_rotations : Int,
 ) -> Int {
   let mut stars = 1
   if time_seconds <= par_time {

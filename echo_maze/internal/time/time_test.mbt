@@ -31,7 +31,6 @@ test "finish_loop respects max ghosts" {
   for _i in 0..<@types.max_ghosts {
     game.current_recording = [Some(East)]
     let _ = @time.finish_loop(game)
-
   }
   inspect(game.ghosts.length(), content="3")
   // Try to create one more

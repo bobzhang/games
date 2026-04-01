@@ -38,7 +38,7 @@ pub fn set_cell(
   x : Int,
   y : Int,
   has_paper : Bool,
-  layers : Int
+  layers : Int,
 ) -> Unit {
   if x >= 0 && x < paper.width && y >= 0 && y < paper.height {
     let idx = y * paper.width + x
@@ -51,7 +51,10 @@ pub fn set_cell(
 pub fn clone_paper(paper : Paper) -> Paper {
   let cells : Array[PaperCell] = Array::new(capacity=paper.width * paper.height)
   for i in 0..<paper.cells.length() {
-    cells.push({ has_paper: paper.cells[i].has_paper, layers: paper.cells[i].layers })
+    cells.push({
+      has_paper: paper.cells[i].has_paper,
+      layers: paper.cells[i].layers,
+    })
   }
   { width: paper.width, height: paper.height, cells }
 }
@@ -72,7 +75,7 @@ pub fn paper_matches_silhouette(current : Paper, target : Paper) -> Bool {
 ///|
 pub fn check_layer_requirements(
   paper : Paper,
-  checks : Array[LayerCheck]
+  checks : Array[LayerCheck],
 ) -> Bool {
   for i in 0..<checks.length() {
     let chk = checks[i]
@@ -119,7 +122,7 @@ pub fn make_rect_paper(
   x1 : Int,
   y1 : Int,
   x2 : Int,
-  y2 : Int
+  y2 : Int,
 ) -> Paper {
   let p = new_paper(width, height)
   for y in y1..<y2 {

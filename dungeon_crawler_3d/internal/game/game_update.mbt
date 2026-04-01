@@ -312,7 +312,16 @@ fn @types.Game::update_level_up(game : @types.Game, _dt : Float) -> Unit {
       game.player_int_stat += 2
       @types.add_message(game, "Level Up: +2 STR/DEX/INT!", 200, 200, 255)
     }
-    @types.spawn_particles(game, game.player_x, 1.0, game.player_z, 20, 255, 255, 50)
+    @types.spawn_particles(
+      game,
+      game.player_x,
+      1.0,
+      game.player_z,
+      20,
+      255,
+      255,
+      50,
+    )
     game.state = StatePlaying
     @raylib.disable_cursor()
   }
@@ -484,31 +493,19 @@ fn @types.Game::update_shrine(game : @types.Game, _dt : Float) -> Unit {
         // Berserker's Fury: permanent buff (stored as special buff)
         @types.add_buff(game, @types.buff_berserker, 999.0, 20)
         @types.add_message(
-          game,
-          "Berserker's Fury! +20% DMG when below 30% HP!",
-          255,
-          80,
-          40,
+          game, "Berserker's Fury! +20% DMG when below 30% HP!", 255, 80, 40,
         )
       } else if boon_id == 11 {
         // Mana Shield: permanent buff
         @types.add_buff(game, @types.buff_mana_shield, 999.0, 1)
         @types.add_message(
-          game,
-          "Mana Shield! Absorb damage with mana!",
-          80,
-          120,
-          255,
+          game, "Mana Shield! Absorb damage with mana!", 80, 120, 255,
         )
       } else if boon_id == 12 {
         // Shadow Step: permanent buff
         @types.add_buff(game, @types.buff_shadow_step, 999.0, 1)
         @types.add_message(
-          game,
-          "Shadow Step! Brief invisibility after dodge!",
-          150,
-          80,
-          200,
+          game, "Shadow Step! Brief invisibility after dodge!", 150, 80, 200,
         )
       }
       @types.spawn_particles(
@@ -581,7 +578,16 @@ fn @types.Game::update_equip_popup(game : @types.Game, _dt : Float) -> Unit {
         @types.get_rarity_color_b(game.pending_equip_rarity),
       )
     }
-    @types.spawn_particles(game, game.player_x, 1.0, game.player_z, 12, 100, 200, 255)
+    @types.spawn_particles(
+      game,
+      game.player_x,
+      1.0,
+      game.player_z,
+      12,
+      100,
+      200,
+      255,
+    )
     game.state = StatePlaying
     @raylib.disable_cursor()
   }
@@ -591,7 +597,16 @@ fn @types.Game::update_equip_popup(game : @types.Game, _dt : Float) -> Unit {
     game.player_gold += gold
     game.player_total_gold += gold
     @types.add_message(game, "Sold equipment for \{gold} gold", 255, 215, 0)
-    @types.spawn_particles(game, game.player_x, 1.0, game.player_z, 8, 255, 215, 0)
+    @types.spawn_particles(
+      game,
+      game.player_x,
+      1.0,
+      game.player_z,
+      8,
+      255,
+      215,
+      0,
+    )
     game.state = StatePlaying
     @raylib.disable_cursor()
   }

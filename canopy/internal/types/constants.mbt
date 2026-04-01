@@ -65,13 +65,17 @@ pub let color_ground : @raylib.Color = @raylib.Color::new(90, 65, 40, 255)
 pub let color_water : @raylib.Color = @raylib.Color::new(60, 130, 200, 255)
 
 ///|
-pub let color_water_empty : @raylib.Color = @raylib.Color::new(140, 120, 100, 255)
+pub let color_water_empty : @raylib.Color = @raylib.Color::new(
+  140, 120, 100, 255,
+)
 
 ///|
 pub let color_sun : @raylib.Color = @raylib.Color::new(255, 220, 80, 255)
 
 ///|
-pub let color_target_marker : @raylib.Color = @raylib.Color::new(255, 80, 80, 255)
+pub let color_target_marker : @raylib.Color = @raylib.Color::new(
+  255, 80, 80, 255,
+)
 
 ///|
 pub let color_target_met : @raylib.Color = @raylib.Color::new(80, 255, 80, 255)
@@ -89,19 +93,25 @@ pub let color_hud_text : @raylib.Color = @raylib.Color::new(220, 230, 240, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(60, 120, 80, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(80, 150, 100, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  80, 150, 100, 255,
+)
 
 ///|
 pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 200, 50, 255)
 
 ///|
-pub let color_star_empty : @raylib.Color = @raylib.Color::new(100, 100, 100, 255)
+pub let color_star_empty : @raylib.Color = @raylib.Color::new(
+  100, 100, 100, 255,
+)
 
 ///|
 pub let color_title_green : @raylib.Color = @raylib.Color::new(40, 180, 60, 255)
 
 ///|
-pub let color_tier_seedling : @raylib.Color = @raylib.Color::new(100, 200, 100, 255)
+pub let color_tier_seedling : @raylib.Color = @raylib.Color::new(
+  100, 200, 100, 255,
+)
 
 ///|
 pub let color_tier_grove : @raylib.Color = @raylib.Color::new(60, 160, 60, 255)

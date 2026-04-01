@@ -22,4 +22,3 @@ fn sinf(a : Float) -> Float {
 fn cosf(a : Float) -> Float {
   Float::from_double(@math.cos(a.to_double()))
 }
-

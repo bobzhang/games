@@ -8,88 +8,181 @@
 pub fn build_campaign_map() -> @types.CampaignMap {
   let nodes : Array[@types.CampaignNode] = []
   // Column 0: Starting mission (1 node)
-  nodes.push(
-    { id: 0, kind: Mission(0), x: 0, y: 2, connections: [1, 2, 3],
-      difficulty: 1, reward_icon: "A", theme: Neutral },
-  )
+  nodes.push({
+    id: 0,
+    kind: Mission(0),
+    x: 0,
+    y: 2,
+    connections: [1, 2, 3],
+    difficulty: 1,
+    reward_icon: "A",
+    theme: Neutral,
+  })
   // Column 1: Three branching paths with themes
   // Path A: "Scorched Earth" - fire-themed
-  nodes.push(
-    { id: 1, kind: Mission(1), x: 1, y: 0, connections: [4, 5],
-      difficulty: 1, reward_icon: "A", theme: ScorchedEarth },
-  )
+  nodes.push({
+    id: 1,
+    kind: Mission(1),
+    x: 1,
+    y: 0,
+    connections: [4, 5],
+    difficulty: 1,
+    reward_icon: "A",
+    theme: ScorchedEarth,
+  })
   // Path B: "Ice Protocol" - mobility-themed
-  nodes.push(
-    { id: 2, kind: Mission(2), x: 1, y: 2, connections: [5, 6],
-      difficulty: 2, reward_icon: "G", theme: IceProtocol },
-  )
+  nodes.push({
+    id: 2,
+    kind: Mission(2),
+    x: 1,
+    y: 2,
+    connections: [5, 6],
+    difficulty: 2,
+    reward_icon: "G",
+    theme: IceProtocol,
+  })
   // Path C: "Void Zone" - push-themed
-  nodes.push(
-    { id: 3, kind: Mission(3), x: 1, y: 4, connections: [6, 7],
-      difficulty: 2, reward_icon: "A", theme: VoidZone },
-  )
+  nodes.push({
+    id: 3,
+    kind: Mission(3),
+    x: 1,
+    y: 4,
+    connections: [6, 7],
+    difficulty: 2,
+    reward_icon: "A",
+    theme: VoidZone,
+  })
   // Column 2: Mid-tier nodes (rest/shop/event/elite)
-  nodes.push(
-    { id: 4, kind: Rest, x: 2, y: 0, connections: [8],
-      difficulty: 0, reward_icon: "R", theme: ScorchedEarth },
-  )
-  nodes.push(
-    { id: 5, kind: Event, x: 2, y: 1, connections: [8, 9],
-      difficulty: 0, reward_icon: "?", theme: Neutral },
-  )
-  nodes.push(
-    { id: 6, kind: Shop, x: 2, y: 3, connections: [9, 10],
-      difficulty: 0, reward_icon: "G", theme: Neutral },
-  )
-  nodes.push(
-    { id: 7, kind: Elite(3), x: 2, y: 4, connections: [10],
-      difficulty: 3, reward_icon: "A", theme: VoidZone },
-  )
+  nodes.push({
+    id: 4,
+    kind: Rest,
+    x: 2,
+    y: 0,
+    connections: [8],
+    difficulty: 0,
+    reward_icon: "R",
+    theme: ScorchedEarth,
+  })
+  nodes.push({
+    id: 5,
+    kind: Event,
+    x: 2,
+    y: 1,
+    connections: [8, 9],
+    difficulty: 0,
+    reward_icon: "?",
+    theme: Neutral,
+  })
+  nodes.push({
+    id: 6,
+    kind: Shop,
+    x: 2,
+    y: 3,
+    connections: [9, 10],
+    difficulty: 0,
+    reward_icon: "G",
+    theme: Neutral,
+  })
+  nodes.push({
+    id: 7,
+    kind: Elite(3),
+    x: 2,
+    y: 4,
+    connections: [10],
+    difficulty: 3,
+    reward_icon: "A",
+    theme: VoidZone,
+  })
   // Column 3: Boss 1 approach
-  nodes.push(
-    { id: 8, kind: Mission(5), x: 3, y: 0, connections: [11],
-      difficulty: 2, reward_icon: "A", theme: ScorchedEarth },
-  )
-  nodes.push(
-    { id: 9, kind: Mission(6), x: 3, y: 2, connections: [11],
-      difficulty: 2, reward_icon: "G", theme: IceProtocol },
-  )
-  nodes.push(
-    { id: 10, kind: Mission(7), x: 3, y: 4, connections: [11],
-      difficulty: 2, reward_icon: "A", theme: VoidZone },
-  )
+  nodes.push({
+    id: 8,
+    kind: Mission(5),
+    x: 3,
+    y: 0,
+    connections: [11],
+    difficulty: 2,
+    reward_icon: "A",
+    theme: ScorchedEarth,
+  })
+  nodes.push({
+    id: 9,
+    kind: Mission(6),
+    x: 3,
+    y: 2,
+    connections: [11],
+    difficulty: 2,
+    reward_icon: "G",
+    theme: IceProtocol,
+  })
+  nodes.push({
+    id: 10,
+    kind: Mission(7),
+    x: 3,
+    y: 4,
+    connections: [11],
+    difficulty: 2,
+    reward_icon: "A",
+    theme: VoidZone,
+  })
   // Column 4: Boss 1 (Siege Engine)
-  nodes.push(
-    { id: 11, kind: Boss(4), x: 4, y: 2, connections: [12, 13, 14],
-      difficulty: 3, reward_icon: "A", theme: Neutral },
-  )
+  nodes.push({
+    id: 11,
+    kind: Boss(4),
+    x: 4,
+    y: 2,
+    connections: [12, 13, 14],
+    difficulty: 3,
+    reward_icon: "A",
+    theme: Neutral,
+  })
   // Column 5: Post-boss rest/event nodes
-  nodes.push(
-    { id: 12, kind: Rest, x: 5, y: 0, connections: [15],
-      difficulty: 0, reward_icon: "R", theme: Neutral },
-  )
-  nodes.push(
-    { id: 13, kind: Event, x: 5, y: 2, connections: [15],
-      difficulty: 0, reward_icon: "?", theme: Neutral },
-  )
-  nodes.push(
-    { id: 14, kind: Shop, x: 5, y: 4, connections: [15],
-      difficulty: 0, reward_icon: "G", theme: Neutral },
-  )
+  nodes.push({
+    id: 12,
+    kind: Rest,
+    x: 5,
+    y: 0,
+    connections: [15],
+    difficulty: 0,
+    reward_icon: "R",
+    theme: Neutral,
+  })
+  nodes.push({
+    id: 13,
+    kind: Event,
+    x: 5,
+    y: 2,
+    connections: [15],
+    difficulty: 0,
+    reward_icon: "?",
+    theme: Neutral,
+  })
+  nodes.push({
+    id: 14,
+    kind: Shop,
+    x: 5,
+    y: 4,
+    connections: [15],
+    difficulty: 0,
+    reward_icon: "G",
+    theme: Neutral,
+  })
   // Column 6: Final boss (Hivemind)
-  nodes.push(
-    { id: 15, kind: Boss(8), x: 6, y: 2, connections: [],
-      difficulty: 3, reward_icon: "A", theme: Neutral },
-  )
+  nodes.push({
+    id: 15,
+    kind: Boss(8),
+    x: 6,
+    y: 2,
+    connections: [],
+    difficulty: 3,
+    reward_icon: "A",
+    theme: Neutral,
+  })
   { nodes, selected_node: 0, completed_nodes: [] }
 }
 
 ///|
 /// Check if a node is available to select (connected from a completed node).
-pub fn is_node_available(
-  campaign : @types.CampaignMap,
-  node_id : Int,
-) -> Bool {
+pub fn is_node_available(campaign : @types.CampaignMap, node_id : Int) -> Bool {
   // The first node is always available if nothing completed
   if campaign.completed_nodes.length() == 0 && node_id == 0 {
     return true
@@ -111,10 +204,7 @@ pub fn is_node_available(
 
 ///|
 /// Check if a node is already completed.
-pub fn is_node_completed(
-  campaign : @types.CampaignMap,
-  node_id : Int,
-) -> Bool {
+pub fn is_node_completed(campaign : @types.CampaignMap, node_id : Int) -> Bool {
   for i = 0; i < campaign.completed_nodes.length(); i = i + 1 {
     if campaign.completed_nodes[i] == node_id {
       return true
@@ -125,10 +215,7 @@ pub fn is_node_completed(
 
 ///|
 /// Get the mission ID for a campaign node.
-pub fn get_node_mission_id(
-  campaign : @types.CampaignMap,
-  node_id : Int,
-) -> Int {
+pub fn get_node_mission_id(campaign : @types.CampaignMap, node_id : Int) -> Int {
   if node_id < 0 || node_id >= campaign.nodes.length() {
     return 0
   }
@@ -156,9 +243,7 @@ pub fn get_node_name(node : @types.CampaignNode) -> String {
 
 ///|
 /// Get available (selectable) node IDs for the player.
-pub fn get_available_nodes(
-  campaign : @types.CampaignMap,
-) -> Array[Int] {
+pub fn get_available_nodes(campaign : @types.CampaignMap) -> Array[Int] {
   let available : Array[Int] = []
   for i = 0; i < campaign.nodes.length(); i = i + 1 {
     if is_node_available(campaign, i) && !is_node_completed(campaign, i) {
@@ -232,9 +317,13 @@ pub fn update_campaign(game : @types.Game) -> Unit {
         }
         Shop => {
           // Shop: offer 3 augments to buy with GP
-          let seed : Ref[UInt] = { val: (node_id * 7919 + 42).reinterpret_as_uint() }
+          let seed : Ref[UInt] = {
+            val: (node_id * 7919 + 42).reinterpret_as_uint(),
+          }
           game.run.offered_augments = @content.pick_random_augments(
-            seed, game.run.augments, 3,
+            seed,
+            game.run.augments,
+            3,
           )
           game.screen = Reward
           campaign.completed_nodes.push(node_id)
@@ -300,14 +389,16 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
   // Place 3 player mechs with augment-modified stats
   let classes : Array[@types.MechClass] = [Vanguard, Striker, Sentinel]
   for i = 0; i < 3; i = i + 1 {
-    let stats = @content.get_augmented_mech_stats(
-      classes[i],
-      game.run.augments,
-    )
+    let stats = @content.get_augmented_mech_stats(classes[i], game.run.augments)
     let tier = @content.get_upgrade_tier(game.run, classes[i])
     // Apply tier 1 stat bonuses
     let (hp, move_range, _ability_range, _ability_damage) = @content.apply_upgrade_stats(
-      classes[i], tier, stats.hp, stats.move_range, stats.ability_range, stats.ability_damage,
+      classes[i],
+      tier,
+      stats.hp,
+      stats.move_range,
+      stats.ability_range,
+      stats.ability_damage,
     )
     ignore(move_range)
     let px = 1
@@ -319,7 +410,11 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
     }
     // Persistent HP: use saved HP if available and > 0
     let actual_hp = if i < game.run.mech_hp.length() && game.run.mech_hp[i] > 0 {
-      if game.run.mech_hp[i] > hp { hp } else { game.run.mech_hp[i] }
+      if game.run.mech_hp[i] > hp {
+        hp
+      } else {
+        game.run.mech_hp[i]
+      }
     } else {
       hp
     }
@@ -346,11 +441,7 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
     }
     battle.units.push(u)
     if battle.grid.in_bounds(px, py) {
-      battle.grid.set(
-        px,
-        py,
-        { ..battle.grid.get(px, py), occupied_by: u.id },
-      )
+      battle.grid.set(px, py, { ..battle.grid.get(px, py), occupied_by: u.id })
     }
   }
   // Spawn enemies from mission definition
@@ -405,7 +496,11 @@ fn spawn_mission_enemies(
       y: actual_y,
       hp: ehp,
       max_hp: ehp,
-      shield: if etype == Boss { 2 } else { 0 },
+      shield: if etype == Boss {
+        2
+      } else {
+        0
+      },
       heat: 0,
       max_heat: 0,
       stunned: false,
@@ -420,11 +515,10 @@ fn spawn_mission_enemies(
     }
     battle.units.push(eu)
     if battle.grid.in_bounds(actual_x, actual_y) {
-      battle.grid.set(
-        actual_x,
-        actual_y,
-        { ..battle.grid.get(actual_x, actual_y), occupied_by: eu.id },
-      )
+      battle.grid.set(actual_x, actual_y, {
+        ..battle.grid.get(actual_x, actual_y),
+        occupied_by: eu.id,
+      })
     }
   }
 }
@@ -435,16 +529,17 @@ fn apply_rest_heal(game : @types.Game) -> Unit {
   // If mech_hp tracking is initialized (non-zero), heal 50%
   let classes : Array[@types.MechClass] = [Vanguard, Striker, Sentinel]
   for i = 0; i < 3; i = i + 1 {
-    let stats = @content.get_augmented_mech_stats(
-      classes[i], game.run.augments,
-    )
+    let stats = @content.get_augmented_mech_stats(classes[i], game.run.augments)
     let max_hp = stats.hp
     if game.run.mech_hp[i] <= 0 {
       // Not initialized yet, set to full
       game.run.mech_hp[i] = max_hp
     } else {
       let heal = max_hp / 2
-      game.run.mech_hp[i] = (game.run.mech_hp[i] + heal).clamp(min=1, max=max_hp)
+      game.run.mech_hp[i] = (game.run.mech_hp[i] + heal).clamp(
+        min=1,
+        max=max_hp,
+      )
     }
   }
 }
@@ -459,9 +554,7 @@ fn apply_event_node(game : @types.Game, node_id : Int) -> Unit {
       // Scavenger: give a free augment (simplified - no fight/pay choice for now)
       if game.run.grid_power >= 2 {
         game.run.grid_power -= 2
-        let offered = @content.pick_random_augments(
-          seed, game.run.augments, 1,
-        )
+        let offered = @content.pick_random_augments(seed, game.run.augments, 1)
         if offered.length() > 0 {
           game.run.augments.push(offered[0])
           let name = @content.get_augment_name(offered[0])
@@ -493,7 +586,7 @@ fn apply_event_node(game : @types.Game, node_id : Int) -> Unit {
 /// Save mech HP from battle back to persistent run state.
 pub fn save_mech_hp(game : @types.Game) -> Unit {
   match game.battle {
-    Some(b) => {
+    Some(b) =>
       for i = 0; i < b.units.length(); i = i + 1 {
         let u = b.units[i]
         if u.team == Player {
@@ -503,15 +596,10 @@ pub fn save_mech_hp(game : @types.Game) -> Unit {
             Sentinel => 2
           }
           if idx < game.run.mech_hp.length() {
-            game.run.mech_hp[idx] = if u.active && u.hp > 0 {
-              u.hp
-            } else {
-              0
-            }
+            game.run.mech_hp[idx] = if u.active && u.hp > 0 { u.hp } else { 0 }
           }
         }
       }
-    }
     None => ()
   }
 }
@@ -527,13 +615,12 @@ pub fn complete_campaign_node(game : @types.Game) -> Unit {
       // Check if final boss completed
       let node = campaign.nodes[campaign.selected_node]
       match node.kind {
-        Boss(mid) => {
+        Boss(mid) =>
           if mid == 8 {
             // Final boss defeated - run summary
             game.screen = RunSummary
             return
           }
-        }
         _ => ()
       }
     }

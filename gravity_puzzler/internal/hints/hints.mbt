@@ -81,7 +81,11 @@ pub fn get_level_difficulty(world : Int, level : Int) -> Int {
   let base_diff = world + 1
   let level_diff = level / 3
   let total = base_diff + level_diff
-  if total > 5 { 5 } else { total }
+  if total > 5 {
+    5
+  } else {
+    total
+  }
 }
 
 ///|
@@ -91,9 +95,9 @@ pub fn get_context_tip(game : @types.Game) -> String {
     Title => "Press ENTER to start or S for statistics"
     WorldSelect => "LEFT/RIGHT to browse, ENTER to select world"
     LevelSelect => "Navigate with arrows, ENTER to play"
-    Playing => {
+    Playing =>
       match game.level {
-        Some(level) => {
+        Some(level) =>
           if level.moves == 0 {
             "Q/E to rotate gravity, Arrow keys to move"
           } else if level.moves <= 2 {
@@ -103,10 +107,8 @@ pub fn get_context_tip(game : @types.Game) -> String {
           } else {
             ""
           }
-        }
         None => ""
       }
-    }
     Paused => "ESC to resume, Q to quit"
     LevelComplete => "ENTER for next level, ESC for level select"
     Editor => "TAB to switch modes, T to test play"
@@ -117,7 +119,7 @@ pub fn get_context_tip(game : @types.Game) -> String {
 ///|
 /// Draw the hint arrow overlay on screen
 pub fn draw_hint(game : @types.Game) -> Unit {
-  if !(game.hints.hint_active) {
+  if !game.hints.hint_active {
     return
   }
   let alpha_f = game.hints.hint_timer / @types.hint_display_duration
@@ -138,7 +140,13 @@ pub fn draw_hint(game : @types.Game) -> Unit {
   let ay1 = Float::from_int(cy) - fdy * 30.0
   let ax2 = Float::from_int(cx) + fdx * 30.0
   let ay2 = Float::from_int(cy) + fdy * 30.0
-  @raylib.draw_line(ax1.to_int(), ay1.to_int(), ax2.to_int(), ay2.to_int(), color)
+  @raylib.draw_line(
+    ax1.to_int(),
+    ay1.to_int(),
+    ax2.to_int(),
+    ay2.to_int(),
+    color,
+  )
   // Arrow head (triangle)
   let tip_x = Float::from_int(cx) + fdx * 45.0
   let tip_y = Float::from_int(cy) + fdy * 45.0
@@ -161,12 +169,21 @@ pub fn draw_hint(game : @types.Game) -> Unit {
   // Remaining hints count
   let remaining = hints_remaining(game)
   let hint_text = "Hints: " + remaining.to_string()
-  @draw.draw_text(hint_text, cx - 30, cy + 80, 16, @raylib.Color::new(200, 200, 200, a))
+  @draw.draw_text(
+    hint_text,
+    cx - 30,
+    cy + 80,
+    16,
+    @raylib.Color::new(200, 200, 200, a),
+  )
 }
 
 ///|
 /// Compute the best gravity direction to hint
-fn compute_best_direction(level : @types.Level, game : @types.Game) -> @types.GravityDir {
+fn compute_best_direction(
+  level : @types.Level,
+  game : @types.Game,
+) -> @types.GravityDir {
   // Find exit position
   let mut exit_x = 0
   let mut exit_y = 0

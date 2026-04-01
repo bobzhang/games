@@ -174,6 +174,7 @@ test "total_score with no completed levels is zero" {
 }
 
 ///|
+
 ///|
 test "score zero time gives maximum speed bonus" {
   let game = @types.new_game()

@@ -254,7 +254,8 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
     // Build lateral velocity based on steering and speed
     let steer_angle = kart.steer + kart.drift_angle
     let lateral_force = steer_angle * kart.speed * 0.08
-    kart.lateral_vel = kart.lateral_vel + lateral_force * @types.lateral_build_rate * dt
+    kart.lateral_vel = kart.lateral_vel +
+      lateral_force * @types.lateral_build_rate * dt
     // Damp lateral velocity based on surface traction
     let lat_damp = @types.get_lateral_damp(kart.on_surface_type)
     kart.lateral_vel = kart.lateral_vel * (1.0 - lat_damp * dt)
@@ -372,7 +373,9 @@ pub fn apply_kart_physics(
   let cos_a = @math.cosf(kart.angle)
   // Landing boost adds to effective speed
   let effective_speed : Float = if kart.landing_boost_timer > 0.0 {
-    kart.speed + @types.landing_boost_max * (kart.landing_boost_timer / @types.landing_boost_duration)
+    kart.speed +
+    @types.landing_boost_max *
+    (kart.landing_boost_timer / @types.landing_boost_duration)
   } else {
     kart.speed
   }

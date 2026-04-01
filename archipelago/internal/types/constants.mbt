@@ -50,6 +50,7 @@ pub let tier2_count : Int = 9
 pub let tier3_count : Int = 8
 
 // Colors - Ocean/Island theme
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(25, 55, 100, 255)
 
@@ -63,13 +64,19 @@ pub let color_ocean_light : @raylib.Color = @raylib.Color::new(40, 80, 140, 255)
 pub let color_island : @raylib.Color = @raylib.Color::new(210, 180, 120, 255)
 
 ///|
-pub let color_island_border : @raylib.Color = @raylib.Color::new(160, 130, 70, 255)
+pub let color_island_border : @raylib.Color = @raylib.Color::new(
+  160, 130, 70, 255,
+)
 
 ///|
-pub let color_island_selected : @raylib.Color = @raylib.Color::new(255, 220, 100, 255)
+pub let color_island_selected : @raylib.Color = @raylib.Color::new(
+  255, 220, 100, 255,
+)
 
 ///|
-pub let color_island_satisfied : @raylib.Color = @raylib.Color::new(80, 200, 100, 255)
+pub let color_island_satisfied : @raylib.Color = @raylib.Color::new(
+  80, 200, 100, 255,
+)
 
 ///|
 pub let color_island_over : @raylib.Color = @raylib.Color::new(220, 60, 60, 255)
@@ -78,7 +85,9 @@ pub let color_island_over : @raylib.Color = @raylib.Color::new(220, 60, 60, 255)
 pub let color_bridge : @raylib.Color = @raylib.Color::new(140, 100, 50, 255)
 
 ///|
-pub let color_bridge_preview : @raylib.Color = @raylib.Color::new(140, 100, 50, 120)
+pub let color_bridge_preview : @raylib.Color = @raylib.Color::new(
+  140, 100, 50, 120,
+)
 
 ///|
 pub let color_number : @raylib.Color = @raylib.Color::new(255, 255, 255, 255)
@@ -105,7 +114,9 @@ pub let color_panel_bg : @raylib.Color = @raylib.Color::new(20, 40, 70, 220)
 pub let color_button : @raylib.Color = @raylib.Color::new(50, 90, 150, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(70, 120, 190, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  70, 120, 190, 255,
+)
 
 ///|
 pub let color_hint : @raylib.Color = @raylib.Color::new(100, 255, 200, 200)
@@ -114,4 +125,6 @@ pub let color_hint : @raylib.Color = @raylib.Color::new(100, 255, 200, 200)
 pub let color_wave : @raylib.Color = @raylib.Color::new(60, 120, 200, 40)
 
 ///|
-pub let color_title_accent : @raylib.Color = @raylib.Color::new(255, 200, 80, 255)
+pub let color_title_accent : @raylib.Color = @raylib.Color::new(
+  255, 200, 80, 255,
+)

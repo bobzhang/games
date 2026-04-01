@@ -43,7 +43,14 @@ test "rock_from_index out of range defaults to slate" {
 ///|
 test "rock_index and rock_from_index are inverses" {
   let rocks : Array[RockKind] = [
-    Sandstone, Limestone, Shale, Granite, Basalt, Coal, Chalk, Slate,
+    Sandstone,
+    Limestone,
+    Shale,
+    Granite,
+    Basalt,
+    Coal,
+    Chalk,
+    Slate,
   ]
   for i in 0..<rocks.length() {
     inspect(rock_from_index(rock_index(rocks[i])) == rocks[i], content="true")

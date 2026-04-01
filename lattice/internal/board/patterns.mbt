@@ -2,7 +2,7 @@
 /// Find all patterns for a given player on the board
 pub fn find_all_patterns(
   board : @types.HexBoard,
-  player : @types.Player
+  player : @types.Player,
 ) -> Array[@types.Pattern] {
   let result : Array[@types.Pattern] = []
   find_bridges(board, player, result)
@@ -18,10 +18,7 @@ pub fn find_all_patterns(
 
 ///|
 /// Calculate total pattern score for a player
-pub fn score_patterns(
-  board : @types.HexBoard,
-  player : @types.Player
-) -> Int {
+pub fn score_patterns(board : @types.HexBoard, player : @types.Player) -> Int {
   let patterns = find_all_patterns(board, player)
   let mut total = 0
   for i in 0..<patterns.length() {
@@ -36,7 +33,7 @@ pub fn score_patterns(
 fn find_bridges(
   board : @types.HexBoard,
   player : @types.Player,
-  result : Array[@types.Pattern]
+  result : Array[@types.Pattern],
 ) -> Unit {
   let found : Array[(Int, Int, Int, Int)] = []
   for r in 0..<board.size {
@@ -51,7 +48,8 @@ fn find_bridges(
             let n_neighbors = @types.hex_neighbors_valid(n, board.size)
             for nni in 0..<n_neighbors.length() {
               let nn = n_neighbors[nni]
-              if @types.has_stone(board, nn, player) && !@types.hex_eq(nn, coord) {
+              if @types.has_stone(board, nn, player) &&
+                !@types.hex_eq(nn, coord) {
                 // Bridge found: coord -- gap(n) -- nn
                 let r1 = @types.mini(r, nn.row) * 100 + @types.mini(c, nn.col)
                 let r2 = @types.maxi(r, nn.row) * 100 + @types.maxi(c, nn.col)
@@ -66,7 +64,10 @@ fn find_bridges(
                 }
                 if !dup {
                   // Also verify the two stones are NOT direct neighbors
-                  let direct_neighbors = @types.hex_neighbors_valid(coord, board.size)
+                  let direct_neighbors = @types.hex_neighbors_valid(
+                    coord,
+                    board.size,
+                  )
                   let mut is_direct = false
                   for di in 0..<direct_neighbors.length() {
                     if @types.hex_eq(direct_neighbors[di], nn) {
@@ -76,13 +77,11 @@ fn find_bridges(
                   }
                   if !is_direct {
                     found.push((r1, r2, n.row, n.col))
-                    result.push(
-                      {
-                        kind: Bridge,
-                        positions: [coord, nn],
-                        points: @types.bridge_points,
-                      },
-                    )
+                    result.push({
+                      kind: Bridge,
+                      positions: [coord, nn],
+                      points: @types.bridge_points,
+                    })
                   }
                 }
               }
@@ -99,7 +98,7 @@ fn find_bridges(
 fn find_chains(
   board : @types.HexBoard,
   player : @types.Player,
-  result : Array[@types.Pattern]
+  result : Array[@types.Pattern],
 ) -> Unit {
   // For odd-r hex grid, the three main axes for each cell are:
   // Direction pairs: we check 3 directions from each cell
@@ -178,12 +177,11 @@ fn check_chain_dir(
   start : @types.HexCoord,
   dir : Int,
   result : Array[@types.Pattern],
-  found_set : Array[String]
+  found_set : Array[String],
 ) -> Unit {
   // Only start a chain if there's no stone in the previous direction
   let prev = prev_in_direction(start, dir)
-  if @types.in_bounds(prev, board.size) &&
-    @types.has_stone(board, prev, player) {
+  if @types.in_bounds(prev, board.size) && @types.has_stone(board, prev, player) {
     return // This is not the start of a maximal chain
   }
   // Collect stones in this direction
@@ -220,9 +218,11 @@ fn check_chain_dir(
     }
     if !dup {
       found_set.push(key)
-      result.push(
-        { kind: Chain, positions: stones, points: @types.chain_points },
-      )
+      result.push({
+        kind: Chain,
+        positions: stones,
+        points: @types.chain_points,
+      })
     }
   }
 }
@@ -232,7 +232,7 @@ fn check_chain_dir(
 fn find_triangles(
   board : @types.HexBoard,
   player : @types.Player,
-  result : Array[@types.Pattern]
+  result : Array[@types.Pattern],
 ) -> Unit {
   let found : Array[String] = []
   for r in 0..<board.size {
@@ -281,13 +281,11 @@ fn find_triangles(
                   }
                   if !dup {
                     found.push(key)
-                    result.push(
-                      {
-                        kind: Triangle,
-                        positions: [a, b, cc],
-                        points: @types.triangle_points,
-                      },
-                    )
+                    result.push({
+                      kind: Triangle,
+                      positions: [a, b, cc],
+                      points: @types.triangle_points,
+                    })
                   }
                 }
               }
@@ -308,7 +306,7 @@ fn coord_key(c : @types.HexCoord) -> Int {
 fn sort_three_coords(
   a : @types.HexCoord,
   b : @types.HexCoord,
-  c : @types.HexCoord
+  c : @types.HexCoord,
 ) -> (@types.HexCoord, @types.HexCoord, @types.HexCoord) {
   let ka = coord_key(a)
   let kb = coord_key(b)
@@ -338,7 +336,7 @@ fn sort_three_coords(
 fn find_diamonds(
   board : @types.HexBoard,
   player : @types.Player,
-  result : Array[@types.Pattern]
+  result : Array[@types.Pattern],
 ) -> Unit {
   let found : Array[String] = []
   for r in 0..<board.size {
@@ -398,13 +396,11 @@ fn find_diamonds(
                     }
                     if !dup {
                       found.push(key)
-                      result.push(
-                        {
-                          kind: Diamond,
-                          positions: [a, b, cc, dd],
-                          points: @types.diamond_points,
-                        },
-                      )
+                      result.push({
+                        kind: Diamond,
+                        positions: [a, b, cc, dd],
+                        points: @types.diamond_points,
+                      })
                     }
                   }
                 }
@@ -422,7 +418,7 @@ fn sort_four_coords(
   a : @types.HexCoord,
   b : @types.HexCoord,
   c : @types.HexCoord,
-  d : @types.HexCoord
+  d : @types.HexCoord,
 ) -> (@types.HexCoord, @types.HexCoord, @types.HexCoord, @types.HexCoord) {
   let arr : Array[@types.HexCoord] = [a, b, c, d]
   // Simple bubble sort by coord_key
@@ -443,7 +439,7 @@ fn sort_four_coords(
 fn find_fortresses(
   board : @types.HexBoard,
   player : @types.Player,
-  result : Array[@types.Pattern]
+  result : Array[@types.Pattern],
 ) -> Unit {
   for r in 0..<board.size {
     for c in 0..<board.size {
@@ -459,13 +455,11 @@ fn find_fortresses(
           }
         }
         if friendly_count >= 4 {
-          result.push(
-            {
-              kind: Fortress,
-              positions,
-              points: @types.fortress_points,
-            },
-          )
+          result.push({
+            kind: Fortress,
+            positions,
+            points: @types.fortress_points,
+          })
         }
       }
     }
@@ -477,7 +471,7 @@ fn find_fortresses(
 fn find_rings(
   board : @types.HexBoard,
   player : @types.Player,
-  result : Array[@types.Pattern]
+  result : Array[@types.Pattern],
 ) -> Unit {
   for r in 0..<board.size {
     for c in 0..<board.size {
@@ -496,9 +490,7 @@ fn find_rings(
             }
           }
           if all_friendly && positions.length() == 6 {
-            result.push(
-              { kind: Ring, positions, points: @types.ring_points },
-            )
+            result.push({ kind: Ring, positions, points: @types.ring_points })
           }
         }
       }
@@ -511,7 +503,7 @@ fn find_rings(
 fn find_stars(
   board : @types.HexBoard,
   player : @types.Player,
-  result : Array[@types.Pattern]
+  result : Array[@types.Pattern],
 ) -> Unit {
   for r in 0..<board.size {
     for c in 0..<board.size {
@@ -530,9 +522,7 @@ fn find_stars(
             }
           }
           if all_friendly {
-            result.push(
-              { kind: Star, positions, points: @types.star_points },
-            )
+            result.push({ kind: Star, positions, points: @types.star_points })
           }
         }
       }
@@ -545,7 +535,7 @@ fn find_stars(
 fn find_walls(
   board : @types.HexBoard,
   player : @types.Player,
-  result : Array[@types.Pattern]
+  result : Array[@types.Pattern],
 ) -> Unit {
   // Check each edge direction and find runs of stones
   // Top edge: row=0, all cols
@@ -564,7 +554,7 @@ fn check_wall_edge(
   player : @types.Player,
   result : Array[@types.Pattern],
   row : Int,
-  _is_row : Bool
+  _is_row : Bool,
 ) -> Unit {
   let mut run : Array[@types.HexCoord] = []
   for c in 0..<board.size {
@@ -577,9 +567,7 @@ fn check_wall_edge(
         for i in 0..<run.length() {
           positions.push(run[i])
         }
-        result.push(
-          { kind: Wall, positions, points: @types.wall_points },
-        )
+        result.push({ kind: Wall, positions, points: @types.wall_points })
       }
       run = []
     }
@@ -594,7 +582,7 @@ fn check_wall_edge_col(
   board : @types.HexBoard,
   player : @types.Player,
   result : Array[@types.Pattern],
-  col : Int
+  col : Int,
 ) -> Unit {
   let mut run : Array[@types.HexCoord] = []
   for r in 0..<board.size {
@@ -607,9 +595,7 @@ fn check_wall_edge_col(
         for i in 0..<run.length() {
           positions.push(run[i])
         }
-        result.push(
-          { kind: Wall, positions, points: @types.wall_points },
-        )
+        result.push({ kind: Wall, positions, points: @types.wall_points })
       }
       run = []
     }

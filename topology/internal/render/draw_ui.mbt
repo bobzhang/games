@@ -13,11 +13,7 @@ fn draw_ui(game : @types.Game) -> Unit {
     @raylib.Color::new(20, 22, 35, 200),
   )
   @raylib.draw_rectangle_lines(
-    panel_x,
-    panel_y,
-    panel_w,
-    panel_h,
-    @types.color_grid_line,
+    panel_x, panel_y, panel_w, panel_h, @types.color_grid_line,
   )
   // Level info
   let level_idx = game.current_level_idx
@@ -26,7 +22,13 @@ fn draw_ui(game : @types.Game) -> Unit {
   let level_name = @types.tier_name(game.current_tier) +
     " " +
     local_idx.to_string()
-  @draw.draw_text(level_name, panel_x + 20, panel_y + 15, 24, @types.color_accent)
+  @draw.draw_text(
+    level_name,
+    panel_x + 20,
+    panel_y + 15,
+    24,
+    @types.color_accent,
+  )
   // Cost display
   let cost_str = "Cost: " + game.total_cost.to_string()
   @draw.draw_text(cost_str, panel_x + 20, panel_y + 55, 20, @types.color_text)
@@ -36,7 +38,13 @@ fn draw_ui(game : @types.Game) -> Unit {
     levels.0.to_string() +
     "  Min: " +
     levels.1.to_string()
-  @draw.draw_text(par_str, panel_x + 200, panel_y + 55, 16, @types.color_text_dim)
+  @draw.draw_text(
+    par_str,
+    panel_x + 200,
+    panel_y + 55,
+    16,
+    @types.color_text_dim,
+  )
   // Match percentage
   let match_pct = calc_match_pct(game)
   let match_str = "Match: " + match_pct.to_string() + "%"
@@ -107,7 +115,7 @@ fn calc_match_pct(game : @types.Game) -> Int {
   let total_target = target.cells.length()
   let mut extra_current = 0
   for i in 0..<current.cells.length() {
-    if !(@types.shape_contains(target, current.cells[i])) {
+    if !@types.shape_contains(target, current.cells[i]) {
       extra_current = extra_current + 1
     }
   }
@@ -119,11 +127,7 @@ fn calc_match_pct(game : @types.Game) -> Int {
 }
 
 ///|
-fn draw_operations(
-  game : @types.Game,
-  base_x : Int,
-  base_y : Int
-) -> Unit {
+fn draw_operations(game : @types.Game, base_x : Int, base_y : Int) -> Unit {
   @draw.draw_text("OPERATIONS", base_x, base_y, 18, @types.color_text)
   let ops : Array[@types.OpKind] = [Shift, Rotate, Flip, Grow, Shrink]
   let level_idx = game.current_level_idx
@@ -194,7 +198,10 @@ fn draw_operations(
 }
 
 ///|
-fn op_is_available(op : @types.OpKind, available : Array[@types.OpKind]) -> Bool {
+fn op_is_available(
+  op : @types.OpKind,
+  available : Array[@types.OpKind],
+) -> Bool {
   for i in 0..<available.length() {
     if available[i] == op {
       return true
@@ -260,10 +267,6 @@ fn draw_history(game : @types.Game, base_x : Int, base_y : Int) -> Unit {
 ///|
 fn draw_controls(base_x : Int, base_y : Int) -> Unit {
   @draw.draw_text(
-    "Z - Undo    R - Restart    ESC - Back",
-    base_x,
-    base_y,
-    14,
-    @types.color_text_dim,
+    "Z - Undo    R - Restart    ESC - Back", base_x, base_y, 14, @types.color_text_dim,
   )
 }

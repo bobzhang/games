@@ -80,9 +80,21 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   // Par info
   let dim_col = @raylib.Color::new(150, 150, 160, 200)
   @draw.draw_text("Par turns:", px, turn_y + 28, 14, dim_col)
-  @draw.draw_text(level.par_turns.to_string(), px + 100, turn_y + 28, 14, dim_col)
+  @draw.draw_text(
+    level.par_turns.to_string(),
+    px + 100,
+    turn_y + 28,
+    14,
+    dim_col,
+  )
   @draw.draw_text("Par sources:", px, turn_y + 48, 14, dim_col)
-  @draw.draw_text(level.par_sources.to_string(), px + 110, turn_y + 48, 14, dim_col)
+  @draw.draw_text(
+    level.par_sources.to_string(),
+    px + 110,
+    turn_y + 48,
+    14,
+    dim_col,
+  )
   // Target progress
   let (met, total) = @weather.count_targets_met(game.grid)
   let target_y = turn_y + 80

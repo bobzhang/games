@@ -80,7 +80,7 @@ fn draw_spiral_path(
   is_cw : Bool,
   cx : Float,
   cy : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   for i in 0..<(total - 1) {
     let (x1, y1) = @types.cell_pos_on_spiral(i, total, is_cw, cx, cy)
@@ -98,7 +98,7 @@ fn draw_spiral_path(
 fn draw_cell(cell : @types.Cell, x : Float, y : Float) -> Unit {
   let r = @types.cell_radius
   match cell.kind {
-    Path => {
+    Path =>
       if cell.has_pickup {
         @raylib.draw_circle_v(
           @raylib.Vector2::new(x, y),
@@ -126,7 +126,6 @@ fn draw_cell(cell : @types.Cell, x : Float, y : Float) -> Unit {
           @types.color_path_cell,
         )
       }
-    }
     Switch =>
       // Diamond shape for switch
       draw_diamond(x, y, r, @types.color_switch)
@@ -161,12 +160,7 @@ fn draw_cell(cell : @types.Cell, x : Float, y : Float) -> Unit {
           (y - half + 2.0).to_int(),
           (half * 2.0 - 4.0).to_int(),
           (half * 2.0 - 4.0).to_int(),
-          @raylib.Color::new(
-            col.r.to_int(),
-            col.g.to_int(),
-            col.b.to_int(),
-            60,
-          ),
+          @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 60),
         )
       }
     }
@@ -198,7 +192,7 @@ fn draw_diamond(
   x : Float,
   y : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   @raylib.draw_line_ex(
     @raylib.Vector2::new(x, y - size),
@@ -232,7 +226,7 @@ fn draw_token(
   y : Float,
   color : @raylib.Color,
   t : Float,
-  is_cw : Bool
+  is_cw : Bool,
 ) -> Unit {
   let pulse : Float = @types.sinf(t * 4.0) * 2.0
   let r : Float = @types.token_radius + pulse
@@ -240,12 +234,7 @@ fn draw_token(
   @raylib.draw_circle_v(
     @raylib.Vector2::new(x, y),
     r + 4.0,
-    @raylib.Color::new(
-      color.r.to_int(),
-      color.g.to_int(),
-      color.b.to_int(),
-      40,
-    ),
+    @raylib.Color::new(color.r.to_int(), color.g.to_int(), color.b.to_int(), 40),
   )
   // Main circle
   @raylib.draw_circle_v(@raylib.Vector2::new(x, y), r, color)

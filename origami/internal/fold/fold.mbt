@@ -2,7 +2,7 @@
 pub fn execute_fold(
   paper : @types.Paper,
   dir : @types.FoldDir,
-  line_pos : Int
+  line_pos : Int,
 ) -> @types.Paper {
   let result = @types.clone_paper(paper)
   match dir {
@@ -15,11 +15,7 @@ pub fn execute_fold(
 }
 
 ///|
-fn fold_left(
-  src : @types.Paper,
-  dst : @types.Paper,
-  line : Int
-) -> Unit {
+fn fold_left(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
   // Fold right side onto left side along vertical line at column 'line'
   // Cells at x >= line get mirrored to x' = 2*line - 1 - x
   // First, clear cells on the right side of fold line in dst
@@ -31,7 +27,13 @@ fn fold_left(
         if mirror_x >= 0 && mirror_x < src.width {
           let dst_cell = @types.get_cell(dst, mirror_x, y)
           if dst_cell.has_paper {
-            @types.set_cell(dst, mirror_x, y, true, dst_cell.layers + cell.layers)
+            @types.set_cell(
+              dst,
+              mirror_x,
+              y,
+              true,
+              dst_cell.layers + cell.layers,
+            )
           } else {
             @types.set_cell(dst, mirror_x, y, true, cell.layers)
           }
@@ -44,11 +46,7 @@ fn fold_left(
 }
 
 ///|
-fn fold_right(
-  src : @types.Paper,
-  dst : @types.Paper,
-  line : Int
-) -> Unit {
+fn fold_right(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
   // Fold left side onto right side along vertical line at column 'line'
   // Cells at x < line get mirrored to x' = 2*line - 1 - x
   for y in 0..<src.height {
@@ -60,7 +58,11 @@ fn fold_right(
           let dst_cell = @types.get_cell(dst, mirror_x, y)
           if dst_cell.has_paper {
             @types.set_cell(
-              dst, mirror_x, y, true, dst_cell.layers + cell.layers,
+              dst,
+              mirror_x,
+              y,
+              true,
+              dst_cell.layers + cell.layers,
             )
           } else {
             @types.set_cell(dst, mirror_x, y, true, cell.layers)
@@ -73,11 +75,7 @@ fn fold_right(
 }
 
 ///|
-fn fold_up(
-  src : @types.Paper,
-  dst : @types.Paper,
-  line : Int
-) -> Unit {
+fn fold_up(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
   // Fold bottom half onto top half along horizontal line at row 'line'
   // Cells at y >= line get mirrored to y' = 2*line - 1 - y
   for y in line..<src.height {
@@ -89,7 +87,11 @@ fn fold_up(
           let dst_cell = @types.get_cell(dst, x, mirror_y)
           if dst_cell.has_paper {
             @types.set_cell(
-              dst, x, mirror_y, true, dst_cell.layers + cell.layers,
+              dst,
+              x,
+              mirror_y,
+              true,
+              dst_cell.layers + cell.layers,
             )
           } else {
             @types.set_cell(dst, x, mirror_y, true, cell.layers)
@@ -102,11 +104,7 @@ fn fold_up(
 }
 
 ///|
-fn fold_down(
-  src : @types.Paper,
-  dst : @types.Paper,
-  line : Int
-) -> Unit {
+fn fold_down(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
   // Fold top half onto bottom half along horizontal line at row 'line'
   // Cells at y < line get mirrored to y' = 2*line - 1 - y
   for y = line - 1; y >= 0; y = y - 1 {
@@ -118,7 +116,11 @@ fn fold_down(
           let dst_cell = @types.get_cell(dst, x, mirror_y)
           if dst_cell.has_paper {
             @types.set_cell(
-              dst, x, mirror_y, true, dst_cell.layers + cell.layers,
+              dst,
+              x,
+              mirror_y,
+              true,
+              dst_cell.layers + cell.layers,
             )
           } else {
             @types.set_cell(dst, x, mirror_y, true, cell.layers)
@@ -134,7 +136,7 @@ fn fold_down(
 pub fn is_valid_fold(
   paper : @types.Paper,
   dir : @types.FoldDir,
-  line_pos : Int
+  line_pos : Int,
 ) -> Bool {
   // Must have at least 1 cell on folding side
   match dir {

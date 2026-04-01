@@ -25,13 +25,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Title
   let title = "TOPOLOGY"
   let title_w = @draw.measure_text(title, 72)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    h / 4 - 20,
-    72,
-    @types.color_accent,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, h / 4 - 20, 72, @types.color_accent)
   // Subtitle
   let sub = "Shape Transformation Puzzle"
   let sub_w = @draw.measure_text(sub, 22)
@@ -60,19 +54,9 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   // Title
   let title = "SELECT TIER"
   let title_w = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    60,
-    40,
-    @types.color_text,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 60, 40, @types.color_text)
   let tiers : Array[@types.Tier] = [Morph, Sculpt, Transform]
-  let tier_descs = [
-    "Shift + Rotate",
-    "+ Flip + Grow",
-    "+ Shrink (Full Kit)",
-  ]
+  let tier_descs = ["Shift + Rotate", "+ Flip + Grow", "+ Shrink (Full Kit)"]
   let tier_counts = [
     @types.morph_levels, @types.sculpt_levels, @types.transform_levels,
   ]
@@ -83,7 +67,9 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let box_h = 130
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
-    let hovered = mx >= box_x && mx < box_x + box_w && my >= box_y &&
+    let hovered = mx >= box_x &&
+      mx < box_x + box_w &&
+      my >= box_y &&
       my < box_y + box_h
     // Check if tier is unlocked (previous tier must have at least 1 star on all levels)
     let unlocked = is_tier_unlocked(game, tiers[i])
@@ -131,9 +117,8 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       if game.level_scores[start + j].completed {
         completed_count = completed_count + 1
       }
-      stars_earned = stars_earned + @types.star_count(
-          game.level_scores[start + j].stars,
-        )
+      stars_earned = stars_earned +
+        @types.star_count(game.level_scores[start + j].stars)
     }
     let info_str = completed_count.to_string() +
       "/" +
@@ -205,13 +190,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   // Title
   let title = @types.tier_name(tier) + " - Select Level"
   let title_w = @draw.measure_text(title, 36)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    40,
-    36,
-    @types.tier_color(tier),
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 40, 36, @types.tier_color(tier))
   // Level grid (4 columns)
   let cols = 4
   let box_size = 120
@@ -226,7 +205,9 @@ fn draw_level_select(game : @types.Game) -> Unit {
     let row = i / cols
     let bx = base_x + col * (box_size + gap)
     let by = base_y + row * (box_size + gap + 20)
-    let hovered = mx >= bx && mx < bx + box_size && my >= by &&
+    let hovered = mx >= bx &&
+      mx < bx + box_size &&
+      my >= by &&
       my < by + box_size
     let score = game.level_scores[start + i]
     let bg = if hovered {
@@ -334,9 +315,7 @@ fn draw_results(game : @types.Game) -> Unit {
   // Par info
   let level_idx = game.current_level_idx
   let score = game.level_scores[level_idx]
-  let par_str = "Par: " +
-    score.best_cost.to_string() +
-    " (your best)"
+  let par_str = "Par: " + score.best_cost.to_string() + " (your best)"
   let par_w = @draw.measure_text(par_str, 18)
   @draw.draw_text(
     par_str,

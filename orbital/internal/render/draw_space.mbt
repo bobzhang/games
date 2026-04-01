@@ -121,13 +121,7 @@ fn draw_station(station : @types.Station, frame : Int) -> Unit {
   // Label
   let label = "TARGET"
   let lw = @draw.measure_text(label, 10)
-  @draw.draw_text(
-    label,
-    sx - lw / 2,
-    sy + r + 5,
-    10,
-    @types.color_station,
-  )
+  @draw.draw_text(label, sx - lw / 2, sy + r + 5, 10, @types.color_station)
 }
 
 ///|
@@ -153,7 +147,9 @@ fn draw_waypoints(waypoints : Array[@types.Waypoint], frame : Int) -> Unit {
         @types.color_waypoint_collected,
       )
     } else {
-      let pulse = @types.sinf(Float::from_int(frame) * 0.06 + Float::from_int(i) * 2.0) *
+      let pulse = @types.sinf(
+          Float::from_int(frame) * 0.06 + Float::from_int(i) * 2.0,
+        ) *
         3.0
       @raylib.draw_circle(
         sx,
@@ -165,13 +161,7 @@ fn draw_waypoints(waypoints : Array[@types.Waypoint], frame : Int) -> Unit {
       // Star icon in center
       let star_txt = "*"
       let sw = @draw.measure_text(star_txt, 14)
-      @draw.draw_text(
-        star_txt,
-        sx - sw / 2,
-        sy - 7,
-        14,
-        @types.color_waypoint,
-      )
+      @draw.draw_text(star_txt, sx - sw / 2, sy - 7, 14, @types.color_waypoint)
     }
   }
 }
@@ -180,7 +170,7 @@ fn draw_waypoints(waypoints : Array[@types.Waypoint], frame : Int) -> Unit {
 fn draw_launch_indicator(
   launch_pos : @types.Vec2f,
   angle : Float,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let sx = to_screen_x(launch_pos.x)
   let sy = to_screen_y(launch_pos.y)
@@ -202,14 +192,10 @@ fn draw_launch_indicator(
   // Arrowhead
   let head_len : Float = 10.0
   let head_angle : Float = 0.4
-  let hx1 = (Float::from_int(ex) -
-    @types.cosf(angle - head_angle) * head_len).to_int()
-  let hy1 = (Float::from_int(ey) -
-    @types.sinf(angle - head_angle) * head_len).to_int()
-  let hx2 = (Float::from_int(ex) -
-    @types.cosf(angle + head_angle) * head_len).to_int()
-  let hy2 = (Float::from_int(ey) -
-    @types.sinf(angle + head_angle) * head_len).to_int()
+  let hx1 = (Float::from_int(ex) - @types.cosf(angle - head_angle) * head_len).to_int()
+  let hy1 = (Float::from_int(ey) - @types.sinf(angle - head_angle) * head_len).to_int()
+  let hx2 = (Float::from_int(ex) - @types.cosf(angle + head_angle) * head_len).to_int()
+  let hy2 = (Float::from_int(ey) - @types.sinf(angle + head_angle) * head_len).to_int()
   @raylib.draw_line(ex, ey, hx1, hy1, arrow_color)
   @raylib.draw_line(ex, ey, hx2, hy2, arrow_color)
 }
@@ -288,7 +274,11 @@ fn draw_playing(game : @types.Game) -> Unit {
   match game.play_state {
     Aiming => {
       draw_preview(game.preview)
-      draw_launch_indicator(level.launch_pos, game.launch_angle, game.frame_count)
+      draw_launch_indicator(
+        level.launch_pos,
+        game.launch_angle,
+        game.frame_count,
+      )
     }
     _ => ()
   }

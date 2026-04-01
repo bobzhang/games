@@ -106,12 +106,7 @@ pub fn screen_to_grid_y(sy : Int, offset_y : Int) -> Int {
 }
 
 ///|
-pub fn new_node(
-  id : Int,
-  gx : Int,
-  gy : Int,
-  kind : NodeKind
-) -> Node {
+pub fn new_node(id : Int, gx : Int, gy : Int, kind : NodeKind) -> Node {
   {
     id,
     pos: vec2i(gx, gy),
@@ -140,14 +135,7 @@ pub fn new_rope() -> Rope {
 
 ///|
 pub fn new_weight(node_id : Int, mass : Float) -> Weight {
-  {
-    active: true,
-    node_id,
-    mass,
-    current_y: 0.0,
-    target_y: 0.0,
-    bob_timer: 0.0,
-  }
+  { active: true, node_id, mass, current_y: 0.0, target_y: 0.0, bob_timer: 0.0 }
 }
 
 ///|
@@ -173,7 +161,7 @@ pub fn new_bucket(
   node_id : Int,
   mass : Float,
   max_mass : Float,
-  fill_rate : Float
+  fill_rate : Float,
 ) -> Bucket {
   {
     active: true,
@@ -315,11 +303,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn find_node_at(
-  nodes : Array[Node],
-  gx : Int,
-  gy : Int
-) -> Int {
+pub fn find_node_at(nodes : Array[Node], gx : Int, gy : Int) -> Int {
   for i in 0..<nodes.length() {
     if nodes[i].pos.x == gx && nodes[i].pos.y == gy {
       return i
@@ -337,11 +321,7 @@ pub fn can_connect(node : Node, side : RopeSide) -> Bool {
 }
 
 ///|
-pub fn get_mass_on_side(
-  game : Game,
-  node_id : Int,
-  side : RopeSide
-) -> Float {
+pub fn get_mass_on_side(game : Game, node_id : Int, side : RopeSide) -> Float {
   let conn = match side {
     LeftSide => game.nodes[node_id].left_conn
     RightSide => game.nodes[node_id].right_conn

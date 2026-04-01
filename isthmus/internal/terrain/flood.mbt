@@ -25,10 +25,7 @@ pub fn any_settlement_flooded(grid : @types.Grid, sea_level : Int) -> Bool {
 }
 
 ///|
-pub fn will_settlement_flood_next(
-  grid : @types.Grid,
-  sea_level : Int
-) -> Bool {
+pub fn will_settlement_flood_next(grid : @types.Grid, sea_level : Int) -> Bool {
   let next_level = sea_level + 1
   for i in 0..<grid.tiles.length() {
     if grid.tiles[i].is_settlement && grid.tiles[i].height <= next_level {
@@ -39,10 +36,7 @@ pub fn will_settlement_flood_next(
 }
 
 ///|
-pub fn tiles_flooding_next(
-  grid : @types.Grid,
-  sea_level : Int
-) -> Array[Int] {
+pub fn tiles_flooding_next(grid : @types.Grid, sea_level : Int) -> Array[Int] {
   let result : Array[Int] = []
   let next_level = sea_level + 1
   for i in 0..<grid.tiles.length() {
@@ -55,11 +49,7 @@ pub fn tiles_flooding_next(
 }
 
 ///|
-fn neighbors(
-  grid : @types.Grid,
-  x : Int,
-  y : Int
-) -> Array[(Int, Int)] {
+fn neighbors(grid : @types.Grid, x : Int, y : Int) -> Array[(Int, Int)] {
   let result : Array[(Int, Int)] = []
   if x > 0 {
     result.push((x - 1, y))
@@ -80,7 +70,7 @@ fn neighbors(
 pub fn bfs_connected(
   grid : @types.Grid,
   start_idx : Int,
-  sea_level : Int
+  sea_level : Int,
 ) -> Array[Bool] {
   let visited : Array[Bool] = Array::new(capacity=grid.tiles.length())
   for _i in 0..<grid.tiles.length() {
@@ -107,10 +97,7 @@ pub fn bfs_connected(
 }
 
 ///|
-pub fn all_settlements_connected(
-  grid : @types.Grid,
-  sea_level : Int
-) -> Bool {
+pub fn all_settlements_connected(grid : @types.Grid, sea_level : Int) -> Bool {
   let settlements = @types.settlement_positions(grid)
   if settlements.length() <= 1 {
     return true
@@ -139,7 +126,7 @@ pub fn all_settlements_connected(
 ///|
 pub fn count_connected_settlements(
   grid : @types.Grid,
-  sea_level : Int
+  sea_level : Int,
 ) -> (Int, Int) {
   let settlements = @types.settlement_positions(grid)
   if settlements.length() == 0 {
@@ -168,10 +155,7 @@ pub fn count_connected_settlements(
 }
 
 ///|
-pub fn settlement_safety_margin(
-  grid : @types.Grid,
-  sea_level : Int
-) -> Int {
+pub fn settlement_safety_margin(grid : @types.Grid, sea_level : Int) -> Int {
   let mut min_margin = 100
   for i in 0..<grid.tiles.length() {
     if grid.tiles[i].is_settlement {

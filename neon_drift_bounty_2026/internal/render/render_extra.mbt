@@ -14,7 +14,8 @@ fn @types.Game::draw_hazards(
     match h.kind {
       OilSlick => {
         // Dark translucent slick with shimmer
-        let pulse : Float = 0.5 + 0.5 * @math.sinf(game.time_s * 3.0 + h.x * 0.01)
+        let pulse : Float = 0.5 +
+          0.5 * @math.sinf(game.time_s * 3.0 + h.x * 0.01)
         @raylib.draw_rectangle(
           (x - h.w * 0.5).to_int(),
           (y - h.h * 0.5).to_int(),
@@ -95,12 +96,7 @@ fn @types.Game::draw_hazards(
             (x - 6.0).to_int(),
             (y - 12.0).to_int(),
             24,
-            @raylib.Color::new(
-              255,
-              180 + (pulse * 75.0).to_int(),
-              60,
-              240,
-            ),
+            @raylib.Color::new(255, 180 + (pulse * 75.0).to_int(), 60, 240),
           )
         }
       }
@@ -132,23 +128,12 @@ fn @types.Game::draw_weapon_hud(game : @types.Game) -> Unit {
         24,
         @raylib.Color::new(8, 18, 30, 200),
       )
-      @raylib.draw_rectangle_lines(
-        326,
-        80,
-        310,
-        24,
-        col,
-      )
+      @raylib.draw_rectangle_lines(326, 80, 310, 24, col)
       let level_str = label + " Lv." + game.weapon_level.to_string()
       @draw.draw_text(level_str, 336, 84, 16, col)
       // Draw level pips
       for i in 0..<game.weapon_level.clamp(min=0, max=3) {
-        @raylib.draw_circle(
-          580 + i * 18,
-          92,
-          5.0,
-          col,
-        )
+        @raylib.draw_circle(580 + i * 18, 92, 5.0, col)
       }
     }
   }
@@ -223,7 +208,13 @@ fn @types.Game::draw_cooldown_indicators(game : @types.Game) -> Unit {
     // Ready pulse
     let pulse = @math.sinf(game.time_s * 4.0) * 0.5 + 0.5
     let a : Int = (Float::from_int(100) + pulse * 80.0).to_int()
-    @raylib.draw_rectangle(327, 70, 148, 3, @raylib.Color::new(128, 248, 170, a))
+    @raylib.draw_rectangle(
+      327,
+      70,
+      148,
+      3,
+      @raylib.Color::new(128, 248, 170, a),
+    )
   }
   // Hack cooldown bar
   if game.hack_cd > 0.0 {
@@ -239,7 +230,13 @@ fn @types.Game::draw_cooldown_indicators(game : @types.Game) -> Unit {
   } else {
     let pulse = @math.sinf(game.time_s * 4.0 + 1.0) * 0.5 + 0.5
     let a : Int = (Float::from_int(100) + pulse * 80.0).to_int()
-    @raylib.draw_rectangle(487, 70, 148, 3, @raylib.Color::new(128, 248, 170, a))
+    @raylib.draw_rectangle(
+      487,
+      70,
+      148,
+      3,
+      @raylib.Color::new(128, 248, 170, a),
+    )
   }
 }
 
@@ -256,7 +253,7 @@ fn @types.Game::draw_combo_stinger(game : @types.Game) -> Unit {
     1.0,
   )
   let pulse = @math.sinf(game.time_s * 6.0) * 0.5 + 0.5
-  let alpha = ((intensity * 60.0 + pulse * 30.0) : Float)
+  let alpha = (intensity * 60.0 + pulse * 30.0 : Float)
     .to_int()
     .clamp(min=0, max=90)
   // Left edge glow

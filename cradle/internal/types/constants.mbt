@@ -35,6 +35,7 @@ pub let total_levels : Int = 25
 pub let pi : Float = 3.14159265
 
 // Colors
+
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(18, 18, 32, 255)
 
@@ -101,4 +102,6 @@ pub let color_panel_bg : @raylib.Color = @raylib.Color::new(30, 30, 50, 220)
 pub let color_button : @raylib.Color = @raylib.Color::new(50, 50, 80, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(70, 70, 110, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  70, 70, 110, 255,
+)

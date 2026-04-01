@@ -3,7 +3,7 @@
 pub fn select_move(
   board : @types.HexBoard,
   player : @types.Player,
-  difficulty : @types.Difficulty
+  difficulty : @types.Difficulty,
 ) -> @types.HexCoord? {
   let empty = @types.empty_positions(board)
   if empty.length() == 0 {
@@ -22,7 +22,7 @@ pub fn select_move(
 fn select_easy(
   board : @types.HexBoard,
   player : @types.Player,
-  empty : Array[@types.HexCoord]
+  empty : Array[@types.HexCoord],
 ) -> @types.HexCoord? {
   if empty.length() == 0 {
     return None
@@ -44,7 +44,7 @@ fn select_easy(
 pub fn select_easy_heuristic(
   board : @types.HexBoard,
   player : @types.Player,
-  empty : Array[@types.HexCoord]
+  empty : Array[@types.HexCoord],
 ) -> @types.HexCoord {
   let sample_size = @types.mini(empty.length(), 3)
   let mut best_score = -999999
@@ -71,7 +71,7 @@ pub fn select_easy_heuristic(
 fn select_normal(
   board : @types.HexBoard,
   player : @types.Player,
-  empty : Array[@types.HexCoord]
+  empty : Array[@types.HexCoord],
 ) -> @types.HexCoord? {
   if empty.length() == 0 {
     return None
@@ -91,7 +91,7 @@ fn select_normal(
 pub fn rank_moves(
   board : @types.HexBoard,
   player : @types.Player,
-  empty : Array[@types.HexCoord]
+  empty : Array[@types.HexCoord],
 ) -> Array[@types.HexCoord] {
   let scored : Array[(Int, Int)] = [] // (score, index)
   for i in 0..<empty.length() {
@@ -123,7 +123,7 @@ pub fn rank_moves(
 fn select_hard(
   board : @types.HexBoard,
   player : @types.Player,
-  empty : Array[@types.HexCoord]
+  empty : Array[@types.HexCoord],
 ) -> @types.HexCoord? {
   if empty.length() == 0 {
     return None
@@ -140,7 +140,7 @@ fn select_hard(
 pub fn select_hard_core(
   board : @types.HexBoard,
   player : @types.Player,
-  candidates : Array[@types.HexCoord]
+  candidates : Array[@types.HexCoord],
 ) -> @types.HexCoord {
   let mut best_score = -999999
   let mut best_idx = 0
@@ -150,8 +150,15 @@ pub fn select_hard_core(
     @types.set_cell(test_board, pos, Occupied(player))
     let captured = @board.resolve_captures(test_board, player)
     let capture_bonus = captured.length() * 3
-    let score = capture_bonus + minimax(
-        test_board, @types.opponent(player), player, 2, -999999, 999999, false,
+    let score = capture_bonus +
+      minimax(
+        test_board,
+        @types.opponent(player),
+        player,
+        2,
+        -999999,
+        999999,
+        false,
       )
     if score > best_score {
       best_score = score
@@ -167,7 +174,7 @@ fn get_candidate_moves(
   board : @types.HexBoard,
   player : @types.Player,
   empty : Array[@types.HexCoord],
-  max_count : Int
+  max_count : Int,
 ) -> Array[@types.HexCoord] {
   // Score each move quickly and take the top ones
   let scores : Array[(Int, Int)] = [] // (score, index)
@@ -205,7 +212,7 @@ fn minimax(
   depth : Int,
   alpha_in : Int,
   beta_in : Int,
-  maximizing : Bool
+  maximizing : Bool,
 ) -> Int {
   if depth == 0 {
     return evaluate_board(board, ai_player)
@@ -227,7 +234,12 @@ fn minimax(
       @types.set_cell(test_board, pos, Occupied(current))
       let _captured = @board.resolve_captures(test_board, current)
       let score = minimax(
-        test_board, @types.opponent(current), ai_player, depth - 1, alpha, beta,
+        test_board,
+        @types.opponent(current),
+        ai_player,
+        depth - 1,
+        alpha,
+        beta,
         false,
       )
       if score > max_score {
@@ -249,7 +261,12 @@ fn minimax(
       @types.set_cell(test_board, pos, Occupied(current))
       let _captured = @board.resolve_captures(test_board, current)
       let score = minimax(
-        test_board, @types.opponent(current), ai_player, depth - 1, alpha, beta,
+        test_board,
+        @types.opponent(current),
+        ai_player,
+        depth - 1,
+        alpha,
+        beta,
         true,
       )
       if score < min_score {
@@ -302,7 +319,7 @@ pub fn evaluate_board(board : @types.HexBoard, player : @types.Player) -> Int {
 pub fn evaluate_move(
   board : @types.HexBoard,
   pos : @types.HexCoord,
-  player : @types.Player
+  player : @types.Player,
 ) -> Int {
   let before = @board.score_patterns(board, player)
   let test_board = @types.clone_board(board)
@@ -316,13 +333,7 @@ pub fn evaluate_move(
   let dr = pos.row - center
   let dc = pos.col - center
   let dist = dr * dr + dc * dc
-  let center_bonus = if dist <= 1 {
-    3
-  } else if dist <= 4 {
-    1
-  } else {
-    0
-  }
+  let center_bonus = if dist <= 1 { 3 } else if dist <= 4 { 1 } else { 0 }
   // Bonus for blocking opponent patterns
   let opp = @types.opponent(player)
   let opp_before = @board.score_patterns(board, opp)

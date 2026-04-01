@@ -80,7 +80,9 @@ test "ghost trail accumulates positions" {
   let maze = @maze.parse_maze(level)
   let ms = @types.new_maze_state(maze)
   let recording : Array[@types.Direction?] = [
-    Some(East), Some(East), Some(East),
+    Some(East),
+    Some(East),
+    Some(East),
   ]
   let ghost = @types.new_ghost(recording, Green, maze.start)
   // Initial trail has start position
@@ -243,13 +245,7 @@ test "validate_level_structure catches bad guard patrol" {
 test "door animation progress updates correctly" {
   let ms : @types.MazeState = {
     door_states: [
-      {
-        door_id: 0,
-        open: true,
-        timer: 0,
-        anim_progress: 0.0,
-        prev_open: false,
-      },
+      { door_id: 0, open: true, timer: 0, anim_progress: 0.0, prev_open: false },
     ],
     button_pressed: [],
     guard_states: [],
@@ -273,8 +269,14 @@ test "door animation progress updates correctly" {
 
 ///|
 test "manhattan distance calculation" {
-  inspect(@types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(3, 4)), content="7")
-  inspect(@types.manhattan_dist(@types.vec2i(5, 5), @types.vec2i(5, 5)), content="0")
+  inspect(
+    @types.manhattan_dist(@types.vec2i(0, 0), @types.vec2i(3, 4)),
+    content="7",
+  )
+  inspect(
+    @types.manhattan_dist(@types.vec2i(5, 5), @types.vec2i(5, 5)),
+    content="0",
+  )
   inspect(
     @types.manhattan_dist(@types.vec2i(1, 1), @types.vec2i(4, 5)),
     content="7",

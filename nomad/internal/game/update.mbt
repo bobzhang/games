@@ -69,7 +69,7 @@ fn update_tier_select(game : @types.Game) -> Unit {
 ///|
 fn update_level_select(
   game : @types.Game,
-  levels : Array[@types.Level]
+  levels : Array[@types.Level],
 ) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.screen = TierSelect
@@ -170,11 +170,10 @@ fn update_playing(game : @types.Game) -> Unit {
   match game.play_state {
     Planning => update_planning(game, level)
     Executing => update_executing(game, level, dt)
-    Complete => {
+    Complete =>
       if @raylib.is_key_pressed(@raylib.KeyEnter) {
         game.screen = Results
       }
-    }
     Failed => ()
   }
 }
@@ -220,7 +219,7 @@ fn update_planning(game : @types.Game, level : @types.Level) -> Unit {
 fn handle_route_click(
   game : @types.Game,
   level : @types.Level,
-  hex : @types.HexCoord
+  hex : @types.HexCoord,
 ) -> Unit {
   let map = level.map
   // Check if clicking the last hex in route to remove it
@@ -240,7 +239,7 @@ fn handle_route_click(
     if game.route[i].col == hex.col && game.route[i].row == hex.row {
       // Truncate route to this point
       let new_route : Array[@types.HexCoord] = []
-      for j in 0..=i {
+      for j in 0..<=i {
         new_route.push(game.route[j])
       }
       game.route = new_route
@@ -275,7 +274,7 @@ fn handle_route_click(
 fn update_executing(
   game : @types.Game,
   level : @types.Level,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   game.execute_timer = game.execute_timer + dt
   if game.execute_timer < @types.move_speed {
@@ -332,10 +331,7 @@ fn update_executing(
 }
 
 ///|
-fn update_results(
-  game : @types.Game,
-  levels : Array[@types.Level]
-) -> Unit {
+fn update_results(game : @types.Game, levels : Array[@types.Level]) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
     game.screen = LevelSelect
     return

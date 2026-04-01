@@ -8,12 +8,10 @@ pub(all) struct CheckResult {
 ///|
 pub fn check_completion(
   paper : @types.Paper,
-  level : @types.Level
+  level : @types.Level,
 ) -> CheckResult {
   let sil = @types.paper_matches_silhouette(paper, level.target_silhouette)
-  let details : Array[Bool] = Array::new(
-    capacity=level.layer_checks.length(),
-  )
+  let details : Array[Bool] = Array::new(capacity=level.layer_checks.length())
   let mut all_layers = true
   for i in 0..<level.layer_checks.length() {
     let ok = @types.single_layer_check_ok(paper, level.layer_checks[i])
@@ -32,7 +30,7 @@ pub fn check_completion(
 pub fn compute_stars(
   result : CheckResult,
   folds_used : Int,
-  par_folds : Int
+  par_folds : Int,
 ) -> @types.StarRating {
   if !result.silhouette_match {
     return Zero

@@ -23,7 +23,7 @@ fn get_node_total_mass(game : @types.Game, node_id : Int) -> Float {
 fn find_connected_node(
   game : @types.Game,
   pulley_id : Int,
-  side : @types.RopeSide
+  side : @types.RopeSide,
 ) -> Int {
   for i in 0..<game.ropes.length() {
     if game.ropes[i].active && !game.ropes[i].broken {
@@ -44,7 +44,7 @@ fn compute_side_mass_depth(
   game : @types.Game,
   pulley_id : Int,
   side : @types.RopeSide,
-  depth : Int
+  depth : Int,
 ) -> Float {
   if depth > 10 {
     return 0.0
@@ -57,9 +57,7 @@ fn compute_side_mass_depth(
   let node = game.nodes[connected]
   if node.kind == Pulley || node.kind == Ratchet {
     let left_m = compute_side_mass_depth(game, connected, LeftSide, depth + 1)
-    let right_m = compute_side_mass_depth(
-      game, connected, RightSide, depth + 1,
-    )
+    let right_m = compute_side_mass_depth(game, connected, RightSide, depth + 1)
     return direct_mass + @types.maxf(left_m, right_m)
   }
   direct_mass
@@ -69,7 +67,7 @@ fn compute_side_mass_depth(
 fn compute_side_mass(
   game : @types.Game,
   pulley_id : Int,
-  side : @types.RopeSide
+  side : @types.RopeSide,
 ) -> Float {
   compute_side_mass_depth(game, pulley_id, side, 0)
 }
@@ -78,7 +76,7 @@ fn compute_side_mass(
 fn apply_height_change(
   game : @types.Game,
   node_id : Int,
-  delta : Float
+  delta : Float,
 ) -> Unit {
   let node = game.nodes[node_id]
   if node.locked || node.kind == Anchor {
@@ -182,7 +180,9 @@ pub fn solve_equilibrium(game : @types.Game) -> Unit {
     }
     // Check breakable ropes
     for i in 0..<game.ropes.length() {
-      if game.ropes[i].active && game.ropes[i].breakable && !game.ropes[i].broken {
+      if game.ropes[i].active &&
+        game.ropes[i].breakable &&
+        !game.ropes[i].broken {
         let r = game.ropes[i]
         let load : Float = get_node_total_mass(game, r.to_node) +
           get_node_total_mass(game, r.from_node)
@@ -237,7 +237,7 @@ pub fn check_targets(game : @types.Game) -> Bool {
 pub fn validate_connection(
   game : @types.Game,
   from_id : Int,
-  to_id : Int
+  to_id : Int,
 ) -> Bool {
   if from_id == to_id {
     return false

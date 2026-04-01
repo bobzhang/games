@@ -21,14 +21,20 @@ fn draw_playing(game : @types.Game) -> Unit {
   draw_parchment_texture(gx, gy, gw, gh, game.parchment_seed)
   // Dark border with double-line for aged map feel
   @raylib.draw_rectangle_lines(gx, gy, gw, gh, @types.color_compass_ring)
-  @raylib.draw_rectangle_lines(gx + 2, gy + 2, gw - 4, gh - 4, @types.color_parchment_border)
+  @raylib.draw_rectangle_lines(
+    gx + 2,
+    gy + 2,
+    gw - 4,
+    gh - 4,
+    @types.color_parchment_border,
+  )
   // Corner decorations
   draw_corner_flourish(gx, gy)
   draw_corner_flourish(gx + gw, gy)
   draw_corner_flourish(gx, gy + gh)
   draw_corner_flourish(gx + gw, gy + gh)
   // Draw grid lines
-  for i in 0..=@types.grid_size {
+  for i in 0..<=@types.grid_size {
     let x = @types.grid_offset_x + i * @types.cell_size
     let y = @types.grid_offset_y + i * @types.cell_size
     @raylib.draw_line(
@@ -69,8 +75,12 @@ fn draw_playing(game : @types.Game) -> Unit {
   for row in 0..<@types.grid_size {
     for col in 0..<@types.grid_size {
       let idx = row * @types.grid_size + col
-      let cx = @types.grid_offset_x + col * @types.cell_size + @types.cell_size / 2
-      let cy = @types.grid_offset_y + row * @types.cell_size + @types.cell_size / 2
+      let cx = @types.grid_offset_x +
+        col * @types.cell_size +
+        @types.cell_size / 2
+      let cy = @types.grid_offset_y +
+        row * @types.cell_size +
+        @types.cell_size / 2
       match game.grid[idx] {
         None => @raylib.draw_circle(cx, cy, 2.0, @types.color_grid_dot)
         Some(feature) => draw_feature(cx, cy, feature, @types.cell_size - 12)
@@ -201,10 +211,17 @@ fn draw_playing(game : @types.Game) -> Unit {
               @types.cell_size / 2
             let color = @types.feature_color(feat)
             let preview_color = @raylib.Color::new(
-              color.r.to_int(), color.g.to_int(), color.b.to_int(), 120,
+              color.r.to_int(),
+              color.g.to_int(),
+              color.b.to_int(),
+              120,
             )
             draw_feature_with_color(
-              preview_cx, preview_cy, feat, @types.cell_size - 16, preview_color,
+              preview_cx,
+              preview_cy,
+              feat,
+              @types.cell_size - 16,
+              preview_color,
             )
           }
           None => ()
@@ -259,7 +276,12 @@ fn draw_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_feature(cx : Int, cy : Int, feature : @types.FeatureKind, size : Int) -> Unit {
+fn draw_feature(
+  cx : Int,
+  cy : Int,
+  feature : @types.FeatureKind,
+  size : Int,
+) -> Unit {
   let color = @types.feature_color(feature)
   draw_feature_with_color(cx, cy, feature, size, color)
 }
@@ -270,7 +292,7 @@ fn draw_feature_with_color(
   cy : Int,
   feature : @types.FeatureKind,
   size : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let half = size / 2
   match feature {
@@ -283,9 +305,7 @@ fn draw_feature_with_color(
       // Snow cap
       let cap_h = half / 3
       let cap_w = half / 3
-      let white_color = @raylib.Color::new(
-        240, 240, 255, color.a.to_int(),
-      )
+      let white_color = @raylib.Color::new(240, 240, 255, color.a.to_int())
       @raylib.draw_triangle(
         vec2(cx, cy - half),
         vec2(cx - cap_w, cy - half + cap_h),
@@ -297,9 +317,7 @@ fn draw_feature_with_color(
         let sx = cx + half / 3
         let sy = cy + half / 4
         let small_h = half / 3
-        let darker = @raylib.Color::new(
-          120, 75, 35, color.a.to_int(),
-        )
+        let darker = @raylib.Color::new(120, 75, 35, color.a.to_int())
         @raylib.draw_triangle(
           vec2(sx, sy - small_h),
           vec2(sx - small_h, sy + small_h),
@@ -331,47 +349,37 @@ fn draw_feature_with_color(
       )
       // Water shine dots
       if size > 20 {
-        let shine = @raylib.Color::new(
-          150, 200, 255, color.a.to_int(),
-        )
+        let shine = @raylib.Color::new(150, 200, 255, color.a.to_int())
         @raylib.draw_circle(cx - half / 4, cy + 1, 2.0, shine)
         @raylib.draw_circle(cx + half / 4, cy - 2, 2.0, shine)
       }
     }
     Forest => {
       // Tree trunk
-      let trunk = @raylib.Color::new(
-        100, 60, 30, color.a.to_int(),
-      )
+      let trunk = @raylib.Color::new(100, 60, 30, color.a.to_int())
       @raylib.draw_rectangle(cx - 2, cy + half / 3, 4, half / 2, trunk)
       // Main canopy (layered circles for fullness)
       @raylib.draw_circle(cx, cy - half / 6, fi(half * 2 / 3), color)
-      let inner = @raylib.Color::new(
-        20, 100, 20, color.a.to_int(),
-      )
-      @raylib.draw_circle(
-        cx - half / 4, cy - half / 3, fi(half / 3), inner,
-      )
-      @raylib.draw_circle(
-        cx + half / 4, cy - half / 3, fi(half / 3), inner,
-      )
+      let inner = @raylib.Color::new(20, 100, 20, color.a.to_int())
+      @raylib.draw_circle(cx - half / 4, cy - half / 3, fi(half / 3), inner)
+      @raylib.draw_circle(cx + half / 4, cy - half / 3, fi(half / 3), inner)
       // Highlight
       if size > 20 {
-        let light = @raylib.Color::new(
-          60, 170, 60, color.a.to_int(),
-        )
+        let light = @raylib.Color::new(60, 170, 60, color.a.to_int())
         @raylib.draw_circle(cx, cy - half / 2, fi(half / 4), light)
       }
     }
     Town => {
       // Main building
       @raylib.draw_rectangle(
-        cx - half * 2 / 3, cy - half / 3, half * 4 / 3, half * 4 / 3, color,
+        cx - half * 2 / 3,
+        cy - half / 3,
+        half * 4 / 3,
+        half * 4 / 3,
+        color,
       )
       // Roof (triangle)
-      let roof_color = @raylib.Color::new(
-        150, 25, 25, color.a.to_int(),
-      )
+      let roof_color = @raylib.Color::new(150, 25, 25, color.a.to_int())
       @raylib.draw_triangle(
         vec2(cx, cy - half),
         vec2(cx - half * 2 / 3, cy - half / 3),
@@ -379,16 +387,12 @@ fn draw_feature_with_color(
         roof_color,
       )
       // Windows
-      let win_color = @raylib.Color::new(
-        255, 220, 150, color.a.to_int(),
-      )
+      let win_color = @raylib.Color::new(255, 220, 150, color.a.to_int())
       let ww = half / 4
       @raylib.draw_rectangle(cx - ww - 2, cy, ww, ww, win_color)
       @raylib.draw_rectangle(cx + 2, cy, ww, ww, win_color)
       // Door
-      let door_color = @raylib.Color::new(
-        100, 60, 30, color.a.to_int(),
-      )
+      let door_color = @raylib.Color::new(100, 60, 30, color.a.to_int())
       @raylib.draw_rectangle(
         cx - ww / 2,
         cy + half / 3,
@@ -401,17 +405,17 @@ fn draw_feature_with_color(
       // Water body
       @raylib.draw_ellipse(cx, cy, fi(half), fi(half * 2 / 3), color)
       // Shore highlight
-      let shore = @raylib.Color::new(
-        100, 170, 230, color.a.to_int(),
-      )
+      let shore = @raylib.Color::new(100, 170, 230, color.a.to_int())
       @raylib.draw_ellipse(
-        cx - 2, cy - 2, fi(half * 2 / 3), fi(half / 2), shore,
+        cx - 2,
+        cy - 2,
+        fi(half * 2 / 3),
+        fi(half / 2),
+        shore,
       )
       // Water sparkle
       if size > 20 {
-        let sparkle = @raylib.Color::new(
-          200, 230, 255, color.a.to_int(),
-        )
+        let sparkle = @raylib.Color::new(200, 230, 255, color.a.to_int())
         @raylib.draw_circle(cx - half / 4, cy - half / 6, 2.0, sparkle)
       }
     }
@@ -425,21 +429,25 @@ fn draw_feature_with_color(
       @raylib.draw_triangle(v2, v4, v3, color)
       // Dune ripple lines
       if size > 20 {
-        let ripple = @raylib.Color::new(
-          200, 170, 80, color.a.to_int(),
+        let ripple = @raylib.Color::new(200, 170, 80, color.a.to_int())
+        @raylib.draw_line(
+          cx - half / 2,
+          cy - half / 4,
+          cx + half / 2,
+          cy - half / 4,
+          ripple,
         )
         @raylib.draw_line(
-          cx - half / 2, cy - half / 4, cx + half / 2, cy - half / 4, ripple,
-        )
-        @raylib.draw_line(
-          cx - half / 3, cy + half / 4, cx + half / 3, cy + half / 4, ripple,
+          cx - half / 3,
+          cy + half / 4,
+          cx + half / 3,
+          cy + half / 4,
+          ripple,
         )
       }
       // Cactus hint
       if size > 24 {
-        let green = @raylib.Color::new(
-          60, 130, 40, color.a.to_int(),
-        )
+        let green = @raylib.Color::new(60, 130, 40, color.a.to_int())
         @raylib.draw_line_ex(
           vec2(cx + half / 3, cy - 2),
           vec2(cx + half / 3, cy + half / 3),
@@ -450,19 +458,13 @@ fn draw_feature_with_color(
     }
     Road => {
       // Road path
-      @raylib.draw_line_ex(
-        vec2(cx - half, cy), vec2(cx + half, cy), 5.0, color,
-      )
+      @raylib.draw_line_ex(vec2(cx - half, cy), vec2(cx + half, cy), 5.0, color)
       // Road edges (lighter)
-      let edge = @raylib.Color::new(
-        180, 180, 180, color.a.to_int(),
-      )
+      let edge = @raylib.Color::new(180, 180, 180, color.a.to_int())
       @raylib.draw_line(cx - half, cy - 3, cx + half, cy - 3, edge)
       @raylib.draw_line(cx - half, cy + 3, cx + half, cy + 3, edge)
       // Center dashes
-      let dash = @raylib.Color::new(
-        220, 220, 200, color.a.to_int(),
-      )
+      let dash = @raylib.Color::new(220, 220, 200, color.a.to_int())
       @raylib.draw_line(cx - half / 2, cy, cx - half / 4, cy, dash)
       @raylib.draw_line(cx + half / 4, cy, cx + half / 2, cy, dash)
     }
@@ -482,12 +484,8 @@ fn draw_compass_rose(cx : Int, cy : Int) -> Unit {
   @raylib.draw_circle(cx, cy, fi(size + 2), @types.color_parchment)
   @raylib.draw_circle_lines(cx, cy, fi(size + 2), ring)
   // Cardinal direction lines (thicker)
-  @raylib.draw_line_ex(
-    vec2(cx, cy - size), vec2(cx, cy + size), 2.0, body,
-  )
-  @raylib.draw_line_ex(
-    vec2(cx - size, cy), vec2(cx + size, cy), 2.0, body,
-  )
+  @raylib.draw_line_ex(vec2(cx, cy - size), vec2(cx, cy + size), 2.0, body)
+  @raylib.draw_line_ex(vec2(cx - size, cy), vec2(cx + size, cy), 2.0, body)
   // Diagonal lines (thinner)
   let diag = size * 7 / 10
   @raylib.draw_line(cx - diag, cy - diag, cx + diag, cy + diag, body)

@@ -8,7 +8,7 @@ test "trace beam straight through empty grid" {
   cell.locked = true
   let segments = trace_all_beams(grid)
   // Should have at least one segment
-  assert_true!(segments.length() > 0)
+  assert_true(segments.length() > 0)
 }
 
 ///|
@@ -28,7 +28,7 @@ test "trace beam to receiver" {
   let _segments = trace_all_beams(grid)
   // Check receiver satisfaction
   let satisfied = check_all_receivers(grid)
-  assert_true!(satisfied)
+  assert_true(satisfied)
 }
 
 ///|
@@ -52,7 +52,7 @@ test "filter removes channel" {
   recv.locked = true
   let _segments = trace_all_beams(grid)
   let satisfied = check_all_receivers(grid)
-  assert_true!(satisfied)
+  assert_true(satisfied)
 }
 
 ///|
@@ -80,7 +80,7 @@ test "mirror reflects beam" {
   recv.locked = true
   let _segments = trace_all_beams(grid)
   let satisfied = check_all_receivers(grid)
-  assert_true!(satisfied)
+  assert_true(satisfied)
 }
 
 ///|
@@ -98,7 +98,7 @@ test "prism splits white into RGB" {
   let segments = trace_all_beams(grid)
   // Should have the incoming segment + 3 split segments (R, G, B)
   // At minimum: 1 segment from source to prism + 3 from prism outward
-  assert_true!(segments.length() >= 4)
+  assert_true(segments.length() >= 4)
 }
 
 ///|
@@ -136,7 +136,7 @@ test "combiner merges colors" {
   recv.locked = true
   let _segments = trace_all_beams(grid)
   let satisfied = check_all_receivers(grid)
-  assert_true!(satisfied)
+  assert_true(satisfied)
 }
 
 ///|
@@ -156,7 +156,7 @@ test "receiver not satisfied with wrong color" {
   let _segments = trace_all_beams(grid)
   let satisfied = check_all_receivers(grid)
   // White != Red
-  assert_false!(satisfied)
+  assert_false(satisfied)
 }
 
 ///|
@@ -176,5 +176,5 @@ test "beam crossing count" {
     },
   ]
   let crossings = count_beam_crossings(beams)
-  assert_eq!(crossings, 1)
+  assert_eq(crossings, 1)
 }

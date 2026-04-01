@@ -169,7 +169,7 @@ fn draw_dir_arrow(
   cy : Float,
   radius : Float,
   dir : @types.RotDir,
-  angle : Float
+  angle : Float,
 ) -> Unit {
   let dir_mult : Float = match dir {
     CW => 1.0

@@ -204,7 +204,7 @@ pub fn rng_sign() -> Float {
 ///|
 pub fn alloc_projectile(pool : Array[Projectile]) -> Int {
   for i in 0..<pool.length() {
-    if !(pool[i].active) {
+    if !pool[i].active {
       return i
     }
   }
@@ -214,7 +214,7 @@ pub fn alloc_projectile(pool : Array[Projectile]) -> Int {
 ///|
 pub fn alloc_enemy(pool : Array[Enemy]) -> Int {
   for i in 0..<pool.length() {
-    if !(pool[i].active) {
+    if !pool[i].active {
       return i
     }
   }
@@ -224,7 +224,7 @@ pub fn alloc_enemy(pool : Array[Enemy]) -> Int {
 ///|
 pub fn alloc_particle(pool : Array[Particle]) -> Int {
   for i in 0..<pool.length() {
-    if !(pool[i].active) {
+    if !pool[i].active {
       return i
     }
   }
@@ -244,7 +244,7 @@ pub fn alloc_particle(pool : Array[Particle]) -> Int {
 ///|
 pub fn alloc_damage_number(pool : Array[DamageNumber]) -> Int {
   for i in 0..<pool.length() {
-    if !(pool[i].active) {
+    if !pool[i].active {
       return i
     }
   }
@@ -507,7 +507,9 @@ pub fn new_shake() -> ScreenShake {
 
 ///|
 pub fn new_game() -> Game {
-  let projectiles : Array[Projectile] = Array::new(capacity=projectile_pool_size)
+  let projectiles : Array[Projectile] = Array::new(
+    capacity=projectile_pool_size,
+  )
   for _i in 0..<projectile_pool_size {
     projectiles.push(new_projectile())
   }
@@ -601,7 +603,7 @@ pub fn spawn_damage_number(
   x : Float,
   y : Float,
   value : Int,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let idx = alloc_damage_number(game.damage_numbers)
   let dn = game.damage_numbers[idx]

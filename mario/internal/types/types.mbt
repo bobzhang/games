@@ -451,7 +451,14 @@ pub(all) struct BridgeState {
 ///|
 /// Creates a new bridge state tracker.
 pub fn BridgeState::new() -> BridgeState {
-  { active: false, tile_x: 0, tile_y: 0, phase: Stable, timer: 0.0, fall_y: 0.0 }
+  {
+    active: false,
+    tile_x: 0,
+    tile_y: 0,
+    phase: Stable,
+    timer: 0.0,
+    fall_y: 0.0,
+  }
 }
 
 ///|

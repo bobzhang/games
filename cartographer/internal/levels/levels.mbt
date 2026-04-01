@@ -1607,9 +1607,7 @@ fn level_25() -> @types.Level {
   @types.new_level(
     "Grand Cartograph",
     Master,
-    [
-      Town, Mountain, Forest, Lake, River, Desert, Road, Town, Mountain, Forest,
-    ],
+    [Town, Mountain, Forest, Lake, River, Desert, Road, Town, Mountain, Forest],
     [
       @types.new_clue(
         Count,

@@ -728,8 +728,12 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
 
   @draw.draw_text(
     "Operate junction signals to route trains to correct colored exits.",
-    @types.board_x0 + @types.board_w / 2 -
-    @draw.measure_text("Operate junction signals to route trains to correct colored exits.", 28) / 2,
+    @types.board_x0 +
+    @types.board_w / 2 -
+    @draw.measure_text(
+      "Operate junction signals to route trains to correct colored exits.", 28,
+    ) /
+    2,
     @types.board_y0 + 248,
     28,
     @raylib.Color::new(186, 214, 240, 236),
@@ -737,7 +741,9 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
 
   @draw.draw_text(
     "Avoid inspectors. Use EMP when trapped.",
-    @types.board_x0 + @types.board_w / 2 - @draw.measure_text("Avoid inspectors. Use EMP when trapped.", 28) / 2,
+    @types.board_x0 +
+    @types.board_w / 2 -
+    @draw.measure_text("Avoid inspectors. Use EMP when trapped.", 28) / 2,
     @types.board_y0 + 286,
     28,
     @raylib.Color::new(186, 214, 240, 232),
@@ -745,8 +751,10 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
 
   @draw.draw_text(
     "Need 20 successful routes before time runs out.",
-    @types.board_x0 + @types.board_w / 2 -
-    @draw.measure_text("Need 20 successful routes before time runs out.", 28) / 2,
+    @types.board_x0 +
+    @types.board_w / 2 -
+    @draw.measure_text("Need 20 successful routes before time runs out.", 28) /
+    2,
     @types.board_y0 + 324,
     28,
     @raylib.Color::new(244, 228, 166, 236),
@@ -841,7 +849,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 
   @draw.draw_text(
     score_line,
-    @types.board_x0 + @types.board_w / 2 - @draw.measure_text(score_line, 30) / 2,
+    @types.board_x0 +
+    @types.board_w / 2 -
+    @draw.measure_text(score_line, 30) / 2,
     @types.board_y0 + 334,
     30,
     @raylib.Color::new(232, 240, 255, 238),

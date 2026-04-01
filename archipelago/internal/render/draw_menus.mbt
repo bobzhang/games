@@ -10,9 +10,7 @@ fn draw_title(game : @types.Game) -> Unit {
     let y = (fy * 40.0 + wave_offset).to_int()
     let alpha = 20 + (fy * 3.0).to_int()
     let a = if alpha > 60 { 60 } else { alpha }
-    @raylib.draw_rectangle(
-      0, y, w, 20, @raylib.Color::new(40, 100, 180, a),
-    )
+    @raylib.draw_rectangle(0, y, w, 20, @raylib.Color::new(40, 100, 180, a))
   }
   // Animated islands on title
   for i in 0..<5 {
@@ -22,9 +20,7 @@ fn draw_title(game : @types.Game) -> Unit {
     let ix = ix_f.to_int()
     let iy = iy_f.to_int()
     let r : Float = 18.0 + fi * 3.0
-    @raylib.draw_circle(
-      ix, iy, r + 3.0, @types.color_island_border,
-    )
+    @raylib.draw_circle(ix, iy, r + 3.0, @types.color_island_border)
     @raylib.draw_circle(ix, iy, r, @types.color_island)
   }
   // Animated bridge lines between islands
@@ -88,8 +84,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   @draw.draw_text(title, (w - tw) / 2, 80, 48, @types.color_title_accent)
   let tiers : Array[@types.Tier] = [Shores, Straits, Ocean]
   let tier_desc : Array[String] = [
-    "5x5 grids - Learn the basics", "7x7 grids - Tighter constraints",
-    "9x9 grids - Master puzzler",
+    "5x5 grids - Learn the basics", "7x7 grids - Tighter constraints", "9x9 grids - Master puzzler",
   ]
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
@@ -107,7 +102,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     @draw.draw_text(name, bx + (bw - nw) / 2, by + 15, 36, @types.color_text)
     let dw = @draw.measure_text(tier_desc[i], 18)
     @draw.draw_text(
-      tier_desc[i], bx + (bw - dw) / 2, by + 60, 18, @types.color_text_dim,
+      tier_desc[i],
+      bx + (bw - dw) / 2,
+      by + 60,
+      18,
+      @types.color_text_dim,
     )
     // Star count for tier
     let start = @types.tier_start_level(tier)
@@ -121,13 +120,26 @@ fn draw_tier_select(game : @types.Game) -> Unit {
         completed = completed + 1
       }
     }
-    let star_text = completed.to_string() + "/" + count.to_string() + " completed"
+    let star_text = completed.to_string() +
+      "/" +
+      count.to_string() +
+      " completed"
     let stw = @draw.measure_text(star_text, 16)
     @draw.draw_text(
-      star_text, bx + (bw - stw) / 2, by + 85, 16, @types.color_text_dim,
+      star_text,
+      bx + (bw - stw) / 2,
+      by + 85,
+      16,
+      @types.color_text_dim,
     )
   }
-  @draw.draw_text("ESC to go back", 20, @types.screen_height - 40, 16, @types.color_text_dim)
+  @draw.draw_text(
+    "ESC to go back",
+    20,
+    @types.screen_height - 40,
+    16,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -175,7 +187,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
   let desc = "Grid size: " + grid_size
   let dw = @draw.measure_text(desc, 20)
   @draw.draw_text(desc, (w - dw) / 2, 200, 20, @types.color_text_dim)
-  @draw.draw_text("ESC to go back", 20, @types.screen_height - 40, 16, @types.color_text_dim)
+  @draw.draw_text(
+    "ESC to go back",
+    20,
+    @types.screen_height - 40,
+    16,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -183,7 +201,13 @@ fn draw_results(game : @types.Game) -> Unit {
   let w = @types.screen_width
   let sc = game.level_scores[game.current_level]
   // Background overlay
-  @raylib.draw_rectangle(0, 0, w, @types.screen_height, @raylib.Color::new(0, 0, 0, 150))
+  @raylib.draw_rectangle(
+    0,
+    0,
+    w,
+    @types.screen_height,
+    @raylib.Color::new(0, 0, 0, 150),
+  )
   // Panel
   @raylib.draw_rectangle(290, 120, 700, 500, @types.color_panel_bg)
   @raylib.draw_rectangle_lines(290, 120, 700, 500, @types.color_island)
@@ -195,16 +219,16 @@ fn draw_results(game : @types.Game) -> Unit {
   draw_stars_at(w / 2 - 60, 220, sc.stars, 3, 36)
   // Stats
   let segs = @types.total_bridge_segments(game.bridges)
-  let bridges_text = "Bridges used: " + segs.to_string() + " (par: " + game.par_bridges.to_string() + ")"
+  let bridges_text = "Bridges used: " +
+    segs.to_string() +
+    " (par: " +
+    game.par_bridges.to_string() +
+    ")"
   let btw = @draw.measure_text(bridges_text, 24)
-  @draw.draw_text(
-    bridges_text, (w - btw) / 2, 300, 24, @types.color_text,
-  )
+  @draw.draw_text(bridges_text, (w - btw) / 2, 300, 24, @types.color_text)
   let removal_text = "Bridge removals: " + game.removal_count.to_string()
   let rtw = @draw.measure_text(removal_text, 24)
-  @draw.draw_text(
-    removal_text, (w - rtw) / 2, 340, 24, @types.color_text,
-  )
+  @draw.draw_text(removal_text, (w - rtw) / 2, 340, 24, @types.color_text)
   // Star explanations
   let s1 = "1 star: Puzzle solved"
   let s2 = "2 stars: Within par bridges"
@@ -228,11 +252,7 @@ fn draw_results(game : @types.Game) -> Unit {
   }
   // Back button
   let hover2 = mx >= 660 && mx <= 860 && my >= 520 && my <= 580
-  let bg2 = if hover2 {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let bg2 = if hover2 { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(660, 520, 200, 60, bg2)
   @raylib.draw_rectangle_lines(660, 520, 200, 60, @types.color_island)
   let btx = "Level Select"
@@ -246,7 +266,7 @@ fn draw_stars_at(
   y : Int,
   filled : Int,
   total : Int,
-  size : Int
+  size : Int,
 ) -> Unit {
   for i in 0..<total {
     let sx = x + i * (size + 8)

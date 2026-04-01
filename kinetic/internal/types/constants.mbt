@@ -64,7 +64,9 @@ pub let color_peg_hover : @raylib.Color = @raylib.Color::new(180, 170, 200, 255)
 pub let color_gear_small : @raylib.Color = @raylib.Color::new(205, 170, 80, 255)
 
 ///|
-pub let color_gear_medium : @raylib.Color = @raylib.Color::new(185, 155, 70, 255)
+pub let color_gear_medium : @raylib.Color = @raylib.Color::new(
+  185, 155, 70, 255,
+)
 
 ///|
 pub let color_gear_large : @raylib.Color = @raylib.Color::new(165, 140, 60, 255)
@@ -85,7 +87,9 @@ pub let color_output_ok : @raylib.Color = @raylib.Color::new(80, 220, 80, 255)
 pub let color_output_fail : @raylib.Color = @raylib.Color::new(220, 60, 60, 255)
 
 ///|
-pub let color_output_marker : @raylib.Color = @raylib.Color::new(60, 150, 255, 255)
+pub let color_output_marker : @raylib.Color = @raylib.Color::new(
+  60, 150, 255, 255,
+)
 
 ///|
 pub let color_text : @raylib.Color = @raylib.Color::new(220, 215, 200, 255)
@@ -115,4 +119,6 @@ pub let color_title_bg : @raylib.Color = @raylib.Color::new(20, 18, 28, 255)
 pub let color_mesh_line : @raylib.Color = @raylib.Color::new(100, 200, 255, 100)
 
 ///|
-pub let color_direction_arrow : @raylib.Color = @raylib.Color::new(255, 255, 255, 180)
+pub let color_direction_arrow : @raylib.Color = @raylib.Color::new(
+  255, 255, 255, 180,
+)

@@ -4,7 +4,7 @@ pub fn point_in_vision_cone(
   grd : @types.Guard,
   target_x : Int,
   target_y : Int,
-  tiles : Array[Array[@types.TileKind]]
+  tiles : Array[Array[@types.TileKind]],
 ) -> Bool {
   if !grd.active {
     return false
@@ -46,7 +46,7 @@ pub fn point_in_camera_vision(
   cam : @types.Camera,
   target_x : Int,
   target_y : Int,
-  tiles : Array[Array[@types.TileKind]]
+  tiles : Array[Array[@types.TileKind]],
 ) -> Bool {
   if !cam.active || !cam.powered {
     return false
@@ -106,7 +106,11 @@ pub fn check_player_visibility(game : @types.Game) -> Bool {
 
 ///|
 /// Get detection speed multiplier based on tile type
-pub fn detection_speed_at(tiles : Array[Array[@types.TileKind]], x : Int, y : Int) -> Float {
+pub fn detection_speed_at(
+  tiles : Array[Array[@types.TileKind]],
+  x : Int,
+  y : Int,
+) -> Float {
   if x >= 0 && x < @types.grid_width && y >= 0 && y < @types.grid_height {
     match tiles[y][x] {
       Shadow => @types.detection_rate_shadow

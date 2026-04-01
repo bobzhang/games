@@ -50,17 +50,29 @@ pub fn copy_grid(g : Grid) -> Grid {
   let tiles : Array[Tile] = Array::new(capacity=g.tiles.length())
   for i in 0..<g.tiles.length() {
     let t = g.tiles[i]
-    tiles.push({ height: t.height, is_settlement: t.is_settlement, is_sand: t.is_sand })
+    tiles.push({
+      height: t.height,
+      is_settlement: t.is_settlement,
+      is_sand: t.is_sand,
+    })
   }
   { width: g.width, height: g.height, tiles }
 }
 
 ///|
-pub fn snapshot_grid(g : Grid, sea_level : Int, sand_remaining : Int) -> GridSnapshot {
+pub fn snapshot_grid(
+  g : Grid,
+  sea_level : Int,
+  sand_remaining : Int,
+) -> GridSnapshot {
   let tiles : Array[Tile] = Array::new(capacity=g.tiles.length())
   for i in 0..<g.tiles.length() {
     let t = g.tiles[i]
-    tiles.push({ height: t.height, is_settlement: t.is_settlement, is_sand: t.is_sand })
+    tiles.push({
+      height: t.height,
+      is_settlement: t.is_settlement,
+      is_sand: t.is_sand,
+    })
   }
   { tiles, sea_level, sand_remaining }
 }
@@ -231,7 +243,7 @@ pub fn index_to_xy(g : Grid, idx : Int) -> (Int, Int) {
 pub fn lerp_color(
   a : @raylib.Color,
   b : @raylib.Color,
-  t : Float
+  t : Float,
 ) -> @raylib.Color {
   let t2 = clampf(t, 0.0, 1.0)
   let ar = a.r.to_int()

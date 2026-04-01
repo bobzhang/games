@@ -137,9 +137,7 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   // Ink channel selection via click on palette
   if @raylib.is_mouse_button_pressed(0) {
-    let panel_x = @types.grid_offset_x +
-      game.grid.width * @types.cell_size +
-      30
+    let panel_x = @types.grid_offset_x + game.grid.width * @types.cell_size + 30
     let panel_w = @types.screen_width - panel_x - 20
     if mx >= panel_x && mx <= panel_x + panel_w {
       if my >= 145 && my < 185 {
@@ -216,7 +214,9 @@ fn update_results_overlay(game : @types.Game) -> Unit {
     let retry_x = cx - 180
     let retry_w = 150
     let retry_h = 40
-    if mx >= retry_x && mx <= retry_x + retry_w && my >= btn_y &&
+    if mx >= retry_x &&
+      mx <= retry_x + retry_w &&
+      my >= btn_y &&
       my <= btn_y + retry_h {
       @levels.load_level_into_game(game, game.selected_level)
       return
@@ -225,7 +225,9 @@ fn update_results_overlay(game : @types.Game) -> Unit {
     let next_x = cx + 30
     let next_w = 150
     let next_h = 40
-    if mx >= next_x && mx <= next_x + next_w && my >= btn_y &&
+    if mx >= next_x &&
+      mx <= next_x + next_w &&
+      my >= btn_y &&
       my <= btn_y + next_h {
       if game.play_state == Won {
         // Go to next level
@@ -282,9 +284,7 @@ fn check_game_state(game : @types.Game) -> Unit {
   if @ink.all_targets_satisfied(game.grid) {
     game.play_state = Won
     // Save score
-    let stars = @ink.compute_stars(
-      game.grid, game.drops_used, game.par_drops,
-    )
+    let stars = @ink.compute_stars(game.grid, game.drops_used, game.par_drops)
     let score = game.scores[game.selected_level]
     score.completed = true
     // Only upgrade stars, never downgrade

@@ -4,9 +4,13 @@ fn draw_title(game : @types.Game) -> Unit {
   let t = game.title_anim
   for i in 0..<20 {
     let fi = Float::from_int(i)
-    let x = Float::from_int((Float::from_int(i * 67) + t * 20.0).to_int() % @types.screen_width)
-    let y = Float::from_int((Float::from_int(i * 43) + t * 15.0).to_int() % @types.screen_height)
-    let sz = (sinf(t + fi) * 3.0 + 5.0)
+    let x = Float::from_int(
+      (Float::from_int(i * 67) + t * 20.0).to_int() % @types.screen_width,
+    )
+    let y = Float::from_int(
+      (Float::from_int(i * 43) + t * 15.0).to_int() % @types.screen_height,
+    )
+    let sz = sinf(t + fi) * 3.0 + 5.0
     @raylib.draw_circle(
       x.to_int(),
       y.to_int(),
@@ -36,7 +40,10 @@ fn draw_title(game : @types.Game) -> Unit {
     @types.color_text_dim,
   )
   // Total stars
-  let stars_text = "Stars: " + game.total_stars.to_string() + "/" + (@types.num_worlds * @types.levels_per_world * 3).to_string()
+  let stars_text = "Stars: " +
+    game.total_stars.to_string() +
+    "/" +
+    (@types.num_worlds * @types.levels_per_world * 3).to_string()
   let stw = @draw.measure_text(stars_text, 20)
   @draw.draw_text(
     stars_text,
@@ -58,7 +65,13 @@ fn draw_title(game : @types.Game) -> Unit {
     )
   }
   // Version
-  @draw.draw_text("v1.0", @types.screen_width - 60, @types.screen_height - 30, 14, @types.color_text_dim)
+  @draw.draw_text(
+    "v1.0",
+    @types.screen_width - 60,
+    @types.screen_height - 30,
+    14,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -79,16 +92,35 @@ fn draw_world_select(game : @types.Game) -> Unit {
       @raylib.draw_rectangle(cx - 4, cy - 4, cw + 8, ch + 8, wcol)
     }
     @raylib.draw_rectangle(cx, cy, cw, ch, @types.color_panel_bg)
-    @raylib.draw_rectangle_lines(cx, cy, cw, ch, if selected { wcol } else { @types.color_grid_line })
+    @raylib.draw_rectangle_lines(
+      cx,
+      cy,
+      cw,
+      ch,
+      if selected {
+        wcol
+      } else {
+        @types.color_grid_line
+      },
+    )
     // World number
     let wnum = "World " + (w + 1).to_string()
     @draw.draw_text(wnum, cx + 10, cy + 10, 20, wcol)
     // World name
-    @draw.draw_text(@types.world_name(w), cx + 10, cy + 38, 18, @types.color_text)
+    @draw.draw_text(
+      @types.world_name(w),
+      cx + 10,
+      cy + 38,
+      18,
+      @types.color_text,
+    )
     // Stars for this world
     let world_stars = count_world_stars(game, w)
     let max_stars = @types.levels_per_world * 3
-    let star_text = "Stars: " + world_stars.to_string() + "/" + max_stars.to_string()
+    let star_text = "Stars: " +
+      world_stars.to_string() +
+      "/" +
+      max_stars.to_string()
     @draw.draw_text(star_text, cx + 10, cy + 70, 16, @types.color_gold)
     // Progress bar
     let bar_w = cw - 20
@@ -101,7 +133,10 @@ fn draw_world_select(game : @types.Game) -> Unit {
     @raylib.draw_rectangle(cx + 10, cy + 95, filled_w, 8, wcol)
     // Completed levels
     let completed = count_world_completed(game, w)
-    let comp_text = "Completed: " + completed.to_string() + "/" + @types.levels_per_world.to_string()
+    let comp_text = "Completed: " +
+      completed.to_string() +
+      "/" +
+      @types.levels_per_world.to_string()
     @draw.draw_text(comp_text, cx + 10, cy + 115, 14, @types.color_text_dim)
     // World description
     let desc = match w {
@@ -118,7 +153,13 @@ fn draw_world_select(game : @types.Game) -> Unit {
     }
   }
   // Controls
-  @draw.draw_text("[Left/Right] Navigate  [Enter] Select  [Esc] Back", 40, @types.screen_height - 40, 16, @types.color_text_dim)
+  @draw.draw_text(
+    "[Left/Right] Navigate  [Enter] Select  [Esc] Back",
+    40,
+    @types.screen_height - 40,
+    16,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -149,7 +190,10 @@ fn count_world_completed(game : @types.Game, world : Int) -> Int {
 fn draw_level_select(game : @types.Game) -> Unit {
   let wcol = @types.world_color(game.current_world)
   // Header
-  let header = "World " + (game.current_world + 1).to_string() + ": " + @types.world_name(game.current_world)
+  let header = "World " +
+    (game.current_world + 1).to_string() +
+    ": " +
+    @types.world_name(game.current_world)
   @draw.draw_text(header, 40, 30, 32, wcol)
   @draw.draw_text("[Esc] Back", 40, 70, 16, @types.color_text_dim)
   // Draw 3x3 grid of level cards
@@ -172,7 +216,17 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @types.color_panel_bg
     }
     @raylib.draw_rectangle(cx, cy, cw, ch, card_bg)
-    @raylib.draw_rectangle_lines(cx, cy, cw, ch, if selected { wcol } else { @types.color_grid_line })
+    @raylib.draw_rectangle_lines(
+      cx,
+      cy,
+      cw,
+      ch,
+      if selected {
+        wcol
+      } else {
+        @types.color_grid_line
+      },
+    )
     // Level number and name
     let level_def = @types.LevelDef::{
       world: game.current_world,
@@ -208,7 +262,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
     }
   }
   // Controls
-  @draw.draw_text("[Arrows] Navigate  [Enter] Play  [Esc] Back", 40, @types.screen_height - 40, 16, @types.color_text_dim)
+  @draw.draw_text(
+    "[Arrows] Navigate  [Enter] Play  [Esc] Back",
+    40,
+    @types.screen_height - 40,
+    16,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -224,7 +284,13 @@ fn draw_programming(game : @types.Game) -> Unit {
 ///|
 fn draw_results(game : @types.Game) -> Unit {
   // Background
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @raylib.Color::new(0, 0, 0, 180))
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
+    @raylib.Color::new(0, 0, 0, 180),
+  )
   // Results panel
   let px = @types.screen_width / 2 - 250
   let py = 120
@@ -232,15 +298,36 @@ fn draw_results(game : @types.Game) -> Unit {
   let ph = 450
   @raylib.draw_rectangle(px, py, pw, ph, @types.color_panel_bg)
   @raylib.draw_rectangle_lines(px, py, pw, ph, @types.color_success)
-  @draw.draw_text("LEVEL COMPLETE!", px + 120, py + 20, 32, @types.color_success)
+  @draw.draw_text(
+    "LEVEL COMPLETE!",
+    px + 120,
+    py + 20,
+    32,
+    @types.color_success,
+  )
   match game.level_def {
     None => ()
     Some(def) => {
-      let name = "World " + (def.world + 1).to_string() + "-" + (def.index + 1).to_string() + ": " + def.name
+      let name = "World " +
+        (def.world + 1).to_string() +
+        "-" +
+        (def.index + 1).to_string() +
+        ": " +
+        def.name
       let nw = @draw.measure_text(name, 20)
-      @draw.draw_text(name, px + pw / 2 - nw / 2, py + 65, 20, @types.color_text)
+      @draw.draw_text(
+        name,
+        px + pw / 2 - nw / 2,
+        py + 65,
+        20,
+        @types.color_text,
+      )
       let cmd_count = game.program.commands.length()
-      let medal = @types.medal_from_instructions(cmd_count, def.par, def.optimal)
+      let medal = @types.medal_from_instructions(
+        cmd_count,
+        def.par,
+        def.optimal,
+      )
       let stars = @types.medal_stars(medal)
       // Big stars
       for i in 0..<3 {
@@ -286,7 +373,25 @@ fn draw_results(game : @types.Game) -> Unit {
     }
   }
   // Options
-  @draw.draw_text("[Enter] Next Level", px + 40, py + 330, 20, @types.color_text)
-  @draw.draw_text("[R] Retry (improve score)", px + 40, py + 365, 20, @types.color_text_dim)
-  @draw.draw_text("[Esc] Level Select", px + 40, py + 400, 20, @types.color_text_dim)
+  @draw.draw_text(
+    "[Enter] Next Level",
+    px + 40,
+    py + 330,
+    20,
+    @types.color_text,
+  )
+  @draw.draw_text(
+    "[R] Retry (improve score)",
+    px + 40,
+    py + 365,
+    20,
+    @types.color_text_dim,
+  )
+  @draw.draw_text(
+    "[Esc] Level Select",
+    px + 40,
+    py + 400,
+    20,
+    @types.color_text_dim,
+  )
 }

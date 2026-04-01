@@ -148,7 +148,9 @@ test "budget should not exceed grid size for any level" {
   for i in 0..<25 {
     let level = @levels.get_level(i)
     let total_cells = level.width * level.height
-    let total_budget = level.budget.forest + level.budget.ocean + level.budget.desert
+    let total_budget = level.budget.forest +
+      level.budget.ocean +
+      level.budget.desert
     // Budget should be less than grid size (you can't paint more tiles than exist)
     inspect(total_budget < total_cells, content="true")
   }
@@ -161,20 +163,22 @@ test "difficulty progression: tier 1 budgets are more generous per cell" {
   for i in 0..<8 {
     let level = @levels.get_level(i)
     let total_cells = level.width * level.height
-    let total_budget = level.budget.forest + level.budget.ocean + level.budget.desert
-    tier1_ratio = tier1_ratio + Float::from_int(total_budget) / Float::from_int(
-        total_cells,
-      )
+    let total_budget = level.budget.forest +
+      level.budget.ocean +
+      level.budget.desert
+    tier1_ratio = tier1_ratio +
+      Float::from_int(total_budget) / Float::from_int(total_cells)
   }
   tier1_ratio = tier1_ratio / 8.0
   let mut tier3_ratio : Float = 0.0
   for i in 17..<25 {
     let level = @levels.get_level(i)
     let total_cells = level.width * level.height
-    let total_budget = level.budget.forest + level.budget.ocean + level.budget.desert
-    tier3_ratio = tier3_ratio + Float::from_int(total_budget) / Float::from_int(
-        total_cells,
-      )
+    let total_budget = level.budget.forest +
+      level.budget.ocean +
+      level.budget.desert
+    tier3_ratio = tier3_ratio +
+      Float::from_int(total_budget) / Float::from_int(total_cells)
   }
   tier3_ratio = tier3_ratio / 8.0
   // Tier 1 should have more generous budgets per cell than tier 3
@@ -188,16 +192,20 @@ test "difficulty progression: tier 3 targets are tighter than tier 1" {
   for i in 0..<8 {
     let level = @levels.get_level(i)
     let t = level.targets
-    tier1_range = tier1_range + (t.forest_max - t.forest_min) + (t.ocean_max -
-      t.ocean_min) + (t.desert_max - t.desert_min)
+    tier1_range = tier1_range +
+      (t.forest_max - t.forest_min) +
+      (t.ocean_max - t.ocean_min) +
+      (t.desert_max - t.desert_min)
   }
   tier1_range = tier1_range / 8.0
   let mut tier3_range : Float = 0.0
   for i in 17..<25 {
     let level = @levels.get_level(i)
     let t = level.targets
-    tier3_range = tier3_range + (t.forest_max - t.forest_min) + (t.ocean_max -
-      t.ocean_min) + (t.desert_max - t.desert_min)
+    tier3_range = tier3_range +
+      (t.forest_max - t.forest_min) +
+      (t.ocean_max - t.ocean_min) +
+      (t.desert_max - t.desert_min)
   }
   tier3_range = tier3_range / 8.0
   // Tier 1 average target range should be wider
@@ -225,7 +233,9 @@ test "par turns scale with grid complexity" {
   // Larger grids with more starting obstacles should have more par turns
   for i in 0..<25 {
     let level = @levels.get_level(i)
-    let total_budget = level.budget.forest + level.budget.ocean + level.budget.desert
+    let total_budget = level.budget.forest +
+      level.budget.ocean +
+      level.budget.desert
     // Par turns should be >= total budget (you need at least 1 turn per paint)
     inspect(level.par_turns >= total_budget, content="true")
   }

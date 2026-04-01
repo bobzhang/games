@@ -37,7 +37,12 @@ fn update_title(game : @types.Game) -> Unit {
 ///|
 fn update_weapon_select(game : @types.Game) -> Unit {
   let weapons : Array[@types.WeaponKind] = [
-    Laser, Shotgun, Missile, Railgun, Flak, Beam,
+    Laser,
+    Shotgun,
+    Missile,
+    Railgun,
+    Flak,
+    Beam,
   ]
   for i in 0..<weapons.length() {
     if @raylib.is_key_pressed(@raylib.KeyOne + i) {
@@ -178,7 +183,10 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   // Ship physics
   @physics.update_ship_physics(game.ship, dt)
   @physics.clamp_to_arena(
-    game.ship.pos, 12.0, game.arena_width, game.arena_height,
+    game.ship.pos,
+    12.0,
+    game.arena_width,
+    game.arena_height,
   )
   @physics.update_heat(game.ship, dt)
   @physics.update_shield_regen(game.ship, dt)
@@ -273,7 +281,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   // Collision detection
   resolve_collisions(game)
   // Wave spawning (not in boss arenas - boss handles its own spawns)
-  if !(game.sector_cleared) && game.current_sector_kind != BossArena {
+  if !game.sector_cleared && game.current_sector_kind != BossArena {
     // Get target enemy count from sector node
     let target_count = match game.sector_map {
       Some(map) => map.nodes[map.current].enemy_count
@@ -309,9 +317,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
             game.meta.bosses_defeated += 1
             @types.set_message(game, "SECTOR COMPLETE!", 2.0)
             // Generate next sector map
-            game.sector_map = Some(
-              @sectors.generate_sector_map(map.depth + 1),
-            )
+            game.sector_map = Some(@sectors.generate_sector_map(map.depth + 1))
             game.screen = SectorMap
           } else {
             @types.set_message(game, "SECTOR CLEARED!", 2.0)
@@ -336,14 +342,12 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     if game.stats.kills > game.meta.highest_kills {
       game.meta.highest_kills = game.stats.kills
     }
-    game.meta.run_history.push(
-      {
-        score: game.stats.score,
-        kills: game.stats.kills,
-        sectors: game.stats.sectors_cleared,
-        weapon: game.ship.weapon.kind,
-      },
-    )
+    game.meta.run_history.push({
+      score: game.stats.score,
+      kills: game.stats.kills,
+      sectors: game.stats.sectors_cleared,
+      weapon: game.ship.weapon.kind,
+    })
   }
 }
 
@@ -362,9 +366,7 @@ fn update_player_input(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_down(@raylib.KeyA) || @raylib.is_key_down(@raylib.KeyLeft) {
     mx = mx - 1.0
   }
-  if @raylib.is_key_down(@raylib.KeyD) || @raylib.is_key_down(
-    @raylib.KeyRight,
-  ) {
+  if @raylib.is_key_down(@raylib.KeyD) || @raylib.is_key_down(@raylib.KeyRight) {
     mx = mx + 1.0
   }
   // Normalize
@@ -389,8 +391,10 @@ fn update_player_input(game : @types.Game, dt : Float) -> Unit {
   ship.vel.x = ship.vel.x + move_dir.x * final_speed * dt * 8.0
   ship.vel.y = ship.vel.y + move_dir.y * final_speed * dt * 8.0
   // Dash
-  if (@raylib.is_key_pressed(@raylib.KeySpace) ||
-    @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight)) &&
+  if (
+      @raylib.is_key_pressed(@raylib.KeySpace) ||
+      @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight)
+    ) &&
     ship.dash_cooldown <= 0.0 {
     ship.dash_cooldown = @types.dash_cooldown
     ship.dash_timer = @types.dash_duration
@@ -424,7 +428,11 @@ fn update_player_input(game : @types.Game, dt : Float) -> Unit {
   // Fire primary weapon (with primary mod)
   if @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) {
     @weapons.fire_weapon(
-      game, ship.weapon, ship.pos, ship.angle, mod_kind=ship.primary_mod,
+      game,
+      ship.weapon,
+      ship.pos,
+      ship.angle,
+      mod_kind=ship.primary_mod,
     )
   }
   // Fire secondary weapon (Q key, no mod)
@@ -442,18 +450,23 @@ fn resolve_collisions(game : @types.Game) -> Unit {
   // Friendly projectiles vs enemies
   for i in 0..<game.projectiles.length() {
     let p = game.projectiles[i]
-    if !(p.active) || !(p.friendly) {
+    if !p.active || !p.friendly {
       continue
     }
     // vs enemies
     for j in 0..<game.enemies.length() {
       let e = game.enemies[j]
-      if !(e.active) {
+      if !e.active {
         continue
       }
       if @physics.circles_overlap(
-        p.pos.x, p.pos.y, p.radius, e.pos.x, e.pos.y, e.radius,
-      ) {
+          p.pos.x,
+          p.pos.y,
+          p.radius,
+          e.pos.x,
+          e.pos.y,
+          e.radius,
+        ) {
         game.stats.shots_hit += 1
         // Apply damage
         if e.shield > 0 {
@@ -471,7 +484,12 @@ fn resolve_collisions(game : @types.Game) -> Unit {
         )
         @types.push_sound(game, EnemyHit)
         // Hit particles
-        spawn_hit_particles(game, p.pos.x, p.pos.y, @types.weapon_color(p.weapon_kind))
+        spawn_hit_particles(
+          game,
+          p.pos.x,
+          p.pos.y,
+          @types.weapon_color(p.weapon_kind),
+        )
         // Freezing
         if p.freezing {
           e.frozen_timer = 2.0
@@ -546,7 +564,7 @@ fn resolve_collisions(game : @types.Game) -> Unit {
             }
           }
         }
-        if !(p.piercing) {
+        if !p.piercing {
           p.active = false
         }
         break
@@ -558,7 +576,12 @@ fn resolve_collisions(game : @types.Game) -> Unit {
         if boss.active &&
           p.active &&
           @physics.circles_overlap(
-            p.pos.x, p.pos.y, p.radius, boss.pos.x, boss.pos.y, boss.radius,
+            p.pos.x,
+            p.pos.y,
+            p.radius,
+            boss.pos.x,
+            boss.pos.y,
+            boss.radius,
           ) {
           game.stats.shots_hit += 1
           if boss.shield > 0 {
@@ -596,7 +619,7 @@ fn resolve_collisions(game : @types.Game) -> Unit {
             }
             @types.add_shake(game.shake, @types.shake_explosion)
           }
-          if !(p.piercing) {
+          if !p.piercing {
             p.active = false
           }
         }
@@ -605,12 +628,17 @@ fn resolve_collisions(game : @types.Game) -> Unit {
     // vs asteroids
     for j in 0..<game.asteroids.length() {
       let ast = game.asteroids[j]
-      if !(ast.active) || !(p.active) {
+      if !ast.active || !p.active {
         continue
       }
       if @physics.circles_overlap(
-        p.pos.x, p.pos.y, p.radius, ast.pos.x, ast.pos.y, ast.radius,
-      ) {
+          p.pos.x,
+          p.pos.y,
+          p.radius,
+          ast.pos.x,
+          ast.pos.y,
+          ast.radius,
+        ) {
         ast.hp = ast.hp - p.damage
         if ast.hp <= 0 {
           ast.active = false
@@ -632,7 +660,7 @@ fn resolve_collisions(game : @types.Game) -> Unit {
             spawn_random_pickup(game, ast.pos.x, ast.pos.y)
           }
         }
-        if !(p.piercing) {
+        if !p.piercing {
           p.active = false
         }
         break
@@ -643,12 +671,17 @@ fn resolve_collisions(game : @types.Game) -> Unit {
   if ship.invincible_timer <= 0.0 {
     for i in 0..<game.projectiles.length() {
       let p = game.projectiles[i]
-      if !(p.active) || p.friendly {
+      if !p.active || p.friendly {
         continue
       }
       if @physics.circles_overlap(
-        p.pos.x, p.pos.y, p.radius, ship.pos.x, ship.pos.y, 12.0,
-      ) {
+          p.pos.x,
+          p.pos.y,
+          p.radius,
+          ship.pos.x,
+          ship.pos.y,
+          12.0,
+        ) {
         damage_player(game, p.damage)
         p.active = false
         ship.invincible_timer = @types.invincible_duration
@@ -658,12 +691,17 @@ fn resolve_collisions(game : @types.Game) -> Unit {
     // Contact damage from enemies
     for i in 0..<game.enemies.length() {
       let e = game.enemies[i]
-      if !(e.active) {
+      if !e.active {
         continue
       }
       if @physics.circles_overlap(
-        e.pos.x, e.pos.y, e.radius, ship.pos.x, ship.pos.y, 12.0,
-      ) {
+          e.pos.x,
+          e.pos.y,
+          e.radius,
+          ship.pos.x,
+          ship.pos.y,
+          12.0,
+        ) {
         damage_player(game, e.damage)
         ship.invincible_timer = @types.invincible_duration
       }
@@ -673,7 +711,12 @@ fn resolve_collisions(game : @types.Game) -> Unit {
       Some(boss) =>
         if boss.active &&
           @physics.circles_overlap(
-            boss.pos.x, boss.pos.y, boss.radius, ship.pos.x, ship.pos.y, 12.0,
+            boss.pos.x,
+            boss.pos.y,
+            boss.radius,
+            ship.pos.x,
+            ship.pos.y,
+            12.0,
           ) {
           damage_player(game, 3)
           ship.invincible_timer = @types.invincible_duration
@@ -684,12 +727,17 @@ fn resolve_collisions(game : @types.Game) -> Unit {
   // Player vs pickups
   for i in 0..<game.pickups.length() {
     let pk = game.pickups[i]
-    if !(pk.active) {
+    if !pk.active {
       continue
     }
     if @physics.circles_overlap(
-      pk.pos.x, pk.pos.y, pk.radius, ship.pos.x, ship.pos.y, 16.0,
-    ) {
+        pk.pos.x,
+        pk.pos.y,
+        pk.radius,
+        ship.pos.x,
+        ship.pos.y,
+        16.0,
+      ) {
       apply_pickup(game, pk.kind)
       pk.active = false
       @types.push_sound(game, Pickup)
@@ -773,11 +821,11 @@ fn apply_explosion(
   x : Float,
   y : Float,
   radius : Float,
-  damage : Int
+  damage : Int,
 ) -> Unit {
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if !(e.active) {
+    if !e.active {
       continue
     }
     if @types.vec2_dist(@types.vec2(x, y), e.pos) < radius {
@@ -835,9 +883,7 @@ fn apply_pickup(game : @types.Game, kind : @types.PickupKind) -> Unit {
     }
     WeaponDrop(wpn) => {
       ship.secondary = Some(@types.new_weapon(wpn))
-      @types.set_message(
-        game, "SECONDARY: " + @weapons.weapon_name(wpn), 1.5,
-      )
+      @types.set_message(game, "SECONDARY: " + @weapons.weapon_name(wpn), 1.5)
     }
   }
 }
@@ -845,7 +891,7 @@ fn apply_pickup(game : @types.Game, kind : @types.PickupKind) -> Unit {
 ///|
 fn spawn_random_pickup(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<game.pickups.length() {
-    if !(game.pickups[i].active) {
+    if !game.pickups[i].active {
       let pk = game.pickups[i]
       pk.active = true
       pk.pos = @types.vec2(x, y)
@@ -863,13 +909,22 @@ fn spawn_random_pickup(game : @types.Game, x : Float, y : Float) -> Unit {
         HeatVent
       } else if roll < 80 {
         let mods : Array[@types.ModKind] = [
-          Piercing, Homing, Split, Chain, Explosive, Freezing, Bouncing,
+          Piercing,
+          Homing,
+          Split,
+          Chain,
+          Explosive,
+          Freezing,
+          Bouncing,
           Overcharge,
         ]
         WeaponMod(mods[@types.rng_int(mods.length())])
       } else {
         let utils : Array[@types.UtilityMod] = [
-          ShieldDrain, Vampire, HeatSink, Accelerator,
+          ShieldDrain,
+          Vampire,
+          HeatSink,
+          Accelerator,
         ]
         UtilityPickup(utils[@types.rng_int(utils.length())])
       }
@@ -887,7 +942,7 @@ fn spawn_particle(
   vy : Float,
   life : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let idx = @types.alloc_particle(game.particles)
   let p = game.particles[idx]
@@ -906,7 +961,7 @@ fn spawn_hit_particles(
   game : @types.Game,
   x : Float,
   y : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   for _i in 0..<5 {
     spawn_particle(
@@ -946,7 +1001,7 @@ fn spawn_engine_trail(game : @types.Game) -> Unit {
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.particles.length() {
     let p = game.particles[i]
-    if !(p.active) {
+    if !p.active {
       continue
     }
     p.pos.x = p.pos.x + p.vel.x * dt
@@ -964,7 +1019,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 fn update_damage_numbers(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.damage_numbers.length() {
     let dn = game.damage_numbers[i]
-    if !(dn.active) {
+    if !dn.active {
       continue
     }
     dn.pos.x = dn.pos.x + dn.vel.x * dt
@@ -992,7 +1047,7 @@ fn update_shop(game : @types.Game) -> Unit {
   for i in 0..<game.shop_items.length() {
     if @raylib.is_key_pressed(@raylib.KeyOne + i) {
       let item = game.shop_items[i]
-      if !(item.purchased) && game.ship.credits >= item.cost {
+      if !item.purchased && game.ship.credits >= item.cost {
         game.ship.credits = game.ship.credits - item.cost
         item.purchased = true
         apply_pickup(game, item.effect)

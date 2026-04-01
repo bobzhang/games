@@ -13,7 +13,7 @@ pub fn compute_stars(
   connections_used : Int,
   rehooks : Int,
   par_connections : Int,
-  par_rehooks : Int
+  par_rehooks : Int,
 ) -> Int {
   // 1 star: complete
   // 2 star: within par connections
@@ -28,11 +28,7 @@ pub fn compute_stars(
 }
 
 ///|
-pub fn is_rope_valid(
-  game : @types.Game,
-  from_id : Int,
-  to_id : Int
-) -> Bool {
+pub fn is_rope_valid(game : @types.Game, from_id : Int, to_id : Int) -> Bool {
   // Basic validation
   if from_id < 0 || to_id < 0 {
     return false

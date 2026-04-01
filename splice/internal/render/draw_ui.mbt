@@ -26,7 +26,12 @@ fn draw_ops_panel(game : @types.Game, level : @types.Level) -> Unit {
     let by = py + 25
     // Background
     let bg = if selected {
-      @raylib.Color::new(color.r.to_int(), color.g.to_int(), color.b.to_int(), 60)
+      @raylib.Color::new(
+        color.r.to_int(),
+        color.g.to_int(),
+        color.b.to_int(),
+        60,
+      )
     } else {
       @raylib.Color::new(30, 30, 40, 200)
     }
@@ -36,11 +41,17 @@ fn draw_ops_panel(game : @types.Game, level : @types.Level) -> Unit {
     // Key label
     @draw.draw_text("[" + key + "]", ox + 5, by + 5, 14, @types.color_text_dim)
     // Operation name
-    @draw.draw_text(name, ox + 30, by + 5, 18, if selected {
-      color
-    } else {
-      @types.color_text
-    })
+    @draw.draw_text(
+      name,
+      ox + 30,
+      by + 5,
+      18,
+      if selected {
+        color
+      } else {
+        @types.color_text
+      },
+    )
     // Description
     let desc = op_description(op)
     @draw.draw_text(desc, ox + 5, by + 30, 11, @types.color_text_dim)
@@ -59,18 +70,30 @@ fn draw_ops_panel(game : @types.Game, level : @types.Level) -> Unit {
       let sel = game.insert_base == b
       let bc = @types.base_color(b)
       if sel {
-        @raylib.draw_rectangle(bx, by2, 30, 25, @raylib.Color::new(
-          bc.r.to_int(), bc.g.to_int(), bc.b.to_int(), 80,
-        ))
+        @raylib.draw_rectangle(
+          bx,
+          by2,
+          30,
+          25,
+          @raylib.Color::new(bc.r.to_int(), bc.g.to_int(), bc.b.to_int(), 80),
+        )
       }
-      @raylib.draw_rectangle_lines(bx, by2, 30, 25, if sel { bc } else { @types.color_panel_border })
+      @raylib.draw_rectangle_lines(
+        bx,
+        by2,
+        30,
+        25,
+        if sel {
+          bc
+        } else {
+          @types.color_panel_border
+        },
+      )
       @draw.draw_text(@types.base_char(b), bx + 8, by2 + 3, 18, bc)
     }
   }
   // Undo info
-  let undo_text = "Undo [Z]: " +
-    game.ops_history.length().to_string() +
-    " ops"
+  let undo_text = "Undo [Z]: " + game.ops_history.length().to_string() + " ops"
   @draw.draw_text(undo_text, w - 200, py + 85, 14, @types.color_text_dim)
   // Verify button hint
   let verify_text = "[V] VERIFY SEQUENCE"
@@ -109,98 +132,58 @@ fn draw_help_overlay() -> Unit {
   y += gap
   @draw.draw_text("Left/Right  Move cursor", x, y, 15, @types.color_text)
   y += gap - 4
-  @draw.draw_text(
-    "Shift+Arrow  Select range",
-    x,
-    y,
-    15,
-    @types.color_text,
-  )
+  @draw.draw_text("Shift+Arrow  Select range", x, y, 15, @types.color_text)
   y += gap - 4
   @draw.draw_text("Home/End  Jump to start/end", x, y, 15, @types.color_text)
   y += gap + 6
   @draw.draw_text("OPERATIONS", x, y, 18, @types.color_highlight)
   y += gap
   @draw.draw_text(
-    "[1] Cut     Remove base at cursor",
-    x,
-    y,
-    15,
-    @types.color_op_cut,
+    "[1] Cut     Remove base at cursor", x, y, 15, @types.color_op_cut,
   )
   y += gap - 4
   @draw.draw_text(
-    "[2] Insert  Add base at cursor (Tab to cycle)",
-    x,
-    y,
-    15,
-    @types.color_op_insert,
+    "[2] Insert  Add base at cursor (Tab to cycle)", x, y, 15, @types.color_op_insert,
   )
   y += gap - 4
   @draw.draw_text(
-    "[3] Dup     Copy selected range after itself",
-    x,
-    y,
-    15,
-    @types.color_op_duplicate,
+    "[3] Dup     Copy selected range after itself", x, y, 15, @types.color_op_duplicate,
   )
   y += gap - 4
   @draw.draw_text(
-    "[4] Invert  Reverse selected range",
-    x,
-    y,
-    15,
-    @types.color_op_invert,
+    "[4] Invert  Reverse selected range", x, y, 15, @types.color_op_invert,
   )
   y += gap - 4
   @draw.draw_text(
-    "[5] Delete  Remove selected range",
-    x,
-    y,
-    15,
-    @types.color_op_delete,
+    "[5] Delete  Remove selected range", x, y, 15, @types.color_op_delete,
   )
   y += gap + 6
   @draw.draw_text("ACTIONS", x, y, 18, @types.color_highlight)
   y += gap
   @draw.draw_text(
-    "Enter  Apply selected operation",
-    x,
-    y,
-    15,
-    @types.color_text,
+    "Enter  Apply selected operation", x, y, 15, @types.color_text,
   )
   y += gap - 4
   @draw.draw_text(
-    "V      Verify sequence against target",
-    x,
-    y,
-    15,
-    @types.color_text,
+    "V      Verify sequence against target", x, y, 15, @types.color_text,
   )
   y += gap - 4
   @draw.draw_text("Z      Undo last operation", x, y, 15, @types.color_text)
   y += gap - 4
   @draw.draw_text("R      Restart level", x, y, 15, @types.color_text)
   y += gap - 4
-  @draw.draw_text("Tab    Cycle insert base (A>T>G>C)", x, y, 15, @types.color_text)
+  @draw.draw_text(
+    "Tab    Cycle insert base (A>T>G>C)", x, y, 15, @types.color_text,
+  )
   y += gap + 6
   @draw.draw_text("GOAL", x, y, 18, @types.color_highlight)
   y += gap
   @draw.draw_text(
-    "Edit the sequence so codons (3-base groups)",
-    x,
-    y,
-    15,
-    @types.color_text,
+    "Edit the sequence so codons (3-base groups)", x, y, 15, @types.color_text,
   )
   y += gap - 4
   @draw.draw_text(
-    "produce the target trait list. ATG=Start, TGA=Stop.",
-    x,
-    y,
-    15,
-    @types.color_text,
+    "produce the target trait list. ATG=Start, TGA=Stop.", x, y, 15, @types.color_text,
   )
   y += gap + 6
   @draw.draw_text(

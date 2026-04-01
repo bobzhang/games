@@ -189,12 +189,7 @@ pub(all) struct Game {
 }
 
 ///|
-pub fn Entity::new(
-  id : Int,
-  kind : EntityKind,
-  x : Int,
-  y : Int
-) -> Entity {
+pub fn Entity::new(id : Int, kind : EntityKind, x : Int, y : Int) -> Entity {
   {
     id,
     active: true,
@@ -234,7 +229,7 @@ pub fn Particle::new(
   r : Int,
   g : Int,
   b : Int,
-  kind : Int
+  kind : Int,
 ) -> Particle {
   { x, y, vx, vy, life, max_life: life, size, r, g, b, kind }
 }
@@ -254,7 +249,12 @@ pub fn GhostState::new() -> GhostState {
 
 ///|
 pub fn HintState::new() -> HintState {
-  { hints_remaining: [3, 3, 3, 3, 3], hint_active: false, hint_dir: Down, hint_timer: 0.0 }
+  {
+    hints_remaining: [3, 3, 3, 3, 3],
+    hint_active: false,
+    hint_dir: Down,
+    hint_timer: 0.0,
+  }
 }
 
 ///|
@@ -283,36 +283,126 @@ pub fn AmbientState::new() -> AmbientState {
 ///|
 pub fn AchievementState::new() -> AchievementState {
   let achievements = init_achievements()
-  {
-    achievements,
-    toast_queue: [],
-    toast_timer: 0.0,
-    current_toast: -1,
-  }
+  { achievements, toast_queue: [], toast_timer: 0.0, current_toast: -1 }
 }
 
 ///|
 fn init_achievements() -> Array[Achievement] {
   [
-    { kind: FirstStep, name: "First Steps", description: "Complete your first level", unlocked: false },
-    { kind: WorldMaster(0), name: "Stone Master", description: "Earn all stars in Stone Ruins", unlocked: false },
-    { kind: WorldMaster(1), name: "Crystal Master", description: "Earn all stars in Crystal Caverns", unlocked: false },
-    { kind: WorldMaster(2), name: "Void Master", description: "Earn all stars in Void Expanse", unlocked: false },
-    { kind: WorldMaster(3), name: "Magma Master", description: "Earn all stars in Magma Depths", unlocked: false },
-    { kind: WorldMaster(4), name: "Sky Master", description: "Earn all stars in Sky Citadel", unlocked: false },
-    { kind: Speedster, name: "Speedster", description: "Complete any level in under 10 moves", unlocked: false },
-    { kind: Perfectionist, name: "Perfectionist", description: "Earn 3 stars on 10 different levels", unlocked: false },
-    { kind: NoHints, name: "No Hints Needed", description: "Complete a world without using hints", unlocked: false },
-    { kind: GemCollector, name: "Gem Collector", description: "Collect 20 gems total", unlocked: false },
-    { kind: KeyMaster, name: "Key Master", description: "Collect 10 keys total", unlocked: false },
-    { kind: Minimalist, name: "Minimalist", description: "Complete a level at exactly par", unlocked: false },
-    { kind: Explorer, name: "Explorer", description: "Use the level editor", unlocked: false },
-    { kind: GhostRacer, name: "Ghost Racer", description: "Beat your ghost replay", unlocked: false },
-    { kind: UndoFree, name: "Undo Free", description: "Complete a level without using undo", unlocked: false },
-    { kind: AllWorlds, name: "World Traveler", description: "Unlock all 5 worlds", unlocked: false },
-    { kind: GravitySpinner, name: "Gravity Spinner", description: "Rotate gravity 50 times total", unlocked: false },
-    { kind: IceSlider, name: "Ice Slider", description: "Slide on ice 20 times total", unlocked: false },
-    { kind: Completionist, name: "Completionist", description: "Earn all 3 stars on all 50 levels", unlocked: false },
+    {
+      kind: FirstStep,
+      name: "First Steps",
+      description: "Complete your first level",
+      unlocked: false,
+    },
+    {
+      kind: WorldMaster(0),
+      name: "Stone Master",
+      description: "Earn all stars in Stone Ruins",
+      unlocked: false,
+    },
+    {
+      kind: WorldMaster(1),
+      name: "Crystal Master",
+      description: "Earn all stars in Crystal Caverns",
+      unlocked: false,
+    },
+    {
+      kind: WorldMaster(2),
+      name: "Void Master",
+      description: "Earn all stars in Void Expanse",
+      unlocked: false,
+    },
+    {
+      kind: WorldMaster(3),
+      name: "Magma Master",
+      description: "Earn all stars in Magma Depths",
+      unlocked: false,
+    },
+    {
+      kind: WorldMaster(4),
+      name: "Sky Master",
+      description: "Earn all stars in Sky Citadel",
+      unlocked: false,
+    },
+    {
+      kind: Speedster,
+      name: "Speedster",
+      description: "Complete any level in under 10 moves",
+      unlocked: false,
+    },
+    {
+      kind: Perfectionist,
+      name: "Perfectionist",
+      description: "Earn 3 stars on 10 different levels",
+      unlocked: false,
+    },
+    {
+      kind: NoHints,
+      name: "No Hints Needed",
+      description: "Complete a world without using hints",
+      unlocked: false,
+    },
+    {
+      kind: GemCollector,
+      name: "Gem Collector",
+      description: "Collect 20 gems total",
+      unlocked: false,
+    },
+    {
+      kind: KeyMaster,
+      name: "Key Master",
+      description: "Collect 10 keys total",
+      unlocked: false,
+    },
+    {
+      kind: Minimalist,
+      name: "Minimalist",
+      description: "Complete a level at exactly par",
+      unlocked: false,
+    },
+    {
+      kind: Explorer,
+      name: "Explorer",
+      description: "Use the level editor",
+      unlocked: false,
+    },
+    {
+      kind: GhostRacer,
+      name: "Ghost Racer",
+      description: "Beat your ghost replay",
+      unlocked: false,
+    },
+    {
+      kind: UndoFree,
+      name: "Undo Free",
+      description: "Complete a level without using undo",
+      unlocked: false,
+    },
+    {
+      kind: AllWorlds,
+      name: "World Traveler",
+      description: "Unlock all 5 worlds",
+      unlocked: false,
+    },
+    {
+      kind: GravitySpinner,
+      name: "Gravity Spinner",
+      description: "Rotate gravity 50 times total",
+      unlocked: false,
+    },
+    {
+      kind: IceSlider,
+      name: "Ice Slider",
+      description: "Slide on ice 20 times total",
+      unlocked: false,
+    },
+    {
+      kind: Completionist,
+      name: "Completionist",
+      description: "Earn all 3 stars on all 50 levels",
+      unlocked: false,
+    },
   ]
 }
 
