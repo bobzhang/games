@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/voltage/internal/types",
+  "bobzhang/games/voltage/internal/circuit",
+  "bobzhang/games/voltage/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
