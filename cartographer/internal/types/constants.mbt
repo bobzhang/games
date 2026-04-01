@@ -121,3 +121,48 @@ pub let color_black : @raylib.Color = @raylib.Color::new(0, 0, 0, 255)
 
 ///|
 pub let color_incorrect_flash : @raylib.Color = @raylib.Color::new(255, 50, 50, 120)
+
+///|
+pub let color_clue_highlight : @raylib.Color = @raylib.Color::new(
+  255, 180, 50, 60,
+)
+
+///|
+pub let color_feature_highlight : @raylib.Color = @raylib.Color::new(
+  100, 180, 255, 70,
+)
+
+///|
+pub let color_hint_narrow : @raylib.Color = @raylib.Color::new(
+  180, 220, 255, 80,
+)
+
+///|
+pub let color_hint_reveal : @raylib.Color = @raylib.Color::new(
+  100, 255, 100, 120,
+)
+
+///|
+pub let color_flash_ok : @raylib.Color = @raylib.Color::new(50, 200, 50, 150)
+
+///|
+pub let color_flash_error : @raylib.Color = @raylib.Color::new(255, 50, 50, 150)
+
+///|
+pub let color_compass_n : @raylib.Color = @raylib.Color::new(180, 30, 30, 255)
+
+///|
+pub let color_compass_body : @raylib.Color = @raylib.Color::new(139, 90, 43, 255)
+
+///|
+pub let color_compass_ring : @raylib.Color = @raylib.Color::new(100, 70, 35, 255)
+
+///|
+pub let color_parchment_dark : @raylib.Color = @raylib.Color::new(
+  215, 200, 170, 255,
+)
+
+///|
+pub let color_parchment_border : @raylib.Color = @raylib.Color::new(
+  180, 160, 120, 255,
+)

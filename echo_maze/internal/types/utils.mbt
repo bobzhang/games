@@ -82,7 +82,7 @@ pub fn new_player(start : Vec2i) -> Player {
 
 ///|
 pub fn new_ghost(rec : Array[Direction?], color : GhostColor, start : Vec2i) -> Ghost {
-  { recording: rec, color, pos: start, active: true }
+  { recording: rec, color, pos: start, active: true, trail_positions: [start] }
 }
 
 ///|
@@ -109,7 +109,9 @@ pub fn new_maze_state(maze : Maze) -> MazeState {
   }
   let door_states : Array[DoorState] = []
   for did in door_ids {
-    door_states.push({ door_id: did, open: false, timer: 0 })
+    door_states.push(
+      { door_id: did, open: false, timer: 0, anim_progress: 0.0, prev_open: false },
+    )
   }
   let button_pressed : Array[Bool] = Array::make(
     maze.button_links.length(),
@@ -122,6 +124,8 @@ pub fn new_maze_state(maze : Maze) -> MazeState {
         pos: gd.patrol[0],
         patrol_index: 0,
         forward: true,
+        alert: Idle,
+        alert_timer: 0.0,
       },
     )
   }
@@ -180,6 +184,10 @@ pub fn new_game() -> Game {
     result_stars: 0,
     result_collectibles: 0,
     result_total_collectibles: 0,
+    restart_flash_timer: 0.0,
+    ghost_button_feedback: [],
+    planning_paused: false,
+    loop_transition_timer: 0.0,
   }
 }
 
@@ -260,6 +268,27 @@ pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
   }
   // Need at least 6 stars from previous world to unlock next
   world_stars(game, world - 1) >= 6
+}
+
+///|
+pub fn manhattan_dist(a : Vec2i, b : Vec2i) -> Int {
+  let dx = a.x - b.x
+  let dy = a.y - b.y
+  (if dx < 0 { -dx } else { dx }) + (if dy < 0 { -dy } else { dy })
+}
+
+///|
+pub fn update_door_animations(maze_state : MazeState, dt : Float) -> Unit {
+  let speed : Float = 5.0
+  for ds in maze_state.door_states {
+    let target : Float = if ds.open { 1.0 } else { 0.0 }
+    if ds.anim_progress < target {
+      ds.anim_progress = minf(ds.anim_progress + dt * speed, 1.0)
+    } else if ds.anim_progress > target {
+      ds.anim_progress = maxf(ds.anim_progress - dt * speed, 0.0)
+    }
+    ds.prev_open = ds.open
+  }
 }
 
 ///|

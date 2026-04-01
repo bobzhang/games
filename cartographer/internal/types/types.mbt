@@ -61,4 +61,21 @@ pub(all) struct Game {
   mut hint_cells : Array[Vec2i]
   mut show_hints : Bool
   mut frame_count : Int
+  // Graduated hints
+  mut hint_level : HintLevel
+  mut hint_narrow_cells : Array[Vec2i]
+  mut hint_reveal_cell : Vec2i?
+  mut hint_feature : FeatureKind?
+  // Clue highlighting
+  mut hover_clue_index : Int
+  mut highlighted_cells : Array[Vec2i]
+  mut highlighted_clue_indices : Array[Int]
+  // Visual feedback
+  mut flash_timer : Float
+  mut flash_cell : Vec2i?
+  mut flash_is_error : Bool
+  mut clue_anim_indices : Array[Int]
+  mut clue_anim_timer : Float
+  // Parchment texture noise seed
+  mut parchment_seed : Int
 }

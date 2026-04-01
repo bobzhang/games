@@ -98,3 +98,70 @@ pub fn get_feature_placement_count(
   }
   count
 }
+
+///|
+pub fn compute_narrow_hint(
+  grid : Array[@types.FeatureKind?],
+  size : Int,
+  features_to_place : Array[@types.FeatureKind],
+  clues : Array[@types.Clue]
+) -> (Array[@types.Vec2i], @types.FeatureKind?) {
+  // Find the feature with the fewest valid positions (most constrained)
+  let needed = get_needed_features(grid, features_to_place)
+  let mut best_positions : Array[@types.Vec2i] = []
+  let mut best_feature : @types.FeatureKind? = None
+  let mut best_count = size * size + 1
+  for i in 0..<needed.length() {
+    let feature = needed[i]
+    let valid = find_valid_positions(grid, size, clues, feature)
+    if valid.length() > 0 && valid.length() < best_count {
+      best_count = valid.length()
+      best_positions = valid
+      best_feature = Some(feature)
+    }
+  }
+  (best_positions, best_feature)
+}
+
+///|
+pub fn compute_reveal_hint(
+  grid : Array[@types.FeatureKind?],
+  size : Int,
+  features_to_place : Array[@types.FeatureKind],
+  clues : Array[@types.Clue]
+) -> (@types.Vec2i?, @types.FeatureKind?) {
+  // Try to find a feature with exactly one valid position
+  let needed = get_needed_features(grid, features_to_place)
+  for i in 0..<needed.length() {
+    let feature = needed[i]
+    let valid = find_valid_positions(grid, size, clues, feature)
+    if valid.length() == 1 {
+      return (Some(valid[0]), Some(feature))
+    }
+  }
+  // Fallback: pick the most constrained feature, reveal its first valid position
+  let (positions, feat) = compute_narrow_hint(grid, size, features_to_place, clues)
+  if positions.length() > 0 {
+    (Some(positions[0]), feat)
+  } else {
+    (None, None)
+  }
+}
+
+///|
+pub fn get_needed_features_pub(
+  grid : Array[@types.FeatureKind?],
+  features_to_place : Array[@types.FeatureKind]
+) -> Array[@types.FeatureKind] {
+  get_needed_features(grid, features_to_place)
+}
+
+///|
+pub fn find_valid_positions_pub(
+  grid : Array[@types.FeatureKind?],
+  size : Int,
+  clues : Array[@types.Clue],
+  feature : @types.FeatureKind
+) -> Array[@types.Vec2i] {
+  find_valid_positions(grid, size, clues, feature)
+}

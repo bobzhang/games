@@ -60,3 +60,11 @@ pub(all) enum ClueStatus {
   Satisfied
   Violated
 } derive(Eq, Show)
+
+///|
+pub(all) enum HintLevel {
+  None
+  Narrow // First hint: highlight possible cells for a feature
+  Reveal // Second hint: highlight a specific cell
+  Answer // Third hint: auto-place the answer
+} derive(Eq, Show)

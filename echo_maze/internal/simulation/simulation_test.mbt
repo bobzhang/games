@@ -88,6 +88,8 @@ test "guard advances along patrol" {
     pos: patrol[0],
     patrol_index: 0,
     forward: true,
+    alert: Idle,
+    alert_timer: 0.0,
   }
   // Advance forward
   @simulation.advance_guard(guard_def, guard_state)
@@ -113,7 +115,15 @@ test "guard collision kills player" {
   let ms : @types.MazeState = {
     door_states: [],
     button_pressed: [],
-    guard_states: [{ pos: @types.vec2i(5, 3), patrol_index: 0, forward: true }],
+    guard_states: [
+      {
+        pos: @types.vec2i(5, 3),
+        patrol_index: 0,
+        forward: true,
+        alert: Idle,
+        alert_timer: 0.0,
+      },
+    ],
     collectibles_collected: [],
   }
   inspect(@simulation.check_guard_collision(player, ms), content="true")
@@ -129,7 +139,15 @@ test "guard adjacent collision" {
   let ms : @types.MazeState = {
     door_states: [],
     button_pressed: [],
-    guard_states: [{ pos: @types.vec2i(5, 4), patrol_index: 0, forward: true }],
+    guard_states: [
+      {
+        pos: @types.vec2i(5, 4),
+        patrol_index: 0,
+        forward: true,
+        alert: Idle,
+        alert_timer: 0.0,
+      },
+    ],
     collectibles_collected: [],
   }
   // Guard is directly south - should detect

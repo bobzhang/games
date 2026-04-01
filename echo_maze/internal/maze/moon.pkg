@@ -2,4 +2,8 @@ import {
   "bobzhang/games/echo_maze/internal/types",
 }
 
+import {
+  "bobzhang/games/echo_maze/internal/simulation",
+} for "test"
+
 warnings = "-missing_doc+unnecessary_annotation"

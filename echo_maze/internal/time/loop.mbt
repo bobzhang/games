@@ -110,11 +110,18 @@ pub fn advance_tick(game : @types.Game, move_dir : @types.Direction?) -> @simula
   for gs in maze_state.guard_states {
     guard_positions.push(gs.pos)
   }
+  let buttons_pressed : Array[Bool] = maze_state.button_pressed.copy()
+  let doors_open : Array[Bool] = []
+  for ds in maze_state.door_states {
+    doors_open.push(ds.open)
+  }
   game.timeline.push(
     {
       player_pos: game.player.pos,
       ghost_positions,
       guard_positions,
+      buttons_pressed,
+      doors_open,
     },
   )
   game.tick += 1

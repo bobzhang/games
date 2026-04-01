@@ -17,6 +17,7 @@ pub(all) struct Ghost {
   color : GhostColor
   mut pos : Vec2i
   mut active : Bool
+  trail_positions : Array[Vec2i] // history of positions for trail visualization
 } derive(Show)
 
 ///|
@@ -47,6 +48,8 @@ pub(all) struct GuardState {
   mut pos : Vec2i
   mut patrol_index : Int
   mut forward : Bool
+  mut alert : GuardAlertState
+  mut alert_timer : Float // countdown for alert state visual
 } derive(Show)
 
 ///|
@@ -66,6 +69,8 @@ pub(all) struct DoorState {
   door_id : Int
   mut open : Bool
   mut timer : Int
+  mut anim_progress : Float // 0.0 = closed, 1.0 = open (for smooth animation)
+  mut prev_open : Bool // track previous state for transition detection
 } derive(Show)
 
 ///|
@@ -102,6 +107,8 @@ pub(all) struct TimelineEntry {
   player_pos : Vec2i
   ghost_positions : Array[Vec2i]
   guard_positions : Array[Vec2i]
+  buttons_pressed : Array[Bool]
+  doors_open : Array[Bool]
 } derive(Show)
 
 ///|
@@ -132,4 +139,15 @@ pub(all) struct Game {
   mut result_stars : Int
   mut result_collectibles : Int
   mut result_total_collectibles : Int
+  mut restart_flash_timer : Float // visual flash on quick restart
+  mut ghost_button_feedback : Array[GhostButtonEvent] // feedback when ghost presses button
+  mut planning_paused : Bool // explicit pause indicator in planning mode
+  mut loop_transition_timer : Float // smooth transition between loops
+} derive(Show)
+
+///|
+pub(all) struct GhostButtonEvent {
+  ghost_index : Int
+  button_id : Int
+  mut timer : Float
 } derive(Show)

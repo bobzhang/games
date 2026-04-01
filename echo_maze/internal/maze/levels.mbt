@@ -396,6 +396,9 @@ pub fn get_all_levels() -> Array[@types.LevelDef] {
     },
   )
   // Level 3-8: "Echo Chamber" - Ultimate challenge
+  // ASCII: D at col 5 (id 0), D at col 9 (id 1), T at col 11 (id 2)
+  // Buttons: B0 links to D0, B1 links to D1, B2 links to T(but T is timed, not button-linked)
+  // Fix: button_id 2 should not link to timed door; timed door is id 2
   levels.push(
     {
       world: 2,
@@ -404,7 +407,6 @@ pub fn get_all_levels() -> Array[@types.LevelDef] {
       button_links: [
         { button_id: 0, door_id: 0 },
         { button_id: 1, door_id: 1 },
-        { button_id: 2, door_id: 2 },
       ],
       guard_patrols: [
         [
@@ -412,7 +414,7 @@ pub fn get_all_levels() -> Array[@types.LevelDef] {
           @types.vec2i(8, 3),
         ],
       ],
-      timed_door_durations: [(3, 5)],
+      timed_door_durations: [(2, 5)],
       par_loops: 3,
       name: "Echo Chamber",
     },

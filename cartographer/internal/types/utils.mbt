@@ -215,6 +215,19 @@ pub fn new_game(levels : Array[Level]) -> Game {
     hint_cells: [],
     show_hints: false,
     frame_count: 0,
+    hint_level: None,
+    hint_narrow_cells: [],
+    hint_reveal_cell: None,
+    hint_feature: None,
+    hover_clue_index: -1,
+    highlighted_cells: [],
+    highlighted_clue_indices: [],
+    flash_timer: 0.0,
+    flash_cell: None,
+    flash_is_error: false,
+    clue_anim_indices: [],
+    clue_anim_timer: 0.0,
+    parchment_seed: 42,
   }
 }
 
@@ -229,6 +242,18 @@ pub fn reset_level(game : Game) -> Unit {
   game.show_hints = false
   game.message = ""
   game.message_timer = 0.0
+  game.hint_level = None
+  game.hint_narrow_cells = []
+  game.hint_reveal_cell = None
+  game.hint_feature = None
+  game.hover_clue_index = -1
+  game.highlighted_cells = []
+  game.highlighted_clue_indices = []
+  game.flash_timer = 0.0
+  game.flash_cell = None
+  game.flash_is_error = false
+  game.clue_anim_indices = []
+  game.clue_anim_timer = 0.0
   // Reset clue statuses
   let level = game.levels[game.current_level]
   for i in 0..<level.clues.length() {
@@ -274,6 +299,62 @@ pub fn tier_level_range(tier : Tier) -> (Int, Int) {
     Explorer => (8, 17)
     Master => (17, 25)
   }
+}
+
+///|
+pub fn clue_references_feature(clue : Clue, kind : FeatureKind) -> Bool {
+  clue.feature_a == kind || clue.feature_b == kind
+}
+
+///|
+pub fn clues_referencing_feature(
+  clues : Array[Clue],
+  kind : FeatureKind
+) -> Array[Int] {
+  let result : Array[Int] = []
+  for i in 0..<clues.length() {
+    if clue_references_feature(clues[i], kind) {
+      result.push(i)
+    }
+  }
+  result
+}
+
+///|
+pub fn cells_referenced_by_clue(
+  clue : Clue,
+  grid : Array[FeatureKind?],
+  size : Int
+) -> Array[Vec2i] {
+  let cells : Array[Vec2i] = []
+  // Always include positions of feature_a and feature_b if placed
+  match find_feature_pos(grid, size, clue.feature_a) {
+    Some(p) => cells.push(p)
+    None => ()
+  }
+  if clue.kind != Not && clue.kind != Count {
+    match find_feature_pos(grid, size, clue.feature_b) {
+      Some(p) => cells.push(p)
+      None => ()
+    }
+  }
+  // For Count/Not clues, highlight the row or column
+  match clue.kind {
+    Count | Not =>
+      if clue.direction == N {
+        // Row-based
+        for i in 0..<size {
+          cells.push(vec2i(i, clue.row_col))
+        }
+      } else {
+        // Column-based
+        for i in 0..<size {
+          cells.push(vec2i(clue.row_col, i))
+        }
+      }
+    _ => ()
+  }
+  cells
 }
 
 ///|

@@ -2,4 +2,8 @@ import {
   "bobzhang/games/cartographer/internal/types",
 }
 
+import {
+  "bobzhang/games/cartographer/internal/levels",
+} for "test"
+
 warnings = "-missing_doc+unnecessary_annotation"

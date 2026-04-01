@@ -44,3 +44,10 @@ pub(all) enum GhostColor {
   Yellow
   Orange
 } derive(Eq, Show)
+
+///|
+pub(all) enum GuardAlertState {
+  Idle
+  Alert
+  Chasing
+} derive(Eq, Show)

@@ -79,6 +79,12 @@ pub fn advance_ghost(
     }
     None => () // Ghost stood still this tick
   }
+  // Record trail position
+  ghost.trail_positions.push(ghost.pos)
+  // Keep trail manageable (max 200 entries)
+  if ghost.trail_positions.length() > 200 {
+    let _ = ghost.trail_positions.remove(0)
+  }
 }
 
 ///|
@@ -230,6 +236,7 @@ pub fn advance_guard(
 
 ///|
 /// Check if player collides with any guard (caught!)
+/// Also updates guard alert states based on proximity
 pub fn check_guard_collision(
   player : @types.Player,
   maze_state : @types.MazeState
@@ -237,22 +244,35 @@ pub fn check_guard_collision(
   if !player.alive {
     return false
   }
+  let mut caught = false
   for gs in maze_state.guard_states {
+    let dist = @types.manhattan_dist(player.pos, gs.pos)
     if @types.vec2i_eq(player.pos, gs.pos) {
-      return true
-    }
-    // Also check adjacency (guards have 1-tile detection range)
-    let dx = player.pos.x - gs.pos.x
-    let dy = player.pos.y - gs.pos.y
-    if dx >= -1 && dx <= 1 && dy >= -1 && dy <= 1 && (dx != 0 || dy != 0) {
-      // Adjacent but not same tile - guards see diagonal too
-      // But only trigger if on same row or column (not diagonal)
-      if dx == 0 || dy == 0 {
-        return true
+      gs.alert = Chasing
+      gs.alert_timer = 2.0
+      caught = true
+    } else {
+      // Adjacent check (1-tile detection range, cardinal only)
+      let dx = player.pos.x - gs.pos.x
+      let dy = player.pos.y - gs.pos.y
+      if dx >= -1 && dx <= 1 && dy >= -1 && dy <= 1 && (dx != 0 || dy != 0) &&
+        (dx == 0 || dy == 0) {
+        gs.alert = Chasing
+        gs.alert_timer = 2.0
+        caught = true
+      } else if dist <= 3 {
+        // Near detection range - alert state
+        gs.alert = Alert
+        gs.alert_timer = 1.0
+      } else {
+        // Decay alert
+        if gs.alert_timer <= 0.0 {
+          gs.alert = Idle
+        }
       }
     }
   }
-  false
+  caught
 }
 
 ///|
@@ -364,6 +384,144 @@ pub fn count_collectibles(maze_state : @types.MazeState) -> Int {
     }
   }
   count
+}
+
+///|
+/// Detect which ghosts are pressing which buttons this tick
+pub fn detect_ghost_button_presses(
+  maze : @types.Maze,
+  ghosts : Array[@types.Ghost]
+) -> Array[(Int, Int)] {
+  let result : Array[(Int, Int)] = [] // (ghost_index, button_id)
+  for y in 0..<maze.height {
+    for x in 0..<maze.width {
+      match maze.tiles[y][x].kind {
+        Button(btn_id) => {
+          let pos = @types.vec2i(x, y)
+          for gi, ghost in ghosts {
+            if ghost.active && @types.vec2i_eq(ghost.pos, pos) {
+              result.push((gi, btn_id))
+            }
+          }
+        }
+        _ => ()
+      }
+    }
+  }
+  result
+}
+
+///|
+/// Preview ghost collision with guards at a given tick
+/// Returns array of (ghost_index, guard_index) collision pairs
+pub fn preview_ghost_guard_collisions(
+  ghosts : Array[@types.Ghost],
+  maze_state : @types.MazeState
+) -> Array[(Int, Int)] {
+  let collisions : Array[(Int, Int)] = []
+  for gi, ghost in ghosts {
+    if !ghost.active {
+      continue
+    }
+    for gsi, gs in maze_state.guard_states {
+      if @types.vec2i_eq(ghost.pos, gs.pos) {
+        collisions.push((gi, gsi))
+      }
+    }
+  }
+  collisions
+}
+
+///|
+/// Update guard alert timers (called per frame with dt)
+pub fn update_guard_alert_timers(
+  maze_state : @types.MazeState,
+  dt : Float
+) -> Unit {
+  for gs in maze_state.guard_states {
+    if gs.alert_timer > 0.0 {
+      gs.alert_timer -= dt
+    }
+    if gs.alert_timer <= 0.0 && gs.alert is (Alert | Chasing) {
+      gs.alert = Idle
+    }
+  }
+}
+
+///|
+/// Validate that a maze is structurally sound for gameplay
+pub fn validate_level_structure(
+  maze : @types.Maze,
+  level_def : @types.LevelDef
+) -> Array[String] {
+  let errors : Array[String] = []
+  // Check start tile is actually Start
+  if maze.start.y < maze.height && maze.start.x < maze.width {
+    match maze.tiles[maze.start.y][maze.start.x].kind {
+      Start => ()
+      _ => errors.push("Start position is not a Start tile")
+    }
+  } else {
+    errors.push("Start position out of bounds")
+  }
+  // Check exit tile is actually Exit
+  if maze.exit.y < maze.height && maze.exit.x < maze.width {
+    match maze.tiles[maze.exit.y][maze.exit.x].kind {
+      Exit => ()
+      _ => errors.push("Exit position is not an Exit tile")
+    }
+  } else {
+    errors.push("Exit position out of bounds")
+  }
+  // Validate button links: each button_id should have a corresponding tile
+  for link in level_def.button_links {
+    let mut found_button = false
+    let mut found_door = false
+    for y in 0..<maze.height {
+      for x in 0..<maze.width {
+        match maze.tiles[y][x].kind {
+          Button(id) => if id == link.button_id { found_button = true }
+          Door(id) | TimedDoor(id, _) =>
+            if id == link.door_id { found_door = true }
+          _ => ()
+        }
+      }
+    }
+    if !found_button {
+      errors.push("Button link references non-existent button \{link.button_id}")
+    }
+    if !found_door {
+      errors.push("Button link references non-existent door \{link.door_id}")
+    }
+  }
+  // Validate guard patrols: all positions should be on floor tiles
+  for pi, patrol in level_def.guard_patrols {
+    if patrol.length() < 2 {
+      errors.push("Guard patrol \{pi} has fewer than 2 waypoints")
+    }
+    for wi, waypoint in patrol {
+      if waypoint.y >= maze.height || waypoint.x >= maze.width || waypoint.y < 0 ||
+        waypoint.x < 0 {
+        errors.push(
+          "Guard patrol \{pi} waypoint \{wi} is out of bounds: (\{waypoint.x}, \{waypoint.y})",
+        )
+      } else {
+        let kind = maze.tiles[waypoint.y][waypoint.x].kind
+        match kind {
+          Wall =>
+            errors.push(
+              "Guard patrol \{pi} waypoint \{wi} is on a wall: (\{waypoint.x}, \{waypoint.y})",
+            )
+          _ => ()
+        }
+      }
+    }
+  }
+  // Validate par is achievable (par >= 1)
+  if level_def.par_loops < 1 {
+    errors.push("Par loops is less than 1")
+  }
+  errors
 }
 
 ///|
