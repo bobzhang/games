@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/menagerie/internal/types",
+  "bobzhang/games/menagerie/internal/habitat",
+  "bobzhang/games/menagerie/internal/levels",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
