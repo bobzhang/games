@@ -37,8 +37,44 @@ pub fn draw_guards(game : @types.Game) -> Unit {
       continue
     }
     draw_guard_vision_cone(g, game)
+    draw_guard_footstep_timing(g)
     draw_guard_body(g)
     draw_guard_detection_meter(g)
+  }
+}
+
+///|
+/// Draw footstep timing indicator under guard
+fn draw_guard_footstep_timing(g : @types.Guard) -> Unit {
+  // Only show for moving guard types
+  if g.kind is Sentinel {
+    return
+  }
+  // Show a small arc that fills as the move timer counts down
+  let interval : Float = match g.alert_state {
+    Patrolling => @types.guard_move_interval
+    Suspicious => @types.guard_move_interval * 0.8
+    Alert => @types.guard_move_interval * 0.5
+  }
+  if interval <= 0.0 {
+    return
+  }
+  let ratio : Float = 1.0 - g.move_timer / interval
+  let ratio_clamped : Float = @types.clampf(ratio, 0.0, 1.0)
+  // Draw small dots that light up as guard is about to step
+  let dot_count = 3
+  let dot_radius : Float = 2.0
+  let spread : Float = 10.0
+  let base_y : Float = g.py + Float::from_int(@types.tile_size) / 2.0 - 2.0
+  for d in 0..<dot_count {
+    let threshold : Float = Float::from_int(d + 1) / Float::from_int(dot_count)
+    let dx : Float = Float::from_int(d - 1) * spread
+    let alpha : Float = if ratio_clamped >= threshold { 120.0 } else { 30.0 }
+    @raylib.draw_circle_v(
+      @raylib.Vector2::new(g.px + dx, base_y),
+      dot_radius,
+      @raylib.Color::new(200, 200, 255, alpha.to_int()),
+    )
   }
 }
 
@@ -81,8 +117,46 @@ fn draw_guard_vision_cone(g : @types.Guard, game : @types.Game) -> Unit {
 }
 
 ///|
+/// Compute a smooth guard color that transitions based on detection meter
+fn smooth_guard_color(g : @types.Guard) -> @raylib.Color {
+  match g.alert_state {
+    Patrolling => {
+      // Blend from patrol green toward suspicious yellow based on detection
+      let t : Float = g.detection_meter
+      let r : Float = 50.0 + 205.0 * t
+      let gv : Float = 200.0 + 55.0 * t
+      let b : Float = 50.0 - 50.0 * t
+      @raylib.Color::new(
+        @types.clampi(r.to_int(), 0, 255),
+        @types.clampi(gv.to_int(), 0, 255),
+        @types.clampi(b.to_int(), 0, 255),
+        255,
+      )
+    }
+    Suspicious => {
+      // Pulse between yellow and orange based on timer
+      let pulse : Float = @types.sinf(g.suspicious_timer * 4.0) * 0.3 + 0.7
+      let r : Float = 255.0 * pulse
+      let gv : Float = 200.0 * pulse
+      @raylib.Color::new(
+        @types.clampi(r.to_int(), 0, 255),
+        @types.clampi(gv.to_int(), 0, 255),
+        30,
+        255,
+      )
+    }
+    Alert => {
+      // Flash red with intensity
+      let pulse : Float = @types.sinf(g.alert_timer * 6.0) * 0.2 + 0.8
+      let r : Float = 255.0 * pulse
+      @raylib.Color::new(@types.clampi(r.to_int(), 0, 255), 30, 30, 255)
+    }
+  }
+}
+
+///|
 fn draw_guard_body(g : @types.Guard) -> Unit {
-  let color = @types.guard_color(g.alert_state)
+  let color = smooth_guard_color(g)
   let half : Float = Float::from_int(@types.tile_size) / 2.0 - 6.0
   // Triangle pointing in facing direction
   let angle = g.facing_angle

@@ -46,6 +46,23 @@ fn draw_playing(game : @types.Game) -> Unit {
   draw_scanlines(game)
   // Draw HUD
   draw_hud(game)
+  // Detection pause flash
+  if game.detection_pause > 0.0 {
+    let flash_ratio : Float = game.detection_pause / @types.detection_pause_duration
+    let flash_alpha_f : Float = 80.0 * flash_ratio
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_width,
+      @types.screen_height,
+      @raylib.Color::new(
+        255,
+        50,
+        50,
+        @types.clampi(flash_alpha_f.to_int(), 0, 255),
+      ),
+    )
+  }
   // Fade effect when caught
   if game.fade_timer > 0.0 {
     let alpha = (game.fade_timer * 255.0).to_int()

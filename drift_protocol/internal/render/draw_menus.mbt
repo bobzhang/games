@@ -386,10 +386,11 @@ pub fn draw_hack_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_lines(px, py, panel_w, panel_h, @types.color_cyan)
   // Title
   @draw.draw_text("HIGH SECURITY HACK", px + 80, py + 15, 20, @types.color_neon_pink)
-  // Timer bar
+  // Timer bar with animated segments
   let bar_w = panel_w - 40
   let bar_h = 12
   let timer_ratio = hg.timer / hg.max_time
+  // Background
   @raylib.draw_rectangle(
     px + 20,
     py + 50,
@@ -397,12 +398,50 @@ pub fn draw_hack_overlay(game : @types.Game) -> Unit {
     bar_h,
     @raylib.Color::new(30, 30, 50, 255),
   )
-  @raylib.draw_rectangle(
+  // Animated fill with segment glow
+  let fill_w = (Float::from_int(bar_w) * timer_ratio).to_int()
+  let bar_color = if timer_ratio > 0.6 {
+    @types.color_cyan
+  } else if timer_ratio > 0.3 {
+    @types.color_guard_suspicious
+  } else {
+    @types.color_guard_alert
+  }
+  @raylib.draw_rectangle(px + 20, py + 50, fill_w, bar_h, bar_color)
+  // Glowing edge on the fill bar
+  if fill_w > 2 {
+    let pulse = @types.sinf(
+      Float::from_int(game.frame_count) * 0.2,
+    ) * 0.4 + 0.6
+    let glow_alpha_f : Float = 180.0 * pulse
+    let glow_alpha = glow_alpha_f.to_int()
+    @raylib.draw_rectangle(
+      px + 20 + fill_w - 3,
+      py + 50,
+      3,
+      bar_h,
+      @raylib.Color::new(255, 255, 255, @types.clampi(glow_alpha, 0, 255)),
+    )
+  }
+  // Tick marks for visual rhythm
+  let segments = 10
+  for seg in 1..<segments {
+    let tick_x = px + 20 + bar_w * seg / segments
+    @raylib.draw_line(
+      tick_x,
+      py + 50,
+      tick_x,
+      py + 50 + bar_h,
+      @raylib.Color::new(60, 60, 80, 120),
+    )
+  }
+  // Border
+  @raylib.draw_rectangle_lines(
     px + 20,
     py + 50,
-    (Float::from_int(bar_w) * timer_ratio).to_int(),
+    bar_w,
     bar_h,
-    if timer_ratio > 0.3 { @types.color_cyan } else { @types.color_guard_alert },
+    @raylib.Color::new(80, 80, 120, 255),
   )
   // Sequence display
   @draw.draw_text("MATCH THE SEQUENCE:", px + 100, py + 80, 14, @types.color_hud_text)

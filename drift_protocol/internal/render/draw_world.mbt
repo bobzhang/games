@@ -263,7 +263,7 @@ pub fn draw_exit_glow(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Draw noise ring
+/// Draw noise ring with expanding ripple effect
 pub fn draw_noise_ring(game : @types.Game) -> Unit {
   if game.noise_timer <= 0.0 || game.noise_radius == 0 {
     return
@@ -275,13 +275,51 @@ pub fn draw_noise_ring(game : @types.Game) -> Unit {
   let cy = Float::from_int(oy + game.noise_y * ts + ts / 2)
   let max_r = Float::from_int(game.noise_radius * ts)
   let alpha_ratio = game.noise_timer / @types.noise_decay_time
+  // Expanding ring: starts small, grows to full radius
+  let expand_t : Float = 1.0 - alpha_ratio
+  let current_r : Float = max_r * (0.3 + 0.7 * expand_t)
   let alpha_f : Float = 60.0 * alpha_ratio
   let alpha = alpha_f.to_int()
+  // Outer ring
   @raylib.draw_circle_lines_v(
     @raylib.Vector2::new(cx, cy),
-    max_r,
+    current_r,
     @raylib.Color::new(255, 255, 100, alpha),
   )
+  // Inner ring (slightly delayed)
+  let inner_alpha_f : Float = 40.0 * alpha_ratio
+  let inner_r = current_r * 0.6
+  if inner_r > 5.0 {
+    @raylib.draw_circle_lines_v(
+      @raylib.Vector2::new(cx, cy),
+      inner_r,
+      @raylib.Color::new(255, 255, 100, inner_alpha_f.to_int()),
+    )
+  }
+  // Tile highlight: tint tiles within noise radius
+  let nr = game.noise_radius
+  let tile_alpha_f : Float = 20.0 * alpha_ratio
+  let tile_alpha = tile_alpha_f.to_int()
+  if tile_alpha > 0 {
+    for dy in -nr..=nr {
+      for dx in -nr..=nr {
+        let tx = game.noise_x + dx
+        let ty = game.noise_y + dy
+        if @types.in_bounds(tx, ty) &&
+          @types.manhattan_dist(game.noise_x, game.noise_y, tx, ty) <= nr {
+          let px = ox + tx * ts
+          let py = oy + ty * ts
+          @raylib.draw_rectangle(
+            px,
+            py,
+            ts,
+            ts,
+            @raylib.Color::new(255, 255, 100, tile_alpha),
+          )
+        }
+      }
+    }
+  }
 }
 
 ///|

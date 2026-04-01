@@ -1,22 +1,24 @@
 ///|
 /// Corporate Tier - Level 1: "Lobby Infiltration"
-/// Simple introduction level with few guards
+/// Teaches movement, shadow tiles, and single guard avoidance.
+/// Generous shadows line the left corridor; one guard patrols a
+/// corridor with a clear gap for timing. Terminal and exit on right.
 fn level_1() -> @types.Level {
   let ascii : Array[String] = [
     "####################",
     "#S..~..........#...#",
-    "#..............#.T.#",
+    "#..~...........#.T.#",
     "#..~...G.......#...#",
-    "#......########D...#",
+    "#..~...########D...#",
     "#..~..........##...#",
-    "#.............#....#",
-    "#....G........#..X.#",
-    "#.............#....#",
+    "#..~..........#....#",
+    "#..~..G.......#..X.#",
+    "#..~..........#....#",
     "#..~..........######",
-    "#.............T....#",
-    "#....G.............#",
+    "#..~..........T....#",
+    "#..~...G...........#",
     "#..~...............#",
-    "#..................#",
+    "#..~...............#",
     "####################",
   ]
   parse_level("Lobby Infiltration", Corporate, ascii, 45.0)
@@ -24,7 +26,8 @@ fn level_1() -> @types.Level {
 
 ///|
 /// Corporate Tier - Level 2: "Server Room"
-/// Introduces lasers and power nodes
+/// Introduces power nodes, doors, and lasers. One guard patrols
+/// each half. A power node clearly gates a laser blocking the path.
 fn level_2() -> @types.Level {
   let ascii : Array[String] = [
     "####################",
@@ -48,7 +51,8 @@ fn level_2() -> @types.Level {
 
 ///|
 /// Corporate Tier - Level 3: "Executive Floor"
-/// Introduces sentinels and high-security terminals
+/// Introduces sentinel guards who rotate in place. No hack minigame
+/// yet - just avoidance and timing around stationary vision cones.
 fn level_3() -> @types.Level {
   let ascii : Array[String] = [
     "####################",
@@ -64,7 +68,7 @@ fn level_3() -> @types.Level {
     "#~~..#.....#..~~..##",
     "#~~..D.....D..~~..##",
     "#~~..#.....#..~~..##",
-    "#~~..#..H..#..~~X.##",
+    "#~~..#..T..#..~~X.##",
     "####################",
   ]
   parse_level("Executive Floor", Corporate, ascii, 75.0)
@@ -72,7 +76,8 @@ fn level_3() -> @types.Level {
 
 ///|
 /// Corporate Tier - Level 4: "Data Center"
-/// Full corporate challenge with cameras
+/// Introduces cameras and high-security terminals (hack minigame).
+/// Combines all corporate mechanics for a capstone challenge.
 fn level_4() -> @types.Level {
   let ascii : Array[String] = [
     "####################",
@@ -96,7 +101,8 @@ fn level_4() -> @types.Level {
 
 ///|
 /// Military Tier - Level 5: "Perimeter Breach"
-/// Introduction to military difficulty
+/// Introduces hunter guards. More guards overall, but layout
+/// offers shadow corridors. First encounter with a hunter.
 fn level_5() -> @types.Level {
   let ascii : Array[String] = [
     "####################",

@@ -30,6 +30,11 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     game.screen = Paused
     return
   }
+  // Detection pause: brief freeze when first spotted
+  if game.detection_pause > 0.0 {
+    game.detection_pause -= dt
+    return
+  }
   // Update time
   game.time_played += dt
   // Process player input
@@ -46,13 +51,37 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     game.player.target_py,
     lerp_speed,
   )
+  // Smooth camera offset towards player position
+  let target_cam_x = game.player.px - @types.tile_to_pixel_x(
+    @types.grid_width / 2,
+  )
+  let target_cam_y = game.player.py - @types.tile_to_pixel_y(
+    @types.grid_height / 2,
+  )
+  let cam_lerp : Float = @types.camera_smooth_speed * dt
+  game.camera_offset_x = @types.lerpf(
+    game.camera_offset_x,
+    target_cam_x * 0.15,
+    cam_lerp,
+  )
+  game.camera_offset_y = @types.lerpf(
+    game.camera_offset_y,
+    target_cam_y * 0.15,
+    cam_lerp,
+  )
   // Update stealth state
   @stealth.update_shadow_state(game)
   @stealth.update_detection(game)
   @stealth.update_noise(game, dt)
+  // Track detection count before guard update for pause trigger
+  let prev_detected = game.player.detected_count
   // Update guard AI
   @guard.update_guards(game, dt)
   @guard.update_cameras(game, dt)
+  // Trigger detection pause if newly detected
+  if game.player.detected_count > prev_detected {
+    game.detection_pause = @types.detection_pause_duration
+  }
   // Check if player caught by alert guard
   if @stealth.check_player_caught(game) {
     // Player caught - reset to start of level
@@ -101,6 +130,9 @@ pub fn start_level(game : @types.Game, index : Int) -> Unit {
   game.noise_timer = 0.0
   game.coin_active = false
   game.fade_timer = 0.0
+  game.detection_pause = 0.0
+  game.camera_offset_x = 0.0
+  game.camera_offset_y = 0.0
   game.message = ""
   game.message_timer = 0.0
   game.screen = Playing
@@ -136,5 +168,8 @@ fn reset_guards(game : @types.Game) -> Unit {
     g.detection_meter = 0.0
     g.patrol_index = 0
     g.patrol_forward = true
+    g.searching = false
+    g.search_index = 0
+    g.look_timer = 0.0
   }
 }
