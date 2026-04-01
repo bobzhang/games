@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/erode/internal/types",
+  "bobzhang/games/erode/internal/erosion",
+  "bobzhang/games/erode/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
