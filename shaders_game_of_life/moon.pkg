@@ -7,7 +7,7 @@
 // }
 //
 // options(
-//   "is-main": true,
+//   // "is-main": true,
 //   overrides: ["tonyfettes/raygui/backend/raylib"],
 // )
 
