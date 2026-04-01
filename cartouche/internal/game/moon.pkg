@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/cartouche/internal/types",
+  "bobzhang/games/cartouche/internal/levels",
+  "bobzhang/games/cartouche/internal/decoder",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
