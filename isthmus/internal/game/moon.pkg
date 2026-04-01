@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/isthmus/internal/types",
+  "bobzhang/games/isthmus/internal/terrain",
+  "bobzhang/games/isthmus/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

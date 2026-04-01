@@ -1,0 +1,10 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/isthmus/internal/types",
+  "bobzhang/games/isthmus/internal/terrain",
+  "bobzhang/games/isthmus/internal/levels",
+  "bobzhang/games/utils/draw",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
