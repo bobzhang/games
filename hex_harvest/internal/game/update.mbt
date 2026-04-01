@@ -47,8 +47,10 @@ pub fn update(game : @types.Game) -> Unit {
 fn update_playing(game : @types.Game) -> Unit {
   // Update hover
   update_hover(game)
-  // Process input
-  process_playing_input(game)
+  // Only process input when not in the middle of turn resolution
+  if game.turn_phase == Idle {
+    process_playing_input(game)
+  }
 }
 
 ///|
@@ -176,8 +178,12 @@ fn process_playing_input(game : @types.Game) -> Unit {
         }
         ChannelPlace => tile.has_channel = true
       }
-      // Execute turn
-      execute_turn(game)
+      // Click feedback
+      game.click_feedback_timer = 0.3
+      game.click_feedback_col = game.hover_col
+      game.click_feedback_row = game.hover_row
+      // Execute turn with staged animation
+      begin_staged_turn(game)
     }
   }
   // Remove crop on right-click
@@ -200,7 +206,7 @@ fn process_playing_input(game : @types.Game) -> Unit {
   // End turn without placing (Enter)
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
     save_undo(game)
-    execute_turn(game)
+    begin_staged_turn(game)
   }
   // Undo
   if @raylib.is_key_pressed(@raylib.KeyU) {
@@ -219,7 +225,7 @@ fn process_playing_input(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Execute a turn: water flow -> crop growth -> harvest
+/// Execute a turn: water flow -> crop growth -> harvest (all at once, for tests)
 pub fn execute_turn(game : @types.Game) -> Unit {
   game.turn += 1
   // 1. Water flows
@@ -238,10 +244,61 @@ pub fn execute_turn(game : @types.Game) -> Unit {
   // 4. Check goals (harvested crops on goal tiles)
   check_goals(game)
   // 5. Check end conditions
+  check_end_conditions(game)
+}
+
+///|
+/// Start staged turn resolution with animation beats
+fn begin_staged_turn(game : @types.Game) -> Unit {
+  game.turn += 1
+  game.turn_phase = Placing
+  game.phase_timer = 0.15 // Brief pause after placement
+}
+
+///|
+/// Advance to the next phase in the staged turn sequence
+fn advance_turn_phase(game : @types.Game) -> Unit {
+  match game.turn_phase {
+    Placing => {
+      // Phase 1: Water flows
+      game.turn_phase = Flowing
+      let new_water = @water.flow_water(game.level.grid)
+      game.newly_watered = new_water
+      game.water_anim_timer = 0.8
+      game.phase_timer = 0.35
+    }
+    Flowing => {
+      // Phase 2: Crops grow
+      game.turn_phase = Growing
+      let _matured = @crops.grow_crops(game.level.grid)
+      game.phase_timer = 0.25
+    }
+    Growing => {
+      // Phase 3: Harvest
+      game.turn_phase = Harvesting
+      let (yield_gained, harvested) = @crops.harvest_mature(game.level.grid)
+      if yield_gained > 0 {
+        game.yield_collected += yield_gained
+        game.newly_harvested = harvested
+        game.harvest_anim_timer = 1.2
+      }
+      game.phase_timer = 0.3
+    }
+    Harvesting => {
+      // Done - check goals and end conditions
+      game.turn_phase = Idle
+      check_goals(game)
+      check_end_conditions(game)
+    }
+    Idle => ()
+  }
+}
+
+///|
+fn check_end_conditions(game : @types.Game) -> Unit {
   if game.yield_collected >= game.level.target_yield {
     complete_level(game)
   } else if game.turn >= game.level.turn_budget {
-    // Out of turns - still show results
     game.score = calculate_score(game)
     game.level_complete = false
     game.screen = Results
@@ -289,6 +346,11 @@ pub fn start_level(game : @types.Game, index : Int) -> Unit {
   game.message = ""
   game.message_timer = 0.0
   game.score = @types.new_level_score()
+  game.turn_phase = Idle
+  game.phase_timer = 0.0
+  game.click_feedback_timer = 0.0
+  game.click_feedback_col = -1
+  game.click_feedback_row = -1
   game.screen = Playing
   @types.set_message(game, game.level.name, 2.0)
 }
@@ -380,11 +442,14 @@ pub fn undo(game : @types.Game) -> Unit {
       game.turn = s.turn
       game.yield_collected = s.yield_collected
       game.goals_collected = s.goals_collected
+      // Snap-clear all animations for instant feel
       game.newly_watered = []
       game.newly_harvested = []
       game.water_anim_timer = 0.0
       game.harvest_anim_timer = 0.0
-      @types.set_message(game, "Undone", 0.8)
+      game.turn_phase = Idle
+      game.phase_timer = 0.0
+      @types.set_message(game, "Undone", 0.5)
     }
     None => ()
   }

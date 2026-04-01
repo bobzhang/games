@@ -116,11 +116,11 @@ test "level_09_solution_valid" {
   let ok = verify_solution(
     levels[8],
     [
-      (Mountain, 3, 2),
-      (Town, 4, 2),
-      (River, 3, 5),
-      (Forest, 6, 2),
-      (Lake, 6, 3),
+      (Mountain, 0, 0),
+      (Forest, 4, 0),
+      (Town, 1, 1),
+      (River, 2, 1),
+      (Lake, 3, 1),
     ],
   )
   inspect(ok, content="true")
@@ -197,12 +197,12 @@ test "level_14_solution_valid" {
   let ok = verify_solution(
     levels[13],
     [
-      (Town, 3, 3),
-      (Mountain, 3, 0),
-      (Lake, 6, 3),
-      (Forest, 0, 3),
-      (River, 3, 6),
-      (Desert, 6, 6),
+      (Mountain, 0, 0),
+      (Desert, 3, 0),
+      (Lake, 4, 0),
+      (Town, 2, 1),
+      (River, 0, 2),
+      (Forest, 1, 3),
     ],
   )
   inspect(ok, content="true")
@@ -214,12 +214,12 @@ test "level_15_solution_valid" {
   let ok = verify_solution(
     levels[14],
     [
-      (Town, 2, 2),
-      (Mountain, 5, 2),
-      (Forest, 2, 5),
-      (Lake, 5, 5),
-      (River, 3, 2),
-      (Road, 4, 2),
+      (Mountain, 0, 0),
+      (River, 1, 0),
+      (Lake, 2, 0),
+      (Road, 1, 1),
+      (Town, 2, 1),
+      (Forest, 0, 2),
     ],
   )
   inspect(ok, content="true")
@@ -248,13 +248,13 @@ test "level_17_solution_valid" {
   let ok = verify_solution(
     levels[16],
     [
-      (Town, 3, 1),
-      (Mountain, 6, 1),
-      (Forest, 3, 4),
-      (Lake, 6, 4),
-      (River, 0, 4),
-      (Road, 3, 7),
-      (Desert, 6, 7),
+      (Desert, 0, 0),
+      (Mountain, 1, 0),
+      (River, 2, 0),
+      (Road, 3, 0),
+      (Town, 0, 2),
+      (Lake, 3, 2),
+      (Forest, 2, 3),
     ],
   )
   inspect(ok, content="true")
@@ -266,13 +266,13 @@ test "level_18_solution_valid" {
   let ok = verify_solution(
     levels[17],
     [
-      (Town, 2, 1),
-      (Mountain, 5, 1),
-      (Forest, 2, 4),
-      (Lake, 5, 4),
-      (River, 2, 7),
-      (Desert, 5, 7),
-      (Road, 3, 1),
+      (Desert, 0, 0),
+      (Mountain, 1, 0),
+      (River, 2, 0),
+      (Road, 0, 1),
+      (Lake, 3, 1),
+      (Town, 0, 2),
+      (Forest, 2, 3),
     ],
   )
   inspect(ok, content="true")
@@ -284,13 +284,13 @@ test "level_19_solution_valid" {
   let ok = verify_solution(
     levels[18],
     [
-      (Town, 1, 2),
-      (Mountain, 4, 2),
-      (Lake, 7, 2),
-      (Forest, 1, 5),
-      (River, 4, 5),
-      (Desert, 7, 5),
-      (Road, 1, 7),
+      (River, 0, 0),
+      (Mountain, 1, 0),
+      (Desert, 2, 0),
+      (Lake, 4, 0),
+      (Town, 0, 2),
+      (Road, 1, 2),
+      (Forest, 2, 3),
     ],
   )
   inspect(ok, content="true")
@@ -320,13 +320,13 @@ test "level_21_solution_valid" {
   let ok = verify_solution(
     levels[20],
     [
-      (Town, 2, 2),
-      (Mountain, 5, 2),
-      (Forest, 2, 5),
-      (Lake, 5, 5),
-      (River, 7, 2),
-      (Desert, 7, 5),
-      (Road, 0, 2),
+      (Road, 0, 0),
+      (Mountain, 1, 0),
+      (River, 2, 0),
+      (Desert, 4, 0),
+      (Lake, 3, 1),
+      (Town, 0, 2),
+      (Forest, 2, 3),
     ],
   )
   inspect(ok, content="true")
@@ -358,12 +358,12 @@ test "level_23_solution_valid" {
     levels[22],
     [
       (Town, 3, 0),
-      (Mountain, 3, 3),
-      (Lake, 3, 6),
+      (Desert, 4, 0),
+      (Mountain, 1, 1),
+      (River, 4, 1),
+      (Lake, 3, 2),
+      (Road, 4, 2),
       (Forest, 0, 3),
-      (River, 6, 3),
-      (Desert, 6, 0),
-      (Road, 6, 6),
     ],
   )
   inspect(ok, content="true")
@@ -375,14 +375,14 @@ test "level_24_solution_valid" {
   let ok = verify_solution(
     levels[23],
     [
-      (Town, 1, 1),
-      (Mountain, 1, 4),
-      (Forest, 1, 7),
-      (Lake, 4, 1),
-      (River, 4, 4),
-      (Desert, 4, 7),
-      (Road, 7, 1),
-      (Town, 7, 4),
+      (Mountain, 0, 0),
+      (Town, 1, 0),
+      (Desert, 2, 0),
+      (Lake, 3, 0),
+      (Road, 6, 0),
+      (Town, 7, 0),
+      (River, 1, 1),
+      (Forest, 2, 1),
     ],
   )
   inspect(ok, content="true")

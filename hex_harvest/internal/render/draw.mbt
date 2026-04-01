@@ -27,10 +27,14 @@ fn draw_playing(game : @types.Game) -> Unit {
   draw_goals(game)
   // Draw hover highlight
   draw_hover(game)
+  // Draw click feedback
+  draw_click_feedback(game)
   // Draw water flow preview
   draw_water_preview(game)
   // Draw adjacency preview
   draw_adjacency_preview(game)
+  // Draw turn phase indicator
+  draw_phase_indicator(game)
   // Draw harvest animation
   draw_harvest_anim(game)
   // Draw UI

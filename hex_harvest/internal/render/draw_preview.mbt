@@ -162,6 +162,62 @@ fn draw_projected_yield(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draw click confirmation feedback (expanding ring)
+fn draw_click_feedback(game : @types.Game) -> Unit {
+  if game.click_feedback_timer <= 0.0 {
+    return
+  }
+  if !@types.hex_in_bounds(game.click_feedback_col, game.click_feedback_row) {
+    return
+  }
+  let (cx, cy) = @hex.hex_screen_pos(
+    game.click_feedback_col,
+    game.click_feedback_row,
+  )
+  let size = Float::from_int(@types.hex_size)
+  let max_time : Float = 0.3
+  let t : Float = @types.clampf(
+    (max_time - game.click_feedback_timer) * 3.333,
+    0.0,
+    1.0,
+  )
+  let ring_size : Float = size * (0.5 + t * 0.6)
+  let fade : Float = 1.0 - t
+  let alpha = @types.clampi((fade * 200.0).to_int(), 0, 200)
+  draw_hex_outline(
+    cx,
+    cy,
+    ring_size,
+    @raylib.Color::new(255, 255, 200, alpha),
+  )
+}
+
+///|
+/// Draw turn phase indicator during staged resolution
+fn draw_phase_indicator(game : @types.Game) -> Unit {
+  match game.turn_phase {
+    Idle => ()
+    _ => {
+      let phase_text = match game.turn_phase {
+        Placing => "Placing..."
+        Flowing => "Water flowing..."
+        Growing => "Crops growing..."
+        Harvesting => "Harvesting!"
+        Idle => ""
+      }
+      let tw = @draw.measure_text(phase_text, 18)
+      @draw.draw_text(
+        phase_text,
+        (@types.screen_width - tw) / 2,
+        @types.screen_height - 65,
+        18,
+        @raylib.Color::new(200, 220, 180, 200),
+      )
+    }
+  }
+}
+
+///|
 /// Draw harvest animation (floating numbers)
 fn draw_harvest_anim(game : @types.Game) -> Unit {
   if game.harvest_anim_timer <= 0.0 {

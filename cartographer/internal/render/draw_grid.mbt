@@ -11,21 +11,22 @@ fn vec2(x : Int, y : Int) -> @raylib.Vector2 {
 ///|
 fn draw_playing(game : @types.Game) -> Unit {
   let level = game.levels[game.current_level]
-  // Draw parchment background for grid
-  @raylib.draw_rectangle(
-    @types.grid_offset_x - 10,
-    @types.grid_offset_y - 10,
-    @types.grid_size * @types.cell_size + 20,
-    @types.grid_size * @types.cell_size + 20,
-    @types.color_parchment,
-  )
-  @raylib.draw_rectangle_lines(
-    @types.grid_offset_x - 10,
-    @types.grid_offset_y - 10,
-    @types.grid_size * @types.cell_size + 20,
-    @types.grid_size * @types.cell_size + 20,
-    @types.color_mountain,
-  )
+  let gw = @types.grid_size * @types.cell_size + 20
+  let gh = @types.grid_size * @types.cell_size + 20
+  let gx = @types.grid_offset_x - 10
+  let gy = @types.grid_offset_y - 10
+  // Parchment background with layered texture effect
+  @raylib.draw_rectangle(gx, gy, gw, gh, @types.color_parchment)
+  // Parchment texture: subtle stipple dots
+  draw_parchment_texture(gx, gy, gw, gh, game.parchment_seed)
+  // Dark border with double-line for aged map feel
+  @raylib.draw_rectangle_lines(gx, gy, gw, gh, @types.color_compass_ring)
+  @raylib.draw_rectangle_lines(gx + 2, gy + 2, gw - 4, gh - 4, @types.color_parchment_border)
+  // Corner decorations
+  draw_corner_flourish(gx, gy)
+  draw_corner_flourish(gx + gw, gy)
+  draw_corner_flourish(gx, gy + gh)
+  draw_corner_flourish(gx + gw, gy + gh)
   // Draw grid lines
   for i in 0..=@types.grid_size {
     let x = @types.grid_offset_x + i * @types.cell_size
@@ -76,17 +77,102 @@ fn draw_playing(game : @types.Game) -> Unit {
       }
     }
   }
-  // Draw hint highlights
-  if game.show_hints {
-    for i in 0..<game.hint_cells.length() {
-      let h = game.hint_cells[i]
+  // Draw clue-referenced cell highlights (when hovering a clue)
+  for i in 0..<game.highlighted_cells.length() {
+    let h = game.highlighted_cells[i]
+    if h.x >= 0 && h.x < @types.grid_size && h.y >= 0 && h.y < @types.grid_size {
       @raylib.draw_rectangle(
-        @types.grid_offset_x + h.x * @types.cell_size + 2,
-        @types.grid_offset_y + h.y * @types.cell_size + 2,
-        @types.cell_size - 4,
-        @types.cell_size - 4,
-        @types.color_hint,
+        @types.grid_offset_x + h.x * @types.cell_size + 1,
+        @types.grid_offset_y + h.y * @types.cell_size + 1,
+        @types.cell_size - 2,
+        @types.cell_size - 2,
+        @types.color_clue_highlight,
       )
+    }
+  }
+  // Draw graduated hint highlights
+  if game.show_hints {
+    match game.hint_level {
+      Narrow =>
+        // Show all possible cells with a subtle highlight
+        for i in 0..<game.hint_narrow_cells.length() {
+          let h = game.hint_narrow_cells[i]
+          @raylib.draw_rectangle(
+            @types.grid_offset_x + h.x * @types.cell_size + 2,
+            @types.grid_offset_y + h.y * @types.cell_size + 2,
+            @types.cell_size - 4,
+            @types.cell_size - 4,
+            @types.color_hint_narrow,
+          )
+        }
+      Reveal | Answer =>
+        // Show the specific revealed cell with bright highlight
+        match game.hint_reveal_cell {
+          Some(h) => {
+            // Pulsing effect
+            let pulse = @raylib.get_time().to_float() * 4.0
+            let alpha = 80 + (pulse.sin() * 40.0).to_int().abs()
+            let reveal_color = @raylib.Color::new(100, 255, 100, alpha)
+            @raylib.draw_rectangle(
+              @types.grid_offset_x + h.x * @types.cell_size + 2,
+              @types.grid_offset_y + h.y * @types.cell_size + 2,
+              @types.cell_size - 4,
+              @types.cell_size - 4,
+              reveal_color,
+            )
+            // Draw the feature name below
+            match game.hint_feature {
+              Some(f) => {
+                let name = @types.feature_name(f)
+                let tx = @types.grid_offset_x +
+                  h.x * @types.cell_size +
+                  @types.cell_size / 2 -
+                  @draw.measure_text(name, 12) / 2
+                let ty = @types.grid_offset_y +
+                  h.y * @types.cell_size +
+                  @types.cell_size -
+                  4
+                @draw.draw_text(name, tx, ty, 12, @types.color_clue_satisfied)
+              }
+              None => ()
+            }
+          }
+          None => ()
+        }
+      None =>
+        // Legacy: show forced cells
+        for i in 0..<game.hint_cells.length() {
+          let h = game.hint_cells[i]
+          @raylib.draw_rectangle(
+            @types.grid_offset_x + h.x * @types.cell_size + 2,
+            @types.grid_offset_y + h.y * @types.cell_size + 2,
+            @types.cell_size - 4,
+            @types.cell_size - 4,
+            @types.color_hint,
+          )
+        }
+    }
+  }
+  // Draw flash feedback (placement confirmation or error)
+  if game.flash_timer > 0.0 {
+    match game.flash_cell {
+      Some(fc) => {
+        let flash_alpha_f = game.flash_timer / 0.5 * 150.0
+        let flash_alpha = flash_alpha_f.to_int()
+        let flash_color = if game.flash_is_error {
+          @raylib.Color::new(255, 50, 50, flash_alpha)
+        } else {
+          @raylib.Color::new(50, 200, 50, flash_alpha)
+        }
+        @raylib.draw_rectangle(
+          @types.grid_offset_x + fc.x * @types.cell_size,
+          @types.grid_offset_y + fc.y * @types.cell_size,
+          @types.cell_size,
+          @types.cell_size,
+          flash_color,
+        )
+      }
+      None => ()
     }
   }
   // Draw hover highlight
@@ -155,9 +241,15 @@ fn draw_playing(game : @types.Game) -> Unit {
       @types.color_town,
     )
   }
-  // Draw controls help
+  // Draw controls help with hint level indicator
+  let hint_text = match game.hint_level {
+    None => "H:Hint(1/3)"
+    Narrow => "H:Hint(2/3)"
+    Reveal => "H:Hint(3/3)"
+    Answer => "H:Reset Hints"
+  }
   @draw.draw_text(
-    "H:Hint  R:Restart  Esc:Back",
+    "\{hint_text}  R:Restart  Esc:Back  Right-click:Remove",
     @types.grid_offset_x,
     @types.screen_height - 30,
     16,
@@ -182,68 +274,261 @@ fn draw_feature_with_color(
   let half = size / 2
   match feature {
     Mountain => {
+      // Main peak
       let v1 = vec2(cx, cy - half)
       let v2 = vec2(cx - half, cy + half)
       let v3 = vec2(cx + half, cy + half)
       @raylib.draw_triangle(v1, v2, v3, color)
+      // Snow cap
+      let cap_h = half / 3
+      let cap_w = half / 3
+      let white_color = @raylib.Color::new(
+        240, 240, 255, color.a.to_int(),
+      )
+      @raylib.draw_triangle(
+        vec2(cx, cy - half),
+        vec2(cx - cap_w, cy - half + cap_h),
+        vec2(cx + cap_w, cy - half + cap_h),
+        white_color,
+      )
+      // Secondary smaller peak
+      if size > 20 {
+        let sx = cx + half / 3
+        let sy = cy + half / 4
+        let small_h = half / 3
+        let darker = @raylib.Color::new(
+          120, 75, 35, color.a.to_int(),
+        )
+        @raylib.draw_triangle(
+          vec2(sx, sy - small_h),
+          vec2(sx - small_h, sy + small_h),
+          vec2(sx + small_h, sy + small_h),
+          darker,
+        )
+      }
     }
     River => {
+      // Wavy river with 3 curves
+      let seg = half * 2 / 3
       @raylib.draw_line_ex(
-        vec2(cx - half, cy - half / 2),
-        vec2(cx, cy + half / 2),
+        vec2(cx - half, cy - seg / 2),
+        vec2(cx - half / 3, cy + seg / 3),
         3.0,
         color,
       )
       @raylib.draw_line_ex(
-        vec2(cx, cy + half / 2),
-        vec2(cx + half, cy - half / 2),
+        vec2(cx - half / 3, cy + seg / 3),
+        vec2(cx + half / 3, cy - seg / 3),
         3.0,
         color,
       )
+      @raylib.draw_line_ex(
+        vec2(cx + half / 3, cy - seg / 3),
+        vec2(cx + half, cy + seg / 2),
+        3.0,
+        color,
+      )
+      // Water shine dots
+      if size > 20 {
+        let shine = @raylib.Color::new(
+          150, 200, 255, color.a.to_int(),
+        )
+        @raylib.draw_circle(cx - half / 4, cy + 1, 2.0, shine)
+        @raylib.draw_circle(cx + half / 4, cy - 2, 2.0, shine)
+      }
     }
     Forest => {
-      @raylib.draw_circle(cx, cy, fi(half), color)
-      let inner = @raylib.Color::new(20, 100, 20, 255)
-      @raylib.draw_circle(cx, cy - 4, fi(half - 8), inner)
+      // Tree trunk
+      let trunk = @raylib.Color::new(
+        100, 60, 30, color.a.to_int(),
+      )
+      @raylib.draw_rectangle(cx - 2, cy + half / 3, 4, half / 2, trunk)
+      // Main canopy (layered circles for fullness)
+      @raylib.draw_circle(cx, cy - half / 6, fi(half * 2 / 3), color)
+      let inner = @raylib.Color::new(
+        20, 100, 20, color.a.to_int(),
+      )
+      @raylib.draw_circle(
+        cx - half / 4, cy - half / 3, fi(half / 3), inner,
+      )
+      @raylib.draw_circle(
+        cx + half / 4, cy - half / 3, fi(half / 3), inner,
+      )
+      // Highlight
+      if size > 20 {
+        let light = @raylib.Color::new(
+          60, 170, 60, color.a.to_int(),
+        )
+        @raylib.draw_circle(cx, cy - half / 2, fi(half / 4), light)
+      }
     }
     Town => {
-      @raylib.draw_rectangle(cx - half, cy - half, size, size, color)
-      let win_color = @raylib.Color::new(255, 200, 150, 255)
+      // Main building
       @raylib.draw_rectangle(
-        cx - half / 3,
-        cy - half / 3,
-        half * 2 / 3,
-        half * 2 / 3,
-        win_color,
+        cx - half * 2 / 3, cy - half / 3, half * 4 / 3, half * 4 / 3, color,
+      )
+      // Roof (triangle)
+      let roof_color = @raylib.Color::new(
+        150, 25, 25, color.a.to_int(),
+      )
+      @raylib.draw_triangle(
+        vec2(cx, cy - half),
+        vec2(cx - half * 2 / 3, cy - half / 3),
+        vec2(cx + half * 2 / 3, cy - half / 3),
+        roof_color,
+      )
+      // Windows
+      let win_color = @raylib.Color::new(
+        255, 220, 150, color.a.to_int(),
+      )
+      let ww = half / 4
+      @raylib.draw_rectangle(cx - ww - 2, cy, ww, ww, win_color)
+      @raylib.draw_rectangle(cx + 2, cy, ww, ww, win_color)
+      // Door
+      let door_color = @raylib.Color::new(
+        100, 60, 30, color.a.to_int(),
+      )
+      @raylib.draw_rectangle(
+        cx - ww / 2,
+        cy + half / 3,
+        ww,
+        half * 2 / 3 - half / 3,
+        door_color,
       )
     }
     Lake => {
+      // Water body
       @raylib.draw_ellipse(cx, cy, fi(half), fi(half * 2 / 3), color)
+      // Shore highlight
+      let shore = @raylib.Color::new(
+        100, 170, 230, color.a.to_int(),
+      )
+      @raylib.draw_ellipse(
+        cx - 2, cy - 2, fi(half * 2 / 3), fi(half / 2), shore,
+      )
+      // Water sparkle
+      if size > 20 {
+        let sparkle = @raylib.Color::new(
+          200, 230, 255, color.a.to_int(),
+        )
+        @raylib.draw_circle(cx - half / 4, cy - half / 6, 2.0, sparkle)
+      }
     }
     Desert => {
+      // Sand dune shape
       let v1 = vec2(cx, cy - half)
       let v2 = vec2(cx - half, cy)
       let v3 = vec2(cx + half, cy)
       let v4 = vec2(cx, cy + half)
       @raylib.draw_triangle(v1, v2, v3, color)
       @raylib.draw_triangle(v2, v4, v3, color)
+      // Dune ripple lines
+      if size > 20 {
+        let ripple = @raylib.Color::new(
+          200, 170, 80, color.a.to_int(),
+        )
+        @raylib.draw_line(
+          cx - half / 2, cy - half / 4, cx + half / 2, cy - half / 4, ripple,
+        )
+        @raylib.draw_line(
+          cx - half / 3, cy + half / 4, cx + half / 3, cy + half / 4, ripple,
+        )
+      }
+      // Cactus hint
+      if size > 24 {
+        let green = @raylib.Color::new(
+          60, 130, 40, color.a.to_int(),
+        )
+        @raylib.draw_line_ex(
+          vec2(cx + half / 3, cy - 2),
+          vec2(cx + half / 3, cy + half / 3),
+          2.0,
+          green,
+        )
+      }
     }
     Road => {
-      @raylib.draw_line_ex(vec2(cx - half, cy), vec2(cx + half, cy), 4.0, color)
-      @raylib.draw_circle(cx - half / 2, cy, 3.0, color)
-      @raylib.draw_circle(cx + half / 2, cy, 3.0, color)
+      // Road path
+      @raylib.draw_line_ex(
+        vec2(cx - half, cy), vec2(cx + half, cy), 5.0, color,
+      )
+      // Road edges (lighter)
+      let edge = @raylib.Color::new(
+        180, 180, 180, color.a.to_int(),
+      )
+      @raylib.draw_line(cx - half, cy - 3, cx + half, cy - 3, edge)
+      @raylib.draw_line(cx - half, cy + 3, cx + half, cy + 3, edge)
+      // Center dashes
+      let dash = @raylib.Color::new(
+        220, 220, 200, color.a.to_int(),
+      )
+      @raylib.draw_line(cx - half / 2, cy, cx - half / 4, cy, dash)
+      @raylib.draw_line(cx + half / 4, cy, cx + half / 2, cy, dash)
     }
   }
 }
 
 ///|
 fn draw_compass_rose(cx : Int, cy : Int) -> Unit {
-  let size = 20
-  let color = @types.color_mountain
-  @raylib.draw_line(cx, cy - size, cx, cy + size, color)
-  @raylib.draw_line(cx - size, cy, cx + size, cy, color)
-  @draw.draw_text("N", cx - 4, cy - size - 16, 14, color)
-  @draw.draw_text("S", cx - 4, cy + size + 4, 14, color)
-  @draw.draw_text("W", cx - size - 14, cy - 6, 14, color)
-  @draw.draw_text("E", cx + size + 4, cy - 6, 14, color)
+  let size = 28
+  let ring = @types.color_compass_ring
+  let body = @types.color_compass_body
+  let north_color = @types.color_compass_n
+  // Outer ring - double circle
+  @raylib.draw_circle_lines(cx, cy, fi(size + 6), ring)
+  @raylib.draw_circle_lines(cx, cy, fi(size + 4), ring)
+  // Inner circle background
+  @raylib.draw_circle(cx, cy, fi(size + 2), @types.color_parchment)
+  @raylib.draw_circle_lines(cx, cy, fi(size + 2), ring)
+  // Cardinal direction lines (thicker)
+  @raylib.draw_line_ex(
+    vec2(cx, cy - size), vec2(cx, cy + size), 2.0, body,
+  )
+  @raylib.draw_line_ex(
+    vec2(cx - size, cy), vec2(cx + size, cy), 2.0, body,
+  )
+  // Diagonal lines (thinner)
+  let diag = size * 7 / 10
+  @raylib.draw_line(cx - diag, cy - diag, cx + diag, cy + diag, body)
+  @raylib.draw_line(cx + diag, cy - diag, cx - diag, cy + diag, body)
+  // North arrow (red triangle pointing up)
+  let arrow_w = 6
+  @raylib.draw_triangle(
+    vec2(cx, cy - size),
+    vec2(cx - arrow_w, cy - 4),
+    vec2(cx, cy),
+    north_color,
+  )
+  @raylib.draw_triangle(
+    vec2(cx, cy - size),
+    vec2(cx, cy),
+    vec2(cx + arrow_w, cy - 4),
+    north_color,
+  )
+  // South arrow (brown)
+  @raylib.draw_triangle(
+    vec2(cx, cy + size),
+    vec2(cx, cy),
+    vec2(cx - arrow_w, cy + 4),
+    body,
+  )
+  @raylib.draw_triangle(
+    vec2(cx, cy + size),
+    vec2(cx + arrow_w, cy + 4),
+    vec2(cx, cy),
+    body,
+  )
+  // Center dot
+  @raylib.draw_circle(cx, cy, 3.0, ring)
+  // Cardinal labels
+  @draw.draw_text("N", cx - 5, cy - size - 20, 16, north_color)
+  @draw.draw_text("S", cx - 4, cy + size + 8, 14, body)
+  @draw.draw_text("W", cx - size - 16, cy - 6, 14, body)
+  @draw.draw_text("E", cx + size + 6, cy - 6, 14, body)
+  // Intercardinal labels (smaller)
+  let ic_off = size * 6 / 10
+  @draw.draw_text("NW", cx - ic_off - 16, cy - ic_off - 10, 10, ring)
+  @draw.draw_text("NE", cx + ic_off + 4, cy - ic_off - 10, 10, ring)
+  @draw.draw_text("SW", cx - ic_off - 16, cy + ic_off + 2, 10, ring)
+  @draw.draw_text("SE", cx + ic_off + 4, cy + ic_off + 2, 10, ring)
 }
