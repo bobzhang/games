@@ -34,6 +34,7 @@ pub fn fire_weapon(
     p.explosive_radius = 0.0
     p.freezing = false
     p.bounces = 0
+    p.weapon_kind = weapon.kind
     // Calculate spread angle
     let spread_offset = if weapon.projectile_count > 1 {
       let t = Float::from_int(i) / Float::from_int(weapon.projectile_count - 1)

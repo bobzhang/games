@@ -110,3 +110,50 @@ pub let palette_w : Int = 530
 
 ///|
 pub let palette_h : Int = 660
+
+// Wave visualization colors
+///|
+pub let color_wave_ripple_0 : @raylib.Color = @raylib.Color::new(
+  0, 200, 255, 120,
+)
+
+///|
+pub let color_wave_ripple_1 : @raylib.Color = @raylib.Color::new(
+  80, 255, 80, 120,
+)
+
+///|
+pub let color_wave_ripple_2 : @raylib.Color = @raylib.Color::new(
+  255, 220, 50, 120,
+)
+
+///|
+pub let color_wave_ripple_3 : @raylib.Color = @raylib.Color::new(
+  220, 80, 255, 120,
+)
+
+// Target indicator colors
+///|
+pub let color_target_ring_sat : @raylib.Color = @raylib.Color::new(
+  50, 255, 100, 255,
+)
+
+///|
+pub let color_target_ring_unsat : @raylib.Color = @raylib.Color::new(
+  255, 60, 60, 200,
+)
+
+///|
+pub let color_target_amp_bar_bg : @raylib.Color = @raylib.Color::new(
+  20, 25, 40, 200,
+)
+
+///|
+pub let color_target_amp_bar_fill : @raylib.Color = @raylib.Color::new(
+  100, 200, 255, 220,
+)
+
+///|
+pub let color_target_amp_bar_range : @raylib.Color = @raylib.Color::new(
+  60, 180, 100, 120,
+)

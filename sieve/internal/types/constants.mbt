@@ -147,3 +147,45 @@ pub let color_palette_bg : @raylib.Color = @raylib.Color::new(35, 40, 58, 255)
 
 ///|
 pub let color_timer : @raylib.Color = @raylib.Color::new(200, 210, 230, 255)
+
+// Constraint visualization colors
+///|
+pub let color_constraint_icon_sat : @raylib.Color = @raylib.Color::new(
+  60, 220, 90, 255,
+)
+
+///|
+pub let color_constraint_icon_unsat : @raylib.Color = @raylib.Color::new(
+  220, 70, 70, 255,
+)
+
+///|
+pub let color_constraint_icon_pending : @raylib.Color = @raylib.Color::new(
+  130, 140, 170, 255,
+)
+
+///|
+pub let color_constraint_bar_bg : @raylib.Color = @raylib.Color::new(
+  20, 24, 38, 255,
+)
+
+// Candidate highlighting colors
+///|
+pub let color_candidate_valid : @raylib.Color = @raylib.Color::new(
+  60, 180, 100, 180,
+)
+
+///|
+pub let color_candidate_invalid : @raylib.Color = @raylib.Color::new(
+  180, 50, 50, 100,
+)
+
+///|
+pub let color_candidate_text : @raylib.Color = @raylib.Color::new(
+  140, 180, 220, 200,
+)
+
+///|
+pub let color_cell_highlight : @raylib.Color = @raylib.Color::new(
+  80, 120, 200, 50,
+)

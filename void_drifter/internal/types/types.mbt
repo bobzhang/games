@@ -60,6 +60,7 @@ pub(all) struct Projectile {
   mut explosive_radius : Float
   mut freezing : Bool
   mut bounces : Int
+  mut weapon_kind : WeaponKind
 }
 
 ///|

@@ -447,7 +447,7 @@ fn draw_projectile(
   let px = (p.pos.x + ox).to_int()
   let py = (p.pos.y + oy).to_int()
   let color = if p.friendly {
-    @types.weapon_color(game.ship.weapon.kind)
+    @types.weapon_color(p.weapon_kind)
   } else {
     @raylib.Color::new(255, 100, 100, 230)
   }
@@ -772,9 +772,75 @@ fn draw_sector_map(game : @types.Game) -> Unit {
             }
           }
         }
+        // Difficulty indicator: skulls/dots under the node label
+        if !(node.cleared) && i != 0 {
+          let difficulty = node.enemy_count
+          let tier = if difficulty <= 4 {
+            1
+          } else if difficulty <= 6 {
+            2
+          } else if difficulty <= 8 {
+            3
+          } else {
+            4
+          }
+          let tier_color = match tier {
+            1 => @raylib.Color::new(100, 200, 100, 200)
+            2 => @raylib.Color::new(220, 200, 50, 200)
+            3 => @raylib.Color::new(255, 120, 40, 200)
+            _ => @raylib.Color::new(255, 50, 50, 200)
+          }
+          // Draw difficulty pips
+          let pip_y = ny + 36
+          let pip_start_x = nx - (tier * 5)
+          for p in 0..<tier {
+            @raylib.draw_circle(
+              pip_start_x + p * 10,
+              pip_y,
+              3.0,
+              tier_color,
+            )
+          }
+          // Elite badge
+          if node.elite {
+            @draw.draw_text(
+              "E",
+              nx + 18,
+              ny - 10,
+              12,
+              @raylib.Color::new(255, 200, 50, 230),
+            )
+          }
+          // Shop badge
+          if node.has_shop {
+            @draw.draw_text(
+              "$",
+              nx - 22,
+              ny - 10,
+              12,
+              @types.color_credits,
+            )
+          }
+        }
       }
     }
   }
+  // Legend
+  let legend_y = @types.screen_height - 75
+  @draw.draw_text("Difficulty:", 20, legend_y, 12, @raylib.Color::new(150, 160, 180, 180))
+  @raylib.draw_circle(100, legend_y + 6, 3.0, @raylib.Color::new(100, 200, 100, 200))
+  @draw.draw_text("Low", 108, legend_y, 12, @raylib.Color::new(100, 200, 100, 180))
+  @raylib.draw_circle(150, legend_y + 6, 3.0, @raylib.Color::new(220, 200, 50, 200))
+  @raylib.draw_circle(160, legend_y + 6, 3.0, @raylib.Color::new(220, 200, 50, 200))
+  @draw.draw_text("Med", 170, legend_y, 12, @raylib.Color::new(220, 200, 50, 180))
+  @raylib.draw_circle(210, legend_y + 6, 3.0, @raylib.Color::new(255, 120, 40, 200))
+  @raylib.draw_circle(220, legend_y + 6, 3.0, @raylib.Color::new(255, 120, 40, 200))
+  @raylib.draw_circle(230, legend_y + 6, 3.0, @raylib.Color::new(255, 120, 40, 200))
+  @draw.draw_text("Hard", 240, legend_y, 12, @raylib.Color::new(255, 120, 40, 180))
+  @draw.draw_text("E", 290, legend_y, 12, @raylib.Color::new(255, 200, 50, 200))
+  @draw.draw_text("=Elite", 302, legend_y, 12, @raylib.Color::new(150, 160, 180, 180))
+  @draw.draw_text("$", 360, legend_y, 12, @types.color_credits)
+  @draw.draw_text("=Shop", 372, legend_y, 12, @raylib.Color::new(150, 160, 180, 180))
   // Instructions
   @draw.draw_text(
     "Press 1-3 or click a highlighted node to travel",

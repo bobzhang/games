@@ -358,6 +358,7 @@ pub fn new_projectile() -> Projectile {
     explosive_radius: 0.0,
     freezing: false,
     bounces: 0,
+    weapon_kind: Laser,
   }
 }
 

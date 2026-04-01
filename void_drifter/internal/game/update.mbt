@@ -467,11 +467,11 @@ fn resolve_collisions(game : @types.Game) -> Unit {
           e.pos.x,
           e.pos.y,
           p.damage,
-          @types.weapon_color(ship.weapon.kind),
+          @types.weapon_color(p.weapon_kind),
         )
         @types.push_sound(game, EnemyHit)
         // Hit particles
-        spawn_hit_particles(game, p.pos.x, p.pos.y, @types.color_enemy_drone)
+        spawn_hit_particles(game, p.pos.x, p.pos.y, @types.weapon_color(p.weapon_kind))
         // Freezing
         if p.freezing {
           e.frozen_timer = 2.0
@@ -542,6 +542,7 @@ fn resolve_collisions(game : @types.Game) -> Unit {
               cp.explosive_radius = 0.0
               cp.freezing = p.freezing
               cp.bounces = 0
+              cp.weapon_kind = p.weapon_kind
             }
           }
         }

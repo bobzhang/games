@@ -73,6 +73,50 @@ fn draw_grid(game : @types.Game, level : @types.Level) -> Unit {
       }
     }
   }
+  // Draw candidate numbers for selected empty cell
+  if game.play_state == Editing &&
+    game.selected_row >= 0 &&
+    game.selected_col >= 0 {
+    let sel_val = @types.grid_get(
+      level.grid,
+      game.selected_row,
+      game.selected_col,
+    )
+    if sel_val == 0 {
+      draw_candidates(game, level)
+    }
+  }
+  // Highlight row/col of selected cell
+  if game.selected_row >= 0 && game.selected_col >= 0 {
+    // Highlight row
+    for c in 0..<gs {
+      if c != game.selected_col {
+        let hx = ox + c * cs
+        let hy = oy + game.selected_row * cs
+        @raylib.draw_rectangle(
+          hx + 2,
+          hy + 2,
+          cs - 4,
+          cs - 4,
+          @types.color_cell_highlight,
+        )
+      }
+    }
+    // Highlight column
+    for r in 0..<gs {
+      if r != game.selected_row {
+        let hx = ox + game.selected_col * cs
+        let hy = oy + r * cs
+        @raylib.draw_rectangle(
+          hx + 2,
+          hy + 2,
+          cs - 4,
+          cs - 4,
+          @types.color_cell_highlight,
+        )
+      }
+    }
+  }
   // Highlight errors after checking
   if game.play_state == Failed {
     draw_error_highlights(game, level)
@@ -86,6 +130,42 @@ fn draw_grid(game : @types.Game, level : @types.Level) -> Unit {
       gs * cs + 8,
       @types.color_cell_correct,
     )
+  }
+}
+
+///|
+fn draw_candidates(game : @types.Game, level : @types.Level) -> Unit {
+  let ox = @types.grid_offset_x
+  let oy = @types.grid_offset_y
+  let cs = @types.cell_size
+  let row = game.selected_row
+  let col = game.selected_col
+  let candidates = @types.cell_candidates(
+    level.grid,
+    row,
+    col,
+    level.constraints,
+  )
+  let x = ox + col * cs
+  let y = oy + row * cs
+  // Draw small candidate numbers in a 3x3 sub-grid within the cell
+  for n in 1..=9 {
+    let sub_col = (n - 1) % 3
+    let sub_row = (n - 1) / 3
+    let cx = x + 6 + sub_col * 24
+    let cy = y + 4 + sub_row * 22
+    let text = n.to_string()
+    if candidates[n] {
+      @draw.draw_text(text, cx, cy, 16, @types.color_candidate_text)
+    } else {
+      @draw.draw_text(
+        text,
+        cx,
+        cy,
+        16,
+        @raylib.Color::new(80, 50, 50, 100),
+      )
+    }
   }
 }
 
@@ -188,10 +268,24 @@ fn draw_error_highlights(_game : @types.Game, level : @types.Level) -> Unit {
 }
 
 ///|
-fn draw_number_palette(game : @types.Game, _level : @types.Level) -> Unit {
+fn draw_number_palette(game : @types.Game, level : @types.Level) -> Unit {
   let px = @types.palette_x
   let py = @types.palette_y
   let pc = @types.palette_cell
+  // Compute candidates if a cell is selected and empty
+  let has_candidates = game.selected_row >= 0 &&
+    game.selected_col >= 0 &&
+    @types.grid_get(level.grid, game.selected_row, game.selected_col) == 0
+  let candidates : Array[Bool] = if has_candidates {
+    @types.cell_candidates(
+      level.grid,
+      game.selected_row,
+      game.selected_col,
+      level.constraints,
+    )
+  } else {
+    Array::make(10, true)
+  }
   // Label
   @draw.draw_text("Numbers:", px, py - 30, 20, @types.color_subtitle)
   // Numbers 1-9
@@ -199,8 +293,24 @@ fn draw_number_palette(game : @types.Game, _level : @types.Level) -> Unit {
     let num = i + 1
     let x = px + i * (pc + 4)
     let y = py
-    // Background
-    @raylib.draw_rectangle(x, y, pc, pc, @types.color_palette_bg)
+    let is_valid = candidates[num]
+    // Background: tint green for valid, dim for invalid when candidates active
+    let bg = if has_candidates {
+      if is_valid {
+        @raylib.Color::new(35, 55, 45, 255)
+      } else {
+        @raylib.Color::new(40, 30, 30, 255)
+      }
+    } else {
+      @types.color_palette_bg
+    }
+    @raylib.draw_rectangle(x, y, pc, pc, bg)
+    // Border: highlight valid candidates
+    let border = if has_candidates && is_valid {
+      @types.color_candidate_valid
+    } else {
+      @types.color_grid_line
+    }
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(
         Float::from_int(x),
@@ -208,15 +318,17 @@ fn draw_number_palette(game : @types.Game, _level : @types.Level) -> Unit {
         Float::from_int(pc),
         Float::from_int(pc),
       ),
-      1.0,
-      @types.color_grid_line,
+      if has_candidates && is_valid { 2.0 } else { 1.0 },
+      border,
     )
     // Number
     let text = num.to_string()
     let tw = @draw.measure_text(text, 28)
     let tx = x + (pc - tw) / 2
     let ty = y + (pc - 28) / 2
-    let color = if @types.is_prime(num) {
+    let color = if has_candidates && !is_valid {
+      @raylib.Color::new(100, 70, 70, 150)
+    } else if @types.is_prime(num) {
       @types.color_number_prime
     } else {
       @types.color_number_editable
@@ -262,48 +374,96 @@ fn draw_number_palette(game : @types.Game, _level : @types.Level) -> Unit {
     14,
     @raylib.Color::new(120, 125, 150, 255),
   )
-  ignore(game)
 }
 
 ///|
 fn draw_constraint_panel(game : @types.Game, level : @types.Level) -> Unit {
   let px = @types.constraint_panel_x
   let py = @types.constraint_panel_y
+  let panel_w = @types.screen_width - px - 20
   // Panel background
   @raylib.draw_rectangle(
     px - 10,
     py - 10,
-    @types.screen_width - px - 20,
-    400,
+    panel_w,
+    420,
     @raylib.Color::new(25, 28, 42, 255),
   )
   // Title
   @draw.draw_text("Constraints:", px, py, 22, @types.color_title)
+  // Summary bar: satisfied / total
+  let show_status = game.play_state == Checking ||
+    game.play_state == Solved ||
+    game.play_state == Failed
+  if show_status {
+    let total = level.constraints.length()
+    let mut sat_count = 0
+    for c in level.constraints {
+      if c.satisfied {
+        sat_count += 1
+      }
+    }
+    let bar_x = px
+    let bar_y = py + 28
+    let bar_w = panel_w - 20
+    let bar_h = 6
+    @raylib.draw_rectangle(
+      bar_x,
+      bar_y,
+      bar_w,
+      bar_h,
+      @types.color_constraint_bar_bg,
+    )
+    if total > 0 {
+      let fill_w = bar_w * sat_count / total
+      let fill_color = if sat_count == total {
+        @types.color_constraint_icon_sat
+      } else {
+        @raylib.Color::new(200, 180, 60, 255)
+      }
+      @raylib.draw_rectangle(bar_x, bar_y, fill_w, bar_h, fill_color)
+    }
+  }
   // Constraints list
-  let mut y = py + 35
+  let mut y = py + 42
   for i in 0..<level.constraints.length() {
     let c = level.constraints[i]
     let desc = constraint_description(c)
-    let status_color = if c.satisfied {
-      @types.color_constraint_sat
-    } else {
-      @types.color_constraint_unsat
-    }
-    let status_text = if c.satisfied { "[OK]" } else { "[  ]" }
-    // Only show status after checking
-    let show_status = game.play_state == Checking ||
-      game.play_state == Solved ||
-      game.play_state == Failed
     if show_status {
-      @draw.draw_text(status_text, px, y, 18, status_color)
-      @draw.draw_text(desc, px + 50, y, 18, @types.color_constraint_text)
+      // Color-coded icon
+      let icon_color = if c.satisfied {
+        @types.color_constraint_icon_sat
+      } else {
+        @types.color_constraint_icon_unsat
+      }
+      // Draw filled/hollow circle as status indicator
+      let icon_cx = px + 10
+      let icon_cy = y + 9
+      if c.satisfied {
+        @raylib.draw_circle(icon_cx, icon_cy, 6.0, icon_color)
+      } else {
+        @raylib.draw_circle_lines(icon_cx, icon_cy, 6.0, icon_color)
+      }
+      // Constraint text colored by satisfaction
+      let text_color = if c.satisfied {
+        @types.color_constraint_sat
+      } else {
+        @types.color_constraint_unsat
+      }
+      @draw.draw_text(desc, px + 24, y, 17, text_color)
     } else {
-      @draw.draw_text("[ ? ]", px, y, 18, @types.color_subtitle)
-      @draw.draw_text(desc, px + 50, y, 18, @types.color_constraint_text)
+      // Pending state: neutral icon
+      @raylib.draw_circle_lines(
+        px + 10,
+        y + 9,
+        6.0,
+        @types.color_constraint_icon_pending,
+      )
+      @draw.draw_text(desc, px + 24, y, 17, @types.color_constraint_text)
     }
-    y += 28
+    y += 26
+    ignore(i)
   }
-  ignore(game)
 }
 
 ///|

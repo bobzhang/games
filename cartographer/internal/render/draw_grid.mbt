@@ -109,9 +109,10 @@ fn draw_playing(game : @types.Game) -> Unit {
         // Show the specific revealed cell with bright highlight
         match game.hint_reveal_cell {
           Some(h) => {
-            // Pulsing effect
-            let pulse = @raylib.get_time().to_float() * 4.0
-            let alpha = 80 + (pulse.sin() * 40.0).to_int().abs()
+            // Pulsing effect via triangle wave
+            let time_f = Float::from_double(@raylib.get_time()) * 4.0
+            let wave = time_f.to_int() % 2
+            let alpha = if wave == 0 { 120 } else { 80 }
             let reveal_color = @raylib.Color::new(100, 255, 100, alpha)
             @raylib.draw_rectangle(
               @types.grid_offset_x + h.x * @types.cell_size + 2,

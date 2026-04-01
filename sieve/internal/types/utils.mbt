@@ -159,6 +159,46 @@ pub fn clone_grid(g : Grid) -> Grid {
 }
 
 ///|
+pub fn cell_candidates(
+  grid : Grid,
+  row : Int,
+  col : Int,
+  constraints : Array[Constraint]
+) -> Array[Bool] {
+  // Returns array of size 10 where index n is true if n is a valid candidate
+  let valid : Array[Bool] = Array::make(10, true)
+  valid[0] = false // 0 is never a valid number
+  // Check uniqueness constraints
+  for c in constraints {
+    match c.kind {
+      Unique => {
+        let is_row = c.params[0] == 0
+        let index = c.params[1]
+        if (is_row && index == row) || (!is_row && index == col) {
+          // Values already in this row/col are not valid candidates
+          for i in 0..<grid.size {
+            let v = if is_row {
+              grid_get(grid, index, i)
+            } else {
+              grid_get(grid, i, index)
+            }
+            if v > 0 {
+              let pos = if is_row { i } else { i }
+              let my_pos = if is_row { col } else { row }
+              if pos != my_pos {
+                valid[v] = false
+              }
+            }
+          }
+        }
+      }
+      _ => ()
+    }
+  }
+  valid
+}
+
+///|
 pub fn new_game() -> Game {
   let scores : Array[LevelScore] = Array::new(capacity=total_levels)
   for _i in 0..<total_levels {
