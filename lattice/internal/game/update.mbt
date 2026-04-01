@@ -36,6 +36,17 @@ fn update_anims(game : @types.Game, dt : Float) -> Unit {
     }
   }
   game.pattern_anims = new_pat_anims
+  // Update score animations (floating text)
+  let new_score_anims : Array[@types.ScoreAnim] = []
+  for i in 0..<game.score_anims.length() {
+    let anim = game.score_anims[i]
+    anim.timer = anim.timer - dt
+    anim.y = anim.y - 30.0 * dt // float upward
+    if anim.timer > 0.0 {
+      new_score_anims.push(anim)
+    }
+  }
+  game.score_anims = new_score_anims
 }
 
 ///|
@@ -156,6 +167,7 @@ fn load_puzzle(game : @types.Game) -> Unit {
     game.puzzle_solved = false
     game.capture_anims = []
     game.pattern_anims = []
+    game.score_anims = []
   }
 }
 
@@ -251,6 +263,26 @@ fn make_move(game : @types.Game, coord : @types.HexCoord) -> Unit {
   for i in 0..<captured.length() {
     game.capture_anims.push({ pos: captured[i], timer: 0.0 })
   }
+  if captured.length() > 0 {
+    // Floating score animation at center of captured stones
+    let mut sum_x : Float = 0.0
+    let mut sum_y : Float = 0.0
+    for i in 0..<captured.length() {
+      let (px, py) = @types.hex_to_pixel(captured[i], @types.hex_size)
+      sum_x = sum_x + px
+      sum_y = sum_y + py
+    }
+    let cx = sum_x / Float::from_int(captured.length())
+    let cy = sum_y / Float::from_int(captured.length())
+    game.score_anims.push(
+      {
+        x: cx,
+        y: cy - 20.0,
+        text: "+" + captured.length().to_string() + " cap",
+        timer: @types.score_anim_time,
+      },
+    )
+  }
   match player {
     Black => game.black_captures = game.black_captures + captured.length()
     White => game.white_captures = game.white_captures + captured.length()
@@ -270,6 +302,26 @@ fn make_move(game : @types.Game, coord : @types.HexCoord) -> Unit {
     game.pattern_anims.push(
       { kind: p.kind, positions: p.positions, timer: @types.pattern_anim_time },
     )
+    // Create floating score animation at pattern center
+    if p.positions.length() > 0 {
+      let mut sum_x : Float = 0.0
+      let mut sum_y : Float = 0.0
+      for j in 0..<p.positions.length() {
+        let (px, py) = @types.hex_to_pixel(p.positions[j], @types.hex_size)
+        sum_x = sum_x + px
+        sum_y = sum_y + py
+      }
+      let cx = sum_x / Float::from_int(p.positions.length())
+      let cy = sum_y / Float::from_int(p.positions.length())
+      game.score_anims.push(
+        {
+          x: cx,
+          y: cy,
+          text: "+" + p.points.to_string(),
+          timer: @types.score_anim_time,
+        },
+      )
+    }
   }
   // Puzzle mode: check score from this single move
   if game.mode == Puzzle {

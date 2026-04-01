@@ -2,4 +2,9 @@ import {
   "bobzhang/games/lattice/internal/types",
 }
 
+import {
+  "bobzhang/games/lattice/internal/types",
+  "bobzhang/games/lattice/internal/board",
+} for "test"
+
 warnings = "-missing_doc+unnecessary_annotation"

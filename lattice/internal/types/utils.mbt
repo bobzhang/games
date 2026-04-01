@@ -245,6 +245,7 @@ pub fn new_game() -> Game {
     ai_delay: 0.0,
     capture_anims: [],
     pattern_anims: [],
+    score_anims: [],
     hover_hex: None,
     puzzle_levels: [],
     current_puzzle: 0,
@@ -279,6 +280,7 @@ pub fn reset_game(game : Game) -> Unit {
   game.ai_delay = 0.0
   game.capture_anims = []
   game.pattern_anims = []
+  game.score_anims = []
   game.hover_hex = None
   game.puzzle_score = 0
   game.puzzle_solved = false

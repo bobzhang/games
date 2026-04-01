@@ -46,6 +46,14 @@ pub(all) struct PatternAnim {
 } derive(Show)
 
 ///|
+pub(all) struct ScoreAnim {
+  mut x : Float
+  mut y : Float
+  mut text : String
+  mut timer : Float
+} derive(Show)
+
+///|
 pub(all) struct Game {
   mut screen : Screen
   mut mode : GameMode
@@ -66,6 +74,7 @@ pub(all) struct Game {
   mut ai_delay : Float
   mut capture_anims : Array[CaptureAnim]
   mut pattern_anims : Array[PatternAnim]
+  mut score_anims : Array[ScoreAnim]
   mut hover_hex : HexCoord?
   mut puzzle_levels : Array[PuzzleLevel]
   mut current_puzzle : Int

@@ -53,6 +53,9 @@ pub let capture_anim_time : Float = 0.5
 pub let pattern_anim_time : Float = 1.0
 
 ///|
+pub let score_anim_time : Float = 1.5
+
+///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(25, 28, 38, 255)
 
 ///|
@@ -89,28 +92,43 @@ pub let color_title : @raylib.Color = @raylib.Color::new(100, 200, 255, 255)
 pub let color_accent : @raylib.Color = @raylib.Color::new(255, 180, 50, 255)
 
 ///|
-pub let color_bridge : @raylib.Color = @raylib.Color::new(100, 200, 100, 200)
+pub let color_bridge : @raylib.Color = @raylib.Color::new(60, 220, 120, 220)
 
 ///|
-pub let color_chain : @raylib.Color = @raylib.Color::new(100, 150, 255, 200)
+pub let color_chain : @raylib.Color = @raylib.Color::new(80, 140, 255, 220)
 
 ///|
-pub let color_triangle : @raylib.Color = @raylib.Color::new(255, 200, 50, 200)
+pub let color_triangle : @raylib.Color = @raylib.Color::new(255, 210, 40, 220)
 
 ///|
-pub let color_diamond : @raylib.Color = @raylib.Color::new(200, 100, 255, 200)
+pub let color_diamond : @raylib.Color = @raylib.Color::new(210, 80, 255, 220)
 
 ///|
-pub let color_fortress : @raylib.Color = @raylib.Color::new(255, 100, 100, 200)
+pub let color_fortress : @raylib.Color = @raylib.Color::new(255, 80, 80, 220)
 
 ///|
-pub let color_ring : @raylib.Color = @raylib.Color::new(50, 255, 200, 200)
+pub let color_ring : @raylib.Color = @raylib.Color::new(40, 240, 220, 220)
 
 ///|
-pub let color_star : @raylib.Color = @raylib.Color::new(255, 255, 100, 200)
+pub let color_star : @raylib.Color = @raylib.Color::new(255, 240, 60, 230)
 
 ///|
-pub let color_wall : @raylib.Color = @raylib.Color::new(180, 130, 80, 200)
+pub let color_wall : @raylib.Color = @raylib.Color::new(200, 150, 70, 220)
+
+///|
+pub let color_last_move_inner : @raylib.Color = @raylib.Color::new(
+  255, 200, 60, 255,
+)
+
+///|
+pub let color_last_move_outer : @raylib.Color = @raylib.Color::new(
+  255, 160, 30, 180,
+)
+
+///|
+pub let color_score_anim : @raylib.Color = @raylib.Color::new(
+  100, 255, 100, 255,
+)
 
 ///|
 pub let color_selected : @raylib.Color = @raylib.Color::new(255, 220, 100, 255)

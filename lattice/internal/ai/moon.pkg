@@ -4,4 +4,8 @@ import {
   "tonyfettes/raylib",
 }
 
+import {
+  "bobzhang/games/lattice/internal/types",
+} for "test"
+
 warnings = "-missing_doc+unnecessary_annotation"

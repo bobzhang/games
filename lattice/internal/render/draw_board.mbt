@@ -28,15 +28,36 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
       }
     }
   }
-  // Draw last move indicator
+  // Draw last move indicator (pulsing double-ring with marker dot)
   match game.last_move {
     Some(lm) => {
       let (lx, ly) = @types.hex_to_pixel(lm, size)
+      let time = Float::from_int(game.frame_count) * 0.05
+      let pulse = Float::from_double(
+        @math.sin(time.to_double()) * 0.15 + 0.85,
+      )
+      let outer_radius = size * 0.9 * pulse
+      let inner_radius = size * 0.75 * pulse
+      // Outer ring
       @raylib.draw_circle_lines(
         lx.to_int(),
         ly.to_int(),
-        size * 0.85,
-        @types.color_accent,
+        outer_radius,
+        @types.color_last_move_outer,
+      )
+      // Inner ring
+      @raylib.draw_circle_lines(
+        lx.to_int(),
+        ly.to_int(),
+        inner_radius,
+        @types.color_last_move_inner,
+      )
+      // Small marker dot at center
+      @raylib.draw_circle(
+        lx.to_int(),
+        ly.to_int(),
+        3.0,
+        @types.color_last_move_inner,
       )
     }
     None => ()
@@ -45,6 +66,8 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
   draw_pattern_highlights(game)
   // Draw capture animations
   draw_capture_anims(game)
+  // Draw score animations (floating text)
+  draw_score_anims(game)
 }
 
 ///|
@@ -115,20 +138,86 @@ fn draw_pattern_highlights(game : @types.Game) -> Unit {
   for i in 0..<game.pattern_anims.length() {
     let anim = game.pattern_anims[i]
     let alpha_f = @types.minf(anim.timer / @types.pattern_anim_time, 1.0)
-    let alpha = (alpha_f * 200.0).to_int()
     let base_color = pattern_color(anim.kind)
-    let color = @raylib.Color::new(
+    // Filled hex overlay with reduced alpha
+    let fill_alpha = (alpha_f * 80.0).to_int()
+    let fill_color = @raylib.Color::new(
       base_color.r.to_int(),
       base_color.g.to_int(),
       base_color.b.to_int(),
-      alpha,
+      fill_alpha,
+    )
+    // Bright outline
+    let line_alpha = (alpha_f * 230.0).to_int()
+    let line_color = @raylib.Color::new(
+      base_color.r.to_int(),
+      base_color.g.to_int(),
+      base_color.b.to_int(),
+      line_alpha,
     )
     for j in 0..<anim.positions.length() {
       let pos = anim.positions[j]
       let (px, py) = @types.hex_to_pixel(pos, size)
-      @raylib.draw_circle_lines(px.to_int(), py.to_int(), size * 0.9, color)
-      @raylib.draw_circle_lines(px.to_int(), py.to_int(), size * 0.8, color)
+      // Filled hex glow behind stone
+      draw_hexagon_filled(px.to_int(), py.to_int(), size * 0.95, fill_color)
+      // Crisp outline rings
+      @raylib.draw_circle_lines(
+        px.to_int(),
+        py.to_int(),
+        size * 0.92,
+        line_color,
+      )
+      @raylib.draw_circle_lines(
+        px.to_int(),
+        py.to_int(),
+        size * 0.82,
+        line_color,
+      )
     }
+    // Draw connecting lines between pattern positions
+    if anim.positions.length() >= 2 {
+      let connect_alpha = (alpha_f * 120.0).to_int()
+      let connect_color = @raylib.Color::new(
+        base_color.r.to_int(),
+        base_color.g.to_int(),
+        base_color.b.to_int(),
+        connect_alpha,
+      )
+      for j in 0..<(anim.positions.length() - 1) {
+        let (x1, y1) = @types.hex_to_pixel(anim.positions[j], size)
+        let (x2, y2) = @types.hex_to_pixel(anim.positions[j + 1], size)
+        @raylib.draw_line(
+          x1.to_int(),
+          y1.to_int(),
+          x2.to_int(),
+          y2.to_int(),
+          connect_color,
+        )
+      }
+    }
+  }
+}
+
+///|
+fn draw_score_anims(game : @types.Game) -> Unit {
+  for i in 0..<game.score_anims.length() {
+    let anim = game.score_anims[i]
+    let alpha_f = @types.minf(anim.timer / @types.score_anim_time, 1.0)
+    let alpha = (alpha_f * 255.0).to_int()
+    let grow : Float = (1.0 : Float) - alpha_f
+    let font_size = 22 + (grow * 6.0).to_int()
+    @draw.draw_text(
+      anim.text,
+      anim.x.to_int() - 15,
+      anim.y.to_int(),
+      font_size,
+      @raylib.Color::new(
+        @types.color_score_anim.r.to_int(),
+        @types.color_score_anim.g.to_int(),
+        @types.color_score_anim.b.to_int(),
+        alpha,
+      ),
+    )
   }
 }
 
