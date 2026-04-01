@@ -162,13 +162,15 @@ fn draw_region(
     }
     Pristine => ()
   }
-  // Highlight on hover
+  // Highlight on hover with tool preview
   if game.hover_region == idx {
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(fx, fy, fs, fs),
       2.0,
       @types.color_highlight,
     )
+    // Show preview of what the tool will do
+    draw_tool_preview(game, region, x, y, size)
   }
   // Animation flash
   if game.anim_region == idx && game.anim_timer > 0.0 {
@@ -207,83 +209,367 @@ fn draw_damage_overlay(
     let dmg = region.damage_types[i]
     match dmg {
       Crack => {
-        // Brown diagonal crack lines
+        // Detailed crack pattern: main fissure with branching fractures
+        let crack_color = @types.color_crack
+        let dark_crack = @raylib.Color::new(80, 50, 25, 255)
+        // Main diagonal crack
         @raylib.draw_line_ex(
-          @raylib.Vector2::new(fx + 10.0, fy + 8.0),
-          @raylib.Vector2::new(fx + fs / 2.0, fy + fs / 2.0),
-          2.0,
-          @types.color_crack,
+          @raylib.Vector2::new(fx + 8.0, fy + 6.0),
+          @raylib.Vector2::new(fx + fs * 0.35, fy + fs * 0.3),
+          2.5,
+          crack_color,
         )
         @raylib.draw_line_ex(
-          @raylib.Vector2::new(fx + fs / 2.0, fy + fs / 2.0),
-          @raylib.Vector2::new(fx + fs - 12.0, fy + fs - 10.0),
-          2.0,
-          @types.color_crack,
+          @raylib.Vector2::new(fx + fs * 0.35, fy + fs * 0.3),
+          @raylib.Vector2::new(fx + fs * 0.5, fy + fs * 0.55),
+          2.5,
+          crack_color,
         )
-        // Branch
         @raylib.draw_line_ex(
-          @raylib.Vector2::new(fx + fs / 2.0, fy + fs / 2.0),
-          @raylib.Vector2::new(fx + fs - 8.0, fy + 15.0),
+          @raylib.Vector2::new(fx + fs * 0.5, fy + fs * 0.55),
+          @raylib.Vector2::new(fx + fs - 10.0, fy + fs - 8.0),
+          2.5,
+          crack_color,
+        )
+        // Branch fractures
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(fx + fs * 0.35, fy + fs * 0.3),
+          @raylib.Vector2::new(fx + fs - 6.0, fy + 12.0),
           1.5,
-          @types.color_crack,
+          dark_crack,
+        )
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(fx + fs * 0.5, fy + fs * 0.55),
+          @raylib.Vector2::new(fx + 12.0, fy + fs - 14.0),
+          1.5,
+          dark_crack,
+        )
+        // Small hairline cracks
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(fx + fs * 0.35, fy + fs * 0.3),
+          @raylib.Vector2::new(fx + fs * 0.25, fy + fs * 0.5),
+          1.0,
+          dark_crack,
         )
       }
       Stain => {
-        // Dark stain blobs
-        let time = Float::from_int(frame) * 0.01
+        // Organic stain pattern with irregular blobs and spatter
+        let time = Float::from_int(frame) * 0.008
+        let stain_dark = @raylib.Color::new(50, 40, 30, 200)
+        let stain_light = @raylib.Color::new(70, 55, 40, 160)
+        // Main stain blob (large, organic)
+        let r1 : Float = 14.0 + @types.sinf(time) * 1.5
         @raylib.draw_circle(
           x + size / 3,
           y + size / 3,
-          12.0 + @types.sinf(time) * 1.0,
-          @types.color_stain,
+          r1,
+          stain_dark,
         )
+        // Secondary blob overlapping
+        @raylib.draw_circle(
+          x + size / 3 + 8,
+          y + size / 3 + 6,
+          10.0,
+          stain_light,
+        )
+        // Drip trail
         @raylib.draw_circle(
           x + size * 2 / 3,
           y + size * 2 / 3,
-          10.0,
-          @types.color_stain,
+          11.0,
+          stain_dark,
         )
         @raylib.draw_circle(
-          x + size / 2,
-          y + size / 2 + 5,
-          8.0,
-          @types.color_stain,
+          x + size * 2 / 3 - 4,
+          y + size * 2 / 3 + 8,
+          7.0,
+          stain_light,
         )
+        // Small spatter dots
+        for s in 0..<5 {
+          let sf = Float::from_int(s)
+          let sx = x + (sf * 17.3 % Float::from_int(size - 10) + 5.0).to_int()
+          let sy = y + (sf * 13.7 % Float::from_int(size - 10) + 5.0).to_int()
+          @raylib.draw_circle(sx, sy, 3.0, stain_light)
+        }
       }
-      Fade =>
-        // Pale wash overlay
+      Fade => {
+        // Faded area with diagonal hatching pattern to show color loss
+        let fade_color = @raylib.Color::new(230, 225, 215, 160)
+        let line_color = @raylib.Color::new(210, 205, 195, 120)
+        // Base wash
         @raylib.draw_rectangle(
           x + 3,
           y + 3,
           size - 6,
           size - 6,
-          @types.color_fade,
+          fade_color,
         )
+        // Diagonal hatching pattern - shows bleached/faded texture
+        let step = 8
+        let count = size * 2 / step
+        for s in 0..<count {
+          let offset = s * step
+          let x1 = x + offset
+          let y1 = y
+          let x2 = x
+          let y2 = y + offset
+          // Clip to region
+          if x1 < x + size && y2 < y + size {
+            @raylib.draw_line(
+              @types.mini(x1, x + size - 1),
+              @types.maxi(y1, y),
+              @types.maxi(x2, x),
+              @types.mini(y2, y + size - 1),
+              line_color,
+            )
+          }
+        }
+      }
       Flake => {
-        // Missing paint chunks
-        @raylib.draw_rectangle(x + 8, y + 12, 18, 14, @types.color_flake)
+        // Missing paint patches with exposed underlayer
+        let underlayer = @raylib.Color::new(170, 150, 120, 220)
+        let edge_color = @raylib.Color::new(140, 120, 90, 255)
+        // Irregular flake patches
+        @raylib.draw_rectangle(x + 6, y + 10, 20, 16, underlayer)
+        @raylib.draw_rectangle_lines(x + 6, y + 10, 20, 16, edge_color)
         @raylib.draw_rectangle(
-          x + size - 28,
-          y + size - 26,
+          x + size - 30,
+          y + size - 28,
+          18,
+          14,
+          underlayer,
+        )
+        @raylib.draw_rectangle_lines(
+          x + size - 30,
+          y + size - 28,
+          18,
+          14,
+          edge_color,
+        )
+        @raylib.draw_rectangle(
+          x + size / 2 - 8,
+          y + 4,
           16,
           12,
-          @types.color_flake,
+          underlayer,
         )
-        @raylib.draw_rectangle(
-          x + size / 2 - 6,
-          y + 6,
-          14,
-          10,
-          @types.color_flake,
+        @raylib.draw_rectangle_lines(
+          x + size / 2 - 8,
+          y + 4,
+          16,
+          12,
+          edge_color,
         )
+        // Scattered small flake fragments
+        @raylib.draw_rectangle(x + size / 2 + 10, y + size / 2, 8, 6, underlayer)
+        @raylib.draw_rectangle(x + 10, y + size - 18, 10, 8, underlayer)
       }
     }
   }
-  // Show treatment indicators (small dots for each treatment applied)
-  let dot_y = y + size - 8
+  // Show treatment indicators (small colored squares for each treatment applied)
+  let dot_y = y + size - 10
   for t in 0..<region.treatments_applied.length() {
-    let dot_x = x + 6 + t * 10
+    let dot_x = x + 4 + t * 12
     let tc = @types.tool_color(region.treatments_applied[t])
-    @raylib.draw_circle(dot_x, dot_y, 3.0, tc)
+    @raylib.draw_rectangle(dot_x, dot_y, 8, 8, tc)
+    @raylib.draw_rectangle_lines(
+      dot_x,
+      dot_y,
+      8,
+      8,
+      @raylib.Color::new(0, 0, 0, 60),
+    )
+  }
+}
+
+///|
+fn draw_tool_preview(
+  game : @types.Game,
+  region : @types.Region,
+  x : Int,
+  y : Int,
+  size : Int,
+) -> Unit {
+  // Only show preview for actionable regions
+  match region.state {
+    Pristine | Restored | Sealed => return
+    _ => ()
+  }
+  let tool = game.selected_tool
+  // Check budget
+  match game.current_budget {
+    None => return
+    Some(b) => {
+      let remaining = @types.get_budget_for_tool(b, tool)
+      if remaining <= 0 {
+        return
+      }
+    }
+  }
+  // Predict the outcome of applying the tool
+  let preview_text : String = predict_outcome(region, tool)
+  let is_danger = preview_is_danger(region, tool)
+  // Draw preview indicator at bottom-right of the region
+  let fx = Float::from_int(x)
+  let fy = Float::from_int(y)
+  let fs = Float::from_int(size)
+  // Semi-transparent tool color overlay
+  let tc = @types.tool_color(tool)
+  let overlay_alpha = 50
+  @raylib.draw_rectangle(
+    x + 2,
+    y + 2,
+    size - 4,
+    size - 4,
+    @raylib.Color::new(
+      tc.r.to_int(),
+      tc.g.to_int(),
+      tc.b.to_int(),
+      overlay_alpha,
+    ),
+  )
+  // Tool icon indicator in top-right corner
+  let icon_size = 14
+  let icon_x = x + size - icon_size - 3
+  let icon_y = y + 3
+  let icon_bg = if is_danger {
+    @raylib.Color::new(200, 50, 50, 200)
+  } else {
+    @raylib.Color::new(
+      tc.r.to_int(),
+      tc.g.to_int(),
+      tc.b.to_int(),
+      200,
+    )
+  }
+  @raylib.draw_rectangle(icon_x, icon_y, icon_size, icon_size, icon_bg)
+  // Tool letter abbreviation
+  let abbrev = match tool {
+    Clean => "C"
+    Fill => "F"
+    Retouch => "R"
+    Seal => "S"
+  }
+  @draw.draw_text(
+    abbrev,
+    icon_x + 2,
+    icon_y + 1,
+    12,
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  // Draw outcome text below the region
+  let text_w = @draw.measure_text(preview_text, 10)
+  let text_x = x + (size - text_w) / 2
+  let text_y = y + size - 22
+  // Background for text
+  @raylib.draw_rectangle(
+    text_x - 2,
+    text_y - 1,
+    text_w + 4,
+    13,
+    @raylib.Color::new(0, 0, 0, 180),
+  )
+  let text_color = if is_danger {
+    @types.color_worsened
+  } else {
+    @raylib.Color::new(200, 255, 200, 255)
+  }
+  @draw.draw_text(preview_text, text_x, text_y, 10, text_color)
+  ignore(fx)
+  ignore(fy)
+  ignore(fs)
+}
+
+///|
+fn predict_outcome(region : @types.Region, tool : @types.ToolKind) -> String {
+  match tool {
+    Clean => {
+      let has_stain = @types.region_has_damage(region, Stain)
+      let has_crack = @types.region_has_damage(region, Crack)
+      if region.stain_permanent {
+        return "WORSEN!"
+      }
+      if has_stain {
+        if has_crack && !@types.region_has_treatment(region, Fill) {
+          return "WORSEN: crack!"
+        }
+        return "Remove stain"
+      }
+      if has_crack {
+        return "WORSEN: crack!"
+      }
+      "No effect"
+    }
+    Fill => {
+      let has_crack = @types.region_has_damage(region, Crack)
+      let has_flake = @types.region_has_damage(region, Flake)
+      let has_stain = @types.region_has_damage(region, Stain)
+      if has_crack || has_flake {
+        return "Fix structure"
+      }
+      if has_stain {
+        return "WORSEN: set stain!"
+      }
+      "No effect"
+    }
+    Retouch => {
+      let has_fade = @types.region_has_damage(region, Fade)
+      let has_flake = @types.region_has_damage(region, Flake)
+      if has_fade {
+        return "Restore color"
+      }
+      if has_flake {
+        return "Fragile fix"
+      }
+      "Touch up"
+    }
+    Seal => {
+      if region.damage_types.length() > 0 {
+        return "Seal damage in"
+      }
+      if region.state == Worsened || region.fragile || region.stain_permanent {
+        return "Seal (imperfect)"
+      }
+      "Restore!"
+    }
+  }
+}
+
+///|
+fn preview_is_danger(region : @types.Region, tool : @types.ToolKind) -> Bool {
+  match tool {
+    Clean => {
+      let has_crack = @types.region_has_damage(region, Crack)
+      let has_stain = @types.region_has_damage(region, Stain)
+      if region.stain_permanent {
+        return true
+      }
+      if has_crack && !@types.region_has_treatment(region, Fill) {
+        return true
+      }
+      if !has_stain && has_crack {
+        return true
+      }
+      false
+    }
+    Fill => {
+      let has_crack = @types.region_has_damage(region, Crack)
+      let has_flake = @types.region_has_damage(region, Flake)
+      let has_stain = @types.region_has_damage(region, Stain)
+      if !has_crack && !has_flake && has_stain {
+        return true
+      }
+      false
+    }
+    Retouch => {
+      let has_flake = @types.region_has_damage(region, Flake)
+      has_flake
+    }
+    Seal =>
+      region.damage_types.length() > 0 ||
+      region.state == Worsened ||
+      region.fragile ||
+      region.stain_permanent
   }
 }
