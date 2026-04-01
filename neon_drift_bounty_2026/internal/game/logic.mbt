@@ -384,6 +384,7 @@ fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
   game.clear_sparks()
   game.clear_rings()
   game.clear_images()
+  game.clear_hazards()
 
   reset_player(game.hero)
 
@@ -405,6 +406,11 @@ fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
   game.flash_t = 0.0
   game.shake_t = 0.0
   game.hint_t = 0.0
+  game.oil_t = 0.0
+  game.boss_active = false
+  game.boss_hp = 0.0
+  game.boss_max_hp = 0.0
+  game.formation_cd = 0.0
   game.reset_combo()
 
   if stage <= 1 {
@@ -429,6 +435,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
   game.clear_sparks()
   game.clear_rings()
   game.clear_images()
+  game.clear_hazards()
   reset_player(game.hero)
 
   game.state = Title
@@ -457,6 +464,14 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
 
   game.scroll_speed = @types.base_scroll_speed
   game.next_spawn_y = @types.spawn_start_y
+  game.weapon = None
+  game.weapon_level = 0
+  game.oil_t = 0.0
+  game.stage_trans_t = 0.0
+  game.boss_active = false
+  game.boss_hp = 0.0
+  game.boss_max_hp = 0.0
+  game.formation_cd = 0.0
 }
 
 ///|
@@ -466,138 +481,17 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Spawns a random pack of 1-3 enemies or items at vertical position `y`, using stage-appropriate types and parameters.
-fn @types.Game::spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
-  let depth = game.distance + (Float::from_int(@types.screen_h) - y)
-  let center = @types.road_center_at(depth, game.time_s)
-
-  let pack = 1 + @types.randi(0, 2)
-  for _i in 0..<pack {
-    let roll = @types.randi(0, 99)
-
-    if roll < 34 {
-      let lane = @types.randi(0, @types.lanes_count - 1)
-      let x = @types.lane_x(lane, center) + @types.randf(-12.0, 12.0)
-      game.spawn_entity(
-        FoeBike,
-        x,
-        y + @types.randf(-28.0, 20.0),
-        @types.randf(-44.0, 44.0),
-        @types.randf(-20.0, 40.0),
-        44.0,
-        76.0,
-        18.0 + Float::from_int(game.stage - 1) * 3.0,
-        @types.randf(0.42, 1.22),
-        false,
-        120,
-      )
-    } else if roll < 56 {
-      let lane = @types.randi(0, @types.lanes_count - 1)
-      let x = @types.lane_x(lane, center) + @types.randf(-16.0, 16.0)
-      game.spawn_entity(
-        FoeDrone,
-        x,
-        y + @types.randf(-26.0, 24.0),
-        @types.randf(-60.0, 60.0),
-        @types.randf(-10.0, 30.0),
-        40.0,
-        40.0,
-        12.0 + Float::from_int(game.stage - 1) * 2.0,
-        @types.randf(0.26, 0.9),
-        game.stage >= 3 && @types.chance(26),
-        110,
-      )
-    } else if roll < 70 {
-      let lane = @types.randi(0, @types.lanes_count - 1)
-      let x = @types.lane_x(lane, center)
-      game.spawn_entity(
-        FoeTruck,
-        x,
-        y + @types.randf(-32.0, 22.0),
-        @types.randf(-18.0, 18.0),
-        @types.randf(-16.0, 18.0),
-        82.0,
-        124.0,
-        46.0 + Float::from_int(game.stage - 1) * 7.0,
-        @types.randf(0.7, 1.8),
-        false,
-        190,
-      )
-    } else if roll < 80 {
-      let lane = @types.randi(0, @types.lanes_count - 1)
-      let x = @types.lane_x(lane, center)
-      game.spawn_entity(
-        FoeLaser,
-        x,
-        y + @types.randf(-14.0, 12.0),
-        0.0,
-        @types.randf(-6.0, 12.0),
-        126.0,
-        18.0,
-        16.0,
-        @types.randf(0.9, 2.0),
-        false,
-        96,
-      )
-    } else if roll < 90 {
-      let x = @types.road_spawn_x(game.distance, game.time_s, game.stage, y)
-      game.spawn_entity(
-        ItemCredit,
-        x,
-        y + @types.randf(-18.0, 18.0),
-        @types.randf(-34.0, 34.0),
-        @types.randf(-14.0, 16.0),
-        34.0,
-        34.0,
-        1.0,
-        0.0,
-        false,
-        0,
-      )
-    } else if roll < 96 {
-      let x = @types.road_spawn_x(game.distance, game.time_s, game.stage, y)
-      game.spawn_entity(
-        ItemBattery,
-        x,
-        y + @types.randf(-18.0, 18.0),
-        @types.randf(-28.0, 28.0),
-        @types.randf(-12.0, 18.0),
-        38.0,
-        38.0,
-        1.0,
-        0.0,
-        false,
-        0,
-      )
-    } else {
-      let x = @types.road_spawn_x(game.distance, game.time_s, game.stage, y)
-      game.spawn_entity(
-        ItemHackcell,
-        x,
-        y + @types.randf(-14.0, 14.0),
-        @types.randf(-20.0, 20.0),
-        @types.randf(-10.0, 14.0),
-        34.0,
-        34.0,
-        1.0,
-        0.0,
-        false,
-        0,
-      )
-    }
-  }
-}
-
-///|
-/// Advances the spawn cursor by scroll speed and spawns enemy packs whenever the cursor crosses the screen top.
+/// Advances the spawn cursor by scroll speed and spawns encounter packs and hazards whenever the cursor crosses the screen top.
 fn @types.Game::spawn_step(game : @types.Game, dt : Float) -> Unit {
   game.next_spawn_y = game.next_spawn_y + game.scroll_speed * dt
+  game.formation_cd = @types.maxf(0.0, game.formation_cd - dt)
 
   let mut spawn_count = 0
   while game.next_spawn_y >= 0.0 && spawn_count < 18 {
     game.next_spawn_y = game.next_spawn_y -
       @types.randf(@types.spawn_spacing_min, @types.spawn_spacing_max)
-    game.spawn_enemy_pack(game.next_spawn_y)
+    game.encounter_spawn(game.next_spawn_y)
+    game.spawn_hazard_pack(game.next_spawn_y)
     spawn_count = spawn_count + 1
   }
 }
@@ -611,8 +505,10 @@ fn @types.Game::apply_hack_pulse(game : @types.Game) -> Unit {
   game.spawn_ring(game.hero.x, game.hero.y, 14.0, 0.9, 2)
   game.burst(game.hero.x, game.hero.y, 24, 2)
 
+  let hack_bonus = weapon_hack_bonus(game.weapon, game.weapon_level)
+  let effective_kill = @types.hack_pulse_kill + hack_bonus
   let rr2 = @types.hack_radius * @types.hack_radius
-  let kill2 = @types.hack_pulse_kill * @types.hack_pulse_kill
+  let kill2 = effective_kill * effective_kill
 
   for entity in game.entities {
     if !entity.active {
@@ -661,45 +557,9 @@ fn @types.Game::apply_hack_pulse(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Fires two parallel bullets from the player's gun ports and optionally a center bullet on higher stages.
+/// Fires player bullets using the current weapon upgrade system.
 fn @types.Game::shoot_player_bullet(game : @types.Game) -> Unit {
-  let spread : Float = if game.boost_t > 0.0 { 16.0 } else { 8.0 }
-
-  game.spawn_bullet(
-    true,
-    game.hero.x - 10.0,
-    game.hero.y - game.hero.h * 0.44,
-    @types.randf(-spread, spread),
-    -@types.bullet_speed,
-    @types.bullet_life,
-    8.0,
-    0,
-  )
-  game.spawn_bullet(
-    true,
-    game.hero.x + 10.0,
-    game.hero.y - game.hero.h * 0.44,
-    @types.randf(-spread, spread),
-    -@types.bullet_speed,
-    @types.bullet_life,
-    8.0,
-    0,
-  )
-
-  if game.stage >= 4 && @types.chance(28) {
-    game.spawn_bullet(
-      true,
-      game.hero.x,
-      game.hero.y - game.hero.h * 0.54,
-      @types.randf(-6.0, 6.0),
-      -@types.bullet_speed * 1.08,
-      @types.bullet_life,
-      6.0,
-      1,
-    )
-  }
-
-  game.hero.muzzle_t = 0.12
+  game.shoot_upgraded_bullet()
 }
 
 ///|
@@ -738,7 +598,8 @@ fn @types.Game::apply_player_input(game : @types.Game, dt : Float) -> Unit {
   if game.input_fire_hold && game.fire_cd <= 0.0 {
     game.shoot_player_bullet()
     game.fire_cd = if game.boost_t > 0.0 {
-      @types.fire_cooldown_base * 0.62
+      @types.fire_cooldown_base *
+      weapon_boost_fire_mult(game.weapon, game.weapon_level)
     } else {
       @types.fire_cooldown_base
     }
@@ -769,7 +630,12 @@ fn @types.Game::apply_player_input(game : @types.Game, dt : Float) -> Unit {
       @types.player_max_speed_y + @types.boost_speed_bonus * 0.7,
     )
   } else {
-    let drag_mul = @types.clampf(1.0 - @types.player_drag * dt, 0.0, 1.0)
+    let drag = if game.oil_t > 0.0 {
+      @types.player_drag * @types.oil_drag_factor
+    } else {
+      @types.player_drag
+    }
+    let drag_mul = @types.clampf(1.0 - drag * dt, 0.0, 1.0)
     game.hero.vx = game.hero.vx * drag_mul
     game.hero.vy = game.hero.vy * drag_mul
 
@@ -876,7 +742,7 @@ fn @types.Game::entity_fire(game : @types.Game, e : @types.Entity) -> Unit {
 }
 
 ///|
-/// Deactivates entity `i`, awards score, increments the kill count, and spawns a burst and glow ring at the kill position.
+/// Deactivates entity `i`, awards score, increments the kill count, spawns effects, and may drop weapon modules.
 fn @types.Game::kill_entity(
   game : @types.Game,
   i : Int,
@@ -885,12 +751,24 @@ fn @types.Game::kill_entity(
 ) -> Unit {
   let x = game.entities[i].x
   let y = game.entities[i].y
+  let kind = game.entities[i].kind
+  let is_elite = kind == FoeTruck || (kind == FoeDrone && game.stage >= 4)
   game.entities[i].active = false
   game.add_score(bonus)
   game.push_combo()
   game.kills = game.kills + 1
   game.burst(x, y, 16 + @types.randi(0, 8), burst_kind)
   game.spawn_ring(x, y, 10.0, 0.56, burst_kind)
+  // Screen shake on kill for game feel
+  game.shake_t = @types.maxf(game.shake_t, 0.15)
+  // Elite enemies can drop weapon modules
+  if is_elite {
+    game.try_drop_weapon(x, y)
+  }
+  // Track boss kill
+  if bonus >= @types.boss_kill_bonus {
+    game.boss_active = false
+  }
 }
 
 ///|
@@ -1047,8 +925,11 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
         let rr = @types.entity_hit_radius(game.entities[j]) + 8.0
         if d2 <= rr * rr {
           game.entities[j].hp = game.entities[j].hp - bullet.dmg
-          bullet.active = false
-          hit = true
+          // Piercing bullets (kind==2) pass through enemies instead of stopping
+          if bullet.kind != 2 {
+            bullet.active = false
+            hit = true
+          }
 
           game.emit_spark(
             game.entities[j].x,
@@ -1063,7 +944,9 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
           if game.entities[j].hp <= 0.0 {
             game.kill_entity(j, game.entities[j].reward, 0)
           }
-          break
+          if hit {
+            break
+          }
         }
       }
 
@@ -1185,6 +1068,8 @@ fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
 
   game.flash_t = @types.maxf(0.0, game.flash_t - dt)
   game.shake_t = @types.maxf(0.0, game.shake_t - dt)
+  game.oil_t = @types.maxf(0.0, game.oil_t - dt)
+  game.stage_trans_t = @types.maxf(0.0, game.stage_trans_t - dt)
 
   if game.combo_t > 0.0 {
     game.combo_t = game.combo_t - dt
@@ -1209,6 +1094,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.update_entities(dt)
   game.update_bullets(dt)
   game.update_effects(dt)
+  game.update_hazards(dt)
 
   game.energy = @types.maxf(
     0.0,
@@ -1231,14 +1117,33 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     game.damage_player(100.0)
   }
 
+  // Emit extra afterimage trail during boost for game feel
+  if game.boost_t > 0.0 && @types.chance(60) {
+    game.emit_image(
+      game.hero.x + @types.randf(-6.0, 6.0),
+      game.hero.y + 24.0,
+      game.hero.w * 0.8,
+      game.hero.h * 0.6,
+      game.hero.heading,
+      @types.randf(0.1, 0.2),
+      1,
+    )
+  }
+
   if game.state == Play && game.distance >= game.stage_goal {
     game.state = StageClear
     game.result_t = 0.0
+    game.stage_trans_t = @types.stage_trans_duration
     game.add_score(320 + game.stage * 120)
     game.shield = @types.minf(@types.player_shield_max, game.shield + 14.0)
     game.energy = @types.minf(@types.player_energy_max, game.energy + 20.0)
     game.spawn_ring(game.hero.x, game.hero.y, 18.0, 0.9, 2)
     game.burst(game.hero.x, game.hero.y, 28, 2)
+    // Combo stinger effect
+    if game.combo >= 5 {
+      game.burst(game.hero.x, game.hero.y, 36, 2)
+      game.spawn_ring(game.hero.x, game.hero.y, 30.0, 1.0, 0)
+    }
   }
 }
 

@@ -173,3 +173,75 @@ pub let invuln_after_hit : Float = 0.62
 ///|
 /// Gameplay tuning constant for ui panel h.
 pub let ui_panel_h : Int = 112
+
+///|
+/// Duration of the oil slick control reduction effect.
+pub let oil_slick_duration : Float = 1.8
+
+///|
+/// Drag multiplier when affected by oil slick (lower = more slide).
+pub let oil_drag_factor : Float = 0.3
+
+///|
+/// Width of an oil slick hazard.
+pub let oil_slick_w : Float = 90.0
+
+///|
+/// Height of an oil slick hazard.
+pub let oil_slick_h : Float = 40.0
+
+///|
+/// Width of a barrier gate hazard.
+pub let barrier_gate_w : Float = 60.0
+
+///|
+/// Height of a barrier gate hazard.
+pub let barrier_gate_h : Float = 24.0
+
+///|
+/// Damage dealt by a barrier gate collision.
+pub let barrier_gate_dmg : Float = 18.0
+
+///|
+/// Width of a blast zone hazard.
+pub let blast_zone_w : Float = 70.0
+
+///|
+/// Height of a blast zone hazard.
+pub let blast_zone_h : Float = 70.0
+
+///|
+/// Damage dealt by a blast zone explosion.
+pub let blast_zone_dmg : Float = 22.0
+
+///|
+/// Duration before a blast zone explodes.
+pub let blast_zone_fuse : Float = 2.2
+
+///|
+/// Warning telegraph time before a hazard activates.
+pub let hazard_warn_time : Float = 1.0
+
+///|
+/// HP for a boss entity.
+pub let boss_hp_base : Float = 180.0
+
+///|
+/// HP gain per stage for boss entities.
+pub let boss_hp_per_stage : Float = 40.0
+
+///|
+/// Score bonus for defeating a boss.
+pub let boss_kill_bonus : Int = 800
+
+///|
+/// Spread upgrade extra bullet angle in degrees.
+pub let spread_angle : Float = 14.0
+
+///|
+/// Chance (percent) for elite enemies to drop a weapon module.
+pub let elite_drop_chance : Int = 18
+
+///|
+/// Duration of the stage transition effect.
+pub let stage_trans_duration : Float = 1.2

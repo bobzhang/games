@@ -164,6 +164,15 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+  hazards : Array[Hazard]
+  mut weapon : WeaponUpgrade?
+  mut weapon_level : Int
+  mut oil_t : Float
+  mut stage_trans_t : Float
+  mut boss_active : Bool
+  mut boss_hp : Float
+  mut boss_max_hp : Float
+  mut formation_cd : Float
 
   fn new() -> Game
 }
@@ -314,5 +323,14 @@ pub fn Game::new() -> Game {
     mouse_y: 0.0,
     mouse_hold: false,
     touch_count: 0,
+    hazards: Array::makei(max_hazards, fn(_i) { Hazard::new() }),
+    weapon: None,
+    weapon_level: 0,
+    oil_t: 0.0,
+    stage_trans_t: 0.0,
+    boss_active: false,
+    boss_hp: 0.0,
+    boss_max_hp: 0.0,
+    formation_cd: 0.0,
   }
 }

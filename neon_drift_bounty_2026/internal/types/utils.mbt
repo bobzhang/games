@@ -330,6 +330,24 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Returns true if two axis-aligned rectangles overlap.
+pub fn rect_overlap(
+  ax : Float,
+  ay : Float,
+  aw : Float,
+  ah : Float,
+  bx : Float,
+  by : Float,
+  bw : Float,
+  bh : Float,
+) -> Bool {
+  ax - aw * 0.5 < bx + bw * 0.5 &&
+  ax + aw * 0.5 > bx - bw * 0.5 &&
+  ay - ah * 0.5 < by + bh * 0.5 &&
+  ay + ah * 0.5 > by - bh * 0.5
+}
+
+///|
 /// Returns the rectangle used for pointer on rect.
 pub fn pointer_on_rect(
   mx : Float,
