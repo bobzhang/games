@@ -1,0 +1,6 @@
+import {
+  "bobzhang/games/compass/internal/types",
+  "bobzhang/games/compass/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

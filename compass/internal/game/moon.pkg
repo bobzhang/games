@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/compass/internal/types",
+  "bobzhang/games/compass/internal/levels",
+  "bobzhang/games/compass/internal/navigation",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
