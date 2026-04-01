@@ -1,0 +1,9 @@
+import {
+  "bobzhang/games/leyline/internal/types",
+}
+
+import {
+  "bobzhang/games/leyline/internal/types",
+} for "test"
+
+warnings = "-missing_doc+unnecessary_annotation"
