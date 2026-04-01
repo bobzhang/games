@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/tide_pool/internal/types",
+  "bobzhang/games/tide_pool/internal/ecology",
+  "bobzhang/games/tide_pool/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

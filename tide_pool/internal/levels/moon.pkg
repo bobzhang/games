@@ -1,0 +1,5 @@
+import {
+  "bobzhang/games/tide_pool/internal/types",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
