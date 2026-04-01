@@ -1,0 +1,11 @@
+import {
+  "bobzhang/games/glaze/internal/types",
+  "bobzhang/games/glaze/internal/kiln",
+}
+
+import {
+  "bobzhang/games/glaze/internal/types",
+  "bobzhang/games/glaze/internal/levels",
+} for "test"
+
+warnings = "-missing_doc+unnecessary_annotation"

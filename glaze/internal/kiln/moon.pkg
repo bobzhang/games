@@ -1,0 +1,9 @@
+import {
+  "bobzhang/games/glaze/internal/types",
+}
+
+import {
+  "bobzhang/games/glaze/internal/types",
+} for "test"
+
+warnings = "-missing_doc+unnecessary_annotation"

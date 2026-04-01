@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/glaze/internal/types",
+  "bobzhang/games/glaze/internal/kiln",
+  "bobzhang/games/glaze/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
