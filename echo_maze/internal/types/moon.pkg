@@ -3,4 +3,8 @@ import {
   "moonbitlang/core/math",
 }
 
+import {
+  "bobzhang/games/echo_maze/internal/maze",
+} for "test"
+
 warnings = "-missing_doc+unnecessary_annotation"

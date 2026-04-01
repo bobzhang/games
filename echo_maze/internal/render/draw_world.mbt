@@ -35,29 +35,101 @@ fn tile_color(
     Exit => @types.color_exit
     Button(_) => @types.color_floor // glow drawn separately
     Door(id) => {
-      let mut open = false
+      let mut anim : Float = 0.0
       for ds in maze_state.door_states {
         if ds.door_id == id {
-          open = ds.open
+          anim = ds.anim_progress
         }
       }
-      if open { @types.color_door_open } else { @types.color_door_closed }
+      // Smooth color blend based on animation progress
+      let t = anim.to_double()
+      let r = (60.0 + -60.0 * t * 0.7).to_int()
+      let g = (100.0 + -100.0 * t * 0.7).to_int()
+      let b = (220.0 + -220.0 * t * 0.2).to_int()
+      let a = (255.0 + -195.0 * t).to_int()
+      @raylib.Color::new(r, g, b, a)
     }
     TimedDoor(id, _) => {
-      let mut open = false
+      let mut anim : Float = 0.0
       for ds in maze_state.door_states {
         if ds.door_id == id {
-          open = ds.open
+          anim = ds.anim_progress
         }
       }
-      if open {
-        @raylib.Color::new(100, 60, 220, 60)
-      } else {
-        @types.color_timed_door
-      }
+      let t = anim.to_double()
+      let r = (100.0 + -100.0 * t * 0.5).to_int()
+      let g = (60.0 + -60.0 * t * 0.5).to_int()
+      let b = (220.0 + -220.0 * t * 0.1).to_int()
+      let a = (255.0 + -195.0 * t).to_int()
+      @raylib.Color::new(r, g, b, a)
     }
     Guard => @types.color_floor
     Collectible => @types.color_floor // drawn separately
+  }
+}
+
+///|
+/// Draw door animation effects (sliding open/close visual)
+pub fn draw_door_animations(
+  maze : @types.Maze,
+  maze_state : @types.MazeState
+) -> Unit {
+  let ts = @types.tile_size
+  let ox = @types.grid_offset_x
+  let oy = @types.grid_offset_y
+  for y in 0..<maze.height {
+    for x in 0..<maze.width {
+      match maze.tiles[y][x].kind {
+        Door(id) | TimedDoor(id, _) => {
+          let mut anim : Float = 0.0
+          for ds in maze_state.door_states {
+            if ds.door_id == id {
+              anim = ds.anim_progress
+            }
+          }
+          // Draw sliding panels effect
+          let anim_f = anim.to_double()
+          if anim_f > 0.01 && anim_f < 0.99 {
+            let px = ox + x * ts
+            let py = oy + y * ts
+            let half_gap = (ts.to_double() / 2.0 * anim_f).to_int()
+            let is_timed = maze.tiles[y][x].kind is TimedDoor(_, _)
+            let panel_color = if is_timed {
+              @raylib.Color::new(100, 60, 220, 200)
+            } else {
+              @raylib.Color::new(60, 100, 220, 200)
+            }
+            // Left panel slides left
+            @raylib.draw_rectangle(
+              px,
+              py + 2,
+              ts / 2 - half_gap,
+              ts - 4,
+              panel_color,
+            )
+            // Right panel slides right
+            @raylib.draw_rectangle(
+              px + ts / 2 + half_gap,
+              py + 2,
+              ts / 2 - half_gap,
+              ts - 4,
+              panel_color,
+            )
+            // Spark effect at center during transition
+            let mid_dist = if anim_f > 0.5 { anim_f - 0.5 } else { 0.5 - anim_f }
+            let spark_alpha = (150.0 * (1.0 - mid_dist * 2.0)).to_int()
+            let cx = Float::from_int(px + ts / 2)
+            let cy = Float::from_int(py + ts / 2)
+            @raylib.draw_circle_v(
+              @raylib.Vector2::new(cx, cy),
+              3.0,
+              @raylib.Color::new(255, 255, 255, spark_alpha),
+            )
+          }
+        }
+        _ => ()
+      }
+    }
   }
 }
 

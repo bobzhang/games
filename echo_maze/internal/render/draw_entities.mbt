@@ -101,7 +101,7 @@ pub fn draw_ghosts(game : @types.Game, maze : @types.Maze) -> Unit {
 }
 
 ///|
-/// Draw guards as red triangles
+/// Draw guards as red triangles with alert state coloring
 pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
@@ -110,6 +110,22 @@ pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
     let px = Float::from_int(ox + gs.pos.x * ts + ts / 2)
     let py = Float::from_int(oy + gs.pos.y * ts + ts / 2)
     let half : Float = Float::from_int(ts) / 2.0 - 5.0
+    // Color based on alert state
+    let body_color : @raylib.Color = match gs.alert {
+      Idle => @types.color_guard
+      Alert => {
+        // Pulsing orange-red for alert
+        let pulse = (@types.sinf(Float::from_int(game.frame_count) * 0.3) * 0.3 + 0.7).to_double()
+        let r = (240.0 * pulse).to_int()
+        let g = (120.0 * pulse).to_int()
+        @raylib.Color::new(r, g, 20, 255)
+      }
+      Chasing => {
+        // Bright flashing red for chasing
+        let flash = (@types.sinf(Float::from_int(game.frame_count) * 0.5) * 0.4 + 0.6).to_double()
+        @raylib.Color::new(255, (30.0 * flash).to_int(), (30.0 * flash).to_int(), 255)
+      }
+    }
     // Determine patrol direction for visual indicator
     let facing_x : Float = if gs.forward { 1.0 } else { -1.0 }
     // Triangle pointing in patrol direction
@@ -123,10 +139,15 @@ pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
       @raylib.Vector2::new(front_x, front_y),
       @raylib.Vector2::new(back_x1, back_y1),
       @raylib.Vector2::new(back_x2, back_y2),
-      @types.color_guard,
+      body_color,
     )
-    // Guard vision cone (simplified - highlight tiles in patrol direction)
+    // Guard vision cone (highlight tiles in patrol direction)
     let vision_range = 2
+    let vision_alpha : Int = match gs.alert {
+      Idle => 20
+      Alert => 40
+      Chasing => 60
+    }
     let dir_x : Int = if gs.forward { 1 } else { -1 }
     for v in 1..=vision_range {
       let vx = gs.pos.x + dir_x * v
@@ -137,24 +158,50 @@ pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
           oy + vy * ts,
           ts,
           ts,
-          @raylib.Color::new(240, 50, 50, 25),
+          @raylib.Color::new(240, 50, 50, vision_alpha),
         )
       }
     }
-    // Alert pulse
-    let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.2) * 3.0
+    // Alert-dependent pulse ring
+    let pulse_speed : Float = match gs.alert {
+      Idle => 0.15
+      Alert => 0.3
+      Chasing => 0.5
+    }
+    let pulse_size : Float = match gs.alert {
+      Idle => 2.0
+      Alert => 4.0
+      Chasing => 6.0
+    }
+    let pulse = @types.sinf(Float::from_int(game.frame_count) * pulse_speed) * pulse_size
+    let ring_alpha : Int = match gs.alert {
+      Idle => 30
+      Alert => 60
+      Chasing => 100
+    }
     @raylib.draw_circle_lines_v(
       @raylib.Vector2::new(px, py),
       half + 2.0 + pulse,
-      @raylib.Color::new(240, 50, 50, 40),
+      @raylib.Color::new(240, 50, 50, ring_alpha),
     )
-    // "!" indicator
+    // Alert indicator above guard
+    let indicator : String = match gs.alert {
+      Idle => "!"
+      Alert => "!?"
+      Chasing => "!!!"
+    }
+    let indicator_color : @raylib.Color = match gs.alert {
+      Idle => @types.color_guard
+      Alert => @raylib.Color::new(255, 180, 40, 255)
+      Chasing => @raylib.Color::new(255, 50, 50, 255)
+    }
+    let iw = @draw.measure_text(indicator, 12)
     @draw.draw_text(
-      "!",
-      (px - 3.0).to_int(),
+      indicator,
+      (px - Float::from_int(iw) / 2.0).to_int(),
       (py - half - 14.0).to_int(),
       12,
-      @types.color_guard,
+      indicator_color,
     )
   }
 }

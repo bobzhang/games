@@ -30,6 +30,7 @@ fn draw_playing(game : @types.Game) -> Unit {
           // Draw world
           draw_tiles(maze, maze_state)
           draw_wall_edges(maze)
+          draw_door_animations(maze, maze_state)
           draw_grid_border(maze)
           draw_exit_glow(maze, game)
           draw_button_glow(maze, maze_state, game)
@@ -43,9 +44,13 @@ fn draw_playing(game : @types.Game) -> Unit {
           draw_player(game)
           // Draw FX
           draw_ghost_trails(game)
+          draw_ghost_collision_preview(game)
+          draw_ghost_button_feedback(game)
           draw_danger_border(game)
           draw_scanlines(game)
           draw_failed_overlay(game)
+          draw_restart_flash(game)
+          draw_loop_transition(game)
           // Draw HUD
           draw_hud(game)
           // Draw message

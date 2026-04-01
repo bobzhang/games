@@ -2,6 +2,7 @@ import {
   "tonyfettes/raylib",
   "bobzhang/games/echo_maze/internal/types",
   "bobzhang/games/echo_maze/internal/maze",
+  "bobzhang/games/echo_maze/internal/simulation",
   "bobzhang/games/utils/draw",
   "moonbitlang/core/math",
 }

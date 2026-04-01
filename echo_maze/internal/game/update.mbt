@@ -10,6 +10,33 @@ pub fn update(game : @types.Game) -> Unit {
       game.message = ""
     }
   }
+  // Update restart flash timer
+  if game.restart_flash_timer > 0.0 {
+    game.restart_flash_timer -= dt
+  }
+  // Update loop transition timer
+  if game.loop_transition_timer > 0.0 {
+    game.loop_transition_timer -= dt
+  }
+  // Update ghost button feedback timers
+  let mut i = 0
+  while i < game.ghost_button_feedback.length() {
+    game.ghost_button_feedback[i].timer -= dt
+    if game.ghost_button_feedback[i].timer <= 0.0 {
+      let _ = game.ghost_button_feedback.remove(i)
+    } else {
+      i += 1
+    }
+  }
+  // Update door animations
+  match game.maze_state {
+    Some(maze_state) => {
+      @types.update_door_animations(maze_state, dt)
+      // Update guard alert timers
+      @simulation.update_guard_alert_timers(maze_state, dt)
+    }
+    None => ()
+  }
   match game.screen {
     Title => process_title_input(game)
     WorldSelect => process_world_select_input(game)
@@ -43,15 +70,38 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     @time.enter_planning(game)
     return
   }
-  // Check for restart
+  // Check for restart (faster restart with flash feedback)
   if @raylib.is_key_pressed(@raylib.KeyR) {
     @time.reset_level(game)
-    @types.set_message(game, "Level Reset", 1.0)
+    game.restart_flash_timer = 0.3
+    @types.set_message(game, "Level Reset", 0.6)
     return
   }
   // Run simulation tick
   if game.tick < game.max_ticks && game.play_state is Recording {
     let result = @time.advance_tick(game, move_dir)
+    // Detect ghost button presses for visual feedback
+    match game.maze {
+      Some(maze) => {
+        let presses = @simulation.detect_ghost_button_presses(maze, game.ghosts)
+        for press in presses {
+          // Check if we already have feedback for this ghost+button combo
+          let mut already_tracked = false
+          for fb in game.ghost_button_feedback {
+            if fb.ghost_index == press.0 && fb.button_id == press.1 {
+              fb.timer = 0.8 // refresh timer
+              already_tracked = true
+            }
+          }
+          if !already_tracked {
+            game.ghost_button_feedback.push(
+              { ghost_index: press.0, button_id: press.1, timer: 0.8 },
+            )
+          }
+        }
+      }
+      None => ()
+    }
     match result {
       Completed(_) => @time.complete_current_level(game)
       Failed => {
@@ -66,55 +116,76 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
       @time.enter_planning(game)
     }
   }
-  // Handle failed state
+  // Handle failed state - quick restart
   if game.play_state is Failed {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       @time.reset_level(game)
+      game.restart_flash_timer = 0.3
+      @types.set_message(game, "Retry!", 0.6)
+    }
+    // Also allow Space to enter planning from failed state
+    if @raylib.is_key_pressed(@raylib.KeySpace) {
+      @time.enter_planning(game)
     }
   }
 }
 
 ///|
 fn update_planning(game : @types.Game) -> Unit {
+  game.planning_paused = true
   // In planning mode, player reviews and decides next action
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.screen = Paused
     return
   }
-  // Start new loop
+  // Start new loop with transition
   if @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyEnter) {
     @time.start_new_loop(game)
+    game.loop_transition_timer = 0.3
+    game.planning_paused = false
     game.screen = Playing
     return
   }
   // Undo last ghost
   if @raylib.is_key_pressed(@raylib.KeyU) {
     if @time.undo_loop(game) {
-      @types.set_message(game, "Ghost removed", 1.0)
+      @types.set_message(game, "Ghost removed", 0.8)
     } else {
-      @types.set_message(game, "No ghosts to undo", 1.0)
+      @types.set_message(game, "No ghosts to undo", 0.8)
     }
   }
-  // Full reset
+  // Full reset (faster restart)
   if @raylib.is_key_pressed(@raylib.KeyR) {
     @time.reset_level(game)
+    game.restart_flash_timer = 0.3
+    game.planning_paused = false
     game.screen = Playing
-    @types.set_message(game, "Level Reset", 1.0)
+    @types.set_message(game, "Level Reset", 0.6)
   }
   // Quit to level select
   if @raylib.is_key_pressed(@raylib.KeyQ) {
+    game.planning_paused = false
     game.screen = LevelSelect
   }
-  // Scrub timeline with left/right
-  if @raylib.is_key_pressed(@raylib.KeyRight) {
+  // Scrub timeline with left/right (with held-key fast scrub)
+  if @raylib.is_key_pressed(@raylib.KeyRight) ||
+    (@raylib.is_key_down(@raylib.KeyRight) && game.frame_count % 4 == 0) {
     game.planning_tick = @types.mini(
       game.planning_tick + 1,
       game.timeline.length() - 1,
     )
   }
-  if @raylib.is_key_pressed(@raylib.KeyLeft) {
+  if @raylib.is_key_pressed(@raylib.KeyLeft) ||
+    (@raylib.is_key_down(@raylib.KeyLeft) && game.frame_count % 4 == 0) {
     game.planning_tick = @types.maxi(game.planning_tick - 1, 0)
+  }
+  // Home/End keys for quick timeline jump
+  if @raylib.is_key_pressed(@raylib.KeyHome) {
+    game.planning_tick = 0
+  }
+  if @raylib.is_key_pressed(@raylib.KeyEnd) {
+    game.planning_tick = @types.maxi(game.timeline.length() - 1, 0)
   }
 }
 

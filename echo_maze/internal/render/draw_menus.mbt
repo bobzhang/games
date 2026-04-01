@@ -356,15 +356,40 @@ fn draw_star_display(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 }
 
 ///|
-/// Draw planning overlay
+/// Draw planning overlay with improved timeline scrubber
 pub fn draw_planning_overlay(game : @types.Game) -> Unit {
   let sw = @types.screen_width
   let sh = @types.screen_height
   // Semi-transparent overlay
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 100))
+  // Pause indicator pulsing bars at top
+  if game.planning_paused {
+    let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.1) * 0.3 + 0.7
+    let bar_alpha = (180.0 * pulse.to_double()).to_int()
+    let bar_w = 12
+    let bar_h = 30
+    let bar_gap = 8
+    let bx = sw / 2 - bar_w - bar_gap / 2
+    let by = 12
+    @raylib.draw_rectangle(bx, by, bar_w, bar_h, @raylib.Color::new(240, 220, 40, bar_alpha))
+    @raylib.draw_rectangle(
+      bx + bar_w + bar_gap,
+      by,
+      bar_w,
+      bar_h,
+      @raylib.Color::new(240, 220, 40, bar_alpha),
+    )
+    @draw.draw_text(
+      "PAUSED",
+      sw / 2 - 25,
+      by + bar_h + 4,
+      10,
+      @raylib.Color::new(240, 220, 40, bar_alpha),
+    )
+  }
   // Planning panel
   let panel_w = 500
-  let panel_h = 300
+  let panel_h = 340
   let px = sw / 2 - panel_w / 2
   let py = sh / 2 - panel_h / 2
   @raylib.draw_rectangle(
@@ -404,20 +429,40 @@ pub fn draw_planning_overlay(game : @types.Game) -> Unit {
     16,
     @types.color_hud_text,
   )
-  y += 24
-  @draw.draw_text(
-    "Ghost slots remaining: \{ghosts_left}",
-    nx,
-    y,
-    14,
-    if ghosts_left > 0 {
-      @raylib.Color::new(60, 220, 80, 220)
+  y += 20
+  // Ghost slot indicators (colored dots)
+  for i in 0..<@types.max_ghosts {
+    let gx = nx + i * 24
+    if i < ghosts_used {
+      let color = @types.ghost_color_value(game.ghosts[i].color)
+      @raylib.draw_circle(gx + 8, y + 8, 7.0, color)
     } else {
-      @raylib.Color::new(240, 50, 50, 220)
+      @raylib.draw_circle_lines(
+        gx + 8,
+        y + 8,
+        7.0,
+        @raylib.Color::new(80, 65, 120, 100),
+      )
+    }
+  }
+  let remaining_text = if ghosts_left > 0 {
+    "  +\{ghosts_left} slots"
+  } else {
+    "  FULL"
+  }
+  @draw.draw_text(
+    remaining_text,
+    nx + @types.max_ghosts * 24 + 4,
+    y + 2,
+    12,
+    if ghosts_left > 0 {
+      @raylib.Color::new(60, 220, 80, 200)
+    } else {
+      @raylib.Color::new(240, 50, 50, 200)
     },
   )
-  y += 30
-  // Timeline scrubber
+  y += 26
+  // Enhanced timeline scrubber
   @draw.draw_text(
     "Timeline:",
     nx,
@@ -425,9 +470,18 @@ pub fn draw_planning_overlay(game : @types.Game) -> Unit {
     12,
     @raylib.Color::new(120, 115, 140, 200),
   )
+  let ticks_label = "\{game.planning_tick} / \{game.timeline.length()}"
+  @draw.draw_text(
+    ticks_label,
+    nx + panel_w - 80,
+    y,
+    12,
+    @types.color_hud_text,
+  )
   y += 16
   let tl_w = panel_w - 50
-  let tl_h = 20
+  let tl_h = 24
+  // Timeline background with tick marks
   @raylib.draw_rectangle(
     nx,
     y,
@@ -435,27 +489,66 @@ pub fn draw_planning_overlay(game : @types.Game) -> Unit {
     tl_h,
     @types.color_timeline_bg,
   )
+  @raylib.draw_rectangle_lines(
+    nx,
+    y,
+    tl_w,
+    tl_h,
+    @raylib.Color::new(80, 65, 120, 100),
+  )
   if game.timeline.length() > 0 {
     let tick_w : Float = Float::from_int(tl_w) / Float::from_int(
       game.timeline.length(),
     )
+    // Draw ghost activity markers along timeline
+    for ti in 0..<game.timeline.length() {
+      let entry = game.timeline[ti]
+      let tx = nx + (Float::from_int(ti) * tick_w).to_int()
+      // Draw small colored dots for ghost positions in timeline
+      for gi in 0..<entry.ghost_positions.length() {
+        let gc = @types.ghost_color_for_index(gi)
+        let dot_color = match gc {
+          Green => @raylib.Color::new(60, 220, 80, 60)
+          Yellow => @raylib.Color::new(240, 220, 40, 60)
+          Orange => @raylib.Color::new(240, 140, 40, 60)
+        }
+        let dot_y = y + 4 + gi * 5
+        @raylib.draw_rectangle(tx, dot_y, @types.maxi(tick_w.to_int(), 1), 3, dot_color)
+      }
+      // Mark button press events
+      for bi in 0..<entry.buttons_pressed.length() {
+        if entry.buttons_pressed[bi] {
+          @raylib.draw_rectangle(
+            tx,
+            y + tl_h - 3,
+            @types.maxi(tick_w.to_int(), 1),
+            2,
+            @raylib.Color::new(255, 200, 40, 80),
+          )
+        }
+      }
+    }
+    // Cursor (playback position)
     let cursor_x = nx + (Float::from_int(game.planning_tick) * tick_w).to_int()
+    let cursor_w = @types.maxi(tick_w.to_int(), 3)
     @raylib.draw_rectangle(
       cursor_x,
       y,
-      @types.maxi(tick_w.to_int(), 3),
+      cursor_w,
       tl_h,
-      @raylib.Color::new(0, 220, 240, 200),
+      @raylib.Color::new(0, 220, 240, 180),
+    )
+    // Cursor handle (triangle above)
+    let handle_x = Float::from_int(cursor_x + cursor_w / 2)
+    let handle_y = Float::from_int(y - 2)
+    @raylib.draw_triangle(
+      @raylib.Vector2::new(handle_x - 4.0, handle_y - 6.0),
+      @raylib.Vector2::new(handle_x + 4.0, handle_y - 6.0),
+      @raylib.Vector2::new(handle_x, handle_y),
+      @raylib.Color::new(0, 220, 240, 255),
     )
   }
-  @draw.draw_text(
-    "Tick \{game.planning_tick}",
-    nx + tl_w + 5,
-    y + 2,
-    12,
-    @types.color_hud_text,
-  )
-  y += 35
+  y += tl_h + 12
   // Options
   @draw.draw_text(
     "SPACE/ENTER  Start New Loop",
@@ -490,7 +583,7 @@ pub fn draw_planning_overlay(game : @types.Game) -> Unit {
   )
   y += 22
   @draw.draw_text(
-    "LEFT/RIGHT  Scrub Timeline",
+    "LEFT/RIGHT  Scrub    HOME/END  Jump",
     nx,
     y,
     13,
