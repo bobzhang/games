@@ -106,16 +106,32 @@ fn draw_gear(gear : @types.Gear, preview : Bool) -> Unit {
       draw_ratchet_indicator(cx, cy, radius)
     }
   }
-  // Draw RPM label if active and not preview
+  // Draw RPM + direction label if active and not preview
   if !preview && @types.absf(gear.rpm) > 0.01 {
-    let rpm_text = gear.rpm.to_int().to_string() + " RPM"
+    let dir_str : String = match gear.dir {
+      CW => "CW"
+      CCW => "CCW"
+    }
+    let rpm_text = gear.rpm.to_int().to_string() + " " + dir_str
     let tw = @draw.measure_text(rpm_text, 12)
+    // Background pill for readability
+    @raylib.draw_rectangle(
+      cx.to_int() - tw / 2 - 3,
+      cy.to_int() + radius.to_int() + 8,
+      tw + 6,
+      16,
+      @raylib.Color::new(20, 18, 30, 200),
+    )
+    let label_color = match gear.dir {
+      CW => @raylib.Color::new(120, 220, 255, 255)
+      CCW => @raylib.Color::new(255, 180, 120, 255)
+    }
     @draw.draw_text(
       rpm_text,
       cx.to_int() - tw / 2,
       cy.to_int() + radius.to_int() + 10,
       12,
-      @types.color_text,
+      label_color,
     )
     // Draw direction arrow
     draw_dir_arrow(cx, cy, radius + 16.0, gear.dir, gear.angle)
@@ -205,17 +221,46 @@ fn draw_connections(game : @types.Game) -> Unit {
       conn.to < game.placed_gears.length() {
       let g1 = game.placed_gears[conn.from]
       let g2 = game.placed_gears[conn.to]
-      if g1.active && g2.active && conn.flips_dir {
+      if g1.active && g2.active {
         let x1 = @types.peg_screen_x(g1.pos.x)
         let y1 = @types.peg_screen_y(g1.pos.y)
         let x2 = @types.peg_screen_x(g2.pos.x)
         let y2 = @types.peg_screen_y(g2.pos.y)
-        @raylib.draw_line_ex(
-          @raylib.Vector2::new(x1, y1),
-          @raylib.Vector2::new(x2, y2),
-          1.0,
-          @types.color_mesh_line,
-        )
+        if conn.flips_dir {
+          // Gear mesh connection line
+          @raylib.draw_line_ex(
+            @raylib.Vector2::new(x1, y1),
+            @raylib.Vector2::new(x2, y2),
+            1.0,
+            @types.color_mesh_line,
+          )
+          // Draw gear-ratio badge at midpoint
+          let mx = (x1 + x2) / 2.0
+          let my = (y1 + y2) / 2.0
+          let inv_ratio : Float = 1.0 / conn.ratio + 0.5
+          let ratio_text = if conn.ratio > 1.005 {
+            "x" + conn.ratio.to_int().to_string()
+          } else if conn.ratio < 0.995 {
+            "/" + inv_ratio.to_int().to_string()
+          } else {
+            "1:1"
+          }
+          let tw = @draw.measure_text(ratio_text, 10)
+          @raylib.draw_rectangle(
+            mx.to_int() - tw / 2 - 2,
+            my.to_int() - 7,
+            tw + 4,
+            14,
+            @raylib.Color::new(20, 18, 30, 200),
+          )
+          @draw.draw_text(
+            ratio_text,
+            mx.to_int() - tw / 2,
+            my.to_int() - 6,
+            10,
+            @types.color_mesh_line,
+          )
+        }
       }
     }
   }
@@ -223,6 +268,8 @@ fn draw_connections(game : @types.Game) -> Unit {
 
 ///|
 fn draw_belts(game : @types.Game) -> Unit {
+  let belt_highlight = @raylib.Color::new(140, 110, 80, 255)
+  let belt_dash_color = @raylib.Color::new(80, 65, 50, 180)
   for i in 0..<game.belts.length() {
     let belt = game.belts[i]
     if belt.active {
@@ -230,24 +277,85 @@ fn draw_belts(game : @types.Game) -> Unit {
       let y1 = @types.peg_screen_y(belt.from_pos.y)
       let x2 = @types.peg_screen_x(belt.to_pos.x)
       let y2 = @types.peg_screen_y(belt.to_pos.y)
-      // Draw belt as two parallel lines
       let dx = x2 - x1
       let dy = y2 - y1
       let len = @types.sqrtf(dx * dx + dy * dy)
       if len > 0.01 {
-        let nx = -dy / len * 4.0
-        let ny = dx / len * 4.0
+        let nx = -dy / len * 5.0
+        let ny = dx / len * 5.0
+        // Outer belt bands (thicker)
         @raylib.draw_line_ex(
           @raylib.Vector2::new(x1 + nx, y1 + ny),
           @raylib.Vector2::new(x2 + nx, y2 + ny),
-          2.0,
-          @types.color_belt,
+          2.5,
+          belt_highlight,
         )
         @raylib.draw_line_ex(
           @raylib.Vector2::new(x1 - nx, y1 - ny),
           @raylib.Vector2::new(x2 - nx, y2 - ny),
+          2.5,
+          belt_highlight,
+        )
+        // Draw dashed center line to show belt motion
+        let dash_len : Float = 8.0
+        let gap_len : Float = 6.0
+        let unit_x = dx / len
+        let unit_y = dy / len
+        let mut t : Float = 0.0
+        while t < len {
+          let seg_end = @types.minf(t + dash_len, len)
+          let sx1 = x1 + unit_x * t
+          let sy1 = y1 + unit_y * t
+          let sx2 = x1 + unit_x * seg_end
+          let sy2 = y1 + unit_y * seg_end
+          @raylib.draw_line_ex(
+            @raylib.Vector2::new(sx1, sy1),
+            @raylib.Vector2::new(sx2, sy2),
+            1.0,
+            belt_dash_color,
+          )
+          t = t + dash_len + gap_len
+        }
+        // Pulley circles at endpoints
+        @raylib.draw_circle_lines(
+          x1.to_int(),
+          y1.to_int(),
+          8.0,
+          belt_highlight,
+        )
+        @raylib.draw_circle_lines(
+          x2.to_int(),
+          y2.to_int(),
+          8.0,
+          belt_highlight,
+        )
+        // Direction arrow at midpoint
+        let mx = (x1 + x2) / 2.0
+        let my = (y1 + y2) / 2.0
+        let arrow_len : Float = 6.0
+        let ax1 = mx + unit_x * arrow_len
+        let ay1 = my + unit_y * arrow_len
+        let hx1 = mx - unit_x * 2.0 + nx * 0.6
+        let hy1 = my - unit_y * 2.0 + ny * 0.6
+        let hx2 = mx - unit_x * 2.0 - nx * 0.6
+        let hy2 = my - unit_y * 2.0 - ny * 0.6
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(mx, my),
+          @raylib.Vector2::new(ax1, ay1),
           2.0,
-          @types.color_belt,
+          belt_highlight,
+        )
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(ax1, ay1),
+          @raylib.Vector2::new(hx1, hy1),
+          2.0,
+          belt_highlight,
+        )
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(ax1, ay1),
+          @raylib.Vector2::new(hx2, hy2),
+          2.0,
+          belt_highlight,
         )
       }
     }
