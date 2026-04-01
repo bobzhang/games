@@ -1,0 +1,6 @@
+import {
+  "bobzhang/games/alloy/internal/types",
+  "bobzhang/games/alloy/internal/forge",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

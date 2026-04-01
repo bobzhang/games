@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/alloy/internal/types",
+  "bobzhang/games/alloy/internal/game",
+  "bobzhang/games/alloy/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)
