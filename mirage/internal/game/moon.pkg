@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/mirage/internal/types",
+  "bobzhang/games/mirage/internal/layers",
+  "bobzhang/games/mirage/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
