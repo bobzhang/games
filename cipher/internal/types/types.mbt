@@ -63,4 +63,6 @@ pub(all) struct Game {
   // Pattern cache
   mut cached_patterns : Array[PatternMatch]
   mut patterns_dirty : Bool
+  // Selected pattern for highlighting
+  mut selected_pattern_idx : Int // -1 = none
 } derive(Show)

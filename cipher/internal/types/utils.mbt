@@ -267,6 +267,7 @@ pub fn new_game() -> Game {
     level_scores: scores,
     cached_patterns: [],
     patterns_dirty: true,
+    selected_pattern_idx: -1,
   }
 }
 
@@ -284,6 +285,7 @@ pub fn reset_for_level(game : Game) -> Unit {
   game.result_timer = 0.0
   game.cached_patterns = []
   game.patterns_dirty = true
+  game.selected_pattern_idx = -1
 }
 
 ///|

@@ -40,18 +40,25 @@ fn draw_tool_panel(game : @types.Game, level : @types.Level) -> Unit {
 
 ///|
 fn draw_frequency_chart(
-  _game : @types.Game,
+  game : @types.Game,
   level : @types.Level,
   px : Int,
   py : Int,
   pw : Int,
 ) -> Unit {
-  @draw.draw_text("LETTER FREQUENCY", px + 10, py, 14, @types.color_text)
+  @draw.draw_text(
+    "FREQUENCY ANALYSIS",
+    px + 10,
+    py,
+    14,
+    @types.color_text,
+  )
   let cipher_freq = @crypto.letter_frequency_pct(level.ciphertext)
   let chart_x = px + 10
-  let chart_y = py + 25
-  let chart_h = 340
-  let bar_w = (pw - 30) / 26
+  let chart_y = py + 22
+  let chart_h = 280
+  let half_bar = (pw - 30) / 26 / 2
+  let pair_w = half_bar * 2
   // Find max for scaling
   let mut max_freq : Float = 1.0
   for i in 0..<26 {
@@ -62,64 +69,132 @@ fn draw_frequency_chart(
       max_freq = @types.english_freq[i]
     }
   }
+  let bar_area_h = chart_h - 40
+  let baseline_y = chart_y + bar_area_h
+  // Hover detection
+  let mx = @raylib.get_mouse_x()
+  let my = @raylib.get_mouse_y()
+  let mut hovered_letter = -1
   for i in 0..<26 {
-    let bx = chart_x + i * bar_w
-    // English expected (background bar)
-    let eng_h = (@types.english_freq[i] /
-    max_freq *
-    Float::from_int(chart_h - 40)).to_int()
+    let bx = chart_x + i * pair_w
+    if mx >= bx && mx < bx + pair_w && my >= chart_y && my < baseline_y + 15 {
+      hovered_letter = i
+    }
+  }
+  for i in 0..<26 {
+    let bx = chart_x + i * pair_w
+    let is_hovered = i == hovered_letter
+    // English bar (left half, blue-tinted)
+    let eng_h = (@types.english_freq[i] / max_freq * Float::from_int(
+        bar_area_h,
+      )).to_int()
+    let eng_color = if is_hovered {
+      @raylib.Color::new(80, 80, 150, 220)
+    } else {
+      @types.color_bar_english
+    }
     @raylib.draw_rectangle(
       bx,
-      chart_y + chart_h - 40 - eng_h,
-      bar_w - 1,
+      baseline_y - eng_h,
+      half_bar - 1,
       eng_h,
-      @types.color_bar_english,
+      eng_color,
     )
-    // Cipher actual (foreground bar)
-    let cip_h = (cipher_freq[i] / max_freq * Float::from_int(chart_h - 40)).to_int()
+    // Cipher bar (right half, green-tinted)
+    let cip_h = (cipher_freq[i] / max_freq * Float::from_int(bar_area_h)).to_int()
+    let cip_color = if is_hovered {
+      @raylib.Color::new(0, 220, 100, 240)
+    } else {
+      @types.color_bar_cipher
+    }
     @raylib.draw_rectangle(
-      bx,
-      chart_y + chart_h - 40 - cip_h,
-      bar_w - 1,
+      bx + half_bar,
+      baseline_y - cip_h,
+      half_bar - 1,
       cip_h,
-      @types.color_bar_cipher,
+      cip_color,
     )
+    // Overlay outline when bars differ significantly (visual comparison aid)
+    let diff = @types.absf(cipher_freq[i] - @types.english_freq[i])
+    if diff > 4.0 {
+      let taller_h = if eng_h > cip_h { eng_h } else { cip_h }
+      let pulse = @types.sinf(
+          Float::from_int(game.frame_count) * 0.08 + Float::from_int(i) * 0.5,
+        ) *
+        0.3 +
+        0.7
+      let outline_alpha = (pulse * 80.0).to_int()
+      @raylib.draw_rectangle_lines(
+        bx,
+        baseline_y - taller_h,
+        pair_w - 1,
+        taller_h,
+        @raylib.Color::new(255, 200, 50, outline_alpha),
+      )
+    }
     // Letter label
     let letter = @types.idx_to_char(i)
+    let label_color = if is_hovered {
+      @types.color_white
+    } else {
+      @types.color_dim
+    }
+    @draw.draw_text(letter.to_string(), bx + 1, baseline_y + 2, 9, label_color)
+  }
+  // Hover tooltip with percentages
+  if hovered_letter >= 0 {
+    let tip_y = baseline_y + 16
+    let letter = @types.idx_to_char(hovered_letter)
+    let eng_pct = @types.english_freq[hovered_letter]
+    let cip_pct = cipher_freq[hovered_letter]
+    let eng_int = eng_pct.to_int()
+    let cip_int = cip_pct.to_int()
+    let tip = letter.to_string() +
+      ": Eng " +
+      eng_int.to_string() +
+      "% / Cip " +
+      cip_int.to_string() +
+      "%"
+    @draw.draw_text(tip, px + 10, tip_y, 12, @types.color_amber)
+    // Show current mapping if any
+    let pi = game.mapping.cipher_to_plain[hovered_letter]
+    if pi >= 0 {
+      let mapped = @types.idx_to_char(pi)
+      let map_txt = "Mapped: " +
+        letter.to_string() +
+        " -> " +
+        mapped.to_string()
+      @draw.draw_text(map_txt, px + 10, tip_y + 16, 12, @types.color_green)
+    }
+  } else {
+    let tip_y = baseline_y + 16
     @draw.draw_text(
-      letter.to_string(),
-      bx + 1,
-      chart_y + chart_h - 35,
-      10,
+      "Hover a bar for details",
+      px + 10,
+      tip_y,
+      11,
       @types.color_dim,
     )
   }
   // Legend
-  let legend_y = chart_y + chart_h - 10
-  @raylib.draw_rectangle(chart_x, legend_y, 12, 12, @types.color_bar_english)
-  @draw.draw_text("English", chart_x + 16, legend_y, 11, @types.color_dim)
-  @raylib.draw_rectangle(
-    chart_x + 100,
-    legend_y,
-    12,
-    12,
-    @types.color_bar_cipher,
-  )
-  @draw.draw_text("Cipher", chart_x + 116, legend_y, 11, @types.color_dim)
-  // Frequency comparison tip
-  let tip_y = legend_y + 25
+  let legend_y = baseline_y + 50
+  @raylib.draw_rectangle(chart_x, legend_y, 10, 10, @types.color_bar_english)
+  @draw.draw_text("English", chart_x + 14, legend_y, 11, @types.color_dim)
+  @raylib.draw_rectangle(chart_x + 80, legend_y, 10, 10, @types.color_bar_cipher)
+  @draw.draw_text("Cipher", chart_x + 94, legend_y, 11, @types.color_dim)
+  // Top English letters guide
   @draw.draw_text(
-    "E(12.7%) T(9.1%) A(8.2%)",
+    "E(12.7) T(9.1) A(8.2) O(7.5)",
     px + 10,
-    tip_y,
-    11,
+    legend_y + 18,
+    10,
     @types.color_dim,
   )
   @draw.draw_text(
-    "Most common English letters",
+    "I(7.0) N(6.7) S(6.3) H(6.1)",
     px + 10,
-    tip_y + 16,
-    11,
+    legend_y + 32,
+    10,
     @types.color_dim,
   )
 }
