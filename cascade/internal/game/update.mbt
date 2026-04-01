@@ -468,8 +468,16 @@ fn update_domino_animations(game : @types.Game, dt : Float) -> Unit {
     let d = game.dominoes[i]
     if d.state == Toppling {
       if d.topple_tick <= game.current_tick {
+        // Accelerating animation: faster at start, eases to end
+        let speed_mult : Float = if d.anim_progress < 0.3 {
+          @types.anim_speed * 1.5
+        } else if d.anim_progress < 0.7 {
+          @types.anim_speed * 1.2
+        } else {
+          @types.anim_speed * 0.8
+        }
         d.anim_progress = @types.clampf(
-          d.anim_progress + dt * @types.anim_speed, 0.0, 1.0,
+          d.anim_progress + dt * speed_mult, 0.0, 1.0,
         )
       }
     } else if d.state == Fallen {

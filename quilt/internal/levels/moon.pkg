@@ -1,5 +1,6 @@
 import {
   "bobzhang/games/quilt/internal/types",
+  "bobzhang/games/quilt/internal/matching",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"

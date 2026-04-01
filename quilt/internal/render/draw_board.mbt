@@ -117,9 +117,9 @@ fn draw_edge_pattern(
   } else {
     @types.pattern_color(pattern)
   }
-  // Draw thick edge stripe
-  let thickness = 6
-  let margin = 4
+  // Draw thick edge stripe with outer border for clarity
+  let thickness = 8
+  let margin = 3
   match edge_idx {
     0 => {
       // North
@@ -129,6 +129,14 @@ fn draw_edge_pattern(
         size - margin * 2,
         thickness,
         edge_color,
+      )
+      // Outer border line for definition
+      @raylib.draw_rectangle(
+        x + margin,
+        y + thickness + 1,
+        size - margin * 2,
+        1,
+        @raylib.Color::new(0, 0, 0, 40),
       )
       draw_pattern_marks(pattern, is_wildcard, x + margin, y + 1, size - margin * 2, thickness, true)
     }
@@ -140,6 +148,13 @@ fn draw_edge_pattern(
         thickness,
         size - margin * 2,
         edge_color,
+      )
+      @raylib.draw_rectangle(
+        x + size - thickness - 2,
+        y + margin,
+        1,
+        size - margin * 2,
+        @raylib.Color::new(0, 0, 0, 40),
       )
       draw_pattern_marks(
         pattern,
@@ -160,6 +175,13 @@ fn draw_edge_pattern(
         thickness,
         edge_color,
       )
+      @raylib.draw_rectangle(
+        x + margin,
+        y + size - thickness - 2,
+        size - margin * 2,
+        1,
+        @raylib.Color::new(0, 0, 0, 40),
+      )
       draw_pattern_marks(
         pattern,
         is_wildcard,
@@ -179,29 +201,45 @@ fn draw_edge_pattern(
         size - margin * 2,
         edge_color,
       )
+      @raylib.draw_rectangle(
+        x + thickness + 1,
+        y + margin,
+        1,
+        size - margin * 2,
+        @raylib.Color::new(0, 0, 0, 40),
+      )
       draw_pattern_marks(pattern, is_wildcard, x + 1, y + margin, thickness, size - margin * 2, false)
     }
   }
-  // Match indicator
+  // Match/mismatch indicator - larger and more visible
   if has_neighbor {
     let ix : Int = match edge_idx {
       0 => x + size / 2
-      1 => x + size - 10
+      1 => x + size - 12
       2 => x + size / 2
-      _ => x + 6
+      _ => x + 8
     }
     let iy : Int = match edge_idx {
-      0 => y + 8
+      0 => y + 12
       1 => y + size / 2
-      2 => y + size - 12
+      2 => y + size - 16
       _ => y + size / 2
     }
-    let indicator_color = if matched {
-      @types.color_matched
+    if matched {
+      // Green checkmark circle - larger glow + solid center
+      @raylib.draw_circle(ix, iy, 6.0, @raylib.Color::new(80, 200, 120, 60))
+      @raylib.draw_circle(ix, iy, 4.0, @types.color_matched)
+      // Small check mark lines
+      @raylib.draw_line(ix - 2, iy, ix - 1, iy + 2, @raylib.white)
+      @raylib.draw_line(ix - 1, iy + 2, ix + 3, iy - 2, @raylib.white)
     } else {
-      @types.color_mismatched
+      // Red X circle - larger glow + solid center
+      @raylib.draw_circle(ix, iy, 6.0, @raylib.Color::new(220, 80, 80, 60))
+      @raylib.draw_circle(ix, iy, 4.0, @types.color_mismatched)
+      // Small X lines
+      @raylib.draw_line(ix - 2, iy - 2, ix + 2, iy + 2, @raylib.white)
+      @raylib.draw_line(ix + 2, iy - 2, ix - 2, iy + 2, @raylib.white)
     }
-    @raylib.draw_circle(ix, iy, 3.0, indicator_color)
   }
 }
 
@@ -215,15 +253,16 @@ fn draw_pattern_marks(
   h : Int,
   horizontal : Bool
 ) -> Unit {
-  let mark_color = @raylib.Color::new(255, 255, 255, 180)
+  let mark_color = @raylib.Color::new(255, 255, 255, 200)
+  let mark_shadow = @raylib.Color::new(0, 0, 0, 60)
   if is_wildcard {
     // Rainbow shimmer for wildcard
     let colors = [
-      @raylib.Color::new(255, 0, 0, 150),
-      @raylib.Color::new(255, 165, 0, 150),
-      @raylib.Color::new(255, 255, 0, 150),
-      @raylib.Color::new(0, 255, 0, 150),
-      @raylib.Color::new(0, 0, 255, 150),
+      @raylib.Color::new(255, 50, 50, 170),
+      @raylib.Color::new(255, 180, 0, 170),
+      @raylib.Color::new(255, 255, 50, 170),
+      @raylib.Color::new(50, 255, 50, 170),
+      @raylib.Color::new(50, 100, 255, 170),
     ]
     let count = 5
     if horizontal {
@@ -241,108 +280,138 @@ fn draw_pattern_marks(
   }
   match pattern {
     Zigzag =>
-      // Zigzag marks along edge
-      if horizontal {
-        let count = w / 12
-        for i in 0..<count {
-          let bx = x + i * 12
-          @raylib.draw_line(bx, y + h / 2, bx + 6, y, mark_color)
-          @raylib.draw_line(bx + 6, y, bx + 12, y + h / 2, mark_color)
-        }
-      } else {
-        let count = h / 12
-        for i in 0..<count {
-          let by = y + i * 12
-          @raylib.draw_line(x + w / 2, by, x, by + 6, mark_color)
-          @raylib.draw_line(x, by + 6, x + w / 2, by + 12, mark_color)
-        }
-      }
-    Dots =>
-      // Small dots along edge
+      // Thick zigzag marks with shadow
       if horizontal {
         let count = w / 14
         for i in 0..<count {
-          @raylib.draw_circle(
-            x + 7 + i * 14,
-            y + h / 2,
-            2.0,
-            mark_color,
-          )
+          let bx = x + i * 14 + 2
+          // Shadow
+          @raylib.draw_line(bx + 1, y + h / 2 + 1, bx + 7, y + 1, mark_shadow)
+          @raylib.draw_line(bx + 7, y + 1, bx + 13, y + h / 2 + 1, mark_shadow)
+          // Main lines (draw twice for thickness)
+          @raylib.draw_line(bx, y + h / 2, bx + 6, y, mark_color)
+          @raylib.draw_line(bx + 6, y, bx + 12, y + h / 2, mark_color)
+          @raylib.draw_line(bx, y + h / 2 - 1, bx + 6, y + 1, mark_color)
+          @raylib.draw_line(bx + 6, y + 1, bx + 12, y + h / 2 - 1, mark_color)
         }
       } else {
         let count = h / 14
         for i in 0..<count {
-          @raylib.draw_circle(
-            x + w / 2,
-            y + 7 + i * 14,
-            2.0,
-            mark_color,
-          )
+          let by = y + i * 14 + 2
+          @raylib.draw_line(x + w / 2 + 1, by + 1, x + 1, by + 7, mark_shadow)
+          @raylib.draw_line(x + 1, by + 7, x + w / 2 + 1, by + 13, mark_shadow)
+          @raylib.draw_line(x + w / 2, by, x, by + 6, mark_color)
+          @raylib.draw_line(x, by + 6, x + w / 2, by + 12, mark_color)
+          @raylib.draw_line(x + w / 2 - 1, by, x + 1, by + 6, mark_color)
+          @raylib.draw_line(x + 1, by + 6, x + w / 2 - 1, by + 12, mark_color)
         }
       }
-    Stripes =>
-      // Perpendicular stripes
-      if horizontal {
-        let count = w / 10
-        for i in 0..<count {
-          @raylib.draw_line(
-            x + 5 + i * 10,
-            y,
-            x + 5 + i * 10,
-            y + h,
-            mark_color,
-          )
-        }
-      } else {
-        let count = h / 10
-        for i in 0..<count {
-          @raylib.draw_line(
-            x,
-            y + 5 + i * 10,
-            x + w,
-            y + 5 + i * 10,
-            mark_color,
-          )
-        }
-      }
-    Waves =>
-      // Wave marks
-      if horizontal {
-        let count = w / 16
-        for i in 0..<count {
-          let bx = x + i * 16
-          @raylib.draw_line(bx, y + h / 2, bx + 4, y + 1, mark_color)
-          @raylib.draw_line(bx + 4, y + 1, bx + 8, y + h / 2, mark_color)
-          @raylib.draw_line(bx + 8, y + h / 2, bx + 12, y + h - 1, mark_color)
-          @raylib.draw_line(bx + 12, y + h - 1, bx + 16, y + h / 2, mark_color)
-        }
-      } else {
-        let count = h / 16
-        for i in 0..<count {
-          let by = y + i * 16
-          @raylib.draw_line(x + w / 2, by, x + 1, by + 4, mark_color)
-          @raylib.draw_line(x + 1, by + 4, x + w / 2, by + 8, mark_color)
-          @raylib.draw_line(x + w / 2, by + 8, x + w - 1, by + 12, mark_color)
-          @raylib.draw_line(x + w - 1, by + 12, x + w / 2, by + 16, mark_color)
-        }
-      }
-    Diamonds =>
-      // Small diamond shapes
+    Dots =>
+      // Larger, filled dots with outline
       if horizontal {
         let count = w / 16
         for i in 0..<count {
           let cx = x + 8 + i * 16
           let cy = y + h / 2
-          @raylib.draw_line(cx, cy - 2, cx + 3, cy, mark_color)
-          @raylib.draw_line(cx + 3, cy, cx, cy + 2, mark_color)
-          @raylib.draw_line(cx, cy + 2, cx - 3, cy, mark_color)
-          @raylib.draw_line(cx - 3, cy, cx, cy - 2, mark_color)
+          @raylib.draw_circle(cx, cy, 3.5, mark_shadow)
+          @raylib.draw_circle(cx, cy, 3.0, mark_color)
         }
       } else {
         let count = h / 16
         for i in 0..<count {
           let cx = x + w / 2
           let cy = y + 8 + i * 16
+          @raylib.draw_circle(cx, cy, 3.5, mark_shadow)
+          @raylib.draw_circle(cx, cy, 3.0, mark_color)
+        }
+      }
+    Stripes =>
+      // Thicker perpendicular stripes (double-line)
+      if horizontal {
+        let count = w / 12
+        for i in 0..<count {
+          let sx = x + 6 + i * 12
+          @raylib.draw_line(sx + 1, y, sx + 1, y + h, mark_shadow)
+          @raylib.draw_line(sx, y, sx, y + h, mark_color)
+          @raylib.draw_line(sx + 1, y, sx + 1, y + h, mark_color)
+        }
+      } else {
+        let count = h / 12
+        for i in 0..<count {
+          let sy = y + 6 + i * 12
+          @raylib.draw_line(x, sy + 1, x + w, sy + 1, mark_shadow)
+          @raylib.draw_line(x, sy, x + w, sy, mark_color)
+          @raylib.draw_line(x, sy + 1, x + w, sy + 1, mark_color)
+        }
+      }
+    Waves =>
+      // Thicker wave marks with doubled lines
+      if horizontal {
+        let count = w / 18
+        for i in 0..<count {
+          let bx = x + i * 18 + 2
+          // Shadow
+          @raylib.draw_line(bx + 1, y + h / 2 + 1, bx + 5, y + 2, mark_shadow)
+          @raylib.draw_line(bx + 5, y + 2, bx + 9, y + h / 2 + 1, mark_shadow)
+          @raylib.draw_line(bx + 9, y + h / 2 + 1, bx + 13, y + h, mark_shadow)
+          @raylib.draw_line(bx + 13, y + h, bx + 17, y + h / 2 + 1, mark_shadow)
+          // Main + thickness
+          @raylib.draw_line(bx, y + h / 2, bx + 4, y + 1, mark_color)
+          @raylib.draw_line(bx + 4, y + 1, bx + 8, y + h / 2, mark_color)
+          @raylib.draw_line(bx + 8, y + h / 2, bx + 12, y + h - 1, mark_color)
+          @raylib.draw_line(bx + 12, y + h - 1, bx + 16, y + h / 2, mark_color)
+          @raylib.draw_line(bx, y + h / 2 + 1, bx + 4, y + 2, mark_color)
+          @raylib.draw_line(bx + 4, y + 2, bx + 8, y + h / 2 + 1, mark_color)
+          @raylib.draw_line(bx + 8, y + h / 2 + 1, bx + 12, y + h, mark_color)
+          @raylib.draw_line(bx + 12, y + h, bx + 16, y + h / 2 + 1, mark_color)
+        }
+      } else {
+        let count = h / 18
+        for i in 0..<count {
+          let by = y + i * 18 + 2
+          @raylib.draw_line(x + w / 2 + 1, by + 1, x + 2, by + 5, mark_shadow)
+          @raylib.draw_line(x + 2, by + 5, x + w / 2 + 1, by + 9, mark_shadow)
+          @raylib.draw_line(x + w / 2, by, x + 1, by + 4, mark_color)
+          @raylib.draw_line(x + 1, by + 4, x + w / 2, by + 8, mark_color)
+          @raylib.draw_line(x + w / 2, by + 8, x + w - 1, by + 12, mark_color)
+          @raylib.draw_line(x + w - 1, by + 12, x + w / 2, by + 16, mark_color)
+          @raylib.draw_line(x + w / 2 + 1, by, x + 2, by + 4, mark_color)
+          @raylib.draw_line(x + 2, by + 4, x + w / 2 + 1, by + 8, mark_color)
+          @raylib.draw_line(x + w / 2 + 1, by + 8, x + w, by + 12, mark_color)
+          @raylib.draw_line(x + w, by + 12, x + w / 2 + 1, by + 16, mark_color)
+        }
+      }
+    Diamonds =>
+      // Larger diamond shapes with fill
+      if horizontal {
+        let count = w / 18
+        for i in 0..<count {
+          let cx = x + 9 + i * 18
+          let cy = y + h / 2
+          // Shadow
+          @raylib.draw_line(cx + 1, cy - 3, cx + 5, cy + 1, mark_shadow)
+          @raylib.draw_line(cx + 5, cy + 1, cx + 1, cy + 4, mark_shadow)
+          // Diamond outline (doubled for thickness)
+          @raylib.draw_line(cx, cy - 3, cx + 4, cy, mark_color)
+          @raylib.draw_line(cx + 4, cy, cx, cy + 3, mark_color)
+          @raylib.draw_line(cx, cy + 3, cx - 4, cy, mark_color)
+          @raylib.draw_line(cx - 4, cy, cx, cy - 3, mark_color)
+          @raylib.draw_line(cx, cy - 2, cx + 3, cy, mark_color)
+          @raylib.draw_line(cx + 3, cy, cx, cy + 2, mark_color)
+          @raylib.draw_line(cx, cy + 2, cx - 3, cy, mark_color)
+          @raylib.draw_line(cx - 3, cy, cx, cy - 2, mark_color)
+        }
+      } else {
+        let count = h / 18
+        for i in 0..<count {
+          let cx = x + w / 2
+          let cy = y + 9 + i * 18
+          @raylib.draw_line(cx + 1, cy - 3, cx + 4, cy + 1, mark_shadow)
+          @raylib.draw_line(cx + 4, cy + 1, cx + 1, cy + 4, mark_shadow)
+          @raylib.draw_line(cx, cy - 3, cx + 3, cy, mark_color)
+          @raylib.draw_line(cx + 3, cy, cx, cy + 3, mark_color)
+          @raylib.draw_line(cx, cy + 3, cx - 3, cy, mark_color)
+          @raylib.draw_line(cx - 3, cy, cx, cy - 3, mark_color)
           @raylib.draw_line(cx, cy - 2, cx + 2, cy, mark_color)
           @raylib.draw_line(cx + 2, cy, cx, cy + 2, mark_color)
           @raylib.draw_line(cx, cy + 2, cx - 2, cy, mark_color)
@@ -350,26 +419,33 @@ fn draw_pattern_marks(
         }
       }
     Stars =>
-      // Small star/cross marks
+      // Larger star/cross marks with proper 6-point star feel
       if horizontal {
-        let count = w / 16
+        let count = w / 18
         for i in 0..<count {
-          let cx = x + 8 + i * 16
+          let cx = x + 9 + i * 18
           let cy = y + h / 2
-          @raylib.draw_line(cx - 2, cy, cx + 2, cy, mark_color)
-          @raylib.draw_line(cx, cy - 2, cx, cy + 2, mark_color)
-          @raylib.draw_line(cx - 1, cy - 1, cx + 1, cy + 1, mark_color)
-          @raylib.draw_line(cx + 1, cy - 1, cx - 1, cy + 1, mark_color)
+          // Shadow
+          @raylib.draw_circle(cx + 1, cy + 1, 2.0, mark_shadow)
+          // Cross + diagonal for 8-point star
+          @raylib.draw_line(cx - 3, cy, cx + 3, cy, mark_color)
+          @raylib.draw_line(cx, cy - 3, cx, cy + 3, mark_color)
+          @raylib.draw_line(cx - 2, cy - 2, cx + 2, cy + 2, mark_color)
+          @raylib.draw_line(cx + 2, cy - 2, cx - 2, cy + 2, mark_color)
+          // Center dot
+          @raylib.draw_circle(cx, cy, 1.5, mark_color)
         }
       } else {
-        let count = h / 16
+        let count = h / 18
         for i in 0..<count {
           let cx = x + w / 2
-          let cy = y + 8 + i * 16
-          @raylib.draw_line(cx - 2, cy, cx + 2, cy, mark_color)
-          @raylib.draw_line(cx, cy - 2, cx, cy + 2, mark_color)
-          @raylib.draw_line(cx - 1, cy - 1, cx + 1, cy + 1, mark_color)
-          @raylib.draw_line(cx + 1, cy - 1, cx - 1, cy + 1, mark_color)
+          let cy = y + 9 + i * 18
+          @raylib.draw_circle(cx + 1, cy + 1, 2.0, mark_shadow)
+          @raylib.draw_line(cx - 3, cy, cx + 3, cy, mark_color)
+          @raylib.draw_line(cx, cy - 3, cx, cy + 3, mark_color)
+          @raylib.draw_line(cx - 2, cy - 2, cx + 2, cy + 2, mark_color)
+          @raylib.draw_line(cx + 2, cy - 2, cx - 2, cy + 2, mark_color)
+          @raylib.draw_circle(cx, cy, 1.5, mark_color)
         }
       }
   }
