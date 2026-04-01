@@ -228,6 +228,25 @@ fn update_playing(game : @types.Game) -> Unit {
         }
       }
     }
+    // Check pattern finder clicks (select/deselect pattern for highlighting)
+    if game.active_tool == PatternFinder && game.cached_patterns.length() > 0 {
+      let pat_content_y = 55 + 40 + 50
+      let max_show = @types.mini(game.cached_patterns.length(), 10)
+      for pi in 0..<max_show {
+        let row_y = pat_content_y + 20 + pi * 20
+        if mx >= @types.tool_panel_x + 5 &&
+          mx < @types.tool_panel_x + @types.tool_panel_w - 5 &&
+          my >= row_y &&
+          my < row_y + 18 {
+          if game.selected_pattern_idx == pi {
+            game.selected_pattern_idx = -1
+          } else {
+            game.selected_pattern_idx = pi
+          }
+          break
+        }
+      }
+    }
     // Check letter swap grid clicks (assign plain letter)
     if game.active_tool == LetterSwap && game.selected_cipher_letter >= 0 {
       let grid_y = 55 + 40 + 72

@@ -57,6 +57,7 @@ fn draw_grid_lines(game : @types.Game) -> Unit {
 
 ///|
 fn draw_bridges(game : @types.Game) -> Unit {
+  let time = Float::from_int(game.frame_count) * 0.04
   for br in game.bridges {
     let ia = game.islands[br.island_a]
     let ib = game.islands[br.island_b]
@@ -64,44 +65,147 @@ fn draw_bridges(game : @types.Game) -> Unit {
     let ay = Float::from_int(@types.island_screen_y(ia, game.grid_size))
     let bx = Float::from_int(@types.island_screen_x(ib, game.grid_size))
     let by = Float::from_int(@types.island_screen_y(ib, game.grid_size))
+    // Check if both endpoints are satisfied for glow effect
+    let a_satisfied = @solver.is_island_satisfied(
+      game.islands,
+      game.bridges,
+      br.island_a,
+    )
+    let b_satisfied = @solver.is_island_satisfied(
+      game.islands,
+      game.bridges,
+      br.island_b,
+    )
+    let both_satisfied = a_satisfied && b_satisfied
     if br.count == 1 {
+      // Single bridge: draw glow underneath if both ends satisfied
+      if both_satisfied {
+        let glow_pulse = @types.sinf(time + ax * 0.01) * 0.3 + 0.7
+        let glow_alpha = (glow_pulse * 60.0).to_int()
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(ax, ay),
+          @raylib.Vector2::new(bx, by),
+          @types.bridge_thickness + 4.0,
+          @raylib.Color::new(80, 200, 100, glow_alpha),
+        )
+      }
       @raylib.draw_line_ex(
         @raylib.Vector2::new(ax, ay),
         @raylib.Vector2::new(bx, by),
         @types.bridge_thickness,
-        @types.color_bridge,
+        if both_satisfied {
+          @raylib.Color::new(160, 130, 60, 255)
+        } else {
+          @types.color_bridge
+        },
       )
     } else {
-      // Double bridge - two parallel lines
+      // Double bridge - two parallel lines with enhanced gap and glow
       let gap = @types.double_bridge_gap
       match br.direction {
         Horizontal => {
+          // Glow for double bridge
+          if both_satisfied {
+            let glow_pulse = @types.sinf(time + ax * 0.01) * 0.3 + 0.7
+            let glow_alpha = (glow_pulse * 50.0).to_int()
+            @raylib.draw_line_ex(
+              @raylib.Vector2::new(ax, ay - gap),
+              @raylib.Vector2::new(bx, by - gap),
+              @types.bridge_thickness + 4.0,
+              @raylib.Color::new(80, 200, 100, glow_alpha),
+            )
+            @raylib.draw_line_ex(
+              @raylib.Vector2::new(ax, ay + gap),
+              @raylib.Vector2::new(bx, by + gap),
+              @types.bridge_thickness + 4.0,
+              @raylib.Color::new(80, 200, 100, glow_alpha),
+            )
+          }
+          let bridge_color = if both_satisfied {
+            @raylib.Color::new(160, 130, 60, 255)
+          } else {
+            @types.color_bridge
+          }
           @raylib.draw_line_ex(
             @raylib.Vector2::new(ax, ay - gap),
             @raylib.Vector2::new(bx, by - gap),
             @types.bridge_thickness,
-            @types.color_bridge,
+            bridge_color,
           )
           @raylib.draw_line_ex(
             @raylib.Vector2::new(ax, ay + gap),
             @raylib.Vector2::new(bx, by + gap),
             @types.bridge_thickness,
-            @types.color_bridge,
+            bridge_color,
           )
+          // Cross-ties for double horizontal bridges (railroad-style)
+          let dist_x = @types.absf(bx - ax)
+          let tie_spacing : Float = 20.0
+          let tie_count = (dist_x / tie_spacing).to_int()
+          if tie_count > 0 {
+            let dx = (bx - ax) / Float::from_int(tie_count)
+            for t = 1; t < tie_count; t = t + 1 {
+              let tx = ax + Float::from_int(t) * dx
+              @raylib.draw_line_ex(
+                @raylib.Vector2::new(tx, ay - gap - 1.0),
+                @raylib.Vector2::new(tx, ay + gap + 1.0),
+                1.0,
+                @raylib.Color::new(100, 70, 35, 100),
+              )
+            }
+          }
         }
         Vertical => {
+          // Glow for double bridge
+          if both_satisfied {
+            let glow_pulse = @types.sinf(time + ay * 0.01) * 0.3 + 0.7
+            let glow_alpha = (glow_pulse * 50.0).to_int()
+            @raylib.draw_line_ex(
+              @raylib.Vector2::new(ax - gap, ay),
+              @raylib.Vector2::new(bx - gap, by),
+              @types.bridge_thickness + 4.0,
+              @raylib.Color::new(80, 200, 100, glow_alpha),
+            )
+            @raylib.draw_line_ex(
+              @raylib.Vector2::new(ax + gap, ay),
+              @raylib.Vector2::new(bx + gap, by),
+              @types.bridge_thickness + 4.0,
+              @raylib.Color::new(80, 200, 100, glow_alpha),
+            )
+          }
+          let bridge_color = if both_satisfied {
+            @raylib.Color::new(160, 130, 60, 255)
+          } else {
+            @types.color_bridge
+          }
           @raylib.draw_line_ex(
             @raylib.Vector2::new(ax - gap, ay),
             @raylib.Vector2::new(bx - gap, by),
             @types.bridge_thickness,
-            @types.color_bridge,
+            bridge_color,
           )
           @raylib.draw_line_ex(
             @raylib.Vector2::new(ax + gap, ay),
             @raylib.Vector2::new(bx + gap, by),
             @types.bridge_thickness,
-            @types.color_bridge,
+            bridge_color,
           )
+          // Cross-ties for double vertical bridges
+          let dist_y = @types.absf(by - ay)
+          let tie_spacing : Float = 20.0
+          let tie_count = (dist_y / tie_spacing).to_int()
+          if tie_count > 0 {
+            let dy = (by - ay) / Float::from_int(tie_count)
+            for t = 1; t < tie_count; t = t + 1 {
+              let ty = ay + Float::from_int(t) * dy
+              @raylib.draw_line_ex(
+                @raylib.Vector2::new(ax - gap - 1.0, ty),
+                @raylib.Vector2::new(ax + gap + 1.0, ty),
+                1.0,
+                @raylib.Color::new(100, 70, 35, 100),
+              )
+            }
+          }
         }
       }
     }
@@ -177,6 +281,35 @@ fn draw_islands(game : @types.Game) -> Unit {
     let satisfied = @solver.is_island_satisfied(game.islands, game.bridges, i)
     let over = @solver.is_island_over(game.islands, game.bridges, i)
     let selected = i == game.selected_island
+    // Satisfaction pulse animation (expanding green ring)
+    let pulse_timer = if i < game.satisfaction_timers.length() {
+      game.satisfaction_timers[i]
+    } else {
+      0.0
+    }
+    if pulse_timer > 0.0 {
+      let progress : Float = 1.0 - pulse_timer // 0 -> 1 over time
+      let ring_r : Float = r + 5.0 + progress * 25.0
+      let ring_alpha = ((1.0 : Float) - progress) * 200.0
+      @raylib.draw_circle_lines(
+        sx,
+        sy,
+        ring_r,
+        @raylib.Color::new(80, 255, 120, ring_alpha.to_int()),
+      )
+      // Second ring, slightly delayed
+      if progress > 0.2 {
+        let p2 : Float = progress - 0.2
+        let r2 : Float = r + 5.0 + p2 * 25.0
+        let a2 : Float = ((1.0 : Float) - p2) * 120.0
+        @raylib.draw_circle_lines(
+          sx,
+          sy,
+          r2,
+          @raylib.Color::new(80, 255, 120, a2.to_int()),
+        )
+      }
+    }
     // Island circle - border
     let border_color = if selected {
       @types.color_island_selected
@@ -188,20 +321,37 @@ fn draw_islands(game : @types.Game) -> Unit {
       @types.color_island_border
     }
     @raylib.draw_circle(sx, sy, r + 3.0, border_color)
-    // Island circle - fill
+    // Island circle - fill with subtle glow when satisfied
     let fill_color = if over {
       @raylib.Color::new(180, 50, 50, 255)
     } else if satisfied {
-      @raylib.Color::new(60, 160, 80, 255)
+      let sat_pulse = @types.sinf(
+          Float::from_int(game.frame_count) * 0.05 + Float::from_int(i) * 0.7,
+        ) *
+        15.0
+      let g = 160 + sat_pulse.to_int()
+      @raylib.Color::new(60, g, 80, 255)
     } else {
       @types.color_island
     }
     @raylib.draw_circle(sx, sy, r, fill_color)
+    // Inner highlight for satisfied (subtle light spot)
+    if satisfied && !over {
+      @raylib.draw_circle(
+        sx - (r * 0.25).to_int(),
+        sy - (r * 0.25).to_int(),
+        r * 0.35,
+        @raylib.Color::new(120, 255, 140, 40),
+      )
+    }
     // Selection glow
     if selected {
-      let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.1) * 0.3 +
+      let sel_pulse = @types.sinf(
+          Float::from_int(game.frame_count) * 0.1,
+        ) *
+        0.3 +
         0.7
-      let glow_alpha = (pulse * 100.0).to_int()
+      let glow_alpha = (sel_pulse * 100.0).to_int()
       @raylib.draw_circle(
         sx,
         sy,
@@ -225,5 +375,22 @@ fn draw_islands(game : @types.Game) -> Unit {
       @types.color_number
     }
     @draw.draw_text(num, sx - nw / 2, sy - font_size / 2, font_size, text_color)
+    // Bridge count indicator below number (small)
+    if !satisfied && !over {
+      let current = @types.count_bridges_for_island(game.bridges, i)
+      if current > 0 {
+        let count_txt = current.to_string() +
+          "/" +
+          isl.required_count.to_string()
+        let cw = @draw.measure_text(count_txt, 9)
+        @draw.draw_text(
+          count_txt,
+          sx - cw / 2,
+          sy + (r * 0.6).to_int(),
+          9,
+          @raylib.Color::new(200, 200, 200, 150),
+        )
+      }
+    }
   }
 }

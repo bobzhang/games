@@ -192,7 +192,7 @@ fn case_06_power_outage() -> @types.Case {
   let c = @types.make_event_card
   let cards = [
     c(0, "Utility worker", "skips transformer check", "morning", -1),
-    c(1, "Heatwave", "increases power demand", "afternoon", 0),
+    c(1, "Heatwave", "increases power demand", "afternoon", 1),
     c(2, "Transformer", "overheats", "3 PM", -1),
     c(3, "Grid", "shuts down sector 7", "3:05 PM", -1),
     c(4, "Hospital", "switches to backup power", "3:10 PM", -1),

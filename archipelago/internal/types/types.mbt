@@ -53,4 +53,8 @@ pub(all) struct Game {
   mut undo_stack : Array[Array[Bridge]]
   mut message : String
   mut message_timer : Float
+  // Per-island satisfaction pulse animation timers (0 = no pulse, >0 = pulsing)
+  mut satisfaction_timers : Array[Float]
+  // Track previous satisfaction state to detect changes
+  mut prev_satisfied : Array[Bool]
 }

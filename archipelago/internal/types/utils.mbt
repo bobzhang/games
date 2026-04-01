@@ -43,6 +43,8 @@ pub fn new_game() -> Game {
     undo_stack: [],
     message: "",
     message_timer: 0.0,
+    satisfaction_timers: [],
+    prev_satisfied: [],
   }
 }
 

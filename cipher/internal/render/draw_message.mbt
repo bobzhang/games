@@ -103,9 +103,19 @@ fn draw_message_area(game : @types.Game, level : @types.Level) -> Unit {
         let ci = @types.char_to_idx(c)
         let pi = game.mapping.cipher_to_plain[ci]
         let is_selected = ci == game.selected_cipher_letter
+        let in_pattern = @types.is_position_in_pattern(game, i, ct)
         // Cipher letter cell background
         let cell_bg = if is_selected {
           @types.color_amber
+        } else if in_pattern {
+          // Highlighted pattern: pulsing teal/cyan background
+          let pulse = @types.sinf(
+              Float::from_int(game.frame_count) * 0.12,
+            ) *
+            0.3 +
+            0.7
+          let alpha = (pulse * 140.0).to_int()
+          @raylib.Color::new(0, 120, 160, alpha)
         } else {
           @types.color_bg
         }

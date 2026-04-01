@@ -283,7 +283,7 @@ fn draw_pattern_finder(
   level : @types.Level,
   px : Int,
   py : Int,
-  _pw : Int,
+  pw : Int,
 ) -> Unit {
   @draw.draw_text("PATTERN ANALYSIS", px + 10, py, 14, @types.color_text)
   // Show cipher kind info
@@ -298,21 +298,66 @@ fn draw_pattern_finder(
     let p = @crypto.find_repeated_patterns(level.ciphertext, 3, 6)
     game.cached_patterns = p
     game.patterns_dirty = false
+    game.selected_pattern_idx = -1
     p
   } else {
     game.cached_patterns
   }
   let pat_y = py + 50
-  @draw.draw_text("Repeated sequences:", px + 10, pat_y, 13, @types.color_amber)
-  let max_show = @types.mini(patterns.length(), 12)
+  @draw.draw_text(
+    "Click a pattern to highlight:",
+    px + 10,
+    pat_y,
+    13,
+    @types.color_amber,
+  )
+  let max_show = @types.mini(patterns.length(), 10)
+  let mx = @raylib.get_mouse_x()
+  let my = @raylib.get_mouse_y()
   for i in 0..<max_show {
     let p = patterns[i]
+    let row_y = pat_y + 20 + i * 20
+    let row_h = 18
+    let is_selected = i == game.selected_pattern_idx
+    let hover = mx >= px + 5 &&
+      mx < px + pw - 5 &&
+      my >= row_y &&
+      my < row_y + row_h
+    // Row background for selected/hovered pattern
+    if is_selected {
+      @raylib.draw_rectangle(
+        px + 5,
+        row_y - 1,
+        pw - 10,
+        row_h + 2,
+        @raylib.Color::new(0, 120, 160, 60),
+      )
+    } else if hover {
+      @raylib.draw_rectangle(
+        px + 5,
+        row_y - 1,
+        pw - 10,
+        row_h + 2,
+        @raylib.Color::new(40, 60, 90, 80),
+      )
+    }
     let txt = p.pattern +
       " (x" +
       p.count.to_string() +
-      ") at positions: " +
+      ") pos: " +
       positions_to_string(p.positions)
-    @draw.draw_text(txt, px + 10, pat_y + 20 + i * 18, 11, @types.color_text)
+    let text_color = if is_selected {
+      @types.color_cyan
+    } else if hover {
+      @types.color_white
+    } else {
+      @types.color_text
+    }
+    @draw.draw_text(txt, px + 10, row_y, 11, text_color)
+    // Selection indicator
+    if is_selected {
+      @draw.draw_text(">", px + 2, row_y, 11, @types.color_cyan)
+    }
   }
   if patterns.length() == 0 {
     @draw.draw_text(
@@ -323,9 +368,20 @@ fn draw_pattern_finder(
       @types.color_dim,
     )
   }
+  // Clear selection hint
+  if game.selected_pattern_idx >= 0 {
+    let clear_y = pat_y + 22 + max_show * 20
+    @draw.draw_text(
+      "Click again to deselect",
+      px + 10,
+      clear_y,
+      11,
+      @types.color_dim,
+    )
+  }
   // For Vigenere, show spacing analysis
   if level.cipher_kind == Vigenere && patterns.length() > 0 {
-    let spacing_y = pat_y + 25 + max_show * 18
+    let spacing_y = pat_y + 40 + max_show * 20
     @draw.draw_text(
       "SPACING ANALYSIS (key length clues):",
       px + 10,

@@ -103,6 +103,15 @@ fn start_level(game : @types.Game, level_idx : Int) -> Unit {
   game.undo_stack = []
   game.message = ""
   game.message_timer = 0.0
+  // Initialize satisfaction animation arrays
+  let sat_timers : Array[Float] = []
+  let prev_sat : Array[Bool] = []
+  for _i in 0..<level.islands.length() {
+    sat_timers.push(0.0)
+    prev_sat.push(false)
+  }
+  game.satisfaction_timers = sat_timers
+  game.prev_satisfied = prev_sat
   game.screen = Playing
 }
 
@@ -134,6 +143,26 @@ fn update_playing(game : @types.Game) -> Unit {
       @types.set_message(game, "No hint available")
     }
     return
+  }
+  // Update satisfaction pulse timers
+  let dt_sat = @types.minf(@raylib.get_frame_time(), 0.05)
+  for i in 0..<game.islands.length() {
+    let currently_satisfied = @solver.is_island_satisfied(
+      game.islands,
+      game.bridges,
+      i,
+    )
+    // Detect newly satisfied
+    if i < game.prev_satisfied.length() && i < game.satisfaction_timers.length() {
+      if currently_satisfied && !game.prev_satisfied[i] {
+        game.satisfaction_timers[i] = 1.0 // Start 1-second pulse
+      }
+      game.prev_satisfied[i] = currently_satisfied
+      // Decay timer
+      if game.satisfaction_timers[i] > 0.0 {
+        game.satisfaction_timers[i] = game.satisfaction_timers[i] - dt_sat
+      }
+    }
   }
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()

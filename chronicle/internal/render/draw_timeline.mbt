@@ -15,10 +15,18 @@ fn draw_playing(game : @types.Game) -> Unit {
   draw_clue_panel(game, case_)
   // Mode indicator
   draw_mode_indicator(game)
-  // Drag preview
+  // Drag preview with enhanced feedback
   if game.dragging && game.drag_card_id >= 0 {
     match @types.find_card(case_.cards, game.drag_card_id) {
-      Some(card) =>
+      Some(card) => {
+        // Draw a subtle trail/shadow
+        @raylib.draw_rectangle(
+          Float::to_int(game.drag_x - @types.card_width / 2.0) + 6,
+          Float::to_int(game.drag_y - @types.card_height / 2.0) + 6,
+          Float::to_int(@types.card_width),
+          Float::to_int(@types.card_height),
+          @raylib.Color::new(0, 0, 0, 50),
+        )
         draw_card_at(
           card,
           game.drag_x - @types.card_width / 2.0,
@@ -27,6 +35,17 @@ fn draw_playing(game : @types.Game) -> Unit {
           false,
           false,
         )
+        // Card ID label below the drag preview
+        let drag_label = "Card #" + card.id.to_string()
+        let lw = @draw.measure_text(drag_label, 12)
+        @draw.draw_text(
+          drag_label,
+          Float::to_int(game.drag_x) - lw / 2,
+          Float::to_int(game.drag_y + @types.card_height / 2.0 + 4.0),
+          12,
+          @types.color_clue,
+        )
+      }
       None => ()
     }
   }
@@ -59,7 +78,7 @@ fn draw_timeline_slots(game : @types.Game, case_ : @types.Case) -> Unit {
       @types.clue_panel_width
     ) /
     2.0
-  // Timeline line
+  // Timeline line with tick marks
   let line_y = Float::to_int(@types.timeline_y + @types.slot_height / 2.0)
   @raylib.draw_line(
     Float::to_int(start_x - 20.0),
@@ -68,18 +87,44 @@ fn draw_timeline_slots(game : @types.Game, case_ : @types.Case) -> Unit {
     line_y,
     @types.color_subtitle,
   )
+  // Second line for thickness
+  @raylib.draw_line(
+    Float::to_int(start_x - 20.0),
+    line_y + 1,
+    Float::to_int(start_x + total_width + 20.0),
+    line_y + 1,
+    @raylib.Color::new(120, 110, 90, 80),
+  )
+  // Timeline endpoints (small circles)
+  @raylib.draw_circle(
+    Float::to_int(start_x - 20.0),
+    line_y,
+    4.0,
+    @types.color_subtitle,
+  )
+  @raylib.draw_circle(
+    Float::to_int(start_x + total_width + 20.0),
+    line_y,
+    4.0,
+    @types.color_subtitle,
+  )
   // Slot numbers
   for i in 0..<num_slots {
     let sx = start_x +
       Float::from_int(i) * (@types.slot_width + @types.card_gap)
     let sy = @types.timeline_y
     let is_hover = game.hover_slot == i
-    let slot_color = if is_hover {
+    let is_empty = @types.is_slot_empty(game.timeline_slots, i)
+    let is_snap_target = game.dragging && is_hover && is_empty
+    // Slot background with snap indicator
+    let slot_color = if is_snap_target {
+      // Bright snap highlight when dragging over empty slot
+      @raylib.Color::new(100, 95, 130, 255)
+    } else if is_hover {
       @types.color_slot_hover
     } else {
       @types.color_slot_empty
     }
-    // Draw slot
     @raylib.draw_rectangle(
       Float::to_int(sx),
       Float::to_int(sy),
@@ -87,13 +132,37 @@ fn draw_timeline_slots(game : @types.Game, case_ : @types.Case) -> Unit {
       Float::to_int(@types.slot_height),
       slot_color,
     )
+    // Snap indicator border: pulsing dashed outline when dragging over
+    let border_color = if is_snap_target {
+      @types.color_clue
+    } else {
+      @types.color_subtitle
+    }
     @raylib.draw_rectangle_lines(
       Float::to_int(sx),
       Float::to_int(sy),
       Float::to_int(@types.slot_width),
       Float::to_int(@types.slot_height),
-      @types.color_subtitle,
+      border_color,
     )
+    if is_snap_target {
+      // Double border for emphasis
+      @raylib.draw_rectangle_lines(
+        Float::to_int(sx) + 1,
+        Float::to_int(sy) + 1,
+        Float::to_int(@types.slot_width) - 2,
+        Float::to_int(@types.slot_height) - 2,
+        border_color,
+      )
+      // "Drop here" text for empty snap target
+      @draw.draw_text(
+        "DROP",
+        Float::to_int(sx + @types.slot_width / 2.0 - 18.0),
+        Float::to_int(sy + @types.slot_height / 2.0 - 8.0),
+        14,
+        @types.color_clue,
+      )
+    }
     // Slot number
     let num = (i + 1).to_string()
     @draw.draw_text(
@@ -103,10 +172,16 @@ fn draw_timeline_slots(game : @types.Game, case_ : @types.Case) -> Unit {
       16,
       @types.color_subtitle,
     )
-    // Arrow between slots
+    // Arrow between slots (triangle)
     if i < num_slots - 1 {
-      let arrow_x = Float::to_int(sx + @types.slot_width + 2.0)
-      @draw.draw_text(">", arrow_x, line_y - 8, 16, @types.color_subtitle)
+      let arrow_cx = sx + @types.slot_width + @types.card_gap / 2.0
+      let arrow_cy = Float::from_int(line_y)
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(arrow_cx + 5.0, arrow_cy),
+        @raylib.Vector2::new(arrow_cx - 3.0, arrow_cy - 5.0),
+        @raylib.Vector2::new(arrow_cx - 3.0, arrow_cy + 5.0),
+        @raylib.Color::new(140, 130, 110, 180),
+      )
     }
   }
 }
@@ -283,6 +358,8 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
       @types.clue_panel_width
     ) /
     2.0
+  // Stagger link heights to avoid overlap
+  let mut link_layer = 0
   for i in 0..<game.placed_links.length() {
     let link = game.placed_links[i]
     let from_slot = @types.card_in_slot(game.timeline_slots, link.from_id)
@@ -296,11 +373,13 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
         Float::from_int(to_slot) * (@types.slot_width + @types.card_gap) +
         @types.slot_width / 2.0
       let ty = @types.timeline_y - 5.0
-      // Curved arrow above timeline
+      // Stagger arc height per link to reduce overlap
+      let layer_offset = Float::from_int(link_layer % 3) * 12.0
       let mid_y = fy -
-        30.0 -
+        35.0 -
+        layer_offset -
         Float::from_int(@types.absf(tx - fx).to_int()) * 0.15
-      // Draw arrow line segments
+      // Choose color
       let color = if game.play_state == Validated {
         if is_link_correct(link, case_.solution_links) {
           @types.color_link_correct
@@ -310,15 +389,26 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
       } else {
         @types.color_link_arrow
       }
-      // Simple arc: from -> mid -> to
-      let steps = 12
+      let shadow_color = @raylib.Color::new(0, 0, 0, 40)
+      // Draw arc with double-line thickness and shadow
+      let steps = 16
       for s in 0..<steps {
         let t1 = Float::from_int(s) / Float::from_int(steps)
         let t2 = Float::from_int(s + 1) / Float::from_int(steps)
-        let x1 = bezier_point(fx, (fx + tx) / 2.0, tx, t1)
+        let mid_cx = (fx + tx) / 2.0
+        let x1 = bezier_point(fx, mid_cx, tx, t1)
         let y1 = bezier_point(fy, mid_y, ty, t1)
-        let x2 = bezier_point(fx, (fx + tx) / 2.0, tx, t2)
+        let x2 = bezier_point(fx, mid_cx, tx, t2)
         let y2 = bezier_point(fy, mid_y, ty, t2)
+        // Shadow
+        @raylib.draw_line(
+          Float::to_int(x1) + 1,
+          Float::to_int(y1) + 1,
+          Float::to_int(x2) + 1,
+          Float::to_int(y2) + 1,
+          shadow_color,
+        )
+        // Main line
         @raylib.draw_line(
           Float::to_int(x1),
           Float::to_int(y1),
@@ -326,26 +416,51 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
           Float::to_int(y2),
           color,
         )
+        // Second line for thickness
+        @raylib.draw_line(
+          Float::to_int(x1),
+          Float::to_int(y1) - 1,
+          Float::to_int(x2),
+          Float::to_int(y2) - 1,
+          color,
+        )
       }
-      // Arrowhead at end
+      // Origin dot at start
+      @raylib.draw_circle(
+        Float::to_int(fx),
+        Float::to_int(fy),
+        4.0,
+        color,
+      )
+      // Arrowhead at end (larger, filled)
       @raylib.draw_triangle(
         @raylib.Vector2::new(tx, ty),
-        @raylib.Vector2::new(tx - 8.0, ty - 12.0),
-        @raylib.Vector2::new(tx + 8.0, ty - 12.0),
+        @raylib.Vector2::new(tx - 9.0, ty - 14.0),
+        @raylib.Vector2::new(tx + 9.0, ty - 14.0),
         color,
       )
-      // Label
-      let mid_x = (fx + tx) / 2.0
-      @draw.draw_text(
-        "cause",
-        Float::to_int(mid_x - 15.0),
-        Float::to_int(mid_y - 12.0),
-        11,
-        color,
+      // Label with card IDs
+      let mid_cx = (fx + tx) / 2.0
+      let label = "#" +
+        link.from_id.to_string() +
+        " -> #" +
+        link.to_id.to_string()
+      let label_w = @draw.measure_text(label, 10)
+      let label_x = Float::to_int(mid_cx) - label_w / 2
+      let label_y = Float::to_int(mid_y - 14.0)
+      // Label background pill
+      @raylib.draw_rectangle(
+        label_x - 4,
+        label_y - 1,
+        label_w + 8,
+        14,
+        @raylib.Color::new(35, 30, 40, 200),
       )
+      @draw.draw_text(label, label_x, label_y, 10, color)
+      link_layer += 1
     }
   }
-  // Draw link-in-progress
+  // Draw link-in-progress with visual feedback
   if game.link_from >= 0 && game.play_state == Linking {
     let from_slot = @types.card_in_slot(game.timeline_slots, game.link_from)
     if from_slot >= 0 {
@@ -355,11 +470,52 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
       let fy = @types.timeline_y - 5.0
       let mx = Float::from_int(@raylib.get_mouse_x())
       let my = Float::from_int(@raylib.get_mouse_y())
+      // Dashed effect: draw the line
       @raylib.draw_line(
         Float::to_int(fx),
         Float::to_int(fy),
         Float::to_int(mx),
         Float::to_int(my),
+        @types.color_link_arrow,
+      )
+      // Origin dot
+      @raylib.draw_circle(
+        Float::to_int(fx),
+        Float::to_int(fy),
+        5.0,
+        @types.color_link_arrow,
+      )
+      // Cursor arrowhead
+      let dx = mx - fx
+      let dy = my - fy
+      let len = Float::from_double(
+        @math.sqrt((dx * dx + dy * dy).to_double()),
+      )
+      if len > 10.0 {
+        let nx = dx / len
+        let ny = dy / len
+        // perpendicular
+        let px = -ny
+        let py = nx
+        @raylib.draw_triangle(
+          @raylib.Vector2::new(mx, my),
+          @raylib.Vector2::new(
+            mx - nx * 12.0 + px * 6.0,
+            my - ny * 12.0 + py * 6.0,
+          ),
+          @raylib.Vector2::new(
+            mx - nx * 12.0 - px * 6.0,
+            my - ny * 12.0 - py * 6.0,
+          ),
+          @types.color_link_arrow,
+        )
+      }
+      // Label hint
+      @draw.draw_text(
+        "From #" + game.link_from.to_string() + " -> select target",
+        Float::to_int(fx) - 40,
+        Float::to_int(fy) - 20,
+        11,
         @types.color_link_arrow,
       )
     }

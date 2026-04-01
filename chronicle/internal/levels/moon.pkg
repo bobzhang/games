@@ -1,6 +1,9 @@
 import {
   "bobzhang/games/chronicle/internal/types",
-  "bobzhang/games/chronicle/internal/logic",
 }
+
+import {
+  "bobzhang/games/chronicle/internal/logic",
+} for "test"
 
 warnings = "-missing_doc+unnecessary_annotation"

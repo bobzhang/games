@@ -289,6 +289,42 @@ pub fn reset_for_level(game : Game) -> Unit {
 }
 
 ///|
+pub fn is_position_in_pattern(
+  game : Game,
+  text_pos : Int,
+  ciphertext : String,
+) -> Bool {
+  if game.selected_pattern_idx < 0 ||
+    game.selected_pattern_idx >= game.cached_patterns.length() {
+    return false
+  }
+  let pat = game.cached_patterns[game.selected_pattern_idx]
+  let pat_len = pat.pattern.length()
+  // The pattern positions are in terms of the original ciphertext index
+  // We need to check if text_pos falls within [pos, pos+pat_len) of any occurrence
+  for p in pat.positions {
+    // Count how many characters of the pattern we've seen up to text_pos
+    // positions are in original text coordinates, so we need to span pat_len
+    // cipher-letters from each start position
+    let mut cipher_count = 0
+    let mut end_pos = p
+    while cipher_count < pat_len && end_pos < ciphertext.length() {
+      let c = str_char_at(ciphertext, end_pos)
+      if is_upper(c) {
+        cipher_count = cipher_count + 1
+      }
+      if cipher_count < pat_len {
+        end_pos = end_pos + 1
+      }
+    }
+    if text_pos >= p && text_pos <= end_pos {
+      return true
+    }
+  }
+  false
+}
+
+///|
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
