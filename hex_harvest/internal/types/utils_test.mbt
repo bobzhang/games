@@ -71,15 +71,15 @@ test "offset_to_cube_roundtrip" {
 test "crop_grow_time" {
   assert_eq(crop_grow_time(Wheat), 2)
   assert_eq(crop_grow_time(Corn), 3)
-  assert_eq(crop_grow_time(Berry), 4)
-  assert_eq(crop_grow_time(Flower), 1)
+  assert_eq(crop_grow_time(Berry), 3)
+  assert_eq(crop_grow_time(Flower), 2)
 }
 
 ///|
 test "crop_base_yield" {
   assert_eq(crop_base_yield(Wheat), 1)
   assert_eq(crop_base_yield(Corn), 2)
-  assert_eq(crop_base_yield(Berry), 3)
+  assert_eq(crop_base_yield(Berry), 2)
   assert_eq(crop_base_yield(Flower), 1)
 }
 

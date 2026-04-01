@@ -77,10 +77,31 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
           @raylib.Color::new(255, 255, 255, 100),
         )
       }
-      // Draw outline
-      draw_hex_outline(cx, cy, size * 0.95, @types.color_hex_outline)
+      // Draw outline - thicker for height edges
+      let has_height_edge = has_adjacent_height_diff(grid, c, r)
+      if has_height_edge {
+        draw_hex_outline(cx, cy, size * 0.95, @raylib.Color::new(50, 40, 30, 255))
+        // Inner contour line for strong depth effect
+        draw_hex_outline(cx, cy, size * 0.88, @raylib.Color::new(60, 50, 35, 80))
+      } else {
+        draw_hex_outline(cx, cy, size * 0.95, @types.color_hex_outline)
+      }
     }
   }
+}
+
+///|
+/// Check if a tile has any neighbor with a different height
+fn has_adjacent_height_diff(grid : @types.HexGrid, col : Int, row : Int) -> Bool {
+  let h = grid.tiles[row][col].height
+  let neighbors = @hex.valid_neighbors(col, row)
+  for i in 0..<neighbors.length() {
+    let (nc, nr) = neighbors[i]
+    if grid.tiles[nr][nc].height != h {
+      return true
+    }
+  }
+  false
 }
 
 ///|
@@ -119,7 +140,7 @@ fn draw_water_overlays(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Draw channel indicators
+/// Draw channel indicators - distinct grooved trough appearance
 fn draw_channels(game : @types.Game) -> Unit {
   let grid = game.level.grid
   let size = Float::from_int(@types.hex_size)
@@ -131,26 +152,36 @@ fn draw_channels(game : @types.Game) -> Unit {
           River => () // Already drawn as river
           _ => {
             let (cx, cy) = @hex.hex_screen_pos(c, r)
-            // Draw channel as a small circle pattern
-            @raylib.draw_circle_lines(
-              cx.to_int(),
-              cy.to_int(),
-              size * 0.3,
-              @types.color_channel,
+            // Draw trough background (darker inner hex)
+            draw_hex_filled(
+              cx,
+              cy,
+              size * 0.35,
+              @raylib.Color::new(60, 110, 170, 100),
             )
-            // Draw small water lines
-            let line_len = size * 0.2
+            // Draw channel border ring
+            draw_hex_outline(
+              cx,
+              cy,
+              size * 0.38,
+              @raylib.Color::new(80, 140, 200, 200),
+            )
+            // Draw wavy water lines across the channel
+            let line_len = size * 0.25
+            let wave = @types.sinf(
+              Float::from_int(game.frame_count) * 0.06,
+            ) * 2.0
             @raylib.draw_line_ex(
-              @raylib.Vector2::new(cx - line_len, cy),
-              @raylib.Vector2::new(cx + line_len, cy),
-              2.0,
-              @types.color_channel,
+              @raylib.Vector2::new(cx - line_len, cy + wave),
+              @raylib.Vector2::new(cx + line_len, cy + wave),
+              2.5,
+              @raylib.Color::new(100, 170, 240, 200),
             )
             @raylib.draw_line_ex(
-              @raylib.Vector2::new(cx, cy - line_len * 0.7),
-              @raylib.Vector2::new(cx, cy + line_len * 0.7),
+              @raylib.Vector2::new(cx - line_len * 0.6, cy - line_len * 0.4 - wave * 0.5),
+              @raylib.Vector2::new(cx + line_len * 0.6, cy - line_len * 0.4 - wave * 0.5),
               2.0,
-              @types.color_channel,
+              @raylib.Color::new(100, 170, 240, 150),
             )
           }
         }
@@ -250,7 +281,15 @@ fn draw_crop_seed(
 ) -> Unit {
   let color = @types.crop_seed_color(kind)
   let s = hex_size * 0.15
+  // Seed dot with tiny sprout indicator
   @raylib.draw_circle(cx.to_int(), cy.to_int(), s, color)
+  // Small upward tick to distinguish from empty
+  @raylib.draw_line_ex(
+    @raylib.Vector2::new(cx, cy - s * 0.3),
+    @raylib.Vector2::new(cx, cy - s * 1.2),
+    1.5,
+    @raylib.Color::new(80, 140, 60, 120),
+  )
 }
 
 ///|
@@ -294,8 +333,21 @@ fn draw_crop_growing(
       )
     }
     Berry => {
-      // Growing berry bush
-      @raylib.draw_circle(cx.to_int(), cy.to_int(), s * 0.6, color)
+      // Growing berry bush - distinct rounded multi-lobe shape
+      @raylib.draw_circle(cx.to_int(), cy.to_int(), s * 0.5, color)
+      // Small leaf buds at sides
+      @raylib.draw_circle(
+        (cx - s * 0.35).to_int(),
+        (cy - s * 0.1).to_int(),
+        s * 0.2,
+        @raylib.Color::new(100, 160, 80, 180),
+      )
+      @raylib.draw_circle(
+        (cx + s * 0.35).to_int(),
+        (cy - s * 0.1).to_int(),
+        s * 0.2,
+        @raylib.Color::new(100, 160, 80, 180),
+      )
     }
     Flower => {
       // Growing flower stem

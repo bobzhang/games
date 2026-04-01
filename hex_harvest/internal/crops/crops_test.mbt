@@ -33,8 +33,20 @@ test "adjacency_bonus_berry_flower_combo" {
   grid.tiles[0][1].crop = Some(Flower)
   grid.tiles[0][1].crop_state = Growing
   let bonus = adjacency_bonus(grid, 0, 0)
-  // Should get +3 for berry+flower combo
-  assert_true(bonus >= 3)
+  // Should get +2 for berry+flower combo
+  assert_true(bonus >= 2)
+}
+
+///|
+test "adjacency_bonus_corn_berry_combo" {
+  let grid = @types.new_grid(3, 3)
+  grid.tiles[0][0].crop = Some(Corn)
+  grid.tiles[0][0].crop_state = Growing
+  grid.tiles[0][1].crop = Some(Berry)
+  grid.tiles[0][1].crop_state = Growing
+  let bonus = adjacency_bonus(grid, 0, 0)
+  // Should get +1 for corn+berry combo
+  assert_true(bonus >= 1)
 }
 
 ///|
@@ -89,7 +101,7 @@ test "projected_yield" {
   grid.tiles[0][1].crop = Some(Corn)
   grid.tiles[0][1].crop_state = Seed
   let proj = projected_yield(grid)
-  // Wheat(1) + Corn(2) + adjacency bonuses
+  // Wheat(1+combo2) + Corn(2+combo2) = 7
   assert_true(proj >= 3)
 }
 

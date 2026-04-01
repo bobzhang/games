@@ -39,22 +39,33 @@ pub fn adjacency_bonus(
     }
   }
   // Combo bonuses (only if this crop is part of the combo)
+  // Wheat+Corn: staple synergy (+2 each)
+  // Berry+Flower: garden synergy (+2 each)
+  // Corn+Berry: harvest synergy (+1 each) - rewards mixed planting
   match crop_kind {
     Wheat =>
       if has_corn {
         bonus += 2
       }
-    Corn =>
+    Corn => {
       if has_wheat {
         bonus += 2
       }
-    Berry =>
-      if has_flower {
-        bonus += 3
+      if has_berry {
+        bonus += 1
       }
+    }
+    Berry => {
+      if has_flower {
+        bonus += 2
+      }
+      if has_corn {
+        bonus += 1
+      }
+    }
     Flower =>
       if has_berry {
-        bonus += 3
+        bonus += 2
       }
   }
   bonus
@@ -188,7 +199,12 @@ pub fn adjacency_preview(
         }
         // Combo check
         let is_combo = match (kind, nkind) {
-          (Wheat, Corn) | (Corn, Wheat) | (Berry, Flower) | (Flower, Berry) =>
+          (Wheat, Corn)
+          | (Corn, Wheat)
+          | (Berry, Flower)
+          | (Flower, Berry)
+          | (Corn, Berry)
+          | (Berry, Corn) =>
             true
           _ => false
         }

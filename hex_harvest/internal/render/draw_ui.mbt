@@ -111,7 +111,7 @@ fn draw_controls_help(game : @types.Game) -> Unit {
   let y = @types.screen_height - 35
   @raylib.draw_rectangle(0, y - 5, @types.screen_width, 40, @raylib.Color::new(0, 0, 0, 100))
   @draw.draw_text(
-    "Click: Place | 1-4: Crop | 5: Channel | Enter: End Turn | U: Undo | R: Restart | Esc: Menu",
+    "L-Click: Place | R-Click: Remove | 1-4: Crop | 5: Channel | Enter: End Turn | U: Undo | R: Restart",
     10,
     y,
     14,

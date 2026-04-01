@@ -35,6 +35,7 @@ fn draw_playing(game : @types.Game) -> Unit {
   draw_harvest_anim(game)
   // Draw UI
   draw_hud(game)
+  draw_projected_yield(game)
   draw_crop_palette(game)
   draw_controls_help(game)
   // Draw message

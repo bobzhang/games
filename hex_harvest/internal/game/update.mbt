@@ -23,6 +23,17 @@ pub fn update(game : @types.Game) -> Unit {
       game.newly_harvested = []
     }
   }
+  // Update click feedback
+  if game.click_feedback_timer > 0.0 {
+    game.click_feedback_timer -= dt
+  }
+  // Update staged turn phase timer
+  if game.phase_timer > 0.0 {
+    game.phase_timer -= dt
+    if game.phase_timer <= 0.0 {
+      advance_turn_phase(game)
+    }
+  }
   match game.screen {
     Title => process_title_input(game)
     WorldSelect => process_world_select_input(game)
@@ -169,6 +180,23 @@ fn process_playing_input(game : @types.Game) -> Unit {
       execute_turn(game)
     }
   }
+  // Remove crop on right-click
+  if @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight) {
+    if @types.hex_in_bounds(game.hover_col, game.hover_row) {
+      let rtile = game.level.grid.tiles[game.hover_row][game.hover_col]
+      match rtile.crop {
+        Some(_) =>
+          if rtile.crop_state != Harvested {
+            save_undo(game)
+            rtile.crop = None
+            rtile.crop_state = Seed
+            rtile.crop_turns = 0
+            @types.set_message(game, "Crop removed", 0.6)
+          }
+        None => ()
+      }
+    }
+  }
   // End turn without placing (Enter)
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
     save_undo(game)
@@ -192,7 +220,7 @@ fn process_playing_input(game : @types.Game) -> Unit {
 
 ///|
 /// Execute a turn: water flow -> crop growth -> harvest
-fn execute_turn(game : @types.Game) -> Unit {
+pub fn execute_turn(game : @types.Game) -> Unit {
   game.turn += 1
   // 1. Water flows
   let new_water = @water.flow_water(game.level.grid)
@@ -221,7 +249,7 @@ fn execute_turn(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_goals(game : @types.Game) -> Unit {
+pub fn check_goals(game : @types.Game) -> Unit {
   let mut goals_done = 0
   for i in 0..<game.level.goals.length() {
     let goal = game.level.goals[i]
@@ -266,7 +294,7 @@ pub fn start_level(game : @types.Game, index : Int) -> Unit {
 }
 
 ///|
-fn complete_level(game : @types.Game) -> Unit {
+pub fn complete_level(game : @types.Game) -> Unit {
   game.level_complete = true
   game.score = calculate_score(game)
   // Save best score
@@ -283,7 +311,7 @@ fn complete_level(game : @types.Game) -> Unit {
 }
 
 ///|
-fn calculate_score(game : @types.Game) -> @types.LevelScore {
+pub fn calculate_score(game : @types.Game) -> @types.LevelScore {
   let mut stars = 0
   // Star 1: reach target yield
   if game.yield_collected >= game.level.target_yield {
@@ -324,7 +352,7 @@ fn process_results_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn save_undo(game : @types.Game) -> Unit {
+pub fn save_undo(game : @types.Game) -> Unit {
   let saved_tiles = @types.clone_grid_tiles(game.level.grid)
   let state : @types.UndoState = {
     tiles: saved_tiles,
@@ -340,7 +368,7 @@ fn save_undo(game : @types.Game) -> Unit {
 }
 
 ///|
-fn undo(game : @types.Game) -> Unit {
+pub fn undo(game : @types.Game) -> Unit {
   if game.undo_stack.length() == 0 {
     @types.set_message(game, "Nothing to undo", 1.0)
     return

@@ -321,6 +321,11 @@ pub fn new_game() -> Game {
     level_complete: false,
     fade_timer: 0.0,
     rng: 42,
+    turn_phase: Idle,
+    phase_timer: 0.0,
+    click_feedback_timer: 0.0,
+    click_feedback_col: -1,
+    click_feedback_row: -1,
   }
 }
 
@@ -329,8 +334,8 @@ pub fn crop_grow_time(kind : CropKind) -> Int {
   match kind {
     Wheat => 2
     Corn => 3
-    Berry => 4
-    Flower => 1
+    Berry => 3
+    Flower => 2
   }
 }
 
@@ -339,7 +344,7 @@ pub fn crop_base_yield(kind : CropKind) -> Int {
   match kind {
     Wheat => 1
     Corn => 2
-    Berry => 3
+    Berry => 2
     Flower => 1
   }
 }
@@ -454,12 +459,12 @@ pub fn restore_grid_tiles(
 
 ///|
 pub fn height_color_mod(height : Int) -> Int {
-  // Higher tiles are lighter
+  // Stronger contour shading - higher tiles are noticeably brighter
   match height {
-    0 => -20
-    1 => 0
-    2 => 15
-    3 => 30
+    0 => -35
+    1 => -10
+    2 => 20
+    3 => 45
     _ => 0
   }
 }

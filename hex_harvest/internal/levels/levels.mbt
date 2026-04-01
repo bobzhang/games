@@ -212,7 +212,7 @@ fn valley_06() -> @types.Level {
     (4, 5, Rock, 0), (5, 5, Rock, 0), (6, 5, Rock, 0), (7, 5, Rock, 0),
   ]
   build_level(
-    "Berry Patch", 0, data, [(1, 1)], [], 14, 12, 10,
+    "Berry Patch", 0, data, [(1, 1)], [], 14, 10, 10,
   )
 }
 

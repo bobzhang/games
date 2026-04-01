@@ -94,4 +94,9 @@ pub(all) struct Game {
   mut level_complete : Bool
   mut fade_timer : Float
   mut rng : Int
+  mut turn_phase : TurnPhase
+  mut phase_timer : Float
+  mut click_feedback_timer : Float
+  mut click_feedback_col : Int
+  mut click_feedback_row : Int
 } derive(Show)

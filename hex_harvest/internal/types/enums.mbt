@@ -47,3 +47,12 @@ pub(all) enum PlaceMode {
   CropPlace(CropKind)
   ChannelPlace
 } derive(Eq, Show)
+
+///|
+pub(all) enum TurnPhase {
+  Idle
+  Placing
+  Flowing
+  Growing
+  Harvesting
+} derive(Eq, Show)
