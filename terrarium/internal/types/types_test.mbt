@@ -314,19 +314,17 @@ test "get_available_count_no_level" {
 ///|
 test "get_available_count_with_level" {
   let game = new_game()
-  game.current_level = Some(
-    {
-      id: 0,
-      name: "Test",
-      tier: Beginner,
-      description: "Test",
-      initial_resources: new_resources(50.0, 50.0, 50.0, 50.0),
-      available_organisms: [Moss, Beetle],
-      organism_counts: [3, 1],
-      par_turns: 10,
-      locked_cells: [],
-    },
-  )
+  game.current_level = Some({
+    id: 0,
+    name: "Test",
+    tier: Beginner,
+    description: "Test",
+    initial_resources: new_resources(50.0, 50.0, 50.0, 50.0),
+    available_organisms: [Moss, Beetle],
+    organism_counts: [3, 1],
+    par_turns: 10,
+    locked_cells: [],
+  })
   assert_eq(get_available_count(game, Moss), 3)
   assert_eq(get_available_count(game, Beetle), 1)
   assert_eq(get_available_count(game, Fern), 0)

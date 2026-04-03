@@ -157,6 +157,114 @@ test "is_given_symbol" {
 }
 
 ///|
+test "count_symbol_frequency" {
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+    @types.make_space(),
+    @types.make_symbol(Circle),
+    @types.make_symbol(Circle),
+    @types.make_symbol(Star),
+  ])
+  inspect(@types.count_symbol_frequency(inscription, Circle), content="3")
+  inspect(@types.count_symbol_frequency(inscription, Triangle), content="1")
+  inspect(@types.count_symbol_frequency(inscription, Star), content="1")
+  inspect(@types.count_symbol_frequency(inscription, Diamond), content="0")
+}
+
+///|
+test "compute_symbol_positions basic" {
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+    @types.make_space(),
+    @types.make_symbol(Square),
+  ])
+  let positions = @types.compute_symbol_positions(
+    inscription, 100, // base_x
+     200, // base_y
+     500, // max_width
+     90, // line_height
+     56, // spacing
+     30, // gap
+  )
+  inspect(positions.length(), content="4")
+  // First symbol at base
+  inspect(positions[0].x, content="100")
+  inspect(positions[0].y, content="200")
+  // Second symbol offset by spacing
+  inspect(positions[1].x, content="156")
+  inspect(positions[1].y, content="200")
+  // Third is a space
+  inspect(positions[2].symbol, content="None")
+  // Fourth symbol after space gap
+  inspect(positions[3].x, content="242")
+  inspect(positions[3].y, content="200")
+}
+
+///|
+test "compute_symbol_positions wraps at boundary" {
+  // max_width=120, spacing=56 → fits 2 symbols per row (0, 56; 112 > 120-56=64 → wraps)
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_symbol(Triangle),
+    @types.make_symbol(Square),
+  ])
+  let positions = @types.compute_symbol_positions(
+    inscription, 10, // base_x
+     20, // base_y
+     120, // max_width
+     90, // line_height
+     56, // spacing
+     30, // gap
+  )
+  inspect(positions.length(), content="3")
+  // First two fit on row 0
+  inspect(positions[0].y, content="20")
+  inspect(positions[1].y, content="20")
+  // Third wraps to next row
+  inspect(positions[2].x, content="10")
+  inspect(positions[2].y, content="110")
+}
+
+///|
+test "compute_symbol_positions wraps after space" {
+  // Space pushes cx past boundary → next symbol on new line
+  let inscription = @types.new_inscription([
+    @types.make_symbol(Circle),
+    @types.make_space(),
+    @types.make_symbol(Triangle),
+  ])
+  let positions = @types.compute_symbol_positions(
+    inscription, 10, // base_x
+     20, // base_y
+     100, // max_width — tight: 56 + 30 = 86 cx after space; 86 > 100-56=44 → wraps
+     90, // line_height
+     56, // spacing
+     30, // gap
+  )
+  inspect(positions.length(), content="3")
+  inspect(positions[0].y, content="20")
+  // Triangle should be on next row since space pushed past boundary
+  inspect(positions[2].x, content="10")
+  inspect(positions[2].y, content="110")
+}
+
+///|
+test "palette_button_pos" {
+  // 5 cols, gap=6, btn_size=44, label_offset=28
+  let (x0, y0) = @types.palette_button_pos(0, 100, 50, 44, 6, 5, 28)
+  inspect(x0, content="100")
+  inspect(y0, content="78") // 50 + 28
+  let (x1, y1) = @types.palette_button_pos(1, 100, 50, 44, 6, 5, 28)
+  inspect(x1, content="150") // 100 + 1*(44+6)
+  inspect(y1, content="78")
+  let (x5, y5) = @types.palette_button_pos(5, 100, 50, 44, 6, 5, 28)
+  inspect(x5, content="100") // wraps to second row
+  inspect(y5, content="128") // 78 + 44 + 6
+}
+
+///|
 test "sinf and cosf" {
   inspect(@types.sinf(0.0), content="0")
   inspect(@types.cosf(0.0), content="1")

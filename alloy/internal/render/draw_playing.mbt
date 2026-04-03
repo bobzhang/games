@@ -83,10 +83,18 @@ fn draw_metal_palette(game : @types.Game, level : @types.LevelDef) -> Unit {
     // Mini property bars
     draw_mini_bar(px + 52, y + 22, 40, props.hardness, @types.color_hardness)
     draw_mini_bar(
-      px + 96, y + 22, 40, props.flexibility, @types.color_flexibility,
+      px + 96,
+      y + 22,
+      40,
+      props.flexibility,
+      @types.color_flexibility,
     )
     draw_mini_bar(
-      px + 140, y + 22, 40, props.conductivity, @types.color_conductivity,
+      px + 140,
+      y + 22,
+      40,
+      props.conductivity,
+      @types.color_conductivity,
     )
     // Property labels
     @draw.draw_text("H", px + 52, y + 34, 10, @types.color_hud_dim)
@@ -129,11 +137,7 @@ fn draw_crucible_area(game : @types.Game) -> Unit {
   let vessel_h = 330
   // Crucible outline
   @raylib.draw_rectangle(
-    vessel_x,
-    vessel_y,
-    vessel_w,
-    vessel_h,
-    @types.color_crucible,
+    vessel_x, vessel_y, vessel_w, vessel_h, @types.color_crucible,
   )
   @raylib.draw_rectangle(
     vessel_x + 4,
@@ -166,32 +170,34 @@ fn draw_crucible_area(game : @types.Game) -> Unit {
       }
       @raylib.draw_rectangle(slot_x, y, vessel_w - 20, 48, bg)
       // Color bar
-      @raylib.draw_rectangle(
-        slot_x,
-        y,
-        8,
-        48,
-        @types.metal_color(ing.metal),
-      )
+      @raylib.draw_rectangle(slot_x, y, 8, 48, @types.metal_color(ing.metal))
       // Metal name and amount
       let name = @types.metal_name(ing.metal)
       @draw.draw_text(name, slot_x + 14, y + 4, 16, @types.color_hud_text)
       let amount_str = "x" + ing.amount.to_string()
-      @draw.draw_text(
-        amount_str,
-        slot_x + 14,
-        y + 24,
-        14,
-        @types.color_hud_dim,
-      )
+      @draw.draw_text(amount_str, slot_x + 14, y + 24, 14, @types.color_hud_dim)
       // Properties preview
       let props = @types.metal_props(ing.metal)
-      draw_mini_bar(slot_x + 100, y + 8, 50, props.hardness, @types.color_hardness)
       draw_mini_bar(
-        slot_x + 100, y + 20, 50, props.flexibility, @types.color_flexibility,
+        slot_x + 100,
+        y + 8,
+        50,
+        props.hardness,
+        @types.color_hardness,
       )
       draw_mini_bar(
-        slot_x + 100, y + 32, 50, props.conductivity, @types.color_conductivity,
+        slot_x + 100,
+        y + 20,
+        50,
+        props.flexibility,
+        @types.color_flexibility,
+      )
+      draw_mini_bar(
+        slot_x + 100,
+        y + 32,
+        50,
+        props.conductivity,
+        @types.color_conductivity,
       )
       // Remove hint
       @draw.draw_text(
@@ -254,9 +260,7 @@ fn draw_target_panel(game : @types.Game, level : @types.LevelDef) -> Unit {
     draw_blend_preview(tx, bar_y, preview, level)
   }
   // Par info
-  let par_str = "Par: " +
-    level.par_ingredients.to_string() +
-    " ingredients"
+  let par_str = "Par: " + level.par_ingredients.to_string() + " ingredients"
   @draw.draw_text(par_str, tx, bar_y + 340, 14, @types.color_hud_dim)
 }
 
@@ -279,7 +283,9 @@ fn draw_property_target(
   let bar_y = y + 22
   let bar_w = 440
   let bar_h = 24
-  @raylib.draw_rectangle(bar_x, bar_y, bar_w, bar_h, @types.color_property_bar_bg)
+  @raylib.draw_rectangle(
+    bar_x, bar_y, bar_w, bar_h, @types.color_property_bar_bg,
+  )
   // Target range highlight
   let range_x = bar_x + (Float::from_int(bar_w) * range.min / 100.0).to_int()
   let range_w = (Float::from_int(bar_w) * (range.max - range.min) / 100.0).to_int()
@@ -290,13 +296,20 @@ fn draw_property_target(
     range_w,
     bar_h,
     @raylib.Color::new(
-      color.r.to_int(), color.g.to_int(), color.b.to_int(), range_alpha,
+      color.r.to_int(),
+      color.g.to_int(),
+      color.b.to_int(),
+      range_alpha,
     ),
   )
   // Range borders
   @raylib.draw_line(range_x, bar_y, range_x, bar_y + bar_h, color)
   @raylib.draw_line(
-    range_x + range_w, bar_y, range_x + range_w, bar_y + bar_h, color,
+    range_x + range_w,
+    bar_y,
+    range_x + range_w,
+    bar_y + bar_h,
+    color,
   )
   // Center marker
   let center_x = bar_x +
@@ -408,11 +421,7 @@ fn draw_value_marker(
 ) -> Unit {
   let marker_x = bar_x +
     (Float::from_int(bar_w) * @types.clampf(value, 0.0, 100.0) / 100.0).to_int()
-  let color = if in_range {
-    @types.color_success
-  } else {
-    @types.color_fail
-  }
+  let color = if in_range { @types.color_success } else { @types.color_fail }
   // Triangle marker above bar
   let bar_h = 24
   @raylib.draw_triangle(
@@ -424,20 +433,11 @@ fn draw_value_marker(
       Float::from_int(marker_x + 5),
       Float::from_int(bar_y - 2),
     ),
-    @raylib.Vector2::new(
-      Float::from_int(marker_x),
-      Float::from_int(bar_y + 4),
-    ),
+    @raylib.Vector2::new(Float::from_int(marker_x), Float::from_int(bar_y + 4)),
     color,
   )
   // Vertical line through bar
-  @raylib.draw_line(
-    marker_x,
-    bar_y,
-    marker_x,
-    bar_y + bar_h,
-    color,
-  )
+  @raylib.draw_line(marker_x, bar_y, marker_x, bar_y + bar_h, color)
 }
 
 ///|
@@ -471,7 +471,13 @@ fn draw_temperature_panel(game : @types.Game) -> Unit {
     }
     @draw.draw_text(name, x + (temp_w - nw) / 2, ty + 20, 14, text_color)
     if is_selected {
-      @raylib.draw_rectangle_lines(x, ty + 12, temp_w, 35, @types.color_selected)
+      @raylib.draw_rectangle_lines(
+        x,
+        ty + 12,
+        temp_w,
+        35,
+        @types.color_selected,
+      )
     }
   }
   @draw.draw_text("T: toggle", tx, ty + 54, 12, @types.color_hud_dim)

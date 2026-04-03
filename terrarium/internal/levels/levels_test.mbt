@@ -38,7 +38,8 @@ test "all_levels_have_valid_organisms" {
     let level = get_level(i)
     assert_true(level.available_organisms.length() > 0)
     assert_eq(
-      level.available_organisms.length(), level.organism_counts.length(),
+      level.available_organisms.length(),
+      level.organism_counts.length(),
     )
     for j in 0..<level.organism_counts.length() {
       assert_true(level.organism_counts[j] > 0)
@@ -128,9 +129,13 @@ test "level_difficulty_progression" {
   // Advanced levels should generally have lower initial resources
   let beginner = get_level(0)
   let advanced = get_level(19)
-  let beginner_total = beginner.initial_resources.o2 + beginner.initial_resources.co2 +
-    beginner.initial_resources.water + beginner.initial_resources.nutrients
-  let advanced_total = advanced.initial_resources.o2 + advanced.initial_resources.co2 +
-    advanced.initial_resources.water + advanced.initial_resources.nutrients
+  let beginner_total = beginner.initial_resources.o2 +
+    beginner.initial_resources.co2 +
+    beginner.initial_resources.water +
+    beginner.initial_resources.nutrients
+  let advanced_total = advanced.initial_resources.o2 +
+    advanced.initial_resources.co2 +
+    advanced.initial_resources.water +
+    advanced.initial_resources.nutrients
   assert_true(beginner_total > advanced_total)
 }

@@ -17,8 +17,9 @@ pub fn apply_predation(game : @types.Game, events : Array[String]) -> Unit {
           let prey = game.organisms[j]
           if prey.alive && prey.kind == prey_kind {
             let dist = @types.abs_float(
-              Float::from_int(predator.row - prey.row),
-            ) + @types.abs_float(Float::from_int(predator.col - prey.col))
+                Float::from_int(predator.row - prey.row),
+              ) +
+              @types.abs_float(Float::from_int(predator.col - prey.col))
             if dist <= 2.0 {
               found_prey = true
               if profile.is_predator {

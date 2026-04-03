@@ -26,7 +26,13 @@ fn draw_fog_overlay(state : @types.LevelState, frame : Int) -> Unit {
           30.0 +
           40.0
         let alpha = alpha_mod.to_int()
-        let clamped = if alpha < 0 { 0 } else if alpha > 80 { 80 } else { alpha }
+        let clamped = if alpha < 0 {
+          0
+        } else if alpha > 80 {
+          80
+        } else {
+          alpha
+        }
         @raylib.draw_circle(
           wisp_x.to_int(),
           wisp_y.to_int(),
@@ -46,8 +52,8 @@ fn draw_water_ripples(state : @types.LevelState, frame : Int) -> Unit {
   let ship_x = state.ship.pos.x
   let ship_y = state.ship.pos.y
   // Draw ripple rings around ship on revealed ocean tiles
-  for dy in -2..=2 {
-    for dx in -2..=2 {
+  for dy in -2..<=2 {
+    for dx in -2..<=2 {
       let gx = ship_x + dx
       let gy = ship_y + dy
       if @types.in_bounds(gx, gy) && state.revealed[gy][gx] {

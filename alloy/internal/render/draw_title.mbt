@@ -68,7 +68,13 @@ fn draw_title(game : @types.Game) -> Unit {
   // Controls hint
   let hint = "Blend metals to match target alloy properties"
   let hint_w = @draw.measure_text(hint, 16)
-  @draw.draw_text(hint, (w - hint_w) / 2, h * 3 / 4 + 45, 16, @types.color_hud_dim)
+  @draw.draw_text(
+    hint,
+    (w - hint_w) / 2,
+    h * 3 / 4 + 45,
+    16,
+    @types.color_hud_dim,
+  )
 }
 
 ///|

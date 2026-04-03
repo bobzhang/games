@@ -1,7 +1,9 @@
 ///|
 fn draw_title(game : @types.Game) -> Unit {
   // Background
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_title_bg,
+  )
   // Decorative field rows
   for i in 0..<8 {
     let y = 200 + i * 60
@@ -17,11 +19,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Title
   @draw.draw_text("HARVEST", 420, 80, 64, @types.color_title_text)
   @draw.draw_text(
-    "Seasonal Crop Planning Puzzle",
-    380,
-    160,
-    24,
-    @types.color_hud_text,
+    "Seasonal Crop Planning Puzzle", 380, 160, 24, @types.color_hud_text,
   )
   // Menu items
   let items = ["Play", "Quit"]
@@ -36,18 +34,20 @@ fn draw_title(game : @types.Game) -> Unit {
     @raylib.draw_rectangle_lines(490, y, 300, 55, @types.color_dark_text)
     let text_x = 580
     if i == game.menu_selection {
-      @draw.draw_text("> " + items[i] + " <", text_x - 20, y + 14, 28, @types.color_white)
+      @draw.draw_text(
+        "> " + items[i] + " <",
+        text_x - 20,
+        y + 14,
+        28,
+        @types.color_white,
+      )
     } else {
       @draw.draw_text(items[i], text_x + 10, y + 14, 28, @types.color_white)
     }
   }
   // Instructions
   @draw.draw_text(
-    "Arrow Keys to select, Enter to confirm",
-    410,
-    520,
-    18,
-    @types.color_hud_text,
+    "Arrow Keys to select, Enter to confirm", 410, 520, 18, @types.color_hud_text,
   )
   // Crop icons at bottom
   let crops = @types.all_crops()
@@ -56,7 +56,13 @@ fn draw_title(game : @types.Game) -> Unit {
     let y = 600
     let cc = @types.crop_color(crops[i])
     @raylib.draw_rectangle(x, y, 40, 40, cc)
-    @draw.draw_text(@types.crop_name(crops[i]), x - 5, y + 45, 12, @types.color_dark_text)
+    @draw.draw_text(
+      @types.crop_name(crops[i]),
+      x - 5,
+      y + 45,
+      12,
+      @types.color_dark_text,
+    )
   }
 }
 
@@ -110,7 +116,7 @@ fn draw_level_button(
   x : Int,
   y : Int,
   btn_w : Int,
-  btn_h : Int
+  btn_h : Int,
 ) -> Unit {
   let is_hover = game.menu_selection == i
   let unlocked = is_level_unlocked(game, i)
@@ -180,7 +186,13 @@ fn draw_results(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(px, py, pw, ph, @types.color_panel_bg)
   @raylib.draw_rectangle_lines(px, py, pw, ph, @types.color_hud_text)
   // Title
-  @draw.draw_text("Year Complete!", px + 140, py + 20, 32, @types.color_title_text)
+  @draw.draw_text(
+    "Year Complete!",
+    px + 140,
+    py + 20,
+    32,
+    @types.color_title_text,
+  )
   // Level name
   @draw.draw_text(
     @levels.level_name(game.level_index),

@@ -18,7 +18,10 @@ test "all_levels_have_depth_profile_length_8" {
 test "all_levels_have_matching_counts" {
   for i in 0..<20 {
     let level = get_level(i)
-    assert_eq(level.available_organisms.length(), level.organism_counts.length())
+    assert_eq(
+      level.available_organisms.length(),
+      level.organism_counts.length(),
+    )
   }
 }
 
@@ -63,12 +66,11 @@ test "setup_level_places_rocks" {
   let game = @types.new_game()
   setup_level(game, 4)
   match game.current_level {
-    Some(level) => {
+    Some(level) =>
       for i in 0..<level.rock_cells.length() {
         let (r, c) = level.rock_cells[i]
         assert_eq(game.grid[r][c], Rock)
       }
-    }
     None => fail("Level should be set")
   }
 }

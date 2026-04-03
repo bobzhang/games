@@ -83,8 +83,12 @@ test "all 25 levels have non-base target elements" {
 test "all 25 levels have positive budget totals" {
   for i in 0..<25 {
     let level = get_level(i)
-    let total = level.budget.fire + level.budget.water + level.budget.earth +
-      level.budget.air + level.budget.light + level.budget.shadow
+    let total = level.budget.fire +
+      level.budget.water +
+      level.budget.earth +
+      level.budget.air +
+      level.budget.light +
+      level.budget.shadow
     assert_true(total > 0)
   }
 }
@@ -115,8 +119,12 @@ test "budget provides enough elements for par steps" {
   // Budget total should be >= par_steps (need at least 1 element per step)
   for i in 0..<25 {
     let level = get_level(i)
-    let total = level.budget.fire + level.budget.water + level.budget.earth +
-      level.budget.air + level.budget.light + level.budget.shadow
+    let total = level.budget.fire +
+      level.budget.water +
+      level.budget.earth +
+      level.budget.air +
+      level.budget.light +
+      level.budget.shadow
     assert_true(total >= level.par_steps)
   }
 }
@@ -131,9 +139,7 @@ test "steam targets have fire and water in budget" {
       let has_water = level.budget.water > 0
       let has_air = level.budget.air > 0
       // Direct path: fire + water, or indirect: air+water->ice, ice+fire->steam
-      assert_true(
-        (has_fire && has_water) || (has_fire && has_air && has_water),
-      )
+      assert_true((has_fire && has_water) || (has_fire && has_air && has_water))
     }
   }
 }

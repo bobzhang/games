@@ -1,7 +1,15 @@
 ///|
 /// Create Tier 1 levels (7 levels): Simple downhill routing.
 pub fn create_tier1() -> Array[@types.Level] {
-  [level_1_1(), level_1_2(), level_1_3(), level_1_4(), level_1_5(), level_1_6(), level_1_7()]
+  [
+    level_1_1(),
+    level_1_2(),
+    level_1_3(),
+    level_1_4(),
+    level_1_5(),
+    level_1_6(),
+    level_1_7(),
+  ]
 }
 
 ///|

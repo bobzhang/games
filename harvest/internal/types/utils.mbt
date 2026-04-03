@@ -413,7 +413,7 @@ pub fn new_grid() -> Array[Array[Plot]] {
 
 ///|
 pub fn new_grid_with_soil(
-  soil_data : Array[Array[(Int, Int, Int)]]
+  soil_data : Array[Array[(Int, Int, Int)]],
 ) -> Array[Array[Plot]] {
   let grid : Array[Array[Plot]] = Array::new(capacity=grid_rows)
   for r in 0..<grid_rows {
@@ -524,7 +524,7 @@ pub fn tier_from_value(
   value : Int,
   bronze : Int,
   silver : Int,
-  gold : Int
+  gold : Int,
 ) -> Tier? {
   if value >= gold {
     Some(Gold)

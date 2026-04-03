@@ -178,11 +178,9 @@ test "every island has at least one potential neighbor" {
     for j in 0..<islands.length() {
       let mut has_neighbor = false
       for k in 0..<islands.length() {
-        if j != k && @types.can_connect(islands, j, k) && !@types.has_island_between(
-          islands,
-          j,
-          k,
-        ) {
+        if j != k &&
+          @types.can_connect(islands, j, k) &&
+          !@types.has_island_between(islands, j, k) {
           has_neighbor = true
           break
         }

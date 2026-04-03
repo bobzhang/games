@@ -45,9 +45,14 @@ test "clear_grid_resets_all_cells" {
   let game = new_game()
   game.grid[0][0] = Organism(Barnacle)
   game.grid[2][3] = Organism(Crab)
-  game.organisms.push(
-    { kind: Barnacle, row: 0, col: 0, alive: true, health: 100.0, submerged: false },
-  )
+  game.organisms.push({
+    kind: Barnacle,
+    row: 0,
+    col: 0,
+    alive: true,
+    health: 100.0,
+    submerged: false,
+  })
   game.organisms_placed[0] = 1
   clear_grid(game)
   assert_eq(game.grid[0][0], Empty)
@@ -74,7 +79,12 @@ test "in_grid_invalid" {
 ///|
 test "organism_index_roundtrip" {
   let kinds : Array[OrganismKind] = [
-    Barnacle, Anemone, Crab, Starfish, Algae, Urchin,
+    Barnacle,
+    Anemone,
+    Crab,
+    Starfish,
+    Algae,
+    Urchin,
   ]
   for i in 0..<kinds.length() {
     let idx = organism_index(kinds[i])
@@ -257,19 +267,17 @@ test "get_available_count_no_level" {
 ///|
 test "get_available_count_with_level" {
   let game = new_game()
-  game.current_level = Some(
-    {
-      id: 0,
-      name: "Test",
-      tier: Shallow,
-      description: "Test",
-      depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
-      available_organisms: [Barnacle, Crab],
-      organism_counts: [3, 1],
-      target_species: [Barnacle],
-      rock_cells: [],
-    },
-  )
+  game.current_level = Some({
+    id: 0,
+    name: "Test",
+    tier: Shallow,
+    description: "Test",
+    depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
+    available_organisms: [Barnacle, Crab],
+    organism_counts: [3, 1],
+    target_species: [Barnacle],
+    rock_cells: [],
+  })
   assert_eq(get_available_count(game, Barnacle), 3)
   assert_eq(get_available_count(game, Crab), 1)
   assert_eq(get_available_count(game, Algae), 0)

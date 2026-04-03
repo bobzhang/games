@@ -3,7 +3,7 @@
 pub fn plant_crop(
   plot : @types.Plot,
   kind : @types.CropKind,
-  season : @types.Season
+  season : @types.Season,
 ) -> Bool {
   if plot.state != Empty {
     return false
@@ -36,7 +36,7 @@ pub fn plant_crop(
 /// Advance one season: grow planted crops
 pub fn advance_season(
   grid : Array[Array[@types.Plot]],
-  current_season : @types.Season
+  current_season : @types.Season,
 ) -> Unit {
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
@@ -55,7 +55,8 @@ fn advance_plot(plot : @types.Plot, current_season : @types.Season) -> Unit {
       plot.growth_turns += 1
       if plot.growth_turns >= info.growth_time {
         // Check if we're in the harvest season
-        if current_season == info.harvest_season || plot.crop == Fallow ||
+        if current_season == info.harvest_season ||
+          plot.crop == Fallow ||
           plot.crop == Clover {
           plot.state = Mature
         } else {
@@ -69,7 +70,8 @@ fn advance_plot(plot : @types.Plot, current_season : @types.Season) -> Unit {
       let info = @types.crop_info(plot.crop)
       plot.growth_turns += 1
       if plot.growth_turns >= info.growth_time {
-        if current_season == info.harvest_season || plot.crop == Fallow ||
+        if current_season == info.harvest_season ||
+          plot.crop == Fallow ||
           plot.crop == Clover {
           plot.state = Mature
         }
@@ -91,7 +93,7 @@ fn advance_plot(plot : @types.Plot, current_season : @types.Season) -> Unit {
 /// Harvest all mature crops, return total value
 pub fn harvest_mature(
   grid : Array[Array[@types.Plot]],
-  flash : Array[Array[Float]]
+  flash : Array[Array[Float]],
 ) -> Int {
   let mut total = 0
   for r in 0..<@types.grid_rows {
@@ -131,7 +133,7 @@ pub fn clear_harvested(grid : Array[Array[@types.Plot]]) -> Unit {
 pub fn apply_plan(
   grid : Array[Array[@types.Plot]],
   plan : @types.SeasonPlan,
-  season : @types.Season
+  season : @types.Season,
 ) -> Int {
   let mut planted = 0
   for r in 0..<@types.grid_rows {
@@ -151,7 +153,7 @@ pub fn apply_plan(
 /// Count how many plots have a specific state
 pub fn count_state(
   grid : Array[Array[@types.Plot]],
-  state : @types.CropState
+  state : @types.CropState,
 ) -> Int {
   let mut count = 0
   for r in 0..<@types.grid_rows {
@@ -217,7 +219,7 @@ pub fn average_soil_quality(grid : Array[Array[@types.Plot]]) -> Int {
 pub fn simulate_year(
   grid : Array[Array[@types.Plot]],
   plans : Array[@types.SeasonPlan],
-  flash : Array[Array[Float]]
+  flash : Array[Array[Float]],
 ) -> Int {
   let mut total = 0
   for s in 0..<4 {
@@ -239,7 +241,7 @@ pub fn simulate_year(
 /// Reset grid to initial state with given soil
 pub fn reset_grid(
   grid : Array[Array[@types.Plot]],
-  soil_data : Array[Array[(Int, Int, Int)]]
+  soil_data : Array[Array[(Int, Int, Int)]],
 ) -> Unit {
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {

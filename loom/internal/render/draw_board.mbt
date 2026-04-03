@@ -64,7 +64,13 @@ fn draw_loom_frame() -> Unit {
   let gw = @types.grid_cols * @types.cell_size
   let gh = @types.grid_rows * @types.cell_size
   // Outer frame
-  @raylib.draw_rectangle(gx - 8, gy - 8, gw + 16, gh + 16, @types.color_loom_frame)
+  @raylib.draw_rectangle(
+    gx - 8,
+    gy - 8,
+    gw + 16,
+    gh + 16,
+    @types.color_loom_frame,
+  )
   // Inner background
   @raylib.draw_rectangle(gx - 2, gy - 2, gw + 4, gh + 4, @types.color_grid_bg)
 }
@@ -105,7 +111,7 @@ fn draw_fabric_grid(game : @types.Game) -> Unit {
     }
   }
   // Grid lines
-  for row in 0..=@types.grid_rows {
+  for row in 0..<=@types.grid_rows {
     let y = gy + row * cs
     @raylib.draw_line(
       gx,
@@ -115,7 +121,7 @@ fn draw_fabric_grid(game : @types.Game) -> Unit {
       @types.color_grid_line,
     )
   }
-  for col in 0..=@types.grid_cols {
+  for col in 0..<=@types.grid_cols {
     let x = gx + col * cs
     @raylib.draw_line(
       x,
@@ -214,7 +220,13 @@ fn draw_target_pattern(game : @types.Game) -> Unit {
   // Frame
   let tw = @types.grid_cols * tcs
   let th = @types.grid_rows * tcs
-  @raylib.draw_rectangle(tx - 4, ty - 4, tw + 8, th + 8, @types.color_loom_frame)
+  @raylib.draw_rectangle(
+    tx - 4,
+    ty - 4,
+    tw + 8,
+    th + 8,
+    @types.color_loom_frame,
+  )
   @raylib.draw_rectangle(tx - 1, ty - 1, tw + 2, th + 2, @types.color_grid_bg)
   for row in 0..<@types.grid_rows {
     for col in 0..<@types.grid_cols {
@@ -244,7 +256,7 @@ fn draw_target_pattern(game : @types.Game) -> Unit {
     }
   }
   // Target grid lines
-  for row in 0..=@types.grid_rows {
+  for row in 0..<=@types.grid_rows {
     let y = ty + row * tcs
     @raylib.draw_line(
       tx,
@@ -254,7 +266,7 @@ fn draw_target_pattern(game : @types.Game) -> Unit {
       @raylib.Color::new(180, 170, 155, 100),
     )
   }
-  for col in 0..=@types.grid_cols {
+  for col in 0..<=@types.grid_cols {
     let x = tx + col * tcs
     @raylib.draw_line(
       x,
@@ -367,12 +379,14 @@ fn draw_completion_overlay() -> Unit {
 fn draw_controls_help(game : @types.Game) -> Unit {
   let _ = game
   let hx = @types.target_offset_x
-  let hy = @types.target_offset_y + @types.grid_rows * @types.target_cell_size + 100
+  let hy = @types.target_offset_y +
+    @types.grid_rows * @types.target_cell_size +
+    100
   @draw.draw_text("Controls:", hx, hy, 16, @types.color_text)
   let controls = [
     "Up/Down: Select row", "1-8: Toggle warp column", "Left/Right: Shift row pattern",
-    "A: Apply alternating", "C: Copy from row above", "I: Invert row",
-    "Tab: Compare view", "H: Show hint", "Enter: Check pattern", "ESC: Back",
+    "A: Apply alternating", "C: Copy from row above", "I: Invert row", "Tab: Compare view",
+    "H: Show hint", "Enter: Check pattern", "ESC: Back",
   ]
   for i in 0..<controls.length() {
     let col = i / 5

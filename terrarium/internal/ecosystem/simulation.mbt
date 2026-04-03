@@ -1,7 +1,7 @@
 ///|
 pub fn check_organism_alive(
   org : @types.OrganismState,
-  res : @types.Resources
+  res : @types.Resources,
 ) -> Bool {
   let profile = @types.get_profile(org.kind)
   if res.water < profile.min_water {
@@ -23,12 +23,10 @@ pub fn check_organism_alive(
 pub fn count_adjacent_plants(
   grid : Array[Array[@types.CellContent]],
   row : Int,
-  col : Int
+  col : Int,
 ) -> Int {
   let mut count = 0
-  let offsets : Array[(Int, Int)] = [
-    (-1, 0), (1, 0), (0, -1), (0, 1),
-  ]
+  let offsets : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
   for i in 0..<offsets.length() {
     let (dr, dc) = offsets[i]
     let nr = row + dr
@@ -47,7 +45,7 @@ pub fn count_adjacent_plants(
 pub fn herbivore_has_food(
   grid : Array[Array[@types.CellContent]],
   row : Int,
-  col : Int
+  col : Int,
 ) -> Bool {
   count_adjacent_plants(grid, row, col) > 0
 }
@@ -56,7 +54,7 @@ pub fn herbivore_has_food(
 pub fn apply_organism_effects(
   organisms : Array[@types.OrganismState],
   resources : @types.Resources,
-  grid : Array[Array[@types.CellContent]]
+  grid : Array[Array[@types.CellContent]],
 ) -> Array[String] {
   let events : Array[String] = []
   for i in 0..<organisms.length() {
@@ -72,7 +70,11 @@ pub fn apply_organism_effects(
           can_act = false
           org.health -= 15.0
           events.push(
-            profile.name + " at (" + org.row.to_string() + "," + org.col.to_string() +
+            profile.name +
+            " at (" +
+            org.row.to_string() +
+            "," +
+            org.col.to_string() +
             ") has no food nearby",
           )
           if org.health <= 0.0 {
@@ -97,7 +99,7 @@ pub fn apply_organism_effects(
 pub fn check_resource_deaths(
   organisms : Array[@types.OrganismState],
   resources : @types.Resources,
-  grid : Array[Array[@types.CellContent]]
+  grid : Array[Array[@types.CellContent]],
 ) -> Array[String] {
   let events : Array[String] = []
   for i in 0..<organisms.length() {
@@ -141,14 +143,18 @@ pub fn simulate_turn(game : @types.Game) -> @types.SimTurnLog {
   let turn = game.current_turn + 1
   let events : Array[String] = []
   let prod_events = apply_organism_effects(
-    game.organisms, game.resources, game.grid,
+    game.organisms,
+    game.resources,
+    game.grid,
   )
   for i in 0..<prod_events.length() {
     events.push(prod_events[i])
   }
   @types.clamp_resources(game.resources)
   let death_events = check_resource_deaths(
-    game.organisms, game.resources, game.grid,
+    game.organisms,
+    game.resources,
+    game.grid,
   )
   for i in 0..<death_events.length() {
     events.push(death_events[i])

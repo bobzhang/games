@@ -8,7 +8,7 @@ pub fn new_signal_path(
   from_col : Int,
   from_row : Int,
   to_col : Int,
-  to_row : Int
+  to_row : Int,
 ) -> SignalPath {
   { from_col, from_row, to_col, to_row, progress: 0.0, active: true }
 }

@@ -5,7 +5,13 @@ fn draw_palette(game : @types.Game) -> Unit {
   let item_h = @types.palette_item_h
   let panel_w = 280
   let panel_h = 50 + game.palette.length() * item_h + 20
-  @raylib.draw_rectangle(px - 10, py - 40, panel_w + 20, panel_h, @types.color_palette_bg)
+  @raylib.draw_rectangle(
+    px - 10,
+    py - 40,
+    panel_w + 20,
+    panel_h,
+    @types.color_palette_bg,
+  )
   @raylib.draw_rectangle_lines(
     px - 10,
     py - 40,
@@ -28,7 +34,11 @@ fn draw_palette(game : @types.Game) -> Unit {
       )
     }
     // Name with qualifier
-    let name = build_component_label(item.kind, item.filter_color, item.crystal_face)
+    let name = build_component_label(
+      item.kind,
+      item.filter_color,
+      item.crystal_face,
+    )
     let name_color = if item.count > 0 {
       @types.color_text
     } else {
@@ -130,19 +140,11 @@ fn draw_help_overlay() -> Unit {
   @raylib.draw_rectangle_lines(px, py, panel_w, panel_h, @types.color_accent)
   @draw.draw_text("HOW TO PLAY", px + 20, py + 15, 24, @types.color_accent)
   let lines = [
-    "Route light beams through a hex crystal grid.",
-    "",
-    "Source: Emits white light in one direction",
-    "Crystal: Refracts beam 60 degrees (L or R)",
-    "Filter: Passes only one color (R/G/B)",
-    "Mirror: Reflects beam across its axis",
-    "Target: Must receive the exact color shown",
-    "",
-    "Click empty hex to place selected component",
-    "Click placed component to remove it",
-    "R to rotate   SPACE to simulate beams",
-    "1-6 keys to select from palette",
-    "All targets satisfied = level complete!",
+    "Route light beams through a hex crystal grid.", "", "Source: Emits white light in one direction",
+    "Crystal: Refracts beam 60 degrees (L or R)", "Filter: Passes only one color (R/G/B)",
+    "Mirror: Reflects beam across its axis", "Target: Must receive the exact color shown",
+    "", "Click empty hex to place selected component", "Click placed component to remove it",
+    "R to rotate   SPACE to simulate beams", "1-6 keys to select from palette", "All targets satisfied = level complete!",
   ]
   for i in 0..<lines.length() {
     @draw.draw_text(lines[i], px + 20, py + 50 + i * 22, 14, @types.color_text)

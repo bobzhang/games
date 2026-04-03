@@ -141,11 +141,7 @@ fn draw_arc_preview(game : @types.Game) -> Unit {
     let fade_range : Float = 120.0
     let min_alpha : Float = 20.0
     let alpha_val = base_alpha - frac * fade_range
-    let alpha = if alpha_val < min_alpha {
-      20
-    } else {
-      alpha_val.to_int()
-    }
+    let alpha = if alpha_val < min_alpha { 20 } else { alpha_val.to_int() }
     let trail_color = @raylib.Color::new(100, 140, 200, alpha)
     let r : Float = if i == left_limit || i == right_limit {
       4.0
@@ -302,12 +298,7 @@ fn draw_cut_indicator(game : @types.Game, hits_goal : Bool) -> Unit {
       @types.sinf(Float::from_int(game.frame_count) * 0.15),
     )
     let r : Float = 18.0 + pulse * 4.0
-    @raylib.draw_circle_lines(
-      wx,
-      wy,
-      r,
-      @raylib.Color::new(50, 255, 100, 200),
-    )
+    @raylib.draw_circle_lines(wx, wy, r, @raylib.Color::new(50, 255, 100, 200))
     @raylib.draw_circle_lines(
       wx,
       wy,

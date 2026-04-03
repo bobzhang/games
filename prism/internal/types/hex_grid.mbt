@@ -23,8 +23,8 @@ pub fn new_hex_grid() -> HexGrid {
   // Generate axial coords for hex grid with given radius.
   // For a hex grid of radius R, valid cells are those where
   // |q| <= R, |r| <= R, and |q+r| <= R.
-  for q in -radius..=radius {
-    for r in -radius..=radius {
+  for q in -radius..<=radius {
+    for r in -radius..<=radius {
       let s = -q - r
       if absint(s) <= radius {
         cells[hex_key(q, r)] = new_hex_cell()
@@ -85,7 +85,8 @@ pub fn hex_to_pixel_y(q : Int, r : Int) -> Float {
   let fq = Float::from_int(q)
   let fr = Float::from_int(r)
   let size = Float::from_int(hex_size)
-  Float::from_int(grid_offset_y) + size * (hex_inner_ratio * fq + 2.0 * hex_inner_ratio * fr)
+  Float::from_int(grid_offset_y) +
+  size * (hex_inner_ratio * fq + 2.0 * hex_inner_ratio * fr)
 }
 
 ///|
@@ -103,12 +104,21 @@ pub fn pixel_to_hex(px : Float, py : Float) -> (Int, Int) {
 }
 
 ///|
+fn roundf(v : Float) -> Int {
+  if v >= 0.0 {
+    (v + 0.5).to_int()
+  } else {
+    (v - 0.5).to_int()
+  }
+}
+
+///|
 /// Round fractional hex coords to nearest integer hex.
 fn hex_round(fq : Float, fr : Float) -> (Int, Int) {
   let fs = -fq - fr
-  let mut q = fq.to_int()
-  let mut r = fr.to_int()
-  let s = fs.to_int()
+  let mut q = roundf(fq)
+  let mut r = roundf(fr)
+  let s = roundf(fs)
   let q_diff = absf(Float::from_int(q) - fq)
   let r_diff = absf(Float::from_int(r) - fr)
   let s_diff = absf(Float::from_int(s) - fs)
@@ -122,12 +132,20 @@ fn hex_round(fq : Float, fr : Float) -> (Int, Int) {
 
 ///|
 pub fn absint(v : Int) -> Int {
-  if v < 0 { -v } else { v }
+  if v < 0 {
+    -v
+  } else {
+    v
+  }
 }
 
 ///|
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 { -v } else { v }
+  if v < 0.0 {
+    -v
+  } else {
+    v
+  }
 }
 
 ///|
@@ -251,8 +269,8 @@ pub fn cosf(a : Float) -> Float {
 pub fn grid_all_coords(grid : HexGrid) -> Array[(Int, Int)] {
   let coords : Array[(Int, Int)] = []
   let radius = grid.radius
-  for q in -radius..=radius {
-    for r in -radius..=radius {
+  for q in -radius..<=radius {
+    for r in -radius..<=radius {
       let s = -q - r
       if absint(s) <= radius {
         coords.push((q, r))

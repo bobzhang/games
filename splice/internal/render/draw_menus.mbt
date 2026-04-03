@@ -95,13 +95,13 @@ fn draw_helix_background(time : Float, w : Int, h : Int) -> Unit {
         x1.to_int(),
         py.to_int(),
         6.0 * depth1 + 2.0,
-        @raylib.Color::new(c1.r.to_int(), c1.g.to_int(), c1.b.to_int(), alpha1),
+        @types.color_with_alpha(c1, alpha1),
       )
       @raylib.draw_circle(
         x2.to_int(),
         py.to_int(),
         6.0 * depth2 + 2.0,
-        @raylib.Color::new(c2.r.to_int(), c2.g.to_int(), c2.b.to_int(), alpha2),
+        @types.color_with_alpha(c2, alpha2),
       )
       // Draw base letters
       if depth1 > 0.3 {

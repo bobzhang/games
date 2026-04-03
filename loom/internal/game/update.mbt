@@ -251,8 +251,12 @@ fn handle_grid_click(game : @types.Game) -> Unit {
   let cs = @types.cell_size
   let col = (mx - gx) / cs
   let row = (my - gy) / cs
-  if col >= 0 && col < @types.grid_cols && row >= 0 && row < @types.grid_rows && mx >=
-  gx && my >= gy {
+  if col >= 0 &&
+    col < @types.grid_cols &&
+    row >= 0 &&
+    row < @types.grid_rows &&
+    mx >= gx &&
+    my >= gy {
     game.selected_row = row
     toggle_heddle(game, row, col)
   }

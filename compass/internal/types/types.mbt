@@ -96,11 +96,7 @@ pub fn direction_name(dir : Direction) -> String {
 ///|
 pub fn heading_to_compass(heading : Float) -> String {
   let pi : Float = Float::from_double(@math.PI)
-  let h = if heading < 0.0 {
-    heading + 2.0 * pi
-  } else {
-    heading
-  }
+  let h = if heading < 0.0 { heading + 2.0 * pi } else { heading }
   let eighth = pi / 4.0
   if h < eighth || h >= 7.0 * eighth {
     "N"

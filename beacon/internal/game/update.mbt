@@ -65,7 +65,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 fn detect_level_click(game : @types.Game, mx : Int, my : Int) -> Int {
   let start_y = 120 - game.scroll_offset * 200
   let mut cy = start_y
-  for tier in 1..=3 {
+  for tier in 1..<=3 {
     cy += 40
     let count = @levels.tier_level_count(tier)
     let start = @levels.tier_start_index(tier)
@@ -178,7 +178,7 @@ fn place_tower(
   data : @types.LevelData,
   state : @types.LevelState,
   col : Int,
-  row : Int
+  row : Int,
 ) -> Unit {
   state.grid[row][col].kind = Tower
   state.towers_placed += 1
@@ -190,7 +190,10 @@ fn place_tower(
   if all_lit {
     // Level completed!
     let stars = @signal.compute_stars(
-      state.towers_placed, chain, data.par_towers, data.par_chain,
+      state.towers_placed,
+      chain,
+      data.par_towers,
+      data.par_chain,
     )
     let prog = game.progress[game.current_level]
     prog.completed = true
@@ -213,7 +216,7 @@ fn remove_tower(
   data : @types.LevelData,
   state : @types.LevelState,
   col : Int,
-  row : Int
+  row : Int,
 ) -> Unit {
   state.grid[row][col].kind = Empty
   state.towers_placed -= 1

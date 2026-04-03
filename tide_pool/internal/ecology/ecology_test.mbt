@@ -14,19 +14,17 @@ test "advance_tide_sets_correct_level" {
 ///|
 test "update_submersion_marks_organisms" {
   let game = @types.new_game()
-  game.current_level = Some(
-    {
-      id: 0,
-      name: "Test",
-      tier: Shallow,
-      description: "",
-      depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
-      available_organisms: [],
-      organism_counts: [],
-      target_species: [],
-      rock_cells: [],
-    },
-  )
+  game.current_level = Some({
+    id: 0,
+    name: "Test",
+    tier: Shallow,
+    description: "",
+    depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
+    available_organisms: [],
+    organism_counts: [],
+    target_species: [],
+    rock_cells: [],
+  })
   game.organisms = [
     {
       kind: Barnacle,
@@ -243,19 +241,17 @@ test "apply_algae_growth_controlled_by_urchin" {
 ///|
 test "simulate_turn_advances_state" {
   let game = @types.new_game()
-  game.current_level = Some(
-    {
-      id: 0,
-      name: "Test",
-      tier: Shallow,
-      description: "",
-      depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
-      available_organisms: [Barnacle],
-      organism_counts: [2],
-      target_species: [Barnacle],
-      rock_cells: [],
-    },
-  )
+  game.current_level = Some({
+    id: 0,
+    name: "Test",
+    tier: Shallow,
+    description: "",
+    depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
+    available_organisms: [Barnacle],
+    organism_counts: [2],
+    target_species: [Barnacle],
+    rock_cells: [],
+  })
   game.organisms = [
     {
       kind: Barnacle,
@@ -275,19 +271,17 @@ test "simulate_turn_advances_state" {
 ///|
 test "check_victory_all_targets_alive_after_3_cycles" {
   let game = @types.new_game()
-  game.current_level = Some(
-    {
-      id: 0,
-      name: "Test",
-      tier: Shallow,
-      description: "",
-      depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
-      available_organisms: [Barnacle],
-      organism_counts: [1],
-      target_species: [Barnacle],
-      rock_cells: [],
-    },
-  )
+  game.current_level = Some({
+    id: 0,
+    name: "Test",
+    tier: Shallow,
+    description: "",
+    depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
+    available_organisms: [Barnacle],
+    organism_counts: [1],
+    target_species: [Barnacle],
+    rock_cells: [],
+  })
   game.organisms = [
     {
       kind: Barnacle,
@@ -306,19 +300,17 @@ test "check_victory_all_targets_alive_after_3_cycles" {
 ///|
 test "check_victory_target_died" {
   let game = @types.new_game()
-  game.current_level = Some(
-    {
-      id: 0,
-      name: "Test",
-      tier: Shallow,
-      description: "",
-      depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
-      available_organisms: [Barnacle],
-      organism_counts: [1],
-      target_species: [Barnacle],
-      rock_cells: [],
-    },
-  )
+  game.current_level = Some({
+    id: 0,
+    name: "Test",
+    tier: Shallow,
+    description: "",
+    depth_profile: [0, 0, 1, 1, 2, 2, 3, 3],
+    available_organisms: [Barnacle],
+    organism_counts: [1],
+    target_species: [Barnacle],
+    rock_cells: [],
+  })
   game.organisms = [
     {
       kind: Barnacle,
@@ -346,22 +338,8 @@ test "count_alive" {
       health: 80.0,
       submerged: false,
     },
-    {
-      kind: Crab,
-      row: 1,
-      col: 1,
-      alive: false,
-      health: 0.0,
-      submerged: false,
-    },
-    {
-      kind: Algae,
-      row: 2,
-      col: 2,
-      alive: true,
-      health: 50.0,
-      submerged: false,
-    },
+    { kind: Crab, row: 1, col: 1, alive: false, health: 0.0, submerged: false },
+    { kind: Algae, row: 2, col: 2, alive: true, health: 50.0, submerged: false },
   ]
   assert_eq(count_alive(game), 2)
 }

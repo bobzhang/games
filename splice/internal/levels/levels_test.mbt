@@ -21,13 +21,7 @@ test "all levels have ATG start codon in start sequence" {
   for i in 0..<25 {
     let level = get_level(i)
     let seq = level.start_sequence
-    let mut found = false
-    for j in 0..<(seq.length() - 2) {
-      if seq[j] == A && seq[j + 1] == T && seq[j + 2] == G {
-        found = true
-        break
-      }
-    }
+    let found = @types.find_start_codon(seq) >= 0
     // Level start sequence should have ATG so the puzzle makes sense
     // (some levels intentionally break it, but target always needs Start)
     let first_target = level.target_traits[0]

@@ -13,7 +13,9 @@ pub fn apply_health_effects(game : @types.Game, events : Array[String]) -> Unit 
           0.0,
           @types.max_health,
         )
-        events.push("\{profile.name} at (\{org.row},\{org.col}) regenerates underwater")
+        events.push(
+          "\{profile.name} at (\{org.row},\{org.col}) regenerates underwater",
+        )
       } else if profile.needs_exposure {
         org.health = org.health - profile.health_decay_submerged
         events.push(
@@ -27,28 +29,26 @@ pub fn apply_health_effects(game : @types.Game, events : Array[String]) -> Unit 
           )
         }
       }
+    } else if profile.needs_exposure {
+      org.health = @types.clamp_float(
+        org.health + profile.health_regen,
+        0.0,
+        @types.max_health,
+      )
+      events.push(
+        "\{profile.name} at (\{org.row},\{org.col}) thrives in the light",
+      )
+    } else if profile.needs_submersion {
+      org.health = org.health - profile.health_decay_exposed
+      events.push(
+        "\{profile.name} at (\{org.row},\{org.col}) drying out in the air",
+      )
     } else {
-      if profile.needs_exposure {
-        org.health = @types.clamp_float(
-          org.health + profile.health_regen,
-          0.0,
-          @types.max_health,
-        )
+      org.health = org.health - profile.health_decay_exposed
+      if profile.health_decay_exposed > 0.0 {
         events.push(
-          "\{profile.name} at (\{org.row},\{org.col}) thrives in the light",
+          "\{profile.name} at (\{org.row},\{org.col}) slightly stressed exposed",
         )
-      } else if profile.needs_submersion {
-        org.health = org.health - profile.health_decay_exposed
-        events.push(
-          "\{profile.name} at (\{org.row},\{org.col}) drying out in the air",
-        )
-      } else {
-        org.health = org.health - profile.health_decay_exposed
-        if profile.health_decay_exposed > 0.0 {
-          events.push(
-            "\{profile.name} at (\{org.row},\{org.col}) slightly stressed exposed",
-          )
-        }
       }
     }
   }

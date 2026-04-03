@@ -5,9 +5,9 @@ pub fn draw_grid(game : @types.Game) -> Unit {
   let cs = @types.cell_size
   match game.current_level {
     None => ()
-    Some(level) => {
-      for r in 0..< @types.grid_rows {
-        for c in 0..< @types.grid_cols {
+    Some(level) =>
+      for r in 0..<@types.grid_rows {
+        for c in 0..<@types.grid_cols {
           let x = ox + c * cs
           let y = oy + r * cs
           let depth = if c < level.depth_profile.length() {
@@ -48,7 +48,6 @@ pub fn draw_grid(game : @types.Game) -> Unit {
           @raylib.draw_rectangle_lines(x, y, cs, cs, @types.color_hud_dim)
         }
       }
-    }
   }
 }
 
@@ -59,8 +58,8 @@ pub fn draw_water_overlay(game : @types.Game) -> Unit {
   let cs = @types.cell_size
   match game.current_level {
     None => ()
-    Some(level) => {
-      for c in 0..< @types.grid_cols {
+    Some(level) =>
+      for c in 0..<@types.grid_cols {
         let depth = if c < level.depth_profile.length() {
           level.depth_profile[c]
         } else {
@@ -75,7 +74,6 @@ pub fn draw_water_overlay(game : @types.Game) -> Unit {
           @raylib.draw_rectangle(x, y, cs, h, @types.color_submerged)
         }
       }
-    }
   }
 }
 
@@ -88,13 +86,7 @@ pub fn draw_hover(game : @types.Game) -> Unit {
       Some(_) => @types.color_selected
       None => @types.color_hover
     }
-    @raylib.draw_rectangle(
-      x,
-      y,
-      @types.cell_size,
-      @types.cell_size,
-      color,
-    )
+    @raylib.draw_rectangle(x, y, @types.cell_size, @types.cell_size, color)
   }
 }
 
@@ -103,7 +95,7 @@ fn draw_organism_icon(
   kind : @types.OrganismKind,
   x : Int,
   y : Int,
-  size : Int
+  size : Int,
 ) -> Unit {
   let color = @types.organism_color(kind)
   let profile = @types.get_profile(kind)
@@ -112,13 +104,7 @@ fn draw_organism_icon(
   let half = size / 3
   match kind {
     Barnacle => {
-      @raylib.draw_rectangle(
-        cx - half / 2,
-        cy - half,
-        half,
-        half * 2,
-        color,
-      )
+      @raylib.draw_rectangle(cx - half / 2, cy - half, half, half * 2, color)
       @raylib.draw_rectangle(cx - half, cy, half * 2, half / 2, color)
     }
     Anemone => {
@@ -129,23 +115,12 @@ fn draw_organism_icon(
       }
     }
     Crab => {
-      @raylib.draw_rectangle(
-        cx - half,
-        cy - half / 3,
-        half * 2,
-        half,
-        color,
-      )
+      @raylib.draw_rectangle(cx - half, cy - half / 3, half * 2, half, color)
       @raylib.draw_line(cx - half, cy, cx - half - 6, cy - 8, color)
       @raylib.draw_line(cx + half, cy, cx + half + 6, cy - 8, color)
     }
     Starfish => {
-      @raylib.draw_circle(
-        cx,
-        cy,
-        Float::from_int(half / 2),
-        color,
-      )
+      @raylib.draw_circle(cx, cy, Float::from_int(half / 2), color)
       @raylib.draw_line(cx, cy - half, cx, cy + half, color)
       @raylib.draw_line(cx - half, cy, cx + half, cy, color)
       @raylib.draw_line(
@@ -164,12 +139,7 @@ fn draw_organism_icon(
       @raylib.draw_circle(cx, cy, Float::from_int(half / 3), color)
     }
     Urchin => {
-      @raylib.draw_circle(
-        cx,
-        cy,
-        Float::from_int(half / 2),
-        color,
-      )
+      @raylib.draw_circle(cx, cy, Float::from_int(half / 2), color)
       @raylib.draw_line(cx, cy - half, cx, cy + half, color)
       @raylib.draw_line(cx - half, cy, cx + half, cy, color)
     }
@@ -195,7 +165,13 @@ pub fn draw_tide_indicator(game : @types.Game) -> Unit {
     Mid => "MID"
     High => "HIGH"
   }
-  @draw.draw_text(phase_text, indicator_x, oy - 24, 16, @types.color_tide_indicator)
+  @draw.draw_text(
+    phase_text,
+    indicator_x,
+    oy - 24,
+    16,
+    @types.color_tide_indicator,
+  )
   @draw.draw_text(
     "Tide: \{game.tide_level}",
     ox + total_w + 10,
@@ -219,7 +195,7 @@ pub fn draw_depth_labels(game : @types.Game) -> Unit {
     Some(level) => {
       let ox = @types.grid_offset_x
       let oy = @types.grid_offset_y + @types.grid_rows * @types.cell_size + 24
-      for c in 0..< @types.grid_cols {
+      for c in 0..<@types.grid_cols {
         let depth = if c < level.depth_profile.length() {
           level.depth_profile[c]
         } else {

@@ -10,10 +10,10 @@ pub fn new_fabric_pattern(
   warp_colors : Array[Int],
   weft_colors : Array[Int],
 ) -> FabricPattern {
-  let cells : Array[FabricCell] = Array::make(
-    rows * cols,
-    { state: WeftOver, color_index: 0 },
-  )
+  let cells : Array[FabricCell] = Array::make(rows * cols, {
+    state: WeftOver,
+    color_index: 0,
+  })
   { rows, cols, cells, warp_colors, weft_colors }
 }
 

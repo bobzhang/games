@@ -1,0 +1,292 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cartouche/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn all_symbols() -> Array[Symbol]
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_bg : @raylib.Color
+
+pub let color_correct : @raylib.Color
+
+pub let color_given : @raylib.Color
+
+pub let color_gold : @raylib.Color
+
+pub let color_gold_dim : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_hint : @raylib.Color
+
+pub let color_inscription : @raylib.Color
+
+pub let color_mapped : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_filled : @raylib.Color
+
+pub let color_stone : @raylib.Color
+
+pub let color_stone_dark : @raylib.Color
+
+pub let color_stone_light : @raylib.Color
+
+pub let color_sym_accent : @raylib.Color
+
+pub let color_sym_primary : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_tier1 : @raylib.Color
+
+pub let color_tier2 : @raylib.Color
+
+pub let color_tier3 : @raylib.Color
+
+pub let color_wrong : @raylib.Color
+
+pub fn compute_symbol_positions(Inscription, Int, Int, Int, Int, Int, Int) -> Array[SymbolPosition]
+
+pub fn copy_mapping(Mapping) -> Mapping
+
+pub fn cosf(Float) -> Float
+
+pub fn count_symbol_frequency(Inscription, Symbol) -> Int
+
+pub fn decode_inscription(Inscription, Mapping) -> String
+
+pub fn find_symbol_for_letter(Mapping, Int) -> Int
+
+pub fn get_inscription_symbols_unique(Inscription) -> Array[Symbol]
+
+pub let inscription_line_height : Int
+
+pub let inscription_margin_x : Int
+
+pub let inscription_margin_y : Int
+
+pub let inscription_max_margin : Int
+
+pub fn is_given_symbol(Tablet, Symbol) -> Bool
+
+pub fn is_letter_used(Mapping, Int) -> Bool
+
+pub fn letter_from_index(Int) -> String
+
+pub fn letter_index(String) -> Int
+
+pub fn make_space() -> InscriptionSymbol
+
+pub fn make_symbol(Symbol) -> InscriptionSymbol
+
+pub fn mapping_clear(Mapping, Symbol) -> Unit
+
+pub fn mapping_get(Mapping, Symbol) -> Int
+
+pub fn mapping_set(Mapping, Symbol, Int) -> Unit
+
+pub let mapping_table_y : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_game() -> Game
+
+pub fn new_inscription(Array[InscriptionSymbol]) -> Inscription
+
+pub fn new_mapping() -> Mapping
+
+pub fn new_tablet_score() -> TabletScore
+
+pub let palette_btn_gap : Int
+
+pub let palette_btn_size : Int
+
+pub fn palette_button_pos(Int, Int, Int, Int, Int, Int, Int) -> (Int, Int)
+
+pub let palette_cols : Int
+
+pub let palette_label_offset_y : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub let pi : Float
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub let symbol_count : Int
+
+pub fn symbol_from_index(Int) -> Symbol
+
+pub fn symbol_index(Symbol) -> Int
+
+pub let symbol_size : Float
+
+pub let symbol_spacing : Int
+
+pub let tablet_height : Int
+
+pub let tablet_width : Int
+
+pub let tablet_x : Int
+
+pub let tablet_y : Int
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_tablet_count(Tier) -> Int
+
+pub fn tier_tablet_offset(Tier) -> Int
+
+pub fn total_stars(Game) -> Int
+
+pub fn total_stars_for_tier(Game, Tier) -> Int
+
+pub let total_tablets : Int
+
+pub let word_gap : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_tablet_index : Int
+  mut current_mapping : Mapping
+  mut guesses : Int
+  mut wrong_count : Int
+  mut selected_symbol : Symbol?
+  mut undo_stack : Array[UndoEntry]
+  mut scores : Array[TabletScore]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut anim_timer : Float
+  mut hint_symbol : Symbol?
+  mut hint_timer : Float
+}
+
+pub(all) struct Inscription {
+  mut symbols : Array[InscriptionSymbol]
+}
+
+pub(all) struct InscriptionSymbol {
+  mut symbol : Symbol?
+}
+
+pub(all) struct Mapping {
+  mut values : Array[Int]
+}
+
+pub(all) enum PlayState {
+  Decoding
+  Checking
+  Solved
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  TabletSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Symbol {
+  Circle
+  Triangle
+  Square
+  Diamond
+  Star
+  Cross
+  Arrow
+  Wave
+  Spiral
+  Dot
+  Crescent
+  Lightning
+  Eye
+  Hand
+  Sun
+  MoonSym
+  Mountain
+  River
+  Tree
+  Flame
+} derive(Compare, Eq, Show)
+
+pub(all) struct SymbolPosition {
+  x : Int
+  y : Int
+  symbol : Symbol?
+} derive(Show)
+
+pub(all) struct Tablet {
+  inscription : Inscription
+  solution_mapping : Mapping
+  given_mapping : Mapping
+  mut theme_name : String
+  mut par_guesses : Int
+  mut tier : Tier
+}
+
+pub(all) struct TabletScore {
+  mut solved : Bool
+  mut stars : Int
+  mut guesses_used : Int
+  mut wrong_count : Int
+}
+
+pub(all) enum Tier {
+  Fragments
+  Scrolls
+  Monuments
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  mut symbol_index : Int
+  mut old_value : Int
+}
+
+// Type aliases
+
+// Traits
+

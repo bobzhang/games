@@ -54,7 +54,9 @@ pub let color_beam_green : @raylib.Color = @raylib.Color::new(60, 255, 60, 255)
 pub let color_beam_blue : @raylib.Color = @raylib.Color::new(60, 100, 255, 255)
 
 ///|
-pub let color_beam_yellow : @raylib.Color = @raylib.Color::new(255, 255, 50, 255)
+pub let color_beam_yellow : @raylib.Color = @raylib.Color::new(
+  255, 255, 50, 255,
+)
 
 ///|
 pub let color_beam_magenta : @raylib.Color = @raylib.Color::new(

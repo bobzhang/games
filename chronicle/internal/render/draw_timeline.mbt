@@ -426,12 +426,7 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
         )
       }
       // Origin dot at start
-      @raylib.draw_circle(
-        Float::to_int(fx),
-        Float::to_int(fy),
-        4.0,
-        color,
-      )
+      @raylib.draw_circle(Float::to_int(fx), Float::to_int(fy), 4.0, color)
       // Arrowhead at end (larger, filled)
       @raylib.draw_triangle(
         @raylib.Vector2::new(tx, ty),
@@ -488,9 +483,7 @@ fn draw_cause_links(game : @types.Game, case_ : @types.Case) -> Unit {
       // Cursor arrowhead
       let dx = mx - fx
       let dy = my - fy
-      let len = Float::from_double(
-        (dx * dx + dy * dy).to_double().sqrt(),
-      )
+      let len = Float::from_double((dx * dx + dy * dy).to_double().sqrt())
       if len > 10.0 {
         let nx = dx / len
         let ny = dy / len

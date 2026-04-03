@@ -40,9 +40,9 @@ test "check_organism_alive_beetle_no_o2" {
 ///|
 test "count_adjacent_plants_none" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -53,9 +53,9 @@ test "count_adjacent_plants_none" {
 ///|
 test "count_adjacent_plants_surrounded" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -70,9 +70,9 @@ test "count_adjacent_plants_surrounded" {
 ///|
 test "count_adjacent_plants_corner" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -85,9 +85,9 @@ test "count_adjacent_plants_corner" {
 ///|
 test "herbivore_has_food_no_plants" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -98,9 +98,9 @@ test "herbivore_has_food_no_plants" {
 ///|
 test "herbivore_has_food_with_plant" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -139,9 +139,9 @@ test "count_alive_all_dead" {
 ///|
 test "apply_organism_effects_moss_produces_o2" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -160,9 +160,9 @@ test "apply_organism_effects_moss_produces_o2" {
 ///|
 test "apply_organism_effects_beetle_no_food_loses_health" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -180,9 +180,9 @@ test "apply_organism_effects_beetle_no_food_loses_health" {
 ///|
 test "apply_organism_effects_beetle_starves" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -200,9 +200,9 @@ test "apply_organism_effects_beetle_starves" {
 ///|
 test "check_resource_deaths_no_deaths" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -220,9 +220,9 @@ test "check_resource_deaths_no_deaths" {
 ///|
 test "check_resource_deaths_low_water_kills_moss" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)
@@ -242,9 +242,7 @@ test "check_resource_deaths_low_water_kills_moss" {
 test "simulate_turn_increments_turn" {
   let game = @types.new_game()
   game.grid[0][0] = Organism(Moss)
-  game.organisms.push(
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
-  )
+  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
   game.resources = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let log = simulate_turn(game)
   assert_eq(log.turn, 1)
@@ -255,9 +253,7 @@ test "simulate_turn_increments_turn" {
 test "simulate_turn_moss_changes_resources" {
   let game = @types.new_game()
   game.grid[0][0] = Organism(Moss)
-  game.organisms.push(
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
-  )
+  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
   game.resources = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let _log = simulate_turn(game)
   // Moss: o2+8, co2-4, water-3, nutrients-1
@@ -271,9 +267,7 @@ test "simulate_turn_moss_changes_resources" {
 test "evaluate_result_victory" {
   let game = @types.new_game()
   game.current_turn = 10
-  game.organisms.push(
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
-  )
+  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
   let result = evaluate_result(game)
   assert_eq(result, Victory)
 }
@@ -282,9 +276,7 @@ test "evaluate_result_victory" {
 test "evaluate_result_all_dead" {
   let game = @types.new_game()
   game.current_turn = 5
-  game.organisms.push(
-    { kind: Moss, row: 0, col: 0, alive: false, health: 0.0 },
-  )
+  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: false, health: 0.0 })
   let result = evaluate_result(game)
   assert_eq(result, Failure("All organisms died!"))
 }
@@ -293,9 +285,7 @@ test "evaluate_result_all_dead" {
 test "evaluate_result_collapse" {
   let game = @types.new_game()
   game.current_turn = 7
-  game.organisms.push(
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
-  )
+  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
   let result = evaluate_result(game)
   assert_eq(result, Failure("Ecosystem collapsed at turn 7"))
 }
@@ -318,9 +308,9 @@ test "run_full_simulation_10_turns" {
 ///|
 test "dead_organism_does_not_produce" {
   let grid : Array[Array[@types.CellContent]] = []
-  for _r in 0..< @types.grid_size {
+  for _r in 0..<@types.grid_size {
     let row : Array[@types.CellContent] = []
-    for _c in 0..< @types.grid_size {
+    for _c in 0..<@types.grid_size {
       row.push(Empty)
     }
     grid.push(row)

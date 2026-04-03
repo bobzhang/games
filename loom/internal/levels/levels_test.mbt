@@ -33,7 +33,8 @@ test "tier3 levels are complex" {
   for i in 0..<@types.tier3_count {
     let level = get_level(@types.tier1_count + @types.tier2_count + i)
     assert_eq(level.tier, Master)
-    let is_valid = level.weave_type == Herringbone || level.weave_type == Diamond
+    let is_valid = level.weave_type == Herringbone ||
+      level.weave_type == Diamond
     assert_true(is_valid)
   }
 }

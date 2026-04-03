@@ -64,22 +64,10 @@ fn draw_results(game : @types.Game) -> Unit {
       if idx < game.target_grid.length() {
         if cell.fired == game.target_grid[idx] {
           // Green check mark corner
-          @raylib.draw_rectangle(
-            cx + cs - 10,
-            cy,
-            10,
-            10,
-            @types.color_success,
-          )
+          @raylib.draw_rectangle(cx + cs - 10, cy, 10, 10, @types.color_success)
         } else {
           // Red X corner
-          @raylib.draw_rectangle(
-            cx + cs - 10,
-            cy,
-            10,
-            10,
-            @types.color_fail,
-          )
+          @raylib.draw_rectangle(cx + cs - 10, cy, 10, 10, @types.color_fail)
         }
       }
     }
@@ -113,7 +101,13 @@ fn draw_results(game : @types.Game) -> Unit {
   if score.cracked_cells > 0 {
     let crack_str = "Cracked: \{score.cracked_cells}"
     let crw = @draw.measure_text(crack_str, 20)
-    @draw.draw_text(crack_str, (w - crw) / 2, panel_y + 80, 20, @types.color_fail)
+    @draw.draw_text(
+      crack_str,
+      (w - crw) / 2,
+      panel_y + 80,
+      20,
+      @types.color_fail,
+    )
   }
   let moves_str = "Moves used: \{score.moves_used}"
   let mvw = @draw.measure_text(moves_str, 20)

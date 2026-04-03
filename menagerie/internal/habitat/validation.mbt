@@ -2,7 +2,7 @@
 pub fn validate_enclosure(
   grid : @types.Grid,
   enc : @types.Enclosure,
-  all_enclosures : Array[@types.Enclosure]
+  all_enclosures : Array[@types.Enclosure],
 ) -> Array[String] {
   let messages : Array[String] = []
   match enc.species {
@@ -16,7 +16,9 @@ pub fn validate_enclosure(
         )
       }
       let primary_count = count_terrain_in_enclosure(
-        grid, enc, needs.terrain_primary,
+        grid,
+        enc,
+        needs.terrain_primary,
       )
       if primary_count < needs.terrain_primary_count {
         let tname = @types.terrain_label(needs.terrain_primary)
@@ -64,7 +66,7 @@ pub fn validate_enclosure(
 fn check_predator_proximity(
   grid : @types.Grid,
   enc : @types.Enclosure,
-  all_enclosures : Array[@types.Enclosure]
+  all_enclosures : Array[@types.Enclosure],
 ) -> Bool {
   ignore(grid)
   let safe_dist = @types.predator_safe_distance
@@ -89,10 +91,7 @@ fn check_predator_proximity(
 }
 
 ///|
-fn min_enclosure_distance(
-  a : @types.Enclosure,
-  b : @types.Enclosure
-) -> Int {
+fn min_enclosure_distance(a : @types.Enclosure, b : @types.Enclosure) -> Int {
   let mut min_dist = 999
   for ca in a.cells {
     for cb in b.cells {
@@ -111,7 +110,7 @@ fn min_enclosure_distance(
 pub fn validate_level(
   grid : @types.Grid,
   level : @types.LevelDef,
-  enclosures : Array[@types.Enclosure]
+  enclosures : Array[@types.Enclosure],
 ) -> @types.LevelResult {
   let result = @types.new_level_result()
   result.par_tiles = level.par_tiles
@@ -166,7 +165,7 @@ pub fn validate_level(
 ///|
 fn compute_bonus_space(
   _grid : @types.Grid,
-  enclosures : Array[@types.Enclosure]
+  enclosures : Array[@types.Enclosure],
 ) -> Int {
   let mut total = 0
   for enc in enclosures {

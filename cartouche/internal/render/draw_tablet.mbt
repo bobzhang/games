@@ -52,32 +52,25 @@ fn draw_tablet_background() -> Unit {
 
 ///|
 fn draw_inscription(game : @types.Game, tablet : @types.Tablet) -> Unit {
-  let inscription = tablet.inscription
-  let base_x = @types.tablet_x + 30
-  let base_y = @types.tablet_y + 40
-  let max_width = @types.tablet_width - 60
+  let base_x = @types.tablet_x + @types.inscription_margin_x
+  let base_y = @types.tablet_y + @types.inscription_margin_y
+  let max_width = @types.tablet_width - @types.inscription_max_margin
   let time = Float::from_int(game.frame_count) * 0.03
-  // Layout: wrap symbols across lines
-  let mut cx = 0
-  let mut cy = 0
-  let line_height = 90
-  for i in 0..<inscription.symbols.length() {
-    match inscription.symbols[i].symbol {
-      None => {
-        // Word gap
-        cx = cx + @types.word_gap
-        if cx > max_width - @types.symbol_spacing {
-          cx = 0
-          cy = cy + line_height
-        }
-      }
+  let positions = @types.compute_symbol_positions(
+    tablet.inscription,
+    base_x,
+    base_y,
+    max_width,
+    @types.inscription_line_height,
+    @types.symbol_spacing,
+    @types.word_gap,
+  )
+  for pos in positions {
+    match pos.symbol {
+      None => ()
       Some(sym) => {
-        if cx > max_width - @types.symbol_spacing {
-          cx = 0
-          cy = cy + line_height
-        }
-        let sx = Float::from_int(base_x + cx)
-        let sy = Float::from_int(base_y + cy)
+        let sx = Float::from_int(pos.x)
+        let sy = Float::from_int(pos.y)
         let si = @types.symbol_index(sym)
         let is_given = @types.is_given_symbol(tablet, sym)
         let is_selected = match game.selected_symbol {
@@ -150,7 +143,6 @@ fn draw_inscription(game : @types.Game, tablet : @types.Tablet) -> Unit {
             @types.color_text_dim,
           )
         }
-        cx = cx + @types.symbol_spacing
       }
     }
   }

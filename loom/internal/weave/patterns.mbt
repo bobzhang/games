@@ -143,7 +143,9 @@ pub fn generate_diamond(
 
 ///|
 /// Generate heddle rows from a fabric pattern (extract which warps are raised per row)
-pub fn heddles_from_pattern(pattern : @types.FabricPattern) -> Array[@types.HeddleRow] {
+pub fn heddles_from_pattern(
+  pattern : @types.FabricPattern,
+) -> Array[@types.HeddleRow] {
   let heddles : Array[@types.HeddleRow] = []
   for row in 0..<pattern.rows {
     let h = @types.new_heddle_row(pattern.cols)

@@ -51,8 +51,8 @@ fn update_level_select(game : @types.Game) -> Unit {
       let (start, end) = @levels.levels_in_tier(tier)
       for i = start; i < end; i = i + 1 {
         let idx = i - start
-        let bx = 200 + (idx % 4) * 220
-        let by = 280 + (idx / 4) * 120
+        let bx = 200 + idx % 4 * 220
+        let by = 280 + idx / 4 * 120
         if mx >= bx && mx < bx + 200 && my >= by && my < by + 100 {
           @levels.load_level(game, i)
           game.screen = Playing
@@ -116,11 +116,10 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
         game.screen = LevelFailed
       }
     }
-    Paused => {
+    Paused =>
       if @raylib.is_key_pressed(@raylib.KeySpace) {
         game.sim.state = Running
       }
-    }
     Complete => ()
     Failed => ()
   }
@@ -133,7 +132,9 @@ fn update_placing(game : @types.Game) -> Unit {
   game.hover_col = @types.mouse_to_grid_col(mx)
   game.hover_row = @types.mouse_to_grid_row(my)
   // Check toolbar area for palette selection
-  let toolbar_y = @types.grid_offset_y + @types.grid_rows * @types.cell_size + 20
+  let toolbar_y = @types.grid_offset_y +
+    @types.grid_rows * @types.cell_size +
+    20
   let palette = game.level_def.palette
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     // Check palette buttons

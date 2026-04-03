@@ -8,7 +8,7 @@ pub fn new_connection(
   from_col : Int,
   from_row : Int,
   to_col : Int,
-  to_row : Int
+  to_row : Int,
 ) -> Connection {
   { from_col, from_row, to_col, to_row, energy_flow: 0.0, flow_anim: 0.0 }
 }
@@ -17,9 +17,12 @@ pub fn new_connection(
 pub fn new_game() -> Game {
   let progress : Array[LevelProgress] = []
   for _i in 0..<total_levels {
-    progress.push(
-      { completed: false, stars: None, best_waystones: 0, best_energy: 0.0 },
-    )
+    progress.push({
+      completed: false,
+      stars: None,
+      best_waystones: 0,
+      best_energy: 0.0,
+    })
   }
   {
     screen: Title,
@@ -119,18 +122,22 @@ pub fn connection_exists(
   c1 : Int,
   r1 : Int,
   c2 : Int,
-  r2 : Int
+  r2 : Int,
 ) -> Bool {
   for i in 0..<connections.length() {
     let conn = connections[i]
-    if (conn.from_col == c1 &&
-      conn.from_row == r1 &&
-      conn.to_col == c2 &&
-      conn.to_row == r2) ||
-      (conn.from_col == c2 &&
-      conn.from_row == r2 &&
-      conn.to_col == c1 &&
-      conn.to_row == r1) {
+    if (
+        conn.from_col == c1 &&
+        conn.from_row == r1 &&
+        conn.to_col == c2 &&
+        conn.to_row == r2
+      ) ||
+      (
+        conn.from_col == c2 &&
+        conn.from_row == r2 &&
+        conn.to_col == c1 &&
+        conn.to_row == r1
+      ) {
       return true
     }
   }
@@ -164,7 +171,7 @@ pub fn level_unlocked(progress : Array[LevelProgress], level_id : Int) -> Bool {
 pub fn neighbor_connections(
   connections : Array[Connection],
   col : Int,
-  row : Int
+  row : Int,
 ) -> Array[(Int, Int)] {
   let neighbors : Array[(Int, Int)] = []
   for i in 0..<connections.length() {

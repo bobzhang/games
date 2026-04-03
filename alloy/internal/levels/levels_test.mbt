@@ -76,7 +76,10 @@ test "level 1 is solvable with iron and copper" {
   ]
   let result = @forge.blend(ingredients, Medium)
   // hardness = (80+25)/2 = 52.5, target 40-65
-  inspect(@forge.in_range(result.hardness, level.target.hardness), content="true")
+  inspect(
+    @forge.in_range(result.hardness, level.target.hardness),
+    content="true",
+  )
 }
 
 ///|
@@ -88,7 +91,10 @@ test "level 4 steel is solvable with iron and carbon" {
   ]
   let result = @forge.blend(ingredients, Medium)
   // hardness = (80+95)/2 = 87.5, target 82-100
-  inspect(@forge.in_range(result.hardness, level.target.hardness), content="true")
+  inspect(
+    @forge.in_range(result.hardness, level.target.hardness),
+    content="true",
+  )
 }
 
 ///|

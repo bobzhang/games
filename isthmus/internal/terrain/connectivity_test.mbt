@@ -182,23 +182,22 @@ test "safety margin can be negative when settlement flooded" {
 
 ///|
 test "rising sea level progressively disconnects settlements" {
+  // In a 1D row, one flooded tile breaks the connection
   let g = @types.new_grid(5, 1)
   g.tiles[0].height = 5
   g.tiles[0].is_settlement = true
-  g.tiles[1].height = 2 // low bridge
-  g.tiles[2].height = 3 // medium bridge
-  g.tiles[3].height = 4 // high bridge
+  g.tiles[1].height = 3 // bridge tile
+  g.tiles[2].height = 4 // bridge tile
+  g.tiles[3].height = 5 // bridge tile
   g.tiles[4].height = 5
   g.tiles[4].is_settlement = true
-  // Sea level 0: all connected
+  // Sea level 0: all connected (all heights > 0)
   inspect(all_settlements_connected(g, 0), content="true")
-  // Sea level 1: still connected (all tiles > 1)
-  inspect(all_settlements_connected(g, 1), content="true")
-  // Sea level 2: tile 1 floods, but tile 2 and 3 still connect
+  // Sea level 2: all tiles still above water (min height 3 > 2)
   inspect(all_settlements_connected(g, 2), content="true")
-  // Sea level 3: tiles 1,2 flood, but tile 3 still connects
-  inspect(all_settlements_connected(g, 3), content="true")
-  // Sea level 4: tiles 1,2,3 flood, settlements disconnected
+  // Sea level 3: tile 1 floods (height 3 <= 3), breaking path -> disconnected
+  inspect(all_settlements_connected(g, 3), content="false")
+  // Sea level 4: tiles 1,2 flood, still disconnected
   inspect(all_settlements_connected(g, 4), content="false")
 }
 

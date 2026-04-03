@@ -16,15 +16,18 @@ pub fn codon_to_trait(b0 : Base, b1 : Base, b2 : Base) -> Trait {
 }
 
 ///|
-pub fn read_sequence(seq : Array[Base]) -> ReadResult {
-  // Find first ATG (Start codon)
-  let mut start_pos = -1
+pub fn find_start_codon(seq : Array[Base]) -> Int {
   for i in 0..<(seq.length() - 2) {
     if seq[i] == A && seq[i + 1] == T && seq[i + 2] == G {
-      start_pos = i
-      break
+      return i
     }
   }
+  -1
+}
+
+///|
+pub fn read_sequence(seq : Array[Base]) -> ReadResult {
+  let start_pos = find_start_codon(seq)
   if start_pos < 0 {
     return { traits: [], valid: false }
   }
@@ -275,6 +278,11 @@ pub fn clamp_cursor(game : Game) -> Unit {
 pub fn clear_selection(game : Game) -> Unit {
   game.selection_start = -1
   game.selection_end = -1
+}
+
+///|
+pub fn color_with_alpha(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+  @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), alpha)
 }
 
 ///|

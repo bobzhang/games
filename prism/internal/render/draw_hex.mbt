@@ -63,7 +63,12 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hex_filled(cx : Float, cy : Float, size : Float, color : @raylib.Color) -> Unit {
+fn draw_hex_filled(
+  cx : Float,
+  cy : Float,
+  size : Float,
+  color : @raylib.Color,
+) -> Unit {
   // Flat-top hexagon: vertices at angles 0, 60, 120, 180, 240, 300 degrees
   for i in 0..<6 {
     let a1 = Float::from_int(i) * @types.pi / 3.0
@@ -220,7 +225,13 @@ fn draw_component(
       let y1 = cy + @types.sinf(perp) * len
       let x2 = cx - @types.cosf(perp) * len
       let y2 = cy - @types.sinf(perp) * len
-      @raylib.draw_line(x1.to_int(), y1.to_int(), x2.to_int(), y2.to_int(), color)
+      @raylib.draw_line(
+        x1.to_int(),
+        y1.to_int(),
+        x2.to_int(),
+        y2.to_int(),
+        color,
+      )
       @raylib.draw_line(
         (x1 + 1.0).to_int(),
         y1.to_int(),
@@ -232,7 +243,13 @@ fn draw_component(
       let na = half * 0.35
       let nx = cx + @types.cosf(angle) * na
       let ny = cy + @types.sinf(angle) * na
-      @raylib.draw_line(icx, icy, nx.to_int(), ny.to_int(), fade_color(color, 150))
+      @raylib.draw_line(
+        icx,
+        icy,
+        nx.to_int(),
+        ny.to_int(),
+        fade_color(color, 150),
+      )
       if !locked {
         @draw.draw_text(
           "R",

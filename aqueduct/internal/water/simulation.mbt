@@ -4,7 +4,7 @@ pub fn are_connected(
   game : @types.Game,
   from : @types.Pos,
   to : @types.Pos,
-  dir : @types.Direction
+  dir : @types.Direction,
 ) -> Bool {
   guard @types.get_tile(game, from) is Some(from_tile) else { return false }
   guard @types.get_tile(game, to) is Some(to_tile) else { return false }
@@ -15,7 +15,10 @@ pub fn are_connected(
 }
 
 ///|
-fn has_direction(connections : Array[@types.Direction], dir : @types.Direction) -> Bool {
+fn has_direction(
+  connections : Array[@types.Direction],
+  dir : @types.Direction,
+) -> Bool {
   for d in connections {
     if d == dir {
       return true
@@ -32,7 +35,7 @@ pub fn can_flow(
   game : @types.Game,
   from : @types.Pos,
   to : @types.Pos,
-  dir : @types.Direction
+  dir : @types.Direction,
 ) -> Bool {
   guard @types.get_tile(game, from) is Some(from_tile) else { return false }
   guard @types.get_tile(game, to) is Some(to_tile) else { return false }

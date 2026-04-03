@@ -3,7 +3,7 @@ pub fn new_resources(
   o2 : Float,
   co2 : Float,
   water : Float,
-  nutrients : Float
+  nutrients : Float,
 ) -> Resources {
   { o2, co2, water, nutrients }
 }

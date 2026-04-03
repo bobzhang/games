@@ -13,7 +13,7 @@ pub fn set_tile(
   grid : Array[Array[@types.Tile]],
   x : Int,
   y : Int,
-  tile : @types.Tile
+  tile : @types.Tile,
 ) -> Unit {
   grid[y][x] = tile
 }
@@ -24,7 +24,7 @@ pub fn set_land_rect(
   x : Int,
   y : Int,
   w : Int,
-  h : Int
+  h : Int,
 ) -> Unit {
   for dy in 0..<h {
     for dx in 0..<w {

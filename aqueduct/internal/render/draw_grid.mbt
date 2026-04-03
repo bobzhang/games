@@ -57,8 +57,7 @@ pub fn draw_tiles(game : @types.Game) -> Unit {
       let cy = sy + half
       match tile.kind {
         Spring => draw_spring(cx, cy, half, tile.has_water, game.anim_timer)
-        Fountain =>
-          draw_fountain(cx, cy, half, tile.has_water, game.anim_timer)
+        Fountain => draw_fountain(cx, cy, half, tile.has_water, game.anim_timer)
         Aqueduct => draw_aqueduct(sx, sy, cs, tile)
         Reservoir => draw_reservoir(sx, sy, cs, tile)
         Dam => draw_dam(sx, sy, cs, tile)
@@ -74,7 +73,7 @@ fn draw_spring(
   cy : Int,
   half : Int,
   has_water : Bool,
-  anim_timer : Float
+  anim_timer : Float,
 ) -> Unit {
   let r = Float::from_int(half - 6)
   let pulse : Float = 1.0 + sinf(anim_timer * 3.0) * 0.1
@@ -94,10 +93,14 @@ fn draw_fountain(
   cy : Int,
   half : Int,
   filled : Bool,
-  anim_timer : Float
+  anim_timer : Float,
 ) -> Unit {
   let r = Float::from_int(half - 6)
-  let color = if filled { @types.color_fountain_filled } else { @types.color_fountain }
+  let color = if filled {
+    @types.color_fountain_filled
+  } else {
+    @types.color_fountain
+  }
   @raylib.draw_circle(cx, cy, r, color)
   if filled {
     let pulse : Float = 1.0 + sinf(anim_timer * 4.0) * 0.15
@@ -116,21 +119,23 @@ fn draw_aqueduct(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
     @types.color_aqueduct
   }
   let inset = cs / 5
-  @raylib.draw_rectangle(sx + inset, sy + inset, cs - inset * 2, cs - inset * 2, color)
+  @raylib.draw_rectangle(
+    sx + inset,
+    sy + inset,
+    cs - inset * 2,
+    cs - inset * 2,
+    color,
+  )
   // Draw connection lines
   let cx = sx + cs / 2
   let cy = sy + cs / 2
   let water_color = if tile.has_water { @types.color_water_flow } else { color }
   for d in tile.connections {
     match d {
-      North =>
-        @raylib.draw_rectangle(cx - 3, sy, 6, cs / 2, water_color)
-      South =>
-        @raylib.draw_rectangle(cx - 3, cy, 6, cs / 2, water_color)
-      East =>
-        @raylib.draw_rectangle(cx, cy - 3, cs / 2, 6, water_color)
-      West =>
-        @raylib.draw_rectangle(sx, cy - 3, cs / 2, 6, water_color)
+      North => @raylib.draw_rectangle(cx - 3, sy, 6, cs / 2, water_color)
+      South => @raylib.draw_rectangle(cx - 3, cy, 6, cs / 2, water_color)
+      East => @raylib.draw_rectangle(cx, cy - 3, cs / 2, 6, water_color)
+      West => @raylib.draw_rectangle(sx, cy - 3, cs / 2, 6, water_color)
     }
   }
 }
@@ -143,7 +148,13 @@ fn draw_reservoir(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
     @types.color_reservoir
   }
   let inset = cs / 6
-  @raylib.draw_rectangle(sx + inset, sy + inset, cs - inset * 2, cs - inset * 2, color)
+  @raylib.draw_rectangle(
+    sx + inset,
+    sy + inset,
+    cs - inset * 2,
+    cs - inset * 2,
+    color,
+  )
   // Draw fill level
   if tile.water_level > 0 && !tile.has_water {
     let fill_h = (cs - inset * 2) * tile.water_level / 3
@@ -161,17 +172,19 @@ fn draw_reservoir(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
   let cy = sy + cs / 2
   for d in tile.connections {
     match d {
-      North =>
-        @raylib.draw_rectangle(cx - 3, sy, 6, cs / 2, color)
-      South =>
-        @raylib.draw_rectangle(cx - 3, cy, 6, cs / 2, color)
-      East =>
-        @raylib.draw_rectangle(cx, cy - 3, cs / 2, 6, color)
-      West =>
-        @raylib.draw_rectangle(sx, cy - 3, cs / 2, 6, color)
+      North => @raylib.draw_rectangle(cx - 3, sy, 6, cs / 2, color)
+      South => @raylib.draw_rectangle(cx - 3, cy, 6, cs / 2, color)
+      East => @raylib.draw_rectangle(cx, cy - 3, cs / 2, 6, color)
+      West => @raylib.draw_rectangle(sx, cy - 3, cs / 2, 6, color)
     }
   }
-  @draw.draw_text("R", sx + cs / 2 - 5, sy + cs / 2 - 8, 16, @types.color_selected)
+  @draw.draw_text(
+    "R",
+    sx + cs / 2 - 5,
+    sy + cs / 2 - 8,
+    16,
+    @types.color_selected,
+  )
 }
 
 ///|
@@ -254,7 +267,8 @@ pub fn draw_water_overlay(game : @types.Game) -> Unit {
       if tile.has_water && !(tile.kind is Spring) && !(tile.kind is Fountain) {
         let sx = @types.grid_offset_x + x * cs
         let sy = @types.grid_offset_y + y * cs
-        let pulse_val : Float = 128.0 + sinf(game.anim_timer * 2.0 + Float::from_int(x + y) * 0.5) * 60.0
+        let pulse_val : Float = 128.0 +
+          sinf(game.anim_timer * 2.0 + Float::from_int(x + y) * 0.5) * 60.0
         let pulse_alpha = pulse_val.to_int()
         let alpha = if pulse_alpha > 255 {
           255

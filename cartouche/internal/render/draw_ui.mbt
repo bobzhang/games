@@ -20,15 +20,21 @@ fn draw_ui(game : @types.Game, tablet : @types.Tablet) -> Unit {
     1.0,
     @types.color_stone_dark,
   )
-  // Section: Letter palette
-  @draw.draw_text("Assign Letter:", px, py, 18, @types.color_gold)
+  draw_letter_palette(game)
+  draw_mapping_table(game, tablet)
+  draw_status_and_controls(game, tablet)
+}
+
+///|
+fn draw_letter_palette(game : @types.Game) -> Unit {
+  let px = @types.palette_x
+  let py = @types.palette_y
   let btn_size = @types.palette_btn_size
-  let cols = @types.palette_cols
+  @draw.draw_text("Assign Letter:", px, py, 18, @types.color_gold)
   for i in 0..<@types.symbol_count {
-    let row = i / cols
-    let col = i % cols
-    let bx = px + col * (btn_size + 6)
-    let by = py + 28 + row * (btn_size + 6)
+    let (bx, by) = @types.palette_button_pos(
+      i, px, py, btn_size, @types.palette_btn_gap, @types.palette_cols, @types.palette_label_offset_y,
+    )
     let letter = @types.letter_from_index(i)
     let is_used = @types.is_letter_used(game.current_mapping, i)
     // Button background
@@ -63,7 +69,11 @@ fn draw_ui(game : @types.Game, tablet : @types.Tablet) -> Unit {
     }
     @draw.draw_text(letter, bx + (btn_size - lw) / 2, by + 12, 20, text_color)
   }
-  // Section: Mapping table
+}
+
+///|
+fn draw_mapping_table(game : @types.Game, tablet : @types.Tablet) -> Unit {
+  let px = @types.palette_x
   let my = @types.mapping_table_y
   @draw.draw_text("Mappings:", px, my, 18, @types.color_gold)
   // Column headers
@@ -118,13 +128,7 @@ fn draw_ui(game : @types.Game, tablet : @types.Tablet) -> Unit {
       @draw.draw_text("?", px + 52, row_y, 16, @types.color_text_dim)
     }
     // Frequency count
-    let mut freq = 0
-    for j in 0..<tablet.inscription.symbols.length() {
-      match tablet.inscription.symbols[j].symbol {
-        Some(s) => if s == sym { freq = freq + 1 }
-        None => ()
-      }
-    }
+    let freq = @types.count_symbol_frequency(tablet.inscription, sym)
     let freq_str = "x" + freq.to_string()
     let freq_color = if freq >= 4 {
       @types.color_gold
@@ -155,7 +159,11 @@ fn draw_ui(game : @types.Game, tablet : @types.Tablet) -> Unit {
     }
     row_y = row_y + 22
   }
-  // Section: Status
+}
+
+///|
+fn draw_status_and_controls(game : @types.Game, tablet : @types.Tablet) -> Unit {
+  let px = @types.palette_x
   let status_y = @types.screen_height - 160
   @raylib.draw_line(
     px,
@@ -221,7 +229,6 @@ pub fn draw_symbol(
   let thick : Float = if size > 24.0 { 2.5 } else { 1.5 }
   match sym {
     Circle => {
-      // Filled ring - two concentric circles for thickness
       @raylib.draw_ring(
         @raylib.Vector2::new(cx, cy),
         r * 0.65,
@@ -231,18 +238,15 @@ pub fn draw_symbol(
         36,
         color,
       )
-      // Center dot
       @raylib.draw_circle_v(@raylib.Vector2::new(cx, cy), r * 0.15, color)
     }
     Triangle => {
-      // Thick equilateral triangle using filled triangles for edges
       let top = @raylib.Vector2::new(cx, cy - r * 0.85)
       let bl = @raylib.Vector2::new(cx - r * 0.8, cy + r * 0.65)
       let br = @raylib.Vector2::new(cx + r * 0.8, cy + r * 0.65)
       @raylib.draw_line_ex(top, bl, thick, color)
       @raylib.draw_line_ex(bl, br, thick, color)
       @raylib.draw_line_ex(br, top, thick, color)
-      // Inner dot at centroid
       @raylib.draw_circle_v(
         @raylib.Vector2::new(cx, cy + r * 0.15),
         r * 0.12,
@@ -250,14 +254,12 @@ pub fn draw_symbol(
       )
     }
     Square => {
-      // Thick square outline
       let half = r * 0.75
       @raylib.draw_rectangle_lines_ex(
         @raylib.Rectangle::new(cx - half, cy - half, half * 2.0, half * 2.0),
         thick,
         color,
       )
-      // Cross-hair inside
       let inner = r * 0.3
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx - inner, cy),
@@ -273,7 +275,6 @@ pub fn draw_symbol(
       )
     }
     Diamond => {
-      // Filled diamond outline with thick lines
       let top = @raylib.Vector2::new(cx, cy - r * 0.9)
       let right = @raylib.Vector2::new(cx + r * 0.65, cy)
       let bottom = @raylib.Vector2::new(cx, cy + r * 0.9)
@@ -282,11 +283,9 @@ pub fn draw_symbol(
       @raylib.draw_line_ex(right, bottom, thick, color)
       @raylib.draw_line_ex(bottom, left, thick, color)
       @raylib.draw_line_ex(left, top, thick, color)
-      // Horizontal line through center
       @raylib.draw_line_ex(left, right, 1.0, color)
     }
     Star => {
-      // 5-pointed star with thick lines
       for i in 0..<5 {
         let fi = Float::from_int(i)
         let a1 = fi * @types.pi * 2.0 / 5.0 - @types.pi / 2.0
@@ -304,11 +303,9 @@ pub fn draw_symbol(
           color,
         )
       }
-      // Center dot
       @raylib.draw_circle_v(@raylib.Vector2::new(cx, cy), r * 0.12, color)
     }
     Cross => {
-      // Ankh-style cross with thick lines
       let arm = r * 0.7
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx - arm, cy),
@@ -322,14 +319,12 @@ pub fn draw_symbol(
         thick,
         color,
       )
-      // Crossbar
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx - r * 0.45, cy - r * 0.35),
         @raylib.Vector2::new(cx + r * 0.45, cy - r * 0.35),
         thick,
         color,
       )
-      // Serifs at endpoints
       @raylib.draw_circle_v(
         @raylib.Vector2::new(cx, cy - r * 0.85),
         r * 0.1,
@@ -342,14 +337,12 @@ pub fn draw_symbol(
       )
     }
     Arrow => {
-      // Thick upward arrow
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx, cy + r * 0.75),
         @raylib.Vector2::new(cx, cy - r * 0.75),
         thick,
         color,
       )
-      // Arrowhead
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx, cy - r * 0.75),
         @raylib.Vector2::new(cx - r * 0.5, cy - r * 0.15),
@@ -362,7 +355,6 @@ pub fn draw_symbol(
         thick,
         color,
       )
-      // Tail fletching
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx - r * 0.3, cy + r * 0.55),
         @raylib.Vector2::new(cx, cy + r * 0.35),
@@ -376,8 +368,7 @@ pub fn draw_symbol(
         color,
       )
     }
-    Wave => {
-      // Thick double wave
+    Wave =>
       for row in 0..<2 {
         let offset_y = Float::from_int(row) * r * 0.5 - r * 0.25
         for i in 0..<10 {
@@ -394,9 +385,7 @@ pub fn draw_symbol(
           )
         }
       }
-    }
-    Spiral => {
-      // Thick spiral with more segments
+    Spiral =>
       for i in 0..<24 {
         let fi = Float::from_int(i)
         let a1 = fi * 0.45
@@ -416,9 +405,7 @@ pub fn draw_symbol(
           color,
         )
       }
-    }
     Dot => {
-      // Solid circle with outer ring
       @raylib.draw_circle_v(@raylib.Vector2::new(cx, cy), r * 0.4, color)
       @raylib.draw_ring(
         @raylib.Vector2::new(cx, cy),
@@ -430,8 +417,7 @@ pub fn draw_symbol(
         color,
       )
     }
-    Crescent => {
-      // Thick crescent using ring segment
+    Crescent =>
       @raylib.draw_ring(
         @raylib.Vector2::new(cx - r * 0.1, cy),
         r * 0.5,
@@ -441,9 +427,7 @@ pub fn draw_symbol(
         24,
         color,
       )
-    }
     Lightning => {
-      // Thick zigzag bolt
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx + r * 0.25, cy - r * 0.85),
         @raylib.Vector2::new(cx - r * 0.15, cy - r * 0.1),
@@ -462,7 +446,6 @@ pub fn draw_symbol(
         thick,
         color,
       )
-      // Glow dots at tips
       @raylib.draw_circle_v(
         @raylib.Vector2::new(cx + r * 0.25, cy - r * 0.85),
         r * 0.08,
@@ -475,7 +458,6 @@ pub fn draw_symbol(
       )
     }
     Eye => {
-      // Thick almond-shaped eye
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx - r * 0.85, cy),
         @raylib.Vector2::new(cx, cy - r * 0.45),
@@ -500,9 +482,7 @@ pub fn draw_symbol(
         thick,
         color,
       )
-      // Filled pupil
       @raylib.draw_circle_v(@raylib.Vector2::new(cx, cy), r * 0.22, color)
-      // Iris ring
       @raylib.draw_ring(
         @raylib.Vector2::new(cx, cy),
         r * 0.25,
@@ -514,7 +494,6 @@ pub fn draw_symbol(
       )
     }
     Hand => {
-      // Filled palm
       @raylib.draw_rectangle(
         (cx - r * 0.35).to_int(),
         (cy - r * 0.05).to_int(),
@@ -522,7 +501,6 @@ pub fn draw_symbol(
         (r * 0.7).to_int(),
         color,
       )
-      // Thick fingers
       for i in 0..<3 {
         let fi = Float::from_int(i)
         let fx = cx - r * 0.25 + fi * r * 0.25
@@ -532,14 +510,12 @@ pub fn draw_symbol(
           thick,
           color,
         )
-        // Fingertip dot
         @raylib.draw_circle_v(
           @raylib.Vector2::new(fx, cy - r * 0.7),
           r * 0.06,
           color,
         )
       }
-      // Thumb
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx - r * 0.35, cy + r * 0.2),
         @raylib.Vector2::new(cx - r * 0.65, cy - r * 0.1),
@@ -548,9 +524,7 @@ pub fn draw_symbol(
       )
     }
     Sun => {
-      // Filled center circle
       @raylib.draw_circle_v(@raylib.Vector2::new(cx, cy), r * 0.35, color)
-      // Thick rays
       for i in 0..<8 {
         let fi = Float::from_int(i)
         let angle = fi * @types.pi * 2.0 / 8.0
@@ -569,7 +543,6 @@ pub fn draw_symbol(
       }
     }
     MoonSym => {
-      // Thick crescent moon - ring segment
       @raylib.draw_ring(
         @raylib.Vector2::new(cx, cy),
         r * 0.45,
@@ -579,7 +552,6 @@ pub fn draw_symbol(
         24,
         color,
       )
-      // Stars beside the moon
       @raylib.draw_circle_v(
         @raylib.Vector2::new(cx + r * 0.55, cy - r * 0.55),
         r * 0.08,
@@ -592,14 +564,12 @@ pub fn draw_symbol(
       )
     }
     Mountain => {
-      // Thick mountain with twin peaks
       let base_y = cy + r * 0.7
       let peak = @raylib.Vector2::new(cx - r * 0.15, cy - r * 0.75)
       let bl = @raylib.Vector2::new(cx - r * 0.85, base_y)
       let br = @raylib.Vector2::new(cx + r * 0.85, base_y)
       @raylib.draw_line_ex(bl, peak, thick, color)
       @raylib.draw_line_ex(peak, br, thick, color)
-      // Second smaller peak
       let peak2 = @raylib.Vector2::new(cx + r * 0.4, cy - r * 0.3)
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx + r * 0.1, base_y),
@@ -608,7 +578,6 @@ pub fn draw_symbol(
         color,
       )
       @raylib.draw_line_ex(peak2, br, thick, color)
-      // Snow cap
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx - r * 0.35, cy - r * 0.4),
         @raylib.Vector2::new(cx + r * 0.05, cy - r * 0.4),
@@ -616,8 +585,7 @@ pub fn draw_symbol(
         color,
       )
     }
-    River => {
-      // Three parallel wavy lines
+    River =>
       for j in 0..<3 {
         let offset_y = Float::from_int(j) * r * 0.35 - r * 0.35
         for i in 0..<8 {
@@ -634,16 +602,13 @@ pub fn draw_symbol(
           )
         }
       }
-    }
     Tree => {
-      // Thick trunk
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx, cy + r * 0.75),
         @raylib.Vector2::new(cx, cy - r * 0.15),
         thick + 1.0,
         color,
       )
-      // Crown - filled triangle
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx, cy - r * 0.85),
         @raylib.Vector2::new(cx - r * 0.55, cy + r * 0.1),
@@ -662,7 +627,6 @@ pub fn draw_symbol(
         thick,
         color,
       )
-      // Roots
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx, cy + r * 0.75),
         @raylib.Vector2::new(cx - r * 0.3, cy + r * 0.85),
@@ -677,7 +641,6 @@ pub fn draw_symbol(
       )
     }
     Flame => {
-      // Thick flame outline with teardrop shape
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx, cy - r * 0.85),
         @raylib.Vector2::new(cx + r * 0.45, cy + r * 0.15),
@@ -708,7 +671,6 @@ pub fn draw_symbol(
         thick,
         color,
       )
-      // Inner flame
       @raylib.draw_line_ex(
         @raylib.Vector2::new(cx, cy - r * 0.3),
         @raylib.Vector2::new(cx + r * 0.18, cy + r * 0.35),
@@ -721,7 +683,6 @@ pub fn draw_symbol(
         1.5,
         color,
       )
-      // Bright core dot
       @raylib.draw_circle_v(
         @raylib.Vector2::new(cx, cy + r * 0.15),
         r * 0.1,

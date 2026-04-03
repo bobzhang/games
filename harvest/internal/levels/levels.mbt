@@ -84,7 +84,7 @@ fn varied_soil(
   base_n : Int,
   base_p : Int,
   base_k : Int,
-  variation : Int
+  variation : Int,
 ) -> Array[Array[(Int, Int, Int)]] {
   let data : Array[Array[(Int, Int, Int)]] = Array::new(
     capacity=@types.grid_rows,

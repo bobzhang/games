@@ -317,18 +317,8 @@ fn draw_belts(game : @types.Game) -> Unit {
           t = t + dash_len + gap_len
         }
         // Pulley circles at endpoints
-        @raylib.draw_circle_lines(
-          x1.to_int(),
-          y1.to_int(),
-          8.0,
-          belt_highlight,
-        )
-        @raylib.draw_circle_lines(
-          x2.to_int(),
-          y2.to_int(),
-          8.0,
-          belt_highlight,
-        )
+        @raylib.draw_circle_lines(x1.to_int(), y1.to_int(), 8.0, belt_highlight)
+        @raylib.draw_circle_lines(x2.to_int(), y2.to_int(), 8.0, belt_highlight)
         // Direction arrow at midpoint
         let mx = (x1 + x2) / 2.0
         let my = (y1 + y2) / 2.0

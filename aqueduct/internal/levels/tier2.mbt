@@ -1,7 +1,15 @@
 ///|
 /// Create Tier 2 levels (7 levels): Reservoirs and branching paths.
 pub fn create_tier2() -> Array[@types.Level] {
-  [level_2_1(), level_2_2(), level_2_3(), level_2_4(), level_2_5(), level_2_6(), level_2_7()]
+  [
+    level_2_1(),
+    level_2_2(),
+    level_2_3(),
+    level_2_4(),
+    level_2_5(),
+    level_2_6(),
+    level_2_7(),
+  ]
 }
 
 ///|

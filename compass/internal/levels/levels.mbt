@@ -52,8 +52,8 @@ pub fn init_level(index : Int) -> @types.LevelState {
 ///|
 pub fn reveal_area(revealed : Array[Array[Bool]], cx : Int, cy : Int) -> Unit {
   let r = @types.reveal_radius
-  for dy in -r..=r {
-    for dx in -r..=r {
+  for dy in -r..<=r {
+    for dx in -r..<=r {
       let nx = cx + dx
       let ny = cy + dy
       if @types.in_bounds(nx, ny) {

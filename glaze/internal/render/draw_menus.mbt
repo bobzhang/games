@@ -46,17 +46,15 @@ fn draw_title(game : @types.Game) -> Unit {
           .to_int()
           .land(255)
         @raylib.draw_rectangle(
-          cx, cy, cw, ch, @raylib.Color::new(rv, gv, bv, 255),
-        )
-      } else {
-        // Empty kiln cell
-        @raylib.draw_rectangle(
           cx,
           cy,
           cw,
           ch,
-          @types.color_panel_light,
+          @raylib.Color::new(rv, gv, bv, 255),
         )
+      } else {
+        // Empty kiln cell
+        @raylib.draw_rectangle(cx, cy, cw, ch, @types.color_panel_light)
       }
     }
   }
@@ -108,15 +106,27 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let cy = 120
     let is_selected = game.selected_tier == tier
     // Card background
-    let bg = if is_selected { @types.color_panel_light } else { @types.color_panel }
+    let bg = if is_selected {
+      @types.color_panel_light
+    } else {
+      @types.color_panel
+    }
     @raylib.draw_rectangle(cx, cy, card_w, card_h, bg)
     if is_selected {
-      @raylib.draw_rectangle_lines(cx, cy, card_w, card_h, @types.color_highlight)
+      @raylib.draw_rectangle_lines(
+        cx, cy, card_w, card_h, @types.color_highlight,
+      )
     }
     // Tier name
     let name = @types.tier_name(tier)
     let nw = @draw.measure_text(name, 32)
-    @draw.draw_text(name, cx + (card_w - nw) / 2, cy + 20, 32, @types.color_text)
+    @draw.draw_text(
+      name,
+      cx + (card_w - nw) / 2,
+      cy + 20,
+      32,
+      @types.color_text,
+    )
     // Level count info
     let (lo, hi) = @types.tier_level_range(tier)
     let count_str = "Levels \{lo + 1} - \{hi}"
@@ -199,7 +209,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
     let cx = start_x + col * (card_w + gap)
     let cy = start_y + row * (card_h + gap)
     let is_selected = game.selected_level == lo + i
-    let bg = if is_selected { @types.color_panel_light } else { @types.color_panel }
+    let bg = if is_selected {
+      @types.color_panel_light
+    } else {
+      @types.color_panel
+    }
     @raylib.draw_rectangle(cx, cy, card_w, card_h, bg)
     if is_selected {
       @raylib.draw_rectangle_lines(
@@ -238,26 +252,18 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars(
-  x : Int,
-  y : Int,
-  filled : Int,
-  total : Int,
-  size : Int
-) -> Unit {
+fn draw_stars(x : Int, y : Int, filled : Int, total : Int, size : Int) -> Unit {
   for i in 0..<total {
     let sx = x + i * (size + 4)
-    let color = if i < filled { @types.color_star_gold } else { @types.color_star_empty }
+    let color = if i < filled {
+      @types.color_star_gold
+    } else {
+      @types.color_star_empty
+    }
     // Draw a simple star shape using triangle and inverted triangle
     let cx = Float::from_int(sx + size / 2)
     let cy = Float::from_int(y + size / 2)
     let r = Float::from_int(size) / 2.0
-    @raylib.draw_poly(
-      @raylib.Vector2::new(cx, cy),
-      5,
-      r,
-      0.0,
-      color,
-    )
+    @raylib.draw_poly(@raylib.Vector2::new(cx, cy), 5, r, 0.0, color)
   }
 }

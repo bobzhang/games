@@ -117,11 +117,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star_rating(
-  rating : @types.StarRating,
-  x : Int,
-  y : Int
-) -> Unit {
+fn draw_star_rating(rating : @types.StarRating, x : Int, y : Int) -> Unit {
   let (count, color) = match rating {
     None => (0, text_dim_color)
     Bronze => (1, bronze_color)
@@ -170,13 +166,7 @@ pub fn draw_level_complete(game : @types.Game) -> Unit {
   // Victory text
   let title = "Level Complete!"
   let title_w = @draw.measure_text(title, 48)
-  @draw.draw_text(
-    title,
-    cx - title_w / 2,
-    200,
-    48,
-    temple_powered_color,
-  )
+  @draw.draw_text(title, cx - title_w / 2, 200, 48, temple_powered_color)
   // Stars
   let prog = game.progress[game.current_level]
   draw_star_rating(prog.stars, cx - 30, 280)

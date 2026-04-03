@@ -19,7 +19,10 @@ test "all levels have matching ciphertext and plaintext length" {
   let levels = get_all_levels()
   for i in 0..<levels.length() {
     let level = levels[i]
-    inspect(level.ciphertext.length() == level.plaintext.length(), content="true")
+    inspect(
+      level.ciphertext.length() == level.plaintext.length(),
+      content="true",
+    )
   }
 }
 
@@ -132,7 +135,9 @@ test "caesar levels decrypt correctly via known shifts" {
 ///|
 test "vigenere levels decrypt correctly via known keys" {
   let levels = get_all_levels()
-  let keys = ["KEY", "SPY", "AGENT", "CODE", "SHADOW", "ENIGMA", "BLETCH", "ULTRAX"]
+  let keys = [
+    "KEY", "SPY", "AGENT", "CODE", "SHADOW", "ENIGMA", "BLETCH", "ULTRAX",
+  ]
   for i in 0..<8 {
     let level = levels[17 + i]
     let decrypted = @crypto.vigenere_decrypt(level.ciphertext, keys[i])

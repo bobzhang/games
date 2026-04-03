@@ -10,7 +10,7 @@ pub fn set_row(
   elevations : Array[Int],
   cols : Int,
   row : Int,
-  values : Array[Int]
+  values : Array[Int],
 ) -> Unit {
   let offset = row * cols
   for i, v in values {

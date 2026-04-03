@@ -145,27 +145,11 @@ fn update_playing(game : @types.Game) -> Unit {
   let level = @levels.get_level(game.current_level)
   // Undo
   if @raylib.is_key_pressed(@raylib.KeyZ) {
-    if game.undo_stack.length() > 0 {
-      let entry = game.undo_stack.pop().unwrap()
-      @types.undo_mapping(game.mapping, entry)
-      game.patterns_dirty = true
-    }
+    apply_undo(game)
   }
   // Hint
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    let (ci, pi) = @crypto.get_hint_mapping(
-      level.ciphertext,
-      level.plaintext,
-      game.mapping,
-    )
-    if ci != pi || game.mapping.cipher_to_plain[ci] != pi {
-      let entry = @types.assign_mapping(game.mapping, ci, pi)
-      game.undo_stack.push(entry)
-      game.hints_used += 1
-      game.swap_count += 1
-      game.patterns_dirty = true
-      check_solved(game, level)
-    }
+    apply_hint(game, level)
   }
   // Tool tab switching with number keys
   if @raylib.is_key_pressed(@raylib.KeyOne) {
@@ -190,7 +174,7 @@ fn update_playing(game : @types.Game) -> Unit {
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
     // Check tool tab clicks
-    if my >= 55 && my < 85 {
+    if my >= @types.tool_panel_y && my < @types.tool_panel_y + @types.tool_tab_h {
       let tab_w = @types.tool_panel_w / 3
       if mx >= @types.tool_panel_x &&
         mx < @types.tool_panel_x + @types.tool_panel_w {
@@ -210,10 +194,10 @@ fn update_playing(game : @types.Game) -> Unit {
       handle_message_click(game, level, mx, my)
     }
     // Check alphabet strip clicks
-    let strip_y = @types.screen_height - 65
-    if my >= strip_y && my < strip_y + 44 {
-      let strip_x = 40
-      let cell_w = 42
+    let strip_y = @types.screen_height - @types.strip_y_offset
+    if my >= strip_y && my < strip_y + @types.strip_cell_h {
+      let strip_x = @types.strip_x
+      let cell_w = @types.strip_cell_w
       if mx >= strip_x && mx < strip_x + 26 * cell_w {
         let idx = (mx - strip_x) / cell_w
         if idx >= 0 && idx < 26 {
@@ -230,10 +214,17 @@ fn update_playing(game : @types.Game) -> Unit {
     }
     // Check pattern finder clicks (select/deselect pattern for highlighting)
     if game.active_tool == PatternFinder && game.cached_patterns.length() > 0 {
-      let pat_content_y = 55 + 40 + 50
-      let max_show = @types.mini(game.cached_patterns.length(), 10)
+      let pat_content_y = @types.tool_panel_y +
+        @types.tool_content_offset_y +
+        @types.pattern_content_offset_y
+      let max_show = @types.mini(
+        game.cached_patterns.length(),
+        @types.pattern_max_show,
+      )
       for pi in 0..<max_show {
-        let row_y = pat_content_y + 20 + pi * 20
+        let row_y = pat_content_y +
+          @types.pattern_row_top +
+          pi * @types.pattern_row_height
         if mx >= @types.tool_panel_x + 5 &&
           mx < @types.tool_panel_x + @types.tool_panel_w - 5 &&
           my >= row_y &&
@@ -249,48 +240,32 @@ fn update_playing(game : @types.Game) -> Unit {
     }
     // Check letter swap grid clicks (assign plain letter)
     if game.active_tool == LetterSwap && game.selected_cipher_letter >= 0 {
-      let grid_y = 55 + 40 + 72
-      let cell = 40
+      let grid_y = @types.tool_panel_y +
+        @types.tool_content_offset_y +
+        @types.swap_grid_offset_y
+      let cell = @types.swap_cell_size
       let px = @types.tool_panel_x
       for i in 0..<26 {
-        let col = i % 7
-        let row = i / 7
-        let gx = px + 15 + col * (cell + 4)
-        let gy = grid_y + row * (cell + 4)
+        let col = i % @types.swap_cols
+        let row = i / @types.swap_cols
+        let gx = px +
+          @types.swap_grid_inset_x +
+          col * (cell + @types.swap_cell_gap)
+        let gy = grid_y + row * (cell + @types.swap_cell_gap)
         if mx >= gx && mx < gx + cell && my >= gy && my < gy + cell {
-          let entry = @types.assign_mapping(
-            game.mapping,
-            game.selected_cipher_letter,
-            i,
-          )
-          game.undo_stack.push(entry)
-          game.swap_count += 1
-          game.selected_cipher_letter = -1
-          game.patterns_dirty = true
-          check_solved(game, level)
+          apply_letter_mapping(game, level, game.selected_cipher_letter, i)
           break
         }
       }
     }
-    // Hint button click
-    let hint_y = 55 + (@types.screen_height - 125) - 70
+    // Hint button click (must match draw_tools.mbt: py + ph - 70)
+    let panel_h = @types.screen_height - 125
+    let hint_y = @types.tool_panel_y + panel_h - 70
     if mx >= @types.tool_panel_x + 10 &&
       mx < @types.tool_panel_x + @types.tool_panel_w - 10 &&
       my >= hint_y &&
       my < hint_y + 30 {
-      let (ci, pi) = @crypto.get_hint_mapping(
-        level.ciphertext,
-        level.plaintext,
-        game.mapping,
-      )
-      if ci != pi || game.mapping.cipher_to_plain[ci] != pi {
-        let entry = @types.assign_mapping(game.mapping, ci, pi)
-        game.undo_stack.push(entry)
-        game.hints_used += 1
-        game.swap_count += 1
-        game.patterns_dirty = true
-        check_solved(game, level)
-      }
+      apply_hint(game, level)
     }
     // Undo button click
     let undo_y = hint_y + 35
@@ -298,11 +273,7 @@ fn update_playing(game : @types.Game) -> Unit {
       mx < @types.tool_panel_x + @types.tool_panel_w - 10 &&
       my >= undo_y &&
       my < undo_y + 30 {
-      if game.undo_stack.length() > 0 {
-        let entry = game.undo_stack.pop().unwrap()
-        @types.undo_mapping(game.mapping, entry)
-        game.patterns_dirty = true
-      }
+      apply_undo(game)
     }
   }
   // Right click to deselect
@@ -314,16 +285,7 @@ fn update_playing(game : @types.Game) -> Unit {
     for i in 0..<26 {
       let key_code = @raylib.KeyA + i
       if @raylib.is_key_pressed(key_code) {
-        let entry = @types.assign_mapping(
-          game.mapping,
-          game.selected_cipher_letter,
-          i,
-        )
-        game.undo_stack.push(entry)
-        game.swap_count += 1
-        game.selected_cipher_letter = -1
-        game.patterns_dirty = true
-        check_solved(game, level)
+        apply_letter_mapping(game, level, game.selected_cipher_letter, i)
         break
       }
     }
@@ -380,16 +342,48 @@ fn handle_cipher_select(
   level : @types.Level,
   plain_idx : Int,
 ) -> Unit {
-  let entry = @types.assign_mapping(
-    game.mapping,
-    game.selected_cipher_letter,
-    plain_idx,
-  )
+  apply_letter_mapping(game, level, game.selected_cipher_letter, plain_idx)
+}
+
+///|
+fn apply_letter_mapping(
+  game : @types.Game,
+  level : @types.Level,
+  cipher_idx : Int,
+  plain_idx : Int,
+) -> Unit {
+  let entry = @types.assign_mapping(game.mapping, cipher_idx, plain_idx)
   game.undo_stack.push(entry)
   game.swap_count += 1
   game.selected_cipher_letter = -1
   game.patterns_dirty = true
   check_solved(game, level)
+}
+
+///|
+fn apply_hint(game : @types.Game, level : @types.Level) -> Unit {
+  let (ci, pi) = @crypto.get_hint_mapping(
+    level.ciphertext,
+    level.plaintext,
+    game.mapping,
+  )
+  if ci != pi || game.mapping.cipher_to_plain[ci] != pi {
+    let entry = @types.assign_mapping(game.mapping, ci, pi)
+    game.undo_stack.push(entry)
+    game.hints_used += 1
+    game.swap_count += 1
+    game.patterns_dirty = true
+    check_solved(game, level)
+  }
+}
+
+///|
+fn apply_undo(game : @types.Game) -> Unit {
+  if game.undo_stack.length() > 0 {
+    let entry = game.undo_stack.pop().unwrap()
+    @types.undo_mapping(game.mapping, entry)
+    game.patterns_dirty = true
+  }
 }
 
 ///|

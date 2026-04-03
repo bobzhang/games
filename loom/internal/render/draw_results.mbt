@@ -55,13 +55,7 @@ fn draw_results(game : @types.Game) -> Unit {
   } else {
     @types.color_text_light
   }
-  @draw.draw_text(
-    "* Match the pattern",
-    px + 60,
-    sy + 30,
-    18,
-    s1_color,
-  )
+  @draw.draw_text("* Match the pattern", px + 60, sy + 30, 18, s1_color)
   let s2_color = if score.stars >= 2 {
     @types.color_correct
   } else {
@@ -141,12 +135,7 @@ fn draw_stars_large(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 }
 
 ///|
-fn draw_result_pattern(
-  game : @types.Game,
-  x : Int,
-  y : Int,
-  cs : Int,
-) -> Unit {
+fn draw_result_pattern(game : @types.Game, x : Int, y : Int, cs : Int) -> Unit {
   let target = game.target
   @draw.draw_text("Your Fabric:", x, y - 25, 14, @types.color_text_light)
   // Frame

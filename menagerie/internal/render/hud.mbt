@@ -9,7 +9,11 @@ fn draw_hud(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     let mw = @draw.measure_text(game.message, 18)
     @draw.draw_text(
-      game.message, (sw - mw) / 2, hud_y + 8, 18, @types.color_warning,
+      game.message,
+      (sw - mw) / 2,
+      hud_y + 8,
+      18,
+      @types.color_warning,
     )
   }
   // Tile/fence count
@@ -28,7 +32,10 @@ fn draw_hud(game : @types.Game) -> Unit {
   // Enclosure count
   let enc_count = game.enclosures.length()
   @draw.draw_text(
-    "Enclosures: \{enc_count}", sw - 200, hud_y + 36, 16,
+    "Enclosures: \{enc_count}",
+    sw - 200,
+    hud_y + 36,
+    16,
     @types.color_hud_text,
   )
 }
@@ -46,10 +53,14 @@ fn draw_needs_panel(game : @types.Game) -> Unit {
     return
   }
   // Panel background
-  @raylib.draw_rectangle(
-    panel_x, panel_y, panel_w, 500, @types.color_hud_bg,
+  @raylib.draw_rectangle(panel_x, panel_y, panel_w, 500, @types.color_hud_bg)
+  @draw.draw_text(
+    "SPECIES NEEDS",
+    panel_x + 8,
+    panel_y + 8,
+    16,
+    @types.color_title,
   )
-  @draw.draw_text("SPECIES NEEDS", panel_x + 8, panel_y + 8, 16, @types.color_title)
   let mut y = panel_y + 32
   for sp in level.species {
     let needs = @types.species_needs(sp)
@@ -59,7 +70,10 @@ fn draw_needs_panel(game : @types.Game) -> Unit {
     // Primary terrain
     let prim_label = @types.terrain_label(needs.terrain_primary)
     @draw.draw_text(
-      "  \{needs.terrain_primary_count}x \{prim_label}", panel_x + 8, y, 13,
+      "  \{needs.terrain_primary_count}x \{prim_label}",
+      panel_x + 8,
+      y,
+      13,
       @types.color_hud_text,
     )
     y += 16
@@ -69,8 +83,11 @@ fn draw_needs_panel(game : @types.Game) -> Unit {
         if needs.terrain_secondary_count > 0 {
           let sec_label = @types.terrain_label(sec)
           @draw.draw_text(
-            "  \{needs.terrain_secondary_count}x \{sec_label}", panel_x + 8,
-            y, 13, @types.color_hud_text,
+            "  \{needs.terrain_secondary_count}x \{sec_label}",
+            panel_x + 8,
+            y,
+            13,
+            @types.color_hud_text,
           )
           y += 16
         }
@@ -79,27 +96,34 @@ fn draw_needs_panel(game : @types.Game) -> Unit {
     // Water adjacent
     if needs.water_adjacent {
       @draw.draw_text(
-        "  \{needs.water_adjacent_count} water-adj", panel_x + 8, y, 13,
+        "  \{needs.water_adjacent_count} water-adj",
+        panel_x + 8,
+        y,
+        13,
         @types.color_water,
       )
       y += 16
     }
     // Space
     @draw.draw_text(
-      "  Space: \{needs.min_space}+", panel_x + 8, y, 13,
+      "  Space: \{needs.min_space}+",
+      panel_x + 8,
+      y,
+      13,
       @types.color_hud_text,
     )
     y += 16
     // Predator info
     if needs.is_predator {
-      @draw.draw_text(
-        "  [PREDATOR]", panel_x + 8, y, 13, @types.color_error,
-      )
+      @draw.draw_text("  [PREDATOR]", panel_x + 8, y, 13, @types.color_error)
       y += 16
     }
     if needs.fears_predators {
       @draw.draw_text(
-        "  Fears predators (dist 3+)", panel_x + 8, y, 13,
+        "  Fears predators (dist 3+)",
+        panel_x + 8,
+        y,
+        13,
         @types.color_error,
       )
       y += 16
@@ -109,17 +133,26 @@ fn draw_needs_panel(game : @types.Game) -> Unit {
   // Current enclosure info
   if game.hover_col >= 0 && game.hover_row >= 0 {
     let enc = @habitat.find_enclosure_at(
-      game.enclosures, game.hover_col, game.hover_row,
+      game.enclosures,
+      game.hover_col,
+      game.hover_row,
     )
     match enc {
       Some(e) => {
         y += 8
         @draw.draw_text(
-          "Enclosure #\{e.id}", panel_x + 8, y, 14, @types.color_title,
+          "Enclosure #\{e.id}",
+          panel_x + 8,
+          y,
+          14,
+          @types.color_title,
         )
         y += 18
         @draw.draw_text(
-          "  Size: \{e.cells.length()}", panel_x + 8, y, 13,
+          "  Size: \{e.cells.length()}",
+          panel_x + 8,
+          y,
+          13,
           @types.color_hud_text,
         )
         y += 16
@@ -127,13 +160,20 @@ fn draw_needs_panel(game : @types.Game) -> Unit {
           Some(sp) => {
             let needs = @types.species_needs(sp)
             @draw.draw_text(
-              "  Species: \{needs.name}", panel_x + 8, y, 13,
+              "  Species: \{needs.name}",
+              panel_x + 8,
+              y,
+              13,
               @types.species_color(sp),
             )
           }
           None =>
             @draw.draw_text(
-              "  No species", panel_x + 8, y, 13, @types.color_hud_text,
+              "  No species",
+              panel_x + 8,
+              y,
+              13,
+              @types.color_hud_text,
             )
         }
       }

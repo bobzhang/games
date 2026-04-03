@@ -67,13 +67,7 @@ fn draw_compass(state : @types.LevelState, frame : Int) -> Unit {
     let blink = frame % 30 < 15
     if blink {
       let land_dir = @types.direction_name(state.near_land_dir)
-      @draw.draw_text(
-        "! Land \{land_dir}",
-        cx - 35,
-        cy + 115,
-        16,
-        hp_warn,
-      )
+      @draw.draw_text("! Land \{land_dir}", cx - 35, cy + 115, 16, hp_warn)
     }
   }
 }

@@ -22,7 +22,7 @@ pub fn handle_level_select_input(game : @types.Game) -> Unit {
     let gap = 12
     let start_x = (@types.screen_width - cols * (btn_w + gap)) / 2
     let start_y = 80
-    for i in 0..< @types.total_levels {
+    for i in 0..<@types.total_levels {
       let row = i / cols
       let col = i % cols
       let x = start_x + col * (btn_w + gap)
@@ -149,7 +149,7 @@ fn place_organism(
   game : @types.Game,
   kind : @types.OrganismKind,
   row : Int,
-  col : Int
+  col : Int,
 ) -> Unit {
   if !@types.in_grid(row, col) {
     return
@@ -169,9 +169,14 @@ fn place_organism(
   game.grid[row][col] = Organism(kind)
   let idx = @types.organism_index(kind)
   game.organisms_placed[idx] = game.organisms_placed[idx] + 1
-  game.organisms.push(
-    { kind, row, col, alive: true, health: @types.max_health, submerged: false },
-  )
+  game.organisms.push({
+    kind,
+    row,
+    col,
+    alive: true,
+    health: @types.max_health,
+    submerged: false,
+  })
   let profile = @types.get_profile(kind)
   set_message(game, "\{profile.name} placed at (\{row},\{col})")
 }

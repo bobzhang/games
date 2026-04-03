@@ -50,9 +50,13 @@ fn draw_tool_panel(game : @types.Game, px : Int, py : Int) -> Unit {
       @types.color_hud_dim
     }
     if selected {
-      @raylib.draw_rectangle(px - 4, ty - 2, 200, 28, @raylib.Color::new(
-        60, 80, 120, 180,
-      ))
+      @raylib.draw_rectangle(
+        px - 4,
+        ty - 2,
+        200,
+        28,
+        @raylib.Color::new(60, 80, 120, 180),
+      )
     }
     @draw.draw_text(label, px, ty, 20, color)
   }
@@ -61,13 +65,8 @@ fn draw_tool_panel(game : @types.Game, px : Int, py : Int) -> Unit {
 ///|
 fn draw_controls(px : Int, py : Int) -> Unit {
   let controls = [
-    "Click: Place/Remove",
-    "1/2/3: Select tool",
-    "Space: Run water",
-    "R: Reset water",
-    "U: Undo",
-    "C: Clear all",
-    "Esc: Back",
+    "Click: Place/Remove", "1/2/3: Select tool", "Space: Run water", "R: Reset water",
+    "U: Undo", "C: Clear all", "Esc: Back",
   ]
   @draw.draw_text("Controls:", px, py, 18, @types.color_hud_text)
   for i, text in controls {

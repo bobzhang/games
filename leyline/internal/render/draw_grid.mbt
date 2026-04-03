@@ -7,7 +7,7 @@ pub fn draw_grid_background() -> Unit {
     @types.grid_rows * @types.cell_size,
     grid_color,
   )
-  for row in 0..=@types.grid_rows {
+  for row in 0..<=@types.grid_rows {
     let y = @types.grid_offset_y + row * @types.cell_size
     @raylib.draw_line(
       @types.grid_offset_x,
@@ -17,7 +17,7 @@ pub fn draw_grid_background() -> Unit {
       grid_line_color,
     )
   }
-  for col in 0..=@types.grid_cols {
+  for col in 0..<=@types.grid_cols {
     let x = @types.grid_offset_x + col * @types.cell_size
     @raylib.draw_line(
       x,
@@ -70,13 +70,7 @@ fn draw_cell(cell : @types.Cell, col : Int, row : Int, phase : Float) -> Unit {
       }
       let label = required.to_int().to_string()
       let tw = @draw.measure_text(label, 14)
-      @draw.draw_text(
-        label,
-        x + half - tw / 2,
-        y + half - 6,
-        14,
-        @raylib.white,
-      )
+      @draw.draw_text(label, x + half - tw / 2, y + half - 6, 14, @raylib.white)
     }
     Waystone => {
       @raylib.draw_circle_v(
@@ -116,7 +110,7 @@ fn draw_diamond(
   cx : Float,
   cy : Float,
   size : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let top = @raylib.Vector2::new(cx, cy - size)
   let right = @raylib.Vector2::new(cx + size, cy)
@@ -167,7 +161,11 @@ pub fn draw_cursor(state : @types.LevelState, tool : @types.Tool) -> Unit {
   let cell = state.grid[state.cursor_row][state.cursor_col]
   let color = match tool {
     PlaceWaystone =>
-      if cell.kind is Empty { cursor_valid_color } else { cursor_invalid_color }
+      if cell.kind is Empty {
+        cursor_valid_color
+      } else {
+        cursor_invalid_color
+      }
     RemoveWaystone =>
       if cell.kind is Waystone {
         cursor_valid_color

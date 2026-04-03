@@ -104,3 +104,55 @@ pub let char_cell_h : Int = 36
 
 ///|
 pub let max_undo : Int = 100
+
+// Tool panel shared layout (used by both update hit-testing and render)
+
+///|
+pub let tool_panel_y : Int = 55
+
+///|
+pub let tool_tab_h : Int = 30
+
+///|
+pub let tool_content_offset_y : Int = 40
+
+///|
+pub let swap_grid_offset_y : Int = 72
+
+///|
+pub let swap_cell_size : Int = 40
+
+///|
+pub let swap_cell_gap : Int = 4
+
+///|
+pub let swap_cols : Int = 7
+
+///|
+pub let swap_grid_inset_x : Int = 15
+
+///|
+pub let pattern_content_offset_y : Int = 50
+
+///|
+pub let pattern_row_height : Int = 20
+
+///|
+pub let pattern_row_top : Int = 20
+
+///|
+pub let pattern_max_show : Int = 10
+
+// Alphabet strip layout
+
+///|
+pub let strip_y_offset : Int = 65
+
+///|
+pub let strip_cell_w : Int = 42
+
+///|
+pub let strip_cell_h : Int = 44
+
+///|
+pub let strip_x : Int = 40

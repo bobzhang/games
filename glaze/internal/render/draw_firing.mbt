@@ -97,12 +97,8 @@ fn draw_firing(game : @types.Game) -> Unit {
   // Fire particles at the bottom
   let fire_y = kiln_y + kiln_h + 10
   for i in 0..<20 {
-    let fx = Float::from_int(
-      kiln_x + 20 + (i * (kiln_w - 40)) / 20,
-    )
-    let flicker = @types.sinf(
-      Float::from_int(i * 17) + time * 8.0,
-    )
+    let fx = Float::from_int(kiln_x + 20 + i * (kiln_w - 40) / 20)
+    let flicker = @types.sinf(Float::from_int(i * 17) + time * 8.0)
     let fy = Float::from_int(fire_y) - flicker * 15.0 - 10.0
     let size : Float = 4.0 + flicker * 3.0
     let fire_r = 255

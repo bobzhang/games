@@ -60,3 +60,24 @@ pub fn set_message(game : Game, msg : String) -> Unit {
   game.message = msg
   game.message_timer = 2.5
 }
+
+///|
+pub fn Game::is_level_unlocked(self : Game, level_id : Int) -> Bool {
+  if level_id == 0 {
+    return true
+  }
+  if level_id > 0 && self.stars_earned[level_id - 1] > 0 {
+    return true
+  }
+  false
+}
+
+///|
+pub fn tier_label(tier : Int) -> String {
+  match tier {
+    1 => "I"
+    2 => "II"
+    3 => "III"
+    _ => "?"
+  }
+}

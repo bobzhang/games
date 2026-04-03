@@ -109,9 +109,7 @@ fn draw_message_area(game : @types.Game, level : @types.Level) -> Unit {
           @types.color_amber
         } else if in_pattern {
           // Highlighted pattern: pulsing teal/cyan background
-          let pulse = @types.sinf(
-              Float::from_int(game.frame_count) * 0.12,
-            ) *
+          let pulse = @types.sinf(Float::from_int(game.frame_count) * 0.12) *
             0.3 +
             0.7
           let alpha = (pulse * 140.0).to_int()
@@ -186,9 +184,9 @@ fn draw_message_area(game : @types.Game, level : @types.Level) -> Unit {
 
 ///|
 fn draw_alphabet_strip(game : @types.Game, level : @types.Level) -> Unit {
-  let strip_y = @types.screen_height - 65
-  let strip_x = 40
-  let cell_w = 42
+  let strip_y = @types.screen_height - @types.strip_y_offset
+  let strip_x = @types.strip_x
+  let cell_w = @types.strip_cell_w
   @raylib.draw_rectangle(
     strip_x - 10,
     strip_y - 10,
@@ -217,7 +215,7 @@ fn draw_alphabet_strip(game : @types.Game, level : @types.Level) -> Unit {
     } else {
       @types.color_bg
     }
-    @raylib.draw_rectangle(x, strip_y, cell_w - 4, 44, bg)
+    @raylib.draw_rectangle(x, strip_y, cell_w - 4, @types.strip_cell_h, bg)
     // Cipher letter on top
     let tc = if is_selected { @types.color_bg } else { @types.color_cyan }
     @draw.draw_text(letter.to_string(), x + 4, strip_y + 2, 14, tc)

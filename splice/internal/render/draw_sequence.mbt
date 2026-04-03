@@ -118,12 +118,7 @@ fn draw_sequence(game : @types.Game) -> Unit {
       sy,
       base_size,
       base_size,
-      @raylib.Color::new(
-        color.r.to_int(),
-        color.g.to_int(),
-        color.b.to_int(),
-        60,
-      ),
+      @types.color_with_alpha(color, 60),
     )
     @raylib.draw_rectangle_lines(bx, sy, base_size, base_size, color)
     // Base letter
@@ -201,12 +196,7 @@ fn draw_codon_brackets(game : @types.Game, sx_start : Int, y : Int) -> Unit {
     // Color bracket with the trait's color for instant identification
     let tr = @types.codon_to_trait(seq[pos], seq[pos + 1], seq[pos + 2])
     let trait_col = @types.trait_color(tr)
-    let bracket_color = @raylib.Color::new(
-      trait_col.r.to_int(),
-      trait_col.g.to_int(),
-      trait_col.b.to_int(),
-      160,
-    )
+    let bracket_color = @types.color_with_alpha(trait_col, 160)
     // Draw bracket: top bar with tick marks
     @raylib.draw_line(bx1, y, bx2, y, bracket_color)
     @raylib.draw_line(bx1, y, bx1, y + 6, bracket_color)
@@ -226,12 +216,7 @@ fn draw_codon_brackets(game : @types.Game, sx_start : Int, y : Int) -> Unit {
       tint_y,
       bx2 - bx1 + 2,
       tint_h,
-      @raylib.Color::new(
-        trait_col.r.to_int(),
-        trait_col.g.to_int(),
-        trait_col.b.to_int(),
-        20,
-      ),
+      @types.color_with_alpha(trait_col, 20),
     )
     if tr == Stop {
       break
@@ -247,11 +232,7 @@ fn draw_trait_readout(game : @types.Game) -> Unit {
   @draw.draw_text("TRAITS:", 20, ty - 25, 16, @types.color_text_dim)
   if groups.length() == 0 {
     @draw.draw_text(
-      "No valid reading frame (ATG start codon not found)",
-      20,
-      ty,
-      16,
-      @types.color_fail,
+      "No valid reading frame (ATG start codon not found)", 20, ty, 16, @types.color_fail,
     )
     return
   }
@@ -272,12 +253,7 @@ fn draw_trait_readout(game : @types.Game) -> Unit {
       ty,
       box_w - 4,
       30,
-      @raylib.Color::new(
-        color.r.to_int(),
-        color.g.to_int(),
-        color.b.to_int(),
-        35,
-      ),
+      @types.color_with_alpha(color, 35),
     )
     @raylib.draw_rectangle_lines(tx, ty, box_w, 30, color)
     // Trait name
@@ -292,14 +268,7 @@ fn draw_trait_readout(game : @types.Game) -> Unit {
     // Arrow between traits
     if i < groups.length() - 1 {
       tx += box_w + 4
-      // Colored arrow using a triangle shape
-      let arrow_y = ty + 15
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(Float::from_int(tx + 10), Float::from_int(arrow_y)),
-        @raylib.Vector2::new(Float::from_int(tx + 2), Float::from_int(arrow_y - 5)),
-        @raylib.Vector2::new(Float::from_int(tx + 2), Float::from_int(arrow_y + 5)),
-        @raylib.Color::new(100, 110, 130, 180),
-      )
+      draw_trait_arrow(tx, ty + 15)
       tx += 14
     } else {
       tx += box_w
@@ -387,29 +356,27 @@ fn draw_target_comparison(game : @types.Game, level : @types.Level) -> Unit {
     } else if i < produced.length() {
       // Show what was produced instead
       let got = @types.trait_name(produced[i])
-      @draw.draw_text(
-        "got:" + got,
-        tx + 2,
-        ty + 34,
-        10,
-        @types.color_fail,
-      )
+      @draw.draw_text("got:" + got, tx + 2, ty + 34, 10, @types.color_fail)
     } else {
       @draw.draw_text("---", tx + box_w / 2 - 8, ty + 34, 12, @types.color_fail)
     }
     // Arrow between target traits
     if i < target.length() - 1 {
       tx += box_w + 4
-      let arrow_y = ty + 15
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(Float::from_int(tx + 10), Float::from_int(arrow_y)),
-        @raylib.Vector2::new(Float::from_int(tx + 2), Float::from_int(arrow_y - 5)),
-        @raylib.Vector2::new(Float::from_int(tx + 2), Float::from_int(arrow_y + 5)),
-        @raylib.Color::new(100, 110, 130, 180),
-      )
+      draw_trait_arrow(tx, ty + 15)
       tx += 14
     } else {
       tx += box_w
     }
   }
+}
+
+///|
+fn draw_trait_arrow(x : Int, y : Int) -> Unit {
+  @raylib.draw_triangle(
+    @raylib.Vector2::new(Float::from_int(x + 10), Float::from_int(y)),
+    @raylib.Vector2::new(Float::from_int(x + 2), Float::from_int(y - 5)),
+    @raylib.Vector2::new(Float::from_int(x + 2), Float::from_int(y + 5)),
+    @raylib.Color::new(100, 110, 130, 180),
+  )
 }

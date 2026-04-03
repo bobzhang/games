@@ -5,7 +5,9 @@ pub let color_bg : @raylib.Color = @raylib.Color::new(15, 25, 20, 255)
 pub let color_jar : @raylib.Color = @raylib.Color::new(180, 220, 200, 60)
 
 ///|
-pub let color_jar_border : @raylib.Color = @raylib.Color::new(140, 180, 160, 120)
+pub let color_jar_border : @raylib.Color = @raylib.Color::new(
+  140, 180, 160, 120,
+)
 
 ///|
 pub let color_soil : @raylib.Color = @raylib.Color::new(90, 65, 40, 255)
@@ -74,7 +76,9 @@ pub let color_subtitle : @raylib.Color = @raylib.Color::new(100, 180, 120, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(60, 120, 80, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(80, 160, 100, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  80, 160, 100, 255,
+)
 
 ///|
 pub let color_dead : @raylib.Color = @raylib.Color::new(120, 60, 60, 255)

@@ -50,10 +50,10 @@ fn draw_title(game : @types.Game) -> Unit {
   // Credits
   @draw.draw_text(
     "Thread your heddles, weave the pattern",
-    (@types.screen_width - @draw.measure_text(
-        "Thread your heddles, weave the pattern",
-        18,
-      )) /
+    (
+      @types.screen_width -
+      @draw.measure_text("Thread your heddles, weave the pattern", 18)
+    ) /
     2,
     530,
     18,
@@ -67,13 +67,7 @@ fn draw_title_pattern(x : Int, y : Int, w : Int, h : Int) -> Unit {
   let cs = 15
   let cols = w / cs
   let rows = h / cs
-  @raylib.draw_rectangle(
-    x - 2,
-    y - 2,
-    w + 4,
-    h + 4,
-    @types.color_loom_frame,
-  )
+  @raylib.draw_rectangle(x - 2, y - 2, w + 4, h + 4, @types.color_loom_frame)
   for row in 0..<rows {
     for col in 0..<cols {
       let is_warp = (row + col) % 2 == 0
@@ -88,11 +82,21 @@ fn draw_title_pattern(x : Int, y : Int, w : Int, h : Int) -> Unit {
 fn draw_tier_select(game : @types.Game) -> Unit {
   let _ = game
   @draw.draw_text("Select Tier", 100, 60, 40, @types.color_title)
-  @draw.draw_text("Choose your weaving challenge", 100, 110, 20, @types.color_text_light)
+  @draw.draw_text(
+    "Choose your weaving challenge", 100, 110, 20, @types.color_text_light,
+  )
   let tiers : Array[(@types.Tier, String, String)] = [
     (Apprentice, "Apprentice", "Plain weave - learn the basics (Levels 1-7)"),
-    (Journeyman, "Journeyman", "Twill & satin - diagonal patterns (Levels 8-14)"),
-    (Master, "Master", "Herringbone & diamond - complex patterns (Levels 15-20)"),
+    (
+      Journeyman,
+      "Journeyman",
+      "Twill & satin - diagonal patterns (Levels 8-14)",
+    ),
+    (
+      Master,
+      "Master",
+      "Herringbone & diamond - complex patterns (Levels 15-20)",
+    ),
   ]
   for i in 0..<3 {
     let (_, name, desc) = tiers[i]
@@ -109,7 +113,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     // Tier name
     @draw.draw_text(name, 420, ty + 10, 32, @raylib.white)
     // Description
-    @draw.draw_text(desc, 420, ty + 55, 18, @raylib.Color::new(255, 240, 220, 255))
+    @draw.draw_text(
+      desc,
+      420,
+      ty + 55,
+      18,
+      @raylib.Color::new(255, 240, 220, 255),
+    )
     // Star count for completed levels
     let (start, count) = @types.tier_levels(tiers[i].0)
     let mut completed = 0
@@ -209,7 +219,12 @@ fn draw_stars_small(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 }
 
 ///|
-fn draw_star_shape(cx : Int, cy : Int, radius : Int, color : @raylib.Color) -> Unit {
+fn draw_star_shape(
+  cx : Int,
+  cy : Int,
+  radius : Int,
+  color : @raylib.Color,
+) -> Unit {
   // Simple star as a filled circle with rays
   let r = radius
   @raylib.draw_circle(cx, cy, Float::from_int(r), color)
@@ -217,50 +232,26 @@ fn draw_star_shape(cx : Int, cy : Int, radius : Int, color : @raylib.Color) -> U
   let half = r / 2
   @raylib.draw_triangle(
     @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy - r - half)),
-    @raylib.Vector2::new(
-      Float::from_int(cx - half),
-      Float::from_int(cy - half),
-    ),
-    @raylib.Vector2::new(
-      Float::from_int(cx + half),
-      Float::from_int(cy - half),
-    ),
+    @raylib.Vector2::new(Float::from_int(cx - half), Float::from_int(cy - half)),
+    @raylib.Vector2::new(Float::from_int(cx + half), Float::from_int(cy - half)),
     color,
   )
   @raylib.draw_triangle(
     @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy + r + half)),
-    @raylib.Vector2::new(
-      Float::from_int(cx + half),
-      Float::from_int(cy + half),
-    ),
-    @raylib.Vector2::new(
-      Float::from_int(cx - half),
-      Float::from_int(cy + half),
-    ),
+    @raylib.Vector2::new(Float::from_int(cx + half), Float::from_int(cy + half)),
+    @raylib.Vector2::new(Float::from_int(cx - half), Float::from_int(cy + half)),
     color,
   )
   @raylib.draw_triangle(
     @raylib.Vector2::new(Float::from_int(cx - r - half), Float::from_int(cy)),
-    @raylib.Vector2::new(
-      Float::from_int(cx - half),
-      Float::from_int(cy + half),
-    ),
-    @raylib.Vector2::new(
-      Float::from_int(cx - half),
-      Float::from_int(cy - half),
-    ),
+    @raylib.Vector2::new(Float::from_int(cx - half), Float::from_int(cy + half)),
+    @raylib.Vector2::new(Float::from_int(cx - half), Float::from_int(cy - half)),
     color,
   )
   @raylib.draw_triangle(
     @raylib.Vector2::new(Float::from_int(cx + r + half), Float::from_int(cy)),
-    @raylib.Vector2::new(
-      Float::from_int(cx + half),
-      Float::from_int(cy - half),
-    ),
-    @raylib.Vector2::new(
-      Float::from_int(cx + half),
-      Float::from_int(cy + half),
-    ),
+    @raylib.Vector2::new(Float::from_int(cx + half), Float::from_int(cy - half)),
+    @raylib.Vector2::new(Float::from_int(cx + half), Float::from_int(cy + half)),
     color,
   )
 }

@@ -59,7 +59,7 @@ fn reset_energy(state : @types.LevelState) -> Unit {
 fn propagate_from_source(
   state : @types.LevelState,
   src_col : Int,
-  src_row : Int
+  src_row : Int,
 ) -> Unit {
   let grid = state.grid
   let connections = state.connections
@@ -90,8 +90,7 @@ fn propagate_from_source(
       } else {
         decayed
       }
-      grid[nr][nc].energy_received = grid[nr][nc].energy_received +
-        final_energy
+      grid[nr][nc].energy_received = grid[nr][nc].energy_received + final_energy
       // Set connection flow
       set_connection_flow(connections, col, row, nc, nr, split_energy)
       // Continue propagation if not a void or empty cell
@@ -105,12 +104,12 @@ fn propagate_from_source(
 ///|
 fn count_unvisited(
   neighbors : Array[(Int, Int)],
-  visited : Array[(Int, Int)]
+  visited : Array[(Int, Int)],
 ) -> Int {
   let mut count = 0
   for i in 0..<neighbors.length() {
     let (c, r) = neighbors[i]
-    if !(is_visited(visited, c, r)) {
+    if !is_visited(visited, c, r) {
       count = count + 1
     }
   }
@@ -135,18 +134,22 @@ fn set_connection_flow(
   r1 : Int,
   c2 : Int,
   r2 : Int,
-  flow : Float
+  flow : Float,
 ) -> Unit {
   for i in 0..<connections.length() {
     let conn = connections[i]
-    if (conn.from_col == c1 &&
-      conn.from_row == r1 &&
-      conn.to_col == c2 &&
-      conn.to_row == r2) ||
-      (conn.from_col == c2 &&
-      conn.from_row == r2 &&
-      conn.to_col == c1 &&
-      conn.to_row == r1) {
+    if (
+        conn.from_col == c1 &&
+        conn.from_row == r1 &&
+        conn.to_col == c2 &&
+        conn.to_row == r2
+      ) ||
+      (
+        conn.from_col == c2 &&
+        conn.from_row == r2 &&
+        conn.to_col == c1 &&
+        conn.to_row == r1
+      ) {
       conn.energy_flow = flow
       return
     }

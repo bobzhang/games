@@ -8,10 +8,14 @@ pub let color_water_deep : @raylib.Color = @raylib.Color::new(20, 50, 100, 255)
 pub let color_water_mid : @raylib.Color = @raylib.Color::new(30, 80, 140, 255)
 
 ///|
-pub let color_water_shallow : @raylib.Color = @raylib.Color::new(50, 120, 180, 255)
+pub let color_water_shallow : @raylib.Color = @raylib.Color::new(
+  50, 120, 180, 255,
+)
 
 ///|
-pub let color_water_surface : @raylib.Color = @raylib.Color::new(80, 160, 220, 200)
+pub let color_water_surface : @raylib.Color = @raylib.Color::new(
+  80, 160, 220, 200,
+)
 
 ///|
 pub let color_rock : @raylib.Color = @raylib.Color::new(100, 90, 80, 255)
@@ -71,7 +75,9 @@ pub let color_subtitle : @raylib.Color = @raylib.Color::new(80, 160, 200, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(40, 80, 120, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(60, 110, 160, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  60, 110, 160, 255,
+)
 
 ///|
 pub let color_dead : @raylib.Color = @raylib.Color::new(120, 60, 60, 255)
@@ -101,7 +107,9 @@ pub let color_star : @raylib.Color = @raylib.Color::new(255, 220, 50, 255)
 pub let color_star_off : @raylib.Color = @raylib.Color::new(80, 80, 60, 255)
 
 ///|
-pub let color_tide_indicator : @raylib.Color = @raylib.Color::new(100, 200, 255, 160)
+pub let color_tide_indicator : @raylib.Color = @raylib.Color::new(
+  100, 200, 255, 160,
+)
 
 ///|
 pub let color_submerged : @raylib.Color = @raylib.Color::new(40, 100, 180, 80)

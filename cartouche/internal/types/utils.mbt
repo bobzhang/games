@@ -415,3 +415,75 @@ pub fn total_stars(game : Game) -> Int {
 pub fn is_given_symbol(tablet : Tablet, sym : Symbol) -> Bool {
   mapping_get(tablet.given_mapping, sym) >= 0
 }
+
+///|
+pub fn count_symbol_frequency(inscription : Inscription, sym : Symbol) -> Int {
+  let mut count = 0
+  for j in 0..<inscription.symbols.length() {
+    match inscription.symbols[j].symbol {
+      Some(s) => if s == sym { count += 1 }
+      None => ()
+    }
+  }
+  count
+}
+
+///|
+pub(all) struct SymbolPosition {
+  x : Int
+  y : Int
+  symbol : Symbol?
+} derive(Show)
+
+///|
+pub fn compute_symbol_positions(
+  inscription : Inscription,
+  base_x : Int,
+  base_y : Int,
+  max_width : Int,
+  line_height : Int,
+  spacing : Int,
+  gap : Int,
+) -> Array[SymbolPosition] {
+  let result : Array[SymbolPosition] = []
+  let mut cx = 0
+  let mut cy = 0
+  for i in 0..<inscription.symbols.length() {
+    match inscription.symbols[i].symbol {
+      None => {
+        cx = cx + gap
+        if cx > max_width - spacing {
+          cx = 0
+          cy = cy + line_height
+        }
+        result.push({ x: base_x + cx, y: base_y + cy, symbol: None })
+      }
+      Some(sym) => {
+        if cx > max_width - spacing {
+          cx = 0
+          cy = cy + line_height
+        }
+        result.push({ x: base_x + cx, y: base_y + cy, symbol: Some(sym) })
+        cx = cx + spacing
+      }
+    }
+  }
+  result
+}
+
+///|
+pub fn palette_button_pos(
+  index : Int,
+  px : Int,
+  py : Int,
+  btn_size : Int,
+  btn_gap : Int,
+  cols : Int,
+  label_offset_y : Int,
+) -> (Int, Int) {
+  let row = index / cols
+  let col = index % cols
+  let bx = px + col * (btn_size + btn_gap)
+  let by = py + label_offset_y + row * (btn_size + btn_gap)
+  (bx, by)
+}

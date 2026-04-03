@@ -96,13 +96,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   // Title
   let title = "SELECT LEVEL"
   let title_w = @draw.measure_text(title, 36)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    30,
-    36,
-    @types.color_title,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, 30, 36, @types.color_title)
   // Draw three tier sections
   draw_tier_section(game, Reflection, "Tier 1: Reflection", 0, 7, 90)
   draw_tier_section(game, Overlap, "Tier 2: Overlap", 7, 7, 300)
@@ -135,7 +129,7 @@ fn draw_tier_section(
   label : String,
   start_idx : Int,
   count : Int,
-  y_offset : Int
+  y_offset : Int,
 ) -> Unit {
   let w = @types.screen_width
   // Tier label
@@ -224,10 +218,7 @@ fn draw_playing(game : @types.Game) -> Unit {
   draw_hud(game)
   // Draw message
   if game.message_timer > 0.0 {
-    let alpha = @types.mini(
-      (game.message_timer * 3.0 * 255.0).to_int(),
-      255,
-    )
+    let alpha = @types.mini((game.message_timer * 3.0 * 255.0).to_int(), 255)
     let msg_w = @draw.measure_text(game.message, 24)
     @draw.draw_text(
       game.message,
@@ -290,11 +281,7 @@ fn draw_split_view(game : @types.Game) -> Unit {
   }
   // Dim overlay on inactive layer area
   @raylib.draw_rectangle(
-    ox,
-    oy,
-    @types.grid_width,
-    @types.grid_height,
-    @types.color_inactive_overlay,
+    ox, oy, @types.grid_width, @types.grid_height, @types.color_inactive_overlay,
   )
   // Draw active layer on top
   for row in 0..<@types.grid_rows {
@@ -324,13 +311,7 @@ fn draw_merged_view(game : @types.Game) -> Unit {
       // If either is walkable, show the one that is
       if @types.is_walkable(fg_tile) && @types.is_walkable(bg_tile) {
         // Both walkable - show merged color
-        @raylib.draw_rectangle(
-          x,
-          y,
-          ts,
-          ts,
-          @types.color_merged,
-        )
+        @raylib.draw_rectangle(x, y, ts, ts, @types.color_merged)
         @raylib.draw_rectangle_lines(
           x,
           y,
@@ -362,16 +343,11 @@ fn draw_tile(
   size : Int,
   tile : @types.Tile,
   is_fg : Bool,
-  alpha_mult : Float
+  alpha_mult : Float,
 ) -> Unit {
   let base_color = match tile {
     Empty => @types.color_bg
-    Floor =>
-      if is_fg {
-        @types.color_floor_fg
-      } else {
-        @types.color_floor_bg
-      }
+    Floor => if is_fg { @types.color_floor_fg } else { @types.color_floor_bg }
     Wall => @types.color_wall
     Gap => @types.color_gap
     Exit => @types.color_exit
@@ -503,13 +479,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   @draw.draw_text(level_str, 20, 10, 18, @types.color_hud_text)
   // Tier
   let tier_str = @types.tier_name(level_def.tier)
-  @draw.draw_text(
-    tier_str,
-    20,
-    34,
-    14,
-    @raylib.Color::new(120, 130, 160, 200),
-  )
+  @draw.draw_text(tier_str, 20, 34, 14, @raylib.Color::new(120, 130, 160, 200))
   // Swap counter
   let swap_str = "Swaps: " +
     game.swap_count.to_string() +
@@ -573,13 +543,7 @@ fn draw_level_complete(game : @types.Game) -> Unit {
   // Title
   let title = "LEVEL COMPLETE!"
   let title_w = @draw.measure_text(title, 40)
-  @draw.draw_text(
-    title,
-    (w - title_w) / 2,
-    h / 4 - 20,
-    40,
-    @types.color_exit,
-  )
+  @draw.draw_text(title, (w - title_w) / 2, h / 4 - 20, 40, @types.color_exit)
   // Level name
   let name_str = level_def.name
   let name_w = @draw.measure_text(name_str, 24)
@@ -663,13 +627,7 @@ fn draw_game_complete(game : @types.Game) -> Unit {
   )
   let sub = "All levels completed!"
   let sub_w = @draw.measure_text(sub, 24)
-  @draw.draw_text(
-    sub,
-    (w - sub_w) / 2,
-    h / 4 + 60,
-    24,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(sub, (w - sub_w) / 2, h / 4 + 60, 24, @types.color_hud_text)
   // Total stars
   let mut total_stars = 0
   let max_stars = @types.total_levels * 3

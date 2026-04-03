@@ -259,12 +259,7 @@ fn draw_damage_overlay(
         let stain_light = @raylib.Color::new(70, 55, 40, 160)
         // Main stain blob (large, organic)
         let r1 : Float = 14.0 + @types.sinf(time) * 1.5
-        @raylib.draw_circle(
-          x + size / 3,
-          y + size / 3,
-          r1,
-          stain_dark,
-        )
+        @raylib.draw_circle(x + size / 3, y + size / 3, r1, stain_dark)
         // Secondary blob overlapping
         @raylib.draw_circle(
           x + size / 3 + 8,
@@ -298,13 +293,7 @@ fn draw_damage_overlay(
         let fade_color = @raylib.Color::new(230, 225, 215, 160)
         let line_color = @raylib.Color::new(210, 205, 195, 120)
         // Base wash
-        @raylib.draw_rectangle(
-          x + 3,
-          y + 3,
-          size - 6,
-          size - 6,
-          fade_color,
-        )
+        @raylib.draw_rectangle(x + 3, y + 3, size - 6, size - 6, fade_color)
         // Diagonal hatching pattern - shows bleached/faded texture
         let step = 8
         let count = size * 2 / step
@@ -333,13 +322,7 @@ fn draw_damage_overlay(
         // Irregular flake patches
         @raylib.draw_rectangle(x + 6, y + 10, 20, 16, underlayer)
         @raylib.draw_rectangle_lines(x + 6, y + 10, 20, 16, edge_color)
-        @raylib.draw_rectangle(
-          x + size - 30,
-          y + size - 28,
-          18,
-          14,
-          underlayer,
-        )
+        @raylib.draw_rectangle(x + size - 30, y + size - 28, 18, 14, underlayer)
         @raylib.draw_rectangle_lines(
           x + size - 30,
           y + size - 28,
@@ -347,13 +330,7 @@ fn draw_damage_overlay(
           14,
           edge_color,
         )
-        @raylib.draw_rectangle(
-          x + size / 2 - 8,
-          y + 4,
-          16,
-          12,
-          underlayer,
-        )
+        @raylib.draw_rectangle(x + size / 2 - 8, y + 4, 16, 12, underlayer)
         @raylib.draw_rectangle_lines(
           x + size / 2 - 8,
           y + 4,
@@ -362,7 +339,13 @@ fn draw_damage_overlay(
           edge_color,
         )
         // Scattered small flake fragments
-        @raylib.draw_rectangle(x + size / 2 + 10, y + size / 2, 8, 6, underlayer)
+        @raylib.draw_rectangle(
+          x + size / 2 + 10,
+          y + size / 2,
+          8,
+          6,
+          underlayer,
+        )
         @raylib.draw_rectangle(x + 10, y + size - 18, 10, 8, underlayer)
       }
     }
@@ -436,12 +419,7 @@ fn draw_tool_preview(
   let icon_bg = if is_danger {
     @raylib.Color::new(200, 50, 50, 200)
   } else {
-    @raylib.Color::new(
-      tc.r.to_int(),
-      tc.g.to_int(),
-      tc.b.to_int(),
-      200,
-    )
+    @raylib.Color::new(tc.r.to_int(), tc.g.to_int(), tc.b.to_int(), 200)
   }
   @raylib.draw_rectangle(icon_x, icon_y, icon_size, icon_size, icon_bg)
   // Tool letter abbreviation

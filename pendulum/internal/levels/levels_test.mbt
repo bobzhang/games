@@ -163,7 +163,9 @@ test "tier 1 levels have correct tier tag" {
 
 ///|
 test "tier 2 levels have correct tier tag" {
-  for i = @types.tier1_count; i < @types.tier1_count + @types.tier2_count; i = i + 1 {
+  for i = @types.tier1_count
+      i < @types.tier1_count + @types.tier2_count
+      i = i + 1 {
     let level = get_level(i)
     assert_eq(level.tier, Wrap)
   }

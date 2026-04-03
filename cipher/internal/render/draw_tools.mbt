@@ -2,7 +2,7 @@
 fn draw_tool_panel(game : @types.Game, level : @types.Level) -> Unit {
   let px = @types.tool_panel_x
   let pw = @types.tool_panel_w
-  let py = 55
+  let py = @types.tool_panel_y
   let ph = @types.screen_height - 125
   // Panel background
   @raylib.draw_rectangle(px, py, pw, ph, @types.color_panel)
@@ -19,12 +19,14 @@ fn draw_tool_panel(game : @types.Game, level : @types.Level) -> Unit {
     } else {
       @types.color_button
     }
-    @raylib.draw_rectangle(tx, py, tab_w, 30, bg)
-    @raylib.draw_rectangle_lines(tx, py, tab_w, 30, @types.color_panel_border)
+    @raylib.draw_rectangle(tx, py, tab_w, @types.tool_tab_h, bg)
+    @raylib.draw_rectangle_lines(
+      tx, py, tab_w, @types.tool_tab_h, @types.color_panel_border,
+    )
     let tc = if is_active { @types.color_green } else { @types.color_dim }
     @draw.draw_text(tab_names[t], tx + 10, py + 7, 14, tc)
   }
-  let content_y = py + 40
+  let content_y = py + @types.tool_content_offset_y
   match game.active_tool {
     FrequencyChart => draw_frequency_chart(game, level, px, content_y, pw)
     LetterSwap => draw_letter_swap(game, level, px, content_y, pw)
@@ -46,13 +48,7 @@ fn draw_frequency_chart(
   py : Int,
   pw : Int,
 ) -> Unit {
-  @draw.draw_text(
-    "FREQUENCY ANALYSIS",
-    px + 10,
-    py,
-    14,
-    @types.color_text,
-  )
+  @draw.draw_text("FREQUENCY ANALYSIS", px + 10, py, 14, @types.color_text)
   let cipher_freq = @crypto.letter_frequency_pct(level.ciphertext)
   let chart_x = px + 10
   let chart_y = py + 22
@@ -85,9 +81,7 @@ fn draw_frequency_chart(
     let bx = chart_x + i * pair_w
     let is_hovered = i == hovered_letter
     // English bar (left half, blue-tinted)
-    let eng_h = (@types.english_freq[i] / max_freq * Float::from_int(
-        bar_area_h,
-      )).to_int()
+    let eng_h = (@types.english_freq[i] / max_freq * Float::from_int(bar_area_h)).to_int()
     let eng_color = if is_hovered {
       @raylib.Color::new(80, 80, 150, 220)
     } else {
@@ -180,7 +174,13 @@ fn draw_frequency_chart(
   let legend_y = baseline_y + 50
   @raylib.draw_rectangle(chart_x, legend_y, 10, 10, @types.color_bar_english)
   @draw.draw_text("English", chart_x + 14, legend_y, 11, @types.color_dim)
-  @raylib.draw_rectangle(chart_x + 80, legend_y, 10, 10, @types.color_bar_cipher)
+  @raylib.draw_rectangle(
+    chart_x + 80,
+    legend_y,
+    10,
+    10,
+    @types.color_bar_cipher,
+  )
   @draw.draw_text("Cipher", chart_x + 94, legend_y, 11, @types.color_dim)
   // Top English letters guide
   @draw.draw_text(
@@ -230,13 +230,13 @@ fn draw_letter_swap(
     )
   }
   // Plain letter grid for assignment
-  let grid_y = py + 72
-  let cell = 40
+  let grid_y = py + @types.swap_grid_offset_y
+  let cell = @types.swap_cell_size
   for i in 0..<26 {
-    let col = i % 7
-    let row = i / 7
-    let gx = px + 15 + col * (cell + 4)
-    let gy = grid_y + row * (cell + 4)
+    let col = i % @types.swap_cols
+    let row = i / @types.swap_cols
+    let gx = px + @types.swap_grid_inset_x + col * (cell + @types.swap_cell_gap)
+    let gy = grid_y + row * (cell + @types.swap_cell_gap)
     let letter = @types.idx_to_char(i)
     let used = game.mapping.plain_used[i]
     let bg = if used { @types.color_dark_green } else { @types.color_button }
@@ -254,7 +254,7 @@ fn draw_letter_swap(
     @draw.draw_text(letter.to_string(), gx + 10, gy + 8, 20, tc)
   }
   // Current mappings list
-  let list_y = grid_y + 4 * (cell + 4) + 20
+  let list_y = grid_y + 4 * (cell + @types.swap_cell_gap) + 20
   @draw.draw_text("CURRENT MAPPINGS:", px + 10, list_y, 12, @types.color_dim)
   let mut line = 0
   for i in 0..<26 {
@@ -303,7 +303,7 @@ fn draw_pattern_finder(
   } else {
     game.cached_patterns
   }
-  let pat_y = py + 50
+  let pat_y = py + @types.pattern_content_offset_y
   @draw.draw_text(
     "Click a pattern to highlight:",
     px + 10,
@@ -311,12 +311,12 @@ fn draw_pattern_finder(
     13,
     @types.color_amber,
   )
-  let max_show = @types.mini(patterns.length(), 10)
+  let max_show = @types.mini(patterns.length(), @types.pattern_max_show)
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   for i in 0..<max_show {
     let p = patterns[i]
-    let row_y = pat_y + 20 + i * 20
+    let row_y = pat_y + @types.pattern_row_top + i * @types.pattern_row_height
     let row_h = 18
     let is_selected = i == game.selected_pattern_idx
     let hover = mx >= px + 5 &&

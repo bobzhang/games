@@ -318,38 +318,29 @@ fn find_clicked_symbol(
   mouse_x : Int,
   mouse_y : Int,
 ) -> @types.Symbol? {
-  let inscription = tablet.inscription
-  let base_x = @types.tablet_x + 30
-  let base_y = @types.tablet_y + 40
-  let max_width = @types.tablet_width - 60
-  let line_height = 90
-  let mut cx = 0
-  let mut cy = 0
+  let base_x = @types.tablet_x + @types.inscription_margin_x
+  let base_y = @types.tablet_y + @types.inscription_margin_y
+  let max_width = @types.tablet_width - @types.inscription_max_margin
   let size = @types.symbol_size.to_int()
-  for i in 0..<inscription.symbols.length() {
-    match inscription.symbols[i].symbol {
-      None => {
-        cx = cx + @types.word_gap
-        if cx > max_width - @types.symbol_spacing {
-          cx = 0
-          cy = cy + line_height
-        }
-      }
-      Some(sym) => {
-        if cx > max_width - @types.symbol_spacing {
-          cx = 0
-          cy = cy + line_height
-        }
-        let sx = base_x + cx
-        let sy = base_y + cy
-        if mouse_x >= sx &&
-          mouse_x <= sx + size &&
-          mouse_y >= sy &&
-          mouse_y <= sy + size {
+  let positions = @types.compute_symbol_positions(
+    tablet.inscription,
+    base_x,
+    base_y,
+    max_width,
+    @types.inscription_line_height,
+    @types.symbol_spacing,
+    @types.word_gap,
+  )
+  for pos in positions {
+    match pos.symbol {
+      Some(sym) =>
+        if mouse_x >= pos.x &&
+          mouse_x <= pos.x + size &&
+          mouse_y >= pos.y &&
+          mouse_y <= pos.y + size {
           return Some(sym)
         }
-        cx = cx + @types.symbol_spacing
-      }
+      None => ()
     }
   }
   None
@@ -357,15 +348,12 @@ fn find_clicked_symbol(
 
 ///|
 fn find_clicked_letter(mouse_x : Int, mouse_y : Int) -> Int {
-  let px = @types.palette_x
-  let py = @types.palette_y + 28
   let btn_size = @types.palette_btn_size
-  let cols = @types.palette_cols
   for i in 0..<@types.symbol_count {
-    let row = i / cols
-    let col = i % cols
-    let bx = px + col * (btn_size + 6)
-    let by = py + row * (btn_size + 6)
+    let (bx, by) = @types.palette_button_pos(
+      i, @types.palette_x, @types.palette_y, btn_size, @types.palette_btn_gap, @types.palette_cols,
+      @types.palette_label_offset_y,
+    )
     if mouse_x >= bx &&
       mouse_x <= bx + btn_size &&
       mouse_y >= by &&

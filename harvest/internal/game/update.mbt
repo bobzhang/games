@@ -152,9 +152,7 @@ fn try_start_level(game : @types.Game, index : Int) -> Unit {
     start_level(game, index)
   } else {
     @types.set_message(
-      game,
-      "Level locked! Complete previous level first.",
-      2.0,
+      game, "Level locked! Complete previous level first.", 2.0,
     )
   }
 }
@@ -235,11 +233,7 @@ fn update_hover(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_plot_locked(
-  col : Int,
-  row : Int,
-  locked : Array[(Int, Int)]
-) -> Bool {
+fn is_plot_locked(col : Int, row : Int, locked : Array[(Int, Int)]) -> Bool {
   for i in 0..<locked.length() {
     let (lc, lr) = locked[i]
     if lc == col && lr == row {
@@ -450,17 +444,12 @@ fn update_simulate(game : @types.Game, dt : Float) -> Unit {
       @farm.advance_season(game.grid, season)
       for r in 0..<@types.grid_rows {
         for c in 0..<@types.grid_cols {
-          if game.grid[r][c].state == Growing ||
-            game.grid[r][c].state == Mature {
+          if game.grid[r][c].state == Growing || game.grid[r][c].state == Mature {
             game.growth_anim[r][c] = 0.8
           }
         }
       }
-      @types.set_message(
-        game,
-        @types.season_name(season) + ": Growing...",
-        0.7,
-      )
+      @types.set_message(game, @types.season_name(season) + ": Growing...", 0.7)
       game.sim_timer = 0.6
     }
     _ => {
@@ -470,9 +459,7 @@ fn update_simulate(game : @types.Game, dt : Float) -> Unit {
       game.total_value += value
       @types.set_message(
         game,
-        @types.season_name(season) +
-        ": Harvested $" +
-        value.to_string(),
+        @types.season_name(season) + ": Harvested $" + value.to_string(),
         0.7,
       )
       game.sim_season += 1

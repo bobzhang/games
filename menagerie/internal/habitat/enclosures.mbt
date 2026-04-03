@@ -16,11 +16,7 @@ pub fn find_enclosures(grid : @types.Grid) -> Array[@types.Enclosure] {
         let cells : Array[(Int, Int)] = []
         flood_fill(grid, c, r, visited, cells)
         if cells.length() > 0 {
-          let enc : @types.Enclosure = {
-            id: next_id,
-            cells,
-            species: None,
-          }
+          let enc : @types.Enclosure = { id: next_id, cells, species: None }
           next_id += 1
           enclosures.push(enc)
         }
@@ -36,7 +32,7 @@ fn flood_fill(
   col : Int,
   row : Int,
   visited : Array[Array[Bool]],
-  cells : Array[(Int, Int)]
+  cells : Array[(Int, Int)],
 ) -> Unit {
   if col < 0 || col >= grid.cols || row < 0 || row >= grid.rows {
     return
@@ -67,7 +63,7 @@ fn flood_fill(
 ///|
 pub fn assign_animals_to_enclosures(
   grid : @types.Grid,
-  enclosures : Array[@types.Enclosure]
+  enclosures : Array[@types.Enclosure],
 ) -> Unit {
   for enc in enclosures {
     enc.species = None
@@ -88,7 +84,7 @@ pub fn assign_animals_to_enclosures(
 pub fn find_enclosure_at(
   enclosures : Array[@types.Enclosure],
   col : Int,
-  row : Int
+  row : Int,
 ) -> @types.Enclosure? {
   for enc in enclosures {
     for cell in enc.cells {
@@ -104,7 +100,7 @@ pub fn find_enclosure_at(
 pub fn count_terrain_in_enclosure(
   grid : @types.Grid,
   enc : @types.Enclosure,
-  terrain : @types.Terrain
+  terrain : @types.Terrain,
 ) -> Int {
   let mut count = 0
   for cell in enc.cells {
@@ -118,10 +114,7 @@ pub fn count_terrain_in_enclosure(
 }
 
 ///|
-pub fn count_water_adjacent(
-  grid : @types.Grid,
-  enc : @types.Enclosure
-) -> Int {
+pub fn count_water_adjacent(grid : @types.Grid, enc : @types.Enclosure) -> Int {
   let mut count = 0
   for cell in enc.cells {
     let (c, r) = cell

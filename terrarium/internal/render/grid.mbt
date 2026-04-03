@@ -6,11 +6,18 @@ pub fn draw_jar_background() -> Unit {
   let h = @types.grid_size * @types.cell_size + 20
   @raylib.draw_rectangle_rounded(rect(x, y, w, h), 0.05, 8, @types.color_jar)
   @raylib.draw_rectangle_rounded_lines_ex(
-    rect(x, y, w, h), 0.05, 8, 2.0, @types.color_jar_border,
+    rect(x, y, w, h),
+    0.05,
+    8,
+    2.0,
+    @types.color_jar_border,
   )
   let lid_y = y - 16
   @raylib.draw_rectangle_rounded(
-    rect(x + 10, lid_y, w - 20, 18), 0.3, 4, @types.color_jar_border,
+    rect(x + 10, lid_y, w - 20, 18),
+    0.3,
+    4,
+    @types.color_jar_border,
   )
 }
 
@@ -59,8 +66,8 @@ fn draw_soil_texture(cx : Int, cy : Int) -> Unit {
   let seed2 = (cx * 3 + cy * 11) % 4
   @raylib.draw_rectangle(cx + seed1 * 8, cy + seed2 * 10, 3, 2, dark)
   @raylib.draw_rectangle(
-    cx + ((seed1 + 2) * 6) % s,
-    cy + ((seed2 + 3) * 7) % s,
+    cx + (seed1 + 2) * 6 % s,
+    cy + (seed2 + 3) * 7 % s,
     2,
     3,
     dark,
@@ -72,7 +79,7 @@ fn draw_organism_cell(
   kind : @types.OrganismKind,
   cx : Int,
   cy : Int,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   let color = @types.organism_color(kind)
   let half = @types.cell_size / 2
@@ -80,18 +87,26 @@ fn draw_organism_cell(
   match kind {
     Moss => {
       @raylib.draw_rectangle(
-        cx + 4, cy + 4, @types.cell_size - 8, @types.cell_size - 8, color,
+        cx + 4,
+        cy + 4,
+        @types.cell_size - 8,
+        @types.cell_size - 8,
+        color,
       )
-      let bob = (frame / 30) % 2
+      let bob = frame / 30 % 2
       @raylib.draw_rectangle(cx + 10, cy + 8 - bob, 8, 12, @types.color_fern)
       @raylib.draw_rectangle(cx + 28, cy + 12 - bob, 6, 10, @types.color_fern)
       @raylib.draw_rectangle(cx + 44, cy + 6 - bob, 7, 14, @types.color_fern)
     }
     Fern => {
       @raylib.draw_rectangle(
-        cx + 4, cy + 4, @types.cell_size - 8, @types.cell_size - 8, color,
+        cx + 4,
+        cy + 4,
+        @types.cell_size - 8,
+        @types.cell_size - 8,
+        color,
       )
-      let bob = (frame / 25) % 3
+      let bob = frame / 25 % 3
       @raylib.draw_triangle(
         vec2(cx + half, cy + 6 - bob),
         vec2(cx + 10, cy + @types.cell_size - 8),
@@ -101,12 +116,20 @@ fn draw_organism_cell(
     }
     Beetle => {
       @raylib.draw_circle(cx + half, cy + half, fi(qtr), color)
-      let bob = (frame / 10) % 2
+      let bob = frame / 10 % 2
       @raylib.draw_rectangle(
-        cx + half - 10, cy + half + qtr - 2, 4, 6 + bob, @types.color_soil,
+        cx + half - 10,
+        cy + half + qtr - 2,
+        4,
+        6 + bob,
+        @types.color_soil,
       )
       @raylib.draw_rectangle(
-        cx + half + 6, cy + half + qtr - 2, 4, 6 + bob, @types.color_soil,
+        cx + half + 6,
+        cy + half + qtr - 2,
+        4,
+        6 + bob,
+        @types.color_soil,
       )
       @raylib.draw_circle(
         cx + half - 5,
@@ -129,7 +152,7 @@ fn draw_organism_cell(
         fi(qtr - 4),
         @raylib.Color::new(140, 120, 80, 255),
       )
-      let bob = (frame / 20) % 3
+      let bob = frame / 20 % 3
       @raylib.draw_line(
         cx + half - 6,
         cy + half - 6,
@@ -162,7 +185,7 @@ fn draw_organism_cell(
       @raylib.draw_circle(cx + half + 7, cy + half - 2, 2.0, spots)
     }
     Worm => {
-      let bob = (frame / 15) % 4
+      let bob = frame / 15 % 4
       let segments = 5
       for s in 0..<segments {
         let sx = cx + 12 + s * 8 + (if s % 2 == 0 { bob } else { 0 - bob })

@@ -137,3 +137,23 @@ pub let palette_cols : Int = 5
 
 ///|
 pub let mapping_table_y : Int = 340
+
+// Inscription layout
+
+///|
+pub let inscription_margin_x : Int = 30
+
+///|
+pub let inscription_margin_y : Int = 40
+
+///|
+pub let inscription_max_margin : Int = 60
+
+///|
+pub let inscription_line_height : Int = 90
+
+///|
+pub let palette_btn_gap : Int = 6
+
+///|
+pub let palette_label_offset_y : Int = 28

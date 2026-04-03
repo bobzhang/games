@@ -102,9 +102,7 @@ pub let color_star_empty : @raylib.Color = @raylib.Color::new(
 )
 
 ///|
-pub let color_heddle_up : @raylib.Color = @raylib.Color::new(
-  255, 220, 120, 255,
-)
+pub let color_heddle_up : @raylib.Color = @raylib.Color::new(255, 220, 120, 255)
 
 ///|
 pub let color_heddle_down : @raylib.Color = @raylib.Color::new(

@@ -200,3 +200,42 @@ test "tier_level_offset" {
   inspect(@types.tier_level_offset(1), content="8")
   inspect(@types.tier_level_offset(2), content="17")
 }
+
+///|
+test "find_start_codon basic" {
+  let seq : Array[@types.Base] = [A, T, G, C, C, C]
+  inspect(@types.find_start_codon(seq), content="0")
+}
+
+///|
+test "find_start_codon offset" {
+  let seq : Array[@types.Base] = [C, C, A, T, G, T, T, T]
+  inspect(@types.find_start_codon(seq), content="2")
+}
+
+///|
+test "find_start_codon missing" {
+  let seq : Array[@types.Base] = [C, C, C, T, T, T]
+  inspect(@types.find_start_codon(seq), content="-1")
+}
+
+///|
+test "find_start_codon matches read_sequence" {
+  let seq : Array[@types.Base] = [G, A, T, G, A, A, A, T, G, A]
+  let pos = @types.find_start_codon(seq)
+  let result = @types.read_sequence(seq)
+  // Start codon should be at position 1 (A,T,G)
+  inspect(pos, content="1")
+  inspect(result.valid, content="true")
+  inspect(result.traits[0], content="Start")
+}
+
+///|
+test "color_with_alpha" {
+  let c = @raylib.Color::new(100, 150, 200, 255)
+  let result = @types.color_with_alpha(c, 128)
+  inspect(result.r.to_int(), content="100")
+  inspect(result.g.to_int(), content="150")
+  inspect(result.b.to_int(), content="200")
+  inspect(result.a.to_int(), content="128")
+}

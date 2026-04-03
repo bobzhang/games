@@ -11,16 +11,14 @@ test "start_simulation_requires_organisms" {
 test "start_simulation_with_organisms" {
   let game = @types.new_game()
   @levels.setup_level(game, 0)
-  game.organisms.push(
-    {
-      kind: Barnacle,
-      row: 5,
-      col: 7,
-      alive: true,
-      health: 100.0,
-      submerged: false,
-    },
-  )
+  game.organisms.push({
+    kind: Barnacle,
+    row: 5,
+    col: 7,
+    alive: true,
+    health: 100.0,
+    submerged: false,
+  })
   game.grid[5][7] = Organism(Barnacle)
   game.screen = Playing
   start_simulation(game)
@@ -93,16 +91,14 @@ test "set_message" {
 test "finalize_simulation_updates_score_on_victory" {
   let game = @types.new_game()
   @levels.setup_level(game, 0)
-  game.organisms.push(
-    {
-      kind: Barnacle,
-      row: 5,
-      col: 7,
-      alive: true,
-      health: 100.0,
-      submerged: true,
-    },
-  )
+  game.organisms.push({
+    kind: Barnacle,
+    row: 5,
+    col: 7,
+    alive: true,
+    health: 100.0,
+    submerged: true,
+  })
   game.current_cycle = 3
   game.play_result = Victory
   finalize_simulation(game)
@@ -115,16 +111,14 @@ test "finalize_simulation_updates_score_on_victory" {
 test "finalize_simulation_failure_does_not_complete" {
   let game = @types.new_game()
   @levels.setup_level(game, 0)
-  game.organisms.push(
-    {
-      kind: Barnacle,
-      row: 5,
-      col: 7,
-      alive: false,
-      health: 0.0,
-      submerged: false,
-    },
-  )
+  game.organisms.push({
+    kind: Barnacle,
+    row: 5,
+    col: 7,
+    alive: false,
+    health: 0.0,
+    submerged: false,
+  })
   game.current_cycle = 1
   game.play_result = Failure("target died")
   finalize_simulation(game)

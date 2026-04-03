@@ -172,7 +172,7 @@ fn handle_place_waystone(
   game : @types.Game,
   state : @types.LevelState,
   col : Int,
-  row : Int
+  row : Int,
 ) -> Unit {
   if @raylib.is_mouse_button_pressed(0) {
     if state.grid[row][col].kind is Empty {
@@ -192,7 +192,7 @@ fn handle_remove_waystone(
   game : @types.Game,
   state : @types.LevelState,
   col : Int,
-  row : Int
+  row : Int,
 ) -> Unit {
   if @raylib.is_mouse_button_pressed(0) {
     if state.grid[row][col].kind is Waystone {
@@ -221,7 +221,7 @@ fn handle_draw_line(
   _game : @types.Game,
   state : @types.LevelState,
   col : Int,
-  row : Int
+  row : Int,
 ) -> Unit {
   if @raylib.is_mouse_button_pressed(0) {
     if @types.is_connectable(state.grid[row][col].kind) {
@@ -249,7 +249,7 @@ fn handle_erase_line(
   _game : @types.Game,
   state : @types.LevelState,
   col : Int,
-  row : Int
+  row : Int,
 ) -> Unit {
   if @raylib.is_mouse_button_pressed(0) {
     if @types.is_connectable(state.grid[row][col].kind) {
@@ -269,7 +269,11 @@ fn handle_erase_line(
 }
 
 ///|
-fn remove_connections_at(state : @types.LevelState, col : Int, row : Int) -> Unit {
+fn remove_connections_at(
+  state : @types.LevelState,
+  col : Int,
+  row : Int,
+) -> Unit {
   let new_conns : Array[@types.Connection] = []
   for i in 0..<state.connections.length() {
     let c = state.connections[i]
@@ -287,15 +291,14 @@ fn remove_specific_connection(
   c1 : Int,
   r1 : Int,
   c2 : Int,
-  r2 : Int
+  r2 : Int,
 ) -> Unit {
   let new_conns : Array[@types.Connection] = []
   for i in 0..<state.connections.length() {
     let c = state.connections[i]
-    let matches = (c.from_col == c1 &&
-      c.from_row == r1 &&
-      c.to_col == c2 &&
-      c.to_row == r2) ||
+    let matches = (
+        c.from_col == c1 && c.from_row == r1 && c.to_col == c2 && c.to_row == r2
+      ) ||
       (c.from_col == c2 && c.from_row == r2 && c.to_col == c1 && c.to_row == r1)
     if !matches {
       new_conns.push(c)
@@ -316,12 +319,10 @@ fn update_cell_animations(state : @types.LevelState) -> Unit {
             cell.glow_anim = 1.0
           }
         }
-      } else {
-        if cell.glow_anim > 0.0 {
-          cell.glow_anim = cell.glow_anim - 0.03
-          if cell.glow_anim < 0.0 {
-            cell.glow_anim = 0.0
-          }
+      } else if cell.glow_anim > 0.0 {
+        cell.glow_anim = cell.glow_anim - 0.03
+        if cell.glow_anim < 0.0 {
+          cell.glow_anim = 0.0
         }
       }
     }
@@ -337,8 +338,7 @@ fn complete_level(game : @types.Game, state : @types.LevelState) -> Unit {
   if star_value(stars) > star_value(prog.stars) {
     prog.stars = stars
   }
-  if prog.best_waystones == 0 ||
-    state.waystones_placed < prog.best_waystones {
+  if prog.best_waystones == 0 || state.waystones_placed < prog.best_waystones {
     prog.best_waystones = state.waystones_placed
   }
   if state.total_energy_delivered > prog.best_energy {
@@ -350,7 +350,7 @@ fn complete_level(game : @types.Game, state : @types.LevelState) -> Unit {
 ///|
 fn calculate_stars(
   def : @types.LevelDef,
-  state : @types.LevelState
+  state : @types.LevelState,
 ) -> @types.StarRating {
   let energy = state.total_energy_delivered
   if energy >= def.gold_threshold && state.waystones_placed <= def.par_waystones {

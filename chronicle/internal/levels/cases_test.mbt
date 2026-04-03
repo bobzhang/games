@@ -289,7 +289,10 @@ test "compute_score gives 3 stars for perfect solution" {
   for i in 0..<cases.length() {
     let case_ = cases[i]
     let score = @logic.compute_score(
-      case_, case_.solution_order, case_.solution_links, 0,
+      case_,
+      case_.solution_order,
+      case_.solution_links,
+      0,
     )
     assert_eq(score.stars, 3)
     assert_true(score.order_correct)

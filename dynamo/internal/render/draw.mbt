@@ -329,7 +329,11 @@ fn draw_field_lines(state : @types.LevelState, game : @types.Game) -> Unit {
     let ey = @types.cell_center_y(fl.end_row)
     let base_alpha = if fl.captured { 160 } else { 80 }
     let pulse = @types.sinf(time * 2.0 + Float::from_int(i) * 0.7) * 30.0
-    let alpha = @types.clampi((Float::from_int(base_alpha) + pulse).to_int(), 40, 220)
+    let alpha = @types.clampi(
+      (Float::from_int(base_alpha) + pulse).to_int(),
+      40,
+      220,
+    )
     let color = if fl.captured {
       alpha_color(255, 120, 60, alpha)
     } else {
@@ -338,7 +342,11 @@ fn draw_field_lines(state : @types.LevelState, game : @types.Game) -> Unit {
     @raylib.draw_line_ex(
       @raylib.Vector2::new(sx, sy),
       @raylib.Vector2::new(ex, ey),
-      if fl.captured { 3.0 } else { 2.0 },
+      if fl.captured {
+        3.0
+      } else {
+        2.0
+      },
       color,
     )
     // Draw arrowhead at endpoint
@@ -406,7 +414,13 @@ fn draw_components(state : @types.LevelState, game : @types.Game) -> Unit {
           }
           // Draw magnet body
           @raylib.draw_rectangle(icx - 16, icy - 14, 32, 28, fixed_color)
-          @raylib.draw_rectangle_lines(icx - 16, icy - 14, 32, 28, @raylib.white)
+          @raylib.draw_rectangle_lines(
+            icx - 16,
+            icy - 14,
+            32,
+            28,
+            @raylib.white,
+          )
           let label = match polarity {
             North => "N"
             South => "S"
@@ -442,19 +456,9 @@ fn draw_components(state : @types.LevelState, game : @types.Game) -> Unit {
           let radius : Float = base_r * pulse
           // Draw coil as concentric circles
           @raylib.draw_circle(icx, icy, radius, color)
-          @raylib.draw_circle(
-            icx,
-            icy,
-            radius - 4.0,
-            @types.color_grid_cell,
-          )
+          @raylib.draw_circle(icx, icy, radius - 4.0, @types.color_grid_cell)
           @raylib.draw_circle(icx, icy, radius - 8.0, color)
-          @raylib.draw_circle(
-            icx,
-            icy,
-            radius - 12.0,
-            @types.color_grid_cell,
-          )
+          @raylib.draw_circle(icx, icy, radius - 12.0, @types.color_grid_cell)
           // Show field line count when simulated
           if state.simulated && cell.field_lines > 0 {
             let fl_str = cell.field_lines.to_string()
@@ -501,9 +505,7 @@ fn draw_components(state : @types.LevelState, game : @types.Game) -> Unit {
           let radius = @types.component_radius * pulse
           // Device: filled circle with ring
           @raylib.draw_circle(icx, icy, radius, color)
-          @raylib.draw_circle(
-            icx, icy, radius - 4.0, @types.color_grid_cell,
-          )
+          @raylib.draw_circle(icx, icy, radius - 4.0, @types.color_grid_cell)
           // Show target wattage
           let w_str = format_watts(target)
           let ww = @draw.measure_text(w_str, 14)
@@ -757,8 +759,7 @@ fn draw_hud(game : @types.Game, state : @types.LevelState) -> Unit {
   @draw.draw_text("CONTROLS", x, y, 14, @types.color_title)
   y += 18
   let controls = [
-    "Arrows: move", "SPACE: place", "R: reset level", "S: simulate", "H: help",
-    "ESC: back",
+    "Arrows: move", "SPACE: place", "R: reset level", "S: simulate", "H: help", "ESC: back",
   ]
   for i in 0..<controls.length() {
     @draw.draw_text(controls[i], x, y, 11, alpha_color(140, 150, 180, 200))
@@ -879,9 +880,8 @@ fn draw_help_overlay() -> Unit {
     "  N (red) and S (blue) both work the same", "", "COILS capture field lines to generate power",
     "  Each captured line = 1.5W of power", "", "WIRES route power from coils to devices",
     "  Connect coils to devices with wires", "", "DEVICES need exact wattage (+-0.2W)",
-    "", "SCORING:", "  1 star: All devices powered",
-    "  2 stars: Use par magnets or fewer", "  3 stars: Par magnets + minimal coils",
-    "", "Press H to close",
+    "", "SCORING:", "  1 star: All devices powered", "  2 stars: Use par magnets or fewer",
+    "  3 stars: Par magnets + minimal coils", "", "Press H to close",
   ]
   for i in 0..<rules.length() {
     @draw.draw_text(rules[i], px + 25, yy, 14, @types.color_hud_text)

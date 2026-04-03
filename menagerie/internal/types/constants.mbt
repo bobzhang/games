@@ -131,13 +131,17 @@ pub let color_tool_selected : @raylib.Color = @raylib.Color::new(
 )
 
 ///|
-pub let color_tool_hover : @raylib.Color = @raylib.Color::new(100, 120, 140, 120)
+pub let color_tool_hover : @raylib.Color = @raylib.Color::new(
+  100, 120, 140, 120,
+)
 
 ///|
 pub let color_button : @raylib.Color = @raylib.Color::new(63, 81, 181, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(92, 107, 192, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  92, 107, 192, 255,
+)
 
 ///|
 pub let color_level_locked : @raylib.Color = @raylib.Color::new(60, 60, 60, 255)
@@ -151,3 +155,37 @@ pub let color_level_available : @raylib.Color = @raylib.Color::new(
 pub let color_level_completed : @raylib.Color = @raylib.Color::new(
   76, 175, 80, 255,
 )
+
+// Level select layout
+
+///|
+pub let level_button_y : Int = 140
+
+///|
+pub let level_button_h : Int = 56
+
+///|
+pub let level_button_gap : Int = 8
+
+///|
+pub let level_visible_count : Int = 9
+
+///|
+pub let level_button_x : Int = 80
+
+///|
+pub let level_button_w : Int = 864
+
+// Toolbar layout
+
+///|
+pub let toolbar_slot_w : Int = 72
+
+///|
+pub let toolbar_slot_gap : Int = 4
+
+///|
+pub let toolbar_start_x : Int = 16
+
+///|
+pub let toolbar_slot_h : Int = 56

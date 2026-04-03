@@ -63,7 +63,7 @@ fn draw_tile_detail(
   px : Int,
   py : Int,
   ts : Int,
-  frame : Int
+  frame : Int,
 ) -> Unit {
   match tile {
     Lighthouse => {
@@ -144,10 +144,5 @@ fn draw_ship(state : @types.LevelState, frame : Int) -> Unit {
     ship_color,
   )
   // Small glow
-  @raylib.draw_circle(
-    sx,
-    sy,
-    3.0,
-    @raylib.Color::new(255, 220, 100, 150),
-  )
+  @raylib.draw_circle(sx, sy, 3.0, @raylib.Color::new(255, 220, 100, 150))
 }

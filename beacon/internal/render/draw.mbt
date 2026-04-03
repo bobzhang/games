@@ -14,13 +14,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
 
 ///|
 fn color_with_alpha(c : @raylib.Color, alpha : Int) -> @raylib.Color {
-  let a = if alpha < 0 {
-    0
-  } else if alpha > 255 {
-    255
-  } else {
-    alpha
-  }
+  let a = if alpha < 0 { 0 } else if alpha > 255 { 255 } else { alpha }
   @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), a)
 }
 
@@ -51,7 +45,11 @@ fn draw_title(game : @types.Game) -> Unit {
   }
   // Version
   @draw.draw_text(
-    "v1.0", 10, @types.screen_height - 30, 16, @types.color_hud_dim,
+    "v1.0",
+    10,
+    @types.screen_height - 30,
+    16,
+    @types.color_hud_dim,
   )
   // Decorative signal lines
   draw_title_decoration(game)
@@ -87,7 +85,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   @draw.draw_text(total_text, (sw - tsw) / 2, 75, 20, @types.color_star_gold)
   let start_y = 120 - game.scroll_offset * 200
   let mut cy = start_y
-  for tier in 1..=3 {
+  for tier in 1..<=3 {
     let tier_label = @levels.tier_name(tier)
     @draw.draw_text(tier_label, 40, cy, 24, @types.color_hud_text)
     cy += 40
@@ -115,20 +113,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_level_button(
-  game : @types.Game,
-  idx : Int,
-  bx : Int,
-  by : Int
-) -> Unit {
+fn draw_level_button(game : @types.Game, idx : Int, bx : Int, by : Int) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   let hovered = mx >= bx && mx <= bx + 160 && my >= by && my <= by + 55
-  let bg = if hovered {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let bg = if hovered { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(bx, by, 160, 55, bg)
   @raylib.draw_rectangle_lines(bx, by, 160, 55, @types.color_grid_line)
   let data = @levels.get_level(idx)
@@ -201,7 +190,7 @@ fn draw_playing(game : @types.Game) -> Unit {
 fn draw_grid(
   data : @types.LevelData,
   state : @types.LevelState,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
@@ -286,7 +275,7 @@ fn draw_receiver(
   sy : Int,
   ts : Int,
   lit : Bool,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   let cx = Float::from_int(sx + ts / 2)
   let cy = Float::from_int(sy + ts / 2)
@@ -301,11 +290,12 @@ fn draw_receiver(
   } else {
     @raylib.draw_circle(cx.to_int(), cy.to_int(), r, @types.color_receiver)
     @raylib.draw_circle_lines(
-      cx.to_int(), cy.to_int(), r + 2.0, @types.color_receiver,
+      cx.to_int(),
+      cy.to_int(),
+      r + 2.0,
+      @types.color_receiver,
     )
-    @draw.draw_text(
-      "RX", sx + ts / 2 - 8, sy + ts / 2 - 6, 12, @raylib.white,
-    )
+    @draw.draw_text("RX", sx + ts / 2 - 8, sy + ts / 2 - 6, 12, @raylib.white)
   }
 }
 
@@ -315,16 +305,23 @@ fn draw_tower(
   sy : Int,
   ts : Int,
   has_signal : Bool,
-  game : @types.Game
+  game : @types.Game,
 ) -> Unit {
   let cx = Float::from_int(sx + ts / 2)
   let cy = Float::from_int(sy + ts / 2)
   let r = Float::from_int(ts) * 0.28
   @raylib.draw_rectangle(
-    sx + ts / 4, sy + ts / 2, ts / 2, ts / 2 - 4, @types.color_tower,
+    sx + ts / 4,
+    sy + ts / 2,
+    ts / 2,
+    ts / 2 - 4,
+    @types.color_tower,
   )
   @raylib.draw_circle(
-    cx.to_int(), (cy - r * 0.5).to_int(), r * 0.7, @types.color_tower,
+    cx.to_int(),
+    (cy - r * 0.5).to_int(),
+    r * 0.7,
+    @types.color_tower,
   )
   if has_signal {
     let pulse = @types.sinf(game.signal_phase * 2.5) * 0.3 + 0.7
@@ -392,24 +389,38 @@ fn draw_cursor(state : @types.LevelState) -> Unit {
 fn draw_hud(
   data : @types.LevelData,
   state : @types.LevelState,
-  _game : @types.Game
+  _game : @types.Game,
 ) -> Unit {
   let sw = @types.screen_width
   let ts = @types.tile_size
   let grid_right = @types.grid_offset_x + @types.grid_cols * ts
   let panel_x = grid_right + 20
   let panel_w = sw - panel_x - 20
-  @draw.draw_text(data.name, panel_x, @types.grid_offset_y, 22, @types.color_title)
+  @draw.draw_text(
+    data.name,
+    panel_x,
+    @types.grid_offset_y,
+    22,
+    @types.color_title,
+  )
   let level_str = "Level " + data.id.to_string()
   @draw.draw_text(
-    level_str, panel_x, @types.grid_offset_y + 30, 16, @types.color_hud_dim,
+    level_str,
+    panel_x,
+    @types.grid_offset_y + 30,
+    16,
+    @types.color_hud_dim,
   )
   let budget_str = "Towers: " +
     state.towers_placed.to_string() +
     " / " +
     state.budget.to_string()
   @draw.draw_text(
-    budget_str, panel_x, @types.grid_offset_y + 60, 18, @types.color_hud_text,
+    budget_str,
+    panel_x,
+    @types.grid_offset_y + 60,
+    18,
+    @types.color_hud_text,
   )
   // Budget bar
   let bar_y = @types.grid_offset_y + 85
@@ -449,13 +460,25 @@ fn draw_hud(
   let ctrl_y = @types.grid_offset_y + 250
   @draw.draw_text("Controls:", panel_x, ctrl_y, 16, @types.color_hud_text)
   @draw.draw_text(
-    "LMB: Place tower", panel_x, ctrl_y + 22, 14, @types.color_hud_dim,
+    "LMB: Place tower",
+    panel_x,
+    ctrl_y + 22,
+    14,
+    @types.color_hud_dim,
   )
   @draw.draw_text(
-    "RMB: Remove tower", panel_x, ctrl_y + 40, 14, @types.color_hud_dim,
+    "RMB: Remove tower",
+    panel_x,
+    ctrl_y + 40,
+    14,
+    @types.color_hud_dim,
   )
   @draw.draw_text(
-    "R: Reset level", panel_x, ctrl_y + 58, 14, @types.color_hud_dim,
+    "R: Reset level",
+    panel_x,
+    ctrl_y + 58,
+    14,
+    @types.color_hud_dim,
   )
   @draw.draw_text("ESC: Back", panel_x, ctrl_y + 76, 14, @types.color_hud_dim)
   // Receiver count
@@ -471,10 +494,7 @@ fn draw_hud(
       }
     }
   }
-  let rx_str = "Receivers: " +
-    rx_lit.to_string() +
-    " / " +
-    rx_total.to_string()
+  let rx_str = "Receivers: " + rx_lit.to_string() + " / " + rx_total.to_string()
   let rx_color = if rx_lit == rx_total && rx_total > 0 {
     @types.color_receiver_lit
   } else {
@@ -487,7 +507,11 @@ fn draw_hud(
 fn draw_won(game : @types.Game) -> Unit {
   draw_playing(game)
   @raylib.draw_rectangle(
-    0, 0, @types.screen_width, @types.screen_height, overlay_color(180),
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
+    overlay_color(180),
   )
   let sw = @types.screen_width
   let title = "Level Complete!"
@@ -509,7 +533,13 @@ fn draw_won(game : @types.Game) -> Unit {
       }
       let towers_str = "Towers used: " + state.towers_placed.to_string()
       let tsw2 = @draw.measure_text(towers_str, 22)
-      @draw.draw_text(towers_str, (sw - tsw2) / 2, 340, 22, @types.color_hud_text)
+      @draw.draw_text(
+        towers_str,
+        (sw - tsw2) / 2,
+        340,
+        22,
+        @types.color_hud_text,
+      )
       let chain_str = "Relay chain: " + state.relay_chain_length.to_string()
       let csw = @draw.measure_text(chain_str, 22)
       @draw.draw_text(chain_str, (sw - csw) / 2, 370, 22, @types.color_hud_text)
@@ -529,7 +559,11 @@ fn draw_won(game : @types.Game) -> Unit {
 fn draw_failed(game : @types.Game) -> Unit {
   draw_playing(game)
   @raylib.draw_rectangle(
-    0, 0, @types.screen_width, @types.screen_height, overlay_color(180),
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
+    overlay_color(180),
   )
   let sw = @types.screen_width
   let title = "Out of Towers!"

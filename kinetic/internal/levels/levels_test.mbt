@@ -81,7 +81,9 @@ test "output positions do not overlap with input position" {
     let level = get_level(i)
     for j in 0..<level.outputs.length() {
       let out = level.outputs[j]
-      assert_true(out.pos.x != level.input.pos.x || out.pos.y != level.input.pos.y)
+      assert_true(
+        out.pos.x != level.input.pos.x || out.pos.y != level.input.pos.y,
+      )
     }
   }
 }

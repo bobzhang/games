@@ -21,13 +21,7 @@ pub fn find_hint(
       continue
     }
     // Count occurrences
-    let mut freq = 0
-    for j in 0..<inscription.symbols.length() {
-      match inscription.symbols[j].symbol {
-        Some(s) => if s == sym { freq += 1 }
-        None => ()
-      }
-    }
+    let freq = @types.count_symbol_frequency(inscription, sym)
     if freq > best_freq {
       best_freq = freq
       best_sym = Some(sym)

@@ -172,7 +172,7 @@ pub fn new_component(kind : ComponentKind, col : Int, row : Int) -> Component {
 pub fn new_fixed_component(
   kind : ComponentKind,
   col : Int,
-  row : Int
+  row : Int,
 ) -> Component {
   let c = new_component(kind, col, row)
   c.fixed = true

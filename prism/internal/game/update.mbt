@@ -121,10 +121,7 @@ fn update_playing(game : @types.Game) -> Unit {
   // Update hover position using hex grid
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
-  let (hq, hr) = @types.pixel_to_hex(
-    Float::from_int(mx),
-    Float::from_int(my),
-  )
+  let (hq, hr) = @types.pixel_to_hex(Float::from_int(mx), Float::from_int(my))
   if @types.grid_in_bounds(game.grid, hq, hr) {
     game.hover_q = hq
     game.hover_r = hr

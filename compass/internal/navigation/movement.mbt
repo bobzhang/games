@@ -1,8 +1,5 @@
 ///|
-pub fn try_move(
-  state : @types.LevelState,
-  dir : @types.Direction
-) -> Unit {
+pub fn try_move(state : @types.LevelState, dir : @types.Direction) -> Unit {
   if state.phase is Playing {
     let dx = @types.direction_dx(dir)
     let dy = @types.direction_dy(dir)
@@ -135,7 +132,7 @@ pub fn compute_star_rating(state : @types.LevelState) -> @types.StarRating {
 ///|
 pub fn can_reach_adjacent(
   state : @types.LevelState,
-  dir : @types.Direction
+  dir : @types.Direction,
 ) -> Bool {
   let nx = state.ship.pos.x + @types.direction_dx(dir)
   let ny = state.ship.pos.y + @types.direction_dy(dir)

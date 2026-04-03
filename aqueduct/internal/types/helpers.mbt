@@ -30,13 +30,7 @@ pub fn get_tile(game : Game, p : Pos) -> Tile? {
 
 ///|
 pub fn new_tile(elevation : Int) -> Tile {
-  {
-    kind: Empty,
-    elevation,
-    has_water: false,
-    water_level: 0,
-    connections: [],
-  }
+  { kind: Empty, elevation, has_water: false, water_level: 0, connections: [] }
 }
 
 ///|

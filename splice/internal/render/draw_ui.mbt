@@ -26,12 +26,7 @@ fn draw_ops_panel(game : @types.Game, level : @types.Level) -> Unit {
     let by = py + 25
     // Background
     let bg = if selected {
-      @raylib.Color::new(
-        color.r.to_int(),
-        color.g.to_int(),
-        color.b.to_int(),
-        60,
-      )
+      @types.color_with_alpha(color, 60)
     } else {
       @raylib.Color::new(30, 30, 40, 200)
     }
@@ -70,13 +65,7 @@ fn draw_ops_panel(game : @types.Game, level : @types.Level) -> Unit {
       let sel = game.insert_base == b
       let bc = @types.base_color(b)
       if sel {
-        @raylib.draw_rectangle(
-          bx,
-          by2,
-          30,
-          25,
-          @raylib.Color::new(bc.r.to_int(), bc.g.to_int(), bc.b.to_int(), 80),
-        )
+        @raylib.draw_rectangle(bx, by2, 30, 25, @types.color_with_alpha(bc, 80))
       }
       @raylib.draw_rectangle_lines(
         bx,

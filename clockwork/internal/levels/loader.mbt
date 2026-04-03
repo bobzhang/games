@@ -69,10 +69,8 @@ pub fn levels_in_tier(tier : @types.Tier) -> (Int, Int) {
   match tier {
     Ticks => (0, @types.tier1_levels)
     Timing => (@types.tier1_levels, @types.tier1_levels + @types.tier2_levels)
-    Clockwork => (
-      @types.tier1_levels + @types.tier2_levels,
-      @types.total_levels,
-    )
+    Clockwork =>
+      (@types.tier1_levels + @types.tier2_levels, @types.total_levels)
   }
 }
 

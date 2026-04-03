@@ -30,7 +30,11 @@ pub fn draw_palette(game : @types.Game) -> Unit {
           sy,
           ss,
           ss,
-          if is_selected { @types.color_title } else { @types.color_hud_dim },
+          if is_selected {
+            @types.color_title
+          } else {
+            @types.color_hud_dim
+          },
         )
         @draw.draw_text(
           profile.name,
@@ -44,7 +48,11 @@ pub fn draw_palette(game : @types.Game) -> Unit {
           sx + ss + 8,
           sy + 22,
           14,
-          if avail > 0 { @types.color_ok } else { @types.color_warn },
+          if avail > 0 {
+            @types.color_ok
+          } else {
+            @types.color_warn
+          },
         )
         let zone_text = @types.zone_name(profile.preferred_zone)
         @draw.draw_text(
@@ -166,12 +174,6 @@ pub fn draw_message(game : @types.Game) -> Unit {
       30,
       @types.color_bar_bg,
     )
-    @draw.draw_text(
-      game.message,
-      msg_x,
-      msg_y,
-      18,
-      @types.color_title,
-    )
+    @draw.draw_text(game.message, msg_x, msg_y, 18, @types.color_title)
   }
 }

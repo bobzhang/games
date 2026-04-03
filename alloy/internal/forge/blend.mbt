@@ -55,11 +55,12 @@ fn apply_temperature(
         conductivity: @types.clampf(cc, 0.0, 100.0),
       }
     }
-    Medium => {
-      hardness: @types.clampf(h, 0.0, 100.0),
-      flexibility: @types.clampf(f, 0.0, 100.0),
-      conductivity: @types.clampf(c, 0.0, 100.0),
-    }
+    Medium =>
+      {
+        hardness: @types.clampf(h, 0.0, 100.0),
+        flexibility: @types.clampf(f, 0.0, 100.0),
+        conductivity: @types.clampf(c, 0.0, 100.0),
+      }
     High => {
       // Amplify hardness, reduce flexibility
       let boost : Float = 1.15

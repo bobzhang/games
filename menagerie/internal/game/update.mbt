@@ -32,13 +32,14 @@ fn update_level_select(game : @types.Game) -> Unit {
     game.screen = Title
     return
   }
+  let visible = @types.level_visible_count
   if @raylib.is_key_pressed(@raylib.KeyUp) {
     if game.level_select_scroll > 0 {
       game.level_select_scroll -= 1
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyDown) {
-    let max_scroll = @levels.level_count() - 5
+    let max_scroll = @levels.level_count() - visible
     if game.level_select_scroll < max_scroll {
       game.level_select_scroll += 1
     }
@@ -49,12 +50,22 @@ fn update_level_select(game : @types.Game) -> Unit {
     let my = @raylib.get_mouse_y()
     handle_level_select_click(game, mx, my)
   }
-  // Number keys for quick level selection
-  for i in 0..<10 {
-    if @raylib.is_key_pressed(49 + i) {
-      // Keys 1-9, 0
+  // Number keys 1-9 for quick level selection
+  let number_keys = [
+    @raylib.KeyOne,
+    @raylib.KeyTwo,
+    @raylib.KeyThree,
+    @raylib.KeyFour,
+    @raylib.KeyFive,
+    @raylib.KeySix,
+    @raylib.KeySeven,
+    @raylib.KeyEight,
+    @raylib.KeyNine,
+  ]
+  for i, key in number_keys {
+    if @raylib.is_key_pressed(key) {
       let lvl = game.level_select_scroll + i
-      if lvl < @levels.level_count() && is_level_unlocked(game, lvl) {
+      if lvl < @levels.level_count() && game.is_level_unlocked(lvl) {
         start_level(game, lvl)
         return
       }
@@ -64,35 +75,25 @@ fn update_level_select(game : @types.Game) -> Unit {
 
 ///|
 fn handle_level_select_click(game : @types.Game, mx : Int, my : Int) -> Unit {
-  let start_y = 140
-  let button_h = 56
-  let gap = 8
-  let visible = 10
+  let start_y = @types.level_button_y
+  let button_h = @types.level_button_h
+  let gap = @types.level_button_gap
+  let visible = @types.level_visible_count
+  let bx = @types.level_button_x
+  let bw = @types.level_button_w
   for i in 0..<visible {
     let lvl = game.level_select_scroll + i
     if lvl >= @levels.level_count() {
       break
     }
     let by = start_y + i * (button_h + gap)
-    if mx >= 80 && mx <= 944 && my >= by && my < by + button_h {
-      if is_level_unlocked(game, lvl) {
+    if mx >= bx && mx <= bx + bw && my >= by && my < by + button_h {
+      if game.is_level_unlocked(lvl) {
         start_level(game, lvl)
       }
       return
     }
   }
-}
-
-///|
-fn is_level_unlocked(game : @types.Game, level_id : Int) -> Bool {
-  if level_id == 0 {
-    return true
-  }
-  // Unlock if previous level completed
-  if level_id > 0 && game.stars_earned[level_id - 1] > 0 {
-    return true
-  }
-  false
 }
 
 ///|
@@ -127,13 +128,11 @@ fn start_level(game : @types.Game, level_id : Int) -> Unit {
 fn rebuild_tool_slots(game : @types.Game, level : @types.LevelDef) -> Unit {
   let slots = @types.build_tool_slots()
   for sp in level.species {
-    slots.push(
-      {
-        tool: AnimalPlacer(sp),
-        label: @types.species_icon(sp),
-        color: @types.species_color(sp),
-      },
-    )
+    slots.push({
+      tool: AnimalPlacer(sp),
+      label: @types.species_icon(sp),
+      color: @types.species_color(sp),
+    })
   }
   game.tool_slots = slots
 }
@@ -151,25 +150,25 @@ fn update_playing(game : @types.Game) -> Unit {
     return
   }
   // Tool hotkeys: 1-5 for terrain, 6 for fence, 7 for eraser
-  if @raylib.is_key_pressed(49) {
+  if @raylib.is_key_pressed(@raylib.KeyOne) {
     game.current_tool = TerrainBrush(Grass)
   }
-  if @raylib.is_key_pressed(50) {
+  if @raylib.is_key_pressed(@raylib.KeyTwo) {
     game.current_tool = TerrainBrush(Water)
   }
-  if @raylib.is_key_pressed(51) {
+  if @raylib.is_key_pressed(@raylib.KeyThree) {
     game.current_tool = TerrainBrush(Sand)
   }
-  if @raylib.is_key_pressed(52) {
+  if @raylib.is_key_pressed(@raylib.KeyFour) {
     game.current_tool = TerrainBrush(Rock)
   }
-  if @raylib.is_key_pressed(53) {
+  if @raylib.is_key_pressed(@raylib.KeyFive) {
     game.current_tool = TerrainBrush(Trees)
   }
-  if @raylib.is_key_pressed(54) {
+  if @raylib.is_key_pressed(@raylib.KeySix) {
     game.current_tool = FenceTool
   }
-  if @raylib.is_key_pressed(55) {
+  if @raylib.is_key_pressed(@raylib.KeySeven) {
     game.current_tool = EraserTool
   }
   // Toggle fence mode with Tab
@@ -201,7 +200,10 @@ fn update_playing(game : @types.Game) -> Unit {
   let cs = @types.cell_size
   let col = (mx - gx) / cs
   let row = (my - gy) / cs
-  if col >= 0 && col < @types.grid_cols && row >= 0 && row < @types.grid_rows &&
+  if col >= 0 &&
+    col < @types.grid_cols &&
+    row >= 0 &&
+    row < @types.grid_rows &&
     mx >= gx &&
     my >= gy {
     game.hover_col = col
@@ -235,12 +237,12 @@ fn update_playing(game : @types.Game) -> Unit {
 
 ///|
 fn handle_toolbar_click(game : @types.Game, mx : Int, _my : Int) -> Unit {
-  let slot_width = 72
-  let slot_gap = 4
-  let start_x = 16
+  let slot_w = @types.toolbar_slot_w
+  let slot_gap = @types.toolbar_slot_gap
+  let start_x = @types.toolbar_start_x
   for i, slot in game.tool_slots {
-    let sx = start_x + i * (slot_width + slot_gap)
-    if mx >= sx && mx < sx + slot_width {
+    let sx = start_x + i * (slot_w + slot_gap)
+    if mx >= sx && mx < sx + slot_w {
       game.current_tool = slot.tool
       return
     }
@@ -299,7 +301,10 @@ fn handle_grid_erase(game : @types.Game, col : Int, row : Int) -> Unit {
 }
 
 ///|
-fn remove_species_from_grid(grid : @types.Grid, species : @types.Species) -> Unit {
+fn remove_species_from_grid(
+  grid : @types.Grid,
+  species : @types.Species,
+) -> Unit {
   for r in 0..<grid.rows {
     for c in 0..<grid.cols {
       match grid.cells[r][c].animal {

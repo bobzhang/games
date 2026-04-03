@@ -76,7 +76,9 @@ pub let color_magnet_s : @raylib.Color = @raylib.Color::new(60, 100, 220, 255)
 pub let color_coil : @raylib.Color = @raylib.Color::new(255, 180, 50, 255)
 
 ///|
-pub let color_coil_active : @raylib.Color = @raylib.Color::new(255, 220, 80, 255)
+pub let color_coil_active : @raylib.Color = @raylib.Color::new(
+  255, 220, 80, 255,
+)
 
 ///|
 pub let color_wire : @raylib.Color = @raylib.Color::new(100, 160, 255, 255)
@@ -114,9 +116,7 @@ pub let color_star_filled : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
 pub let color_star_empty : @raylib.Color = @raylib.Color::new(60, 60, 80, 255)
 
 ///|
-pub let color_highlight : @raylib.Color = @raylib.Color::new(
-  255, 255, 255, 60,
-)
+pub let color_highlight : @raylib.Color = @raylib.Color::new(255, 255, 255, 60)
 
 ///|
 pub let color_cursor : @raylib.Color = @raylib.Color::new(255, 255, 100, 180)

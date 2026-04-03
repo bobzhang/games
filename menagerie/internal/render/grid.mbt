@@ -23,9 +23,7 @@ fn draw_grid(game : @types.Game) -> Unit {
           let icon = @types.species_icon(sp)
           let col = @types.species_color(sp)
           let iw = @draw.measure_text(icon, 28)
-          @draw.draw_text(
-            icon, x + (cs - iw) / 2, y + (cs - 28) / 2, 28, col,
-          )
+          @draw.draw_text(icon, x + (cs - iw) / 2, y + (cs - 28) / 2, 28, col)
         }
         None => ()
       }
@@ -46,13 +44,9 @@ fn draw_grid(game : @types.Game) -> Unit {
       FenceTool =>
         match game.fence_mode {
           Horizontal =>
-            @raylib.draw_rectangle(
-              hx, hy, cs, 4, @types.color_fence_highlight,
-            )
+            @raylib.draw_rectangle(hx, hy, cs, 4, @types.color_fence_highlight)
           Vertical =>
-            @raylib.draw_rectangle(
-              hx, hy, 4, cs, @types.color_fence_highlight,
-            )
+            @raylib.draw_rectangle(hx, hy, 4, cs, @types.color_fence_highlight)
         }
       _ => ()
     }

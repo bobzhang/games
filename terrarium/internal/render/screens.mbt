@@ -24,15 +24,20 @@ pub fn draw_title_screen(game : @types.Game) -> Unit {
   let btn_y = 520
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
-  let hover = mx >= btn_x && mx <= btn_x + btn_w && my >= btn_y && my <= btn_y +
-    btn_h
+  let hover = mx >= btn_x &&
+    mx <= btn_x + btn_w &&
+    my >= btn_y &&
+    my <= btn_y + btn_h
   let btn_color = if hover {
     @types.color_button_hover
   } else {
     @types.color_button
   }
   @raylib.draw_rectangle_rounded(
-    rect(btn_x, btn_y, btn_w, btn_h), 0.3, 6, btn_color,
+    rect(btn_x, btn_y, btn_w, btn_h),
+    0.3,
+    6,
+    btn_color,
   )
   let btw = @draw.measure_text(btn_text, 24)
   @draw.draw_text(
@@ -44,8 +49,10 @@ pub fn draw_title_screen(game : @types.Game) -> Unit {
   )
   let stars = @types.total_stars(game.scores)
   if stars > 0 {
-    let star_text = "Stars: " + stars.to_string() + " / " + (@types.total_levels *
-    3).to_string()
+    let star_text = "Stars: " +
+      stars.to_string() +
+      " / " +
+      (@types.total_levels * 3).to_string()
     let stw = @draw.measure_text(star_text, 16)
     @draw.draw_text(star_text, cx - stw / 2, 590, 16, @types.color_star)
   }
@@ -71,7 +78,7 @@ fn draw_jar_preview(cx : Int, cy : Int, frame : Int) -> Unit {
     1.5,
     @types.color_jar_border,
   )
-  let bob = (frame / 30) % 2
+  let bob = frame / 30 % 2
   @raylib.draw_circle(cx - 20, cy + 10, 8.0, @types.color_moss)
   @raylib.draw_circle(cx + 15, cy + 5, 6.0, @types.color_fern)
   @raylib.draw_circle(cx + 5, cy - 5 - bob, 5.0, @types.color_beetle)
@@ -125,9 +132,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
       } else {
         @types.color_button
       }
-      @raylib.draw_rectangle_rounded(
-        rect(bx, by, bw, bh), 0.1, 4, bg_color,
-      )
+      @raylib.draw_rectangle_rounded(rect(bx, by, bw, bh), 0.1, 4, bg_color)
       let num_str = (level_id + 1).to_string()
       @draw.draw_text(num_str, bx + 8, by + 6, 20, @types.color_hud_text)
       if unlocked {
@@ -148,9 +153,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
     }
   }
   let back = "[ESC] Back"
-  @draw.draw_text(
-    back, 40, @types.screen_height - 35, 16, @types.color_hud_dim,
-  )
+  @draw.draw_text(back, 40, @types.screen_height - 35, 16, @types.color_hud_dim)
 }
 
 ///|
@@ -179,14 +182,23 @@ pub fn draw_playing_screen(game : @types.Game) -> Unit {
       )
       let tier_col = @types.tier_color(level.tier)
       @draw.draw_text(
-        @types.tier_name(level.tier), @types.grid_offset_x, 48, 14, tier_col,
+        @types.tier_name(level.tier),
+        @types.grid_offset_x,
+        48,
+        14,
+        tier_col,
       )
       let desc_y = 68
       @draw.draw_text(
-        level.description, @types.grid_offset_x, desc_y, 14, @types.color_hud_dim,
+        level.description,
+        @types.grid_offset_x,
+        desc_y,
+        14,
+        @types.color_hud_dim,
       )
       @draw.draw_text(
-        "Goal: Sustain all organisms for " + @types.max_turns.to_string() +
+        "Goal: Sustain all organisms for " +
+        @types.max_turns.to_string() +
         " turns",
         @types.grid_offset_x,
         desc_y + 18,
@@ -205,10 +217,7 @@ pub fn draw_playing_screen(game : @types.Game) -> Unit {
   let controls_y = @types.screen_height - 50
   @draw.draw_text(
     "[Click] Place  [Right-Click] Remove  [SPACE] Simulate  [R] Reset  [ESC] Back",
-    20,
-    controls_y,
-    14,
-    @types.color_hud_dim,
+    20, controls_y, 14, @types.color_hud_dim,
   )
 }
 
@@ -218,7 +227,11 @@ pub fn draw_simulating_screen(game : @types.Game) -> Unit {
   let cx = @types.screen_width / 2
   let banner_y = @types.screen_height / 2 - 20
   @raylib.draw_rectangle(
-    0, banner_y - 5, @types.screen_width, 30, @types.color_bg,
+    0,
+    banner_y - 5,
+    @types.screen_width,
+    30,
+    @types.color_bg,
   )
   let sim_text = "Simulating Turn " + game.current_turn.to_string() + "..."
   let stw = @draw.measure_text(sim_text, 22)
@@ -234,7 +247,11 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
   let overlay_h = 320
   @raylib.draw_rectangle(cx - 220, overlay_y, 440, overlay_h, @types.color_bg)
   @raylib.draw_rectangle_lines(
-    cx - 220, overlay_y, 440, overlay_h, @types.color_jar_border,
+    cx - 220,
+    overlay_y,
+    440,
+    overlay_h,
+    @types.color_jar_border,
   )
   let result_text = match game.play_result {
     Victory => "VICTORY!"
@@ -247,11 +264,17 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
   }
   let rtw = @draw.measure_text(result_text, 28)
   @draw.draw_text(result_text, cx - rtw / 2, overlay_y + 20, 28, result_color)
-  let turns_text = "Turns survived: " + game.current_turn.to_string() + " / " +
+  let turns_text = "Turns survived: " +
+    game.current_turn.to_string() +
+    " / " +
     @types.max_turns.to_string()
   let ttw = @draw.measure_text(turns_text, 18)
   @draw.draw_text(
-    turns_text, cx - ttw / 2, overlay_y + 60, 18, @types.color_hud_text,
+    turns_text,
+    cx - ttw / 2,
+    overlay_y + 60,
+    18,
+    @types.color_hud_text,
   )
   match game.current_level {
     Some(level) => {
@@ -267,13 +290,19 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
   let btn_y = overlay_y + overlay_h - 70
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
-  let retry_hover = mx >= retry_x && mx <= retry_x + btn_w && my >= btn_y && my <=
-    btn_y + btn_h
+  let retry_hover = mx >= retry_x &&
+    mx <= retry_x + btn_w &&
+    my >= btn_y &&
+    my <= btn_y + btn_h
   @raylib.draw_rectangle_rounded(
     rect(retry_x, btn_y, btn_w, btn_h),
     0.2,
     4,
-    if retry_hover { @types.color_button_hover } else { @types.color_button },
+    if retry_hover {
+      @types.color_button_hover
+    } else {
+      @types.color_button
+    },
   )
   let rw = @draw.measure_text("RETRY", 20)
   @draw.draw_text(
@@ -285,8 +314,10 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
   )
   let is_victory = game.play_result == Victory
   if is_victory {
-    let next_hover = mx >= next_x && mx <= next_x + btn_w && my >= btn_y && my <=
-      btn_y + btn_h
+    let next_hover = mx >= next_x &&
+      mx <= next_x + btn_w &&
+      my >= btn_y &&
+      my <= btn_y + btn_h
     @raylib.draw_rectangle_rounded(
       rect(next_x, btn_y, btn_w, btn_h),
       0.2,

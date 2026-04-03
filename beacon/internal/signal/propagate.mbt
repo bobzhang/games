@@ -6,22 +6,10 @@ pub fn line_of_sight(
   fc : Int,
   fr : Int,
   tc : Int,
-  tr : Int
+  tr : Int,
 ) -> Bool {
-  let dc = if tc > fc {
-    1
-  } else if tc < fc {
-    -1
-  } else {
-    0
-  }
-  let dr = if tr > fr {
-    1
-  } else if tr < fr {
-    -1
-  } else {
-    0
-  }
+  let dc = if tc > fc { 1 } else if tc < fc { -1 } else { 0 }
+  let dr = if tr > fr { 1 } else if tr < fr { -1 } else { 0 }
   let mut cc = fc + dc
   let mut cr = fr + dr
   while cc != tc || cr != tr {
@@ -46,15 +34,23 @@ pub fn can_reach(
   sr : Int,
   tc : Int,
   tr : Int,
-  range : Int
+  range : Int,
 ) -> Bool {
   // Must be along cardinal direction
   if sc != tc && sr != tr {
     return false
   }
   let dist = @types.maxi(
-    if sc > tc { sc - tc } else { tc - sc },
-    if sr > tr { sr - tr } else { tr - sr },
+    if sc > tc {
+      sc - tc
+    } else {
+      tc - sc
+    },
+    if sr > tr {
+      sr - tr
+    } else {
+      tr - sr
+    },
   )
   if dist > range || dist == 0 {
     return false
@@ -67,7 +63,7 @@ pub fn can_reach(
 /// Returns: (all_receivers_lit, max_relay_chain_length, signal_paths)
 pub fn propagate(
   state : @types.LevelState,
-  data : @types.LevelData
+  data : @types.LevelData,
 ) -> (Bool, Int, Array[@types.SignalPath]) {
   let grid = state.grid
   // Reset signal state
@@ -109,7 +105,7 @@ pub fn propagate(
     for d in 0..<dirs.length() {
       let (dc, dr) = dirs[d]
       // Scan tiles in this direction up to range
-      for dist in 1..=range {
+      for dist in 1..<=range {
         let tc = sc + dc * dist
         let tr = sr + dr * dist
         if !@types.in_grid(tc, tr) {
@@ -123,13 +119,12 @@ pub fn propagate(
         // Can we reach this tile?
         let target_kind = tile.kind
         match target_kind {
-          Receiver => {
+          Receiver =>
             if !tile.has_signal {
               tile.has_signal = true
               paths.push(@types.new_signal_path(sc, sr, tc, tr))
             }
-          }
-          Tower => {
+          Tower =>
             if !visited[tr][tc] {
               visited[tr][tc] = true
               tile.has_signal = true
@@ -140,7 +135,6 @@ pub fn propagate(
               queue.push((tc, tr, new_depth))
               paths.push(@types.new_signal_path(sc, sr, tc, tr))
             }
-          }
           _ => ()
         }
       }
@@ -171,7 +165,7 @@ pub fn compute_stars(
   towers_placed : Int,
   chain_length : Int,
   par_towers : Int,
-  par_chain : Int
+  par_chain : Int,
 ) -> @types.StarRating {
   if towers_placed <= par_towers && chain_length <= par_chain {
     Three

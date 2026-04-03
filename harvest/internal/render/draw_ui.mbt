@@ -49,13 +49,7 @@ fn draw_crop_palette(game : @types.Game) -> Unit {
   let pal_y = @types.grid_offset_y
   // Background
   @raylib.draw_rectangle(pal_x, pal_y, 280, 420, @types.color_panel_bg)
-  @raylib.draw_rectangle_lines(
-    pal_x,
-    pal_y,
-    280,
-    420,
-    @types.color_grid_line,
-  )
+  @raylib.draw_rectangle_lines(pal_x, pal_y, 280, 420, @types.color_grid_line)
   @draw.draw_text("Crops", pal_x + 10, pal_y + 8, 22, @types.color_title_text)
   let crops = @types.all_crops()
   let season = @types.season_from_index(game.planning_season)
@@ -67,13 +61,7 @@ fn draw_crop_palette(game : @types.Game) -> Unit {
     let is_selected = crop == game.selected_crop
     // Background
     if is_selected {
-      @raylib.draw_rectangle(
-        pal_x + 5,
-        cy,
-        270,
-        42,
-        @types.color_crop_selected,
-      )
+      @raylib.draw_rectangle(pal_x + 5, cy, 270, 42, @types.color_crop_selected)
     } else if can_plant {
       @raylib.draw_rectangle(
         pal_x + 5,
@@ -126,13 +114,7 @@ fn draw_crop_palette(game : @types.Game) -> Unit {
   // Nutrient legend
   let leg_y = pal_y + 420 + 15
   @raylib.draw_rectangle(pal_x, leg_y, 280, 65, @types.color_panel_bg)
-  @raylib.draw_rectangle_lines(
-    pal_x,
-    leg_y,
-    280,
-    65,
-    @types.color_grid_line,
-  )
+  @raylib.draw_rectangle_lines(pal_x, leg_y, 280, 65, @types.color_grid_line)
   @draw.draw_text("Nutrients", pal_x + 10, leg_y + 5, 14, @types.color_hud_text)
   @raylib.draw_rectangle(pal_x + 10, leg_y + 25, 12, 12, @types.color_n_bar)
   @draw.draw_text("N", pal_x + 28, leg_y + 25, 12, @types.color_hud_text)
@@ -221,11 +203,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
   // Simulate button hint
   @draw.draw_text(
-    "Space: Simulate Year",
-    1100,
-    15,
-    16,
-    @types.color_button_hover,
+    "Space: Simulate Year", 1100, 15, 16, @types.color_button_hover,
   )
 }
 
@@ -300,12 +278,14 @@ fn draw_hover_info(game : @types.Game) -> Unit {
     @types.color_grid_line,
   )
   // Plot info
-  let pos_str = "Plot (" +
-    col.to_string() +
-    "," +
-    row.to_string() +
-    ")"
-  @draw.draw_text(pos_str, @types.grid_offset_x + 10, info_y + 5, 14, @types.color_hud_text)
+  let pos_str = "Plot (" + col.to_string() + "," + row.to_string() + ")"
+  @draw.draw_text(
+    pos_str,
+    @types.grid_offset_x + 10,
+    info_y + 5,
+    14,
+    @types.color_hud_text,
+  )
   // Soil
   let soil_str = "N:" +
     plot.soil.nitrogen.to_string() +
@@ -316,7 +296,13 @@ fn draw_hover_info(game : @types.Game) -> Unit {
     " (Avg:" +
     @types.soil_quality(plot.soil).to_string() +
     "%)"
-  @draw.draw_text(soil_str, @types.grid_offset_x + 10, info_y + 25, 14, @types.color_hud_text)
+  @draw.draw_text(
+    soil_str,
+    @types.grid_offset_x + 10,
+    info_y + 25,
+    14,
+    @types.color_hud_text,
+  )
   // Selected crop cost
   let info = @types.crop_info(game.selected_crop)
   let cost_str = @types.crop_name(game.selected_crop) +
@@ -326,7 +312,13 @@ fn draw_hover_info(game : @types.Game) -> Unit {
     info.p_cost.to_string() +
     " K:" +
     info.k_cost.to_string()
-  @draw.draw_text(cost_str, @types.grid_offset_x + 10, info_y + 45, 13, @types.color_hud_text)
+  @draw.draw_text(
+    cost_str,
+    @types.grid_offset_x + 10,
+    info_y + 45,
+    13,
+    @types.color_hud_text,
+  )
   // Can plant indicator
   let season = @types.season_from_index(game.planning_season)
   let can = @types.can_plant_in_season(game.selected_crop, season) &&
@@ -337,13 +329,7 @@ fn draw_hover_info(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(200, 80, 80, 255)
   }
-  @draw.draw_text(
-    can_str,
-    @types.grid_offset_x + 10,
-    info_y + 62,
-    13,
-    can_col,
-  )
+  @draw.draw_text(can_str, @types.grid_offset_x + 10, info_y + 62, 13, can_col)
 }
 
 ///|
@@ -378,9 +364,6 @@ fn draw_controls(game : @types.Game) -> Unit {
   let y = @types.screen_height - 30
   @draw.draw_text(
     "1-8: Select Crop  Click: Place  Tab: Season  Space: Simulate  R: Reset  ESC: Back",
-    80,
-    y,
-    14,
-    @types.color_dark_text,
+    80, y, 14, @types.color_dark_text,
   )
 }

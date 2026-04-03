@@ -48,14 +48,12 @@ pub fn attempt_blend(game : @types.Game) -> Unit {
   let ingredients_used = @types.total_ingredient_count(game)
   let all_in_range = @forge.check_target(result, level.target)
   let stars = @forge.calculate_stars(
-    result, level.target, ingredients_used, level.par_ingredients,
-  )
-  game.result = {
-    stars,
+    result,
+    level.target,
     ingredients_used,
-    blend: result,
-    all_in_range,
-  }
+    level.par_ingredients,
+  )
+  game.result = { stars, ingredients_used, blend: result, all_in_range }
 }
 
 ///|

@@ -1,11 +1,7 @@
 ///|
 pub fn draw_title_screen(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
   )
   let title = "TIDE POOL"
   let tw = @draw.measure_text(title, 48)
@@ -53,14 +49,7 @@ pub fn draw_title_screen(game : @types.Game) -> Unit {
     16,
     @types.color_hud_dim,
   )
-  draw_button(
-    "START",
-    @types.screen_width / 2 - 80,
-    460,
-    160,
-    45,
-    game,
-  )
+  draw_button("START", @types.screen_width / 2 - 80, 460, 160, 45, game)
   let stars = @types.total_stars(game.scores)
   let completed = @types.levels_completed(game.scores)
   if completed > 0 {
@@ -83,25 +72,19 @@ fn draw_wave_decoration(game : @types.Game, y : Int) -> Unit {
   for i in 0..<wave_count {
     let x = i * 4
     let wave_offset = (frame + i * 3) % 60
-    let wave_y = if wave_offset < 30 { wave_offset / 3 } else { (60 - wave_offset) / 3 }
-    @raylib.draw_rectangle(
-      x,
-      y + wave_y,
-      3,
-      2,
-      @types.color_water_surface,
-    )
+    let wave_y = if wave_offset < 30 {
+      wave_offset / 3
+    } else {
+      (60 - wave_offset) / 3
+    }
+    @raylib.draw_rectangle(x, y + wave_y, 3, 2, @types.color_water_surface)
   }
 }
 
 ///|
 pub fn draw_level_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
   )
   let title = "SELECT LEVEL"
   let tw = @draw.measure_text(title, 32)
@@ -118,7 +101,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
   let gap = 12
   let start_x = (@types.screen_width - cols * (btn_w + gap)) / 2
   let start_y = 80
-  for i in 0..< @types.total_levels {
+  for i in 0..<@types.total_levels {
     let row = i / cols
     let col = i % cols
     let x = start_x + col * (btn_w + gap)
@@ -141,7 +124,11 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
       x + 8,
       y + 6,
       13,
-      if unlocked { @types.color_hud_text } else { @types.color_locked },
+      if unlocked {
+        @types.color_hud_text
+      } else {
+        @types.color_locked
+      },
     )
     if unlocked {
       let tier_text = @types.tier_name(level.tier)
@@ -176,11 +163,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
 ///|
 pub fn draw_results_screen(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
   )
   let result_text = match game.play_result {
     Victory => "ECOSYSTEM THRIVES!"
@@ -227,7 +210,13 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
       if is_victory {
         let total_placed = game.organisms.length()
         let stars = @types.compute_stars(game.current_cycle, total_placed)
-        @draw.draw_text("Stars earned:", @types.screen_width / 2 - 100, 250, 18, @types.color_hud_dim)
+        @draw.draw_text(
+          "Stars earned:",
+          @types.screen_width / 2 - 100,
+          250,
+          18,
+          @types.color_hud_dim,
+        )
         for s in 0..<3 {
           let sx = @types.screen_width / 2 - 100 + 130 + s * 30
           let sc = if s < stars {
@@ -264,7 +253,11 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
       @types.color_hud_dim,
     )
     let mut evt_text = ""
-    let max_events = if log.events.length() > 3 { 3 } else { log.events.length() }
+    let max_events = if log.events.length() > 3 {
+      3
+    } else {
+      log.events.length()
+    }
     for j in 0..<max_events {
       if j > 0 {
         evt_text = evt_text + " | "
@@ -293,14 +286,7 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
   }
   let btn_y = @types.screen_height - 60
   draw_button("RETRY", @types.screen_width / 2 - 180, btn_y, 140, 40, game)
-  draw_button(
-    "LEVELS",
-    @types.screen_width / 2 + 40,
-    btn_y,
-    140,
-    40,
-    game,
-  )
+  draw_button("LEVELS", @types.screen_width / 2 + 40, btn_y, 140, 40, game)
 }
 
 ///|
@@ -310,16 +296,12 @@ pub fn draw_button(
   y : Int,
   w : Int,
   h : Int,
-  _game : @types.Game
+  _game : @types.Game,
 ) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   let hovered = mx >= x && mx < x + w && my >= y && my < y + h
-  let bg = if hovered {
-    @types.color_button_hover
-  } else {
-    @types.color_button
-  }
+  let bg = if hovered { @types.color_button_hover } else { @types.color_button }
   @raylib.draw_rectangle(x, y, w, h, bg)
   @raylib.draw_rectangle_lines(x, y, w, h, @types.color_hud_text)
   let tw = @draw.measure_text(text, 18)

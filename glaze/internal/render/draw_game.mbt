@@ -48,13 +48,7 @@ fn draw_player_grid(game : @types.Game) -> Unit {
       @raylib.draw_rectangle(cx, cy, cs, cs, color)
       // Draw a subtle inner border
       if cell.glaze is Empty {
-        @raylib.draw_rectangle_lines(
-          cx,
-          cy,
-          cs,
-          cs,
-          @types.color_panel_light,
-        )
+        @raylib.draw_rectangle_lines(cx, cy, cs, cs, @types.color_panel_light)
       }
       // Hover highlight
       if row == game.hover_row && col == game.hover_col {
@@ -74,7 +68,12 @@ fn draw_player_grid(game : @types.Game) -> Unit {
             cy + 4,
             cs - 8,
             cs - 8,
-            @raylib.Color::new(preview.r.to_int(), preview.g.to_int(), preview.b.to_int(), 100),
+            @raylib.Color::new(
+              preview.r.to_int(),
+              preview.g.to_int(),
+              preview.b.to_int(),
+              100,
+            ),
           )
         }
       }
@@ -118,13 +117,7 @@ fn draw_target_grid(game : @types.Game) -> Unit {
         let color = @types.fired_to_raylib(game.target_grid[idx])
         @raylib.draw_rectangle(cx, cy, cs, cs, color)
       } else {
-        @raylib.draw_rectangle(
-          cx,
-          cy,
-          cs,
-          cs,
-          @types.color_panel_light,
-        )
+        @raylib.draw_rectangle(cx, cy, cs, cs, @types.color_panel_light)
       }
     }
   }
@@ -133,7 +126,8 @@ fn draw_target_grid(game : @types.Game) -> Unit {
 ///|
 fn draw_palette(game : @types.Game) -> Unit {
   let px = @types.target_offset_x
-  let py = @types.target_offset_y + @types.grid_rows * (@types.target_cell_size + @types.target_cell_gap) +
+  let py = @types.target_offset_y +
+    @types.grid_rows * (@types.target_cell_size + @types.target_cell_gap) +
     40
   // Label
   @draw.draw_text("GLAZES (1-6, TAB)", px, py, 18, @types.color_text_dim)
@@ -188,7 +182,8 @@ fn draw_palette(game : @types.Game) -> Unit {
 ///|
 fn draw_info_panel(game : @types.Game) -> Unit {
   let px = @types.target_offset_x
-  let py = @types.target_offset_y + @types.grid_rows * (@types.target_cell_size + @types.target_cell_gap) +
+  let py = @types.target_offset_y +
+    @types.grid_rows * (@types.target_cell_size + @types.target_cell_gap) +
     160
   // Level name
   guard game.current_level is Some(level) else { return }
@@ -234,13 +229,7 @@ fn draw_info_panel(game : @types.Game) -> Unit {
     16,
     @types.color_text_dim,
   )
-  @draw.draw_text(
-    "ESC: Back",
-    px,
-    y_base + 104,
-    16,
-    @types.color_text_dim,
-  )
+  @draw.draw_text("ESC: Back", px, y_base + 104, 16, @types.color_text_dim)
   // Firing rules reminder
   let ry = y_base + 140
   @draw.draw_text("Firing Rules:", px, ry, 16, @types.color_highlight)
@@ -258,20 +247,8 @@ fn draw_info_panel(game : @types.Game) -> Unit {
     14,
     @types.color_text_dim,
   )
-  @draw.draw_text(
-    "Red + Green -> CRACK!",
-    px,
-    ry + 56,
-    14,
-    @types.color_fail,
-  )
-  @draw.draw_text(
-    "Gold + Black -> CRACK!",
-    px,
-    ry + 74,
-    14,
-    @types.color_fail,
-  )
+  @draw.draw_text("Red + Green -> CRACK!", px, ry + 56, 14, @types.color_fail)
+  @draw.draw_text("Gold + Black -> CRACK!", px, ry + 74, 14, @types.color_fail)
 }
 
 ///|
@@ -281,10 +258,7 @@ fn draw_message(game : @types.Game) -> Unit {
   }
   let w = @types.screen_width
   let msg_w = @draw.measure_text(game.message, 22)
-  let alpha = @types.mini(
-    255,
-    (game.message_timer * 255.0 / 0.5).to_int(),
-  )
+  let alpha = @types.mini(255, (game.message_timer * 255.0 / 0.5).to_int())
   @draw.draw_text(
     game.message,
     (w - msg_w) / 2,

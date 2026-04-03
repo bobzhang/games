@@ -346,10 +346,7 @@ fn draw_islands(game : @types.Game) -> Unit {
     }
     // Selection glow
     if selected {
-      let sel_pulse = @types.sinf(
-          Float::from_int(game.frame_count) * 0.1,
-        ) *
-        0.3 +
+      let sel_pulse = @types.sinf(Float::from_int(game.frame_count) * 0.1) * 0.3 +
         0.7
       let glow_alpha = (sel_pulse * 100.0).to_int()
       @raylib.draw_circle(

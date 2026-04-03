@@ -6,13 +6,7 @@ fn draw_menu(game : @types.GameState, frame : Int) -> Unit {
   let wave = @math.sinf(Float::from_int(frame) * 0.05) * 3.0
   let ty = 80 + wave.to_int()
   @draw.draw_text("COMPASS", cx - 100, ty, 48, text_bright)
-  @draw.draw_text(
-    "Blind Navigation Puzzle",
-    cx - 115,
-    ty + 55,
-    20,
-    text_dim,
-  )
+  @draw.draw_text("Blind Navigation Puzzle", cx - 115, ty + 55, 20, text_dim)
   // Instructions
   let iy = 200
   @draw.draw_text("Navigate your ship through fog", cx - 145, iy, 18, text_dim)
@@ -56,7 +50,7 @@ fn draw_menu_button(
   w : Int,
   h : Int,
   text : String,
-  _frame : Int
+  _frame : Int,
 ) -> Unit {
   @raylib.draw_rectangle(x, y, w, h, button_color)
   @raylib.draw_rectangle_lines(x, y, w, h, panel_border)
@@ -72,7 +66,9 @@ fn draw_level_select(game : @types.GameState, frame : Int) -> Unit {
   // Draw tier sections
   let tier_starts = [0, 7, 14]
   let tier_counts = [7, 7, 6]
-  let tier_names = ["Calm Seas (1-7)", "Rough Waters (8-14)", "Treacherous Depths (15-20)"]
+  let tier_names = [
+    "Calm Seas (1-7)", "Rough Waters (8-14)", "Treacherous Depths (15-20)",
+  ]
   for tier_idx in 0..<3 {
     let ty = 90 + tier_idx * 210
     @draw.draw_text(tier_names[tier_idx], 40, ty, 18, text_dim)
@@ -100,7 +96,7 @@ fn draw_level_button(
   y : Int,
   level : Int,
   star : @types.StarRating,
-  _frame : Int
+  _frame : Int,
 ) -> Unit {
   let w = 110
   let h = 140
@@ -116,13 +112,7 @@ fn draw_level_button(
   let tw = @draw.measure_text(num_str, 28)
   @draw.draw_text(num_str, x + (w - tw) / 2, y + 15, 28, text_bright)
   // Tier indicator
-  let tier = if level < 7 {
-    1
-  } else if level < 14 {
-    2
-  } else {
-    3
-  }
+  let tier = if level < 7 { 1 } else if level < 14 { 2 } else { 3 }
   let tier_str = "Tier \{tier}"
   @draw.draw_text(tier_str, x + 30, y + 55, 14, text_dim)
   // Stars
@@ -133,11 +123,7 @@ fn draw_level_button(
     @draw.draw_text("*", sx, y + 85, 24, color)
   }
   // Keyboard hint
-  let key_str = if level < 9 {
-    "\{level + 1}"
-  } else {
-    ""
-  }
+  let key_str = if level < 9 { "\{level + 1}" } else { "" }
   if key_str.length() > 0 {
     @draw.draw_text(key_str, x + w / 2 - 4, y + h - 25, 14, text_dim)
   }

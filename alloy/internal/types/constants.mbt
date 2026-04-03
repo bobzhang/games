@@ -43,7 +43,9 @@ pub let color_hud_dim : @raylib.Color = @raylib.Color::new(140, 135, 155, 255)
 pub let color_button : @raylib.Color = @raylib.Color::new(65, 58, 85, 255)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(85, 78, 115, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  85, 78, 115, 255,
+)
 
 ///|
 pub let color_star_gold : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
@@ -79,13 +81,17 @@ pub let color_zinc : @raylib.Color = @raylib.Color::new(170, 180, 190, 255)
 pub let color_crucible : @raylib.Color = @raylib.Color::new(90, 60, 40, 255)
 
 ///|
-pub let color_crucible_inner : @raylib.Color = @raylib.Color::new(50, 35, 25, 255)
+pub let color_crucible_inner : @raylib.Color = @raylib.Color::new(
+  50, 35, 25, 255,
+)
 
 ///|
 pub let color_temp_low : @raylib.Color = @raylib.Color::new(80, 140, 220, 255)
 
 ///|
-pub let color_temp_medium : @raylib.Color = @raylib.Color::new(220, 160, 50, 255)
+pub let color_temp_medium : @raylib.Color = @raylib.Color::new(
+  220, 160, 50, 255,
+)
 
 ///|
 pub let color_temp_high : @raylib.Color = @raylib.Color::new(255, 70, 30, 255)

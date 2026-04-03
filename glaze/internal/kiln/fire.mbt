@@ -30,7 +30,7 @@ pub fn deepen(f : @types.FiredColor) -> @types.FiredColor {
 /// Check if two glaze colors are blend-compatible (Red+Blue->Purple).
 fn is_blend_pair(
   a : @types.GlazeColor,
-  b : @types.GlazeColor
+  b : @types.GlazeColor,
 ) -> @types.FiredColor? {
   match (a, b) {
     (Red, Blue) | (Blue, Red) => Some(FPurple)
@@ -59,11 +59,7 @@ fn neighbors(row : Int, col : Int) -> Array[(Int, Int)] {
 
 ///|
 /// Count how many neighbors have the same glaze color.
-fn count_same_neighbors(
-  grid : @types.Grid,
-  row : Int,
-  col : Int
-) -> Int {
+fn count_same_neighbors(grid : @types.Grid, row : Int, col : Int) -> Int {
   let g = @types.get_cell(grid, row, col).glaze
   if g is Empty {
     return 0
@@ -81,11 +77,7 @@ fn count_same_neighbors(
 
 ///|
 /// Check if any neighbor is incompatible (causes cracking).
-fn has_incompatible_neighbor(
-  grid : @types.Grid,
-  row : Int,
-  col : Int
-) -> Bool {
+fn has_incompatible_neighbor(grid : @types.Grid, row : Int, col : Int) -> Bool {
   let g = @types.get_cell(grid, row, col).glaze
   if g is Empty {
     return false
@@ -109,7 +101,7 @@ fn has_incompatible_neighbor(
 fn find_blend_neighbor(
   grid : @types.Grid,
   row : Int,
-  col : Int
+  col : Int,
 ) -> @types.FiredColor? {
   let g = @types.get_cell(grid, row, col).glaze
   if g is Empty {
@@ -173,7 +165,7 @@ pub fn fire_grid(grid : @types.Grid) -> Unit {
 /// Count how many cells match the target pattern.
 pub fn count_matches(
   grid : @types.Grid,
-  target : Array[@types.FiredColor]
+  target : Array[@types.FiredColor],
 ) -> Int {
   let mut count = 0
   for i in 0..<@types.mini(grid.cells.length(), target.length()) {
@@ -202,7 +194,7 @@ pub fn calculate_score(
   grid : @types.Grid,
   target : Array[@types.FiredColor],
   moves_used : Int,
-  par_moves : Int
+  par_moves : Int,
 ) -> @types.LevelScore {
   let total = @types.grid_cols * @types.grid_rows
   let matched = count_matches(grid, target)

@@ -115,10 +115,14 @@ pub let color_peg : @raylib.Color = @raylib.Color::new(120, 100, 70, 255)
 pub let color_gear_gold : @raylib.Color = @raylib.Color::new(210, 180, 80, 255)
 
 ///|
-pub let color_gear_copper : @raylib.Color = @raylib.Color::new(200, 120, 60, 255)
+pub let color_gear_copper : @raylib.Color = @raylib.Color::new(
+  200, 120, 60, 255,
+)
 
 ///|
-pub let color_gear_silver : @raylib.Color = @raylib.Color::new(180, 190, 200, 255)
+pub let color_gear_silver : @raylib.Color = @raylib.Color::new(
+  180, 190, 200, 255,
+)
 
 ///|
 pub let color_cam : @raylib.Color = @raylib.Color::new(160, 140, 100, 255)
@@ -127,7 +131,9 @@ pub let color_cam : @raylib.Color = @raylib.Color::new(160, 140, 100, 255)
 pub let color_spring : @raylib.Color = @raylib.Color::new(100, 180, 120, 255)
 
 ///|
-pub let color_escapement : @raylib.Color = @raylib.Color::new(150, 100, 180, 255)
+pub let color_escapement : @raylib.Color = @raylib.Color::new(
+  150, 100, 180, 255,
+)
 
 ///|
 pub let color_bell : @raylib.Color = @raylib.Color::new(220, 200, 50, 255)
@@ -138,9 +144,7 @@ pub let color_bell_ringing : @raylib.Color = @raylib.Color::new(
 )
 
 ///|
-pub let color_highlight : @raylib.Color = @raylib.Color::new(
-  255, 255, 200, 120,
-)
+pub let color_highlight : @raylib.Color = @raylib.Color::new(255, 255, 200, 120)
 
 ///|
 pub let color_invalid : @raylib.Color = @raylib.Color::new(255, 60, 60, 120)
@@ -155,7 +159,9 @@ pub let color_hud_text : @raylib.Color = @raylib.Color::new(220, 210, 180, 255)
 pub let color_star_empty : @raylib.Color = @raylib.Color::new(80, 70, 50, 255)
 
 ///|
-pub let color_star_filled : @raylib.Color = @raylib.Color::new(255, 220, 50, 255)
+pub let color_star_filled : @raylib.Color = @raylib.Color::new(
+  255, 220, 50, 255,
+)
 
 ///|
 pub let color_title : @raylib.Color = @raylib.Color::new(210, 180, 80, 255)

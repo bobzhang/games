@@ -1,8 +1,7 @@
 ///|
 pub fn handle_title_input(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_mouse_button_pressed(
-    0,
-  ) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_mouse_button_pressed(0) {
     let cx = @types.screen_width / 2
     let btn_w = 160
     let btn_h = 50
@@ -10,8 +9,8 @@ pub fn handle_title_input(game : @types.Game) -> Unit {
     let btn_y = 520
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
-    if @raylib.is_key_pressed(@raylib.KeyEnter) || (mx >= btn_x && mx <= btn_x +
-    btn_w && my >= btn_y && my <= btn_y + btn_h) {
+    if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+      (mx >= btn_x && mx <= btn_x + btn_w && my >= btn_y && my <= btn_y + btn_h) {
       game.screen = LevelSelect
     }
   }
@@ -81,8 +80,10 @@ fn update_hover(game : @types.Game) -> Unit {
   let my = @raylib.get_mouse_y()
   let gx = mx - @types.grid_offset_x
   let gy = my - @types.grid_offset_y
-  if gx >= 0 && gx < @types.grid_size * @types.cell_size && gy >= 0 && gy < @types.grid_size *
-  @types.cell_size {
+  if gx >= 0 &&
+    gx < @types.grid_size * @types.cell_size &&
+    gy >= 0 &&
+    gy < @types.grid_size * @types.cell_size {
     game.hover_col = gx / @types.cell_size
     game.hover_row = gy / @types.cell_size
   } else {
@@ -106,8 +107,10 @@ fn handle_palette_click(game : @types.Game) -> Unit {
       for i in 0..<level.available_organisms.length() {
         let kind = level.available_organisms[i]
         let slot_y = y + i * (@types.palette_slot_size + @types.palette_gap)
-        if mx >= x && mx <= x + @types.palette_slot_size && my >= slot_y && my <=
-        slot_y + @types.palette_slot_size {
+        if mx >= x &&
+          mx <= x + @types.palette_slot_size &&
+          my >= slot_y &&
+          my <= slot_y + @types.palette_slot_size {
           if game.selected_organism == Some(kind) {
             game.selected_organism = None
           } else {
@@ -135,30 +138,30 @@ fn handle_grid_click(game : @types.Game) -> Unit {
   let c = game.hover_col
   match game.current_level {
     None => return
-    Some(level) =>
-      if @types.is_cell_locked(level, r, c) {
-        return
-      }
+    Some(level) => if @types.is_cell_locked(level, r, c) { return }
   }
   if @raylib.is_mouse_button_pressed(0) {
     match game.selected_organism {
       None => ()
-      Some(kind) => {
+      Some(kind) =>
         if game.grid[r][c] == Empty {
           let avail = @types.get_available_count(game, kind)
           if avail > 0 {
             game.grid[r][c] = Organism(kind)
             let idx = @types.organism_index(kind)
             game.organisms_placed[idx] += 1
-            game.organisms.push(
-              { kind, row: r, col: c, alive: true, health: 100.0 },
-            )
+            game.organisms.push({
+              kind,
+              row: r,
+              col: c,
+              alive: true,
+              health: 100.0,
+            })
           } else {
             game.message = "No more available!"
             game.message_timer = 1.5
           }
         }
-      }
     }
   }
   if @raylib.is_mouse_button_pressed(1) {
@@ -205,8 +208,10 @@ pub fn handle_results_input(game : @types.Game) -> Unit {
     let btn_y = 200 + 320 - 70
     let mx = @raylib.get_mouse_x()
     let my = @raylib.get_mouse_y()
-    if mx >= retry_x && mx <= retry_x + btn_w && my >= btn_y && my <= btn_y +
-    btn_h {
+    if mx >= retry_x &&
+      mx <= retry_x + btn_w &&
+      my >= btn_y &&
+      my <= btn_y + btn_h {
       match game.current_level {
         Some(level) => start_level(game, level.id)
         _ => ()
@@ -214,12 +219,13 @@ pub fn handle_results_input(game : @types.Game) -> Unit {
       return
     }
     if game.play_result == Victory {
-      if mx >= next_x && mx <= next_x + btn_w && my >= btn_y && my <= btn_y +
-      btn_h {
+      if mx >= next_x &&
+        mx <= next_x + btn_w &&
+        my >= btn_y &&
+        my <= btn_y + btn_h {
         let next_id = game.selected_level + 1
-        if next_id < @types.total_levels && @types.is_level_unlocked(
-          game.scores, next_id,
-        ) {
+        if next_id < @types.total_levels &&
+          @types.is_level_unlocked(game.scores, next_id) {
           start_level(game, next_id)
         } else {
           game.screen = LevelSelect

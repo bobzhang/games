@@ -102,7 +102,14 @@ test "species_needs returns correct data for Penguin" {
 
 ///|
 test "species_needs for all species" {
-  let all : Array[@types.Species] = [Lion, Penguin, Elephant, Snake, Monkey, Bear]
+  let all : Array[@types.Species] = [
+    Lion,
+    Penguin,
+    Elephant,
+    Snake,
+    Monkey,
+    Bear,
+  ]
   for sp in all {
     let needs = @types.species_needs(sp)
     assert_true(needs.min_space > 0)
@@ -124,7 +131,9 @@ test "new_game initializes correctly" {
 test "terrain_color returns distinct colors" {
   let grass_c = @types.terrain_color(Grass)
   let water_c = @types.terrain_color(Water)
-  assert_true(grass_c.r != water_c.r || grass_c.g != water_c.g || grass_c.b != water_c.b)
+  assert_true(
+    grass_c.r != water_c.r || grass_c.g != water_c.g || grass_c.b != water_c.b,
+  )
 }
 
 ///|
@@ -154,4 +163,37 @@ test "set_message sets message and timer" {
   @types.set_message(game, "Hello")
   inspect(game.message, content="Hello")
   assert_true(game.message_timer > 0.0)
+}
+
+///|
+test "Game::is_level_unlocked level 0 always unlocked" {
+  let game = @types.new_game()
+  inspect(game.is_level_unlocked(0), content="true")
+}
+
+///|
+test "Game::is_level_unlocked locked until previous completed" {
+  let game = @types.new_game()
+  inspect(game.is_level_unlocked(1), content="false")
+  game.stars_earned[0] = 1
+  inspect(game.is_level_unlocked(1), content="true")
+}
+
+///|
+test "Game::is_level_unlocked chain" {
+  let game = @types.new_game()
+  inspect(game.is_level_unlocked(3), content="false")
+  game.stars_earned[2] = 2
+  inspect(game.is_level_unlocked(3), content="true")
+  // Level 2 still locked since level 1 not completed
+  inspect(game.is_level_unlocked(2), content="false")
+}
+
+///|
+test "tier_label returns correct roman numerals" {
+  inspect(@types.tier_label(1), content="I")
+  inspect(@types.tier_label(2), content="II")
+  inspect(@types.tier_label(3), content="III")
+  inspect(@types.tier_label(0), content="?")
+  inspect(@types.tier_label(99), content="?")
 }

@@ -48,9 +48,7 @@ pub let color_soil_medium : @raylib.Color = @raylib.Color::new(
 )
 
 ///|
-pub let color_soil_poor : @raylib.Color = @raylib.Color::new(
-  190, 170, 140, 255,
-)
+pub let color_soil_poor : @raylib.Color = @raylib.Color::new(190, 170, 140, 255)
 
 ///|
 pub let color_soil_depleted : @raylib.Color = @raylib.Color::new(
@@ -112,9 +110,7 @@ pub let color_black : @raylib.Color = @raylib.Color::new(0, 0, 0, 255)
 pub let color_dark_text : @raylib.Color = @raylib.Color::new(60, 50, 40, 255)
 
 ///|
-pub let color_highlight : @raylib.Color = @raylib.Color::new(
-  255, 255, 200, 120,
-)
+pub let color_highlight : @raylib.Color = @raylib.Color::new(255, 255, 200, 120)
 
 ///|
 pub let color_invalid : @raylib.Color = @raylib.Color::new(255, 60, 60, 120)

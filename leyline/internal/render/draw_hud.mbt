@@ -16,7 +16,13 @@ pub fn draw_toolbar(game : @types.Game) -> Unit {
     let color = if is_active { tool_active_color } else { tool_inactive_color }
     @raylib.draw_rectangle_lines(x, 8, 130, 36, color)
     if is_active {
-      @raylib.draw_rectangle(x + 1, 9, 128, 34, @raylib.Color::new(80, 255, 180, 30))
+      @raylib.draw_rectangle(
+        x + 1,
+        9,
+        128,
+        34,
+        @raylib.Color::new(80, 255, 180, 30),
+      )
     }
     @draw.draw_text(label, x + 8, 16, 18, color)
   }

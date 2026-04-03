@@ -14,15 +14,7 @@ pub fn trace_all_beams(grid : @types.HexGrid) -> Array[@types.BeamSegment] {
               Some(c) => c
               None => @types.beam_color_white()
             }
-            trace_beam(
-              grid,
-              q,
-              r,
-              cell.direction,
-              source_color,
-              segments,
-              0,
-            )
+            trace_beam(grid, q, r, cell.direction, source_color, segments, 0)
           }
           _ => ()
         }
@@ -116,15 +108,7 @@ fn trace_beam(
             match cell.crystal_face {
               Some(face) => {
                 let new_dir = @types.crystal_refract(dir, face)
-                trace_beam(
-                  grid,
-                  cq,
-                  cr,
-                  new_dir,
-                  color,
-                  segments,
-                  depth + 1,
-                )
+                trace_beam(grid, cq, cr, new_dir, color, segments, depth + 1)
               }
               None =>
                 // Default crystal: pass through (refract left)
@@ -143,15 +127,7 @@ fn trace_beam(
               Some(fc) => {
                 let filtered = @types.beam_color_filter(color, fc)
                 if !@types.beam_color_is_black(filtered) {
-                  trace_beam(
-                    grid,
-                    cq,
-                    cr,
-                    dir,
-                    filtered,
-                    segments,
-                    depth + 1,
-                  )
+                  trace_beam(grid, cq, cr, dir, filtered, segments, depth + 1)
                 }
               }
               None => ()

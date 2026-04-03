@@ -1,7 +1,9 @@
 ///|
 /// Draw the title screen.
 pub fn draw_title(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
+  )
   let title = "AQUEDUCT"
   let tw = @draw.measure_text(title, 60)
   @draw.draw_text(
@@ -27,18 +29,19 @@ pub fn draw_title(game : @types.Game) -> Unit {
     let drop_x = 300 + i * 150
     let drop_offset : Float = sinf(anim * 2.0 + fi * 1.2) * 20.0
     let drop_y = 350 + drop_offset.to_int()
-    @raylib.draw_circle(
-      drop_x,
-      drop_y,
-      8.0,
-      @types.color_water,
-    )
+    @raylib.draw_circle(drop_x, drop_y, 8.0, @types.color_water)
   }
   let play_text = "Press ENTER to Play"
   let pw = @draw.measure_text(play_text, 28)
   let pv : Float = 180.0 + sinf(anim * 3.0) * 75.0
   let pulse_alpha = pv.to_int()
-  let pa = if pulse_alpha > 255 { 255 } else if pulse_alpha < 80 { 80 } else { pulse_alpha }
+  let pa = if pulse_alpha > 255 {
+    255
+  } else if pulse_alpha < 80 {
+    80
+  } else {
+    pulse_alpha
+  }
   @draw.draw_text(
     play_text,
     (@types.screen_width - pw) / 2,
@@ -48,8 +51,7 @@ pub fn draw_title(game : @types.Game) -> Unit {
   )
   // Instructions
   let desc_lines = [
-    "Route water from springs to fountains",
-    "through aqueducts. Water flows downhill!",
+    "Route water from springs to fountains", "through aqueducts. Water flows downhill!",
   ]
   for i, line in desc_lines {
     let lw = @draw.measure_text(line, 18)
@@ -66,7 +68,9 @@ pub fn draw_title(game : @types.Game) -> Unit {
 ///|
 /// Draw the tier selection screen.
 pub fn draw_tier_select(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
+  )
   let title = "Select Tier"
   let tw = @draw.measure_text(title, 40)
   @draw.draw_text(
@@ -115,18 +119,16 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
     @draw.draw_text(key_text, bx + bw - 60, by + 30, 24, @types.color_hud_dim)
   }
   @draw.draw_text(
-    "Press 1/2/3 or ENTER to select  |  ESC to go back",
-    340,
-    560,
-    18,
-    @types.color_hud_dim,
+    "Press 1/2/3 or ENTER to select  |  ESC to go back", 340, 560, 18, @types.color_hud_dim,
   )
 }
 
 ///|
 /// Draw the level selection screen.
 pub fn draw_level_select(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
+  )
   let tier_label = @types.tier_name(game.current_tier)
   @draw.draw_text(tier_label, 80, 40, 32, @types.tier_color(game.current_tier))
   @draw.draw_text("Select Level", 80, 80, 24, @types.color_hud_text)
@@ -172,7 +174,9 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
 ///|
 /// Draw the results screen.
 pub fn draw_results(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @types.color_bg)
+  @raylib.draw_rectangle(
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
+  )
   let level = game.levels[game.current_level]
   let score = game.scores[game.current_level]
   let title = if score.completed { "Level Complete!" } else { "Try Again..." }
@@ -182,14 +186,14 @@ pub fn draw_results(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 100, 80, 255)
   }
   let tw = @draw.measure_text(title, 48)
+  @draw.draw_text(title, (@types.screen_width - tw) / 2, 120, 48, title_color)
   @draw.draw_text(
-    title,
-    (@types.screen_width - tw) / 2,
-    120,
-    48,
-    title_color,
+    level.name,
+    (@types.screen_width - @draw.measure_text(level.name, 28)) / 2,
+    190,
+    28,
+    @types.color_hud_text,
   )
-  @draw.draw_text(level.name, (@types.screen_width - @draw.measure_text(level.name, 28)) / 2, 190, 28, @types.color_hud_text)
   // Stats
   let segments = score.segments_used
   let filled = game.fountains_filled
@@ -213,11 +217,7 @@ pub fn draw_results(game : @types.Game) -> Unit {
   let star_x = (@types.screen_width - 90) / 2
   draw_stars(star_x, 380, score.stars, 3)
   // Actions
-  let actions = [
-    "ENTER: Next level",
-    "R: Retry",
-    "ESC: Level select",
-  ]
+  let actions = ["ENTER: Next level", "R: Retry", "ESC: Level select"]
   for i, text in actions {
     let atw = @draw.measure_text(text, 20)
     @draw.draw_text(

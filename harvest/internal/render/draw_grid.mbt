@@ -35,9 +35,27 @@ fn draw_grid(game : @types.Game) -> Unit {
         @raylib.draw_rectangle(x, y, s, s, @types.color_locked)
         @raylib.draw_rectangle_lines(x, y, s, s, @types.color_grid_line)
         // Rock pattern
-        @raylib.draw_rectangle(x + 20, y + 20, 25, 20, @raylib.Color::new(90, 85, 75, 200))
-        @raylib.draw_rectangle(x + 50, y + 40, 20, 25, @raylib.Color::new(85, 80, 70, 200))
-        @raylib.draw_rectangle(x + 30, y + 55, 30, 18, @raylib.Color::new(95, 88, 78, 200))
+        @raylib.draw_rectangle(
+          x + 20,
+          y + 20,
+          25,
+          20,
+          @raylib.Color::new(90, 85, 75, 200),
+        )
+        @raylib.draw_rectangle(
+          x + 50,
+          y + 40,
+          20,
+          25,
+          @raylib.Color::new(85, 80, 70, 200),
+        )
+        @raylib.draw_rectangle(
+          x + 30,
+          y + 55,
+          30,
+          18,
+          @raylib.Color::new(95, 88, 78, 200),
+        )
         continue
       }
       // Soil background
@@ -67,11 +85,7 @@ fn draw_grid(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_locked(
-  col : Int,
-  row : Int,
-  locked : Array[(Int, Int)]
-) -> Bool {
+fn is_locked(col : Int, row : Int, locked : Array[(Int, Int)]) -> Bool {
   for i in 0..<locked.length() {
     let (lc, lr) = locked[i]
     if lc == col && lr == row {
@@ -92,12 +106,7 @@ fn draw_empty_plot(x : Int, y : Int, s : Int) -> Unit {
 }
 
 ///|
-fn draw_planted_plot(
-  x : Int,
-  y : Int,
-  s : Int,
-  plot : @types.Plot
-) -> Unit {
+fn draw_planted_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
   let cc = @types.crop_color(plot.crop)
   // Small seed dots
   let alpha_col = @raylib.Color::new(
@@ -108,7 +117,7 @@ fn draw_planted_plot(
   )
   for i in 0..<4 {
     let dx = 20 + i * 18
-    let dy = 40 + (i % 2) * 20
+    let dy = 40 + i % 2 * 20
     @raylib.draw_circle(x + dx, y + dy, 4.0, alpha_col)
   }
   // Crop name
@@ -122,12 +131,7 @@ fn draw_planted_plot(
 }
 
 ///|
-fn draw_growing_plot(
-  x : Int,
-  y : Int,
-  s : Int,
-  plot : @types.Plot
-) -> Unit {
+fn draw_growing_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
   let cc = @types.crop_color(plot.crop)
   // Growing sprouts
   let mid_x = x + s / 2
@@ -150,31 +154,42 @@ fn draw_growing_plot(
 }
 
 ///|
-fn draw_mature_plot(
-  x : Int,
-  y : Int,
-  s : Int,
-  plot : @types.Plot
-) -> Unit {
+fn draw_mature_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
   let cc = @types.crop_color(plot.crop)
   // Full crop icon
   let mid_x = x + s / 2
   let mid_y = y + s / 2
   match plot.crop {
-    Wheat => {
+    Wheat =>
       // Wheat stalks
       for i in 0..<5 {
         let sx = mid_x - 24 + i * 12
         @raylib.draw_line(sx, y + 75, sx, y + 25, cc)
         @raylib.draw_circle(sx, y + 22, 5.0, cc)
       }
-    }
     Corn => {
       // Tall corn stalk
       @raylib.draw_rectangle(mid_x - 4, y + 15, 8, 65, cc)
-      @raylib.draw_rectangle(mid_x - 15, y + 25, 12, 20, @raylib.Color::new(80, 200, 60, 255))
-      @raylib.draw_rectangle(mid_x + 3, y + 35, 12, 20, @raylib.Color::new(80, 200, 60, 255))
-      @raylib.draw_circle(mid_x, y + 12, 8.0, @raylib.Color::new(220, 200, 60, 255))
+      @raylib.draw_rectangle(
+        mid_x - 15,
+        y + 25,
+        12,
+        20,
+        @raylib.Color::new(80, 200, 60, 255),
+      )
+      @raylib.draw_rectangle(
+        mid_x + 3,
+        y + 35,
+        12,
+        20,
+        @raylib.Color::new(80, 200, 60, 255),
+      )
+      @raylib.draw_circle(
+        mid_x,
+        y + 12,
+        8.0,
+        @raylib.Color::new(220, 200, 60, 255),
+      )
     }
     Tomato => {
       // Tomato cluster
@@ -182,11 +197,23 @@ fn draw_mature_plot(
       @raylib.draw_circle(mid_x - 12, mid_y + 8, 10.0, cc)
       @raylib.draw_circle(mid_x + 12, mid_y + 8, 10.0, cc)
       // Stem
-      @raylib.draw_line(mid_x, mid_y - 15, mid_x, mid_y - 25, @raylib.Color::new(50, 130, 50, 255))
+      @raylib.draw_line(
+        mid_x,
+        mid_y - 15,
+        mid_x,
+        mid_y - 25,
+        @raylib.Color::new(50, 130, 50, 255),
+      )
     }
     Potato => {
       // Underground potato blobs
-      @raylib.draw_rectangle(x + 15, y + 50, s - 30, 30, @raylib.Color::new(160, 130, 70, 200))
+      @raylib.draw_rectangle(
+        x + 15,
+        y + 50,
+        s - 30,
+        30,
+        @raylib.Color::new(160, 130, 70, 200),
+      )
       @raylib.draw_circle(mid_x - 12, y + 60, 10.0, cc)
       @raylib.draw_circle(mid_x + 12, y + 60, 10.0, cc)
       @raylib.draw_circle(mid_x, y + 55, 12.0, cc)
@@ -194,7 +221,7 @@ fn draw_mature_plot(
       @raylib.draw_line(mid_x, y + 45, mid_x - 8, y + 30, @types.color_clover)
       @raylib.draw_line(mid_x, y + 45, mid_x + 8, y + 30, @types.color_clover)
     }
-    Carrot => {
+    Carrot =>
       // Orange carrots
       for i in 0..<3 {
         let cx = mid_x - 18 + i * 18
@@ -207,20 +234,34 @@ fn draw_mature_plot(
         @raylib.draw_line(cx, y + 40, cx - 5, y + 28, @types.color_clover)
         @raylib.draw_line(cx, y + 40, cx + 5, y + 28, @types.color_clover)
       }
-    }
     Pumpkin => {
       // Round pumpkin
       @raylib.draw_circle(mid_x, mid_y + 5, 22.0, cc)
-      @raylib.draw_circle(mid_x - 10, mid_y + 5, 18.0, @raylib.Color::new(200, 110, 15, 255))
-      @raylib.draw_circle(mid_x + 10, mid_y + 5, 18.0, @raylib.Color::new(200, 110, 15, 255))
+      @raylib.draw_circle(
+        mid_x - 10,
+        mid_y + 5,
+        18.0,
+        @raylib.Color::new(200, 110, 15, 255),
+      )
+      @raylib.draw_circle(
+        mid_x + 10,
+        mid_y + 5,
+        18.0,
+        @raylib.Color::new(200, 110, 15, 255),
+      )
       // Stem
-      @raylib.draw_rectangle(mid_x - 3, mid_y - 20, 6, 12, @raylib.Color::new(80, 130, 40, 255))
+      @raylib.draw_rectangle(
+        mid_x - 3,
+        mid_y - 20,
+        6,
+        12,
+        @raylib.Color::new(80, 130, 40, 255),
+      )
     }
     Clover => {
       // Three-leaf clover
       for i in 0..<3 {
-        let angle = Float::from_int(i) * @types.pi * 2.0 / 3.0 -
-          @types.pi / 2.0
+        let angle = Float::from_int(i) * @types.pi * 2.0 / 3.0 - @types.pi / 2.0
         let lx = Float::from_int(mid_x) + 12.0 * @types.cosf(angle)
         let ly = Float::from_int(mid_y) + 12.0 * @types.sinf(angle)
         @raylib.draw_circle(lx.to_int(), ly.to_int(), 10.0, cc)
@@ -258,8 +299,20 @@ fn draw_harvested_plot(x : Int, y : Int, s : Int) -> Unit {
 fn draw_withered_plot(x : Int, y : Int, s : Int) -> Unit {
   // Wilted brown
   let mid_x = x + s / 2
-  @raylib.draw_line(mid_x - 10, y + 60, mid_x - 10, y + 35, @types.color_withered)
-  @raylib.draw_line(mid_x + 10, y + 60, mid_x + 10, y + 35, @types.color_withered)
+  @raylib.draw_line(
+    mid_x - 10,
+    y + 60,
+    mid_x - 10,
+    y + 35,
+    @types.color_withered,
+  )
+  @raylib.draw_line(
+    mid_x + 10,
+    y + 60,
+    mid_x + 10,
+    y + 35,
+    @types.color_withered,
+  )
   @raylib.draw_line(
     mid_x - 10,
     y + 35,
@@ -345,13 +398,7 @@ fn draw_harvest_flash(game : @types.Game) -> Unit {
         let s = @types.cell_size
         let alpha = (flash * 200.0).to_int()
         let a = @types.clampi(alpha, 0, 255)
-        @raylib.draw_rectangle(
-          x,
-          y,
-          s,
-          s,
-          @raylib.Color::new(255, 255, 100, a),
-        )
+        @raylib.draw_rectangle(x, y, s, s, @raylib.Color::new(255, 255, 100, a))
       }
     }
   }
@@ -368,13 +415,7 @@ fn draw_growth_anim(game : @types.Game) -> Unit {
         let s = @types.cell_size
         let alpha = (anim * 120.0).to_int()
         let a = @types.clampi(alpha, 0, 255)
-        @raylib.draw_rectangle(
-          x,
-          y,
-          s,
-          s,
-          @raylib.Color::new(100, 255, 100, a),
-        )
+        @raylib.draw_rectangle(x, y, s, s, @raylib.Color::new(100, 255, 100, a))
       }
     }
   }

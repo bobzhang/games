@@ -10,12 +10,7 @@ pub fn read_and_compare(
 
 ///|
 pub fn find_start_codon(seq : Array[@types.Base]) -> Int {
-  for i in 0..<(seq.length() - 2) {
-    if seq[i] == A && seq[i + 1] == T && seq[i + 2] == G {
-      return i
-    }
-  }
-  -1
+  @types.find_start_codon(seq)
 }
 
 ///|

@@ -1,19 +1,12 @@
 ///|
 pub fn are_adjacent(c1 : @types.Component, c2 : @types.Component) -> Bool {
-  let dc = @types.absf(
-    Float::from_int(c1.col) - Float::from_int(c2.col),
-  )
-  let dr = @types.absf(
-    Float::from_int(c1.row) - Float::from_int(c2.row),
-  )
-  (dc <= 1.0 && dr <= 1.0) && (dc + dr > 0.0)
+  let dc = @types.absf(Float::from_int(c1.col) - Float::from_int(c2.col))
+  let dr = @types.absf(Float::from_int(c1.row) - Float::from_int(c2.row))
+  (dc <= 1.0 && dr <= 1.0) && dc + dr > 0.0
 }
 
 ///|
-pub fn gears_can_mesh(
-  c1 : @types.Component,
-  c2 : @types.Component
-) -> Bool {
+pub fn gears_can_mesh(c1 : @types.Component, c2 : @types.Component) -> Bool {
   match (c1.kind, c2.kind) {
     (Gear(_), Gear(_)) => are_adjacent(c1, c2)
     _ => false
@@ -23,7 +16,7 @@ pub fn gears_can_mesh(
 ///|
 pub fn gear_mesh_ratio(
   driving : @types.Component,
-  driven : @types.Component
+  driven : @types.Component,
 ) -> Float {
   match (driving.kind, driven.kind) {
     (Gear(s1), Gear(s2)) => {
@@ -84,7 +77,7 @@ pub fn propagate_rotation(
   source_idx : Int,
   speed : Float,
   clockwise : Bool,
-  visited : Array[Bool]
+  visited : Array[Bool],
 ) -> Unit {
   if source_idx < 0 || source_idx >= game.components.length() {
     return
@@ -105,9 +98,8 @@ pub fn propagate_rotation(
     let neighbor = game.components[neighbor_idx]
     match (comp.kind, neighbor.kind) {
       (Gear(s1), Gear(s2)) => {
-        let ratio = Float::from_int(@types.gear_teeth(s1)) / Float::from_int(
-            @types.gear_teeth(s2),
-          )
+        let ratio = Float::from_int(@types.gear_teeth(s1)) /
+          Float::from_int(@types.gear_teeth(s2))
         let new_speed = speed * ratio
         propagate_rotation(game, neighbor_idx, new_speed, !clockwise, visited)
       }
@@ -117,18 +109,16 @@ pub fn propagate_rotation(
         let esc_speed = speed * 0.5
         propagate_rotation(game, neighbor_idx, esc_speed, clockwise, visited)
       }
-      (Spring, Gear(_)) => {
+      (Spring, Gear(_)) =>
         if comp.spring_released {
           let spring_speed = speed * @types.spring_force
           propagate_rotation(
             game, neighbor_idx, spring_speed, clockwise, visited,
           )
         }
-      }
       (Gear(_), Spring) =>
         propagate_rotation(game, neighbor_idx, speed, clockwise, visited)
-      _ =>
-        propagate_rotation(game, neighbor_idx, speed, clockwise, visited)
+      _ => propagate_rotation(game, neighbor_idx, speed, clockwise, visited)
     }
   }
 }
@@ -163,9 +153,10 @@ pub fn init_simulation(game : @types.Game) -> Unit {
     let c = game.components[i]
     if c.active && c.fixed {
       match c.kind {
-        Gear(_) => {
+        Gear(_) =>
           if !visited[i] {
-            let speed = @types.base_rotation_speed * @types.gear_speed_ratio(
+            let speed = @types.base_rotation_speed *
+              @types.gear_speed_ratio(
                 match c.kind {
                   Gear(s) => s
                   _ => Medium
@@ -173,7 +164,6 @@ pub fn init_simulation(game : @types.Game) -> Unit {
               )
             propagate_rotation(game, i, speed, true, visited)
           }
-        }
         _ => ()
       }
     }
@@ -231,11 +221,7 @@ fn update_gear(c : @types.Component, dt : Float) -> Unit {
 }
 
 ///|
-fn update_cam(
-  c : @types.Component,
-  _game : @types.Game,
-  dt : Float
-) -> Unit {
+fn update_cam(c : @types.Component, _game : @types.Game, dt : Float) -> Unit {
   // Cam oscillates based on rotation
   c.rotation = c.rotation + c.rotation_speed * dt
   if c.rotation > @types.two_pi {
@@ -249,7 +235,7 @@ fn update_cam(
 fn update_spring(
   c : @types.Component,
   _game : @types.Game,
-  sim : @types.Simulation
+  sim : @types.Simulation,
 ) -> Unit {
   if !c.spring_released {
     // Accumulate energy from connected rotating gears
@@ -263,9 +249,9 @@ fn update_spring(
   } else {
     // Release energy - decrease over time
     c.spring_energy = @types.maxf(
-      c.spring_energy - Float::from_int(1) / (
-          @types.spring_release_speed * Float::from_int(sim.tick + 1)
-        ),
+      c.spring_energy -
+      Float::from_int(1) /
+      (@types.spring_release_speed * Float::from_int(sim.tick + 1)),
       0.0,
     )
     if c.spring_energy <= 0.0 {
@@ -289,7 +275,7 @@ fn update_escapement(c : @types.Component, dt : Float) -> Unit {
 fn check_bell_trigger(
   bell : @types.Component,
   game : @types.Game,
-  sim : @types.Simulation
+  sim : @types.Simulation,
 ) -> Unit {
   if bell.bell_rung {
     return
@@ -302,21 +288,12 @@ fn check_bell_trigger(
       let idx = bell.connected_to[i]
       let neighbor = game.components[idx]
       match neighbor.kind {
-        Cam => {
+        Cam =>
           if @types.absf(neighbor.cam_offset) > @types.bell_trigger_distance {
             triggered = true
           }
-        }
-        Gear(_) => {
-          if neighbor.rotation_speed > 0.0 {
-            triggered = true
-          }
-        }
-        Spring => {
-          if neighbor.spring_released {
-            triggered = true
-          }
-        }
+        Gear(_) => if neighbor.rotation_speed > 0.0 { triggered = true }
+        Spring => if neighbor.spring_released { triggered = true }
         _ => ()
       }
     }
@@ -358,11 +335,7 @@ fn max_target_tick(game : @types.Game) -> Int {
     let c = game.components[i]
     if c.active {
       match c.kind {
-        Bell => {
-          if c.bell_target_tick > max_t {
-            max_t = c.bell_target_tick
-          }
-        }
+        Bell => if c.bell_target_tick > max_t { max_t = c.bell_target_tick }
         _ => ()
       }
     }

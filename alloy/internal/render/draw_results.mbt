@@ -107,7 +107,13 @@ fn draw_level_failed(game : @types.Game) -> Unit {
   // Navigation
   let prompt = "ENTER/R - Retry  |  ESC - Level Select"
   let pw = @draw.measure_text(prompt, 18)
-  @draw.draw_text(prompt, (w - pw) / 2, h * 3 / 4 + 30, 18, @types.color_hud_dim)
+  @draw.draw_text(
+    prompt,
+    (w - pw) / 2,
+    h * 3 / 4 + 30,
+    18,
+    @types.color_hud_dim,
+  )
 }
 
 ///|
@@ -141,7 +147,9 @@ fn draw_result_property(
   let bar_y = y + 20
   let bar_w = 400
   let bar_h = 12
-  @raylib.draw_rectangle(bar_x, bar_y, bar_w, bar_h, @types.color_property_bar_bg)
+  @raylib.draw_rectangle(
+    bar_x, bar_y, bar_w, bar_h, @types.color_property_bar_bg,
+  )
   // Range highlight
   let rx = bar_x + (Float::from_int(bar_w) * range.min / 100.0).to_int()
   let rw = (Float::from_int(bar_w) * (range.max - range.min) / 100.0).to_int()
@@ -150,9 +158,7 @@ fn draw_result_property(
     bar_y,
     rw,
     bar_h,
-    @raylib.Color::new(
-      color.r.to_int(), color.g.to_int(), color.b.to_int(), 60,
-    ),
+    @raylib.Color::new(color.r.to_int(), color.g.to_int(), color.b.to_int(), 60),
   )
   // Value marker
   let vx = bar_x +

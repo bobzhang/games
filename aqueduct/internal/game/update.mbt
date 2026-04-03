@@ -44,14 +44,16 @@ fn update_tier_select(game : @types.Game) -> Unit {
     game.screen = LevelSelect
   }
   // Arrow keys to cycle tiers
-  if @raylib.is_key_pressed(@raylib.KeyUp) || @raylib.is_key_pressed(@raylib.KeyLeft) {
+  if @raylib.is_key_pressed(@raylib.KeyUp) ||
+    @raylib.is_key_pressed(@raylib.KeyLeft) {
     game.current_tier = match game.current_tier {
       Tier1 => Tier3
       Tier2 => Tier1
       Tier3 => Tier2
     }
   }
-  if @raylib.is_key_pressed(@raylib.KeyDown) || @raylib.is_key_pressed(@raylib.KeyRight) {
+  if @raylib.is_key_pressed(@raylib.KeyDown) ||
+    @raylib.is_key_pressed(@raylib.KeyRight) {
     game.current_tier = match game.current_tier {
       Tier1 => Tier2
       Tier2 => Tier3
@@ -267,7 +269,9 @@ fn clear_placed(game : @types.Game) -> Unit {
       if !is_level_defined_tile(game, pos) {
         let idx = @types.pos_to_index(pos, cols)
         let tile = game.grid[idx]
-        if !(tile.kind is Empty) && !(tile.kind is Spring) && !(tile.kind is Fountain) {
+        if !(tile.kind is Empty) &&
+          !(tile.kind is Spring) &&
+          !(tile.kind is Fountain) {
           tile.kind = Empty
           tile.connections = []
         }
@@ -294,7 +298,8 @@ fn update_simulating(game : @types.Game) -> Unit {
     }
   }
   // Allow canceling simulation
-  if @raylib.is_key_pressed(@raylib.KeyEscape) || @raylib.is_key_pressed(@raylib.KeySpace) {
+  if @raylib.is_key_pressed(@raylib.KeyEscape) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     finish_simulation(game)
   }
 }
@@ -330,7 +335,8 @@ fn finish_simulation(game : @types.Game) -> Unit {
 
 ///|
 fn update_complete(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(@raylib.KeySpace) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     game.screen = Results
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
@@ -341,7 +347,9 @@ fn update_complete(game : @types.Game) -> Unit {
 
 ///|
 fn update_failed(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(@raylib.KeySpace) || @raylib.is_key_pressed(@raylib.KeyR) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) ||
+    @raylib.is_key_pressed(@raylib.KeyR) {
     @water.reset_water(game)
     game.play_state = Placing
   }

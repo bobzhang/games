@@ -40,8 +40,16 @@ pub fn get_level_17() -> @types.LevelDef {
     organism_counts: [2, 2, 2, 1, 1],
     target_species: [Barnacle, Anemone, Algae, Crab],
     rock_cells: [
-      (0, 1), (0, 3), (1, 0), (1, 4), (2, 2), (2, 6), (3, 1), (3, 5),
-      (4, 3), (4, 7),
+      (0, 1),
+      (0, 3),
+      (1, 0),
+      (1, 4),
+      (2, 2),
+      (2, 6),
+      (3, 1),
+      (3, 5),
+      (4, 3),
+      (4, 7),
     ],
   }
 }
@@ -87,8 +95,6 @@ pub fn get_level_20() -> @types.LevelDef {
     available_organisms: [Barnacle, Anemone, Crab, Starfish, Algae, Urchin],
     organism_counts: [3, 2, 2, 1, 4, 2],
     target_species: [Barnacle, Anemone, Crab, Starfish, Algae, Urchin],
-    rock_cells: [
-      (0, 0), (0, 4), (1, 2), (1, 6), (2, 1), (3, 5), (4, 3), (4, 7),
-    ],
+    rock_cells: [(0, 0), (0, 4), (1, 2), (1, 6), (2, 1), (3, 5), (4, 3), (4, 7)],
   }
 }

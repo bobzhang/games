@@ -267,10 +267,7 @@ fn update_firing(game : @types.Game, dt : Float) -> Unit {
   // Firing animation: 3 phases of 0.6s each
   let phase_duration : Float = 0.6
   let total_duration : Float = 1.8
-  game.fire_phase = @types.mini(
-    (game.fire_timer / phase_duration).to_int(),
-    2,
-  )
+  game.fire_phase = @types.mini((game.fire_timer / phase_duration).to_int(), 2)
   if game.fire_timer >= total_duration {
     // Actually fire the grid
     @kiln.fire_grid(game.grid)

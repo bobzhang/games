@@ -14,11 +14,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
 ///|
 fn draw_playing_screen(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
   )
   match game.current_level {
     None => ()
@@ -44,11 +40,7 @@ fn draw_playing_screen(game : @types.Game) -> Unit {
 ///|
 fn draw_simulating_screen(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    @types.screen_height,
-    @types.color_bg,
+    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
   )
   match game.current_level {
     None => ()

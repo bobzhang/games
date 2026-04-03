@@ -130,11 +130,7 @@ fn update_game_over(game : @types.GameState) -> Unit {
 
 ///|
 fn start_level(game : @types.GameState, level : Int) -> Unit {
-  let lvl = if level >= 0 && level < @types.total_levels {
-    level
-  } else {
-    0
-  }
+  let lvl = if level >= 0 && level < @types.total_levels { level } else { 0 }
   game.current_level = lvl
   game.level_state = Some(@levels.init_level(lvl))
   game.phase = Playing

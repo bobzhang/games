@@ -121,10 +121,7 @@ test "calculate_stars zero when out of range" {
     flexibility: { min: 40.0, max: 60.0 },
     conductivity: { min: 40.0, max: 60.0 },
   }
-  inspect(
-    @forge.calculate_stars(result, target, 2, 3),
-    content="Zero",
-  )
+  inspect(@forge.calculate_stars(result, target, 2, 3), content="Zero")
 }
 
 ///|
@@ -139,10 +136,7 @@ test "calculate_stars one when in range but over par" {
     flexibility: { min: 40.0, max: 60.0 },
     conductivity: { min: 40.0, max: 60.0 },
   }
-  inspect(
-    @forge.calculate_stars(result, target, 5, 3),
-    content="One",
-  )
+  inspect(@forge.calculate_stars(result, target, 5, 3), content="One")
 }
 
 ///|
@@ -157,10 +151,7 @@ test "calculate_stars three when at par and close to center" {
     flexibility: { min: 40.0, max: 60.0 },
     conductivity: { min: 40.0, max: 60.0 },
   }
-  inspect(
-    @forge.calculate_stars(result, target, 3, 3),
-    content="Three",
-  )
+  inspect(@forge.calculate_stars(result, target, 3, 3), content="Three")
 }
 
 ///|

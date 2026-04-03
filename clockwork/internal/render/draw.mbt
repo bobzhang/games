@@ -45,13 +45,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Subtitle
   let sub = "A Gear Mechanism Puzzle"
   let sub_w = @draw.measure_text(sub, 20)
-  @draw.draw_text(
-    sub,
-    (w - sub_w) / 2,
-    h / 4 + 60,
-    20,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(sub, (w - sub_w) / 2, h / 4 + 60, 20, @types.color_hud_text)
   // Instructions
   @draw.draw_text(
     "Place gears to ring bells at the right time",
@@ -110,7 +104,7 @@ fn draw_gear_shape(
   radius : Float,
   teeth : Int,
   angle : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
@@ -149,31 +143,13 @@ fn draw_level_select(game : @types.Game) -> Unit {
   // Header
   let header = "SELECT LEVEL - " + tier_str
   let header_w = @draw.measure_text(header, 36)
-  @draw.draw_text(
-    header,
-    (w - header_w) / 2,
-    40,
-    36,
-    @types.color_title,
-  )
+  @draw.draw_text(header, (w - header_w) / 2, 40, 36, @types.color_title)
   // Tier navigation arrows
   if game.tier_scroll > 0 {
-    @draw.draw_text(
-      "< ",
-      120,
-      45,
-      30,
-      @types.color_hud_text,
-    )
+    @draw.draw_text("< ", 120, 45, 30, @types.color_hud_text)
   }
   if game.tier_scroll < 2 {
-    @draw.draw_text(
-      " >",
-      w - 160,
-      45,
-      30,
-      @types.color_hud_text,
-    )
+    @draw.draw_text(" >", w - 160, 45, 30, @types.color_hud_text)
   }
   // Tier description
   let desc = match tier {
@@ -193,13 +169,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
   if !unlocked {
     let lock_msg = "Locked - earn more stars in previous tier"
     let lock_w = @draw.measure_text(lock_msg, 20)
-    @draw.draw_text(
-      lock_msg,
-      (w - lock_w) / 2,
-      350,
-      20,
-      @types.color_fail,
-    )
+    @draw.draw_text(lock_msg, (w - lock_w) / 2, 350, 20, @types.color_fail)
     // Navigation hint
     @draw.draw_text(
       "ESC - Back    Left/Right - Change Tier",
@@ -216,8 +186,8 @@ fn draw_level_select(game : @types.Game) -> Unit {
   let my = @raylib.get_mouse_y()
   for i = start; i < end; i = i + 1 {
     let idx = i - start
-    let bx = 200 + (idx % 4) * 220
-    let by = 280 + (idx / 4) * 120
+    let bx = 200 + idx % 4 * 220
+    let by = 280 + idx / 4 * 120
     let hovered = mx >= bx && mx < bx + 200 && my >= by && my < by + 100
     let bg_color = if hovered {
       @types.color_button_hover
@@ -225,30 +195,12 @@ fn draw_level_select(game : @types.Game) -> Unit {
       @types.color_button
     }
     @raylib.draw_rectangle(bx, by, 200, 100, bg_color)
-    @raylib.draw_rectangle_lines(
-      bx,
-      by,
-      200,
-      100,
-      @types.color_grid_line,
-    )
+    @raylib.draw_rectangle_lines(bx, by, 200, 100, @types.color_grid_line)
     // Level number and name
     let num = (i + 1).to_string()
-    @draw.draw_text(
-      num,
-      bx + 10,
-      by + 8,
-      20,
-      @types.color_title,
-    )
+    @draw.draw_text(num, bx + 10, by + 8, 20, @types.color_title)
     let name = @levels.level_name(i)
-    @draw.draw_text(
-      name,
-      bx + 10,
-      by + 35,
-      16,
-      @types.color_hud_text,
-    )
+    @draw.draw_text(name, bx + 10, by + 35, 16, @types.color_hud_text)
     // Stars
     let stars = game.level_stars[i]
     for s in 0..<3 {
@@ -272,13 +224,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
     total_stars.to_string() +
     "/" +
     max_stars.to_string()
-  @draw.draw_text(
-    star_str,
-    w / 2 - 50,
-    130,
-    18,
-    @types.color_star_filled,
-  )
+  @draw.draw_text(star_str, w / 2 - 50, 130, 18, @types.color_star_filled)
   // Navigation hint
   @draw.draw_text(
     "ESC - Back    Left/Right - Change Tier    1-7 - Quick Select",
@@ -337,15 +283,9 @@ fn draw_grid() -> Unit {
   let cols = @types.grid_cols
   let rows = @types.grid_rows
   // Grid background
-  @raylib.draw_rectangle(
-    ox,
-    oy,
-    cols * cs,
-    rows * cs,
-    @types.color_grid_bg,
-  )
+  @raylib.draw_rectangle(ox, oy, cols * cs, rows * cs, @types.color_grid_bg)
   // Grid lines
-  for i in 0..=cols {
+  for i in 0..<=cols {
     @raylib.draw_line(
       ox + i * cs,
       oy,
@@ -354,7 +294,7 @@ fn draw_grid() -> Unit {
       @types.color_grid_line,
     )
   }
-  for i in 0..=rows {
+  for i in 0..<=rows {
     @raylib.draw_line(
       ox,
       oy + i * cs,
@@ -364,8 +304,8 @@ fn draw_grid() -> Unit {
     )
   }
   // Pegs at intersections
-  for r in 0..=rows {
-    for c in 0..=cols {
+  for r in 0..<=rows {
+    for c in 0..<=cols {
       let px = ox + c * cs
       let py = oy + r * cs
       @raylib.draw_circle(px, py, 3.0, @types.color_peg)
@@ -429,7 +369,7 @@ fn draw_gear_component(
   cx : Int,
   cy : Int,
   size : @types.GearSize,
-  comp : @types.Component
+  comp : @types.Component,
 ) -> Unit {
   let radius = @types.gear_radius(size)
   let teeth = @types.gear_teeth(size)
@@ -453,11 +393,7 @@ fn draw_gear_component(
 }
 
 ///|
-fn draw_cam_component(
-  cx : Int,
-  cy : Int,
-  comp : @types.Component
-) -> Unit {
+fn draw_cam_component(cx : Int, cy : Int, comp : @types.Component) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   // Cam body - ellipse-like shape
@@ -490,11 +426,7 @@ fn draw_cam_component(
 }
 
 ///|
-fn draw_spring_component(
-  cx : Int,
-  cy : Int,
-  comp : @types.Component
-) -> Unit {
+fn draw_spring_component(cx : Int, cy : Int, comp : @types.Component) -> Unit {
   let r : Float = 18.0
   // Spring coils
   let energy = comp.spring_energy
@@ -550,7 +482,7 @@ fn draw_spring_component(
 fn draw_escapement_component(
   cx : Int,
   cy : Int,
-  comp : @types.Component
+  comp : @types.Component,
 ) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
@@ -568,7 +500,12 @@ fn draw_escapement_component(
     arm_y.to_int(),
     @types.color_escapement,
   )
-  @raylib.draw_circle(arm_x.to_int(), arm_y.to_int(), 5.0, @types.color_escapement)
+  @raylib.draw_circle(
+    arm_x.to_int(),
+    arm_y.to_int(),
+    5.0,
+    @types.color_escapement,
+  )
   // Lock indicator
   if comp.escapement_locked {
     @draw.draw_text(
@@ -582,11 +519,7 @@ fn draw_escapement_component(
 }
 
 ///|
-fn draw_bell_component(
-  cx : Int,
-  cy : Int,
-  comp : @types.Component
-) -> Unit {
+fn draw_bell_component(cx : Int, cy : Int, comp : @types.Component) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   let ringing = comp.bell_ring_timer > 0.0
@@ -605,7 +538,8 @@ fn draw_bell_component(
   @raylib.draw_circle(cx, cy + 4, 4.0, @raylib.Color::new(100, 80, 40, 255))
   // Ring waves
   if ringing {
-    let wave_r : Float = 20.0 + (1.0 - comp.bell_ring_timer / @types.bell_ring_duration) * 30.0
+    let wave_r : Float = 20.0 +
+      (1.0 - comp.bell_ring_timer / @types.bell_ring_duration) * 30.0
     let wave_alpha = (comp.bell_ring_timer / @types.bell_ring_duration * 200.0).to_int()
     @raylib.draw_circle_lines(
       cx,
@@ -617,24 +551,12 @@ fn draw_bell_component(
   // Target tick label
   let tick_str = "@" + comp.bell_target_tick.to_string()
   let tw = @draw.measure_text(tick_str, 12)
-  @draw.draw_text(
-    tick_str,
-    cx - tw / 2,
-    cy + 18,
-    12,
-    @types.color_hud_text,
-  )
+  @draw.draw_text(tick_str, cx - tw / 2, cy + 18, 12, @types.color_hud_text)
   // Check mark if rung
   if comp.bell_rung {
     let _ = fcx
     let _ = fcy
-    @draw.draw_text(
-      "OK",
-      cx + 14,
-      cy - 18,
-      12,
-      @types.color_success,
-    )
+    @draw.draw_text("OK", cx + 14, cy - 18, 12, @types.color_success)
   }
 }
 
@@ -656,13 +578,7 @@ fn draw_hover(game : @types.Game) -> Unit {
   } else {
     @types.color_highlight
   }
-  @raylib.draw_rectangle(
-    px,
-    py,
-    @types.cell_size,
-    @types.cell_size,
-    color,
-  )
+  @raylib.draw_rectangle(px, py, @types.cell_size, @types.cell_size, color)
 }
 
 ///|
@@ -712,17 +628,35 @@ fn draw_toolbar(game : @types.Game) -> Unit {
     match kind {
       Gear(size) => {
         let r = @types.gear_radius(size) * 0.5
-        draw_gear_shape(icon_cx, icon_cy, r, @types.gear_teeth(size), 0.0, color)
+        draw_gear_shape(
+          icon_cx,
+          icon_cy,
+          r,
+          @types.gear_teeth(size),
+          0.0,
+          color,
+        )
       }
       Cam => @raylib.draw_circle(icon_cx, icon_cy, 10.0, color)
       Spring => {
-        @raylib.draw_line(icon_cx - 8, icon_cy - 8, icon_cx + 8, icon_cy - 4, color)
+        @raylib.draw_line(
+          icon_cx - 8,
+          icon_cy - 8,
+          icon_cx + 8,
+          icon_cy - 4,
+          color,
+        )
         @raylib.draw_line(icon_cx + 8, icon_cy - 4, icon_cx - 8, icon_cy, color)
         @raylib.draw_line(icon_cx - 8, icon_cy, icon_cx + 8, icon_cy + 4, color)
-        @raylib.draw_line(icon_cx + 8, icon_cy + 4, icon_cx - 8, icon_cy + 8, color)
+        @raylib.draw_line(
+          icon_cx + 8,
+          icon_cy + 4,
+          icon_cx - 8,
+          icon_cy + 8,
+          color,
+        )
       }
-      Escapement =>
-        @raylib.draw_circle_lines(icon_cx, icon_cy, 10.0, color)
+      Escapement => @raylib.draw_circle_lines(icon_cx, icon_cy, 10.0, color)
       Bell => {
         @raylib.draw_circle(icon_cx, icon_cy - 2, 8.0, color)
         @raylib.draw_rectangle(icon_cx - 7, icon_cy + 5, 14, 3, color)
@@ -744,9 +678,7 @@ fn draw_toolbar(game : @types.Game) -> Unit {
     )
   }
   // Simulation state hint
-  let hint_x = @types.grid_offset_x +
-    palette.available.length() * 80 +
-    20
+  let hint_x = @types.grid_offset_x + palette.available.length() * 80 + 20
   if game.sim.state == Idle {
     @draw.draw_text(
       "ENTER/SPACE - Run",
@@ -789,13 +721,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   let panel_y = @types.grid_offset_y
   let panel_w = w - panel_x - 20
   // Level info
-  @raylib.draw_rectangle(
-    panel_x,
-    panel_y,
-    panel_w,
-    400,
-    @types.color_hud_bg,
-  )
+  @raylib.draw_rectangle(panel_x, panel_y, panel_w, 400, @types.color_hud_bg)
   @draw.draw_text(
     "Level " + (game.current_level + 1).to_string(),
     panel_x + 10,
@@ -850,13 +776,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
   // Bell targets
   let bell_y = status_y + 80
-  @draw.draw_text(
-    "Bell Targets:",
-    panel_x + 10,
-    bell_y,
-    16,
-    @types.color_title,
-  )
+  @draw.draw_text("Bell Targets:", panel_x + 10, bell_y, 16, @types.color_title)
   let targets = game.level_def.bell_targets
   for i in 0..<targets.length() {
     let target = targets[i]
@@ -877,13 +797,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   }
   // Current stars
   let stars_y = bell_y + 22 + targets.length() * 20 + 20
-  @draw.draw_text(
-    "Best: ",
-    panel_x + 10,
-    stars_y,
-    16,
-    @types.color_hud_text,
-  )
+  @draw.draw_text("Best: ", panel_x + 10, stars_y, 16, @types.color_hud_text)
   let best = game.level_stars[game.current_level]
   for s in 0..<3 {
     let sx = panel_x + 70 + s * 22
@@ -897,13 +811,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   // Message display
   if game.message_timer > 0.0 {
     let msg_w = @draw.measure_text(game.message, 20)
-    @draw.draw_text(
-      game.message,
-      (w - msg_w) / 2,
-      20,
-      20,
-      @types.color_title,
-    )
+    @draw.draw_text(game.message, (w - msg_w) / 2, 20, 20, @types.color_title)
   }
 }
 
@@ -924,13 +832,7 @@ fn draw_pause_overlay() -> Unit {
   @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(0, 0, 0, 150))
   let text = "PAUSED"
   let tw = @draw.measure_text(text, 48)
-  @draw.draw_text(
-    text,
-    (w - tw) / 2,
-    h / 3,
-    48,
-    @types.color_title,
-  )
+  @draw.draw_text(text, (w - tw) / 2, h / 3, 48, @types.color_title)
   @draw.draw_text(
     "ESC/P - Resume    Q - Quit to Menu",
     w / 2 - 160,
@@ -947,13 +849,7 @@ fn draw_level_complete(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(0, 0, 0, 180))
   let text = "LEVEL COMPLETE!"
   let tw = @draw.measure_text(text, 48)
-  @draw.draw_text(
-    text,
-    (w - tw) / 2,
-    h / 4,
-    48,
-    @types.color_success,
-  )
+  @draw.draw_text(text, (w - tw) / 2, h / 4, 48, @types.color_success)
   // Stars
   let stars = game.level_stars[game.current_level]
   for s in 0..<3 {
@@ -1027,13 +923,7 @@ fn draw_level_failed(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(0, 0, 0, 180))
   let text = "MECHANISM FAILED"
   let tw = @draw.measure_text(text, 48)
-  @draw.draw_text(
-    text,
-    (w - tw) / 2,
-    h / 3,
-    48,
-    @types.color_fail,
-  )
+  @draw.draw_text(text, (w - tw) / 2, h / 3, 48, @types.color_fail)
   @draw.draw_text(
     "Not all bells rang in time.",
     w / 2 - 120,

@@ -57,8 +57,10 @@ test "level_unlock_first_always" {
 test "level_unlock_requires_prev" {
   let g = @types.new_game()
   assert_false(@game.is_level_unlocked(g, 1))
-  g.level_scores[0] = Some(
-    { value_earned: 50, target_value: 10, tier: Some(Bronze) },
-  )
+  g.level_scores[0] = Some({
+    value_earned: 50,
+    target_value: 10,
+    tier: Some(Bronze),
+  })
   assert_true(@game.is_level_unlocked(g, 1))
 }

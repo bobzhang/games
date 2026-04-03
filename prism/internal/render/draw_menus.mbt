@@ -5,8 +5,8 @@ fn draw_title(game : @types.Game) -> Unit {
   let time = Float::from_int(game.frame_count) * 0.03
   // Animated hex pattern at the top
   let colors = [
-    @types.color_beam_red, @types.color_beam_green, @types.color_beam_blue,
-    @types.color_beam_yellow, @types.color_beam_magenta, @types.color_beam_cyan,
+    @types.color_beam_red, @types.color_beam_green, @types.color_beam_blue, @types.color_beam_yellow,
+    @types.color_beam_magenta, @types.color_beam_cyan,
   ]
   for i in 0..<6 {
     let fi = Float::from_int(i)
@@ -14,8 +14,7 @@ fn draw_title(game : @types.Game) -> Unit {
     let radius : Float = 100.0 +
       Float::from_double(@math.sin((time + fi).to_double())) * 20.0
     let bx = Float::from_int(w) / 2.0 + @types.cosf(angle) * radius
-    let by = Float::from_int(h) / 3.0 - 50.0 +
-      @types.sinf(angle) * radius * 0.5
+    let by = Float::from_int(h) / 3.0 - 50.0 + @types.sinf(angle) * radius * 0.5
     @raylib.draw_circle(
       bx.to_int(),
       by.to_int(),
@@ -54,7 +53,13 @@ fn draw_title(game : @types.Game) -> Unit {
   // Controls hint
   let hint = "Hex grid - Click to place - R to rotate - 1-6 select"
   let hint_w = @draw.measure_text(hint, 14)
-  @draw.draw_text(hint, (w - hint_w) / 2, h * 2 / 3 + 50, 14, @types.color_text_dim)
+  @draw.draw_text(
+    hint,
+    (w - hint_w) / 2,
+    h * 2 / 3 + 50,
+    14,
+    @types.color_text_dim,
+  )
 }
 
 ///|
@@ -87,7 +92,11 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       by,
       box_w,
       box_h,
-      if selected { color } else { @types.color_cell_border },
+      if selected {
+        color
+      } else {
+        @types.color_cell_border
+      },
     )
     let name = @types.tier_name(tier)
     let name_w = @draw.measure_text(name, 28)
@@ -109,7 +118,10 @@ fn draw_tier_select(game : @types.Game) -> Unit {
       }
     }
     let max_stars = (end_idx - start_idx) * 3
-    let star_text = total_stars.to_string() + " / " + max_stars.to_string() + " Stars"
+    let star_text = total_stars.to_string() +
+      " / " +
+      max_stars.to_string() +
+      " Stars"
     let star_w = @draw.measure_text(star_text, 16)
     @draw.draw_text(
       star_text,
@@ -164,7 +176,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
       by,
       box_w,
       box_h,
-      if selected { @types.color_accent } else { @types.color_cell_border },
+      if selected {
+        @types.color_accent
+      } else {
+        @types.color_cell_border
+      },
     )
     if level_idx < levels.length() {
       let name = levels[level_idx].name
@@ -249,7 +265,13 @@ fn draw_results(game : @types.Game) -> Unit {
       game.par_count.to_string() +
       " par"
     let comp_w = @draw.measure_text(comp_text, 20)
-    @draw.draw_text(comp_text, (w - comp_w) / 2, h / 2 + 20, 20, @types.color_text)
+    @draw.draw_text(
+      comp_text,
+      (w - comp_w) / 2,
+      h / 2 + 20,
+      20,
+      @types.color_text,
+    )
   }
   let next_text = if score.solved {
     "ENTER: Next Level   ESC: Level Select"

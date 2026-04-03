@@ -54,7 +54,11 @@ pub fn get_tier(id : Int) -> @types.Tier {
 /// Load a level into playable state
 pub fn load_level(id : Int) -> @types.LevelState {
   let def = get_level(id)
-  let state = @types.new_level_state(def.magnet_budget, def.coil_budget, def.par_magnets)
+  let state = @types.new_level_state(
+    def.magnet_budget,
+    def.coil_budget,
+    def.par_magnets,
+  )
   // Place fixed components
   for i in 0..<def.fixed_cells.length() {
     let p = def.fixed_cells[i]
@@ -117,7 +121,12 @@ fn level_01() -> @types.LevelDef {
     coil_budget: 0,
     par_magnets: 1,
     fixed_cells: [
-      { col: 4, row: 2, component: Coil, connections: [false, false, false, true] },
+      {
+        col: 4,
+        row: 2,
+        component: Coil,
+        connections: [false, false, false, true],
+      },
       {
         col: 5,
         row: 2,
@@ -145,7 +154,12 @@ fn level_02() -> @types.LevelDef {
     coil_budget: 0,
     par_magnets: 2,
     fixed_cells: [
-      { col: 3, row: 2, component: Coil, connections: [false, false, false, true] },
+      {
+        col: 3,
+        row: 2,
+        component: Coil,
+        connections: [false, false, false, true],
+      },
       {
         col: 4,
         row: 2,

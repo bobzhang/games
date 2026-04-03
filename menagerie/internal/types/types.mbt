@@ -19,9 +19,12 @@ pub fn Grid::new(cols : Int, rows : Int) -> Grid {
   for _r in 0..<rows {
     let row : Array[Cell] = []
     for _c in 0..<cols {
-      row.push(
-        { terrain: None, fence_top: false, fence_left: false, animal: None },
-      )
+      row.push({
+        terrain: None,
+        fence_top: false,
+        fence_left: false,
+        animal: None,
+      })
     }
     cells.push(row)
   }
@@ -42,7 +45,7 @@ pub fn Grid::set_terrain(
   self : Grid,
   col : Int,
   row : Int,
-  t : Terrain?
+  t : Terrain?,
 ) -> Unit {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
     self.cells[row][col].terrain = t
@@ -54,7 +57,7 @@ pub fn Grid::set_animal(
   self : Grid,
   col : Int,
   row : Int,
-  a : Species?
+  a : Species?,
 ) -> Unit {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
     self.cells[row][col].animal = a
@@ -62,12 +65,7 @@ pub fn Grid::set_animal(
 }
 
 ///|
-pub fn Grid::set_fence_top(
-  self : Grid,
-  col : Int,
-  row : Int,
-  v : Bool
-) -> Unit {
+pub fn Grid::set_fence_top(self : Grid, col : Int, row : Int, v : Bool) -> Unit {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
     self.cells[row][col].fence_top = v
   }
@@ -78,7 +76,7 @@ pub fn Grid::set_fence_left(
   self : Grid,
   col : Int,
   row : Int,
-  v : Bool
+  v : Bool,
 ) -> Unit {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
     self.cells[row][col].fence_left = v

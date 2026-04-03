@@ -65,8 +65,20 @@ fn draw_controls(x : Int, y : Int) -> Unit {
   @draw.draw_text("S - South", x + 10, y + 38, @types.info_font_size, text_dim)
   @draw.draw_text("A - West", x + 10, y + 56, @types.info_font_size, text_dim)
   @draw.draw_text("D - East", x + 10, y + 74, @types.info_font_size, text_dim)
-  @draw.draw_text("R - Restart", x + 10, y + 96, @types.info_font_size, text_dim)
-  @draw.draw_text("ESC - Menu", x + 10, y + 114, @types.info_font_size, text_dim)
+  @draw.draw_text(
+    "R - Restart",
+    x + 10,
+    y + 96,
+    @types.info_font_size,
+    text_dim,
+  )
+  @draw.draw_text(
+    "ESC - Menu",
+    x + 10,
+    y + 114,
+    @types.info_font_size,
+    text_dim,
+  )
 }
 
 ///|
@@ -122,11 +134,7 @@ fn draw_game_over(frame : Int) -> Unit {
 }
 
 ///|
-fn draw_star_display(
-  cx : Int,
-  cy : Int,
-  rating : @types.StarRating
-) -> Unit {
+fn draw_star_display(cx : Int, cy : Int, rating : @types.StarRating) -> Unit {
   let count = @types.star_rating_value(rating)
   for i in 0..<3 {
     let sx = cx - 45 + i * 35

@@ -40,12 +40,8 @@ pub fn get_level(index : Int) -> @types.Level {
 /// Level 1: "First Glaze" - Single red, learn placement
 fn level_1() -> @types.Level {
   let target = build_target([
-    e, e, e, e, e, e,
-    e, e, r, r, e, e,
-    e, e, r, r, e, e,
-    e, e, r, r, e, e,
-    e, e, e, e, e, e,
-    e, e, e, e, e, e,
+    e, e, e, e, e, e, e, e, r, r, e, e, e, e, r, r, e, e, e, e, r, r, e, e, e, e,
+    e, e, e, e, e, e, e, e, e, e,
   ])
   {
     tier: Beginner,
@@ -61,12 +57,8 @@ fn level_1() -> @types.Level {
 /// Level 2: "Blue Stripe" - Learn blue placement
 fn level_2() -> @types.Level {
   let target = build_target([
-    e, e, e, e, e, e,
-    b, b, b, b, b, b,
-    e, e, e, e, e, e,
-    e, e, e, e, e, e,
-    b, b, b, b, b, b,
-    e, e, e, e, e, e,
+    e, e, e, e, e, e, b, b, b, b, b, b, e, e, e, e, e, e, e, e, e, e, e, e, b, b,
+    b, b, b, b, e, e, e, e, e, e,
   ])
   {
     tier: Beginner,
@@ -82,12 +74,8 @@ fn level_2() -> @types.Level {
 /// Level 3: "Green Cross" - Learn shape making
 fn level_3() -> @types.Level {
   let target = build_target([
-    e, e, g, g, e, e,
-    e, e, g, g, e, e,
-    g, g, g, g, g, g,
-    g, g, g, g, g, g,
-    e, e, g, g, e, e,
-    e, e, g, g, e, e,
+    e, e, g, g, e, e, e, e, g, g, e, e, g, g, g, g, g, g, g, g, g, g, g, g, e, e,
+    g, g, e, e, e, e, g, g, e, e,
   ])
   {
     tier: Beginner,
@@ -103,12 +91,8 @@ fn level_3() -> @types.Level {
 /// Level 4: "Gold Frame" - Border pattern
 fn level_4() -> @types.Level {
   let target = build_target([
-    o, o, o, o, o, o,
-    o, e, e, e, e, o,
-    o, e, e, e, e, o,
-    o, e, e, e, e, o,
-    o, e, e, e, e, o,
-    o, o, o, o, o, o,
+    o, o, o, o, o, o, o, e, e, e, e, o, o, e, e, e, e, o, o, e, e, e, e, o, o, e,
+    e, e, e, o, o, o, o, o, o, o,
   ])
   {
     tier: Beginner,
@@ -124,12 +108,8 @@ fn level_4() -> @types.Level {
 /// Level 5: "Two Tone" - Learn two colors
 fn level_5() -> @types.Level {
   let target = build_target([
-    r, r, r, b, b, b,
-    r, r, r, b, b, b,
-    r, r, r, b, b, b,
-    r, r, r, b, b, b,
-    r, r, r, b, b, b,
-    r, r, r, b, b, b,
+    r, r, r, b, b, b, r, r, r, b, b, b, r, r, r, b, b, b, r, r, r, b, b, b, r, r,
+    r, b, b, b, r, r, r, b, b, b,
   ])
   {
     tier: Beginner,
@@ -145,12 +125,8 @@ fn level_5() -> @types.Level {
 /// Level 6: "Purple Mix" - Learn Red+Blue blending
 fn level_6() -> @types.Level {
   let target = build_target([
-    e, e, e, e, e, e,
-    e, r, b, r, b, e,
-    e, b, r, b, r, e,
-    e, r, b, r, b, e,
-    e, b, r, b, r, e,
-    e, e, e, e, e, e,
+    e, e, e, e, e, e, e, r, b, r, b, e, e, b, r, b, r, e, e, r, b, r, b, e, e, b,
+    r, b, r, e, e, e, e, e, e, e,
   ])
   {
     tier: Beginner,
@@ -166,12 +142,8 @@ fn level_6() -> @types.Level {
 /// Level 7: "Checkerboard" - Alternating pattern
 fn level_7() -> @types.Level {
   let target = build_target([
-    w, k, w, k, w, k,
-    k, w, k, w, k, w,
-    w, k, w, k, w, k,
-    k, w, k, w, k, w,
-    w, k, w, k, w, k,
-    k, w, k, w, k, w,
+    w, k, w, k, w, k, k, w, k, w, k, w, w, k, w, k, w, k, k, w, k, w, k, w, w, k,
+    w, k, w, k, k, w, k, w, k, w,
   ])
   {
     tier: Beginner,
@@ -191,12 +163,8 @@ fn level_7() -> @types.Level {
 /// Level 8: "Sunset" - Red and Gold bands
 fn level_8() -> @types.Level {
   let target = build_target([
-    r, r, r, r, r, r,
-    r, r, r, r, r, r,
-    o, o, o, o, o, o,
-    o, o, o, o, o, o,
-    e, e, e, e, e, e,
-    e, e, e, e, e, e,
+    r, r, r, r, r, r, r, r, r, r, r, r, o, o, o, o, o, o, o, o, o, o, o, o, e, e,
+    e, e, e, e, e, e, e, e, e, e,
   ])
   {
     tier: Intermediate,
@@ -212,12 +180,8 @@ fn level_8() -> @types.Level {
 /// Level 9: "Ocean" - Blue and White waves
 fn level_9() -> @types.Level {
   let target = build_target([
-    b, b, w, w, b, b,
-    w, b, b, b, b, w,
-    b, w, w, w, w, b,
-    w, b, b, b, b, w,
-    b, b, w, w, b, b,
-    w, w, b, b, w, w,
+    b, b, w, w, b, b, w, b, b, b, b, w, b, w, w, w, w, b, w, b, b, b, b, w, b, b,
+    w, w, b, b, w, w, b, b, w, w,
   ])
   {
     tier: Intermediate,
@@ -233,12 +197,8 @@ fn level_9() -> @types.Level {
 /// Level 10: "Forest Floor" - Green and Gold
 fn level_10() -> @types.Level {
   let target = build_target([
-    g, g, e, e, g, g,
-    g, o, o, o, o, g,
-    e, o, g, g, o, e,
-    e, o, g, g, o, e,
-    g, o, o, o, o, g,
-    g, g, e, e, g, g,
+    g, g, e, e, g, g, g, o, o, o, o, g, e, o, g, g, o, e, e, o, g, g, o, e, g, o,
+    o, o, o, g, g, g, e, e, g, g,
   ])
   {
     tier: Intermediate,
@@ -254,12 +214,8 @@ fn level_10() -> @types.Level {
 /// Level 11: "Amethyst" - Purple center with Red/Blue edges
 fn level_11() -> @types.Level {
   let target = build_target([
-    r, r, r, b, b, b,
-    r, r, b, r, b, b,
-    r, b, r, b, r, b,
-    b, r, b, r, b, r,
-    b, b, r, b, r, r,
-    b, b, b, r, r, r,
+    r, r, r, b, b, b, r, r, b, r, b, b, r, b, r, b, r, b, b, r, b, r, b, r, b, b,
+    r, b, r, r, b, b, b, r, r, r,
   ])
   {
     tier: Intermediate,
@@ -275,12 +231,8 @@ fn level_11() -> @types.Level {
 /// Level 12: "Night Sky" - White dots on Black
 fn level_12() -> @types.Level {
   let target = build_target([
-    k, k, w, k, k, k,
-    k, k, k, k, w, k,
-    w, k, k, k, k, k,
-    k, k, k, w, k, k,
-    k, w, k, k, k, w,
-    k, k, k, k, k, k,
+    k, k, w, k, k, k, k, k, k, k, w, k, w, k, k, k, k, k, k, k, k, w, k, k, k, w,
+    k, k, k, w, k, k, k, k, k, k,
   ])
   {
     tier: Intermediate,
@@ -296,12 +248,8 @@ fn level_12() -> @types.Level {
 /// Level 13: "Stained Glass" - Three-color pattern
 fn level_13() -> @types.Level {
   let target = build_target([
-    r, r, b, b, o, o,
-    r, r, b, b, o, o,
-    b, b, o, o, r, r,
-    b, b, o, o, r, r,
-    o, o, r, r, b, b,
-    o, o, r, r, b, b,
+    r, r, b, b, o, o, r, r, b, b, o, o, b, b, o, o, r, r, b, b, o, o, r, r, o, o,
+    r, r, b, b, o, o, r, r, b, b,
   ])
   {
     tier: Intermediate,
@@ -317,12 +265,8 @@ fn level_13() -> @types.Level {
 /// Level 14: "Royal Crest" - Complex multi-color
 fn level_14() -> @types.Level {
   let target = build_target([
-    o, o, b, b, o, o,
-    o, b, b, b, b, o,
-    b, b, r, r, b, b,
-    b, b, r, r, b, b,
-    o, b, b, b, b, o,
-    o, o, b, b, o, o,
+    o, o, b, b, o, o, o, b, b, b, b, o, b, b, r, r, b, b, b, b, r, r, b, b, o, b,
+    b, b, b, o, o, o, b, b, o, o,
   ])
   {
     tier: Intermediate,
@@ -342,12 +286,8 @@ fn level_14() -> @types.Level {
 /// Level 15: "Dragon Scale" - Complex interlocking
 fn level_15() -> @types.Level {
   let target = build_target([
-    r, o, r, o, r, o,
-    o, g, o, g, o, g,
-    r, o, r, o, r, o,
-    o, g, o, g, o, g,
-    r, o, r, o, r, o,
-    o, g, o, g, o, g,
+    r, o, r, o, r, o, o, g, o, g, o, g, r, o, r, o, r, o, o, g, o, g, o, g, r, o,
+    r, o, r, o, o, g, o, g, o, g,
   ])
   {
     tier: Advanced,
@@ -363,12 +303,8 @@ fn level_15() -> @types.Level {
 /// Level 16: "Porcelain Dream" - White, Blue, Gold
 fn level_16() -> @types.Level {
   let target = build_target([
-    w, w, b, b, w, w,
-    w, b, o, o, b, w,
-    b, o, w, w, o, b,
-    b, o, w, w, o, b,
-    w, b, o, o, b, w,
-    w, w, b, b, w, w,
+    w, w, b, b, w, w, w, b, o, o, b, w, b, o, w, w, o, b, b, o, w, w, o, b, w, b,
+    o, o, b, w, w, w, b, b, w, w,
   ])
   {
     tier: Advanced,
@@ -384,12 +320,8 @@ fn level_16() -> @types.Level {
 /// Level 17: "Obsidian Flame" - Black, Red, Gold
 fn level_17() -> @types.Level {
   let target = build_target([
-    k, k, k, k, k, k,
-    k, r, r, r, r, k,
-    k, r, o, o, r, k,
-    k, r, o, o, r, k,
-    k, r, r, r, r, k,
-    k, k, k, k, k, k,
+    k, k, k, k, k, k, k, r, r, r, r, k, k, r, o, o, r, k, k, r, o, o, r, k, k, r,
+    r, r, r, k, k, k, k, k, k, k,
   ])
   {
     tier: Advanced,
@@ -405,12 +337,8 @@ fn level_17() -> @types.Level {
 /// Level 18: "Persian Tile" - 4-color symmetry
 fn level_18() -> @types.Level {
   let target = build_target([
-    b, b, w, w, g, g,
-    b, o, w, g, o, g,
-    w, w, o, o, g, g,
-    g, g, o, o, w, w,
-    g, o, g, w, o, b,
-    g, g, w, w, b, b,
+    b, b, w, w, g, g, b, o, w, g, o, g, w, w, o, o, g, g, g, g, o, o, w, w, g, o,
+    g, w, o, b, g, g, w, w, b, b,
   ])
   {
     tier: Advanced,
@@ -426,12 +354,8 @@ fn level_18() -> @types.Level {
 /// Level 19: "Phoenix Mosaic" - 5 colors
 fn level_19() -> @types.Level {
   let target = build_target([
-    r, r, o, o, r, r,
-    r, b, o, o, b, r,
-    o, o, w, w, o, o,
-    o, o, w, w, o, o,
-    r, b, o, o, b, r,
-    r, r, o, o, r, r,
+    r, r, o, o, r, r, r, b, o, o, b, r, o, o, w, w, o, o, o, o, w, w, o, o, r, b,
+    o, o, b, r, r, r, o, o, r, r,
   ])
   {
     tier: Advanced,
@@ -447,12 +371,8 @@ fn level_19() -> @types.Level {
 /// Level 20: "Magnum Opus" - Full palette masterwork
 fn level_20() -> @types.Level {
   let target = build_target([
-    o, k, b, b, k, o,
-    k, w, r, r, w, k,
-    b, r, g, g, r, b,
-    b, r, g, g, r, b,
-    k, w, r, r, w, k,
-    o, k, b, b, k, o,
+    o, k, b, b, k, o, k, w, r, r, w, k, b, r, g, g, r, b, b, r, g, g, r, b, k, w,
+    r, r, w, k, o, k, b, b, k, o,
   ])
   {
     tier: Advanced,
