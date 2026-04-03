@@ -35,17 +35,3 @@ pub fn draw_frame(game : @types.Game) -> Unit {
 fn sinf(x : Float) -> Float {
   Float::from_double(@math.sin(x.to_double()))
 }
-
-///|
-fn cosf(x : Float) -> Float {
-  Float::from_double(@math.cos(x.to_double()))
-}
-
-///|
-fn absf(x : Float) -> Float {
-  if x < 0.0 {
-    -x
-  } else {
-    x
-  }
-}

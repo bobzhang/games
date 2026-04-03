@@ -1,6 +1,9 @@
 import {
   "bobzhang/games/cartouche/internal/types",
-  "bobzhang/games/cartouche/internal/decoder",
 }
+
+import {
+  "bobzhang/games/cartouche/internal/decoder",
+} for "test"
 
 warnings = "-missing_doc+unnecessary_annotation"

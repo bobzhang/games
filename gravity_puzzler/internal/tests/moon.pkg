@@ -4,6 +4,6 @@ import {
   "bobzhang/games/gravity_puzzler/internal/content",
   "bobzhang/games/gravity_puzzler/internal/mechanics",
   "bobzhang/games/gravity_puzzler/internal/game",
-}
+} for "test"
 
 warnings = "-missing_doc+unnecessary_annotation"

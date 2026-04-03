@@ -20,7 +20,7 @@ test "tier 1 levels use metal and stone" {
     // Tier 1 should only have Metal and Stone
     for m = 0; m < level.available_materials.length(); m = m + 1 {
       let mat = level.available_materials[m]
-      assert_true(mat == @types.Metal || mat == @types.Stone)
+      assert_true(mat == Metal || mat == Stone)
     }
   }
 }
@@ -46,7 +46,7 @@ test "tier 3 levels include glass" {
     // Should include glass
     let mut has_glass = false
     for m = 0; m < level.available_materials.length(); m = m + 1 {
-      if level.available_materials[m] == @types.Glass {
+      if level.available_materials[m] == Glass {
         has_glass = true
       }
     }
@@ -67,7 +67,7 @@ test "load_level sets up grid correctly" {
     },
   )
   assert_eq(source.locked, true)
-  assert_eq(source.material, @types.Metal)
+  assert_eq(source.material, Metal)
   let target = game.grid.tiles[0][3]
   assert_true(
     match target.kind {
@@ -81,11 +81,11 @@ test "load_level sets up grid correctly" {
 test "load_level resets grid first" {
   let game = @types.new_game()
   // Dirty the grid
-  game.grid.tiles[5][5].material = @types.Metal
+  game.grid.tiles[5][5].material = Metal
   game.grid.tiles[5][5].temperature = 999.0
   @levels.load_level(game, 0)
   // Should be reset
-  assert_eq(game.grid.tiles[5][5].material, @types.Empty)
+  assert_eq(game.grid.tiles[5][5].material, Empty)
   assert_eq(game.grid.tiles[5][5].temperature, @types.ambient_temp)
 }
 

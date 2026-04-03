@@ -112,7 +112,7 @@ test "out of range sensor gives no reading" {
   let epicenter = @types.vec2i(11, 9)
   let tile = @types.new_tile(Empty)
   let result = compute_reading(sensor, epicenter, tile.kind)
-  assert_true(result.is_empty())
+  assert_true(result is None)
 }
 
 ///|

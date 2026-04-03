@@ -1,6 +1,6 @@
 ///|
 test "score_gain: base score with zero combo" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.combo = 0
   let gained = game.score_gain(100)
   inspect(gained, content="100")
@@ -8,7 +8,7 @@ test "score_gain: base score with zero combo" {
 
 ///|
 test "score_gain: combo multiplier scales score" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.combo = 10
   // bonus = 100 * 10 / 5 = 200; total = 100 + 200 = 300
   let gained = game.score_gain(100)
@@ -17,7 +17,7 @@ test "score_gain: combo multiplier scales score" {
 
 ///|
 test "score_gain: max combo cap" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.combo = 24
   // bonus = 50 * 24 / 5 = 240; total = 50 + 240 = 290
   let gained = game.score_gain(50)
@@ -26,7 +26,7 @@ test "score_gain: max combo cap" {
 
 ///|
 test "push_combo: increments combo and resets timer" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.combo = 0
   game.combo_t = 0.0
   game.push_combo()
@@ -36,7 +36,7 @@ test "push_combo: increments combo and resets timer" {
 
 ///|
 test "push_combo: caps at 24" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.combo = 24
   game.push_combo()
   inspect(game.combo, content="24")
@@ -44,7 +44,7 @@ test "push_combo: caps at 24" {
 
 ///|
 test "reset_combo: clears combo and timer" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.combo = 15
   game.combo_t = 2.0
   game.reset_combo()
@@ -54,7 +54,7 @@ test "reset_combo: clears combo and timer" {
 
 ///|
 test "add_score: updates score and best_score" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.score = 0
   game.best_score = 0
   game.combo = 5
@@ -66,7 +66,7 @@ test "add_score: updates score and best_score" {
 
 ///|
 test "add_score: preserves existing best_score when lower" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.score = 0
   game.best_score = 5000
   game.combo = 0
@@ -181,7 +181,7 @@ test "weapon_boost_fire_mult: spread scales with level" {
 
 ///|
 test "stage_transition: updates from play to stage_clear" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.state = Play
   game.stage = 1
   game.distance = 0.0
@@ -198,7 +198,7 @@ test "stage_transition: updates from play to stage_clear" {
 
 ///|
 test "apply_weapon_upgrade: sets weapon on first pickup" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   guard game.weapon is None else { fail("weapon should start as None") }
   game.apply_weapon_upgrade(Spread)
   guard game.weapon is Some(Spread) else {
@@ -209,7 +209,7 @@ test "apply_weapon_upgrade: sets weapon on first pickup" {
 
 ///|
 test "apply_weapon_upgrade: same weapon increases level" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.apply_weapon_upgrade(Piercing)
   game.apply_weapon_upgrade(Piercing)
   guard game.weapon is Some(Piercing) else {
@@ -220,7 +220,7 @@ test "apply_weapon_upgrade: same weapon increases level" {
 
 ///|
 test "apply_weapon_upgrade: different weapon resets level" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.apply_weapon_upgrade(Spread)
   game.apply_weapon_upgrade(Spread)
   inspect(game.weapon_level, content="2")
@@ -233,7 +233,7 @@ test "apply_weapon_upgrade: different weapon resets level" {
 
 ///|
 test "apply_weapon_upgrade: level caps at 3" {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.apply_weapon_upgrade(Spread)
   game.apply_weapon_upgrade(Spread)
   game.apply_weapon_upgrade(Spread)

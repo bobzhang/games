@@ -46,7 +46,7 @@ pub fn compute_all_readings(
       s.pos.x < grid[0].length() {
       grid[s.pos.y][s.pos.x].kind
     } else {
-      @types.TileKind::Empty
+      Empty
     }
     match compute_reading(s, epicenter, tk) {
       Some(r) => result.push(r)

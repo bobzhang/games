@@ -20,12 +20,12 @@ test "get_neighbors edge" {
 test "heat spreads from source to metal" {
   let grid = @types.new_grid()
   // Place heat source at (0,0)
-  grid.tiles[0][0].kind = @types.HeatSource(200.0)
-  grid.tiles[0][0].material = @types.Metal
+  grid.tiles[0][0].kind = HeatSource(200.0)
+  grid.tiles[0][0].material = Metal
   grid.tiles[0][0].temperature = 200.0
   // Place metal at (0,1) and (1,0)
-  grid.tiles[0][1].material = @types.Metal
-  grid.tiles[1][0].material = @types.Metal
+  grid.tiles[0][1].material = Metal
+  grid.tiles[1][0].material = Metal
   // Run one step
   @heat.simulate_step(grid)
   // Metal neighbors should have warmed up
@@ -39,13 +39,13 @@ test "heat spreads from source to metal" {
 test "insulator blocks heat" {
   let grid = @types.new_grid()
   // Heat source at (0,0)
-  grid.tiles[0][0].kind = @types.HeatSource(200.0)
-  grid.tiles[0][0].material = @types.Metal
+  grid.tiles[0][0].kind = HeatSource(200.0)
+  grid.tiles[0][0].material = Metal
   grid.tiles[0][0].temperature = 200.0
   // Insulator at (0,1)
-  grid.tiles[0][1].material = @types.Insulator
+  grid.tiles[0][1].material = Insulator
   // Metal at (0,2)
-  grid.tiles[0][2].material = @types.Metal
+  grid.tiles[0][2].material = Metal
   // Run multiple steps
   for _i in 0..<10 {
     @heat.simulate_step(grid)
@@ -61,16 +61,16 @@ test "metal conducts faster than stone" {
   let grid1 = @types.new_grid()
   let grid2 = @types.new_grid()
   // Same source setup for both
-  grid1.tiles[0][0].kind = @types.HeatSource(200.0)
-  grid1.tiles[0][0].material = @types.Metal
+  grid1.tiles[0][0].kind = HeatSource(200.0)
+  grid1.tiles[0][0].material = Metal
   grid1.tiles[0][0].temperature = 200.0
-  grid2.tiles[0][0].kind = @types.HeatSource(200.0)
-  grid2.tiles[0][0].material = @types.Metal
+  grid2.tiles[0][0].kind = HeatSource(200.0)
+  grid2.tiles[0][0].material = Metal
   grid2.tiles[0][0].temperature = 200.0
   // Metal path
-  grid1.tiles[0][1].material = @types.Metal
+  grid1.tiles[0][1].material = Metal
   // Stone path
-  grid2.tiles[0][1].material = @types.Stone
+  grid2.tiles[0][1].material = Stone
   // Run 5 steps
   for _i in 0..<5 {
     @heat.simulate_step(grid1)
@@ -83,8 +83,8 @@ test "metal conducts faster than stone" {
 ///|
 test "empty tiles dont conduct" {
   let grid = @types.new_grid()
-  grid.tiles[0][0].kind = @types.HeatSource(200.0)
-  grid.tiles[0][0].material = @types.Metal
+  grid.tiles[0][0].kind = HeatSource(200.0)
+  grid.tiles[0][0].material = Metal
   grid.tiles[0][0].temperature = 200.0
   // Leave (0,1) as Empty
   // Run steps
@@ -105,21 +105,21 @@ test "is_stable returns true when no heat flow" {
 ///|
 test "is_stable returns false with active heat flow" {
   let grid = @types.new_grid()
-  grid.tiles[0][0].kind = @types.HeatSource(200.0)
-  grid.tiles[0][0].material = @types.Metal
+  grid.tiles[0][0].kind = HeatSource(200.0)
+  grid.tiles[0][0].material = Metal
   grid.tiles[0][0].temperature = 200.0
-  grid.tiles[0][1].material = @types.Metal
+  grid.tiles[0][1].material = Metal
   assert_true(@heat.is_stable(grid, 0.5) == false)
 }
 
 ///|
 test "run_simulation runs and produces result" {
   let grid = @types.new_grid()
-  grid.tiles[3][3].kind = @types.HeatSource(100.0)
-  grid.tiles[3][3].material = @types.Metal
+  grid.tiles[3][3].kind = HeatSource(100.0)
+  grid.tiles[3][3].material = Metal
   grid.tiles[3][3].temperature = 100.0
-  grid.tiles[3][4].material = @types.Metal
-  grid.tiles[4][3].material = @types.Metal
+  grid.tiles[3][4].material = Metal
+  grid.tiles[4][3].material = Metal
   // Run just one step and check
   @heat.simulate_step(grid)
   let t1 = grid.tiles[3][4].temperature
@@ -137,10 +137,10 @@ test "run_simulation runs and produces result" {
 ///|
 test "wood conducts slowly" {
   let grid = @types.new_grid()
-  grid.tiles[0][0].kind = @types.HeatSource(200.0)
-  grid.tiles[0][0].material = @types.Metal
+  grid.tiles[0][0].kind = HeatSource(200.0)
+  grid.tiles[0][0].material = Metal
   grid.tiles[0][0].temperature = 200.0
-  grid.tiles[0][1].material = @types.Wood
+  grid.tiles[0][1].material = Wood
   @heat.simulate_step(grid)
   let wood_temp = grid.tiles[0][1].temperature
   // Wood should have gained some heat but not much

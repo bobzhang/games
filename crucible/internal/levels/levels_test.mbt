@@ -14,11 +14,11 @@ test "all 25 levels are valid" {
 
 ///|
 test "tier levels have correct count" {
-  let apprentice = get_tier_levels(@types.Apprentice)
+  let apprentice = get_tier_levels(Apprentice)
   assert_eq(apprentice.length(), 8)
-  let journeyman = get_tier_levels(@types.Journeyman)
+  let journeyman = get_tier_levels(Journeyman)
   assert_eq(journeyman.length(), 9)
-  let master = get_tier_levels(@types.Master)
+  let master = get_tier_levels(Master)
   assert_eq(master.length(), 8)
 }
 
@@ -26,7 +26,7 @@ test "tier levels have correct count" {
 test "apprentice levels have tier Apprentice" {
   for i in 0..<8 {
     let level = get_level(i)
-    assert_eq(level.tier, @types.Apprentice)
+    assert_eq(level.tier, Apprentice)
   }
 }
 
@@ -34,7 +34,7 @@ test "apprentice levels have tier Apprentice" {
 test "journeyman levels have tier Journeyman" {
   for i in 8..<17 {
     let level = get_level(i)
-    assert_eq(level.tier, @types.Journeyman)
+    assert_eq(level.tier, Journeyman)
   }
 }
 
@@ -42,7 +42,7 @@ test "journeyman levels have tier Journeyman" {
 test "master levels have tier Master" {
   for i in 17..<25 {
     let level = get_level(i)
-    assert_eq(level.tier, @types.Master)
+    assert_eq(level.tier, Master)
   }
 }
 
@@ -52,9 +52,9 @@ test "first tier always unlocked" {
   for _i in 0..<25 {
     scores.push(@types.new_level_score())
   }
-  assert_eq(is_tier_unlocked(@types.Apprentice, scores), true)
-  assert_eq(is_tier_unlocked(@types.Journeyman, scores), false)
-  assert_eq(is_tier_unlocked(@types.Master, scores), false)
+  assert_eq(is_tier_unlocked(Apprentice, scores), true)
+  assert_eq(is_tier_unlocked(Journeyman, scores), false)
+  assert_eq(is_tier_unlocked(Master, scores), false)
 }
 
 ///|
@@ -67,7 +67,7 @@ test "journeyman unlocks after 5 apprentice levels" {
   for i in 0..<5 {
     scores[i].completed = true
   }
-  assert_eq(is_tier_unlocked(@types.Journeyman, scores), true)
+  assert_eq(is_tier_unlocked(Journeyman, scores), true)
 }
 
 ///|
@@ -133,7 +133,7 @@ test "budget provides enough elements for par steps" {
 test "steam targets have fire and water in budget" {
   for i in 0..<25 {
     let level = get_level(i)
-    if level.target == @types.Steam {
+    if level.target == Steam {
       // Steam needs Fire+Water or Ice+Fire (Ice needs Air+Water)
       let has_fire = level.budget.fire > 0
       let has_water = level.budget.water > 0
@@ -148,7 +148,7 @@ test "steam targets have fire and water in budget" {
 test "void targets have light and shadow in budget" {
   for i in 0..<25 {
     let level = get_level(i)
-    if level.target == @types.Void {
+    if level.target == Void {
       assert_true(level.budget.light > 0)
       assert_true(level.budget.shadow > 0)
     }
@@ -159,7 +159,7 @@ test "void targets have light and shadow in budget" {
 test "storm targets have required elements in budget" {
   for i in 0..<25 {
     let level = get_level(i)
-    if level.target == @types.Storm {
+    if level.target == Storm {
       // Storm = Lightning + Water; Lightning = Fire + Air
       assert_true(level.budget.fire > 0)
       assert_true(level.budget.water > 0)
@@ -172,7 +172,7 @@ test "storm targets have required elements in budget" {
 test "clay targets have required elements in budget" {
   for i in 0..<25 {
     let level = get_level(i)
-    if level.target == @types.Clay {
+    if level.target == Clay {
       // Clay = Steam + Earth; Steam = Fire + Water
       assert_true(level.budget.fire > 0)
       assert_true(level.budget.water > 0)
@@ -185,7 +185,7 @@ test "clay targets have required elements in budget" {
 test "obsidian targets have required elements in budget" {
   for i in 0..<25 {
     let level = get_level(i)
-    if level.target == @types.Obsidian {
+    if level.target == Obsidian {
       // Obsidian = Magma + Water; Magma = Fire + Earth
       assert_true(level.budget.fire > 0)
       assert_true(level.budget.water > 0)
@@ -198,9 +198,9 @@ test "obsidian targets have required elements in budget" {
 test "total levels constant matches actual count" {
   inspect(@types.total_levels, content="25")
   // Verify tier counts sum to total
-  let sum = @types.tier_level_count(@types.Apprentice) +
-    @types.tier_level_count(@types.Journeyman) +
-    @types.tier_level_count(@types.Master)
+  let sum = @types.tier_level_count(Apprentice) +
+    @types.tier_level_count(Journeyman) +
+    @types.tier_level_count(Master)
   inspect(sum, content="25")
 }
 
@@ -217,7 +217,7 @@ test "master unlocks after 6 journeyman levels" {
   for i in 8..<14 {
     scores[i].completed = true
   }
-  assert_eq(is_tier_unlocked(@types.Master, scores), true)
+  assert_eq(is_tier_unlocked(Master, scores), true)
 }
 
 ///|
@@ -229,5 +229,5 @@ test "master stays locked with only 5 journeyman levels" {
   for i in 8..<13 {
     scores[i].completed = true
   }
-  assert_eq(is_tier_unlocked(@types.Master, scores), false)
+  assert_eq(is_tier_unlocked(Master, scores), false)
 }

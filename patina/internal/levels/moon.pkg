@@ -1,6 +1,9 @@
 import {
   "bobzhang/games/patina/internal/types",
-  "bobzhang/games/patina/internal/restoration",
 }
+
+import {
+  "bobzhang/games/patina/internal/restoration",
+} for "test"
 
 warnings = "-missing_doc+unnecessary_annotation"

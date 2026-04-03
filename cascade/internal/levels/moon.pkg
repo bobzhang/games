@@ -1,6 +1,9 @@
 import {
   "bobzhang/games/cascade/internal/types",
-  "bobzhang/games/cascade/internal/physics",
 }
+
+import {
+  "bobzhang/games/cascade/internal/physics",
+} for "test"
 
 warnings = "-missing_doc+unnecessary_annotation"
