@@ -7,7 +7,12 @@ pub(all) enum Screen {
   Hacking
   Results
   Victory
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -22,21 +27,36 @@ pub(all) enum TileKind {
   Exit
   CameraTile
   Start
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GuardKind {
   Patrol
   Sentinel
   Hunter
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GuardKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AlertState {
   Patrolling
   Suspicious
   Alert
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AlertState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum HackState {
@@ -45,7 +65,12 @@ pub(all) enum HackState {
   Sequencing
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HackState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -53,7 +78,12 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SoundEvent {
@@ -65,7 +95,12 @@ pub(all) enum SoundEvent {
   AlertTriggered
   CoinToss
   LevelComplete
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SoundEvent with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ScoreGrade {
@@ -73,10 +108,20 @@ pub(all) enum ScoreGrade {
   A
   B
   C
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ScoreGrade with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Corporate
   Military
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

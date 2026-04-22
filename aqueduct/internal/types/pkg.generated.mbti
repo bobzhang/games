@@ -2,6 +2,7 @@
 package "bobzhang/games/aqueduct/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -118,10 +119,11 @@ pub(all) enum Direction {
   East
   South
   West
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
 pub fn Direction::dx(Self) -> Int
 pub fn Direction::dy(Self) -> Int
 pub fn Direction::opposite(Self) -> Self
+pub impl Show for Direction
 
 pub(all) struct Game {
   mut screen : Screen
@@ -170,7 +172,8 @@ pub(all) enum PlayState {
   Simulating
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct Pos {
   x : Int
@@ -183,13 +186,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Tier1
   Tier2
   Tier3
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Tile {
   mut kind : TileKind
@@ -206,7 +211,8 @@ pub(all) enum TileKind {
   Aqueduct
   Reservoir
   Dam
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct UndoEntry {
   pos : Pos

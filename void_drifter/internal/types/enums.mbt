@@ -10,7 +10,12 @@ pub(all) enum Screen {
   WeaponSelect
   BossIntro
   Victory
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum WeaponKind {
@@ -20,7 +25,12 @@ pub(all) enum WeaponKind {
   Railgun
   Flak
   Beam
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WeaponKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ModKind {
@@ -32,7 +42,12 @@ pub(all) enum ModKind {
   Freezing
   Bouncing
   Overcharge
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ModKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum UtilityMod {
@@ -40,7 +55,12 @@ pub(all) enum UtilityMod {
   Vampire
   HeatSink
   Accelerator
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for UtilityMod with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EnemyKind {
@@ -52,14 +72,24 @@ pub(all) enum EnemyKind {
   Carrier
   Bomber
   ShieldBearer
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EnemyKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum BossKind {
   Leviathan
   Hive
   Dreadnought
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for BossKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SectorKind {
@@ -69,7 +99,12 @@ pub(all) enum SectorKind {
   BossArena
   EliteZone
   EmptySpace
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SectorKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum HazardKind {
@@ -77,7 +112,12 @@ pub(all) enum HazardKind {
   RadiationZone
   GravityWell
   MineField
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HazardKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PickupKind {
@@ -88,7 +128,12 @@ pub(all) enum PickupKind {
   Credits(Int)
   HeatVent
   WeaponDrop(WeaponKind)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PickupKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SoundEvent {
@@ -106,7 +151,12 @@ pub(all) enum SoundEvent {
   ShieldBreak
   OverheatWarn
   SectorEnter
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SoundEvent with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum MetaUnlock {
@@ -114,7 +164,12 @@ pub(all) enum MetaUnlock {
   UnlockMod(ModKind)
   UnlockUtility(UtilityMod)
   UnlockShip(Int)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MetaUnlock with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -122,4 +177,9 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

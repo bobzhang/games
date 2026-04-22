@@ -2,6 +2,7 @@
 package "bobzhang/games/vector_breach/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "moonbitlang/core/ref",
   "tonyfettes/raylib",
 }
@@ -171,7 +172,8 @@ pub(all) enum AnimKind {
   AnimPush
   AnimDeath
   AnimIntentReveal
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for AnimKind
 
 pub(all) struct AnimState {
   mut playing : Bool
@@ -196,7 +198,8 @@ pub(all) enum AugmentKind {
   FortifiedGrid
   ReflexBoost
   EmergencyRepair
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for AugmentKind
 
 pub(all) struct BattleSnapshot {
   unit_states : Array[UnitSnapshot]
@@ -245,7 +248,8 @@ pub(all) enum BranchTheme {
   IceProtocol
   VoidZone
   Neutral
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for BranchTheme
 
 pub(all) struct CampaignMap {
   nodes : Array[CampaignNode]
@@ -271,7 +275,8 @@ pub(all) enum CampaignNodeKind {
   Shop
   Event
   Elite(Int)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CampaignNodeKind
 
 pub(all) struct Cell {
   x : Int
@@ -306,14 +311,16 @@ pub(all) enum Command {
   Overclock(Int)
   Wait
   Push(Int, Int, Int)
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for Command
 
 pub(all) enum Direction {
   North
   South
   East
   West
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) enum Effect {
   Damage(Int)
@@ -325,7 +332,8 @@ pub(all) enum Effect {
   Spawn(Int, Int, Int)
   DestroyTile(Int, Int)
   ApplyHazard(Int, Int, Int)
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for Effect
 
 pub(all) enum EffectKind {
   DamagePreview
@@ -335,7 +343,8 @@ pub(all) enum EffectKind {
   HazardPreview
   KillPreview
   CollisionPreview
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EffectKind
 
 pub(all) enum EnemyType {
   Rammer
@@ -346,13 +355,15 @@ pub(all) enum EnemyType {
   ShieldDrone
   Splitter
   Boss
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EnemyType
 
 pub(all) enum EventKind {
   Scavenger
   Ambush
   Intel
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EventKind
 
 pub(all) struct FloatingText {
   mut text : String
@@ -396,7 +407,8 @@ pub(all) enum HazardKind {
   Acid
   Mine
   Smoke
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for HazardKind
 
 pub(all) enum Intent {
   March(Int, Int)
@@ -406,13 +418,15 @@ pub(all) enum Intent {
   Summon(Int, Int, Int)
   Charge(Int, Int)
   MinePlace(Int, Int)
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for Intent
 
 pub(all) enum MechClass {
   Vanguard
   Striker
   Sentinel
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for MechClass
 
 pub(all) enum Objective {
   DefendGrid(Int)
@@ -420,7 +434,8 @@ pub(all) enum Objective {
   Assassinate(Int)
   CapturePoints(Int)
   Escort(Int, Int)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Objective
 
 pub(all) struct Particle {
   mut x : Float
@@ -445,7 +460,8 @@ pub(all) enum RewardChoice {
   PickAugment(Int)
   RepairAll
   GainGridPower
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for RewardChoice
 
 pub(all) struct RingEffect {
   mut x : Float
@@ -491,7 +507,8 @@ pub(all) enum Screen {
   RunSummary
   GameOver
   Victory
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct ScreenFX {
   mut shake_timer : Float
@@ -514,7 +531,8 @@ pub(all) struct ScreenFX {
 pub(all) enum StatusEffect {
   OnFire(Int)
   Immobilized(Int)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for StatusEffect
 
 pub(all) struct Tile {
   kind : TileKind
@@ -531,7 +549,8 @@ pub(all) enum TileKind {
   Ice
   ControlPoint
   SpawnPoint
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct UnitSnapshot {
   id : Int
@@ -552,7 +571,8 @@ pub(all) struct UnitSnapshot {
 pub(all) enum UnitTeam {
   Player
   Enemy
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for UnitTeam
 
 // Type aliases
 

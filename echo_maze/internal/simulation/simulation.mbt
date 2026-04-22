@@ -375,7 +375,12 @@ pub(all) enum TickResult {
   Continue(Int) // collected count this tick
   Completed(Int) // level complete, collected count
   Failed // player caught
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub impl Show for TickResult with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Count total collectibles obtained

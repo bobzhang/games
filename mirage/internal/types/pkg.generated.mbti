@@ -2,6 +2,7 @@
 package "bobzhang/games/mirage/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -156,7 +157,8 @@ pub(all) enum AnimKind {
   SwitchToggle
   LevelClear
   GemCollect
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for AnimKind
 
 pub(all) struct Animation {
   mut kind : AnimKind
@@ -170,7 +172,8 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Game {
   mut screen : Screen
@@ -199,7 +202,8 @@ pub(all) struct GridData {
 pub(all) enum Layer {
   Foreground
   Background
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Layer
 
 pub(all) struct LevelDef {
   tier : Tier
@@ -222,7 +226,8 @@ pub(all) struct LevelResult {
 pub(all) enum MergeState {
   Split
   Merged
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for MergeState
 
 pub(all) struct Player {
   mut grid_x : Int
@@ -243,13 +248,15 @@ pub(all) enum Screen {
   LevelComplete
   GameComplete
   Paused
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Reflection
   Overlap
   Illusion
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) enum Tile {
   Empty
@@ -260,7 +267,8 @@ pub(all) enum Tile {
   Switch(Int)
   Platform
   Gem
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tile
 
 // Type aliases
 

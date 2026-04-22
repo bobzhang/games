@@ -2,6 +2,7 @@
 package "bobzhang/games/dynamo/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -189,14 +190,16 @@ pub(all) enum ComponentKind {
   Coil
   Wire
   Device(Float)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ComponentKind
 
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct FieldLine {
   mut start_col : Int
@@ -261,7 +264,8 @@ pub(all) struct LevelState {
 pub(all) enum Polarity {
   North
   South
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Polarity
 
 pub(all) enum Screen {
   Title
@@ -270,7 +274,8 @@ pub(all) enum Screen {
   Simulating
   LevelComplete
   LevelFailed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct Spark {
   mut active : Bool
@@ -286,7 +291,8 @@ pub(all) enum Tier {
   Foundations
   Generators
   PowerGrid
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) enum ToolMode {
   PlaceMagnetN
@@ -294,7 +300,8 @@ pub(all) enum ToolMode {
   PlaceCoil
   PlaceWire
   Erase
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ToolMode
 
 // Type aliases
 

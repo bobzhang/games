@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "bobzhang/games/compass/internal/types"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
 pub fn bearing_to_degrees(Float) -> Float
 
@@ -70,7 +74,8 @@ pub(all) enum Direction {
   South
   East
   West
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) enum GamePhase {
   Menu
@@ -78,7 +83,8 @@ pub(all) enum GamePhase {
   LevelComplete
   GameOver
   LevelSelect
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for GamePhase
 
 pub(all) struct GameState {
   mut current_level : Int
@@ -127,7 +133,8 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for StarRating
 
 pub(all) enum Tile {
   Ocean
@@ -136,7 +143,8 @@ pub(all) enum Tile {
   Reef
   Landmark
   Current(Direction)
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for Tile
 
 // Type aliases
 

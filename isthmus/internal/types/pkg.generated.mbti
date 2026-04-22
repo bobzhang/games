@@ -2,6 +2,7 @@
 package "bobzhang/games/isthmus/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -184,7 +185,8 @@ pub(all) enum PlayState {
   Rising
   Won
   Lost
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -192,13 +194,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Shores
   Straits
   Archipelago
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Tile {
   mut height : Int
@@ -211,7 +215,8 @@ pub(all) enum TileKind {
   Water
   Settlement
   Sand
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 // Type aliases
 

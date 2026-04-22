@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum DamageKind {
@@ -13,7 +18,12 @@ pub(all) enum DamageKind {
   Stain
   Fade
   Flake
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for DamageKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ToolKind {
@@ -21,7 +31,12 @@ pub(all) enum ToolKind {
   Fill
   Retouch
   Seal
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ToolKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum RegionState {
@@ -31,18 +46,33 @@ pub(all) enum RegionState {
   Restored
   Worsened
   Sealed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RegionState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Selecting
   Animating
   LevelComplete
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Sketches
   Paintings
   Masterworks
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

@@ -2,6 +2,7 @@
 package "bobzhang/games/beacon/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -142,7 +143,8 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Game {
   mut screen : Screen
@@ -194,7 +196,8 @@ pub(all) enum Screen {
   Playing
   Won
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct SignalPath {
   mut from_col : Int
@@ -210,7 +213,8 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for StarRating
 
 pub(all) struct Tile {
   mut kind : TileKind
@@ -225,7 +229,8 @@ pub(all) enum TileKind {
   Transmitter
   Receiver
   Tower
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 // Type aliases
 

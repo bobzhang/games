@@ -2,6 +2,7 @@
 package "bobzhang/games/glaze/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -142,7 +143,8 @@ pub(all) enum FiredColor {
   FDeepBlack
   FCracked
   FEmpty
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for FiredColor
 
 pub(all) struct Game {
   mut screen : Screen
@@ -177,7 +179,8 @@ pub(all) enum GlazeColor {
   White
   Black
   Empty
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for GlazeColor
 
 pub(all) struct Grid {
   cells : Array[Cell]
@@ -204,7 +207,8 @@ pub(all) enum PlayState {
   Placing
   ReadyToFire
   LevelComplete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -213,13 +217,15 @@ pub(all) enum Screen {
   Playing
   Firing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Beginner
   Intermediate
   Advanced
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct UndoEntry {
   row : Int

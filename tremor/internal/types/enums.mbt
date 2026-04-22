@@ -5,14 +5,24 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SensorKind {
   Broad
   Precise
   Directional
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SensorKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -20,7 +30,12 @@ pub(all) enum TileKind {
   Blocked
   Town
   Noisy
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -28,14 +43,24 @@ pub(all) enum PlayState {
   Guessing
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Detection
   Precision
   Crisis
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CompassDir {
@@ -43,4 +68,9 @@ pub(all) enum CompassDir {
   East
   South
   West
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CompassDir with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

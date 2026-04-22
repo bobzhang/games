@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileColor {
@@ -15,7 +20,12 @@ pub(all) enum TileColor {
   Gold
   Purple
   White
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileColor with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileShape {
@@ -25,7 +35,12 @@ pub(all) enum TileShape {
   Diamond
   Circle
   Cross
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileShape with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Orientation {
@@ -33,7 +48,12 @@ pub(all) enum Orientation {
   E
   S
   W
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Orientation with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SymmetryKind {
@@ -43,18 +63,33 @@ pub(all) enum SymmetryKind {
   Rotate2
   Rotate4
   Glide
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SymmetryKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Placing
   GuessSymmetry
   Complete
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Repair
   Restore
   Master
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

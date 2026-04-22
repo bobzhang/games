@@ -2,6 +2,7 @@
 package "bobzhang/games/fighter_97_lite/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -305,7 +306,8 @@ pub(all) enum AiDifficulty {
   Easy
   Normal
   Hard
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for AiDifficulty
 
 pub(all) enum AiMode {
   AiModeIdle
@@ -460,7 +462,8 @@ pub(all) enum GameState {
   StateRoundOver
   StateMatchOver
   StatePause
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GameState
 
 pub(all) struct InputState {
   mut x : Int

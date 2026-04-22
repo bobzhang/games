@@ -161,7 +161,12 @@ pub(all) enum GameState {
   Playing
   Win
   GameOver
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GameState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Tile types used in the level grid.

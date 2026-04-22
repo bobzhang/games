@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Base {
@@ -13,7 +18,12 @@ pub(all) enum Base {
   T
   G
   C
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Base with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Trait {
@@ -28,7 +38,12 @@ pub(all) enum Trait {
   Armor
   Vision
   Neutral
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Trait with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum OpKind {
@@ -37,18 +52,33 @@ pub(all) enum OpKind {
   Duplicate
   Invert
   Delete
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for OpKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Editing
   Verified
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   LabBasics
   GeneEditing
   Mastery
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

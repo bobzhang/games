@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -14,7 +19,12 @@ pub(all) enum TileKind {
   WaterSource
   River
   Goal
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CropKind {
@@ -22,7 +32,12 @@ pub(all) enum CropKind {
   Corn
   Berry
   Flower
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CropKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CropState {
@@ -30,7 +45,12 @@ pub(all) enum CropState {
   Growing
   Mature
   Harvested
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CropState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -40,13 +60,23 @@ pub(all) enum Direction {
   SW
   W
   NW
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlaceMode {
   CropPlace(CropKind)
   ChannelPlace
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlaceMode with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TurnPhase {
@@ -55,4 +85,9 @@ pub(all) enum TurnPhase {
   Flowing
   Growing
   Harvesting
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TurnPhase with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

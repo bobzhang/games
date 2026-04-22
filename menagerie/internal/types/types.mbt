@@ -158,4 +158,9 @@ pub(all) struct Game {
 pub(all) enum FenceMode {
   Horizontal
   Vertical
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for FenceMode with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

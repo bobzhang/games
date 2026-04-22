@@ -5,7 +5,12 @@ pub(all) enum Terrain {
   Sand
   Rock
   Trees
-} derive(Eq, Show, Compare)
+} derive(Eq, Debug, Compare)
+
+///|
+pub impl Show for Terrain with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Species {
@@ -15,7 +20,12 @@ pub(all) enum Species {
   Snake
   Monkey
   Bear
-} derive(Eq, Show, Compare)
+} derive(Eq, Debug, Compare)
+
+///|
+pub impl Show for Species with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Screen {
@@ -24,7 +34,12 @@ pub(all) enum Screen {
   Playing
   LevelComplete
   Paused
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tool {
@@ -32,7 +47,12 @@ pub(all) enum Tool {
   FenceTool
   EraserTool
   AnimalPlacer(Species)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tool with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -40,7 +60,12 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum StarRating {
@@ -48,4 +73,9 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for StarRating with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

@@ -2,6 +2,7 @@
 package "bobzhang/games/patina/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -148,7 +149,8 @@ pub(all) enum DamageKind {
   Stain
   Fade
   Flake
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for DamageKind
 
 pub(all) struct Game {
   mut screen : Screen
@@ -191,7 +193,8 @@ pub(all) enum PlayState {
   Selecting
   Animating
   LevelComplete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct Region {
   mut state : RegionState
@@ -208,7 +211,8 @@ pub(all) enum RegionState {
   Restored
   Worsened
   Sealed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for RegionState
 
 pub(all) enum Screen {
   Title
@@ -216,13 +220,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Sketches
   Paintings
   Masterworks
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct ToolBudget {
   mut clean : Int
@@ -236,7 +242,8 @@ pub(all) enum ToolKind {
   Fill
   Retouch
   Seal
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ToolKind
 
 pub(all) struct UndoEntry {
   region_index : Int

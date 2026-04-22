@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -18,14 +23,24 @@ pub(all) enum TileKind {
   Ice
   Anchor
   Gem
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GoalKind {
   BothExit
   BothSwitch
   ExitInMoves(Int)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GoalKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -33,7 +48,12 @@ pub(all) enum PlayState {
   Won
   Failed
   Paused
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -41,10 +61,20 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum MoveInput {
   DirInput(Direction)
   Wait
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MoveInput with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

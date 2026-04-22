@@ -7,7 +7,12 @@ pub(all) enum Screen {
   Planning
   Results
   Paused
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -20,7 +25,12 @@ pub(all) enum TileKind {
   TimedDoor(Int, Int) // door_id, duration in ticks
   Guard
   Collectible
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -28,7 +38,12 @@ pub(all) enum Direction {
   South
   East
   West
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -36,18 +51,33 @@ pub(all) enum PlayState {
   Reviewing
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GhostColor {
   Green
   Yellow
   Orange
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GhostColor with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GuardAlertState {
   Idle
   Alert
   Chasing
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GuardAlertState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

@@ -2,6 +2,7 @@
 package "bobzhang/games/surveyor/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -133,7 +134,8 @@ pub(all) enum ConstraintResult {
   Satisfied
   Violated
   Unchecked
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ConstraintResult
 
 pub(all) struct ConstraintStatus {
   house_idx : Int
@@ -205,13 +207,15 @@ pub(all) struct LevelScore {
 pub(all) enum Orientation {
   Horizontal
   Vertical
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Orientation
 
 pub(all) enum PlayState {
   Drawing
   Checking
   Complete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct Region {
   tiles : Array[Vec2i]
@@ -226,20 +230,23 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Plots
   Districts
   Zoning
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) enum TileKind {
   Empty
   House(Int)
   Road
   Water
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct UndoEntry {
   fences : Array[FenceEdge]

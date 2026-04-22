@@ -2,6 +2,7 @@
 package "bobzhang/games/tide_pool/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -179,7 +180,8 @@ pub(all) enum CellContent {
   Empty
   Rock
   Organism(OrganismKind)
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for CellContent
 
 pub(all) struct Game {
   mut screen : Screen
@@ -230,7 +232,8 @@ pub(all) enum OrganismKind {
   Starfish
   Algae
   Urchin
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for OrganismKind
 
 pub(all) struct OrganismProfile {
   kind : OrganismKind
@@ -260,7 +263,8 @@ pub(all) enum PlayResult {
   None
   Victory
   Failure(String)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayResult
 
 pub(all) enum Screen {
   Title
@@ -268,19 +272,22 @@ pub(all) enum Screen {
   Playing
   Simulating
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum TidePhase {
   Low
   Mid
   High
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for TidePhase
 
 pub(all) enum Tier {
   Shallow
   Middle
   Deep
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct TurnLog {
   turn : Int
@@ -294,7 +301,8 @@ pub(all) enum Zone {
   HighZone
   MidZone
   LowZone
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for Zone
 
 // Type aliases
 

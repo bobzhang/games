@@ -2,6 +2,7 @@
 package "bobzhang/games/terraform/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -166,7 +167,8 @@ pub(all) enum BiomeKind {
   Forest
   Ocean
   Desert
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for BiomeKind
 
 pub(all) struct Game {
   mut screen : Screen
@@ -249,7 +251,8 @@ pub(all) enum PlayState {
   Resolving
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct ResolveSnapshot {
   biomes : Array[BiomeKind]
@@ -265,7 +268,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct TargetRatio {
   forest_min : Float
@@ -280,7 +284,8 @@ pub(all) enum Tier {
   Seeds
   Balance
   Harmony
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct UndoEntry {
   col : Int

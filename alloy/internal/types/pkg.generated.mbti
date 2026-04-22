@@ -2,6 +2,7 @@
 package "bobzhang/games/alloy/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -186,7 +187,8 @@ pub(all) enum MetalKind {
   Gold
   Carbon
   Zinc
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for MetalKind
 
 pub(all) struct MetalProps {
   hardness : Float
@@ -206,14 +208,16 @@ pub(all) enum Screen {
   Blending
   LevelComplete
   LevelFailed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum StarRating {
   Zero
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for StarRating
 
 pub(all) struct TargetAlloy {
   hardness : PropertyRange
@@ -225,7 +229,8 @@ pub(all) enum Temperature {
   Low
   Medium
   High
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Temperature
 
 // Type aliases
 

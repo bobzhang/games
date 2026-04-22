@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Note {
@@ -16,21 +21,36 @@ pub(all) enum Note {
   G
   A
   B
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Note with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Idle
   Playing
   Finished
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Melody
   Harmony
   Counterpoint
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum IntervalQuality {
@@ -41,4 +61,9 @@ pub(all) enum IntervalQuality {
   Fifth
   Sixth
   Seventh
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for IntervalQuality with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

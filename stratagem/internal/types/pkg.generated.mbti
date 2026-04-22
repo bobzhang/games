@@ -2,6 +2,7 @@
 package "bobzhang/games/stratagem/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -220,13 +221,15 @@ pub(all) enum Difficulty {
   Easy
   Normal
   Hard
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Difficulty
 
 pub(all) enum FogState {
   Hidden
   Visible
   Explored
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for FogState
 
 pub(all) struct Game {
   mut screen : Screen
@@ -248,7 +251,8 @@ pub(all) enum GameResult {
   Victory
   Defeat
   Ongoing
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GameResult
 
 pub(all) struct GameUnit {
   mut id : Int
@@ -302,7 +306,8 @@ pub(all) enum Phase {
   Attack
   EnemyTurn
   Animating
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Phase
 
 pub(all) enum Screen {
   Title
@@ -310,7 +315,8 @@ pub(all) enum Screen {
   Skirmish
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct SkirmishSetup {
   mut map_index : Int
@@ -321,25 +327,29 @@ pub(all) struct SkirmishSetup {
 pub(all) enum Team {
   Player
   Enemy
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Team
 
 pub(all) enum Terrain {
   Plains
   Forest
   Hills
   Water
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Terrain
 
 pub(all) enum UnitKind {
   Infantry
   Cavalry
   Artillery
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for UnitKind
 
 pub(all) enum VictoryCondition {
   EliminateAll
   CaptureFlag(Int, Int)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for VictoryCondition
 
 // Type aliases
 

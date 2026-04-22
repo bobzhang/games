@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Element {
@@ -25,7 +30,12 @@ pub(all) enum Element {
   Storm
   Obsidian
   Clay
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Element with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -34,18 +44,33 @@ pub(all) enum PlayState {
   Reacting
   Success
   Destroyed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Apprentice
   Journeyman
   Master
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ReactionResult {
   Transform(Element)
   Destroy
   NoReaction
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ReactionResult with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

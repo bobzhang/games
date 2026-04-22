@@ -2,6 +2,7 @@
 package "bobzhang/games/cartographer/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -184,13 +185,15 @@ pub(all) enum ClueKind {
   Count
   Between
   Not
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ClueKind
 
 pub(all) enum ClueStatus {
   Pending
   Satisfied
   Violated
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ClueStatus
 
 pub(all) enum CompassDir {
   N
@@ -201,7 +204,8 @@ pub(all) enum CompassDir {
   NW
   SE
   SW
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CompassDir
 
 pub(all) enum FeatureKind {
   Mountain
@@ -211,7 +215,8 @@ pub(all) enum FeatureKind {
   Lake
   Desert
   Road
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for FeatureKind
 
 pub(all) struct Game {
   mut screen : Screen
@@ -252,7 +257,8 @@ pub(all) enum HintLevel {
   Narrow
   Reveal
   Answer
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for HintLevel
 
 pub(all) struct Level {
   name : String
@@ -279,7 +285,8 @@ pub(all) enum PlayState {
   Placing
   Complete
   Checking
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -287,13 +294,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Surveyor
   Explorer
   Master
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int

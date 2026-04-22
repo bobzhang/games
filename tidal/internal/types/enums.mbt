@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -16,7 +21,12 @@ pub(all) enum TileKind {
   Reflector
   PhaseShifter
   Absorber
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -25,7 +35,12 @@ pub(all) enum PlayState {
   Stepping
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlaceableKind {
@@ -33,4 +48,9 @@ pub(all) enum PlaceableKind {
   PlaceReflector
   PlacePhaseShifter
   PlaceAbsorber
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlaceableKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

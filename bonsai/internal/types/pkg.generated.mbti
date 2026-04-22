@@ -2,6 +2,7 @@
 package "bobzhang/games/bonsai/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -159,7 +160,8 @@ pub(all) enum CellKind {
   Branch
   Leaf
   Pruned
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CellKind
 
 pub(all) struct Game {
   mut screen : Screen
@@ -193,7 +195,8 @@ pub(all) enum GrowthDir {
   UpRight
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GrowthDir
 
 pub(all) struct Level {
   species : Species
@@ -216,7 +219,8 @@ pub(all) enum PlayState {
   Growing
   Won
   Lost
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct PruneAction {
   pos : Vec2i
@@ -229,19 +233,22 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Species {
   Pine
   Maple
   Cherry
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Species
 
 pub(all) enum Tier {
   Tier1
   Tier2
   Tier3
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct TreeCell {
   mut kind : CellKind
@@ -270,7 +277,8 @@ pub(all) enum ZoneKind {
   Required
   Forbidden
   TipTarget
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ZoneKind
 
 // Type aliases
 

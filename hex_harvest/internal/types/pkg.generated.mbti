@@ -2,6 +2,7 @@
 package "bobzhang/games/hex_harvest/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -194,14 +195,16 @@ pub(all) enum CropKind {
   Corn
   Berry
   Flower
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CropKind
 
 pub(all) enum CropState {
   Seed
   Growing
   Mature
   Harvested
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CropState
 
 pub(all) enum Direction {
   NE
@@ -210,7 +213,8 @@ pub(all) enum Direction {
   SW
   W
   NW
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Game {
   mut screen : Screen
@@ -297,7 +301,8 @@ pub(all) struct LevelScore {
 pub(all) enum PlaceMode {
   CropPlace(CropKind)
   ChannelPlace
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlaceMode
 
 pub(all) enum Screen {
   Title
@@ -305,7 +310,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum TileKind {
   Dirt
@@ -313,7 +319,8 @@ pub(all) enum TileKind {
   WaterSource
   River
   Goal
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) enum TurnPhase {
   Idle
@@ -321,7 +328,8 @@ pub(all) enum TurnPhase {
   Flowing
   Growing
   Harvesting
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TurnPhase
 
 pub(all) struct UndoState {
   mut tiles : Array[Array[HexTile]]

@@ -8,7 +8,12 @@ pub(all) enum GameState {
   StateRoundOver
   StateMatchOver
   StatePause
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GameState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Fighter action state machine.
@@ -94,7 +99,12 @@ pub(all) enum AiDifficulty {
   Easy
   Normal
   Hard
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AiDifficulty with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Per-frame input state and motion buffers for one fighter.

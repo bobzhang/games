@@ -2,6 +2,7 @@
 package "bobzhang/games/neon_drift_bounty_2026/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -277,7 +278,8 @@ pub(all) enum Formation {
   ColumnRush
   FlankingPairs
   Random
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Formation
 
 pub(all) struct Game {
   entities : Array[Entity]
@@ -369,7 +371,8 @@ pub(all) enum HazardKind {
   OilSlick
   BarrierGate
   BlastZone
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for HazardKind
 
 pub(all) struct Player {
   mut x : Float
@@ -390,7 +393,8 @@ pub(all) enum RoadZone {
   NeonAlley
   IndustrialStrip
   HighwayOverpass
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for RoadZone
 
 pub(all) struct Spark {
   mut active : Bool
@@ -408,7 +412,8 @@ pub(all) enum WeaponUpgrade {
   Spread
   Piercing
   Homing
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for WeaponUpgrade
 
 // Type aliases
 

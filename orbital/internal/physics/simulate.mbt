@@ -5,7 +5,12 @@ pub(all) enum TickResult {
   ReachedStation
   OutOfBounds
   MaxTicks
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TickResult with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 fn compute_total_gravity(

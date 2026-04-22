@@ -6,7 +6,12 @@ pub(all) enum Screen {
   Playing
   Results
   Paused
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ObjectKind {
@@ -16,7 +21,12 @@ pub(all) enum ObjectKind {
   OneWayGate
   Bumper
   Pickup
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ObjectKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum BallState {
@@ -24,4 +34,9 @@ pub(all) enum BallState {
   Moving
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for BallState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

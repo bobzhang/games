@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum NodeKind {
@@ -14,7 +19,12 @@ pub(all) enum NodeKind {
   WeightHook
   CrateHook
   Ratchet
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for NodeKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ComponentKind {
@@ -22,7 +32,12 @@ pub(all) enum ComponentKind {
   CrateComp
   BucketComp
   BreakableRopeComp
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ComponentKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -31,17 +46,32 @@ pub(all) enum PlayState {
   Settling
   Won
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Basics
   Chains
   Workshop
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum RopeSide {
   LeftSide
   RightSide
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RopeSide with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

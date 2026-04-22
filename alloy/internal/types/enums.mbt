@@ -6,14 +6,24 @@ pub(all) enum MetalKind {
   Gold
   Carbon
   Zinc
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MetalKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Temperature {
   Low
   Medium
   High
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Temperature with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Screen {
@@ -23,7 +33,12 @@ pub(all) enum Screen {
   Blending
   LevelComplete
   LevelFailed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum StarRating {
@@ -31,4 +46,9 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for StarRating with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

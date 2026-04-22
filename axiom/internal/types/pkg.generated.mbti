@@ -2,6 +2,7 @@
 package "bobzhang/games/axiom/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -221,21 +222,24 @@ pub(all) enum CommandKind {
   Push
   If(Condition)
   Loop(Int)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CommandKind
 
 pub(all) enum Condition {
   PathAhead
   WallAhead
   AtGoal
   OnColor(TileColor)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Condition
 
 pub(all) enum Direction {
   North
   South
   East
   West
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct EditorState {
   mut cursor : Int
@@ -312,7 +316,8 @@ pub(all) enum Medal {
   Bronze
   Silver
   Gold
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Medal
 
 pub(all) struct Program {
   mut commands : Array[Command]
@@ -340,7 +345,8 @@ pub(all) enum RunState {
   Stepping
   Complete
   Failed(String)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for RunState
 
 pub(all) enum Screen {
   Title
@@ -349,7 +355,8 @@ pub(all) enum Screen {
   Programming
   Results
   Sandbox
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct Tile {
   mut kind : TileKind
@@ -359,7 +366,8 @@ pub(all) enum TileColor {
   Red
   Blue
   Green
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileColor
 
 pub(all) enum TileKind {
   Floor
@@ -369,7 +377,8 @@ pub(all) enum TileKind {
   ColorTile(TileColor)
   Block
   Start
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct Vec2i {
   x : Int

@@ -2,6 +2,7 @@
 package "bobzhang/games/drift_protocol/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -267,7 +268,8 @@ pub(all) enum AlertState {
   Patrolling
   Suspicious
   Alert
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for AlertState
 
 pub(all) struct Camera {
   mut gx : Int
@@ -284,7 +286,8 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Door {
   mut gx : Int
@@ -358,7 +361,8 @@ pub(all) enum GuardKind {
   Patrol
   Sentinel
   Hunter
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GuardKind
 
 pub(all) struct HackMiniGame {
   mut active : Bool
@@ -378,7 +382,8 @@ pub(all) enum HackState {
   Sequencing
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for HackState
 
 pub(all) struct LaserGrid {
   mut gx : Int
@@ -436,7 +441,8 @@ pub(all) enum ScoreGrade {
   A
   B
   C
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ScoreGrade
 
 pub(all) enum Screen {
   Title
@@ -446,7 +452,8 @@ pub(all) enum Screen {
   Hacking
   Results
   Victory
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum SoundEvent {
   Footstep
@@ -457,7 +464,8 @@ pub(all) enum SoundEvent {
   AlertTriggered
   CoinToss
   LevelComplete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for SoundEvent
 
 pub(all) struct Terminal {
   mut gx : Int
@@ -471,7 +479,8 @@ pub(all) struct Terminal {
 pub(all) enum Tier {
   Corporate
   Military
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) enum TileKind {
   Floor
@@ -485,7 +494,8 @@ pub(all) enum TileKind {
   Exit
   CameraTile
   Start
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct Vec2i {
   x : Int

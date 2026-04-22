@@ -2,6 +2,7 @@
 package "bobzhang/games/kinetic/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -205,7 +206,8 @@ pub(all) enum GearKind {
   Large
   Belt
   Ratchet
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GearKind
 
 pub(all) struct InputGear {
   pos : Vec2i
@@ -242,12 +244,14 @@ pub(all) enum PlayState {
   Placing
   Simulating
   Solved
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum RotDir {
   CW
   CCW
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for RotDir
 
 pub(all) enum Screen {
   Title
@@ -255,13 +259,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Gears
   Trains
   Workshop
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int

@@ -5,7 +5,12 @@ pub(all) enum Screen {
   CaseSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ClueKind {
@@ -14,18 +19,33 @@ pub(all) enum ClueKind {
   Because
   During
   NotAdjacent
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ClueKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Arranging
   Linking
   Validated
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Reports
   Investigations
   ColdCases
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

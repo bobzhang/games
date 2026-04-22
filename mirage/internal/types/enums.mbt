@@ -8,7 +8,12 @@ pub(all) enum Tile {
   Switch(Int)
   Platform
   Gem
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tile with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Screen {
@@ -18,13 +23,23 @@ pub(all) enum Screen {
   LevelComplete
   GameComplete
   Paused
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Layer {
   Foreground
   Background
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Layer with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -32,20 +47,35 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Reflection
   Overlap
   Illusion
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum MergeState {
   Split
   Merged
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MergeState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AnimKind {
@@ -55,4 +85,9 @@ pub(all) enum AnimKind {
   SwitchToggle
   LevelClear
   GemCollect
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AnimKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

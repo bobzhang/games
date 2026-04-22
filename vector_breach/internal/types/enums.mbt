@@ -13,7 +13,12 @@ pub(all) enum Screen {
   RunSummary
   GameOver
   Victory
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Command {
@@ -22,7 +27,12 @@ pub(all) enum Command {
   Overclock(Int)
   Wait
   Push(Int, Int, Int)
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for Command with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Effect {
@@ -35,7 +45,12 @@ pub(all) enum Effect {
   Spawn(Int, Int, Int)
   DestroyTile(Int, Int)
   ApplyHazard(Int, Int, Int)
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for Effect with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Intent {
@@ -46,7 +61,12 @@ pub(all) enum Intent {
   Summon(Int, Int, Int)
   Charge(Int, Int)
   MinePlace(Int, Int)
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for Intent with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Objective {
@@ -55,7 +75,12 @@ pub(all) enum Objective {
   Assassinate(Int)
   CapturePoints(Int)
   Escort(Int, Int)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Objective with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -67,20 +92,35 @@ pub(all) enum TileKind {
   Ice
   ControlPoint
   SpawnPoint
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum UnitTeam {
   Player
   Enemy
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for UnitTeam with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum MechClass {
   Vanguard
   Striker
   Sentinel
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MechClass with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EnemyType {
@@ -92,7 +132,12 @@ pub(all) enum EnemyType {
   ShieldDrone
   Splitter
   Boss
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EnemyType with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum HazardKind {
@@ -101,7 +146,12 @@ pub(all) enum HazardKind {
   Acid
   Mine
   Smoke
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HazardKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -109,7 +159,12 @@ pub(all) enum Direction {
   South
   East
   West
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EffectKind {
@@ -120,7 +175,12 @@ pub(all) enum EffectKind {
   HazardPreview
   KillPreview
   CollisionPreview
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EffectKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AugmentKind {
@@ -134,7 +194,12 @@ pub(all) enum AugmentKind {
   FortifiedGrid // grid objectives take 1 less damage
   ReflexBoost // first mech each turn gets +1 move range
   EmergencyRepair // auto-heal 1 HP when below 25%
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AugmentKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CampaignNodeKind {
@@ -144,14 +209,24 @@ pub(all) enum CampaignNodeKind {
   Shop // buy augments
   Event // random risk/reward event
   Elite(Int) // harder mission with guaranteed rare augment
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CampaignNodeKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EventKind {
   Scavenger // pay 2 GP for random augment, or fight for free augment
   Ambush // surprise battle with extra enemies but double reward
   Intel // see next 2 missions' enemies + objectives
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EventKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum BranchTheme {
@@ -159,14 +234,24 @@ pub(all) enum BranchTheme {
   IceProtocol // more ice tiles, mobility-themed rewards
   VoidZone // more chasms, push-themed rewards
   Neutral // no special theme
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for BranchTheme with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum RewardChoice {
   PickAugment(Int) // index into offered augments
   RepairAll
   GainGridPower
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RewardChoice with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AnimKind {
@@ -176,10 +261,20 @@ pub(all) enum AnimKind {
   AnimPush
   AnimDeath
   AnimIntentReveal
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AnimKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum StatusEffect {
   OnFire(Int) // turns remaining
   Immobilized(Int) // turns remaining
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for StatusEffect with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
