@@ -1,0 +1,292 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/lattice/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let ai_think_delay : Float
+
+pub let board_offset_x : Float
+
+pub let board_offset_y : Float
+
+pub let board_size : Int
+
+pub let bridge_points : Int
+
+pub let capture_anim_time : Float
+
+pub let chain_points : Int
+
+pub fn clone_board(HexBoard) -> HexBoard
+
+pub let color_accent : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_black_highlight : @raylib.Color
+
+pub let color_black_stone : @raylib.Color
+
+pub let color_board_bg : @raylib.Color
+
+pub let color_bridge : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_chain : @raylib.Color
+
+pub let color_diamond : @raylib.Color
+
+pub let color_fortress : @raylib.Color
+
+pub let color_hex_border : @raylib.Color
+
+pub let color_hex_fill : @raylib.Color
+
+pub let color_hex_hover : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_last_move_inner : @raylib.Color
+
+pub let color_last_move_outer : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_ring : @raylib.Color
+
+pub let color_score_anim : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_star : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_triangle : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub let color_white_highlight : @raylib.Color
+
+pub let color_white_stone : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn count_empty(HexBoard) -> Int
+
+pub let diamond_points : Int
+
+pub fn empty_positions(HexBoard) -> Array[HexCoord]
+
+pub let fortress_points : Int
+
+pub fn get_cell(HexBoard, HexCoord) -> CellState
+
+pub fn has_stone(HexBoard, HexCoord, Player) -> Bool
+
+pub fn hex_contains(Array[HexCoord], HexCoord) -> Bool
+
+pub fn hex_eq(HexCoord, HexCoord) -> Bool
+
+pub fn hex_neighbors(HexCoord) -> Array[HexCoord]
+
+pub fn hex_neighbors_valid(HexCoord, Int) -> Array[HexCoord]
+
+pub let hex_size : Float
+
+pub fn hex_to_pixel(HexCoord, Float) -> (Float, Float)
+
+pub fn in_bounds(HexCoord, Int) -> Bool
+
+pub fn is_edge(HexCoord, Int) -> Bool
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_board(Int) -> HexBoard
+
+pub fn new_game() -> Game
+
+pub fn opponent(Player) -> Player
+
+pub let pattern_anim_time : Float
+
+pub fn pattern_name(PatternKind) -> String
+
+pub fn pattern_points(PatternKind) -> Int
+
+pub fn pi() -> Float
+
+pub fn pixel_to_hex(Float, Float, Float) -> HexCoord?
+
+pub fn reset_game(Game) -> Unit
+
+pub let ring_points : Int
+
+pub let score_anim_time : Float
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_cell(HexBoard, HexCoord, CellState) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let star_points : Int
+
+pub let target_fps : Int
+
+pub let triangle_points : Int
+
+pub let wall_points : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct CaptureAnim {
+  mut pos : HexCoord
+  mut timer : Float
+} derive(Show)
+
+pub(all) enum CellState {
+  Empty
+  Occupied(Player)
+} derive(Eq, Show)
+
+pub(all) enum Difficulty {
+  Easy
+  Normal
+  Hard
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut mode : GameMode
+  mut difficulty : Difficulty
+  mut play_state : PlayState
+  board : HexBoard
+  mut current_player : Player
+  mut black_score : Int
+  mut white_score : Int
+  mut black_captures : Int
+  mut white_captures : Int
+  mut patterns_found : Array[Pattern]
+  mut last_move : HexCoord?
+  mut move_count : Int
+  mut black_passed : Bool
+  mut white_passed : Bool
+  mut frame_count : Int
+  mut ai_delay : Float
+  mut capture_anims : Array[CaptureAnim]
+  mut pattern_anims : Array[PatternAnim]
+  mut score_anims : Array[ScoreAnim]
+  mut hover_hex : HexCoord?
+  mut puzzle_levels : Array[PuzzleLevel]
+  mut current_puzzle : Int
+  mut puzzle_score : Int
+  mut puzzle_solved : Bool
+  mut menu_selection : Int
+  mut winner : Player?
+  mut result_message : String
+}
+
+pub(all) enum GameMode {
+  VsAI
+  Puzzle
+  Local2P
+} derive(Eq, Show)
+
+pub(all) struct HexBoard {
+  size : Int
+  cells : Array[Array[CellState]]
+} derive(Show)
+
+pub(all) struct HexCoord {
+  row : Int
+  col : Int
+} derive(Eq, Show)
+
+pub(all) struct Move {
+  pos : HexCoord
+  player : Player
+} derive(Show)
+
+pub(all) struct Pattern {
+  kind : PatternKind
+  positions : Array[HexCoord]
+  points : Int
+} derive(Show)
+
+pub(all) struct PatternAnim {
+  mut kind : PatternKind
+  mut positions : Array[HexCoord]
+  mut timer : Float
+} derive(Show)
+
+pub(all) enum PatternKind {
+  Bridge
+  Chain
+  Triangle
+  Diamond
+  Fortress
+  Ring
+  Star
+  Wall
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  WaitingForMove
+  AIThinking
+  Animating
+  GameOver
+} derive(Eq, Show)
+
+pub(all) enum Player {
+  Black
+  White
+} derive(Eq, Show)
+
+pub(all) struct PuzzleLevel {
+  id : Int
+  board : HexBoard
+  current_player : Player
+  target_score : Int
+  hint : String
+} derive(Show)
+
+pub(all) struct ScoreAnim {
+  mut x : Float
+  mut y : Float
+  mut text : String
+  mut timer : Float
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  ModeSelect
+  DifficultySelect
+  Playing
+  PuzzleSelect
+  Results
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

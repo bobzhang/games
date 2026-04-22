@@ -1,0 +1,62 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/game"
+
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+// Values
+pub fn check_achievements_on_complete(@types.Game) -> Unit
+
+pub fn check_achievements_on_editor(@types.Game) -> Unit
+
+pub fn check_achievements_on_move(@types.Game) -> Unit
+
+pub fn check_achievements_on_rotate(@types.Game) -> Unit
+
+pub fn count_completed_levels(@types.Game) -> Int
+
+pub fn get_best_moves(@types.Game, Int, Int) -> Int
+
+pub fn get_favorite_world(@types.Game) -> Int
+
+pub fn get_total_completion(@types.Game) -> Int
+
+pub fn get_world_completion(@types.Game, Int) -> Int
+
+pub fn get_world_stars(@types.Game, Int) -> Int
+
+pub fn load_progress(@types.Game) -> Unit
+
+pub fn save_progress(@types.Game) -> Unit
+
+pub fn total_achievement_count(@types.Game) -> Int
+
+pub fn track_death(@types.Game) -> Unit
+
+pub fn track_gem_collected(@types.Game) -> Unit
+
+pub fn track_hint_used(@types.Game) -> Unit
+
+pub fn track_ice_slide(@types.Game) -> Unit
+
+pub fn track_key_collected(@types.Game) -> Unit
+
+pub fn track_undo(@types.Game) -> Unit
+
+pub fn unlocked_count(@types.Game) -> Int
+
+pub fn update_achievement_toasts(@types.Game, Float) -> Unit
+
+pub fn update_game(@types.Game, Float) -> Unit
+
+pub fn update_play_time(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

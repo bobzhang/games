@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/ricochet/internal/physics"
+
+import {
+  "bobzhang/games/ricochet/internal/types",
+}
+
+// Values
+pub fn check_circle_collision(@types.Vec2, Float, @types.Vec2, Float) -> Bool
+
+pub fn check_gate(@types.Vec2, @types.Vec2, Float, @types.Gate) -> (Bool, Bool)
+
+pub fn check_wall_collision(@types.Vec2, Float, @types.Wall) -> (Bool, @types.Vec2, @types.Vec2)
+
+pub fn compute_preview(@types.Level, @types.Vec2, Float, Int) -> Array[@types.PreviewPoint]
+
+pub fn simulate_step(@types.Game, Float) -> Unit
+
+pub fn update_timers(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub fn draw_fade_overlay(@types.Game) -> Unit
+
 pub fn draw_game(@types.Game) -> Unit
 
 pub fn draw_ui(@types.Game) -> Unit

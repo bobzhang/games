@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/mirage/internal/levels"
+
+import {
+  "bobzhang/games/mirage/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.LevelDef
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

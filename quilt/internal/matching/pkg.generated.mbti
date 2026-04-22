@@ -1,0 +1,36 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/quilt/internal/matching"
+
+import {
+  "bobzhang/games/quilt/internal/types",
+}
+
+// Values
+pub fn compute_stars(@types.Level, Int, Int) -> Int
+
+pub fn count_edge_pairs(@types.Board) -> Int
+
+pub fn count_filled_cells(@types.Board) -> Int
+
+pub fn count_matched_pairs(@types.Board) -> Int
+
+pub fn date_hash(Int, Int, Int) -> Int
+
+pub fn edge_matched_at(@types.Board, Int, Int, @types.Direction) -> Bool
+
+pub fn generate_daily_board(Int) -> (@types.Board, Array[@types.Patch])
+
+pub fn is_board_complete(@types.Board) -> Bool
+
+pub fn is_board_full(@types.Board) -> Bool
+
+pub fn match_percentage(@types.Board) -> Float
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

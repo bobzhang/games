@@ -1,0 +1,188 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/leyline/internal/types"
+
+// Values
+pub let amplifier_boost : Float
+
+pub fn cell_center_x(Int) -> Float
+
+pub fn cell_center_y(Int) -> Float
+
+pub fn cell_screen_x(Int) -> Int
+
+pub fn cell_screen_y(Int) -> Int
+
+pub let cell_size : Int
+
+pub fn connection_exists(Array[Connection], Int, Int, Int, Int) -> Bool
+
+pub fn cosf(Float) -> Float
+
+pub let decay_rate : Float
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub let hud_y : Int
+
+pub fn in_grid(Int, Int) -> Bool
+
+pub fn init_level_state(LevelDef) -> LevelState
+
+pub fn is_adjacent(Int, Int, Int, Int) -> Bool
+
+pub fn is_connectable(CellKind) -> Bool
+
+pub fn level_unlocked(Array[LevelProgress], Int) -> Bool
+
+pub fn make_grid(LevelDef) -> Array[Array[Cell]]
+
+pub let max_waystones : Int
+
+pub fn neighbor_connections(Array[Connection], Int, Int) -> Array[(Int, Int)]
+
+pub fn new_cell(CellKind) -> Cell
+
+pub fn new_connection(Int, Int, Int, Int) -> Connection
+
+pub fn new_game() -> Game
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn sinf(Float) -> Float
+
+pub let source_energy : Float
+
+pub let target_fps : Int
+
+pub fn temple_required(CellKind) -> Float
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_for_level(Int) -> Int
+
+pub let toolbar_height : Int
+
+pub let toolbar_y : Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Cell {
+  mut kind : CellKind
+  mut energy_received : Float
+  mut glow_anim : Float
+}
+
+pub(all) enum CellKind {
+  Empty
+  Source
+  Temple(Float)
+  Waystone
+  Amplifier
+  Void
+} derive(Eq, Show)
+
+pub(all) struct Connection {
+  from_col : Int
+  from_row : Int
+  to_col : Int
+  to_row : Int
+  mut energy_flow : Float
+  mut flow_anim : Float
+} derive(Eq, Show)
+
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut current_level : Int
+  mut level_def : LevelDef?
+  mut level_state : LevelState?
+  mut progress : Array[LevelProgress]
+  mut anim_timer : Float
+  mut message : String
+  mut message_timer : Float
+  mut scroll_offset : Int
+  mut frame_count : Int
+  mut tool : Tool
+  mut energy_phase : Float
+}
+
+pub(all) struct LevelDef {
+  id : Int
+  name : String
+  tier : Int
+  waystone_budget : Int
+  grid : Array[Array[CellKind]]
+  par_waystones : Int
+  gold_threshold : Float
+  silver_threshold : Float
+} derive(Show)
+
+pub(all) struct LevelProgress {
+  mut completed : Bool
+  mut stars : StarRating
+  mut best_waystones : Int
+  mut best_energy : Float
+}
+
+pub(all) struct LevelState {
+  mut grid : Array[Array[Cell]]
+  mut connections : Array[Connection]
+  mut waystones_placed : Int
+  mut waystone_budget : Int
+  mut all_temples_powered : Bool
+  mut total_energy_delivered : Float
+  mut cursor_col : Int
+  mut cursor_row : Int
+  mut hover_valid : Bool
+  mut draw_start_col : Int
+  mut draw_start_row : Int
+  mut is_drawing_line : Bool
+}
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  LevelComplete
+  LevelFailed
+} derive(Eq, Show)
+
+pub(all) enum StarRating {
+  None
+  Bronze
+  Silver
+  Gold
+} derive(Eq, Show)
+
+pub(all) enum Tool {
+  PlaceWaystone
+  RemoveWaystone
+  DrawLine
+  EraseLine
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

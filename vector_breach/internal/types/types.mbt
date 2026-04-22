@@ -257,13 +257,10 @@ pub(all) struct Game {
   mut message_text : String
   mut message_timer : Float
   mut hover_info : String
-
-  fn new() -> Game
 }
 
 ///|
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     screen: Title,
     battle: None,

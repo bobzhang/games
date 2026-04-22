@@ -65,14 +65,11 @@ pub(all) struct Player {
   mut weapon_switch_timer : Float
   // Recoil pitch kick (applied to camera pitch directly)
   mut recoil_kick : Float
-
-  fn new() -> Player
 }
 
 ///|
 /// Constructs a fresh player with starter weapons, base stats, and empty combo/boost timers.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   let ammo : Array[Int] = [
     ammo_pistol, ammo_shotgun, ammo_rifle, ammo_sniper, ammo_rocket, ammo_minigun,
   ]
@@ -322,14 +319,11 @@ pub(all) struct Crate {
   mut z : Float
   mut respawn_timer : Float
   mut kind : WeaponKind
-
-  fn new(x : Float, z : Float, kind : WeaponKind) -> Crate
 }
 
 ///|
 /// Creates an active crate instance at world position `(x, z)` with a weapon kind.
-#deprecated
-pub fn Crate::new(x : Float, z : Float, kind : WeaponKind) -> Crate {
+pub fn Crate::Crate(x : Float, z : Float, kind : WeaponKind) -> Crate {
   { active: true, x, z, respawn_timer: 0.0, kind }
 }
 
@@ -467,14 +461,11 @@ pub(all) struct WeaponState {
   mut reload_timer : Float
   mut reloading : Bool
   mut reload_time : Float
-
-  fn new() -> WeaponState
 }
 
 ///|
 /// Creates default weapon reload state.
-#deprecated
-pub fn WeaponState::new() -> WeaponState {
+pub fn WeaponState::WeaponState() -> WeaponState {
   { reload_timer: 0.0, reloading: false, reload_time: 0.0 }
 }
 
@@ -590,15 +581,12 @@ pub(all) struct Game {
   mut wave_start_shots_fired : Int
   mut wave_start_shots_hit : Int
   mut wave_start_money : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Constructs a new match state with initialized arena layout, pooled entities,
 /// player defaults, and zeroed runtime statistics.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   // Create weapons array
   let weapons : Array[WeaponState] = []
   for _i in 0..<weapon_count {

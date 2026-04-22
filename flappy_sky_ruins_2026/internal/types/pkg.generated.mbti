@@ -102,11 +102,8 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -124,11 +121,8 @@ pub(all) struct Obstacle {
   mut kind : ObstacleKind
   mut phase : Float
   mut scored : Bool
-
-  fn new() -> Obstacle
 }
-#deprecated
-pub fn Obstacle::new() -> Self
+pub fn Obstacle::Obstacle() -> Self
 
 pub(all) enum ObstacleKind {
   Gate
@@ -145,11 +139,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Particle
 }
-#deprecated
-pub fn Particle::new() -> Self
+pub fn Particle::Particle() -> Self
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -157,11 +148,8 @@ pub(all) struct Pickup {
   mut y : Float
   mut kind : PickupKind
   mut phase : Float
-
-  fn new() -> Pickup
 }
-#deprecated
-pub fn Pickup::new() -> Self
+pub fn Pickup::Pickup() -> Self
 
 pub(all) enum PickupKind {
   Score

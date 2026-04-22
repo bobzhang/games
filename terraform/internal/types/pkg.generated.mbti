@@ -1,0 +1,295 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/terraform/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn add_budget(PaintBudget, BiomeKind) -> Unit
+
+pub fn biome_color(BiomeKind) -> @raylib.Color
+
+pub fn biome_color_light(BiomeKind) -> @raylib.Color
+
+pub fn biome_name(BiomeKind) -> String
+
+pub fn biome_ratio(HexGrid, BiomeKind) -> Float
+
+pub fn budget_remaining(PaintBudget, BiomeKind) -> Int
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clone_grid(HexGrid) -> HexGrid
+
+pub let color_accent : @raylib.Color
+
+pub let color_bar_bg : @raylib.Color
+
+pub let color_barren : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_desert : @raylib.Color
+
+pub let color_desert_light : @raylib.Color
+
+pub let color_fail : @raylib.Color
+
+pub let color_forest : @raylib.Color
+
+pub let color_forest_light : @raylib.Color
+
+pub let color_hover : @raylib.Color
+
+pub let color_locked : @raylib.Color
+
+pub let color_ocean : @raylib.Color
+
+pub let color_ocean_light : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_tier_balance : @raylib.Color
+
+pub let color_tier_harmony : @raylib.Color
+
+pub let color_tier_seeds : @raylib.Color
+
+pub let color_tolerance : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn count_biome(HexGrid, BiomeKind) -> Int
+
+pub fn count_neighbor_biome(HexGrid, Int, Int, BiomeKind) -> Int
+
+pub fn deduct_budget(PaintBudget, BiomeKind) -> Unit
+
+pub let default_grid_height : Int
+
+pub let default_grid_width : Int
+
+pub fn get_tile(HexGrid, Int, Int) -> HexTile
+
+pub fn grid_index(Int, Int, Int) -> Int
+
+pub let grid_offset_x : Float
+
+pub let grid_offset_y : Float
+
+pub fn hex_neighbors(Int, Int, Int, Int, Bool) -> Array[(Int, Int)]
+
+pub let hex_size : Float
+
+pub fn hex_to_pixel(Int, Int) -> (Float, Float)
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn level_name(Int) -> String
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_budget(Int, Int, Int) -> PaintBudget
+
+pub fn new_game() -> Game
+
+pub fn new_grid(Int, Int, Bool) -> HexGrid
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_resolve_snapshot(HexGrid, PaintBudget, Int) -> ResolveSnapshot
+
+pub fn new_targets(Float, Float, Float, Float, Float, Float) -> TargetRatio
+
+pub let pi : Float
+
+pub fn pixel_to_hex(Float, Float, Int, Int) -> (Int, Int)
+
+pub let resolve_delay : Float
+
+pub let resolve_steps : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_biome(HexGrid, Int, Int, BiomeKind) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn snapshot_biomes(HexGrid) -> Array[BiomeKind]
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub fn total_budget(PaintBudget) -> Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) enum BiomeKind {
+  Barren
+  Forest
+  Ocean
+  Desert
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut grid : HexGrid
+  mut budget : PaintBudget
+  mut targets : TargetRatio
+  mut par_turns : Int
+  mut current_turn : Int
+  mut selected_biome : BiomeKind
+  mut hover_col : Int
+  mut hover_row : Int
+  mut current_level : Int
+  mut current_tier : Tier
+  mut tier_page : Int
+  mut level_scores : Array[LevelScore]
+  mut undo_stack : Array[UndoEntry]
+  mut resolve_timer : Float
+  mut resolve_step : Int
+  mut anim_timer : Float
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut prev_snapshot : Array[BiomeKind]
+  mut changed_tiles : Array[Bool]
+  mut resolve_undo_stack : Array[ResolveSnapshot]
+  mut spread_queue : Array[Int]
+  mut spread_index : Int
+  mut spread_timer : Float
+  mut show_preview : Bool
+  mut preview_tiles : Array[(Int, BiomeKind)]
+  mut transition_tiles : Array[Int]
+  mut transition_timer : Float
+  mut ratio_pulse_timer : Float
+  mut ratio_just_entered : Array[Bool]
+} derive(Show)
+
+pub(all) struct HexCoord {
+  col : Int
+  row : Int
+} derive(Eq, Show)
+
+pub(all) struct HexGrid {
+  width : Int
+  height : Int
+  tiles : Array[HexTile]
+  wraps_horizontal : Bool
+} derive(Show)
+
+pub(all) struct HexTile {
+  mut biome : BiomeKind
+  locked : Bool
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  tier : Tier
+  tier_index : Int
+  width : Int
+  height : Int
+  starting_tiles : Array[(Int, Int, BiomeKind, Bool)]
+  budget : PaintBudget
+  targets : TargetRatio
+  par_turns : Int
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut best_turns : Int
+} derive(Show)
+
+pub(all) struct PaintBudget {
+  mut forest : Int
+  mut ocean : Int
+  mut desert : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Painting
+  Resolving
+  Complete
+  Failed
+} derive(Eq, Show)
+
+pub(all) struct ResolveSnapshot {
+  biomes : Array[BiomeKind]
+  budget_forest : Int
+  budget_ocean : Int
+  budget_desert : Int
+  turn : Int
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct TargetRatio {
+  forest_min : Float
+  forest_max : Float
+  ocean_min : Float
+  ocean_max : Float
+  desert_min : Float
+  desert_max : Float
+} derive(Show)
+
+pub(all) enum Tier {
+  Seeds
+  Balance
+  Harmony
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  col : Int
+  row : Int
+  prev_biome : BiomeKind
+  biome_used : BiomeKind
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

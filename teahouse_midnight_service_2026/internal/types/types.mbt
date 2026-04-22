@@ -13,8 +13,6 @@ pub(all) struct Customer {
   mut mood : Float
   mut served_t : Float
   mut angry : Bool
-
-  fn new() -> Customer
 }
 
 ///|
@@ -28,8 +26,6 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Spark
 }
 
 ///|
@@ -41,8 +37,6 @@ pub(all) struct Ring {
   mut r : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Ring
 }
 
 ///|
@@ -55,8 +49,6 @@ pub(all) struct Shadow {
   mut h : Float
   mut life : Float
   mut rot : Float
-
-  fn new() -> Shadow
 }
 
 ///|
@@ -75,8 +67,6 @@ pub(all) struct Player {
   mut anim_t : Float
   mut carry_water : Bool
   mut carry_leaf : Tea?
-
-  fn new() -> Player
 }
 
 ///|
@@ -124,14 +114,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive customer record with default values.
-#deprecated
-pub fn Customer::new() -> Customer {
+pub fn Customer::Customer() -> Customer {
   {
     active: false,
     tea_type: Jasmine,
@@ -150,8 +137,7 @@ pub fn Customer::new() -> Customer {
 
 ///|
 /// Creates an inactive spark effect record.
-#deprecated
-pub fn Spark::new() -> Spark {
+pub fn Spark::Spark() -> Spark {
   {
     active: false,
     x: 0.0,
@@ -166,22 +152,19 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates an inactive ring effect record.
-#deprecated
-pub fn Ring::new() -> Ring {
+pub fn Ring::Ring() -> Ring {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates an inactive shadow effect record.
-#deprecated
-pub fn Shadow::new() -> Shadow {
+pub fn Shadow::Shadow() -> Shadow {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0 }
 }
 
 ///|
 /// Creates a player at the starting position with empty hands.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: 628.0,
     y: 468.0,
@@ -201,8 +184,7 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a new game state with preallocated pools and title defaults.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     customers: Array::makei(max_customers, fn(_i) { Customer() }),
     sparks: Array::makei(max_sparks, fn(_i) { Spark() }),

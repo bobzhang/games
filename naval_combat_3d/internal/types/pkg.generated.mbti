@@ -474,11 +474,8 @@ pub(all) struct BattleObjective {
   mut completed : Bool
   mut failed : Bool
   mut description : String
-
-  fn new() -> BattleObjective
 }
-#deprecated
-pub fn BattleObjective::new() -> Self
+pub fn BattleObjective::BattleObjective() -> Self
 
 pub(all) struct BattleStats {
   mut ships_sunk : Int
@@ -491,11 +488,8 @@ pub(all) struct BattleStats {
   mut accuracy_shots : Int
   mut boarding_wins : Int
   mut fortresses_destroyed : Int
-
-  fn new() -> BattleStats
 }
-#deprecated
-pub fn BattleStats::new() -> Self
+pub fn BattleStats::BattleStats() -> Self
 
 pub(all) enum Cannon {
   Light
@@ -678,11 +672,8 @@ pub(all) struct Game {
   mut convoy_target_x : Float
   mut convoy_target_z : Float
   mut convoy_arrived_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Menu
@@ -823,11 +814,8 @@ pub(all) struct Wind {
   mut shift_timer : Float
   mut shift_interval : Float
   mut turbulence : Float
-
-  fn new() -> Wind
 }
-#deprecated
-pub fn Wind::new() -> Self
+pub fn Wind::Wind() -> Self
 
 // Type aliases
 

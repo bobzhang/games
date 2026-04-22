@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tide_pool/internal/game"
+
+import {
+  "bobzhang/games/tide_pool/internal/types",
+}
+
+// Values
+pub fn handle_level_select_input(@types.Game) -> Unit
+
+pub fn handle_playing_input(@types.Game) -> Unit
+
+pub fn handle_results_input(@types.Game) -> Unit
+
+pub fn handle_title_input(@types.Game) -> Unit
+
+pub fn update(@types.Game) -> Unit
+
+pub fn update_simulation(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

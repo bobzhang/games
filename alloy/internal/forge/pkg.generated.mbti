@@ -1,0 +1,26 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/alloy/internal/forge"
+
+import {
+  "bobzhang/games/alloy/internal/types",
+}
+
+// Values
+pub fn blend(Array[@types.Ingredient], @types.Temperature) -> @types.BlendResult
+
+pub fn calculate_stars(@types.BlendResult, @types.TargetAlloy, Int, Int) -> @types.StarRating
+
+pub fn check_target(@types.BlendResult, @types.TargetAlloy) -> Bool
+
+pub fn distance_to_center(@types.BlendResult, @types.TargetAlloy) -> Float
+
+pub fn in_range(Float, @types.PropertyRange) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

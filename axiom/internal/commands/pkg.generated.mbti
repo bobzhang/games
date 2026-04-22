@@ -1,0 +1,53 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/axiom/internal/commands"
+
+import {
+  "bobzhang/games/axiom/internal/types",
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn all_conditions() -> Array[@types.Condition]
+
+pub fn basic_commands() -> Array[@types.CommandKind]
+
+pub fn command_color(@types.CommandKind) -> @raylib.Color
+
+pub fn command_description(@types.CommandKind) -> String
+
+pub fn command_name(@types.CommandKind) -> String
+
+pub fn command_short_name(@types.CommandKind) -> String
+
+pub fn is_control_flow(@types.CommandKind) -> Bool
+
+pub fn leap_commands() -> Array[@types.CommandKind]
+
+pub fn logic_commands() -> Array[@types.CommandKind]
+
+pub fn mastery_commands() -> Array[@types.CommandKind]
+
+pub fn new_command(@types.CommandKind) -> @types.Command
+
+pub fn program_add(@types.Program, @types.CommandKind) -> Bool
+
+pub fn program_clear(@types.Program) -> Unit
+
+pub fn program_insert(@types.Program, Int, @types.CommandKind) -> Bool
+
+pub fn program_move_down(@types.Program, Int) -> Bool
+
+pub fn program_move_up(@types.Program, Int) -> Bool
+
+pub fn program_remove(@types.Program, Int) -> Bool
+
+pub fn validate_program(@types.Program) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

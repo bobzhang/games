@@ -18,14 +18,11 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
-
-  fn new() -> InputState
 }
 
 ///|
 /// Creates a default InputState value for a new session.
-#deprecated
-pub fn InputState::new() -> InputState {
+pub fn InputState::InputState() -> InputState {
   {
     move_x: 0,
     move_y: 0,
@@ -51,14 +48,11 @@ pub(all) struct Player {
   mut dash_cd : Float
   mut attack_cd : Float
   mut attack_t : Float
-
-  fn new() -> Player
 }
 
 ///|
 /// Creates a default Player value for a new session.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: Float::from_int(world_x + 330),
     y: lane_y(1),
@@ -80,14 +74,11 @@ pub(all) struct Beacon {
   y : Float
   mut integrity : Float
   mut pulse_t : Float
-
-  fn new(index : Int) -> Beacon
 }
 
 ///|
 /// Creates a default Beacon value for a new session.
-#deprecated
-pub fn Beacon::new(index : Int) -> Beacon {
+pub fn Beacon::Beacon(index : Int) -> Beacon {
   let (x, y) = beacon_position(index)
   { x, y, integrity: beacon_integrity_max, pulse_t: 0.0 }
 }
@@ -100,14 +91,11 @@ pub(all) struct Trap {
   y : Float
   mut trigger_cd : Float
   mut flash_t : Float
-
-  fn new(index : Int) -> Trap
 }
 
 ///|
 /// Creates a default Trap value for a new session.
-#deprecated
-pub fn Trap::new(index : Int) -> Trap {
+pub fn Trap::Trap(index : Int) -> Trap {
   let (x, y) = trap_slot_position(index)
   { active: false, x, y, trigger_cd: 0.0, flash_t: 0.0 }
 }
@@ -128,14 +116,11 @@ pub(all) struct Enemy {
   mut slow_t : Float
   mut kind : Int
   mut anim_t : Float
-
-  fn new() -> Enemy
 }
 
 ///|
 /// Creates a default Enemy value for a new session.
-#deprecated
-pub fn Enemy::new() -> Enemy {
+pub fn Enemy::Enemy() -> Enemy {
   {
     active: false,
     x: 0.0,
@@ -248,14 +233,11 @@ pub(all) struct Game {
   /// Set when transitioning to `GameOver`; empty string during active play.
   /// Displayed on the game-over screen.
   mut game_over_reason : String
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a default Game value for a new session.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   let beacons = Array::makei(beacon_count, fn(i) { Beacon(i) })
   let traps = Array::makei(trap_slot_count, fn(i) { Trap(i) })
   let enemies = Array::makei(max_enemies, fn(_i) { Enemy() })

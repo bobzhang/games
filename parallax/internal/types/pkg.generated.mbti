@@ -1,0 +1,243 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/parallax/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let cell_size_3 : Int
+
+pub let cell_size_4 : Int
+
+pub let cell_size_5 : Int
+
+pub fn cell_size_for_grid(Int) -> Int
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_complete : @raylib.Color
+
+pub let color_empty : @raylib.Color
+
+pub let color_filled : @raylib.Color
+
+pub let color_filled_light : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hover : @raylib.Color
+
+pub let color_iso_left : @raylib.Color
+
+pub let color_iso_right : @raylib.Color
+
+pub let color_iso_top : @raylib.Color
+
+pub let color_matched : @raylib.Color
+
+pub let color_panel_bg : @raylib.Color
+
+pub let color_preview : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_target : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_tier_sculptures : @raylib.Color
+
+pub let color_tier_shapes : @raylib.Color
+
+pub let color_tier_structures : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_unmatched : @raylib.Color
+
+pub fn copy_grid(VoxelGrid) -> VoxelGrid
+
+pub fn idx_to_xyz(Int, Int) -> Vec3i
+
+pub let iso_center_x : Int
+
+pub let iso_center_y : Int
+
+pub let iso_scale : Float
+
+pub let iso_x_factor : Float
+
+pub let iso_y_factor : Float
+
+pub fn level_index(Int, Int) -> Int
+
+pub let levels_per_tier : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_game() -> Game
+
+pub fn new_hover() -> HoverInfo
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_silhouette(Int, Int) -> Silhouette
+
+pub fn new_target_set(Silhouette, Silhouette, Silhouette) -> TargetSet
+
+pub fn new_voxel_grid(Int) -> VoxelGrid
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn silhouette_from_bits(Int, Int, Array[Int]) -> Silhouette
+
+pub let target_fps : Int
+
+pub fn tier_color(Int) -> @raylib.Color
+
+pub fn tier_name(Int) -> String
+
+pub let total_levels : Int
+
+pub let view_front_x : Int
+
+pub let view_front_y : Int
+
+pub let view_iso_x : Int
+
+pub let view_iso_y : Int
+
+pub let view_side_x : Int
+
+pub let view_side_y : Int
+
+pub let view_top_x : Int
+
+pub let view_top_y : Int
+
+pub fn xyz_to_idx(Int, Int, Int, Int) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Int
+  mut current_level : Int
+  mut grid : VoxelGrid
+  mut moves : Int
+  mut undo_stack : Array[UndoEntry]
+  mut hover : HoverInfo
+  mut scores : Array[LevelScore]
+  mut frame_count : Int
+  mut anim_timer : Float
+  mut message : String
+  mut message_timer : Float
+  mut result_stars : Int
+}
+
+pub(all) struct HoverInfo {
+  mut active : Bool
+  mut vx : Int
+  mut vy : Int
+  mut vz : Int
+  mut view : ViewKind
+} derive(Show)
+
+pub(all) struct Level {
+  size : Int
+  targets : TargetSet
+  voxel_budget : Int
+  requires_connected : Bool
+  par_moves : Int
+  par_voxels : Int
+  tier : Tier
+  name : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut best_moves : Int
+  mut best_voxels : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Editing
+  Complete
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct Silhouette {
+  width : Int
+  height : Int
+  cells : Array[Bool]
+} derive(Show)
+
+pub(all) struct TargetSet {
+  top : Silhouette
+  front : Silhouette
+  side : Silhouette
+} derive(Show)
+
+pub(all) enum Tier {
+  Shapes
+  Structures
+  Sculptures
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  x : Int
+  y : Int
+  z : Int
+  was_filled : Bool
+} derive(Show)
+
+pub(all) struct Vec3i {
+  x : Int
+  y : Int
+  z : Int
+} derive(Eq, Show)
+
+pub(all) enum ViewKind {
+  Top
+  Front
+  Side
+} derive(Eq, Show)
+
+pub(all) struct VoxelGrid {
+  size : Int
+  cells : Array[Bool]
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

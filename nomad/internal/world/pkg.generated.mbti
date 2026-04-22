@@ -1,0 +1,26 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/nomad/internal/world"
+
+import {
+  "bobzhang/games/nomad/internal/types",
+}
+
+// Values
+pub fn calculate_route_water_cost(@types.HexMap, Array[@types.HexCoord]) -> Int
+
+pub fn calculate_stars(Bool, Int, Int, Int, Int) -> Int
+
+pub fn execute_route_step(@types.Caravan, @types.HexMap) -> @types.PlayState
+
+pub fn is_route_valid(@types.HexMap, Array[@types.HexCoord], @types.HexCoord) -> Bool
+
+pub fn validate_route_step(@types.HexMap, @types.HexCoord, @types.HexCoord) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

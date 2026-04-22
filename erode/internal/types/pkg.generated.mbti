@@ -1,0 +1,218 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/erode/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub let anim_duration : Float
+
+pub let cell_size : Int
+
+pub fn clone_budget(ForceBudget) -> ForceBudget
+
+pub fn clone_grid(Grid) -> Grid
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_empty : @raylib.Color
+
+pub let color_frost : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_heat : @raylib.Color
+
+pub let color_over_eroded : @raylib.Color
+
+pub let color_preview : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_solid : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_target_match : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_text_highlight : @raylib.Color
+
+pub let color_tier_clay : @raylib.Color
+
+pub let color_tier_crystal : @raylib.Color
+
+pub let color_tier_stone : @raylib.Color
+
+pub let color_under_eroded : @raylib.Color
+
+pub let color_water : @raylib.Color
+
+pub let color_wind : @raylib.Color
+
+pub fn count_empty_neighbors(Grid, Int, Int) -> Int
+
+pub fn force_budget_remaining(ForceBudget, ForceKind) -> Int
+
+pub fn force_budget_spend(ForceBudget, ForceKind) -> Unit
+
+pub fn force_color(ForceKind) -> @raylib.Color
+
+pub fn force_name(ForceKind) -> String
+
+pub fn grid_from_rows(Int, Array[Array[Bool]]) -> Grid
+
+pub fn grid_get(Grid, Int, Int) -> Bool
+
+pub fn grid_in_bounds(Grid, Int, Int) -> Bool
+
+pub let grid_left_x : Int
+
+pub let grid_right_x : Int
+
+pub fn grid_set(Grid, Int, Int, Bool) -> Unit
+
+pub let grid_size : Int
+
+pub let grid_top_y : Int
+
+pub fn grids_match(Grid, Grid) -> Bool
+
+pub fn is_left_exposed(Grid, Int, Int) -> Bool
+
+pub fn is_right_exposed(Grid, Int, Int) -> Bool
+
+pub fn is_top_exposed(Grid, Int, Int) -> Bool
+
+pub fn new_game() -> Game
+
+pub fn new_grid(Int, Bool) -> Grid
+
+pub fn new_level_scores() -> Array[LevelScore]
+
+pub fn new_preview_cells() -> Array[Bool]
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct ForceAction {
+  kind : ForceKind
+} derive(Show)
+
+pub(all) struct ForceBudget {
+  mut water : Int
+  mut wind : Int
+  mut frost : Int
+  mut heat : Int
+} derive(Eq, Show)
+
+pub(all) enum ForceKind {
+  Water
+  WindLeft
+  WindRight
+  Frost
+  Heat
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut grid : Grid
+  mut target : Grid
+  mut budget : ForceBudget
+  mut history : Array[Grid]
+  mut current_level : Int
+  mut current_tier : Tier
+  mut play_state : PlayState
+  mut forces_used : Int
+  mut par_forces : Int
+  mut level_scores : Array[LevelScore]
+  mut preview_cells : Array[Bool]
+  mut anim_timer : Float
+  mut selected_force : ForceKind
+  mut frame_count : Int
+}
+
+pub(all) struct Grid {
+  size : Int
+  cells : Array[Bool]
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  tier : Tier
+  name : String
+  initial_block : Grid
+  target_shape : Grid
+  budget : ForceBudget
+  par_forces : Int
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut forces_used : Int
+} derive(Show)
+
+pub(all) struct MatchResult {
+  matching : Int
+  over_eroded : Int
+  under_eroded : Int
+  total_target_empty : Int
+  total_target_solid : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Selecting
+  Previewing(ForceKind)
+  Animating
+  Won
+  Lost
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Clay
+  Stone
+  Crystal
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

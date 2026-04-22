@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/loom/internal/weave"
+
+import {
+  "bobzhang/games/loom/internal/types",
+}
+
+// Values
+pub fn count_heddle_changes(Array[@types.HeddleRow]) -> Int
+
+pub fn generate_diamond(Int, Int, Array[Int], Array[Int], Int) -> @types.FabricPattern
+
+pub fn generate_herringbone(Int, Int, Array[Int], Array[Int], Int) -> @types.FabricPattern
+
+pub fn generate_plain(Int, Int, Array[Int], Array[Int]) -> @types.FabricPattern
+
+pub fn generate_satin(Int, Int, Array[Int], Array[Int], Int, Int) -> @types.FabricPattern
+
+pub fn generate_twill(Int, Int, Array[Int], Array[Int], Int) -> @types.FabricPattern
+
+pub fn heddles_from_pattern(@types.FabricPattern) -> Array[@types.HeddleRow]
+
+pub fn identify_weave_type(@types.FabricPattern) -> @types.WeaveType
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

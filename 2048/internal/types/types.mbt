@@ -18,14 +18,11 @@ pub(all) struct Tile {
   mut scale : Float
   mut is_new : Bool
   mut is_merged : Bool
-
-  fn new() -> Tile
 }
 
 ///|
 /// Creates an empty tile with neutral animation state.
-#deprecated
-pub fn Tile::new() -> Tile {
+pub fn Tile::Tile() -> Tile {
   {
     value: 0,
     anim_x: 0.0,
@@ -88,14 +85,11 @@ pub(all) struct Game {
   /// the 2048 tile. Prevents the `Won` state from re-triggering and lets
   /// the player keep merging toward higher tiles.
   mut keep_playing : Bool
-
-  fn new() -> Game
 }
 
 ///|
 /// Allocates a fresh game state with cleared board and score counters.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   let g : Game = {
     tiles: Array::makei(cell_count, _i => Tile()),
     prev_values: Array::make(cell_count, 0),

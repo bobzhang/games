@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cartouche/internal/decoder"
+
+import {
+  "bobzhang/games/cartouche/internal/types",
+}
+
+// Values
+pub fn check_mapping_correct(@types.Mapping, @types.Mapping, @types.Symbol) -> Bool
+
+pub fn check_mapping_wrong(@types.Mapping, @types.Mapping, @types.Symbol) -> Bool
+
+pub fn compute_stars(@types.Tablet, Int, Int) -> Int
+
+pub fn count_correct(@types.Mapping, @types.Mapping) -> Int
+
+pub fn count_mapped(@types.Mapping) -> Int
+
+pub fn count_wrong(@types.Mapping, @types.Mapping) -> Int
+
+pub fn find_hint(@types.Tablet, @types.Mapping) -> @types.Symbol?
+
+pub fn get_hint_letter(@types.Tablet, @types.Symbol) -> Int
+
+pub fn is_fully_decoded(@types.Mapping, @types.Mapping, @types.Inscription) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

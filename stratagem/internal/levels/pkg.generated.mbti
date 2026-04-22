@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/stratagem/internal/levels"
+
+import {
+  "bobzhang/games/stratagem/internal/types",
+}
+
+// Values
+pub fn generate_skirmish_units(Int) -> (Array[(@types.UnitKind, Int, Int)], Array[(@types.UnitKind, Int, Int)])
+
+pub fn get_campaign_level(Int) -> @types.LevelDef
+
+pub fn get_skirmish_map(Int) -> @types.LevelDef
+
+pub fn skirmish_map_name(Int) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

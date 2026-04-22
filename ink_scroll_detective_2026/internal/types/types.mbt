@@ -7,8 +7,6 @@ pub(all) struct Clue {
   chain : Int
   mut discovered : Bool
   mut glow_t : Float
-
-  fn new(index : Int) -> Clue
 }
 
 ///|
@@ -19,8 +17,6 @@ pub(all) struct Suspect {
   home_y : Int
   mut deduction_unlocked : Bool
   mut suspicion : Float
-
-  fn new(index : Int) -> Suspect
 }
 
 ///|
@@ -33,8 +29,6 @@ pub(all) struct Incident {
   mut timer : Float
   mut severity : Int
   mut pulse_t : Float
-
-  fn new() -> Incident
 }
 
 ///|
@@ -42,8 +36,6 @@ pub(all) struct Incident {
 pub(all) struct DistrictPulse {
   mut heat : Float
   drift : Float
-
-  fn new(index : Int) -> DistrictPulse
 }
 
 ///|
@@ -89,8 +81,6 @@ pub(all) struct Game {
   mut input_focus_press : Bool
   mut input_pause_press : Bool
   mut input_restart_press : Bool
-
-  fn new() -> Game
 }
 
 ///|
@@ -150,8 +140,7 @@ fn is_reserved_cell(cell_x : Int, cell_y : Int) -> Bool {
 
 ///|
 /// Creates a clue at a deterministic grid position for `index`.
-#deprecated
-pub fn Clue::new(index : Int) -> Clue {
+pub fn Clue::Clue(index : Int) -> Clue {
   let suspect = index % suspect_count
   let chain = index / suspect_count % chains_per_suspect
   let step = index / (suspect_count * chains_per_suspect)
@@ -171,8 +160,7 @@ pub fn Clue::new(index : Int) -> Clue {
 
 ///|
 /// Creates a suspect profile from a suspect index.
-#deprecated
-pub fn Suspect::new(index : Int) -> Suspect {
+pub fn Suspect::Suspect(index : Int) -> Suspect {
   {
     name: suspect_name(index),
     home_x: suspect_home_x(index),
@@ -184,8 +172,7 @@ pub fn Suspect::new(index : Int) -> Suspect {
 
 ///|
 /// Creates an inactive incident with default values.
-#deprecated
-pub fn Incident::new() -> Incident {
+pub fn Incident::Incident() -> Incident {
   {
     active: false,
     x: 0,
@@ -199,16 +186,14 @@ pub fn Incident::new() -> Incident {
 
 ///|
 /// Creates a district pulse state seeded by district index.
-#deprecated
-pub fn DistrictPulse::new(index : Int) -> DistrictPulse {
+pub fn DistrictPulse::DistrictPulse(index : Int) -> DistrictPulse {
   let drift_seed = Float::from_int((index * 71 + 17) % 1000) / 1000.0
   { heat: 0.0, drift: drift_seed * tau }
 }
 
 ///|
 /// Creates a new case state with clues, suspects, and timers initialized.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     clues: Array::makei(clue_count, fn(i) { Clue(i) }),
     suspects: Array::makei(suspect_count, fn(i) { Suspect(i) }),

@@ -1,0 +1,329 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/echo_maze/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_pressed : @raylib.Color
+
+pub let color_collectible : @raylib.Color
+
+pub let color_door_closed : @raylib.Color
+
+pub let color_door_open : @raylib.Color
+
+pub let color_exit : @raylib.Color
+
+pub let color_floor : @raylib.Color
+
+pub let color_ghost_green : @raylib.Color
+
+pub let color_ghost_orange : @raylib.Color
+
+pub let color_ghost_yellow : @raylib.Color
+
+pub let color_guard : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_player : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_start : @raylib.Color
+
+pub let color_timed_door : @raylib.Color
+
+pub let color_timeline_bg : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub let color_wall_edge : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn dir_to_delta(Direction) -> Vec2i
+
+pub fn ghost_color_for_index(Int) -> GhostColor
+
+pub fn ghost_color_value(GhostColor) -> @raylib.Color
+
+pub let grid_max_h : Int
+
+pub let grid_max_w : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub fn in_bounds(Vec2i, Int, Int) -> Bool
+
+pub fn is_level_unlocked(Game, Int, Int) -> Bool
+
+pub fn is_world_unlocked(Game, Int) -> Bool
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub let levels_per_world : Int
+
+pub fn manhattan_dist(Vec2i, Vec2i) -> Int
+
+pub let max_ghosts : Int
+
+pub let max_ticks_per_loop : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_game() -> Game
+
+pub fn new_ghost(Array[Direction?], GhostColor, Vec2i) -> Ghost
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_maze_state(Maze) -> MazeState
+
+pub fn new_player(Vec2i) -> Player
+
+pub let num_worlds : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tick_interval : Float
+
+pub let tile_size : Int
+
+pub fn tile_to_screen_x(Int) -> Int
+
+pub fn tile_to_screen_y(Int) -> Int
+
+pub fn update_door_animations(MazeState, Float) -> Unit
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+pub fn vec2i_add(Vec2i, Vec2i) -> Vec2i
+
+pub fn vec2i_eq(Vec2i, Vec2i) -> Bool
+
+pub fn world_stars(Game, Int) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct ButtonLink {
+  button_id : Int
+  door_id : Int
+} derive(Show)
+
+pub(all) enum Direction {
+  North
+  South
+  East
+  West
+} derive(Eq, Show)
+
+pub(all) struct DoorState {
+  door_id : Int
+  mut open : Bool
+  mut timer : Int
+  mut anim_progress : Float
+  mut prev_open : Bool
+} derive(Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_world : Int
+  mut current_level : Int
+  mut maze : Maze?
+  mut maze_state : MazeState?
+  player : Player
+  mut ghosts : Array[Ghost]
+  mut current_recording : Array[Direction?]
+  mut recordings : Array[Recording]
+  mut tick : Int
+  mut max_ticks : Int
+  mut loop_count : Int
+  mut timeline : Array[TimelineEntry]
+  mut level_scores : Array[Array[LevelScore]]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut tick_timer : Float
+  mut planning_tick : Int
+  mut selected_world : Int
+  mut selected_level : Int
+  mut result_loops : Int
+  mut result_stars : Int
+  mut result_collectibles : Int
+  mut result_total_collectibles : Int
+  mut restart_flash_timer : Float
+  mut ghost_button_feedback : Array[GhostButtonEvent]
+  mut planning_paused : Bool
+  mut loop_transition_timer : Float
+} derive(Show)
+
+pub(all) struct Ghost {
+  recording : Array[Direction?]
+  color : GhostColor
+  mut pos : Vec2i
+  mut active : Bool
+  trail_positions : Array[Vec2i]
+} derive(Show)
+
+pub(all) struct GhostButtonEvent {
+  ghost_index : Int
+  button_id : Int
+  mut timer : Float
+} derive(Show)
+
+pub(all) enum GhostColor {
+  Green
+  Yellow
+  Orange
+} derive(Eq, Show)
+
+pub(all) enum GuardAlertState {
+  Idle
+  Alert
+  Chasing
+} derive(Eq, Show)
+
+pub(all) struct GuardDef {
+  patrol : Array[Vec2i]
+  mut patrol_index : Int
+  mut forward : Bool
+} derive(Show)
+
+pub(all) struct GuardState {
+  mut pos : Vec2i
+  mut patrol_index : Int
+  mut forward : Bool
+  mut alert : GuardAlertState
+  mut alert_timer : Float
+} derive(Show)
+
+pub(all) struct LevelDef {
+  world : Int
+  level : Int
+  ascii : String
+  button_links : Array[ButtonLink]
+  guard_patrols : Array[Array[Vec2i]]
+  timed_door_durations : Array[(Int, Int)]
+  par_loops : Int
+  name : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut best_loops : Int
+  mut stars : Int
+  mut collectibles_got : Int
+  mut collectibles_total : Int
+} derive(Show)
+
+pub(all) struct Maze {
+  width : Int
+  height : Int
+  tiles : Array[Array[Tile]]
+  button_links : Array[ButtonLink]
+  guard_defs : Array[GuardDef]
+  start : Vec2i
+  exit : Vec2i
+  collectible_positions : Array[Vec2i]
+} derive(Show)
+
+pub(all) struct MazeState {
+  mut door_states : Array[DoorState]
+  mut button_pressed : Array[Bool]
+  mut guard_states : Array[GuardState]
+  mut collectibles_collected : Array[Bool]
+} derive(Show)
+
+pub(all) enum PlayState {
+  Recording
+  Reviewing
+  Complete
+  Failed
+} derive(Eq, Show)
+
+pub(all) struct Player {
+  mut pos : Vec2i
+  mut dir : Direction
+  mut alive : Bool
+} derive(Show)
+
+pub(all) struct Recording {
+  moves : Array[Direction?]
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  WorldSelect
+  LevelSelect
+  Playing
+  Planning
+  Results
+  Paused
+} derive(Eq, Show)
+
+pub(all) struct Tile {
+  kind : TileKind
+} derive(Show)
+
+pub(all) enum TileKind {
+  Floor
+  Wall
+  Start
+  Exit
+  Button(Int)
+  Door(Int)
+  TimedDoor(Int, Int)
+  Guard
+  Collectible
+} derive(Eq, Show)
+
+pub(all) struct TimelineEntry {
+  player_pos : Vec2i
+  ghost_positions : Array[Vec2i]
+  guard_positions : Array[Vec2i]
+  buttons_pressed : Array[Bool]
+  doors_open : Array[Bool]
+} derive(Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

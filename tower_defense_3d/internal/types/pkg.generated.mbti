@@ -607,11 +607,8 @@ pub(all) struct Game {
   mut leak_warning_timer : Float
   mut gold_flash_timer : Float
   mut prev_gold : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Menu
@@ -684,11 +681,8 @@ pub(all) struct StatusEffect {
   mut duration : Float
   mut strength : Float
   mut tick_timer : Float
-
-  fn new(Int, Float, Float) -> StatusEffect
 }
-#deprecated
-pub fn StatusEffect::new(Int, Float, Float) -> Self
+pub fn StatusEffect::StatusEffect(Int, Float, Float) -> Self
 pub fn StatusEffect::none() -> Self
 
 pub(all) struct SynergyLine {
@@ -741,12 +735,9 @@ pub(all) struct Tower {
   mut buff_range : Float
   mut buff_rate : Float
   mut sell_value : Int
-
-  fn new(TowerKind, Int, Int) -> Tower
 }
+pub fn Tower::Tower(TowerKind, Int, Int) -> Self
 pub fn Tower::inactive() -> Self
-#deprecated
-pub fn Tower::new(TowerKind, Int, Int) -> Self
 
 pub(all) enum TowerKind {
   Arrow

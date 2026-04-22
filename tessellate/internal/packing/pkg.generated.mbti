@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tessellate/internal/packing"
+
+import {
+  "bobzhang/games/tessellate/internal/types",
+}
+
+// Values
+pub fn calculate_stars(Int, Int, Int, Int) -> Int
+
+pub fn can_place_piece(@types.Region, Array[Array[Int]], Array[@types.Vec2i], @types.Vec2i) -> Bool
+
+pub fn count_empty_cells(@types.Region, Array[Array[Int]]) -> Int
+
+pub fn count_placed(Array[@types.PlacedPiece]) -> Int
+
+pub fn is_piece_used(Array[@types.PlacedPiece], Int) -> Bool
+
+pub fn is_region_complete(@types.Region, Array[Array[Int]]) -> Bool
+
+pub fn place_piece(Array[Array[Int]], Array[@types.Vec2i], @types.Vec2i, Int) -> Unit
+
+pub fn remove_piece(Array[Array[Int]], Int) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

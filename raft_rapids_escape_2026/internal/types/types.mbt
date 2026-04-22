@@ -10,8 +10,6 @@ pub(all) struct Obstacle {
   mut vy : Float
   mut kind : ObstacleKind
   mut phase : Float
-
-  fn new() -> Obstacle
 }
 
 ///|
@@ -22,8 +20,6 @@ pub(all) struct Pickup {
   mut y : Float
   mut kind : PickupKind
   mut phase : Float
-
-  fn new() -> Pickup
 }
 
 ///|
@@ -37,8 +33,6 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
 
 ///|
@@ -81,14 +75,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Create an inactive obstacle slot.
-#deprecated
-pub fn Obstacle::new() -> Obstacle {
+pub fn Obstacle::Obstacle() -> Obstacle {
   {
     active: false,
     x: 0.0,
@@ -104,15 +95,13 @@ pub fn Obstacle::new() -> Obstacle {
 
 ///|
 /// Create an inactive pickup slot.
-#deprecated
-pub fn Pickup::new() -> Pickup {
+pub fn Pickup::Pickup() -> Pickup {
   { active: false, x: 0.0, y: 0.0, kind: Coin, phase: 0.0 }
 }
 
 ///|
 /// Create an inactive particle slot.
-#deprecated
-pub fn Particle::new() -> Particle {
+pub fn Particle::Particle() -> Particle {
   {
     active: false,
     x: 0.0,
@@ -127,8 +116,7 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Build a new run in title state with empty object pools.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     obstacles: Array::makei(max_obstacles, fn(_i) { Obstacle() }),
     pickups: Array::makei(max_pickups, fn(_i) { Pickup() }),

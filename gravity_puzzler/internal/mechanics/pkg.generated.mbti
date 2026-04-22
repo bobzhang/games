@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/mechanics"
+
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+// Values
+pub fn apply_gravity_wells(@types.Level) -> Bool
+
+pub fn apply_mirror_movement(@types.Level, @types.Entity, @types.GravityDir) -> Bool
+
+pub fn apply_wind_gusts(@types.Level, Int) -> Bool
+
+pub fn check_boulder_crush_enemies(@types.Level) -> Unit
+
+pub fn check_enemy_player_collision(@types.Level) -> Unit
+
+pub fn is_lava_active(Float) -> Bool
+
+pub fn is_lava_deadly(Float) -> Bool
+
+pub fn process_enemies(@types.Level, @types.Game) -> Bool
+
+pub fn process_mirror(@types.Level, @types.Entity, @types.GravityDir) -> @types.GravityDir
+
+pub fn process_pressure_plate(@types.Level, @types.Entity) -> Unit
+
+pub fn process_world_mechanics(@types.Level, @types.Game) -> Bool
+
+pub fn update_timed_lava(@types.Level, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

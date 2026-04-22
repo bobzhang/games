@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/compass/internal/navigation"
+
+import {
+  "bobzhang/games/compass/internal/types",
+}
+
+// Values
+pub fn can_reach_adjacent(@types.LevelState, @types.Direction) -> Bool
+
+pub fn compute_star_rating(@types.LevelState) -> @types.StarRating
+
+pub fn try_move(@types.LevelState, @types.Direction) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -22,6 +22,8 @@ pub fn alloc_projectile(Game) -> Int
 
 pub fn alloc_station(Game) -> Int
 
+pub let angular_drag : Float
+
 pub let asteroid_break_count : Int
 
 pub let asteroid_large : Int
@@ -44,6 +46,8 @@ pub let asteroid_small_hp : Float
 
 pub let asteroid_small_size : Float
 
+pub let attack_run_trail_dist : Float
+
 pub let bomber_class_boost : Float
 
 pub let bomber_class_hull : Float
@@ -64,9 +68,13 @@ pub let bomber_score : Int
 
 pub let bomber_speed : Float
 
+pub let boost_acceleration_mult : Float
+
 pub let boost_fuel_drain : Float
 
 pub let boost_fuel_regen : Float
+
+pub let break_away_duration : Float
 
 pub let camera_distance : Float
 
@@ -77,6 +85,8 @@ pub let camera_height : Float
 pub let camera_lag_pitch : Float
 
 pub let camera_lag_yaw : Float
+
+pub let camera_roll_lag : Float
 
 pub let capital_class_boost : Float
 
@@ -94,13 +104,25 @@ pub let capital_fire_rate : Float
 
 pub let capital_hp : Float
 
+pub let capital_phase_death_spiral : Float
+
+pub let capital_phase_shield_loss : Float
+
+pub let capital_phase_slow : Float
+
 pub let capital_score : Int
 
 pub let capital_speed : Float
 
+pub let capital_weak_point_count : Int
+
 pub let capital_weak_point_hp : Float
 
+pub fn capital_weak_point_offset(Int) -> (Float, Float, Float)
+
 pub fn check_objective_progress(Game, Objective, Int) -> Unit
+
+pub fn clampf(Float, Float, Float) -> Float
 
 pub let combo_mult_2 : Float
 
@@ -144,6 +166,8 @@ pub let damage_number_duration : Float
 
 pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
 
+pub fn dot3d(Float, Float, Float, Float, Float, Float) -> Float
+
 pub let enemy_bomber : Int
 
 pub let enemy_capital : Int
@@ -151,6 +175,8 @@ pub let enemy_capital : Int
 pub let enemy_cruiser : Int
 
 pub let enemy_fighter : Int
+
+pub let enemy_fire_cone_half : Float
 
 pub let enemy_interceptor : Int
 
@@ -185,6 +211,14 @@ pub let fighter_score : Int
 pub let fighter_speed : Float
 
 pub fn find_nearest_enemy(Game, Float, Float, Float) -> Int
+
+pub let fire_burst_duration : Float
+
+pub let flight_assist_drift_kill : Float
+
+pub let flight_assist_level_strength : Float
+
+pub let flight_drag : Float
 
 pub fn formation_from_int(Int) -> Formation
 
@@ -250,6 +284,8 @@ pub let max_powerups : Int
 
 pub let max_projectiles : Int
 
+pub let max_shock_rings : Int
+
 pub let max_stars : Int
 
 pub let max_stations : Int
@@ -284,11 +320,17 @@ pub fn mission_difficulty_hp_mult(Int) -> Float
 
 pub fn mission_difficulty_speed_mult(Int) -> Float
 
+pub let near_miss_distance : Float
+
+pub let near_miss_duration : Float
+
 pub fn normalize3d(Float, Float, Float) -> (Float, Float, Float)
 
 pub fn objective_from_int(Int) -> Objective
 
 pub fn objective_type_name(Objective) -> String
+
+pub let overshoot_distance : Float
 
 pub let patrol_waypoint_count : Int
 
@@ -354,7 +396,11 @@ pub fn rand_rangef(Game, Float, Float) -> Float
 
 pub fn register_kill_combo(Game) -> Unit
 
+pub let reposition_duration : Float
+
 pub fn right_dir(Float) -> (Float, Float, Float)
+
+pub fn rotate_around_axis(Float, Float, Float, Float, Float, Float, Float) -> (Float, Float, Float)
 
 pub let screen_height : Int
 
@@ -378,15 +424,21 @@ pub fn ship_class_turn(ShipKind) -> Float
 
 pub fn ship_kind_from_int(Int) -> ShipKind
 
+pub fn spawn_burning_debris(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
+
 pub fn spawn_damage_number(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_debris(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
+
+pub fn spawn_directional_explosion(Game, Float, Float, Float, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_explosion(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_shield_hit(Game, Float, Float, Float, Int) -> Unit
+
+pub fn spawn_shock_ring(Game, Float, Float, Float, Float, Float, Int, Int, Int) -> Unit
 
 pub let station_enemy : Int
 
@@ -396,6 +448,8 @@ pub let station_hp : Float
 
 pub let survive_time_limit : Float
 
+pub let thrust_acceleration : Float
+
 pub let total_missions : Int
 
 pub let two_pi : Float
@@ -403,6 +457,12 @@ pub let two_pi : Float
 pub fn up_dir(Float, Float) -> (Float, Float, Float)
 
 pub fn update_combo(Game, Float) -> Unit
+
+pub let weak_point_damage_mult : Float
+
+pub let weak_point_destroy_damage : Float
+
+pub let weak_point_hit_radius : Float
 
 pub fn weapon_cooldown(WeaponKind) -> Float
 
@@ -429,6 +489,12 @@ pub(all) enum AiState {
   Evade
   Flee
   Formation
+  LineUp
+  FireBurst
+  BreakAway
+  Reposition
+  OvershootRecover
+  PincerFlank
 } derive(Eq)
 
 pub(all) struct Asteroid {
@@ -583,11 +649,12 @@ pub(all) struct Game {
   mut reinforcement_spawned : Bool
   mut mid_event_timer : Float
   mut mid_event_count : Int
-
-  fn new() -> Game
+  shock_rings : Array[ShockRing]
+  mut near_miss_timer : Float
+  mut near_miss_dir_x : Float
+  mut near_miss_dir_y : Float
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   StateMenu
@@ -618,11 +685,8 @@ pub(all) struct MissionObjective {
   mut current_count : Int
   mut complete : Bool
   mut description : String
-
-  fn new(Objective, Int, String) -> MissionObjective
 }
-#deprecated
-pub fn MissionObjective::new(Objective, Int, String) -> Self
+pub fn MissionObjective::MissionObjective(Objective, Int, String) -> Self
 
 pub(all) enum Objective {
   DestroyAll
@@ -663,6 +727,19 @@ pub(all) struct Player {
   mut vx : Float
   mut vy : Float
   mut vz : Float
+  mut ori_fx : Float
+  mut ori_fy : Float
+  mut ori_fz : Float
+  mut ori_ux : Float
+  mut ori_uy : Float
+  mut ori_uz : Float
+  mut ori_rx : Float
+  mut ori_ry : Float
+  mut ori_rz : Float
+  mut ang_vx : Float
+  mut ang_vy : Float
+  mut ang_vz : Float
+  mut flight_assist : Bool
   mut hull : Float
   mut max_hull : Float
   mut shield : Float
@@ -686,11 +763,8 @@ pub(all) struct Player {
   mut kills : Int
   mut shots_fired : Int
   mut shots_hit : Int
-
-  fn new() -> Player
 }
-#deprecated
-pub fn Player::new() -> Self
+pub fn Player::Player() -> Self
 
 pub(all) struct PowerUp {
   mut active : Bool
@@ -737,6 +811,21 @@ pub(all) enum ShipKind {
   Cruiser
   CapitalShip
 } derive(Eq)
+
+pub(all) struct ShockRing {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut radius : Float
+  mut max_radius : Float
+  mut life : Float
+  mut max_life : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+}
+pub fn ShockRing::inactive() -> Self
 
 pub(all) struct SpaceStation {
   mut active : Bool

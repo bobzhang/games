@@ -1,0 +1,140 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/physics_tower/internal/game"
+
+import {
+  "bobzhang/games/physics_tower/internal/types",
+}
+
+// Values
+pub fn apply_combo_bonuses(@types.World, Array[@types.ActiveCombo]) -> Unit
+
+pub fn best_height_for_level(@types.Game, Int) -> Float
+
+pub fn check_combos(@types.World) -> Array[@types.ActiveCombo]
+
+pub fn clear_ghost_tower(@types.Game) -> Unit
+
+pub fn clear_sound_queue(@types.Game) -> Unit
+
+pub fn combo_color(@types.ComboKind) -> (Int, Int, Int)
+
+pub fn combo_description(@types.ComboKind) -> String
+
+pub fn combo_name(@types.ComboKind) -> String
+
+pub fn completion_percentage(@types.Game) -> Int
+
+pub fn count_combos(Array[@types.ActiveCombo]) -> (Int, Int, Int, Int)
+
+pub fn count_sound_events(@types.Game, @types.SoundEvent) -> Int
+
+pub fn emit_break_sounds(@types.Game) -> Unit
+
+pub fn emit_hazard_sounds(@types.Game) -> Unit
+
+pub fn filter_sound_queue(@types.Game, Int) -> Array[@types.SoundEvent]
+
+pub fn get_sound_queue(@types.Game) -> Array[@types.SoundEvent]
+
+pub fn get_tutorial_step_delay() -> Float
+
+pub fn ghost_pieces(@types.Game) -> Array[(@types.PieceKind, @types.Material, Float, Float, Float)]
+
+pub fn ghost_visible(@types.Game) -> Bool
+
+pub fn has_replay(@types.Game) -> Bool
+
+pub fn has_sound_event(@types.Game, @types.SoundEvent) -> Bool
+
+pub fn init_tutorial(@types.Game) -> Unit
+
+pub fn material_usage(@types.Game) -> (Int, Int, Int)
+
+pub fn playback_progress(@types.Game) -> Int
+
+pub fn push_sound(@types.Game, @types.SoundEvent) -> Unit
+
+pub fn record_blueprint(@types.Game, @types.BlueprintKind, Float, Float) -> Unit
+
+pub fn record_breaks(@types.Game, Int) -> Unit
+
+pub fn record_build(@types.Game) -> Unit
+
+pub fn record_challenge_complete(@types.Game) -> Unit
+
+pub fn record_level_result(@types.Game, Int, Float, Int, Bool) -> Unit
+
+pub fn record_piece_placed(@types.Game, @types.Material) -> Unit
+
+pub fn record_place(@types.Game, @types.PieceKind, @types.Material, Float, Float, Float) -> Unit
+
+pub fn record_rotate(@types.Game, Int) -> Unit
+
+pub fn replay_action_count(@types.Game) -> Int
+
+pub fn replay_result_summary(@types.Game) -> String
+
+pub fn reset_tutorial(@types.Game) -> Unit
+
+pub fn save_ghost_tower(@types.Game) -> Unit
+
+pub fn set_playback_speed(@types.Game, Float) -> Unit
+
+pub fn should_show_tutorial(@types.Game) -> Bool
+
+pub fn sound_event_name(@types.SoundEvent) -> String
+
+pub fn sound_event_priority(@types.SoundEvent) -> Int
+
+pub fn stars_for_level(@types.Game, Int) -> Int
+
+pub fn start_playback(@types.Game) -> Unit
+
+pub fn start_recording(@types.Game) -> Unit
+
+pub fn stats_summary(@types.Game) -> Array[String]
+
+pub fn stop_playback(@types.Game) -> Unit
+
+pub fn stop_recording(@types.Game, Float, Int, Bool) -> Unit
+
+pub fn toggle_ghost(@types.Game) -> Unit
+
+pub fn total_stars(@types.Game) -> Int
+
+pub fn tutorial_arrow_pos(@types.Game) -> (Int, Int, Bool)
+
+pub fn tutorial_highlight_rect(@types.Game) -> (Int, Int, Int, Int)
+
+pub fn tutorial_highlight_visible(@types.Game) -> Bool
+
+pub fn tutorial_message(@types.Game) -> String
+
+pub fn tutorial_step_number(@types.Game) -> Int
+
+pub fn tutorial_total() -> Int
+
+pub fn update(@types.Game, Float) -> Unit
+
+pub fn update_game_combos(@types.Game) -> Unit
+
+pub fn update_playback(@types.Game, Float) -> Bool
+
+pub fn update_replay_screen(@types.Game, Float) -> Unit
+
+pub fn update_stats_screen(@types.Game) -> Unit
+
+pub fn update_tutorial(@types.Game, Float) -> Bool
+
+pub fn world_max_stars(Int) -> Int
+
+pub fn world_stars(@types.Game, Int) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

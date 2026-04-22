@@ -1,0 +1,50 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/physics_tower/internal/physics"
+
+import {
+  "bobzhang/games/physics_tower/internal/types",
+}
+
+// Values
+pub fn add_body(@types.World, @types.PieceKind, @types.Material, Float, Float, Float) -> Int
+
+pub fn apply_impact(@types.Body, Float, Float) -> Unit
+
+pub fn auto_join(@types.World, Int) -> Unit
+
+pub fn clear_world(@types.World) -> Unit
+
+pub fn count_active_bodies(@types.World) -> Int
+
+pub fn count_broken_bodies(@types.World) -> Int
+
+pub fn find_body(@types.World, Int) -> @types.Body?
+
+pub fn find_body_at(@types.World, Float, Float) -> @types.Body?
+
+pub fn fire_impact(@types.World, Float) -> Unit
+
+pub fn is_settled(@types.World) -> Bool
+
+pub fn local_to_world(@types.Body, Float, Float) -> (Float, Float)
+
+pub fn measure_tower_height(@types.World) -> Float
+
+pub fn reset_velocities(@types.World) -> Unit
+
+pub fn start_earthquake(@types.World, Float, Float) -> Unit
+
+pub fn start_wind(@types.World, Float) -> Unit
+
+pub fn step(@types.World, Float) -> Unit
+
+pub fn stop_wind(@types.World) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

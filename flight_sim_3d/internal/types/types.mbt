@@ -164,14 +164,11 @@ pub(all) struct Player {
   mut shots_fired : Int
   mut shots_hit : Int
   mut weapon_switch_timer : Float
-
-  fn new() -> Player
 }
 
 ///|
 /// Creates a new player with default fighter stats and starting position.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: 0.0,
     y: 30.0,
@@ -543,14 +540,11 @@ pub(all) struct WeatherState {
   mut cloud_height : Float
   mut rain_intensity : Float
   mut time_of_day : Float
-
-  fn new() -> WeatherState
 }
 
 ///|
 /// Creates a new weather state defaulting to clear skies.
-#deprecated
-pub fn WeatherState::new() -> WeatherState {
+pub fn WeatherState::WeatherState() -> WeatherState {
   {
     kind: Clear,
     visibility: fog_clear_dist,
@@ -749,8 +743,6 @@ pub(all) struct Game {
   mut damage_dir_timer : Float
   floating_damage : Array[FloatingDamage]
   mut weapon_switch_display_timer : Float
-
-  fn new() -> Game
 }
 
 ///|
@@ -766,8 +758,7 @@ pub(all) struct FloatingDamage {
 
 ///|
 /// Creates a new game with default state, entity pools, and all missions.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   let missions = build_missions()
   {
     state: Menu,

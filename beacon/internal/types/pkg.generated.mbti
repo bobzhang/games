@@ -1,0 +1,233 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/beacon/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let anim_speed : Float
+
+pub let base_range : Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_blocked : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_elevation0 : @raylib.Color
+
+pub let color_elevation1 : @raylib.Color
+
+pub let color_elevation2 : @raylib.Color
+
+pub let color_elevation3 : @raylib.Color
+
+pub let color_empty : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hud_dim : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_mountain : @raylib.Color
+
+pub let color_mountain_peak : @raylib.Color
+
+pub let color_receiver : @raylib.Color
+
+pub let color_receiver_lit : @raylib.Color
+
+pub let color_signal : @raylib.Color
+
+pub let color_signal_relay : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_tower : @raylib.Color
+
+pub let color_tower_ghost : @raylib.Color
+
+pub let color_transmitter : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn in_grid(Int, Int) -> Bool
+
+pub let max_elevation : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_game() -> Game
+
+pub fn new_level_progress() -> LevelProgress
+
+pub fn new_level_state(LevelData) -> LevelState
+
+pub fn new_signal_path(Int, Int, Int, Int) -> SignalPath
+
+pub fn new_tile(TileKind, Int) -> Tile
+
+pub let pulse_speed : Float
+
+pub let screen_height : Int
+
+pub fn screen_to_grid_col(Int) -> Int
+
+pub fn screen_to_grid_row(Int) -> Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub let signal_travel_speed : Float
+
+pub fn sinf(Float) -> Float
+
+pub fn star_count(StarRating) -> Int
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tile_center_x(Int) -> Float
+
+pub fn tile_center_y(Int) -> Float
+
+pub fn tile_screen_x(Int) -> Int
+
+pub fn tile_screen_y(Int) -> Int
+
+pub let tile_size : Int
+
+pub let total_levels : Int
+
+pub fn tower_range(Int) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut current_level : Int
+  mut level_data : LevelData?
+  mut level_state : LevelState?
+  mut progress : Array[LevelProgress]
+  mut anim_timer : Float
+  mut message : String
+  mut message_timer : Float
+  mut scroll_offset : Int
+  mut frame_count : Int
+  mut signal_phase : Float
+}
+
+pub(all) struct LevelData {
+  id : Int
+  name : String
+  tier : Int
+  par_towers : Int
+  par_chain : Int
+  budget : Int
+  grid : Array[Array[TileKind]]
+  elevations : Array[Array[Int]]
+}
+
+pub(all) struct LevelProgress {
+  mut completed : Bool
+  mut stars : StarRating
+  mut best_towers : Int
+  mut best_chain : Int
+}
+
+pub(all) struct LevelState {
+  mut grid : Array[Array[Tile]]
+  mut towers_placed : Int
+  mut budget : Int
+  mut all_receivers_lit : Bool
+  mut relay_chain_length : Int
+  mut signal_paths : Array[SignalPath]
+  mut cursor_col : Int
+  mut cursor_row : Int
+  mut hover_valid : Bool
+}
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  Won
+  Failed
+} derive(Eq, Show)
+
+pub(all) struct SignalPath {
+  mut from_col : Int
+  mut from_row : Int
+  mut to_col : Int
+  mut to_row : Int
+  mut progress : Float
+  mut active : Bool
+}
+
+pub(all) enum StarRating {
+  None
+  One
+  Two
+  Three
+} derive(Eq, Show)
+
+pub(all) struct Tile {
+  mut kind : TileKind
+  mut elevation : Int
+  mut has_signal : Bool
+  mut signal_anim : Float
+}
+
+pub(all) enum TileKind {
+  Empty
+  Mountain
+  Transmitter
+  Receiver
+  Tower
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

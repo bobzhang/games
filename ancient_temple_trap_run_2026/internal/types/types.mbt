@@ -91,8 +91,6 @@ pub(all) struct Player {
   h : Float
   mut stamina : Float
   mut dash_on : Bool
-
-  fn new() -> Player
 }
 
 ///|
@@ -218,14 +216,11 @@ pub(all) struct Game {
   /// Number of active touch points this frame (0 on desktop).
   /// When > 0, activates `touch_mode` and enables on-screen controls.
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Create a player at default spawn with full stamina.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: world_x + 90.0,
     y: world_y + world_h - 100.0,
@@ -238,8 +233,7 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Build a fresh game initialized to title state.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     player: Player(),
     relics: [],

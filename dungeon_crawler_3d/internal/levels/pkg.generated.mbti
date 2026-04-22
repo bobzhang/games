@@ -32,6 +32,8 @@ pub fn get_floor_trap_count(Int) -> Int
 
 pub fn get_locked_door_count(Int) -> Int
 
+pub fn get_random_shop_item(Int, Int) -> (Int, Int)
+
 pub fn get_rarity_weight_common(Int) -> Int
 
 pub fn get_rarity_weight_epic(Int) -> Int

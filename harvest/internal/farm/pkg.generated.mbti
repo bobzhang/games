@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/harvest/internal/farm"
+
+import {
+  "bobzhang/games/harvest/internal/types",
+}
+
+// Values
+pub fn advance_season(Array[Array[@types.Plot]], @types.Season) -> Unit
+
+pub fn apply_plan(Array[Array[@types.Plot]], @types.SeasonPlan, @types.Season) -> Int
+
+pub fn average_soil_quality(Array[Array[@types.Plot]]) -> Int
+
+pub fn clear_harvested(Array[Array[@types.Plot]]) -> Unit
+
+pub fn count_state(Array[Array[@types.Plot]], @types.CropState) -> Int
+
+pub fn count_viable_plots(Array[Array[@types.Plot]]) -> Int
+
+pub fn harvest_mature(Array[Array[@types.Plot]], Array[Array[Float]]) -> Int
+
+pub fn plant_crop(@types.Plot, @types.CropKind, @types.Season) -> Bool
+
+pub fn reset_grid(Array[Array[@types.Plot]], Array[Array[(Int, Int, Int)]]) -> Unit
+
+pub fn simulate_year(Array[Array[@types.Plot]], Array[@types.SeasonPlan], Array[Array[Float]]) -> Int
+
+pub fn soil_viable(@types.Soil) -> Bool
+
+pub fn total_mature_value(Array[Array[@types.Plot]]) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

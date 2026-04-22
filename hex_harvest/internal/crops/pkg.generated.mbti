@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/hex_harvest/internal/crops"
+
+import {
+  "bobzhang/games/hex_harvest/internal/types",
+}
+
+// Values
+pub fn adjacency_bonus(@types.HexGrid, Int, Int) -> Int
+
+pub fn adjacency_preview(@types.HexGrid, Int, Int, @types.CropKind) -> Array[(Int, Int)]
+
+pub fn count_crops(@types.HexGrid) -> (Int, Int, Int, Int)
+
+pub fn grow_crops(@types.HexGrid) -> Array[@types.HexCoord]
+
+pub fn harvest_mature(@types.HexGrid) -> (Int, Array[@types.HexCoord])
+
+pub fn projected_yield(@types.HexGrid) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

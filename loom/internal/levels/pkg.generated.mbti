@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/loom/internal/levels"
+
+import {
+  "bobzhang/games/loom/internal/types",
+}
+
+// Values
+pub fn compute_stars(@types.Level, Int, Bool) -> Int
+
+pub fn get_level(Int) -> @types.Level
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

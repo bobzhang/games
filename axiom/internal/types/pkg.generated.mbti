@@ -1,0 +1,382 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/axiom/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn all_goals_collected(Array[Bool]) -> Bool
+
+pub fn calculate_total_stars(Array[Array[LevelScore]]) -> Int
+
+pub fn clone_blocks(Array[Vec2i]) -> Array[Vec2i]
+
+pub fn clone_goals_collected(Array[Bool]) -> Array[Bool]
+
+pub fn clone_robot(Robot) -> Robot
+
+pub let color_bg : @raylib.Color
+
+pub let color_bg_dark : @raylib.Color
+
+pub let color_block : @raylib.Color
+
+pub let color_blue_tile : @raylib.Color
+
+pub let color_bronze : @raylib.Color
+
+pub let color_cmd_if : @raylib.Color
+
+pub let color_cmd_jump : @raylib.Color
+
+pub let color_cmd_loop : @raylib.Color
+
+pub let color_cmd_move : @raylib.Color
+
+pub let color_cmd_push : @raylib.Color
+
+pub let color_cmd_turn : @raylib.Color
+
+pub let color_exec_highlight : @raylib.Color
+
+pub let color_fail : @raylib.Color
+
+pub let color_floor : @raylib.Color
+
+pub let color_gap : @raylib.Color
+
+pub let color_goal : @raylib.Color
+
+pub let color_goal_dim : @raylib.Color
+
+pub let color_gold : @raylib.Color
+
+pub let color_green_tile : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_panel_bg : @raylib.Color
+
+pub let color_red_tile : @raylib.Color
+
+pub let color_robot : @raylib.Color
+
+pub let color_robot_trail : @raylib.Color
+
+pub let color_silver : @raylib.Color
+
+pub let color_slot_active : @raylib.Color
+
+pub let color_slot_bg : @raylib.Color
+
+pub let color_slot_highlight : @raylib.Color
+
+pub let color_start : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_bright : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub let color_wall_shadow : @raylib.Color
+
+pub let color_world1 : @raylib.Color
+
+pub let color_world2 : @raylib.Color
+
+pub let color_world3 : @raylib.Color
+
+pub let color_world4 : @raylib.Color
+
+pub fn condition_name(Condition) -> String
+
+pub fn count_goals_collected(Array[Bool]) -> Int
+
+pub fn dir_delta(Direction) -> Vec2i
+
+pub fn dir_dx(Direction) -> Int
+
+pub fn dir_dy(Direction) -> Int
+
+pub fn dir_name(Direction) -> String
+
+pub fn find_block_index(Array[Vec2i], Int, Int) -> Int
+
+pub fn grid_get(Grid, Int, Int) -> TileKind
+
+pub let grid_height : Int
+
+pub fn grid_in_bounds(Grid, Int, Int) -> Bool
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub fn grid_set(Grid, Int, Int, TileKind) -> Unit
+
+pub let grid_width : Int
+
+pub fn has_block_at(Array[Vec2i], Int, Int) -> Bool
+
+pub fn is_tile_gap(TileKind) -> Bool
+
+pub fn is_tile_solid(TileKind) -> Bool
+
+pub fn is_tile_walkable(TileKind) -> Bool
+
+pub let levels_per_world : Int
+
+pub fn make_robot_state(Robot, Array[Bool], Array[Vec2i], Int) -> RobotState
+
+pub let max_instructions : Int
+
+pub let max_steps : Int
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn medal_from_instructions(Int, Int, Int) -> Medal
+
+pub fn medal_stars(Medal) -> Int
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_editor_state(Array[CommandKind]) -> EditorState
+
+pub fn new_game() -> Game
+
+pub fn new_grid(Int, Int) -> Grid
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_program() -> Program
+
+pub fn new_robot(Int, Int, Direction) -> Robot
+
+pub let num_worlds : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub let program_panel_width : Int
+
+pub let program_panel_x : Int
+
+pub let program_panel_y : Int
+
+pub let program_slot_height : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub fn tile_center_x(Int) -> Int
+
+pub fn tile_center_y(Int) -> Int
+
+pub fn tile_color_name(TileColor) -> String
+
+pub fn tile_screen_x(Int) -> Int
+
+pub fn tile_screen_y(Int) -> Int
+
+pub let tile_size : Int
+
+pub fn turn_left(Direction) -> Direction
+
+pub fn turn_right(Direction) -> Direction
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+pub fn vec2i_add(Vec2i, Vec2i) -> Vec2i
+
+pub fn vec2i_eq(Vec2i, Vec2i) -> Bool
+
+pub fn world_color(Int) -> @raylib.Color
+
+pub fn world_name(Int) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct Command {
+  mut kind : CommandKind
+} derive(Show)
+
+pub(all) enum CommandKind {
+  Move
+  TurnLeft
+  TurnRight
+  Jump
+  Push
+  If(Condition)
+  Loop(Int)
+} derive(Eq, Show)
+
+pub(all) enum Condition {
+  PathAhead
+  WallAhead
+  AtGoal
+  OnColor(TileColor)
+} derive(Eq, Show)
+
+pub(all) enum Direction {
+  North
+  South
+  East
+  West
+} derive(Eq, Show)
+
+pub(all) struct EditorState {
+  mut cursor : Int
+  mut palette_cursor : Int
+  mut palette_open : Bool
+  mut palette_commands : Array[CommandKind]
+  mut loop_count : Int
+  mut condition_index : Int
+} derive(Show)
+
+pub(all) struct ExecutionTrace {
+  mut states : Array[RobotState]
+  mut success : Bool
+  mut fail_reason : String
+} derive(Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut current_world : Int
+  mut current_level : Int
+  mut level : Level?
+  mut level_def : LevelDef?
+  mut program : Program
+  mut editor : EditorState
+  mut run_state : RunState
+  mut trace : ExecutionTrace?
+  mut trace_step : Int
+  mut trace_timer : Float
+  mut run_speed : Int
+  mut scores : Array[Array[LevelScore]]
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut title_anim : Float
+  mut total_stars : Int
+} derive(Show)
+
+pub(all) struct Grid {
+  mut tiles : Array[Array[Tile]]
+  mut width : Int
+  mut height : Int
+} derive(Show)
+
+pub(all) struct Level {
+  mut grid : Grid
+  mut robot : Robot
+  mut goals : Array[Vec2i]
+  mut goals_collected : Array[Bool]
+  mut blocks : Array[Vec2i]
+} derive(Show)
+
+pub(all) struct LevelDef {
+  world : Int
+  index : Int
+  name : String
+  ascii : Array[String]
+  start_x : Int
+  start_y : Int
+  start_dir : Direction
+  par : Int
+  optimal : Int
+  hint : String
+  available_commands : Array[CommandKind]
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut best_instructions : Int
+  mut medal : Medal
+} derive(Show)
+
+pub(all) enum Medal {
+  None_
+  Bronze
+  Silver
+  Gold
+} derive(Eq, Show)
+
+pub(all) struct Program {
+  mut commands : Array[Command]
+  mut max_slots : Int
+} derive(Show)
+
+pub(all) struct Robot {
+  mut pos : Vec2i
+  mut dir : Direction
+  mut alive : Bool
+} derive(Show)
+
+pub(all) struct RobotState {
+  mut pos : Vec2i
+  mut dir : Direction
+  mut alive : Bool
+  mut goals_collected : Array[Bool]
+  mut blocks : Array[Vec2i]
+  mut cmd_index : Int
+} derive(Show)
+
+pub(all) enum RunState {
+  Editing
+  Running
+  Stepping
+  Complete
+  Failed(String)
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  WorldSelect
+  LevelSelect
+  Programming
+  Results
+  Sandbox
+} derive(Eq, Show)
+
+pub(all) struct Tile {
+  mut kind : TileKind
+} derive(Show)
+
+pub(all) enum TileColor {
+  Red
+  Blue
+  Green
+} derive(Eq, Show)
+
+pub(all) enum TileKind {
+  Floor
+  Wall
+  Gap
+  Goal
+  ColorTile(TileColor)
+  Block
+  Start
+} derive(Eq, Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

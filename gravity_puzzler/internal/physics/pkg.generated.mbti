@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/physics"
+
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+// Values
+pub fn rotate_gravity(@types.Level, @types.Game, @types.GravityDir) -> Unit
+
+pub fn settle_all(@types.Level) -> Bool
+
+pub fn step_gravity(@types.Level) -> Bool
+
+pub fn try_move_player(@types.Level, @types.Game, Int, Int) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

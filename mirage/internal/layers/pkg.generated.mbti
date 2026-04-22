@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/mirage/internal/layers"
+
+import {
+  "bobzhang/games/mirage/internal/types",
+}
+
+// Values
+pub fn activate_switch(@types.Game, Int) -> Unit
+
+pub fn active_tiles(@types.Game) -> Array[@types.Tile]
+
+pub fn calc_stars(Int, Int, Bool) -> Int
+
+pub fn can_walk(@types.Game, Int, Int) -> Bool
+
+pub fn check_exit(@types.Game) -> Bool
+
+pub fn check_gem(@types.Game) -> Bool
+
+pub fn check_switch(@types.Game) -> Int
+
+pub fn collect_gem(@types.Game) -> Unit
+
+pub fn inactive_tiles(@types.Game) -> Array[@types.Tile]
+
+pub fn swap_layer(@types.Game) -> Unit
+
+pub fn toggle_merge(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

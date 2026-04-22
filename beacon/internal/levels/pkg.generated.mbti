@@ -1,0 +1,74 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/beacon/internal/levels"
+
+import {
+  "bobzhang/games/beacon/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.LevelData
+
+pub fn level_01() -> @types.LevelData
+
+pub fn level_02() -> @types.LevelData
+
+pub fn level_03() -> @types.LevelData
+
+pub fn level_04() -> @types.LevelData
+
+pub fn level_05() -> @types.LevelData
+
+pub fn level_06() -> @types.LevelData
+
+pub fn level_07() -> @types.LevelData
+
+pub fn level_08() -> @types.LevelData
+
+pub fn level_09() -> @types.LevelData
+
+pub fn level_10() -> @types.LevelData
+
+pub fn level_11() -> @types.LevelData
+
+pub fn level_12() -> @types.LevelData
+
+pub fn level_13() -> @types.LevelData
+
+pub fn level_14() -> @types.LevelData
+
+pub fn level_15() -> @types.LevelData
+
+pub fn level_16() -> @types.LevelData
+
+pub fn level_17() -> @types.LevelData
+
+pub fn level_18() -> @types.LevelData
+
+pub fn level_19() -> @types.LevelData
+
+pub fn level_20() -> @types.LevelData
+
+pub fn level_21() -> @types.LevelData
+
+pub fn level_22() -> @types.LevelData
+
+pub fn level_23() -> @types.LevelData
+
+pub fn level_24() -> @types.LevelData
+
+pub fn level_25() -> @types.LevelData
+
+pub fn tier_level_count(Int) -> Int
+
+pub fn tier_name(Int) -> String
+
+pub fn tier_start_index(Int) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

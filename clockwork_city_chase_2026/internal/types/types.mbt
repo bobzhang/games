@@ -36,8 +36,6 @@ pub(all) struct Obj {
   mut spin : Float
   mut cloak : Bool
   mut reward : Int
-
-  fn new() -> Obj
 }
 
 ///|
@@ -52,8 +50,6 @@ pub(all) struct Shot {
   mut life : Float
   mut dmg : Float
   mut kind : Int
-
-  fn new() -> Shot
 }
 
 ///|
@@ -67,8 +63,6 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Spark
 }
 
 ///|
@@ -80,8 +74,6 @@ pub(all) struct ShockRing {
   mut r : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> ShockRing
 }
 
 ///|
@@ -95,8 +87,6 @@ pub(all) struct Ghost {
   mut rot : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Ghost
 }
 
 ///|
@@ -113,8 +103,6 @@ pub(all) struct Player {
   mut hurt_t : Float
   mut muzzle_t : Float
   mut engine_t : Float
-
-  fn new() -> Player
 }
 
 ///|
@@ -164,14 +152,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a default Obj value for a new session.
-#deprecated
-pub fn Obj::new() -> Obj {
+pub fn Obj::Obj() -> Obj {
   {
     active: false,
     kind: Scout,
@@ -192,8 +177,7 @@ pub fn Obj::new() -> Obj {
 
 ///|
 /// Creates a default Shot value for a new session.
-#deprecated
-pub fn Shot::new() -> Shot {
+pub fn Shot::Shot() -> Shot {
   {
     active: false,
     from_player: true,
@@ -209,8 +193,7 @@ pub fn Shot::new() -> Shot {
 
 ///|
 /// Creates a default Spark value for a new session.
-#deprecated
-pub fn Spark::new() -> Spark {
+pub fn Spark::Spark() -> Spark {
   {
     active: false,
     x: 0.0,
@@ -225,15 +208,13 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates a default ShockRing value for a new session.
-#deprecated
-pub fn ShockRing::new() -> ShockRing {
+pub fn ShockRing::ShockRing() -> ShockRing {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates a default Ghost value for a new session.
-#deprecated
-pub fn Ghost::new() -> Ghost {
+pub fn Ghost::Ghost() -> Ghost {
   {
     active: false,
     x: 0.0,
@@ -248,8 +229,7 @@ pub fn Ghost::new() -> Ghost {
 
 ///|
 /// Creates a default Player value for a new session.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: Float::from_int(screen_w / 2),
     y: Float::from_int(screen_h) * 0.76,
@@ -267,8 +247,7 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a default Game value for a new session.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     objs: Array::makei(max_objs, fn(_i) { Obj() }),
     shots: Array::makei(max_shots, fn(_i) { Shot() }),

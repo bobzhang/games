@@ -31,8 +31,6 @@ pub(all) struct Obj {
   mut cloak : Bool
   mut spin : Float
   mut life : Float
-
-  fn new() -> Obj
 }
 
 ///|
@@ -46,8 +44,6 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Particle
 }
 
 ///|
@@ -59,8 +55,6 @@ pub(all) struct Ripple {
   mut r : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Ripple
 }
 
 ///|
@@ -73,8 +67,6 @@ pub(all) struct Trail {
   mut h : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Trail
 }
 
 ///|
@@ -88,8 +80,6 @@ pub(all) struct Player {
   mut invuln : Float
   mut hurt_t : Float
   mut anim_t : Float
-
-  fn new() -> Player
 }
 
 ///|
@@ -249,14 +239,11 @@ pub(all) struct Game {
   /// Number of active touch points this frame (0 on desktop).
   /// When > 0, activates `touch_mode` and enables on-screen controls.
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive object slot for the object pool.
-#deprecated
-pub fn Obj::new() -> Obj {
+pub fn Obj::Obj() -> Obj {
   {
     active: false,
     kind: Rock,
@@ -273,8 +260,7 @@ pub fn Obj::new() -> Obj {
 
 ///|
 /// Creates an inactive particle slot for the particle pool.
-#deprecated
-pub fn Particle::new() -> Particle {
+pub fn Particle::Particle() -> Particle {
   {
     active: false,
     x: 0.0,
@@ -289,22 +275,19 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates an inactive ripple slot for the ripple pool.
-#deprecated
-pub fn Ripple::new() -> Ripple {
+pub fn Ripple::Ripple() -> Ripple {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates an inactive trail slot for the trail pool.
-#deprecated
-pub fn Trail::new() -> Trail {
+pub fn Trail::Trail() -> Trail {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates a player initialized at the default on-screen start position.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: Float::from_int(screen_w / 2),
     y: Float::from_int(screen_h) * 0.72,
@@ -319,8 +302,7 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a new game state with initialized pools and stage counters.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     objs: Array::makei(max_objs, fn(_i) { Obj() }),
     particles: Array::makei(max_particles, fn(_i) { Particle() }),

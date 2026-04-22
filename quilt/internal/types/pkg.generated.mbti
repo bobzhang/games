@@ -1,0 +1,246 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/quilt/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn all_patterns() -> Array[EdgePattern]
+
+pub fn board_get(Board, Int, Int) -> Patch?
+
+pub fn board_set(Board, Int, Int, Patch?) -> Unit
+
+pub let cell_size_3x3 : Int
+
+pub let cell_size_4x4 : Int
+
+pub let cell_size_5x5 : Int
+
+pub fn cell_size_for(Int) -> Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_diamonds : @raylib.Color
+
+pub let color_dots : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_matched : @raylib.Color
+
+pub let color_mismatched : @raylib.Color
+
+pub let color_patch_base : @raylib.Color
+
+pub let color_pinned : @raylib.Color
+
+pub let color_progress_bg : @raylib.Color
+
+pub let color_progress_fill : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_stars : @raylib.Color
+
+pub let color_stripes : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_light : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_tray_bg : @raylib.Color
+
+pub let color_waves : @raylib.Color
+
+pub let color_wildcard : @raylib.Color
+
+pub let color_zigzag : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn edges_match(EdgePattern, Bool, EdgePattern, Bool) -> Bool
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_board(Int) -> Board
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_patch(EdgePattern, EdgePattern, EdgePattern, EdgePattern) -> Patch
+
+pub fn new_patch_pinned(EdgePattern, EdgePattern, EdgePattern, EdgePattern) -> Patch
+
+pub fn new_patch_wildcard(EdgePattern, EdgePattern, EdgePattern, EdgePattern, Bool, Bool, Bool, Bool) -> Patch
+
+pub fn pattern_at(Int) -> EdgePattern
+
+pub fn pattern_color(EdgePattern) -> @raylib.Color
+
+pub fn pattern_name(EdgePattern) -> String
+
+pub fn rng_float() -> Float
+
+pub fn rng_int(Int) -> Int
+
+pub fn rng_next() -> Int
+
+pub fn rotate_patch(Patch) -> Patch
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn seed_rng(Int) -> Unit
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_levels(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub let tray_cols : Int
+
+pub let tray_gap : Int
+
+pub let tray_patch_size : Int
+
+pub let tray_x : Int
+
+pub let tray_y : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Board {
+  size : Int
+  cells : Array[Patch?]
+} derive(Show)
+
+pub(all) enum Direction {
+  North
+  East
+  South
+  West
+} derive(Eq, Show)
+
+pub(all) enum EdgePattern {
+  Zigzag
+  Dots
+  Stripes
+  Waves
+  Diamonds
+  Stars
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut board : Board
+  mut tray : Array[Patch]
+  mut selected_tray : Int
+  mut selected_board : Int
+  mut play_state : PlayState
+  mut rotations : Int
+  mut swaps : Int
+  mut current_level : Int
+  mut current_tier : Tier
+  mut level_scores : Array[LevelScore]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut daily_seed : Int
+  mut is_daily : Bool
+  mut daily_score : LevelScore
+  mut anim_timer : Float
+  mut tier_select_index : Int
+}
+
+pub(all) struct Level {
+  board_size : Int
+  patches : Array[Patch]
+  pinned_positions : Array[Int]
+  pinned_patches : Array[Patch]
+  par_rotations : Int
+  par_swaps : Int
+  tier : Tier
+  level_num : Int
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut best_rotations : Int
+  mut best_swaps : Int
+} derive(Show)
+
+pub(all) struct Patch {
+  edges : Array[EdgePattern]
+  wildcard_edges : Array[Bool]
+  pinned : Bool
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  Placing
+  Selecting
+  Swapping
+  Complete
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+  Daily
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Scraps
+  Quilting
+  Masterwork
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

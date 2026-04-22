@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/pendulum/internal/physics"
+
+import {
+  "bobzhang/games/pendulum/internal/types",
+}
+
+// Values
+pub fn check_goal_on_swing(@types.Weight, @types.Vec2i) -> Unit
+
+pub fn check_peg_wrap(@types.Vec2i, @types.Vec2i, Array[@types.Vec2i], Array[@types.Vec2i]) -> @types.Vec2i?
+
+pub fn compute_arc(@types.Vec2i, Int) -> Array[@types.ArcPoint]
+
+pub fn compute_new_rope_length(@types.Vec2i, @types.Vec2i) -> Int
+
+pub fn compute_stars(Int, Int, Int, Int) -> Int
+
+pub fn compute_swing_extent(Array[@types.ArcPoint], Int) -> (Int, Int)
+
+pub fn cut_rope(@types.Weight, @types.Rope, Array[@types.ArcPoint]) -> Unit
+
+pub fn find_bottom_index(Array[@types.ArcPoint]) -> Int
+
+pub fn tick_swing(@types.Weight, @types.Rope, Array[@types.ArcPoint], Array[@types.Vec2i], Array[@types.Vec2i], @types.Vec2i, Array[@types.Vec2i], Array[Bool]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -92,14 +92,11 @@ pub(all) struct Game {
   mut hint_t : Float
   mut msg : String
   mut msg_t : Float
-
-  fn new() -> Game
 }
 
 ///|
 /// Allocates a new level-1 game state with default counters.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     board: Array::makei(cell_count, fn(_i) { Gem::empty() }),
     state: Title,

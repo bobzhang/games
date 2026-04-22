@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/harvest/internal/game"
+
+import {
+  "bobzhang/games/harvest/internal/types",
+}
+
+// Values
+pub fn is_level_unlocked(@types.Game, Int) -> Bool
+
+pub fn update(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

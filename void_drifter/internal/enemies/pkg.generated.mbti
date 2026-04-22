@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/void_drifter/internal/enemies"
+
+import {
+  "bobzhang/games/void_drifter/internal/types",
+}
+
+// Values
+pub fn enemy_shape_sides(@types.EnemyKind) -> Int
+
+pub fn spawn_enemy(@types.Game, @types.EnemyKind, Float, Float) -> Unit
+
+pub fn spawn_wave(@types.Game, Int, @types.SectorKind) -> Unit
+
+pub fn update_enemy_ai(@types.Game, @types.Enemy, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

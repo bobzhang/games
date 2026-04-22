@@ -10,14 +10,11 @@ pub(all) struct Traffic {
   mut h : Float
   mut kind : TrafficKind
   mut phase : Float
-
-  fn new() -> Traffic
 }
 
 ///|
 /// Creates an inactive traffic entity with default values.
-#deprecated
-pub fn Traffic::new() -> Traffic {
+pub fn Traffic::Traffic() -> Traffic {
   {
     active: false,
     x: 0.0,
@@ -42,14 +39,11 @@ pub(all) struct Order {
   mut y_to : Float
   mut timer : Float
   mut value : Int
-
-  fn new() -> Order
 }
 
 ///|
 /// Creates an inactive order entity with default values.
-#deprecated
-pub fn Order::new() -> Order {
+pub fn Order::Order() -> Order {
   {
     active: false,
     picked: false,
@@ -72,14 +66,11 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
-
-  fn new() -> Pickup
 }
 
 ///|
 /// Creates an inactive pickup entity with default values.
-#deprecated
-pub fn Pickup::new() -> Pickup {
+pub fn Pickup::Pickup() -> Pickup {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Fuel, phase: 0.0 }
 }
 
@@ -94,14 +85,11 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Particle
 }
 
 ///|
 /// Creates an inactive particle entity with default values.
-#deprecated
-pub fn Particle::new() -> Particle {
+pub fn Particle::Particle() -> Particle {
   {
     active: false,
     x: 0.0,
@@ -161,14 +149,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a new game state with preallocated object pools.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     traffic: Array::makei(max_traffic, fn(_i) { Traffic() }),
     orders: Array::makei(max_orders, fn(_i) { Order() }),

@@ -1,0 +1,253 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cipher/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let alphabet_size : Int
+
+pub fn apply_mapping_to_text(String, Mapping) -> String
+
+pub fn assign_mapping(Mapping, Int, Int) -> UndoEntry
+
+pub fn calc_stars(Int, Int, Int) -> Int
+
+pub let char_cell_h : Int
+
+pub let char_cell_w : Int
+
+pub fn char_to_idx(Char) -> Int
+
+pub fn check_solution(String, String, Mapping) -> Bool
+
+pub fn clear_mapping(Mapping) -> Unit
+
+pub let color_amber : @raylib.Color
+
+pub let color_bar_cipher : @raylib.Color
+
+pub let color_bar_english : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_cyan : @raylib.Color
+
+pub let color_dark_green : @raylib.Color
+
+pub let color_dim : @raylib.Color
+
+pub let color_green : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_panel_border : @raylib.Color
+
+pub let color_red : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_white : @raylib.Color
+
+pub fn copy_mapping(Mapping) -> Mapping
+
+pub fn count_correct(String, String, Mapping) -> Int
+
+pub fn count_unique_letters(String) -> Int
+
+pub let english_freq : Array[Float]
+
+pub fn idx_to_char(Int) -> Char
+
+pub fn is_position_in_pattern(Game, Int, String) -> Bool
+
+pub fn is_upper(Char) -> Bool
+
+pub fn mapping_complete(Mapping) -> Bool
+
+pub let max_undo : Int
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn mini(Int, Int) -> Int
+
+pub let msg_area_w : Int
+
+pub let msg_area_x : Int
+
+pub let msg_area_y : Int
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_mapping() -> Mapping
+
+pub let pattern_content_offset_y : Int
+
+pub let pattern_max_show : Int
+
+pub let pattern_row_height : Int
+
+pub let pattern_row_top : Int
+
+pub fn reset_for_level(Game) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn sinf(Float) -> Float
+
+pub fn str_char_at(String, Int) -> Char
+
+pub let strip_cell_h : Int
+
+pub let strip_cell_w : Int
+
+pub let strip_x : Int
+
+pub let strip_y_offset : Int
+
+pub let swap_cell_gap : Int
+
+pub let swap_cell_size : Int
+
+pub let swap_cols : Int
+
+pub let swap_grid_inset_x : Int
+
+pub let swap_grid_offset_y : Int
+
+pub let target_fps : Int
+
+pub fn tier_for_level(Int) -> Tier
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub let tool_content_offset_y : Int
+
+pub let tool_panel_w : Int
+
+pub let tool_panel_x : Int
+
+pub let tool_panel_y : Int
+
+pub let tool_tab_h : Int
+
+pub fn undo_mapping(Mapping, UndoEntry) -> Unit
+
+pub let unmapped : Int
+
+// Errors
+
+// Types and methods
+pub(all) enum CipherKind {
+  Caesar
+  Substitution
+  Vigenere
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut play_state : PlayState
+  mut current_level : Int
+  mapping : Mapping
+  mut undo_stack : Array[UndoEntry]
+  mut swap_count : Int
+  mut hints_used : Int
+  mut selected_cipher_letter : Int
+  mut active_tool : Tool
+  mut frame_count : Int
+  mut scroll_offset : Int
+  mut message_flash_timer : Float
+  mut result_timer : Float
+  level_scores : Array[LevelScore]
+  mut cached_patterns : Array[PatternMatch]
+  mut patterns_dirty : Bool
+  mut selected_pattern_idx : Int
+} derive(Show)
+
+pub(all) struct Level {
+  id : Int
+  tier : Tier
+  cipher_kind : CipherKind
+  plaintext : String
+  ciphertext : String
+  key_info : String
+  par_swaps : Int
+  hint_text : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : Int
+  mut best_swaps : Int
+  mut best_no_hints : Bool
+} derive(Show)
+
+pub(all) struct Mapping {
+  cipher_to_plain : Array[Int]
+  plain_used : Array[Bool]
+} derive(Show)
+
+pub(all) struct PatternMatch {
+  pattern : String
+  positions : Array[Int]
+  count : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Solving
+  Solved
+  GaveUp
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Recruit
+  Agent
+  Cryptographer
+} derive(Eq, Show)
+
+pub(all) enum Tool {
+  FrequencyChart
+  LetterSwap
+  PatternFinder
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  cipher_idx : Int
+  old_plain : Int
+  old_displaced_cipher : Int
+  old_displaced_plain : Int
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

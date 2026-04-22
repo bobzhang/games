@@ -1,0 +1,298 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/terrarium/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn abs_float(Float) -> Float
+
+pub let cell_size : Int
+
+pub fn clamp_float(Float, Float, Float) -> Float
+
+pub fn clamp_resources(Resources) -> Unit
+
+pub fn clear_grid(Game) -> Unit
+
+pub fn clone_resources(Resources) -> Resources
+
+pub let color_alive : @raylib.Color
+
+pub let color_bar_bg : @raylib.Color
+
+pub let color_beetle : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_co2 : @raylib.Color
+
+pub let color_dead : @raylib.Color
+
+pub let color_empty_cell : @raylib.Color
+
+pub let color_fern : @raylib.Color
+
+pub let color_fungus : @raylib.Color
+
+pub let color_hover : @raylib.Color
+
+pub let color_hud_dim : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_jar : @raylib.Color
+
+pub let color_jar_border : @raylib.Color
+
+pub let color_locked : @raylib.Color
+
+pub let color_moss : @raylib.Color
+
+pub let color_nutrients : @raylib.Color
+
+pub let color_o2 : @raylib.Color
+
+pub let color_ok : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_snail : @raylib.Color
+
+pub let color_soil : @raylib.Color
+
+pub let color_soil_dark : @raylib.Color
+
+pub let color_star : @raylib.Color
+
+pub let color_star_off : @raylib.Color
+
+pub let color_subtitle : @raylib.Color
+
+pub let color_tier1 : @raylib.Color
+
+pub let color_tier2 : @raylib.Color
+
+pub let color_tier3 : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_warn : @raylib.Color
+
+pub let color_water : @raylib.Color
+
+pub let color_worm : @raylib.Color
+
+pub fn compute_stars(Int, Int) -> Int
+
+pub fn count_organism_on_grid(Game, OrganismKind) -> Int
+
+pub fn get_available_count(Game, OrganismKind) -> Int
+
+pub fn get_profile(OrganismKind) -> OrganismProfile
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_size : Int
+
+pub let hud_x : Int
+
+pub let hud_y : Int
+
+pub fn in_grid(Int, Int) -> Bool
+
+pub fn is_cell_locked(LevelDef, Int, Int) -> Bool
+
+pub fn is_level_unlocked(Array[LevelScore], Int) -> Bool
+
+pub fn levels_completed(Array[LevelScore]) -> Int
+
+pub let levels_per_tier : Int
+
+pub let max_resource : Float
+
+pub let max_turns : Int
+
+pub let min_resource_warn : Float
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_resources(Float, Float, Float, Float) -> Resources
+
+pub let num_organisms : Int
+
+pub let num_resources : Int
+
+pub let num_tiers : Int
+
+pub fn organism_color(OrganismKind) -> @raylib.Color
+
+pub fn organism_from_index(Int) -> OrganismKind
+
+pub fn organism_index(OrganismKind) -> Int
+
+pub fn organism_symbol(OrganismKind) -> String
+
+pub let palette_gap : Int
+
+pub let palette_slot_size : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub let resource_bar_height : Int
+
+pub let resource_bar_width : Int
+
+pub fn resource_color(ResourceKind) -> @raylib.Color
+
+pub fn resource_name(ResourceKind) -> String
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub fn total_stars(Array[LevelScore]) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) enum CellContent {
+  Empty
+  Organism(OrganismKind)
+} derive(Eq, Show, ToJson)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_level : Int
+  grid : Array[Array[CellContent]]
+  mut resources : Resources
+  mut organisms : Array[OrganismState]
+  mut current_turn : Int
+  mut play_result : PlayResult
+  mut selected_organism : OrganismKind?
+  mut hover_row : Int
+  mut hover_col : Int
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut scores : Array[LevelScore]
+  mut current_level : LevelDef?
+  mut sim_log : Array[SimTurnLog]
+  mut sim_speed_timer : Float
+  mut organisms_placed : Array[Int]
+  mut anim_timer : Float
+} derive(Show)
+
+pub(all) struct LevelDef {
+  id : Int
+  name : String
+  tier : Tier
+  description : String
+  initial_resources : Resources
+  available_organisms : Array[OrganismKind]
+  organism_counts : Array[Int]
+  par_turns : Int
+  locked_cells : Array[(Int, Int)]
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut best_turns_survived : Int
+  mut stars : Int
+} derive(Show)
+
+pub(all) enum OrganismKind {
+  Moss
+  Fern
+  Beetle
+  Snail
+  Fungus
+  Worm
+} derive(Eq, Show, ToJson)
+
+pub(all) struct OrganismProfile {
+  kind : OrganismKind
+  name : String
+  category : String
+  o2_delta : Float
+  co2_delta : Float
+  water_delta : Float
+  nutrient_delta : Float
+  min_water : Float
+  min_o2 : Float
+  min_co2 : Float
+  min_nutrients : Float
+} derive(Show)
+
+pub(all) struct OrganismState {
+  kind : OrganismKind
+  row : Int
+  col : Int
+  mut alive : Bool
+  mut health : Float
+} derive(Show, ToJson)
+
+pub(all) enum PlayResult {
+  None
+  Victory
+  Failure(String)
+} derive(Eq, Show)
+
+pub(all) enum ResourceKind {
+  O2
+  CO2
+  Water
+  Nutrients
+} derive(Eq, Show, ToJson)
+
+pub(all) struct Resources {
+  mut o2 : Float
+  mut co2 : Float
+  mut water : Float
+  mut nutrients : Float
+} derive(Show, ToJson)
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  Simulating
+  Results
+} derive(Eq, Show)
+
+pub(all) struct SimTurnLog {
+  turn : Int
+  events : Array[String]
+  resources_after : Resources
+  organisms_alive : Int
+} derive(Show)
+
+pub(all) enum Tier {
+  Beginner
+  Intermediate
+  Advanced
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

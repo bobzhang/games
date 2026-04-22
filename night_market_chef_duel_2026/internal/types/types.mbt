@@ -40,8 +40,6 @@ pub(all) struct Order {
   mut patience_max : Float
   mut reward : Int
   mut ticket_no : Int
-
-  fn new() -> Order
 }
 
 ///|
@@ -55,8 +53,6 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
-
-  fn new() -> InputState
 }
 
 ///|
@@ -68,8 +64,6 @@ pub(all) struct CookingState {
   mut stage : CookStage
   mut prep_progress : Float
   mut cook_progress : Float
-
-  fn new() -> CookingState
 }
 
 ///|
@@ -96,14 +90,11 @@ pub(all) struct Game {
   mut boost_cd : Float
   mut flash_t : Float
   mut shake_t : Float
-
-  fn new() -> Game
 }
 
 ///|
 /// Create an inactive order slot.
-#deprecated
-pub fn Order::new() -> Order {
+pub fn Order::Order() -> Order {
   {
     active: false,
     dish: Skewers,
@@ -116,8 +107,7 @@ pub fn Order::new() -> Order {
 
 ///|
 /// Create an empty input snapshot with no key presses.
-#deprecated
-pub fn InputState::new() -> InputState {
+pub fn InputState::InputState() -> InputState {
   {
     move_x: 0,
     move_y: 0,
@@ -132,8 +122,7 @@ pub fn InputState::new() -> InputState {
 
 ///|
 /// Create a cleared cooking pipeline state.
-#deprecated
-pub fn CookingState::new() -> CookingState {
+pub fn CookingState::CookingState() -> CookingState {
   {
     active: false,
     dish: DishNone,
@@ -146,8 +135,7 @@ pub fn CookingState::new() -> CookingState {
 
 ///|
 /// Build a fresh run at title state with empty orders.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     orders: Array::makei(max_orders, fn(_i) { Order() }),
     input: InputState(),

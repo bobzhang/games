@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/physics_tower/internal/upgrades"
+
+import {
+  "bobzhang/games/physics_tower/internal/types",
+}
+
+// Values
+pub fn apply_body_upgrades(@types.Game, @types.Body) -> Unit
+
+pub fn apply_joint_upgrades(@types.Game, @types.Joint) -> Unit
+
+pub fn available_upgrade_count(@types.Game) -> Int
+
+pub fn effective_joint_strength(@types.Game, @types.JointKind) -> Float
+
+pub fn effective_mass(@types.Game, @types.Material) -> Float
+
+pub fn effective_strength(@types.Game, @types.Material) -> Float
+
+pub fn is_immovable(@types.Game, @types.Body) -> Bool
+
+pub fn is_mass_upgrade(@types.UpgradeKind) -> Bool
+
+pub fn is_stress_upgrade(@types.UpgradeKind) -> Bool
+
+pub fn purchase_upgrade(@types.Game, Int) -> Bool
+
+pub fn purchased_upgrade_count(@types.Game) -> Int
+
+pub fn reset_upgrades(@types.Game) -> Unit
+
+pub fn upgrade_display_info(@types.Upgrade, Int) -> (String, String, Bool)
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/drift_protocol/internal/game"
+
+import {
+  "bobzhang/games/drift_protocol/internal/types",
+}
+
+// Values
+pub fn all_levels_complete(@types.Game) -> Bool
+
+pub fn best_grade(@types.Game) -> @types.ScoreGrade
+
+pub fn calculate_score(@types.Game) -> @types.LevelScore
+
+pub fn process_hack_input(@types.Game) -> Unit
+
+pub fn process_input(@types.Game, Float) -> Unit
+
+pub fn process_level_select_input(@types.Game) -> Unit
+
+pub fn process_pause_input(@types.Game) -> Unit
+
+pub fn process_results_input(@types.Game) -> Unit
+
+pub fn process_title_input(@types.Game) -> Unit
+
+pub fn process_victory_input(@types.Game) -> Unit
+
+pub fn start_level(@types.Game, Int) -> Unit
+
+pub fn total_score(@types.Game) -> Int
+
+pub fn update(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

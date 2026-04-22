@@ -26,8 +26,6 @@ pub(all) struct Foe {
   mut shot_cd : Float
   mut reward : Int
   mut marked : Bool
-
-  fn new() -> Foe
 }
 
 ///|
@@ -41,8 +39,6 @@ pub(all) struct Bolt {
   mut life : Float
   mut dmg : Float
   mut kind : Int
-
-  fn new() -> Bolt
 }
 
 ///|
@@ -56,8 +52,6 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Spark
 }
 
 ///|
@@ -69,8 +63,6 @@ pub(all) struct Ring {
   mut r : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Ring
 }
 
 ///|
@@ -83,8 +75,6 @@ pub(all) struct Echo {
   mut h : Float
   mut life : Float
   mut rot : Float
-
-  fn new() -> Echo
 }
 
 ///|
@@ -103,8 +93,6 @@ pub(all) struct Hero {
   mut hurt_t : Float
   mut aura_t : Float
   mut anim_t : Float
-
-  fn new() -> Hero
 }
 
 ///|
@@ -158,14 +146,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive foe record with default values.
-#deprecated
-pub fn Foe::new() -> Foe {
+pub fn Foe::Foe() -> Foe {
   {
     active: false,
     kind: Wisp,
@@ -187,8 +172,7 @@ pub fn Foe::new() -> Foe {
 
 ///|
 /// Creates an inactive bolt record.
-#deprecated
-pub fn Bolt::new() -> Bolt {
+pub fn Bolt::Bolt() -> Bolt {
   {
     active: false,
     x: 0.0,
@@ -203,8 +187,7 @@ pub fn Bolt::new() -> Bolt {
 
 ///|
 /// Creates an inactive spark effect record.
-#deprecated
-pub fn Spark::new() -> Spark {
+pub fn Spark::Spark() -> Spark {
   {
     active: false,
     x: 0.0,
@@ -219,22 +202,19 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates an inactive ring effect record.
-#deprecated
-pub fn Ring::new() -> Ring {
+pub fn Ring::Ring() -> Ring {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates an inactive echo effect record.
-#deprecated
-pub fn Echo::new() -> Echo {
+pub fn Echo::Echo() -> Echo {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0 }
 }
 
 ///|
 /// Creates a hero positioned near the shrine with default stats.
-#deprecated
-pub fn Hero::new() -> Hero {
+pub fn Hero::Hero() -> Hero {
   {
     x: shrine_x(),
     y: shrine_y() + 130.0,
@@ -254,8 +234,7 @@ pub fn Hero::new() -> Hero {
 
 ///|
 /// Creates a fresh game state with pooled objects and title defaults.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   let bells = Array::makei(bell_count, fn(i) {
     let p = bell_pos(i)
     { x: p.0, y: p.1, cooldown: 0.0, glow: 0.0, charge: 1.0 }

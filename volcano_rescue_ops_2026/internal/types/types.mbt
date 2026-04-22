@@ -5,8 +5,6 @@ pub(all) struct CivilianSite {
   mut x : Int
   mut y : Int
   mut waiting : Int
-
-  fn new() -> CivilianSite
 }
 
 ///|
@@ -54,21 +52,17 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   mut mouse_press : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive civilian site with default values.
-#deprecated
-pub fn CivilianSite::new() -> CivilianSite {
+pub fn CivilianSite::CivilianSite() -> CivilianSite {
   { active: false, x: 0, y: 0, waiting: 0 }
 }
 
 ///|
 /// Creates a new game state with preallocated arrays and default UI state.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     terrain: Array::make(max_cells, Ground),
     lava: Array::make(max_cells, false),

@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/voltage/internal/circuit"
+
+import {
+  "bobzhang/games/voltage/internal/types",
+}
+
+// Values
+pub fn auto_connect(@types.LevelState, Int, Int) -> Unit
+
+pub fn can_place(@types.LevelState, Int, Int, @types.ComponentKind) -> Bool
+
+pub fn connect_cells(@types.LevelState, Int, Int, Int, Int) -> Unit
+
+pub fn disconnect_all(@types.LevelState, Int, Int) -> Unit
+
+pub fn disconnect_cells(@types.LevelState, Int, Int, Int, Int) -> Unit
+
+pub fn evaluate_level(@types.LevelState) -> @types.LevelResult
+
+pub fn place_component(@types.LevelState, Int, Int, @types.ComponentKind) -> Bool
+
+pub fn remove_component(@types.LevelState, Int, Int) -> Bool
+
+pub fn reset_simulation(@types.LevelState) -> Unit
+
+pub fn simulate(@types.LevelState) -> Unit
+
+pub fn toggle_switch(@types.LevelState, Int, Int) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

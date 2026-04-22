@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/dynamo/internal/circuit"
+
+import {
+  "bobzhang/games/dynamo/internal/types",
+}
+
+// Values
+pub fn auto_connect(@types.LevelState, Int, Int) -> Unit
+
+pub fn can_place(@types.LevelState, Int, Int, @types.ComponentKind) -> Bool
+
+pub fn connect_cells(@types.LevelState, Int, Int, Int, Int) -> Unit
+
+pub fn count_field_lines_at(@types.LevelState, Int, Int) -> Int
+
+pub fn disconnect_all(@types.LevelState, Int, Int) -> Unit
+
+pub fn disconnect_cells(@types.LevelState, Int, Int, Int, Int) -> Unit
+
+pub fn evaluate_level(@types.LevelState) -> @types.LevelResult
+
+pub fn place_component(@types.LevelState, Int, Int, @types.ComponentKind) -> Bool
+
+pub fn remove_component(@types.LevelState, Int, Int) -> Bool
+
+pub fn reset_simulation(@types.LevelState) -> Unit
+
+pub fn simulate(@types.LevelState) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

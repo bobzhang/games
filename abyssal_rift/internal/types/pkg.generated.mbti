@@ -70,6 +70,8 @@ pub fn ease_out(Float) -> Float
 
 pub fn encounter_name(EncounterType) -> String
 
+pub fn has_pact(Player, PactKind) -> Bool
+
 pub let hit_pause_duration : Float
 
 pub let invuln_duration : Float
@@ -99,6 +101,8 @@ pub fn minf(Float, Float) -> Float
 pub fn mini(Int, Int) -> Int
 
 pub fn normalize(Float, Float) -> (Float, Float)
+
+pub fn path_name(FloorPath) -> String
 
 pub let player_accel : Float
 
@@ -240,6 +244,14 @@ pub(all) struct Floor {
   floor_num : Int
 }
 
+pub(all) enum FloorPath {
+  Hunter
+  Pilgrim
+  Rot
+  Forge
+  Gauntlet
+} derive(Eq, Show)
+
 pub(all) struct Game {
   mut state : GameState
   player : Player
@@ -284,6 +296,12 @@ pub(all) struct Game {
   mut wave_count : Int
   mut wave_max : Int
   mut wave_active : Bool
+  path_choices : Array[FloorPath]
+  mut path_active : Bool
+  mut current_path : FloorPath?
+  mut starter_hover : Int
+  pact_offers : Array[PactKind]
+  mut pact_offer_active : Bool
 }
 pub fn Game::new() -> Self
 
@@ -306,6 +324,7 @@ pub(all) enum GameState {
   GameOver
   Victory
   MetaScreen
+  StarterSelect
 } derive(Eq)
 
 pub(all) struct Hitbox {
@@ -348,6 +367,14 @@ pub(all) enum MetaUpgrade {
   WeaponMastery
   DashMastery
   PotionEfficiency
+} derive(Eq, Show)
+
+pub(all) enum PactKind {
+  BloodPrice
+  GlassStep
+  MerchantsDebt
+  CursedStrength
+  VoidHeart
 } derive(Eq, Show)
 
 pub(all) struct Particle {
@@ -411,6 +438,7 @@ pub(all) struct Player {
   mut attack_buffered : Bool
   passives : Array[PassiveKind]
   status_effects : Array[StatusEffect]
+  pacts : Array[PactKind]
 }
 pub fn Player::new() -> Self
 
@@ -481,6 +509,12 @@ pub(all) enum ShrineKind {
   GambleShrine
   CursedChest
   ReforgeAnvil
+} derive(Eq, Show)
+
+pub(all) enum StarterKit {
+  Vanguard
+  Cutpurse
+  Invoker
 } derive(Eq, Show)
 
 pub(all) enum StatusEffect {

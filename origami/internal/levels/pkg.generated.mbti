@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/origami/internal/levels"
+
+import {
+  "bobzhang/games/origami/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.Level
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

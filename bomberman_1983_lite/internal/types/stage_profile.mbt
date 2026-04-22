@@ -10,24 +10,11 @@ pub(all) struct StageProfile {
   sky_bottom : @raylib.Color
   fog_alpha : Float
   ui_accent : @raylib.Color
-
-  fn new(
-    title : String,
-    subtitle : String,
-    enemy_bonus : Int,
-    spawn_scale : Float,
-    drop_bonus : Int,
-    sky_top : @raylib.Color,
-    sky_bottom : @raylib.Color,
-    fog_alpha : Float,
-    ui_accent : @raylib.Color,
-  ) -> StageProfile
 }
 
 ///|
 /// Creates a stage profile with gameplay and palette parameters.
-#deprecated
-pub fn StageProfile::new(
+pub fn StageProfile::StageProfile(
   title : String,
   subtitle : String,
   enemy_bonus : Int,

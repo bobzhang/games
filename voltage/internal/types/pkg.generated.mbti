@@ -1,0 +1,286 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/voltage/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn all_directions() -> Array[Direction]
+
+pub fn alloc_spark(Array[Spark]) -> Int
+
+pub let animation_speed : Float
+
+pub let battery_voltage : Float
+
+pub fn cell_center_x(Int) -> Float
+
+pub fn cell_center_y(Int) -> Float
+
+pub let cell_size : Int
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub let color_battery : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_cursor : @raylib.Color
+
+pub let color_device : @raylib.Color
+
+pub let color_fuse : @raylib.Color
+
+pub let color_fuse_blown : @raylib.Color
+
+pub let color_grid_cell : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_satisfied : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_filled : @raylib.Color
+
+pub let color_switch_off : @raylib.Color
+
+pub let color_switch_on : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_unsatisfied : @raylib.Color
+
+pub let color_wire : @raylib.Color
+
+pub let color_wire_powered : @raylib.Color
+
+pub let component_radius : Float
+
+pub fn cosf(Float) -> Float
+
+pub fn direction_delta(Direction) -> (Int, Int)
+
+pub fn direction_index(Direction) -> Int
+
+pub let fuse_blow_duration : Float
+
+pub let fuse_blow_multiplier : Float
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn in_bounds(Int, Int) -> Bool
+
+pub fn is_conductor(ComponentKind) -> Bool
+
+pub fn is_connectable(ComponentKind) -> Bool
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_cell() -> Cell
+
+pub fn new_cell_with(ComponentKind, Bool) -> Cell
+
+pub fn new_game() -> Game
+
+pub fn new_level_result() -> LevelResult
+
+pub fn new_level_state(Int, Int, Int, Int) -> LevelState
+
+pub fn new_spark() -> Spark
+
+pub fn opposite_direction(Direction) -> Direction
+
+pub fn rng_float() -> Float
+
+pub fn rng_int(Int) -> Int
+
+pub fn rng_next() -> Int
+
+pub fn rng_range(Float, Float) -> Float
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn seed_rng(Int) -> Unit
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub let spark_lifetime : Float
+
+pub fn spawn_sparks(Array[Spark], Float, Float, Int, @raylib.Color) -> Unit
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub let total_levels : Int
+
+pub let voltage_tolerance : Float
+
+pub let wire_thickness : Float
+
+// Errors
+
+// Types and methods
+pub(all) struct Cell {
+  mut component : ComponentKind
+  mut fixed : Bool
+  mut powered : Bool
+  mut voltage : Float
+  mut current : Float
+  mut connections : Array[Bool]
+}
+
+pub(all) struct CellPlacement {
+  col : Int
+  row : Int
+  component : ComponentKind
+  connections : Array[Bool]
+}
+
+pub(all) enum ComponentKind {
+  Empty
+  Battery
+  Device(Float)
+  Wire
+  Fuse(Float)
+  Switch(Bool)
+} derive(Eq, Show)
+
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut current_level : Int
+  mut level_state : LevelState?
+  mut level_results : Array[LevelResult]
+  mut cursor_col : Int
+  mut cursor_row : Int
+  mut tool : ToolMode
+  mut sparks : Array[Spark]
+  mut animation_timer : Float
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut level_select_scroll : Int
+  mut show_help : Bool
+}
+
+pub(all) struct LevelDef {
+  id : Int
+  name : String
+  tier : Tier
+  description : String
+  battery_budget : Int
+  par_batteries : Int
+  fixed_cells : Array[CellPlacement]
+  fuse_budget : Int
+  switch_budget : Int
+}
+
+pub(all) struct LevelResult {
+  mut stars : Int
+  mut completed : Bool
+  mut devices_powered : Int
+  mut devices_total : Int
+  mut batteries_used : Int
+  mut fuses_blown : Int
+}
+
+pub(all) struct LevelState {
+  mut cells : Array[Array[Cell]]
+  mut batteries_used : Int
+  mut battery_budget : Int
+  mut fuses_used : Int
+  mut fuse_budget : Int
+  mut switches_used : Int
+  mut switch_budget : Int
+  mut par_batteries : Int
+  mut devices_total : Int
+  mut devices_satisfied : Int
+  mut any_fuse_blown : Bool
+  mut simulated : Bool
+}
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  Simulating
+  LevelComplete
+  LevelFailed
+} derive(Eq, Show)
+
+pub(all) struct Spark {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut life : Float
+  mut color : @raylib.Color
+}
+
+pub(all) enum Tier {
+  Basics
+  Parallel
+  Networks
+} derive(Eq, Show)
+
+pub(all) enum ToolMode {
+  PlaceBattery
+  PlaceWire
+  PlaceFuse
+  PlaceSwitch
+  Erase
+  ToggleSwitch
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

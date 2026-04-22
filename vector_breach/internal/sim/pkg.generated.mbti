@@ -1,0 +1,98 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/vector_breach/internal/sim"
+
+import {
+  "bobzhang/games/vector_breach/internal/types",
+}
+
+// Values
+pub fn add_combo_score(@types.BattleState, Int, String) -> Unit
+
+pub fn apply_chain_lightning(@types.BattleState, Int, Int) -> Unit
+
+pub fn apply_damage(@types.BattleState, Int, Int) -> Int
+
+pub fn apply_damage_from(@types.BattleState, Int, Int, Int) -> Int
+
+pub fn apply_heat(@types.BattleState, Int, Int) -> Unit
+
+pub fn apply_shield(@types.BattleState, Int, Int) -> Unit
+
+pub fn apply_status(@types.BattleState, Int, @types.StatusEffect) -> Unit
+
+pub fn apply_stun(@types.BattleState, Int) -> Unit
+
+pub fn check_boss_phase_transition(@types.BattleState) -> Unit
+
+pub fn check_emergency_repair(@types.BattleState, Int) -> Unit
+
+pub fn clear_undo_stack(@types.BattleState) -> Unit
+
+pub fn execute_player_command(@types.BattleState, Int, @types.Command) -> Unit
+
+pub fn find_most_damaged_unit(@types.BattleState, @types.UnitTeam) -> Int
+
+pub fn find_nearest_unit(@types.BattleState, Int, Int, @types.UnitTeam) -> Int
+
+pub fn find_weakest_unit(@types.BattleState, @types.UnitTeam) -> Int
+
+pub fn generate_enemy_intents(@types.BattleState) -> Unit
+
+pub fn get_unit_name(@types.BattleState, Int) -> String
+
+pub fn has_line_of_sight(@types.BattleState, Int, Int, Int, Int) -> Bool
+
+pub fn hivemind_has_minions(@types.BattleState) -> Bool
+
+pub fn is_blocked(@types.BattleState, Int, Int) -> Bool
+
+pub fn is_immobilized(@types.CombatUnit) -> Bool
+
+pub fn is_walkable(@types.BattleState, Int, Int) -> Bool
+
+pub fn kill_unit(@types.BattleState, Int) -> Unit
+
+pub fn move_unit_to(@types.BattleState, Int, Int, Int) -> Unit
+
+pub fn place_hazard(@types.BattleState, Int, Int, @types.HazardKind) -> Unit
+
+pub fn pop_undo(@types.BattleState) -> Bool
+
+pub fn preview_command(@types.BattleState, Int, @types.Command) -> Array[@types.PreviewTile]
+
+pub fn preview_enemy_intents(@types.BattleState) -> Array[@types.PreviewTile]
+
+pub fn process_statuses(@types.BattleState) -> Unit
+
+pub fn push_undo(@types.BattleState) -> Unit
+
+pub fn resolve_all_enemy_intents(@types.BattleState) -> Unit
+
+pub fn resolve_boss_turn_effects(@types.BattleState) -> Unit
+
+pub fn resolve_enemy_intents(@types.BattleState) -> Array[String]
+
+pub fn restore_snapshot(@types.BattleState, @types.BattleSnapshot) -> Unit
+
+pub fn save_snapshot(@types.BattleState) -> @types.BattleSnapshot
+
+pub fn sign(Int) -> Int
+
+pub fn simulate_turn(@types.BattleState, Array[@types.Command]) -> Array[String]
+
+pub fn step_toward(Int, Int, Int, Int) -> (Int, Int)
+
+pub fn try_pull(@types.BattleState, Int, Int, Int, Int) -> Unit
+
+pub fn try_push(@types.BattleState, Int, Int, Int, Int) -> Unit
+
+pub fn unit_at(@types.BattleState, Int, Int) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

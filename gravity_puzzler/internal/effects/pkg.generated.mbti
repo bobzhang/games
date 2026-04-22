@@ -1,0 +1,46 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/effects"
+
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+// Values
+pub fn draw_ambient(@types.Game) -> Unit
+
+pub fn draw_enemy_tracking_lines(@types.Level, Int) -> Unit
+
+pub fn draw_enemy_warning(@types.Level, Int) -> Unit
+
+pub fn draw_exit_glow(@types.Level, Int) -> Unit
+
+pub fn draw_gravity_rotation(@types.Game) -> Unit
+
+pub fn draw_high_contrast_tile_overlay(Int, Int, @types.TileKind) -> Unit
+
+pub fn draw_speedrun_timer(@types.Game) -> Unit
+
+pub fn draw_wall_shadows(@types.Level) -> Unit
+
+pub fn draw_world_tiles(@types.Level, Int) -> Unit
+
+pub fn get_bounce_offset(@types.Game, Int) -> Float
+
+pub fn trigger_bounce(@types.Game, Int) -> Unit
+
+pub fn update_ambient(@types.Game, Float) -> Unit
+
+pub fn update_bounce(@types.Game, Float) -> Unit
+
+pub fn update_gravity_rotation(@types.Game, Float) -> Unit
+
+pub fn update_speedrun_timer(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

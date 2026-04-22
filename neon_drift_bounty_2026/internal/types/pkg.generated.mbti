@@ -6,17 +6,37 @@ import {
 }
 
 // Values
+pub let barrier_gate_dmg : Float
+
+pub let barrier_gate_h : Float
+
+pub let barrier_gate_w : Float
+
 pub let base_scroll_speed : Float
 
 pub fn bg_bottom() -> @raylib.Color
 
 pub fn bg_top() -> @raylib.Color
 
+pub let blast_zone_dmg : Float
+
+pub let blast_zone_fuse : Float
+
+pub let blast_zone_h : Float
+
+pub let blast_zone_w : Float
+
 pub let boost_cd_time : Float
 
 pub let boost_speed_bonus : Float
 
 pub let boost_time : Float
+
+pub let boss_hp_base : Float
+
+pub let boss_hp_per_stage : Float
+
+pub let boss_kill_bonus : Int
 
 pub fn btn_boost_rect() -> (Float, Float, Float, Float)
 
@@ -46,6 +66,8 @@ pub fn dist2(Float, Float, Float, Float) -> Float
 
 pub fn ease_out_cubic(Float) -> Float
 
+pub let elite_drop_chance : Int
+
 pub let enemy_bullet_speed : Float
 
 pub fn energy_col() -> @raylib.Color
@@ -70,7 +92,11 @@ pub let hack_radius : Float
 
 pub let hack_time : Float
 
+pub let hazard_warn_time : Float
+
 pub let invuln_after_hit : Float
+
+pub fn is_boss_stage(Int) -> Bool
 
 pub fn is_pickup(EntityKind) -> Bool
 
@@ -92,6 +118,8 @@ pub let max_entities : Int
 
 pub let max_glow_rings : Int
 
+pub let max_hazards : Int
+
 pub let max_sparks : Int
 
 pub fn maxf(Float, Float) -> Float
@@ -99,6 +127,14 @@ pub fn maxf(Float, Float) -> Float
 pub fn minf(Float, Float) -> Float
 
 pub fn neon_yellow() -> @raylib.Color
+
+pub let oil_drag_factor : Float
+
+pub let oil_slick_duration : Float
+
+pub let oil_slick_h : Float
+
+pub let oil_slick_w : Float
 
 pub let player_accel_x : Float
 
@@ -128,6 +164,8 @@ pub fn randf(Float, Float) -> Float
 
 pub fn randi(Int, Int) -> Int
 
+pub fn rect_overlap(Float, Float, Float, Float, Float, Float, Float, Float) -> Bool
+
 pub fn result_retry_rect() -> (Float, Float, Float, Float)
 
 pub fn road_center_at(Float, Float) -> Float
@@ -142,9 +180,13 @@ pub fn road_mid() -> @raylib.Color
 
 pub fn road_spawn_x(Float, Float, Int, Float) -> Float
 
+pub fn road_zone_for_stage(Int) -> RoadZone
+
 pub let screen_h : Int
 
 pub let screen_w : Int
+
+pub fn select_formation(Int, Int) -> Formation
 
 pub fn shield_col() -> @raylib.Color
 
@@ -156,6 +198,8 @@ pub let spawn_spacing_min : Float
 
 pub let spawn_start_y : Float
 
+pub let spread_angle : Float
+
 pub let stage_clear_delay : Float
 
 pub let stage_distance_base : Float
@@ -163,6 +207,8 @@ pub let stage_distance_base : Float
 pub let stage_distance_gain : Float
 
 pub let stage_scroll_gain : Float
+
+pub let stage_trans_duration : Float
 
 pub let target_fps : Int
 
@@ -182,11 +228,8 @@ pub(all) struct Afterimage {
   mut rot : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Afterimage
 }
-#deprecated
-pub fn Afterimage::new() -> Self
+pub fn Afterimage::Afterimage() -> Self
 
 pub(all) struct Bullet {
   mut active : Bool
@@ -198,11 +241,8 @@ pub(all) struct Bullet {
   mut life : Float
   mut dmg : Float
   mut kind : Int
-
-  fn new() -> Bullet
 }
-#deprecated
-pub fn Bullet::new() -> Self
+pub fn Bullet::Bullet() -> Self
 
 pub(all) struct Entity {
   mut active : Bool
@@ -219,11 +259,8 @@ pub(all) struct Entity {
   mut spin : Float
   mut cloak : Bool
   mut reward : Int
-
-  fn new() -> Entity
 }
-#deprecated
-pub fn Entity::new() -> Self
+pub fn Entity::Entity() -> Self
 
 pub(all) enum EntityKind {
   FoeBike
@@ -234,6 +271,13 @@ pub(all) enum EntityKind {
   ItemBattery
   ItemHackcell
 } derive(Eq)
+
+pub(all) enum Formation {
+  VShape
+  ColumnRush
+  FlankingPairs
+  Random
+} derive(Eq, Show)
 
 pub(all) struct Game {
   entities : Array[Entity]
@@ -280,11 +324,17 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
+  hazards : Array[Hazard]
+  mut weapon : WeaponUpgrade?
+  mut weapon_level : Int
+  mut oil_t : Float
+  mut stage_trans_t : Float
+  mut boss_active : Bool
+  mut boss_hp : Float
+  mut boss_max_hp : Float
+  mut formation_cd : Float
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -300,11 +350,26 @@ pub(all) struct GlowRing {
   mut r : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> GlowRing
 }
-#deprecated
-pub fn GlowRing::new() -> Self
+pub fn GlowRing::GlowRing() -> Self
+
+pub(all) struct Hazard {
+  mut active : Bool
+  mut kind : HazardKind
+  mut x : Float
+  mut y : Float
+  mut w : Float
+  mut h : Float
+  mut timer : Float
+  mut warn_t : Float
+} derive(Show)
+pub fn Hazard::new() -> Self
+
+pub(all) enum HazardKind {
+  OilSlick
+  BarrierGate
+  BlastZone
+} derive(Eq, Show)
 
 pub(all) struct Player {
   mut x : Float
@@ -318,11 +383,14 @@ pub(all) struct Player {
   mut hurt_t : Float
   mut muzzle_t : Float
   mut engine_t : Float
-
-  fn new() -> Player
 }
-#deprecated
-pub fn Player::new() -> Self
+pub fn Player::Player() -> Self
+
+pub(all) enum RoadZone {
+  NeonAlley
+  IndustrialStrip
+  HighwayOverpass
+} derive(Eq, Show)
 
 pub(all) struct Spark {
   mut active : Bool
@@ -333,11 +401,14 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Spark
 }
-#deprecated
-pub fn Spark::new() -> Self
+pub fn Spark::Spark() -> Self
+
+pub(all) enum WeaponUpgrade {
+  Spread
+  Piercing
+  Homing
+} derive(Eq, Show)
 
 // Type aliases
 

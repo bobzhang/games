@@ -1,0 +1,247 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/almanac/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub let cell_size : Int
+
+pub fn clear_weather(Grid) -> Unit
+
+pub fn clone_weather(Grid) -> Array[WeatherState]
+
+pub let color_bg : @raylib.Color
+
+pub let color_clear : @raylib.Color
+
+pub let color_cloudy : @raylib.Color
+
+pub let color_height0 : @raylib.Color
+
+pub let color_height1 : @raylib.Color
+
+pub let color_height2 : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_monsoon : @raylib.Color
+
+pub let color_rainy : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_source_rain : @raylib.Color
+
+pub let color_source_sun : @raylib.Color
+
+pub let color_source_wind : @raylib.Color
+
+pub let color_spring : @raylib.Color
+
+pub let color_star_off : @raylib.Color
+
+pub let color_star_on : @raylib.Color
+
+pub let color_stormy : @raylib.Color
+
+pub let color_summer : @raylib.Color
+
+pub let color_sunny : @raylib.Color
+
+pub let color_target_ring : @raylib.Color
+
+pub let color_windy : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub let grid_cols : Int
+
+pub fn grid_get(Grid, Int, Int) -> Tile
+
+pub fn grid_index(Int, Int, Int) -> Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn height_color(Int) -> @raylib.Color
+
+pub fn in_bounds(Int, Int, Int, Int) -> Bool
+
+pub fn make_grid(Int, Int, Array[Int], Array[(Int, Int, WeatherState)]) -> Grid
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub let palette_item_h : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub fn restore_weather(Grid, Array[WeatherState]) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn source_color(SourceKind) -> @raylib.Color
+
+pub fn source_name(SourceKind) -> String
+
+pub let target_fps : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_level_offset(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub fn weather_color(WeatherState) -> @raylib.Color
+
+pub fn weather_name(WeatherState) -> String
+
+pub fn wind_dir_dx(WindDir) -> Int
+
+pub fn wind_dir_dy(WindDir) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_level : Int
+  mut grid : Grid
+  mut placed_sources : Array[Source]
+  mut available_sources : Array[(SourceKind, Int)]
+  mut selected_source : Int
+  mut wind_dir : WindDir
+  mut turn_count : Int
+  mut cursor_col : Int
+  mut cursor_row : Int
+  mut level_scores : Array[LevelScore]
+  mut history : Array[HistoryEntry]
+  mut anim_timer : Float
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut stable : Bool
+  mut prev_weather : Array[WeatherState]
+}
+
+pub(all) struct Grid {
+  width : Int
+  height : Int
+  tiles : Array[Tile]
+}
+
+pub(all) struct HistoryEntry {
+  tiles : Array[WeatherState]
+  sources : Array[Source]
+}
+
+pub(all) struct Level {
+  grid_width : Int
+  grid_height : Int
+  heights : Array[Int]
+  targets : Array[(Int, Int, WeatherState)]
+  source_budget : Array[(SourceKind, Int)]
+  par_sources : Int
+  par_turns : Int
+  tier : Tier
+  name : String
+}
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut sources_used : Int
+  mut turns_taken : Int
+}
+
+pub(all) enum PlayState {
+  Placing
+  Simulating
+  Won
+  Failed
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct Source {
+  kind : SourceKind
+  mut col : Int
+  mut row : Int
+  wind_dir : WindDir
+}
+
+pub(all) enum SourceKind {
+  Sun
+  Rain
+  Wind
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Spring
+  Summer
+  Monsoon
+} derive(Eq, Show)
+
+pub(all) struct Tile {
+  mut weather : WeatherState
+  height : Int
+  is_target : Bool
+  target_weather : WeatherState
+}
+
+pub(all) enum WeatherState {
+  Clear
+  Sunny
+  Rainy
+  Cloudy
+  Windy
+  Stormy
+} derive(Eq, Show)
+
+pub(all) enum WindDir {
+  North
+  East
+  South
+  West
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,256 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/surveyor/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let cell_size : Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_fence : @raylib.Color
+
+pub let color_fence_hover : @raylib.Color
+
+pub let color_grass : @raylib.Color
+
+pub let color_grass_alt : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_road : @raylib.Color
+
+pub let color_satisfied : @raylib.Color
+
+pub let color_star : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_ui_bg : @raylib.Color
+
+pub let color_ui_dim : @raylib.Color
+
+pub let color_ui_text : @raylib.Color
+
+pub let color_unchecked : @raylib.Color
+
+pub let color_violated : @raylib.Color
+
+pub let color_water : @raylib.Color
+
+pub let color_water_dark : @raylib.Color
+
+pub fn copy_fences(Array[FenceEdge]) -> Array[FenceEdge]
+
+pub fn fence_eq(FenceEdge, FenceEdge) -> Bool
+
+pub let fence_hover_thickness : Float
+
+pub let fence_thickness : Float
+
+pub let grid_cols : Int
+
+pub fn grid_get(Grid, Int, Int) -> TileKind
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn grid_set(Grid, Int, Int, TileKind) -> Unit
+
+pub fn has_fence(Array[FenceEdge], FenceEdge) -> Bool
+
+pub fn house_color(Int) -> @raylib.Color
+
+pub fn is_region_rectangular(Region) -> Bool
+
+pub fn make_constraint(Bool, Bool) -> LevelConstraint
+
+pub fn make_fence(Int, Int, Orientation) -> FenceEdge
+
+pub fn make_grid(Int, Int, Array[TileKind]) -> Grid
+
+pub fn make_house(Int, Int, Int, Int) -> House
+
+pub fn make_level(Grid, Array[House], LevelConstraint, Int, Int, Tier, String) -> LevelDef
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_constraint_status(Int) -> ConstraintStatus
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub fn region_shade(Int) -> @raylib.Color
+
+pub fn region_touches_water(Region, Grid) -> Bool
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_start_idx(Tier) -> Int
+
+pub fn toggle_fence(Array[FenceEdge], FenceEdge) -> Unit
+
+pub let total_levels : Int
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+// Errors
+
+// Types and methods
+pub(all) enum ConstraintResult {
+  Satisfied
+  Violated
+  Unchecked
+} derive(Eq, Show)
+
+pub(all) struct ConstraintStatus {
+  house_idx : Int
+  mut one_house : ConstraintResult
+  mut correct_area : ConstraintResult
+  mut road_access : ConstraintResult
+  mut shape_ok : ConstraintResult
+}
+
+pub(all) struct FenceEdge {
+  row : Int
+  col : Int
+  orient : Orientation
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_level_idx : Int
+  mut current_level : LevelDef?
+  mut fences : Array[FenceEdge]
+  mut regions : Array[Region]
+  mut constraint_status : Array[ConstraintStatus]
+  mut undo_stack : Array[UndoEntry]
+  mut hover_fence : FenceEdge?
+  mut level_scores : Array[LevelScore]
+  mut result_stars : Int
+  mut result_fence_count : Int
+  mut frame_count : Int
+  mut transition_timer : Float
+  mut message : String
+  mut message_timer : Float
+}
+
+pub(all) struct Grid {
+  width : Int
+  height : Int
+  tiles : Array[TileKind]
+}
+
+pub(all) struct House {
+  pos : Vec2i
+  color_id : Int
+  required_area : Int
+}
+
+pub(all) struct LevelConstraint {
+  must_be_rectangular : Bool
+  must_not_touch_water : Bool
+}
+
+pub(all) struct LevelDef {
+  grid : Grid
+  houses : Array[House]
+  constraints : LevelConstraint
+  par_fences : Int
+  par_length : Int
+  tier : Tier
+  name : String
+}
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut fence_count : Int
+}
+
+pub(all) enum Orientation {
+  Horizontal
+  Vertical
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  Drawing
+  Checking
+  Complete
+} derive(Eq, Show)
+
+pub(all) struct Region {
+  tiles : Array[Vec2i]
+  houses : Array[House]
+  has_road : Bool
+  area : Int
+}
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Plots
+  Districts
+  Zoning
+} derive(Eq, Show)
+
+pub(all) enum TileKind {
+  Empty
+  House(Int)
+  Road
+  Water
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  fences : Array[FenceEdge]
+}
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Compare, Eq, Hash, Show)
+
+// Type aliases
+
+// Traits
+

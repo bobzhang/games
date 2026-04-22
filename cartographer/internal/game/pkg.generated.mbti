@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cartographer/internal/game"
+
+import {
+  "bobzhang/games/cartographer/internal/types",
+}
+
+// Values
+pub fn update(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

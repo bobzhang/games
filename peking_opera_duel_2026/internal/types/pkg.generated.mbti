@@ -136,11 +136,8 @@ pub(all) struct Game {
   mut message : String
   mut message_t : Float
   mut game_over_reason : String
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -158,22 +155,16 @@ pub(all) struct InputState {
   mut pause_pressed : Bool
   mut restart_pressed : Bool
   mut confirm_pressed : Bool
-
-  fn new() -> InputState
 }
-#deprecated
-pub fn InputState::new() -> Self
+pub fn InputState::InputState() -> Self
 
 pub(all) struct Prompt {
   lane_x : Int
   lane_y : Int
   stance : Stance
   mut time_left : Float
-
-  fn new(Int, Int, Stance, Float) -> Prompt
 }
-#deprecated
-pub fn Prompt::new(Int, Int, Stance, Float) -> Self
+pub fn Prompt::Prompt(Int, Int, Stance, Float) -> Self
 
 pub(all) enum Stance {
   Spear

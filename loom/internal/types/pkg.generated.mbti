@@ -1,0 +1,215 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/loom/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn absi(Int) -> Int
+
+pub fn build_player_fabric(Game) -> FabricPattern
+
+pub fn cell_color(Int) -> @raylib.Color
+
+pub let cell_size : Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_correct : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_heddle_down : @raylib.Color
+
+pub let color_heddle_up : @raylib.Color
+
+pub let color_incorrect : @raylib.Color
+
+pub let color_loom_frame : @raylib.Color
+
+pub let color_panel_bg : @raylib.Color
+
+pub let color_selected_row : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_light : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub fn count_matches(FabricPattern, FabricPattern) -> Int
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub let heddle_panel_x : Int
+
+pub let heddle_panel_y : Int
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_fabric_pattern(Int, Int, Array[Int], Array[Int]) -> FabricPattern
+
+pub fn new_game() -> Game
+
+pub fn new_heddle_row(Int) -> HeddleRow
+
+pub fn new_level_score() -> LevelScore
+
+pub fn pattern_get(FabricPattern, Int, Int) -> FabricCell
+
+pub fn pattern_set(FabricPattern, Int, Int, FabricCell) -> Unit
+
+pub fn patterns_match(FabricPattern, FabricPattern) -> Bool
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub let target_cell_size : Int
+
+pub let target_fps : Int
+
+pub let target_offset_x : Int
+
+pub let target_offset_y : Int
+
+pub let thread_color_names : Array[String]
+
+pub let thread_colors : Array[@raylib.Color]
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_levels(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub fn weave_type_name(WeaveType) -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum CellState {
+  WarpOver
+  WeftOver
+} derive(Eq, Show)
+
+pub(all) struct FabricCell {
+  state : CellState
+  color_index : Int
+} derive(Eq, Show)
+
+pub(all) struct FabricPattern {
+  rows : Int
+  cols : Int
+  cells : Array[FabricCell]
+  warp_colors : Array[Int]
+  weft_colors : Array[Int]
+} derive(Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_level : Int
+  mut current_tier : Tier
+  mut heddles : Array[HeddleRow]
+  mut warp_colors : Array[Int]
+  mut weft_colors : Array[Int]
+  mut target : FabricPattern
+  mut level_scores : Array[LevelScore]
+  mut heddle_changes : Int
+  mut selected_row : Int
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut anim_timer : Float
+  mut tier_select_index : Int
+  mut show_comparison : Bool
+  mut weave_type_guess : WeaveType
+  mut has_guessed_type : Bool
+  mut show_hint : Bool
+}
+
+pub(all) struct HeddleRow {
+  mut raised : Array[Bool]
+} derive(Show)
+
+pub(all) struct Level {
+  target : FabricPattern
+  warp_colors : Array[Int]
+  weft_colors : Array[Int]
+  par_changes : Int
+  weave_type : WeaveType
+  tier : Tier
+  level_num : Int
+  hint : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut best_changes : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Weaving
+  Complete
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Apprentice
+  Journeyman
+  Master
+} derive(Eq, Show)
+
+pub(all) enum WeaveType {
+  Plain
+  Twill
+  Satin
+  Herringbone
+  Diamond
+  Custom
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

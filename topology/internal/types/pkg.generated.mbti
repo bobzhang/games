@@ -1,0 +1,258 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/topology/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absi(Int) -> Int
+
+pub let anim_duration : Float
+
+pub let cell_size : Int
+
+pub let color_accent : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_gold : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_grow_valid : @raylib.Color
+
+pub let color_hover : @raylib.Color
+
+pub let color_op_bg : @raylib.Color
+
+pub let color_op_disabled : @raylib.Color
+
+pub let color_op_selected : @raylib.Color
+
+pub let color_overlap : @raylib.Color
+
+pub let color_shape : @raylib.Color
+
+pub let color_shrink_valid : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_target : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_tier_morph : @raylib.Color
+
+pub let color_tier_sculpt : @raylib.Color
+
+pub let color_tier_transform : @raylib.Color
+
+pub let cost_flip : Int
+
+pub let cost_grow : Int
+
+pub let cost_rotate : Int
+
+pub let cost_shift : Int
+
+pub let cost_shrink : Int
+
+pub fn get_level_available_ops(Int) -> Array[OpKind]
+
+pub fn get_level_par_and_min(Int) -> (Int, Int)
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn mini(Int, Int) -> Int
+
+pub let morph_levels : Int
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_shape(Array[Vec2i]) -> Shape
+
+pub fn op_cost(OpKind) -> Int
+
+pub fn op_name(OpKind) -> String
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let sculpt_levels : Int
+
+pub fn set_level_data(Array[Level]) -> Unit
+
+pub fn shape_adjacent_empty(Shape) -> Array[Vec2i]
+
+pub fn shape_center_x(Shape) -> Float
+
+pub fn shape_center_y(Shape) -> Float
+
+pub fn shape_clone(Shape) -> Shape
+
+pub fn shape_contains(Shape, Vec2i) -> Bool
+
+pub fn shape_edge_cells(Shape) -> Array[Vec2i]
+
+pub fn shape_equals(Shape, Shape) -> Bool
+
+pub fn shape_exact_match(Shape, Shape) -> Bool
+
+pub fn shape_match_count(Shape, Shape) -> Int
+
+pub fn shape_max_x(Shape) -> Int
+
+pub fn shape_max_y(Shape) -> Int
+
+pub fn shape_min_x(Shape) -> Int
+
+pub fn shape_min_y(Shape) -> Int
+
+pub fn shape_normalize(Shape) -> Shape
+
+pub fn star_count(StarRating) -> Int
+
+pub let target_fps : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_start_index(Tier) -> Int
+
+pub let total_levels : Int
+
+pub let transform_levels : Int
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+// Errors
+
+// Types and methods
+pub(all) enum Direction {
+  N
+  E
+  S
+  W
+} derive(Eq, Show)
+
+pub(all) enum FlipAxis {
+  Horizontal
+  Vertical
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut current_shape : Shape
+  mut target_shape : Shape
+  mut ops_history : Array[OpRecord]
+  mut shape_history : Array[Shape]
+  mut total_cost : Int
+  mut play_state : PlayState
+  mut selected_op : OpKind?
+  mut current_level_idx : Int
+  mut current_tier : Tier
+  mut level_scores : Array[LevelScore]
+  mut hover_cell : Vec2i?
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut anim_timer : Float
+  mut anim_shape_before : Shape?
+}
+
+pub(all) struct Level {
+  initial_shape : Shape
+  target_shape : Shape
+  par_cost : Int
+  min_cost : Int
+  available_ops : Array[OpKind]
+  tier : Tier
+  name : String
+}
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut best_cost : Int
+  mut stars : StarRating
+}
+
+pub(all) enum OpKind {
+  Shift
+  Rotate
+  Flip
+  Grow
+  Shrink
+} derive(Eq, Show)
+
+pub(all) struct OpRecord {
+  kind : OpKind
+  cost : Int
+}
+
+pub(all) enum PlayState {
+  Idle
+  SelectingDirection
+  SelectingFlipAxis
+  SelectingGrowCell
+  SelectingShrinkCell
+  AnimatingOp
+  Won
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct Shape {
+  mut cells : Array[Vec2i]
+} derive(Show)
+
+pub(all) enum StarRating {
+  Zero
+  One
+  Two
+  Three
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Morph
+  Sculpt
+  Transform
+} derive(Eq, Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Compare, Eq, Show)
+
+// Type aliases
+
+// Traits
+

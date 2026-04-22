@@ -1,0 +1,220 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/strata/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn all_slots_filled(Array[RockKind?]) -> Bool
+
+pub fn clue_kind_name(ClueKind) -> String
+
+pub let clue_panel_x : Int
+
+pub let clue_panel_y : Int
+
+pub let color_accent : @raylib.Color
+
+pub let color_basalt : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_bg_light : @raylib.Color
+
+pub let color_chalk : @raylib.Color
+
+pub let color_coal : @raylib.Color
+
+pub let color_correct : @raylib.Color
+
+pub let color_granite : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_incorrect : @raylib.Color
+
+pub let color_limestone : @raylib.Color
+
+pub let color_sandstone : @raylib.Color
+
+pub let color_shale : @raylib.Color
+
+pub let color_slate : @raylib.Color
+
+pub let color_slot_border : @raylib.Color
+
+pub let color_slot_empty : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_tier_bedrock : @raylib.Color
+
+pub let color_tier_deep : @raylib.Color
+
+pub let color_tier_surface : @raylib.Color
+
+pub let color_title_earth : @raylib.Color
+
+pub fn count_filled_slots(Array[RockKind?]) -> Int
+
+pub fn find_rock_slot(Array[RockKind?], RockKind) -> Int
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_clue(ClueKind, Int, Int, String) -> Clue
+
+pub fn new_game() -> Game
+
+pub fn new_level(Tier, String, Array[RockKind], Array[Clue], Int) -> Level
+
+pub fn new_level_score() -> LevelScore
+
+pub fn pop_undo(Game) -> Bool
+
+pub fn rock_color(RockKind) -> @raylib.Color
+
+pub fn rock_from_index(Int) -> RockKind
+
+pub fn rock_index(RockKind) -> Int
+
+pub fn rock_name(RockKind) -> String
+
+pub fn save_undo(Game) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let section_x : Int
+
+pub let section_y : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub let slot_height : Int
+
+pub let slot_width : Int
+
+pub let target_fps : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_from_level(Int) -> Tier
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub let tray_x : Int
+
+pub let tray_y : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Clue {
+  kind : ClueKind
+  param_a : Int
+  param_b : Int
+  text : String
+  mut satisfied : Bool
+} derive(Eq, Show)
+
+pub(all) enum ClueKind {
+  FossilAge
+  Superposition
+  Dating
+  Intrusion
+  Unconformity
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut current_tier : Tier
+  mut current_level : Int
+  mut slots : Array[RockKind?]
+  mut tray : Array[RockKind]
+  mut play_state : PlayState
+  mut moves : Int
+  mut selected_tray : Int
+  mut selected_slot : Int
+  mut any_incorrect : Bool
+  mut scores : Array[LevelScore]
+  mut undo_stack : Array[UndoEntry]
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut anim_timer : Float
+  mut tier_page : Int
+}
+
+pub(all) struct Level {
+  tier : Tier
+  name : String
+  rocks : Array[RockKind]
+  clues : Array[Clue]
+  par_moves : Int
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut best_moves : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Arranging
+  Checking
+  Solved
+  Failed
+} derive(Eq, Show)
+
+pub(all) enum RockKind {
+  Sandstone
+  Limestone
+  Shale
+  Granite
+  Basalt
+  Coal
+  Chalk
+  Slate
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Surface
+  Bedrock
+  DeepCore
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  slots : Array[RockKind?]
+  tray : Array[RockKind]
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

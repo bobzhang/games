@@ -1,0 +1,256 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/nomad/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_artifact_text : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_caravan : @raylib.Color
+
+pub let color_dest_glow : @raylib.Color
+
+pub let color_destination : @raylib.Color
+
+pub let color_dunes : @raylib.Color
+
+pub let color_dunes_dark : @raylib.Color
+
+pub let color_gold_text : @raylib.Color
+
+pub let color_hex_outline : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_oasis : @raylib.Color
+
+pub let color_oasis_light : @raylib.Color
+
+pub let color_route : @raylib.Color
+
+pub let color_route_preview : @raylib.Color
+
+pub let color_ruins : @raylib.Color
+
+pub let color_ruins_dark : @raylib.Color
+
+pub let color_sand : @raylib.Color
+
+pub let color_sand_light : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_filled : @raylib.Color
+
+pub let color_storm : @raylib.Color
+
+pub let color_storm_dark : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_title_text : @raylib.Color
+
+pub let color_trade : @raylib.Color
+
+pub let color_trade_dark : @raylib.Color
+
+pub let color_warning : @raylib.Color
+
+pub let color_water_bar : @raylib.Color
+
+pub let color_water_bg : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn hex_are_adjacent(HexCoord, HexCoord) -> Bool
+
+pub fn hex_in_bounds(HexCoord, Int, Int) -> Bool
+
+pub fn hex_neighbors(HexCoord) -> Array[HexCoord]
+
+pub let hex_size : Float
+
+pub fn hex_to_pixel(HexCoord, Float) -> (Float, Float)
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn level_tier(Int) -> Tier
+
+pub let map_height : Int
+
+pub let map_offset_x : Float
+
+pub let map_offset_y : Float
+
+pub let map_width : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub let move_speed : Float
+
+pub fn new_caravan(HexCoord, Int) -> Caravan
+
+pub fn new_game() -> Game
+
+pub fn new_hex_map(Int, Int) -> HexMap
+
+pub fn new_hex_tile(TileKind) -> HexTile
+
+pub fn new_level_score() -> LevelScore
+
+pub fn pixel_to_hex(Float, Float, Float) -> HexCoord
+
+pub fn rng_float() -> Float
+
+pub fn rng_int(Int) -> Int
+
+pub fn rng_next() -> Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn seed_rng(Int) -> Unit
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub fn tile_name(TileKind) -> String
+
+pub let total_levels : Int
+
+pub fn water_cost(TileKind) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Caravan {
+  mut pos : HexCoord
+  mut water : Int
+  mut max_water : Int
+  mut gold : Int
+  mut artifacts : Int
+  mut route : Array[HexCoord]
+  mut route_index : Int
+  mut move_timer : Float
+} derive(Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_level : Int
+  mut caravan : Caravan
+  mut level : Level?
+  mut route : Array[HexCoord]
+  mut hover_hex : HexCoord?
+  mut scores : Array[LevelScore]
+  mut message : String
+  mut message_timer : Float
+  mut rng : Int
+  mut frame_count : Int
+  mut execute_timer : Float
+  mut result_gold : Int
+  mut result_artifacts : Int
+  mut result_stars : Int
+  mut water_preview : Int
+  mut anim_timer : Float
+} derive(Show)
+
+pub(all) struct HexCoord {
+  col : Int
+  row : Int
+} derive(Eq, Show)
+
+pub(all) struct HexMap {
+  width : Int
+  height : Int
+  tiles : Array[Array[HexTile]]
+} derive(Show)
+
+pub(all) struct HexTile {
+  kind : TileKind
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  map : HexMap
+  start : HexCoord
+  destination : HexCoord
+  starting_water : Int
+  gold_target : Int
+  total_artifacts : Int
+  tier : Tier
+  name : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut best_gold : Int
+  mut best_artifacts : Int
+  mut completed : Bool
+} derive(Show)
+
+pub(all) enum PlayState {
+  Planning
+  Executing
+  Complete
+  Failed
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  OasisTrail
+  DuneSea
+  LostCity
+} derive(Eq, Show)
+
+pub(all) enum TileKind {
+  Sand
+  Dunes
+  Oasis
+  TradePost
+  Ruins
+  Sandstorm
+  Destination
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

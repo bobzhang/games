@@ -1,0 +1,50 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/mosaic/internal/symmetry"
+
+import {
+  "bobzhang/games/mosaic/internal/types",
+}
+
+// Values
+pub fn check_all_correct(@types.MosaicGrid, Array[(@types.Vec2i, @types.Tile)], @types.SymmetryKind) -> Bool
+
+pub fn check_all_holes_filled(@types.MosaicGrid) -> Bool
+
+pub fn compute_solution_tile(@types.MosaicGrid, @types.Vec2i, @types.SymmetryKind) -> @types.Tile?
+
+pub fn count_correct_placements(@types.MosaicGrid, Array[(@types.Vec2i, @types.Tile)], @types.SymmetryKind) -> Int
+
+pub fn expected_tile_at(@types.MosaicGrid, @types.Vec2i, @types.SymmetryKind) -> @types.Tile?
+
+pub fn get_expected_for_rotate4(@types.MosaicGrid, @types.Vec2i) -> @types.Tile?
+
+pub fn get_symmetric_pos(@types.Vec2i, @types.SymmetryKind, Int, Int) -> Array[@types.Vec2i]
+
+pub fn glide_pos(@types.Vec2i, Int) -> @types.Vec2i
+
+pub fn mirror_d_pos(@types.Vec2i) -> @types.Vec2i
+
+pub fn mirror_h_pos(@types.Vec2i, Int) -> @types.Vec2i
+
+pub fn mirror_v_pos(@types.Vec2i, Int) -> @types.Vec2i
+
+pub fn rotate2_pos(@types.Vec2i, Int, Int) -> @types.Vec2i
+
+pub fn rotate4_pos_180(@types.Vec2i, Int, Int) -> @types.Vec2i
+
+pub fn rotate4_pos_270(@types.Vec2i, Int, Int) -> @types.Vec2i
+
+pub fn rotate4_pos_90(@types.Vec2i, Int, Int) -> @types.Vec2i
+
+pub fn transform_tile(@types.Tile, @types.SymmetryKind) -> @types.Tile
+
+pub fn validate_placement(@types.MosaicGrid, @types.Vec2i, @types.Tile, @types.SymmetryKind) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

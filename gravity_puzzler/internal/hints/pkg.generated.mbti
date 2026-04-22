@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/hints"
+
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+// Values
+pub fn draw_hint(@types.Game) -> Unit
+
+pub fn get_context_tip(@types.Game) -> String
+
+pub fn get_current_level_hint_text(@types.Game) -> String
+
+pub fn get_hint_text_for_level(Int, Int) -> String
+
+pub fn get_level_difficulty(Int, Int) -> Int
+
+pub fn hints_available(@types.Game) -> Bool
+
+pub fn hints_remaining(@types.Game) -> Int
+
+pub fn update_hint(@types.Game, Float) -> Unit
+
+pub fn use_hint(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

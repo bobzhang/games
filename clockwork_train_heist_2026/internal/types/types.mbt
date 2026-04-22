@@ -52,8 +52,6 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
-
-  fn new() -> Actor
 }
 
 ///|
@@ -71,8 +69,6 @@ pub(all) struct Guard {
   mut seed : Int
   mut alert_t : Float
   mut color_id : Int
-
-  fn new() -> Guard
 }
 
 ///|
@@ -83,8 +79,6 @@ pub(all) struct Loot {
   mut y : Int
   mut kind : LootKind
   mut value : Int
-
-  fn new() -> Loot
 }
 
 ///|
@@ -94,8 +88,6 @@ pub(all) struct Smoke {
   mut x : Int
   mut y : Int
   mut t : Float
-
-  fn new() -> Smoke
 }
 
 ///|
@@ -109,8 +101,6 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
 
 ///|
@@ -254,14 +244,11 @@ pub(all) struct Game {
   /// `pointer_on_rect` iterates `0..<touch_count` to check each touch
   /// against UI button rectangles.
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an actor initialized at the starting tile.
-#deprecated
-pub fn Actor::new() -> Actor {
+pub fn Actor::Actor() -> Actor {
   {
     x: start_x,
     y: start_y,
@@ -278,8 +265,7 @@ pub fn Actor::new() -> Actor {
 
 ///|
 /// Creates an inactive guard with default patrol parameters.
-#deprecated
-pub fn Guard::new() -> Guard {
+pub fn Guard::Guard() -> Guard {
   {
     active: false,
     body: Actor(),
@@ -298,22 +284,19 @@ pub fn Guard::new() -> Guard {
 
 ///|
 /// Creates an inactive loot slot.
-#deprecated
-pub fn Loot::new() -> Loot {
+pub fn Loot::Loot() -> Loot {
   { active: false, x: 0, y: 0, kind: Gold, value: 0 }
 }
 
 ///|
 /// Creates an inactive smoke slot.
-#deprecated
-pub fn Smoke::new() -> Smoke {
+pub fn Smoke::Smoke() -> Smoke {
   { active: false, x: 0, y: 0, t: 0.0 }
 }
 
 ///|
 /// Creates an inactive particle slot.
-#deprecated
-pub fn Particle::new() -> Particle {
+pub fn Particle::Particle() -> Particle {
   {
     active: false,
     x: 0.0,
@@ -328,8 +311,7 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with all pools preallocated.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     map: Array::make(grid_w * grid_h, Wall),
     guards: Array::makei(max_guards, fn(_i) { Guard() }),

@@ -18,14 +18,11 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
-
-  fn new() -> InputState
 }
 
 ///|
 /// Creates a default InputState value for a new session.
-#deprecated
-pub fn InputState::new() -> InputState {
+pub fn InputState::InputState() -> InputState {
   {
     move_x: 0,
     move_y: 0,
@@ -49,14 +46,11 @@ pub(all) struct Patrol {
   mut guard_t : Float
   mut calm_t : Float
   mut calm_cd : Float
-
-  fn new() -> Patrol
 }
 
 ///|
 /// Creates a default Patrol value for a new session.
-#deprecated
-pub fn Patrol::new() -> Patrol {
+pub fn Patrol::Patrol() -> Patrol {
   let gate = gate_position()
   {
     x: gate.0 + 30.0,
@@ -82,14 +76,11 @@ pub(all) struct Lantern {
   mut target_shrine : Int
   mut escorting : Bool
   mut wobble : Float
-
-  fn new() -> Lantern
 }
 
 ///|
 /// Creates a default Lantern value for a new session.
-#deprecated
-pub fn Lantern::new() -> Lantern {
+pub fn Lantern::Lantern() -> Lantern {
   {
     active: false,
     x: 0.0,
@@ -114,14 +105,11 @@ pub(all) struct Gust {
   mut radius : Float
   mut power : Float
   mut life : Float
-
-  fn new() -> Gust
 }
 
 ///|
 /// Creates a default Gust value for a new session.
-#deprecated
-pub fn Gust::new() -> Gust {
+pub fn Gust::Gust() -> Gust {
   {
     active: false,
     x: 0.0,
@@ -145,14 +133,11 @@ pub(all) struct Spark {
   mut life : Float
   mut power : Float
   mut size : Float
-
-  fn new() -> Spark
 }
 
 ///|
 /// Creates a default Spark value for a new session.
-#deprecated
-pub fn Spark::new() -> Spark {
+pub fn Spark::Spark() -> Spark {
   {
     active: false,
     x: 0.0,
@@ -177,14 +162,11 @@ pub(all) struct Thief {
   mut target : Int
   mut steal_cd : Float
   mut life : Float
-
-  fn new() -> Thief
 }
 
 ///|
 /// Creates a default Thief value for a new session.
-#deprecated
-pub fn Thief::new() -> Thief {
+pub fn Thief::Thief() -> Thief {
   {
     active: false,
     x: 0.0,
@@ -223,14 +205,11 @@ pub(all) struct Game {
   mut status_t : Float
   mut screen_flash_t : Float
   mut game_over_reason : String
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a default Game value for a new session.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     input: InputState(),
     patrol: Patrol(),

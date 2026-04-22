@@ -1,0 +1,235 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/helix/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn calculate_stars(Int, Int, Int, Int) -> Int
+
+pub fn cell_pos_on_spiral(Int, Int, Bool, Float, Float) -> (Float, Float)
+
+pub let cell_radius : Float
+
+pub let center_x : Float
+
+pub let center_y : Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_ccw_token : @raylib.Color
+
+pub let color_ccw_trail : @raylib.Color
+
+pub let color_cw_token : @raylib.Color
+
+pub let color_cw_trail : @raylib.Color
+
+pub let color_gate_closed : @raylib.Color
+
+pub let color_gate_open : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_oneshot : @raylib.Color
+
+pub let color_path_cell : @raylib.Color
+
+pub let color_pickup : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_switch : @raylib.Color
+
+pub let color_sync : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_tier_coil : @raylib.Color
+
+pub let color_tier_double : @raylib.Color
+
+pub let color_tier_twist : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn make_cell(CellKind, gate_open? : Bool, switch_link_id? : Int, arrow_offset? : Int, has_pickup? : Bool) -> Cell
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_cell(CellKind) -> Cell
+
+pub fn new_game() -> Game
+
+pub fn new_level(Spiral, Spiral, Array[SwitchLink], Int, Int, String) -> Level
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_spiral(Array[Cell]) -> Spiral
+
+pub fn new_switch_link(Int, Int, Array[Int], Array[Int]) -> SwitchLink
+
+pub let pi : Float
+
+pub fn restore_history(Game) -> Unit
+
+pub let ring_spacing : Float
+
+pub fn save_history(Game) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn sinf(Float) -> Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_of_level(Int) -> Tier
+
+pub fn tier_start_index(Tier) -> Int
+
+pub let token_radius : Float
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Cell {
+  kind : CellKind
+  mut gate_open : Bool
+  switch_link_id : Int
+  arrow_offset : Int
+  has_pickup : Bool
+} derive(Eq, Show)
+
+pub(all) enum CellKind {
+  Path
+  Switch
+  Gate
+  SyncPoint
+  OneShotSwitch
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut cw_pos : Int
+  mut ccw_pos : Int
+  mut steps : Int
+  mut play_state : PlayState
+  mut pickups_collected : Array[Bool]
+  mut pickups_count : Int
+  mut oneshot_used : Array[Bool]
+  mut current_level : Level?
+  mut history : Array[HistoryEntry]
+  mut level_scores : Array[LevelScore]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut anim_timer : Float
+} derive(Show)
+
+pub(all) struct HistoryEntry {
+  cw_pos : Int
+  ccw_pos : Int
+  gate_states_cw : Array[Bool]
+  gate_states_ccw : Array[Bool]
+  oneshot_used : Array[Bool]
+  pickups_collected : Array[Bool]
+  pickups_count : Int
+} derive(Show)
+
+pub(all) struct Level {
+  cw_spiral : Spiral
+  ccw_spiral : Spiral
+  switch_links : Array[SwitchLink]
+  par_steps : Int
+  pickups_total : Int
+  name : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut steps : Int
+  mut stars : Int
+  mut pickups : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Moving
+  Blocked
+  Won
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct Spiral {
+  cells : Array[Cell]
+} derive(Eq, Show)
+
+pub(all) struct SwitchLink {
+  switch_cell_cw : Int
+  switch_cell_ccw : Int
+  gate_cells_cw : Array[Int]
+  gate_cells_ccw : Array[Int]
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Coil
+  Twist
+  DoubleHelix
+} derive(Eq, Show)
+
+pub(all) enum TokenKind {
+  CW
+  CCW
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

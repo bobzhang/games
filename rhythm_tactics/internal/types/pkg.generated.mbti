@@ -1,0 +1,996 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/rhythm_tactics/internal/types"
+
+import {
+  "moonbitlang/core/ref",
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn ability_desc(AbilityKind) -> String
+
+pub fn ability_name(AbilityKind) -> String
+
+pub fn absf(Float) -> Float
+
+pub fn all_ability_kinds() -> Array[AbilityKind]
+
+pub fn all_curse_kinds() -> Array[CurseKind]
+
+pub fn all_spell_kinds() -> Array[SpellKind]
+
+pub fn all_weapon_kinds() -> Array[WeaponKind]
+
+pub let beat_dragon_damage : Int
+
+pub let beat_dragon_hp : Int
+
+pub let beat_freeze_duration : Int
+
+pub let beat_indicator_h : Int
+
+pub let beat_indicator_y : Int
+
+pub let beat_window_good : Float
+
+pub let beat_window_perfect : Float
+
+pub let blind_beat_perfect_bonus : Float
+
+pub let bomb_radius : Int
+
+pub let boss_arena_size : Int
+
+pub let boss_intro_duration : Float
+
+pub fn boss_phase_color(BossPhase) -> @raylib.Color
+
+pub fn boss_phase_from_hp(EnemyKind, Int, Int) -> BossPhase
+
+pub fn boss_phase_name(BossPhase) -> String
+
+pub let bpm_floor_10 : Float
+
+pub let bpm_floor_1_3 : Float
+
+pub let bpm_floor_4_6 : Float
+
+pub let bpm_floor_7_9 : Float
+
+pub fn bpm_for_floor(Int) -> Float
+
+pub fn can_cast_spell(Player, Int) -> Bool
+
+pub fn check_achievement(AchievementState, AchievementKind) -> Bool
+
+pub fn check_boss_phase_transition(Game, EnemyKind, Int, Int) -> Bool
+
+pub fn check_combo_milestone(Int) -> ComboMilestone
+
+pub fn check_weapon_unlocks(MetaProgress, Int) -> Unit
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub fn clear_sound_queue(Game) -> Unit
+
+pub let color_bg : @raylib.Color
+
+pub let color_elite_outline : @raylib.Color
+
+pub let color_enemy_base : @raylib.Color
+
+pub let color_exit : @raylib.Color
+
+pub let color_floor_base : @raylib.Color
+
+pub let color_gold : @raylib.Color
+
+pub let color_good : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_ice : @raylib.Color
+
+pub let color_lava : @raylib.Color
+
+pub let color_miss : @raylib.Color
+
+pub let color_perfect : @raylib.Color
+
+pub let color_pit : @raylib.Color
+
+pub let color_player : @raylib.Color
+
+pub let color_shop_bg : @raylib.Color
+
+pub let color_shop_highlight : @raylib.Color
+
+pub let color_spike : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub let combo_damage_bonus : Float
+
+pub fn combo_encouragement(Int) -> String
+
+pub fn combo_visual_level(Int) -> Int
+
+pub fn compute_score_grade(Int) -> ScoreGrade
+
+pub fn cos_approx(Float) -> Float
+
+pub let curse_bpm_bonus_pct : Float
+
+pub fn curse_color(CurseKind) -> @raylib.Color
+
+pub fn curse_desc(CurseKind) -> String
+
+pub fn curse_name(CurseKind) -> String
+
+pub fn curse_risk_text(CurseKind) -> String
+
+pub let curse_score_bonus_pct : Float
+
+pub let damage_number_life : Float
+
+pub let damage_number_speed : Float
+
+pub let default_bpm : Float
+
+pub fn dir_dx(Direction) -> Int
+
+pub fn dir_dy(Direction) -> Int
+
+pub fn direction_arrow(Direction) -> String
+
+pub fn direction_from_to(Int, Int, Int, Int) -> Direction
+
+pub let dragon_4dir_fire_interval : Int
+
+pub let dragon_charge_interval : Int
+
+pub let dragon_phase2_threshold : Float
+
+pub let dragon_phase3_threshold : Float
+
+pub fn drain_sound_queue(Game) -> Array[SoundEvent]
+
+pub fn element_color(Element) -> @raylib.Color
+
+pub let elite_drop_bonus : Int
+
+pub let elite_floor_threshold : Int
+
+pub let elite_gold_drop : Int
+
+pub let elite_hp_mult : Int
+
+pub fn elite_suffix(EnemyKind) -> String
+
+pub fn enemy_color(EnemyKind) -> @raylib.Color
+
+pub fn enemy_threat_level(Enemy) -> String
+
+pub fn equip_spell(Player, SpellKind) -> Bool
+
+pub let fever_duration : Int
+
+pub fn finalize_floor_stats(Game) -> Unit
+
+pub fn find_enemy_at(Array[Enemy], Int, Int) -> Int
+
+pub fn floor_difficulty_color(Int) -> @raylib.Color
+
+pub fn floor_difficulty_text(Int) -> String
+
+pub fn floor_theme(Int) -> FloorTheme
+
+pub let floor_transition_duration : Float
+
+pub let floor_wipe_speed : Float
+
+pub fn flush_death_explosions(Game) -> Unit
+
+pub let frenzy_duration : Int
+
+pub fn game_rng(Game) -> @ref.Ref[Int]
+
+pub let good_window_early : Float
+
+pub fn good_window_for_floor(Int) -> Float
+
+pub let good_window_late : Float
+
+pub let grade_a_threshold : Int
+
+pub let grade_b_threshold : Int
+
+pub fn grade_color(ScoreGrade) -> @raylib.Color
+
+pub fn grade_distance_text(Int) -> String
+
+pub let grade_s_threshold : Int
+
+pub fn grade_text(ScoreGrade) -> String
+
+pub fn grid_get(Grid, Int, Int) -> Tile?
+
+pub let grid_h : Int
+
+pub fn grid_index(Int, Int, Int) -> Int
+
+pub fn grid_is_walkable(Grid, Int, Int) -> Bool
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub fn grid_set_kind(Grid, Int, Int, TileKind) -> Unit
+
+pub let grid_w : Int
+
+pub fn has_ability(Player, AbilityKind) -> Bool
+
+pub fn has_curse(CurseState, CurseKind) -> Bool
+
+pub fn has_enemy_at(Array[Enemy], Int, Int) -> Bool
+
+pub fn has_spell(Player, SpellKind) -> Bool
+
+pub let heal_beat_threshold : Int
+
+pub fn in_bounds(Int, Int, Int, Int) -> Bool
+
+pub fn is_achievement_unlocked(AchievementState, AchievementKind) -> Bool
+
+pub fn is_boss_floor(Int) -> Bool
+
+pub fn item_color(ItemKind) -> @raylib.Color
+
+pub let item_gold_amount : Int
+
+pub let lava_damage : Int
+
+pub let lich_aoe_interval_p2 : Int
+
+pub let lich_aoe_interval_p3 : Int
+
+pub let lich_phase2_threshold : Float
+
+pub let lich_phase3_threshold : Float
+
+pub let lich_summon_interval_p1 : Int
+
+pub let lich_summon_interval_p2 : Int
+
+pub let lich_teleport_interval : Int
+
+pub fn make_ability_choice(AbilityKind) -> AbilityChoice
+
+pub fn make_elite(Enemy) -> Unit
+
+pub fn make_shop_entry(ShopItemKind) -> ShopEntry
+
+pub fn mana_cost_affordable(Player, Int) -> Bool
+
+pub let mana_regen_on_perfect : Int
+
+pub fn manhattan_dist(Int, Int, Int, Int) -> Int
+
+pub fn mastery_rating(Int) -> String
+
+pub let max_combo : Int
+
+pub let max_enemies_per_floor : Int
+
+pub let max_floor : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub let message_duration : Float
+
+pub fn milestone_color(ComboMilestone) -> @raylib.Color
+
+pub fn milestone_text(ComboMilestone) -> String
+
+pub fn minf(Float, Float) -> Float
+
+pub let miss_damage : Int
+
+pub fn most_used_weapon(RunStats) -> (WeaponKind, Int)
+
+pub fn opposite_dir(Direction) -> Direction
+
+pub let particle_count_death : Int
+
+pub let particle_life : Float
+
+pub let perfect_window_early : Float
+
+pub fn perfect_window_for_floor(Int) -> Float
+
+pub let perfect_window_late : Float
+
+pub let price_beat_window : Int
+
+pub let price_health_potion : Int
+
+pub let price_shield : Int
+
+pub let price_special_charge : Int
+
+pub let price_weapon_upgrade : Int
+
+pub fn push_sound(Game, SoundEvent) -> Unit
+
+pub fn queue_death_explosion(Game, Float, Float, @raylib.Color) -> Unit
+
+pub fn rand_next(@ref.Ref[Int]) -> Int
+
+pub fn rand_range(@ref.Ref[Int], Int, Int) -> Int
+
+pub fn rating_color(BeatRating) -> @raylib.Color
+
+pub fn rating_text(BeatRating) -> String
+
+pub fn record_spell_usage(Game, SpellKind) -> Unit
+
+pub fn record_weapon_usage(Game, WeaponKind) -> Unit
+
+pub fn reset_boss_phases(Game) -> Unit
+
+pub fn reset_run_stats(Game) -> Unit
+
+pub let rhythm_lich_damage : Int
+
+pub let rhythm_lich_hp : Int
+
+pub fn run_stats_summary(Int, Int, Int, Int, Int) -> String
+
+pub let score_combo_bonus : Int
+
+pub let score_floor_gold_mult : Int
+
+pub let score_floor_hp_mult : Int
+
+pub let score_good_mult : Float
+
+pub let score_kill_base_mult : Int
+
+pub let score_miss_mult : Float
+
+pub let score_perfect_mult : Float
+
+pub fn score_rating_mult(BeatRating) -> Float
+
+pub let screen_h : Int
+
+pub fn screen_pulse_for_bpm(Float) -> Float
+
+pub let screen_w : Int
+
+pub fn set_message(Game, String) -> Unit
+
+pub let shadow_dodge_chance : Int
+
+pub let shield_combo_threshold : Int
+
+pub fn shop_item_desc(ShopItemKind) -> String
+
+pub fn shop_item_name(ShopItemKind) -> String
+
+pub fn shop_item_price(ShopItemKind) -> Int
+
+pub fn should_spawn_elite(Int, @ref.Ref[Int]) -> Bool
+
+pub fn sin_approx(Float) -> Float
+
+pub fn spawn_boss_death_particles(Game, Float, Float, @raylib.Color) -> Unit
+
+pub fn spawn_damage_number(Game, Float, Float, Int, BeatRating) -> Unit
+
+pub fn spawn_death_particles(Game, Float, Float, @raylib.Color) -> Unit
+
+pub fn spawn_milestone_burst(Game, ComboMilestone) -> Unit
+
+pub fn spawn_spell_particles(Game, Float, Float, Element) -> Unit
+
+pub fn spawn_trail_particles(Game, Float, Float) -> Unit
+
+pub fn spawn_weapon_effect(Game, WeaponKind, Float, Float, Direction) -> Unit
+
+pub let speed_boost_duration : Int
+
+pub fn spell_border_flash(Game, Element) -> Unit
+
+pub fn spell_color(SpellKind) -> @raylib.Color
+
+pub fn spell_data(SpellKind) -> SpellData
+
+pub let spell_drop_chance : Int
+
+pub fn spell_slot_summary(Player) -> String
+
+pub let spike_damage : Int
+
+pub fn start_floor_stats(Game, Int) -> Unit
+
+pub fn sync_rng(Game, @ref.Ref[Int]) -> Unit
+
+pub fn theme_ambient_text(FloorTheme) -> String
+
+pub fn theme_data(FloorTheme) -> FloorThemeData
+
+pub fn themed_tile_color(TileKind, FloorThemeData?) -> @raylib.Color
+
+pub fn tick_spell_cooldowns(Player) -> Unit
+
+pub fn tile_color(TileKind) -> @raylib.Color
+
+pub fn tile_screen_x(Int) -> Int
+
+pub fn tile_screen_y(Int) -> Int
+
+pub let tile_size : Int
+
+pub let trail_particle_count : Int
+
+pub let trail_particle_life : Float
+
+pub fn trigger_weapon_switch_flash(Game) -> Unit
+
+pub fn update_achievement_toasts(AchievementState, Float) -> Unit
+
+pub fn update_damage_numbers(Game, Float) -> Unit
+
+pub fn update_floor_mastery(MetaProgress, Int, Int) -> Unit
+
+pub fn update_meta_after_run(MetaProgress, Int, Int, Int, Int, Int, Int, WeaponKind) -> Unit
+
+pub fn update_particles(Game, Float) -> Unit
+
+pub fn update_trail_particles(Game, Float) -> Unit
+
+pub fn update_weapon_effects(Game, Float) -> Unit
+
+pub fn update_weapon_switch_flash(Game, Float) -> Unit
+
+pub fn weapon_attack_cells(WeaponKind, Direction) -> Array[(Int, Int)]
+
+pub fn weapon_base_damage(WeaponKind) -> Int
+
+pub fn weapon_can_attack(WeaponKind, Int) -> Bool
+
+pub fn weapon_color(WeaponKind) -> @raylib.Color
+
+pub fn weapon_data(WeaponKind) -> Weapon
+
+pub fn weapon_effect_color(WeaponKind) -> @raylib.Color
+
+pub let weapon_effect_lifetime : Float
+
+pub let weapon_switch_flash_duration : Float
+
+// Errors
+
+// Types and methods
+pub(all) struct AbilityChoice {
+  ability : AbilityKind
+  name : String
+  desc : String
+} derive(Show)
+
+pub(all) enum AbilityKind {
+  DoubleStep
+  CounterAttack
+  HealBeat
+  ShadowDodge
+  RhythmShield
+} derive(Eq, Show)
+
+pub(all) struct Achievement {
+  kind : AchievementKind
+  name : String
+  desc : String
+  mut unlocked : Bool
+} derive(Show)
+
+pub(all) enum AchievementKind {
+  FirstBlood
+  Perfect10
+  BossSlayer
+  ComboKing
+  SpeedDemon
+  Pacifist
+} derive(Eq, Show)
+
+pub(all) struct AchievementState {
+  achievements : Array[Achievement]
+  toasts : Array[AchievementToast]
+} derive(Show)
+pub fn AchievementState::new() -> Self
+
+pub(all) struct AchievementToast {
+  text : String
+  mut timer : Float
+} derive(Show)
+
+pub(all) enum BeatRating {
+  Perfect
+  Good
+  Miss
+} derive(Eq, Show)
+
+pub(all) struct BeatState {
+  mut bpm : Float
+  mut beat_timer : Float
+  mut beat_count : Int
+  mut beat_window : Float
+  mut in_window : Bool
+  mut last_rating : BeatRating
+  mut combo : Int
+  mut max_combo : Int
+  mut perfect_window : Float
+  mut good_window : Float
+} derive(Show)
+pub fn BeatState::new(Float) -> Self
+
+pub(all) enum BossPhase {
+  Phase1
+  Phase2
+  Phase3
+} derive(Eq, Show)
+
+pub(all) struct BossPhaseState {
+  mut dragon_phase : BossPhase
+  mut lich_phase : BossPhase
+  mut dragon_charge_cooldown : Int
+  mut lich_teleport_cooldown : Int
+  mut dragon_4dir_cooldown : Int
+  mut lich_double_summon : Bool
+} derive(Show)
+pub fn BossPhaseState::new() -> Self
+
+pub(all) struct Cell {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+pub(all) enum ComboMilestone {
+  Fever
+  Frenzy
+  PerfectStorm
+  NoMilestone
+} derive(Eq, Show)
+
+pub(all) struct ComboState {
+  mut fever_active : Bool
+  mut fever_beats : Int
+  mut frenzy_active : Bool
+  mut frenzy_beats : Int
+  mut storm_triggered : Bool
+  mut last_milestone : ComboMilestone
+  mut milestone_flash_timer : Float
+} derive(Show)
+pub fn ComboState::new() -> Self
+
+pub(all) enum CurseKind {
+  DoubleTime
+  GlassCannon
+  BlindBeat
+  Swarm
+} derive(Eq, Show)
+
+pub(all) struct CurseState {
+  active_curses : Array[CurseKind]
+} derive(Show)
+pub fn CurseState::new() -> Self
+
+pub(all) struct DamageNumber {
+  mut x : Float
+  mut y : Float
+  mut vy : Float
+  mut life : Float
+  value : Int
+  color : @raylib.Color
+} derive(Show)
+
+pub(all) enum Direction {
+  North
+  South
+  East
+  West
+} derive(Eq, Show)
+
+pub(all) enum Element {
+  Fire
+  Ice
+  Lightning
+  Dark
+} derive(Eq, Show)
+
+pub(all) struct Enemy {
+  id : Int
+  mut active : Bool
+  kind : EnemyKind
+  mut x : Int
+  mut y : Int
+  mut hp : Int
+  max_hp : Int
+  damage : Int
+  mut intent : EnemyIntent
+  beat_pattern : Array[Bool]
+  mut pattern_idx : Int
+  mut is_elite : Bool
+  mut frozen_beats : Int
+  mut stunned_beats : Int
+} derive(Show)
+pub fn Enemy::new(Int, EnemyKind, Int, Int, hp~ : Int, damage~ : Int, beat_pattern~ : Array[Bool]) -> Self
+
+pub(all) enum EnemyIntent {
+  Move(Direction)
+  Attack(Direction, Int)
+  Charge(Direction, Int)
+  Summon(EnemyKind, Int, Int)
+  BreathFire(Direction, Int)
+  AoeFreeze(Int)
+  Wait
+} derive(Show)
+
+pub(all) enum EnemyKind {
+  Slime
+  Skeleton
+  Bat
+  Dragon
+  Mimic
+  Golem
+  Wraith
+  Boss
+  BeatDragon
+  RhythmLich
+} derive(Eq, Show)
+
+pub(all) struct Floor {
+  grid : Grid
+  enemies : Array[Enemy]
+  floor_num : Int
+  exit_x : Int
+  exit_y : Int
+} derive(Show)
+pub fn Floor::new(Int) -> Self
+
+pub(all) struct FloorStats {
+  mut floor_num : Int
+  mut enemies_killed : Int
+  mut perfects_hit : Int
+  mut items_collected : Int
+  mut spells_cast : Int
+  mut damage_taken : Int
+  mut damage_dealt : Int
+} derive(Show)
+pub fn FloorStats::new(Int) -> Self
+
+pub(all) enum FloorTheme {
+  Meadow
+  Cave
+  BossArena
+  IceDungeon
+  Volcano
+  FinalArena
+} derive(Eq, Show)
+
+pub(all) struct FloorThemeData {
+  theme : FloorTheme
+  bg_color : @raylib.Color
+  floor_color : @raylib.Color
+  wall_color : @raylib.Color
+  accent_color : @raylib.Color
+  name : String
+} derive(Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  player : Player
+  beat : BeatState
+  mut floor : Floor?
+  mut frame_count : Int
+  mut rng_state : Int
+  mut score : Int
+  mut floors_cleared : Int
+  mut message_text : String
+  mut message_timer : Float
+  mut anim_timer : Float
+  particles : Array[Particle]
+  mut border_flash_color : @raylib.Color?
+  mut border_flash_timer : Float
+  mut combo_scale : Float
+  mut transition_timer : Float
+  mut transition_floor : Int
+  mut boss_intro_timer : Float
+  mut screen_shake : Float
+  shop_items : Array[ShopEntry]
+  mut shop_cursor : Int
+  score_state : ScoreState
+  mut is_boss_floor : Bool
+  combo_state : ComboState
+  meta : MetaProgress
+  mut floor_theme : FloorThemeData?
+  ability_choices : Array[AbilityChoice]
+  mut ability_cursor : Int
+  mut choosing_ability : Bool
+  mut combo_visual_intensity : Float
+  mut run_perfects : Int
+  mut run_kills : Int
+  curses : CurseState
+  achievements : AchievementState
+  damage_numbers : Array[DamageNumber]
+  trail_particles : Array[Particle]
+  mut pending_death_explosions : Array[(Float, Float, @raylib.Color)]
+  curse_offers : Array[CurseKind]
+  mut curse_cursor : Int
+  mut showing_curse_offer : Bool
+  mut bpm_anim_value : Float
+  mut bpm_anim_target : Float
+  mut bpm_anim_timer : Float
+  sound_queue : Array[SoundEvent]
+  weapon_effects : Array[WeaponEffect]
+  boss_phases : BossPhaseState
+  run_stats : RunStats
+  mut current_floor_stats : FloorStats
+  mut weapon_switch_flash : Float
+  mut floor_wipe_progress : Float
+  mut boss_intro_pulse : Float
+} derive(Show)
+pub fn Game::new() -> Self
+
+pub(all) struct Grid {
+  width : Int
+  height : Int
+  tiles : Array[Tile]
+} derive(Show)
+pub fn Grid::new(Int, Int) -> Self
+
+pub(all) enum ItemKind {
+  Gold(Int)
+  HealthPotion
+  ShieldOrb
+  SpeedBoost
+  WeaponUpgrade
+  BeatFreeze
+  SpecialCharge
+  Bomb
+} derive(Show)
+
+pub(all) struct MetaProgress {
+  mut best_score : Int
+  mut highest_combo : Int
+  mut floors_cleared : Int
+  mut bosses_defeated : Int
+  mut total_runs : Int
+  mut total_kills : Int
+  mut total_perfects : Int
+  unlocked_weapons : Array[WeaponKind]
+  floor_mastery : Array[Int]
+  run_history : Array[RunRecord]
+} derive(Show)
+pub fn MetaProgress::new() -> Self
+
+pub(all) struct Particle {
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  r : Int
+  g : Int
+  b : Int
+  mut size : Float
+} derive(Show)
+
+pub(all) struct Player {
+  mut x : Int
+  mut y : Int
+  mut hp : Int
+  mut max_hp : Int
+  mut gold : Int
+  mut combo : Int
+  mut max_combo : Int
+  mut weapon_damage : Int
+  mut shield : Int
+  mut special_charges : Int
+  mut beat_multiplier : Float
+  mut speed_boost_beats : Int
+  mut beat_freeze_beats : Int
+  mut weapon : WeaponKind
+  mut weapon_beat_counter : Int
+  abilities : Array[AbilityKind]
+  mut consecutive_perfects : Int
+  mut facing : Direction
+  mut invincible_beats : Int
+  mut double_damage_beats : Int
+  mut mana : Int
+  mut max_mana : Int
+  spell_slots : SpellSlots
+  learned_spells : Array[SpellKind]
+  mut floor_attacks : Int
+} derive(Show)
+pub fn Player::new() -> Self
+
+pub(all) enum PlayerAction {
+  Move(Direction)
+  Attack(Direction)
+  Special
+  Wait
+} derive(Show)
+
+pub(all) struct RunRecord {
+  score : Int
+  max_combo : Int
+  floors : Int
+  weapon : WeaponKind
+  grade : ScoreGrade
+} derive(Show)
+
+pub(all) struct RunStats {
+  floor_history : Array[FloorStats]
+  mut weapon_usage : Array[(WeaponKind, Int)]
+  mut spell_usage : Array[(SpellKind, Int)]
+  mut total_items : Int
+  mut total_spells_cast : Int
+  mut total_damage_dealt : Int
+  mut total_damage_taken : Int
+} derive(Show)
+pub fn RunStats::new() -> Self
+
+pub(all) enum ScoreGrade {
+  GradeS
+  GradeA
+  GradeB
+  GradeC
+} derive(Show)
+
+pub(all) struct ScoreState {
+  mut base_kills : Int
+  mut beat_bonus : Int
+  mut combo_bonus : Int
+  mut floor_bonus : Int
+  mut total : Int
+} derive(Show)
+pub fn ScoreState::new() -> Self
+
+pub(all) enum Screen {
+  Title
+  Playing
+  BeatFail
+  LevelComplete
+  GameOver
+  FloorSelect
+  Shop
+  FloorTransition
+  BossIntro
+  AbilityChoice
+  RunSummary
+  CurseOffer
+} derive(Eq, Show)
+
+pub(all) struct ShopEntry {
+  kind : ShopItemKind
+  price : Int
+  name : String
+  desc : String
+} derive(Show)
+
+pub(all) enum ShopItemKind {
+  ShopHealthPotion
+  ShopShield
+  ShopWeaponUpgrade
+  ShopSpecialCharge
+  ShopBeatWindow
+  ShopWeapon(WeaponKind)
+  ShopSpell(SpellKind)
+  ShopManaPotion
+} derive(Show)
+
+pub(all) enum SoundEvent {
+  BeatTick
+  BeatPerfect
+  BeatGood
+  BeatMiss
+  PlayerAttack
+  PlayerHit
+  EnemyDeath
+  ItemPickup
+  SpellCast(Element)
+  BossPhaseChange
+  LevelComplete
+  ComboMilestoneSound(ComboMilestone)
+  ShopPurchase
+  WeaponSwitch
+  BossRoar
+  CurseAccepted
+} derive(Show)
+
+pub(all) struct SpellData {
+  kind : SpellKind
+  element : Element
+  name : String
+  desc : String
+  mana_cost : Int
+  beat_cooldown : Int
+  damage : Int
+  range : Int
+  aoe_radius : Int
+} derive(Show)
+
+pub(all) enum SpellKind {
+  Fireball
+  FrostNova
+  ChainLightning
+  ShadowStep
+  Inferno
+  Blizzard
+  ThunderStrike
+  VoidPulse
+} derive(Eq, Show)
+
+pub(all) struct SpellSlots {
+  spells : Array[SpellKind?]
+  mut cooldowns : Array[Int]
+} derive(Show)
+pub fn SpellSlots::new() -> Self
+
+pub(all) struct Tile {
+  mut kind : TileKind
+  mut has_item : Bool
+  mut item_kind : Int
+  mut item : ItemKind?
+} derive(Show)
+pub fn Tile::floor() -> Self
+pub fn Tile::wall() -> Self
+
+pub(all) enum TileKind {
+  Floor
+  Wall
+  Pit
+  Spike
+  Ice
+  Exit
+  Lava
+} derive(Eq, Show)
+
+pub(all) struct Weapon {
+  kind : WeaponKind
+  damage : Int
+  range : Int
+  beat_cost : Int
+  name : String
+} derive(Show)
+
+pub(all) struct WeaponEffect {
+  kind : WeaponKind
+  mut x : Float
+  mut y : Float
+  direction : Direction
+  mut timer : Float
+  max_timer : Float
+} derive(Show)
+pub fn WeaponEffect::new(WeaponKind, Float, Float, Direction) -> Self
+
+pub(all) enum WeaponKind {
+  Sword
+  Spear
+  Whip
+  Hammer
+  Bow
+  Staff
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

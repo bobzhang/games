@@ -11,8 +11,6 @@ pub(all) struct Enemy {
   mut max_hp : Float
   mut kind : EnemyKind
   mut phase : Float
-
-  fn new() -> Enemy
 }
 
 ///|
@@ -25,8 +23,6 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
-
-  fn new() -> Pickup
 }
 
 ///|
@@ -40,8 +36,6 @@ pub(all) struct Bullet {
   mut life : Float
   mut power : Float
   mut kind : BulletKind
-
-  fn new() -> Bullet
 }
 
 ///|
@@ -55,8 +49,6 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
 
 ///|
@@ -249,14 +241,11 @@ pub(all) struct Game {
   /// Written by the main loop from `get_touch_point_count()` each frame.
   /// Used by `pointer_on_rect` to iterate over touch positions.
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive enemy with default field values.
-#deprecated
-pub fn Enemy::new() -> Enemy {
+pub fn Enemy::Enemy() -> Enemy {
   {
     active: false,
     x: 0.0,
@@ -273,15 +262,13 @@ pub fn Enemy::new() -> Enemy {
 
 ///|
 /// Creates an inactive pickup with default field values.
-#deprecated
-pub fn Pickup::new() -> Pickup {
+pub fn Pickup::Pickup() -> Pickup {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Fuel, phase: 0.0 }
 }
 
 ///|
 /// Creates an inactive bullet with default field values.
-#deprecated
-pub fn Bullet::new() -> Bullet {
+pub fn Bullet::Bullet() -> Bullet {
   {
     active: false,
     x: 0.0,
@@ -296,8 +283,7 @@ pub fn Bullet::new() -> Bullet {
 
 ///|
 /// Creates an inactive particle with default field values.
-#deprecated
-pub fn Particle::new() -> Particle {
+pub fn Particle::Particle() -> Particle {
   {
     active: false,
     x: 0.0,
@@ -312,8 +298,7 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with preallocated object pools.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     enemies: Array::makei(max_enemies, fn(_i) { Enemy() }),
     pickups: Array::makei(max_pickups, fn(_i) { Pickup() }),

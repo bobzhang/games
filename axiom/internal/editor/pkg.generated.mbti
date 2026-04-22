@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/axiom/internal/editor"
+
+import {
+  "bobzhang/games/axiom/internal/types",
+}
+
+// Values
+pub fn add_command_by_index(@types.EditorState, @types.Program, Int) -> Bool
+
+pub fn clamp_cursor(@types.EditorState, @types.Program) -> Unit
+
+pub fn clear_program(@types.EditorState, @types.Program) -> Unit
+
+pub fn close_palette(@types.EditorState) -> Unit
+
+pub fn cursor_down(@types.EditorState, @types.Program) -> Unit
+
+pub fn cursor_up(@types.EditorState, @types.Program) -> Unit
+
+pub fn delete_at_cursor(@types.EditorState, @types.Program) -> Bool
+
+pub fn get_current_command(@types.EditorState, @types.Program) -> @types.CommandKind?
+
+pub fn init_editor(@types.EditorState, Array[@types.CommandKind]) -> Unit
+
+pub fn move_cmd_down(@types.EditorState, @types.Program) -> Bool
+
+pub fn move_cmd_up(@types.EditorState, @types.Program) -> Bool
+
+pub fn select_from_palette(@types.EditorState, @types.Program) -> Bool
+
+pub fn toggle_palette(@types.EditorState) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

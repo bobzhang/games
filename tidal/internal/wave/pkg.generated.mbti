@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tidal/internal/wave"
+
+import {
+  "bobzhang/games/tidal/internal/types",
+}
+
+// Values
+pub fn check_targets(@types.WaveGrid) -> Bool
+
+pub fn count_targets(@types.WaveGrid) -> (Int, Int)
+
+pub fn simulate_tick(@types.WaveGrid) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

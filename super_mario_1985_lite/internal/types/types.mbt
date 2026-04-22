@@ -26,14 +26,11 @@ pub(all) struct Player {
   mut score : Int
   mut reached_flag : Bool
   mut flag_phase : Int
-
-  fn new() -> Player
 }
 
 ///|
 /// Creates a player with default movement and score state.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: player_start_x,
     y: 0.0,
@@ -166,14 +163,11 @@ pub(all) struct Game {
   enemies : Array[Enemy]
   coins : Array[Coin]
   particles : Array[Particle]
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a fresh game state with allocated tile/entity pools.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     state: Title,
     elapsed: 0.0,

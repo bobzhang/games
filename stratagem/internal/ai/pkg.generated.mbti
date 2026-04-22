@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/stratagem/internal/ai"
+
+import {
+  "bobzhang/games/stratagem/internal/types",
+}
+
+// Values
+pub fn execute_ai_turn(@types.Battle, @types.Difficulty) -> Array[String]
+
+// Errors
+
+// Types and methods
+pub(all) struct AiAction {
+  unit_id : Int
+  move_to : @types.HexCoord?
+  attack_target : Int
+  score : Int
+}
+
+// Type aliases
+
+// Traits
+

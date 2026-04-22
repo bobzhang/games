@@ -1,0 +1,449 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub let ambient_spawn_rate : Float
+
+pub let anim_speed : Float
+
+pub let bounce_duration : Float
+
+pub fn calc_stars(Int, Int) -> Int
+
+pub let color_boulder : @raylib.Color
+
+pub let color_box : @raylib.Color
+
+pub let color_conveyor : @raylib.Color
+
+pub let color_crumble : @raylib.Color
+
+pub let color_enemy : @raylib.Color
+
+pub let color_exit : @raylib.Color
+
+pub let color_gate : @raylib.Color
+
+pub let color_gem : @raylib.Color
+
+pub let color_gravity_well : @raylib.Color
+
+pub let color_ice : @raylib.Color
+
+pub let color_key : @raylib.Color
+
+pub let color_mirror : @raylib.Color
+
+pub let color_player : @raylib.Color
+
+pub let color_portal : @raylib.Color
+
+pub let color_pressure_plate : @raylib.Color
+
+pub let color_spike : @raylib.Color
+
+pub let color_star_bronze : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_star_silver : @raylib.Color
+
+pub let color_switch : @raylib.Color
+
+pub let color_timed_lava : @raylib.Color
+
+pub let color_wind_gust : @raylib.Color
+
+pub fn count_active_enemies(Level) -> Int
+
+pub fn count_gates(Level, Int) -> Int
+
+pub let editor_entity_count : Int
+
+pub let editor_tile_count : Int
+
+pub fn entity_at(Level, Int, Int) -> Entity?
+
+pub fn entity_at_except(Level, Int, Int, Int) -> Entity?
+
+pub fn entity_kind_from_index(Int) -> EntityKind
+
+pub fn find_enemies(Level) -> Array[Entity]
+
+pub fn find_matching_portal(Level, Int, Int, Int) -> (Int, Int)
+
+pub fn find_player(Level) -> Entity?
+
+pub fn get_tile(Level, Int, Int) -> TileKind
+
+pub let ghost_replay_speed : Float
+
+pub let gravity_anim_duration : Float
+
+pub fn gravity_dir_to_angle(GravityDir) -> Float
+
+pub fn gravity_perp_vectors(GravityDir) -> ((Int, Int), (Int, Int))
+
+pub let gravity_rot_speed : Float
+
+pub fn gravity_vector(GravityDir) -> (Int, Int)
+
+pub let grid_max_h : Int
+
+pub let grid_max_w : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let hint_display_duration : Float
+
+pub fn is_blocking(Level, Int, Int) -> Bool
+
+pub fn is_solid(TileKind) -> Bool
+
+pub let lava_cycle_period : Float
+
+pub fn lerp(Float, Float, Float) -> Float
+
+pub let levels_per_world : Int
+
+pub let max_particles : Int
+
+pub let message_duration : Float
+
+pub fn mirror_reflect(GravityDir, Int) -> GravityDir
+
+pub let num_worlds : Int
+
+pub fn open_gates(Level, Int) -> Unit
+
+pub fn rand_next(Game) -> UInt
+
+pub fn restore_snapshot(Level, LevelSnapshot) -> Unit
+
+pub fn rotate_gravity_ccw(GravityDir) -> GravityDir
+
+pub fn rotate_gravity_cw(GravityDir) -> GravityDir
+
+pub fn save_snapshot(Level) -> LevelSnapshot
+
+pub let screen_h : Int
+
+pub let screen_w : Int
+
+pub fn set_tile(Level, Int, Int, TileKind) -> Unit
+
+pub let settle_delay : Float
+
+pub let target_fps : Int
+
+pub fn tile_from_index(Int) -> TileKind
+
+pub fn tile_kind_index(TileKind) -> Int
+
+pub let tile_size : Int
+
+pub let tile_sizef : Float
+
+pub fn tile_to_pixel_x(Int) -> Float
+
+pub fn tile_to_pixel_y(Int) -> Float
+
+pub let toast_display_duration : Float
+
+pub let toast_slide_speed : Float
+
+pub fn toggle_gates(Level, Int) -> Unit
+
+pub let total_levels : Int
+
+pub let wind_beat_period : Float
+
+pub fn world_bg_color(WorldTheme) -> @raylib.Color
+
+pub fn world_floor_color(WorldTheme) -> @raylib.Color
+
+pub fn world_name(Int) -> String
+
+pub fn world_theme_of(Int) -> WorldTheme
+
+pub fn world_wall_color(WorldTheme) -> @raylib.Color
+
+// Errors
+
+// Types and methods
+pub(all) enum AccessibilityMode {
+  Normal
+  HighContrast
+  LargeText
+} derive(Eq, Show)
+
+pub(all) struct Achievement {
+  kind : AchievementKind
+  name : String
+  description : String
+  mut unlocked : Bool
+}
+
+pub(all) enum AchievementKind {
+  FirstStep
+  WorldMaster(Int)
+  Speedster
+  Perfectionist
+  NoHints
+  GemCollector
+  KeyMaster
+  Minimalist
+  Explorer
+  GhostRacer
+  UndoFree
+  AllWorlds
+  GravitySpinner
+  IceSlider
+  Completionist
+} derive(Eq, Show)
+
+pub(all) struct AchievementState {
+  achievements : Array[Achievement]
+  mut toast_queue : Array[Int]
+  mut toast_timer : Float
+  mut current_toast : Int
+}
+pub fn AchievementState::new() -> Self
+
+pub(all) struct AmbientState {
+  mut particles : Array[Particle]
+  mut spawn_timer : Float
+}
+pub fn AmbientState::new() -> Self
+
+pub(all) struct EditorState {
+  mut active : Bool
+  mut cursor_x : Int
+  mut cursor_y : Int
+  mut selected_tile : Int
+  mut selected_entity : Int
+  mut mode : Int
+  mut grid_w : Int
+  mut grid_h : Int
+  mut tiles : Array[TileKind]
+  mut entities : Array[Entity]
+  mut test_playing : Bool
+  mut gravity : GravityDir
+}
+pub fn EditorState::new() -> Self
+
+pub(all) struct Entity {
+  mut id : Int
+  mut active : Bool
+  kind : EntityKind
+  mut x : Int
+  mut y : Int
+  mut falling : Bool
+  mut slide_timer : Float
+  mut from_x : Int
+  mut from_y : Int
+}
+pub fn Entity::clone(Self) -> Self
+pub fn Entity::new(Int, EntityKind, Int, Int) -> Self
+
+pub(all) enum EntityKind {
+  Player
+  Box
+  Boulder
+  Key
+  Gem
+  Enemy
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut level : Level?
+  mut current_world : Int
+  mut current_level : Int
+  mut undo_stack : Array[LevelSnapshot]
+  mut frame_count : Int
+  mut rng_state : UInt
+  mut anim_timer : Float
+  mut gravity_anim_timer : Float
+  mut gravity_anim_from : GravityDir
+  mut message_text : String
+  mut message_timer : Float
+  mut total_stars : Int
+  mut level_stars : Array[Int]
+  levels_unlocked : Array[Int]
+  mut settling : Bool
+  mut settle_timer : Float
+  particles : Array[Particle]
+  ghost : GhostState
+  hints : HintState
+  editor : EditorState
+  ambient : AmbientState
+  mut move_history : Array[ReplayFrame]
+  mut speedrun_timer : Float
+  mut speedrun_active : Bool
+  mut gravity_rot_angle : Float
+  mut gravity_rot_target : Float
+  mut bounce_timers : Array[Float]
+  mut lava_timer : Float
+  mut wind_timer : Float
+  mut wind_beat : Int
+  achievement_state : AchievementState
+  save_data : SaveData
+  stats : GameStats
+  mut accessibility : AccessibilityMode
+  mut used_undo_this_level : Bool
+  mut used_hint_this_level : Bool
+}
+pub fn Game::new() -> Self
+
+pub(all) struct GameStats {
+  mut total_moves : Int
+  mut total_gravity_rotations : Int
+  mut total_levels_completed : Int
+  mut total_stars_earned : Int
+  mut total_time_played : Float
+  mut total_deaths : Int
+  mut total_undos : Int
+  mut total_gems_collected : Int
+  mut total_keys_collected : Int
+  mut best_streak : Int
+  mut current_streak : Int
+  mut levels_with_3_stars : Int
+  mut total_ice_slides : Int
+  mut hint_uses : Int
+}
+pub fn GameStats::new() -> Self
+
+pub(all) struct GhostState {
+  mut active : Bool
+  mut frame_index : Int
+  mut ghost_x : Int
+  mut ghost_y : Int
+  mut ghost_timer : Float
+  mut replay_frames : Array[ReplayFrame]
+  mut best_moves : Int
+}
+pub fn GhostState::new() -> Self
+
+pub(all) enum GravityDir {
+  Down
+  Up
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct HintState {
+  mut hints_remaining : Array[Int]
+  mut hint_active : Bool
+  mut hint_dir : GravityDir
+  mut hint_timer : Float
+}
+pub fn HintState::new() -> Self
+
+pub(all) struct Level {
+  width : Int
+  height : Int
+  tiles : Array[TileKind]
+  entities : Array[Entity]
+  mut gravity : GravityDir
+  mut moves : Int
+  mut gems_collected : Int
+  mut gems_total : Int
+  mut keys_collected : Int
+  par_moves : Int
+  world : Int
+  level_num : Int
+  name : String
+  mut completed : Bool
+  mut player_dead : Bool
+}
+
+pub(all) struct LevelSnapshot {
+  gravity : GravityDir
+  moves : Int
+  gems_collected : Int
+  keys_collected : Int
+  entity_states : Array[(Int, Bool, Int, Int)]
+  tile_states : Array[TileKind]
+}
+
+pub(all) struct Particle {
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  mut size : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut kind : Int
+}
+pub fn Particle::new(Float, Float, Float, Float, Float, Float, Int, Int, Int, Int) -> Self
+
+pub(all) struct ReplayFrame {
+  direction : GravityDir
+  move_type : Int
+  dx : Int
+  dy : Int
+}
+
+pub(all) struct SaveData {
+  star_ratings : Array[Array[Int]]
+  best_moves : Array[Array[Int]]
+  mut achievements_unlocked : Array[Bool]
+  mut total_play_time : Float
+  levels_unlocked : Array[Int]
+}
+pub fn SaveData::new() -> Self
+
+pub(all) enum Screen {
+  Title
+  Playing
+  LevelComplete
+  WorldSelect
+  LevelSelect
+  Paused
+  Editor
+  Statistics
+} derive(Eq, Show)
+
+pub(all) enum TileKind {
+  Empty
+  Wall
+  Exit
+  Spike
+  Ice
+  Portal(Int)
+  Switch(Int)
+  Gate(Int)
+  Crumble
+  Conveyor(GravityDir)
+  PressurePlate(Int)
+  Mirror(Int)
+  GravityWell
+  TimedLava
+  WindGust(GravityDir)
+} derive(Eq, Show)
+
+pub(all) enum WorldTheme {
+  Stone
+  Crystal
+  Void
+  Magma
+  Sky
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

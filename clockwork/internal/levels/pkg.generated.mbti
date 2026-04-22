@@ -1,0 +1,68 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/clockwork/internal/levels"
+
+import {
+  "bobzhang/games/clockwork/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.LevelDef
+
+pub fn level_name(Int) -> String
+
+pub fn level_tier(Int) -> @types.Tier
+
+pub fn levels_in_tier(@types.Tier) -> (Int, Int)
+
+pub fn load_level(@types.Game, Int) -> Unit
+
+pub fn make_level_1() -> @types.LevelDef
+
+pub fn make_level_10() -> @types.LevelDef
+
+pub fn make_level_11() -> @types.LevelDef
+
+pub fn make_level_12() -> @types.LevelDef
+
+pub fn make_level_13() -> @types.LevelDef
+
+pub fn make_level_14() -> @types.LevelDef
+
+pub fn make_level_15() -> @types.LevelDef
+
+pub fn make_level_16() -> @types.LevelDef
+
+pub fn make_level_17() -> @types.LevelDef
+
+pub fn make_level_18() -> @types.LevelDef
+
+pub fn make_level_19() -> @types.LevelDef
+
+pub fn make_level_2() -> @types.LevelDef
+
+pub fn make_level_20() -> @types.LevelDef
+
+pub fn make_level_3() -> @types.LevelDef
+
+pub fn make_level_4() -> @types.LevelDef
+
+pub fn make_level_5() -> @types.LevelDef
+
+pub fn make_level_6() -> @types.LevelDef
+
+pub fn make_level_7() -> @types.LevelDef
+
+pub fn make_level_8() -> @types.LevelDef
+
+pub fn make_level_9() -> @types.LevelDef
+
+pub fn tier_unlocked(@types.Game, @types.Tier) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

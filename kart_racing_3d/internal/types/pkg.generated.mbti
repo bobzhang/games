@@ -4,13 +4,57 @@ package "bobzhang/games/kart_racing_3d/internal/types"
 // Values
 pub fn add_skid_mark(Game, Float, Float, Float, Float, Float, Float) -> Unit
 
+pub let ai_apex_steer_strength : Float
+
+pub let ai_avoidance_dist : Float
+
+pub let ai_avoidance_strength : Float
+
+pub let ai_block_offset : Float
+
+pub let ai_brake_decel : Float
+
 pub let ai_difficulty_medium : Int
 
 pub let ai_difficulty_stats : Array[(Float, Float, Float, Float)]
 
+pub let ai_draft_boost_duration : Float
+
+pub let ai_draft_boost_power : Float
+
+pub let ai_draft_charge_time : Float
+
+pub let ai_draft_max_angle : Float
+
+pub let ai_draft_max_dist : Float
+
+pub let ai_exit_accel_mult : Float
+
+pub let ai_gentle_corner_speed : Float
+
+pub let ai_hazard_lookahead : Int
+
+pub let ai_hazard_speed_reduction : Float
+
+pub let ai_lookahead_segments : Int
+
+pub let ai_medium_corner_speed : Float
+
+pub let ai_obstacle_cone_half : Float
+
+pub let ai_obstacle_dodge_offset : Float
+
+pub let ai_obstacle_scan_dist : Float
+
+pub let ai_overtake_duration : Float
+
+pub let ai_overtake_offset : Float
+
 pub let ai_rubberband_ahead : Float
 
 pub let ai_rubberband_behind : Float
+
+pub let ai_sharp_corner_speed : Float
 
 pub let air_steer_mult : Float
 
@@ -19,6 +63,8 @@ pub fn alloc_dropped_item(Game) -> Int
 pub fn alloc_particle(Game) -> Int
 
 pub fn alloc_projectile(Game) -> Int
+
+pub fn angle_between_segments(Waypoint, Waypoint, Waypoint) -> Float
 
 pub fn angle_diff(Float, Float) -> Float
 
@@ -100,7 +146,13 @@ pub let deco_tree_pine : Int
 
 pub fn detect_surface_type(Game, Float, Float) -> Surface
 
+pub let dirt_decel : Float
+
 pub fn distance2d(Float, Float, Float, Float) -> Float
+
+pub fn distance_to_segment(Float, Float, Float, Float, Float, Float) -> Float
+
+pub fn distance_to_waypoint(Game, Kart, Int) -> Float
 
 pub let drift_friction_mult : Float
 
@@ -126,6 +178,22 @@ pub let drift_ultra_duration : Float
 
 pub let drift_ultra_threshold : Float
 
+pub let fall_reset_distance : Float
+
+pub let fall_reset_speed : Float
+
+pub let fall_reset_time_penalty : Float
+
+pub let falling_rock_radius : Float
+
+pub let falling_rock_speed_penalty : Float
+
+pub let falling_rock_spin_time : Float
+
+pub let falling_rocks_max : Int
+
+pub fn find_nearest_waypoint(Game, Float, Float) -> Int
+
 pub fn find_target_ahead(Game, Int) -> Int
 
 pub fn format_time(Float) -> String
@@ -146,6 +214,8 @@ pub fn get_kart_max_speed(Kart) -> Float
 
 pub fn get_kart_weight(Kart) -> Float
 
+pub fn get_lateral_damp(Surface) -> Float
+
 pub fn get_segment(Game, Int) -> TrackSegment
 
 pub fn get_surface_grip(Surface) -> Float
@@ -160,6 +230,8 @@ pub fn get_track_perpendicular(Game, Int) -> (Float, Float)
 
 pub fn get_waypoint(Game, Int) -> Waypoint
 
+pub let grass_decel : Float
+
 pub let gravity : Float
 
 pub let grip_boost_pad : Float
@@ -173,6 +245,18 @@ pub let grip_ice : Float
 pub let grip_oil : Float
 
 pub let grip_road : Float
+
+pub let hop_duration : Float
+
+pub let hop_vy : Float
+
+pub let ice_sheet_grip : Float
+
+pub let ice_sheet_steer_mult : Float
+
+pub fn is_boost_item(PowerupKind) -> Bool
+
+pub fn is_defensive_item(PowerupKind) -> Bool
 
 pub fn is_on_ramp(Game, Kart) -> Bool
 
@@ -206,6 +290,30 @@ pub let kart_type_names : Array[String]
 
 pub let kart_width : Float
 
+pub let landing_boost_duration : Float
+
+pub let landing_boost_max : Float
+
+pub let landing_boost_per_sec : Float
+
+pub let lateral_build_rate : Float
+
+pub let lateral_damp_dirt : Float
+
+pub let lateral_damp_grass : Float
+
+pub let lateral_damp_ice : Float
+
+pub let lateral_damp_road : Float
+
+pub let lava_burst_active_duration : Float
+
+pub let lava_burst_period : Float
+
+pub let lava_burst_speed_penalty : Float
+
+pub let lava_burst_spin_time : Float
+
 pub fn lerpf(Float, Float, Float) -> Float
 
 pub let lightning_duration : Float
@@ -226,11 +334,15 @@ pub let max_projectiles : Int
 
 pub let max_waypoints : Int
 
+pub fn maxf(Float, Float) -> Float
+
 pub fn minf(Float, Float) -> Float
 
 pub let missile_speed : Float
 
 pub fn normalize_angle(Float) -> Float
+
+pub let offroad_spin_chance : Int
 
 pub let oil_slick_lifetime : Float
 
@@ -272,13 +384,21 @@ pub let road_half : Float
 
 pub let road_width : Float
 
+pub fn roll_position_weighted_item(Game, Int) -> PowerupKind
+
 pub let screen_height : Int
 
 pub let screen_width : Int
 
 pub let seg_straight : Int
 
+pub fn segment_length(Game, Int) -> Float
+
 pub let shield_duration : Float
+
+pub let shortcut_speed_bonus : Float
+
+pub let shortcut_width_mult : Float
 
 pub fn should_spin_from_bump(Float, Float) -> (Bool, Bool)
 
@@ -297,6 +417,12 @@ pub let speed_mult_ice : Float
 pub let speed_mult_oil : Float
 
 pub let speed_mult_road : Float
+
+pub let speed_wobble_amplitude : Float
+
+pub let speed_wobble_rate : Float
+
+pub let speed_wobble_threshold : Float
 
 pub let spin_duration : Float
 
@@ -318,7 +444,11 @@ pub let track_record_times : Array[Float]
 
 pub let triple_mushroom_boost : Float
 
+pub fn turn_direction(Waypoint, Waypoint, Waypoint) -> Float
+
 pub let two_pi : Float
+
+pub let water_current_force : Float
 
 pub let weight_spin_diff : Float
 
@@ -410,11 +540,11 @@ pub(all) struct Game {
   skid_marks : Array[(Float, Float, Float, Float, Float, Float, Float)]
   mut skid_mark_count : Int
   mut hit_flash_timer : Float
-
-  fn new() -> Game
+  mut hazard_timer : Float
+  falling_rocks : Array[(Int, Float, Float, Bool)]
+  mut falling_rocks_count : Int
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Menu
@@ -426,6 +556,15 @@ pub(all) enum GameState {
   KartSelect
   TrackPreview
 } derive(Eq)
+
+pub(all) enum HazardKind {
+  NoHazard
+  LavaBurst
+  FallingRocks
+  WaterCurrent
+  IceSheet
+  Shortcut
+} derive(Eq, Show)
 
 pub(all) struct Kart {
   mut active : Bool
@@ -477,7 +616,21 @@ pub(all) struct Kart {
   mut ai_line_offset : Float
   mut ai_reaction_timer : Float
   mut ai_brake_timer : Float
+  mut ai_braking_for_corner : Bool
+  mut ai_corner_target_speed : Float
+  mut ai_corner_phase : Int
+  mut ai_draft_timer : Float
+  mut ai_draft_boost : Float
+  mut ai_overtake_side : Float
+  mut ai_overtake_timer : Float
+  mut ai_hazard_offset : Float
+  mut ai_hazard_slow : Float
   mut ramp_launched : Bool
+  mut lateral_vel : Float
+  mut hop_timer : Float
+  mut landing_boost_timer : Float
+  mut speed_wobble_phase : Float
+  mut trailing_item_active : Bool
 }
 pub fn Kart::inactive() -> Self
 
@@ -584,6 +737,7 @@ pub(all) struct TrackSegment {
   mut decoration_type : Int
   mut is_ramp : Bool
   mut ramp_height : Float
+  mut hazard : HazardKind
 }
 pub fn TrackSegment::default() -> Self
 

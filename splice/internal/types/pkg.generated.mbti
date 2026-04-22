@@ -1,0 +1,269 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/splice/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn base_char(Base) -> String
+
+pub fn base_color(Base) -> @raylib.Color
+
+pub fn clamp_cursor(Game) -> Unit
+
+pub fn clear_selection(Game) -> Unit
+
+pub fn codon_to_trait(Base, Base, Base) -> Trait
+
+pub let color_base_a : @raylib.Color
+
+pub let color_base_c : @raylib.Color
+
+pub let color_base_g : @raylib.Color
+
+pub let color_base_t : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_cursor : @raylib.Color
+
+pub let color_fail : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_op_cut : @raylib.Color
+
+pub let color_op_delete : @raylib.Color
+
+pub let color_op_duplicate : @raylib.Color
+
+pub let color_op_insert : @raylib.Color
+
+pub let color_op_invert : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_panel_border : @raylib.Color
+
+pub let color_selection : @raylib.Color
+
+pub let color_star : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_trait_armor : @raylib.Color
+
+pub let color_trait_heal : @raylib.Color
+
+pub let color_trait_neutral : @raylib.Color
+
+pub let color_trait_poison : @raylib.Color
+
+pub let color_trait_shield : @raylib.Color
+
+pub let color_trait_speed : @raylib.Color
+
+pub let color_trait_start : @raylib.Color
+
+pub let color_trait_stealth : @raylib.Color
+
+pub let color_trait_stop : @raylib.Color
+
+pub let color_trait_strength : @raylib.Color
+
+pub let color_trait_vision : @raylib.Color
+
+pub fn color_with_alpha(@raylib.Color, Int) -> @raylib.Color
+
+pub fn compute_stars(Int, Int, Int) -> Int
+
+pub fn copy_sequence(Array[Base]) -> Array[Base]
+
+pub fn find_start_codon(Array[Base]) -> Int
+
+pub fn has_selection(Game) -> Bool
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub fn op_color(OpKind) -> @raylib.Color
+
+pub fn op_key(OpKind) -> String
+
+pub fn op_name(OpKind) -> String
+
+pub let ops_panel_x : Int
+
+pub let ops_panel_y : Int
+
+pub fn read_sequence(Array[Base]) -> ReadResult
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn selection_max(Game) -> Int
+
+pub fn selection_min(Game) -> Int
+
+pub let seq_base_gap : Int
+
+pub let seq_base_size : Int
+
+pub let seq_x_start : Int
+
+pub let seq_y : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub let target_fps : Int
+
+pub let target_y : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_from_index(Int) -> Tier
+
+pub fn tier_level_count(Int) -> Int
+
+pub fn tier_level_offset(Int) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub fn trait_color(Trait) -> @raylib.Color
+
+pub fn trait_name(Trait) -> String
+
+pub let trait_y : Int
+
+pub fn traits_match(Array[Trait], Array[Trait]) -> Bool
+
+// Errors
+
+// Types and methods
+pub(all) enum Base {
+  A
+  T
+  G
+  C
+} derive(Eq, Show)
+
+pub(all) struct CodonResult {
+  trait_ : Trait
+  bases : Array[Base]
+} derive(Eq, Show)
+
+pub(all) struct EditOp {
+  kind : OpKind
+  position : Int
+  range_start : Int
+  range_end : Int
+  insert_base : Base
+  removed : Array[Base]
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_sequence : Array[Base]
+  mut original_sequence : Array[Base]
+  mut cursor : Int
+  mut selection_start : Int
+  mut selection_end : Int
+  mut edit_count : Int
+  mut ops_history : Array[EditOp]
+  mut current_tier : Int
+  mut current_level : Int
+  mut insert_base : Base
+  mut selected_op : OpKind
+  mut level_scores : Array[LevelScore]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut anim_timer : Float
+  mut show_help : Bool
+  mut confirm_verify : Bool
+}
+
+pub(all) struct Level {
+  start_sequence : Array[Base]
+  target_traits : Array[Trait]
+  edit_budget : Int
+  par_edits : Int
+  min_edits : Int
+  available_ops : Array[OpKind]
+  name : String
+  description : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : Int
+  mut best_edits : Int
+} derive(Show)
+
+pub(all) enum OpKind {
+  Cut
+  Insert
+  Duplicate
+  Invert
+  Delete
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  Editing
+  Verified
+  Failed
+} derive(Eq, Show)
+
+pub(all) struct ReadResult {
+  traits : Array[Trait]
+  valid : Bool
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  LabBasics
+  GeneEditing
+  Mastery
+} derive(Eq, Show)
+
+pub(all) enum Trait {
+  Start
+  Stop
+  Strength
+  Speed
+  Shield
+  Stealth
+  Heal
+  Poison
+  Armor
+  Vision
+  Neutral
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

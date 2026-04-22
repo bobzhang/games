@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/hex_harvest/internal/game"
+
+import {
+  "bobzhang/games/hex_harvest/internal/types",
+}
+
+// Values
+pub fn calculate_score(@types.Game) -> @types.LevelScore
+
+pub fn check_goals(@types.Game) -> Unit
+
+pub fn complete_level(@types.Game) -> Unit
+
+pub fn execute_turn(@types.Game) -> Unit
+
+pub fn save_undo(@types.Game) -> Unit
+
+pub fn start_level(@types.Game, Int) -> Unit
+
+pub fn undo(@types.Game) -> Unit
+
+pub fn update(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

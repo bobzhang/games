@@ -1,0 +1,26 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/canopy/internal/levels"
+
+import {
+  "bobzhang/games/canopy/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.Level
+
+pub fn load_level(@types.Game, Int) -> Unit
+
+pub fn tier_for_level(Int) -> @types.Tier
+
+pub fn tier_level_count(@types.Tier) -> Int
+
+pub fn tier_start_level(@types.Tier) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

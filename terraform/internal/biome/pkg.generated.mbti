@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/terraform/internal/biome"
+
+import {
+  "bobzhang/games/terraform/internal/types",
+}
+
+// Values
+pub fn calculate_stars(@types.HexGrid, @types.TargetRatio, @types.PaintBudget, Int, Int) -> Int
+
+pub fn check_failure(@types.HexGrid, @types.PaintBudget, @types.TargetRatio) -> Bool
+
+pub fn check_targets(@types.HexGrid, @types.TargetRatio) -> Bool
+
+pub fn count_pending_changes(@types.HexGrid) -> Int
+
+pub fn is_stable(@types.HexGrid) -> Bool
+
+pub fn preview_next_step(@types.HexGrid) -> (Int, Int, Int, Int)
+
+pub fn preview_tile_changes(@types.HexGrid) -> Array[(Int, @types.BiomeKind)]
+
+pub fn ratio_status(@types.HexGrid, @types.TargetRatio) -> (Int, Int, Int)
+
+pub fn resolve_ecosystem(@types.HexGrid) -> Array[Bool]
+
+pub fn resolve_n_steps(@types.HexGrid, Int) -> Array[Bool]
+
+pub fn resolve_until_stable(@types.HexGrid, Int) -> (Int, Array[Bool])
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

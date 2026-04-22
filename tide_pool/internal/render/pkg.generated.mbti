@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tide_pool/internal/render"
+
+import {
+  "bobzhang/games/tide_pool/internal/types",
+}
+
+// Values
+pub fn draw_button(String, Int, Int, Int, Int, @types.Game) -> Unit
+
+pub fn draw_depth_labels(@types.Game) -> Unit
+
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_grid(@types.Game) -> Unit
+
+pub fn draw_hover(@types.Game) -> Unit
+
+pub fn draw_hud(@types.Game) -> Unit
+
+pub fn draw_level_select(@types.Game) -> Unit
+
+pub fn draw_message(@types.Game) -> Unit
+
+pub fn draw_palette(@types.Game) -> Unit
+
+pub fn draw_results_screen(@types.Game) -> Unit
+
+pub fn draw_tide_indicator(@types.Game) -> Unit
+
+pub fn draw_title_screen(@types.Game) -> Unit
+
+pub fn draw_water_overlay(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

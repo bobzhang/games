@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/sieve/internal/constraints"
+
+import {
+  "bobzhang/games/sieve/internal/types",
+}
+
+// Values
+pub fn check_cell_conflicts(@types.Grid, Int, Int, Array[@types.Constraint]) -> Bool
+
+pub fn validate_all(@types.Grid, Array[@types.Constraint]) -> Bool
+
+pub fn validate_constraint(@types.Grid, @types.Constraint) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

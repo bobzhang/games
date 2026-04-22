@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/aqueduct/internal/water"
+
+import {
+  "bobzhang/games/aqueduct/internal/types",
+}
+
+// Values
+pub fn are_connected(@types.Game, @types.Pos, @types.Pos, @types.Direction) -> Bool
+
+pub fn calculate_stars(@types.Game) -> Int
+
+pub fn can_flow(@types.Game, @types.Pos, @types.Pos, @types.Direction) -> Bool
+
+pub fn reset_water(@types.Game) -> Unit
+
+pub fn run_simulation(@types.Game) -> Unit
+
+pub fn sim_step(@types.Game) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

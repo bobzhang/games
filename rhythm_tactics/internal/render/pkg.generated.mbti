@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/rhythm_tactics/internal/render"
+
+import {
+  "bobzhang/games/rhythm_tactics/internal/types",
+}
+
+// Values
+pub fn draw_frame(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

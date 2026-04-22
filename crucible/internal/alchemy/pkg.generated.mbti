@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/crucible/internal/alchemy"
+
+import {
+  "bobzhang/games/crucible/internal/types",
+}
+
+// Values
+pub fn all_reactions() -> Array[(@types.Element, @types.Element, @types.Element)]
+
+pub fn count_discovered(Array[@types.Recipe]) -> Int
+
+pub fn count_total() -> Int
+
+pub fn discover_reaction(Array[@types.Recipe], @types.Element, @types.Element, @types.ReactionResult) -> Bool
+
+pub fn get_all_recipes_deduped(Array[@types.Recipe]) -> Array[@types.Recipe]
+
+pub fn get_discovered_recipes(Array[@types.Recipe]) -> Array[@types.Recipe]
+
+pub fn get_reaction_result(@types.Element, @types.Element) -> @types.ReactionResult
+
+pub fn init_recipe_book(Array[@types.Recipe]) -> Unit
+
+pub fn react(@types.Element, @types.Element) -> @types.ReactionResult
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

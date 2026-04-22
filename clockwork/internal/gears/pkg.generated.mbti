@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/clockwork/internal/gears"
+
+import {
+  "bobzhang/games/clockwork/internal/types",
+}
+
+// Values
+pub fn are_adjacent(@types.Component, @types.Component) -> Bool
+
+pub fn build_connections(@types.Game) -> Unit
+
+pub fn calculate_stars(@types.Game) -> Int
+
+pub fn gear_mesh_ratio(@types.Component, @types.Component) -> Float
+
+pub fn gears_can_mesh(@types.Component, @types.Component) -> Bool
+
+pub fn init_simulation(@types.Game) -> Unit
+
+pub fn propagate_rotation(@types.Game, Int, Float, Bool, Array[Bool]) -> Unit
+
+pub fn update_simulation(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

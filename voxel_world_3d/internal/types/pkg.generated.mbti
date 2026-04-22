@@ -2,6 +2,10 @@
 package "bobzhang/games/voxel_world_3d/internal/types"
 
 // Values
+pub let arrow_damage : Int
+
+pub let arrow_speed : Float
+
 pub let base_height : Int
 
 pub fn biome_name(Biome) -> String
@@ -13,6 +17,10 @@ pub let block_bedrock : Int
 pub let block_brick : Int
 
 pub let block_cactus : Int
+
+pub let block_campfire : Int
+
+pub let block_chest : Int
 
 pub let block_clay : Int
 
@@ -30,6 +38,8 @@ pub let block_grass : Int
 
 pub let block_gravel : Int
 
+pub let block_ladder : Int
+
 pub let block_leaves : Int
 
 pub fn block_name(Int) -> String
@@ -42,7 +52,11 @@ pub let block_ore_iron : Int
 
 pub let block_planks : Int
 
+pub let block_rail : Int
+
 pub let block_sand : Int
+
+pub let block_shrine_stone : Int
 
 pub let block_snow : Int
 
@@ -57,6 +71,8 @@ pub let block_water : Int
 pub let block_wood : Int
 
 pub let camera_fovy : Float
+
+pub fn can_mine_block(Int, Int) -> Bool
 
 pub let cave_frequency : Float
 
@@ -100,6 +116,8 @@ pub let durability_wood : Int
 
 pub let dusk_end : Float
 
+pub let dusk_warning_time : Float
+
 pub let entity_attack_range : Float
 
 pub let entity_chicken : Int
@@ -121,6 +139,8 @@ pub let entity_spawn_radius : Float
 pub let entity_speed_hostile : Float
 
 pub let entity_speed_passive : Float
+
+pub let entity_speed_spider : Float
 
 pub let entity_spider : Int
 
@@ -151,6 +171,8 @@ pub fn get_entity_max_health(Int) -> Int
 pub fn get_mining_time(Int, Int) -> Float
 
 pub fn get_tool_max_durability(Int) -> Int
+
+pub fn get_tool_tier(Int) -> Int
 
 pub fn get_world_block(Game, Int, Int, Int) -> Int
 
@@ -184,19 +206,37 @@ pub fn is_gravity_block(Int) -> Bool
 
 pub fn is_hostile(Int) -> Bool
 
+pub fn is_near_furnace(Game) -> Bool
+
+pub fn is_near_workbench(Game) -> Bool
+
+pub fn is_placeable_item(Int) -> Bool
+
 pub fn is_solid(Int) -> Bool
 
 pub fn is_tool_item(Int) -> Bool
 
 pub fn is_transparent(Int) -> Bool
 
+pub let item_arrow : Int
+
+pub let item_bone : Int
+
 pub let item_coal : Int
+
+pub let item_cooked_meat : Int
 
 pub let item_furnace : Int
 
 pub let item_iron_ingot : Int
 
+pub let item_raw_meat : Int
+
+pub let item_rotten_flesh : Int
+
 pub let item_stick : Int
+
+pub let item_string : Int
 
 pub let item_workbench : Int
 
@@ -223,6 +263,8 @@ pub let mine_speed_ore : Float
 pub let mine_speed_stone : Float
 
 pub let mine_speed_wood : Float
+
+pub fn mining_speed_multiplier(Int, Int) -> Float
 
 pub fn moisture_noise(Float, Float) -> Float
 
@@ -274,6 +316,8 @@ pub let player_speed : Float
 
 pub let player_sprint_mult : Float
 
+pub let projectile_max : Int
+
 pub fn rand_float(Game) -> Float
 
 pub fn rand_next(Game) -> Int
@@ -282,7 +326,15 @@ pub let ray_step : Float
 
 pub let reach_distance : Float
 
+pub let recipe_station_furnace : Int
+
+pub let recipe_station_none : Int
+
+pub let recipe_station_workbench : Int
+
 pub let render_distance : Int
+
+pub fn required_pick_tier(Int) -> Int
 
 pub let respawn_invulnerability : Float
 
@@ -302,6 +354,10 @@ pub let skeleton_damage : Int
 
 pub let skeleton_health : Int
 
+pub let skeleton_shoot_interval : Float
+
+pub let skeleton_shoot_range : Float
+
 pub fn spawn_break_particles(Game, Int, Int, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_damage_number(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
@@ -314,9 +370,15 @@ pub let spider_damage : Int
 
 pub let spider_health : Int
 
+pub let spider_lunge_range : Float
+
+pub let spider_lunge_speed : Float
+
 pub let stack_max : Int
 
 pub let starve_damage_interval : Float
+
+pub let station_proximity : Float
 
 pub fn temperature_noise(Float, Float) -> Float
 
@@ -355,6 +417,8 @@ pub let tool_wooden_pickaxe : Int
 pub let tool_wooden_shovel : Int
 
 pub let tool_wooden_sword : Int
+
+pub let torch_spawn_suppress_radius : Int
 
 pub let two_pi : Float
 
@@ -414,11 +478,8 @@ pub(all) struct BlockHit {
   mut ny : Int
   mut nz : Int
   mut distance : Float
-
-  fn new() -> BlockHit
 }
-#deprecated
-pub fn BlockHit::new() -> Self
+pub fn BlockHit::BlockHit() -> Self
 
 pub(all) struct Chunk {
   blocks : Array[Int]
@@ -426,12 +487,9 @@ pub(all) struct Chunk {
   cz : Int
   mut dirty : Bool
   mut biome : Biome
-
-  fn new(Int, Int) -> Chunk
 }
+pub fn Chunk::Chunk(Int, Int) -> Self
 pub fn Chunk::get_block(Self, Int, Int, Int) -> Int
-#deprecated
-pub fn Chunk::new(Int, Int) -> Self
 pub fn Chunk::set_block(Self, Int, Int, Int, Int) -> Unit
 
 pub(all) struct CraftingRecipe {
@@ -442,11 +500,10 @@ pub(all) struct CraftingRecipe {
   output_id : Int
   output_count : Int
   name : String
-
-  fn new(Int, Int, Int, Int, Int, Int, String) -> CraftingRecipe
+  station : Int
 }
-#deprecated
-pub fn CraftingRecipe::new(Int, Int, Int, Int, Int, Int, String) -> Self
+pub fn CraftingRecipe::CraftingRecipe(Int, Int, Int, Int, Int, Int, String) -> Self
+pub fn CraftingRecipe::with_station(Int, Int, Int, Int, Int, Int, String, Int) -> Self
 
 pub(all) struct DamageNumber {
   mut active : Bool
@@ -526,12 +583,14 @@ pub(all) struct Game {
   mut respawn_count : Int
   mut inv_full_timer : Float
   damage_numbers : Array[DamageNumber]
+  projectiles : Array[Projectile]
+  mut night_warning_timer : Float
+  mut night_danger_alpha : Float
+  mut nearby_enemy_count : Int
+  mut poison_timer : Float
   mut world_seed : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Menu
@@ -545,15 +604,12 @@ pub(all) enum GameState {
 pub(all) struct Inventory {
   slots : Array[ItemSlot]
   mut selected : Int
-
-  fn new() -> Inventory
 }
+pub fn Inventory::Inventory() -> Self
 pub fn Inventory::add_item(Self, Int, Int) -> Int
 pub fn Inventory::count_item(Self, Int) -> Int
 pub fn Inventory::has_space_for(Self, Int, Int) -> Bool
 pub fn Inventory::is_full(Self) -> Bool
-#deprecated
-pub fn Inventory::new() -> Self
 pub fn Inventory::remove_item(Self, Int, Int) -> Int
 
 pub(all) struct ItemSlot {
@@ -613,11 +669,22 @@ pub(all) struct Player {
   mut underwater : Bool
   mut air_timer : Float
   mut starve_timer : Float
-
-  fn new() -> Player
 }
-#deprecated
-pub fn Player::new() -> Self
+pub fn Player::Player() -> Self
+
+pub(all) struct Projectile {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut vx : Float
+  mut vy : Float
+  mut vz : Float
+  mut lifetime : Float
+  mut damage : Int
+  mut owner_kind : Int
+}
+pub fn Projectile::inactive() -> Self
 
 // Type aliases
 

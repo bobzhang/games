@@ -43,8 +43,6 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
-
-  fn new() -> Actor
 }
 
 ///|
@@ -57,8 +55,6 @@ pub(all) struct Ghost {
   mut move_cd : Float
   mut seed : Int
   mut alert_t : Float
-
-  fn new() -> Ghost
 }
 
 ///|
@@ -72,8 +68,6 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
 
 ///|
@@ -116,14 +110,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an actor initialized at the starting tile.
-#deprecated
-pub fn Actor::new() -> Actor {
+pub fn Actor::Actor() -> Actor {
   {
     x: start_x,
     y: start_y,
@@ -140,8 +131,7 @@ pub fn Actor::new() -> Actor {
 
 ///|
 /// Creates an inactive ghost with default patrol state.
-#deprecated
-pub fn Ghost::new() -> Ghost {
+pub fn Ghost::Ghost() -> Ghost {
   {
     active: false,
     body: Actor(),
@@ -155,8 +145,7 @@ pub fn Ghost::new() -> Ghost {
 
 ///|
 /// Creates an inactive particle with default values.
-#deprecated
-pub fn Particle::new() -> Particle {
+pub fn Particle::Particle() -> Particle {
   {
     active: false,
     x: 0.0,
@@ -171,8 +160,7 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with preallocated arrays and defaults.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     map: Array::make(grid_w * grid_h, Floor),
     shelf_x: Array::make(max_shelves, 0),

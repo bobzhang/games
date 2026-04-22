@@ -1,0 +1,36 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/menagerie/internal/habitat"
+
+import {
+  "bobzhang/games/menagerie/internal/types",
+}
+
+// Values
+pub fn assign_animals_to_enclosures(@types.Grid, Array[@types.Enclosure]) -> Unit
+
+pub fn count_fences_used(@types.Grid) -> Int
+
+pub fn count_terrain_in_enclosure(@types.Grid, @types.Enclosure, @types.Terrain) -> Int
+
+pub fn count_tiles_used(@types.Grid) -> Int
+
+pub fn count_water_adjacent(@types.Grid, @types.Enclosure) -> Int
+
+pub fn find_enclosure_at(Array[@types.Enclosure], Int, Int) -> @types.Enclosure?
+
+pub fn find_enclosures(@types.Grid) -> Array[@types.Enclosure]
+
+pub fn star_count(@types.StarRating) -> Int
+
+pub fn validate_enclosure(@types.Grid, @types.Enclosure, Array[@types.Enclosure]) -> Array[String]
+
+pub fn validate_level(@types.Grid, @types.LevelDef, Array[@types.Enclosure]) -> @types.LevelResult
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

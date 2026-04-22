@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/hex_harvest/internal/hex"
+
+import {
+  "bobzhang/games/hex_harvest/internal/types",
+}
+
+// Values
+pub fn adjacent_matching(@types.HexGrid, Int, Int, (@types.HexTile) -> Bool) -> Array[(Int, Int)]
+
+pub fn count_adjacent_matching(@types.HexGrid, Int, Int, (@types.HexTile) -> Bool) -> Int
+
+pub fn hex_at_screen(Float, Float) -> (Int, Int)
+
+pub fn hex_corners(Float, Float, Float) -> Array[(Float, Float)]
+
+pub fn hex_ring(Int, Int, Int) -> Array[(Int, Int)]
+
+pub fn hex_screen_pos(Int, Int) -> (Float, Float)
+
+pub fn is_adjacent(Int, Int, Int, Int) -> Bool
+
+pub fn valid_neighbors(Int, Int) -> Array[(Int, Int)]
+
+pub fn water_flow_targets(@types.HexGrid, Int, Int) -> Array[(Int, Int)]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

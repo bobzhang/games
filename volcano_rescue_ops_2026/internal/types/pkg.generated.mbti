@@ -112,11 +112,8 @@ pub(all) struct CivilianSite {
   mut x : Int
   mut y : Int
   mut waiting : Int
-
-  fn new() -> CivilianSite
 }
-#deprecated
-pub fn CivilianSite::new() -> Self
+pub fn CivilianSite::CivilianSite() -> Self
 
 pub(all) enum Dir {
   None
@@ -169,11 +166,8 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   mut mouse_press : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameResult {
   None

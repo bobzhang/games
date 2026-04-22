@@ -1,0 +1,281 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/pendulum/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn absi(Int) -> Int
+
+pub fn atan2f(Float, Float) -> Float
+
+pub let cell_size : Int
+
+pub let color_anchor : @raylib.Color
+
+pub let color_arc_preview : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_collectible : @raylib.Color
+
+pub let color_goal : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_launch_preview : @raylib.Color
+
+pub let color_peg : @raylib.Color
+
+pub let color_rope : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_tier_launch : @raylib.Color
+
+pub let color_tier_swing : @raylib.Color
+
+pub let color_tier_wrap : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub let color_weight : @raylib.Color
+
+pub fn compute_arc_points(Vec2i, Int) -> Array[ArcPoint]
+
+pub fn compute_launch_velocity(Vec2i, Vec2i, SwingDir) -> Vec2f
+
+pub fn cosf(Float) -> Float
+
+pub fn dist_i(Vec2i, Vec2i) -> Float
+
+pub fn find_arc_index_for_pos(Array[ArcPoint], Vec2i) -> Int
+
+pub fn floorf(Float) -> Int
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn grid_to_screen_x(Int) -> Float
+
+pub fn grid_to_screen_y(Int) -> Float
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_empty_grid() -> Array[Array[CellKind]]
+
+pub fn new_game() -> Game
+
+pub fn new_history_entry(Weight, Rope, Int, Array[Bool]) -> HistoryEntry
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_rope() -> Rope
+
+pub fn new_weight() -> Weight
+
+pub let pi : Float
+
+pub fn restore_from_history(HistoryEntry, Weight, Rope, Array[Bool]) -> Int
+
+pub fn roundf(Float) -> Int
+
+pub let screen_height : Int
+
+pub fn screen_to_grid_x(Float) -> Int
+
+pub fn screen_to_grid_y(Float) -> Int
+
+pub let screen_width : Int
+
+pub fn sinf(Float) -> Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_level_offset(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub fn vec2f(Float, Float) -> Vec2f
+
+pub fn vec2f_zero() -> Vec2f
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+// Errors
+
+// Types and methods
+pub(all) struct ArcPoint {
+  gx : Int
+  gy : Int
+  angle : Float
+} derive(Eq, Show)
+
+pub(all) enum CellKind {
+  Empty
+  Anchor
+  Peg
+  Goal
+  Wall
+  Collectible
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut current_level : Level?
+  mut play_state : PlayState
+  weight : Weight
+  rope : Rope
+  mut arc_points : Array[ArcPoint]
+  mut tick_count : Int
+  mut collected : Array[Bool]
+  mut history : Array[HistoryEntry]
+  mut scores : Array[LevelScore]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut anim_timer : Float
+  mut title_angle : Float
+} derive(Show)
+
+pub(all) struct HistoryEntry {
+  weight_pos : Vec2i
+  weight_state : WeightState
+  swing_dir : SwingDir
+  arc_index : Int
+  anchor : Vec2i
+  rope_length : Int
+  wrapped_pegs : Array[Vec2i]
+  tick_count : Int
+  collected : Array[Bool]
+  launch_vel : Vec2f
+  launch_pos : Vec2f
+} derive(Show)
+
+pub(all) struct Level {
+  id : Int
+  tier : Tier
+  name : String
+  grid : Array[Array[CellKind]]
+  anchor_pos : Vec2i
+  goal_pos : Vec2i
+  pegs : Array[Vec2i]
+  walls : Array[Vec2i]
+  collectibles : Array[Vec2i]
+  par_ticks : Int
+  rope_length : Int
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : Int
+  mut best_ticks : Int
+  mut collectibles_got : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Ready
+  Simulating
+  Won
+  Lost
+} derive(Eq, Show)
+
+pub(all) struct Rope {
+  mut anchor : Vec2i
+  mut length : Int
+  mut wrapped_pegs : Array[Vec2i]
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum SwingDir {
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Swing
+  Wrap
+  Launch
+} derive(Eq, Show)
+
+pub(all) struct Vec2f {
+  mut x : Float
+  mut y : Float
+} derive(Eq, Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+pub(all) struct Weight {
+  mut pos : Vec2i
+  mut state : WeightState
+  mut swing_dir : SwingDir
+  mut arc_index : Int
+  mut launch_vel : Vec2f
+  mut launch_pos : Vec2f
+} derive(Show)
+
+pub(all) enum WeightState {
+  Swinging
+  Launched
+  Stopped
+  AtGoal
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

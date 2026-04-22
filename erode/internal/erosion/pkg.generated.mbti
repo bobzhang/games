@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/erode/internal/erosion"
+
+import {
+  "bobzhang/games/erode/internal/types",
+}
+
+// Values
+pub fn apply_force(@types.Grid, @types.ForceKind) -> @types.Grid
+
+pub fn apply_frost(@types.Grid) -> @types.Grid
+
+pub fn apply_heat(@types.Grid) -> @types.Grid
+
+pub fn apply_water(@types.Grid) -> @types.Grid
+
+pub fn apply_wind_left(@types.Grid) -> @types.Grid
+
+pub fn apply_wind_right(@types.Grid) -> @types.Grid
+
+pub fn calculate_stars(@types.Grid, @types.Grid, Int, Int) -> Int
+
+pub fn compare_grids(@types.Grid, @types.Grid) -> @types.MatchResult
+
+pub fn is_perfect_match(@types.Grid, @types.Grid) -> Bool
+
+pub fn is_stuck(@types.Grid, @types.Grid, @types.ForceBudget) -> Bool
+
+pub fn match_percentage(@types.Grid, @types.Grid) -> Int
+
+pub fn preview_force(@types.Grid, @types.ForceKind) -> Array[Bool]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

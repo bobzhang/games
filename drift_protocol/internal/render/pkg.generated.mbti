@@ -1,0 +1,68 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/drift_protocol/internal/render"
+
+import {
+  "bobzhang/games/drift_protocol/internal/types",
+}
+
+// Values
+pub fn draw_alert_border(@types.Game) -> Unit
+
+pub fn draw_cameras(@types.Game) -> Unit
+
+pub fn draw_coin(@types.Game) -> Unit
+
+pub fn draw_door_labels(@types.Game) -> Unit
+
+pub fn draw_exit_glow(@types.Game) -> Unit
+
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_grid_border() -> Unit
+
+pub fn draw_guards(@types.Game) -> Unit
+
+pub fn draw_hack_overlay(@types.Game) -> Unit
+
+pub fn draw_hud(@types.Game) -> Unit
+
+pub fn draw_interaction_prompt(@types.Game) -> Unit
+
+pub fn draw_laser_beams(@types.Game) -> Unit
+
+pub fn draw_level_select(@types.Game) -> Unit
+
+pub fn draw_noise_ring(@types.Game) -> Unit
+
+pub fn draw_pause(@types.Game) -> Unit
+
+pub fn draw_player(@types.Game) -> Unit
+
+pub fn draw_power_connections(@types.Game) -> Unit
+
+pub fn draw_power_indicators(@types.Game) -> Unit
+
+pub fn draw_results(@types.Game) -> Unit
+
+pub fn draw_scanlines(@types.Game) -> Unit
+
+pub fn draw_shadow_overlay(@types.Game) -> Unit
+
+pub fn draw_terminal_glow(@types.Game) -> Unit
+
+pub fn draw_tiles(@types.Game) -> Unit
+
+pub fn draw_title(@types.Game) -> Unit
+
+pub fn draw_victory(@types.Game) -> Unit
+
+pub fn draw_wall_edges(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

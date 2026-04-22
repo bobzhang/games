@@ -12,9 +12,13 @@ pub let base_target : Int
 
 pub let bg_color : @raylib.Color
 
+pub let bg_color_bottom : @raylib.Color
+
 pub let board_bg_color : @raylib.Color
 
 pub let board_left : Int
+
+pub let board_slot_color : @raylib.Color
 
 pub let board_top : Int
 
@@ -30,6 +34,8 @@ pub fn cell_y(Int) -> Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
+pub let danger_color : @raylib.Color
+
 pub let fall_speed : Float
 
 pub let flash_duration : Float
@@ -42,11 +48,19 @@ pub let grid_cols : Int
 
 pub let grid_rows : Int
 
+pub let hint_color : @raylib.Color
+
 pub fn idx(Int, Int) -> Int
 
 pub fn lerpf(Float, Float, Float) -> Float
 
 pub let num_colors : Int
+
+pub let panel_accent_color : @raylib.Color
+
+pub let panel_card_border : @raylib.Color
+
+pub let panel_card_color : @raylib.Color
 
 pub let panel_label_color : @raylib.Color
 
@@ -57,6 +71,8 @@ pub let screen_h : Int
 pub let screen_w : Int
 
 pub let select_color : @raylib.Color
+
+pub let success_color : @raylib.Color
 
 pub let swap_speed : Float
 
@@ -88,11 +104,8 @@ pub(all) struct Game {
   mut hint_t : Float
   mut msg : String
   mut msg_t : Float
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title

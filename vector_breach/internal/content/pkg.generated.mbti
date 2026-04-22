@@ -1,0 +1,93 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/vector_breach/internal/content"
+
+import {
+  "bobzhang/games/vector_breach/internal/types",
+  "moonbitlang/core/ref",
+}
+
+// Values
+pub fn apply_augment_to_stats(@types.AugmentKind, Int, Int, Int, Int) -> (Int, Int, Int, Int)
+
+pub fn apply_upgrade_stats(@types.MechClass, Int, Int, Int, Int, Int) -> (Int, Int, Int, Int)
+
+pub fn get_augment_def(@types.AugmentKind) -> AugmentDef
+
+pub fn get_augment_name(@types.AugmentKind) -> String
+
+pub fn get_augmented_mech_stats(@types.MechClass, Array[@types.AugmentKind]) -> MechStats
+
+pub fn get_boss_hp(Int) -> Int
+
+pub fn get_enemy_hp(@types.EnemyType) -> Int
+
+pub fn get_enemy_name(@types.EnemyType) -> String
+
+pub fn get_mech_stats(@types.MechClass) -> MechStats
+
+pub fn get_mission_count() -> Int
+
+pub fn get_mission_def(Int) -> MissionDef
+
+pub fn get_next_upgrade_cost(Int) -> Int
+
+pub fn get_upgrade_def(@types.MechClass, Int) -> UpgradeDef
+
+pub fn get_upgrade_tier(@types.RunState, @types.MechClass) -> Int
+
+pub fn is_boss_mission(Int) -> Bool
+
+pub fn mech_class_index(@types.MechClass) -> Int
+
+pub fn pick_random_augments(@ref.Ref[UInt], Array[@types.AugmentKind], Int) -> Array[@types.AugmentKind]
+
+pub fn try_purchase_upgrade(@types.RunState, @types.MechClass) -> Bool
+
+// Errors
+
+// Types and methods
+pub(all) struct AugmentDef {
+  kind : @types.AugmentKind
+  name : String
+  description : String
+  icon : String
+}
+
+pub(all) struct MechStats {
+  name : String
+  mech_class : @types.MechClass
+  hp : Int
+  max_heat : Int
+  move_range : Int
+  ability_name : String
+  ability_range : Int
+  ability_damage : Int
+}
+
+pub(all) struct MissionDef {
+  id : Int
+  name : String
+  description : String
+  briefing : String
+  debrief : String
+  objective : @types.Objective
+  grid_template : Int
+  enemy_types : Array[(@types.EnemyType, Int, Int)]
+  special_tiles : Array[(Int, Int, @types.TileKind)]
+  hazard_tiles : Array[(Int, Int, @types.HazardKind)]
+  turns_limit : Int
+  reward_tier : Int
+}
+
+pub(all) struct UpgradeDef {
+  name : String
+  description : String
+  cost : Int
+  tier : Int
+  mech_class : @types.MechClass
+}
+
+// Type aliases
+
+// Traits
+

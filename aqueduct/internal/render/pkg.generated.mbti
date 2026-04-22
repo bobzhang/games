@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/aqueduct/internal/render"
+
+import {
+  "bobzhang/games/aqueduct/internal/types",
+}
+
+// Values
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_grid(@types.Game) -> Unit
+
+pub fn draw_hover(@types.Game) -> Unit
+
+pub fn draw_hud(@types.Game) -> Unit
+
+pub fn draw_level_select(@types.Game) -> Unit
+
+pub fn draw_message(@types.Game) -> Unit
+
+pub fn draw_play_state(@types.Game) -> Unit
+
+pub fn draw_results(@types.Game) -> Unit
+
+pub fn draw_stars(Int, Int, Int, Int) -> Unit
+
+pub fn draw_tier_select(@types.Game) -> Unit
+
+pub fn draw_tiles(@types.Game) -> Unit
+
+pub fn draw_title(@types.Game) -> Unit
+
+pub fn draw_water_overlay(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

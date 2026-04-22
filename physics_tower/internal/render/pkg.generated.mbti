@@ -1,0 +1,56 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/physics_tower/internal/render"
+
+import {
+  "bobzhang/games/physics_tower/internal/types",
+}
+
+// Values
+pub fn draw_blueprint_ghost(@types.Game) -> Unit
+
+pub fn draw_challenge_hud(@types.Game) -> Unit
+
+pub fn draw_challenge_results(@types.Game) -> Unit
+
+pub fn draw_challenge_select(@types.Game) -> Unit
+
+pub fn draw_combo_hud(@types.Game, Int) -> Unit
+
+pub fn draw_combo_indicators(@types.Game) -> Unit
+
+pub fn draw_earthquake_effects(@types.Game) -> Unit
+
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_ghost_tower(@types.Game) -> Unit
+
+pub fn draw_impact_effects(@types.Game) -> Unit
+
+pub fn draw_replay_overlay(@types.Game) -> Unit
+
+pub fn draw_replay_screen(@types.Game) -> Unit
+
+pub fn draw_slow_motion_indicator(@types.Game) -> Unit
+
+pub fn draw_star_tally(@types.Game) -> Unit
+
+pub fn draw_stats_screen(@types.Game) -> Unit
+
+pub fn draw_stress_heatmap(@types.Game) -> Unit
+
+pub fn draw_tutorial_overlay(@types.Game) -> Unit
+
+pub fn draw_upgrade_screen(@types.Game) -> Unit
+
+pub fn draw_wind_particles(@types.Game) -> Unit
+
+pub fn get_level_names() -> Array[String]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

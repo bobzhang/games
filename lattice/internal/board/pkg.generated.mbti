@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/lattice/internal/board"
+
+import {
+  "bobzhang/games/lattice/internal/types",
+}
+
+// Values
+pub fn count_liberties(@types.HexBoard, @types.HexCoord) -> Int
+
+pub fn evaluate_captures(@types.HexBoard, @types.HexCoord, @types.Player) -> Int
+
+pub fn find_all_patterns(@types.HexBoard, @types.Player) -> Array[@types.Pattern]
+
+pub fn find_group(@types.HexBoard, @types.HexCoord, @types.Player) -> Array[@types.HexCoord]
+
+pub fn resolve_captures(@types.HexBoard, @types.Player) -> Array[@types.HexCoord]
+
+pub fn resolve_captures_cascading(@types.HexBoard, @types.Player) -> Array[@types.HexCoord]
+
+pub fn score_patterns(@types.HexBoard, @types.Player) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/helix/internal/spiral"
+
+import {
+  "bobzhang/games/helix/internal/types",
+}
+
+// Values
+pub fn check_blocked(@types.Game) -> Bool
+
+pub fn step(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

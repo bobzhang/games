@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/void_drifter/internal/bosses"
+
+import {
+  "bobzhang/games/void_drifter/internal/types",
+}
+
+// Values
+pub fn boss_for_depth(Int) -> @types.BossKind
+
+pub fn boss_name(@types.BossKind) -> String
+
+pub fn spawn_boss(@types.Game, @types.BossKind) -> Unit
+
+pub fn update_boss(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -529,14 +529,11 @@ pub(all) struct Game {
   // Falling rock positions per segment: (seg_idx, offset_x, offset_z, active)
   falling_rocks : Array[(Int, Float, Float, Bool)]
   mut falling_rocks_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a new game instance with default initial state.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     state: Menu,
     current_cup: 0,

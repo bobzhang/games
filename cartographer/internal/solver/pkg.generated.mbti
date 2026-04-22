@@ -1,0 +1,50 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cartographer/internal/solver"
+
+import {
+  "bobzhang/games/cartographer/internal/types",
+}
+
+// Values
+pub fn all_clues_satisfied(Array[@types.Clue]) -> Bool
+
+pub fn all_features_placed(Array[@types.FeatureKind?], Array[@types.FeatureKind]) -> Bool
+
+pub fn any_clue_violated(Array[@types.Clue]) -> Bool
+
+pub fn check_clue(@types.Clue, Array[@types.FeatureKind?], Int) -> @types.ClueStatus
+
+pub fn check_placement_consistent(Array[@types.FeatureKind?], Int, Array[@types.Clue], @types.Vec2i, @types.FeatureKind) -> Bool
+
+pub fn compute_hints(Array[@types.FeatureKind?], Int, Array[@types.FeatureKind], Array[@types.Clue]) -> Array[@types.Vec2i]
+
+pub fn compute_narrow_hint(Array[@types.FeatureKind?], Int, Array[@types.FeatureKind], Array[@types.Clue]) -> (Array[@types.Vec2i], @types.FeatureKind?)
+
+pub fn compute_reveal_hint(Array[@types.FeatureKind?], Int, Array[@types.FeatureKind], Array[@types.Clue]) -> (@types.Vec2i?, @types.FeatureKind?)
+
+pub fn count_placed_features(Array[@types.FeatureKind?], @types.FeatureKind) -> Int
+
+pub fn count_solutions(Int, Array[@types.FeatureKind], Array[@types.Clue], max_solutions? : Int) -> Int
+
+pub fn feature_kind_from_index(Int) -> @types.FeatureKind
+
+pub fn feature_kind_to_index(@types.FeatureKind) -> Int
+
+pub fn find_valid_positions_pub(Array[@types.FeatureKind?], Int, Array[@types.Clue], @types.FeatureKind) -> Array[@types.Vec2i]
+
+pub fn get_feature_placement_count(Array[@types.FeatureKind], @types.FeatureKind) -> Int
+
+pub fn get_needed_features_pub(Array[@types.FeatureKind?], Array[@types.FeatureKind]) -> Array[@types.FeatureKind]
+
+pub fn solve(Array[@types.FeatureKind?], Int, Array[@types.FeatureKind], Array[@types.Clue], max_solutions? : Int) -> Array[Array[@types.FeatureKind?]]
+
+pub fn validate_all_clues(Array[@types.Clue], Array[@types.FeatureKind?], Int) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

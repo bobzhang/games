@@ -182,11 +182,8 @@ pub(all) struct Game {
   mut my : Float
   mut hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -206,11 +203,8 @@ pub(all) struct Obj {
   mut cloak : Bool
   mut spin : Float
   mut life : Float
-
-  fn new() -> Obj
 }
-#deprecated
-pub fn Obj::new() -> Self
+pub fn Obj::Obj() -> Self
 
 pub(all) enum ObjKind {
   Rock
@@ -230,11 +224,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Particle
 }
-#deprecated
-pub fn Particle::new() -> Self
+pub fn Particle::Particle() -> Self
 
 pub(all) struct Player {
   mut x : Float
@@ -245,11 +236,8 @@ pub(all) struct Player {
   mut invuln : Float
   mut hurt_t : Float
   mut anim_t : Float
-
-  fn new() -> Player
 }
-#deprecated
-pub fn Player::new() -> Self
+pub fn Player::Player() -> Self
 
 pub(all) struct Ripple {
   mut active : Bool
@@ -258,11 +246,8 @@ pub(all) struct Ripple {
   mut r : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Ripple
 }
-#deprecated
-pub fn Ripple::new() -> Self
+pub fn Ripple::Ripple() -> Self
 
 pub(all) struct Trail {
   mut active : Bool
@@ -272,11 +257,8 @@ pub(all) struct Trail {
   mut h : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Trail
 }
-#deprecated
-pub fn Trail::new() -> Self
+pub fn Trail::Trail() -> Self
 
 // Type aliases
 

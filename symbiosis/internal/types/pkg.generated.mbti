@@ -1,0 +1,237 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/symbiosis/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn all_ceiling_gems_collected(Game) -> Bool
+
+pub fn all_floor_gems_collected(Game) -> Bool
+
+pub fn all_gems_collected(Game) -> Bool
+
+pub let color_anchor : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_ceiling_tint : @raylib.Color
+
+pub let color_door_closed : @raylib.Color
+
+pub let color_door_open : @raylib.Color
+
+pub let color_exit : @raylib.Color
+
+pub let color_floor : @raylib.Color
+
+pub let color_floor_tint : @raylib.Color
+
+pub let color_gem : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_hud_dim : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_ice : @raylib.Color
+
+pub let color_luna : @raylib.Color
+
+pub let color_pit : @raylib.Color
+
+pub let color_sol : @raylib.Color
+
+pub let color_star_off : @raylib.Color
+
+pub let color_star_on : @raylib.Color
+
+pub let color_switch : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub fn compute_stars(Game) -> Int
+
+pub fn direction_delta(Direction) -> Vec2i
+
+pub let grid_height : Int
+
+pub let grid_width : Int
+
+pub fn in_bounds(Vec2i) -> Bool
+
+pub fn init_level(Game, Level) -> Unit
+
+pub fn is_on_switch(Array[Array[TileKind]], Vec2i) -> Bool
+
+pub fn is_walkable(TileKind, Array[Bool]) -> Bool
+
+pub let left_grid_x : Int
+
+pub let left_grid_y : Int
+
+pub let levels_per_world : Int
+
+pub fn make_snapshot(Game) -> Snapshot
+
+pub let max_door_ids : Int
+
+pub let max_moves : Int
+
+pub fn mirror_direction(Direction) -> Direction
+
+pub fn new_character(Vec2i) -> Character
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub let num_worlds : Int
+
+pub fn restore_snapshot(Game, Snapshot) -> Unit
+
+pub let right_grid_x : Int
+
+pub let right_grid_y : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub fn tile_at(Array[Array[TileKind]], Vec2i) -> TileKind
+
+pub let tile_size : Int
+
+pub fn vec2i_add(Vec2i, Vec2i) -> Vec2i
+
+pub fn world_name(Int) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct Character {
+  mut pos : Vec2i
+  mut on_anchor : Bool
+  mut reached_exit : Bool
+  mut alive : Bool
+} derive(Show)
+
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_world : Int
+  mut selected_level : Int
+  mut current_level : Level?
+  luna : Character
+  sol : Character
+  mut door_states : Array[Bool]
+  mut floor_gems_collected : Array[Bool]
+  mut ceiling_gems_collected : Array[Bool]
+  mut move_count : Int
+  mut play_state : PlayState
+  mut history : Array[Snapshot]
+  mut scores : Array[Array[LevelScore]]
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+} derive(Show)
+
+pub(all) enum GoalKind {
+  BothExit
+  BothSwitch
+  ExitInMoves(Int)
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  world : Int
+  index : Int
+  floor_tiles : Array[Array[TileKind]]
+  ceiling_tiles : Array[Array[TileKind]]
+  switch_links : Array[SwitchLink]
+  floor_start : Vec2i
+  ceiling_start : Vec2i
+  floor_exit : Vec2i
+  ceiling_exit : Vec2i
+  goal : GoalKind
+  par_moves : Int
+  gems : Array[Vec2i]
+  ceiling_gems : Array[Vec2i]
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut best_moves : Int
+  mut stars : Int
+  mut gem_collected : Bool
+} derive(Show)
+
+pub(all) enum MoveInput {
+  DirInput(Direction)
+  Wait
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  Active
+  Won
+  Failed
+  Paused
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  WorldSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct Snapshot {
+  luna_pos : Vec2i
+  sol_pos : Vec2i
+  door_states : Array[Bool]
+  floor_gems_collected : Array[Bool]
+  ceiling_gems_collected : Array[Bool]
+  luna_on_anchor : Bool
+  sol_on_anchor : Bool
+  luna_reached_exit : Bool
+  sol_reached_exit : Bool
+} derive(Show)
+
+pub(all) struct SwitchLink {
+  switch_id : Int
+  door_id : Int
+} derive(Eq, Show)
+
+pub(all) enum TileKind {
+  Floor
+  Wall
+  Exit
+  Switch(Int)
+  Door(Int)
+  Pit
+  Ice
+  Anchor
+  Gem
+} derive(Eq, Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

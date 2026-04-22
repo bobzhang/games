@@ -1,0 +1,52 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/parallax/internal/voxel"
+
+import {
+  "bobzhang/games/parallax/internal/types",
+}
+
+// Values
+pub fn check_completion(@types.VoxelGrid, @types.TargetSet) -> Bool
+
+pub fn check_connected(@types.VoxelGrid) -> Bool
+
+pub fn compute_front_silhouette(@types.VoxelGrid) -> @types.Silhouette
+
+pub fn compute_side_silhouette(@types.VoxelGrid) -> @types.Silhouette
+
+pub fn compute_silhouette(@types.VoxelGrid, @types.ViewKind) -> @types.Silhouette
+
+pub fn compute_top_silhouette(@types.VoxelGrid) -> @types.Silhouette
+
+pub fn count_filled(@types.VoxelGrid) -> Int
+
+pub fn get_voxel(@types.VoxelGrid, Int, Int, Int) -> Bool
+
+pub fn ray_preview(@types.VoxelGrid, @types.ViewKind, Int, Int) -> @types.Vec3i?
+
+pub fn ray_preview_front(@types.VoxelGrid, Int, Int) -> @types.Vec3i?
+
+pub fn ray_preview_side(@types.VoxelGrid, Int, Int) -> @types.Vec3i?
+
+pub fn ray_preview_top(@types.VoxelGrid, Int, Int) -> @types.Vec3i?
+
+pub fn ray_toggle(@types.VoxelGrid, @types.ViewKind, Int, Int) -> @types.Vec3i?
+
+pub fn ray_toggle_front(@types.VoxelGrid, Int, Int) -> @types.Vec3i?
+
+pub fn ray_toggle_side(@types.VoxelGrid, Int, Int) -> @types.Vec3i?
+
+pub fn ray_toggle_top(@types.VoxelGrid, Int, Int) -> @types.Vec3i?
+
+pub fn set_voxel(@types.VoxelGrid, Int, Int, Int, Bool) -> Unit
+
+pub fn silhouettes_match(@types.Silhouette, @types.Silhouette) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

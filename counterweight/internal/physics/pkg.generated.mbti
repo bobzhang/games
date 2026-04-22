@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/counterweight/internal/physics"
+
+import {
+  "bobzhang/games/counterweight/internal/types",
+}
+
+// Values
+pub fn animate_settling(@types.Game, Float) -> Bool
+
+pub fn check_all_crates_placed(@types.Game) -> Bool
+
+pub fn check_targets(@types.Game) -> Bool
+
+pub fn compute_stars(Int, Int, Int, Int) -> Int
+
+pub fn is_rope_valid(@types.Game, Int, Int) -> Bool
+
+pub fn solve_equilibrium(@types.Game) -> Unit
+
+pub fn validate_connection(@types.Game, Int, Int) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+
