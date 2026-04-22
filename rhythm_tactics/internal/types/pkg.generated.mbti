@@ -2,6 +2,7 @@
 package "bobzhang/games/rhythm_tactics/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "moonbitlang/core/ref",
   "tonyfettes/raylib",
 }
@@ -490,7 +491,8 @@ pub(all) enum AbilityKind {
   HealBeat
   ShadowDodge
   RhythmShield
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for AbilityKind
 
 pub(all) struct Achievement {
   kind : AchievementKind
@@ -506,7 +508,8 @@ pub(all) enum AchievementKind {
   ComboKing
   SpeedDemon
   Pacifist
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for AchievementKind
 
 pub(all) struct AchievementState {
   achievements : Array[Achievement]
@@ -523,7 +526,8 @@ pub(all) enum BeatRating {
   Perfect
   Good
   Miss
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for BeatRating
 
 pub(all) struct BeatState {
   mut bpm : Float
@@ -543,7 +547,8 @@ pub(all) enum BossPhase {
   Phase1
   Phase2
   Phase3
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for BossPhase
 
 pub(all) struct BossPhaseState {
   mut dragon_phase : BossPhase
@@ -565,7 +570,8 @@ pub(all) enum ComboMilestone {
   Frenzy
   PerfectStorm
   NoMilestone
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ComboMilestone
 
 pub(all) struct ComboState {
   mut fever_active : Bool
@@ -583,7 +589,8 @@ pub(all) enum CurseKind {
   GlassCannon
   BlindBeat
   Swarm
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CurseKind
 
 pub(all) struct CurseState {
   active_curses : Array[CurseKind]
@@ -604,14 +611,16 @@ pub(all) enum Direction {
   South
   East
   West
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) enum Element {
   Fire
   Ice
   Lightning
   Dark
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Element
 
 pub(all) struct Enemy {
   id : Int
@@ -639,7 +648,8 @@ pub(all) enum EnemyIntent {
   BreathFire(Direction, Int)
   AoeFreeze(Int)
   Wait
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for EnemyIntent
 
 pub(all) enum EnemyKind {
   Slime
@@ -652,7 +662,8 @@ pub(all) enum EnemyKind {
   Boss
   BeatDragon
   RhythmLich
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EnemyKind
 
 pub(all) struct Floor {
   grid : Grid
@@ -681,7 +692,8 @@ pub(all) enum FloorTheme {
   IceDungeon
   Volcano
   FinalArena
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for FloorTheme
 
 pub(all) struct FloorThemeData {
   theme : FloorTheme
@@ -763,7 +775,8 @@ pub(all) enum ItemKind {
   BeatFreeze
   SpecialCharge
   Bomb
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for ItemKind
 
 pub(all) struct MetaProgress {
   mut best_score : Int
@@ -826,7 +839,8 @@ pub(all) enum PlayerAction {
   Attack(Direction)
   Special
   Wait
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for PlayerAction
 
 pub(all) struct RunRecord {
   score : Int
@@ -852,7 +866,8 @@ pub(all) enum ScoreGrade {
   GradeA
   GradeB
   GradeC
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for ScoreGrade
 
 pub(all) struct ScoreState {
   mut base_kills : Int
@@ -876,7 +891,8 @@ pub(all) enum Screen {
   AbilityChoice
   RunSummary
   CurseOffer
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct ShopEntry {
   kind : ShopItemKind
@@ -894,7 +910,8 @@ pub(all) enum ShopItemKind {
   ShopWeapon(WeaponKind)
   ShopSpell(SpellKind)
   ShopManaPotion
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for ShopItemKind
 
 pub(all) enum SoundEvent {
   BeatTick
@@ -913,7 +930,8 @@ pub(all) enum SoundEvent {
   WeaponSwitch
   BossRoar
   CurseAccepted
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for SoundEvent
 
 pub(all) struct SpellData {
   kind : SpellKind
@@ -936,7 +954,8 @@ pub(all) enum SpellKind {
   Blizzard
   ThunderStrike
   VoidPulse
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for SpellKind
 
 pub(all) struct SpellSlots {
   spells : Array[SpellKind?]
@@ -961,7 +980,8 @@ pub(all) enum TileKind {
   Ice
   Exit
   Lava
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct Weapon {
   kind : WeaponKind
@@ -988,7 +1008,8 @@ pub(all) enum WeaponKind {
   Hammer
   Bow
   Staff
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for WeaponKind
 
 // Type aliases
 

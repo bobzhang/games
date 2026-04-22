@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -13,14 +18,24 @@ pub(all) enum PlayState {
   Rising
   Won
   Lost
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Shores
   Straits
   Archipelago
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -28,4 +43,9 @@ pub(all) enum TileKind {
   Water
   Settlement
   Sand
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

@@ -54,7 +54,12 @@ pub(all) enum HazardKind {
   WaterCurrent
   IceSheet
   Shortcut
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HazardKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 // Screen
 

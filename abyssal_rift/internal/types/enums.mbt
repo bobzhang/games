@@ -14,7 +14,12 @@ pub(all) enum StarterKit {
   Vanguard
   Cutpurse
   Invoker
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for StarterKit with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PactKind {
@@ -23,7 +28,12 @@ pub(all) enum PactKind {
   MerchantsDebt
   CursedStrength
   VoidHeart
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PactKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum MetaUpgrade {
@@ -33,7 +43,12 @@ pub(all) enum MetaUpgrade {
   WeaponMastery
   DashMastery
   PotionEfficiency
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MetaUpgrade with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum RoomState {
@@ -48,7 +63,12 @@ pub(all) enum WeaponKind {
   Daggers
   Bow
   Staff
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WeaponKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EnemyKind {
@@ -61,7 +81,12 @@ pub(all) enum EnemyKind {
   Golem
   BroodMother
   LichKing
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EnemyKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ItemKind {
@@ -69,7 +94,12 @@ pub(all) enum ItemKind {
   WeaponPickup(WeaponKind)
   Gold(Int)
   PassiveItem(PassiveKind)
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for ItemKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PassiveKind {
@@ -87,7 +117,12 @@ pub(all) enum PassiveKind {
   GlassCannon
   Vampiric
   ChainLightning
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PassiveKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum RoomKind {
@@ -99,7 +134,12 @@ pub(all) enum RoomKind {
   Shrine
   EliteVault
   Challenge
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RoomKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EncounterType {
@@ -110,7 +150,12 @@ pub(all) enum EncounterType {
   SurvivalWave
   PoisonNest
   Ambush
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EncounterType with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub fn encounter_name(encounter : EncounterType) -> String {
@@ -132,7 +177,12 @@ pub(all) enum ShrineKind {
   GambleShrine
   CursedChest
   ReforgeAnvil
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ShrineKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -140,7 +190,12 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GameEvent {
@@ -153,7 +208,12 @@ pub(all) enum GameEvent {
   DashUsed(Float, Float, Float, Float)
   WeaponSwing(Float, Float, Float)
   SynergyUnlocked(String)
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for GameEvent with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AttackState {
@@ -179,7 +239,12 @@ pub(all) enum StatusEffect {
   Poison(Float)
   Shield(Float)
   Haste(Float)
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for StatusEffect with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EliteAffix {
@@ -189,7 +254,12 @@ pub(all) enum EliteAffix {
   Splitting
   Vampiric
   Explosive
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EliteAffix with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum FloorPath {
@@ -198,7 +268,12 @@ pub(all) enum FloorPath {
   Rot
   Forge
   Gauntlet
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for FloorPath with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub fn path_name(path : FloorPath) -> String {

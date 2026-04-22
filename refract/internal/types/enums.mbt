@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ComponentKind {
@@ -15,7 +20,12 @@ pub(all) enum ComponentKind {
   Filter
   Combiner
   Receiver
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ComponentKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -23,25 +33,45 @@ pub(all) enum Direction {
   E
   S
   W
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum FilterColor {
   Red
   Green
   Blue
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for FilterColor with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Placing
   Simulating
   Solved
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Spectrum
   Prisms
   Synthesis
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

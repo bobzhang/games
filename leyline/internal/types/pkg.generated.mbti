@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "bobzhang/games/leyline/internal/types"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
 pub let amplifier_boost : Float
 
@@ -94,7 +98,8 @@ pub(all) enum CellKind {
   Waystone
   Amplifier
   Void
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CellKind
 
 pub(all) struct Connection {
   from_col : Int
@@ -110,7 +115,8 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Game {
   mut screen : Screen
@@ -166,21 +172,24 @@ pub(all) enum Screen {
   Playing
   LevelComplete
   LevelFailed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum StarRating {
   None
   Bronze
   Silver
   Gold
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for StarRating
 
 pub(all) enum Tool {
   PlaceWaystone
   RemoveWaystone
   DrawLine
   EraseLine
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tool
 
 // Type aliases
 

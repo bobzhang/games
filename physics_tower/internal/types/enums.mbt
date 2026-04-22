@@ -12,7 +12,12 @@ pub(all) enum Screen {
   ChallengeResults
   StatsScreen
   ReplayPlayback
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PieceKind {
@@ -21,28 +26,48 @@ pub(all) enum PieceKind {
   Triangle
   Arch
   Cable
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PieceKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TestKind {
   Wind
   Earthquake
   Impact
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TestKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Material {
   Wood
   Stone
   Steel
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Material with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum JointKind {
   Fixed
   Hinge
   Spring
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for JointKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum BlueprintKind {
@@ -51,7 +76,12 @@ pub(all) enum BlueprintKind {
   Truss
   Foundation
   Custom(Int)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for BlueprintKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ChallengeMode {
@@ -59,7 +89,12 @@ pub(all) enum ChallengeMode {
   BudgetMode
   Survival
   Precision
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ChallengeMode with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum UpgradeKind {
@@ -67,14 +102,24 @@ pub(all) enum UpgradeKind {
   Lightweight(Material)
   FlexJoints
   DeepFoundation
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for UpgradeKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum WorldTheme {
   StoneFortress
   DesertRuins
   ArcticPeaks
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WorldTheme with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ComboKind {
@@ -82,7 +127,12 @@ pub(all) enum ComboKind {
   MonolithCombo // Stone+Stone adjacent
   ReinforcedCombo // Steel+Steel adjacent
   LightweightCombo // Wood+Wood adjacent
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ComboKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SoundEvent {
@@ -99,11 +149,21 @@ pub(all) enum SoundEvent {
   ImpactHit
   ButtonClick
   StarEarned
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SoundEvent with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ReplayAction {
   Place(PieceKind, Material, Float, Float, Float) // kind, material, x, y, angle
   Rotate(Int) // body_id
   BlueprintPlace(BlueprintKind, Float, Float) // kind, x, y
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ReplayAction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

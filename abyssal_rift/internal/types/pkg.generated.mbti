@@ -2,6 +2,7 @@
 package "bobzhang/games/abyssal_rift/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -170,7 +171,8 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) enum EliteAffix {
   None
@@ -179,7 +181,8 @@ pub(all) enum EliteAffix {
   Splitting
   Vampiric
   Explosive
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EliteAffix
 
 pub(all) enum EncounterType {
   Standard
@@ -189,7 +192,8 @@ pub(all) enum EncounterType {
   SurvivalWave
   PoisonNest
   Ambush
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EncounterType
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -227,7 +231,8 @@ pub(all) enum EnemyKind {
   Golem
   BroodMother
   LichKing
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EnemyKind
 
 pub(all) enum EnemyState {
   Idle
@@ -250,7 +255,8 @@ pub(all) enum FloorPath {
   Rot
   Forge
   Gauntlet
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for FloorPath
 
 pub(all) struct Game {
   mut state : GameState
@@ -315,7 +321,8 @@ pub(all) enum GameEvent {
   DashUsed(Float, Float, Float, Float)
   WeaponSwing(Float, Float, Float)
   SynergyUnlocked(String)
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for GameEvent
 
 pub(all) enum GameState {
   Title
@@ -349,7 +356,8 @@ pub(all) enum ItemKind {
   WeaponPickup(WeaponKind)
   Gold(Int)
   PassiveItem(PassiveKind)
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for ItemKind
 
 pub(all) struct MetaProgress {
   mut abyss_tokens : Int
@@ -367,7 +375,8 @@ pub(all) enum MetaUpgrade {
   WeaponMastery
   DashMastery
   PotionEfficiency
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for MetaUpgrade
 
 pub(all) enum PactKind {
   BloodPrice
@@ -375,7 +384,8 @@ pub(all) enum PactKind {
   MerchantsDebt
   CursedStrength
   VoidHeart
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PactKind
 
 pub(all) struct Particle {
   mut active : Bool
@@ -406,7 +416,8 @@ pub(all) enum PassiveKind {
   GlassCannon
   Vampiric
   ChainLightning
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PassiveKind
 
 pub(all) struct Player {
   mut x : Float
@@ -487,7 +498,8 @@ pub(all) enum RoomKind {
   Shrine
   EliteVault
   Challenge
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for RoomKind
 
 pub(all) enum RoomState {
   Idle
@@ -509,20 +521,23 @@ pub(all) enum ShrineKind {
   GambleShrine
   CursedChest
   ReforgeAnvil
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ShrineKind
 
 pub(all) enum StarterKit {
   Vanguard
   Cutpurse
   Invoker
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for StarterKit
 
 pub(all) enum StatusEffect {
   Slow(Float)
   Poison(Float)
   Shield(Float)
   Haste(Float)
-} derive(Show)
+} derive(@debug.Debug)
+pub impl Show for StatusEffect
 
 pub(all) struct SynergyBonuses {
   mut bleed_on_crit : Bool
@@ -549,7 +564,8 @@ pub(all) enum WeaponKind {
   Daggers
   Bow
   Staff
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for WeaponKind
 
 // Type aliases
 

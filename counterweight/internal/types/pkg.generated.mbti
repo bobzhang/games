@@ -2,6 +2,7 @@
 package "bobzhang/games/counterweight/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -219,7 +220,8 @@ pub(all) enum ComponentKind {
   CrateComp
   BucketComp
   BreakableRopeComp
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ComponentKind
 
 pub(all) struct Crate {
   mut active : Bool
@@ -309,7 +311,8 @@ pub(all) enum NodeKind {
   WeightHook
   CrateHook
   Ratchet
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for NodeKind
 
 pub(all) struct Platform {
   mut active : Bool
@@ -325,7 +328,8 @@ pub(all) enum PlayState {
   Settling
   Won
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct Rope {
   mut active : Bool
@@ -341,7 +345,8 @@ pub(all) struct Rope {
 pub(all) enum RopeSide {
   LeftSide
   RightSide
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for RopeSide
 
 pub(all) enum Screen {
   Title
@@ -349,13 +354,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Basics
   Chains
   Workshop
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int

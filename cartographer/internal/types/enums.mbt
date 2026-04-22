@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum FeatureKind {
@@ -16,7 +21,12 @@ pub(all) enum FeatureKind {
   Lake
   Desert
   Road
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for FeatureKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ClueKind {
@@ -26,21 +36,36 @@ pub(all) enum ClueKind {
   Count
   Between
   Not
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ClueKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Placing
   Complete
   Checking
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Surveyor
   Explorer
   Master
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CompassDir {
@@ -52,14 +77,24 @@ pub(all) enum CompassDir {
   NW
   SE
   SW
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CompassDir with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ClueStatus {
   Pending
   Satisfied
   Violated
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ClueStatus with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum HintLevel {
@@ -67,4 +102,9 @@ pub(all) enum HintLevel {
   Narrow // First hint: highlight possible cells for a feature
   Reveal // Second hint: highlight a specific cell
   Answer // Third hint: auto-place the answer
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HintLevel with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

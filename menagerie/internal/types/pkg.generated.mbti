@@ -2,6 +2,7 @@
 package "bobzhang/games/menagerie/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -157,7 +158,8 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Enclosure {
   id : Int
@@ -168,7 +170,8 @@ pub(all) struct Enclosure {
 pub(all) enum FenceMode {
   Horizontal
   Vertical
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for FenceMode
 
 pub(all) struct Game {
   mut screen : Screen
@@ -232,7 +235,8 @@ pub(all) enum Screen {
   Playing
   LevelComplete
   Paused
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Species {
   Lion
@@ -241,7 +245,8 @@ pub(all) enum Species {
   Snake
   Monkey
   Bear
-} derive(Compare, Eq, Show)
+} derive(Compare, Eq, @debug.Debug)
+pub impl Show for Species
 
 pub(all) struct SpeciesNeeds {
   name : String
@@ -261,7 +266,8 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for StarRating
 
 pub(all) enum Terrain {
   Grass
@@ -269,14 +275,16 @@ pub(all) enum Terrain {
   Sand
   Rock
   Trees
-} derive(Compare, Eq, Show)
+} derive(Compare, Eq, @debug.Debug)
+pub impl Show for Terrain
 
 pub(all) enum Tool {
   TerrainBrush(Terrain)
   FenceTool
   EraserTool
   AnimalPlacer(Species)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tool
 
 pub(all) struct ToolSlot {
   tool : Tool

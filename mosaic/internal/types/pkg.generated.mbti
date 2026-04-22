@@ -2,6 +2,7 @@
 package "bobzhang/games/mosaic/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -208,13 +209,15 @@ pub(all) enum Orientation {
   E
   S
   W
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Orientation
 
 pub(all) enum PlayState {
   Placing
   GuessSymmetry
   Complete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -222,7 +225,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum SymmetryKind {
   MirrorH
@@ -231,13 +235,15 @@ pub(all) enum SymmetryKind {
   Rotate2
   Rotate4
   Glide
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for SymmetryKind
 
 pub(all) enum Tier {
   Repair
   Restore
   Master
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Tile {
   mut color : TileColor
@@ -252,7 +258,8 @@ pub(all) enum TileColor {
   Gold
   Purple
   White
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileColor
 
 pub(all) enum TileShape {
   Square
@@ -261,7 +268,8 @@ pub(all) enum TileShape {
   Diamond
   Circle
   Cross
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileShape
 
 pub(all) struct UndoEntry {
   pos : Vec2i

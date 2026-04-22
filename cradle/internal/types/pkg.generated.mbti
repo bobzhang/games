@@ -2,6 +2,7 @@
 package "bobzhang/games/cradle/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -159,7 +160,8 @@ pub(all) struct Peg {
 pub(all) enum PlayState {
   Placing
   Complete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -167,7 +169,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct StringLine {
   peg_a : Int
@@ -183,7 +186,8 @@ pub(all) enum Tier {
   Lines
   Weave
   Art
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2f {
   x : Float

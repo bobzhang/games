@@ -2,6 +2,7 @@
 package "bobzhang/games/clockwork/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -208,7 +209,8 @@ pub(all) enum CamDirection {
   PushDown
   PushLeft
   PushRight
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CamDirection
 
 pub(all) struct Component {
   mut active : Bool
@@ -238,14 +240,16 @@ pub(all) enum ComponentKind {
   Spring
   Escapement
   Bell
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ComponentKind
 
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Game {
   mut screen : Screen
@@ -269,7 +273,8 @@ pub(all) enum GearSize {
   Small
   Medium
   Large
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GearSize
 
 pub(all) struct LevelDef {
   mut id : Int
@@ -294,7 +299,8 @@ pub(all) enum Screen {
   Paused
   LevelComplete
   LevelFailed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum SimState {
   Idle
@@ -302,7 +308,8 @@ pub(all) enum SimState {
   Paused
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for SimState
 
 pub(all) struct Simulation {
   mut state : SimState
@@ -319,7 +326,8 @@ pub(all) enum Tier {
   Ticks
   Timing
   Clockwork
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2 {
   mut x : Float

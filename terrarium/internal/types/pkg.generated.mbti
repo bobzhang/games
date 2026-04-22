@@ -2,6 +2,7 @@
 package "bobzhang/games/terrarium/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -178,7 +179,8 @@ pub fn total_stars(Array[LevelScore]) -> Int
 pub(all) enum CellContent {
   Empty
   Organism(OrganismKind)
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for CellContent
 
 pub(all) struct Game {
   mut screen : Screen
@@ -227,7 +229,8 @@ pub(all) enum OrganismKind {
   Snail
   Fungus
   Worm
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for OrganismKind
 
 pub(all) struct OrganismProfile {
   kind : OrganismKind
@@ -255,14 +258,16 @@ pub(all) enum PlayResult {
   None
   Victory
   Failure(String)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayResult
 
 pub(all) enum ResourceKind {
   O2
   CO2
   Water
   Nutrients
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub impl Show for ResourceKind
 
 pub(all) struct Resources {
   mut o2 : Float
@@ -277,7 +282,8 @@ pub(all) enum Screen {
   Playing
   Simulating
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct SimTurnLog {
   turn : Int
@@ -290,7 +296,8 @@ pub(all) enum Tier {
   Beginner
   Intermediate
   Advanced
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 // Type aliases
 

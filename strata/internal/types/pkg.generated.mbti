@@ -2,6 +2,7 @@
 package "bobzhang/games/strata/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -141,7 +142,8 @@ pub(all) enum ClueKind {
   Dating
   Intrusion
   Unconformity
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ClueKind
 
 pub(all) struct Game {
   mut screen : Screen
@@ -182,7 +184,8 @@ pub(all) enum PlayState {
   Checking
   Solved
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum RockKind {
   Sandstone
@@ -193,7 +196,8 @@ pub(all) enum RockKind {
   Coal
   Chalk
   Slate
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for RockKind
 
 pub(all) enum Screen {
   Title
@@ -201,13 +205,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Surface
   Bedrock
   DeepCore
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct UndoEntry {
   slots : Array[RockKind?]

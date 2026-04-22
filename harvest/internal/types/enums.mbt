@@ -4,7 +4,12 @@ pub(all) enum Season {
   Summer
   Fall
   Winter
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Season with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CropKind {
@@ -16,7 +21,12 @@ pub(all) enum CropKind {
   Pumpkin
   Clover
   Fallow
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CropKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CropState {
@@ -26,7 +36,12 @@ pub(all) enum CropState {
   Mature
   Harvested
   Withered
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CropState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Screen {
@@ -35,18 +50,33 @@ pub(all) enum Screen {
   Planning
   Simulate
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Nutrient {
   Nitrogen
   Phosphorus
   Potassium
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Nutrient with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Bronze
   Silver
   Gold
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

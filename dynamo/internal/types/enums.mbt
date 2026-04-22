@@ -6,13 +6,23 @@ pub(all) enum Screen {
   Simulating
   LevelComplete
   LevelFailed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Polarity {
   North
   South
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Polarity with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ComponentKind {
@@ -21,7 +31,12 @@ pub(all) enum ComponentKind {
   Coil
   Wire
   Device(Float)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ComponentKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -29,7 +44,12 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ToolMode {
@@ -38,11 +58,21 @@ pub(all) enum ToolMode {
   PlaceCoil
   PlaceWire
   Erase
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ToolMode with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Foundations
   Generators
   PowerGrid
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

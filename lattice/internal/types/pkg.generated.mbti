@@ -2,6 +2,7 @@
 package "bobzhang/games/lattice/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -167,13 +168,15 @@ pub(all) struct CaptureAnim {
 pub(all) enum CellState {
   Empty
   Occupied(Player)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CellState
 
 pub(all) enum Difficulty {
   Easy
   Normal
   Hard
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Difficulty
 
 pub(all) struct Game {
   mut screen : Screen
@@ -210,7 +213,8 @@ pub(all) enum GameMode {
   VsAI
   Puzzle
   Local2P
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GameMode
 
 pub(all) struct HexBoard {
   size : Int
@@ -248,19 +252,22 @@ pub(all) enum PatternKind {
   Ring
   Star
   Wall
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PatternKind
 
 pub(all) enum PlayState {
   WaitingForMove
   AIThinking
   Animating
   GameOver
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Player {
   Black
   White
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Player
 
 pub(all) struct PuzzleLevel {
   id : Int
@@ -284,7 +291,8 @@ pub(all) enum Screen {
   Playing
   PuzzleSelect
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 // Type aliases
 

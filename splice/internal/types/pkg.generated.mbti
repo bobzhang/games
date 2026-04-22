@@ -2,6 +2,7 @@
 package "bobzhang/games/splice/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -160,7 +161,8 @@ pub(all) enum Base {
   T
   G
   C
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Base
 
 pub(all) struct CodonResult {
   trait_ : Trait
@@ -222,13 +224,15 @@ pub(all) enum OpKind {
   Duplicate
   Invert
   Delete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for OpKind
 
 pub(all) enum PlayState {
   Editing
   Verified
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct ReadResult {
   traits : Array[Trait]
@@ -241,13 +245,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   LabBasics
   GeneEditing
   Mastery
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) enum Trait {
   Start
@@ -261,7 +267,8 @@ pub(all) enum Trait {
   Armor
   Vision
   Neutral
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Trait
 
 // Type aliases
 

@@ -6,14 +6,24 @@ pub(all) enum Material {
   Wood
   Insulator
   Glass
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Material with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
   Normal
   HeatSource(Float)
   Target(Float, Float)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Screen {
@@ -23,13 +33,23 @@ pub(all) enum Screen {
   Simulating
   LevelComplete
   LevelFailed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ToolMode {
   Place(Material)
   Erase
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ToolMode with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum StarRating {
@@ -37,4 +57,9 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for StarRating with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

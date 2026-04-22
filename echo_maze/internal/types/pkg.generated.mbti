@@ -2,6 +2,7 @@
 package "bobzhang/games/echo_maze/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -147,7 +148,8 @@ pub(all) enum Direction {
   South
   East
   West
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct DoorState {
   door_id : Int
@@ -208,13 +210,15 @@ pub(all) enum GhostColor {
   Green
   Yellow
   Orange
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GhostColor
 
 pub(all) enum GuardAlertState {
   Idle
   Alert
   Chasing
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GuardAlertState
 
 pub(all) struct GuardDef {
   patrol : Array[Vec2i]
@@ -272,7 +276,8 @@ pub(all) enum PlayState {
   Reviewing
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct Player {
   mut pos : Vec2i
@@ -292,7 +297,8 @@ pub(all) enum Screen {
   Planning
   Results
   Paused
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct Tile {
   kind : TileKind
@@ -308,7 +314,8 @@ pub(all) enum TileKind {
   TimedDoor(Int, Int)
   Guard
   Collectible
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct TimelineEntry {
   player_pos : Vec2i

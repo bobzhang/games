@@ -6,7 +6,12 @@ pub(all) enum Screen {
   Simulating
   LevelComplete
   LevelFailed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ComponentKind {
@@ -16,7 +21,12 @@ pub(all) enum ComponentKind {
   Wire
   Fuse(Float)
   Switch(Bool)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ComponentKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -24,7 +34,12 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ToolMode {
@@ -34,11 +49,21 @@ pub(all) enum ToolMode {
   PlaceSwitch
   Erase
   ToggleSwitch
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ToolMode with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Basics
   Parallel
   Networks
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

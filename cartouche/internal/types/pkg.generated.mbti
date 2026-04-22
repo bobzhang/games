@@ -2,6 +2,7 @@
 package "bobzhang/games/cartouche/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -220,7 +221,8 @@ pub(all) enum PlayState {
   Decoding
   Checking
   Solved
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -228,7 +230,8 @@ pub(all) enum Screen {
   TabletSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Symbol {
   Circle
@@ -251,7 +254,8 @@ pub(all) enum Symbol {
   River
   Tree
   Flame
-} derive(Compare, Eq, Show)
+} derive(Compare, Eq, @debug.Debug)
+pub impl Show for Symbol
 
 pub(all) struct SymbolPosition {
   x : Int
@@ -279,7 +283,8 @@ pub(all) enum Tier {
   Fragments
   Scrolls
   Monuments
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct UndoEntry {
   mut symbol_index : Int

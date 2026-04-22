@@ -6,7 +6,12 @@ pub(all) enum Screen {
   Playing
   Results
   Daily
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EdgePattern {
@@ -16,7 +21,12 @@ pub(all) enum EdgePattern {
   Waves
   Diamonds
   Stars
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EdgePattern with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -24,14 +34,24 @@ pub(all) enum PlayState {
   Selecting
   Swapping
   Complete
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Scraps
   Quilting
   Masterwork
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -39,4 +59,9 @@ pub(all) enum Direction {
   East
   South
   West
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

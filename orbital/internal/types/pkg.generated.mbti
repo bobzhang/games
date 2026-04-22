@@ -2,6 +2,7 @@
 package "bobzhang/games/orbital/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -205,7 +206,8 @@ pub(all) enum PlayState {
   Flying
   Won
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct Probe {
   mut pos : Vec2f
@@ -219,7 +221,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct Star {
   x : Float
@@ -237,7 +240,8 @@ pub(all) enum Tier {
   Launch
   Slingshot
   Navigation
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2f {
   mut x : Float

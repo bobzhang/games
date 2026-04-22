@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum DominoKind {
@@ -13,7 +18,12 @@ pub(all) enum DominoKind {
   Heavy
   Splitter
   Delay
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for DominoKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Orientation {
@@ -25,14 +35,24 @@ pub(all) enum Orientation {
   SW
   W
   NW
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Orientation with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum DominoState {
   Standing
   Toppling
   Fallen
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for DominoState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -41,11 +61,21 @@ pub(all) enum PlayState {
   Stepping
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Chains
   Splits
   Timing
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

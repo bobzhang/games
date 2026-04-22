@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum WeatherState {
@@ -15,14 +20,24 @@ pub(all) enum WeatherState {
   Cloudy
   Windy
   Stormy
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WeatherState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SourceKind {
   Sun
   Rain
   Wind
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SourceKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -30,14 +45,24 @@ pub(all) enum PlayState {
   Simulating
   Won
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Spring
   Summer
   Monsoon
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum WindDir {
@@ -45,4 +70,9 @@ pub(all) enum WindDir {
   East
   South
   West
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WindDir with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

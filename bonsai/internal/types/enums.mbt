@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CellKind {
@@ -14,7 +19,12 @@ pub(all) enum CellKind {
   Branch
   Leaf
   Pruned
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CellKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GrowthDir {
@@ -23,14 +33,24 @@ pub(all) enum GrowthDir {
   UpRight
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GrowthDir with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Species {
   Pine
   Maple
   Cherry
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Species with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -38,18 +58,33 @@ pub(all) enum PlayState {
   Growing
   Won
   Lost
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Tier1
   Tier2
   Tier3
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ZoneKind {
   Required
   Forbidden
   TipTarget
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ZoneKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

@@ -5,7 +5,12 @@ pub(all) enum Formation {
   ColumnRush
   FlankingPairs
   Random
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Formation with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Enumerates themed road zone types that affect gameplay feel.
@@ -13,7 +18,12 @@ pub(all) enum RoadZone {
   NeonAlley
   IndustrialStrip
   HighwayOverpass
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RoadZone with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Enumerates weapon upgrade paths the player can obtain.
@@ -21,7 +31,12 @@ pub(all) enum WeaponUpgrade {
   Spread
   Piercing
   Homing
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WeaponUpgrade with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Enumerates road hazard types that appear on the road surface.
@@ -29,7 +44,12 @@ pub(all) enum HazardKind {
   OilSlick
   BarrierGate
   BlastZone
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HazardKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Stores runtime data for a road hazard.

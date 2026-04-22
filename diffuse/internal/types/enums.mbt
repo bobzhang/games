@@ -5,21 +5,36 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum InkChannel {
   Cyan
   Magenta
   Yellow
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for InkChannel with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
   Paper
   Barrier
   Target
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -27,14 +42,24 @@ pub(all) enum PlayState {
   Spreading
   Won
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Watercolor
   Pigment
   Palette
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum StarRating {
@@ -42,4 +67,9 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for StarRating with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

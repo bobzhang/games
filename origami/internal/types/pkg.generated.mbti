@@ -2,6 +2,7 @@
 package "bobzhang/games/origami/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -132,7 +133,8 @@ pub(all) enum FoldDir {
   Right
   Up
   Down
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for FoldDir
 
 pub(all) struct Game {
   mut screen : Screen
@@ -188,7 +190,8 @@ pub(all) enum PlayState {
   Selecting
   Animating
   Complete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -196,20 +199,23 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum StarRating {
   Zero
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for StarRating
 
 pub(all) enum Tier {
   Folds
   Layers
   Craft
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int

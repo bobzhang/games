@@ -2,6 +2,7 @@
 package "bobzhang/games/loom/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -122,7 +123,8 @@ pub fn weave_type_name(WeaveType) -> String
 pub(all) enum CellState {
   WarpOver
   WeftOver
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CellState
 
 pub(all) struct FabricCell {
   state : CellState
@@ -184,7 +186,8 @@ pub(all) struct LevelScore {
 pub(all) enum PlayState {
   Weaving
   Complete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -192,13 +195,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Apprentice
   Journeyman
   Master
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) enum WeaveType {
   Plain
@@ -207,7 +212,8 @@ pub(all) enum WeaveType {
   Herringbone
   Diamond
   Custom
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for WeaveType
 
 // Type aliases
 

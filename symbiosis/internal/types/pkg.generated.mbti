@@ -2,6 +2,7 @@
 package "bobzhang/games/symbiosis/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -127,7 +128,8 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Game {
   mut screen : Screen
@@ -152,7 +154,8 @@ pub(all) enum GoalKind {
   BothExit
   BothSwitch
   ExitInMoves(Int)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for GoalKind
 
 pub(all) struct Level {
   world : Int
@@ -180,14 +183,16 @@ pub(all) struct LevelScore {
 pub(all) enum MoveInput {
   DirInput(Direction)
   Wait
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for MoveInput
 
 pub(all) enum PlayState {
   Active
   Won
   Failed
   Paused
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -195,7 +200,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct Snapshot {
   luna_pos : Vec2i
@@ -224,7 +230,8 @@ pub(all) enum TileKind {
   Ice
   Anchor
   Gem
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct Vec2i {
   x : Int

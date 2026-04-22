@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum RockKind {
@@ -17,7 +22,12 @@ pub(all) enum RockKind {
   Coal
   Chalk
   Slate
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RockKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ClueKind {
@@ -26,7 +36,12 @@ pub(all) enum ClueKind {
   Dating
   Intrusion
   Unconformity
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ClueKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -34,11 +49,21 @@ pub(all) enum PlayState {
   Checking
   Solved
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Surface
   Bedrock
   DeepCore
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

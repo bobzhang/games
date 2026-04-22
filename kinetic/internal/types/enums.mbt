@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GearKind {
@@ -14,24 +19,44 @@ pub(all) enum GearKind {
   Large
   Belt
   Ratchet
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GearKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum RotDir {
   CW
   CCW
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RotDir with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Placing
   Simulating
   Solved
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Gears
   Trains
   Workshop
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

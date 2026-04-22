@@ -2,6 +2,7 @@
 package "bobzhang/games/harvest/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -231,7 +232,8 @@ pub(all) enum CropKind {
   Pumpkin
   Clover
   Fallow
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CropKind
 
 pub(all) enum CropState {
   Empty
@@ -240,7 +242,8 @@ pub(all) enum CropState {
   Mature
   Harvested
   Withered
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CropState
 
 pub(all) struct Game {
   mut screen : Screen
@@ -291,7 +294,8 @@ pub(all) enum Nutrient {
   Nitrogen
   Phosphorus
   Potassium
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Nutrient
 
 pub(all) struct Plot {
   mut crop : CropKind
@@ -307,14 +311,16 @@ pub(all) enum Screen {
   Planning
   Simulate
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Season {
   Spring
   Summer
   Fall
   Winter
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Season
 
 pub(all) struct SeasonPlan {
   mut crops : Array[Array[CropKind]]
@@ -330,7 +336,8 @@ pub(all) enum Tier {
   Bronze
   Silver
   Gold
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 // Type aliases
 

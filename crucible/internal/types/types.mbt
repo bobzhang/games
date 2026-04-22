@@ -53,7 +53,12 @@ pub(all) enum AnimKind {
   Destruction
   SuccessGlow
   Bubbling
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AnimKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) struct Game {

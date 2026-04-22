@@ -6,7 +6,12 @@ pub(all) enum Screen {
   Playing
   Firing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GlazeColor {
@@ -17,7 +22,12 @@ pub(all) enum GlazeColor {
   White
   Black
   Empty
-} derive(Eq, Show, ToJson)
+} derive(Eq, Debug, ToJson)
+
+///|
+pub impl Show for GlazeColor with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum FiredColor {
@@ -36,18 +46,33 @@ pub(all) enum FiredColor {
   FDeepBlack
   FCracked
   FEmpty
-} derive(Eq, Show, ToJson)
+} derive(Eq, Debug, ToJson)
+
+///|
+pub impl Show for FiredColor with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Placing
   ReadyToFire
   LevelComplete
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Beginner
   Intermediate
   Advanced
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

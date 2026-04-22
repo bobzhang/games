@@ -5,7 +5,12 @@ pub(all) enum Screen {
   Playing
   Won
   Failed
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -14,7 +19,12 @@ pub(all) enum TileKind {
   Transmitter
   Receiver
   Tower
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -22,7 +32,12 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum StarRating {
@@ -30,4 +45,9 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for StarRating with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

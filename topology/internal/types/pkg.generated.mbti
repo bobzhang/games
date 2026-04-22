@@ -2,6 +2,7 @@
 package "bobzhang/games/topology/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -156,12 +157,14 @@ pub(all) enum Direction {
   E
   S
   W
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) enum FlipAxis {
   Horizontal
   Vertical
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for FlipAxis
 
 pub(all) struct Game {
   mut screen : Screen
@@ -205,7 +208,8 @@ pub(all) enum OpKind {
   Flip
   Grow
   Shrink
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for OpKind
 
 pub(all) struct OpRecord {
   kind : OpKind
@@ -220,7 +224,8 @@ pub(all) enum PlayState {
   SelectingShrinkCell
   AnimatingOp
   Won
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -228,7 +233,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct Shape {
   mut cells : Array[Vec2i]
@@ -239,13 +245,15 @@ pub(all) enum StarRating {
   One
   Two
   Three
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for StarRating
 
 pub(all) enum Tier {
   Morph
   Sculpt
   Transform
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int

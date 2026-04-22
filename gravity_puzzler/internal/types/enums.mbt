@@ -8,7 +8,12 @@ pub(all) enum Screen {
   Paused
   Editor
   Statistics
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum GravityDir {
@@ -16,7 +21,12 @@ pub(all) enum GravityDir {
   Up
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for GravityDir with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -35,7 +45,12 @@ pub(all) enum TileKind {
   GravityWell
   TimedLava
   WindGust(GravityDir)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EntityKind {
@@ -45,7 +60,12 @@ pub(all) enum EntityKind {
   Key
   Gem
   Enemy
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EntityKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum WorldTheme {
@@ -54,7 +74,12 @@ pub(all) enum WorldTheme {
   Void
   Magma
   Sky
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WorldTheme with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AchievementKind {
@@ -73,11 +98,21 @@ pub(all) enum AchievementKind {
   GravitySpinner
   IceSlider
   Completionist
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AchievementKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AccessibilityMode {
   Normal
   HighContrast
   LargeText
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AccessibilityMode with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

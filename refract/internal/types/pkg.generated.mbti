@@ -2,6 +2,7 @@
 package "bobzhang/games/refract/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -187,20 +188,23 @@ pub(all) enum ComponentKind {
   Filter
   Combiner
   Receiver
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ComponentKind
 
 pub(all) enum Direction {
   N
   E
   S
   W
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) enum FilterColor {
   Red
   Green
   Blue
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for FilterColor
 
 pub(all) struct Game {
   mut screen : Screen
@@ -256,7 +260,8 @@ pub(all) enum PlayState {
   Placing
   Simulating
   Solved
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -264,13 +269,15 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Spectrum
   Prisms
   Synthesis
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int

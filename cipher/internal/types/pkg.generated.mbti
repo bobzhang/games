@@ -2,6 +2,7 @@
 package "bobzhang/games/cipher/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -161,7 +162,8 @@ pub(all) enum CipherKind {
   Caesar
   Substitution
   Vigenere
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for CipherKind
 
 pub(all) struct Game {
   mut screen : Screen
@@ -218,7 +220,8 @@ pub(all) enum PlayState {
   Solving
   Solved
   GaveUp
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -226,19 +229,22 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Recruit
   Agent
   Cryptographer
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) enum Tool {
   FrequencyChart
   LetterSwap
   PatternFinder
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tool
 
 pub(all) struct UndoEntry {
   cipher_idx : Int

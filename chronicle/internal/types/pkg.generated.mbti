@@ -2,6 +2,7 @@
 package "bobzhang/games/chronicle/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -181,7 +182,8 @@ pub(all) enum ClueKind {
   Because
   During
   NotAdjacent
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ClueKind
 
 pub(all) struct EventCard {
   id : Int
@@ -222,7 +224,8 @@ pub(all) enum PlayState {
   Arranging
   Linking
   Validated
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -230,13 +233,15 @@ pub(all) enum Screen {
   CaseSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Reports
   Investigations
   ColdCases
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 // Type aliases
 

@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "bobzhang/games/kart_racing_3d/internal/types"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
 pub fn add_skid_mark(Game, Float, Float, Float, Float, Float, Float) -> Unit
 
@@ -564,7 +568,8 @@ pub(all) enum HazardKind {
   WaterCurrent
   IceSheet
   Shortcut
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for HazardKind
 
 pub(all) struct Kart {
   mut active : Bool

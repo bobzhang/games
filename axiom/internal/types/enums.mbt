@@ -6,7 +6,12 @@ pub(all) enum Screen {
   Programming
   Results
   Sandbox
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CommandKind {
@@ -17,7 +22,12 @@ pub(all) enum CommandKind {
   Push
   If(Condition)
   Loop(Int)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CommandKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -25,7 +35,12 @@ pub(all) enum Direction {
   South
   East
   West
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -36,14 +51,24 @@ pub(all) enum TileKind {
   ColorTile(TileColor)
   Block
   Start
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileColor {
   Red
   Blue
   Green
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileColor with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Condition {
@@ -51,7 +76,12 @@ pub(all) enum Condition {
   WallAhead
   AtGoal
   OnColor(TileColor)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Condition with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum RunState {
@@ -60,7 +90,12 @@ pub(all) enum RunState {
   Stepping
   Complete
   Failed(String)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RunState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Medal {
@@ -68,4 +103,9 @@ pub(all) enum Medal {
   Bronze
   Silver
   Gold
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Medal with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

@@ -2,6 +2,7 @@
 package "bobzhang/games/tidal/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -214,7 +215,8 @@ pub(all) enum PlaceableKind {
   PlaceReflector
   PlacePhaseShifter
   PlaceAbsorber
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlaceableKind
 
 pub(all) enum PlayState {
   Editing
@@ -222,7 +224,8 @@ pub(all) enum PlayState {
   Stepping
   Complete
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) struct PrePlaced {
   x : Int
@@ -236,7 +239,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct TargetDef {
   x : Int
@@ -254,7 +258,8 @@ pub(all) enum TileKind {
   Reflector
   PhaseShifter
   Absorber
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TileKind
 
 pub(all) struct Vec2i {
   x : Int

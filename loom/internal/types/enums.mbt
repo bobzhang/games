@@ -5,20 +5,35 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Weaving
   Complete
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Apprentice
   Journeyman
   Master
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum WeaveType {
@@ -28,10 +43,20 @@ pub(all) enum WeaveType {
   Herringbone
   Diamond
   Custom
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WeaveType with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CellState {
   WarpOver
   WeftOver
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CellState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

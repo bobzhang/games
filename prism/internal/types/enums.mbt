@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ComponentKind {
@@ -14,7 +19,12 @@ pub(all) enum ComponentKind {
   Filter
   Mirror
   Target
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ComponentKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Hex directions: 6 directions at 60-degree intervals for flat-top hexes.
@@ -26,32 +36,57 @@ pub(all) enum HexDir {
   W
   SW
   SE
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HexDir with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum FilterColor {
   Red
   Green
   Blue
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for FilterColor with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
   Placing
   Simulating
   Solved
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Fundamentals
   Chromatics
   Mastery
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Crystal refraction: beam turns 60 degrees left or right.
 pub(all) enum CrystalFace {
   Left60
   Right60
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CrystalFace with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

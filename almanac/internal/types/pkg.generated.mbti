@@ -2,6 +2,7 @@
 package "bobzhang/games/almanac/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -189,7 +190,8 @@ pub(all) enum PlayState {
   Simulating
   Won
   Failed
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -197,7 +199,8 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct Source {
   kind : SourceKind
@@ -210,13 +213,15 @@ pub(all) enum SourceKind {
   Sun
   Rain
   Wind
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for SourceKind
 
 pub(all) enum Tier {
   Spring
   Summer
   Monsoon
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 pub(all) struct Tile {
   mut weather : WeatherState
@@ -232,14 +237,16 @@ pub(all) enum WeatherState {
   Cloudy
   Windy
   Stormy
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for WeatherState
 
 pub(all) enum WindDir {
   North
   East
   South
   West
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for WindDir
 
 // Type aliases
 

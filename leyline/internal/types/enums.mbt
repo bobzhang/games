@@ -6,7 +6,12 @@ pub(all) enum CellKind {
   Waystone
   Amplifier
   Void
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub impl Show for CellKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Screen {
@@ -15,7 +20,12 @@ pub(all) enum Screen {
   Playing
   LevelComplete
   LevelFailed
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tool {
@@ -23,7 +33,12 @@ pub(all) enum Tool {
   RemoveWaystone
   DrawLine
   EraseLine
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub impl Show for Tool with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum StarRating {
@@ -31,7 +46,12 @@ pub(all) enum StarRating {
   Bronze
   Silver
   Gold
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub impl Show for StarRating with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -39,4 +59,9 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

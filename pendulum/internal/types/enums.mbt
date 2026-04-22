@@ -5,7 +5,12 @@ pub(all) enum Screen {
   LevelSelect
   Playing
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CellKind {
@@ -15,13 +20,23 @@ pub(all) enum CellKind {
   Goal
   Wall
   Collectible
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CellKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SwingDir {
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SwingDir with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum WeightState {
@@ -29,7 +44,12 @@ pub(all) enum WeightState {
   Launched
   Stopped
   AtGoal
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WeightState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayState {
@@ -37,11 +57,21 @@ pub(all) enum PlayState {
   Simulating
   Won
   Lost
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayState with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Swing
   Wrap
   Launch
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

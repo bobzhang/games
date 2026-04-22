@@ -6,14 +6,24 @@ pub(all) enum OrganismKind {
   Starfish
   Algae
   Urchin
-} derive(Eq, Show, ToJson)
+} derive(Eq, Debug, ToJson)
+
+///|
+pub impl Show for OrganismKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TidePhase {
   Low
   Mid
   High
-} derive(Eq, Show, ToJson)
+} derive(Eq, Debug, ToJson)
+
+///|
+pub impl Show for TidePhase with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Screen {
@@ -22,32 +32,57 @@ pub(all) enum Screen {
   Playing
   Simulating
   Results
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayResult {
   None
   Victory
   Failure(String)
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PlayResult with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CellContent {
   Empty
   Rock
   Organism(OrganismKind)
-} derive(Eq, Show, ToJson)
+} derive(Eq, Debug, ToJson)
+
+///|
+pub impl Show for CellContent with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Tier {
   Shallow
   Middle
   Deep
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Tier with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Zone {
   HighZone
   MidZone
   LowZone
-} derive(Eq, Show, ToJson)
+} derive(Eq, Debug, ToJson)
+
+///|
+pub impl Show for Zone with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

@@ -12,7 +12,12 @@ pub(all) enum Screen {
   AbilityChoice
   RunSummary
   CurseOffer
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Screen with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum TileKind {
@@ -23,7 +28,12 @@ pub(all) enum TileKind {
   Ice
   Exit
   Lava
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TileKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Direction {
@@ -31,7 +41,12 @@ pub(all) enum Direction {
   South
   East
   West
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Direction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EnemyKind {
@@ -45,14 +60,24 @@ pub(all) enum EnemyKind {
   Boss
   BeatDragon
   RhythmLich
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for EnemyKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum BeatRating {
   Perfect
   Good
   Miss
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for BeatRating with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum PlayerAction {
@@ -60,7 +85,12 @@ pub(all) enum PlayerAction {
   Attack(Direction)
   Special
   Wait
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for PlayerAction with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum EnemyIntent {
@@ -71,7 +101,12 @@ pub(all) enum EnemyIntent {
   BreathFire(Direction, Int)
   AoeFreeze(Int)
   Wait
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for EnemyIntent with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ItemKind {
@@ -83,7 +118,12 @@ pub(all) enum ItemKind {
   BeatFreeze
   SpecialCharge
   Bomb
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for ItemKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ShopItemKind {
@@ -95,7 +135,12 @@ pub(all) enum ShopItemKind {
   ShopWeapon(WeaponKind)
   ShopSpell(SpellKind)
   ShopManaPotion
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for ShopItemKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum WeaponKind {
@@ -105,7 +150,12 @@ pub(all) enum WeaponKind {
   Hammer
   Bow
   Staff
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for WeaponKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AbilityKind {
@@ -114,7 +164,12 @@ pub(all) enum AbilityKind {
   HealBeat
   ShadowDodge
   RhythmShield
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AbilityKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum FloorTheme {
@@ -124,7 +179,12 @@ pub(all) enum FloorTheme {
   IceDungeon
   Volcano
   FinalArena
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for FloorTheme with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ComboMilestone {
@@ -132,7 +192,12 @@ pub(all) enum ComboMilestone {
   Frenzy
   PerfectStorm
   NoMilestone
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ComboMilestone with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum ScoreGrade {
@@ -140,7 +205,12 @@ pub(all) enum ScoreGrade {
   GradeA
   GradeB
   GradeC
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for ScoreGrade with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum Element {
@@ -148,7 +218,12 @@ pub(all) enum Element {
   Ice
   Lightning
   Dark
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for Element with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SpellKind {
@@ -160,7 +235,12 @@ pub(all) enum SpellKind {
   Blizzard
   ThunderStrike
   VoidPulse
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SpellKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum CurseKind {
@@ -168,7 +248,12 @@ pub(all) enum CurseKind {
   GlassCannon
   BlindBeat
   Swarm
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CurseKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum AchievementKind {
@@ -178,7 +263,12 @@ pub(all) enum AchievementKind {
   ComboKing
   SpeedDemon
   Pacifist
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for AchievementKind with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum SoundEvent {
@@ -198,11 +288,21 @@ pub(all) enum SoundEvent {
   WeaponSwitch
   BossRoar
   CurseAccepted
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for SoundEvent with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 pub(all) enum BossPhase {
   Phase1
   Phase2
   Phase3
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for BossPhase with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}

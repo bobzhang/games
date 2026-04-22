@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "bobzhang/games/physics_tower/internal/types"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
 pub fn absf(Float) -> Float
 
@@ -191,7 +195,8 @@ pub(all) enum BlueprintKind {
   Truss
   Foundation
   Custom(Int)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for BlueprintKind
 
 pub(all) struct Body {
   mut id : Int
@@ -217,7 +222,8 @@ pub(all) enum ChallengeMode {
   BudgetMode
   Survival
   Precision
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ChallengeMode
 
 pub(all) struct ChallengeState {
   mode : ChallengeMode
@@ -237,7 +243,8 @@ pub(all) enum ComboKind {
   MonolithCombo
   ReinforcedCombo
   LightweightCombo
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ComboKind
 
 pub(all) struct DestructionState {
   particles : Array[Particle]
@@ -312,7 +319,8 @@ pub(all) enum JointKind {
   Fixed
   Hinge
   Spring
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for JointKind
 
 pub(all) struct Level {
   name : String
@@ -328,7 +336,8 @@ pub(all) enum Material {
   Wood
   Stone
   Steel
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Material
 
 pub(all) struct Particle {
   mut x : Float
@@ -349,13 +358,15 @@ pub(all) enum PieceKind {
   Triangle
   Arch
   Cable
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PieceKind
 
 pub(all) enum ReplayAction {
   Place(PieceKind, Material, Float, Float, Float)
   Rotate(Int)
   BlueprintPlace(BlueprintKind, Float, Float)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ReplayAction
 
 pub(all) struct ReplayState {
   actions : Array[ReplayAction]
@@ -384,7 +395,8 @@ pub(all) enum Screen {
   ChallengeResults
   StatsScreen
   ReplayPlayback
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum SoundEvent {
   PlacePiece
@@ -400,7 +412,8 @@ pub(all) enum SoundEvent {
   ImpactHit
   ButtonClick
   StarEarned
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for SoundEvent
 
 pub(all) struct Statistics {
   mut total_builds : Int
@@ -419,7 +432,8 @@ pub(all) enum TestKind {
   Wind
   Earthquake
   Impact
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for TestKind
 
 pub(all) struct TutorialState {
   mut step : Int
@@ -448,7 +462,8 @@ pub(all) enum UpgradeKind {
   Lightweight(Material)
   FlexJoints
   DeepFoundation
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for UpgradeKind
 
 pub(all) struct Vec2 {
   mut x : Float
@@ -488,7 +503,8 @@ pub(all) enum WorldTheme {
   StoneFortress
   DesertRuins
   ArcticPeaks
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for WorldTheme
 
 // Type aliases
 

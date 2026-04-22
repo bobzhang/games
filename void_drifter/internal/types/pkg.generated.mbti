@@ -2,6 +2,7 @@
 package "bobzhang/games/void_drifter/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -297,7 +298,8 @@ pub(all) enum BossKind {
   Leviathan
   Hive
   Dreadnought
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for BossKind
 
 pub(all) struct DamageNumber {
   mut active : Bool
@@ -313,7 +315,8 @@ pub(all) enum Direction {
   Down
   Left
   Right
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -344,7 +347,8 @@ pub(all) enum EnemyKind {
   Carrier
   Bomber
   ShieldBearer
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EnemyKind
 
 pub(all) struct Game {
   mut screen : Screen
@@ -395,7 +399,8 @@ pub(all) enum HazardKind {
   RadiationZone
   GravityWell
   MineField
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for HazardKind
 
 pub(all) struct MetaProgress {
   mut best_score : Int
@@ -414,7 +419,8 @@ pub(all) enum MetaUnlock {
   UnlockMod(ModKind)
   UnlockUtility(UtilityMod)
   UnlockShip(Int)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for MetaUnlock
 
 pub(all) enum ModKind {
   Piercing
@@ -425,7 +431,8 @@ pub(all) enum ModKind {
   Freezing
   Bouncing
   Overcharge
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for ModKind
 
 pub(all) struct Particle {
   mut active : Bool
@@ -455,7 +462,8 @@ pub(all) enum PickupKind {
   Credits(Int)
   HeatVent
   WeaponDrop(WeaponKind)
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PickupKind
 
 pub(all) struct Projectile {
   mut active : Bool
@@ -508,7 +516,8 @@ pub(all) enum Screen {
   WeaponSelect
   BossIntro
   Victory
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) struct ScreenShake {
   mut intensity : Float
@@ -524,7 +533,8 @@ pub(all) enum SectorKind {
   BossArena
   EliteZone
   EmptySpace
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for SectorKind
 
 pub(all) struct SectorMap {
   mut nodes : Array[SectorNode]
@@ -595,14 +605,16 @@ pub(all) enum SoundEvent {
   ShieldBreak
   OverheatWarn
   SectorEnter
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for SoundEvent
 
 pub(all) enum UtilityMod {
   ShieldDrain
   Vampire
   HeatSink
   Accelerator
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for UtilityMod
 
 pub(all) struct Vec2 {
   mut x : Float
@@ -628,7 +640,8 @@ pub(all) enum WeaponKind {
   Railgun
   Flak
   Beam
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for WeaponKind
 
 // Type aliases
 

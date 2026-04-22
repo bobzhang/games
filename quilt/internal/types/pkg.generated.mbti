@@ -2,6 +2,7 @@
 package "bobzhang/games/quilt/internal/types"
 
 import {
+  "moonbitlang/core/debug",
   "tonyfettes/raylib",
 }
 
@@ -161,7 +162,8 @@ pub(all) enum Direction {
   East
   South
   West
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Direction
 
 pub(all) enum EdgePattern {
   Zigzag
@@ -170,7 +172,8 @@ pub(all) enum EdgePattern {
   Waves
   Diamonds
   Stars
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for EdgePattern
 
 pub(all) struct Game {
   mut screen : Screen
@@ -223,7 +226,8 @@ pub(all) enum PlayState {
   Selecting
   Swapping
   Complete
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for PlayState
 
 pub(all) enum Screen {
   Title
@@ -232,13 +236,15 @@ pub(all) enum Screen {
   Playing
   Results
   Daily
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Screen
 
 pub(all) enum Tier {
   Scraps
   Quilting
   Masterwork
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub impl Show for Tier
 
 // Type aliases
 
