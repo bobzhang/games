@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/patina/internal/restoration"
+
+import {
+  "bobzhang/games/patina/internal/types",
+}
+
+// Values
+pub fn apply_tool(@types.Region, @types.ToolKind) -> Bool
+
+pub fn calculate_stars(@types.Artwork, Int, Int) -> Int
+
+pub fn check_completion(@types.Artwork) -> @types.LevelScore
+
+pub fn count_damaged(@types.Artwork) -> Int
+
+pub fn count_states(@types.Artwork) -> (Int, Int, Int, Int, Int, Int)
+
+pub fn is_level_complete(@types.Artwork) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

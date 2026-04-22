@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/kinetic/internal/mechanics"
+
+import {
+  "bobzhang/games/kinetic/internal/types",
+}
+
+// Values
+pub fn all_outputs_count(@types.Game) -> (Int, Int)
+
+pub fn can_place_gear(@types.Game, @types.Vec2i, @types.GearKind) -> Bool
+
+pub fn simulate(@types.Game) -> Unit
+
+pub fn update_gear_angles(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

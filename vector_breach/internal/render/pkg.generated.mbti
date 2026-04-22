@@ -1,0 +1,96 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/vector_breach/internal/render"
+
+import {
+  "bobzhang/games/vector_breach/internal/types",
+}
+
+// Values
+pub fn draw(@types.Game) -> Unit
+
+pub fn draw_current_anim(@types.BattleState) -> Unit
+
+pub fn draw_floating_texts(@types.BattleState) -> Unit
+
+pub fn draw_objective_progress_bar(@types.BattleState, Int, Int, Int) -> Unit
+
+pub fn draw_particles(@types.BattleState) -> Unit
+
+pub fn draw_rings(@types.BattleState) -> Unit
+
+pub fn draw_screen_effects(@types.BattleState) -> Unit
+
+pub fn draw_turn_countdown(@types.BattleState, Int, Int) -> Unit
+
+pub fn fx_boss_phase_transition(@types.BattleState, Int, Int) -> Unit
+
+pub fn fx_chasm_kill(@types.BattleState, Int, Int) -> Unit
+
+pub fn fx_kill(@types.BattleState, Int, Int, Bool) -> Unit
+
+pub fn fx_normal_hit(@types.BattleState, Int, Int) -> Unit
+
+pub fn fx_overclock(@types.BattleState, Int, Int) -> Unit
+
+pub fn fx_push_collision(@types.BattleState, Int, Int, Int, Int) -> Unit
+
+pub fn get_shake_offset(@types.ScreenFX) -> (Int, Int)
+
+pub fn queue_attack_anim(@types.BattleState, Int, Int, Int) -> Unit
+
+pub fn queue_death_anim(@types.BattleState, Int, Int, Int) -> Unit
+
+pub fn queue_intent_reveal(@types.BattleState) -> Unit
+
+pub fn queue_move_anim(@types.BattleState, Int, Int, Int, Int, Int) -> Unit
+
+pub fn queue_push_anim(@types.BattleState, Int, Int, Int, Int, Int) -> Unit
+
+pub fn spawn_chain_text(@types.BattleState, Int, Int, Int) -> Unit
+
+pub fn spawn_combo_text(@types.BattleState, String, Int, Int) -> Unit
+
+pub fn spawn_damage_text(@types.BattleState, Int, Int, Int) -> Unit
+
+pub fn spawn_death_particles(@types.BattleState, Int, Int, Int, Int, Int) -> Unit
+
+pub fn spawn_directional_particles(@types.BattleState, Int, Int, Int, Int, Int, Int, Int, Int) -> Unit
+
+pub fn spawn_explosion_particles(@types.BattleState, Int, Int) -> Unit
+
+pub fn spawn_heat_particles(@types.BattleState, Int, Int) -> Unit
+
+pub fn spawn_kill_text(@types.BattleState, Int, Int) -> Unit
+
+pub fn spawn_lava_particles(@types.BattleState, Int, Int) -> Unit
+
+pub fn spawn_overclock_text(@types.BattleState, Int, Int) -> Unit
+
+pub fn spawn_ring(@types.BattleState, Int, Int, Float, Float, Int, Int, Int) -> Unit
+
+pub fn spawn_shield_text(@types.BattleState, Int, Int) -> Unit
+
+pub fn spawn_stun_text(@types.BattleState, Int, Int) -> Unit
+
+pub fn trigger_flash(@types.BattleState, Int, Int, Int, Int) -> Unit
+
+pub fn trigger_hitstop(@types.BattleState, Float) -> Unit
+
+pub fn trigger_pulse(@types.BattleState) -> Unit
+
+pub fn trigger_shake(@types.BattleState, Float) -> Unit
+
+pub fn trigger_slowmo(@types.BattleState, Float) -> Unit
+
+pub fn trigger_tint(@types.BattleState, Int, Int, Int, Int, Float) -> Unit
+
+pub fn update_animations(@types.BattleState, Float) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

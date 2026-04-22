@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/chronicle/internal/logic"
+
+import {
+  "bobzhang/games/chronicle/internal/types",
+}
+
+// Values
+pub fn check_all_clues(Array[@types.Clue], Array[Int]) -> Bool
+
+pub fn check_anchors(@types.Case, Array[Int]) -> Bool
+
+pub fn check_clue_satisfied(@types.Clue, Array[Int]) -> Bool
+
+pub fn check_links(Array[@types.CauseLink], Array[@types.CauseLink]) -> Bool
+
+pub fn check_order(Array[Int], Array[Int]) -> Bool
+
+pub fn compute_score(@types.Case, Array[Int], Array[@types.CauseLink], Int) -> @types.CaseScore
+
+pub fn count_correct_links(Array[@types.CauseLink], Array[@types.CauseLink]) -> Int
+
+pub fn count_correct_positions(Array[Int], Array[Int]) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

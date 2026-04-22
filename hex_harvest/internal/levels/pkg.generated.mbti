@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/hex_harvest/internal/levels"
+
+import {
+  "bobzhang/games/hex_harvest/internal/types",
+}
+
+// Values
+pub fn load_level(Int) -> @types.Level
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -11,7 +11,12 @@ fn clamp_channel(v : Int) -> Int {
 
 ///|
 fn color_with_alpha(c : @raylib.Color, alpha : Int) -> @raylib.Color {
-  @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), clamp_channel(alpha))
+  @raylib.Color::new(
+    c.r.to_int(),
+    c.g.to_int(),
+    c.b.to_int(),
+    clamp_channel(alpha),
+  )
 }
 
 ///|
@@ -60,12 +65,7 @@ fn board_bounds() -> (Int, Int, Int, Int) {
 ///|
 fn draw_scene_backdrop() -> Unit {
   @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @types.bg_color,
-    @types.bg_color_bottom,
+    0, 0, @types.screen_w, @types.screen_h, @types.bg_color, @types.bg_color_bottom,
   )
 
   @raylib.draw_circle(
@@ -342,11 +342,7 @@ fn draw_title() -> Unit {
   )
   draw_centered_text("XIAO XIAO LE", cx, 184, 58, @types.panel_text_color)
   draw_centered_text(
-    "Match 3 or more gems to score and beat the level target.",
-    cx,
-    264,
-    22,
-    @types.panel_label_color,
+    "Match 3 or more gems to score and beat the level target.", cx, 264, 22, @types.panel_label_color,
   )
 
   for i in 0..<@types.num_colors {
@@ -373,10 +369,7 @@ fn draw_title() -> Unit {
     darken_color(@types.panel_card_color, 8),
   )
   draw_centered_text(
-    "Click adjacent gems to swap them and set up chain reactions.",
-    cx,
-    436,
-    18,
+    "Click adjacent gems to swap them and set up chain reactions.", cx, 436, 18,
     @types.panel_text_color,
   )
 
@@ -393,10 +386,7 @@ fn draw_title() -> Unit {
   )
   draw_centered_text(
     "H shows a hint. R restarts the run. Beat the score goal before moves run out.",
-    cx,
-    506,
-    18,
-    @types.panel_label_color,
+    cx, 506, 18, @types.panel_label_color,
   )
 
   @raylib.draw_rectangle_rounded(
@@ -506,14 +496,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   } else {
     @types.panel_text_color
   }
-  draw_stat_tile(
-    398,
-    32,
-    88,
-    "Moves",
-    game.moves_left.to_string(),
-    moves_color,
-  )
+  draw_stat_tile(398, 32, 88, "Moves", game.moves_left.to_string(), moves_color)
   draw_stat_tile(
     496,
     32,
@@ -541,15 +524,13 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     )
   } else {
     @draw.draw_text(
-      "Click gems to swap. H shows a hint.",
-      42,
-      94,
-      18,
-      @types.panel_label_color,
+      "Click gems to swap. H shows a hint.", 42, 94, 18, @types.panel_label_color,
     )
   }
 
-  @draw.draw_text("Target Progress", progress_x, 96, 16, @types.panel_label_color)
+  @draw.draw_text(
+    "Target Progress", progress_x, 96, 16, @types.panel_label_color,
+  )
   @raylib.draw_rectangle_rounded(
     @raylib.Rectangle::new(
       Float::from_int(progress_x),

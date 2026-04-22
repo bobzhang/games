@@ -16,8 +16,6 @@ pub(all) struct Pin {
   mut vy : Float
   mut ang : Float
   mut ang_v : Float
-
-  fn new() -> Pin
 }
 
 ///|
@@ -31,8 +29,6 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Spark
 }
 
 ///|
@@ -192,21 +188,17 @@ pub(all) struct Game {
   /// Number of active touch points this frame (0 if no touches).
   /// Used to distinguish touch input from mouse input for button detection.
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a standing pin with zero velocity.
-#deprecated
-pub fn Pin::new() -> Pin {
+pub fn Pin::Pin() -> Pin {
   { standing: true, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ang: 0.0, ang_v: 0.0 }
 }
 
 ///|
 /// Creates an inactive spark instance for the particle pool.
-#deprecated
-pub fn Spark::new() -> Spark {
+pub fn Spark::Spark() -> Spark {
   {
     active: false,
     x: 0.0,
@@ -221,8 +213,7 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates a new game in title state with initialized pins and score buffers.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   let pins : Array[Pin] = Array::makei(10, fn(_i) { Pin() })
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) { Spark() })
 

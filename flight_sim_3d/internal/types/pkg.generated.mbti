@@ -641,11 +641,8 @@ pub(all) struct Game {
   mut damage_dir_timer : Float
   floating_damage : Array[FloatingDamage]
   mut weapon_switch_display_timer : Float
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) struct GameMessage {
   mut text : String
@@ -735,12 +732,9 @@ pub(all) struct Player {
   mut shots_fired : Int
   mut shots_hit : Int
   mut weapon_switch_timer : Float
-
-  fn new() -> Player
 }
+pub fn Player::Player() -> Self
 pub fn Player::apply_stats(Self, AircraftStats) -> Unit
-#deprecated
-pub fn Player::new() -> Self
 
 pub(all) struct Projectile {
   mut active : Bool
@@ -811,11 +805,8 @@ pub(all) struct WeatherState {
   mut cloud_height : Float
   mut rain_intensity : Float
   mut time_of_day : Float
-
-  fn new() -> WeatherState
 }
-#deprecated
-pub fn WeatherState::new() -> Self
+pub fn WeatherState::WeatherState() -> Self
 pub fn WeatherState::set_weather(Self, Weather) -> Unit
 
 // Type aliases

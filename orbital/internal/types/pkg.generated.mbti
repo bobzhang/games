@@ -1,0 +1,256 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/orbital/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let angle_step : Float
+
+pub fn atan2f(Float, Float) -> Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_arrow : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_hud : @raylib.Color
+
+pub let color_locked : @raylib.Color
+
+pub let color_planet : @raylib.Color
+
+pub let color_planet_ring : @raylib.Color
+
+pub let color_preview : @raylib.Color
+
+pub let color_probe : @raylib.Color
+
+pub let color_probe_glow : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_stars : @raylib.Color
+
+pub let color_station : @raylib.Color
+
+pub let color_station_glow : @raylib.Color
+
+pub let color_tier_launch : @raylib.Color
+
+pub let color_tier_nav : @raylib.Color
+
+pub let color_tier_sling : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_trail : @raylib.Color
+
+pub let color_waypoint : @raylib.Color
+
+pub let color_waypoint_collected : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn generate_stars() -> Array[Star]
+
+pub fn gravity_accel(Vec2f, Vec2f, Float) -> Vec2f
+
+pub let gravity_g : Float
+
+pub let launch_speed : Float
+
+pub fn level_index_for(Tier, Int) -> Int
+
+pub fn make_level(Array[Planet], Station, Array[Waypoint], Float, Float, Int, String, Tier) -> Level
+
+pub fn make_planet(Float, Float, Float, Float) -> Planet
+
+pub fn make_star(Float, Float, Int, Float) -> Star
+
+pub fn make_station(Float, Float, Float) -> Station
+
+pub fn make_waypoint(Float, Float, Float) -> Waypoint
+
+pub let max_ticks : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn minf(Float, Float) -> Float
+
+pub fn new_game() -> Game
+
+pub fn new_probe() -> Probe
+
+pub fn new_score() -> LevelScore
+
+pub let pi : Float
+
+pub let preview_ticks : Int
+
+pub fn rng_float() -> Float
+
+pub fn rng_int(Int) -> Int
+
+pub fn rng_next() -> Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn seed_rng(Int) -> Unit
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub let space_height : Float
+
+pub let space_width : Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tick_rate : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_start_index(Tier) -> Int
+
+pub fn tier_unlocked(Tier, Array[LevelScore]) -> Bool
+
+pub let total_levels : Int
+
+pub let trail_max : Int
+
+pub fn vec2f(Float, Float) -> Vec2f
+
+pub fn vec2f_add(Vec2f, Vec2f) -> Vec2f
+
+pub fn vec2f_dist(Vec2f, Vec2f) -> Float
+
+pub fn vec2f_dist_sq(Vec2f, Vec2f) -> Float
+
+pub fn vec2f_len(Vec2f) -> Float
+
+pub fn vec2f_normalize(Vec2f) -> Vec2f
+
+pub fn vec2f_scale(Vec2f, Float) -> Vec2f
+
+pub fn vec2f_sub(Vec2f, Vec2f) -> Vec2f
+
+pub fn vec2f_zero() -> Vec2f
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_level : Int
+  mut launch_angle : Float
+  probe : Probe
+  mut tick_count : Int
+  mut trail : Array[Vec2f]
+  mut preview : Array[Vec2f]
+  mut scores : Array[LevelScore]
+  mut frame_count : Int
+  stars : Array[Star]
+  mut message : String
+  mut message_timer : Float
+} derive(Show)
+
+pub(all) struct Level {
+  planets : Array[Planet]
+  station : Station
+  waypoints : Array[Waypoint]
+  launch_pos : Vec2f
+  par_ticks : Int
+  name : String
+  tier : Tier
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut best_ticks : Int
+  mut stars : Int
+} derive(Show)
+
+pub(all) struct Planet {
+  pos : Vec2f
+  mass : Float
+  radius : Float
+} derive(Show)
+
+pub(all) enum PlayState {
+  Aiming
+  Flying
+  Won
+  Failed
+} derive(Eq, Show)
+
+pub(all) struct Probe {
+  mut pos : Vec2f
+  mut vel : Vec2f
+  mut active : Bool
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct Star {
+  x : Float
+  y : Float
+  brightness : Int
+  size : Float
+} derive(Show)
+
+pub(all) struct Station {
+  pos : Vec2f
+  radius : Float
+} derive(Show)
+
+pub(all) enum Tier {
+  Launch
+  Slingshot
+  Navigation
+} derive(Eq, Show)
+
+pub(all) struct Vec2f {
+  mut x : Float
+  mut y : Float
+} derive(Eq, Show)
+
+pub(all) struct Waypoint {
+  pos : Vec2f
+  radius : Float
+  mut collected : Bool
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

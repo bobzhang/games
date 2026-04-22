@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/symbiosis/internal/simulation"
+
+import {
+  "bobzhang/games/symbiosis/internal/types",
+}
+
+// Values
+pub fn restart_level(@types.Game) -> Unit
+
+pub fn simulate_move(@types.Game, @types.MoveInput) -> Unit
+
+pub fn undo_move(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

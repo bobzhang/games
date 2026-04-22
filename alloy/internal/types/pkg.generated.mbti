@@ -1,0 +1,233 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/alloy/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn add_ingredient(Game, MetalKind) -> Unit
+
+pub let blend_anim_duration : Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clear_crucible(Game) -> Unit
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_carbon : @raylib.Color
+
+pub let color_conductivity : @raylib.Color
+
+pub let color_copper : @raylib.Color
+
+pub let color_crucible : @raylib.Color
+
+pub let color_crucible_inner : @raylib.Color
+
+pub let color_fail : @raylib.Color
+
+pub let color_flexibility : @raylib.Color
+
+pub let color_gold : @raylib.Color
+
+pub let color_hardness : @raylib.Color
+
+pub let color_hud_dim : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_iron : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_property_bar_bg : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_temp_high : @raylib.Color
+
+pub let color_temp_low : @raylib.Color
+
+pub let color_temp_medium : @raylib.Color
+
+pub let color_tin : @raylib.Color
+
+pub let color_title_glow : @raylib.Color
+
+pub let color_zinc : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn is_level_unlocked(Game, Int) -> Bool
+
+pub let max_crucible_slots : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn metal_color(MetalKind) -> @raylib.Color
+
+pub fn metal_name(MetalKind) -> String
+
+pub fn metal_props(MetalKind) -> MetalProps
+
+pub fn minf(Float, Float) -> Float
+
+pub fn new_game() -> Game
+
+pub fn new_level_progress() -> LevelProgress
+
+pub fn new_level_result() -> LevelResult
+
+pub fn recalculate_total_stars(Game) -> Unit
+
+pub fn remove_ingredient(Game, Int) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn star_count(StarRating) -> Int
+
+pub let target_fps : Int
+
+pub fn temp_color(Temperature) -> @raylib.Color
+
+pub fn temp_description(Temperature) -> String
+
+pub fn temp_name(Temperature) -> String
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn total_ingredient_count(Game) -> Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct BlendResult {
+  hardness : Float
+  flexibility : Float
+  conductivity : Float
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut current_level : Int
+  crucible : Array[Ingredient]
+  mut temperature : Temperature
+  mut blend_result : BlendResult
+  mut blend_timer : Float
+  mut blend_animating : Bool
+  level_progress : Array[LevelProgress]
+  mut result : LevelResult
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut total_stars : Int
+  mut hover_metal : Int
+  mut hover_button : String
+  mut selected_slot : Int
+}
+
+pub(all) struct Ingredient {
+  metal : MetalKind
+  mut amount : Int
+} derive(Show)
+
+pub(all) struct LevelDef {
+  id : Int
+  name : String
+  tier : Int
+  available_metals : Array[MetalKind]
+  target : TargetAlloy
+  par_ingredients : Int
+  hint : String
+} derive(Show)
+
+pub(all) struct LevelProgress {
+  mut best_stars : StarRating
+  mut completed : Bool
+} derive(Show)
+
+pub(all) struct LevelResult {
+  mut stars : StarRating
+  mut ingredients_used : Int
+  mut blend : BlendResult
+  mut all_in_range : Bool
+} derive(Show)
+
+pub(all) enum MetalKind {
+  Iron
+  Copper
+  Tin
+  Gold
+  Carbon
+  Zinc
+} derive(Eq, Show)
+
+pub(all) struct MetalProps {
+  hardness : Float
+  flexibility : Float
+  conductivity : Float
+} derive(Eq, Show)
+
+pub(all) struct PropertyRange {
+  min : Float
+  max : Float
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  Blending
+  LevelComplete
+  LevelFailed
+} derive(Eq, Show)
+
+pub(all) enum StarRating {
+  Zero
+  One
+  Two
+  Three
+} derive(Eq, Show)
+
+pub(all) struct TargetAlloy {
+  hardness : PropertyRange
+  flexibility : PropertyRange
+  conductivity : PropertyRange
+} derive(Show)
+
+pub(all) enum Temperature {
+  Low
+  Medium
+  High
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

@@ -7,8 +7,6 @@ pub(all) struct StatusEffect {
   mut duration : Float
   mut strength : Float
   mut tick_timer : Float
-
-  fn new(kind : Int, duration : Float, strength : Float) -> StatusEffect
 }
 
 ///|
@@ -19,8 +17,7 @@ pub fn StatusEffect::none() -> StatusEffect {
 
 ///|
 /// Creates a status effect with the given `kind`, `duration`, and `strength`.
-#deprecated
-pub fn StatusEffect::new(
+pub fn StatusEffect::StatusEffect(
   kind : Int,
   duration : Float,
   strength : Float,
@@ -50,8 +47,6 @@ pub(all) struct Tower {
   mut buff_range : Float
   mut buff_rate : Float
   mut sell_value : Int
-
-  fn new(kind : TowerKind, gx : Int, gy : Int) -> Tower
 }
 
 ///|
@@ -80,8 +75,7 @@ pub fn Tower::inactive() -> Tower {
 
 ///|
 /// Creates a new active tower of the given `kind` at grid position (`gx`, `gy`).
-#deprecated
-pub fn Tower::new(kind : TowerKind, gx : Int, gy : Int) -> Tower {
+pub fn Tower::Tower(kind : TowerKind, gx : Int, gy : Int) -> Tower {
   {
     active: true,
     kind,
@@ -484,8 +478,6 @@ pub(all) struct Game {
   mut leak_warning_timer : Float
   mut gold_flash_timer : Float
   mut prev_gold : Int
-
-  fn new() -> Game
 }
 
 // Chain lightning visual line
@@ -666,8 +658,7 @@ pub fn AttackBeam::inactive() -> AttackBeam {
 
 ///|
 /// Creates a new game instance with default settings and empty entity pools.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     state: Menu,
     prev_state: Menu,

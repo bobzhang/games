@@ -1,0 +1,332 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/clockwork/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn atan2f(Float, Float) -> Float
+
+pub let base_rotation_speed : Float
+
+pub let bell_ring_duration : Float
+
+pub let bell_trigger_distance : Float
+
+pub let cam_push_distance : Float
+
+pub let cam_radius : Float
+
+pub fn cell_center_x(Int) -> Float
+
+pub fn cell_center_y(Int) -> Float
+
+pub let cell_size : Int
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clear_grid(Game) -> Unit
+
+pub let color_bell : @raylib.Color
+
+pub let color_bell_ringing : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_cam : @raylib.Color
+
+pub let color_connection : @raylib.Color
+
+pub let color_escapement : @raylib.Color
+
+pub let color_fail : @raylib.Color
+
+pub let color_gear_copper : @raylib.Color
+
+pub let color_gear_gold : @raylib.Color
+
+pub let color_gear_silver : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_invalid : @raylib.Color
+
+pub let color_peg : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_spring : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_filled : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_toolbar_bg : @raylib.Color
+
+pub fn component_color(ComponentKind) -> @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn count_placed_components(Game) -> Int
+
+pub let escapement_period : Float
+
+pub fn fmodf(Float, Float) -> Float
+
+pub let gear_large_radius : Float
+
+pub let gear_large_speed_ratio : Float
+
+pub let gear_large_teeth : Int
+
+pub let gear_medium_radius : Float
+
+pub let gear_medium_speed_ratio : Float
+
+pub let gear_medium_teeth : Int
+
+pub fn gear_radius(GearSize) -> Float
+
+pub let gear_small_radius : Float
+
+pub let gear_small_speed_ratio : Float
+
+pub let gear_small_teeth : Int
+
+pub fn gear_speed_ratio(GearSize) -> Float
+
+pub fn gear_teeth(GearSize) -> Int
+
+pub let grid_cols : Int
+
+pub fn grid_get(Game, Int, Int) -> Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn grid_set(Game, Int, Int, Int) -> Unit
+
+pub fn grid_valid(Int, Int) -> Bool
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub let max_bells : Int
+
+pub let max_components : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn mouse_to_grid_col(Int) -> Int
+
+pub fn mouse_to_grid_row(Int) -> Int
+
+pub fn new_bell(Int, Int, Int) -> Component
+
+pub fn new_component(ComponentKind, Int, Int) -> Component
+
+pub fn new_fixed_component(ComponentKind, Int, Int) -> Component
+
+pub fn new_game() -> Game
+
+pub fn new_grid() -> Array[Array[Int]]
+
+pub fn new_level_def() -> LevelDef
+
+pub fn new_palette() -> Palette
+
+pub fn new_simulation() -> Simulation
+
+pub fn palette_add(Palette, ComponentKind, Int) -> Unit
+
+pub fn palette_remaining(Palette, Int) -> Int
+
+pub let pi : Float
+
+pub fn reset_simulation(Simulation) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub let spring_force : Float
+
+pub let spring_release_speed : Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tier1_levels : Int
+
+pub let tier2_levels : Int
+
+pub let tier3_levels : Int
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub let two_pi : Float
+
+// Errors
+
+// Types and methods
+pub(all) enum CamDirection {
+  PushUp
+  PushDown
+  PushLeft
+  PushRight
+} derive(Eq, Show)
+
+pub(all) struct Component {
+  mut active : Bool
+  mut kind : ComponentKind
+  mut col : Int
+  mut row : Int
+  mut rotation : Float
+  mut rotation_speed : Float
+  mut clockwise : Bool
+  mut cam_dir : CamDirection
+  mut cam_offset : Float
+  mut spring_energy : Float
+  mut spring_released : Bool
+  mut escapement_phase : Float
+  mut escapement_locked : Bool
+  mut bell_target_tick : Int
+  mut bell_rung : Bool
+  mut bell_ring_timer : Float
+  mut connected_to : Array[Int]
+  mut fixed : Bool
+  mut dragging : Bool
+} derive(Show)
+
+pub(all) enum ComponentKind {
+  Gear(GearSize)
+  Cam
+  Spring
+  Escapement
+  Bell
+} derive(Eq, Show)
+
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut grid : Array[Array[Int]]
+  mut components : Array[Component]
+  mut selected_palette : Int
+  mut dragging_component : Int
+  mut hover_col : Int
+  mut hover_row : Int
+  mut current_level : Int
+  mut level_def : LevelDef
+  sim : Simulation
+  mut level_stars : Array[Int]
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut tier_scroll : Int
+} derive(Show)
+
+pub(all) enum GearSize {
+  Small
+  Medium
+  Large
+} derive(Eq, Show)
+
+pub(all) struct LevelDef {
+  mut id : Int
+  mut name : String
+  mut tier : Tier
+  mut fixed_components : Array[Component]
+  mut palette : Palette
+  mut bell_targets : Array[Int]
+  mut par_components : Int
+  mut description : String
+} derive(Show)
+
+pub(all) struct Palette {
+  mut available : Array[ComponentKind]
+  mut counts : Array[Int]
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  Paused
+  LevelComplete
+  LevelFailed
+} derive(Eq, Show)
+
+pub(all) enum SimState {
+  Idle
+  Running
+  Paused
+  Complete
+  Failed
+} derive(Eq, Show)
+
+pub(all) struct Simulation {
+  mut state : SimState
+  mut tick : Int
+  mut tick_timer : Float
+  mut tick_interval : Float
+  mut bells_rung : Array[Int]
+  mut bells_order : Array[Int]
+  mut total_bells : Int
+  mut speed_mult : Float
+} derive(Show)
+
+pub(all) enum Tier {
+  Ticks
+  Timing
+  Clockwork
+} derive(Eq, Show)
+
+pub(all) struct Vec2 {
+  mut x : Float
+  mut y : Float
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,144 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/compass/internal/types"
+
+// Values
+pub fn bearing_to_degrees(Float) -> Float
+
+pub let compass_panel_x : Int
+
+pub let compass_panel_y : Int
+
+pub fn compute_bearing(Pos, Pos) -> Float
+
+pub fn direction_dx(Direction) -> Int
+
+pub fn direction_dy(Direction) -> Int
+
+pub fn direction_name(Direction) -> String
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn heading_to_compass(Float) -> String
+
+pub let hud_font_size : Int
+
+pub fn in_bounds(Int, Int) -> Bool
+
+pub let info_font_size : Int
+
+pub fn levels_completed(Array[StarRating]) -> Int
+
+pub let max_hp : Int
+
+pub fn new_game() -> GameState
+
+pub fn new_ship(Pos) -> Ship
+
+pub fn progress_percent(Array[StarRating]) -> Int
+
+pub let reveal_radius : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn star_rating_value(StarRating) -> Int
+
+pub let target_fps : Int
+
+pub fn three_star_count(Array[StarRating]) -> Int
+
+pub let tile_size : Int
+
+pub let title_font_size : Int
+
+pub let total_levels : Int
+
+pub fn total_stars(Array[StarRating]) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) enum Direction {
+  North
+  South
+  East
+  West
+} derive(Eq, Show, ToJson)
+
+pub(all) enum GamePhase {
+  Menu
+  Playing
+  LevelComplete
+  GameOver
+  LevelSelect
+} derive(Eq, Show, ToJson)
+
+pub(all) struct GameState {
+  mut current_level : Int
+  mut phase : GamePhase
+  mut level_state : LevelState?
+  mut stars : Array[StarRating]
+  mut anim_timer : Float
+  mut frame_count : Int
+} derive(Show, ToJson)
+
+pub(all) struct LevelData {
+  grid : Array[Array[Tile]]
+  start : Pos
+  lighthouse : Pos
+  par_steps : Int
+  landmark_count : Int
+  tier : Int
+} derive(Show, ToJson)
+
+pub(all) struct LevelState {
+  data : LevelData
+  mut revealed : Array[Array[Bool]]
+  ship : Ship
+  mut phase : GamePhase
+  mut message : String
+  mut message_timer : Float
+  mut compass_beep : Bool
+  mut near_land_dir : Direction
+} derive(Show, ToJson)
+
+pub(all) struct Pos {
+  x : Int
+  y : Int
+} derive(Compare, Eq, Hash, Show, ToJson)
+
+pub(all) struct Ship {
+  mut pos : Pos
+  mut hp : Int
+  mut steps : Int
+  mut heading : Float
+  mut landmarks_found : Int
+} derive(Show, ToJson)
+
+pub(all) enum StarRating {
+  None
+  One
+  Two
+  Three
+} derive(Eq, Show, ToJson)
+
+pub(all) enum Tile {
+  Ocean
+  Land
+  Lighthouse
+  Reef
+  Landmark
+  Current(Direction)
+} derive(Eq, Show, ToJson)
+
+// Type aliases
+
+// Traits
+

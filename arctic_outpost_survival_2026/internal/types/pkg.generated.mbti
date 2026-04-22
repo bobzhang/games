@@ -98,11 +98,8 @@ pub(all) struct Bullet {
   mut life : Float
   mut power : Float
   mut kind : BulletKind
-
-  fn new() -> Bullet
 }
-#deprecated
-pub fn Bullet::new() -> Self
+pub fn Bullet::Bullet() -> Self
 
 pub(all) enum BulletKind {
   Normal
@@ -120,11 +117,8 @@ pub(all) struct Enemy {
   mut max_hp : Float
   mut kind : EnemyKind
   mut phase : Float
-
-  fn new() -> Enemy
 }
-#deprecated
-pub fn Enemy::new() -> Self
+pub fn Enemy::Enemy() -> Self
 
 pub(all) enum EnemyKind {
   Wolf
@@ -177,11 +171,8 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -198,11 +189,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
-#deprecated
-pub fn Particle::new() -> Self
+pub fn Particle::Particle() -> Self
 
 pub(all) enum ParticleKind {
   Default
@@ -218,11 +206,8 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
-
-  fn new() -> Pickup
 }
-#deprecated
-pub fn Pickup::new() -> Self
+pub fn Pickup::Pickup() -> Self
 
 pub(all) enum PickupKind {
   Fuel

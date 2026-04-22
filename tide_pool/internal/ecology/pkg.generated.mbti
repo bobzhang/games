@@ -1,0 +1,36 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tide_pool/internal/ecology"
+
+import {
+  "bobzhang/games/tide_pool/internal/types",
+}
+
+// Values
+pub fn advance_tide(@types.Game) -> Unit
+
+pub fn apply_algae_growth(@types.Game, Array[String]) -> Unit
+
+pub fn apply_health_effects(@types.Game, Array[String]) -> Unit
+
+pub fn apply_predation(@types.Game, Array[String]) -> Unit
+
+pub fn check_deaths(@types.Game, Array[String]) -> Unit
+
+pub fn check_victory(@types.Game) -> @types.PlayResult
+
+pub fn count_alive(@types.Game) -> Int
+
+pub fn get_water_row(Int, Int) -> Int
+
+pub fn simulate_turn(@types.Game) -> @types.TurnLog
+
+pub fn update_submersion(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

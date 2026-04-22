@@ -59,11 +59,8 @@ pub(all) struct Game {
   mut step_timer_ghost : Float
   mut game_over : Bool
   mut win : Bool
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) struct Ghost {
   mut x : Int
@@ -75,11 +72,8 @@ pub(all) struct Ghost {
   scatter_x : Int
   scatter_y : Int
   color : @raylib.Color
-
-  fn new(Int, Int, Int, Int, @raylib.Color) -> Ghost
 }
-#deprecated
-pub fn Ghost::new(Int, Int, Int, Int, @raylib.Color) -> Self
+pub fn Ghost::Ghost(Int, Int, Int, Int, @raylib.Color) -> Self
 
 // Type aliases
 

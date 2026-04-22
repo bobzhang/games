@@ -1,0 +1,245 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/sieve/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absi(Int) -> Int
+
+pub fn cell_candidates(Grid, Int, Int, Array[Constraint]) -> Array[Bool]
+
+pub let cell_size : Int
+
+pub fn clone_grid(Grid) -> Grid
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_button_text : @raylib.Color
+
+pub let color_candidate_invalid : @raylib.Color
+
+pub let color_candidate_text : @raylib.Color
+
+pub let color_candidate_valid : @raylib.Color
+
+pub let color_cell_correct : @raylib.Color
+
+pub let color_cell_empty : @raylib.Color
+
+pub let color_cell_error : @raylib.Color
+
+pub let color_cell_highlight : @raylib.Color
+
+pub let color_cell_locked : @raylib.Color
+
+pub let color_cell_selected : @raylib.Color
+
+pub let color_constraint_bar_bg : @raylib.Color
+
+pub let color_constraint_icon_pending : @raylib.Color
+
+pub let color_constraint_icon_sat : @raylib.Color
+
+pub let color_constraint_icon_unsat : @raylib.Color
+
+pub let color_constraint_sat : @raylib.Color
+
+pub let color_constraint_text : @raylib.Color
+
+pub let color_constraint_unsat : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_number_editable : @raylib.Color
+
+pub let color_number_locked : @raylib.Color
+
+pub let color_number_prime : @raylib.Color
+
+pub let color_palette_bg : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_filled : @raylib.Color
+
+pub let color_subtitle : @raylib.Color
+
+pub let color_tier_factors : @raylib.Color
+
+pub let color_tier_primes : @raylib.Color
+
+pub let color_tier_theorem : @raylib.Color
+
+pub let color_timer : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub fn constraint_kind_name(ConstraintKind) -> String
+
+pub let constraint_panel_x : Int
+
+pub let constraint_panel_y : Int
+
+pub fn divisible_by(Int, Int) -> Bool
+
+pub fn gcd(Int, Int) -> Int
+
+pub fn grid_get(Grid, Int, Int) -> Int
+
+pub fn grid_is_full(Grid) -> Bool
+
+pub fn grid_is_locked(Grid, Int, Int) -> Bool
+
+pub fn grid_lock(Grid, Int, Int) -> Unit
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub fn grid_set(Grid, Int, Int, Int) -> Unit
+
+pub let grid_size : Int
+
+pub let grid_total_cells : Int
+
+pub fn is_prime(Int) -> Bool
+
+pub fn new_cell(Int, Bool) -> Cell
+
+pub fn new_constraint(ConstraintKind, Array[Int]) -> Constraint
+
+pub fn new_game() -> Game
+
+pub fn new_grid() -> Grid
+
+pub fn new_level_score() -> LevelScore
+
+pub let palette_cell : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_start_index(Tier) -> Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Cell {
+  mut value : Int
+  mut locked : Bool
+} derive(Eq, Show)
+
+pub(all) struct Constraint {
+  kind : ConstraintKind
+  params : Array[Int]
+  mut satisfied : Bool
+} derive(Eq, Show)
+
+pub(all) enum ConstraintKind {
+  RowSum
+  ColProduct
+  Adjacent
+  NoPrimePair
+  Divisible
+  Unique
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_level_index : Int
+  mut current_level : Level?
+  mut selected_row : Int
+  mut selected_col : Int
+  mut timer : Float
+  mut incorrect_placements : Int
+  mut undo_stack : Array[UndoEntry]
+  mut scores : Array[LevelScore]
+  mut frame_count : Int
+  mut anim_timer : Float
+  mut message : String
+  mut message_timer : Float
+  mut checking_timer : Float
+  mut tier_scroll : Int
+} derive(Eq, Show)
+
+pub(all) struct Grid {
+  size : Int
+  cells : Array[Cell]
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  tier : Tier
+  grid : Grid
+  constraints : Array[Constraint]
+  par_time : Float
+  level_index : Int
+} derive(Eq, Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut best_time : Float
+  mut completed : Bool
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  Editing
+  Checking
+  Solved
+  Failed
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Primes
+  Factors
+  Theorem
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  row : Int
+  col : Int
+  old_value : Int
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

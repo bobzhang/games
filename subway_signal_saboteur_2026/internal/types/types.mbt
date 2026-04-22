@@ -52,8 +52,6 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
-
-  fn new() -> Actor
 }
 
 ///|
@@ -67,8 +65,6 @@ pub(all) struct Train {
   mut speed : Float
   mut passed_junction : Int
   mut color_id : TrainColor
-
-  fn new() -> Train
 }
 
 ///|
@@ -85,8 +81,6 @@ pub(all) struct Inspector {
   mut stun_t : Float
   mut seed : Int
   mut alert_t : Float
-
-  fn new() -> Inspector
 }
 
 ///|
@@ -100,8 +94,6 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
 
 ///|
@@ -143,14 +135,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a player actor initialized at the configured start cell.
-#deprecated
-pub fn Actor::new() -> Actor {
+pub fn Actor::Actor() -> Actor {
   {
     x: start_x,
     y: start_y,
@@ -167,8 +156,7 @@ pub fn Actor::new() -> Actor {
 
 ///|
 /// Creates an inactive train entry for the train object pool.
-#deprecated
-pub fn Train::new() -> Train {
+pub fn Train::Train() -> Train {
   {
     active: false,
     x: 0.0,
@@ -183,8 +171,7 @@ pub fn Train::new() -> Train {
 
 ///|
 /// Creates an inactive inspector with default patrol parameters.
-#deprecated
-pub fn Inspector::new() -> Inspector {
+pub fn Inspector::Inspector() -> Inspector {
   {
     active: false,
     body: Actor(),
@@ -202,8 +189,7 @@ pub fn Inspector::new() -> Inspector {
 
 ///|
 /// Creates an inactive particle entry for the particle pool.
-#deprecated
-pub fn Particle::new() -> Particle {
+pub fn Particle::Particle() -> Particle {
   {
     active: false,
     x: 0.0,
@@ -218,8 +204,7 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with initialized pools and counters.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     map: Array::make(grid_w * grid_h, Void),
     switch_state: Array::make(junction_n, 0),

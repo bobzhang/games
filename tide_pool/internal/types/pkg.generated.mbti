@@ -1,0 +1,302 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tide_pool/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn abs_float(Float) -> Float
+
+pub let cell_size : Int
+
+pub fn clamp_float(Float, Float, Float) -> Float
+
+pub fn clear_grid(Game) -> Unit
+
+pub let color_algae : @raylib.Color
+
+pub let color_alive : @raylib.Color
+
+pub let color_anemone : @raylib.Color
+
+pub let color_bar_bg : @raylib.Color
+
+pub let color_barnacle : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_crab : @raylib.Color
+
+pub let color_dead : @raylib.Color
+
+pub let color_empty_cell : @raylib.Color
+
+pub let color_exposed : @raylib.Color
+
+pub let color_hover : @raylib.Color
+
+pub let color_hud_dim : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_locked : @raylib.Color
+
+pub let color_ok : @raylib.Color
+
+pub let color_rock : @raylib.Color
+
+pub let color_rock_dark : @raylib.Color
+
+pub let color_sand : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_star : @raylib.Color
+
+pub let color_star_off : @raylib.Color
+
+pub let color_starfish : @raylib.Color
+
+pub let color_submerged : @raylib.Color
+
+pub let color_subtitle : @raylib.Color
+
+pub let color_tide_indicator : @raylib.Color
+
+pub let color_tier1 : @raylib.Color
+
+pub let color_tier2 : @raylib.Color
+
+pub let color_tier3 : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_urchin : @raylib.Color
+
+pub let color_warn : @raylib.Color
+
+pub let color_water_deep : @raylib.Color
+
+pub let color_water_mid : @raylib.Color
+
+pub let color_water_shallow : @raylib.Color
+
+pub let color_water_surface : @raylib.Color
+
+pub fn compute_stars(Int, Int) -> Int
+
+pub fn count_organism_on_grid(Game, OrganismKind) -> Int
+
+pub let cycle_length : Int
+
+pub fn get_available_count(Game, OrganismKind) -> Int
+
+pub fn get_depth_at_col(Game, Int) -> Int
+
+pub fn get_profile(OrganismKind) -> OrganismProfile
+
+pub fn get_tide_for_turn(Int) -> (Int, TidePhase)
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub let health_warn : Float
+
+pub let hud_x : Int
+
+pub let hud_y : Int
+
+pub fn in_grid(Int, Int) -> Bool
+
+pub fn is_cell_rock(LevelDef, Int, Int) -> Bool
+
+pub fn is_level_unlocked(Array[LevelScore], Int) -> Bool
+
+pub fn is_submerged(Int, Int, Int) -> Bool
+
+pub fn levels_completed(Array[LevelScore]) -> Int
+
+pub let levels_per_tier : Int
+
+pub let max_health : Float
+
+pub let max_tide : Int
+
+pub let max_turns : Int
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub let num_organisms : Int
+
+pub fn organism_color(OrganismKind) -> @raylib.Color
+
+pub fn organism_from_index(Int) -> OrganismKind
+
+pub fn organism_index(OrganismKind) -> Int
+
+pub let palette_gap : Int
+
+pub let palette_slot_size : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_name(Tier) -> String
+
+pub let total_cycles : Int
+
+pub let total_levels : Int
+
+pub fn total_stars(Array[LevelScore]) -> Int
+
+pub fn zone_name(Zone) -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum CellContent {
+  Empty
+  Rock
+  Organism(OrganismKind)
+} derive(Eq, Show, ToJson)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_level : Int
+  grid : Array[Array[CellContent]]
+  mut organisms : Array[OrganismState]
+  mut current_turn : Int
+  mut current_cycle : Int
+  mut tide_level : Int
+  mut tide_phase : TidePhase
+  mut play_result : PlayResult
+  mut selected_organism : OrganismKind?
+  mut hover_row : Int
+  mut hover_col : Int
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut scores : Array[LevelScore]
+  mut current_level : LevelDef?
+  mut sim_log : Array[TurnLog]
+  mut sim_speed_timer : Float
+  mut organisms_placed : Array[Int]
+  mut anim_timer : Float
+} derive(Show)
+
+pub(all) struct LevelDef {
+  id : Int
+  name : String
+  tier : Tier
+  description : String
+  depth_profile : Array[Int]
+  available_organisms : Array[OrganismKind]
+  organism_counts : Array[Int]
+  target_species : Array[OrganismKind]
+  rock_cells : Array[(Int, Int)]
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut best_cycles_survived : Int
+  mut stars : Int
+} derive(Show)
+
+pub(all) enum OrganismKind {
+  Barnacle
+  Anemone
+  Crab
+  Starfish
+  Algae
+  Urchin
+} derive(Eq, Show, ToJson)
+
+pub(all) struct OrganismProfile {
+  kind : OrganismKind
+  name : String
+  symbol : String
+  preferred_zone : Zone
+  needs_submersion : Bool
+  needs_exposure : Bool
+  is_mobile : Bool
+  is_predator : Bool
+  prey : OrganismKind?
+  health_decay_submerged : Float
+  health_decay_exposed : Float
+  health_regen : Float
+} derive(Show)
+
+pub(all) struct OrganismState {
+  kind : OrganismKind
+  row : Int
+  col : Int
+  mut alive : Bool
+  mut health : Float
+  mut submerged : Bool
+} derive(Show, ToJson)
+
+pub(all) enum PlayResult {
+  None
+  Victory
+  Failure(String)
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  Simulating
+  Results
+} derive(Eq, Show)
+
+pub(all) enum TidePhase {
+  Low
+  Mid
+  High
+} derive(Eq, Show, ToJson)
+
+pub(all) enum Tier {
+  Shallow
+  Middle
+  Deep
+} derive(Eq, Show)
+
+pub(all) struct TurnLog {
+  turn : Int
+  tide_level : Int
+  phase : TidePhase
+  events : Array[String]
+  organisms_alive : Int
+} derive(Show)
+
+pub(all) enum Zone {
+  HighZone
+  MidZone
+  LowZone
+} derive(Eq, Show, ToJson)
+
+// Type aliases
+
+// Traits
+

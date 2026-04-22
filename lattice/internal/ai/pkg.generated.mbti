@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/lattice/internal/ai"
+
+import {
+  "bobzhang/games/lattice/internal/types",
+}
+
+// Values
+pub fn evaluate_board(@types.HexBoard, @types.Player) -> Int
+
+pub fn evaluate_move(@types.HexBoard, @types.HexCoord, @types.Player) -> Int
+
+pub fn rank_moves(@types.HexBoard, @types.Player, Array[@types.HexCoord]) -> Array[@types.HexCoord]
+
+pub fn select_easy_heuristic(@types.HexBoard, @types.Player, Array[@types.HexCoord]) -> @types.HexCoord
+
+pub fn select_hard_core(@types.HexBoard, @types.Player, Array[@types.HexCoord]) -> @types.HexCoord
+
+pub fn select_move(@types.HexBoard, @types.Player, @types.Difficulty) -> @types.HexCoord?
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

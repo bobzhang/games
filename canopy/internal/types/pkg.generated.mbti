@@ -1,0 +1,240 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/canopy/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absi(Int) -> Int
+
+pub let branch_interval : Int
+
+pub let cell_size : Int
+
+pub fn clone_ground(Array[GroundTile]) -> Array[GroundTile]
+
+pub fn clone_tree(Tree) -> Tree
+
+pub fn clone_trees(Array[Tree]) -> Array[Tree]
+
+pub let color_bg : @raylib.Color
+
+pub let color_branch : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_ground : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_leaf : @raylib.Color
+
+pub let color_leaf_dark : @raylib.Color
+
+pub let color_shadow : @raylib.Color
+
+pub let color_sky : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_sun : @raylib.Color
+
+pub let color_target_marker : @raylib.Color
+
+pub let color_target_met : @raylib.Color
+
+pub let color_tier_forest : @raylib.Color
+
+pub let color_tier_grove : @raylib.Color
+
+pub let color_tier_seedling : @raylib.Color
+
+pub let color_title_green : @raylib.Color
+
+pub let color_trunk : @raylib.Color
+
+pub let color_water : @raylib.Color
+
+pub let color_water_empty : @raylib.Color
+
+pub fn compute_shadows(Game) -> Unit
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub let max_water : Int
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_branch(Int, Int) -> Branch
+
+pub fn new_game() -> Game
+
+pub fn new_grid() -> Grid
+
+pub fn new_ground_tile(Int) -> GroundTile
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_tree(Int) -> Tree
+
+pub let rain_interval : Int
+
+pub fn rebuild_grid(Game) -> Unit
+
+pub fn restore_undo(Game) -> Bool
+
+pub fn save_undo(Game) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let shadow_growth_delay : Int
+
+pub let target_fps : Int
+
+pub let total_levels : Int
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+pub fn water_consumption(Tree) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Branch {
+  mut row : Int
+  mut col_offset : Int
+  mut pruned : Bool
+} derive(Show)
+
+pub(all) enum CellKind {
+  Empty
+  Trunk
+  Branch
+  Leaf
+  Shadow
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_level : Int
+  mut grid : Grid
+  mut trees : Array[Tree]
+  mut ground : Array[GroundTile]
+  mut turn : Int
+  mut prunes_used : Int
+  mut targets : Array[Target]
+  mut turn_limit : Int
+  mut prune_budget : Int
+  mut par_prunes : Int
+  mut par_turns : Int
+  mut level_scores : Array[LevelScore]
+  mut undo_stack : Array[UndoState]
+  mut frame_count : Int
+  mut anim_timer : Float
+  mut message : String
+  mut message_timer : Float
+  mut hover_col : Int
+  mut hover_row : Int
+  mut selected_tier : Int
+}
+
+pub(all) struct Grid {
+  width : Int
+  height : Int
+  cells : Array[Array[CellKind]]
+} derive(Show)
+
+pub(all) struct GroundTile {
+  mut water : Int
+  mut has_seed : Bool
+} derive(Show)
+
+pub(all) struct Level {
+  seed_columns : Array[Int]
+  targets : Array[Target]
+  turn_limit : Int
+  prune_budget : Int
+  par_prunes : Int
+  par_turns : Int
+  tier : Tier
+  water_levels : Array[Int]
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut completed : Bool
+  mut turns_used : Int
+  mut prunes_used : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Idle
+  Animating
+  Won
+  Lost
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct Target {
+  tree_index : Int
+  required_height : Int
+} derive(Show)
+
+pub(all) enum Tier {
+  Seedling
+  Grove
+  Forest
+} derive(Eq, Show)
+
+pub(all) struct Tree {
+  mut col : Int
+  mut height : Int
+  branches : Array[Branch]
+  mut growth_timer : Int
+  mut shadowed : Bool
+} derive(Show)
+
+pub(all) struct UndoState {
+  trees : Array[Tree]
+  turn : Int
+  prunes_used : Int
+  ground : Array[GroundTile]
+} derive(Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

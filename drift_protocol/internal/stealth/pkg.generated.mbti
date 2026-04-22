@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/drift_protocol/internal/stealth"
+
+import {
+  "bobzhang/games/drift_protocol/internal/types",
+}
+
+// Values
+pub fn check_player_caught(@types.Game) -> Bool
+
+pub fn count_alert_guards(@types.Game) -> (Int, Int, Int)
+
+pub fn generate_coin_noise(@types.Game, Int, Int) -> Unit
+
+pub fn generate_movement_noise(@types.Game) -> Unit
+
+pub fn max_detection_meter(@types.Game) -> Float
+
+pub fn update_detection(@types.Game) -> Unit
+
+pub fn update_noise(@types.Game, Float) -> Unit
+
+pub fn update_shadow_state(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

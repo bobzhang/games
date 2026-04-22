@@ -25,8 +25,6 @@ pub(all) struct Mine {
   mut r : Float
   mut reveal_t : Float
   mut armed : Bool
-
-  fn new() -> Mine
 }
 
 ///|
@@ -37,8 +35,6 @@ pub(all) struct Target {
   mut y : Float
   mut detected : Bool
   mut pulse_t : Float
-
-  fn new() -> Target
 }
 
 ///|
@@ -75,28 +71,23 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a default Mine value for a new session.
-#deprecated
-pub fn Mine::new() -> Mine {
+pub fn Mine::Mine() -> Mine {
   { active: false, x: 0.0, y: 0.0, r: 0.0, reveal_t: 0.0, armed: true }
 }
 
 ///|
 /// Creates a default Target value for a new session.
-#deprecated
-pub fn Target::new() -> Target {
+pub fn Target::Target() -> Target {
   { active: false, x: 0.0, y: 0.0, detected: false, pulse_t: 0.0 }
 }
 
 ///|
 /// Creates a default Game value for a new session.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     mines: Array::makei(max_mines, fn(_i) { Mine() }),
     targets: Array::makei(max_targets, fn(_i) { Target() }),

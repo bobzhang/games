@@ -1,0 +1,73 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/rhythm_tactics/internal/content"
+
+import {
+  "bobzhang/games/rhythm_tactics/internal/types",
+  "moonbitlang/core/ref",
+}
+
+// Values
+pub fn active_elite_count(Array[@types.Enemy]) -> Int
+
+pub fn active_enemy_count(Array[@types.Enemy]) -> Int
+
+pub fn can_freeze_enemy(@types.Enemy) -> Bool
+
+pub fn compute_enemy_intents(@types.Floor, Int, Int, @ref.Ref[Int], Int) -> Unit
+
+pub fn elite_bat_double_move(@types.Enemy, @types.Floor, Int, Int) -> Unit
+
+pub fn elite_dragon_breath_cells(Int, Int, @types.Direction) -> Array[(Int, Int)]
+
+pub fn elite_skeleton_cross_cells(Int, Int) -> Array[(Int, Int)]
+
+pub fn elite_slime_split(Int, Int, Int, @types.Floor) -> Array[@types.Enemy]
+
+pub fn enemy_display_name(@types.Enemy) -> String
+
+pub fn enemy_drop_count(@types.Enemy) -> Int
+
+pub fn enemy_xp_value(@types.Enemy) -> Int
+
+pub fn floor_enemy_count(Int) -> Int
+
+pub fn floor_enemy_kinds(Int) -> Array[@types.EnemyKind]
+
+pub fn floor_total_threat(Array[@types.Enemy]) -> Int
+
+pub fn generate_floor(@types.Game, Int) -> @types.Floor
+
+pub fn make_bat(Int, Int, Int) -> @types.Enemy
+
+pub fn make_beat_dragon(Int, Int, Int) -> @types.Enemy
+
+pub fn make_boss(Int, Int, Int) -> @types.Enemy
+
+pub fn make_dragon(Int, Int, Int) -> @types.Enemy
+
+pub fn make_elite_enemy(@types.EnemyKind, Int, Int, Int) -> @types.Enemy
+
+pub fn make_enemy(@types.EnemyKind, Int, Int, Int) -> @types.Enemy
+
+pub fn make_golem(Int, Int, Int) -> @types.Enemy
+
+pub fn make_mimic(Int, Int, Int) -> @types.Enemy
+
+pub fn make_rhythm_lich(Int, Int, Int) -> @types.Enemy
+
+pub fn make_skeleton(Int, Int, Int) -> @types.Enemy
+
+pub fn make_slime(Int, Int, Int) -> @types.Enemy
+
+pub fn make_wraith(Int, Int, Int) -> @types.Enemy
+
+pub fn stun_duration_for(@types.Enemy) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

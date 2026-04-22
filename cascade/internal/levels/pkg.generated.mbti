@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cascade/internal/levels"
+
+import {
+  "bobzhang/games/cascade/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.Level
+
+pub fn level_name(Int) -> String
+
+pub fn tier_unlocked(Array[@types.LevelScore], @types.Tier) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

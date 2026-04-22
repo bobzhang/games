@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/splice/internal/dna"
+
+import {
+  "bobzhang/games/splice/internal/types",
+}
+
+// Values
+pub fn count_matching_traits(Array[@types.Trait], Array[@types.Trait]) -> Int
+
+pub fn cut(Array[@types.Base], Int) -> Array[@types.Base]
+
+pub fn delete(Array[@types.Base], Int, Int) -> Array[@types.Base]
+
+pub fn duplicate(Array[@types.Base], Int, Int) -> Array[@types.Base]
+
+pub fn find_start_codon(Array[@types.Base]) -> Int
+
+pub fn find_stop_codon(Array[@types.Base], Int) -> Int
+
+pub fn get_codon_groups(Array[@types.Base]) -> Array[@types.CodonResult]
+
+pub fn get_removed(Array[@types.Base], Int, Int) -> Array[@types.Base]
+
+pub fn insert(Array[@types.Base], Int, @types.Base) -> Array[@types.Base]
+
+pub fn invert(Array[@types.Base], Int, Int) -> Array[@types.Base]
+
+pub fn read_and_compare(Array[@types.Base], Array[@types.Trait]) -> (Array[@types.Trait], Bool)
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

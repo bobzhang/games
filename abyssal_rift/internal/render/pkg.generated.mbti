@@ -22,7 +22,11 @@ pub fn draw_meta_screen(@types.Game) -> Unit
 
 pub fn draw_minimap(@types.Game) -> Unit
 
+pub fn draw_pact_offer(@types.Game) -> Unit
+
 pub fn draw_particles(@types.Game) -> Unit
+
+pub fn draw_path_cards(@types.Game) -> Unit
 
 pub fn draw_pause_overlay(@types.Game) -> Unit
 
@@ -39,6 +43,8 @@ pub fn draw_shop_items(@types.Game) -> Unit
 pub fn draw_shrine(@types.Game) -> Unit
 
 pub fn draw_stairs(@types.Game) -> Unit
+
+pub fn draw_starter_select(@types.Game) -> Unit
 
 pub fn draw_telegraph_indicators(@types.Game) -> Unit
 

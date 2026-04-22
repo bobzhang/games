@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/convex/internal/geometry"
+
+import {
+  "bobzhang/games/convex/internal/types",
+}
+
+// Values
+pub fn compute_hull(Array[@types.Point]) -> Array[@types.Point]
+
+pub fn count_hull_vertices(Array[@types.Point]) -> Int
+
+pub fn hull_edge_count(Array[@types.Point]) -> Int
+
+pub fn hull_matches_target(Array[@types.Point], @types.Polygon) -> Bool
+
+pub fn is_point_on_hull(@types.Point, Array[@types.Point]) -> Bool
+
+pub fn match_hull_to_target(Array[@types.Point], @types.Polygon) -> Float
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

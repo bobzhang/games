@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/loom/internal/render"
+
+import {
+  "bobzhang/games/loom/internal/types",
+}
+
+// Values
+pub fn draw_frame(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

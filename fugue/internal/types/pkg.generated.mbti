@@ -1,0 +1,259 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/fugue/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn absi(Int) -> Int
+
+pub fn all_targets_matched(Grid, Array[TargetPos]) -> Bool
+
+pub let cell_height : Int
+
+pub let cell_width : Int
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_consonant : @raylib.Color
+
+pub let color_counterpoint_tier : @raylib.Color
+
+pub let color_dissonant : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_harmony_tier : @raylib.Color
+
+pub let color_locked : @raylib.Color
+
+pub let color_melody_tier : @raylib.Color
+
+pub let color_note_a : @raylib.Color
+
+pub let color_note_b : @raylib.Color
+
+pub let color_note_c : @raylib.Color
+
+pub let color_note_d : @raylib.Color
+
+pub let color_note_e : @raylib.Color
+
+pub let color_note_f : @raylib.Color
+
+pub let color_note_g : @raylib.Color
+
+pub let color_playback : @raylib.Color
+
+pub let color_star_off : @raylib.Color
+
+pub let color_star_on : @raylib.Color
+
+pub let color_target : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub fn column_harmony_score(Grid, Int) -> Int
+
+pub fn column_notes(Grid, Int) -> Array[Int]
+
+pub fn count_notes_in_grid(Grid) -> Int
+
+pub fn count_targets_matched(Grid, Array[TargetPos]) -> Int
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn harmony_between(Int, Int) -> Int
+
+pub fn interval_between(Int, Int) -> Int
+
+pub fn interval_quality(Int) -> IntervalQuality
+
+pub fn interval_score(IntervalQuality) -> Int
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn new_game() -> Game
+
+pub fn new_grid(Int, Int) -> Grid
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_note_cell() -> NoteCell
+
+pub fn note_color(Note) -> @raylib.Color
+
+pub fn note_from_row(Int) -> Note
+
+pub fn note_index(Note) -> Int
+
+pub fn note_name(Note) -> String
+
+pub fn placeholder_level() -> Level
+
+pub let playback_speed : Float
+
+pub fn row_from_note(Note) -> Int
+
+pub let score_fifth : Int
+
+pub let score_second : Int
+
+pub let score_seventh : Int
+
+pub let score_sixth : Int
+
+pub let score_third : Int
+
+pub let score_tritone : Int
+
+pub let score_unison : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub fn total_harmony_score(Grid) -> Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut grid : Grid
+  mut current_level : Level
+  mut playback_col : Int
+  mut play_state : PlayState
+  mut play_timer : Float
+  mut harmony_score : Int
+  mut notes_placed : Int
+  mut targets_matched : Int
+  mut stars : Int
+  mut level_scores : Array[LevelScore]
+  mut undo_stack : Array[UndoEntry]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut anim_timer : Float
+}
+
+pub(all) struct Grid {
+  cols : Int
+  rows : Int
+  cells : Array[Array[NoteCell]]
+} derive(Show)
+
+pub(all) enum IntervalQuality {
+  Unison
+  Second
+  Third
+  Tritone
+  Fifth
+  Sixth
+  Seventh
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  id : Int
+  name : String
+  tier : Tier
+  grid_cols : Int
+  grid_rows : Int
+  targets : Array[TargetPos]
+  note_budget : Int
+  harmony_threshold_2star : Int
+  harmony_threshold_3star : Int
+}
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut harmony_score : Int
+  mut targets_matched : Int
+  mut total_targets : Int
+  mut completed : Bool
+}
+
+pub(all) enum Note {
+  C
+  D
+  E
+  F
+  G
+  A
+  B
+} derive(Eq, Show)
+
+pub(all) struct NoteCell {
+  mut has_note : Bool
+  mut is_target : Bool
+  mut is_locked : Bool
+} derive(Show)
+
+pub(all) enum PlayState {
+  Idle
+  Playing
+  Finished
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct TargetPos {
+  col : Int
+  row : Int
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Melody
+  Harmony
+  Counterpoint
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  col : Int
+  row : Int
+  was_note : Bool
+}
+
+// Type aliases
+
+// Traits
+

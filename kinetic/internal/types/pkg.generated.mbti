@@ -1,0 +1,274 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/kinetic/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn absi(Int) -> Int
+
+pub fn can_mesh(Int, Int, Int) -> Bool
+
+pub fn check_output(Output, Float, RotDir) -> Bool
+
+pub let color_belt : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_direction_arrow : @raylib.Color
+
+pub let color_gear_large : @raylib.Color
+
+pub let color_gear_medium : @raylib.Color
+
+pub let color_gear_small : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_input : @raylib.Color
+
+pub let color_mesh_line : @raylib.Color
+
+pub let color_output_fail : @raylib.Color
+
+pub let color_output_marker : @raylib.Color
+
+pub let color_output_ok : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_peg : @raylib.Color
+
+pub let color_peg_hover : @raylib.Color
+
+pub let color_ratchet : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_title_bg : @raylib.Color
+
+pub let color_tooth : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn count_placed_gears(Array[Gear]) -> Int
+
+pub fn find_gear_at(Array[Gear], Vec2i) -> Int
+
+pub fn flip_dir(RotDir) -> RotDir
+
+pub fn gear_color(GearKind) -> @raylib.Color
+
+pub fn gear_pixel_radius(GearKind) -> Float
+
+pub fn gear_radius(GearKind) -> Int
+
+pub fn gear_tooth_count(GearKind) -> Int
+
+pub fn gears_overlap(Gear, Gear) -> Bool
+
+pub let grid_cols : Int
+
+pub fn grid_dist_sq(Vec2i, Vec2i) -> Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_belt(Vec2i, Vec2i) -> BeltLink
+
+pub fn new_game() -> Game
+
+pub fn new_gear(Vec2i, GearKind) -> Gear
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_output(Vec2i, Float, RotDir) -> Output
+
+pub let palette_slot_size : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub fn peg_screen_x(Int) -> Float
+
+pub fn peg_screen_y(Int) -> Float
+
+pub let peg_spacing : Int
+
+pub let pi : Float
+
+pub fn rpm_satisfied(Float, Float) -> Bool
+
+pub let rpm_tolerance : Float
+
+pub let screen_height : Int
+
+pub fn screen_to_grid(Float, Float) -> Vec2i?
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn speed_ratio(Int, Int) -> Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_level_offset(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct BeltLink {
+  mut from_pos : Vec2i
+  mut to_pos : Vec2i
+  mut active : Bool
+} derive(Show)
+
+pub(all) struct Connection {
+  from : Int
+  to : Int
+  ratio : Float
+  flips_dir : Bool
+} derive(Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut play_state : PlayState
+  mut placed_gears : Array[Gear]
+  mut belts : Array[BeltLink]
+  mut connections : Array[Connection]
+  mut current_level : Level?
+  mut selected_gear_kind : GearKind
+  mut belt_start : Vec2i?
+  mut scores : Array[LevelScore]
+  mut hover_peg : Vec2i?
+  mut sim_time : Float
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut anim_timer : Float
+  mut title_gear_angle : Float
+} derive(Show)
+
+pub(all) struct Gear {
+  mut pos : Vec2i
+  mut kind : GearKind
+  mut radius : Int
+  mut rpm : Float
+  mut dir : RotDir
+  mut angle : Float
+  mut active : Bool
+} derive(Show)
+
+pub(all) enum GearKind {
+  Small
+  Medium
+  Large
+  Belt
+  Ratchet
+} derive(Eq, Show)
+
+pub(all) struct InputGear {
+  pos : Vec2i
+  rpm : Float
+  dir : RotDir
+  radius : Int
+} derive(Show)
+
+pub(all) struct Level {
+  name : String
+  tier : Tier
+  input : InputGear
+  outputs : Array[Output]
+  available_gears : Array[GearKind]
+  gear_budget : Int
+  par_gears : Int
+  hint : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut gears_used : Int
+  mut completed : Bool
+} derive(Show)
+
+pub(all) struct Output {
+  pos : Vec2i
+  target_rpm : Float
+  target_dir : RotDir
+  mut satisfied : Bool
+} derive(Show)
+
+pub(all) enum PlayState {
+  Placing
+  Simulating
+  Solved
+} derive(Eq, Show)
+
+pub(all) enum RotDir {
+  CW
+  CCW
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Gears
+  Trains
+  Workshop
+} derive(Eq, Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

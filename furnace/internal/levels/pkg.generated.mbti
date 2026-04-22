@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/furnace/internal/levels"
+
+import {
+  "bobzhang/games/furnace/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.LevelDef
+
+pub fn load_level(@types.Game, Int) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

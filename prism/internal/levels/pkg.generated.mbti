@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/prism/internal/levels"
+
+import {
+  "bobzhang/games/prism/internal/types",
+}
+
+// Values
+pub fn get_all_levels() -> Array[@types.Level]
+
+pub fn load_level(@types.Game, Int) -> Unit
+
+pub fn tier_level_count(@types.Tier) -> Int
+
+pub fn tier_level_range(@types.Tier) -> (Int, Int)
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

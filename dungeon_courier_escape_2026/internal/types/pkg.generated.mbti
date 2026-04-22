@@ -186,11 +186,8 @@ pub(all) struct ExitMarker {
   x : Float
   y : Float
   radius : Float
-
-  fn new(Float, Float) -> ExitMarker
 }
-#deprecated
-pub fn ExitMarker::new(Float, Float) -> Self
+pub fn ExitMarker::ExitMarker(Float, Float) -> Self
 
 pub(all) struct Game {
   player : Player
@@ -214,11 +211,8 @@ pub(all) struct Game {
   mut hint : String
   mut fail_reason : String
   mut best_wave : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -245,11 +239,8 @@ pub(all) struct Guard {
   mut investigate_t : Float
   mut target_x : Float
   mut target_y : Float
-
-  fn new() -> Guard
 }
-#deprecated
-pub fn Guard::new() -> Self
+pub fn Guard::Guard() -> Self
 
 pub(all) struct InputState {
   mut move_x : Float
@@ -259,11 +250,8 @@ pub(all) struct InputState {
   mut sprint_hold : Bool
   mut start_press : Bool
   mut retry_press : Bool
-
-  fn new() -> InputState
 }
-#deprecated
-pub fn InputState::new() -> Self
+pub fn InputState::InputState() -> Self
 
 pub(all) struct Parcel {
   mut active : Bool
@@ -271,11 +259,8 @@ pub(all) struct Parcel {
   mut x : Float
   mut y : Float
   mut pulse : Float
-
-  fn new() -> Parcel
 }
-#deprecated
-pub fn Parcel::new() -> Self
+pub fn Parcel::Parcel() -> Self
 
 pub(all) struct Player {
   mut x : Float
@@ -286,11 +271,8 @@ pub(all) struct Player {
   mut health : Float
   mut stealth : Float
   mut carrying_parcel : Int
-
-  fn new() -> Player
 }
-#deprecated
-pub fn Player::new() -> Self
+pub fn Player::Player() -> Self
 
 pub(all) struct Smoke {
   mut active : Bool
@@ -298,11 +280,8 @@ pub(all) struct Smoke {
   mut y : Float
   mut radius : Float
   mut life : Float
-
-  fn new() -> Smoke
 }
-#deprecated
-pub fn Smoke::new() -> Self
+pub fn Smoke::Smoke() -> Self
 
 pub(all) struct Trap {
   mut active : Bool
@@ -311,11 +290,8 @@ pub(all) struct Trap {
   mut radius : Float
   mut blink_t : Float
   mut cooldown : Float
-
-  fn new() -> Trap
 }
-#deprecated
-pub fn Trap::new() -> Self
+pub fn Trap::Trap() -> Self
 
 // Type aliases
 

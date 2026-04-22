@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cascade/internal/physics"
+
+import {
+  "bobzhang/games/cascade/internal/types",
+}
+
+// Values
+pub fn all_targets_fallen(Array[@types.Domino]) -> Bool
+
+pub fn calculate_stars(Bool, Int, Int, Int, Int) -> Int
+
+pub fn count_placed(Array[@types.Domino]) -> Int
+
+pub fn simulate(Array[@types.Domino]) -> (Array[@types.ToppleEvent], Int)
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

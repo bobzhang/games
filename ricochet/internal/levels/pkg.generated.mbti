@@ -1,0 +1,82 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/ricochet/internal/levels"
+
+import {
+  "bobzhang/games/ricochet/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.Level
+
+pub fn level_1() -> @types.Level
+
+pub fn level_10() -> @types.Level
+
+pub fn level_11() -> @types.Level
+
+pub fn level_12() -> @types.Level
+
+pub fn level_13() -> @types.Level
+
+pub fn level_14() -> @types.Level
+
+pub fn level_15() -> @types.Level
+
+pub fn level_16() -> @types.Level
+
+pub fn level_17() -> @types.Level
+
+pub fn level_18() -> @types.Level
+
+pub fn level_19() -> @types.Level
+
+pub fn level_2() -> @types.Level
+
+pub fn level_20() -> @types.Level
+
+pub fn level_21() -> @types.Level
+
+pub fn level_22() -> @types.Level
+
+pub fn level_23() -> @types.Level
+
+pub fn level_24() -> @types.Level
+
+pub fn level_25() -> @types.Level
+
+pub fn level_26() -> @types.Level
+
+pub fn level_27() -> @types.Level
+
+pub fn level_28() -> @types.Level
+
+pub fn level_29() -> @types.Level
+
+pub fn level_3() -> @types.Level
+
+pub fn level_30() -> @types.Level
+
+pub fn level_4() -> @types.Level
+
+pub fn level_5() -> @types.Level
+
+pub fn level_6() -> @types.Level
+
+pub fn level_7() -> @types.Level
+
+pub fn level_8() -> @types.Level
+
+pub fn level_9() -> @types.Level
+
+pub fn level_name(Int, Int) -> String
+
+pub fn world_name(Int) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

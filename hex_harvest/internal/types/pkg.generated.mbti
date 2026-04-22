@@ -1,0 +1,341 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/hex_harvest/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn absi(Int) -> Int
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub fn clone_grid_tiles(HexGrid) -> Array[Array[HexTile]]
+
+pub fn clone_tile(HexTile) -> HexTile
+
+pub let color_adjacency_highlight : @raylib.Color
+
+pub let color_berry : @raylib.Color
+
+pub let color_berry_seed : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_black : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_channel : @raylib.Color
+
+pub let color_corn : @raylib.Color
+
+pub let color_corn_seed : @raylib.Color
+
+pub let color_dark_text : @raylib.Color
+
+pub let color_dirt : @raylib.Color
+
+pub let color_dirt_dark : @raylib.Color
+
+pub let color_dirt_light : @raylib.Color
+
+pub let color_flower : @raylib.Color
+
+pub let color_flower_seed : @raylib.Color
+
+pub let color_goal : @raylib.Color
+
+pub let color_goal_glow : @raylib.Color
+
+pub let color_hex_outline : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_invalid : @raylib.Color
+
+pub let color_panel_bg : @raylib.Color
+
+pub let color_preview_water : @raylib.Color
+
+pub let color_river : @raylib.Color
+
+pub let color_rock : @raylib.Color
+
+pub let color_rock_dark : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_title_bg : @raylib.Color
+
+pub let color_title_text : @raylib.Color
+
+pub let color_water_overlay : @raylib.Color
+
+pub let color_water_source : @raylib.Color
+
+pub let color_wheat : @raylib.Color
+
+pub let color_wheat_seed : @raylib.Color
+
+pub let color_white : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn crop_base_yield(CropKind) -> Int
+
+pub fn crop_color(CropKind) -> @raylib.Color
+
+pub fn crop_grow_time(CropKind) -> Int
+
+pub fn crop_name(CropKind) -> String
+
+pub fn crop_seed_color(CropKind) -> @raylib.Color
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn height_color_mod(Int) -> Int
+
+pub fn hex_distance(Int, Int, Int, Int) -> Int
+
+pub fn hex_in_bounds(Int, Int) -> Bool
+
+pub fn hex_neighbors(Int, Int) -> Array[(Int, Int)]
+
+pub let hex_size : Int
+
+pub fn hex_to_pixel_x(Int, Int) -> Float
+
+pub fn hex_to_pixel_y(col~ : Int, Int) -> Float
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub let levels_per_world : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_empty_level() -> Level
+
+pub fn new_game() -> Game
+
+pub fn new_grid(Int, Int) -> HexGrid
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_tile(TileKind, Int) -> HexTile
+
+pub fn offset_to_cube(Int, Int) -> (Int, Int, Int)
+
+pub let pi : Float
+
+pub fn pixel_to_hex(Float, Float) -> (Int, Int)
+
+pub fn restore_grid_tiles(HexGrid, Array[Array[HexTile]]) -> Unit
+
+pub fn rng_int(Int) -> Int
+
+pub fn rng_next() -> Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn seed_rng(Int) -> Unit
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub fn tile_channelable(HexTile) -> Bool
+
+pub fn tile_color_with_height(@raylib.Color, Int) -> @raylib.Color
+
+pub fn tile_plantable(HexTile) -> Bool
+
+pub let total_levels : Int
+
+pub let total_worlds : Int
+
+pub fn world_name(Int) -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum CropKind {
+  Wheat
+  Corn
+  Berry
+  Flower
+} derive(Eq, Show)
+
+pub(all) enum CropState {
+  Seed
+  Growing
+  Mature
+  Harvested
+} derive(Eq, Show)
+
+pub(all) enum Direction {
+  NE
+  E
+  SE
+  SW
+  W
+  NW
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut level : Level
+  mut level_index : Int
+  mut world_index : Int
+  mut turn : Int
+  mut yield_collected : Int
+  mut goals_collected : Int
+  mut selected_crop : CropKind
+  mut place_mode : PlaceMode
+  mut hover_col : Int
+  mut hover_row : Int
+  mut hover_valid : Bool
+  mut score : LevelScore
+  mut level_scores : Array[Array[LevelScore?]]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut menu_selection : Int
+  mut water_anim_timer : Float
+  mut newly_watered : Array[HexCoord]
+  mut newly_harvested : Array[HexCoord]
+  mut harvest_anim_timer : Float
+  mut undo_stack : Array[UndoState]
+  mut level_complete : Bool
+  mut fade_timer : Float
+  mut rng : Int
+  mut turn_phase : TurnPhase
+  mut phase_timer : Float
+  mut click_feedback_timer : Float
+  mut click_feedback_col : Int
+  mut click_feedback_row : Int
+} derive(Show)
+
+pub(all) struct GoalPos {
+  col : Int
+  row : Int
+} derive(Show)
+
+pub(all) struct HexCoord {
+  col : Int
+  row : Int
+} derive(Eq, Show)
+
+pub(all) struct HexGrid {
+  width : Int
+  height : Int
+  tiles : Array[Array[HexTile]]
+} derive(Show)
+
+pub(all) struct HexTile {
+  mut kind : TileKind
+  mut height : Int
+  mut watered : Bool
+  mut crop : CropKind?
+  mut crop_state : CropState
+  mut crop_turns : Int
+  mut has_channel : Bool
+} derive(Show)
+
+pub(all) struct Level {
+  mut grid : HexGrid
+  mut water_sources : Array[WaterSource]
+  mut turn_budget : Int
+  mut target_yield : Int
+  mut goals : Array[GoalPos]
+  mut par_turns : Int
+  mut name : String
+  mut world : Int
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut yield_collected : Int
+  mut target_yield : Int
+  mut turns_used : Int
+  mut turn_budget : Int
+  mut par_turns : Int
+  mut goals_collected : Int
+  mut total_goals : Int
+  mut stars : Int
+} derive(Show)
+
+pub(all) enum PlaceMode {
+  CropPlace(CropKind)
+  ChannelPlace
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  WorldSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum TileKind {
+  Dirt
+  Rock
+  WaterSource
+  River
+  Goal
+} derive(Eq, Show)
+
+pub(all) enum TurnPhase {
+  Idle
+  Placing
+  Flowing
+  Growing
+  Harvesting
+} derive(Eq, Show)
+
+pub(all) struct UndoState {
+  mut tiles : Array[Array[HexTile]]
+  mut turn : Int
+  mut yield_collected : Int
+  mut goals_collected : Int
+} derive(Show)
+
+pub(all) struct WaterSource {
+  col : Int
+  row : Int
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

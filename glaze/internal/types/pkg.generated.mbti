@@ -1,0 +1,233 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/glaze/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn blend_result(GlazeColor, GlazeColor) -> FiredColor
+
+pub let cell_gap : Int
+
+pub let cell_size : Int
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub fn clear_grid(Grid) -> Unit
+
+pub let color_bg : @raylib.Color
+
+pub let color_crack_mark : @raylib.Color
+
+pub let color_fail : @raylib.Color
+
+pub let color_grid_border : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_kiln_glow : @raylib.Color
+
+pub let color_kiln_hot : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_panel_light : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dark : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn fired_name(FiredColor) -> String
+
+pub fn fired_to_raylib(FiredColor) -> @raylib.Color
+
+pub fn get_cell(Grid, Int, Int) -> Cell
+
+pub fn glaze_from_index(Int) -> GlazeColor
+
+pub fn glaze_index(GlazeColor) -> Int
+
+pub fn glaze_name(GlazeColor) -> String
+
+pub fn glaze_to_raylib(GlazeColor) -> @raylib.Color
+
+pub let grid_cols : Int
+
+pub fn grid_index(Int, Int) -> Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn is_incompatible(GlazeColor, GlazeColor) -> Bool
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_cell() -> Cell
+
+pub fn new_game() -> Game
+
+pub fn new_grid() -> Grid
+
+pub fn new_score() -> LevelScore
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_glaze(Grid, Int, Int, GlazeColor) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub let target_cell_gap : Int
+
+pub let target_cell_size : Int
+
+pub let target_fps : Int
+
+pub let target_offset_x : Int
+
+pub let target_offset_y : Int
+
+pub fn tier_from_index(Int) -> Tier
+
+pub fn tier_index(Tier) -> Int
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct Cell {
+  mut glaze : GlazeColor
+  mut fired : FiredColor
+}
+
+pub(all) enum FiredColor {
+  FRed
+  FBlue
+  FGreen
+  FGold
+  FWhite
+  FBlack
+  FPurple
+  FDeepRed
+  FDeepBlue
+  FDeepGreen
+  FDeepGold
+  FDeepWhite
+  FDeepBlack
+  FCracked
+  FEmpty
+} derive(Eq, Show, ToJson)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut current_level : Level?
+  grid : Grid
+  mut target_grid : Array[FiredColor]
+  mut play_state : PlayState
+  mut selected_glaze : GlazeColor
+  mut hover_row : Int
+  mut hover_col : Int
+  mut moves_used : Int
+  mut max_moves : Int
+  mut score : LevelScore?
+  mut level_scores : Array[Int]
+  mut undo_stack : Array[UndoEntry]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut fire_timer : Float
+  mut fire_phase : Int
+  mut title_anim_timer : Float
+  mut allowed_glazes : Array[GlazeColor]
+}
+
+pub(all) enum GlazeColor {
+  Red
+  Blue
+  Green
+  Gold
+  White
+  Black
+  Empty
+} derive(Eq, Show, ToJson)
+
+pub(all) struct Grid {
+  cells : Array[Cell]
+}
+
+pub(all) struct Level {
+  tier : Tier
+  name : String
+  target : Array[FiredColor]
+  allowed_glazes : Array[GlazeColor]
+  max_moves : Int
+  par_moves : Int
+}
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut matched_cells : Int
+  mut cracked_cells : Int
+  mut total_cells : Int
+  mut moves_used : Int
+}
+
+pub(all) enum PlayState {
+  Placing
+  ReadyToFire
+  LevelComplete
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Firing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Beginner
+  Intermediate
+  Advanced
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  row : Int
+  col : Int
+  prev_glaze : GlazeColor
+}
+
+// Type aliases
+
+// Traits
+

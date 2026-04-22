@@ -9,8 +9,6 @@ pub(all) struct Segment {
   mut skin : Int
   mut neon : Int
   mut window_seed : Int
-
-  fn new() -> Segment
 }
 
 ///|
@@ -25,8 +23,6 @@ pub(all) struct Obstacle {
   mut vx : Float
   mut phase : Float
   mut hit_lock : Float
-
-  fn new() -> Obstacle
 }
 
 ///|
@@ -37,8 +33,6 @@ pub(all) struct Chip {
   mut y : Float
   mut bob_t : Float
   mut spin_t : Float
-
-  fn new() -> Chip
 }
 
 ///|
@@ -48,8 +42,6 @@ pub(all) struct Anchor {
   mut x : Float
   mut y : Float
   mut glow_t : Float
-
-  fn new() -> Anchor
 }
 
 ///|
@@ -63,8 +55,6 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
 
 ///|
@@ -77,8 +67,6 @@ pub(all) struct Ghost {
   mut h : Float
   mut life : Float
   mut hue : Float
-
-  fn new() -> Ghost
 }
 
 ///|
@@ -100,8 +88,6 @@ pub(all) struct Player {
   mut hurt_t : Float
   mut anim_t : Float
   mut floor_y : Float
-
-  fn new() -> Player
 }
 
 ///|
@@ -152,14 +138,11 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive segment slot for the segment pool.
-#deprecated
-pub fn Segment::new() -> Segment {
+pub fn Segment::Segment() -> Segment {
   {
     active: false,
     x: 0.0,
@@ -174,8 +157,7 @@ pub fn Segment::new() -> Segment {
 
 ///|
 /// Creates an inactive obstacle slot for the obstacle pool.
-#deprecated
-pub fn Obstacle::new() -> Obstacle {
+pub fn Obstacle::Obstacle() -> Obstacle {
   {
     active: false,
     kind: Vent,
@@ -191,22 +173,19 @@ pub fn Obstacle::new() -> Obstacle {
 
 ///|
 /// Creates an inactive chip slot for the chip pool.
-#deprecated
-pub fn Chip::new() -> Chip {
+pub fn Chip::Chip() -> Chip {
   { active: false, x: 0.0, y: 0.0, bob_t: 0.0, spin_t: 0.0 }
 }
 
 ///|
 /// Creates an inactive anchor slot for the anchor pool.
-#deprecated
-pub fn Anchor::new() -> Anchor {
+pub fn Anchor::Anchor() -> Anchor {
   { active: false, x: 0.0, y: 0.0, glow_t: 0.0 }
 }
 
 ///|
 /// Creates an inactive particle slot for the particle pool.
-#deprecated
-pub fn Particle::new() -> Particle {
+pub fn Particle::Particle() -> Particle {
   {
     active: false,
     x: 0.0,
@@ -221,15 +200,13 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates an inactive ghost trail slot.
-#deprecated
-pub fn Ghost::new() -> Ghost {
+pub fn Ghost::Ghost() -> Ghost {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, hue: 0.0 }
 }
 
 ///|
 /// Creates the player with default dimensions and spawn state.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: player_spawn_x,
     y: player_spawn_y,
@@ -252,8 +229,7 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a new game state with initialized pools and counters.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     segments: Array::makei(max_segments, fn(_i) { Segment() }),
     obstacles: Array::makei(max_obstacles, fn(_i) { Obstacle() }),

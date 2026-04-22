@@ -1,0 +1,63 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/echo_maze/internal/simulation"
+
+import {
+  "bobzhang/games/echo_maze/internal/types",
+}
+
+// Values
+pub fn advance_ghost(@types.Ghost, @types.Maze, @types.MazeState, Int) -> Unit
+
+pub fn advance_guard(@types.GuardDef, @types.GuardState) -> Unit
+
+pub fn calculate_stars(Int, Int, Int, Int) -> Int
+
+pub fn check_collectibles(@types.Player, @types.Maze, @types.MazeState) -> Int
+
+pub fn check_exit(@types.Player, @types.Maze) -> Bool
+
+pub fn check_ghost_guard_collision(Array[@types.Ghost], @types.MazeState) -> Unit
+
+pub fn check_guard_collision(@types.Player, @types.MazeState) -> Bool
+
+pub fn count_collectibles(@types.MazeState) -> Int
+
+pub fn detect_ghost_button_presses(@types.Maze, Array[@types.Ghost]) -> Array[(Int, Int)]
+
+pub fn is_door_open(@types.MazeState, Int) -> Bool
+
+pub fn is_walkable(@types.Maze, @types.MazeState, @types.Vec2i) -> Bool
+
+pub fn load_maze(Int, Int) -> (@types.Maze, @types.MazeState)?
+
+pub fn preview_ghost_guard_collisions(Array[@types.Ghost], @types.MazeState) -> Array[(Int, Int)]
+
+pub fn run_tick(@types.Maze, @types.MazeState, @types.Player, Array[@types.Ghost], Int, @types.Direction?) -> TickResult
+
+pub fn try_move_player(@types.Maze, @types.MazeState, @types.Player, @types.Direction) -> Bool
+
+pub fn update_buttons(@types.Maze, @types.MazeState, @types.Player, Array[@types.Ghost]) -> Unit
+
+pub fn update_doors(@types.Maze, @types.MazeState) -> Unit
+
+pub fn update_guard_alert_timers(@types.MazeState, Float) -> Unit
+
+pub fn update_guards(@types.MazeState) -> Unit
+
+pub fn update_timed_doors(@types.Maze, @types.MazeState, Int) -> Unit
+
+pub fn validate_level_structure(@types.Maze, @types.LevelDef) -> Array[String]
+
+// Errors
+
+// Types and methods
+pub(all) enum TickResult {
+  Continue(Int)
+  Completed(Int)
+  Failed
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,82 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/symbiosis/internal/levels"
+
+import {
+  "bobzhang/games/symbiosis/internal/types",
+}
+
+// Values
+pub fn get_level(Int, Int) -> @types.Level
+
+pub fn level_1_1() -> @types.Level
+
+pub fn level_1_2() -> @types.Level
+
+pub fn level_1_3() -> @types.Level
+
+pub fn level_1_4() -> @types.Level
+
+pub fn level_1_5() -> @types.Level
+
+pub fn level_1_6() -> @types.Level
+
+pub fn level_1_7() -> @types.Level
+
+pub fn level_2_1() -> @types.Level
+
+pub fn level_2_2() -> @types.Level
+
+pub fn level_2_3() -> @types.Level
+
+pub fn level_2_4() -> @types.Level
+
+pub fn level_2_5() -> @types.Level
+
+pub fn level_2_6() -> @types.Level
+
+pub fn level_2_7() -> @types.Level
+
+pub fn level_3_1() -> @types.Level
+
+pub fn level_3_2() -> @types.Level
+
+pub fn level_3_3() -> @types.Level
+
+pub fn level_3_4() -> @types.Level
+
+pub fn level_3_5() -> @types.Level
+
+pub fn level_3_6() -> @types.Level
+
+pub fn level_3_7() -> @types.Level
+
+pub fn level_4_1() -> @types.Level
+
+pub fn level_4_2() -> @types.Level
+
+pub fn level_4_3() -> @types.Level
+
+pub fn level_4_4() -> @types.Level
+
+pub fn level_4_5() -> @types.Level
+
+pub fn level_4_6() -> @types.Level
+
+pub fn level_4_7() -> @types.Level
+
+pub fn level_unlocked(Array[Array[@types.LevelScore]], Int, Int) -> Bool
+
+pub fn make_level(Int, Int, Array[String], Array[String], Array[@types.SwitchLink], @types.GoalKind, Int) -> @types.Level
+
+pub fn parse_grid(Array[String]) -> (Array[Array[@types.TileKind]], @types.Vec2i, @types.Vec2i, Array[@types.Vec2i])
+
+pub fn world_unlocked(Array[Array[@types.LevelScore]], Int) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

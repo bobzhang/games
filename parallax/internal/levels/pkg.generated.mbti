@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/parallax/internal/levels"
+
+import {
+  "bobzhang/games/parallax/internal/types",
+}
+
+// Values
+pub fn get_all_levels() -> Array[@types.Level]
+
+pub fn get_difficulty(Int) -> Int
+
+pub fn get_level(Int) -> @types.Level
+
+pub fn get_level_description(Int) -> String
+
+pub fn get_tier_description(Int) -> String
+
+pub fn target_cell_count(@types.Level) -> Int
+
+pub fn validate_level_targets(@types.Level) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

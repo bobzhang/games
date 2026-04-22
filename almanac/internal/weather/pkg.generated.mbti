@@ -1,0 +1,26 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/almanac/internal/weather"
+
+import {
+  "bobzhang/games/almanac/internal/types",
+}
+
+// Values
+pub fn calculate_stars(Bool, Int, Int, Int, Int) -> Int
+
+pub fn check_stable(@types.Grid, Array[@types.WeatherState]) -> Bool
+
+pub fn check_targets(@types.Grid) -> Bool
+
+pub fn count_targets_met(@types.Grid) -> (Int, Int)
+
+pub fn simulate_turn(@types.Grid, Array[@types.Source]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

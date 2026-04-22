@@ -16,8 +16,6 @@ pub(all) struct Ent {
   mut cloak : Bool
   mut reward : Int
   mut max_hp : Float
-
-  fn new() -> Ent
 }
 
 ///|
@@ -32,8 +30,6 @@ pub(all) struct Shot {
   mut life : Float
   mut dmg : Float
   mut kind : Int
-
-  fn new() -> Shot
 }
 
 ///|
@@ -47,8 +43,6 @@ pub(all) struct Fx {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Fx
 }
 
 ///|
@@ -60,8 +54,6 @@ pub(all) struct Ring {
   mut r : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Ring
 }
 
 ///|
@@ -75,8 +67,6 @@ pub(all) struct Shadow {
   mut rot : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Shadow
 }
 
 ///|
@@ -98,8 +88,6 @@ pub(all) struct Player {
   mut hurt_t : Float
   mut muzzle_t : Float
   mut anim_t : Float
-
-  fn new() -> Player
 }
 
 ///|
@@ -150,14 +138,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive entity record with default fields.
-#deprecated
-pub fn Ent::new() -> Ent {
+pub fn Ent::Ent() -> Ent {
   {
     active: false,
     kind: Guard,
@@ -179,8 +164,7 @@ pub fn Ent::new() -> Ent {
 
 ///|
 /// Creates an inactive shot record.
-#deprecated
-pub fn Shot::new() -> Shot {
+pub fn Shot::Shot() -> Shot {
   {
     active: false,
     from_player: true,
@@ -196,8 +180,7 @@ pub fn Shot::new() -> Shot {
 
 ///|
 /// Creates an inactive particle effect record.
-#deprecated
-pub fn Fx::new() -> Fx {
+pub fn Fx::Fx() -> Fx {
   {
     active: false,
     x: 0.0,
@@ -212,15 +195,13 @@ pub fn Fx::new() -> Fx {
 
 ///|
 /// Creates an inactive ring effect record.
-#deprecated
-pub fn Ring::new() -> Ring {
+pub fn Ring::Ring() -> Ring {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates an inactive shadow effect record.
-#deprecated
-pub fn Shadow::new() -> Shadow {
+pub fn Shadow::Shadow() -> Shadow {
   {
     active: false,
     x: 0.0,
@@ -235,8 +216,7 @@ pub fn Shadow::new() -> Shadow {
 
 ///|
 /// Creates a player initialized on the middle lane.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   let lane = 1
   {
     x: Float::from_int(screen_w / 2),
@@ -260,8 +240,7 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a fresh game state with pooled objects and title defaults.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     ents: Array::makei(max_ents, fn(_i) { Ent() }),
     shots: Array::makei(max_shots, fn(_i) { Shot() }),

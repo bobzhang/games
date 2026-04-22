@@ -1,0 +1,306 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cartographer/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absi(Int) -> Int
+
+pub let cell_size : Int
+
+pub fn cells_referenced_by_clue(Clue, Array[FeatureKind?], Int) -> Array[Vec2i]
+
+pub let clue_panel_width : Int
+
+pub let clue_panel_x : Int
+
+pub let clue_panel_y : Int
+
+pub fn clue_references_feature(Clue, FeatureKind) -> Bool
+
+pub fn clues_referencing_feature(Array[Clue], FeatureKind) -> Array[Int]
+
+pub let color_bg : @raylib.Color
+
+pub let color_black : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_clue_highlight : @raylib.Color
+
+pub let color_clue_pending : @raylib.Color
+
+pub let color_clue_satisfied : @raylib.Color
+
+pub let color_clue_violated : @raylib.Color
+
+pub let color_compass_body : @raylib.Color
+
+pub let color_compass_n : @raylib.Color
+
+pub let color_compass_ring : @raylib.Color
+
+pub let color_desert : @raylib.Color
+
+pub let color_feature_highlight : @raylib.Color
+
+pub let color_flash_error : @raylib.Color
+
+pub let color_flash_ok : @raylib.Color
+
+pub let color_forest : @raylib.Color
+
+pub let color_grid_dot : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hint : @raylib.Color
+
+pub let color_hint_narrow : @raylib.Color
+
+pub let color_hint_reveal : @raylib.Color
+
+pub let color_hover : @raylib.Color
+
+pub let color_incorrect_flash : @raylib.Color
+
+pub let color_lake : @raylib.Color
+
+pub let color_mountain : @raylib.Color
+
+pub let color_parchment : @raylib.Color
+
+pub let color_parchment_border : @raylib.Color
+
+pub let color_parchment_dark : @raylib.Color
+
+pub let color_river : @raylib.Color
+
+pub let color_road : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_light : @raylib.Color
+
+pub let color_title_bg : @raylib.Color
+
+pub let color_town : @raylib.Color
+
+pub let color_white : @raylib.Color
+
+pub fn compass_name(CompassDir) -> String
+
+pub fn direction_check(Vec2i, Vec2i, CompassDir) -> Bool
+
+pub fn feature_color(FeatureKind) -> @raylib.Color
+
+pub fn feature_name(FeatureKind) -> String
+
+pub fn find_all_feature_positions(Array[FeatureKind?], Int, FeatureKind) -> Array[Vec2i]
+
+pub fn find_feature_pos(Array[FeatureKind?], Int, FeatureKind) -> Vec2i?
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_size : Int
+
+pub fn index_to_pos(Int, Int) -> Vec2i
+
+pub fn is_adjacent(Vec2i, Vec2i) -> Bool
+
+pub fn is_between(Vec2i, Vec2i, Vec2i) -> Bool
+
+pub fn level_tier(Int) -> Tier
+
+pub fn manhattan_distance(Vec2i, Vec2i) -> Int
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_clue(ClueKind, FeatureKind, feature_b? : FeatureKind, distance? : Int, direction? : CompassDir, row_col? : Int, count? : Int, text? : String) -> Clue
+
+pub fn new_game(Array[Level]) -> Game
+
+pub fn new_level(String, Tier, Array[FeatureKind], Array[Clue], Int, description? : String) -> Level
+
+pub fn new_score() -> LevelScore
+
+pub let palette_cell : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub fn pos_to_index(Vec2i, Int) -> Int
+
+pub fn reset_level(Game) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let target_fps : Int
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub let total_levels : Int
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+// Errors
+
+// Types and methods
+pub(all) struct Clue {
+  kind : ClueKind
+  feature_a : FeatureKind
+  feature_b : FeatureKind
+  distance : Int
+  direction : CompassDir
+  row_col : Int
+  count : Int
+  text : String
+  mut status : ClueStatus
+} derive(Show)
+
+pub(all) enum ClueKind {
+  Distance
+  Direction
+  Adjacent
+  Count
+  Between
+  Not
+} derive(Eq, Show)
+
+pub(all) enum ClueStatus {
+  Pending
+  Satisfied
+  Violated
+} derive(Eq, Show)
+
+pub(all) enum CompassDir {
+  N
+  S
+  E
+  W
+  NE
+  NW
+  SE
+  SW
+} derive(Eq, Show)
+
+pub(all) enum FeatureKind {
+  Mountain
+  River
+  Forest
+  Town
+  Lake
+  Desert
+  Road
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut grid : Array[FeatureKind?]
+  mut placements : Array[Placement]
+  mut incorrect_count : Int
+  mut total_placements : Int
+  mut selected_feature : FeatureKind?
+  mut current_level : Int
+  mut current_tier : Tier
+  mut levels : Array[Level]
+  mut scores : Array[LevelScore]
+  mut hover_cell : Vec2i?
+  mut play_state : PlayState
+  mut message : String
+  mut message_timer : Float
+  mut anim_timer : Float
+  mut hint_cells : Array[Vec2i]
+  mut show_hints : Bool
+  mut frame_count : Int
+  mut hint_level : HintLevel
+  mut hint_narrow_cells : Array[Vec2i]
+  mut hint_reveal_cell : Vec2i?
+  mut hint_feature : FeatureKind?
+  mut hover_clue_index : Int
+  mut highlighted_cells : Array[Vec2i]
+  mut highlighted_clue_indices : Array[Int]
+  mut flash_timer : Float
+  mut flash_cell : Vec2i?
+  mut flash_is_error : Bool
+  mut clue_anim_indices : Array[Int]
+  mut clue_anim_timer : Float
+  mut parchment_seed : Int
+}
+
+pub(all) enum HintLevel {
+  None
+  Narrow
+  Reveal
+  Answer
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  name : String
+  tier : Tier
+  grid_size : Int
+  features_to_place : Array[FeatureKind]
+  clues : Array[Clue]
+  par_placements : Int
+  description : String
+}
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : Int
+  mut best_placements : Int
+} derive(Show)
+
+pub(all) struct Placement {
+  pos : Vec2i
+  feature : FeatureKind
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  Placing
+  Complete
+  Checking
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Surveyor
+  Explorer
+  Master
+} derive(Eq, Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

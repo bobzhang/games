@@ -755,11 +755,8 @@ pub(all) struct Game {
   checkpoint_platform_snapshots : Array[PlatformSnapshot]
   mut rng_state : Int
   mut frame_counter : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Menu

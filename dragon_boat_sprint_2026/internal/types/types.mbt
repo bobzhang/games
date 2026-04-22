@@ -17,8 +17,6 @@ pub(all) struct Input {
   mut pause_pressed : Bool
   mut restart_pressed : Bool
   mut start_pressed : Bool
-
-  fn new() -> Input
 }
 
 ///|
@@ -31,8 +29,6 @@ pub(all) struct Hazard {
   mut size : Float
   mut drift : Float
   mut phase : Float
-
-  fn new() -> Hazard
 }
 
 ///|
@@ -44,8 +40,6 @@ pub(all) struct Rival {
   mut dist : Float
   mut speed_bias : Float
   mut stroke_t : Float
-
-  fn new() -> Rival
 }
 
 ///|
@@ -78,14 +72,11 @@ pub(all) struct Game {
   mut hazard_spawn_t : Float
   mut msg : String
   mut msg_t : Float
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a default empty input snapshot.
-#deprecated
-pub fn Input::new() -> Input {
+pub fn Input::Input() -> Input {
   {
     steer: 0.0,
     paddle_pressed: false,
@@ -99,8 +90,7 @@ pub fn Input::new() -> Input {
 
 ///|
 /// Returns an inactive hazard placeholder.
-#deprecated
-pub fn Hazard::new() -> Hazard {
+pub fn Hazard::Hazard() -> Hazard {
   {
     active: false,
     kind: hazard_debris,
@@ -114,15 +104,13 @@ pub fn Hazard::new() -> Hazard {
 
 ///|
 /// Returns an inactive rival placeholder.
-#deprecated
-pub fn Rival::new() -> Rival {
+pub fn Rival::Rival() -> Rival {
   { active: false, id: 0, lane: 0.0, dist: 0.0, speed_bias: 0.0, stroke_t: 0.0 }
 }
 
 ///|
 /// Allocates a new race state with prebuilt hazard and rival pools.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     input: Input(),
     hazards: Array::makei(max_hazards, fn(_i) { Hazard() }),

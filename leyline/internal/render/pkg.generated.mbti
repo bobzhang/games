@@ -1,0 +1,91 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/leyline/internal/render"
+
+import {
+  "bobzhang/games/leyline/internal/types",
+  "tonyfettes/raylib",
+}
+
+// Values
+pub let amplifier_color : @raylib.Color
+
+pub let bg_color : @raylib.Color
+
+pub let bronze_color : @raylib.Color
+
+pub let cursor_invalid_color : @raylib.Color
+
+pub let cursor_valid_color : @raylib.Color
+
+pub fn draw_cells(@types.LevelState, Float) -> Unit
+
+pub fn draw_connections(@types.LevelState, Float) -> Unit
+
+pub fn draw_cursor(@types.LevelState, @types.Tool) -> Unit
+
+pub fn draw_draw_line_preview(@types.LevelState) -> Unit
+
+pub fn draw_energy_labels(@types.LevelState) -> Unit
+
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_grid_background() -> Unit
+
+pub fn draw_hud(@types.Game, @types.LevelState) -> Unit
+
+pub fn draw_level_complete(@types.Game) -> Unit
+
+pub fn draw_level_failed(@types.Game) -> Unit
+
+pub fn draw_level_select(@types.Game) -> Unit
+
+pub fn draw_playing(@types.Game) -> Unit
+
+pub fn draw_title(@types.Game) -> Unit
+
+pub fn draw_toolbar(@types.Game) -> Unit
+
+pub let energy_text_color : @raylib.Color
+
+pub let gold_color : @raylib.Color
+
+pub let grid_color : @raylib.Color
+
+pub let grid_line_color : @raylib.Color
+
+pub let hud_bg_color : @raylib.Color
+
+pub let line_active_color : @raylib.Color
+
+pub let line_color : @raylib.Color
+
+pub let locked_color : @raylib.Color
+
+pub let silver_color : @raylib.Color
+
+pub let source_color : @raylib.Color
+
+pub let temple_color : @raylib.Color
+
+pub let temple_powered_color : @raylib.Color
+
+pub let text_color : @raylib.Color
+
+pub let text_dim_color : @raylib.Color
+
+pub let tool_active_color : @raylib.Color
+
+pub let tool_inactive_color : @raylib.Color
+
+pub let void_color : @raylib.Color
+
+pub let waystone_color : @raylib.Color
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

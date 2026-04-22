@@ -576,14 +576,11 @@ pub(all) struct Game {
   // RNG
   mut rng_state : Int
   mut frame_counter : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Constructs a fresh game state with initialized pools and menu-start defaults.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     state: Menu,
     px: 0.0,

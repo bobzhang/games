@@ -1,0 +1,560 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/vector_breach/internal/types"
+
+import {
+  "moonbitlang/core/ref",
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn abs_int(Int) -> Int
+
+pub let anim_attack_duration : Float
+
+pub let anim_death_duration : Float
+
+pub let anim_intent_duration : Float
+
+pub let anim_move_duration : Float
+
+pub let anim_push_duration : Float
+
+pub fn battle_has_augment(BattleState, AugmentKind) -> Bool
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_bg : @raylib.Color
+
+pub let color_chasm : @raylib.Color
+
+pub let color_enemy : @raylib.Color
+
+pub let color_floor : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_heat : @raylib.Color
+
+pub let color_hp_bar : @raylib.Color
+
+pub let color_hp_bg : @raylib.Color
+
+pub let color_ice : @raylib.Color
+
+pub let color_intent : @raylib.Color
+
+pub let color_lava : @raylib.Color
+
+pub let color_player : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_shield : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub let color_water : @raylib.Color
+
+pub fn default_screen_fx() -> ScreenFX
+
+pub fn direction_dx(Direction) -> Int
+
+pub fn direction_dy(Direction) -> Int
+
+pub fn direction_from_delta(Int, Int) -> Direction
+
+pub fn draw_center_text(String, Int, Int, Int, @raylib.Color) -> Unit
+
+pub fn draw_shadow_text(String, Int, Int, Int, @raylib.Color) -> Unit
+
+pub fn emit_flash(BattleState, Int, Int, Int, Int) -> Unit
+
+pub fn emit_float_text(BattleState, Int, Int, String, Int, Int, Int, Float, Bool) -> Unit
+
+pub fn emit_hitstop(BattleState, Float) -> Unit
+
+pub fn emit_ring(BattleState, Int, Int, Float, Float, Int, Int, Int) -> Unit
+
+pub fn emit_shake(BattleState, Float) -> Unit
+
+pub fn emit_slowmo(BattleState, Float) -> Unit
+
+pub fn emit_tint(BattleState, Int, Int, Int, Int, Float) -> Unit
+
+pub let flash_duration : Float
+
+pub let float_text_duration : Float
+
+pub let font_body : Int
+
+pub let font_small : Int
+
+pub let font_title : Int
+
+pub let grid_h : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_w : Int
+
+pub fn has_augment(RunState, AugmentKind) -> Bool
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn make_default_unit(Int, UnitTeam, Int, Int) -> CombatUnit
+
+pub fn manhattan(Int, Int, Int, Int) -> Int
+
+pub let max_frame_dt : Float
+
+pub let max_heat : Int
+
+pub let max_units : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn minf(Float, Float) -> Float
+
+pub fn new_anim(AnimKind, Int, Int, Int, Int, Int) -> AnimState
+
+pub fn new_battle(Objective) -> BattleState
+
+pub fn opposite_direction(Direction) -> Direction
+
+pub let overclock_heat_cost : Int
+
+pub let particle_life : Float
+
+pub fn rand_next(@ref.Ref[UInt]) -> UInt
+
+pub fn rand_range(@ref.Ref[UInt], Int, Int) -> Int
+
+pub let screen_h : Int
+
+pub fn screen_to_tile_x(Int) -> Int
+
+pub fn screen_to_tile_y(Int) -> Int
+
+pub let screen_w : Int
+
+pub let shake_duration : Float
+
+pub fn tile_center_x(Int) -> Int
+
+pub fn tile_center_y(Int) -> Int
+
+pub let tile_size : Int
+
+pub fn tile_to_screen_x(Int) -> Int
+
+pub fn tile_to_screen_y(Int) -> Int
+
+pub let total_missions : Int
+
+pub let ui_panel_w : Int
+
+pub let ui_panel_x : Int
+
+// Errors
+
+// Types and methods
+pub(all) enum AnimKind {
+  AnimNone
+  AnimMove
+  AnimAttack
+  AnimPush
+  AnimDeath
+  AnimIntentReveal
+} derive(Eq, Show)
+
+pub(all) struct AnimState {
+  mut playing : Bool
+  mut timer : Float
+  mut kind : AnimKind
+  mut source_x : Int
+  mut source_y : Int
+  mut target_x : Int
+  mut target_y : Int
+  mut unit_id : Int
+  mut alpha : Float
+}
+
+pub(all) enum AugmentKind {
+  ExtendedBarrel
+  HeavyFrame
+  OverchargedPush
+  ShieldGenerator
+  HeatSink
+  ChainLightning
+  VampireCore
+  FortifiedGrid
+  ReflexBoost
+  EmergencyRepair
+} derive(Eq, Show)
+
+pub(all) struct BattleSnapshot {
+  unit_states : Array[UnitSnapshot]
+  tile_states : Array[Tile]
+  grid_width : Int
+  grid_height : Int
+  selected_mech : Int
+  cursor_x : Int
+  cursor_y : Int
+  commands : Array[Command]
+}
+
+pub(all) struct BattleState {
+  grid : Grid
+  units : Array[CombatUnit]
+  mut turn : Int
+  mut phase : Screen
+  objective : Objective
+  mut objective_progress : Int
+  mut player_commands : Array[Command]
+  mut selected_mech : Int
+  mut cursor_x : Int
+  mut cursor_y : Int
+  mut turn_log : Array[String]
+  mut anim_queue : Array[AnimState]
+  mut anim_current : AnimState?
+  mut floating_texts : Array[FloatingText]
+  mut particles : Array[Particle]
+  mut rings : Array[RingEffect]
+  mut screen_fx : ScreenFX
+  mut mission_id : Int
+  mut augments : Array[AugmentKind]
+  mut score : Int
+  mut combo_text : String
+  mut combo_timer : Float
+  mut damage_taken_this_turn : Bool
+  mut undo_stack : Array[BattleSnapshot]
+  mut boss_phase : Int
+  mut boss_narrative_text : String
+  mut boss_narrative_timer : Float
+  mut boss_walls_deployed : Array[(Int, Int)]
+}
+
+pub(all) enum BranchTheme {
+  ScorchedEarth
+  IceProtocol
+  VoidZone
+  Neutral
+} derive(Eq, Show)
+
+pub(all) struct CampaignMap {
+  nodes : Array[CampaignNode]
+  mut selected_node : Int
+  mut completed_nodes : Array[Int]
+}
+
+pub(all) struct CampaignNode {
+  id : Int
+  kind : CampaignNodeKind
+  x : Int
+  y : Int
+  connections : Array[Int]
+  difficulty : Int
+  reward_icon : String
+  theme : BranchTheme
+}
+
+pub(all) enum CampaignNodeKind {
+  Mission(Int)
+  Boss(Int)
+  Rest
+  Shop
+  Event
+  Elite(Int)
+} derive(Eq, Show)
+
+pub(all) struct Cell {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+pub(all) struct CombatUnit {
+  mut id : Int
+  mut active : Bool
+  team : UnitTeam
+  mut x : Int
+  mut y : Int
+  mut hp : Int
+  mut max_hp : Int
+  mut shield : Int
+  mut heat : Int
+  mut max_heat : Int
+  mut stunned : Bool
+  mut moved_this_turn : Bool
+  mut acted_this_turn : Bool
+  mech_class : MechClass
+  enemy_type : EnemyType
+  mut intent : Intent
+  mut statuses : Array[StatusEffect]
+  mut upgrade_tier : Int
+  mut orbital_used : Bool
+}
+
+pub(all) enum Command {
+  Move(Int, Int)
+  Attack(Int, Int, Int)
+  Overclock(Int)
+  Wait
+  Push(Int, Int, Int)
+} derive(Show)
+
+pub(all) enum Direction {
+  North
+  South
+  East
+  West
+} derive(Eq, Show)
+
+pub(all) enum Effect {
+  Damage(Int)
+  Push(Int, Int)
+  Pull(Int, Int)
+  Shield(Int)
+  Heal(Int)
+  Stun
+  Spawn(Int, Int, Int)
+  DestroyTile(Int, Int)
+  ApplyHazard(Int, Int, Int)
+} derive(Show)
+
+pub(all) enum EffectKind {
+  DamagePreview
+  PushPreview
+  PullPreview
+  MovePreview
+  HazardPreview
+  KillPreview
+  CollisionPreview
+} derive(Eq, Show)
+
+pub(all) enum EnemyType {
+  Rammer
+  Artillery
+  BeamTurret
+  Leaper
+  MineLayer
+  ShieldDrone
+  Splitter
+  Boss
+} derive(Eq, Show)
+
+pub(all) enum EventKind {
+  Scavenger
+  Ambush
+  Intel
+} derive(Eq, Show)
+
+pub(all) struct FloatingText {
+  mut text : String
+  mut x : Float
+  mut y : Float
+  mut timer : Float
+  mut duration : Float
+  mut color_r : Int
+  mut color_g : Int
+  mut color_b : Int
+  mut scale : Float
+  mut glow : Bool
+}
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut battle : BattleState?
+  mut run : RunState
+  mut frame_count : Int
+  mut rng_state : UInt
+  mut anim_timer : Float
+  mut message_text : String
+  mut message_timer : Float
+  mut hover_info : String
+}
+pub fn Game::Game() -> Self
+
+pub(all) struct Grid {
+  width : Int
+  height : Int
+  tiles : Array[Tile]
+}
+pub fn Grid::get(Self, Int, Int) -> Tile
+pub fn Grid::in_bounds(Self, Int, Int) -> Bool
+pub fn Grid::new(Int, Int) -> Self
+pub fn Grid::set(Self, Int, Int, Tile) -> Unit
+
+pub(all) enum HazardKind {
+  None
+  Fire
+  Acid
+  Mine
+  Smoke
+} derive(Eq, Show)
+
+pub(all) enum Intent {
+  March(Int, Int)
+  FireLine(Int, Int, Int)
+  Leap(Int, Int)
+  AreaBlast(Int, Int, Int)
+  Summon(Int, Int, Int)
+  Charge(Int, Int)
+  MinePlace(Int, Int)
+} derive(Show)
+
+pub(all) enum MechClass {
+  Vanguard
+  Striker
+  Sentinel
+} derive(Eq, Show)
+
+pub(all) enum Objective {
+  DefendGrid(Int)
+  Survive(Int)
+  Assassinate(Int)
+  CapturePoints(Int)
+  Escort(Int, Int)
+} derive(Eq, Show)
+
+pub(all) struct Particle {
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  mut color_r : Int
+  mut color_g : Int
+  mut color_b : Int
+}
+
+pub(all) struct PreviewTile {
+  x : Int
+  y : Int
+  effect : EffectKind
+  affected_unit : Int
+} derive(Show)
+
+pub(all) enum RewardChoice {
+  PickAugment(Int)
+  RepairAll
+  GainGridPower
+} derive(Eq, Show)
+
+pub(all) struct RingEffect {
+  mut x : Float
+  mut y : Float
+  mut radius : Float
+  mut max_radius : Float
+  mut timer : Float
+  mut duration : Float
+  mut color_r : Int
+  mut color_g : Int
+  mut color_b : Int
+}
+
+pub(all) struct RunState {
+  mut current_mission : Int
+  mut missions_completed : Int
+  mut squad : Array[Int]
+  mut augments : Array[AugmentKind]
+  mut grid_power : Int
+  mut reputation : Int
+  mut campaign : CampaignMap?
+  mut offered_augments : Array[AugmentKind]
+  mut upgrade_tiers : Array[Int]
+  mut total_score : Int
+  mut mechs_lost : Int
+  mut best_combo : Int
+  mut total_turns : Int
+  mut mech_hp : Array[Int]
+  mut event_choice : Int
+}
+
+pub(all) enum Screen {
+  Title
+  MapSelect
+  MechSelect
+  Campaign
+  MissionBriefing
+  Battle
+  EnemyTurn
+  Reward
+  UpgradeScreen
+  MissionDebrief
+  RunSummary
+  GameOver
+  Victory
+} derive(Eq, Show)
+
+pub(all) struct ScreenFX {
+  mut shake_timer : Float
+  mut shake_intensity : Float
+  mut flash_timer : Float
+  mut flash_r : Int
+  mut flash_g : Int
+  mut flash_b : Int
+  mut flash_alpha : Int
+  mut slowmo_timer : Float
+  mut pulse_timer : Float
+  mut hitstop_timer : Float
+  mut tint_timer : Float
+  mut tint_r : Int
+  mut tint_g : Int
+  mut tint_b : Int
+  mut tint_alpha : Int
+}
+
+pub(all) enum StatusEffect {
+  OnFire(Int)
+  Immobilized(Int)
+} derive(Eq, Show)
+
+pub(all) struct Tile {
+  kind : TileKind
+  hazard : HazardKind
+  occupied_by : Int
+}
+
+pub(all) enum TileKind {
+  Floor
+  Wall
+  Chasm
+  Water
+  Lava
+  Ice
+  ControlPoint
+  SpawnPoint
+} derive(Eq, Show)
+
+pub(all) struct UnitSnapshot {
+  id : Int
+  active : Bool
+  x : Int
+  y : Int
+  hp : Int
+  max_hp : Int
+  shield : Int
+  heat : Int
+  max_heat : Int
+  stunned : Bool
+  moved_this_turn : Bool
+  acted_this_turn : Bool
+  statuses : Array[StatusEffect]
+}
+
+pub(all) enum UnitTeam {
+  Player
+  Enemy
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

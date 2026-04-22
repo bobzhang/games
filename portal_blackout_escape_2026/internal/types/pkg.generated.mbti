@@ -130,22 +130,16 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
-
-  fn new() -> Actor
 }
-#deprecated
-pub fn Actor::new() -> Self
+pub fn Actor::Actor() -> Self
 
 pub(all) struct Core {
   mut active : Bool
   mut x : Int
   mut y : Int
   mut kind : CoreKind
-
-  fn new() -> Core
 }
-#deprecated
-pub fn Core::new() -> Self
+pub fn Core::Core() -> Self
 
 pub(all) enum CoreKind {
   Orange
@@ -167,11 +161,8 @@ pub(all) struct Drone {
   mut seed : Int
   mut alert_t : Float
   mut color_id : Int
-
-  fn new() -> Drone
 }
-#deprecated
-pub fn Drone::new() -> Self
+pub fn Drone::Drone() -> Self
 
 pub(all) enum DroneMode {
   Patrol
@@ -184,11 +175,8 @@ pub(all) struct Flare {
   mut x : Int
   mut y : Int
   mut t : Float
-
-  fn new() -> Flare
 }
-#deprecated
-pub fn Flare::new() -> Self
+pub fn Flare::Flare() -> Self
 
 pub(all) struct Game {
   map : Array[Tile]
@@ -225,11 +213,8 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -246,11 +231,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
-#deprecated
-pub fn Particle::new() -> Self
+pub fn Particle::Particle() -> Self
 
 pub(all) enum ParticleKind {
   BluePulse

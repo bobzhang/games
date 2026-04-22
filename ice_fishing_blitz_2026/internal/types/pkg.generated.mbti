@@ -120,11 +120,8 @@ pub(all) struct Fish {
   mut kind : FishKind
   mut phase : Float
   mut hooked : Bool
-
-  fn new() -> Fish
 }
-#deprecated
-pub fn Fish::new() -> Self
+pub fn Fish::Fish() -> Self
 
 pub(all) enum FishKind {
   Trout
@@ -178,11 +175,8 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -200,11 +194,8 @@ pub(all) struct Hazard {
   mut dmg : Float
   mut kind : HazardKind
   mut phase : Float
-
-  fn new() -> Hazard
 }
-#deprecated
-pub fn Hazard::new() -> Self
+pub fn Hazard::Hazard() -> Self
 
 pub(all) enum HazardKind {
   Jelly
@@ -221,11 +212,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
-#deprecated
-pub fn Particle::new() -> Self
+pub fn Particle::Particle() -> Self
 
 pub(all) enum ParticleKind {
   Splash
@@ -241,11 +229,8 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
-
-  fn new() -> Pickup
 }
-#deprecated
-pub fn Pickup::new() -> Self
+pub fn Pickup::Pickup() -> Self
 
 pub(all) enum PickupKind {
   Bait

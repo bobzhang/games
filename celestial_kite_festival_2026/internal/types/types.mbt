@@ -25,8 +25,6 @@ pub(all) struct SkyObj {
   mut phase : Float
   mut value : Int
   mut flagged : Bool
-
-  fn new() -> SkyObj
 }
 
 ///|
@@ -40,8 +38,6 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Spark
 }
 
 ///|
@@ -53,8 +49,6 @@ pub(all) struct Halo {
   mut r : Float
   mut life : Float
   mut kind : Int
-
-  fn new() -> Halo
 }
 
 ///|
@@ -67,8 +61,6 @@ pub(all) struct Trail {
   mut w : Float
   mut h : Float
   mut rot : Float
-
-  fn new() -> Trail
 }
 
 ///|
@@ -95,8 +87,6 @@ pub(all) struct Kite {
   mut burst_glow : Float
   mut reel_glow : Float
   mut anim_t : Float
-
-  fn new() -> Kite
 }
 
 ///|
@@ -146,14 +136,11 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a default SkyObj value for a new session.
-#deprecated
-pub fn SkyObj::new() -> SkyObj {
+pub fn SkyObj::SkyObj() -> SkyObj {
   {
     active: false,
     kind: Lantern,
@@ -174,8 +161,7 @@ pub fn SkyObj::new() -> SkyObj {
 
 ///|
 /// Creates a default Spark value for a new session.
-#deprecated
-pub fn Spark::new() -> Spark {
+pub fn Spark::Spark() -> Spark {
   {
     active: false,
     x: 0.0,
@@ -190,22 +176,19 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates a default Halo value for a new session.
-#deprecated
-pub fn Halo::new() -> Halo {
+pub fn Halo::Halo() -> Halo {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates a default Trail value for a new session.
-#deprecated
-pub fn Trail::new() -> Trail {
+pub fn Trail::Trail() -> Trail {
   { active: false, x: 0.0, y: 0.0, life: 0.0, w: 0.0, h: 0.0, rot: 0.0 }
 }
 
 ///|
 /// Creates a default Kite value for a new session.
-#deprecated
-pub fn Kite::new() -> Kite {
+pub fn Kite::Kite() -> Kite {
   {
     x: Float::from_int(screen_w) * 0.5,
     y: Float::from_int(screen_h) * 0.5,
@@ -224,8 +207,7 @@ pub fn Kite::new() -> Kite {
 
 ///|
 /// Creates a default Game value for a new session.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     objs: Array::makei(max_objs, fn(_i) { SkyObj() }),
     sparks: Array::makei(max_sparks, fn(_i) { Spark() }),

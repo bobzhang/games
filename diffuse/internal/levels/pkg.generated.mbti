@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/diffuse/internal/levels"
+
+import {
+  "bobzhang/games/diffuse/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.Level
+
+pub fn load_level_into_game(@types.Game, Int) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -209,11 +209,8 @@ pub(all) struct Bolt {
   vy : Float
   mut life : Float
   dmg : Float
-
-  fn new() -> Bolt
 }
-#deprecated
-pub fn Bolt::new() -> Self
+pub fn Bolt::Bolt() -> Self
 
 pub(all) enum Dir {
   Up
@@ -237,11 +234,8 @@ pub(all) struct Enemy {
   reward : Int
   gate_damage : Float
   mut phase : Float
-
-  fn new() -> Enemy
 }
-#deprecated
-pub fn Enemy::new() -> Self
+pub fn Enemy::Enemy() -> Self
 
 pub(all) enum EnemyKind {
   Skitter
@@ -283,11 +277,8 @@ pub(all) struct Game {
   mut input_barrier_press : Bool
   mut input_pause_press : Bool
   mut input_restart_press : Bool
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -304,11 +295,8 @@ pub(all) struct Node {
   mut facing : Dir
   mut cooldown : Float
   mut pulse : Float
-
-  fn new() -> Node
 }
-#deprecated
-pub fn Node::new() -> Self
+pub fn Node::Node() -> Self
 
 pub(all) struct PulseFx {
   mut active : Bool
@@ -318,11 +306,8 @@ pub(all) struct PulseFx {
   mut life : Float
   max_life : Float
   kind : Int
-
-  fn new() -> PulseFx
 }
-#deprecated
-pub fn PulseFx::new() -> Self
+pub fn PulseFx::PulseFx() -> Self
 
 // Type aliases
 

@@ -1,0 +1,46 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tremor/internal/sensors"
+
+import {
+  "bobzhang/games/tremor/internal/types",
+}
+
+// Values
+pub fn all_epicenters_found(Array[@types.Epicenter]) -> Bool
+
+pub fn can_place_sensor(@types.Game, @types.Vec2i) -> Bool
+
+pub fn check_all_epicenters(@types.Vec2i, Array[@types.Epicenter], Float) -> Int
+
+pub fn check_guess(@types.Vec2i, @types.Vec2i, Float) -> Bool
+
+pub fn compute_all_readings(Array[@types.Sensor], @types.Vec2i, Array[Array[@types.TileInfo]]) -> Array[@types.SensorReading]
+
+pub fn compute_overlap_tiles(Array[@types.SensorReading]) -> Array[@types.Vec2i]
+
+pub fn compute_reading(@types.Sensor, @types.Vec2i, @types.TileKind) -> @types.SensorReading?
+
+pub fn normalize_angle(Float) -> Float
+
+pub fn place_sensor(@types.Game, @types.Vec2i) -> Bool
+
+pub fn point_in_all_readings(Array[@types.SensorReading], @types.Vec2i) -> Bool
+
+pub fn point_in_ring(@types.SensorReading, @types.Vec2i) -> Bool
+
+pub fn point_in_wedge(@types.SensorReading, @types.Vec2i) -> Bool
+
+pub fn recompute_readings(@types.Game) -> Unit
+
+pub fn remaining_budget(@types.Game) -> Int
+
+pub fn remove_last_sensor(@types.Game) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

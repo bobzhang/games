@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/physics_tower/internal/content"
+
+import {
+  "bobzhang/games/physics_tower/internal/types",
+}
+
+// Values
+pub fn get_levels() -> Array[@types.Level]
+
+pub fn get_sandbox_inventory() -> Array[(@types.PieceKind, @types.Material, Int)]
+
+pub fn get_worlds() -> Array[@types.WorldInfo]
+
+pub fn is_world_unlocked(Int, Int) -> Bool
+
+pub fn world_accent_color(Int) -> (Int, Int, Int)
+
+pub fn world_bg_color(Int) -> (Int, Int, Int)
+
+pub fn world_for_level(Int) -> Int
+
+pub fn world_friction_mult(Int) -> Float
+
+pub fn world_gravity_mult(Int) -> Float
+
+pub fn world_level_count(Int) -> Int
+
+pub fn world_name(Int) -> String
+
+pub fn world_theme(Int) -> @types.WorldTheme
+
+pub fn world_wind_mult(Int) -> Float
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

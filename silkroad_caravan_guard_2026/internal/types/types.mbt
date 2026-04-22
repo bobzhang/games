@@ -6,8 +6,6 @@ pub(all) struct Wagon {
   mut hp : Float
   max_hp : Float
   mut repair_cd : Float
-
-  fn new(index : Int) -> Wagon
 }
 
 ///|
@@ -26,8 +24,6 @@ pub(all) struct Raider {
   mut attack_cd : Float
   mut flash_t : Float
   mut radius : Float
-
-  fn new() -> Raider
 }
 
 ///|
@@ -40,8 +36,6 @@ pub(all) struct Bullet {
   mut vy : Float
   mut life : Float
   mut dmg : Float
-
-  fn new() -> Bullet
 }
 
 ///|
@@ -55,8 +49,6 @@ pub(all) struct Dust {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Dust
 }
 
 ///|
@@ -75,8 +67,6 @@ pub(all) struct Player {
   mut shoot_cd : Float
   mut invuln_t : Float
   mut repair_t : Float
-
-  fn new() -> Player
 }
 
 ///|
@@ -114,14 +104,11 @@ pub(all) struct Game {
   mut input_pause_press : Bool
   mut input_restart_press : Bool
   mut input_confirm_press : Bool
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a default Wagon value for a new session.
-#deprecated
-pub fn Wagon::new(index : Int) -> Wagon {
+pub fn Wagon::Wagon(index : Int) -> Wagon {
   {
     x: wagon_slot_x(index),
     y: wagon_slot_y(index),
@@ -133,8 +120,7 @@ pub fn Wagon::new(index : Int) -> Wagon {
 
 ///|
 /// Creates a default Raider value for a new session.
-#deprecated
-pub fn Raider::new() -> Raider {
+pub fn Raider::Raider() -> Raider {
   {
     active: false,
     kind: Skirmisher,
@@ -154,15 +140,13 @@ pub fn Raider::new() -> Raider {
 
 ///|
 /// Creates a default Bullet value for a new session.
-#deprecated
-pub fn Bullet::new() -> Bullet {
+pub fn Bullet::Bullet() -> Bullet {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, life: 0.0, dmg: 0.0 }
 }
 
 ///|
 /// Creates a default Dust value for a new session.
-#deprecated
-pub fn Dust::new() -> Dust {
+pub fn Dust::Dust() -> Dust {
   {
     active: false,
     x: 0.0,
@@ -177,8 +161,7 @@ pub fn Dust::new() -> Dust {
 
 ///|
 /// Creates a default Player value for a new session.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   {
     x: caravan_center_x - perimeter_outer_rx * 0.9,
     y: caravan_center_y,
@@ -198,8 +181,7 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a default Game value for a new session.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   let wagons = Array::makei(wagon_count, fn(i) { Wagon(i) })
   let raiders = Array::makei(max_raiders, fn(_i) { Raider() })
   let bullets = Array::makei(max_bullets, fn(_i) { Bullet() })

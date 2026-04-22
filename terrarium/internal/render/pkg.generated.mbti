@@ -1,0 +1,44 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/terrarium/internal/render"
+
+import {
+  "bobzhang/games/terrarium/internal/types",
+}
+
+// Values
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_grid_cells(@types.Game) -> Unit
+
+pub fn draw_hover_highlight(@types.Game) -> Unit
+
+pub fn draw_jar_background() -> Unit
+
+pub fn draw_level_select(@types.Game) -> Unit
+
+pub fn draw_message(@types.Game) -> Unit
+
+pub fn draw_palette(@types.Game) -> Unit
+
+pub fn draw_playing_screen(@types.Game) -> Unit
+
+pub fn draw_resource_bars(@types.Game) -> Unit
+
+pub fn draw_results_screen(@types.Game) -> Unit
+
+pub fn draw_sim_log(@types.Game) -> Unit
+
+pub fn draw_simulating_screen(@types.Game) -> Unit
+
+pub fn draw_title_screen(@types.Game) -> Unit
+
+pub fn draw_turn_info(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

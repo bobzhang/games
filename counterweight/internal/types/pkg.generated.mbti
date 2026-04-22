@@ -1,0 +1,377 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/counterweight/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let bucket_height : Float
+
+pub let bucket_width : Float
+
+pub fn can_connect(Node, RopeSide) -> Bool
+
+pub let cell_size : Int
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_anchor_gray : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_bucket : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_button_text : @raylib.Color
+
+pub let color_connect_line : @raylib.Color
+
+pub let color_crate_dark : @raylib.Color
+
+pub let color_crate_hook : @raylib.Color
+
+pub let color_crate_wood : @raylib.Color
+
+pub let color_gear : @raylib.Color
+
+pub let color_gear_tooth : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hook_highlight : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_platform : @raylib.Color
+
+pub let color_pulley_brass : @raylib.Color
+
+pub let color_pulley_center : @raylib.Color
+
+pub let color_ratchet : @raylib.Color
+
+pub let color_rope : @raylib.Color
+
+pub let color_rope_break : @raylib.Color
+
+pub let color_rope_taut : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_target_glow : @raylib.Color
+
+pub let color_target_gold : @raylib.Color
+
+pub let color_title_text : @raylib.Color
+
+pub let color_water : @raylib.Color
+
+pub let color_waterfall : @raylib.Color
+
+pub let color_weight_dark : @raylib.Color
+
+pub let color_weight_hook : @raylib.Color
+
+pub let color_weight_iron : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn count_connections(Game) -> Int
+
+pub let crate_size : Float
+
+pub fn find_node_at(Array[Node], Int, Int) -> Int
+
+pub fn get_mass_on_side(Game, Int, RopeSide) -> Float
+
+pub let grid_cols : Int
+
+pub let grid_rows : Int
+
+pub fn grid_to_screen_x(Int, Int) -> Int
+
+pub fn grid_to_screen_y(Int, Int) -> Int
+
+pub let height_per_mass_diff : Float
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn level_index_for_tier(Int, Int) -> Int
+
+pub fn levels_in_tier(Int) -> Int
+
+pub let max_buckets : Int
+
+pub let max_crates : Int
+
+pub let max_nodes : Int
+
+pub let max_platforms : Int
+
+pub let max_ropes : Int
+
+pub let max_settle_iterations : Int
+
+pub let max_weights : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_bucket(Int, Float, Float, Float) -> Bucket
+
+pub fn new_crate(Int, Float, Float) -> Crate
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_node(Int, Int, Int, NodeKind) -> Node
+
+pub fn new_platform(Int, Float) -> Platform
+
+pub fn new_rope() -> Rope
+
+pub fn new_weight(Int, Float) -> Weight
+
+pub let node_radius : Float
+
+pub fn node_screen_x(Node, Int) -> Int
+
+pub fn node_screen_y(Node, Int) -> Int
+
+pub let rope_thickness : Float
+
+pub let screen_height : Int
+
+pub fn screen_to_grid_x(Int, Int) -> Int
+
+pub fn screen_to_grid_y(Int, Int) -> Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub let settle_duration : Float
+
+pub fn sinf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let target_tolerance : Float
+
+pub let tier1_levels : Int
+
+pub let tier2_levels : Int
+
+pub let tier3_levels : Int
+
+pub fn tier_from_index(Int) -> Tier
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_unlocked(Array[LevelScore], Int) -> Bool
+
+pub let total_levels : Int
+
+pub fn total_stars(Array[LevelScore]) -> Int
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+pub let weight_height : Float
+
+pub let weight_width : Float
+
+// Errors
+
+// Types and methods
+pub(all) struct Bucket {
+  mut active : Bool
+  mut node_id : Int
+  mut mass : Float
+  mut max_mass : Float
+  mut fill_rate : Float
+  mut filling : Bool
+  mut current_y : Float
+  mut target_y : Float
+} derive(Show)
+
+pub(all) enum ComponentKind {
+  WeightComp
+  CrateComp
+  BucketComp
+  BreakableRopeComp
+} derive(Eq, Show)
+
+pub(all) struct Crate {
+  mut active : Bool
+  mut node_id : Int
+  mut mass : Float
+  mut current_y : Float
+  mut target_y : Float
+  mut target_height : Float
+  mut at_target : Bool
+} derive(Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_level : Int
+  mut selected_tier : Int
+  mut selected_level : Int
+  mut nodes : Array[Node]
+  mut ropes : Array[Rope]
+  mut weights : Array[Weight]
+  mut crates : Array[Crate]
+  mut platforms : Array[Platform]
+  mut buckets : Array[Bucket]
+  mut targets : Array[LevelTarget]
+  mut par_connections : Int
+  mut par_rehooks : Int
+  mut connections_used : Int
+  mut rehooks : Int
+  mut has_waterfall : Bool
+  mut waterfall_x : Int
+  mut settle_timer : Float
+  mut anim_timer : Float
+  mut hover_node : Int
+  mut message : String
+  mut message_timer : Float
+  mut scores : Array[LevelScore]
+  mut frame_count : Int
+  mut grid_offset_x : Int
+  mut grid_offset_y : Int
+} derive(Show)
+
+pub(all) struct LevelDef {
+  mut tier : Tier
+  mut index : Int
+  mut name : String
+  mut nodes : Array[Node]
+  mut ropes : Array[Rope]
+  mut weights : Array[Weight]
+  mut crates : Array[Crate]
+  mut platforms : Array[Platform]
+  mut buckets : Array[Bucket]
+  mut targets : Array[LevelTarget]
+  mut par_connections : Int
+  mut par_rehooks : Int
+  mut has_waterfall : Bool
+  mut waterfall_x : Int
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : Int
+  mut connections_used : Int
+  mut rehooks : Int
+} derive(Show)
+
+pub(all) struct LevelTarget {
+  mut crate_index : Int
+  mut target_height : Float
+  mut tolerance : Float
+} derive(Show)
+
+pub(all) struct Node {
+  mut id : Int
+  mut pos : Vec2i
+  mut kind : NodeKind
+  mut left_conn : Int
+  mut right_conn : Int
+  mut height : Float
+  mut base_height : Float
+  mut locked : Bool
+} derive(Show)
+
+pub(all) enum NodeKind {
+  Pulley
+  Anchor
+  WeightHook
+  CrateHook
+  Ratchet
+} derive(Eq, Show)
+
+pub(all) struct Platform {
+  mut active : Bool
+  mut node_id : Int
+  mut width : Float
+  mut height_val : Float
+  mut connected_to : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Idle
+  ConnectingRope(Int)
+  Settling
+  Won
+  Failed
+} derive(Eq, Show)
+
+pub(all) struct Rope {
+  mut active : Bool
+  mut from_node : Int
+  mut to_node : Int
+  mut from_side : RopeSide
+  mut to_side : RopeSide
+  mut max_load : Float
+  mut broken : Bool
+  mut breakable : Bool
+} derive(Show)
+
+pub(all) enum RopeSide {
+  LeftSide
+  RightSide
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Basics
+  Chains
+  Workshop
+} derive(Eq, Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+pub(all) struct Weight {
+  mut active : Bool
+  mut node_id : Int
+  mut mass : Float
+  mut current_y : Float
+  mut target_y : Float
+  mut bob_timer : Float
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/void_drifter/internal/audio"
+
+import {
+  "bobzhang/games/void_drifter/internal/types",
+}
+
+// Values
+pub fn process_sound_queue(Array[@types.SoundEvent]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

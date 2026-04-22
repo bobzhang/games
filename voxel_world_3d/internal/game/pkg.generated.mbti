@@ -12,6 +12,8 @@ pub fn handle_block_interaction(@types.Game, Float) -> Unit
 
 pub fn handle_block_selection(@types.Game) -> Unit
 
+pub fn handle_food_consumption(@types.Game) -> Unit
+
 pub fn is_axe(Int) -> Bool
 
 pub fn is_pickaxe(Int) -> Bool
@@ -35,6 +37,8 @@ pub fn update_game(@types.Game, Float) -> Unit
 pub fn update_message(@types.Game, Float) -> Unit
 
 pub fn update_player(@types.Game, Float) -> Unit
+
+pub fn update_projectiles(@types.Game, Float) -> Unit
 
 // Errors
 

@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tidal/internal/game"
+
+import {
+  "bobzhang/games/tidal/internal/types",
+}
+
+// Values
+pub fn load_level(@types.Game) -> Unit
+
+pub fn update(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

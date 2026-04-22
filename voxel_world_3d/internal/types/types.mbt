@@ -8,14 +8,11 @@ pub(all) struct Chunk {
   cz : Int
   mut dirty : Bool
   mut biome : Biome
-
-  fn new(cx : Int, cz : Int) -> Chunk
 }
 
 ///|
 /// Creates a new empty chunk initialized with `block_air`.
-#deprecated
-pub fn Chunk::new(cx : Int, cz : Int) -> Chunk {
+pub fn Chunk::Chunk(cx : Int, cz : Int) -> Chunk {
   let size = chunk_x * chunk_y * chunk_z
   { blocks: Array::make(size, block_air), cx, cz, dirty: true, biome: Plains }
 }
@@ -73,14 +70,11 @@ pub fn ItemSlot::make(item_id : Int, count : Int) -> ItemSlot {
 pub(all) struct Inventory {
   slots : Array[ItemSlot]
   mut selected : Int
-
-  fn new() -> Inventory
 }
 
 ///|
 /// Creates a new inventory with starter blocks/tools in the hotbar.
-#deprecated
-pub fn Inventory::new() -> Inventory {
+pub fn Inventory::Inventory() -> Inventory {
   let slots : Array[ItemSlot] = []
   for i in 0..<inventory_slots {
     slots.push(ItemSlot::empty())
@@ -186,14 +180,11 @@ pub(all) struct Player {
   mut air_timer : Float
   // Starvation
   mut starve_timer : Float
-
-  fn new() -> Player
 }
 
 ///|
 /// Creates a new player with default survival stats and starter inventory.
-#deprecated
-pub fn Player::new() -> Player {
+pub fn Player::Player() -> Player {
   let spawn_x = Float::from_int(world_chunks_x * chunk_x) / 2.0
   let spawn_z = Float::from_int(world_chunks_z * chunk_z) / 2.0
   {
@@ -245,14 +236,11 @@ pub(all) struct BlockHit {
   mut ny : Int
   mut nz : Int
   mut distance : Float
-
-  fn new() -> BlockHit
 }
 
 ///|
 /// Creates an empty block-hit record.
-#deprecated
-pub fn BlockHit::new() -> BlockHit {
+pub fn BlockHit::BlockHit() -> BlockHit {
   { hit: false, bx: 0, by: 0, bz: 0, nx: 0, ny: 0, nz: 0, distance: 0.0 }
 }
 
@@ -431,22 +419,11 @@ pub(all) struct CraftingRecipe {
   output_count : Int
   name : String
   station : Int
-
-  fn new(
-    in1_id : Int,
-    in1_count : Int,
-    in2_id : Int,
-    in2_count : Int,
-    out_id : Int,
-    out_count : Int,
-    name : String,
-  ) -> CraftingRecipe
 }
 
 ///|
 /// Constructs a crafting recipe record (defaults to no station required).
-#deprecated
-pub fn CraftingRecipe::new(
+pub fn CraftingRecipe::CraftingRecipe(
   in1_id : Int,
   in1_count : Int,
   in2_id : Int,
@@ -602,14 +579,11 @@ pub(all) struct Game {
 
   // World seed
   mut world_seed : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a new voxel world game state, allocates pools, and generates initial chunk terrain.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   // Create chunks
   let total_chunks = world_chunks_x * world_chunks_z
   let chunks : Array[Chunk] = []

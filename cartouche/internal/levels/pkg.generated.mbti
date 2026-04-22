@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cartouche/internal/levels"
+
+import {
+  "bobzhang/games/cartouche/internal/types",
+}
+
+// Values
+pub fn get_tablet(Int) -> @types.Tablet
+
+pub fn get_tier_tablets(@types.Tier) -> Array[Int]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

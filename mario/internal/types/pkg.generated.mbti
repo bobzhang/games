@@ -10,7 +10,33 @@ pub let air_accel : Float
 
 pub let bounce_velocity : Float
 
+pub let bowser_fire_rate : Float
+
+pub let bowser_fire_speed : Float
+
+pub let bowser_hp : Int
+
+pub let bowser_patrol_range : Float
+
+pub let bowser_speed : Float
+
+pub let bridge_chain_delay : Float
+
+pub let bridge_fall_speed : Float
+
+pub let bridge_shake_delay : Float
+
+pub let bridge_shake_time : Float
+
+pub let buzzy_beetle_hop_interval : Float
+
+pub let buzzy_beetle_hop_velocity : Float
+
+pub let buzzy_beetle_speed : Float
+
 pub let camera_offset_x : Float
+
+pub fn count_coin_tiles(Game) -> Int
 
 pub let coyote_time : Float
 
@@ -19,6 +45,14 @@ pub let fireball_bounce_vel : Float
 pub let fireball_gravity : Float
 
 pub let fireball_speed_x : Float
+
+pub let firebar_num_segments : Int
+
+pub let firebar_rotation_speed : Float
+
+pub let firebar_segment_radius : Float
+
+pub let firebar_segment_spacing : Float
 
 pub fn get_tile(Game, Int, Int) -> TileKind
 
@@ -48,6 +82,10 @@ pub let koopa_speed : Float
 
 pub let level_time : Float
 
+pub let max_bowser_fireballs : Int
+
+pub let max_bridges : Int
+
 pub let max_bumped_blocks : Int
 
 pub let max_enemies : Int
@@ -58,11 +96,23 @@ pub let max_fireballs : Int
 
 pub let max_items : Int
 
+pub let max_lifts : Int
+
 pub let max_particles : Int
+
+pub let max_platforms : Int
 
 pub let max_score_popups : Int
 
 pub let mushroom_speed : Float
+
+pub let piranha_cycle_time : Float
+
+pub let piranha_extend_time : Float
+
+pub let piranha_retract_time : Float
+
+pub let platform_thickness : Int
 
 pub let player_half_w : Float
 
@@ -129,6 +179,32 @@ pub fn world_to_tile_y(Float) -> Int
 // Errors
 
 // Types and methods
+pub(all) struct BowserFireball {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+}
+pub fn BowserFireball::clone(Self) -> Self
+pub fn BowserFireball::new() -> Self
+
+pub(all) enum BridgePhase {
+  Stable
+  Shaking
+  Falling
+  Gone
+} derive(Eq)
+
+pub(all) struct BridgeState {
+  mut active : Bool
+  mut tile_x : Int
+  mut tile_y : Int
+  mut phase : BridgePhase
+  mut timer : Float
+  mut fall_y : Float
+}
+pub fn BridgeState::new() -> Self
+
 pub(all) struct BumpedBlock {
   mut active : Bool
   mut tile_x : Int
@@ -161,13 +237,28 @@ pub(all) struct Enemy {
   mut shell_moving : Bool
   mut width : Float
   mut height : Float
+  mut pipe_timer : Float
+  mut extended : Bool
+  mut hop_timer : Float
+  mut firebar_angle : Float
+  mut firebar_segments : Int
+  mut boss_hp : Int
+  mut fire_cooldown : Float
+  mut patrol_left : Float
+  mut patrol_right : Float
+  mut flash_timer : Float
 }
+pub fn Enemy::clone(Self) -> Self
 pub fn Enemy::new(EnemyKind, Float, Float) -> Self
 
 pub(all) enum EnemyKind {
   Goomba
   KoopaTroopa
   KoopaShell
+  PiranhaPlant
+  BuzzyBeetle
+  Firebar
+  BowserLite
 } derive(Eq)
 
 pub(all) struct Fireball {
@@ -177,6 +268,7 @@ pub(all) struct Fireball {
   mut vx : Float
   mut vy : Float
 }
+pub fn Fireball::clone(Self) -> Self
 pub fn Fireball::new() -> Self
 
 pub(all) struct Game {
@@ -188,9 +280,14 @@ pub(all) struct Game {
   enemies : Array[Enemy]
   items : Array[Item]
   fireballs : Array[Fireball]
+  bowser_fireballs : Array[BowserFireball]
   particles : Array[Particle]
   score_popups : Array[ScorePopup]
   bumped_blocks : Array[BumpedBlock]
+  platforms : Array[MovingPlatform]
+  lifts : Array[LiftPlatform]
+  bridges : Array[BridgeState]
+  mut boss_defeated : Bool
   mut map_tiles : Array[TileKind]
   mut map_width : Int
   mut map_height : Int
@@ -211,6 +308,38 @@ pub(all) struct Game {
   mut frame_counter : Int
   mut rng_state : Int
   clouds : Array[Cloud]
+  mut checkpoint_x : Float
+  mut checkpoint_y : Float
+  mut checkpoint_active : Bool
+  mut saved_power : PowerState
+  mut tally_timer : Float
+  mut tally_phase : Int
+  mut tally_time_bonus : Int
+  mut tally_coin_bonus : Int
+  mut tally_enemy_bonus : Int
+  mut tally_height_bonus : Int
+  mut tally_rank : String
+  mut enemies_defeated : Int
+  mut level_coins_collected : Int
+  mut level_total_coins : Int
+  mut level_deaths : Int
+  mut flag_height_frac : Float
+  mut in_bonus_room : Bool
+  mut bonus_return_x : Float
+  mut bonus_return_y : Float
+  mut bonus_return_level : Int
+  mut bonus_saved_tiles : Array[TileKind]
+  mut bonus_saved_width : Int
+  mut bonus_saved_height : Int
+  mut bonus_saved_enemies : Array[Enemy]
+  mut bonus_saved_items : Array[Item]
+  mut bonus_saved_fireballs : Array[Fireball]
+  mut bonus_fade_timer : Float
+  mut bonus_fade_in : Bool
+  mut hitstop_timer : Float
+  mut shake_timer : Float
+  mut shake_intensity : Float
+  mut slowmo_timer : Float
 }
 pub fn Game::new() -> Self
 
@@ -223,6 +352,8 @@ pub(all) enum GameState {
   PlayerDied
   GameOver
   Victory
+  LevelTally
+  BonusRoom
 } derive(Eq)
 
 pub(all) struct Item {
@@ -237,6 +368,7 @@ pub(all) struct Item {
   mut emerge_start_y : Float
   mut emerge_target_y : Float
 }
+pub fn Item::clone(Self) -> Self
 pub fn Item::new() -> Self
 
 pub(all) enum ItemKind {
@@ -246,6 +378,35 @@ pub(all) enum ItemKind {
   OneUp
   CoinPopup
 } derive(Eq)
+
+pub(all) struct LiftPlatform {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  width : Float
+  mut target_y : Float
+  mut speed : Float
+  mut triggered : Bool
+  mut prev_y : Float
+}
+pub fn LiftPlatform::new() -> Self
+
+pub(all) struct MovingPlatform {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  width : Float
+  mut start_x : Float
+  mut start_y : Float
+  mut end_x : Float
+  mut end_y : Float
+  mut speed : Float
+  mut progress : Float
+  mut direction : Int
+  mut prev_x : Float
+  mut prev_y : Float
+}
+pub fn MovingPlatform::new() -> Self
 
 pub(all) struct Particle {
   mut active : Bool
@@ -324,6 +485,12 @@ pub(all) enum TileKind {
   CastleBlock
   CastleTop
   CastleDoor
+  CoinTile
+  PipeEntrance
+  Checkpoint
+  HiddenBonusCoin
+  HiddenBonusOneUp
+  BridgeTile
 } derive(Eq)
 
 // Type aliases

@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/isthmus/internal/terrain"
+
+import {
+  "bobzhang/games/isthmus/internal/types",
+}
+
+// Values
+pub fn all_settlements_connected(@types.Grid, Int) -> Bool
+
+pub fn any_settlement_flooded(@types.Grid, Int) -> Bool
+
+pub fn bfs_connected(@types.Grid, Int, Int) -> Array[Bool]
+
+pub fn can_place_sand(@types.Grid, Int, Int, Int) -> Bool
+
+pub fn count_connected_settlements(@types.Grid, Int) -> (Int, Int)
+
+pub fn count_flooded_tiles(@types.Grid, Int) -> Int
+
+pub fn count_land_tiles(@types.Grid, Int) -> Int
+
+pub fn is_tile_flooded(@types.Tile, Int) -> Bool
+
+pub fn place_sand(@types.Grid, Int, Int, Int) -> Bool
+
+pub fn settlement_safety_margin(@types.Grid, Int) -> Int
+
+pub fn tiles_flooding_next(@types.Grid, Int) -> Array[Int]
+
+pub fn valid_placements(@types.Grid, Int) -> Array[(Int, Int)]
+
+pub fn will_settlement_flood_next(@types.Grid, Int) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

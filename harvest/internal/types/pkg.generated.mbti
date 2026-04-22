@@ -1,0 +1,338 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/harvest/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn absi(Int) -> Int
+
+pub fn all_crops() -> Array[CropKind]
+
+pub fn apply_crop_cost(Soil, CropKind) -> Unit
+
+pub fn can_plant_in_season(CropKind, Season) -> Bool
+
+pub let cell_size : Int
+
+pub fn cell_x(Int) -> Int
+
+pub fn cell_y(Int) -> Int
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub let color_bar_bg : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_black : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_carrot : @raylib.Color
+
+pub let color_clover : @raylib.Color
+
+pub let color_corn : @raylib.Color
+
+pub let color_crop_selected : @raylib.Color
+
+pub let color_dark_text : @raylib.Color
+
+pub let color_fall : @raylib.Color
+
+pub let color_fallow : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_growing : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_invalid : @raylib.Color
+
+pub let color_k_bar : @raylib.Color
+
+pub let color_locked : @raylib.Color
+
+pub let color_mature : @raylib.Color
+
+pub let color_n_bar : @raylib.Color
+
+pub let color_p_bar : @raylib.Color
+
+pub let color_panel_bg : @raylib.Color
+
+pub let color_planted : @raylib.Color
+
+pub let color_potato : @raylib.Color
+
+pub let color_pumpkin : @raylib.Color
+
+pub let color_season_tab : @raylib.Color
+
+pub let color_season_tab_active : @raylib.Color
+
+pub let color_soil_depleted : @raylib.Color
+
+pub let color_soil_medium : @raylib.Color
+
+pub let color_soil_poor : @raylib.Color
+
+pub let color_soil_rich : @raylib.Color
+
+pub let color_spring : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_summer : @raylib.Color
+
+pub let color_title_bg : @raylib.Color
+
+pub let color_title_text : @raylib.Color
+
+pub let color_tomato : @raylib.Color
+
+pub let color_wheat : @raylib.Color
+
+pub let color_white : @raylib.Color
+
+pub let color_winter : @raylib.Color
+
+pub let color_withered : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn crop_color(CropKind) -> @raylib.Color
+
+pub fn crop_info(CropKind) -> CropInfo
+
+pub fn crop_name(CropKind) -> String
+
+pub fn crop_yield_value(CropKind, Soil) -> Int
+
+pub fn default_soil() -> Soil
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn in_bounds(Int, Int) -> Bool
+
+pub fn in_grid_area(Int, Int) -> Bool
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub let max_nutrient : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_anim_grid() -> Array[Array[Float]]
+
+pub fn new_game() -> Game
+
+pub fn new_grid() -> Array[Array[Plot]]
+
+pub fn new_grid_with_soil(Array[Array[(Int, Int, Int)]]) -> Array[Array[Plot]]
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_plot() -> Plot
+
+pub fn new_plot_with_soil(Int, Int, Int) -> Plot
+
+pub fn new_season_plan() -> SeasonPlan
+
+pub fn new_soil(Int, Int, Int) -> Soil
+
+pub fn next_season(Season) -> Season
+
+pub let pi : Float
+
+pub fn pixel_to_grid(Int, Int) -> (Int, Int)
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn season_color(Season) -> @raylib.Color
+
+pub fn season_from_index(Int) -> Season
+
+pub fn season_index(Season) -> Int
+
+pub fn season_name(Season) -> String
+
+pub let seasons_per_year : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn soil_color(Soil) -> @raylib.Color
+
+pub fn soil_has_nutrients(Soil, CropKind) -> Bool
+
+pub fn soil_quality(Soil) -> Int
+
+pub let target_fps : Int
+
+pub fn tier_from_value(Int, Int, Int, Int) -> Tier?
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_stars(Tier?) -> Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct CropInfo {
+  name : String
+  plant_season : Season?
+  growth_time : Int
+  harvest_season : Season
+  value : Int
+  n_cost : Int
+  p_cost : Int
+  k_cost : Int
+} derive(Show)
+
+pub(all) enum CropKind {
+  Wheat
+  Corn
+  Tomato
+  Potato
+  Carrot
+  Pumpkin
+  Clover
+  Fallow
+} derive(Eq, Show)
+
+pub(all) enum CropState {
+  Empty
+  Planted
+  Growing
+  Mature
+  Harvested
+  Withered
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut level_index : Int
+  mut grid : Array[Array[Plot]]
+  mut season : Season
+  mut season_index : Int
+  mut plans : Array[SeasonPlan]
+  mut planning_season : Int
+  mut selected_crop : CropKind
+  mut hover_col : Int
+  mut hover_row : Int
+  mut hover_valid : Bool
+  mut total_value : Int
+  mut season_value : Int
+  mut level_scores : Array[LevelScore?]
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut menu_selection : Int
+  mut sim_timer : Float
+  mut sim_season : Int
+  mut sim_step : Int
+  mut fade_timer : Float
+  mut scroll_offset : Int
+  mut anim_timer : Float
+  mut harvest_flash : Array[Array[Float]]
+  mut growth_anim : Array[Array[Float]]
+} derive(Show)
+
+pub(all) struct LevelGoal {
+  target_value : Int
+  bronze_threshold : Int
+  silver_threshold : Int
+  gold_threshold : Int
+  hint : String
+  locked_plots : Array[(Int, Int)]
+  initial_soil : Array[Array[(Int, Int, Int)]]
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut value_earned : Int
+  mut target_value : Int
+  mut tier : Tier?
+} derive(Show)
+
+pub(all) enum Nutrient {
+  Nitrogen
+  Phosphorus
+  Potassium
+} derive(Eq, Show)
+
+pub(all) struct Plot {
+  mut crop : CropKind
+  mut state : CropState
+  mut growth_turns : Int
+  mut soil : Soil
+  mut season_planted : Season
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Planning
+  Simulate
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Season {
+  Spring
+  Summer
+  Fall
+  Winter
+} derive(Eq, Show)
+
+pub(all) struct SeasonPlan {
+  mut crops : Array[Array[CropKind]]
+} derive(Show)
+
+pub(all) struct Soil {
+  mut nitrogen : Int
+  mut phosphorus : Int
+  mut potassium : Int
+} derive(Show)
+
+pub(all) enum Tier {
+  Bronze
+  Silver
+  Gold
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

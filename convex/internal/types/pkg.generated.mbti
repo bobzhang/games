@@ -1,0 +1,226 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/convex/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn atan2f(Float, Float) -> Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clone_points(Array[Point]) -> Array[Point]
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_grid : @raylib.Color
+
+pub let color_grid_major : @raylib.Color
+
+pub let color_hover_remove : @raylib.Color
+
+pub let color_hull : @raylib.Color
+
+pub let color_hull_fill : @raylib.Color
+
+pub let color_match : @raylib.Color
+
+pub let color_nomatch : @raylib.Color
+
+pub let color_panel : @raylib.Color
+
+pub let color_plane_bg : @raylib.Color
+
+pub let color_point : @raylib.Color
+
+pub let color_point_interior : @raylib.Color
+
+pub let color_snap : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_target : @raylib.Color
+
+pub let color_target_fill : @raylib.Color
+
+pub let color_tier_edges : @raylib.Color
+
+pub let color_tier_sculpt : @raylib.Color
+
+pub let color_tier_vertices : @raylib.Color
+
+pub let color_ui_dim : @raylib.Color
+
+pub let color_ui_text : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn cross_product(Point, Point, Point) -> Float
+
+pub fn dot_product(Point, Point, Point, Point) -> Float
+
+pub fn floorf(Float) -> Float
+
+pub let grid_snap : Float
+
+pub let hull_point_radius : Float
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn make_polygon(Array[Point]) -> Polygon
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn minf(Float, Float) -> Float
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub let pi : Float
+
+pub let plane_height : Float
+
+pub let plane_width : Float
+
+pub let plane_x : Float
+
+pub let plane_y : Float
+
+pub fn point_dist(Point, Point) -> Float
+
+pub fn point_dist_sq(Point, Point) -> Float
+
+pub fn point_in_plane(Point) -> Bool
+
+pub fn point_in_polygon(Point, Array[Point]) -> Bool
+
+pub let point_radius : Float
+
+pub fn point_to_segment_dist(Point, Point, Point) -> Float
+
+pub fn pop_undo(Game) -> Bool
+
+pub fn pt(Float, Float) -> Point
+
+pub fn push_undo(Game) -> Unit
+
+pub let remove_radius : Float
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn snap_point(Point) -> Point
+
+pub fn snap_to_grid(Float) -> Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_start_index(Tier) -> Int
+
+pub let tolerance : Float
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut placed_points : Array[Point]
+  mut current_hull : Array[Point]
+  mut target : Polygon
+  mut match_pct : Float
+  mut hull_matches : Bool
+  mut level_index : Int
+  mut undo_stack : Array[UndoEntry]
+  mut scores : Array[LevelScore]
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut snap_preview : Point?
+  mut hover_remove : Int
+}
+
+pub(all) struct Level {
+  target_polygon : Polygon
+  pre_placed_points : Array[Point]
+  par_points : Int
+  min_points : Int
+  tier : Tier
+  name : String
+}
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : Int
+  mut points_used : Int
+}
+
+pub(all) enum PlayState {
+  Placing
+  Completed
+} derive(Eq, Show)
+
+pub(all) struct Point {
+  mut x : Float
+  mut y : Float
+} derive(Eq, Show)
+
+pub(all) struct Polygon {
+  vertices : Array[Point]
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Vertices
+  Edges
+  Sculpt
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  points : Array[Point]
+}
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,37 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/echo_maze/internal/time"
+
+import {
+  "bobzhang/games/echo_maze/internal/simulation",
+  "bobzhang/games/echo_maze/internal/types",
+}
+
+// Values
+pub fn advance_tick(@types.Game, @types.Direction?) -> @simulation.TickResult
+
+pub fn complete_current_level(@types.Game) -> Unit
+
+pub fn enter_planning(@types.Game) -> Unit
+
+pub fn finish_loop(@types.Game) -> Bool
+
+pub fn load_level(@types.Game, Int, Int) -> Bool
+
+pub fn record_move(@types.Game, @types.Direction?) -> Unit
+
+pub fn reset_level(@types.Game) -> Unit
+
+pub fn start_new_loop(@types.Game) -> Unit
+
+pub fn start_recording(@types.Game) -> Unit
+
+pub fn undo_loop(@types.Game) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

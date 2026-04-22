@@ -2,6 +2,8 @@
 package "bobzhang/games/mario/internal/levels"
 
 // Values
+pub fn bonus_room_rows(Int) -> Array[String]
+
 pub fn level_rows(Int) -> Array[String]
 
 // Errors

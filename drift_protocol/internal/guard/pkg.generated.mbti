@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/drift_protocol/internal/guard"
+
+import {
+  "bobzhang/games/drift_protocol/internal/types",
+}
+
+// Values
+pub fn alert_nearby_guards(@types.Game, Int, Int) -> Unit
+
+pub fn check_player_visibility(@types.Game) -> Bool
+
+pub fn detection_speed_at(Array[Array[@types.TileKind]], Int, Int) -> Float
+
+pub fn guards_hear_noise(@types.Game, Int, Int, Int) -> Unit
+
+pub fn normalize_angle(Float) -> Float
+
+pub fn point_in_camera_vision(@types.Camera, Int, Int, Array[Array[@types.TileKind]]) -> Bool
+
+pub fn point_in_vision_cone(@types.Guard, Int, Int, Array[Array[@types.TileKind]]) -> Bool
+
+pub fn update_cameras(@types.Game, Float) -> Unit
+
+pub fn update_guards(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

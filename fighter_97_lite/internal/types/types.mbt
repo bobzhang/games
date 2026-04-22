@@ -125,14 +125,11 @@ pub(all) struct InputState {
   mut buffered_motion : Motion
   mut motion_timer : Float
   mut attack_buffer_timer : Float
-
-  fn new() -> InputState
 }
 
 ///|
 /// Creates a cleared input state with neutral buffers.
-#deprecated
-pub fn InputState::new() -> InputState {
+pub fn InputState::InputState() -> InputState {
   {
     x: 0,
     y: 0,
@@ -339,14 +336,11 @@ pub(all) struct Fighter {
   mut input : InputState
   mut trail_positions : Array[(Float, Float)]
   mut trail_timer : Float
-
-  fn new(slot : Int, is_cpu : Bool) -> Fighter
 }
 
 ///|
 /// Creates a fighter with default stats and controls.
-#deprecated
-pub fn Fighter::new(slot : Int, is_cpu : Bool) -> Fighter {
+pub fn Fighter::Fighter(slot : Int, is_cpu : Bool) -> Fighter {
   {
     slot,
     is_cpu,
@@ -447,14 +441,11 @@ pub(all) struct Game {
   mut combat_badge_color_g : Int
   mut combat_badge_color_b : Int
   mut slowmo_timer : Float
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a fresh game state with roster and fighters initialized.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     state: StateTitle,
     frame_count: 0,

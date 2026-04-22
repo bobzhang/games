@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/pendulum/internal/levels"
+
+import {
+  "bobzhang/games/pendulum/internal/types",
+}
+
+// Values
+pub fn get_all_levels() -> Array[@types.Level]
+
+pub fn get_level(Int) -> @types.Level
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

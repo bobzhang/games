@@ -85,11 +85,8 @@ pub(all) struct Game {
   mut msg : String
   mut msg_t : Float
   mut keep_playing : Bool
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -107,11 +104,8 @@ pub(all) struct Tile {
   mut scale : Float
   mut is_new : Bool
   mut is_merged : Bool
-
-  fn new() -> Tile
 }
-#deprecated
-pub fn Tile::new() -> Self
+pub fn Tile::Tile() -> Self
 
 // Type aliases
 

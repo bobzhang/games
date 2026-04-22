@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/surveyor/internal/solver"
+
+import {
+  "bobzhang/games/surveyor/internal/types",
+}
+
+// Values
+pub fn all_constraints_satisfied(Array[@types.ConstraintStatus]) -> Bool
+
+pub fn compute_stars(@types.LevelDef, Int, Bool) -> Int
+
+pub fn find_region_for_tile(Array[@types.Region], Int, Int) -> Int
+
+pub fn flood_fill_regions(@types.Grid, Array[@types.FenceEdge]) -> Array[@types.Region]
+
+pub fn has_fence_between(Array[@types.FenceEdge], Int, Int, Int, Int) -> Bool
+
+pub fn validate_level(@types.LevelDef, Array[@types.FenceEdge], Array[@types.Region]) -> Array[@types.ConstraintStatus]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

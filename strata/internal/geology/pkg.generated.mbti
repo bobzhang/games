@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/strata/internal/geology"
+
+import {
+  "bobzhang/games/strata/internal/types",
+}
+
+// Values
+pub fn all_satisfied(Array[@types.Clue]) -> Bool
+
+pub fn check_clue(@types.Clue, Array[@types.RockKind?]) -> Bool
+
+pub fn check_dating(Array[@types.RockKind?], Int, Int) -> Bool
+
+pub fn check_fossil_age(Array[@types.RockKind?], Int, Int) -> Bool
+
+pub fn check_intrusion(Array[@types.RockKind?], Int, Int) -> Bool
+
+pub fn check_superposition(Array[@types.RockKind?], Int, Int) -> Bool
+
+pub fn check_unconformity(Array[@types.RockKind?], Int, Int) -> Bool
+
+pub fn validate_all(Array[@types.Clue], Array[@types.RockKind?]) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

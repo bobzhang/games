@@ -1,0 +1,347 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/stratagem/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn absi(Int) -> Int
+
+pub fn all_player_done(Battle) -> Bool
+
+pub let color_attack_overlay : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_enemy : @raylib.Color
+
+pub let color_flag : @raylib.Color
+
+pub let color_fog_explored : @raylib.Color
+
+pub let color_fog_hidden : @raylib.Color
+
+pub let color_forest : @raylib.Color
+
+pub let color_gold : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hills : @raylib.Color
+
+pub let color_hp_bar : @raylib.Color
+
+pub let color_hp_bar_bg : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_move_overlay : @raylib.Color
+
+pub let color_plains : @raylib.Color
+
+pub let color_player : @raylib.Color
+
+pub let color_select_highlight : @raylib.Color
+
+pub let color_water : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn count_team_units(Battle, Team) -> Int
+
+pub fn effective_attack_range(Battle, GameUnit) -> Int
+
+pub fn effective_move_range(Battle, GameUnit) -> Int
+
+pub fn effective_sight_range(GameUnit, Terrain) -> Int
+
+pub fn get_unit(Battle, Int) -> GameUnit?
+
+pub fn get_unit_at(Battle, HexCoord) -> GameUnit?
+
+pub let grid_height : Int
+
+pub let grid_width : Int
+
+pub fn has_line_of_sight(HexMap, HexCoord, HexCoord) -> Bool
+
+pub fn hex(Int, Int) -> HexCoord
+
+pub fn hex_distance(HexCoord, HexCoord) -> Int
+
+pub fn hex_from_index(Int, Int) -> HexCoord
+
+pub fn hex_index(HexCoord, Int) -> Int
+
+pub fn hex_line(HexCoord, HexCoord) -> Array[HexCoord]
+
+pub fn hex_neighbors(HexCoord) -> Array[HexCoord]
+
+pub let hex_size : Float
+
+pub fn hex_to_cube(HexCoord) -> (Int, Int, Int)
+
+pub fn hex_to_pixel(HexCoord) -> (Float, Float)
+
+pub fn hex_valid(HexCoord, Int, Int) -> Bool
+
+pub let map_offset_x : Float
+
+pub let map_offset_y : Float
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_battle() -> Battle
+
+pub fn new_campaign() -> CampaignState
+
+pub fn new_game() -> Game
+
+pub fn new_hex_map(Int, Int) -> HexMap
+
+pub fn new_skirmish_setup() -> SkirmishSetup
+
+pub fn new_tile(Terrain) -> HexTile
+
+pub fn new_unit(Int, UnitKind, Team, Int, Int) -> GameUnit
+
+pub fn pixel_to_hex(Float, Float) -> HexCoord
+
+pub fn place_unit_on_map(Battle, GameUnit) -> GameUnit
+
+pub fn remove_unit_from_map(Battle, GameUnit) -> GameUnit
+
+pub fn reset_team_turn(Battle, Team) -> Unit
+
+pub fn rng_float() -> Float
+
+pub fn rng_int(Int) -> Int
+
+pub fn rng_next() -> Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn seed_rng(Int) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub fn terrain_atk_bonus(Terrain, Terrain) -> Int
+
+pub fn terrain_def_bonus(Terrain, UnitKind) -> Int
+
+pub fn terrain_from_int(Int) -> Terrain
+
+pub fn terrain_move_cost(Terrain) -> Int
+
+pub fn terrain_move_penalty(Terrain, UnitKind) -> Int
+
+pub fn terrain_name(Terrain) -> String
+
+pub fn terrain_range_bonus(Terrain, UnitKind) -> Int
+
+pub fn terrain_sight_bonus(Terrain) -> Int
+
+pub let total_campaign_levels : Int
+
+pub let total_skirmish_maps : Int
+
+pub let ui_panel_width : Int
+
+pub let ui_panel_x : Int
+
+pub fn unit_base_atk(UnitKind) -> Int
+
+pub fn unit_base_def(UnitKind) -> Int
+
+pub fn unit_base_hp(UnitKind) -> Int
+
+pub fn unit_base_move(UnitKind) -> Int
+
+pub fn unit_base_range(UnitKind) -> Int
+
+pub fn unit_base_sight(UnitKind) -> Int
+
+pub fn unit_kind_name(UnitKind) -> String
+
+pub fn update_fog_of_war(Battle) -> Unit
+
+// Errors
+
+// Types and methods
+pub(all) struct Battle {
+  map : HexMap
+  mut units : Array[GameUnit]
+  mut phase : Phase
+  mut selected_unit : Int
+  mut turn : Int
+  mut result : GameResult
+  mut victory_condition : VictoryCondition
+  mut move_targets : Array[HexCoord]
+  mut attack_targets : Array[HexCoord]
+  mut player_done_count : Int
+  mut anim_timer : Float
+  mut anim_message : String
+  mut next_unit_id : Int
+  mut attack_flash_timer : Float
+  mut attack_flash_pos : HexCoord?
+  mut hit_shake_timer : Float
+  mut hit_shake_target : HexCoord?
+  mut damage_popup_timer : Float
+  mut damage_popup_pos : HexCoord?
+  mut damage_popup_value : Int
+  mut turn_banner_timer : Float
+}
+
+pub(all) struct CampaignState {
+  mut current_level : Int
+  mut levels_unlocked : Int
+  mut total_score : Int
+  mut level_scores : Array[Int]
+}
+
+pub(all) enum Difficulty {
+  Easy
+  Normal
+  Hard
+} derive(Eq, Show)
+
+pub(all) enum FogState {
+  Hidden
+  Visible
+  Explored
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut battle : Battle?
+  mut campaign : CampaignState
+  mut skirmish : SkirmishSetup
+  mut last_score : Int
+  mut last_turns : Int
+  mut last_units_remaining : Int
+  mut last_was_victory : Bool
+  mut frame_count : Int
+  mut rng : Int
+  mut hover_hex : HexCoord?
+  mut scroll_y : Float
+  mut difficulty : Difficulty
+}
+
+pub(all) enum GameResult {
+  Victory
+  Defeat
+  Ongoing
+} derive(Eq, Show)
+
+pub(all) struct GameUnit {
+  mut id : Int
+  mut pos : HexCoord
+  mut kind : UnitKind
+  mut team : Team
+  mut hp : Int
+  mut max_hp : Int
+  mut atk : Int
+  mut def : Int
+  mut move_range : Int
+  mut attack_range : Int
+  mut sight_range : Int
+  mut moved : Bool
+  mut attacked : Bool
+  mut active : Bool
+}
+
+pub(all) struct HexCoord {
+  col : Int
+  row : Int
+} derive(Eq, Show)
+
+pub(all) struct HexMap {
+  width : Int
+  height : Int
+  tiles : Array[HexTile]
+}
+
+pub(all) struct HexTile {
+  mut terrain : Terrain
+  mut fog_player : FogState
+  mut unit_id : Int
+  mut has_flag : Bool
+}
+
+pub(all) struct LevelDef {
+  name : String
+  width : Int
+  height : Int
+  terrain : Array[Int]
+  player_units : Array[(UnitKind, Int, Int)]
+  enemy_units : Array[(UnitKind, Int, Int)]
+  victory : VictoryCondition
+  description : String
+}
+
+pub(all) enum Phase {
+  Select
+  Move
+  Attack
+  EnemyTurn
+  Animating
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  Campaign
+  Skirmish
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct SkirmishSetup {
+  mut map_index : Int
+  mut army_size : Int
+  mut difficulty : Difficulty
+}
+
+pub(all) enum Team {
+  Player
+  Enemy
+} derive(Eq, Show)
+
+pub(all) enum Terrain {
+  Plains
+  Forest
+  Hills
+  Water
+} derive(Eq, Show)
+
+pub(all) enum UnitKind {
+  Infantry
+  Cavalry
+  Artillery
+} derive(Eq, Show)
+
+pub(all) enum VictoryCondition {
+  EliminateAll
+  CaptureFlag(Int, Int)
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

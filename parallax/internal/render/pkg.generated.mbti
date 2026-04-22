@@ -1,0 +1,57 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/parallax/internal/render"
+
+import {
+  "bobzhang/games/parallax/internal/types",
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn draw_all_views(@types.Game, @types.Level) -> Unit
+
+pub fn draw_animated_text(String, Int, Int, Int, @raylib.Color, Int) -> Unit
+
+pub fn draw_completion_particles(Int, Int, Int) -> Unit
+
+pub fn draw_connection_indicator(Int, Int, Int, Int, Bool, Int) -> Unit
+
+pub fn draw_difficulty(Int, Int, Int) -> Unit
+
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_game_ui(@types.Game, @types.Level) -> Unit
+
+pub fn draw_grid_background(Int) -> Unit
+
+pub fn draw_isometric_view(@types.Game, @types.Level) -> Unit
+
+pub fn draw_level_select(@types.Game) -> Unit
+
+pub fn draw_playing(@types.Game) -> Unit
+
+pub fn draw_progress_bar(Int, Int, Int, Int, Float, @raylib.Color, @raylib.Color) -> Unit
+
+pub fn draw_pulse_border(Int, Int, Int, Int, Int, @raylib.Color) -> Unit
+
+pub fn draw_results(@types.Game) -> Unit
+
+pub fn draw_stars(Int, Int, Int, Int, Int) -> Unit
+
+pub fn draw_tier_select(@types.Game) -> Unit
+
+pub fn draw_title(@types.Game) -> Unit
+
+pub fn draw_tooltip(Int, Int, String) -> Unit
+
+pub fn draw_view_label(Int, Int, String, @types.ViewKind, @raylib.Color) -> Unit
+
+pub fn draw_voxel_budget_bar(Int, Int, Int, Int) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

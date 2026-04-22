@@ -141,11 +141,8 @@ pub(all) struct Enemy {
   mut state_t : Float
   mut telegraph_total_t : Float
   mut visual_phase : Float
-
-  fn new() -> Enemy
 }
-#deprecated
-pub fn Enemy::new() -> Self
+pub fn Enemy::Enemy() -> Self
 
 pub(all) enum EnemyState {
   Seek
@@ -193,11 +190,8 @@ pub(all) struct Game {
   mut shake_t : Float
   mut message : String
   mut message_t : Float
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title

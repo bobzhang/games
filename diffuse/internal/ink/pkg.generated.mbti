@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/diffuse/internal/ink"
+
+import {
+  "bobzhang/games/diffuse/internal/types",
+}
+
+// Values
+pub fn all_targets_satisfied(@types.Grid) -> Bool
+
+pub fn any_target_wrong_color(@types.Grid) -> Bool
+
+pub fn compute_preview(@types.Grid) -> Array[Bool]
+
+pub fn compute_stars(@types.Grid, Int, Int) -> @types.StarRating
+
+pub fn count_targets_satisfied(@types.Grid) -> (Int, Int)
+
+pub fn count_waste(@types.Grid) -> Int
+
+pub fn has_any_ink(@types.Grid) -> Bool
+
+pub fn spread_n_turns(@types.Grid, Int) -> @types.Grid
+
+pub fn spread_once(@types.Grid) -> @types.Grid
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

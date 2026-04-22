@@ -1,0 +1,496 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/physics_tower/internal/types"
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let angular_damping : Float
+
+pub let arch_h : Float
+
+pub let arch_w : Float
+
+pub let auto_joint_radius : Float
+
+pub let beam_h : Float
+
+pub let beam_w : Float
+
+pub let block_h : Float
+
+pub let block_w : Float
+
+pub let build_area_left : Float
+
+pub let build_area_right : Float
+
+pub let build_area_top : Float
+
+pub let cable_h : Float
+
+pub let cable_w : Float
+
+pub let camera_shake_decay : Float
+
+pub let chain_break_radius : Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let damping : Float
+
+pub let debris_per_break : Int
+
+pub fn default_blueprints() -> Array[Blueprint]
+
+pub fn default_upgrades() -> Array[Upgrade]
+
+pub let flex_joint_bonus : Float
+
+pub let friction_coeff : Float
+
+pub let gravity : Float
+
+pub let ground_y : Float
+
+pub let impact_force : Float
+
+pub let joint_stiffness : Float
+
+pub fn lerp(Float, Float, Float) -> Float
+
+pub let lightweight_factor : Float
+
+pub let mass_steel : Float
+
+pub let mass_stone : Float
+
+pub let mass_wood : Float
+
+pub fn material_mass(Material) -> Float
+
+pub fn material_strength(Material) -> Float
+
+pub let max_bodies : Int
+
+pub let max_joints : Int
+
+pub let max_particles : Int
+
+pub let max_test_phases : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn minf(Float, Float) -> Float
+
+pub fn new_body(Int, PieceKind, Material, Float, Float, Float) -> Body
+
+pub fn new_challenge_state(ChallengeMode) -> ChallengeState
+
+pub fn new_destruction_state() -> DestructionState
+
+pub fn new_game() -> Game
+
+pub fn new_joint(JointKind, Int, Int, Float, Float, Float, Float, Float) -> Joint
+
+pub fn new_particle(Float, Float, Float, Float, Float, Float, Int, Int, Int) -> Particle
+
+pub fn new_replay_state() -> ReplayState
+
+pub fn new_statistics(Int) -> Statistics
+
+pub fn new_tutorial_state() -> TutorialState
+
+pub fn new_world() -> World
+
+pub let panel_w : Int
+
+pub let panel_x : Int
+
+pub let particle_life : Float
+
+pub fn piece_dimensions(PieceKind) -> (Float, Float)
+
+pub fn pointer_in_rect(Float, Float, Int, Int, Int, Int) -> Bool
+
+pub let precision_tolerance : Float
+
+pub let quake_test_duration : Float
+
+pub let quake_test_intensity : Float
+
+pub fn randf(Float, Float) -> Float
+
+pub fn randi(Int, Int) -> Int
+
+pub let reinforce_bonus : Float
+
+pub let restitution : Float
+
+pub let screen_h : Int
+
+pub let screen_w : Int
+
+pub let slow_motion_duration : Float
+
+pub let snap_grid : Float
+
+pub fn snap_to_grid(Float, Float) -> Float
+
+pub let star_anim_duration : Float
+
+pub let stress_steel : Float
+
+pub let stress_stone : Float
+
+pub let stress_wood : Float
+
+pub let survival_rounds : Int
+
+pub let target_fps : Int
+
+pub let test_phase_duration : Float
+
+pub let time_attack_duration : Float
+
+pub let triangle_h : Float
+
+pub let triangle_w : Float
+
+pub let upgrade_cost_flex : Int
+
+pub let upgrade_cost_foundation : Int
+
+pub let upgrade_cost_lightweight : Int
+
+pub let upgrade_cost_reinforce : Int
+
+pub let wind_particle_count : Int
+
+pub let wind_test_force : Float
+
+// Errors
+
+// Types and methods
+pub(all) struct ActiveCombo {
+  kind : ComboKind
+  body_a_id : Int
+  body_b_id : Int
+  bonus_value : Float
+}
+
+pub(all) struct Blueprint {
+  kind : BlueprintKind
+  name : String
+  pieces : Array[(PieceKind, Material, Float, Float, Float)]
+  cost : Int
+}
+
+pub(all) enum BlueprintKind {
+  Column
+  ArchWay
+  Truss
+  Foundation
+  Custom(Int)
+} derive(Eq, Show)
+
+pub(all) struct Body {
+  mut id : Int
+  mut active : Bool
+  kind : PieceKind
+  material : Material
+  mut x : Float
+  mut y : Float
+  mut angle : Float
+  mut vx : Float
+  mut vy : Float
+  mut angular_vel : Float
+  width : Float
+  height : Float
+  mut mass : Float
+  mut stress : Float
+  mut broken : Bool
+  mut grounded : Bool
+}
+
+pub(all) enum ChallengeMode {
+  TimeAttack
+  BudgetMode
+  Survival
+  Precision
+} derive(Eq, Show)
+
+pub(all) struct ChallengeState {
+  mode : ChallengeMode
+  mut time_left : Float
+  mut rounds_survived : Int
+  mut target_height : Float
+  mut budget_used : Int
+  mut budget_limit : Int
+  mut hazard_round : Int
+  mut hazard_timer : Float
+  mut completed : Bool
+  mut challenge_score : Int
+}
+
+pub(all) enum ComboKind {
+  FlexCombo
+  MonolithCombo
+  ReinforcedCombo
+  LightweightCombo
+} derive(Eq, Show)
+
+pub(all) struct DestructionState {
+  particles : Array[Particle]
+  mut slow_motion : Float
+  mut camera_shake : Float
+  mut shake_x : Float
+  mut shake_y : Float
+  mut chain_breaks : Int
+  mut replay_timer : Float
+  mut replay_active : Bool
+}
+
+pub(all) struct Game {
+  mut screen : Screen
+  world : World
+  mut current_level : Int
+  mut selected_piece : Int
+  mut ghost_x : Float
+  mut ghost_y : Float
+  mut ghost_angle : Float
+  mut score : Int
+  mut total_score : Int
+  mut best_height : Float
+  mut test_phase : Int
+  mut test_timer : Float
+  mut frame_count : Int
+  mut rng_state : UInt
+  mut message_text : String
+  mut message_timer : Float
+  inventory : Array[(PieceKind, Material, Int)]
+  mut tower_height : Float
+  blueprints : Array[Blueprint]
+  mut selected_blueprint : Int
+  custom_blueprints : Array[Blueprint]
+  destruction : DestructionState
+  upgrades : Array[Upgrade]
+  mut challenge_state : ChallengeState?
+  mut star_anim_timer : Float
+  mut result_stars : Int
+  mut reinforce_wood : Bool
+  mut reinforce_stone : Bool
+  mut reinforce_steel : Bool
+  mut lightweight_wood : Bool
+  mut lightweight_stone : Bool
+  mut lightweight_steel : Bool
+  mut flex_joints : Bool
+  mut deep_foundation : Bool
+  active_combos : Array[ActiveCombo]
+  tutorial : TutorialState
+  statistics : Statistics
+  replay : ReplayState
+  sound_queue : Array[SoundEvent]
+  mut current_world : Int
+  mut tutorial_shown : Bool
+}
+
+pub(all) struct Joint {
+  mut active : Bool
+  kind : JointKind
+  body_a : Int
+  body_b : Int
+  local_x_a : Float
+  local_y_a : Float
+  local_x_b : Float
+  local_y_b : Float
+  mut stress : Float
+  mut broken : Bool
+  strength : Float
+}
+
+pub(all) enum JointKind {
+  Fixed
+  Hinge
+  Spring
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  name : String
+  description : String
+  target_height : Float
+  budget : Int
+  test_kinds : Array[TestKind]
+  available_pieces : Array[(PieceKind, Material, Int)]
+  world_index : Int
+}
+
+pub(all) enum Material {
+  Wood
+  Stone
+  Steel
+} derive(Eq, Show)
+
+pub(all) struct Particle {
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  mut size : Float
+  r : Int
+  g : Int
+  b : Int
+}
+
+pub(all) enum PieceKind {
+  Beam
+  Block
+  Triangle
+  Arch
+  Cable
+} derive(Eq, Show)
+
+pub(all) enum ReplayAction {
+  Place(PieceKind, Material, Float, Float, Float)
+  Rotate(Int)
+  BlueprintPlace(BlueprintKind, Float, Float)
+} derive(Eq, Show)
+
+pub(all) struct ReplayState {
+  actions : Array[ReplayAction]
+  mut test_height : Float
+  mut test_score : Int
+  mut test_passed : Bool
+  mut playback_index : Int
+  mut playback_timer : Float
+  mut playback_speed : Float
+  mut is_recording : Bool
+  mut is_playing : Bool
+  ghost_pieces : Array[(PieceKind, Material, Float, Float, Float)]
+  mut ghost_visible : Bool
+}
+
+pub(all) enum Screen {
+  Title
+  Build
+  Test
+  Results
+  LevelSelect
+  Sandbox
+  Upgrades
+  ChallengeSelect
+  Challenge
+  ChallengeResults
+  StatsScreen
+  ReplayPlayback
+} derive(Eq, Show)
+
+pub(all) enum SoundEvent {
+  PlacePiece
+  RotatePiece
+  StartTest
+  BodyBreak
+  JointBreak
+  TestPass
+  TestFail
+  LevelComplete
+  WindStart
+  EarthquakeStart
+  ImpactHit
+  ButtonClick
+  StarEarned
+} derive(Eq, Show)
+
+pub(all) struct Statistics {
+  mut total_builds : Int
+  mut total_breaks : Int
+  best_heights : Array[Float]
+  materials_used : Array[Int]
+  mut levels_completed : Int
+  mut stars_earned : Int
+  level_stars : Array[Int]
+  mut total_pieces_placed : Int
+  mut total_tests_run : Int
+  mut challenges_completed : Int
+}
+
+pub(all) enum TestKind {
+  Wind
+  Earthquake
+  Impact
+} derive(Eq, Show)
+
+pub(all) struct TutorialState {
+  mut step : Int
+  mut completed : Bool
+  mut highlight_x : Int
+  mut highlight_y : Int
+  mut highlight_w : Int
+  mut highlight_h : Int
+  mut message : String
+  mut show_arrow : Bool
+  mut arrow_x : Int
+  mut arrow_y : Int
+  mut blink_timer : Float
+}
+
+pub(all) struct Upgrade {
+  kind : UpgradeKind
+  name : String
+  description : String
+  cost : Int
+  mut purchased : Bool
+}
+
+pub(all) enum UpgradeKind {
+  Reinforce(Material)
+  Lightweight(Material)
+  FlexJoints
+  DeepFoundation
+} derive(Eq, Show)
+
+pub(all) struct Vec2 {
+  mut x : Float
+  mut y : Float
+}
+
+pub(all) struct World {
+  bodies : Array[Body]
+  joints : Array[Joint]
+  mut gravity : Float
+  ground_y : Float
+  mut wind_force : Float
+  mut quake_timer : Float
+  mut quake_intensity : Float
+  mut friction_mult : Float
+}
+
+pub(all) struct WorldInfo {
+  theme : WorldTheme
+  name : String
+  description : String
+  level_start : Int
+  level_end : Int
+  stars_required : Int
+  bg_r : Int
+  bg_g : Int
+  bg_b : Int
+  accent_r : Int
+  accent_g : Int
+  accent_b : Int
+  gravity_mult : Float
+  wind_mult : Float
+  friction_mult : Float
+}
+
+pub(all) enum WorldTheme {
+  StoneFortress
+  DesertRuins
+  ArcticPeaks
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

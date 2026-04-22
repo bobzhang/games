@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/vector_breach/internal/game"
+
+import {
+  "bobzhang/games/vector_breach/internal/types",
+}
+
+// Values
+pub fn build_campaign_map() -> @types.CampaignMap
+
+pub fn complete_campaign_node(@types.Game) -> Unit
+
+pub fn get_available_nodes(@types.CampaignMap) -> Array[Int]
+
+pub fn get_node_mission_id(@types.CampaignMap, Int) -> Int
+
+pub fn get_node_name(@types.CampaignNode) -> String
+
+pub fn is_node_available(@types.CampaignMap, Int) -> Bool
+
+pub fn is_node_completed(@types.CampaignMap, Int) -> Bool
+
+pub fn save_mech_hp(@types.Game) -> Unit
+
+pub fn setup_mission_from_def(@types.Game, Int) -> Unit
+
+pub fn update(@types.Game, Float) -> Unit
+
+pub fn update_campaign(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

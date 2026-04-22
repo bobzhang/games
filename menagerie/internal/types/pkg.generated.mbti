@@ -1,0 +1,290 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/menagerie/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn build_tool_slots() -> Array[ToolSlot]
+
+pub let cell_size : Int
+
+pub let color_bear : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_elephant : @raylib.Color
+
+pub let color_empty : @raylib.Color
+
+pub let color_error : @raylib.Color
+
+pub let color_fence : @raylib.Color
+
+pub let color_fence_highlight : @raylib.Color
+
+pub let color_grass : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_level_available : @raylib.Color
+
+pub let color_level_completed : @raylib.Color
+
+pub let color_level_locked : @raylib.Color
+
+pub let color_lion : @raylib.Color
+
+pub let color_monkey : @raylib.Color
+
+pub let color_penguin : @raylib.Color
+
+pub let color_rock : @raylib.Color
+
+pub let color_sand : @raylib.Color
+
+pub let color_snake : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_tool_hover : @raylib.Color
+
+pub let color_tool_selected : @raylib.Color
+
+pub let color_toolbar_bg : @raylib.Color
+
+pub let color_trees : @raylib.Color
+
+pub let color_warning : @raylib.Color
+
+pub let color_water : @raylib.Color
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub let hud_height : Int
+
+pub let level_button_gap : Int
+
+pub let level_button_h : Int
+
+pub let level_button_w : Int
+
+pub let level_button_x : Int
+
+pub let level_button_y : Int
+
+pub let level_visible_count : Int
+
+pub let max_species : Int
+
+pub fn new_game() -> Game
+
+pub fn new_level_result() -> LevelResult
+
+pub let predator_safe_distance : Int
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String) -> Unit
+
+pub fn species_color(Species) -> @raylib.Color
+
+pub fn species_icon(Species) -> String
+
+pub fn species_needs(Species) -> SpeciesNeeds
+
+pub let target_fps : Int
+
+pub fn terrain_color(Terrain) -> @raylib.Color
+
+pub fn terrain_label(Terrain) -> String
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_label(Int) -> String
+
+pub let toolbar_height : Int
+
+pub let toolbar_slot_gap : Int
+
+pub let toolbar_slot_h : Int
+
+pub let toolbar_slot_w : Int
+
+pub let toolbar_start_x : Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Cell {
+  mut terrain : Terrain?
+  mut fence_top : Bool
+  mut fence_left : Bool
+  mut animal : Species?
+} derive(Show)
+
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct Enclosure {
+  id : Int
+  cells : Array[(Int, Int)]
+  mut species : Species?
+} derive(Show)
+
+pub(all) enum FenceMode {
+  Horizontal
+  Vertical
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  grid : Grid
+  mut current_level : Int
+  mut current_tool : Tool
+  mut tool_slots : Array[ToolSlot]
+  mut enclosures : Array[Enclosure]
+  mut level_results : Array[LevelResult?]
+  mut stars_earned : Array[Int]
+  mut hover_col : Int
+  mut hover_row : Int
+  mut fence_mode : FenceMode
+  mut message : String
+  mut message_timer : Float
+  mut anim_timer : Float
+  mut frame_count : Int
+  mut total_stars : Int
+  mut levels_completed : Int
+  mut level_select_scroll : Int
+  mut show_needs_panel : Bool
+} derive(Show)
+pub fn Game::is_level_unlocked(Self, Int) -> Bool
+
+pub(all) struct Grid {
+  cells : Array[Array[Cell]]
+  cols : Int
+  rows : Int
+} derive(Show)
+pub fn Grid::clear(Self) -> Unit
+pub fn Grid::get(Self, Int, Int) -> Cell?
+pub fn Grid::new(Int, Int) -> Self
+pub fn Grid::set_animal(Self, Int, Int, Species?) -> Unit
+pub fn Grid::set_fence_left(Self, Int, Int, Bool) -> Unit
+pub fn Grid::set_fence_top(Self, Int, Int, Bool) -> Unit
+pub fn Grid::set_terrain(Self, Int, Int, Terrain?) -> Unit
+
+pub(all) struct LevelDef {
+  id : Int
+  tier : Int
+  species : Array[Species]
+  par_tiles : Int
+  bonus_space : Int
+  description : String
+  preset_terrain : Array[(Int, Int, Terrain)]
+  preset_fences : Array[(Int, Int, Bool, Bool)]
+} derive(Show)
+
+pub(all) struct LevelResult {
+  mut stars : StarRating
+  mut all_needs_met : Bool
+  mut tiles_used : Int
+  mut par_tiles : Int
+  mut bonus_met : Bool
+  mut messages : Array[String]
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  LevelComplete
+  Paused
+} derive(Eq, Show)
+
+pub(all) enum Species {
+  Lion
+  Penguin
+  Elephant
+  Snake
+  Monkey
+  Bear
+} derive(Compare, Eq, Show)
+
+pub(all) struct SpeciesNeeds {
+  name : String
+  terrain_primary : Terrain
+  terrain_primary_count : Int
+  terrain_secondary : Terrain?
+  terrain_secondary_count : Int
+  water_adjacent : Bool
+  water_adjacent_count : Int
+  min_space : Int
+  is_predator : Bool
+  fears_predators : Bool
+} derive(Show)
+
+pub(all) enum StarRating {
+  Zero
+  One
+  Two
+  Three
+} derive(Eq, Show)
+
+pub(all) enum Terrain {
+  Grass
+  Water
+  Sand
+  Rock
+  Trees
+} derive(Compare, Eq, Show)
+
+pub(all) enum Tool {
+  TerrainBrush(Terrain)
+  FenceTool
+  EraserTool
+  AnimalPlacer(Species)
+} derive(Eq, Show)
+
+pub(all) struct ToolSlot {
+  tool : Tool
+  label : String
+  color : @raylib.Color
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

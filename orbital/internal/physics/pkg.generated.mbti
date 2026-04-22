@@ -1,0 +1,27 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/orbital/internal/physics"
+
+import {
+  "bobzhang/games/orbital/internal/types",
+}
+
+// Values
+pub fn compute_preview(@types.Vec2f, Float, Array[@types.Planet], @types.Station) -> Array[@types.Vec2f]
+
+pub fn simulate_tick(@types.Probe, Array[@types.Planet], @types.Station, Array[@types.Waypoint], Int) -> TickResult
+
+// Errors
+
+// Types and methods
+pub(all) enum TickResult {
+  Continue
+  HitPlanet
+  ReachedStation
+  OutOfBounds
+  MaxTicks
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

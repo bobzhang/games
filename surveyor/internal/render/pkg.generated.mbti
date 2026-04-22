@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/surveyor/internal/render"
+
+import {
+  "bobzhang/games/surveyor/internal/types",
+}
+
+// Values
+pub fn draw_constraint_panel(@types.Game) -> Unit
+
+pub fn draw_controls_hint(@types.Game) -> Unit
+
+pub fn draw_fences(@types.Game) -> Unit
+
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_grid(@types.Game) -> Unit
+
+pub fn draw_hover_fence(@types.Game) -> Unit
+
+pub fn draw_level_select(@types.Game) -> Unit
+
+pub fn draw_region_shading(@types.Game) -> Unit
+
+pub fn draw_results(@types.Game) -> Unit
+
+pub fn draw_tier_select(@types.Game) -> Unit
+
+pub fn draw_title(@types.Game) -> Unit
+
+pub fn draw_ui_panel(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/beacon/internal/signal"
+
+import {
+  "bobzhang/games/beacon/internal/types",
+}
+
+// Values
+pub fn can_reach(Array[Array[@types.Tile]], Int, Int, Int, Int, Int) -> Bool
+
+pub fn compute_stars(Int, Int, Int, Int) -> @types.StarRating
+
+pub fn line_of_sight(Array[Array[@types.Tile]], Int, Int, Int, Int) -> Bool
+
+pub fn propagate(@types.LevelState, @types.LevelData) -> (Bool, Int, Array[@types.SignalPath])
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

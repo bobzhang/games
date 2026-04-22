@@ -1,0 +1,312 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/prism/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn absint(Int) -> Int
+
+pub fn all_hex_dirs() -> Array[HexDir]
+
+pub fn beam_color_add(BeamColor, BeamColor) -> BeamColor
+
+pub fn beam_color_black() -> BeamColor
+
+pub fn beam_color_blue() -> BeamColor
+
+pub fn beam_color_channel_count(BeamColor) -> Int
+
+pub fn beam_color_cyan() -> BeamColor
+
+pub fn beam_color_display_name(BeamColor) -> String
+
+pub fn beam_color_filter(BeamColor, FilterColor) -> BeamColor
+
+pub fn beam_color_green() -> BeamColor
+
+pub fn beam_color_is_black(BeamColor) -> Bool
+
+pub fn beam_color_magenta() -> BeamColor
+
+pub fn beam_color_red() -> BeamColor
+
+pub fn beam_color_to_raylib(BeamColor) -> @raylib.Color
+
+pub fn beam_color_white() -> BeamColor
+
+pub fn beam_color_yellow() -> BeamColor
+
+pub let color_accent : @raylib.Color
+
+pub let color_beam_blue : @raylib.Color
+
+pub let color_beam_cyan : @raylib.Color
+
+pub let color_beam_green : @raylib.Color
+
+pub let color_beam_magenta : @raylib.Color
+
+pub let color_beam_red : @raylib.Color
+
+pub let color_beam_white : @raylib.Color
+
+pub let color_beam_yellow : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_cell_border : @raylib.Color
+
+pub let color_cell_empty : @raylib.Color
+
+pub let color_cell_hover : @raylib.Color
+
+pub let color_cell_locked : @raylib.Color
+
+pub let color_crystal : @raylib.Color
+
+pub let color_failure : @raylib.Color
+
+pub let color_mirror : @raylib.Color
+
+pub let color_palette_bg : @raylib.Color
+
+pub let color_palette_sel : @raylib.Color
+
+pub let color_source_star : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_filled : @raylib.Color
+
+pub let color_success : @raylib.Color
+
+pub let color_target_gold : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub fn component_kind_name(ComponentKind) -> String
+
+pub fn cosf(Float) -> Float
+
+pub fn count_placed_components(HexGrid) -> Int
+
+pub fn crystal_face_name(CrystalFace) -> String
+
+pub fn crystal_refract(HexDir, CrystalFace) -> HexDir
+
+pub fn filter_color_name(FilterColor) -> String
+
+pub fn grid_all_coords(HexGrid) -> Array[(Int, Int)]
+
+pub fn grid_cell_count(HexGrid) -> Int
+
+pub fn grid_clear(HexGrid) -> Unit
+
+pub fn grid_clear_received(HexGrid) -> Unit
+
+pub fn grid_get(HexGrid, Int, Int) -> HexCell?
+
+pub fn grid_in_bounds(HexGrid, Int, Int) -> Bool
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_radius : Int
+
+pub fn hex_dir_ccw(HexDir) -> HexDir
+
+pub fn hex_dir_cw(HexDir) -> HexDir
+
+pub fn hex_dir_dq(HexDir) -> Int
+
+pub fn hex_dir_dr(HexDir) -> Int
+
+pub fn hex_dir_index(HexDir) -> Int
+
+pub fn hex_dir_name(HexDir) -> String
+
+pub fn hex_dir_opposite(HexDir) -> HexDir
+
+pub let hex_inner_ratio : Float
+
+pub fn hex_key(Int, Int) -> String
+
+pub let hex_size : Int
+
+pub fn hex_to_pixel_x(Int, Int) -> Float
+
+pub fn hex_to_pixel_y(Int, Int) -> Float
+
+pub fn index_to_hex_dir(Int) -> HexDir
+
+pub fn index_to_tier(Int) -> Tier
+
+pub fn mirror_reflect_hex(HexDir, HexDir) -> HexDir
+
+pub fn new_game() -> Game
+
+pub fn new_hex_cell() -> HexCell
+
+pub fn new_hex_grid() -> HexGrid
+
+pub fn new_level_score() -> LevelScore
+
+pub let palette_item_h : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub let pi : Float
+
+pub fn pixel_to_hex(Float, Float) -> (Int, Int)
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn sinf(Float) -> Float
+
+pub let target_fps : Int
+
+pub fn tier_index(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct AvailableComponent {
+  kind : ComponentKind
+  mut filter_color : FilterColor?
+  mut crystal_face : CrystalFace?
+  mut count : Int
+}
+
+pub(all) struct BeamColor {
+  r : Bool
+  g : Bool
+  b : Bool
+} derive(Eq, Show)
+
+pub(all) struct BeamSegment {
+  start : HexCoord
+  end_ : HexCoord
+  color : BeamColor
+  direction : HexDir
+}
+
+pub(all) enum ComponentKind {
+  Source
+  Crystal
+  Filter
+  Mirror
+  Target
+} derive(Eq, Show)
+
+pub(all) enum CrystalFace {
+  Left60
+  Right60
+} derive(Eq, Show)
+
+pub(all) enum FilterColor {
+  Red
+  Green
+  Blue
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  grid : HexGrid
+  mut beams : Array[BeamSegment]
+  mut play_state : PlayState
+  mut palette : Array[AvailableComponent]
+  mut selected_palette : Int
+  mut current_level_index : Int
+  mut current_tier_index : Int
+  mut hover_q : Int
+  mut hover_r : Int
+  mut hover_valid : Bool
+  mut scores : Array[LevelScore]
+  mut frame_count : Int
+  mut par_count : Int
+  mut level_name : String
+  mut show_help : Bool
+}
+
+pub(all) struct HexCell {
+  mut component : ComponentKind?
+  mut direction : HexDir
+  mut filter_color : FilterColor?
+  mut crystal_face : CrystalFace?
+  mut target_color : BeamColor?
+  mut locked : Bool
+  mut received_color : BeamColor?
+}
+
+pub(all) struct HexCoord {
+  q : Int
+  r : Int
+} derive(Eq, Show)
+
+pub(all) enum HexDir {
+  E
+  NE
+  NW
+  W
+  SW
+  SE
+} derive(Eq, Show)
+
+pub(all) struct HexGrid {
+  radius : Int
+  cells : Map[String, HexCell]
+}
+
+pub(all) struct Level {
+  name : String
+  tier : Tier
+  grid_template : Array[(Int, Int, ComponentKind, HexDir, FilterColor?, CrystalFace?, BeamColor?)]
+  available : Array[AvailableComponent]
+  par_count : Int
+}
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut solved : Bool
+  mut components_used : Int
+}
+
+pub(all) enum PlayState {
+  Placing
+  Simulating
+  Solved
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Fundamentals
+  Chromatics
+  Mastery
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

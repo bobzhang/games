@@ -1,0 +1,26 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/void_drifter/internal/sectors"
+
+import {
+  "bobzhang/games/void_drifter/internal/types",
+}
+
+// Values
+pub fn can_travel_to(@types.SectorMap, Int) -> Bool
+
+pub fn enter_sector(@types.Game, Int) -> Unit
+
+pub fn generate_sector_map(Int) -> @types.SectorMap
+
+pub fn generate_shop_items(@types.Game) -> Unit
+
+pub fn sector_name(@types.SectorKind) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

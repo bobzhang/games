@@ -176,11 +176,8 @@ pub(all) struct Game {
   mut msg : String
   mut msg_t : Float
   mut time_s : Float
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -198,11 +195,8 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
-
-  fn new() -> InputState
 }
-#deprecated
-pub fn InputState::new() -> Self
+pub fn InputState::InputState() -> Self
 
 pub(all) struct Threat {
   mut active : Bool
@@ -213,11 +207,8 @@ pub(all) struct Threat {
   mut radius : Float
   mut stun_t : Float
   mut spin : Float
-
-  fn new() -> Threat
 }
-#deprecated
-pub fn Threat::new() -> Self
+pub fn Threat::Threat() -> Self
 
 // Type aliases
 

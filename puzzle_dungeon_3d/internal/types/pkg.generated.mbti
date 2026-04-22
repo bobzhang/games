@@ -378,11 +378,8 @@ pub fn world_to_int(World) -> Int
 pub(all) struct AchievementInfo {
   mut unlocked : Bool
   mut show_timer : Float
-
-  fn new() -> AchievementInfo
 }
-#deprecated
-pub fn AchievementInfo::new() -> Self
+pub fn AchievementInfo::AchievementInfo() -> Self
 
 pub(all) enum DecoKind {
   DecoTorch
@@ -444,11 +441,8 @@ pub(all) struct FloorInfo {
   mut completed : Bool
   mut best_moves : Int
   mut stars : Int
-
-  fn new() -> FloorInfo
 }
-#deprecated
-pub fn FloorInfo::new() -> Self
+pub fn FloorInfo::FloorInfo() -> Self
 
 pub(all) struct Game {
   mut state : GameState
@@ -520,11 +514,8 @@ pub(all) struct Game {
   mut total_moves : Int
   mut total_undos : Int
   mut levels_completed : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   StateMenu

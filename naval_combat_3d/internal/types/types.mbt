@@ -455,14 +455,11 @@ pub(all) struct Wind {
   mut shift_timer : Float
   mut shift_interval : Float
   mut turbulence : Float
-
-  fn new() -> Wind
 }
 
 ///|
 /// Creates a moderate default wind profile.
-#deprecated
-pub fn Wind::new() -> Wind {
+pub fn Wind::Wind() -> Wind {
   {
     direction: 0.5,
     speed: wind_speed_moderate,
@@ -518,14 +515,11 @@ pub(all) struct BattleObjective {
   mut completed : Bool
   mut failed : Bool
   mut description : String
-
-  fn new() -> BattleObjective
 }
 
 ///|
 /// Creates a default "destroy all" objective.
-#deprecated
-pub fn BattleObjective::new() -> BattleObjective {
+pub fn BattleObjective::BattleObjective() -> BattleObjective {
   {
     objective_type: objective_destroy_all,
     target_count: 0,
@@ -553,14 +547,11 @@ pub(all) struct BattleStats {
   mut accuracy_shots : Int
   mut boarding_wins : Int
   mut fortresses_destroyed : Int
-
-  fn new() -> BattleStats
 }
 
 ///|
 /// Creates zeroed battle statistics.
-#deprecated
-pub fn BattleStats::new() -> BattleStats {
+pub fn BattleStats::BattleStats() -> BattleStats {
   {
     ships_sunk: 0,
     damage_dealt: 0.0,
@@ -768,14 +759,11 @@ pub(all) struct Game {
   mut convoy_target_x : Float
   mut convoy_target_z : Float
   mut convoy_arrived_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Constructs a fresh naval game state with initialized pools and menu defaults.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     state: Menu,
     player: Ship::new_player(),

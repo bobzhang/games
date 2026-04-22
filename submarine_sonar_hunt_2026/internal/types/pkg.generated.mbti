@@ -189,11 +189,8 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -216,11 +213,8 @@ pub(all) struct Mine {
   mut r : Float
   mut reveal_t : Float
   mut armed : Bool
-
-  fn new() -> Mine
 }
-#deprecated
-pub fn Mine::new() -> Self
+pub fn Mine::Mine() -> Self
 
 pub(all) struct Target {
   mut active : Bool
@@ -228,11 +222,8 @@ pub(all) struct Target {
   mut y : Float
   mut detected : Bool
   mut pulse_t : Float
-
-  fn new() -> Target
 }
-#deprecated
-pub fn Target::new() -> Self
+pub fn Target::Target() -> Self
 
 // Type aliases
 

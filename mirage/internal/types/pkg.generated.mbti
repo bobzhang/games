@@ -1,0 +1,268 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/mirage/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let anim_clear_duration : Float
+
+pub let anim_gem_duration : Float
+
+pub let anim_merge_duration : Float
+
+pub let anim_move_duration : Float
+
+pub fn anim_progress(Animation) -> Float
+
+pub let anim_swap_duration : Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_bg_label : @raylib.Color
+
+pub let color_exit : @raylib.Color
+
+pub let color_fg_label : @raylib.Color
+
+pub let color_floor_bg : @raylib.Color
+
+pub let color_floor_fg : @raylib.Color
+
+pub let color_gap : @raylib.Color
+
+pub let color_gem : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_inactive_overlay : @raylib.Color
+
+pub let color_merged : @raylib.Color
+
+pub let color_platform_bg : @raylib.Color
+
+pub let color_platform_fg : @raylib.Color
+
+pub let color_player : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_filled : @raylib.Color
+
+pub let color_switch : @raylib.Color
+
+pub let color_title : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn empty_grid() -> Array[Tile]
+
+pub fn get_tile(Array[Tile], Int, Int) -> Tile
+
+pub let grid_cols : Int
+
+pub let grid_height : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn grid_to_pixel_x(Int) -> Float
+
+pub fn grid_to_pixel_y(Int) -> Float
+
+pub let grid_width : Int
+
+pub fn is_solid_in_layer(Tile, Layer) -> Bool
+
+pub fn is_walkable(Tile) -> Bool
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub fn level_unlocked(Array[LevelResult], Int) -> Bool
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_animation() -> Animation
+
+pub fn new_game() -> Game
+
+pub fn new_level_result() -> LevelResult
+
+pub fn new_player(Int, Int, Layer) -> Player
+
+pub let player_move_delay : Float
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn set_tile(Array[Tile], Int, Int, Tile) -> Unit
+
+pub fn sinf(Float) -> Float
+
+pub fn start_anim(Animation, AnimKind, Float) -> Unit
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_for_level(Int) -> Tier
+
+pub fn tier_name(Tier) -> String
+
+pub fn tile_index(Int, Int) -> Int
+
+pub let tile_size : Int
+
+pub let total_levels : Int
+
+pub fn update_anim(Animation, Float) -> Unit
+
+pub fn valid_pos(Int, Int) -> Bool
+
+// Errors
+
+// Types and methods
+pub(all) enum AnimKind {
+  LayerSwap
+  Merge
+  PlayerMove
+  SwitchToggle
+  LevelClear
+  GemCollect
+} derive(Eq, Show)
+
+pub(all) struct Animation {
+  mut kind : AnimKind
+  mut timer : Float
+  mut duration : Float
+  mut active : Bool
+}
+
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  player : Player
+  mut fg_tiles : Array[Tile]
+  mut bg_tiles : Array[Tile]
+  mut merge_state : MergeState
+  mut current_level : Int
+  mut swap_count : Int
+  mut gem_collected : Bool
+  mut level_results : Array[LevelResult]
+  anim : Animation
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut input_cooldown : Float
+  mut switch_states : Array[Bool]
+  mut level_select_cursor : Int
+}
+
+pub(all) struct GridData {
+  fg : Array[Tile]
+  bg : Array[Tile]
+}
+
+pub(all) enum Layer {
+  Foreground
+  Background
+} derive(Eq, Show)
+
+pub(all) struct LevelDef {
+  tier : Tier
+  index : Int
+  name : String
+  par_swaps : Int
+  fg : Array[Tile]
+  bg : Array[Tile]
+  player_start_x : Int
+  player_start_y : Int
+  player_start_layer : Layer
+}
+
+pub(all) struct LevelResult {
+  mut completed : Bool
+  mut stars : Int
+  mut best_swaps : Int
+}
+
+pub(all) enum MergeState {
+  Split
+  Merged
+} derive(Eq, Show)
+
+pub(all) struct Player {
+  mut grid_x : Int
+  mut grid_y : Int
+  mut pixel_x : Float
+  mut pixel_y : Float
+  mut target_x : Float
+  mut target_y : Float
+  mut moving : Bool
+  mut active_layer : Layer
+  mut move_timer : Float
+}
+
+pub(all) enum Screen {
+  Title
+  Playing
+  LevelSelect
+  LevelComplete
+  GameComplete
+  Paused
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Reflection
+  Overlap
+  Illusion
+} derive(Eq, Show)
+
+pub(all) enum Tile {
+  Empty
+  Floor
+  Wall
+  Gap
+  Exit
+  Switch(Int)
+  Platform
+  Gem
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

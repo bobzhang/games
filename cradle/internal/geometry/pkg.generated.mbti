@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cradle/internal/geometry"
+
+import {
+  "bobzhang/games/cradle/internal/types",
+}
+
+// Values
+pub fn compute_all_intersections(Array[@types.StringLine], Array[@types.Peg]) -> Array[@types.Intersection]
+
+pub fn match_intersections_to_targets(Array[@types.Intersection], Array[@types.TargetDot]) -> Int
+
+pub fn segment_intersection(@types.Vec2f, @types.Vec2f, @types.Vec2f, @types.Vec2f) -> @types.Vec2f?
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

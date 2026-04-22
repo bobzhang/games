@@ -1,0 +1,292 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/tidal/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clone_grid(WaveGrid) -> WaveGrid
+
+pub let color_absorber : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_emitter_p0 : @raylib.Color
+
+pub let color_emitter_p1 : @raylib.Color
+
+pub let color_emitter_p2 : @raylib.Color
+
+pub let color_emitter_p3 : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_phase_shifter : @raylib.Color
+
+pub let color_reflector : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_target_amp_bar_bg : @raylib.Color
+
+pub let color_target_amp_bar_fill : @raylib.Color
+
+pub let color_target_amp_bar_range : @raylib.Color
+
+pub let color_target_fail : @raylib.Color
+
+pub let color_target_ok : @raylib.Color
+
+pub let color_target_ring_sat : @raylib.Color
+
+pub let color_target_ring_unsat : @raylib.Color
+
+pub let color_title_accent : @raylib.Color
+
+pub let color_ui_dim : @raylib.Color
+
+pub let color_ui_highlight : @raylib.Color
+
+pub let color_ui_panel : @raylib.Color
+
+pub let color_ui_text : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub let color_wave_ripple_0 : @raylib.Color
+
+pub let color_wave_ripple_1 : @raylib.Color
+
+pub let color_wave_ripple_2 : @raylib.Color
+
+pub let color_wave_ripple_3 : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn count_target_info(WaveGrid) -> (Int, Int)
+
+pub let decay_rate : Float
+
+pub fn dir_dx(Int) -> Int
+
+pub fn dir_dy(Int) -> Int
+
+pub fn grid_get(WaveGrid, Int, Int) -> WaveTile
+
+pub let grid_height : Int
+
+pub fn grid_in_bounds(Int, Int) -> Bool
+
+pub fn grid_index(Int, Int) -> Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_width : Int
+
+pub let levels_per_tier : Int
+
+pub let max_ticks : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_wave_grid() -> WaveGrid
+
+pub fn new_wave_tile() -> WaveTile
+
+pub fn opposite_dir(Int) -> Int
+
+pub let palette_h : Int
+
+pub let palette_w : Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub fn phase_color(Int) -> @raylib.Color
+
+pub fn placeable_kind_color(PlaceableKind) -> @raylib.Color
+
+pub fn placeable_kind_name(PlaceableKind) -> String
+
+pub let screen_height : Int
+
+pub fn screen_to_grid_x(Int) -> Int
+
+pub fn screen_to_grid_y(Int) -> Int
+
+pub let screen_width : Int
+
+pub let sim_tick_interval : Float
+
+pub fn sinf(Float) -> Float
+
+pub let target_fps : Int
+
+pub fn tile_center_x(Int) -> Float
+
+pub fn tile_center_y(Int) -> Float
+
+pub fn tile_kind_name(TileKind) -> String
+
+pub fn tile_screen_x(Int) -> Float
+
+pub fn tile_screen_y(Int) -> Float
+
+pub let tile_size : Int
+
+pub let total_levels : Int
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut grid : WaveGrid
+  mut edit_grid : WaveGrid
+  mut current_level : Int
+  mut current_tier : Int
+  mut play_state : PlayState
+  mut sim_tick : Int
+  mut sim_timer : Float
+  mut selected_slot : Int
+  mut cursor_x : Int
+  mut cursor_y : Int
+  mut scores : Array[LevelScore]
+  mut frame_count : Int
+  mut objects_placed : Int
+  mut emitter_phase : Int
+  mut message : String
+  mut message_timer : Float
+  mut sim_speed : Float
+} derive(Show)
+
+pub(all) struct Level {
+  tier : Int
+  index : Int
+  name : String
+  grid_template : Array[Int]
+  targets : Array[TargetDef]
+  pre_placed : Array[PrePlaced]
+  budget : Array[PlaceableBudget]
+  par_objects : Int
+  par_ticks : Int
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : Int
+  mut objects_used : Int
+  mut ticks_used : Int
+} derive(Show)
+
+pub(all) struct PlaceableBudget {
+  mut kind : PlaceableKind
+  mut total : Int
+  mut used : Int
+} derive(Show)
+
+pub(all) enum PlaceableKind {
+  PlaceEmitter
+  PlaceReflector
+  PlacePhaseShifter
+  PlaceAbsorber
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  Editing
+  Simulating
+  Stepping
+  Complete
+  Failed
+} derive(Eq, Show)
+
+pub(all) struct PrePlaced {
+  x : Int
+  y : Int
+  kind : TileKind
+} derive(Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) struct TargetDef {
+  x : Int
+  y : Int
+  min_amp : Float
+  max_amp : Float
+  phase : Int
+} derive(Show)
+
+pub(all) enum TileKind {
+  Empty
+  Wall
+  Target
+  Emitter(Int)
+  Reflector
+  PhaseShifter
+  Absorber
+} derive(Eq, Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+pub(all) struct WaveFront {
+  mut amplitude : Float
+  mut phase : Int
+  mut direction : Int
+} derive(Show)
+
+pub(all) struct WaveGrid {
+  width : Int
+  height : Int
+  tiles : Array[WaveTile]
+} derive(Show)
+
+pub(all) struct WaveTile {
+  mut amplitude : Float
+  mut phase : Int
+  mut has_wall : Bool
+  mut object : TileKind
+  mut is_target : Bool
+  mut target_min : Float
+  mut target_max : Float
+  mut target_phase : Int
+  mut target_satisfied : Bool
+  mut wave_fronts : Array[WaveFront]
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

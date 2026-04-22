@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/replay"
+
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+// Values
+pub fn clear_history(@types.Game) -> Unit
+
+pub fn decode_replay(String) -> Array[@types.ReplayFrame]
+
+pub fn draw_ghost(@types.Game) -> Unit
+
+pub fn draw_ghost_hud(@types.Game) -> Unit
+
+pub fn encode_replay(@types.Game) -> String
+
+pub fn record_gravity_rotate(@types.Game, @types.GravityDir) -> Unit
+
+pub fn record_player_move(@types.Game, Int, Int) -> Unit
+
+pub fn save_best_replay(@types.Game) -> Unit
+
+pub fn start_ghost_replay(@types.Game) -> Unit
+
+pub fn stop_ghost_replay(@types.Game) -> Unit
+
+pub fn update_ghost(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

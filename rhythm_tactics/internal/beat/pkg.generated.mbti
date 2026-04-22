@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/rhythm_tactics/internal/beat"
+
+import {
+  "bobzhang/games/rhythm_tactics/internal/types",
+}
+
+// Values
+pub fn advance_enemy_pattern(@types.Enemy) -> Unit
+
+pub fn beat_accuracy(@types.BeatState) -> Float
+
+pub fn beat_interval(@types.BeatState) -> Float
+
+pub fn beat_phase(@types.BeatState) -> Float
+
+pub fn beat_pulse(@types.BeatState) -> Float
+
+pub fn combo_multiplier(@types.BeatState) -> Float
+
+pub fn compute_damage(Int, @types.BeatState, @types.BeatRating) -> Int
+
+pub fn enemy_acts_this_beat(@types.Enemy) -> Bool
+
+pub fn rate_input(@types.BeatState) -> @types.BeatRating
+
+pub fn reset(@types.BeatState) -> Unit
+
+pub fn tick(@types.BeatState, Float) -> Bool
+
+pub fn update_combo(@types.BeatState, @types.BeatRating) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

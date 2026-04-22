@@ -1,0 +1,29 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/origami/internal/fold"
+
+import {
+  "bobzhang/games/origami/internal/types",
+}
+
+// Values
+pub fn check_completion(@types.Paper, @types.Level) -> CheckResult
+
+pub fn compute_stars(CheckResult, Int, Int) -> @types.StarRating
+
+pub fn execute_fold(@types.Paper, @types.FoldDir, Int) -> @types.Paper
+
+pub fn is_valid_fold(@types.Paper, @types.FoldDir, Int) -> Bool
+
+// Errors
+
+// Types and methods
+pub(all) struct CheckResult {
+  silhouette_match : Bool
+  layers_match : Bool
+  checks_detail : Array[Bool]
+} derive(Show)
+
+// Type aliases
+
+// Traits
+

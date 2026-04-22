@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/compass/internal/levels"
+
+import {
+  "bobzhang/games/compass/internal/types",
+}
+
+// Values
+pub fn count_landmarks(Array[Array[@types.Tile]]) -> Int
+
+pub fn get_level(Int) -> @types.LevelData
+
+pub fn init_level(Int) -> @types.LevelState
+
+pub fn make_ocean_grid() -> Array[Array[@types.Tile]]
+
+pub fn reveal_area(Array[Array[Bool]], Int, Int) -> Unit
+
+pub fn set_land_rect(Array[Array[@types.Tile]], Int, Int, Int, Int) -> Unit
+
+pub fn set_tile(Array[Array[@types.Tile]], Int, Int, @types.Tile) -> Unit
+
+pub fn tier_name(Int) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

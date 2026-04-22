@@ -1,0 +1,34 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/topology/internal/transform"
+
+import {
+  "bobzhang/games/topology/internal/types",
+}
+
+// Values
+pub fn calculate_stars(Int, Int, Int) -> @types.StarRating
+
+pub fn check_match(@types.Shape, @types.Shape) -> Bool
+
+pub fn flip_h(@types.Shape) -> @types.Shape
+
+pub fn flip_v(@types.Shape) -> @types.Shape
+
+pub fn grow(@types.Shape, @types.Vec2i) -> @types.Shape
+
+pub fn match_percentage(@types.Shape, @types.Shape) -> Int
+
+pub fn rotate_cw(@types.Shape) -> @types.Shape
+
+pub fn shift(@types.Shape, @types.Direction) -> @types.Shape
+
+pub fn shrink(@types.Shape, @types.Vec2i) -> @types.Shape
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

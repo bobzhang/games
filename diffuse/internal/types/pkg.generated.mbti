@@ -1,0 +1,270 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/diffuse/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn budget_get(InkBudget, InkChannel) -> Int
+
+pub fn budget_use(InkBudget, InkChannel) -> Unit
+
+pub let cell_size : Int
+
+pub fn channel_name(InkChannel) -> String
+
+pub fn channel_to_color(InkChannel) -> @raylib.Color
+
+pub fn clone_budget(InkBudget) -> InkBudget
+
+pub fn clone_tile(Tile) -> Tile
+
+pub fn clone_tiles(Array[Tile]) -> Array[Tile]
+
+pub let color_barrier : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_black : @raylib.Color
+
+pub let color_blue : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_button_text : @raylib.Color
+
+pub let color_cyan : @raylib.Color
+
+pub let color_empty : @raylib.Color
+
+pub let color_failed_bg : @raylib.Color
+
+pub let color_green : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_magenta : @raylib.Color
+
+pub let color_paper : @raylib.Color
+
+pub let color_preview : @raylib.Color
+
+pub let color_red : @raylib.Color
+
+pub let color_selected_border : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_filled : @raylib.Color
+
+pub let color_subtitle : @raylib.Color
+
+pub let color_target_ring : @raylib.Color
+
+pub let color_title_text : @raylib.Color
+
+pub let color_won_bg : @raylib.Color
+
+pub let color_yellow : @raylib.Color
+
+pub fn grid_get(Grid, Int, Int) -> Tile
+
+pub let grid_height : Int
+
+pub fn grid_in_bounds(Grid, Int, Int) -> Bool
+
+pub fn grid_index(Grid, Int, Int) -> Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub fn grid_set(Grid, Int, Int, Tile) -> Unit
+
+pub let grid_width : Int
+
+pub fn ink_add_channel(InkColor, InkChannel) -> InkColor
+
+pub fn ink_black() -> InkColor
+
+pub fn ink_blue() -> InkColor
+
+pub fn ink_cyan() -> InkColor
+
+pub fn ink_display_name(InkColor) -> String
+
+pub fn ink_empty() -> InkColor
+
+pub fn ink_equals(InkColor, InkColor) -> Bool
+
+pub fn ink_from_channel(InkChannel) -> InkColor
+
+pub fn ink_green() -> InkColor
+
+pub fn ink_is_empty(InkColor) -> Bool
+
+pub fn ink_magenta() -> InkColor
+
+pub fn ink_mix(InkColor, InkColor) -> InkColor
+
+pub fn ink_red() -> InkColor
+
+pub fn ink_to_color(InkColor) -> @raylib.Color
+
+pub fn ink_yellow() -> InkColor
+
+pub fn make_grid(Int, Int) -> Grid
+
+pub fn make_target_tile(InkColor) -> Tile
+
+pub fn make_tile(TileKind) -> Tile
+
+pub fn new_game() -> Game
+
+pub fn new_level_score() -> LevelScore
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let spread_anim_time : Float
+
+pub fn star_count(StarRating) -> Int
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub fn tier_for_level(Int) -> Tier
+
+pub fn tier_level_count(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub fn tier_start_index(Tier) -> Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut grid : Grid
+  mut budget : InkBudget
+  mut par_drops : Int
+  mut drops_used : Int
+  mut turn : Int
+  mut selected_channel : InkChannel
+  mut play_state : PlayState
+  mut level_name : String
+  scores : Array[LevelScore]
+  history : Array[HistoryEntry]
+  mut hover_col : Int
+  mut hover_row : Int
+  mut frame_count : Int
+  mut spread_timer : Float
+  mut show_preview : Bool
+} derive(Show)
+
+pub(all) struct Grid {
+  width : Int
+  height : Int
+  tiles : Array[Tile]
+} derive(Show)
+
+pub(all) struct HistoryEntry {
+  tiles : Array[Tile]
+  budget : InkBudget
+  drops_used : Int
+} derive(Show)
+
+pub(all) struct InkBudget {
+  mut cyan : Int
+  mut magenta : Int
+  mut yellow : Int
+} derive(Show)
+
+pub(all) enum InkChannel {
+  Cyan
+  Magenta
+  Yellow
+} derive(Eq, Show)
+
+pub(all) struct InkColor {
+  mut c : Bool
+  mut m : Bool
+  mut y : Bool
+} derive(Eq, Show)
+
+pub(all) struct Level {
+  grid : Grid
+  budget : InkBudget
+  par_drops : Int
+  tier : Tier
+  name : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : StarRating
+  mut drops_used : Int
+} derive(Show)
+
+pub(all) enum PlayState {
+  Placing
+  Spreading
+  Won
+  Failed
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum StarRating {
+  Zero
+  One
+  Two
+  Three
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Watercolor
+  Pigment
+  Palette
+} derive(Eq, Show)
+
+pub(all) struct Tile {
+  mut kind : TileKind
+  mut ink : InkColor
+  mut target_color : InkColor
+} derive(Show)
+
+pub(all) enum TileKind {
+  Paper
+  Barrier
+  Target
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/nomad/internal/game"
+
+import {
+  "bobzhang/games/nomad/internal/types",
+}
+
+// Values
+pub fn update(@types.Game, Array[@types.Level]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

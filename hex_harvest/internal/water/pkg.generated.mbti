@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/hex_harvest/internal/water"
+
+import {
+  "bobzhang/games/hex_harvest/internal/types",
+}
+
+// Values
+pub fn count_watered(@types.HexGrid) -> Int
+
+pub fn flow_water(@types.HexGrid) -> Array[@types.HexCoord]
+
+pub fn preview_water_flow(@types.HexGrid) -> Array[@types.HexCoord]
+
+pub fn would_channel_bring_water(@types.HexGrid, Int, Int) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

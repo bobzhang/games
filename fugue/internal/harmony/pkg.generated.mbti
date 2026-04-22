@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/fugue/internal/harmony"
+
+import {
+  "bobzhang/games/fugue/internal/types",
+}
+
+// Values
+pub fn check_all_targets(@types.Grid, Array[@types.TargetPos]) -> Bool
+
+pub fn column_interval_pairs(@types.Grid, Int) -> Array[(Int, Int, Int)]
+
+pub fn compute_column_harmony(@types.Grid, Int) -> Int
+
+pub fn compute_stars(@types.Grid, @types.Level) -> Int
+
+pub fn compute_total_harmony(@types.Grid) -> Int
+
+pub fn count_matched(@types.Grid, Array[@types.TargetPos]) -> Int
+
+pub fn evaluate_placement(@types.Grid, Int, Int) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/cipher/internal/crypto"
+
+import {
+  "bobzhang/games/cipher/internal/types",
+}
+
+// Values
+pub fn caesar_decrypt(String, Int) -> String
+
+pub fn caesar_encrypt(String, Int) -> String
+
+pub fn count_letters(String) -> Int
+
+pub fn find_repeated_patterns(String, Int, Int) -> Array[@types.PatternMatch]
+
+pub fn get_hint_mapping(String, String, @types.Mapping) -> (Int, Int)
+
+pub fn letter_frequency(String) -> Array[Int]
+
+pub fn letter_frequency_pct(String) -> Array[Float]
+
+pub fn substitution_decrypt(String, Array[Int]) -> String
+
+pub fn substitution_encrypt(String, Array[Int]) -> String
+
+pub fn suggest_caesar_shift(String) -> Int
+
+pub fn vigenere_decrypt(String, String) -> String
+
+pub fn vigenere_encrypt(String, String) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

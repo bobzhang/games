@@ -1,0 +1,253 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/patina/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn clone_budget(ToolBudget) -> ToolBudget
+
+pub fn clone_region(Region) -> Region
+
+pub let color_bg : @raylib.Color
+
+pub let color_canvas : @raylib.Color
+
+pub let color_canvas_dark : @raylib.Color
+
+pub let color_crack : @raylib.Color
+
+pub let color_fade : @raylib.Color
+
+pub let color_flake : @raylib.Color
+
+pub let color_frame : @raylib.Color
+
+pub let color_frame_gold : @raylib.Color
+
+pub let color_highlight : @raylib.Color
+
+pub let color_panel_bg : @raylib.Color
+
+pub let color_pristine : @raylib.Color
+
+pub let color_restored : @raylib.Color
+
+pub let color_sealed : @raylib.Color
+
+pub let color_stain : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_text : @raylib.Color
+
+pub let color_text_dark : @raylib.Color
+
+pub let color_text_dim : @raylib.Color
+
+pub let color_tool_clean : @raylib.Color
+
+pub let color_tool_fill : @raylib.Color
+
+pub let color_tool_retouch : @raylib.Color
+
+pub let color_tool_seal : @raylib.Color
+
+pub let color_treated : @raylib.Color
+
+pub let color_worsened : @raylib.Color
+
+pub fn cosf(Float) -> Float
+
+pub fn damage_color(DamageKind) -> @raylib.Color
+
+pub fn damage_name(DamageKind) -> String
+
+pub fn get_budget_for_tool(ToolBudget, ToolKind) -> Int
+
+pub let grid_cols : Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_padding : Int
+
+pub let grid_rows : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_artwork(Int, Int, Array[Region]) -> Artwork
+
+pub fn new_budget(Int, Int, Int, Int) -> ToolBudget
+
+pub fn new_game() -> Game
+
+pub fn new_level(Tier, String, Array[Region], ToolBudget, Int) -> Level
+
+pub fn new_region(Array[DamageKind]) -> Region
+
+pub fn new_score() -> LevelScore
+
+pub fn region_has_damage(Region, DamageKind) -> Bool
+
+pub fn region_has_treatment(Region, ToolKind) -> Bool
+
+pub let region_size : Int
+
+pub fn restore_budget(ToolBudget, ToolKind) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn sinf(Float) -> Float
+
+pub fn state_color(RegionState) -> @raylib.Color
+
+pub fn state_name(RegionState) -> String
+
+pub let target_fps : Int
+
+pub fn tier_from_index(Int) -> Tier
+
+pub fn tier_index(Tier) -> Int
+
+pub fn tier_level_range(Tier) -> (Int, Int)
+
+pub fn tier_name(Tier) -> String
+
+pub fn tool_color(ToolKind) -> @raylib.Color
+
+pub fn tool_name(ToolKind) -> String
+
+pub fn use_budget(ToolBudget, ToolKind) -> Unit
+
+// Errors
+
+// Types and methods
+pub(all) struct Artwork {
+  width : Int
+  height : Int
+  regions : Array[Region]
+}
+
+pub(all) enum DamageKind {
+  Crack
+  Stain
+  Fade
+  Flake
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  mut selected_tier : Tier
+  mut selected_level : Int
+  mut current_level : Level?
+  mut current_budget : ToolBudget?
+  mut selected_tool : ToolKind
+  mut play_state : PlayState
+  mut anim_timer : Float
+  mut anim_region : Int
+  mut hover_region : Int
+  mut score : LevelScore?
+  mut level_scores : Array[Int]
+  mut undo_stack : Array[UndoEntry]
+  mut total_tools_used : Int
+  mut message : String
+  mut message_timer : Float
+  mut frame_count : Int
+  mut title_anim_timer : Float
+}
+
+pub(all) struct Level {
+  tier : Tier
+  name : String
+  artwork : Artwork
+  budget : ToolBudget
+  par_tools : Int
+}
+
+pub(all) struct LevelScore {
+  mut stars : Int
+  mut restored_count : Int
+  mut worsened_count : Int
+  mut sealed_count : Int
+  mut total_tools_used : Int
+}
+
+pub(all) enum PlayState {
+  Selecting
+  Animating
+  LevelComplete
+} derive(Eq, Show)
+
+pub(all) struct Region {
+  mut state : RegionState
+  damage_types : Array[DamageKind]
+  treatments_applied : Array[ToolKind]
+  mut fragile : Bool
+  mut stain_permanent : Bool
+}
+
+pub(all) enum RegionState {
+  Pristine
+  Damaged
+  Treated
+  Restored
+  Worsened
+  Sealed
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Sketches
+  Paintings
+  Masterworks
+} derive(Eq, Show)
+
+pub(all) struct ToolBudget {
+  mut clean : Int
+  mut fill : Int
+  mut retouch : Int
+  mut seal : Int
+}
+
+pub(all) enum ToolKind {
+  Clean
+  Fill
+  Retouch
+  Seal
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  region_index : Int
+  prev_state : RegionState
+  prev_treatments : Array[ToolKind]
+  prev_fragile : Bool
+  prev_stain_permanent : Bool
+  tool_used : ToolKind
+}
+
+// Type aliases
+
+// Traits
+

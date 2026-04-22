@@ -1,0 +1,44 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/physics_tower/internal/destruction"
+
+import {
+  "bobzhang/games/physics_tower/internal/types",
+}
+
+// Values
+pub fn clear_destruction(@types.DestructionState) -> Unit
+
+pub fn detect_breaks_and_spawn(@types.World, @types.DestructionState) -> Unit
+
+pub fn effective_dt(@types.DestructionState, Float) -> Float
+
+pub fn is_replay_active(@types.DestructionState) -> Bool
+
+pub fn particle_count(@types.DestructionState) -> Int
+
+pub fn process_chain_reaction(@types.World, @types.DestructionState) -> Unit
+
+pub fn spawn_debris(@types.DestructionState, @types.Body) -> Unit
+
+pub fn spawn_dust(@types.DestructionState, Float) -> Unit
+
+pub fn spawn_impact_trail(@types.DestructionState, Float, Float) -> Unit
+
+pub fn spawn_wind_particles(@types.DestructionState, Float) -> Unit
+
+pub fn start_replay(@types.DestructionState, Float) -> Unit
+
+pub fn trigger_camera_shake(@types.DestructionState, Float) -> Unit
+
+pub fn trigger_slow_motion(@types.DestructionState, Float) -> Unit
+
+pub fn update_destruction(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

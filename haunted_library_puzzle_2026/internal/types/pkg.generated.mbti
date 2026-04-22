@@ -116,11 +116,8 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
-
-  fn new() -> Actor
 }
-#deprecated
-pub fn Actor::new() -> Self
+pub fn Actor::Actor() -> Self
 
 pub(all) struct Game {
   map : Array[Tile]
@@ -160,11 +157,8 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -180,11 +174,8 @@ pub(all) struct Ghost {
   mut move_cd : Float
   mut seed : Int
   mut alert_t : Float
-
-  fn new() -> Ghost
 }
-#deprecated
-pub fn Ghost::new() -> Self
+pub fn Ghost::Ghost() -> Self
 
 pub(all) enum GhostMode {
   Patrol
@@ -201,11 +192,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
-
-  fn new() -> Particle
 }
-#deprecated
-pub fn Particle::new() -> Self
+pub fn Particle::Particle() -> Self
 
 pub(all) enum ParticleKind {
   Dust

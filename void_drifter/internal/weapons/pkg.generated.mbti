@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/void_drifter/internal/weapons"
+
+import {
+  "bobzhang/games/void_drifter/internal/types",
+}
+
+// Values
+pub fn fire_enemy_projectile(@types.Game, @types.Vec2, @types.Vec2, Float, Int) -> Unit
+
+pub fn fire_weapon(@types.Game, @types.Weapon, @types.Vec2, Float, mod_kind? : @types.ModKind?) -> Unit
+
+pub fn mod_name(@types.ModKind) -> String
+
+pub fn update_weapon_timer(@types.Weapon, Float) -> Unit
+
+pub fn utility_name(@types.UtilityMod) -> String
+
+pub fn weapon_name(@types.WeaponKind) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

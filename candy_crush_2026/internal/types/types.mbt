@@ -135,14 +135,11 @@ pub(all) struct Game {
   /// Number of active touch points this frame (0 on desktop).
   /// A value > 0 enables `touch_mode` and activates touch hit-testing.
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a new game state with default board buffers and counters.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     kinds: Array::make(board_cells, 0),
     specials: Array::make(board_cells, None),

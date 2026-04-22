@@ -7,8 +7,6 @@ pub(all) struct Tower {
   mut need : Int
   mut delivered : Int
   mut pulse_t : Float
-
-  fn new() -> Tower
 }
 
 ///|
@@ -22,8 +20,6 @@ pub(all) struct Storm {
   mut vy : Float
   mut phase : Float
   mut strength : Float
-
-  fn new() -> Storm
 }
 
 ///|
@@ -77,21 +73,17 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
 
 ///|
 /// Allocates and returns a new inactive Tower with all fields zeroed.
-#deprecated
-pub fn Tower::new() -> Tower {
+pub fn Tower::Tower() -> Tower {
   { active: false, x: 0.0, y: 0.0, need: 0, delivered: 0, pulse_t: 0.0 }
 }
 
 ///|
 /// Allocates and returns a new inactive Storm with all fields zeroed.
-#deprecated
-pub fn Storm::new() -> Storm {
+pub fn Storm::Storm() -> Storm {
   {
     active: false,
     x: 0.0,
@@ -106,8 +98,7 @@ pub fn Storm::new() -> Storm {
 
 ///|
 /// Allocates and returns a new Game initialised to the Title state at stage 1 with full energy and heat.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     towers: Array::makei(max_towers, fn(_i) { Tower() }),
     storms: Array::makei(max_storms, fn(_i) { Storm() }),

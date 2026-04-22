@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/fugue/internal/render"
+
+import {
+  "bobzhang/games/fugue/internal/types",
+}
+
+// Values
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_playing(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

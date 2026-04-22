@@ -5,8 +5,6 @@ pub(all) struct Breach {
   mut severity : Float
   mut raider_cd : Float
   mut ember_cd : Float
-
-  fn new(room : Int) -> Breach
 }
 
 ///|
@@ -20,8 +18,6 @@ pub(all) struct Raider {
   max_hp : Float
   mut panic_t : Float
   mut attack_cd : Float
-
-  fn new() -> Raider
 }
 
 ///|
@@ -33,8 +29,6 @@ pub(all) struct Flame {
   y : Float
   mut intensity : Float
   mut spread_cd : Float
-
-  fn new() -> Flame
 }
 
 ///|
@@ -60,8 +54,6 @@ pub(all) struct Keeper {
   mut shield_cd : Float
   mut shield_t : Float
   mut ink_shields : Float
-
-  fn new() -> Keeper
 }
 
 ///|
@@ -176,21 +168,17 @@ pub(all) struct Game {
   /// True for one frame when R is pressed.
   /// Starts a new run from Paused or GameOver states.
   mut input_restart_press : Bool
-
-  fn new() -> Game
 }
 
 ///|
 /// Creates a default Breach value for a new session.
-#deprecated
-pub fn Breach::new(room : Int) -> Breach {
+pub fn Breach::Breach(room : Int) -> Breach {
   { room, severity: 0.0, raider_cd: randf(0.8, 1.6), ember_cd: randf(0.7, 1.4) }
 }
 
 ///|
 /// Creates a default Raider value for a new session.
-#deprecated
-pub fn Raider::new() -> Raider {
+pub fn Raider::Raider() -> Raider {
   {
     active: false,
     room: 0,
@@ -205,15 +193,13 @@ pub fn Raider::new() -> Raider {
 
 ///|
 /// Creates a default Flame value for a new session.
-#deprecated
-pub fn Flame::new() -> Flame {
+pub fn Flame::Flame() -> Flame {
   { active: false, room: 0, x: 0.0, y: 0.0, intensity: 0.0, spread_cd: 0.0 }
 }
 
 ///|
 /// Creates a default Keeper value for a new session.
-#deprecated
-pub fn Keeper::new() -> Keeper {
+pub fn Keeper::Keeper() -> Keeper {
   {
     room: vault_room,
     x: chamber_center_x(),
@@ -231,8 +217,7 @@ pub fn Keeper::new() -> Keeper {
 
 ///|
 /// Creates a default Game value for a new session.
-#deprecated
-pub fn Game::new() -> Game {
+pub fn Game::Game() -> Game {
   {
     breaches: Array::makei(chamber_count, fn(room) { Breach(room) }),
     raiders: Array::makei(max_raiders, fn(_i) { Raider() }),

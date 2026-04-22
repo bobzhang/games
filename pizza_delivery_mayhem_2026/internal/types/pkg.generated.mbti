@@ -142,11 +142,8 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
-
-  fn new() -> Game
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   Title
@@ -163,11 +160,8 @@ pub(all) struct Order {
   mut y_to : Float
   mut timer : Float
   mut value : Int
-
-  fn new() -> Order
 }
-#deprecated
-pub fn Order::new() -> Self
+pub fn Order::Order() -> Self
 
 pub(all) struct Particle {
   mut active : Bool
@@ -178,11 +172,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
-
-  fn new() -> Particle
 }
-#deprecated
-pub fn Particle::new() -> Self
+pub fn Particle::Particle() -> Self
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -192,11 +183,8 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
-
-  fn new() -> Pickup
 }
-#deprecated
-pub fn Pickup::new() -> Self
+pub fn Pickup::Pickup() -> Self
 
 pub(all) enum PickupKind {
   Fuel
@@ -214,11 +202,8 @@ pub(all) struct Traffic {
   mut h : Float
   mut kind : TrafficKind
   mut phase : Float
-
-  fn new() -> Traffic
 }
-#deprecated
-pub fn Traffic::new() -> Self
+pub fn Traffic::Traffic() -> Self
 
 pub(all) enum TrafficKind {
   Sedan

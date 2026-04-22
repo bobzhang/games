@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/physics_tower/internal/challenge"
+
+import {
+  "bobzhang/games/physics_tower/internal/types",
+}
+
+// Values
+pub fn challenge_inventory() -> Array[(@types.PieceKind, @types.Material, Int)]
+
+pub fn challenge_mode_description(@types.ChallengeMode) -> String
+
+pub fn challenge_mode_name(@types.ChallengeMode) -> String
+
+pub fn challenge_stars(@types.ChallengeState) -> Int
+
+pub fn challenge_status_text(@types.ChallengeState) -> String
+
+pub fn get_challenge_modes() -> Array[@types.ChallengeMode]
+
+pub fn start_challenge(@types.ChallengeMode) -> @types.ChallengeState
+
+pub fn update_challenge(@types.ChallengeState, @types.World, Float) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

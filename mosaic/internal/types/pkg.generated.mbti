@@ -1,0 +1,279 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/mosaic/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn all_colors() -> Array[TileColor]
+
+pub fn all_orientations() -> Array[Orientation]
+
+pub fn all_shapes() -> Array[TileShape]
+
+pub let cell_size : Int
+
+pub fn clamp_int(Int, Int, Int) -> Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_correct_glow : @raylib.Color
+
+pub let color_grid_bg : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_hole : @raylib.Color
+
+pub let color_hole_border : @raylib.Color
+
+pub let color_hover : @raylib.Color
+
+pub let color_hud_dim : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_star_off : @raylib.Color
+
+pub let color_star_on : @raylib.Color
+
+pub let color_tier_master : @raylib.Color
+
+pub let color_tier_repair : @raylib.Color
+
+pub let color_tier_restore : @raylib.Color
+
+pub let color_title_accent : @raylib.Color
+
+pub let color_wrong_glow : @raylib.Color
+
+pub fn copy_tile(Tile) -> Tile
+
+pub fn count_remaining_holes(Game) -> Int
+
+pub fn get_tile(MosaicGrid, Int, Int) -> Tile?
+
+pub let grid_cols : Int
+
+pub fn grid_index(Int, Int, Int) -> Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_rows : Int
+
+pub fn index_to_orientation(Int) -> Orientation
+
+pub fn index_to_symmetry(Int) -> SymmetryKind
+
+pub fn index_to_tier(Int) -> Tier
+
+pub fn index_to_tile_color(Int) -> TileColor
+
+pub fn index_to_tile_shape(Int) -> TileShape
+
+pub fn is_hole(MosaicGrid, Vec2i) -> Bool
+
+pub fn is_symmetric_shape(TileShape) -> Bool
+
+pub fn levels_for_tier(Game, Tier) -> Array[Int]
+
+pub fn mirror_orient_d(Orientation) -> Orientation
+
+pub fn mirror_orient_h(Orientation) -> Orientation
+
+pub fn mirror_orient_v(Orientation) -> Orientation
+
+pub fn new_game(Array[Level]) -> Game
+
+pub fn new_grid(Int, Int) -> MosaicGrid
+
+pub fn new_level_score() -> LevelScore
+
+pub fn new_tile(TileColor, TileShape, Orientation) -> Tile
+
+pub fn orientation_ccw(Orientation) -> Orientation
+
+pub fn orientation_cw(Orientation) -> Orientation
+
+pub fn orientation_flip(Orientation) -> Orientation
+
+pub fn orientation_index(Orientation) -> Int
+
+pub let palette_x : Int
+
+pub let palette_y : Int
+
+pub fn rotate_orient_180(Orientation) -> Orientation
+
+pub fn rotate_orient_270(Orientation) -> Orientation
+
+pub fn rotate_orient_90(Orientation) -> Orientation
+
+pub fn rotate_orientation(Orientation, Int) -> Orientation
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub fn set_tile(MosaicGrid, Int, Int, Tile?) -> Unit
+
+pub let swatch_size : Int
+
+pub fn symmetry_index(SymmetryKind) -> Int
+
+pub fn symmetry_name(SymmetryKind) -> String
+
+pub let target_fps : Int
+
+pub fn tier_color(Tier) -> @raylib.Color
+
+pub fn tier_completed(Game, Tier) -> Bool
+
+pub fn tier_index(Tier) -> Int
+
+pub fn tier_name(Tier) -> String
+
+pub fn tile_color_index(TileColor) -> Int
+
+pub fn tile_color_to_raylib(TileColor) -> @raylib.Color
+
+pub fn tile_eq(Tile, Tile) -> Bool
+
+pub fn tile_shape_index(TileShape) -> Int
+
+pub fn total_stars(Game) -> Int
+
+pub fn vec2i(Int, Int) -> Vec2i
+
+pub fn vec2i_eq(Vec2i, Vec2i) -> Bool
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  mut play_state : PlayState
+  mut current_tier : Tier
+  mut current_level : Int
+  mut selected_color : TileColor
+  mut selected_shape : TileShape
+  mut selected_orientation : Orientation
+  mut hover_cell : Vec2i?
+  mut errors : Int
+  mut no_errors : Bool
+  mut guessed_symmetry : Bool
+  mut symmetry_guess : SymmetryKind?
+  levels : Array[Level]
+  scores : Array[LevelScore]
+  mut placed_tiles : Array[(Vec2i, Tile)]
+  mut undo_stack : Array[UndoEntry]
+  mut frame_count : Int
+  mut message : String
+  mut message_timer : Float
+  mut show_symmetry_hint : Bool
+  mut anim_timer : Float
+} derive(Show)
+
+pub(all) struct Level {
+  grid : MosaicGrid
+  symmetry : SymmetryKind
+  par_errors : Int
+  tier : Tier
+  name : String
+} derive(Show)
+
+pub(all) struct LevelScore {
+  mut completed : Bool
+  mut stars : Int
+  mut errors : Int
+  mut guessed_symmetry : Bool
+} derive(Show)
+
+pub(all) struct MosaicGrid {
+  width : Int
+  height : Int
+  tiles : Array[Tile?]
+  holes : Array[Vec2i]
+} derive(Show)
+
+pub(all) enum Orientation {
+  N
+  E
+  S
+  W
+} derive(Eq, Show)
+
+pub(all) enum PlayState {
+  Placing
+  GuessSymmetry
+  Complete
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  TierSelect
+  LevelSelect
+  Playing
+  Results
+} derive(Eq, Show)
+
+pub(all) enum SymmetryKind {
+  MirrorH
+  MirrorV
+  MirrorD
+  Rotate2
+  Rotate4
+  Glide
+} derive(Eq, Show)
+
+pub(all) enum Tier {
+  Repair
+  Restore
+  Master
+} derive(Eq, Show)
+
+pub(all) struct Tile {
+  mut color : TileColor
+  mut shape : TileShape
+  mut orientation : Orientation
+} derive(Eq, Show)
+
+pub(all) enum TileColor {
+  Red
+  Blue
+  Green
+  Gold
+  Purple
+  White
+} derive(Eq, Show)
+
+pub(all) enum TileShape {
+  Square
+  Triangle
+  Arrow
+  Diamond
+  Circle
+  Cross
+} derive(Eq, Show)
+
+pub(all) struct UndoEntry {
+  pos : Vec2i
+  prev_tile : Tile?
+} derive(Show)
+
+pub(all) struct Vec2i {
+  x : Int
+  y : Int
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/content"
+
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+// Values
+pub fn count_entities_by_kind(@types.Level) -> (Int, Int, Int, Int, Int, Int)
+
+pub fn count_special_tiles(@types.Level) -> (Int, Int, Int, Int, Int, Int)
+
+pub fn get_level(Int, Int) -> @types.Level
+
+pub fn get_level_hint(Int, Int) -> String
+
+pub fn get_level_name(Int, Int) -> String
+
+pub fn get_par_moves(Int, Int) -> Int
+
+pub fn parse_level(String, Int, Int, String, Int) -> @types.Level
+
+pub fn validate_level(@types.Level) -> Bool
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

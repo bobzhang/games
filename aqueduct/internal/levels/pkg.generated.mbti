@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/aqueduct/internal/levels"
+
+import {
+  "bobzhang/games/aqueduct/internal/types",
+}
+
+// Values
+pub fn create_all_levels() -> Array[@types.Level]
+
+pub fn create_tier1() -> Array[@types.Level]
+
+pub fn create_tier2() -> Array[@types.Level]
+
+pub fn create_tier3() -> Array[@types.Level]
+
+pub fn make_flat_grid(Int, Int, Int) -> Array[Int]
+
+pub fn set_row(Array[Int], Int, Int, Array[Int]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

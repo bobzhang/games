@@ -1,0 +1,74 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/echo_maze/internal/render"
+
+import {
+  "bobzhang/games/echo_maze/internal/types",
+}
+
+// Values
+pub fn draw_button_glow(@types.Maze, @types.MazeState, @types.Game) -> Unit
+
+pub fn draw_collectibles(@types.Maze, @types.MazeState, @types.Game) -> Unit
+
+pub fn draw_danger_border(@types.Game) -> Unit
+
+pub fn draw_door_animations(@types.Maze, @types.MazeState) -> Unit
+
+pub fn draw_door_labels(@types.Maze, @types.MazeState) -> Unit
+
+pub fn draw_exit_glow(@types.Maze, @types.Game) -> Unit
+
+pub fn draw_failed_overlay(@types.Game) -> Unit
+
+pub fn draw_frame(@types.Game) -> Unit
+
+pub fn draw_ghost_button_feedback(@types.Game) -> Unit
+
+pub fn draw_ghost_collision_preview(@types.Game) -> Unit
+
+pub fn draw_ghost_trails(@types.Game) -> Unit
+
+pub fn draw_ghosts(@types.Game, @types.Maze) -> Unit
+
+pub fn draw_grid_border(@types.Maze) -> Unit
+
+pub fn draw_guards(@types.MazeState, @types.Game) -> Unit
+
+pub fn draw_hud(@types.Game) -> Unit
+
+pub fn draw_level_select(@types.Game) -> Unit
+
+pub fn draw_loop_transition(@types.Game) -> Unit
+
+pub fn draw_pause(@types.Game) -> Unit
+
+pub fn draw_planning_overlay(@types.Game) -> Unit
+
+pub fn draw_player(@types.Game) -> Unit
+
+pub fn draw_restart_flash(@types.Game) -> Unit
+
+pub fn draw_results(@types.Game) -> Unit
+
+pub fn draw_scanlines(@types.Game) -> Unit
+
+pub fn draw_start_marker(@types.Maze, @types.Game) -> Unit
+
+pub fn draw_tiles(@types.Maze, @types.MazeState) -> Unit
+
+pub fn draw_timed_door_indicators(@types.Maze, @types.MazeState, @types.Game) -> Unit
+
+pub fn draw_title(@types.Game) -> Unit
+
+pub fn draw_wall_edges(@types.Maze) -> Unit
+
+pub fn draw_world_select(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,636 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/void_drifter/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn add_shake(ScreenShake, Float) -> Unit
+
+pub fn alloc_damage_number(Array[DamageNumber]) -> Int
+
+pub fn alloc_enemy(Array[Enemy]) -> Int
+
+pub fn alloc_particle(Array[Particle]) -> Int
+
+pub fn alloc_projectile(Array[Projectile]) -> Int
+
+pub fn angle_to(Vec2, Vec2) -> Float
+
+pub let arena_default_height : Float
+
+pub let arena_default_width : Float
+
+pub let asteroid_base_hp : Int
+
+pub let asteroid_pool_size : Int
+
+pub let base_wave_enemies : Int
+
+pub let boss_intro_duration : Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_asteroid : @raylib.Color
+
+pub let color_beam : @raylib.Color
+
+pub let color_bg : @raylib.Color
+
+pub let color_boss : @raylib.Color
+
+pub let color_credits : @raylib.Color
+
+pub let color_enemy_bomber : @raylib.Color
+
+pub let color_enemy_carrier : @raylib.Color
+
+pub let color_enemy_drone : @raylib.Color
+
+pub let color_enemy_fighter : @raylib.Color
+
+pub let color_enemy_kiter : @raylib.Color
+
+pub let color_enemy_shield : @raylib.Color
+
+pub let color_enemy_swarm : @raylib.Color
+
+pub let color_enemy_turret : @raylib.Color
+
+pub let color_flak : @raylib.Color
+
+pub let color_grid : @raylib.Color
+
+pub let color_heat_bar : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_laser : @raylib.Color
+
+pub let color_missile : @raylib.Color
+
+pub let color_pickup : @raylib.Color
+
+pub let color_player : @raylib.Color
+
+pub let color_player_shield : @raylib.Color
+
+pub let color_railgun : @raylib.Color
+
+pub let color_shotgun : @raylib.Color
+
+pub let combo_decay_time : Float
+
+pub let combo_multiplier_per : Float
+
+pub fn cosf(Float) -> Float
+
+pub fn count_active_enemies(Array[Enemy]) -> Int
+
+pub let damage_number_life : Float
+
+pub let damage_number_pool_size : Int
+
+pub let damage_number_speed : Float
+
+pub let dash_cooldown : Float
+
+pub let dash_duration : Float
+
+pub let dash_speed : Float
+
+pub let default_projectile_lifetime : Float
+
+pub let default_projectile_radius : Float
+
+pub fn enemy_color(EnemyKind) -> @raylib.Color
+
+pub let enemy_pool_size : Int
+
+pub let enemy_spawn_margin : Float
+
+pub let heat_decay_rate : Float
+
+pub let heat_sink_bonus : Float
+
+pub let invincible_duration : Float
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub let max_heat : Float
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn new_asteroid() -> Asteroid
+
+pub fn new_damage_number() -> DamageNumber
+
+pub fn new_enemy() -> Enemy
+
+pub fn new_game() -> Game
+
+pub fn new_meta() -> MetaProgress
+
+pub fn new_particle() -> Particle
+
+pub fn new_pickup() -> Pickup
+
+pub fn new_projectile() -> Projectile
+
+pub fn new_run_stats() -> RunStats
+
+pub fn new_shake() -> ScreenShake
+
+pub fn new_ship(WeaponKind) -> Ship
+
+pub fn new_weapon(WeaponKind) -> Weapon
+
+pub let nodes_per_layer : Int
+
+pub let overheat_penalty : Float
+
+pub let particle_default_life : Float
+
+pub let particle_pool_size : Int
+
+pub let pickup_lifetime : Float
+
+pub let pickup_pool_size : Int
+
+pub let pickup_radius : Float
+
+pub let projectile_pool_size : Int
+
+pub fn push_sound(Game, SoundEvent) -> Unit
+
+pub fn rng_float() -> Float
+
+pub fn rng_int(Int) -> Int
+
+pub fn rng_next() -> Int
+
+pub fn rng_range(Float, Float) -> Float
+
+pub fn rng_sign() -> Float
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub let sector_map_layers : Int
+
+pub fn seed_rng(Int) -> Unit
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub let shake_boss_hit : Float
+
+pub let shake_decay : Float
+
+pub let shake_explosion : Float
+
+pub let shake_hit : Float
+
+pub let shield_regen_delay : Float
+
+pub let shield_regen_rate : Float
+
+pub let ship_base_hp : Int
+
+pub let ship_base_shield : Int
+
+pub let ship_base_speed : Float
+
+pub let ship_boost_heat : Float
+
+pub let ship_boost_mult : Float
+
+pub let ship_drag : Float
+
+pub let shop_heal_cost : Int
+
+pub let shop_mod_cost : Int
+
+pub let shop_shield_cost : Int
+
+pub let shop_weapon_cost : Int
+
+pub fn sinf(Float) -> Float
+
+pub fn spawn_damage_number(Game, Float, Float, Int, @raylib.Color) -> Unit
+
+pub fn sqrtf(Float) -> Float
+
+pub let target_fps : Int
+
+pub fn vec2(Float, Float) -> Vec2
+
+pub fn vec2_add(Vec2, Vec2) -> Vec2
+
+pub fn vec2_dist(Vec2, Vec2) -> Float
+
+pub fn vec2_dist_sq(Vec2, Vec2) -> Float
+
+pub fn vec2_dot(Vec2, Vec2) -> Float
+
+pub fn vec2_len(Vec2) -> Float
+
+pub fn vec2_lerp(Vec2, Vec2, Float) -> Vec2
+
+pub fn vec2_normalize(Vec2) -> Vec2
+
+pub fn vec2_rotate(Vec2, Float) -> Vec2
+
+pub fn vec2_scale(Vec2, Float) -> Vec2
+
+pub fn vec2_sub(Vec2, Vec2) -> Vec2
+
+pub fn vec2_zero() -> Vec2
+
+pub let wave_interval : Float
+
+pub fn weapon_color(WeaponKind) -> @raylib.Color
+
+// Errors
+
+// Types and methods
+pub(all) struct Asteroid {
+  mut active : Bool
+  mut pos : Vec2
+  mut vel : Vec2
+  mut radius : Float
+  mut angle : Float
+  mut spin : Float
+  mut hp : Int
+}
+
+pub(all) struct Boss {
+  mut active : Bool
+  mut kind : BossKind
+  mut pos : Vec2
+  mut vel : Vec2
+  mut hp : Int
+  mut max_hp : Int
+  mut phase : Int
+  mut phase_timer : Float
+  mut attack_timer : Float
+  mut pattern_index : Int
+  mut radius : Float
+  mut shield : Int
+  mut enraged : Bool
+  mut spawn_timer : Float
+  mut score_value : Int
+}
+
+pub(all) enum BossKind {
+  Leviathan
+  Hive
+  Dreadnought
+} derive(Eq, Show)
+
+pub(all) struct DamageNumber {
+  mut active : Bool
+  mut pos : Vec2
+  mut vel : Vec2
+  mut life : Float
+  mut value : Int
+  mut color : @raylib.Color
+}
+
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) struct Enemy {
+  mut active : Bool
+  mut kind : EnemyKind
+  mut pos : Vec2
+  mut vel : Vec2
+  mut angle : Float
+  mut hp : Int
+  mut max_hp : Int
+  mut damage : Int
+  mut speed : Float
+  mut fire_timer : Float
+  mut fire_rate : Float
+  mut radius : Float
+  mut frozen_timer : Float
+  mut shield : Int
+  mut behavior_timer : Float
+  mut target_pos : Vec2
+  mut score_value : Int
+}
+
+pub(all) enum EnemyKind {
+  Drone
+  Fighter
+  Kiter
+  Swarm
+  Turret
+  Carrier
+  Bomber
+  ShieldBearer
+} derive(Eq, Show)
+
+pub(all) struct Game {
+  mut screen : Screen
+  ship : Ship
+  mut projectiles : Array[Projectile]
+  mut enemies : Array[Enemy]
+  mut boss : Boss?
+  mut particles : Array[Particle]
+  mut asteroids : Array[Asteroid]
+  mut hazards : Array[Hazard]
+  mut pickups : Array[Pickup]
+  mut damage_numbers : Array[DamageNumber]
+  mut sector_map : SectorMap?
+  mut shop_items : Array[ShopItem]
+  stats : RunStats
+  meta : MetaProgress
+  shake : ScreenShake
+  mut sound_queue : Array[SoundEvent]
+  mut message : String
+  mut message_timer : Float
+  mut rng : Int
+  mut camera_x : Float
+  mut camera_y : Float
+  mut arena_width : Float
+  mut arena_height : Float
+  mut current_sector_kind : SectorKind
+  mut wave_timer : Float
+  mut wave_count : Int
+  mut sector_enemies_total : Int
+  mut sector_enemies_killed : Int
+  mut sector_cleared : Bool
+  mut boss_intro_timer : Float
+  mut paused : Bool
+  mut frame_count : Int
+}
+
+pub(all) struct Hazard {
+  mut active : Bool
+  mut kind : HazardKind
+  mut pos : Vec2
+  mut radius : Float
+  mut timer : Float
+  mut damage : Int
+}
+
+pub(all) enum HazardKind {
+  AsteroidField
+  RadiationZone
+  GravityWell
+  MineField
+} derive(Eq, Show)
+
+pub(all) struct MetaProgress {
+  mut best_score : Int
+  mut highest_kills : Int
+  mut total_runs : Int
+  mut total_kills : Int
+  mut bosses_defeated : Int
+  mut sectors_explored : Int
+  mut unlocked_weapons : Array[WeaponKind]
+  mut unlocked_mods : Array[ModKind]
+  mut run_history : Array[RunRecord]
+}
+
+pub(all) enum MetaUnlock {
+  UnlockWeapon(WeaponKind)
+  UnlockMod(ModKind)
+  UnlockUtility(UtilityMod)
+  UnlockShip(Int)
+} derive(Eq, Show)
+
+pub(all) enum ModKind {
+  Piercing
+  Homing
+  Split
+  Chain
+  Explosive
+  Freezing
+  Bouncing
+  Overcharge
+} derive(Eq, Show)
+
+pub(all) struct Particle {
+  mut active : Bool
+  mut pos : Vec2
+  mut vel : Vec2
+  mut life : Float
+  mut max_life : Float
+  mut size : Float
+  mut color : @raylib.Color
+  mut shrink : Bool
+}
+
+pub(all) struct Pickup {
+  mut active : Bool
+  mut kind : PickupKind
+  mut pos : Vec2
+  mut radius : Float
+  mut lifetime : Float
+  mut pulse_timer : Float
+}
+
+pub(all) enum PickupKind {
+  HealthPack
+  ShieldRecharge
+  WeaponMod(ModKind)
+  UtilityPickup(UtilityMod)
+  Credits(Int)
+  HeatVent
+  WeaponDrop(WeaponKind)
+} derive(Eq, Show)
+
+pub(all) struct Projectile {
+  mut active : Bool
+  mut pos : Vec2
+  mut vel : Vec2
+  mut damage : Int
+  mut lifetime : Float
+  mut radius : Float
+  mut friendly : Bool
+  mut piercing : Bool
+  mut homing_strength : Float
+  mut chain_count : Int
+  mut explosive_radius : Float
+  mut freezing : Bool
+  mut bounces : Int
+  mut weapon_kind : WeaponKind
+}
+
+pub(all) struct RunRecord {
+  mut score : Int
+  mut kills : Int
+  mut sectors : Int
+  mut weapon : WeaponKind
+}
+
+pub(all) struct RunStats {
+  mut score : Int
+  mut kills : Int
+  mut max_combo : Int
+  mut combo : Int
+  mut sectors_cleared : Int
+  mut credits_earned : Int
+  mut damage_dealt : Int
+  mut damage_taken : Int
+  mut shots_fired : Int
+  mut shots_hit : Int
+  mut time_played : Float
+  mut bosses_defeated : Int
+  mut mods_collected : Int
+}
+
+pub(all) enum Screen {
+  Title
+  Playing
+  Paused
+  SectorMap
+  Shop
+  GameOver
+  RunSummary
+  WeaponSelect
+  BossIntro
+  Victory
+} derive(Eq, Show)
+
+pub(all) struct ScreenShake {
+  mut intensity : Float
+  mut decay : Float
+  mut offset_x : Float
+  mut offset_y : Float
+}
+
+pub(all) enum SectorKind {
+  Asteroids
+  Nebula
+  Station
+  BossArena
+  EliteZone
+  EmptySpace
+} derive(Eq, Show)
+
+pub(all) struct SectorMap {
+  mut nodes : Array[SectorNode]
+  mut current : Int
+  mut depth : Int
+  mut boss_node : Int
+}
+
+pub(all) struct SectorNode {
+  mut kind : SectorKind
+  mut x : Int
+  mut y : Int
+  mut cleared : Bool
+  mut connections : Array[Int]
+  mut enemy_count : Int
+  mut has_shop : Bool
+  mut reward_tier : Int
+  mut elite : Bool
+}
+
+pub(all) struct Ship {
+  mut pos : Vec2
+  mut vel : Vec2
+  mut angle : Float
+  mut hp : Int
+  mut max_hp : Int
+  mut shield : Int
+  mut max_shield : Int
+  mut shield_regen_timer : Float
+  mut heat : Float
+  mut max_heat : Float
+  mut heat_decay : Float
+  mut dash_cooldown : Float
+  mut dash_timer : Float
+  mut invincible_timer : Float
+  mut speed : Float
+  mut drag : Float
+  mut boost_mult : Float
+  weapon : Weapon
+  mut secondary : Weapon?
+  mut primary_mod : ModKind?
+  mut utility_mod : UtilityMod?
+  mut credits : Int
+  mut kills : Int
+  mut sectors_cleared : Int
+}
+
+pub(all) struct ShopItem {
+  mut name : String
+  mut description : String
+  mut cost : Int
+  mut purchased : Bool
+  mut effect : PickupKind
+}
+
+pub(all) enum SoundEvent {
+  PlayerShoot
+  PlayerHit
+  PlayerDash
+  PlayerDeath
+  EnemyHit
+  EnemyDeath
+  BossPhase
+  Pickup
+  ShopBuy
+  MenuSelect
+  Explosion
+  ShieldBreak
+  OverheatWarn
+  SectorEnter
+} derive(Eq, Show)
+
+pub(all) enum UtilityMod {
+  ShieldDrain
+  Vampire
+  HeatSink
+  Accelerator
+} derive(Eq, Show)
+
+pub(all) struct Vec2 {
+  mut x : Float
+  mut y : Float
+} derive(Eq, Show)
+
+pub(all) struct Weapon {
+  mut kind : WeaponKind
+  mut damage : Int
+  mut fire_rate : Float
+  mut fire_timer : Float
+  mut projectile_speed : Float
+  mut spread : Float
+  mut projectile_count : Int
+  mut range : Float
+  mut heat_cost : Float
+}
+
+pub(all) enum WeaponKind {
+  Laser
+  Shotgun
+  Missile
+  Railgun
+  Flak
+  Beam
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

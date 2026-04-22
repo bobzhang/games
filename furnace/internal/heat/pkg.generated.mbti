@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/furnace/internal/heat"
+
+import {
+  "bobzhang/games/furnace/internal/types",
+}
+
+// Values
+pub fn get_neighbors(Int, Int, Int) -> Array[(Int, Int)]
+
+pub fn is_stable(@types.Grid, Float) -> Bool
+
+pub fn run_simulation(@types.Grid, Int) -> Int
+
+pub fn simulate_step(@types.Grid) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

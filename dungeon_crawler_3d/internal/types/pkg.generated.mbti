@@ -6,6 +6,8 @@ pub fn add_buff(Game, Int, Float, Int) -> Unit
 
 pub fn add_message(Game, String, Int, Int, Int) -> Unit
 
+pub let affix_count : Int
+
 pub let ai_ambush : Int
 
 pub let ai_chase : Int
@@ -76,6 +78,12 @@ pub let bow_damage_mult : Float
 
 pub let bow_range : Float
 
+pub let buff_berserker : Int
+
+pub let buff_mana_shield : Int
+
+pub let buff_shadow_step : Int
+
 pub let buff_shield : Int
 
 pub let buff_speed : Int
@@ -126,6 +134,10 @@ pub let enemy_sight_range : Float
 
 pub let enemy_telegraph_duration : Float
 
+pub let fire_dot_damage : Int
+
+pub let fire_dot_duration : Float
+
 pub let fireball_damage : Int
 
 pub let fireball_mana_cost : Int
@@ -134,11 +146,21 @@ pub let fireball_radius : Float
 
 pub let flame_damage : Int
 
+pub fn generate_shrine_boons(Game) -> Unit
+
+pub fn get_affix_name(WeaponAffix) -> String
+
 pub fn get_armor_defense(Int) -> Int
 
 pub fn get_boss_phase(Int, Int) -> Int
 
+pub fn get_buff_color(Int) -> (Int, Int, Int)
+
+pub fn get_buff_name(Int) -> String
+
 pub fn get_enemy_name(EnemyKind) -> String
+
+pub fn get_levelup_card_text(Int) -> (String, String)
 
 pub fn get_loot_name(Int) -> String
 
@@ -202,6 +224,8 @@ pub let ice_bolt_mana_cost : Int
 
 pub let ice_bolt_slow_duration : Float
 
+pub let icy_slow_duration : Float
+
 pub fn in_bounds(Int, Int) -> Bool
 
 pub fn is_blocked(Game, Float, Float, Float) -> Bool
@@ -209,6 +233,8 @@ pub fn is_blocked(Game, Float, Float, Float) -> Bool
 pub fn is_walkable(Int) -> Bool
 
 pub let leather_defense : Int
+
+pub let levelup_card_count : Int
 
 pub let lightning_chain_range : Float
 
@@ -258,11 +284,15 @@ pub let max_buffs : Int
 
 pub let max_damage_numbers : Int
 
+pub let max_discovered_weapons : Int
+
 pub let max_enemies : Int
 
 pub let max_floors : Int
 
 pub let max_inventory : Int
+
+pub let max_levelup_cards : Int
 
 pub let max_loot : Int
 
@@ -299,6 +329,8 @@ pub let minimap_x : Int
 pub let minimap_y : Int
 
 pub let minotaur_charge_speed : Float
+
+pub fn next_discovered_weapon(Game) -> WeaponKind
 
 pub fn next_weapon(WeaponKind) -> WeaponKind
 
@@ -361,6 +393,10 @@ pub let ring_mana_regen : Int
 pub let ring_thorns : Int
 
 pub let robes_defense : Int
+
+pub fn roll_affix(Game, Int) -> WeaponAffix
+
+pub fn roll_levelup_cards(Game) -> Unit
 
 pub let room_boss : Int
 
@@ -454,6 +490,8 @@ pub let trap_cooldown : Float
 
 pub fn trap_kind_from_int(Int) -> TrapKind
 
+pub fn trigger_hitstop(Game, Float) -> Unit
+
 pub fn trigger_shake(Game, Float, Float) -> Unit
 
 pub fn update_buffs(Game, Float) -> Unit
@@ -462,11 +500,17 @@ pub fn update_damage_numbers(Game, Float) -> Unit
 
 pub fn update_explored(Game) -> Unit
 
+pub fn update_hitstop(Game, Float) -> Bool
+
 pub fn update_messages(Game, Float) -> Unit
 
 pub fn update_shake(Game, Float) -> Unit
 
 pub let wall_height : Float
+
+pub fn weapon_kind_from_index(Int) -> WeaponKind
+
+pub fn weapon_kind_index(WeaponKind) -> Int
 
 pub fn world_to_grid_x(Float) -> Int
 
@@ -572,11 +616,8 @@ pub(all) struct FloorInfo {
   mut cleared : Bool
   mut enemies_killed : Int
   mut enemies_total : Int
-
-  fn new() -> FloorInfo
 }
-#deprecated
-pub fn FloorInfo::new() -> Self
+pub fn FloorInfo::FloorInfo() -> Self
 
 pub(all) struct Game {
   mut state : GameState
@@ -655,6 +696,7 @@ pub(all) struct Game {
   mut frame_counter : Int
   mut shake_timer : Float
   mut shake_intensity : Float
+  mut hitstop_timer : Float
   damage_numbers : Array[DamageNumber]
   mut equip_weapon_rarity : Int
   mut equip_weapon_bonus : Int
@@ -664,11 +706,21 @@ pub(all) struct Game {
   mut equip_ring_rarity : Int
   mut equip_ring_bonus : Int
   mut mana_regen_accum : Float
-
-  fn new() -> Game
+  discovered_weapons : Array[Bool]
+  mut weapon_affix : WeaponAffix
+  mut pending_equip_kind : Int
+  mut pending_equip_bonus : Int
+  mut pending_equip_rarity : Int
+  mut pending_equip_affix : WeaponAffix
+  mut pending_equip_weapon_type : WeaponKind
+  mut pending_equip_ring_kind : Int
+  levelup_cards : Array[Int]
+  mut levelup_card_cursor : Int
+  shrine_boon_names : Array[String]
+  shrine_boon_ids : Array[Int]
+  enemy_fire_dot : Array[Float]
 }
-#deprecated
-pub fn Game::new() -> Self
+pub fn Game::Game() -> Self
 
 pub(all) enum GameState {
   StateMenu
@@ -680,6 +732,7 @@ pub(all) enum GameState {
   StateShop
   StateShrine
   StateClassSelect
+  StateEquipPopup
 } derive(Eq)
 pub fn GameState::from_int(Int) -> Self
 pub fn GameState::to_int(Self) -> Int
@@ -701,6 +754,8 @@ pub(all) struct Loot {
   mut bob_phase : Float
   mut rarity : Int
   mut value : Int
+  mut affix : WeaponAffix
+  mut weapon_type : WeaponKind
 }
 pub fn Loot::inactive() -> Self
 
@@ -753,13 +808,10 @@ pub(all) struct Room {
   mut kind : Int
   mut explored : Bool
   mut enemies_cleared : Bool
-
-  fn new(Int, Int, Int, Int) -> Room
 }
+pub fn Room::Room(Int, Int, Int, Int) -> Self
 pub fn Room::center_x(Self) -> Int
 pub fn Room::center_y(Self) -> Int
-#deprecated
-pub fn Room::new(Int, Int, Int, Int) -> Self
 
 pub(all) enum ShipClass {
   Warrior
@@ -818,6 +870,16 @@ pub(all) enum TrapKind {
   Flame
   Poison
   Pitfall
+} derive(Eq)
+
+pub(all) enum WeaponAffix {
+  AffixNone
+  AffixVampiric
+  AffixFlaming
+  AffixIcy
+  AffixSwift
+  AffixHeavy
+  AffixKeen
 } derive(Eq)
 
 pub(all) enum WeaponKind {

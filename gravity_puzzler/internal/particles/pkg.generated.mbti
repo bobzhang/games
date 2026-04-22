@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/gravity_puzzler/internal/particles"
+
+import {
+  "bobzhang/games/gravity_puzzler/internal/types",
+}
+
+// Values
+pub fn draw_particles(@types.Game) -> Unit
+
+pub fn spawn_achievement_sparkle(@types.Game) -> Unit
+
+pub fn spawn_celebration(@types.Game, Float, Float) -> Unit
+
+pub fn spawn_crumble_debris(@types.Game, Float, Float) -> Unit
+
+pub fn spawn_enemy_crush(@types.Game, Float, Float) -> Unit
+
+pub fn spawn_gem_sparkle(@types.Game, Float, Float) -> Unit
+
+pub fn spawn_gravity_trail(@types.Game, Float, Float, @types.GravityDir) -> Unit
+
+pub fn spawn_key_ring(@types.Game, Float, Float) -> Unit
+
+pub fn spawn_portal_swirl(@types.Game, Float, Float, Int) -> Unit
+
+pub fn spawn_spike_death(@types.Game, Float, Float) -> Unit
+
+pub fn update_particles(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

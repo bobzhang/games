@@ -8,6 +8,8 @@ import {
 // Values
 pub fn update_game(@types.Game, Float) -> Unit
 
+pub fn weapon_hack_bonus(@types.WeaponUpgrade?, Int) -> Float
+
 // Errors
 
 // Types and methods

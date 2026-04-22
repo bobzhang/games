@@ -1,0 +1,64 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/terrarium/internal/levels"
+
+import {
+  "bobzhang/games/terrarium/internal/types",
+}
+
+// Values
+pub fn get_level(Int) -> @types.LevelDef
+
+pub fn get_tier_count(Int) -> Int
+
+pub fn get_tier_for_level(Int) -> @types.Tier
+
+pub fn get_tier_start(Int) -> Int
+
+pub fn level_01() -> @types.LevelDef
+
+pub fn level_02() -> @types.LevelDef
+
+pub fn level_03() -> @types.LevelDef
+
+pub fn level_04() -> @types.LevelDef
+
+pub fn level_05() -> @types.LevelDef
+
+pub fn level_06() -> @types.LevelDef
+
+pub fn level_07() -> @types.LevelDef
+
+pub fn level_08() -> @types.LevelDef
+
+pub fn level_09() -> @types.LevelDef
+
+pub fn level_10() -> @types.LevelDef
+
+pub fn level_11() -> @types.LevelDef
+
+pub fn level_12() -> @types.LevelDef
+
+pub fn level_13() -> @types.LevelDef
+
+pub fn level_14() -> @types.LevelDef
+
+pub fn level_15() -> @types.LevelDef
+
+pub fn level_16() -> @types.LevelDef
+
+pub fn level_17() -> @types.LevelDef
+
+pub fn level_18() -> @types.LevelDef
+
+pub fn level_19() -> @types.LevelDef
+
+pub fn level_20() -> @types.LevelDef
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,225 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/furnace/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let ambient_temp : Float
+
+pub fn calculate_stars(Bool, Int, Int, Int, Int) -> StarRating
+
+pub let cell_size : Int
+
+pub fn check_all_targets(Grid) -> Bool
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let color_bg : @raylib.Color
+
+pub let color_button : @raylib.Color
+
+pub let color_button_hover : @raylib.Color
+
+pub let color_empty : @raylib.Color
+
+pub let color_glass : @raylib.Color
+
+pub let color_grid_line : @raylib.Color
+
+pub let color_heat_source : @raylib.Color
+
+pub let color_hud_dim : @raylib.Color
+
+pub let color_hud_text : @raylib.Color
+
+pub let color_insulator : @raylib.Color
+
+pub let color_metal : @raylib.Color
+
+pub let color_selected : @raylib.Color
+
+pub let color_star_empty : @raylib.Color
+
+pub let color_star_gold : @raylib.Color
+
+pub let color_stone : @raylib.Color
+
+pub let color_target : @raylib.Color
+
+pub let color_target_fail : @raylib.Color
+
+pub let color_target_met : @raylib.Color
+
+pub let color_title_glow : @raylib.Color
+
+pub let color_toolbar_bg : @raylib.Color
+
+pub let color_wood : @raylib.Color
+
+pub fn conductivity(Material) -> Float
+
+pub fn count_placed_materials(Grid) -> Int
+
+pub let grid_offset_x : Int
+
+pub let grid_offset_y : Int
+
+pub let grid_size : Int
+
+pub let heat_spread_rate : Float
+
+pub fn is_level_unlocked(Game, Int) -> Bool
+
+pub fn material_color(Material) -> @raylib.Color
+
+pub fn material_name(Material) -> String
+
+pub let max_sim_turns : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn minf(Float, Float) -> Float
+
+pub fn new_game() -> Game
+
+pub fn new_grid() -> Grid
+
+pub fn new_level_progress() -> LevelProgress
+
+pub fn new_level_result() -> LevelResult
+
+pub fn new_tile() -> Tile
+
+pub fn recalculate_total_stars(Game) -> Unit
+
+pub fn reset_grid(Grid) -> Unit
+
+pub fn reset_temperatures(Grid) -> Unit
+
+pub let screen_height : Int
+
+pub let screen_width : Int
+
+pub fn set_message(Game, String, Float) -> Unit
+
+pub let sim_speed : Float
+
+pub fn sinf(Float) -> Float
+
+pub fn star_count(StarRating) -> Int
+
+pub let target_fps : Int
+
+pub let tier1_count : Int
+
+pub let tier2_count : Int
+
+pub let tier3_count : Int
+
+pub let toolbar_x : Int
+
+pub let toolbar_y : Int
+
+pub let total_levels : Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Game {
+  mut screen : Screen
+  grid : Grid
+  mut current_level : Int
+  mut tool_mode : ToolMode
+  mut sim_turn : Int
+  mut sim_timer : Float
+  mut sim_running : Bool
+  level_progress : Array[LevelProgress]
+  mut result : LevelResult
+  mut frame_count : Int
+  mut hover_row : Int
+  mut hover_col : Int
+  mut message : String
+  mut message_timer : Float
+  mut total_stars : Int
+}
+
+pub(all) struct Grid {
+  tiles : Array[Array[Tile]]
+  size : Int
+}
+
+pub(all) struct LevelDef {
+  id : Int
+  name : String
+  tier : Int
+  par_materials : Int
+  par_turns : Int
+  sources : Array[(Int, Int, Float)]
+  targets : Array[(Int, Int, Float, Float)]
+  locked_tiles : Array[(Int, Int, Material)]
+  available_materials : Array[Material]
+}
+
+pub(all) struct LevelProgress {
+  mut best_stars : StarRating
+  mut completed : Bool
+}
+
+pub(all) struct LevelResult {
+  mut stars : StarRating
+  mut materials_used : Int
+  mut turns_taken : Int
+  mut all_targets_met : Bool
+}
+
+pub(all) enum Material {
+  Empty
+  Metal
+  Stone
+  Wood
+  Insulator
+  Glass
+} derive(Eq, Show)
+
+pub(all) enum Screen {
+  Title
+  LevelSelect
+  Playing
+  Simulating
+  LevelComplete
+  LevelFailed
+} derive(Eq, Show)
+
+pub(all) enum StarRating {
+  Zero
+  One
+  Two
+  Three
+} derive(Eq, Show)
+
+pub(all) struct Tile {
+  mut material : Material
+  mut kind : TileKind
+  mut temperature : Float
+  mut locked : Bool
+}
+
+pub(all) enum TileKind {
+  Normal
+  HeatSource(Float)
+  Target(Float, Float)
+} derive(Eq, Show)
+
+pub(all) enum ToolMode {
+  Place(Material)
+  Erase
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

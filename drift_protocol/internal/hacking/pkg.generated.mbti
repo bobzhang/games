@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/drift_protocol/internal/hacking"
+
+import {
+  "bobzhang/games/drift_protocol/internal/types",
+}
+
+// Values
+pub fn all_terminals_hacked(@types.Game) -> Bool
+
+pub fn complete_hack(@types.Game, Int) -> Unit
+
+pub fn hack_input(@types.Game, Int) -> Unit
+
+pub fn hacked_data_value(@types.Game) -> Int
+
+pub fn toggle_power_node(@types.Game, Int) -> Unit
+
+pub fn try_hack_terminal(@types.Game) -> Unit
+
+pub fn update_hack_minigame(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+
