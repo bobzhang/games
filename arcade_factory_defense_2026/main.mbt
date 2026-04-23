@@ -151,6 +151,194 @@ struct Particle {
 }
 
 ///|
+/// Generated title backdrop texture.
+let tex_factory_title : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated factory core texture.
+let tex_core : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated player defender texture.
+let tex_player : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated auto turret texture.
+let tex_auto_turret : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated cannon turret texture.
+let tex_cannon_turret : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated basic drone enemy texture.
+let tex_enemy_drone : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated shooter enemy texture.
+let tex_enemy_shooter : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated heavy enemy texture.
+let tex_enemy_heavy : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated scrap pickup texture.
+let tex_scrap : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated factory art texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "arcade_factory_defense_2026/resources/" + file_name,
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated factory art textures.
+fn load_factory_art() -> Unit {
+  tex_factory_title.val = Some(load_art_texture("factory_title.png"))
+  tex_core.val = Some(load_art_texture("core_sprite.png"))
+  tex_player.val = Some(load_art_texture("player_sprite.png"))
+  tex_auto_turret.val = Some(load_art_texture("auto_turret_sprite.png"))
+  tex_cannon_turret.val = Some(load_art_texture("cannon_turret_sprite.png"))
+  tex_enemy_drone.val = Some(load_art_texture("enemy_drone_sprite.png"))
+  tex_enemy_shooter.val = Some(load_art_texture("enemy_shooter_sprite.png"))
+  tex_enemy_heavy.val = Some(load_art_texture("enemy_heavy_sprite.png"))
+  tex_scrap.val = Some(load_art_texture("scrap_sprite.png"))
+}
+
+///|
+/// Unloads generated factory art textures.
+fn unload_factory_art() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_factory_title)
+  unload(tex_core)
+  unload(tex_player)
+  unload(tex_auto_turret)
+  unload(tex_cannon_turret)
+  unload(tex_enemy_drone)
+  unload(tex_enemy_shooter)
+  unload(tex_enemy_heavy)
+  unload(tex_scrap)
+}
+
+///|
+/// Draws a generated sprite centered in a destination rectangle.
+fn draw_art_rect(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated sprite scaled to fit a centered box.
+fn draw_art_fit(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w = Float::from_int(texture.width())
+  let source_h = Float::from_int(texture.height())
+  let source_ratio = source_w / source_h
+  let box_ratio = max_w / max_h
+  let (w, h) = if source_ratio > box_ratio {
+    (max_w, max_w / source_ratio)
+  } else {
+    (max_h * source_ratio, max_h)
+  }
+  draw_art_rect(texture, x, y, w, h, rotation, tint)
+}
+
+///|
+/// Draws a generated image as full-screen cover art.
+fn draw_cover_art(texture : @raylib.Texture) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let screen_w : Float = Float::from_int(sw)
+  let screen_h : Float = Float::from_int(sh)
+  let source_ratio : Float = source_w / source_h
+  let screen_ratio : Float = screen_w / screen_h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > screen_ratio {
+    src_w = source_h * screen_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < screen_ratio {
+    src_h = source_w / screen_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(0.0, 0.0, screen_w, screen_h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    @raylib.white,
+  )
+}
+
+///|
+/// Returns generated turret texture for a turret kind.
+fn turret_art(kind : Int) -> @raylib.Texture? {
+  if kind == 0 {
+    tex_auto_turret.val
+  } else {
+    tex_cannon_turret.val
+  }
+}
+
+///|
+/// Returns generated enemy texture for an enemy kind.
+fn enemy_art(kind : Int) -> @raylib.Texture? {
+  if kind == 0 {
+    tex_enemy_drone.val
+  } else if kind == 1 {
+    tex_enemy_shooter.val
+  } else {
+    tex_enemy_heavy.val
+  }
+}
+
+///|
 /// Returns the value clamped between lo and hi.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -692,6 +880,7 @@ fn main {
   @raylib.init_window(sw, sh, "raylib [game] arcade factory defense 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_factory_art()
 
   let player : Player = {
     x: core_x,
@@ -1742,13 +1931,23 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(8, 12, 20, 255))
 
     // Background grid + moving glow.
-    for gy in 0..<14 {
-      let y : Int = 92 + gy * 48
-      @raylib.draw_line(0, y, sw, y, @raylib.Color::new(20, 30, 46, 130))
-    }
-    for gx in 0..<26 {
-      let x : Int = gx * 50
-      @raylib.draw_line(x, 92, x, sh, @raylib.Color::new(20, 30, 46, 106))
+    if state == 0 {
+      match tex_factory_title.val {
+        Some(title_art) => {
+          draw_cover_art(title_art)
+          @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(4, 8, 14, 96))
+        }
+        None => ()
+      }
+    } else {
+      for gy in 0..<14 {
+        let y : Int = 92 + gy * 48
+        @raylib.draw_line(0, y, sw, y, @raylib.Color::new(20, 30, 46, 130))
+      }
+      for gx in 0..<26 {
+        let x : Int = gx * 50
+        @raylib.draw_line(x, 92, x, sh, @raylib.Color::new(20, 30, 46, 106))
+      }
     }
 
     for i in 0..<160 {
@@ -1803,6 +2002,19 @@ fn main {
       core_r,
       @raylib.Color::new(96, 196, 242, 210),
     )
+    match tex_core.val {
+      Some(core_art) =>
+        draw_art_fit(
+          core_art,
+          core_x,
+          core_y,
+          core_r * 2.45,
+          core_r * 2.45,
+          stars_t * 0.12,
+          @raylib.white,
+        )
+      None => ()
+    }
     @raylib.draw_circle_lines(
       core_x.to_int(),
       core_y.to_int(),
@@ -1816,22 +2028,43 @@ fn main {
         continue
       }
 
-      if turret.kind == 0 {
-        @raylib.draw_rectangle(
-          (turret.x - 15.0).to_int(),
-          (turret.y - 15.0).to_int(),
-          30,
-          30,
-          @raylib.Color::new(82, 170, 210, 242),
-        )
-      } else {
-        @raylib.draw_rectangle(
-          (turret.x - 18.0).to_int(),
-          (turret.y - 18.0).to_int(),
-          36,
-          36,
-          @raylib.Color::new(126, 156, 214, 242),
-        )
+      match turret_art(turret.kind) {
+        Some(turret_texture) =>
+          draw_art_fit(
+            turret_texture,
+            turret.x,
+            turret.y,
+            if turret.kind == 0 {
+              42.0
+            } else {
+              50.0
+            },
+            if turret.kind == 0 {
+              42.0
+            } else {
+              50.0
+            },
+            @math.sinf(turret.t * 1.2) * 2.0,
+            @raylib.white,
+          )
+        None =>
+          if turret.kind == 0 {
+            @raylib.draw_rectangle(
+              (turret.x - 15.0).to_int(),
+              (turret.y - 15.0).to_int(),
+              30,
+              30,
+              @raylib.Color::new(82, 170, 210, 242),
+            )
+          } else {
+            @raylib.draw_rectangle(
+              (turret.x - 18.0).to_int(),
+              (turret.y - 18.0).to_int(),
+              36,
+              36,
+              @raylib.Color::new(126, 156, 214, 242),
+            )
+          }
       }
       @raylib.draw_rectangle_lines(
         (turret.x - 20.0).to_int(),
@@ -1854,12 +2087,25 @@ fn main {
       } else {
         @raylib.Color::new(250, 216, 118, 236)
       }
-      @raylib.draw_circle(
-        scrap.x.to_int(),
-        scrap.y.to_int(),
-        6.0 + Float::from_int(scrap.value),
-        col,
-      )
+      match tex_scrap.val {
+        Some(scrap_art) =>
+          draw_art_fit(
+            scrap_art,
+            scrap.x,
+            scrap.y,
+            14.0 + Float::from_int(scrap.value) * 2.0,
+            14.0 + Float::from_int(scrap.value) * 2.0,
+            @math.sinf(scrap.t * 4.0) * 8.0,
+            col,
+          )
+        None =>
+          @raylib.draw_circle(
+            scrap.x.to_int(),
+            scrap.y.to_int(),
+            6.0 + Float::from_int(scrap.value),
+            col,
+          )
+      }
     }
 
     // Enemies.
@@ -1867,29 +2113,42 @@ fn main {
       if !enemy.active {
         continue
       }
-      if enemy.kind == 0 {
-        @raylib.draw_circle(
-          enemy.x.to_int(),
-          enemy.y.to_int(),
-          15.0,
-          @raylib.Color::new(232, 106, 114, 242),
-        )
-      } else if enemy.kind == 1 {
-        @raylib.draw_rectangle(
-          (enemy.x - 18.0).to_int(),
-          (enemy.y - 14.0).to_int(),
-          36,
-          28,
-          @raylib.Color::new(236, 146, 80, 242),
-        )
-      } else {
-        @raylib.draw_rectangle(
-          (enemy.x - 24.0).to_int(),
-          (enemy.y - 20.0).to_int(),
-          48,
-          40,
-          @raylib.Color::new(166, 98, 192, 242),
-        )
+      match enemy_art(enemy.kind) {
+        Some(enemy_texture) =>
+          draw_art_fit(
+            enemy_texture,
+            enemy.x,
+            enemy.y,
+            enemy_radius(enemy.kind) * 2.7,
+            enemy_radius(enemy.kind) * 2.45,
+            @math.sinf(enemy.t * 2.0) * 4.0,
+            @raylib.white,
+          )
+        None =>
+          if enemy.kind == 0 {
+            @raylib.draw_circle(
+              enemy.x.to_int(),
+              enemy.y.to_int(),
+              15.0,
+              @raylib.Color::new(232, 106, 114, 242),
+            )
+          } else if enemy.kind == 1 {
+            @raylib.draw_rectangle(
+              (enemy.x - 18.0).to_int(),
+              (enemy.y - 14.0).to_int(),
+              36,
+              28,
+              @raylib.Color::new(236, 146, 80, 242),
+            )
+          } else {
+            @raylib.draw_rectangle(
+              (enemy.x - 24.0).to_int(),
+              (enemy.y - 20.0).to_int(),
+              48,
+              40,
+              @raylib.Color::new(166, 98, 192, 242),
+            )
+          }
       }
       @raylib.draw_circle_lines(
         enemy.x.to_int(),
@@ -1924,19 +2183,33 @@ fn main {
     } else {
       @raylib.Color::new(96, 194, 250, 246)
     }
-    @raylib.draw_rectangle(
-      (player.x - 16.0).to_int(),
-      (player.y - 12.0).to_int(),
-      32,
-      24,
-      pcol,
-    )
-    @raylib.draw_circle(
-      player.x.to_int(),
-      (player.y - 14.0).to_int(),
-      8.0,
-      @raylib.Color::new(216, 244, 255, 252),
-    )
+    match tex_player.val {
+      Some(player_art) =>
+        draw_art_fit(
+          player_art,
+          player.x,
+          player.y,
+          48.0,
+          48.0,
+          @math.sinf(stars_t * 0.18) * 2.0,
+          pcol,
+        )
+      None => {
+        @raylib.draw_rectangle(
+          (player.x - 16.0).to_int(),
+          (player.y - 12.0).to_int(),
+          32,
+          24,
+          pcol,
+        )
+        @raylib.draw_circle(
+          player.x.to_int(),
+          (player.y - 14.0).to_int(),
+          8.0,
+          @raylib.Color::new(216, 244, 255, 252),
+        )
+      }
+    }
     @raylib.draw_line(
       player.x.to_int(),
       player.y.to_int(),
@@ -1964,6 +2237,27 @@ fn main {
         @raylib.Color::new(234, 118, 140, 150)
       }
       @raylib.draw_circle(px.to_int(), py.to_int(), 20.0, col)
+      match turret_art(selected_turret) {
+        Some(preview_texture) =>
+          draw_art_fit(
+            preview_texture,
+            px,
+            py,
+            if selected_turret == 0 {
+              42.0
+            } else {
+              50.0
+            },
+            if selected_turret == 0 {
+              42.0
+            } else {
+              50.0
+            },
+            0.0,
+            @raylib.Color::new(255, 255, 255, if valid { 190 } else { 130 }),
+          )
+        None => ()
+      }
       @raylib.draw_circle_lines(
         px.to_int(),
         py.to_int(),
@@ -2328,5 +2622,6 @@ fn main {
   }
 
   @draw.cleanup()
+  unload_factory_art()
   @raylib.close_window()
 }
