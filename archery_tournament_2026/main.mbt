@@ -32,6 +32,150 @@ struct Target {
 }
 
 ///|
+/// Generated archery range backdrop texture.
+let tex_archery_backdrop : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated archer sprite texture.
+let tex_archer : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated target sprite texture.
+let tex_target : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated arrow sprite texture.
+let tex_arrow : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated wind pennant sprite texture.
+let tex_wind_pennant : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated archery art texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "archery_tournament_2026/resources/" + file_name,
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated archery tournament art textures.
+fn load_archery_art() -> Unit {
+  tex_archery_backdrop.val = Some(
+    load_art_texture("archery_range_backdrop.png"),
+  )
+  tex_archer.val = Some(load_art_texture("archer_sprite.png"))
+  tex_target.val = Some(load_art_texture("target_sprite.png"))
+  tex_arrow.val = Some(load_art_texture("arrow_sprite.png"))
+  tex_wind_pennant.val = Some(load_art_texture("wind_pennant_sprite.png"))
+}
+
+///|
+/// Unloads generated archery tournament art textures.
+fn unload_archery_art() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_archery_backdrop)
+  unload(tex_archer)
+  unload(tex_target)
+  unload(tex_arrow)
+  unload(tex_wind_pennant)
+}
+
+///|
+/// Draws a generated sprite centered in a destination rectangle.
+fn draw_art_rect(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated sprite scaled to fit a centered box.
+fn draw_art_fit(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w = Float::from_int(texture.width())
+  let source_h = Float::from_int(texture.height())
+  let source_ratio = source_w / source_h
+  let box_ratio = max_w / max_h
+  let (w, h) = if source_ratio > box_ratio {
+    (max_w, max_w / source_ratio)
+  } else {
+    (max_h * source_ratio, max_h)
+  }
+  draw_art_rect(texture, x, y, w, h, rotation, tint)
+}
+
+///|
+/// Draws a generated image as full-screen cover art.
+fn draw_cover_art(texture : @raylib.Texture) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let screen_w : Float = Float::from_int(sw)
+  let screen_h : Float = Float::from_int(sh)
+  let source_ratio : Float = source_w / source_h
+  let screen_ratio : Float = screen_w / screen_h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > screen_ratio {
+    src_w = source_h * screen_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < screen_ratio {
+    src_h = source_w / screen_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(0.0, 0.0, screen_w, screen_h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    @raylib.white,
+  )
+}
+
+///|
 /// Resets all targets to their initial positions, sizes, velocities, and point values.
 fn reset_targets(ts : Array[Target]) -> Unit {
   ts[0] = { alive: true, x: 920.0, y: 430.0, r: 34.0, vx: 90.0, points: 30 }
@@ -46,6 +190,7 @@ fn main {
   @raylib.init_window(sw, sh, "Archery Tournament 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_archery_art()
 
   let arrow : Arrow = { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0 }
 
@@ -207,62 +352,103 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(196, 228, 255, 255))
 
-    @raylib.draw_rectangle(
-      0,
-      ground_y.to_int(),
-      sw,
-      sh - ground_y.to_int(),
-      @raylib.Color::new(88, 138, 82, 255),
-    )
+    match tex_archery_backdrop.val {
+      Some(texture) => {
+        draw_cover_art(texture)
+        @raylib.draw_rectangle(
+          0,
+          0,
+          sw,
+          146,
+          @raylib.Color::new(255, 255, 255, 42),
+        )
+      }
+      None =>
+        @raylib.draw_rectangle(
+          0,
+          ground_y.to_int(),
+          sw,
+          sh - ground_y.to_int(),
+          @raylib.Color::new(88, 138, 82, 255),
+        )
+    }
 
     // Archer
-    @raylib.draw_circle(
-      archer_x.to_int(),
-      (archer_y - 52.0).to_int(),
-      16.0,
-      @raylib.orange,
-    )
-    @raylib.draw_rectangle(
-      (archer_x - 12.0).to_int(),
-      (archer_y - 36.0).to_int(),
-      24,
-      34,
-      @raylib.darkbrown,
-    )
-    @raylib.draw_line(
-      (archer_x + 12.0).to_int(),
-      (archer_y - 28.0).to_int(),
-      (archer_x + 34.0).to_int(),
-      (archer_y - 28.0).to_int(),
-      @raylib.brown,
-    )
-    @raylib.draw_circle_lines(
-      (archer_x + 40.0).to_int(),
-      (archer_y - 28.0).to_int(),
-      14.0,
-      @raylib.darkbrown,
-    )
+    match tex_archer.val {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          archer_x + 26.0,
+          archer_y - 56.0,
+          128.0,
+          150.0,
+          0.0,
+          @raylib.white,
+        )
+      None => {
+        @raylib.draw_circle(
+          archer_x.to_int(),
+          (archer_y - 52.0).to_int(),
+          16.0,
+          @raylib.orange,
+        )
+        @raylib.draw_rectangle(
+          (archer_x - 12.0).to_int(),
+          (archer_y - 36.0).to_int(),
+          24,
+          34,
+          @raylib.darkbrown,
+        )
+        @raylib.draw_line(
+          (archer_x + 12.0).to_int(),
+          (archer_y - 28.0).to_int(),
+          (archer_x + 34.0).to_int(),
+          (archer_y - 28.0).to_int(),
+          @raylib.brown,
+        )
+        @raylib.draw_circle_lines(
+          (archer_x + 40.0).to_int(),
+          (archer_y - 28.0).to_int(),
+          14.0,
+          @raylib.darkbrown,
+        )
+      }
+    }
 
     for target in targets {
       if target.alive {
-        @raylib.draw_circle(
-          target.x.to_int(),
-          target.y.to_int(),
-          target.r,
-          @raylib.red,
-        )
-        @raylib.draw_circle(
-          target.x.to_int(),
-          target.y.to_int(),
-          target.r * 0.68,
-          @raylib.white,
-        )
-        @raylib.draw_circle(
-          target.x.to_int(),
-          target.y.to_int(),
-          target.r * 0.36,
-          @raylib.blue,
-        )
+        match tex_target.val {
+          Some(texture) =>
+            draw_art_fit(
+              texture,
+              target.x,
+              target.y + target.r * 0.48,
+              target.r * 2.85,
+              target.r * 3.35,
+              0.0,
+              @raylib.white,
+            )
+          None => {
+            @raylib.draw_circle(
+              target.x.to_int(),
+              target.y.to_int(),
+              target.r,
+              @raylib.red,
+            )
+            @raylib.draw_circle(
+              target.x.to_int(),
+              target.y.to_int(),
+              target.r * 0.68,
+              @raylib.white,
+            )
+            @raylib.draw_circle(
+              target.x.to_int(),
+              target.y.to_int(),
+              target.r * 0.36,
+              @raylib.blue,
+            )
+          }
+        }
         @draw.draw_text(
           "\{target.points}",
           (target.x - 14.0).to_int(),
@@ -274,19 +460,33 @@ fn main {
     }
 
     if arrow.alive {
-      @raylib.draw_line(
-        (arrow.x - 18.0).to_int(),
-        arrow.y.to_int(),
-        (arrow.x + 18.0).to_int(),
-        arrow.y.to_int(),
-        @raylib.darkbrown,
-      )
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(arrow.x + 18.0, arrow.y),
-        @raylib.Vector2::new(arrow.x + 10.0, arrow.y - 4.0),
-        @raylib.Vector2::new(arrow.x + 10.0, arrow.y + 4.0),
-        @raylib.gray,
-      )
+      match tex_arrow.val {
+        Some(texture) =>
+          draw_art_fit(
+            texture,
+            arrow.x,
+            arrow.y,
+            72.0,
+            12.0,
+            0.0,
+            @raylib.white,
+          )
+        None => {
+          @raylib.draw_line(
+            (arrow.x - 18.0).to_int(),
+            arrow.y.to_int(),
+            (arrow.x + 18.0).to_int(),
+            arrow.y.to_int(),
+            @raylib.darkbrown,
+          )
+          @raylib.draw_triangle(
+            @raylib.Vector2::new(arrow.x + 18.0, arrow.y),
+            @raylib.Vector2::new(arrow.x + 10.0, arrow.y - 4.0),
+            @raylib.Vector2::new(arrow.x + 10.0, arrow.y + 4.0),
+            @raylib.gray,
+          )
+        }
+      }
     }
 
     @draw.draw_text("ARCHERY TOURNAMENT 2026", 20, 18, 40, @raylib.darkblue)
@@ -346,6 +546,19 @@ fn main {
         @raylib.gray
       },
     )
+    match tex_wind_pennant.val {
+      Some(texture) => {
+        let tint = if wind > 0.0 {
+          @raylib.Color::new(255, 220, 204, 255)
+        } else if wind < 0.0 {
+          @raylib.Color::new(204, 226, 255, 255)
+        } else {
+          @raylib.white
+        }
+        draw_art_fit(texture, 978.0, 118.0, 92.0, 58.0, 0.0, tint)
+      }
+      None => ()
+    }
 
     @raylib.draw_rectangle(
       20,
@@ -372,6 +585,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_archery_art()
   @draw.cleanup()
   @raylib.close_window()
 }
