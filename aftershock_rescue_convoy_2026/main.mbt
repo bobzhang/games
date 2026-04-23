@@ -112,6 +112,18 @@ struct Particle {
 }
 
 ///|
+/// Holds all project-bound raster artwork used by the game renderer.
+struct GameArt {
+  title_art : @raylib.Texture
+  convoy : @raylib.Texture
+  survivor_group : @raylib.Texture
+  med_hub : @raylib.Texture
+  district : @raylib.Texture
+  crack : @raylib.Texture
+  rubble : @raylib.Texture
+}
+
+///|
 /// Returns the value clamped between lo and hi.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -172,6 +184,42 @@ fn inside_rect(
   px <= Float::from_int(x + w) &&
   py >= Float::from_int(y) &&
   py <= Float::from_int(y + h)
+}
+
+///|
+/// Loads one bilinear-filtered texture from the game resources directory.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "aftershock_rescue_convoy_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads the generated art bundle. Call after window initialization.
+fn load_game_art() -> GameArt {
+  {
+    title_art: load_art_texture("aftershock_title.png"),
+    convoy: load_art_texture("convoy_sprite.png"),
+    survivor_group: load_art_texture("survivor_group_sprite.png"),
+    med_hub: load_art_texture("med_hub_sprite.png"),
+    district: load_art_texture("district_sprite.png"),
+    crack: load_art_texture("crack_sprite.png"),
+    rubble: load_art_texture("rubble_sprite.png"),
+  }
+}
+
+///|
+/// Releases the generated art bundle before closing the window.
+fn unload_game_art(art : GameArt) -> Unit {
+  @raylib.unload_texture(art.title_art)
+  @raylib.unload_texture(art.convoy)
+  @raylib.unload_texture(art.survivor_group)
+  @raylib.unload_texture(art.med_hub)
+  @raylib.unload_texture(art.district)
+  @raylib.unload_texture(art.crack)
+  @raylib.unload_texture(art.rubble)
 }
 
 ///|
@@ -1118,13 +1166,32 @@ fn draw_city(
 
 ///|
 /// Draws the hospital building and its label on screen.
-fn draw_hospital(hospital : Hospital) -> Unit {
-  @raylib.draw_rectangle(
-    hospital.x.to_int(),
-    hospital.y.to_int(),
-    hospital.w,
-    hospital.h,
-    @raylib.Color::new(42, 78, 114, 236),
+fn draw_hospital(hospital : Hospital, art : GameArt) -> Unit {
+  let cx : Float = hospital.x + Float::from_int(hospital.w) * 0.5
+  let cy : Float = hospital.y + Float::from_int(hospital.h) * 0.5
+  @raylib.draw_ellipse(
+    cx.to_int(),
+    (cy + 34.0).to_int(),
+    72.0,
+    24.0,
+    @raylib.Color::new(4, 12, 20, 104),
+  )
+  @raylib.draw_circle(
+    cx.to_int(),
+    (hospital.y + 14.0).to_int(),
+    54.0,
+    @raylib.Color::new(246, 226, 160, 42),
+  )
+  draw_centered_art(
+    art.med_hub,
+    cx,
+    cy,
+    150.0,
+    150.0 *
+    Float::from_int(art.med_hub.height()) /
+    Float::from_int(art.med_hub.width()),
+    0.0,
+    @raylib.Color::new(255, 255, 255, 255),
   )
   @raylib.draw_rectangle_lines(
     hospital.x.to_int(),
@@ -1133,18 +1200,6 @@ fn draw_hospital(hospital : Hospital) -> Unit {
     hospital.h,
     @raylib.Color::new(176, 214, 244, 246),
   )
-
-  let mut x : Int = hospital.x.to_int() + 10
-  while x < hospital.x.to_int() + hospital.w - 8 {
-    @raylib.draw_line(
-      x,
-      hospital.y.to_int() + 8,
-      x,
-      hospital.y.to_int() + hospital.h - 8,
-      @raylib.Color::new(88, 132, 170, 198),
-    )
-    x = x + 16
-  }
 
   @draw.draw_text(
     "MED HUB",
@@ -1157,7 +1212,11 @@ fn draw_hospital(hospital : Hospital) -> Unit {
 
 ///|
 /// Draws all active districts with status indicators and alarm effects.
-fn draw_districts(districts : Array[District], t : Float) -> Unit {
+fn draw_districts(
+  districts : Array[District],
+  t : Float,
+  art : GameArt,
+) -> Unit {
   for i in 0..<districts.length() {
     if !districts[i].active {
       continue
@@ -1167,27 +1226,6 @@ fn draw_districts(districts : Array[District], t : Float) -> Unit {
     let pulse : Float = @math.sinf(t * 3.2 + Float::from_int(i) * 0.9) * 0.5 +
       0.5
 
-    let col : @raylib.Color = if districts[i].queue >= 70.0 {
-      @raylib.Color::new(244, 154, 162, 252)
-    } else {
-      @raylib.Color::new(234, 240, 248, 252)
-    }
-
-    @raylib.draw_rectangle(
-      (districts[i].x - 14.0).to_int(),
-      (districts[i].y - 20.0).to_int(),
-      28,
-      28,
-      col,
-    )
-    @raylib.draw_rectangle(
-      (districts[i].x - 24.0).to_int(),
-      (districts[i].y + 8.0).to_int(),
-      48,
-      8,
-      @raylib.Color::new(96, 140, 178, 234),
-    )
-
     let beam_r : Float = 26.0 + q01 * 54.0 + pulse * 6.0
     @raylib.draw_circle(
       districts[i].x.to_int(),
@@ -1195,11 +1233,51 @@ fn draw_districts(districts : Array[District], t : Float) -> Unit {
       beam_r,
       @raylib.Color::new(246, 236, 168, 46 + (q01 * 80.0).to_int()),
     )
+    @raylib.draw_ellipse(
+      districts[i].x.to_int(),
+      (districts[i].y + 14.0).to_int(),
+      38.0,
+      13.0,
+      @raylib.Color::new(4, 12, 20, 96),
+    )
+
+    let district_h : Float = 58.0 + q01 * 5.0
+    let district_w : Float = district_h *
+      Float::from_int(art.district.width()) /
+      Float::from_int(art.district.height())
+    let tint : @raylib.Color = if districts[i].queue >= 70.0 {
+      @raylib.Color::new(255, 220, 214, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 255)
+    }
+    draw_centered_art(
+      art.district,
+      districts[i].x,
+      districts[i].y,
+      district_w,
+      district_h,
+      0.0,
+      tint,
+    )
+    @raylib.draw_rectangle(
+      (districts[i].x - 28.0).to_int(),
+      (districts[i].y + 34.0).to_int(),
+      56,
+      5,
+      @raylib.Color::new(12, 20, 32, 220),
+    )
+    @raylib.draw_rectangle(
+      (districts[i].x - 28.0).to_int(),
+      (districts[i].y + 34.0).to_int(),
+      (q01 * 56.0).to_int(),
+      5,
+      @raylib.Color::new(248, 196, 116, 238),
+    )
 
     @draw.draw_text(
       "D\{districts[i].id} Q:\{districts[i].queue.to_int()} S:\{districts[i].stress.to_int()}",
       (districts[i].x - 56.0).to_int(),
-      (districts[i].y + 24.0).to_int(),
+      (districts[i].y + 42.0).to_int(),
       15,
       @raylib.Color::new(220, 238, 252, 236),
     )
@@ -1217,7 +1295,7 @@ fn draw_districts(districts : Array[District], t : Float) -> Unit {
 
 ///|
 /// Draws all active survivor groups with panic-coloured icons and flare effects.
-fn draw_groups(groups : Array[SurvivorGroup], t : Float) -> Unit {
+fn draw_groups(groups : Array[SurvivorGroup], t : Float, art : GameArt) -> Unit {
   for group in groups {
     if !group.active {
       continue
@@ -1228,29 +1306,44 @@ fn draw_groups(groups : Array[SurvivorGroup], t : Float) -> Unit {
       0.5 +
       0.5
 
-    let col : @raylib.Color = if group.panic >= 72.0 {
-      @raylib.Color::new(248, 154, 132, 252)
-    } else {
-      @raylib.Color::new(246, 226, 194, 248)
-    }
-
     @raylib.draw_circle(
       group.x.to_int(),
       group.y.to_int(),
-      11.0 + flare * 3.0,
-      col,
+      18.0 + p01 * 32.0 + flare * 4.0,
+      @raylib.Color::new(252, 178, 112, 38 + (p01 * 74.0).to_int()),
     )
-    @raylib.draw_circle(
+
+    @raylib.draw_ellipse(
       group.x.to_int(),
-      group.y.to_int(),
-      4.0,
-      @raylib.Color::new(252, 246, 236, 246),
+      (group.y + 10.0).to_int(),
+      22.0,
+      8.0,
+      @raylib.Color::new(4, 12, 20, 86),
+    )
+
+    let group_h : Float = 42.0 + p01 * 8.0
+    let group_w : Float = group_h *
+      Float::from_int(art.survivor_group.width()) /
+      Float::from_int(art.survivor_group.height())
+    let tint : @raylib.Color = if group.panic >= 72.0 {
+      @raylib.Color::new(255, 220, 206, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 255)
+    }
+    draw_centered_art(
+      art.survivor_group,
+      group.x,
+      group.y,
+      group_w,
+      group_h,
+      @math.sinf(t * 1.2 + Float::from_int(group.id)) * 3.0,
+      tint,
     )
 
     @draw.draw_text(
       "G\{group.id} N:\{group.count} P:\{group.panic.to_int()}",
-      (group.x - 54.0).to_int(),
-      (group.y + 14.0).to_int(),
+      (group.x - 58.0).to_int(),
+      (group.y + 30.0).to_int(),
       16,
       @raylib.Color::new(246, 234, 220, 236),
     )
@@ -1269,7 +1362,7 @@ fn draw_groups(groups : Array[SurvivorGroup], t : Float) -> Unit {
 
 ///|
 /// Draws all active crack zones as pulsing hazard circles with spark effects.
-fn draw_cracks(cracks : Array[CrackZone], t : Float) -> Unit {
+fn draw_cracks(cracks : Array[CrackZone], t : Float, art : GameArt) -> Unit {
   for crack in cracks {
     if !crack.active {
       continue
@@ -1294,6 +1387,22 @@ fn draw_cracks(cracks : Array[CrackZone], t : Float) -> Unit {
       crack.y.to_int(),
       r1,
       @raylib.Color::new(238, 176, 116, a1),
+    )
+    let crack_w : Float = maxf(
+      46.0,
+      crack.radius * (0.72 + crack.intensity * 0.26),
+    )
+    let crack_h : Float = crack_w *
+      Float::from_int(art.crack.height()) /
+      Float::from_int(art.crack.width())
+    draw_centered_art(
+      art.crack,
+      crack.x,
+      crack.y,
+      crack_w,
+      crack_h,
+      crack.phase * 18.0,
+      @raylib.Color::new(255, 236, 216, 226),
     )
 
     let spark_x : Float = crack.x +
@@ -1342,7 +1451,11 @@ fn draw_dusts(dusts : Array[DustCloud], t : Float) -> Unit {
 
 ///|
 /// Draws all active obstacles as wobbling circles coloured by hardness.
-fn draw_obstacles(obstacles : Array[Obstacle], t : Float) -> Unit {
+fn draw_obstacles(
+  obstacles : Array[Obstacle],
+  t : Float,
+  art : GameArt,
+) -> Unit {
   for obstacle in obstacles {
     if !obstacle.active {
       continue
@@ -1352,63 +1465,44 @@ fn draw_obstacles(obstacles : Array[Obstacle], t : Float) -> Unit {
     let rr : Float = obstacle.size * (0.88 + wob * 0.2)
     let h01 : Float = clampf(obstacle.hard / 100.0, 0.0, 1.0)
 
-    let r : Int = 92 + (h01 * 54.0).to_int()
-    let g : Int = 88 + (h01 * 38.0).to_int()
-    let b : Int = 74 + (h01 * 22.0).to_int()
-
-    @raylib.draw_circle(
+    @raylib.draw_ellipse(
       obstacle.x.to_int(),
-      obstacle.y.to_int(),
-      rr + 1.8,
-      @raylib.Color::new(46, 70, 92, 174),
+      (obstacle.y + 4.0).to_int(),
+      rr * 1.25,
+      rr * 0.54,
+      @raylib.Color::new(4, 12, 20, 110),
     )
-    @raylib.draw_circle(
-      obstacle.x.to_int(),
-      obstacle.y.to_int(),
-      rr,
-      @raylib.Color::new(r, g, b, 238),
+
+    let rubble_w : Float = rr * 2.35
+    let rubble_h : Float = rubble_w *
+      Float::from_int(art.rubble.height()) /
+      Float::from_int(art.rubble.width())
+    let tint : @raylib.Color = @raylib.Color::new(
+      188 + (h01 * 66.0).to_int(),
+      188 + (h01 * 52.0).to_int(),
+      182 + (h01 * 44.0).to_int(),
+      246,
+    )
+    draw_centered_art(
+      art.rubble,
+      obstacle.x,
+      obstacle.y,
+      rubble_w,
+      rubble_h,
+      obstacle.spin * 57.29578,
+      tint,
     )
   }
 }
 
 ///|
 /// Draws the player's convoy vehicle with heading indicator, onboard survivors, and medkit bar.
-fn draw_player(player : Player, t : Float) -> Unit {
+fn draw_player(player : Player, t : Float, art : GameArt) -> Unit {
   let x : Float = player.x
   let y : Float = player.y
 
   let nx : Float = @math.cosf(player.heading)
   let ny : Float = @math.sinf(player.heading)
-
-  let hull_col : @raylib.Color = if player.hull < 34.0 {
-    @raylib.Color::new(248, 164, 174, 252)
-  } else {
-    @raylib.Color::new(240, 244, 252, 252)
-  }
-
-  // convoy van
-  @raylib.draw_rectangle(
-    (x - 14.0).to_int(),
-    (y - 8.0).to_int(),
-    28,
-    16,
-    hull_col,
-  )
-  @raylib.draw_rectangle(
-    (x - 8.0).to_int(),
-    (y - 13.0).to_int(),
-    16,
-    6,
-    @raylib.Color::new(204, 230, 250, 238),
-  )
-
-  @raylib.draw_line(
-    x.to_int(),
-    y.to_int(),
-    (x + nx * 24.0).to_int(),
-    (y + ny * 24.0).to_int(),
-    @raylib.Color::new(252, 246, 214, 236),
-  )
 
   let wake_r : Float = 9.0 +
     (@math.sinf(t * 4.4 + player.engine_t) * 0.5 + 0.5) * 6.0
@@ -1417,6 +1511,39 @@ fn draw_player(player : Player, t : Float) -> Unit {
     (y - ny * 18.0).to_int(),
     wake_r,
     @raylib.Color::new(176, 214, 246, 86),
+  )
+  @raylib.draw_ellipse(
+    x.to_int(),
+    (y + 4.0).to_int(),
+    34.0,
+    12.0,
+    @raylib.Color::new(4, 12, 20, 112),
+  )
+  @raylib.draw_line(
+    x.to_int(),
+    y.to_int(),
+    (x + nx * 36.0).to_int(),
+    (y + ny * 36.0).to_int(),
+    @raylib.Color::new(252, 246, 214, 132),
+  )
+
+  let convoy_w : Float = 80.0
+  let convoy_h : Float = convoy_w *
+    Float::from_int(art.convoy.height()) /
+    Float::from_int(art.convoy.width())
+  let convoy_tint : @raylib.Color = if player.hull < 34.0 {
+    @raylib.Color::new(255, 206, 214, 255)
+  } else {
+    @raylib.Color::new(255, 255, 255, 255)
+  }
+  draw_centered_art(
+    art.convoy,
+    x,
+    y,
+    convoy_w,
+    convoy_h,
+    player.heading * 57.29578,
+    convoy_tint,
   )
 
   let shown_people : Int = player.onboard.min(6)
@@ -1694,6 +1821,70 @@ fn draw_button(
 }
 
 ///|
+/// Draws a texture centered at a world position with the requested destination size.
+fn draw_centered_art(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws title artwork full-bleed without distorting its source aspect ratio.
+fn draw_title_art(
+  title_art : @raylib.Texture,
+  sw : Int,
+  sh : Int,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(title_art.width())
+  let source_h : Float = Float::from_int(title_art.height())
+  let screen_w : Float = Float::from_int(sw)
+  let screen_h : Float = Float::from_int(sh)
+  let source_ratio : Float = source_w / source_h
+  let screen_ratio : Float = screen_w / screen_h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > screen_ratio {
+    src_w = source_h * screen_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < screen_ratio {
+    src_h = source_w / screen_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    title_art,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(0.0, 0.0, screen_w, screen_h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
 /// Initializes the window and runs the main aftershock rescue convoy game loop.
 fn main {
   let sw : Int = 1680
@@ -1704,6 +1895,8 @@ fn main {
 
   @raylib.set_target_fps(120)
   @draw.init_font()
+
+  let art = load_game_art()
 
   let world_x : Int = 20
   let world_y : Int = 20
@@ -2366,13 +2559,13 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(8, 16, 28, 255))
 
     draw_city(world_x, world_y, world_w, world_h, scene_t)
-    draw_hospital(hospital)
-    draw_obstacles(obstacles, scene_t)
-    draw_districts(districts, scene_t)
-    draw_groups(groups, scene_t)
-    draw_cracks(cracks, scene_t)
+    draw_hospital(hospital, art)
+    draw_obstacles(obstacles, scene_t, art)
+    draw_districts(districts, scene_t, art)
+    draw_groups(groups, scene_t, art)
+    draw_cracks(cracks, scene_t, art)
     draw_dusts(dusts, scene_t)
-    draw_player(player, scene_t)
+    draw_player(player, scene_t, art)
 
     if player.ping_t > 0.0 {
       let rr : Float = 18.0 + (2.0 - player.ping_t) * 62.0
@@ -2730,7 +2923,13 @@ fn main {
     }
 
     if state == 0 {
-      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 14, 24, 212))
+      draw_title_art(
+        art.title_art,
+        sw,
+        sh,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 14, 24, 118))
       @draw.draw_text(
         "AFTERSHOCK RESCUE CONVOY",
         sw / 2 - 500,
@@ -2836,7 +3035,13 @@ fn main {
       )
       draw_button(sw / 2 - 210, 638, 420, 94, "START CONVOY", hover)
     } else if state == 2 {
-      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 24, 14, 206))
+      draw_title_art(
+        art.title_art,
+        sw,
+        sh,
+        @raylib.Color::new(210, 255, 222, 255),
+      )
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 24, 14, 168))
       @draw.draw_text(
         "RESCUE SUCCESS",
         sw / 2 - 278,
@@ -2866,7 +3071,13 @@ fn main {
         @raylib.Color::new(214, 234, 252, 244),
       )
     } else if state == 3 {
-      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(26, 8, 14, 214))
+      draw_title_art(
+        art.title_art,
+        sw,
+        sh,
+        @raylib.Color::new(255, 218, 224, 255),
+      )
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(26, 8, 14, 180))
       @draw.draw_text(
         "MISSION FAILED",
         sw / 2 - 266,
@@ -2897,4 +3108,6 @@ fn main {
       )
     }
   }
+
+  unload_game_art(art)
 }

@@ -12,6 +12,8 @@ type District
 
 type DustCloud
 
+type GameArt
+
 type Hospital
 
 type Obstacle
