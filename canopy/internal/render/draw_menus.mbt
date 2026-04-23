@@ -11,58 +11,55 @@ fn draw_title(game : @types.Game) -> Unit {
   let tree_x = sw / 2
   let tree_base = sh - 120
   let anim_height = (sinf(time * 0.5) * 40.0 + 160.0).to_int()
-  // Trunk
-  @raylib.draw_rectangle(
-    tree_x - 8,
-    tree_base - anim_height,
-    16,
-    anim_height,
-    @types.color_trunk,
-  )
-  // Branches
-  let branch_count = anim_height / 40
-  for i in 0..<branch_count {
-    let by = tree_base - 40 - i * 40
-    let bw = 30 + i * 5
-    let sway = sinf(time + Float::from_int(i) * 1.5) * 5.0
-    // Left branch
-    @raylib.draw_line_ex(
-      @raylib.Vector2::new(Float::from_int(tree_x), Float::from_int(by)),
-      @raylib.Vector2::new(
-        Float::from_int(tree_x - bw) + sway,
-        Float::from_int(by - 10),
-      ),
-      3.0,
-      @types.color_branch,
+  if !draw_title_tree_art(tree_x, tree_base, time) {
+    @raylib.draw_rectangle(
+      tree_x - 8,
+      tree_base - anim_height,
+      16,
+      anim_height,
+      @types.color_trunk,
     )
-    @raylib.draw_circle(
-      (Float::from_int(tree_x - bw) + sway).to_int(),
-      by - 10,
-      18.0,
-      @types.color_leaf,
-    )
-    // Right branch
-    @raylib.draw_line_ex(
-      @raylib.Vector2::new(Float::from_int(tree_x), Float::from_int(by)),
-      @raylib.Vector2::new(
-        Float::from_int(tree_x + bw) - sway,
-        Float::from_int(by - 10),
-      ),
-      3.0,
-      @types.color_branch,
-    )
-    @raylib.draw_circle(
-      (Float::from_int(tree_x + bw) - sway).to_int(),
-      by - 10,
-      18.0,
-      @types.color_leaf,
-    )
+    let branch_count = anim_height / 40
+    for i in 0..<branch_count {
+      let by = tree_base - 40 - i * 40
+      let bw = 30 + i * 5
+      let sway = sinf(time + Float::from_int(i) * 1.5) * 5.0
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(Float::from_int(tree_x), Float::from_int(by)),
+        @raylib.Vector2::new(
+          Float::from_int(tree_x - bw) + sway,
+          Float::from_int(by - 10),
+        ),
+        3.0,
+        @types.color_branch,
+      )
+      @raylib.draw_circle(
+        (Float::from_int(tree_x - bw) + sway).to_int(),
+        by - 10,
+        18.0,
+        @types.color_leaf,
+      )
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(Float::from_int(tree_x), Float::from_int(by)),
+        @raylib.Vector2::new(
+          Float::from_int(tree_x + bw) - sway,
+          Float::from_int(by - 10),
+        ),
+        3.0,
+        @types.color_branch,
+      )
+      @raylib.draw_circle(
+        (Float::from_int(tree_x + bw) - sway).to_int(),
+        by - 10,
+        18.0,
+        @types.color_leaf,
+      )
+    }
+    let crown_y = tree_base - anim_height - 20
+    @raylib.draw_circle(tree_x, crown_y, 30.0, @types.color_leaf)
+    @raylib.draw_circle(tree_x - 15, crown_y + 10, 22.0, @types.color_leaf_dark)
+    @raylib.draw_circle(tree_x + 15, crown_y + 10, 22.0, @types.color_leaf_dark)
   }
-  // Crown
-  let crown_y = tree_base - anim_height - 20
-  @raylib.draw_circle(tree_x, crown_y, 30.0, @types.color_leaf)
-  @raylib.draw_circle(tree_x - 15, crown_y + 10, 22.0, @types.color_leaf_dark)
-  @raylib.draw_circle(tree_x + 15, crown_y + 10, 22.0, @types.color_leaf_dark)
   // Sun
   let sun_pulse = sinf(time) * 5.0
   @raylib.draw_circle(
@@ -116,19 +113,22 @@ fn draw_tier_select(game : @types.Game) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   for i in 0..<3 {
-    let bx = sw / 2 - 160
+    let bx = sw / 2 - 220
     let by = 150 + i * 140
-    let bw = 320
+    let bw = 440
     let bh = 110
     let hover = mx >= bx && mx < bx + bw && my >= by && my < by + bh
     let bg = if hover { @types.color_button_hover } else { @types.color_button }
     @raylib.draw_rectangle(bx, by, bw, bh, bg)
     @raylib.draw_rectangle_lines(bx, by, bw, bh, tier_colors[i])
+    ignore(draw_tier_icon_art(i, bx + 56, by + bh / 2, 76))
+    let content_x = bx + 112
+    let content_w = bw - 130
     // Tier name
     let name_w = @draw.measure_text(tiers[i], 28)
     @draw.draw_text(
       tiers[i],
-      bx + (bw - name_w) / 2,
+      content_x + (content_w - name_w) / 2,
       by + 15,
       28,
       tier_colors[i],
@@ -137,7 +137,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let dw = @draw.measure_text(descs[i], 14)
     @draw.draw_text(
       descs[i],
-      bx + (bw - dw) / 2,
+      content_x + (content_w - dw) / 2,
       by + 50,
       14,
       @types.color_hud_text,
@@ -164,7 +164,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let prog_w = @draw.measure_text(prog, 14)
     @draw.draw_text(
       prog,
-      bx + (bw - prog_w) / 2,
+      content_x + (content_w - prog_w) / 2,
       by + 75,
       14,
       @types.color_star_gold,
@@ -235,7 +235,9 @@ fn draw_level_select(game : @types.Game) -> Unit {
         } else {
           @types.color_star_empty
         }
-        @raylib.draw_circle(sx, star_y, 8.0, sc)
+        if !draw_star_art(sx, star_y, s < score.stars, 20) {
+          @raylib.draw_circle(sx, star_y, 8.0, sc)
+        }
       }
       if score.completed {
         @draw.draw_text(

@@ -12,6 +12,10 @@ pub fn draw_frame(@types.Game) -> Unit
 
 pub fn draw_playing(@types.Game) -> Unit
 
+pub fn load_assets() -> Unit
+
+pub fn unload_assets() -> Unit
+
 // Errors
 
 // Types and methods

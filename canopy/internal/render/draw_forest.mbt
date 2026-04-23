@@ -6,12 +6,13 @@ fn sinf(a : Float) -> Float {
 ///|
 fn draw_sky(game : @types.Game) -> Unit {
   let time = Float::from_int(game.frame_count) * 0.02
-  // Sky gradient
   let gx = @types.grid_offset_x
   let gy = @types.grid_offset_y
   let gw = @types.grid_cols * @types.cell_size
   let gh = @types.grid_rows * @types.cell_size
-  @raylib.draw_rectangle(gx - 10, gy - 10, gw + 20, gh + 20, @types.color_sky)
+  if !draw_forest_board_art(game) {
+    @raylib.draw_rectangle(gx - 10, gy - 10, gw + 20, gh + 20, @types.color_sky)
+  }
   // Sun rays from top
   for i in 0..<8 {
     let fi = Float::from_int(i)
@@ -71,59 +72,62 @@ fn draw_cells(game : @types.Game) -> Unit {
       let y = gy + r * cs
       match game.grid.cells[r][c] {
         Trunk => {
-          // Brown trunk with bark detail
-          @raylib.draw_rectangle(
-            x + 12,
-            y + 1,
-            cs - 24,
-            cs - 2,
-            @types.color_trunk,
-          )
-          // Bark lines
-          @raylib.draw_line(
-            x + 16,
-            y + cs / 3,
-            x + cs - 16,
-            y + cs / 3,
-            @raylib.Color::new(90, 60, 35, 180),
-          )
+          if !draw_trunk_art(x, y) {
+            @raylib.draw_rectangle(
+              x + 12,
+              y + 1,
+              cs - 24,
+              cs - 2,
+              @types.color_trunk,
+            )
+            @raylib.draw_line(
+              x + 16,
+              y + cs / 3,
+              x + cs - 16,
+              y + cs / 3,
+              @raylib.Color::new(90, 60, 35, 180),
+            )
+          }
         }
         Branch => {
-          // Branch
-          @raylib.draw_rectangle(
-            x + 2,
-            y + 14,
-            cs - 4,
-            cs - 28,
-            @types.color_branch,
-          )
-          // Leaves on branch
           let leaf_pulse = sinf(time + Float::from_int(c * 3 + r * 7)) * 2.0
-          let lx = Float::from_int(x + cs / 2)
-          let ly = Float::from_int(y + 8) + leaf_pulse
-          @raylib.draw_circle(lx.to_int(), ly.to_int(), 10.0, @types.color_leaf)
+          if !draw_branch_art(x, y, leaf_pulse) {
+            @raylib.draw_rectangle(
+              x + 2,
+              y + 14,
+              cs - 4,
+              cs - 28,
+              @types.color_branch,
+            )
+            let lx = Float::from_int(x + cs / 2)
+            let ly = Float::from_int(y + 8) + leaf_pulse
+            @raylib.draw_circle(lx.to_int(), ly.to_int(), 10.0, @types.color_leaf)
+          }
         }
         Leaf => {
-          // Leaf cluster
           let pulse = sinf(time + Float::from_int(c * 5 + r * 3)) * 2.0
-          let lx = Float::from_int(x + cs / 2)
-          let ly = Float::from_int(y + cs / 2) + pulse
-          @raylib.draw_circle(
-            lx.to_int(),
-            ly.to_int(),
-            Float::from_int(cs / 2 - 4),
-            @types.color_leaf,
-          )
-          @raylib.draw_circle(
-            (lx - 6.0).to_int(),
-            (ly + 3.0).to_int(),
-            Float::from_int(cs / 3),
-            @types.color_leaf_dark,
-          )
+          if !draw_leaf_art(x, y, pulse) {
+            let lx = Float::from_int(x + cs / 2)
+            let ly = Float::from_int(y + cs / 2) + pulse
+            @raylib.draw_circle(
+              lx.to_int(),
+              ly.to_int(),
+              Float::from_int(cs / 2 - 4),
+              @types.color_leaf,
+            )
+            @raylib.draw_circle(
+              (lx - 6.0).to_int(),
+              (ly + 3.0).to_int(),
+              Float::from_int(cs / 3),
+              @types.color_leaf_dark,
+            )
+          }
         }
-        Shadow =>
-          // Shadow overlay
-          @raylib.draw_rectangle(x, y, cs, cs, @types.color_shadow)
+        Shadow => {
+          if !draw_shadow_art(x, y) {
+            @raylib.draw_rectangle(x, y, cs, cs, @types.color_shadow)
+          }
+        }
         Empty => ()
       }
     }
@@ -135,8 +139,9 @@ fn draw_ground(game : @types.Game) -> Unit {
   let gx = @types.grid_offset_x
   let gy = @types.grid_offset_y + @types.grid_rows * @types.cell_size
   let cs = @types.cell_size
-  // Ground strip
-  @raylib.draw_rectangle(gx, gy, @types.grid_cols * cs, 40, @types.color_ground)
+  if !draw_ground_art(gx, gy, @types.grid_cols * cs, 40) {
+    @raylib.draw_rectangle(gx, gy, @types.grid_cols * cs, 40, @types.color_ground)
+  }
   // Water bars per column
   for i in 0..<game.ground.length() {
     let x = gx + i * cs
@@ -177,22 +182,23 @@ fn draw_target_markers(game : @types.Game) -> Unit {
         @raylib.draw_line(dx, y + cs / 2, dx + 4, y + cs / 2, color)
         dx += 8
       }
-      // Arrow marker
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(
-          Float::from_int(x - 12),
-          Float::from_int(y + cs / 2),
-        ),
-        @raylib.Vector2::new(
-          Float::from_int(x - 4),
-          Float::from_int(y + cs / 2 - 5),
-        ),
-        @raylib.Vector2::new(
-          Float::from_int(x - 4),
-          Float::from_int(y + cs / 2 + 5),
-        ),
-        color,
-      )
+      if !draw_target_marker_art(x - 12, y + cs / 2, met) {
+        @raylib.draw_triangle(
+          @raylib.Vector2::new(
+            Float::from_int(x - 12),
+            Float::from_int(y + cs / 2),
+          ),
+          @raylib.Vector2::new(
+            Float::from_int(x - 4),
+            Float::from_int(y + cs / 2 - 5),
+          ),
+          @raylib.Vector2::new(
+            Float::from_int(x - 4),
+            Float::from_int(y + cs / 2 + 5),
+          ),
+          color,
+        )
+      }
       // Height label
       let label = target.required_height.to_string()
       @draw.draw_text(label, x - 30, y + cs / 2 - 6, 12, color)
@@ -221,14 +227,15 @@ fn draw_hover_highlight(game : @types.Game) -> Unit {
         cs,
         @raylib.Color::new(255, 100, 100, 200),
       )
-      // Scissors icon text
-      @draw.draw_text(
-        "X",
-        x + cs / 2 - 4,
-        y + cs / 2 - 6,
-        14,
-        @raylib.Color::new(255, 80, 80, 200),
-      )
+      if !draw_prune_shears_art(x + cs / 2, y + cs / 2) {
+        @draw.draw_text(
+          "X",
+          x + cs / 2 - 4,
+          y + cs / 2 - 6,
+          14,
+          @raylib.Color::new(255, 80, 80, 200),
+        )
+      }
     }
   }
 }

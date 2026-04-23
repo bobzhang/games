@@ -166,16 +166,16 @@ fn draw_stars(count : Int, cx : Int, cy : Int) -> Unit {
     } else {
       @types.color_star_empty
     }
-    // Draw star as a filled circle with points
-    @raylib.draw_circle(x, cy, 15.0, color)
-    // Small highlight
-    if i < count {
-      @raylib.draw_circle(
-        x - 3,
-        cy - 3,
-        5.0,
-        @raylib.Color::new(255, 240, 180, 180),
-      )
+    if !draw_star_art(x, cy, i < count, 34) {
+      @raylib.draw_circle(x, cy, 15.0, color)
+      if i < count {
+        @raylib.draw_circle(
+          x - 3,
+          cy - 3,
+          5.0,
+          @raylib.Color::new(255, 240, 180, 180),
+        )
+      }
     }
   }
 }
