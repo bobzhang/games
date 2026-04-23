@@ -108,11 +108,125 @@ fn enemy_turn(
 }
 
 ///|
+/// Draws a bounded stat bar with a filled fraction based on the current value.
+fn draw_stat_bar(
+  x : Int,
+  y : Int,
+  width : Int,
+  height : Int,
+  value : Int,
+  max_value : Int,
+  color : @raylib.Color,
+) -> Unit {
+  let safe_value = if value < 0 {
+    0
+  } else if value > max_value {
+    max_value
+  } else {
+    value
+  }
+  let fill_w = width * safe_value / max_value
+  @raylib.draw_rectangle(
+    x,
+    y,
+    width,
+    height,
+    @raylib.Color::new(8, 10, 16, 210),
+  )
+  @raylib.draw_rectangle(x, y, fill_w, height, color)
+  @raylib.draw_rectangle_lines(
+    x,
+    y,
+    width,
+    height,
+    @raylib.Color::new(230, 236, 255, 90),
+  )
+}
+
+///|
+/// Draws one duelist status panel with portrait, HP, and block information.
+fn draw_duelist_panel(
+  x : Int,
+  y : Int,
+  width : Int,
+  height : Int,
+  is_player : Bool,
+  hp : Int,
+  max_hp : Int,
+  block : Int,
+) -> Unit {
+  let accent = if is_player {
+    @raylib.Color::new(80, 170, 255, 255)
+  } else {
+    @raylib.Color::new(235, 76, 84, 255)
+  }
+  let bg = if is_player {
+    @raylib.Color::new(22, 36, 60, 214)
+  } else {
+    @raylib.Color::new(62, 26, 34, 214)
+  }
+  @raylib.draw_rectangle(x, y, width, height, bg)
+  @raylib.draw_rectangle_lines(x, y, width, height, accent)
+  if is_player {
+    ignore(draw_portrait_art(true, x + width - 172, y + 8, 158, 152))
+  } else {
+    ignore(draw_portrait_art(false, x + 14, y + 8, 158, 152))
+  }
+
+  let text_x = if is_player { x + 24 } else { x + 190 }
+  let name = if is_player { "PLAYER" } else { "RIVAL" }
+  @draw.draw_text(name, text_x, y + 18, 26, @raylib.raywhite)
+  @draw.draw_text("HP \{hp}", text_x, y + 58, 24, @raylib.raywhite)
+  draw_stat_bar(text_x, y + 88, 146, 14, hp, max_hp, accent)
+  @draw.draw_text("Block \{block}", text_x, y + 112, 22, @raylib.lightgray)
+  draw_stat_bar(
+    text_x,
+    y + 140,
+    146,
+    10,
+    block,
+    28,
+    @raylib.Color::new(160, 178, 200, 255),
+  )
+}
+
+///|
+/// Draws one card in the player's current hand.
+fn draw_hand_card(slot : Int, card : Int) -> Unit {
+  let x = 120 + slot * 260
+  let y = 360
+  if !draw_card_frame_art(x, y, 220, 190) {
+    @raylib.draw_rectangle(x, y, 220, 190, @raylib.Color::new(34, 34, 46, 255))
+    @raylib.draw_rectangle_lines(x, y, 220, 190, @raylib.lightgray)
+  }
+  @raylib.draw_rectangle(
+    x + 12,
+    y + 36,
+    132,
+    118,
+    @raylib.Color::new(8, 10, 18, 190),
+  )
+  @raylib.draw_rectangle_lines(
+    x + 12,
+    y + 36,
+    132,
+    118,
+    @raylib.Color::new(210, 220, 245, 70),
+  )
+  ignore(draw_card_icon_art(card, x + 168, y + 98, 86))
+  @draw.draw_text("\{slot + 1}", x + 16, y + 12, 26, @raylib.yellow)
+  @draw.draw_text(card_name(card), x + 22, y + 48, 26, @raylib.raywhite)
+  @draw.draw_text("Cost \{card_cost(card)}", x + 22, y + 84, 22, @raylib.orange)
+  @draw.draw_text(card_desc(card), x + 22, y + 118, 19, @raylib.lightgray)
+}
+
+///|
 /// Initializes the game window and runs the Card Duel 2026 main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Card Duel 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
 
   let hand : Array[Int] = []
   let mut player_hp = 80
@@ -227,55 +341,24 @@ fn main {
 
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(18, 20, 30, 255))
+    ignore(draw_backdrop_art())
 
-    @draw.draw_text("CARD DUEL 2026", 24, 20, 34, @raylib.skyblue)
+    @draw.draw_text(
+      "CARD DUEL 2026",
+      24,
+      20,
+      34,
+      @raylib.Color::new(150, 220, 255, 255),
+    )
     @draw.draw_text("Turn \{turn_no}", 28, 60, 24, @raylib.raywhite)
     @draw.draw_text("Energy \{energy}", 160, 60, 24, @raylib.yellow)
 
-    @raylib.draw_rectangle(
-      60,
-      120,
-      380,
-      170,
-      @raylib.Color::new(34, 48, 72, 255),
-    )
-    @draw.draw_text("PLAYER", 82, 138, 28, @raylib.raywhite)
-    @draw.draw_text("HP: \{player_hp}", 86, 178, 30, @raylib.lime)
-    @draw.draw_text("Block: \{player_block}", 86, 218, 28, @raylib.gray)
-
-    @raylib.draw_rectangle(
-      540,
-      120,
-      380,
-      170,
-      @raylib.Color::new(72, 38, 44, 255),
-    )
-    @draw.draw_text("RIVAL", 564, 138, 28, @raylib.raywhite)
-    @draw.draw_text("HP: \{enemy_hp}", 568, 178, 30, @raylib.red)
-    @draw.draw_text("Block: \{enemy_block}", 568, 218, 28, @raylib.gray)
+    draw_duelist_panel(60, 120, 380, 170, true, player_hp, 80, player_block)
+    draw_duelist_panel(540, 120, 380, 170, false, enemy_hp, 95, enemy_block)
 
     for i in 0..<hand.length() {
-      let x = 120 + i * 260
-      let y = 360
       let card = hand[i]
-      @raylib.draw_rectangle(
-        x,
-        y,
-        220,
-        190,
-        @raylib.Color::new(34, 34, 46, 255),
-      )
-      @raylib.draw_rectangle_lines(x, y, 220, 190, @raylib.lightgray)
-      @draw.draw_text("\{i + 1}", x + 10, y + 10, 28, @raylib.yellow)
-      @draw.draw_text(card_name(card), x + 20, y + 56, 30, @raylib.raywhite)
-      @draw.draw_text(
-        "Cost \{card_cost(card)}",
-        x + 20,
-        y + 98,
-        26,
-        @raylib.orange,
-      )
-      @draw.draw_text(card_desc(card), x + 20, y + 138, 24, @raylib.gray)
+      draw_hand_card(i, card)
     }
 
     @draw.draw_text(
@@ -286,7 +369,14 @@ fn main {
       620,
       900,
       56,
-      @raylib.Color::new(24, 24, 34, 255),
+      @raylib.Color::new(12, 14, 24, 220),
+    )
+    @raylib.draw_rectangle_lines(
+      40,
+      620,
+      900,
+      56,
+      @raylib.Color::new(150, 190, 230, 80),
     )
     @draw.draw_text(log, 56, 638, 22, @raylib.raywhite)
 
@@ -320,6 +410,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
