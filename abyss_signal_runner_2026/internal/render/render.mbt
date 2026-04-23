@@ -24,6 +24,142 @@ fn draw_right_text(
 }
 
 ///|
+let tex_title : Ref[@raylib.Texture?] = { val: None }
+
+///|
+let tex_submersible : Ref[@raylib.Texture?] = { val: None }
+
+///|
+let tex_rock : Ref[@raylib.Texture?] = { val: None }
+
+///|
+let tex_mine : Ref[@raylib.Texture?] = { val: None }
+
+///|
+let tex_data_node : Ref[@raylib.Texture?] = { val: None }
+
+///|
+let tex_oxygen : Ref[@raylib.Texture?] = { val: None }
+
+///|
+let tex_scrap : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Abyss Signal Runner texture from the game resources directory.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "abyss_signal_runner_2026/resources/" + file_name,
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads all generated Abyss Signal Runner art textures. Call after `init_window`.
+pub fn load_art() -> Unit {
+  tex_title.val = Some(load_art_texture("abyss_title.png"))
+  tex_submersible.val = Some(load_art_texture("submersible_sprite.png"))
+  tex_rock.val = Some(load_art_texture("rock_sprite.png"))
+  tex_mine.val = Some(load_art_texture("mine_sprite.png"))
+  tex_data_node.val = Some(load_art_texture("data_node_sprite.png"))
+  tex_oxygen.val = Some(load_art_texture("oxygen_sprite.png"))
+  tex_scrap.val = Some(load_art_texture("scrap_sprite.png"))
+}
+
+///|
+/// Unloads generated Abyss Signal Runner art textures. Call before `close_window`.
+pub fn unload_art() -> Unit {
+  fn unload(r : Ref[@raylib.Texture?]) -> Unit {
+    match r.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        r.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_title)
+  unload(tex_submersible)
+  unload(tex_rock)
+  unload(tex_mine)
+  unload(tex_data_node)
+  unload(tex_oxygen)
+  unload(tex_scrap)
+}
+
+///|
+/// Draws a texture centered at a world position with the requested destination size.
+fn draw_centered_art(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Returns the destination height that preserves a texture aspect ratio for a requested width.
+fn art_height_for_width(texture : @raylib.Texture, w : Float) -> Float {
+  w * Float::from_int(texture.height()) / Float::from_int(texture.width())
+}
+
+///|
+/// Returns the destination width that preserves a texture aspect ratio for a requested height.
+fn art_width_for_height(texture : @raylib.Texture, h : Float) -> Float {
+  h * Float::from_int(texture.width()) / Float::from_int(texture.height())
+}
+
+///|
+/// Draws title artwork full-bleed without distorting its source aspect ratio.
+fn draw_title_art(title_art : @raylib.Texture, tint : @raylib.Color) -> Unit {
+  let source_w : Float = Float::from_int(title_art.width())
+  let source_h : Float = Float::from_int(title_art.height())
+  let screen_w : Float = Float::from_int(@types.screen_w)
+  let screen_h : Float = Float::from_int(@types.screen_h)
+  let source_ratio : Float = source_w / source_h
+  let screen_ratio : Float = screen_w / screen_h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > screen_ratio {
+    src_w = source_h * screen_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < screen_ratio {
+    src_h = source_w / screen_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    title_art,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(0.0, 0.0, screen_w, screen_h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
 /// Draws a labeled progress bar filled proportionally to `value` out of 100, with a dark background, colored fill, and a border outline.
 fn draw_value_bar(
   x : Int,
@@ -270,7 +406,7 @@ fn draw_obj_current(
 }
 
 ///|
-/// Draws a Mine object as a pulsing filled circle with 8 radiating spike lines.
+/// Draws a Mine object using generated art when loaded, with a pulsing glow and procedural spike fallback.
 fn draw_obj_mine(
   o : @types.Obj,
   col : @raylib.Color,
@@ -285,22 +421,50 @@ fn draw_obj_mine(
   @raylib.draw_circle(
     x.to_int(),
     y.to_int(),
-    rr,
-    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 210),
+    rr * 1.34,
+    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 46),
   )
 
-  for k in 0..<8 {
-    let a = Float::from_int(k) * 0.785 + o.spin
-    let nx = @math.cosf(a)
-    let ny = @math.sinf(a)
-    let p0 = @raylib.Vector2::new(x + nx * rr * 0.6, y + ny * rr * 0.6)
-    let p1 = @raylib.Vector2::new(x + nx * rr * 1.45, y + ny * rr * 1.45)
-    @raylib.draw_line_ex(p0, p1, 2.6, @raylib.Color::new(255, 214, 224, 230))
+  match tex_mine.val {
+    Some(texture) => {
+      let art_w = rr * 2.55
+      draw_centered_art(
+        texture,
+        x,
+        y,
+        art_w,
+        art_height_for_width(texture, art_w),
+        o.spin * 22.0,
+        @raylib.Color::new(255, 255, 255, col.a.to_int()),
+      )
+    }
+    None => {
+      @raylib.draw_circle(
+        x.to_int(),
+        y.to_int(),
+        rr,
+        @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 210),
+      )
+
+      for k in 0..<8 {
+        let a = Float::from_int(k) * 0.785 + o.spin
+        let nx = @math.cosf(a)
+        let ny = @math.sinf(a)
+        let p0 = @raylib.Vector2::new(x + nx * rr * 0.6, y + ny * rr * 0.6)
+        let p1 = @raylib.Vector2::new(x + nx * rr * 1.45, y + ny * rr * 1.45)
+        @raylib.draw_line_ex(
+          p0,
+          p1,
+          2.6,
+          @raylib.Color::new(255, 214, 224, 230),
+        )
+      }
+    }
   }
 }
 
 ///|
-/// Draws a Data object as a rotating diamond outline with a small bright center dot.
+/// Draws a Data object using generated crystal art when loaded, with a rotating procedural diamond fallback.
 fn draw_obj_data(
   o : @types.Obj,
   col : @raylib.Color,
@@ -312,26 +476,49 @@ fn draw_obj_data(
   let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 4.3)
   let r : Float = o.r + pulse * 2.6
 
-  let top = @raylib.Vector2::new(x, y - r)
-  let right = @raylib.Vector2::new(x + r, y)
-  let bot = @raylib.Vector2::new(x, y + r)
-  let left = @raylib.Vector2::new(x - r, y)
-
-  @raylib.draw_line_ex(top, right, 3.0, col)
-  @raylib.draw_line_ex(right, bot, 3.0, col)
-  @raylib.draw_line_ex(bot, left, 3.0, col)
-  @raylib.draw_line_ex(left, top, 3.0, col)
-
   @raylib.draw_circle(
     x.to_int(),
     y.to_int(),
-    r * 0.32,
-    @raylib.Color::new(236, 255, 248, 210),
+    r * 1.45,
+    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 40),
   )
+
+  match tex_data_node.val {
+    Some(texture) => {
+      let art_w = r * 2.35
+      draw_centered_art(
+        texture,
+        x,
+        y,
+        art_w,
+        art_height_for_width(texture, art_w),
+        o.spin * 36.0,
+        @raylib.Color::new(255, 255, 255, col.a.to_int()),
+      )
+    }
+    None => {
+      let top = @raylib.Vector2::new(x, y - r)
+      let right = @raylib.Vector2::new(x + r, y)
+      let bot = @raylib.Vector2::new(x, y + r)
+      let left = @raylib.Vector2::new(x - r, y)
+
+      @raylib.draw_line_ex(top, right, 3.0, col)
+      @raylib.draw_line_ex(right, bot, 3.0, col)
+      @raylib.draw_line_ex(bot, left, 3.0, col)
+      @raylib.draw_line_ex(left, top, 3.0, col)
+
+      @raylib.draw_circle(
+        x.to_int(),
+        y.to_int(),
+        r * 0.32,
+        @raylib.Color::new(236, 255, 248, 210),
+      )
+    }
+  }
 }
 
 ///|
-/// Draws an Oxygen pickup as a semi-transparent filled circle with a colored outline and an "O2" label centered inside.
+/// Draws an Oxygen pickup using generated capsule art when loaded, with the original labeled circle fallback.
 fn draw_obj_oxygen(
   o : @types.Obj,
   col : @raylib.Color,
@@ -346,26 +533,43 @@ fn draw_obj_oxygen(
   @raylib.draw_circle(
     x.to_int(),
     y.to_int(),
-    r,
-    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 120),
+    r * 1.36,
+    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 54),
   )
-  @raylib.draw_circle_lines(
-    x.to_int(),
-    y.to_int(),
-    r,
-    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 235),
-  )
-  @draw.draw_text(
-    "O2",
-    (x - 12.0).to_int(),
-    (y - 8.0).to_int(),
-    16,
-    @raylib.Color::new(232, 248, 255, 220),
-  )
+
+  match tex_oxygen.val {
+    Some(texture) => {
+      let art_h = r * 3.2
+      draw_centered_art(
+        texture,
+        x,
+        y,
+        art_width_for_height(texture, art_h),
+        art_h,
+        @math.sinf(o.spin * 1.4) * 4.0,
+        @raylib.Color::new(255, 255, 255, col.a.to_int()),
+      )
+    }
+    None => {
+      @raylib.draw_circle_lines(
+        x.to_int(),
+        y.to_int(),
+        r,
+        @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 235),
+      )
+      @draw.draw_text(
+        "O2",
+        (x - 12.0).to_int(),
+        (y - 8.0).to_int(),
+        16,
+        @raylib.Color::new(232, 248, 255, 220),
+      )
+    }
+  }
 }
 
 ///|
-/// Draws a Scrap pickup as a slowly rotating filled rectangle with a lighter outline.
+/// Draws a Scrap pickup using generated salvage art when loaded, with the original rotating rectangle fallback.
 fn draw_obj_scrap(
   o : @types.Obj,
   col : @raylib.Color,
@@ -377,19 +581,35 @@ fn draw_obj_scrap(
   let w = o.r * 1.6
   let h = o.r * 1.1
 
-  @raylib.draw_rectangle_pro(
-    @raylib.Rectangle::new(x, y, w, h),
-    @raylib.Vector2::new(w * 0.5, h * 0.5),
-    o.spin * 57.3,
-    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 200),
-  )
-  @raylib.draw_rectangle_lines(
-    (x - w * 0.5).to_int(),
-    (y - h * 0.5).to_int(),
-    w.to_int(),
-    h.to_int(),
-    @raylib.Color::new(252, 236, 212, 180),
-  )
+  match tex_scrap.val {
+    Some(texture) => {
+      let art_w = o.r * 2.55
+      draw_centered_art(
+        texture,
+        x,
+        y,
+        art_w,
+        art_height_for_width(texture, art_w),
+        o.spin * 38.0,
+        @raylib.Color::new(255, 255, 255, col.a.to_int()),
+      )
+    }
+    None => {
+      @raylib.draw_rectangle_pro(
+        @raylib.Rectangle::new(x, y, w, h),
+        @raylib.Vector2::new(w * 0.5, h * 0.5),
+        o.spin * 57.3,
+        @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 200),
+      )
+      @raylib.draw_rectangle_lines(
+        (x - w * 0.5).to_int(),
+        (y - h * 0.5).to_int(),
+        w.to_int(),
+        h.to_int(),
+        @raylib.Color::new(252, 236, 212, 180),
+      )
+    }
+  }
 }
 
 ///|
@@ -419,23 +639,41 @@ fn @types.Game::draw_objects(
 
     match o.kind {
       Rock => {
-        @raylib.draw_circle(
-          (o.x + cam_x).to_int(),
-          (o.y + cam_y).to_int(),
-          o.r,
-          @raylib.Color::new(
-            col.r.to_int(),
-            col.g.to_int(),
-            col.b.to_int(),
-            220,
-          ),
-        )
-        @raylib.draw_circle_lines(
-          (o.x + cam_x).to_int(),
-          (o.y + cam_y).to_int(),
-          o.r,
-          @raylib.Color::new(86, 102, 122, 210),
-        )
+        let x = o.x + cam_x
+        let y = o.y + cam_y
+        match tex_rock.val {
+          Some(texture) => {
+            let art_w = o.r * 2.42
+            draw_centered_art(
+              texture,
+              x,
+              y,
+              art_w,
+              art_height_for_width(texture, art_w),
+              o.spin * 10.0,
+              @raylib.Color::new(255, 255, 255, col.a.to_int()),
+            )
+          }
+          None => {
+            @raylib.draw_circle(
+              x.to_int(),
+              y.to_int(),
+              o.r,
+              @raylib.Color::new(
+                col.r.to_int(),
+                col.g.to_int(),
+                col.b.to_int(),
+                220,
+              ),
+            )
+            @raylib.draw_circle_lines(
+              x.to_int(),
+              y.to_int(),
+              o.r,
+              @raylib.Color::new(86, 102, 122, 210),
+            )
+          }
+        }
       }
       Mine => draw_obj_mine(o, col, cam_x, cam_y)
       Data => draw_obj_data(o, col, cam_x, cam_y)
@@ -534,7 +772,7 @@ fn @types.Game::draw_ripples(
 }
 
 ///|
-/// Draws the player submarine with a pulsing body, highlight dot, velocity-scaled tail fin, active-dash ring, invulnerability shield flash, and a wake trail emitter.
+/// Draws the player submarine using generated art when loaded, plus active-dash rings, invulnerability flashes, and wake trail emission.
 fn @types.Game::draw_player(
   game : @types.Game,
   cam_x : Float,
@@ -552,29 +790,55 @@ fn @types.Game::draw_player(
     @raylib.Color::new(140, 234, 255, 255)
   }
 
-  @raylib.draw_circle(px.to_int(), py.to_int(), body_r, body_col)
-  @raylib.draw_circle_lines(
-    px.to_int(),
-    py.to_int(),
-    body_r,
-    @raylib.Color::new(32, 48, 62, 220),
-  )
+  match tex_submersible.val {
+    Some(texture) => {
+      @raylib.draw_circle(
+        px.to_int(),
+        py.to_int(),
+        body_r * 1.28,
+        @raylib.Color::new(40, 178, 224, 38),
+      )
+      let art_w = body_r * 3.55
+      draw_centered_art(
+        texture,
+        px,
+        py,
+        art_w,
+        art_height_for_width(texture, art_w),
+        @math.sinf(game.hero.anim_t * 3.4) * 2.0,
+        if game.hero.hurt_t > 0.0 {
+          @raylib.Color::new(255, 200, 210, 255)
+        } else {
+          @raylib.Color::new(255, 255, 255, 255)
+        },
+      )
+    }
+    None => {
+      @raylib.draw_circle(px.to_int(), py.to_int(), body_r, body_col)
+      @raylib.draw_circle_lines(
+        px.to_int(),
+        py.to_int(),
+        body_r,
+        @raylib.Color::new(32, 48, 62, 220),
+      )
 
-  @raylib.draw_circle(
-    (px + body_r * 0.34).to_int(),
-    (py - body_r * 0.26).to_int(),
-    body_r * 0.34,
-    @raylib.Color::new(218, 248, 255, 240),
-  )
+      @raylib.draw_circle(
+        (px + body_r * 0.34).to_int(),
+        (py - body_r * 0.26).to_int(),
+        body_r * 0.34,
+        @raylib.Color::new(218, 248, 255, 240),
+      )
 
-  let fin : Float = Float::from_int(1) +
-    game.hero.vx.abs() / @types.player_max_speed
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(px - body_r * 1.1, py),
-    @raylib.Vector2::new(px - body_r * 1.9 * fin, py - body_r * 0.6),
-    @raylib.Vector2::new(px - body_r * 1.9 * fin, py + body_r * 0.6),
-    @raylib.Color::new(86, 194, 232, 230),
-  )
+      let fin : Float = Float::from_int(1) +
+        game.hero.vx.abs() / @types.player_max_speed
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(px - body_r * 1.1, py),
+        @raylib.Vector2::new(px - body_r * 1.9 * fin, py - body_r * 0.6),
+        @raylib.Vector2::new(px - body_r * 1.9 * fin, py + body_r * 0.6),
+        @raylib.Color::new(86, 194, 232, 230),
+      )
+    }
+  }
 
   if game.dash_t > 0.0 {
     @raylib.draw_circle_lines(
@@ -810,14 +1074,22 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Draws the title screen overlay with the game title, subtitle lines, a hoverable START DIVE button, a controls reference panel, and the best score if one exists.
+/// Draws the title screen overlay over generated key art when loaded, with the start button, controls panel, and best score.
 fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
+  let shade_alpha = match tex_title.val {
+    Some(texture) => {
+      draw_title_art(texture, @raylib.Color::new(255, 255, 255, 255))
+      138
+    }
+    None => 120
+  }
+
   @raylib.draw_rectangle(
     0,
     0,
     @types.screen_w,
     @types.screen_h,
-    @raylib.Color::new(4, 8, 18, 120),
+    @raylib.Color::new(4, 8, 18, shade_alpha),
   )
 
   draw_center_text(
