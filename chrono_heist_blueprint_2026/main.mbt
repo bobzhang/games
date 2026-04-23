@@ -557,6 +557,7 @@ fn main {
   @raylib.init_window(screen_w, screen_h, "Chrono Heist Blueprint 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
 
   let tiles : Array[Int] = Array::make(grid_w * grid_h, tile_empty)
   let guards : Array[Guard] = Array::makei(max_guards, fn(_i) {
@@ -761,14 +762,16 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(12, 18, 28, 255))
 
     if title {
-      @raylib.draw_rectangle_gradient_v(
-        0,
-        0,
-        screen_w,
-        screen_h,
-        @raylib.Color::new(18, 28, 44, 255),
-        @raylib.Color::new(6, 12, 20, 255),
-      )
+      if !draw_title_backdrop_art() {
+        @raylib.draw_rectangle_gradient_v(
+          0,
+          0,
+          screen_w,
+          screen_h,
+          @raylib.Color::new(18, 28, 44, 255),
+          @raylib.Color::new(6, 12, 20, 255),
+        )
+      }
       @draw.draw_text(
         "CHRONO HEIST BLUEPRINT",
         210,
@@ -852,37 +855,45 @@ fn main {
         for x in 0..<grid_w {
           let tile = tiles[idx(x, y)]
           if tile == tile_wall {
-            draw_tile(x, y, @raylib.Color::new(46, 58, 74, 255))
-          } else {
+            if !draw_wall_art(x, y) {
+              draw_tile(x, y, @raylib.Color::new(46, 58, 74, 255))
+            }
+          } else if !draw_floor_art(x, y) {
             draw_tile(x, y, @raylib.Color::new(20, 30, 46, 255))
           }
 
           if tile == tile_vault {
-            draw_tile(x, y, @raylib.Color::new(44, 112, 132, 255))
-            @draw.draw_text(
-              "V",
-              screen_center_x(x) - 10,
-              screen_center_y(y) - 16,
-              28,
-              @raylib.Color::new(234, 248, 255, 255),
-            )
+            if !draw_vault_art(x, y) {
+              draw_tile(x, y, @raylib.Color::new(44, 112, 132, 255))
+              @draw.draw_text(
+                "V",
+                screen_center_x(x) - 10,
+                screen_center_y(y) - 16,
+                28,
+                @raylib.Color::new(234, 248, 255, 255),
+              )
+            }
           } else if tile == tile_exit {
-            draw_tile(x, y, @raylib.Color::new(42, 114, 82, 255))
-            @draw.draw_text(
-              "EX",
-              screen_center_x(x) - 16,
-              screen_center_y(y) - 14,
-              22,
-              @raylib.Color::new(239, 252, 244, 255),
-            )
+            if !draw_exit_art(x, y) {
+              draw_tile(x, y, @raylib.Color::new(42, 114, 82, 255))
+              @draw.draw_text(
+                "EX",
+                screen_center_x(x) - 16,
+                screen_center_y(y) - 14,
+                22,
+                @raylib.Color::new(239, 252, 244, 255),
+              )
+            }
           } else if tile == tile_key {
-            draw_tile(x, y, @raylib.Color::new(118, 94, 24, 255))
-            @raylib.draw_circle(
-              screen_center_x(x),
-              screen_center_y(y),
-              10.0,
-              @raylib.Color::new(255, 218, 110, 255),
-            )
+            if !draw_key_art(x, y) {
+              draw_tile(x, y, @raylib.Color::new(118, 94, 24, 255))
+              @raylib.draw_circle(
+                screen_center_x(x),
+                screen_center_y(y),
+                10.0,
+                @raylib.Color::new(255, 218, 110, 255),
+              )
+            }
           }
         }
       }
@@ -897,12 +908,16 @@ fn main {
         } else {
           @raylib.Color::new(168, 76, 76, 255)
         }
-        draw_tile(door.x, door.y, col)
-        draw_tile(
-          door.plate_x,
-          door.plate_y,
-          @raylib.Color::new(176, 140, 62, 255),
-        )
+        if !draw_door_art(door.x, door.y, open) {
+          draw_tile(door.x, door.y, col)
+        }
+        if !draw_pressure_plate_art(door.plate_x, door.plate_y) {
+          draw_tile(
+            door.plate_x,
+            door.plate_y,
+            @raylib.Color::new(176, 140, 62, 255),
+          )
+        }
         @raylib.draw_circle_lines(
           screen_center_x(door.plate_x),
           screen_center_y(door.plate_y),
@@ -919,12 +934,14 @@ fn main {
       }
 
       for i in 0..<ghost_count {
-        @raylib.draw_circle(
-          screen_center_x(ghosts[i].x),
-          screen_center_y(ghosts[i].y),
-          18.0,
-          @raylib.Color::new(136, 210, 255, 110),
-        )
+        if !draw_ghost_art(ghosts[i].x, ghosts[i].y) {
+          @raylib.draw_circle(
+            screen_center_x(ghosts[i].x),
+            screen_center_y(ghosts[i].y),
+            18.0,
+            @raylib.Color::new(136, 210, 255, 110),
+          )
+        }
         @raylib.draw_circle_lines(
           screen_center_x(ghosts[i].x),
           screen_center_y(ghosts[i].y),
@@ -939,7 +956,6 @@ fn main {
         }
         let gx = screen_center_x(guard_val.x)
         let gy = screen_center_y(guard_val.y)
-        @raylib.draw_circle(gx, gy, 18.0, @raylib.Color::new(236, 92, 92, 255))
         let target = guard_target_cell(guard_val)
         @raylib.draw_line(
           gx,
@@ -948,14 +964,24 @@ fn main {
           screen_center_y(target.1),
           @raylib.Color::new(255, 120, 120, 90),
         )
+        if !draw_guard_art(guard_val.x, guard_val.y) {
+          @raylib.draw_circle(
+            gx,
+            gy,
+            18.0,
+            @raylib.Color::new(236, 92, 92, 255),
+          )
+        }
       }
 
-      @raylib.draw_circle(
-        screen_center_x(player.x),
-        screen_center_y(player.y),
-        18.0,
-        @raylib.Color::new(86, 166, 255, 255),
-      )
+      if !draw_player_art(player.x, player.y) {
+        @raylib.draw_circle(
+          screen_center_x(player.x),
+          screen_center_y(player.y),
+          18.0,
+          @raylib.Color::new(86, 166, 255, 255),
+        )
+      }
       @raylib.draw_circle_lines(
         screen_center_x(player.x),
         screen_center_y(player.y),
@@ -1065,6 +1091,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
