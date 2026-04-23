@@ -43,7 +43,17 @@ fn draw_meter(
 ///|
 /// Draws the forest background: a dark green fill, 34 gently swaying bamboo stalks behind the world area, and 12 subtle horizontal gradient stripes across the screen.
 fn @types.Game::draw_forest_background(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(9, 24, 14, 255))
+  if draw_backdrop_art() {
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @raylib.Color::new(4, 18, 10, 88),
+    )
+  } else {
+    @raylib.clear_background(@raylib.Color::new(9, 24, 14, 255))
+  }
 
   for i in 0..<34 {
     let sway = @math.sinf(game.elapsed * 1.7 + Float::from_int(i) * 0.62) * 8.0
@@ -73,13 +83,23 @@ fn @types.Game::draw_forest_background(game : @types.Game) -> Unit {
 ///|
 /// Draws the world area as a dark fill with three highlighted lane corridors, a right-side shrine zone, and a green border outline.
 fn draw_corridors() -> Unit {
-  @raylib.draw_rectangle(
-    @types.world_x,
-    @types.world_y,
-    @types.world_w,
-    @types.world_h,
-    @raylib.Color::new(13, 30, 17, 238),
-  )
+  if draw_corridor_art() {
+    @raylib.draw_rectangle(
+      @types.world_x,
+      @types.world_y,
+      @types.world_w,
+      @types.world_h,
+      @raylib.Color::new(6, 24, 12, 84),
+    )
+  } else {
+    @raylib.draw_rectangle(
+      @types.world_x,
+      @types.world_y,
+      @types.world_w,
+      @types.world_h,
+      @raylib.Color::new(13, 30, 17, 238),
+    )
+  }
 
   for lane in 0..<@types.corridor_lanes {
     let y = @types.lane_y(lane).to_int() - 58
@@ -88,7 +108,7 @@ fn draw_corridors() -> Unit {
       y,
       @types.world_w - 20,
       116,
-      @raylib.Color::new(34, 56, 36, 235),
+      @raylib.Color::new(34, 56, 36, 150),
     )
     @raylib.draw_rectangle_lines(
       @types.world_x + 10,
@@ -145,12 +165,32 @@ fn @types.Game::draw_beacons(game : @types.Game) -> Unit {
       @raylib.Color::new(218, 88, 82, 238)
     }
 
-    @raylib.draw_circle(
-      game.beacons[i].x.to_int(),
-      game.beacons[i].y.to_int(),
-      @types.beacon_radius,
-      body_color,
-    )
+    match tex_beacon_sprite.val {
+      Some(texture) => {
+        @raylib.draw_circle(
+          game.beacons[i].x.to_int(),
+          game.beacons[i].y.to_int(),
+          @types.beacon_radius + 16.0,
+          @raylib.Color::new(body_color.r.to_int(), body_color.g.to_int(), body_color.b.to_int(), 70),
+        )
+        draw_art_fit(
+          texture,
+          game.beacons[i].x,
+          game.beacons[i].y,
+          @types.beacon_radius * 3.4,
+          @types.beacon_radius * 3.4,
+          0.0,
+          @raylib.white,
+        )
+      }
+      None =>
+        @raylib.draw_circle(
+          game.beacons[i].x.to_int(),
+          game.beacons[i].y.to_int(),
+          @types.beacon_radius,
+          body_color,
+        )
+    }
     @raylib.draw_circle_lines(
       game.beacons[i].x.to_int(),
       game.beacons[i].y.to_int(),
@@ -200,12 +240,25 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
       continue
     }
 
-    @raylib.draw_circle(
-      trap.x.to_int(),
-      trap.y.to_int(),
-      13.0,
-      @raylib.Color::new(92, 188, 116, 222),
-    )
+    match tex_trap_sprite.val {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          trap.x,
+          trap.y,
+          46.0,
+          46.0,
+          trap.flash_t * 24.0,
+          @raylib.white,
+        )
+      None =>
+        @raylib.draw_circle(
+          trap.x.to_int(),
+          trap.y.to_int(),
+          13.0,
+          @raylib.Color::new(92, 188, 116, 222),
+        )
+    }
 
     @raylib.draw_circle_lines(
       trap.x.to_int(),
@@ -254,7 +307,32 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
       _ => @raylib.Color::new(174, 208, 102, 236)
     }
 
-    @raylib.draw_circle(enemy.x.to_int(), enemy.y.to_int(), radius, base_color)
+    match enemy_art(enemy.kind) {
+      Some(texture) => {
+        @raylib.draw_circle(
+          enemy.x.to_int(),
+          enemy.y.to_int(),
+          radius + 9.0,
+          @raylib.Color::new(
+            base_color.r.to_int(),
+            base_color.g.to_int(),
+            base_color.b.to_int(),
+            48,
+          ),
+        )
+        draw_art_fit(
+          texture,
+          enemy.x,
+          enemy.y,
+          radius * 4.2,
+          radius * 4.2,
+          enemy.anim_t * 3.0,
+          @raylib.white,
+        )
+      }
+      None =>
+        @raylib.draw_circle(enemy.x.to_int(), enemy.y.to_int(), radius, base_color)
+    }
 
     if enemy.slow_t > 0.0 {
       @raylib.draw_circle_lines(
@@ -340,12 +418,28 @@ fn @types.Game::draw_player(game : @types.Game) -> Unit {
     )
   }
 
-  @raylib.draw_circle(
-    game.player.x.to_int(),
-    game.player.y.to_int(),
-    @types.player_radius,
-    @raylib.Color::new(208, 236, 226, 245),
-  )
+  match tex_sentinel_sprite.val {
+    Some(texture) => {
+      let angle = @math.atan2f(game.player.facing_y, game.player.facing_x) *
+        57.29577951308232
+      draw_art_fit(
+        texture,
+        game.player.x,
+        game.player.y,
+        @types.player_radius * 4.2,
+        @types.player_radius * 4.2,
+        angle,
+        @raylib.white,
+      )
+    }
+    None =>
+      @raylib.draw_circle(
+        game.player.x.to_int(),
+        game.player.y.to_int(),
+        @types.player_radius,
+        @raylib.Color::new(208, 236, 226, 245),
+      )
+  }
   @raylib.draw_circle_lines(
     game.player.x.to_int(),
     game.player.y.to_int(),
