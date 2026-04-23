@@ -56,7 +56,27 @@ fn draw_button(
 ///|
 /// Draws the gradient background with ambient glow circles.
 fn draw_background() -> Unit {
-  @raylib.clear_background(@raylib.Color::new(14, 20, 34, 255))
+  let has_art = draw_background_art()
+  if !has_art {
+    @raylib.clear_background(@raylib.Color::new(14, 20, 34, 255))
+  }
+
+  if has_art {
+    @raylib.draw_circle(180, 120, 160.0, @raylib.Color::new(70, 120, 210, 38))
+    @raylib.draw_circle(
+      @types.screen_w - 220,
+      160,
+      210.0,
+      @raylib.Color::new(120, 86, 220, 30),
+    )
+    @raylib.draw_circle(
+      420,
+      @types.screen_h - 130,
+      190.0,
+      @raylib.Color::new(70, 180, 180, 28),
+    )
+    return
+  }
 
   for i in 0..<18 {
     let y = i * (@types.screen_h / 18)
@@ -70,7 +90,12 @@ fn draw_background() -> Unit {
     )
   }
 
-  @raylib.draw_circle(180, 120, 160.0, @raylib.Color::new(70, 120, 210, 86))
+  @raylib.draw_circle(
+    180,
+    120,
+    160.0,
+    @raylib.Color::new(70, 120, 210, 86),
+  )
   @raylib.draw_circle(
     @types.screen_w - 220,
     160,
@@ -93,13 +118,15 @@ fn draw_board_frame() -> Unit {
   let bw = @types.board_pixel_w()
   let bh = @types.board_pixel_h()
 
-  @raylib.draw_rectangle(
-    bx - @types.board_pad,
-    by - @types.board_pad,
-    bw + @types.board_pad * 2,
-    bh + @types.board_pad * 2,
-    @raylib.Color::new(12, 26, 44, 220),
-  )
+  if !draw_board_panel_art() {
+    @raylib.draw_rectangle(
+      bx - @types.board_pad,
+      by - @types.board_pad,
+      bw + @types.board_pad * 2,
+      bh + @types.board_pad * 2,
+      @raylib.Color::new(12, 26, 44, 220),
+    )
+  }
   @raylib.draw_rectangle_lines(
     bx - @types.board_pad,
     by - @types.board_pad,
@@ -108,12 +135,16 @@ fn draw_board_frame() -> Unit {
     @raylib.Color::new(148, 188, 235, 220),
   )
 
-  @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(8, 16, 30, 232))
+  @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(8, 16, 30, 74))
 }
 
 ///|
 /// Draws the visual indicator for a special candy (row stripe, column stripe, or bomb ring) at the given center pixel.
 fn draw_special_overlay(cx : Int, cy : Int, sp : @types.Special) -> Unit {
+  if draw_special_art(cx, cy, sp) {
+    return
+  }
+
   match sp {
     None => return
     Row =>
@@ -155,9 +186,9 @@ fn @types.Game::draw_board_cells(game : @types.Game) -> Unit {
       let left = bx + x * @types.cell_px
       let top = by + y * @types.cell_px
       let cell_bg = if (x + y) % 2 == 0 {
-        @raylib.Color::new(18, 30, 56, 220)
+        @raylib.Color::new(18, 30, 56, 72)
       } else {
-        @raylib.Color::new(22, 36, 62, 224)
+        @raylib.Color::new(22, 36, 62, 84)
       }
 
       @raylib.draw_rectangle(left, top, @types.cell_px, @types.cell_px, cell_bg)
@@ -171,20 +202,7 @@ fn @types.Game::draw_board_cells(game : @types.Game) -> Unit {
 
       let i = @types.idx(x, y)
       let kind = game.kinds[i]
-      if kind < 0 {
-        continue
-      }
-
-      let cx = left + @types.cell_px / 2
-      let cy = top + @types.cell_px / 2
-      let base = @types.candy_color(kind)
-      @raylib.draw_circle(cx, cy, 29.0, base)
-      @raylib.draw_circle(cx - 9, cy - 12, 10.0, @types.tint(base, 38))
-      @raylib.draw_circle_lines(cx, cy, 30.0, @types.tint(base, -50))
-
-      draw_special_overlay(cx, cy, game.specials[i])
-
-      if game.jelly[i] > 0 {
+      if game.jelly[i] > 0 && !draw_jelly_art(left, top) {
         @raylib.draw_rectangle(
           left + 4,
           top + 4,
@@ -200,6 +218,20 @@ fn @types.Game::draw_board_cells(game : @types.Game) -> Unit {
           @raylib.Color::new(210, 242, 255, 186),
         )
       }
+      if kind < 0 {
+        continue
+      }
+
+      let cx = left + @types.cell_px / 2
+      let cy = top + @types.cell_px / 2
+      let base = @types.candy_color(kind)
+      if !draw_candy_art(cx, cy, kind) {
+        @raylib.draw_circle(cx, cy, 29.0, base)
+        @raylib.draw_circle(cx - 9, cy - 12, 10.0, @types.tint(base, 38))
+        @raylib.draw_circle_lines(cx, cy, 30.0, @types.tint(base, -50))
+      }
+
+      draw_special_overlay(cx, cy, game.specials[i])
 
       if game.flash[i] > 0.0 {
         let alpha = (@types.clampf(game.flash[i], 0.0, 1.0) * 170.0).to_int()
