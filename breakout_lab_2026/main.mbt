@@ -86,6 +86,7 @@ fn main {
   @raylib.init_window(arena_w, arena_h, "Breakout Lab 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
 
   let bricks = make_bricks()
   let mut paddle_x : Float = fi(arena_w) * (0.5 : Float) - 55.0
@@ -243,44 +244,52 @@ fn main {
     }
 
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(14, 16, 28, 255))
+    if !draw_backdrop_art() {
+      @raylib.clear_background(@raylib.Color::new(14, 16, 28, 255))
+    }
 
     for brick in bricks {
       if brick.alive {
-        @raylib.draw_rectangle(
-          brick.x,
-          brick.y,
-          brick_w,
-          brick_h,
-          brick_color(brick.hp),
-        )
-        @raylib.draw_rectangle_lines(
-          brick.x,
-          brick.y,
-          brick_w,
-          brick_h,
-          @raylib.black,
-        )
+        if !draw_brick_art(brick) {
+          @raylib.draw_rectangle(
+            brick.x,
+            brick.y,
+            brick_w,
+            brick_h,
+            brick_color(brick.hp),
+          )
+          @raylib.draw_rectangle_lines(
+            brick.x,
+            brick.y,
+            brick_w,
+            brick_h,
+            @raylib.black,
+          )
+        }
       }
     }
 
-    @raylib.draw_rectangle(
-      paddle_x.to_int(),
-      paddle_y.to_int(),
-      paddle_w.to_int(),
-      paddle_h.to_int(),
-      if wide_paddle {
-        @raylib.lime
-      } else {
-        @raylib.skyblue
-      },
-    )
-    @raylib.draw_circle(
-      ball_x.to_int(),
-      ball_y.to_int(),
-      ball_r,
-      @raylib.raywhite,
-    )
+    if !draw_paddle_art(paddle_x, paddle_y, paddle_w, paddle_h, wide_paddle) {
+      @raylib.draw_rectangle(
+        paddle_x.to_int(),
+        paddle_y.to_int(),
+        paddle_w.to_int(),
+        paddle_h.to_int(),
+        if wide_paddle {
+          @raylib.lime
+        } else {
+          @raylib.skyblue
+        },
+      )
+    }
+    if !draw_ball_art(ball_x, ball_y, ball_r) {
+      @raylib.draw_circle(
+        ball_x.to_int(),
+        ball_y.to_int(),
+        ball_r,
+        @raylib.raywhite,
+      )
+    }
 
     @draw.draw_text("BREAKOUT LAB 2026", 22, 18, 34, @raylib.skyblue)
     @draw.draw_text("Score: \{score}", 24, 58, 24, @raylib.raywhite)
@@ -317,6 +326,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
