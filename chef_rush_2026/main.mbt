@@ -100,6 +100,7 @@ fn main {
   @raylib.init_window(sw, sh, "Chef Rush 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
 
   let drops : Array[Drop] = Array::makei(140, fn(_i) {
     { alive: false, lane: 0, x: 0.0, y: 0.0, kind: 0, vy: 200.0 }
@@ -250,16 +251,17 @@ fn main {
     }
 
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(24, 24, 24, 255))
-
-    @raylib.draw_rectangle(0, 0, sw, 130, @raylib.Color::new(42, 30, 26, 255))
-    @raylib.draw_rectangle(
-      0,
-      130,
-      sw,
-      sh - 130,
-      @raylib.Color::new(232, 220, 196, 255),
-    )
+    if !draw_kitchen_backdrop_art() {
+      @raylib.clear_background(@raylib.Color::new(24, 24, 24, 255))
+      @raylib.draw_rectangle(0, 0, sw, 130, @raylib.Color::new(42, 30, 26, 255))
+      @raylib.draw_rectangle(
+        0,
+        130,
+        sw,
+        sh - 130,
+        @raylib.Color::new(232, 220, 196, 255),
+      )
+    }
 
     for l in 0..<lane_count {
       let x = lane_x(l)
@@ -276,36 +278,40 @@ fn main {
 
     for drop in drops {
       if drop.alive {
-        let c = ingredient_color(drop.kind)
-        @raylib.draw_circle(drop.x.to_int(), drop.y.to_int(), 16.0, c)
-        if drop.kind == 4 {
-          @draw.draw_text(
-            "X",
-            (drop.x - 6.0).to_int(),
-            (drop.y - 10.0).to_int(),
-            22,
-            @raylib.white,
-          )
+        if !draw_drop_art(drop.kind, drop.x, drop.y) {
+          let c = ingredient_color(drop.kind)
+          @raylib.draw_circle(drop.x.to_int(), drop.y.to_int(), 16.0, c)
+          if drop.kind == 4 {
+            @draw.draw_text(
+              "X",
+              (drop.x - 6.0).to_int(),
+              (drop.y - 10.0).to_int(),
+              22,
+              @raylib.white,
+            )
+          }
         }
       }
     }
 
     // Chef
-    @raylib.draw_circle(px.to_int(), py.to_int(), 20.0, @raylib.white)
-    @raylib.draw_rectangle(
-      (px - 20.0).to_int(),
-      (py + 20.0).to_int(),
-      40,
-      26,
-      @raylib.blue,
-    )
-    @raylib.draw_rectangle(
-      (px - 28.0).to_int(),
-      (py - 32.0).to_int(),
-      56,
-      8,
-      @raylib.white,
-    )
+    if !draw_chef_art(px, py) {
+      @raylib.draw_circle(px.to_int(), py.to_int(), 20.0, @raylib.white)
+      @raylib.draw_rectangle(
+        (px - 20.0).to_int(),
+        (py + 20.0).to_int(),
+        40,
+        26,
+        @raylib.blue,
+      )
+      @raylib.draw_rectangle(
+        (px - 28.0).to_int(),
+        (py - 32.0).to_int(),
+        56,
+        8,
+        @raylib.white,
+      )
+    }
 
     // Order panel
     @raylib.draw_rectangle(
@@ -382,6 +388,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
