@@ -27,7 +27,17 @@ fn @types.Game::shake_y(game : @types.Game) -> Int {
 ///|
 /// Draws the dark arctic background: a near-black fill, three slowly pulsing ambient glow circles, and 16 subtle horizontal gradient bands.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(8, 16, 28, 255))
+  if draw_backdrop_art() {
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @raylib.Color::new(4, 12, 24, 122),
+    )
+  } else {
+    @raylib.clear_background(@raylib.Color::new(8, 16, 28, 255))
+  }
 
   let n0 : Float = game.bg_noise(0.43)
   let n1 : Float = game.bg_noise(0.76)
@@ -71,13 +81,23 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 ///|
 /// Draws the world-area backdrop: a dark fill, a border outline, a faint grid of horizontal and vertical lines, and two narrow side-wall panels.
 fn draw_world_back(_game : @types.Game, ox : Int, oy : Int) -> Unit {
-  @raylib.draw_rectangle(
-    @types.world_x0 + ox,
-    @types.world_y0 + oy,
-    @types.world_w,
-    @types.world_h,
-    @raylib.Color::new(16, 30, 44, 236),
-  )
+  if draw_snowfield_art(ox, oy) {
+    @raylib.draw_rectangle(
+      @types.world_x0 + ox,
+      @types.world_y0 + oy,
+      @types.world_w,
+      @types.world_h,
+      @raylib.Color::new(10, 30, 48, 82),
+    )
+  } else {
+    @raylib.draw_rectangle(
+      @types.world_x0 + ox,
+      @types.world_y0 + oy,
+      @types.world_w,
+      @types.world_h,
+      @raylib.Color::new(16, 30, 44, 236),
+    )
+  }
 
   @raylib.draw_rectangle_lines(
     @types.world_x0 + ox,
@@ -169,24 +189,44 @@ fn @types.Game::draw_core(game : @types.Game, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(32, 48, 66, 210),
   )
 
-  @raylib.draw_circle(
-    cx,
-    cy,
-    @types.core_r + pulse * 4.0,
-    @raylib.Color::new(
-      110 + (heat_ratio * 100.0).to_int(),
-      120 + (heat_ratio * 60.0).to_int(),
-      160 + (heat_ratio * 60.0).to_int(),
-      220,
-    ),
-  )
-
-  @raylib.draw_circle(
-    cx,
-    cy,
-    @types.core_r - 24.0,
-    @raylib.Color::new(34, 62, 86, 242),
-  )
+  match tex_core_sprite.val {
+    Some(texture) => {
+      let tint = @raylib.Color::new(
+        160 + (heat_ratio * 80.0).to_int(),
+        180 + (heat_ratio * 50.0).to_int(),
+        210 + (heat_ratio * 30.0).to_int(),
+        255,
+      )
+      draw_art_fit(
+        texture,
+        Float::from_int(cx),
+        Float::from_int(cy),
+        @types.core_r * 2.9 + pulse * 5.0,
+        @types.core_r * 2.9 + pulse * 5.0,
+        0.0,
+        tint,
+      )
+    }
+    None => {
+      @raylib.draw_circle(
+        cx,
+        cy,
+        @types.core_r + pulse * 4.0,
+        @raylib.Color::new(
+          110 + (heat_ratio * 100.0).to_int(),
+          120 + (heat_ratio * 60.0).to_int(),
+          160 + (heat_ratio * 60.0).to_int(),
+          220,
+        ),
+      )
+      @raylib.draw_circle(
+        cx,
+        cy,
+        @types.core_r - 24.0,
+        @raylib.Color::new(34, 62, 86, 242),
+      )
+    }
+  }
 
   for i in 0..<6 {
     let a : Float = game.ui_t * 0.8 + Float::from_int(i) * 1.047
@@ -228,58 +268,73 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
 
   let c0 : @raylib.Color = enemy_color(enemy.kind)
 
-  match enemy.kind {
-    Wolf => {
-      @raylib.draw_circle(x, y, enemy.r, c0)
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(Float::from_int(x - 10), Float::from_int(y - 8)),
-        @raylib.Vector2::new(Float::from_int(x - 18), Float::from_int(y - 22)),
-        @raylib.Vector2::new(Float::from_int(x - 2), Float::from_int(y - 18)),
-        @raylib.Color::new(206, 232, 248, 238),
-      )
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(Float::from_int(x + 10), Float::from_int(y - 8)),
-        @raylib.Vector2::new(Float::from_int(x + 2), Float::from_int(y - 22)),
-        @raylib.Vector2::new(Float::from_int(x + 18), Float::from_int(y - 18)),
-        @raylib.Color::new(206, 232, 248, 238),
+  match enemy_art(enemy.kind) {
+    Some(texture) => {
+      let size = if enemy.kind == Brute { enemy.r * 3.7 } else { enemy.r * 3.2 }
+      draw_art_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        size,
+        size,
+        0.0,
+        @raylib.white,
       )
     }
-    Brute => {
-      @raylib.draw_circle(
-        x,
-        y,
-        enemy.r + 4.0,
-        @raylib.Color::new(112, 136, 162, 248),
-      )
-      @raylib.draw_circle(x, y, enemy.r - 2.0, c0)
-      @raylib.draw_circle_lines(
-        x,
-        y,
-        enemy.r + 6.0,
-        @raylib.Color::new(218, 236, 246, 188),
-      )
-    }
-    _ => {
-      let r : Float = enemy.r
-      for k in 0..<4 {
-        let a0 : Float = enemy.phase + Float::from_int(k) * 1.57
-        let a1 : Float = a0 + 0.7
-        let a2 : Float = a0 - 0.7
+    None =>
+      match enemy.kind {
+        Wolf => {
+          @raylib.draw_circle(x, y, enemy.r, c0)
+          @raylib.draw_triangle(
+            @raylib.Vector2::new(Float::from_int(x - 10), Float::from_int(y - 8)),
+            @raylib.Vector2::new(Float::from_int(x - 18), Float::from_int(y - 22)),
+            @raylib.Vector2::new(Float::from_int(x - 2), Float::from_int(y - 18)),
+            @raylib.Color::new(206, 232, 248, 238),
+          )
+          @raylib.draw_triangle(
+            @raylib.Vector2::new(Float::from_int(x + 10), Float::from_int(y - 8)),
+            @raylib.Vector2::new(Float::from_int(x + 2), Float::from_int(y - 22)),
+            @raylib.Vector2::new(Float::from_int(x + 18), Float::from_int(y - 18)),
+            @raylib.Color::new(206, 232, 248, 238),
+          )
+        }
+        Brute => {
+          @raylib.draw_circle(
+            x,
+            y,
+            enemy.r + 4.0,
+            @raylib.Color::new(112, 136, 162, 248),
+          )
+          @raylib.draw_circle(x, y, enemy.r - 2.0, c0)
+          @raylib.draw_circle_lines(
+            x,
+            y,
+            enemy.r + 6.0,
+            @raylib.Color::new(218, 236, 246, 188),
+          )
+        }
+        _ => {
+          let r : Float = enemy.r
+          for k in 0..<4 {
+            let a0 : Float = enemy.phase + Float::from_int(k) * 1.57
+            let a1 : Float = a0 + 0.7
+            let a2 : Float = a0 - 0.7
 
-        @raylib.draw_triangle(
-          @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-          @raylib.Vector2::new(
-            (enemy.x + @math.cosf(a1) * (r + 8.0)).to_int() |> Float::from_int,
-            (enemy.y + @math.sinf(a1) * (r + 8.0)).to_int() |> Float::from_int,
-          ),
-          @raylib.Vector2::new(
-            (enemy.x + @math.cosf(a2) * (r + 8.0)).to_int() |> Float::from_int,
-            (enemy.y + @math.sinf(a2) * (r + 8.0)).to_int() |> Float::from_int,
-          ),
-          c0,
-        )
+            @raylib.draw_triangle(
+              @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+              @raylib.Vector2::new(
+                (enemy.x + @math.cosf(a1) * (r + 8.0)).to_int() |> Float::from_int,
+                (enemy.y + @math.sinf(a1) * (r + 8.0)).to_int() |> Float::from_int,
+              ),
+              @raylib.Vector2::new(
+                (enemy.x + @math.cosf(a2) * (r + 8.0)).to_int() |> Float::from_int,
+                (enemy.y + @math.sinf(a2) * (r + 8.0)).to_int() |> Float::from_int,
+              ),
+              c0,
+            )
+          }
+        }
       }
-    }
   }
 
   @raylib.draw_circle(x + 4, y - 4, 3.0, @raylib.Color::new(24, 34, 42, 220))
@@ -322,7 +377,7 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 }
 
 ///|
-/// Draws a pickup as a pulsing filled circle with a white outline ring and a kind-specific inner icon (canister, cross, dot, or inner ring).
+/// Draws a pickup with generated art when available, falling back to a pulsing procedural icon.
 fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
   if !p.active {
     return
@@ -335,52 +390,80 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 
   let c : @raylib.Color = pickup_color(p.kind)
 
-  @raylib.draw_circle(x, y, rr, c)
-  @raylib.draw_circle_lines(
-    x,
-    y,
-    rr + 3.0,
-    @raylib.Color::new(244, 250, 255, 210),
-  )
-
-  match p.kind {
-    Fuel =>
-      @raylib.draw_rectangle(
-        x - 5,
-        y - 8,
-        10,
-        16,
-        @raylib.Color::new(58, 38, 24, 230),
-      )
-    Medkit => {
-      @raylib.draw_line(
-        x - 6,
-        y,
-        x + 6,
-        y,
-        @raylib.Color::new(250, 248, 248, 240),
-      )
-      @raylib.draw_line(
+  match pickup_art(p.kind) {
+    Some(texture) => {
+      @raylib.draw_circle(
         x,
-        y - 6,
-        x,
-        y + 6,
-        @raylib.Color::new(250, 248, 248, 240),
+        y,
+        rr + 7.0,
+        @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 42),
       )
-    }
-    Ammo => @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(22, 36, 50, 234))
-    _ =>
       @raylib.draw_circle_lines(
         x,
         y,
-        rr - 5.0,
-        @raylib.Color::new(236, 214, 255, 224),
+        rr + 8.0 + pulse * 1.2,
+        @raylib.Color::new(244, 250, 255, 178),
       )
+      draw_art_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        rr * 3.2,
+        rr * 3.0,
+        if p.kind == Overdrive { p.phase * 18.0 } else { 0.0 },
+        @raylib.white,
+      )
+    }
+    None => {
+      @raylib.draw_circle(x, y, rr, c)
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        rr + 3.0,
+        @raylib.Color::new(244, 250, 255, 210),
+      )
+
+      match p.kind {
+        Fuel =>
+          @raylib.draw_rectangle(
+            x - 5,
+            y - 8,
+            10,
+            16,
+            @raylib.Color::new(58, 38, 24, 230),
+          )
+        Medkit => {
+          @raylib.draw_line(
+            x - 6,
+            y,
+            x + 6,
+            y,
+            @raylib.Color::new(250, 248, 248, 240),
+          )
+          @raylib.draw_line(
+            x,
+            y - 6,
+            x,
+            y + 6,
+            @raylib.Color::new(250, 248, 248, 240),
+          )
+        }
+        Ammo =>
+          @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(22, 36, 50, 234))
+        _ =>
+          @raylib.draw_circle_lines(
+            x,
+            y,
+            rr - 5.0,
+            @raylib.Color::new(236, 214, 255, 224),
+          )
+      }
+    }
   }
 }
 
 ///|
-/// Draws a bullet as a small circle, using violet for pierce bullets and cyan for normal bullets.
+/// Draws a bullet with generated projectile art when available, falling back to a colored dot.
 fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
   if !b.active {
     return
@@ -392,16 +475,31 @@ fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(152, 236, 255, 242)
   }
 
-  @raylib.draw_circle(
-    b.x.to_int() + ox,
-    b.y.to_int() + oy,
-    if b.kind == Pierce {
-      5.0
-    } else {
-      3.5
-    },
-    c,
-  )
+  match projectile_art() {
+    Some(texture) => {
+      let angle : Float = @math.atan2f(b.vy, b.vx) * 57.29577951308232
+      draw_art_fit(
+        texture,
+        Float::from_int(b.x.to_int() + ox),
+        Float::from_int(b.y.to_int() + oy),
+        if b.kind == Pierce { 36.0 } else { 25.0 },
+        if b.kind == Pierce { 13.0 } else { 9.0 },
+        angle,
+        c,
+      )
+    }
+    None =>
+      @raylib.draw_circle(
+        b.x.to_int() + ox,
+        b.y.to_int() + oy,
+        if b.kind == Pierce {
+          5.0
+        } else {
+          3.5
+        },
+        c,
+      )
+  }
 }
 
 ///|
@@ -443,32 +541,50 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
   let tilt : Float = @types.clampf(game.player_vx * 0.0015, -0.5, 0.5)
 
-  @raylib.draw_circle(
-    x,
-    y,
-    @types.player_r + 2.0,
-    @raylib.Color::new(74, 118, 146, 248),
-  )
-  @raylib.draw_circle(
-    x,
-    y,
-    @types.player_r - 6.0,
-    @raylib.Color::new(192, 214, 232, 248),
-  )
-
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(Float::from_int(x), Float::from_int(y - 18)),
-    @raylib.Vector2::new(Float::from_int(x - 12), Float::from_int(y + 10)),
-    @raylib.Vector2::new(Float::from_int(x + 12), Float::from_int(y + 10)),
-    @raylib.Color::new(78, 104, 132, 240),
-  )
-
-  @raylib.draw_circle(
-    (Float::from_int(x) + tilt * 10.0).to_int(),
-    y - 6,
-    4.0,
-    @raylib.Color::new(20, 34, 46, 220),
-  )
+  match tex_player_sprite.val {
+    Some(texture) => {
+      let tint = if game.overdrive_t > 0.0 {
+        @raylib.Color::new(226, 204, 255, 255)
+      } else {
+        @raylib.white
+      }
+      draw_art_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        @types.player_r * 3.0,
+        @types.player_r * 3.3,
+        0.0,
+        tint,
+      )
+    }
+    None => {
+      @raylib.draw_circle(
+        x,
+        y,
+        @types.player_r + 2.0,
+        @raylib.Color::new(74, 118, 146, 248),
+      )
+      @raylib.draw_circle(
+        x,
+        y,
+        @types.player_r - 6.0,
+        @raylib.Color::new(192, 214, 232, 248),
+      )
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y - 18)),
+        @raylib.Vector2::new(Float::from_int(x - 12), Float::from_int(y + 10)),
+        @raylib.Vector2::new(Float::from_int(x + 12), Float::from_int(y + 10)),
+        @raylib.Color::new(78, 104, 132, 240),
+      )
+      @raylib.draw_circle(
+        (Float::from_int(x) + tilt * 10.0).to_int(),
+        y - 6,
+        4.0,
+        @raylib.Color::new(20, 34, 46, 220),
+      )
+    }
+  }
 
   let ax : Int = game.aim_x.to_int() + ox
   let ay : Int = game.aim_y.to_int() + oy
