@@ -21,33 +21,6 @@ fn @types.Game::draw_ship(game : @types.Game) -> Unit {
 
   let dir_x = @math.cosf(game.ship_angle)
   let dir_y = @math.sinf(game.ship_angle)
-  let side_x = Float::from_double(
-    @math.cos((game.ship_angle + @types.pi * 0.75).to_double()),
-  )
-  let side_y = Float::from_double(
-    @math.sin((game.ship_angle + @types.pi * 0.75).to_double()),
-  )
-  let side2_x = Float::from_double(
-    @math.cos((game.ship_angle - @types.pi * 0.75).to_double()),
-  )
-  let side2_y = Float::from_double(
-    @math.sin((game.ship_angle - @types.pi * 0.75).to_double()),
-  )
-
-  let nose = @raylib.Vector2::new(
-    game.ship_x + dir_x * 15.0,
-    game.ship_y + dir_y * 15.0,
-  )
-  let left = @raylib.Vector2::new(
-    game.ship_x + side_x * 10.0,
-    game.ship_y + side_y * 10.0,
-  )
-  let right = @raylib.Vector2::new(
-    game.ship_x + side2_x * 10.0,
-    game.ship_y + side2_y * 10.0,
-  )
-
-  @raylib.draw_triangle_lines(nose, left, right, @raylib.raywhite)
 
   if game.thrusting {
     let back = @raylib.Vector2::new(
@@ -55,6 +28,48 @@ fn @types.Game::draw_ship(game : @types.Game) -> Unit {
       game.ship_y - dir_y * 8.0,
     )
     @raylib.draw_circle(back.x.to_int(), back.y.to_int(), 3.0, @raylib.orange)
+  }
+
+  match tex_ship_sprite.val {
+    Some(texture) =>
+      draw_art_fit(
+        texture,
+        game.ship_x,
+        game.ship_y,
+        46.0,
+        34.0,
+        game.ship_angle * 57.29577951308232,
+        @raylib.white,
+      )
+    None => {
+      let side_x = Float::from_double(
+        @math.cos((game.ship_angle + @types.pi * 0.75).to_double()),
+      )
+      let side_y = Float::from_double(
+        @math.sin((game.ship_angle + @types.pi * 0.75).to_double()),
+      )
+      let side2_x = Float::from_double(
+        @math.cos((game.ship_angle - @types.pi * 0.75).to_double()),
+      )
+      let side2_y = Float::from_double(
+        @math.sin((game.ship_angle - @types.pi * 0.75).to_double()),
+      )
+
+      let nose = @raylib.Vector2::new(
+        game.ship_x + dir_x * 15.0,
+        game.ship_y + dir_y * 15.0,
+      )
+      let left = @raylib.Vector2::new(
+        game.ship_x + side_x * 10.0,
+        game.ship_y + side_y * 10.0,
+      )
+      let right = @raylib.Vector2::new(
+        game.ship_x + side2_x * 10.0,
+        game.ship_y + side2_y * 10.0,
+      )
+
+      @raylib.draw_triangle_lines(nose, left, right, @raylib.raywhite)
+    }
   }
 }
 
@@ -70,34 +85,61 @@ fn @types.Game::draw_rocks(game : @types.Game) -> Unit {
       1 => @raylib.gray
       _ => @raylib.darkgray
     }
-    @raylib.draw_circle_lines(
-      rock.x.to_int(),
-      rock.y.to_int(),
-      rock.radius,
-      color,
-    )
-    @raylib.draw_circle_lines(
-      (rock.x + 3.0).to_int(),
-      (rock.y - 2.0).to_int(),
-      rock.radius * 0.6,
-      color,
-    )
+    match asteroid_art(rock.size) {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          rock.x,
+          rock.y,
+          rock.radius * 2.45,
+          rock.radius * 2.45,
+          (rock.x + rock.y) * 0.018,
+          @raylib.white,
+        )
+      None => {
+        @raylib.draw_circle_lines(
+          rock.x.to_int(),
+          rock.y.to_int(),
+          rock.radius,
+          color,
+        )
+        @raylib.draw_circle_lines(
+          (rock.x + 3.0).to_int(),
+          (rock.y - 2.0).to_int(),
+          rock.radius * 0.6,
+          color,
+        )
+      }
+    }
   }
 }
 
 ///|
-/// Draws all active bullets as small yellow circles.
+/// Draws all active bullets as generated plasma bolts when available, falling back to small yellow circles.
 fn @types.Game::draw_bullets(game : @types.Game) -> Unit {
   for bullet in game.bullets {
     if !bullet.active {
       continue
     }
-    @raylib.draw_circle(
-      bullet.x.to_int(),
-      bullet.y.to_int(),
-      2.4,
-      @raylib.yellow,
-    )
+    match tex_projectile_sprite.val {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          bullet.x,
+          bullet.y,
+          18.0,
+          6.0,
+          @math.atan2f(bullet.vy, bullet.vx) * 57.29577951308232,
+          @raylib.white,
+        )
+      None =>
+        @raylib.draw_circle(
+          bullet.x.to_int(),
+          bullet.y.to_int(),
+          2.4,
+          @raylib.yellow,
+        )
+    }
   }
 }
 
@@ -125,7 +167,17 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 /// Draws the complete asteroid salvage frame, including HUD and entities.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.begin_drawing()
-  @raylib.clear_background(@raylib.Color::new(7, 9, 18, 255))
+  if draw_backdrop_art() {
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_width,
+      @types.screen_height,
+      @raylib.Color::new(2, 5, 13, 58),
+    )
+  } else {
+    @raylib.clear_background(@raylib.Color::new(7, 9, 18, 255))
+  }
   draw_starfield()
   game.draw_rocks()
   game.draw_bullets()
