@@ -50,113 +50,123 @@ fn @types.Game::draw_single_tile(
 
   match tile {
     Brick => {
-      @raylib.draw_rectangle(
-        sx,
-        sy,
-        @types.tile_size,
-        @types.tile_size,
-        @raylib.Color::new(140, 72, 51, 255),
-      )
-      @raylib.draw_rectangle_lines(
-        sx,
-        sy,
-        @types.tile_size,
-        @types.tile_size,
-        @raylib.Color::new(88, 43, 30, 255),
-      )
-      @raylib.draw_line(
-        sx,
-        sy + @types.tile_size / 2,
-        sx + @types.tile_size,
-        sy + @types.tile_size / 2,
-        @raylib.Color::new(110, 55, 37, 255),
-      )
+      if !draw_tile_art(tile, game.base_alive, sx, sy) {
+        @raylib.draw_rectangle(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.Color::new(140, 72, 51, 255),
+        )
+        @raylib.draw_rectangle_lines(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.Color::new(88, 43, 30, 255),
+        )
+        @raylib.draw_line(
+          sx,
+          sy + @types.tile_size / 2,
+          sx + @types.tile_size,
+          sy + @types.tile_size / 2,
+          @raylib.Color::new(110, 55, 37, 255),
+        )
+      }
     }
     Steel => {
-      @raylib.draw_rectangle(
-        sx,
-        sy,
-        @types.tile_size,
-        @types.tile_size,
-        @raylib.Color::new(110, 124, 143, 255),
-      )
-      @raylib.draw_rectangle_lines(
-        sx,
-        sy,
-        @types.tile_size,
-        @types.tile_size,
-        @raylib.Color::new(180, 190, 204, 255),
-      )
-      @raylib.draw_line(
-        sx,
-        sy,
-        sx + @types.tile_size,
-        sy + @types.tile_size,
-        @raylib.Color::new(84, 94, 108, 255),
-      )
+      if !draw_tile_art(tile, game.base_alive, sx, sy) {
+        @raylib.draw_rectangle(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.Color::new(110, 124, 143, 255),
+        )
+        @raylib.draw_rectangle_lines(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.Color::new(180, 190, 204, 255),
+        )
+        @raylib.draw_line(
+          sx,
+          sy,
+          sx + @types.tile_size,
+          sy + @types.tile_size,
+          @raylib.Color::new(84, 94, 108, 255),
+        )
+      }
     }
     Water => {
-      @raylib.draw_rectangle(
-        sx,
-        sy,
-        @types.tile_size,
-        @types.tile_size,
-        @raylib.Color::new(35, 70, 140, 255),
-      )
-      let wave = (Float::from_int(game.frame_counter) * 0.18 +
-        Float::from_int(tx + ty)).to_int() %
-        4
-      @raylib.draw_line(
-        sx,
-        sy + 5 + wave,
-        sx + @types.tile_size,
-        sy + 3 + wave,
-        @raylib.Color::new(70, 130, 220, 255),
-      )
+      if !draw_tile_art(tile, game.base_alive, sx, sy) {
+        @raylib.draw_rectangle(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.Color::new(35, 70, 140, 255),
+        )
+        let wave = (Float::from_int(game.frame_counter) * 0.18 +
+          Float::from_int(tx + ty)).to_int() %
+          4
+        @raylib.draw_line(
+          sx,
+          sy + 5 + wave,
+          sx + @types.tile_size,
+          sy + 3 + wave,
+          @raylib.Color::new(70, 130, 220, 255),
+        )
+      }
     }
     Ice => {
-      @raylib.draw_rectangle(
-        sx,
-        sy,
-        @types.tile_size,
-        @types.tile_size,
-        @raylib.Color::new(156, 222, 232, 255),
-      )
-      @raylib.draw_line(
-        sx + 4,
-        sy + 5,
-        sx + @types.tile_size - 4,
-        sy + @types.tile_size - 5,
-        @raylib.Color::new(210, 248, 255, 255),
-      )
+      if !draw_tile_art(tile, game.base_alive, sx, sy) {
+        @raylib.draw_rectangle(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.Color::new(156, 222, 232, 255),
+        )
+        @raylib.draw_line(
+          sx + 4,
+          sy + 5,
+          sx + @types.tile_size - 4,
+          sy + @types.tile_size - 5,
+          @raylib.Color::new(210, 248, 255, 255),
+        )
+      }
     }
     Base => {
-      let base_color = if game.base_alive {
-        @raylib.Color::new(201, 167, 86, 255)
-      } else {
-        @raylib.Color::new(110, 32, 32, 255)
+      if !draw_tile_art(tile, game.base_alive, sx, sy) {
+        let base_color = if game.base_alive {
+          @raylib.Color::new(201, 167, 86, 255)
+        } else {
+          @raylib.Color::new(110, 32, 32, 255)
+        }
+        @raylib.draw_rectangle(
+          sx, sy, @types.tile_size, @types.tile_size, base_color,
+        )
+        @raylib.draw_rectangle_lines(
+          sx, sy, @types.tile_size, @types.tile_size, @raylib.darkbrown,
+        )
+        @raylib.draw_triangle(
+          @raylib.Vector2::new(
+            Float::from_int(sx + 4),
+            Float::from_int(sy + @types.tile_size - 4),
+          ),
+          @raylib.Vector2::new(
+            Float::from_int(sx + @types.tile_size - 4),
+            Float::from_int(sy + @types.tile_size - 4),
+          ),
+          @raylib.Vector2::new(
+            Float::from_int(sx + @types.tile_size / 2),
+            Float::from_int(sy + 5),
+          ),
+          @raylib.black,
+        )
       }
-      @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size, base_color,
-      )
-      @raylib.draw_rectangle_lines(
-        sx, sy, @types.tile_size, @types.tile_size, @raylib.darkbrown,
-      )
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(
-          Float::from_int(sx + 4),
-          Float::from_int(sy + @types.tile_size - 4),
-        ),
-        @raylib.Vector2::new(
-          Float::from_int(sx + @types.tile_size - 4),
-          Float::from_int(sy + @types.tile_size - 4),
-        ),
-        @raylib.Vector2::new(
-          Float::from_int(sx + @types.tile_size / 2),
-          Float::from_int(sy + 5),
-        ),
-        @raylib.black,
-      )
       if game.base_flash > 0.0 {
         let alpha = @types.clampf(game.base_flash, 0.0, 1.0)
         @raylib.draw_rectangle(
@@ -181,6 +191,17 @@ fn @types.Game::draw_terrain_layer(
   for ty in 0..<@types.map_tiles_h {
     for tx in 0..<@types.map_tiles_w {
       let tile = @types.get_tile(game, tx, ty)
+      let sx = @types.tile_to_screen_x(tx, shake_x)
+      let sy = @types.tile_to_screen_y(ty, shake_y)
+      if !draw_floor_art(sx, sy) {
+        @raylib.draw_rectangle(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.Color::new(20, 23, 28, 255),
+        )
+      }
       match tile {
         Empty | Bush => continue
         _ => game.draw_single_tile(tx, ty, tile, shake_x, shake_y)
@@ -202,31 +223,33 @@ fn @types.Game::draw_bush_layer(
       }
       let sx = @types.tile_to_screen_x(tx, shake_x)
       let sy = @types.tile_to_screen_y(ty, shake_y)
-      @raylib.draw_rectangle(
-        sx,
-        sy,
-        @types.tile_size,
-        @types.tile_size,
-        @raylib.Color::new(42, 106, 53, 220),
-      )
-      @raylib.draw_circle(
-        sx + 6,
-        sy + 9,
-        5.0,
-        @raylib.Color::new(74, 145, 80, 230),
-      )
-      @raylib.draw_circle(
-        sx + 15,
-        sy + 8,
-        4.0,
-        @raylib.Color::new(58, 126, 63, 230),
-      )
-      @raylib.draw_circle(
-        sx + 12,
-        sy + 15,
-        5.0,
-        @raylib.Color::new(85, 153, 88, 230),
-      )
+      if !draw_tile_art(Bush, game.base_alive, sx, sy) {
+        @raylib.draw_rectangle(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.Color::new(42, 106, 53, 220),
+        )
+        @raylib.draw_circle(
+          sx + 6,
+          sy + 9,
+          5.0,
+          @raylib.Color::new(74, 145, 80, 230),
+        )
+        @raylib.draw_circle(
+          sx + 15,
+          sy + 8,
+          4.0,
+          @raylib.Color::new(58, 126, 63, 230),
+        )
+        @raylib.draw_circle(
+          sx + 12,
+          sy + 15,
+          5.0,
+          @raylib.Color::new(85, 153, 88, 230),
+        )
+      }
     }
   }
 }
@@ -324,7 +347,9 @@ fn @types.Game::draw_players(
     } else {
       @raylib.Color::new(170, 86, 34, 255)
     }
-    draw_tank(player, body, trim, shake_x, shake_y)
+    if !draw_player_tank_art(i, player, shake_x, shake_y) {
+      draw_tank(player, body, trim, shake_x, shake_y)
+    }
 
     if player.shield_timer > 0.0 {
       let pulse = Float::from_double(
@@ -374,7 +399,9 @@ fn @types.Game::draw_enemies(
         @raylib.Color::new(70, 30, 30, 255),
       )
     }
-    draw_tank(enemy, body, trim, shake_x, shake_y)
+    if !draw_enemy_tank_art(enemy, shake_x, shake_y, body) {
+      draw_tank(enemy, body, trim, shake_x, shake_y)
+    }
 
     if enemy.enemy_kind == Heavy {
       for hp_i in 0..<enemy.hp {
@@ -405,12 +432,14 @@ fn @types.Game::draw_bullets(
       Player2 => @raylib.Color::new(255, 222, 120, 255)
       _ => @raylib.Color::new(122, 222, 255, 255)
     }
-    @raylib.draw_circle(
-      @types.world_to_screen_x(bullet.x, shake_x),
-      @types.world_to_screen_y(bullet.y, shake_y),
-      bullet.radius,
-      color,
-    )
+    if !draw_bullet_art(bullet, shake_x, shake_y) {
+      @raylib.draw_circle(
+        @types.world_to_screen_x(bullet.x, shake_x),
+        @types.world_to_screen_y(bullet.y, shake_y),
+        bullet.radius,
+        color,
+      )
+    }
   }
 }
 
@@ -462,13 +491,15 @@ fn @types.Game::draw_bombs(
           }
           let bsx = @types.tile_to_screen_x(tx, shake_x)
           let bsy = @types.tile_to_screen_y(ty, shake_y)
-          @raylib.draw_rectangle(
-            bsx + 3,
-            bsy + 3,
-            @types.tile_size - 6,
-            @types.tile_size - 6,
-            color,
-          )
+          if !draw_blast_art(bsx, bsy, alpha) {
+            @raylib.draw_rectangle(
+              bsx + 3,
+              bsy + 3,
+              @types.tile_size - 6,
+              @types.tile_size - 6,
+              color,
+            )
+          }
 
           let tile = @types.get_tile(game, tx, ty)
           match tile {
@@ -486,14 +517,21 @@ fn @types.Game::draw_bombs(
       let bsx = @types.world_to_screen_x(bomb.x, shake_x)
       let bsy = @types.world_to_screen_y(bomb.y, shake_y)
       let radius = Float::from_double(7.0) + pulse * Float::from_double(1.8)
-      @raylib.draw_circle(bsx, bsy, radius, @raylib.Color::new(44, 44, 52, 255))
-      @raylib.draw_circle_lines(bsx, bsy, radius, @raylib.lightgray)
-      @raylib.draw_circle(
-        bsx + 3,
-        bsy - 4,
-        2.0 + pulse * 0.8,
-        @raylib.Color::new(255, 152, 92, 255),
-      )
+      if !draw_bomb_art(bsx, bsy, pulse) {
+        @raylib.draw_circle(
+          bsx,
+          bsy,
+          radius,
+          @raylib.Color::new(44, 44, 52, 255),
+        )
+        @raylib.draw_circle_lines(bsx, bsy, radius, @raylib.lightgray)
+        @raylib.draw_circle(
+          bsx + 3,
+          bsy - 4,
+          2.0 + pulse * 0.8,
+          @raylib.Color::new(255, 152, 92, 255),
+        )
+      }
     }
   }
 }
@@ -576,9 +614,11 @@ fn @types.Game::draw_powerups(
     let pulse = @math.sinf(p.pulse) * 0.5 + 0.5
     let radius = powerup_radius(p.kind) - 1.0 + pulse * 2.0
 
-    @raylib.draw_circle(sx, sy, radius, @raylib.color_alpha(color, 0.25))
-    @raylib.draw_circle_lines(sx, sy, radius + 1.0, color)
-    @draw.draw_text(powerup_text(p.kind), sx - 5, sy - 8, 16, color)
+    if !draw_powerup_art(p.kind, sx, sy, pulse) {
+      @raylib.draw_circle(sx, sy, radius, @raylib.color_alpha(color, 0.25))
+      @raylib.draw_circle_lines(sx, sy, radius + 1.0, color)
+      @draw.draw_text(powerup_text(p.kind), sx - 5, sy - 8, 16, color)
+    }
   }
 }
 

@@ -6,6 +6,7 @@ fn main {
   )
   @raylib.set_target_fps(60)
   @draw.init_font()
+  @render.load_assets()
 
   let game = @types.Game::new()
 
@@ -22,6 +23,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  @render.unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
