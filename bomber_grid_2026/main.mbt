@@ -201,7 +201,9 @@ fn draw_fire_arm(
     }
     let px = off_x + x * tile
     let py = off_y + y * tile
-    @raylib.draw_rectangle(px + 10, py + 10, tile - 20, tile - 20, color)
+    if !draw_fire_art(px, py) {
+      @raylib.draw_rectangle(px + 10, py + 10, tile - 20, tile - 20, color)
+    }
     if cell == 2 {
       break
     }
@@ -214,6 +216,7 @@ fn main {
   @raylib.init_window(screen_w, screen_h, "Bomber Grid 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
 
   let map = init_map()
   let mut player_x = 1
@@ -369,25 +372,39 @@ fn main {
       for x in 0..<cols {
         let px = off_x + x * tile
         let py = off_y + y * tile
-        match map[idx(x, y)] {
-          1 => @raylib.draw_rectangle(px, py, tile, tile, @raylib.darkgray)
-          2 =>
-            @raylib.draw_rectangle(
-              px + 4,
-              py + 4,
-              tile - 8,
-              tile - 8,
-              @raylib.brown,
-            )
-          _ =>
-            @raylib.draw_rectangle_lines(
-              px,
-              py,
-              tile,
-              tile,
-              @raylib.Color::new(35, 35, 42, 255),
-            )
+        if !draw_floor_art(px, py) {
+          @raylib.draw_rectangle(
+            px,
+            py,
+            tile,
+            tile,
+            @raylib.Color::new(18, 22, 30, 255),
+          )
         }
+        match map[idx(x, y)] {
+          1 =>
+            if !draw_wall_art(px, py) {
+              @raylib.draw_rectangle(px, py, tile, tile, @raylib.darkgray)
+            }
+          2 =>
+            if !draw_crate_art(px, py) {
+              @raylib.draw_rectangle(
+                px + 4,
+                py + 4,
+                tile - 8,
+                tile - 8,
+                @raylib.brown,
+              )
+            }
+          _ => ()
+        }
+        @raylib.draw_rectangle_lines(
+          px,
+          py,
+          tile,
+          tile,
+          @raylib.Color::new(19, 26, 34, 178),
+        )
       }
     }
 
@@ -396,37 +413,43 @@ fn main {
       let by = off_y + bomb.y * tile
       if bomb.blast > 0.0 {
         let fire_col = @raylib.orange
-        @raylib.draw_rectangle(bx + 9, by + 9, tile - 18, tile - 18, fire_col)
+        if !draw_fire_art(bx, by) {
+          @raylib.draw_rectangle(bx + 9, by + 9, tile - 18, tile - 18, fire_col)
+        }
         draw_fire_arm(map, bomb, -1, 0, fire_col)
         draw_fire_arm(map, bomb, 1, 0, fire_col)
         draw_fire_arm(map, bomb, 0, -1, fire_col)
         draw_fire_arm(map, bomb, 0, 1, fire_col)
-      } else {
+      } else if !draw_bomb_art(bx, by) {
         @raylib.draw_circle(bx + tile / 2, by + tile / 2, 12.0, @raylib.black)
       }
     }
 
     let player_px = off_x + player_x * tile
     let player_py = off_y + player_y * tile
-    @raylib.draw_rectangle(
-      player_px + 8,
-      player_py + 8,
-      tile - 16,
-      tile - 16,
-      @raylib.skyblue,
-    )
+    if !draw_player_art(player_px, player_py) {
+      @raylib.draw_rectangle(
+        player_px + 8,
+        player_py + 8,
+        tile - 16,
+        tile - 16,
+        @raylib.skyblue,
+      )
+    }
 
     for enemy in enemies {
       if enemy.alive {
         let ex = off_x + enemy.x * tile
         let ey = off_y + enemy.y * tile
-        @raylib.draw_rectangle(
-          ex + 8,
-          ey + 8,
-          tile - 16,
-          tile - 16,
-          @raylib.red,
-        )
+        if !draw_enemy_art(ex, ey) {
+          @raylib.draw_rectangle(
+            ex + 8,
+            ey + 8,
+            tile - 16,
+            tile - 16,
+            @raylib.red,
+          )
+        }
       }
     }
 
@@ -466,6 +489,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
