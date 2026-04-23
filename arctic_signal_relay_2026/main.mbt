@@ -9,6 +9,8 @@ fn main {
   defer @raylib.close_window()
   @raylib.set_target_fps(@types.target_fps)
   @draw.init_font()
+  @render.load_assets()
+  defer @render.unload_assets()
 
   let game = @types.Game()
   @game.init_title_scene(game)

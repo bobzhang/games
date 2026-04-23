@@ -39,16 +39,26 @@ fn draw_mask_rect(
 ///|
 /// Draws the full-screen gradient sky background with animated star particles.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(8, 22, 38, 255))
+  if draw_backdrop_art() {
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @raylib.Color::new(4, 14, 28, 96),
+    )
+  } else {
+    @raylib.clear_background(@raylib.Color::new(8, 22, 38, 255))
 
-  @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @raylib.Color::new(18, 36, 58, 255),
-    @raylib.Color::new(7, 14, 28, 255),
-  )
+    @raylib.draw_rectangle_gradient_v(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @raylib.Color::new(18, 36, 58, 255),
+      @raylib.Color::new(7, 14, 28, 255),
+    )
+  }
 
   for i in 0..<120 {
     let fi = Float::from_int(i)
@@ -75,13 +85,23 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 ///|
 /// Draws the world viewport background including the ice-grid overlay, border, and an animated depot glow circle.
 fn @types.Game::draw_world_back(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(
-    @types.world_x0,
-    @types.world_y0,
-    @types.world_w,
-    @types.world_h,
-    @raylib.Color::new(14, 30, 44, 236),
-  )
+  if draw_icefield_art() {
+    @raylib.draw_rectangle(
+      @types.world_x0,
+      @types.world_y0,
+      @types.world_w,
+      @types.world_h,
+      @raylib.Color::new(8, 24, 38, 80),
+    )
+  } else {
+    @raylib.draw_rectangle(
+      @types.world_x0,
+      @types.world_y0,
+      @types.world_w,
+      @types.world_h,
+      @raylib.Color::new(14, 30, 44, 236),
+    )
+  }
 
   for row in 0..<22 {
     let y = @types.world_y0 + row * 40
@@ -179,13 +199,38 @@ fn @types.Game::draw_towers(game : @types.Game) -> Unit {
       @types.tower_hit_r() + 14.0 + pulse * 4.0,
       col_a(base_col, 56),
     )
-    @raylib.draw_circle(x, y, @types.tower_hit_r() + 3.0, col_a(base_col, 204))
-    @raylib.draw_circle(
-      x,
-      y,
-      @types.tower_hit_r() - 8.0,
-      @raylib.Color::new(20, 40, 62, 242),
-    )
+    match tex_tower_sprite.val {
+      Some(texture) => {
+        draw_art_fit(
+          texture,
+          Float::from_int(x),
+          Float::from_int(y),
+          @types.tower_hit_r() * 2.45,
+          @types.tower_hit_r() * 3.1,
+          0.0,
+          if done {
+            @raylib.Color::new(210, 255, 242, 255)
+          } else {
+            @raylib.white
+          },
+        )
+        @raylib.draw_circle_lines(
+          x,
+          y,
+          @types.tower_hit_r() + 4.0,
+          col_a(base_col, 164),
+        )
+      }
+      None => {
+        @raylib.draw_circle(x, y, @types.tower_hit_r() + 3.0, col_a(base_col, 204))
+        @raylib.draw_circle(
+          x,
+          y,
+          @types.tower_hit_r() - 8.0,
+          @raylib.Color::new(20, 40, 62, 242),
+        )
+      }
+    }
 
     if game.state == Play && i == game.nearby_tower {
       @raylib.draw_circle_lines(
@@ -226,35 +271,62 @@ fn @types.Game::draw_depot(game : @types.Game) -> Unit {
   let x = @types.depot_x().to_int()
   let y = @types.depot_y().to_int()
 
-  @raylib.draw_circle(
-    x,
-    y,
-    @types.depot_r(),
-    @raylib.Color::new(34, 86, 122, 228),
-  )
+  match tex_depot_sprite.val {
+    Some(texture) => {
+      @raylib.draw_circle(
+        x,
+        y,
+        @types.depot_r() + 18.0,
+        @raylib.Color::new(42, 116, 152, 74),
+      )
+      draw_art_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        @types.depot_r() * 2.65,
+        @types.depot_r() * 2.15,
+        0.0,
+        @raylib.white,
+      )
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        @types.depot_r() + 8.0,
+        @raylib.Color::new(180, 228, 255, 198),
+      )
+    }
+    None => {
+      @raylib.draw_circle(
+        x,
+        y,
+        @types.depot_r(),
+        @raylib.Color::new(34, 86, 122, 228),
+      )
 
-  @raylib.draw_circle_lines(
-    x,
-    y,
-    @types.depot_r() + 8.0,
-    @raylib.Color::new(180, 228, 255, 198),
-  )
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        @types.depot_r() + 8.0,
+        @raylib.Color::new(180, 228, 255, 198),
+      )
 
-  @raylib.draw_rectangle(
-    x - 24,
-    y - 18,
-    48,
-    36,
-    @raylib.Color::new(42, 110, 148, 250),
-  )
+      @raylib.draw_rectangle(
+        x - 24,
+        y - 18,
+        48,
+        36,
+        @raylib.Color::new(42, 110, 148, 250),
+      )
 
-  @draw.draw_text(
-    "CELL",
-    x - @draw.measure_text("CELL", 16) / 2,
-    y - 8,
-    16,
-    @raylib.Color::new(232, 246, 255, 250),
-  )
+      @draw.draw_text(
+        "CELL",
+        x - @draw.measure_text("CELL", 16) / 2,
+        y - 8,
+        16,
+        @raylib.Color::new(232, 246, 255, 250),
+      )
+    }
+  }
 
   if game.state == Play && game.in_depot {
     @raylib.draw_circle_lines(
@@ -276,12 +348,30 @@ fn @types.Game::draw_storms(game : @types.Game) -> Unit {
 
     let base_alpha = 28 + (storm.strength * 28.0).to_int()
 
-    @raylib.draw_circle(
-      storm.x.to_int(),
-      storm.y.to_int(),
-      storm.r,
-      @raylib.Color::new(202, 228, 255, base_alpha),
-    )
+    match tex_storm_sprite.val {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          storm.x,
+          storm.y,
+          storm.r * 2.22,
+          storm.r * 2.22,
+          storm.phase * 18.0,
+          @raylib.Color::new(
+            214,
+            238,
+            255,
+            (118 + (storm.strength * 42.0).to_int()).clamp(min=90, max=184),
+          ),
+        )
+      None =>
+        @raylib.draw_circle(
+          storm.x.to_int(),
+          storm.y.to_int(),
+          storm.r,
+          @raylib.Color::new(202, 228, 255, base_alpha),
+        )
+    }
 
     @raylib.draw_circle_lines(
       storm.x.to_int(),
@@ -328,38 +418,83 @@ fn @types.Game::draw_rover(game : @types.Game) -> Unit {
     255,
   )
 
-  @raylib.draw_circle(
-    x,
-    y,
-    @types.rover_r + 8.0,
-    @raylib.Color::new(24, 42, 62, 220),
-  )
-  @raylib.draw_circle(x, y, @types.rover_r, body_col)
-  @raylib.draw_circle_lines(
-    x,
-    y,
-    @types.rover_r + 2.0,
-    @raylib.Color::new(224, 244, 255, 220),
-  )
-
   let head_x = game.rover_x + game.rover_vx * 0.10
   let head_y = game.rover_y + game.rover_vy * 0.10
-  @raylib.draw_circle(
-    head_x.to_int(),
-    head_y.to_int(),
-    8.0,
-    @raylib.Color::new(232, 246, 255, 240),
-  )
+  let speed2 = game.rover_vx * game.rover_vx + game.rover_vy * game.rover_vy
+  let angle = if speed2 > 4.0 {
+    @math.atan2f(game.rover_vy, game.rover_vx) * 57.29577951308232
+  } else {
+    0.0
+  }
+
+  match tex_rover_sprite.val {
+    Some(texture) => {
+      @raylib.draw_circle(
+        x,
+        y,
+        @types.rover_r + 11.0,
+        @raylib.Color::new(16, 30, 46, 188),
+      )
+      draw_art_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        @types.rover_r * 4.6,
+        @types.rover_r * 3.3,
+        angle,
+        @raylib.Color::new(
+          196 + (energy_ratio * 52.0).to_int(),
+          210 + (heat_ratio * 32.0).to_int(),
+          226 + (energy_ratio * 24.0).to_int(),
+          255,
+        ),
+      )
+    }
+    None => {
+      @raylib.draw_circle(
+        x,
+        y,
+        @types.rover_r + 8.0,
+        @raylib.Color::new(24, 42, 62, 220),
+      )
+      @raylib.draw_circle(x, y, @types.rover_r, body_col)
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        @types.rover_r + 2.0,
+        @raylib.Color::new(224, 244, 255, 220),
+      )
+      @raylib.draw_circle(
+        head_x.to_int(),
+        head_y.to_int(),
+        8.0,
+        @raylib.Color::new(232, 246, 255, 240),
+      )
+    }
+  }
 
   for i in 0..<game.cargo_cells {
     let off_x = -16 + i * 16
-    @raylib.draw_rectangle(
-      x + off_x - 5,
-      y - 32,
-      10,
-      10,
-      @raylib.Color::new(248, 224, 128, 242),
-    )
+    match tex_power_cell_sprite.val {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          Float::from_int(x + off_x),
+          Float::from_int(y - 36),
+          22.0,
+          14.0,
+          0.0,
+          @raylib.white,
+        )
+      None =>
+        @raylib.draw_rectangle(
+          x + off_x - 5,
+          y - 32,
+          10,
+          10,
+          @raylib.Color::new(248, 224, 128, 242),
+        )
+    }
   }
 }
 
