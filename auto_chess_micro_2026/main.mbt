@@ -187,6 +187,7 @@ fn main {
   @raylib.init_window(sw, sh, "Auto Chess Micro 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
 
   let board : Array[Int] = Array::make(gw * gh, -1)
   let units : Array[Piece] = []
@@ -337,7 +338,11 @@ fn main {
     }
 
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(18, 20, 28, 255))
+    if draw_arena_art() {
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 10, 18, 96))
+    } else {
+      @raylib.clear_background(@raylib.Color::new(18, 20, 28, 255))
+    }
 
     @draw.draw_text("AUTO CHESS MICRO 2026", 22, 18, 34, @raylib.skyblue)
     @draw.draw_text("Round \{round}", 24, 58, 24, @raylib.raywhite)
@@ -355,9 +360,20 @@ fn main {
           tile - 2,
           tile - 2,
           if left_side {
-            @raylib.Color::new(38, 52, 70, 255)
+            @raylib.Color::new(38, 70, 104, 176)
           } else {
-            @raylib.Color::new(70, 38, 44, 255)
+            @raylib.Color::new(94, 42, 54, 164)
+          },
+        )
+        @raylib.draw_rectangle_lines(
+          px,
+          py,
+          tile - 2,
+          tile - 2,
+          if left_side {
+            @raylib.Color::new(122, 184, 236, 126)
+          } else {
+            @raylib.Color::new(222, 118, 128, 116)
           },
         )
       }
@@ -377,7 +393,15 @@ fn main {
             } else {
               @raylib.orange
             }
-            @raylib.draw_rectangle(px + 12, py + 12, tile - 26, tile - 26, col)
+            if !draw_unit_art(role, 0, px, py, 0.0) {
+              @raylib.draw_rectangle(
+                px + 12,
+                py + 12,
+                tile - 26,
+                tile - 26,
+                col,
+              )
+            }
           }
         }
       }
@@ -397,8 +421,39 @@ fn main {
           } else {
             @raylib.red
           }
-          @raylib.draw_rectangle(px + 12, py + 12, tile - 26, tile - 26, col)
-          @draw.draw_text("\{unit.hp}", px + 18, py + 16, 22, @raylib.raywhite)
+          let pulse : Float = if unit.cooldown > 0.44 { 5.0 } else { 0.0 }
+          if !draw_unit_art(unit.role, unit.team, px, py, pulse) {
+            @raylib.draw_rectangle(px + 12, py + 12, tile - 26, tile - 26, col)
+          }
+          let max_hp = role_hp(unit.role)
+          let hp_clamped = if unit.hp < 0 {
+            0
+          } else if unit.hp > max_hp {
+            max_hp
+          } else {
+            unit.hp
+          }
+          let bar_w = tile - 24
+          let fill_w = bar_w * hp_clamped / max_hp
+          @raylib.draw_rectangle(
+            px + 12,
+            py + tile - 16,
+            bar_w,
+            7,
+            @raylib.Color::new(12, 14, 20, 214),
+          )
+          @raylib.draw_rectangle(
+            px + 12,
+            py + tile - 16,
+            fill_w,
+            7,
+            if unit.team == 0 {
+              @raylib.Color::new(94, 224, 154, 238)
+            } else {
+              @raylib.Color::new(248, 108, 116, 238)
+            },
+          )
+          @draw.draw_text("\{unit.hp}", px + 16, py + 13, 20, @raylib.raywhite)
         }
       }
     }
@@ -446,6 +501,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
