@@ -124,6 +124,258 @@ struct Particle {
 }
 
 ///|
+/// Generated title backdrop texture.
+let tex_hacker_title : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated facility floor tile texture.
+let tex_floor_tile : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated facility wall tile texture.
+let tex_wall_tile : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated player hacker texture.
+let tex_player_hacker : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated patrol guard texture.
+let tex_guard_patrol : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated heavy guard texture.
+let tex_guard_heavy : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated drone guard texture.
+let tex_guard_drone : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated security camera texture.
+let tex_security_camera : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated data terminal texture.
+let tex_data_terminal : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated extraction gate texture.
+let tex_exit_gate : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated med patch pickup texture.
+let tex_pickup_med : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated battery pickup texture.
+let tex_pickup_battery : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated signal jammer pickup texture.
+let tex_pickup_jammer : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated data cache pickup texture.
+let tex_pickup_cache : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated hacker art texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "arcade_hacker_infiltration_2026/resources/" + file_name,
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated hacker infiltration art textures.
+fn load_hacker_art() -> Unit {
+  tex_hacker_title.val = Some(load_art_texture("hacker_title.png"))
+  tex_floor_tile.val = Some(load_art_texture("floor_tile.png"))
+  tex_wall_tile.val = Some(load_art_texture("wall_tile.png"))
+  tex_player_hacker.val = Some(load_art_texture("player_hacker.png"))
+  tex_guard_patrol.val = Some(load_art_texture("guard_patrol.png"))
+  tex_guard_heavy.val = Some(load_art_texture("guard_heavy.png"))
+  tex_guard_drone.val = Some(load_art_texture("guard_drone.png"))
+  tex_security_camera.val = Some(load_art_texture("security_camera.png"))
+  tex_data_terminal.val = Some(load_art_texture("data_terminal.png"))
+  tex_exit_gate.val = Some(load_art_texture("exit_gate.png"))
+  tex_pickup_med.val = Some(load_art_texture("pickup_med.png"))
+  tex_pickup_battery.val = Some(load_art_texture("pickup_battery.png"))
+  tex_pickup_jammer.val = Some(load_art_texture("pickup_jammer.png"))
+  tex_pickup_cache.val = Some(load_art_texture("pickup_cache.png"))
+}
+
+///|
+/// Unloads generated hacker infiltration art textures.
+fn unload_hacker_art() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_hacker_title)
+  unload(tex_floor_tile)
+  unload(tex_wall_tile)
+  unload(tex_player_hacker)
+  unload(tex_guard_patrol)
+  unload(tex_guard_heavy)
+  unload(tex_guard_drone)
+  unload(tex_security_camera)
+  unload(tex_data_terminal)
+  unload(tex_exit_gate)
+  unload(tex_pickup_med)
+  unload(tex_pickup_battery)
+  unload(tex_pickup_jammer)
+  unload(tex_pickup_cache)
+}
+
+///|
+/// Draws a generated sprite centered in a destination rectangle.
+fn draw_art_rect(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated sprite scaled to fit a centered box.
+fn draw_art_fit(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w = Float::from_int(texture.width())
+  let source_h = Float::from_int(texture.height())
+  let source_ratio = source_w / source_h
+  let box_ratio = max_w / max_h
+  let (w, h) = if source_ratio > box_ratio {
+    (max_w, max_w / source_ratio)
+  } else {
+    (max_h * source_ratio, max_h)
+  }
+  draw_art_rect(texture, x, y, w, h, rotation, tint)
+}
+
+///|
+/// Draws a generated tile texture into a map cell.
+fn draw_art_tile(
+  texture : @raylib.Texture,
+  x : Int,
+  y : Int,
+  w : Int,
+  h : Int,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(
+      Float::from_int(x),
+      Float::from_int(y),
+      Float::from_int(w),
+      Float::from_int(h),
+    ),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated image as full-screen cover art.
+fn draw_cover_art(texture : @raylib.Texture) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let screen_w : Float = Float::from_int(sw)
+  let screen_h : Float = Float::from_int(sh)
+  let source_ratio : Float = source_w / source_h
+  let screen_ratio : Float = screen_w / screen_h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > screen_ratio {
+    src_w = source_h * screen_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < screen_ratio {
+    src_h = source_w / screen_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(0.0, 0.0, screen_w, screen_h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    @raylib.white,
+  )
+}
+
+///|
+/// Returns the generated guard texture for a guard kind.
+fn guard_art(kind : Int) -> @raylib.Texture? {
+  if kind == 0 {
+    tex_guard_patrol.val
+  } else if kind == 1 {
+    tex_guard_heavy.val
+  } else {
+    tex_guard_drone.val
+  }
+}
+
+///|
+/// Returns the generated pickup texture for a pickup kind.
+fn pickup_art(kind : Int) -> @raylib.Texture? {
+  if kind == 0 {
+    tex_pickup_med.val
+  } else if kind == 1 {
+    tex_pickup_battery.val
+  } else if kind == 2 {
+    tex_pickup_jammer.val
+  } else {
+    tex_pickup_cache.val
+  }
+}
+
+///|
 /// Returns the flat array index for a tile at grid coordinates (gx, gy).
 fn idx(gx : Int, gy : Int) -> Int {
   gy * map_w + gx
@@ -484,35 +736,55 @@ fn draw_guard(g : Guard) -> Unit {
   if !g.active {
     ignore(())
   } else {
-    let body_col = if g.kind == 0 {
-      @raylib.Color::new(214, 106, 106, 255)
-    } else if g.kind == 1 {
-      @raylib.Color::new(196, 82, 122, 255)
-    } else {
-      @raylib.Color::new(164, 68, 138, 255)
-    }
-
     let cx = cell_center_x(g.gx)
     let cy = cell_center_y(g.gy)
-    @raylib.draw_circle(cx.to_int(), cy.to_int(), 15.0, body_col)
-    @raylib.draw_circle(
-      cx.to_int(),
-      (cy - 18.0).to_int(),
-      11.0,
-      @raylib.Color::new(252, 224, 214, 255),
-    )
-    @raylib.draw_circle(
-      (cx - 4.0).to_int(),
-      (cy - 20.0).to_int(),
-      2.6,
-      @raylib.Color::new(34, 18, 30, 255),
-    )
-    @raylib.draw_circle(
-      (cx + 4.0).to_int(),
-      (cy - 20.0).to_int(),
-      2.6,
-      @raylib.Color::new(34, 18, 30, 255),
-    )
+    match guard_art(g.kind) {
+      Some(texture) => {
+        let size : Float = if g.kind == 1 {
+          44.0
+        } else if g.kind == 2 {
+          42.0
+        } else {
+          38.0
+        }
+        let tint = if g.stun_t > 0.0 {
+          @raylib.Color::new(176, 232, 255, 236)
+        } else if g.alert_t > 0.0 {
+          @raylib.Color::new(255, 206, 206, 255)
+        } else {
+          @raylib.white
+        }
+        draw_art_fit(texture, cx, cy, size, size, 0.0, tint)
+      }
+      None => {
+        let body_col = if g.kind == 0 {
+          @raylib.Color::new(214, 106, 106, 255)
+        } else if g.kind == 1 {
+          @raylib.Color::new(196, 82, 122, 255)
+        } else {
+          @raylib.Color::new(164, 68, 138, 255)
+        }
+        @raylib.draw_circle(cx.to_int(), cy.to_int(), 15.0, body_col)
+        @raylib.draw_circle(
+          cx.to_int(),
+          (cy - 18.0).to_int(),
+          11.0,
+          @raylib.Color::new(252, 224, 214, 255),
+        )
+        @raylib.draw_circle(
+          (cx - 4.0).to_int(),
+          (cy - 20.0).to_int(),
+          2.6,
+          @raylib.Color::new(34, 18, 30, 255),
+        )
+        @raylib.draw_circle(
+          (cx + 4.0).to_int(),
+          (cy - 20.0).to_int(),
+          2.6,
+          @raylib.Color::new(34, 18, 30, 255),
+        )
+      }
+    }
 
     if g.stun_t > 0.0 {
       @raylib.draw_circle_lines(
@@ -540,13 +812,25 @@ fn draw_camera(c : Camera) -> Unit {
       @raylib.Color::new(146, 222, 246, 255)
     }
 
-    @raylib.draw_circle(cx.to_int(), cy.to_int(), 14.0, base_col)
-    @raylib.draw_circle_lines(
-      cx.to_int(),
-      cy.to_int(),
-      18.0,
-      @raylib.Color::new(30, 38, 58, 255),
-    )
+    match tex_security_camera.val {
+      Some(texture) => {
+        let tint = if c.disable_t > 0.0 {
+          @raylib.Color::new(120, 130, 142, 206)
+        } else {
+          @raylib.white
+        }
+        draw_art_fit(texture, cx, cy, 42.0, 42.0, 0.0, tint)
+      }
+      None => {
+        @raylib.draw_circle(cx.to_int(), cy.to_int(), 14.0, base_col)
+        @raylib.draw_circle_lines(
+          cx.to_int(),
+          cy.to_int(),
+          18.0,
+          @raylib.Color::new(30, 38, 58, 255),
+        )
+      }
+    }
 
     let ax : Float = if c.dir == 1 {
       12.0
@@ -578,6 +862,7 @@ fn main {
   @raylib.init_window(sw, sh, "Arcade Hacker Infiltration 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_hacker_art()
 
   let tiles : Array[Int] = Array::makei(map_w * map_h, fn(_i) { 0 })
 
@@ -1539,20 +1824,26 @@ fn main {
         let px = map_x + x * tile
         let py = map_y + y * tile
         if tiles[idx(x, y)] == 1 {
-          @raylib.draw_rectangle(
-            px,
-            py,
-            tile,
-            tile,
-            @raylib.Color::new(48, 58, 76, 255),
-          )
-          @raylib.draw_rectangle(
-            px + 8,
-            py + 8,
-            tile - 16,
-            tile - 16,
-            @raylib.Color::new(36, 44, 58, 255),
-          )
+          match tex_wall_tile.val {
+            Some(texture) =>
+              draw_art_tile(texture, px, py, tile, tile, @raylib.white)
+            None => {
+              @raylib.draw_rectangle(
+                px,
+                py,
+                tile,
+                tile,
+                @raylib.Color::new(48, 58, 76, 255),
+              )
+              @raylib.draw_rectangle(
+                px + 8,
+                py + 8,
+                tile - 16,
+                tile - 16,
+                @raylib.Color::new(36, 44, 58, 255),
+              )
+            }
+          }
         } else {
           let checker = (x + y) % 2 == 0
           let floor_col = if checker {
@@ -1560,7 +1851,17 @@ fn main {
           } else {
             @raylib.Color::new(20, 26, 40, 255)
           }
-          @raylib.draw_rectangle(px, py, tile, tile, floor_col)
+          match tex_floor_tile.val {
+            Some(texture) => {
+              let tint = if checker {
+                @raylib.Color::new(224, 232, 255, 255)
+              } else {
+                @raylib.Color::new(190, 204, 232, 255)
+              }
+              draw_art_tile(texture, px, py, tile, tile, tint)
+            }
+            None => @raylib.draw_rectangle(px, py, tile, tile, floor_col)
+          }
         }
       }
     }
@@ -1609,13 +1910,26 @@ fn main {
     } else {
       @raylib.Color::new(206, 86, 92, 255)
     }
-    @raylib.draw_rectangle(
-      exit_px + 6,
-      exit_py + 6,
-      tile - 12,
-      tile - 12,
-      exit_col,
-    )
+    match tex_exit_gate.val {
+      Some(texture) => {
+        let cx = cell_center_x(exit_x)
+        let cy = cell_center_y(exit_y)
+        let tint = if exit_open {
+          @raylib.Color::new(160, 255, 204, 255)
+        } else {
+          @raylib.Color::new(255, 170, 176, 255)
+        }
+        draw_art_fit(texture, cx, cy, 44.0, 44.0, 0.0, tint)
+      }
+      None =>
+        @raylib.draw_rectangle(
+          exit_px + 6,
+          exit_py + 6,
+          tile - 12,
+          tile - 12,
+          exit_col,
+        )
+    }
     if !exit_open {
       @raylib.draw_line(
         exit_px + 10,
@@ -1642,20 +1956,32 @@ fn main {
         } else {
           @raylib.Color::new(108, 184, 250, 255)
         }
-        @raylib.draw_rectangle(
-          (cx - 13.0).to_int(),
-          (cy - 16.0).to_int(),
-          26,
-          32,
-          col,
-        )
-        @raylib.draw_rectangle(
-          (cx - 9.0).to_int(),
-          (cy - 8.0).to_int(),
-          18,
-          16,
-          @raylib.Color::new(22, 34, 52, 255),
-        )
+        match tex_data_terminal.val {
+          Some(texture) => {
+            let tint = if terminal.hacked {
+              @raylib.Color::new(154, 255, 204, 255)
+            } else {
+              @raylib.white
+            }
+            draw_art_fit(texture, cx, cy, 42.0, 42.0, 0.0, tint)
+          }
+          None => {
+            @raylib.draw_rectangle(
+              (cx - 13.0).to_int(),
+              (cy - 16.0).to_int(),
+              26,
+              32,
+              col,
+            )
+            @raylib.draw_rectangle(
+              (cx - 9.0).to_int(),
+              (cy - 8.0).to_int(),
+              18,
+              16,
+              @raylib.Color::new(22, 34, 52, 255),
+            )
+          }
+        }
       }
     }
 
@@ -1672,7 +1998,11 @@ fn main {
         } else {
           @raylib.Color::new(232, 148, 250, 255)
         }
-        @raylib.draw_circle(cx.to_int(), cy.to_int(), 10.0, col)
+        match pickup_art(pickup.kind) {
+          Some(texture) =>
+            draw_art_fit(texture, cx, cy, 34.0, 34.0, 0.0, @raylib.white)
+          None => @raylib.draw_circle(cx.to_int(), cy.to_int(), 10.0, col)
+        }
       }
     }
 
@@ -1727,13 +2057,27 @@ fn main {
       @raylib.Color::new(132, 206, 252, 255)
     }
 
-    @raylib.draw_circle(pcx.to_int(), pcy.to_int(), 16.0, body_col)
-    @raylib.draw_circle(
-      pcx.to_int(),
-      (pcy - 18.0).to_int(),
-      11.0,
-      @raylib.Color::new(248, 222, 192, 255),
-    )
+    match tex_player_hacker.val {
+      Some(texture) => {
+        let tint = if player.hurt_cd > 0.0 {
+          @raylib.Color::new(255, 184, 184, 255)
+        } else if player.cloak_t > 0.0 {
+          @raylib.Color::new(170, 255, 220, 206)
+        } else {
+          @raylib.white
+        }
+        draw_art_fit(texture, pcx, pcy, 38.0, 46.0, 0.0, tint)
+      }
+      None => {
+        @raylib.draw_circle(pcx.to_int(), pcy.to_int(), 16.0, body_col)
+        @raylib.draw_circle(
+          pcx.to_int(),
+          (pcy - 18.0).to_int(),
+          11.0,
+          @raylib.Color::new(248, 222, 192, 255),
+        )
+      }
+    }
     @raylib.draw_rectangle(
       (pcx - 5.0 + Float::from_int(player.face_x * 8)).to_int(),
       (pcy - 5.0 + Float::from_int(player.face_y * 8)).to_int(),
@@ -2006,6 +2350,13 @@ fn main {
     )
 
     if state == 0 {
+      match tex_hacker_title.val {
+        Some(texture) => {
+          draw_cover_art(texture)
+          @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 54))
+        }
+        None => ()
+      }
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 132))
       @raylib.draw_rectangle(
         sw / 2 - 470,
@@ -2150,6 +2501,7 @@ fn main {
     }
   }
 
+  unload_hacker_art()
   @draw.cleanup()
   @raylib.close_window()
 }
