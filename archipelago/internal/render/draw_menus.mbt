@@ -3,6 +3,11 @@ fn draw_title(game : @types.Game) -> Unit {
   let w = @types.screen_width
   let h = @types.screen_height
   let time = Float::from_int(game.frame_count) * 0.03
+  let has_title_art = draw_title_art()
+  if has_title_art {
+    @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(0, 24, 54, 72))
+  }
+  if !has_title_art {
   // Animated ocean waves background
   for row in 0..<18 {
     let fy = Float::from_int(row)
@@ -41,6 +46,7 @@ fn draw_title(game : @types.Game) -> Unit {
       3.0,
       @types.color_bridge,
     )
+  }
   }
   // Title text
   let title = "ARCHIPELAGO"

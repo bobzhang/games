@@ -11,6 +11,7 @@ fn draw_playing(game : @types.Game) -> Unit {
 
 ///|
 fn draw_ocean_bg(game : @types.Game) -> Unit {
+  ignore(draw_ocean_art())
   let time = Float::from_int(game.frame_count) * 0.02
   // Draw subtle wave pattern
   for row in 0..<36 {
@@ -89,16 +90,23 @@ fn draw_bridges(game : @types.Game) -> Unit {
           @raylib.Color::new(80, 200, 100, glow_alpha),
         )
       }
-      @raylib.draw_line_ex(
-        @raylib.Vector2::new(ax, ay),
-        @raylib.Vector2::new(bx, by),
-        @types.bridge_thickness,
-        if both_satisfied {
-          @raylib.Color::new(160, 130, 60, 255)
-        } else {
-          @types.color_bridge
-        },
-      )
+      let bridge_color = if both_satisfied {
+        @raylib.Color::new(210, 190, 118, 255)
+      } else {
+        @raylib.white
+      }
+      if !draw_bridge_art(ax, ay, bx, by, br.direction, bridge_color) {
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(ax, ay),
+          @raylib.Vector2::new(bx, by),
+          @types.bridge_thickness,
+          if both_satisfied {
+            @raylib.Color::new(160, 130, 60, 255)
+          } else {
+            @types.color_bridge
+          },
+        )
+      }
     } else {
       // Double bridge - two parallel lines with enhanced gap and glow
       let gap = @types.double_bridge_gap
@@ -126,18 +134,27 @@ fn draw_bridges(game : @types.Game) -> Unit {
           } else {
             @types.color_bridge
           }
-          @raylib.draw_line_ex(
-            @raylib.Vector2::new(ax, ay - gap),
-            @raylib.Vector2::new(bx, by - gap),
-            @types.bridge_thickness,
-            bridge_color,
-          )
-          @raylib.draw_line_ex(
-            @raylib.Vector2::new(ax, ay + gap),
-            @raylib.Vector2::new(bx, by + gap),
-            @types.bridge_thickness,
-            bridge_color,
-          )
+          let bridge_tint = if both_satisfied {
+            @raylib.Color::new(210, 190, 118, 255)
+          } else {
+            @raylib.white
+          }
+          if !draw_bridge_art(ax, ay - gap, bx, by - gap, br.direction, bridge_tint) {
+            @raylib.draw_line_ex(
+              @raylib.Vector2::new(ax, ay - gap),
+              @raylib.Vector2::new(bx, by - gap),
+              @types.bridge_thickness,
+              bridge_color,
+            )
+          }
+          if !draw_bridge_art(ax, ay + gap, bx, by + gap, br.direction, bridge_tint) {
+            @raylib.draw_line_ex(
+              @raylib.Vector2::new(ax, ay + gap),
+              @raylib.Vector2::new(bx, by + gap),
+              @types.bridge_thickness,
+              bridge_color,
+            )
+          }
           // Cross-ties for double horizontal bridges (railroad-style)
           let dist_x = @types.absf(bx - ax)
           let tie_spacing : Float = 20.0
@@ -178,18 +195,27 @@ fn draw_bridges(game : @types.Game) -> Unit {
           } else {
             @types.color_bridge
           }
-          @raylib.draw_line_ex(
-            @raylib.Vector2::new(ax - gap, ay),
-            @raylib.Vector2::new(bx - gap, by),
-            @types.bridge_thickness,
-            bridge_color,
-          )
-          @raylib.draw_line_ex(
-            @raylib.Vector2::new(ax + gap, ay),
-            @raylib.Vector2::new(bx + gap, by),
-            @types.bridge_thickness,
-            bridge_color,
-          )
+          let bridge_tint = if both_satisfied {
+            @raylib.Color::new(210, 190, 118, 255)
+          } else {
+            @raylib.white
+          }
+          if !draw_bridge_art(ax - gap, ay, bx - gap, by, br.direction, bridge_tint) {
+            @raylib.draw_line_ex(
+              @raylib.Vector2::new(ax - gap, ay),
+              @raylib.Vector2::new(bx - gap, by),
+              @types.bridge_thickness,
+              bridge_color,
+            )
+          }
+          if !draw_bridge_art(ax + gap, ay, bx + gap, by, br.direction, bridge_tint) {
+            @raylib.draw_line_ex(
+              @raylib.Vector2::new(ax + gap, ay),
+              @raylib.Vector2::new(bx + gap, by),
+              @types.bridge_thickness,
+              bridge_color,
+            )
+          }
           // Cross-ties for double vertical bridges
           let dist_y = @types.absf(by - ay)
           let tie_spacing : Float = 20.0
@@ -334,7 +360,16 @@ fn draw_islands(game : @types.Game) -> Unit {
     } else {
       @types.color_island
     }
-    @raylib.draw_circle(sx, sy, r, fill_color)
+    let island_tint = if over {
+      @raylib.Color::new(255, 160, 160, 255)
+    } else if satisfied {
+      @raylib.Color::new(198, 255, 198, 255)
+    } else {
+      @raylib.white
+    }
+    if !draw_island_art(sx, sy, r, island_tint) {
+      @raylib.draw_circle(sx, sy, r, fill_color)
+    }
     // Inner highlight for satisfied (subtle light spot)
     if satisfied && !over {
       @raylib.draw_circle(
