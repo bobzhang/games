@@ -12,6 +12,10 @@ pub fn draw_grid(@types.Game) -> Unit
 
 pub fn draw_ui(@types.Game) -> Unit
 
+pub fn load_art() -> Unit
+
+pub fn unload_art() -> Unit
+
 // Errors
 
 // Types and methods

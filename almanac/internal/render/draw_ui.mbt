@@ -31,14 +31,33 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     if selected {
       @raylib.draw_rectangle_lines(px, iy, 240, ih - 4, @types.color_selected)
     }
-    // Source icon/color swatch
+    // Source icon
     let sc = @types.source_color(kind)
-    @raylib.draw_rectangle(px + 4, iy + 4, 16, 16, sc)
+    @raylib.draw_rectangle(
+      px + 4,
+      iy + 4,
+      36,
+      36,
+      @raylib.Color::new(18, 23, 34, 180),
+    )
+    match source_art(kind) {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          Float::from_int(px + 22),
+          Float::from_int(iy + 22),
+          32.0,
+          32.0,
+          0.0,
+          @raylib.white,
+        )
+      None => @raylib.draw_rectangle(px + 12, iy + 12, 16, 16, sc)
+    }
     // Name and count
     let name = @types.source_name(kind)
-    @draw.draw_text(name, px + 26, iy + 4, 18, sc)
+    @draw.draw_text(name, px + 48, iy + 4, 18, sc)
     let count_text = "x" + count.to_string()
-    @draw.draw_text(count_text, px + 100, iy + 4, 18, @types.color_hud_text)
+    @draw.draw_text(count_text, px + 124, iy + 4, 18, @types.color_hud_text)
     // Keybind hint
     let key_hint = (i + 1).to_string()
     @draw.draw_text(
@@ -53,14 +72,14 @@ pub fn draw_ui(game : @types.Game) -> Unit {
       let dir_text = wind_dir_text(game.wind_dir)
       @draw.draw_text(
         dir_text,
-        px + 26,
+        px + 48,
         iy + 28,
         14,
         @raylib.Color::new(180, 200, 230, 200),
       )
       @draw.draw_text(
         "[Q/E]",
-        px + 120,
+        px + 150,
         iy + 28,
         12,
         @raylib.Color::new(120, 120, 130, 200),

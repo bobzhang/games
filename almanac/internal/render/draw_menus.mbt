@@ -3,6 +3,13 @@ fn draw_title(game : @types.Game) -> Unit {
   let w = @types.screen_width
   let h = @types.screen_height
   let time = Float::from_int(game.frame_count) * 0.02
+  match tex_title.val {
+    Some(title_art) => {
+      draw_cover_art(title_art, w, h)
+      @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(7, 11, 20, 92))
+    }
+    None => ()
+  }
   // Animated weather background
   for i in 0..<40 {
     let fi = Float::from_int(i)
@@ -55,18 +62,33 @@ fn draw_title(game : @types.Game) -> Unit {
   )
   // Weather icons row
   let icon_y = h / 2 - 20
-  let icons = ["Sun", "Rain", "Cloud", "Wind", "Storm"]
-  let colors : Array[@raylib.Color] = [
-    @types.color_sunny, @types.color_rainy, @types.color_cloudy, @types.color_windy,
-    @types.color_stormy,
-  ]
+  let icons : Array[@types.WeatherState] = [Sunny, Rainy, Cloudy, Windy, Stormy]
   for i in 0..<icons.length() {
     let fi = Float::from_int(i)
     let ix = w / 2 - 120 + (fi * 60.0).to_int()
     let bob = @types.sinf(time * 2.0 + fi * 0.8) * 5.0
-    @raylib.draw_circle(ix, icon_y + bob.to_int(), 12.0, colors[i])
-    let iw = @draw.measure_text(icons[i], 12)
-    @draw.draw_text(icons[i], ix - iw / 2, icon_y + 20, 12, colors[i])
+    let weather = icons[i]
+    let color = @types.weather_color(weather)
+    match weather_art(weather) {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          Float::from_int(ix),
+          Float::from_int(icon_y) + bob,
+          42.0,
+          42.0,
+          if weather == Sunny {
+            time * 8.0
+          } else {
+            0.0
+          },
+          @raylib.white,
+        )
+      None => @raylib.draw_circle(ix, icon_y + bob.to_int(), 12.0, color)
+    }
+    let label = @types.weather_name(weather)
+    let iw = @draw.measure_text(label, 12)
+    @draw.draw_text(label, ix - iw / 2, icon_y + 24, 12, color)
   }
   // Start prompt
   let start_text = "PRESS ENTER TO START"

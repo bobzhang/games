@@ -62,6 +62,34 @@ fn draw_weather_icon(
   let cx = x + cs / 2
   let cy = y + cs / 2
   let time = Float::from_int(frame) * 0.05
+  match weather_art(weather) {
+    Some(texture) => {
+      let bob = if weather == Cloudy || weather == Windy {
+        @types.sinf(time) * 2.0
+      } else {
+        0.0
+      }
+      let rotation = if weather == Sunny {
+        time * 6.0
+      } else if weather == Windy {
+        @types.sinf(time * 2.0) * 3.0
+      } else {
+        0.0
+      }
+      let alpha = if weather == Stormy && frame % 30 < 5 { 255 } else { 230 }
+      draw_art_fit(
+        texture,
+        Float::from_int(cx),
+        Float::from_int(cy) + bob,
+        Float::from_int(cs) * 0.72,
+        Float::from_int(cs) * 0.72,
+        rotation,
+        @raylib.Color::new(255, 255, 255, alpha),
+      )
+      return
+    }
+    None => ()
+  }
   match weather {
     Clear => ()
     Sunny => {
@@ -206,10 +234,23 @@ fn draw_sources(game : @types.Game) -> Unit {
     let x = ox + src.col * cs
     let y = oy + src.row * cs
     let col = @types.source_color(src.kind)
-    // Draw source marker: outlined diamond
+    // Draw source marker: generated icon with outlined diamond
     let cx_pos = x + cs / 2
     let cy_pos = y + cs / 2
     let sz = cs / 3
+    match source_art(src.kind) {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          Float::from_int(cx_pos),
+          Float::from_int(cy_pos),
+          Float::from_int(cs) * 0.62,
+          Float::from_int(cs) * 0.62,
+          0.0,
+          @raylib.white,
+        )
+      None => ()
+    }
     @raylib.draw_line(cx_pos, cy_pos - sz, cx_pos + sz, cy_pos, col)
     @raylib.draw_line(cx_pos + sz, cy_pos, cx_pos, cy_pos + sz, col)
     @raylib.draw_line(cx_pos, cy_pos + sz, cx_pos - sz, cy_pos, col)
