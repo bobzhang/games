@@ -78,13 +78,36 @@ fn draw_spring(
   let r = Float::from_int(half - 6)
   let pulse : Float = 1.0 + sinf(anim_timer * 3.0) * 0.1
   let draw_r = r * pulse
-  @raylib.draw_circle(cx, cy, draw_r, @types.color_spring)
-  if has_water {
-    let inner_r = draw_r * 0.6
-    @raylib.draw_circle(cx, cy, inner_r, @types.color_water)
+  match tex_spring.val {
+    Some(spring_art) =>
+      draw_art_fit(
+        spring_art,
+        Float::from_int(cx),
+        Float::from_int(cy),
+        draw_r * 2.35,
+        draw_r * 2.35,
+        anim_timer * 10.0,
+        @raylib.white,
+      )
+    None => {
+      @raylib.draw_circle(cx, cy, draw_r, @types.color_spring)
+      if has_water {
+        let inner_r = draw_r * 0.6
+        @raylib.draw_circle(cx, cy, inner_r, @types.color_water)
+      }
+    }
   }
-  // Draw "S" label
-  @draw.draw_text("S", cx - 5, cy - 8, 16, @types.color_selected)
+  if has_water {
+    @raylib.draw_circle(
+      cx,
+      cy,
+      draw_r * 0.35,
+      @raylib.Color::new(96, 210, 255, 132),
+    )
+  }
+  if tex_spring.val is None {
+    @draw.draw_text("S", cx - 5, cy - 8, 16, @types.color_selected)
+  }
 }
 
 ///|
@@ -101,14 +124,31 @@ fn draw_fountain(
   } else {
     @types.color_fountain
   }
-  @raylib.draw_circle(cx, cy, r, color)
+  match tex_fountain.val {
+    Some(fountain_art) =>
+      draw_art_fit(
+        fountain_art,
+        Float::from_int(cx),
+        Float::from_int(cy),
+        r * 2.25,
+        r * 2.25,
+        0.0,
+        if filled {
+          @raylib.white
+        } else {
+          @raylib.Color::new(210, 210, 226, 230)
+        },
+      )
+    None => @raylib.draw_circle(cx, cy, r, color)
+  }
   if filled {
     let pulse : Float = 1.0 + sinf(anim_timer * 4.0) * 0.15
     let inner_r = r * 0.5 * pulse
     @raylib.draw_circle(cx, cy, inner_r, @types.color_water_flow)
   }
-  // Draw "F" label
-  @draw.draw_text("F", cx - 5, cy - 8, 16, @types.color_selected)
+  if tex_fountain.val is None {
+    @draw.draw_text("F", cx - 5, cy - 8, 16, @types.color_selected)
+  }
 }
 
 ///|
@@ -126,6 +166,23 @@ fn draw_aqueduct(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
     cs - inset * 2,
     color,
   )
+  match tex_aqueduct.val {
+    Some(aqueduct_art) =>
+      draw_art_fit(
+        aqueduct_art,
+        Float::from_int(sx + cs / 2),
+        Float::from_int(sy + cs / 2),
+        Float::from_int(cs - 6),
+        Float::from_int(cs - 6),
+        0.0,
+        if tile.has_water {
+          @raylib.white
+        } else {
+          @raylib.Color::new(220, 210, 190, 226)
+        },
+      )
+    None => ()
+  }
   // Draw connection lines
   let cx = sx + cs / 2
   let cy = sy + cs / 2
@@ -155,6 +212,23 @@ fn draw_reservoir(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
     cs - inset * 2,
     color,
   )
+  match tex_reservoir.val {
+    Some(reservoir_art) =>
+      draw_art_fit(
+        reservoir_art,
+        Float::from_int(sx + cs / 2),
+        Float::from_int(sy + cs / 2),
+        Float::from_int(cs - 4),
+        Float::from_int(cs - 4),
+        0.0,
+        if tile.has_water {
+          @raylib.white
+        } else {
+          @raylib.Color::new(216, 208, 226, 232)
+        },
+      )
+    None => ()
+  }
   // Draw fill level
   if tile.water_level > 0 && !tile.has_water {
     let fill_h = (cs - inset * 2) * tile.water_level / 3
@@ -178,13 +252,15 @@ fn draw_reservoir(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
       West => @raylib.draw_rectangle(sx, cy - 3, cs / 2, 6, color)
     }
   }
-  @draw.draw_text(
-    "R",
-    sx + cs / 2 - 5,
-    sy + cs / 2 - 8,
-    16,
-    @types.color_selected,
-  )
+  if tex_reservoir.val is None {
+    @draw.draw_text(
+      "R",
+      sx + cs / 2 - 5,
+      sy + cs / 2 - 8,
+      16,
+      @types.color_selected,
+    )
+  }
 }
 
 ///|
@@ -197,6 +273,19 @@ fn draw_dam(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
     cs - inset * 2,
     @types.color_dam,
   )
+  match tex_dam.val {
+    Some(dam_art) =>
+      draw_art_fit(
+        dam_art,
+        Float::from_int(sx + cs / 2),
+        Float::from_int(sy + cs / 2),
+        Float::from_int(cs - 6),
+        Float::from_int(cs - 6),
+        0.0,
+        @raylib.white,
+      )
+    None => ()
+  }
   // Draw blocked direction as a thick red line
   let cx = sx + cs / 2
   let cy = sy + cs / 2
@@ -236,7 +325,9 @@ fn draw_dam(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
       }
     }
   }
-  @draw.draw_text("D", cx - 5, cy - 8, 16, @types.color_selected)
+  if tex_dam.val is None {
+    @draw.draw_text("D", cx - 5, cy - 8, 16, @types.color_selected)
+  }
 }
 
 ///|

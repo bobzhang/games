@@ -35,9 +35,9 @@ pub fn draw_hud(game : @types.Game) -> Unit {
 fn draw_tool_panel(game : @types.Game, px : Int, py : Int) -> Unit {
   @draw.draw_text("Tools:", px, py, 20, @types.color_hud_text)
   let tools : Array[(@types.TileKind, String)] = [
-    (Aqueduct, "[1] Aqueduct"),
-    (Reservoir, "[2] Reservoir"),
-    (Dam, "[3] Dam"),
+    (Aqueduct, "Aqueduct"),
+    (Reservoir, "Reservoir"),
+    (Dam, "Dam"),
   ]
   for i, entry in tools {
     let kind = entry.0
@@ -53,12 +53,25 @@ fn draw_tool_panel(game : @types.Game, px : Int, py : Int) -> Unit {
       @raylib.draw_rectangle(
         px - 4,
         ty - 2,
-        200,
-        28,
+        220,
+        32,
         @raylib.Color::new(60, 80, 120, 180),
       )
     }
-    @draw.draw_text(label, px, ty, 20, color)
+    match tool_art(kind) {
+      Some(texture) =>
+        draw_art_fit(
+          texture,
+          Float::from_int(px + 16),
+          Float::from_int(ty + 14),
+          26.0,
+          26.0,
+          0.0,
+          @raylib.white,
+        )
+      None => @raylib.draw_rectangle(px, ty + 4, 20, 20, @types.color_aqueduct)
+    }
+    @draw.draw_text("[\{i + 1}] \{label}", px + 36, ty + 2, 18, color)
   }
 }
 

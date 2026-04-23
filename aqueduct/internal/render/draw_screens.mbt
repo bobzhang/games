@@ -1,9 +1,22 @@
 ///|
 /// Draw the title screen.
 pub fn draw_title(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(
-    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
-  )
+  match tex_title.val {
+    Some(title_art) => {
+      draw_cover_art(title_art, @types.screen_width, @types.screen_height)
+      @raylib.draw_rectangle(
+        0,
+        0,
+        @types.screen_width,
+        @types.screen_height,
+        @raylib.Color::new(7, 16, 28, 112),
+      )
+    }
+    None =>
+      @raylib.draw_rectangle(
+        0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
+      )
+  }
   let title = "AQUEDUCT"
   let tw = @draw.measure_text(title, 60)
   @draw.draw_text(
@@ -29,7 +42,19 @@ pub fn draw_title(game : @types.Game) -> Unit {
     let drop_x = 300 + i * 150
     let drop_offset : Float = sinf(anim * 2.0 + fi * 1.2) * 20.0
     let drop_y = 350 + drop_offset.to_int()
-    @raylib.draw_circle(drop_x, drop_y, 8.0, @types.color_water)
+    match tex_spring.val {
+      Some(spring_art) =>
+        draw_art_fit(
+          spring_art,
+          Float::from_int(drop_x),
+          Float::from_int(drop_y),
+          44.0,
+          44.0,
+          anim * 8.0 + fi * 10.0,
+          @raylib.Color::new(255, 255, 255, 210),
+        )
+      None => @raylib.draw_circle(drop_x, drop_y, 8.0, @types.color_water)
+    }
   }
   let play_text = "Press ENTER to Play"
   let pw = @draw.measure_text(play_text, 28)

@@ -32,6 +32,10 @@ pub fn draw_title(@types.Game) -> Unit
 
 pub fn draw_water_overlay(@types.Game) -> Unit
 
+pub fn load_art() -> Unit
+
+pub fn unload_art() -> Unit
+
 // Errors
 
 // Types and methods
