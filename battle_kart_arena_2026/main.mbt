@@ -457,6 +457,7 @@ fn main {
   @raylib.init_window(sw, sh, "Battle Kart Arena 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
 
   let wx : Array[Float] = Array::make(wp_n, 0.0)
   let wy : Array[Float] = Array::make(wp_n, 0.0)
@@ -821,26 +822,45 @@ fn main {
 
     @raylib.begin_drawing()
 
-    if hit_flash > 0.0 {
-      @raylib.clear_background(@raylib.Color::new(42, 18, 20, 255))
-    } else {
+    let has_arena_art = draw_arena_art()
+    if !has_arena_art {
       @raylib.clear_background(@raylib.Color::new(12, 18, 28, 255))
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(14, 24, 38, 255))
+      @raylib.draw_rectangle(0, 0, sw, 220, @raylib.Color::new(26, 44, 70, 255))
     }
-
-    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(14, 24, 38, 255))
-    @raylib.draw_rectangle(0, 0, sw, 220, @raylib.Color::new(26, 44, 70, 255))
+    if hit_flash > 0.0 {
+      @raylib.draw_rectangle(
+        0,
+        0,
+        sw,
+        sh,
+        @raylib.Color::new(126, 34, 40, if has_arena_art { 88 } else { 118 }),
+      )
+    }
 
     let ol = (outer_l + shake_x).to_int()
     let ot = outer_t.to_int()
     let ow = (outer_r - outer_l).to_int()
     let oh = (outer_b - outer_t).to_int()
-    @raylib.draw_rectangle(ol, ot, ow, oh, @raylib.Color::new(90, 96, 104, 255))
+    @raylib.draw_rectangle(
+      ol,
+      ot,
+      ow,
+      oh,
+      @raylib.Color::new(90, 96, 104, if has_arena_art { 78 } else { 255 }),
+    )
 
     let il = (inner_l + shake_x).to_int()
     let it = inner_t.to_int()
     let iw = (inner_r - inner_l).to_int()
     let ih = (inner_b - inner_t).to_int()
-    @raylib.draw_rectangle(il, it, iw, ih, @raylib.Color::new(38, 92, 58, 255))
+    @raylib.draw_rectangle(
+      il,
+      it,
+      iw,
+      ih,
+      @raylib.Color::new(38, 92, 58, if has_arena_art { 108 } else { 255 }),
+    )
 
     for i in 0..<36 {
       let dash_x = ol + i * 30
@@ -881,8 +901,10 @@ fn main {
       } else {
         @raylib.Color::new(142, 238, 152, 255)
       }
-      @raylib.draw_circle(x, y, 12.0, c)
-      @raylib.draw_circle_lines(x, y, 12.0, @raylib.Color::new(22, 30, 42, 255))
+      if !draw_pickup_art(pickup.kind, Float::from_int(x), Float::from_int(y)) {
+        @raylib.draw_circle(x, y, 12.0, c)
+      }
+      @raylib.draw_circle_lines(x, y, 13.0, @raylib.Color::new(22, 30, 42, 220))
     }
 
     for i in 0..<karts.length() {
@@ -897,8 +919,15 @@ fn main {
       } else {
         @raylib.Color::new(168, 148, 246, 255)
       }
-      @raylib.draw_circle(x, y, 17.0, c)
-      @raylib.draw_circle(x, y, 9.0, @raylib.Color::new(24, 30, 42, 255))
+      if !draw_kart_art(
+          i,
+          Float::from_int(x),
+          Float::from_int(y),
+          karts[i].angle,
+        ) {
+        @raylib.draw_circle(x, y, 17.0, c)
+        @raylib.draw_circle(x, y, 9.0, @raylib.Color::new(24, 30, 42, 255))
+      }
       let hx = x + (cosf_deg(karts[i].angle) * 20.0).to_int()
       let hy = y + (sinf_deg(karts[i].angle) * 20.0).to_int()
       @raylib.draw_line(x, y, hx, hy, @raylib.Color::new(244, 244, 248, 255))
@@ -911,7 +940,15 @@ fn main {
       }
       let x = (shot.x + shake_x).to_int()
       let y = shot.y.to_int()
-      @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(246, 248, 252, 255))
+      if !draw_projectile_art(
+          Float::from_int(x),
+          Float::from_int(y),
+          shot.vx,
+          shot.vy,
+          shot.owner,
+        ) {
+        @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(246, 248, 252, 255))
+      }
     }
 
     for spark in sparks {
@@ -1108,6 +1145,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
