@@ -6,6 +6,8 @@ package "bobzhang/games/air_traffic_control_2026"
 // Errors
 
 // Types and methods
+type GameArt
+
 type Plane
 
 // Type aliases

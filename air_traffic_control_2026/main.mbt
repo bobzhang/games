@@ -28,6 +28,104 @@ struct Plane {
 }
 
 ///|
+/// Generated texture bundle used by the air traffic control scene.
+struct GameArt {
+  backdrop : @raylib.Texture
+  runway : @raylib.Texture
+  airliner : @raylib.Texture
+  tower_badge : @raylib.Texture
+}
+
+///|
+/// Loads one generated art texture from the game resources directory.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "air_traffic_control_2026/resources/" + file_name,
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads all generated art textures after the window has been initialized.
+fn load_game_art() -> GameArt {
+  {
+    backdrop: load_art_texture("airport_backdrop.png"),
+    runway: load_art_texture("runway_strip_sprite.png"),
+    airliner: load_art_texture("airliner_sprite.png"),
+    tower_badge: load_art_texture("tower_badge_sprite.png"),
+  }
+}
+
+///|
+/// Unloads generated art textures before closing the window.
+fn unload_game_art(art : GameArt) -> Unit {
+  @raylib.unload_texture(art.backdrop)
+  @raylib.unload_texture(art.runway)
+  @raylib.unload_texture(art.airliner)
+  @raylib.unload_texture(art.tower_badge)
+}
+
+///|
+/// Draws a texture centered at a position with the requested destination size.
+fn draw_centered_art(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture full-screen without distorting its source aspect ratio.
+fn draw_cover_art(texture : @raylib.Texture, sw : Int, sh : Int) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let screen_w : Float = Float::from_int(sw)
+  let screen_h : Float = Float::from_int(sh)
+  let source_ratio : Float = source_w / source_h
+  let screen_ratio : Float = screen_w / screen_h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > screen_ratio {
+    src_w = source_h * screen_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < screen_ratio {
+    src_h = source_w / screen_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(0.0, 0.0, screen_w, screen_h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    @raylib.white,
+  )
+}
+
+///|
 /// Spawns a new plane into the first inactive slot in the planes array.
 fn spawn_plane(planes : Array[Plane]) -> Unit {
   for plane in planes {
@@ -58,6 +156,7 @@ fn main {
   @raylib.init_window(sw, sh, "Air Traffic Control 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  let art = load_game_art()
 
   let planes : Array[Plane] = Array::makei(100, fn(_i) {
     { alive: false, runway: 0, x: 0.0, y: 0.0, vy: 80.0, fuel: 20.0 }
@@ -192,27 +291,40 @@ fn main {
 
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(120, 178, 230, 255))
+    draw_cover_art(art.backdrop, sw, sh)
 
     @raylib.draw_rectangle(
       0,
       140,
       sw,
       sh - 140,
-      @raylib.Color::new(84, 130, 94, 255),
+      @raylib.Color::new(42, 84, 52, 78),
     )
 
     for r in 0..<runway_count {
       let x = runway_x(r)
       let state_c = if runway_open[r] { @raylib.lime } else { @raylib.red }
 
-      @raylib.draw_rectangle(
+      draw_centered_art(
+        art.runway,
+        x,
+        430.0,
+        108.0,
+        520.0,
+        0.0,
+        if runway_open[r] {
+          @raylib.Color::new(255, 255, 255, 242)
+        } else {
+          @raylib.Color::new(255, 188, 188, 228)
+        },
+      )
+      @raylib.draw_rectangle_lines(
         (x - 54.0).to_int(),
         170,
         108,
         520,
-        @raylib.Color::new(62, 66, 72, 255),
+        @raylib.Color::new(210, 226, 236, 90),
       )
-      @raylib.draw_line(x.to_int(), 180, x.to_int(), 680, @raylib.lightgray)
       @draw.draw_text(
         "RWY \{r + 1}",
         (x - 42.0).to_int(),
@@ -235,12 +347,18 @@ fn main {
 
     for plane in planes {
       if plane.alive {
-        let c = if plane.fuel < 6.0 { @raylib.red } else { @raylib.white }
-        @raylib.draw_triangle(
-          @raylib.Vector2::new(plane.x, plane.y - 12.0),
-          @raylib.Vector2::new(plane.x - 12.0, plane.y + 10.0),
-          @raylib.Vector2::new(plane.x + 12.0, plane.y + 10.0),
-          c,
+        draw_centered_art(
+          art.airliner,
+          plane.x,
+          plane.y,
+          34.0,
+          42.0,
+          0.0,
+          if plane.fuel < 6.0 {
+            @raylib.Color::new(255, 126, 126, 255)
+          } else {
+            @raylib.white
+          },
         )
         @draw.draw_text(
           "\{plane.fuel.to_int()}",
@@ -258,6 +376,15 @@ fn main {
       600,
       110,
       @raylib.Color::new(12, 18, 30, 220),
+    )
+    draw_centered_art(
+      art.tower_badge,
+      560.0,
+      70.0,
+      72.0,
+      92.0,
+      0.0,
+      @raylib.white,
     )
     @draw.draw_text("AIR TRAFFIC CONTROL 2026", 26, 22, 36, @raylib.skyblue)
     @draw.draw_text(
@@ -303,6 +430,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_game_art(art)
   @draw.cleanup()
   @raylib.close_window()
 }
