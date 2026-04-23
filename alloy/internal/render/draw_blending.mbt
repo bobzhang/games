@@ -14,20 +14,33 @@ fn draw_blending(game : @types.Game) -> Unit {
   // Crucible body
   let crucible_w = 200
   let crucible_h = 160
-  @raylib.draw_rectangle(
-    cx - crucible_w / 2,
-    cy - crucible_h / 2,
-    crucible_w,
-    crucible_h,
-    @types.color_crucible,
-  )
-  @raylib.draw_rectangle(
-    cx - crucible_w / 2 + 6,
-    cy - crucible_h / 2 + 6,
-    crucible_w - 12,
-    crucible_h - 12,
-    @types.color_crucible_inner,
-  )
+  match tex_crucible.val {
+    Some(crucible_art) =>
+      draw_art_width(
+        crucible_art,
+        Float::from_int(cx),
+        Float::from_int(cy),
+        230.0,
+        0.0,
+        @raylib.white,
+      )
+    None => {
+      @raylib.draw_rectangle(
+        cx - crucible_w / 2,
+        cy - crucible_h / 2,
+        crucible_w,
+        crucible_h,
+        @types.color_crucible,
+      )
+      @raylib.draw_rectangle(
+        cx - crucible_w / 2 + 6,
+        cy - crucible_h / 2 + 6,
+        crucible_w - 12,
+        crucible_h - 12,
+        @types.color_crucible_inner,
+      )
+    }
+  }
   // Swirling ingredients
   let time = game.blend_timer * 4.0
   let shrink_r : Float = 0.6
@@ -41,8 +54,21 @@ fn draw_blending(game : @types.Game) -> Unit {
     let px = Float::from_int(cx) + cosf(angle) * radius
     let py = Float::from_int(cy) + sinf(angle) * radius * orbit_h
     let size : Float = 12.0 * (1.0 - progress * shrink_s)
-    let color = @types.metal_color(ing.metal)
-    @raylib.draw_circle(px.to_int(), py.to_int(), size, color)
+    match metal_art(ing.metal) {
+      Some(texture) =>
+        draw_art_width(
+          texture,
+          px,
+          py,
+          size * 2.4,
+          angle * 18.0,
+          @raylib.white,
+        )
+      None => {
+        let color = @types.metal_color(ing.metal)
+        @raylib.draw_circle(px.to_int(), py.to_int(), size, color)
+      }
+    }
   }
   // Glow effect at center during blend
   let glow_threshold : Float = 0.3

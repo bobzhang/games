@@ -8,6 +8,10 @@ import {
 // Values
 pub fn draw_frame(@types.Game) -> Unit
 
+pub fn load_art() -> Unit
+
+pub fn unload_art() -> Unit
+
 // Errors
 
 // Types and methods

@@ -61,15 +61,14 @@ fn draw_metal_palette(game : @types.Game, level : @types.LevelDef) -> Unit {
       @raylib.Color::new(40, 36, 52, 255)
     }
     @raylib.draw_rectangle(px, y, 180, 50, bg)
-    // Color swatch
-    @raylib.draw_rectangle(px + 4, y + 4, 42, 42, @types.metal_color(metal))
+    draw_metal_token(metal, px + 4, y + 4, 42, 0.0)
     // Key number
     let key_str = (i + 1).to_string()
     @draw.draw_text(
       key_str,
-      px + 18,
-      y + 16,
-      16,
+      px + 164,
+      y + 6,
+      13,
       @raylib.Color::new(200, 200, 200, 200),
     )
     // Metal name
@@ -108,6 +107,36 @@ fn draw_metal_palette(game : @types.Game, level : @types.LevelDef) -> Unit {
 }
 
 ///|
+fn draw_metal_token(
+  metal : @types.MetalKind,
+  x : Int,
+  y : Int,
+  size : Int,
+  rotation : Float,
+) -> Unit {
+  @raylib.draw_rectangle(x, y, size, size, @raylib.Color::new(24, 22, 30, 255))
+  match metal_art(metal) {
+    Some(texture) =>
+      draw_art_width(
+        texture,
+        Float::from_int(x + size / 2),
+        Float::from_int(y + size / 2),
+        Float::from_int(size) * 0.92,
+        rotation,
+        @raylib.white,
+      )
+    None =>
+      @raylib.draw_rectangle(
+        x + 4,
+        y + 4,
+        size - 8,
+        size - 8,
+        @types.metal_color(metal),
+      )
+  }
+}
+
+///|
 fn draw_mini_bar(
   x : Int,
   y : Int,
@@ -127,6 +156,18 @@ fn draw_crucible_area(game : @types.Game) -> Unit {
   // Panel background
   @raylib.draw_rectangle(cx - 10, cy - 10, 290, 460, @types.color_panel)
   @draw.draw_text("CRUCIBLE", cx, cy, 18, @types.color_hud_text)
+  match tex_crucible.val {
+    Some(crucible_art) =>
+      draw_art_width(
+        crucible_art,
+        Float::from_int(cx + 238),
+        Float::from_int(cy + 28),
+        58.0,
+        0.0,
+        @raylib.Color::new(255, 255, 255, 210),
+      )
+    None => ()
+  }
   let count = @types.total_ingredient_count(game)
   let count_str = "Ingredients: " + count.to_string()
   @draw.draw_text(count_str, cx, cy + 22, 14, @types.color_hud_dim)
@@ -171,38 +212,39 @@ fn draw_crucible_area(game : @types.Game) -> Unit {
       @raylib.draw_rectangle(slot_x, y, vessel_w - 20, 48, bg)
       // Color bar
       @raylib.draw_rectangle(slot_x, y, 8, 48, @types.metal_color(ing.metal))
+      draw_metal_token(ing.metal, slot_x + 14, y + 7, 34, 0.0)
       // Metal name and amount
       let name = @types.metal_name(ing.metal)
-      @draw.draw_text(name, slot_x + 14, y + 4, 16, @types.color_hud_text)
+      @draw.draw_text(name, slot_x + 56, y + 4, 16, @types.color_hud_text)
       let amount_str = "x" + ing.amount.to_string()
-      @draw.draw_text(amount_str, slot_x + 14, y + 24, 14, @types.color_hud_dim)
+      @draw.draw_text(amount_str, slot_x + 56, y + 24, 14, @types.color_hud_dim)
       // Properties preview
       let props = @types.metal_props(ing.metal)
       draw_mini_bar(
-        slot_x + 100,
+        slot_x + 118,
         y + 8,
-        50,
+        44,
         props.hardness,
         @types.color_hardness,
       )
       draw_mini_bar(
-        slot_x + 100,
+        slot_x + 118,
         y + 20,
-        50,
+        44,
         props.flexibility,
         @types.color_flexibility,
       )
       draw_mini_bar(
-        slot_x + 100,
+        slot_x + 118,
         y + 32,
-        50,
+        44,
         props.conductivity,
         @types.color_conductivity,
       )
       // Remove hint
       @draw.draw_text(
         "R-click: remove",
-        slot_x + 160,
+        slot_x + 168,
         y + 16,
         10,
         @types.color_hud_dim,

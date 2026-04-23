@@ -3,6 +3,13 @@ fn draw_title(game : @types.Game) -> Unit {
   let w = @types.screen_width
   let h = @types.screen_height
   let time = Float::from_int(game.frame_count) * 0.03
+  match tex_title.val {
+    Some(title_art) => {
+      draw_cover_art(title_art, w, h)
+      @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(12, 8, 10, 118))
+    }
+    None => ()
+  }
   // Animated molten metal particles
   for i in 0..<50 {
     let fi = Float::from_int(i)
@@ -81,6 +88,21 @@ fn draw_title(game : @types.Game) -> Unit {
 fn draw_crucible_icon(cx : Int, cy : Int, size : Int, frame : Int) -> Unit {
   let time = Float::from_int(frame) * 0.04
   let half = size / 2
+  match tex_crucible.val {
+    Some(crucible_art) => {
+      let pulse : Float = 1.0 + sinf(time * 2.0) * 0.035
+      draw_art_width(
+        crucible_art,
+        Float::from_int(cx),
+        Float::from_int(cy),
+        Float::from_int(size) * 1.55 * pulse,
+        0.0,
+        @raylib.white,
+      )
+      return
+    }
+    None => ()
+  }
   // Crucible body
   @raylib.draw_rectangle(
     cx - half,
