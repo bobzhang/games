@@ -1,19 +1,21 @@
 ///|
 fn draw_title(game : @types.Game) -> Unit {
   // Background
-  @raylib.draw_rectangle(
-    0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
-  )
-  // Decorative lines
-  for i in 0..<5 {
-    let y = 100 + i * 120
-    @raylib.draw_line(
-      100,
-      y,
-      @types.screen_width - 100,
-      y,
-      @raylib.Color::new(60, 55, 70, 80),
+  if !draw_title_backdrop_art() {
+    @raylib.draw_rectangle(
+      0, 0, @types.screen_width, @types.screen_height, @types.color_bg,
     )
+    // Decorative lines
+    for i in 0..<5 {
+      let y = 100 + i * 120
+      @raylib.draw_line(
+        100,
+        y,
+        @types.screen_width - 100,
+        y,
+        @raylib.Color::new(60, 55, 70, 80),
+      )
+    }
   }
   // Title
   let pulse = Float::from_double(@math.sin(game.title_pulse.to_double() * 2.0))

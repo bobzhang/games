@@ -125,13 +125,41 @@ fn draw_timeline_slots(game : @types.Game, case_ : @types.Case) -> Unit {
     } else {
       @types.color_slot_empty
     }
-    @raylib.draw_rectangle(
-      Float::to_int(sx),
-      Float::to_int(sy),
-      Float::to_int(@types.slot_width),
-      Float::to_int(@types.slot_height),
-      slot_color,
+    let drew_slot_art = draw_timeline_slot_art(
+      sx,
+      sy,
+      @types.slot_width,
+      @types.slot_height,
     )
+    if drew_slot_art {
+      let overlay_alpha = if is_snap_target {
+        96
+      } else if is_hover {
+        70
+      } else {
+        24
+      }
+      @raylib.draw_rectangle(
+        Float::to_int(sx),
+        Float::to_int(sy),
+        Float::to_int(@types.slot_width),
+        Float::to_int(@types.slot_height),
+        @raylib.Color::new(
+          slot_color.r.to_int(),
+          slot_color.g.to_int(),
+          slot_color.b.to_int(),
+          overlay_alpha,
+        ),
+      )
+    } else {
+      @raylib.draw_rectangle(
+        Float::to_int(sx),
+        Float::to_int(sy),
+        Float::to_int(@types.slot_width),
+        Float::to_int(@types.slot_height),
+        slot_color,
+      )
+    }
     // Snap indicator border: pulsing dashed outline when dragging over
     let border_color = if is_snap_target {
       @types.color_clue
@@ -285,7 +313,25 @@ fn draw_card_at(
     @raylib.Color::new(0, 0, 0, 60),
   )
   // Card body
-  @raylib.draw_rectangle(ix, iy, iw, ih, bg)
+  let drew_card_art = draw_card_art(x, y, @types.card_width, @types.card_height, @raylib.white)
+  if drew_card_art {
+    if is_drag || is_anchor {
+      @raylib.draw_rectangle(
+        ix,
+        iy,
+        iw,
+        ih,
+        @raylib.Color::new(
+          bg.r.to_int(),
+          bg.g.to_int(),
+          bg.b.to_int(),
+          if is_drag { 58 } else { 68 },
+        ),
+      )
+    }
+  } else {
+    @raylib.draw_rectangle(ix, iy, iw, ih, bg)
+  }
   // Border
   let border_color = if is_selected {
     @types.color_clue
@@ -543,9 +589,32 @@ fn draw_clue_panel(game : @types.Game, case_ : @types.Case) -> Unit {
   let pw = Float::to_int(@types.clue_panel_width)
   let ph = @types.screen_height - 20
   // Background
-  @raylib.draw_rectangle(px, py, pw, ph, @types.color_clue_panel_bg)
+  let has_panel_art = draw_clue_panel_art(
+    Float::from_int(px),
+    Float::from_int(py),
+    Float::from_int(pw),
+    Float::from_int(ph),
+  )
+  if !has_panel_art {
+    @raylib.draw_rectangle(px, py, pw, ph, @types.color_clue_panel_bg)
+  }
   @raylib.draw_rectangle_lines(px, py, pw, ph, @types.color_subtitle)
-  @draw.draw_text("CLUES", px + 130, py + 10, 24, @types.color_clue)
+  let panel_title_color = if has_panel_art {
+    @raylib.Color::new(88, 54, 34, 255)
+  } else {
+    @types.color_clue
+  }
+  let panel_text_color = if has_panel_art {
+    @raylib.Color::new(58, 48, 34, 255)
+  } else {
+    @types.color_hud
+  }
+  let panel_subtitle_color = if has_panel_art {
+    @raylib.Color::new(96, 76, 52, 255)
+  } else {
+    @types.color_subtitle
+  }
+  @draw.draw_text("CLUES", px + 130, py + 10, 24, panel_title_color)
   // Clues list
   for i in 0..<case_.clues.length() {
     let clue = case_.clues[i]
@@ -581,14 +650,14 @@ fn draw_clue_panel(game : @types.Game, case_ : @types.Case) -> Unit {
       }
       // Clue text (may wrap)
       let clue_text = truncate_text(clue.text, 40)
-      @draw.draw_text(clue_text, px + 10, cy + 24, 14, @types.color_hud)
+      @draw.draw_text(clue_text, px + 10, cy + 24, 14, panel_text_color)
       // Card references
       let ref_str = "[#" +
         clue.card_a.to_string() +
         " -> #" +
         clue.card_b.to_string() +
         "]"
-      @draw.draw_text(ref_str, px + 10, cy + 44, 12, @types.color_subtitle)
+      @draw.draw_text(ref_str, px + 10, cy + 44, 12, panel_subtitle_color)
     }
   }
 }
