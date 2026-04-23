@@ -1,11 +1,30 @@
 ///|
 /// Clears the screen and draws pulsing gradient bands as the game background.
 fn @types.Game::draw_bg(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
+  let has_art : Bool = draw_alley_backdrop_art()
+  if !has_art {
+    @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
+  }
 
   let pulse : Float = Float::from_double(
     @math.sin((game.ui_t * 0.86).to_double()),
   )
+
+  if has_art {
+    @raylib.draw_circle(
+      280,
+      170,
+      220.0 + pulse * 14.0,
+      @raylib.Color::new(30, 48, 84, 22),
+    )
+    @raylib.draw_circle(
+      @types.screen_w - 220,
+      200,
+      190.0 - pulse * 12.0,
+      @raylib.Color::new(72, 40, 34, 18),
+    )
+    return
+  }
 
   @raylib.draw_circle(
     280,
@@ -78,28 +97,30 @@ fn @types.Game::draw_lane(game : @types.Game) -> (Int, Int) {
     @raylib.Color::new(158, 186, 218, 216),
   )
 
-  @raylib.draw_rectangle(
-    @types.lane_x + sx,
-    @types.lane_y + sy,
-    @types.lane_w,
-    @types.lane_h,
-    @raylib.Color::new(164, 124, 82, 252),
-  )
-
-  for i in 0..<26 {
-    let y : Int = @types.lane_y + sy + i * 36
+  if !draw_lane_art(sx, sy) {
     @raylib.draw_rectangle(
-      @types.lane_x + sx + 6,
-      y,
-      @types.lane_w - 12,
-      18,
-      @raylib.Color::new(
-        190 + i * 7 % 24,
-        148 + i * 11 % 22,
-        90 + i * 9 % 20,
-        78,
-      ),
+      @types.lane_x + sx,
+      @types.lane_y + sy,
+      @types.lane_w,
+      @types.lane_h,
+      @raylib.Color::new(164, 124, 82, 252),
     )
+
+    for i in 0..<26 {
+      let y : Int = @types.lane_y + sy + i * 36
+      @raylib.draw_rectangle(
+        @types.lane_x + sx + 6,
+        y,
+        @types.lane_w - 12,
+        18,
+        @raylib.Color::new(
+          190 + i * 7 % 24,
+          148 + i * 11 % 22,
+          90 + i * 9 % 20,
+          78,
+        ),
+      )
+    }
   }
 
   @raylib.draw_rectangle(
@@ -169,6 +190,10 @@ fn draw_pin(pin : @types.Pin, sx : Int, sy : Int) -> Unit {
   let px : Int = pin.x.to_int() + sx
   let py : Int = pin.y.to_int() + sy
 
+  if draw_pin_art(pin, sx, sy) {
+    return
+  }
+
   if pin.standing {
     @raylib.draw_circle(
       px,
@@ -233,6 +258,10 @@ fn @types.Game::draw_pins(game : @types.Game, sx : Int, sy : Int) -> Unit {
 fn @types.Game::draw_ball(game : @types.Game, sx : Int, sy : Int) -> Unit {
   let bx : Int = game.ball_x.to_int() + sx
   let by : Int = game.ball_y.to_int() + sy
+
+  if draw_ball_art(bx, by) {
+    return
+  }
 
   @raylib.draw_circle(
     bx,
