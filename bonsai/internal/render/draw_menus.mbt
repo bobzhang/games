@@ -6,7 +6,9 @@ fn draw_title(game : @types.Game) -> Unit {
   // Dark nature background
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(25, 22, 18, 255))
   // Animated decorative tree in center
-  draw_title_tree(sw / 2, sh / 2 + 40, time)
+  if !draw_title_bonsai_art(sw / 2, sh / 2 + 70, time) {
+    draw_title_tree(sw / 2, sh / 2 + 40, time)
+  }
   // Title text
   let title = "BONSAI"
   let title_size = 64

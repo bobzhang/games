@@ -32,6 +32,15 @@ fn draw_grid_background() -> Unit {
     h * cs + 4,
     @raylib.Color::new(40, 36, 30, 255),
   )
+  if !draw_board_art() {
+    @raylib.draw_rectangle(
+      ox,
+      oy,
+      w * cs,
+      h * cs,
+      @raylib.Color::new(28, 25, 21, 255),
+    )
+  }
   // Grid lines
   for x in 0..<=w {
     @raylib.draw_line(
@@ -131,80 +140,95 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
       let sy = @types.cell_screen_y(y)
       match cell.kind {
         Trunk => {
-          // Thick brown rectangle
-          let pad = cs / 6
-          @raylib.draw_rectangle(
-            sx + pad,
-            sy,
-            cs - pad * 2,
-            cs,
-            @types.color_trunk,
-          )
-          // Darker edge
-          @raylib.draw_rectangle(
-            sx + pad,
-            sy,
-            2,
-            cs,
-            @raylib.Color::new(70, 45, 20, 255),
-          )
+          if !draw_trunk_art(sx, sy) {
+            // Thick brown rectangle
+            let pad = cs / 6
+            @raylib.draw_rectangle(
+              sx + pad,
+              sy,
+              cs - pad * 2,
+              cs,
+              @types.color_trunk,
+            )
+            // Darker edge
+            @raylib.draw_rectangle(
+              sx + pad,
+              sy,
+              2,
+              cs,
+              @raylib.Color::new(70, 45, 20, 255),
+            )
+          }
         }
         Branch => {
-          let bcolor = @types.branch_color(species)
-          // Thinner rectangle along growth direction
-          let pad = cs / 4
-          let dx = @types.dir_dx(cell.growth_dir)
-          let dy = @types.dir_dy(cell.growth_dir)
-          if dx == 0 {
-            // Vertical branch
-            @raylib.draw_rectangle(sx + pad, sy, cs - pad * 2, cs, bcolor)
-          } else if dy == 0 {
-            // Horizontal branch
-            @raylib.draw_rectangle(sx, sy + pad, cs, cs - pad * 2, bcolor)
-          } else {
-            // Diagonal - draw an L shape
-            @raylib.draw_rectangle(sx + pad, sy, cs - pad * 2, cs / 2, bcolor)
-            if dx > 0 {
-              @raylib.draw_rectangle(
-                sx + cs / 2,
-                sy + pad,
-                cs / 2,
-                cs - pad * 2,
-                bcolor,
-              )
+          if !draw_branch_art(sx, sy, cell.growth_dir) {
+            let bcolor = @types.branch_color(species)
+            // Thinner rectangle along growth direction
+            let pad = cs / 4
+            let dx = @types.dir_dx(cell.growth_dir)
+            let dy = @types.dir_dy(cell.growth_dir)
+            if dx == 0 {
+              // Vertical branch
+              @raylib.draw_rectangle(sx + pad, sy, cs - pad * 2, cs, bcolor)
+            } else if dy == 0 {
+              // Horizontal branch
+              @raylib.draw_rectangle(sx, sy + pad, cs, cs - pad * 2, bcolor)
             } else {
-              @raylib.draw_rectangle(sx, sy + pad, cs / 2, cs - pad * 2, bcolor)
+              // Diagonal - draw an L shape
+              @raylib.draw_rectangle(sx + pad, sy, cs - pad * 2, cs / 2, bcolor)
+              if dx > 0 {
+                @raylib.draw_rectangle(
+                  sx + cs / 2,
+                  sy + pad,
+                  cs / 2,
+                  cs - pad * 2,
+                  bcolor,
+                )
+              } else {
+                @raylib.draw_rectangle(
+                  sx,
+                  sy + pad,
+                  cs / 2,
+                  cs - pad * 2,
+                  bcolor,
+                )
+              }
             }
           }
         }
         Leaf => {
-          let lcolor = @types.leaf_color(species)
-          let cx = sx + cs / 2
-          let cy = sy + cs / 2
-          let radius = Float::from_int(cs) / 2.5
-          @raylib.draw_circle(cx, cy, radius, lcolor)
-          // Inner highlight
-          @raylib.draw_circle(
-            cx - 2,
-            cy - 2,
-            radius * 0.5,
-            @raylib.Color::new(
-              (lcolor.r.to_int() + 40) |> min(255),
-              (lcolor.g.to_int() + 40) |> min(255),
-              (lcolor.b.to_int() + 40) |> min(255),
-              200,
-            ),
-          )
+          if !draw_leaf_art(sx, sy, species) {
+            let lcolor = @types.leaf_color(species)
+            let cx = sx + cs / 2
+            let cy = sy + cs / 2
+            let radius = Float::from_int(cs) / 2.5
+            @raylib.draw_circle(cx, cy, radius, lcolor)
+            // Inner highlight
+            @raylib.draw_circle(
+              cx - 2,
+              cy - 2,
+              radius * 0.5,
+              @raylib.Color::new(
+                (lcolor.r.to_int() + 40) |> min(255),
+                (lcolor.g.to_int() + 40) |> min(255),
+                (lcolor.b.to_int() + 40) |> min(255),
+                200,
+              ),
+            )
+          }
         }
-        Pruned =>
-          // Faint mark
-          @raylib.draw_rectangle(
-            sx + cs / 4,
-            sy + cs / 4,
-            cs / 2,
-            cs / 2,
-            @types.color_pruned,
-          )
+        Pruned => {
+          if !draw_pruned_art(sx, sy) {
+            // Faint mark
+            @raylib.draw_rectangle(
+              sx + cs / 4,
+              sy + cs / 4,
+              cs / 2,
+              cs / 2,
+              @types.color_pruned,
+            )
+          }
+        }
         Empty => ()
       }
     }
