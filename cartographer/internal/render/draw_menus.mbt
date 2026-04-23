@@ -41,10 +41,12 @@ fn draw_title(game : @types.Game) -> Unit {
     @types.color_parchment,
   )
   // Decorative map elements
-  draw_feature(@types.screen_width / 2 - 120, 380, Mountain, 40)
-  draw_feature(@types.screen_width / 2 - 40, 380, Forest, 40)
-  draw_feature(@types.screen_width / 2 + 40, 380, Town, 40)
-  draw_feature(@types.screen_width / 2 + 120, 380, Lake, 40)
+  if !draw_title_atlas_art(@types.screen_width / 2, 380) {
+    draw_feature(@types.screen_width / 2 - 120, 380, Mountain, 40)
+    draw_feature(@types.screen_width / 2 - 40, 380, Forest, 40)
+    draw_feature(@types.screen_width / 2 + 40, 380, Town, 40)
+    draw_feature(@types.screen_width / 2 + 120, 380, Lake, 40)
+  }
   // Start prompt
   let prompt = "Press ENTER to begin"
   let pw = @draw.measure_text(prompt, 28)
@@ -308,12 +310,14 @@ fn draw_stars_inline(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 
 ///|
 fn draw_star(cx : Int, cy : Int, size : Int, color : @raylib.Color) -> Unit {
-  // Simple 5-point star using triangles
-  @raylib.draw_poly(
-    @raylib.Vector2::new(fi(cx), fi(cy)),
-    5,
-    fi(size),
-    0.0,
-    color,
-  )
+  if !draw_star_art(cx, cy, size * 2, color) {
+    // Simple 5-point star using triangles
+    @raylib.draw_poly(
+      @raylib.Vector2::new(fi(cx), fi(cy)),
+      5,
+      fi(size),
+      0.0,
+      color,
+    )
+  }
 }
