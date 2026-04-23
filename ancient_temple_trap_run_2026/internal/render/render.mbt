@@ -1,6 +1,23 @@
 ///|
 /// Draws the dark stone background with horizontal gradient bands and two large pulsing ambient glow circles.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
+  if game.state == Title {
+    match tex_title.val {
+      Some(title_art) => {
+        draw_cover_art(title_art, @types.screen_w, @types.screen_h)
+        @raylib.draw_rectangle(
+          0,
+          0,
+          @types.screen_w,
+          @types.screen_h,
+          @raylib.Color::new(10, 9, 8, 86),
+        )
+        return
+      }
+      None => ()
+    }
+  }
+
   @raylib.clear_background(@raylib.Color::new(13, 10, 8, 255))
 
   for i in 0..<14 {
@@ -64,6 +81,19 @@ fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
       hazard.h.to_int(),
       col,
     )
+    match tex_lava_hazard.val {
+      Some(lava_art) =>
+        draw_art_rect(
+          lava_art,
+          hazard.x + hazard.w * 0.5,
+          hazard.y + hazard.h * 0.5,
+          hazard.w,
+          hazard.h,
+          0.0,
+          @raylib.Color::new(255, 255, 255, 236),
+        )
+      None => ()
+    }
     @raylib.draw_rectangle_lines(
       hazard.x.to_int(),
       hazard.y.to_int(),
@@ -94,6 +124,28 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
       trap.h.to_int(),
       base_col,
     )
+    let trap_texture = if trap.kind == @types.trap_kind_spike {
+      tex_spike_trap.val
+    } else {
+      tex_dart_trap.val
+    }
+    match trap_texture {
+      Some(trap_art) =>
+        draw_art_rect(
+          trap_art,
+          trap.x + trap.w * 0.5,
+          trap.y + trap.h * 0.5,
+          trap.w,
+          trap.h,
+          0.0,
+          if hot {
+            @raylib.white
+          } else {
+            @raylib.Color::new(196, 188, 176, 232)
+          },
+        )
+      None => ()
+    }
     @raylib.draw_rectangle_lines(
       trap.x.to_int(),
       trap.y.to_int(),
@@ -122,17 +174,35 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
 /// Draws each pressure plate as a filled rectangle that brightens to green when pressed, with a "PLATE" label centered inside.
 fn @types.Game::draw_plates(game : @types.Game) -> Unit {
   for plate in game.plates {
+    let plate_col = if plate.pressed {
+      @raylib.Color::new(40, 122, 96, 232)
+    } else {
+      @raylib.Color::new(58, 82, 62, 220)
+    }
     @raylib.draw_rectangle(
       plate.x.to_int(),
       plate.y.to_int(),
       plate.w.to_int(),
       plate.h.to_int(),
-      if plate.pressed {
-        @raylib.Color::new(40, 122, 96, 232)
-      } else {
-        @raylib.Color::new(58, 82, 62, 220)
-      },
+      plate_col,
     )
+    match tex_pressure_plate.val {
+      Some(plate_art) =>
+        draw_art_fit(
+          plate_art,
+          plate.x + plate.w * 0.5,
+          plate.y + plate.h * 0.5,
+          plate.w * 0.98,
+          plate.h * 0.98,
+          0.0,
+          if plate.pressed {
+            @raylib.Color::new(190, 255, 220, 255)
+          } else {
+            @raylib.white
+          },
+        )
+      None => ()
+    }
     @raylib.draw_rectangle_lines(
       plate.x.to_int(),
       plate.y.to_int(),
@@ -140,13 +210,15 @@ fn @types.Game::draw_plates(game : @types.Game) -> Unit {
       plate.h.to_int(),
       @raylib.Color::new(186, 234, 210, 220),
     )
-    @draw.draw_text(
-      "PLATE",
-      plate.x.to_int() + 18,
-      plate.y.to_int() + 32,
-      16,
-      @raylib.Color::new(232, 250, 236, 246),
-    )
+    if tex_pressure_plate.val is None {
+      @draw.draw_text(
+        "PLATE",
+        plate.x.to_int() + 18,
+        plate.y.to_int() + 32,
+        16,
+        @raylib.Color::new(232, 250, 236, 246),
+      )
+    }
   }
 }
 
@@ -174,6 +246,23 @@ fn @types.Game::draw_doors(game : @types.Game) -> Unit {
       door.h.to_int(),
       door_col,
     )
+    match tex_stone_door.val {
+      Some(door_art) =>
+        draw_art_rect(
+          door_art,
+          door.x + door.w * 0.5,
+          door.y + door.h * 0.5,
+          door.w,
+          door.h,
+          0.0,
+          if door.open {
+            @raylib.Color::new(176, 255, 220, open_alpha)
+          } else {
+            @raylib.white
+          },
+        )
+      None => ()
+    }
     @raylib.draw_rectangle_lines(
       door.x.to_int(),
       door.y.to_int(),
@@ -204,12 +293,25 @@ fn @types.Game::draw_relics(game : @types.Game) -> Unit {
       game.relics[i].r + Float::from_int(pulse),
       @raylib.Color::new(188, 146, 52, 68),
     )
-    @raylib.draw_circle(
-      game.relics[i].x.to_int(),
-      game.relics[i].y.to_int(),
-      game.relics[i].r,
-      @raylib.Color::new(248, 206, 84, 246),
-    )
+    match tex_relic.val {
+      Some(relic_art) =>
+        draw_art_fit(
+          relic_art,
+          game.relics[i].x,
+          game.relics[i].y,
+          game.relics[i].r * 3.5,
+          game.relics[i].r * 3.5,
+          game.stage_time * 12.0,
+          @raylib.white,
+        )
+      None =>
+        @raylib.draw_circle(
+          game.relics[i].x.to_int(),
+          game.relics[i].y.to_int(),
+          game.relics[i].r,
+          @raylib.Color::new(248, 206, 84, 246),
+        )
+    }
     @raylib.draw_circle_lines(
       game.relics[i].x.to_int(),
       game.relics[i].y.to_int(),
@@ -235,6 +337,23 @@ fn @types.Game::draw_exit_gate(game : @types.Game) -> Unit {
       @raylib.Color::new(94, 52, 46, 214)
     },
   )
+  match tex_exit_gate.val {
+    Some(exit_art) =>
+      draw_art_fit(
+        exit_art,
+        game.exit_x + game.exit_w * 0.5,
+        game.exit_y + game.exit_h * 0.5,
+        game.exit_w * 1.16,
+        game.exit_h * 1.08,
+        0.0,
+        if unlocked {
+          @raylib.white
+        } else {
+          @raylib.Color::new(174, 128, 120, 216)
+        },
+      )
+    None => ()
+  }
   @raylib.draw_rectangle_lines(
     game.exit_x.to_int(),
     game.exit_y.to_int(),
@@ -247,17 +366,19 @@ fn @types.Game::draw_exit_gate(game : @types.Game) -> Unit {
     },
   )
 
-  @draw.draw_text(
-    if unlocked {
-      "EXIT"
-    } else {
-      "SEALED"
-    },
-    game.exit_x.to_int() + 8,
-    game.exit_y.to_int() + game.exit_h.to_int() / 2 - 10,
-    20,
-    @raylib.Color::new(250, 246, 238, 246),
-  )
+  if tex_exit_gate.val is None {
+    @draw.draw_text(
+      if unlocked {
+        "EXIT"
+      } else {
+        "SEALED"
+      },
+      game.exit_x.to_int() + 8,
+      game.exit_y.to_int() + game.exit_h.to_int() / 2 - 10,
+      20,
+      @raylib.Color::new(250, 246, 238, 246),
+    )
+  }
 }
 
 ///|
@@ -275,13 +396,26 @@ fn @types.Game::draw_player(game : @types.Game) -> Unit {
     )
   }
 
-  @raylib.draw_rectangle(
-    px,
-    py,
-    game.player.w.to_int(),
-    game.player.h.to_int(),
-    @raylib.Color::new(190, 208, 224, 246),
-  )
+  match tex_player.val {
+    Some(player_art) =>
+      draw_art_fit(
+        player_art,
+        game.player.x,
+        game.player.y,
+        game.player.w * 1.75,
+        game.player.h * 1.75,
+        0.0,
+        @raylib.white,
+      )
+    None =>
+      @raylib.draw_rectangle(
+        px,
+        py,
+        game.player.w.to_int(),
+        game.player.h.to_int(),
+        @raylib.Color::new(190, 208, 224, 246),
+      )
+  }
   @raylib.draw_rectangle_lines(
     px,
     py,
@@ -290,12 +424,14 @@ fn @types.Game::draw_player(game : @types.Game) -> Unit {
     @raylib.Color::new(24, 36, 46, 250),
   )
 
-  @raylib.draw_circle(
-    game.player.x.to_int(),
-    (game.player.y - 6.0).to_int(),
-    4.0,
-    @raylib.Color::new(36, 52, 66, 250),
-  )
+  if tex_player.val is None {
+    @raylib.draw_circle(
+      game.player.x.to_int(),
+      (game.player.y - 6.0).to_int(),
+      4.0,
+      @raylib.Color::new(36, 52, 66, 250),
+    )
+  }
 }
 
 ///|
