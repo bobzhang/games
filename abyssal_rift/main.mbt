@@ -4,6 +4,7 @@ fn main {
   @raylib.init_window(@types.screen_w, @types.screen_h, "Abyssal Rift")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  @render.load_art()
   @audio.init_audio()
   let game = @types.Game::new()
   while !@raylib.window_should_close() {
@@ -14,6 +15,7 @@ fn main {
     @raylib.end_drawing()
     @audio.process_events(game.events)
   }
+  @render.unload_art()
   @audio.cleanup()
   @draw.cleanup()
   @raylib.close_window()

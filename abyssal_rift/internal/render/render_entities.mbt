@@ -40,30 +40,50 @@ pub fn draw_player(game : @types.Game) -> Unit {
       @raylib.Color::new(80, 160, 255, (shield_ratio * 120.0).to_int()),
     )
   }
-  // Body circle
-  @raylib.draw_circle(px, py, draw_radius, @types.color_player)
-  // Inner circle
-  @raylib.draw_circle(
-    px,
-    py,
-    draw_radius - 4.0,
-    @raylib.Color::new(130, 220, 255, 255),
-  )
-  // Direction indicator (triangle pointing in facing direction)
+
   let fx = p.facing_x
   let fy = p.facing_y
-  let tip_x = p.x + fx * (@types.player_radius + 8.0)
-  let tip_y = p.y + fy * (@types.player_radius + 8.0)
-  let base1_x = p.x + fx * @types.player_radius - fy * 5.0
-  let base1_y = p.y + fy * @types.player_radius + fx * 5.0
-  let base2_x = p.x + fx * @types.player_radius + fy * 5.0
-  let base2_y = p.y + fy * @types.player_radius - fx * 5.0
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(tip_x, tip_y),
-    @raylib.Vector2::new(base1_x, base1_y),
-    @raylib.Vector2::new(base2_x, base2_y),
-    @raylib.white,
-  )
+  match tex_hero.val {
+    Some(texture) => {
+      let rotation = Float::from_double(
+          @math.atan2(fy.to_double(), fx.to_double()),
+        ) *
+        180.0 /
+        3.14159
+      draw_art_width(
+        texture,
+        p.x,
+        p.y,
+        draw_radius * 4.25,
+        rotation,
+        white_alpha(255),
+      )
+    }
+    None => {
+      // Body circle
+      @raylib.draw_circle(px, py, draw_radius, @types.color_player)
+      // Inner circle
+      @raylib.draw_circle(
+        px,
+        py,
+        draw_radius - 4.0,
+        @raylib.Color::new(130, 220, 255, 255),
+      )
+      // Direction indicator (triangle pointing in facing direction)
+      let tip_x = p.x + fx * (@types.player_radius + 8.0)
+      let tip_y = p.y + fy * (@types.player_radius + 8.0)
+      let base1_x = p.x + fx * @types.player_radius - fy * 5.0
+      let base1_y = p.y + fy * @types.player_radius + fx * 5.0
+      let base2_x = p.x + fx * @types.player_radius + fy * 5.0
+      let base2_y = p.y + fy * @types.player_radius - fx * 5.0
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(tip_x, tip_y),
+        @raylib.Vector2::new(base1_x, base1_y),
+        @raylib.Vector2::new(base2_x, base2_y),
+        @raylib.white,
+      )
+    }
+  }
   // Weapon accent near direction indicator
   let wstats = @data.get_weapon_stats(p.weapon)
   let accent_color = if wstats.is_ranged {
@@ -208,6 +228,14 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
       )
     }
     draw_enemy_shape(e.kind, ex, ey, r, base_color)
+    if e.flash_timer > 0.0 {
+      @raylib.draw_circle(
+        ex,
+        ey,
+        r * 1.08,
+        @raylib.Color::new(255, 255, 255, 86),
+      )
+    }
     // Outline
     @raylib.draw_circle_lines_v(
       @raylib.Vector2::new(Float::from_int(ex), Float::from_int(ey)),
@@ -304,75 +332,87 @@ fn draw_enemy_shape(
   r : Float,
   color : @raylib.Color,
 ) -> Unit {
-  match kind {
-    Slime | SlimeSmall =>
-      // Circle
-      @raylib.draw_circle(x, y, r, color)
-    Skeleton =>
-      // Diamond
-      @raylib.draw_poly(
-        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        4,
-        r,
-        45.0,
-        color,
-      )
-    Archer =>
-      // Triangle
-      @raylib.draw_poly(
-        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        3,
-        r,
+  match enemy_art(kind) {
+    Some(texture) =>
+      draw_art_width(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        enemy_art_width(kind, r),
         0.0,
-        color,
+        white_alpha(color.a.to_int()),
       )
-    Bat =>
-      // Small fast circle
-      @raylib.draw_circle(x, y, r, color)
-    Spider =>
-      // Hexagon
-      @raylib.draw_poly(
-        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        6,
-        r,
-        0.0,
-        color,
-      )
-    Golem =>
-      // Large square
-      @raylib.draw_rectangle(
-        x - r.to_int(),
-        y - r.to_int(),
-        (r * 2.0).to_int(),
-        (r * 2.0).to_int(),
-        color,
-      )
-    BroodMother =>
-      // Large octagon
-      @raylib.draw_poly(
-        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        8,
-        r,
-        0.0,
-        color,
-      )
-    LichKing => {
-      // Large diamond with inner glow
-      @raylib.draw_poly(
-        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        4,
-        r,
-        45.0,
-        color,
-      )
-      @raylib.draw_poly(
-        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        4,
-        r * 0.6,
-        45.0,
-        @raylib.Color::new(200, 120, 255, 180),
-      )
-    }
+    None =>
+      match kind {
+        Slime | SlimeSmall =>
+          // Circle
+          @raylib.draw_circle(x, y, r, color)
+        Skeleton =>
+          // Diamond
+          @raylib.draw_poly(
+            @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+            4,
+            r,
+            45.0,
+            color,
+          )
+        Archer =>
+          // Triangle
+          @raylib.draw_poly(
+            @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+            3,
+            r,
+            0.0,
+            color,
+          )
+        Bat =>
+          // Small fast circle
+          @raylib.draw_circle(x, y, r, color)
+        Spider =>
+          // Hexagon
+          @raylib.draw_poly(
+            @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+            6,
+            r,
+            0.0,
+            color,
+          )
+        Golem =>
+          // Large square
+          @raylib.draw_rectangle(
+            x - r.to_int(),
+            y - r.to_int(),
+            (r * 2.0).to_int(),
+            (r * 2.0).to_int(),
+            color,
+          )
+        BroodMother =>
+          // Large octagon
+          @raylib.draw_poly(
+            @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+            8,
+            r,
+            0.0,
+            color,
+          )
+        LichKing => {
+          // Large diamond with inner glow
+          @raylib.draw_poly(
+            @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+            4,
+            r,
+            45.0,
+            color,
+          )
+          @raylib.draw_poly(
+            @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+            4,
+            r * 0.6,
+            45.0,
+            @raylib.Color::new(200, 120, 255, 180),
+          )
+        }
+      }
   }
 }
 
@@ -420,29 +460,38 @@ pub fn draw_items(game : @types.Game) -> Unit {
       3.0
     let ix = item.x.to_int()
     let iy = (item.y + bob).to_int()
-    match item.kind {
-      Gold(_) => {
-        @raylib.draw_circle(ix, iy, 5.0, @types.color_gold_text)
-        @raylib.draw_circle(ix, iy, 3.0, @raylib.Color::new(255, 240, 100, 255))
+    if draw_item_art(item.kind, item.x, item.y + bob, 20.0, 255) {
+      ()
+    } else {
+      match item.kind {
+        Gold(_) => {
+          @raylib.draw_circle(ix, iy, 5.0, @types.color_gold_text)
+          @raylib.draw_circle(
+            ix,
+            iy,
+            3.0,
+            @raylib.Color::new(255, 240, 100, 255),
+          )
+        }
+        HealthPotion =>
+          @raylib.draw_circle(ix, iy, 7.0, @raylib.Color::new(255, 50, 80, 255))
+        WeaponPickup(_) =>
+          @raylib.draw_rectangle(
+            ix - 6,
+            iy - 6,
+            12,
+            12,
+            @raylib.Color::new(200, 200, 255, 255),
+          )
+        PassiveItem(_) =>
+          @raylib.draw_poly(
+            @raylib.Vector2::new(item.x, item.y + bob),
+            5,
+            8.0,
+            0.0,
+            @raylib.Color::new(200, 100, 255, 255),
+          )
       }
-      HealthPotion =>
-        @raylib.draw_circle(ix, iy, 7.0, @raylib.Color::new(255, 50, 80, 255))
-      WeaponPickup(_) =>
-        @raylib.draw_rectangle(
-          ix - 6,
-          iy - 6,
-          12,
-          12,
-          @raylib.Color::new(200, 200, 255, 255),
-        )
-      PassiveItem(_) =>
-        @raylib.draw_poly(
-          @raylib.Vector2::new(item.x, item.y + bob),
-          5,
-          8.0,
-          0.0,
-          @raylib.Color::new(200, 100, 255, 255),
-        )
     }
   }
 }
@@ -475,26 +524,30 @@ pub fn draw_shop_items(game : @types.Game) -> Unit {
       ) *
       3.0
     let iy = (shop.y - 20.0 + bob).to_int()
-    match shop.kind {
-      HealthPotion =>
-        @raylib.draw_circle(sx, iy, 8.0, @raylib.Color::new(255, 50, 80, 255))
-      WeaponPickup(_) =>
-        @raylib.draw_rectangle(
-          sx - 7,
-          iy - 7,
-          14,
-          14,
-          @raylib.Color::new(200, 200, 255, 255),
-        )
-      PassiveItem(_) =>
-        @raylib.draw_poly(
-          @raylib.Vector2::new(shop.x, Float::from_int(iy)),
-          5,
-          9.0,
-          0.0,
-          @raylib.Color::new(200, 100, 255, 255),
-        )
-      Gold(_) => @raylib.draw_circle(sx, iy, 6.0, @types.color_gold_text)
+    if draw_item_art(shop.kind, shop.x, Float::from_int(iy), 24.0, 235) {
+      ()
+    } else {
+      match shop.kind {
+        HealthPotion =>
+          @raylib.draw_circle(sx, iy, 8.0, @raylib.Color::new(255, 50, 80, 255))
+        WeaponPickup(_) =>
+          @raylib.draw_rectangle(
+            sx - 7,
+            iy - 7,
+            14,
+            14,
+            @raylib.Color::new(200, 200, 255, 255),
+          )
+        PassiveItem(_) =>
+          @raylib.draw_poly(
+            @raylib.Vector2::new(shop.x, Float::from_int(iy)),
+            5,
+            9.0,
+            0.0,
+            @raylib.Color::new(200, 100, 255, 255),
+          )
+        Gold(_) => @raylib.draw_circle(sx, iy, 6.0, @types.color_gold_text)
+      }
     }
     // Draw price tag
     let price_text = "\{shop.price}g"
@@ -581,27 +634,36 @@ pub fn draw_reward_choices(game : @types.Game) -> Unit {
       40.0
     @raylib.draw_circle(cx, cy, pulse, @raylib.Color::new(255, 215, 0, 20))
     // Item icon
-    match choice.kind {
-      WeaponPickup(_) =>
-        @raylib.draw_rectangle(
-          cx - 8,
-          cy - 8,
-          16,
-          16,
-          @raylib.Color::new(200, 200, 255, 230),
-        )
-      PassiveItem(_) =>
-        @raylib.draw_poly(
-          @raylib.Vector2::new(choice.x, choice.y),
-          5,
-          12.0,
-          0.0,
-          @raylib.Color::new(200, 100, 255, 230),
-        )
-      HealthPotion =>
-        @raylib.draw_circle(cx, cy, 10.0, @raylib.Color::new(255, 80, 80, 230))
-      _ =>
-        @raylib.draw_circle(cx, cy, 8.0, @raylib.Color::new(255, 215, 0, 230))
+    if draw_item_art(choice.kind, choice.x, choice.y, 28.0, 240) {
+      ()
+    } else {
+      match choice.kind {
+        WeaponPickup(_) =>
+          @raylib.draw_rectangle(
+            cx - 8,
+            cy - 8,
+            16,
+            16,
+            @raylib.Color::new(200, 200, 255, 230),
+          )
+        PassiveItem(_) =>
+          @raylib.draw_poly(
+            @raylib.Vector2::new(choice.x, choice.y),
+            5,
+            12.0,
+            0.0,
+            @raylib.Color::new(200, 100, 255, 230),
+          )
+        HealthPotion =>
+          @raylib.draw_circle(
+            cx,
+            cy,
+            10.0,
+            @raylib.Color::new(255, 80, 80, 230),
+          )
+        _ =>
+          @raylib.draw_circle(cx, cy, 8.0, @raylib.Color::new(255, 215, 0, 230))
+      }
     }
     // Description below
     let tw = @raylib.measure_text(choice.description, 12)
@@ -639,21 +701,40 @@ pub fn draw_stairs(game : @types.Game) -> Unit {
       ) *
       3.0 +
       12.0
-    @raylib.draw_poly(
-      @raylib.Vector2::new(game.stairs_x, game.stairs_y),
-      4,
-      pulse,
-      45.0,
-      @raylib.Color::new(255, 215, 0, 200),
+    @raylib.draw_circle(
+      sx,
+      sy,
+      pulse + 10.0,
+      @raylib.Color::new(90, 150, 255, 42),
     )
-    // Inner glow
-    @raylib.draw_poly(
-      @raylib.Vector2::new(game.stairs_x, game.stairs_y),
-      4,
-      pulse * 0.6,
-      45.0,
-      @raylib.Color::new(255, 240, 150, 150),
-    )
+    match tex_rift_stairs.val {
+      Some(texture) =>
+        draw_art_width(
+          texture,
+          game.stairs_x,
+          game.stairs_y,
+          42.0 + pulse,
+          0.0,
+          white_alpha(235),
+        )
+      None => {
+        @raylib.draw_poly(
+          @raylib.Vector2::new(game.stairs_x, game.stairs_y),
+          4,
+          pulse,
+          45.0,
+          @raylib.Color::new(255, 215, 0, 200),
+        )
+        // Inner glow
+        @raylib.draw_poly(
+          @raylib.Vector2::new(game.stairs_x, game.stairs_y),
+          4,
+          pulse * 0.6,
+          45.0,
+          @raylib.Color::new(255, 240, 150, 150),
+        )
+      }
+    }
     // Label
     let text = "STAIRS"
     let tw = @raylib.measure_text(text, 12)

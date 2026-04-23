@@ -54,6 +54,10 @@ pub fn draw_victory_screen(@types.Game) -> Unit
 
 pub fn draw_world(@types.Game) -> Unit
 
+pub fn load_art() -> Unit
+
+pub fn unload_art() -> Unit
+
 // Errors
 
 // Types and methods

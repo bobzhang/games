@@ -1,6 +1,19 @@
 ///|
 pub fn draw_title_screen(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.color_bg)
+  match tex_title.val {
+    Some(title_art) => {
+      draw_title_art(title_art, @raylib.Color::new(255, 255, 255, 255))
+      @raylib.draw_rectangle(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(8, 6, 18, 118),
+      )
+    }
+    None => ()
+  }
   let t = Float::from_int(game.frame_count) * 0.02
   let sw = Float::from_int(@types.screen_w)
   let sh = Float::from_int(@types.screen_h)
