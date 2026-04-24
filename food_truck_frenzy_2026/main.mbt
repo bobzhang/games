@@ -631,15 +631,23 @@ fn earliest_servable_order_index(
 
 ///|
 /// Draws an animated floor grid with pulsing cell borders over the kitchen area.
-fn draw_floor_grid(x : Int, y : Int, w : Int, h : Int, scene_t : Float) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
-    x,
-    y,
-    w,
-    h,
-    @raylib.Color::new(38, 42, 58, 255),
-    @raylib.Color::new(26, 30, 44, 255),
+fn draw_floor_grid(
+  x : Int,
+  y : Int,
+  w : Int,
+  h : Int,
+  scene_t : Float,
+  art : GameArt,
+) -> Unit {
+  draw_texture_cover(
+    art.kitchen_backdrop,
+    Float::from_int(x),
+    Float::from_int(y),
+    Float::from_int(w),
+    Float::from_int(h),
+    @raylib.white,
   )
+  @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(8, 12, 18, 44))
 
   let cell : Int = 54
   let cols : Int = w / cell + 1
@@ -654,7 +662,7 @@ fn draw_floor_grid(x : Int, y : Int, w : Int, h : Int, scene_t : Float) -> Unit 
         ) *
         0.5 +
         0.5
-      let alpha : Int = 16 + (wave * 20.0).to_int()
+      let alpha : Int = 8 + (wave * 16.0).to_int()
       @raylib.draw_rectangle_lines(
         px,
         py,
@@ -668,90 +676,73 @@ fn draw_floor_grid(x : Int, y : Int, w : Int, h : Int, scene_t : Float) -> Unit 
 
 ///|
 /// Draws a single kitchen station with kind-based color, label, and animated center pulse.
-fn draw_station(s : Station, active : Bool, scene_t : Float) -> Unit {
-  let color = match s.kind {
-    0 => @raylib.Color::new(250, 196, 118, if active { 236 } else { 162 })
-    1 => @raylib.Color::new(246, 124, 102, if active { 236 } else { 162 })
-    2 => @raylib.Color::new(120, 206, 126, if active { 236 } else { 162 })
-    3 => @raylib.Color::new(242, 216, 124, if active { 236 } else { 162 })
-    4 => @raylib.Color::new(112, 182, 250, if active { 236 } else { 162 })
-    5 => @raylib.Color::new(255, 140, 88, if active { 236 } else { 166 })
-    6 => @raylib.Color::new(128, 220, 250, if active { 236 } else { 166 })
-    7 => @raylib.Color::new(166, 232, 194, if active { 236 } else { 166 })
-    _ => @raylib.Color::new(174, 204, 248, if active { 236 } else { 166 })
+fn draw_station(
+  s : Station,
+  active : Bool,
+  scene_t : Float,
+  art : GameArt,
+) -> Unit {
+  draw_texture_fill(
+    station_texture(art, s.kind),
+    s.x,
+    s.y,
+    s.w,
+    s.h,
+    if active {
+      @raylib.Color::new(255, 255, 255, 255)
+    } else {
+      @raylib.Color::new(220, 226, 232, 214)
+    },
+  )
+  if !active {
+    @raylib.draw_rectangle(
+      s.x.to_int(),
+      s.y.to_int(),
+      s.w.to_int(),
+      s.h.to_int(),
+      @raylib.Color::new(8, 10, 18, 54),
+    )
   }
-
-  @raylib.draw_rectangle(
-    s.x.to_int(),
-    s.y.to_int(),
-    s.w.to_int(),
-    s.h.to_int(),
-    @raylib.Color::new(24, 30, 44, 228),
-  )
-  @raylib.draw_rectangle(
-    (s.x + 3.0).to_int(),
-    (s.y + 3.0).to_int(),
-    (s.w - 6.0).to_int(),
-    (s.h - 6.0).to_int(),
-    color,
-  )
   @raylib.draw_rectangle_lines(
     s.x.to_int(),
     s.y.to_int(),
     s.w.to_int(),
     s.h.to_int(),
-    @raylib.Color::new(230, 240, 252, 210),
+    if active {
+      @raylib.Color::new(244, 248, 255, 224)
+    } else {
+      @raylib.Color::new(208, 220, 236, 164)
+    },
   )
 
   let pulse : Float = @math.sinf(scene_t * 6.0 + s.x * 0.01 + s.y * 0.01) * 0.5 +
     0.5
   @raylib.draw_circle_v(
-    @raylib.Vector2::new(s.x + s.w * 0.5, s.y + s.h * 0.5),
-    5.0 + pulse * 4.0,
-    @raylib.Color::new(255, 255, 255, if active { 164 } else { 84 }),
-  )
-
-  let label : String = match s.kind {
-    0 => "BUN"
-    1 => "MEAT"
-    2 => "VEG"
-    3 => "SAUCE"
-    4 => "NOODLE"
-    5 => "STOVE"
-    6 => "WINDOW"
-    7 => "SINK"
-    _ => "FAN"
-  }
-
-  @draw.draw_text(
-    label,
-    s.x.to_int() + s.w.to_int() / 2 - @draw.measure_text(label, 20) / 2,
-    s.y.to_int() + s.h.to_int() / 2 - 10,
-    20,
-    @raylib.Color::new(22, 26, 34, 240),
+    @raylib.Vector2::new(s.x + s.w - 14.0, s.y + 14.0),
+    4.0 + pulse * 3.0,
+    if active {
+      @raylib.Color::new(248, 242, 180, 196)
+    } else {
+      @raylib.Color::new(255, 255, 255, 72)
+    },
   )
 }
 
 ///|
 /// Draws the chef character with bobbing animation and a boost aura when the boost is active.
-fn draw_chef(chef : Chef, scene_t : Float) -> Unit {
+fn draw_chef(chef : Chef, scene_t : Float, art : GameArt) -> Unit {
   let bob : Float = @math.sinf(scene_t * 10.0 + chef.step_t * 0.08) * 1.2
-  @raylib.draw_circle_v(
-    @raylib.Vector2::new(chef.x, chef.y + bob),
+  @raylib.draw_ellipse(
+    chef.x.to_int(),
+    (chef.y + 24.0).to_int(),
     18.0,
-    @raylib.Color::new(250, 226, 176, 242),
+    8.0,
+    @raylib.Color::new(8, 10, 16, 88),
   )
   @raylib.draw_circle_v(
-    @raylib.Vector2::new(chef.x, chef.y - 18.0 + bob),
-    11.0,
-    @raylib.Color::new(252, 252, 255, 242),
-  )
-  @raylib.draw_rectangle(
-    (chef.x - 14.0).to_int(),
-    (chef.y + 10.0 + bob).to_int(),
-    28,
-    18,
-    @raylib.Color::new(210, 236, 252, 240),
+    @raylib.Vector2::new(chef.x, chef.y + bob + 2.0),
+    21.0 + chef.boost_t * 6.0,
+    @raylib.Color::new(255, 190, 120, 22 + (chef.boost_t * 44.0).to_int()),
   )
 
   if chef.boost_t > 0.0 {
@@ -761,6 +752,16 @@ fn draw_chef(chef : Chef, scene_t : Float) -> Unit {
       @raylib.Color::new(118, 208, 252, 138),
     )
   }
+
+  draw_texture_centered(
+    art.chef_sprite,
+    chef.x,
+    chef.y + bob + 2.0,
+    84.0,
+    84.0,
+    0.0,
+    @raylib.Color::new(255, 255, 255, 248),
+  )
 }
 
 ///|
@@ -1001,38 +1002,42 @@ fn draw_stoves(
 
 ///|
 /// Draws all active supply boxes with recipe-colored fill, an amount label, and a pulsing glow ring.
-fn draw_supply_boxes(boxes : Array[SupplyBox], scene_t : Float) -> Unit {
+fn draw_supply_boxes(
+  boxes : Array[SupplyBox],
+  scene_t : Float,
+  art : GameArt,
+) -> Unit {
   for box in boxes {
     if !box.active {
       continue
     }
     let pulse : Float = @math.sinf(scene_t * 5.8 + box.pulse) * 0.5 + 0.5
-    @raylib.draw_rectangle(
-      (box.x - 14.0).to_int(),
-      (box.y - 14.0).to_int(),
-      28,
-      28,
-      recipe_color(box.kind),
-    )
-    @raylib.draw_rectangle_lines(
-      (box.x - 14.0).to_int(),
-      (box.y - 14.0).to_int(),
-      28,
-      28,
-      @raylib.Color::new(248, 252, 255, 232),
-    )
     @raylib.draw_circle_v(
       @raylib.Vector2::new(box.x, box.y),
-      20.0 + pulse * 8.0,
-      @raylib.Color::new(248, 252, 255, (pulse * 80.0).to_int()),
+      18.0 + pulse * 10.0,
+      @raylib.Color::new(248, 252, 255, 18 + (pulse * 72.0).to_int()),
+    )
+    draw_texture_centered(
+      art.supply_crate_sprite,
+      box.x,
+      box.y,
+      56.0,
+      56.0,
+      0.0,
+      @raylib.Color::new(255, 255, 255, 255),
+    )
+    @raylib.draw_circle_v(
+      @raylib.Vector2::new(box.x - 16.0, box.y - 16.0),
+      8.0,
+      recipe_color(box.kind),
     )
 
     @draw.draw_text(
       "\{box.amount}",
-      (box.x - 6.0).to_int(),
-      (box.y - 8.0).to_int(),
+      (box.x - 4.0).to_int(),
+      (box.y + 10.0).to_int(),
       18,
-      @raylib.Color::new(20, 24, 32, 240),
+      @raylib.Color::new(248, 252, 255, 242),
     )
   }
 }
@@ -1384,21 +1389,16 @@ fn draw_hud(
 
 ///|
 /// Draws the main menu screen with animated background and start prompt.
-fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(10, 16, 26, 255))
-
-  for i in 0..<24 {
-    let yy : Float = Float::from_int(i) / 24.0
-    let wave : Float = @math.sinf(scene_t * 1.2 + yy * 6.4) * 0.5 + 0.5
-    let alpha : Int = 22 + (wave * 46.0).to_int()
-    @raylib.draw_rectangle(
-      0,
-      (yy * Float::from_int(sh)).to_int(),
-      sw,
-      sh / 24 + 2,
-      @raylib.Color::new(32, 58, 96, alpha),
-    )
-  }
+fn draw_menu(sw : Int, sh : Int, scene_t : Float, art : GameArt) -> Unit {
+  draw_texture_cover(
+    art.title_art,
+    0.0,
+    0.0,
+    Float::from_int(sw),
+    Float::from_int(sh),
+    @raylib.white,
+  )
+  @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 14, 24, 126))
 
   @draw.draw_text(
     "FOOD TRUCK FRENZY 2026",
@@ -1479,8 +1479,31 @@ fn draw_end(
   rep : Float,
   served : Int,
   lost : Int,
+  art : GameArt,
 ) -> Unit {
-  @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 220))
+  draw_texture_cover(
+    art.title_art,
+    0.0,
+    0.0,
+    Float::from_int(sw),
+    Float::from_int(sh),
+    if win {
+      @raylib.Color::new(225, 255, 232, 255)
+    } else {
+      @raylib.Color::new(255, 224, 228, 255)
+    },
+  )
+  @raylib.draw_rectangle(
+    0,
+    0,
+    sw,
+    sh,
+    if win {
+      @raylib.Color::new(8, 18, 14, 186)
+    } else {
+      @raylib.Color::new(22, 8, 12, 196)
+    },
+  )
   let title : String = if win { "SHIFT COMPLETE" } else { "TRUCK CLOSED" }
 
   @draw.draw_text(
@@ -1536,6 +1559,8 @@ fn main {
   defer @raylib.close_window()
   @raylib.set_target_fps(120)
   @draw.init_font()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let world_x : Int = 22
   let world_y : Int = 22
@@ -2189,9 +2214,9 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(10, 16, 26, 255))
 
     if state == 0 {
-      draw_menu(sw, sh, scene_t)
+      draw_menu(sw, sh, scene_t, art)
     } else {
-      draw_floor_grid(world_x, world_y, world_w, world_h, scene_t)
+      draw_floor_grid(world_x, world_y, world_w, world_h, scene_t, art)
 
       let active_orders = @utils.count_by(orders, fn(order) { order.active })
 
@@ -2204,13 +2229,13 @@ fn main {
           station.w,
           station.h,
         )
-        draw_station(station, near, scene_t)
+        draw_station(station, near, scene_t, art)
       }
 
-      draw_supply_boxes(boxes, scene_t)
+      draw_supply_boxes(boxes, scene_t, art)
       draw_stoves(stoves, stations[5].x + 8.0, stations[5].y + 10.0, parts, dt)
       draw_particles(parts)
-      draw_chef(chef, scene_t)
+      draw_chef(chef, scene_t, art)
 
       let panel_x : Int = world_x + world_w + 10
       let panel_y : Int = world_y
@@ -2251,7 +2276,17 @@ fn main {
       draw_touch_controls(sw, sh, mouse.x, mouse.y, hold, touch_count)
 
       if state == 2 || state == 3 {
-        draw_end(sw, sh, state == 2, score, score_target, rep, served, lost)
+        draw_end(
+          sw,
+          sh,
+          state == 2,
+          score,
+          score_target,
+          rep,
+          served,
+          lost,
+          art,
+        )
       }
     }
 

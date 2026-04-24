@@ -8,6 +8,8 @@ package "bobzhang/games/food_truck_frenzy_2026"
 // Types and methods
 type Chef
 
+type GameArt
+
 type Order
 
 type Particle
