@@ -41,14 +41,18 @@ fn @types.Game::draw_sky(
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @types.sky_top(),
-    @types.sky_bottom(),
-  )
+  let using_backdrop = draw_backdrop_art()
+
+  if !using_backdrop {
+    @raylib.draw_rectangle_gradient_v(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @types.sky_top(),
+      @types.sky_bottom(),
+    )
+  }
 
   let moon_x : Float = Float::from_int(@types.screen_w) * 0.78 +
     @math.sinf(game.time_s * 0.2) * 44.0
@@ -56,18 +60,20 @@ fn @types.Game::draw_sky(
     86.0 +
     @math.cosf(game.time_s * 0.24) * 14.0
 
-  @raylib.draw_circle(
-    (moon_x + cam_x * 0.2).to_int(),
-    (moon_y + cam_y * 0.2).to_int(),
-    88.0,
-    @raylib.Color::new(220, 236, 255, 52),
-  )
-  @raylib.draw_circle(
-    (moon_x + cam_x * 0.2).to_int(),
-    (moon_y + cam_y * 0.2).to_int(),
-    48.0,
-    @raylib.Color::new(236, 246, 255, 132),
-  )
+  if !using_backdrop {
+    @raylib.draw_circle(
+      (moon_x + cam_x * 0.2).to_int(),
+      (moon_y + cam_y * 0.2).to_int(),
+      88.0,
+      @raylib.Color::new(220, 236, 255, 52),
+    )
+    @raylib.draw_circle(
+      (moon_x + cam_x * 0.2).to_int(),
+      (moon_y + cam_y * 0.2).to_int(),
+      48.0,
+      @raylib.Color::new(236, 246, 255, 132),
+    )
+  }
 
   for i in 0..<180 {
     let fi = Float::from_int(i)
@@ -78,7 +84,11 @@ fn @types.Game::draw_sky(
       Float::from_int(@types.screen_h - @types.hud_h)
 
     let tw : Float = 0.5 + 0.5 * @math.sinf(fi * 0.66 + game.time_s * 1.4)
-    let alpha = 70 + (tw * 120.0).to_int()
+    let alpha = if using_backdrop {
+      24 + (tw * 58.0).to_int()
+    } else {
+      70 + (tw * 120.0).to_int()
+    }
 
     @raylib.draw_circle(
       (x + cam_x * 0.12).to_int(),
@@ -103,9 +113,19 @@ fn @types.Game::draw_sky(
         0.55 * @math.sinf(fx * 0.009 + game.time_s * 1.1 + fb)
 
       let col = if band % 2 == 0 {
-        @raylib.Color::new(96, 222 + (glow * 24.0).to_int(), 188, 42)
+        @raylib.Color::new(
+          96,
+          222 + (glow * 24.0).to_int(),
+          188,
+          if using_backdrop { 18 } else { 42 },
+        )
       } else {
-        @raylib.Color::new(120, 178 + (glow * 28.0).to_int(), 255, 36)
+        @raylib.Color::new(
+          120,
+          178 + (glow * 28.0).to_int(),
+          255,
+          if using_backdrop { 16 } else { 36 },
+        )
       }
 
       @raylib.draw_circle(
@@ -135,24 +155,32 @@ fn @types.Game::draw_far_clouds(
     let w : Float = 80.0 + fi % 4.0 * 34.0
     let h : Float = 30.0 + fi % 3.0 * 12.0
 
-    @raylib.draw_circle(
-      (x + cam_x * 0.16).to_int(),
-      (y + cam_y * 0.16).to_int(),
-      w * 0.32,
-      @raylib.Color::new(160, 188, 224, 30),
-    )
-    @raylib.draw_circle(
-      (x + w * 0.24 + cam_x * 0.16).to_int(),
-      (y + h * 0.1 + cam_y * 0.16).to_int(),
-      w * 0.38,
-      @raylib.Color::new(170, 198, 230, 30),
-    )
-    @raylib.draw_circle(
-      (x - w * 0.22 + cam_x * 0.16).to_int(),
-      (y + h * 0.08 + cam_y * 0.16).to_int(),
-      w * 0.26,
-      @raylib.Color::new(150, 180, 218, 28),
-    )
+    if !draw_cloud_wisp_art(
+      x + cam_x * 0.16,
+      y + cam_y * 0.16,
+      w * 1.8,
+      h * 1.7,
+      @raylib.Color::new(166, 204, 238, 46),
+    ) {
+      @raylib.draw_circle(
+        (x + cam_x * 0.16).to_int(),
+        (y + cam_y * 0.16).to_int(),
+        w * 0.32,
+        @raylib.Color::new(160, 188, 224, 30),
+      )
+      @raylib.draw_circle(
+        (x + w * 0.24 + cam_x * 0.16).to_int(),
+        (y + h * 0.1 + cam_y * 0.16).to_int(),
+        w * 0.38,
+        @raylib.Color::new(170, 198, 230, 30),
+      )
+      @raylib.draw_circle(
+        (x - w * 0.22 + cam_x * 0.16).to_int(),
+        (y + h * 0.08 + cam_y * 0.16).to_int(),
+        w * 0.26,
+        @raylib.Color::new(150, 180, 218, 28),
+      )
+    }
   }
 }
 
@@ -180,13 +208,24 @@ fn @types.Game::draw_wind_lanes(
       (fi * 47.0 + fi * fi * 0.9) % (@types.play_bottom - @types.play_top)
     let len : Float = 20.0 + intensity * 40.0
     let dy = game.wind_y * 0.06
+    let rotation = @math.atan2f(dy, -len) * 57.29577951308232
+    let alpha = 34 + (intensity * 82.0).to_int()
 
-    @raylib.draw_line_ex(
-      @raylib.Vector2::new(x + cam_x * 0.14, y + cam_y * 0.14),
-      @raylib.Vector2::new(x - len + cam_x * 0.14, y + dy + cam_y * 0.14),
-      1.0 + intensity * 2.0,
-      @raylib.Color::new(188, 224, 255, 36 + (intensity * 66.0).to_int()),
-    )
+    if !draw_wind_ribbon_art(
+      x - len * 0.5 + cam_x * 0.14,
+      y + dy * 0.5 + cam_y * 0.14,
+      len * 2.5,
+      16.0 + intensity * 14.0,
+      rotation,
+      @raylib.Color::new(188, 232, 255, alpha),
+    ) {
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(x + cam_x * 0.14, y + cam_y * 0.14),
+        @raylib.Vector2::new(x - len + cam_x * 0.14, y + dy + cam_y * 0.14),
+        1.0 + intensity * 2.0,
+        @raylib.Color::new(188, 224, 255, 36 + (intensity * 66.0).to_int()),
+      )
+    }
   }
 }
 
@@ -270,13 +309,22 @@ fn @types.Game::draw_trails(
     let stretch : Float = Float::from_int(1) +
       @math.sinf(trail.rot * 0.05).abs() * 0.28
 
-    @raylib.draw_rectangle(
-      (trail.x - trail.w * 0.5 * stretch + cam_x * 0.2).to_int(),
-      (trail.y - trail.h * 0.5 + cam_y * 0.2).to_int(),
-      @types.maxf(2.0, trail.w * stretch).to_int(),
-      @types.maxf(2.0, trail.h).to_int(),
+    if !draw_wind_ribbon_art(
+      trail.x + cam_x * 0.2,
+      trail.y + cam_y * 0.2,
+      @types.maxf(8.0, trail.w * stretch * 2.0),
+      @types.maxf(5.0, trail.h * 0.9),
+      trail.rot,
       col,
-    )
+    ) {
+      @raylib.draw_rectangle(
+        (trail.x - trail.w * 0.5 * stretch + cam_x * 0.2).to_int(),
+        (trail.y - trail.h * 0.5 + cam_y * 0.2).to_int(),
+        @types.maxf(2.0, trail.w * stretch).to_int(),
+        @types.maxf(2.0, trail.h).to_int(),
+        col,
+      )
+    }
   }
 }
 
@@ -305,6 +353,17 @@ fn draw_lantern(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
     o.w * 0.45 + glow * 3.0,
     @raylib.Color::new(255, 214, 120, 100),
   )
+
+  if draw_lantern_art(
+    x,
+    y + o.h * 0.22,
+    o.w * 1.55,
+    o.h * 2.55,
+    @raylib.Color::new(255, 248, 232, 244),
+  ) {
+    return
+  }
+
   @raylib.draw_rectangle(
     (x - o.w * 0.36).to_int(),
     (y - o.h * 0.44).to_int(),
@@ -334,6 +393,17 @@ fn draw_bird(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
   let wing : Float = @math.sinf(o.phase * 16.0) * 16.0
+
+  if draw_bird_art(
+    x,
+    y + o.h * 0.05,
+    o.w * 2.45,
+    o.h * 2.15,
+    @math.sinf(o.phase * 6.0) * 6.0,
+    @raylib.Color::new(255, 246, 255, 240),
+  ) {
+    return
+  }
 
   @raylib.draw_triangle(
     @raylib.Vector2::new(x, y - o.h * 0.46),
@@ -389,6 +459,16 @@ fn draw_storm(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
     @raylib.Color::new(106, 160, 228, 226),
   )
 
+  if draw_storm_cloud_art(
+    x,
+    y + o.h * 0.12,
+    o.w * 1.45,
+    o.h * 1.95,
+    @raylib.Color::new(232, 244, 255, 238),
+  ) {
+    return
+  }
+
   @raylib.draw_triangle(
     @raylib.Vector2::new(x - 8.0, y + o.h * 0.2),
     @raylib.Vector2::new(x + 4.0, y + o.h * 0.2),
@@ -410,6 +490,16 @@ fn draw_orb(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
     o.w * 0.45 + pulse * 3.0,
     @raylib.Color::new(126, 246, 206, 104),
   )
+
+  if draw_energy_orb_art(
+    x,
+    y,
+    o.w * (1.55 + pulse * 0.08),
+    @raylib.Color::new(238, 255, 250, 236),
+  ) {
+    return
+  }
+
   @raylib.draw_circle(x.to_int(), y.to_int(), o.w * 0.32, @types.energy_col())
   @raylib.draw_circle(
     x.to_int(),
@@ -425,6 +515,17 @@ fn draw_koi(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
   let sway : Float = @math.sinf(o.phase * 9.0) * 9.0
+
+  if draw_koi_art(
+    x,
+    y + sway * 0.08,
+    o.w * 2.35,
+    o.h * 2.7,
+    o.vx < 0.0,
+    @raylib.Color::new(255, 248, 238, 238),
+  ) {
+    return
+  }
 
   @raylib.draw_triangle(
     @raylib.Vector2::new(x + o.w * 0.5, y),
@@ -528,51 +629,67 @@ fn @types.Game::draw_kite(
   )
 
   let tilt = game.kite.angle
-  let kx0 = x + @math.sinf(tilt * 0.017) * 6.0
+  let kite_art_h = game.kite.h * 2.35
+  let kite_art_w = kite_art_h * 0.54
 
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(kx0, y - game.kite.h * 0.52),
-    @raylib.Vector2::new(x - game.kite.w * 0.5, y),
-    @raylib.Vector2::new(x + game.kite.w * 0.5, y),
-    body_col,
-  )
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(kx0, y + game.kite.h * 0.52),
-    @raylib.Vector2::new(x - game.kite.w * 0.5, y),
-    @raylib.Vector2::new(x + game.kite.w * 0.5, y),
-    @types.a_col(@types.cyan(), 210),
-  )
+  if !draw_kite_art(
+    x,
+    y + kite_art_h * 0.22,
+    kite_art_w,
+    kite_art_h,
+    tilt,
+    if game.kite.invuln > 0.0 {
+      @raylib.Color::new(206, 255, 255, 232)
+    } else {
+      @raylib.Color::new(255, 255, 255, 240)
+    },
+  ) {
+    let kx0 = x + @math.sinf(tilt * 0.017) * 6.0
 
-  @raylib.draw_line_ex(
-    @raylib.Vector2::new(x - game.kite.w * 0.5, y),
-    @raylib.Vector2::new(x + game.kite.w * 0.5, y),
-    3.0,
-    @raylib.Color::new(72, 106, 146, 220),
-  )
+    @raylib.draw_triangle(
+      @raylib.Vector2::new(kx0, y - game.kite.h * 0.52),
+      @raylib.Vector2::new(x - game.kite.w * 0.5, y),
+      @raylib.Vector2::new(x + game.kite.w * 0.5, y),
+      body_col,
+    )
+    @raylib.draw_triangle(
+      @raylib.Vector2::new(kx0, y + game.kite.h * 0.52),
+      @raylib.Vector2::new(x - game.kite.w * 0.5, y),
+      @raylib.Vector2::new(x + game.kite.w * 0.5, y),
+      @types.a_col(@types.cyan(), 210),
+    )
 
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    5.0,
-    @raylib.Color::new(56, 84, 132, 232),
-  )
-
-  for i in 0..<8 {
-    let fi = Float::from_int(i)
-    let sway = @math.sinf(game.kite.anim_t * 8.0 + fi * 0.6) * 8.0
-    let tx = x + @math.sinf(game.kite.angle * 0.02) * fi * 1.8 + sway * 0.16
-    let ty = y + fi * 14.0 + sway
+    @raylib.draw_line_ex(
+      @raylib.Vector2::new(x - game.kite.w * 0.5, y),
+      @raylib.Vector2::new(x + game.kite.w * 0.5, y),
+      3.0,
+      @raylib.Color::new(72, 106, 146, 220),
+    )
 
     @raylib.draw_circle(
-      tx.to_int(),
-      ty.to_int(),
-      @types.maxf(1.0, 4.0 - fi * 0.36),
-      if i % 2 == 0 {
-        @types.a_col(@types.pink(), 210)
-      } else {
-        @types.a_col(@types.amber(), 210)
-      },
+      x.to_int(),
+      y.to_int(),
+      5.0,
+      @raylib.Color::new(56, 84, 132, 232),
     )
+
+    for i in 0..<8 {
+      let fi = Float::from_int(i)
+      let sway = @math.sinf(game.kite.anim_t * 8.0 + fi * 0.6) * 8.0
+      let tx = x + @math.sinf(game.kite.angle * 0.02) * fi * 1.8 + sway * 0.16
+      let ty = y + fi * 14.0 + sway
+
+      @raylib.draw_circle(
+        tx.to_int(),
+        ty.to_int(),
+        @types.maxf(1.0, 4.0 - fi * 0.36),
+        if i % 2 == 0 {
+          @types.a_col(@types.pink(), 210)
+        } else {
+          @types.a_col(@types.amber(), 210)
+        },
+      )
+    }
   }
 
   if game.kite.reel_glow > 0.0 {
@@ -660,12 +777,19 @@ fn @types.Game::draw_sparks(
       @types.a_col(@types.cyan(), (life * 190.0).to_int())
     }
 
-    @raylib.draw_circle_lines(
-      (halo.x + cam_x).to_int(),
-      (halo.y + cam_y).to_int(),
-      halo.r,
+    if !draw_burst_halo_art(
+      halo.x + cam_x,
+      halo.y + cam_y,
+      halo.r * 2.35,
       col,
-    )
+    ) {
+      @raylib.draw_circle_lines(
+        (halo.x + cam_x).to_int(),
+        (halo.y + cam_y).to_int(),
+        halo.r,
+        col,
+      )
+    }
   }
 }
 
