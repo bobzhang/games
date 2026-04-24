@@ -142,6 +142,7 @@ fn main {
   @raylib.init_window(sw, sh, "Castle Siege Artillery 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
 
   let player_center_x = Float::from_int(player_x + castle_w / 2)
   let enemy_center_x = Float::from_int(enemy_x + castle_w / 2)
@@ -409,100 +410,125 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(16, 22, 34, 255))
 
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      ground_y - 130,
-      @raylib.Color::new(82, 126, 188, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      ground_y - 130,
-      sw,
-      130,
-      @raylib.Color::new(204, 166, 104, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      ground_y,
-      sw,
-      sh - ground_y,
-      @raylib.Color::new(106, 78, 52, 255),
-    )
+    if !draw_battlefield_art() {
+      @raylib.draw_rectangle(
+        0,
+        0,
+        sw,
+        ground_y - 130,
+        @raylib.Color::new(82, 126, 188, 255),
+      )
+      @raylib.draw_rectangle(
+        0,
+        ground_y - 130,
+        sw,
+        130,
+        @raylib.Color::new(204, 166, 104, 255),
+      )
+      @raylib.draw_rectangle(
+        0,
+        ground_y,
+        sw,
+        sh - ground_y,
+        @raylib.Color::new(106, 78, 52, 255),
+      )
 
-    @raylib.draw_circle(
-      sw / 2 + 220,
-      118,
-      52.0,
-      @raylib.Color::new(250, 236, 170, 255),
-    )
+      @raylib.draw_circle(
+        sw / 2 + 220,
+        118,
+        52.0,
+        @raylib.Color::new(250, 236, 170, 255),
+      )
+    }
 
-    @raylib.draw_rectangle(
-      mountain_x,
-      ground_y - mountain_h,
-      mountain_w,
-      mountain_h,
-      @raylib.Color::new(102, 82, 68, 255),
-    )
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(
-        Float::from_int(mountain_x),
-        Float::from_int(ground_y - mountain_h),
+    if !draw_mountain_art(mountain_x - 38, ground_y - 310, 220, 310) {
+      @raylib.draw_rectangle(
+        mountain_x,
+        ground_y - mountain_h,
+        mountain_w,
+        mountain_h,
+        @raylib.Color::new(102, 82, 68, 255),
+      )
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(
+          Float::from_int(mountain_x),
+          Float::from_int(ground_y - mountain_h),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(mountain_x + mountain_w),
+          Float::from_int(ground_y - mountain_h),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(sw / 2),
+          Float::from_int(ground_y - mountain_h - 70),
+        ),
+        @raylib.Color::new(134, 112, 88, 255),
+      )
+    }
+
+    if !draw_castle_art(false, player_x - 30, ground_y - 190, 180, 190) {
+      @raylib.draw_rectangle(
+        player_x,
+        ground_y - castle_h,
+        castle_w,
+        castle_h,
+        @raylib.Color::new(116, 124, 148, 255),
+      )
+      @raylib.draw_rectangle(
+        player_x + 18,
+        ground_y - castle_h - 36,
+        28,
+        36,
+        @raylib.Color::new(140, 148, 174, 255),
+      )
+      @raylib.draw_rectangle(
+        player_x + 74,
+        ground_y - castle_h - 42,
+        30,
+        42,
+        @raylib.Color::new(140, 148, 174, 255),
+      )
+    }
+
+    if !draw_castle_art(true, enemy_x - 30, ground_y - 190, 180, 190) {
+      @raylib.draw_rectangle(
+        enemy_x,
+        ground_y - castle_h,
+        castle_w,
+        castle_h,
+        @raylib.Color::new(148, 108, 108, 255),
+      )
+      @raylib.draw_rectangle(
+        enemy_x + 16,
+        ground_y - castle_h - 40,
+        28,
+        40,
+        @raylib.Color::new(172, 132, 132, 255),
+      )
+      @raylib.draw_rectangle(
+        enemy_x + 76,
+        ground_y - castle_h - 30,
+        26,
+        30,
+        @raylib.Color::new(172, 132, 132, 255),
+      )
+    }
+
+    ignore(
+      draw_cannon_art(
+        Float::from_int(player_x + castle_w - 10),
+        Float::from_int(ground_y - castle_h + 24),
+        true,
+        player_angle,
       ),
-      @raylib.Vector2::new(
-        Float::from_int(mountain_x + mountain_w),
-        Float::from_int(ground_y - mountain_h),
+    )
+    ignore(
+      draw_cannon_art(
+        Float::from_int(enemy_x + 10),
+        Float::from_int(ground_y - castle_h + 24),
+        false,
+        enemy_angle,
       ),
-      @raylib.Vector2::new(
-        Float::from_int(sw / 2),
-        Float::from_int(ground_y - mountain_h - 70),
-      ),
-      @raylib.Color::new(134, 112, 88, 255),
-    )
-
-    @raylib.draw_rectangle(
-      player_x,
-      ground_y - castle_h,
-      castle_w,
-      castle_h,
-      @raylib.Color::new(116, 124, 148, 255),
-    )
-    @raylib.draw_rectangle(
-      player_x + 18,
-      ground_y - castle_h - 36,
-      28,
-      36,
-      @raylib.Color::new(140, 148, 174, 255),
-    )
-    @raylib.draw_rectangle(
-      player_x + 74,
-      ground_y - castle_h - 42,
-      30,
-      42,
-      @raylib.Color::new(140, 148, 174, 255),
-    )
-
-    @raylib.draw_rectangle(
-      enemy_x,
-      ground_y - castle_h,
-      castle_w,
-      castle_h,
-      @raylib.Color::new(148, 108, 108, 255),
-    )
-    @raylib.draw_rectangle(
-      enemy_x + 16,
-      ground_y - castle_h - 40,
-      28,
-      40,
-      @raylib.Color::new(172, 132, 132, 255),
-    )
-    @raylib.draw_rectangle(
-      enemy_x + 76,
-      ground_y - castle_h - 30,
-      26,
-      30,
-      @raylib.Color::new(172, 132, 132, 255),
     )
 
     let wind_mid_x = sw / 2
@@ -615,46 +641,53 @@ fn main {
     }
 
     if shot_active {
-      @raylib.draw_circle(
-        shot_x.to_int(),
-        shot_y.to_int(),
-        7.0,
-        @raylib.Color::new(30, 30, 36, 255),
-      )
-      @raylib.draw_circle(
-        shot_x.to_int(),
-        shot_y.to_int(),
-        3.0,
-        @raylib.Color::new(236, 236, 236, 255),
-      )
+      if !draw_cannonball_art(shot_x, shot_y) {
+        @raylib.draw_circle(
+          shot_x.to_int(),
+          shot_y.to_int(),
+          7.0,
+          @raylib.Color::new(30, 30, 36, 255),
+        )
+        @raylib.draw_circle(
+          shot_x.to_int(),
+          shot_y.to_int(),
+          3.0,
+          @raylib.Color::new(236, 236, 236, 255),
+        )
+      }
     }
 
     if blast_t > 0.0 {
       let f = blast_t / 0.45
       let radius : Float = 26.0 + (Float::from_int(1) - f) * 74.0
-      @raylib.draw_circle(
-        blast_x.to_int(),
-        blast_y.to_int(),
-        radius,
-        @raylib.Color::new(250, 142, 66, 150),
-      )
-      @raylib.draw_circle(
-        blast_x.to_int(),
-        blast_y.to_int(),
-        radius * 0.55,
-        @raylib.Color::new(254, 216, 118, 210),
-      )
+      let blast_alpha = (f * 255.0).to_int()
+      if !draw_explosion_art(blast_x, blast_y, radius * 2.35, blast_alpha) {
+        @raylib.draw_circle(
+          blast_x.to_int(),
+          blast_y.to_int(),
+          radius,
+          @raylib.Color::new(250, 142, 66, 150),
+        )
+        @raylib.draw_circle(
+          blast_x.to_int(),
+          blast_y.to_int(),
+          radius * 0.55,
+          @raylib.Color::new(254, 216, 118, 210),
+        )
+      }
     }
 
     let base_x = 24
     let base_y = sh - 188
-    @raylib.draw_rectangle(
-      14,
-      sh - 202,
-      198,
-      192,
-      @raylib.Color::new(14, 20, 30, 220),
-    )
+    if !draw_control_panel_art(4, sh - 212, 218, 212) {
+      @raylib.draw_rectangle(
+        14,
+        sh - 202,
+        198,
+        192,
+        @raylib.Color::new(14, 20, 30, 220),
+      )
+    }
     @draw.draw_text("Touch", 82, sh - 198, 20, @raylib.white)
 
     @raylib.draw_rectangle(
@@ -744,6 +777,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_assets()
   @draw.cleanup()
   @raylib.close_window()
 }
