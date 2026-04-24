@@ -12,6 +12,8 @@ type Dock
 
 type FogCell
 
+type GameArt
+
 type Group
 
 type Particle

@@ -86,6 +86,16 @@ struct Particle {
 }
 
 ///|
+/// Holds all project-bound raster artwork used by the game renderer.
+struct GameArt {
+  title_art : @raylib.Texture
+  ferry : @raylib.Texture
+  survivor_raft : @raylib.Texture
+  dock_beacon : @raylib.Texture
+  debris : @raylib.Texture
+}
+
+///|
 /// Returns v clamped to the range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -146,6 +156,38 @@ fn inside_rect(
   px <= Float::from_int(x + w) &&
   py >= Float::from_int(y) &&
   py <= Float::from_int(y + h)
+}
+
+///|
+/// Loads one bilinear-filtered texture from the game resources directory.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "fog_ferry_rescue_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads the generated art bundle. Call after window initialization.
+fn load_game_art() -> GameArt {
+  {
+    title_art: load_art_texture("fog_ferry_title.png"),
+    ferry: load_art_texture("ferry_sprite.png"),
+    survivor_raft: load_art_texture("survivor_raft_sprite.png"),
+    dock_beacon: load_art_texture("dock_beacon_sprite.png"),
+    debris: load_art_texture("debris_sprite.png"),
+  }
+}
+
+///|
+/// Releases the generated art bundle before closing the window.
+fn unload_game_art(art : GameArt) -> Unit {
+  @raylib.unload_texture(art.title_art)
+  @raylib.unload_texture(art.ferry)
+  @raylib.unload_texture(art.survivor_raft)
+  @raylib.unload_texture(art.dock_beacon)
+  @raylib.unload_texture(art.debris)
 }
 
 ///|
@@ -895,7 +937,7 @@ fn draw_harbor(hx : Int, hy : Int, hw : Int, hh : Int) -> Unit {
 
 ///|
 /// Draws all active docks with queue-scaled beacon glow and ID labels.
-fn draw_docks(docks : Array[Dock], t : Float) -> Unit {
+fn draw_docks(docks : Array[Dock], t : Float, art : GameArt) -> Unit {
   for i in 0..<docks.length() {
     if !docks[i].active {
       continue
@@ -905,27 +947,6 @@ fn draw_docks(docks : Array[Dock], t : Float) -> Unit {
     let pulse : Float = @math.sinf(t * 3.2 + Float::from_int(i) * 0.9) * 0.5 +
       0.5
 
-    let col : @raylib.Color = if docks[i].queue >= 70.0 {
-      @raylib.Color::new(244, 154, 162, 252)
-    } else {
-      @raylib.Color::new(234, 240, 248, 252)
-    }
-
-    @raylib.draw_rectangle(
-      (docks[i].x - 14.0).to_int(),
-      (docks[i].y - 20.0).to_int(),
-      28,
-      28,
-      col,
-    )
-    @raylib.draw_rectangle(
-      (docks[i].x - 24.0).to_int(),
-      (docks[i].y + 8.0).to_int(),
-      48,
-      8,
-      @raylib.Color::new(96, 140, 178, 234),
-    )
-
     let beam_r : Float = 26.0 + q01 * 54.0 + pulse * 6.0
     @raylib.draw_circle(
       docks[i].x.to_int(),
@@ -933,11 +954,52 @@ fn draw_docks(docks : Array[Dock], t : Float) -> Unit {
       beam_r,
       @raylib.Color::new(246, 236, 168, 46 + (q01 * 80.0).to_int()),
     )
+    @raylib.draw_ellipse(
+      docks[i].x.to_int(),
+      (docks[i].y + 18.0).to_int(),
+      42.0,
+      16.0,
+      @raylib.Color::new(4, 12, 22, 96),
+    )
+
+    let dock_w : Float = 74.0 + q01 * 5.0
+    let dock_h : Float = dock_w *
+      Float::from_int(art.dock_beacon.height()) /
+      Float::from_int(art.dock_beacon.width())
+    let dock_tint : @raylib.Color = if docks[i].queue >= 70.0 {
+      @raylib.Color::new(255, 218, 218, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 255)
+    }
+    draw_centered_art(
+      art.dock_beacon,
+      docks[i].x,
+      docks[i].y - 4.0,
+      dock_w,
+      dock_h,
+      0.0,
+      dock_tint,
+    )
+
+    @raylib.draw_rectangle(
+      (docks[i].x - 28.0).to_int(),
+      (docks[i].y + 42.0).to_int(),
+      56,
+      5,
+      @raylib.Color::new(12, 20, 32, 220),
+    )
+    @raylib.draw_rectangle(
+      (docks[i].x - 28.0).to_int(),
+      (docks[i].y + 42.0).to_int(),
+      (q01 * 56.0).to_int(),
+      5,
+      @raylib.Color::new(248, 196, 116, 238),
+    )
 
     @draw.draw_text(
       "D\{docks[i].id} Q:\{docks[i].queue.to_int()}",
       (docks[i].x - 44.0).to_int(),
-      (docks[i].y + 24.0).to_int(),
+      (docks[i].y + 50.0).to_int(),
       18,
       @raylib.Color::new(220, 238, 252, 236),
     )
@@ -946,7 +1008,7 @@ fn draw_docks(docks : Array[Dock], t : Float) -> Unit {
 
 ///|
 /// Draws all active survivor groups with panic-colored markers, flare pulses, and status labels.
-fn draw_groups(groups : Array[Group], t : Float) -> Unit {
+fn draw_groups(groups : Array[Group], t : Float, art : GameArt) -> Unit {
   for group in groups {
     if !group.active {
       continue
@@ -957,29 +1019,44 @@ fn draw_groups(groups : Array[Group], t : Float) -> Unit {
       0.5 +
       0.5
 
-    let col : @raylib.Color = if group.panic >= 72.0 {
-      @raylib.Color::new(248, 154, 132, 252)
-    } else {
-      @raylib.Color::new(246, 226, 194, 248)
-    }
-
     @raylib.draw_circle(
       group.x.to_int(),
       group.y.to_int(),
-      11.0 + flare * 3.0,
-      col,
+      19.0 + p01 * 30.0 + flare * 4.0,
+      @raylib.Color::new(252, 170, 108, 36 + (p01 * 72.0).to_int()),
     )
-    @raylib.draw_circle(
+
+    @raylib.draw_ellipse(
       group.x.to_int(),
-      group.y.to_int(),
-      4.0,
-      @raylib.Color::new(252, 246, 236, 246),
+      (group.y + 10.0).to_int(),
+      23.0,
+      8.0,
+      @raylib.Color::new(4, 12, 22, 88),
+    )
+
+    let raft_h : Float = 42.0 + p01 * 8.0
+    let raft_w : Float = raft_h *
+      Float::from_int(art.survivor_raft.width()) /
+      Float::from_int(art.survivor_raft.height())
+    let raft_tint : @raylib.Color = if group.panic >= 72.0 {
+      @raylib.Color::new(255, 220, 208, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 255)
+    }
+    draw_centered_art(
+      art.survivor_raft,
+      group.x,
+      group.y,
+      raft_w,
+      raft_h,
+      @math.sinf(t * 1.2 + Float::from_int(group.id)) * 3.0,
+      raft_tint,
     )
 
     @draw.draw_text(
       "G\{group.id} N:\{group.count} P:\{group.panic.to_int()}",
-      (group.x - 54.0).to_int(),
-      (group.y + 14.0).to_int(),
+      (group.x - 58.0).to_int(),
+      (group.y + 30.0).to_int(),
       16,
       @raylib.Color::new(246, 234, 220, 236),
     )
@@ -1029,7 +1106,7 @@ fn draw_fogs(fogs : Array[FogCell], t : Float) -> Unit {
 
 ///|
 /// Draws all active debris pieces as wobbling circles with hardness-based coloring.
-fn draw_debris(debris : Array[Debris], t : Float) -> Unit {
+fn draw_debris(debris : Array[Debris], t : Float, art : GameArt) -> Unit {
   for debris in debris {
     if !debris.active {
       continue
@@ -1039,62 +1116,44 @@ fn draw_debris(debris : Array[Debris], t : Float) -> Unit {
     let rr : Float = debris.size * (0.88 + wob * 0.2)
     let h01 : Float = clampf(debris.hard / 100.0, 0.0, 1.0)
 
-    let r : Int = 88 + (h01 * 58.0).to_int()
-    let g : Int = 98 + (h01 * 44.0).to_int()
-    let b : Int = 88 + (h01 * 24.0).to_int()
-
-    @raylib.draw_circle(
+    @raylib.draw_ellipse(
       debris.x.to_int(),
-      debris.y.to_int(),
-      rr + 1.8,
-      @raylib.Color::new(46, 70, 92, 174),
+      (debris.y + 4.0).to_int(),
+      rr * 1.35,
+      rr * 0.58,
+      @raylib.Color::new(4, 12, 22, 112),
     )
-    @raylib.draw_circle(
-      debris.x.to_int(),
-      debris.y.to_int(),
-      rr,
-      @raylib.Color::new(r, g, b, 238),
+
+    let debris_w : Float = rr * 2.45
+    let debris_h : Float = debris_w *
+      Float::from_int(art.debris.height()) /
+      Float::from_int(art.debris.width())
+    let tint : @raylib.Color = @raylib.Color::new(
+      190 + (h01 * 65.0).to_int(),
+      196 + (h01 * 52.0).to_int(),
+      194 + (h01 * 42.0).to_int(),
+      246,
+    )
+    draw_centered_art(
+      art.debris,
+      debris.x,
+      debris.y,
+      debris_w,
+      debris_h,
+      debris.spin * 57.29578,
+      tint,
     )
   }
 }
 
 ///|
 /// Draws the player ferry with heading indicator, wake effect, passenger icons, and ping ring.
-fn draw_player(player : Player, t : Float) -> Unit {
+fn draw_player(player : Player, t : Float, art : GameArt) -> Unit {
   let x : Float = player.x
   let y : Float = player.y
 
   let nx : Float = @math.cosf(player.heading)
   let ny : Float = @math.sinf(player.heading)
-
-  let hull_col : @raylib.Color = if player.hull < 34.0 {
-    @raylib.Color::new(248, 164, 174, 252)
-  } else {
-    @raylib.Color::new(240, 244, 252, 252)
-  }
-
-  @raylib.draw_rectangle(
-    (x - 14.0).to_int(),
-    (y - 9.0).to_int(),
-    28,
-    18,
-    hull_col,
-  )
-  @raylib.draw_rectangle(
-    (x - 8.0).to_int(),
-    (y - 14.0).to_int(),
-    16,
-    7,
-    @raylib.Color::new(204, 230, 250, 238),
-  )
-
-  @raylib.draw_line(
-    x.to_int(),
-    y.to_int(),
-    (x + nx * 24.0).to_int(),
-    (y + ny * 24.0).to_int(),
-    @raylib.Color::new(252, 246, 214, 236),
-  )
 
   let wake_r : Float = 9.0 +
     (@math.sinf(t * 4.4 + player.wake_t) * 0.5 + 0.5) * 6.0
@@ -1103,6 +1162,39 @@ fn draw_player(player : Player, t : Float) -> Unit {
     (y - ny * 18.0).to_int(),
     wake_r,
     @raylib.Color::new(176, 214, 246, 86),
+  )
+  @raylib.draw_ellipse(
+    x.to_int(),
+    (y + 4.0).to_int(),
+    32.0,
+    12.0,
+    @raylib.Color::new(4, 12, 22, 108),
+  )
+  @raylib.draw_line(
+    x.to_int(),
+    y.to_int(),
+    (x + nx * 34.0).to_int(),
+    (y + ny * 34.0).to_int(),
+    @raylib.Color::new(252, 246, 214, 132),
+  )
+
+  let ferry_w : Float = 76.0
+  let ferry_h : Float = ferry_w *
+    Float::from_int(art.ferry.height()) /
+    Float::from_int(art.ferry.width())
+  let ferry_tint : @raylib.Color = if player.hull < 34.0 {
+    @raylib.Color::new(255, 206, 214, 255)
+  } else {
+    @raylib.Color::new(255, 255, 255, 255)
+  }
+  draw_centered_art(
+    art.ferry,
+    x,
+    y,
+    ferry_w,
+    ferry_h,
+    player.heading * 57.29578,
+    ferry_tint,
   )
 
   let shown : Int = player.passengers.min(6)
@@ -1360,6 +1452,70 @@ fn draw_button(
 }
 
 ///|
+/// Draws a texture centered at a world position with the requested destination size.
+fn draw_centered_art(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws the generated title artwork full-bleed without distorting its source aspect ratio.
+fn draw_title_art(
+  title_art : @raylib.Texture,
+  sw : Int,
+  sh : Int,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(title_art.width())
+  let source_h : Float = Float::from_int(title_art.height())
+  let screen_w : Float = Float::from_int(sw)
+  let screen_h : Float = Float::from_int(sh)
+  let source_ratio : Float = source_w / source_h
+  let screen_ratio : Float = screen_w / screen_h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > screen_ratio {
+    src_w = source_h * screen_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < screen_ratio {
+    src_h = source_w / screen_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    title_art,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(0.0, 0.0, screen_w, screen_h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
 /// Initializes and runs the Fog Ferry Rescue 2026 game loop.
 fn main {
   let sw : Int = 1680
@@ -1370,6 +1526,8 @@ fn main {
 
   @raylib.set_target_fps(120)
   @draw.init_font()
+
+  let art = load_game_art()
 
   let world_x : Int = 20
   let world_y : Int = 20
@@ -1934,11 +2092,11 @@ fn main {
 
     draw_water(world_x, world_y, world_w, world_h, scene_t)
     draw_harbor(harbor_x, harbor_y, harbor_w, harbor_h)
-    draw_debris(debris, scene_t)
-    draw_docks(docks, scene_t)
-    draw_groups(groups, scene_t)
+    draw_debris(debris, scene_t, art)
+    draw_docks(docks, scene_t, art)
+    draw_groups(groups, scene_t, art)
     draw_fogs(fogs, scene_t)
-    draw_player(player, scene_t)
+    draw_player(player, scene_t, art)
 
     if player.ping_t > 0.0 {
       let rr : Float = 18.0 + (2.0 - player.ping_t) * 62.0
@@ -2243,7 +2401,13 @@ fn main {
     }
 
     if state == 0 {
-      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 14, 24, 212))
+      draw_title_art(
+        art.title_art,
+        sw,
+        sh,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 14, 24, 116))
       @draw.draw_text(
         "FOG FERRY RESCUE",
         sw / 2 - 350,
@@ -2349,7 +2513,13 @@ fn main {
       )
       draw_button(sw / 2 - 210, 638, 420, 94, "START RESCUE", hover)
     } else if state == 2 {
-      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 24, 14, 206))
+      draw_title_art(
+        art.title_art,
+        sw,
+        sh,
+        @raylib.Color::new(205, 255, 218, 255),
+      )
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 24, 14, 168))
       @draw.draw_text(
         "SEA LANE SECURED",
         sw / 2 - 304,
@@ -2379,7 +2549,13 @@ fn main {
         @raylib.Color::new(214, 234, 252, 244),
       )
     } else if state == 3 {
-      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(26, 8, 14, 214))
+      draw_title_art(
+        art.title_art,
+        sw,
+        sh,
+        @raylib.Color::new(255, 216, 224, 255),
+      )
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(26, 8, 14, 178))
       @draw.draw_text(
         "MISSION FAILED",
         sw / 2 - 266,
@@ -2410,4 +2586,6 @@ fn main {
       )
     }
   }
+
+  unload_game_art(art)
 }
