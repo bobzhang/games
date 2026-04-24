@@ -34,7 +34,9 @@ fn draw_edit_ui(game : @types.Game) -> Unit {
   }
   // Right panel: domino palette
   let panel_x = @types.screen_width - 160
-  @raylib.draw_rectangle(panel_x - 10, 50, 170, 400, @types.color_ui_bg)
+  if !draw_ui_panel_art(panel_x - 10, 50, 170, 400) {
+    @raylib.draw_rectangle(panel_x - 10, 50, 170, 400, @types.color_ui_bg)
+  }
   @draw.draw_text("DOMINOES", panel_x, 58, 18, @types.color_ui_highlight)
   let kinds : Array[@types.DominoKind] = [Normal, Heavy, Splitter, Delay]
   let keys = ["1", "2", "3", "4"]
@@ -316,14 +318,18 @@ fn draw_stars(count : Int, x : Int, y : Int, size : Int) -> Unit {
     } else {
       @types.color_star_empty
     }
-    let sz = Float::from_int(size) / 2.0
-    @raylib.draw_circle(star_x + size / 2, y + size / 2, sz, c)
-    @draw.draw_text(
-      "*",
-      star_x + size / 4,
-      y,
-      size,
-      @raylib.Color::new(0, 0, 0, 192),
-    )
+    let cx = Float::from_int(star_x + size / 2)
+    let cy = Float::from_int(y + size / 2)
+    if !draw_star_icon_art(cx, cy, Float::from_int(size), c) {
+      let sz = Float::from_int(size) / 2.0
+      @raylib.draw_circle(star_x + size / 2, y + size / 2, sz, c)
+      @draw.draw_text(
+        "*",
+        star_x + size / 4,
+        y,
+        size,
+        @raylib.Color::new(0, 0, 0, 192),
+      )
+    }
   }
 }

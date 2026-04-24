@@ -1,5 +1,6 @@
 ///|
 fn draw_board(game : @types.Game) -> Unit {
+  ignore(draw_board_backdrop_art())
   // Draw socket grid
   draw_grid()
   // Draw dominoes
@@ -164,27 +165,31 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
   if d.is_target {
     if d.state == Fallen {
       // Success glow
-      @raylib.draw_circle_v(
-        @raylib.Vector2::new(sx, sy),
-        18.0,
-        @raylib.Color::new(40, 220, 80, 50),
-      )
-      @raylib.draw_circle_v(
-        @raylib.Vector2::new(sx, sy),
-        12.0,
-        @raylib.Color::new(40, 220, 80, 40),
-      )
+      if !draw_target_glow_art(sx, sy, 52.0) {
+        @raylib.draw_circle_v(
+          @raylib.Vector2::new(sx, sy),
+          18.0,
+          @raylib.Color::new(40, 220, 80, 50),
+        )
+        @raylib.draw_circle_v(
+          @raylib.Vector2::new(sx, sy),
+          12.0,
+          @raylib.Color::new(40, 220, 80, 40),
+        )
+      }
     } else {
       // Pulsing target ring
       let pulse_v = Float::from_int(display_tick % 60)
       let pulse : Float = @types.absf(pulse_v / 30.0 - 1.0)
       let glow_r : Float = 16.0 + pulse * 6.0
       let glow_a_f : Float = 60.0 + pulse * 60.0
-      @raylib.draw_circle_v(
-        @raylib.Vector2::new(sx, sy),
-        glow_r,
-        @raylib.Color::new(40, 220, 80, glow_a_f.to_int()),
-      )
+      if !draw_target_glow_art(sx, sy, glow_r * 2.6) {
+        @raylib.draw_circle_v(
+          @raylib.Vector2::new(sx, sy),
+          glow_r,
+          @raylib.Color::new(40, 220, 80, glow_a_f.to_int()),
+        )
+      }
     }
   }
   // Draw starter highlight
@@ -193,7 +198,9 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
     let pulse : Float = @types.absf(pulse_v / 30.0 - 1.0)
     let pa : Float = 40.0 + pulse * 60.0
     let starter_glow = @raylib.Color::new(255, 180, 0, pa.to_int())
-    @raylib.draw_circle_v(@raylib.Vector2::new(sx, sy), 22.0, starter_glow)
+    if !draw_starter_glow_art(sx, sy, 62.0 + pulse * 18.0) {
+      @raylib.draw_circle_v(@raylib.Vector2::new(sx, sy), 22.0, starter_glow)
+    }
   }
   // Draw shadow beneath domino (offset by tilt)
   if d.state != Standing {
@@ -223,12 +230,26 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
     @types.domino_width,
     @types.domino_height * height_scale,
   )
-  @raylib.draw_rectangle_pro(
-    rec,
-    @raylib.Vector2::new(hw, hh),
+  let sprite_tint = match d.state {
+    Fallen => @raylib.Color::new(180, 180, 190, 255)
+    _ => @raylib.white
+  }
+  let drew_domino_art = draw_domino_art(
+    d.kind,
+    sx,
+    sy,
     final_angle,
-    color,
+    height_scale,
+    sprite_tint,
   )
+  if !drew_domino_art {
+    @raylib.draw_rectangle_pro(
+      rec,
+      @raylib.Vector2::new(hw, hh),
+      final_angle,
+      color,
+    )
+  }
   // Draw direction indicator for standing dominoes
   if d.state == Standing {
     let dx = Float::from_int(@types.orientation_dx(d.orientation))
@@ -249,62 +270,64 @@ fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
     )
   }
   // Draw kind indicator (larger, clearer)
-  match d.kind {
-    Heavy => {
-      // Solid filled circle with ring
-      @raylib.draw_circle_v(
-        @raylib.Vector2::new(sx, sy),
-        5.0,
-        @raylib.Color::new(0, 0, 0, 100),
-      )
-      @raylib.draw_circle_v(
-        @raylib.Vector2::new(sx, sy),
-        3.5,
-        @raylib.Color::new(0, 0, 0, 160),
-      )
+  if !drew_domino_art {
+    match d.kind {
+      Heavy => {
+        // Solid filled circle with ring
+        @raylib.draw_circle_v(
+          @raylib.Vector2::new(sx, sy),
+          5.0,
+          @raylib.Color::new(0, 0, 0, 100),
+        )
+        @raylib.draw_circle_v(
+          @raylib.Vector2::new(sx, sy),
+          3.5,
+          @raylib.Color::new(0, 0, 0, 160),
+        )
+      }
+      Splitter => {
+        // Perpendicular split indicator (two arrows)
+        @raylib.draw_line(
+          sx.to_int() - 5,
+          sy.to_int(),
+          sx.to_int() + 5,
+          sy.to_int(),
+          @raylib.Color::new(0, 0, 0, 200),
+        )
+        @raylib.draw_line(
+          sx.to_int() - 5,
+          sy.to_int() - 1,
+          sx.to_int() + 5,
+          sy.to_int() - 1,
+          @raylib.Color::new(0, 0, 0, 120),
+        )
+      }
+      Delay => {
+        // Clock-like indicator
+        @raylib.draw_circle_lines(
+          sx.to_int(),
+          sy.to_int(),
+          5.0,
+          @raylib.Color::new(0, 0, 0, 200),
+        )
+        // Clock hands
+        @raylib.draw_line(
+          sx.to_int(),
+          sy.to_int(),
+          sx.to_int(),
+          sy.to_int() - 3,
+          @raylib.Color::new(0, 0, 0, 200),
+        )
+        @raylib.draw_line(
+          sx.to_int(),
+          sy.to_int(),
+          sx.to_int() + 2,
+          sy.to_int(),
+          @raylib.Color::new(0, 0, 0, 200),
+        )
+      }
+      _ => ()
     }
-    Splitter => {
-      // Perpendicular split indicator (two arrows)
-      @raylib.draw_line(
-        sx.to_int() - 5,
-        sy.to_int(),
-        sx.to_int() + 5,
-        sy.to_int(),
-        @raylib.Color::new(0, 0, 0, 200),
-      )
-      @raylib.draw_line(
-        sx.to_int() - 5,
-        sy.to_int() - 1,
-        sx.to_int() + 5,
-        sy.to_int() - 1,
-        @raylib.Color::new(0, 0, 0, 120),
-      )
-    }
-    Delay => {
-      // Clock-like indicator
-      @raylib.draw_circle_lines(
-        sx.to_int(),
-        sy.to_int(),
-        5.0,
-        @raylib.Color::new(0, 0, 0, 200),
-      )
-      // Clock hands
-      @raylib.draw_line(
-        sx.to_int(),
-        sy.to_int(),
-        sx.to_int(),
-        sy.to_int() - 3,
-        @raylib.Color::new(0, 0, 0, 200),
-      )
-      @raylib.draw_line(
-        sx.to_int(),
-        sy.to_int(),
-        sx.to_int() + 2,
-        sy.to_int(),
-        @raylib.Color::new(0, 0, 0, 200),
-      )
-    }
-    _ => ()
   }
 }
 
@@ -320,11 +343,13 @@ fn draw_hover_preview(game : @types.Game) -> Unit {
   // Check if socket is occupied
   let occupied = @types.find_domino_at(game.dominoes, game.hover_pos) >= 0
   if occupied {
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(sx, sy),
-      16.0,
-      @raylib.Color::new(255, 48, 48, 64),
-    )
+    if !draw_bad_socket_glow_art(sx, sy, 58.0) {
+      @raylib.draw_circle_v(
+        @raylib.Vector2::new(sx, sy),
+        16.0,
+        @raylib.Color::new(255, 48, 48, 64),
+      )
+    }
     return
   }
   // Ghost preview of domino to be placed
@@ -344,16 +369,20 @@ fn draw_hover_preview(game : @types.Game) -> Unit {
     @types.domino_width,
     @types.domino_height,
   )
-  @raylib.draw_rectangle_pro(
-    rec,
-    @raylib.Vector2::new(hw, hh),
-    angle,
-    ghost_color,
-  )
+  if !draw_domino_art(game.selected_kind, sx, sy, angle, 1.0, ghost_color) {
+    @raylib.draw_rectangle_pro(
+      rec,
+      @raylib.Vector2::new(hw, hh),
+      angle,
+      ghost_color,
+    )
+  }
   // Socket highlight
-  @raylib.draw_circle_v(
-    @raylib.Vector2::new(sx, sy),
-    16.0,
-    @types.color_socket_hover,
-  )
+  if !draw_hover_glow_art(sx, sy, 58.0) {
+    @raylib.draw_circle_v(
+      @raylib.Vector2::new(sx, sy),
+      16.0,
+      @types.color_socket_hover,
+    )
+  }
 }

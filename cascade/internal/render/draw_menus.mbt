@@ -27,32 +27,34 @@ fn draw_title(game : @types.Game) -> Unit {
     @types.color_ui_text,
   )
   // Animated domino chain on title screen
-  let chain_y = title_y + 160
-  for i in 0..<8 {
-    let cx = 340 + i * 80
-    let delay = Float::from_int(i) * 0.5
-    let anim_t = t - delay
-    let tilt : Float = if anim_t > 0.0 {
-      let raw_v = anim_t * 3.0
-      let bounded = @types.clampf(raw_v, 0.0, 1.0)
-      bounded * 80.0
-    } else {
-      0.0
+  if !draw_title_chain_art() {
+    let chain_y = title_y + 160
+    for i in 0..<8 {
+      let cx = 340 + i * 80
+      let delay = Float::from_int(i) * 0.5
+      let anim_t = t - delay
+      let tilt : Float = if anim_t > 0.0 {
+        let raw_v = anim_t * 3.0
+        let bounded = @types.clampf(raw_v, 0.0, 1.0)
+        bounded * 80.0
+      } else {
+        0.0
+      }
+      let c = if i % 2 == 0 {
+        @types.color_normal
+      } else {
+        @types.color_ui_highlight
+      }
+      let hw = @types.domino_width / 2.0
+      let hh = @types.domino_height / 2.0
+      let rec = @raylib.Rectangle::new(
+        Float::from_int(cx) - hw,
+        Float::from_int(chain_y) - hh,
+        @types.domino_width,
+        @types.domino_height,
+      )
+      @raylib.draw_rectangle_pro(rec, @raylib.Vector2::new(hw, hh), tilt, c)
     }
-    let c = if i % 2 == 0 {
-      @types.color_normal
-    } else {
-      @types.color_ui_highlight
-    }
-    let hw = @types.domino_width / 2.0
-    let hh = @types.domino_height / 2.0
-    let rec = @raylib.Rectangle::new(
-      Float::from_int(cx) - hw,
-      Float::from_int(chain_y) - hh,
-      @types.domino_width,
-      @types.domino_height,
-    )
-    @raylib.draw_rectangle_pro(rec, @raylib.Vector2::new(hw, hh), tilt, c)
   }
   // Start prompt
   let blink_raw = t * 2.0 - Float::from_int((t * 2.0).to_int())
@@ -85,14 +87,16 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     } else {
       @types.color_ui_bg
     }
-    @raylib.draw_rectangle(bx, by, bw, bh, bg_color)
-    // Border
-    let border_color = if unlocked {
-      @types.tier_color(tier)
-    } else {
-      @types.color_grid_dot
+    if !draw_tier_card_art(tier, bx, by, bw, bh) {
+      @raylib.draw_rectangle(bx, by, bw, bh, bg_color)
+      // Border
+      let border_color = if unlocked {
+        @types.tier_color(tier)
+      } else {
+        @types.color_grid_dot
+      }
+      @raylib.draw_rectangle_lines(bx, by, bw, bh, border_color)
     }
-    @raylib.draw_rectangle_lines(bx, by, bw, bh, border_color)
     // Tier name
     let name_color = if unlocked {
       @types.tier_color(tier)
@@ -183,8 +187,10 @@ fn draw_level_select(game : @types.Game) -> Unit {
     } else {
       @types.color_ui_bg
     }
-    @raylib.draw_rectangle(bx, by, bw, bh, bg)
-    @raylib.draw_rectangle_lines(bx, by, bw, bh, tier_c)
+    if !draw_tier_card_art(game.selected_tier, bx, by, bw, bh) {
+      @raylib.draw_rectangle(bx, by, bw, bh, bg)
+      @raylib.draw_rectangle_lines(bx, by, bw, bh, tier_c)
+    }
     // Level number and name
     let num_text = (i + 1).to_string()
     @draw.draw_text(num_text, bx + 10, by + 10, 28, tier_c)
@@ -248,8 +254,12 @@ fn draw_level_stars(count : Int, x : Int, y : Int, size : Int) -> Unit {
     } else {
       @types.color_star_empty
     }
-    let sz = Float::from_int(size) / 2.0
-    @raylib.draw_circle(star_x + size / 2, y + size / 2, sz, c)
+    let cx = Float::from_int(star_x + size / 2)
+    let cy = Float::from_int(y + size / 2)
+    if !draw_star_icon_art(cx, cy, Float::from_int(size), c) {
+      let sz = Float::from_int(size) / 2.0
+      @raylib.draw_circle(star_x + size / 2, y + size / 2, sz, c)
+    }
   }
 }
 
