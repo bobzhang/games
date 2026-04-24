@@ -39,15 +39,28 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the wooden board background, grid lines, and traditional star-point dots at the nine hoshi intersections.
-fn draw_board_grid(board_x : Int, board_y : Int, tile : Int) -> Unit {
+fn draw_board_grid(
+  board_x : Int,
+  board_y : Int,
+  tile : Int,
+  art : GameArt,
+) -> Unit {
   let size : Int = @types.board_n * tile
 
+  draw_texture_stretch(
+    art.board_surface,
+    Float::from_int(board_x - tile / 2),
+    Float::from_int(board_y - tile / 2),
+    Float::from_int(size + tile),
+    Float::from_int(size + tile),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
   @raylib.draw_rectangle(
     board_x - tile / 2,
     board_y - tile / 2,
     size + tile,
     size + tile,
-    @raylib.Color::new(92, 70, 46, 248),
+    @raylib.Color::new(32, 20, 10, 34),
   )
   @raylib.draw_rectangle_lines(
     board_x - tile / 2,
@@ -110,38 +123,27 @@ fn draw_stone(
   board_x : Int,
   board_y : Int,
   tile : Int,
+  art : GameArt,
 ) -> Unit {
   let cx : Int = board_x + x * tile
   let cy : Int = board_y + y * tile
   let r : Float = Float::from_int(tile) * 0.42
 
-  match p {
-    Human => {
-      @raylib.draw_circle(cx, cy, r, @raylib.Color::new(28, 34, 46, 255))
-      @raylib.draw_circle(
-        cx - 4,
-        cy - 4,
-        r * 0.42,
-        @raylib.Color::new(126, 146, 176, 196),
-      )
-      @raylib.draw_circle_lines(
-        cx,
-        cy,
-        r,
-        @raylib.Color::new(210, 220, 236, 220),
-      )
-    }
-    _ => {
-      @raylib.draw_circle(cx, cy, r, @raylib.Color::new(224, 228, 238, 255))
-      @raylib.draw_circle(
-        cx - 4,
-        cy - 4,
-        r * 0.42,
-        @raylib.Color::new(252, 252, 255, 206),
-      )
-      @raylib.draw_circle_lines(cx, cy, r, @raylib.Color::new(68, 76, 88, 190))
-    }
-  }
+  @raylib.draw_circle(
+    cx,
+    cy + (tile / 18),
+    r * 1.05,
+    @raylib.Color::new(10, 12, 18, 54),
+  )
+  draw_texture_centered(
+    stone_texture(art, p),
+    Float::from_int(cx),
+    Float::from_int(cy),
+    Float::from_int(tile) * 0.98,
+    Float::from_int(tile) * 0.98,
+    0.0,
+    @raylib.Color::new(255, 255, 255, 255),
+  )
 }
 
 ///|
@@ -202,16 +204,16 @@ fn @types.Game::draw_last_markers(
 
 ///|
 /// Draws the full board: grid, all placed stones, hint ring, last-move markers, and the cursor ring during active play.
-fn @types.Game::draw_board(game : @types.Game) -> Unit {
+fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
-  draw_board_grid(board_x, board_y, tile)
+  draw_board_grid(board_x, board_y, tile, art)
 
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
       let p : @types.Player = @types.cell_at(game, x, y)
       if p != Empty {
-        draw_stone(x, y, p, board_x, board_y, tile)
+        draw_stone(x, y, p, board_x, board_y, tile, art)
       }
     }
   }
@@ -646,7 +648,22 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen with game name, description lines, and a hoverable start-duel button.
-fn @types.Game::draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game, art : GameArt) -> Unit {
+  draw_texture_cover(
+    art.title_art,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(8, 12, 20, 188),
+  )
   @draw.draw_text(
     "Gomoku Street Duel 2026",
     @types.screen_w / 2 - @draw.measure_text("Gomoku Street Duel 2026", 84) / 2,
@@ -696,7 +713,15 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the result overlay panel with win/draw/loss heading, move count, game time, and a hoverable next-round button.
-fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game, art : GameArt) -> Unit {
+  draw_texture_cover(
+    art.title_art,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
   @raylib.draw_rectangle(
     0,
     0,
@@ -771,24 +796,24 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Renders board, HUD, and overlays for the current duel state.
-pub fn draw_frame(game : @types.Game) -> Unit {
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
   game.draw_bg()
 
   match game.state {
     Title => {
-      game.draw_title()
+      game.draw_title(art)
       return
     }
     Play => ()
     Result => ()
   }
 
-  game.draw_board()
+  game.draw_board(art)
   game.draw_side_panel()
   game.draw_touch_overlay()
   game.draw_sparks()
 
   if game.state == Result {
-    game.draw_result_overlay()
+    game.draw_result_overlay(art)
   }
 }
