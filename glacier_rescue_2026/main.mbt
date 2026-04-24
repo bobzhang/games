@@ -462,11 +462,13 @@ fn draw_touch_controls(show : Bool) -> Unit {
 /// Initialises the window, runs the main game loop, and handles all update and draw logic.
 fn main {
   @raylib.init_window(sw, sh, "raylib [moonbit] example - glacier rescue 2026")
-  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let survivors = FixedArray::make(max_survivors, {
     active: false,
@@ -1142,8 +1144,17 @@ fn main {
     defer @raylib.end_drawing()
 
     @raylib.clear_background(@raylib.Color::new(10, 20, 34, 255))
+    draw_texture_stretch(
+      art.world_backdrop,
+      -cam_x + shake_x,
+      -cam_y + shake_y,
+      world_w,
+      world_h,
+      @raylib.Color::new(255, 255, 255, 255),
+    )
+    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 18, 30, 46))
 
-    let grid_col = @raylib.Color::new(34, 56, 78, 70)
+    let grid_col = @raylib.Color::new(34, 56, 78, 28)
     let mut gx : Float = 0.0
     while gx <= world_w {
       let x = (gx - cam_x + shake_x).to_int()
@@ -1200,37 +1211,27 @@ fn main {
         @raylib.draw_circle(
           hx.to_int(),
           hy.to_int(),
-          hazard.r,
-          @raylib.Color::new(122, 154, 178, 235),
-        )
-        @raylib.draw_circle(
-          hx.to_int(),
-          hy.to_int(),
-          hazard.r * 0.58,
-          @raylib.Color::new(178, 210, 232, 230),
+          hazard.r * 0.95,
+          @raylib.Color::new(128, 184, 224, 44),
         )
       } else {
         @raylib.draw_circle(
           hx.to_int(),
           hy.to_int(),
-          hazard.r,
-          @raylib.Color::new(112, 128, 150, 245),
-        )
-        @raylib.draw_line(
-          (hx - hazard.r * 0.8).to_int(),
-          hy.to_int(),
-          (hx + hazard.r * 0.8).to_int(),
-          hy.to_int(),
-          @raylib.Color::new(236, 244, 252, 180),
-        )
-        @raylib.draw_line(
-          hx.to_int(),
-          (hy - hazard.r * 0.8).to_int(),
-          hx.to_int(),
-          (hy + hazard.r * 0.8).to_int(),
-          @raylib.Color::new(236, 244, 252, 180),
+          hazard.r * 0.95,
+          @raylib.Color::new(64, 76, 96, 52),
         )
       }
+      let hazard_size = hazard.r * 2.6
+      draw_texture_centered(
+        hazard_texture(art, hazard.kind),
+        hx,
+        hy,
+        hazard_size,
+        hazard_size,
+        hazard.spin * 57.29577951308232,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
     }
 
     for flare in flares {
@@ -1264,22 +1265,25 @@ fn main {
 
     @raylib.draw_circle(
       (base_x - cam_x + shake_x).to_int(),
-      (base_y - cam_y + shake_y).to_int(),
-      76.0,
-      @raylib.Color::new(70, 96, 132, 255),
+      (base_y - cam_y + shake_y + 18.0).to_int(),
+      96.0,
+      @raylib.Color::new(42, 68, 98, 66),
     )
-    @raylib.draw_circle(
-      (base_x - cam_x + shake_x).to_int(),
-      (base_y - cam_y + shake_y).to_int(),
-      52.0,
-      @raylib.Color::new(112, 182, 236, 255),
+    draw_texture_centered(
+      art.rescue_base_sprite,
+      base_x - cam_x + shake_x,
+      base_y - cam_y + shake_y,
+      232.0,
+      232.0,
+      0.0,
+      @raylib.Color::new(255, 255, 255, 255),
     )
     @draw.draw_text(
       "BASE",
       (base_x - cam_x - 28.0 + shake_x).to_int(),
-      (base_y - cam_y - 8.0 + shake_y).to_int(),
+      (base_y - cam_y + 82.0 + shake_y).to_int(),
       24,
-      @raylib.Color::new(14, 28, 42, 250),
+      @raylib.Color::new(236, 244, 252, 250),
     )
 
     for survivor in survivors {
@@ -1305,13 +1309,28 @@ fn main {
         @raylib.Color::new(tr, tr, 252, 255)
       }
 
-      @raylib.draw_circle(sx.to_int(), sy.to_int(), 10.0, col)
-      @raylib.draw_rectangle(
-        (sx - 8.0).to_int(),
-        (sy + 8.0).to_int(),
-        16,
-        18,
-        @raylib.Color::new(92, 136, 198, 255),
+      @raylib.draw_circle(
+        sx.to_int(),
+        sy.to_int(),
+        18.0,
+        @raylib.Color::new(46, 68, 96, 52),
+      )
+      draw_texture_centered(
+        art.survivor_sprite,
+        sx,
+        sy,
+        if survivor.carried {
+          34.0
+        } else {
+          42.0
+        },
+        if survivor.carried {
+          34.0
+        } else {
+          42.0
+        },
+        0.0,
+        col,
       )
 
       if survivor.beacon_t > 0.65 {
@@ -1338,41 +1357,20 @@ fn main {
       @raylib.Color::new(126, 218, 242, 255)
     }
 
-    @raylib.draw_rectangle(
-      (hx - 20.0).to_int(),
-      (hy - 14.0).to_int(),
-      40,
-      28,
-      heli_col,
-    )
     @raylib.draw_circle(
       hx.to_int(),
-      hy.to_int(),
-      12.0,
-      @raylib.Color::new(42, 68, 92, 255),
+      (hy + 18.0).to_int(),
+      52.0,
+      @raylib.Color::new(38, 58, 84, 56),
     )
-    @raylib.draw_rectangle(
-      (hx - 30.0).to_int(),
-      (hy + 12.0).to_int(),
-      60,
-      5,
-      @raylib.Color::new(60, 88, 122, 255),
-    )
-    @raylib.draw_line(
-      (hx - 46.0).to_int(),
-      (hy - 24.0).to_int(),
-      (hx + 46.0).to_int(),
-      (hy - 24.0).to_int(),
-      @raylib.Color::new(236, 240, 246, 240),
-    )
-
-    let blade : Float = @math.sinf(heli.rotor * 0.03) * 52.0
-    @raylib.draw_line(
-      (hx - blade).to_int(),
-      (hy - 24.0).to_int(),
-      (hx + blade).to_int(),
-      (hy - 24.0).to_int(),
-      @raylib.Color::new(210, 226, 236, 200),
+    draw_texture_centered(
+      art.helicopter_sprite,
+      hx,
+      hy,
+      156.0,
+      156.0,
+      velocity_rotation(heli.vx, heli.vy),
+      heli_col,
     )
 
     for particle in particles {
@@ -1539,6 +1537,14 @@ fn main {
     }
 
     if state == 0 {
+      draw_texture_cover(
+        art.title_art,
+        0.0,
+        0.0,
+        Float::from_int(sw),
+        Float::from_int(sh),
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 220))
       @draw.draw_text(
         "GLACIER RESCUE",
@@ -1571,6 +1577,14 @@ fn main {
     }
 
     if state == 2 {
+      draw_texture_cover(
+        art.title_art,
+        0.0,
+        0.0,
+        Float::from_int(sw),
+        Float::from_int(sh),
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 24, 20, 188))
       @draw.draw_text(
         "MISSION COMPLETE",
@@ -1594,6 +1608,14 @@ fn main {
         @raylib.Color::new(252, 238, 176, 255),
       )
     } else if state == 3 {
+      draw_texture_cover(
+        art.title_art,
+        0.0,
+        0.0,
+        Float::from_int(sw),
+        Float::from_int(sh),
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(22, 8, 8, 198))
       @draw.draw_text(
         "MISSION FAILED",
