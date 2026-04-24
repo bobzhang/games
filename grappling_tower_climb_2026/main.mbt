@@ -538,6 +538,11 @@ fn main {
   @raylib.init_window(sw, sh, "Grappling Tower Climb 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+
+  let art = load_game_art()
+  defer unload_game_art(art)
+  defer @raylib.close_window()
 
   let pilot : Pilot = {
     x: (tower_l + tower_r) * 0.5,
@@ -1310,81 +1315,61 @@ fn main {
 
     @raylib.begin_drawing()
 
-    let bg_col = if state == 2 {
-      @raylib.Color::new(12, 24, 24, 255)
-    } else if state == 3 {
-      @raylib.Color::new(28, 14, 20, 255)
-    } else {
-      @raylib.Color::new(12, 18, 32, 255)
-    }
-    @raylib.clear_background(bg_col)
+    let swf = Float::from_int(sw)
+    let shf = Float::from_int(sh)
+    draw_texture_cover(
+      art.tower_shaft_backdrop,
+      0.0,
+      0.0,
+      swf,
+      shf,
+      if state == 2 {
+        @raylib.Color::new(228, 255, 240, 212)
+      } else if state == 3 {
+        @raylib.Color::new(255, 226, 236, 198)
+      } else {
+        @raylib.Color::new(255, 255, 255, 224)
+      },
+    )
+    @raylib.draw_rectangle(
+      0,
+      0,
+      sw,
+      sh,
+      if state == 2 {
+        @raylib.Color::new(4, 10, 12, 102)
+      } else if state == 3 {
+        @raylib.Color::new(14, 4, 10, 124)
+      } else {
+        @raylib.Color::new(6, 10, 16, 118)
+      },
+    )
 
-    // Parallax skyline.
-    for i in 0..<24 {
-      let x = i * 56
-      let h = 80 + i * 17 % 220
-      let y0 = sh - h - ((cam_y * 0.08).to_int() + i * 12) % 44
-      @raylib.draw_rectangle(
-        x,
-        y0,
-        42,
-        h + 60,
-        @raylib.Color::new(22, 30, 52, 255),
-      )
-      @raylib.draw_rectangle(
-        x + 12,
-        y0 + 12,
-        8,
-        12,
-        @raylib.Color::new(90, 162, 244, 120),
-      )
-    }
-
-    // Tower walls.
     @raylib.draw_rectangle(
       (tower_l - 24.0).to_int(),
       0,
       24,
       sh,
-      @raylib.Color::new(44, 52, 70, 255),
+      @raylib.Color::new(8, 12, 18, 224),
     )
     @raylib.draw_rectangle(
       tower_r.to_int(),
       0,
       24,
       sh,
-      @raylib.Color::new(44, 52, 70, 255),
+      @raylib.Color::new(8, 12, 18, 224),
     )
-
-    for i in 0..<18 {
-      let wy = i * 44 + (cam_y * 0.30).to_int() % 44
-      @raylib.draw_rectangle(
-        (tower_l - 18.0).to_int(),
-        wy,
-        10,
-        12,
-        @raylib.Color::new(108, 152, 214, 120),
-      )
-      @raylib.draw_rectangle(
-        (tower_r + 8.0).to_int(),
-        wy,
-        10,
-        12,
-        @raylib.Color::new(108, 152, 214, 120),
-      )
-    }
-
     @raylib.draw_rectangle(
       tower_l.to_int(),
       0,
       tower_w.to_int(),
       sh,
-      @raylib.Color::new(24, 32, 46, 255),
+      @raylib.Color::new(10, 18, 26, 64),
     )
 
     for i in 0..<16 {
       let gx = tower_l.to_int() + i * 38
-      @raylib.draw_line(gx, 0, gx, sh, @raylib.Color::new(38, 50, 70, 80))
+      @raylib.draw_line(gx, 0, gx, sh, @raylib.Color::new(70, 108, 140, 48))
     }
 
     // Platforms.
@@ -1394,44 +1379,53 @@ fn main {
       }
 
       let sy = platform.y - cam_y
-      if sy < -80.0 || sy > Float::from_int(sh) + 80.0 {
+      if sy < -80.0 || sy > shf + 80.0 {
         continue
       }
 
-      let px = (platform.x - platform.w * 0.5).to_int()
-      let py = sy.to_int()
-      @raylib.draw_rectangle(
-        px,
-        py,
-        platform.w.to_int(),
-        14,
-        @raylib.Color::new(108, 130, 156, 255),
+      draw_texture_fill(
+        art.platform_sprite,
+        platform.x - platform.w * 0.5,
+        sy - 12.0,
+        platform.w,
+        30.0,
+        if platform.moving {
+          @raylib.Color::new(255, 255, 255, 248)
+        } else {
+          @raylib.Color::new(224, 232, 242, 236)
+        },
       )
-      @raylib.draw_rectangle(
-        px + 10,
-        py + 4,
-        platform.w.to_int() - 20,
-        8,
-        @raylib.Color::new(150, 176, 206, 190),
-      )
+
+      if platform.moving {
+        @raylib.draw_rectangle(
+          (platform.x - platform.w * 0.5 + 18.0).to_int(),
+          (sy - 2.0).to_int(),
+          (platform.w - 36.0).to_int(),
+          3,
+          @raylib.Color::new(132, 226, 246, 156),
+        )
+      }
     }
 
     // Anchors.
     for anchor in anchors {
       if anchor.active {
         let sy = anchor.y - cam_y
-        if sy >= -40.0 && sy <= Float::from_int(sh) + 40.0 {
-          @raylib.draw_circle(
-            anchor.x.to_int(),
-            sy.to_int(),
-            8.0,
-            @raylib.Color::new(126, 230, 210, 255),
+        if sy >= -40.0 && sy <= shf + 40.0 {
+          draw_texture_centered(
+            art.anchor_sprite,
+            anchor.x,
+            sy,
+            26.0,
+            26.0,
+            0.0,
+            @raylib.Color::new(255, 255, 255, 250),
           )
           @raylib.draw_circle_lines(
             anchor.x.to_int(),
             sy.to_int(),
-            12.0,
-            @raylib.Color::new(80, 180, 168, 255),
+            15.0,
+            @raylib.Color::new(100, 212, 220, 168),
           )
         }
       }
@@ -1441,24 +1435,21 @@ fn main {
     for crystal in crystals {
       if crystal.active {
         let sy = crystal.y - cam_y
-        if sy >= -36.0 && sy <= Float::from_int(sh) + 36.0 {
+        if sy >= -36.0 && sy <= shf + 36.0 {
           let blink = (crystal.t * 8.0).to_int() % 2 == 0
-          let col = if blink {
-            @raylib.Color::new(146, 246, 202, 255)
-          } else {
-            @raylib.Color::new(112, 216, 176, 220)
-          }
-          @raylib.draw_triangle(
-            @raylib.Vector2::new(crystal.x, sy - 10.0),
-            @raylib.Vector2::new(crystal.x - 8.0, sy + 4.0),
-            @raylib.Vector2::new(crystal.x + 8.0, sy + 4.0),
-            col,
-          )
-          @raylib.draw_triangle(
-            @raylib.Vector2::new(crystal.x, sy + 12.0),
-            @raylib.Vector2::new(crystal.x - 8.0, sy + 4.0),
-            @raylib.Vector2::new(crystal.x + 8.0, sy + 4.0),
-            @raylib.Color::new(98, 194, 158, 220),
+          let bob = @math.sinf(crystal.t * 7.0) * 2.5
+          draw_texture_centered(
+            art.crystal_sprite,
+            crystal.x,
+            sy + bob,
+            24.0,
+            36.0,
+            0.0,
+            if blink {
+              @raylib.Color::new(255, 255, 255, 255)
+            } else {
+              @raylib.Color::new(228, 255, 242, 220)
+            },
           )
         }
       }
@@ -1468,28 +1459,41 @@ fn main {
     for drone in drones {
       if drone.active {
         let sy = drone.y - cam_y
-        if sy >= -40.0 && sy <= Float::from_int(sh) + 40.0 {
-          let body_col = if drone.kind == 0 {
-            @raylib.Color::new(226, 132, 126, 255)
+        if sy >= -52.0 && sy <= shf + 52.0 {
+          let dw : Float = if drone.kind == 0 {
+            52.0
           } else if drone.kind == 1 {
-            @raylib.Color::new(214, 98, 142, 255)
+            60.0
           } else {
-            @raylib.Color::new(180, 86, 160, 255)
+            72.0
+          }
+          let dh : Float = if drone.kind == 0 {
+            34.0
+          } else if drone.kind == 1 {
+            42.0
+          } else {
+            54.0
           }
 
-          @raylib.draw_circle(drone.x.to_int(), sy.to_int(), 14.0, body_col)
-          @raylib.draw_circle(
-            drone.x.to_int(),
-            sy.to_int(),
-            6.0,
-            @raylib.Color::new(252, 236, 210, 255),
+          draw_texture_centered(
+            drone_texture(art, drone.kind),
+            drone.x,
+            sy,
+            dw,
+            dh,
+            0.0,
+            @raylib.Color::new(255, 255, 255, 248),
           )
 
           if drone.stun_t > 0.0 {
             @raylib.draw_circle_lines(
               drone.x.to_int(),
               sy.to_int(),
-              18.0,
+              if drone.kind == 2 {
+                32.0
+              } else {
+                24.0
+              },
               @raylib.Color::new(134, 228, 255, 255),
             )
           }
@@ -1501,7 +1505,7 @@ fn main {
     for bullet in bullets {
       if bullet.active {
         let sy = bullet.y - cam_y
-        if sy >= -20.0 && sy <= Float::from_int(sh) + 20.0 {
+        if sy >= -20.0 && sy <= shf + 20.0 {
           if bullet.team == 2 {
             @raylib.draw_circle(
               bullet.x.to_int(),
@@ -1532,25 +1536,20 @@ fn main {
     }
 
     // Pilot.
-    let pilot_col = if pilot.flash_t > 0.0 {
-      @raylib.Color::new(252, 146, 148, 255)
-    } else {
-      @raylib.Color::new(126, 214, 252, 255)
-    }
     let psy = pilot.y - cam_y
-    @raylib.draw_circle(pilot.x.to_int(), psy.to_int(), 14.0, pilot_col)
-    @raylib.draw_circle(
-      pilot.x.to_int(),
-      (psy - 16.0).to_int(),
-      10.0,
-      @raylib.Color::new(246, 226, 190, 255),
-    )
-    @raylib.draw_rectangle(
-      (pilot.x - 5.0 + Float::from_int(pilot.face * 8)).to_int(),
-      (psy - 4.0).to_int(),
-      10,
-      8,
-      @raylib.Color::new(236, 246, 255, 255),
+    draw_texture_centered_facing(
+      art.pilot_sprite,
+      pilot.x,
+      psy - 2.0,
+      76.0,
+      52.0,
+      0.0,
+      pilot.face,
+      if pilot.flash_t > 0.0 {
+        @raylib.Color::new(255, 180, 188, 255)
+      } else {
+        @raylib.Color::new(255, 255, 255, 248)
+      },
     )
 
     // Particles.
@@ -1588,17 +1587,26 @@ fn main {
 
     // HUD.
     @raylib.draw_rectangle(0, 0, sw, 76, @raylib.Color::new(8, 10, 20, 228))
+    draw_texture_cover(
+      art.title_art,
+      12.0,
+      8.0,
+      430.0,
+      56.0,
+      @raylib.Color::new(255, 255, 255, 138),
+    )
+    @raylib.draw_rectangle(12, 8, 430, 56, @raylib.Color::new(8, 12, 18, 156))
     @draw.draw_text(
       "GRAPPLING TOWER CLIMB 2026",
-      16,
-      12,
-      30,
+      22,
+      14,
+      28,
       @raylib.Color::new(236, 246, 255, 255),
     )
     @draw.draw_text(
       "WASD move  W/SPACE jump  J grapple  K dash  L bomb",
-      16,
-      48,
+      22,
+      44,
       18,
       @raylib.Color::new(176, 208, 236, 255),
     )
@@ -1808,12 +1816,20 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 132))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 470),
+        Float::from_int(sh / 2 - 206),
+        940.0,
+        412.0,
+        @raylib.Color::new(255, 255, 255, 228),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 470,
         sh / 2 - 206,
         940,
         412,
-        @raylib.Color::new(14, 20, 32, 246),
+        @raylib.Color::new(10, 14, 22, 174),
       )
       @draw.draw_text(
         "GRAPPLING TOWER CLIMB",
@@ -1852,12 +1868,20 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 146))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 430),
+        Float::from_int(sh / 2 - 190),
+        860.0,
+        380.0,
+        @raylib.Color::new(240, 255, 232, 228),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 430,
         sh / 2 - 190,
         860,
         380,
-        @raylib.Color::new(14, 20, 32, 246),
+        @raylib.Color::new(8, 14, 16, 170),
       )
       @draw.draw_text(
         "SUMMIT REACHED",
@@ -1889,12 +1913,20 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 154))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 430),
+        Float::from_int(sh / 2 - 190),
+        860.0,
+        380.0,
+        @raylib.Color::new(255, 228, 236, 224),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 430,
         sh / 2 - 190,
         860,
         380,
-        @raylib.Color::new(14, 20, 32, 246),
+        @raylib.Color::new(18, 10, 16, 178),
       )
       @draw.draw_text(
         "CLIMB FAILED",
@@ -1936,7 +1968,4 @@ fn main {
       }
     }
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
