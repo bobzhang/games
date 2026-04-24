@@ -162,6 +162,28 @@ fn blocked(x : Float, y : Float, r : Float, level : Int) -> Bool {
 }
 
 ///|
+/// Draws a translucent blocked zone over the mansion artwork so collisions remain legible.
+fn draw_blocked_zone(x : Int, y : Int, w : Int, h : Int) -> Unit {
+  @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(8, 12, 20, 164))
+  @raylib.draw_rectangle_lines(
+    x,
+    y,
+    w,
+    h,
+    @raylib.Color::new(136, 154, 186, 188),
+  )
+  if w > 12 && h > 12 {
+    @raylib.draw_rectangle_lines(
+      x + 4,
+      y + 4,
+      w - 8,
+      h - 8,
+      @raylib.Color::new(56, 72, 98, 160),
+    )
+  }
+}
+
+///|
 /// Resets all ghosts in the array to their default inactive state.
 fn clear_ghosts(gs : Array[Ghost]) -> Unit {
   for gs_elem in gs {
@@ -416,6 +438,7 @@ fn main {
   @raylib.init_window(sw, sh, "Ghost Mansion Investigation 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  let art = load_game_art()
 
   let player : Investigator = {
     x: 86.0,
@@ -860,28 +883,37 @@ fn main {
 
     @raylib.begin_drawing()
 
-    if flash_t > 0.0 {
-      @raylib.clear_background(@raylib.Color::new(28, 18, 28, 255))
-    } else {
-      @raylib.clear_background(@raylib.Color::new(10, 12, 24, 255))
-    }
+    @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
     let pulse = (wave_t * 2.4).to_int() % 160
     let glow = if pulse < 80 { pulse } else { 160 - pulse }
+
+    draw_texture_cover(
+      art.mansion_backdrop,
+      20.0,
+      132.0,
+      Float::from_int(sw - 40),
+      Float::from_int(sh - 162),
+      if flash_t > 0.0 {
+        @raylib.Color::new(255, 238, 248, 255)
+      } else {
+        @raylib.Color::new(255, 255, 255, 255)
+      },
+    )
 
     @raylib.draw_rectangle(
       0,
       0,
       sw,
       sh,
-      @raylib.Color::new(12, 16 + glow / 12, 30 + glow / 5, 255),
+      @raylib.Color::new(12, 16 + glow / 12, 30 + glow / 5, 78),
     )
     @raylib.draw_rectangle(
       0,
       0,
       sw,
       250,
-      @raylib.Color::new(16, 24 + glow / 10, 52 + glow / 5, 255),
+      @raylib.Color::new(16, 24 + glow / 10, 52 + glow / 5, 42),
     )
 
     @raylib.draw_rectangle(
@@ -889,77 +921,53 @@ fn main {
       132,
       sw - 40,
       sh - 162,
-      @raylib.Color::new(48, 48, 56, 255),
+      @raylib.Color::new(8, 14, 24, 96),
     )
-    @raylib.draw_rectangle(
+    @raylib.draw_rectangle_lines(
+      20,
+      132,
+      sw - 40,
+      sh - 162,
+      @raylib.Color::new(148, 168, 194, 188),
+    )
+    @raylib.draw_rectangle_lines(
       28,
       140,
       sw - 56,
       sh - 178,
-      @raylib.Color::new(62, 62, 72, 255),
+      @raylib.Color::new(68, 88, 120, 188),
     )
 
-    @raylib.draw_rectangle(
-      294,
-      156,
-      40,
-      430,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      294,
-      156,
-      472,
-      40,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      546,
-      318,
-      204,
-      146,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      902,
-      208,
-      126,
-      312,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      280,
-      618,
-      540,
-      60,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
+    draw_blocked_zone(294, 156, 40, 430)
+    draw_blocked_zone(294, 156, 472, 40)
+    draw_blocked_zone(546, 318, 204, 146)
+    draw_blocked_zone(902, 208, 126, 312)
+    draw_blocked_zone(280, 618, 540, 60)
 
     if level >= 2 {
-      @raylib.draw_rectangle(
-        116,
-        322,
-        132,
-        184,
-        @raylib.Color::new(96, 88, 92, 255),
-      )
+      draw_blocked_zone(116, 322, 132, 184)
     }
     if level >= 3 {
-      @raylib.draw_rectangle(
-        760,
-        500,
-        180,
-        124,
-        @raylib.Color::new(96, 88, 92, 255),
-      )
+      draw_blocked_zone(760, 500, 180, 124)
     }
 
     let exit_col = if collected >= target {
-      @raylib.Color::new(120, 220, 146, 185)
+      @raylib.Color::new(92, 190, 124, 138)
     } else {
-      @raylib.Color::new(110, 134, 166, 122)
+      @raylib.Color::new(42, 58, 86, 126)
     }
     @raylib.draw_rectangle(1108, 150, 146, 116, exit_col)
+    @raylib.draw_rectangle_lines(
+      1108,
+      150,
+      146,
+      116,
+      if collected >= target {
+        @raylib.Color::new(182, 244, 194, 255)
+      } else {
+        @raylib.Color::new(164, 186, 214, 220)
+      },
+    )
     @draw.draw_text(
       "EXIT",
       1140,
@@ -976,14 +984,30 @@ fn main {
       let cx = (clue.x + shake_x).to_int()
       let cy = clue.y.to_int()
       let col = if clue.kind == 0 {
-        @raylib.Color::new(242, 212, 132, 255)
+        @raylib.Color::new(242, 212, 132, 72)
       } else if clue.kind == 1 {
-        @raylib.Color::new(132, 214, 242, 255)
+        @raylib.Color::new(132, 214, 242, 72)
       } else {
-        @raylib.Color::new(224, 156, 250, 255)
+        @raylib.Color::new(224, 156, 250, 72)
       }
-      @raylib.draw_circle(cx, cy, 10.0, col)
-      @raylib.draw_circle(cx, cy, 5.0, @raylib.Color::new(252, 248, 236, 255))
+      @raylib.draw_circle(cx, cy, 16.0, col)
+      draw_texture_centered(
+        clue_texture(art, clue.kind),
+        clue.x + shake_x,
+        clue.y,
+        if clue.kind == 2 {
+          34.0
+        } else {
+          30.0
+        },
+        if clue.kind == 2 {
+          34.0
+        } else {
+          30.0
+        },
+        Float::from_int(clue.kind * 10),
+        @raylib.Color::new(255, 255, 255, 255),
+      )
     }
 
     for ghost in ghosts {
@@ -995,34 +1019,46 @@ fn main {
       let gy = ghost.y.to_int()
 
       let col = if ghost.stun_t > 0.0 {
-        @raylib.Color::new(132, 236, 248, 255)
+        @raylib.Color::new(132, 236, 248, 220)
       } else if ghost.kind == 2 {
-        @raylib.Color::new(252, 164, 196, 255)
+        @raylib.Color::new(224, 234, 252, 238)
       } else if ghost.kind == 1 {
-        @raylib.Color::new(232, 182, 252, 255)
+        @raylib.Color::new(246, 212, 255, 236)
       } else {
-        @raylib.Color::new(212, 206, 244, 255)
+        @raylib.Color::new(228, 242, 255, 236)
       }
-
-      @raylib.draw_circle(gx, gy - 6, ghost.radius, col)
-      @raylib.draw_rectangle(
-        gx - ghost.radius.to_int(),
-        gy - 2,
-        (ghost.radius * 2.0).to_int(),
-        28,
+      @raylib.draw_circle(
+        gx,
+        gy + 10,
+        ghost.radius + 18.0,
+        if ghost.kind == 2 {
+          @raylib.Color::new(116, 172, 244, 54)
+        } else if ghost.kind == 1 {
+          @raylib.Color::new(212, 126, 252, 60)
+        } else {
+          @raylib.Color::new(154, 214, 255, 54)
+        },
+      )
+      draw_texture_centered(
+        ghost_texture(art, ghost.kind),
+        ghost.x + shake_x,
+        ghost.y - 4.0,
+        if ghost.kind == 2 {
+          112.0
+        } else if ghost.kind == 1 {
+          100.0
+        } else {
+          92.0
+        },
+        if ghost.kind == 2 {
+          112.0
+        } else if ghost.kind == 1 {
+          100.0
+        } else {
+          92.0
+        },
+        0.0,
         col,
-      )
-      @raylib.draw_circle(
-        gx - 6,
-        gy - 8,
-        3.0,
-        @raylib.Color::new(22, 30, 38, 255),
-      )
-      @raylib.draw_circle(
-        gx + 6,
-        gy - 8,
-        3.0,
-        @raylib.Color::new(22, 30, 38, 255),
       )
 
       if ghost.alert_t > 0.0 {
@@ -1058,50 +1094,24 @@ fn main {
     )
 
     let p_col = if player.flash_t > 0.0 {
-      @raylib.Color::new(252, 238, 148, 255)
+      @raylib.Color::new(255, 246, 188, 255)
     } else {
-      @raylib.Color::new(102, 224, 246, 255)
+      @raylib.Color::new(255, 255, 255, 255)
     }
 
     @raylib.draw_circle(
-      (px - 2.0).to_int(),
-      (py - 20.0).to_int(),
-      12.0,
-      @raylib.Color::new(236, 242, 252, 255),
-    )
-    @raylib.draw_rectangle(
-      (px - 12.0).to_int(),
-      (py - 10.0).to_int(),
-      24,
-      32,
-      p_col,
-    )
-    @raylib.draw_line(
-      (px - 10.0).to_int(),
-      (py - 2.0).to_int(),
-      (px - 22.0).to_int(),
+      px.to_int(),
       (py + 10.0).to_int(),
-      p_col,
+      30.0,
+      @raylib.Color::new(108, 146, 204, 50),
     )
-    @raylib.draw_line(
-      (px + 10.0).to_int(),
-      (py - 2.0).to_int(),
-      (px + 22.0).to_int(),
-      (py + 10.0).to_int(),
-      p_col,
-    )
-    @raylib.draw_line(
-      (px - 8.0).to_int(),
-      (py + 22.0).to_int(),
-      (px - 12.0).to_int(),
-      (py + 44.0).to_int(),
-      p_col,
-    )
-    @raylib.draw_line(
-      (px + 8.0).to_int(),
-      (py + 22.0).to_int(),
-      (px + 12.0).to_int(),
-      (py + 44.0).to_int(),
+    draw_texture_centered(
+      art.investigator_sprite,
+      px,
+      py + 2.0,
+      92.0,
+      92.0,
+      facing_rotation(player.fx, player.fy),
       p_col,
     )
 
@@ -1137,7 +1147,16 @@ fn main {
       )
     }
 
-    @raylib.draw_rectangle(0, 0, sw, 116, @raylib.Color::new(6, 10, 18, 232))
+    @raylib.draw_rectangle(0, 0, sw, 116, @raylib.Color::new(6, 10, 18, 224))
+    draw_texture_cover(
+      art.title_art,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      116.0,
+      @raylib.Color::new(255, 255, 255, 104),
+    )
+    @raylib.draw_rectangle(0, 0, sw, 116, @raylib.Color::new(6, 10, 18, 166))
     @draw.draw_text(
       "GHOST MANSION INVESTIGATION 2026",
       16,
@@ -1330,12 +1349,20 @@ fn main {
 
     if over {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 130))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 360),
+        Float::from_int(sh / 2 - 112),
+        720.0,
+        224.0,
+        @raylib.Color::new(255, 255, 255, 176),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 360,
         sh / 2 - 112,
         720,
         224,
-        @raylib.Color::new(16, 24, 42, 244),
+        @raylib.Color::new(10, 18, 34, 214),
       )
       @draw.draw_text(
         if won {
@@ -1365,6 +1392,7 @@ fn main {
     @raylib.end_drawing()
   }
 
+  unload_game_art(art)
   @draw.cleanup()
   @raylib.close_window()
 }

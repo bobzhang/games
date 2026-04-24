@@ -8,6 +8,8 @@ package "bobzhang/games/ghost_mansion_investigation_2026"
 // Types and methods
 type Clue
 
+type GameArt
+
 type Ghost
 
 type Investigator
