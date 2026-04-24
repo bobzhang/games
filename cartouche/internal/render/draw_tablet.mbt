@@ -13,40 +13,42 @@ fn draw_tablet_background() -> Unit {
   let ty = @types.tablet_y
   let tw = @types.tablet_width
   let th = @types.tablet_height
-  // Outer stone border
-  @raylib.draw_rectangle(
-    tx - 4,
-    ty - 4,
-    tw + 8,
-    th + 8,
-    @types.color_stone_dark,
-  )
-  // Main stone surface
-  @raylib.draw_rectangle(tx, ty, tw, th, @types.color_stone)
-  // Inner border
-  @raylib.draw_rectangle_lines_ex(
-    @raylib.Rectangle::new(
-      Float::from_int(tx + 8),
-      Float::from_int(ty + 8),
-      Float::from_int(tw - 16),
-      Float::from_int(th - 16),
-    ),
-    2.0,
-    @types.color_stone_dark,
-  )
-  // Stone texture - subtle cracks
-  for i in 0..<15 {
-    let fi = Float::from_int(i)
-    let cx = tx + 20 + (fi * 53.7 % Float::from_int(tw - 40)).to_int()
-    let cy = ty + 20 + (fi * 37.3 % Float::from_int(th - 40)).to_int()
-    let len = 10 + (fi * 7.1 % 20.0).to_int()
-    @raylib.draw_line(
-      cx,
-      cy,
-      cx + len,
-      cy + (fi * 3.0 % 6.0 - 3.0).to_int(),
-      @raylib.Color::new(150, 135, 110, 60),
+  if !draw_tablet_surface_art(tx, ty, tw, th) {
+    // Outer stone border
+    @raylib.draw_rectangle(
+      tx - 4,
+      ty - 4,
+      tw + 8,
+      th + 8,
+      @types.color_stone_dark,
     )
+    // Main stone surface
+    @raylib.draw_rectangle(tx, ty, tw, th, @types.color_stone)
+    // Inner border
+    @raylib.draw_rectangle_lines_ex(
+      @raylib.Rectangle::new(
+        Float::from_int(tx + 8),
+        Float::from_int(ty + 8),
+        Float::from_int(tw - 16),
+        Float::from_int(th - 16),
+      ),
+      2.0,
+      @types.color_stone_dark,
+    )
+    // Stone texture - subtle cracks
+    for i in 0..<15 {
+      let fi = Float::from_int(i)
+      let cx = tx + 20 + (fi * 53.7 % Float::from_int(tw - 40)).to_int()
+      let cy = ty + 20 + (fi * 37.3 % Float::from_int(th - 40)).to_int()
+      let len = 10 + (fi * 7.1 % 20.0).to_int()
+      @raylib.draw_line(
+        cx,
+        cy,
+        cx + len,
+        cy + (fi * 3.0 % 6.0 - 3.0).to_int(),
+        @raylib.Color::new(150, 135, 110, 60),
+      )
+    }
   }
 }
 
@@ -83,25 +85,37 @@ fn draw_inscription(game : @types.Game, tablet : @types.Tablet) -> Unit {
         }
         // Symbol background highlight
         if is_selected {
-          let glow = @types.sinf(time * 4.0) * 0.3 + 0.7
-          let alpha = (glow * 180.0).to_int()
-          @raylib.draw_rectangle(
-            (sx - 4.0).to_int(),
-            (sy - 4.0).to_int(),
-            (@types.symbol_size + 8.0).to_int(),
-            (@types.symbol_size + 8.0).to_int(),
-            @raylib.Color::new(255, 200, 60, alpha),
-          )
+          if !draw_selection_glow_art(
+            (sx - 12.0).to_int(),
+            (sy - 12.0).to_int(),
+            (@types.symbol_size + 24.0).to_int(),
+          ) {
+            let glow = @types.sinf(time * 4.0) * 0.3 + 0.7
+            let alpha = (glow * 180.0).to_int()
+            @raylib.draw_rectangle(
+              (sx - 4.0).to_int(),
+              (sy - 4.0).to_int(),
+              (@types.symbol_size + 8.0).to_int(),
+              (@types.symbol_size + 8.0).to_int(),
+              @raylib.Color::new(255, 200, 60, alpha),
+            )
+          }
         } else if is_hint {
-          let glow = @types.sinf(time * 6.0) * 0.4 + 0.6
-          let alpha = (glow * 160.0).to_int()
-          @raylib.draw_rectangle(
-            (sx - 4.0).to_int(),
-            (sy - 4.0).to_int(),
-            (@types.symbol_size + 8.0).to_int(),
-            (@types.symbol_size + 8.0).to_int(),
-            @raylib.Color::new(180, 100, 255, alpha),
-          )
+          if !draw_hint_glow_art(
+            (sx - 12.0).to_int(),
+            (sy - 12.0).to_int(),
+            (@types.symbol_size + 24.0).to_int(),
+          ) {
+            let glow = @types.sinf(time * 6.0) * 0.4 + 0.6
+            let alpha = (glow * 160.0).to_int()
+            @raylib.draw_rectangle(
+              (sx - 4.0).to_int(),
+              (sy - 4.0).to_int(),
+              (@types.symbol_size + 8.0).to_int(),
+              (@types.symbol_size + 8.0).to_int(),
+              @raylib.Color::new(180, 100, 255, alpha),
+            )
+          }
         }
         // Draw the hieroglyph symbol
         let sym_color = if is_given {

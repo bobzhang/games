@@ -39,6 +39,7 @@ fn draw_title(game : @types.Game) -> Unit {
     1.0,
     border_color,
   )
+  ignore(draw_title_cartouche_art(w / 2, 215, 680, 385))
   // Title
   let title = "CARTOUCHE"
   let title_w = @draw.measure_text(title, 72)
@@ -114,17 +115,19 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let bh = 440
     let tc = @types.tier_color(tier)
     // Background panel
-    @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(50, 40, 30, 200))
-    @raylib.draw_rectangle_lines_ex(
-      @raylib.Rectangle::new(
-        Float::from_int(bx),
-        Float::from_int(by),
-        Float::from_int(bw),
-        Float::from_int(bh),
-      ),
-      2.0,
-      tc,
-    )
+    if !draw_tier_card_art(tier, bx, by, bw, bh) {
+      @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(50, 40, 30, 200))
+      @raylib.draw_rectangle_lines_ex(
+        @raylib.Rectangle::new(
+          Float::from_int(bx),
+          Float::from_int(by),
+          Float::from_int(bw),
+          Float::from_int(bh),
+        ),
+        2.0,
+        tc,
+      )
+    }
     // Tier name
     let tn = @types.tier_name(tier)
     let tn_w = @draw.measure_text(tn, 32)
@@ -420,31 +423,33 @@ fn draw_star_shape(
   size : Float,
   color : @raylib.Color,
 ) -> Unit {
-  // 5-pointed star
-  let outer = size
-  let inner = size * 0.4
-  for i in 0..<5 {
-    let fi = Float::from_int(i)
-    let angle1 = fi * @types.pi * 2.0 / 5.0 - @types.pi / 2.0
-    let angle2 = (fi + 0.5) * @types.pi * 2.0 / 5.0 - @types.pi / 2.0
-    let angle3 = (fi + 1.0) * @types.pi * 2.0 / 5.0 - @types.pi / 2.0
-    let x1 = cx + @types.cosf(angle1) * outer
-    let y1 = cy + @types.sinf(angle1) * outer
-    let x2 = cx + @types.cosf(angle2) * inner
-    let y2 = cy + @types.sinf(angle2) * inner
-    let x3 = cx + @types.cosf(angle3) * outer
-    let y3 = cy + @types.sinf(angle3) * outer
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(x1, y1),
-      @raylib.Vector2::new(cx, cy),
-      @raylib.Vector2::new(x2, y2),
-      color,
-    )
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(x2, y2),
-      @raylib.Vector2::new(cx, cy),
-      @raylib.Vector2::new(x3, y3),
-      color,
-    )
+  if !draw_star_icon_art(cx, cy, size * 2.6, color) {
+    // 5-pointed star
+    let outer = size
+    let inner = size * 0.4
+    for i in 0..<5 {
+      let fi = Float::from_int(i)
+      let angle1 = fi * @types.pi * 2.0 / 5.0 - @types.pi / 2.0
+      let angle2 = (fi + 0.5) * @types.pi * 2.0 / 5.0 - @types.pi / 2.0
+      let angle3 = (fi + 1.0) * @types.pi * 2.0 / 5.0 - @types.pi / 2.0
+      let x1 = cx + @types.cosf(angle1) * outer
+      let y1 = cy + @types.sinf(angle1) * outer
+      let x2 = cx + @types.cosf(angle2) * inner
+      let y2 = cy + @types.sinf(angle2) * inner
+      let x3 = cx + @types.cosf(angle3) * outer
+      let y3 = cy + @types.sinf(angle3) * outer
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(x1, y1),
+        @raylib.Vector2::new(cx, cy),
+        @raylib.Vector2::new(x2, y2),
+        color,
+      )
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(x2, y2),
+        @raylib.Vector2::new(cx, cy),
+        @raylib.Vector2::new(x3, y3),
+        color,
+      )
+    }
   }
 }

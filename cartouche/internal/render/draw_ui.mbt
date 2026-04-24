@@ -3,23 +3,30 @@ fn draw_ui(game : @types.Game, tablet : @types.Tablet) -> Unit {
   let px = @types.palette_x
   let py = @types.palette_y
   // Panel background
-  @raylib.draw_rectangle(
+  if !draw_decoder_panel_art(
     px - 10,
     py - 10,
     @types.screen_width - px + 10 - 20,
     @types.screen_height - py - 10,
-    @raylib.Color::new(40, 30, 25, 200),
-  )
-  @raylib.draw_rectangle_lines_ex(
-    @raylib.Rectangle::new(
-      Float::from_int(px - 10),
-      Float::from_int(py - 10),
-      Float::from_int(@types.screen_width - px + 10 - 20),
-      Float::from_int(@types.screen_height - py - 10),
-    ),
-    1.0,
-    @types.color_stone_dark,
-  )
+  ) {
+    @raylib.draw_rectangle(
+      px - 10,
+      py - 10,
+      @types.screen_width - px + 10 - 20,
+      @types.screen_height - py - 10,
+      @raylib.Color::new(40, 30, 25, 200),
+    )
+    @raylib.draw_rectangle_lines_ex(
+      @raylib.Rectangle::new(
+        Float::from_int(px - 10),
+        Float::from_int(py - 10),
+        Float::from_int(@types.screen_width - px + 10 - 20),
+        Float::from_int(@types.screen_height - py - 10),
+      ),
+      1.0,
+      @types.color_stone_dark,
+    )
+  }
   draw_letter_palette(game)
   draw_mapping_table(game, tablet)
   draw_status_and_controls(game, tablet)
@@ -43,7 +50,9 @@ fn draw_letter_palette(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(70, 55, 40, 200)
     }
-    @raylib.draw_rectangle(bx, by, btn_size, btn_size, bg)
+    if !draw_glyph_backplate_art(bx, by, btn_size, bg) {
+      @raylib.draw_rectangle(bx, by, btn_size, btn_size, bg)
+    }
     // Border
     let border = if is_used {
       @types.color_given
