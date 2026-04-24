@@ -67,6 +67,11 @@ fn main {
   @raylib.init_window(sw, sh, "Gravity Golf 2026")
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+
+  let art = load_game_art()
+  defer unload_game_art(art)
+  defer @raylib.close_window()
 
   let wells : Array[Well] = Array::makei(4, fn(_i) {
     { x: 0.0, y: 0.0, mass: 0.0, r: 0.0 }
@@ -243,54 +248,168 @@ fn main {
     }
 
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(14, 18, 28, 255))
+    let swf = Float::from_int(sw)
+    let shf = Float::from_int(sh)
+    draw_texture_cover(
+      art.course_backdrop,
+      0.0,
+      0.0,
+      swf,
+      shf,
+      if over {
+        @raylib.Color::new(255, 255, 255, 198)
+      } else {
+        @raylib.Color::new(255, 255, 255, 236)
+      },
+    )
+    @raylib.draw_rectangle(
+      0,
+      0,
+      sw,
+      sh,
+      if over {
+        @raylib.Color::new(4, 8, 18, 132)
+      } else {
+        @raylib.Color::new(4, 8, 18, 110)
+      },
+    )
+    @raylib.draw_rectangle(
+      20,
+      90,
+      sw - 40,
+      sh - 110,
+      @raylib.Color::new(4, 8, 18, 40),
+    )
+    @raylib.draw_rectangle_lines(
+      20,
+      90,
+      sw - 40,
+      sh - 110,
+      @raylib.Color::new(100, 138, 188, 180),
+    )
+
+    draw_texture_centered(
+      art.tee_marker_sprite,
+      sx,
+      sy,
+      42.0,
+      42.0,
+      0.0,
+      @raylib.Color::new(255, 255, 255, 208),
+    )
 
     for well in wells {
       if well.mass > 0.0 {
-        @raylib.draw_circle(
-          well.x.to_int(),
-          well.y.to_int(),
-          well.r + 12.0,
-          @raylib.fade(@raylib.darkblue, 0.35),
-        )
-        @raylib.draw_circle(
-          well.x.to_int(),
-          well.y.to_int(),
-          well.r,
-          @raylib.purple,
+        let well_size : Float = (well.r + 34.0) * 2.0
+        draw_texture_centered(
+          art.gravity_well_sprite,
+          well.x,
+          well.y,
+          well_size,
+          well_size,
+          0.0,
+          @raylib.Color::new(255, 255, 255, 240),
         )
         @raylib.draw_circle_lines(
           well.x.to_int(),
           well.y.to_int(),
-          well.r,
-          @raylib.white,
+          well.r + 8.0,
+          @raylib.Color::new(180, 214, 255, 110),
         )
       }
     }
 
-    @raylib.draw_circle(hx.to_int(), hy.to_int(), 18.0, @raylib.green)
-    @raylib.draw_circle_lines(hx.to_int(), hy.to_int(), 18.0, @raylib.lime)
-    @raylib.draw_circle(hx.to_int(), hy.to_int(), 6.0, @raylib.black)
+    draw_texture_centered(
+      art.hole_target_sprite,
+      hx,
+      hy,
+      62.0,
+      62.0,
+      0.0,
+      @raylib.Color::new(255, 255, 255, 246),
+    )
+    @raylib.draw_circle_lines(
+      hx.to_int(),
+      hy.to_int(),
+      18.0,
+      @raylib.Color::new(142, 255, 210, 170),
+    )
 
     let m = @raylib.get_mouse_position()
     if !moving && !over {
-      @raylib.draw_line(
-        bx.to_int(),
-        by.to_int(),
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(bx, by),
+        @raylib.Vector2::new(m.x, m.y),
+        2.5,
+        @raylib.Color::new(255, 234, 136, 232),
+      )
+      @raylib.draw_circle_lines(
         m.x.to_int(),
         m.y.to_int(),
-        @raylib.yellow,
+        9.0,
+        @raylib.Color::new(255, 234, 136, 160),
       )
     }
 
-    @raylib.draw_circle(bx.to_int(), by.to_int(), 8.0, @raylib.raywhite)
+    if moving {
+      let speed = @math.hypotf(bvx, bvy)
+      if speed > 0.001 {
+        let trail_bonus : Float = if shot_time < 0.4 {
+          shot_time * 30.0
+        } else {
+          12.0
+        }
+        let trail_len : Float = 28.0 + trail_bonus
+        let tx = bx - bvx / speed * trail_len
+        let ty = by - bvy / speed * trail_len
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(bx, by),
+          @raylib.Vector2::new(tx, ty),
+          4.0,
+          @raylib.Color::new(170, 220, 255, 120),
+        )
+      }
+    }
 
-    @draw.draw_text("GRAVITY GOLF 2026", 20, 16, 40, @raylib.skyblue)
+    draw_texture_centered(
+      art.golf_ball_sprite,
+      bx,
+      by,
+      20.0,
+      20.0,
+      0.0,
+      @raylib.Color::new(255, 255, 255, 255),
+    )
+    @raylib.draw_circle_lines(
+      bx.to_int(),
+      by.to_int(),
+      10.0,
+      @raylib.Color::new(220, 240, 255, 140),
+    )
+
+    @raylib.draw_rectangle(0, 0, sw, 84, @raylib.Color::new(4, 8, 18, 226))
+    draw_texture_cover(
+      art.title_art,
+      12.0,
+      8.0,
+      420.0,
+      64.0,
+      @raylib.Color::new(255, 255, 255, 148),
+    )
+    @raylib.draw_rectangle(12, 8, 420, 64, @raylib.Color::new(6, 10, 18, 152))
+    @draw.draw_text("GRAVITY GOLF 2026", 24, 18, 38, @raylib.skyblue)
     @draw.draw_text("Level \{level}/3", 20, 62, 28, @raylib.white)
     @draw.draw_text("Shots \{shots_left}", 180, 62, 28, @raylib.orange)
     @draw.draw_text("Power \{power.to_int()}", 330, 62, 28, @raylib.raywhite)
     @draw.draw_text("Score \{score}", 540, 62, 28, @raylib.lime)
 
+    @raylib.draw_rectangle(
+      20,
+      688,
+      sw - 40,
+      32,
+      @raylib.Color::new(6, 10, 18, 196),
+    )
     @draw.draw_text(
       "Aim with mouse. W/S adjust power. Space launches ball.", 20, 694, 24, @raylib.lightgray,
     )
@@ -304,12 +423,20 @@ fn main {
     @draw.draw_text(msg, 26, 729, 18, @raylib.raywhite)
 
     if over {
+      draw_texture_cover(
+        art.title_art,
+        300.0,
+        250.0,
+        560.0,
+        190.0,
+        @raylib.Color::new(255, 255, 255, 224),
+      )
       @raylib.draw_rectangle(
         300,
         250,
         560,
         190,
-        @raylib.fade(@raylib.black, 0.82),
+        @raylib.Color::new(4, 8, 16, 176),
       )
       @draw.draw_text("ROUND OVER", 430, 320, 56, @raylib.orange)
       @draw.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
@@ -318,7 +445,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

@@ -6,6 +6,8 @@ package "bobzhang/games/gravity_golf_2026"
 // Errors
 
 // Types and methods
+type GameArt
+
 type Well
 
 // Type aliases
