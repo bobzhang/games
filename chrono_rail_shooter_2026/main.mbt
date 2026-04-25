@@ -619,8 +619,12 @@ fn draw_touch_ui(state : Int) -> Unit {
 /// Initializes the game window and runs the Chrono Rail Shooter 2026 main game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] chrono rail shooter 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let player : Player = {
     x: (rail_l + rail_r) * 0.5,
@@ -1564,95 +1568,14 @@ fn main {
     @raylib.begin_drawing()
 
     @raylib.clear_background(@raylib.Color::new(6, 10, 18, 255))
-
-    let mut horizon_shift : Float = storm_t * 64.0
-    while horizon_shift > 64.0 {
-      horizon_shift = horizon_shift - 64.0
-    }
-
-    for i in 0..<14 {
-      let y = (Float::from_int(i) * 64.0 + horizon_shift).to_int() - 64
-      let shade : Int = 18 + i * 3
-      @raylib.draw_rectangle(
-        0,
-        y,
-        sw,
-        32,
-        @raylib.Color::new(shade, shade + 8, 32 + i * 4, 255),
-      )
-    }
-
-    @raylib.draw_rectangle(
-      0,
-      0,
-      rail_l.to_int(),
-      sh,
-      @raylib.Color::new(10, 14, 24, 255),
-    )
-    @raylib.draw_rectangle(
-      rail_r.to_int(),
-      0,
-      sw - rail_r.to_int(),
-      sh,
-      @raylib.Color::new(10, 14, 24, 255),
-    )
-
-    @raylib.draw_line(
-      rail_l.to_int(),
-      0,
-      rail_l.to_int(),
-      sh,
-      @raylib.Color::new(70, 120, 170, 210),
-    )
-    @raylib.draw_line(
-      rail_r.to_int(),
-      0,
-      rail_r.to_int(),
-      sh,
-      @raylib.Color::new(70, 120, 170, 210),
-    )
+    draw_chrono_backdrop(art, storm_t, state)
 
     for panel in panels {
       if !panel.active {
         continue
       }
 
-      let x = (panel.x - panel.w * 0.5).to_int()
-      let y = (panel.y - panel.h * 0.5).to_int()
-      let w = panel.w.to_int()
-      let h = panel.h.to_int()
-
-      let col = if panel.hazard {
-        @raylib.Color::new(148, 54, 66, 244)
-      } else if panel.boost {
-        @raylib.Color::new(44, 138, 166, 244)
-      } else {
-        @raylib.Color::new(60, 68, 88, 236)
-      }
-      @raylib.draw_rectangle(x, y, w, h, col)
-      @raylib.draw_rectangle_lines(
-        x,
-        y,
-        w,
-        h,
-        @raylib.Color::new(22, 28, 40, 255),
-      )
-
-      if panel.hazard {
-        for k in 0..<4 {
-          let lx0 = x + 8 + k * ((w - 16) / 4)
-          let ly0 = y + 4
-          let lx1 = lx0 + 10
-          let ly1 = y + h - 4
-          @raylib.draw_line(
-            lx0,
-            ly0,
-            lx1,
-            ly1,
-            @raylib.Color::new(240, 148, 106, 230),
-          )
-        }
-      }
+      draw_panel_art(panel)
     }
 
     for pickup in pickups {
@@ -1660,20 +1583,7 @@ fn main {
         continue
       }
 
-      let col = if pickup.kind == 0 {
-        @raylib.Color::new(110, 236, 182, 246)
-      } else if pickup.kind == 1 {
-        @raylib.Color::new(102, 170, 252, 246)
-      } else {
-        @raylib.Color::new(252, 208, 94, 246)
-      }
-      @raylib.draw_circle(pickup.x.to_int(), pickup.y.to_int(), 10.0, col)
-      @raylib.draw_circle_lines(
-        pickup.x.to_int(),
-        pickup.y.to_int(),
-        14.0,
-        @raylib.Color::new(250, 250, 250, 180),
-      )
+      draw_pickup_art(pickup, art)
     }
 
     for enemy in enemies {
@@ -1681,72 +1591,11 @@ fn main {
         continue
       }
 
-      if enemy.kind == 0 {
-        @raylib.draw_circle(
-          enemy.x.to_int(),
-          enemy.y.to_int(),
-          16.0,
-          @raylib.Color::new(224, 92, 94, 242),
-        )
-        @raylib.draw_circle_lines(
-          enemy.x.to_int(),
-          enemy.y.to_int(),
-          20.0,
-          @raylib.Color::new(248, 196, 198, 180),
-        )
-      } else if enemy.kind == 1 {
-        @raylib.draw_rectangle(
-          (enemy.x - 18.0).to_int(),
-          (enemy.y - 14.0).to_int(),
-          36,
-          28,
-          @raylib.Color::new(220, 122, 62, 244),
-        )
-        @raylib.draw_rectangle_lines(
-          (enemy.x - 22.0).to_int(),
-          (enemy.y - 18.0).to_int(),
-          44,
-          36,
-          @raylib.Color::new(248, 226, 200, 176),
-        )
-      } else {
-        @raylib.draw_rectangle(
-          (enemy.x - 24.0).to_int(),
-          (enemy.y - 20.0).to_int(),
-          48,
-          40,
-          @raylib.Color::new(156, 84, 170, 240),
-        )
-        @raylib.draw_circle(
-          enemy.x.to_int(),
-          (enemy.y - 4.0).to_int(),
-          12.0,
-          @raylib.Color::new(236, 188, 250, 210),
-        )
-      }
+      draw_enemy_art(enemy, art)
     }
 
     if boss.active {
-      @raylib.draw_rectangle(
-        (boss.x - 72.0).to_int(),
-        (boss.y - 36.0).to_int(),
-        144,
-        72,
-        @raylib.Color::new(140, 56, 166, 246),
-      )
-      @raylib.draw_rectangle_lines(
-        (boss.x - 80.0).to_int(),
-        (boss.y - 44.0).to_int(),
-        160,
-        88,
-        @raylib.Color::new(246, 218, 255, 180),
-      )
-      @raylib.draw_circle(
-        boss.x.to_int(),
-        (boss.y + 6.0).to_int(),
-        17.0,
-        @raylib.Color::new(220, 170, 248, 230),
-      )
+      draw_boss_art(boss, art)
 
       let boss_fill : Int = (clampf(boss.hp / boss.max_hp, 0.0, 1.0) * 420.0).to_int()
 
@@ -1822,41 +1671,7 @@ fn main {
       )
     }
 
-    let player_col = if player.inv_t > 0.0 {
-      @raylib.Color::new(244, 244, 244, 230)
-    } else {
-      @raylib.Color::new(92, 188, 250, 246)
-    }
-
-    @raylib.draw_rectangle(
-      (player.x - 16.0).to_int(),
-      (player.y - 12.0).to_int(),
-      32,
-      24,
-      player_col,
-    )
-    @raylib.draw_circle(
-      player.x.to_int(),
-      (player.y - 14.0).to_int(),
-      9.0,
-      @raylib.Color::new(212, 240, 255, 250),
-    )
-    @raylib.draw_line(
-      player.x.to_int(),
-      (player.y - 24.0).to_int(),
-      player.x.to_int(),
-      (player.y - 44.0).to_int(),
-      @raylib.Color::new(164, 224, 255, 180),
-    )
-
-    if player.shield_on {
-      @raylib.draw_circle_lines(
-        player.x.to_int(),
-        player.y.to_int(),
-        24.0,
-        @raylib.Color::new(130, 214, 246, 210),
-      )
-    }
+    draw_player_art(player, art)
 
     @raylib.draw_rectangle(0, 0, sw, 76, @raylib.Color::new(8, 10, 18, 228))
 
@@ -2146,7 +1961,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
