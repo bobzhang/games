@@ -7,7 +7,26 @@ fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
 ///|
 /// Clears the screen and draws the animated dark background with pulsing glow circles and horizontal scanline bands.
 fn @types.Game::draw_bg(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(8, 12, 20, 255))
+  match tex_neon_ops_backdrop.val {
+    Some(texture) =>
+      draw_art_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(@types.screen_w),
+        Float::from_int(@types.screen_h),
+        @raylib.white,
+      )
+    None => @raylib.clear_background(@raylib.Color::new(8, 12, 20, 255))
+  }
+
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(5, 8, 14, 118),
+  )
 
   let w0 : Float = game.bg_wave(0.64)
   let w1 : Float = game.bg_wave(0.94)
@@ -69,45 +88,71 @@ fn draw_board_back(bx : Int, by : Int, tile : Int) -> Unit {
 ///|
 /// Draws an unrevealed cell tile with a highlight bevel; includes a flag triangle when flagged.
 fn draw_cell_hidden(x : Int, y : Int, tile : Int, flagged : Bool) -> Unit {
-  @raylib.draw_rectangle(
-    x + 1,
-    y + 1,
-    tile - 2,
-    tile - 2,
-    @raylib.Color::new(52, 76, 110, 236),
-  )
+  match tex_covered_cell.val {
+    Some(texture) =>
+      draw_art_centered(
+        texture,
+        Float::from_int(x + tile / 2),
+        Float::from_int(y + tile / 2),
+        Float::from_int(tile),
+        Float::from_int(tile),
+        @raylib.white,
+      )
+    None => {
+      @raylib.draw_rectangle(
+        x + 1,
+        y + 1,
+        tile - 2,
+        tile - 2,
+        @raylib.Color::new(52, 76, 110, 236),
+      )
 
-  @raylib.draw_rectangle(
-    x + 3,
-    y + 3,
-    tile - 6,
-    tile / 3,
-    @raylib.Color::new(88, 122, 160, 140),
-  )
+      @raylib.draw_rectangle(
+        x + 3,
+        y + 3,
+        tile - 6,
+        tile / 3,
+        @raylib.Color::new(88, 122, 160, 140),
+      )
+    }
+  }
 
   if flagged {
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(
-        Float::from_int(x + tile / 2 - 6),
-        Float::from_int(y + 8),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x + tile / 2 - 6),
-        Float::from_int(y + tile - 8),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x + tile - 8),
-        Float::from_int(y + tile / 2),
-      ),
-      @raylib.Color::new(232, 78, 86, 248),
-    )
-    @raylib.draw_rectangle(
-      x + tile / 2 - 9,
-      y + 8,
-      4,
-      tile - 16,
-      @raylib.Color::new(224, 226, 236, 236),
-    )
+    match tex_flag_marker.val {
+      Some(texture) =>
+        draw_art_centered(
+          texture,
+          Float::from_int(x + tile / 2),
+          Float::from_int(y + tile / 2),
+          Float::from_int(tile) * 0.76,
+          Float::from_int(tile) * 0.76,
+          @raylib.white,
+        )
+      None => {
+        @raylib.draw_triangle(
+          @raylib.Vector2::new(
+            Float::from_int(x + tile / 2 - 6),
+            Float::from_int(y + 8),
+          ),
+          @raylib.Vector2::new(
+            Float::from_int(x + tile / 2 - 6),
+            Float::from_int(y + tile - 8),
+          ),
+          @raylib.Vector2::new(
+            Float::from_int(x + tile - 8),
+            Float::from_int(y + tile / 2),
+          ),
+          @raylib.Color::new(232, 78, 86, 248),
+        )
+        @raylib.draw_rectangle(
+          x + tile / 2 - 9,
+          y + 8,
+          4,
+          tile - 16,
+          @raylib.Color::new(224, 226, 236, 236),
+        )
+      }
+    }
   }
 }
 
@@ -156,18 +201,31 @@ fn draw_cell_revealed(
   )
 
   if mine {
-    @raylib.draw_circle(
-      x + tile / 2,
-      y + tile / 2,
-      Float::from_int(tile) * 0.24,
-      @raylib.Color::new(34, 34, 42, 252),
-    )
-    @raylib.draw_circle_lines(
-      x + tile / 2,
-      y + tile / 2,
-      Float::from_int(tile) * 0.24,
-      @raylib.Color::new(240, 112, 112, 236),
-    )
+    match tex_cyber_mine.val {
+      Some(texture) =>
+        draw_art_centered(
+          texture,
+          Float::from_int(x + tile / 2),
+          Float::from_int(y + tile / 2),
+          Float::from_int(tile) * 0.74,
+          Float::from_int(tile) * 0.74,
+          @raylib.white,
+        )
+      None => {
+        @raylib.draw_circle(
+          x + tile / 2,
+          y + tile / 2,
+          Float::from_int(tile) * 0.24,
+          @raylib.Color::new(34, 34, 42, 252),
+        )
+        @raylib.draw_circle_lines(
+          x + tile / 2,
+          y + tile / 2,
+          Float::from_int(tile) * 0.24,
+          @raylib.Color::new(240, 112, 112, 236),
+        )
+      }
+    }
     return
   }
 

@@ -13,6 +13,9 @@ fn main {
 
   @raylib.set_target_fps(@types.target_fps)
   @draw.init_font()
+  defer @draw.cleanup()
+  @render.load_assets()
+  defer @render.unload_assets()
 
   let game = @types.Game()
 
