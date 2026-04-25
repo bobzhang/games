@@ -401,134 +401,71 @@ fn burst(
 }
 
 ///|
-/// Draws an active enemy ship using layered rectangles sized by kind; silently no-ops if the ship is inactive.
-fn draw_enemy(e : EnemyShip) -> Unit {
+/// Draws an active enemy ship with the generated sprite sized by kind; silently no-ops if the ship is inactive.
+fn draw_enemy(e : EnemyShip, art : GameArt) -> Unit {
   if !e.active {
     ignore(())
   } else {
-    let body_col = if e.kind == 0 {
-      @raylib.Color::new(180, 90, 84, 255)
+    let sprite_w : Float = if e.kind == 0 {
+      70.0
     } else if e.kind == 1 {
-      @raylib.Color::new(152, 70, 66, 255)
+      82.0
     } else {
-      @raylib.Color::new(124, 52, 52, 255)
+      96.0
     }
-
-    let deck_col = if e.kind == 2 {
-      @raylib.Color::new(236, 132, 122, 255)
+    let sprite_h : Float = if e.kind == 0 {
+      47.0
+    } else if e.kind == 1 {
+      55.0
     } else {
-      @raylib.Color::new(224, 164, 148, 255)
+      64.0
     }
-
-    @raylib.draw_rectangle(
-      (e.x - 24.0).to_int(),
-      (e.y - 12.0).to_int(),
-      48,
-      24,
-      body_col,
-    )
-    @raylib.draw_rectangle(
-      (e.x - 16.0).to_int(),
-      (e.y - 24.0).to_int(),
-      32,
-      12,
-      deck_col,
-    )
-    @raylib.draw_rectangle(
-      (e.x - 6.0).to_int(),
-      (e.y - 34.0).to_int(),
-      12,
-      10,
-      @raylib.Color::new(242, 214, 190, 255),
-    )
-
-    if e.kind >= 1 {
-      @raylib.draw_rectangle(
-        (e.x - 30.0).to_int(),
-        (e.y - 8.0).to_int(),
-        6,
-        8,
-        @raylib.Color::new(250, 170, 132, 255),
-      )
-      @raylib.draw_rectangle(
-        (e.x + 24.0).to_int(),
-        (e.y - 8.0).to_int(),
-        6,
-        8,
-        @raylib.Color::new(250, 170, 132, 255),
-      )
-    }
-
-    @raylib.draw_rectangle(
-      (e.x - 16.0).to_int(),
-      (e.y + 12.0).to_int(),
-      32,
-      3,
-      @raylib.Color::new(70, 26, 24, 255),
+    draw_texture_centered(
+      enemy_texture(art, e.kind),
+      e.x,
+      e.y - 4.0,
+      sprite_w,
+      sprite_h,
+      0.0,
+      @raylib.Color::new(255, 255, 255, 255),
     )
   }
 }
 
 ///|
 /// Draws an active civilian boat with a panic colour tint when recently struck; silently no-ops if the boat is inactive.
-fn draw_boat(boat : CivilianBoat) -> Unit {
+fn draw_boat(boat : CivilianBoat, art : GameArt) -> Unit {
   if !boat.active {
     ignore(())
   } else {
-    let panic_tint : Int = if boat.panic_t > 0.0 { 72 } else { 0 }
-    @raylib.draw_rectangle(
-      (boat.x - 24.0).to_int(),
-      (boat.y - 9.0).to_int(),
-      48,
-      18,
-      @raylib.Color::new(76 + panic_tint, 112, 196, 255),
-    )
-    @raylib.draw_rectangle(
-      (boat.x - 8.0).to_int(),
-      (boat.y - 21.0).to_int(),
-      16,
-      12,
-      @raylib.Color::new(208, 230, 252, 255),
-    )
-    @raylib.draw_rectangle(
-      (boat.x - 2.0).to_int(),
-      (boat.y - 30.0).to_int(),
-      4,
-      10,
-      @raylib.Color::new(218, 230, 248, 255),
+    let tint = if boat.panic_t > 0.0 {
+      @raylib.Color::new(255, 178, 178, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 255)
+    }
+    draw_texture_centered(
+      art.civilian_boat_sprite,
+      boat.x,
+      boat.y - 18.0,
+      82.0,
+      55.0,
+      0.0,
+      tint,
     )
   }
 }
 
 ///|
 /// Draws the cannon body, turret barrel, wheel, and a shield ring overlay when the shield timer is active.
-fn draw_cannon(c : Cannon) -> Unit {
-  @raylib.draw_rectangle(
-    (c.x - 44.0).to_int(),
-    (c.y - 20.0).to_int(),
-    88,
-    40,
-    @raylib.Color::new(84, 108, 126, 255),
-  )
-  @raylib.draw_rectangle(
-    (c.x - 12.0).to_int(),
-    (c.y - 52.0).to_int(),
-    24,
-    34,
-    @raylib.Color::new(118, 146, 166, 255),
-  )
-  @raylib.draw_rectangle(
-    (c.x - 6.0).to_int(),
-    (c.y - 84.0).to_int(),
-    12,
-    34,
-    @raylib.Color::new(144, 176, 198, 255),
-  )
-  @raylib.draw_circle(
-    c.x.to_int(),
-    (c.y + 20.0).to_int(),
-    18.0,
-    @raylib.Color::new(62, 82, 98, 255),
+fn draw_cannon(c : Cannon, art : GameArt) -> Unit {
+  draw_texture_centered(
+    art.cannon_battery_sprite,
+    c.x,
+    c.y - 42.0,
+    154.0,
+    154.0,
+    0.0,
+    @raylib.Color::new(255, 255, 255, 255),
   )
 
   if c.shield_t > 0.0 {
@@ -551,8 +488,12 @@ fn draw_cannon(c : Cannon) -> Unit {
 /// Initialises the Raylib window, pre-allocates all entity arrays, runs the game loop with update and draw logic, and closes the window on exit.
 fn main {
   @raylib.init_window(sw, sh, "Harbor Defense 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let cannon : Cannon = {
     x: 640.0,
@@ -1171,16 +1112,17 @@ fn main {
     @raylib.begin_drawing()
 
     @raylib.clear_background(@raylib.Color::new(14, 24, 42, 255))
-
-    @raylib.draw_rectangle(0, 0, sw, 300, @raylib.Color::new(26, 44, 72, 255))
-    @raylib.draw_rectangle(0, 300, sw, 224, @raylib.Color::new(22, 58, 96, 255))
-    @raylib.draw_rectangle(
-      0,
-      524,
-      sw,
-      sh - 524,
-      @raylib.Color::new(20, 76, 114, 255),
+    let swf : Float = Float::from_int(sw)
+    let shf : Float = Float::from_int(sh)
+    draw_texture_cover(
+      art.harbor_backdrop,
+      0.0,
+      0.0,
+      swf,
+      shf,
+      @raylib.Color::new(255, 255, 255, 255),
     )
+    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(4, 8, 18, 52))
 
     for i in 0..<24 {
       let wx = i * 74 + (timer * 30.0).to_int() % 74
@@ -1194,49 +1136,30 @@ fn main {
       )
     }
 
-    for i in 0..<18 {
-      let x = i * 80 + 16
-      let h = 80 + i * 13 % 180
-      @raylib.draw_rectangle(
-        x,
-        harbor_y.to_int() - h - 42,
-        58,
-        h,
-        @raylib.Color::new(30, 42, 58, 255),
-      )
-      @raylib.draw_rectangle(
-        x + 12,
-        harbor_y.to_int() - h - 12,
-        10,
-        10,
-        @raylib.Color::new(116, 188, 244, 170),
-      )
-    }
-
     @raylib.draw_rectangle(
       0,
       harbor_y.to_int(),
       sw,
       sh - harbor_y.to_int(),
-      @raylib.Color::new(58, 72, 80, 255),
+      @raylib.Color::new(42, 48, 52, 214),
     )
     @raylib.draw_rectangle(
       0,
       harbor_y.to_int() - 8,
       sw,
       8,
-      @raylib.Color::new(90, 106, 118, 255),
+      @raylib.Color::new(106, 120, 132, 255),
     )
 
     for boat in boats {
       if boat.active {
-        draw_boat(boat)
+        draw_boat(boat, art)
       }
     }
 
     for enemy in enemies {
       if enemy.active {
-        draw_enemy(enemy)
+        draw_enemy(enemy, art)
       }
     }
 
@@ -1253,11 +1176,19 @@ fn main {
           @raylib.Color::new(246, 164, 240, if blink { 255 } else { 196 })
         }
 
-        @raylib.draw_rectangle(
-          (pickup.x - 12.0).to_int(),
-          (pickup.y - 12.0).to_int(),
-          24,
-          24,
+        draw_texture_centered(
+          art.pickup_crate_sprite,
+          pickup.x,
+          pickup.y,
+          36.0,
+          36.0,
+          0.0,
+          col,
+        )
+        @raylib.draw_circle_lines(
+          pickup.x.to_int(),
+          pickup.y.to_int(),
+          18.0,
           col,
         )
       }
@@ -1315,8 +1246,16 @@ fn main {
       )
     }
 
-    draw_cannon(cannon)
+    draw_cannon(cannon, art)
 
+    draw_texture_cover(
+      art.title_art,
+      0.0,
+      0.0,
+      440.0,
+      78.0,
+      @raylib.Color::new(156, 170, 190, 138),
+    )
     @raylib.draw_rectangle(0, 0, sw, 78, @raylib.Color::new(6, 12, 22, 222))
     @draw.draw_text(
       "HARBOR DEFENSE 2026",
@@ -1531,12 +1470,20 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 132))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 468),
+        Float::from_int(sh / 2 - 212),
+        936.0,
+        424.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 468,
         sh / 2 - 212,
         936,
         424,
-        @raylib.Color::new(14, 20, 32, 246),
+        @raylib.Color::new(8, 12, 22, 188),
       )
       @draw.draw_text(
         "HARBOR DEFENSE",
@@ -1575,12 +1522,20 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 148))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 430),
+        Float::from_int(sh / 2 - 190),
+        860.0,
+        380.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 430,
         sh / 2 - 190,
         860,
         380,
-        @raylib.Color::new(14, 20, 32, 246),
+        @raylib.Color::new(8, 12, 22, 194),
       )
       @draw.draw_text(
         "HARBOR SECURED",
@@ -1619,12 +1574,20 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 154))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 430),
+        Float::from_int(sh / 2 - 190),
+        860.0,
+        380.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 430,
         sh / 2 - 190,
         860,
         380,
-        @raylib.Color::new(14, 20, 32, 246),
+        @raylib.Color::new(12, 10, 16, 196),
       )
       @draw.draw_text(
         "HARBOR FALLEN",
@@ -1673,7 +1636,4 @@ fn main {
       }
     }
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

@@ -12,6 +12,8 @@ type CivilianBoat
 
 type EnemyShip
 
+type GameArt
+
 type Particle
 
 type Pickup
