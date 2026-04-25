@@ -697,42 +697,6 @@ fn run_network_step(
 }
 
 ///|
-/// Draws the visual glyph for a source or sink port cell centered at (cx, cy) with the given radius and color.
-fn draw_port_glyph(
-  kind : Int,
-  cx : Float,
-  cy : Float,
-  r : Float,
-  col : @raylib.Color,
-) -> Unit {
-  if kind == 5 {
-    @raylib.draw_circle(cx.to_int(), cy.to_int(), r + 2.0, col)
-    @raylib.draw_circle(
-      cx.to_int(),
-      cy.to_int(),
-      r - 6.0,
-      @raylib.Color::new(24, 30, 42, 240),
-    )
-    @raylib.draw_circle(cx.to_int(), cy.to_int(), 6.0, col)
-  } else if kind == 6 {
-    @raylib.draw_rectangle(
-      (cx - r + 2.0).to_int(),
-      (cy - r + 2.0).to_int(),
-      (r * 2.0 - 4.0).to_int(),
-      (r * 2.0 - 4.0).to_int(),
-      col,
-    )
-    @raylib.draw_rectangle(
-      (cx - r + 8.0).to_int(),
-      (cy - r + 8.0).to_int(),
-      (r * 2.0 - 16.0).to_int(),
-      (r * 2.0 - 16.0).to_int(),
-      @raylib.Color::new(24, 30, 42, 240),
-    )
-  }
-}
-
-///|
 /// Draws the wire segments and center node for a tile of the given kind and rotation at pixel position (gx, gy).
 fn draw_cell_wires(
   kind : Int,
@@ -776,6 +740,7 @@ fn draw_board(
   selected : Int,
   hover : Int,
   grid_t : Float,
+  art : GameArt,
 ) -> Unit {
   @raylib.draw_rectangle(
     board_x - 10,
@@ -828,7 +793,7 @@ fn draw_board(
         base = @raylib.Color::new(r, 52, 66, 238)
       }
 
-      @raylib.draw_rectangle(gx + 1, gy + 1, cell_sz - 2, cell_sz - 2, base)
+      draw_cell_shell_art(art, gx, gy, base)
 
       let line_col = if selected == i {
         @raylib.Color::new(252, 242, 156, 252)
@@ -859,16 +824,14 @@ fn draw_board(
       let cy : Float = Float::from_int(gy + cell_sz / 2)
 
       if cells[i].kind == 5 || cells[i].kind == 6 {
-        draw_port_glyph(
-          cells[i].kind,
-          cx,
-          cy,
-          18.0,
-          @raylib.Color::new(242, 246, 255, 248),
-        )
+        draw_terminal_node_art(art, cells[i].kind, cx, cy)
       }
 
       if cells[i].fault_t > 0.0 {
+        let flash : Float = @math.sinf(grid_t * 14.0 + Float::from_int(i) * 0.8) *
+          0.5 +
+          0.5
+        draw_fault_marker_art(art, cx, cy, flash)
         @raylib.draw_line(
           gx + 10,
           gy + 10,
@@ -1280,8 +1243,12 @@ fn draw_panel(
 /// Initializes the game window and runs the Circuit Grid Operator 2026 main game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] circuit grid operator 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let cells : Array[Cell] = Array::makei(max_cells, fn(_i) {
     {
@@ -1680,31 +1647,8 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
 
-    @raylib.draw_rectangle_gradient_v(
-      0,
-      0,
-      sw,
-      sh,
-      @raylib.Color::new(14, 24, 44, 255),
-      @raylib.Color::new(8, 12, 22, 255),
-    )
-
-    for i in 0..<38 {
-      let fi : Float = Float::from_int(i)
-      let x : Int = (fi * 66.0 + scene_t * (14.0 + Float::from_int(i % 6) * 5.0)).to_int() %
-        sw
-      let y : Int = (fi * 132.0 +
-        scene_t * (10.0 + Float::from_int(i % 5) * 6.0)).to_int() %
-        sh
-      @raylib.draw_circle(
-        x,
-        y,
-        1.0 + Float::from_int(i % 3),
-        @raylib.Color::new(108, 146, 220, 112),
-      )
-    }
-
-    draw_board(cells, selected, hover, scene_t)
+    draw_operator_room_backdrop(art, state)
+    draw_board(cells, selected, hover, scene_t, art)
 
     let faults_now : Int = count_faults(cells)
     draw_panel(
@@ -1944,7 +1888,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
