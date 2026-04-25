@@ -6,6 +6,8 @@ package "bobzhang/games/lunar_lander_ops_2026"
 // Errors
 
 // Types and methods
+type GameArt
+
 type Meteor
 
 // Type aliases

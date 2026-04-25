@@ -213,8 +213,12 @@ fn set_level(
 /// Initializes the window and runs the full game loop for Lunar Lander Ops 2026.
 fn main {
   @raylib.init_window(sw, sh, "Lunar Lander Ops 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let heights : Array[Float] = Array::make(points, 0.0)
   let meteors : Array[Meteor] = Array::makei(max_meteors, fn(_i) {
@@ -505,22 +509,15 @@ fn main {
 
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
-
-    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(12, 22, 42, 255))
-    @raylib.draw_rectangle(0, 0, sw, 280, @raylib.Color::new(18, 34, 66, 255))
-    @raylib.draw_rectangle(0, 0, sw, 140, @raylib.Color::new(30, 58, 98, 255))
-
-    for i in 0..<84 {
-      let sx = (i * 173 + level * 97) % sw
-      let sy = (i * 97 + level * 61) % 420
-      let b = 140 + i * 13 % 100
-      @raylib.draw_circle(
-        sx,
-        sy,
-        1.0 + Float::from_int(i % 3),
-        @raylib.Color::new(b, b, b + 20, 255),
-      )
-    }
+    draw_texture_cover(
+      art.lunar_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.Color::new(255, 255, 255, 255),
+    )
+    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(5, 8, 16, 28))
 
     let segs = points - 1
     let step = Float::from_int(sw) / Float::from_int(segs)
@@ -555,12 +552,14 @@ fn main {
       )
     }
 
-    @raylib.draw_rectangle(
-      pad_x.to_int(),
-      (pad_y - 10.0).to_int(),
-      pad_w.to_int(),
-      8,
-      @raylib.Color::new(248, 216, 106, 255),
+    draw_texture_centered(
+      art.landing_pad_sprite,
+      pad_x + pad_w * 0.5,
+      pad_y - 12.0,
+      pad_w + 48.0,
+      34.0,
+      0.0,
+      @raylib.Color::new(255, 255, 255, 255),
     )
     @raylib.draw_rectangle_lines(
       pad_x.to_int(),
@@ -581,24 +580,14 @@ fn main {
       if !meteor.active {
         continue
       }
-      @raylib.draw_line(
-        meteor.x.to_int(),
-        (meteor.y - 22.0).to_int(),
-        meteor.x.to_int(),
-        meteor.y.to_int(),
-        @raylib.Color::new(244, 152, 88, 255),
-      )
-      @raylib.draw_circle(
-        meteor.x.to_int(),
-        meteor.y.to_int(),
-        6.0,
-        @raylib.Color::new(250, 202, 122, 255),
-      )
-      @raylib.draw_circle(
-        meteor.x.to_int(),
-        meteor.y.to_int(),
-        3.0,
-        @raylib.Color::new(98, 78, 62, 255),
+      draw_texture_centered(
+        art.meteor_sprite,
+        meteor.x,
+        meteor.y - 8.0,
+        30.0,
+        42.0,
+        0.0,
+        @raylib.Color::new(255, 255, 255, 255),
       )
     }
 
@@ -606,42 +595,8 @@ fn main {
       let s = sinf_deg(angle)
       let c = cosf_deg(angle)
 
-      let nx = x + s * 20.0
-      let ny = y - c * 20.0
-      let lx = x + sinf_deg(angle + 132.0) * 13.0
-      let ly = y - cosf_deg(angle + 132.0) * 13.0
-      let rx = x + sinf_deg(angle - 132.0) * 13.0
-      let ry = y - cosf_deg(angle - 132.0) * 13.0
-
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(nx, ny),
-        @raylib.Vector2::new(lx, ly),
-        @raylib.Vector2::new(rx, ry),
-        @raylib.Color::new(196, 214, 232, 255),
-      )
-      @raylib.draw_triangle_lines(
-        @raylib.Vector2::new(nx, ny),
-        @raylib.Vector2::new(lx, ly),
-        @raylib.Vector2::new(rx, ry),
-        @raylib.Color::new(44, 62, 84, 255),
-      )
-
-      let tx = x - s * 12.0
-      let ty = y + c * 12.0
-      @raylib.draw_line(
-        (lx + 2.0).to_int(),
-        (ly + 3.0).to_int(),
-        (tx - 6.0).to_int(),
-        (ty + 7.0).to_int(),
-        @raylib.lightgray,
-      )
-      @raylib.draw_line(
-        (rx - 2.0).to_int(),
-        (ry + 3.0).to_int(),
-        (tx + 6.0).to_int(),
-        (ty + 7.0).to_int(),
-        @raylib.lightgray,
-      )
+      let tx = x - s * 18.0
+      let ty = y + c * 18.0
 
       if thrusting && fuel > 0.0 {
         let f1x = tx + sinf_deg(angle + 172.0) * 8.0
@@ -659,6 +614,16 @@ fn main {
           @raylib.Color::new(250, 146, 70, 255),
         )
       }
+
+      draw_texture_centered(
+        art.lander_sprite,
+        x,
+        y,
+        58.0,
+        58.0,
+        angle,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
     }
 
     if explosion_t > 0.0 {
@@ -678,7 +643,15 @@ fn main {
       )
     }
 
-    @raylib.draw_rectangle(0, 0, sw, 94, @raylib.Color::new(12, 18, 30, 220))
+    draw_texture_cover(
+      art.title_art,
+      0.0,
+      0.0,
+      420.0,
+      94.0,
+      @raylib.Color::new(150, 166, 190, 130),
+    )
+    @raylib.draw_rectangle(0, 0, sw, 94, @raylib.Color::new(12, 18, 30, 218))
     @draw.draw_text(
       "LUNAR LANDER OPS 2026",
       20,
@@ -792,12 +765,20 @@ fn main {
 
     if over {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 126))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 340),
+        Float::from_int(sh / 2 - 108),
+        680.0,
+        216.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 340,
         sh / 2 - 108,
         680,
         216,
-        @raylib.Color::new(16, 24, 40, 242),
+        @raylib.Color::new(16, 24, 40, 190),
       )
       @draw.draw_text(
         if won {
@@ -826,7 +807,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
