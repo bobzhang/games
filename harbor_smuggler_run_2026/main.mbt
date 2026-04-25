@@ -332,8 +332,12 @@ fn setup_level(
 /// Initialises the Raylib window, pre-allocates all entity arrays, runs the 3-night game loop, and closes the window on exit.
 fn main {
   @raylib.init_window(sw, sh, "Harbor Smuggler Run 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let player : Smuggler = {
     x: 174.0,
@@ -809,76 +813,22 @@ fn main {
 
     @raylib.begin_drawing()
 
+    @raylib.clear_background(@raylib.Color::new(10, 14, 26, 255))
+    let swf : Float = Float::from_int(sw)
+    let shf : Float = Float::from_int(sh)
+    draw_texture_cover(
+      art.night_harbor_backdrop,
+      0.0,
+      0.0,
+      swf,
+      shf,
+      @raylib.Color::new(255, 255, 255, 255),
+    )
     if flash_t > 0.0 {
-      @raylib.clear_background(@raylib.Color::new(30, 18, 24, 255))
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(54, 14, 24, 76))
     } else {
-      @raylib.clear_background(@raylib.Color::new(10, 14, 26, 255))
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(3, 8, 18, 32))
     }
-
-    let pulse = (wave_t * 3.0).to_int() % 180
-    let glow = if pulse < 90 { pulse } else { 180 - pulse }
-
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      sh,
-      @raylib.Color::new(14, 18 + glow / 10, 36 + glow / 4, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      280,
-      @raylib.Color::new(18, 28 + glow / 9, 58 + glow / 4, 255),
-    )
-
-    for i in 0..<88 {
-      let x = (i * 102 + (wave_t * 62.0).to_int()) % (sw + 200) - 100
-      let h = 120 + i * 41 % 300
-      let w = 40 + i * 13 % 76
-      let c = 20 + i * 11 % 58
-      @raylib.draw_rectangle(
-        x,
-        sh - h,
-        w,
-        h,
-        @raylib.Color::new(c, c + 10, c + 34, 255),
-      )
-      if i % 2 == 0 {
-        @raylib.draw_rectangle(
-          x + 8,
-          sh - h + 24,
-          8,
-          h - 34,
-          @raylib.Color::new(92, 210, 248, 190),
-        )
-      }
-      if i % 3 == 0 {
-        @raylib.draw_rectangle(
-          x + 24,
-          sh - h + 36,
-          8,
-          h - 46,
-          @raylib.Color::new(248, 146, 226, 184),
-        )
-      }
-    }
-
-    @raylib.draw_rectangle(
-      0,
-      water_top.to_int(),
-      sw,
-      (water_bottom - water_top).to_int(),
-      @raylib.Color::new(26, 74, 112, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      water_top.to_int(),
-      sw,
-      44,
-      @raylib.Color::new(36, 108, 154, 255),
-    )
 
     let wave_shift = (wave_t * 120.0).to_int()
     for i in 0..<44 {
@@ -887,49 +837,6 @@ fn main {
       let alpha = 24 + phase
       @raylib.draw_line(0, y, sw, y, @raylib.Color::new(120, 190, 228, alpha))
     }
-
-    @raylib.draw_rectangle(
-      0,
-      172,
-      106,
-      522,
-      @raylib.Color::new(98, 102, 114, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      196,
-      86,
-      84,
-      @raylib.Color::new(138, 132, 118, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      304,
-      86,
-      84,
-      @raylib.Color::new(138, 132, 118, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      412,
-      86,
-      84,
-      @raylib.Color::new(138, 132, 118, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      520,
-      86,
-      84,
-      @raylib.Color::new(138, 132, 118, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      628,
-      86,
-      84,
-      @raylib.Color::new(138, 132, 118, 255),
-    )
 
     let zone_col = if player.cargo > 0 {
       @raylib.Color::new(126, 220, 146, 170)
@@ -953,19 +860,14 @@ fn main {
       let cx = (crate.x + shake_x).to_int()
       let cy = crate.y.to_int()
 
-      @raylib.draw_rectangle(
-        cx - 14,
-        cy - 12,
-        28,
-        24,
-        @raylib.Color::new(160, 112, 72, 255),
-      )
-      @raylib.draw_rectangle(
-        cx - 10,
-        cy - 8,
-        20,
-        16,
-        @raylib.Color::new(190, 146, 94, 255),
+      draw_texture_centered(
+        art.cargo_crate_sprite,
+        crate.x + shake_x,
+        crate.y,
+        42.0,
+        32.0,
+        0.0,
+        @raylib.Color::new(255, 255, 255, 255),
       )
       @draw.draw_text(
         "\{crate.value}",
@@ -983,26 +885,28 @@ fn main {
 
       let px = (patrol.x + shake_x).to_int()
       let py = patrol.y.to_int()
-      let hull_col = if patrol.kind == 2 {
-        @raylib.Color::new(248, 104, 102, 255)
+      let patrol_w : Float = if patrol.kind == 2 {
+        96.0
       } else if patrol.kind == 1 {
-        @raylib.Color::new(236, 124, 98, 255)
+        84.0
       } else {
-        @raylib.Color::new(220, 92, 82, 255)
+        72.0
       }
-
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(patrol.x + 22.0 + shake_x, patrol.y),
-        @raylib.Vector2::new(patrol.x - 20.0 + shake_x, patrol.y - 14.0),
-        @raylib.Vector2::new(patrol.x - 20.0 + shake_x, patrol.y + 14.0),
-        hull_col,
-      )
-      @raylib.draw_rectangle(
-        px - 10,
-        py - 8,
-        16,
-        16,
-        @raylib.Color::new(238, 206, 182, 255),
+      let patrol_h : Float = if patrol.kind == 2 {
+        64.0
+      } else if patrol.kind == 1 {
+        56.0
+      } else {
+        48.0
+      }
+      draw_texture_centered(
+        patrol_texture(art, patrol.kind),
+        patrol.x + shake_x,
+        patrol.y - 4.0,
+        patrol_w,
+        patrol_h,
+        0.0,
+        @raylib.Color::new(255, 255, 255, 255),
       )
 
       if patrol.alert_t > 0.0 {
@@ -1016,24 +920,19 @@ fn main {
       }
     }
 
-    let boat_col = if player.flash_t > 0.0 {
-      @raylib.Color::new(252, 238, 142, 255)
+    let boat_tint = if player.flash_t > 0.0 {
+      @raylib.Color::new(255, 240, 150, 255)
     } else {
-      @raylib.Color::new(106, 228, 244, 255)
+      @raylib.Color::new(255, 255, 255, 255)
     }
-
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(player.x + 26.0 + shake_x, player.y),
-      @raylib.Vector2::new(player.x - 22.0 + shake_x, player.y - 16.0),
-      @raylib.Vector2::new(player.x - 22.0 + shake_x, player.y + 16.0),
-      boat_col,
-    )
-    @raylib.draw_rectangle(
-      (player.x - 12.0 + shake_x).to_int(),
-      (player.y - 8.0).to_int(),
-      18,
-      16,
-      @raylib.Color::new(198, 248, 254, 255),
+    draw_texture_centered(
+      art.smuggler_boat_sprite,
+      player.x + shake_x,
+      player.y - 4.0,
+      84.0,
+      56.0,
+      0.0,
+      boat_tint,
     )
 
     if player.dash_t > 0.0 {
@@ -1098,6 +997,14 @@ fn main {
       )
     }
 
+    draw_texture_cover(
+      art.title_art,
+      0.0,
+      0.0,
+      480.0,
+      112.0,
+      @raylib.Color::new(150, 166, 190, 132),
+    )
     @raylib.draw_rectangle(0, 0, sw, 112, @raylib.Color::new(6, 10, 18, 232))
     @draw.draw_text(
       "HARBOR SMUGGLER RUN 2026",
@@ -1311,12 +1218,20 @@ fn main {
 
     if over {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 132))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 360),
+        Float::from_int(sh / 2 - 112),
+        720.0,
+        224.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 360,
         sh / 2 - 112,
         720,
         224,
-        @raylib.Color::new(16, 24, 42, 244),
+        @raylib.Color::new(10, 14, 26, 188),
       )
       @draw.draw_text(
         if won {
@@ -1345,7 +1260,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

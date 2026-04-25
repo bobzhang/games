@@ -8,6 +8,8 @@ package "bobzhang/games/harbor_smuggler_run_2026"
 // Types and methods
 type Crate
 
+type GameArt
+
 type Particle
 
 type Patrol
