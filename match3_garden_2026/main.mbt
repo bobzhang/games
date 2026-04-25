@@ -24,11 +24,364 @@ let cell : Int = 64
 
 ///|
 /// Horizontal pixel offset of the board origin.
-let board_px : Int = 220
+let board_px : Int = 284
 
 ///|
 /// Vertical pixel offset of the board origin.
-let board_py : Int = 96
+let board_py : Int = 112
+
+///|
+/// Generated art resources used by the renderer.
+struct GameArt {
+  backdrop : @raylib.Texture
+  rose : @raylib.Texture
+  marigold : @raylib.Texture
+  sunflower : @raylib.Texture
+  clover : @raylib.Texture
+  hydrangea : @raylib.Texture
+  seed : @raylib.Texture
+}
+
+///|
+/// Returns a copy of `color` with the alpha channel replaced by `alpha`.
+fn with_alpha(color : @raylib.Color, alpha : Int) -> @raylib.Color {
+  @raylib.Color::new(
+    color.r.to_int(),
+    color.g.to_int(),
+    color.b.to_int(),
+    alpha.clamp(min=0, max=255),
+  )
+}
+
+///|
+/// Loads one bilinear-filtered texture from the package resources directory.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "match3_garden_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads the generated garden backdrop and match tile artwork.
+fn load_game_art() -> GameArt {
+  {
+    backdrop: load_art_texture("garden_backdrop.png"),
+    rose: load_art_texture("tile_rose.png"),
+    marigold: load_art_texture("tile_marigold.png"),
+    sunflower: load_art_texture("tile_sunflower.png"),
+    clover: load_art_texture("tile_clover.png"),
+    hydrangea: load_art_texture("tile_hydrangea.png"),
+    seed: load_art_texture("tile_seed.png"),
+  }
+}
+
+///|
+/// Releases the generated textures before closing the window.
+fn unload_game_art(art : GameArt) -> Unit {
+  @raylib.unload_texture(art.backdrop)
+  @raylib.unload_texture(art.rose)
+  @raylib.unload_texture(art.marigold)
+  @raylib.unload_texture(art.sunflower)
+  @raylib.unload_texture(art.clover)
+  @raylib.unload_texture(art.hydrangea)
+  @raylib.unload_texture(art.seed)
+}
+
+///|
+/// Draws a texture centered on the destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture cover-cropped into the destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Returns the generated texture associated with a tile type.
+fn tile_texture(art : GameArt, tile : Int) -> @raylib.Texture {
+  if tile == 0 {
+    art.rose
+  } else if tile == 1 {
+    art.marigold
+  } else if tile == 2 {
+    art.sunflower
+  } else if tile == 3 {
+    art.clover
+  } else if tile == 4 {
+    art.hydrangea
+  } else {
+    art.seed
+  }
+}
+
+///|
+/// Draws the greenhouse backdrop and a subtle screen-wide readability wash.
+fn draw_background(art : GameArt) -> Unit {
+  @raylib.clear_background(@raylib.Color::new(18, 24, 20, 255))
+  draw_texture_cover(
+    art.backdrop,
+    0.0,
+    0.0,
+    Float::from_int(sw),
+    Float::from_int(sh),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 14, 12, 74))
+}
+
+///|
+/// Draws the top status bar.
+fn draw_hud(score : Int, moves_left : Int, best_combo : Int) -> Unit {
+  @raylib.draw_rectangle_rounded(
+    @raylib.Rectangle::new(22.0, 18.0, 1036.0, 72.0),
+    0.18,
+    12,
+    @raylib.Color::new(10, 18, 18, 218),
+  )
+  @raylib.draw_rectangle_rounded_lines_ex(
+    @raylib.Rectangle::new(22.0, 18.0, 1036.0, 72.0),
+    0.18,
+    12,
+    2.0,
+    @raylib.Color::new(210, 174, 92, 210),
+  )
+  @draw.draw_text(
+    "MATCH-3 GARDEN 2026",
+    44,
+    36,
+    34,
+    @raylib.Color::new(236, 244, 216, 246),
+  )
+  @draw.draw_text(
+    "Score \{score}",
+    560,
+    36,
+    28,
+    @raylib.Color::new(226, 244, 238, 238),
+  )
+  @draw.draw_text(
+    "Moves \{moves_left}",
+    740,
+    36,
+    28,
+    @raylib.Color::new(254, 226, 116, 240),
+  )
+  @draw.draw_text(
+    "Combo x\{best_combo}",
+    910,
+    36,
+    28,
+    @raylib.Color::new(255, 178, 112, 240),
+  )
+}
+
+///|
+/// Draws the complete board, including generated tile icons and selection highlights.
+fn draw_board(
+  board : Array[Int],
+  cur_x : Int,
+  cur_y : Int,
+  sel_x : Int,
+  sel_y : Int,
+  art : GameArt,
+) -> Unit {
+  let board_size = board_w * cell
+  @raylib.draw_rectangle_rounded(
+    @raylib.Rectangle::new(
+      Float::from_int(board_px - 18),
+      Float::from_int(board_py - 18),
+      Float::from_int(board_size + 36),
+      Float::from_int(board_size + 36),
+    ),
+    0.08,
+    10,
+    @raylib.Color::new(38, 28, 18, 226),
+  )
+  @raylib.draw_rectangle_rounded_lines_ex(
+    @raylib.Rectangle::new(
+      Float::from_int(board_px - 18),
+      Float::from_int(board_py - 18),
+      Float::from_int(board_size + 36),
+      Float::from_int(board_size + 36),
+    ),
+    0.08,
+    10,
+    3.0,
+    @raylib.Color::new(224, 184, 88, 224),
+  )
+
+  for y in 0..<board_h {
+    for x in 0..<board_w {
+      let v = board[idx(x, y)]
+      let px = board_px + x * cell
+      let py = board_py + y * cell
+      let base = if v >= 0 {
+        with_alpha(tile_color(v), 42)
+      } else {
+        @raylib.Color::new(24, 32, 26, 226)
+      }
+
+      @raylib.draw_rectangle_rounded(
+        @raylib.Rectangle::new(
+          Float::from_int(px + 3),
+          Float::from_int(py + 3),
+          Float::from_int(cell - 6),
+          Float::from_int(cell - 6),
+        ),
+        0.18,
+        8,
+        @raylib.Color::new(16, 24, 20, 226),
+      )
+      @raylib.draw_rectangle_rounded(
+        @raylib.Rectangle::new(
+          Float::from_int(px + 5),
+          Float::from_int(py + 5),
+          Float::from_int(cell - 10),
+          Float::from_int(cell - 10),
+        ),
+        0.16,
+        8,
+        base,
+      )
+      if v >= 0 {
+        draw_texture_centered(
+          tile_texture(art, v),
+          Float::from_int(px + cell / 2),
+          Float::from_int(py + cell / 2),
+          58.0,
+          58.0,
+          @raylib.Color::new(255, 255, 255, 245),
+        )
+      }
+
+      if x == cur_x && y == cur_y {
+        @raylib.draw_rectangle_rounded_lines_ex(
+          @raylib.Rectangle::new(
+            Float::from_int(px + 3),
+            Float::from_int(py + 3),
+            Float::from_int(cell - 6),
+            Float::from_int(cell - 6),
+          ),
+          0.18,
+          8,
+          3.0,
+          @raylib.Color::new(255, 238, 126, 248),
+        )
+      }
+      if x == sel_x && y == sel_y {
+        @raylib.draw_rectangle_rounded_lines_ex(
+          @raylib.Rectangle::new(
+            Float::from_int(px + 8),
+            Float::from_int(py + 8),
+            Float::from_int(cell - 16),
+            Float::from_int(cell - 16),
+          ),
+          0.18,
+          8,
+          3.0,
+          @raylib.Color::new(250, 86, 86, 246),
+        )
+      }
+    }
+  }
+}
+
+///|
+/// Draws the bottom message bar.
+fn draw_message(msg : String) -> Unit {
+  @raylib.draw_rectangle_rounded(
+    @raylib.Rectangle::new(24.0, 642.0, 1032.0, 56.0),
+    0.22,
+    10,
+    @raylib.Color::new(10, 16, 18, 224),
+  )
+  @raylib.draw_rectangle_rounded_lines_ex(
+    @raylib.Rectangle::new(24.0, 642.0, 1032.0, 56.0),
+    0.22,
+    10,
+    2.0,
+    @raylib.Color::new(196, 164, 86, 196),
+  )
+  @draw.draw_text(msg, 44, 659, 23, @raylib.Color::new(234, 242, 224, 238))
+}
+
+///|
+/// Draws the final score overlay once the move budget is exhausted.
+fn draw_game_over(score : Int) -> Unit {
+  @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 116))
+  @raylib.draw_rectangle_rounded(
+    @raylib.Rectangle::new(270.0, 244.0, 540.0, 190.0),
+    0.12,
+    10,
+    @raylib.Color::new(8, 14, 18, 236),
+  )
+  @raylib.draw_rectangle_rounded_lines_ex(
+    @raylib.Rectangle::new(270.0, 244.0, 540.0, 190.0),
+    0.12,
+    10,
+    3.0,
+    @raylib.Color::new(118, 198, 232, 230),
+  )
+  @draw.draw_text("GARDEN SHIFT ENDED", 326, 278, 38, @raylib.skyblue)
+  @draw.draw_text("Final score: \{score}", 398, 328, 28, @raylib.raywhite)
+  @draw.draw_text("Press R to start a new shift", 354, 370, 26, @raylib.white)
+}
 
 ///|
 /// Converts 2D board coordinates into a flat row-major index.
@@ -201,8 +554,12 @@ fn swap_tiles(
 /// Entry point: opens the window and runs the main game loop handling input, match resolution, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "Match-3 Garden 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let board : Array[Int] = Array::make(board_w * board_h, 0)
   fill_board_no_matches(board)
@@ -300,100 +657,16 @@ fn main {
     }
 
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(19, 26, 33, 255))
-
-    @draw.draw_text("MATCH-3 GARDEN 2026", 24, 20, 40, @raylib.lime)
-    @draw.draw_text("Score: \{score}", 24, 76, 30, @raylib.raywhite)
-    @draw.draw_text("Moves: \{moves_left}", 24, 112, 30, @raylib.yellow)
-    @draw.draw_text("Best Combo: x\{best_combo}", 24, 148, 28, @raylib.orange)
-
-    @raylib.draw_rectangle(
-      board_px - 10,
-      board_py - 10,
-      board_w * cell + 20,
-      board_h * cell + 20,
-      @raylib.Color::new(34, 48, 52, 255),
-    )
-
-    for y in 0..<board_h {
-      for x in 0..<board_w {
-        let v = board[idx(x, y)]
-        let px = board_px + x * cell
-        let py = board_py + y * cell
-
-        @raylib.draw_rectangle(
-          px,
-          py,
-          cell - 2,
-          cell - 2,
-          @raylib.Color::new(12, 16, 20, 255),
-        )
-        if v >= 0 {
-          let c = tile_color(v)
-          @raylib.draw_circle(px + cell / 2, py + cell / 2, 22.0, c)
-          @raylib.draw_circle_lines(
-            px + cell / 2,
-            py + cell / 2,
-            22.0,
-            @raylib.white,
-          )
-        }
-
-        if x == cur_x && y == cur_y {
-          @raylib.draw_rectangle_lines(
-            px + 1,
-            py + 1,
-            cell - 4,
-            cell - 4,
-            @raylib.yellow,
-          )
-          @raylib.draw_rectangle_lines(
-            px + 2,
-            py + 2,
-            cell - 6,
-            cell - 6,
-            @raylib.yellow,
-          )
-        }
-        if x == sel_x && y == sel_y {
-          @raylib.draw_rectangle_lines(
-            px + 5,
-            py + 5,
-            cell - 12,
-            cell - 12,
-            @raylib.red,
-          )
-        }
-      }
-    }
-
-    @raylib.draw_rectangle(
-      200,
-      628,
-      860,
-      64,
-      @raylib.Color::new(10, 15, 20, 220),
-    )
-    @draw.draw_text(msg, 212, 648, 24, @raylib.raywhite)
+    draw_background(art)
+    draw_hud(score, moves_left, best_combo)
+    draw_board(board, cur_x, cur_y, sel_x, sel_y, art)
+    draw_message(msg)
 
     if moves_left <= 0 {
-      @raylib.draw_rectangle(
-        300,
-        260,
-        500,
-        150,
-        @raylib.fade(@raylib.black, 0.8),
-      )
-      @draw.draw_text("GARDEN SHIFT ENDED", 350, 294, 36, @raylib.skyblue)
-      @draw.draw_text(
-        "Press R to start a new shift", 360, 344, 26, @raylib.white,
-      )
+      draw_game_over(score)
     }
 
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

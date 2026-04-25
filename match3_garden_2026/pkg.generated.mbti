@@ -6,6 +6,7 @@ package "bobzhang/games/match3_garden_2026"
 // Errors
 
 // Types and methods
+type GameArt
 
 // Type aliases
 
