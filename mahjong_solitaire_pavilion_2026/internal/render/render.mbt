@@ -24,42 +24,24 @@ fn tile_label(kind : Int) -> String {
 }
 
 ///|
-/// Clears the background and draws animated decorative circles and horizontal bands.
-fn @types.Game::draw_bg(game : @types.Game) -> Unit {
+/// Clears the background and draws the generated pavilion backdrop.
+fn @types.Game::draw_bg(_game : @types.Game, art : GameArt) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 22, 255))
-
-  let wave : Float = Float::from_double(
-    @math.sin((game.ui_t * 0.6).to_double()),
+  draw_texture_cover(
+    art.pavilion_backdrop,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
   )
-
-  @raylib.draw_circle(
-    220,
-    150,
-    184.0 + wave * 14.0,
-    @raylib.Color::new(28, 50, 74, 44),
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(4, 7, 12, 82),
   )
-  @raylib.draw_circle(
-    @types.screen_w - 220,
-    170,
-    186.0 - wave * 12.0,
-    @raylib.Color::new(64, 40, 30, 34),
-  )
-
-  for i in 0..<16 {
-    let y : Int = i * 66 - 20
-    @raylib.draw_rectangle(
-      0,
-      y,
-      @types.screen_w,
-      52,
-      @raylib.Color::new(
-        14 + i * 6 % 24,
-        22 + i * 8 % 24,
-        34 + i * 10 % 24,
-        16 + i * 9 % 30,
-      ),
-    )
-  }
 }
 
 ///|
@@ -128,7 +110,7 @@ fn @types.Game::draw_hint(game : @types.Game) -> Unit {
 
 ///|
 /// Renders all board cells with tile colours, free/blocked overlays, cursor, selection highlight, and hint markers.
-fn @types.Game::draw_board(game : @types.Game) -> Unit {
+fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
   @raylib.draw_rectangle(
@@ -180,16 +162,35 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
       if k > 0 {
         let c : @raylib.Color = color_for_kind(k)
 
-        @raylib.draw_rectangle(px + 4, py + 4, tile - 8, tile - 8, c)
+        @raylib.draw_rectangle(
+          px + 7,
+          py + 9,
+          tile - 10,
+          tile - 9,
+          @raylib.Color::new(4, 6, 10, 94),
+        )
+        let tile_tint = if @types.free_tile(game, x, y) {
+          @raylib.Color::new(255, 255, 255, 255)
+        } else {
+          @raylib.Color::new(178, 186, 196, 255)
+        }
+        draw_texture_centered(
+          art.tile_skin,
+          Float::from_int(px + tile / 2),
+          Float::from_int(py + tile / 2),
+          Float::from_int(tile - 4),
+          Float::from_int(tile - 4),
+          tile_tint,
+        )
         @raylib.draw_rectangle_lines(
-          px + 4,
-          py + 4,
-          tile - 8,
-          tile - 8,
+          px + 8,
+          py + 8,
+          tile - 16,
+          tile - 16,
           if @types.free_tile(game, x, y) {
-            @raylib.Color::new(248, 252, 255, 242)
+            @raylib.Color::new(184, 144, 58, 212)
           } else {
-            @raylib.Color::new(186, 198, 214, 220)
+            @raylib.Color::new(132, 116, 94, 150)
           },
         )
 
@@ -204,12 +205,18 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
         }
 
         let label : String = tile_label(k)
+        @raylib.draw_circle(
+          px + tile / 2,
+          py + tile / 2 - font_size,
+          @types.maxf(3.0, Float::from_int(font_size) * 0.18),
+          c,
+        )
         @draw.draw_text(
           label,
           px + tile / 2 - @draw.measure_text(label, font_size) / 2,
           py + tile / 2 - font_size / 2,
           font_size,
-          @raylib.Color::new(248, 252, 255, 248),
+          @raylib.Color::new(54, 42, 32, 248),
         )
       }
 
@@ -259,6 +266,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 ///|
 /// Draws a labelled UI button with an optional active accent fill and a border.
 fn draw_button(
+  art : GameArt,
   label : String,
   x : Int,
   y : Int,
@@ -267,17 +275,32 @@ fn draw_button(
   active : Bool,
   accent : @raylib.Color,
 ) -> Unit {
-  @raylib.draw_rectangle(
+  draw_texture_rect(
+    art.button_skin,
     x,
     y,
     w,
     h,
     if active {
-      accent
+      @raylib.Color::new(255, 255, 255, 255)
     } else {
-      @raylib.Color::new(46, 62, 86, 226)
+      @raylib.Color::new(210, 224, 232, 236)
     },
   )
+  if active {
+    @raylib.draw_rectangle(
+      x + 8,
+      y + 8,
+      w - 16,
+      h - 16,
+      @raylib.Color::new(
+        accent.r.to_int(),
+        accent.g.to_int(),
+        accent.b.to_int(),
+        96,
+      ),
+    )
+  }
   @raylib.draw_rectangle_lines(
     x,
     y,
@@ -298,13 +321,27 @@ fn draw_button(
 
 ///|
 /// Draws the right-side panel with game stats, keyboard help text, action buttons, and the status message.
-fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game, art : GameArt) -> Unit {
   let px : Int = @types.panel_x()
   let py : Int = 20
   let pw : Int = 396
   let ph : Int = @types.screen_h - 40
 
-  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(12, 18, 30, 242))
+  draw_texture_rect(
+    art.panel_skin,
+    px,
+    py,
+    pw,
+    ph,
+    @raylib.Color::new(255, 255, 255, 252),
+  )
+  @raylib.draw_rectangle(
+    px + 28,
+    py + 92,
+    pw - 56,
+    ph - 126,
+    @raylib.Color::new(5, 8, 14, 64),
+  )
   @raylib.draw_rectangle_lines(
     px,
     py,
@@ -480,6 +517,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let (cx, cy, cw, ch) = @types.clear_button_rect()
 
   draw_button(
+    art,
     "SELECT",
     sx,
     sy,
@@ -489,6 +527,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(80, 134, 176, 236),
   )
   draw_button(
+    art,
     "HINT",
     hx,
     hy,
@@ -498,6 +537,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(162, 124, 70, 236),
   )
   draw_button(
+    art,
     "SHUFFLE",
     fx,
     fy,
@@ -507,6 +547,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(112, 98, 164, 236),
   )
   draw_button(
+    art,
     "UNDO",
     ux,
     uy,
@@ -516,6 +557,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(112, 92, 132, 236),
   )
   draw_button(
+    art,
     "RESET",
     rx,
     ry,
@@ -525,6 +567,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(132, 86, 82, 236),
   )
   draw_button(
+    art,
     "CLEAR",
     cx,
     cy,
@@ -693,7 +736,23 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title-screen layout with game name, instructions, and the start button.
-fn @types.Game::draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game, art : GameArt) -> Unit {
+  draw_texture_cover(
+    art.title_art,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 218),
+  )
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(4, 7, 12, 104),
+  )
+
   @draw.draw_text(
     "Mahjong Solitaire Pavilion 2026",
     @types.screen_w / 2 -
@@ -734,6 +793,7 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     bh,
   )
   draw_button(
+    art,
     "Start Pavilion",
     bx,
     by,
@@ -746,7 +806,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the level-clear overlay showing score, remaining time, and the next-stage button.
-fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_clear_overlay(
+  game : @types.Game,
+  art : GameArt,
+) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -760,7 +823,15 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
   let px : Int = @types.screen_w / 2 - pw / 2
   let py : Int = @types.screen_h / 2 - ph / 2
 
-  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 26, 36, 244))
+  draw_texture_cover(
+    art.title_art,
+    Float::from_int(px),
+    Float::from_int(py),
+    Float::from_int(pw),
+    Float::from_int(ph),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 26, 36, 194))
   @raylib.draw_rectangle_lines(
     px,
     py,
@@ -803,6 +874,7 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
     bh,
   )
   draw_button(
+    art,
     "Next Stage",
     bx,
     by,
@@ -815,7 +887,7 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the stage-failed overlay with the player score and a retry button.
-fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_fail_overlay(game : @types.Game, art : GameArt) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -829,7 +901,15 @@ fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
   let px : Int = @types.screen_w / 2 - pw / 2
   let py : Int = @types.screen_h / 2 - ph / 2
 
-  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(44, 20, 20, 246))
+  draw_texture_cover(
+    art.title_art,
+    Float::from_int(px),
+    Float::from_int(py),
+    Float::from_int(pw),
+    Float::from_int(ph),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(44, 20, 20, 202))
   @raylib.draw_rectangle_lines(
     px,
     py,
@@ -872,6 +952,7 @@ fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
     bh,
   )
   draw_button(
+    art,
     "Retry",
     bx,
     by,
@@ -884,7 +965,10 @@ fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the campaign-complete overlay showing final score, stages cleared, play time, and a restart button.
-fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_overlay(
+  game : @types.Game,
+  art : GameArt,
+) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -898,7 +982,15 @@ fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
   let px : Int = @types.screen_w / 2 - pw / 2
   let py : Int = @types.screen_h / 2 - ph / 2
 
-  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 25, 35, 246))
+  draw_texture_cover(
+    art.title_art,
+    Float::from_int(px),
+    Float::from_int(py),
+    Float::from_int(pw),
+    Float::from_int(ph),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 25, 35, 198))
   @raylib.draw_rectangle_lines(
     px,
     py,
@@ -956,6 +1048,7 @@ fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
     bh,
   )
   draw_button(
+    art,
     "Restart Pavilion",
     bx,
     by,
@@ -968,20 +1061,20 @@ fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Renders the complete frame for the current campaign state.
-pub fn draw_frame(game : @types.Game) -> Unit {
-  game.draw_bg()
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
+  game.draw_bg(art)
 
   match game.state {
-    Title => game.draw_title()
+    Title => game.draw_title(art)
     _ => {
-      game.draw_board()
-      game.draw_side_panel()
+      game.draw_board(art)
+      game.draw_side_panel(art)
       game.draw_touch_overlay()
       game.draw_sparks()
       match game.state {
-        LevelClear => game.draw_level_clear_overlay()
-        CampaignClear => game.draw_campaign_overlay()
-        Fail => game.draw_fail_overlay()
+        LevelClear => game.draw_level_clear_overlay(art)
+        CampaignClear => game.draw_campaign_overlay(art)
+        Fail => game.draw_fail_overlay(art)
         _ => ()
       }
     }

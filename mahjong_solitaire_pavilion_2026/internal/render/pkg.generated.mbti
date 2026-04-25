@@ -3,14 +3,26 @@ package "bobzhang/games/mahjong_solitaire_pavilion_2026/internal/render"
 
 import {
   "bobzhang/games/mahjong_solitaire_pavilion_2026/internal/types",
+  "tonyfettes/raylib",
 }
 
 // Values
-pub fn draw_frame(@types.Game) -> Unit
+pub fn draw_frame(@types.Game, GameArt) -> Unit
+
+pub fn load_game_art() -> GameArt
+
+pub fn unload_game_art(GameArt) -> Unit
 
 // Errors
 
 // Types and methods
+pub(all) struct GameArt {
+  pavilion_backdrop : @raylib.Texture
+  title_art : @raylib.Texture
+  tile_skin : @raylib.Texture
+  panel_skin : @raylib.Texture
+  button_skin : @raylib.Texture
+}
 
 // Type aliases
 
