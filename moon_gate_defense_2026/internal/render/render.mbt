@@ -40,31 +40,24 @@ fn @types.Game::camera_offset(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
-/// Draws the animated starfield background with a moon accent and a vertical gradient.
+/// Draws the generated lunar battlefield backdrop with an animated starfield overlay.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
+  if !draw_lunar_battlefield_backdrop() {
+    @raylib.draw_rectangle_gradient_v(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @types.col_bg_top(),
+      @types.col_bg_bottom(),
+    )
+  }
+  @raylib.draw_rectangle(
     0,
     0,
     @types.screen_w,
     @types.screen_h,
-    @types.col_bg_top(),
-    @types.col_bg_bottom(),
-  )
-
-  let moon_x = Float::from_int(@types.screen_w) * 0.82 +
-    @math.sinf(game.time_s * 0.24) * 24.0
-  let moon_y : Float = 106.0 + @math.cosf(game.time_s * 0.18) * 14.0
-  @raylib.draw_circle(
-    moon_x.to_int(),
-    moon_y.to_int(),
-    68.0,
-    @raylib.Color::new(184, 216, 255, 52),
-  )
-  @raylib.draw_circle(
-    moon_x.to_int(),
-    moon_y.to_int(),
-    42.0,
-    @raylib.Color::new(216, 236, 255, 128),
+    @raylib.Color::new(4, 8, 18, 48),
   )
 
   for i in 0..<160 {
@@ -155,6 +148,7 @@ fn @types.Game::draw_gate(
   )
 
   let pulse : Float = 3.0 * @math.sinf(game.time_s * 4.0)
+  draw_moon_gate_asset(gx, gy, pulse)
   @raylib.draw_circle(
     gx.to_int(),
     gy.to_int(),
@@ -222,6 +216,7 @@ fn @types.Game::draw_nodes(
       @types.node_range(node.level),
       alpha_col(node_col, 36),
     )
+    draw_guardian_node_asset(node.level, node.facing, x, y, radius * 2.32)
 
     let dx = @types.dir_vec_x(node.facing)
     let dy = @types.dir_vec_y(node.facing)
@@ -245,7 +240,7 @@ fn @types.Game::draw_nodes(
 }
 
 ///|
-/// Draws all active enemies with health bars and wraith aura effects.
+/// Draws all active generated enemy sprites with health bars and wraith aura effects.
 fn @types.Game::draw_enemies(
   game : @types.Game,
   cam_x : Float,
@@ -266,6 +261,7 @@ fn @types.Game::draw_enemies(
       enemy.radius,
       alpha_col(col, 220),
     )
+    draw_enemy_asset(enemy, x, y)
 
     if enemy.kind == Wraith {
       let aura = enemy.radius +
