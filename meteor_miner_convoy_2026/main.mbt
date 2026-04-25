@@ -407,8 +407,12 @@ fn nearest_truck_for_repair(
 /// Entry point: opens the window, runs the three-level game loop managing player, convoy, meteors, ore, and particles each frame.
 fn main {
   @raylib.init_window(sw, sh, "Meteor Miner Convoy 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let trucks : Array[Truck] = Array::makei(truck_n, fn(i) {
     {
@@ -910,14 +914,19 @@ fn main {
 
     @raylib.begin_drawing()
 
+    draw_texture_cover(
+      art.space_mining_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.white,
+    )
     if shake_t > 0.0 {
-      @raylib.clear_background(@raylib.Color::new(20, 20, 30, 255))
-    } else {
-      @raylib.clear_background(@raylib.Color::new(10, 14, 26, 255))
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(42, 18, 20, 48))
     }
-
-    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(14, 20, 38, 255))
-    @raylib.draw_rectangle(0, 0, sw, 260, @raylib.Color::new(18, 30, 58, 255))
+    @raylib.draw_rectangle(0, 0, sw, 130, @raylib.Color::new(6, 10, 18, 186))
+    @raylib.draw_rectangle(0, 474, sw, 290, @raylib.Color::new(6, 8, 12, 90))
 
     let twinkle = (wave_t * 4.0).to_int()
     for i in 0..<190 {
@@ -963,26 +972,13 @@ fn main {
       }
     }
 
-    @raylib.draw_rectangle(
-      sw - 122,
-      496,
-      122,
-      228,
-      @raylib.Color::new(44, 72, 94, 255),
-    )
-    @raylib.draw_rectangle(
-      sw - 96,
-      536,
-      44,
-      150,
-      @raylib.Color::new(86, 120, 142, 255),
-    )
-    @raylib.draw_rectangle(
-      sw - 112,
-      522,
-      76,
-      14,
-      @raylib.Color::new(172, 206, 220, 255),
+    draw_texture_centered(
+      art.refinery,
+      Float::from_int(sw - 64),
+      612.0,
+      156.0,
+      286.0,
+      @raylib.white,
     )
     @draw.draw_text(
       "REFINERY",
@@ -1000,39 +996,7 @@ fn main {
       let tx = truck.x.to_int()
       let ty = lane_y(truck.lane).to_int()
 
-      @raylib.draw_rectangle(
-        tx - 30,
-        ty - 14,
-        60,
-        22,
-        @raylib.Color::new(208, 164, 82, 255),
-      )
-      @raylib.draw_rectangle(
-        tx + 6,
-        ty - 20,
-        22,
-        16,
-        @raylib.Color::new(228, 204, 152, 255),
-      )
-      @raylib.draw_circle(
-        tx - 18,
-        ty + 10,
-        6.0,
-        @raylib.Color::new(28, 30, 36, 255),
-      )
-      @raylib.draw_circle(
-        tx + 18,
-        ty + 10,
-        6.0,
-        @raylib.Color::new(28, 30, 36, 255),
-      )
-      @draw.draw_text(
-        "\\{truck.cargo}",
-        tx - 6,
-        ty - 10,
-        18,
-        @raylib.Color::new(20, 28, 34, 255),
-      )
+      draw_convoy_truck_art(art, truck, tx, ty)
 
       @raylib.draw_rectangle(
         tx - 28,
@@ -1057,21 +1021,8 @@ fn main {
 
       let mx = meteor.x.to_int()
       let my = meteor.y.to_int()
-      let r = meteor.r
 
-      @raylib.draw_circle(mx, my, r, @raylib.Color::new(130, 92, 64, 255))
-      @raylib.draw_circle(
-        mx - 4,
-        my - 3,
-        r * 0.64,
-        @raylib.Color::new(166, 118, 82, 255),
-      )
-      @raylib.draw_circle(
-        mx + 6,
-        my + 2,
-        r * 0.35,
-        @raylib.Color::new(102, 72, 50, 255),
-      )
+      draw_meteor_art(art, meteor, mx, my)
       @draw.draw_text(
         "\\{meteor.hp}",
         mx - 5,
@@ -1087,13 +1038,7 @@ fn main {
       }
       let ox = ore.x.to_int()
       let oy = ore.y.to_int()
-      @raylib.draw_circle(ox, oy, 8.0, @raylib.Color::new(82, 238, 232, 255))
-      @raylib.draw_circle(
-        ox + 2,
-        oy - 2,
-        4.0,
-        @raylib.Color::new(182, 252, 246, 255),
-      )
+      draw_ore_art(art, ore, ox, oy)
       @draw.draw_text(
         "+\\{ore.amount}",
         ox - 9,
@@ -1133,41 +1078,7 @@ fn main {
     }
 
     if invuln_t <= 0.0 || (invuln_t * 12.0).to_int() % 2 == 0 {
-      let pxi = px.to_int()
-      let pyi = py.to_int()
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(px + 24.0, py),
-        @raylib.Vector2::new(px - 14.0, py - 12.0),
-        @raylib.Vector2::new(px - 14.0, py + 12.0),
-        @raylib.Color::new(220, 238, 252, 255),
-      )
-      @raylib.draw_rectangle(
-        pxi - 18,
-        pyi - 8,
-        16,
-        16,
-        @raylib.Color::new(96, 186, 242, 255),
-      )
-      @raylib.draw_circle(
-        pxi - 20,
-        pyi,
-        8.0,
-        @raylib.Color::new(98, 246, 236, 255),
-      )
-      @raylib.draw_line(
-        pxi - 25,
-        pyi - 10,
-        pxi - 34,
-        pyi - 14,
-        @raylib.Color::new(146, 220, 248, 255),
-      )
-      @raylib.draw_line(
-        pxi - 25,
-        pyi + 10,
-        pxi - 34,
-        pyi + 14,
-        @raylib.Color::new(146, 220, 248, 255),
-      )
+      draw_command_ship_art(art, px, py)
     }
 
     @raylib.draw_rectangle(0, 0, sw, 106, @raylib.Color::new(8, 12, 22, 228))
@@ -1402,7 +1313,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
