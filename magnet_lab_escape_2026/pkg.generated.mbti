@@ -14,6 +14,8 @@ type Core
 
 type Drone
 
+type GameArt
+
 type Gate
 
 type Particle

@@ -871,8 +871,12 @@ fn draw_touch_ui(state : Int) -> Unit {
 /// Initializes the window, allocates object pools, calls `setup_world`, and runs the full game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] magnet lab escape 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let platforms : Array[Platform] = Array::makei(max_platforms, fn(_i) {
     {
@@ -2042,31 +2046,15 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(6, 10, 18, 255))
 
-    // Parallax backdrop.
-    for i in 0..<120 {
-      let fi : Float = Float::from_int(i)
-      let px : Int = ((
-        fi * 73.0 +
-        stars_t * (0.2 + Float::from_int(i % 5) * 0.1) +
-        cam_x * 0.04
-      ) %
-      Float::from_int(sw)).to_int()
-      let py : Int = ((
-        fi * 131.0 + stars_t * (0.15 + Float::from_int(i % 7) * 0.08)
-      ) %
-      Float::from_int(sh)).to_int()
-      let br : Int = 96 + i % 8 * 16
-      @raylib.draw_circle(
-        px,
-        py,
-        if i % 3 == 0 {
-          1.8
-        } else {
-          1.2
-        },
-        @raylib.Color::new(br, br, br + 34, 190),
-      )
-    }
+    draw_texture_cover(
+      art.lab_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.Color::new(255, 255, 255, 255),
+    )
+    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(4, 7, 14, 66))
 
     // Floor and world border.
     @raylib.draw_rectangle(
@@ -2074,7 +2062,7 @@ fn main {
       floor_y.to_int(),
       sw,
       sh - floor_y.to_int(),
-      @raylib.Color::new(18, 22, 34, 255),
+      @raylib.Color::new(16, 20, 30, 198),
     )
     @raylib.draw_rectangle_lines(
       (-cam_x).to_int(),
@@ -2087,6 +2075,15 @@ fn main {
     // Reactor zone.
     let rx : Int = (reactor_x - cam_x).to_int()
     let ry : Int = reactor_y.to_int()
+    draw_texture_centered(
+      art.reactor_sprite,
+      Float::from_int(rx),
+      Float::from_int(ry) + 8.0,
+      216.0,
+      144.0,
+      0.0,
+      @raylib.Color::new(255, 255, 255, 245),
+    )
     @raylib.draw_circle(rx, ry, 94.0, @raylib.Color::new(46, 128, 170, 70))
     @raylib.draw_circle_lines(
       rx,
@@ -2197,7 +2194,28 @@ fn main {
       } else {
         @raylib.Color::new(252, 214, 114, 244)
       }
-      @raylib.draw_circle(cx, cy, core.r, col)
+      @raylib.draw_circle(
+        cx,
+        cy,
+        core.r + 3.0,
+        @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 86),
+      )
+      let core_tint = if core.kind == 0 {
+        @raylib.Color::new(232, 255, 248, 255)
+      } else if core.kind == 1 {
+        @raylib.Color::new(188, 218, 255, 255)
+      } else {
+        @raylib.Color::new(255, 230, 156, 255)
+      }
+      draw_texture_centered(
+        art.core_sprite,
+        Float::from_int(cx),
+        Float::from_int(cy),
+        core.r * 2.7,
+        core.r * 2.7,
+        0.0,
+        core_tint,
+      )
       if core.magnetized {
         @raylib.draw_circle_lines(
           cx,
@@ -2213,21 +2231,20 @@ fn main {
       if !box.active {
         continue
       }
-      let bx : Int = (box.x - box.r - cam_x).to_int()
-      let by : Int = (box.y - box.r).to_int()
       let bs : Int = (box.r * 2.0).to_int()
       let col = if box.kind == 0 {
-        @raylib.Color::new(96, 110, 138, 236)
+        @raylib.Color::new(238, 248, 255, 246)
       } else {
-        @raylib.Color::new(126, 140, 166, 236)
+        @raylib.Color::new(214, 226, 248, 246)
       }
-      @raylib.draw_rectangle(bx, by, bs, bs, col)
-      @raylib.draw_rectangle_lines(
-        bx,
-        by,
-        bs,
-        bs,
-        @raylib.Color::new(184, 206, 232, 170),
+      draw_texture_centered(
+        art.crate_sprite,
+        box.x - cam_x,
+        box.y,
+        Float::from_int(bs) + 10.0,
+        Float::from_int(bs) + 10.0,
+        0.0,
+        col,
       )
       if box.magnetized {
         @raylib.draw_circle_lines(
@@ -2247,49 +2264,29 @@ fn main {
 
       let dx : Int = (drone.x - cam_x).to_int()
       let dy : Int = drone.y.to_int()
-      if drone.kind == 0 {
-        @raylib.draw_circle(
-          dx,
-          dy,
-          16.0,
-          @raylib.Color::new(230, 102, 108, 244),
-        )
-        @raylib.draw_circle_lines(
-          dx,
-          dy,
-          20.0,
-          @raylib.Color::new(252, 220, 224, 190),
-        )
+      let radius = drone_radius(drone.kind)
+      let drone_tint = if drone.kind == 0 {
+        @raylib.Color::new(255, 255, 255, 250)
       } else if drone.kind == 1 {
-        @raylib.draw_rectangle(
-          dx - 18,
-          dy - 14,
-          36,
-          28,
-          @raylib.Color::new(240, 152, 78, 242),
-        )
-        @raylib.draw_rectangle_lines(
-          dx - 22,
-          dy - 18,
-          44,
-          36,
-          @raylib.Color::new(252, 228, 200, 186),
-        )
+        @raylib.Color::new(255, 214, 172, 250)
       } else {
-        @raylib.draw_rectangle(
-          dx - 24,
-          dy - 20,
-          48,
-          40,
-          @raylib.Color::new(166, 96, 190, 240),
-        )
-        @raylib.draw_circle(
-          dx,
-          dy - 4,
-          12.0,
-          @raylib.Color::new(240, 200, 254, 218),
-        )
+        @raylib.Color::new(226, 188, 255, 250)
       }
+      draw_texture_centered(
+        art.drone_sprite,
+        Float::from_int(dx),
+        Float::from_int(dy),
+        radius * 3.0,
+        radius * 3.0,
+        0.0,
+        drone_tint,
+      )
+      @raylib.draw_circle_lines(
+        dx,
+        dy,
+        radius + 4.0,
+        @raylib.Color::new(252, 220, 224, 130),
+      )
     }
 
     // Bolts.
@@ -2318,20 +2315,14 @@ fn main {
       @raylib.Color::new(94, 190, 250, 248)
     }
 
-    @raylib.draw_rectangle(px - 15, py - 23, 30, 46, pcol)
-    @raylib.draw_circle(
-      px,
-      py - 22,
-      9.0,
-      @raylib.Color::new(210, 242, 255, 252),
-    )
-
-    @raylib.draw_line(
-      px,
-      py - 10,
-      (player.x - cam_x + Float::from_int(player.face) * 24.0).to_int(),
-      py - 10,
-      @raylib.Color::new(194, 232, 252, 224),
+    draw_texture_centered_flip(
+      art.player_sprite,
+      Float::from_int(px),
+      Float::from_int(py) - 4.0,
+      96.0,
+      64.0,
+      player.face < 0,
+      pcol,
     )
 
     if player.dash_t > 0.0 {
@@ -2400,7 +2391,15 @@ fn main {
     }
 
     // HUD top.
-    @raylib.draw_rectangle(0, 0, sw, 82, @raylib.Color::new(8, 12, 20, 230))
+    draw_texture_cover(
+      art.title_art,
+      0.0,
+      0.0,
+      420.0,
+      82.0,
+      @raylib.Color::new(130, 158, 176, 128),
+    )
+    @raylib.draw_rectangle(0, 0, sw, 82, @raylib.Color::new(8, 12, 20, 220))
 
     @draw.draw_text(
       "Magnet Lab Escape 2026",
@@ -2595,13 +2594,21 @@ fn main {
     draw_touch_ui(state)
 
     if state == 0 {
-      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 162))
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 132))
+      draw_texture_cover(
+        art.title_art,
+        174.0,
+        126.0,
+        934.0,
+        506.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         174,
         126,
         934,
         506,
-        @raylib.Color::new(12, 18, 34, 236),
+        @raylib.Color::new(12, 18, 34, 172),
       )
       @raylib.draw_rectangle_lines(
         174,
@@ -2662,12 +2669,20 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 176))
+      draw_texture_cover(
+        art.title_art,
+        280.0,
+        194.0,
+        720.0,
+        360.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         280,
         194,
         720,
         360,
-        @raylib.Color::new(14, 28, 36, 242),
+        @raylib.Color::new(14, 28, 36, 192),
       )
       @raylib.draw_rectangle_lines(
         280,
@@ -2707,12 +2722,20 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 186))
+      draw_texture_cover(
+        art.title_art,
+        280.0,
+        194.0,
+        720.0,
+        360.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         280,
         194,
         720,
         360,
-        @raylib.Color::new(30, 16, 20, 246),
+        @raylib.Color::new(30, 16, 20, 196),
       )
       @raylib.draw_rectangle_lines(
         280,
@@ -2755,7 +2778,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
