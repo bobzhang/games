@@ -71,32 +71,38 @@ fn @types.Game::mean_fatigue(game : @types.Game) -> Float {
 }
 
 ///|
-/// Clears and draws the animated background with waving stripe bands, decorative circles, and incident flash overlay.
-fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(16, 20, 30, 255))
+/// Clears and draws the generated dojo backdrop with subtle animated light bands and incident flash overlay.
+fn @types.Game::draw_background(game : @types.Game, art : GameArt) -> Unit {
+  @raylib.clear_background(@raylib.Color::new(12, 14, 18, 255))
+  draw_texture_cover(
+    art.dojo_backdrop,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(6, 10, 18, 88),
+  )
 
-  for i in 0..<14 {
+  for i in 0..<7 {
     let wave = (@math.sinf(game.scene_t * 0.6 + Float::from_int(i) * 0.38) *
-    18.0).to_int()
-    let y = i * 72 + wave
-    let tone = 28 + i * 2
+    14.0).to_int()
+    let y = i * 134 + wave
 
     @raylib.draw_rectangle(
       0,
       y,
       @types.screen_w,
-      56,
-      @raylib.Color::new(tone, tone + 10, tone + 24, 84),
+      42,
+      @raylib.Color::new(230, 184, 98, 18),
     )
   }
-
-  @raylib.draw_circle(220, 120, 180.0, @raylib.Color::new(76, 114, 188, 88))
-  @raylib.draw_circle(
-    @types.screen_w - 220,
-    136,
-    220.0,
-    @raylib.Color::new(198, 108, 92, 64),
-  )
 
   if game.incident_flash_t > 0.0 {
     let alpha = (game.incident_flash_t * 130.0).to_int().clamp(min=0, max=130)
@@ -221,13 +227,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Draws the student assignment grid with room column headers, per-student skill/fatigue meters, and cursor/assignment highlights.
-fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
+/// Draws the student assignment grid with generated portraits, room icons, per-student meters, and cursor/assignment highlights.
+fn @types.Game::draw_student_table(game : @types.Game, art : GameArt) -> Unit {
   let panel_x = 40
   let panel_y = 164
   let panel_w = @types.screen_w - 80
   let panel_h = 636
   let info_x = panel_x + 20
+  let detail_x = info_x + 76
   let grid_x = panel_x + 422
   let row_start_y = panel_y + 98
   let row_h = 84
@@ -268,7 +275,6 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
     let x = grid_x + col * (cell_w + cell_gap)
     let room = @types.Room::from_int(col)
     let title = @types.room_name(room)
-    let tw = @draw.measure_text(title, 24)
     @raylib.draw_rectangle(
       x,
       panel_y + 20,
@@ -283,9 +289,17 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
       52,
       with_alpha(room_color(room), 200),
     )
+    draw_texture_centered(
+      room_icon(art, room),
+      Float::from_int(x + 32),
+      Float::from_int(panel_y + 46),
+      38.0,
+      38.0,
+      @raylib.Color::new(255, 255, 255, 232),
+    )
     @draw.draw_text(
       title,
-      x + cell_w / 2 - tw / 2,
+      x + 58,
       panel_y + 34,
       24,
       @raylib.Color::new(236, 240, 250, 236),
@@ -305,39 +319,47 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
         @raylib.Color::new(22, 34, 50, 186)
       },
     )
+    draw_texture_centered(
+      art.student_portrait,
+      Float::from_int(info_x + 26),
+      Float::from_int(y + 38),
+      58.0,
+      58.0,
+      @raylib.Color::new(255, 255, 255, 232),
+    )
     @draw.draw_text(
       game.students[i].name,
-      info_x,
+      detail_x,
       y + 10,
       30,
       @raylib.Color::new(240, 240, 232, 240),
     )
     @draw.draw_text(
       "Skill " + game.students[i].skill.to_int().to_string(),
-      info_x,
+      detail_x,
       y + 45,
       18,
       @raylib.Color::new(218, 228, 242, 220),
     )
     draw_meter(
-      info_x + 108,
+      detail_x + 108,
       y + 46,
-      200,
+      166,
       16,
       game.students[i].skill / 130.0,
       @raylib.Color::new(108, 196, 252, 236),
     )
     @draw.draw_text(
       "Fatigue " + game.students[i].fatigue.to_int().to_string(),
-      info_x,
+      detail_x,
       y + 64,
       18,
       fatigue_color(game.students[i].fatigue),
     )
     draw_meter(
-      info_x + 108,
+      detail_x + 108,
       y + 65,
-      200,
+      166,
       16,
       game.students[i].fatigue / @types.fatigue_max,
       fatigue_color(game.students[i].fatigue),
@@ -374,6 +396,16 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
           @raylib.Color::new(84, 106, 136, 170)
         },
       )
+      if assigned {
+        draw_texture_centered(
+          room_icon(art, room),
+          Float::from_int(x + 36),
+          Float::from_int(y + 38),
+          42.0,
+          42.0,
+          @raylib.Color::new(255, 255, 255, 190),
+        )
+      }
       let label = if assigned { "Assigned" } else { "Press J" }
       let lw = @draw.measure_text(label, 20)
       @draw.draw_text(
@@ -487,11 +519,20 @@ fn draw_overlay_card(
   lines : Array[String],
   y : Int,
   border : @raylib.Color,
+  art : GameArt,
 ) -> Unit {
   let x = @types.screen_w / 2 - 520
   let w = 1040
   let h = 460
-  @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(6, 10, 18, 232))
+  draw_texture_cover(
+    art.title_art,
+    Float::from_int(x),
+    Float::from_int(y),
+    Float::from_int(w),
+    Float::from_int(h),
+    @raylib.Color::new(255, 255, 255, 216),
+  )
+  @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(6, 10, 18, 202))
   @raylib.draw_rectangle_lines(x, y, w, h, border)
   let title_w = @draw.measure_text(title, 52)
   @draw.draw_text(
@@ -514,7 +555,15 @@ fn draw_overlay_card(
 
 ///|
 /// Draws the title-screen overlay with game instructions and the best-week record.
-fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game, art : GameArt) -> Unit {
+  draw_texture_cover(
+    art.title_art,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
   @raylib.draw_rectangle(
     0,
     0,
@@ -535,6 +584,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     lines,
     210,
     @raylib.Color::new(204, 178, 126, 236),
+    art,
   )
 }
 
@@ -570,7 +620,7 @@ fn draw_paused_overlay() -> Unit {
 
 ///|
 /// Draws the game-over overlay card showing the defeat reason, final stats, and a restart prompt.
-fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game, art : GameArt) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -591,23 +641,24 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
     lines,
     220,
     @raylib.Color::new(226, 120, 102, 236),
+    art,
   )
 }
 
 ///|
 /// Render world panels, HUD, and state overlays for the frame.
-pub fn draw_frame(game : @types.Game) -> Unit {
-  game.draw_background()
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
+  game.draw_background(art)
   game.draw_hud()
-  game.draw_student_table()
+  game.draw_student_table(art)
   draw_footer_help()
   game.draw_week_banner()
   game.draw_message()
 
   match game.state {
-    Title => game.draw_title_overlay()
+    Title => game.draw_title_overlay(art)
     Paused => draw_paused_overlay()
-    GameOver => game.draw_game_over_overlay()
+    GameOver => game.draw_game_over_overlay(art)
     Playing => ()
   }
 }

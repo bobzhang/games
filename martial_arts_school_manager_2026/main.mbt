@@ -5,11 +5,13 @@ fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [game] martial_arts_school_manager_2026",
   )
-  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(@types.target_fps)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = @render.load_game_art()
+  defer @render.unload_game_art(art)
 
   let game = @types.Game()
   @game.init_title_scene_pub(game)
@@ -24,7 +26,7 @@ fn main {
     @game.update_game(game, dt)
 
     @raylib.begin_drawing()
-    @render.draw_frame(game)
+    @render.draw_frame(game, art)
     @fps.draw()
     @raylib.end_drawing()
   }
