@@ -8,9 +8,24 @@ fn color_for_kind(kind : Int) -> @raylib.Color {
 }
 
 ///|
-/// Draws the background: a dark fill, two pulsing ambient circles, and subtle horizontal stripe bands.
-fn @types.Game::draw_bg(game : @types.Game) -> Unit {
+/// Draws the generated festival backdrop with a dark readability wash and subtle animated light bands.
+fn @types.Game::draw_bg(game : @types.Game, art : GameArt) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 22, 255))
+  draw_texture_cover(
+    art.festival_backdrop,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(4, 8, 14, 94),
+  )
 
   let wave : Float = Float::from_double(
     @math.sin((game.ui_t * 0.62).to_double()),
@@ -36,12 +51,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
       y,
       @types.screen_w,
       52,
-      @raylib.Color::new(
-        14 + i * 6 % 24,
-        22 + i * 8 % 24,
-        32 + i * 9 % 24,
-        15 + i * 9 % 30,
-      ),
+      @raylib.Color::new(242, 172, 74, 12 + i * 5 % 22),
     )
   }
 }
@@ -139,8 +149,8 @@ fn @types.Game::draw_hint_pair(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Draws the tile grid with alternating cell shading, coloured tiles with kind labels, selection highlight, cursor ring, hint pair, and link path.
-fn @types.Game::draw_board(game : @types.Game) -> Unit {
+/// Draws the tile grid with generated medallion tiles, kind labels, selection highlight, cursor ring, hint pair, and link path.
+fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
   @raylib.draw_rectangle(
@@ -181,16 +191,29 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
       if k > 0 {
         let c : @raylib.Color = color_for_kind(k)
 
-        @raylib.draw_rectangle(px + 4, py + 4, tile - 8, tile - 8, c)
-        @raylib.draw_rectangle_lines(
-          px + 4,
-          py + 4,
-          tile - 8,
-          tile - 8,
-          @raylib.Color::new(244, 248, 255, 226),
+        draw_texture_centered(
+          art.tile_medallion,
+          Float::from_int(px + tile / 2),
+          Float::from_int(py + tile / 2),
+          Float::from_int(tile - 5),
+          Float::from_int(tile - 5),
+          @raylib.Color::new(255, 255, 255, 238),
+        )
+        @raylib.draw_circle(
+          px + tile / 2,
+          py + tile / 2,
+          Float::from_int(tile) * 0.22,
+          @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 184),
         )
 
         let label : String = "\{k}"
+        @draw.draw_text(
+          label,
+          px + tile / 2 - @draw.measure_text(label, text_size) / 2 + 1,
+          py + tile / 2 - text_size / 2 + 1,
+          text_size,
+          @raylib.Color::new(24, 18, 14, 212),
+        )
         @draw.draw_text(
           label,
           px + tile / 2 - @draw.measure_text(label, text_size) / 2,
@@ -249,6 +272,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 ///|
 /// Draws a labelled button rectangle, filling with the accent colour when active and a default dark colour otherwise.
 fn draw_button(
+  art : GameArt,
   label : String,
   x : Int,
   y : Int,
@@ -268,12 +292,17 @@ fn draw_button(
       @raylib.Color::new(46, 62, 86, 226)
     },
   )
-  @raylib.draw_rectangle_lines(
+  draw_texture_rect(
+    art.button_skin,
     x,
     y,
     w,
     h,
-    @raylib.Color::new(190, 220, 242, 236),
+    if active {
+      @raylib.Color::new(255, 255, 255, 252)
+    } else {
+      @raylib.Color::new(235, 236, 238, 226)
+    },
   )
 
   let fs : Int = 28
@@ -287,14 +316,22 @@ fn draw_button(
 }
 
 ///|
-/// Draws the right-side panel showing level info, score, combo, timer, remaining tiles, time bar, hint/shuffle counts, keyboard help, action buttons, and the current message.
-fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
+/// Draws the right-side panel showing level info, stats, action buttons, and the current message.
+fn @types.Game::draw_side_panel(game : @types.Game, art : GameArt) -> Unit {
   let px : Int = @types.panel_x()
   let py : Int = 20
   let pw : Int = 396
   let ph : Int = @types.screen_h - 40
 
-  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(12, 18, 30, 242))
+  draw_texture_cover(
+    art.panel_skin,
+    Float::from_int(px),
+    Float::from_int(py),
+    Float::from_int(pw),
+    Float::from_int(ph),
+    @raylib.Color::new(255, 255, 255, 234),
+  )
+  @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(8, 12, 18, 118))
   @raylib.draw_rectangle_lines(
     px,
     py,
@@ -462,6 +499,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let (rx, ry, rw, rh) = @types.reset_button_rect()
 
   draw_button(
+    art,
     "SELECT",
     sx,
     sy,
@@ -471,6 +509,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(80, 134, 176, 236),
   )
   draw_button(
+    art,
     "HINT",
     hx,
     hy,
@@ -480,6 +519,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(162, 124, 70, 236),
   )
   draw_button(
+    art,
     "SHUFFLE",
     fx,
     fy,
@@ -489,6 +529,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(112, 98, 164, 236),
   )
   draw_button(
+    art,
     "CLEAR",
     cx,
     cy,
@@ -498,6 +539,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(110, 84, 132, 236),
   )
   draw_button(
+    art,
     "RESET",
     rx,
     ry,
@@ -665,8 +707,23 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Draws the title screen with game name, subtitle, instruction lines, and the Start Festival button.
-fn @types.Game::draw_title(game : @types.Game) -> Unit {
+/// Draws the title screen with generated festival key art, game name, instructions, and the Start Festival button.
+fn @types.Game::draw_title(game : @types.Game, art : GameArt) -> Unit {
+  draw_texture_cover(
+    art.title_art,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(4, 8, 12, 106),
+  )
   @draw.draw_text(
     "MatchLink Festival 2026",
     @types.screen_w / 2 - @draw.measure_text("MatchLink Festival 2026", 86) / 2,
@@ -709,6 +766,7 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     bh,
   )
   draw_button(
+    art,
     "Start Festival",
     bx,
     by,
@@ -721,7 +779,7 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the level-clear modal overlay showing score, time left, hints left, and a Next Stage button.
-fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_clear_overlay(game : @types.Game, art : GameArt) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -785,6 +843,7 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
     bh,
   )
   draw_button(
+    art,
     "Next Stage",
     bx,
     by,
@@ -797,7 +856,7 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the game-over failure overlay showing the final score and a Retry button.
-fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_fail_overlay(game : @types.Game, art : GameArt) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -854,6 +913,7 @@ fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
     bh,
   )
   draw_button(
+    art,
     "Retry",
     bx,
     by,
@@ -866,7 +926,7 @@ fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the campaign-complete overlay showing final score, stages cleared, total play time, and a Restart Festival button.
-fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_overlay(game : @types.Game, art : GameArt) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -938,6 +998,7 @@ fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
     bh,
   )
   draw_button(
+    art,
     "Restart Festival",
     bx,
     by,
@@ -950,26 +1011,26 @@ fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Renders the complete frame for the current campaign state.
-pub fn draw_frame(game : @types.Game) -> Unit {
-  game.draw_bg()
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
+  game.draw_bg(art)
 
   match game.state {
     Title => {
-      game.draw_title()
+      game.draw_title(art)
       return
     }
     _ => ()
   }
 
-  game.draw_board()
-  game.draw_side_panel()
+  game.draw_board(art)
+  game.draw_side_panel(art)
   game.draw_touch_overlay()
   game.draw_sparks()
 
   match game.state {
-    LevelClear => game.draw_level_clear_overlay()
-    CampaignClear => game.draw_campaign_overlay()
-    Fail => game.draw_fail_overlay()
+    LevelClear => game.draw_level_clear_overlay(art)
+    CampaignClear => game.draw_campaign_overlay(art)
+    Fail => game.draw_fail_overlay(art)
     _ => ()
   }
 }
