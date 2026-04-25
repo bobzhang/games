@@ -844,15 +844,22 @@ fn apply_repair(
 }
 
 ///|
-/// Draws the world background: gradient fill, drifting city-light dots, and a faint road grid overlay.
-fn draw_world_bg(t : Float) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
+/// Draws the world background: generated metro map art, drifting city-light dots, and a faint road grid overlay.
+fn draw_world_bg(art : GameArt, t : Float) -> Unit {
+  draw_texture_cover(
+    art.metro_map_backdrop,
+    Float::from_int(world_x - 10),
+    Float::from_int(world_y - 10),
+    Float::from_int(world_w + 20),
+    Float::from_int(world_h + 20),
+    @raylib.white,
+  )
+  @raylib.draw_rectangle(
     world_x - 10,
     world_y - 10,
     world_w + 20,
     world_h + 20,
-    @raylib.Color::new(20, 30, 52, 255),
-    @raylib.Color::new(14, 20, 34, 255),
+    @raylib.Color::new(6, 10, 18, 72),
   )
 
   for i in 0..<36 {
@@ -982,7 +989,7 @@ fn draw_segments(
 
 ///|
 /// Draws all active stations as line-coloured circles scaled by crowd size, with name and crowd count labels.
-fn draw_stations(stations : Array[Station]) -> Unit {
+fn draw_stations(art : GameArt, stations : Array[Station]) -> Unit {
   for station in stations {
     if !station.active {
       continue
@@ -998,13 +1005,7 @@ fn draw_stations(stations : Array[Station]) -> Unit {
 
     let r : Float = 16.0 +
       clampf(Float::from_int(station.crowd) * 0.03, 0.0, 16.0)
-    @raylib.draw_circle(station.x.to_int(), station.y.to_int(), r, col)
-    @raylib.draw_circle(
-      station.x.to_int(),
-      station.y.to_int(),
-      8.0,
-      @raylib.Color::new(24, 34, 52, 248),
-    )
+    draw_station_node_art(art, station, r, col)
 
     @draw.draw_text(
       station.name,
@@ -1043,6 +1044,7 @@ fn train_color(id : Int) -> @raylib.Color {
 ///|
 /// Draws all active trains interpolated along their current segment, showing passenger count and a blink highlight when delayed.
 fn draw_trains(
+  art : GameArt,
   trains : Array[Train],
   stations : Array[Station],
   route0 : Array[Int],
@@ -1065,14 +1067,7 @@ fn draw_trains(
       train_color(train.color_id)
     }
 
-    @raylib.draw_rectangle((x - 12.0).to_int(), (y - 8.0).to_int(), 24, 16, col)
-    @raylib.draw_rectangle_lines(
-      (x - 12.0).to_int(),
-      (y - 8.0).to_int(),
-      24,
-      16,
-      @raylib.Color::new(26, 34, 50, 252),
-    )
+    draw_train_art(art, x, y, col)
 
     @draw.draw_text(
       "\{train.passengers}",
@@ -1096,25 +1091,11 @@ fn draw_trains(
 
 ///|
 /// Draws the maintenance drone with a bobbing animation, rotor arm oscillation, and its current position.
-fn draw_drone(drone : Drone, t : Float) -> Unit {
+fn draw_drone(art : GameArt, drone : Drone, t : Float) -> Unit {
   let bob : Float = @math.sinf(t * 10.0 + drone.wobble) * 2.0
   let x : Float = drone.x
   let y : Float = drone.y + bob
 
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    13.0,
-    @raylib.Color::new(244, 226, 124, 252),
-  )
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    8.0,
-    @raylib.Color::new(66, 84, 120, 252),
-  )
-
-  // rotor arms
   let arm : Float = 20.0 + @math.sinf(t * 20.0) * 3.0
   @raylib.draw_line_ex(
     @raylib.Vector2::new(x - arm, y),
@@ -1128,6 +1109,7 @@ fn draw_drone(drone : Drone, t : Float) -> Unit {
     3.0,
     @raylib.Color::new(222, 234, 248, 240),
   )
+  draw_drone_art(art, x, y)
 }
 
 ///|
@@ -1275,8 +1257,12 @@ fn draw_button(
 /// Entry point: opens the window, initialises the network, and runs the frame loop handling drone input, network simulation, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] metro repair dispatch 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let stations : Array[Station] = Array::makei(max_stations, fn(_i) {
     {
@@ -1737,12 +1723,12 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
 
-    draw_world_bg(scene_t)
+    draw_world_bg(art, scene_t)
 
     let selected_fault : Int = drone.target_seg
     draw_segments(segments, stations, selected_fault, scene_t)
-    draw_stations(stations)
-    draw_trains(trains, stations, route0, route1)
+    draw_stations(art, stations)
+    draw_trains(art, trains, stations, route0, route1)
 
     // depot
     let depot_x : Int = world_x + 20
@@ -1754,14 +1740,15 @@ fn main {
       depot_y,
       depot_w,
       depot_h,
-      @raylib.Color::new(72, 132, 208, 172),
+      @raylib.Color::new(6, 10, 18, 118),
     )
-    @raylib.draw_rectangle_lines(
-      depot_x,
-      depot_y,
-      depot_w,
-      depot_h,
-      @raylib.Color::new(196, 224, 252, 238),
+    draw_texture_centered(
+      art.repair_depot,
+      Float::from_int(depot_x + depot_w / 2),
+      Float::from_int(depot_y + depot_h / 2 + 4),
+      192.0,
+      112.0,
+      @raylib.white,
     )
     @draw.draw_text(
       "DEPOT",
@@ -1778,7 +1765,7 @@ fn main {
       @raylib.Color::new(214, 232, 252, 236),
     )
 
-    draw_drone(drone, scene_t)
+    draw_drone(art, drone, scene_t)
 
     if drone.scan_t > 0.0 &&
       drone.target_seg >= 0 &&
@@ -2267,7 +2254,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
