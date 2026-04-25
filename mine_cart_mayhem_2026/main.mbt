@@ -51,8 +51,12 @@ fn spawn_hazard(hazards : Array[Hazard], lane : Int, kind : Int) -> Unit {
 /// Entry point: opens the window, runs the game loop handling cart movement, jumping, hazard spawning, collision, and rendering each frame.
 fn main {
   @raylib.init_window(sw, sh, "Mine Cart Mayhem 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let hazards : Array[Hazard] = Array::makei(120, fn(_i) {
     { alive: false, x: 0.0, lane: 0, kind: 0 }
@@ -188,105 +192,28 @@ fn main {
     }
 
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(21, 18, 16, 255))
+    draw_mine_backdrop(art)
 
     for l in 0..<lane_count {
-      let y = lane_y(l)
-      @raylib.draw_line(30, y.to_int(), sw - 20, y.to_int(), @raylib.darkgray)
-      @raylib.draw_line(
-        30,
-        y.to_int() + 8,
-        sw - 20,
-        y.to_int() + 8,
-        @raylib.gray,
-      )
-      @raylib.draw_rectangle(
-        0,
-        y.to_int() - 30,
-        sw,
-        22,
-        @raylib.Color::new(43, 35, 28, 255),
-      )
+      draw_track_lane(l, distance % 58)
     }
 
     for hazard in hazards {
       if hazard.alive {
         let y = lane_y(hazard.lane)
         if hazard.kind == 0 {
-          @raylib.draw_rectangle(
-            (hazard.x - 18.0).to_int(),
-            (y - 16.0).to_int(),
-            36,
-            20,
-            @raylib.brown,
-          )
-          @raylib.draw_rectangle_lines(
-            (hazard.x - 18.0).to_int(),
-            (y - 16.0).to_int(),
-            36,
-            20,
-            @raylib.black,
-          )
+          draw_low_rock_art(art, hazard.x, y)
         } else if hazard.kind == 1 {
-          @raylib.draw_rectangle(
-            (hazard.x - 16.0).to_int(),
-            (y - 56.0).to_int(),
-            32,
-            56,
-            @raylib.maroon,
-          )
-          @raylib.draw_rectangle_lines(
-            (hazard.x - 16.0).to_int(),
-            (y - 56.0).to_int(),
-            32,
-            56,
-            @raylib.black,
-          )
+          draw_high_wall_art(art, hazard.x, y)
         } else {
-          @raylib.draw_circle(
-            hazard.x.to_int(),
-            (y - 36.0).to_int(),
-            10.0,
-            @raylib.gold,
-          )
-          @raylib.draw_circle_lines(
-            hazard.x.to_int(),
-            (y - 36.0).to_int(),
-            10.0,
-            @raylib.yellow,
-          )
+          draw_gold_coin_art(art, hazard.x, y - 36.0)
         }
       }
     }
 
     let base_y = lane_y(cart_lane)
     let cart_y = base_y - jump_y
-    @raylib.draw_rectangle(
-      (cart_x - 28.0).to_int(),
-      (cart_y - 22.0).to_int(),
-      56,
-      22,
-      @raylib.skyblue,
-    )
-    @raylib.draw_rectangle(
-      (cart_x - 24.0).to_int(),
-      (cart_y - 30.0).to_int(),
-      48,
-      8,
-      @raylib.blue,
-    )
-    @raylib.draw_circle(
-      (cart_x - 16.0).to_int(),
-      (cart_y + 2.0).to_int(),
-      6.0,
-      @raylib.black,
-    )
-    @raylib.draw_circle(
-      (cart_x + 16.0).to_int(),
-      (cart_y + 2.0).to_int(),
-      6.0,
-      @raylib.black,
-    )
+    draw_mine_cart_art(art, cart_x, cart_y)
 
     @draw.draw_text("MINE CART MAYHEM 2026", 20, 14, 40, @raylib.orange)
     @draw.draw_text("Score \{score}", 20, 62, 30, @raylib.white)
@@ -332,7 +259,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
