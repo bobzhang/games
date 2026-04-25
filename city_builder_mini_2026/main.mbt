@@ -107,8 +107,12 @@ fn regen_world(terrain : Array[Int], zone : Array[Int]) -> Unit {
 /// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "City Builder Mini 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let terrain : Array[Int] = Array::make(gw * gh, 0)
   let zone : Array[Int] = Array::make(gw * gh, 0)
@@ -235,21 +239,23 @@ fn main {
 
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(18, 22, 28, 255))
+    @raylib.draw_rectangle_gradient_v(
+      0,
+      0,
+      sw,
+      sh,
+      @raylib.Color::new(36, 48, 50, 255),
+      @raylib.Color::new(14, 18, 24, 255),
+    )
 
     for y in 0..<gh {
       for x in 0..<gw {
         let i = gidx(x, y)
         let px = ox + x * cell
         let py = oy + y * cell
-        @raylib.draw_rectangle(px, py, cell, cell, terrain_color(terrain[i]))
+        draw_terrain_tile_art(art, terrain[i], px, py)
         if zone[i] != 0 {
-          @raylib.draw_rectangle(
-            px + 5,
-            py + 5,
-            cell - 10,
-            cell - 10,
-            zone_color(zone[i]),
-          )
+          draw_zone_tile_art(art, zone[i], px, py)
         }
         @raylib.draw_rectangle_lines(
           px,
@@ -310,7 +316,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
