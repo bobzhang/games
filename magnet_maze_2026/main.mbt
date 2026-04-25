@@ -354,8 +354,12 @@ fn apply_pulse(
 /// Entry point: initialises the window, runs the game loop, and handles input, physics, and rendering each frame.
 fn main {
   @raylib.init_window(sw, sh, "Magnet Maze 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let walls : Array[Bool] = Array::make(gw * gh, false)
   let orbs : Array[Orb] = Array::makei(max_orbs, fn(_i) {
@@ -558,7 +562,24 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(12, 18, 28, 255))
 
-    @raylib.draw_rectangle(0, 0, sw, 104, @raylib.Color::new(8, 12, 20, 230))
+    draw_texture_cover(
+      art.maze_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.Color::new(255, 255, 255, 255),
+    )
+    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(4, 7, 13, 56))
+    draw_texture_cover(
+      art.title_art,
+      0.0,
+      0.0,
+      390.0,
+      104.0,
+      @raylib.Color::new(142, 166, 190, 132),
+    )
+    @raylib.draw_rectangle(0, 0, sw, 104, @raylib.Color::new(8, 12, 20, 218))
     @draw.draw_text(
       "MAGNET MAZE 2026",
       18,
@@ -614,7 +635,32 @@ fn main {
           @raylib.Color::new(30, 38, 52, 255)
         }
 
-        @raylib.draw_rectangle(px0, py0, cell, cell, c)
+        if is_wall(walls, x, y) {
+          draw_texture_rect(
+            art.wall_tile,
+            px0,
+            py0,
+            cell,
+            cell,
+            @raylib.Color::new(255, 255, 255, 248),
+          )
+        } else {
+          draw_texture_rect(
+            art.floor_tile,
+            px0,
+            py0,
+            cell,
+            cell,
+            @raylib.Color::new(194, 206, 224, 212),
+          )
+        }
+        @raylib.draw_rectangle(
+          px0,
+          py0,
+          cell,
+          cell,
+          @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 44),
+        )
         @raylib.draw_rectangle_lines(
           px0,
           py0,
@@ -627,14 +673,16 @@ fn main {
           @raylib.draw_circle(
             px0 + cell / 2,
             py0 + cell / 2,
-            16.0,
-            @raylib.Color::new(250, 228, 126, 255),
+            24.0,
+            @raylib.Color::new(248, 216, 112, 88),
           )
-          @raylib.draw_circle(
-            px0 + cell / 2,
-            py0 + cell / 2,
-            8.0,
-            @raylib.Color::new(134, 110, 42, 255),
+          draw_texture_centered(
+            art.goal_sprite,
+            Float::from_int(px0 + cell / 2),
+            Float::from_int(py0 + cell / 2),
+            72.0,
+            72.0,
+            @raylib.Color::new(255, 255, 255, 255),
           )
         }
       }
@@ -646,14 +694,16 @@ fn main {
       }
       let x = ox + orb.x * cell + cell / 2
       let y = oy + orb.y * cell + cell / 2
-      @raylib.draw_circle(x, y, 18.0, @raylib.Color::new(198, 214, 234, 255))
-      @raylib.draw_circle(
-        x - 5,
-        y - 5,
-        7.0,
-        @raylib.Color::new(240, 246, 252, 255),
+      @raylib.draw_circle(x, y, 23.0, @raylib.Color::new(108, 214, 252, 86))
+      draw_texture_centered(
+        art.orb_sprite,
+        Float::from_int(x),
+        Float::from_int(y),
+        78.0,
+        78.0,
+        @raylib.Color::new(255, 255, 255, 255),
       )
-      @raylib.draw_circle_lines(x, y, 18.0, @raylib.Color::new(46, 58, 78, 255))
+      @raylib.draw_circle_lines(x, y, 20.0, @raylib.Color::new(46, 58, 78, 190))
     }
 
     let mx = ox + px * cell + cell / 2
@@ -664,15 +714,29 @@ fn main {
       @raylib.Color::new(246, 112, 112, 255)
     }
 
-    @raylib.draw_circle(mx, my, 20.0, magnet_color)
-    @raylib.draw_rectangle(
-      mx - 12,
-      my - 6,
-      24,
-      12,
-      @raylib.Color::new(22, 28, 36, 255),
+    @raylib.draw_circle(
+      mx,
+      my,
+      24.0,
+      @raylib.Color::new(
+        magnet_color.r.to_int(),
+        magnet_color.g.to_int(),
+        magnet_color.b.to_int(),
+        76,
+      ),
     )
-    @raylib.draw_rectangle_lines(mx - 14, my - 8, 28, 16, @raylib.white)
+    draw_texture_centered(
+      if attract_mode {
+        art.attract_sprite
+      } else {
+        art.repel_sprite
+      },
+      Float::from_int(mx),
+      Float::from_int(my),
+      92.0,
+      92.0,
+      @raylib.Color::new(255, 255, 255, 255),
+    )
 
     if transition_t > 0.0 {
       @raylib.draw_rectangle(
@@ -798,12 +862,20 @@ fn main {
 
     if over {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 126))
+      draw_texture_cover(
+        art.title_art,
+        Float::from_int(sw / 2 - 320),
+        Float::from_int(sh / 2 - 96),
+        640.0,
+        192.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
       @raylib.draw_rectangle(
         sw / 2 - 320,
         sh / 2 - 96,
         640,
         192,
-        @raylib.Color::new(16, 24, 40, 242),
+        @raylib.Color::new(16, 24, 40, 190),
       )
       @draw.draw_text(
         if won {
@@ -832,7 +904,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

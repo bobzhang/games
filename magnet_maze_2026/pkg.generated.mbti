@@ -6,6 +6,8 @@ package "bobzhang/games/magnet_maze_2026"
 // Errors
 
 // Types and methods
+type GameArt
+
 type Orb
 
 // Type aliases
