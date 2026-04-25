@@ -327,8 +327,12 @@ fn generate_course(
 /// Initialises the Raylib window and runs the full mountain-bike game loop including physics, collision, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "Mountain Bike Downhill 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let rider : Rider = {
     x: 640.0,
@@ -754,40 +758,8 @@ fn main {
 
     @raylib.begin_drawing()
 
-    let mut sky_col = @raylib.Color::new(144, 196, 250, 255)
-    if state == 2 {
-      sky_col = @raylib.Color::new(148, 212, 188, 255)
-    } else if state == 3 {
-      sky_col = @raylib.Color::new(176, 146, 170, 255)
-    }
-    @raylib.clear_background(sky_col)
-
-    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(222, 236, 255, 172))
-
-    let line_shift : Int = (cam_y / 36.0).to_int() % 2
-    for idx in 0..<30 {
-      let i = idx - 2
-      let sy : Int = i * 36 - cam_y.to_int() % 36
-      let stripe : Int = if (i + line_shift) % 2 == 0 { 236 } else { 226 }
-      @raylib.draw_rectangle(
-        0,
-        sy,
-        sw,
-        36,
-        @raylib.Color::new(stripe, stripe + 10, 255, 255),
-      )
-    }
-
-    for i in 0..<24 {
-      let ridge_x = i * 62 + (cam_y * 0.25).to_int() % 62
-      @raylib.draw_rectangle(
-        ridge_x,
-        74,
-        2,
-        sh - 74,
-        @raylib.Color::new(208, 226, 246, 170),
-      )
-    }
+    @raylib.clear_background(@raylib.Color::new(104, 154, 188, 255))
+    draw_downhill_backdrop(art, cam_y, state)
 
     for i in 0..<checkpoint_count {
       if !checkpoints[i].active {
@@ -799,40 +771,7 @@ fn main {
         continue
       }
 
-      let left_x : Float = checkpoints[i].x - checkpoints[i].width * 0.5
-      let right_x : Float = checkpoints[i].x + checkpoints[i].width * 0.5
-
-      let mut pole_col = @raylib.Color::new(74, 106, 168, 255)
-      let mut banner_col = @raylib.Color::new(86, 188, 246, 220)
-      if checkpoints[i].state == 1 {
-        pole_col = @raylib.Color::new(72, 162, 104, 255)
-        banner_col = @raylib.Color::new(108, 232, 160, 220)
-      } else if checkpoints[i].state == 2 {
-        pole_col = @raylib.Color::new(178, 82, 104, 255)
-        banner_col = @raylib.Color::new(236, 128, 144, 220)
-      }
-
-      @raylib.draw_rectangle(
-        (left_x - 6.0).to_int(),
-        (csy - 42.0).to_int(),
-        12,
-        84,
-        pole_col,
-      )
-      @raylib.draw_rectangle(
-        (right_x - 6.0).to_int(),
-        (csy - 42.0).to_int(),
-        12,
-        84,
-        pole_col,
-      )
-      @raylib.draw_rectangle(
-        (left_x + 6.0).to_int(),
-        (csy - 24.0).to_int(),
-        (checkpoints[i].width - 12.0).to_int(),
-        16,
-        banner_col,
-      )
+      draw_checkpoint_art(checkpoints[i], art, csy)
     }
 
     for hazard in hazards {
@@ -845,36 +784,7 @@ fn main {
         continue
       }
 
-      if hazard.kind == 0 {
-        @raylib.draw_circle(
-          hazard.x.to_int(),
-          hsy.to_int(),
-          hazard.size,
-          @raylib.Color::new(114, 128, 152, 255),
-        )
-      } else if hazard.kind == 1 {
-        @raylib.draw_triangle(
-          @raylib.Vector2::new(hazard.x, hsy - hazard.size),
-          @raylib.Vector2::new(hazard.x - hazard.size, hsy + hazard.size),
-          @raylib.Vector2::new(hazard.x + hazard.size, hsy + hazard.size),
-          @raylib.Color::new(64, 130, 84, 255),
-        )
-      } else if hazard.kind == 2 {
-        @raylib.draw_rectangle(
-          (hazard.x - hazard.size).to_int(),
-          (hsy - hazard.size).to_int(),
-          (hazard.size * 2.0).to_int(),
-          (hazard.size * 2.0).to_int(),
-          @raylib.Color::new(168, 138, 104, 255),
-        )
-      } else {
-        @raylib.draw_circle(
-          hazard.x.to_int(),
-          hsy.to_int(),
-          hazard.size,
-          @raylib.Color::new(86, 164, 196, 255),
-        )
-      }
+      draw_hazard_art(hazard, art, hsy)
     }
 
     for pickup in pickups {
@@ -892,20 +802,7 @@ fn main {
       } else {
         180
       }
-      let pcol = if pickup.kind == 0 {
-        @raylib.Color::new(228, 126, 134, blink)
-      } else if pickup.kind == 1 {
-        @raylib.Color::new(124, 228, 166, blink)
-      } else {
-        @raylib.Color::new(130, 208, 252, blink)
-      }
-      @raylib.draw_circle(pickup.x.to_int(), psy.to_int(), 10.0, pcol)
-      @raylib.draw_circle_lines(
-        pickup.x.to_int(),
-        psy.to_int(),
-        16.0,
-        @raylib.Color::new(246, 250, 255, blink),
-      )
+      draw_pickup_art(pickup, art, psy, blink)
     }
 
     for particle in particles {
@@ -929,11 +826,6 @@ fn main {
 
     let rider_sy : Float = world_to_screen_y(rider.y, rider.y)
 
-    let mut body_col = @raylib.Color::new(242, 176, 72, 255)
-    if rider.flash_t > 0.0 {
-      body_col = @raylib.Color::new(255, 240, 220, 255)
-    }
-
     let mut jump_offset : Float = 0.0
     if rider.air_t > 0.0 {
       let k = rider.air_t / rider.jump_peak
@@ -943,64 +835,7 @@ fn main {
       }
     }
 
-    @raylib.draw_rectangle(
-      (rider.x - 26.0).to_int(),
-      (rider_sy + 12.0 - jump_offset).to_int(),
-      52,
-      8,
-      @raylib.Color::new(58, 78, 112, 255),
-    )
-    @raylib.draw_circle(
-      (rider.x - 18.0).to_int(),
-      (rider_sy + 16.0 - jump_offset).to_int(),
-      8.0,
-      @raylib.Color::new(44, 56, 78, 255),
-    )
-    @raylib.draw_circle(
-      (rider.x + 18.0).to_int(),
-      (rider_sy + 16.0 - jump_offset).to_int(),
-      8.0,
-      @raylib.Color::new(44, 56, 78, 255),
-    )
-    @raylib.draw_circle(
-      rider.x.to_int(),
-      (rider_sy - 2.0 - jump_offset).to_int(),
-      13.0,
-      body_col,
-    )
-    @raylib.draw_rectangle(
-      (rider.x - 8.0).to_int(),
-      (rider_sy + 4.0 - jump_offset).to_int(),
-      16,
-      12,
-      @raylib.Color::new(28, 34, 48, 255),
-    )
-
-    if rider.air_t > 0.0 {
-      @raylib.draw_circle_lines(
-        rider.x.to_int(),
-        (rider_sy - jump_offset).to_int(),
-        24.0,
-        @raylib.Color::new(132, 224, 252, 220),
-      )
-    }
-
-    if rider.boost_t > 0.0 {
-      @raylib.draw_rectangle(
-        (rider.x - 30.0).to_int(),
-        (rider_sy + 8.0 - jump_offset).to_int(),
-        6,
-        10,
-        @raylib.Color::new(112, 214, 252, 255),
-      )
-      @raylib.draw_rectangle(
-        (rider.x + 24.0).to_int(),
-        (rider_sy + 8.0 - jump_offset).to_int(),
-        6,
-        10,
-        @raylib.Color::new(112, 214, 252, 255),
-      )
-    }
+    draw_rider_art(rider, art, rider_sy, jump_offset)
 
     @raylib.draw_rectangle(0, 0, sw, 74, @raylib.Color::new(8, 12, 22, 222))
     @draw.draw_text(
@@ -1379,7 +1214,4 @@ fn main {
       }
     }
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
