@@ -761,8 +761,9 @@ fn min_bridge_integrity(spans : Array[BridgeSpan]) -> Float {
 }
 
 ///|
-/// Draws the animated river background with gradient fill, scrolling wave stripes, and storm tinting.
+/// Draws the generated river backdrop with scrolling wave stripes and storm tinting.
 fn draw_river(
+  art : GameArt,
   x : Int,
   y : Int,
   w : Int,
@@ -770,9 +771,7 @@ fn draw_river(
   scene_t : Float,
   storm : Float,
 ) -> Unit {
-  let base_top = @raylib.Color::new(18, 58, 96, 255)
-  let base_bottom = @raylib.Color::new(10, 34, 62, 255)
-  @raylib.draw_rectangle_gradient_v(x, y, w, h, base_top, base_bottom)
+  draw_monsoon_backdrop(art, x, y, w, h, storm)
 
   let stripe_count : Int = 46
   let seg_h : Float = Float::from_int(h) / Float::from_int(stripe_count)
@@ -828,116 +827,36 @@ fn draw_current_grid(cells : Array[CurrentCell], storm : Float) -> Unit {
 }
 
 ///|
-/// Draws all bridge spans with integrity fill bars, border outlines, and low-integrity alarm icons.
-fn draw_spans(spans : Array[BridgeSpan], scene_t : Float) -> Unit {
+/// Draws all generated bridge span sprites with compact integrity bars and alarms.
+fn draw_spans(
+  art : GameArt,
+  spans : Array[BridgeSpan],
+  scene_t : Float,
+) -> Unit {
   for i in 0..<spans.length() {
-    let p : Float = clampf(spans[i].integrity / 100.0, 0.0, 1.0)
-    let red : Int = 210 - (p * 100.0).to_int()
-    let green : Int = 34 + (p * 180.0).to_int()
-    let pulse : Float = @math.sinf(scene_t * 4.6 + Float::from_int(i) * 0.7) *
-      0.5 +
-      0.5
-
-    @raylib.draw_rectangle(
-      spans[i].x.to_int(),
-      spans[i].y.to_int(),
-      spans[i].w.to_int(),
-      spans[i].h.to_int(),
-      @raylib.Color::new(36, 40, 46, 230),
-    )
-    @raylib.draw_rectangle(
-      (spans[i].x + 5.0).to_int(),
-      (spans[i].y + 6.0).to_int(),
-      ((spans[i].w - 10.0) * p).to_int(),
-      (spans[i].h - 12.0).to_int(),
-      @raylib.Color::new(red, green, 56, 228),
-    )
-    @raylib.draw_rectangle_lines(
-      spans[i].x.to_int(),
-      spans[i].y.to_int(),
-      spans[i].w.to_int(),
-      spans[i].h.to_int(),
-      @raylib.Color::new(224, 228, 236, 216),
-    )
-
-    if spans[i].integrity < 44.0 {
-      let ax : Float = spans[i].x + spans[i].w * 0.5
-      let ay : Float = spans[i].y - 14.0
-      let rr : Float = 9.0 + pulse * 5.0
-      @raylib.draw_circle_v(
-        @raylib.Vector2::new(ax, ay),
-        rr,
-        @raylib.Color::new(255, 68, 46, 128),
-      )
-      @draw.draw_text(
-        "!",
-        (ax - 4.0).to_int(),
-        (ay - 10.0).to_int(),
-        18,
-        @raylib.white,
-      )
-    }
+    draw_bridge_span_art(art, spans[i], scene_t, i)
   }
 }
 
 ///|
-/// Draws all active rafts as coloured circles with panic-tinted fills and blinking flare indicators.
-fn draw_rafts(rafts : Array[RaftGroup], scene_t : Float) -> Unit {
+/// Draws all active generated raft sprites with panic glow and blinking flare indicators.
+fn draw_rafts(art : GameArt, rafts : Array[RaftGroup], scene_t : Float) -> Unit {
   for raft in rafts {
     if !raft.active {
       continue
     }
-    let panic_col : Int = 90 + (clampf(raft.panic, 0.0, 1.0) * 130.0).to_int()
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(raft.x, raft.y),
-      17.0,
-      @raylib.Color::new(138, 108, 70, 242),
-    )
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(raft.x, raft.y),
-      10.0,
-      @raylib.Color::new(208, panic_col, 98, 238),
-    )
-
-    let blink : Float = @math.sinf(scene_t * 7.0 + raft.flare_t) * 0.5 + 0.5
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(raft.x, raft.y - 22.0),
-      5.0 + blink * 3.0,
-      @raylib.Color::new(255, 110, 72, 180),
-    )
-    @draw.draw_text(
-      "\{raft.survivors}",
-      (raft.x - 8.0).to_int(),
-      (raft.y - 7.0).to_int(),
-      18,
-      @raylib.white,
-    )
+    draw_raft_art(art, raft, scene_t)
   }
 }
 
 ///|
-/// Draws all active debris pieces as filled rectangles with lighter border outlines.
-fn draw_debris_field(debris : Array[Debris]) -> Unit {
+/// Draws all active generated debris sprites scaled to their hazard size.
+fn draw_debris_field(art : GameArt, debris : Array[Debris]) -> Unit {
   for debris in debris {
     if !debris.active {
       continue
     }
-    let w : Float = debris.size * 1.8
-    let h : Float = debris.size * 0.9
-    @raylib.draw_rectangle(
-      (debris.x - w * 0.5).to_int(),
-      (debris.y - h * 0.5).to_int(),
-      w.to_int(),
-      h.to_int(),
-      @raylib.Color::new(88, 62, 38, 226),
-    )
-    @raylib.draw_rectangle_lines(
-      (debris.x - w * 0.5).to_int(),
-      (debris.y - h * 0.5).to_int(),
-      w.to_int(),
-      h.to_int(),
-      @raylib.Color::new(170, 144, 102, 210),
-    )
+    draw_debris_art(art, debris)
   }
 }
 
@@ -987,48 +906,17 @@ fn draw_strikes(strikes : Array[LightningStrike], scene_t : Float) -> Unit {
 }
 
 ///|
-/// Draws all active supply crates as blinking labelled squares with a glow halo effect.
-fn draw_supplies(supplies : Array[SupplyCrate], scene_t : Float) -> Unit {
+/// Draws all active generated supply crate sprites with a kind-specific glow.
+fn draw_supplies(
+  art : GameArt,
+  supplies : Array[SupplyCrate],
+  scene_t : Float,
+) -> Unit {
   for supply in supplies {
     if !supply.active {
       continue
     }
-    let blink : Float = @math.sinf(scene_t * 6.2 + supply.blink) * 0.5 + 0.5
-    let col = if supply.kind == 0 {
-      @raylib.Color::new(104, 222, 132, 212)
-    } else {
-      @raylib.Color::new(112, 190, 248, 212)
-    }
-    @raylib.draw_rectangle(
-      (supply.x - 12.0).to_int(),
-      (supply.y - 12.0).to_int(),
-      24,
-      24,
-      col,
-    )
-    @raylib.draw_rectangle_lines(
-      (supply.x - 12.0).to_int(),
-      (supply.y - 12.0).to_int(),
-      24,
-      24,
-      @raylib.Color::new(248, 252, 255, 230),
-    )
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(supply.x, supply.y),
-      18.0 + blink * 8.0,
-      @raylib.Color::new(236, 248, 255, (blink * 70.0).to_int()),
-    )
-    @draw.draw_text(
-      if supply.kind == 0 {
-        "K"
-      } else {
-        "F"
-      },
-      (supply.x - 5.0).to_int(),
-      (supply.y - 8.0).to_int(),
-      16,
-      @raylib.Color::new(20, 28, 40, 255),
-    )
+    draw_supply_art(art, supply, scene_t)
   }
 }
 
@@ -1074,107 +962,20 @@ fn draw_wakes(wakes : Array[WakeParticle]) -> Unit {
 }
 
 ///|
-/// Draws the rescue boat as a triangle with a bobbing animation, interior highlight, and boost heat glow.
-fn draw_boat(boat : RescueBoat, scene_t : Float) -> Unit {
-  let bob : Float = @math.sinf(scene_t * 7.2) * 1.4
-  let x : Float = boat.x
-  let y : Float = boat.y + bob
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(x + 25.0, y),
-    @raylib.Vector2::new(x - 20.0, y - 14.0),
-    @raylib.Vector2::new(x - 20.0, y + 14.0),
-    @raylib.Color::new(252, 124, 78, 246),
-  )
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(x + 13.0, y),
-    @raylib.Vector2::new(x - 14.0, y - 8.0),
-    @raylib.Vector2::new(x - 14.0, y + 8.0),
-    @raylib.Color::new(250, 212, 160, 242),
-  )
-  @raylib.draw_circle_v(
-    @raylib.Vector2::new(x - 4.0, y),
-    5.0,
-    @raylib.Color::new(40, 46, 62, 238),
-  )
-
-  let heat_alpha : Int = clampf(boat.boost_heat * 160.0, 0.0, 170.0).to_int()
-  if heat_alpha > 0 {
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(x - 21.0, y),
-      8.0 + boat.boost_heat * 5.0,
-      @raylib.Color::new(255, 146, 62, heat_alpha),
-    )
-  }
+/// Draws the generated rescue boat sprite with a bobbing animation and boost heat glow.
+fn draw_boat(art : GameArt, boat : RescueBoat, scene_t : Float) -> Unit {
+  draw_rescue_boat_art(art, boat, scene_t)
 }
 
 ///|
-/// Draws the supply dock and evacuation camp rectangles with labels and pulsing highlight circles.
+/// Draws the generated supply dock and evacuation camp sprites with gameplay labels.
 fn draw_world_panels(
+  art : GameArt,
   dock : SupplyDock,
   camp : EvacCamp,
   scene_t : Float,
 ) -> Unit {
-  @raylib.draw_rectangle(
-    dock.x.to_int(),
-    dock.y.to_int(),
-    dock.w,
-    dock.h,
-    @raylib.Color::new(38, 66, 58, 228),
-  )
-  @raylib.draw_rectangle_lines(
-    dock.x.to_int(),
-    dock.y.to_int(),
-    dock.w,
-    dock.h,
-    @raylib.Color::new(154, 238, 190, 220),
-  )
-  @draw.draw_text(
-    "SUPPLY DOCK",
-    dock.x.to_int() + 14,
-    dock.y.to_int() + 12,
-    20,
-    @raylib.Color::new(220, 248, 234, 240),
-  )
-
-  @raylib.draw_rectangle(
-    camp.x.to_int(),
-    camp.y.to_int(),
-    camp.w,
-    camp.h,
-    @raylib.Color::new(62, 72, 40, 228),
-  )
-  @raylib.draw_rectangle_lines(
-    camp.x.to_int(),
-    camp.y.to_int(),
-    camp.w,
-    camp.h,
-    @raylib.Color::new(240, 242, 148, 220),
-  )
-  @draw.draw_text(
-    "EVAC CAMP",
-    camp.x.to_int() + 16,
-    camp.y.to_int() + 12,
-    20,
-    @raylib.Color::new(250, 250, 208, 240),
-  )
-
-  let pulse : Float = @math.sinf(scene_t * 3.6) * 0.5 + 0.5
-  @raylib.draw_circle_v(
-    @raylib.Vector2::new(
-      dock.x + Float::from_int(dock.w) * 0.5,
-      dock.y + Float::from_int(dock.h) * 0.5,
-    ),
-    20.0 + pulse * 6.0,
-    @raylib.Color::new(154, 244, 212, 70),
-  )
-  @raylib.draw_circle_v(
-    @raylib.Vector2::new(
-      camp.x + Float::from_int(camp.w) * 0.5,
-      camp.y + Float::from_int(camp.h) * 0.5,
-    ),
-    20.0 + pulse * 6.0,
-    @raylib.Color::new(244, 236, 154, 70),
-  )
+  draw_world_panel_art(art, dock, camp, scene_t)
 }
 
 ///|
@@ -1674,10 +1475,12 @@ fn main {
   let sw : Int = 1700
   let sh : Int = 960
   @raylib.init_window(sw, sh, "raylib [game] monsoon bridge rescue 2026")
-  @draw.cleanup()
   defer @raylib.close_window()
   @raylib.set_target_fps(120)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let world_x : Int = 24
   let world_y : Int = 24
@@ -2115,7 +1918,9 @@ fn main {
 
       boat.x = boat.x + boat.vx * dt
       boat.y = boat.y + boat.vy * dt
-      boat.heading = boat.heading + dt * (boat.vx * 0.004 + boat.vy * 0.002)
+      if speed > 12.0 {
+        boat.heading = @math.atan2f(boat.vy, boat.vx)
+      }
 
       if boat.x < world_l + 14.0 {
         boat.x = world_l + 14.0
@@ -2529,16 +2334,18 @@ fn main {
       }
       let wind_x : Float = -140.0 - storm_for_draw * 120.0
 
-      draw_river(world_x, world_y, world_w, world_h, scene_t, storm_for_draw)
+      draw_river(
+        art, world_x, world_y, world_w, world_h, scene_t, storm_for_draw,
+      )
       draw_current_grid(currents, storm_for_draw)
-      draw_world_panels(dock, camp, scene_t)
-      draw_spans(spans, scene_t)
-      draw_supplies(supplies, scene_t)
-      draw_debris_field(debris)
-      draw_rafts(rafts, scene_t)
+      draw_world_panels(art, dock, camp, scene_t)
+      draw_spans(art, spans, scene_t)
+      draw_supplies(art, supplies, scene_t)
+      draw_debris_field(art, debris)
+      draw_rafts(art, rafts, scene_t)
       draw_wakes(wakes)
       draw_strikes(strikes, scene_t)
-      draw_boat(boat, scene_t)
+      draw_boat(art, boat, scene_t)
       draw_rain(rain, wind_x)
 
       if boat.siren_t > 0.0 {
