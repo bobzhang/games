@@ -89,8 +89,12 @@ fn reset_shots(shots : Array[Shot]) -> Unit {
 /// Entry point: opens the window, runs the game loop handling input, physics, AI, collision, and rendering each frame.
 fn main {
   @raylib.init_window(sw, sh, "Mech Arena Duel 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let shots : Array[Shot] = Array::makei(260, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, from_enemy: false }
@@ -321,32 +325,11 @@ fn main {
     }
 
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(18, 20, 24, 255))
-
-    // arena floor
-    for y = 120; y < sh; y = y + 40 {
-      @raylib.draw_line(60, y, sw - 60, y, @raylib.fade(@raylib.gray, 0.2))
-    }
-    for x = 80; x < sw; x = x + 40 {
-      @raylib.draw_line(x, 120, x, sh - 20, @raylib.fade(@raylib.gray, 0.14))
-    }
+    draw_arena_floor()
 
     for bot in bots {
       if bot.alive {
-        @raylib.draw_rectangle(
-          (bot.x - 18.0).to_int(),
-          (bot.y - 18.0).to_int(),
-          36,
-          36,
-          @raylib.maroon,
-        )
-        @raylib.draw_rectangle_lines(
-          (bot.x - 18.0).to_int(),
-          (bot.y - 18.0).to_int(),
-          36,
-          36,
-          @raylib.white,
-        )
+        draw_enemy_bot_art(art, bot.x, bot.y)
         @draw.draw_text(
           "\{bot.hp}",
           (bot.x - 10.0).to_int(),
@@ -359,25 +342,11 @@ fn main {
 
     for shot in shots {
       if shot.alive {
-        let c = if shot.from_enemy { @raylib.orange } else { @raylib.skyblue }
-        @raylib.draw_circle(shot.x.to_int(), shot.y.to_int(), 4.0, c)
+        draw_plasma_bolt_art(art, shot.x, shot.y, shot.from_enemy)
       }
     }
 
-    @raylib.draw_rectangle(
-      (px - 20.0).to_int(),
-      (py - 20.0).to_int(),
-      40,
-      40,
-      @raylib.blue,
-    )
-    @raylib.draw_rectangle_lines(
-      (px - 20.0).to_int(),
-      (py - 20.0).to_int(),
-      40,
-      40,
-      @raylib.white,
-    )
+    draw_player_mech_art(art, px, py)
 
     @draw.draw_text("MECH ARENA DUEL 2026", 20, 18, 40, @raylib.skyblue)
     @draw.draw_text("Score \{score}", 20, 64, 30, @raylib.white)
@@ -438,7 +407,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
