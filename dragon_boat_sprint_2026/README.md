@@ -1,6 +1,6 @@
 # dragon_boat_sprint_2026
 
-A rhythm-based dragon boat racing game. Paddle in time with the beat to build speed, steer around river hazards, and race against AI rivals to the finish line through multiple checkpoints.
+A rhythm-based dragon boat racing game with generated festival river artwork. Paddle in time with the beat to build speed, steer around river hazards, and race against AI rivals to the finish line through multiple checkpoints. The race view uses a generated festival backdrop, generated river surface, generated player/rival dragon boat sprites, and generated debris/wave hazard art.
 
 ## Build and Run
 
@@ -107,9 +107,11 @@ Internal helpers (not exported): `sample_input`, `clear_input`, `reset_run`, `se
 
 | Function | Description |
 |---|---|
+| `pub fn load_assets() -> Unit` | Loads generated festival, river, boat, debris, and wave textures for the renderer |
+| `pub fn unload_assets() -> Unit` | Releases generated renderer textures |
 | `pub fn draw_frame(@types.Game) -> Unit` | Renders background, river, checkpoints, hazards, rivals, player boat, HUD panel, message banner, and any state overlay |
 
-Internal helpers (not exported): `draw_background`, `draw_river_surface`, `draw_checkpoint_lines`, `draw_hazards`, `draw_boat`, `draw_rivals`, `draw_player_boat`, `draw_hud_panel`, `draw_message_banner`, `draw_title_overlay`, `draw_pause_overlay`, `draw_result_overlay`, `lane_to_x`, `world_y`, `rival_hull_color`, `current_rank`.
+Internal helpers (not exported): generated texture drawing helpers, `draw_background`, `draw_river_surface`, `draw_checkpoint_lines`, `draw_hazards`, `draw_boat`, `draw_rivals`, `draw_player_boat`, `draw_hud_panel`, `draw_message_banner`, `draw_title_overlay`, `draw_pause_overlay`, `draw_result_overlay`, `lane_to_x`, `world_y`, `rival_hull_color`, `current_rank`.
 
 ## Architecture
 
@@ -118,6 +120,7 @@ Internal helpers (not exported): `draw_background`, `draw_river_surface`, `draw_
 ```
 dragon_boat_sprint_2026/
 ├── main.mbt                  # Entry point: window init, game loop
+├── resources/                # Generated festival, river, boat, debris, and wave assets
 └── internal/
     ├── types/
     │   ├── constants.mbt     # Screen, river, timing, race constants
@@ -127,14 +130,15 @@ dragon_boat_sprint_2026/
     │   ├── input.mbt         # Keyboard sampling into Input snapshot
     │   └── logic.mbt         # update_game: rhythm, physics, AI, scoring
     └── render/
+        ├── assets.mbt        # Generated texture loading and art draw helpers
         └── render.mbt        # draw_frame: river world, boats, HUD, overlays
 ```
 
 ### Data Flow
 
-Each frame the main loop calls `update_game(game, dt)` followed by `draw_frame(game)`. Inside `update_game`, raw keyboard state is sampled into the flat `Input` sub-struct stored inside `Game`. The per-state dispatcher then routes control: the `Play` branch runs rhythm timing, paddle evaluation, burst gating, wave/lane physics, hazard spawning and collision, rival AI, checkpoint detection, and speed integration, all of which write back into `Game` fields. When the race ends, the state transitions to `Result` and a final score is tallied.
+Each frame the main loop calls `update_game(game, dt)` followed by `draw_frame(game)`. The main package loads generated render textures once after window initialization and unloads them before shutdown. Inside `update_game`, raw keyboard state is sampled into the flat `Input` sub-struct stored inside `Game`. The per-state dispatcher then routes control: the `Play` branch runs rhythm timing, paddle evaluation, burst gating, wave/lane physics, hazard spawning and collision, rival AI, checkpoint detection, and speed integration, all of which write back into `Game` fields. When the race ends, the state transitions to `Result` and a final score is tallied.
 
-`draw_frame` is read-only with respect to game state. It converts distance and lane values into screen coordinates via `lane_to_x` and `world_y`, walks the hazard and rival pools, and draws the right-side HUD panel containing the rhythm meter, beat-lane indicator, and live race stats. Overlay functions for `Title`, `Paused`, and `Result` states are drawn last so they appear above the world.
+`draw_frame` is read-only with respect to game state. It converts distance and lane values into screen coordinates via `lane_to_x` and `world_y`, walks the hazard and rival pools, draws generated river/boat/hazard assets when available, and draws the right-side HUD panel containing the rhythm meter, beat-lane indicator, and live race stats. Overlay functions for `Title`, `Paused`, and `Result` states are drawn last so they appear above the world.
 
 ### Key Design Patterns
 

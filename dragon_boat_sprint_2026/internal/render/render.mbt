@@ -17,6 +17,10 @@ fn @types.Game::world_y(game : @types.Game, dist : Float) -> Float {
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 20, 34, 255))
 
+  if draw_background_art(game) {
+    return
+  }
+
   let glow0 : Float = 0.5 + 0.5 * @math.sinf(game.ui_t * 0.62)
   let glow1 : Float = 0.5 + 0.5 * @math.cosf(game.ui_t * 0.48)
 
@@ -59,13 +63,15 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 ///|
 /// Draws the river rectangle, vertical lane dividers, and animated horizontal ripple lines.
 fn @types.Game::draw_river_surface(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(
-    @types.river_x,
-    @types.river_y,
-    @types.river_w,
-    @types.river_h,
-    @raylib.Color::new(24, 88, 130, 236),
-  )
+  if !draw_river_surface_art(game) {
+    @raylib.draw_rectangle(
+      @types.river_x,
+      @types.river_y,
+      @types.river_w,
+      @types.river_h,
+      @raylib.Color::new(24, 88, 130, 236),
+    )
+  }
 
   @raylib.draw_rectangle_lines(
     @types.river_x,
@@ -160,48 +166,52 @@ fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
       let w : Int = (hazard.size * 1.7).to_int()
       let h : Int = (hazard.size * 0.8).to_int()
 
-      @raylib.draw_rectangle(
-        x - w / 2,
-        y - h / 2,
-        w,
-        h,
-        @raylib.Color::new(98, 66, 44, 236),
-      )
-      @raylib.draw_rectangle_lines(
-        x - w / 2,
-        y - h / 2,
-        w,
-        h,
-        @raylib.Color::new(212, 186, 156, 210),
-      )
-      @raylib.draw_circle(
-        x - w / 2,
-        y,
-        Float::from_int(h / 2),
-        @raylib.Color::new(128, 86, 58, 226),
-      )
-      @raylib.draw_circle(
-        x + w / 2,
-        y,
-        Float::from_int(h / 2),
-        @raylib.Color::new(128, 86, 58, 226),
-      )
+      if !draw_debris_art(x, y, w, h) {
+        @raylib.draw_rectangle(
+          x - w / 2,
+          y - h / 2,
+          w,
+          h,
+          @raylib.Color::new(98, 66, 44, 236),
+        )
+        @raylib.draw_rectangle_lines(
+          x - w / 2,
+          y - h / 2,
+          w,
+          h,
+          @raylib.Color::new(212, 186, 156, 210),
+        )
+        @raylib.draw_circle(
+          x - w / 2,
+          y,
+          Float::from_int(h / 2),
+          @raylib.Color::new(128, 86, 58, 226),
+        )
+        @raylib.draw_circle(
+          x + w / 2,
+          y,
+          Float::from_int(h / 2),
+          @raylib.Color::new(128, 86, 58, 226),
+        )
+      }
     } else {
       let r : Float = hazard.size
-      @raylib.draw_circle_lines(x, y, r, @raylib.Color::new(228, 248, 255, 184))
-      @raylib.draw_circle_lines(
-        x,
-        y,
-        r * 0.7,
-        @raylib.Color::new(168, 226, 248, 164),
-      )
-      @raylib.draw_line(
-        x - r.to_int(),
-        y,
-        x + r.to_int(),
-        y,
-        @raylib.Color::new(212, 242, 255, 176),
-      )
+      if !draw_wave_art(x, y, r) {
+        @raylib.draw_circle_lines(x, y, r, @raylib.Color::new(228, 248, 255, 184))
+        @raylib.draw_circle_lines(
+          x,
+          y,
+          r * 0.7,
+          @raylib.Color::new(168, 226, 248, 164),
+        )
+        @raylib.draw_line(
+          x - r.to_int(),
+          y,
+          x + r.to_int(),
+          y,
+          @raylib.Color::new(212, 242, 255, 176),
+        )
+      }
     }
   }
 }
@@ -216,6 +226,10 @@ fn draw_boat(
   trim : @raylib.Color,
   show_flag : Bool,
 ) -> Unit {
+  if draw_boat_art(x, y, scale, hull, show_flag) {
+    return
+  }
+
   @raylib.draw_ellipse(x, y, scale * 74.0, scale * 18.0, hull)
   @raylib.draw_circle(x - (scale * 54.0).to_int(), y, scale * 18.0, hull)
   @raylib.draw_circle(x + (scale * 54.0).to_int(), y, scale * 18.0, hull)
@@ -344,13 +358,20 @@ fn @types.Game::draw_player_boat(game : @types.Game) -> Unit {
 
   draw_boat(x, y, 1.0, hull, trim, true)
 
-  @raylib.draw_circle(
-    x + 72,
-    y - 2,
-    14.0,
-    @raylib.Color::new(246, 188, 86, 244),
-  )
-  @raylib.draw_circle(x + 76, y - 4, 4.5, @raylib.Color::new(44, 34, 24, 238))
+  if !has_player_boat_art() {
+    @raylib.draw_circle(
+      x + 72,
+      y - 2,
+      14.0,
+      @raylib.Color::new(246, 188, 86, 244),
+    )
+    @raylib.draw_circle(
+      x + 76,
+      y - 4,
+      4.5,
+      @raylib.Color::new(44, 34, 24, 238),
+    )
+  }
 
   let miss : Float = @types.minf(
     game.rhythm_t,
