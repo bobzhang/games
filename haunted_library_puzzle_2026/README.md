@@ -1,6 +1,6 @@
 # Haunted Library Puzzle 2026
 
-A grid-based puzzle game set in a haunted library. Navigate through a maze of bookshelves, collect lost pages, activate arcane seals by pushing shelves onto glowing circles, and escape through the gate while avoiding patrolling ghosts.
+A grid-based puzzle game set in a haunted library with generated background, tile, character, ghost, shelf, page, seal, and gate art assets. Navigate through a maze of bookshelves, collect lost pages, activate arcane seals by pushing shelves onto glowing circles, and escape through the gate while avoiding patrolling ghosts.
 
 ## Build and Run
 
@@ -122,6 +122,8 @@ Explore a 21x13 grid library. Collect all 5 lost pages scattered across the map 
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
+| `load_assets` | `() -> Unit` | Loads the generated haunted library PNG textures used by the renderer. |
+| `unload_assets` | `() -> Unit` | Unloads generated render textures during shutdown. |
 | `draw_frame` | `(@types.Game) -> Unit` | Draws the full frame: background, board with shake offset, side panel, touch controls, and any active overlay (title or result). |
 
 ## Architecture
@@ -132,6 +134,17 @@ Explore a 21x13 grid library. Collect all 5 lost pages scattered across the map 
 haunted_library_puzzle_2026/
 ├── main.mbt              — Entry point: window init, input poll, update dispatch, render call
 ├── moon.pkg
+├── resources/
+│   ├── arcane_seal.png
+│   ├── exit_gate_locked.png
+│   ├── exit_gate_open.png
+│   ├── floor_tile.png
+│   ├── ghost_patrol.png
+│   ├── library_background.png
+│   ├── lost_page.png
+│   ├── movable_shelf.png
+│   ├── player_librarian.png
+│   └── wall_bookshelf_tile.png
 └── internal/
     ├── types/
     │   ├── constants.mbt — All numeric/string constants plus pure utility functions
@@ -143,10 +156,11 @@ haunted_library_puzzle_2026/
         └── render.mbt    — All draw functions: background, grid, seals, pages, shelves, gate, player, ghosts, particles, HUD panel, overlays, touch buttons
 ```
 
-Data flows from `main.mbt` inward: raw Raylib input is written into `Game` fields, `@game.update_*_input` translates them to movement requests and action flags, `@game.update_game` advances simulation and mutates `Game`, and `@render.draw_frame` reads `Game` as a pure view. The `types` package is a leaf with no dependencies on `game` or `render`, preventing circular imports.
+Data flows from `main.mbt` inward: raw Raylib input is written into `Game` fields, `@game.update_*_input` translates them to movement requests and action flags, `@game.update_game` advances simulation and mutates `Game`, and `@render.draw_frame` reads `Game` as a pure view. `@render.load_assets` and `@render.unload_assets` own the generated texture lifecycle, while draw helpers fall back to primitive shapes if any texture is unavailable. The `types` package is a leaf with no dependencies on `game` or `render`, preventing circular imports.
 
 Key design patterns:
 - Sokoban-style shelf pushing: `try_move_player` detects a shelf in the target cell and calls `push_shelf` before committing the move.
+- Texture-backed tile rendering: board floors, bookshelf walls, shelves, pages, seals, gate states, player, and ghosts are rendered through generated assets with primitive fallbacks.
 - Ghost AI uses Manhattan distance and axis-aligned line-of-sight checks; within detection range ghosts greedily minimise Manhattan distance to the player, otherwise they use a seeded LCG for pseudo-random patrol steps.
 - Actor interpolation fields (`from_x/y`, `to_x/y`, `fx/fy`, `t`) decouple the logical grid position from the rendered float position, producing smooth movement at 120 fps.
 - Screen-shake is applied as a pixel offset `(shake_dx, shake_dy)` passed to all board draw calls.

@@ -1,4 +1,183 @@
 ///|
+/// Generated haunted library background texture.
+let tex_library_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated floor tile texture.
+let tex_floor_tile : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated wall/bookshelf tile texture.
+let tex_wall_tile : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated movable shelf texture.
+let tex_movable_shelf : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated lost page texture.
+let tex_lost_page : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated arcane seal texture.
+let tex_arcane_seal : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated locked exit gate texture.
+let tex_exit_gate_locked : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated open exit gate texture.
+let tex_exit_gate_open : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated player librarian texture.
+let tex_player_librarian : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated ghost patrol texture.
+let tex_ghost_patrol : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Haunted Library texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "haunted_library_puzzle_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Haunted Library render assets.
+pub fn load_assets() -> Unit {
+  tex_library_background.val = Some(load_art_texture("library_background.png"))
+  tex_floor_tile.val = Some(load_art_texture("floor_tile.png"))
+  tex_wall_tile.val = Some(load_art_texture("wall_bookshelf_tile.png"))
+  tex_movable_shelf.val = Some(load_art_texture("movable_shelf.png"))
+  tex_lost_page.val = Some(load_art_texture("lost_page.png"))
+  tex_arcane_seal.val = Some(load_art_texture("arcane_seal.png"))
+  tex_exit_gate_locked.val = Some(load_art_texture("exit_gate_locked.png"))
+  tex_exit_gate_open.val = Some(load_art_texture("exit_gate_open.png"))
+  tex_player_librarian.val = Some(load_art_texture("player_librarian.png"))
+  tex_ghost_patrol.val = Some(load_art_texture("ghost_patrol.png"))
+}
+
+///|
+/// Unloads generated Haunted Library render assets.
+pub fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_library_background)
+  unload(tex_floor_tile)
+  unload(tex_wall_tile)
+  unload(tex_movable_shelf)
+  unload(tex_lost_page)
+  unload(tex_arcane_seal)
+  unload(tex_exit_gate_locked)
+  unload(tex_exit_gate_open)
+  unload(tex_player_librarian)
+  unload(tex_ghost_patrol)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on a destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated texture scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, cx, cy, w, h, rotation, tint)
+}
+
+///|
 /// Returns a random horizontal pixel offset when the screen-shake timer is active, or 0 otherwise.
 fn @types.Game::shake_dx(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
@@ -32,14 +211,34 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 
   @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
-  @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @raylib.Color::new(16, 26, 44, 255),
-    @raylib.Color::new(7, 9, 16, 255),
-  )
+  match tex_library_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(@types.screen_w),
+        Float::from_int(@types.screen_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(5, 8, 16, 82),
+      )
+    }
+    None =>
+      @raylib.draw_rectangle_gradient_v(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(16, 26, 44, 255),
+        @raylib.Color::new(7, 9, 16, 255),
+      )
+  }
 
   @raylib.draw_circle(180, 120, 220.0, @raylib.Color::new(84, 126, 168, a0))
   @raylib.draw_circle(
@@ -69,21 +268,34 @@ fn @types.Game::draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
       match t {
         Wall => {
-          let shade : Int = if (x + y) % 2 == 0 { 62 } else { 72 }
-          @raylib.draw_rectangle(
-            rx,
-            ry,
-            @types.cell,
-            @types.cell,
-            @raylib.Color::new(shade, 56, 64, 255),
-          )
-          @raylib.draw_rectangle(
-            rx + 6,
-            ry + 8,
-            @types.cell - 12,
-            @types.cell - 14,
-            @raylib.Color::new(98, 74, 66, 220),
-          )
+          match tex_wall_tile.val {
+            Some(texture) =>
+              draw_texture_cover(
+                texture,
+                Float::from_int(rx),
+                Float::from_int(ry),
+                Float::from_int(@types.cell),
+                Float::from_int(@types.cell),
+                @raylib.white,
+              )
+            None => {
+              let shade : Int = if (x + y) % 2 == 0 { 62 } else { 72 }
+              @raylib.draw_rectangle(
+                rx,
+                ry,
+                @types.cell,
+                @types.cell,
+                @raylib.Color::new(shade, 56, 64, 255),
+              )
+              @raylib.draw_rectangle(
+                rx + 6,
+                ry + 8,
+                @types.cell - 12,
+                @types.cell - 14,
+                @raylib.Color::new(98, 74, 66, 220),
+              )
+            }
+          }
           @raylib.draw_rectangle_lines(
             rx,
             ry,
@@ -93,14 +305,39 @@ fn @types.Game::draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
           )
         }
         Floor | Exit => {
-          let floor_tint : Int = if (x + y) % 2 == 0 { 34 } else { 38 }
-          @raylib.draw_rectangle(
-            rx,
-            ry,
-            @types.cell,
-            @types.cell,
-            @raylib.Color::new(26, floor_tint, 50, 220),
-          )
+          match tex_floor_tile.val {
+            Some(texture) => {
+              draw_texture_cover(
+                texture,
+                Float::from_int(rx),
+                Float::from_int(ry),
+                Float::from_int(@types.cell),
+                Float::from_int(@types.cell),
+                if (x + y) % 2 == 0 {
+                  @raylib.Color::new(232, 238, 248, 255)
+                } else {
+                  @raylib.Color::new(210, 222, 238, 255)
+                },
+              )
+              @raylib.draw_rectangle(
+                rx,
+                ry,
+                @types.cell,
+                @types.cell,
+                @raylib.Color::new(8, 14, 26, 70),
+              )
+            }
+            None => {
+              let floor_tint : Int = if (x + y) % 2 == 0 { 34 } else { 38 }
+              @raylib.draw_rectangle(
+                rx,
+                ry,
+                @types.cell,
+                @types.cell,
+                @raylib.Color::new(26, floor_tint, 50, 220),
+              )
+            }
+          }
           @raylib.draw_rectangle_lines(
             rx,
             ry,
@@ -152,30 +389,57 @@ fn @types.Game::draw_seals(game : @types.Game, ox : Int, oy : Int) -> Unit {
       100 + (game.pulse(2.0 + Float::from_int(i)) * 66.0).to_int()
     }
 
-    @raylib.draw_circle(
-      cx,
-      cy,
-      21.0,
-      if on {
-        @raylib.Color::new(126, 236, 176, 126)
-      } else {
-        @raylib.Color::new(126, 192, 236, 62)
-      },
-    )
+    match tex_arcane_seal.val {
+      Some(texture) => {
+        draw_texture_fit(
+          texture,
+          Float::from_int(cx),
+          Float::from_int(cy),
+          52.0,
+          52.0,
+          game.pulse(0.9 + Float::from_int(i)) * 8.0,
+          if on {
+            @raylib.Color::new(166, 255, 196, 238)
+          } else {
+            @raylib.white
+          },
+        )
+        if on {
+          @raylib.draw_circle_lines(
+            cx,
+            cy,
+            25.0,
+            @raylib.Color::new(170, 255, 200, 218),
+          )
+        }
+      }
+      None => {
+        @raylib.draw_circle(
+          cx,
+          cy,
+          21.0,
+          if on {
+            @raylib.Color::new(126, 236, 176, 126)
+          } else {
+            @raylib.Color::new(126, 192, 236, 62)
+          },
+        )
 
-    @raylib.draw_circle_lines(
-      cx,
-      cy,
-      24.0,
-      @raylib.Color::new(188, 232, 248, glow),
-    )
+        @raylib.draw_circle_lines(
+          cx,
+          cy,
+          24.0,
+          @raylib.Color::new(188, 232, 248, glow),
+        )
 
-    @raylib.draw_circle_lines(
-      cx,
-      cy,
-      14.0,
-      @raylib.Color::new(196, 232, 255, glow),
-    )
+        @raylib.draw_circle_lines(
+          cx,
+          cy,
+          14.0,
+          @raylib.Color::new(196, 232, 255, glow),
+        )
+      }
+    }
   }
 }
 
@@ -195,42 +459,56 @@ fn @types.Game::draw_pages(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let glow : Int = 156 +
       (game.pulse(1.6 + Float::from_int(i) * 0.4) * 70.0).to_int()
 
-    @raylib.draw_rectangle(
-      rx,
-      ry,
-      30,
-      36,
-      @raylib.Color::new(246, 230, 188, 240),
-    )
-    @raylib.draw_rectangle_lines(
-      rx,
-      ry,
-      30,
-      36,
-      @raylib.Color::new(120, 90, 52, 220),
-    )
-
-    @raylib.draw_line(
-      rx + 9,
-      ry + 8,
-      rx + 24,
-      ry + 8,
-      @raylib.Color::new(132, 102, 68, 200),
-    )
-    @raylib.draw_line(
-      rx + 9,
-      ry + 15,
-      rx + 24,
-      ry + 15,
-      @raylib.Color::new(132, 102, 68, 200),
-    )
-
     @raylib.draw_circle(
       rx + 15,
       ry + 18,
       24.0,
       @raylib.Color::new(246, 226, 174, glow / 5),
     )
+
+    match tex_lost_page.val {
+      Some(texture) =>
+        draw_texture_fit(
+          texture,
+          Float::from_int(rx + 15),
+          Float::from_int(ry + 18),
+          40.0,
+          46.0,
+          game.pulse(1.1 + Float::from_int(i)) * 8.0 - 4.0,
+          @raylib.white,
+        )
+      None => {
+        @raylib.draw_rectangle(
+          rx,
+          ry,
+          30,
+          36,
+          @raylib.Color::new(246, 230, 188, 240),
+        )
+        @raylib.draw_rectangle_lines(
+          rx,
+          ry,
+          30,
+          36,
+          @raylib.Color::new(120, 90, 52, 220),
+        )
+
+        @raylib.draw_line(
+          rx + 9,
+          ry + 8,
+          rx + 24,
+          ry + 8,
+          @raylib.Color::new(132, 102, 68, 200),
+        )
+        @raylib.draw_line(
+          rx + 9,
+          ry + 15,
+          rx + 24,
+          ry + 15,
+          @raylib.Color::new(132, 102, 68, 200),
+        )
+      }
+    }
   }
 }
 
@@ -245,40 +523,67 @@ fn @types.Game::draw_shelves(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
     let on_seal : Bool = seal_index_at(x, y) >= 0
 
-    @raylib.draw_rectangle(
-      rx,
-      ry,
-      @types.cell - 12,
-      @types.cell - 16,
-      if on_seal {
-        @raylib.Color::new(168, 122, 76, 242)
-      } else {
-        @raylib.Color::new(140, 104, 72, 236)
-      },
-    )
+    if on_seal {
+      @raylib.draw_circle(
+        @types.board_px(x) + @types.cell / 2 + ox,
+        @types.board_py(y) + @types.cell / 2 + oy,
+        26.0,
+        @raylib.Color::new(122, 238, 170, 60),
+      )
+    }
 
-    @raylib.draw_rectangle(
-      rx + 4,
-      ry + 5,
-      @types.cell - 20,
-      9,
-      @raylib.Color::new(98, 72, 50, 210),
-    )
-    @raylib.draw_rectangle(
-      rx + 4,
-      ry + 20,
-      @types.cell - 20,
-      9,
-      @raylib.Color::new(98, 72, 50, 210),
-    )
+    match tex_movable_shelf.val {
+      Some(texture) =>
+        draw_texture_fit(
+          texture,
+          Float::from_int(@types.board_px(x) + @types.cell / 2 + ox),
+          Float::from_int(@types.board_py(y) + @types.cell / 2 + oy),
+          54.0,
+          54.0,
+          0.0,
+          if on_seal {
+            @raylib.Color::new(255, 226, 176, 255)
+          } else {
+            @raylib.white
+          },
+        )
+      None => {
+        @raylib.draw_rectangle(
+          rx,
+          ry,
+          @types.cell - 12,
+          @types.cell - 16,
+          if on_seal {
+            @raylib.Color::new(168, 122, 76, 242)
+          } else {
+            @raylib.Color::new(140, 104, 72, 236)
+          },
+        )
 
-    @raylib.draw_rectangle_lines(
-      rx,
-      ry,
-      @types.cell - 12,
-      @types.cell - 16,
-      @raylib.Color::new(66, 48, 32, 220),
-    )
+        @raylib.draw_rectangle(
+          rx + 4,
+          ry + 5,
+          @types.cell - 20,
+          9,
+          @raylib.Color::new(98, 72, 50, 210),
+        )
+        @raylib.draw_rectangle(
+          rx + 4,
+          ry + 20,
+          @types.cell - 20,
+          9,
+          @raylib.Color::new(98, 72, 50, 210),
+        )
+
+        @raylib.draw_rectangle_lines(
+          rx,
+          ry,
+          @types.cell - 12,
+          @types.cell - 16,
+          @raylib.Color::new(66, 48, 32, 220),
+        )
+      }
+    }
   }
 }
 
@@ -294,37 +599,66 @@ fn @types.Game::draw_gate(game : @types.Game, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(78, 84, 124, 236)
   }
 
-  @raylib.draw_rectangle(rx, ry, @types.cell - 8, @types.cell - 8, gate_col)
-  @raylib.draw_rectangle_lines(
-    rx,
-    ry,
-    @types.cell - 8,
-    @types.cell - 8,
-    @raylib.Color::new(210, 228, 246, 180),
-  )
-
-  if game.gate_open {
-    @raylib.draw_circle(
-      rx + (@types.cell - 8) / 2,
-      ry + (@types.cell - 8) / 2,
-      18.0,
-      @raylib.Color::new(224, 250, 210, 80),
-    )
+  let gate_texture = if game.gate_open {
+    tex_exit_gate_open.val
   } else {
-    @raylib.draw_line(
-      rx + 12,
-      ry + 12,
-      rx + @types.cell - 20,
-      ry + @types.cell - 20,
-      @raylib.Color::new(38, 30, 62, 220),
-    )
-    @raylib.draw_line(
-      rx + @types.cell - 20,
-      ry + 12,
-      rx + 12,
-      ry + @types.cell - 20,
-      @raylib.Color::new(38, 30, 62, 220),
-    )
+    tex_exit_gate_locked.val
+  }
+
+  match gate_texture {
+    Some(texture) => {
+      if game.gate_open {
+        @raylib.draw_circle(
+          rx + (@types.cell - 8) / 2,
+          ry + (@types.cell - 8) / 2,
+          24.0,
+          @raylib.Color::new(124, 255, 156, 70),
+        )
+      }
+      draw_texture_fit(
+        texture,
+        Float::from_int(rx + (@types.cell - 8) / 2),
+        Float::from_int(ry + (@types.cell - 8) / 2),
+        56.0,
+        56.0,
+        0.0,
+        @raylib.white,
+      )
+    }
+    None => {
+      @raylib.draw_rectangle(rx, ry, @types.cell - 8, @types.cell - 8, gate_col)
+      @raylib.draw_rectangle_lines(
+        rx,
+        ry,
+        @types.cell - 8,
+        @types.cell - 8,
+        @raylib.Color::new(210, 228, 246, 180),
+      )
+
+      if game.gate_open {
+        @raylib.draw_circle(
+          rx + (@types.cell - 8) / 2,
+          ry + (@types.cell - 8) / 2,
+          18.0,
+          @raylib.Color::new(224, 250, 210, 80),
+        )
+      } else {
+        @raylib.draw_line(
+          rx + 12,
+          ry + 12,
+          rx + @types.cell - 20,
+          ry + @types.cell - 20,
+          @raylib.Color::new(38, 30, 62, 220),
+        )
+        @raylib.draw_line(
+          rx + @types.cell - 20,
+          ry + 12,
+          rx + 12,
+          ry + @types.cell - 20,
+          @raylib.Color::new(38, 30, 62, 220),
+        )
+      }
+    }
   }
 }
 
@@ -340,19 +674,50 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
     return
   }
 
-  @raylib.draw_circle(cx, cy, 18.0, @raylib.Color::new(110, 200, 248, 244))
-  @raylib.draw_circle(cx, cy - 3, 11.0, @raylib.Color::new(224, 244, 255, 236))
+  @raylib.draw_circle(cx + 12, cy + 8, 24.0, @raylib.Color::new(92, 196, 255, 48))
 
-  @raylib.draw_circle(cx - 4, cy - 4, 2.0, @raylib.Color::new(28, 52, 72, 255))
-  @raylib.draw_circle(cx + 4, cy - 4, 2.0, @raylib.Color::new(28, 52, 72, 255))
+  match tex_player_librarian.val {
+    Some(texture) =>
+      draw_texture_fit(
+        texture,
+        Float::from_int(cx),
+        Float::from_int(cy),
+        48.0,
+        58.0,
+        0.0,
+        @raylib.white,
+      )
+    None => {
+      @raylib.draw_circle(cx, cy, 18.0, @raylib.Color::new(110, 200, 248, 244))
+      @raylib.draw_circle(
+        cx,
+        cy - 3,
+        11.0,
+        @raylib.Color::new(224, 244, 255, 236),
+      )
 
-  @raylib.draw_rectangle(
-    cx - 12,
-    cy + 12,
-    24,
-    8,
-    @raylib.Color::new(82, 148, 190, 230),
-  )
+      @raylib.draw_circle(
+        cx - 4,
+        cy - 4,
+        2.0,
+        @raylib.Color::new(28, 52, 72, 255),
+      )
+      @raylib.draw_circle(
+        cx + 4,
+        cy - 4,
+        2.0,
+        @raylib.Color::new(28, 52, 72, 255),
+      )
+
+      @raylib.draw_rectangle(
+        cx - 12,
+        cy + 12,
+        24,
+        8,
+        @raylib.Color::new(82, 148, 190, 230),
+      )
+    }
+  }
 }
 
 ///|
@@ -379,21 +744,35 @@ fn draw_ghost(
     Patrol => @raylib.Color::new(226, 232, 248, 222)
   }
 
-  @raylib.draw_circle(cx, cy - 8 + bob, 16.0, body_col)
-  @raylib.draw_rectangle(cx - 16, cy - 8 + bob, 32, 24, body_col)
+  match tex_ghost_patrol.val {
+    Some(texture) =>
+      draw_texture_fit(
+        texture,
+        Float::from_int(cx),
+        Float::from_int(cy - 3 + bob),
+        50.0,
+        58.0,
+        game.pulse(3.0 + Float::from_int(i)) * 4.0 - 2.0,
+        body_col,
+      )
+    None => {
+      @raylib.draw_circle(cx, cy - 8 + bob, 16.0, body_col)
+      @raylib.draw_rectangle(cx - 16, cy - 8 + bob, 32, 24, body_col)
 
-  @raylib.draw_circle(
-    cx - 5,
-    cy - 12 + bob,
-    3.0,
-    @raylib.Color::new(34, 44, 66, 255),
-  )
-  @raylib.draw_circle(
-    cx + 5,
-    cy - 12 + bob,
-    3.0,
-    @raylib.Color::new(34, 44, 66, 255),
-  )
+      @raylib.draw_circle(
+        cx - 5,
+        cy - 12 + bob,
+        3.0,
+        @raylib.Color::new(34, 44, 66, 255),
+      )
+      @raylib.draw_circle(
+        cx + 5,
+        cy - 12 + bob,
+        3.0,
+        @raylib.Color::new(34, 44, 66, 255),
+      )
+    }
+  }
 
   if g.mode == Stunned {
     @raylib.draw_circle_lines(
