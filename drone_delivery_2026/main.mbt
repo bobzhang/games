@@ -7,6 +7,26 @@ let sw : Int = 1120
 let sh : Int = 740
 
 ///|
+/// Generated city background texture.
+let tex_city_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated delivery drone sprite.
+let tex_drone : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated package pickup pad sprite.
+let tex_pickup_pad : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated drop-off pad sprite.
+let tex_dropoff_pad : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated shock orb sprite.
+let tex_shock_orb : Ref[@raylib.Texture?] = { val: None }
+
+///|
 /// Represents a bouncing shock orb that damages the drone on contact.
 struct Orb {
   mut alive : Bool
@@ -57,11 +77,252 @@ fn dist_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Loads one generated Drone Delivery texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "drone_delivery_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Drone Delivery render assets.
+fn load_assets() -> Unit {
+  tex_city_background.val = Some(load_art_texture("city_background.png"))
+  tex_drone.val = Some(load_art_texture("drone_sprite.png"))
+  tex_pickup_pad.val = Some(load_art_texture("pickup_pad.png"))
+  tex_dropoff_pad.val = Some(load_art_texture("dropoff_pad.png"))
+  tex_shock_orb.val = Some(load_art_texture("shock_orb.png"))
+}
+
+///|
+/// Unloads generated Drone Delivery render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_city_background)
+  unload(tex_drone)
+  unload(tex_pickup_pad)
+  unload(tex_dropoff_pad)
+  unload(tex_shock_orb)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on the destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated sprite scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  max_w : Float,
+  max_h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, x, y, w, h, tint)
+}
+
+///|
+/// Draws the generated fixed city background.
+fn draw_city_background_art() -> Bool {
+  match tex_city_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(sw),
+        Float::from_int(sh),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(6, 10, 18, 32))
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated pickup pad art.
+fn draw_pickup_art(x : Int, y : Int) -> Bool {
+  match tex_pickup_pad.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        58.0,
+        72.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated drop-off pad art.
+fn draw_dropoff_art(x : Int, y : Int) -> Bool {
+  match tex_dropoff_pad.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        68.0,
+        76.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated shock orb art.
+fn draw_shock_orb_art(x : Int, y : Int) -> Bool {
+  match tex_shock_orb.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        34.0,
+        34.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated drone art.
+fn draw_drone_art(x : Int, y : Int, has_package : Bool, turbo : Bool) -> Bool {
+  match tex_drone.val {
+    Some(texture) => {
+      @raylib.draw_ellipse(
+        x,
+        y + 14,
+        34.0,
+        10.0,
+        @raylib.Color::new(0, 8, 16, 104),
+      )
+      if turbo {
+        @raylib.draw_circle(x, y, 34.0, @raylib.Color::new(96, 224, 255, 52))
+      }
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        76.0,
+        60.0,
+        if has_package {
+          @raylib.Color::new(255, 232, 154, 255)
+        } else {
+          @raylib.white
+        },
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Initializes the window and runs the drone delivery game loop.
 fn main {
   @raylib.init_window(sw, sh, "Drone Delivery 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  load_assets()
+  defer unload_assets()
 
   let orbs : Array[Orb] = Array::makei(110, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0 }
@@ -254,38 +515,47 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(18, 21, 32, 255))
 
-    // City blocks
-    for gx in 0..<7 {
-      for gy in 0..<4 {
-        let bx = 42 + gx * 155
-        let by = 90 + gy * 155
-        @raylib.draw_rectangle(
-          bx,
-          by,
-          110,
-          110,
-          @raylib.Color::new(33, 38, 50, 255),
-        )
-        @raylib.draw_rectangle_lines(
-          bx,
-          by,
-          110,
-          110,
-          @raylib.Color::new(55, 63, 83, 255),
-        )
+    if !draw_city_background_art() {
+      // City blocks
+      for gx in 0..<7 {
+        for gy in 0..<4 {
+          let bx = 42 + gx * 155
+          let by = 90 + gy * 155
+          @raylib.draw_rectangle(
+            bx,
+            by,
+            110,
+            110,
+            @raylib.Color::new(33, 38, 50, 255),
+          )
+          @raylib.draw_rectangle_lines(
+            bx,
+            by,
+            110,
+            110,
+            @raylib.Color::new(55, 63, 83, 255),
+          )
+        }
       }
     }
 
     if !has_package {
-      @raylib.draw_circle(pick_x.to_int(), pick_y.to_int(), 16.0, @raylib.lime)
-      @draw.draw_text(
-        "P",
-        (pick_x - 6.0).to_int(),
-        (pick_y - 11.0).to_int(),
-        24,
-        @raylib.black,
-      )
-    } else {
+      if !draw_pickup_art(pick_x.to_int(), pick_y.to_int()) {
+        @raylib.draw_circle(
+          pick_x.to_int(),
+          pick_y.to_int(),
+          16.0,
+          @raylib.lime,
+        )
+        @draw.draw_text(
+          "P",
+          (pick_x - 6.0).to_int(),
+          (pick_y - 11.0).to_int(),
+          24,
+          @raylib.black,
+        )
+      }
+    } else if !draw_dropoff_art(drop_x.to_int(), drop_y.to_int()) {
       @raylib.draw_circle(
         drop_x.to_int(),
         drop_y.to_int(),
@@ -303,38 +573,53 @@ fn main {
 
     for orb in orbs {
       if orb.alive {
-        @raylib.draw_circle(
-          orb.x.to_int(),
-          orb.y.to_int(),
-          11.0,
-          @raylib.skyblue,
-        )
-        @raylib.draw_circle_lines(
-          orb.x.to_int(),
-          orb.y.to_int(),
-          11.0,
-          @raylib.white,
-        )
+        if !draw_shock_orb_art(orb.x.to_int(), orb.y.to_int()) {
+          @raylib.draw_circle(
+            orb.x.to_int(),
+            orb.y.to_int(),
+            11.0,
+            @raylib.skyblue,
+          )
+          @raylib.draw_circle_lines(
+            orb.x.to_int(),
+            orb.y.to_int(),
+            11.0,
+            @raylib.white,
+          )
+        }
       }
     }
 
+    let turbo_vis = !over &&
+      (
+        @raylib.is_key_down(@raylib.KeySpace) ||
+        @raylib.is_key_down(@raylib.KeyJ)
+      )
     let body = if has_package { @raylib.gold } else { @raylib.raywhite }
-    @raylib.draw_circle(drone_x.to_int(), drone_y.to_int(), 14.0, body)
-    @raylib.draw_line(
-      (drone_x - 22.0).to_int(),
-      drone_y.to_int(),
-      (drone_x + 22.0).to_int(),
-      drone_y.to_int(),
-      @raylib.gray,
-    )
-    @raylib.draw_line(
-      drone_x.to_int(),
-      (drone_y - 22.0).to_int(),
-      drone_x.to_int(),
-      (drone_y + 22.0).to_int(),
-      @raylib.gray,
-    )
+    if !draw_drone_art(
+        drone_x.to_int(),
+        drone_y.to_int(),
+        has_package,
+        turbo_vis,
+      ) {
+      @raylib.draw_circle(drone_x.to_int(), drone_y.to_int(), 14.0, body)
+      @raylib.draw_line(
+        (drone_x - 22.0).to_int(),
+        drone_y.to_int(),
+        (drone_x + 22.0).to_int(),
+        drone_y.to_int(),
+        @raylib.gray,
+      )
+      @raylib.draw_line(
+        drone_x.to_int(),
+        (drone_y - 22.0).to_int(),
+        drone_x.to_int(),
+        (drone_y + 22.0).to_int(),
+        @raylib.gray,
+      )
+    }
 
+    @raylib.draw_rectangle(0, 0, sw, 144, @raylib.Color::new(8, 10, 16, 166))
     @draw.draw_text("DRONE DELIVERY 2026", 20, 16, 40, @raylib.skyblue)
     @draw.draw_text("Score \{score}", 20, 64, 30, @raylib.white)
     @draw.draw_text("Deliveries \{deliveries}", 220, 64, 30, @raylib.lime)
@@ -403,7 +688,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

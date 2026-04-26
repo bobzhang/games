@@ -1,6 +1,6 @@
 # Drone Delivery 2026
 
-Drone Delivery 2026 is a top-down arcade delivery game set over a stylized city grid. The player pilots a drone through a 1120x740 window, picking up packages from randomly placed pickup points (marked "P") and delivering them to drop-off points (marked "D"), all while dodging bouncing shock orbs that spawn every 0.55 seconds.
+Drone Delivery 2026 is a top-down arcade delivery game set over a stylized generated city grid. The player pilots a drone through a 1120x740 window, picking up packages from randomly placed pickup beacons and delivering them to drop-off pads, all while dodging bouncing shock orbs that spawn every 0.55 seconds.
 
 The core gameplay loop is a time-pressure delivery circuit: fly to the pickup, grab the package (which adds 7 seconds to the timer, capped at 99), then navigate to the drop-off while avoiding the growing field of shock orbs. Each successful delivery awards 120 + combo*20 points and adds 4 seconds. Getting hit by a shock orb resets the combo, subtracts 40 points, drains 9 battery, and adds 20 heat. The game ends when the 90-second timer expires, battery reaches zero, or heat reaches 100 (overheating).
 
@@ -59,6 +59,7 @@ The 90-second timer counts down continuously. Picking up a package adds 7 second
 | `reset_orbs` | `(Array[Orb]) -> Unit` | Deactivates all orbs in the pool |
 | `random_point` | `(Int) -> (Float, Float)` | Generates a random screen position with the given margin from edges |
 | `dist_sq` | `(Float, Float, Float, Float) -> Float` | Squared distance between two 2D points |
+| `load_assets` / `unload_assets` | `() -> Unit` | Loads and releases generated city, drone, pickup, drop-off, and shock orb textures |
 
 ## Architecture
 
@@ -67,14 +68,15 @@ The 90-second timer counts down continuously. Picking up a package adds 7 second
 ```
 drone_delivery_2026/
 ├── main.mbt              -- Entry point, game loop, all logic and rendering
+├── resources/            -- Generated city, drone, package, drop-off, and shock orb art
 └── moon.pkg              -- Package config, imports raylib
 ```
 
-This is a single-file game with all code in `main.mbt`. The main function sets up an array of 110 orb slots, initializes game state as local variables, and runs a 60 FPS game loop.
+This is a single-file game with all code in `main.mbt`. The main function sets up an array of 110 orb slots, initializes game state as local variables, loads generated textures once after window setup, and runs a 60 FPS game loop.
 
 ### Data Flow
 
-Each frame begins with delta-time capping at 50ms. If not in game-over state, input is sampled for movement keys and turbo. The drone position is updated with clamping to screen bounds. Battery and heat are updated based on turbo state. Orbs spawn on a 0.55-second tick, move with velocity, bounce off edges, and check collision against the drone (26-unit radius). Package pickup and delivery are checked via distance tests (28-unit radius). Passive score accrues from distance traveled. Rendering draws city block backgrounds, pickup/drop-off markers, orbs, the drone with rotor lines, HUD bars, and the message bar.
+Each frame begins with delta-time capping at 50ms. If not in game-over state, input is sampled for movement keys and turbo. The drone position is updated with clamping to screen bounds. Battery and heat are updated based on turbo state. Orbs spawn on a 0.55-second tick, move with velocity, bounce off edges, and check collision against the drone (26-unit radius). Package pickup and delivery are checked via distance tests (28-unit radius). Passive score accrues from distance traveled. Rendering draws generated city, pickup/drop-off, shock orb, and drone assets when available, with procedural fallbacks for missing textures, followed by HUD bars and the message bar.
 
 ### Key Design Patterns
 
