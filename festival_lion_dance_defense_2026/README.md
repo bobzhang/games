@@ -1,6 +1,6 @@
 # Festival Lion Dance Defense 2026
 
-A lane-defense action game set during a festival parade. You control a lion dance troupe moving freely across 6 horizontal lanes to intercept two types of threats: firecrackers (fast, directly clearable) and crowd incidents (must be stunned first, then struck). The troupe has three actions: Strike (J) clears firecrackers and stunned incidents in a radius, Guard (K) stuns nearby incidents and deflects firecrackers on contact, and Hype Burst (Space) consumes hype meter to clear everything in a large radius.
+A lane-defense action game set during a festival parade. You control a lion dance troupe moving freely across 6 horizontal lanes to intercept two types of threats: firecrackers (fast, directly clearable) and crowd incidents (must be stunned first, then struck). The game uses generated festival street, lion troupe, firecracker, crowd incident, and action-ring art, while preserving procedural fallbacks for missing textures.
 
 The game tracks three meters: Hype (built by clearing threats in combos, spent on burst), Crowd Order (recovers over time, drains when threats leak or hit the troupe, triggers morale drain below a threshold), and Morale (the health bar -- when it hits zero the parade is over). Threat spawn rate and speed scale with elapsed time, creating steadily increasing pressure. Chaining clears builds a combo multiplier that boosts score, hype gains, and order recovery. Missing a strike resets the combo.
 
@@ -167,6 +167,8 @@ moon build --target native festival_lion_dance_defense_2026/
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
+| `load_assets` | `() -> Unit` | Loads generated textures from `resources/` and applies bilinear filtering |
+| `unload_assets` | `() -> Unit` | Releases generated textures during shutdown |
 | `draw_frame` | `(Game) -> Unit` | Main render entry point: draws background with lantern glows, lanes with labels, threats (firecrackers as circles with cross rays, incidents as blob clusters), action effect rings, troupe with guard aura, HUD with three meters, controls legend, message bar, and state overlays |
 
 ## Architecture
@@ -175,8 +177,14 @@ moon build --target native festival_lion_dance_defense_2026/
 
 ```
 festival_lion_dance_defense_2026/
-├── main.mbt              — Entry point: window init, game loop
+├── main.mbt              — Entry point: window init, game loop, render asset lifecycle
 ├── moon.pkg              — Package config, imports
+├── resources/            — Generated festival street, troupe, threat, and effect textures
+│   ├── festival_street_background.png
+│   ├── firecracker_sprite.png
+│   ├── incident_sprite.png
+│   ├── lion_troupe_sprite.png
+│   └── strike_ring.png
 └── internal/
     ├── types/
     │   ├── types.mbt     — Enums (GameState, Action), structs (InputState, Threat, Game), constructors
@@ -198,7 +206,7 @@ The `types` package is the shared foundation with no game logic. The `game` pack
 3. **Threat System**: Threats spawn at the right edge of the street in random lanes. Spawn interval decreases from 1.0s to 0.24s (rate = start - elapsed x 0.01). Speed increases with a bonus up to +240. Incidents have a 24-62% spawn chance that increases over time. Threats move left; stunned threats move at 30% (incidents) or 55% (firecrackers) speed.
 4. **Action System**: Strike checks all threats within radius for clearability (firecrackers always, incidents only if stunned). Guard stuns incidents within radius and activates a passive deflection stance. Burst clears everything in a large radius each frame for its duration. All actions have separate cooldown timers.
 5. **Scoring and Meters**: Each clear registers a combo step, awards score (base + combo bonus - action penalty + stun bonus), grants hype, and recovers order. Leaked or contacted threats drain order and morale, reset combo. When order drops below 42, morale drains proportionally. Morale reaching zero triggers game over.
-6. **Render**: `draw_frame` layers: gradient background with animated glow circles, lane grid with labels, threat sprites (firecrackers as circles with cross-pattern rays, incidents as blob clusters with stun aura), expanding action effect rings, troupe body with guard ring overlay, HUD panel with score/combo/meters, controls legend bar, fading message bar, and state overlays (title card, pause panel, game over summary).
+6. **Render**: `load_assets` prepares generated textures at startup. `draw_frame` layers: generated festival street background with animated glow overlays, lane grid, generated threat sprites, generated action rings, generated lion troupe art with guard ring overlay, HUD panel with score/combo/meters, controls legend bar, fading message bar, and state overlays (title card, pause panel, game over summary).
 
 ### Key Design Patterns
 
@@ -208,6 +216,7 @@ The `types` package is the shared foundation with no game logic. The `game` pack
 - **Triple-meter pressure**: Hype (resource to spend), Order (environmental health), and Morale (player health) create interconnected resource management where neglecting crowd order cascades into morale loss.
 - **Combo system**: Time-limited combo chain with score/hype/order bonuses incentivizes aggressive, rhythmic play. Missed strikes punish by resetting the chain.
 - **Continuous difficulty scaling**: Both spawn interval and threat speed scale with elapsed time using clamped linear functions, providing smooth difficulty increase without discrete waves.
+- **Texture fallback system**: Generated art helpers return `false` when their texture is unavailable, allowing each renderer to use the original procedural shape path.
 - **Separation of concerns**: Input, logic, and rendering are cleanly separated. The render package only reads game state and never modifies it.
 
 ## Improvement & Refinement Plan

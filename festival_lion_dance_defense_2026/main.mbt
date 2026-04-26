@@ -5,11 +5,13 @@ fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [game] festival lion dance defense 2026",
   )
-  @draw.cleanup()
   defer @raylib.close_window()
+  defer @draw.cleanup()
 
   @raylib.set_target_fps(@types.target_fps)
   @draw.init_font()
+  @render.load_assets()
+  defer @render.unload_assets()
 
   let game = @types.Game()
   @types.set_msg(game, "Press J / Enter / Space to begin.", 2.2)

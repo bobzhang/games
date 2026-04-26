@@ -52,18 +52,301 @@ fn draw_meter(
 }
 
 ///|
+/// Generated festival street background texture.
+let tex_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated lion dance troupe texture.
+let tex_lion : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated firecracker threat texture.
+let tex_firecracker : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated crowd incident threat texture.
+let tex_incident : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated strike ring effect texture.
+let tex_strike_ring : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Festival Lion Dance Defense texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "festival_lion_dance_defense_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Festival Lion Dance Defense render assets.
+pub fn load_assets() -> Unit {
+  tex_background.val = Some(load_art_texture("festival_street_background.png"))
+  tex_lion.val = Some(load_art_texture("lion_troupe_sprite.png"))
+  tex_firecracker.val = Some(load_art_texture("firecracker_sprite.png"))
+  tex_incident.val = Some(load_art_texture("incident_sprite.png"))
+  tex_strike_ring.val = Some(load_art_texture("strike_ring.png"))
+}
+
+///|
+/// Unloads generated Festival Lion Dance Defense render assets.
+pub fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_background)
+  unload(tex_lion)
+  unload(tex_firecracker)
+  unload(tex_incident)
+  unload(tex_strike_ring)
+}
+
+///|
+/// Returns true when the generated street background is loaded.
+fn has_background_art() -> Bool {
+  match tex_background.val {
+    Some(_) => true
+    None => false
+  }
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on a destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated texture scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, cx, cy, w, h, rotation, tint)
+}
+
+///|
+/// Draws the generated festival street background.
+fn draw_background_art() -> Bool {
+  match tex_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(@types.screen_w),
+        Float::from_int(@types.screen_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(10, 12, 22, 28),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated firecracker threat art.
+fn draw_firecracker_art(threat : @types.Threat, x : Float, y : Float) -> Bool {
+  match tex_firecracker.val {
+    Some(texture) => {
+      let tint = if threat.stun_t > 0.0 {
+        @raylib.Color::new(158, 204, 255, 242)
+      } else {
+        @raylib.white
+      }
+      draw_texture_fit(
+        texture,
+        x,
+        y,
+        threat.radius * 3.0,
+        threat.radius * 3.0,
+        threat.spin * 24.0,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated crowd incident threat art.
+fn draw_incident_art(threat : @types.Threat, x : Float, y : Float) -> Bool {
+  match tex_incident.val {
+    Some(texture) => {
+      let tint = if threat.stun_t > 0.0 {
+        @raylib.Color::new(158, 204, 255, 236)
+      } else {
+        @raylib.white
+      }
+      draw_texture_fit(
+        texture,
+        x,
+        y,
+        threat.radius * 2.65,
+        threat.radius * 1.95,
+        0.0,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated lion dance troupe art.
+fn draw_lion_art(game : @types.Game, x : Float, y : Float) -> Bool {
+  match tex_lion.val {
+    Some(texture) => {
+      let tint = if game.burst_t > 0.0 {
+        @raylib.Color::new(255, 226, 180, 255)
+      } else if game.guard_t > 0.0 {
+        @raylib.Color::new(178, 214, 255, 255)
+      } else {
+        @raylib.white
+      }
+      @raylib.draw_ellipse(
+        x.to_int(),
+        (y + 20.0).to_int(),
+        58.0,
+        14.0,
+        @raylib.Color::new(0, 0, 0, 72),
+      )
+      draw_texture_fit(texture, x, y - 4.0, 132.0, 90.0, 0.0, tint)
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated action ring art.
+fn draw_action_ring_art(x : Float, y : Float, radius : Float, alpha : Int) -> Bool {
+  match tex_strike_ring.val {
+    Some(texture) => {
+      let tint_alpha = (Float::from_int(alpha) * 0.62).to_int()
+      draw_texture_fit(
+        texture,
+        x,
+        y,
+        radius * 2.0,
+        radius * 2.0,
+        0.0,
+        @raylib.Color::new(255, 240, 196, tint_alpha.clamp(min=0, max=170)),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Draws the gradient sky background with animated glow circles, the street area backing, and a flash overlay when hit.
 fn @types.Game::draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 16, 24, 255))
 
-  @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @raylib.Color::new(34, 26, 44, 255),
-    @raylib.Color::new(12, 16, 26, 255),
-  )
+  if !draw_background_art() {
+    @raylib.draw_rectangle_gradient_v(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @raylib.Color::new(34, 26, 44, 255),
+      @raylib.Color::new(12, 16, 26, 255),
+    )
+  }
 
   let glow_0 = 36 + (@types.pulse(game, 0.54) * 22.0).to_int()
   let glow_1 = 36 + (@types.pulse(game, 0.68) * 24.0).to_int()
@@ -93,7 +376,7 @@ fn @types.Game::draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit 
     @types.lane_top - 42 + oy,
     @types.street_w() + 44,
     @types.street_h() + 84,
-    @raylib.Color::new(12, 14, 22, 178),
+    @raylib.Color::new(12, 14, 22, if has_background_art() { 58 } else { 178 }),
   )
 
   if game.flash_t > 0.0 {
@@ -118,9 +401,9 @@ fn @types.Game::draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let y0 = cy - @types.lane_height / 2
 
     let lane_tone = if lane % 2 == 0 {
-      @raylib.Color::new(42, 50, 74, 214)
+      @raylib.Color::new(42, 50, 74, if has_background_art() { 96 } else { 214 })
     } else {
-      @raylib.Color::new(36, 44, 66, 214)
+      @raylib.Color::new(36, 44, 66, if has_background_art() { 78 } else { 214 })
     }
 
     @raylib.draw_rectangle(
@@ -186,39 +469,45 @@ fn draw_firecracker(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(184, 46, 62, 206)
   }
 
-  @raylib.draw_circle(cx, cy, threat.radius + 4.0, shell)
-  @raylib.draw_circle(cx, cy, threat.radius - 7.0, core)
+  if !draw_firecracker_art(
+    threat,
+    Float::from_int(cx),
+    Float::from_int(cy),
+  ) {
+    @raylib.draw_circle(cx, cy, threat.radius + 4.0, shell)
+    @raylib.draw_circle(cx, cy, threat.radius - 7.0, core)
 
-  let ray = (threat.radius + 14.0 + @math.sinf(threat.spin * 2.2) * 4.0).to_int()
+    let ray = (threat.radius + 14.0 + @math.sinf(threat.spin * 2.2) * 4.0).to_int()
 
-  @raylib.draw_line(
-    cx - ray,
-    cy,
-    cx + ray,
-    cy,
-    @raylib.Color::new(254, 214, 174, 218),
-  )
-  @raylib.draw_line(
-    cx,
-    cy - ray,
-    cx,
-    cy + ray,
-    @raylib.Color::new(254, 214, 174, 218),
-  )
-  @raylib.draw_line(
-    cx - ray / 2,
-    cy - ray / 2,
-    cx + ray / 2,
-    cy + ray / 2,
-    @raylib.Color::new(254, 214, 174, 170),
-  )
-  @raylib.draw_line(
-    cx - ray / 2,
-    cy + ray / 2,
-    cx + ray / 2,
-    cy - ray / 2,
-    @raylib.Color::new(254, 214, 174, 170),
-  )
+    @raylib.draw_line(
+      cx - ray,
+      cy,
+      cx + ray,
+      cy,
+      @raylib.Color::new(254, 214, 174, 218),
+    )
+    @raylib.draw_line(
+      cx,
+      cy - ray,
+      cx,
+      cy + ray,
+      @raylib.Color::new(254, 214, 174, 218),
+    )
+    @raylib.draw_line(
+      cx - ray / 2,
+      cy - ray / 2,
+      cx + ray / 2,
+      cy + ray / 2,
+      @raylib.Color::new(254, 214, 174, 170),
+    )
+    @raylib.draw_line(
+      cx - ray / 2,
+      cy + ray / 2,
+      cx + ray / 2,
+      cy - ray / 2,
+      @raylib.Color::new(254, 214, 174, 170),
+    )
+  }
 }
 
 ///|
@@ -239,12 +528,18 @@ fn draw_incident(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(250, 226, 168, 220)
   }
 
-  @raylib.draw_circle(cx - 14, cy - 9, 12.0, body)
-  @raylib.draw_circle(cx + 12, cy - 8, 11.0, body)
-  @raylib.draw_circle(cx, cy - 13, 11.0, body)
-  @raylib.draw_rectangle(cx - 23, cy - 6, 46, 26, body)
+  if !draw_incident_art(
+    threat,
+    Float::from_int(cx),
+    Float::from_int(cy),
+  ) {
+    @raylib.draw_circle(cx - 14, cy - 9, 12.0, body)
+    @raylib.draw_circle(cx + 12, cy - 8, 11.0, body)
+    @raylib.draw_circle(cx, cy - 13, 11.0, body)
+    @raylib.draw_rectangle(cx - 23, cy - 6, 46, 26, body)
 
-  @raylib.draw_rectangle_lines(cx - 23, cy - 6, 46, 26, outline)
+    @raylib.draw_rectangle_lines(cx - 23, cy - 6, 46, 26, outline)
+  }
 
   if threat.stun_t > 0.0 {
     let aura : Float = 22.0 + @math.sinf(threat.spin * 3.2) * 4.0
@@ -287,32 +582,44 @@ fn @types.Game::draw_troupe(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
   let trim_col = @raylib.Color::new(254, 226, 172, 236)
 
-  @raylib.draw_rectangle(cx - 46, cy - 22, 92, 44, body_col)
-  @raylib.draw_rectangle_lines(
-    cx - 46,
-    cy - 22,
-    92,
-    44,
-    @raylib.Color::new(252, 238, 208, 220),
-  )
+  if !draw_lion_art(game, Float::from_int(cx), Float::from_int(cy)) {
+    @raylib.draw_rectangle(cx - 46, cy - 22, 92, 44, body_col)
+    @raylib.draw_rectangle_lines(
+      cx - 46,
+      cy - 22,
+      92,
+      44,
+      @raylib.Color::new(252, 238, 208, 220),
+    )
 
-  @raylib.draw_circle(cx + 56, cy - 2, 22.0, body_col)
-  @raylib.draw_circle(cx + 64, cy - 10, 10.0, trim_col)
-  @raylib.draw_circle(cx + 50, cy - 8, 5.0, trim_col)
+    @raylib.draw_circle(cx + 56, cy - 2, 22.0, body_col)
+    @raylib.draw_circle(cx + 64, cy - 10, 10.0, trim_col)
+    @raylib.draw_circle(cx + 50, cy - 8, 5.0, trim_col)
 
-  @raylib.draw_rectangle(cx - 58, cy - 13, 12, 26, trim_col)
-  @raylib.draw_rectangle(
-    cx - 70,
-    cy - 8,
-    14,
-    16,
-    @raylib.Color::new(246, 74, 60, 238),
-  )
+    @raylib.draw_rectangle(cx - 58, cy - 13, 12, 26, trim_col)
+    @raylib.draw_rectangle(
+      cx - 70,
+      cy - 8,
+      14,
+      16,
+      @raylib.Color::new(246, 74, 60, 238),
+    )
 
-  @raylib.draw_circle(cx + 62, cy - 5, 3.0, @raylib.Color::new(28, 30, 42, 255))
-  @raylib.draw_circle(cx + 49, cy - 4, 3.0, @raylib.Color::new(28, 30, 42, 255))
+    @raylib.draw_circle(
+      cx + 62,
+      cy - 5,
+      3.0,
+      @raylib.Color::new(28, 30, 42, 255),
+    )
+    @raylib.draw_circle(
+      cx + 49,
+      cy - 4,
+      3.0,
+      @raylib.Color::new(28, 30, 42, 255),
+    )
 
-  @raylib.draw_rectangle(cx - 20, cy - 8, 40, 8, trim_col)
+    @raylib.draw_rectangle(cx - 20, cy - 8, 40, 8, trim_col)
+  }
 
   if game.guard_t > 0.0 {
     let ring_r : Float = @types.guard_radius *
@@ -340,12 +647,19 @@ fn @types.Game::draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
       .to_int()
       .clamp(min=0, max=220)
 
-    @raylib.draw_circle_lines(
-      cx,
-      cy,
+    if !draw_action_ring_art(
+      Float::from_int(cx),
+      Float::from_int(cy),
       radius,
-      @raylib.Color::new(252, 226, 168, alpha),
-    )
+      alpha,
+    ) {
+      @raylib.draw_circle_lines(
+        cx,
+        cy,
+        radius,
+        @raylib.Color::new(252, 226, 168, alpha),
+      )
+    }
   }
 
   if game.burst_t > 0.0 {
@@ -356,12 +670,19 @@ fn @types.Game::draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
       .to_int()
       .clamp(min=0, max=230)
 
-    @raylib.draw_circle_lines(
-      cx,
-      cy,
+    if !draw_action_ring_art(
+      Float::from_int(cx),
+      Float::from_int(cy),
       radius,
-      @raylib.Color::new(252, 198, 98, alpha),
-    )
+      alpha,
+    ) {
+      @raylib.draw_circle_lines(
+        cx,
+        cy,
+        radius,
+        @raylib.Color::new(252, 198, 98, alpha),
+      )
+    }
 
     @raylib.draw_circle_lines(
       cx,
