@@ -21,13 +21,22 @@ cd examples && ./_build/native/debug/build/lighthouse_supply_run_2026/lighthouse
 
 Navigate open waters to resupply lighthouses before their fuel demand runs critical. Each lighthouse has a priority level and increasing urgency. Load cargo at the home dock and deliver to lighthouses in need. Dodge coral reefs that damage your hull, weather storms that push your ship off course, and outrun pirates that pursue and attack. Manage hull integrity and energy reserves across escalating missions.
 
+## Generated Art Assets
+
+This package now ships generated bitmap art under `lighthouse_supply_run_2026/resources/`:
+
+| Asset | Use |
+|-------|-----|
+| `ocean_route_background.png` | Stormy maritime route map blended into the playable ocean panel. |
+| `lighthouse_supply_sprites.png` | 4x2 transparent sprite sheet for the supply vessel, lighthouse, reef, storm, pirate skiff, harbor dock, cargo crates, and sonar ping. |
+
 ## Public API Reference
 
 ### Package `lighthouse_supply_run_2026`
 
 > Main entry point and single-file game implementation.
 
-The `main` function initializes the window, creates all entity arrays, calls `init_lights` and `init_reefs` to set up the world, and runs the frame loop. Each frame reads input, updates all entities, delivers cargo, and renders all layers.
+The `main` function initializes the window, initializes fonts and generated art assets, creates all entity arrays, calls `init_lights` and `init_reefs` to set up the world, and runs the frame loop. Each frame reads input, updates all entities, delivers cargo, and renders all layers. Deferred cleanup unloads textures, font resources, and the window.
 
 #### Types
 
@@ -51,6 +60,10 @@ The `main` function initializes the window, creates all entity arrays, calls `in
 | `randf` | `(Float, Float) -> Float` | Returns a random float in `[lo, hi]`. |
 | `dist2` | `(Float, Float, Float, Float) -> Float` | Returns squared distance between two points. |
 | `inside_rect` | `(Float, Float, Int, Int, Int, Int) -> Bool` | Tests point-in-rectangle for touch input. |
+| `load_art_texture` | `(String) -> Texture` | Loads a package resource texture with bilinear filtering. |
+| `load_assets` / `unload_assets` | `() -> Unit` | Loads and unloads generated ocean and sprite-sheet textures. |
+| `draw_texture_cover` | `(Texture, Float, Float, Float, Float, Color) -> Unit` | Cover-crops a generated texture into a destination rectangle. |
+| `draw_sprite_cell` | `(Int, Float, Float, Float, Float, Float, Color) -> Bool` | Draws one cell from the generated 4x2 sprite sheet and reports whether art was available. |
 | `clear_lights` / `clear_reefs` / `clear_storms` / `clear_pirates` / `clear_parts` | pool `-> Unit` | Reset all records in each entity pool. |
 | `add_particle` | `(Array[Particle], Float, Float, Float, Float, Float, Float, Int) -> Unit` | Activates an inactive particle. |
 | `burst` | `(Array[Particle], Float, Float, Int, Float, Int) -> Unit` | Emits `n` particles outward from a point. |
@@ -89,6 +102,7 @@ There are no top-level `let` constants in this file. Configuration values (world
 ## Architecture
 
 All game logic is in `main.mbt`. Key patterns:
+- **Generated art pipeline**: `load_assets` loads the ocean route background and maritime sprite sheet from `resources/`; render code keeps procedural fallbacks for every generated sprite use.
 - **State machine**: An integer `state` variable (0=title, 1=playing, 2=win, 3=lose) drives logic branches and overlay rendering. A `mission` counter tracks completed supply cycles.
 - **Main data structures**: The `Player` struct holds all vessel state. Six `Array` pools (lighthouses, reefs, storms, pirates, particles) with `active` flags manage all entities.
 - **Delta-time updates**: All physics (ship steering with drag, storm wind forces, pirate pursuit) are scaled by `dt` for frame-rate independence.

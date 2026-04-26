@@ -1,4 +1,124 @@
 ///|
+/// Generated stormy ocean route background texture.
+let tex_ocean_route_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated 4x2 maritime object sprite sheet texture.
+let tex_lighthouse_supply_sprites : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Lighthouse Supply Run texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "lighthouse_supply_run_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Lighthouse Supply Run render assets.
+fn load_assets() -> Unit {
+  tex_ocean_route_background.val = Some(
+    load_art_texture("ocean_route_background.png"),
+  )
+  tex_lighthouse_supply_sprites.val = Some(
+    load_art_texture("lighthouse_supply_sprites.png"),
+  )
+}
+
+///|
+/// Unloads generated Lighthouse Supply Run render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_ocean_route_background)
+  unload(tex_lighthouse_supply_sprites)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws one cell from the generated 4x2 sprite sheet.
+fn draw_sprite_cell(
+  index : Int,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Bool {
+  match tex_lighthouse_supply_sprites.val {
+    Some(texture) => {
+      let col = index % 4
+      let row = index / 4
+      let cell_w = Float::from_int(texture.width()) / 4.0
+      let cell_h = Float::from_int(texture.height()) / 2.0
+      @raylib.draw_texture_pro(
+        texture,
+        @raylib.Rectangle::new(
+          Float::from_int(col) * cell_w,
+          Float::from_int(row) * cell_h,
+          cell_w,
+          cell_h,
+        ),
+        @raylib.Rectangle::new(cx, cy, w, h),
+        @raylib.Vector2::new(w * 0.5, h * 0.5),
+        rotation,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Supply vessel state including position, velocity, heading, hull integrity, energy, cargo, and sonar ping.
 struct Player {
   mut x : Float
@@ -815,31 +935,57 @@ fn draw_ocean(
   world_h : Int,
   t : Float,
 ) -> Unit {
-  @raylib.draw_rectangle(
-    world_x,
-    world_y,
-    world_w,
-    world_h,
-    @raylib.Color::new(10, 32, 56, 255),
-  )
+  let using_art = match tex_ocean_route_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        Float::from_int(world_x),
+        Float::from_int(world_y),
+        Float::from_int(world_w),
+        Float::from_int(world_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        world_x,
+        world_y,
+        world_w,
+        world_h,
+        @raylib.Color::new(4, 16, 28, 74),
+      )
+      true
+    }
+    None => {
+      @raylib.draw_rectangle(
+        world_x,
+        world_y,
+        world_w,
+        world_h,
+        @raylib.Color::new(10, 32, 56, 255),
+      )
+      false
+    }
+  }
 
-  let mut y : Int = world_y
-  while y < world_y + world_h {
-    let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
-    let w : Float = @math.sinf(t * 0.8 + Float::from_int(y) * 0.018) * 0.5 + 0.5
+  if !using_art {
+    let mut y : Int = world_y
+    while y < world_y + world_h {
+      let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
+      let w : Float = @math.sinf(t * 0.8 + Float::from_int(y) * 0.018) * 0.5 +
+        0.5
 
-    let r : Int = 18 + (p * 24.0).to_int() + (w * 6.0).to_int()
-    let g : Int = 64 + (p * 44.0).to_int() + (w * 8.0).to_int()
-    let b : Int = 108 + (p * 34.0).to_int() + (w * 11.0).to_int()
+      let r : Int = 18 + (p * 24.0).to_int() + (w * 6.0).to_int()
+      let g : Int = 64 + (p * 44.0).to_int() + (w * 8.0).to_int()
+      let b : Int = 108 + (p * 34.0).to_int() + (w * 11.0).to_int()
 
-    @raylib.draw_rectangle(
-      world_x,
-      y,
-      world_w,
-      4,
-      @raylib.Color::new(r, g, b, 255),
-    )
-    y = y + 4
+      @raylib.draw_rectangle(
+        world_x,
+        y,
+        world_w,
+        4,
+        @raylib.Color::new(r, g, b, 255),
+      )
+      y = y + 4
+    }
   }
 
   @raylib.draw_rectangle_lines(
@@ -859,32 +1005,54 @@ fn draw_harbor(
   harbor_w : Int,
   harbor_h : Int,
 ) -> Unit {
-  @raylib.draw_rectangle(
-    harbor_x,
-    harbor_y,
-    harbor_w,
-    harbor_h,
-    @raylib.Color::new(42, 76, 110, 232),
-  )
-  @raylib.draw_rectangle_lines(
-    harbor_x,
-    harbor_y,
-    harbor_w,
-    harbor_h,
-    @raylib.Color::new(178, 214, 244, 242),
-  )
-
-  let mut x : Int = harbor_x + 10
-  while x < harbor_x + harbor_w - 8 {
-    @raylib.draw_line(
-      x,
-      harbor_y + 8,
-      x,
-      harbor_y + harbor_h - 8,
-      @raylib.Color::new(90, 132, 168, 200),
+  if !draw_sprite_cell(
+      5,
+      Float::from_int(harbor_x + harbor_w / 2),
+      Float::from_int(harbor_y + harbor_h / 2),
+      Float::from_int(harbor_w) * 1.34,
+      Float::from_int(harbor_h) * 1.04,
+      0.0,
+      @raylib.white,
+    ) {
+    @raylib.draw_rectangle(
+      harbor_x,
+      harbor_y,
+      harbor_w,
+      harbor_h,
+      @raylib.Color::new(42, 76, 110, 232),
     )
-    x = x + 16
+    @raylib.draw_rectangle_lines(
+      harbor_x,
+      harbor_y,
+      harbor_w,
+      harbor_h,
+      @raylib.Color::new(178, 214, 244, 242),
+    )
+
+    let mut x : Int = harbor_x + 10
+    while x < harbor_x + harbor_w - 8 {
+      @raylib.draw_line(
+        x,
+        harbor_y + 8,
+        x,
+        harbor_y + harbor_h - 8,
+        @raylib.Color::new(90, 132, 168, 200),
+      )
+      x = x + 16
+    }
   }
+
+  ignore(
+    draw_sprite_cell(
+      6,
+      Float::from_int(harbor_x) + Float::from_int(harbor_w) * 0.62,
+      Float::from_int(harbor_y) + Float::from_int(harbor_h) * 0.34,
+      42.0,
+      34.0,
+      0.0,
+      @raylib.white,
+    ),
+  )
 
   @draw.draw_text(
     "HARBOR",
@@ -914,20 +1082,30 @@ fn draw_lights(lights : Array[Lighthouse], t : Float) -> Unit {
       @raylib.Color::new(232, 238, 246, 252)
     }
 
-    @raylib.draw_rectangle(
-      (lights[i].x - 10.0).to_int(),
-      (lights[i].y - 34.0).to_int(),
-      20,
-      40,
-      body_col,
-    )
-    @raylib.draw_rectangle(
-      (lights[i].x - 16.0).to_int(),
-      (lights[i].y + 6.0).to_int(),
-      32,
-      8,
-      @raylib.Color::new(104, 146, 184, 236),
-    )
+    if !draw_sprite_cell(
+        1,
+        lights[i].x,
+        lights[i].y - 12.0,
+        72.0,
+        82.0,
+        0.0,
+        body_col,
+      ) {
+      @raylib.draw_rectangle(
+        (lights[i].x - 10.0).to_int(),
+        (lights[i].y - 34.0).to_int(),
+        20,
+        40,
+        body_col,
+      )
+      @raylib.draw_rectangle(
+        (lights[i].x - 16.0).to_int(),
+        (lights[i].y + 6.0).to_int(),
+        32,
+        8,
+        @raylib.Color::new(104, 146, 184, 236),
+      )
+    }
 
     let beam_r : Float = 30.0 + p01 * 72.0 + blink * 6.0
     let beam_a : Int = 54 + (p01 * 88.0).to_int()
@@ -972,18 +1150,28 @@ fn draw_reefs(reefs : Array[Reef], t : Float) -> Unit {
     let g : Int = 130 + (h01 * 44.0).to_int()
     let b : Int = 120 + (h01 * 14.0).to_int()
 
-    @raylib.draw_circle(
-      reef.x.to_int(),
-      reef.y.to_int(),
-      rr + 2.0,
-      @raylib.Color::new(54, 88, 116, 170),
-    )
-    @raylib.draw_circle(
-      reef.x.to_int(),
-      reef.y.to_int(),
-      rr,
-      @raylib.Color::new(r, g, b, 238),
-    )
+    if !draw_sprite_cell(
+        2,
+        reef.x,
+        reef.y,
+        rr * 2.6,
+        rr * 2.1,
+        reef.pulse * 8.0,
+        @raylib.Color::new(r, g, b, 238),
+      ) {
+      @raylib.draw_circle(
+        reef.x.to_int(),
+        reef.y.to_int(),
+        rr + 2.0,
+        @raylib.Color::new(54, 88, 116, 170),
+      )
+      @raylib.draw_circle(
+        reef.x.to_int(),
+        reef.y.to_int(),
+        rr,
+        @raylib.Color::new(r, g, b, 238),
+      )
+    }
   }
 }
 
@@ -1003,18 +1191,28 @@ fn draw_storms(storms : Array[Storm], t : Float) -> Unit {
     let a0 : Int = 50 + (storm.intensity * 62.0).to_int()
     let a1 : Int = 22 + (storm.intensity * 30.0).to_int()
 
-    @raylib.draw_circle(
-      storm.x.to_int(),
-      storm.y.to_int(),
-      rr0,
-      @raylib.Color::new(132, 168, 212, a0),
-    )
-    @raylib.draw_circle(
-      storm.x.to_int(),
-      storm.y.to_int(),
-      rr1,
-      @raylib.Color::new(186, 214, 246, a1),
-    )
+    if !draw_sprite_cell(
+        3,
+        storm.x,
+        storm.y,
+        rr0 * 2.0,
+        rr0 * 2.0,
+        t * 18.0 + storm.phase * 12.0,
+        @raylib.Color::new(210, 226, 246, a0 + 70),
+      ) {
+      @raylib.draw_circle(
+        storm.x.to_int(),
+        storm.y.to_int(),
+        rr0,
+        @raylib.Color::new(132, 168, 212, a0),
+      )
+      @raylib.draw_circle(
+        storm.x.to_int(),
+        storm.y.to_int(),
+        rr1,
+        @raylib.Color::new(186, 214, 246, a1),
+      )
+    }
 
     let bx : Int = (storm.x +
     @math.sinf(t * 5.2 + storm.phase) * storm.radius * 0.24).to_int()
@@ -1045,20 +1243,31 @@ fn draw_pirates(pirates : Array[Pirate], t : Float) -> Unit {
 
     let wob : Float = @math.sinf(t * 4.0 + Float::from_int(i) * 0.7) * 2.4
 
-    @raylib.draw_rectangle(
-      (pirates[i].x - 12.0).to_int(),
-      (pirates[i].y - 8.0 + wob).to_int(),
-      24,
-      16,
-      col,
-    )
-    @raylib.draw_rectangle(
-      (pirates[i].x - 8.0).to_int(),
-      (pirates[i].y - 13.0 + wob).to_int(),
-      16,
-      6,
-      @raylib.Color::new(246, 214, 206, 236),
-    )
+    let rotation = @math.atan2f(pirates[i].vy, pirates[i].vx) * 57.29578
+    if !draw_sprite_cell(
+        4,
+        pirates[i].x,
+        pirates[i].y + wob,
+        58.0,
+        42.0,
+        rotation,
+        col,
+      ) {
+      @raylib.draw_rectangle(
+        (pirates[i].x - 12.0).to_int(),
+        (pirates[i].y - 8.0 + wob).to_int(),
+        24,
+        16,
+        col,
+      )
+      @raylib.draw_rectangle(
+        (pirates[i].x - 8.0).to_int(),
+        (pirates[i].y - 13.0 + wob).to_int(),
+        16,
+        6,
+        @raylib.Color::new(246, 214, 206, 236),
+      )
+    }
 
     @draw.draw_text(
       "P\{pirates[i].id}",
@@ -1095,29 +1304,6 @@ fn draw_player(player : Player, t : Float) -> Unit {
     @raylib.Color::new(240, 244, 252, 252)
   }
 
-  @raylib.draw_rectangle(
-    (x - 13.0).to_int(),
-    (y - 8.0).to_int(),
-    26,
-    16,
-    hull_col,
-  )
-  @raylib.draw_rectangle(
-    (x - 8.0).to_int(),
-    (y - 12.0).to_int(),
-    16,
-    6,
-    @raylib.Color::new(204, 230, 250, 238),
-  )
-
-  @raylib.draw_line(
-    x.to_int(),
-    y.to_int(),
-    (x + nx * 24.0).to_int(),
-    (y + ny * 24.0).to_int(),
-    @raylib.Color::new(252, 248, 214, 236),
-  )
-
   let wake_r : Float = 8.0 +
     (@math.sinf(t * 4.4 + player.wake_t) * 0.5 + 0.5) * 5.5
   @raylib.draw_circle(
@@ -1126,6 +1312,31 @@ fn draw_player(player : Player, t : Float) -> Unit {
     wake_r,
     @raylib.Color::new(176, 214, 246, 82),
   )
+
+  if !draw_sprite_cell(0, x, y, 70.0, 48.0, player.heading * 57.29578, hull_col) {
+    @raylib.draw_rectangle(
+      (x - 13.0).to_int(),
+      (y - 8.0).to_int(),
+      26,
+      16,
+      hull_col,
+    )
+    @raylib.draw_rectangle(
+      (x - 8.0).to_int(),
+      (y - 12.0).to_int(),
+      16,
+      6,
+      @raylib.Color::new(204, 230, 250, 238),
+    )
+
+    @raylib.draw_line(
+      x.to_int(),
+      y.to_int(),
+      (x + nx * 24.0).to_int(),
+      (y + ny * 24.0).to_int(),
+      @raylib.Color::new(252, 248, 214, 236),
+    )
+  }
 
   // cargo markers on deck
   let shown : Int = player.cargo.min(6)
@@ -1390,11 +1601,13 @@ fn main {
   let sw : Int = 1680
   let sh : Int = 940
   @raylib.init_window(sw, sh, "raylib [game] lighthouse supply run 2026")
-  @draw.cleanup()
+  defer @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(120)
   @draw.init_font()
+  load_assets()
+  defer unload_assets()
 
   let world_x : Int = 20
   let world_y : Int = 20
@@ -1951,18 +2164,28 @@ fn main {
 
     if player.ping_t > 0.0 {
       let rr : Float = 20.0 + (2.2 - player.ping_t) * 58.0
-      @raylib.draw_circle(
-        player.ping_x.to_int(),
-        player.ping_y.to_int(),
-        rr,
-        @raylib.Color::new(170, 230, 252, 84),
-      )
-      @raylib.draw_circle(
-        player.ping_x.to_int(),
-        player.ping_y.to_int(),
-        9.0,
-        @raylib.Color::new(248, 252, 255, 214),
-      )
+      if !draw_sprite_cell(
+          7,
+          player.ping_x,
+          player.ping_y,
+          rr * 2.2,
+          rr * 1.45,
+          scene_t * 22.0,
+          @raylib.Color::new(188, 236, 252, 156),
+        ) {
+        @raylib.draw_circle(
+          player.ping_x.to_int(),
+          player.ping_y.to_int(),
+          rr,
+          @raylib.Color::new(170, 230, 252, 84),
+        )
+        @raylib.draw_circle(
+          player.ping_x.to_int(),
+          player.ping_y.to_int(),
+          9.0,
+          @raylib.Color::new(248, 252, 255, 214),
+        )
+      }
       @raylib.draw_line(
         player.x.to_int(),
         player.y.to_int(),
