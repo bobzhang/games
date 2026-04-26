@@ -1,6 +1,6 @@
 # Hospital Triage 2026
 
-A time-management game where you play as a nurse triaging patients across four hospital wards. Prioritize critical cases before they worsen and leave untreated.
+A time-management game with generated hospital, ward, nurse, patient, and treatment-station art assets. You play as a nurse triaging patients across four hospital wards, prioritizing critical cases before they worsen and leave untreated.
 
 ## Build and Run
 
@@ -42,6 +42,8 @@ The `main` function initialises a 1120x740 window, allocates a 140-slot `Patient
 | `ward_x` | `(Int) -> Float` | Returns the screen x-coordinate for the centre of the given ward column. |
 | `reset_patients` | `(Array[Patient]) -> Unit` | Marks all patient slots as inactive. |
 | `spawn_patient` | `(Array[Patient]) -> Unit` | Finds the first inactive slot and spawns a patient in a random ward with probability-weighted severity. |
+| `load_assets` | `() -> Unit` | Loads the generated hospital background, ward bay, nurse, patient, and treatment-station textures. |
+| `unload_assets` | `() -> Unit` | Unloads generated textures during shutdown. |
 | `treat_time` | `(Int) -> Float` | Returns the treatment duration in seconds for the given severity level (2.2s mild, 3.4s medium, 4.8s critical). |
 | `treat_score` | `(Int) -> Int` | Returns the score awarded for successfully treating a patient of the given severity (28/48/92). |
 | `severity_color` | `(Int) -> @raylib.Color` | Maps severity index to a display colour (lime/orange/red). |
@@ -60,12 +62,29 @@ The `main` function initialises a 1120x740 window, allocates a 140-slot `Patient
 
 All game logic resides in `main.mbt`. Key design patterns:
 - A single `Patient` array with 140 pre-allocated slots; `spawn_patient` scans for the first inactive slot to avoid heap allocation each spawn.
+- Generated texture rendering with fallbacks: the hospital backdrop, ward lanes, nurse, patient severities, and treatment station are drawn from PNG assets when available, while the original primitive shapes remain as fallback paths.
 - Ward positions are computed by `ward_x(ward)` returning a formula-driven x-coordinate, so adding more wards only requires changing `ward_count`.
 - Patients scroll downward at a speed proportional to severity, creating urgency; they are lost either when the wait-time panic threshold is exceeded or when they scroll off the bottom.
 - A single treatment bed is modelled with boolean `treating` and a timer `tr_time_left`; only one patient can be treated at a time, forcing prioritisation decisions.
 - Successful treatment adds 2.6 seconds to the shift timer (capped at 170 s), incentivising throughput.
 - Delta-time updates capped at 50 ms ensure consistent behaviour at low frame rates.
 - Integer-encoded game state uses a single `over` boolean; no separate title screen — the game starts immediately.
+
+### Package Structure
+
+```
+hospital_triage_2026/
+├── main.mbt
+├── moon.pkg
+└── resources/
+    ├── hospital_background.png
+    ├── nurse_sprite.png
+    ├── patient_critical.png
+    ├── patient_medium.png
+    ├── patient_mild.png
+    ├── treatment_station.png
+    └── ward_bay.png
+```
 
 ## Improvement & Refinement Plan
 

@@ -17,6 +17,34 @@ fn ward_x(ward : Int) -> Float {
 }
 
 ///|
+/// Generated hospital backdrop texture.
+let tex_hospital_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated ward bay texture.
+let tex_ward_bay : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated nurse sprite texture.
+let tex_nurse : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated mild patient sprite texture.
+let tex_patient_mild : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated medium patient sprite texture.
+let tex_patient_medium : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated critical patient sprite texture.
+let tex_patient_critical : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated treatment station texture.
+let tex_treatment_station : Ref[@raylib.Texture?] = { val: None }
+
+///|
 /// A hospital patient with liveness flag, assigned ward, screen position, severity level (0=mild/1=medium/2=critical), and elapsed wait time.
 struct Patient {
   mut alive : Bool
@@ -25,6 +53,285 @@ struct Patient {
   mut y : Float
   mut severity : Int // 0 mild, 1 medium, 2 critical
   mut wait : Float
+}
+
+///|
+/// Loads one generated Hospital Triage texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "hospital_triage_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Hospital Triage render assets.
+fn load_assets() -> Unit {
+  tex_hospital_background.val = Some(
+    load_art_texture("hospital_background.png"),
+  )
+  tex_ward_bay.val = Some(load_art_texture("ward_bay.png"))
+  tex_nurse.val = Some(load_art_texture("nurse_sprite.png"))
+  tex_patient_mild.val = Some(load_art_texture("patient_mild.png"))
+  tex_patient_medium.val = Some(load_art_texture("patient_medium.png"))
+  tex_patient_critical.val = Some(load_art_texture("patient_critical.png"))
+  tex_treatment_station.val = Some(load_art_texture("treatment_station.png"))
+}
+
+///|
+/// Unloads generated Hospital Triage render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_hospital_background)
+  unload(tex_ward_bay)
+  unload(tex_nurse)
+  unload(tex_patient_mild)
+  unload(tex_patient_medium)
+  unload(tex_patient_critical)
+  unload(tex_treatment_station)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on a destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated texture scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, cx, cy, w, h, rotation, tint)
+}
+
+///|
+/// Draws the generated hospital backdrop.
+fn draw_hospital_background() -> Bool {
+  match tex_hospital_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(sw),
+        Float::from_int(sh),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        0,
+        sw,
+        sh,
+        @raylib.Color::new(230, 240, 248, 62),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws a generated ward bay lane.
+fn draw_ward_bay_art(x : Float) -> Bool {
+  match tex_ward_bay.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        x - 75.0,
+        160.0,
+        150.0,
+        520.0,
+        @raylib.Color::new(250, 252, 255, 246),
+      )
+      @raylib.draw_rectangle(
+        (x - 75.0).to_int(),
+        160,
+        150,
+        520,
+        @raylib.Color::new(240, 248, 255, 36),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Returns the generated patient texture for the severity.
+fn patient_texture(sev : Int) -> @raylib.Texture? {
+  if sev == 0 {
+    tex_patient_mild.val
+  } else if sev == 1 {
+    tex_patient_medium.val
+  } else {
+    tex_patient_critical.val
+  }
+}
+
+///|
+/// Draws generated patient art for a live queue token.
+fn draw_patient_art(patient : Patient) -> Bool {
+  match patient_texture(patient.severity) {
+    Some(texture) => {
+      @raylib.draw_circle(
+        patient.x.to_int(),
+        (patient.y + 13.0).to_int(),
+        18.0,
+        @raylib.fade(severity_color(patient.severity), 0.24),
+      )
+      draw_texture_fit(
+        texture,
+        patient.x,
+        patient.y,
+        if patient.severity == 2 {
+          50.0
+        } else {
+          42.0
+        },
+        if patient.severity == 2 {
+          62.0
+        } else {
+          54.0
+        },
+        0.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws generated nurse art at the current ward station.
+fn draw_nurse_art(x : Float, y : Int) -> Bool {
+  match tex_nurse.val {
+    Some(texture) => {
+      @raylib.draw_circle(
+        x.to_int(),
+        y + 19,
+        24.0,
+        @raylib.Color::new(36, 84, 140, 52),
+      )
+      draw_texture_fit(
+        texture,
+        x,
+        Float::from_int(y - 9),
+        50.0,
+        72.0,
+        0.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws generated treatment station art in the side treatment area.
+fn draw_treatment_station_art() -> Bool {
+  match tex_treatment_station.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        Float::from_int(sw - 165),
+        258.0,
+        220.0,
+        112.0,
+        0.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
 }
 
 ///|
@@ -106,8 +413,12 @@ fn severity_name(sev : Int) -> String {
 /// Initialises the Raylib window, pre-allocates the patient array, runs the triage game loop, and closes the window on exit.
 fn main {
   @raylib.init_window(sw, sh, "Hospital Triage 2026")
+  defer @raylib.close_window()
+  defer @draw.cleanup()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
+  defer unload_assets()
 
   let patients : Array[Patient] = Array::makei(140, fn(_i) {
     { alive: false, ward: 0, x: 0.0, y: 0.0, severity: 0, wait: 0.0 }
@@ -271,30 +582,34 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(230, 236, 242, 255))
 
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      130,
-      @raylib.Color::new(188, 214, 236, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      130,
-      sw,
-      sh - 130,
-      @raylib.Color::new(248, 248, 248, 255),
-    )
+    if !draw_hospital_background() {
+      @raylib.draw_rectangle(
+        0,
+        0,
+        sw,
+        130,
+        @raylib.Color::new(188, 214, 236, 255),
+      )
+      @raylib.draw_rectangle(
+        0,
+        130,
+        sw,
+        sh - 130,
+        @raylib.Color::new(248, 248, 248, 255),
+      )
+    }
 
     for w in 0..<ward_count {
       let x = ward_x(w)
-      @raylib.draw_rectangle(
-        (x - 75.0).to_int(),
-        160,
-        150,
-        520,
-        @raylib.Color::new(240, 244, 248, 255),
-      )
+      if !draw_ward_bay_art(x) {
+        @raylib.draw_rectangle(
+          (x - 75.0).to_int(),
+          160,
+          150,
+          520,
+          @raylib.Color::new(240, 244, 248, 255),
+        )
+      }
       @raylib.draw_rectangle_lines(
         (x - 75.0).to_int(),
         160,
@@ -313,8 +628,10 @@ fn main {
 
     for patient in patients {
       if patient.alive {
-        let c = severity_color(patient.severity)
-        @raylib.draw_circle(patient.x.to_int(), patient.y.to_int(), 15.0, c)
+        if !draw_patient_art(patient) {
+          let c = severity_color(patient.severity)
+          @raylib.draw_circle(patient.x.to_int(), patient.y.to_int(), 15.0, c)
+        }
         @draw.draw_text(
           severity_name(patient.severity),
           (patient.x - 26.0).to_int(),
@@ -326,14 +643,16 @@ fn main {
     }
 
     // Nurse and treatment bed
-    @raylib.draw_circle(nx.to_int(), sh - 82, 16.0, @raylib.blue)
-    @raylib.draw_rectangle(
-      (nx - 26.0).to_int(),
-      sh - 64,
-      52,
-      10,
-      @raylib.darkblue,
-    )
+    if !draw_nurse_art(nx, sh - 82) {
+      @raylib.draw_circle(nx.to_int(), sh - 82, 16.0, @raylib.blue)
+      @raylib.draw_rectangle(
+        (nx - 26.0).to_int(),
+        sh - 64,
+        52,
+        10,
+        @raylib.darkblue,
+      )
+    }
 
     @raylib.draw_rectangle(
       sw - 290,
@@ -342,6 +661,7 @@ fn main {
       150,
       @raylib.Color::new(214, 228, 242, 255),
     )
+    ignore(draw_treatment_station_art())
     @draw.draw_text("TREATMENT", sw - 262, 194, 28, @raylib.darkblue)
     if treating {
       @draw.draw_text(
@@ -432,7 +752,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
