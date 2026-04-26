@@ -21,13 +21,23 @@ cd examples && ./_build/native/debug/build/jade_temple_bellkeeper_2026/jade_temp
 
 Four sacred bells orbit the central shrine. Move near a bell and ring it to emit a damaging shockwave that destroys nearby foes (wisps, brutes, shamans, and relics). Foes advance toward the shrine and drain its HP on contact. Manage your spirit energy -- it regenerates over time but is consumed by ringing bells and dashing. Build combos by defeating foes in quick succession. Reach the stage score goal within the time limit to advance to harder stages.
 
+## Generated Art Assets
+
+This package now ships generated bitmap art under `jade_temple_bellkeeper_2026/resources/`:
+
+| Asset | Use |
+|-------|-----|
+| `jade_temple_background.png` | Moonlit temple sanctuary backdrop behind the playfield. |
+| `jade_floor_tile.png` | Jade stone courtyard texture blended into the playable floor. |
+| `jade_guardian_sprites.png` | 4x2 transparent sprite sheet for the bellkeeper, bell, shrine, relic, hostile spirits, and bolt. |
+
 ## Public API Reference
 
 ### Package `jade_temple_bellkeeper_2026`
 
 > Main entry point.
 
-The `main` function initializes the window (1280x720, MSAA 4x), initializes the audio device, sets 120 FPS, creates the `Game` struct via `@types.Game::new()`, and runs the frame loop. Each frame it clamps delta time to 33 ms, calls `@game.update_game`, then draws with `@render.draw_frame` inside `begin_drawing`/`end_drawing`.
+The `main` function initializes the window (1280x720, MSAA 4x), initializes the audio device, sets 120 FPS, initializes fonts and generated render assets, creates the `Game` struct via `@types.Game::new()`, and runs the frame loop. Each frame it clamps delta time to 33 ms, calls `@game.update_game`, then draws with `@render.draw_frame` inside `begin_drawing`/`end_drawing`. Deferred cleanup unloads textures, font resources, audio, and the window.
 
 ### Package `jade_temple_bellkeeper_2026/internal/types`
 
@@ -196,18 +206,23 @@ The `main` function initializes the window (1280x720, MSAA 4x), initializes the 
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
+| `load_assets` | `() -> Unit` | **Public.** Loads generated background, floor, and sprite-sheet textures from the package resources directory. |
+| `unload_assets` | `() -> Unit` | **Public.** Unloads generated textures and clears texture refs. |
 | `draw_frame` | `(Game) -> Unit` | **Public.** Renders the complete frame: clears background, draws world, HUD, state overlays, touch controls, and flash. |
+| `load_art_texture` | `(String) -> Texture` | Loads a package resource texture with bilinear filtering. |
+| `draw_texture_cover` | `(Texture, Float, Float, Float, Float, Color) -> Unit` | Cover-crops a generated texture into a destination rectangle. |
+| `draw_sprite_cell` | `(Int, Float, Float, Float, Float, Float, Color) -> Bool` | Draws one cell from the generated 4x2 sprite sheet and reports whether art was available. |
 | `draw_center_text` | `(String, Int, Int, Color) -> Unit` | Draws text centered horizontally at a given y. |
 | `draw_right_text` | `(String, Int, Int, Int, Color) -> Unit` | Draws text right-aligned at a given x. |
 | `cam_shake` | `(Game) -> (Float, Float)` | Returns a random camera offset based on shake timer. |
-| `draw_sky` | `(Game, Float, Float) -> Unit` | Draws background gradient, moon, stars, and wave clouds. |
-| `draw_floor_grid` | `(Game, Float, Float) -> Unit` | Draws the play area floor with animated scrolling grid. |
-| `draw_shrine` | `(Game, Float, Float) -> Unit` | Draws shrine with aura, HP gem, and bell connector lines. |
-| `draw_bell` | `(Bell, Int, Float, Float) -> Unit` | Draws a bell with glow, body, clapper, and charge bar. |
-| `draw_wisp` / `draw_brute` / `draw_shaman` / `draw_relic` | `(Foe, Float, Float, Float) -> Unit` | Draw individual foe kinds. |
+| `draw_sky` | `(Game, Float, Float) -> Unit` | Draws the generated temple backdrop, fallback gradient/moon, stars, and wave clouds. |
+| `draw_floor_grid` | `(Game, Float, Float) -> Unit` | Draws the generated jade floor texture with animated scrolling grid overlay. |
+| `draw_shrine` | `(Game, Float, Float) -> Unit` | Draws shrine art with aura, HP gem, and bell connector lines. |
+| `draw_bell` | `(Bell, Int, Float, Float) -> Unit` | Draws generated bell art with glow and charge bar. |
+| `draw_wisp` / `draw_brute` / `draw_shaman` / `draw_relic` | `(Foe, Float, Float, Float) -> Unit` | Draw individual foe kinds with generated sprite art and procedural fallback. |
 | `draw_foe` | `(Foe, Float, Float) -> Unit` | Dispatches to kind-specific draw and adds HP bar. |
-| `draw_hero` | `(Game, Float, Float) -> Unit` | Draws hero with aura, body, tail, and hurt flash. |
-| `draw_bolts` | `(Game, Float, Float) -> Unit` | Draws all active bolt projectiles. |
+| `draw_hero` | `(Game, Float, Float) -> Unit` | Draws generated bellkeeper art with aura, invulnerability tint, and hurt flash. |
+| `draw_bolts` | `(Game, Float, Float) -> Unit` | Draws all active bolt projectiles with generated bolt art and procedural fallback. |
 | `draw_fx` | `(Game, Float, Float) -> Unit` | Draws sparks, rings, and echo effects. |
 | `draw_bar` | `(Int, Int, Int, Int, Float, Float, String, Color) -> Unit` | Draws a labeled progress bar. |
 | `draw_hud` | `(Game) -> Unit` | Draws shrine HP, spirit, score/goal, timer, bell charges, combo, and hints. |
@@ -227,6 +242,10 @@ The `main` function initializes the window (1280x720, MSAA 4x), initializes the 
 jade_temple_bellkeeper_2026/
 ├── main.mbt           — Entry point: window/audio init, game loop
 ├── moon.pkg           — Package config with raylib and math imports
+├── resources/
+│   ├── jade_temple_background.png — Generated moonlit sanctuary backdrop
+│   ├── jade_floor_tile.png        — Generated jade courtyard playfield texture
+│   └── jade_guardian_sprites.png  — Generated 4x2 transparent sprite sheet
 └── internal/
     ├── types/
     │   ├── types.mbt      — All struct definitions and ::new constructors

@@ -1,4 +1,130 @@
 ///|
+/// Generated moonlit temple background texture.
+let tex_jade_temple_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated jade courtyard floor texture.
+let tex_jade_floor_tile : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated 4x2 bellkeeper, bell, shrine, foe, relic, and bolt sprite sheet.
+let tex_jade_guardian_sprites : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Jade Temple Bellkeeper texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "jade_temple_bellkeeper_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Jade Temple Bellkeeper render assets.
+pub fn load_assets() -> Unit {
+  tex_jade_temple_background.val = Some(
+    load_art_texture("jade_temple_background.png"),
+  )
+  tex_jade_floor_tile.val = Some(load_art_texture("jade_floor_tile.png"))
+  tex_jade_guardian_sprites.val = Some(
+    load_art_texture("jade_guardian_sprites.png"),
+  )
+}
+
+///|
+/// Unloads generated Jade Temple Bellkeeper render assets.
+pub fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_jade_temple_background)
+  unload(tex_jade_floor_tile)
+  unload(tex_jade_guardian_sprites)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws one cell from the generated 4x2 sprite sheet.
+fn draw_sprite_cell(
+  index : Int,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Bool {
+  match tex_jade_guardian_sprites.val {
+    Some(texture) => {
+      let col = index % 4
+      let row = index / 4
+      let cell_w = Float::from_int(texture.width()) / 4.0
+      let cell_h = Float::from_int(texture.height()) / 2.0
+      @raylib.draw_texture_pro(
+        texture,
+        @raylib.Rectangle::new(
+          Float::from_int(col) * cell_w,
+          Float::from_int(row) * cell_h,
+          cell_w,
+          cell_h,
+        ),
+        @raylib.Rectangle::new(cx, cy, w, h),
+        @raylib.Vector2::new(w * 0.5, h * 0.5),
+        rotation,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Draws `text` horizontally centered on screen at the given y position, size, and color.
 fn draw_center_text(
   text : String,
@@ -41,14 +167,37 @@ fn @types.Game::draw_sky(
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @types.bg_top(),
-    @types.bg_bottom(),
-  )
+  let using_art = match tex_jade_temple_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(@types.screen_w),
+        Float::from_int(@types.screen_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(4, 10, 22, 42),
+      )
+      true
+    }
+    None => {
+      @raylib.draw_rectangle_gradient_v(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @types.bg_top(),
+        @types.bg_bottom(),
+      )
+      false
+    }
+  }
 
   let moon_x : Float = Float::from_int(@types.screen_w) * 0.8 +
     @math.sinf(game.time_s * 0.16) * 34.0
@@ -56,18 +205,22 @@ fn @types.Game::draw_sky(
     74.0 +
     @math.cosf(game.time_s * 0.22) * 14.0
 
-  @raylib.draw_circle(
-    (moon_x + cam_x * 0.2).to_int(),
-    (moon_y + cam_y * 0.2).to_int(),
-    84.0,
-    @raylib.Color::new(210, 234, 255, 58),
-  )
-  @raylib.draw_circle(
-    (moon_x + cam_x * 0.2).to_int(),
-    (moon_y + cam_y * 0.2).to_int(),
-    46.0,
-    @raylib.Color::new(232, 246, 255, 130),
-  )
+  if !using_art {
+    @raylib.draw_circle(
+      (moon_x + cam_x * 0.2).to_int(),
+      (moon_y + cam_y * 0.2).to_int(),
+      84.0,
+      @raylib.Color::new(210, 234, 255, 58),
+    )
+    @raylib.draw_circle(
+      (moon_x + cam_x * 0.2).to_int(),
+      (moon_y + cam_y * 0.2).to_int(),
+      46.0,
+      @raylib.Color::new(232, 246, 255, 130),
+    )
+  }
+
+  let art_alpha : Float = if using_art { 0.42 } else { 1.0 }
 
   for i in 0..<160 {
     let fi = Float::from_int(i)
@@ -77,7 +230,8 @@ fn @types.Game::draw_sky(
       (fi * 42.0 + fi * 15.0) % Float::from_int(@types.screen_h - @types.hud_h)
 
     let tw : Float = 0.5 + 0.5 * @math.sinf(fi * 0.7 + game.time_s * 1.4)
-    let alpha = 64 + (tw * 112.0).to_int()
+    let base_alpha : Float = 64.0 + tw * 112.0
+    let alpha = (base_alpha * art_alpha).to_int()
 
     @raylib.draw_circle(
       (x + cam_x * 0.1).to_int(),
@@ -124,13 +278,33 @@ fn @types.Game::draw_floor_grid(
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
-  @raylib.draw_rectangle(
-    @types.play_left.to_int(),
-    @types.play_top.to_int(),
-    (@types.play_right - @types.play_left).to_int(),
-    (@types.play_bottom - @types.play_top).to_int(),
-    @raylib.Color::new(8, 18, 34, 44),
-  )
+  match tex_jade_floor_tile.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        @types.play_left,
+        @types.play_top,
+        @types.play_right - @types.play_left,
+        @types.play_bottom - @types.play_top,
+        @raylib.Color::new(210, 232, 238, 176),
+      )
+      @raylib.draw_rectangle(
+        @types.play_left.to_int(),
+        @types.play_top.to_int(),
+        (@types.play_right - @types.play_left).to_int(),
+        (@types.play_bottom - @types.play_top).to_int(),
+        @raylib.Color::new(3, 8, 16, 68),
+      )
+    }
+    None =>
+      @raylib.draw_rectangle(
+        @types.play_left.to_int(),
+        @types.play_top.to_int(),
+        (@types.play_right - @types.play_left).to_int(),
+        (@types.play_bottom - @types.play_top).to_int(),
+        @raylib.Color::new(8, 18, 34, 44),
+      )
+  }
 
   @raylib.draw_rectangle_lines(
     (@types.play_left + cam_x * 0.1).to_int(),
@@ -184,18 +358,29 @@ fn @types.Game::draw_shrine(
     @types.shrine_radius + 34.0,
     @raylib.Color::new(92, 164, 236, 44),
   )
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    @types.shrine_radius,
-    @raylib.Color::new(28, 58, 92, 228),
-  )
-  @raylib.draw_circle_lines(
-    x.to_int(),
-    y.to_int(),
-    @types.shrine_radius,
-    @raylib.Color::new(134, 216, 255, 170),
-  )
+
+  if !draw_sprite_cell(
+    2,
+    x,
+    y + 4.0,
+    @types.shrine_radius * 2.8,
+    @types.shrine_radius * 2.15,
+    0.0,
+    @raylib.Color::new(238, 252, 246, 220),
+  ) {
+    @raylib.draw_circle(
+      x.to_int(),
+      y.to_int(),
+      @types.shrine_radius,
+      @raylib.Color::new(28, 58, 92, 228),
+    )
+    @raylib.draw_circle_lines(
+      x.to_int(),
+      y.to_int(),
+      @types.shrine_radius,
+      @raylib.Color::new(134, 216, 255, 170),
+    )
+  }
 
   let hp_ratio = @types.clampf(game.shrine_hp / @types.shrine_max_hp, 0.0, 1.0)
   @raylib.draw_circle(
@@ -239,32 +424,42 @@ fn draw_bell(b : @types.Bell, i : Int, cam_x : Float, cam_y : Float) -> Unit {
     @raylib.Color::new(120, 224, 255, 34 + (b.glow * 120.0).to_int()),
   )
 
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    18.0,
-    @raylib.Color::new(32, 72, 112, 230),
-  )
-  @raylib.draw_circle_lines(
-    x.to_int(),
-    y.to_int(),
-    18.0,
-    @raylib.Color::new(156, 226, 255, 210),
-  )
+  if !draw_sprite_cell(
+    1,
+    x,
+    y - 2.0,
+    68.0,
+    68.0,
+    0.0,
+    @raylib.Color::new(238, 252, 248, 238),
+  ) {
+    @raylib.draw_circle(
+      x.to_int(),
+      y.to_int(),
+      18.0,
+      @raylib.Color::new(32, 72, 112, 230),
+    )
+    @raylib.draw_circle_lines(
+      x.to_int(),
+      y.to_int(),
+      18.0,
+      @raylib.Color::new(156, 226, 255, 210),
+    )
 
-  @raylib.draw_rectangle(
-    (x - 5.0).to_int(),
-    (y - 12.0).to_int(),
-    10,
-    16,
-    @raylib.Color::new(244, 232, 196, 218),
-  )
-  @raylib.draw_circle(
-    x.to_int(),
-    (y + 2.0 + pulse * 2.0).to_int(),
-    3.0,
-    @raylib.Color::new(255, 188, 126, 230),
-  )
+    @raylib.draw_rectangle(
+      (x - 5.0).to_int(),
+      (y - 12.0).to_int(),
+      10,
+      16,
+      @raylib.Color::new(244, 232, 196, 218),
+    )
+    @raylib.draw_circle(
+      x.to_int(),
+      (y + 2.0 + pulse * 2.0).to_int(),
+      3.0,
+      @raylib.Color::new(255, 188, 126, 230),
+    )
+  }
 
   let c : Float = @types.clampf(b.charge, 0.0, 1.0)
   @raylib.draw_rectangle(
@@ -300,13 +495,23 @@ fn draw_wisp(
     f.w * 0.34 + pulse * 4.0,
     @raylib.Color::new(255, 126, 190, 124),
   )
-  @raylib.draw_circle(x.to_int(), y.to_int(), f.w * 0.25, @types.pink())
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    f.w * 0.12,
-    @raylib.Color::new(32, 24, 44, 220),
-  )
+  if !draw_sprite_cell(
+    4,
+    x,
+    y,
+    f.w * 1.55,
+    f.h * 1.55,
+    @math.sinf(f.phase * 1.8) * 4.0,
+    @raylib.white,
+  ) {
+    @raylib.draw_circle(x.to_int(), y.to_int(), f.w * 0.25, @types.pink())
+    @raylib.draw_circle(
+      x.to_int(),
+      y.to_int(),
+      f.w * 0.12,
+      @raylib.Color::new(32, 24, 44, 220),
+    )
+  }
 }
 
 ///|
@@ -320,27 +525,37 @@ fn draw_brute(
   let x = f.x + cam_x
   let y = f.y + cam_y
 
-  @raylib.draw_rectangle(
-    (x - f.w * 0.5).to_int(),
-    (y - f.h * 0.5).to_int(),
-    f.w.to_int(),
-    f.h.to_int(),
-    @raylib.Color::new(236, 156, 104, 236),
-  )
-  @raylib.draw_rectangle_lines(
-    (x - f.w * 0.5).to_int(),
-    (y - f.h * 0.5).to_int(),
-    f.w.to_int(),
-    f.h.to_int(),
-    @raylib.Color::new(86, 56, 42, 220),
-  )
+  if !draw_sprite_cell(
+    5,
+    x,
+    y,
+    f.w * 1.35,
+    f.h * 1.35,
+    @math.sinf(f.phase * 1.2) * 2.0,
+    @raylib.white,
+  ) {
+    @raylib.draw_rectangle(
+      (x - f.w * 0.5).to_int(),
+      (y - f.h * 0.5).to_int(),
+      f.w.to_int(),
+      f.h.to_int(),
+      @raylib.Color::new(236, 156, 104, 236),
+    )
+    @raylib.draw_rectangle_lines(
+      (x - f.w * 0.5).to_int(),
+      (y - f.h * 0.5).to_int(),
+      f.w.to_int(),
+      f.h.to_int(),
+      @raylib.Color::new(86, 56, 42, 220),
+    )
 
-  @raylib.draw_circle(
-    (x + pulse * 2.0).to_int(),
-    (y - f.h * 0.12).to_int(),
-    8.0,
-    @raylib.Color::new(40, 30, 22, 230),
-  )
+    @raylib.draw_circle(
+      (x + pulse * 2.0).to_int(),
+      (y - f.h * 0.12).to_int(),
+      8.0,
+      @raylib.Color::new(40, 30, 22, 230),
+    )
+  }
 }
 
 ///|
@@ -354,18 +569,28 @@ fn draw_shaman(
   let x = f.x + cam_x
   let y = f.y + cam_y
 
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(x, y - f.h * 0.52),
-    @raylib.Vector2::new(x - f.w * 0.46, y + f.h * 0.4),
-    @raylib.Vector2::new(x + f.w * 0.46, y + f.h * 0.4),
-    @raylib.Color::new(126, 210, 255, 238),
-  )
-  @raylib.draw_circle(
-    x.to_int(),
-    (y - f.h * 0.06).to_int(),
-    7.0 + pulse * 2.0,
-    @raylib.Color::new(36, 52, 78, 224),
-  )
+  if !draw_sprite_cell(
+    6,
+    x,
+    y,
+    f.w * 1.5,
+    f.h * 1.58,
+    @math.sinf(f.phase * 1.4) * 3.0,
+    @raylib.white,
+  ) {
+    @raylib.draw_triangle(
+      @raylib.Vector2::new(x, y - f.h * 0.52),
+      @raylib.Vector2::new(x - f.w * 0.46, y + f.h * 0.4),
+      @raylib.Vector2::new(x + f.w * 0.46, y + f.h * 0.4),
+      @raylib.Color::new(126, 210, 255, 238),
+    )
+    @raylib.draw_circle(
+      x.to_int(),
+      (y - f.h * 0.06).to_int(),
+      7.0 + pulse * 2.0,
+      @raylib.Color::new(36, 52, 78, 224),
+    )
+  }
 }
 
 ///|
@@ -385,25 +610,35 @@ fn draw_relic(
     f.w * 0.34 + pulse * 4.0,
     @raylib.Color::new(118, 244, 202, 88),
   )
-  @raylib.draw_rectangle(
-    (x - f.w * 0.3).to_int(),
-    (y - f.h * 0.3).to_int(),
-    (f.w * 0.6).to_int(),
-    (f.h * 0.6).to_int(),
-    @types.jade(),
-  )
-  @raylib.draw_line_ex(
-    @raylib.Vector2::new(x - f.w * 0.3, y),
-    @raylib.Vector2::new(x + f.w * 0.3, y),
-    2.0,
-    @raylib.Color::new(20, 56, 42, 220),
-  )
-  @raylib.draw_line_ex(
-    @raylib.Vector2::new(x, y - f.h * 0.3),
-    @raylib.Vector2::new(x, y + f.h * 0.3),
-    2.0,
-    @raylib.Color::new(20, 56, 42, 220),
-  )
+  if !draw_sprite_cell(
+    3,
+    x,
+    y,
+    f.w * 1.5,
+    f.h * 1.55,
+    @math.sinf(f.phase * 1.6) * 5.0,
+    @raylib.white,
+  ) {
+    @raylib.draw_rectangle(
+      (x - f.w * 0.3).to_int(),
+      (y - f.h * 0.3).to_int(),
+      (f.w * 0.6).to_int(),
+      (f.h * 0.6).to_int(),
+      @types.jade(),
+    )
+    @raylib.draw_line_ex(
+      @raylib.Vector2::new(x - f.w * 0.3, y),
+      @raylib.Vector2::new(x + f.w * 0.3, y),
+      2.0,
+      @raylib.Color::new(20, 56, 42, 220),
+    )
+    @raylib.draw_line_ex(
+      @raylib.Vector2::new(x, y - f.h * 0.3),
+      @raylib.Vector2::new(x, y + f.h * 0.3),
+      2.0,
+      @raylib.Color::new(20, 56, 42, 220),
+    )
+  }
 }
 
 ///|
@@ -483,40 +718,50 @@ fn @types.Game::draw_hero(
     )
   }
 
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(x, y - h.h * 0.54),
-    @raylib.Vector2::new(x - h.w * 0.5, y + h.h * 0.16),
-    @raylib.Vector2::new(x + h.w * 0.5, y + h.h * 0.16),
+  if !draw_sprite_cell(
+    0,
+    x,
+    y - 7.0,
+    h.w * 1.85,
+    h.h * 2.0,
+    h.angle,
     body,
-  )
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(x, y + h.h * 0.56),
-    @raylib.Vector2::new(x - h.w * 0.5, y + h.h * 0.16),
-    @raylib.Vector2::new(x + h.w * 0.5, y + h.h * 0.16),
-    @raylib.Color::new(120, 186, 255, 236),
-  )
+  ) {
+    @raylib.draw_triangle(
+      @raylib.Vector2::new(x, y - h.h * 0.54),
+      @raylib.Vector2::new(x - h.w * 0.5, y + h.h * 0.16),
+      @raylib.Vector2::new(x + h.w * 0.5, y + h.h * 0.16),
+      body,
+    )
+    @raylib.draw_triangle(
+      @raylib.Vector2::new(x, y + h.h * 0.56),
+      @raylib.Vector2::new(x - h.w * 0.5, y + h.h * 0.16),
+      @raylib.Vector2::new(x + h.w * 0.5, y + h.h * 0.16),
+      @raylib.Color::new(120, 186, 255, 236),
+    )
 
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    6.0,
-    @raylib.Color::new(34, 52, 90, 226),
-  )
+    @raylib.draw_circle(
+      x.to_int(),
+      y.to_int(),
+      6.0,
+      @raylib.Color::new(34, 52, 90, 226),
+    )
 
-  let tail_a = @math.sinf(h.anim_t * 10.0) * 6.0
-  let tail_b = @math.cosf(h.anim_t * 8.0) * 6.0
-  @raylib.draw_circle(
-    (x + tail_a).to_int(),
-    (y + h.h * 0.72).to_int(),
-    4.0,
-    @raylib.Color::new(255, 132, 184, 230),
-  )
-  @raylib.draw_circle(
-    (x - tail_b).to_int(),
-    (y + h.h * 0.88).to_int(),
-    3.0,
-    @raylib.Color::new(255, 210, 144, 230),
-  )
+    let tail_a = @math.sinf(h.anim_t * 10.0) * 6.0
+    let tail_b = @math.cosf(h.anim_t * 8.0) * 6.0
+    @raylib.draw_circle(
+      (x + tail_a).to_int(),
+      (y + h.h * 0.72).to_int(),
+      4.0,
+      @raylib.Color::new(255, 132, 184, 230),
+    )
+    @raylib.draw_circle(
+      (x - tail_b).to_int(),
+      (y + h.h * 0.88).to_int(),
+      3.0,
+      @raylib.Color::new(255, 210, 144, 230),
+    )
+  }
 
   if h.hurt_t > 0.0 {
     let t = @types.clampf(h.hurt_t / @types.hero_hurt_time, 0.0, 1.0)
@@ -554,12 +799,15 @@ fn @types.Game::draw_bolts(
       @raylib.Color::new(255, 156, 210, 230)
     }
 
-    @raylib.draw_line_ex(
-      @raylib.Vector2::new(x0, y0),
-      @raylib.Vector2::new(x0 - vx * inv * len, y0 - vy * inv * len),
-      3.0,
-      col,
-    )
+    let rotation = @math.atan2f(vy, vx) * 57.29578
+    if !draw_sprite_cell(7, x0, y0, 36.0, 22.0, rotation, col) {
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(x0, y0),
+        @raylib.Vector2::new(x0 - vx * inv * len, y0 - vy * inv * len),
+        3.0,
+        col,
+      )
+    }
     @raylib.draw_circle(
       x0.to_int(),
       y0.to_int(),
