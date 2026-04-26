@@ -484,8 +484,12 @@ fn setup_level(
 /// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "Clocktower Heist 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let player : Thief = {
     x: 84.0,
@@ -1056,141 +1060,25 @@ fn main {
     let pulse = (wave_t * 2.8).to_int() % 180
     let glow = if pulse < 90 { pulse } else { 180 - pulse }
 
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      sh,
-      @raylib.Color::new(12, 18 + glow / 12, 34 + glow / 6, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      250,
-      @raylib.Color::new(18, 28 + glow / 11, 58 + glow / 6, 255),
-    )
+    draw_clocktower_backdrop(art, flash_t, glow)
+    draw_floor_art(art)
 
-    for i in 0..<84 {
-      let x = (i * 98 + (wave_t * 54.0).to_int()) % (sw + 180) - 90
-      let h = 120 + i * 37 % 250
-      let w = 40 + i * 13 % 66
-      let c = 20 + i * 11 % 60
-      @raylib.draw_rectangle(
-        x,
-        sh - h,
-        w,
-        h,
-        @raylib.Color::new(c, c + 8, c + 30, 255),
-      )
-      if i % 2 == 0 {
-        @raylib.draw_rectangle(
-          x + 8,
-          sh - h + 24,
-          8,
-          h - 32,
-          @raylib.Color::new(94, 212, 248, 186),
-        )
-      }
-      if i % 3 == 0 {
-        @raylib.draw_rectangle(
-          x + 24,
-          sh - h + 36,
-          8,
-          h - 44,
-          @raylib.Color::new(248, 144, 226, 176),
-        )
-      }
-    }
-
-    @raylib.draw_rectangle(
-      20,
-      132,
-      sw - 40,
-      sh - 162,
-      @raylib.Color::new(48, 48, 56, 255),
-    )
-    @raylib.draw_rectangle(
-      28,
-      140,
-      sw - 56,
-      sh - 178,
-      @raylib.Color::new(62, 62, 72, 255),
-    )
-
-    @raylib.draw_rectangle(
-      252,
-      148,
-      40,
-      470,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      252,
-      148,
-      496,
-      40,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      546,
-      148,
-      42,
-      380,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      588,
-      490,
-      402,
-      42,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      960,
-      148,
-      40,
-      280,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
-    @raylib.draw_rectangle(
-      790,
-      314,
-      180,
-      38,
-      @raylib.Color::new(96, 88, 92, 255),
-    )
+    draw_wall_art(art, 252, 148, 40, 470)
+    draw_wall_art(art, 252, 148, 496, 40)
+    draw_wall_art(art, 546, 148, 42, 380)
+    draw_wall_art(art, 588, 490, 402, 42)
+    draw_wall_art(art, 960, 148, 40, 280)
+    draw_wall_art(art, 790, 314, 180, 38)
 
     if level >= 2 {
-      @raylib.draw_rectangle(
-        116,
-        326,
-        122,
-        170,
-        @raylib.Color::new(96, 88, 92, 255),
-      )
+      draw_wall_art(art, 116, 326, 122, 170)
     }
 
     if level >= 3 {
-      @raylib.draw_rectangle(
-        702,
-        556,
-        178,
-        114,
-        @raylib.Color::new(96, 88, 92, 255),
-      )
+      draw_wall_art(art, 702, 556, 178, 114)
     }
 
-    let vault_col = if collected >= target_cards {
-      if vault_open {
-        @raylib.Color::new(126, 220, 146, 180)
-      } else {
-        @raylib.Color::new(206, 186, 112, 170)
-      }
-    } else {
-      @raylib.Color::new(98, 112, 136, 120)
-    }
-    @raylib.draw_rectangle(986, 186, 218, 162, vault_col)
+    draw_vault_art(art, collected, target_cards, vault_open)
     @draw.draw_text(
       "VAULT",
       1040,
@@ -1199,17 +1087,7 @@ fn main {
       @raylib.Color::new(236, 244, 252, 255),
     )
 
-    @raylib.draw_rectangle(
-      36,
-      654,
-      160,
-      130,
-      if vault_open {
-        @raylib.Color::new(126, 220, 146, 182)
-      } else {
-        @raylib.Color::new(108, 130, 160, 120)
-      },
-    )
+    draw_exit_art(art, vault_open)
     @draw.draw_text("EXIT", 74, 612, 34, @raylib.Color::new(236, 244, 252, 255))
 
     for card in cards {
@@ -1217,23 +1095,7 @@ fn main {
         continue
       }
 
-      let cx = (card.x + shake_x).to_int()
-      let cy = card.y.to_int()
-      let col = if card.kind == 0 {
-        @raylib.Color::new(246, 212, 124, 255)
-      } else if card.kind == 1 {
-        @raylib.Color::new(126, 218, 248, 255)
-      } else {
-        @raylib.Color::new(224, 156, 252, 255)
-      }
-      @raylib.draw_rectangle(cx - 10, cy - 8, 20, 16, col)
-      @raylib.draw_rectangle(
-        cx - 6,
-        cy - 4,
-        12,
-        8,
-        @raylib.Color::new(244, 246, 250, 255),
-      )
+      draw_keycard_art(art, card, shake_x)
     }
 
     for guard_val in guards {
@@ -1274,93 +1136,13 @@ fn main {
         )
       }
 
-      let col = if guard_val.stun_t > 0.0 {
-        @raylib.Color::new(130, 236, 248, 255)
-      } else {
-        @raylib.Color::new(238, 112, 96, 255)
-      }
-
-      @raylib.draw_circle(
-        (gx - 1.0).to_int(),
-        (gy - 18.0).to_int(),
-        10.0,
-        @raylib.Color::new(236, 230, 220, 255),
-      )
-      @raylib.draw_rectangle(
-        (gx - 10.0).to_int(),
-        (gy - 8.0).to_int(),
-        20,
-        24,
-        col,
-      )
-      @raylib.draw_line(
-        (gx - 8.0).to_int(),
-        (gy + 16.0).to_int(),
-        (gx - 12.0).to_int(),
-        (gy + 32.0).to_int(),
-        col,
-      )
-      @raylib.draw_line(
-        (gx + 8.0).to_int(),
-        (gy + 16.0).to_int(),
-        (gx + 12.0).to_int(),
-        (gy + 32.0).to_int(),
-        col,
-      )
-    }
-
-    let pcol = if player.flash_t > 0.0 {
-      @raylib.Color::new(252, 238, 148, 255)
-    } else if player.cloak_t > 0.0 {
-      @raylib.Color::new(168, 156, 248, 255)
-    } else {
-      @raylib.Color::new(100, 224, 246, 255)
+      draw_guard_art(art, guard_val, gx, gy)
     }
 
     let px = player.x + shake_x
     let py = player.y
 
-    @raylib.draw_circle(
-      (px - 1.0).to_int(),
-      (py - 20.0).to_int(),
-      12.0,
-      @raylib.Color::new(236, 242, 252, 255),
-    )
-    @raylib.draw_rectangle(
-      (px - 12.0).to_int(),
-      (py - 10.0).to_int(),
-      24,
-      30,
-      pcol,
-    )
-    @raylib.draw_line(
-      (px - 10.0).to_int(),
-      py.to_int(),
-      (px - 22.0).to_int(),
-      (py + 12.0).to_int(),
-      pcol,
-    )
-    @raylib.draw_line(
-      (px + 10.0).to_int(),
-      py.to_int(),
-      (px + 22.0).to_int(),
-      (py + 12.0).to_int(),
-      pcol,
-    )
-    @raylib.draw_line(
-      (px - 8.0).to_int(),
-      (py + 20.0).to_int(),
-      (px - 12.0).to_int(),
-      (py + 40.0).to_int(),
-      pcol,
-    )
-    @raylib.draw_line(
-      (px + 8.0).to_int(),
-      (py + 20.0).to_int(),
-      (px + 12.0).to_int(),
-      (py + 40.0).to_int(),
-      pcol,
-    )
+    draw_player_art(art, player, shake_x)
 
     if player.pulse_cd > 2.3 {
       @raylib.draw_circle_lines(
@@ -1675,7 +1457,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
