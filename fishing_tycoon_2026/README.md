@@ -1,6 +1,6 @@
 # fishing_tycoon_2026
 
-A fishing simulation tycoon game. Move your boat across the water surface, cast your hook to catch fish of varying rarity, sell catches to earn gold, and upgrade your equipment over multiple in-game days.
+A fishing simulation tycoon game with generated lake, boat, hook, and fish art assets. Move your boat across the water surface, cast your hook to catch fish of varying rarity, sell catches to earn gold, and upgrade your equipment over multiple in-game days.
 
 ## Build and Run
 
@@ -35,10 +35,13 @@ moon build --target native fishing_tycoon_2026/
 #### Functions
 
 - **`fn fish_color(kind : Int) -> @raylib.Color`** — Returns the display colour for a fish kind: lime (common), skyblue (silver), gold (golden).
+- **`fn load_art_texture(file_name : String) -> @raylib.Texture`** — Loads one generated PNG from `fishing_tycoon_2026/resources/` and applies bilinear filtering.
+- **`fn load_assets() -> Unit`** — Loads the generated lake background, boat, hook, and three fish textures at startup.
+- **`fn unload_assets() -> Unit`** — Releases the generated texture resources on shutdown.
 - **`fn fish_value(kind : Int) -> Int`** — Returns the gold reward for catching a fish: 18 (common), 42 (silver), 88 (golden).
 - **`fn spawn_fish(fishes : Array[Fish], rare_bonus : Int) -> Unit`** — Activates the first idle slot in the pool. Fish kind is chosen by a weighted roll adjusted by `rare_bonus`; entry direction and speed are randomised.
 - **`fn reset_fishes(fishes : Array[Fish]) -> Unit`** — Marks every fish in the pool as inactive without clearing position data.
-- **`fn main`** — Entry point. Opens the window (1100 x 720), runs the game loop, and calls `@raylib.close_window()` on exit.
+- **`fn main`** — Entry point. Opens the window (1100 x 720), loads/unloads generated art with `defer`, runs the game loop, and calls `@raylib.close_window()` on exit.
 
 #### Constants (module-level `let` bindings)
 
@@ -53,7 +56,15 @@ moon build --target native fishing_tycoon_2026/
 
 ```
 fishing_tycoon_2026/
-└── main.mbt          # All structs, helpers, game loop, and rendering (374 lines)
+├── main.mbt          # All structs, helpers, game loop, asset loading, and rendering
+├── resources/
+│   ├── boat_sprite.png
+│   ├── fish_common.png
+│   ├── fish_golden.png
+│   ├── fish_silver.png
+│   ├── hook_sprite.png
+│   └── lake_background.png
+└── moon.pkg
 ```
 
 ### Data Flow
@@ -64,13 +75,14 @@ The spawn timer fires every 0.42 seconds and picks the first inactive `Fish` slo
 
 When the hook returns to the surface with a captured fish, the fish's value is computed by `fish_value`, added to `money`, and the slot is freed. Upgrades are purchased inline with key presses 1/2/3 and modify `reel_speed`, `max_depth`, or `rare_bonus` immediately. The 180-second `day_timer` counts down each frame; reaching zero sets `over = true` and freezes all updates.
 
-Rendering is immediate-mode: background rectangles simulate sky and water depth gradients, fish are drawn as ellipses with triangular tails, and the HUD texts (money, catch count, time) are redrawn every frame from the mutable state variables.
+Rendering is immediate-mode with generated PNG textures layered over procedural fallbacks. `draw_lake_background` cover-crops the lake art to the 1100 x 720 viewport, `draw_boat_art` anchors the boat at the water surface, `draw_hook_art` keeps the lure aligned with the hook state machine, and `draw_fish_art` picks the common/silver/golden texture and flips it to face the fish velocity. If any texture is unavailable, the original rectangle, ellipse, triangle, and circle drawing paths are still used.
 
 ### Key Design Patterns
 
 - **Object pooling** — A fixed `Array[Fish]` of size 90 is allocated once; `spawn_fish` scans for the first `alive == false` slot, eliminating per-frame heap allocation.
 - **Hook state machine** — The single `hook_state` integer (0/1/2) drives all hook physics; state transitions are guarded by depth and position comparisons rather than timers.
 - **Weighted random spawning** — The rarity roll uses the expression `roll < 62 - rare_bonus` so a single integer upgrade variable continuously biases the distribution without requiring a lookup table.
+- **Texture-backed rendering with fallbacks** — Generated art is loaded once, drawn through cover/fit helpers, and guarded by `Bool`-returning draw functions so the game remains playable if an asset is missing.
 - **Delta-time clamped loop** — `dt` is capped at 0.05 s per frame to prevent large physics steps from tunnelling the hook or fish through boundaries during lag spikes.
 - **Upgrade side-effects** — Each upgrade key directly mutates the relevant float variable (`reel_speed`, `max_depth`, `rare_bonus`) in the same scope as the money deduction, keeping upgrade logic self-contained.
 - **Monolithic main loop** — All game logic and rendering live inside `fn main`, which removes inter-package coupling overhead and keeps the single-file structure easy to follow for a short game.

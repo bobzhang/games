@@ -7,6 +7,30 @@ let sw : Int = 1100
 let sh : Int = 720
 
 ///|
+/// Generated lake background texture.
+let tex_lake_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated boat sprite texture.
+let tex_boat : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated common fish texture.
+let tex_fish_common : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated silver fish texture.
+let tex_fish_silver : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated golden fish texture.
+let tex_fish_golden : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated hook sprite texture.
+let tex_hook : Ref[@raylib.Texture?] = { val: None }
+
+///|
 /// Represents a fish with position, velocity, kind, size, and alive state.
 struct Fish {
   mut alive : Bool
@@ -15,6 +39,256 @@ struct Fish {
   mut vx : Float
   mut kind : Int // 0 common, 1 silver, 2 golden
   mut size : Float
+}
+
+///|
+/// Loads one generated Fishing Tycoon texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "fishing_tycoon_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Fishing Tycoon render assets.
+fn load_assets() -> Unit {
+  tex_lake_background.val = Some(load_art_texture("lake_background.png"))
+  tex_boat.val = Some(load_art_texture("boat_sprite.png"))
+  tex_fish_common.val = Some(load_art_texture("fish_common.png"))
+  tex_fish_silver.val = Some(load_art_texture("fish_silver.png"))
+  tex_fish_golden.val = Some(load_art_texture("fish_golden.png"))
+  tex_hook.val = Some(load_art_texture("hook_sprite.png"))
+}
+
+///|
+/// Unloads generated Fishing Tycoon render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_lake_background)
+  unload(tex_boat)
+  unload(tex_fish_common)
+  unload(tex_fish_silver)
+  unload(tex_fish_golden)
+  unload(tex_hook)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on a destination point with optional horizontal flip.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+  flip_x : Bool,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_x : Float = if flip_x { source_w } else { 0.0 }
+  let src_w : Float = if flip_x { -source_w } else { source_w }
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      source_x,
+      0.0,
+      src_w,
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated texture scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+  flip_x : Bool,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, cx, cy, w, h, rotation, tint, flip_x)
+}
+
+///|
+/// Draws the generated lake background.
+fn draw_lake_background() -> Bool {
+  match tex_lake_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(sw),
+        Float::from_int(sh),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        boat_waterline(),
+        sw,
+        sh - boat_waterline(),
+        @raylib.Color::new(7, 45, 78, 44),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Returns the waterline used for subtle background tinting and fallback water.
+fn boat_waterline() -> Int {
+  180
+}
+
+///|
+/// Draws the generated fishing boat.
+fn draw_boat_art(boat_x : Float, boat_y : Float) -> Bool {
+  match tex_boat.val {
+    Some(texture) => {
+      @raylib.draw_ellipse(
+        boat_x.to_int(),
+        (boat_y + 26.0).to_int(),
+        68.0,
+        12.0,
+        @raylib.Color::new(0, 0, 0, 78),
+      )
+      draw_texture_fit(
+        texture,
+        boat_x,
+        boat_y - 25.0,
+        154.0,
+        108.0,
+        0.0,
+        @raylib.white,
+        false,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated hook art.
+fn draw_hook_art(hook_x : Float, hook_y : Float) -> Bool {
+  match tex_hook.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        hook_x,
+        hook_y + 14.0,
+        28.0,
+        56.0,
+        0.0,
+        @raylib.white,
+        false,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Returns the generated fish texture for the given fish kind.
+fn fish_texture(kind : Int) -> @raylib.Texture? {
+  if kind == 0 {
+    tex_fish_common.val
+  } else if kind == 1 {
+    tex_fish_silver.val
+  } else {
+    tex_fish_golden.val
+  }
+}
+
+///|
+/// Draws generated fish art, flipped to face the swim direction.
+fn draw_fish_art(fish : Fish) -> Bool {
+  match fish_texture(fish.kind) {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        fish.x,
+        fish.y,
+        fish.size * 3.8,
+        fish.size * 2.35,
+        0.0,
+        @raylib.white,
+        fish.vx > 0.0,
+      )
+      true
+    }
+    None => false
+  }
 }
 
 ///|
@@ -80,8 +354,12 @@ fn reset_fishes(fishes : Array[Fish]) -> Unit {
 /// Initializes and runs the Fishing Tycoon 2026 game loop.
 fn main {
   @raylib.init_window(sw, sh, "Fishing Tycoon 2026")
+  defer @raylib.close_window()
+  defer @draw.cleanup()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
+  defer unload_assets()
 
   let fishes : Array[Fish] = Array::makei(90, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, vx: 0.0, kind: 0, size: 16.0 }
@@ -262,68 +540,77 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(14, 24, 42, 255))
 
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      boat_y.to_int() + 30,
-      @raylib.Color::new(35, 78, 122, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      boat_y.to_int() + 30,
-      sw,
-      sh - (boat_y.to_int() + 30),
-      @raylib.Color::new(18, 92, 148, 255),
-    )
+    if !draw_lake_background() {
+      @raylib.draw_rectangle(
+        0,
+        0,
+        sw,
+        boat_y.to_int() + 30,
+        @raylib.Color::new(35, 78, 122, 255),
+      )
+      @raylib.draw_rectangle(
+        0,
+        boat_y.to_int() + 30,
+        sw,
+        sh - (boat_y.to_int() + 30),
+        @raylib.Color::new(18, 92, 148, 255),
+      )
+    }
 
-    @raylib.draw_rectangle(
-      (boat_x - 48.0).to_int(),
-      (boat_y - 14.0).to_int(),
-      96,
-      24,
-      @raylib.brown,
-    )
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(boat_x - 10.0, boat_y - 16.0),
-      @raylib.Vector2::new(boat_x - 10.0, boat_y - 70.0),
-      @raylib.Vector2::new(boat_x + 24.0, boat_y - 40.0),
-      @raylib.white,
-    )
+    if !draw_boat_art(boat_x, boat_y) {
+      @raylib.draw_rectangle(
+        (boat_x - 48.0).to_int(),
+        (boat_y - 14.0).to_int(),
+        96,
+        24,
+        @raylib.brown,
+      )
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(boat_x - 10.0, boat_y - 16.0),
+        @raylib.Vector2::new(boat_x - 10.0, boat_y - 70.0),
+        @raylib.Vector2::new(boat_x + 24.0, boat_y - 40.0),
+        @raylib.white,
+      )
+    }
 
     @raylib.draw_line_ex(
-      @raylib.Vector2::new(boat_x, boat_y),
+      @raylib.Vector2::new(boat_x + 36.0, boat_y - 44.0),
       @raylib.Vector2::new(hook_x, hook_y),
       2.0,
       @raylib.lightgray,
     )
-    @raylib.draw_circle(hook_x.to_int(), hook_y.to_int(), 5.0, @raylib.white)
+    if !draw_hook_art(hook_x, hook_y) {
+      @raylib.draw_circle(hook_x.to_int(), hook_y.to_int(), 5.0, @raylib.white)
+    }
 
     for fish in fishes {
       if fish.alive {
-        let c = fish_color(fish.kind)
-        @raylib.draw_ellipse(
-          fish.x.to_int(),
-          fish.y.to_int(),
-          fish.size,
-          fish.size * 0.62,
-          c,
-        )
-        @raylib.draw_triangle(
-          @raylib.Vector2::new(fish.x - fish.size, fish.y),
-          @raylib.Vector2::new(fish.x - fish.size - 11.0, fish.y - 8.0),
-          @raylib.Vector2::new(fish.x - fish.size - 11.0, fish.y + 8.0),
-          c,
-        )
-        @raylib.draw_circle(
-          (fish.x + fish.size * 0.35).to_int(),
-          (fish.y - 2.0).to_int(),
-          2.5,
-          @raylib.black,
-        )
+        if !draw_fish_art(fish) {
+          let c = fish_color(fish.kind)
+          @raylib.draw_ellipse(
+            fish.x.to_int(),
+            fish.y.to_int(),
+            fish.size,
+            fish.size * 0.62,
+            c,
+          )
+          @raylib.draw_triangle(
+            @raylib.Vector2::new(fish.x - fish.size, fish.y),
+            @raylib.Vector2::new(fish.x - fish.size - 11.0, fish.y - 8.0),
+            @raylib.Vector2::new(fish.x - fish.size - 11.0, fish.y + 8.0),
+            c,
+          )
+          @raylib.draw_circle(
+            (fish.x + fish.size * 0.35).to_int(),
+            (fish.y - 2.0).to_int(),
+            2.5,
+            @raylib.black,
+          )
+        }
       }
     }
 
+    @raylib.draw_rectangle(12, 10, 760, 96, @raylib.Color::new(7, 15, 24, 150))
     @draw.draw_text("FISHING TYCOON 2026", 20, 18, 42, @raylib.skyblue)
     @draw.draw_text("Money \{money}", 20, 66, 30, @raylib.gold)
     @draw.draw_text("Catch \{total_catch}", 220, 66, 30, @raylib.white)
@@ -342,6 +629,7 @@ fn main {
       },
     )
 
+    @raylib.draw_rectangle(12, 607, 680, 66, @raylib.Color::new(7, 15, 24, 145))
     @draw.draw_text(
       "1 Reel+ (90)  2 Depth+ (120)  3 Bait+ (160)", 20, 618, 28, @raylib.raywhite,
     )
@@ -377,7 +665,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
