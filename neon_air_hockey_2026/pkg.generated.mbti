@@ -6,6 +6,8 @@ package "bobzhang/games/neon_air_hockey_2026"
 // Errors
 
 // Types and methods
+type GameArt
+
 type Spark
 
 // Type aliases

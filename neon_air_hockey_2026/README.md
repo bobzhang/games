@@ -1,6 +1,6 @@
 # neon_air_hockey_2026
 
-A neon-styled air hockey game for two players sharing one keyboard, with spark effects on puck collisions and goal scoring.
+A neon-styled player-vs-AI air hockey game with generated table art, sprite-backed paddles, spark effects on puck collisions, sector progression, and goal scoring.
 
 ## Build and Run
 
@@ -11,17 +11,20 @@ cd examples && ./_build/native/debug/build/neon_air_hockey_2026/neon_air_hockey_
 
 ## Controls
 
-- **WASD**: Move left paddle (Player 1)
-- **Space / J / K**: Strike puck (Player 1)
+- **WASD**: Move the player paddle
+- **Space / J / K**: Power strike
 - **R**: Restart match
+- **Touch controls**: On-screen movement buttons and STRIKE button
 
 ## How to Play
 
-- Each player controls a paddle on their side of the table
-- Hit the puck into the opponent's goal to score points
+- You control the cyan left paddle; the AI controls the red right paddle
+- Hit the puck into the AI goal to score points
 - The puck bounces off table walls and paddles with physics-based collisions
+- A pulsing boost zone alternates sides and accelerates the puck when crossed
+- Clear three sectors with increasing target scores and AI speed to win
 - Spark particles burst on contact for visual feedback
-- First player to reach the score limit wins the match
+- If the AI reaches a sector target first, the match ends in defeat
 
 ## Public API Reference
 
@@ -29,19 +32,19 @@ cd examples && ./_build/native/debug/build/neon_air_hockey_2026/neon_air_hockey_
 
 > Main entry point.
 
-The `main` function initializes the window, creates the game state, and runs the frame loop.
+The `main` function initializes the window, loads generated air hockey art, creates the game state, and runs the frame loop.
 
 #### Types
 
 | Type | Description |
 |------|-------------|
+| `GameArt` | Generated Raylib textures for the table surface and entity sprite sheet |
 | `Spark` | Particle emitted on puck collisions; holds position, velocity, time-to-live, and active flag |
 
 #### Functions
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `absf` | `(Float) -> Float` | Returns the absolute value of a float |
 | `clampf` | `(Float, Float, Float) -> Float` | Clamps a float value to the inclusive `[lo, hi]` range |
 | `inside_rect` | `(Float, Float, Int, Int, Int, Int) -> Bool` | Tests whether a point lies inside an axis-aligned rectangle |
 | `table_left` | `() -> Float` | Returns the left edge X coordinate of the play table |
@@ -56,6 +59,8 @@ The `main` function initializes the window, creates the game state, and runs the
 | `reset_round` | `() -> (Float, Float, Float, Float, Float, Float, Float, Float, Float)` | Returns initial positions and velocities for both paddles and the puck |
 | `goal_opening` | `(Float) -> Bool` | Returns true when a Y coordinate falls within the goal slot |
 | `paddle_hit` | `(Float, Float, Float, Float, Float) -> Bool` | Returns true when the puck overlaps a paddle |
+| `load_game_art` | `() -> GameArt` | Loads generated table and sprite textures from `resources/` |
+| `unload_game_art` | `(GameArt) -> Unit` | Releases generated textures before shutdown |
 | `main` | `() -> Unit` | Initializes the window, runs the game loop, and cleans up on exit |
 
 #### Constants
@@ -75,9 +80,10 @@ The `main` function initializes the window, creates the game state, and runs the
 
 ## Architecture
 
-All game logic is in `main.mbt`. Key patterns:
+All game logic is in `main.mbt`, with generated texture helpers in `art.mbt`. Key patterns:
 
-- Single-file design: constants, helper functions, and the game loop all live in one file with no internal packages
+- Small package design: constants, physics helpers, and the game loop live in `main.mbt`; generated art loading and sprite helpers live in `art.mbt`
+- Generated assets: `resources/air_hockey_table.png` backs the playfield; `resources/air_hockey_sprites.png` provides player/AI paddles, puck, goal gates, and boost ring cells
 - State machine via flags: `over`, `won`, and `faceoff_t` control which phase of the game is active (faceoff countdown, live play, or end screen)
 - Physics model: puck velocity is deflected on paddle collisions using a relative-velocity impulse formula that incorporates paddle movement speed; friction reduces puck speed each frame
 - AI paddle: the right paddle tracks the puck's predicted Y position and maintains a fixed X zone, with speed scaling per sector

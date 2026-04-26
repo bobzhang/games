@@ -232,8 +232,12 @@ fn paddle_hit(
 /// Initializes the window, creates the game state, and runs the main frame loop until the window is closed.
 fn main {
   @raylib.init_window(sw, sh, "Neon Air Hockey 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) {
     { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false }
@@ -717,19 +721,27 @@ fn main {
 
     let tx = table_x + shake.to_int()
 
+    draw_texture_cover(
+      art.table_surface,
+      Float::from_int(tx),
+      Float::from_int(table_y),
+      Float::from_int(table_w),
+      Float::from_int(table_h),
+      @raylib.Color::new(255, 255, 255, 255),
+    )
     @raylib.draw_rectangle(
       tx,
       table_y,
       table_w,
       table_h,
-      @raylib.Color::new(22, 30, 48, 255),
+      @raylib.Color::new(4, 8, 14, 32),
     )
     @raylib.draw_rectangle_lines(
       tx,
       table_y,
       table_w,
       table_h,
-      @raylib.Color::new(84, 130, 214, 255),
+      @raylib.Color::new(116, 184, 242, 214),
     )
 
     @raylib.draw_line(
@@ -737,40 +749,47 @@ fn main {
       table_y,
       tx + table_w / 2,
       table_y + table_h,
-      @raylib.Color::new(74, 108, 170, 255),
+      @raylib.Color::new(120, 200, 248, 120),
     )
     @raylib.draw_circle_lines(
       tx + table_w / 2,
       table_y + table_h / 2,
       120.0,
-      @raylib.Color::new(74, 108, 170, 255),
+      @raylib.Color::new(120, 200, 248, 122),
     )
 
     let gy = table_y + (table_h - goal_h) / 2
-    @raylib.draw_rectangle(
-      tx - 8,
-      gy,
-      8,
-      goal_h,
-      @raylib.Color::new(242, 98, 120, 255),
+    draw_sprite_cell(
+      art,
+      3,
+      Float::from_int(tx - 10),
+      Float::from_int(gy + goal_h / 2),
+      56.0,
+      Float::from_int(goal_h + 70),
+      @raylib.Color::new(255, 255, 255, 250),
     )
-    @raylib.draw_rectangle(
-      tx + table_w,
-      gy,
-      8,
-      goal_h,
-      @raylib.Color::new(98, 232, 170, 255),
+    draw_sprite_cell(
+      art,
+      4,
+      Float::from_int(tx + table_w + 10),
+      Float::from_int(gy + goal_h / 2),
+      56.0,
+      Float::from_int(goal_h + 70),
+      @raylib.Color::new(255, 255, 255, 250),
     )
 
     let pulse = Float::from_int(1) - (zone_phase - 0.5).abs() * 2.0
     let glow = (Float::from_int(40) + pulse * 90.0).to_int()
 
     if zone_left {
-      @raylib.draw_circle(
-        Float::from_int(tx + 210).to_int(),
-        table_y + table_h / 2,
-        70.0,
-        @raylib.Color::new(72, 206, 246, glow),
+      draw_sprite_cell(
+        art,
+        5,
+        Float::from_int(tx + 210),
+        Float::from_int(table_y + table_h / 2),
+        164.0,
+        164.0,
+        @raylib.Color::new(110, 224, 255, glow),
       )
       @draw.draw_text(
         "BOOST",
@@ -780,11 +799,14 @@ fn main {
         @raylib.Color::new(210, 236, 252, 255),
       )
     } else {
-      @raylib.draw_circle(
-        Float::from_int(tx + table_w - 210).to_int(),
-        table_y + table_h / 2,
-        70.0,
-        @raylib.Color::new(250, 164, 96, glow),
+      draw_sprite_cell(
+        art,
+        5,
+        Float::from_int(tx + table_w - 210),
+        Float::from_int(table_y + table_h / 2),
+        164.0,
+        164.0,
+        @raylib.Color::new(255, 176, 104, glow),
       )
       @draw.draw_text(
         "BOOST",
@@ -795,43 +817,34 @@ fn main {
       )
     }
 
-    @raylib.draw_circle(
-      (px + shake).to_int(),
-      py.to_int(),
-      paddle_r,
-      @raylib.Color::new(74, 202, 252, 255),
-    )
-    @raylib.draw_circle(
-      (px + shake).to_int(),
-      py.to_int(),
-      paddle_r * 0.52,
-      @raylib.Color::new(20, 44, 72, 255),
+    draw_sprite_cell(
+      art,
+      0,
+      px + shake,
+      py,
+      96.0,
+      96.0,
+      @raylib.Color::new(255, 255, 255, 255),
     )
 
-    @raylib.draw_circle(
-      (aix + shake).to_int(),
-      aiy.to_int(),
-      paddle_r,
-      @raylib.Color::new(252, 126, 132, 255),
-    )
-    @raylib.draw_circle(
-      (aix + shake).to_int(),
-      aiy.to_int(),
-      paddle_r * 0.52,
-      @raylib.Color::new(72, 22, 30, 255),
+    draw_sprite_cell(
+      art,
+      1,
+      aix + shake,
+      aiy,
+      96.0,
+      96.0,
+      @raylib.Color::new(255, 255, 255, 255),
     )
 
-    @raylib.draw_circle(
-      (puck_x + shake).to_int(),
-      puck_y.to_int(),
-      puck_r,
-      @raylib.Color::new(240, 246, 254, 255),
-    )
-    @raylib.draw_circle(
-      (puck_x + shake).to_int(),
-      puck_y.to_int(),
-      puck_r * 0.5,
-      @raylib.Color::new(84, 120, 174, 255),
+    draw_sprite_cell(
+      art,
+      2,
+      puck_x + shake,
+      puck_y,
+      44.0,
+      44.0,
+      @raylib.Color::new(255, 255, 255, 255),
     )
 
     for spark in sparks {
@@ -1022,7 +1035,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
