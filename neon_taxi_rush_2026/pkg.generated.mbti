@@ -8,6 +8,8 @@ package "bobzhang/games/neon_taxi_rush_2026"
 // Types and methods
 type FuelPickup
 
+type GameArt
+
 type Marker
 
 type Particle

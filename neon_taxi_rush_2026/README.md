@@ -6,6 +6,14 @@ The core gameplay loop is a timed shift with a cash quota: earn 1,600 cash withi
 
 The game also tracks a driver rating (starting at 4.2/5.0) that increases with successful deliveries (+0.08) and decreases when passengers time out waiting (-0.05), adding a quality-of-service dimension to the score.
 
+## Generated Art Assets
+
+The package now includes generated raster artwork under `resources/`:
+
+- `taxi_city_backdrop.png` — top-down cyberpunk city map used as the full-scene base layer.
+- `taxi_road_panel.png` — wet asphalt, lane markings, crosswalks, cracks, and neon reflections drawn into the road grid.
+- `taxi_sprites.png` — transparent 4x3 top-down sprite sheet for the player taxi, traffic variants, passenger and destination markers, fuel, horn, collision, cash, and route effects.
+
 ## Build and Run
 
 ```bash
@@ -40,7 +48,7 @@ moon build --target native neon_taxi_rush_2026/
 
 ### Package `neon_taxi_rush_2026`
 
-> Main entry point and complete game implementation in a single file.
+> Main entry point, generated art loader, and complete game implementation.
 
 #### Constants
 
@@ -97,11 +105,13 @@ moon build --target native neon_taxi_rush_2026/
 
 ```
 neon_taxi_rush_2026/
-├── main.mbt    — Complete game: types, road geometry, spawning, game loop, rendering
-└── moon.pkg    — Package config with raylib and math imports
+├── art.mbt       — Generated texture loading, unloading, and draw helpers
+├── main.mbt      — Complete game: types, road geometry, spawning, game loop, rendering
+├── resources/    — Generated PNG city backdrop, road panel, and sprite sheet
+└── moon.pkg      — Package config with raylib and math imports
 ```
 
-Single-file game with all logic in `main.mbt`. Organized top-to-bottom: constants, struct definitions, utility functions, pool management, spawning functions, main function with nested reset closure, game loop with input/update/render.
+The game keeps most logic in `main.mbt` with a small asset helper file. It is organized top-to-bottom: constants, struct definitions, utility functions, pool management, spawning functions, main function with nested reset closure, game loop with input/update/render.
 
 ### Data Flow
 
@@ -109,7 +119,7 @@ Single-file game with all logic in `main.mbt`. Organized top-to-bottom: constant
 
 2. **Update**: In state 1 (playing): timer countdown, cooldown ticks, movement with acceleration/drag (higher drag off-road via `road_hit`), speed clamping, fuel consumption (base + speed-proportional + boost extra), boost/horn activation, traffic spawning on cooldowns, traffic movement along lanes, taxi-traffic collision (distance check, impulse response, HP damage), passenger state machine (waiting -> boarding -> riding -> delivered), fuel pickup collection, particle physics, win/lose checks.
 
-3. **Rendering**: Background with animated road grid (4 horizontal + 5 vertical roads with scrolling lane dashes), fuel pickups (blinking circles), passengers (pulsing gold circles), destination marker (blue circle when carrying), traffic vehicles (colored rectangles), particles, taxi (yellow rectangle with windshield), HUD (cash/time/served/wave/combo/rating/misses, HP and fuel bars), touch controls, message bar, state overlays.
+3. **Rendering**: Generated top-down city backdrop, textured road grid (4 horizontal + 5 vertical roads with scrolling lane dashes), generated fuel pickups, passenger and destination marker sprites, rotated traffic vehicle sprites, sprite-enhanced horn/collision/delivery particles, generated taxi sprite with boost art, HUD (cash/time/served/wave/combo/rating/misses, HP and fuel bars), touch controls, message bar, state overlays.
 
 ### Key Design Patterns
 

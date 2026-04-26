@@ -507,8 +507,12 @@ fn spawn_fuel(
 /// Entry point: initialises the window, creates all game entities, and runs the main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Neon Taxi Rush 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let traffic : Array[Traffic] = Array::makei(max_traffic, fn(_i) {
     {
@@ -1036,10 +1040,18 @@ fn main {
       bg = @raylib.Color::new(24, 10, 16, 255)
     }
     @raylib.clear_background(bg)
+    draw_texture_cover(
+      art.city_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.Color::new(255, 255, 255, 232),
+    )
+    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(6, 8, 14, 54))
 
     @raylib.draw_rectangle(0, 0, sw, 74, @raylib.Color::new(8, 10, 16, 228))
 
-    let road_col = @raylib.Color::new(44, 48, 64, 255)
     let lane_col = @raylib.Color::new(116, 124, 152, 180)
 
     for i in 0..<4 {
@@ -1052,7 +1064,21 @@ fn main {
       } else {
         620
       }
-      @raylib.draw_rectangle(0, y - 40, sw, 80, road_col)
+      draw_texture_rect(
+        art.road_panel,
+        0.0,
+        Float::from_int(y - 40),
+        Float::from_int(sw),
+        80.0,
+        @raylib.Color::new(226, 236, 244, 224),
+      )
+      @raylib.draw_rectangle(
+        0,
+        y - 40,
+        sw,
+        80,
+        @raylib.Color::new(8, 10, 16, 34),
+      )
       for dash in 0..<22 {
         @raylib.draw_rectangle(
           dash * 64 + (@raylib.get_time() * 120.0).to_int() % 64,
@@ -1076,7 +1102,21 @@ fn main {
       } else {
         1100
       }
-      @raylib.draw_rectangle(x - 40, 74, 80, sh - 74, road_col)
+      draw_texture_rect(
+        art.road_panel,
+        Float::from_int(x - 40),
+        74.0,
+        80.0,
+        Float::from_int(sh - 74),
+        @raylib.Color::new(226, 236, 244, 212),
+      )
+      @raylib.draw_rectangle(
+        x - 40,
+        74,
+        80,
+        sh - 74,
+        @raylib.Color::new(8, 10, 16, 38),
+      )
       for dash in 0..<14 {
         @raylib.draw_rectangle(
           x - 2,
@@ -1093,18 +1133,20 @@ fn main {
         continue
       }
       let blink = if (fuel.t * 6.0).to_int() % 2 == 0 { 255 } else { 180 }
-      @raylib.draw_circle(
+      @raylib.draw_circle_lines(
         fuel.x.to_int(),
         fuel.y.to_int(),
-        10.0,
-        @raylib.Color::new(88, 222, 162, blink),
+        20.0,
+        @raylib.Color::new(132, 246, 176, blink),
       )
-      @raylib.draw_rectangle(
-        (fuel.x - 4.0).to_int(),
-        (fuel.y - 6.0).to_int(),
-        8,
-        12,
-        @raylib.Color::new(12, 40, 30, 240),
+      draw_sprite_cell(
+        art,
+        7,
+        fuel.x,
+        fuel.y,
+        52.0,
+        52.0,
+        @raylib.Color::new(255, 255, 255, blink),
       )
     }
 
@@ -1119,33 +1161,39 @@ fn main {
         } else {
           3.0
         }
-        @raylib.draw_circle(
-          passenger.x.to_int(),
-          passenger.y.to_int(),
-          10.0,
-          @raylib.Color::new(248, 210, 116, 255),
-        )
         @raylib.draw_circle_lines(
           passenger.x.to_int(),
           passenger.y.to_int(),
           16.0 + pulse,
           @raylib.Color::new(250, 236, 182, 190),
         )
+        draw_sprite_cell(
+          art,
+          5,
+          passenger.x,
+          passenger.y,
+          58.0 + pulse,
+          58.0 + pulse,
+          @raylib.Color::new(255, 255, 255, 255),
+        )
       }
     }
 
     if taxi.carry_idx >= 0 {
-      @raylib.draw_circle(
-        taxi.drop_x.to_int(),
-        taxi.drop_y.to_int(),
-        16.0,
-        @raylib.Color::new(96, 204, 246, 255),
-      )
       @raylib.draw_circle_lines(
         taxi.drop_x.to_int(),
         taxi.drop_y.to_int(),
         24.0,
         @raylib.Color::new(162, 228, 255, 220),
+      )
+      draw_sprite_cell(
+        art,
+        6,
+        taxi.drop_x,
+        taxi.drop_y,
+        66.0,
+        66.0,
+        @raylib.Color::new(255, 255, 255, 255),
       )
     }
 
@@ -1154,29 +1202,33 @@ fn main {
         continue
       }
 
-      let mut c = @raylib.Color::new(164, 128, 234, 255)
-      if traffic_elem.lane % 3 == 0 {
-        c = @raylib.Color::new(246, 128, 142, 255)
+      let sprite_idx = if traffic_elem.lane % 3 == 0 {
+        2
       } else if traffic_elem.lane % 3 == 1 {
-        c = @raylib.Color::new(114, 206, 248, 255)
+        3
+      } else {
+        4
       }
-      if traffic_elem.horn_t > 0.0 {
-        c = @raylib.Color::new(255, 240, 190, 255)
+      let tint = if traffic_elem.horn_t > 0.0 {
+        @raylib.Color::new(255, 240, 190, 255)
+      } else {
+        @raylib.Color::new(255, 255, 255, 255)
       }
-
-      @raylib.draw_rectangle(
-        (traffic_elem.x - traffic_elem.size).to_int(),
-        (traffic_elem.y - traffic_elem.size * 0.62).to_int(),
-        (traffic_elem.size * 2.0).to_int(),
-        (traffic_elem.size * 1.24).to_int(),
-        c,
+      @raylib.draw_circle(
+        traffic_elem.x.to_int(),
+        traffic_elem.y.to_int(),
+        traffic_elem.size * 1.25,
+        @raylib.Color::new(0, 0, 0, 82),
       )
-      @raylib.draw_rectangle(
-        (traffic_elem.x - traffic_elem.size * 0.5).to_int(),
-        (traffic_elem.y - traffic_elem.size * 0.42).to_int(),
-        traffic_elem.size.to_int(),
-        (traffic_elem.size * 0.84).to_int(),
-        @raylib.Color::new(22, 24, 40, 220),
+      draw_sprite_cell_rotated(
+        art,
+        sprite_idx,
+        traffic_elem.x,
+        traffic_elem.y,
+        traffic_elem.size * 3.2,
+        traffic_elem.size * 4.6,
+        movement_rotation(traffic_elem.vx, traffic_elem.vy),
+        tint,
       )
     }
 
@@ -1195,50 +1247,80 @@ fn main {
       } else if particle.kind == 3 {
         c = @raylib.Color::new(236, 88, 108, a)
       }
-      @raylib.draw_circle(
-        particle.x.to_int(),
-        particle.y.to_int(),
-        particle.size,
-        c,
-      )
+      if particle.kind == 1 {
+        draw_sprite_cell(
+          art,
+          10,
+          particle.x,
+          particle.y,
+          particle.size * 8.0,
+          particle.size * 8.0,
+          @raylib.Color::new(255, 255, 255, a),
+        )
+      } else if particle.kind == 2 {
+        draw_sprite_cell(
+          art,
+          8,
+          particle.x,
+          particle.y,
+          particle.size * 10.0,
+          particle.size * 10.0,
+          @raylib.Color::new(255, 255, 255, a),
+        )
+      } else if particle.kind == 3 {
+        draw_sprite_cell(
+          art,
+          9,
+          particle.x,
+          particle.y,
+          particle.size * 9.0,
+          particle.size * 9.0,
+          @raylib.Color::new(255, 255, 255, a),
+        )
+      } else {
+        @raylib.draw_circle(
+          particle.x.to_int(),
+          particle.y.to_int(),
+          particle.size,
+          c,
+        )
+      }
     }
 
-    let mut taxi_col = @raylib.Color::new(248, 210, 88, 255)
-    if taxi.flash_t > 0.0 {
-      taxi_col = @raylib.Color::new(255, 242, 228, 255)
+    let taxi_tint = if taxi.flash_t > 0.0 {
+      @raylib.Color::new(255, 242, 228, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 255)
     }
-
-    @raylib.draw_rectangle(
-      (taxi.x - 20.0).to_int(),
-      (taxi.y - 12.0).to_int(),
-      40,
-      24,
-      taxi_col,
+    let taxi_cell = if taxi.boost_t > 0.0 { 1 } else { 0 }
+    @raylib.draw_circle(
+      taxi.x.to_int(),
+      taxi.y.to_int(),
+      26.0,
+      @raylib.Color::new(0, 0, 0, 98),
     )
-    @raylib.draw_rectangle(
-      (taxi.x - 8.0).to_int(),
-      (taxi.y - 10.0).to_int(),
-      16,
-      20,
-      @raylib.Color::new(28, 34, 52, 255),
-    )
-
     if taxi.boost_t > 0.0 {
-      @raylib.draw_rectangle(
-        (taxi.x - 26.0).to_int(),
-        (taxi.y - 4.0).to_int(),
-        6,
-        8,
-        @raylib.Color::new(112, 216, 250, 255),
-      )
-      @raylib.draw_rectangle(
-        (taxi.x + 20.0).to_int(),
-        (taxi.y - 4.0).to_int(),
-        6,
-        8,
-        @raylib.Color::new(112, 216, 250, 255),
+      draw_sprite_cell_rotated(
+        art,
+        11,
+        taxi.x,
+        taxi.y + 4.0,
+        64.0,
+        64.0,
+        movement_rotation(taxi.vx, taxi.vy),
+        @raylib.Color::new(255, 255, 255, 170),
       )
     }
+    draw_sprite_cell_rotated(
+      art,
+      taxi_cell,
+      taxi.x,
+      taxi.y,
+      76.0,
+      108.0,
+      movement_rotation(taxi.vx, taxi.vy),
+      taxi_tint,
+    )
 
     @draw.draw_text(
       "NEON TAXI RUSH 2026",
@@ -1612,7 +1694,4 @@ fn main {
       }
     }
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
