@@ -205,8 +205,12 @@ fn spawn_pos() -> (Float, Float) {
 /// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "City Crossing 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let cars : Array[Car] = Array::makei(12, fn(_i) {
     { x: 0.0, row: 5, w: 1, speed: 0.0, color: 0 }
@@ -463,58 +467,11 @@ fn main {
     )
 
     for row in 0..<rows {
-      let y = oy + row * cell
-      if row == 0 {
-        @raylib.draw_rectangle(
-          ox,
-          y,
-          cols * cell,
-          cell,
-          @raylib.Color::new(30, 70, 40, 255),
-        )
-      } else if is_river_row(row) {
-        @raylib.draw_rectangle(
-          ox,
-          y,
-          cols * cell,
-          cell,
-          @raylib.Color::new(24, 86, 146, 255),
-        )
-      } else if is_road_row(row) {
-        @raylib.draw_rectangle(
-          ox,
-          y,
-          cols * cell,
-          cell,
-          @raylib.Color::new(58, 60, 68, 255),
-        )
-      } else {
-        @raylib.draw_rectangle(
-          ox,
-          y,
-          cols * cell,
-          cell,
-          @raylib.Color::new(36, 98, 52, 255),
-        )
-      }
+      draw_lane_art(art, row)
     }
 
     for i in 0..<homes.length() {
-      let sx = (slot_center_x(i) - Float::from_int(cell / 2 - 6)).to_int()
-      let sy = oy + 8
-      let c = if homes[i] {
-        @raylib.Color::new(236, 216, 82, 255)
-      } else {
-        @raylib.Color::new(48, 114, 62, 255)
-      }
-      @raylib.draw_rectangle(sx, sy, cell - 12, cell - 16, c)
-      @raylib.draw_rectangle_lines(
-        sx,
-        sy,
-        cell - 12,
-        cell - 16,
-        @raylib.Color::new(16, 34, 20, 255),
-      )
+      draw_home_slot_art(art, i, homes[i])
     }
 
     for i in 0..<=cols {
@@ -539,77 +496,14 @@ fn main {
     }
 
     for log in logs {
-      let x = log.x.to_int()
-      let y = oy + log.row * cell + 10
-      let w = log.w * cell
-      @raylib.draw_rectangle(
-        x,
-        y,
-        w,
-        cell - 20,
-        @raylib.Color::new(120, 86, 42, 255),
-      )
-      @raylib.draw_rectangle(
-        x + 6,
-        y + 6,
-        w - 12,
-        7,
-        @raylib.Color::new(160, 116, 66, 255),
-      )
-      @raylib.draw_rectangle(
-        x + 6,
-        y + cell - 33,
-        w - 12,
-        6,
-        @raylib.Color::new(82, 58, 28, 255),
-      )
+      draw_log_art(art, log)
     }
 
     for car in cars {
-      let x = car.x.to_int()
-      let y = oy + car.row * cell + 8
-      let w = car.w * cell
-      let car_c = if car.color == 0 {
-        @raylib.Color::new(236, 92, 84, 255)
-      } else if car.color == 1 {
-        @raylib.Color::new(76, 180, 246, 255)
-      } else {
-        @raylib.Color::new(250, 192, 72, 255)
-      }
-      @raylib.draw_rectangle(x, y, w, cell - 16, car_c)
-      @raylib.draw_rectangle(
-        x + 8,
-        y + 8,
-        w - 16,
-        cell - 32,
-        @raylib.Color::new(24, 34, 52, 170),
-      )
-      @raylib.draw_rectangle(
-        x + 5,
-        y + cell - 20,
-        11,
-        8,
-        @raylib.Color::new(20, 20, 20, 255),
-      )
-      @raylib.draw_rectangle(
-        x + w - 16,
-        y + cell - 20,
-        11,
-        8,
-        @raylib.Color::new(20, 20, 20, 255),
-      )
+      draw_car_art(art, car)
     }
 
-    @raylib.draw_circle(
-      px.to_int(),
-      py.to_int(),
-      18.0,
-      @raylib.Color::new(84, 230, 94, 255),
-    )
-    @raylib.draw_circle(px.to_int() - 7, py.to_int() - 7, 4.0, @raylib.white)
-    @raylib.draw_circle(px.to_int() + 7, py.to_int() - 7, 4.0, @raylib.white)
-    @raylib.draw_circle(px.to_int() - 7, py.to_int() - 7, 2.0, @raylib.black)
-    @raylib.draw_circle(px.to_int() + 7, py.to_int() - 7, 2.0, @raylib.black)
+    draw_player_art(art, px, py)
 
     let ctl_x = 38
     let ctl_y = sh - 192
@@ -704,7 +598,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
