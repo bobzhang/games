@@ -1,6 +1,6 @@
 # Icebreaker Convoy Command 2026
 
-Icebreaker Convoy Command 2026 is a tactical escort simulation set in Arctic waters where the player pilots an icebreaker ship through dense pack ice, clearing lanes for cargo convoy ships traveling along waypoint routes from a base harbor to an exit harbor. Storms drift across the map, intensifying ice formation and damaging both the player and convoy ships.
+Icebreaker Convoy Command 2026 is a tactical escort simulation set in Arctic waters where the player pilots an icebreaker ship through dense pack ice, clearing lanes for cargo convoy ships traveling along waypoint routes from a base harbor to an exit harbor. Storms drift across the map, intensifying ice formation and damaging both the player and convoy ships. The renderer uses generated Arctic sea and top-down sprite sheet assets with procedural fallbacks for every textured element.
 
 The core gameplay loop involves steering the icebreaker ahead of convoy ships, activating the ice cutter (held action) to carve through ice floes of varying hardness, repairing damaged convoy ships within close range, and using sonar pings to scout for dense ice or incoming storms. Convoy ships follow a procedurally generated waypoint route and get stuck on hard ice, taking hull damage and accumulating panic. The player must deliver 34 convoy ships before the 420-second timer expires, while keeping convoy losses below 10 and the icebreaker's hull above zero.
 
@@ -60,7 +60,7 @@ From the title screen, click or press Enter/Space to start the operation. The ic
 
 > Single-file game with all logic, rendering, and state in main.mbt.
 
-This game uses a single-file architecture with no public API. All structs, functions, and game state are package-private within `main.mbt`.
+This game uses a single-file architecture with no public API. All structs, functions, asset lifecycle helpers, render helpers, and game state are package-private within `main.mbt`.
 
 #### Structs (package-private)
 
@@ -95,8 +95,11 @@ This game uses a single-file architecture with no public API. All structs, funct
 
 ```
 icebreaker_convoy_command_2026/
-├── main.mbt    — All game logic, rendering, and state in a single file
-└── moon.pkg    — Package config, imports (raylib, core/math)
+├── main.mbt    — All game logic, rendering, assets, and state in a single file
+├── moon.pkg    — Package config, imports (raylib, core/math)
+└── resources/
+    ├── arctic_sea_background.png — Generated top-down Arctic map backdrop
+    └── convoy_sprites.png        — Generated 3x2 sheet for ships, ice, storms, harbors
 ```
 
 This is a single-file game where all entity definitions, utility functions, game logic, rendering, and the main loop are contained in `main.mbt`. Local variables in `main` hold the game state (arrays of entities, player ship, timers, scores) and a nested `reset_run` closure reinitializes everything.
@@ -113,6 +116,7 @@ This is a single-file game where all entity definitions, utility functions, game
 ### Key Design Patterns
 
 - **Single-file monolith**: All code in one file with package-private structs, using closures (`reset_run`) for state reset.
+- **Texture-backed tactical rendering**: The world map and entity sprites draw from generated assets first, while the original procedural shapes remain available as fallback rendering.
 - **Object pool pattern**: Ice (260), convoys (26), storms (18), and particles (920) are pre-allocated arrays with active flags.
 - **Procedural route generation**: `init_route` creates a zigzag waypoint path with random vertical offsets, and `setup_ice_field` avoids placing ice directly on the route.
 - **Tier-based difficulty scaling**: Tier derived from deliveries affects convoy spawn rate, cargo size, storm intensity, storm frequency, and ice chunk falling speed.

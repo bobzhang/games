@@ -1,4 +1,122 @@
 ///|
+/// Generated Arctic sea map background texture.
+let tex_arctic_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated 3x2 convoy command sprite sheet texture.
+let tex_convoy_sprites : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Icebreaker Convoy Command texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "icebreaker_convoy_command_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Icebreaker Convoy Command render assets.
+fn load_assets() -> Unit {
+  tex_arctic_background.val = Some(
+    load_art_texture("arctic_sea_background.png"),
+  )
+  tex_convoy_sprites.val = Some(load_art_texture("convoy_sprites.png"))
+}
+
+///|
+/// Unloads generated Icebreaker Convoy Command render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_arctic_background)
+  unload(tex_convoy_sprites)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws one cell from the generated 3x2 sprite sheet.
+fn draw_sprite_cell(
+  index : Int,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Bool {
+  match tex_convoy_sprites.val {
+    Some(texture) => {
+      let col = index % 3
+      let row = index / 3
+      let cell_w = Float::from_int(texture.width()) / 3.0
+      let cell_h = Float::from_int(texture.height()) / 2.0
+      @raylib.draw_texture_pro(
+        texture,
+        @raylib.Rectangle::new(
+          Float::from_int(col) * cell_w,
+          Float::from_int(row) * cell_h,
+          cell_w,
+          cell_h,
+        ),
+        @raylib.Rectangle::new(cx, cy, w, h),
+        @raylib.Vector2::new(w * 0.5, h * 0.5),
+        rotation,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Player-controlled icebreaker ship with hull, energy, cutter, sonar, and wake state.
 struct PlayerShip {
   mut x : Float
@@ -931,33 +1049,54 @@ fn draw_ocean(
   world_h : Int,
   scene_t : Float,
 ) -> Unit {
-  @raylib.draw_rectangle(
-    world_x,
-    world_y,
-    world_w,
-    world_h,
-    @raylib.Color::new(12, 34, 58, 255),
-  )
+  match tex_arctic_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        Float::from_int(world_x),
+        Float::from_int(world_y),
+        Float::from_int(world_w),
+        Float::from_int(world_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        world_x,
+        world_y,
+        world_w,
+        world_h,
+        @raylib.Color::new(2, 14, 28, 42),
+      )
+    }
+    None => {
+      @raylib.draw_rectangle(
+        world_x,
+        world_y,
+        world_w,
+        world_h,
+        @raylib.Color::new(12, 34, 58, 255),
+      )
 
-  let mut y : Int = world_y
-  while y < world_y + world_h {
-    let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
-    let wave : Float = @math.sinf(scene_t * 0.8 + Float::from_int(y) * 0.02) *
-      0.5 +
-      0.5
+      let mut y : Int = world_y
+      while y < world_y + world_h {
+        let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
+        let wave : Float = @math.sinf(scene_t * 0.8 + Float::from_int(y) * 0.02) *
+          0.5 +
+          0.5
 
-    let c0 : Int = 24 + (p * 24.0).to_int() + (wave * 5.0).to_int()
-    let c1 : Int = 62 + (p * 42.0).to_int() + (wave * 8.0).to_int()
-    let c2 : Int = 98 + (p * 28.0).to_int() + (wave * 10.0).to_int()
+        let c0 : Int = 24 + (p * 24.0).to_int() + (wave * 5.0).to_int()
+        let c1 : Int = 62 + (p * 42.0).to_int() + (wave * 8.0).to_int()
+        let c2 : Int = 98 + (p * 28.0).to_int() + (wave * 10.0).to_int()
 
-    @raylib.draw_rectangle(
-      world_x,
-      y,
-      world_w,
-      4,
-      @raylib.Color::new(c0, c1, c2, 255),
-    )
-    y = y + 4
+        @raylib.draw_rectangle(
+          world_x,
+          y,
+          world_w,
+          4,
+          @raylib.Color::new(c0, c1, c2, 255),
+        )
+        y = y + 4
+      }
+    }
   }
 
   @raylib.draw_rectangle_lines(
@@ -1014,18 +1153,30 @@ fn draw_ice(ice : Array[IceChunk], scene_t : Float) -> Unit {
     let cg : Int = 198 + (hard01 * 42.0).to_int()
     let cb : Int = 222 + (pulse * 25.0).to_int()
 
-    @raylib.draw_circle(
-      ice_elem.x.to_int(),
-      ice_elem.y.to_int(),
-      ice_elem.radius + 1.5,
-      @raylib.Color::new(102, 154, 194, 180),
-    )
-    @raylib.draw_circle(
-      ice_elem.x.to_int(),
-      ice_elem.y.to_int(),
-      ice_elem.radius,
+    let used_art = draw_sprite_cell(
+      2,
+      ice_elem.x,
+      ice_elem.y,
+      ice_elem.radius * 2.75,
+      ice_elem.radius * 2.75,
+      ice_elem.tone * 360.0,
       @raylib.Color::new(cr, cg, cb, 238),
     )
+
+    if !used_art {
+      @raylib.draw_circle(
+        ice_elem.x.to_int(),
+        ice_elem.y.to_int(),
+        ice_elem.radius + 1.5,
+        @raylib.Color::new(102, 154, 194, 180),
+      )
+      @raylib.draw_circle(
+        ice_elem.x.to_int(),
+        ice_elem.y.to_int(),
+        ice_elem.radius,
+        @raylib.Color::new(cr, cg, cb, 238),
+      )
+    }
 
     if ice_elem.crack_t > 0.0 {
       let r : Float = ice_elem.radius * (0.28 + 0.18 * ice_elem.crack_t)
@@ -1076,6 +1227,17 @@ fn draw_storms(storms : Array[StormCell], scene_t : Float) -> Unit {
       r1,
       @raylib.Color::new(192, 218, 250, alpha1),
     )
+    ignore(
+      draw_sprite_cell(
+        3,
+        storm.x,
+        storm.y,
+        r0 * 1.85,
+        r0 * 1.85,
+        scene_t * 18.0 + storm.phase * 24.0,
+        @raylib.Color::new(222, 230, 255, 150),
+      ),
+    )
 
     let bolt_x : Int = (storm.x +
     @math.sinf(scene_t * 4.0 + storm.phase) * storm.radius * 0.28).to_int()
@@ -1124,21 +1286,29 @@ fn draw_convoys(convoys : Array[ConvoyShip]) -> Unit {
     let x : Int = convoy.x.to_int()
     let y : Int = convoy.y.to_int()
 
-    @raylib.draw_rectangle(x - 14, y - 8, 28, 16, col)
-    @raylib.draw_rectangle(
-      x - 8,
-      y - 12,
-      16,
-      8,
-      @raylib.Color::new(232, 246, 255, 230),
-    )
-    @raylib.draw_rectangle(
-      x - 20,
-      y - 2,
-      10,
-      4,
-      @raylib.Color::new(74, 114, 146, 228),
-    )
+    let rotation : Float = if convoy.vx * convoy.vx + convoy.vy * convoy.vy >
+      0.01 {
+      @math.atan2f(convoy.vy, convoy.vx) * 57.29578
+    } else {
+      0.0
+    }
+    if !draw_sprite_cell(1, convoy.x, convoy.y, 58.0, 34.0, rotation, col) {
+      @raylib.draw_rectangle(x - 14, y - 8, 28, 16, col)
+      @raylib.draw_rectangle(
+        x - 8,
+        y - 12,
+        16,
+        8,
+        @raylib.Color::new(232, 246, 255, 230),
+      )
+      @raylib.draw_rectangle(
+        x - 20,
+        y - 2,
+        10,
+        4,
+        @raylib.Color::new(74, 114, 146, 228),
+      )
+    }
 
     @draw.draw_text(
       "#\{convoy.id} \{convoy.hp.to_int()}%",
@@ -1164,44 +1334,6 @@ fn draw_player(ship : PlayerShip, scene_t : Float) -> Unit {
   let nx : Float = @math.cosf(ship.heading)
   let ny : Float = @math.sinf(ship.heading)
 
-  let arm : Float = 18.0
-  @raylib.draw_line(
-    (x - arm).to_int(),
-    y.to_int(),
-    (x + arm).to_int(),
-    y.to_int(),
-    @raylib.Color::new(90, 130, 164, 242),
-  )
-  @raylib.draw_line(
-    x.to_int(),
-    (y - 14.0).to_int(),
-    x.to_int(),
-    (y + 14.0).to_int(),
-    @raylib.Color::new(90, 130, 164, 242),
-  )
-
-  @raylib.draw_rectangle(
-    (x - 13.0).to_int(),
-    (y - 9.0).to_int(),
-    26,
-    18,
-    hull_col,
-  )
-  @raylib.draw_rectangle(
-    (x - 7.0).to_int(),
-    (y - 13.0).to_int(),
-    14,
-    8,
-    @raylib.Color::new(214, 236, 250, 240),
-  )
-  @raylib.draw_line(
-    x.to_int(),
-    y.to_int(),
-    (x + nx * 26.0).to_int(),
-    (y + ny * 26.0).to_int(),
-    @raylib.Color::new(246, 248, 255, 232),
-  )
-
   let wake_r : Float = 10.0 +
     (@math.sinf(scene_t * 4.6 + ship.wake_t) * 0.5 + 0.5) * 6.0
   @raylib.draw_circle(
@@ -1210,6 +1342,46 @@ fn draw_player(ship : PlayerShip, scene_t : Float) -> Unit {
     wake_r,
     @raylib.Color::new(180, 216, 246, 80),
   )
+
+  if !draw_sprite_cell(0, x, y, 76.0, 46.0, ship.heading * 57.29578, hull_col) {
+    let arm : Float = 18.0
+    @raylib.draw_line(
+      (x - arm).to_int(),
+      y.to_int(),
+      (x + arm).to_int(),
+      y.to_int(),
+      @raylib.Color::new(90, 130, 164, 242),
+    )
+    @raylib.draw_line(
+      x.to_int(),
+      (y - 14.0).to_int(),
+      x.to_int(),
+      (y + 14.0).to_int(),
+      @raylib.Color::new(90, 130, 164, 242),
+    )
+
+    @raylib.draw_rectangle(
+      (x - 13.0).to_int(),
+      (y - 9.0).to_int(),
+      26,
+      18,
+      hull_col,
+    )
+    @raylib.draw_rectangle(
+      (x - 7.0).to_int(),
+      (y - 13.0).to_int(),
+      14,
+      8,
+      @raylib.Color::new(214, 236, 250, 240),
+    )
+    @raylib.draw_line(
+      x.to_int(),
+      y.to_int(),
+      (x + nx * 26.0).to_int(),
+      (y + ny * 26.0).to_int(),
+      @raylib.Color::new(246, 248, 255, 232),
+    )
+  }
 
   if ship.cutter_heat > 0.04 {
     let glow : Float = 12.0 + ship.cutter_heat * 26.0
@@ -1273,63 +1445,83 @@ fn draw_harbors(
   let right_x : Int = world_x + world_w - 94
   let mid_y : Int = world_y + world_h / 2
 
-  @raylib.draw_rectangle(
-    left_x,
-    mid_y - 90,
-    82,
-    180,
-    @raylib.Color::new(48, 86, 124, 228),
-  )
-  @raylib.draw_rectangle(
-    left_x + 8,
-    mid_y - 70,
-    16,
-    140,
-    @raylib.Color::new(78, 128, 170, 235),
-  )
-  @raylib.draw_rectangle(
-    left_x + 30,
-    mid_y - 56,
-    16,
-    112,
-    @raylib.Color::new(78, 128, 170, 235),
-  )
-  @raylib.draw_rectangle(
-    left_x + 52,
-    mid_y - 42,
-    16,
-    84,
-    @raylib.Color::new(78, 128, 170, 235),
-  )
+  if !draw_sprite_cell(
+      4,
+      Float::from_int(left_x + 42),
+      Float::from_int(mid_y),
+      100.0,
+      196.0,
+      0.0,
+      @raylib.white,
+    ) {
+    @raylib.draw_rectangle(
+      left_x,
+      mid_y - 90,
+      82,
+      180,
+      @raylib.Color::new(48, 86, 124, 228),
+    )
+    @raylib.draw_rectangle(
+      left_x + 8,
+      mid_y - 70,
+      16,
+      140,
+      @raylib.Color::new(78, 128, 170, 235),
+    )
+    @raylib.draw_rectangle(
+      left_x + 30,
+      mid_y - 56,
+      16,
+      112,
+      @raylib.Color::new(78, 128, 170, 235),
+    )
+    @raylib.draw_rectangle(
+      left_x + 52,
+      mid_y - 42,
+      16,
+      84,
+      @raylib.Color::new(78, 128, 170, 235),
+    )
+  }
 
-  @raylib.draw_rectangle(
-    right_x,
-    mid_y - 100,
-    82,
-    200,
-    @raylib.Color::new(62, 102, 142, 228),
-  )
-  @raylib.draw_rectangle(
-    right_x + 8,
-    mid_y - 72,
-    18,
-    148,
-    @raylib.Color::new(104, 148, 186, 235),
-  )
-  @raylib.draw_rectangle(
-    right_x + 34,
-    mid_y - 56,
-    18,
-    120,
-    @raylib.Color::new(104, 148, 186, 235),
-  )
-  @raylib.draw_rectangle(
-    right_x + 58,
-    mid_y - 38,
-    16,
-    92,
-    @raylib.Color::new(104, 148, 186, 235),
-  )
+  if !draw_sprite_cell(
+      5,
+      Float::from_int(right_x + 42),
+      Float::from_int(mid_y),
+      100.0,
+      212.0,
+      0.0,
+      @raylib.white,
+    ) {
+    @raylib.draw_rectangle(
+      right_x,
+      mid_y - 100,
+      82,
+      200,
+      @raylib.Color::new(62, 102, 142, 228),
+    )
+    @raylib.draw_rectangle(
+      right_x + 8,
+      mid_y - 72,
+      18,
+      148,
+      @raylib.Color::new(104, 148, 186, 235),
+    )
+    @raylib.draw_rectangle(
+      right_x + 34,
+      mid_y - 56,
+      18,
+      120,
+      @raylib.Color::new(104, 148, 186, 235),
+    )
+    @raylib.draw_rectangle(
+      right_x + 58,
+      mid_y - 38,
+      16,
+      92,
+      @raylib.Color::new(104, 148, 186, 235),
+    )
+  }
 
   @draw.draw_text(
     "BASE",
@@ -1568,11 +1760,13 @@ fn main {
   @raylib.init_window(
     sw, sh, "raylib [core] example - icebreaker convoy command",
   )
-  @draw.cleanup()
+  defer @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(120)
   @draw.init_font()
+  load_assets()
+  defer unload_assets()
 
   let world_x : Int = 20
   let world_y : Int = 20
