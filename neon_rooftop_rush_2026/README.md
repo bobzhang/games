@@ -35,6 +35,14 @@ moon build --target native neon_rooftop_rush_2026/
 8. **Stage progression**: A progress bar shows distance toward the stage goal. Clearing a stage awards a bonus (380 + combo * 14 + health * 4) and heals 14 HP. Subsequent stages are faster and have longer distance goals.
 9. **Game over**: When health reaches 0, the run ends. Press R/Enter/Tap to retry. Best score persists during the session.
 
+## Generated Art Assets
+
+This package uses generated raster art from `resources/`:
+
+- `rooftop_skyline_backdrop.png` - side-scrolling neon city backdrop
+- `rooftop_segment_panel.png` - wet rooftop/building material for generated segments
+- `rooftop_sprites.png` - transparent 4x3 sprite sheet for the runner states, obstacles, chips, grapple anchor, hook, and VFX bursts
+
 ## Public API Reference
 
 ### Package `neon_rooftop_rush_2026`
@@ -169,7 +177,9 @@ moon build --target native neon_rooftop_rush_2026/
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `draw_frame` | `(@types.Game) -> Unit` | Main rendering entry point: draws world, HUD, overlays, and effects |
+| `load_game_art` | `() -> GameArt` | Loads generated backdrop, segment, and sprite textures |
+| `unload_game_art` | `(GameArt) -> Unit` | Releases generated textures before window close |
+| `draw_frame` | `(@types.Game, GameArt) -> Unit` | Main rendering entry point: draws generated art, world, HUD, overlays, and effects |
 
 ## Architecture
 
@@ -177,8 +187,9 @@ moon build --target native neon_rooftop_rush_2026/
 
 ```
 neon_rooftop_rush_2026/
-├── main.mbt                  — Entry point: window init, audio init, game loop
+├── main.mbt                  — Entry point: window/art init, audio init, game loop
 ├── moon.pkg                  — Root package config with imports
+├── resources/                — Generated skyline, rooftop material, and sprite sheet
 └── internal/
     ├── types/
     │   ├── types.mbt         — Core structs (Game, Player, Segment, Obstacle, Chip, etc.)
@@ -188,7 +199,8 @@ neon_rooftop_rush_2026/
     │   ├── logic.mbt         — World generation, entity spawning, physics, damage, stage management
     │   └── input.mbt         — Input reading for each game state (title, play, stage clear, game over)
     └── render/
-        └── render.mbt        — All drawing: skyline parallax, segments, obstacles, hero, HUD, overlays
+        ├── art.mbt           — Generated texture loading and sprite helpers
+        └── render.mbt        — All drawing: generated skyline, segments, obstacles, hero, HUD, overlays
 ```
 
 The code follows a clean ECS-like separation: `types` holds all data structures and pure utilities, `game` handles all state mutation and game logic, and `render` is a pure read-only drawing layer. The main package simply wires them together in a standard init-loop-cleanup pattern.
@@ -199,7 +211,7 @@ The code follows a clean ECS-like separation: `types` holds all data structures 
 
 2. **Update**: After input, the state-specific update function runs. In `update_play`, the sequence is: advance timers, calculate scroll speed with ramp, `shift_world` (moves all entities left by dx), `ensure_world` (spawns new segments/obstacles/chips/anchors ahead), `update_player` (gravity, jump/slide/grapple physics, floor detection via `find_floor`), `update_obstacles` (collision with player hitbox via `hero_hitbox` and `rect_overlap`), `update_chips` (collection via distance check), `update_particles` (fade and physics), and `update_combo_and_score` (distance scoring, combo decay).
 
-3. **Rendering**: `draw_frame` draws in order: parallax skyline (3 layers), anchors, rooftop segments with neon trim and windows, obstacles, chips, particles/ghosts, hero, then HUD and state overlays. Camera shake is applied via `shake_offset`. A screen flash effect fades out after damage or stage clear.
+3. **Rendering**: `draw_frame` draws in order: generated skyline backdrop, parallax accents, generated anchors, textured rooftop segments with neon trim and windows, generated obstacles/chips, particles/ghosts, generated hero sprite, then HUD and state overlays. Camera shake is applied via `shake_offset`. A screen flash effect fades out after damage or stage clear.
 
 ### Key Design Patterns
 

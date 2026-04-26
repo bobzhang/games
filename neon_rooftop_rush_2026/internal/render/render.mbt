@@ -25,13 +25,25 @@ fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
 /// Draws the background sky gradient, parallax city building layers, glowing windows, and twinkling stars.
 fn @types.Game::draw_skyline(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
-  let top_a = @types.bg_night()
-  let top_b = @raylib.Color::new(24, 24, 52, 255)
+  draw_texture_cover(
+    art.skyline_backdrop,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
   @raylib.draw_rectangle_gradient_v(
-    0, 0, @types.screen_w, @types.screen_h, top_a, top_b,
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(4, 6, 18, 30),
+    @raylib.Color::new(4, 6, 14, 142),
   )
 
   for layer in 0..<@types.skyline_layers {
@@ -124,6 +136,7 @@ fn segment_color_glow(seg : @types.Segment) -> @raylib.Color {
 /// Draws all active rooftop segments as neon-lit buildings with a colored top edge and procedural window grid.
 fn @types.Game::draw_segments(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
@@ -142,12 +155,25 @@ fn @types.Game::draw_segments(
     }
 
     let base_col = segment_color_base(segment)
+    draw_texture_rect(
+      art.segment_panel,
+      sx,
+      sy,
+      sw,
+      sh,
+      @raylib.Color::new(202, 214, 232, 232),
+    )
     @raylib.draw_rectangle(
       sx.to_int(),
       sy.to_int(),
       sw.to_int(),
       sh.to_int(),
-      base_col,
+      @raylib.Color::new(
+        base_col.r.to_int(),
+        base_col.g.to_int(),
+        base_col.b.to_int(),
+        72,
+      ),
     )
 
     let glow = segment_color_glow(segment)
@@ -195,7 +221,12 @@ fn @types.Game::draw_segments(
 
 ///|
 /// Draws a single grapple anchor as a pulsing neon orb with a halo ring, blending blue and pink based on its glow phase.
-fn draw_anchor(a : @types.Anchor, cam_x : Float, cam_y : Float) -> Unit {
+fn draw_anchor(
+  a : @types.Anchor,
+  art : GameArt,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   if !a.active {
     return
   }
@@ -216,7 +247,15 @@ fn draw_anchor(a : @types.Anchor, cam_x : Float, cam_y : Float) -> Unit {
     halo_r,
     @raylib.Color::new(core.r.to_int(), core.g.to_int(), core.b.to_int(), 80),
   )
-  @raylib.draw_circle(x.to_int(), y.to_int(), 6.0, core)
+  draw_sprite_cell(
+    art,
+    7,
+    x,
+    y,
+    34.0,
+    34.0,
+    @raylib.Color::new(255, 255, 255, 236),
+  )
   @raylib.draw_circle_lines(
     x.to_int(),
     y.to_int(),
@@ -227,7 +266,12 @@ fn draw_anchor(a : @types.Anchor, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws a single obstacle using its kind-specific visual: a vented box for vents, a neon signpost for signs, a glowing ellipse for drones, and dual pulsing laser beams for lasers.
-fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
+fn draw_obstacle(
+  ob : @types.Obstacle,
+  art : GameArt,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   if !ob.active {
     return
   }
@@ -240,75 +284,44 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
 
   match ob.kind {
     Vent => {
-      @raylib.draw_rectangle(
-        x.to_int(),
-        y.to_int(),
-        ob.w.to_int(),
-        ob.h.to_int(),
-        @raylib.Color::new(98, 110, 132, 255),
+      draw_sprite_cell(
+        art,
+        2,
+        x + ob.w * 0.5,
+        y + ob.h * 0.5,
+        ob.w * 1.18,
+        @types.maxf(ob.h * 2.0, 44.0),
+        @raylib.Color::new(255, 255, 255, 248),
       )
-      @raylib.draw_rectangle_lines(
-        x.to_int(),
-        y.to_int(),
-        ob.w.to_int(),
-        ob.h.to_int(),
-        @raylib.Color::new(20, 26, 34, 220),
-      )
-      for i in 0..<4 {
-        @raylib.draw_line(
-          x.to_int() + 8,
-          y.to_int() + 5 + i * 5,
-          x.to_int() + ob.w.to_int() - 8,
-          y.to_int() + 5 + i * 5,
-          @raylib.Color::new(66, 74, 92, 240),
-        )
-      }
     }
     Sign => {
-      @raylib.draw_rectangle(
-        x.to_int() + 6,
-        y.to_int() + ob.h.to_int(),
-        6,
-        26,
-        @raylib.Color::new(80, 90, 114, 255),
-      )
-      @raylib.draw_rectangle(
-        x.to_int(),
-        y.to_int(),
-        ob.w.to_int(),
-        ob.h.to_int(),
-        @raylib.Color::new(38, 20, 40, 255),
-      )
-      @raylib.draw_rectangle_lines(
-        x.to_int(),
-        y.to_int(),
-        ob.w.to_int(),
-        ob.h.to_int(),
-        @types.neon_pink(),
-      )
-      @draw.draw_text(
-        "N",
-        x.to_int() + ob.w.to_int() / 2 - 8,
-        y.to_int() + 2,
-        22,
-        @types.neon_pink(),
+      draw_sprite_cell(
+        art,
+        3,
+        x + ob.w * 0.5,
+        y + ob.h * 0.5,
+        ob.w * 1.45,
+        @types.maxf(ob.h * 2.2, 68.0),
+        @raylib.Color::new(255, 255, 255, 246),
       )
     }
     Drone => {
       let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase * 2.2)
       let glow = @types.color_mix(@types.neon_blue(), @types.neon_pink(), pulse)
-      @raylib.draw_ellipse(
-        (x + ob.w * 0.5).to_int(),
-        (y + ob.h * 0.5).to_int(),
-        ob.w * 0.5,
-        ob.h * 0.5,
-        @raylib.Color::new(70, 76, 98, 255),
-      )
       @raylib.draw_circle(
         (x + ob.w * 0.5).to_int(),
         (y + ob.h * 0.5).to_int(),
-        8.0,
-        glow,
+        @types.maxf(ob.w, ob.h) * 0.48,
+        @raylib.Color::new(glow.r.to_int(), glow.g.to_int(), glow.b.to_int(), 64),
+      )
+      draw_sprite_cell(
+        art,
+        4,
+        x + ob.w * 0.5,
+        y + ob.h * 0.5,
+        ob.w * 1.44,
+        ob.h * 1.75,
+        @raylib.Color::new(255, 255, 255, 248),
       )
       @raylib.draw_circle_lines(
         (x + ob.w * 0.5).to_int(),
@@ -321,37 +334,25 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
           160,
         ),
       )
-      @raylib.draw_line(
-        x.to_int() - 6,
-        (y + ob.h * 0.5).to_int(),
-        x.to_int() + ob.w.to_int() + 6,
-        (y + ob.h * 0.5).to_int(),
-        @raylib.Color::new(70, 78, 100, 240),
-      )
     }
     Laser => {
       let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase)
       let c = @types.color_mix(@types.neon_pink(), @types.neon_orange(), pulse)
-      @raylib.draw_rectangle(
-        x.to_int(),
-        y.to_int(),
-        ob.w.to_int(),
-        ob.h.to_int(),
-        @raylib.Color::new(36, 22, 28, 255),
+      draw_sprite_cell(
+        art,
+        5,
+        x + ob.w * 0.5,
+        y + ob.h * 0.5,
+        ob.w * 1.5,
+        ob.h * 1.08,
+        @raylib.Color::new(255, 255, 255, 238),
       )
       @raylib.draw_rectangle(
-        x.to_int() + 5,
-        y.to_int(),
+        x.to_int() + ob.w.to_int() / 2 - 2,
+        y.to_int() + 8,
         4,
-        ob.h.to_int(),
-        @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 220),
-      )
-      @raylib.draw_rectangle(
-        x.to_int() + ob.w.to_int() - 9,
-        y.to_int(),
-        4,
-        ob.h.to_int(),
-        @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 220),
+        ob.h.to_int() - 16,
+        @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 120),
       )
     }
   }
@@ -361,6 +362,7 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
 /// Draws all active collectible chips as spinning neon squares with a bobbing glow halo, blending lime and blue.
 fn @types.Game::draw_chips(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
@@ -384,7 +386,15 @@ fn @types.Game::draw_chips(
       Float::from_int(10) + spin * Float::from_int(2),
       @raylib.Color::new(glow.r.to_int(), glow.g.to_int(), glow.b.to_int(), 130),
     )
-    @raylib.draw_rectangle((x - 6.0).to_int(), (y - 6.0).to_int(), 12, 12, glow)
+    draw_sprite_cell(
+      art,
+      6,
+      x,
+      y,
+      28.0,
+      28.0,
+      @raylib.Color::new(255, 255, 255, 238),
+    )
     @raylib.draw_rectangle_lines(
       (x - 6.0).to_int(),
       (y - 6.0).to_int(),
@@ -399,6 +409,7 @@ fn @types.Game::draw_chips(
 /// Draws all active particles as colored circles fading with their remaining life, followed by ghost trail rectangles that fade by their remaining life time.
 fn @types.Game::draw_particles(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
@@ -434,11 +445,13 @@ fn @types.Game::draw_particles(
       @raylib.Color::new(255, 116, 180, a)
     }
 
-    @raylib.draw_rectangle(
-      (g.x + cam_x).to_int(),
-      (g.y + cam_y).to_int(),
-      g.w.to_int(),
-      g.h.to_int(),
+    draw_sprite_cell(
+      art,
+      0,
+      g.x + cam_x + g.w * 0.5,
+      g.y + cam_y + g.h * 0.5,
+      g.w * 1.25,
+      g.h * 1.08,
       tint,
     )
   }
@@ -448,6 +461,7 @@ fn @types.Game::draw_particles(
 /// Draws the player character with a grapple line when latched, an animated running/sliding body, leg animation, hurt flash tint, and an invulnerability blink outline.
 fn @types.Game::draw_hero(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
@@ -468,57 +482,29 @@ fn @types.Game::draw_hero(
   }
 
   let base_col = if hero.hurt_t > 0.0 {
-    @raylib.Color::new(255, 126, 162, 255)
+    @raylib.Color::new(255, 156, 184, 255)
   } else {
-    @raylib.Color::new(220, 236, 255, 255)
+    @raylib.Color::new(255, 255, 255, 255)
   }
-
-  let suit_col = @raylib.Color::new(
-    40 + (run_pulse * 24.0).to_int(),
-    58 + (run_pulse * 20.0).to_int(),
-    88 + (run_pulse * 26.0).to_int(),
-    255,
-  )
-
   if hero.slide_t > 0.0 {
-    @raylib.draw_rectangle(
-      (hx + 4.0).to_int(),
-      (hy + hero.h * 0.35).to_int(),
-      (hero.w - 8.0).to_int(),
-      (hero.h * 0.58).to_int(),
-      suit_col,
-    )
-    @raylib.draw_rectangle(
-      (hx + hero.w * 0.62).to_int(),
-      (hy + hero.h * 0.2).to_int(),
-      14,
-      14,
+    draw_sprite_cell(
+      art,
+      1,
+      hx + hero.w * 0.5,
+      hy + hero.h * 0.56,
+      hero.w * 1.28,
+      hero.h * 0.82,
       base_col,
     )
   } else {
-    @raylib.draw_rectangle(
-      (hx + 8.0).to_int(),
-      (hy + 20.0).to_int(),
-      (hero.w - 16.0).to_int(),
-      (hero.h - 20.0).to_int(),
-      suit_col,
-    )
-    @raylib.draw_rectangle((hx + 18.0).to_int(), hy.to_int(), 28, 28, base_col)
-
-    let leg_off = (run_pulse * 8.0).to_int()
-    @raylib.draw_rectangle(
-      (hx + 14.0).to_int(),
-      (hy + hero.h - 16.0).to_int(),
-      12,
-      16 + leg_off,
-      @raylib.Color::new(24, 30, 42, 255),
-    )
-    @raylib.draw_rectangle(
-      (hx + 34.0).to_int(),
-      (hy + hero.h - 16.0).to_int(),
-      12,
-      16 + (8 - leg_off),
-      @raylib.Color::new(24, 30, 42, 255),
+    draw_sprite_cell(
+      art,
+      0,
+      hx + hero.w * 0.5,
+      hy + hero.h * 0.52,
+      hero.w * (1.12 + run_pulse * 0.04),
+      hero.h * 1.08,
+      base_col,
     )
   }
 
@@ -999,33 +985,34 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 /// Draws the full game world layer stack: skyline backdrop, grapple anchors, rooftop segments, obstacles, chips, particles, ghost trails, and the hero.
 fn @types.Game::draw_game_world(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
-  game.draw_skyline(cam_x, cam_y)
+  game.draw_skyline(art, cam_x, cam_y)
 
   for anchor in game.anchors {
-    draw_anchor(anchor, cam_x, cam_y)
+    draw_anchor(anchor, art, cam_x, cam_y)
   }
 
-  game.draw_segments(cam_x, cam_y)
+  game.draw_segments(art, cam_x, cam_y)
 
   for obstacle in game.obstacles {
-    draw_obstacle(obstacle, cam_x, cam_y)
+    draw_obstacle(obstacle, art, cam_x, cam_y)
   }
 
-  game.draw_chips(cam_x, cam_y)
-  game.draw_particles(cam_x, cam_y)
-  game.draw_hero(cam_x, cam_y)
+  game.draw_chips(art, cam_x, cam_y)
+  game.draw_particles(art, cam_x, cam_y)
+  game.draw_hero(art, cam_x, cam_y)
 }
 
 ///|
 /// Draws one full frame of world, HUD, controls, and state overlays.
-pub fn draw_frame(game : @types.Game) -> Unit {
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
   @raylib.clear_background(@types.bg_haze())
 
   let shake = game.shake_offset()
-  game.draw_game_world(shake.0, shake.1)
+  game.draw_game_world(art, shake.0, shake.1)
 
   if game.state != Title {
     game.draw_hud()
