@@ -36,8 +36,16 @@ moon build --target native neon_heist_extraction_2026/
 6. **Extract**: Deliver collected loot to the extraction zone (top-right circle labeled "EXTRACT"). You can only deposit when all terminals are hacked. Deliver 42 or more total loot units to win.
 7. **Manage resources**: HP regeneration is absent -- avoid damage. Energy regenerates at 10/s and powers Dash (20 cost) and EMP (40 cost). Weapon heat builds with firing and cools at 36/s; overheating (above 94) prevents firing.
 8. **Alarm system**: Cameras and certain events raise the alarm. If alarm reaches 100, the heist fails. High alarm (35+) triggers guard reinforcements from map edges. Hacking terminals and EMP reduce alarm.
-9. **Guard types**: Kind 0 (red circles, light, single-shot), Kind 1 (orange rectangles, medium, dual-shot spread), Kind 2 (purple rectangles, heavy, slow but high HP, fires large projectiles). Guards scale in HP with wave number.
+9. **Guard types**: Kind 0 (red light guard, single-shot), Kind 1 (orange medium guard, dual-shot spread), Kind 2 (violet heavy guard, slow but high HP, fires large projectiles). Guards scale in HP with wave number.
 10. **Win/Lose**: Win by delivering 42+ loot. Lose if HP drops to 0, timer (430s) expires, or alarm hits 100.
+
+## Generated Art Assets
+
+This package uses generated raster art from `resources/`:
+
+- `heist_facility_backdrop.png` - top-down neon facility floor and room backdrop
+- `heist_wall_panel.png` - metal wall/bulkhead material used on collision walls
+- `heist_sprites.png` - transparent 4x3 sprite sheet for the infiltrator, guard tiers, cameras, terminals, vault states, loot, extraction pad, and EMP device
 
 ## Public API Reference
 
@@ -125,11 +133,13 @@ moon build --target native neon_heist_extraction_2026/
 
 ```
 neon_heist_extraction_2026/
+├── art.mbt     — Generated texture loading and sprite drawing helpers
 ├── main.mbt    — Complete game: types, constants, utilities, game logic, input, rendering
+├── resources/  — Generated backdrop, wall material, and sprite sheet
 └── moon.pkg    — Package config with raylib and math imports
 ```
 
-This is a single-file game with all logic contained in `main.mbt`. The file is organized into sections: constants and type definitions at the top, followed by utility functions, object pool management (clear/add functions), map setup, touch UI rendering, and finally the main game loop which handles input, game state updates, collision detection, and rendering.
+This is a compact package with gameplay kept in `main.mbt` and generated-art helpers split into `art.mbt`. The main file is organized into sections: constants and type definitions at the top, followed by utility functions, object pool management (clear/add functions), map setup, touch UI rendering, and finally the main game loop which handles input, game state updates, collision detection, and rendering.
 
 ### Data Flow
 
@@ -137,7 +147,7 @@ This is a single-file game with all logic contained in `main.mbt`. The file is o
 
 2. **Update**: Game state `0` (title) waits for Enter/tap. State `1` (playing) processes: timer countdown, player cooldown/energy/heat regeneration, alarm decay, guard reinforcement spawning, player movement with wall bounce (`bounce_from_walls`), shooting, terminal hacking, vault unlocking, camera sweep detection, guard AI (patrol/chase states), loot pickup, extraction deposit, bullet-wall/bullet-guard/bullet-player collisions, and particle updates. States `2` (win) and `3` (lose) wait for restart input.
 
-3. **Rendering**: Drawing order: background grid and stars, playable zone, extraction zone, walls, terminals with progress bars, vaults, camera cones, loot, guards, bullets, player with aim line, particles, HUD bars (alarm/HP/energy/heat), status text, message bar, touch UI overlay, and state-specific screens (title/win/lose).
+3. **Rendering**: Drawing order: generated facility backdrop, grid/stars, playable zone, generated extraction pad, generated wall material, terminals with progress bars, vaults, camera cones, generated loot/guards/player sprites, bullets, particles, HUD bars (alarm/HP/energy/heat), status text, message bar, touch UI overlay, and state-specific screens (title/win/lose).
 
 ### Key Design Patterns
 

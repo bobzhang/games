@@ -919,8 +919,12 @@ fn draw_touch_ui(state : Int) -> Unit {
 /// Initializes the window, allocates all game pools, sets up the map, and runs the main frame loop until the window is closed.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] neon heist extraction 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let walls : Array[Wall] = Array::makei(max_walls, fn(_i) {
     { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0 }
@@ -2029,14 +2033,23 @@ fn main {
     // Render.
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(8, 12, 20, 255))
+    draw_texture_cover(
+      art.facility_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.Color::new(255, 255, 255, 255),
+    )
+    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(4, 8, 16, 70))
 
     for gy in 0..<15 {
       let y : Int = 90 + gy * 44
-      @raylib.draw_line(0, y, sw, y, @raylib.Color::new(22, 30, 46, 122))
+      @raylib.draw_line(0, y, sw, y, @raylib.Color::new(54, 92, 130, 72))
     }
     for gx in 0..<26 {
       let x : Int = gx * 50
-      @raylib.draw_line(x, 90, x, sh, @raylib.Color::new(22, 30, 46, 102))
+      @raylib.draw_line(x, 90, x, sh, @raylib.Color::new(54, 92, 130, 60))
     }
 
     for i in 0..<170 {
@@ -2058,7 +2071,7 @@ fn main {
         } else {
           1.1
         },
-        @raylib.Color::new(br, br, br + 28, 166),
+        @raylib.Color::new(br, br, br + 28, 104),
       )
     }
 
@@ -2068,7 +2081,7 @@ fn main {
       world_t.to_int(),
       (world_r - world_l).to_int(),
       (world_b - world_t).to_int(),
-      @raylib.Color::new(10, 18, 30, 150),
+      @raylib.Color::new(10, 18, 30, 66),
     )
     @raylib.draw_rectangle_lines(
       world_l.to_int(),
@@ -2079,6 +2092,15 @@ fn main {
     )
 
     // extraction zone
+    draw_sprite_cell(
+      art,
+      10,
+      extraction_x,
+      extraction_y,
+      extraction_r * 1.7,
+      extraction_r * 1.7,
+      @raylib.Color::new(255, 255, 255, 224),
+    )
     @raylib.draw_circle(
       extraction_x.to_int(),
       extraction_y.to_int(),
@@ -2104,12 +2126,20 @@ fn main {
       if !wall.active {
         continue
       }
+      draw_texture_rect(
+        art.wall_panel,
+        wall.x,
+        wall.y,
+        wall.w,
+        wall.h,
+        @raylib.Color::new(210, 220, 232, 236),
+      )
       @raylib.draw_rectangle(
         wall.x.to_int(),
         wall.y.to_int(),
         wall.w.to_int(),
         wall.h.to_int(),
-        @raylib.Color::new(66, 76, 98, 236),
+        @raylib.Color::new(8, 12, 20, 52),
       )
       @raylib.draw_rectangle_lines(
         wall.x.to_int(),
@@ -2125,17 +2155,18 @@ fn main {
       if !terminal.active {
         continue
       }
-      let col = if terminal.hacked {
-        @raylib.Color::new(108, 220, 168, 244)
-      } else {
-        @raylib.Color::new(228, 166, 90, 242)
-      }
-      @raylib.draw_rectangle(
-        (terminal.x - 16.0).to_int(),
-        (terminal.y - 16.0).to_int(),
-        32,
-        32,
-        col,
+      draw_sprite_cell(
+        art,
+        if terminal.hacked {
+          6
+        } else {
+          5
+        },
+        terminal.x,
+        terminal.y,
+        54.0,
+        54.0,
+        @raylib.Color::new(255, 255, 255, 246),
       )
       @raylib.draw_rectangle_lines(
         (terminal.x - 20.0).to_int(),
@@ -2170,17 +2201,18 @@ fn main {
       if !vault.active {
         continue
       }
-      let col = if vault.open {
-        @raylib.Color::new(96, 140, 186, 236)
-      } else {
-        @raylib.Color::new(124, 74, 92, 236)
-      }
-      @raylib.draw_rectangle(
-        (vault.x - 24.0).to_int(),
-        (vault.y - 20.0).to_int(),
-        48,
-        40,
-        col,
+      draw_sprite_cell(
+        art,
+        if vault.open {
+          8
+        } else {
+          7
+        },
+        vault.x,
+        vault.y,
+        68.0,
+        62.0,
+        @raylib.Color::new(255, 255, 255, 246),
       )
       @raylib.draw_rectangle_lines(
         (vault.x - 28.0).to_int(),
@@ -2235,7 +2267,25 @@ fn main {
       } else {
         @raylib.Color::new(224, 108, 120, 244)
       }
-      @raylib.draw_circle(camera.x.to_int(), camera.y.to_int(), 13.0, cam_col)
+      @raylib.draw_circle(
+        camera.x.to_int(),
+        camera.y.to_int(),
+        18.0,
+        alpha_color(cam_col, 48),
+      )
+      draw_sprite_cell(
+        art,
+        4,
+        camera.x,
+        camera.y,
+        46.0,
+        46.0,
+        if camera.disabled_t > 0.0 {
+          @raylib.Color::new(170, 180, 194, 218)
+        } else {
+          @raylib.Color::new(255, 255, 255, 244)
+        },
+      )
       @raylib.draw_circle_lines(
         camera.x.to_int(),
         camera.y.to_int(),
@@ -2259,8 +2309,17 @@ fn main {
       @raylib.draw_circle(
         loot_elem.x.to_int(),
         loot_elem.y.to_int(),
-        6.0 + Float::from_int(loot_elem.value),
-        col,
+        8.0 + Float::from_int(loot_elem.value),
+        alpha_color(col, 62),
+      )
+      draw_sprite_cell(
+        art,
+        9,
+        loot_elem.x,
+        loot_elem.y,
+        22.0 + Float::from_int(loot_elem.value) * 2.0,
+        22.0 + Float::from_int(loot_elem.value) * 2.0,
+        @raylib.Color::new(255, 255, 255, col.a.to_int()),
       )
     }
 
@@ -2269,28 +2328,39 @@ fn main {
       if !guard_val.active {
         continue
       }
+      let guard_rot = @math.atan2f(guard_val.vy, guard_val.vx) * 57.29578 + 90.0
       if guard_val.kind == 0 {
-        @raylib.draw_circle(
-          guard_val.x.to_int(),
-          guard_val.y.to_int(),
-          15.0,
-          @raylib.Color::new(230, 106, 116, 242),
+        draw_sprite_cell_rotated(
+          art,
+          1,
+          guard_val.x,
+          guard_val.y,
+          44.0,
+          54.0,
+          guard_rot,
+          @raylib.Color::new(255, 255, 255, 244),
         )
       } else if guard_val.kind == 1 {
-        @raylib.draw_rectangle(
-          (guard_val.x - 18.0).to_int(),
-          (guard_val.y - 14.0).to_int(),
-          36,
-          28,
-          @raylib.Color::new(238, 152, 82, 242),
+        draw_sprite_cell_rotated(
+          art,
+          2,
+          guard_val.x,
+          guard_val.y,
+          56.0,
+          64.0,
+          guard_rot,
+          @raylib.Color::new(255, 255, 255, 244),
         )
       } else {
-        @raylib.draw_rectangle(
-          (guard_val.x - 24.0).to_int(),
-          (guard_val.y - 20.0).to_int(),
-          48,
-          40,
-          @raylib.Color::new(168, 100, 194, 240),
+        draw_sprite_cell_rotated(
+          art,
+          3,
+          guard_val.x,
+          guard_val.y,
+          72.0,
+          74.0,
+          guard_rot,
+          @raylib.Color::new(255, 255, 255, 242),
         )
       }
       @raylib.draw_circle_lines(
@@ -2328,20 +2398,17 @@ fn main {
     let pcol = if player.inv_t > 0.0 {
       @raylib.Color::new(252, 252, 252, 236)
     } else {
-      @raylib.Color::new(98, 196, 252, 246)
+      @raylib.Color::new(255, 255, 255, 246)
     }
-    @raylib.draw_rectangle(
-      (player.x - 16.0).to_int(),
-      (player.y - 12.0).to_int(),
-      32,
-      24,
+    draw_sprite_cell_rotated(
+      art,
+      0,
+      player.x,
+      player.y,
+      46.0,
+      58.0,
+      @math.atan2f(player.aim_y, player.aim_x) * 57.29578 + 90.0,
       pcol,
-    )
-    @raylib.draw_circle(
-      player.x.to_int(),
-      (player.y - 14.0).to_int(),
-      8.0,
-      @raylib.Color::new(220, 246, 255, 252),
     )
     @raylib.draw_line(
       player.x.to_int(),
@@ -2510,9 +2577,18 @@ fn main {
     )
     @draw.draw_text("HEAT", 16, 208, 16, @raylib.Color::new(246, 222, 194, 255))
 
+    draw_sprite_cell(
+      art,
+      11,
+      314.0,
+      112.0,
+      34.0,
+      34.0,
+      @raylib.Color::new(255, 255, 255, 226),
+    )
     @draw.draw_text(
       "Hack [K]  Dash [L] \{(player.dash_cd * 10.0).to_int()}  EMP [O] \{(player.emp_cd * 10.0).to_int()}",
-      332,
+      338,
       100,
       20,
       @raylib.Color::new(224, 236, 250, 244),
@@ -2705,7 +2781,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
