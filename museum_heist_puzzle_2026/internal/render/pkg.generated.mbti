@@ -3,14 +3,26 @@ package "bobzhang/games/museum_heist_puzzle_2026/internal/render"
 
 import {
   "bobzhang/games/museum_heist_puzzle_2026/internal/types",
+  "tonyfettes/raylib",
 }
 
 // Values
-pub fn draw_frame(@types.Game) -> Unit
+pub fn draw_frame(@types.Game, GameArt) -> Unit
+
+pub fn load_game_art() -> GameArt
+
+pub fn unload_game_art(GameArt) -> Unit
 
 // Errors
 
 // Types and methods
+pub(all) struct GameArt {
+  museum_backdrop : @raylib.Texture
+  floor_tile : @raylib.Texture
+  wall_tile : @raylib.Texture
+  panel_skin : @raylib.Texture
+  sprite_sheet : @raylib.Texture
+}
 
 // Type aliases
 

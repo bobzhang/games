@@ -53,7 +53,7 @@ Clearing a floor shows a "Floor Cleared" overlay with options to continue to the
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `main` | `() -> Unit` | Entry point: initializes window (1280x800) at 60 FPS, creates Game, runs main loop reading mouse/touch state each frame, calls update_game and draw_frame |
+| `main` | `() -> Unit` | Entry point: initializes window (1280x800) at 60 FPS, loads generated museum art, creates Game, runs the main loop reading mouse/touch state each frame, calls update_game and draw_frame, then unloads textures |
 
 ### Package `museum_heist_puzzle_2026/internal/types`
 
@@ -152,11 +152,19 @@ Clearing a floor shows a "Floor Cleared" overlay with options to continue to the
 
 > All rendering routines.
 
+#### Types
+
+| Type | Description |
+|------|-------------|
+| `GameArt` | Bundle of generated Raylib textures: museum backdrop, floor/wall tiles, panel skin, and sprite sheet. |
+
 #### Functions
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `draw_frame` | `(@types.Game) -> Unit` | Main render: draws background, board tiles, guard FOV overlay, exit door, artifacts, guards, player, side panel, play controls (D-pad + restart button), alarm flash, and state overlays (title/win/lose/campaign_clear) |
+| `load_game_art` | `() -> GameArt` | Loads generated PNG textures from `resources/` after window initialization. |
+| `unload_game_art` | `(GameArt) -> Unit` | Releases generated textures before closing the Raylib window. |
+| `draw_frame` | `(@types.Game, GameArt) -> Unit` | Main render: draws generated museum backdrop and board materials, guard FOV overlay, sprite-backed exit/artifacts/guards/player, side panel, play controls (D-pad + restart button), alarm flash, and state overlays (title/win/lose/campaign_clear) |
 
 ## Architecture
 
@@ -165,6 +173,7 @@ Clearing a floor shows a "Floor Cleared" overlay with options to continue to the
 ```
 museum_heist_puzzle_2026/
 ├── main.mbt              -- Entry point: window init, mouse/touch reading, game loop
+├── resources/            -- Generated museum backdrop, tile materials, panel skin, sprite sheet
 ├── moon.pkg              -- Package config, imports
 └── internal/
     ├── types/
@@ -175,6 +184,7 @@ museum_heist_puzzle_2026/
     │   ├── logic.mbt     -- 3 hand-crafted level layouts, level loading, guard patrol, player movement, artifact collection, detection, state transitions
     │   └── input.mbt     -- Keyboard + touch/mouse D-pad input gathering into FrameInput struct
     └── render/
+        ├── art.mbt       -- Generated texture loading, unloading, cover/rect/sprite helpers
         └── render.mbt    -- Background, board tiles, guard FOV overlay, exit, artifacts, guards, player, side panel, D-pad buttons, alarm flash, overlay cards
 ```
 
@@ -186,7 +196,7 @@ museum_heist_puzzle_2026/
 4. **Play Update**: `update_play` decrements the player step timer, advances all guards along their patrol paths, moves the player if the step cooldown has elapsed, collects artifacts on the player's tile, checks for exit completion, and checks for guard detection.
 5. **Guard Patrol**: Each guard has a looping waypoint path. `advance_guard_once` moves the guard one tile toward the current target waypoint, updating facing direction. When a waypoint is reached, the path index advances. Guards step at 0.33s intervals.
 6. **Detection**: `player_spotted` first checks if any guard occupies the player's tile, then checks each guard's vision cone. `guard_sees_cell` validates: in bounds, not a wall, within view range (Chebyshev distance), within the 90-degree forward cone (`in_guard_front`), and has clear line of sight (`has_line_of_sight` using Bresenham's algorithm).
-7. **Rendering**: `draw_frame` renders layers in order: background -> board tiles -> guard FOV overlay (red tint) -> exit door -> artifacts (gold circles) -> guards (red circles with direction indicator) -> player (blue circle) -> side panel -> D-pad controls -> alarm flash -> state overlay card.
+7. **Rendering**: `draw_frame` renders layers in order: generated museum backdrop -> generated floor/wall board tiles -> guard FOV overlay (red tint) -> sprite-backed exit door -> relic sprites -> guard sprites with direction indicator -> thief sprite -> generated side panel -> D-pad controls -> alarm flash -> state overlay card.
 
 ### Key Design Patterns
 
