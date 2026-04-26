@@ -1,10 +1,10 @@
 # Desert Train Robbery 2026
 
-Desert Train Robbery 2026 is a side-scrolling action-platformer set in a Wild West desert where the player controls an outlaw robbing a moving train. The game takes place on a 1280x820 pixel screen featuring a scrolling desert landscape with parallax sand dunes, railroad ties, and a convoy of 6 wagons that drift leftward at increasing speed. The player must jump between wagon rooftops, shoot patrolling sheriffs, dash to evade gunfire, and loot cargo from each wagon before time runs out.
+Desert Train Robbery 2026 is a side-scrolling action-platformer set in a Wild West desert where the player controls an outlaw robbing a moving train. The game takes place on a 1280x820 pixel screen featuring a generated desert railroad backdrop, animated track foreground, and a convoy of 6 generated freight wagons that drift leftward at increasing speed. The player must jump between wagon rooftops, shoot patrolling sheriffs, dash to evade gunfire, and loot cargo from each wagon before time runs out.
 
 The game spans three chapters with escalating difficulty. Chapter 1 requires 9 loot with a 128-second timer and slow train speed (-122 px/s), chapter 2 requires 13 loot with 142 seconds at -144 px/s, and chapter 3 demands 18 loot in 156 seconds at -168 px/s. Sheriffs spawn at decreasing intervals (1.18s, 0.94s, 0.72s base cooldowns) and scale in HP (2, 3, 4) and patrol speed (88, 102, 116 px/s) per chapter. The player has 6 HP, 7-round ammo with auto-reload after 1.5 seconds, a stamina-based dash (costs 22 stamina, recharges at 22/s), and can loot wagons by pressing L when standing on the roof near cargo. Stars accumulate from looting and killing sheriffs, tracking total accomplishments across all chapters.
 
-Visual feedback includes screen shake on damage, flash effects when hit, particle bursts on kills and loot grabs, and a dynamic desert skyline with animated dune silhouettes. Touch controls provide full playability on mobile with on-screen D-pad, jump, shoot, dash, and loot buttons.
+Visual feedback includes screen shake on damage, flash effects when hit, generated outlaw/sheriff/loot sprites, particle bursts on kills and loot grabs, and a generated sunset desert skyline with animated railroad ties. Touch controls provide full playability on mobile with on-screen D-pad, jump, shoot, dash, and loot buttons.
 
 ## Build and Run
 
@@ -38,7 +38,7 @@ Taking damage (from bullets or melee contact within 34px) costs 1 HP with a 0.95
 
 ### Package `desert_train_robbery_2026`
 
-> Single-file game with all logic in main.mbt.
+> Two-file game package with core gameplay in `main.mbt` and generated art helpers in `art.mbt`.
 
 #### Structs
 
@@ -89,11 +89,13 @@ Taking damage (from bullets or melee contact within 34px) costs 1 HP with a 0.95
 
 ```
 desert_train_robbery_2026/
-├── main.mbt    -- Complete game: structs, level setup, AI, physics, combat, rendering
-└── moon.pkg    -- Package config (single main package, imports math + raylib)
+├── art.mbt      -- Generated texture loading and art draw helpers
+├── main.mbt     -- Complete game: structs, level setup, AI, physics, combat, rendering
+├── moon.pkg     -- Package config (single main package, imports math + raylib + draw/fps)
+└── resources/   -- Generated desert, wagon, outlaw, sheriff, and loot assets
 ```
 
-This is a single-file game with all state managed as local variables in the `main` function. The game loop handles input, physics, entity management, collision detection, and rendering sequentially. Level transitions use a `transition_t` timer to show a "Chapter Clear" overlay before advancing.
+Most game state remains managed as local variables in the `main` function. The game loop handles input, physics, entity management, collision detection, and rendering sequentially, while `art.mbt` owns generated texture loading and draw helpers. Level transitions use a `transition_t` timer to show a "Chapter Clear" overlay before advancing.
 
 ### Data Flow
 
@@ -102,7 +104,7 @@ This is a single-file game with all state managed as local variables in the `mai
 3. **Player Physics**: Acceleration-based movement with drag when no input. Gravity at 1180 px/s^2, jump velocity -596 px/s. Landing detection checks ground (y >= 710) and wagon roofs (crossing from above with positive vy). Player moves with wagon when standing on it.
 4. **Combat**: Player shoots directionally (left/right based on input, slight upward angle). Sheriffs patrol toward player on their wagon and shoot when in 340px range. Circle-based collision for bullet-vs-sheriff (radius 20) and bullet-vs-player (radius 22). Melee contact at 34px range.
 5. **Looting**: L key triggers loot when within 42px of wagon center cargo. Each loot reduces wagon.loot and increments looted count. Meeting target_loot triggers chapter transition.
-6. **Rendering**: Layered: sky gradient, parallax dune silhouettes (46 triangles), ground with railroad ties, wagons (body + roof line + wheels + cargo indicator), sheriffs (head + body + limbs + hat), player (head + body + limbs, flash when hit, dash trails), bullets (short lines), particles (circles), HUD (chapter/loot/score/HP/stamina/ammo/timer/stars + bars), touch buttons, message bar, transition/game-over overlays.
+6. **Rendering**: Layered: generated desert backdrop, animated railroad foreground, generated wagons and loot crates, generated sheriff sprites, generated outlaw sprite with flash/dash trails, bullets (short lines), particles (circles), HUD (chapter/loot/score/HP/stamina/ammo/timer/stars + bars), touch buttons, message bar, transition/game-over overlays.
 
 ### Key Design Patterns
 

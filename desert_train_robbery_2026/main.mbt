@@ -369,8 +369,12 @@ fn player_support_wagon(player : Rider, wagons : Array[Wagon]) -> Int {
 /// Initializes the window and runs the Desert Train Robbery game loop.
 fn main {
   @raylib.init_window(sw, sh, "Desert Train Robbery 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let player : Rider = {
     x: 164.0,
@@ -941,125 +945,17 @@ fn main {
     }
 
     @raylib.begin_drawing()
-
-    if flash_t > 0.0 {
-      @raylib.clear_background(@raylib.Color::new(34, 20, 20, 255))
-    } else {
-      @raylib.clear_background(@raylib.Color::new(18, 20, 34, 255))
-    }
-
-    let pulse = (wave_t * 3.0).to_int() % 180
-    let glow = if pulse < 90 { pulse } else { 180 - pulse }
-
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      sh,
-      @raylib.Color::new(30, 36 + glow / 12, 58 + glow / 7, 255),
-    )
-    @raylib.draw_rectangle(0, 0, sw, 280, @raylib.Color::new(236, 148, 86, 255))
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      164,
-      @raylib.Color::new(248, 196, 126, 255),
-    )
-
-    for i in 0..<46 {
-      let x = (i * 66 + (wave_t * 70.0).to_int()) % (sw + 180) - 90
-      let h = 60 + i * 23 % 170
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(Float::from_int(x), ground_y + 16.0),
-        @raylib.Vector2::new(Float::from_int(x + 120), ground_y + 16.0),
-        @raylib.Vector2::new(
-          Float::from_int(x + 58),
-          ground_y - Float::from_int(h),
-        ),
-        @raylib.Color::new(172, 114, 76, 180),
-      )
-    }
-
-    @raylib.draw_rectangle(
-      0,
-      ground_y.to_int(),
-      sw,
-      sh - ground_y.to_int(),
-      @raylib.Color::new(194, 142, 86, 255),
-    )
-
-    @raylib.draw_line(0, 736, sw, 736, @raylib.Color::new(90, 70, 60, 255))
-    @raylib.draw_line(0, 752, sw, 752, @raylib.Color::new(90, 70, 60, 255))
-
-    for s in 0..<54 {
-      let x = (s * 44 + (wave_t * 200.0).to_int()) % (sw + 80) - 40
-      @raylib.draw_rectangle(
-        x,
-        730,
-        24,
-        28,
-        @raylib.Color::new(120, 90, 68, 255),
-      )
-    }
+    @raylib.clear_background(@raylib.Color::new(18, 20, 34, 255))
+    draw_desert_backdrop_art(art, wave_t, flash_t)
 
     for wagon in wagons {
       let wx = wagon.x + shake_x
       let wy = wagon.roof_y
       let len = wagon.len
-
-      @raylib.draw_rectangle(
-        wx.to_int(),
-        (wy - 50.0).to_int(),
-        len.to_int(),
-        52,
-        @raylib.Color::new(96, 62, 48, 255),
-      )
-      @raylib.draw_rectangle(
-        (wx + 8.0).to_int(),
-        (wy - 42.0).to_int(),
-        (len - 16.0).to_int(),
-        30,
-        @raylib.Color::new(126, 84, 62, 255),
-      )
-      @raylib.draw_line(
-        wx.to_int(),
-        wy.to_int(),
-        (wx + len).to_int(),
-        wy.to_int(),
-        @raylib.Color::new(238, 232, 226, 255),
-      )
-
-      @raylib.draw_circle(
-        (wx + 28.0).to_int(),
-        (wy + 8.0).to_int(),
-        14.0,
-        @raylib.Color::new(38, 30, 28, 255),
-      )
-      @raylib.draw_circle(
-        (wx + len - 28.0).to_int(),
-        (wy + 8.0).to_int(),
-        14.0,
-        @raylib.Color::new(38, 30, 28, 255),
-      )
+      draw_wagon_art(art, wagon, shake_x)
 
       if wagon.loot > 0 {
-        let cx = (wx + len * 0.5).to_int()
-        let cy = (wy - 14.0).to_int()
-        @raylib.draw_rectangle(
-          cx - 12,
-          cy - 10,
-          24,
-          20,
-          @raylib.Color::new(142, 102, 60, 255),
-        )
-        @draw.draw_text(
-          "\{wagon.loot}",
-          cx - 5,
-          cy - 10,
-          18,
-          @raylib.Color::new(246, 230, 186, 255),
-        )
+        draw_loot_art(art, wx + len * 0.5, wy - 14.0, wagon.loot)
       }
     }
 
@@ -1075,76 +971,12 @@ fn main {
 
       let sx = (wagons[wi].x + sheriff.rel_x + shake_x).to_int()
       let sy = (wagons[wi].roof_y - 16.0).to_int()
-
-      let col = if sheriff.hit_cd > 0.0 {
-        @raylib.Color::new(252, 234, 146, 255)
-      } else {
-        @raylib.Color::new(238, 108, 90, 255)
-      }
-
-      @raylib.draw_circle(
-        sx,
-        sy - 22,
-        10.0,
-        @raylib.Color::new(242, 230, 214, 255),
-      )
-      @raylib.draw_rectangle(sx - 10, sy - 12, 20, 24, col)
-      @raylib.draw_line(sx - 8, sy + 12, sx - 12, sy + 28, col)
-      @raylib.draw_line(sx + 8, sy + 12, sx + 12, sy + 28, col)
-
-      @raylib.draw_rectangle(
-        sx - 12,
-        sy - 32,
-        24,
-        4,
-        @raylib.Color::new(82, 52, 38, 255),
-      )
-    }
-
-    let p_col = if player.flash_t > 0.0 {
-      @raylib.Color::new(252, 238, 148, 255)
-    } else {
-      @raylib.Color::new(102, 224, 246, 255)
+      draw_sheriff_art(art, sx, sy, sheriff.hit_cd > 0.0)
     }
 
     let px = (player.x + shake_x).to_int()
     let py = player.y.to_int()
-
-    @raylib.draw_circle(
-      px,
-      py - 52,
-      12.0,
-      @raylib.Color::new(240, 236, 228, 255),
-    )
-    @raylib.draw_rectangle(px - 12, py - 40, 24, 30, p_col)
-    @raylib.draw_line(px - 10, py - 30, px - 22, py - 18, p_col)
-    @raylib.draw_line(px + 10, py - 30, px + 22, py - 18, p_col)
-    @raylib.draw_line(px - 8, py - 10, px - 12, py + 16, p_col)
-    @raylib.draw_line(px + 8, py - 10, px + 12, py + 16, p_col)
-
-    if player.dash_t > 0.0 {
-      @raylib.draw_line(
-        px - 38,
-        py - 36,
-        px - 12,
-        py - 36,
-        @raylib.Color::new(250, 226, 124, 255),
-      )
-      @raylib.draw_line(
-        px - 46,
-        py - 24,
-        px - 20,
-        py - 24,
-        @raylib.Color::new(250, 226, 124, 255),
-      )
-      @raylib.draw_line(
-        px - 38,
-        py - 12,
-        px - 12,
-        py - 12,
-        @raylib.Color::new(250, 226, 124, 255),
-      )
-    }
+    draw_player_art(art, player, px, py, player.dash_t > 0.0)
 
     for bullet in bullets {
       if !bullet.active {
@@ -1421,7 +1253,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
