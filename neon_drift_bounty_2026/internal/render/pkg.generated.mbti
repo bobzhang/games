@@ -3,14 +3,24 @@ package "bobzhang/games/neon_drift_bounty_2026/internal/render"
 
 import {
   "bobzhang/games/neon_drift_bounty_2026/internal/types",
+  "tonyfettes/raylib",
 }
 
 // Values
-pub fn draw_frame(@types.Game) -> Unit
+pub fn draw_frame(@types.Game, GameArt) -> Unit
+
+pub fn load_game_art() -> GameArt
+
+pub fn unload_game_art(GameArt) -> Unit
 
 // Errors
 
 // Types and methods
+pub(all) struct GameArt {
+  city_backdrop : @raylib.Texture
+  road_texture : @raylib.Texture
+  sprite_sheet : @raylib.Texture
+}
 
 // Type aliases
 

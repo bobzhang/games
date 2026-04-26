@@ -364,8 +364,9 @@ pub(all) struct Hazard {
   mut h : Float
   mut timer : Float
   mut warn_t : Float
-} derive(Show)
+} derive(@debug.Debug)
 pub fn Hazard::new() -> Self
+pub impl Show for Hazard
 
 pub(all) enum HazardKind {
   OilSlick

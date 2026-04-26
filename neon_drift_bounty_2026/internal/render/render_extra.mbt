@@ -2,6 +2,7 @@
 /// Draws all active road hazards with warning telegraphs.
 fn @types.Game::draw_hazards(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
@@ -16,12 +17,14 @@ fn @types.Game::draw_hazards(
         // Dark translucent slick with shimmer
         let pulse : Float = 0.5 +
           0.5 * @math.sinf(game.time_s * 3.0 + h.x * 0.01)
-        @raylib.draw_rectangle(
-          (x - h.w * 0.5).to_int(),
-          (y - h.h * 0.5).to_int(),
-          h.w.to_int(),
-          h.h.to_int(),
-          @raylib.Color::new(30, 20, 50, 140 + (pulse * 40.0).to_int()),
+        draw_sprite_cell(
+          art,
+          8,
+          x,
+          y,
+          h.w * 1.34,
+          h.h * 2.2,
+          @raylib.Color::new(255, 255, 255, 188 + (pulse * 38.0).to_int()),
         )
         // Rainbow shimmer line
         @raylib.draw_rectangle(
@@ -45,12 +48,20 @@ fn @types.Game::draw_hazards(
         } else {
           @raylib.Color::new(255, 140, 40, 180)
         }
-        @raylib.draw_rectangle(
-          (x - h.w * 0.5).to_int(),
-          (y - h.h * 0.5).to_int(),
-          h.w.to_int(),
-          h.h.to_int(),
-          col,
+        @raylib.draw_circle(
+          x.to_int(),
+          y.to_int(),
+          @types.maxf(h.w, h.h) * 0.42,
+          alpha_color(col, 54),
+        )
+        draw_sprite_cell(
+          art,
+          9,
+          x,
+          y,
+          h.w * 1.9,
+          @types.maxf(h.h * 2.5, 52.0),
+          @raylib.Color::new(255, 255, 255, col.a.to_int()),
         )
         @raylib.draw_rectangle_lines(
           (x - h.w * 0.5).to_int(),
@@ -72,6 +83,15 @@ fn @types.Game::draw_hazards(
         // Warning circle
         if h.warn_t > 0.0 || h.timer > 0.5 {
           let warn_a = (warn_ratio * 180.0).to_int().clamp(min=40, max=180)
+          draw_sprite_cell(
+            art,
+            10,
+            x,
+            y,
+            h.w * 1.34,
+            h.h * 1.34,
+            @raylib.Color::new(255, 255, 255, warn_a + 54),
+          )
           @raylib.draw_circle_lines(
             x.to_int(),
             y.to_int(),

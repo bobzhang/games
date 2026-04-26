@@ -26,6 +26,14 @@ cd examples && ./_build/native/debug/build/neon_drift_bounty_2026/neon_drift_bou
 - Clear the distance goal for each stage to advance
 - Collect credits from destroyed enemies to increase your score
 
+## Generated Art Assets
+
+This package uses generated raster art from `resources/`:
+
+- `drift_city_backdrop.png` - cyber expressway background for the playfield and title scene
+- `drift_road_texture.png` - wet asphalt road material blended into the procedural swaying road
+- `drift_sprites.png` - transparent 4x3 sprite sheet for the player, enemies, pickups, hazards, and upgrade module
+
 ## Public API Reference
 
 ### Package `neon_drift_bounty_2026` (root)
@@ -193,17 +201,19 @@ cd examples && ./_build/native/debug/build/neon_drift_bounty_2026/neon_drift_bou
 | `draw_bar(x, y, w, h, fill, bg, fg, border)` | Draws a filled progress bar with background and border. |
 | `alpha_color(col, a)` | Returns a color with a replaced alpha channel. |
 | `shake_offset(game)` | Returns a random camera shake displacement. |
-| `draw_sky_backdrop(game)` | Draws the vertical gradient sky background. |
+| `GameArt` | Bundle of generated city, road, and sprite-sheet textures. |
+| `load_game_art() / unload_game_art(art)` | Loads and releases generated textures around the Raylib frame loop. |
+| `draw_sky_backdrop(game, art)` | Draws the generated cyber expressway backdrop with animated ambience. |
 | `draw_city_horizon(game)` | Draws parallax silhouette city building layers. |
-| `draw_road_surface(game)` | Draws the procedurally swaying neon road. |
+| `draw_road_surface(game, art)` | Draws the procedurally swaying neon road with generated asphalt material. |
 | `entity_body_col(kind)` | Returns the primary fill color for an entity kind. |
-| `draw_entity_bike/drone/truck/laser/pickup(e, game)` | Draws a specific entity type with kind-appropriate visuals. |
-| `draw_entities(game)` | Draws all active entities. |
+| `draw_entity_bike/drone/truck/laser/pickup(e, art, game)` | Draws a specific entity type with generated sprite art and kind-appropriate effects. |
+| `draw_entities(game, art)` | Draws all active entities. |
 | `draw_bullets(game)` | Draws all active bullets as colored streaks or orbs. |
 | `draw_sparks(game)` | Draws all active spark particles. |
 | `draw_rings(game)` | Draws all active glow rings as expanding circles. |
-| `draw_afterimages(game)` | Draws all active afterimage ghost trails. |
-| `draw_player(game)` | Draws the player vehicle with muzzle flash, engine glow, and boost afterimages. |
+| `draw_afterimages(game, art)` | Draws all active generated-sprite afterimage ghost trails. |
+| `draw_player(game, art)` | Draws the generated player vehicle with muzzle flash, engine glow, and boost effects. |
 | `draw_hack_pulse(game)` | Draws the hack pulse ring visual while hack is active. |
 | `cooldown_text(cd, total)` | Returns a cooldown label string for ability buttons. |
 | `draw_hud(game)` | Draws the HUD: shield/energy bars, stage progress, score, and ability readout. |
@@ -213,13 +223,14 @@ cd examples && ./_build/native/debug/build/neon_drift_bounty_2026/neon_drift_bou
 | `draw_title_overlay(game)` | Draws the title screen with game name, controls, and start prompt. |
 | `draw_stage_clear_overlay(game)` | Draws the stage-clear banner and next-stage transition. |
 | `draw_game_over_overlay(game)` | Draws the game-over screen with final score and retry prompt. |
-| `pub fn draw_frame(game)` | Top-level render entry point: composes sky, city, road, entities, HUD, and state overlays. |
+| `pub fn draw_frame(game, art)` | Top-level render entry point: composes generated art, city, road, entities, HUD, and state overlays. |
 
 ## Architecture
 
 ```
 neon_drift_bounty_2026/
-├── main.mbt                  # Entry point: window init, game loop
+├── main.mbt                  # Entry point: window/art init, game loop
+├── resources/                # Generated backdrop, road material, and sprite sheet
 └── internal/
     ├── types/
     │   ├── constants.mbt     # All numeric tuning constants
@@ -229,6 +240,7 @@ neon_drift_bounty_2026/
     │   ├── input.mbt         # Per-frame input reading (keyboard, mouse, touch)
     │   └── logic.mbt         # Game simulation: physics, AI, combat, progression
     └── render/
+        ├── art.mbt           # Generated texture loading and sprite helpers
         └── render.mbt        # Rendering: sky, road, entities, HUD, overlays
 ```
 
@@ -247,10 +259,10 @@ main.mbt
             ├─ update_effects       → sparks, rings, afterimages
             └─ update_timers        → cooldowns, combos, stage clear
 
-  └─ draw_frame(game)               [internal/render/render.mbt]
-       ├─ draw_sky_backdrop
+  └─ draw_frame(game, art)          [internal/render/render.mbt]
+       ├─ draw_sky_backdrop        (generated city backdrop)
        ├─ draw_city_horizon         (parallax layers)
-       ├─ draw_road_surface         (procedural swaying road)
+       ├─ draw_road_surface         (generated material on procedural swaying road)
        ├─ draw_entities / draw_bullets / draw_sparks / draw_rings / draw_afterimages
        ├─ draw_player
        ├─ draw_hud
@@ -260,7 +272,7 @@ main.mbt
 ### Key design decisions
 
 - **Object pools**: All entities, bullets, sparks, rings, and afterimages use fixed-size arrays allocated once at startup. Slots are recycled via `alloc_*_slot` functions that scan for the first inactive entry.
-- **Procedural road**: The road center and width sway sinusoidally as a function of scroll distance and time, giving an organic curve feel without authored level data.
+- **Generated art over procedural gameplay**: The backdrop, road material, vehicles, pickups, and hazards are generated raster assets, while the road center and width still sway procedurally as a function of scroll distance and time.
 - **Combo and score scaling**: Every kill calls `score_gain(combo)` which multiplies a base credit value by the current combo. The combo resets on a timer, rewarding sustained aggressive play.
 - **Ability system**: Boost grants a short speed surge on a cooldown. Hack emits a pulse that instantly kills cloaked enemies within radius, enabling otherwise difficult encounters. Both are driven by energy.
 - **Stage progression**: Stages increase scroll speed by `stage_scroll_gain` and extend the distance goal by `stage_distance_gain`, providing a smooth difficulty ramp without hand-authored levels.

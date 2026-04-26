@@ -62,7 +62,12 @@ pub(all) struct Hazard {
   mut h : Float
   mut timer : Float
   mut warn_t : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub impl Show for Hazard with output(self, logger) {
+  Debug::to_repr(self).output(logger)
+}
 
 ///|
 /// Maximum number of active road hazards.
