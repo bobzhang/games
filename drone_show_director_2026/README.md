@@ -1,6 +1,6 @@
 # Drone Show Director 2026
 
-A real-time drone choreography management game set on a nighttime aerial stage. As the director, you command a swarm of 58 drones to form spectacular patterns -- Solar Ring, Dragon Spiral, River Wave, Lotus Bloom, and Phoenix Wings -- while fulfilling audience requests within tight deadlines. The show takes place against a dark sky punctuated by fireworks and atmospheric wind gusts that threaten to scatter your formation.
+A real-time drone choreography management game set on a nighttime aerial stage. As the director, you command a swarm of 58 drones to form spectacular patterns -- Solar Ring, Dragon Spiral, River Wave, Lotus Bloom, and Phoenix Wings -- while fulfilling audience requests within tight deadlines. The show uses generated show-stage artwork, director/station sprites, drone lights, wind gusts, and firework bursts, with procedural fallbacks retained if a texture is unavailable.
 
 The core gameplay loop revolves around switching between five formation patterns to match incoming audience requests, maintaining formation quality above each request's minimum threshold, and managing drone health (battery and temperature). Three ground stations (Recharge, Cooling, Broadcast) provide critical support: recharging batteries, cooling overheated drones, or boosting formation sync. The director moves across the field, activating stations and using a boost ability for faster traversal at the cost of energy.
 
@@ -96,6 +96,8 @@ You have 7 minutes (420 seconds) to reach a score target of 9,800 while maintain
 | `formation_quality` | `(Array[Drone], Int, Float, Float, Float) -> Float` | Calculates formation quality (0-100) based on drone distances to pattern targets and state penalties |
 | `nearest_station_kind` | `(Array[Station], Float, Float, Float) -> Int` | Returns the kind of the nearest station within a radius, or -1 if none |
 | `active_requests_count` | `(Array[Request]) -> Int` | Counts the number of currently active audience requests |
+| `load_assets` | `() -> Unit` | Loads generated textures from `resources/` and applies bilinear filtering |
+| `unload_assets` | `() -> Unit` | Releases generated textures during shutdown |
 | `draw_background` | `(Int, Int, Int, Int, Float) -> Unit` | Renders the dark gradient background with animated scan lines |
 | `draw_stage` | `(Float, Float, Float, Float) -> Unit` | Renders the circular performance stage with concentric ring effects |
 | `draw_targets` | `(Array[Drone], Int, Float, Float, Float, Float) -> Unit` | Renders target position markers for the current formation pattern |
@@ -118,8 +120,15 @@ You have 7 minutes (420 seconds) to reach a score target of 9,800 while maintain
 
 ```
 drone_show_director_2026/
-├── main.mbt              — Complete game: types, logic, rendering, entry point
-└── moon.pkg              — Package config with raylib and math imports
+├── main.mbt              - Complete game: types, logic, rendering, entry point
+├── moon.pkg              - Package config with raylib and math imports
+└── resources/            - Generated stage, sprite, and effect textures
+    ├── director_sprite.png
+    ├── drone_light.png
+    ├── firework_burst.png
+    ├── show_stage_background.png
+    ├── station_pad.png
+    └── wind_gust.png
 ```
 
 This is a single-file game architecture where all structs, game logic, rendering, and the main loop reside in `main.mbt`. The file is organized top-down: struct definitions, utility functions, pattern computation, entity management (spawn/clear/update), rendering functions, and finally the main game loop.
@@ -128,7 +137,7 @@ This is a single-file game architecture where all structs, game logic, rendering
 
 1. **Input**: The main loop reads keyboard state (`is_key_down`/`is_key_pressed`) and touch input (`get_touch_position`/`get_touch_point_count`) to determine movement direction, boost, action, and pattern cycling.
 2. **Update**: Director position is updated with velocity and clamped to world bounds. Drones are attracted toward `pattern_target` positions with strength modified by sync state. Gusts apply forces to nearby drones. Request progress accumulates when the current pattern matches and quality exceeds the minimum. Battery drains and temperature rises based on speed and storm pressure.
-3. **Render**: `draw_background` and `draw_stage` establish the scene, then entities are layered: targets, stations, gusts, fireworks, drones, particles, director. The HUD panel and request list are drawn to the right side. Touch controls overlay the bottom corners.
+3. **Render**: `load_assets` prepares generated textures at startup. `draw_background` and `draw_stage` establish the scene, then entities are layered: targets, generated station pads, generated gusts, generated firework bursts, generated drone lights, particles, and the generated director sprite. The HUD panel and request list are drawn to the right side. Touch controls overlay the bottom corners.
 
 ### Key Design Patterns
 
@@ -136,6 +145,7 @@ This is a single-file game architecture where all structs, game logic, rendering
 - **State machine**: Integer `state` variable drives top-level flow (0=menu, 1=play, 2=win, 3=lose) with distinct update and render paths.
 - **Wave-based difficulty**: `wave` increases with score, scaling request deadlines, quality thresholds, rewards, and gust spawn rates via `storm_pressure` (derived from elapsed time).
 - **Formation system**: Five parametric pattern functions (`pattern_target`) compute per-drone target positions using trigonometric formulas with a continuously advancing `pattern_phase`.
+- **Texture fallback system**: Generated art helpers return `false` when a texture is missing, so each renderer can use the original procedural shape path instead of failing at draw time.
 - **Combo system**: Consecutive fulfilled requests build a combo multiplier (capped at 30) that boosts score gains and reputation recovery.
 - **Multi-input support**: All interactive elements check both keyboard and touch/mouse input through `pointer_on_rect` and `pointer_on_circle` helpers.
 

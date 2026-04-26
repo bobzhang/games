@@ -99,6 +99,30 @@ struct Vec2f {
 }
 
 ///|
+/// Generated aerial stage background texture.
+let tex_show_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated show director sprite.
+let tex_director : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated support station sprite.
+let tex_station : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated drone light sprite.
+let tex_drone_light : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated wind gust sprite.
+let tex_wind_gust : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated firework burst sprite.
+let tex_firework_burst : Ref[@raylib.Texture?] = { val: None }
+
+///|
 /// Returns v clamped to the range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -619,6 +643,308 @@ fn active_requests_count(requests : Array[Request]) -> Int {
 }
 
 ///|
+/// Loads one generated Drone Show Director texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "drone_show_director_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Drone Show Director render assets.
+fn load_assets() -> Unit {
+  tex_show_background.val = Some(load_art_texture("show_stage_background.png"))
+  tex_director.val = Some(load_art_texture("director_sprite.png"))
+  tex_station.val = Some(load_art_texture("station_pad.png"))
+  tex_drone_light.val = Some(load_art_texture("drone_light.png"))
+  tex_wind_gust.val = Some(load_art_texture("wind_gust.png"))
+  tex_firework_burst.val = Some(load_art_texture("firework_burst.png"))
+}
+
+///|
+/// Unloads generated Drone Show Director render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_show_background)
+  unload(tex_director)
+  unload(tex_station)
+  unload(tex_drone_light)
+  unload(tex_wind_gust)
+  unload(tex_firework_burst)
+}
+
+///|
+/// Returns true when the generated show-stage background is loaded.
+fn has_show_background_art() -> Bool {
+  match tex_show_background.val {
+    Some(_) => true
+    None => false
+  }
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on the destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated sprite scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  max_w : Float,
+  max_h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, x, y, w, h, tint)
+}
+
+///|
+/// Draws the generated show-stage background inside the game world.
+fn draw_show_background_art(
+  world_x : Int,
+  world_y : Int,
+  world_w : Int,
+  world_h : Int,
+) -> Bool {
+  match tex_show_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        Float::from_int(world_x),
+        Float::from_int(world_y),
+        Float::from_int(world_w),
+        Float::from_int(world_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        world_x,
+        world_y,
+        world_w,
+        world_h,
+        @raylib.Color::new(4, 8, 16, 38),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated station pad art.
+fn draw_station_art(
+  station : Station,
+  tint : @raylib.Color,
+  near : Bool,
+) -> Bool {
+  match tex_station.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        station.x + station.w * 0.5,
+        station.y + station.h * 0.5,
+        station.w * 1.12,
+        station.h * 1.26,
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        (station.x + 10.0).to_int(),
+        (station.y + station.h - 20.0).to_int(),
+        (station.w - 20.0).to_int(),
+        8,
+        tint,
+      )
+      if near {
+        @raylib.draw_rectangle_lines(
+          station.x.to_int() - 2,
+          station.y.to_int() - 2,
+          station.w.to_int() + 4,
+          station.h.to_int() + 4,
+          @raylib.Color::new(246, 252, 255, 226),
+        )
+      }
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated gust art.
+fn draw_gust_art(x : Int, y : Int, radius : Float, alpha : Int) -> Bool {
+  match tex_wind_gust.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        radius * 2.22,
+        radius * 2.22,
+        @raylib.Color::new(196, 230, 255, alpha.clamp(min=0, max=210)),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws generated drone-light art.
+fn draw_drone_art(
+  x : Float,
+  y : Float,
+  radius : Float,
+  color : @raylib.Color,
+  flash : Float,
+) -> Bool {
+  match tex_drone_light.val {
+    Some(texture) => {
+      @raylib.draw_circle_v(
+        @raylib.Vector2::new(x, y),
+        radius + 5.0 + flash * 4.0,
+        @raylib.Color::new(
+          color.r.to_int(),
+          color.g.to_int(),
+          color.b.to_int(),
+          40,
+        ),
+      )
+      draw_texture_fit(texture, x, y, radius * 2.8, radius * 2.8, color)
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated firework burst art.
+fn draw_firework_art(firework : Firework) -> Bool {
+  match tex_firework_burst.val {
+    Some(texture) => {
+      let burst_ratio : Float = clampf(1.0 - firework.burst_t / 1.1, 0.0, 1.0)
+      let size : Float = 24.0 + burst_ratio * 52.0
+      draw_texture_fit(
+        texture,
+        firework.x,
+        firework.y,
+        size,
+        size,
+        @raylib.Color::new(255, 246, 218, 210),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated show director art.
+fn draw_director_art(director : Director, bob : Float) -> Bool {
+  match tex_director.val {
+    Some(texture) => {
+      @raylib.draw_ellipse(
+        director.x.to_int(),
+        (director.y + 16.0).to_int(),
+        22.0,
+        8.0,
+        @raylib.Color::new(0, 8, 16, 112),
+      )
+      draw_texture_fit(
+        texture,
+        director.x,
+        director.y - 8.0 + bob,
+        56.0,
+        76.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Draws the animated dark gradient background with horizontal light-wave bands.
 fn draw_background(
   world_x : Int,
@@ -627,14 +953,16 @@ fn draw_background(
   world_h : Int,
   scene_t : Float,
 ) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
-    world_x,
-    world_y,
-    world_w,
-    world_h,
-    @raylib.Color::new(14, 22, 38, 255),
-    @raylib.Color::new(9, 14, 26, 255),
-  )
+  if !draw_show_background_art(world_x, world_y, world_w, world_h) {
+    @raylib.draw_rectangle_gradient_v(
+      world_x,
+      world_y,
+      world_w,
+      world_h,
+      @raylib.Color::new(14, 22, 38, 255),
+      @raylib.Color::new(9, 14, 26, 255),
+    )
+  }
 
   for i in 0..<22 {
     let y0 : Float = Float::from_int(world_y) +
@@ -659,7 +987,16 @@ fn draw_stage(cx : Float, cy : Float, radius : Float, scene_t : Float) -> Unit {
   @raylib.draw_circle_v(
     @raylib.Vector2::new(cx, cy),
     radius,
-    @raylib.Color::new(26, 34, 54, 228),
+    @raylib.Color::new(
+      26,
+      34,
+      54,
+      if has_show_background_art() {
+        58
+      } else {
+        228
+      },
+    ),
   )
   @raylib.draw_circle_lines(
     cx.to_int(),
@@ -722,27 +1059,29 @@ fn draw_stations(
       _ => @raylib.Color::new(246, 202, 112, if near { 238 } else { 172 })
     }
 
-    @raylib.draw_rectangle(
-      s.x.to_int(),
-      s.y.to_int(),
-      s.w.to_int(),
-      s.h.to_int(),
-      @raylib.Color::new(24, 30, 44, 232),
-    )
-    @raylib.draw_rectangle(
-      (s.x + 4.0).to_int(),
-      (s.y + 4.0).to_int(),
-      (s.w - 8.0).to_int(),
-      (s.h - 8.0).to_int(),
-      base,
-    )
-    @raylib.draw_rectangle_lines(
-      s.x.to_int(),
-      s.y.to_int(),
-      s.w.to_int(),
-      s.h.to_int(),
-      @raylib.Color::new(224, 234, 248, 212),
-    )
+    if !draw_station_art(s, base, near) {
+      @raylib.draw_rectangle(
+        s.x.to_int(),
+        s.y.to_int(),
+        s.w.to_int(),
+        s.h.to_int(),
+        @raylib.Color::new(24, 30, 44, 232),
+      )
+      @raylib.draw_rectangle(
+        (s.x + 4.0).to_int(),
+        (s.y + 4.0).to_int(),
+        (s.w - 8.0).to_int(),
+        (s.h - 8.0).to_int(),
+        base,
+      )
+      @raylib.draw_rectangle_lines(
+        s.x.to_int(),
+        s.y.to_int(),
+        s.w.to_int(),
+        s.h.to_int(),
+        @raylib.Color::new(224, 234, 248, 212),
+      )
+    }
 
     let label : String = match s.kind {
       0 => "RECHARGE"
@@ -778,18 +1117,20 @@ fn draw_gusts(gusts : Array[Gust], scene_t : Float) -> Unit {
     }
     let pulse : Float = @math.sinf(scene_t * 5.0 + gust.pulse) * 0.5 + 0.5
     let rr : Float = gust.radius * (0.86 + pulse * 0.18)
-    @raylib.draw_circle_lines(
-      gust.x.to_int(),
-      gust.y.to_int(),
-      rr,
-      @raylib.Color::new(120, 190, 255, 166),
-    )
-    @raylib.draw_circle_lines(
-      gust.x.to_int(),
-      gust.y.to_int(),
-      rr * 0.62,
-      @raylib.Color::new(176, 224, 255, 122),
-    )
+    if !draw_gust_art(gust.x.to_int(), gust.y.to_int(), rr, 148) {
+      @raylib.draw_circle_lines(
+        gust.x.to_int(),
+        gust.y.to_int(),
+        rr,
+        @raylib.Color::new(120, 190, 255, 166),
+      )
+      @raylib.draw_circle_lines(
+        gust.x.to_int(),
+        gust.y.to_int(),
+        rr * 0.62,
+        @raylib.Color::new(176, 224, 255, 122),
+      )
+    }
   }
 }
 
@@ -815,28 +1156,26 @@ fn draw_drones(drones : Array[Drone], scene_t : Float) -> Unit {
       7.2
     }
 
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(d.x, d.y),
-      radius,
-      @raylib.Color::new(
-        red,
-        green,
-        clampf(Float::from_int(blue), 50.0, 255.0).to_int(),
-        240,
-      ),
-    )
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(d.x, d.y),
-      2.6,
-      @raylib.Color::new(250, 252, 255, 240),
-    )
-
     let flash : Float = @math.sinf(scene_t * 9.0 + d.flash_t) * 0.5 + 0.5
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(d.x, d.y),
-      10.0 + flash * 4.0,
-      @raylib.Color::new(182, 224, 255, 30 + (flash * 50.0).to_int()),
+    let drone_col = @raylib.Color::new(
+      red,
+      green,
+      clampf(Float::from_int(blue), 50.0, 255.0).to_int(),
+      240,
     )
+    if !draw_drone_art(d.x, d.y, radius, drone_col, flash) {
+      @raylib.draw_circle_v(@raylib.Vector2::new(d.x, d.y), radius, drone_col)
+      @raylib.draw_circle_v(
+        @raylib.Vector2::new(d.x, d.y),
+        2.6,
+        @raylib.Color::new(250, 252, 255, 240),
+      )
+      @raylib.draw_circle_v(
+        @raylib.Vector2::new(d.x, d.y),
+        10.0 + flash * 4.0,
+        @raylib.Color::new(182, 224, 255, 30 + (flash * 50.0).to_int()),
+      )
+    }
   }
 }
 
@@ -847,17 +1186,19 @@ fn draw_fireworks(fireworks : Array[Firework]) -> Unit {
     if !firework.active {
       continue
     }
-    @raylib.draw_circle_v(
-      @raylib.Vector2::new(firework.x, firework.y),
-      3.2,
-      match firework.color {
-        0 => @raylib.Color::new(255, 156, 126, 220)
-        1 => @raylib.Color::new(132, 228, 166, 220)
-        2 => @raylib.Color::new(134, 210, 255, 220)
-        3 => @raylib.Color::new(244, 194, 255, 220)
-        _ => @raylib.Color::new(255, 238, 152, 220)
-      },
-    )
+    if !draw_firework_art(firework) {
+      @raylib.draw_circle_v(
+        @raylib.Vector2::new(firework.x, firework.y),
+        3.2,
+        match firework.color {
+          0 => @raylib.Color::new(255, 156, 126, 220)
+          1 => @raylib.Color::new(132, 228, 166, 220)
+          2 => @raylib.Color::new(134, 210, 255, 220)
+          3 => @raylib.Color::new(244, 194, 255, 220)
+          _ => @raylib.Color::new(255, 238, 152, 220)
+        },
+      )
+    }
   }
 }
 
@@ -890,16 +1231,18 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 /// Draws the director character with a bobbing animation and sync pulse ring when active.
 fn draw_director(director : Director, scene_t : Float) -> Unit {
   let bob : Float = @math.sinf(scene_t * 11.0 + director.step_t * 0.07) * 1.2
-  @raylib.draw_circle_v(
-    @raylib.Vector2::new(director.x, director.y + bob),
-    16.0,
-    @raylib.Color::new(254, 220, 160, 242),
-  )
-  @raylib.draw_circle_v(
-    @raylib.Vector2::new(director.x, director.y - 16.0 + bob),
-    9.5,
-    @raylib.Color::new(252, 252, 255, 244),
-  )
+  if !draw_director_art(director, bob) {
+    @raylib.draw_circle_v(
+      @raylib.Vector2::new(director.x, director.y + bob),
+      16.0,
+      @raylib.Color::new(254, 220, 160, 242),
+    )
+    @raylib.draw_circle_v(
+      @raylib.Vector2::new(director.x, director.y - 16.0 + bob),
+      9.5,
+      @raylib.Color::new(252, 252, 255, 244),
+    )
+  }
 
   if director.sync_t > 0.0 {
     let pulse : Float = @math.sinf(director.sync_t * 8.0) * 0.5 + 0.5
@@ -1524,10 +1867,12 @@ fn main {
   let sw : Int = 1700
   let sh : Int = 960
   @raylib.init_window(sw, sh, "raylib [game] drone show director 2026")
-  @draw.cleanup()
   defer @raylib.close_window()
+  defer @draw.cleanup()
   @raylib.set_target_fps(120)
   @draw.init_font()
+  load_assets()
+  defer unload_assets()
 
   let world_x : Int = 20
   let world_y : Int = 20
