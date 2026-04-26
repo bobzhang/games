@@ -6,6 +6,14 @@ The kitchen workflow follows a two-phase pipeline: first, select an order and be
 
 A combo system rewards consecutive successful deliveries with bonus points (18 per combo level), while a boost ability (Space key, 1.15s duration, 5s cooldown) accelerates both prep and cooking progress. Scoring factors in the base dish reward, remaining patience ratio, cooking quality (penalized by overcooking), and combo multiplier. The spawn rate of new orders accelerates as the game progresses, creating an ever-increasing pace that tests the player's multitasking ability.
 
+## Generated Art Assets
+
+The package now includes generated raster artwork under `resources/`:
+
+- `chef_market_backdrop.png` — lantern-lit night market kitchen backdrop used as the full-scene base layer.
+- `chef_counter_panel.png` — warm wood, metal, and tile station material drawn across panels and station surfaces.
+- `chef_sprites.png` — transparent 4x3 sprite sheet for dish icons, prep board, grill, wok, serving pass, order ticket, lantern, boost steam, and success burst.
+
 ## Build and Run
 
 ```bash
@@ -139,7 +147,9 @@ moon build --target native night_market_chef_duel_2026/
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `draw_frame` | `(@types.Game) -> Unit` | Main render entry point: draws background, all stations, orders panel, cursor, HUD, hint line, and state overlays |
+| `load_game_art` | `() -> GameArt` | Loads generated backdrop, station panel, and sprite-sheet textures |
+| `unload_game_art` | `(GameArt) -> Unit` | Releases generated textures before shutdown |
+| `draw_frame` | `(@types.Game, GameArt) -> Unit` | Main render entry point: draws generated background/assets, all stations, orders panel, cursor, HUD, hint line, and state overlays |
 
 ### Package `night_market_chef_duel_2026` (main)
 
@@ -159,6 +169,7 @@ moon build --target native night_market_chef_duel_2026/
 night_market_chef_duel_2026/
 ├── main.mbt                    — Entry point: window init, game loop
 ├── moon.pkg                    — Main package config with imports
+├── resources/                  — Generated PNG backdrop, counter panel, and sprite sheet
 └── internal/
     ├── types/
     │   ├── types.mbt           — Enums (GameState, Dish, Lane, CookStage), structs (Order, InputState, CookingState, Game), constructors
@@ -170,6 +181,7 @@ night_market_chef_duel_2026/
     │   ├── logic.mbt           — Core game logic: order spawning, cooking pipeline, serving, cursor navigation, boost, state transitions
     │   └── moon.pkg            — Package config
     └── render/
+        ├── art.mbt             — Generated texture loading, unloading, and draw helpers
         ├── render.mbt          — All rendering: background, stations, orders, cursor, HUD, overlays
         └── moon.pkg            — Package config
 ```
@@ -182,7 +194,7 @@ Clean separation of concerns across four packages. The `types` package defines a
 
 2. **Update**: The `update_game` function dispatches to state-specific handlers. In the `Play` state: cursor navigation uses a spatial nearest-neighbor algorithm (`move_cursor`) that finds the closest node in the pressed direction across all 10 nodes; J presses are routed based on cursor position (order slot -> select, prep -> start/advance prep, grill/wok -> advance heat, pass -> no action); K presses serve at the pass or cancel cooking/deselect orders; order patience counts down and expired orders register failures; new orders spawn on a timer that accelerates with game progression; the boost system ticks down active time and cooldown; cooking quality degrades passively at the serve pass.
 
-3. **Rendering**: `draw_frame` renders in layer order: gradient background with animated lantern circles, three background panels (order queue area, cooking area, serve area), order slots with dish colors and patience bars, prep/grill/wok/pass stations with progress bars and animations (grill flames), pulsing cursor ring, HUD bar with score/combo/served/failed/boost status, hint line, and state overlays (title/pause/game over).
+3. **Rendering**: `draw_frame` renders in layer order: generated night market backdrop, generated-material queue/cooking/serve panels, generated lantern accents, order slots with generated dish icons and patience bars, prep/grill/wok/pass stations with generated equipment sprites, progress bars and animations (grill flames), pulsing cursor ring, HUD bar with score/combo/served/failed/boost status, hint line, and state overlays (title/pause/game over).
 
 ### Key Design Patterns
 

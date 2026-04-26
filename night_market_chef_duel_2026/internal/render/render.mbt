@@ -11,14 +11,14 @@ fn draw_center_text(
 }
 
 ///|
-/// Returns the display colour associated with the given dish type.
-fn dish_color(dish : @types.Dish) -> @raylib.Color {
+/// Returns the generated sprite-sheet cell for a dish icon.
+fn dish_sprite_index(dish : @types.Dish) -> Int {
   match dish {
-    Skewers => @raylib.Color::new(243, 139, 78, 255)
-    Noodles => @raylib.Color::new(247, 208, 82, 255)
-    Squid => @raylib.Color::new(232, 104, 115, 255)
-    FriedRice => @raylib.Color::new(115, 205, 124, 255)
-    DishNone => @raylib.Color::new(210, 210, 210, 255)
+    Skewers => 0
+    Noodles => 1
+    Squid => 2
+    FriedRice => 3
+    DishNone => 8
   }
 }
 
@@ -53,14 +53,21 @@ fn progress_bar(
 
 ///|
 /// Draws the gradient background, decorative lanterns, station area panels, and flash overlay.
-fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
+fn @types.Game::draw_background(game : @types.Game, art : GameArt) -> Unit {
+  draw_texture_cover(
+    art.market_backdrop,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 234),
+  )
+  @raylib.draw_rectangle(
     0,
     0,
     @types.screen_w,
     @types.screen_h,
-    @raylib.Color::new(18, 22, 40, 255),
-    @raylib.Color::new(42, 24, 26, 255),
+    @raylib.Color::new(18, 10, 12, 58),
   )
 
   for i in 0..<14 {
@@ -70,20 +77,25 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
       @math.sinf(game.elapsed_t * 0.6 + fi * 0.9) * 18.0
     let y : Float = 62.0 + @math.cosf(game.elapsed_t * 0.9 + fi * 0.6) * 6.0
 
-    @raylib.draw_circle(
-      x.to_int(),
-      y.to_int(),
-      20.0,
-      @raylib.Color::new(238, 102 + i * 5, 84, 90),
-    )
-    @raylib.draw_circle(
-      x.to_int(),
-      (y + 1.0).to_int(),
-      12.0,
-      @raylib.Color::new(255, 196, 124, 130),
+    draw_sprite_cell(
+      art,
+      9,
+      x,
+      y + 8.0,
+      54.0,
+      54.0,
+      @raylib.Color::new(255, 255, 255, 125),
     )
   }
 
+  draw_texture_rect(
+    art.counter_panel,
+    20.0,
+    Float::from_int(@types.hud_h + 20),
+    350.0,
+    520.0,
+    @raylib.Color::new(235, 222, 205, 206),
+  )
   @raylib.draw_rectangle(
     20,
     @types.hud_h + 20,
@@ -91,12 +103,28 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
     520,
     @raylib.Color::new(33, 40, 58, 184),
   )
+  draw_texture_rect(
+    art.counter_panel,
+    380.0,
+    Float::from_int(@types.hud_h + 20),
+    500.0,
+    520.0,
+    @raylib.Color::new(246, 226, 206, 214),
+  )
   @raylib.draw_rectangle(
     380,
     @types.hud_h + 20,
     500,
     520,
     @raylib.Color::new(52, 35, 37, 165),
+  )
+  draw_texture_rect(
+    art.counter_panel,
+    900.0,
+    Float::from_int(@types.hud_h + 20),
+    360.0,
+    520.0,
+    @raylib.Color::new(238, 226, 190, 210),
   )
   @raylib.draw_rectangle(
     900,
@@ -120,7 +148,11 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a single order slot showing dish name, ticket number, and patience bar.
-fn @types.Game::draw_order_slot(game : @types.Game, slot : Int) -> Unit {
+fn @types.Game::draw_order_slot(
+  game : @types.Game,
+  slot : Int,
+  art : GameArt,
+) -> Unit {
   let x = @types.orders_x - 122.0
   let y = @types.order_node_y(slot) - 28.0
   let w = 248
@@ -151,10 +183,19 @@ fn @types.Game::draw_order_slot(game : @types.Game, slot : Int) -> Unit {
 
   if active {
     @raylib.draw_circle(
-      (x + 22.0).to_int(),
+      (x + 24.0).to_int(),
       (y + 29.0).to_int(),
-      10.0,
-      dish_color(game.orders[slot].dish),
+      17.0,
+      @raylib.Color::new(12, 10, 8, 130),
+    )
+    draw_sprite_cell(
+      art,
+      dish_sprite_index(game.orders[slot].dish),
+      x + 24.0,
+      y + 29.0,
+      52.0,
+      52.0,
+      @raylib.Color::new(255, 255, 255, 255),
     )
 
     @draw.draw_text(
@@ -183,9 +224,18 @@ fn @types.Game::draw_order_slot(game : @types.Game, slot : Int) -> Unit {
       patience_color(ratio),
     )
   } else {
+    draw_sprite_cell(
+      art,
+      8,
+      x + 24.0,
+      y + 29.0,
+      42.0,
+      42.0,
+      @raylib.Color::new(255, 255, 255, 92),
+    )
     @draw.draw_text(
       "No order",
-      (x + 18.0).to_int(),
+      (x + 50.0).to_int(),
       (y + 18.0).to_int(),
       22,
       @raylib.Color::new(126, 129, 144, 190),
@@ -195,7 +245,7 @@ fn @types.Game::draw_order_slot(game : @types.Game, slot : Int) -> Unit {
 
 ///|
 /// Draws the QUEUE label and all order slot rows in the left panel.
-fn @types.Game::draw_orders_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_orders_panel(game : @types.Game, art : GameArt) -> Unit {
   @draw.draw_text(
     "QUEUE",
     72,
@@ -205,7 +255,7 @@ fn @types.Game::draw_orders_panel(game : @types.Game) -> Unit {
   )
 
   for i in 0..<@types.max_orders {
-    game.draw_order_slot(i)
+    game.draw_order_slot(i, art)
   }
 }
 
@@ -219,10 +269,19 @@ fn draw_station_base(
   h : Int,
   fill : @raylib.Color,
   border : @raylib.Color,
+  art : GameArt,
 ) -> Unit {
   let rx = (x - Float::from_int(w) * 0.5).to_int()
   let ry = (y - Float::from_int(h) * 0.5).to_int()
 
+  draw_texture_rect(
+    art.counter_panel,
+    Float::from_int(rx),
+    Float::from_int(ry),
+    Float::from_int(w),
+    Float::from_int(h),
+    @raylib.Color::new(255, 242, 224, 218),
+  )
   @raylib.draw_rectangle(rx, ry, w, h, fill)
   @raylib.draw_rectangle_lines(rx, ry, w, h, border)
 
@@ -238,7 +297,7 @@ fn draw_station_base(
 
 ///|
 /// Draws the prep station with active dish name and prep progress bar when cooking is in progress.
-fn @types.Game::draw_prep_station(game : @types.Game) -> Unit {
+fn @types.Game::draw_prep_station(game : @types.Game, art : GameArt) -> Unit {
   let hot = game.cursor == PrepStation
   let working = game.cooking.active && game.cooking.stage == Prep
 
@@ -258,14 +317,17 @@ fn @types.Game::draw_prep_station(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(188, 198, 214, 180)
     },
+    art,
   )
 
-  @raylib.draw_rectangle(
-    (@types.prep_x - 74.0).to_int(),
-    (@types.prep_y - 18.0).to_int(),
-    148,
-    36,
-    @raylib.Color::new(38, 50, 69, 220),
+  draw_sprite_cell(
+    art,
+    4,
+    @types.prep_x,
+    @types.prep_y - 6.0,
+    128.0,
+    92.0,
+    @raylib.Color::new(255, 255, 255, 238),
   )
 
   if working {
@@ -282,6 +344,15 @@ fn @types.Game::draw_prep_station(game : @types.Game) -> Unit {
       (@types.prep_y - 52.0).to_int(),
       20,
       @raylib.Color::new(244, 248, 252, 235),
+    )
+    draw_sprite_cell(
+      art,
+      dish_sprite_index(game.cooking.dish),
+      @types.prep_x + 72.0,
+      @types.prep_y - 18.0,
+      52.0,
+      52.0,
+      @raylib.Color::new(255, 255, 255, 235),
     )
 
     progress_bar(
@@ -306,7 +377,7 @@ fn @types.Game::draw_prep_station(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the grill station with animated flame effects and a cook progress bar for grill-lane dishes.
-fn @types.Game::draw_grill_station(game : @types.Game) -> Unit {
+fn @types.Game::draw_grill_station(game : @types.Game, art : GameArt) -> Unit {
   let hot = game.cursor == GrillStation
   let working = game.cooking.active &&
     game.cooking.stage == Heat &&
@@ -328,6 +399,17 @@ fn @types.Game::draw_grill_station(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(212, 172, 156, 190)
     },
+    art,
+  )
+
+  draw_sprite_cell(
+    art,
+    5,
+    @types.grill_x,
+    @types.grill_y + 2.0,
+    142.0,
+    106.0,
+    @raylib.Color::new(255, 255, 255, 238),
   )
 
   for i in 0..<5 {
@@ -344,6 +426,15 @@ fn @types.Game::draw_grill_station(game : @types.Game) -> Unit {
   }
 
   if working {
+    draw_sprite_cell(
+      art,
+      dish_sprite_index(game.cooking.dish),
+      @types.grill_x + 72.0,
+      @types.grill_y - 22.0,
+      56.0,
+      56.0,
+      @raylib.Color::new(255, 255, 255, 238),
+    )
     let need = @types.dish_cook_need(game.cooking.dish)
     let ratio : Float = if need <= 0.01 {
       0.0
@@ -364,7 +455,7 @@ fn @types.Game::draw_grill_station(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the wok station with a circular wok graphic and a cook progress bar for wok-lane dishes.
-fn @types.Game::draw_wok_station(game : @types.Game) -> Unit {
+fn @types.Game::draw_wok_station(game : @types.Game, art : GameArt) -> Unit {
   let hot = game.cursor == WokStation
   let working = game.cooking.active &&
     game.cooking.stage == Heat &&
@@ -386,22 +477,29 @@ fn @types.Game::draw_wok_station(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(168, 220, 187, 180)
     },
+    art,
   )
 
-  @raylib.draw_circle(
-    @types.wok_x.to_int(),
-    (@types.wok_y + 4.0).to_int(),
-    42.0,
-    @raylib.Color::new(38, 46, 55, 230),
-  )
-  @raylib.draw_circle_lines(
-    @types.wok_x.to_int(),
-    (@types.wok_y + 4.0).to_int(),
-    42.0,
-    @raylib.Color::new(212, 228, 233, 140),
+  draw_sprite_cell(
+    art,
+    6,
+    @types.wok_x,
+    @types.wok_y,
+    132.0,
+    112.0,
+    @raylib.Color::new(255, 255, 255, 240),
   )
 
   if working {
+    draw_sprite_cell(
+      art,
+      dish_sprite_index(game.cooking.dish),
+      @types.wok_x + 70.0,
+      @types.wok_y - 22.0,
+      56.0,
+      56.0,
+      @raylib.Color::new(255, 255, 255, 238),
+    )
     let need = @types.dish_cook_need(game.cooking.dish)
     let ratio : Float = if need <= 0.01 {
       0.0
@@ -422,7 +520,7 @@ fn @types.Game::draw_wok_station(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the serve-pass station showing the ready dish and its quality bar, or an idle prompt.
-fn @types.Game::draw_pass_station(game : @types.Game) -> Unit {
+fn @types.Game::draw_pass_station(game : @types.Game, art : GameArt) -> Unit {
   let hot = game.cursor == PassStation
 
   draw_station_base(
@@ -441,14 +539,28 @@ fn @types.Game::draw_pass_station(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(214, 208, 170, 180)
     },
+    art,
+  )
+
+  draw_sprite_cell(
+    art,
+    7,
+    @types.pass_x,
+    @types.pass_y - 16.0,
+    124.0,
+    96.0,
+    @raylib.Color::new(255, 255, 255, 230),
   )
 
   if game.ready_dish != DishNone {
-    @raylib.draw_circle(
-      (@types.pass_x - 78.0).to_int(),
-      (@types.pass_y + 8.0).to_int(),
-      18.0,
-      dish_color(game.ready_dish),
+    draw_sprite_cell(
+      art,
+      dish_sprite_index(game.ready_dish),
+      @types.pass_x - 76.0,
+      @types.pass_y + 6.0,
+      64.0,
+      64.0,
+      @raylib.Color::new(255, 255, 255, 245),
     )
 
     @draw.draw_text(
@@ -775,16 +887,16 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Render a full frame: kitchen, HUD, cursor, and overlays.
-pub fn draw_frame(game : @types.Game) -> Unit {
+/// Render a full frame: kitchen, generated art, HUD, cursor, and overlays.
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
   @raylib.clear_background(@raylib.Color::new(0, 0, 0, 255))
 
-  game.draw_background()
-  game.draw_orders_panel()
-  game.draw_prep_station()
-  game.draw_grill_station()
-  game.draw_wok_station()
-  game.draw_pass_station()
+  game.draw_background(art)
+  game.draw_orders_panel(art)
+  game.draw_prep_station(art)
+  game.draw_grill_station(art)
+  game.draw_wok_station(art)
+  game.draw_pass_station(art)
   game.draw_cursor()
   game.draw_hud()
   draw_hint_line()
