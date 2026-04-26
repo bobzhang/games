@@ -28,10 +28,10 @@ cd examples && ./_build/native/debug/build/neon_2048_storm_2026/neon_2048_storm_
 ### Package `neon_2048_storm_2026`
 > Main entry point.
 
-`main.mbt` initialises the Raylib window and audio device, creates the `Game`
-struct, then drives the game loop: each frame it calls `@game.update_game` for
-simulation and `@render.draw_frame` for drawing, using `@types.clampf` to cap
-the delta-time.
+`main.mbt` initialises the Raylib window and audio device, loads the generated
+neon storm art bundle, creates the `Game` struct, then drives the game loop:
+each frame it calls `@game.update_game` for simulation and `@render.draw_frame`
+for drawing, using `@types.clampf` to cap the delta-time.
 
 ### Package `neon_2048_storm_2026/internal/types`
 > Core type definitions, constants, and utility functions.
@@ -130,24 +130,31 @@ Button layout helpers (`board_area_x/y/w/h`, `title_start_button`, `retry_button
 ### Package `neon_2048_storm_2026/internal/render`
 > Rendering and drawing routines.
 
+#### Types
+| Type | Description |
+|------|-------------|
+| `GameArt` | Bundle of generated Raylib textures: storm backdrop, tile overlay, and icon sheet. |
+
 #### Functions (`render.mbt`)
 | Function | Signature | Description |
 |----------|-----------|-------------|
+| `load_game_art` | `() -> GameArt` | Loads generated PNG textures from `resources/` after window initialization |
+| `unload_game_art` | `(GameArt) -> Unit` | Releases generated textures before closing the Raylib window |
 | `bg_wave` | `(Game, Float) -> Float` | Returns a sine wave value driven by `ui_t` |
-| `draw_bg` | `(Game) -> Unit` | Draws the dark neon background with animated circles and scan stripes |
+| `draw_bg` | `(Game, GameArt) -> Unit` | Draws the generated cyberstorm backdrop with animated circles and scan stripes |
 | `tile_body_color` | `(Int) -> Color` | Maps a tile value to its fill colour |
 | `tile_text_color` | `(Int) -> Color` | Maps a tile value to its label text colour |
 | `draw_board_panel` | `(Game, Int, Int, Int) -> Unit` | Draws the board background panel with shake highlight |
-| `draw_cell` | `(Game, Int, Int, Int, Int, Int) -> Unit` | Draws one cell including its blocker or tile appearance |
-| `draw_grid` | `(Game, Int, Int, Int) -> Unit` | Draws all cells and grid lines |
+| `draw_cell` | `(Game, GameArt, Int, Int, Int, Int, Int) -> Unit` | Draws one cell including generated blocker art or tile overlay |
+| `draw_grid` | `(Game, GameArt, Int, Int, Int) -> Unit` | Draws all cells and grid lines |
 | `draw_cursor` | `(Game, Int, Int, Int) -> Unit` | Draws the selection cursor highlight |
 | `draw_sparks` | `(Game) -> Unit` | Draws all active spark particles |
-| `draw_touch_button` | `(String, (Int,Int,Int,Int), Bool, Color) -> Unit` | Draws a labelled on-screen button |
-| `draw_controls` | `(Game) -> Unit` | Draws the full set of on-screen touch buttons |
-| `draw_panel` | `(Game) -> Unit` | Draws the right-side HUD panel with stats and controls legend |
-| `draw_title` | `(Game) -> Unit` | Draws the title screen overlay |
-| `draw_result_overlay` | `(Game) -> Unit` | Draws the win/loss result overlay |
-| `draw_frame` | `(Game) -> Unit` | **Public.** Renders the complete frame for the current game state |
+| `draw_touch_button` | `(GameArt, String, (Int,Int,Int,Int), Bool, Color, Int) -> Unit` | Draws a labelled on-screen button with optional generated icon |
+| `draw_controls` | `(Game, GameArt) -> Unit` | Draws the full set of on-screen touch buttons |
+| `draw_panel` | `(Game, GameArt) -> Unit` | Draws the right-side HUD panel with stats, generated icons, and controls legend |
+| `draw_title` | `(Game, GameArt) -> Unit` | Draws the title screen overlay with generated emblem |
+| `draw_result_overlay` | `(Game, GameArt) -> Unit` | Draws the win/loss result overlay |
+| `draw_frame` | `(Game, GameArt) -> Unit` | **Public.** Renders the complete frame for the current game state |
 
 ## Architecture
 
@@ -155,6 +162,7 @@ Button layout helpers (`board_area_x/y/w/h`, `title_start_button`, `retry_button
 ```
 neon_2048_storm_2026/
 ├── main.mbt          — Window init, audio init, game loop
+├── resources/        — Generated cyberstorm backdrop, tile overlay, icon sheet
 └── internal/
     ├── types/
     │   ├── types.mbt      — GameState, Direction, SparkKind enums; Spark and Game structs with constructors
@@ -164,6 +172,7 @@ neon_2048_storm_2026/
     │   ├── logic.mbt      — Board simulation: slide/merge, undo, storm spawner, zap, win/loss, particle logic
     │   └── input.mbt      — Keyboard, mouse, and touch input routing for all game states
     └── render/
+        ├── art.mbt        — Generated texture loading, unloading, and sprite helpers
         └── render.mbt     — All draw functions: background, board, cells, sparks, HUD panel, overlays
 ```
 
@@ -172,8 +181,8 @@ Data flows from top to bottom each frame:
 2. `update_game` reads input (via `input.mbt`), then dispatches to
    state-specific update functions in `logic.mbt`.
 3. `logic.mbt` mutates the shared `Game` struct in place.
-4. `main` then calls `@render.draw_frame`, which reads the same `Game` struct
-   to produce all draw calls.
+4. `main` then calls `@render.draw_frame` with the loaded `GameArt`, which
+   reads the same `Game` struct to produce all draw calls.
 
 Design patterns used:
 - **Flat struct mutation**: all game state lives in one `Game` struct passed by

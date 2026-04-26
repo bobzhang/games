@@ -5,12 +5,28 @@ fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
 }
 
 ///|
-/// Draws the dark neon background with animated ambient circles and horizontal scan-line stripes.
-fn @types.Game::draw_bg(game : @types.Game) -> Unit {
+/// Draws the generated neon storm backdrop with animated ambient tinting and scan lines.
+fn @types.Game::draw_bg(game : @types.Game, art : GameArt) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
   let w0 : Float = game.bg_wave(0.68)
   let w1 : Float = game.bg_wave(0.96)
+
+  draw_texture_cover(
+    art.storm_backdrop,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_w),
+    Float::from_int(@types.screen_h),
+    @raylib.Color::new(255, 255, 255, 255),
+  )
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(4, 6, 14, 104),
+  )
 
   @raylib.draw_circle(
     220,
@@ -127,6 +143,7 @@ fn @types.Game::draw_board_panel(
 /// Draws one board cell: a blocker with debris appearance or a numbered tile with gloss highlight.
 fn @types.Game::draw_cell(
   game : @types.Game,
+  art : GameArt,
   x : Int,
   y : Int,
   tile : Int,
@@ -145,14 +162,23 @@ fn @types.Game::draw_cell(
       py + 4,
       tile - 8,
       tile - 8,
-      @raylib.Color::new(72, 78, 92, 244),
+      @raylib.Color::new(26, 30, 42, 238),
+    )
+    draw_icon_cell(
+      art,
+      0,
+      Float::from_int(px + tile / 2),
+      Float::from_int(py + tile / 2),
+      Float::from_int(tile + 18),
+      Float::from_int(tile + 18),
+      @raylib.Color::new(255, 255, 255, 255),
     )
     @raylib.draw_rectangle(
-      px + 10,
-      py + 10,
-      tile - 20,
-      tile / 4,
-      @raylib.Color::new(142, 152, 174, 114),
+      px + 4,
+      py + 4,
+      tile - 8,
+      tile - 8,
+      @raylib.Color::new(4, 8, 14, 26),
     )
     @raylib.draw_rectangle_lines(
       px + 4,
@@ -160,13 +186,6 @@ fn @types.Game::draw_cell(
       tile - 8,
       tile - 8,
       @raylib.Color::new(202, 214, 234, 170),
-    )
-    @draw.draw_text(
-      "#",
-      px + tile / 2 - @draw.measure_text("#", 44) / 2,
-      py + tile / 2 - 22,
-      44,
-      @raylib.Color::new(232, 236, 244, 236),
     )
     return
   }
@@ -184,6 +203,13 @@ fn @types.Game::draw_cell(
   )
 
   if v <= 0 {
+    draw_tile_overlay(
+      art,
+      px + 5,
+      py + 5,
+      tile - 10,
+      @raylib.Color::new(126, 164, 196, 72),
+    )
     @raylib.draw_rectangle(
       px + 10,
       py + 10,
@@ -192,6 +218,13 @@ fn @types.Game::draw_cell(
       @raylib.Color::new(96, 130, 166, 74),
     )
   } else {
+    draw_tile_overlay(
+      art,
+      px + 4,
+      py + 4,
+      tile - 8,
+      @raylib.Color::new(255, 255, 255, 178),
+    )
     @raylib.draw_rectangle(
       px + 8,
       py + 8,
@@ -215,13 +248,14 @@ fn @types.Game::draw_cell(
 /// Draws all board cells and the grid line overlay.
 fn @types.Game::draw_grid(
   game : @types.Game,
+  art : GameArt,
   bx : Int,
   by : Int,
   tile : Int,
 ) -> Unit {
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
-      game.draw_cell(x, y, tile, bx, by)
+      game.draw_cell(art, x, y, tile, bx, by)
     }
   }
 
@@ -309,10 +343,12 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 ///|
 /// Draws a labelled rectangular on-screen button, highlighted when active.
 fn draw_touch_button(
+  art : GameArt,
   label : String,
   rect : (Int, Int, Int, Int),
   active : Bool,
   tint : @raylib.Color,
+  icon_index : Int,
 ) -> Unit {
   let x : Int = rect.0
   let y : Int = rect.1
@@ -330,6 +366,17 @@ fn draw_touch_button(
       @raylib.Color::new(44, 62, 88, 204)
     },
   )
+  if icon_index >= 0 {
+    draw_icon_cell(
+      art,
+      icon_index,
+      Float::from_int(x + 34),
+      Float::from_int(y + h / 2),
+      56.0,
+      56.0,
+      @raylib.Color::new(255, 255, 255, 232),
+    )
+  }
   @raylib.draw_rectangle_lines(
     x,
     y,
@@ -338,9 +385,11 @@ fn draw_touch_button(
     @raylib.Color::new(184, 216, 242, 218),
   )
 
+  let label_x = x + w / 2 - @draw.measure_text(label, 30) / 2 +
+    (if icon_index >= 0 { 18 } else { 0 })
   @draw.draw_text(
     label,
-    x + w / 2 - @draw.measure_text(label, 30) / 2,
+    label_x,
     y + h / 2 - 15,
     30,
     @raylib.Color::new(246, 252, 255, 248),
@@ -349,7 +398,7 @@ fn draw_touch_button(
 
 ///|
 /// Draws the full set of on-screen directional and action touch buttons during play.
-fn @types.Game::draw_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_controls(game : @types.Game, art : GameArt) -> Unit {
   if game.state != Play {
     return
   }
@@ -431,31 +480,40 @@ fn @types.Game::draw_controls(game : @types.Game) -> Unit {
   )
 
   draw_touch_button(
+    art,
     "L",
     @types.btn_left(),
     l_on,
     @raylib.Color::new(86, 138, 194, 228),
+    -1,
   )
   draw_touch_button(
+    art,
     "R",
     @types.btn_right(),
     r_on,
     @raylib.Color::new(86, 138, 194, 228),
+    -1,
   )
   draw_touch_button(
+    art,
     "U",
     @types.btn_up(),
     u_on,
     @raylib.Color::new(86, 138, 194, 228),
+    -1,
   )
   draw_touch_button(
+    art,
     "D",
     @types.btn_down(),
     d_on,
     @raylib.Color::new(86, 138, 194, 228),
+    -1,
   )
 
   draw_touch_button(
+    art,
     if game.zap_ready {
       "ZAP READY"
     } else {
@@ -464,24 +522,29 @@ fn @types.Game::draw_controls(game : @types.Game) -> Unit {
     @types.btn_zap(),
     z_on || game.zap_ready,
     @raylib.Color::new(194, 136, 86, 228),
+    1,
   )
   draw_touch_button(
+    art,
     "UNDO",
     @types.btn_undo(),
     u2_on,
     @raylib.Color::new(118, 98, 164, 228),
+    -1,
   )
   draw_touch_button(
+    art,
     "RESTART",
     @types.btn_restart(),
     rs_on,
     @raylib.Color::new(136, 92, 100, 228),
+    -1,
   )
 }
 
 ///|
 /// Draws the right-side HUD panel with score, stats, zap charge bar, controls legend, and transient messages.
-fn @types.Game::draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game, art : GameArt) -> Unit {
   let px : Int = @types.panel_x0
   let py : Int = 24
   let pw : Int = @types.panel_w
@@ -498,14 +561,23 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 
   @draw.draw_text(
     "Neon 2048 Storm",
-    px + 20,
+    px + 88,
     py + 20,
     44,
     @raylib.Color::new(236, 246, 255, 248),
   )
+  draw_icon_cell(
+    art,
+    3,
+    Float::from_int(px + 48),
+    Float::from_int(py + 48),
+    74.0,
+    74.0,
+    @raylib.Color::new(255, 255, 255, 218),
+  )
   @draw.draw_text(
     "Grid Duel 2026",
-    px + 20,
+    px + 88,
     py + 68,
     28,
     @raylib.Color::new(194, 220, 246, 238),
@@ -555,25 +627,52 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 
   @draw.draw_text(
     "Storm In \{game.turns_to_storm}",
-    px + 20,
+    px + 64,
     py + 236,
     30,
     @raylib.Color::new(214, 232, 252, 242),
   )
+  draw_icon_cell(
+    art,
+    2,
+    Float::from_int(px + 40),
+    Float::from_int(py + 250),
+    48.0,
+    48.0,
+    @raylib.Color::new(255, 255, 255, 220),
+  )
   @draw.draw_text(
     "Debris \{game.blockers_spawned}",
-    px + 220,
+    px + 268,
     py + 236,
     30,
     @raylib.Color::new(214, 232, 252, 242),
+  )
+  draw_icon_cell(
+    art,
+    0,
+    Float::from_int(px + 244),
+    Float::from_int(py + 250),
+    46.0,
+    46.0,
+    @raylib.Color::new(255, 255, 255, 218),
   )
 
   @draw.draw_text(
     "Zap Charge",
-    px + 20,
+    px + 64,
     py + 286,
     28,
     @raylib.Color::new(220, 236, 252, 242),
+  )
+  draw_icon_cell(
+    art,
+    1,
+    Float::from_int(px + 40),
+    Float::from_int(py + 300),
+    48.0,
+    48.0,
+    @raylib.Color::new(255, 255, 255, 222),
   )
 
   @raylib.draw_rectangle(
@@ -680,12 +779,21 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen with game name, description, start button, and tip text.
-fn @types.Game::draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game, art : GameArt) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
 
+  draw_icon_cell(
+    art,
+    3,
+    Float::from_int(@types.screen_w / 2),
+    168.0,
+    260.0,
+    260.0,
+    @raylib.Color::new(255, 255, 255, 190),
+  )
   @draw.draw_text(
     "Neon 2048 Storm 2026",
     @types.screen_w / 2 - @draw.measure_text("Neon 2048 Storm 2026", 88) / 2,
@@ -719,10 +827,12 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   let hov : Bool = @types.pointer_on_rect(mx, my, hold, touch_count, x, y, w, h)
 
   draw_touch_button(
+    art,
     "Start Match",
     (x, y, w, h),
     hov,
     @raylib.Color::new(92, 150, 208, 230),
+    2,
   )
 
   @draw.draw_text(
@@ -738,7 +848,7 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the win/loss result overlay with score, grade, rank, stats, and a play-again button.
-fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game, art : GameArt) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -778,6 +888,15 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     py + 34,
     64,
     @raylib.Color::new(244, 250, 255, 250),
+  )
+  draw_icon_cell(
+    art,
+    if game.win { 3 } else { 2 },
+    Float::from_int(px + pw - 132),
+    Float::from_int(py + 122),
+    142.0,
+    142.0,
+    @raylib.Color::new(255, 255, 255, 218),
   )
 
   @draw.draw_text(
@@ -821,33 +940,35 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let hov : Bool = @types.pointer_on_rect(mx, my, hold, touch_count, x, y, w, h)
 
   draw_touch_button(
+    art,
     "Play Again",
     (x, y, w, h),
     hov,
     @raylib.Color::new(96, 154, 210, 230),
+    1,
   )
 }
 
 ///|
 /// Renders the complete frame for the current game state.
-pub fn draw_frame(game : @types.Game) -> Unit {
-  game.draw_bg()
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
+  game.draw_bg(art)
 
   if game.state == Title {
-    game.draw_title()
+    game.draw_title(art)
     return
   }
 
   let (bx, by, tile) = @types.board_metrics(game)
   game.draw_board_panel(bx, by, tile)
-  game.draw_grid(bx, by, tile)
+  game.draw_grid(art, bx, by, tile)
   game.draw_cursor(bx, by, tile)
 
   game.draw_sparks()
-  game.draw_panel()
-  game.draw_controls()
+  game.draw_panel(art)
+  game.draw_controls(art)
 
   if game.state == Result {
-    game.draw_result_overlay()
+    game.draw_result_overlay(art)
   }
 }
