@@ -1,6 +1,6 @@
 # Ink Scroll Detective 2026
 
-A deduction and investigation game set in an ink-wash city. Navigate a 10x6 grid of districts, discover clues linked to four suspects, resolve timed incidents, and build evidence chains to unmask the culprit.
+A deduction and investigation game set in an ink-wash city. Navigate a 10x6 grid of districts, discover clues linked to four suspects, resolve timed incidents, and build evidence chains to unmask the culprit. The renderer uses generated ink city, district tile, and symbolic clue/suspect/incident assets with procedural fallbacks.
 
 ## Build and Run
 
@@ -153,6 +153,8 @@ Owns the entire rendering pipeline; reads `Game` state but never mutates it.
 
 | Function | Signature | Visibility | Description |
 |----------|-----------|------------|-------------|
+| `load_assets` | `() -> Unit` | `pub` | Loads generated ink city background, district tile, and symbol textures |
+| `unload_assets` | `() -> Unit` | `pub` | Releases generated render textures |
 | `draw_frame` | `(game: Game) -> Unit` | `pub` | Draws the full frame for the current detective case state: background, districts, clues, suspects, incidents, cursor, HUD, evidence board, and any active overlay. |
 
 All helper functions (`draw_background`, `draw_districts`, `draw_clues`, `draw_suspects`, `draw_incidents`, `draw_cursor`, `draw_hud`, `draw_suspect_board`, `draw_meter`, `draw_center_text`, `draw_right_text`, overlay functions, etc.) are package-private.
@@ -164,6 +166,10 @@ All helper functions (`draw_background`, `draw_districts`, `draw_clues`, `draw_s
 ```
 ink_scroll_detective_2026/
 ├── main.mbt                          # Entry point: window + game loop
+├── resources/
+│   ├── ink_city_background.png       # Generated ink-wash city backdrop
+│   ├── district_tile.png             # Generated reusable district tile
+│   └── symbol_sprites.png            # Generated clue/suspect/incident/deduction symbols
 └── internal/
     ├── types/                        # Shared data model (no game logic)
     │   ├── constants.mbt             # All pub let constants

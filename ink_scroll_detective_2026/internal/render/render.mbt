@@ -1,4 +1,124 @@
 ///|
+/// Generated ink city backdrop texture.
+let tex_ink_city_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated reusable district tile texture.
+let tex_district_tile : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated clue/suspect/incident/deduction symbol sheet texture.
+let tex_symbol_sprites : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Ink Scroll Detective texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "ink_scroll_detective_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Ink Scroll Detective render assets.
+pub fn load_assets() -> Unit {
+  tex_ink_city_background.val = Some(
+    load_art_texture("ink_city_background.png"),
+  )
+  tex_district_tile.val = Some(load_art_texture("district_tile.png"))
+  tex_symbol_sprites.val = Some(load_art_texture("symbol_sprites.png"))
+}
+
+///|
+/// Unloads generated Ink Scroll Detective render assets.
+pub fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_ink_city_background)
+  unload(tex_district_tile)
+  unload(tex_symbol_sprites)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws one symbol from the generated horizontal symbol sheet.
+fn draw_symbol_sprite(
+  index : Int,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Bool {
+  match tex_symbol_sprites.val {
+    Some(texture) => {
+      let cell_w = Float::from_int(texture.width()) / 4.0
+      @raylib.draw_texture_pro(
+        texture,
+        @raylib.Rectangle::new(
+          Float::from_int(index) * cell_w,
+          0.0,
+          cell_w,
+          Float::from_int(texture.height()),
+        ),
+        @raylib.Rectangle::new(cx, cy, w, h),
+        @raylib.Vector2::new(w * 0.5, h * 0.5),
+        0.0,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Draws text centered horizontally at the given y position.
 fn draw_center_text(
   text : String,
@@ -62,14 +182,34 @@ fn state_label(state : @types.GameState) -> String {
 ///|
 /// Draws the dark gradient background, animated scan lines, and city panel underlay.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @raylib.Color::new(10, 14, 26, 255),
-    @raylib.Color::new(18, 24, 42, 255),
-  )
+  match tex_ink_city_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(@types.screen_w),
+        Float::from_int(@types.screen_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(3, 8, 18, 112),
+      )
+    }
+    None =>
+      @raylib.draw_rectangle_gradient_v(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(10, 14, 26, 255),
+        @raylib.Color::new(18, 24, 42, 255),
+      )
+  }
 
   for i in 0..<12 {
     let fi = Float::from_int(i)
@@ -110,18 +250,39 @@ fn @types.Game::draw_districts(game : @types.Game) -> Unit {
       let lx = @types.cell_left_i(x)
       let ty = @types.cell_top_i(y)
 
-      @raylib.draw_rectangle(
-        lx,
-        ty,
-        @types.cell_w_i - 2,
-        @types.cell_h_i - 2,
-        @raylib.Color::new(
-          r.clamp(min=0, max=255),
-          g.clamp(min=0, max=255),
-          b.clamp(min=0, max=255),
-          220,
-        ),
+      let district_col = @raylib.Color::new(
+        r.clamp(min=0, max=255),
+        g.clamp(min=0, max=255),
+        b.clamp(min=0, max=255),
+        220,
       )
+      match tex_district_tile.val {
+        Some(texture) => {
+          draw_texture_cover(
+            texture,
+            Float::from_int(lx),
+            Float::from_int(ty),
+            Float::from_int(@types.cell_w_i - 2),
+            Float::from_int(@types.cell_h_i - 2),
+            @raylib.Color::new(218, 224, 232, 210),
+          )
+          @raylib.draw_rectangle(
+            lx,
+            ty,
+            @types.cell_w_i - 2,
+            @types.cell_h_i - 2,
+            a_col(district_col, 84),
+          )
+        }
+        None =>
+          @raylib.draw_rectangle(
+            lx,
+            ty,
+            @types.cell_w_i - 2,
+            @types.cell_h_i - 2,
+            district_col,
+          )
+      }
 
       if game.focus_t > 0.0 {
         let dx0 = x - game.cursor_x
@@ -187,15 +348,16 @@ fn @types.Game::draw_clues(game : @types.Game) -> Unit {
       x.to_int(),
       y.to_int(),
       radius,
-      a_col(base, 120 + (pulse * 80.0).to_int()),
+      a_col(base, 78 + (pulse * 52.0).to_int()),
     )
-
-    @raylib.draw_circle(
-      x.to_int(),
-      y.to_int(),
-      2.0,
-      @raylib.Color::new(240, 246, 255, 220),
-    )
+    if !draw_symbol_sprite(0, x, y, 30.0, 40.0, @raylib.white) {
+      @raylib.draw_circle(
+        x.to_int(),
+        y.to_int(),
+        2.0,
+        @raylib.Color::new(240, 246, 255, 220),
+      )
+    }
   }
 
   for clue in game.clues {
@@ -228,13 +390,15 @@ fn @types.Game::draw_suspects(game : @types.Game) -> Unit {
     let y = @types.cell_center_y(game.suspects[i].home_y)
     let col = suspect_col(i)
 
-    @raylib.draw_circle(x.to_int(), y.to_int(), 16.0, a_col(col, 210))
-    @raylib.draw_circle_lines(
-      x.to_int(),
-      y.to_int(),
-      21.0,
-      @raylib.Color::new(240, 246, 255, 160),
-    )
+    if !draw_symbol_sprite(1, x, y, 42.0, 48.0, a_col(col, 235)) {
+      @raylib.draw_circle(x.to_int(), y.to_int(), 16.0, a_col(col, 210))
+      @raylib.draw_circle_lines(
+        x.to_int(),
+        y.to_int(),
+        21.0,
+        @raylib.Color::new(240, 246, 255, 160),
+      )
+    }
 
     if game.marked_suspect == i {
       let pulse : Float = 0.5 + 0.5 * @math.sinf(game.city_time * 7.0)
@@ -247,13 +411,22 @@ fn @types.Game::draw_suspects(game : @types.Game) -> Unit {
     }
 
     if game.suspects[i].deduction_unlocked {
-      @draw.draw_text(
-        "D",
-        (x - 5.0).to_int(),
-        (y - 37.0).to_int(),
-        20,
+      if !draw_symbol_sprite(
+        3,
+        x,
+        y - 32.0,
+        28.0,
+        28.0,
         @raylib.Color::new(250, 244, 146, 230),
-      )
+      ) {
+        @draw.draw_text(
+          "D",
+          (x - 5.0).to_int(),
+          (y - 37.0).to_int(),
+          20,
+          @raylib.Color::new(250, 244, 146, 230),
+        )
+      }
     }
 
     @draw.draw_text(
@@ -295,7 +468,16 @@ fn @types.Game::draw_incidents(game : @types.Game) -> Unit {
       10.0 + sevf * 5.0 + pulse * 4.0,
       a_col(core_col, 88),
     )
-    @raylib.draw_circle(x.to_int(), y.to_int(), 6.0 + sevf * 3.5, core_col)
+    if !draw_symbol_sprite(
+      2,
+      x,
+      y,
+      34.0 + sevf * 8.0,
+      34.0 + sevf * 8.0,
+      @raylib.white,
+    ) {
+      @raylib.draw_circle(x.to_int(), y.to_int(), 6.0 + sevf * 3.5, core_col)
+    }
 
     @raylib.draw_circle_lines(
       x.to_int(),
