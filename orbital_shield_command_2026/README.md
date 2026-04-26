@@ -1,6 +1,12 @@
 # orbital_shield_command_2026
 
-A circular defense game where you rotate a shield arc around a planet to deflect incoming enemies and fire shots to protect the planet from asteroid waves.
+A circular defense game where you rotate a generated shield arc around a generated planet to deflect incoming enemies and fire shots to protect the planet from asteroid waves.
+
+## Generated Art
+
+- `resources/shield_orbit_backdrop.png`: dark orbital command arena with a clean center for the planet and shield ring.
+- `resources/shield_hud_panel.png`: sci-fi command glass panel used behind the HUD, touch controls, message banner, and end-state card.
+- `resources/shield_sprites.png`: 4x3 transparent sprite sheet for the planet, shield emitter, shield slab, three enemy classes, shot bolt, spark bursts, core icon, and sector beacon.
 
 ## Build and Run
 
@@ -37,6 +43,7 @@ cd examples && ./_build/native/debug/build/orbital_shield_command_2026/orbital_s
 | `Enemy` | `x`, `y`, `vx`, `vy`, `hp`, `kind`, `active` | An enemy entity approaching the planet; kind 0=small, 1=medium, 2=large |
 | `Shot` | `x`, `y`, `vx`, `vy`, `ttl`, `active` | A player-fired projectile traveling outward from the shield position |
 | `Spark` | `x`, `y`, `vx`, `vy`, `ttl`, `active`, `kind` | A short-lived neon particle emitted on enemy destruction or planet impact |
+| `GameArt` | `orbit_backdrop`, `hud_panel`, `sprite_sheet` | Runtime bundle of generated Raylib textures |
 
 #### Constants
 
@@ -60,6 +67,7 @@ cd examples && ./_build/native/debug/build/orbital_shield_command_2026/orbital_s
 | `deg2rad` | `(Float) -> Double` | Converts degrees to radians |
 | `sinf_deg` | `(Float) -> Float` | Sine of an angle given in degrees |
 | `cosf_deg` | `(Float) -> Float` | Cosine of an angle given in degrees |
+| `angle_from_vector` | `(Float, Float) -> Float` | Converts a direction vector into a sprite rotation where unrotated art faces upward |
 | `enemy_radius` | `(Int) -> Float` | Collision radius for an enemy by kind |
 | `enemy_score` | `(Int) -> Int` | Score awarded for destroying an enemy by kind |
 | `enemy_damage` | `(Int) -> Int` | Planet HP damage dealt when an enemy reaches the planet |
@@ -71,6 +79,11 @@ cd examples && ./_build/native/debug/build/orbital_shield_command_2026/orbital_s
 | `spawn_burst` | `(Array[Spark], Float, Float, Int, Float, Int) -> Unit` | Spawns n sparks to create an explosion burst effect |
 | `spawn_shot` | `(Array[Shot], Float, Float, Float, Float) -> Unit` | Fires a new shot aimed toward a target position |
 | `spawn_enemy` | `(Array[Enemy], Int) -> Unit` | Spawns a new enemy from a random screen edge aimed at the planet |
+| `load_game_art` | `() -> GameArt` | Loads the generated texture bundle after Raylib initialization |
+| `unload_game_art` | `(GameArt) -> Unit` | Releases generated textures before window shutdown |
+| `draw_texture_cover` | `(@raylib.Texture, Float, Float, Float, Float, @raylib.Color) -> Unit` | Cover-crops a texture into a destination rectangle |
+| `draw_sprite_cell` | `(GameArt, Int, Float, Float, Float, Float, @raylib.Color) -> Unit` | Draws one centered cell from the generated 4x3 sprite sheet |
+| `draw_sprite_cell_rotated` | `(GameArt, Int, Float, Float, Float, Float, Float, @raylib.Color) -> Unit` | Draws one centered and rotated cell from the generated 4x3 sprite sheet |
 
 ## Architecture
 
@@ -78,17 +91,19 @@ cd examples && ./_build/native/debug/build/orbital_shield_command_2026/orbital_s
 
 ```
 orbital_shield_command_2026/
-├── main.mbt    — All game state, logic, and rendering in a single file
+├── main.mbt    — Game state, logic, and frame rendering
+├── art.mbt     — Generated texture loading and draw helpers
+├── resources/  — Generated PNG backdrop, panel, and sprite sheet
 └── moon.pkg    — Package config with imports
 ```
 
-This game uses a flat single-file architecture. All constants, structs, helper functions, entity pool management, physics updates, collision detection, and rendering are contained within `main.mbt`. The main loop allocates three fixed-size pools (enemies, shots, sparks) as `Array` values, runs the full update-render cycle each frame, and restarts by clearing the pools and resetting local variables.
+Most gameplay remains in `main.mbt`, while generated texture loading and sprite-sheet drawing live in `art.mbt`. The main loop allocates three fixed-size pools (enemies, shots, sparks) as `Array` values, runs the full update-render cycle each frame, and restarts by clearing the pools and resetting local variables.
 
 ### Data Flow
 
 1. **Input**: Keyboard state is read inline inside the main loop. Shield rotation from A/D, firing from Space/J/K, and restart from R are all handled with direct `@raylib.is_key_*` calls.
 2. **Update**: The main loop advances shield angle, updates shot/enemy/spark positions, applies drag to sparks, performs shield deflection against enemies by angular proximity, checks shot-to-enemy collisions, handles planet impact when an enemy reaches within `planet_r`, and escalates the sector (difficulty) every 30 seconds.
-3. **Render**: All drawing is inline in the main loop using raylib calls: background gradient, planet, shield arc, enemies (sized by kind), shots, spark particles, HUD text, and game-over/victory overlays.
+3. **Render**: The main loop draws the generated arena backdrop, generated planet and sprite entities, procedural shield lines, generated HUD panels, text, and game-over/victory overlays.
 
 ### Key Design Patterns
 

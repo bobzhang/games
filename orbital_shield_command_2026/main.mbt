@@ -104,6 +104,16 @@ fn cosf_deg(a : Float) -> Float {
 }
 
 ///|
+/// Converts a direction vector into a sprite rotation where unrotated art faces upward.
+fn angle_from_vector(x : Float, y : Float) -> Float {
+  if x * x + y * y < 0.001 {
+    0.0
+  } else {
+    @math.atan2f(y, x) * 57.29577951308232 + 90.0
+  }
+}
+
+///|
 /// Returns the collision radius of an enemy based on its kind (0=small, 1=medium, 2=large).
 fn enemy_radius(kind : Int) -> Float {
   if kind == 0 {
@@ -335,8 +345,12 @@ fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
 /// Initializes the window, creates all game state arrays, and runs the main game loop until the window closes.
 fn main {
   @raylib.init_window(sw, sh, "Orbital Shield Command 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let enemies : Array[Enemy] = Array::makei(max_enemies, fn(_i) {
     { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 0, kind: 0, active: false }
@@ -669,9 +683,17 @@ fn main {
     } else {
       @raylib.clear_background(@raylib.Color::new(10, 14, 24, 255))
     }
-
-    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 18, 34, 255))
-    @raylib.draw_rectangle(0, 0, sw, 260, @raylib.Color::new(18, 32, 58, 255))
+    draw_texture_cover(
+      art.orbit_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.white,
+    )
+    if flash_t > 0.0 {
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(120, 22, 24, 86))
+    }
 
     for i in 0..<130 {
       let x = (i * 97 + sector * 53) % sw
@@ -698,23 +720,14 @@ fn main {
       @raylib.Color::new(54, 90, 148, 120),
     )
 
-    @raylib.draw_circle(
-      render_cx.to_int(),
-      render_cy.to_int(),
-      planet_r + 8.0,
-      @raylib.Color::new(44, 88, 170, 255),
-    )
-    @raylib.draw_circle(
-      render_cx.to_int(),
-      render_cy.to_int(),
-      planet_r - 14.0,
-      @raylib.Color::new(26, 58, 124, 255),
-    )
-    @raylib.draw_circle(
-      (render_cx - 20.0).to_int(),
-      (render_cy - 18.0).to_int(),
-      planet_r * 0.34,
-      @raylib.Color::new(110, 166, 232, 180),
+    draw_sprite_cell(
+      art,
+      0,
+      render_cx,
+      render_cy,
+      planet_r * 2.38,
+      planet_r * 2.38,
+      @raylib.white,
     )
 
     let sdx = cosf_deg(shield_angle)
@@ -738,12 +751,17 @@ fn main {
 
     let hx = render_cx + sdx * shield_r
     let hy = render_cy + sdy * shield_r
-    @raylib.draw_circle(
-      hx.to_int(),
-      hy.to_int(),
-      12.0,
-      @raylib.Color::new(224, 248, 252, 255),
+    draw_sprite_cell_rotated(
+      art,
+      2,
+      hx,
+      hy,
+      96.0,
+      58.0,
+      shield_angle + 90.0,
+      @raylib.Color::new(190, 252, 255, 214),
     )
+    draw_sprite_cell(art, 1, hx, hy, 52.0, 52.0, @raylib.white)
 
     for enemy in enemies {
       if !enemy.active {
@@ -751,49 +769,36 @@ fn main {
       }
       let ex = enemy.x + shake_x
       let ey = enemy.y + shake_y
-      if enemy.kind == 0 {
-        @raylib.draw_circle(
-          ex.to_int(),
-          ey.to_int(),
-          12.0,
-          @raylib.Color::new(248, 204, 92, 255),
-        )
+      let enemy_sprite : Int = if enemy.kind == 0 {
+        3
       } else if enemy.kind == 1 {
-        @raylib.draw_rectangle(
-          (ex - 15.0).to_int(),
-          (ey - 12.0).to_int(),
-          30,
-          24,
-          @raylib.Color::new(246, 132, 84, 255),
-        )
-        @raylib.draw_circle(
-          (ex - 16.0).to_int(),
-          ey.to_int(),
-          6.0,
-          @raylib.Color::new(66, 46, 34, 255),
-        )
-        @raylib.draw_circle(
-          (ex + 16.0).to_int(),
-          ey.to_int(),
-          6.0,
-          @raylib.Color::new(66, 46, 34, 255),
-        )
+        4
       } else {
-        @raylib.draw_rectangle(
-          (ex - 20.0).to_int(),
-          (ey - 16.0).to_int(),
-          40,
-          32,
-          @raylib.Color::new(238, 86, 98, 255),
-        )
-        @raylib.draw_rectangle(
-          (ex - 8.0).to_int(),
-          (ey - 21.0).to_int(),
-          16,
-          8,
-          @raylib.Color::new(254, 176, 126, 255),
-        )
+        5
       }
+      let enemy_size : Float = if enemy.kind == 0 {
+        38.0
+      } else if enemy.kind == 1 {
+        62.0
+      } else {
+        86.0
+      }
+      draw_sprite_cell_rotated(
+        art,
+        enemy_sprite,
+        ex,
+        ey,
+        enemy_size,
+        enemy_size,
+        angle_from_vector(enemy.vx, enemy.vy),
+        @raylib.white,
+      )
+      @raylib.draw_circle_lines(
+        ex.to_int(),
+        ey.to_int(),
+        enemy_radius(enemy.kind) + 5.0,
+        @raylib.Color::new(255, 220, 166, 146),
+      )
     }
 
     for shot in shots {
@@ -802,15 +807,19 @@ fn main {
       }
       let sx = shot.x + shake_x
       let sy = shot.y + shake_y
+      draw_sprite_cell_rotated(
+        art,
+        6,
+        sx,
+        sy,
+        18.0,
+        36.0,
+        angle_from_vector(shot.vx, shot.vy),
+        @raylib.white,
+      )
       @raylib.draw_circle(
         sx.to_int(),
         sy.to_int(),
-        4.0,
-        @raylib.Color::new(236, 244, 254, 255),
-      )
-      @raylib.draw_circle(
-        (sx - 1.0).to_int(),
-        (sy - 1.0).to_int(),
         2.0,
         @raylib.Color::new(124, 198, 252, 255),
       )
@@ -831,15 +840,34 @@ fn main {
       } else {
         @raylib.Color::new(252, 124, 124, a)
       }
-      @raylib.draw_circle(
-        (spark.x + shake_x).to_int(),
-        (spark.y + shake_y).to_int(),
-        2.5,
+      let spark_sprite : Int = if spark.kind == 0 {
+        7
+      } else if spark.kind == 1 {
+        8
+      } else {
+        9
+      }
+      let spark_size : Float = if spark.kind == 0 { 12.0 } else { 20.0 }
+      draw_sprite_cell(
+        art,
+        spark_sprite,
+        spark.x + shake_x,
+        spark.y + shake_y,
+        spark_size,
+        spark_size,
         c,
       )
     }
 
-    @raylib.draw_rectangle(0, 0, sw, 98, @raylib.Color::new(8, 12, 20, 228))
+    draw_texture_cover(
+      art.hud_panel,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      108.0,
+      @raylib.Color::new(255, 255, 255, 210),
+    )
+    @raylib.draw_rectangle(0, 0, sw, 98, @raylib.Color::new(8, 12, 20, 116))
     @draw.draw_text(
       "ORBITAL SHIELD COMMAND 2026",
       16,
@@ -847,6 +875,7 @@ fn main {
       34,
       @raylib.Color::new(236, 242, 252, 255),
     )
+    draw_sprite_cell(art, 11, 452.0, 42.0, 34.0, 34.0, @raylib.white)
     @draw.draw_text(
       "Sector \{sector}/3",
       474,
@@ -862,6 +891,7 @@ fn main {
       @raylib.Color::new(214, 234, 250, 255),
     )
 
+    draw_sprite_cell(art, 10, 834.0, 38.0, 34.0, 34.0, @raylib.white)
     @raylib.draw_rectangle(
       860,
       28,
@@ -909,6 +939,14 @@ fn main {
       166,
       @raylib.Color::new(10, 16, 28, 220),
     )
+    draw_texture_cover(
+      art.hud_panel,
+      10.0,
+      Float::from_int(sh - 190),
+      168.0,
+      166.0,
+      @raylib.Color::new(160, 224, 244, 54),
+    )
     @draw.draw_text("Touch", 64, sh - 186, 20, @raylib.white)
 
     @raylib.draw_rectangle(
@@ -937,6 +975,14 @@ fn main {
       116,
       @raylib.Color::new(186, 82, 76, 255),
     )
+    draw_texture_cover(
+      art.hud_panel,
+      Float::from_int(fire_x),
+      Float::from_int(fire_y),
+      182.0,
+      116.0,
+      @raylib.Color::new(255, 176, 150, 74),
+    )
     @draw.draw_text("FIRE", fire_x + 58, fire_y + 42, 36, @raylib.white)
 
     @raylib.draw_rectangle(
@@ -945,6 +991,14 @@ fn main {
       sw - 398,
       36,
       @raylib.Color::new(10, 16, 24, 220),
+    )
+    draw_texture_cover(
+      art.hud_panel,
+      184.0,
+      Float::from_int(sh - 52),
+      Float::from_int(sw - 398),
+      36.0,
+      @raylib.Color::new(160, 224, 244, 44),
     )
     @draw.draw_text(
       msg,
@@ -962,6 +1016,14 @@ fn main {
         700,
         216,
         @raylib.Color::new(16, 24, 40, 244),
+      )
+      draw_texture_cover(
+        art.hud_panel,
+        Float::from_int(sw / 2 - 350),
+        Float::from_int(sh / 2 - 108),
+        700.0,
+        216.0,
+        @raylib.Color::new(190, 230, 250, 64),
       )
       @draw.draw_text(
         if won {
@@ -990,7 +1052,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

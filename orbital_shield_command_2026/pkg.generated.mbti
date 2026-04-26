@@ -8,6 +8,8 @@ package "bobzhang/games/orbital_shield_command_2026"
 // Types and methods
 type Enemy
 
+type GameArt
+
 type Shot
 
 type Spark
