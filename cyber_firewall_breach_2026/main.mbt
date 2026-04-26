@@ -340,8 +340,12 @@ fn spawn_interval(sector : Int) -> Float {
 /// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "Cyber Firewall Breach 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let enemies : Array[Enemy] = Array::makei(max_enemies, fn(_i) {
     { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 0, kind: 0, active: false }
@@ -666,21 +670,24 @@ fn main {
 
     @raylib.begin_drawing()
 
-    if flash_t > 0.0 {
-      @raylib.clear_background(@raylib.Color::new(40, 16, 20, 255))
-    } else {
-      @raylib.clear_background(@raylib.Color::new(10, 14, 24, 255))
-    }
+    @raylib.clear_background(@raylib.Color::new(6, 10, 18, 255))
+    draw_network_backdrop_art(art, flash_t)
+    @raylib.draw_rectangle(0, 0, sw, 260, @raylib.Color::new(4, 12, 24, 142))
 
-    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(12, 22, 38, 255))
-    @raylib.draw_rectangle(0, 0, sw, 260, @raylib.Color::new(20, 34, 58, 255))
-
+    draw_texture_cover(
+      art.arena_panel,
+      Float::from_int(arena_x),
+      Float::from_int(arena_y),
+      Float::from_int(arena_w),
+      Float::from_int(arena_h),
+      @raylib.Color::new(255, 255, 255, 226),
+    )
     @raylib.draw_rectangle(
       arena_x,
       arena_y,
       arena_w,
       arena_h,
-      @raylib.Color::new(18, 28, 46, 255),
+      @raylib.Color::new(6, 14, 28, 76),
     )
     @raylib.draw_rectangle_lines(
       arena_x,
@@ -711,40 +718,38 @@ fn main {
       )
     }
 
-    @raylib.draw_rectangle(
-      (core_x - 30.0 + shake_x).to_int(),
-      arena_y + arena_h / 2 - 120,
-      46,
-      240,
-      @raylib.Color::new(80, 208, 244, 255),
-    )
-    @raylib.draw_rectangle(
-      (core_x - 10.0 + shake_x).to_int(),
-      arena_y + arena_h / 2 - 90,
-      16,
-      180,
-      @raylib.Color::new(16, 44, 78, 255),
+    draw_texture_fit_centered(
+      art.core_node,
+      core_x + shake_x,
+      Float::from_int(arena_y + arena_h / 2),
+      92.0,
+      270.0,
+      if flash_t > 0.0 {
+        @raylib.Color::new(255, 214, 214, 255)
+      } else {
+        @raylib.white
+      },
     )
     @raylib.draw_circle(
       (core_x + 14.0 + shake_x).to_int(),
       py.to_int(),
       24.0,
-      @raylib.Color::new(102, 232, 252, 255),
+      @raylib.Color::new(102, 232, 252, 96),
     )
 
-    @raylib.draw_rectangle(
-      (player_x - 16.0 + shake_x).to_int(),
-      (py - 24.0).to_int(),
-      30,
-      48,
-      @raylib.Color::new(110, 222, 242, 255),
+    @raylib.draw_circle(
+      (player_x + 16.0 + shake_x).to_int(),
+      py.to_int(),
+      34.0,
+      @raylib.Color::new(82, 232, 252, 72),
     )
-    @raylib.draw_rectangle(
-      (player_x + 12.0 + shake_x).to_int(),
-      (py - 8.0).to_int(),
-      22,
-      16,
-      @raylib.Color::new(196, 242, 252, 255),
+    draw_texture_fit_centered(
+      art.turret_sprite,
+      player_x + 16.0 + shake_x,
+      py,
+      72.0,
+      78.0,
+      @raylib.white,
     )
 
     for shot in shots {
@@ -752,12 +757,13 @@ fn main {
         continue
       }
       let sx = shot.x + shake_x
-      @raylib.draw_rectangle(
-        sx.to_int(),
-        (shot.y - 3.0).to_int(),
-        14,
-        6,
-        @raylib.Color::new(244, 250, 255, 255),
+      draw_texture_fit_centered(
+        art.shot_sprite,
+        sx + 7.0,
+        shot.y,
+        30.0,
+        14.0,
+        @raylib.white,
       )
     }
 
@@ -771,43 +777,52 @@ fn main {
         @raylib.draw_circle(
           ex.to_int(),
           ey.to_int(),
-          11.0,
-          @raylib.Color::new(244, 186, 94, 255),
+          18.0,
+          @raylib.Color::new(244, 186, 94, 54),
+        )
+        draw_texture_fit_centered(
+          art.enemy_scout,
+          ex,
+          ey,
+          34.0,
+          30.0,
+          @raylib.white,
         )
       } else if enemy.kind == 1 {
-        @raylib.draw_rectangle(
-          (ex - 14.0).to_int(),
-          (ey - 11.0).to_int(),
-          28,
-          22,
-          @raylib.Color::new(246, 128, 94, 255),
-        )
         @raylib.draw_circle(
-          (ex - 15.0).to_int(),
+          ex.to_int(),
           ey.to_int(),
-          6.0,
-          @raylib.Color::new(70, 48, 34, 255),
+          24.0,
+          @raylib.Color::new(246, 128, 94, 58),
         )
-        @raylib.draw_circle(
-          (ex + 15.0).to_int(),
-          ey.to_int(),
-          6.0,
-          @raylib.Color::new(70, 48, 34, 255),
+        draw_texture_fit_centered(
+          art.enemy_trojan,
+          ex,
+          ey,
+          48.0,
+          36.0,
+          @raylib.white,
         )
       } else {
-        @raylib.draw_rectangle(
-          (ex - 20.0).to_int(),
-          (ey - 15.0).to_int(),
-          40,
-          30,
-          @raylib.Color::new(238, 88, 104, 255),
+        @raylib.draw_circle(
+          ex.to_int(),
+          ey.to_int(),
+          32.0,
+          @raylib.Color::new(238, 88, 104, 64),
         )
-        @raylib.draw_rectangle(
-          (ex - 8.0).to_int(),
-          (ey - 22.0).to_int(),
-          16,
-          8,
-          @raylib.Color::new(252, 176, 130, 255),
+        draw_texture_fit_centered(
+          art.enemy_brute,
+          ex,
+          ey,
+          66.0,
+          46.0,
+          @raylib.white,
+        )
+        @raylib.draw_circle(
+          ex.to_int(),
+          ey.to_int(),
+          3.0,
+          @raylib.Color::new(252, 176, 130, 210),
         )
       }
     }
@@ -1017,7 +1032,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
