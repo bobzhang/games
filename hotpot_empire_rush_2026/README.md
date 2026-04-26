@@ -1,6 +1,6 @@
 # Hotpot Empire Rush 2026
 
-Hotpot Empire Rush 2026 is a kitchen management game set in a bustling hotpot restaurant. Players navigate a 4x3 grid of kitchen stations -- from the Broth Kettle and Protein Crate to the Prep Board, Hotpot Base, and Serve Counter -- assembling customized hotpot bowls for an ever-growing queue of impatient customers.
+Hotpot Empire Rush 2026 is a kitchen management game set in a bustling hotpot restaurant. Players navigate a 4x3 grid of kitchen stations -- from the Broth Kettle and Protein Crate to the Prep Board, Hotpot Base, and Serve Counter -- assembling customized hotpot bowls for an ever-growing queue of impatient customers. The renderer uses generated restaurant, station counter, and station icon assets with procedural fallbacks so the game keeps working if assets fail to load.
 
 The core gameplay loop revolves around reading customer orders from the queue, gathering the correct broth (Mala, Tomato, or Mushroom), protein (Beef, Lamb, or Tofu), vegetable (Lotus, Spinach, or Enoki), and spice level (Mild, Bold, or Inferno), then prepping raw ingredients on the Prep Board, combining everything in the Hotpot Base, and serving the finished bowl at the Serve Counter. Every correct serve builds a score combo multiplier and restores reputation, while wrong orders, expired patience, and queue overflows drain reputation toward zero.
 
@@ -49,7 +49,7 @@ Use the Speed Boost (Space) to double prep and cook speed for 2.8 seconds. The b
 
 > Main entry point.
 
-The `main` function initializes a 1680x960 window with MSAA 4x, creates a `Game` instance, and runs the game loop calling `update_game` and `draw_frame` each frame at 120 FPS.
+The `main` function initializes a 1680x960 window with MSAA 4x, loads generated render assets, creates a `Game` instance, and runs the game loop calling `update_game` and `draw_frame` each frame at 120 FPS.
 
 ### Package `hotpot_empire_rush_2026/internal/types`
 
@@ -172,7 +172,9 @@ The `main` function initializes a 1680x960 window with MSAA 4x, creates a `Game`
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `draw_frame` | `(Game) -> Unit` | Main rendering entry point: draws background with animated gradient circles and flash overlay, the kitchen grid with station tiles and cursor highlight, the side panel with score/combo/reputation/boost/hand/queue, and state-specific overlays (title, pause, game over) |
+| `load_assets` | `() -> Unit` | Loads generated restaurant background, station counter, and station icon textures |
+| `unload_assets` | `() -> Unit` | Releases generated render textures |
+| `draw_frame` | `(Game) -> Unit` | Main rendering entry point: draws the generated restaurant background with fallback gradient, texture-backed station tiles/icons with cursor highlight, the side panel with score/combo/reputation/boost/hand/queue, and state-specific overlays (title, pause, game over) |
 
 ## Architecture
 
@@ -182,6 +184,10 @@ The `main` function initializes a 1680x960 window with MSAA 4x, creates a `Game`
 hotpot_empire_rush_2026/
 ├── main.mbt              — Entry point: window init, game loop
 ├── moon.pkg              — Package config, imports
+├── resources/
+│   ├── restaurant_background.png — Generated hotpot restaurant backdrop
+│   ├── station_counter_tile.png  — Generated reusable counter tile
+│   └── station_icons.png         — Generated 4x3 station icon sheet
 └── internal/
     ├── types/
     │   ├── types.mbt     — Core structs (Game, Order, Item, PrepState, PotState, InputState)
@@ -207,8 +213,9 @@ The types package defines all data structures and constants with no dependencies
 
 ### Key Design Patterns
 
-- **Grid-based station system**: The 4x3 kitchen grid uses `station_at(x, y)` to map cursor coordinates to station type constants, with each station having a dedicated `interact_*` handler function.
-- **Integer-encoded enums**: Game states, station types, ingredient types, and flavor variants are all encoded as `Int` constants rather than MoonBit enums, providing a lightweight approach to state representation.
+- **Grid-based station system**: The 4x3 kitchen grid uses `station_at(x, y)` to map cursor coordinates to station enums, with each station having a dedicated `interact_*` handler function.
+- **Texture-backed station rendering**: The render package loads a generated restaurant backdrop, a reusable counter tile, and a 4x3 icon sheet, then composes them with station-specific color washes so each station remains readable while sharing a cohesive art style.
+- **Enum-backed state**: Game states, station types, and carried ingredient types use MoonBit enums, while flavor variants remain compact integer values for array indexing and simple cycling.
 - **Queue-based order management**: Orders are stored in a fixed-size array with active flags and are shifted down (compacted) when removed, so the head of the queue is always index 0.
 - **Boost multiplier pattern**: The `boost_multiplier` function returns either 1.0 or `boost_speed_mult` (1.9) based on `boost_t`, applied directly to prep and cook progress increments.
 - **Reputation-as-HP**: Reputation serves as the player's health bar -- it starts at 72/100, gains/losses are tuned to create pressure, and reaching zero triggers game over.
@@ -216,7 +223,7 @@ The types package defines all data structures and constants with no dependencies
 
 ## Improvement & Refinement Plan
 
-1. **Use MoonBit enums instead of integer constants for station and ingredient types**: The current approach with `station_broth`, `ingredient_protein`, etc. as `Int` constants sacrifices type safety. Converting to proper enums would enable exhaustive match checking and prevent invalid state combinations in `station_at` and `handle_interact`.
+1. **Expand art feedback for active station state**: Station icons now establish the station identity, but prep completion, pot readiness, rush cooldown, and storage shuffle state could each get small always-visible badge art so players do not need to hover every station.
 
 2. **Extract order matching into a dedicated function**: The `serve_matches_head` function compares pot fields one by one against `orders[0]`. An `Order::matches_pot(PotState)` method on the `Order` struct would be more encapsulated and reusable.
 

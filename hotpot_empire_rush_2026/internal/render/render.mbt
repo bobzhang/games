@@ -1,4 +1,118 @@
 ///|
+/// Generated hotpot restaurant backdrop texture.
+let tex_restaurant_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated station counter tile texture.
+let tex_station_counter_tile : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated station icon sheet texture.
+let tex_station_icons : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Hotpot Empire Rush texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "hotpot_empire_rush_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Hotpot Empire Rush render assets.
+pub fn load_assets() -> Unit {
+  tex_restaurant_background.val = Some(
+    load_art_texture("restaurant_background.png"),
+  )
+  tex_station_counter_tile.val = Some(
+    load_art_texture("station_counter_tile.png"),
+  )
+  tex_station_icons.val = Some(load_art_texture("station_icons.png"))
+}
+
+///|
+/// Unloads generated Hotpot Empire Rush render assets.
+pub fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_restaurant_background)
+  unload(tex_station_counter_tile)
+  unload(tex_station_icons)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws one source region from a texture centered on a destination point.
+fn draw_texture_source_centered(
+  texture : @raylib.Texture,
+  src_x : Float,
+  src_y : Float,
+  src_w : Float,
+  src_h : Float,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    0.0,
+    tint,
+  )
+}
+
+///|
 /// Returns the background fill color for a given station id.
 fn station_color(station : @types.Station) -> @raylib.Color {
   match station {
@@ -14,6 +128,79 @@ fn station_color(station : @types.Station) -> @raylib.Color {
     Queue => @raylib.Color::new(56, 72, 116, 255)
     Reputation => @raylib.Color::new(92, 54, 92, 255)
     Storage => @raylib.Color::new(58, 70, 74, 255)
+  }
+}
+
+///|
+/// Returns the source-cell index for a station icon in the generated 4x3 sheet.
+fn station_icon_index(station : @types.Station) -> Int {
+  match station {
+    Broth => 0
+    Protein => 1
+    Veg => 2
+    Spice => 3
+    Prep => 4
+    Pot => 5
+    Serve => 6
+    Rush => 7
+    Trash => 8
+    Queue => 9
+    Reputation => 10
+    Storage => 11
+  }
+}
+
+///|
+/// Draws the generated station counter tile with a station-specific color wash.
+fn draw_station_tile_art(station : @types.Station, x : Int, y : Int) -> Bool {
+  match tex_station_counter_tile.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        Float::from_int(@types.station_tile_w),
+        Float::from_int(@types.station_tile_h),
+        @raylib.Color::new(255, 255, 255, 246),
+      )
+      @raylib.draw_rectangle(
+        x,
+        y,
+        @types.station_tile_w,
+        @types.station_tile_h,
+        @raylib.fade(station_color(station), 0.48),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated station icon from the shared station icon sheet.
+fn draw_station_icon(station : @types.Station, x : Int, y : Int) -> Bool {
+  match tex_station_icons.val {
+    Some(texture) => {
+      let index = station_icon_index(station)
+      let col = index % @types.station_cols
+      let row = index / @types.station_cols
+      let cell_w = Float::from_int(texture.width()) / 4.0
+      let cell_h = Float::from_int(texture.height()) / 3.0
+      draw_texture_source_centered(
+        texture,
+        Float::from_int(col) * cell_w,
+        Float::from_int(row) * cell_h,
+        cell_w,
+        cell_h,
+        Float::from_int(x + @types.station_tile_w - 50),
+        Float::from_int(y + 86),
+        82.0,
+        82.0,
+        @raylib.Color::new(255, 255, 255, 205),
+      )
+      true
+    }
+    None => false
   }
 }
 
@@ -93,39 +280,60 @@ fn @types.Game::hand_text(game : @types.Game) -> String {
 ///|
 /// Draws the animated dark background and full-screen flash overlay.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(14, 16, 24, 255))
+  match tex_restaurant_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(@types.screen_w),
+        Float::from_int(@types.screen_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(0, 0, 0, 74),
+      )
+    }
+    None => {
+      @raylib.clear_background(@raylib.Color::new(14, 16, 24, 255))
 
-  let wave = @math.sinf(game.elapsed * 0.28)
-  for i in 0..<16 {
-    let y = i * (@types.screen_h / 16)
-    let tone = 20 + i * 5
-    @raylib.draw_rectangle(
-      0,
-      y,
-      @types.screen_w,
-      @types.screen_h / 16 + 2,
-      @raylib.Color::new(tone, 18 + i * 4, 30 + i * 3, 255),
-    )
+      let wave = @math.sinf(game.elapsed * 0.28)
+      for i in 0..<16 {
+        let y = i * (@types.screen_h / 16)
+        let tone = 20 + i * 5
+        @raylib.draw_rectangle(
+          0,
+          y,
+          @types.screen_w,
+          @types.screen_h / 16 + 2,
+          @raylib.Color::new(tone, 18 + i * 4, 30 + i * 3, 255),
+        )
+      }
+
+      @raylib.draw_circle(
+        190,
+        140,
+        170.0 + wave * 20.0,
+        @raylib.Color::new(156, 64, 44, 48),
+      )
+      @raylib.draw_circle(
+        @types.screen_w - 240,
+        170,
+        200.0 - wave * 16.0,
+        @raylib.Color::new(82, 120, 180, 46),
+      )
+      @raylib.draw_circle(
+        640,
+        @types.screen_h - 110,
+        180.0 + wave * 11.0,
+        @raylib.Color::new(180, 132, 48, 40),
+      )
+    }
   }
-
-  @raylib.draw_circle(
-    190,
-    140,
-    170.0 + wave * 20.0,
-    @raylib.Color::new(156, 64, 44, 48),
-  )
-  @raylib.draw_circle(
-    @types.screen_w - 240,
-    170,
-    200.0 - wave * 16.0,
-    @raylib.Color::new(82, 120, 180, 46),
-  )
-  @raylib.draw_circle(
-    640,
-    @types.screen_h - 110,
-    180.0 + wave * 11.0,
-    @raylib.Color::new(180, 132, 48, 40),
-  )
 
   if game.flash_t > 0.0 {
     let alpha = (game.flash_t * 140.0).to_int().clamp(min=0, max=140)
@@ -378,9 +586,12 @@ fn @types.Game::draw_kitchen(game : @types.Game) -> Unit {
       let station = @types.station_at(x, y)
 
       let base = station_color(station)
-      @raylib.draw_rectangle(
-        sx, sy, @types.station_tile_w, @types.station_tile_h, base,
-      )
+      if !draw_station_tile_art(station, sx, sy) {
+        @raylib.draw_rectangle(
+          sx, sy, @types.station_tile_w, @types.station_tile_h, base,
+        )
+      }
+      ignore(draw_station_icon(station, sx, sy))
       @raylib.draw_rectangle_lines(
         sx,
         sy,
