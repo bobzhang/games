@@ -8,6 +8,8 @@ package "bobzhang/games/neon_subway_sprint_2026"
 // Types and methods
 type Coin
 
+type GameArt
+
 type Obstacle
 
 type Particle

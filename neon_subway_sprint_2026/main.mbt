@@ -426,8 +426,12 @@ fn obstacle_hit_center_y(ob : Obstacle) -> Float {
 /// Entry point: initialises the window, creates all game entities, and runs the main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Neon Subway Sprint 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let runner : Runner = {
     x: 220.0,
@@ -945,56 +949,53 @@ fn main {
     let pulse = (wave_t * 3.0).to_int() % 140
     let sky_boost = if pulse < 70 { pulse } else { 140 - pulse }
 
+    draw_texture_cover(
+      art.tunnel_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.Color::new(255, 255, 255, 236),
+    )
     @raylib.draw_rectangle(
       0,
       0,
       sw,
       sh,
-      @raylib.Color::new(14, 14 + sky_boost / 3, 30 + sky_boost / 2, 255),
+      @raylib.Color::new(8, 10 + sky_boost / 6, 18 + sky_boost / 4, 58),
     )
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      270,
-      @raylib.Color::new(16, 26 + sky_boost / 3, 46 + sky_boost / 2, 255),
-    )
-
-    for i in 0..<72 {
+    @raylib.draw_rectangle(0, 0, sw, 132, @raylib.Color::new(6, 8, 14, 132))
+    for i in 0..<18 {
       let x = (
-          i * 118 + (wave_t * (60.0 + Float::from_int(level) * 16.0)).to_int()
+          i * 96 - (wave_t * (170.0 + Float::from_int(level) * 24.0)).to_int()
         ) %
-        (sw + 240) -
-        120
-      let h = 160 + i * 57 % 220
-      let w = 48 + i * 13 % 72
-      let c = 24 + i * 19 % 52
-      @raylib.draw_rectangle(
+        (sw + 260) -
+        130
+      @raylib.draw_line(
         x,
-        sh - h,
-        w,
-        h,
-        @raylib.Color::new(c, c + 14, c + 44, 255),
+        340,
+        x + 96,
+        308,
+        @raylib.Color::new(74, 222, 246, 48),
       )
-      if i % 3 == 0 {
-        @raylib.draw_rectangle(
-          x + 8,
-          sh - h + 24,
-          8,
-          h - 30,
-          @raylib.Color::new(50, 170, 220, 210),
-        )
-      }
     }
 
     for lane in 0..<lane_n {
       let y = lane_y(lane)
+      draw_texture_rect(
+        art.track_panel,
+        0.0,
+        y - 48.0,
+        Float::from_int(sw),
+        96.0,
+        @raylib.Color::new(210, 228, 238, 230),
+      )
       @raylib.draw_rectangle(
         0,
-        (y - 30.0).to_int(),
+        (y - 48.0).to_int(),
         sw,
-        62,
-        @raylib.Color::new(32, 36, 48, 255),
+        96,
+        @raylib.Color::new(8, 10, 16, 42 + lane * 18),
       )
       @raylib.draw_line(
         0,
@@ -1046,37 +1047,20 @@ fn main {
       } else {
         let tx = (train.x + shake_x).to_int()
         @raylib.draw_rectangle(
-          tx - 220,
-          (y - 36.0).to_int(),
-          440,
-          72,
-          @raylib.Color::new(194, 72, 88, 255),
+          tx - 286,
+          (y - 56.0).to_int(),
+          572,
+          112,
+          @raylib.Color::new(232, 48, 70, 50),
         )
-        @raylib.draw_rectangle(
-          tx - 206,
-          (y - 20.0).to_int(),
-          150,
-          28,
-          @raylib.Color::new(236, 214, 230, 255),
-        )
-        @raylib.draw_rectangle(
-          tx + 34,
-          (y - 20.0).to_int(),
-          150,
-          28,
-          @raylib.Color::new(236, 214, 230, 255),
-        )
-        @raylib.draw_circle(
-          tx - 154,
-          (y + 28.0).to_int(),
-          10.0,
-          @raylib.Color::new(30, 34, 42, 255),
-        )
-        @raylib.draw_circle(
-          tx + 154,
-          (y + 28.0).to_int(),
-          10.0,
-          @raylib.Color::new(30, 34, 42, 255),
+        draw_sprite_cell(
+          art,
+          10,
+          train.x + shake_x,
+          y - 2.0,
+          560.0,
+          174.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
       }
     }
@@ -1088,77 +1072,59 @@ fn main {
 
       let ox = (obstacle.x + shake_x).to_int()
       let base_y = lane_y(obstacle.lane)
-      let top = (base_y + obstacle.y_off - obstacle.h).to_int()
-
+      let cy = base_y + obstacle.y_off - obstacle.h * 0.5
+      @raylib.draw_circle(
+        ox,
+        (base_y + 22.0).to_int(),
+        obstacle.w * 0.42,
+        @raylib.Color::new(0, 0, 0, 90),
+      )
       if obstacle.kind == 0 {
-        @raylib.draw_rectangle(
-          ox - 26,
-          top,
-          52,
-          obstacle.h.to_int(),
-          @raylib.Color::new(222, 122, 82, 255),
-        )
-        @raylib.draw_rectangle(
-          ox - 30,
-          top + 10,
-          60,
-          10,
-          @raylib.Color::new(246, 188, 72, 255),
+        draw_sprite_cell(
+          art,
+          2,
+          Float::from_int(ox),
+          cy,
+          96.0,
+          96.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
       } else if obstacle.kind == 1 {
-        @raylib.draw_rectangle(
-          ox - 32,
-          top,
-          64,
-          obstacle.h.to_int(),
-          @raylib.Color::new(122, 84, 184, 255),
-        )
-        @raylib.draw_rectangle(
-          ox - 24,
-          top + 14,
-          48,
-          14,
-          @raylib.Color::new(198, 162, 240, 255),
+        draw_sprite_cell(
+          art,
+          3,
+          Float::from_int(ox),
+          cy,
+          106.0,
+          156.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
         @draw.draw_text(
           "2",
           ox - 6,
-          top + 36,
+          (cy - 12.0).to_int(),
           28,
           @raylib.Color::new(248, 236, 172, 255),
         )
       } else if obstacle.kind == 2 {
-        @raylib.draw_circle(
-          ox,
-          top + 20,
-          22.0,
-          @raylib.Color::new(94, 220, 242, 255),
-        )
-        @raylib.draw_circle(
-          ox - 4,
-          top + 16,
-          8.0,
-          @raylib.Color::new(196, 250, 255, 255),
+        draw_sprite_cell(
+          art,
+          4,
+          Float::from_int(ox),
+          cy,
+          94.0,
+          94.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
       } else {
-        @raylib.draw_rectangle(
-          ox - 35,
-          top + 8,
-          70,
-          22,
-          @raylib.Color::new(86, 178, 116, 255),
-        )
-        @raylib.draw_circle(
-          ox - 22,
-          top + 30,
-          7.0,
-          @raylib.Color::new(28, 32, 36, 255),
-        )
-        @raylib.draw_circle(
-          ox + 22,
-          top + 30,
-          7.0,
-          @raylib.Color::new(28, 32, 36, 255),
+        draw_sprite_cell(
+          art,
+          5,
+          Float::from_int(ox),
+          cy,
+          128.0,
+          82.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
       }
     }
@@ -1176,12 +1142,14 @@ fn main {
       } else {
         8.0
       }
-      @raylib.draw_circle(cx, cy, r, @raylib.Color::new(244, 214, 90, 255))
-      @raylib.draw_circle(
-        cx,
-        cy,
-        r * 0.55,
-        @raylib.Color::new(252, 240, 180, 255),
+      draw_sprite_cell(
+        art,
+        6,
+        Float::from_int(cx),
+        Float::from_int(cy),
+        r * 6.2,
+        r * 6.2,
+        @raylib.Color::new(255, 255, 255, 255),
       )
       if coin.value > 1 {
         @draw.draw_text(
@@ -1201,52 +1169,16 @@ fn main {
       let px = (powerup.x + shake_x).to_int()
       let py = (lane_y(powerup.lane) + powerup.y_off).to_int()
 
-      if powerup.kind == 0 {
-        @raylib.draw_rectangle(
-          px - 14,
-          py - 12,
-          28,
-          24,
-          @raylib.Color::new(94, 212, 146, 255),
-        )
-        @raylib.draw_rectangle(
-          px - 4,
-          py - 18,
-          8,
-          36,
-          @raylib.Color::new(224, 250, 236, 255),
-        )
-        @raylib.draw_rectangle(
-          px - 14,
-          py - 4,
-          28,
-          8,
-          @raylib.Color::new(224, 250, 236, 255),
-        )
-      } else if powerup.kind == 1 {
-        @raylib.draw_rectangle(
-          px - 13,
-          py - 18,
-          26,
-          36,
-          @raylib.Color::new(90, 182, 246, 255),
-        )
-        @raylib.draw_rectangle(
-          px - 6,
-          py - 24,
-          12,
-          8,
-          @raylib.Color::new(206, 234, 252, 255),
-        )
-      } else {
-        @raylib.draw_circle(
-          px,
-          py,
-          16.0,
-          @raylib.Color::new(190, 118, 252, 255),
-        )
-        @raylib.draw_circle(px, py, 9.0, @raylib.Color::new(238, 214, 255, 255))
-      }
+      @raylib.draw_circle(px, py, 24.0, @raylib.Color::new(82, 226, 246, 58))
+      draw_sprite_cell(
+        art,
+        7 + powerup.kind,
+        Float::from_int(px),
+        Float::from_int(py),
+        78.0,
+        78.0,
+        @raylib.Color::new(255, 255, 255, 255),
+      )
     }
 
     for particle in particles {
@@ -1264,48 +1196,44 @@ fn main {
         @raylib.Color::new(110, 226, 246, 255)
       }
 
-      @raylib.draw_circle(
-        (particle.x + shake_x).to_int(),
-        particle.y.to_int(),
-        2.0,
-        c,
-      )
+      if particle.kind == 2 {
+        draw_sprite_cell(
+          art,
+          11,
+          particle.x + shake_x,
+          particle.y,
+          24.0,
+          24.0,
+          @raylib.Color::new(255, 255, 255, 220),
+        )
+      } else {
+        @raylib.draw_circle(
+          (particle.x + shake_x).to_int(),
+          particle.y.to_int(),
+          2.0,
+          c,
+        )
+      }
     }
 
     if runner.invuln_t <= 0.0 || (runner.invuln_t * 13.0).to_int() % 2 == 0 {
       let rx = (runner.x + shake_x).to_int()
       let ry = runner.y.to_int()
-      let dash_col = if runner.dash_t > 0.0 {
-        @raylib.Color::new(252, 232, 124, 255)
-      } else {
-        @raylib.Color::new(218, 232, 248, 255)
-      }
-
-      @raylib.draw_triangle(
-        @raylib.Vector2::new(runner.x + 26.0 + shake_x, runner.y - 8.0),
-        @raylib.Vector2::new(runner.x - 20.0 + shake_x, runner.y - 22.0),
-        @raylib.Vector2::new(runner.x - 20.0 + shake_x, runner.y + 6.0),
-        dash_col,
-      )
-      @raylib.draw_rectangle(
-        rx - 10,
-        ry - 24,
-        18,
-        24,
-        @raylib.Color::new(92, 186, 244, 255),
-      )
+      let runner_cell = if runner.dash_t > 0.0 { 1 } else { 0 }
       @raylib.draw_circle(
-        rx - 2,
-        ry - 30,
-        9.0,
-        @raylib.Color::new(236, 248, 255, 255),
+        rx - 4,
+        ry + 8,
+        34.0,
+        @raylib.Color::new(62, 220, 248, 50),
       )
-      @raylib.draw_line(
-        rx - 24,
-        ry + 2,
-        rx + 10,
-        ry + 2,
-        @raylib.Color::new(96, 236, 248, 255),
+      draw_sprite_cell(
+        art,
+        runner_cell,
+        runner.x + shake_x + 2.0,
+        runner.y - 25.0,
+        128.0,
+        104.0,
+        @raylib.Color::new(255, 255, 255, 255),
       )
 
       if runner.dash_t > 0.0 {
@@ -1568,7 +1496,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

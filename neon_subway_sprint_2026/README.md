@@ -4,7 +4,15 @@ A three-lane side-scrolling runner set in neon-lit subway tunnels across a cyber
 
 The game is structured around a three-sector campaign. Each sector has a target score quota that must be reached before a countdown timer expires. Sector 1 requires 1,450 points in 92 seconds at 360 speed; Sector 2 requires 2,050 in 98 seconds at 430 speed; Sector 3 requires 2,800 in 104 seconds at 500 speed. Clearing all three sectors wins the run. The runner has 6 HP; obstacles deal 1 damage, trains deal 2 damage, and med pack power-ups restore 1 HP. A boost meter (starting at 100%) powers the dash ability, which destroys obstacles on contact for bonus points.
 
-The single-file implementation uses object pools for obstacles (150), coins (220), power-ups (32), and particles (420), with a dedicated TrainEvent struct for the express train hazard system.
+The implementation uses object pools for obstacles (150), coins (220), power-ups (32), and particles (420), with a dedicated TrainEvent struct for the express train hazard system.
+
+## Generated Art Assets
+
+The package now includes generated raster artwork under `resources/`:
+
+- `subway_tunnel_backdrop.png` — cyberpunk metro tunnel backdrop used as the full-scene base layer.
+- `subway_track_panel.png` — wet concrete, rails, hazard striping, and grate material drawn across the three runner lanes.
+- `subway_sprites.png` — transparent 4x3 sprite sheet for the runner, dash pose, obstacle set, coin, power-ups, express train, and spark burst.
 
 ## Build and Run
 
@@ -38,7 +46,7 @@ moon build --target native neon_subway_sprint_2026/
 
 ### Package `neon_subway_sprint_2026`
 
-> Main entry point and complete game implementation in a single file.
+> Main entry point, generated art loader, and complete game implementation.
 
 #### Constants
 
@@ -94,11 +102,13 @@ moon build --target native neon_subway_sprint_2026/
 
 ```
 neon_subway_sprint_2026/
-├── main.mbt    — Complete game: types, constants, utilities, spawning, game loop, rendering
+├── art.mbt       — Generated texture loading, unloading, and draw helpers
+├── main.mbt      — Complete game: types, constants, utilities, spawning, game loop, rendering
+├── resources/    — Generated PNG backdrop, lane panel, and sprite sheet
 └── moon.pkg    — Package config with raylib and math imports
 ```
 
-This is a single-file game. The code is organized top-to-bottom: constants, struct definitions, utility functions, pool management (clear/reset), entity spawning functions, the main function with game loop containing input handling, physics, collision detection, spawning logic, and rendering.
+The code is organized with a small asset helper file plus the main game file: constants, struct definitions, utility functions, pool management (clear/reset), entity spawning functions, and the main function with game loop containing input handling, physics, collision detection, spawning logic, and rendering.
 
 ### Data Flow
 
@@ -106,7 +116,7 @@ This is a single-file game. The code is organized top-to-bottom: constants, stru
 
 2. **Update**: When not in game-over or transition state: timer counts down, cooldowns tick, lane switching applies, jump physics (gravity at 980, landing detection), dash activation (costs 35 boost), entity spawning on cooldowns (obstacles, coins, power-ups, trains), entity scrolling (obstacles move left at `speed`, floating orbs move faster), collision detection (runner vs obstacles with AABB, runner vs coins with distance check, runner vs train with zone check), power-up effects (HP heal, boost refill, magnet activation), stage completion check.
 
-3. **Rendering**: Draws in order: pulsing sky background, parallax city buildings, three lane tracks with scrolling ties, train (warning blink or physical train), obstacles by kind, coins with value labels, power-ups by kind, particles, runner (triangle body with head, dash trail lines), HUD (title, sector, scores, HP/boost/progress bars), touch controls, message bar, sector clear overlay, game over overlay.
+3. **Rendering**: Draws in order: generated subway tunnel backdrop with motion glints, three generated-material lane tracks with scrolling ties, train (warning blink or generated train sprite), generated obstacle sprites by kind, generated coin and power-up sprites, particles and generated spark bursts, generated runner sprite with dash trail lines, HUD (title, sector, scores, HP/boost/progress bars), touch controls, message bar, sector clear overlay, game over overlay.
 
 ### Key Design Patterns
 
