@@ -797,8 +797,12 @@ fn draw_touch_help() -> Unit {
 /// Initializes the window and runs the Dice Roguelite Arena game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] dice roguelite arena 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let visuals = load_game_art()
+  defer unload_game_art(visuals)
 
   let mut state : Int = 0 // 0 menu, 1 battle, 2 reward, 3 game over, 4 victory
   let mut turn : Int = 0 // 0 player turn, 1 enemy anim
@@ -1180,9 +1184,9 @@ fn main {
       let mut picked : Int = -1
 
       for i in 0..<3 {
-        let x = 194 + i * 330
-        let y = 292
-        if inside_rect(mouse.x, mouse.y, x, y, 290, 220) {
+        let x = 213 + i * 340
+        let y = 284
+        if inside_rect(mouse.x, mouse.y, x, y, 260, 330) {
           if click {
             picked = i
           }
@@ -1245,43 +1249,7 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(10, 12, 19, 255))
 
-    // background layers
-    @raylib.draw_rectangle_gradient_v(
-      0,
-      0,
-      sw,
-      sh,
-      @raylib.Color::new(18, 26, 48, 255),
-      @raylib.Color::new(10, 12, 22, 255),
-    )
-
-    for i in 0..<24 {
-      let fi : Float = Float::from_int(i)
-      let x : Int = (fi * 80.0 + bg_t * (18.0 + Float::from_int(i % 5) * 7.0)).to_int() %
-        sw
-      let y : Int = 50 + (fi * 39.0 + bg_t * 22.0).to_int() % 240
-      @raylib.draw_circle(
-        x,
-        y,
-        2.0 + Float::from_int(i % 3),
-        @raylib.Color::new(110, 150, 220, 152),
-      )
-    }
-
-    for i in 0..<14 {
-      let fi : Float = Float::from_int(i)
-      let base_x : Float = fi * 108.0 -
-        bg_t * (18.0 + Float::from_int(i % 4) * 6.0)
-      let wx : Int = (base_x % Float::from_int(sw + 220)).to_int()
-      let y : Int = 180 + i % 4 * 28
-      @raylib.draw_rectangle(
-        wx - 110,
-        y,
-        220,
-        26,
-        @raylib.Color::new(34, 54, 96, 94),
-      )
-    }
+    draw_arena_backdrop_art(visuals, bg_t)
 
     draw_panel(40, 28, 620, 180, @raylib.Color::new(104, 142, 232, 220))
     draw_panel(706, 28, 620, 180, @raylib.Color::new(230, 124, 126, 220))
@@ -1388,24 +1356,21 @@ fn main {
 
     draw_panel(40, 228, 1286, 500, @raylib.Color::new(106, 124, 166, 224))
 
-    @raylib.draw_circle(330, 468, 70.0, @raylib.Color::new(76, 112, 202, 190))
-    @raylib.draw_circle(330, 468, 46.0, @raylib.Color::new(106, 170, 244, 232))
-    @draw.draw_text("YOU", 292, 454, 28, @raylib.Color::new(18, 28, 42, 250))
+    @raylib.draw_circle(330, 540, 62.0, @raylib.Color::new(48, 96, 180, 76))
+    draw_player_avatar_art(visuals, 330, 454)
 
     let mut enemy_x : Int = 978
     if turn == 1 {
       enemy_x = enemy_x + (@math.sinf(enemy_anim_t * 34.0) * 18.0).to_int()
     }
 
-    @raylib.draw_circle(enemy_x, 360, 82.0, enemy_color(enemy.kind))
-    @raylib.draw_circle(enemy_x, 360, 58.0, @raylib.Color::new(30, 30, 44, 84))
-    @draw.draw_text(
-      "ENEMY",
-      enemy_x - 62,
-      348,
-      24,
-      @raylib.Color::new(244, 246, 252, 252),
+    @raylib.draw_circle(
+      enemy_x,
+      442,
+      70.0,
+      @raylib.Color::new(126, 76, 180, 58),
     )
+    draw_enemy_art(visuals, enemy.kind, enemy_x, 360)
 
     if state == 1 {
       for dice_elem in dice {
@@ -1413,25 +1378,15 @@ fn main {
         let y : Int = dice_elem.y.to_int()
 
         let over : Bool = inside_rect(mouse.x, mouse.y, x, y, 132, 132)
-        let mut bg = if dice_elem.used {
-          @raylib.Color::new(72, 76, 92, 210)
-        } else if over && turn == 0 {
-          @raylib.Color::new(132, 156, 222, 244)
-        } else {
-          @raylib.Color::new(94, 112, 170, 232)
-        }
-
-        if dice_elem.pulse_t > 0.0 {
-          let glow : Int = (dice_elem.pulse_t * 420.0).to_int()
-          bg = @raylib.Color::new(
-            (94 + glow / 9).clamp(min=0, max=255),
-            (112 + glow / 8).clamp(min=0, max=255),
-            (170 + glow / 7).clamp(min=0, max=255),
-            240,
-          )
-        }
-
-        @raylib.draw_rectangle(x, y, 132, 132, bg)
+        draw_dice_tile_art(
+          visuals,
+          x,
+          y,
+          132,
+          dice_elem.used,
+          over && turn == 0,
+          dice_elem.pulse_t,
+        )
         @raylib.draw_rectangle_lines(
           x,
           y,
@@ -1652,44 +1607,38 @@ fn main {
       )
 
       for i in 0..<3 {
-        let x = 194 + i * 330
-        let y = 292
-        let over : Bool = inside_rect(mouse.x, mouse.y, x, y, 290, 220)
+        let x = 213 + i * 340
+        let y = 284
+        let over : Bool = inside_rect(mouse.x, mouse.y, x, y, 260, 330)
 
-        let fill = if over {
-          @raylib.Color::new(102, 126, 204, 246)
-        } else {
-          @raylib.Color::new(70, 88, 152, 232)
-        }
-
-        @raylib.draw_rectangle(x, y, 290, 220, fill)
+        draw_reward_card_art(visuals, x, y, 260, 330, over)
         @raylib.draw_rectangle_lines(
           x,
           y,
-          290,
-          220,
+          260,
+          330,
           @raylib.Color::new(218, 232, 252, 250),
         )
 
         @draw.draw_text(
           "\{i + 1}",
           x + 14,
-          y + 10,
+          y + 18,
           28,
           @raylib.Color::new(250, 236, 142, 252),
         )
         @draw.draw_text(
           rewards[i].title,
-          x + 18,
-          y + 52,
-          34,
+          x + 24,
+          y + 86,
+          28,
           @raylib.Color::new(242, 248, 255, 252),
         )
         @draw.draw_text(
           rewards[i].desc,
-          x + 18,
-          y + 108,
-          30,
+          x + 24,
+          y + 156,
+          24,
           @raylib.Color::new(222, 236, 252, 252),
         )
       }
@@ -1786,7 +1735,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

@@ -1,8 +1,8 @@
 # Dice Roguelite Arena 2026
 
-Dice Roguelite Arena 2026 is a turn-based roguelite combat game where the player rolls dice and assigns them to actions against a series of increasingly powerful enemies across 12 floors. Each turn, the player receives 6 dice with random values (1-6) and randomly assigned faces (Strike, Guard, Focus, Mend, Venom, Crush), spending energy to activate them one at a time. The game features a clean cyberpunk-themed UI on a 1366x768 screen with animated background elements, spark particle effects, and color-coded panels for player and enemy status.
+Dice Roguelite Arena 2026 is a turn-based roguelite combat game where the player rolls dice and assigns them to actions against a series of increasingly powerful enemies across 12 floors. Each turn, the player receives 6 dice with random values (1-6) and randomly assigned faces (Strike, Guard, Focus, Mend, Venom, Crush), spending energy to activate them one at a time. The game features a generated cyberpunk arena backdrop, generated pilot and enemy sprites, generated dice/card UI frames, spark particle effects, and color-coded panels for player and enemy status on a 1366x768 screen.
 
-The core mechanic revolves around dice face assignment and energy management. The player starts each turn with 3 energy (+ focus bonus) and 2 rerolls (+ reroll bonus). Each die activation costs 1 energy, and rerolling unused dice costs 1 energy and 1 reroll charge. Six face types provide distinct tactical options: Strike deals value*4 + attack bonus damage with crit chance, Guard adds value*3 + 3 + guard bonus shield, Focus grants 1 + value/2 energy, Mend heals value*2 + heal bonus HP, Venom applies value + venom bonus poison, and Crush deals value*5 + 5 + crush bonus damage (bonus from current shield). Enemies telegraph their next intent (attack, guard, rage, or poison), allowing strategic counter-play.
+The core mechanic revolves around dice face assignment and energy management. The player starts each turn with 3 energy (+ focus bonus) and 2 rerolls (+ reroll bonus). Each die activation costs 1 energy, and rerolling unused dice costs 1 energy and 1 reroll charge. Six face types provide distinct tactical options: Strike deals value*4 + attack bonus damage with crit chance, Guard adds value*3 + 3 + guard bonus shield, Focus grants 1 + value/2 energy, Mend heals value*2 + heal bonus HP, Venom applies value + venom bonus poison, and Crush deals value*5 + 5 + crush bonus damage (bonus from current shield). Four generated enemy silhouettes map directly to the enemy types, and enemies telegraph their next intent (attack, guard, rage, or poison), allowing strategic counter-play.
 
 After each victory, the player chooses from 3 randomly generated reward cards that permanently upgrade artifacts (attack bonus, guard bonus, heal bonus, venom bonus, crush bonus, reroll charges, starting shield, crit chance, or gold). Four enemy types with distinct behavior profiles and floor-scaling stats create variety: Scrap Berserkers favor attacking, Aegis Sentinels prioritize shielding, Venom Archivists apply poison, and Null Reapers (appearing from floor 9) combine all threats with the highest stats. The player wins by clearing all 12 floors.
 
@@ -43,7 +43,7 @@ After defeating an enemy, choose 1 of 3 reward cards to permanently upgrade your
 
 ### Package `dice_roguelite_arena_2026`
 
-> Single-file game with all logic in main.mbt.
+> Two-file game package with core gameplay in `main.mbt` and generated art helpers in `art.mbt`.
 
 #### Structs
 
@@ -106,11 +106,13 @@ After defeating an enemy, choose 1 of 3 reward cards to permanently upgrade your
 
 ```
 dice_roguelite_arena_2026/
-├── main.mbt    -- Complete game: structs, dice mechanics, combat, rewards, AI, rendering
-└── moon.pkg    -- Package config (single main package, imports math + raylib)
+├── art.mbt      -- Generated texture loading and art draw helpers
+├── main.mbt     -- Complete game: structs, dice mechanics, combat, rewards, AI, rendering
+├── moon.pkg     -- Package config (single main package, imports math + raylib + draw/fps)
+└── resources/   -- Generated arena, pilot, enemy, dice, and reward-card assets
 ```
 
-This is a single-file turn-based game with all state managed as local variables and closures in the `main` function. Three closures (`begin_new_run`, `begin_player_turn`, `begin_enemy_turn`) handle state transitions. The game loop processes input, turn logic, and rendering sequentially.
+Most turn-based game state remains managed as local variables and closures in the `main` function. Three closures (`begin_new_run`, `begin_player_turn`, `begin_enemy_turn`) handle state transitions. The game loop processes input, turn logic, and rendering sequentially, while `art.mbt` owns generated texture loading, backdrop drawing, sprite selection, and dice/card frame helpers.
 
 ### Data Flow
 
@@ -120,7 +122,7 @@ This is a single-file turn-based game with all state managed as local variables 
 4. **Enemy AI**: Each turn, `roll_enemy_intent` selects the enemy's action using kind-specific probability tables. Intent is displayed before execution, allowing counter-play. Intent values scale with floor and accumulated rage.
 5. **Damage Resolution**: Both `compute_damage_to_enemy` and `compute_damage_to_player` handle shield absorption before HP reduction, returning actual HP damage for visual feedback.
 6. **Rewards**: After victory, `generate_rewards` creates 3 random cards. `apply_reward` permanently modifies the player's stats or artifacts, building power over the run.
-7. **Rendering**: Layered UI with gradient background, floating animated elements, player panel (left, blue), enemy panel (right, red), arena panel (center), 3x2 dice grid with face icons and values, action buttons, status bars, intent display, reward card selection, and overlay screens.
+7. **Rendering**: Layered UI with generated cyberpunk arena backdrop, player panel (left, blue), enemy panel (right, red), arena panel (center), generated pilot and enemy sprites, 3x2 generated dice tile grid with face icons and values, action buttons, status bars, intent display, generated reward card selection, and overlay screens.
 
 ### Key Design Patterns
 
