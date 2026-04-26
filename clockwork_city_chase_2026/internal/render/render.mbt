@@ -78,20 +78,14 @@ fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
-/// Draws the dark gradient sky background, two large animated glow blobs, and 140 parallax-scrolling twinkling stars with camera offset applied.
+/// Draws the generated clockwork city backdrop, two large animated glow blobs, and 140 parallax-scrolling twinkling stars with camera offset applied.
 fn @types.Game::draw_sky(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @types.bg_top(),
-    @types.bg_bottom(),
-  )
+  draw_city_backdrop_art(art, game.flash_t)
 
   let g0x = Float::from_int(@types.screen_w) * 0.2 +
     @math.sinf(game.time_s * 0.28) * 140.0
@@ -182,9 +176,10 @@ fn @types.Game::draw_horizon(
 }
 
 ///|
-/// Renders the procedural road surface row-by-row, drawing off-road gutters in dark tones, the road fill with alternating mid stripes, cyan left and pink right border lines, and dashed lane dividers.
+/// Renders the road row-by-row, drawing generated surface strips, dark off-road gutters, cyan/pink border lines, and dashed lane dividers.
 fn @types.Game::draw_track(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
@@ -229,7 +224,8 @@ fn @types.Game::draw_track(
       )
     }
 
-    @raylib.draw_rectangle(
+    draw_road_strip_art(
+      art,
       left,
       (y0 + cam_y).to_int(),
       @types.maxf(0.0, Float::from_int(right - left)).to_int(),
@@ -292,193 +288,10 @@ fn obj_col(kind : @types.ObjKind) -> @raylib.Color {
 }
 
 ///|
-/// Draws a Scout enemy as a forward-pointing triangle hull with two dark wheel circles near the rear.
-fn draw_scout(
-  o : @types.Obj,
-  col : @raylib.Color,
-  cam_x : Float,
-  cam_y : Float,
-) -> Unit {
-  let x = o.x + cam_x
-  let y = o.y + cam_y
-
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(x, y - o.h * 0.5),
-    @raylib.Vector2::new(x - o.w * 0.5, y + o.h * 0.36),
-    @raylib.Vector2::new(x + o.w * 0.5, y + o.h * 0.36),
-    col,
-  )
-  @raylib.draw_circle(
-    (x - o.w * 0.22).to_int(),
-    (y + o.h * 0.3).to_int(),
-    9.0,
-    @raylib.Color::new(14, 20, 30, 220),
-  )
-  @raylib.draw_circle(
-    (x + o.w * 0.22).to_int(),
-    (y + o.h * 0.3).to_int(),
-    9.0,
-    @raylib.Color::new(14, 20, 30, 220),
-  )
-}
-
-///|
-/// Draws a Spinner enemy as a solid circle with a pulsing ring outline and a bright central highlight dot.
-fn draw_spinner(
-  o : @types.Obj,
-  col : @raylib.Color,
-  cam_x : Float,
-  cam_y : Float,
-) -> Unit {
-  let x = o.x + cam_x
-  let y = o.y + cam_y
-  let r = o.w * 0.42
-  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 4.0)
-
-  @raylib.draw_circle(x.to_int(), y.to_int(), r, @types.alpha_color(col, 200))
-  @raylib.draw_circle_lines(
-    x.to_int(),
-    y.to_int(),
-    r + pulse * 6.0,
-    @types.alpha_color(col, 180),
-  )
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    4.6,
-    @raylib.Color::new(240, 250, 255, 240),
-  )
-}
-
-///|
-/// Draws a Tank enemy as a large filled rectangle hull with a dark outline and a semi-transparent turret block across the mid section.
-fn draw_tank(
-  o : @types.Obj,
-  col : @raylib.Color,
-  cam_x : Float,
-  cam_y : Float,
-) -> Unit {
-  let x = o.x + cam_x
-  let y = o.y + cam_y
-
-  @raylib.draw_rectangle(
-    (x - o.w * 0.5).to_int(),
-    (y - o.h * 0.5).to_int(),
-    o.w.to_int(),
-    o.h.to_int(),
-    @types.alpha_color(col, 214),
-  )
-  @raylib.draw_rectangle_lines(
-    (x - o.w * 0.5).to_int(),
-    (y - o.h * 0.5).to_int(),
-    o.w.to_int(),
-    o.h.to_int(),
-    @raylib.Color::new(30, 40, 58, 220),
-  )
-
-  @raylib.draw_rectangle(
-    (x - o.w * 0.38).to_int(),
-    (y - o.h * 0.24).to_int(),
-    (o.w * 0.76).to_int(),
-    (o.h * 0.2).to_int(),
-    @raylib.Color::new(220, 236, 250, 84),
-  )
-}
-
-///|
-/// Draws a GearWall barrier as a wide semi-transparent rectangle with a pulsing neon centre stripe.
-fn draw_gear_wall(
-  o : @types.Obj,
-  col : @raylib.Color,
-  cam_x : Float,
-  cam_y : Float,
-) -> Unit {
-  let x = o.x + cam_x
-  let y = o.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 4.6)
-
-  @raylib.draw_rectangle(
-    (x - o.w * 0.5).to_int(),
-    (y - o.h * 0.5).to_int(),
-    o.w.to_int(),
-    o.h.to_int(),
-    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 170),
-  )
-  @raylib.draw_rectangle(
-    (x - o.w * 0.5).to_int(),
-    (y - 2.0).to_int(),
-    o.w.to_int(),
-    4,
-    @raylib.Color::new(255, 200, 228, 160 + (pulse * 80.0).to_int()),
-  )
-}
-
-///|
-/// Draws a pickup item as a pulsing glow circle with a ring outline and an inner icon: "$" for Coin, a canister shape for Coolant, or "E" for EmpCell.
-fn draw_pickup(
-  o : @types.Obj,
-  col : @raylib.Color,
-  cam_x : Float,
-  cam_y : Float,
-) -> Unit {
-  let x = o.x + cam_x
-  let y = o.y + cam_y
-  let r = o.w * 0.46
-  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 3.2)
-
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    r + pulse * 2.0,
-    @types.alpha_color(col, 130),
-  )
-  @raylib.draw_circle_lines(
-    x.to_int(),
-    y.to_int(),
-    r + pulse * 5.2,
-    @types.alpha_color(col, 180),
-  )
-
-  match o.kind {
-    Coin =>
-      @draw.draw_text(
-        "$",
-        (x - 8.0).to_int(),
-        (y - 12.0).to_int(),
-        24,
-        @raylib.Color::new(255, 242, 162, 230),
-      )
-    Coolant => {
-      @raylib.draw_rectangle(
-        (x - 10.0).to_int(),
-        (y - 14.0).to_int(),
-        20,
-        28,
-        @raylib.Color::new(220, 255, 240, 220),
-      )
-      @raylib.draw_rectangle(
-        (x - 4.0).to_int(),
-        (y - 19.0).to_int(),
-        8,
-        4,
-        @raylib.Color::new(220, 255, 240, 220),
-      )
-    }
-    _ =>
-      @draw.draw_text(
-        "E",
-        (x - 9.0).to_int(),
-        (y - 12.0).to_int(),
-        24,
-        @raylib.Color::new(236, 214, 255, 230),
-      )
-  }
-}
-
-///|
 /// Iterates all active objects, applies cloaking transparency where applicable, dispatches to the per-kind draw function, and draws a small HP bar above hostile enemies.
 fn @types.Game::draw_objs(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
@@ -494,13 +307,7 @@ fn @types.Game::draw_objs(
       col0
     }
 
-    match o.kind {
-      Scout => draw_scout(o, col, cam_x, cam_y)
-      Spinner => draw_spinner(o, col, cam_x, cam_y)
-      Tank => draw_tank(o, col, cam_x, cam_y)
-      GearWall => draw_gear_wall(o, col, cam_x, cam_y)
-      _ => draw_pickup(o, col, cam_x, cam_y)
-    }
+    draw_obj_sprite_art(art, o, col, cam_x, cam_y)
 
     if @types.is_hostile(o.kind) && o.hp > 0.0 {
       let hp_ratio = @types.clampf(o.hp / @types.maxf(1.0, o.max_hp), 0.0, 1.0)
@@ -649,103 +456,6 @@ fn @types.Game::draw_ghost_fx(
       @raylib.Vector2::new(g.w * 0.5, g.h * 0.5),
       g.rot,
       c,
-    )
-  }
-}
-
-///|
-/// Draws the player car as a tilted rectangle body with a cockpit cutout, front headlight, twin engine flares, muzzle flashes, a dash aura ring, and an invulnerability flicker shield; body tints red while the hurt timer is active.
-fn @types.Game::draw_player(
-  game : @types.Game,
-  cam_x : Float,
-  cam_y : Float,
-) -> Unit {
-  let x = game.hero.x + cam_x
-  let y = game.hero.y + cam_y
-
-  let lean = @types.clampf(game.hero.vx / @types.max_speed_x, -1.0, 1.0)
-  let rot = lean * 18.0
-  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.hero.engine_t * 8.2)
-
-  let body = if game.hero.hurt_t > 0.0 {
-    @raylib.Color::new(255, 188, 204, 255)
-  } else {
-    @raylib.Color::new(136, 236, 255, 255)
-  }
-
-  @raylib.draw_rectangle_pro(
-    @raylib.Rectangle::new(x, y, game.hero.w, game.hero.h),
-    @raylib.Vector2::new(game.hero.w * 0.5, game.hero.h * 0.5),
-    rot,
-    body,
-  )
-  @raylib.draw_rectangle_pro(
-    @raylib.Rectangle::new(
-      x,
-      y + game.hero.h * 0.18,
-      game.hero.w * 0.86,
-      game.hero.h * 0.42,
-    ),
-    @raylib.Vector2::new(game.hero.w * 0.43, game.hero.h * 0.21),
-    rot,
-    @raylib.Color::new(20, 34, 56, 220),
-  )
-
-  @raylib.draw_circle(
-    x.to_int(),
-    (y - game.hero.h * 0.46).to_int(),
-    8.0 + pulse * 2.2,
-    @raylib.Color::new(236, 246, 255, 230),
-  )
-
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(x - game.hero.w * 0.4, y + game.hero.h * 0.48),
-    @raylib.Vector2::new(x - game.hero.w * 0.8, y + game.hero.h * 0.64),
-    @raylib.Vector2::new(x - game.hero.w * 0.1, y + game.hero.h * 0.56),
-    @raylib.Color::new(106, 206, 242, 220),
-  )
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(x + game.hero.w * 0.4, y + game.hero.h * 0.48),
-    @raylib.Vector2::new(x + game.hero.w * 0.8, y + game.hero.h * 0.64),
-    @raylib.Vector2::new(x + game.hero.w * 0.1, y + game.hero.h * 0.56),
-    @raylib.Color::new(106, 206, 242, 220),
-  )
-
-  if game.hero.muzzle_t > 0.0 {
-    let a = (game.hero.muzzle_t * 255.0).to_int().clamp(min=0, max=255)
-    @raylib.draw_circle(
-      (x - 10.0).to_int(),
-      (y - game.hero.h * 0.53).to_int(),
-      5.2,
-      @raylib.Color::new(255, 236, 180, a),
-    )
-    @raylib.draw_circle(
-      (x + 10.0).to_int(),
-      (y - game.hero.h * 0.53).to_int(),
-      5.2,
-      @raylib.Color::new(255, 236, 180, a),
-    )
-  }
-
-  if game.dash_t > 0.0 {
-    @raylib.draw_circle_lines(
-      x.to_int(),
-      y.to_int(),
-      @types.maxf(game.hero.w, game.hero.h) * 0.65 + game.dash_t * 40.0,
-      @raylib.Color::new(120, 248, 255, 210),
-    )
-  }
-
-  if game.hero.invuln > 0.0 {
-    let flicker = Float::from_int(80) +
-      @math.sinf(game.time_s * 14.0) * 70.0 +
-      70.0
-    let aa = flicker.to_int().clamp(min=30, max=220)
-    @raylib.draw_circle(
-      x.to_int(),
-      y.to_int(),
-      @types.maxf(game.hero.w, game.hero.h) * 0.6,
-      @raylib.Color::new(246, 252, 255, aa),
     )
   }
 }
@@ -1315,30 +1025,31 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
 /// Composites the play-world layer in depth order: ghost after-images, rings, objects, shots, spark particles, and then the player car.
 fn @types.Game::draw_world(
   game : @types.Game,
+  art : GameArt,
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
   game.draw_ghost_fx(cam_x, cam_y)
   game.draw_ring_fx(cam_x, cam_y)
-  game.draw_objs(cam_x, cam_y)
+  game.draw_objs(art, cam_x, cam_y)
   game.draw_shots(cam_x, cam_y)
   game.draw_spark_fx(cam_x, cam_y)
-  game.draw_player(cam_x, cam_y)
+  draw_player_car_art(art, game, cam_x, cam_y)
 }
 
 ///|
 /// Renders the full frame for the current game state.
-pub fn draw_frame(game : @types.Game) -> Unit {
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
   @raylib.clear_background(@types.bg_top())
 
   let cam = game.shake_offset()
   let cam_x = cam.0
   let cam_y = cam.1
 
-  game.draw_sky(cam_x, cam_y)
+  game.draw_sky(art, cam_x, cam_y)
   game.draw_horizon(cam_x, cam_y)
-  game.draw_track(cam_x, cam_y)
-  game.draw_world(cam_x, cam_y)
+  game.draw_track(art, cam_x, cam_y)
+  game.draw_world(art, cam_x, cam_y)
   game.draw_emp_wave()
 
   if game.flash_t > 0.0 {

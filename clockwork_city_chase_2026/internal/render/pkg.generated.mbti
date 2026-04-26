@@ -3,14 +3,31 @@ package "bobzhang/games/clockwork_city_chase_2026/internal/render"
 
 import {
   "bobzhang/games/clockwork_city_chase_2026/internal/types",
+  "tonyfettes/raylib",
 }
 
 // Values
-pub fn draw_frame(@types.Game) -> Unit
+pub fn draw_frame(@types.Game, GameArt) -> Unit
+
+pub fn load_game_art() -> GameArt
+
+pub fn unload_game_art(GameArt) -> Unit
 
 // Errors
 
 // Types and methods
+pub(all) struct GameArt {
+  city_backdrop : @raylib.Texture
+  road_surface : @raylib.Texture
+  player_car : @raylib.Texture
+  scout_enemy : @raylib.Texture
+  spinner_enemy : @raylib.Texture
+  tank_enemy : @raylib.Texture
+  gear_wall : @raylib.Texture
+  coin_pickup : @raylib.Texture
+  coolant_pickup : @raylib.Texture
+  emp_cell_pickup : @raylib.Texture
+}
 
 // Type aliases
 
