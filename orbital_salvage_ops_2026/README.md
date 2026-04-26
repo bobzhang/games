@@ -1,6 +1,12 @@
 # orbital_salvage_ops_2026
 
-A top-down space salvage game where you pilot a ship through an orbital debris field, collecting scrap with a tractor beam, fighting hostile drones, and depositing cargo at a beacon.
+A top-down space salvage game where you pilot a generated salvage ship through an orbital debris field, collecting scrap with a tractor beam, fighting hostile drones, and depositing cargo at a generated extraction beacon.
+
+## Generated Art
+
+- `resources/salvage_starfield_backdrop.png`: orbital debris-field backdrop for the scrolling world and title screens.
+- `resources/salvage_debris_panel.png`: derelict hull texture used as a subtle world and modal surface overlay.
+- `resources/salvage_sprites.png`: 4x3 transparent sprite sheet for the player ship, boost variant, three drone classes, boss, scrap, mines, wrecks, tractor effect, bullets, and beacon.
 
 ## Build and Run
 
@@ -48,15 +54,16 @@ The `main` function initializes the window, creates all game entity arrays (`Pla
 | `Wreck` | Static debris obstacle: position and collision radius. |
 | `Particle` | Visual effect particle: position, velocity, size, lifetime, and kind for color selection. |
 | `Boss` | Boss ship: position, velocity, HP, max HP, fire cooldown, drone-spawn cooldown, and animation timer. |
+| `GameArt` | Runtime bundle of generated backdrop, hull-panel, and sprite-sheet textures. |
 
 #### Functions
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
 | `clampf` | `(Float, Float, Float) -> Float` | Clamps a float value to the inclusive range `[lo, hi]`. |
-| `absf` | `(Float) -> Float` | Returns the absolute value of a float. |
 | `dist2` | `(Float, Float, Float, Float) -> Float` | Returns the squared Euclidean distance between two points. |
 | `randf` | `(Float, Float) -> Float` | Returns a uniform random float in `[lo, hi]` using raylib RNG. |
+| `angle_from_vector` | `(Float, Float) -> Float` | Converts a direction vector into a sprite rotation where unrotated art faces upward. |
 | `inside_rect` | `(Float, Float, Int, Int, Int, Int) -> Bool` | Returns true if point `(px, py)` lies within the given rectangle. |
 | `drone_radius` | `(Int) -> Float` | Returns the collision radius for a drone of the given kind. |
 | `drone_hp` | `(Int, Int) -> Float` | Returns the starting HP for a drone of given kind at the given level. |
@@ -75,6 +82,11 @@ The `main` function initializes the window, creates all game entity arrays (`Pla
 | `push_from_center` | `(Float, Float, Float, Float, Float) -> (Float, Float)` | Returns a push impulse vector directed away from center `(cx, cy)` with given force. |
 | `spawn_map_wrecks` | `(Array[Wreck]) -> Unit` | Clears and randomly places all wreck obstacles across the world, avoiding the spawn zone and beacon area. |
 | `draw_touch_ui` | `(Int) -> Unit` | Draws the on-screen touch control overlay (movement pad and action buttons) during play state. |
+| `load_game_art` | `() -> GameArt` | Loads the generated texture bundle after Raylib initialization. |
+| `unload_game_art` | `(GameArt) -> Unit` | Releases generated textures before window shutdown. |
+| `draw_texture_cover` | `(@raylib.Texture, Float, Float, Float, Float, @raylib.Color) -> Unit` | Cover-crops a texture into a destination rectangle. |
+| `draw_sprite_cell` | `(GameArt, Int, Float, Float, Float, Float, @raylib.Color) -> Unit` | Draws one centered cell from the generated 4x3 sprite sheet. |
+| `draw_sprite_cell_rotated` | `(GameArt, Int, Float, Float, Float, Float, Float, @raylib.Color) -> Unit` | Draws one centered and rotated cell from the generated 4x3 sprite sheet. |
 | `main` | `() -> Unit` | Entry point: initialises window, allocates all entity arrays, runs the game loop. |
 
 #### Constants
@@ -98,12 +110,13 @@ The `main` function initializes the window, creates all game entity arrays (`Pla
 
 ## Architecture
 
-All game logic is in `main.mbt`. Key design patterns:
+Gameplay logic remains in `main.mbt`; generated texture loading and sprite helpers live in `art.mbt`. Key design patterns:
 - **State machine**: An integer `state` variable drives title (0), play (1), win (2), and game-over (3) screens; transitions happen when `deposited >= target_salvage`, `hp <= 0`, or `timer <= 0`.
-- **Top-down scrolling world**: A 3600×2600 world is panned via `cam_x`/`cam_y` camera offsets that follow the player ship.
+- **Top-down scrolling world**: A 3600×2600 world is panned via `cam_x`/`cam_y` camera offsets that follow the player ship, with generated space and hull textures behind the entity layer.
 - **Object pools**: All entities (drones, bullets, scrap, mines, particles) are pre-allocated arrays with an `active` flag; helper functions scan for the first free slot.
 - **Tractor beam mechanic**: Holding the tractor key sets `player.tractor_on`; scrap pieces with the magnet flag are pulled toward the ship each frame.
-- **Boss encounter**: When `deposited` crosses a threshold and enough drones have been killed, the boss activates, fires spread-shot patterns, and spawns additional drones.
+- **Generated sprite layer**: Wrecks, mines, scrap, drones, boss, bullets, beacon, tractor effect, and player ship all draw from the generated transparent sprite sheet while keeping the original collision radii.
+- **Boss encounter**: When `deposited` crosses a threshold, the boss activates, fires spread-shot patterns, and spawns additional drones.
 - **Delta-time updates**: All physics, cooldowns, and timers are multiplied by `dt` (capped at 0.033 s) for frame-rate independence.
 
 ## Improvement & Refinement Plan

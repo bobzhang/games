@@ -201,6 +201,16 @@ fn randf(lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Converts a direction vector into a sprite rotation where unrotated art faces upward.
+fn angle_from_vector(x : Float, y : Float) -> Float {
+  if x * x + y * y < 0.001 {
+    0.0
+  } else {
+    @math.atan2f(y, x) * 57.29577951308232 + 90.0
+  }
+}
+
+///|
 /// Returns true if point `(px, py)` lies within the rectangle at `(rx, ry)` with size `rw x rh`.
 fn inside_rect(
   px : Float,
@@ -715,8 +725,12 @@ fn draw_touch_ui(state : Int) -> Unit {
 /// Entry point: initialises the window, allocates all entity arrays, and runs the main game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] orbital salvage ops 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let player : Player = {
     x: world_w * 0.5,
@@ -2083,6 +2097,22 @@ fn main {
     // Render.
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(4, 8, 16, 255))
+    draw_texture_cover(
+      art.starfield_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.white,
+    )
+    draw_texture_cover(
+      art.debris_panel,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.Color::new(160, 210, 230, 32),
+    )
 
     // Space starfield.
     for i in 0..<240 {
@@ -2110,7 +2140,7 @@ fn main {
       (-cam_y).to_int(),
       world_w.to_int(),
       world_h.to_int(),
-      @raylib.Color::new(8, 16, 30, 110),
+      @raylib.Color::new(8, 16, 30, 64),
     )
 
     @raylib.draw_rectangle_lines(
@@ -2140,6 +2170,15 @@ fn main {
       24.0,
       @raylib.Color::new(156, 242, 252, 210),
     )
+    draw_sprite_cell(
+      art,
+      11,
+      beacon_x - cam_x,
+      beacon_y - cam_y,
+      96.0,
+      116.0,
+      @raylib.white,
+    )
 
     // Wrecks.
     for wreck in wrecks {
@@ -2148,23 +2187,24 @@ fn main {
       }
       let wx = (wreck.x - cam_x).to_int()
       let wy = (wreck.y - cam_y).to_int()
-      @raylib.draw_circle(
-        wx,
-        wy,
-        wreck.radius,
-        @raylib.Color::new(44, 52, 66, 230),
+      let wreck_rot : Float = Float::from_int(
+        (wreck.x * 0.23 + wreck.y * 0.11).to_int() % 360,
+      )
+      draw_sprite_cell_rotated(
+        art,
+        8,
+        wreck.x - cam_x,
+        wreck.y - cam_y,
+        wreck.radius * 2.45,
+        wreck.radius * 2.45,
+        wreck_rot,
+        @raylib.white,
       )
       @raylib.draw_circle_lines(
         wx,
         wy,
         wreck.radius,
         @raylib.Color::new(112, 132, 160, 190),
-      )
-      @raylib.draw_circle(
-        wx,
-        wy,
-        wreck.radius * 0.35,
-        @raylib.Color::new(30, 36, 48, 210),
       )
     }
 
@@ -2177,17 +2217,25 @@ fn main {
       let my = (mine.y - cam_y).to_int()
 
       let armed : Bool = mine.arm_t <= 0.0
-      let col = if armed {
-        @raylib.Color::new(214, 88, 94, 232)
+      let mine_tint = if armed {
+        @raylib.white
       } else {
-        @raylib.Color::new(132, 132, 154, 216)
+        @raylib.Color::new(156, 168, 190, 210)
       }
       let mine_top : Int = (mine.y - cam_y - mine.radius - 7.0).to_int()
       let mine_bottom : Int = (mine.y - cam_y + mine.radius + 7.0).to_int()
       let mine_left : Int = (mine.x - cam_x - mine.radius - 7.0).to_int()
       let mine_right : Int = (mine.x - cam_x + mine.radius + 7.0).to_int()
 
-      @raylib.draw_circle(mx, my, mine.radius, col)
+      draw_sprite_cell(
+        art,
+        7,
+        mine.x - cam_x,
+        mine.y - cam_y,
+        mine.radius * 2.65,
+        mine.radius * 2.65,
+        mine_tint,
+      )
       @raylib.draw_circle_lines(
         mx,
         my,
@@ -2226,7 +2274,17 @@ fn main {
         @raylib.Color::new(252, 212, 116, 236)
       }
 
-      @raylib.draw_circle(sx, sy, 9.0 + Float::from_int(scrap.value), col)
+      let scrap_size : Float = 24.0 + Float::from_int(scrap.value) * 5.0
+      draw_sprite_cell_rotated(
+        art,
+        6,
+        scrap.x - cam_x,
+        scrap.y - cam_y,
+        scrap_size,
+        scrap_size,
+        scrap.t * 18.0 + Float::from_int(scrap.kind) * 31.0,
+        col,
+      )
       if scrap.magnet {
         @raylib.draw_circle_lines(
           sx,
@@ -2246,67 +2304,55 @@ fn main {
       let dx = (drone.x - cam_x).to_int()
       let dy = (drone.y - cam_y).to_int()
 
-      if drone.kind == 0 {
-        @raylib.draw_circle(dx, dy, 16.0, @raylib.Color::new(220, 96, 102, 244))
-        @raylib.draw_circle_lines(
-          dx,
-          dy,
-          20.0,
-          @raylib.Color::new(248, 212, 214, 186),
-        )
+      let drone_sprite : Int = if drone.kind == 0 {
+        2
       } else if drone.kind == 1 {
-        @raylib.draw_rectangle(
-          dx - 18,
-          dy - 14,
-          36,
-          28,
-          @raylib.Color::new(238, 144, 72, 242),
-        )
-        @raylib.draw_rectangle_lines(
-          dx - 22,
-          dy - 18,
-          44,
-          36,
-          @raylib.Color::new(252, 226, 188, 184),
-        )
+        3
       } else {
-        @raylib.draw_rectangle(
-          dx - 24,
-          dy - 20,
-          48,
-          40,
-          @raylib.Color::new(168, 96, 186, 240),
-        )
-        @raylib.draw_circle(
-          dx,
-          dy - 4,
-          12.0,
-          @raylib.Color::new(236, 190, 252, 214),
-        )
+        4
       }
+      let drone_w : Float = if drone.kind == 0 {
+        44.0
+      } else if drone.kind == 1 {
+        62.0
+      } else {
+        78.0
+      }
+      let drone_h : Float = if drone.kind == 0 {
+        44.0
+      } else if drone.kind == 1 {
+        56.0
+      } else {
+        70.0
+      }
+      draw_sprite_cell_rotated(
+        art,
+        drone_sprite,
+        drone.x - cam_x,
+        drone.y - cam_y,
+        drone_w,
+        drone_h,
+        angle_from_vector(drone.vx, drone.vy),
+        @raylib.white,
+      )
+      @raylib.draw_circle_lines(
+        dx,
+        dy,
+        drone_radius(drone.kind) + 4.0,
+        @raylib.Color::new(248, 212, 214, 150),
+      )
     }
 
     // Boss.
     if boss.active {
-      @raylib.draw_rectangle(
-        (boss.x - cam_x - 80.0).to_int(),
-        (boss.y - cam_y - 44.0).to_int(),
-        160,
-        88,
-        @raylib.Color::new(126, 64, 168, 246),
-      )
-      @raylib.draw_rectangle_lines(
-        (boss.x - cam_x - 92.0).to_int(),
-        (boss.y - cam_y - 56.0).to_int(),
-        184,
-        112,
-        @raylib.Color::new(234, 202, 252, 194),
-      )
-      @raylib.draw_circle(
-        (boss.x - cam_x).to_int(),
-        (boss.y - cam_y).to_int(),
-        26.0,
-        @raylib.Color::new(210, 166, 246, 226),
+      draw_sprite_cell(
+        art,
+        5,
+        boss.x - cam_x,
+        boss.y - cam_y,
+        190.0,
+        154.0,
+        @raylib.white,
       )
       @raylib.draw_circle_lines(
         (boss.x - cam_x).to_int(),
@@ -2336,7 +2382,19 @@ fn main {
         @raylib.Color::new(252, 132, 136, 242)
       }
 
-      @raylib.draw_circle(bx, by, bullet.radius, col)
+      let bullet_w : Float = if bullet.kind == 1 { 18.0 } else { 14.0 }
+      let bullet_h : Float = if bullet.kind == 1 { 36.0 } else { 28.0 }
+      draw_sprite_cell_rotated(
+        art,
+        10,
+        bullet.x - cam_x,
+        bullet.y - cam_y,
+        bullet_w,
+        bullet_h,
+        angle_from_vector(bullet.vx, bullet.vy),
+        col,
+      )
+      @raylib.draw_circle(bx, by, bullet.radius * 0.55, col)
     }
 
     // Player and tractor visual.
@@ -2346,15 +2404,22 @@ fn main {
     let pcol = if player.inv_t > 0.0 {
       @raylib.Color::new(252, 252, 252, 240)
     } else {
-      @raylib.Color::new(94, 188, 246, 248)
+      @raylib.white
     }
 
-    @raylib.draw_rectangle(px - 16, py - 12, 32, 24, pcol)
-    @raylib.draw_circle(
-      px,
-      py - 14,
-      8.0,
-      @raylib.Color::new(214, 242, 255, 252),
+    draw_sprite_cell_rotated(
+      art,
+      if player.boost_t > 0.0 {
+        1
+      } else {
+        0
+      },
+      player.x - cam_x,
+      player.y - cam_y,
+      58.0,
+      64.0,
+      angle_from_vector(player.face_x, player.face_y),
+      pcol,
     )
 
     @raylib.draw_line(
@@ -2366,6 +2431,15 @@ fn main {
     )
 
     if player.tractor_on {
+      draw_sprite_cell(
+        art,
+        9,
+        player.x - cam_x,
+        player.y - cam_y,
+        148.0,
+        148.0,
+        @raylib.Color::new(190, 250, 255, 132),
+      )
       @raylib.draw_circle_lines(
         px,
         py,
@@ -2609,6 +2683,14 @@ fn main {
         500,
         @raylib.Color::new(12, 18, 34, 236),
       )
+      draw_texture_cover(
+        art.debris_panel,
+        180.0,
+        130.0,
+        1006.0,
+        500.0,
+        @raylib.Color::new(130, 190, 214, 62),
+      )
       @raylib.draw_rectangle_lines(
         180,
         130,
@@ -2675,6 +2757,14 @@ fn main {
         374,
         @raylib.Color::new(14, 28, 36, 242),
       )
+      draw_texture_cover(
+        art.debris_panel,
+        286.0,
+        196.0,
+        794.0,
+        374.0,
+        @raylib.Color::new(130, 230, 200, 44),
+      )
       @raylib.draw_rectangle_lines(
         286,
         196,
@@ -2720,6 +2810,14 @@ fn main {
         374,
         @raylib.Color::new(30, 16, 20, 246),
       )
+      draw_texture_cover(
+        art.debris_panel,
+        286.0,
+        196.0,
+        794.0,
+        374.0,
+        @raylib.Color::new(214, 120, 130, 44),
+      )
       @raylib.draw_rectangle_lines(
         286,
         196,
@@ -2761,7 +2859,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

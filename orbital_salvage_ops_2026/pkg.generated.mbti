@@ -12,6 +12,8 @@ type Bullet
 
 type Drone
 
+type GameArt
+
 type Mine
 
 type Particle
