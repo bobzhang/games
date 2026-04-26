@@ -1,12 +1,20 @@
 ///|
 /// Draws the maze background, wall tiles, normal pellets, and power pellets.
-fn @types.Game::draw_maze(game : @types.Game) -> Unit {
+fn @types.Game::draw_maze(game : @types.Game, art : GameArt) -> Unit {
   @raylib.draw_rectangle(
     @types.maze_x - 4,
     @types.maze_y - 4,
     @types.maze_cols * @types.tile_size + 8,
     @types.maze_rows * @types.tile_size + 8,
     @raylib.Color::new(12, 12, 34, 255),
+  )
+  draw_texture_cover(
+    art.maze_panel,
+    Float::from_int(@types.maze_x - 4),
+    Float::from_int(@types.maze_y - 4),
+    Float::from_int(@types.maze_cols * @types.tile_size + 8),
+    Float::from_int(@types.maze_rows * @types.tile_size + 8),
+    @raylib.Color::new(90, 150, 255, 68),
   )
 
   for y in 0..<@types.maze_rows {
@@ -22,6 +30,14 @@ fn @types.Game::draw_maze(game : @types.Game) -> Unit {
           @types.tile_size,
           @raylib.Color::new(24, 60, 185, 255),
         )
+        draw_texture_cover(
+          art.maze_panel,
+          Float::from_int(px),
+          Float::from_int(py),
+          Float::from_int(@types.tile_size),
+          Float::from_int(@types.tile_size),
+          @raylib.Color::new(90, 170, 255, 132),
+        )
       } else {
         @raylib.draw_rectangle(
           px,
@@ -32,18 +48,24 @@ fn @types.Game::draw_maze(game : @types.Game) -> Unit {
         )
         match game.pellets[i] {
           1 =>
-            @raylib.draw_circle(
-              @types.tile_center_x(x),
-              @types.tile_center_y(y),
-              3.0,
-              @raylib.raywhite,
+            draw_sprite_cell(
+              art,
+              9,
+              Float::from_int(@types.tile_center_x(x)),
+              Float::from_int(@types.tile_center_y(y)),
+              10.0,
+              10.0,
+              @raylib.white,
             )
           2 =>
-            @raylib.draw_circle(
-              @types.tile_center_x(x),
-              @types.tile_center_y(y),
-              6.0,
-              @raylib.orange,
+            draw_sprite_cell(
+              art,
+              10,
+              Float::from_int(@types.tile_center_x(x)),
+              Float::from_int(@types.tile_center_y(y)),
+              22.0,
+              22.0,
+              @raylib.white,
             )
           _ => ()
         }
@@ -54,39 +76,90 @@ fn @types.Game::draw_maze(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the player character as a yellow circle at its current tile position.
-fn @types.Game::draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, art : GameArt) -> Unit {
   let cx = @types.tile_center_x(game.player_x)
   let cy = @types.tile_center_y(game.player_y)
-  @raylib.draw_circle(cx, cy, 9.0, @raylib.yellow)
-  @raylib.draw_circle(cx + 3, cy - 2, 2.0, @raylib.black)
+  let sprite = if game.dir_x < 0 {
+    1
+  } else if game.dir_y < 0 {
+    2
+  } else if game.dir_y > 0 {
+    3
+  } else {
+    0
+  }
+  draw_sprite_cell(
+    art,
+    sprite,
+    Float::from_int(cx),
+    Float::from_int(cy),
+    27.0,
+    27.0,
+    @raylib.white,
+  )
 }
 
 ///|
 /// Draws all ghosts in their team color, or blue when frightened mode is active.
-fn @types.Game::draw_ghosts(game : @types.Game) -> Unit {
+fn @types.Game::draw_ghosts(game : @types.Game, art : GameArt) -> Unit {
+  let mut ghost_index = 0
   for ghost in game.ghosts {
     let cx = @types.tile_center_x(ghost.x)
     let cy = @types.tile_center_y(ghost.y)
-    let color = if game.frightened_timer > 0.0 {
-      @raylib.Color::new(65, 135, 255, 255)
+    let sprite = if game.frightened_timer > 0.0 {
+      8
     } else {
-      ghost.color
+      4 + ghost_index
     }
-    @raylib.draw_circle(cx, cy - 2, 9.0, color)
-    @raylib.draw_rectangle(cx - 9, cy - 2, 18, 11, color)
-    @raylib.draw_circle(cx - 3, cy - 2, 2.0, @raylib.white)
-    @raylib.draw_circle(cx + 3, cy - 2, 2.0, @raylib.white)
+    draw_sprite_cell(
+      art,
+      sprite,
+      Float::from_int(cx),
+      Float::from_int(cy),
+      28.0,
+      30.0,
+      @raylib.white,
+    )
+    ghost_index = ghost_index + 1
   }
 }
 
 ///|
 /// Draws the HUD panel showing score, lives, pellet count, ghost mode, and controls.
-fn @types.Game::draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game, art : GameArt) -> Unit {
+  draw_texture_cover(
+    art.hud_panel,
+    Float::from_int(@types.hud_x - 16),
+    16.0,
+    Float::from_int(@types.screen_width - @types.hud_x - 8),
+    Float::from_int(@types.screen_height - 32),
+    @raylib.Color::new(255, 255, 255, 218),
+  )
+  @raylib.draw_rectangle(
+    @types.hud_x - 8,
+    26,
+    @types.screen_width - @types.hud_x - 26,
+    @types.screen_height - 60,
+    @raylib.Color::new(4, 8, 18, 112),
+  )
+
   @draw.draw_text("PAC DASH 2026", @types.hud_x, 30, 30, @raylib.raywhite)
+  draw_sprite_cell(art, 11, 724.0, 46.0, 34.0, 34.0, @raylib.white)
   @draw.draw_text("Score", @types.hud_x, 90, 24, @raylib.lightgray)
   @draw.draw_text("\{game.score}", @types.hud_x, 118, 32, @raylib.yellow)
   @draw.draw_text("Lives", @types.hud_x, 170, 24, @raylib.lightgray)
   @draw.draw_text("\{game.lives}", @types.hud_x, 198, 30, @raylib.orange)
+  for i in 0..<game.lives {
+    draw_sprite_cell(
+      art,
+      0,
+      Float::from_int(@types.hud_x + i * 26),
+      230.0,
+      22.0,
+      22.0,
+      @raylib.white,
+    )
+  }
   @draw.draw_text("Pellets", @types.hud_x, 246, 24, @raylib.lightgray)
   @draw.draw_text(
     "\{game.pellets_left}",
@@ -119,13 +192,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
 ///|
 /// Draws maze, actors, and HUD for the current Pac Dash frame.
-pub fn draw_frame(game : @types.Game) -> Unit {
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
   @raylib.begin_drawing()
   @raylib.clear_background(@raylib.Color::new(5, 5, 10, 255))
-  game.draw_maze()
-  game.draw_player()
-  game.draw_ghosts()
-  game.draw_hud()
+  draw_texture_cover(
+    art.maze_panel,
+    0.0,
+    0.0,
+    Float::from_int(@types.screen_width),
+    Float::from_int(@types.screen_height),
+    @raylib.Color::new(24, 74, 170, 42),
+  )
+  game.draw_maze(art)
+  game.draw_player(art)
+  game.draw_ghosts(art)
+  game.draw_hud(art)
   @fps.draw()
   @raylib.end_drawing()
 }

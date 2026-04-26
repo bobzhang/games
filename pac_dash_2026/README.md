@@ -1,6 +1,12 @@
 # pac_dash_2026
 
-A Pac-Man-inspired maze game with classic mechanics: eat all pellets, avoid four colored ghosts, grab power pellets to turn the tables, and clear the maze to win.
+A Pac-Man-inspired maze game with generated arcade art: eat all pellets, avoid four colored ghosts, grab power pellets to turn the tables, and clear the maze to win.
+
+## Generated Art
+
+- `resources/pac_maze_panel.png`: glossy neon-blue maze panel used for the board background and wall tile texture.
+- `resources/pac_hud_panel.png`: vertical arcade cabinet HUD panel used behind the right-side score/status column.
+- `resources/pac_sprites.png`: 4x3 transparent sprite sheet for four player directions, four ghost colors, frightened ghost, pellet, power pellet, and cherry bonus icon.
 
 ## Build and Run
 
@@ -83,11 +89,19 @@ No additional public types or functions beyond the `main` entry point.
 
 > Rendering for the maze, entities, and HUD.
 
+#### Types
+
+| Type | Description |
+|------|-------------|
+| `GameArt` | Public bundle of generated maze, HUD, and sprite-sheet textures |
+
 #### Functions
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `draw_frame` | `(@types.Game) -> Unit` | Main rendering entry point: draws the maze, player, ghosts, HUD, and game-over or win overlays |
+| `load_game_art` | `() -> GameArt` | Loads the generated render textures after Raylib initialization |
+| `unload_game_art` | `(GameArt) -> Unit` | Releases generated textures before window shutdown |
+| `draw_frame` | `(@types.Game, GameArt) -> Unit` | Main rendering entry point: draws the generated maze surface, player, ghosts, HUD, and game-over or win overlays |
 
 ## Architecture
 
@@ -97,6 +111,7 @@ No additional public types or functions beyond the `main` entry point.
 pac_dash_2026/
 ├── main.mbt              — Entry point: window init, game creation, main loop
 ├── moon.pkg              — Package config with imports
+├── resources/            — Generated PNG maze, HUD, and sprite sheet
 └── internal/
     ├── types/
     │   ├── types.mbt     — Ghost and Game structs with constructors
@@ -106,6 +121,7 @@ pac_dash_2026/
     │   ├── logic.mbt     — Maze building, pellet reset, player/ghost stepping, collision, AI
     │   └── input.mbt     — Per-frame keyboard sampling into game.want_x/want_y
     └── render/
+        ├── art.mbt       — Generated texture loading and sprite drawing helpers
         └── render.mbt    — All drawing: maze tiles, player, ghosts, HUD, overlays
 ```
 
@@ -115,7 +131,7 @@ The `types` package provides all shared data structures and maze utility functio
 
 1. **Input**: `try_set_player_wanted_dir` in `input.mbt` reads WASD/arrow keys and writes `game.want_x`/`game.want_y`, which the movement logic applies when the current tile boundary is reached.
 2. **Update**: `update_game` in `logic.mbt` advances `step_timer_player` and `step_timer_ghost`. When timers expire, `step_player` moves the player (applying the wanted direction if walkable), `maybe_consume_pellet` awards points and checks for win, and `step_ghost` moves each ghost using `choose_ghost_target` (Manhattan distance chase toward player or scatter home). `resolve_collisions` then checks player-ghost proximity for life loss or ghost eating.
-3. **Render**: `draw_frame` in `render.mbt` draws maze walls as filled rectangles, normal pellets as small dots, power pellets as larger circles, the player as a colored circle, each ghost with frightened coloring when active, and the HUD showing score and lives.
+3. **Render**: `draw_frame` in `render.mbt` draws the generated board surface, textured wall tiles, generated pellets, player direction sprites, ghost sprites with frightened mode, and the generated HUD panel showing score and lives.
 
 ### Key Design Patterns
 
