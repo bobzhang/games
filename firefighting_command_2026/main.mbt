@@ -15,6 +15,30 @@ let cols : Int = 5
 let rows : Int = 3
 
 ///|
+/// Generated city grid background texture.
+let tex_city_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated intact house texture.
+let tex_house_intact : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated burned house texture.
+let tex_house_burned : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated fire truck texture.
+let tex_fire_truck : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated flame texture.
+let tex_flame : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated water spray texture.
+let tex_water_spray : Ref[@raylib.Texture?] = { val: None }
+
+///|
 /// Returns the pixel X coordinate for the center of grid column c.
 fn cell_x(c : Int) -> Float {
   150.0 + Float::from_int(c) * 180.0
@@ -31,6 +55,241 @@ fn cell_y(r : Int) -> Float {
 struct Zone {
   mut fire : Float
   mut has_house : Bool
+}
+
+///|
+/// Loads one generated Firefighting Command texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "firefighting_command_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Firefighting Command render assets.
+fn load_assets() -> Unit {
+  tex_city_background.val = Some(load_art_texture("city_grid_background.png"))
+  tex_house_intact.val = Some(load_art_texture("house_intact.png"))
+  tex_house_burned.val = Some(load_art_texture("house_burned.png"))
+  tex_fire_truck.val = Some(load_art_texture("fire_truck.png"))
+  tex_flame.val = Some(load_art_texture("flame.png"))
+  tex_water_spray.val = Some(load_art_texture("water_spray.png"))
+}
+
+///|
+/// Unloads generated Firefighting Command render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_city_background)
+  unload(tex_house_intact)
+  unload(tex_house_burned)
+  unload(tex_fire_truck)
+  unload(tex_flame)
+  unload(tex_water_spray)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on a destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated texture scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, cx, cy, w, h, rotation, tint)
+}
+
+///|
+/// Draws the generated city map background.
+fn draw_city_background() -> Bool {
+  match tex_city_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        110.0,
+        Float::from_int(sw),
+        Float::from_int(sh - 170),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        110,
+        sw,
+        sh - 170,
+        @raylib.Color::new(18, 24, 32, 42),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws generated house art for a grid zone.
+fn draw_house_art(x : Float, y : Float, standing : Bool) -> Bool {
+  let texture_ref = if standing { tex_house_intact } else { tex_house_burned }
+  match texture_ref.val {
+    Some(texture) => {
+      let tint = if standing {
+        @raylib.white
+      } else {
+        @raylib.Color::new(210, 210, 210, 255)
+      }
+      draw_texture_fit(texture, x, y - 4.0, 142.0, 122.0, 0.0, tint)
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws generated flame art over a burning house.
+fn draw_flame_art(x : Float, y : Float, fire : Float) -> Bool {
+  match tex_flame.val {
+    Some(texture) => {
+      let size : Float = 44.0 + fire * 0.38
+      draw_texture_fit(
+        texture,
+        x + 8.0,
+        y - 20.0,
+        size,
+        size * 1.18,
+        0.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated fire truck art.
+fn draw_truck_art(x : Float, y : Float) -> Bool {
+  match tex_fire_truck.val {
+    Some(texture) => {
+      @raylib.draw_ellipse(
+        x.to_int(),
+        (y + 84.0).to_int(),
+        34.0,
+        8.0,
+        @raylib.Color::new(0, 0, 0, 82),
+      )
+      draw_texture_fit(texture, x, y + 64.0, 70.0, 74.0, 0.0, @raylib.white)
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws generated water spray from the truck toward the current zone.
+fn draw_water_spray_art(x : Float, y : Float) -> Bool {
+  match tex_water_spray.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        x + 4.0,
+        y + 18.0,
+        126.0,
+        70.0,
+        -66.0,
+        @raylib.Color::new(214, 236, 255, 184),
+      )
+      true
+    }
+    None => false
+  }
 }
 
 ///|
@@ -73,8 +332,12 @@ fn active_fire_count(zones : Array[Zone]) -> Int {
 /// Initializes and runs the Firefighting Command 2026 game loop.
 fn main {
   @raylib.init_window(sw, sh, "Firefighting Command 2026")
+  defer @raylib.close_window()
+  defer @draw.cleanup()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
+  defer unload_assets()
 
   let zones : Array[Zone] = Array::makei(cols * rows, fn(_i) {
     { fire: 0.0, has_house: true }
@@ -244,6 +507,8 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(28, 34, 42, 255))
 
+    ignore(draw_city_background())
+
     @raylib.draw_rectangle(0, 0, sw, 130, @raylib.Color::new(42, 52, 66, 255))
 
     for r in 0..<rows {
@@ -256,35 +521,39 @@ fn main {
         } else {
           @raylib.Color::new(66, 66, 66, 255)
         }
-        @raylib.draw_rectangle(
-          (x - 64.0).to_int(),
-          (y - 56.0).to_int(),
-          128,
-          108,
-          house_color,
-        )
-        @raylib.draw_rectangle_lines(
-          (x - 64.0).to_int(),
-          (y - 56.0).to_int(),
-          128,
-          108,
-          @raylib.darkgray,
-        )
+        if !draw_house_art(x, y, zones[i].has_house) {
+          @raylib.draw_rectangle(
+            (x - 64.0).to_int(),
+            (y - 56.0).to_int(),
+            128,
+            108,
+            house_color,
+          )
+          @raylib.draw_rectangle_lines(
+            (x - 64.0).to_int(),
+            (y - 56.0).to_int(),
+            128,
+            108,
+            @raylib.darkgray,
+          )
+        }
 
         if zones[i].fire > 0.0 {
           let f = zones[i].fire
-          @raylib.draw_circle(
-            (x - 20.0).to_int(),
-            (y - 18.0).to_int(),
-            12.0 + f * 0.09,
-            @raylib.orange,
-          )
-          @raylib.draw_circle(
-            (x + 16.0).to_int(),
-            (y - 6.0).to_int(),
-            10.0 + f * 0.08,
-            @raylib.red,
-          )
+          if !draw_flame_art(x, y, f) {
+            @raylib.draw_circle(
+              (x - 20.0).to_int(),
+              (y - 18.0).to_int(),
+              12.0 + f * 0.09,
+              @raylib.orange,
+            )
+            @raylib.draw_circle(
+              (x + 16.0).to_int(),
+              (y - 6.0).to_int(),
+              10.0 + f * 0.08,
+              @raylib.red,
+            )
+          }
           @draw.draw_text(
             "\{f.to_int()}%",
             (x - 22.0).to_int(),
@@ -296,32 +565,53 @@ fn main {
       }
     }
 
-    @raylib.draw_rectangle(
-      (truck_x - 30.0).to_int(),
-      (truck_y + 58.0).to_int(),
-      60,
-      26,
-      @raylib.red,
-    )
-    @raylib.draw_rectangle(
-      (truck_x - 18.0).to_int(),
-      (truck_y + 45.0).to_int(),
-      36,
-      13,
-      @raylib.white,
-    )
-    @raylib.draw_circle(
-      (truck_x - 18.0).to_int(),
-      (truck_y + 85.0).to_int(),
-      6.0,
-      @raylib.black,
-    )
-    @raylib.draw_circle(
-      (truck_x + 18.0).to_int(),
-      (truck_y + 85.0).to_int(),
-      6.0,
-      @raylib.black,
-    )
+    let current_zone = idx(truck_c, truck_r)
+    let spraying = !over &&
+      (
+        @raylib.is_key_down(@raylib.KeySpace) ||
+        @raylib.is_key_down(@raylib.KeyJ)
+      ) &&
+      water > 0.0 &&
+      zones[current_zone].fire > 0.0
+    if spraying {
+      if !draw_water_spray_art(truck_x, truck_y) {
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(truck_x, truck_y + 56.0),
+          @raylib.Vector2::new(truck_x, truck_y - 16.0),
+          6.0,
+          @raylib.skyblue,
+        )
+      }
+    }
+
+    if !draw_truck_art(truck_x, truck_y) {
+      @raylib.draw_rectangle(
+        (truck_x - 30.0).to_int(),
+        (truck_y + 58.0).to_int(),
+        60,
+        26,
+        @raylib.red,
+      )
+      @raylib.draw_rectangle(
+        (truck_x - 18.0).to_int(),
+        (truck_y + 45.0).to_int(),
+        36,
+        13,
+        @raylib.white,
+      )
+      @raylib.draw_circle(
+        (truck_x - 18.0).to_int(),
+        (truck_y + 85.0).to_int(),
+        6.0,
+        @raylib.black,
+      )
+      @raylib.draw_circle(
+        (truck_x + 18.0).to_int(),
+        (truck_y + 85.0).to_int(),
+        6.0,
+        @raylib.black,
+      )
+    }
 
     @draw.draw_text("FIREFIGHTING COMMAND 2026", 20, 18, 38, @raylib.skyblue)
     @draw.draw_text("Budget \{budget}", 20, 64, 28, @raylib.white)
@@ -375,7 +665,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

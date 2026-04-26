@@ -1,6 +1,6 @@
 # firefighting_command_2026
 
-A grid-based firefighting strategy game. Command a fire truck across a 5x3 grid of zones, spraying water to extinguish fires before they spread and destroy houses.
+A grid-based firefighting strategy game. Command a fire truck across a 5x3 grid of zones, spraying water to extinguish fires before they spread and destroy houses. The game now uses generated city-grid, house, burned-house, fire truck, flame, and water spray textures, with the original procedural draw paths retained as fallbacks.
 
 ## Build and Run
 
@@ -44,6 +44,8 @@ Single-file game. All logic, data, and rendering live in `main.mbt`. No internal
 | `idx` | `fn idx(c : Int, r : Int) -> Int` | Flat array index for column `c`, row `r`: `r * cols + c` |
 | `reset_zones` | `fn reset_zones(zones : Array[Zone]) -> Unit` | Resets all zones to full houses with no fire, then seeds 2 random ignition points between 28–46% |
 | `active_fire_count` | `fn active_fire_count(zones : Array[Zone]) -> Int` | Counts zones with `fire > 0.0` |
+| `load_assets` | `fn load_assets() -> Unit` | Loads generated textures from `resources/` and applies bilinear filtering |
+| `unload_assets` | `fn unload_assets() -> Unit` | Releases generated textures during shutdown |
 | `main` | `fn main` | Initialises the window, runs the game loop, handles all input, simulation, and rendering |
 
 #### Constants (file-level `let` bindings)
@@ -77,14 +79,22 @@ Key simulation rates (inlined in `main`):
 
 ```
 firefighting_command_2026/
-└── main.mbt    # All game state, simulation, input, and rendering in one file
+├── main.mbt      # All game state, simulation, input, rendering, and texture lifecycle
+├── moon.pkg      # Package config
+└── resources/    # Generated city, building, vehicle, flame, and water textures
+    ├── city_grid_background.png
+    ├── fire_truck.png
+    ├── flame.png
+    ├── house_burned.png
+    ├── house_intact.png
+    └── water_spray.png
 ```
 
 ### Data Flow
 
 The game is a single-function loop inside `main`. All mutable state is declared as local `let mut` variables: the `zones` array (15 `Zone` records), truck grid position (`truck_c`, `truck_r`), pixel position (`truck_x`, `truck_y`), `water`, two accumulator timers (`spread_tick`, `spawn_tick`), score counters (`budget`, `saved`, `lost`), `lives`, game-over flag (`over`), and the status message string.
 
-Each frame, input is processed first: arrow or WASD keys update `truck_c` / `truck_r` and the pixel position is immediately snapped via `cell_x` / `cell_y`. Holding Space or J while `water > 0` and the current zone has fire reduces `zone.fire` by `48 * dt` and `water` by `24 * dt`; if the fire reaches zero the zone is counted as saved and `budget` increases. When the truck is on a fire-free zone, `water` recharges at `14 * dt`. The spread timer accumulates `dt` each frame; when it reaches 1.0 s every active fire grows by 7%, and if it reaches 100% the house is destroyed and a life is lost, otherwise a random adjacent zone with a standing house may receive a 18% ignition seed. The spawn timer fires every 4.6 s to ignite a random zone that still has a house. Rendering draws zone rectangles, fire circles scaled to intensity, truck geometry, the HUD bar, and the game-over overlay when `lives <= 0`.
+Each frame, input is processed first: arrow or WASD keys update `truck_c` / `truck_r` and the pixel position is immediately snapped via `cell_x` / `cell_y`. Holding Space or J while `water > 0` and the current zone has fire reduces `zone.fire` by `48 * dt` and `water` by `24 * dt`; if the fire reaches zero the zone is counted as saved and `budget` increases. When the truck is on a fire-free zone, `water` recharges at `14 * dt`. The spread timer accumulates `dt` each frame; when it reaches 1.0 s every active fire grows by 7%, and if it reaches 100% the house is destroyed and a life is lost, otherwise a random adjacent zone with a standing house may receive a 18% ignition seed. The spawn timer fires every 4.6 s to ignite a random zone that still has a house. Rendering draws the generated city background, generated house or burned-house sprites, generated flame overlays scaled to intensity, generated truck and water-spray sprites, the HUD bar, and the game-over overlay when `lives <= 0`.
 
 ### Key Design Patterns
 
@@ -93,6 +103,7 @@ Each frame, input is processed first: arrow or WASD keys update `truck_c` / `tru
 - **Delta-time accumulator pattern**: Both the spread tick and the spawn tick use `tick += dt; if tick >= interval { tick -= interval; ... }` to drive periodic events at fixed real-time rates independent of frame rate.
 - **Inline adjacency search with retry**: Fire spread picks a random direction and retries up to 6 times to find a valid adjacent zone with a standing house, providing probabilistic spread that respects grid boundaries without a pre-built neighbour list.
 - **Immediate-mode rendering**: Every draw call is issued directly in the main loop body with no retained scene graph; zone positions are computed on the fly from `cell_x` / `cell_y` each frame.
+- **Texture fallback system**: Generated art helpers return `false` when a texture is unavailable, allowing the original rectangle/circle rendering paths to remain functional.
 
 ## Improvement & Refinement Plan
 
