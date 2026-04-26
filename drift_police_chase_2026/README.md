@@ -1,6 +1,6 @@
 # Drift Police Chase 2026
 
-Drift Police Chase 2026 is a top-down arcade driving game set in a sprawling neon-lit city grid. The player controls a getaway car fleeing through a 4600x3200 world while collecting scattered cash drops, outrunning police cruisers, and managing a rising wanted heat level. Two types of cops -- regular patrol cars and faster interceptors -- pursue the player with predictive AI that leads its targeting ahead of the player's velocity.
+Drift Police Chase 2026 is a top-down arcade driving game set in a sprawling neon-lit city grid with generated road, vehicle, pickup, and smoke artwork. The player controls a getaway car fleeing through a 4600x3200 world while collecting scattered cash drops, outrunning police cruisers, and managing a rising wanted heat level. Two types of cops -- regular patrol cars and faster interceptors -- pursue the player with predictive AI that leads its targeting ahead of the player's velocity.
 
 The core gameplay loop revolves around collecting enough cash to meet a per-level goal before time runs out or the car's integrity (HP) reaches zero. Players can activate a speed boost with a 3.2-second cooldown to ram through stunned cops and gain a cash bonus, or deploy a smoke screen on a 4.6-second cooldown to blind nearby cops and reduce the wanted heat meter. Picking up cash drops increases heat and builds a combo multiplier (up to x20), while boosting through cops at high speed stuns them and reduces heat. Each level escalates the cash goal, shortens the timer, and spawns more aggressive cops.
 
@@ -73,6 +73,7 @@ Completing the cash goal awards bonus points from remaining time and HP, then ad
 | `randf` | `(Float, Float) -> Float` | Returns a random float in the given range using raylib RNG |
 | `dist2` | `(Float, Float, Float, Float) -> Float` | Squared distance between two 2D points |
 | `inside_rect` | `(Float, Float, Int, Int, Int, Int) -> Bool` | Point-in-rectangle test for touch input regions |
+| `load_assets` / `unload_assets` | `() -> Unit` | Loads and releases generated city, vehicle, pickup, and smoke textures |
 | `emit_particle` | `(FixedArray[Particle], Float, Float, Float, Float, Float, Float, Int) -> Unit` | Emits a single particle into the first available slot |
 | `burst_particles` | `(FixedArray[Particle], Float, Float, Int, Float, Int) -> Unit` | Emits a radial burst of particles at a position |
 | `respawn_pickup` | `(FixedArray[Pickup], Int, Int) -> Unit` | Respawns a pickup at a random world position with level-scaled value |
@@ -89,14 +90,15 @@ Completing the cash goal awards bonus points from remaining time and HP, then ad
 ```
 drift_police_chase_2026/
 ├── main.mbt              -- Entry point, game loop, all logic and rendering
+├── resources/            -- Generated city tile, vehicle, pickup, and smoke assets
 └── moon.pkg              -- Package config, imports raylib and math
 ```
 
-This is a single-file game. All structs, game logic, input handling, physics, AI, rendering, and UI are contained in `main.mbt`. The main function initializes all entity arrays as `FixedArray` pools, then runs a game loop at 60 FPS with delta-time capping at 33ms.
+This is a single-file game. All structs, game logic, input handling, physics, AI, generated texture loading, rendering, and UI are contained in `main.mbt`. The main function initializes all entity arrays as `FixedArray` pools, loads generated textures once after window setup, then runs a game loop at 60 FPS with delta-time capping at 33ms.
 
 ### Data Flow
 
-Input is sampled at the top of each frame via `is_key_down` and `is_key_pressed` calls, combined with touch input from `inside_rect` hit tests. The game state is driven by an integer `state` variable (0=title, 1=playing, 2=win, 3=busted). During play, the player's velocity is updated via acceleration/drag physics, cops run predictive chase AI with reroute timers, pickups check proximity for collection, smoke clouds expand and decay, and particles are updated independently. Rendering uses world-to-screen coordinate transformation via `cam_x`/`cam_y` offsets with viewport culling for all entities.
+Input is sampled at the top of each frame via `is_key_down` and `is_key_pressed` calls, combined with touch input from `inside_rect` hit tests. The game state is driven by an integer `state` variable (0=title, 1=playing, 2=win, 3=busted). During play, the player's velocity is updated via acceleration/drag physics, cops run predictive chase AI with reroute timers, pickups check proximity for collection, smoke clouds expand and decay, and particles are updated independently. Rendering uses world-to-screen coordinate transformation via `cam_x`/`cam_y` offsets with viewport culling for all entities, drawing generated art when available and falling back to procedural shapes otherwise.
 
 ### Key Design Patterns
 

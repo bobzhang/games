@@ -31,6 +31,30 @@ let max_smokes : Int = 12
 let max_particles : Int = 1200
 
 ///|
+/// Generated scrolling city road texture.
+let tex_city_tile : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated player getaway car sprite.
+let tex_player_car : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated patrol car sprite.
+let tex_police_car : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated interceptor car sprite.
+let tex_interceptor_car : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated cash pickup sprite.
+let tex_cash_pickup : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated smoke cloud sprite.
+let tex_smoke_cloud : Ref[@raylib.Texture?] = { val: None }
+
+///|
 /// Represents the player's car with position, velocity, health, ability cooldowns, and score state.
 struct Player {
   mut x : Float
@@ -264,6 +288,277 @@ fn spawn_smoke(smokes : FixedArray[Smoke], x : Float, y : Float) -> Unit {
 }
 
 ///|
+/// Loads one generated Drift Police Chase texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "drift_police_chase_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Drift Police Chase render assets.
+fn load_assets() -> Unit {
+  tex_city_tile.val = Some(load_art_texture("city_tile.png"))
+  tex_player_car.val = Some(load_art_texture("player_car.png"))
+  tex_police_car.val = Some(load_art_texture("police_car.png"))
+  tex_interceptor_car.val = Some(load_art_texture("interceptor_car.png"))
+  tex_cash_pickup.val = Some(load_art_texture("cash_pickup.png"))
+  tex_smoke_cloud.val = Some(load_art_texture("smoke_cloud.png"))
+}
+
+///|
+/// Unloads generated Drift Police Chase render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_city_tile)
+  unload(tex_player_car)
+  unload(tex_police_car)
+  unload(tex_interceptor_car)
+  unload(tex_cash_pickup)
+  unload(tex_smoke_cloud)
+}
+
+///|
+/// Draws a texture centered on the destination point with optional rotation.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated sprite scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, x, y, w, h, rotation, tint)
+}
+
+///|
+/// Returns an angle in degrees for a right-facing sprite.
+fn heading_degrees(dx : Float, dy : Float) -> Float {
+  let d2 : Float = dx * dx + dy * dy
+  if d2 < 0.0001 {
+    0.0
+  } else {
+    @math.atan2f(dy, dx) * 57.2957795
+  }
+}
+
+///|
+/// Draws the generated city-road texture as a camera-aligned scrolling tile field.
+fn draw_city_art(
+  cam_x : Float,
+  cam_y : Float,
+  shake_x : Float,
+  shake_y : Float,
+) -> Bool {
+  match tex_city_tile.val {
+    Some(texture) => {
+      let tile_w : Float = 520.0
+      let tile_h : Float = 520.0
+      let mut wx : Float = Float::from_int((cam_x / tile_w).to_int()) * tile_w -
+        tile_w
+      while wx < cam_x + Float::from_int(sw) + tile_w {
+        let mut wy : Float = Float::from_int((cam_y / tile_h).to_int()) * tile_h -
+          tile_h
+        while wy < cam_y + Float::from_int(sh) + tile_h {
+          draw_texture_centered(
+            texture,
+            wx - cam_x + shake_x + tile_w * 0.5,
+            wy - cam_y + shake_y + tile_h * 0.5,
+            tile_w,
+            tile_h,
+            0.0,
+            @raylib.white,
+          )
+          wy = wy + tile_h
+        }
+        wx = wx + tile_w
+      }
+      @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(6, 10, 18, 44))
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated smoke screen art.
+fn draw_smoke_art(x : Int, y : Int, r : Float, life_ratio : Float) -> Bool {
+  match tex_smoke_cloud.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        r * 2.1,
+        r * 2.1,
+        0.0,
+        @raylib.Color::new(
+          210,
+          228,
+          240,
+          clampf(145.0 * life_ratio, 0.0, 160.0).to_int(),
+        ),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated cash pickup art.
+fn draw_cash_art(x : Int, y : Int, pulse : Float) -> Bool {
+  match tex_cash_pickup.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        34.0 + pulse * 4.0,
+        30.0 + pulse * 4.0,
+        0.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated player car art.
+fn draw_player_car_art(
+  x : Int,
+  y : Int,
+  dir_x : Float,
+  dir_y : Float,
+  tint : @raylib.Color,
+) -> Bool {
+  match tex_player_car.val {
+    Some(texture) => {
+      @raylib.draw_ellipse(
+        x,
+        y + 10,
+        30.0,
+        9.0,
+        @raylib.Color::new(0, 8, 14, 116),
+      )
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        64.0,
+        34.0,
+        heading_degrees(dir_x, dir_y),
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws generated police or interceptor car art.
+fn draw_cop_car_art(
+  kind : Int,
+  x : Int,
+  y : Int,
+  vx : Float,
+  vy : Float,
+  stunned : Bool,
+) -> Bool {
+  let texture_opt = if kind == 0 {
+    tex_police_car.val
+  } else {
+    tex_interceptor_car.val
+  }
+  match texture_opt {
+    Some(texture) => {
+      @raylib.draw_ellipse(
+        x,
+        y + 10,
+        28.0,
+        8.0,
+        @raylib.Color::new(0, 8, 14, 108),
+      )
+      draw_texture_fit(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        if kind == 0 {
+          58.0
+        } else {
+          64.0
+        },
+        if kind == 0 {
+          30.0
+        } else {
+          34.0
+        },
+        heading_degrees(vx, vy),
+        if stunned {
+          @raylib.Color::new(174, 232, 255, 255)
+        } else {
+          @raylib.white
+        },
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Draws a filled progress bar at (x, y) with the given dimensions, fill ratio, foreground, and background colors.
 fn draw_bar(
   x : Int,
@@ -400,11 +695,13 @@ fn main {
   @raylib.init_window(
     sw, sh, "raylib [moonbit] example - drift police chase 2026",
   )
-  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  load_assets()
+  defer unload_assets()
 
   let cops = FixedArray::make(max_cops, {
     active: false,
@@ -968,58 +1265,60 @@ fn main {
 
     @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(22, 30, 42, 255))
 
-    let mut bx : Float = 120.0
-    let mut gx : Int = 0
-    while bx < world_w {
-      let mut by : Float = 120.0
-      let mut gy : Int = 0
-      while by < world_h {
-        let px : Int = (bx - cam_x + shake_x).to_int()
-        let py : Int = (by - cam_y + shake_y).to_int()
+    if !draw_city_art(cam_x, cam_y, shake_x, shake_y) {
+      let mut bx : Float = 120.0
+      let mut gx : Int = 0
+      while bx < world_w {
+        let mut by : Float = 120.0
+        let mut gy : Int = 0
+        while by < world_h {
+          let px : Int = (bx - cam_x + shake_x).to_int()
+          let py : Int = (by - cam_y + shake_y).to_int()
 
-        if px > -220 && py > -220 && px < sw + 220 && py < sh + 220 {
-          let tone : Int = 34 + (gx + gy) % 3 * 12
-          @raylib.draw_rectangle(
-            px,
-            py,
-            196,
-            136,
-            @raylib.Color::new(tone, tone + 10, tone + 20, 255),
-          )
-          @raylib.draw_rectangle(
-            px + 12,
-            py + 12,
-            172,
-            112,
-            @raylib.Color::new(tone + 10, tone + 14, tone + 30, 255),
-          )
+          if px > -220 && py > -220 && px < sw + 220 && py < sh + 220 {
+            let tone : Int = 34 + (gx + gy) % 3 * 12
+            @raylib.draw_rectangle(
+              px,
+              py,
+              196,
+              136,
+              @raylib.Color::new(tone, tone + 10, tone + 20, 255),
+            )
+            @raylib.draw_rectangle(
+              px + 12,
+              py + 12,
+              172,
+              112,
+              @raylib.Color::new(tone + 10, tone + 14, tone + 30, 255),
+            )
+          }
+
+          by = by + 220.0
+          gy = gy + 1
         }
 
-        by = by + 220.0
-        gy = gy + 1
+        bx = bx + 260.0
+        gx = gx + 1
       }
 
-      bx = bx + 260.0
-      gx = gx + 1
-    }
-
-    let lane_col = @raylib.Color::new(130, 138, 154, 115)
-    let mut lx : Float = 0.0
-    while lx <= world_w {
-      let sx : Int = (lx - cam_x + shake_x).to_int()
-      if sx >= -4 && sx <= sw + 4 {
-        @raylib.draw_line(sx, 0, sx, sh, lane_col)
+      let lane_col = @raylib.Color::new(130, 138, 154, 115)
+      let mut lx : Float = 0.0
+      while lx <= world_w {
+        let sx : Int = (lx - cam_x + shake_x).to_int()
+        if sx >= -4 && sx <= sw + 4 {
+          @raylib.draw_line(sx, 0, sx, sh, lane_col)
+        }
+        lx = lx + 140.0
       }
-      lx = lx + 140.0
-    }
 
-    let mut ly : Float = 0.0
-    while ly <= world_h {
-      let sy : Int = (ly - cam_y + shake_y).to_int()
-      if sy >= -4 && sy <= sh + 4 {
-        @raylib.draw_line(0, sy, sw, sy, lane_col)
+      let mut ly : Float = 0.0
+      while ly <= world_h {
+        let sy : Int = (ly - cam_y + shake_y).to_int()
+        if sy >= -4 && sy <= sh + 4 {
+          @raylib.draw_line(0, sy, sw, sy, lane_col)
+        }
+        ly = ly + 140.0
       }
-      ly = ly + 140.0
     }
 
     for smoke in smokes {
@@ -1036,18 +1335,20 @@ fn main {
       }
       let life_ratio : Float = 1.0 - smoke.t / smoke.life
       let alpha : Int = clampf(110.0 * life_ratio, 0.0, 130.0).to_int()
-      @raylib.draw_circle(
-        sx.to_int(),
-        sy.to_int(),
-        smoke.r,
-        @raylib.Color::new(136, 152, 164, alpha),
-      )
-      @raylib.draw_circle(
-        sx.to_int(),
-        sy.to_int(),
-        smoke.r * 0.65,
-        @raylib.Color::new(94, 108, 122, alpha + 24),
-      )
+      if !draw_smoke_art(sx.to_int(), sy.to_int(), smoke.r, life_ratio) {
+        @raylib.draw_circle(
+          sx.to_int(),
+          sy.to_int(),
+          smoke.r,
+          @raylib.Color::new(136, 152, 164, alpha),
+        )
+        @raylib.draw_circle(
+          sx.to_int(),
+          sy.to_int(),
+          smoke.r * 0.65,
+          @raylib.Color::new(94, 108, 122, alpha + 24),
+        )
+      }
     }
 
     for pickup in pickups {
@@ -1071,20 +1372,22 @@ fn main {
         glow,
         @raylib.Color::new(248, 210, 116, 96),
       )
-      @raylib.draw_rectangle(
-        (px - 12.0).to_int(),
-        (py - 10.0).to_int(),
-        24,
-        20,
-        @raylib.Color::new(254, 220, 118, 255),
-      )
-      @raylib.draw_rectangle(
-        (px - 7.0).to_int(),
-        (py - 5.0).to_int(),
-        14,
-        10,
-        @raylib.Color::new(252, 244, 210, 255),
-      )
+      if !draw_cash_art(px.to_int(), py.to_int(), pulse) {
+        @raylib.draw_rectangle(
+          (px - 12.0).to_int(),
+          (py - 10.0).to_int(),
+          24,
+          20,
+          @raylib.Color::new(254, 220, 118, 255),
+        )
+        @raylib.draw_rectangle(
+          (px - 7.0).to_int(),
+          (py - 5.0).to_int(),
+          14,
+          10,
+          @raylib.Color::new(252, 244, 210, 255),
+        )
+      }
     }
 
     for i in 0..<cops.length() {
@@ -1101,6 +1404,10 @@ fn main {
         continue
       }
 
+      let cd2 : Float = cops[i].vx * cops[i].vx + cops[i].vy * cops[i].vy
+      let inv : Float = if cd2 < 1.0 { 0.0 } else { 1.0 / cd2.sqrt() }
+      let fx : Float = if inv == 0.0 { 1.0 } else { cops[i].vx * inv }
+      let fy : Float = if inv == 0.0 { 0.0 } else { cops[i].vy * inv }
       let ccol = if cops[i].stun_t > 0.0 {
         @raylib.Color::new(132, 206, 236, 255)
       } else if cops[i].kind == 0 {
@@ -1109,49 +1416,53 @@ fn main {
         @raylib.Color::new(252, 132, 72, 255)
       }
 
-      @raylib.draw_rectangle(
-        (cx - 16.0).to_int(),
-        (cy - 12.0).to_int(),
-        32,
-        24,
-        ccol,
-      )
-      @raylib.draw_rectangle(
-        (cx - 10.0).to_int(),
-        (cy - 8.0).to_int(),
-        20,
-        8,
-        @raylib.Color::new(226, 234, 244, 255),
-      )
+      if !draw_cop_car_art(
+          cops[i].kind,
+          cx.to_int(),
+          cy.to_int(),
+          fx,
+          fy,
+          cops[i].stun_t > 0.0,
+        ) {
+        @raylib.draw_rectangle(
+          (cx - 16.0).to_int(),
+          (cy - 12.0).to_int(),
+          32,
+          24,
+          ccol,
+        )
+        @raylib.draw_rectangle(
+          (cx - 10.0).to_int(),
+          (cy - 8.0).to_int(),
+          20,
+          8,
+          @raylib.Color::new(226, 234, 244, 255),
+        )
+        @raylib.draw_line(
+          cx.to_int(),
+          cy.to_int(),
+          (cx + fx * 24.0).to_int(),
+          (cy + fy * 24.0).to_int(),
+          @raylib.Color::new(254, 248, 232, 220),
+        )
 
-      let cd2 : Float = cops[i].vx * cops[i].vx + cops[i].vy * cops[i].vy
-      let inv : Float = if cd2 < 1.0 { 0.0 } else { 1.0 / cd2.sqrt() }
-      let fx : Float = if inv == 0.0 { 1.0 } else { cops[i].vx * inv }
-      let fy : Float = if inv == 0.0 { 0.0 } else { cops[i].vy * inv }
-      @raylib.draw_line(
-        cx.to_int(),
-        cy.to_int(),
-        (cx + fx * 24.0).to_int(),
-        (cy + fy * 24.0).to_int(),
-        @raylib.Color::new(254, 248, 232, 220),
-      )
-
-      let flash_on : Bool = (time_left.to_int() + i) % 2 == 0
-      let light_a = if flash_on { 220 } else { 120 }
-      @raylib.draw_rectangle(
-        (cx - 14.0).to_int(),
-        (cy - 18.0).to_int(),
-        12,
-        5,
-        @raylib.Color::new(242, 82, 82, light_a),
-      )
-      @raylib.draw_rectangle(
-        (cx + 2.0).to_int(),
-        (cy - 18.0).to_int(),
-        12,
-        5,
-        @raylib.Color::new(88, 148, 252, light_a),
-      )
+        let flash_on : Bool = (time_left.to_int() + i) % 2 == 0
+        let light_a = if flash_on { 220 } else { 120 }
+        @raylib.draw_rectangle(
+          (cx - 14.0).to_int(),
+          (cy - 18.0).to_int(),
+          12,
+          5,
+          @raylib.Color::new(242, 82, 82, light_a),
+        )
+        @raylib.draw_rectangle(
+          (cx + 2.0).to_int(),
+          (cy - 18.0).to_int(),
+          12,
+          5,
+          @raylib.Color::new(88, 148, 252, light_a),
+        )
+      }
     }
 
     let px : Float = player.x - cam_x + shake_x
@@ -1165,27 +1476,35 @@ fn main {
       @raylib.Color::new(112, 202, 248, 255)
     }
 
-    @raylib.draw_rectangle(
-      (px - 18.0).to_int(),
-      (py - 13.0).to_int(),
-      36,
-      26,
-      pcol,
-    )
-    @raylib.draw_rectangle(
-      (px - 12.0).to_int(),
-      (py - 8.0).to_int(),
-      24,
-      9,
-      @raylib.Color::new(240, 248, 254, 255),
-    )
-    @raylib.draw_line(
-      px.to_int(),
-      py.to_int(),
-      (px + player.dir_x * 26.0).to_int(),
-      (py + player.dir_y * 26.0).to_int(),
-      @raylib.Color::new(24, 38, 58, 255),
-    )
+    if !draw_player_car_art(
+        px.to_int(),
+        py.to_int(),
+        player.dir_x,
+        player.dir_y,
+        pcol,
+      ) {
+      @raylib.draw_rectangle(
+        (px - 18.0).to_int(),
+        (py - 13.0).to_int(),
+        36,
+        26,
+        pcol,
+      )
+      @raylib.draw_rectangle(
+        (px - 12.0).to_int(),
+        (py - 8.0).to_int(),
+        24,
+        9,
+        @raylib.Color::new(240, 248, 254, 255),
+      )
+      @raylib.draw_line(
+        px.to_int(),
+        py.to_int(),
+        (px + player.dir_x * 26.0).to_int(),
+        (py + player.dir_y * 26.0).to_int(),
+        @raylib.Color::new(24, 38, 58, 255),
+      )
+    }
 
     let drift_w : Float = clampf(player.drift * 0.14, 0.0, 18.0)
     @raylib.draw_line(
