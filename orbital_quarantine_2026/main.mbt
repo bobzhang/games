@@ -334,8 +334,12 @@ fn restore_crew(rooms : Array[Room], crew_vals : Array[Float]) -> Unit {
 ///|
 fn main {
   @raylib.init_window(screen_w, screen_h, "Orbital Quarantine 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let rooms : Array[Room] = Array::makei(cols * rows, fn(_i) {
     {
@@ -465,15 +469,38 @@ fn main {
 
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(8, 12, 20, 255))
+    draw_texture_cover(
+      art.station_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(screen_w),
+      Float::from_int(screen_h),
+      @raylib.Color::new(255, 255, 255, 232),
+    )
+    @raylib.draw_rectangle(
+      0,
+      0,
+      screen_w,
+      screen_h,
+      @raylib.Color::new(4, 8, 14, if title { 78 } else { 112 }),
+    )
 
     if title {
-      @raylib.draw_rectangle_gradient_v(
+      @raylib.draw_rectangle(
         0,
         0,
         screen_w,
         screen_h,
-        @raylib.Color::new(12, 20, 34, 255),
-        @raylib.Color::new(4, 8, 14, 255),
+        @raylib.Color::new(4, 8, 14, 88),
+      )
+      draw_icon_cell(
+        art,
+        0,
+        660.0,
+        318.0,
+        150.0,
+        112.0,
+        @raylib.Color::new(255, 255, 255, 195),
       )
       @draw.draw_text(
         "ORBITAL QUARANTINE 2026",
@@ -575,6 +602,15 @@ fn main {
         22,
         @raylib.Color::new(215, 226, 236, 255),
       )
+      draw_icon_cell(
+        art,
+        6,
+        596.0,
+        88.0,
+        42.0,
+        42.0,
+        @raylib.Color::new(255, 255, 255, 230),
+      )
       draw_bar(620, 100, 160, power, @raylib.Color::new(255, 204, 104, 255))
       @draw.draw_text(
         "Integrity",
@@ -583,6 +619,15 @@ fn main {
         22,
         @raylib.Color::new(215, 226, 236, 255),
       )
+      draw_icon_cell(
+        art,
+        7,
+        806.0,
+        88.0,
+        42.0,
+        42.0,
+        @raylib.Color::new(255, 255, 255, 230),
+      )
       draw_bar(830, 100, 160, integrity, @raylib.Color::new(114, 219, 255, 255))
       @draw.draw_text(
         "Crew",
@@ -590,6 +635,15 @@ fn main {
         72,
         22,
         @raylib.Color::new(215, 226, 236, 255),
+      )
+      draw_icon_cell(
+        art,
+        5,
+        1018.0,
+        88.0,
+        42.0,
+        42.0,
+        @raylib.Color::new(255, 255, 255, 230),
       )
       draw_bar(
         1040,
@@ -610,12 +664,20 @@ fn main {
             .to_int()
             .clamp(min=30, max=185)
           let base_b = if rooms[i].boost_t > 0.0F { 150 } else { 104 }
+          draw_texture_rect(
+            art.room_panel,
+            Float::from_int(rect.0),
+            Float::from_int(rect.1),
+            Float::from_int(rect.2),
+            Float::from_int(rect.3),
+            @raylib.Color::new(255, 255, 255, 218),
+          )
           @raylib.draw_rectangle(
             rect.0,
             rect.1,
             rect.2,
             rect.3,
-            @raylib.Color::new(base_r, base_g, base_b, 255),
+            @raylib.Color::new(base_r, base_g, base_b, 150),
           )
           @raylib.draw_rectangle_lines(
             rect.0,
@@ -631,12 +693,43 @@ fn main {
             24,
             @raylib.Color::new(244, 247, 252, 255),
           )
+          draw_icon_cell(
+            art,
+            if rooms[i].source > 0.0F {
+              10
+            } else {
+              0
+            },
+            Float::from_int(rect.0 + rect.2 - 28),
+            Float::from_int(rect.1 + 28),
+            40.0,
+            40.0,
+            @raylib.Color::new(255, 255, 255, 210),
+          )
+          draw_icon_cell(
+            art,
+            3,
+            Float::from_int(rect.0 + rect.2 - 22),
+            Float::from_int(rect.1 + 57),
+            24.0,
+            24.0,
+            @raylib.Color::new(255, 255, 255, 210),
+          )
           draw_bar(
             rect.0 + 14,
             rect.1 + 52,
             rect.2 - 28,
             rooms[i].contam,
             @raylib.Color::new(242, 104, 104, 255),
+          )
+          draw_icon_cell(
+            art,
+            4,
+            Float::from_int(rect.0 + rect.2 - 22),
+            Float::from_int(rect.1 + 77),
+            24.0,
+            24.0,
+            @raylib.Color::new(255, 255, 255, 210),
           )
           draw_bar(
             rect.0 + 14,
@@ -645,6 +738,15 @@ fn main {
             rooms[i].oxygen,
             @raylib.Color::new(116, 214, 255, 255),
           )
+          draw_icon_cell(
+            art,
+            5,
+            Float::from_int(rect.0 + rect.2 - 22),
+            Float::from_int(rect.1 + 97),
+            24.0,
+            24.0,
+            @raylib.Color::new(255, 255, 255, 210),
+          )
           draw_bar(
             rect.0 + 14,
             rect.1 + 92,
@@ -652,9 +754,22 @@ fn main {
             rooms[i].crew,
             @raylib.Color::new(126, 228, 164, 255),
           )
+          draw_icon_cell(
+            art,
+            8,
+            Float::from_int(rect.0 + 24),
+            Float::from_int(rect.1 + rect.3 - 34),
+            32.0,
+            32.0,
+            if rooms[i].purge_t > 0.0F {
+              @raylib.Color::new(255, 255, 255, 245)
+            } else {
+              @raylib.Color::new(255, 255, 255, 72)
+            },
+          )
           @draw.draw_text(
             "PURGE",
-            rect.0 + 14,
+            rect.0 + 42,
             rect.1 + rect.3 - 44,
             20,
             if rooms[i].purge_t > 0.0F {
@@ -663,9 +778,22 @@ fn main {
               @raylib.Color::new(46, 70, 92, 255)
             },
           )
+          draw_icon_cell(
+            art,
+            9,
+            Float::from_int(rect.0 + 112),
+            Float::from_int(rect.1 + rect.3 - 34),
+            32.0,
+            32.0,
+            if rooms[i].boost_t > 0.0F {
+              @raylib.Color::new(255, 255, 255, 245)
+            } else {
+              @raylib.Color::new(255, 255, 255, 72)
+            },
+          )
           @draw.draw_text(
             "BOOST",
-            rect.0 + 104,
+            rect.0 + 130,
             rect.1 + rect.3 - 44,
             20,
             if rooms[i].boost_t > 0.0F {
@@ -692,6 +820,19 @@ fn main {
               @raylib.Color::new(230, 92, 92, 255)
             },
           )
+          draw_icon_cell(
+            art,
+            if hdoors[hdoor_idx(x, y)] {
+              2
+            } else {
+              1
+            },
+            Float::from_int(dx + 9),
+            Float::from_int(dy + 33),
+            38.0,
+            38.0,
+            @raylib.Color::new(255, 255, 255, 230),
+          )
         }
       }
       for y in 0..<(rows - 1) {
@@ -708,6 +849,19 @@ fn main {
             } else {
               @raylib.Color::new(230, 92, 92, 255)
             },
+          )
+          draw_icon_cell(
+            art,
+            if vdoors[vdoor_idx(x, y)] {
+              2
+            } else {
+              1
+            },
+            Float::from_int(dx + 33),
+            Float::from_int(dy + 9),
+            38.0,
+            38.0,
+            @raylib.Color::new(255, 255, 255, 230),
           )
         }
       }
@@ -771,7 +925,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

@@ -6,6 +6,8 @@ package "bobzhang/games/orbital_quarantine_2026"
 // Errors
 
 // Types and methods
+type GameArt
+
 type Room
 
 // Type aliases

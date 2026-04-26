@@ -4,6 +4,14 @@ A real-time-with-pause crisis management game set across a contaminated station.
 You are balancing door control, purge cycles, oxygen boosts, power draw, and
 crew survival while each sector runs on a countdown.
 
+## Generated Art Assets
+
+The package now includes generated raster artwork under `resources/`:
+
+- `quarantine_station_backdrop.png` — orbital command deck backdrop used behind the title and station grid.
+- `quarantine_room_panel.png` — sci-fi compartment material drawn into each room panel.
+- `quarantine_icons.png` — transparent 4x3 icon sheet for rooms, sealed/open doors, contamination, oxygen, crew, power, integrity, purge, boost, alert, and stabilized states.
+
 ## Controls
 
 - `Enter` or left click on title: start
