@@ -1,6 +1,6 @@
 # Ice Fishing Blitz 2026
 
-Ice Fishing Blitz 2026 is an arcade action game set on a frozen lake where the player controls a fishing hook dangled through an ice hole into deep water. The goal is to catch fish of varying species and value -- trout, salmon, and rare golden fish -- while dodging underwater hazards including jellyfish, electric eels, and falling ice chunks.
+Ice Fishing Blitz 2026 is an arcade action game set on a frozen lake where the player controls a fishing hook dangled through an ice hole into deep water. The goal is to catch fish of varying species and value -- trout, salmon, and rare golden fish -- while dodging underwater hazards including jellyfish, electric eels, and falling ice chunks. The renderer uses generated lake, underwater world, entity sprite sheet, and hook assets with procedural fallbacks for resilient rendering.
 
 The core gameplay loop involves steering the hook through the underwater world, engaging the hook clamp near a fish to grab it, then reeling the hooked fish up to the catch zone near the ice hole surface. Successfully landing fish earns points with a combo multiplier, while collisions with hazards damage the fishing line. Pickups floating in the water provide bait refills, line repairs, and thermos-powered turbo speed boosts. The player must reach a score goal of 1600 points before running out of lives (3 lives, each lost when line HP hits zero) or before the 200-second time limit expires.
 
@@ -58,7 +58,7 @@ From the title screen, press Enter, Space, or click/tap the START FISHING button
 
 > Main entry point.
 
-The `main` function initializes a 1720x980 window with MSAA 4x and audio device, creates a `Game` instance, and runs the game loop at 120 FPS calling `update_game` and `draw_frame` each frame.
+The `main` function initializes a 1720x980 window with MSAA 4x and audio device, loads generated render assets, creates a `Game` instance, and runs the game loop at 120 FPS calling `update_game` and `draw_frame` each frame.
 
 ### Package `ice_fishing_blitz_2026/internal/types`
 
@@ -174,7 +174,9 @@ The `main` function initializes a 1720x980 window with MSAA 4x and audio device,
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `draw_frame` | `(Game) -> Unit` | Main rendering entry point: draws layered background, underwater world with fish/hazards/pickups/particles/hook, side info panel with stats and bars, touch controls, messages, and state overlays (title/result) |
+| `load_assets` | `() -> Unit` | Loads generated lake background, world panel, entity sprite sheet, and hook textures |
+| `unload_assets` | `() -> Unit` | Releases generated render textures |
+| `draw_frame` | `(Game) -> Unit` | Main rendering entry point: draws generated layered backgrounds with fallback primitives, texture-backed fish/hazards/pickups/hook, side info panel with stats and bars, touch controls, messages, and state overlays (title/result) |
 
 ## Architecture
 
@@ -184,6 +186,11 @@ The `main` function initializes a 1720x980 window with MSAA 4x and audio device,
 ice_fishing_blitz_2026/
 ├── main.mbt              — Entry point: window init, audio init, game loop
 ├── moon.pkg              — Package config, imports
+├── resources/
+│   ├── ice_lake_background.png — Generated full-screen frozen lake backdrop
+│   ├── ice_world_panel.png     — Generated world playfield cross-section
+│   ├── entity_sprites.png      — Generated 3x3 fish/hazard/pickup sheet
+│   └── hook_sprite.png         — Generated fishing hook sprite
 └── internal/
     ├── types/
     │   ├── types.mbt     — Core structs (Game, Fish, Hazard, Pickup, Particle) and enums (GameState, PickupKind)
@@ -210,6 +217,7 @@ The types package is data-only (no raylib rendering calls) except for `randf` an
 ### Key Design Patterns
 
 - **Object pool pattern**: Fish, hazards, pickups, and particles are pre-allocated in fixed-size arrays with `active` flags, avoiding runtime allocation.
+- **Texture-backed entities**: Fish, hazards, pickups, and the hook render from generated textures first, with the original shape-based drawing preserved as fallback behavior.
 - **State machine**: `GameState` enum (`Title`, `Play`, `Result`) drives both input routing and overlay rendering via `match` expressions.
 - **Wave-based difficulty scaling**: Wave number (1-10) is derived from elapsed time and affects spawn intervals, hazard speed, and bait drain rate.
 - **Touch+keyboard dual input**: The game supports both keyboard controls and on-screen touch buttons, with `pointer_on_rect` checking mouse position and all active touch points.

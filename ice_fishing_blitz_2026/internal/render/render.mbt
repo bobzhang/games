@@ -1,4 +1,165 @@
 ///|
+/// Generated full-screen ice lake background texture.
+let tex_ice_lake_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated world panel cross-section texture.
+let tex_ice_world_panel : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated 3x3 entity sprite sheet texture.
+let tex_entity_sprites : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated hook sprite texture.
+let tex_hook_sprite : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Ice Fishing Blitz texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "ice_fishing_blitz_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Ice Fishing Blitz render assets.
+pub fn load_assets() -> Unit {
+  tex_ice_lake_background.val = Some(
+    load_art_texture("ice_lake_background.png"),
+  )
+  tex_ice_world_panel.val = Some(load_art_texture("ice_world_panel.png"))
+  tex_entity_sprites.val = Some(load_art_texture("entity_sprites.png"))
+  tex_hook_sprite.val = Some(load_art_texture("hook_sprite.png"))
+}
+
+///|
+/// Unloads generated Ice Fishing Blitz render assets.
+pub fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_ice_lake_background)
+  unload(tex_ice_world_panel)
+  unload(tex_entity_sprites)
+  unload(tex_hook_sprite)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on a point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a cell from the generated 3x3 entity sheet centered on a point.
+fn draw_entity_sprite(
+  index : Int,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  flip_x : Bool,
+  tint : @raylib.Color,
+) -> Bool {
+  match tex_entity_sprites.val {
+    Some(texture) => {
+      let col = index % 3
+      let row = index / 3
+      let cell_w = Float::from_int(texture.width()) / 3.0
+      let cell_h = Float::from_int(texture.height()) / 3.0
+      let src_x = if flip_x {
+        (Float::from_int(col) + 1.0) * cell_w
+      } else {
+        Float::from_int(col) * cell_w
+      }
+      let src_w = if flip_x { -cell_w } else { cell_w }
+      @raylib.draw_texture_pro(
+        texture,
+        @raylib.Rectangle::new(
+          src_x,
+          Float::from_int(row) * cell_h,
+          src_w,
+          cell_h,
+        ),
+        @raylib.Rectangle::new(cx, cy, w, h),
+        @raylib.Vector2::new(w * 0.5, h * 0.5),
+        0.0,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Returns a sinusoidal background wave amplitude value for frequency `k`.
 fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
   @math.sinf(game.ui_t * k)
@@ -27,65 +188,107 @@ fn @types.Game::shake_y(game : @types.Game) -> Int {
 ///|
 /// Draws the dark ocean background with animated gradient circles.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(9, 18, 30, 255))
+  match tex_ice_lake_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(@types.screen_w),
+        Float::from_int(@types.screen_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        0,
+        0,
+        @types.screen_w,
+        @types.screen_h,
+        @raylib.Color::new(3, 14, 28, 44),
+      )
+    }
+    None => {
+      @raylib.clear_background(@raylib.Color::new(9, 18, 30, 255))
 
-  let w0 : Float = game.bg_wave(0.42)
-  let w1 : Float = game.bg_wave(0.84)
+      let w0 : Float = game.bg_wave(0.42)
+      let w1 : Float = game.bg_wave(0.84)
 
-  @raylib.draw_circle(
-    200,
-    120,
-    240.0 + w0 * 22.0,
-    @raylib.Color::new(28, 64, 94, 30),
-  )
-  @raylib.draw_circle(
-    760,
-    160,
-    300.0 - w1 * 26.0,
-    @raylib.Color::new(24, 58, 88, 30),
-  )
-  @raylib.draw_circle(
-    @types.screen_w - 300,
-    200,
-    320.0 + w1 * 22.0,
-    @raylib.Color::new(36, 54, 86, 32),
-  )
+      @raylib.draw_circle(
+        200,
+        120,
+        240.0 + w0 * 22.0,
+        @raylib.Color::new(28, 64, 94, 30),
+      )
+      @raylib.draw_circle(
+        760,
+        160,
+        300.0 - w1 * 26.0,
+        @raylib.Color::new(24, 58, 88, 30),
+      )
+      @raylib.draw_circle(
+        @types.screen_w - 300,
+        200,
+        320.0 + w1 * 22.0,
+        @raylib.Color::new(36, 54, 86, 32),
+      )
 
-  for i in 0..<16 {
-    let y : Int = i * 64
-    @raylib.draw_rectangle(
-      0,
-      y,
-      @types.screen_w,
-      40,
-      @raylib.Color::new(
-        8 + i * 2 % 12,
-        15 + i * 3 % 17,
-        24 + i * 4 % 20,
-        12 + i * 2 % 18,
-      ),
-    )
+      for i in 0..<16 {
+        let y : Int = i * 64
+        @raylib.draw_rectangle(
+          0,
+          y,
+          @types.screen_w,
+          40,
+          @raylib.Color::new(
+            8 + i * 2 % 12,
+            15 + i * 3 % 17,
+            24 + i * 4 % 20,
+            12 + i * 2 % 18,
+          ),
+        )
+      }
+    }
   }
 }
 
 ///|
 /// Draws the ice sheet, water area, grid lines, hole, and catch zone with shake offset.
 fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  @raylib.draw_rectangle(
-    @types.world_x0 + ox,
-    @types.water_top + oy,
-    @types.world_w,
-    @types.water_bottom - @types.water_top,
-    @raylib.Color::new(20, 56, 82, 236),
-  )
+  match tex_ice_world_panel.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        Float::from_int(@types.world_x0 + ox),
+        Float::from_int(@types.world_y0 + oy),
+        Float::from_int(@types.world_w),
+        Float::from_int(@types.world_h),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        @types.world_x0 + ox,
+        @types.water_top + oy,
+        @types.world_w,
+        @types.water_bottom - @types.water_top,
+        @raylib.Color::new(8, 52, 86, 62),
+      )
+    }
+    None => {
+      @raylib.draw_rectangle(
+        @types.world_x0 + ox,
+        @types.water_top + oy,
+        @types.world_w,
+        @types.water_bottom - @types.water_top,
+        @raylib.Color::new(20, 56, 82, 236),
+      )
 
-  @raylib.draw_rectangle(
-    @types.world_x0 + ox,
-    @types.world_y0 + oy,
-    @types.world_w,
-    @types.water_top - @types.world_y0,
-    @raylib.Color::new(200, 226, 240, 238),
-  )
+      @raylib.draw_rectangle(
+        @types.world_x0 + ox,
+        @types.world_y0 + oy,
+        @types.world_w,
+        @types.water_top - @types.world_y0,
+        @raylib.Color::new(200, 226, 240, 238),
+      )
+    }
+  }
 
   @raylib.draw_rectangle_lines(
     @types.world_x0 + ox,
@@ -181,6 +384,16 @@ fn fish_color(kind : @types.FishKind) -> @raylib.Color {
 }
 
 ///|
+/// Returns the generated sprite-sheet cell index for a fish kind.
+fn fish_sprite_index(kind : @types.FishKind) -> Int {
+  match kind {
+    Trout => 0
+    Salmon => 1
+    Gold => 2
+  }
+}
+
+///|
 /// Draws one fish entity with body, tail, eye, and hook glow if hooked.
 fn draw_fish(f : @types.Fish, ox : Int, oy : Int) -> Unit {
   if !f.active {
@@ -192,37 +405,49 @@ fn draw_fish(f : @types.Fish, ox : Int, oy : Int) -> Unit {
 
   let c0 : @raylib.Color = fish_color(f.kind)
 
-  @raylib.draw_ellipse(x, y, f.r + 4.0, f.r * 0.68, c0)
-
-  let dir : Int = if f.vx >= 0.0 { 1 } else { -1 }
-
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(
-      Float::from_int(x - dir * (f.r.to_int() + 4)),
-      Float::from_int(y),
-    ),
-    @raylib.Vector2::new(
-      Float::from_int(x - dir * (f.r.to_int() + 14)),
-      Float::from_int(y - 10),
-    ),
-    @raylib.Vector2::new(
-      Float::from_int(x - dir * (f.r.to_int() + 14)),
-      Float::from_int(y + 10),
-    ),
-    @raylib.Color::new(
-      (255).min(c0.r.to_int() + 18),
-      (255).min(c0.g.to_int() + 18),
-      (255).min(c0.b.to_int() + 18),
-      230,
-    ),
+  let used_art = draw_entity_sprite(
+    fish_sprite_index(f.kind),
+    Float::from_int(x),
+    Float::from_int(y),
+    f.r * 4.2,
+    f.r * 2.35,
+    f.vx < 0.0,
+    @raylib.white,
   )
 
-  @raylib.draw_circle(
-    x + dir * 5,
-    y - 2,
-    3.0,
-    @raylib.Color::new(24, 36, 52, 220),
-  )
+  if !used_art {
+    @raylib.draw_ellipse(x, y, f.r + 4.0, f.r * 0.68, c0)
+
+    let dir : Int = if f.vx >= 0.0 { 1 } else { -1 }
+
+    @raylib.draw_triangle(
+      @raylib.Vector2::new(
+        Float::from_int(x - dir * (f.r.to_int() + 4)),
+        Float::from_int(y),
+      ),
+      @raylib.Vector2::new(
+        Float::from_int(x - dir * (f.r.to_int() + 14)),
+        Float::from_int(y - 10),
+      ),
+      @raylib.Vector2::new(
+        Float::from_int(x - dir * (f.r.to_int() + 14)),
+        Float::from_int(y + 10),
+      ),
+      @raylib.Color::new(
+        (255).min(c0.r.to_int() + 18),
+        (255).min(c0.g.to_int() + 18),
+        (255).min(c0.b.to_int() + 18),
+        230,
+      ),
+    )
+
+    @raylib.draw_circle(
+      x + dir * 5,
+      y - 2,
+      3.0,
+      @raylib.Color::new(24, 36, 52, 220),
+    )
+  }
 
   if f.hooked {
     @raylib.draw_circle_lines(
@@ -245,6 +470,16 @@ fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
 }
 
 ///|
+/// Returns the generated sprite-sheet cell index for a hazard kind.
+fn hazard_sprite_index(kind : @types.HazardKind) -> Int {
+  match kind {
+    Jelly => 3
+    Eel => 4
+    Ice => 5
+  }
+}
+
+///|
 /// Draws one hazard entity with kind-specific shape: jellyfish, eel, or ice chunk.
 fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
   if !h.active {
@@ -254,6 +489,42 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
   let x : Int = h.x.to_int() + ox
   let y : Int = h.y.to_int() + oy
   let c0 : @raylib.Color = hazard_color(h.kind)
+
+  let used_art = match h.kind {
+    Jelly =>
+      draw_entity_sprite(
+        hazard_sprite_index(h.kind),
+        Float::from_int(x),
+        Float::from_int(y),
+        h.r * 3.0,
+        h.r * 3.0,
+        false,
+        @raylib.white,
+      )
+    Eel =>
+      draw_entity_sprite(
+        hazard_sprite_index(h.kind),
+        Float::from_int(x),
+        Float::from_int(y),
+        h.r * 5.0,
+        h.r * 2.35,
+        h.vx < 0.0,
+        @raylib.white,
+      )
+    Ice =>
+      draw_entity_sprite(
+        hazard_sprite_index(h.kind),
+        Float::from_int(x),
+        Float::from_int(y),
+        h.r * 3.0,
+        h.r * 3.8,
+        false,
+        @raylib.white,
+      )
+  }
+  if used_art {
+    return
+  }
 
   match h.kind {
     Jelly => {
@@ -331,6 +602,16 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 }
 
 ///|
+/// Returns the generated sprite-sheet cell index for a pickup kind.
+fn pickup_sprite_index(kind : @types.PickupKind) -> Int {
+  match kind {
+    Bait => 6
+    Repair => 7
+    Thermos => 8
+  }
+}
+
+///|
 /// Draws one pickup entity with pulsing circle and kind-specific icon.
 fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
   if !p.active {
@@ -352,38 +633,48 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(246, 252, 255, 210),
   )
 
-  match p.kind {
-    Bait =>
-      @raylib.draw_rectangle(
-        x - 5,
-        y - 8,
-        10,
-        16,
-        @raylib.Color::new(58, 36, 20, 230),
-      )
-    Repair => {
-      @raylib.draw_line(
-        x - 6,
-        y,
-        x + 6,
-        y,
-        @raylib.Color::new(250, 248, 248, 240),
-      )
-      @raylib.draw_line(
-        x,
-        y - 6,
-        x,
-        y + 6,
-        @raylib.Color::new(250, 248, 248, 240),
-      )
+  if !draw_entity_sprite(
+    pickup_sprite_index(p.kind),
+    Float::from_int(x),
+    Float::from_int(y),
+    42.0,
+    42.0,
+    false,
+    @raylib.white,
+  ) {
+    match p.kind {
+      Bait =>
+        @raylib.draw_rectangle(
+          x - 5,
+          y - 8,
+          10,
+          16,
+          @raylib.Color::new(58, 36, 20, 230),
+        )
+      Repair => {
+        @raylib.draw_line(
+          x - 6,
+          y,
+          x + 6,
+          y,
+          @raylib.Color::new(250, 248, 248, 240),
+        )
+        @raylib.draw_line(
+          x,
+          y - 6,
+          x,
+          y + 6,
+          @raylib.Color::new(250, 248, 248, 240),
+        )
+      }
+      Thermos =>
+        @raylib.draw_circle_lines(
+          x,
+          y,
+          rr - 4.0,
+          @raylib.Color::new(236, 214, 255, 220),
+        )
     }
-    Thermos =>
-      @raylib.draw_circle_lines(
-        x,
-        y,
-        rr - 4.0,
-        @raylib.Color::new(236, 214, 255, 220),
-      )
   }
 }
 
@@ -434,38 +725,55 @@ fn @types.Game::draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(236, 246, 255, line_a),
   )
 
-  @raylib.draw_circle(
-    hx,
-    hy,
-    @types.hook_r,
-    if game.grab_on {
-      @raylib.Color::new(238, 214, 146, 244)
-    } else {
-      @raylib.Color::new(214, 230, 242, 236)
-    },
-  )
+  let used_hook_art = match tex_hook_sprite.val {
+    Some(texture) => {
+      draw_texture_centered(
+        texture,
+        Float::from_int(hx),
+        Float::from_int(hy),
+        54.0,
+        86.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
 
-  @raylib.draw_circle_lines(
-    hx,
-    hy,
-    @types.hook_r + 4.0,
-    @raylib.Color::new(246, 252, 255, 216),
-  )
+  if !used_hook_art {
+    @raylib.draw_circle(
+      hx,
+      hy,
+      @types.hook_r,
+      if game.grab_on {
+        @raylib.Color::new(238, 214, 146, 244)
+      } else {
+        @raylib.Color::new(214, 230, 242, 236)
+      },
+    )
 
-  @raylib.draw_line(
-    hx,
-    hy + 2,
-    hx - 8,
-    hy + 14,
-    @raylib.Color::new(248, 252, 255, 230),
-  )
-  @raylib.draw_line(
-    hx,
-    hy + 2,
-    hx + 8,
-    hy + 14,
-    @raylib.Color::new(248, 252, 255, 230),
-  )
+    @raylib.draw_circle_lines(
+      hx,
+      hy,
+      @types.hook_r + 4.0,
+      @raylib.Color::new(246, 252, 255, 216),
+    )
+
+    @raylib.draw_line(
+      hx,
+      hy + 2,
+      hx - 8,
+      hy + 14,
+      @raylib.Color::new(248, 252, 255, 230),
+    )
+    @raylib.draw_line(
+      hx,
+      hy + 2,
+      hx + 8,
+      hy + 14,
+      @raylib.Color::new(248, 252, 255, 230),
+    )
+  }
 
   if game.boost_on || game.turbo_t > 0.0 {
     @raylib.draw_circle(
