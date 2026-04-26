@@ -1,6 +1,6 @@
 # dragon_scroll_keeper_2026
 
-A wave-based defense game set in a dragon scroll vault. As the Keeper, defend the vault's scroll integrity across three interconnected chambers by fighting raiders, extinguishing fires, and sealing breaches.
+A wave-based defense game set in a dragon scroll vault with generated chamber and character artwork. As the Keeper, defend the vault's scroll integrity across three interconnected chambers by fighting raiders, extinguishing fires, and sealing breaches.
 
 ## Build and Run
 
@@ -166,9 +166,11 @@ Internal helpers (not exported): `update_input`, `clear_input`, `start_new_run`,
 
 | Function | Description |
 |---|---|
+| `pub fn load_assets() -> Unit` | Loads generated chamber, keeper, raider, breach, flame, and scroll core textures for the renderer |
+| `pub fn unload_assets() -> Unit` | Releases generated renderer textures |
 | `pub fn draw_frame(@types.Game) -> Unit` | Renders background, chamber shell, vault core, breaches, flames, raiders, keeper, minimap, HUD, message bar, and any state overlay |
 
-Internal helpers (not exported): `draw_background`, `draw_chamber_shell`, `draw_vault_core`, `draw_breaches`, `draw_flames`, `draw_raiders`, `draw_keeper`, `draw_room_minimap`, `draw_hud`, `draw_message`, `draw_meter`, `draw_title_overlay`, `draw_paused_overlay`, `draw_game_over_overlay`, `draw_center_text`, `alpha_col`, `room_fill_color`, `count_raiders_in_room`, `count_flames_in_room`.
+Internal helpers (not exported): generated texture loading and draw helpers, `draw_background`, `draw_chamber_shell`, `draw_vault_core`, `draw_breaches`, `draw_flames`, `draw_raiders`, `draw_keeper`, `draw_room_minimap`, `draw_hud`, `draw_message`, `draw_meter`, `draw_title_overlay`, `draw_paused_overlay`, `draw_game_over_overlay`, `draw_center_text`, `alpha_col`, `room_fill_color`, `count_raiders_in_room`, `count_flames_in_room`.
 
 ## Architecture
 
@@ -177,6 +179,7 @@ Internal helpers (not exported): `draw_background`, `draw_chamber_shell`, `draw_
 ```
 dragon_scroll_keeper_2026/
 ├── main.mbt                  # Entry point: window init, game loop
+├── resources/                # Generated chamber, entity, effect, and scroll core assets
 └── internal/
     ├── types/
     │   ├── constants.mbt     # All numeric tuning constants
@@ -186,14 +189,15 @@ dragon_scroll_keeper_2026/
     │   ├── input.mbt         # Keyboard sampling into Game input fields
     │   └── logic.mbt         # update_game: keeper, breaches, raiders, flames, waves
     └── render/
+        ├── assets.mbt        # Generated texture loading and art draw helpers
         └── render.mbt        # draw_frame: world, entities, HUD, overlays
 ```
 
 ### Data Flow
 
-Each frame the main loop calls `update_game(game, dt)` followed by `draw_frame(game)`. `update_game` clamps the delta-time to 50 ms, increments `game.time_s`, and samples keyboard state directly into flat input fields on `Game`. The state dispatcher routes to one of four handlers: `update_title_state` listens for any action key to call `start_new_run`; `update_playing_state` runs the full simulation pipeline in order — keeper timers, keeper motion, ink-shield trigger, action input, wave progress, breach system, raider AI, and flame spread — accumulating `integrity_loss` from all three threat systems and applying the ink-shield reduction factor before subtracting from `scroll_integrity`; `update_paused_state` and `update_game_over_state` handle resume, restart, and title transitions.
+Each frame the main loop calls `update_game(game, dt)` followed by `draw_frame(game)`. The main package loads generated render textures once after window initialization and unloads them before shutdown. `update_game` clamps the delta-time to 50 ms, increments `game.time_s`, and samples keyboard state directly into flat input fields on `Game`. The state dispatcher routes to one of four handlers: `update_title_state` listens for any action key to call `start_new_run`; `update_playing_state` runs the full simulation pipeline in order — keeper timers, keeper motion, ink-shield trigger, action input, wave progress, breach system, raider AI, and flame spread — accumulating `integrity_loss` from all three threat systems and applying the ink-shield reduction factor before subtracting from `scroll_integrity`; `update_paused_state` and `update_game_over_state` handle resume, restart, and title transitions.
 
-`draw_frame` is strictly read-only. It renders the chamber shell for whichever room the keeper currently occupies, then draws world objects (vault core, breaches, flames, raiders, keeper with facing indicator and shield ring), followed by the three-room minimap panel, the bottom HUD strip with integrity and stamina meters, and the floating message bar. State overlays (title card, pause screen, game-over screen) are drawn last.
+`draw_frame` is strictly read-only. It renders the generated chamber shell for whichever room the keeper currently occupies, then draws world objects with generated art when available (vault core, breaches, flames, raiders, keeper with facing indicator and shield ring), followed by the three-room minimap panel, the bottom HUD strip with integrity and stamina meters, and the floating message bar. State overlays (title card, pause screen, game-over screen) are drawn last.
 
 ### Key Design Patterns
 

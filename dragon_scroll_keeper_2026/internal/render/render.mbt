@@ -41,9 +41,11 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
   let top = @raylib.Color::new(10, 16, 24 + (pulse * 18.0).to_int(), 255)
   let bottom = @raylib.Color::new(30, 14, 18, 255)
 
-  @raylib.draw_rectangle_gradient_v(
-    0, 0, @types.screen_w, @types.screen_h, top, bottom,
-  )
+  if !draw_background_art(game) {
+    @raylib.draw_rectangle_gradient_v(
+      0, 0, @types.screen_w, @types.screen_h, top, bottom,
+    )
+  }
 
   for i in 0..<120 {
     let x = (i * 97 + i * i * 23) % @types.screen_w
@@ -67,13 +69,15 @@ fn @types.Game::draw_chamber_shell(game : @types.Game) -> Unit {
   let w = @types.chamber_w.to_int()
   let h = @types.chamber_h.to_int()
 
-  @raylib.draw_rectangle(
-    x,
-    y,
-    w,
-    h,
-    alpha_col(room_fill_color(game.keeper.room), 210),
-  )
+  if !draw_chamber_art(game.keeper.room) {
+    @raylib.draw_rectangle(
+      x,
+      y,
+      w,
+      h,
+      alpha_col(room_fill_color(game.keeper.room), 210),
+    )
+  }
   @raylib.draw_rectangle_lines(
     x,
     y,
@@ -140,18 +144,28 @@ fn @types.Game::draw_vault_core(game : @types.Game) -> Unit {
   let x = @types.vault_core_x().to_int()
   let y = @types.vault_core_y().to_int()
 
-  @raylib.draw_circle(x, y, 42.0 + pulse, @raylib.Color::new(56, 90, 132, 70))
-  @raylib.draw_circle(x, y, 34.0, @raylib.Color::new(82, 162, 206, 220))
-  @raylib.draw_circle_lines(
-    x,
-    y,
-    52.0 + pulse,
-    @raylib.Color::new(184, 226, 246, 190),
-  )
+  let has_scroll_core_art = draw_scroll_core_art(x, y, pulse)
+  if has_scroll_core_art {
+    @raylib.draw_circle_lines(
+      x,
+      y,
+      54.0 + pulse,
+      @raylib.Color::new(184, 226, 246, 190),
+    )
+  } else {
+    @raylib.draw_circle(x, y, 42.0 + pulse, @raylib.Color::new(56, 90, 132, 70))
+    @raylib.draw_circle(x, y, 34.0, @raylib.Color::new(82, 162, 206, 220))
+    @raylib.draw_circle_lines(
+      x,
+      y,
+      52.0 + pulse,
+      @raylib.Color::new(184, 226, 246, 190),
+    )
+  }
   @draw.draw_text(
     "Dragon Scroll",
     x - 70,
-    y - 10,
+    if has_scroll_core_art { y + 52 } else { y - 10 },
     20,
     @raylib.Color::new(238, 248, 255, 235),
   )
@@ -172,18 +186,20 @@ fn @types.Game::draw_breaches(game : @types.Game) -> Unit {
 
     if severity > 0.0 {
       let radius : Float = 16.0 + ratio * 28.0
-      @raylib.draw_circle(
-        x.to_int(),
-        y.to_int(),
-        radius,
-        @raylib.Color::new(186 + (ratio * 68.0).to_int(), 64, 44, 165),
-      )
-      @raylib.draw_circle_lines(
-        x.to_int(),
-        y.to_int(),
-        radius + 8.0,
-        @raylib.Color::new(246, 158, 110, 220),
-      )
+      if !draw_breach_art(x.to_int(), y.to_int(), ratio) {
+        @raylib.draw_circle(
+          x.to_int(),
+          y.to_int(),
+          radius,
+          @raylib.Color::new(186 + (ratio * 68.0).to_int(), 64, 44, 165),
+        )
+        @raylib.draw_circle_lines(
+          x.to_int(),
+          y.to_int(),
+          radius + 8.0,
+          @raylib.Color::new(246, 158, 110, 220),
+        )
+      }
       @draw.draw_text(
         "Breach " + severity.to_int().to_string() + "%",
         x.to_int() - 50,
@@ -218,18 +234,20 @@ fn @types.Game::draw_flames(game : @types.Game) -> Unit {
     }
 
     let heat = @types.clamp01(flame.intensity / 100.0)
-    @raylib.draw_circle(
-      flame.x.to_int(),
-      flame.y.to_int(),
-      8.0 + heat * 20.0,
-      @raylib.Color::new(255, 108 + (heat * 86.0).to_int(), 40, 190),
-    )
-    @raylib.draw_circle(
-      flame.x.to_int(),
-      flame.y.to_int(),
-      4.0 + heat * 12.0,
-      @raylib.Color::new(255, 198 + (heat * 50.0).to_int(), 90, 220),
-    )
+    if !draw_flame_art(flame.x.to_int(), flame.y.to_int(), heat) {
+      @raylib.draw_circle(
+        flame.x.to_int(),
+        flame.y.to_int(),
+        8.0 + heat * 20.0,
+        @raylib.Color::new(255, 108 + (heat * 86.0).to_int(), 40, 190),
+      )
+      @raylib.draw_circle(
+        flame.x.to_int(),
+        flame.y.to_int(),
+        4.0 + heat * 12.0,
+        @raylib.Color::new(255, 198 + (heat * 50.0).to_int(), 90, 220),
+      )
+    }
   }
 }
 
@@ -242,18 +260,24 @@ fn @types.Game::draw_raiders(game : @types.Game) -> Unit {
     }
 
     let panic_alpha = if raider.panic_t > 0.0 { 220 } else { 176 }
-    @raylib.draw_circle(
+    if !draw_raider_art(
       raider.x.to_int(),
       raider.y.to_int(),
-      @types.raider_radius,
-      @raylib.Color::new(212, 72, 86, panic_alpha),
-    )
-    @raylib.draw_circle_lines(
-      raider.x.to_int(),
-      raider.y.to_int(),
-      @types.raider_radius + 3.0,
-      @raylib.Color::new(252, 162, 174, 210),
-    )
+      raider.panic_t > 0.0,
+    ) {
+      @raylib.draw_circle(
+        raider.x.to_int(),
+        raider.y.to_int(),
+        @types.raider_radius,
+        @raylib.Color::new(212, 72, 86, panic_alpha),
+      )
+      @raylib.draw_circle_lines(
+        raider.x.to_int(),
+        raider.y.to_int(),
+        @types.raider_radius + 3.0,
+        @raylib.Color::new(252, 162, 174, 210),
+      )
+    }
 
     let ratio = @types.clamp01(raider.hp / raider.max_hp)
     let bx = raider.x.to_int() - 20
@@ -281,13 +305,15 @@ fn @types.Game::draw_keeper(game : @types.Game) -> Unit {
     @raylib.Color::new(126, 198, 255, 255)
   }
 
-  @raylib.draw_circle(x, y, @types.keeper_radius, keeper_col)
-  @raylib.draw_circle_lines(
-    x,
-    y,
-    @types.keeper_radius + 3.0,
-    @raylib.Color::new(238, 248, 255, 230),
-  )
+  if !draw_keeper_art(x, y, game.keeper.extinguisher_mode) {
+    @raylib.draw_circle(x, y, @types.keeper_radius, keeper_col)
+    @raylib.draw_circle_lines(
+      x,
+      y,
+      @types.keeper_radius + 3.0,
+      @raylib.Color::new(238, 248, 255, 230),
+    )
+  }
 
   let facing_len : Float = 26.0
   @raylib.draw_line(
