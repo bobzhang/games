@@ -622,186 +622,15 @@ fn apply_hazard_events(
 }
 
 ///|
-/// Draws the animated background gradient and floating dust motes behind the tile grid.
-fn draw_world_bg(t : Float) -> Unit {
-  @raylib.draw_rectangle_gradient_v(
-    world_x - 12,
-    world_y - 12,
-    world_w + 24,
-    world_h + 24,
-    @raylib.Color::new(24, 32, 50, 255),
-    @raylib.Color::new(16, 22, 36, 255),
-  )
-
-  for i in 0..<28 {
-    let fi : Float = Float::from_int(i)
-    let x : Int = (fi * 72.0 + t * (14.0 + Float::from_int(i % 5) * 4.0)).to_int() %
-      world_w +
-      world_x
-    let y : Int = (fi * 133.0 + t * 18.0).to_int() % world_h + world_y
-    @raylib.draw_circle(
-      x,
-      y,
-      1.0 + Float::from_int(i % 3),
-      @raylib.Color::new(102, 138, 198, 88),
-    )
-  }
-}
-
-///|
-/// Draws all tiles in the grid with decorative detail sprites for each tile kind.
-fn draw_tiles(tiles : Array[Int], t : Float) -> Unit {
+/// Draws all tiles in the grid using generated material and objective textures.
+fn draw_tiles(art : GameArt, tiles : Array[Int], t : Float) -> Unit {
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
       let tx : Int = world_x + gx * tile_sz
       let ty : Int = world_y + gy * tile_sz
       let tile : Int = get_tile(tiles, gx, gy)
-
-      let fill = if tile == tile_empty {
-        @raylib.Color::new(20, 28, 44, 246)
-      } else if tile == tile_dirt {
-        @raylib.Color::new(98, 76, 56, 246)
-      } else if tile == tile_rock {
-        @raylib.Color::new(94, 98, 118, 248)
-      } else if tile == tile_gas {
-        @raylib.Color::new(70, 134, 92, 220)
-      } else if tile == tile_crystal {
-        @raylib.Color::new(86, 168, 214, 244)
-      } else if tile == tile_miner {
-        @raylib.Color::new(126, 116, 180, 246)
-      } else {
-        @raylib.Color::new(80, 146, 208, 246)
-      }
-      @raylib.draw_rectangle(tx, ty, tile_sz, tile_sz, fill)
-
-      if tile == tile_dirt {
-        @raylib.draw_circle(
-          tx + 8,
-          ty + 8,
-          3.0,
-          @raylib.Color::new(136, 112, 84, 218),
-        )
-        @raylib.draw_circle(
-          tx + 15,
-          ty + 13,
-          2.0,
-          @raylib.Color::new(126, 102, 78, 218),
-        )
-      } else if tile == tile_rock {
-        @raylib.draw_rectangle(
-          tx + 4,
-          ty + 5,
-          7,
-          6,
-          @raylib.Color::new(124, 128, 148, 222),
-        )
-        @raylib.draw_rectangle(
-          tx + 13,
-          ty + 11,
-          6,
-          5,
-          @raylib.Color::new(124, 128, 148, 222),
-        )
-      } else if tile == tile_gas {
-        for i in 0..<3 {
-          let fx : Int = tx + 6 + i * 6
-          let fy : Int = ty +
-            8 +
-            (@math.sinf(t * 4.0 + Float::from_int(gx + gy + i)) * 3.0).to_int()
-          @raylib.draw_circle(
-            fx,
-            fy,
-            4.0,
-            @raylib.Color::new(124, 206, 142, 144),
-          )
-        }
-      } else if tile == tile_crystal {
-        @raylib.draw_triangle(
-          @raylib.Vector2::new(
-            Float::from_int(tx + tile_sz / 2),
-            Float::from_int(ty + 4),
-          ),
-          @raylib.Vector2::new(
-            Float::from_int(tx + 5),
-            Float::from_int(ty + tile_sz - 4),
-          ),
-          @raylib.Vector2::new(
-            Float::from_int(tx + tile_sz - 5),
-            Float::from_int(ty + tile_sz - 4),
-          ),
-          @raylib.Color::new(154, 226, 255, 248),
-        )
-      } else if tile == tile_miner {
-        @raylib.draw_circle(
-          tx + tile_sz / 2,
-          ty + tile_sz / 2,
-          7.0,
-          @raylib.Color::new(246, 236, 154, 248),
-        )
-        @raylib.draw_rectangle(
-          tx + tile_sz / 2 - 4,
-          ty + tile_sz / 2 + 5,
-          8,
-          7,
-          @raylib.Color::new(238, 198, 126, 246),
-        )
-      } else if tile == tile_base {
-        @raylib.draw_rectangle(
-          tx + 4,
-          ty + 4,
-          tile_sz - 8,
-          tile_sz - 8,
-          @raylib.Color::new(132, 220, 252, 220),
-        )
-      }
-
-      @raylib.draw_rectangle_lines(
-        tx,
-        ty,
-        tile_sz,
-        tile_sz,
-        @raylib.Color::new(26, 34, 48, 150),
-      )
+      draw_tile_art(art, tile, tx, ty, gx, gy, t)
     }
-  }
-}
-
-///|
-/// Draws the player's drill vehicle with a bobbing animation and carried-miner counter.
-fn draw_player(player : Player, t : Float) -> Unit {
-  let bob : Float = @math.sinf(t * 8.0 + player.wobble) * 2.0
-  let x : Float = player.x
-  let y : Float = player.y + bob
-
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    14.0,
-    @raylib.Color::new(248, 204, 102, 250),
-  )
-  @raylib.draw_circle(
-    x.to_int(),
-    y.to_int(),
-    9.0,
-    @raylib.Color::new(64, 82, 122, 252),
-  )
-
-  let drill_len : Float = 18.0 + @math.sinf(t * 20.0) * 2.0
-  @raylib.draw_line_ex(
-    @raylib.Vector2::new(x, y),
-    @raylib.Vector2::new(x + drill_len, y),
-    4.0,
-    @raylib.Color::new(218, 228, 244, 248),
-  )
-
-  if player.carried > 0 {
-    @draw.draw_text(
-      "\{player.carried}",
-      (x + 14.0).to_int(),
-      (y - 9.0).to_int(),
-      20,
-      @raylib.Color::new(248, 246, 236, 252),
-    )
   }
 }
 
@@ -1165,8 +994,12 @@ fn draw_ui(
 /// Initializes the window and runs the Deep Tunnel Drill Rescue game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] deep tunnel drill rescue 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let tiles : Array[Int] = Array::make(grid_w * grid_h, tile_empty)
 
@@ -1623,8 +1456,8 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
 
-    draw_world_bg(scene_t)
-    draw_tiles(tiles, scene_t)
+    draw_world_bg(art, scene_t)
+    draw_tiles(art, tiles, scene_t)
 
     // base marker and support areas
     let (base_x, base_y, base_w, base_h) = base_bounds()
@@ -1650,7 +1483,7 @@ fn main {
       @raylib.Color::new(236, 246, 255, 248),
     )
 
-    draw_player(player, scene_t)
+    draw_player_art(art, player, scene_t)
 
     if player.sonar_t > 0.0 {
       let alpha : Int = (player.sonar_t * 130.0).to_int().clamp(min=0, max=220)
@@ -1890,7 +1723,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
