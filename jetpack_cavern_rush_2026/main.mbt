@@ -23,6 +23,185 @@ let world_w : Float = seg_w * Float::from_int(seg_count)
 let world_h : Float = 820.0
 
 ///|
+/// Generated cavern parallax background texture.
+let tex_cavern_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated cavern wall texture.
+let tex_cavern_wall_texture : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated 4x2 pilot, enemy, pickup, portal, projectile, and ability sprite sheet.
+let tex_jetpack_cavern_sprites : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Jetpack Cavern Rush texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "jetpack_cavern_rush_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Jetpack Cavern Rush render assets.
+fn load_assets() -> Unit {
+  tex_cavern_background.val = Some(load_art_texture("cavern_background.png"))
+  tex_cavern_wall_texture.val = Some(
+    load_art_texture("cavern_wall_texture.png"),
+  )
+  tex_jetpack_cavern_sprites.val = Some(
+    load_art_texture("jetpack_cavern_sprites.png"),
+  )
+}
+
+///|
+/// Unloads generated Jetpack Cavern Rush render assets.
+fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_cavern_background)
+  unload(tex_cavern_wall_texture)
+  unload(tex_jetpack_cavern_sprites)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a world-aligned strip from the generated wall texture.
+fn draw_wall_texture_segment(
+  texture_ref : Ref[@raylib.Texture?],
+  world_x : Float,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  top_side : Bool,
+  tint : @raylib.Color,
+) -> Bool {
+  if w <= 0.0 || h <= 0.0 {
+    return false
+  }
+
+  match texture_ref.val {
+    Some(texture) => {
+      let texture_w = Float::from_int(texture.width())
+      let texture_h = Float::from_int(texture.height())
+      let mut src_w = w
+      let mut src_h = h
+      if src_w > texture_w {
+        src_w = texture_w
+      }
+      if src_h > texture_h {
+        src_h = texture_h
+      }
+      let repeat_w = texture_w - src_w
+      let mut src_x : Float = 0.0
+      if repeat_w > 0.0 {
+        let wraps = (world_x / repeat_w).to_int()
+        src_x = world_x - Float::from_int(wraps) * repeat_w
+      }
+      if src_x < 0.0 {
+        src_x = 0.0
+      }
+      let src_y : Float = if top_side { 0.0 } else { texture_h - src_h }
+
+      @raylib.draw_texture_pro(
+        texture,
+        @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+        @raylib.Rectangle::new(x, y, w, h),
+        @raylib.Vector2::new(0.0, 0.0),
+        0.0,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws one cell from the generated 4x2 sprite sheet.
+fn draw_sprite_cell(
+  index : Int,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Bool {
+  match tex_jetpack_cavern_sprites.val {
+    Some(texture) => {
+      let col = index % 4
+      let row = index / 4
+      let cell_w = Float::from_int(texture.width()) / 4.0
+      let cell_h = Float::from_int(texture.height()) / 2.0
+      @raylib.draw_texture_pro(
+        texture,
+        @raylib.Rectangle::new(
+          Float::from_int(col) * cell_w,
+          Float::from_int(row) * cell_h,
+          cell_w,
+          cell_h,
+        ),
+        @raylib.Rectangle::new(cx, cy, w, h),
+        @raylib.Vector2::new(w * 0.5, h * 0.5),
+        rotation,
+        tint,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Maximum number of active enemy objects in the pool.
 let max_enemies : Int = 64
 
@@ -531,11 +710,13 @@ fn main {
   @raylib.init_window(
     sw, sh, "raylib [moonbit] example - jetpack cavern rush 2026",
   )
-  @draw.cleanup()
+  defer @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(60)
   @draw.init_font()
+  load_assets()
+  defer unload_assets()
 
   let cave_top : FixedArray[Float] = FixedArray::make(seg_count + 1, 0.0)
   let cave_bottom : FixedArray[Float] = FixedArray::make(seg_count + 1, 0.0)
@@ -1252,6 +1433,21 @@ fn main {
 
     @raylib.clear_background(@raylib.Color::new(10, 16, 28, 255))
 
+    match tex_cavern_background.val {
+      Some(texture) => {
+        draw_texture_cover(
+          texture,
+          0.0,
+          0.0,
+          Float::from_int(sw),
+          Float::from_int(sh),
+          @raylib.white,
+        )
+        @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(4, 8, 16, 76))
+      }
+      None => ()
+    }
+
     let start_seg : Int = ((cam_x / seg_w).to_int() - 2).clamp(
       min=0,
       max=seg_count - 1,
@@ -1271,20 +1467,42 @@ fn main {
       let top_avg : Float = (top0 + top1) * 0.5
       let bottom_avg : Float = (bottom0 + bottom1) * 0.5
 
-      @raylib.draw_rectangle(
-        x0.to_int(),
-        0,
-        seg_w.to_int() + 1,
-        top_avg.to_int(),
-        @raylib.Color::new(38, 48, 66, 255),
-      )
-      @raylib.draw_rectangle(
-        x0.to_int(),
-        bottom_avg.to_int(),
-        seg_w.to_int() + 1,
-        sh - bottom_avg.to_int(),
-        @raylib.Color::new(38, 48, 66, 255),
-      )
+      if !draw_wall_texture_segment(
+          tex_cavern_wall_texture,
+          Float::from_int(i) * seg_w,
+          x0,
+          0.0,
+          seg_w + 1.0,
+          top_avg,
+          true,
+          @raylib.Color::new(188, 206, 220, 238),
+        ) {
+        @raylib.draw_rectangle(
+          x0.to_int(),
+          0,
+          seg_w.to_int() + 1,
+          top_avg.to_int(),
+          @raylib.Color::new(38, 48, 66, 255),
+        )
+      }
+      if !draw_wall_texture_segment(
+          tex_cavern_wall_texture,
+          Float::from_int(i) * seg_w,
+          x0,
+          bottom_avg,
+          seg_w + 1.0,
+          Float::from_int(sh) - bottom_avg,
+          false,
+          @raylib.Color::new(188, 206, 220, 238),
+        ) {
+        @raylib.draw_rectangle(
+          x0.to_int(),
+          bottom_avg.to_int(),
+          seg_w.to_int() + 1,
+          sh - bottom_avg.to_int(),
+          @raylib.Color::new(38, 48, 66, 255),
+        )
+      }
 
       @raylib.draw_line(
         x0.to_int(),
@@ -1307,18 +1525,28 @@ fn main {
     let exit_bottom : Float = sample_line(cave_bottom, world_w - 180.0) +
       shake_y
     let exit_mid : Float = (exit_top + exit_bottom) * 0.5
-    @raylib.draw_circle(
-      exit_x.to_int(),
-      exit_mid.to_int(),
-      34.0,
-      @raylib.Color::new(138, 228, 252, 180),
-    )
-    @raylib.draw_circle(
-      exit_x.to_int(),
-      exit_mid.to_int(),
-      18.0,
-      @raylib.Color::new(222, 248, 255, 220),
-    )
+    if !draw_sprite_cell(
+        4,
+        exit_x,
+        exit_mid,
+        94.0,
+        94.0,
+        timer * -18.0,
+        @raylib.white,
+      ) {
+      @raylib.draw_circle(
+        exit_x.to_int(),
+        exit_mid.to_int(),
+        34.0,
+        @raylib.Color::new(138, 228, 252, 180),
+      )
+      @raylib.draw_circle(
+        exit_x.to_int(),
+        exit_mid.to_int(),
+        18.0,
+        @raylib.Color::new(222, 248, 255, 220),
+      )
+    }
 
     for crystal in crystals {
       if !crystal.active {
@@ -1334,19 +1562,29 @@ fn main {
       }
 
       let pulse : Float = 1.0 + @math.sinf(crystal.spin_t * 4.0) * 0.12
-      @raylib.draw_circle(
-        cx.to_int(),
-        cy.to_int(),
-        10.0 * pulse,
-        @raylib.Color::new(128, 216, 252, 220),
-      )
-      @raylib.draw_rectangle(
-        (cx - 5.0).to_int(),
-        (cy - 9.0).to_int(),
-        10,
-        18,
-        @raylib.Color::new(194, 236, 255, 255),
-      )
+      if !draw_sprite_cell(
+          3,
+          cx,
+          cy,
+          36.0 * pulse,
+          42.0 * pulse,
+          crystal.spin_t * 56.0,
+          @raylib.white,
+        ) {
+        @raylib.draw_circle(
+          cx.to_int(),
+          cy.to_int(),
+          10.0 * pulse,
+          @raylib.Color::new(128, 216, 252, 220),
+        )
+        @raylib.draw_rectangle(
+          (cx - 5.0).to_int(),
+          (cy - 9.0).to_int(),
+          10,
+          18,
+          @raylib.Color::new(194, 236, 255, 255),
+        )
+      }
     }
 
     for enemy in enemies {
@@ -1373,19 +1611,47 @@ fn main {
       }
 
       let r : Float = if enemy.kind == 0 { 14.0 } else { 18.0 }
-      @raylib.draw_circle(ex.to_int(), ey.to_int(), r, col)
-      @raylib.draw_circle(
-        (ex - 4.0).to_int(),
-        (ey - 3.0).to_int(),
-        2.0,
-        @raylib.Color::new(22, 24, 30, 255),
-      )
-      @raylib.draw_circle(
-        (ex + 4.0).to_int(),
-        (ey - 3.0).to_int(),
-        2.0,
-        @raylib.Color::new(22, 24, 30, 255),
-      )
+      let enemy_rotation = @math.atan2f(enemy.vy, enemy.vx) * 57.29578
+      let enemy_tint = if enemy.shock_t > 0.0 || enemy.slow_t > 0.0 {
+        col
+      } else {
+        @raylib.white
+      }
+      if !draw_sprite_cell(
+          if enemy.kind == 0 {
+            1
+          } else {
+            2
+          },
+          ex,
+          ey,
+          if enemy.kind == 0 {
+            54.0
+          } else {
+            68.0
+          },
+          if enemy.kind == 0 {
+            42.0
+          } else {
+            54.0
+          },
+          enemy_rotation,
+          enemy_tint,
+        ) {
+        @raylib.draw_circle(ex.to_int(), ey.to_int(), r, col)
+        @raylib.draw_circle(
+          (ex - 4.0).to_int(),
+          (ey - 3.0).to_int(),
+          2.0,
+          @raylib.Color::new(22, 24, 30, 255),
+        )
+        @raylib.draw_circle(
+          (ex + 4.0).to_int(),
+          (ey - 3.0).to_int(),
+          2.0,
+          @raylib.Color::new(22, 24, 30, 255),
+        )
+      }
 
       if enemy.burn_t > 0.0 {
         @raylib.draw_circle_lines(
@@ -1415,16 +1681,40 @@ fn main {
       } else {
         @raylib.Color::new(242, 146, 146, 255)
       }
-      @raylib.draw_circle(
-        px.to_int(),
-        py.to_int(),
-        if projectile.from_player {
-          4.0
-        } else {
-          3.0
-        },
-        col,
-      )
+      let projectile_rotation = @math.atan2f(projectile.vy, projectile.vx) *
+        57.29578
+      if !draw_sprite_cell(
+          if projectile.from_player {
+            5
+          } else {
+            6
+          },
+          px,
+          py,
+          if projectile.from_player {
+            30.0
+          } else {
+            26.0
+          },
+          if projectile.from_player {
+            16.0
+          } else {
+            14.0
+          },
+          projectile_rotation,
+          col,
+        ) {
+        @raylib.draw_circle(
+          px.to_int(),
+          py.to_int(),
+          if projectile.from_player {
+            4.0
+          } else {
+            3.0
+          },
+          col,
+        )
+      }
     }
 
     let hx : Float = player.x - cam_x + shake_x
@@ -1438,21 +1728,29 @@ fn main {
       @raylib.Color::new(118, 214, 252, 255)
     }
 
-    @raylib.draw_circle(hx.to_int(), hy.to_int(), 16.0, hcol)
-    @raylib.draw_rectangle(
-      (hx - 10.0).to_int(),
-      (hy - 6.0).to_int(),
-      20,
-      12,
-      @raylib.Color::new(42, 64, 92, 255),
-    )
-    @raylib.draw_line(
-      hx.to_int(),
-      hy.to_int(),
-      (hx + player.aim_x * 24.0).to_int(),
-      (hy + player.aim_y * 24.0).to_int(),
-      @raylib.Color::new(246, 248, 252, 255),
-    )
+    let player_rotation = @math.atan2f(player.aim_y, player.aim_x) * 57.29578
+    let player_tint = if player.flash_t > 0.0 || player.dash_t > 0.0 {
+      hcol
+    } else {
+      @raylib.white
+    }
+    if !draw_sprite_cell(0, hx, hy, 76.0, 58.0, player_rotation, player_tint) {
+      @raylib.draw_circle(hx.to_int(), hy.to_int(), 16.0, hcol)
+      @raylib.draw_rectangle(
+        (hx - 10.0).to_int(),
+        (hy - 6.0).to_int(),
+        20,
+        12,
+        @raylib.Color::new(42, 64, 92, 255),
+      )
+      @raylib.draw_line(
+        hx.to_int(),
+        hy.to_int(),
+        (hx + player.aim_x * 24.0).to_int(),
+        (hy + player.aim_y * 24.0).to_int(),
+        @raylib.Color::new(246, 248, 252, 255),
+      )
+    }
 
     if player.vy > 20.0 || player.vy < -20.0 {
       emit_particle(

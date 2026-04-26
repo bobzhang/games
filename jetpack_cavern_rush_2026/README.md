@@ -25,13 +25,23 @@ cd examples && ./_build/native/debug/build/jetpack_cavern_rush_2026/jetpack_cave
 
 Fly through a randomly generated cavern using your jetpack. Collect scattered crystals to meet the quota, then reach the exit portal at the far end. Two enemy types chase you -- small fast biters and large ranged shooters. Fuel regenerates slowly and is consumed by thrust, firing, and abilities. Hitting cave walls damages you. Build kill combos for bonus score. Levels get progressively harder with more enemies and tighter crystal quotas across 8 stages.
 
+## Generated Art Assets
+
+This package now ships generated bitmap art under `jetpack_cavern_rush_2026/resources/`:
+
+| Asset | Use |
+|-------|-----|
+| `cavern_background.png` | Side-view crystal cavern backdrop behind the procedural route. |
+| `cavern_wall_texture.png` | World-aligned rock/crystal texture used for the generated cave ceiling and floor. |
+| `jetpack_cavern_sprites.png` | 4x2 transparent sprite sheet for the pilot, biter, shooter, crystal, portal, bolts, and pulse orb. |
+
 ## Public API Reference
 
 ### Package `jetpack_cavern_rush_2026`
 
 > Main entry point and single-file game implementation.
 
-The `main` function initializes the window (1280x820), generates a procedural cave, populates crystals and an initial enemy wave, and runs the frame loop. Each frame reads input, updates game state, and renders all layers.
+The `main` function initializes the window (1280x820), initializes fonts and generated art assets, generates a procedural cave, populates crystals and an initial enemy wave, and runs the frame loop. Each frame reads input, updates game state, and renders all layers. Deferred cleanup unloads textures, font resources, and the window.
 
 #### Types
 
@@ -52,6 +62,11 @@ The `main` function initializes the window (1280x820), generates a procedural ca
 | `randf` | `(Float, Float) -> Float` | Returns a random float in `[lo, hi]` using raylib RNG. |
 | `dist2` | `(Float, Float, Float, Float) -> Float` | Returns squared distance between two points. |
 | `inside_rect` | `(Float, Float, Int, Int, Int, Int) -> Bool` | Tests if a point lies inside a rectangle (for touch input). |
+| `load_art_texture` | `(String) -> Texture` | Loads a package resource texture with bilinear filtering. |
+| `load_assets` / `unload_assets` | `() -> Unit` | Loads and unloads generated background, wall, and sprite-sheet textures. |
+| `draw_texture_cover` | `(Texture, Float, Float, Float, Float, Color) -> Unit` | Cover-crops a generated texture into a destination rectangle. |
+| `draw_wall_texture_segment` | `(Ref[Texture?], Float, Float, Float, Float, Float, Bool, Color) -> Bool` | Draws a world-aligned strip from the generated wall texture. |
+| `draw_sprite_cell` | `(Int, Float, Float, Float, Float, Float, Color) -> Bool` | Draws one cell from the generated 4x2 sprite sheet and reports whether art was available. |
 | `sample_line` | `(FixedArray[Float], Float) -> Float` | Interpolates a cave boundary array at a given world x-coordinate. |
 | `generate_cave` | `(FixedArray[Float], FixedArray[Float]) -> Unit` | Procedurally fills top and bottom cave boundary arrays using a clamped random walk. |
 | `emit_particle` | `(FixedArray[Particle], Float, Float, Float, Float, Float, Float, Int) -> Unit` | Activates an inactive particle slot with given parameters. |
@@ -82,6 +97,7 @@ The `main` function initializes the window (1280x820), generates a procedural ca
 ## Architecture
 
 All game logic is in `main.mbt`. Key patterns:
+- **Generated art pipeline**: `load_assets` loads the cavern backdrop, wall texture, and 4x2 sprite sheet from `resources/`; render code falls back to the original procedural shapes if an asset is unavailable.
 - **State machine**: An integer `state` variable (0=title, 1=playing, 2=win, 3=dead) drives logic branches and overlay rendering. The current level (1–8) tracks progression.
 - **Main data structures**: The `Player` struct holds all player state. Five `FixedArray` pools (enemies, projectiles, crystals, particles) with `active` flags handle all entities. Two `FixedArray[Float]` arrays (`cave_top`, `cave_bottom`) define the procedural level geometry.
 - **Delta-time updates**: All physics (thrust, gravity, drag, projectile motion, enemy AI) are scaled by `dt` for frame-rate independence.
