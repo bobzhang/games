@@ -37,6 +37,331 @@ fn draw_meter(
 }
 
 ///|
+/// Generated dungeon floor background texture.
+let tex_floor : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated courier character texture.
+let tex_courier : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated guard character texture.
+let tex_guard : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated parcel pickup texture.
+let tex_parcel : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated exit marker texture.
+let tex_exit : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated trap rune texture.
+let tex_trap : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated smoke cloud texture.
+let tex_smoke : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Dungeon Courier Escape texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "dungeon_courier_escape_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Dungeon Courier Escape render assets.
+pub fn load_assets() -> Unit {
+  tex_floor.val = Some(load_art_texture("dungeon_floor_background.png"))
+  tex_courier.val = Some(load_art_texture("courier_sprite.png"))
+  tex_guard.val = Some(load_art_texture("guard_sprite.png"))
+  tex_parcel.val = Some(load_art_texture("parcel_sprite.png"))
+  tex_exit.val = Some(load_art_texture("exit_marker.png"))
+  tex_trap.val = Some(load_art_texture("trap_rune.png"))
+  tex_smoke.val = Some(load_art_texture("smoke_cloud.png"))
+}
+
+///|
+/// Unloads generated Dungeon Courier Escape render assets.
+pub fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_floor)
+  unload(tex_courier)
+  unload(tex_guard)
+  unload(tex_parcel)
+  unload(tex_exit)
+  unload(tex_trap)
+  unload(tex_smoke)
+}
+
+///|
+/// Returns true when the generated dungeon floor art is loaded.
+fn has_floor_art() -> Bool {
+  match tex_floor.val {
+    Some(_) => true
+    None => false
+  }
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(src_x, src_y, src_w, src_h),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on a destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated texture scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, cx, cy, w, h, rotation, tint)
+}
+
+///|
+/// Draws the generated dungeon floor inside the playable world.
+fn draw_floor_art() -> Bool {
+  match tex_floor.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        @types.world_left,
+        @types.world_top,
+        @types.world_w(),
+        @types.world_h(),
+        @raylib.white,
+      )
+      @raylib.draw_rectangle(
+        @types.world_left.to_int(),
+        @types.world_top.to_int(),
+        @types.world_w().to_int(),
+        @types.world_h().to_int(),
+        @raylib.Color::new(4, 8, 14, 34),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated exit marker art.
+fn draw_exit_art(exit : @types.ExitMarker, radius : Float) -> Bool {
+  match tex_exit.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        exit.x,
+        exit.y,
+        radius * 2.75,
+        radius * 2.75,
+        0.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated trap rune art.
+fn draw_trap_art(trap : @types.Trap, alpha : Int) -> Bool {
+  match tex_trap.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        trap.x,
+        trap.y,
+        trap.radius * 3.15,
+        trap.radius * 3.15,
+        trap.blink_t * 16.0,
+        @raylib.Color::new(255, 196, 236, alpha.clamp(min=70, max=255)),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated parcel pickup art.
+fn draw_parcel_art(x : Float, y : Float, size : Float) -> Bool {
+  match tex_parcel.val {
+    Some(texture) => {
+      draw_texture_fit(texture, x, y, size, size, 0.0, @raylib.white)
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated smoke cloud art.
+fn draw_smoke_art(smoke : @types.Smoke, life_ratio : Float) -> Bool {
+  match tex_smoke.val {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        smoke.x,
+        smoke.y,
+        smoke.radius * 2.08,
+        smoke.radius * 2.08,
+        smoke.life * 8.0,
+        @raylib.Color::new(
+          218,
+          226,
+          238,
+          ((86.0 : Float) * life_ratio).to_int(),
+        ),
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated guard art.
+fn draw_guard_art(g : @types.Guard, alert_boost : Float) -> Bool {
+  match tex_guard.val {
+    Some(texture) => {
+      @raylib.draw_circle(
+        g.x.to_int(),
+        g.y.to_int(),
+        20.0 + alert_boost * 5.0,
+        @raylib.Color::new(255, 90, 104, 44),
+      )
+      draw_texture_fit(
+        texture,
+        g.x,
+        g.y - 4.0,
+        38.0,
+        52.0,
+        g.dir_deg - 135.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Draws the generated courier art.
+fn draw_courier_art(game : @types.Game) -> Bool {
+  match tex_courier.val {
+    Some(texture) => {
+      @raylib.draw_circle(
+        game.player.x.to_int(),
+        game.player.y.to_int(),
+        @types.player_radius + 12.0,
+        @raylib.Color::new(70, 172, 140, 48),
+      )
+      draw_texture_fit(
+        texture,
+        game.player.x,
+        game.player.y - 5.0,
+        42.0,
+        56.0,
+        game.player.facing_deg + 45.0,
+        @raylib.white,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
 /// Draws the dungeon floor with a scrolling grid, border walls, and decorative pillars.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.col_bg_bottom())
@@ -50,13 +375,15 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
     @types.col_bg_bottom(),
   )
 
-  @raylib.draw_rectangle(
-    @types.world_left.to_int(),
-    @types.world_top.to_int(),
-    @types.world_w().to_int(),
-    @types.world_h().to_int(),
-    @types.col_floor(),
-  )
+  if !draw_floor_art() {
+    @raylib.draw_rectangle(
+      @types.world_left.to_int(),
+      @types.world_top.to_int(),
+      @types.world_w().to_int(),
+      @types.world_h().to_int(),
+      @types.col_floor(),
+    )
+  }
 
   let grid_step = 48
   let shift = (game.wave_clock * 26.0).to_int() % grid_step
@@ -93,24 +420,26 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
     @raylib.Color::new(130, 148, 168, 240),
   )
 
-  // Decorative dungeon pillars.
-  for i in 0..<8 {
-    let px = @types.world_left + 90.0 + Float::from_int(i % 4) * 320.0
-    let py = @types.world_top + 120.0 + Float::from_int(i / 4) * 380.0
-    @raylib.draw_rectangle(
-      (px - 24.0).to_int(),
-      (py - 24.0).to_int(),
-      48,
-      48,
-      @types.col_wall(),
-    )
-    @raylib.draw_rectangle_lines(
-      (px - 24.0).to_int(),
-      (py - 24.0).to_int(),
-      48,
-      48,
-      @raylib.Color::new(150, 172, 192, 180),
-    )
+  if !has_floor_art() {
+    // Decorative dungeon pillars.
+    for i in 0..<8 {
+      let px = @types.world_left + 90.0 + Float::from_int(i % 4) * 320.0
+      let py = @types.world_top + 120.0 + Float::from_int(i / 4) * 380.0
+      @raylib.draw_rectangle(
+        (px - 24.0).to_int(),
+        (py - 24.0).to_int(),
+        48,
+        48,
+        @types.col_wall(),
+      )
+      @raylib.draw_rectangle_lines(
+        (px - 24.0).to_int(),
+        (py - 24.0).to_int(),
+        48,
+        48,
+        @raylib.Color::new(150, 172, 192, 180),
+      )
+    }
   }
 }
 
@@ -132,18 +461,20 @@ fn @types.Game::draw_exits(game : @types.Game) -> Unit {
       r + 10.0,
       @raylib.Color::new(90, 136, 232, 58),
     )
-    @raylib.draw_circle(
-      game.exits[i].x.to_int(),
-      game.exits[i].y.to_int(),
-      r,
-      @raylib.Color::new(50, 90, 178, 130),
-    )
-    @raylib.draw_circle_lines(
-      game.exits[i].x.to_int(),
-      game.exits[i].y.to_int(),
-      r,
-      @types.col_exit(),
-    )
+    if !draw_exit_art(game.exits[i], r) {
+      @raylib.draw_circle(
+        game.exits[i].x.to_int(),
+        game.exits[i].y.to_int(),
+        r,
+        @raylib.Color::new(50, 90, 178, 130),
+      )
+      @raylib.draw_circle_lines(
+        game.exits[i].x.to_int(),
+        game.exits[i].y.to_int(),
+        r,
+        @types.col_exit(),
+      )
+    }
 
     @draw.draw_text(
       "EXIT",
@@ -174,19 +505,21 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
       @raylib.Color::new(230, 76, 124, alpha / 3),
     )
 
-    @raylib.draw_circle_lines(
-      trap.x.to_int(),
-      trap.y.to_int(),
-      trap.radius,
-      @raylib.Color::new(250, 98, 146, alpha),
-    )
+    if !draw_trap_art(trap, alpha) {
+      @raylib.draw_circle_lines(
+        trap.x.to_int(),
+        trap.y.to_int(),
+        trap.radius,
+        @raylib.Color::new(250, 98, 146, alpha),
+      )
 
-    @raylib.draw_circle(
-      trap.x.to_int(),
-      trap.y.to_int(),
-      4.0,
-      @types.col_trap(),
-    )
+      @raylib.draw_circle(
+        trap.x.to_int(),
+        trap.y.to_int(),
+        4.0,
+        @types.col_trap(),
+      )
+    }
   }
 }
 
@@ -207,21 +540,23 @@ fn @types.Game::draw_parcels(game : @types.Game) -> Unit {
       @raylib.Color::new(250, 214, 108, 58),
     )
 
-    @raylib.draw_rectangle(
-      (parcel.x - 10.0).to_int(),
-      (parcel.y - 8.0).to_int(),
-      20,
-      16,
-      @types.col_parcel(),
-    )
+    if !draw_parcel_art(parcel.x, parcel.y, 30.0 + pulse * 4.0) {
+      @raylib.draw_rectangle(
+        (parcel.x - 10.0).to_int(),
+        (parcel.y - 8.0).to_int(),
+        20,
+        16,
+        @types.col_parcel(),
+      )
 
-    @raylib.draw_line(
-      parcel.x.to_int(),
-      (parcel.y - 8.0).to_int(),
-      parcel.x.to_int(),
-      (parcel.y + 8.0).to_int(),
-      @raylib.Color::new(180, 134, 64, 220),
-    )
+      @raylib.draw_line(
+        parcel.x.to_int(),
+        (parcel.y - 8.0).to_int(),
+        parcel.x.to_int(),
+        (parcel.y + 8.0).to_int(),
+        @raylib.Color::new(180, 134, 64, 220),
+      )
+    }
   }
 }
 
@@ -239,18 +574,20 @@ fn @types.Game::draw_smokes(game : @types.Game) -> Unit {
       1.0,
     )
 
-    @raylib.draw_circle(
-      smoke.x.to_int(),
-      smoke.y.to_int(),
-      smoke.radius,
-      @raylib.Color::new(154, 162, 176, ((56.0 : Float) * life_ratio).to_int()),
-    )
-    @raylib.draw_circle_lines(
-      smoke.x.to_int(),
-      smoke.y.to_int(),
-      smoke.radius,
-      @raylib.Color::new(212, 220, 236, ((136.0 : Float) * life_ratio).to_int()),
-    )
+    if !draw_smoke_art(smoke, life_ratio) {
+      @raylib.draw_circle(
+        smoke.x.to_int(),
+        smoke.y.to_int(),
+        smoke.radius,
+        @raylib.Color::new(154, 162, 176, ((56.0 : Float) * life_ratio).to_int()),
+      )
+      @raylib.draw_circle_lines(
+        smoke.x.to_int(),
+        smoke.y.to_int(),
+        smoke.radius,
+        @raylib.Color::new(212, 220, 236, ((136.0 : Float) * life_ratio).to_int()),
+      )
+    }
   }
 }
 
@@ -278,13 +615,15 @@ fn draw_guard(g : @types.Guard) -> Unit {
     @raylib.Color::new(255, 146, 166, 120),
   )
 
-  @raylib.draw_circle(g.x.to_int(), g.y.to_int(), 12.0, @types.col_guard())
-  @raylib.draw_circle(
-    g.x.to_int(),
-    g.y.to_int(),
-    6.0,
-    @raylib.Color::new(46, 22, 32, 220),
-  )
+  if !draw_guard_art(g, alert_boost) {
+    @raylib.draw_circle(g.x.to_int(), g.y.to_int(), 12.0, @types.col_guard())
+    @raylib.draw_circle(
+      g.x.to_int(),
+      g.y.to_int(),
+      6.0,
+      @raylib.Color::new(46, 22, 32, 220),
+    )
+  }
 
   let dir_x = g.x + @math.cosf(g.dir_deg * @types.deg_to_rad) * 22.0
   let dir_y = g.y + @math.sinf(g.dir_deg * @types.deg_to_rad) * 22.0
@@ -319,24 +658,26 @@ fn @types.Game::draw_guards(game : @types.Game) -> Unit {
 ///|
 /// Draws the player circle with facing line, an optional carried-parcel indicator above the sprite, and a danger ring when stealth is critically low.
 fn @types.Game::draw_player(game : @types.Game) -> Unit {
-  @raylib.draw_circle(
-    game.player.x.to_int(),
-    game.player.y.to_int(),
-    @types.player_radius + 10.0,
-    @raylib.Color::new(70, 172, 140, 56),
-  )
-  @raylib.draw_circle(
-    game.player.x.to_int(),
-    game.player.y.to_int(),
-    @types.player_radius,
-    @types.col_player(),
-  )
-  @raylib.draw_circle(
-    game.player.x.to_int(),
-    game.player.y.to_int(),
-    @types.player_radius * 0.45,
-    @raylib.Color::new(28, 62, 58, 210),
-  )
+  if !draw_courier_art(game) {
+    @raylib.draw_circle(
+      game.player.x.to_int(),
+      game.player.y.to_int(),
+      @types.player_radius + 10.0,
+      @raylib.Color::new(70, 172, 140, 56),
+    )
+    @raylib.draw_circle(
+      game.player.x.to_int(),
+      game.player.y.to_int(),
+      @types.player_radius,
+      @types.col_player(),
+    )
+    @raylib.draw_circle(
+      game.player.x.to_int(),
+      game.player.y.to_int(),
+      @types.player_radius * 0.45,
+      @raylib.Color::new(28, 62, 58, 210),
+    )
+  }
 
   let fx = game.player.x +
     @math.cosf(game.player.facing_deg * @types.deg_to_rad) * 20.0
@@ -351,13 +692,15 @@ fn @types.Game::draw_player(game : @types.Game) -> Unit {
   )
 
   if game.player.carrying_parcel >= 0 {
-    @raylib.draw_rectangle(
-      (game.player.x - 6.0).to_int(),
-      (game.player.y - 24.0).to_int(),
-      12,
-      10,
-      @types.col_parcel(),
-    )
+    if !draw_parcel_art(game.player.x, game.player.y - 28.0, 18.0) {
+      @raylib.draw_rectangle(
+        (game.player.x - 6.0).to_int(),
+        (game.player.y - 24.0).to_int(),
+        12,
+        10,
+        @types.col_parcel(),
+      )
+    }
   }
 
   if game.player.stealth < 25.0 {

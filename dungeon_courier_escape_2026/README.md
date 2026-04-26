@@ -1,6 +1,6 @@
 # Dungeon Courier Escape 2026
 
-A stealth-action delivery game set in a procedurally populated dungeon. You play as an underground courier who must collect parcels scattered across a guarded floor and deliver them to glowing exit markers before time runs out. Guards patrol with vision cones, floor traps deal damage and alert nearby enemies, and smoke decoys provide temporary cover.
+A stealth-action delivery game set in a procedurally populated dungeon. You play as an underground courier who must collect parcels scattered across a guarded floor and deliver them to glowing exit markers before time runs out. The game now uses generated dungeon floor art plus courier, guard, parcel, exit ring, trap rune, and smoke cloud sprites, while preserving procedural draw fallbacks for missing textures.
 
 The core loop involves picking up parcels with the interact key, navigating past patrolling guards while managing a stealth meter, and delivering parcels at exit rings. Sprinting increases speed at the cost of stealth and generates noise pressure that draws guard attention. Each wave adds more guards, traps, and tighter deadlines. Clearing a wave's delivery target advances to the next wave with health recovery and a score bonus. The stealth system is pressure-based: guard detection cones, traps, and sprinting all generate detection pressure that drains stealth, and when stealth hits zero the player takes continuous health damage.
 
@@ -162,6 +162,8 @@ Each wave requires delivering a target number of parcels to any of three exit ma
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
+| `load_assets` | `() -> Unit` | Loads generated textures from `resources/` and applies bilinear filtering |
+| `unload_assets` | `() -> Unit` | Releases generated textures during shutdown |
 | `draw_frame` | `(Game) -> Unit` | Main render entry point: draws background, entities, HUD, and state overlays |
 
 ## Architecture
@@ -170,8 +172,16 @@ Each wave requires delivering a target number of parcels to any of three exit ma
 
 ```
 dungeon_courier_escape_2026/
-├── main.mbt              — Entry point: window init, game loop
+├── main.mbt              — Entry point: window init, game loop, render asset lifecycle
 ├── moon.pkg              — Package config, imports
+├── resources/            — Generated dungeon floor, character, pickup, hazard, and effect textures
+│   ├── courier_sprite.png
+│   ├── dungeon_floor_background.png
+│   ├── exit_marker.png
+│   ├── guard_sprite.png
+│   ├── parcel_sprite.png
+│   ├── smoke_cloud.png
+│   └── trap_rune.png
 └── internal/
     ├── types/
     │   ├── types.mbt     — Enums (GameState), structs (Player, Guard, Game, etc.), constructors
@@ -191,7 +201,7 @@ The `types` package is the shared foundation with no game logic. The `game` pack
 1. **Input**: `update_input` in `input.mbt` reads keyboard state and populates `game.input` (an `InputState` struct) each frame.
 2. **Update**: `update_game` dispatches based on `game.state`. In `Play` mode, `update_play` sequences: smoke deployment, parcel interaction (`try_interact`), player motion (`update_player_motion`), smoke lifetime decay, guard AI (`update_guards`), trap checks (`update_traps`), stealth/health pressure resolution, and win/lose checks.
 3. **Guard AI**: Each guard chooses a target: smoke lure (highest priority), player chase (if alerted), investigation point, or patrol waypoint toggle. Detection pressure is computed per-guard using cone geometry (distance factor x angle factor x wave scale).
-4. **Render**: `draw_frame` layers: background with scrolling grid, exits, traps, parcels, smoke clouds, guards (with vision cone sectors), player, alarm overlay, HUD meters, and state-specific overlays (title or retry).
+4. **Render**: `load_assets` prepares generated textures at startup. `draw_frame` layers: generated dungeon floor with scrolling grid, generated exit/trap/parcel/smoke/guard/courier art, guard vision cone sectors, alarm overlay, HUD meters, and state-specific overlays (title or retry).
 
 ### Key Design Patterns
 
@@ -199,6 +209,7 @@ The `types` package is the shared foundation with no game logic. The `game` pack
 - **State machine**: `GameState` enum (Title, Play, Retry) with clean transitions via `start_new_run`, `advance_wave`, and `fail_mission`.
 - **Pressure-based detection**: Instead of binary detection, guards, traps, and sprinting contribute additive pressure. Smoke cover applies a multiplicative factor. Stealth drains proportionally to total pressure.
 - **Wave scaling**: Guard speed/range, trap damage, delivery targets, time limits, and smoke stock all scale with wave number through explicit formulas using tuning constants.
+- **Texture fallback system**: Generated art helpers return `false` when their texture is unavailable, allowing each renderer to fall back to the original procedural shapes.
 - **Separation of concerns**: Input, logic, and rendering are cleanly separated. The render package only reads game state and never modifies it.
 
 ## Improvement & Refinement Plan
