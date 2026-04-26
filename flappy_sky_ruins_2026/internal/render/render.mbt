@@ -1,4 +1,262 @@
 ///|
+///|
+/// Generated full-screen sky ruins background texture.
+let tex_sky_ruins_background : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated player bird texture.
+let tex_player_bird : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated standard gate pillar texture.
+let tex_gate_pillar : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated beam hazard pillar texture.
+let tex_beam_pillar : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated spinner hazard texture.
+let tex_spinner_core : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated score pickup texture.
+let tex_pickup_score : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated boost pickup texture.
+let tex_pickup_boost : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated shield pickup texture.
+let tex_pickup_shield : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Generated heart pickup texture.
+let tex_pickup_heart : Ref[@raylib.Texture?] = { val: None }
+
+///|
+/// Loads one generated Flappy Sky Ruins texture.
+fn load_art_texture(file_name : String) -> @raylib.Texture {
+  let texture = @raylib.load_texture(
+    "flappy_sky_ruins_2026/resources/\{file_name}",
+  )
+  @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
+  texture
+}
+
+///|
+/// Loads generated Flappy Sky Ruins render assets.
+pub fn load_assets() -> Unit {
+  tex_sky_ruins_background.val = Some(
+    load_art_texture("sky_ruins_background.png"),
+  )
+  tex_player_bird.val = Some(load_art_texture("player_bird.png"))
+  tex_gate_pillar.val = Some(load_art_texture("gate_pillar.png"))
+  tex_beam_pillar.val = Some(load_art_texture("beam_pillar.png"))
+  tex_spinner_core.val = Some(load_art_texture("spinner_core.png"))
+  tex_pickup_score.val = Some(load_art_texture("pickup_score.png"))
+  tex_pickup_boost.val = Some(load_art_texture("pickup_boost.png"))
+  tex_pickup_shield.val = Some(load_art_texture("pickup_shield.png"))
+  tex_pickup_heart.val = Some(load_art_texture("pickup_heart.png"))
+}
+
+///|
+/// Unloads generated Flappy Sky Ruins render assets.
+pub fn unload_assets() -> Unit {
+  fn unload(texture_ref : Ref[@raylib.Texture?]) -> Unit {
+    match texture_ref.val {
+      Some(texture) => {
+        @raylib.unload_texture(texture)
+        texture_ref.val = None
+      }
+      None => ()
+    }
+  }
+
+  unload(tex_sky_ruins_background)
+  unload(tex_player_bird)
+  unload(tex_gate_pillar)
+  unload(tex_beam_pillar)
+  unload(tex_spinner_core)
+  unload(tex_pickup_score)
+  unload(tex_pickup_boost)
+  unload(tex_pickup_shield)
+  unload(tex_pickup_heart)
+}
+
+///|
+/// Draws a texture cover-cropped into a destination rectangle.
+fn draw_texture_cover(
+  texture : @raylib.Texture,
+  x : Float,
+  y : Float,
+  w : Float,
+  h : Float,
+  tint : @raylib.Color,
+  flip_y : Bool,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let dest_ratio : Float = w / h
+
+  let mut src_x : Float = 0.0
+  let mut src_y : Float = 0.0
+  let mut src_w : Float = source_w
+  let mut src_h : Float = source_h
+
+  if source_ratio > dest_ratio {
+    src_w = source_h * dest_ratio
+    src_x = (source_w - src_w) * 0.5
+  } else if source_ratio < dest_ratio {
+    src_h = source_w / dest_ratio
+    src_y = (source_h - src_h) * 0.5
+  }
+
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      src_x,
+      if flip_y { src_y + src_h } else { src_y },
+      src_w,
+      if flip_y { -src_h } else { src_h },
+    ),
+    @raylib.Rectangle::new(x, y, w, h),
+    @raylib.Vector2::new(0.0, 0.0),
+    0.0,
+    tint,
+  )
+}
+
+///|
+/// Draws a texture centered on a destination point.
+fn draw_texture_centered(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  w : Float,
+  h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  @raylib.draw_texture_pro(
+    texture,
+    @raylib.Rectangle::new(
+      0.0,
+      0.0,
+      Float::from_int(texture.width()),
+      Float::from_int(texture.height()),
+    ),
+    @raylib.Rectangle::new(cx, cy, w, h),
+    @raylib.Vector2::new(w * 0.5, h * 0.5),
+    rotation,
+    tint,
+  )
+}
+
+///|
+/// Draws a generated texture scaled to fit a centered box.
+fn draw_texture_fit(
+  texture : @raylib.Texture,
+  cx : Float,
+  cy : Float,
+  max_w : Float,
+  max_h : Float,
+  rotation : Float,
+  tint : @raylib.Color,
+) -> Unit {
+  let source_w : Float = Float::from_int(texture.width())
+  let source_h : Float = Float::from_int(texture.height())
+  let source_ratio : Float = source_w / source_h
+  let box_ratio : Float = max_w / max_h
+  let mut w : Float = max_w
+  let mut h : Float = max_h
+  if source_ratio > box_ratio {
+    h = max_w / source_ratio
+  } else {
+    w = max_h * source_ratio
+  }
+  draw_texture_centered(texture, cx, cy, w, h, rotation, tint)
+}
+
+///|
+/// Draws generated full-screen sky ruins background art.
+fn draw_sky_ruins_background(tint : @raylib.Color) -> Bool {
+  match tex_sky_ruins_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        0.0,
+        0.0,
+        Float::from_int(@types.screen_w),
+        Float::from_int(@types.screen_h),
+        tint,
+        false,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Returns the generated obstacle pillar texture for a given obstacle kind.
+fn obstacle_pillar_texture(kind : @types.ObstacleKind) -> @raylib.Texture? {
+  match kind {
+    Beam => tex_beam_pillar.val
+    Gate | Spinner => tex_gate_pillar.val
+  }
+}
+
+///|
+/// Draws generated obstacle pillar art into a collision rectangle.
+fn draw_obstacle_pillar_art(
+  kind : @types.ObstacleKind,
+  x : Int,
+  y : Int,
+  w : Int,
+  h : Int,
+  flip_y : Bool,
+) -> Bool {
+  if h <= 0 {
+    return true
+  }
+
+  match obstacle_pillar_texture(kind) {
+    Some(texture) => {
+      let tint = match kind {
+        Beam => @raylib.Color::new(255, 214, 190, 246)
+        Spinner => @raylib.Color::new(222, 218, 255, 246)
+        Gate => @raylib.white
+      }
+      draw_texture_cover(
+        texture,
+        Float::from_int(x),
+        Float::from_int(y),
+        Float::from_int(w),
+        Float::from_int(h),
+        tint,
+        flip_y,
+      )
+      true
+    }
+    None => false
+  }
+}
+
+///|
+/// Returns the generated pickup texture for a pickup kind.
+fn pickup_texture(kind : @types.PickupKind) -> @raylib.Texture? {
+  match kind {
+    Score => tex_pickup_score.val
+    Boost => tex_pickup_boost.val
+    Shield => tex_pickup_shield.val
+    Heart => tex_pickup_heart.val
+  }
+}
+
+///|
 /// Returns a sine wave value sampled from `game.ui_t` scaled by `k`, used to animate background elements.
 fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
   Float::from_double(@math.sin((game.ui_t * k).to_double()))
@@ -8,6 +266,17 @@ fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
 /// Draws the animated background with pulsing ambient circles and layered horizontal gradient bands.
 fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
+
+  if draw_sky_ruins_background(@raylib.white) {
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @raylib.Color::new(7, 12, 22, 58),
+    )
+    return
+  }
 
   let w0 : Float = game.bg_wave(0.66)
   let w1 : Float = game.bg_wave(0.93)
@@ -45,13 +314,34 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 ///|
 /// Draws the world boundary rectangle with layered horizontal stripes and an animated horizon line.
 fn @types.Game::draw_world_back(game : @types.Game) -> Unit {
-  @raylib.draw_rectangle(
-    @types.world_x0,
-    @types.world_y0,
-    @types.world_w,
-    @types.world_h,
-    @raylib.Color::new(20, 30, 48, 228),
-  )
+  match tex_sky_ruins_background.val {
+    Some(texture) => {
+      draw_texture_cover(
+        texture,
+        Float::from_int(@types.world_x0),
+        Float::from_int(@types.world_y0),
+        Float::from_int(@types.world_w),
+        Float::from_int(@types.world_h),
+        @raylib.white,
+        false,
+      )
+      @raylib.draw_rectangle(
+        @types.world_x0,
+        @types.world_y0,
+        @types.world_w,
+        @types.world_h,
+        @raylib.Color::new(12, 22, 38, 82),
+      )
+    }
+    None =>
+      @raylib.draw_rectangle(
+        @types.world_x0,
+        @types.world_y0,
+        @types.world_w,
+        @types.world_h,
+        @raylib.Color::new(20, 30, 48, 228),
+      )
+  }
 
   @raylib.draw_rectangle_lines(
     @types.world_x0,
@@ -62,20 +352,22 @@ fn @types.Game::draw_world_back(game : @types.Game) -> Unit {
   )
 
   let wave : Float = game.bg_wave(1.5)
-  for i in 0..<20 {
-    let y : Int = @types.world_y0 + i * 48
-    @raylib.draw_rectangle(
-      @types.world_x0 + 6,
-      y,
-      @types.world_w - 12,
-      20,
-      @raylib.Color::new(
-        28 + i * 4 % 18,
-        42 + i * 6 % 22,
-        64 + i * 7 % 28,
-        26 + i * 4 % 22,
-      ),
-    )
+  if tex_sky_ruins_background.val is None {
+    for i in 0..<20 {
+      let y : Int = @types.world_y0 + i * 48
+      @raylib.draw_rectangle(
+        @types.world_x0 + 6,
+        y,
+        @types.world_w - 12,
+        20,
+        @raylib.Color::new(
+          28 + i * 4 % 18,
+          42 + i * 6 % 22,
+          64 + i * 7 % 28,
+          26 + i * 4 % 22,
+        ),
+      )
+    }
   }
 
   @raylib.draw_line(
@@ -110,23 +402,31 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
     Gate => @raylib.Color::new(98, 136, 182, 244)
   }
 
-  @raylib.draw_rectangle(x, @types.world_y0, w, top_h, c0)
-  @raylib.draw_rectangle(x, bot_y, w, bot_h, c0)
+  if !draw_obstacle_pillar_art(ob.kind, x, @types.world_y0, w, top_h, false) {
+    @raylib.draw_rectangle(x, @types.world_y0, w, top_h, c0)
+  }
+  if !draw_obstacle_pillar_art(ob.kind, x, bot_y, w, bot_h, true) {
+    @raylib.draw_rectangle(x, bot_y, w, bot_h, c0)
+  }
 
-  @raylib.draw_rectangle_lines(
-    x,
-    @types.world_y0,
-    w,
-    top_h,
-    @raylib.Color::new(208, 220, 238, 186),
-  )
-  @raylib.draw_rectangle_lines(
-    x,
-    bot_y,
-    w,
-    bot_h,
-    @raylib.Color::new(208, 220, 238, 186),
-  )
+  if top_h > 0 {
+    @raylib.draw_rectangle_lines(
+      x,
+      @types.world_y0,
+      w,
+      top_h,
+      @raylib.Color::new(208, 220, 238, 186),
+    )
+  }
+  if bot_h > 0 {
+    @raylib.draw_rectangle_lines(
+      x,
+      bot_y,
+      w,
+      bot_h,
+      @raylib.Color::new(208, 220, 238, 186),
+    )
+  }
 
   match ob.kind {
     Spinner => {
@@ -134,15 +434,45 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
       let cy : Int = gy.to_int()
       let arm : Int = (gh * 0.40).to_int()
 
-      let ang : Float = ob.phase
-      let ax : Int = (Float::from_int(cx) +
-      @math.cosf(ang) * Float::from_int(arm)).to_int()
-      let ay : Int = (Float::from_int(cy) +
-      @math.sinf(ang) * Float::from_int(arm)).to_int()
+      match tex_spinner_core.val {
+        Some(texture) =>
+          draw_texture_fit(
+            texture,
+            Float::from_int(cx),
+            Float::from_int(cy),
+            98.0,
+            98.0,
+            ob.phase * 57.2958,
+            @raylib.white,
+          )
+        None => {
+          let ang : Float = ob.phase
+          let ax : Int = (Float::from_int(cx) +
+          @math.cosf(ang) * Float::from_int(arm)).to_int()
+          let ay : Int = (Float::from_int(cy) +
+          @math.sinf(ang) * Float::from_int(arm)).to_int()
 
-      @raylib.draw_line(cx, cy, ax, ay, @raylib.Color::new(238, 212, 146, 236))
-      @raylib.draw_circle(cx, cy, 7.0, @raylib.Color::new(255, 226, 164, 236))
-      @raylib.draw_circle(ax, ay, 8.0, @raylib.Color::new(255, 174, 122, 236))
+          @raylib.draw_line(
+            cx,
+            cy,
+            ax,
+            ay,
+            @raylib.Color::new(238, 212, 146, 236),
+          )
+          @raylib.draw_circle(
+            cx,
+            cy,
+            7.0,
+            @raylib.Color::new(255, 226, 164, 236),
+          )
+          @raylib.draw_circle(
+            ax,
+            ay,
+            8.0,
+            @raylib.Color::new(255, 174, 122, 236),
+          )
+        }
+      }
     }
     Gate | Beam => ()
   }
@@ -175,7 +505,20 @@ fn draw_pickup(pk : @types.Pickup) -> Unit {
 
   let c : @raylib.Color = pickup_color(pk.kind)
 
-  @raylib.draw_circle(pk.x.to_int(), pk.y.to_int(), r, c)
+  match pickup_texture(pk.kind) {
+    Some(texture) => {
+      draw_texture_fit(
+        texture,
+        pk.x,
+        pk.y,
+        r * 2.6,
+        r * 2.6,
+        pulse * 4.0,
+        @raylib.white,
+      )
+    }
+    None => @raylib.draw_circle(pk.x.to_int(), pk.y.to_int(), r, c)
+  }
   @raylib.draw_circle_lines(
     pk.x.to_int(),
     pk.y.to_int(),
@@ -189,33 +532,62 @@ fn draw_pickup(pk : @types.Pickup) -> Unit {
 fn @types.Game::draw_player(game : @types.Game) -> Unit {
   let tilt : Float = @types.clampf(game.vy * 0.0014, -0.35, 0.45)
 
-  @raylib.draw_circle(
-    game.px.to_int(),
-    game.py.to_int(),
-    @types.player_r,
-    @raylib.Color::new(104, 228, 170, 252),
-  )
-  @raylib.draw_circle(
-    game.px.to_int() - 6,
-    game.py.to_int() - 7,
-    @types.player_r * 0.36,
-    @raylib.Color::new(210, 252, 230, 186),
-  )
+  if game.boost_on {
+    @raylib.draw_circle(
+      (game.px - 38.0).to_int(),
+      game.py.to_int(),
+      18.0,
+      @raylib.Color::new(255, 186, 94, 92),
+    )
+    @raylib.draw_circle(
+      (game.px - 58.0).to_int(),
+      (game.py + 4.0).to_int(),
+      12.0,
+      @raylib.Color::new(104, 202, 255, 72),
+    )
+  }
 
-  let wing_y : Int = (game.py + tilt * 26.0).to_int()
-  @raylib.draw_triangle(
-    @raylib.Vector2::new(game.px - 6.0, Float::from_int(wing_y)),
-    @raylib.Vector2::new(game.px - 30.0, Float::from_int(wing_y - 12)),
-    @raylib.Vector2::new(game.px - 26.0, Float::from_int(wing_y + 14)),
-    @raylib.Color::new(92, 194, 146, 246),
-  )
+  match tex_player_bird.val {
+    Some(texture) =>
+      draw_texture_fit(
+        texture,
+        game.px,
+        game.py,
+        88.0,
+        78.0,
+        tilt * 57.2958,
+        @raylib.white,
+      )
+    None => {
+      @raylib.draw_circle(
+        game.px.to_int(),
+        game.py.to_int(),
+        @types.player_r,
+        @raylib.Color::new(104, 228, 170, 252),
+      )
+      @raylib.draw_circle(
+        game.px.to_int() - 6,
+        game.py.to_int() - 7,
+        @types.player_r * 0.36,
+        @raylib.Color::new(210, 252, 230, 186),
+      )
 
-  @raylib.draw_circle(
-    game.px.to_int() + 7,
-    game.py.to_int() - 6,
-    4.0,
-    @raylib.Color::new(22, 32, 30, 236),
-  )
+      let wing_y : Int = (game.py + tilt * 26.0).to_int()
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(game.px - 6.0, Float::from_int(wing_y)),
+        @raylib.Vector2::new(game.px - 30.0, Float::from_int(wing_y - 12)),
+        @raylib.Vector2::new(game.px - 26.0, Float::from_int(wing_y + 14)),
+        @raylib.Color::new(92, 194, 146, 246),
+      )
+
+      @raylib.draw_circle(
+        game.px.to_int() + 7,
+        game.py.to_int() - 6,
+        4.0,
+        @raylib.Color::new(22, 32, 30, 236),
+      )
+    }
+  }
 
   if game.shield_t > 0.0 {
     let pulse : Float = Float::from_double(

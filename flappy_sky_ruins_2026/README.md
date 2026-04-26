@@ -1,6 +1,6 @@
 # flappy_sky_ruins_2026
 
-A flappy-bird-style game set in ancient sky ruins. Flap through gates, dodge beams and spinners, collect pickups (score, boost, shield, hearts), and survive as long as possible with escalating difficulty levels.
+A flappy-bird-style game set in ancient sky ruins with generated backdrop, player, obstacle, spinner, and pickup art assets. Flap through gates, dodge beams and spinners, collect pickups (score, boost, shield, hearts), and survive as long as possible with escalating difficulty levels.
 
 ## Build and Run
 
@@ -118,6 +118,8 @@ moon build --target native flappy_sky_ruins_2026/
 
 #### Functions
 
+- **`pub fn load_assets() -> Unit`** — Loads generated sky-ruins background, player, obstacle, spinner, and pickup textures at startup.
+- **`pub fn unload_assets() -> Unit`** — Releases generated render textures on shutdown.
 - **`pub fn draw_frame(@types.Game) -> Unit`** — Draws the complete frame: animated background, world viewport, all active obstacles with their kind-specific shapes, pickups with sine-wave bob, particles, the player sprite with shield ring and boost trail, the side panel with score and controls, HUD message, and title/result overlays with screen-shake offset.
 
 ## Architecture
@@ -128,6 +130,16 @@ moon build --target native flappy_sky_ruins_2026/
 flappy_sky_ruins_2026/
 ├── main.mbt                    # Entry point: window, game loop, state dispatch
 ├── moon.pkg                    # Package manifest
+├── resources/
+│   ├── beam_pillar.png
+│   ├── gate_pillar.png
+│   ├── pickup_boost.png
+│   ├── pickup_heart.png
+│   ├── pickup_score.png
+│   ├── pickup_shield.png
+│   ├── player_bird.png
+│   ├── sky_ruins_background.png
+│   └── spinner_core.png
 └── internal/
     ├── types/
     │   ├── constants.mbt       # All pub let constants and button rect functions
@@ -148,12 +160,13 @@ The `internal/types` package is the sole shared dependency. All other packages i
 
 `update_play` in `game/logic.mbt` owns all simulation: it advances the boost meter, runs the particle system, then (only when `state == Play`) integrates player velocity under gravity, clamps to world bounds, scrolls and culls obstacles and pickups, performs circle-vs-AABB and circle-vs-circle collision tests, updates score and combo, and checks for level-up (every 520 score points) and win (at `game_t >= 180 s`). Input functions mutate `Game` fields directly; they call private helpers (`flap`, `use_hint`, `start_match`) that are not exported.
 
-The render package reads `Game` fields purely for drawing; it writes no simulation state. `draw_frame` applies a camera shake offset (`shake_t > 0`) to the world viewport translation before drawing obstacles, pickups, and particles, keeping the shake effect self-contained in the render layer.
+The render package reads `Game` fields purely for drawing; it writes no simulation state. `load_assets` and `unload_assets` own the generated PNG texture lifecycle, while individual draw helpers fall back to the original primitive shapes if a texture is missing. `draw_frame` applies a camera shake offset (`shake_t > 0`) to the world viewport translation before drawing obstacles, pickups, and particles, keeping the shake effect self-contained in the render layer.
 
 ### Key Design Patterns
 
 - **Three-layer package separation** — `types` (data) / `game` (logic) / `render` (drawing) enforces unidirectional data flow and makes each layer independently testable.
 - **Fixed-size object pools** — Obstacles (72), pickups (64), and particles (1300) are pre-allocated as `Array` and reused via `active` flags, eliminating GC pressure during gameplay.
+- **Texture-backed rendering with primitive fallbacks** — Generated art is loaded once in the render package, then drawn through cover/fit helpers for the background, bird, obstacles, spinner, and pickups while preserving the previous shape renderer as a fallback.
 - **State-dispatched input** — The main loop routes to a different input function for each `GameState`, so `update_play_input` never needs to guard against being called during the title screen.
 - **Continuous difficulty scaling** — Obstacle speed, gap size, and spawn interval all depend on `game.level`, which is recomputed every frame as `clamp(1 + score / 520, 1, 10)`, providing smooth escalation without discrete difficulty tiers.
 - **Unified touch and mouse input** — `pointer_on_rect` accepts both `mouse_hold` and `touch_count`, so all button hit-tests are written once and work for desktop and mobile input without conditional branches at the call site.
