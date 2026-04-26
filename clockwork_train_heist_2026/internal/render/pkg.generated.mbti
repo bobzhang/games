@@ -3,14 +3,31 @@ package "bobzhang/games/clockwork_train_heist_2026/internal/render"
 
 import {
   "bobzhang/games/clockwork_train_heist_2026/internal/types",
+  "tonyfettes/raylib",
 }
 
 // Values
-pub fn draw_frame(@types.Game) -> Unit
+pub fn draw_frame(@types.Game, GameArt) -> Unit
+
+pub fn load_game_art() -> GameArt
+
+pub fn unload_game_art(GameArt) -> Unit
 
 // Errors
 
 // Types and methods
+pub(all) struct GameArt {
+  train_backdrop : @raylib.Texture
+  floor_panel : @raylib.Texture
+  wall_panel : @raylib.Texture
+  door_tile : @raylib.Texture
+  thief_sprite : @raylib.Texture
+  guard_sprite : @raylib.Texture
+  loot_blueprint : @raylib.Texture
+  loot_keycard : @raylib.Texture
+  loot_gold : @raylib.Texture
+  exit_cable_lock : @raylib.Texture
+}
 
 // Type aliases
 

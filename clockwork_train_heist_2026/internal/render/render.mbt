@@ -39,18 +39,10 @@ fn guard_base_color(id : Int) -> @raylib.Color {
 }
 
 ///|
-/// Draws the gradient background, ambient glow circles, and board backing panel.
-fn @types.Game::draw_background(game : @types.Game) -> Unit {
+/// Draws the generated train backdrop, ambient glow circles, and board backing panel.
+fn @types.Game::draw_background(game : @types.Game, art : GameArt) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 12, 20, 255))
-
-  @raylib.draw_rectangle_gradient_v(
-    0,
-    0,
-    @types.screen_w,
-    @types.screen_h,
-    @raylib.Color::new(24, 34, 58, 255),
-    @raylib.Color::new(9, 10, 18, 255),
-  )
+  draw_train_backdrop_art(art)
 
   let glow0 : Int = 24 + (game.pulse(0.38) * 26.0).to_int()
   let glow1 : Int = 38 + (game.pulse(0.58) * 32.0).to_int()
@@ -73,34 +65,35 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Draws each grid cell according to its tile kind: wall, floor, door, or exit.
-fn @types.Game::draw_tile_map(game : @types.Game, ox : Int, oy : Int) -> Unit {
+/// Draws each grid cell using generated art for walls, floors, doors, and exit.
+fn @types.Game::draw_tile_map(
+  game : @types.Game,
+  art : GameArt,
+  ox : Int,
+  oy : Int,
+) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
       let rx : Int = @types.board_px(x) + ox
       let ry : Int = @types.board_py(y) + oy
       let t = game.map[y * @types.grid_w + x]
+      let xf : Float = Float::from_int(rx)
+      let yf : Float = Float::from_int(ry)
+      let cf : Float = Float::from_int(@types.cell)
 
       match t {
         Wall => {
-          let tone : Int = if (x + y) % 2 == 0 { 58 } else { 64 }
-          @raylib.draw_rectangle(
-            rx,
-            ry,
-            @types.cell,
-            @types.cell,
-            @raylib.Color::new(tone, 56, 70, 252),
-          )
-
-          @raylib.draw_rectangle(
-            rx + 5,
-            ry + 8,
-            @types.cell - 10,
-            @types.cell - 16,
-            @raylib.Color::new(84, 66, 66, 228),
+          draw_texture_rect(
+            art.wall_panel,
+            xf,
+            yf,
+            cf,
+            cf,
+            @raylib.Color::new(214, 220, 230, 244),
           )
         }
         Door => {
+          draw_texture_rect(art.floor_panel, xf, yf, cf, cf, @raylib.Color::new(190, 210, 230, 194))
           @raylib.draw_rectangle(
             rx,
             ry,
@@ -108,16 +101,24 @@ fn @types.Game::draw_tile_map(game : @types.Game, ox : Int, oy : Int) -> Unit {
             @types.cell,
             @raylib.Color::new(74, 108, 148, 236),
           )
-
-          @raylib.draw_rectangle(
-            rx + 10,
-            ry + 12,
-            @types.cell - 20,
-            @types.cell - 24,
-            @raylib.Color::new(130, 186, 232, 210),
+          draw_texture_rect(
+            art.door_tile,
+            xf,
+            yf,
+            cf,
+            cf,
+            @raylib.Color::new(236, 248, 255, 242),
           )
         }
         Exit => {
+          draw_texture_rect(
+            art.floor_panel,
+            xf,
+            yf,
+            cf,
+            cf,
+            @raylib.Color::new(184, 204, 224, 206),
+          )
           @raylib.draw_rectangle(
             rx,
             ry,
@@ -127,6 +128,18 @@ fn @types.Game::draw_tile_map(game : @types.Game, ox : Int, oy : Int) -> Unit {
               @raylib.Color::new(92, 192, 142, 236)
             } else {
               @raylib.Color::new(74, 92, 120, 232)
+            },
+          )
+          draw_texture_fit_centered(
+            art.exit_cable_lock,
+            Float::from_int(rx + @types.cell / 2),
+            Float::from_int(ry + @types.cell / 2),
+            52.0,
+            52.0,
+            if game.vault_open {
+              @raylib.Color::new(255, 255, 255, 255)
+            } else {
+              @raylib.Color::new(190, 206, 224, 226)
             },
           )
 
@@ -140,13 +153,17 @@ fn @types.Game::draw_tile_map(game : @types.Game, ox : Int, oy : Int) -> Unit {
           }
         }
         Floor => {
-          let f0 : Int = if (x + y) % 2 == 0 { 32 } else { 36 }
-          @raylib.draw_rectangle(
-            rx,
-            ry,
-            @types.cell,
-            @types.cell,
-            @raylib.Color::new(26, f0, 56, 222),
+          draw_texture_rect(
+            art.floor_panel,
+            xf,
+            yf,
+            cf,
+            cf,
+            if (x + y) % 2 == 0 {
+              @raylib.Color::new(222, 232, 242, 232)
+            } else {
+              @raylib.Color::new(204, 218, 234, 228)
+            },
           )
         }
       }
@@ -196,8 +213,13 @@ fn draw_train_shell(ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-/// Draws all active loot items on the map with kind-specific icons and a glow halo.
-fn @types.Game::draw_loot(game : @types.Game, ox : Int, oy : Int) -> Unit {
+/// Draws all active loot items on the map with generated sprites and glow halos.
+fn @types.Game::draw_loot(
+  game : @types.Game,
+  art : GameArt,
+  ox : Int,
+  oy : Int,
+) -> Unit {
   for loot in game.loots {
     if !loot.active {
       continue
@@ -205,77 +227,37 @@ fn @types.Game::draw_loot(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
     let cx : Int = @types.board_px(loot.x) + @types.cell / 2 + ox
     let cy : Int = @types.board_py(loot.y) + @types.cell / 2 + oy
+    @raylib.draw_circle(cx, cy, 26.0, @raylib.Color::new(250, 232, 170, 58))
 
     match loot.kind {
-      Blueprint => {
-        @raylib.draw_rectangle(
-          cx - 15,
-          cy - 19,
-          30,
-          38,
-          @raylib.Color::new(164, 212, 255, 236),
+      Blueprint =>
+        draw_texture_fit_centered(
+          art.loot_blueprint,
+          Float::from_int(cx),
+          Float::from_int(cy),
+          44.0,
+          40.0,
+          @raylib.white,
         )
-        @raylib.draw_rectangle_lines(
-          cx - 15,
-          cy - 19,
-          30,
-          38,
-          @raylib.Color::new(82, 118, 162, 220),
+      Keycard =>
+        draw_texture_fit_centered(
+          art.loot_keycard,
+          Float::from_int(cx),
+          Float::from_int(cy),
+          42.0,
+          34.0,
+          @raylib.white,
         )
-        @raylib.draw_line(
-          cx - 10,
-          cy - 8,
-          cx + 10,
-          cy - 8,
-          @raylib.Color::new(88, 124, 170, 220),
+      Gold =>
+        draw_texture_fit_centered(
+          art.loot_gold,
+          Float::from_int(cx),
+          Float::from_int(cy),
+          38.0,
+          34.0,
+          @raylib.white,
         )
-        @raylib.draw_line(
-          cx - 10,
-          cy,
-          cx + 10,
-          cy,
-          @raylib.Color::new(88, 124, 170, 220),
-        )
-      }
-      Keycard => {
-        @raylib.draw_rectangle(
-          cx - 18,
-          cy - 10,
-          36,
-          20,
-          @raylib.Color::new(196, 242, 186, 240),
-        )
-        @raylib.draw_rectangle_lines(
-          cx - 18,
-          cy - 10,
-          36,
-          20,
-          @raylib.Color::new(96, 154, 86, 220),
-        )
-        @raylib.draw_circle(
-          cx + 10,
-          cy,
-          3.0,
-          @raylib.Color::new(86, 126, 76, 220),
-        )
-      }
-      Gold => {
-        @raylib.draw_circle(
-          cx,
-          cy,
-          13.0,
-          @raylib.Color::new(242, 208, 112, 244),
-        )
-        @raylib.draw_circle_lines(
-          cx,
-          cy,
-          13.0,
-          @raylib.Color::new(122, 92, 38, 222),
-        )
-      }
     }
-
-    @raylib.draw_circle(cx, cy, 26.0, @raylib.Color::new(250, 232, 170, 58))
   }
 }
 
@@ -312,7 +294,7 @@ fn @types.Game::draw_smokes(game : @types.Game, ox : Int, oy : Int) -> Unit {
 /// Draws a single guard sprite at its interpolated position, coloring it by mode (patrol, hunt, stunned).
 fn draw_guard(
   g : @types.Guard,
-  _game : @types.Game,
+  art : GameArt,
   ox : Int,
   oy : Int,
 ) -> Unit {
@@ -329,11 +311,15 @@ fn draw_guard(
     Patrol => guard_base_color(g.color_id)
   }
 
-  @raylib.draw_circle(cx, cy - 8, 14.0, col)
-  @raylib.draw_rectangle(cx - 14, cy - 8, 28, 26, col)
-
-  @raylib.draw_circle(cx - 4, cy - 10, 2.0, @raylib.Color::new(30, 42, 62, 255))
-  @raylib.draw_circle(cx + 4, cy - 10, 2.0, @raylib.Color::new(30, 42, 62, 255))
+  @raylib.draw_circle(cx, cy - 1, 25.0, @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 68))
+  draw_texture_fit_centered(
+    art.guard_sprite,
+    Float::from_int(cx),
+    Float::from_int(cy + 1),
+    44.0,
+    56.0,
+    @raylib.white,
+  )
 
   if g.mode == Hunt {
     @raylib.draw_circle_lines(
@@ -356,7 +342,12 @@ fn draw_guard(
 
 ///|
 /// Draws the player sprite at its interpolated position, blinking when the flash invincibility timer is active.
-fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  art : GameArt,
+  ox : Int,
+  oy : Int,
+) -> Unit {
   let blink : Bool = game.flash_t > 0.0 &&
     (game.flash_t * 14.0).to_int() % 2 == 0
   if blink {
@@ -366,25 +357,15 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cx : Int = @types.cell_center_x(game.player.fx) + ox
   let cy : Int = @types.cell_center_y(game.player.fy) + oy
 
-  @raylib.draw_circle(cx, cy - 8, 15.0, @raylib.Color::new(118, 214, 242, 244))
-  @raylib.draw_rectangle(
-    cx - 14,
-    cy - 8,
-    28,
-    28,
-    @raylib.Color::new(92, 178, 218, 238),
+  @raylib.draw_circle(cx, cy - 1, 26.0, @raylib.Color::new(82, 196, 236, 78))
+  draw_texture_fit_centered(
+    art.thief_sprite,
+    Float::from_int(cx),
+    Float::from_int(cy),
+    46.0,
+    58.0,
+    @raylib.white,
   )
-
-  @raylib.draw_rectangle(
-    cx - 6,
-    cy + 12,
-    12,
-    8,
-    @raylib.Color::new(70, 132, 166, 220),
-  )
-
-  @raylib.draw_circle(cx - 4, cy - 10, 2.0, @raylib.Color::new(22, 46, 66, 255))
-  @raylib.draw_circle(cx + 4, cy - 10, 2.0, @raylib.Color::new(22, 46, 66, 255))
 }
 
 ///|
@@ -412,17 +393,22 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all board layers in order: tiles, train shell, loot, smokes, guards, player, particles, and border.
-fn @types.Game::draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  game.draw_tile_map(ox, oy)
+fn @types.Game::draw_board(
+  game : @types.Game,
+  art : GameArt,
+  ox : Int,
+  oy : Int,
+) -> Unit {
+  game.draw_tile_map(art, ox, oy)
   draw_train_shell(ox, oy)
-  game.draw_loot(ox, oy)
+  game.draw_loot(art, ox, oy)
   game.draw_smokes(ox, oy)
 
   for guard_val in game.guards {
-    draw_guard(guard_val, game, ox, oy)
+    draw_guard(guard_val, art, ox, oy)
   }
 
-  game.draw_player(ox, oy)
+  game.draw_player(art, ox, oy)
   game.draw_particles(ox, oy)
 
   @raylib.draw_rectangle_lines(
@@ -915,13 +901,13 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the complete frame for the current train heist state.
-pub fn draw_frame(game : @types.Game) -> Unit {
-  game.draw_background()
+pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
+  game.draw_background(art)
 
   let ox : Int = game.shake_dx()
   let oy : Int = game.shake_dy()
 
-  game.draw_board(ox, oy)
+  game.draw_board(art, ox, oy)
   game.draw_panel()
   game.draw_touch_controls()
 
