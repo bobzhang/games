@@ -6,6 +6,8 @@ package "bobzhang/games/ninja_rooftop_chase_2026"
 // Errors
 
 // Types and methods
+type GameArt
+
 type Obstacle
 
 type Particle

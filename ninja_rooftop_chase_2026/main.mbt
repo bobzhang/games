@@ -384,8 +384,12 @@ fn nearest_obstacle_dy(obs : Array[Obstacle], player_dist : Float) -> Int {
 /// Entry point: initialises the window, creates all game entities, and runs the main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Ninja Rooftop Chase 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let player : Player = {
     lane: 1,
@@ -983,34 +987,47 @@ fn main {
       bg_col = @raylib.Color::new(34, 20, 30, 255)
     }
     @raylib.clear_background(bg_col)
-
-    for i in 0..<20 {
-      let x = i * 68 + (player.distance * 0.8).to_int() % 68
-      let h = 120 + i * 17 % 260
-      @raylib.draw_rectangle(
+    draw_texture_cover(
+      art.rooftop_backdrop,
+      0.0,
+      0.0,
+      Float::from_int(sw),
+      Float::from_int(sh),
+      @raylib.Color::new(255, 255, 255, 238),
+    )
+    @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 10, 18, 34))
+    for i in 0..<14 {
+      let x = (
+          i * 120 -
+          (player.distance * (0.26 + Float::from_int(i % 3) * 0.08)).to_int()
+        ) %
+        (sw + 260) -
+        130
+      @raylib.draw_line(
         x,
-        sh - h,
-        52,
-        h,
-        @raylib.Color::new(24, 32, 54, 255),
-      )
-      @raylib.draw_rectangle(
-        x + 12,
-        sh - h + 24,
-        8,
-        h - 30,
-        @raylib.Color::new(90, 164, 238, 140),
+        154 + i * 11 % 160,
+        x + 86,
+        140 + i * 17 % 170,
+        @raylib.Color::new(88, 214, 246, 42),
       )
     }
 
     for lane in 0..<lane_count {
       let ly = lane_y(lane)
+      draw_texture_rect(
+        art.rooftop_panel,
+        0.0,
+        ly - 28.0,
+        Float::from_int(sw),
+        78.0,
+        @raylib.Color::new(210, 224, 236, 225),
+      )
       @raylib.draw_rectangle(
         0,
-        (ly + 18.0).to_int(),
+        (ly - 28.0).to_int(),
         sw,
-        24,
-        @raylib.Color::new(42, 48, 66, 255),
+        78,
+        @raylib.Color::new(4, 6, 12, 30 + lane * 14),
       )
       let shift = (player.distance * 20.0).to_int() % 72
       for i in 0..<22 {
@@ -1035,14 +1052,22 @@ fn main {
       } else {
         180
       }
-      let col = if pickup.kind == 0 {
-        @raylib.Color::new(246, 214, 120, blink)
-      } else if pickup.kind == 1 {
-        @raylib.Color::new(236, 132, 148, blink)
-      } else {
-        @raylib.Color::new(132, 214, 246, blink)
-      }
-      @raylib.draw_circle(pickup.x.to_int(), py.to_int(), 10.0, col)
+      let sprite_idx = 8 + pickup.kind
+      @raylib.draw_circle(
+        pickup.x.to_int(),
+        py.to_int(),
+        18.0,
+        @raylib.Color::new(102, 220, 252, blink / 4),
+      )
+      draw_sprite_cell(
+        art,
+        sprite_idx,
+        pickup.x,
+        py,
+        56.0,
+        56.0,
+        @raylib.Color::new(255, 255, 255, blink),
+      )
       @raylib.draw_circle_lines(
         pickup.x.to_int(),
         py.to_int(),
@@ -1058,61 +1083,62 @@ fn main {
 
       let oy = lane_y(obstacle.lane) - obstacle_z(obstacle)
       if obstacle.kind == 0 {
-        @raylib.draw_rectangle(
-          (obstacle.x - 18.0).to_int(),
-          (oy - 20.0).to_int(),
-          36,
-          40,
-          @raylib.Color::new(144, 120, 94, 255),
+        @raylib.draw_circle(
+          obstacle.x.to_int(),
+          (oy + 20.0).to_int(),
+          24.0,
+          @raylib.Color::new(0, 0, 0, 84),
+        )
+        draw_sprite_cell(
+          art,
+          4,
+          obstacle.x,
+          oy - 2.0,
+          86.0,
+          72.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
       } else if obstacle.kind == 1 {
-        @raylib.draw_rectangle(
-          (obstacle.x - 20.0).to_int(),
-          (oy - 44.0).to_int(),
-          40,
-          14,
-          @raylib.Color::new(210, 102, 142, 255),
-        )
-        @raylib.draw_rectangle(
-          (obstacle.x - 20.0).to_int(),
-          (oy - 30.0).to_int(),
-          40,
-          8,
-          @raylib.Color::new(246, 164, 196, 255),
+        draw_sprite_cell(
+          art,
+          5,
+          obstacle.x,
+          oy - 32.0,
+          78.0,
+          96.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
       } else if obstacle.kind == 2 {
-        @raylib.draw_rectangle(
-          (obstacle.x - 16.0).to_int(),
-          (oy - 26.0).to_int(),
-          32,
-          34,
-          @raylib.Color::new(168, 82, 92, 255),
+        @raylib.draw_circle(
+          obstacle.x.to_int(),
+          (oy + 10.0).to_int(),
+          24.0,
+          @raylib.Color::new(0, 0, 0, 88),
         )
-        @raylib.draw_rectangle(
-          (obstacle.x - 8.0).to_int(),
-          (oy - 18.0).to_int(),
-          16,
-          20,
-          @raylib.Color::new(30, 34, 52, 255),
+        draw_sprite_cell(
+          art,
+          6,
+          obstacle.x,
+          oy - 10.0,
+          88.0,
+          106.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
       } else {
         @raylib.draw_circle(
           obstacle.x.to_int(),
           oy.to_int(),
-          16.0,
-          @raylib.Color::new(110, 204, 246, 255),
+          28.0,
+          @raylib.Color::new(82, 220, 252, 54),
         )
-        @raylib.draw_circle(
-          (obstacle.x - 8.0).to_int(),
-          oy.to_int(),
-          3.0,
-          @raylib.Color::new(34, 48, 70, 255),
-        )
-        @raylib.draw_circle(
-          (obstacle.x + 8.0).to_int(),
-          oy.to_int(),
-          3.0,
-          @raylib.Color::new(34, 48, 70, 255),
+        draw_sprite_cell(
+          art,
+          7,
+          obstacle.x,
+          oy,
+          96.0,
+          76.0,
+          @raylib.Color::new(255, 255, 255, 255),
         )
       }
     }
@@ -1128,7 +1154,19 @@ fn main {
       } else {
         @raylib.Color::new(246, 134, 156, 255)
       }
-      @raylib.draw_circle(shot.x.to_int(), sy.to_int(), 4.0, c)
+      if shot.from_player {
+        draw_sprite_cell(
+          art,
+          11,
+          shot.x,
+          sy,
+          40.0,
+          28.0,
+          @raylib.Color::new(255, 255, 255, 255),
+        )
+      } else {
+        @raylib.draw_circle(shot.x.to_int(), sy.to_int(), 5.0, c)
+      }
     }
 
     for particle in particles {
@@ -1155,35 +1193,42 @@ fn main {
 
     let py = lane_y(player.lane) - player.z
 
-    let mut body_col = @raylib.Color::new(242, 188, 90, 255)
-    if player.flash_t > 0.0 {
-      body_col = @raylib.Color::new(255, 240, 220, 255)
+    let player_tint = if player.flash_t > 0.0 {
+      @raylib.Color::new(255, 240, 220, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 255)
     }
-
-    let mut h : Int = 30
-    if player.slide_t > 0.0 {
-      h = 18
+    let player_cell = if player.dash_t > 0.0 {
+      3
+    } else if player.slash_t > 0.0 {
+      2
+    } else if player.slide_t > 0.0 {
+      1
+    } else {
+      0
     }
-    @raylib.draw_rectangle(
-      (player_x - 20.0).to_int(),
-      (py - Float::from_int(h / 2)).to_int(),
-      40,
-      h,
-      body_col,
+    @raylib.draw_circle(
+      player_x.to_int(),
+      (lane_y(player.lane) + 20.0).to_int(),
+      32.0,
+      @raylib.Color::new(0, 0, 0, 90),
     )
-    @raylib.draw_rectangle(
-      (player_x - 8.0).to_int(),
-      (py - Float::from_int(h / 2 - 4)).to_int(),
-      16,
-      h - 8,
-      @raylib.Color::new(30, 36, 54, 255),
-    )
-    @raylib.draw_rectangle(
-      (player_x - 24.0).to_int(),
-      (py + Float::from_int(h / 2 - 2)).to_int(),
-      48,
-      6,
-      @raylib.Color::new(74, 96, 132, 255),
+    draw_sprite_cell(
+      art,
+      player_cell,
+      player_x + 4.0,
+      py - 20.0,
+      if player.slide_t > 0.0 {
+        118.0
+      } else {
+        112.0
+      },
+      if player.slide_t > 0.0 {
+        76.0
+      } else {
+        104.0
+      },
+      player_tint,
     )
 
     if player.slash_t > 0.0 {
@@ -1596,7 +1641,4 @@ fn main {
       }
     }
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }

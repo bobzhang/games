@@ -6,6 +6,14 @@ The game features four obstacle types: crates (jump over, 14 damage), signs (sli
 
 The player has three combat abilities -- slash (0.14s active, 0.30s cooldown, 6 energy), throw (0.28s cooldown, 10 energy, fires a shuriken at 720 speed), and dash (0.30s invulnerability, 1.4s cooldown, 20 energy) -- plus movement abilities of jumping (520 upward velocity, 8 energy) and sliding (hold to crouch). Performing slashes while airborne builds a trick timer that converts to bonus points on landing. Energy regenerates at 14/s, and difficulty scales through a level system based on distance traveled, increasing run speed, enemy HP, and projectile damage.
 
+## Generated Art Assets
+
+The package now includes generated raster artwork under `resources/`:
+
+- `ninja_rooftop_backdrop.png` — moonlit cyberpunk rooftop skyline used as the full-scene base layer.
+- `ninja_rooftop_panel.png` — wet roof tile, cable, vent, and hazard-stripe material drawn across the three running lanes.
+- `ninja_sprites.png` — transparent 4x3 sprite sheet for ninja poses, crate/sign/guard/drone obstacles, pickups, and shuriken projectile.
+
 ## Build and Run
 
 ```bash
@@ -45,7 +53,7 @@ moon build --target native ninja_rooftop_chase_2026/
 
 ### Package `ninja_rooftop_chase_2026`
 
-> Main entry point and complete game implementation in a single file.
+> Main entry point, generated art loader, and complete game implementation.
 
 #### Constants
 
@@ -99,11 +107,13 @@ moon build --target native ninja_rooftop_chase_2026/
 
 ```
 ninja_rooftop_chase_2026/
-├── main.mbt    — Complete game: types, constants, utilities, spawning, game loop, rendering
-└── moon.pkg    — Package config with raylib and math imports
+├── art.mbt       — Generated texture loading, unloading, and draw helpers
+├── main.mbt      — Complete game: types, constants, utilities, spawning, game loop, rendering
+├── resources/    — Generated PNG backdrop, rooftop panel, and sprite sheet
+└── moon.pkg      — Package config with raylib and math imports
 ```
 
-Single-file game with all logic in `main.mbt` (1581 lines). Organized top-to-bottom: constants, struct definitions, utility functions, pool clear functions, spawning functions, main function with nested closures (`reset_run`, `on_hit`, `on_kill`), game loop with input/update/render.
+Most game logic remains in `main.mbt`, with a small asset helper file. Organized top-to-bottom: constants, struct definitions, utility functions, pool clear functions, spawning functions, main function with nested closures (`reset_run`, `on_hit`, `on_kill`), game loop with input/update/render.
 
 ### Data Flow
 
@@ -111,7 +121,7 @@ Single-file game with all logic in `main.mbt` (1581 lines). Organized top-to-bot
 
 2. **Update**: In state 1 (playing): timer counts down, cooldowns tick, lane switching applies, jump physics (gravity at 1400, landing detection with trick bonus), slide activation, dash activation (adds 180 to run speed), slash activation (melee hitbox, air trick accumulation), shuriken spawning, energy regeneration (14/s, capped at 100), level calculation (distance / 720), run speed computation (248 + level*11, +180 during dash, -24 at low HP, min 150), distance accumulation, milestone checks (every 500m), obstacle spawning on cooldown (accelerates with level), pickup spawning (2-4.4s interval), obstacle movement and collision (kind-specific hit logic), shot movement and collision (player shurikens vs enemies, enemy shots vs player), pickup collection (coins/medpacks/energy), particle physics (gravity, drag, lifetime), win/lose checks.
 
-3. **Rendering**: Background city buildings with parallax scrolling, three lane tracks with scrolling tile markers, pickups (blinking colored circles), obstacles by kind (crates as brown rectangles, signs as pink bars, guards as dark red rectangles, drones as blue circles with eyes), shots (colored circles), particles with fade, player ninja (colored rectangle body with slash and dash ring effects), HUD bar (title, score, combo, distance, time, HP bar, energy bar, kills, coins, missed, level, nearest threat), touch controls, message bar, state overlays (title/win/lose panels).
+3. **Rendering**: Generated rooftop skyline backdrop with motion glints, three generated-material lane tracks with scrolling tile markers, generated pickup sprites, generated obstacle/enemy sprites by kind, generated shuriken projectile, particles with fade, generated ninja pose sprites with slash and dash ring effects, HUD bar (title, score, combo, distance, time, HP bar, energy bar, kills, coins, missed, level, nearest threat), touch controls, message bar, state overlays (title/win/lose panels).
 
 ### Key Design Patterns
 
