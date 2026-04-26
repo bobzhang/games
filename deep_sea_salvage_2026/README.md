@@ -1,8 +1,8 @@
 # Deep Sea Salvage 2026
 
-Deep Sea Salvage 2026 is an underwater exploration and resource-management game where the player pilots a submarine to collect valuable relics from the ocean floor. The playing field is split into a surface zone (above 116px) and a deep-sea zone below, with distinct water color gradients and faint horizontal depth lines creating a layered oceanic atmosphere.
+Deep Sea Salvage 2026 is an underwater exploration and resource-management game where the player pilots a submarine to collect valuable relics from the ocean floor. The playing field is split into a surface zone (above 116px) and a deep-sea zone below, with a generated ocean salvage backdrop, readability overlays, and faint horizontal depth lines creating a layered oceanic atmosphere.
 
-The core gameplay loop revolves around a risk-reward diving cycle. Relics (gold circles worth 20-90 points) spawn throughout the deep zone, while drifting mines (maroon circles) patrol horizontally. The submarine consumes oxygen at 6 units/second while submerged, and fuel depletes constantly at 2 units/second. Collecting relics adds to a temporary cargo hold, but the value is only permanently banked when the player surfaces -- where oxygen also refills at 24 units/second and fuel regenerates at 20 units/second. This creates a tension between maximizing dive depth and duration versus the risk of running out of resources before surfacing.
+The core gameplay loop revolves around a risk-reward diving cycle. Relic sprites worth 20-90 points spawn throughout the deep zone, while drifting mine sprites patrol horizontally. The submarine consumes oxygen at 6 units/second while submerged, and fuel depletes constantly at 2 units/second. Collecting relics adds to a temporary cargo hold, but the value is only permanently banked when the player surfaces -- where oxygen also refills at 24 units/second and fuel regenerates at 20 units/second. This creates a tension between maximizing dive depth and duration versus the risk of running out of resources before surfacing.
 
 The game runs on a 210-second mission timer with new relics spawning every 2.8 seconds and new mines every 4.6 seconds. Three failure conditions exist: hull reaching zero (from mine impacts that deal 10 hull and 6 fuel damage each), fuel depletion, or timer expiry. The goal is to maximize the banked score before the mission ends.
 
@@ -23,7 +23,7 @@ moon build --target native deep_sea_salvage_2026/
 
 ## How to Play
 
-Pilot the yellow submarine using WASD or arrow keys. The submarine moves at 210 pixels/second in any direction, clamped within the play area (60px from edges horizontally, 76px from top, 40px from bottom).
+Pilot the salvage submarine using WASD or arrow keys. The submarine moves at 210 pixels/second in any direction, clamped within the play area (60px from edges horizontally, 76px from top, 40px from bottom).
 
 Dive below the surface line to find golden relics scattered across the seabed. Touch a relic to collect it into your cargo hold. Cargo value accumulates but is NOT safe -- it is only permanently added to your bank score when you return to the surface (above the water line at y=116). Surfacing also rapidly refills oxygen and fuel.
 
@@ -35,7 +35,7 @@ New relics appear every 2.8 seconds and new mines every 4.6 seconds, so the ocea
 
 ### Package `deep_sea_salvage_2026`
 
-> Single-file game with all logic in main.mbt.
+> Two-file game package with core gameplay in `main.mbt` and generated art helpers in `art.mbt`.
 
 #### Structs
 
@@ -67,11 +67,13 @@ New relics appear every 2.8 seconds and new mines every 4.6 seconds, so the ocea
 
 ```
 deep_sea_salvage_2026/
-├── main.mbt    — Complete game: structs, spawning, game loop, rendering
-└── moon.pkg    — Package config (single main package)
+├── art.mbt      — Generated texture loading and art draw helpers
+├── main.mbt     — Complete game: structs, spawning, game loop, rendering
+├── moon.pkg     — Package config (single main package)
+└── resources/   — Generated ocean backdrop and sprite assets
 ```
 
-This is a single-file game with all state as local variables in `main`. The game loop handles input, resource depletion, entity spawning, collision detection, and rendering sequentially.
+Most game state remains local to `main`. The game loop handles input, resource depletion, entity spawning, collision detection, and rendering sequentially, while `art.mbt` owns generated texture loading and sprite/background draw helpers.
 
 ### Data Flow
 
@@ -80,7 +82,7 @@ This is a single-file game with all state as local variables in `main`. The game
 3. **Spawning**: `relic_tick` and `mine_tick` timers spawn new entities at 2.8s and 4.6s intervals respectively. Mines drift horizontally with velocity bouncing off arena edges.
 4. **Collision**: Circle-based distance checks for mine-vs-player (radius = mine.r + 12) and relic-vs-player (radius = relic.size + 12).
 5. **Banking**: When py <= surface_y + 20, cargo_value transfers to bank and resets to 0.
-6. **Rendering**: Background gradient (sky blue above surface, dark blue below), depth lines, relics (gold circles), mines (maroon circles), submarine (yellow ellipse with orange porthole and gray conning tower), HUD bars, and status messages.
+6. **Rendering**: Generated underwater salvage backdrop, translucent surface/depth overlays, generated relic and mine sprites, generated submarine sprite, HUD bars, and status messages.
 
 ### Key Design Patterns
 

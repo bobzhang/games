@@ -80,8 +80,12 @@ fn reset_mines(ms : Array[Mine]) -> Unit {
 /// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "Deep Sea Salvage 2026")
+  defer @raylib.close_window()
   @raylib.set_target_fps(60)
   @draw.init_font()
+  defer @draw.cleanup()
+  let art = load_game_art()
+  defer unload_game_art(art)
 
   let relics : Array[Relic] = Array::makei(90, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, size: 14.0, value: 20 }
@@ -278,71 +282,22 @@ fn main {
     }
 
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(10, 24, 36, 255))
-
-    @raylib.draw_rectangle(
-      0,
-      0,
-      sw,
-      surface_y.to_int(),
-      @raylib.Color::new(46, 110, 168, 255),
-    )
-    @raylib.draw_rectangle(
-      0,
-      surface_y.to_int(),
-      sw,
-      sh - surface_y.to_int(),
-      @raylib.Color::new(12, 56, 86, 255),
-    )
-
-    for y = surface_y.to_int() + 30; y < sh; y = y + 60 {
-      @raylib.draw_line(0, y, sw, y, @raylib.fade(@raylib.skyblue, 0.12))
-    }
+    @raylib.clear_background(@raylib.Color::new(6, 18, 32, 255))
+    draw_ocean_backdrop_art(art)
 
     for relic in relics {
       if relic.alive {
-        @raylib.draw_circle(
-          relic.x.to_int(),
-          relic.y.to_int(),
-          relic.size,
-          @raylib.gold,
-        )
-        @raylib.draw_circle_lines(
-          relic.x.to_int(),
-          relic.y.to_int(),
-          relic.size,
-          @raylib.yellow,
-        )
+        draw_relic_art(art, relic)
       }
     }
 
     for mine in mines {
       if mine.alive {
-        @raylib.draw_circle(
-          mine.x.to_int(),
-          mine.y.to_int(),
-          mine.r,
-          @raylib.maroon,
-        )
-        @raylib.draw_circle_lines(
-          mine.x.to_int(),
-          mine.y.to_int(),
-          mine.r,
-          @raylib.red,
-        )
+        draw_mine_art(art, mine)
       }
     }
 
-    // submarine
-    @raylib.draw_ellipse(px.to_int(), py.to_int(), 28.0, 14.0, @raylib.yellow)
-    @raylib.draw_circle((px + 18.0).to_int(), py.to_int(), 6.0, @raylib.orange)
-    @raylib.draw_rectangle(
-      (px - 10.0).to_int(),
-      (py - 18.0).to_int(),
-      20,
-      6,
-      @raylib.gray,
-    )
+    draw_submarine_art(art, px, py)
 
     @draw.draw_text("DEEP SEA SALVAGE 2026", 20, 16, 40, @raylib.skyblue)
     @draw.draw_text("Bank \{bank}", 20, 62, 30, @raylib.lime)
@@ -425,7 +380,4 @@ fn main {
     @fps.draw()
     @raylib.end_drawing()
   }
-
-  @draw.cleanup()
-  @raylib.close_window()
 }
