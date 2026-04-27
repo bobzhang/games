@@ -112,12 +112,12 @@ fn split_lines(s : String) -> Array[String] {
   let mut start = 0
   for i = 0; i < s.length(); i = i + 1 {
     if s[i] == '\n' {
-      lines.push(s[start:i].to_string())
+      lines.push(s[start:i].to_owned())
       start = i + 1
     }
   }
   if start < s.length() {
-    lines.push(s[start:s.length()].to_string())
+    lines.push(s[start:s.length()].to_owned())
   }
   lines
 }

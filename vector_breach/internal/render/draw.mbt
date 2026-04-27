@@ -1933,7 +1933,7 @@ fn draw_turn_log(battle : @types.BattleState, x : Int, y : Int) -> Unit {
     let entry = battle.turn_log[j]
     // Truncate long entries
     let display = if entry.length() > 40 {
-      entry[:40].to_string()
+      entry[:40].to_owned()
     } else {
       entry
     }

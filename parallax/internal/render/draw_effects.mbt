@@ -226,7 +226,7 @@ pub fn draw_animated_text(
     @draw.draw_text(text, x, y, size, color)
   } else if reveal_count > 0 {
     // Draw substring
-    let sub = text[:reveal_count].to_string()
+    let sub = text[:reveal_count].to_owned()
     @draw.draw_text(sub, x, y, size, color)
   }
 }

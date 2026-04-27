@@ -389,7 +389,7 @@ fn truncate_text(s : String, max_len : Int) -> String {
   if s.length() <= max_len {
     s
   } else {
-    s[0:max_len - 2].to_string() + ".."
+    s[0:max_len - 2].to_owned() + ".."
   }
 }
 

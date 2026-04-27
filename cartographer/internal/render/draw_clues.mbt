@@ -101,7 +101,7 @@ fn draw_clues_panel(game : @types.Game) -> Unit {
       _ => @types.color_text
     }
     let display_text = if clue.text.length() > 55 {
-      clue.text[:55].to_string()
+      clue.text[:55].to_owned()
     } else {
       clue.text
     }

@@ -81,7 +81,7 @@ pub fn draw() -> Unit {
     let s = latest_ms.to_string()
     // Show at most 5 chars (e.g. "16.67")
     if s.length() > 5 {
-      s[:5].to_string()
+      s[:5].to_owned()
     } else {
       s
     }
