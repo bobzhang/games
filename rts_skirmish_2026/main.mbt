@@ -13,7 +13,7 @@ fn lane_y(lane : Int) -> Int {
 }
 
 ///|
-struct Unit {
+struct CombatUnit {
   mut alive : Bool
   mut team : Int
   mut kind : Int
@@ -27,7 +27,12 @@ struct Unit {
 }
 
 ///|
-fn spawn_unit(units : Array[Unit], team : Int, kind : Int, lane : Int) -> Bool {
+fn spawn_unit(
+  units : Array[CombatUnit],
+  team : Int,
+  kind : Int,
+  lane : Int,
+) -> Bool {
   let mut slot = -1
   for i in 0..<units.length() {
     if slot < 0 && !units[i].alive {
@@ -59,7 +64,7 @@ fn spawn_unit(units : Array[Unit], team : Int, kind : Int, lane : Int) -> Bool {
 }
 
 ///|
-fn closest_enemy(units : Array[Unit], me : Int) -> Int {
+fn closest_enemy(units : Array[CombatUnit], me : Int) -> Int {
   for i in 0..<units.length(); best = -1, best_d = 1_000_000.0F {
     if i == me || !units[i].alive {
       continue
@@ -82,7 +87,7 @@ fn main {
   @raylib.set_target_fps(60)
   @draw.init_font()
 
-  let units : Array[Unit] = Array::makei(240, fn(_i) {
+  let units : Array[CombatUnit] = Array::makei(240, fn(_i) {
     {
       alive: false,
       team: 0,

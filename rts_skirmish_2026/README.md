@@ -54,15 +54,15 @@ Killing an enemy unit awards 8 resources as a bounty to the killer's team. The g
 
 | Struct | Key Fields | Description |
 |--------|-----------|-------------|
-| `Unit` | `alive`, `team`, `kind`, `lane`, `x`, `hp`, `atk`, `range`, `speed`, `cooldown` | A combat unit with team affiliation (0=player, 1=enemy), type (0=swordsman, 1=ranger), lane assignment, position, stats, and attack cooldown |
+| `CombatUnit` | `alive`, `team`, `kind`, `lane`, `x`, `hp`, `atk`, `range`, `speed`, `cooldown` | A combat unit with team affiliation (0=player, 1=enemy), type (0=swordsman, 1=ranger), lane assignment, position, stats, and attack cooldown |
 
 #### Functions
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
 | `lane_y` | `(Int) -> Int` | Converts a lane index (0-2) to a screen y-coordinate (180 + lane * 170) |
-| `spawn_unit` | `(Array[Unit], Int, Int, Int) -> Bool` | Spawns a new unit for the given team, kind, and lane in the first available pool slot; returns false if pool is full |
-| `closest_enemy` | `(Array[Unit], Int) -> Int` | Finds the index of the nearest living enemy in the same lane, or -1 if none exists |
+| `spawn_unit` | `(Array[CombatUnit], Int, Int, Int) -> Bool` | Spawns a new unit for the given team, kind, and lane in the first available pool slot; returns false if pool is full |
+| `closest_enemy` | `(Array[CombatUnit], Int) -> Int` | Finds the index of the nearest living enemy in the same lane, or -1 if none exists |
 
 ## Architecture
 
@@ -87,7 +87,7 @@ This is a compact single-file RTS game (~368 lines). The code flows from constan
 
 ### Key Design Patterns
 
-- **Object pool**: 240 pre-allocated `Unit` slots with `alive` flags avoid dynamic allocation during gameplay.
+- **Object pool**: 240 pre-allocated `CombatUnit` slots with `alive` flags avoid dynamic allocation during gameplay.
 - **Lane-based combat**: Units only interact with enemies in the same lane, simplifying targeting via `closest_enemy` filtering by `lane`.
 - **Probabilistic AI**: The enemy AI uses random rolls to decide between economic and military investment, creating varied opponent behavior.
 - **Resource economy**: A simple worker-based economy where each worker generates fixed income, creating a classic RTS "econ vs aggro" tradeoff.

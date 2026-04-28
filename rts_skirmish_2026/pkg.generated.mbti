@@ -6,7 +6,7 @@ package "bobzhang/games/rts_skirmish_2026"
 // Errors
 
 // Types and methods
-type Unit
+type CombatUnit
 
 // Type aliases
 
