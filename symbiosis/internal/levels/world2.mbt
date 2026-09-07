@@ -11,7 +11,15 @@ pub fn level_2_1() -> @types.Level {
     "############", "#.........@#", "#..........#", "#.....0....#", "#..........#",
     "#.a........#", "#X.........#", "############",
   ]
-  make_level(1, 0, floor, ceiling, [{ switch_id: 0, door_id: 0 }], BothExit, 15)
+  make_level(
+    1,
+    0,
+    floor,
+    ceiling,
+    [{ switch_id: 0, door_id: 0, }],
+    BothExit,
+    15,
+  )
 }
 
 ///|
@@ -30,7 +38,7 @@ pub fn level_2_2() -> @types.Level {
     1,
     floor,
     ceiling,
-    [{ switch_id: 0, door_id: 0 }, { switch_id: 1, door_id: 1 }],
+    [{ switch_id: 0, door_id: 0, }, { switch_id: 1, door_id: 1, }],
     BothExit,
     18,
   )
@@ -47,7 +55,15 @@ pub fn level_2_3() -> @types.Level {
     "############", "#.........@#", "#.......a..#", "#..........#", "#...0......#",
     "#..........#", "#X.........#", "############",
   ]
-  make_level(1, 2, floor, ceiling, [{ switch_id: 0, door_id: 0 }], BothExit, 16)
+  make_level(
+    1,
+    2,
+    floor,
+    ceiling,
+    [{ switch_id: 0, door_id: 0, }],
+    BothExit,
+    16,
+  )
 }
 
 ///|
@@ -80,7 +96,7 @@ pub fn level_2_5() -> @types.Level {
     4,
     floor,
     ceiling,
-    [{ switch_id: 0, door_id: 0 }, { switch_id: 1, door_id: 1 }],
+    [{ switch_id: 0, door_id: 0, }, { switch_id: 1, door_id: 1, }],
     BothExit,
     20,
   )
@@ -102,7 +118,7 @@ pub fn level_2_6() -> @types.Level {
     5,
     floor,
     ceiling,
-    [{ switch_id: 0, door_id: 0 }, { switch_id: 1, door_id: 0 }],
+    [{ switch_id: 0, door_id: 0, }, { switch_id: 1, door_id: 0, }],
     BothExit,
     20,
   )
@@ -124,7 +140,7 @@ pub fn level_2_7() -> @types.Level {
     6,
     floor,
     ceiling,
-    [{ switch_id: 0, door_id: 0 }, { switch_id: 1, door_id: 1 }],
+    [{ switch_id: 0, door_id: 0, }, { switch_id: 1, door_id: 1, }],
     BothExit,
     22,
   )

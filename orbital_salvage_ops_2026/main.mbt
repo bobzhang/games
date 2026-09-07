@@ -826,7 +826,7 @@ fn main {
   })
 
   let wrecks : Array[Wreck] = Array::makei(max_wrecks, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, radius: 0.0 }
+    { active: false, x: 0.0, y: 0.0, radius: 0.0, }
   })
 
   let boss : Boss = {

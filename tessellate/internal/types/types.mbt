@@ -2,13 +2,19 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Piece {
   cells : Array[Vec2i]
   color : @raylib.Color
-} derive(Show)
+}
 
 ///|
 pub(all) struct PlacedPiece {
@@ -16,14 +22,20 @@ pub(all) struct PlacedPiece {
   position : Vec2i
   rotation : Int
   flipped : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PlacedPiece with Debug::{to_repr}
 
 ///|
 pub(all) struct Region {
   width : Int
   height : Int
   active : Array[Array[Bool]]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Region with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -31,7 +43,10 @@ pub(all) struct Level {
   pieces : Array[Piece]
   par_time : Int
   par_rotations : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -39,7 +54,10 @@ pub(all) struct LevelScore {
   mut completed : Bool
   mut best_time : Int
   mut best_rotations : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -62,3 +80,13 @@ pub(all) struct Game {
   mut message_timer : Float
   mut tier_page : Int
 }
+
+///|
+/// `@raylib.Color` has no `Debug` impl, so `Piece` cannot derive one.
+/// Render the color as its `(r, g, b, a)` channels instead.
+pub impl Debug for Piece with fn to_repr(self) {
+  Repr((self.cells, (self.color.r, self.color.g, self.color.b, self.color.a)))
+}
+
+///|
+pub extend Piece with Debug::{to_repr}

@@ -21,4 +21,3 @@ pub fn parse_level(String, @types.Tier, Array[String], Float) -> @types.Level
 // Type aliases
 
 // Traits
-

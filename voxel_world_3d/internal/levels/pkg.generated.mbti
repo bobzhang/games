@@ -33,4 +33,3 @@ pub fn get_weapon_damage(Int) -> Int
 // Type aliases
 
 // Traits
-

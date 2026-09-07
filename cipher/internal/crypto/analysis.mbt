@@ -1,6 +1,6 @@
 ///|
 pub fn letter_frequency(text : String) -> Array[Int] {
-  let counts : Array[Int] = Array::new(capacity=26)
+  let counts : Array[Int] = Array(capacity=26)
   for _i in 0..<26 {
     counts.push(0)
   }
@@ -21,7 +21,7 @@ pub fn letter_frequency_pct(text : String) -> Array[Float] {
   for i in 0..<26 {
     total += counts[i]
   }
-  let pcts : Array[Float] = Array::new(capacity=26)
+  let pcts : Array[Float] = Array(capacity=26)
   if total == 0 {
     for _i in 0..<26 {
       pcts.push(0.0)
@@ -54,7 +54,7 @@ pub fn find_repeated_patterns(
   max_len : Int,
 ) -> Array[@types.PatternMatch] {
   let results : Array[@types.PatternMatch] = []
-  let letters = StringBuilder::new()
+  let letters = StringBuilder()
   let positions : Array[Int] = []
   for i in 0..<text.length() {
     let c = @types.str_char_at(text, i)
@@ -119,7 +119,7 @@ pub fn find_repeated_patterns(
 
 ///|
 fn str_substring(s : String, start : Int, end_ : Int) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i = start; i < end_ && i < s.length(); i = i + 1 {
     buf.write_char(@types.str_char_at(s, i))
   }

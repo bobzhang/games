@@ -168,6 +168,11 @@ pub(all) enum BiomeKind {
   Ocean
   Desert
 } derive(Eq, @debug.Debug)
+pub fn BiomeKind::equal(Self, Self) -> Bool
+pub fn BiomeKind::not_equal(Self, Self) -> Bool
+pub fn BiomeKind::output(Self, &Logger) -> Unit
+pub fn BiomeKind::to_repr(Self) -> @debug.Repr
+pub fn BiomeKind::to_string(Self) -> String
 pub impl Show for BiomeKind
 
 pub(all) struct Game {
@@ -204,24 +209,32 @@ pub(all) struct Game {
   mut transition_timer : Float
   mut ratio_pulse_timer : Float
   mut ratio_just_entered : Array[Bool]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexCoord {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn HexCoord::equal(Self, Self) -> Bool
+pub fn HexCoord::not_equal(Self, Self) -> Bool
+pub fn HexCoord::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexGrid {
   width : Int
   height : Int
   tiles : Array[HexTile]
   wraps_horizontal : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HexGrid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexTile {
   mut biome : BiomeKind
   locked : Bool
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn HexTile::equal(Self, Self) -> Bool
+pub fn HexTile::not_equal(Self, Self) -> Bool
+pub fn HexTile::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   tier : Tier
@@ -232,19 +245,22 @@ pub(all) struct Level {
   budget : PaintBudget
   targets : TargetRatio
   par_turns : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut best_turns : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct PaintBudget {
   mut forest : Int
   mut ocean : Int
   mut desert : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PaintBudget::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Painting
@@ -252,6 +268,11 @@ pub(all) enum PlayState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct ResolveSnapshot {
@@ -260,7 +281,8 @@ pub(all) struct ResolveSnapshot {
   budget_ocean : Int
   budget_desert : Int
   turn : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn ResolveSnapshot::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -269,6 +291,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct TargetRatio {
@@ -278,13 +305,19 @@ pub(all) struct TargetRatio {
   ocean_max : Float
   desert_min : Float
   desert_max : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn TargetRatio::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tier {
   Seeds
   Balance
   Harmony
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct UndoEntry {
@@ -292,9 +325,9 @@ pub(all) struct UndoEntry {
   row : Int
   prev_biome : BiomeKind
   biome_used : BiomeKind
-} derive(Show)
+} derive(@debug.Debug)
+pub fn UndoEntry::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

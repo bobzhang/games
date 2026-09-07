@@ -34,4 +34,3 @@ pub fn undo_loop(@types.Game) -> Bool
 // Type aliases
 
 // Traits
-

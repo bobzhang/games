@@ -156,10 +156,10 @@ fn main {
 
   let level = gen_level()
   let mobs : Array[Mob] = [
-    { alive: true, x: map_w - 2, y: 1, hp: 4 },
-    { alive: true, x: map_w - 3, y: map_h - 2, hp: 5 },
-    { alive: true, x: map_w - 5, y: map_h / 2, hp: 6 },
-    { alive: true, x: map_w - 8, y: 3, hp: 4 },
+    { alive: true, x: map_w - 2, y: 1, hp: 4, },
+    { alive: true, x: map_w - 3, y: map_h - 2, hp: 5, },
+    { alive: true, x: map_w - 5, y: map_h / 2, hp: 6, },
+    { alive: true, x: map_w - 8, y: 3, hp: 4, },
   ]
 
   let mut hero_x = 1
@@ -183,10 +183,10 @@ fn main {
       score = 0
       victory = false
       defeat = false
-      mobs[0] = { alive: true, x: map_w - 2, y: 1, hp: 4 }
-      mobs[1] = { alive: true, x: map_w - 3, y: map_h - 2, hp: 5 }
-      mobs[2] = { alive: true, x: map_w - 5, y: map_h / 2, hp: 6 }
-      mobs[3] = { alive: true, x: map_w - 8, y: 3, hp: 4 }
+      mobs[0] = { alive: true, x: map_w - 2, y: 1, hp: 4, }
+      mobs[1] = { alive: true, x: map_w - 3, y: map_h - 2, hp: 5, }
+      mobs[2] = { alive: true, x: map_w - 5, y: map_h / 2, hp: 6, }
+      mobs[3] = { alive: true, x: map_w - 8, y: 3, hp: 4, }
     }
 
     if !victory && !defeat {

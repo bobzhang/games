@@ -74,7 +74,7 @@ fn ground_y(x : Float) -> Float {
 ///|
 fn clear_survivors(survivors : Array[Survivor]) -> Unit {
   for i in 0..<survivors.length() {
-    survivors[i] = { x: 0.0, y: 0.0, state: 3 }
+    survivors[i] = { x: 0.0, y: 0.0, state: 3, }
   }
 }
 
@@ -85,13 +85,13 @@ fn set_survivor(
   x : Float,
   y : Float,
 ) -> Unit {
-  survivors[i] = { x, y, state: 0 }
+  survivors[i] = { x, y, state: 0, }
 }
 
 ///|
 fn clear_clouds(clouds : Array[Cloud]) -> Unit {
   for i in 0..<clouds.length() {
-    clouds[i] = { x: 0.0, y: 0.0, vx: 0.0, r: 22.0, active: false }
+    clouds[i] = { x: 0.0, y: 0.0, vx: 0.0, r: 22.0, active: false, }
   }
 }
 
@@ -186,10 +186,10 @@ fn main {
   @draw.init_font()
 
   let survivors : Array[Survivor] = Array::makei(max_survivors, fn(_i) {
-    { x: 0.0, y: 0.0, state: 3 }
+    { x: 0.0, y: 0.0, state: 3, }
   })
   let clouds : Array[Cloud] = Array::makei(max_clouds, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, r: 22.0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, r: 22.0, active: false, }
   })
 
   let mut level = 1

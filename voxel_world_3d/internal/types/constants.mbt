@@ -737,6 +737,9 @@ pub(all) enum AiState {
 } derive(Eq)
 
 ///|
+pub extend AiState with Eq::{not_equal, equal}
+
+///|
 /// World biome type.
 pub(all) enum Biome {
   Plains
@@ -748,6 +751,9 @@ pub(all) enum Biome {
 } derive(Eq)
 
 ///|
+pub extend Biome with Eq::{not_equal, equal}
+
+///|
 /// Current game state.
 pub(all) enum GameState {
   Menu
@@ -757,3 +763,6 @@ pub(all) enum GameState {
   Crafting
   GameOver
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

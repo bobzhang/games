@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Student profile with skill, fatigue, and current room.
 pub(all) struct Student {
   name : String
@@ -96,7 +99,7 @@ pub fn starting_skill(slot : Int) -> Float {
 ///|
 /// Create a student starting in rest with low fatigue.
 pub fn Student::Student(name : String, skill : Float) -> Student {
-  { name, skill, fatigue: 12.0, room: Rest }
+  { name, skill, fatigue: 12.0, room: Rest, }
 }
 
 ///|

@@ -29,4 +29,3 @@ pub fn remove_piece(Array[Array[Int]], Int) -> Unit
 // Type aliases
 
 // Traits
-

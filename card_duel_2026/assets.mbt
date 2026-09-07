@@ -1,38 +1,38 @@
 ///|
 /// Generated full-screen duel arena backdrop texture.
-let tex_duel_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_duel_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player duelist portrait texture.
-let tex_player_portrait : Ref[@raylib.Texture?] = { val: None }
+let tex_player_portrait : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated rival duelist portrait texture.
-let tex_rival_portrait : Ref[@raylib.Texture?] = { val: None }
+let tex_rival_portrait : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated card frame texture.
-let tex_card_frame : Ref[@raylib.Texture?] = { val: None }
+let tex_card_frame : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated Strike card icon texture.
-let tex_icon_strike : Ref[@raylib.Texture?] = { val: None }
+let tex_icon_strike : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated Guard card icon texture.
-let tex_icon_guard : Ref[@raylib.Texture?] = { val: None }
+let tex_icon_guard : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated Burst card icon texture.
-let tex_icon_burst : Ref[@raylib.Texture?] = { val: None }
+let tex_icon_burst : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated Sap card icon texture.
-let tex_icon_sap : Ref[@raylib.Texture?] = { val: None }
+let tex_icon_sap : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated Repair card icon texture.
-let tex_icon_repair : Ref[@raylib.Texture?] = { val: None }
+let tex_icon_repair : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads a bilinear-filtered Card Duel 2026 texture.

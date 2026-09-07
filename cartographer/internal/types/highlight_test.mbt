@@ -49,8 +49,18 @@ test "cells_referenced_by_clue_distance" {
   let cells = @types.cells_referenced_by_clue(clue, grid, 8)
   // Should contain positions for Mountain and Town
   inspect(cells.length(), content="2")
-  inspect(cells[0], content="{x: 3, y: 2}")
-  inspect(cells[1], content="{x: 5, y: 4}")
+  debug_inspect(
+    cells[0],
+    content=(
+      #|{ x: 3, y: 2 }
+    ),
+  )
+  debug_inspect(
+    cells[1],
+    content=(
+      #|{ x: 5, y: 4 }
+    ),
+  )
 }
 
 ///|
@@ -85,7 +95,12 @@ test "cells_referenced_by_clue_not_column" {
   // No Mountain placed, but column 3 should have 8 cells
   inspect(cells.length(), content="8")
   // First cell should be (3,0)
-  inspect(cells[0], content="{x: 3, y: 0}")
+  debug_inspect(
+    cells[0],
+    content=(
+      #|{ x: 3, y: 0 }
+    ),
+  )
 }
 
 ///|
@@ -103,5 +118,10 @@ test "cells_referenced_by_clue_partial_placement" {
   let cells = @types.cells_referenced_by_clue(clue, grid, 8)
   // Only Mountain position should be returned (Town not placed)
   inspect(cells.length(), content="1")
-  inspect(cells[0], content="{x: 2, y: 3}")
+  debug_inspect(
+    cells[0],
+    content=(
+      #|{ x: 2, y: 3 }
+    ),
+  )
 }

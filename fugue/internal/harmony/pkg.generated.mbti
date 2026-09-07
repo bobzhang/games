@@ -27,4 +27,3 @@ pub fn evaluate_placement(@types.Grid, Int, Int) -> Int
 // Type aliases
 
 // Traits
-

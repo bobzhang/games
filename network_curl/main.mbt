@@ -40,7 +40,7 @@ struct AppState {
 ///|
 fn split_lines(content : String, max_chars : Int) -> Array[String] {
   let lines : Array[String] = []
-  let line : StringBuilder = StringBuilder::new()
+  let line : StringBuilder = StringBuilder()
   let mut n = 0
   for content_elem in content {
     let ch = content_elem.to_int().unsafe_to_char()

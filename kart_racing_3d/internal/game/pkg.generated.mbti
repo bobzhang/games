@@ -57,4 +57,3 @@ pub fn use_powerup(@types.Game, Int) -> Unit
 // Type aliases
 
 // Traits
-

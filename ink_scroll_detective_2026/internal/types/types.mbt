@@ -48,6 +48,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Complete runtime state for one detective case session.
 pub(all) struct Game {
   clues : Array[Clue]
@@ -155,7 +158,7 @@ pub fn Clue::Clue(index : Int) -> Clue {
     tries = tries + 1
   }
 
-  { x, y, suspect, chain, discovered: false, glow_t: 0.0 }
+  { x, y, suspect, chain, discovered: false, glow_t: 0.0, }
 }
 
 ///|
@@ -188,7 +191,7 @@ pub fn Incident::Incident() -> Incident {
 /// Creates a district pulse state seeded by district index.
 pub fn DistrictPulse::DistrictPulse(index : Int) -> DistrictPulse {
   let drift_seed = Float::from_int((index * 71 + 17) % 1000) / 1000.0
-  { heat: 0.0, drift: drift_seed * tau }
+  { heat: 0.0, drift: drift_seed * tau, }
 }
 
 ///|

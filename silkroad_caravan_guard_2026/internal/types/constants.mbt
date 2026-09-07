@@ -191,6 +191,9 @@ pub(all) enum RaiderKind {
 } derive(Eq)
 
 ///|
+pub extend RaiderKind with Eq::{not_equal, equal}
+
+///|
 /// Tracks the current phase of the game session.
 pub(all) enum GameState {
   Title
@@ -199,3 +202,6 @@ pub(all) enum GameState {
   GameOver
   Victory
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

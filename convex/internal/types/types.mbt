@@ -2,12 +2,21 @@
 pub(all) struct Point {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Point with Eq::{not_equal, equal}
+
+///|
+pub extend Point with Debug::{to_repr}
 
 ///|
 pub(all) struct Polygon {
   vertices : Array[Point]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Polygon with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {

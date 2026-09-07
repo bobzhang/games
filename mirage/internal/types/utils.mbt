@@ -138,7 +138,7 @@ pub fn set_tile(tiles : Array[Tile], x : Int, y : Int, t : Tile) -> Unit {
 
 ///|
 pub fn new_animation() -> Animation {
-  { kind: PlayerMove, timer: 0.0, duration: 0.1, active: false }
+  { kind: PlayerMove, timer: 0.0, duration: 0.1, active: false, }
 }
 
 ///|
@@ -186,7 +186,7 @@ pub fn new_player(x : Int, y : Int, layer : Layer) -> Player {
 
 ///|
 pub fn new_level_result() -> LevelResult {
-  { completed: false, stars: 0, best_swaps: 999 }
+  { completed: false, stars: 0, best_swaps: 999, }
 }
 
 ///|

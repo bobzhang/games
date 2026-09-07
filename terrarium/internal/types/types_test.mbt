@@ -76,7 +76,13 @@ test "clear_grid_resets_all_cells" {
   let game = new_game()
   game.grid[0][0] = Organism(Moss)
   game.grid[2][3] = Organism(Beetle)
-  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
+  game.organisms.push({
+    kind: Moss,
+    row: 0,
+    col: 0,
+    alive: true,
+    health: 100.0,
+  })
   game.organisms_placed[0] = 1
   clear_grid(game)
   assert_eq(game.grid[0][0], Empty)
@@ -201,9 +207,9 @@ test "total_stars_empty" {
 ///|
 test "total_stars_mixed" {
   let scores : Array[LevelScore] = [
-    { completed: true, best_turns_survived: 10, stars: 3 },
-    { completed: true, best_turns_survived: 10, stars: 2 },
-    { completed: false, best_turns_survived: 5, stars: 0 },
+    { completed: true, best_turns_survived: 10, stars: 3, },
+    { completed: true, best_turns_survived: 10, stars: 2, },
+    { completed: false, best_turns_survived: 5, stars: 0, },
   ]
   assert_eq(total_stars(scores), 5)
 }
@@ -211,9 +217,9 @@ test "total_stars_mixed" {
 ///|
 test "levels_completed_count" {
   let scores : Array[LevelScore] = [
-    { completed: true, best_turns_survived: 10, stars: 3 },
-    { completed: false, best_turns_survived: 0, stars: 0 },
-    { completed: true, best_turns_survived: 10, stars: 1 },
+    { completed: true, best_turns_survived: 10, stars: 3, },
+    { completed: false, best_turns_survived: 0, stars: 0, },
+    { completed: true, best_turns_survived: 10, stars: 1, },
   ]
   assert_eq(levels_completed(scores), 2)
 }

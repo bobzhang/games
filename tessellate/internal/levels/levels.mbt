@@ -46,7 +46,7 @@ fn level_1() -> @types.Level {
     @types.domino_h(@types.piece_color_green),
     @types.domino_h(@types.piece_color_yellow),
   ]
-  { region, pieces, par_time: 30, par_rotations: 4 }
+  { region, pieces, par_time: 30, par_rotations: 4, }
 }
 
 ///|
@@ -58,7 +58,7 @@ fn level_2() -> @types.Level {
     @types.triomino_l(@types.piece_color_blue),
     @types.triomino_l(@types.piece_color_green),
   ]
-  { region, pieces, par_time: 45, par_rotations: 4 }
+  { region, pieces, par_time: 45, par_rotations: 4, }
 }
 
 ///|
@@ -70,7 +70,7 @@ fn level_3() -> @types.Level {
     @types.tetromino_l(@types.piece_color_orange),
     @types.tetromino_t(@types.piece_color_cyan),
   ]
-  { region, pieces, par_time: 45, par_rotations: 5 }
+  { region, pieces, par_time: 45, par_rotations: 5, }
 }
 
 ///|
@@ -83,7 +83,7 @@ fn level_4() -> @types.Level {
     @types.tetromino_s(@types.piece_color_blue),
     @types.tetromino_z(@types.piece_color_green),
   ]
-  { region, pieces, par_time: 60, par_rotations: 6 }
+  { region, pieces, par_time: 60, par_rotations: 6, }
 }
 
 ///|
@@ -97,7 +97,7 @@ fn level_5() -> @types.Level {
     @types.tetromino_t(@types.piece_color_purple),
     @types.tetromino_o(@types.piece_color_orange),
   ]
-  { region, pieces, par_time: 60, par_rotations: 8 }
+  { region, pieces, par_time: 60, par_rotations: 8, }
 }
 
 ///|
@@ -109,7 +109,7 @@ fn level_6() -> @types.Level {
     @types.tetromino_l(@types.piece_color_pink),
     @types.tetromino_j(@types.piece_color_lime),
   ]
-  { region, pieces, par_time: 45, par_rotations: 4 }
+  { region, pieces, par_time: 45, par_rotations: 4, }
 }
 
 ///|
@@ -122,7 +122,7 @@ fn level_7() -> @types.Level {
     @types.tetromino_o(@types.piece_color_green),
     @types.domino_h(@types.piece_color_yellow),
   ]
-  { region, pieces, par_time: 60, par_rotations: 6 }
+  { region, pieces, par_time: 60, par_rotations: 6, }
 }
 
 ///|
@@ -136,7 +136,7 @@ fn level_8() -> @types.Level {
     @types.domino_h(@types.piece_color_pink),
     @types.monomino(@types.piece_color_lime),
   ]
-  { region, pieces, par_time: 60, par_rotations: 6 }
+  { region, pieces, par_time: 60, par_rotations: 6, }
 }
 
 ///|
@@ -150,7 +150,7 @@ fn level_9() -> @types.Level {
     @types.tetromino_s(@types.piece_color_yellow),
     @types.tetromino_z(@types.piece_color_purple),
   ]
-  { region, pieces, par_time: 75, par_rotations: 8 }
+  { region, pieces, par_time: 75, par_rotations: 8, }
 }
 
 ///|
@@ -165,7 +165,7 @@ fn level_10() -> @types.Level {
     @types.tetromino_l(@types.piece_color_purple),
     @types.tetromino_j(@types.piece_color_orange),
   ]
-  { region, pieces, par_time: 90, par_rotations: 10 }
+  { region, pieces, par_time: 90, par_rotations: 10, }
 }
 
 // Tier 2: Shapes - L/T/cross regions, pentominoes added
@@ -190,7 +190,7 @@ fn level_11() -> @types.Level {
     @types.triomino_l(@types.piece_color_yellow),
     @types.triomino_i(@types.piece_color_purple),
   ]
-  { region, pieces, par_time: 90, par_rotations: 8 }
+  { region, pieces, par_time: 90, par_rotations: 8, }
 }
 
 ///|
@@ -213,7 +213,7 @@ fn level_12() -> @types.Level {
     @types.tetromino_j(@types.piece_color_yellow),
     @types.tetromino_o(@types.piece_color_purple),
   ]
-  { region, pieces, par_time: 90, par_rotations: 8 }
+  { region, pieces, par_time: 90, par_rotations: 8, }
 }
 
 ///|
@@ -237,7 +237,7 @@ fn level_13() -> @types.Level {
     @types.tetromino_j(@types.piece_color_purple),
     @types.tetromino_s(@types.piece_color_orange),
   ]
-  { region, pieces, par_time: 90, par_rotations: 10 }
+  { region, pieces, par_time: 90, par_rotations: 10, }
 }
 
 ///|
@@ -264,7 +264,7 @@ fn level_14() -> @types.Level {
     @types.triomino_i(@types.piece_color_cyan),
     @types.domino_h(@types.piece_color_pink),
   ]
-  { region, pieces, par_time: 120, par_rotations: 12 }
+  { region, pieces, par_time: 120, par_rotations: 12, }
 }
 
 ///|
@@ -293,7 +293,7 @@ fn level_15() -> @types.Level {
     @types.tetromino_l(@types.piece_color_pink),
     @types.triomino_i(@types.piece_color_lime),
   ]
-  { region, pieces, par_time: 120, par_rotations: 14 }
+  { region, pieces, par_time: 120, par_rotations: 14, }
 }
 
 ///|
@@ -315,7 +315,7 @@ fn level_16() -> @types.Level {
     @types.tetromino_z(@types.piece_color_yellow),
     @types.tetromino_o(@types.piece_color_purple),
   ]
-  { region, pieces, par_time: 90, par_rotations: 10 }
+  { region, pieces, par_time: 90, par_rotations: 10, }
 }
 
 ///|
@@ -343,7 +343,7 @@ fn level_17() -> @types.Level {
     @types.tetromino_z(@types.piece_color_purple),
     @types.tetromino_o(@types.piece_color_orange),
   ]
-  { region, pieces, par_time: 90, par_rotations: 10 }
+  { region, pieces, par_time: 90, par_rotations: 10, }
 }
 
 ///|
@@ -366,7 +366,7 @@ fn level_18() -> @types.Level {
     @types.tetromino_j(@types.piece_color_purple),
     @types.domino_h(@types.piece_color_orange),
   ]
-  { region, pieces, par_time: 90, par_rotations: 10 }
+  { region, pieces, par_time: 90, par_rotations: 10, }
 }
 
 ///|
@@ -394,7 +394,7 @@ fn level_19() -> @types.Level {
     @types.pento_v(@types.piece_color_cyan),
     @types.tetromino_o(@types.piece_color_pink),
   ]
-  { region, pieces, par_time: 150, par_rotations: 14 }
+  { region, pieces, par_time: 150, par_rotations: 14, }
 }
 
 ///|
@@ -427,7 +427,7 @@ fn level_20() -> @types.Level {
     @types.pento_f(@types.piece_color_magenta),
     @types.tetromino_o(@types.piece_color_red),
   ]
-  { region, pieces, par_time: 180, par_rotations: 18 }
+  { region, pieces, par_time: 180, par_rotations: 18, }
 }
 
 // Tier 3: Art - irregular star/heart/diamond shapes
@@ -458,7 +458,7 @@ fn level_21() -> @types.Level {
     @types.tetromino_o(@types.piece_color_lime),
     @types.triomino_l(@types.piece_color_teal),
   ]
-  { region, pieces, par_time: 150, par_rotations: 14 }
+  { region, pieces, par_time: 150, par_rotations: 14, }
 }
 
 ///|
@@ -510,7 +510,7 @@ fn level_22() -> @types.Level {
     @types.tetromino_t(@types.piece_color_magenta),
     @types.triomino_i(@types.piece_color_red),
   ]
-  { region, pieces, par_time: 180, par_rotations: 16 }
+  { region, pieces, par_time: 180, par_rotations: 16, }
 }
 
 ///|
@@ -543,7 +543,7 @@ fn level_23() -> @types.Level {
     @types.tetromino_o(@types.piece_color_lime),
     @types.triomino_l(@types.piece_color_teal),
   ]
-  { region, pieces, par_time: 150, par_rotations: 14 }
+  { region, pieces, par_time: 150, par_rotations: 14, }
 }
 
 ///|
@@ -587,7 +587,7 @@ fn level_24() -> @types.Level {
     @types.tetromino_o(@types.piece_color_cyan),
     @types.tetromino_t(@types.piece_color_pink),
   ]
-  { region, pieces, par_time: 120, par_rotations: 12 }
+  { region, pieces, par_time: 120, par_rotations: 12, }
 }
 
 ///|
@@ -607,7 +607,7 @@ fn level_25() -> @types.Level {
     @types.pento_p(@types.piece_color_yellow),
     @types.pento_n(@types.piece_color_purple),
   ]
-  { region, pieces, par_time: 120, par_rotations: 10 }
+  { region, pieces, par_time: 120, par_rotations: 10, }
 }
 
 ///|
@@ -654,7 +654,7 @@ fn level_26() -> @types.Level {
     @types.pento_w(@types.piece_color_magenta),
     @types.tetromino_o(@types.piece_color_red),
   ]
-  { region, pieces, par_time: 180, par_rotations: 18 }
+  { region, pieces, par_time: 180, par_rotations: 18, }
 }
 
 ///|
@@ -697,7 +697,7 @@ fn level_27() -> @types.Level {
     @types.tetromino_t(@types.piece_color_lime),
     @types.tetromino_l(@types.piece_color_teal),
   ]
-  { region, pieces, par_time: 150, par_rotations: 14 }
+  { region, pieces, par_time: 150, par_rotations: 14, }
 }
 
 ///|
@@ -731,7 +731,7 @@ fn level_28() -> @types.Level {
     @types.pento_w(@types.piece_color_lime),
     @types.pento_x(@types.piece_color_teal),
   ]
-  { region, pieces, par_time: 150, par_rotations: 16 }
+  { region, pieces, par_time: 150, par_rotations: 16, }
 }
 
 ///|
@@ -766,7 +766,7 @@ fn level_29() -> @types.Level {
     @types.pento_z(@types.piece_color_green),
     @types.tetromino_o(@types.piece_color_yellow),
   ]
-  { region, pieces, par_time: 240, par_rotations: 22 }
+  { region, pieces, par_time: 240, par_rotations: 22, }
 }
 
 ///|
@@ -794,5 +794,5 @@ fn level_30() -> @types.Level {
     @types.pento_z(@types.piece_color_magenta),
     @types.tetromino_o(@types.piece_color_red),
   ]
-  { region, pieces, par_time: 300, par_rotations: 24 }
+  { region, pieces, par_time: 300, par_rotations: 24, }
 }

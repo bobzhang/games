@@ -21,4 +21,3 @@ pub fn try_move_player(@types.Level, @types.Game, Int, Int) -> Bool
 // Type aliases
 
 // Traits
-

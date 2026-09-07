@@ -42,7 +42,7 @@ fn random_song() -> Song {
   let m = @raylib.get_random_value(0, 3)
   let l = Float::from_int(@raylib.get_random_value(6, 11))
   let e = @raylib.get_random_value(30, 95)
-  { mood: m, len: l, energy: e }
+  { mood: m, len: l, energy: e, }
 }
 
 ///|

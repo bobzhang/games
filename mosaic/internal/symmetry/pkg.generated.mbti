@@ -47,4 +47,3 @@ pub fn validate_placement(@types.MosaicGrid, @types.Vec2i, @types.Tile, @types.S
 // Type aliases
 
 // Traits
-

@@ -15,9 +15,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum PieceKind {
@@ -29,9 +38,18 @@ pub(all) enum PieceKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PieceKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PieceKind with Eq::{not_equal, equal}
+
+///|
+pub extend PieceKind with Debug::{to_repr}
+
+///|
+pub impl Show for PieceKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PieceKind with Show::{to_string, output}
 
 ///|
 pub(all) enum TestKind {
@@ -41,9 +59,18 @@ pub(all) enum TestKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TestKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TestKind with Eq::{not_equal, equal}
+
+///|
+pub extend TestKind with Debug::{to_repr}
+
+///|
+pub impl Show for TestKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TestKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Material {
@@ -53,9 +80,18 @@ pub(all) enum Material {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Material with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Material with Eq::{not_equal, equal}
+
+///|
+pub extend Material with Debug::{to_repr}
+
+///|
+pub impl Show for Material with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Material with Show::{to_string, output}
 
 ///|
 pub(all) enum JointKind {
@@ -65,9 +101,18 @@ pub(all) enum JointKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for JointKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend JointKind with Eq::{not_equal, equal}
+
+///|
+pub extend JointKind with Debug::{to_repr}
+
+///|
+pub impl Show for JointKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend JointKind with Show::{to_string, output}
 
 ///|
 pub(all) enum BlueprintKind {
@@ -79,9 +124,18 @@ pub(all) enum BlueprintKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for BlueprintKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend BlueprintKind with Eq::{not_equal, equal}
+
+///|
+pub extend BlueprintKind with Debug::{to_repr}
+
+///|
+pub impl Show for BlueprintKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend BlueprintKind with Show::{to_string, output}
 
 ///|
 pub(all) enum ChallengeMode {
@@ -92,9 +146,18 @@ pub(all) enum ChallengeMode {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ChallengeMode with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ChallengeMode with Eq::{not_equal, equal}
+
+///|
+pub extend ChallengeMode with Debug::{to_repr}
+
+///|
+pub impl Show for ChallengeMode with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ChallengeMode with Show::{to_string, output}
 
 ///|
 pub(all) enum UpgradeKind {
@@ -105,9 +168,18 @@ pub(all) enum UpgradeKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for UpgradeKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend UpgradeKind with Eq::{not_equal, equal}
+
+///|
+pub extend UpgradeKind with Debug::{to_repr}
+
+///|
+pub impl Show for UpgradeKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend UpgradeKind with Show::{to_string, output}
 
 ///|
 pub(all) enum WorldTheme {
@@ -117,9 +189,18 @@ pub(all) enum WorldTheme {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for WorldTheme with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend WorldTheme with Eq::{not_equal, equal}
+
+///|
+pub extend WorldTheme with Debug::{to_repr}
+
+///|
+pub impl Show for WorldTheme with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend WorldTheme with Show::{to_string, output}
 
 ///|
 pub(all) enum ComboKind {
@@ -130,9 +211,18 @@ pub(all) enum ComboKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ComboKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ComboKind with Eq::{not_equal, equal}
+
+///|
+pub extend ComboKind with Debug::{to_repr}
+
+///|
+pub impl Show for ComboKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ComboKind with Show::{to_string, output}
 
 ///|
 pub(all) enum SoundEvent {
@@ -152,9 +242,18 @@ pub(all) enum SoundEvent {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for SoundEvent with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend SoundEvent with Eq::{not_equal, equal}
+
+///|
+pub extend SoundEvent with Debug::{to_repr}
+
+///|
+pub impl Show for SoundEvent with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend SoundEvent with Show::{to_string, output}
 
 ///|
 pub(all) enum ReplayAction {
@@ -164,6 +263,15 @@ pub(all) enum ReplayAction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ReplayAction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ReplayAction with Eq::{not_equal, equal}
+
+///|
+pub extend ReplayAction with Debug::{to_repr}
+
+///|
+pub impl Show for ReplayAction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ReplayAction with Show::{to_string, output}

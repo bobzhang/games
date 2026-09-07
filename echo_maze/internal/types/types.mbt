@@ -2,14 +2,23 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Player {
   mut pos : Vec2i
   mut dir : Direction
   mut alive : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Player with Debug::{to_repr}
 
 ///|
 pub(all) struct Ghost {
@@ -18,30 +27,45 @@ pub(all) struct Ghost {
   mut pos : Vec2i
   mut active : Bool
   trail_positions : Array[Vec2i] // history of positions for trail visualization
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Ghost with Debug::{to_repr}
 
 ///|
 pub(all) struct Recording {
   moves : Array[Direction?]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Recording with Debug::{to_repr}
 
 ///|
 pub(all) struct Tile {
   kind : TileKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Tile with Debug::{to_repr}
 
 ///|
 pub(all) struct ButtonLink {
   button_id : Int
   door_id : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend ButtonLink with Debug::{to_repr}
 
 ///|
 pub(all) struct GuardDef {
   patrol : Array[Vec2i]
   mut patrol_index : Int
   mut forward : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend GuardDef with Debug::{to_repr}
 
 ///|
 pub(all) struct GuardState {
@@ -50,7 +74,10 @@ pub(all) struct GuardState {
   mut forward : Bool
   mut alert : GuardAlertState
   mut alert_timer : Float // countdown for alert state visual
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend GuardState with Debug::{to_repr}
 
 ///|
 pub(all) struct Maze {
@@ -62,7 +89,10 @@ pub(all) struct Maze {
   start : Vec2i
   exit : Vec2i
   collectible_positions : Array[Vec2i]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Maze with Debug::{to_repr}
 
 ///|
 pub(all) struct DoorState {
@@ -71,7 +101,10 @@ pub(all) struct DoorState {
   mut timer : Int
   mut anim_progress : Float // 0.0 = closed, 1.0 = open (for smooth animation)
   mut prev_open : Bool // track previous state for transition detection
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend DoorState with Debug::{to_repr}
 
 ///|
 pub(all) struct MazeState {
@@ -79,7 +112,10 @@ pub(all) struct MazeState {
   mut button_pressed : Array[Bool]
   mut guard_states : Array[GuardState]
   mut collectibles_collected : Array[Bool]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend MazeState with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelDef {
@@ -91,7 +127,10 @@ pub(all) struct LevelDef {
   timed_door_durations : Array[(Int, Int)]
   par_loops : Int
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -100,7 +139,10 @@ pub(all) struct LevelScore {
   mut stars : Int
   mut collectibles_got : Int
   mut collectibles_total : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct TimelineEntry {
@@ -109,7 +151,10 @@ pub(all) struct TimelineEntry {
   guard_positions : Array[Vec2i]
   buttons_pressed : Array[Bool]
   doors_open : Array[Bool]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend TimelineEntry with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -143,11 +188,17 @@ pub(all) struct Game {
   mut ghost_button_feedback : Array[GhostButtonEvent] // feedback when ghost presses button
   mut planning_paused : Bool // explicit pause indicator in planning mode
   mut loop_transition_timer : Float // smooth transition between loops
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}
 
 ///|
 pub(all) struct GhostButtonEvent {
   ghost_index : Int
   button_id : Int
   mut timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend GhostButtonEvent with Debug::{to_repr}

@@ -47,4 +47,3 @@ pub fn get_wind_conditions(Int) -> (Float, Float, Float)
 // Type aliases
 
 // Traits
-

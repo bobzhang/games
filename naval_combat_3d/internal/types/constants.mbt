@@ -713,6 +713,9 @@ pub(all) enum AiState {
 } derive(Eq)
 
 ///|
+pub extend AiState with Eq::{not_equal, equal}
+
+///|
 /// AI personality type.
 pub(all) enum AiPersonality {
   Aggressive
@@ -721,6 +724,9 @@ pub(all) enum AiPersonality {
   Retreater
   Berserker
 } derive(Eq)
+
+///|
+pub extend AiPersonality with Eq::{not_equal, equal}
 
 ///|
 /// Cannon type.
@@ -733,6 +739,9 @@ pub(all) enum Cannon {
 } derive(Eq)
 
 ///|
+pub extend Cannon with Eq::{not_equal, equal}
+
+///|
 /// Ship class.
 pub(all) enum ShipClass {
   Sloop
@@ -741,6 +750,9 @@ pub(all) enum ShipClass {
   Galleon
   ManOfWar
 } derive(Eq)
+
+///|
+pub extend ShipClass with Eq::{not_equal, equal}
 
 ///|
 /// Island variant.
@@ -752,12 +764,18 @@ pub(all) enum IslandKind {
 } derive(Eq)
 
 ///|
+pub extend IslandKind with Eq::{not_equal, equal}
+
+///|
 /// Sail configuration.
 pub(all) enum Sail {
   Furled
   Half
   Full
 } derive(Eq)
+
+///|
+pub extend Sail with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
@@ -769,3 +787,6 @@ pub(all) enum GameState {
   GameOver
   BattleSelect
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

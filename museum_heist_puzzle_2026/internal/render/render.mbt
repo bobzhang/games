@@ -32,8 +32,18 @@ fn @types.Game::draw_background(game : @types.Game, art : GameArt) -> Unit {
     @types.screen_h,
     @raylib.Color::new(4, 6, 12, 92),
   )
-  @raylib.draw_circle(238, 170, 152.0 + pulse * 10.0, @raylib.Color::new(38, 66, 96, 34))
-  @raylib.draw_circle(@types.screen_w - 214, 236, 176.0 - pulse * 8.0, @raylib.Color::new(112, 28, 32, 24))
+  @raylib.draw_circle(
+    238,
+    170,
+    152.0 + pulse * 10.0,
+    @raylib.Color::new(38, 66, 96, 34),
+  )
+  @raylib.draw_circle(
+    @types.screen_w - 214,
+    236,
+    176.0 - pulse * 8.0,
+    @raylib.Color::new(112, 28, 32, 24),
+  )
 }
 
 ///|
@@ -68,7 +78,13 @@ fn @types.Game::draw_board_tiles(game : @types.Game, art : GameArt) -> Unit {
             @types.tile_size,
             @raylib.Color::new(214, 220, 226, 255),
           )
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, @raylib.Color::new(10, 12, 18, 28))
+          @raylib.draw_rectangle(
+            px,
+            py,
+            @types.tile_size,
+            @types.tile_size,
+            @raylib.Color::new(10, 12, 18, 28),
+          )
           @raylib.draw_rectangle_lines(
             px,
             py,
@@ -83,8 +99,21 @@ fn @types.Game::draw_board_tiles(game : @types.Game, art : GameArt) -> Unit {
           } else {
             @raylib.Color::new(112, 126, 144, 255)
           }
-          draw_texture_rect(art.floor_tile, px, py, @types.tile_size, @types.tile_size, tint)
-          @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, @raylib.Color::new(2, 6, 12, 82))
+          draw_texture_rect(
+            art.floor_tile,
+            px,
+            py,
+            @types.tile_size,
+            @types.tile_size,
+            tint,
+          )
+          @raylib.draw_rectangle(
+            px,
+            py,
+            @types.tile_size,
+            @types.tile_size,
+            @raylib.Color::new(2, 6, 12, 82),
+          )
         }
       }
     }
@@ -129,10 +158,19 @@ fn @types.Game::draw_exit(game : @types.Game, art : GameArt) -> Unit {
     @raylib.Color::new(120, 74, 64, 255)
   }
 
-  @raylib.draw_circle(ex + @types.tile_size / 2, ey + @types.tile_size / 2, Float::from_int(@types.tile_size) * 0.52, door_c)
+  @raylib.draw_circle(
+    ex + @types.tile_size / 2,
+    ey + @types.tile_size / 2,
+    Float::from_int(@types.tile_size) * 0.52,
+    door_c,
+  )
   draw_sprite_cell(
     art,
-    if @types.exit_unlocked(game) { 4 } else { 3 },
+    if @types.exit_unlocked(game) {
+      4
+    } else {
+      3
+    },
     Float::from_int(ex + @types.tile_size / 2),
     Float::from_int(ey + @types.tile_size / 2),
     Float::from_int(@types.tile_size + 14),
@@ -171,7 +209,12 @@ fn @types.Game::draw_artifacts(game : @types.Game, art : GameArt) -> Unit {
     let cy = py + @types.tile_size / 2 + (wobble * 3.0).to_int()
     let cx = px + @types.tile_size / 2
 
-    @raylib.draw_circle(cx, cy, Float::from_int(@types.tile_size) * 0.29, @raylib.Color::new(246, 198, 78, 94))
+    @raylib.draw_circle(
+      cx,
+      cy,
+      Float::from_int(@types.tile_size) * 0.29,
+      @raylib.Color::new(246, 198, 78, 94),
+    )
     draw_sprite_cell(
       art,
       2,
@@ -210,7 +253,12 @@ fn @types.Game::draw_guards(game : @types.Game, art : GameArt) -> Unit {
   for guard_val in game.guards {
     let cx = @types.cell_px(guard_val.x) + @types.tile_size / 2
     let cy = @types.cell_py(guard_val.y) + @types.tile_size / 2
-    @raylib.draw_circle(cx, cy, Float::from_int(@types.tile_size) * 0.34, @raylib.Color::new(206, 48, 62, 104))
+    @raylib.draw_circle(
+      cx,
+      cy,
+      Float::from_int(@types.tile_size) * 0.34,
+      @raylib.Color::new(206, 48, 62, 104),
+    )
     draw_sprite_cell(
       art,
       1,
@@ -414,7 +462,14 @@ fn draw_action_button(
     @raylib.Color::new(68, 96, 142, 245)
   }
 
-  draw_texture_rect(art.panel_skin, x, y, w, h, @raylib.Color::new(218, 226, 236, 238))
+  draw_texture_rect(
+    art.panel_skin,
+    x,
+    y,
+    w,
+    h,
+    @raylib.Color::new(218, 226, 236, 238),
+  )
   @raylib.draw_rectangle(x, y, w, h, fill)
   @raylib.draw_rectangle_lines(
     x,
@@ -449,7 +504,14 @@ fn draw_dpad_button(
     @raylib.Color::new(36, 64, 98, 214)
   }
 
-  draw_texture_rect(art.panel_skin, x, y, w, h, @raylib.Color::new(198, 214, 232, 220))
+  draw_texture_rect(
+    art.panel_skin,
+    x,
+    y,
+    w,
+    h,
+    @raylib.Color::new(198, 214, 232, 220),
+  )
   @raylib.draw_rectangle(x, y, w, h, fill)
   @raylib.draw_rectangle_lines(
     x,
@@ -665,8 +727,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game, art : GameArt) -> Unit {
 /// Draws the floor-cleared win overlay with retry and next-floor buttons.
 fn @types.Game::draw_win_overlay(game : @types.Game, art : GameArt) -> Unit {
   draw_overlay_card(
-    art,
-    "Floor Cleared", "You secured the relics and escaped undetected.", "Continue to the next wing or replay this floor.",
+    art, "Floor Cleared", "You secured the relics and escaped undetected.", "Continue to the next wing or replay this floor.",
   )
 
   let (rx, ry, rw, rh) = @types.retry_button_rect()
@@ -709,8 +770,7 @@ fn @types.Game::draw_win_overlay(game : @types.Game, art : GameArt) -> Unit {
 /// Draws the alarm-triggered loss overlay with a retry button.
 fn @types.Game::draw_lose_overlay(game : @types.Game, art : GameArt) -> Unit {
   draw_overlay_card(
-    art,
-    "Alarm Triggered", "A guard spotted you in their cone of vision.", "Retry the same floor and adjust your route.",
+    art, "Alarm Triggered", "A guard spotted you in their cone of vision.", "Retry the same floor and adjust your route.",
   )
 
   let (rx, ry, rw, rh) = @types.retry_button_rect()
@@ -734,8 +794,7 @@ fn @types.Game::draw_campaign_clear_overlay(
   art : GameArt,
 ) -> Unit {
   draw_overlay_card(
-    art,
-    "Grand Collection Secured", "All museum wings cleared without raising a full lockdown.",
+    art, "Grand Collection Secured", "All museum wings cleared without raising a full lockdown.",
     "Return to title to launch another campaign.",
   )
 

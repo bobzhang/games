@@ -243,7 +243,9 @@ pub(all) enum Dir {
   Down
   Left
 } derive(Eq)
+pub fn Dir::equal(Self, Self) -> Bool
 pub fn Dir::from_int(Int) -> Self
+pub fn Dir::not_equal(Self, Self) -> Bool
 
 pub(all) enum EnemyKind {
   Basic
@@ -251,6 +253,8 @@ pub(all) enum EnemyKind {
   Heavy
   Sniper
 } derive(Eq)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   mut state : GameState
@@ -308,6 +312,8 @@ pub(all) enum GameState {
   GameOver
   CampaignClear
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Hostage {
   mut active : Bool
@@ -351,6 +357,8 @@ pub(all) enum PowerupKind {
   Shovel
   Tank
 } derive(Eq)
+pub fn PowerupKind::equal(Self, Self) -> Bool
+pub fn PowerupKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct StageProfile {
   title : String
@@ -405,8 +413,9 @@ pub(all) enum Team {
   Player2
   Enemy
 } derive(Eq)
+pub fn Team::equal(Self, Self) -> Bool
+pub fn Team::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

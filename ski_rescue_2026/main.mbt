@@ -49,7 +49,7 @@ fn main {
   @draw.init_font()
 
   let objs : Array[Obj] = Array::makei(150, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, lane: 0, kind: 0 }
+    { alive: false, x: 0.0, y: 0.0, lane: 0, kind: 0, }
   })
 
   let mut player_lane = 2

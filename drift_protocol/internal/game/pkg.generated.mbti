@@ -39,4 +39,3 @@ pub fn update(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

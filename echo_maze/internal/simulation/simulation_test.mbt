@@ -83,7 +83,7 @@ test "guard advances along patrol" {
     @types.vec2i(5, 3),
     @types.vec2i(6, 3),
   ]
-  let guard_def : @types.GuardDef = { patrol, patrol_index: 0, forward: true }
+  let guard_def : @types.GuardDef = { patrol, patrol_index: 0, forward: true, }
   let guard_state : @types.GuardState = {
     pos: patrol[0],
     patrol_index: 0,

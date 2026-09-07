@@ -191,6 +191,11 @@ pub(all) enum ComponentKind {
   Wire
   Device(Float)
 } derive(Eq, @debug.Debug)
+pub fn ComponentKind::equal(Self, Self) -> Bool
+pub fn ComponentKind::not_equal(Self, Self) -> Bool
+pub fn ComponentKind::output(Self, &Logger) -> Unit
+pub fn ComponentKind::to_repr(Self) -> @debug.Repr
+pub fn ComponentKind::to_string(Self) -> String
 pub impl Show for ComponentKind
 
 pub(all) enum Direction {
@@ -199,6 +204,11 @@ pub(all) enum Direction {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct FieldLine {
@@ -265,6 +275,11 @@ pub(all) enum Polarity {
   North
   South
 } derive(Eq, @debug.Debug)
+pub fn Polarity::equal(Self, Self) -> Bool
+pub fn Polarity::not_equal(Self, Self) -> Bool
+pub fn Polarity::output(Self, &Logger) -> Unit
+pub fn Polarity::to_repr(Self) -> @debug.Repr
+pub fn Polarity::to_string(Self) -> String
 pub impl Show for Polarity
 
 pub(all) enum Screen {
@@ -275,6 +290,11 @@ pub(all) enum Screen {
   LevelComplete
   LevelFailed
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct Spark {
@@ -292,6 +312,11 @@ pub(all) enum Tier {
   Generators
   PowerGrid
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) enum ToolMode {
@@ -301,9 +326,13 @@ pub(all) enum ToolMode {
   PlaceWire
   Erase
 } derive(Eq, @debug.Debug)
+pub fn ToolMode::equal(Self, Self) -> Bool
+pub fn ToolMode::not_equal(Self, Self) -> Bool
+pub fn ToolMode::output(Self, &Logger) -> Unit
+pub fn ToolMode::to_repr(Self) -> @debug.Repr
+pub fn ToolMode::to_string(Self) -> String
 pub impl Show for ToolMode
 
 // Type aliases
 
 // Traits
-

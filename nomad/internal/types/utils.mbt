@@ -77,7 +77,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 // RNG
 
 ///|
-let rng_state : Ref[Int] = { val: 12345 }
+let rng_state : Ref[Int] = { val: 12345, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {
@@ -119,22 +119,22 @@ pub fn hex_neighbors(coord : HexCoord) -> Array[HexCoord] {
   if parity == 1 {
     // Odd row
     [
-      { col: col + 1, row },
-      { col, row: row - 1 },
-      { col: col - 1, row: row - 1 },
-      { col: col - 1, row },
-      { col: col - 1, row: row + 1 },
-      { col, row: row + 1 },
+      { col: col + 1, row, },
+      { col, row: row - 1, },
+      { col: col - 1, row: row - 1, },
+      { col: col - 1, row, },
+      { col: col - 1, row: row + 1, },
+      { col, row: row + 1, },
     ]
   } else {
     // Even row
     [
-      { col: col + 1, row },
-      { col: col + 1, row: row - 1 },
-      { col, row: row - 1 },
-      { col: col - 1, row },
-      { col, row: row + 1 },
-      { col: col + 1, row: row + 1 },
+      { col: col + 1, row, },
+      { col: col + 1, row: row - 1, },
+      { col, row: row - 1, },
+      { col: col - 1, row, },
+      { col, row: row + 1, },
+      { col: col + 1, row: row + 1, },
     ]
   }
 }
@@ -184,7 +184,7 @@ pub fn pixel_to_hex(px : Float, py : Float, size : Float) -> HexCoord {
   let mut best_dist : Float = 999999.0
   for row in 0..<map_height {
     for col in 0..<map_width {
-      let coord : HexCoord = { col, row }
+      let coord : HexCoord = { col, row, }
       let (hx, hy) = hex_to_pixel(coord, size)
       let dx = px - hx
       let dy = py - hy
@@ -199,7 +199,7 @@ pub fn pixel_to_hex(px : Float, py : Float, size : Float) -> HexCoord {
     ignore(w)
     ignore(h)
   }
-  { col: best_col, row: best_row }
+  { col: best_col, row: best_row, }
 }
 
 ///|
@@ -270,11 +270,11 @@ pub fn new_hex_map(width : Int, height : Int) -> HexMap {
   for _r in 0..<height {
     let row : Array[HexTile] = []
     for _c in 0..<width {
-      row.push({ kind: Sand })
+      row.push({ kind: Sand, })
     }
     tiles.push(row)
   }
-  { width, height, tiles }
+  { width, height, tiles, }
 }
 
 ///|
@@ -293,7 +293,7 @@ pub fn new_caravan(start : HexCoord, water : Int) -> Caravan {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, best_gold: 0, best_artifacts: 0, completed: false }
+  { stars: 0, best_gold: 0, best_artifacts: 0, completed: false, }
 }
 
 ///|
@@ -307,7 +307,7 @@ pub fn new_game() -> Game {
     play_state: Planning,
     current_tier: OasisTrail,
     current_level: 0,
-    caravan: new_caravan({ col: 0, row: 0 }, 10),
+    caravan: new_caravan({ col: 0, row: 0, }, 10),
     level: None,
     route: [],
     hover_hex: None,

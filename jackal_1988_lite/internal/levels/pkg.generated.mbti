@@ -17,4 +17,3 @@ pub fn level_pattern(Int) -> Array[String]
 // Type aliases
 
 // Traits
-

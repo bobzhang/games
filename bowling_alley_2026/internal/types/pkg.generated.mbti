@@ -140,6 +140,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Pin {
   mut standing : Bool
@@ -167,4 +169,3 @@ pub fn Spark::Spark() -> Self
 // Type aliases
 
 // Traits
-

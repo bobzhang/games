@@ -31,4 +31,3 @@ pub fn react(@types.Element, @types.Element) -> @types.ReactionResult
 // Type aliases
 
 // Traits
-

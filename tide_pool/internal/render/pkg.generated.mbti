@@ -39,4 +39,3 @@ pub fn draw_water_overlay(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

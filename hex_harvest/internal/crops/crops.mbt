@@ -80,7 +80,7 @@ pub fn grow_crops(grid : @types.HexGrid) -> Array[@types.HexCoord] {
                 tile.crop_turns += 1
                 if tile.crop_turns >= @types.crop_grow_time(kind) {
                   tile.crop_state = Mature
-                  matured.push({ col: c, row: r })
+                  matured.push({ col: c, row: r, })
                 }
               }
               Mature | Harvested => ()
@@ -108,7 +108,7 @@ pub fn harvest_mature(grid : @types.HexGrid) -> (Int, Array[@types.HexCoord]) {
             let bonus = adjacency_bonus(grid, c, r)
             total_yield += base + bonus
             tile.crop_state = Harvested
-            harvested.push({ col: c, row: r })
+            harvested.push({ col: c, row: r, })
           }
         None => ()
       }

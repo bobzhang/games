@@ -139,7 +139,14 @@ fn draw_bridges(game : @types.Game) -> Unit {
           } else {
             @raylib.white
           }
-          if !draw_bridge_art(ax, ay - gap, bx, by - gap, br.direction, bridge_tint) {
+          if !draw_bridge_art(
+              ax,
+              ay - gap,
+              bx,
+              by - gap,
+              br.direction,
+              bridge_tint,
+            ) {
             @raylib.draw_line_ex(
               @raylib.Vector2::new(ax, ay - gap),
               @raylib.Vector2::new(bx, by - gap),
@@ -147,7 +154,14 @@ fn draw_bridges(game : @types.Game) -> Unit {
               bridge_color,
             )
           }
-          if !draw_bridge_art(ax, ay + gap, bx, by + gap, br.direction, bridge_tint) {
+          if !draw_bridge_art(
+              ax,
+              ay + gap,
+              bx,
+              by + gap,
+              br.direction,
+              bridge_tint,
+            ) {
             @raylib.draw_line_ex(
               @raylib.Vector2::new(ax, ay + gap),
               @raylib.Vector2::new(bx, by + gap),
@@ -200,7 +214,14 @@ fn draw_bridges(game : @types.Game) -> Unit {
           } else {
             @raylib.white
           }
-          if !draw_bridge_art(ax - gap, ay, bx - gap, by, br.direction, bridge_tint) {
+          if !draw_bridge_art(
+              ax - gap,
+              ay,
+              bx - gap,
+              by,
+              br.direction,
+              bridge_tint,
+            ) {
             @raylib.draw_line_ex(
               @raylib.Vector2::new(ax - gap, ay),
               @raylib.Vector2::new(bx - gap, by),
@@ -208,7 +229,14 @@ fn draw_bridges(game : @types.Game) -> Unit {
               bridge_color,
             )
           }
-          if !draw_bridge_art(ax + gap, ay, bx + gap, by, br.direction, bridge_tint) {
+          if !draw_bridge_art(
+              ax + gap,
+              ay,
+              bx + gap,
+              by,
+              br.direction,
+              bridge_tint,
+            ) {
             @raylib.draw_line_ex(
               @raylib.Vector2::new(ax + gap, ay),
               @raylib.Vector2::new(bx + gap, by),

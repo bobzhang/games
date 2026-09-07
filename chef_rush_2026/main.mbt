@@ -103,7 +103,7 @@ fn main {
   load_assets()
 
   let drops : Array[Drop] = Array::makei(140, fn(_i) {
-    { alive: false, lane: 0, x: 0.0, y: 0.0, kind: 0, vy: 200.0 }
+    { alive: false, lane: 0, x: 0.0, y: 0.0, kind: 0, vy: 200.0, }
   })
 
   let mut player_lane = 2

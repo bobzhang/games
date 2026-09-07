@@ -272,6 +272,8 @@ pub(all) enum EntityKind {
   ItemBattery
   ItemHackcell
 } derive(Eq)
+pub fn EntityKind::equal(Self, Self) -> Bool
+pub fn EntityKind::not_equal(Self, Self) -> Bool
 
 pub(all) enum Formation {
   VShape
@@ -279,6 +281,11 @@ pub(all) enum Formation {
   FlankingPairs
   Random
 } derive(Eq, @debug.Debug)
+pub fn Formation::equal(Self, Self) -> Bool
+pub fn Formation::not_equal(Self, Self) -> Bool
+pub fn Formation::output(Self, &Logger) -> Unit
+pub fn Formation::to_repr(Self) -> @debug.Repr
+pub fn Formation::to_string(Self) -> String
 pub impl Show for Formation
 
 pub(all) struct Game {
@@ -344,6 +351,8 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct GlowRing {
   mut active : Bool
@@ -366,6 +375,9 @@ pub(all) struct Hazard {
   mut warn_t : Float
 } derive(@debug.Debug)
 pub fn Hazard::new() -> Self
+pub fn Hazard::output(Self, &Logger) -> Unit
+pub fn Hazard::to_repr(Self) -> @debug.Repr
+pub fn Hazard::to_string(Self) -> String
 pub impl Show for Hazard
 
 pub(all) enum HazardKind {
@@ -373,6 +385,11 @@ pub(all) enum HazardKind {
   BarrierGate
   BlastZone
 } derive(Eq, @debug.Debug)
+pub fn HazardKind::equal(Self, Self) -> Bool
+pub fn HazardKind::not_equal(Self, Self) -> Bool
+pub fn HazardKind::output(Self, &Logger) -> Unit
+pub fn HazardKind::to_repr(Self) -> @debug.Repr
+pub fn HazardKind::to_string(Self) -> String
 pub impl Show for HazardKind
 
 pub(all) struct Player {
@@ -395,6 +412,11 @@ pub(all) enum RoadZone {
   IndustrialStrip
   HighwayOverpass
 } derive(Eq, @debug.Debug)
+pub fn RoadZone::equal(Self, Self) -> Bool
+pub fn RoadZone::not_equal(Self, Self) -> Bool
+pub fn RoadZone::output(Self, &Logger) -> Unit
+pub fn RoadZone::to_repr(Self) -> @debug.Repr
+pub fn RoadZone::to_string(Self) -> String
 pub impl Show for RoadZone
 
 pub(all) struct Spark {
@@ -414,9 +436,13 @@ pub(all) enum WeaponUpgrade {
   Piercing
   Homing
 } derive(Eq, @debug.Debug)
+pub fn WeaponUpgrade::equal(Self, Self) -> Bool
+pub fn WeaponUpgrade::not_equal(Self, Self) -> Bool
+pub fn WeaponUpgrade::output(Self, &Logger) -> Unit
+pub fn WeaponUpgrade::to_repr(Self) -> @debug.Repr
+pub fn WeaponUpgrade::to_string(Self) -> String
 pub impl Show for WeaponUpgrade
 
 // Type aliases
 
 // Traits
-

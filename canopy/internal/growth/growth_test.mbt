@@ -7,7 +7,7 @@ fn make_test_game() -> @types.Game {
   for _i in 0..<@types.grid_cols {
     game.ground.push(@types.new_ground_tile(3))
   }
-  game.targets = [{ tree_index: 0, required_height: 5 }]
+  game.targets = [{ tree_index: 0, required_height: 5, }]
   game.turn_limit = 10
   game.prune_budget = 5
   game.par_prunes = 2
@@ -96,7 +96,7 @@ test "pruning removes branch" {
 test "target satisfaction check" {
   let game = make_test_game()
   // Set target to height 3 which is achievable with starting water 3
-  game.targets = [{ tree_index: 0, required_height: 3 }]
+  game.targets = [{ tree_index: 0, required_height: 3, }]
   // Initially target not met
   inspect(check_targets(game), content="false")
   // Grow 3 turns
@@ -110,7 +110,7 @@ test "target satisfaction check" {
 ///|
 test "star calculation" {
   let game = make_test_game()
-  game.targets = [{ tree_index: 0, required_height: 3 }]
+  game.targets = [{ tree_index: 0, required_height: 3, }]
   game.par_prunes = 2
   game.par_turns = 5
   // Not met - 0 stars
@@ -150,7 +150,7 @@ test "shadow slows growth of neighbor" {
   for _i in 0..<@types.grid_cols {
     game.ground.push(@types.new_ground_tile(3))
   }
-  game.targets = [{ tree_index: 0, required_height: 3 }]
+  game.targets = [{ tree_index: 0, required_height: 3, }]
   game.turn_limit = 20
   game.prune_budget = 5
   game.par_prunes = 2

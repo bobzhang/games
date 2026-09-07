@@ -4,7 +4,7 @@ fn make_avail(
   count : Int,
   fc : @types.FilterColor?,
 ) -> @types.AvailableComponent {
-  { kind, filter_color: fc, count }
+  { kind, filter_color: fc, count, }
 }
 
 ///|

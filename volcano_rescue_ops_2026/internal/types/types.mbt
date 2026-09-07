@@ -57,7 +57,7 @@ pub(all) struct Game {
 ///|
 /// Creates an inactive civilian site with default values.
 pub fn CivilianSite::CivilianSite() -> CivilianSite {
-  { active: false, x: 0, y: 0, waiting: 0 }
+  { active: false, x: 0, y: 0, waiting: 0, }
 }
 
 ///|

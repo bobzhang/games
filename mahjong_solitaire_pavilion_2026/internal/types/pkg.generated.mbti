@@ -96,6 +96,8 @@ pub(all) enum Dir {
   Up
   Down
 } derive(Eq)
+pub fn Dir::equal(Self, Self) -> Bool
+pub fn Dir::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   active : Array[Bool]
@@ -153,6 +155,8 @@ pub(all) enum GameState {
   CampaignClear
   Fail
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Spark {
   mut active : Bool
@@ -182,4 +186,3 @@ pub(all) struct UndoPair {
 // Type aliases
 
 // Traits
-

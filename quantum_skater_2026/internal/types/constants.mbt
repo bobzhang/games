@@ -22,6 +22,9 @@ pub(all) enum ObjKind {
 } derive(Eq)
 
 ///|
+pub extend ObjKind with Eq::{not_equal, equal}
+
+///|
 /// Number of lateral lanes on the track.
 pub let lane_count : Int = 5
 
@@ -89,3 +92,6 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

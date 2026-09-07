@@ -29,4 +29,3 @@ pub fn count_correct_positions(Array[Int], Array[Int]) -> Int
 // Type aliases
 
 // Traits
-

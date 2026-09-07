@@ -16,7 +16,7 @@ pub fn new_region(damages : Array[DamageKind]) -> Region {
 
 ///|
 pub fn new_artwork(w : Int, h : Int, regions : Array[Region]) -> Artwork {
-  { width: w, height: h, regions }
+  { width: w, height: h, regions, }
 }
 
 ///|
@@ -26,12 +26,12 @@ pub fn new_budget(
   retouch : Int,
   seal : Int,
 ) -> ToolBudget {
-  { clean, fill, retouch, seal }
+  { clean, fill, retouch, seal, }
 }
 
 ///|
 pub fn clone_budget(b : ToolBudget) -> ToolBudget {
-  { clean: b.clean, fill: b.fill, retouch: b.retouch, seal: b.seal }
+  { clean: b.clean, fill: b.fill, retouch: b.retouch, seal: b.seal, }
 }
 
 ///|
@@ -43,7 +43,7 @@ pub fn new_level(
   par_tools : Int,
 ) -> Level {
   let art = new_artwork(grid_cols, grid_rows, regions)
-  { tier, name, artwork: art, budget, par_tools }
+  { tier, name, artwork: art, budget, par_tools, }
 }
 
 ///|

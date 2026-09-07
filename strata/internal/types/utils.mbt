@@ -110,7 +110,7 @@ pub fn new_clue(
   param_b : Int,
   text : String,
 ) -> Clue {
-  { kind, param_a, param_b, text, satisfied: false }
+  { kind, param_a, param_b, text, satisfied: false, }
 }
 
 ///|
@@ -121,17 +121,17 @@ pub fn new_level(
   clues : Array[Clue],
   par_moves : Int,
 ) -> Level {
-  { tier, name, rocks, clues, par_moves }
+  { tier, name, rocks, clues, par_moves, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_moves: 999 }
+  { stars: 0, completed: false, best_moves: 999, }
 }
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }
@@ -158,15 +158,15 @@ pub fn new_game() -> Game {
 
 ///|
 pub fn save_undo(game : Game) -> Unit {
-  let snap_slots : Array[RockKind?] = Array::new(capacity=game.slots.length())
+  let snap_slots : Array[RockKind?] = Array(capacity=game.slots.length())
   for i in 0..<game.slots.length() {
     snap_slots.push(game.slots[i])
   }
-  let snap_tray : Array[RockKind] = Array::new(capacity=game.tray.length())
+  let snap_tray : Array[RockKind] = Array(capacity=game.tray.length())
   for i in 0..<game.tray.length() {
     snap_tray.push(game.tray[i])
   }
-  game.undo_stack.push({ slots: snap_slots, tray: snap_tray })
+  game.undo_stack.push({ slots: snap_slots, tray: snap_tray, })
 }
 
 ///|

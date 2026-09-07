@@ -61,7 +61,7 @@ pub fn parse_level(
         level.start_y = y
       } else if ch == 'G' {
         // Patrol guard
-        level.guards.push(@types.new_guard(x, y, Patrol, [{ x, y }]))
+        level.guards.push(@types.new_guard(x, y, Patrol, [{ x, y, }]))
         guard_id += 1
       } else if ch == 'N' {
         // Sentinel guard
@@ -69,7 +69,7 @@ pub fn parse_level(
         guard_id += 1
       } else if ch == 'U' {
         // Hunter guard
-        level.guards.push(@types.new_guard(x, y, Hunter, [{ x, y }]))
+        level.guards.push(@types.new_guard(x, y, Hunter, [{ x, y, }]))
         guard_id += 1
       } else if ch == 'C' {
         level.tiles[y][x] = CameraTile
@@ -122,7 +122,7 @@ fn setup_patrol_routes(level : @types.Level) -> Unit {
   for i in 0..<level.guards.length() {
     let g = level.guards[i]
     if g.kind is Patrol && g.patrol_points.length() <= 1 {
-      let route : Array[@types.Vec2i] = [{ x: g.gx, y: g.gy }]
+      let route : Array[@types.Vec2i] = [{ x: g.gx, y: g.gy, }]
       // Try to extend patrol in current row
       let mut cx = g.gx + 1
       while cx < @types.grid_width &&
@@ -131,7 +131,7 @@ fn setup_patrol_routes(level : @types.Level) -> Unit {
         match level.tiles[g.gy][cx] {
           Wall | Door | LaserGrid => break
           _ => {
-            route.push({ x: cx, y: g.gy })
+            route.push({ x: cx, y: g.gy, })
             cx += 1
           }
         }
@@ -145,7 +145,7 @@ fn setup_patrol_routes(level : @types.Level) -> Unit {
           match level.tiles[cy][g.gx] {
             Wall | Door | LaserGrid => break
             _ => {
-              route.push({ x: g.gx, y: cy })
+              route.push({ x: g.gx, y: cy, })
               cy += 1
             }
           }

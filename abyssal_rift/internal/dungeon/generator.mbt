@@ -288,7 +288,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     rooms[0].visited = true
   }
 
-  let floor : @types.Floor = { rooms, current_room: 0, floor_num }
+  let floor : @types.Floor = { rooms, current_room: 0, floor_num, }
   (floor, state)
 }
 

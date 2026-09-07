@@ -1,50 +1,50 @@
 ///|
 /// Generated candy fantasy backdrop texture.
-let tex_candy_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_candy_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated glossy 8x8 board panel texture.
-let tex_board_panel : Ref[@raylib.Texture?] = { val: None }
+let tex_board_panel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated red candy texture.
-let tex_candy_red : Ref[@raylib.Texture?] = { val: None }
+let tex_candy_red : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated orange candy texture.
-let tex_candy_orange : Ref[@raylib.Texture?] = { val: None }
+let tex_candy_orange : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated yellow candy texture.
-let tex_candy_yellow : Ref[@raylib.Texture?] = { val: None }
+let tex_candy_yellow : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated green candy texture.
-let tex_candy_green : Ref[@raylib.Texture?] = { val: None }
+let tex_candy_green : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated blue candy texture.
-let tex_candy_blue : Ref[@raylib.Texture?] = { val: None }
+let tex_candy_blue : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated purple candy texture.
-let tex_candy_purple : Ref[@raylib.Texture?] = { val: None }
+let tex_candy_purple : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated jelly tile overlay texture.
-let tex_jelly_overlay : Ref[@raylib.Texture?] = { val: None }
+let tex_jelly_overlay : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated row-clear special overlay texture.
-let tex_special_row : Ref[@raylib.Texture?] = { val: None }
+let tex_special_row : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated column-clear special overlay texture.
-let tex_special_col : Ref[@raylib.Texture?] = { val: None }
+let tex_special_col : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated bomb special overlay texture.
-let tex_special_bomb : Ref[@raylib.Texture?] = { val: None }
+let tex_special_bomb : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one bilinear-filtered Candy Crush 2026 texture.

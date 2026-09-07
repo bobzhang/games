@@ -105,6 +105,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Global mutable game state for jade temple defense.
 pub(all) struct Game {
   bells : Array[Bell]
@@ -203,13 +206,13 @@ pub fn Spark::Spark() -> Spark {
 ///|
 /// Creates an inactive ring effect record.
 pub fn Ring::Ring() -> Ring {
-  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
+  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0, }
 }
 
 ///|
 /// Creates an inactive echo effect record.
 pub fn Echo::Echo() -> Echo {
-  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0 }
+  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0, }
 }
 
 ///|
@@ -237,7 +240,7 @@ pub fn Hero::Hero() -> Hero {
 pub fn Game::Game() -> Game {
   let bells = Array::makei(bell_count, fn(i) {
     let p = bell_pos(i)
-    { x: p.0, y: p.1, cooldown: 0.0, glow: 0.0, charge: 1.0 }
+    { x: p.0, y: p.1, cooldown: 0.0, glow: 0.0, charge: 1.0, }
   })
 
   {

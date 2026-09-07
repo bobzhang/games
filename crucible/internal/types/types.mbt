@@ -3,7 +3,13 @@ pub(all) struct Reaction {
   input_element : Element
   current_substance : Element
   result : ReactionResult
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Reaction with Eq::{not_equal, equal}
+
+///|
+pub extend Reaction with Debug::{to_repr}
 
 ///|
 pub(all) struct Recipe {
@@ -11,7 +17,13 @@ pub(all) struct Recipe {
   input : Element
   substance : Element
   output : ReactionResult
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Recipe with Eq::{not_equal, equal}
+
+///|
+pub extend Recipe with Debug::{to_repr}
 
 ///|
 pub(all) struct ElementBudget {
@@ -21,7 +33,13 @@ pub(all) struct ElementBudget {
   mut air : Int
   mut light : Int
   mut shadow : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend ElementBudget with Eq::{not_equal, equal}
+
+///|
+pub extend ElementBudget with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -30,21 +48,39 @@ pub(all) struct Level {
   budget : ElementBudget
   par_steps : Int
   hint : String
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Level with Eq::{not_equal, equal}
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut best_steps : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend LevelScore with Eq::{not_equal, equal}
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct AnimState {
   mut timer : Float
   mut active : Bool
   mut kind : AnimKind
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend AnimState with Eq::{not_equal, equal}
+
+///|
+pub extend AnimState with Debug::{to_repr}
 
 ///|
 pub(all) enum AnimKind {
@@ -56,9 +92,18 @@ pub(all) enum AnimKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for AnimKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend AnimKind with Eq::{not_equal, equal}
+
+///|
+pub extend AnimKind with Debug::{to_repr}
+
+///|
+pub impl Show for AnimKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend AnimKind with Show::{to_string, output}
 
 ///|
 pub(all) struct Game {
@@ -85,4 +130,7 @@ pub(all) struct Game {
   mut add_anim_y : Float
   mut result_stars : Int
   mut result_steps : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

@@ -1,50 +1,50 @@
 ///|
 /// Generated arctic outpost backdrop texture.
-let tex_outpost_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_outpost_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated snowfield world texture.
-let tex_snowfield_texture : Ref[@raylib.Texture?] = { val: None }
+let tex_snowfield_texture : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated thermal core sprite texture.
-let tex_core_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_core_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player defender sprite texture.
-let tex_player_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_player_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated wolf enemy sprite texture.
-let tex_enemy_wolf : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_wolf : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated brute enemy sprite texture.
-let tex_enemy_brute : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_brute : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated shard enemy sprite texture.
-let tex_enemy_shard : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_shard : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated fuel pickup sprite texture.
-let tex_pickup_fuel : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_fuel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated medkit pickup sprite texture.
-let tex_pickup_medkit : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_medkit : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated ammo pickup sprite texture.
-let tex_pickup_ammo : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_ammo : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated overdrive pickup sprite texture.
-let tex_pickup_overdrive : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_overdrive : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated projectile sprite texture.
-let tex_projectile_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_projectile_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated arctic outpost texture.

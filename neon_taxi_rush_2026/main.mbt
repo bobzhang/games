@@ -543,7 +543,7 @@ fn main {
   })
 
   let fuels : Array[FuelPickup] = Array::makei(max_fuels, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, amount: 0.0, t: 0.0, life: 0.0 }
+    { active: false, x: 0.0, y: 0.0, amount: 0.0, t: 0.0, life: 0.0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {
@@ -561,7 +561,7 @@ fn main {
   })
 
   let markers : Array[Marker] = Array::makei(max_markers, fn(_i) {
-    { x: 0.0, y: 0.0 }
+    { x: 0.0, y: 0.0, }
   })
 
   let marker_count = setup_markers(markers)

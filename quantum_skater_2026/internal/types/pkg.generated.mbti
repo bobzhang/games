@@ -146,6 +146,8 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) enum ObjKind {
   Wall
@@ -155,6 +157,8 @@ pub(all) enum ObjKind {
   Boost
   JumpBar
 } derive(Eq)
+pub fn ObjKind::equal(Self, Self) -> Bool
+pub fn ObjKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -209,4 +213,3 @@ pub fn Trail::Trail() -> Self
 // Type aliases
 
 // Traits
-

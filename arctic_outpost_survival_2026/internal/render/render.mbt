@@ -286,15 +286,33 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
         Wolf => {
           @raylib.draw_circle(x, y, enemy.r, c0)
           @raylib.draw_triangle(
-            @raylib.Vector2::new(Float::from_int(x - 10), Float::from_int(y - 8)),
-            @raylib.Vector2::new(Float::from_int(x - 18), Float::from_int(y - 22)),
-            @raylib.Vector2::new(Float::from_int(x - 2), Float::from_int(y - 18)),
+            @raylib.Vector2::new(
+              Float::from_int(x - 10),
+              Float::from_int(y - 8),
+            ),
+            @raylib.Vector2::new(
+              Float::from_int(x - 18),
+              Float::from_int(y - 22),
+            ),
+            @raylib.Vector2::new(
+              Float::from_int(x - 2),
+              Float::from_int(y - 18),
+            ),
             @raylib.Color::new(206, 232, 248, 238),
           )
           @raylib.draw_triangle(
-            @raylib.Vector2::new(Float::from_int(x + 10), Float::from_int(y - 8)),
-            @raylib.Vector2::new(Float::from_int(x + 2), Float::from_int(y - 22)),
-            @raylib.Vector2::new(Float::from_int(x + 18), Float::from_int(y - 18)),
+            @raylib.Vector2::new(
+              Float::from_int(x + 10),
+              Float::from_int(y - 8),
+            ),
+            @raylib.Vector2::new(
+              Float::from_int(x + 2),
+              Float::from_int(y - 22),
+            ),
+            @raylib.Vector2::new(
+              Float::from_int(x + 18),
+              Float::from_int(y - 18),
+            ),
             @raylib.Color::new(206, 232, 248, 238),
           )
         }
@@ -323,12 +341,16 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
             @raylib.draw_triangle(
               @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
               @raylib.Vector2::new(
-                (enemy.x + @math.cosf(a1) * (r + 8.0)).to_int() |> Float::from_int,
-                (enemy.y + @math.sinf(a1) * (r + 8.0)).to_int() |> Float::from_int,
+                (enemy.x + @math.cosf(a1) * (r + 8.0)).to_int()
+                |> Float::from_int,
+                (enemy.y + @math.sinf(a1) * (r + 8.0)).to_int()
+                |> Float::from_int,
               ),
               @raylib.Vector2::new(
-                (enemy.x + @math.cosf(a2) * (r + 8.0)).to_int() |> Float::from_int,
-                (enemy.y + @math.sinf(a2) * (r + 8.0)).to_int() |> Float::from_int,
+                (enemy.x + @math.cosf(a2) * (r + 8.0)).to_int()
+                |> Float::from_int,
+                (enemy.y + @math.sinf(a2) * (r + 8.0)).to_int()
+                |> Float::from_int,
               ),
               c0,
             )
@@ -410,7 +432,11 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
         Float::from_int(y),
         rr * 3.2,
         rr * 3.0,
-        if p.kind == Overdrive { p.phase * 18.0 } else { 0.0 },
+        if p.kind == Overdrive {
+          p.phase * 18.0
+        } else {
+          0.0
+        },
         @raylib.white,
       )
     }
@@ -482,8 +508,16 @@ fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
         texture,
         Float::from_int(b.x.to_int() + ox),
         Float::from_int(b.y.to_int() + oy),
-        if b.kind == Pierce { 36.0 } else { 25.0 },
-        if b.kind == Pierce { 13.0 } else { 9.0 },
+        if b.kind == Pierce {
+          36.0
+        } else {
+          25.0
+        },
+        if b.kind == Pierce {
+          13.0
+        } else {
+          9.0
+        },
         angle,
         c,
       )

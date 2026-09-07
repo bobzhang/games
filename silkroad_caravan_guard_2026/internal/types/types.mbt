@@ -141,7 +141,7 @@ pub fn Raider::Raider() -> Raider {
 ///|
 /// Creates a default Bullet value for a new session.
 pub fn Bullet::Bullet() -> Bullet {
-  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, life: 0.0, dmg: 0.0 }
+  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, life: 0.0, dmg: 0.0, }
 }
 
 ///|

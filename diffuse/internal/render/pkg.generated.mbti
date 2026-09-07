@@ -29,4 +29,3 @@ pub fn draw_ui(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

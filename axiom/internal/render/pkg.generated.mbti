@@ -25,4 +25,3 @@ pub fn draw_stars(Int, Int, Int) -> Unit
 // Type aliases
 
 // Traits
-

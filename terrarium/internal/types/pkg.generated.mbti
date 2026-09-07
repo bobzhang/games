@@ -180,6 +180,12 @@ pub(all) enum CellContent {
   Empty
   Organism(OrganismKind)
 } derive(Eq, ToJson, @debug.Debug)
+pub fn CellContent::equal(Self, Self) -> Bool
+pub fn CellContent::not_equal(Self, Self) -> Bool
+pub fn CellContent::output(Self, &Logger) -> Unit
+pub fn CellContent::to_json(Self) -> Json
+pub fn CellContent::to_repr(Self) -> @debug.Repr
+pub fn CellContent::to_string(Self) -> String
 pub impl Show for CellContent
 
 pub(all) struct Game {
@@ -202,7 +208,8 @@ pub(all) struct Game {
   mut sim_speed_timer : Float
   mut organisms_placed : Array[Int]
   mut anim_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelDef {
   id : Int
@@ -214,13 +221,15 @@ pub(all) struct LevelDef {
   organism_counts : Array[Int]
   par_turns : Int
   locked_cells : Array[(Int, Int)]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_turns_survived : Int
   mut stars : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum OrganismKind {
   Moss
@@ -230,6 +239,12 @@ pub(all) enum OrganismKind {
   Fungus
   Worm
 } derive(Eq, ToJson, @debug.Debug)
+pub fn OrganismKind::equal(Self, Self) -> Bool
+pub fn OrganismKind::not_equal(Self, Self) -> Bool
+pub fn OrganismKind::output(Self, &Logger) -> Unit
+pub fn OrganismKind::to_json(Self) -> Json
+pub fn OrganismKind::to_repr(Self) -> @debug.Repr
+pub fn OrganismKind::to_string(Self) -> String
 pub impl Show for OrganismKind
 
 pub(all) struct OrganismProfile {
@@ -244,7 +259,8 @@ pub(all) struct OrganismProfile {
   min_o2 : Float
   min_co2 : Float
   min_nutrients : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn OrganismProfile::to_repr(Self) -> @debug.Repr
 
 pub(all) struct OrganismState {
   kind : OrganismKind
@@ -252,13 +268,20 @@ pub(all) struct OrganismState {
   col : Int
   mut alive : Bool
   mut health : Float
-} derive(Show, ToJson)
+} derive(ToJson, @debug.Debug)
+pub fn OrganismState::to_json(Self) -> Json
+pub fn OrganismState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayResult {
   None
   Victory
   Failure(String)
 } derive(Eq, @debug.Debug)
+pub fn PlayResult::equal(Self, Self) -> Bool
+pub fn PlayResult::not_equal(Self, Self) -> Bool
+pub fn PlayResult::output(Self, &Logger) -> Unit
+pub fn PlayResult::to_repr(Self) -> @debug.Repr
+pub fn PlayResult::to_string(Self) -> String
 pub impl Show for PlayResult
 
 pub(all) enum ResourceKind {
@@ -267,6 +290,12 @@ pub(all) enum ResourceKind {
   Water
   Nutrients
 } derive(Eq, ToJson, @debug.Debug)
+pub fn ResourceKind::equal(Self, Self) -> Bool
+pub fn ResourceKind::not_equal(Self, Self) -> Bool
+pub fn ResourceKind::output(Self, &Logger) -> Unit
+pub fn ResourceKind::to_json(Self) -> Json
+pub fn ResourceKind::to_repr(Self) -> @debug.Repr
+pub fn ResourceKind::to_string(Self) -> String
 pub impl Show for ResourceKind
 
 pub(all) struct Resources {
@@ -274,7 +303,9 @@ pub(all) struct Resources {
   mut co2 : Float
   mut water : Float
   mut nutrients : Float
-} derive(Show, ToJson)
+} derive(ToJson, @debug.Debug)
+pub fn Resources::to_json(Self) -> Json
+pub fn Resources::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -283,6 +314,11 @@ pub(all) enum Screen {
   Simulating
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct SimTurnLog {
@@ -290,16 +326,21 @@ pub(all) struct SimTurnLog {
   events : Array[String]
   resources_after : Resources
   organisms_alive : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn SimTurnLog::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tier {
   Beginner
   Intermediate
   Advanced
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 // Type aliases
 
 // Traits
-

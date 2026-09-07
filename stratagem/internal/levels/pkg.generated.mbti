@@ -21,4 +21,3 @@ pub fn skirmish_map_name(Int) -> String
 // Type aliases
 
 // Traits
-

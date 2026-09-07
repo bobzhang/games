@@ -37,4 +37,3 @@ pub fn preview_force(@types.Grid, @types.ForceKind) -> Array[Bool]
 // Type aliases
 
 // Traits
-

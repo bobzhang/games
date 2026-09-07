@@ -348,13 +348,13 @@ fn main {
   defer unload_game_art(art)
 
   let enemies : Array[Enemy] = Array::makei(max_enemies, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 0, kind: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 0, kind: 0, active: false, }
   })
   let shots : Array[Shot] = Array::makei(max_shots, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, ttl: 0.0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, ttl: 0.0, active: false, }
   })
   let parts : Array[Part] = Array::makei(max_parts, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false, }
   })
 
   clear_enemies(enemies)

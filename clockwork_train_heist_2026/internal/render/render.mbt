@@ -82,7 +82,7 @@ fn @types.Game::draw_tile_map(
       let cf : Float = Float::from_int(@types.cell)
 
       match t {
-        Wall => {
+        Wall =>
           draw_texture_rect(
             art.wall_panel,
             xf,
@@ -91,9 +91,15 @@ fn @types.Game::draw_tile_map(
             cf,
             @raylib.Color::new(214, 220, 230, 244),
           )
-        }
         Door => {
-          draw_texture_rect(art.floor_panel, xf, yf, cf, cf, @raylib.Color::new(190, 210, 230, 194))
+          draw_texture_rect(
+            art.floor_panel,
+            xf,
+            yf,
+            cf,
+            cf,
+            @raylib.Color::new(190, 210, 230, 194),
+          )
           @raylib.draw_rectangle(
             rx,
             ry,
@@ -152,7 +158,7 @@ fn @types.Game::draw_tile_map(
             )
           }
         }
-        Floor => {
+        Floor =>
           draw_texture_rect(
             art.floor_panel,
             xf,
@@ -165,7 +171,6 @@ fn @types.Game::draw_tile_map(
               @raylib.Color::new(204, 218, 234, 228)
             },
           )
-        }
       }
 
       @raylib.draw_rectangle_lines(
@@ -292,12 +297,7 @@ fn @types.Game::draw_smokes(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws a single guard sprite at its interpolated position, coloring it by mode (patrol, hunt, stunned).
-fn draw_guard(
-  g : @types.Guard,
-  art : GameArt,
-  ox : Int,
-  oy : Int,
-) -> Unit {
+fn draw_guard(g : @types.Guard, art : GameArt, ox : Int, oy : Int) -> Unit {
   if !g.active {
     return
   }
@@ -311,7 +311,12 @@ fn draw_guard(
     Patrol => guard_base_color(g.color_id)
   }
 
-  @raylib.draw_circle(cx, cy - 1, 25.0, @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 68))
+  @raylib.draw_circle(
+    cx,
+    cy - 1,
+    25.0,
+    @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 68),
+  )
   draw_texture_fit_centered(
     art.guard_sprite,
     Float::from_int(cx),

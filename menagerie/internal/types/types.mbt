@@ -4,14 +4,20 @@ pub(all) struct Cell {
   mut fence_top : Bool
   mut fence_left : Bool
   mut animal : Species?
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Cell with Debug::{to_repr}
 
 ///|
 pub(all) struct Grid {
   cells : Array[Array[Cell]]
   cols : Int
   rows : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Grid with Debug::{to_repr}
 
 ///|
 pub fn Grid::new(cols : Int, rows : Int) -> Grid {
@@ -28,7 +34,7 @@ pub fn Grid::new(cols : Int, rows : Int) -> Grid {
     }
     cells.push(row)
   }
-  { cells, cols, rows }
+  { cells, cols, rows, }
 }
 
 ///|
@@ -100,7 +106,10 @@ pub(all) struct Enclosure {
   id : Int
   cells : Array[(Int, Int)]
   mut species : Species?
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Enclosure with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelDef {
@@ -112,7 +121,10 @@ pub(all) struct LevelDef {
   description : String
   preset_terrain : Array[(Int, Int, Terrain)]
   preset_fences : Array[(Int, Int, Bool, Bool)]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelResult {
@@ -122,14 +134,17 @@ pub(all) struct LevelResult {
   mut par_tiles : Int
   mut bonus_met : Bool
   mut messages : Array[String]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelResult with Debug::{to_repr}
 
 ///|
 pub(all) struct ToolSlot {
   tool : Tool
   label : String
   color : @raylib.Color
-} derive(Show)
+}
 
 ///|
 pub(all) struct Game {
@@ -152,7 +167,10 @@ pub(all) struct Game {
   mut levels_completed : Int
   mut level_select_scroll : Int
   mut show_needs_panel : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}
 
 ///|
 pub(all) enum FenceMode {
@@ -161,6 +179,31 @@ pub(all) enum FenceMode {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for FenceMode with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend FenceMode with Eq::{not_equal, equal}
+
+///|
+pub extend FenceMode with Debug::{to_repr}
+
+///|
+pub impl Show for FenceMode with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend FenceMode with Show::{to_string, output}
+
+///|
+/// `@raylib.Color` has no `Debug` impl, so `ToolSlot` cannot derive one.
+/// Render the color as its `(r, g, b, a)` channels instead.
+pub impl Debug for ToolSlot with fn to_repr(self) {
+  Repr(
+    (
+      self.tool,
+      self.label,
+      (self.color.r, self.color.g, self.color.b, self.color.a),
+    ),
+  )
+}
+
+///|
+pub extend ToolSlot with Debug::{to_repr}

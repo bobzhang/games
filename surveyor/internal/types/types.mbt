@@ -2,7 +2,19 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show, Compare, Hash)
+} derive(Eq, Debug, Compare, Hash)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
+
+///|
+pub extend Vec2i with Compare::{op_lt, op_le, op_ge, compare, op_gt}
+
+///|
+pub extend Vec2i with Hash::{hash, hash_combine}
 
 ///|
 pub(all) struct Grid {
@@ -23,7 +35,13 @@ pub(all) struct FenceEdge {
   row : Int
   col : Int
   orient : Orientation
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend FenceEdge with Eq::{not_equal, equal}
+
+///|
+pub extend FenceEdge with Debug::{to_repr}
 
 ///|
 pub(all) struct Region {

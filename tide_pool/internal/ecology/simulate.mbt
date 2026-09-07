@@ -55,7 +55,7 @@ pub fn check_victory(game : @types.Game) -> @types.PlayResult {
           let p = @types.get_profile(level.target_species[i])
           target_names.push(p.name)
         }
-        return Failure("Target species died: \{target_names}")
+        return Failure("Target species died: \{target_names.join(", ")}")
       }
       if game.current_cycle >= @types.total_cycles {
         return Victory

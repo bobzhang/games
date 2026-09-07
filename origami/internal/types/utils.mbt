@@ -1,26 +1,26 @@
 ///|
 pub fn new_cell(has_paper : Bool, layers : Int) -> PaperCell {
-  { has_paper, layers }
+  { has_paper, layers, }
 }
 
 ///|
 pub fn new_paper(width : Int, height : Int) -> Paper {
-  let cells : Array[PaperCell] = Array::new(capacity=width * height)
+  let cells : Array[PaperCell] = Array(capacity=width * height)
   let total = width * height
   for _i in 0..<total {
-    cells.push({ has_paper: false, layers: 0 })
+    cells.push({ has_paper: false, layers: 0, })
   }
-  { width, height, cells }
+  { width, height, cells, }
 }
 
 ///|
 pub fn full_paper(width : Int, height : Int) -> Paper {
-  let cells : Array[PaperCell] = Array::new(capacity=width * height)
+  let cells : Array[PaperCell] = Array(capacity=width * height)
   let total = width * height
   for _i in 0..<total {
-    cells.push({ has_paper: true, layers: 1 })
+    cells.push({ has_paper: true, layers: 1, })
   }
-  { width, height, cells }
+  { width, height, cells, }
 }
 
 ///|
@@ -28,7 +28,7 @@ pub fn get_cell(paper : Paper, x : Int, y : Int) -> PaperCell {
   if x >= 0 && x < paper.width && y >= 0 && y < paper.height {
     paper.cells[y * paper.width + x]
   } else {
-    { has_paper: false, layers: 0 }
+    { has_paper: false, layers: 0, }
   }
 }
 
@@ -49,14 +49,14 @@ pub fn set_cell(
 
 ///|
 pub fn clone_paper(paper : Paper) -> Paper {
-  let cells : Array[PaperCell] = Array::new(capacity=paper.width * paper.height)
+  let cells : Array[PaperCell] = Array(capacity=paper.width * paper.height)
   for i in 0..<paper.cells.length() {
     cells.push({
       has_paper: paper.cells[i].has_paper,
       layers: paper.cells[i].layers,
     })
   }
-  { width: paper.width, height: paper.height, cells }
+  { width: paper.width, height: paper.height, cells, }
 }
 
 ///|
@@ -135,7 +135,7 @@ pub fn make_rect_paper(
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: Zero, folds_used: 0 }
+  { completed: false, stars: Zero, folds_used: 0, }
 }
 
 ///|
@@ -214,7 +214,7 @@ pub fn clamp_int(v : Int, lo : Int, hi : Int) -> Int {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

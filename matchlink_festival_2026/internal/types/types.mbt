@@ -9,6 +9,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Directional input used for cursor movement repeat logic.
 pub(all) enum Direction {
   DirNone
@@ -17,6 +20,9 @@ pub(all) enum Direction {
   Up
   Down
 } derive(Eq)
+
+///|
+pub extend Direction with Eq::{not_equal, equal}
 
 ///|
 /// Polyline result for a valid tile link path (up to 4 points).

@@ -142,14 +142,14 @@ pub fn ray_toggle_top(
   for y in 0..<g.size {
     if !get_voxel(g, x, y, z) {
       set_voxel(g, x, y, z, true)
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   // All filled, remove the last one (from top)
   for y = g.size - 1; y >= 0; y = y - 1 {
     if get_voxel(g, x, y, z) {
       set_voxel(g, x, y, z, false)
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   None
@@ -170,14 +170,14 @@ pub fn ray_toggle_front(
   for z in 0..<g.size {
     if !get_voxel(g, x, y, z) {
       set_voxel(g, x, y, z, true)
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   // All filled, remove the last one
   for z = g.size - 1; z >= 0; z = z - 1 {
     if get_voxel(g, x, y, z) {
       set_voxel(g, x, y, z, false)
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   None
@@ -198,14 +198,14 @@ pub fn ray_toggle_side(
   for x in 0..<g.size {
     if !get_voxel(g, x, y, z) {
       set_voxel(g, x, y, z, true)
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   // All filled, remove the last one
   for x = g.size - 1; x >= 0; x = x - 1 {
     if get_voxel(g, x, y, z) {
       set_voxel(g, x, y, z, false)
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   None
@@ -237,12 +237,12 @@ pub fn ray_preview_top(
   let z = row
   for y in 0..<g.size {
     if !get_voxel(g, x, y, z) {
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   for y = g.size - 1; y >= 0; y = y - 1 {
     if get_voxel(g, x, y, z) {
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   None
@@ -258,12 +258,12 @@ pub fn ray_preview_front(
   let y = g.size - 1 - row
   for z in 0..<g.size {
     if !get_voxel(g, x, y, z) {
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   for z = g.size - 1; z >= 0; z = z - 1 {
     if get_voxel(g, x, y, z) {
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   None
@@ -279,12 +279,12 @@ pub fn ray_preview_side(
   let y = g.size - 1 - row
   for x in 0..<g.size {
     if !get_voxel(g, x, y, z) {
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   for x = g.size - 1; x >= 0; x = x - 1 {
     if get_voxel(g, x, y, z) {
-      return Some({ x, y, z })
+      return Some({ x, y, z, })
     }
   }
   None
@@ -332,12 +332,12 @@ pub fn check_connected(g : @types.VoxelGrid) -> Bool {
     let pos = @types.idx_to_xyz(idx, g.size)
     // Check 6 orthogonal neighbors
     let neighbors : Array[@types.Vec3i] = [
-      { x: pos.x - 1, y: pos.y, z: pos.z },
-      { x: pos.x + 1, y: pos.y, z: pos.z },
-      { x: pos.x, y: pos.y - 1, z: pos.z },
-      { x: pos.x, y: pos.y + 1, z: pos.z },
-      { x: pos.x, y: pos.y, z: pos.z - 1 },
-      { x: pos.x, y: pos.y, z: pos.z + 1 },
+      { x: pos.x - 1, y: pos.y, z: pos.z, },
+      { x: pos.x + 1, y: pos.y, z: pos.z, },
+      { x: pos.x, y: pos.y - 1, z: pos.z, },
+      { x: pos.x, y: pos.y + 1, z: pos.z, },
+      { x: pos.x, y: pos.y, z: pos.z - 1, },
+      { x: pos.x, y: pos.y, z: pos.z + 1, },
     ]
     for i in 0..<neighbors.length() {
       let n = neighbors[i]

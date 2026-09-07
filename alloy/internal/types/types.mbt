@@ -4,21 +4,33 @@ pub(all) struct MetalProps {
   hardness : Float
   flexibility : Float
   conductivity : Float
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub extend MetalProps with Debug::{to_repr}
+
+///|
+pub extend MetalProps with Eq::{not_equal, equal}
 
 ///|
 /// An ingredient added to the crucible
 pub(all) struct Ingredient {
   metal : MetalKind
   mut amount : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Ingredient with Debug::{to_repr}
 
 ///|
 /// A range for one property in a target alloy
 pub(all) struct PropertyRange {
   min : Float
   max : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PropertyRange with Debug::{to_repr}
 
 ///|
 /// Target alloy requirements
@@ -26,7 +38,10 @@ pub(all) struct TargetAlloy {
   hardness : PropertyRange
   flexibility : PropertyRange
   conductivity : PropertyRange
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend TargetAlloy with Debug::{to_repr}
 
 ///|
 /// Result of blending
@@ -34,7 +49,13 @@ pub(all) struct BlendResult {
   hardness : Float
   flexibility : Float
   conductivity : Float
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub extend BlendResult with Debug::{to_repr}
+
+///|
+pub extend BlendResult with Eq::{not_equal, equal}
 
 ///|
 /// A level definition
@@ -46,7 +67,10 @@ pub(all) struct LevelDef {
   target : TargetAlloy
   par_ingredients : Int
   hint : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 /// Scoring result
@@ -55,14 +79,20 @@ pub(all) struct LevelResult {
   mut ingredients_used : Int
   mut blend : BlendResult
   mut all_in_range : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelResult with Debug::{to_repr}
 
 ///|
 /// Progress for a single level
 pub(all) struct LevelProgress {
   mut best_stars : StarRating
   mut completed : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelProgress with Debug::{to_repr}
 
 ///|
 /// Main game state

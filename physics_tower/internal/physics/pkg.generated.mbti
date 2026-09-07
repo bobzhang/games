@@ -47,4 +47,3 @@ pub fn stop_wind(@types.World) -> Unit
 // Type aliases
 
 // Traits
-

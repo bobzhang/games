@@ -9,9 +9,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum Player {
@@ -20,9 +29,18 @@ pub(all) enum Player {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Player with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Player with Eq::{not_equal, equal}
+
+///|
+pub extend Player with Debug::{to_repr}
+
+///|
+pub impl Show for Player with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Player with Show::{to_string, output}
 
 ///|
 pub(all) enum CellState {
@@ -31,9 +49,18 @@ pub(all) enum CellState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CellState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CellState with Eq::{not_equal, equal}
+
+///|
+pub extend CellState with Debug::{to_repr}
+
+///|
+pub impl Show for CellState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CellState with Show::{to_string, output}
 
 ///|
 pub(all) enum PatternKind {
@@ -48,9 +75,18 @@ pub(all) enum PatternKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PatternKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PatternKind with Eq::{not_equal, equal}
+
+///|
+pub extend PatternKind with Debug::{to_repr}
+
+///|
+pub impl Show for PatternKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PatternKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Difficulty {
@@ -60,9 +96,18 @@ pub(all) enum Difficulty {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Difficulty with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Difficulty with Eq::{not_equal, equal}
+
+///|
+pub extend Difficulty with Debug::{to_repr}
+
+///|
+pub impl Show for Difficulty with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Difficulty with Show::{to_string, output}
 
 ///|
 pub(all) enum GameMode {
@@ -72,9 +117,18 @@ pub(all) enum GameMode {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for GameMode with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend GameMode with Eq::{not_equal, equal}
+
+///|
+pub extend GameMode with Debug::{to_repr}
+
+///|
+pub impl Show for GameMode with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend GameMode with Show::{to_string, output}
 
 ///|
 pub(all) enum PlayState {
@@ -85,6 +139,15 @@ pub(all) enum PlayState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PlayState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PlayState with Eq::{not_equal, equal}
+
+///|
+pub extend PlayState with Debug::{to_repr}
+
+///|
+pub impl Show for PlayState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PlayState with Show::{to_string, output}

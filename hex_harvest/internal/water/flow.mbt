@@ -32,7 +32,7 @@ pub fn flow_water(grid : @types.HexGrid) -> Array[@types.HexCoord] {
       let target_tile = grid.tiles[tr][tc]
       if !target_tile.watered {
         target_tile.watered = true
-        newly_watered.push({ col: tc, row: tr })
+        newly_watered.push({ col: tc, row: tr, })
       }
     }
   }
@@ -60,7 +60,7 @@ pub fn preview_water_flow(grid : @types.HexGrid) -> Array[@types.HexCoord] {
               }
             }
             if !found {
-              preview.push({ col: tc, row: tr })
+              preview.push({ col: tc, row: tr, })
             }
           }
         }

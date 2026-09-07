@@ -128,6 +128,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) enum Grade {
   GradeS
@@ -136,11 +138,15 @@ pub(all) enum Grade {
   GradeC
   GradeD
 } derive(Eq)
+pub fn Grade::equal(Self, Self) -> Bool
+pub fn Grade::not_equal(Self, Self) -> Bool
 
 pub(all) enum PlayMode {
   Reveal
   Flag
 } derive(Eq)
+pub fn PlayMode::equal(Self, Self) -> Bool
+pub fn PlayMode::not_equal(Self, Self) -> Bool
 
 pub(all) struct Spark {
   mut active : Bool
@@ -157,4 +163,3 @@ pub fn Spark::Spark() -> Self
 // Type aliases
 
 // Traits
-

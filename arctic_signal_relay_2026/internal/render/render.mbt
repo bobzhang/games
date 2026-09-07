@@ -222,7 +222,12 @@ fn @types.Game::draw_towers(game : @types.Game) -> Unit {
         )
       }
       None => {
-        @raylib.draw_circle(x, y, @types.tower_hit_r() + 3.0, col_a(base_col, 204))
+        @raylib.draw_circle(
+          x,
+          y,
+          @types.tower_hit_r() + 3.0,
+          col_a(base_col, 204),
+        )
         @raylib.draw_circle(
           x,
           y,

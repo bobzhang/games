@@ -25,4 +25,3 @@ pub fn is_level_complete(@types.Artwork) -> Bool
 // Type aliases
 
 // Traits
-

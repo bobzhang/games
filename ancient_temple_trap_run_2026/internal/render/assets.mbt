@@ -1,29 +1,29 @@
 ///|
-let tex_title : Ref[@raylib.Texture?] = { val: None }
+let tex_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_player : Ref[@raylib.Texture?] = { val: None }
+let tex_player : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_relic : Ref[@raylib.Texture?] = { val: None }
+let tex_relic : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_spike_trap : Ref[@raylib.Texture?] = { val: None }
+let tex_spike_trap : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_dart_trap : Ref[@raylib.Texture?] = { val: None }
+let tex_dart_trap : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_lava_hazard : Ref[@raylib.Texture?] = { val: None }
+let tex_lava_hazard : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_pressure_plate : Ref[@raylib.Texture?] = { val: None }
+let tex_pressure_plate : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_stone_door : Ref[@raylib.Texture?] = { val: None }
+let tex_stone_door : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_exit_gate : Ref[@raylib.Texture?] = { val: None }
+let tex_exit_gate : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {

@@ -1,14 +1,14 @@
 ///|
 /// Generated hotpot restaurant backdrop texture.
-let tex_restaurant_background : Ref[@raylib.Texture?] = { val: None }
+let tex_restaurant_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated station counter tile texture.
-let tex_station_counter_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_station_counter_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated station icon sheet texture.
-let tex_station_icons : Ref[@raylib.Texture?] = { val: None }
+let tex_station_icons : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Hotpot Empire Rush texture.

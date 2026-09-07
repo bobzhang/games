@@ -116,6 +116,8 @@ pub(all) enum GameState {
   Paused
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Input {
   mut axis_dx : Int
@@ -138,4 +140,3 @@ pub fn Pose::Pose(Int, Int) -> Self
 // Type aliases
 
 // Traits
-

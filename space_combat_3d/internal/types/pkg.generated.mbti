@@ -496,6 +496,8 @@ pub(all) enum AiState {
   OvershootRecover
   PincerFlank
 } derive(Eq)
+pub fn AiState::equal(Self, Self) -> Bool
+pub fn AiState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Asteroid {
   mut active : Bool
@@ -589,6 +591,8 @@ pub(all) enum Formation {
   Circle
   Wedge
 } derive(Eq)
+pub fn Formation::equal(Self, Self) -> Bool
+pub fn Formation::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   mut state : GameState
@@ -666,7 +670,9 @@ pub(all) enum GameState {
   StateMissionSelect
   StateLoadout
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
 pub fn GameState::from_int(Int) -> Self
+pub fn GameState::not_equal(Self, Self) -> Bool
 pub fn GameState::to_int(Self) -> Int
 
 pub(all) struct KillFeedEntry {
@@ -698,6 +704,8 @@ pub(all) enum Objective {
   Survive
   DestroyCount
 } derive(Eq)
+pub fn Objective::equal(Self, Self) -> Bool
+pub fn Objective::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -784,6 +792,8 @@ pub(all) enum PowerupKind {
   WeaponBoost
   SpeedBoost
 } derive(Eq)
+pub fn PowerupKind::equal(Self, Self) -> Bool
+pub fn PowerupKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Projectile {
   mut active : Bool
@@ -811,6 +821,8 @@ pub(all) enum ShipKind {
   Cruiser
   CapitalShip
 } derive(Eq)
+pub fn ShipKind::equal(Self, Self) -> Bool
+pub fn ShipKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct ShockRing {
   mut active : Bool
@@ -856,8 +868,9 @@ pub(all) enum WeaponKind {
   Plasma
   Railgun
 } derive(Eq)
+pub fn WeaponKind::equal(Self, Self) -> Bool
+pub fn WeaponKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

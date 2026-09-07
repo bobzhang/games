@@ -25,4 +25,3 @@ pub fn match_hull_to_target(Array[@types.Point], @types.Polygon) -> Float
 // Type aliases
 
 // Traits
-

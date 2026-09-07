@@ -193,7 +193,7 @@ pub fn find_enemy_at(enemies : Array[Enemy], x : Int, y : Int) -> Int {
 
 ///|
 pub fn game_rng(game : Game) -> Ref[Int] {
-  let r : Ref[Int] = { val: game.rng_state }
+  let r : Ref[Int] = { val: game.rng_state, }
   r
 }
 
@@ -492,13 +492,13 @@ pub fn sin_approx(angle : Float) -> Float {
 ///|
 pub fn weapon_data(kind : WeaponKind) -> Weapon {
   match kind {
-    Sword => { kind: Sword, damage: 2, range: 1, beat_cost: 1, name: "Sword" }
-    Spear => { kind: Spear, damage: 2, range: 2, beat_cost: 1, name: "Spear" }
-    Whip => { kind: Whip, damage: 1, range: 1, beat_cost: 1, name: "Whip" }
+    Sword => { kind: Sword, damage: 2, range: 1, beat_cost: 1, name: "Sword", }
+    Spear => { kind: Spear, damage: 2, range: 2, beat_cost: 1, name: "Spear", }
+    Whip => { kind: Whip, damage: 1, range: 1, beat_cost: 1, name: "Whip", }
     Hammer =>
-      { kind: Hammer, damage: 4, range: 1, beat_cost: 2, name: "Hammer" }
-    Bow => { kind: Bow, damage: 2, range: 3, beat_cost: 1, name: "Bow" }
-    Staff => { kind: Staff, damage: 1, range: 1, beat_cost: 3, name: "Staff" }
+      { kind: Hammer, damage: 4, range: 1, beat_cost: 2, name: "Hammer", }
+    Bow => { kind: Bow, damage: 2, range: 3, beat_cost: 1, name: "Bow", }
+    Staff => { kind: Staff, damage: 1, range: 1, beat_cost: 3, name: "Staff", }
   }
 }
 
@@ -594,7 +594,7 @@ pub fn has_ability(player : Player, kind : AbilityKind) -> Bool {
 
 ///|
 pub fn make_ability_choice(kind : AbilityKind) -> AbilityChoice {
-  { ability: kind, name: ability_name(kind), desc: ability_desc(kind) }
+  { ability: kind, name: ability_name(kind), desc: ability_desc(kind), }
 }
 
 // === Floor Theme System ===
@@ -1125,7 +1125,7 @@ pub fn check_achievement(
   for a in state.achievements {
     if a.kind == kind && !a.unlocked {
       a.unlocked = true
-      state.toasts.push({ text: "Achievement: " + a.name, timer: 3.0 })
+      state.toasts.push({ text: "Achievement: " + a.name, timer: 3.0, })
       return true
     }
   }

@@ -2,7 +2,13 @@
 pub(all) struct HexCoord {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend HexCoord with Eq::{not_equal, equal}
+
+///|
+pub extend HexCoord with Debug::{to_repr}
 
 ///|
 pub(all) struct HexTile {
@@ -13,26 +19,38 @@ pub(all) struct HexTile {
   mut crop_state : CropState
   mut crop_turns : Int
   mut has_channel : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HexTile with Debug::{to_repr}
 
 ///|
 pub(all) struct HexGrid {
   width : Int
   height : Int
   tiles : Array[Array[HexTile]]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HexGrid with Debug::{to_repr}
 
 ///|
 pub(all) struct WaterSource {
   col : Int
   row : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend WaterSource with Debug::{to_repr}
 
 ///|
 pub(all) struct GoalPos {
   col : Int
   row : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend GoalPos with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -44,7 +62,10 @@ pub(all) struct Level {
   mut par_turns : Int
   mut name : String
   mut world : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -56,7 +77,10 @@ pub(all) struct LevelScore {
   mut goals_collected : Int
   mut total_goals : Int
   mut stars : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct UndoState {
@@ -64,7 +88,10 @@ pub(all) struct UndoState {
   mut turn : Int
   mut yield_collected : Int
   mut goals_collected : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend UndoState with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -99,4 +126,7 @@ pub(all) struct Game {
   mut click_feedback_timer : Float
   mut click_feedback_col : Int
   mut click_feedback_row : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

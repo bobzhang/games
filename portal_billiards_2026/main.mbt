@@ -84,7 +84,7 @@ fn set_ball(
   active : Bool,
   id : Int,
 ) -> Unit {
-  balls[i] = { x, y, vx: 0.0, vy: 0.0, active, id, portal_cd: 0.0 }
+  balls[i] = { x, y, vx: 0.0, vy: 0.0, active, id, portal_cd: 0.0, }
 }
 
 ///|
@@ -320,7 +320,7 @@ fn main {
   @draw.init_font()
 
   let balls : Array[Ball] = Array::makei(max_balls, fn(i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, active: false, id: i, portal_cd: 0.0 }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, active: false, id: i, portal_cd: 0.0, }
   })
 
   let mut level = 1

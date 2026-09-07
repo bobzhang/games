@@ -65,13 +65,13 @@ fn generate_search_offsets(
   let offsets : Array[@types.Vec2i] = []
   // Search in a pattern around the investigation point: cardinal then diagonal
   let candidates : Array[@types.Vec2i] = [
-    { x: g.investigate_x, y: g.investigate_y },
-    { x: g.investigate_x + 1, y: g.investigate_y },
-    { x: g.investigate_x - 1, y: g.investigate_y },
-    { x: g.investigate_x, y: g.investigate_y + 1 },
-    { x: g.investigate_x, y: g.investigate_y - 1 },
-    { x: g.investigate_x + 1, y: g.investigate_y + 1 },
-    { x: g.investigate_x - 1, y: g.investigate_y - 1 },
+    { x: g.investigate_x, y: g.investigate_y, },
+    { x: g.investigate_x + 1, y: g.investigate_y, },
+    { x: g.investigate_x - 1, y: g.investigate_y, },
+    { x: g.investigate_x, y: g.investigate_y + 1, },
+    { x: g.investigate_x, y: g.investigate_y - 1, },
+    { x: g.investigate_x + 1, y: g.investigate_y + 1, },
+    { x: g.investigate_x - 1, y: g.investigate_y - 1, },
   ]
   for i in 0..<candidates.length() {
     let c = candidates[i]

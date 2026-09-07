@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Per-frame input snapshot consumed by game logic.
 pub(all) struct Input {
   mut steer : Float
@@ -105,7 +108,14 @@ pub fn Hazard::Hazard() -> Hazard {
 ///|
 /// Returns an inactive rival placeholder.
 pub fn Rival::Rival() -> Rival {
-  { active: false, id: 0, lane: 0.0, dist: 0.0, speed_bias: 0.0, stroke_t: 0.0 }
+  {
+    active: false,
+    id: 0,
+    lane: 0.0,
+    dist: 0.0,
+    speed_bias: 0.0,
+    stroke_t: 0.0,
+  }
 }
 
 ///|

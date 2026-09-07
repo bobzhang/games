@@ -31,4 +31,3 @@ pub fn tick_swing(@types.Weight, @types.Rope, Array[@types.ArcPoint], Array[@typ
 // Type aliases
 
 // Traits
-

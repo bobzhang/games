@@ -94,6 +94,8 @@ pub(all) enum GameState {
   Won
   Over
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Tile {
   mut value : Int
@@ -110,4 +112,3 @@ pub fn Tile::Tile() -> Self
 // Type aliases
 
 // Traits
-

@@ -584,7 +584,7 @@ fn main {
   })
 
   let anchors : Array[Anchor] = Array::makei(max_anchors, fn(_i) {
-    { active: false, x: 0.0, y: 0.0 }
+    { active: false, x: 0.0, y: 0.0, }
   })
 
   let drones : Array[Drone] = Array::makei(max_drones, fn(_i) {
@@ -616,7 +616,7 @@ fn main {
   })
 
   let crystals : Array[Crystal] = Array::makei(max_crystals, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, value: 0, t: 0.0, life: 0.0 }
+    { active: false, x: 0.0, y: 0.0, value: 0, t: 0.0, life: 0.0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

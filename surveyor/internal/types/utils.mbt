@@ -1,11 +1,11 @@
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn make_grid(width : Int, height : Int, tiles : Array[TileKind]) -> Grid {
-  { width, height, tiles }
+  { width, height, tiles, }
 }
 
 ///|
@@ -26,12 +26,12 @@ pub fn grid_set(g : Grid, x : Int, y : Int, tile : TileKind) -> Unit {
 
 ///|
 pub fn make_house(x : Int, y : Int, color_id : Int, area : Int) -> House {
-  { pos: vec2i(x, y), color_id, required_area: area }
+  { pos: vec2i(x, y), color_id, required_area: area, }
 }
 
 ///|
 pub fn make_fence(row : Int, col : Int, orient : Orientation) -> FenceEdge {
-  { row, col, orient }
+  { row, col, orient, }
 }
 
 ///|
@@ -68,7 +68,7 @@ pub fn toggle_fence(fences : Array[FenceEdge], f : FenceEdge) -> Unit {
 
 ///|
 pub fn copy_fences(fences : Array[FenceEdge]) -> Array[FenceEdge] {
-  let result : Array[FenceEdge] = Array::new(capacity=fences.length())
+  let result : Array[FenceEdge] = Array(capacity=fences.length())
   for i in 0..<fences.length() {
     result.push(fences[i])
   }
@@ -77,7 +77,7 @@ pub fn copy_fences(fences : Array[FenceEdge]) -> Array[FenceEdge] {
 
 ///|
 pub fn make_constraint(rectangular : Bool, no_water : Bool) -> LevelConstraint {
-  { must_be_rectangular: rectangular, must_not_touch_water: no_water }
+  { must_be_rectangular: rectangular, must_not_touch_water: no_water, }
 }
 
 ///|
@@ -90,12 +90,12 @@ pub fn make_level(
   tier : Tier,
   name : String,
 ) -> LevelDef {
-  { grid, houses, constraints, par_fences, par_length, tier, name }
+  { grid, houses, constraints, par_fences, par_length, tier, name, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, fence_count: 0 }
+  { stars: 0, completed: false, fence_count: 0, }
 }
 
 ///|
@@ -111,7 +111,7 @@ pub fn new_constraint_status(idx : Int) -> ConstraintStatus {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

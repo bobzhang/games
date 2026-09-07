@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Enumerates LoseReason variants used by runtime state.
 pub(all) enum LoseReason {
   None
@@ -15,6 +18,9 @@ pub(all) enum LoseReason {
   Fuel
   Hull
 } derive(Eq)
+
+///|
+pub extend LoseReason with Eq::{not_equal, equal}
 
 ///|
 /// Stores runtime data for Mine.
@@ -76,13 +82,13 @@ pub(all) struct Game {
 ///|
 /// Creates a default Mine value for a new session.
 pub fn Mine::Mine() -> Mine {
-  { active: false, x: 0.0, y: 0.0, r: 0.0, reveal_t: 0.0, armed: true }
+  { active: false, x: 0.0, y: 0.0, r: 0.0, reveal_t: 0.0, armed: true, }
 }
 
 ///|
 /// Creates a default Target value for a new session.
 pub fn Target::Target() -> Target {
-  { active: false, x: 0.0, y: 0.0, detected: false, pulse_t: 0.0 }
+  { active: false, x: 0.0, y: 0.0, detected: false, pulse_t: 0.0, }
 }
 
 ///|

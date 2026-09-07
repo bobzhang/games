@@ -72,22 +72,22 @@ pub fn hex_neighbors(coord : HexCoord) -> Array[HexCoord] {
   if parity == 0 {
     // Even row
     [
-      { row, col: col + 1 },
-      { row, col: col - 1 },
-      { row: row - 1, col },
-      { row: row - 1, col: col - 1 },
-      { row: row + 1, col },
-      { row: row + 1, col: col - 1 },
+      { row, col: col + 1, },
+      { row, col: col - 1, },
+      { row: row - 1, col, },
+      { row: row - 1, col: col - 1, },
+      { row: row + 1, col, },
+      { row: row + 1, col: col - 1, },
     ]
   } else {
     // Odd row
     [
-      { row, col: col + 1 },
-      { row, col: col - 1 },
-      { row: row - 1, col: col + 1 },
-      { row: row - 1, col },
-      { row: row + 1, col: col + 1 },
-      { row: row + 1, col },
+      { row, col: col + 1, },
+      { row, col: col - 1, },
+      { row: row - 1, col: col + 1, },
+      { row: row - 1, col, },
+      { row: row + 1, col: col + 1, },
+      { row: row + 1, col, },
     ]
   }
 }
@@ -127,7 +127,7 @@ pub fn pixel_to_hex(px : Float, py : Float, size : Float) -> HexCoord? {
   let mut best_dist : Float = 999999.0
   for r in 0..<board_size {
     for c in 0..<board_size {
-      let coord : HexCoord = { row: r, col: c }
+      let coord : HexCoord = { row: r, col: c, }
       let (hx, hy) = hex_to_pixel(coord, size)
       let dx = px - hx
       let dy = py - hy
@@ -140,7 +140,7 @@ pub fn pixel_to_hex(px : Float, py : Float, size : Float) -> HexCoord? {
     }
   }
   if best_dist < size * 0.95 {
-    Some({ row: best_row, col: best_col })
+    Some({ row: best_row, col: best_col, })
   } else {
     None
   }
@@ -205,7 +205,7 @@ pub fn new_board(size : Int) -> HexBoard {
     }
     cells.push(row)
   }
-  { size, cells }
+  { size, cells, }
 }
 
 ///|
@@ -219,7 +219,7 @@ pub fn clone_board(board : HexBoard) -> HexBoard {
     }
     cells.push(row)
   }
-  { size: board.size, cells }
+  { size: board.size, cells, }
 }
 
 ///|
@@ -349,7 +349,7 @@ pub fn empty_positions(board : HexBoard) -> Array[HexCoord] {
   for r in 0..<board.size {
     for c in 0..<board.size {
       match board.cells[r][c] {
-        Empty => result.push({ row: r, col: c })
+        Empty => result.push({ row: r, col: c, })
         _ => ()
       }
     }

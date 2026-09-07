@@ -2,14 +2,26 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Sensor {
   pos : Vec2i
   kind : SensorKind
   direction : CompassDir
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Sensor with Eq::{not_equal, equal}
+
+///|
+pub extend Sensor with Debug::{to_repr}
 
 ///|
 pub(all) struct SensorReading {
@@ -19,18 +31,27 @@ pub(all) struct SensorReading {
   direction : CompassDir
   angle : Float
   kind : SensorKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend SensorReading with Debug::{to_repr}
 
 ///|
 pub(all) struct Epicenter {
   pos : Vec2i
   mut found : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Epicenter with Debug::{to_repr}
 
 ///|
 pub(all) struct TileInfo {
   kind : TileKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend TileInfo with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -43,7 +64,10 @@ pub(all) struct Level {
   towns : Array[Vec2i]
   level_index : Int
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -51,7 +75,10 @@ pub(all) struct LevelScore {
   mut completed : Bool
   mut best_budget_used : Int
   mut best_guesses : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

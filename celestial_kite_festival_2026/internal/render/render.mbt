@@ -117,14 +117,22 @@ fn @types.Game::draw_sky(
           96,
           222 + (glow * 24.0).to_int(),
           188,
-          if using_backdrop { 18 } else { 42 },
+          if using_backdrop {
+            18
+          } else {
+            42
+          },
         )
       } else {
         @raylib.Color::new(
           120,
           178 + (glow * 28.0).to_int(),
           255,
-          if using_backdrop { 16 } else { 36 },
+          if using_backdrop {
+            16
+          } else {
+            36
+          },
         )
       }
 
@@ -156,12 +164,12 @@ fn @types.Game::draw_far_clouds(
     let h : Float = 30.0 + fi % 3.0 * 12.0
 
     if !draw_cloud_wisp_art(
-      x + cam_x * 0.16,
-      y + cam_y * 0.16,
-      w * 1.8,
-      h * 1.7,
-      @raylib.Color::new(166, 204, 238, 46),
-    ) {
+        x + cam_x * 0.16,
+        y + cam_y * 0.16,
+        w * 1.8,
+        h * 1.7,
+        @raylib.Color::new(166, 204, 238, 46),
+      ) {
       @raylib.draw_circle(
         (x + cam_x * 0.16).to_int(),
         (y + cam_y * 0.16).to_int(),
@@ -212,13 +220,13 @@ fn @types.Game::draw_wind_lanes(
     let alpha = 34 + (intensity * 82.0).to_int()
 
     if !draw_wind_ribbon_art(
-      x - len * 0.5 + cam_x * 0.14,
-      y + dy * 0.5 + cam_y * 0.14,
-      len * 2.5,
-      16.0 + intensity * 14.0,
-      rotation,
-      @raylib.Color::new(188, 232, 255, alpha),
-    ) {
+        x - len * 0.5 + cam_x * 0.14,
+        y + dy * 0.5 + cam_y * 0.14,
+        len * 2.5,
+        16.0 + intensity * 14.0,
+        rotation,
+        @raylib.Color::new(188, 232, 255, alpha),
+      ) {
       @raylib.draw_line_ex(
         @raylib.Vector2::new(x + cam_x * 0.14, y + cam_y * 0.14),
         @raylib.Vector2::new(x - len + cam_x * 0.14, y + dy + cam_y * 0.14),
@@ -310,13 +318,13 @@ fn @types.Game::draw_trails(
       @math.sinf(trail.rot * 0.05).abs() * 0.28
 
     if !draw_wind_ribbon_art(
-      trail.x + cam_x * 0.2,
-      trail.y + cam_y * 0.2,
-      @types.maxf(8.0, trail.w * stretch * 2.0),
-      @types.maxf(5.0, trail.h * 0.9),
-      trail.rot,
-      col,
-    ) {
+        trail.x + cam_x * 0.2,
+        trail.y + cam_y * 0.2,
+        @types.maxf(8.0, trail.w * stretch * 2.0),
+        @types.maxf(5.0, trail.h * 0.9),
+        trail.rot,
+        col,
+      ) {
       @raylib.draw_rectangle(
         (trail.x - trail.w * 0.5 * stretch + cam_x * 0.2).to_int(),
         (trail.y - trail.h * 0.5 + cam_y * 0.2).to_int(),
@@ -355,12 +363,12 @@ fn draw_lantern(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   if draw_lantern_art(
-    x,
-    y + o.h * 0.22,
-    o.w * 1.55,
-    o.h * 2.55,
-    @raylib.Color::new(255, 248, 232, 244),
-  ) {
+      x,
+      y + o.h * 0.22,
+      o.w * 1.55,
+      o.h * 2.55,
+      @raylib.Color::new(255, 248, 232, 244),
+    ) {
     return
   }
 
@@ -395,13 +403,13 @@ fn draw_bird(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let wing : Float = @math.sinf(o.phase * 16.0) * 16.0
 
   if draw_bird_art(
-    x,
-    y + o.h * 0.05,
-    o.w * 2.45,
-    o.h * 2.15,
-    @math.sinf(o.phase * 6.0) * 6.0,
-    @raylib.Color::new(255, 246, 255, 240),
-  ) {
+      x,
+      y + o.h * 0.05,
+      o.w * 2.45,
+      o.h * 2.15,
+      @math.sinf(o.phase * 6.0) * 6.0,
+      @raylib.Color::new(255, 246, 255, 240),
+    ) {
     return
   }
 
@@ -460,12 +468,12 @@ fn draw_storm(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   if draw_storm_cloud_art(
-    x,
-    y + o.h * 0.12,
-    o.w * 1.45,
-    o.h * 1.95,
-    @raylib.Color::new(232, 244, 255, 238),
-  ) {
+      x,
+      y + o.h * 0.12,
+      o.w * 1.45,
+      o.h * 1.95,
+      @raylib.Color::new(232, 244, 255, 238),
+    ) {
     return
   }
 
@@ -492,11 +500,11 @@ fn draw_orb(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   if draw_energy_orb_art(
-    x,
-    y,
-    o.w * (1.55 + pulse * 0.08),
-    @raylib.Color::new(238, 255, 250, 236),
-  ) {
+      x,
+      y,
+      o.w * (1.55 + pulse * 0.08),
+      @raylib.Color::new(238, 255, 250, 236),
+    ) {
     return
   }
 
@@ -517,13 +525,13 @@ fn draw_koi(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let sway : Float = @math.sinf(o.phase * 9.0) * 9.0
 
   if draw_koi_art(
-    x,
-    y + sway * 0.08,
-    o.w * 2.35,
-    o.h * 2.7,
-    o.vx < 0.0,
-    @raylib.Color::new(255, 248, 238, 238),
-  ) {
+      x,
+      y + sway * 0.08,
+      o.w * 2.35,
+      o.h * 2.7,
+      o.vx < 0.0,
+      @raylib.Color::new(255, 248, 238, 238),
+    ) {
     return
   }
 
@@ -633,17 +641,17 @@ fn @types.Game::draw_kite(
   let kite_art_w = kite_art_h * 0.54
 
   if !draw_kite_art(
-    x,
-    y + kite_art_h * 0.22,
-    kite_art_w,
-    kite_art_h,
-    tilt,
-    if game.kite.invuln > 0.0 {
-      @raylib.Color::new(206, 255, 255, 232)
-    } else {
-      @raylib.Color::new(255, 255, 255, 240)
-    },
-  ) {
+      x,
+      y + kite_art_h * 0.22,
+      kite_art_w,
+      kite_art_h,
+      tilt,
+      if game.kite.invuln > 0.0 {
+        @raylib.Color::new(206, 255, 255, 232)
+      } else {
+        @raylib.Color::new(255, 255, 255, 240)
+      },
+    ) {
     let kx0 = x + @math.sinf(tilt * 0.017) * 6.0
 
     @raylib.draw_triangle(
@@ -777,12 +785,7 @@ fn @types.Game::draw_sparks(
       @types.a_col(@types.cyan(), (life * 190.0).to_int())
     }
 
-    if !draw_burst_halo_art(
-      halo.x + cam_x,
-      halo.y + cam_y,
-      halo.r * 2.35,
-      col,
-    ) {
+    if !draw_burst_halo_art(halo.x + cam_x, halo.y + cam_y, halo.r * 2.35, col) {
       @raylib.draw_circle_lines(
         (halo.x + cam_x).to_int(),
         (halo.y + cam_y).to_int(),

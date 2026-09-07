@@ -8,14 +8,14 @@ pub fn idx_to_xyz(idx : Int, size : Int) -> Vec3i {
   let x = idx % size
   let y = idx / size % size
   let z = idx / (size * size)
-  { x, y, z }
+  { x, y, z, }
 }
 
 ///|
 pub fn new_voxel_grid(size : Int) -> VoxelGrid {
   let count = size * size * size
   let cells : Array[Bool] = Array::make(count, false)
-  { size, cells }
+  { size, cells, }
 }
 
 ///|
@@ -24,13 +24,13 @@ pub fn copy_grid(g : VoxelGrid) -> VoxelGrid {
   for i in 0..<g.cells.length() {
     cells[i] = g.cells[i]
   }
-  { size: g.size, cells }
+  { size: g.size, cells, }
 }
 
 ///|
 pub fn new_silhouette(width : Int, height : Int) -> Silhouette {
   let cells : Array[Bool] = Array::make(width * height, false)
-  { width, height, cells }
+  { width, height, cells, }
 }
 
 ///|
@@ -49,7 +49,7 @@ pub fn silhouette_from_bits(
       }
     }
   }
-  { width, height, cells }
+  { width, height, cells, }
 }
 
 ///|
@@ -58,7 +58,7 @@ pub fn new_target_set(
   front : Silhouette,
   side : Silhouette,
 ) -> TargetSet {
-  { top, front, side }
+  { top, front, side, }
 }
 
 ///|
@@ -74,17 +74,17 @@ pub fn cell_size_for_grid(size : Int) -> Int {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_moves: 9999, best_voxels: 9999 }
+  { stars: 0, completed: false, best_moves: 9999, best_voxels: 9999, }
 }
 
 ///|
 pub fn new_hover() -> HoverInfo {
-  { active: false, vx: 0, vy: 0, vz: 0, view: Top }
+  { active: false, vx: 0, vy: 0, vz: 0, view: Top, }
 }
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

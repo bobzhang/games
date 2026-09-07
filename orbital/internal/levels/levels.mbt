@@ -442,7 +442,7 @@ fn level_25() -> @types.Level {
 }
 
 ///|
-let all_levels : Ref[Array[@types.Level]?] = { val: None }
+let all_levels : Ref[Array[@types.Level]?] = { val: None, }
 
 ///|
 fn init_levels() -> Array[@types.Level] {

@@ -105,13 +105,13 @@ pub(all) struct Coin {
 ///|
 /// Creates an inactive coin slot.
 pub fn Coin::inactive() -> Coin {
-  { active: false, x: 0.0, y: 0.0, base_y: 0.0, phase: 0.0 }
+  { active: false, x: 0.0, y: 0.0, base_y: 0.0, phase: 0.0, }
 }
 
 ///|
 /// Creates an active coin with initial bobbing phase.
 pub fn Coin::spawn(x : Float, y : Float, phase : Float) -> Coin {
-  { active: true, x, y, base_y: y, phase }
+  { active: true, x, y, base_y: y, phase, }
 }
 
 ///|

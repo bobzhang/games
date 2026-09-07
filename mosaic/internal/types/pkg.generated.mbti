@@ -180,7 +180,8 @@ pub(all) struct Game {
   mut message_timer : Float
   mut show_symmetry_hint : Bool
   mut anim_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   grid : MosaicGrid
@@ -188,21 +189,24 @@ pub(all) struct Level {
   par_errors : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut errors : Int
   mut guessed_symmetry : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct MosaicGrid {
   width : Int
   height : Int
   tiles : Array[Tile?]
   holes : Array[Vec2i]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn MosaicGrid::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Orientation {
   N
@@ -210,6 +214,11 @@ pub(all) enum Orientation {
   S
   W
 } derive(Eq, @debug.Debug)
+pub fn Orientation::equal(Self, Self) -> Bool
+pub fn Orientation::not_equal(Self, Self) -> Bool
+pub fn Orientation::output(Self, &Logger) -> Unit
+pub fn Orientation::to_repr(Self) -> @debug.Repr
+pub fn Orientation::to_string(Self) -> String
 pub impl Show for Orientation
 
 pub(all) enum PlayState {
@@ -217,6 +226,11 @@ pub(all) enum PlayState {
   GuessSymmetry
   Complete
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -226,6 +240,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum SymmetryKind {
@@ -236,6 +255,11 @@ pub(all) enum SymmetryKind {
   Rotate4
   Glide
 } derive(Eq, @debug.Debug)
+pub fn SymmetryKind::equal(Self, Self) -> Bool
+pub fn SymmetryKind::not_equal(Self, Self) -> Bool
+pub fn SymmetryKind::output(Self, &Logger) -> Unit
+pub fn SymmetryKind::to_repr(Self) -> @debug.Repr
+pub fn SymmetryKind::to_string(Self) -> String
 pub impl Show for SymmetryKind
 
 pub(all) enum Tier {
@@ -243,13 +267,21 @@ pub(all) enum Tier {
   Restore
   Master
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Tile {
   mut color : TileColor
   mut shape : TileShape
   mut orientation : Orientation
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
+pub fn Tile::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TileColor {
   Red
@@ -259,6 +291,11 @@ pub(all) enum TileColor {
   Purple
   White
 } derive(Eq, @debug.Debug)
+pub fn TileColor::equal(Self, Self) -> Bool
+pub fn TileColor::not_equal(Self, Self) -> Bool
+pub fn TileColor::output(Self, &Logger) -> Unit
+pub fn TileColor::to_repr(Self) -> @debug.Repr
+pub fn TileColor::to_string(Self) -> String
 pub impl Show for TileColor
 
 pub(all) enum TileShape {
@@ -269,19 +306,27 @@ pub(all) enum TileShape {
   Circle
   Cross
 } derive(Eq, @debug.Debug)
+pub fn TileShape::equal(Self, Self) -> Bool
+pub fn TileShape::not_equal(Self, Self) -> Bool
+pub fn TileShape::output(Self, &Logger) -> Unit
+pub fn TileShape::to_repr(Self) -> @debug.Repr
+pub fn TileShape::to_string(Self) -> String
 pub impl Show for TileShape
 
 pub(all) struct UndoEntry {
   pos : Vec2i
   prev_tile : Tile?
-} derive(Show)
+} derive(@debug.Debug)
+pub fn UndoEntry::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

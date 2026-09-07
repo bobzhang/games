@@ -43,4 +43,3 @@ pub fn update_speedrun_timer(@types.Game, Float) -> Unit
 // Type aliases
 
 // Traits
-

@@ -25,4 +25,3 @@ pub fn projected_yield(@types.HexGrid) -> Int
 // Type aliases
 
 // Traits
-

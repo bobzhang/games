@@ -116,8 +116,8 @@ fn main {
   @draw.init_font()
 
   let walls : Array[Bool] = Array::make(gw * gh, false)
-  let crates : Array[Pos] = Array::makei(4, fn(_i) { { x: 1, y: 1 } })
-  let targets : Array[Pos] = Array::makei(4, fn(_i) { { x: 1, y: 1 } })
+  let crates : Array[Pos] = Array::makei(4, fn(_i) { { x: 1, y: 1, } })
+  let targets : Array[Pos] = Array::makei(4, fn(_i) { { x: 1, y: 1, } })
 
   let (px0, py0) = reset_level(walls, crates, targets)
   let mut px = px0

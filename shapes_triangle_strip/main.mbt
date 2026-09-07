@@ -11,10 +11,10 @@ fn main {
     Float::from_int(screen_width) / 2.0 - 125.0,
     Float::from_int(screen_height) / 2.0,
   )
-  let segments : Ref[Float] = { val: 6.0 }
+  let segments : Ref[Float] = { val: 6.0, }
   let inside_radius : Float = 100.0
   let outside_radius : Float = 150.0
-  let outline : Ref[Bool] = { val: true }
+  let outline : Ref[Bool] = { val: true, }
   let pi : Float = Float::from_double(@math.PI)
   let deg2rad : Float = pi / 180.0
 

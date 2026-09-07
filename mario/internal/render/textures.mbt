@@ -1,26 +1,26 @@
 ///|
-let tex_mario_small : Ref[@raylib.Texture?] = { val: None }
+let tex_mario_small : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_mario_large : Ref[@raylib.Texture?] = { val: None }
+let tex_mario_large : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_enemies : Ref[@raylib.Texture?] = { val: None }
+let tex_enemies : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_blocks : Ref[@raylib.Texture?] = { val: None }
+let tex_blocks : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_items : Ref[@raylib.Texture?] = { val: None }
+let tex_items : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_ground : Ref[@raylib.Texture?] = { val: None }
+let tex_ground : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_chunks : Ref[@raylib.Texture?] = { val: None }
+let tex_chunks : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_score : Ref[@raylib.Texture?] = { val: None }
+let tex_score : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Load all sprite textures. Call after `init_window`.

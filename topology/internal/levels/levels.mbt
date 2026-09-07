@@ -1,5 +1,5 @@
 ///|
-let all_levels : Ref[Array[@types.Level]?] = { val: None }
+let all_levels : Ref[Array[@types.Level]?] = { val: None, }
 
 ///|
 pub fn get_levels() -> Array[@types.Level] {

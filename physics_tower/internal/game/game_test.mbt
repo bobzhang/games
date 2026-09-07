@@ -83,10 +83,10 @@ test "combo detection: no combo for different non-adjacent materials" {
 ///|
 test "combo count function" {
   let combos : Array[@types.ActiveCombo] = [
-    { kind: FlexCombo, body_a_id: 0, body_b_id: 1, bonus_value: 1.5 },
-    { kind: FlexCombo, body_a_id: 2, body_b_id: 3, bonus_value: 1.5 },
-    { kind: MonolithCombo, body_a_id: 4, body_b_id: 5, bonus_value: 1.3 },
-    { kind: ReinforcedCombo, body_a_id: 6, body_b_id: 7, bonus_value: 0.8 },
+    { kind: FlexCombo, body_a_id: 0, body_b_id: 1, bonus_value: 1.5, },
+    { kind: FlexCombo, body_a_id: 2, body_b_id: 3, bonus_value: 1.5, },
+    { kind: MonolithCombo, body_a_id: 4, body_b_id: 5, bonus_value: 1.3, },
+    { kind: ReinforcedCombo, body_a_id: 6, body_b_id: 7, bonus_value: 0.8, },
   ]
   let (flex, mono, rein, light) = @game.count_combos(combos)
   inspect(flex, content="2")

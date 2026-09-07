@@ -31,4 +31,3 @@ pub fn use_hint(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

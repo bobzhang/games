@@ -26,12 +26,18 @@ pub(all) enum ToolKind {
 } derive(Eq)
 
 ///|
+pub extend ToolKind with Eq::{not_equal, equal}
+
+///|
 /// Cell state in the puzzle grid.
 pub(all) enum Cell {
   Unknown
   Fill
   Cross
 } derive(Eq)
+
+///|
+pub extend Cell with Eq::{not_equal, equal}
 
 ///|
 /// Visual spark particle category.
@@ -41,6 +47,9 @@ pub(all) enum SparkKind {
   Error
   Mark
 } derive(Eq)
+
+///|
+pub extend SparkKind with Eq::{not_equal, equal}
 
 ///|
 /// Direction for cursor movement.
@@ -53,6 +62,9 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+pub extend Dir with Eq::{not_equal, equal}
+
+///|
 /// Top-level game/campaign state.
 pub(all) enum GameState {
   Title
@@ -61,3 +73,6 @@ pub(all) enum GameState {
   CampaignClear
   LevelFail
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

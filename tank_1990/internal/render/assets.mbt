@@ -9,7 +9,7 @@ priv struct RenderAssets {
 ///|
 /// Creates a new `RenderAssets` with no font loaded and empty animation frame lists.
 fn RenderAssets::new() -> RenderAssets {
-  { ui_font: None, explosion_frames: [], smoke_frames: [] }
+  { ui_font: None, explosion_frames: [], smoke_frames: [], }
 }
 
 ///|

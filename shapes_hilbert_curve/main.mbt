@@ -55,16 +55,16 @@ fn main {
     screen_width, screen_height, "raylib [shapes] example - hilbert curve",
   )
 
-  let order : Ref[Int] = { val: 2 }
-  let size : Ref[Float] = { val: Float::from_int(@raylib.get_screen_height()) }
+  let order : Ref[Int] = { val: 2, }
+  let size : Ref[Float] = { val: Float::from_int(@raylib.get_screen_height()), }
   let mut hilbert_path = load_hilbert_path(order.val, size.val)
   let mut stroke_count = hilbert_path.length()
 
   let mut prev_order = order.val
   let mut prev_size = size.val.to_int()
   let mut counter = 0
-  let thick : Ref[Float] = { val: 2.0 }
-  let animate : Ref[Bool] = { val: true }
+  let thick : Ref[Float] = { val: 2.0, }
+  let animate : Ref[Bool] = { val: true, }
 
   @raylib.set_target_fps(60)
 

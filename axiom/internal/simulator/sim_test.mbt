@@ -41,16 +41,16 @@ fn make_test_level(
     goals_collected.push(false)
   }
   let robot = @types.new_robot(start_x, start_y, start_dir)
-  { grid, robot, goals, goals_collected, blocks }
+  { grid, robot, goals, goals_collected, blocks, }
 }
 
 ///|
 fn make_program(kinds : Array[@types.CommandKind]) -> @types.Program {
   let commands : Array[@types.Command] = []
   for i in 0..<kinds.length() {
-    commands.push({ kind: kinds[i] })
+    commands.push({ kind: kinds[i], })
   }
-  { commands, max_slots: 20 }
+  { commands, max_slots: 20, }
 }
 
 // ===== Basic movement tests =====

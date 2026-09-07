@@ -163,12 +163,18 @@ pub let wall_points : Int
 pub(all) struct CaptureAnim {
   mut pos : HexCoord
   mut timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn CaptureAnim::to_repr(Self) -> @debug.Repr
 
 pub(all) enum CellState {
   Empty
   Occupied(Player)
 } derive(Eq, @debug.Debug)
+pub fn CellState::equal(Self, Self) -> Bool
+pub fn CellState::not_equal(Self, Self) -> Bool
+pub fn CellState::output(Self, &Logger) -> Unit
+pub fn CellState::to_repr(Self) -> @debug.Repr
+pub fn CellState::to_string(Self) -> String
 pub impl Show for CellState
 
 pub(all) enum Difficulty {
@@ -176,6 +182,11 @@ pub(all) enum Difficulty {
   Normal
   Hard
 } derive(Eq, @debug.Debug)
+pub fn Difficulty::equal(Self, Self) -> Bool
+pub fn Difficulty::not_equal(Self, Self) -> Bool
+pub fn Difficulty::output(Self, &Logger) -> Unit
+pub fn Difficulty::to_repr(Self) -> @debug.Repr
+pub fn Difficulty::to_string(Self) -> String
 pub impl Show for Difficulty
 
 pub(all) struct Game {
@@ -214,34 +225,46 @@ pub(all) enum GameMode {
   Puzzle
   Local2P
 } derive(Eq, @debug.Debug)
+pub fn GameMode::equal(Self, Self) -> Bool
+pub fn GameMode::not_equal(Self, Self) -> Bool
+pub fn GameMode::output(Self, &Logger) -> Unit
+pub fn GameMode::to_repr(Self) -> @debug.Repr
+pub fn GameMode::to_string(Self) -> String
 pub impl Show for GameMode
 
 pub(all) struct HexBoard {
   size : Int
   cells : Array[Array[CellState]]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HexBoard::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexCoord {
   row : Int
   col : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn HexCoord::equal(Self, Self) -> Bool
+pub fn HexCoord::not_equal(Self, Self) -> Bool
+pub fn HexCoord::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Move {
   pos : HexCoord
   player : Player
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Move::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Pattern {
   kind : PatternKind
   positions : Array[HexCoord]
   points : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Pattern::to_repr(Self) -> @debug.Repr
 
 pub(all) struct PatternAnim {
   mut kind : PatternKind
   mut positions : Array[HexCoord]
   mut timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PatternAnim::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PatternKind {
   Bridge
@@ -253,6 +276,11 @@ pub(all) enum PatternKind {
   Star
   Wall
 } derive(Eq, @debug.Debug)
+pub fn PatternKind::equal(Self, Self) -> Bool
+pub fn PatternKind::not_equal(Self, Self) -> Bool
+pub fn PatternKind::output(Self, &Logger) -> Unit
+pub fn PatternKind::to_repr(Self) -> @debug.Repr
+pub fn PatternKind::to_string(Self) -> String
 pub impl Show for PatternKind
 
 pub(all) enum PlayState {
@@ -261,12 +289,22 @@ pub(all) enum PlayState {
   Animating
   GameOver
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Player {
   Black
   White
 } derive(Eq, @debug.Debug)
+pub fn Player::equal(Self, Self) -> Bool
+pub fn Player::not_equal(Self, Self) -> Bool
+pub fn Player::output(Self, &Logger) -> Unit
+pub fn Player::to_repr(Self) -> @debug.Repr
+pub fn Player::to_string(Self) -> String
 pub impl Show for Player
 
 pub(all) struct PuzzleLevel {
@@ -275,14 +313,16 @@ pub(all) struct PuzzleLevel {
   current_player : Player
   target_score : Int
   hint : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PuzzleLevel::to_repr(Self) -> @debug.Repr
 
 pub(all) struct ScoreAnim {
   mut x : Float
   mut y : Float
   mut text : String
   mut timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn ScoreAnim::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -292,9 +332,13 @@ pub(all) enum Screen {
   PuzzleSelect
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 // Type aliases
 
 // Traits
-

@@ -51,4 +51,3 @@ pub fn wave_bonus(Int) -> Int
 // Type aliases
 
 // Traits
-

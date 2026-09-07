@@ -84,7 +84,7 @@ fn set_car(
   speed : Float,
   color : Int,
 ) -> Unit {
-  cars[i] = { x, row, w, speed, color }
+  cars[i] = { x, row, w, speed, color, }
 }
 
 ///|
@@ -97,7 +97,7 @@ fn set_log(
   w : Int,
   speed : Float,
 ) -> Unit {
-  logs[i] = { x, row, w, speed }
+  logs[i] = { x, row, w, speed, }
 }
 
 ///|
@@ -213,10 +213,10 @@ fn main {
   defer unload_game_art(art)
 
   let cars : Array[Car] = Array::makei(12, fn(_i) {
-    { x: 0.0, row: 5, w: 1, speed: 0.0, color: 0 }
+    { x: 0.0, row: 5, w: 1, speed: 0.0, color: 0, }
   })
   let logs : Array[Log] = Array::makei(9, fn(_i) {
-    { x: 0.0, row: 1, w: 2, speed: 0.0 }
+    { x: 0.0, row: 1, w: 2, speed: 0.0, }
   })
   let homes : Array[Bool] = Array::make(5, false)
 

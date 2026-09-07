@@ -62,11 +62,11 @@ fn main {
   @draw.init_font()
 
   let towers : Array[Tower] = Array::makei(lanes * slots, fn(i) {
-    { built: false, lane: i / slots, slot: i % slots, cooldown: 0.0 }
+    { built: false, lane: i / slots, slot: i % slots, cooldown: 0.0, }
   })
 
   let enemies : Array[Enemy] = Array::makei(240, fn(_i) {
-    { alive: false, lane: 0, x: 0.0, hp: 0.0, speed: 0.0 }
+    { alive: false, lane: 0, x: 0.0, hp: 0.0, speed: 0.0, }
   })
 
   let mut lives = 20

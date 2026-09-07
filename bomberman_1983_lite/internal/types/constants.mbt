@@ -272,6 +272,9 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+pub extend Dir with Eq::{not_equal, equal}
+
+///|
 /// Converts an integer to a direction (for random direction selection).
 pub fn Dir::from_int(v : Int) -> Dir {
   match v % 4 {

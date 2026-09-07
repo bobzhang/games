@@ -164,9 +164,18 @@ pub(all) enum GameState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for GameState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
+pub extend GameState with Debug::{to_repr}
+
+///|
+pub impl Show for GameState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend GameState with Show::{to_string, output}
 
 ///|
 /// Tile types used in the level grid.
@@ -180,3 +189,6 @@ pub(all) enum Tile {
   FlagPole
   Castle
 } derive(Eq)
+
+///|
+pub extend Tile with Eq::{not_equal, equal}

@@ -185,6 +185,9 @@ pub(all) enum FishKind {
 } derive(Eq)
 
 ///|
+pub extend FishKind with Eq::{not_equal, equal}
+
+///|
 /// Hazard kind enum.
 pub(all) enum HazardKind {
   Jelly
@@ -193,9 +196,15 @@ pub(all) enum HazardKind {
 } derive(Eq)
 
 ///|
+pub extend HazardKind with Eq::{not_equal, equal}
+
+///|
 /// Particle kind enum: splash (blue), spark (red), shimmer (purple).
 pub(all) enum ParticleKind {
   Splash
   Spark
   Shimmer
 } derive(Eq)
+
+///|
+pub extend ParticleKind with Eq::{not_equal, equal}

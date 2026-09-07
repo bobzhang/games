@@ -9,6 +9,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Collectible relic placed in a stage.
 pub(all) struct Relic {
   mut active : Bool
@@ -274,7 +277,7 @@ pub fn Game::Game() -> Game {
 ///|
 /// Create an active relic at world position `(x, y)`.
 pub fn make_relic(x : Float, y : Float) -> Relic {
-  { active: true, x, y, r: 13.0 }
+  { active: true, x, y, r: 13.0, }
 }
 
 ///|
@@ -290,7 +293,7 @@ pub fn make_trap(
   kind : Int,
   label : String,
 ) -> Trap {
-  { x, y, w, h, cycle, hot_window, phase, kind, label, timer: 0.0 }
+  { x, y, w, h, cycle, hot_window, phase, kind, label, timer: 0.0, }
 }
 
 ///|
@@ -303,13 +306,13 @@ pub fn make_hazard(
   kind : Int,
   label : String,
 ) -> Hazard {
-  { x, y, w, h, kind, label }
+  { x, y, w, h, kind, label, }
 }
 
 ///|
 /// Create a pressure plate with default unpressed state.
 pub fn make_plate(x : Float, y : Float, w : Float, h : Float) -> Plate {
-  { x, y, w, h, pressed: false }
+  { x, y, w, h, pressed: false, }
 }
 
 ///|
@@ -322,5 +325,5 @@ pub fn make_door(
   plate_index : Int,
   hold_time : Float,
 ) -> Door {
-  { x, y, w, h, plate_index, hold_time, timer: 0.0, open: false }
+  { x, y, w, h, plate_index, hold_time, timer: 0.0, open: false, }
 }

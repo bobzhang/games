@@ -2,7 +2,13 @@
 pub(all) struct Vec2 {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2 with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2 with Debug::{to_repr}
 
 ///|
 pub(all) struct Component {
@@ -25,13 +31,19 @@ pub(all) struct Component {
   mut connected_to : Array[Int]
   mut fixed : Bool
   mut dragging : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Component with Debug::{to_repr}
 
 ///|
 pub(all) struct Palette {
   mut available : Array[ComponentKind]
   mut counts : Array[Int]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Palette with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelDef {
@@ -43,7 +55,10 @@ pub(all) struct LevelDef {
   mut bell_targets : Array[Int]
   mut par_components : Int
   mut description : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 pub(all) struct Simulation {
@@ -55,7 +70,10 @@ pub(all) struct Simulation {
   mut bells_order : Array[Int]
   mut total_bells : Int
   mut speed_mult : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Simulation with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -74,4 +92,7 @@ pub(all) struct Game {
   mut message : String
   mut message_timer : Float
   mut tier_scroll : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

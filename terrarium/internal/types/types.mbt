@@ -4,7 +4,13 @@ pub(all) struct Resources {
   mut co2 : Float
   mut water : Float
   mut nutrients : Float
-} derive(Show, ToJson)
+} derive(Debug, ToJson)
+
+///|
+pub extend Resources with Debug::{to_repr}
+
+///|
+pub extend Resources with ToJson::{to_json}
 
 ///|
 pub(all) struct OrganismState {
@@ -13,7 +19,13 @@ pub(all) struct OrganismState {
   col : Int
   mut alive : Bool
   mut health : Float
-} derive(Show, ToJson)
+} derive(Debug, ToJson)
+
+///|
+pub extend OrganismState with Debug::{to_repr}
+
+///|
+pub extend OrganismState with ToJson::{to_json}
 
 ///|
 pub(all) struct LevelDef {
@@ -26,14 +38,20 @@ pub(all) struct LevelDef {
   organism_counts : Array[Int]
   par_turns : Int
   locked_cells : Array[(Int, Int)]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_turns_survived : Int
   mut stars : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct SimTurnLog {
@@ -41,7 +59,10 @@ pub(all) struct SimTurnLog {
   events : Array[String]
   resources_after : Resources
   organisms_alive : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend SimTurnLog with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -64,4 +85,7 @@ pub(all) struct Game {
   mut sim_speed_timer : Float
   mut organisms_placed : Array[Int]
   mut anim_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

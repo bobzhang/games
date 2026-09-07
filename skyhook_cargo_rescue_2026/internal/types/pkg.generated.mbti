@@ -159,6 +159,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Hazard {
   mut active : Bool
@@ -178,6 +180,8 @@ pub(all) enum HazardKind {
   Drone
   Ice
 } derive(Eq)
+pub fn HazardKind::equal(Self, Self) -> Bool
+pub fn HazardKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -207,6 +211,8 @@ pub(all) enum PickupKind {
   Medkit
   Turbo
 } derive(Eq)
+pub fn PickupKind::equal(Self, Self) -> Bool
+pub fn PickupKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Survivor {
   mut active : Bool
@@ -223,4 +229,3 @@ pub fn Survivor::Survivor() -> Self
 // Type aliases
 
 // Traits
-

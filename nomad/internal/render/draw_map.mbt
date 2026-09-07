@@ -181,7 +181,7 @@ fn draw_map(game : @types.Game) -> Unit {
   for row in 0..<map.height {
     for col in 0..<map.width {
       let tile = map.tiles[row][col]
-      let coord : @types.HexCoord = { col, row }
+      let coord : @types.HexCoord = { col, row, }
       let (cx, cy) = @types.hex_to_pixel(coord, size)
       // Base hex
       draw_hex(cx, cy, size * 0.95, tile_color(tile.kind))

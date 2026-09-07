@@ -66,10 +66,10 @@ fn reset_map(blocked : Array[Bool], seen : Array[Bool]) -> Unit {
 
 ///|
 fn reset_relics(relics : Array[Relic]) -> Unit {
-  relics[0] = { x: 2, y: 9, taken: false, value: 80 }
-  relics[1] = { x: 15, y: 2, taken: false, value: 120 }
-  relics[2] = { x: 14, y: 9, taken: false, value: 160 }
-  relics[3] = { x: 8, y: 6, taken: false, value: 210 }
+  relics[0] = { x: 2, y: 9, taken: false, value: 80, }
+  relics[1] = { x: 15, y: 2, taken: false, value: 120, }
+  relics[2] = { x: 14, y: 9, taken: false, value: 160, }
+  relics[3] = { x: 8, y: 6, taken: false, value: 210, }
 }
 
 ///|
@@ -92,7 +92,7 @@ fn main {
   let blocked : Array[Bool] = Array::make(gw * gh, false)
   let seen : Array[Bool] = Array::make(gw * gh, false)
   let relics : Array[Relic] = Array::makei(4, fn(_i) {
-    { x: 1, y: 1, taken: false, value: 40 }
+    { x: 1, y: 1, taken: false, value: 40, }
   })
 
   reset_map(blocked, seen)

@@ -1,41 +1,41 @@
 ///|
 pub fn ink_empty() -> InkColor {
-  { c: false, m: false, y: false }
+  { c: false, m: false, y: false, }
 }
 
 ///|
 pub fn ink_cyan() -> InkColor {
-  { c: true, m: false, y: false }
+  { c: true, m: false, y: false, }
 }
 
 ///|
 pub fn ink_magenta() -> InkColor {
-  { c: false, m: true, y: false }
+  { c: false, m: true, y: false, }
 }
 
 ///|
 pub fn ink_yellow() -> InkColor {
-  { c: false, m: false, y: true }
+  { c: false, m: false, y: true, }
 }
 
 ///|
 pub fn ink_blue() -> InkColor {
-  { c: true, m: true, y: false }
+  { c: true, m: true, y: false, }
 }
 
 ///|
 pub fn ink_green() -> InkColor {
-  { c: true, m: false, y: true }
+  { c: true, m: false, y: true, }
 }
 
 ///|
 pub fn ink_red() -> InkColor {
-  { c: false, m: true, y: true }
+  { c: false, m: true, y: true, }
 }
 
 ///|
 pub fn ink_black() -> InkColor {
-  { c: true, m: true, y: true }
+  { c: true, m: true, y: true, }
 }
 
 ///|
@@ -49,15 +49,15 @@ pub fn ink_from_channel(ch : InkChannel) -> InkColor {
 
 ///|
 pub fn ink_mix(a : InkColor, b : InkColor) -> InkColor {
-  { c: a.c || b.c, m: a.m || b.m, y: a.y || b.y }
+  { c: a.c || b.c, m: a.m || b.m, y: a.y || b.y, }
 }
 
 ///|
 pub fn ink_add_channel(ink : InkColor, ch : InkChannel) -> InkColor {
   match ch {
-    Cyan => { c: true, m: ink.m, y: ink.y }
-    Magenta => { c: ink.c, m: true, y: ink.y }
-    Yellow => { c: ink.c, m: ink.m, y: true }
+    Cyan => { c: true, m: ink.m, y: ink.y, }
+    Magenta => { c: ink.c, m: true, y: ink.y, }
+    Yellow => { c: ink.c, m: ink.m, y: true, }
   }
 }
 
@@ -119,12 +119,12 @@ pub fn channel_name(ch : InkChannel) -> String {
 
 ///|
 pub fn make_tile(kind : TileKind) -> Tile {
-  { kind, ink: ink_empty(), target_color: ink_empty() }
+  { kind, ink: ink_empty(), target_color: ink_empty(), }
 }
 
 ///|
 pub fn make_target_tile(target : InkColor) -> Tile {
-  { kind: Target, ink: ink_empty(), target_color: target }
+  { kind: Target, ink: ink_empty(), target_color: target, }
 }
 
 ///|
@@ -133,7 +133,7 @@ pub fn make_grid(w : Int, h : Int) -> Grid {
   for i = 0; i < w * h; i = i + 1 {
     tiles.push(make_tile(Paper))
   }
-  { width: w, height: h, tiles }
+  { width: w, height: h, tiles, }
 }
 
 ///|
@@ -160,7 +160,7 @@ pub fn grid_in_bounds(g : Grid, col : Int, row : Int) -> Bool {
 pub fn clone_tile(t : Tile) -> Tile {
   {
     kind: t.kind,
-    ink: { c: t.ink.c, m: t.ink.m, y: t.ink.y },
+    ink: { c: t.ink.c, m: t.ink.m, y: t.ink.y, },
     target_color: {
       c: t.target_color.c,
       m: t.target_color.m,
@@ -180,7 +180,7 @@ pub fn clone_tiles(tiles : Array[Tile]) -> Array[Tile] {
 
 ///|
 pub fn clone_budget(b : InkBudget) -> InkBudget {
-  { cyan: b.cyan, magenta: b.magenta, yellow: b.yellow }
+  { cyan: b.cyan, magenta: b.magenta, yellow: b.yellow, }
 }
 
 ///|
@@ -241,7 +241,7 @@ pub fn tier_level_count(t : Tier) -> Int {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: Zero, drops_used: 0 }
+  { completed: false, stars: Zero, drops_used: 0, }
 }
 
 ///|
@@ -256,7 +256,7 @@ pub fn new_game() -> Game {
     selected_tier: Watercolor,
     selected_level: 0,
     grid: make_grid(grid_width, grid_height),
-    budget: { cyan: 0, magenta: 0, yellow: 0 },
+    budget: { cyan: 0, magenta: 0, yellow: 0, },
     par_drops: 0,
     drops_used: 0,
     turn: 0,

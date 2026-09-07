@@ -90,9 +90,9 @@ test "empty grid has correct dimensions" {
 ///|
 test "find_arc_index_for_pos exact match" {
   let arc : Array[ArcPoint] = [
-    { gx: 5, gy: 3, angle: 0.5 },
-    { gx: 6, gy: 4, angle: 1.0 },
-    { gx: 7, gy: 5, angle: 1.5 },
+    { gx: 5, gy: 3, angle: 0.5, },
+    { gx: 6, gy: 4, angle: 1.0, },
+    { gx: 7, gy: 5, angle: 1.5, },
   ]
   let idx = find_arc_index_for_pos(arc, vec2i(6, 4))
   assert_eq(idx, 1)

@@ -31,7 +31,7 @@ fn make_grid(w : Int, h : Int) -> Array[Array[Char]] {
 fn grid_to_rows(g : Array[Array[Char]]) -> Array[String] {
   let rows : Array[String] = []
   for y in 0..<g.length() {
-    let buf = StringBuilder::new()
+    let buf = StringBuilder()
     for x in 0..<g[y].length() {
       buf.write_char(g[y][x])
     }

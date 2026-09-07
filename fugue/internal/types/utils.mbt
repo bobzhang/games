@@ -132,7 +132,7 @@ pub fn harmony_between(row_a : Int, row_b : Int) -> Int {
 
 ///|
 pub fn new_note_cell() -> NoteCell {
-  { has_note: false, is_target: false, is_locked: false }
+  { has_note: false, is_target: false, is_locked: false, }
 }
 
 ///|
@@ -145,7 +145,7 @@ pub fn new_grid(cols : Int, rows : Int) -> Grid {
     }
     cells.push(col)
   }
-  { cols, rows, cells }
+  { cols, rows, cells, }
 }
 
 ///|

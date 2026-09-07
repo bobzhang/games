@@ -17,4 +17,3 @@ pub fn get_tier_tablets(@types.Tier) -> Array[Int]
 // Type aliases
 
 // Traits
-

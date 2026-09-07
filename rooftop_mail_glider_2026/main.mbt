@@ -1550,14 +1550,14 @@ fn main {
   }
 
   let pads : Array[Pad] = [
-    { x: world_l + 280.0, y: world_t + 84.0, w: 126.0, h: 76.0, id: 0 },
-    { x: world_l + 516.0, y: world_t + 160.0, w: 132.0, h: 80.0, id: 1 },
-    { x: world_l + 774.0, y: world_t + 90.0, w: 128.0, h: 78.0, id: 2 },
-    { x: world_l + 1044.0, y: world_t + 176.0, w: 126.0, h: 76.0, id: 3 },
-    { x: world_l + 360.0, y: world_t + 402.0, w: 130.0, h: 78.0, id: 4 },
-    { x: world_l + 686.0, y: world_t + 504.0, w: 132.0, h: 80.0, id: 5 },
-    { x: world_l + 964.0, y: world_t + 420.0, w: 128.0, h: 78.0, id: 6 },
-    { x: world_l + 1168.0, y: world_t + 566.0, w: 132.0, h: 80.0, id: 7 },
+    { x: world_l + 280.0, y: world_t + 84.0, w: 126.0, h: 76.0, id: 0, },
+    { x: world_l + 516.0, y: world_t + 160.0, w: 132.0, h: 80.0, id: 1, },
+    { x: world_l + 774.0, y: world_t + 90.0, w: 128.0, h: 78.0, id: 2, },
+    { x: world_l + 1044.0, y: world_t + 176.0, w: 126.0, h: 76.0, id: 3, },
+    { x: world_l + 360.0, y: world_t + 402.0, w: 130.0, h: 78.0, id: 4, },
+    { x: world_l + 686.0, y: world_t + 504.0, w: 132.0, h: 80.0, id: 5, },
+    { x: world_l + 964.0, y: world_t + 420.0, w: 128.0, h: 78.0, id: 6, },
+    { x: world_l + 1168.0, y: world_t + 566.0, w: 132.0, h: 80.0, id: 7, },
   ]
 
   let deliveries : Array[Delivery] = Array::makei(14, fn(i) {

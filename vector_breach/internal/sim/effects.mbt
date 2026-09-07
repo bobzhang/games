@@ -14,7 +14,7 @@ pub fn move_unit_to(
   if battle.grid.in_bounds(u.x, u.y) {
     let old_tile = battle.grid.get(u.x, u.y)
     if old_tile.occupied_by == unit_id {
-      battle.grid.set(u.x, u.y, { ..old_tile, occupied_by: -1 })
+      battle.grid.set(u.x, u.y, { ..old_tile, occupied_by: -1, })
     }
   }
   // Set new position
@@ -22,7 +22,7 @@ pub fn move_unit_to(
   u.y = ny
   // Mark new tile
   if battle.grid.in_bounds(nx, ny) {
-    battle.grid.set(nx, ny, { ..battle.grid.get(nx, ny), occupied_by: unit_id })
+    battle.grid.set(nx, ny, { ..battle.grid.get(nx, ny), occupied_by: unit_id, })
   }
 }
 
@@ -188,7 +188,7 @@ pub fn kill_unit(battle : @types.BattleState, unit_id : Int) -> Unit {
   if battle.grid.in_bounds(u.x, u.y) {
     let tile = battle.grid.get(u.x, u.y)
     if tile.occupied_by == unit_id {
-      battle.grid.set(u.x, u.y, { ..tile, occupied_by: -1 })
+      battle.grid.set(u.x, u.y, { ..tile, occupied_by: -1, })
     }
   }
   let name = get_unit_name(battle, unit_id)
@@ -304,7 +304,11 @@ pub fn try_push(
       if battle.grid.in_bounds(wall_nx, wall_ny) {
         let beyond = battle.grid.get(wall_nx, wall_ny)
         if beyond.kind == Chasm {
-          battle.grid.set(nx, ny, { kind: Chasm, hazard: None, occupied_by: -1 })
+          battle.grid.set(nx, ny, {
+            kind: Chasm,
+            hazard: None,
+            occupied_by: -1,
+          })
           battle.turn_log.push("Wall crumbles into the chasm!")
         }
       }
@@ -390,7 +394,7 @@ pub fn try_push(
     if tile.hazard == Mine {
       let _ = apply_damage(battle, unit_id, 3)
       battle.turn_log.push("\{name} pushed onto a mine! 3 damage!")
-      battle.grid.set(nx, ny, { ..battle.grid.get(nx, ny), hazard: None })
+      battle.grid.set(nx, ny, { ..battle.grid.get(nx, ny), hazard: None, })
       return
     }
     // Fire on ice -> melts to water

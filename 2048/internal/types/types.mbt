@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Mutable tile data used for value storage and render animation.
 pub(all) struct Tile {
   mut value : Int

@@ -218,7 +218,7 @@ pub fn Particle::Particle() -> Particle {
 ///|
 /// Creates a default Shock value for a new session.
 pub fn Shock::Shock() -> Shock {
-  { active: false, ring: 0, a0: 0.0, a1: 0.0, life: 0.0, beta: false }
+  { active: false, ring: 0, a0: 0.0, a1: 0.0, life: 0.0, beta: false, }
 }
 
 ///|

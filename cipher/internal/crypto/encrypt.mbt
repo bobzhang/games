@@ -1,6 +1,6 @@
 ///|
 pub fn caesar_encrypt(plaintext : String, shift : Int) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   let s = (shift % 26 + 26) % 26
   for i in 0..<plaintext.length() {
     let c = @types.str_char_at(plaintext, i)
@@ -22,7 +22,7 @@ pub fn caesar_decrypt(ciphertext : String, shift : Int) -> String {
 
 ///|
 pub fn substitution_encrypt(plaintext : String, key : Array[Int]) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i in 0..<plaintext.length() {
     let c = @types.str_char_at(plaintext, i)
     if @types.is_upper(c) {
@@ -37,7 +37,7 @@ pub fn substitution_encrypt(plaintext : String, key : Array[Int]) -> String {
 
 ///|
 pub fn substitution_decrypt(ciphertext : String, key : Array[Int]) -> String {
-  let inv : Array[Int] = Array::new(capacity=26)
+  let inv : Array[Int] = Array(capacity=26)
   for _i in 0..<26 {
     inv.push(0)
   }
@@ -49,7 +49,7 @@ pub fn substitution_decrypt(ciphertext : String, key : Array[Int]) -> String {
 
 ///|
 pub fn vigenere_encrypt(plaintext : String, key : String) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   let mut ki = 0
   let key_len = key.length()
   for i in 0..<plaintext.length() {
@@ -69,7 +69,7 @@ pub fn vigenere_encrypt(plaintext : String, key : String) -> String {
 
 ///|
 pub fn vigenere_decrypt(ciphertext : String, key : String) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   let mut ki = 0
   let key_len = key.length()
   for i in 0..<ciphertext.length() {

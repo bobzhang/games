@@ -35,4 +35,3 @@ pub fn read_and_compare(Array[@types.Base], Array[@types.Trait]) -> (Array[@type
 // Type aliases
 
 // Traits
-

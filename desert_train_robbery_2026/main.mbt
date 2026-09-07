@@ -393,7 +393,7 @@ fn main {
   }
 
   let wagons : Array[Wagon] = Array::makei(wagon_n, fn(_i) {
-    { x: 0.0, len: 180.0, roof_y: 520.0, loot: 1 }
+    { x: 0.0, len: 180.0, roof_y: 520.0, loot: 1, }
   })
 
   let sheriffs : Array[Sheriff] = Array::makei(sheriff_n, fn(_i) {
@@ -408,11 +408,11 @@ fn main {
   })
 
   let bullets : Array[Bullet] = Array::makei(bullet_n, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, owner: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, owner: 0, active: false, }
   })
 
   let particles : Array[Particle] = Array::makei(particle_n, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false, }
   })
 
   let mut level = 1

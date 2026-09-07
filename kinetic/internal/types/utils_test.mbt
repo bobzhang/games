@@ -46,11 +46,11 @@ test "flip_dir alternates direction" {
 
 ///|
 test "grid_dist_sq" {
-  let a : @types.Vec2i = { x: 0, y: 0 }
-  let b : @types.Vec2i = { x: 3, y: 4 }
+  let a : @types.Vec2i = { x: 0, y: 0, }
+  let b : @types.Vec2i = { x: 3, y: 4, }
   inspect(@types.grid_dist_sq(a, b), content="25")
-  let c : @types.Vec2i = { x: 1, y: 1 }
-  let d : @types.Vec2i = { x: 4, y: 1 }
+  let c : @types.Vec2i = { x: 1, y: 1, }
+  let d : @types.Vec2i = { x: 4, y: 1, }
   inspect(@types.grid_dist_sq(c, d), content="9")
 }
 
@@ -72,7 +72,7 @@ test "rpm_satisfied with tolerance" {
 
 ///|
 test "check_output requires both rpm and direction" {
-  let output = @types.new_output({ x: 5, y: 5 }, 60.0, CW)
+  let output = @types.new_output({ x: 5, y: 5, }, 60.0, CW)
   // Correct rpm and direction
   inspect(@types.check_output(output, 60.0, CW), content="true")
   // Correct rpm, wrong direction
@@ -83,7 +83,7 @@ test "check_output requires both rpm and direction" {
 
 ///|
 test "new_gear initializes correctly" {
-  let gear = @types.new_gear({ x: 3, y: 4 }, Medium)
+  let gear = @types.new_gear({ x: 3, y: 4, }, Medium)
   inspect(gear.pos.x, content="3")
   inspect(gear.pos.y, content="4")
   inspect(gear.kind, content="Medium")
@@ -95,22 +95,22 @@ test "new_gear initializes correctly" {
 ///|
 test "find_gear_at" {
   let gears : Array[@types.Gear] = [
-    @types.new_gear({ x: 1, y: 1 }, Small),
-    @types.new_gear({ x: 3, y: 3 }, Medium),
-    @types.new_gear({ x: 5, y: 5 }, Large),
+    @types.new_gear({ x: 1, y: 1, }, Small),
+    @types.new_gear({ x: 3, y: 3, }, Medium),
+    @types.new_gear({ x: 5, y: 5, }, Large),
   ]
-  inspect(@types.find_gear_at(gears, { x: 3, y: 3 }), content="1")
-  inspect(@types.find_gear_at(gears, { x: 7, y: 7 }), content="-1")
+  inspect(@types.find_gear_at(gears, { x: 3, y: 3, }), content="1")
+  inspect(@types.find_gear_at(gears, { x: 7, y: 7, }), content="-1")
   gears[1].active = false
-  inspect(@types.find_gear_at(gears, { x: 3, y: 3 }), content="-1")
+  inspect(@types.find_gear_at(gears, { x: 3, y: 3, }), content="-1")
 }
 
 ///|
 test "count_placed_gears" {
   let gears : Array[@types.Gear] = [
-    @types.new_gear({ x: 1, y: 1 }, Small),
-    @types.new_gear({ x: 3, y: 3 }, Medium),
-    @types.new_gear({ x: 5, y: 5 }, Large),
+    @types.new_gear({ x: 1, y: 1, }, Small),
+    @types.new_gear({ x: 3, y: 3, }, Medium),
+    @types.new_gear({ x: 5, y: 5, }, Large),
   ]
   inspect(@types.count_placed_gears(gears), content="3")
   gears[1].active = false
@@ -119,10 +119,10 @@ test "count_placed_gears" {
 
 ///|
 test "gears_overlap detects overlapping gears" {
-  let g1 = @types.new_gear({ x: 2, y: 2 }, Medium) // radius 2
-  let g2 = @types.new_gear({ x: 3, y: 2 }, Medium) // radius 2, dist=1 < 2+2
+  let g1 = @types.new_gear({ x: 2, y: 2, }, Medium) // radius 2
+  let g2 = @types.new_gear({ x: 3, y: 2, }, Medium) // radius 2, dist=1 < 2+2
   inspect(@types.gears_overlap(g1, g2), content="true")
-  let g3 = @types.new_gear({ x: 6, y: 2 }, Medium) // dist=4 = 2+2, not overlap (equal not less)
+  let g3 = @types.new_gear({ x: 6, y: 2, }, Medium) // dist=4 = 2+2, not overlap (equal not less)
   inspect(@types.gears_overlap(g1, g3), content="false")
 }
 
@@ -176,7 +176,7 @@ test "gear_tooth_count" {
 ///|
 test "multi-gear meshing scenario" {
   // Small at (0,0) and Medium at (3,0): dist_sq = 9, r1+r2 = 1+2 = 3, 3*3=9, should mesh
-  let dsq = @types.grid_dist_sq({ x: 0, y: 0 }, { x: 3, y: 0 })
+  let dsq = @types.grid_dist_sq({ x: 0, y: 0, }, { x: 3, y: 0, })
   inspect(@types.can_mesh(1, 2, dsq), content="true")
   // Speed from small (r=1) driving medium (r=2): ratio = 1/2 = 0.5
   // So if input is 60 RPM, output is 30 RPM
@@ -228,14 +228,14 @@ test "ratchet blocks reverse concept" {
   // A ratchet only allows CW transmission
   // If driven in CCW, it should be blocked
   // Testing the concept: ratchet at output with CCW direction = blocked
-  let ratchet_gear = @types.new_gear({ x: 5, y: 5 }, Ratchet)
+  let ratchet_gear = @types.new_gear({ x: 5, y: 5, }, Ratchet)
   inspect(ratchet_gear.kind, content="Ratchet")
   inspect(ratchet_gear.radius, content="2")
 }
 
 ///|
 test "output satisfaction with tolerance edge cases" {
-  let output = @types.new_output({ x: 0, y: 0 }, 100.0, CW)
+  let output = @types.new_output({ x: 0, y: 0, }, 100.0, CW)
   // Exactly 10% above
   inspect(@types.check_output(output, 110.0, CW), content="true")
   // Exactly 10% below

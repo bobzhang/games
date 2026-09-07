@@ -177,7 +177,8 @@ pub(all) struct Game {
   stars : Array[Star]
   mut message : String
   mut message_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   planets : Array[Planet]
@@ -187,19 +188,22 @@ pub(all) struct Level {
   par_ticks : Int
   name : String
   tier : Tier
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_ticks : Int
   mut stars : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Planet {
   pos : Vec2f
   mass : Float
   radius : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Planet::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Aiming
@@ -207,13 +211,19 @@ pub(all) enum PlayState {
   Won
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct Probe {
   mut pos : Vec2f
   mut vel : Vec2f
   mut active : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Probe::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -222,6 +232,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct Star {
@@ -229,32 +244,42 @@ pub(all) struct Star {
   y : Float
   brightness : Int
   size : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Star::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Station {
   pos : Vec2f
   radius : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Station::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tier {
   Launch
   Slingshot
   Navigation
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Vec2f {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2f::equal(Self, Self) -> Bool
+pub fn Vec2f::not_equal(Self, Self) -> Bool
+pub fn Vec2f::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Waypoint {
   pos : Vec2f
   radius : Float
   mut collected : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Waypoint::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

@@ -205,14 +205,14 @@ fn handle_assign_letter(
           }
           // Clear the existing mapping
           let old_val = game.current_mapping.values[existing]
-          game.undo_stack.push({ symbol_index: existing, old_value: old_val })
+          game.undo_stack.push({ symbol_index: existing, old_value: old_val, })
           @types.mapping_clear(game.current_mapping, existing_sym)
         }
       }
       // Save undo
       let si = @types.symbol_index(sym)
       let old_val = game.current_mapping.values[si]
-      game.undo_stack.push({ symbol_index: si, old_value: old_val })
+      game.undo_stack.push({ symbol_index: si, old_value: old_val, })
       // Apply mapping
       @types.mapping_set(game.current_mapping, sym, letter_idx)
       game.guesses = game.guesses + 1
@@ -303,7 +303,7 @@ fn handle_clear(game : @types.Game, tablet : @types.Tablet) -> Unit {
       let si = @types.symbol_index(sym)
       let old_val = game.current_mapping.values[si]
       if old_val >= 0 {
-        game.undo_stack.push({ symbol_index: si, old_value: old_val })
+        game.undo_stack.push({ symbol_index: si, old_value: old_val, })
         @types.mapping_clear(game.current_mapping, sym)
         @types.set_message(game, "Mapping cleared", 0.5)
       }

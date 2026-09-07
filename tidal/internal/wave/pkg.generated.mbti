@@ -19,4 +19,3 @@ pub fn simulate_tick(@types.WaveGrid) -> Unit
 // Type aliases
 
 // Traits
-

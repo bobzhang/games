@@ -200,6 +200,9 @@ pub(all) enum Team {
 } derive(Eq)
 
 ///|
+pub extend Team with Eq::{not_equal, equal}
+
+///|
 /// Movement direction.
 pub(all) enum Dir {
   Up
@@ -207,6 +210,9 @@ pub(all) enum Dir {
   Down
   Left
 } derive(Eq)
+
+///|
+pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Convert an integer to a direction.
@@ -232,6 +238,9 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+pub extend Tile with Eq::{not_equal, equal}
+
+///|
 /// Current game state.
 pub(all) enum GameState {
   Menu
@@ -244,6 +253,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Enemy variant.
 pub(all) enum EnemyKind {
   Basic
@@ -251,6 +263,9 @@ pub(all) enum EnemyKind {
   Heavy
   Sniper
 } derive(Eq)
+
+///|
+pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Power-up variant.
@@ -262,6 +277,9 @@ pub(all) enum PowerupKind {
   Shovel
   Tank
 } derive(Eq)
+
+///|
+pub extend PowerupKind with Eq::{not_equal, equal}
 
 ///|
 /// World X coordinate of the left enemy spawn point.

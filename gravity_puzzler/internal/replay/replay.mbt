@@ -16,7 +16,7 @@ pub fn record_gravity_rotate(
 ///|
 /// Record a player movement into the move history
 pub fn record_player_move(game : @types.Game, dx : Int, dy : Int) -> Unit {
-  let frame : @types.ReplayFrame = { direction: Down, move_type: 1, dx, dy }
+  let frame : @types.ReplayFrame = { direction: Down, move_type: 1, dx, dy, }
   game.move_history.push(frame)
 }
 
@@ -148,7 +148,7 @@ pub fn draw_ghost_hud(game : @types.Game) -> Unit {
 ///|
 /// Encode move history as a compact string for sharing/saving
 pub fn encode_replay(game : @types.Game) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i in 0..<game.move_history.length() {
     let frame = game.move_history[i]
     if i > 0 {
@@ -191,10 +191,10 @@ pub fn decode_replay(data : String) -> Array[@types.ReplayFrame] {
     let first = part[0]
     let ch = Int::unsafe_to_char(first.to_int())
     match ch {
-      'D' => frames.push({ direction: Down, move_type: 0, dx: 0, dy: 0 })
-      'U' => frames.push({ direction: Up, move_type: 0, dx: 0, dy: 0 })
-      'L' => frames.push({ direction: Left, move_type: 0, dx: 0, dy: 0 })
-      'R' => frames.push({ direction: Right, move_type: 0, dx: 0, dy: 0 })
+      'D' => frames.push({ direction: Down, move_type: 0, dx: 0, dy: 0, })
+      'U' => frames.push({ direction: Up, move_type: 0, dx: 0, dy: 0, })
+      'L' => frames.push({ direction: Left, move_type: 0, dx: 0, dy: 0, })
+      'R' => frames.push({ direction: Right, move_type: 0, dx: 0, dy: 0, })
       'M' => {
         // Parse Mdx:dy
         let coords = parse_move_coords(part)
@@ -214,7 +214,7 @@ pub fn decode_replay(data : String) -> Array[@types.ReplayFrame] {
 ///|
 fn split_by_comma(s : String) -> Array[String] {
   let parts : Array[String] = []
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i in 0..<s.length() {
     let ch = Int::unsafe_to_char(s[i].to_int())
     if ch == ',' {
@@ -251,7 +251,7 @@ fn parse_move_coords(s : String) -> (Int, Int) {
 
 ///|
 fn substring(s : String, start : Int, end : Int) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i in start..<end {
     if i < s.length() {
       buf.write_char(Int::unsafe_to_char(s[i].to_int()))

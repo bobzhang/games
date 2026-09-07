@@ -163,7 +163,8 @@ pub(all) struct Caravan {
   mut route : Array[HexCoord]
   mut route_index : Int
   mut move_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Caravan::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -185,22 +186,30 @@ pub(all) struct Game {
   mut result_stars : Int
   mut water_preview : Int
   mut anim_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexCoord {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn HexCoord::equal(Self, Self) -> Bool
+pub fn HexCoord::not_equal(Self, Self) -> Bool
+pub fn HexCoord::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexMap {
   width : Int
   height : Int
   tiles : Array[Array[HexTile]]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HexMap::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexTile {
   kind : TileKind
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn HexTile::equal(Self, Self) -> Bool
+pub fn HexTile::not_equal(Self, Self) -> Bool
+pub fn HexTile::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   map : HexMap
@@ -211,14 +220,16 @@ pub(all) struct Level {
   total_artifacts : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut stars : Int
   mut best_gold : Int
   mut best_artifacts : Int
   mut completed : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Planning
@@ -226,6 +237,11 @@ pub(all) enum PlayState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -235,6 +251,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -242,6 +263,11 @@ pub(all) enum Tier {
   DuneSea
   LostCity
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) enum TileKind {
@@ -253,9 +279,13 @@ pub(all) enum TileKind {
   Sandstorm
   Destination
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 // Type aliases
 
 // Traits
-

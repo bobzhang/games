@@ -1,34 +1,34 @@
 ///|
 /// Generated lunar battlefield backdrop texture.
-let tex_lunar_battlefield_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_lunar_battlefield_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated moon gate portal texture.
-let tex_moon_gate_core : Ref[@raylib.Texture?] = { val: None }
+let tex_moon_gate_core : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated level 1 guardian node texture.
-let tex_guardian_node_l1 : Ref[@raylib.Texture?] = { val: None }
+let tex_guardian_node_l1 : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated level 2 guardian node texture.
-let tex_guardian_node_l2 : Ref[@raylib.Texture?] = { val: None }
+let tex_guardian_node_l2 : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated level 3 guardian node texture.
-let tex_guardian_node_l3 : Ref[@raylib.Texture?] = { val: None }
+let tex_guardian_node_l3 : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated skitter enemy texture.
-let tex_skitter_enemy : Ref[@raylib.Texture?] = { val: None }
+let tex_skitter_enemy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated carapace enemy texture.
-let tex_carapace_enemy : Ref[@raylib.Texture?] = { val: None }
+let tex_carapace_enemy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated wraith enemy texture.
-let tex_wraith_enemy : Ref[@raylib.Texture?] = { val: None }
+let tex_wraith_enemy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Moon Gate Defense texture.
@@ -223,7 +223,7 @@ fn draw_guardian_node_asset(
   size : Float,
 ) -> Unit {
   match node_texture_ref(level).val {
-    Some(texture) => {
+    Some(texture) =>
       draw_art_centered_rotated(
         texture,
         x,
@@ -233,7 +233,6 @@ fn draw_guardian_node_asset(
         dir_rotation_degrees(facing),
         @raylib.white,
       )
-    }
     None => ()
   }
 }
@@ -261,14 +260,7 @@ fn draw_enemy_asset(enemy : @types.Enemy, x : Float, y : Float) -> Unit {
         enemy.radius * 3.0
       }
       let aspect : Float = if enemy.kind == Skitter { 1.34 } else { 1.0 }
-      draw_art_centered(
-        texture,
-        x,
-        y,
-        size * aspect,
-        size,
-        @raylib.white,
-      )
+      draw_art_centered(texture, x, y, size * aspect, size, @raylib.white)
     }
     None => ()
   }

@@ -167,11 +167,21 @@ test "find_feature_pos" {
   grid[10] = Some(Mountain)
   grid[25] = Some(Town)
   let pos = @types.find_feature_pos(grid, 8, Mountain)
-  inspect(pos, content="Some({x: 2, y: 1})")
+  debug_inspect(
+    pos,
+    content=(
+      #|Some({ x: 2, y: 1 })
+    ),
+  )
   let pos2 = @types.find_feature_pos(grid, 8, Town)
-  inspect(pos2, content="Some({x: 1, y: 3})")
+  debug_inspect(
+    pos2,
+    content=(
+      #|Some({ x: 1, y: 3 })
+    ),
+  )
   let pos3 = @types.find_feature_pos(grid, 8, Forest)
-  inspect(pos3, content="None")
+  debug_inspect(pos3, content="None")
 }
 
 ///|
@@ -226,7 +236,7 @@ test "reset_level clears state" {
   game.total_placements = 5
   game.incorrect_count = 2
   @types.reset_level(game)
-  inspect(game.grid[5], content="None")
+  debug_inspect(game.grid[5], content="None")
   inspect(game.total_placements, content="0")
   inspect(game.incorrect_count, content="0")
   inspect(clue.status, content="Pending")

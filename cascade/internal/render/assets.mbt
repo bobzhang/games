@@ -1,47 +1,47 @@
 ///|
-let tex_board_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_board_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_domino_normal : Ref[@raylib.Texture?] = { val: None }
+let tex_domino_normal : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_domino_heavy : Ref[@raylib.Texture?] = { val: None }
+let tex_domino_heavy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_domino_splitter : Ref[@raylib.Texture?] = { val: None }
+let tex_domino_splitter : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_domino_delay : Ref[@raylib.Texture?] = { val: None }
+let tex_domino_delay : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_title_chain : Ref[@raylib.Texture?] = { val: None }
+let tex_title_chain : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_chains : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_chains : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_splits : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_splits : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_timing : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_timing : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_ui_panel : Ref[@raylib.Texture?] = { val: None }
+let tex_ui_panel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_star_icon : Ref[@raylib.Texture?] = { val: None }
+let tex_star_icon : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_starter_glow : Ref[@raylib.Texture?] = { val: None }
+let tex_starter_glow : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_target_glow : Ref[@raylib.Texture?] = { val: None }
+let tex_target_glow : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_hover_glow : Ref[@raylib.Texture?] = { val: None }
+let tex_hover_glow : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_bad_socket_glow : Ref[@raylib.Texture?] = { val: None }
+let tex_bad_socket_glow : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {
@@ -179,7 +179,15 @@ fn draw_domino_art(
 ) -> Bool {
   match domino_art(kind) {
     Some(texture) => {
-      draw_art_centered(texture, cx, cy, 18.0, 46.0 * height_scale, rotation, tint)
+      draw_art_centered(
+        texture,
+        cx,
+        cy,
+        18.0,
+        46.0 * height_scale,
+        rotation,
+        tint,
+      )
       true
     }
     None => false

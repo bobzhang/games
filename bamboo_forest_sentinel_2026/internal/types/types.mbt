@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Stores runtime data for InputState.
 pub(all) struct InputState {
   mut move_x : Int
@@ -80,7 +83,7 @@ pub(all) struct Beacon {
 /// Creates a default Beacon value for a new session.
 pub fn Beacon::Beacon(index : Int) -> Beacon {
   let (x, y) = beacon_position(index)
-  { x, y, integrity: beacon_integrity_max, pulse_t: 0.0 }
+  { x, y, integrity: beacon_integrity_max, pulse_t: 0.0, }
 }
 
 ///|
@@ -97,7 +100,7 @@ pub(all) struct Trap {
 /// Creates a default Trap value for a new session.
 pub fn Trap::Trap(index : Int) -> Trap {
   let (x, y) = trap_slot_position(index)
-  { active: false, x, y, trigger_cd: 0.0, flash_t: 0.0 }
+  { active: false, x, y, trigger_cd: 0.0, flash_t: 0.0, }
 }
 
 ///|

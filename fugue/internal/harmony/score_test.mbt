@@ -31,8 +31,8 @@ test "compute_total_harmony multi-column" {
 test "check_all_targets true" {
   let grid = @types.new_grid(8, 7)
   let targets : Array[@types.TargetPos] = [
-    { col: 1, row: 6 },
-    { col: 3, row: 4 },
+    { col: 1, row: 6, },
+    { col: 3, row: 4, },
   ]
   grid.cells[1][6].has_note = true
   grid.cells[3][4].has_note = true
@@ -43,8 +43,8 @@ test "check_all_targets true" {
 test "check_all_targets false" {
   let grid = @types.new_grid(8, 7)
   let targets : Array[@types.TargetPos] = [
-    { col: 1, row: 6 },
-    { col: 3, row: 4 },
+    { col: 1, row: 6, },
+    { col: 3, row: 4, },
   ]
   grid.cells[1][6].has_note = true
   // Missing second target
@@ -60,7 +60,7 @@ test "compute_stars melody tier all matched" {
     tier: Melody,
     grid_cols: 8,
     grid_rows: 7,
-    targets: [{ col: 0, row: 6 }],
+    targets: [{ col: 0, row: 6, }],
     note_budget: 3,
     harmony_threshold_2star: 0,
     harmony_threshold_3star: 0,
@@ -79,7 +79,7 @@ test "compute_stars no targets matched" {
     tier: Harmony,
     grid_cols: 8,
     grid_rows: 7,
-    targets: [{ col: 0, row: 6 }],
+    targets: [{ col: 0, row: 6, }],
     note_budget: 3,
     harmony_threshold_2star: 4,
     harmony_threshold_3star: 8,
@@ -97,7 +97,7 @@ test "compute_stars harmony tier 2 star" {
     tier: Harmony,
     grid_cols: 8,
     grid_rows: 7,
-    targets: [{ col: 0, row: 6 }],
+    targets: [{ col: 0, row: 6, }],
     note_budget: 5,
     harmony_threshold_2star: 2,
     harmony_threshold_3star: 6,
@@ -117,7 +117,7 @@ test "compute_stars harmony tier 3 star" {
     tier: Harmony,
     grid_cols: 8,
     grid_rows: 7,
-    targets: [{ col: 0, row: 6 }],
+    targets: [{ col: 0, row: 6, }],
     note_budget: 5,
     harmony_threshold_2star: 2,
     harmony_threshold_3star: 5,

@@ -10,7 +10,10 @@ pub(all) struct SpeciesNeeds {
   min_space : Int
   is_predator : Bool
   fears_predators : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend SpeciesNeeds with Debug::{to_repr}
 
 ///|
 pub fn species_needs(species : Species) -> SpeciesNeeds {

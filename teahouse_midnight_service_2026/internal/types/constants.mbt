@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Identifies a tea variety for orders, brewing, and serving.
 pub(all) enum Tea {
   Jasmine
@@ -16,6 +19,9 @@ pub(all) enum Tea {
   Matcha
   Berry
 } derive(Eq)
+
+///|
+pub extend Tea with Eq::{not_equal, equal}
 
 ///|
 /// Window width in pixels.

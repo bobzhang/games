@@ -112,7 +112,7 @@ fn apply_hazard_damage(battle : @types.BattleState) -> Unit {
           let _ = apply_damage(battle, i, 3)
           battle.turn_log.push("\{name} triggers a mine for 3 damage!")
           // Mine is consumed
-          battle.grid.set(u.x, u.y, { ..tile, hazard: None })
+          battle.grid.set(u.x, u.y, { ..tile, hazard: None, })
         }
         Smoke | None => ()
       }

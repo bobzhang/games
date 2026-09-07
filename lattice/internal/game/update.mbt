@@ -261,7 +261,7 @@ fn make_move(game : @types.Game, coord : @types.HexCoord) -> Unit {
   // Resolve captures
   let captured = @board.resolve_captures_cascading(game.board, player)
   for i in 0..<captured.length() {
-    game.capture_anims.push({ pos: captured[i], timer: 0.0 })
+    game.capture_anims.push({ pos: captured[i], timer: 0.0, })
   }
   if captured.length() > 0 {
     // Floating score animation at center of captured stones

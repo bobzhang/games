@@ -70,7 +70,7 @@ fn main {
   @draw.init_font()
 
   let sectors : Array[Sector] = Array::makei(sector_n, fn(_i) {
-    { demand: 100, trend: 0 }
+    { demand: 100, trend: 0, }
   })
   reset_sector_values(sectors)
 

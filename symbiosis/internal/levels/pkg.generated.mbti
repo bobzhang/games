@@ -79,4 +79,3 @@ pub fn world_unlocked(Array[Array[@types.LevelScore]], Int) -> Bool
 // Type aliases
 
 // Traits
-

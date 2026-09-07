@@ -180,7 +180,7 @@ pub fn in_grid(gx : Int, gy : Int) -> Bool {
 
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
@@ -226,7 +226,7 @@ pub fn clone_domino(d : Domino) -> Domino {
 
 ///|
 pub fn clone_dominoes(arr : Array[Domino]) -> Array[Domino] {
-  let result : Array[Domino] = Array::new(capacity=arr.length())
+  let result : Array[Domino] = Array(capacity=arr.length())
   for i in 0..<arr.length() {
     result.push(clone_domino(arr[i]))
   }
@@ -300,12 +300,12 @@ pub fn new_budget(
   splitter : Int,
   delay : Int,
 ) -> DominoBudget {
-  { normal, heavy, splitter, delay }
+  { normal, heavy, splitter, delay, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, dominoes_used: 0, ticks_taken: 0 }
+  { stars: 0, completed: false, dominoes_used: 0, ticks_taken: 0, }
 }
 
 ///|
@@ -358,7 +358,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

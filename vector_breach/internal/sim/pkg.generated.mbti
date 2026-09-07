@@ -95,4 +95,3 @@ pub fn unit_at(@types.BattleState, Int, Int) -> Int
 // Type aliases
 
 // Traits
-

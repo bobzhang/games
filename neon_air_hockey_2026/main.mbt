@@ -240,7 +240,7 @@ fn main {
   defer unload_game_art(art)
 
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false, }
   })
   clear_sparks(sparks)
 

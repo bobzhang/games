@@ -122,6 +122,8 @@ pub(all) enum Dir {
   Left
   Right
 } derive(Eq)
+pub fn Dir::equal(Self, Self) -> Bool
+pub fn Dir::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   terrain : Array[Tile]
@@ -174,12 +176,16 @@ pub(all) enum GameResult {
   Win
   Lose
 } derive(Eq)
+pub fn GameResult::equal(Self, Self) -> Bool
+pub fn GameResult::not_equal(Self, Self) -> Bool
 
 pub(all) enum GameState {
   Title
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) enum Tile {
   Ground
@@ -187,8 +193,9 @@ pub(all) enum Tile {
   Depot
   Shelter
 } derive(Eq)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

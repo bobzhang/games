@@ -25,4 +25,3 @@ pub fn select_move(@types.HexBoard, @types.Player, @types.Difficulty) -> @types.
 // Type aliases
 
 // Traits
-

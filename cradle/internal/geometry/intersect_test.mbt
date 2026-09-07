@@ -44,8 +44,8 @@ test "compute_all_intersections with two crossing strings" {
   let pegs = @types.make_pegs()
   // String from peg 0 to peg 12 (top to bottom) and peg 6 to peg 18 (right to left)
   let strings : Array[@types.StringLine] = [
-    { peg_a: 0, peg_b: 12 },
-    { peg_a: 6, peg_b: 18 },
+    { peg_a: 0, peg_b: 12, },
+    { peg_a: 6, peg_b: 18, },
   ]
   let intersections = @geometry.compute_all_intersections(strings, pegs)
   // These should cross near the center
@@ -60,10 +60,10 @@ test "compute_all_intersections with two crossing strings" {
 ///|
 test "match_intersections_to_targets within tolerance" {
   let intersections : Array[@types.Intersection] = [
-    { pos: @types.vec2f(100.0, 100.0), matched_target: -1 },
+    { pos: @types.vec2f(100.0, 100.0), matched_target: -1, },
   ]
   let targets : Array[@types.TargetDot] = [
-    { pos: @types.vec2f(105.0, 100.0), hit: false },
+    { pos: @types.vec2f(105.0, 100.0), hit: false, },
   ]
   let hit_count = @geometry.match_intersections_to_targets(
     intersections, targets,
@@ -76,10 +76,10 @@ test "match_intersections_to_targets within tolerance" {
 ///|
 test "match_intersections_to_targets outside tolerance" {
   let intersections : Array[@types.Intersection] = [
-    { pos: @types.vec2f(100.0, 100.0), matched_target: -1 },
+    { pos: @types.vec2f(100.0, 100.0), matched_target: -1, },
   ]
   let targets : Array[@types.TargetDot] = [
-    { pos: @types.vec2f(200.0, 200.0), hit: false },
+    { pos: @types.vec2f(200.0, 200.0), hit: false, },
   ]
   let hit_count = @geometry.match_intersections_to_targets(
     intersections, targets,
@@ -93,8 +93,8 @@ test "compute_all_intersections with no crossing strings" {
   let pegs = @types.make_pegs()
   // Two adjacent strings that won't cross
   let strings : Array[@types.StringLine] = [
-    { peg_a: 0, peg_b: 1 },
-    { peg_a: 2, peg_b: 3 },
+    { peg_a: 0, peg_b: 1, },
+    { peg_a: 2, peg_b: 3, },
   ]
   let intersections = @geometry.compute_all_intersections(strings, pegs)
   inspect(intersections.length(), content="0")
@@ -105,9 +105,9 @@ test "multiple intersections from multiple strings" {
   let pegs = @types.make_pegs()
   // 3 strings through center should give 3 intersections
   let strings : Array[@types.StringLine] = [
-    { peg_a: 0, peg_b: 12 },
-    { peg_a: 4, peg_b: 16 },
-    { peg_a: 8, peg_b: 20 },
+    { peg_a: 0, peg_b: 12, },
+    { peg_a: 4, peg_b: 16, },
+    { peg_a: 8, peg_b: 20, },
   ]
   let intersections = @geometry.compute_all_intersections(strings, pegs)
   inspect(intersections.length(), content="3")

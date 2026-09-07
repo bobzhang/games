@@ -353,15 +353,15 @@ fn main {
   }
 
   let checkpoints : Array[Checkpoint] = Array::makei(max_checkpoints, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, width: 0.0, state: 0, pulse_t: 0.0 }
+    { active: false, x: 0.0, y: 0.0, width: 0.0, state: 0, pulse_t: 0.0, }
   })
 
   let hazards : Array[Hazard] = Array::makei(max_hazards, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, kind: 0, size: 0.0 }
+    { active: false, x: 0.0, y: 0.0, kind: 0, size: 0.0, }
   })
 
   let pickups : Array[Pickup] = Array::makei(max_pickups, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, kind: 0, t: 0.0 }
+    { active: false, x: 0.0, y: 0.0, kind: 0, t: 0.0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

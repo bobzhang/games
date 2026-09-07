@@ -7,11 +7,17 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Action mode used when selecting a board cell.
 pub(all) enum PlayMode {
   Reveal
   Flag
 } derive(Eq)
+
+///|
+pub extend PlayMode with Eq::{not_equal, equal}
 
 ///|
 /// End-of-run performance grade.
@@ -22,6 +28,9 @@ pub(all) enum Grade {
   GradeC
   GradeD
 } derive(Eq)
+
+///|
+pub extend Grade with Eq::{not_equal, equal}
 
 ///|
 /// Single board cell state.
@@ -89,7 +98,7 @@ pub(all) struct Game {
 ///|
 /// Creates a fresh unrevealed, non-mined cell.
 pub fn Cell::Cell() -> Cell {
-  { mine: false, revealed: false, flagged: false, exploded: false, around: 0 }
+  { mine: false, revealed: false, flagged: false, exploded: false, around: 0, }
 }
 
 ///|

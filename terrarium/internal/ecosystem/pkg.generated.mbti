@@ -31,4 +31,3 @@ pub fn simulate_turn(@types.Game) -> @types.SimTurnLog
 // Type aliases
 
 // Traits
-

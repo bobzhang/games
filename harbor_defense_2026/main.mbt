@@ -526,7 +526,7 @@ fn main {
   })
 
   let boats : Array[CivilianBoat] = Array::makei(max_boats, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, vx: 0.0, hp: 0.0, value: 0, panic_t: 0.0 }
+    { active: false, x: 0.0, y: 0.0, vx: 0.0, hp: 0.0, value: 0, panic_t: 0.0, }
   })
 
   let projectiles : Array[Projectile] = Array::makei(max_projectiles, fn(_i) {
@@ -544,7 +544,7 @@ fn main {
   })
 
   let pickups : Array[Pickup] = Array::makei(max_pickups, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, vy: 0.0, kind: 0, t: 0.0 }
+    { active: false, x: 0.0, y: 0.0, vy: 0.0, kind: 0, t: 0.0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

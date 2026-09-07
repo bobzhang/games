@@ -193,6 +193,8 @@ pub(all) enum GameState {
   GameOver
   Victory
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Player {
   mut x : Float
@@ -233,6 +235,8 @@ pub(all) enum RaiderKind {
   Brute
   Rider
 } derive(Eq)
+pub fn RaiderKind::equal(Self, Self) -> Bool
+pub fn RaiderKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Wagon {
   mut x : Float
@@ -246,4 +250,3 @@ pub fn Wagon::Wagon(Int) -> Self
 // Type aliases
 
 // Traits
-

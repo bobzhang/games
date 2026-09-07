@@ -3,13 +3,22 @@ pub(all) struct Patch {
   edges : Array[EdgePattern]
   wildcard_edges : Array[Bool]
   pinned : Bool
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Patch with Eq::{not_equal, equal}
+
+///|
+pub extend Patch with Debug::{to_repr}
 
 ///|
 pub(all) struct Board {
   size : Int
   cells : Array[Patch?]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Board with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -21,7 +30,10 @@ pub(all) struct Level {
   par_swaps : Int
   tier : Tier
   level_num : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -29,7 +41,10 @@ pub(all) struct LevelScore {
   mut completed : Bool
   mut best_rotations : Int
   mut best_swaps : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

@@ -620,7 +620,10 @@ fn draw_paused_overlay() -> Unit {
 
 ///|
 /// Draws the game-over overlay card showing the defeat reason, final stats, and a restart prompt.
-fn @types.Game::draw_game_over_overlay(game : @types.Game, art : GameArt) -> Unit {
+fn @types.Game::draw_game_over_overlay(
+  game : @types.Game,
+  art : GameArt,
+) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,

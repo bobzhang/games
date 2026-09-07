@@ -33,7 +33,7 @@ pub fn flood_fill_regions(
   let w = grid.width
   let h = grid.height
   let total = w * h
-  let visited : Array[Bool] = Array::new(capacity=total)
+  let visited : Array[Bool] = Array(capacity=total)
   for _i in 0..<total {
     visited.push(false)
   }
@@ -82,7 +82,7 @@ pub fn flood_fill_regions(
             _ => ()
           }
         }
-        regions.push({ tiles, houses, has_road, area: tiles.length() })
+        regions.push({ tiles, houses, has_road, area: tiles.length(), })
       }
     }
   }

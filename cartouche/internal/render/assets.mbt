@@ -1,32 +1,32 @@
 ///|
-let tex_tablet_surface : Ref[@raylib.Texture?] = { val: None }
+let tex_tablet_surface : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_title_cartouche : Ref[@raylib.Texture?] = { val: None }
+let tex_title_cartouche : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_fragments : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_fragments : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_scrolls : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_scrolls : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_monuments : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_monuments : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_decoder_panel : Ref[@raylib.Texture?] = { val: None }
+let tex_decoder_panel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_glyph_backplate : Ref[@raylib.Texture?] = { val: None }
+let tex_glyph_backplate : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_star_icon : Ref[@raylib.Texture?] = { val: None }
+let tex_star_icon : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_selection_glow : Ref[@raylib.Texture?] = { val: None }
+let tex_selection_glow : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_hint_glow : Ref[@raylib.Texture?] = { val: None }
+let tex_hint_glow : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {
@@ -141,7 +141,12 @@ fn draw_tablet_surface_art(x : Int, y : Int, width : Int, height : Int) -> Bool 
 }
 
 ///|
-fn draw_title_cartouche_art(cx : Int, cy : Int, width : Int, height : Int) -> Bool {
+fn draw_title_cartouche_art(
+  cx : Int,
+  cy : Int,
+  width : Int,
+  height : Int,
+) -> Bool {
   match tex_title_cartouche.val {
     Some(texture) => {
       draw_art_centered(

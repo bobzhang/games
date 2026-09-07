@@ -1,6 +1,6 @@
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
@@ -13,12 +13,12 @@ pub fn rotate_cell(cell : Vec2i, times : Int) -> Vec2i {
     cx = -cy
     cy = tmp
   }
-  { x: cx, y: cy }
+  { x: cx, y: cy, }
 }
 
 ///|
 pub fn flip_cell(cell : Vec2i) -> Vec2i {
-  { x: -cell.x, y: cell.y }
+  { x: -cell.x, y: cell.y, }
 }
 
 ///|
@@ -83,7 +83,7 @@ pub fn new_region(
       active[c.y][c.x] = true
     }
   }
-  { width, height, active }
+  { width, height, active, }
 }
 
 ///|
@@ -96,7 +96,7 @@ pub fn full_region(width : Int, height : Int) -> Region {
     }
     active.push(row)
   }
-  { width, height, active }
+  { width, height, active, }
 }
 
 ///|
@@ -125,7 +125,7 @@ pub fn count_active_cells(region : Region) -> Int {
 
 ///|
 pub fn make_piece(cells : Array[Vec2i], color : @raylib.Color) -> Piece {
-  { cells, color }
+  { cells, color, }
 }
 
 // Standard polyomino definitions
@@ -285,7 +285,7 @@ pub fn pento_z(color : @raylib.Color) -> Piece {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_time: 9999, best_rotations: 9999 }
+  { stars: 0, completed: false, best_time: 9999, best_rotations: 9999, }
 }
 
 ///|

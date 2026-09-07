@@ -1,26 +1,26 @@
 ///|
-let tex_title : Ref[@raylib.Texture?] = { val: None }
+let tex_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_crucible : Ref[@raylib.Texture?] = { val: None }
+let tex_crucible : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_iron : Ref[@raylib.Texture?] = { val: None }
+let tex_iron : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_copper : Ref[@raylib.Texture?] = { val: None }
+let tex_copper : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tin : Ref[@raylib.Texture?] = { val: None }
+let tex_tin : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_gold : Ref[@raylib.Texture?] = { val: None }
+let tex_gold : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_carbon : Ref[@raylib.Texture?] = { val: None }
+let tex_carbon : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_zinc : Ref[@raylib.Texture?] = { val: None }
+let tex_zinc : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {

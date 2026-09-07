@@ -82,7 +82,7 @@ pub fn parse_maze(level_def : @types.LevelDef) -> @types.Maze {
   let guard_defs : Array[@types.GuardDef] = []
   for i, patrol in level_def.guard_patrols {
     ignore(i)
-    guard_defs.push({ patrol, patrol_index: 0, forward: true })
+    guard_defs.push({ patrol, patrol_index: 0, forward: true, })
   }
   {
     width,

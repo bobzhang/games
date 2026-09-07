@@ -17,7 +17,7 @@ test "new_fabric_pattern dimensions" {
 ///|
 test "pattern_get and pattern_set" {
   let p = new_fabric_pattern(4, 4, [0], [0])
-  let cell : FabricCell = { state: WarpOver, color_index: 2 }
+  let cell : FabricCell = { state: WarpOver, color_index: 2, }
   pattern_set(p, 1, 2, cell)
   let got = pattern_get(p, 1, 2)
   assert_eq(got.state, WarpOver)
@@ -53,7 +53,7 @@ test "count_matches perfect" {
 test "count_matches partial" {
   let p1 = new_fabric_pattern(2, 2, [0], [0])
   let p2 = new_fabric_pattern(2, 2, [0], [0])
-  pattern_set(p1, 0, 0, { state: WarpOver, color_index: 0 })
+  pattern_set(p1, 0, 0, { state: WarpOver, color_index: 0, })
   // p2[0,0] is still default WeftOver
   let matches = count_matches(p1, p2)
   assert_eq(matches, 3)
@@ -70,7 +70,7 @@ test "patterns_match true" {
 test "patterns_match false" {
   let p1 = new_fabric_pattern(2, 2, [0], [0])
   let p2 = new_fabric_pattern(2, 2, [0], [0])
-  pattern_set(p1, 0, 0, { state: WarpOver, color_index: 1 })
+  pattern_set(p1, 0, 0, { state: WarpOver, color_index: 1, })
   assert_true(!patterns_match(p1, p2))
 }
 

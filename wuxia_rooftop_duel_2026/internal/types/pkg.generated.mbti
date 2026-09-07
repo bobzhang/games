@@ -126,6 +126,8 @@ pub(all) enum Attack {
   Light
   Heavy
 } derive(Eq)
+pub fn Attack::equal(Self, Self) -> Bool
+pub fn Attack::not_equal(Self, Self) -> Bool
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -151,6 +153,8 @@ pub(all) enum EnemyState {
   Recover
   Stunned
 } derive(Eq)
+pub fn EnemyState::equal(Self, Self) -> Bool
+pub fn EnemyState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   enemies : Array[Enemy]
@@ -199,8 +203,9 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

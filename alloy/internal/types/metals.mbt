@@ -2,12 +2,12 @@
 /// Get the base properties of a metal.
 pub fn metal_props(kind : MetalKind) -> MetalProps {
   match kind {
-    Iron => { hardness: 80.0, flexibility: 20.0, conductivity: 30.0 }
-    Copper => { hardness: 25.0, flexibility: 50.0, conductivity: 90.0 }
-    Tin => { hardness: 15.0, flexibility: 85.0, conductivity: 40.0 }
-    Gold => { hardness: 10.0, flexibility: 60.0, conductivity: 95.0 }
-    Carbon => { hardness: 95.0, flexibility: 5.0, conductivity: 10.0 }
-    Zinc => { hardness: 35.0, flexibility: 45.0, conductivity: 55.0 }
+    Iron => { hardness: 80.0, flexibility: 20.0, conductivity: 30.0, }
+    Copper => { hardness: 25.0, flexibility: 50.0, conductivity: 90.0, }
+    Tin => { hardness: 15.0, flexibility: 85.0, conductivity: 40.0, }
+    Gold => { hardness: 10.0, flexibility: 60.0, conductivity: 95.0, }
+    Carbon => { hardness: 95.0, flexibility: 5.0, conductivity: 10.0, }
+    Zinc => { hardness: 35.0, flexibility: 45.0, conductivity: 55.0, }
   }
 }
 

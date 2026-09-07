@@ -15,9 +15,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum TileKind {
@@ -31,9 +40,18 @@ pub(all) enum TileKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TileKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TileKind with Eq::{not_equal, equal}
+
+///|
+pub extend TileKind with Debug::{to_repr}
+
+///|
+pub impl Show for TileKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TileKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -44,9 +62,18 @@ pub(all) enum Direction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum EnemyKind {
@@ -63,9 +90,18 @@ pub(all) enum EnemyKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for EnemyKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
+pub extend EnemyKind with Debug::{to_repr}
+
+///|
+pub impl Show for EnemyKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend EnemyKind with Show::{to_string, output}
 
 ///|
 pub(all) enum BeatRating {
@@ -75,9 +111,18 @@ pub(all) enum BeatRating {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for BeatRating with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend BeatRating with Eq::{not_equal, equal}
+
+///|
+pub extend BeatRating with Debug::{to_repr}
+
+///|
+pub impl Show for BeatRating with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend BeatRating with Show::{to_string, output}
 
 ///|
 pub(all) enum PlayerAction {
@@ -88,9 +133,15 @@ pub(all) enum PlayerAction {
 } derive(Debug)
 
 ///|
-pub impl Show for PlayerAction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PlayerAction with Debug::{to_repr}
+
+///|
+pub impl Show for PlayerAction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PlayerAction with Show::{to_string, output}
 
 ///|
 pub(all) enum EnemyIntent {
@@ -104,9 +155,15 @@ pub(all) enum EnemyIntent {
 } derive(Debug)
 
 ///|
-pub impl Show for EnemyIntent with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend EnemyIntent with Debug::{to_repr}
+
+///|
+pub impl Show for EnemyIntent with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend EnemyIntent with Show::{to_string, output}
 
 ///|
 pub(all) enum ItemKind {
@@ -121,9 +178,15 @@ pub(all) enum ItemKind {
 } derive(Debug)
 
 ///|
-pub impl Show for ItemKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ItemKind with Debug::{to_repr}
+
+///|
+pub impl Show for ItemKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ItemKind with Show::{to_string, output}
 
 ///|
 pub(all) enum ShopItemKind {
@@ -138,9 +201,15 @@ pub(all) enum ShopItemKind {
 } derive(Debug)
 
 ///|
-pub impl Show for ShopItemKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ShopItemKind with Debug::{to_repr}
+
+///|
+pub impl Show for ShopItemKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ShopItemKind with Show::{to_string, output}
 
 ///|
 pub(all) enum WeaponKind {
@@ -153,9 +222,18 @@ pub(all) enum WeaponKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for WeaponKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend WeaponKind with Eq::{not_equal, equal}
+
+///|
+pub extend WeaponKind with Debug::{to_repr}
+
+///|
+pub impl Show for WeaponKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend WeaponKind with Show::{to_string, output}
 
 ///|
 pub(all) enum AbilityKind {
@@ -167,9 +245,18 @@ pub(all) enum AbilityKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for AbilityKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend AbilityKind with Eq::{not_equal, equal}
+
+///|
+pub extend AbilityKind with Debug::{to_repr}
+
+///|
+pub impl Show for AbilityKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend AbilityKind with Show::{to_string, output}
 
 ///|
 pub(all) enum FloorTheme {
@@ -182,9 +269,18 @@ pub(all) enum FloorTheme {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for FloorTheme with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend FloorTheme with Eq::{not_equal, equal}
+
+///|
+pub extend FloorTheme with Debug::{to_repr}
+
+///|
+pub impl Show for FloorTheme with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend FloorTheme with Show::{to_string, output}
 
 ///|
 pub(all) enum ComboMilestone {
@@ -195,9 +291,18 @@ pub(all) enum ComboMilestone {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ComboMilestone with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ComboMilestone with Eq::{not_equal, equal}
+
+///|
+pub extend ComboMilestone with Debug::{to_repr}
+
+///|
+pub impl Show for ComboMilestone with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ComboMilestone with Show::{to_string, output}
 
 ///|
 pub(all) enum ScoreGrade {
@@ -208,9 +313,15 @@ pub(all) enum ScoreGrade {
 } derive(Debug)
 
 ///|
-pub impl Show for ScoreGrade with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ScoreGrade with Debug::{to_repr}
+
+///|
+pub impl Show for ScoreGrade with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ScoreGrade with Show::{to_string, output}
 
 ///|
 pub(all) enum Element {
@@ -221,9 +332,18 @@ pub(all) enum Element {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Element with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Element with Eq::{not_equal, equal}
+
+///|
+pub extend Element with Debug::{to_repr}
+
+///|
+pub impl Show for Element with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Element with Show::{to_string, output}
 
 ///|
 pub(all) enum SpellKind {
@@ -238,9 +358,18 @@ pub(all) enum SpellKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for SpellKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend SpellKind with Eq::{not_equal, equal}
+
+///|
+pub extend SpellKind with Debug::{to_repr}
+
+///|
+pub impl Show for SpellKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend SpellKind with Show::{to_string, output}
 
 ///|
 pub(all) enum CurseKind {
@@ -251,9 +380,18 @@ pub(all) enum CurseKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CurseKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CurseKind with Eq::{not_equal, equal}
+
+///|
+pub extend CurseKind with Debug::{to_repr}
+
+///|
+pub impl Show for CurseKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CurseKind with Show::{to_string, output}
 
 ///|
 pub(all) enum AchievementKind {
@@ -266,9 +404,18 @@ pub(all) enum AchievementKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for AchievementKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend AchievementKind with Eq::{not_equal, equal}
+
+///|
+pub extend AchievementKind with Debug::{to_repr}
+
+///|
+pub impl Show for AchievementKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend AchievementKind with Show::{to_string, output}
 
 ///|
 pub(all) enum SoundEvent {
@@ -291,9 +438,15 @@ pub(all) enum SoundEvent {
 } derive(Debug)
 
 ///|
-pub impl Show for SoundEvent with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend SoundEvent with Debug::{to_repr}
+
+///|
+pub impl Show for SoundEvent with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend SoundEvent with Show::{to_string, output}
 
 ///|
 pub(all) enum BossPhase {
@@ -303,6 +456,15 @@ pub(all) enum BossPhase {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for BossPhase with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend BossPhase with Eq::{not_equal, equal}
+
+///|
+pub extend BossPhase with Debug::{to_repr}
+
+///|
+pub impl Show for BossPhase with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend BossPhase with Show::{to_string, output}

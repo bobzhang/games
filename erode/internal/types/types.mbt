@@ -2,7 +2,13 @@
 pub(all) struct Grid {
   size : Int
   cells : Array[Bool]
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Grid with Eq::{not_equal, equal}
+
+///|
+pub extend Grid with Debug::{to_repr}
 
 ///|
 pub(all) struct ForceBudget {
@@ -10,7 +16,13 @@ pub(all) struct ForceBudget {
   mut wind : Int
   mut frost : Int
   mut heat : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend ForceBudget with Eq::{not_equal, equal}
+
+///|
+pub extend ForceBudget with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -20,19 +32,28 @@ pub(all) struct Level {
   target_shape : Grid
   budget : ForceBudget
   par_forces : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut forces_used : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct ForceAction {
   kind : ForceKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend ForceAction with Debug::{to_repr}
 
 ///|
 pub(all) struct MatchResult {
@@ -41,7 +62,10 @@ pub(all) struct MatchResult {
   under_eroded : Int
   total_target_empty : Int
   total_target_solid : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend MatchResult with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

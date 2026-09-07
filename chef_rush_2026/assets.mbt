@@ -1,30 +1,30 @@
 ///|
 /// Generated warm kitchen backdrop texture.
-let tex_kitchen_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_kitchen_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated chef catcher sprite.
-let tex_chef_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_chef_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated tomato ingredient sprite.
-let tex_ingredient_tomato : Ref[@raylib.Texture?] = { val: None }
+let tex_ingredient_tomato : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated beef ingredient sprite.
-let tex_ingredient_beef : Ref[@raylib.Texture?] = { val: None }
+let tex_ingredient_beef : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated fish ingredient sprite.
-let tex_ingredient_fish : Ref[@raylib.Texture?] = { val: None }
+let tex_ingredient_fish : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated lettuce ingredient sprite.
-let tex_ingredient_lettuce : Ref[@raylib.Texture?] = { val: None }
+let tex_ingredient_lettuce : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated trash hazard sprite.
-let tex_trash_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_trash_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one bilinear-filtered Chef Rush texture.

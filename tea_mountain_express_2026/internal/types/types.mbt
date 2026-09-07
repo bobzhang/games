@@ -8,12 +8,18 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Kind of route hazard the cart can encounter.
 pub(all) enum HazardKind {
   Rock
   Landslide
   Crosswind
 } derive(Eq)
+
+///|
+pub extend HazardKind with Eq::{not_equal, equal}
 
 ///|
 /// Hazard entity moving down a lane toward the cart.

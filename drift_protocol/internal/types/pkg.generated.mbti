@@ -262,13 +262,19 @@ pub(all) struct Agent {
   mut detected_count : Int
   mut alert_triggered : Bool
   mut in_shadow : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Agent::to_repr(Self) -> @debug.Repr
 
 pub(all) enum AlertState {
   Patrolling
   Suspicious
   Alert
 } derive(Eq, @debug.Debug)
+pub fn AlertState::equal(Self, Self) -> Bool
+pub fn AlertState::not_equal(Self, Self) -> Bool
+pub fn AlertState::output(Self, &Logger) -> Unit
+pub fn AlertState::to_repr(Self) -> @debug.Repr
+pub fn AlertState::to_string(Self) -> String
 pub impl Show for AlertState
 
 pub(all) struct Camera {
@@ -279,7 +285,8 @@ pub(all) struct Camera {
   mut vision_range : Float
   mut active : Bool
   mut powered : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Camera::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Direction {
   Up
@@ -287,6 +294,11 @@ pub(all) enum Direction {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct Door {
@@ -295,7 +307,8 @@ pub(all) struct Door {
   mut open : Bool
   mut locked : Bool
   mut power_id : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Door::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -327,7 +340,8 @@ pub(all) struct Game {
   mut detection_pause : Float
   mut camera_offset_x : Float
   mut camera_offset_y : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Guard {
   mut gx : Int
@@ -355,13 +369,19 @@ pub(all) struct Guard {
   mut search_index : Int
   mut searching : Bool
   mut look_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Guard::to_repr(Self) -> @debug.Repr
 
 pub(all) enum GuardKind {
   Patrol
   Sentinel
   Hunter
 } derive(Eq, @debug.Debug)
+pub fn GuardKind::equal(Self, Self) -> Bool
+pub fn GuardKind::not_equal(Self, Self) -> Bool
+pub fn GuardKind::output(Self, &Logger) -> Unit
+pub fn GuardKind::to_repr(Self) -> @debug.Repr
+pub fn GuardKind::to_string(Self) -> String
 pub impl Show for GuardKind
 
 pub(all) struct HackMiniGame {
@@ -374,7 +394,8 @@ pub(all) struct HackMiniGame {
   mut success : Bool
   mut failed : Bool
   mut target_terminal : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HackMiniGame::to_repr(Self) -> @debug.Repr
 
 pub(all) enum HackState {
   None
@@ -383,6 +404,11 @@ pub(all) enum HackState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn HackState::equal(Self, Self) -> Bool
+pub fn HackState::not_equal(Self, Self) -> Bool
+pub fn HackState::output(Self, &Logger) -> Unit
+pub fn HackState::to_repr(Self) -> @debug.Repr
+pub fn HackState::to_string(Self) -> String
 pub impl Show for HackState
 
 pub(all) struct LaserGrid {
@@ -392,7 +418,8 @@ pub(all) struct LaserGrid {
   mut power_id : Int
   mut horizontal : Bool
   mut length : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LaserGrid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   mut name : String
@@ -412,7 +439,8 @@ pub(all) struct Level {
   mut exit_y : Int
   mut par_time : Float
   mut total_data : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut base_score : Int
@@ -426,7 +454,8 @@ pub(all) struct LevelScore {
   mut all_data : Bool
   mut ghost : Bool
   mut no_alerts : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct PowerNode {
   mut gx : Int
@@ -434,7 +463,8 @@ pub(all) struct PowerNode {
   mut powered : Bool
   mut node_id : Int
   mut connected_ids : Array[Int]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PowerNode::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ScoreGrade {
   S
@@ -442,6 +472,11 @@ pub(all) enum ScoreGrade {
   B
   C
 } derive(Eq, @debug.Debug)
+pub fn ScoreGrade::equal(Self, Self) -> Bool
+pub fn ScoreGrade::not_equal(Self, Self) -> Bool
+pub fn ScoreGrade::output(Self, &Logger) -> Unit
+pub fn ScoreGrade::to_repr(Self) -> @debug.Repr
+pub fn ScoreGrade::to_string(Self) -> String
 pub impl Show for ScoreGrade
 
 pub(all) enum Screen {
@@ -453,6 +488,11 @@ pub(all) enum Screen {
   Results
   Victory
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum SoundEvent {
@@ -465,6 +505,11 @@ pub(all) enum SoundEvent {
   CoinToss
   LevelComplete
 } derive(Eq, @debug.Debug)
+pub fn SoundEvent::equal(Self, Self) -> Bool
+pub fn SoundEvent::not_equal(Self, Self) -> Bool
+pub fn SoundEvent::output(Self, &Logger) -> Unit
+pub fn SoundEvent::to_repr(Self) -> @debug.Repr
+pub fn SoundEvent::to_string(Self) -> String
 pub impl Show for SoundEvent
 
 pub(all) struct Terminal {
@@ -474,12 +519,18 @@ pub(all) struct Terminal {
   mut high_security : Bool
   mut connected_id : Int
   mut data_value : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Terminal::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tier {
   Corporate
   Military
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) enum TileKind {
@@ -495,14 +546,22 @@ pub(all) enum TileKind {
   CameraTile
   Start
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_json(Self) -> Json
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

@@ -218,7 +218,7 @@ test "clone_tiles creates independent array" {
 
 ///|
 test "budget_get retrieves correct channel count" {
-  let b : InkBudget = { cyan: 3, magenta: 5, yellow: 2 }
+  let b : InkBudget = { cyan: 3, magenta: 5, yellow: 2, }
   inspect(budget_get(b, Cyan), content="3")
   inspect(budget_get(b, Magenta), content="5")
   inspect(budget_get(b, Yellow), content="2")
@@ -226,7 +226,7 @@ test "budget_get retrieves correct channel count" {
 
 ///|
 test "budget_use decrements correct channel" {
-  let b : InkBudget = { cyan: 3, magenta: 5, yellow: 2 }
+  let b : InkBudget = { cyan: 3, magenta: 5, yellow: 2, }
   budget_use(b, Cyan)
   inspect(b.cyan, content="2")
   budget_use(b, Magenta)
@@ -237,7 +237,7 @@ test "budget_use decrements correct channel" {
 
 ///|
 test "clone_budget creates independent copy" {
-  let b : InkBudget = { cyan: 3, magenta: 5, yellow: 2 }
+  let b : InkBudget = { cyan: 3, magenta: 5, yellow: 2, }
   let c = clone_budget(b)
   inspect(c.cyan, content="3")
   inspect(c.magenta, content="5")

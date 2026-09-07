@@ -486,7 +486,7 @@ fn find_flow(
     }
   }
 
-  { vx: out_vx, vy: out_vy, turbulence: out_t }
+  { vx: out_vx, vy: out_vy, turbulence: out_t, }
 }
 
 ///|
@@ -1520,7 +1520,7 @@ fn main {
   })
 
   let currents : Array[CurrentCell] = Array::makei(12, fn(_i) {
-    { x: 0.0, y: 0.0, w: 0.0, h: 0.0, vx: 0.0, vy: 0.0, pulse: 0.0 }
+    { x: 0.0, y: 0.0, w: 0.0, h: 0.0, vx: 0.0, vy: 0.0, pulse: 0.0, }
   })
 
   let rafts : Array[RaftGroup] = Array::makei(36, fn(_i) {
@@ -1576,7 +1576,7 @@ fn main {
   })
 
   let rain : Array[RainDrop] = Array::makei(760, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, vy: 0.0, len: 0.0, life: 0.0, alpha: 0 }
+    { active: false, x: 0.0, y: 0.0, vy: 0.0, len: 0.0, life: 0.0, alpha: 0, }
   })
 
   let wakes : Array[WakeParticle] = Array::makei(980, fn(_i) {

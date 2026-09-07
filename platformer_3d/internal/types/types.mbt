@@ -320,7 +320,7 @@ pub(all) struct Checkpoint {
 ///|
 /// Creates an inactive checkpoint slot at the origin.
 pub fn Checkpoint::inactive() -> Checkpoint {
-  { active: false, x: 0.0, y: 0.0, z: 0.0, activated: false, anim_timer: 0.0 }
+  { active: false, x: 0.0, y: 0.0, z: 0.0, activated: false, anim_timer: 0.0, }
 }
 
 ///|
@@ -445,7 +445,7 @@ pub(all) struct ScoreFly {
 ///|
 /// Creates an inactive score-fly slot with a one-second default lifetime.
 pub fn ScoreFly::inactive() -> ScoreFly {
-  { active: false, x: 0.0, y: 0.0, value: 0, timer: 0.0, max_time: 1.0 }
+  { active: false, x: 0.0, y: 0.0, value: 0, timer: 0.0, max_time: 1.0, }
 }
 
 ///|

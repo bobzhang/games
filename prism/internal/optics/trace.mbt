@@ -44,8 +44,8 @@ fn trace_beam(
   // If first step is out of bounds, record a point segment
   if !@types.grid_in_bounds(grid, nq, nr) {
     segments.push({
-      start: { q: start_q, r: start_r },
-      end_: { q: start_q, r: start_r },
+      start: { q: start_q, r: start_r, },
+      end_: { q: start_q, r: start_r, },
       color,
       direction: dir,
     })
@@ -58,8 +58,8 @@ fn trace_beam(
     if !@types.grid_in_bounds(grid, cq, cr) {
       // Beam left the grid; segment ends at previous cell
       segments.push({
-        start: { q: start_q, r: start_r },
-        end_: { q: cq - dq, r: cr - dr },
+        start: { q: start_q, r: start_r, },
+        end_: { q: cq - dq, r: cr - dr, },
         color,
         direction: dir,
       })
@@ -74,8 +74,8 @@ fn trace_beam(
             let next_r = cr + dr
             if !@types.grid_in_bounds(grid, next_q, next_r) {
               segments.push({
-                start: { q: start_q, r: start_r },
-                end_: { q: cq, r: cr },
+                start: { q: start_q, r: start_r, },
+                end_: { q: cq, r: cr, },
                 color,
                 direction: dir,
               })
@@ -86,8 +86,8 @@ fn trace_beam(
           }
           Some(Mirror) => {
             segments.push({
-              start: { q: start_q, r: start_r },
-              end_: { q: cq, r: cr },
+              start: { q: start_q, r: start_r, },
+              end_: { q: cq, r: cr, },
               color,
               direction: dir,
             })
@@ -100,8 +100,8 @@ fn trace_beam(
           }
           Some(Crystal) => {
             segments.push({
-              start: { q: start_q, r: start_r },
-              end_: { q: cq, r: cr },
+              start: { q: start_q, r: start_r, },
+              end_: { q: cq, r: cr, },
               color,
               direction: dir,
             })
@@ -118,8 +118,8 @@ fn trace_beam(
           }
           Some(Filter) => {
             segments.push({
-              start: { q: start_q, r: start_r },
-              end_: { q: cq, r: cr },
+              start: { q: start_q, r: start_r, },
+              end_: { q: cq, r: cr, },
               color,
               direction: dir,
             })
@@ -136,8 +136,8 @@ fn trace_beam(
           }
           Some(Target) => {
             segments.push({
-              start: { q: start_q, r: start_r },
-              end_: { q: cq, r: cr },
+              start: { q: start_q, r: start_r, },
+              end_: { q: cq, r: cr, },
               color,
               direction: dir,
             })
@@ -153,8 +153,8 @@ fn trace_beam(
           Some(Source) => {
             // Beam hits another source, stops
             segments.push({
-              start: { q: start_q, r: start_r },
-              end_: { q: cq, r: cr },
+              start: { q: start_q, r: start_r, },
+              end_: { q: cq, r: cr, },
               color,
               direction: dir,
             })

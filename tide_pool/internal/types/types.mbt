@@ -6,7 +6,13 @@ pub(all) struct OrganismState {
   mut alive : Bool
   mut health : Float
   mut submerged : Bool
-} derive(Show, ToJson)
+} derive(Debug, ToJson)
+
+///|
+pub extend OrganismState with Debug::{to_repr}
+
+///|
+pub extend OrganismState with ToJson::{to_json}
 
 ///|
 pub(all) struct LevelDef {
@@ -19,14 +25,20 @@ pub(all) struct LevelDef {
   organism_counts : Array[Int]
   target_species : Array[OrganismKind]
   rock_cells : Array[(Int, Int)]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_cycles_survived : Int
   mut stars : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct TurnLog {
@@ -35,7 +47,10 @@ pub(all) struct TurnLog {
   phase : TidePhase
   events : Array[String]
   organisms_alive : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend TurnLog with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -60,4 +75,7 @@ pub(all) struct Game {
   mut sim_speed_timer : Float
   mut organisms_placed : Array[Int]
   mut anim_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

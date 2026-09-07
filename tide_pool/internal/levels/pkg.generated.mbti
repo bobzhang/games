@@ -61,4 +61,3 @@ pub fn setup_level(@types.Game, Int) -> Unit
 // Type aliases
 
 // Traits
-

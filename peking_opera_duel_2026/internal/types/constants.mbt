@@ -164,6 +164,9 @@ pub(all) enum Stance {
 } derive(Eq)
 
 ///|
+pub extend Stance with Eq::{not_equal, equal}
+
+///|
 /// Convert an integer index (mod 4) to the corresponding stance.
 pub fn Stance::from_int(i : Int) -> Stance {
   match i % stance_count {

@@ -88,7 +88,7 @@ fn main {
   @draw.init_font()
 
   let packages : Array[Package] = Array::makei(120, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, lane: 0, code: 0, speed: 180.0 }
+    { alive: false, x: 0.0, y: 0.0, lane: 0, code: 0, speed: 180.0, }
   })
 
   let mut sorter_lane = 1

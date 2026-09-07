@@ -95,7 +95,7 @@ pub fn filter_sound_queue(
     return queue
   }
   // Sort by priority (bubble sort is fine for small arrays)
-  let sorted : Array[@types.SoundEvent] = Array::new(capacity=queue.length())
+  let sorted : Array[@types.SoundEvent] = Array(capacity=queue.length())
   for event in queue {
     sorted.push(event)
   }
@@ -109,7 +109,7 @@ pub fn filter_sound_queue(
     }
   }
   // Take top N
-  let result : Array[@types.SoundEvent] = Array::new(capacity=max_events)
+  let result : Array[@types.SoundEvent] = Array(capacity=max_events)
   for i in 0..<max_events {
     if i < sorted.length() {
       result.push(sorted[i])

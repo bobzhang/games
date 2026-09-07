@@ -15,4 +15,3 @@ pub fn create_puzzles() -> Array[@types.PuzzleLevel]
 // Type aliases
 
 // Traits
-

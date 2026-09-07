@@ -88,10 +88,10 @@ fn main {
   defer unload_game_art(art)
 
   let relics : Array[Relic] = Array::makei(90, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, size: 14.0, value: 20 }
+    { alive: false, x: 0.0, y: 0.0, size: 14.0, value: 20, }
   })
   let mines : Array[Mine] = Array::makei(60, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, vx: 0.0, r: 14.0 }
+    { alive: false, x: 0.0, y: 0.0, vx: 0.0, r: 14.0, }
   })
 
   let mut px : Float = Float::from_int(sw / 2)

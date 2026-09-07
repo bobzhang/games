@@ -152,7 +152,8 @@ pub(all) struct BranchSeed {
   x : Int
   y : Int
   dir : GrowthDir
-} derive(Show)
+} derive(@debug.Debug)
+pub fn BranchSeed::to_repr(Self) -> @debug.Repr
 
 pub(all) enum CellKind {
   Empty
@@ -161,6 +162,11 @@ pub(all) enum CellKind {
   Leaf
   Pruned
 } derive(Eq, @debug.Debug)
+pub fn CellKind::equal(Self, Self) -> Bool
+pub fn CellKind::not_equal(Self, Self) -> Bool
+pub fn CellKind::output(Self, &Logger) -> Unit
+pub fn CellKind::to_repr(Self) -> @debug.Repr
+pub fn CellKind::to_string(Self) -> String
 pub impl Show for CellKind
 
 pub(all) struct Game {
@@ -187,7 +193,8 @@ pub(all) struct Game {
 
 pub(all) struct GridSnapshot {
   cells : Array[TreeCell]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn GridSnapshot::to_repr(Self) -> @debug.Repr
 
 pub(all) enum GrowthDir {
   Up
@@ -196,6 +203,11 @@ pub(all) enum GrowthDir {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn GrowthDir::equal(Self, Self) -> Bool
+pub fn GrowthDir::not_equal(Self, Self) -> Bool
+pub fn GrowthDir::output(Self, &Logger) -> Unit
+pub fn GrowthDir::to_repr(Self) -> @debug.Repr
+pub fn GrowthDir::to_string(Self) -> String
 pub impl Show for GrowthDir
 
 pub(all) struct Level {
@@ -207,12 +219,14 @@ pub(all) struct Level {
   par_prunes : Int
   tier : Tier
   level_index : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Waiting
@@ -220,12 +234,18 @@ pub(all) enum PlayState {
   Won
   Lost
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct PruneAction {
   pos : Vec2i
   turn : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PruneAction::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -234,6 +254,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Species {
@@ -241,6 +266,11 @@ pub(all) enum Species {
   Maple
   Cherry
 } derive(Eq, @debug.Debug)
+pub fn Species::equal(Self, Self) -> Bool
+pub fn Species::not_equal(Self, Self) -> Bool
+pub fn Species::output(Self, &Logger) -> Unit
+pub fn Species::to_repr(Self) -> @debug.Repr
+pub fn Species::to_string(Self) -> String
 pub impl Show for Species
 
 pub(all) enum Tier {
@@ -248,6 +278,11 @@ pub(all) enum Tier {
   Tier2
   Tier3
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct TreeCell {
@@ -255,32 +290,42 @@ pub(all) struct TreeCell {
   mut growth_dir : GrowthDir
   mut age : Int
   mut stagnant_turns : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn TreeCell::to_repr(Self) -> @debug.Repr
 
 pub(all) struct TreeGrid {
   width : Int
   height : Int
   cells : Array[TreeCell]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn TreeGrid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Zone {
   positions : Array[Vec2i]
   kind : ZoneKind
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Zone::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ZoneKind {
   Required
   Forbidden
   TipTarget
 } derive(Eq, @debug.Debug)
+pub fn ZoneKind::equal(Self, Self) -> Bool
+pub fn ZoneKind::not_equal(Self, Self) -> Bool
+pub fn ZoneKind::output(Self, &Logger) -> Unit
+pub fn ZoneKind::to_repr(Self) -> @debug.Repr
+pub fn ZoneKind::to_string(Self) -> String
 pub impl Show for ZoneKind
 
 // Type aliases
 
 // Traits
-

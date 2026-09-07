@@ -81,8 +81,8 @@ test "puzzle 1 (Bridge) board has exactly 1 black stone" {
 test "puzzle 2 (Chain) board has 2 black stones in a row" {
   let puzzles = @levels.create_puzzles()
   let p = puzzles[1]
-  assert_true(@types.has_stone(p.board, { row: 3, col: 1 }, Black))
-  assert_true(@types.has_stone(p.board, { row: 3, col: 2 }, Black))
+  assert_true(@types.has_stone(p.board, { row: 3, col: 1, }, Black))
+  assert_true(@types.has_stone(p.board, { row: 3, col: 2, }, Black))
   assert_eq(p.target_score, 3)
 }
 
@@ -90,9 +90,9 @@ test "puzzle 2 (Chain) board has 2 black stones in a row" {
 test "puzzle 4 (Capture) board has white stone nearly surrounded" {
   let puzzles = @levels.create_puzzles()
   let p = puzzles[3]
-  assert_true(@types.has_stone(p.board, { row: 3, col: 3 }, White))
+  assert_true(@types.has_stone(p.board, { row: 3, col: 3, }, White))
   // Count surrounding Black stones
-  let nbrs = @types.hex_neighbors_valid({ row: 3, col: 3 }, 7)
+  let nbrs = @types.hex_neighbors_valid({ row: 3, col: 3, }, 7)
   let mut black_around = 0
   for i in 0..<nbrs.length() {
     if @types.has_stone(p.board, nbrs[i], Black) {
@@ -107,9 +107,9 @@ test "puzzle 4 (Capture) board has white stone nearly surrounded" {
 test "puzzle 6 (Wall) board has 3 black stones on top edge" {
   let puzzles = @levels.create_puzzles()
   let p = puzzles[5]
-  assert_true(@types.has_stone(p.board, { row: 0, col: 0 }, Black))
-  assert_true(@types.has_stone(p.board, { row: 0, col: 1 }, Black))
-  assert_true(@types.has_stone(p.board, { row: 0, col: 2 }, Black))
+  assert_true(@types.has_stone(p.board, { row: 0, col: 0, }, Black))
+  assert_true(@types.has_stone(p.board, { row: 0, col: 1, }, Black))
+  assert_true(@types.has_stone(p.board, { row: 0, col: 2, }, Black))
   assert_eq(p.target_score, 3)
 }
 
@@ -118,9 +118,9 @@ test "puzzle 12 (Ring) board has 5 stones around center" {
   let puzzles = @levels.create_puzzles()
   let p = puzzles[11]
   // Center (3,3) should be empty
-  assert_eq(@types.get_cell(p.board, { row: 3, col: 3 }), Empty)
+  assert_eq(@types.get_cell(p.board, { row: 3, col: 3, }), Empty)
   // Count stones adjacent to center
-  let nbrs = @types.hex_neighbors_valid({ row: 3, col: 3 }, 7)
+  let nbrs = @types.hex_neighbors_valid({ row: 3, col: 3, }, 7)
   let mut stone_count = 0
   for i in 0..<nbrs.length() {
     if @types.has_stone(p.board, nbrs[i], Black) {
@@ -135,8 +135,8 @@ test "puzzle 12 (Ring) board has 5 stones around center" {
 test "puzzle 13 (Star) board has center + 5 neighbors" {
   let puzzles = @levels.create_puzzles()
   let p = puzzles[12]
-  assert_true(@types.has_stone(p.board, { row: 3, col: 3 }, Black))
-  let nbrs = @types.hex_neighbors_valid({ row: 3, col: 3 }, 7)
+  assert_true(@types.has_stone(p.board, { row: 3, col: 3, }, Black))
+  let nbrs = @types.hex_neighbors_valid({ row: 3, col: 3, }, 7)
   let mut stone_count = 0
   for i in 0..<nbrs.length() {
     if @types.has_stone(p.board, nbrs[i], Black) {
@@ -220,11 +220,11 @@ test "all puzzles have stones only at valid positions" {
 test "puzzle boards are independent copies" {
   let puzzles = @levels.create_puzzles()
   // Modify puzzle 1's board, puzzle 2 should be unaffected
-  let p1_original_cell = @types.get_cell(puzzles[0].board, { row: 0, col: 0 })
-  @types.set_cell(puzzles[0].board, { row: 0, col: 0 }, Occupied(White))
-  let p2_cell = @types.get_cell(puzzles[1].board, { row: 0, col: 0 })
+  let p1_original_cell = @types.get_cell(puzzles[0].board, { row: 0, col: 0, })
+  @types.set_cell(puzzles[0].board, { row: 0, col: 0, }, Occupied(White))
+  let p2_cell = @types.get_cell(puzzles[1].board, { row: 0, col: 0, })
   // Restore
-  @types.set_cell(puzzles[0].board, { row: 0, col: 0 }, p1_original_cell)
+  @types.set_cell(puzzles[0].board, { row: 0, col: 0, }, p1_original_cell)
   // Puzzle 2 should not have been affected
   assert_eq(p2_cell, Empty)
 }

@@ -1,11 +1,11 @@
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn vec2i_add(a : Vec2i, b : Vec2i) -> Vec2i {
-  { x: a.x + b.x, y: a.y + b.y }
+  { x: a.x + b.x, y: a.y + b.y, }
 }
 
 ///|
@@ -16,10 +16,10 @@ pub fn vec2i_eq(a : Vec2i, b : Vec2i) -> Bool {
 ///|
 pub fn dir_to_delta(dir : Direction) -> Vec2i {
   match dir {
-    North => { x: 0, y: -1 }
-    South => { x: 0, y: 1 }
-    East => { x: 1, y: 0 }
-    West => { x: -1, y: 0 }
+    North => { x: 0, y: -1, }
+    South => { x: 0, y: 1, }
+    East => { x: 1, y: 0, }
+    West => { x: -1, y: 0, }
   }
 }
 
@@ -77,7 +77,7 @@ pub fn tile_to_screen_y(gy : Int) -> Int {
 
 ///|
 pub fn new_player(start : Vec2i) -> Player {
-  { pos: start, dir: South, alive: true }
+  { pos: start, dir: South, alive: true, }
 }
 
 ///|
@@ -86,7 +86,7 @@ pub fn new_ghost(
   color : GhostColor,
   start : Vec2i,
 ) -> Ghost {
-  { recording: rec, color, pos: start, active: true, trail_positions: [start] }
+  { recording: rec, color, pos: start, active: true, trail_positions: [start], }
 }
 
 ///|
@@ -139,7 +139,7 @@ pub fn new_maze_state(maze : Maze) -> MazeState {
     maze.collectible_positions.length(),
     false,
   )
-  { door_states, button_pressed, guard_states, collectibles_collected }
+  { door_states, button_pressed, guard_states, collectibles_collected, }
 }
 
 ///|
@@ -170,7 +170,7 @@ pub fn new_game() -> Game {
     current_level: 0,
     maze: None,
     maze_state: None,
-    player: { pos: vec2i(0, 0), dir: South, alive: true },
+    player: { pos: vec2i(0, 0), dir: South, alive: true, },
     ghosts: [],
     current_recording: [],
     recordings: [],

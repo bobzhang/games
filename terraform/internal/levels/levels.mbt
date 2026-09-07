@@ -106,7 +106,7 @@ pub fn init_grid_from_level(level : @types.Level) -> @types.HexGrid {
     grid.tiles[idx].biome = biome
     // locked field is immutable so we need to replace the tile
     if locked {
-      grid.tiles[idx] = { biome, locked: true }
+      grid.tiles[idx] = { biome, locked: true, }
     }
   }
   grid

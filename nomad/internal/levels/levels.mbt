@@ -57,12 +57,12 @@ fn build_level(
     dest_col < @types.map_width &&
     dest_row >= 0 &&
     dest_row < @types.map_height {
-    map.tiles[dest_row][dest_col] = { kind: Destination }
+    map.tiles[dest_row][dest_col] = { kind: Destination, }
   }
   {
     map,
-    start: { col: start_col, row: start_row },
-    destination: { col: dest_col, row: dest_row },
+    start: { col: start_col, row: start_row, },
+    destination: { col: dest_col, row: dest_row, },
     starting_water,
     gold_target,
     total_artifacts,

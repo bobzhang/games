@@ -77,7 +77,7 @@ fn put_car(
   player : Bool,
   color : Int,
 ) -> Unit {
-  cars[i] = { x, y, len, horizontal, player, color, active: true }
+  cars[i] = { x, y, len, horizontal, player, color, active: true, }
 }
 
 ///|

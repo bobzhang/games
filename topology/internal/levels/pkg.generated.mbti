@@ -17,4 +17,3 @@ pub fn get_levels() -> Array[@types.Level]
 // Type aliases
 
 // Traits
-

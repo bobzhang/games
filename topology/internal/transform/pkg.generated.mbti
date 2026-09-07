@@ -31,4 +31,3 @@ pub fn shrink(@types.Shape, @types.Vec2i) -> @types.Shape
 // Type aliases
 
 // Traits
-

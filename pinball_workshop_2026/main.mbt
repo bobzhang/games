@@ -165,7 +165,7 @@ fn main {
   @raylib.set_target_fps(60)
   @draw.init_font()
 
-  let ball : Ball = { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, live: false }
+  let ball : Ball = { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, live: false, }
   reset_ball(ball)
 
   let left_flipper : Flipper = {

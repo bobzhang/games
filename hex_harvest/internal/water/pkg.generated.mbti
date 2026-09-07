@@ -21,4 +21,3 @@ pub fn would_channel_bring_water(@types.HexGrid, Int, Int) -> Bool
 // Type aliases
 
 // Traits
-

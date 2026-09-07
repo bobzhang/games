@@ -306,7 +306,7 @@ pub fn can_plant_in_season(kind : CropKind, season : Season) -> Bool {
 
 ///|
 pub fn new_soil(n : Int, p : Int, k : Int) -> Soil {
-  { nitrogen: n, phosphorus: p, potassium: k }
+  { nitrogen: n, phosphorus: p, potassium: k, }
 }
 
 ///|
@@ -400,9 +400,9 @@ pub fn new_plot_with_soil(n : Int, p : Int, k : Int) -> Plot {
 
 ///|
 pub fn new_grid() -> Array[Array[Plot]] {
-  let grid : Array[Array[Plot]] = Array::new(capacity=grid_rows)
+  let grid : Array[Array[Plot]] = Array(capacity=grid_rows)
   for _r in 0..<grid_rows {
-    let row : Array[Plot] = Array::new(capacity=grid_cols)
+    let row : Array[Plot] = Array(capacity=grid_cols)
     for _c in 0..<grid_cols {
       row.push(new_plot())
     }
@@ -415,9 +415,9 @@ pub fn new_grid() -> Array[Array[Plot]] {
 pub fn new_grid_with_soil(
   soil_data : Array[Array[(Int, Int, Int)]],
 ) -> Array[Array[Plot]] {
-  let grid : Array[Array[Plot]] = Array::new(capacity=grid_rows)
+  let grid : Array[Array[Plot]] = Array(capacity=grid_rows)
   for r in 0..<grid_rows {
-    let row : Array[Plot] = Array::new(capacity=grid_cols)
+    let row : Array[Plot] = Array(capacity=grid_cols)
     for c in 0..<grid_cols {
       if r < soil_data.length() && c < soil_data[r].length() {
         let (n, p, k) = soil_data[r][c]
@@ -433,9 +433,9 @@ pub fn new_grid_with_soil(
 
 ///|
 pub fn new_season_plan() -> SeasonPlan {
-  let crops : Array[Array[CropKind]] = Array::new(capacity=grid_rows)
+  let crops : Array[Array[CropKind]] = Array(capacity=grid_rows)
   for _r in 0..<grid_rows {
-    let row : Array[CropKind] = Array::new(capacity=grid_cols)
+    let row : Array[CropKind] = Array(capacity=grid_cols)
     for _c in 0..<grid_cols {
       row.push(Fallow)
     }
@@ -446,9 +446,9 @@ pub fn new_season_plan() -> SeasonPlan {
 
 ///|
 pub fn new_anim_grid() -> Array[Array[Float]] {
-  let grid : Array[Array[Float]] = Array::new(capacity=grid_rows)
+  let grid : Array[Array[Float]] = Array(capacity=grid_rows)
   for _r in 0..<grid_rows {
-    let row : Array[Float] = Array::new(capacity=grid_cols)
+    let row : Array[Float] = Array(capacity=grid_cols)
     for _c in 0..<grid_cols {
       row.push(0.0)
     }
@@ -461,16 +461,16 @@ pub fn new_anim_grid() -> Array[Array[Float]] {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { value_earned: 0, target_value: 0, tier: None }
+  { value_earned: 0, target_value: 0, tier: None, }
 }
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore?] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore?] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(None)
   }
-  let plans : Array[SeasonPlan] = Array::new(capacity=seasons_per_year)
+  let plans : Array[SeasonPlan] = Array(capacity=seasons_per_year)
   for _i in 0..<seasons_per_year {
     plans.push(new_season_plan())
   }

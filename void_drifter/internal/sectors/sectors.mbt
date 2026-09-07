@@ -82,7 +82,7 @@ pub fn generate_sector_map(depth : Int) -> @types.SectorMap {
       nodes[idx].connections.push(boss_node)
     }
   }
-  { nodes, current: 0, depth, boss_node }
+  { nodes, current: 0, depth, boss_node, }
 }
 
 ///|

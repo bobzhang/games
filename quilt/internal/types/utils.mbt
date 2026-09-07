@@ -1,5 +1,5 @@
 ///|
-let rng_state : Ref[Int] = { val: 12345 }
+let rng_state : Ref[Int] = { val: 12345, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {
@@ -70,7 +70,7 @@ pub fn new_patch_wildcard(
   ws : Bool,
   ww : Bool,
 ) -> Patch {
-  { edges: [n, e, s, w], wildcard_edges: [wn, we, ws, ww], pinned: false }
+  { edges: [n, e, s, w], wildcard_edges: [wn, we, ws, ww], pinned: false, }
 }
 
 ///|
@@ -106,7 +106,7 @@ pub fn edges_match(
 ///|
 pub fn new_board(size : Int) -> Board {
   let cells : Array[Patch?] = Array::make(size * size, None)
-  { size, cells }
+  { size, cells, }
 }
 
 ///|
@@ -180,7 +180,7 @@ pub fn tier_levels(t : Tier) -> (Int, Int) {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_rotations: 999, best_swaps: 999 }
+  { stars: 0, completed: false, best_rotations: 999, best_swaps: 999, }
 }
 
 ///|

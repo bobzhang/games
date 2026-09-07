@@ -99,6 +99,11 @@ pub(all) enum CellKind {
   Amplifier
   Void
 } derive(Eq, @debug.Debug)
+pub fn CellKind::equal(Self, Self) -> Bool
+pub fn CellKind::not_equal(Self, Self) -> Bool
+pub fn CellKind::output(Self, &Logger) -> Unit
+pub fn CellKind::to_repr(Self) -> @debug.Repr
+pub fn CellKind::to_string(Self) -> String
 pub impl Show for CellKind
 
 pub(all) struct Connection {
@@ -108,7 +113,10 @@ pub(all) struct Connection {
   to_row : Int
   mut energy_flow : Float
   mut flow_anim : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Connection::equal(Self, Self) -> Bool
+pub fn Connection::not_equal(Self, Self) -> Bool
+pub fn Connection::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Direction {
   Up
@@ -116,6 +124,11 @@ pub(all) enum Direction {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct Game {
@@ -142,7 +155,8 @@ pub(all) struct LevelDef {
   par_waystones : Int
   gold_threshold : Float
   silver_threshold : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelProgress {
   mut completed : Bool
@@ -173,6 +187,11 @@ pub(all) enum Screen {
   LevelComplete
   LevelFailed
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum StarRating {
@@ -181,6 +200,11 @@ pub(all) enum StarRating {
   Silver
   Gold
 } derive(Eq, @debug.Debug)
+pub fn StarRating::equal(Self, Self) -> Bool
+pub fn StarRating::not_equal(Self, Self) -> Bool
+pub fn StarRating::output(Self, &Logger) -> Unit
+pub fn StarRating::to_repr(Self) -> @debug.Repr
+pub fn StarRating::to_string(Self) -> String
 pub impl Show for StarRating
 
 pub(all) enum Tool {
@@ -189,9 +213,13 @@ pub(all) enum Tool {
   DrawLine
   EraseLine
 } derive(Eq, @debug.Debug)
+pub fn Tool::equal(Self, Self) -> Bool
+pub fn Tool::not_equal(Self, Self) -> Bool
+pub fn Tool::output(Self, &Logger) -> Unit
+pub fn Tool::to_repr(Self) -> @debug.Repr
+pub fn Tool::to_string(Self) -> String
 pub impl Show for Tool
 
 // Type aliases
 
 // Traits
-

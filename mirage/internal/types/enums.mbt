@@ -11,9 +11,18 @@ pub(all) enum Tile {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Tile with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tile with Eq::{not_equal, equal}
+
+///|
+pub extend Tile with Debug::{to_repr}
+
+///|
+pub impl Show for Tile with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tile with Show::{to_string, output}
 
 ///|
 pub(all) enum Screen {
@@ -26,9 +35,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum Layer {
@@ -37,9 +55,18 @@ pub(all) enum Layer {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Layer with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Layer with Eq::{not_equal, equal}
+
+///|
+pub extend Layer with Debug::{to_repr}
+
+///|
+pub impl Show for Layer with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Layer with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -50,9 +77,18 @@ pub(all) enum Direction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum Tier {
@@ -62,9 +98,18 @@ pub(all) enum Tier {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Tier with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tier with Eq::{not_equal, equal}
+
+///|
+pub extend Tier with Debug::{to_repr}
+
+///|
+pub impl Show for Tier with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tier with Show::{to_string, output}
 
 ///|
 pub(all) enum MergeState {
@@ -73,9 +118,18 @@ pub(all) enum MergeState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for MergeState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend MergeState with Eq::{not_equal, equal}
+
+///|
+pub extend MergeState with Debug::{to_repr}
+
+///|
+pub impl Show for MergeState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend MergeState with Show::{to_string, output}
 
 ///|
 pub(all) enum AnimKind {
@@ -88,6 +142,15 @@ pub(all) enum AnimKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for AnimKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend AnimKind with Eq::{not_equal, equal}
+
+///|
+pub extend AnimKind with Debug::{to_repr}
+
+///|
+pub impl Show for AnimKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend AnimKind with Show::{to_string, output}

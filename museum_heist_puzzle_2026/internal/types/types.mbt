@@ -9,6 +9,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Direction input used for grid movement.
 pub(all) enum Direction {
   DirNone
@@ -19,11 +22,17 @@ pub(all) enum Direction {
 } derive(Eq)
 
 ///|
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
 /// Board tile kind used for movement and visibility checks.
 pub(all) enum TileKind {
   Floor
   Wall
 } derive(Eq)
+
+///|
+pub extend TileKind with Eq::{not_equal, equal}
 
 ///|
 /// Collectible artifact placed on the board.

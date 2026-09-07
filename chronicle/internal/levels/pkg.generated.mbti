@@ -17,4 +17,3 @@ pub fn get_case(@types.Tier, Int) -> @types.Case
 // Type aliases
 
 // Traits
-

@@ -94,7 +94,7 @@ pub fn dist_i(a : Vec2i, b : Vec2i) -> Float {
 
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
@@ -170,12 +170,12 @@ pub fn new_tile(kind : TileKind) -> TileInfo {
 
 ///|
 pub fn new_epicenter(x : Int, y : Int) -> Epicenter {
-  { pos: vec2i(x, y), found: false }
+  { pos: vec2i(x, y), found: false, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_budget_used: 99, best_guesses: 99 }
+  { stars: 0, completed: false, best_budget_used: 99, best_guesses: 99, }
 }
 
 ///|
@@ -212,7 +212,7 @@ pub fn next_compass(dir : CompassDir) -> CompassDir {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 42 }
+let rng_state : Ref[Int] = { val: 42, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {

@@ -111,7 +111,7 @@ test "holes are initially empty (no tile)" {
     for j in 0..<grid.holes.length() {
       let h = grid.holes[j]
       let tile = @types.get_tile(grid, h.x, h.y)
-      inspect(tile, content="None")
+      debug_inspect(tile, content="None")
     }
   }
 }

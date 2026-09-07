@@ -39,4 +39,3 @@ pub fn draw_world(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

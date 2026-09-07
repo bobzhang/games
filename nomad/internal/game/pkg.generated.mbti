@@ -15,4 +15,3 @@ pub fn update(@types.Game, Array[@types.Level]) -> Unit
 // Type aliases
 
 // Traits
-

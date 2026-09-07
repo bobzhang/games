@@ -611,6 +611,8 @@ pub(all) enum EnemyKind {
   Lich
   Mimic
 } derive(Eq)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct FloorInfo {
   mut cleared : Bool
@@ -734,7 +736,9 @@ pub(all) enum GameState {
   StateClassSelect
   StateEquipPopup
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
 pub fn GameState::from_int(Int) -> Self
+pub fn GameState::not_equal(Self, Self) -> Bool
 pub fn GameState::to_int(Self) -> Int
 
 pub(all) struct InvItem {
@@ -818,6 +822,8 @@ pub(all) enum ShipClass {
   Rogue
   Mage
 } derive(Eq)
+pub fn ShipClass::equal(Self, Self) -> Bool
+pub fn ShipClass::not_equal(Self, Self) -> Bool
 
 pub(all) struct ShopItem {
   mut active : Bool
@@ -837,6 +843,8 @@ pub(all) enum Spell {
   Lightning
   Teleport
 } derive(Eq)
+pub fn Spell::equal(Self, Self) -> Bool
+pub fn Spell::not_equal(Self, Self) -> Bool
 
 pub(all) struct SpellSlot {
   mut spell_type : Spell
@@ -871,6 +879,8 @@ pub(all) enum TrapKind {
   Poison
   Pitfall
 } derive(Eq)
+pub fn TrapKind::equal(Self, Self) -> Bool
+pub fn TrapKind::not_equal(Self, Self) -> Bool
 
 pub(all) enum WeaponAffix {
   AffixNone
@@ -881,6 +891,8 @@ pub(all) enum WeaponAffix {
   AffixHeavy
   AffixKeen
 } derive(Eq)
+pub fn WeaponAffix::equal(Self, Self) -> Bool
+pub fn WeaponAffix::not_equal(Self, Self) -> Bool
 
 pub(all) enum WeaponKind {
   Sword
@@ -890,8 +902,9 @@ pub(all) enum WeaponKind {
   Staff
   Bow
 } derive(Eq)
+pub fn WeaponKind::equal(Self, Self) -> Bool
+pub fn WeaponKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

@@ -139,13 +139,13 @@ pub fn Drone::Drone() -> Drone {
 ///|
 /// Creates an inactive core entry for the core pool.
 pub fn Core::Core() -> Core {
-  { active: false, x: 0, y: 0, kind: Orange }
+  { active: false, x: 0, y: 0, kind: Orange, }
 }
 
 ///|
 /// Creates an inactive flare entry for the flare pool.
 pub fn Flare::Flare() -> Flare {
-  { active: false, x: 0, y: 0, t: 0.0 }
+  { active: false, x: 0, y: 0, t: 0.0, }
 }
 
 ///|

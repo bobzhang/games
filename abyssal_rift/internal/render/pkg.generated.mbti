@@ -65,4 +65,3 @@ pub fn unload_art() -> Unit
 // Type aliases
 
 // Traits
-

@@ -136,44 +136,104 @@ test "rng_float produces value in 0..1" {
 
 ///|
 test "hex_neighbors even row returns 6 neighbors" {
-  let neighbors = hex_neighbors({ col: 3, row: 2 })
+  let neighbors = hex_neighbors({ col: 3, row: 2, })
   inspect(neighbors.length(), content="6")
 }
 
 ///|
 test "hex_neighbors odd row returns 6 neighbors" {
-  let neighbors = hex_neighbors({ col: 3, row: 3 })
+  let neighbors = hex_neighbors({ col: 3, row: 3, })
   inspect(neighbors.length(), content="6")
 }
 
 ///|
 test "hex_neighbors even row specific coords" {
   // Even row: offsets are (+1,0), (+1,-1), (0,-1), (-1,0), (0,+1), (+1,+1)
-  let neighbors = hex_neighbors({ col: 3, row: 2 })
-  inspect(neighbors[0], content="{col: 4, row: 2}")
-  inspect(neighbors[1], content="{col: 4, row: 1}")
-  inspect(neighbors[2], content="{col: 3, row: 1}")
-  inspect(neighbors[3], content="{col: 2, row: 2}")
-  inspect(neighbors[4], content="{col: 3, row: 3}")
-  inspect(neighbors[5], content="{col: 4, row: 3}")
+  let neighbors = hex_neighbors({ col: 3, row: 2, })
+  debug_inspect(
+    neighbors[0],
+    content=(
+      #|{ col: 4, row: 2 }
+    ),
+  )
+  debug_inspect(
+    neighbors[1],
+    content=(
+      #|{ col: 4, row: 1 }
+    ),
+  )
+  debug_inspect(
+    neighbors[2],
+    content=(
+      #|{ col: 3, row: 1 }
+    ),
+  )
+  debug_inspect(
+    neighbors[3],
+    content=(
+      #|{ col: 2, row: 2 }
+    ),
+  )
+  debug_inspect(
+    neighbors[4],
+    content=(
+      #|{ col: 3, row: 3 }
+    ),
+  )
+  debug_inspect(
+    neighbors[5],
+    content=(
+      #|{ col: 4, row: 3 }
+    ),
+  )
 }
 
 ///|
 test "hex_neighbors odd row specific coords" {
   // Odd row: offsets are (+1,0), (0,-1), (-1,-1), (-1,0), (-1,+1), (0,+1)
-  let neighbors = hex_neighbors({ col: 3, row: 3 })
-  inspect(neighbors[0], content="{col: 4, row: 3}")
-  inspect(neighbors[1], content="{col: 3, row: 2}")
-  inspect(neighbors[2], content="{col: 2, row: 2}")
-  inspect(neighbors[3], content="{col: 2, row: 3}")
-  inspect(neighbors[4], content="{col: 2, row: 4}")
-  inspect(neighbors[5], content="{col: 3, row: 4}")
+  let neighbors = hex_neighbors({ col: 3, row: 3, })
+  debug_inspect(
+    neighbors[0],
+    content=(
+      #|{ col: 4, row: 3 }
+    ),
+  )
+  debug_inspect(
+    neighbors[1],
+    content=(
+      #|{ col: 3, row: 2 }
+    ),
+  )
+  debug_inspect(
+    neighbors[2],
+    content=(
+      #|{ col: 2, row: 2 }
+    ),
+  )
+  debug_inspect(
+    neighbors[3],
+    content=(
+      #|{ col: 2, row: 3 }
+    ),
+  )
+  debug_inspect(
+    neighbors[4],
+    content=(
+      #|{ col: 2, row: 4 }
+    ),
+  )
+  debug_inspect(
+    neighbors[5],
+    content=(
+      #|{ col: 3, row: 4 }
+    ),
+  )
 }
 
 ///|
 test "hex_are_adjacent true for neighbors" {
   inspect(
-    hex_are_adjacent({ col: 3, row: 2 }, { col: 4, row: 2 }),
+    hex_are_adjacent({ col: 3, row: 2, }, { col: 4, row: 2, }),
     content="true",
   )
 }
@@ -181,7 +241,7 @@ test "hex_are_adjacent true for neighbors" {
 ///|
 test "hex_are_adjacent false for same cell" {
   inspect(
-    hex_are_adjacent({ col: 3, row: 2 }, { col: 3, row: 2 }),
+    hex_are_adjacent({ col: 3, row: 2, }, { col: 3, row: 2, }),
     content="false",
   )
 }
@@ -189,37 +249,37 @@ test "hex_are_adjacent false for same cell" {
 ///|
 test "hex_are_adjacent false for distant cells" {
   inspect(
-    hex_are_adjacent({ col: 0, row: 0 }, { col: 5, row: 5 }),
+    hex_are_adjacent({ col: 0, row: 0, }, { col: 5, row: 5, }),
     content="false",
   )
 }
 
 ///|
 test "hex_are_adjacent symmetry" {
-  let a : HexCoord = { col: 3, row: 2 }
-  let b : HexCoord = { col: 4, row: 2 }
+  let a : HexCoord = { col: 3, row: 2, }
+  let b : HexCoord = { col: 4, row: 2, }
   inspect(hex_are_adjacent(a, b), content="true")
   inspect(hex_are_adjacent(b, a), content="true")
 }
 
 ///|
 test "hex_in_bounds valid coord" {
-  inspect(hex_in_bounds({ col: 0, row: 0 }, 10, 8), content="true")
-  inspect(hex_in_bounds({ col: 9, row: 7 }, 10, 8), content="true")
-  inspect(hex_in_bounds({ col: 5, row: 3 }, 10, 8), content="true")
+  inspect(hex_in_bounds({ col: 0, row: 0, }, 10, 8), content="true")
+  inspect(hex_in_bounds({ col: 9, row: 7, }, 10, 8), content="true")
+  inspect(hex_in_bounds({ col: 5, row: 3, }, 10, 8), content="true")
 }
 
 ///|
 test "hex_in_bounds out of bounds" {
-  inspect(hex_in_bounds({ col: -1, row: 0 }, 10, 8), content="false")
-  inspect(hex_in_bounds({ col: 0, row: -1 }, 10, 8), content="false")
-  inspect(hex_in_bounds({ col: 10, row: 0 }, 10, 8), content="false")
-  inspect(hex_in_bounds({ col: 0, row: 8 }, 10, 8), content="false")
+  inspect(hex_in_bounds({ col: -1, row: 0, }, 10, 8), content="false")
+  inspect(hex_in_bounds({ col: 0, row: -1, }, 10, 8), content="false")
+  inspect(hex_in_bounds({ col: 10, row: 0, }, 10, 8), content="false")
+  inspect(hex_in_bounds({ col: 0, row: 8, }, 10, 8), content="false")
 }
 
 ///|
 test "hex_in_bounds zero-size map" {
-  inspect(hex_in_bounds({ col: 0, row: 0 }, 0, 0), content="false")
+  inspect(hex_in_bounds({ col: 0, row: 0, }, 0, 0), content="false")
 }
 
 // --- Water cost per tile kind ---
@@ -281,17 +341,17 @@ test "tier_name all variants" {
 
 ///|
 test "tier_level_range OasisTrail" {
-  inspect(tier_level_range(OasisTrail), content="(0, 7)")
+  debug_inspect(tier_level_range(OasisTrail), content="(0, 7)")
 }
 
 ///|
 test "tier_level_range DuneSea" {
-  inspect(tier_level_range(DuneSea), content="(8, 16)")
+  debug_inspect(tier_level_range(DuneSea), content="(8, 16)")
 }
 
 ///|
 test "tier_level_range LostCity" {
-  inspect(tier_level_range(LostCity), content="(17, 24)")
+  debug_inspect(tier_level_range(LostCity), content="(17, 24)")
 }
 
 ///|
@@ -334,8 +394,13 @@ test "new_hex_map zero size" {
 
 ///|
 test "new_caravan initial state" {
-  let c = new_caravan({ col: 2, row: 3 }, 15)
-  inspect(c.pos, content="{col: 2, row: 3}")
+  let c = new_caravan({ col: 2, row: 3, }, 15)
+  debug_inspect(
+    c.pos,
+    content=(
+      #|{ col: 2, row: 3 }
+    ),
+  )
   inspect(c.water, content="15")
   inspect(c.max_water, content="15")
   inspect(c.gold, content="0")
@@ -377,7 +442,7 @@ test "set_message updates game" {
 
 ///|
 test "hex_to_pixel returns tuple" {
-  let (x, y) = hex_to_pixel({ col: 0, row: 0 }, 38.0)
+  let (x, y) = hex_to_pixel({ col: 0, row: 0, }, 38.0)
   // Just check the values are finite positive numbers near expected offsets
   inspect(x > 0.0, content="true")
   inspect(y > 0.0, content="true")
@@ -385,8 +450,8 @@ test "hex_to_pixel returns tuple" {
 
 ///|
 test "hex_to_pixel odd row shifts y" {
-  let (_, y0) = hex_to_pixel({ col: 0, row: 0 }, 38.0)
-  let (_, y1) = hex_to_pixel({ col: 0, row: 1 }, 38.0)
+  let (_, y0) = hex_to_pixel({ col: 0, row: 0, }, 38.0)
+  let (_, y1) = hex_to_pixel({ col: 0, row: 1, }, 38.0)
   // Odd row should have a larger y due to row offset + half-height shift
   inspect(y1 > y0, content="true")
 }

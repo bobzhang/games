@@ -265,7 +265,7 @@ fn clear_placed(game : @types.Game) -> Unit {
   let rows = level.grid_rows
   for y in 0..<rows {
     for x in 0..<cols {
-      let pos : @types.Pos = { x, y }
+      let pos : @types.Pos = { x, y, }
       if !is_level_defined_tile(game, pos) {
         let idx = @types.pos_to_index(pos, cols)
         let tile = game.grid[idx]

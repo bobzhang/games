@@ -25,4 +25,3 @@ pub fn set_row(Array[Int], Int, Int, Array[Int]) -> Unit
 // Type aliases
 
 // Traits
-

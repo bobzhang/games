@@ -42,7 +42,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 
 ///|
 pub fn vec2f(x : Float, y : Float) -> Vec2f {
-  { x, y }
+  { x, y, }
 }
 
 ///|
@@ -58,14 +58,14 @@ pub fn peg_position(index : Int) -> Vec2f {
     pi / 2.0
   let x = frame_center_x + frame_radius * cosf(angle)
   let y = frame_center_y + frame_radius * sinf(angle)
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn make_pegs() -> Array[Peg] {
-  let pegs : Array[Peg] = Array::new(capacity=peg_count)
+  let pegs : Array[Peg] = Array(capacity=peg_count)
   for i in 0..<peg_count {
-    pegs.push({ index: i, pos: peg_position(i) })
+    pegs.push({ index: i, pos: peg_position(i), })
   }
   pegs
 }
@@ -119,12 +119,12 @@ pub fn tier_name(tier : Tier) -> String {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: 0, strings_used: 0 }
+  { completed: false, stars: 0, strings_used: 0, }
 }
 
 ///|
 pub fn new_game(levels : Array[Level]) -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=levels.length())
+  let scores : Array[LevelScore] = Array(capacity=levels.length())
   for _i in 0..<levels.length() {
     scores.push(new_level_score())
   }
@@ -159,9 +159,9 @@ pub fn start_level(game : Game, level_index : Int) -> Unit {
   game.message = ""
   game.message_timer = 0.0
   let level = game.level_data[level_index]
-  let targets : Array[TargetDot] = Array::new(capacity=level.targets.length())
+  let targets : Array[TargetDot] = Array(capacity=level.targets.length())
   for i in 0..<level.targets.length() {
-    targets.push({ pos: level.targets[i], hit: false })
+    targets.push({ pos: level.targets[i], hit: false, })
   }
   game.targets = targets
   game.screen = Playing

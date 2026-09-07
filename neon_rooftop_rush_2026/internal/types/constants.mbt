@@ -120,12 +120,18 @@ pub(all) enum ObstacleKind {
 } derive(Eq)
 
 ///|
+pub extend ObstacleKind with Eq::{not_equal, equal}
+
+///|
 /// Identifies the visual kind of a particle effect.
 pub(all) enum ParticleKind {
   Spark
   Glow
   Hurt
 } derive(Eq)
+
+///|
+pub extend ParticleKind with Eq::{not_equal, equal}
 
 ///|
 /// Represents the current high-level game state.
@@ -135,3 +141,6 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

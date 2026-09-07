@@ -68,7 +68,7 @@ pub fn absi(v : Int) -> Int {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 12345 }
+let rng_state : Ref[Int] = { val: 12345, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {
@@ -104,7 +104,7 @@ pub fn rng_float() -> Float {
 
 ///|
 pub fn hex(col : Int, row : Int) -> HexCoord {
-  { col, row }
+  { col, row, }
 }
 
 ///|
@@ -119,7 +119,7 @@ pub fn hex_index(c : HexCoord, w : Int) -> Int {
 
 ///|
 pub fn hex_from_index(idx : Int, w : Int) -> HexCoord {
-  { col: idx % w, row: idx / w }
+  { col: idx % w, row: idx / w, }
 }
 
 ///|
@@ -128,20 +128,20 @@ pub fn hex_neighbors(c : HexCoord) -> Array[HexCoord] {
   let parity = c.row % 2
   if parity == 0 {
     // Even row
-    result.push({ col: c.col + 1, row: c.row })
-    result.push({ col: c.col - 1, row: c.row })
-    result.push({ col: c.col, row: c.row - 1 })
-    result.push({ col: c.col - 1, row: c.row - 1 })
-    result.push({ col: c.col, row: c.row + 1 })
-    result.push({ col: c.col - 1, row: c.row + 1 })
+    result.push({ col: c.col + 1, row: c.row, })
+    result.push({ col: c.col - 1, row: c.row, })
+    result.push({ col: c.col, row: c.row - 1, })
+    result.push({ col: c.col - 1, row: c.row - 1, })
+    result.push({ col: c.col, row: c.row + 1, })
+    result.push({ col: c.col - 1, row: c.row + 1, })
   } else {
     // Odd row
-    result.push({ col: c.col + 1, row: c.row })
-    result.push({ col: c.col - 1, row: c.row })
-    result.push({ col: c.col + 1, row: c.row - 1 })
-    result.push({ col: c.col, row: c.row - 1 })
-    result.push({ col: c.col + 1, row: c.row + 1 })
-    result.push({ col: c.col, row: c.row + 1 })
+    result.push({ col: c.col + 1, row: c.row, })
+    result.push({ col: c.col - 1, row: c.row, })
+    result.push({ col: c.col + 1, row: c.row - 1, })
+    result.push({ col: c.col, row: c.row - 1, })
+    result.push({ col: c.col + 1, row: c.row + 1, })
+    result.push({ col: c.col, row: c.row + 1, })
   }
   result
 }
@@ -188,7 +188,7 @@ pub fn pixel_to_hex(px : Float, py : Float) -> HexCoord {
   let mut best_dist : Float = 999999.0
   for row in 0..<grid_height {
     for col in 0..<grid_width {
-      let (hx, hy) = hex_to_pixel({ col, row })
+      let (hx, hy) = hex_to_pixel({ col, row, })
       let dx = px - hx
       let dy = py - hy
       let d = dx * dx + dy * dy
@@ -199,7 +199,7 @@ pub fn pixel_to_hex(px : Float, py : Float) -> HexCoord {
       }
     }
   }
-  { col: best_col, row: best_row }
+  { col: best_col, row: best_row, }
 }
 
 // Line of sight check (Bresenham-like on hex grid)
@@ -364,17 +364,17 @@ pub fn new_unit(
 
 ///|
 pub fn new_tile(terrain : Terrain) -> HexTile {
-  { terrain, fog_player: Hidden, unit_id: -1, has_flag: false }
+  { terrain, fog_player: Hidden, unit_id: -1, has_flag: false, }
 }
 
 ///|
 pub fn new_hex_map(w : Int, h : Int) -> HexMap {
-  let tiles : Array[HexTile] = Array::new(capacity=w * h)
+  let tiles : Array[HexTile] = Array(capacity=w * h)
   let total = w * h
   for _i in 0..<total {
     tiles.push(new_tile(Plains))
   }
-  { width: w, height: h, tiles }
+  { width: w, height: h, tiles, }
 }
 
 ///|
@@ -406,16 +406,21 @@ pub fn new_battle() -> Battle {
 
 ///|
 pub fn new_campaign() -> CampaignState {
-  let scores : Array[Int] = Array::new(capacity=total_campaign_levels)
+  let scores : Array[Int] = Array(capacity=total_campaign_levels)
   for _i in 0..<total_campaign_levels {
     scores.push(0)
   }
-  { current_level: 0, levels_unlocked: 1, total_score: 0, level_scores: scores }
+  {
+    current_level: 0,
+    levels_unlocked: 1,
+    total_score: 0,
+    level_scores: scores,
+  }
 }
 
 ///|
 pub fn new_skirmish_setup() -> SkirmishSetup {
-  { map_index: 0, army_size: 4, difficulty: Normal }
+  { map_index: 0, army_size: 4, difficulty: Normal, }
 }
 
 ///|

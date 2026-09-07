@@ -42,8 +42,13 @@ test "star_rating_value" {
 
 ///|
 test "new_ship" {
-  let ship = @types.new_ship({ x: 3, y: 5 })
-  inspect(ship.pos, content="{x: 3, y: 5}")
+  let ship = @types.new_ship({ x: 3, y: 5, })
+  debug_inspect(
+    ship.pos,
+    content=(
+      #|{ x: 3, y: 5 }
+    ),
+  )
   inspect(ship.hp, content="3")
   inspect(ship.steps, content="0")
   inspect(ship.landmarks_found, content="0")
@@ -55,7 +60,7 @@ test "new_game" {
   inspect(game.current_level, content="0")
   inspect(game.phase, content="Menu")
   inspect(game.stars.length(), content="20")
-  inspect(game.level_state, content="None")
+  debug_inspect(game.level_state, content="None")
 }
 
 ///|
@@ -68,8 +73,8 @@ test "bearing_to_degrees" {
 
 ///|
 test "compute_bearing_east" {
-  let from : @types.Pos = { x: 0, y: 0 }
-  let to : @types.Pos = { x: 5, y: 0 }
+  let from : @types.Pos = { x: 0, y: 0, }
+  let to : @types.Pos = { x: 5, y: 0, }
   let bearing = @types.compute_bearing(from, to)
   let deg = @types.bearing_to_degrees(bearing).to_int()
   inspect(deg, content="90")
@@ -77,8 +82,8 @@ test "compute_bearing_east" {
 
 ///|
 test "compute_bearing_south" {
-  let from : @types.Pos = { x: 0, y: 0 }
-  let to : @types.Pos = { x: 0, y: 5 }
+  let from : @types.Pos = { x: 0, y: 0, }
+  let to : @types.Pos = { x: 0, y: 5, }
   let bearing = @types.compute_bearing(from, to)
   let deg = @types.bearing_to_degrees(bearing).to_int()
   inspect(deg, content="180")
@@ -91,9 +96,9 @@ test "heading_to_compass_north" {
 
 ///|
 test "pos_equality" {
-  let a : @types.Pos = { x: 1, y: 2 }
-  let b : @types.Pos = { x: 1, y: 2 }
-  let c : @types.Pos = { x: 3, y: 4 }
+  let a : @types.Pos = { x: 1, y: 2, }
+  let b : @types.Pos = { x: 1, y: 2, }
+  let c : @types.Pos = { x: 3, y: 4, }
   inspect(a == b, content="true")
   inspect(a == c, content="false")
 }

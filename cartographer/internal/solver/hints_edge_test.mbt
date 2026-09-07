@@ -26,7 +26,7 @@ test "hint_narrow_most_constrained" {
   // Should narrow Town to a few cells
   assert_true(cells.length() > 0)
   assert_true(cells.length() < 64)
-  inspect(feat, content="Some(Town)")
+  debug_inspect(feat, content="Some(Town)")
 }
 
 ///|
@@ -65,8 +65,13 @@ test "hint_reveal_forced_cell" {
     @types.new_clue(Not, Town, direction=N, row_col=7, text="no row 8"),
   ]
   let (cell, feat) = @solver.compute_reveal_hint(grid, 8, features, clues)
-  inspect(cell, content="Some({x: 5, y: 2})")
-  inspect(feat, content="Some(Town)")
+  debug_inspect(
+    cell,
+    content=(
+      #|Some({ x: 5, y: 2 })
+    ),
+  )
+  debug_inspect(feat, content="Some(Town)")
 }
 
 ///|
@@ -86,8 +91,8 @@ test "hint_reveal_no_features_needed" {
     ),
   ]
   let (cell, feat) = @solver.compute_reveal_hint(grid, 8, features, clues)
-  inspect(cell, content="None")
-  inspect(feat, content="None")
+  debug_inspect(cell, content="None")
+  debug_inspect(feat, content="None")
 }
 
 ///|

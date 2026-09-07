@@ -90,4 +90,3 @@ pub(all) struct UpgradeDef {
 // Type aliases
 
 // Traits
-

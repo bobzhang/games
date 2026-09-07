@@ -3,13 +3,25 @@ pub(all) struct BeamColor {
   r : Bool
   g : Bool
   b : Bool
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend BeamColor with Eq::{not_equal, equal}
+
+///|
+pub extend BeamColor with Debug::{to_repr}
 
 ///|
 pub(all) struct HexCoord {
   q : Int
   r : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend HexCoord with Eq::{not_equal, equal}
+
+///|
+pub extend HexCoord with Debug::{to_repr}
 
 ///|
 pub(all) struct HexCell {

@@ -126,10 +126,7 @@ fn draw_timeline_slots(game : @types.Game, case_ : @types.Case) -> Unit {
       @types.color_slot_empty
     }
     let drew_slot_art = draw_timeline_slot_art(
-      sx,
-      sy,
-      @types.slot_width,
-      @types.slot_height,
+      sx, sy, @types.slot_width, @types.slot_height,
     )
     if drew_slot_art {
       let overlay_alpha = if is_snap_target {
@@ -313,7 +310,9 @@ fn draw_card_at(
     @raylib.Color::new(0, 0, 0, 60),
   )
   // Card body
-  let drew_card_art = draw_card_art(x, y, @types.card_width, @types.card_height, @raylib.white)
+  let drew_card_art = draw_card_art(
+    x, y, @types.card_width, @types.card_height, @raylib.white,
+  )
   if drew_card_art {
     if is_drag || is_anchor {
       @raylib.draw_rectangle(
@@ -325,7 +324,11 @@ fn draw_card_at(
           bg.r.to_int(),
           bg.g.to_int(),
           bg.b.to_int(),
-          if is_drag { 58 } else { 68 },
+          if is_drag {
+            58
+          } else {
+            68
+          },
         ),
       )
     }

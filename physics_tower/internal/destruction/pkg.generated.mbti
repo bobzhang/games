@@ -41,4 +41,3 @@ pub fn update_destruction(@types.Game, Float) -> Unit
 // Type aliases
 
 // Traits
-

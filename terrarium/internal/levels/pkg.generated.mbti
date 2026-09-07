@@ -61,4 +61,3 @@ pub fn level_20() -> @types.LevelDef
 // Type aliases
 
 // Traits
-

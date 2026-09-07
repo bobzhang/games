@@ -197,7 +197,12 @@ fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
     } else {
       let r : Float = hazard.size
       if !draw_wave_art(x, y, r) {
-        @raylib.draw_circle_lines(x, y, r, @raylib.Color::new(228, 248, 255, 184))
+        @raylib.draw_circle_lines(
+          x,
+          y,
+          r,
+          @raylib.Color::new(228, 248, 255, 184),
+        )
         @raylib.draw_circle_lines(
           x,
           y,
@@ -365,12 +370,7 @@ fn @types.Game::draw_player_boat(game : @types.Game) -> Unit {
       14.0,
       @raylib.Color::new(246, 188, 86, 244),
     )
-    @raylib.draw_circle(
-      x + 76,
-      y - 4,
-      4.5,
-      @raylib.Color::new(44, 34, 24, 238),
-    )
+    @raylib.draw_circle(x + 76, y - 4, 4.5, @raylib.Color::new(44, 34, 24, 238))
   }
 
   let miss : Float = @types.minf(

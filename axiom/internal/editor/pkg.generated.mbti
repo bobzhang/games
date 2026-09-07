@@ -39,4 +39,3 @@ pub fn toggle_palette(@types.EditorState) -> Unit
 // Type aliases
 
 // Traits
-

@@ -113,8 +113,8 @@ test "new_ship default state" {
   inspect(ship.shield, content="3")
   inspect(ship.heat, content="0")
   inspect(ship.weapon.kind, content="Laser")
-  inspect(ship.primary_mod, content="None")
-  inspect(ship.utility_mod, content="None")
+  debug_inspect(ship.primary_mod, content="None")
+  debug_inspect(ship.utility_mod, content="None")
   inspect(ship.credits, content="0")
 }
 

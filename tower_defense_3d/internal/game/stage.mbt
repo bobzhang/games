@@ -131,7 +131,7 @@ fn @types.Game::trace_path(
   let mut cy = start_gy
   let max_steps = @types.map_total
   for _step in 0..<max_steps {
-    path.push({ x: @types.grid_to_world_x(cx), z: @types.grid_to_world_z(cy) })
+    path.push({ x: @types.grid_to_world_x(cx), z: @types.grid_to_world_z(cy), })
     visited[@types.tile_index(cx, cy)] = true
     // Check if reached end
     let tile = @types.get_tile(game, cx, cy)

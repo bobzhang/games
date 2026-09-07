@@ -101,8 +101,8 @@ test "check_layer_requirements all satisfied" {
   let p = full_paper(4, 4)
   set_cell(p, 1, 1, true, 3)
   let checks : Array[LayerCheck] = [
-    { pos: { x: 0, y: 0 }, required_layers: 1 },
-    { pos: { x: 1, y: 1 }, required_layers: 3 },
+    { pos: { x: 0, y: 0, }, required_layers: 1, },
+    { pos: { x: 1, y: 1, }, required_layers: 3, },
   ]
   inspect(check_layer_requirements(p, checks), content="true")
 }
@@ -110,23 +110,27 @@ test "check_layer_requirements all satisfied" {
 ///|
 test "check_layer_requirements fails on wrong layer count" {
   let p = full_paper(4, 4)
-  let checks : Array[LayerCheck] = [{ pos: { x: 0, y: 0 }, required_layers: 2 }]
+  let checks : Array[LayerCheck] = [
+    { pos: { x: 0, y: 0, }, required_layers: 2, },
+  ]
   inspect(check_layer_requirements(p, checks), content="false")
 }
 
 ///|
 test "check_layer_requirements fails on empty cell" {
   let p = new_paper(4, 4)
-  let checks : Array[LayerCheck] = [{ pos: { x: 0, y: 0 }, required_layers: 1 }]
+  let checks : Array[LayerCheck] = [
+    { pos: { x: 0, y: 0, }, required_layers: 1, },
+  ]
   inspect(check_layer_requirements(p, checks), content="false")
 }
 
 ///|
 test "single_layer_check_ok" {
   let p = full_paper(4, 4)
-  let ok : LayerCheck = { pos: { x: 0, y: 0 }, required_layers: 1 }
+  let ok : LayerCheck = { pos: { x: 0, y: 0, }, required_layers: 1, }
   inspect(single_layer_check_ok(p, ok), content="true")
-  let fail : LayerCheck = { pos: { x: 0, y: 0 }, required_layers: 2 }
+  let fail : LayerCheck = { pos: { x: 0, y: 0, }, required_layers: 2, }
   inspect(single_layer_check_ok(p, fail), content="false")
 }
 

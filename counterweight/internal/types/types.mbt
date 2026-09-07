@@ -2,7 +2,13 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Node {
@@ -14,7 +20,10 @@ pub(all) struct Node {
   mut height : Float
   mut base_height : Float
   mut locked : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Node with Debug::{to_repr}
 
 ///|
 pub(all) struct Rope {
@@ -26,7 +35,10 @@ pub(all) struct Rope {
   mut max_load : Float
   mut broken : Bool
   mut breakable : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Rope with Debug::{to_repr}
 
 ///|
 pub(all) struct Weight {
@@ -36,7 +48,10 @@ pub(all) struct Weight {
   mut current_y : Float
   mut target_y : Float
   mut bob_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Weight with Debug::{to_repr}
 
 ///|
 pub(all) struct Crate {
@@ -47,7 +62,10 @@ pub(all) struct Crate {
   mut target_y : Float
   mut target_height : Float
   mut at_target : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Crate with Debug::{to_repr}
 
 ///|
 pub(all) struct Platform {
@@ -56,7 +74,10 @@ pub(all) struct Platform {
   mut width : Float
   mut height_val : Float
   mut connected_to : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Platform with Debug::{to_repr}
 
 ///|
 pub(all) struct Bucket {
@@ -68,14 +89,20 @@ pub(all) struct Bucket {
   mut filling : Bool
   mut current_y : Float
   mut target_y : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Bucket with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelTarget {
   mut crate_index : Int
   mut target_height : Float
   mut tolerance : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelTarget with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelDef {
@@ -93,7 +120,10 @@ pub(all) struct LevelDef {
   mut par_rehooks : Int
   mut has_waterfall : Bool
   mut waterfall_x : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -101,7 +131,10 @@ pub(all) struct LevelScore {
   mut stars : Int
   mut connections_used : Int
   mut rehooks : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -133,4 +166,7 @@ pub(all) struct Game {
   mut frame_count : Int
   mut grid_offset_x : Int
   mut grid_offset_y : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

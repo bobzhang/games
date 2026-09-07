@@ -13,18 +13,16 @@ test "normalize_angle wraps correctly" {
 
 ///|
 test "point_in_vision_cone detects target in front" {
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
     tiles.push(row)
   }
   // Guard at (5,5) facing right (angle=0)
-  let grd = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  let grd = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5, }])
   grd.facing_angle = 0.0 // facing right
   grd.vision_range = 5.0
   grd.vision_cone = @types.pi / 3.0
@@ -38,11 +36,9 @@ test "point_in_vision_cone detects target in front" {
 
 ///|
 test "vision blocked by wall" {
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
@@ -50,7 +46,7 @@ test "vision blocked by wall" {
   }
   // Place wall between guard and target
   tiles[5][7] = Wall
-  let grd = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  let grd = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5, }])
   grd.facing_angle = 0.0
   grd.vision_range = 5.0
   grd.vision_cone = @types.pi / 3.0
@@ -62,17 +58,15 @@ test "vision blocked by wall" {
 
 ///|
 test "shadow reduces vision range" {
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
     tiles.push(row)
   }
-  let grd = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  let grd = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5, }])
   grd.facing_angle = 0.0
   grd.vision_range = 5.0
   grd.vision_cone = @types.pi / 3.0
@@ -90,18 +84,16 @@ test "shadow reduces vision range" {
 test "guard state transitions" {
   // Create a minimal game for testing
   let game = @types.new_game()
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
     tiles.push(row)
   }
   game.level.tiles = tiles
-  let grd = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }, { x: 8, y: 5 }])
+  let grd = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5, }, { x: 8, y: 5, }])
   game.level.guards = [grd]
   // Initially patrolling
   inspect(grd.alert_state, content="Patrolling")
@@ -113,11 +105,9 @@ test "guard state transitions" {
 
 ///|
 test "detection_speed_at varies by tile" {
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
@@ -137,11 +127,9 @@ test "detection_speed_at varies by tile" {
 ///|
 test "alert_nearby_guards propagates to nearby patrolling guards" {
   let game = @types.new_game()
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
@@ -149,9 +137,9 @@ test "alert_nearby_guards propagates to nearby patrolling guards" {
   }
   game.level.tiles = tiles
   // g1 is within radio range (<=8), g2 is out of range, g3 is already suspicious
-  let g1 = @types.new_guard(3, 3, Patrol, [{ x: 3, y: 3 }])
-  let g2 = @types.new_guard(15, 15, Patrol, [{ x: 15, y: 15 }])
-  let g3 = @types.new_guard(4, 4, Patrol, [{ x: 4, y: 4 }])
+  let g1 = @types.new_guard(3, 3, Patrol, [{ x: 3, y: 3, }])
+  let g2 = @types.new_guard(15, 15, Patrol, [{ x: 15, y: 15, }])
+  let g3 = @types.new_guard(4, 4, Patrol, [{ x: 4, y: 4, }])
   g3.alert_state = Suspicious
   game.level.guards = [g1, g2, g3]
   // Alert at position (5,5)
@@ -169,18 +157,16 @@ test "alert_nearby_guards propagates to nearby patrolling guards" {
 ///|
 test "alert_nearby_guards does not affect alert guards" {
   let game = @types.new_game()
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
     tiles.push(row)
   }
   game.level.tiles = tiles
-  let g1 = @types.new_guard(3, 3, Patrol, [{ x: 3, y: 3 }])
+  let g1 = @types.new_guard(3, 3, Patrol, [{ x: 3, y: 3, }])
   g1.alert_state = Alert
   g1.investigate_x = 10
   g1.investigate_y = 10
@@ -194,18 +180,16 @@ test "alert_nearby_guards does not affect alert guards" {
 ///|
 test "guards_hear_noise updates suspicious guard investigate target" {
   let game = @types.new_game()
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
     tiles.push(row)
   }
   game.level.tiles = tiles
-  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5, }])
   g1.alert_state = Suspicious
   g1.investigate_x = 3
   g1.investigate_y = 3
@@ -222,18 +206,16 @@ test "guards_hear_noise updates suspicious guard investigate target" {
 ///|
 test "guards_hear_noise updates alert guard investigate target" {
   let game = @types.new_game()
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
     tiles.push(row)
   }
   game.level.tiles = tiles
-  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5, }])
   g1.alert_state = Alert
   g1.investigate_x = 1
   g1.investigate_y = 1
@@ -247,18 +229,16 @@ test "guards_hear_noise updates alert guard investigate target" {
 ///|
 test "guards_hear_noise ignores inactive guards" {
   let game = @types.new_game()
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
     tiles.push(row)
   }
   game.level.tiles = tiles
-  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
+  let g1 = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5, }])
   g1.active = false
   game.level.guards = [g1]
   @guard.guards_hear_noise(game, 5, 5, 3)
@@ -268,19 +248,17 @@ test "guards_hear_noise ignores inactive guards" {
 ///|
 test "guards_hear_noise only reaches guards within radius" {
   let game = @types.new_game()
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }
     tiles.push(row)
   }
   game.level.tiles = tiles
-  let g_near = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5 }])
-  let g_far = @types.new_guard(12, 12, Patrol, [{ x: 12, y: 12 }])
+  let g_near = @types.new_guard(5, 5, Patrol, [{ x: 5, y: 5, }])
+  let g_far = @types.new_guard(12, 12, Patrol, [{ x: 12, y: 12, }])
   game.level.guards = [g_near, g_far]
   // Noise at (4,4) with radius 3
   @guard.guards_hear_noise(game, 4, 4, 3)
@@ -290,11 +268,9 @@ test "guards_hear_noise only reaches guards within radius" {
 
 ///|
 test "point_in_camera_vision checks powered state" {
-  let tiles : Array[Array[@types.TileKind]] = Array::new(
-    capacity=@types.grid_height,
-  )
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }

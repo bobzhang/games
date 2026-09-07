@@ -93,12 +93,18 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+pub extend Dir with Eq::{not_equal, equal}
+
+///|
 /// Game outcome.
 pub(all) enum GameResult {
   None
   Win
   Lose
 } derive(Eq)
+
+///|
+pub extend GameResult with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
@@ -109,6 +115,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Map tile type.
 pub(all) enum Tile {
   Ground
@@ -116,3 +125,6 @@ pub(all) enum Tile {
   Depot
   Shelter
 } derive(Eq)
+
+///|
+pub extend Tile with Eq::{not_equal, equal}

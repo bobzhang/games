@@ -642,6 +642,9 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Particle effect type.
 pub(all) enum ParticleKind {
   Blood
@@ -653,12 +656,18 @@ pub(all) enum ParticleKind {
 } derive(Eq)
 
 ///|
+pub extend ParticleKind with Eq::{not_equal, equal}
+
+///|
 /// Trap type.
 pub(all) enum Trap {
   Spike
   Flame
   Electric
 } derive(Eq)
+
+///|
+pub extend Trap with Eq::{not_equal, equal}
 
 ///|
 /// Weapon variant.
@@ -674,3 +683,6 @@ pub(all) enum WeaponKind {
 // Minimap
 
 // Difficulty scaling per wave
+
+///|
+pub extend WeaponKind with Eq::{not_equal, equal}

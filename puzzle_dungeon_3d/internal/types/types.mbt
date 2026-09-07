@@ -39,6 +39,9 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+pub extend Tile with Eq::{not_equal, equal}
+
+///|
 /// Entity kinds that can occupy tiles independently from base terrain.
 pub(all) enum EntityKind {
   EntityNone
@@ -49,6 +52,9 @@ pub(all) enum EntityKind {
 } derive(Eq)
 
 ///|
+pub extend EntityKind with Eq::{not_equal, equal}
+
+///|
 /// Cardinal movement and facing directions used by player, conveyors, and lasers.
 pub(all) enum Dir {
   DirNone
@@ -57,6 +63,9 @@ pub(all) enum Dir {
   DirDown
   DirLeft
 } derive(Eq)
+
+///|
+pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// High-level game states that drive update and UI render dispatch.
@@ -73,6 +82,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// The five campaign themes that map floors to mechanics and visual palettes.
 pub(all) enum World {
   WorldDungeon
@@ -81,6 +93,9 @@ pub(all) enum World {
   WorldGarden
   WorldVoid
 } derive(Eq)
+
+///|
+pub extend World with Eq::{not_equal, equal}
 
 ///|
 /// Maps a world-selection index to a `World` enum, defaulting to `WorldVoid`.
@@ -124,6 +139,9 @@ pub(all) enum DecoKind {
 } derive(Eq)
 
 // Entity on the grid (block, diamond, key, bomb)
+
+///|
+pub extend DecoKind with Eq::{not_equal, equal}
 
 ///|
 /// Movable grid entity state (blocks, collectibles, and keys) with animation data.
@@ -350,7 +368,7 @@ pub(all) struct FloorInfo {
 ///|
 /// Creates default floor progress (locked, incomplete, and no stars).
 pub fn FloorInfo::FloorInfo() -> FloorInfo {
-  { unlocked: false, completed: false, best_moves: 999, stars: 0 }
+  { unlocked: false, completed: false, best_moves: 999, stars: 0, }
 }
 
 // Achievement tracking
@@ -365,7 +383,7 @@ pub(all) struct AchievementInfo {
 ///|
 /// Creates a locked achievement entry with no active display timer.
 pub fn AchievementInfo::AchievementInfo() -> AchievementInfo {
-  { unlocked: false, show_timer: 0.0 }
+  { unlocked: false, show_timer: 0.0, }
 }
 
 // Main Game struct

@@ -11,6 +11,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Logical gem identity stored in each board slot.
 pub(all) enum GemKind {
   Empty
@@ -21,6 +24,9 @@ pub(all) enum GemKind {
   Purple
   Orange
 } derive(Eq)
+
+///|
+pub extend GemKind with Eq::{not_equal, equal}
 
 ///|
 /// Maps a random integer bucket to a playable gem color.

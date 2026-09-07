@@ -31,4 +31,3 @@ pub fn water_flow_targets(@types.HexGrid, Int, Int) -> Array[(Int, Int)]
 // Type aliases
 
 // Traits
-

@@ -6,13 +6,17 @@ import {
 }
 
 // Values
-pub fn draw_frame(@types.Game) -> Unit
+pub fn draw_frame(@types.Game, GameArt) -> Unit
+
+pub fn load_game_art() -> GameArt
+
+pub fn unload_game_art(GameArt) -> Unit
 
 // Errors
 
 // Types and methods
+type GameArt
 
 // Type aliases
 
 // Traits
-

@@ -196,6 +196,11 @@ pub(all) enum BlueprintKind {
   Foundation
   Custom(Int)
 } derive(Eq, @debug.Debug)
+pub fn BlueprintKind::equal(Self, Self) -> Bool
+pub fn BlueprintKind::not_equal(Self, Self) -> Bool
+pub fn BlueprintKind::output(Self, &Logger) -> Unit
+pub fn BlueprintKind::to_repr(Self) -> @debug.Repr
+pub fn BlueprintKind::to_string(Self) -> String
 pub impl Show for BlueprintKind
 
 pub(all) struct Body {
@@ -223,6 +228,11 @@ pub(all) enum ChallengeMode {
   Survival
   Precision
 } derive(Eq, @debug.Debug)
+pub fn ChallengeMode::equal(Self, Self) -> Bool
+pub fn ChallengeMode::not_equal(Self, Self) -> Bool
+pub fn ChallengeMode::output(Self, &Logger) -> Unit
+pub fn ChallengeMode::to_repr(Self) -> @debug.Repr
+pub fn ChallengeMode::to_string(Self) -> String
 pub impl Show for ChallengeMode
 
 pub(all) struct ChallengeState {
@@ -244,6 +254,11 @@ pub(all) enum ComboKind {
   ReinforcedCombo
   LightweightCombo
 } derive(Eq, @debug.Debug)
+pub fn ComboKind::equal(Self, Self) -> Bool
+pub fn ComboKind::not_equal(Self, Self) -> Bool
+pub fn ComboKind::output(Self, &Logger) -> Unit
+pub fn ComboKind::to_repr(Self) -> @debug.Repr
+pub fn ComboKind::to_string(Self) -> String
 pub impl Show for ComboKind
 
 pub(all) struct DestructionState {
@@ -320,6 +335,11 @@ pub(all) enum JointKind {
   Hinge
   Spring
 } derive(Eq, @debug.Debug)
+pub fn JointKind::equal(Self, Self) -> Bool
+pub fn JointKind::not_equal(Self, Self) -> Bool
+pub fn JointKind::output(Self, &Logger) -> Unit
+pub fn JointKind::to_repr(Self) -> @debug.Repr
+pub fn JointKind::to_string(Self) -> String
 pub impl Show for JointKind
 
 pub(all) struct Level {
@@ -337,6 +357,11 @@ pub(all) enum Material {
   Stone
   Steel
 } derive(Eq, @debug.Debug)
+pub fn Material::equal(Self, Self) -> Bool
+pub fn Material::not_equal(Self, Self) -> Bool
+pub fn Material::output(Self, &Logger) -> Unit
+pub fn Material::to_repr(Self) -> @debug.Repr
+pub fn Material::to_string(Self) -> String
 pub impl Show for Material
 
 pub(all) struct Particle {
@@ -359,6 +384,11 @@ pub(all) enum PieceKind {
   Arch
   Cable
 } derive(Eq, @debug.Debug)
+pub fn PieceKind::equal(Self, Self) -> Bool
+pub fn PieceKind::not_equal(Self, Self) -> Bool
+pub fn PieceKind::output(Self, &Logger) -> Unit
+pub fn PieceKind::to_repr(Self) -> @debug.Repr
+pub fn PieceKind::to_string(Self) -> String
 pub impl Show for PieceKind
 
 pub(all) enum ReplayAction {
@@ -366,6 +396,11 @@ pub(all) enum ReplayAction {
   Rotate(Int)
   BlueprintPlace(BlueprintKind, Float, Float)
 } derive(Eq, @debug.Debug)
+pub fn ReplayAction::equal(Self, Self) -> Bool
+pub fn ReplayAction::not_equal(Self, Self) -> Bool
+pub fn ReplayAction::output(Self, &Logger) -> Unit
+pub fn ReplayAction::to_repr(Self) -> @debug.Repr
+pub fn ReplayAction::to_string(Self) -> String
 pub impl Show for ReplayAction
 
 pub(all) struct ReplayState {
@@ -396,6 +431,11 @@ pub(all) enum Screen {
   StatsScreen
   ReplayPlayback
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum SoundEvent {
@@ -413,6 +453,11 @@ pub(all) enum SoundEvent {
   ButtonClick
   StarEarned
 } derive(Eq, @debug.Debug)
+pub fn SoundEvent::equal(Self, Self) -> Bool
+pub fn SoundEvent::not_equal(Self, Self) -> Bool
+pub fn SoundEvent::output(Self, &Logger) -> Unit
+pub fn SoundEvent::to_repr(Self) -> @debug.Repr
+pub fn SoundEvent::to_string(Self) -> String
 pub impl Show for SoundEvent
 
 pub(all) struct Statistics {
@@ -433,6 +478,11 @@ pub(all) enum TestKind {
   Earthquake
   Impact
 } derive(Eq, @debug.Debug)
+pub fn TestKind::equal(Self, Self) -> Bool
+pub fn TestKind::not_equal(Self, Self) -> Bool
+pub fn TestKind::output(Self, &Logger) -> Unit
+pub fn TestKind::to_repr(Self) -> @debug.Repr
+pub fn TestKind::to_string(Self) -> String
 pub impl Show for TestKind
 
 pub(all) struct TutorialState {
@@ -463,6 +513,11 @@ pub(all) enum UpgradeKind {
   FlexJoints
   DeepFoundation
 } derive(Eq, @debug.Debug)
+pub fn UpgradeKind::equal(Self, Self) -> Bool
+pub fn UpgradeKind::not_equal(Self, Self) -> Bool
+pub fn UpgradeKind::output(Self, &Logger) -> Unit
+pub fn UpgradeKind::to_repr(Self) -> @debug.Repr
+pub fn UpgradeKind::to_string(Self) -> String
 pub impl Show for UpgradeKind
 
 pub(all) struct Vec2 {
@@ -504,9 +559,13 @@ pub(all) enum WorldTheme {
   DesertRuins
   ArcticPeaks
 } derive(Eq, @debug.Debug)
+pub fn WorldTheme::equal(Self, Self) -> Bool
+pub fn WorldTheme::not_equal(Self, Self) -> Bool
+pub fn WorldTheme::output(Self, &Logger) -> Unit
+pub fn WorldTheme::to_repr(Self) -> @debug.Repr
+pub fn WorldTheme::to_string(Self) -> String
 pub impl Show for WorldTheme
 
 // Type aliases
 
 // Traits
-

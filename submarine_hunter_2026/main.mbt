@@ -80,10 +80,10 @@ fn main {
   @draw.init_font()
 
   let player_t : Array[Torpedo] = Array::makei(90, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, vx: 0.0 }
+    { alive: false, x: 0.0, y: 0.0, vx: 0.0, }
   })
   let enemy_t : Array[Torpedo] = Array::makei(120, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, vx: 0.0 }
+    { alive: false, x: 0.0, y: 0.0, vx: 0.0, }
   })
   let enemies : Array[Enemy] = Array::makei(80, fn(_i) {
     {

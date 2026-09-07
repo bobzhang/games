@@ -54,4 +54,3 @@ pub fn draw_voxel_budget_bar(Int, Int, Int, Int) -> Unit
 // Type aliases
 
 // Traits
-

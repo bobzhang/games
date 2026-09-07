@@ -86,10 +86,10 @@ fn draw_inscription(game : @types.Game, tablet : @types.Tablet) -> Unit {
         // Symbol background highlight
         if is_selected {
           if !draw_selection_glow_art(
-            (sx - 12.0).to_int(),
-            (sy - 12.0).to_int(),
-            (@types.symbol_size + 24.0).to_int(),
-          ) {
+              (sx - 12.0).to_int(),
+              (sy - 12.0).to_int(),
+              (@types.symbol_size + 24.0).to_int(),
+            ) {
             let glow = @types.sinf(time * 4.0) * 0.3 + 0.7
             let alpha = (glow * 180.0).to_int()
             @raylib.draw_rectangle(
@@ -102,10 +102,10 @@ fn draw_inscription(game : @types.Game, tablet : @types.Tablet) -> Unit {
           }
         } else if is_hint {
           if !draw_hint_glow_art(
-            (sx - 12.0).to_int(),
-            (sy - 12.0).to_int(),
-            (@types.symbol_size + 24.0).to_int(),
-          ) {
+              (sx - 12.0).to_int(),
+              (sy - 12.0).to_int(),
+              (@types.symbol_size + 24.0).to_int(),
+            ) {
             let glow = @types.sinf(time * 6.0) * 0.4 + 0.6
             let alpha = (glow * 160.0).to_int()
             @raylib.draw_rectangle(

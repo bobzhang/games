@@ -13,4 +13,3 @@ pub fn level_rows(Int) -> Array[String]
 // Type aliases
 
 // Traits
-

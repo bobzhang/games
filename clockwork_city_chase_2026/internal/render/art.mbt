@@ -193,16 +193,14 @@ fn draw_obj_sprite_art(
 
   match o.kind {
     Scout =>
-      draw_texture_centered(
-        art.scout_enemy,
-        x,
-        y,
-        o.w * 1.16,
-        o.h * 1.16,
-        tint,
-      )
+      draw_texture_centered(art.scout_enemy, x, y, o.w * 1.16, o.h * 1.16, tint)
     Spinner => {
-      @raylib.draw_circle(x.to_int(), y.to_int(), o.w * 0.58, @types.alpha_color(col, 72))
+      @raylib.draw_circle(
+        x.to_int(),
+        y.to_int(),
+        o.w * 0.58,
+        @types.alpha_color(col, 72),
+      )
       draw_texture_centered_rotated(
         art.spinner_enemy,
         x,
@@ -214,14 +212,7 @@ fn draw_obj_sprite_art(
       )
     }
     Tank =>
-      draw_texture_centered(
-        art.tank_enemy,
-        x,
-        y,
-        o.w * 1.08,
-        o.h * 1.08,
-        tint,
-      )
+      draw_texture_centered(art.tank_enemy, x, y, o.w * 1.08, o.h * 1.08, tint)
     GearWall =>
       draw_texture_centered(
         art.gear_wall,
@@ -232,16 +223,45 @@ fn draw_obj_sprite_art(
         tint,
       )
     Coin => {
-      @raylib.draw_circle(x.to_int(), y.to_int(), o.w * 0.58, @types.alpha_color(col, 82))
+      @raylib.draw_circle(
+        x.to_int(),
+        y.to_int(),
+        o.w * 0.58,
+        @types.alpha_color(col, 82),
+      )
       draw_texture_centered(art.coin_pickup, x, y, o.w * 1.05, o.h * 1.05, tint)
     }
     Coolant => {
-      @raylib.draw_circle(x.to_int(), y.to_int(), o.w * 0.58, @types.alpha_color(col, 82))
-      draw_texture_centered(art.coolant_pickup, x, y, o.w * 0.78, o.h * 1.18, tint)
+      @raylib.draw_circle(
+        x.to_int(),
+        y.to_int(),
+        o.w * 0.58,
+        @types.alpha_color(col, 82),
+      )
+      draw_texture_centered(
+        art.coolant_pickup,
+        x,
+        y,
+        o.w * 0.78,
+        o.h * 1.18,
+        tint,
+      )
     }
     EmpCell => {
-      @raylib.draw_circle(x.to_int(), y.to_int(), o.w * 0.58, @types.alpha_color(col, 82))
-      draw_texture_centered(art.emp_cell_pickup, x, y, o.w * 0.9, o.h * 1.22, tint)
+      @raylib.draw_circle(
+        x.to_int(),
+        y.to_int(),
+        o.w * 0.58,
+        @types.alpha_color(col, 82),
+      )
+      draw_texture_centered(
+        art.emp_cell_pickup,
+        x,
+        y,
+        o.w * 0.9,
+        o.h * 1.22,
+        tint,
+      )
     }
   }
 }

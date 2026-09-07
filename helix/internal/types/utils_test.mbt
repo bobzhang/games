@@ -214,5 +214,5 @@ test "new_game initializes properly" {
   inspect(g.steps, content="0")
   inspect(g.play_state, content="Moving")
   inspect(g.level_scores.length(), content="25")
-  inspect(g.current_level, content="None")
+  debug_inspect(g.current_level, content="None")
 }

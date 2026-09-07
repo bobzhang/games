@@ -53,8 +53,18 @@ test "count_landmarks" {
 test "get_level_1" {
   let lvl = @levels.get_level(0)
   inspect(lvl.tier, content="1")
-  inspect(lvl.start, content="{x: 1, y: 1}")
-  inspect(lvl.lighthouse, content="{x: 10, y: 8}")
+  debug_inspect(
+    lvl.start,
+    content=(
+      #|{ x: 1, y: 1 }
+    ),
+  )
+  debug_inspect(
+    lvl.lighthouse,
+    content=(
+      #|{ x: 10, y: 8 }
+    ),
+  )
   assert_true(lvl.landmark_count > 0)
   assert_true(lvl.par_steps > 0)
 }

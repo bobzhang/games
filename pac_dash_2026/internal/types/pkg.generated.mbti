@@ -78,4 +78,3 @@ pub fn Ghost::Ghost(Int, Int, Int, Int, @raylib.Color) -> Self
 // Type aliases
 
 // Traits
-

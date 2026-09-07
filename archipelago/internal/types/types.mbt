@@ -2,13 +2,25 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Island {
   pos : Vec2i
   required_count : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Island with Eq::{not_equal, equal}
+
+///|
+pub extend Island with Debug::{to_repr}
 
 ///|
 pub(all) struct Bridge {
@@ -16,14 +28,23 @@ pub(all) struct Bridge {
   island_b : Int
   mut count : Int
   direction : BridgeDir
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Bridge with Eq::{not_equal, equal}
+
+///|
+pub extend Bridge with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
   grid_size : Int
   islands : Array[Island]
   par_bridges : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -31,7 +52,10 @@ pub(all) struct LevelScore {
   mut completed : Bool
   mut best_bridges : Int
   mut best_no_removals : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

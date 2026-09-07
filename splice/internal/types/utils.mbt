@@ -29,7 +29,7 @@ pub fn find_start_codon(seq : Array[Base]) -> Int {
 pub fn read_sequence(seq : Array[Base]) -> ReadResult {
   let start_pos = find_start_codon(seq)
   if start_pos < 0 {
-    return { traits: [], valid: false }
+    return { traits: [], valid: false, }
   }
   let traits : Array[Trait] = []
   traits.push(Start)
@@ -38,12 +38,12 @@ pub fn read_sequence(seq : Array[Base]) -> ReadResult {
     let tr = codon_to_trait(seq[pos], seq[pos + 1], seq[pos + 2])
     traits.push(tr)
     if tr == Stop {
-      return { traits, valid: true }
+      return { traits, valid: true, }
     }
     pos += 3
   }
   // Reached end without Stop - still valid but incomplete
-  { traits, valid: true }
+  { traits, valid: true, }
 }
 
 ///|
@@ -190,7 +190,7 @@ pub fn tier_level_offset(tier : Int) -> Int {
 
 ///|
 pub fn copy_sequence(seq : Array[Base]) -> Array[Base] {
-  let result : Array[Base] = Array::new(capacity=seq.length())
+  let result : Array[Base] = Array(capacity=seq.length())
   for i in 0..<seq.length() {
     result.push(seq[i])
   }
@@ -199,12 +199,12 @@ pub fn copy_sequence(seq : Array[Base]) -> Array[Base] {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: 0, best_edits: 999 }
+  { completed: false, stars: 0, best_edits: 999, }
 }
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

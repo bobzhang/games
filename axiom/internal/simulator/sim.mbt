@@ -100,7 +100,7 @@ pub fn simulate(
   states.push(@types.make_robot_state(robot, goals_collected, blocks, -1))
   let expanded = expand_program(program.commands)
   if expanded.length() == 0 {
-    return { states, success: false, fail_reason: "Empty program" }
+    return { states, success: false, fail_reason: "Empty program", }
   }
   let mut step = 0
   let mut cmd_idx = 0
@@ -256,7 +256,7 @@ pub fn simulate(
           states.push(
             @types.make_robot_state(robot, goals_collected, blocks, cmd_idx),
           )
-          return { states, success: false, fail_reason: "Nothing to push!" }
+          return { states, success: false, fail_reason: "Nothing to push!", }
         }
         let push_x = bx + delta.x
         let push_y = by + delta.y
@@ -314,5 +314,5 @@ pub fn simulate(
   }
   let success = @types.all_goals_collected(goals_collected)
   let fail_reason = if success { "" } else { "Not all goals collected!" }
-  { states, success, fail_reason }
+  { states, success, fail_reason, }
 }

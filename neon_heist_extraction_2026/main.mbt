@@ -927,7 +927,7 @@ fn main {
   defer unload_game_art(art)
 
   let walls : Array[Wall] = Array::makei(max_walls, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0 }
+    { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, }
   })
 
   let guards : Array[Guard] = Array::makei(max_guards, fn(_i) {
@@ -982,11 +982,11 @@ fn main {
   })
 
   let terminals : Array[Terminal] = Array::makei(max_terminals, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, hacked: false, progress: 0.0 }
+    { active: false, x: 0.0, y: 0.0, hacked: false, progress: 0.0, }
   })
 
   let vaults : Array[Vault] = Array::makei(max_vaults, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, open: false, spawned: false }
+    { active: false, x: 0.0, y: 0.0, open: false, spawned: false, }
   })
 
   let loot : Array[Loot] = Array::makei(max_loot, fn(_i) {

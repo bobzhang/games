@@ -61,7 +61,7 @@ pub fn sim_step(game : @types.Game) -> Bool {
   // Process reservoirs first: if reservoir has enough water, it releases
   for y in 0..<rows {
     for x in 0..<cols {
-      let pos : @types.Pos = { x, y }
+      let pos : @types.Pos = { x, y, }
       let idx = @types.pos_to_index(pos, cols)
       let tile = game.grid[idx]
       if tile.kind is Reservoir && tile.water_level >= 3 && !tile.has_water {
@@ -75,7 +75,7 @@ pub fn sim_step(game : @types.Game) -> Bool {
   let newly_wet : Array[(@types.Pos, Int)] = []
   for y in 0..<rows {
     for x in 0..<cols {
-      let pos : @types.Pos = { x, y }
+      let pos : @types.Pos = { x, y, }
       let idx = @types.pos_to_index(pos, cols)
       let tile = game.grid[idx]
       if !tile.has_water {

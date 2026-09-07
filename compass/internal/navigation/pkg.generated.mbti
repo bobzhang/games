@@ -19,4 +19,3 @@ pub fn try_move(@types.LevelState, @types.Direction) -> Unit
 // Type aliases
 
 // Traits
-

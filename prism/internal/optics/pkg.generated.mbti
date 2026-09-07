@@ -17,4 +17,3 @@ pub fn trace_all_beams(@types.HexGrid) -> Array[@types.BeamSegment]
 // Type aliases
 
 // Traits
-

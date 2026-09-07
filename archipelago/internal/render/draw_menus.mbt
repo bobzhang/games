@@ -8,45 +8,47 @@ fn draw_title(game : @types.Game) -> Unit {
     @raylib.draw_rectangle(0, 0, w, h, @raylib.Color::new(0, 24, 54, 72))
   }
   if !has_title_art {
-  // Animated ocean waves background
-  for row in 0..<18 {
-    let fy = Float::from_int(row)
-    let wave_offset = @types.sinf(time + fy * 0.5) * 8.0
-    let y = (fy * 40.0 + wave_offset).to_int()
-    let alpha = 20 + (fy * 3.0).to_int()
-    let a = if alpha > 60 { 60 } else { alpha }
-    @raylib.draw_rectangle(0, y, w, 20, @raylib.Color::new(40, 100, 180, a))
-  }
-  // Animated islands on title
-  for i in 0..<5 {
-    let fi = Float::from_int(i)
-    let ix_f : Float = fi * 250.0 + 80.0 + @types.sinf(time * 0.7 + fi) * 15.0
-    let iy_f : Float = 400.0 + @types.cosf(time * 0.5 + fi * 1.3) * 10.0
-    let ix = ix_f.to_int()
-    let iy = iy_f.to_int()
-    let r : Float = 18.0 + fi * 3.0
-    @raylib.draw_circle(ix, iy, r + 3.0, @types.color_island_border)
-    @raylib.draw_circle(ix, iy, r, @types.color_island)
-  }
-  // Animated bridge lines between islands
-  for i in 0..<4 {
-    let fi = Float::from_int(i)
-    let x1_f : Float = fi * 250.0 + 80.0 + @types.sinf(time * 0.7 + fi) * 15.0
-    let y1_f : Float = 400.0 + @types.cosf(time * 0.5 + fi * 1.3) * 10.0
-    let x1 = x1_f.to_int()
-    let y1 = y1_f.to_int()
-    let fi2 = Float::from_int(i + 1)
-    let x2_f : Float = fi2 * 250.0 + 80.0 + @types.sinf(time * 0.7 + fi2) * 15.0
-    let y2_f : Float = 400.0 + @types.cosf(time * 0.5 + fi2 * 1.3) * 10.0
-    let x2 = x2_f.to_int()
-    let y2 = y2_f.to_int()
-    @raylib.draw_line_ex(
-      @raylib.Vector2::new(Float::from_int(x1), Float::from_int(y1)),
-      @raylib.Vector2::new(Float::from_int(x2), Float::from_int(y2)),
-      3.0,
-      @types.color_bridge,
-    )
-  }
+    // Animated ocean waves background
+    for row in 0..<18 {
+      let fy = Float::from_int(row)
+      let wave_offset = @types.sinf(time + fy * 0.5) * 8.0
+      let y = (fy * 40.0 + wave_offset).to_int()
+      let alpha = 20 + (fy * 3.0).to_int()
+      let a = if alpha > 60 { 60 } else { alpha }
+      @raylib.draw_rectangle(0, y, w, 20, @raylib.Color::new(40, 100, 180, a))
+    }
+    // Animated islands on title
+    for i in 0..<5 {
+      let fi = Float::from_int(i)
+      let ix_f : Float = fi * 250.0 + 80.0 + @types.sinf(time * 0.7 + fi) * 15.0
+      let iy_f : Float = 400.0 + @types.cosf(time * 0.5 + fi * 1.3) * 10.0
+      let ix = ix_f.to_int()
+      let iy = iy_f.to_int()
+      let r : Float = 18.0 + fi * 3.0
+      @raylib.draw_circle(ix, iy, r + 3.0, @types.color_island_border)
+      @raylib.draw_circle(ix, iy, r, @types.color_island)
+    }
+    // Animated bridge lines between islands
+    for i in 0..<4 {
+      let fi = Float::from_int(i)
+      let x1_f : Float = fi * 250.0 + 80.0 + @types.sinf(time * 0.7 + fi) * 15.0
+      let y1_f : Float = 400.0 + @types.cosf(time * 0.5 + fi * 1.3) * 10.0
+      let x1 = x1_f.to_int()
+      let y1 = y1_f.to_int()
+      let fi2 = Float::from_int(i + 1)
+      let x2_f : Float = fi2 * 250.0 +
+        80.0 +
+        @types.sinf(time * 0.7 + fi2) * 15.0
+      let y2_f : Float = 400.0 + @types.cosf(time * 0.5 + fi2 * 1.3) * 10.0
+      let x2 = x2_f.to_int()
+      let y2 = y2_f.to_int()
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(Float::from_int(x1), Float::from_int(y1)),
+        @raylib.Vector2::new(Float::from_int(x2), Float::from_int(y2)),
+        3.0,
+        @types.color_bridge,
+      )
+    }
   }
   // Title text
   let title = "ARCHIPELAGO"

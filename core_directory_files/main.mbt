@@ -22,9 +22,9 @@ fn main {
   let mut files = @raylib.load_directory_files_ex(directory, ".png;.c", false)
   let mut items = file_path_list_to_array(files)
   let mut btn_back_pressed = false
-  let list_scroll_index : Ref[Int] = { val: 0 }
-  let list_item_active : Ref[Int] = { val: -1 }
-  let list_item_focused : Ref[Int] = { val: -1 }
+  let list_scroll_index : Ref[Int] = { val: 0, }
+  let list_item_active : Ref[Int] = { val: -1, }
+  let list_item_focused : Ref[Int] = { val: -1, }
   @raylib.set_target_fps(60)
   // Main game loop
   while !@raylib.window_should_close() {

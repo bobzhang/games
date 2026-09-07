@@ -27,4 +27,3 @@ pub fn update_title_input(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

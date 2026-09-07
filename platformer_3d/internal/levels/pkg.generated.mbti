@@ -37,4 +37,3 @@ pub fn world_platform_color(Int) -> (Int, Int, Int)
 // Type aliases
 
 // Traits
-

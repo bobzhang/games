@@ -7,15 +7,15 @@ fn main {
     screen_width, screen_height, "raylib [shapes] example - rounded rectangle drawing",
   )
 
-  let roundness : Ref[Float] = { val: 0.2 }
-  let width : Ref[Float] = { val: 200.0 }
-  let height : Ref[Float] = { val: 100.0 }
-  let segments : Ref[Float] = { val: 0.0 }
-  let line_thick : Ref[Float] = { val: 1.0 }
+  let roundness : Ref[Float] = { val: 0.2, }
+  let width : Ref[Float] = { val: 200.0, }
+  let height : Ref[Float] = { val: 100.0, }
+  let segments : Ref[Float] = { val: 0.0, }
+  let line_thick : Ref[Float] = { val: 1.0, }
 
-  let draw_rect : Ref[Bool] = { val: false }
-  let draw_rounded_rect : Ref[Bool] = { val: true }
-  let draw_rounded_lines : Ref[Bool] = { val: false }
+  let draw_rect : Ref[Bool] = { val: false, }
+  let draw_rounded_rect : Ref[Bool] = { val: true, }
+  let draw_rounded_lines : Ref[Bool] = { val: false, }
 
   @raylib.set_target_fps(60)
   @draw.init_font()

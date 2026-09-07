@@ -18,31 +18,31 @@ fn ward_x(ward : Int) -> Float {
 
 ///|
 /// Generated hospital backdrop texture.
-let tex_hospital_background : Ref[@raylib.Texture?] = { val: None }
+let tex_hospital_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated ward bay texture.
-let tex_ward_bay : Ref[@raylib.Texture?] = { val: None }
+let tex_ward_bay : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated nurse sprite texture.
-let tex_nurse : Ref[@raylib.Texture?] = { val: None }
+let tex_nurse : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated mild patient sprite texture.
-let tex_patient_mild : Ref[@raylib.Texture?] = { val: None }
+let tex_patient_mild : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated medium patient sprite texture.
-let tex_patient_medium : Ref[@raylib.Texture?] = { val: None }
+let tex_patient_medium : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated critical patient sprite texture.
-let tex_patient_critical : Ref[@raylib.Texture?] = { val: None }
+let tex_patient_critical : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated treatment station texture.
-let tex_treatment_station : Ref[@raylib.Texture?] = { val: None }
+let tex_treatment_station : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// A hospital patient with liveness flag, assigned ward, screen position, severity level (0=mild/1=medium/2=critical), and elapsed wait time.
@@ -421,7 +421,7 @@ fn main {
   defer unload_assets()
 
   let patients : Array[Patient] = Array::makei(140, fn(_i) {
-    { alive: false, ward: 0, x: 0.0, y: 0.0, severity: 0, wait: 0.0 }
+    { alive: false, ward: 0, x: 0.0, y: 0.0, severity: 0, wait: 0.0, }
   })
 
   let mut nurse_ward = 1

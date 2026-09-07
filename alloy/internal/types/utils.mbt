@@ -13,14 +13,14 @@ pub fn new_level_result() -> LevelResult {
   {
     stars: Zero,
     ingredients_used: 0,
-    blend: { hardness: 0.0, flexibility: 0.0, conductivity: 0.0 },
+    blend: { hardness: 0.0, flexibility: 0.0, conductivity: 0.0, },
     all_in_range: false,
   }
 }
 
 ///|
 pub fn new_level_progress() -> LevelProgress {
-  { best_stars: Zero, completed: false }
+  { best_stars: Zero, completed: false, }
 }
 
 ///|
@@ -34,7 +34,7 @@ pub fn new_game() -> Game {
     current_level: 0,
     crucible: [],
     temperature: Medium,
-    blend_result: { hardness: 0.0, flexibility: 0.0, conductivity: 0.0 },
+    blend_result: { hardness: 0.0, flexibility: 0.0, conductivity: 0.0, },
     blend_timer: 0.0,
     blend_animating: false,
     level_progress: progress,
@@ -52,7 +52,7 @@ pub fn new_game() -> Game {
 ///|
 pub fn clear_crucible(game : Game) -> Unit {
   game.crucible.clear()
-  game.blend_result = { hardness: 0.0, flexibility: 0.0, conductivity: 0.0 }
+  game.blend_result = { hardness: 0.0, flexibility: 0.0, conductivity: 0.0, }
   game.blend_animating = false
   game.blend_timer = 0.0
   game.selected_slot = -1
@@ -69,7 +69,7 @@ pub fn add_ingredient(game : Game, metal : MetalKind) -> Unit {
   }
   // Otherwise add new ingredient if room
   if game.crucible.length() < max_crucible_slots {
-    game.crucible.push({ metal, amount: 1 })
+    game.crucible.push({ metal, amount: 1, })
   }
 }
 

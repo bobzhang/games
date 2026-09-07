@@ -29,4 +29,3 @@ pub fn identify_weave_type(@types.FabricPattern) -> @types.WeaveType
 // Type aliases
 
 // Traits
-

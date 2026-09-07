@@ -2,27 +2,48 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Vec2f {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2f with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2f with Debug::{to_repr}
 
 ///|
 pub(all) struct ArcPoint {
   gx : Int
   gy : Int
   angle : Float
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend ArcPoint with Eq::{not_equal, equal}
+
+///|
+pub extend ArcPoint with Debug::{to_repr}
 
 ///|
 pub(all) struct Rope {
   mut anchor : Vec2i
   mut length : Int
   mut wrapped_pegs : Array[Vec2i]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Rope with Debug::{to_repr}
 
 ///|
 pub(all) struct Weight {
@@ -32,7 +53,10 @@ pub(all) struct Weight {
   mut arc_index : Int
   mut launch_vel : Vec2f
   mut launch_pos : Vec2f
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Weight with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -47,7 +71,10 @@ pub(all) struct Level {
   collectibles : Array[Vec2i]
   par_ticks : Int
   rope_length : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -55,7 +82,10 @@ pub(all) struct LevelScore {
   mut stars : Int
   mut best_ticks : Int
   mut collectibles_got : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -76,7 +106,10 @@ pub(all) struct Game {
   mut frame_count : Int
   mut anim_timer : Float
   mut title_angle : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}
 
 ///|
 pub(all) struct HistoryEntry {
@@ -91,4 +124,7 @@ pub(all) struct HistoryEntry {
   collected : Array[Bool]
   launch_vel : Vec2f
   launch_pos : Vec2f
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HistoryEntry with Debug::{to_repr}

@@ -8,23 +8,23 @@ let sh : Int = 740
 
 ///|
 /// Generated city background texture.
-let tex_city_background : Ref[@raylib.Texture?] = { val: None }
+let tex_city_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated delivery drone sprite.
-let tex_drone : Ref[@raylib.Texture?] = { val: None }
+let tex_drone : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated package pickup pad sprite.
-let tex_pickup_pad : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_pad : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated drop-off pad sprite.
-let tex_dropoff_pad : Ref[@raylib.Texture?] = { val: None }
+let tex_dropoff_pad : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated shock orb sprite.
-let tex_shock_orb : Ref[@raylib.Texture?] = { val: None }
+let tex_shock_orb : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Represents a bouncing shock orb that damages the drone on contact.
@@ -325,7 +325,7 @@ fn main {
   defer unload_assets()
 
   let orbs : Array[Orb] = Array::makei(110, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0 }
+    { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, }
   })
 
   let mut drone_x : Float = Float::from_int(sw / 2)

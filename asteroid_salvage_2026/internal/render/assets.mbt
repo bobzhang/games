@@ -1,31 +1,33 @@
 ///|
 /// Generated deep-space salvage backdrop texture.
-let tex_salvage_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_salvage_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player ship sprite texture.
-let tex_ship_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_ship_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated large asteroid sprite texture.
-let tex_asteroid_large : Ref[@raylib.Texture?] = { val: None }
+let tex_asteroid_large : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated medium asteroid sprite texture.
-let tex_asteroid_medium : Ref[@raylib.Texture?] = { val: None }
+let tex_asteroid_medium : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated small asteroid sprite texture.
-let tex_asteroid_small : Ref[@raylib.Texture?] = { val: None }
+let tex_asteroid_small : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated projectile sprite texture.
-let tex_projectile_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_projectile_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated asteroid salvage texture.
 fn load_art_texture(file_name : String) -> @raylib.Texture {
-  let texture = @raylib.load_texture("asteroid_salvage_2026/resources/" + file_name)
+  let texture = @raylib.load_texture(
+    "asteroid_salvage_2026/resources/" + file_name,
+  )
   @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
   texture
 }

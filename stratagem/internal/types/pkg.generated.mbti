@@ -222,6 +222,11 @@ pub(all) enum Difficulty {
   Normal
   Hard
 } derive(Eq, @debug.Debug)
+pub fn Difficulty::equal(Self, Self) -> Bool
+pub fn Difficulty::not_equal(Self, Self) -> Bool
+pub fn Difficulty::output(Self, &Logger) -> Unit
+pub fn Difficulty::to_repr(Self) -> @debug.Repr
+pub fn Difficulty::to_string(Self) -> String
 pub impl Show for Difficulty
 
 pub(all) enum FogState {
@@ -229,6 +234,11 @@ pub(all) enum FogState {
   Visible
   Explored
 } derive(Eq, @debug.Debug)
+pub fn FogState::equal(Self, Self) -> Bool
+pub fn FogState::not_equal(Self, Self) -> Bool
+pub fn FogState::output(Self, &Logger) -> Unit
+pub fn FogState::to_repr(Self) -> @debug.Repr
+pub fn FogState::to_string(Self) -> String
 pub impl Show for FogState
 
 pub(all) struct Game {
@@ -252,6 +262,11 @@ pub(all) enum GameResult {
   Defeat
   Ongoing
 } derive(Eq, @debug.Debug)
+pub fn GameResult::equal(Self, Self) -> Bool
+pub fn GameResult::not_equal(Self, Self) -> Bool
+pub fn GameResult::output(Self, &Logger) -> Unit
+pub fn GameResult::to_repr(Self) -> @debug.Repr
+pub fn GameResult::to_string(Self) -> String
 pub impl Show for GameResult
 
 pub(all) struct GameUnit {
@@ -274,7 +289,10 @@ pub(all) struct GameUnit {
 pub(all) struct HexCoord {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn HexCoord::equal(Self, Self) -> Bool
+pub fn HexCoord::not_equal(Self, Self) -> Bool
+pub fn HexCoord::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexMap {
   width : Int
@@ -307,6 +325,11 @@ pub(all) enum Phase {
   EnemyTurn
   Animating
 } derive(Eq, @debug.Debug)
+pub fn Phase::equal(Self, Self) -> Bool
+pub fn Phase::not_equal(Self, Self) -> Bool
+pub fn Phase::output(Self, &Logger) -> Unit
+pub fn Phase::to_repr(Self) -> @debug.Repr
+pub fn Phase::to_string(Self) -> String
 pub impl Show for Phase
 
 pub(all) enum Screen {
@@ -316,6 +339,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct SkirmishSetup {
@@ -328,6 +356,11 @@ pub(all) enum Team {
   Player
   Enemy
 } derive(Eq, @debug.Debug)
+pub fn Team::equal(Self, Self) -> Bool
+pub fn Team::not_equal(Self, Self) -> Bool
+pub fn Team::output(Self, &Logger) -> Unit
+pub fn Team::to_repr(Self) -> @debug.Repr
+pub fn Team::to_string(Self) -> String
 pub impl Show for Team
 
 pub(all) enum Terrain {
@@ -336,6 +369,11 @@ pub(all) enum Terrain {
   Hills
   Water
 } derive(Eq, @debug.Debug)
+pub fn Terrain::equal(Self, Self) -> Bool
+pub fn Terrain::not_equal(Self, Self) -> Bool
+pub fn Terrain::output(Self, &Logger) -> Unit
+pub fn Terrain::to_repr(Self) -> @debug.Repr
+pub fn Terrain::to_string(Self) -> String
 pub impl Show for Terrain
 
 pub(all) enum UnitKind {
@@ -343,15 +381,24 @@ pub(all) enum UnitKind {
   Cavalry
   Artillery
 } derive(Eq, @debug.Debug)
+pub fn UnitKind::equal(Self, Self) -> Bool
+pub fn UnitKind::not_equal(Self, Self) -> Bool
+pub fn UnitKind::output(Self, &Logger) -> Unit
+pub fn UnitKind::to_repr(Self) -> @debug.Repr
+pub fn UnitKind::to_string(Self) -> String
 pub impl Show for UnitKind
 
 pub(all) enum VictoryCondition {
   EliminateAll
   CaptureFlag(Int, Int)
 } derive(Eq, @debug.Debug)
+pub fn VictoryCondition::equal(Self, Self) -> Bool
+pub fn VictoryCondition::not_equal(Self, Self) -> Bool
+pub fn VictoryCondition::output(Self, &Logger) -> Unit
+pub fn VictoryCondition::to_repr(Self) -> @debug.Repr
+pub fn VictoryCondition::to_string(Self) -> String
 pub impl Show for VictoryCondition
 
 // Type aliases
 
 // Traits
-

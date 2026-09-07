@@ -241,8 +241,8 @@ fn level_09() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 5, y: 4 }, required_layers: 2 },
-    { pos: { x: 2, y: 4 }, required_layers: 1 },
+    { pos: { x: 5, y: 4, }, required_layers: 2, },
+    { pos: { x: 2, y: 4, }, required_layers: 1, },
   ]
   {
     initial_paper: init,
@@ -269,7 +269,7 @@ fn level_10() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 4, y: 5 }, required_layers: 2 },
+    { pos: { x: 4, y: 5, }, required_layers: 2, },
   ]
   {
     initial_paper: init,
@@ -292,8 +292,8 @@ fn level_11() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 0, y: 0 }, required_layers: 2 },
-    { pos: { x: 1, y: 7 }, required_layers: 2 },
+    { pos: { x: 0, y: 0, }, required_layers: 2, },
+    { pos: { x: 1, y: 7, }, required_layers: 2, },
   ]
   {
     initial_paper: init,
@@ -320,8 +320,8 @@ fn level_12() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 2, y: 3 }, required_layers: 2 },
-    { pos: { x: 6, y: 3 }, required_layers: 1 },
+    { pos: { x: 2, y: 3, }, required_layers: 2, },
+    { pos: { x: 6, y: 3, }, required_layers: 1, },
   ]
   {
     initial_paper: init,
@@ -340,8 +340,8 @@ fn level_13() -> @types.Level {
   let target = @types.make_rect_paper(8, 8, 0, 0, 4, 4)
   set_target_layers(target, 4)
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 2, y: 2 }, required_layers: 4 },
-    { pos: { x: 0, y: 0 }, required_layers: 4 },
+    { pos: { x: 2, y: 2, }, required_layers: 4, },
+    { pos: { x: 0, y: 0, }, required_layers: 4, },
   ]
   {
     initial_paper: init,
@@ -367,8 +367,8 @@ fn level_14() -> @types.Level {
     @types.set_cell(target, 3, y, true, 3)
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 2, y: 0 }, required_layers: 3 },
-    { pos: { x: 0, y: 0 }, required_layers: 1 },
+    { pos: { x: 2, y: 0, }, required_layers: 3, },
+    { pos: { x: 0, y: 0, }, required_layers: 1, },
   ]
   {
     initial_paper: init,
@@ -391,8 +391,8 @@ fn level_15() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 4, y: 0 }, required_layers: 2 },
-    { pos: { x: 4, y: 1 }, required_layers: 2 },
+    { pos: { x: 4, y: 0, }, required_layers: 2, },
+    { pos: { x: 4, y: 1, }, required_layers: 2, },
   ]
   {
     initial_paper: init,
@@ -421,8 +421,8 @@ fn level_16() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 2, y: 5 }, required_layers: 4 },
-    { pos: { x: 2, y: 1 }, required_layers: 2 },
+    { pos: { x: 2, y: 5, }, required_layers: 4, },
+    { pos: { x: 2, y: 1, }, required_layers: 2, },
   ]
   {
     initial_paper: init,
@@ -445,8 +445,8 @@ fn level_17() -> @types.Level {
   let target = @types.make_rect_paper(8, 8, 0, 0, 2, 4)
   set_target_layers(target, 8)
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 0, y: 0 }, required_layers: 8 },
-    { pos: { x: 1, y: 3 }, required_layers: 8 },
+    { pos: { x: 0, y: 0, }, required_layers: 8, },
+    { pos: { x: 1, y: 3, }, required_layers: 8, },
   ]
   {
     initial_paper: init,
@@ -465,8 +465,8 @@ fn level_18() -> @types.Level {
   let target = @types.make_rect_paper(8, 8, 0, 0, 2, 2)
   set_target_layers(target, 16)
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 0, y: 0 }, required_layers: 16 },
-    { pos: { x: 1, y: 1 }, required_layers: 16 },
+    { pos: { x: 0, y: 0, }, required_layers: 16, },
+    { pos: { x: 1, y: 1, }, required_layers: 16, },
   ]
   {
     initial_paper: init,
@@ -490,8 +490,8 @@ fn level_19() -> @types.Level {
     @types.set_cell(target, 3, y, true, 6)
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 3, y: 0 }, required_layers: 6 },
-    { pos: { x: 0, y: 0 }, required_layers: 2 },
+    { pos: { x: 3, y: 0, }, required_layers: 6, },
+    { pos: { x: 0, y: 0, }, required_layers: 2, },
   ]
   {
     initial_paper: init,
@@ -518,7 +518,7 @@ fn level_20() -> @types.Level {
     @types.set_cell(target, 0, y, false, 0)
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 2, y: 2 }, required_layers: 4 },
+    { pos: { x: 2, y: 2, }, required_layers: 4, },
   ]
   {
     initial_paper: init,
@@ -547,8 +547,8 @@ fn level_21() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 6, y: 2 }, required_layers: 4 },
-    { pos: { x: 7, y: 6 }, required_layers: 2 },
+    { pos: { x: 6, y: 2, }, required_layers: 4, },
+    { pos: { x: 7, y: 6, }, required_layers: 2, },
   ]
   {
     initial_paper: init,
@@ -578,8 +578,8 @@ fn level_22() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 1, y: 0 }, required_layers: 2 },
-    { pos: { x: 1, y: 3 }, required_layers: 6 },
+    { pos: { x: 1, y: 0, }, required_layers: 2, },
+    { pos: { x: 1, y: 3, }, required_layers: 6, },
   ]
   {
     initial_paper: init,
@@ -613,9 +613,9 @@ fn level_23() -> @types.Level {
     }
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 2, y: 2 }, required_layers: 8 },
-    { pos: { x: 0, y: 6 }, required_layers: 2 },
-    { pos: { x: 3, y: 6 }, required_layers: 4 },
+    { pos: { x: 2, y: 2, }, required_layers: 8, },
+    { pos: { x: 0, y: 6, }, required_layers: 2, },
+    { pos: { x: 3, y: 6, }, required_layers: 4, },
   ]
   {
     initial_paper: init,
@@ -640,8 +640,8 @@ fn level_24() -> @types.Level {
     @types.set_cell(target, 1, y, true, 8)
   }
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 0, y: 4 }, required_layers: 8 },
-    { pos: { x: 1, y: 7 }, required_layers: 8 },
+    { pos: { x: 0, y: 4, }, required_layers: 8, },
+    { pos: { x: 1, y: 7, }, required_layers: 8, },
   ]
   {
     initial_paper: init,
@@ -665,10 +665,10 @@ fn level_25() -> @types.Level {
   let target = @types.make_rect_paper(8, 8, 0, 0, 2, 2)
   set_target_layers(target, 16)
   let checks : Array[@types.LayerCheck] = [
-    { pos: { x: 0, y: 0 }, required_layers: 16 },
-    { pos: { x: 1, y: 0 }, required_layers: 16 },
-    { pos: { x: 0, y: 1 }, required_layers: 16 },
-    { pos: { x: 1, y: 1 }, required_layers: 16 },
+    { pos: { x: 0, y: 0, }, required_layers: 16, },
+    { pos: { x: 1, y: 0, }, required_layers: 16, },
+    { pos: { x: 0, y: 1, }, required_layers: 16, },
+    { pos: { x: 1, y: 1, }, required_layers: 16, },
   ]
   {
     initial_paper: init,

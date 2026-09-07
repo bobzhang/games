@@ -1574,15 +1574,15 @@ fn main {
   let world_b : Float = Float::from_int(world_y + world_h)
 
   let stations : Array[Station] = [
-    { x: world_l + 30.0, y: world_t + 80.0, w: 120.0, h: 70.0, kind: 0 },
-    { x: world_l + 30.0, y: world_t + 174.0, w: 120.0, h: 70.0, kind: 1 },
-    { x: world_l + 30.0, y: world_t + 268.0, w: 120.0, h: 70.0, kind: 2 },
-    { x: world_l + 30.0, y: world_t + 362.0, w: 120.0, h: 70.0, kind: 3 },
-    { x: world_l + 30.0, y: world_t + 456.0, w: 120.0, h: 70.0, kind: 4 },
-    { x: world_l + 312.0, y: world_t + 188.0, w: 226.0, h: 96.0, kind: 5 },
-    { x: world_r - 210.0, y: world_t + 76.0, w: 174.0, h: 96.0, kind: 6 },
-    { x: world_r - 210.0, y: world_t + 228.0, w: 174.0, h: 96.0, kind: 7 },
-    { x: world_r - 210.0, y: world_t + 380.0, w: 174.0, h: 96.0, kind: 8 },
+    { x: world_l + 30.0, y: world_t + 80.0, w: 120.0, h: 70.0, kind: 0, },
+    { x: world_l + 30.0, y: world_t + 174.0, w: 120.0, h: 70.0, kind: 1, },
+    { x: world_l + 30.0, y: world_t + 268.0, w: 120.0, h: 70.0, kind: 2, },
+    { x: world_l + 30.0, y: world_t + 362.0, w: 120.0, h: 70.0, kind: 3, },
+    { x: world_l + 30.0, y: world_t + 456.0, w: 120.0, h: 70.0, kind: 4, },
+    { x: world_l + 312.0, y: world_t + 188.0, w: 226.0, h: 96.0, kind: 5, },
+    { x: world_r - 210.0, y: world_t + 76.0, w: 174.0, h: 96.0, kind: 6, },
+    { x: world_r - 210.0, y: world_t + 228.0, w: 174.0, h: 96.0, kind: 7, },
+    { x: world_r - 210.0, y: world_t + 380.0, w: 174.0, h: 96.0, kind: 8, },
   ]
 
   let orders : Array[Order] = Array::makei(11, fn(i) {
@@ -1609,7 +1609,15 @@ fn main {
   })
 
   let boxes : Array[SupplyBox] = Array::makei(14, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, kind: 0, amount: 0, life: 0.0, pulse: 0.0 }
+    {
+      active: false,
+      x: 0.0,
+      y: 0.0,
+      kind: 0,
+      amount: 0,
+      life: 0.0,
+      pulse: 0.0,
+    }
   })
 
   let parts : Array[Particle] = Array::makei(900, fn(_i) {

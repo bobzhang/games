@@ -1751,7 +1751,7 @@ fn main {
   }
 
   let towers : Array[Tower] = Array::makei(10, fn(i) {
-    { x: 0.0, y: 0.0, id: i, stress: 0.0, alarm_t: 0.0 }
+    { x: 0.0, y: 0.0, id: i, stress: 0.0, alarm_t: 0.0, }
   })
 
   let faults : Array[Fault] = Array::makei(18, fn(i) {

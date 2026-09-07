@@ -35,4 +35,3 @@ pub fn update_ghost(@types.Game, Float) -> Unit
 // Type aliases
 
 // Traits
-

@@ -172,7 +172,10 @@ pub(all) struct BeamColor {
   r : Bool
   g : Bool
   b : Bool
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn BeamColor::equal(Self, Self) -> Bool
+pub fn BeamColor::not_equal(Self, Self) -> Bool
+pub fn BeamColor::to_repr(Self) -> @debug.Repr
 
 pub(all) struct BeamSegment {
   start : Vec2i
@@ -189,6 +192,11 @@ pub(all) enum ComponentKind {
   Combiner
   Receiver
 } derive(Eq, @debug.Debug)
+pub fn ComponentKind::equal(Self, Self) -> Bool
+pub fn ComponentKind::not_equal(Self, Self) -> Bool
+pub fn ComponentKind::output(Self, &Logger) -> Unit
+pub fn ComponentKind::to_repr(Self) -> @debug.Repr
+pub fn ComponentKind::to_string(Self) -> String
 pub impl Show for ComponentKind
 
 pub(all) enum Direction {
@@ -197,6 +205,11 @@ pub(all) enum Direction {
   S
   W
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) enum FilterColor {
@@ -204,6 +217,11 @@ pub(all) enum FilterColor {
   Green
   Blue
 } derive(Eq, @debug.Debug)
+pub fn FilterColor::equal(Self, Self) -> Bool
+pub fn FilterColor::not_equal(Self, Self) -> Bool
+pub fn FilterColor::output(Self, &Logger) -> Unit
+pub fn FilterColor::to_repr(Self) -> @debug.Repr
+pub fn FilterColor::to_string(Self) -> String
 pub impl Show for FilterColor
 
 pub(all) struct Game {
@@ -261,6 +279,11 @@ pub(all) enum PlayState {
   Simulating
   Solved
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -270,6 +293,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -277,14 +305,21 @@ pub(all) enum Tier {
   Prisms
   Synthesis
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

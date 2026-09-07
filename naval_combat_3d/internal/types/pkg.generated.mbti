@@ -444,6 +444,8 @@ pub(all) enum AiPersonality {
   Retreater
   Berserker
 } derive(Eq)
+pub fn AiPersonality::equal(Self, Self) -> Bool
+pub fn AiPersonality::not_equal(Self, Self) -> Bool
 
 pub(all) enum AiState {
   Patrol
@@ -453,6 +455,8 @@ pub(all) enum AiState {
   Flank
   BroadsideRun
 } derive(Eq)
+pub fn AiState::equal(Self, Self) -> Bool
+pub fn AiState::not_equal(Self, Self) -> Bool
 
 pub(all) struct BattleMessage {
   mut active : Bool
@@ -498,6 +502,8 @@ pub(all) enum Cannon {
   Mortar
   ChainShot
 } derive(Eq)
+pub fn Cannon::equal(Self, Self) -> Bool
+pub fn Cannon::not_equal(Self, Self) -> Bool
 
 pub(all) struct Cannonball {
   mut active : Bool
@@ -683,6 +689,8 @@ pub(all) enum GameState {
   GameOver
   BattleSelect
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Island {
   mut active : Bool
@@ -710,6 +718,8 @@ pub(all) enum IslandKind {
   Large
   Fortress
 } derive(Eq)
+pub fn IslandKind::equal(Self, Self) -> Bool
+pub fn IslandKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -734,6 +744,8 @@ pub(all) enum Sail {
   Half
   Full
 } derive(Eq)
+pub fn Sail::equal(Self, Self) -> Bool
+pub fn Sail::not_equal(Self, Self) -> Bool
 
 pub(all) struct Ship {
   mut x : Float
@@ -790,6 +802,8 @@ pub(all) enum ShipClass {
   Galleon
   ManOfWar
 } derive(Eq)
+pub fn ShipClass::equal(Self, Self) -> Bool
+pub fn ShipClass::not_equal(Self, Self) -> Bool
 
 pub(all) struct WaterWake {
   mut active : Bool
@@ -820,4 +834,3 @@ pub fn Wind::Wind() -> Self
 // Type aliases
 
 // Traits
-

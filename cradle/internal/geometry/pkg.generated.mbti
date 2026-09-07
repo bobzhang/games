@@ -19,4 +19,3 @@ pub fn segment_intersection(@types.Vec2f, @types.Vec2f, @types.Vec2f, @types.Vec
 // Type aliases
 
 // Traits
-

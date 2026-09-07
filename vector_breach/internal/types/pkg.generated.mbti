@@ -173,6 +173,11 @@ pub(all) enum AnimKind {
   AnimDeath
   AnimIntentReveal
 } derive(Eq, @debug.Debug)
+pub fn AnimKind::equal(Self, Self) -> Bool
+pub fn AnimKind::not_equal(Self, Self) -> Bool
+pub fn AnimKind::output(Self, &Logger) -> Unit
+pub fn AnimKind::to_repr(Self) -> @debug.Repr
+pub fn AnimKind::to_string(Self) -> String
 pub impl Show for AnimKind
 
 pub(all) struct AnimState {
@@ -199,6 +204,11 @@ pub(all) enum AugmentKind {
   ReflexBoost
   EmergencyRepair
 } derive(Eq, @debug.Debug)
+pub fn AugmentKind::equal(Self, Self) -> Bool
+pub fn AugmentKind::not_equal(Self, Self) -> Bool
+pub fn AugmentKind::output(Self, &Logger) -> Unit
+pub fn AugmentKind::to_repr(Self) -> @debug.Repr
+pub fn AugmentKind::to_string(Self) -> String
 pub impl Show for AugmentKind
 
 pub(all) struct BattleSnapshot {
@@ -249,6 +259,11 @@ pub(all) enum BranchTheme {
   VoidZone
   Neutral
 } derive(Eq, @debug.Debug)
+pub fn BranchTheme::equal(Self, Self) -> Bool
+pub fn BranchTheme::not_equal(Self, Self) -> Bool
+pub fn BranchTheme::output(Self, &Logger) -> Unit
+pub fn BranchTheme::to_repr(Self) -> @debug.Repr
+pub fn BranchTheme::to_string(Self) -> String
 pub impl Show for BranchTheme
 
 pub(all) struct CampaignMap {
@@ -276,12 +291,20 @@ pub(all) enum CampaignNodeKind {
   Event
   Elite(Int)
 } derive(Eq, @debug.Debug)
+pub fn CampaignNodeKind::equal(Self, Self) -> Bool
+pub fn CampaignNodeKind::not_equal(Self, Self) -> Bool
+pub fn CampaignNodeKind::output(Self, &Logger) -> Unit
+pub fn CampaignNodeKind::to_repr(Self) -> @debug.Repr
+pub fn CampaignNodeKind::to_string(Self) -> String
 pub impl Show for CampaignNodeKind
 
 pub(all) struct Cell {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Cell::equal(Self, Self) -> Bool
+pub fn Cell::not_equal(Self, Self) -> Bool
+pub fn Cell::to_repr(Self) -> @debug.Repr
 
 pub(all) struct CombatUnit {
   mut id : Int
@@ -312,6 +335,9 @@ pub(all) enum Command {
   Wait
   Push(Int, Int, Int)
 } derive(@debug.Debug)
+pub fn Command::output(Self, &Logger) -> Unit
+pub fn Command::to_repr(Self) -> @debug.Repr
+pub fn Command::to_string(Self) -> String
 pub impl Show for Command
 
 pub(all) enum Direction {
@@ -320,6 +346,11 @@ pub(all) enum Direction {
   East
   West
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) enum Effect {
@@ -333,6 +364,9 @@ pub(all) enum Effect {
   DestroyTile(Int, Int)
   ApplyHazard(Int, Int, Int)
 } derive(@debug.Debug)
+pub fn Effect::output(Self, &Logger) -> Unit
+pub fn Effect::to_repr(Self) -> @debug.Repr
+pub fn Effect::to_string(Self) -> String
 pub impl Show for Effect
 
 pub(all) enum EffectKind {
@@ -344,6 +378,11 @@ pub(all) enum EffectKind {
   KillPreview
   CollisionPreview
 } derive(Eq, @debug.Debug)
+pub fn EffectKind::equal(Self, Self) -> Bool
+pub fn EffectKind::not_equal(Self, Self) -> Bool
+pub fn EffectKind::output(Self, &Logger) -> Unit
+pub fn EffectKind::to_repr(Self) -> @debug.Repr
+pub fn EffectKind::to_string(Self) -> String
 pub impl Show for EffectKind
 
 pub(all) enum EnemyType {
@@ -356,6 +395,11 @@ pub(all) enum EnemyType {
   Splitter
   Boss
 } derive(Eq, @debug.Debug)
+pub fn EnemyType::equal(Self, Self) -> Bool
+pub fn EnemyType::not_equal(Self, Self) -> Bool
+pub fn EnemyType::output(Self, &Logger) -> Unit
+pub fn EnemyType::to_repr(Self) -> @debug.Repr
+pub fn EnemyType::to_string(Self) -> String
 pub impl Show for EnemyType
 
 pub(all) enum EventKind {
@@ -363,6 +407,11 @@ pub(all) enum EventKind {
   Ambush
   Intel
 } derive(Eq, @debug.Debug)
+pub fn EventKind::equal(Self, Self) -> Bool
+pub fn EventKind::not_equal(Self, Self) -> Bool
+pub fn EventKind::output(Self, &Logger) -> Unit
+pub fn EventKind::to_repr(Self) -> @debug.Repr
+pub fn EventKind::to_string(Self) -> String
 pub impl Show for EventKind
 
 pub(all) struct FloatingText {
@@ -408,6 +457,11 @@ pub(all) enum HazardKind {
   Mine
   Smoke
 } derive(Eq, @debug.Debug)
+pub fn HazardKind::equal(Self, Self) -> Bool
+pub fn HazardKind::not_equal(Self, Self) -> Bool
+pub fn HazardKind::output(Self, &Logger) -> Unit
+pub fn HazardKind::to_repr(Self) -> @debug.Repr
+pub fn HazardKind::to_string(Self) -> String
 pub impl Show for HazardKind
 
 pub(all) enum Intent {
@@ -419,6 +473,9 @@ pub(all) enum Intent {
   Charge(Int, Int)
   MinePlace(Int, Int)
 } derive(@debug.Debug)
+pub fn Intent::output(Self, &Logger) -> Unit
+pub fn Intent::to_repr(Self) -> @debug.Repr
+pub fn Intent::to_string(Self) -> String
 pub impl Show for Intent
 
 pub(all) enum MechClass {
@@ -426,6 +483,11 @@ pub(all) enum MechClass {
   Striker
   Sentinel
 } derive(Eq, @debug.Debug)
+pub fn MechClass::equal(Self, Self) -> Bool
+pub fn MechClass::not_equal(Self, Self) -> Bool
+pub fn MechClass::output(Self, &Logger) -> Unit
+pub fn MechClass::to_repr(Self) -> @debug.Repr
+pub fn MechClass::to_string(Self) -> String
 pub impl Show for MechClass
 
 pub(all) enum Objective {
@@ -435,6 +497,11 @@ pub(all) enum Objective {
   CapturePoints(Int)
   Escort(Int, Int)
 } derive(Eq, @debug.Debug)
+pub fn Objective::equal(Self, Self) -> Bool
+pub fn Objective::not_equal(Self, Self) -> Bool
+pub fn Objective::output(Self, &Logger) -> Unit
+pub fn Objective::to_repr(Self) -> @debug.Repr
+pub fn Objective::to_string(Self) -> String
 pub impl Show for Objective
 
 pub(all) struct Particle {
@@ -454,13 +521,19 @@ pub(all) struct PreviewTile {
   y : Int
   effect : EffectKind
   affected_unit : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PreviewTile::to_repr(Self) -> @debug.Repr
 
 pub(all) enum RewardChoice {
   PickAugment(Int)
   RepairAll
   GainGridPower
 } derive(Eq, @debug.Debug)
+pub fn RewardChoice::equal(Self, Self) -> Bool
+pub fn RewardChoice::not_equal(Self, Self) -> Bool
+pub fn RewardChoice::output(Self, &Logger) -> Unit
+pub fn RewardChoice::to_repr(Self) -> @debug.Repr
+pub fn RewardChoice::to_string(Self) -> String
 pub impl Show for RewardChoice
 
 pub(all) struct RingEffect {
@@ -508,6 +581,11 @@ pub(all) enum Screen {
   GameOver
   Victory
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct ScreenFX {
@@ -532,6 +610,11 @@ pub(all) enum StatusEffect {
   OnFire(Int)
   Immobilized(Int)
 } derive(Eq, @debug.Debug)
+pub fn StatusEffect::equal(Self, Self) -> Bool
+pub fn StatusEffect::not_equal(Self, Self) -> Bool
+pub fn StatusEffect::output(Self, &Logger) -> Unit
+pub fn StatusEffect::to_repr(Self) -> @debug.Repr
+pub fn StatusEffect::to_string(Self) -> String
 pub impl Show for StatusEffect
 
 pub(all) struct Tile {
@@ -550,6 +633,11 @@ pub(all) enum TileKind {
   ControlPoint
   SpawnPoint
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) struct UnitSnapshot {
@@ -572,9 +660,13 @@ pub(all) enum UnitTeam {
   Player
   Enemy
 } derive(Eq, @debug.Debug)
+pub fn UnitTeam::equal(Self, Self) -> Bool
+pub fn UnitTeam::not_equal(Self, Self) -> Bool
+pub fn UnitTeam::output(Self, &Logger) -> Unit
+pub fn UnitTeam::to_repr(Self) -> @debug.Repr
+pub fn UnitTeam::to_string(Self) -> String
 pub impl Show for UnitTeam
 
 // Type aliases
 
 // Traits
-

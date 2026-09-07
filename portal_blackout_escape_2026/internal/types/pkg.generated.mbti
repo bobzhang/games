@@ -146,7 +146,9 @@ pub(all) enum CoreKind {
   Blue
   Green
 } derive(Eq)
+pub fn CoreKind::equal(Self, Self) -> Bool
 pub fn CoreKind::from_int(Int) -> Self
+pub fn CoreKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Drone {
   mut active : Bool
@@ -169,6 +171,8 @@ pub(all) enum DroneMode {
   Hunt
   Stunned
 } derive(Eq)
+pub fn DroneMode::equal(Self, Self) -> Bool
+pub fn DroneMode::not_equal(Self, Self) -> Bool
 
 pub(all) struct Flare {
   mut active : Bool
@@ -221,6 +225,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -239,14 +245,17 @@ pub(all) enum ParticleKind {
   YellowFlash
   PurpleSmoke
 } derive(Eq)
+pub fn ParticleKind::equal(Self, Self) -> Bool
+pub fn ParticleKind::not_equal(Self, Self) -> Bool
 
 pub(all) enum Tile {
   Wall
   Floor
   Exit
 } derive(Eq)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

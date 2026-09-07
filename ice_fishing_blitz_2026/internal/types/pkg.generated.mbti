@@ -128,6 +128,8 @@ pub(all) enum FishKind {
   Salmon
   Gold
 } derive(Eq)
+pub fn FishKind::equal(Self, Self) -> Bool
+pub fn FishKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   fish : Array[Fish]
@@ -183,6 +185,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Hazard {
   mut active : Bool
@@ -202,6 +206,8 @@ pub(all) enum HazardKind {
   Eel
   Ice
 } derive(Eq)
+pub fn HazardKind::equal(Self, Self) -> Bool
+pub fn HazardKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -220,6 +226,8 @@ pub(all) enum ParticleKind {
   Spark
   Shimmer
 } derive(Eq)
+pub fn ParticleKind::equal(Self, Self) -> Bool
+pub fn ParticleKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -237,8 +245,9 @@ pub(all) enum PickupKind {
   Repair
   Thermos
 } derive(Eq)
+pub fn PickupKind::equal(Self, Self) -> Bool
+pub fn PickupKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

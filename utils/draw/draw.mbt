@@ -1,6 +1,6 @@
 ///|
 /// Global font state – holds the loaded custom font, or `None` before `init` / after `cleanup`.
-let font_state : Ref[@raylib.Font?] = { val: None }
+let font_state : Ref[@raylib.Font?] = { val: None, }
 
 ///|
 /// Loads a high-quality TTF font for use by all subsequent `draw_text` / `measure_text` calls.

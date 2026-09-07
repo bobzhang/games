@@ -23,4 +23,3 @@ pub fn simulate_turn(@types.Grid, Array[@types.Source]) -> Unit
 // Type aliases
 
 // Traits
-

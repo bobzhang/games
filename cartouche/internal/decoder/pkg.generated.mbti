@@ -31,4 +31,3 @@ pub fn is_fully_decoded(@types.Mapping, @types.Mapping, @types.Inscription) -> B
 // Type aliases
 
 // Traits
-

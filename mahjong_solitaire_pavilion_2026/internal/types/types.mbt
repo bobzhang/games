@@ -9,6 +9,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Directional input used for cursor movement repeat logic.
 pub(all) enum Dir {
   DirNone
@@ -17,6 +20,9 @@ pub(all) enum Dir {
   Up
   Down
 } derive(Eq)
+
+///|
+pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Undo snapshot for one removed pair action.

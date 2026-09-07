@@ -2,14 +2,23 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct WaveFront {
   mut amplitude : Float
   mut phase : Int
   mut direction : Int // 0=up,1=right,2=down,3=left, -1=omnidirectional
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend WaveFront with Debug::{to_repr}
 
 ///|
 pub(all) struct WaveTile {
@@ -25,21 +34,30 @@ pub(all) struct WaveTile {
   mut target_satisfied : Bool
   // wave fronts arriving this tick
   mut wave_fronts : Array[WaveFront]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend WaveTile with Debug::{to_repr}
 
 ///|
 pub(all) struct WaveGrid {
   width : Int
   height : Int
   tiles : Array[WaveTile]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend WaveGrid with Debug::{to_repr}
 
 ///|
 pub(all) struct PlaceableBudget {
   mut kind : PlaceableKind
   mut total : Int
   mut used : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PlaceableBudget with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -52,7 +70,10 @@ pub(all) struct Level {
   budget : Array[PlaceableBudget]
   par_objects : Int
   par_ticks : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct TargetDef {
@@ -61,14 +82,20 @@ pub(all) struct TargetDef {
   min_amp : Float
   max_amp : Float
   phase : Int // -1 = any
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend TargetDef with Debug::{to_repr}
 
 ///|
 pub(all) struct PrePlaced {
   x : Int
   y : Int
   kind : TileKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PrePlaced with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -76,7 +103,10 @@ pub(all) struct LevelScore {
   mut stars : Int
   mut objects_used : Int
   mut ticks_used : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -98,4 +128,7 @@ pub(all) struct Game {
   mut message : String
   mut message_timer : Float
   mut sim_speed : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

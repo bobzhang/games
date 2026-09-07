@@ -71,4 +71,3 @@ pub fn tier_start_index(Int) -> Int
 // Type aliases
 
 // Traits
-

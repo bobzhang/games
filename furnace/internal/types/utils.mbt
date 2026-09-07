@@ -36,7 +36,7 @@ pub fn material_color(mat : Material) -> @raylib.Color {
 
 ///|
 pub fn new_tile() -> Tile {
-  { material: Empty, kind: Normal, temperature: ambient_temp, locked: false }
+  { material: Empty, kind: Normal, temperature: ambient_temp, locked: false, }
 }
 
 ///|
@@ -49,7 +49,7 @@ pub fn new_grid() -> Grid {
     }
     tiles.push(row)
   }
-  { tiles, size: grid_size }
+  { tiles, size: grid_size, }
 }
 
 ///|
@@ -90,12 +90,12 @@ pub fn count_placed_materials(grid : Grid) -> Int {
 
 ///|
 pub fn new_level_result() -> LevelResult {
-  { stars: Zero, materials_used: 0, turns_taken: 0, all_targets_met: false }
+  { stars: Zero, materials_used: 0, turns_taken: 0, all_targets_met: false, }
 }
 
 ///|
 pub fn new_level_progress() -> LevelProgress {
-  { best_stars: Zero, completed: false }
+  { best_stars: Zero, completed: false, }
 }
 
 ///|

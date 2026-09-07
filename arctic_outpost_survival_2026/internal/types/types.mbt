@@ -60,6 +60,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Complete runtime state for one arctic outpost survival session.
 /// The player defends a core generator from waves of enemies while managing
 /// suit HP, fuel, ammo, and core heat over a 200-second survival run.
@@ -263,7 +266,7 @@ pub fn Enemy::Enemy() -> Enemy {
 ///|
 /// Creates an inactive pickup with default field values.
 pub fn Pickup::Pickup() -> Pickup {
-  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Fuel, phase: 0.0 }
+  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Fuel, phase: 0.0, }
 }
 
 ///|

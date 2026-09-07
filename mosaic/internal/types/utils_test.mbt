@@ -151,7 +151,7 @@ test "new_grid creates empty grid" {
 ///|
 test "get_tile and set_tile" {
   let grid = @types.new_grid(8, 8)
-  inspect(@types.get_tile(grid, 0, 0), content="None")
+  debug_inspect(@types.get_tile(grid, 0, 0), content="None")
   let tile = @types.new_tile(Red, Square, N)
   @types.set_tile(grid, 3, 4, Some(tile))
   match @types.get_tile(grid, 3, 4) {
@@ -166,8 +166,8 @@ test "get_tile and set_tile" {
 ///|
 test "get_tile out of bounds" {
   let grid = @types.new_grid(8, 8)
-  inspect(@types.get_tile(grid, -1, 0), content="None")
-  inspect(@types.get_tile(grid, 8, 0), content="None")
-  inspect(@types.get_tile(grid, 0, -1), content="None")
-  inspect(@types.get_tile(grid, 0, 8), content="None")
+  debug_inspect(@types.get_tile(grid, -1, 0), content="None")
+  debug_inspect(@types.get_tile(grid, 8, 0), content="None")
+  debug_inspect(@types.get_tile(grid, 0, -1), content="None")
+  debug_inspect(@types.get_tile(grid, 0, 8), content="None")
 }

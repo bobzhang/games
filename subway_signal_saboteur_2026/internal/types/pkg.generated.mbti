@@ -194,6 +194,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Inspector {
   mut active : Bool
@@ -215,6 +217,8 @@ pub(all) enum InspectorMode {
   Hunt
   Stunned
 } derive(Eq)
+pub fn InspectorMode::equal(Self, Self) -> Bool
+pub fn InspectorMode::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -233,6 +237,8 @@ pub(all) enum ParticleKind {
   Gold
   Smoke
 } derive(Eq)
+pub fn ParticleKind::equal(Self, Self) -> Bool
+pub fn ParticleKind::not_equal(Self, Self) -> Bool
 
 pub(all) enum Tile {
   Void
@@ -240,6 +246,8 @@ pub(all) enum Tile {
   Track
   Wall
 } derive(Eq)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
 
 pub(all) struct Train {
   mut active : Bool
@@ -258,8 +266,9 @@ pub(all) enum TrainColor {
   Blue
   Green
 } derive(Eq)
+pub fn TrainColor::equal(Self, Self) -> Bool
+pub fn TrainColor::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

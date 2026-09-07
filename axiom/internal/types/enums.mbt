@@ -9,9 +9,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum CommandKind {
@@ -25,9 +34,18 @@ pub(all) enum CommandKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CommandKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CommandKind with Eq::{not_equal, equal}
+
+///|
+pub extend CommandKind with Debug::{to_repr}
+
+///|
+pub impl Show for CommandKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CommandKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -38,9 +56,18 @@ pub(all) enum Direction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum TileKind {
@@ -54,9 +81,18 @@ pub(all) enum TileKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TileKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TileKind with Eq::{not_equal, equal}
+
+///|
+pub extend TileKind with Debug::{to_repr}
+
+///|
+pub impl Show for TileKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TileKind with Show::{to_string, output}
 
 ///|
 pub(all) enum TileColor {
@@ -66,9 +102,18 @@ pub(all) enum TileColor {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TileColor with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TileColor with Eq::{not_equal, equal}
+
+///|
+pub extend TileColor with Debug::{to_repr}
+
+///|
+pub impl Show for TileColor with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TileColor with Show::{to_string, output}
 
 ///|
 pub(all) enum Condition {
@@ -79,9 +124,18 @@ pub(all) enum Condition {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Condition with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Condition with Eq::{not_equal, equal}
+
+///|
+pub extend Condition with Debug::{to_repr}
+
+///|
+pub impl Show for Condition with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Condition with Show::{to_string, output}
 
 ///|
 pub(all) enum RunState {
@@ -93,9 +147,18 @@ pub(all) enum RunState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for RunState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend RunState with Eq::{not_equal, equal}
+
+///|
+pub extend RunState with Debug::{to_repr}
+
+///|
+pub impl Show for RunState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend RunState with Show::{to_string, output}
 
 ///|
 pub(all) enum Medal {
@@ -106,6 +169,15 @@ pub(all) enum Medal {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Medal with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Medal with Eq::{not_equal, equal}
+
+///|
+pub extend Medal with Debug::{to_repr}
+
+///|
+pub impl Show for Medal with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Medal with Show::{to_string, output}

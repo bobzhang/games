@@ -597,7 +597,7 @@ pub fn spawn_death_particles(
 ) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
-  let seed : Ref[UInt] = { val: (x * 31 + y * 97 + 42).reinterpret_as_uint() }
+  let seed : Ref[UInt] = { val: (x * 31 + y * 97 + 42).reinterpret_as_uint(), }
   for i = 0; i < 12; i = i + 1 {
     ignore(i)
     let angle = Float::from_int(@types.rand_range(seed, 0, 628)) / 100.0F
@@ -702,7 +702,7 @@ pub fn spawn_heat_particles(
 ) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
-  let seed : Ref[UInt] = { val: (x * 19 + y * 53 + 7).reinterpret_as_uint() }
+  let seed : Ref[UInt] = { val: (x * 19 + y * 53 + 7).reinterpret_as_uint(), }
   for i = 0; i < 15; i = i + 1 {
     ignore(i)
     let offset_x = Float::from_int(@types.rand_range(seed, -16, 16))

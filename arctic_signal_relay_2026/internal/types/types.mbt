@@ -31,6 +31,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Holds the complete mutable state of one game session.
 pub(all) struct Game {
   towers : Array[Tower]
@@ -78,7 +81,7 @@ pub(all) struct Game {
 ///|
 /// Allocates and returns a new inactive Tower with all fields zeroed.
 pub fn Tower::Tower() -> Tower {
-  { active: false, x: 0.0, y: 0.0, need: 0, delivered: 0, pulse_t: 0.0 }
+  { active: false, x: 0.0, y: 0.0, need: 0, delivered: 0, pulse_t: 0.0, }
 }
 
 ///|

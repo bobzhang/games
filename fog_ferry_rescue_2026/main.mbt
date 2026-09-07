@@ -1549,7 +1549,7 @@ fn main {
   let harbor_cy : Float = Float::from_int(harbor_y + harbor_h / 2)
 
   let docks : Array[Dock] = Array::makei(7, fn(i) {
-    { active: false, x: 0.0, y: 0.0, queue: 0.0, decay: 0.0, id: i + 1 }
+    { active: false, x: 0.0, y: 0.0, queue: 0.0, decay: 0.0, id: i + 1, }
   })
 
   let groups : Array[Group] = Array::makei(26, fn(i) {

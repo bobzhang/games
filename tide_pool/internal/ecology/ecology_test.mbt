@@ -323,7 +323,9 @@ test "check_victory_target_died" {
   ]
   game.current_cycle = 1
   let result = check_victory(game)
-  guard result is Failure(_)
+  guard result is Failure(_) else {
+    fail("expected Failure, got \{Repr(result)}")
+  }
 }
 
 ///|
@@ -338,8 +340,15 @@ test "count_alive" {
       health: 80.0,
       submerged: false,
     },
-    { kind: Crab, row: 1, col: 1, alive: false, health: 0.0, submerged: false },
-    { kind: Algae, row: 2, col: 2, alive: true, health: 50.0, submerged: false },
+    { kind: Crab, row: 1, col: 1, alive: false, health: 0.0, submerged: false, },
+    {
+      kind: Algae,
+      row: 2,
+      col: 2,
+      alive: true,
+      health: 50.0,
+      submerged: false,
+    },
   ]
   assert_eq(count_alive(game), 2)
 }

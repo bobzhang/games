@@ -50,4 +50,3 @@ pub fn validate_program(@types.Program) -> Bool
 // Type aliases
 
 // Traits
-

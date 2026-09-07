@@ -19,12 +19,12 @@ fn main {
     Float::from_int(screen_width) / 2.0 - 125.0,
     Float::from_int(screen_height),
   )
-  let angle : Ref[Float] = { val: 40.0 }
-  let thick : Ref[Float] = { val: 1.0 }
-  let tree_depth : Ref[Float] = { val: 10.0 }
-  let branch_decay : Ref[Float] = { val: 0.66 }
-  let length : Ref[Float] = { val: 120.0 }
-  let bezier : Ref[Bool] = { val: false }
+  let angle : Ref[Float] = { val: 40.0, }
+  let thick : Ref[Float] = { val: 1.0, }
+  let tree_depth : Ref[Float] = { val: 10.0, }
+  let branch_decay : Ref[Float] = { val: 0.66, }
+  let length : Ref[Float] = { val: 120.0, }
+  let bezier : Ref[Bool] = { val: false, }
   let pi : Float = Float::from_double(@math.PI)
   let deg2rad : Float = pi / 180.0
 
@@ -41,7 +41,7 @@ fn main {
       start.x + length.val * @math.sinf(0.0),
       start.y - length.val * @math.cosf(0.0),
     )
-    branches.push({ start, end_: initial_end, angle: 0.0, length: length.val })
+    branches.push({ start, end_: initial_end, angle: 0.0, length: length.val, })
 
     let mut i = 0
     while i < branches.length() {

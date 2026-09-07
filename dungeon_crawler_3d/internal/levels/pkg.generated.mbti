@@ -59,4 +59,3 @@ pub fn get_xp_for_level(Int) -> Int
 // Type aliases
 
 // Traits
-

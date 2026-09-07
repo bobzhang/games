@@ -185,6 +185,8 @@ pub(all) enum GameState {
   GameOver
   Victory
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) enum LoseReason {
   None
@@ -192,6 +194,8 @@ pub(all) enum LoseReason {
   Fall
   HitHazard
 } derive(Eq)
+pub fn LoseReason::equal(Self, Self) -> Bool
+pub fn LoseReason::not_equal(Self, Self) -> Bool
 
 pub(all) struct Player {
   mut x : Float
@@ -221,8 +225,9 @@ pub(all) enum TileKind {
   Solid
   Hazard
 } derive(Eq)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

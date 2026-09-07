@@ -146,6 +146,8 @@ pub(all) enum Action {
   Guard
   Burst
 } derive(Eq)
+pub fn Action::equal(Self, Self) -> Bool
+pub fn Action::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   input : InputState
@@ -185,6 +187,8 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct InputState {
   mut move_x : Int
@@ -213,4 +217,3 @@ pub fn Threat::Threat() -> Self
 // Type aliases
 
 // Traits
-

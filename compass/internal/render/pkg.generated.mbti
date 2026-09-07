@@ -15,4 +15,3 @@ pub fn draw_frame(@types.GameState) -> Unit
 // Type aliases
 
 // Traits
-

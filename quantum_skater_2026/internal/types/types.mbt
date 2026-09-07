@@ -73,7 +73,7 @@ pub(all) struct Trail {
 ///|
 /// Create an inactive default trail slot.
 pub fn Trail::Trail() -> Trail {
-  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, beta: false }
+  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, beta: false, }
 }
 
 ///|

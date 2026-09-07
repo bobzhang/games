@@ -116,6 +116,8 @@ pub(all) enum GameState {
   Over
   Clear
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Gem {
   mut kind : GemKind
@@ -137,10 +139,11 @@ pub(all) enum GemKind {
   Purple
   Orange
 } derive(Eq)
+pub fn GemKind::equal(Self, Self) -> Bool
 pub fn GemKind::from_int(Int) -> Self
 pub fn GemKind::is_empty(Self) -> Bool
+pub fn GemKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

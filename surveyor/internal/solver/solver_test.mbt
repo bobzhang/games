@@ -202,7 +202,7 @@ test "rectangular region check" {
     @types.vec2i(1, 0),
     @types.vec2i(0, 1),
   ]
-  let region : @types.Region = { tiles, houses: [], has_road: false, area: 3 }
+  let region : @types.Region = { tiles, houses: [], has_road: false, area: 3, }
   assert_eq(@types.is_region_rectangular(region), false)
   // 2x2 region is rectangular
   let tiles2 : Array[@types.Vec2i] = [

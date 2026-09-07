@@ -2,26 +2,41 @@
 pub(all) struct HexCoord {
   row : Int
   col : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend HexCoord with Eq::{not_equal, equal}
+
+///|
+pub extend HexCoord with Debug::{to_repr}
 
 ///|
 pub(all) struct HexBoard {
   size : Int
   cells : Array[Array[CellState]]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HexBoard with Debug::{to_repr}
 
 ///|
 pub(all) struct Pattern {
   kind : PatternKind
   positions : Array[HexCoord]
   points : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Pattern with Debug::{to_repr}
 
 ///|
 pub(all) struct Move {
   pos : HexCoord
   player : Player
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Move with Debug::{to_repr}
 
 ///|
 pub(all) struct PuzzleLevel {
@@ -30,20 +45,29 @@ pub(all) struct PuzzleLevel {
   current_player : Player
   target_score : Int
   hint : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PuzzleLevel with Debug::{to_repr}
 
 ///|
 pub(all) struct CaptureAnim {
   mut pos : HexCoord
   mut timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend CaptureAnim with Debug::{to_repr}
 
 ///|
 pub(all) struct PatternAnim {
   mut kind : PatternKind
   mut positions : Array[HexCoord]
   mut timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PatternAnim with Debug::{to_repr}
 
 ///|
 pub(all) struct ScoreAnim {
@@ -51,7 +75,10 @@ pub(all) struct ScoreAnim {
   mut y : Float
   mut text : String
   mut timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend ScoreAnim with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

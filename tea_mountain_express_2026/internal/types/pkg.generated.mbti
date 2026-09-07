@@ -181,6 +181,8 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Hazard {
   mut active : Bool
@@ -198,8 +200,9 @@ pub(all) enum HazardKind {
   Landslide
   Crosswind
 } derive(Eq)
+pub fn HazardKind::equal(Self, Self) -> Bool
+pub fn HazardKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

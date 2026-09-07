@@ -41,6 +41,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Stores runtime data for Keeper.
 pub(all) struct Keeper {
   mut room : Int
@@ -173,7 +176,12 @@ pub(all) struct Game {
 ///|
 /// Creates a default Breach value for a new session.
 pub fn Breach::Breach(room : Int) -> Breach {
-  { room, severity: 0.0, raider_cd: randf(0.8, 1.6), ember_cd: randf(0.7, 1.4) }
+  {
+    room,
+    severity: 0.0,
+    raider_cd: randf(0.8, 1.6),
+    ember_cd: randf(0.7, 1.4),
+  }
 }
 
 ///|
@@ -194,7 +202,7 @@ pub fn Raider::Raider() -> Raider {
 ///|
 /// Creates a default Flame value for a new session.
 pub fn Flame::Flame() -> Flame {
-  { active: false, room: 0, x: 0.0, y: 0.0, intensity: 0.0, spread_cd: 0.0 }
+  { active: false, room: 0, x: 0.0, y: 0.0, intensity: 0.0, spread_cd: 0.0, }
 }
 
 ///|

@@ -187,7 +187,7 @@ pub(all) struct InvItem {
 ///|
 /// Creates an empty inventory slot.
 pub fn InvItem::empty() -> InvItem {
-  { kind: 0, active: false, rarity: rarity_common, stat_bonus: 0, name_idx: 0 }
+  { kind: 0, active: false, rarity: rarity_common, stat_bonus: 0, name_idx: 0, }
 }
 
 // Trap entity
@@ -234,7 +234,7 @@ pub(all) struct Torch {
 ///|
 /// Creates an inactive torch slot.
 pub fn Torch::inactive() -> Torch {
-  { active: false, gx: 0, gz: 0, flicker_phase: 0.0 }
+  { active: false, gx: 0, gz: 0, flicker_phase: 0.0, }
 }
 
 // Message log entry
@@ -252,7 +252,7 @@ pub(all) struct MessageEntry {
 ///|
 /// Creates an empty message entry with neutral text color.
 pub fn MessageEntry::empty() -> MessageEntry {
-  { text: "", timer: 0.0, r: 200, g: 200, b: 200 }
+  { text: "", timer: 0.0, r: 200, g: 200, b: 200, }
 }
 
 // Shop item
@@ -270,7 +270,7 @@ pub(all) struct ShopItem {
 ///|
 /// Creates an empty shop item slot.
 pub fn ShopItem::empty() -> ShopItem {
-  { active: false, kind: 0, price: 0, name_idx: 0, stat_bonus: 0 }
+  { active: false, kind: 0, price: 0, name_idx: 0, stat_bonus: 0, }
 }
 
 // Room for BSP dungeon generation
@@ -290,7 +290,7 @@ pub(all) struct Room {
 ///|
 /// Constructs a room with bounds and default room-state flags.
 pub fn Room::Room(x : Int, y : Int, w : Int, h : Int) -> Room {
-  { x, y, w, h, kind: 0, explored: false, enemies_cleared: false }
+  { x, y, w, h, kind: 0, explored: false, enemies_cleared: false, }
 }
 
 ///|
@@ -340,7 +340,7 @@ pub(all) struct FloorInfo {
 ///|
 /// Creates an uncleared floor info record.
 pub fn FloorInfo::FloorInfo() -> FloorInfo {
-  { cleared: false, enemies_killed: 0, enemies_total: 0 }
+  { cleared: false, enemies_killed: 0, enemies_total: 0, }
 }
 
 // Player spell slot
@@ -355,7 +355,7 @@ pub(all) struct SpellSlot {
 ///|
 /// Creates an inactive spell slot.
 pub fn SpellSlot::empty() -> SpellSlot {
-  { spell_type: None, active: false }
+  { spell_type: None, active: false, }
 }
 
 // Active buff on player
@@ -372,7 +372,7 @@ pub(all) struct Buff {
 ///|
 /// Creates an inactive buff entry.
 pub fn Buff::inactive() -> Buff {
-  { kind: 0, timer: 0.0, value: 0, active: false }
+  { kind: 0, timer: 0.0, value: 0, active: false, }
 }
 
 // Buff kinds

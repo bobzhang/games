@@ -2,13 +2,25 @@
 pub(all) struct HexCoord {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend HexCoord with Eq::{not_equal, equal}
+
+///|
+pub extend HexCoord with Debug::{to_repr}
 
 ///|
 pub(all) struct HexTile {
   mut biome : BiomeKind
   locked : Bool
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend HexTile with Eq::{not_equal, equal}
+
+///|
+pub extend HexTile with Debug::{to_repr}
 
 ///|
 pub(all) struct HexGrid {
@@ -16,14 +28,20 @@ pub(all) struct HexGrid {
   height : Int
   tiles : Array[HexTile]
   wraps_horizontal : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HexGrid with Debug::{to_repr}
 
 ///|
 pub(all) struct PaintBudget {
   mut forest : Int
   mut ocean : Int
   mut desert : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PaintBudget with Debug::{to_repr}
 
 ///|
 pub(all) struct TargetRatio {
@@ -33,7 +51,10 @@ pub(all) struct TargetRatio {
   ocean_max : Float
   desert_min : Float
   desert_max : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend TargetRatio with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -45,14 +66,20 @@ pub(all) struct Level {
   budget : PaintBudget
   targets : TargetRatio
   par_turns : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut best_turns : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct UndoEntry {
@@ -60,7 +87,10 @@ pub(all) struct UndoEntry {
   row : Int
   prev_biome : BiomeKind
   biome_used : BiomeKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend UndoEntry with Debug::{to_repr}
 
 ///|
 /// Full grid snapshot for undoing ecosystem resolution steps.
@@ -70,7 +100,10 @@ pub(all) struct ResolveSnapshot {
   budget_ocean : Int
   budget_desert : Int
   turn : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend ResolveSnapshot with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -112,4 +145,7 @@ pub(all) struct Game {
   // Target ratio pulse feedback
   mut ratio_pulse_timer : Float
   mut ratio_just_entered : Array[Bool]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

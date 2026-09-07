@@ -7,6 +7,4 @@ import {
 
 warnings = "+missing_doc+unnecessary_annotation"
 
-options(
-  "is-main": true,
-)
+pkgtype(kind: "executable")

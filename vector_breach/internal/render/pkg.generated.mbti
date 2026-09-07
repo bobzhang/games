@@ -93,4 +93,3 @@ pub fn update_animations(@types.BattleState, Float) -> Bool
 // Type aliases
 
 // Traits
-

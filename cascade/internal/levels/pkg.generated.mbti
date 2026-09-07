@@ -19,4 +19,3 @@ pub fn tier_unlocked(Array[@types.LevelScore], @types.Tier) -> Bool
 // Type aliases
 
 // Traits
-

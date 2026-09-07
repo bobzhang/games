@@ -5,9 +5,7 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
   let w = grid.width
   let h = grid.height
   // Track contributions for interference
-  let contributions : Array[Array[@types.WaveFront]] = Array::new(
-    capacity=w * h,
-  )
+  let contributions : Array[Array[@types.WaveFront]] = Array(capacity=w * h)
   for _i in 0..<(w * h) {
     contributions.push([])
   }
@@ -20,7 +18,7 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
       match tile.object {
         Emitter(ep) => {
           // The emitter tile itself has amplitude 1.0
-          contributions[idx].push({ amplitude: 1.0, phase: ep, direction: -1 })
+          contributions[idx].push({ amplitude: 1.0, phase: ep, direction: -1, })
           // Send waves to adjacent tiles
           for d in 0..<4 {
             let nx = x + @types.dir_dx(d)

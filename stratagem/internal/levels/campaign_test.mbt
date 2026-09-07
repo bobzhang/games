@@ -137,7 +137,7 @@ test "campaign victory conditions are solvable - player can reach enemies" {
     let w = level.width
     let h = level.height
     let total = w * h
-    let visited : Array[Bool] = Array::new(capacity=total)
+    let visited : Array[Bool] = Array(capacity=total)
     for _k in 0..<total {
       visited.push(false)
     }

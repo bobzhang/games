@@ -138,6 +138,8 @@ pub(all) enum GameState {
   LevelClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) enum Special {
   None
@@ -145,8 +147,9 @@ pub(all) enum Special {
   Col
   Bomb
 } derive(Eq)
+pub fn Special::equal(Self, Self) -> Bool
+pub fn Special::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

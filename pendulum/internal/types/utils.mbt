@@ -69,17 +69,17 @@ pub fn mini(a : Int, b : Int) -> Int {
 
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn vec2f(x : Float, y : Float) -> Vec2f {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn vec2f_zero() -> Vec2f {
-  { x: 0.0, y: 0.0 }
+  { x: 0.0, y: 0.0, }
 }
 
 ///|
@@ -168,7 +168,7 @@ pub fn compute_arc_points(anchor : Vec2i, length : Int) -> Array[ArcPoint] {
         let diff = absi(dist_sq - r_sq)
         if diff <= r {
           let angle = atan2f(Float::from_int(dy), Float::from_int(dx))
-          points.push({ gx, gy, angle })
+          points.push({ gx, gy, angle, })
         }
       }
     }
@@ -251,7 +251,7 @@ pub fn new_empty_grid() -> Array[Array[CellKind]] {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: 0, best_ticks: 9999, collectibles_got: 0 }
+  { completed: false, stars: 0, best_ticks: 9999, collectibles_got: 0, }
 }
 
 ///|
@@ -268,7 +268,7 @@ pub fn new_weight() -> Weight {
 
 ///|
 pub fn new_rope() -> Rope {
-  { anchor: vec2i(0, 0), length: 0, wrapped_pegs: [] }
+  { anchor: vec2i(0, 0), length: 0, wrapped_pegs: [], }
 }
 
 ///|

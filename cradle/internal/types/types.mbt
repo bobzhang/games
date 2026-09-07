@@ -2,31 +2,52 @@
 pub(all) struct Vec2f {
   x : Float
   y : Float
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2f with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2f with Debug::{to_repr}
 
 ///|
 pub(all) struct Peg {
   index : Int
   pos : Vec2f
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Peg with Debug::{to_repr}
 
 ///|
 pub(all) struct StringLine {
   peg_a : Int
   peg_b : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend StringLine with Eq::{not_equal, equal}
+
+///|
+pub extend StringLine with Debug::{to_repr}
 
 ///|
 pub(all) struct Intersection {
   pos : Vec2f
   mut matched_target : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Intersection with Debug::{to_repr}
 
 ///|
 pub(all) struct TargetDot {
   pos : Vec2f
   mut hit : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend TargetDot with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -35,14 +56,20 @@ pub(all) struct Level {
   par_strings : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut strings_used : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

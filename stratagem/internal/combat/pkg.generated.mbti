@@ -31,4 +31,3 @@ pub fn type_advantage(@types.UnitKind, @types.UnitKind) -> Int
 // Type aliases
 
 // Traits
-

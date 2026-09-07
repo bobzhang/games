@@ -170,7 +170,7 @@ fn update_playing(game : @types.Game) -> Unit {
       Some(f) =>
         if game.play_state != Complete {
           // Save undo state
-          game.undo_stack.push({ fences: @types.copy_fences(game.fences) })
+          game.undo_stack.push({ fences: @types.copy_fences(game.fences), })
           // Toggle fence
           @types.toggle_fence(game.fences, f)
           // Recompute

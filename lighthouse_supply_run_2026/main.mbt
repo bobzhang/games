@@ -1,10 +1,10 @@
 ///|
 /// Generated stormy ocean route background texture.
-let tex_ocean_route_background : Ref[@raylib.Texture?] = { val: None }
+let tex_ocean_route_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated 4x2 maritime object sprite sheet texture.
-let tex_lighthouse_supply_sprites : Ref[@raylib.Texture?] = { val: None }
+let tex_lighthouse_supply_sprites : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Lighthouse Supply Run texture.
@@ -1642,7 +1642,7 @@ fn main {
   })
 
   let reefs : Array[Reef] = Array::makei(180, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, radius: 0.0, hardness: 0.0, pulse: 0.0 }
+    { active: false, x: 0.0, y: 0.0, radius: 0.0, hardness: 0.0, pulse: 0.0, }
   })
 
   let storms : Array[Storm] = Array::makei(20, fn(_i) {

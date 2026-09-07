@@ -2,7 +2,13 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Domino {
@@ -15,7 +21,10 @@ pub(all) struct Domino {
   mut topple_tick : Int
   mut delay_remaining : Int
   mut anim_progress : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Domino with Debug::{to_repr}
 
 ///|
 pub(all) struct DominoBudget {
@@ -23,14 +32,23 @@ pub(all) struct DominoBudget {
   mut heavy : Int
   mut splitter : Int
   mut delay : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend DominoBudget with Debug::{to_repr}
 
 ///|
 pub(all) struct ToppleEvent {
   pos : Vec2i
   tick : Int
   kind : DominoKind
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend ToppleEvent with Eq::{not_equal, equal}
+
+///|
+pub extend ToppleEvent with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -42,7 +60,10 @@ pub(all) struct Level {
   budget : DominoBudget
   par_count : Int
   par_ticks : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -50,7 +71,10 @@ pub(all) struct LevelScore {
   mut completed : Bool
   mut dominoes_used : Int
   mut ticks_taken : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

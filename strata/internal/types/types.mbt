@@ -5,7 +5,13 @@ pub(all) struct Clue {
   param_b : Int
   text : String
   mut satisfied : Bool
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Clue with Eq::{not_equal, equal}
+
+///|
+pub extend Clue with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -14,20 +20,29 @@ pub(all) struct Level {
   rocks : Array[RockKind]
   clues : Array[Clue]
   par_moves : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut best_moves : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct UndoEntry {
   slots : Array[RockKind?]
   tray : Array[RockKind]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend UndoEntry with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

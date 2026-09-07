@@ -86,7 +86,7 @@ pub fn new_budget(
   light : Int,
   shadow : Int,
 ) -> ElementBudget {
-  { fire, water, earth, air, light, shadow }
+  { fire, water, earth, air, light, shadow, }
 }
 
 ///|
@@ -165,12 +165,12 @@ pub fn budget_spend(b : ElementBudget, e : Element) -> Bool {
 
 ///|
 pub fn new_anim() -> AnimState {
-  { timer: 0.0, active: false, kind: None }
+  { timer: 0.0, active: false, kind: None, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: 0, best_steps: 0 }
+  { completed: false, stars: 0, best_steps: 0, }
 }
 
 ///|

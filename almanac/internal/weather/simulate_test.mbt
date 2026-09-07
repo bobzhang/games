@@ -2,7 +2,7 @@
 test "Sun makes adjacent tiles Sunny" {
   let grid = @types.make_grid(5, 5, [], [])
   let sources : Array[@types.Source] = [
-    { kind: Sun, col: 2, row: 2, wind_dir: East },
+    { kind: Sun, col: 2, row: 2, wind_dir: East, },
   ]
   simulate_turn(grid, sources)
   // Center should be Sunny
@@ -22,7 +22,7 @@ test "Cloud blocks sun" {
   // Pre-set a cloud
   @types.grid_get(grid, 3, 2).weather = Cloudy
   let sources : Array[@types.Source] = [
-    { kind: Sun, col: 2, row: 2, wind_dir: East },
+    { kind: Sun, col: 2, row: 2, wind_dir: East, },
   ]
   simulate_turn(grid, sources)
   // The cloudy tile should remain cloudy (sun blocked)
@@ -43,7 +43,7 @@ test "Rain flows downhill" {
   }
   let grid = @types.make_grid(5, 5, heights, [])
   let sources : Array[@types.Source] = [
-    { kind: Rain, col: 2, row: 2, wind_dir: East },
+    { kind: Rain, col: 2, row: 2, wind_dir: East, },
   ]
   simulate_turn(grid, sources)
   // Center should be Rainy
@@ -59,7 +59,7 @@ test "Wind pushes clouds" {
   // Place a cloud at (2,2)
   @types.grid_get(grid, 2, 2).weather = Cloudy
   let sources : Array[@types.Source] = [
-    { kind: Wind, col: 1, row: 2, wind_dir: East },
+    { kind: Wind, col: 1, row: 2, wind_dir: East, },
   ]
   simulate_turn(grid, sources)
   // Cloud should have moved east to (3,2)
@@ -70,8 +70,8 @@ test "Wind pushes clouds" {
 test "Rain + Wind = Storm" {
   let grid = @types.make_grid(5, 5, [], [])
   let sources : Array[@types.Source] = [
-    { kind: Rain, col: 2, row: 2, wind_dir: East },
-    { kind: Wind, col: 2, row: 3, wind_dir: East },
+    { kind: Rain, col: 2, row: 2, wind_dir: East, },
+    { kind: Wind, col: 2, row: 3, wind_dir: East, },
   ]
   simulate_turn(grid, sources)
   // The tile where rain and wind overlap should be Stormy
@@ -85,8 +85,8 @@ test "Sunny + Rainy = Cancel to Clear" {
   let grid = @types.make_grid(5, 5, [], [])
   // Place sun and rain adjacent to same tile
   let sources : Array[@types.Source] = [
-    { kind: Sun, col: 2, row: 2, wind_dir: East },
-    { kind: Rain, col: 2, row: 3, wind_dir: East },
+    { kind: Sun, col: 2, row: 2, wind_dir: East, },
+    { kind: Rain, col: 2, row: 3, wind_dir: East, },
   ]
   simulate_turn(grid, sources)
   // Tile (2,3) would get rain from source + sun adjacency, should cancel

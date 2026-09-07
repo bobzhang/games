@@ -10,10 +10,10 @@ test "Grid::new creates correct dimensions" {
 ///|
 test "Grid::get returns None for out of bounds" {
   let grid = @types.Grid::new(3, 3)
-  inspect(grid.get(-1, 0), content="None")
-  inspect(grid.get(0, -1), content="None")
-  inspect(grid.get(3, 0), content="None")
-  inspect(grid.get(0, 3), content="None")
+  debug_inspect(grid.get(-1, 0), content="None")
+  debug_inspect(grid.get(0, -1), content="None")
+  debug_inspect(grid.get(3, 0), content="None")
+  debug_inspect(grid.get(0, 3), content="None")
 }
 
 ///|
@@ -28,7 +28,7 @@ test "Grid::set_terrain and get" {
   let grid = @types.Grid::new(3, 3)
   grid.set_terrain(1, 1, Some(Grass))
   match grid.get(1, 1) {
-    Some(c) => inspect(c.terrain, content="Some(Grass)")
+    Some(c) => debug_inspect(c.terrain, content="Some(Grass)")
     None => fail("expected cell")
   }
 }
@@ -38,7 +38,7 @@ test "Grid::set_animal" {
   let grid = @types.Grid::new(3, 3)
   grid.set_animal(0, 0, Some(Lion))
   match grid.get(0, 0) {
-    Some(c) => inspect(c.animal, content="Some(Lion)")
+    Some(c) => debug_inspect(c.animal, content="Some(Lion)")
     None => fail("expected cell")
   }
 }
@@ -66,11 +66,11 @@ test "Grid::clear resets all cells" {
   grid.set_fence_top(2, 2, true)
   grid.clear()
   match grid.get(0, 0) {
-    Some(c) => inspect(c.terrain, content="None")
+    Some(c) => debug_inspect(c.terrain, content="None")
     None => fail("expected cell")
   }
   match grid.get(1, 1) {
-    Some(c) => inspect(c.animal, content="None")
+    Some(c) => debug_inspect(c.animal, content="None")
     None => fail("expected cell")
   }
   match grid.get(2, 2) {
@@ -97,7 +97,7 @@ test "species_needs returns correct data for Penguin" {
   inspect(needs.terrain_primary, content="Water")
   inspect(needs.terrain_primary_count, content="3")
   inspect(needs.fears_predators, content="true")
-  inspect(needs.terrain_secondary, content="Some(Rock)")
+  debug_inspect(needs.terrain_secondary, content="Some(Rock)")
 }
 
 ///|

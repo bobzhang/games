@@ -309,15 +309,15 @@ fn main {
   }
 
   let gates : Array[Gate] = Array::makei(max_gates, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, w: 0.0, state: 0, pulse_t: 0.0 }
+    { active: false, x: 0.0, y: 0.0, w: 0.0, state: 0, pulse_t: 0.0, }
   })
 
   let obstacles : Array[Obstacle] = Array::makei(max_obstacles, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, kind: 0, size: 0.0 }
+    { active: false, x: 0.0, y: 0.0, kind: 0, size: 0.0, }
   })
 
   let pickups : Array[Pickup] = Array::makei(max_pickups, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, kind: 0, t: 0.0 }
+    { active: false, x: 0.0, y: 0.0, kind: 0, t: 0.0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

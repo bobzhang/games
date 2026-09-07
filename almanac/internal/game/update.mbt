@@ -259,7 +259,7 @@ fn update_placing(game : @types.Game) -> Unit {
         for i in 0..<game.placed_sources.length() {
           hist_sources.push(game.placed_sources[i])
         }
-        game.history.push({ tiles: hist_tiles, sources: hist_sources })
+        game.history.push({ tiles: hist_tiles, sources: hist_sources, })
         // Place the source
         let src : @types.Source = {
           kind,

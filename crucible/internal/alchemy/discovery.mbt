@@ -5,7 +5,12 @@ pub fn init_recipe_book(book : Array[@types.Recipe]) -> Unit {
   let reactions = all_reactions()
   for i in 0..<reactions.length() {
     let (substance, input, output) = reactions[i]
-    book.push({ discovered: false, input, substance, output: Transform(output) })
+    book.push({
+      discovered: false,
+      input,
+      substance,
+      output: Transform(output),
+    })
   }
 }
 

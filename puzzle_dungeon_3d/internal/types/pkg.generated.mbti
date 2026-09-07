@@ -391,6 +391,8 @@ pub(all) enum DecoKind {
   DecoMushroom
   DecoVine
 } derive(Eq)
+pub fn DecoKind::equal(Self, Self) -> Bool
+pub fn DecoKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Decoration {
   mut active : Bool
@@ -410,6 +412,8 @@ pub(all) enum Dir {
   DirDown
   DirLeft
 } derive(Eq)
+pub fn Dir::equal(Self, Self) -> Bool
+pub fn Dir::not_equal(Self, Self) -> Bool
 
 pub(all) struct Entity {
   mut active : Bool
@@ -435,6 +439,8 @@ pub(all) enum EntityKind {
   EntityKey
   EntityBomb
 } derive(Eq)
+pub fn EntityKind::equal(Self, Self) -> Bool
+pub fn EntityKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct FloorInfo {
   mut unlocked : Bool
@@ -528,6 +534,8 @@ pub(all) enum GameState {
   StateWorldSelect
   StateTutorial
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct LaserSegment {
   mut active : Bool
@@ -591,6 +599,8 @@ pub(all) enum Tile {
   TileLaserTarget
   TileRotatePlatform
 } derive(Eq)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
 
 pub(all) struct UndoState {
   mut player_gx : Int
@@ -613,8 +623,9 @@ pub(all) enum World {
   WorldGarden
   WorldVoid
 } derive(Eq)
+pub fn World::equal(Self, Self) -> Bool
+pub fn World::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

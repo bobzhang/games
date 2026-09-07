@@ -71,4 +71,3 @@ pub fn draw_world_select(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

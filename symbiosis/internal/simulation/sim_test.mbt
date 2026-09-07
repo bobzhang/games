@@ -132,7 +132,7 @@ test "switch_toggles_door" {
     0,
     floor_lines,
     ceiling_lines,
-    [{ switch_id: 0, door_id: 0 }],
+    [{ switch_id: 0, door_id: 0, }],
     BothExit,
     20,
   )

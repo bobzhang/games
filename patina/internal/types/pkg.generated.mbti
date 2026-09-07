@@ -150,6 +150,11 @@ pub(all) enum DamageKind {
   Fade
   Flake
 } derive(Eq, @debug.Debug)
+pub fn DamageKind::equal(Self, Self) -> Bool
+pub fn DamageKind::not_equal(Self, Self) -> Bool
+pub fn DamageKind::output(Self, &Logger) -> Unit
+pub fn DamageKind::to_repr(Self) -> @debug.Repr
+pub fn DamageKind::to_string(Self) -> String
 pub impl Show for DamageKind
 
 pub(all) struct Game {
@@ -194,6 +199,11 @@ pub(all) enum PlayState {
   Animating
   LevelComplete
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct Region {
@@ -212,6 +222,11 @@ pub(all) enum RegionState {
   Worsened
   Sealed
 } derive(Eq, @debug.Debug)
+pub fn RegionState::equal(Self, Self) -> Bool
+pub fn RegionState::not_equal(Self, Self) -> Bool
+pub fn RegionState::output(Self, &Logger) -> Unit
+pub fn RegionState::to_repr(Self) -> @debug.Repr
+pub fn RegionState::to_string(Self) -> String
 pub impl Show for RegionState
 
 pub(all) enum Screen {
@@ -221,6 +236,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -228,6 +248,11 @@ pub(all) enum Tier {
   Paintings
   Masterworks
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct ToolBudget {
@@ -243,6 +268,11 @@ pub(all) enum ToolKind {
   Retouch
   Seal
 } derive(Eq, @debug.Debug)
+pub fn ToolKind::equal(Self, Self) -> Bool
+pub fn ToolKind::not_equal(Self, Self) -> Bool
+pub fn ToolKind::output(Self, &Logger) -> Unit
+pub fn ToolKind::to_repr(Self) -> @debug.Repr
+pub fn ToolKind::to_string(Self) -> String
 pub impl Show for ToolKind
 
 pub(all) struct UndoEntry {
@@ -257,4 +287,3 @@ pub(all) struct UndoEntry {
 // Type aliases
 
 // Traits
-

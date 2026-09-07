@@ -283,7 +283,7 @@ fn draw_obstacle(
   }
 
   match ob.kind {
-    Vent => {
+    Vent =>
       draw_sprite_cell(
         art,
         2,
@@ -293,8 +293,7 @@ fn draw_obstacle(
         @types.maxf(ob.h * 2.0, 44.0),
         @raylib.Color::new(255, 255, 255, 248),
       )
-    }
-    Sign => {
+    Sign =>
       draw_sprite_cell(
         art,
         3,
@@ -304,7 +303,6 @@ fn draw_obstacle(
         @types.maxf(ob.h * 2.2, 68.0),
         @raylib.Color::new(255, 255, 255, 246),
       )
-    }
     Drone => {
       let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase * 2.2)
       let glow = @types.color_mix(@types.neon_blue(), @types.neon_pink(), pulse)
@@ -312,7 +310,12 @@ fn draw_obstacle(
         (x + ob.w * 0.5).to_int(),
         (y + ob.h * 0.5).to_int(),
         @types.maxf(ob.w, ob.h) * 0.48,
-        @raylib.Color::new(glow.r.to_int(), glow.g.to_int(), glow.b.to_int(), 64),
+        @raylib.Color::new(
+          glow.r.to_int(),
+          glow.g.to_int(),
+          glow.b.to_int(),
+          64,
+        ),
       )
       draw_sprite_cell(
         art,

@@ -105,6 +105,8 @@ pub(all) enum BulletKind {
   Normal
   Pierce
 } derive(Eq)
+pub fn BulletKind::equal(Self, Self) -> Bool
+pub fn BulletKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -125,6 +127,8 @@ pub(all) enum EnemyKind {
   Brute
   Shard
 } derive(Eq)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   enemies : Array[Enemy]
@@ -179,6 +183,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -197,6 +203,8 @@ pub(all) enum ParticleKind {
   Damage
   OverdriveEffect
 } derive(Eq)
+pub fn ParticleKind::equal(Self, Self) -> Bool
+pub fn ParticleKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -215,8 +223,9 @@ pub(all) enum PickupKind {
   Ammo
   Overdrive
 } derive(Eq)
+pub fn PickupKind::equal(Self, Self) -> Bool
+pub fn PickupKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

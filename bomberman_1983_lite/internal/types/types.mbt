@@ -11,6 +11,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Team affiliation used for friendly-fire and scoring.
 pub(all) enum Team {
   None
@@ -18,6 +21,9 @@ pub(all) enum Team {
   Player2
   Enemy
 } derive(Eq)
+
+///|
+pub extend Team with Eq::{not_equal, equal}
 
 ///|
 /// Tile categories used by map collision and rendering.
@@ -32,6 +38,9 @@ pub(all) enum TileKind {
 } derive(Eq)
 
 ///|
+pub extend TileKind with Eq::{not_equal, equal}
+
+///|
 /// Enemy behavior archetypes.
 pub(all) enum EnemyKind {
   Basic
@@ -39,6 +48,9 @@ pub(all) enum EnemyKind {
   Heavy
   Sniper
 } derive(Eq)
+
+///|
+pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Collectible powerup categories.
@@ -50,6 +62,9 @@ pub(all) enum PowerupKind {
   Shovel
   ExtraLife
 } derive(Eq)
+
+///|
+pub extend PowerupKind with Eq::{not_equal, equal}
 
 ///|
 /// Shared tank record used for players and enemies.
@@ -301,7 +316,7 @@ pub(all) struct Star {
 ///|
 /// Creates a star entry for the background layer.
 pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
-  { x, y, speed, twinkle }
+  { x, y, speed, twinkle, }
 }
 
 ///|

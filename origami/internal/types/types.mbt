@@ -2,26 +2,47 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct PaperCell {
   mut has_paper : Bool
   mut layers : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend PaperCell with Eq::{not_equal, equal}
+
+///|
+pub extend PaperCell with Debug::{to_repr}
 
 ///|
 pub(all) struct Paper {
   width : Int
   height : Int
   cells : Array[PaperCell]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Paper with Debug::{to_repr}
 
 ///|
 pub(all) struct LayerCheck {
   pos : Vec2i
   required_layers : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend LayerCheck with Eq::{not_equal, equal}
+
+///|
+pub extend LayerCheck with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -31,21 +52,30 @@ pub(all) struct Level {
   par_folds : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : StarRating
   mut folds_used : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct FoldAction {
   dir : FoldDir
   line_pos : Int
   paper_before : Paper
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend FoldAction with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

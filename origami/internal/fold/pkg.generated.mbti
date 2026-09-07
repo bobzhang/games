@@ -3,6 +3,7 @@ package "bobzhang/games/origami/internal/fold"
 
 import {
   "bobzhang/games/origami/internal/types",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -21,9 +22,9 @@ pub(all) struct CheckResult {
   silhouette_match : Bool
   layers_match : Bool
   checks_detail : Array[Bool]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn CheckResult::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

@@ -21,4 +21,3 @@ pub fn update_combo(@types.Game, Float) -> Unit
 // Type aliases
 
 // Traits
-

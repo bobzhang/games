@@ -25,4 +25,3 @@ pub fn sim_step(@types.Game) -> Bool
 // Type aliases
 
 // Traits
-

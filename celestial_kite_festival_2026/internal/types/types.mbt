@@ -9,6 +9,9 @@ pub(all) enum ObjKind {
 } derive(Eq)
 
 ///|
+pub extend ObjKind with Eq::{not_equal, equal}
+
+///|
 /// Stores runtime data for SkyObj.
 pub(all) struct SkyObj {
   mut active : Bool
@@ -71,6 +74,9 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Stores runtime data for Kite.
@@ -177,13 +183,13 @@ pub fn Spark::Spark() -> Spark {
 ///|
 /// Creates a default Halo value for a new session.
 pub fn Halo::Halo() -> Halo {
-  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
+  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0, }
 }
 
 ///|
 /// Creates a default Trail value for a new session.
 pub fn Trail::Trail() -> Trail {
-  { active: false, x: 0.0, y: 0.0, life: 0.0, w: 0.0, h: 0.0, rot: 0.0 }
+  { active: false, x: 0.0, y: 0.0, life: 0.0, w: 0.0, h: 0.0, rot: 0.0, }
 }
 
 ///|

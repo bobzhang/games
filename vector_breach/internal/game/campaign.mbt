@@ -177,7 +177,7 @@ pub fn build_campaign_map() -> @types.CampaignMap {
     reward_icon: "A",
     theme: Neutral,
   })
-  { nodes, selected_node: 0, completed_nodes: [] }
+  { nodes, selected_node: 0, completed_nodes: [], }
 }
 
 ///|
@@ -375,7 +375,7 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
   for i = 0; i < def.special_tiles.length(); i = i + 1 {
     let (tx, ty, tkind) = def.special_tiles[i]
     if battle.grid.in_bounds(tx, ty) {
-      battle.grid.set(tx, ty, { kind: tkind, hazard: None, occupied_by: -1 })
+      battle.grid.set(tx, ty, { kind: tkind, hazard: None, occupied_by: -1, })
     }
   }
   // Place hazard tiles from mission definition
@@ -383,7 +383,7 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
     let (hx, hy, hkind) = def.hazard_tiles[i]
     if battle.grid.in_bounds(hx, hy) {
       let tile = battle.grid.get(hx, hy)
-      battle.grid.set(hx, hy, { ..tile, hazard: hkind })
+      battle.grid.set(hx, hy, { ..tile, hazard: hkind, })
     }
   }
   // Place 3 player mechs with augment-modified stats
@@ -441,7 +441,7 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
     }
     battle.units.push(u)
     if battle.grid.in_bounds(px, py) {
-      battle.grid.set(px, py, { ..battle.grid.get(px, py), occupied_by: u.id })
+      battle.grid.set(px, py, { ..battle.grid.get(px, py), occupied_by: u.id, })
     }
   }
   // Spawn enemies from mission definition
@@ -547,7 +547,7 @@ fn apply_rest_heal(game : @types.Game) -> Unit {
 ///|
 /// Apply a random event node.
 fn apply_event_node(game : @types.Game, node_id : Int) -> Unit {
-  let seed : Ref[UInt] = { val: (node_id * 3571 + 137).reinterpret_as_uint() }
+  let seed : Ref[UInt] = { val: (node_id * 3571 + 137).reinterpret_as_uint(), }
   let event_roll = @types.rand_range(seed, 0, 2)
   match event_roll {
     0 => {

@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Per-frame input snapshot holding movement axes and action button press flags.
 pub(all) struct InputState {
   mut move_x : Int

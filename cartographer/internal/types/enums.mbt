@@ -8,9 +8,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum FeatureKind {
@@ -24,9 +33,18 @@ pub(all) enum FeatureKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for FeatureKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend FeatureKind with Eq::{not_equal, equal}
+
+///|
+pub extend FeatureKind with Debug::{to_repr}
+
+///|
+pub impl Show for FeatureKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend FeatureKind with Show::{to_string, output}
 
 ///|
 pub(all) enum ClueKind {
@@ -39,9 +57,18 @@ pub(all) enum ClueKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ClueKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ClueKind with Eq::{not_equal, equal}
+
+///|
+pub extend ClueKind with Debug::{to_repr}
+
+///|
+pub impl Show for ClueKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ClueKind with Show::{to_string, output}
 
 ///|
 pub(all) enum PlayState {
@@ -51,9 +78,18 @@ pub(all) enum PlayState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PlayState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PlayState with Eq::{not_equal, equal}
+
+///|
+pub extend PlayState with Debug::{to_repr}
+
+///|
+pub impl Show for PlayState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PlayState with Show::{to_string, output}
 
 ///|
 pub(all) enum Tier {
@@ -63,9 +99,18 @@ pub(all) enum Tier {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Tier with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tier with Eq::{not_equal, equal}
+
+///|
+pub extend Tier with Debug::{to_repr}
+
+///|
+pub impl Show for Tier with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tier with Show::{to_string, output}
 
 ///|
 pub(all) enum CompassDir {
@@ -80,9 +125,18 @@ pub(all) enum CompassDir {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CompassDir with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CompassDir with Eq::{not_equal, equal}
+
+///|
+pub extend CompassDir with Debug::{to_repr}
+
+///|
+pub impl Show for CompassDir with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CompassDir with Show::{to_string, output}
 
 ///|
 pub(all) enum ClueStatus {
@@ -92,9 +146,18 @@ pub(all) enum ClueStatus {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ClueStatus with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ClueStatus with Eq::{not_equal, equal}
+
+///|
+pub extend ClueStatus with Debug::{to_repr}
+
+///|
+pub impl Show for ClueStatus with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ClueStatus with Show::{to_string, output}
 
 ///|
 pub(all) enum HintLevel {
@@ -105,6 +168,15 @@ pub(all) enum HintLevel {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for HintLevel with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend HintLevel with Eq::{not_equal, equal}
+
+///|
+pub extend HintLevel with Debug::{to_repr}
+
+///|
+pub impl Show for HintLevel with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend HintLevel with Show::{to_string, output}

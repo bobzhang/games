@@ -212,7 +212,7 @@ test "validate_level_structure catches bad button link" {
     world: 0,
     level: 0,
     ascii: "#####\n#S.X#\n#####",
-    button_links: [{ button_id: 99, door_id: 99 }],
+    button_links: [{ button_id: 99, door_id: 99, }],
     guard_patrols: [],
     timed_door_durations: [],
     par_loops: 1,
@@ -245,7 +245,13 @@ test "validate_level_structure catches bad guard patrol" {
 test "door animation progress updates correctly" {
   let ms : @types.MazeState = {
     door_states: [
-      { door_id: 0, open: true, timer: 0, anim_progress: 0.0, prev_open: false },
+      {
+        door_id: 0,
+        open: true,
+        timer: 0,
+        anim_progress: 0.0,
+        prev_open: false,
+      },
     ],
     button_pressed: [],
     guard_states: [],

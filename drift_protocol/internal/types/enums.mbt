@@ -10,9 +10,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum TileKind {
@@ -30,9 +39,18 @@ pub(all) enum TileKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TileKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TileKind with Eq::{not_equal, equal}
+
+///|
+pub extend TileKind with Debug::{to_repr}
+
+///|
+pub impl Show for TileKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TileKind with Show::{to_string, output}
 
 ///|
 pub(all) enum GuardKind {
@@ -42,9 +60,18 @@ pub(all) enum GuardKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for GuardKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend GuardKind with Eq::{not_equal, equal}
+
+///|
+pub extend GuardKind with Debug::{to_repr}
+
+///|
+pub impl Show for GuardKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend GuardKind with Show::{to_string, output}
 
 ///|
 pub(all) enum AlertState {
@@ -54,9 +81,18 @@ pub(all) enum AlertState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for AlertState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend AlertState with Eq::{not_equal, equal}
+
+///|
+pub extend AlertState with Debug::{to_repr}
+
+///|
+pub impl Show for AlertState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend AlertState with Show::{to_string, output}
 
 ///|
 pub(all) enum HackState {
@@ -68,9 +104,18 @@ pub(all) enum HackState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for HackState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend HackState with Eq::{not_equal, equal}
+
+///|
+pub extend HackState with Debug::{to_repr}
+
+///|
+pub impl Show for HackState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend HackState with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -81,9 +126,18 @@ pub(all) enum Direction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum SoundEvent {
@@ -98,9 +152,18 @@ pub(all) enum SoundEvent {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for SoundEvent with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend SoundEvent with Eq::{not_equal, equal}
+
+///|
+pub extend SoundEvent with Debug::{to_repr}
+
+///|
+pub impl Show for SoundEvent with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend SoundEvent with Show::{to_string, output}
 
 ///|
 pub(all) enum ScoreGrade {
@@ -111,9 +174,18 @@ pub(all) enum ScoreGrade {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ScoreGrade with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ScoreGrade with Eq::{not_equal, equal}
+
+///|
+pub extend ScoreGrade with Debug::{to_repr}
+
+///|
+pub impl Show for ScoreGrade with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ScoreGrade with Show::{to_string, output}
 
 ///|
 pub(all) enum Tier {
@@ -122,6 +194,15 @@ pub(all) enum Tier {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Tier with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tier with Eq::{not_equal, equal}
+
+///|
+pub extend Tier with Debug::{to_repr}
+
+///|
+pub impl Show for Tier with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tier with Show::{to_string, output}

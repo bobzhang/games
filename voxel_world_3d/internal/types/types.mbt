@@ -14,7 +14,7 @@ pub(all) struct Chunk {
 /// Creates a new empty chunk initialized with `block_air`.
 pub fn Chunk::Chunk(cx : Int, cz : Int) -> Chunk {
   let size = chunk_x * chunk_y * chunk_z
-  { blocks: Array::make(size, block_air), cx, cz, dirty: true, biome: Plains }
+  { blocks: Array::make(size, block_air), cx, cz, dirty: true, biome: Plains, }
 }
 
 ///|
@@ -54,13 +54,13 @@ pub(all) struct ItemSlot {
 ///|
 /// Creates an empty item slot.
 pub fn ItemSlot::empty() -> ItemSlot {
-  { item_id: 0, count: 0 }
+  { item_id: 0, count: 0, }
 }
 
 ///|
 /// Creates an item slot with `item_id` and `count`.
 pub fn ItemSlot::make(item_id : Int, count : Int) -> ItemSlot {
-  { item_id, count }
+  { item_id, count, }
 }
 
 // Inventory system
@@ -90,7 +90,7 @@ pub fn Inventory::Inventory() -> Inventory {
   slots[6] = ItemSlot::make(block_glass, 16)
   slots[7] = ItemSlot::make(block_brick, 16)
   slots[8] = ItemSlot::make(block_torch, 8)
-  { slots, selected: 0 }
+  { slots, selected: 0, }
 }
 
 // Add item to inventory, returns count that could not be added
@@ -241,7 +241,7 @@ pub(all) struct BlockHit {
 ///|
 /// Creates an empty block-hit record.
 pub fn BlockHit::BlockHit() -> BlockHit {
-  { hit: false, bx: 0, by: 0, bz: 0, nx: 0, ny: 0, nz: 0, distance: 0.0 }
+  { hit: false, bx: 0, by: 0, bz: 0, nx: 0, ny: 0, nz: 0, distance: 0.0, }
 }
 
 // Entity (mob) struct

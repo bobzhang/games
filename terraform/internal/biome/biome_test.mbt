@@ -152,7 +152,7 @@ test "locked tiles not affected by ecosystem" {
   let grid = @types.new_grid(5, 5, false)
   // Create a locked ocean tile
   let idx = @types.grid_index(2, 2, 5)
-  grid.tiles[idx] = { biome: Ocean, locked: true }
+  grid.tiles[idx] = { biome: Ocean, locked: true, }
   // Surround with desert
   @types.set_biome(grid, 1, 1, Desert)
   @types.set_biome(grid, 2, 1, Desert)

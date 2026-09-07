@@ -19,4 +19,3 @@ pub fn process_events(Array[@types.GameEvent]) -> Unit
 // Type aliases
 
 // Traits
-

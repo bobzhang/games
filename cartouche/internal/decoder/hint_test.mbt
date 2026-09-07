@@ -71,7 +71,7 @@ test "find_hint returns None when all mapped" {
   let current = @types.new_mapping()
   @types.mapping_set(current, Circle, 0)
   let hint = @decoder.find_hint(tablet, current)
-  inspect(hint, content="None")
+  debug_inspect(hint, content="None")
 }
 
 ///|

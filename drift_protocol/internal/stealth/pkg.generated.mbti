@@ -29,4 +29,3 @@ pub fn update_shadow_state(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

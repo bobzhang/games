@@ -2,34 +2,52 @@
 pub(all) struct Vec2f {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2f with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2f with Debug::{to_repr}
 
 ///|
 pub(all) struct Planet {
   pos : Vec2f
   mass : Float
   radius : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Planet with Debug::{to_repr}
 
 ///|
 pub(all) struct Station {
   pos : Vec2f
   radius : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Station with Debug::{to_repr}
 
 ///|
 pub(all) struct Waypoint {
   pos : Vec2f
   radius : Float
   mut collected : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Waypoint with Debug::{to_repr}
 
 ///|
 pub(all) struct Probe {
   mut pos : Vec2f
   mut vel : Vec2f
   mut active : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Probe with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -40,14 +58,20 @@ pub(all) struct Level {
   par_ticks : Int
   name : String
   tier : Tier
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_ticks : Int
   mut stars : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Star {
@@ -55,7 +79,10 @@ pub(all) struct Star {
   y : Float
   brightness : Int
   size : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Star with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -73,4 +100,7 @@ pub(all) struct Game {
   stars : Array[Star]
   mut message : String
   mut message_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

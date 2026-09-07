@@ -11,16 +11,16 @@ pub fn mirror_direction(dir : Direction) -> Direction {
 ///|
 pub fn direction_delta(dir : Direction) -> Vec2i {
   match dir {
-    Up => { x: 0, y: -1 }
-    Down => { x: 0, y: 1 }
-    Left => { x: -1, y: 0 }
-    Right => { x: 1, y: 0 }
+    Up => { x: 0, y: -1, }
+    Down => { x: 0, y: 1, }
+    Left => { x: -1, y: 0, }
+    Right => { x: 1, y: 0, }
   }
 }
 
 ///|
 pub fn vec2i_add(a : Vec2i, b : Vec2i) -> Vec2i {
-  { x: a.x + b.x, y: a.y + b.y }
+  { x: a.x + b.x, y: a.y + b.y, }
 }
 
 ///|
@@ -53,27 +53,25 @@ pub fn is_walkable(tile : TileKind, door_states : Array[Bool]) -> Bool {
 
 ///|
 pub fn new_character(pos : Vec2i) -> Character {
-  { pos, on_anchor: false, reached_exit: false, alive: true }
+  { pos, on_anchor: false, reached_exit: false, alive: true, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, best_moves: 9999, stars: 0, gem_collected: false }
+  { completed: false, best_moves: 9999, stars: 0, gem_collected: false, }
 }
 
 ///|
 pub fn make_snapshot(game : Game) -> Snapshot {
-  let ds : Array[Bool] = Array::new(capacity=game.door_states.length())
+  let ds : Array[Bool] = Array(capacity=game.door_states.length())
   for i in 0..<game.door_states.length() {
     ds.push(game.door_states[i])
   }
-  let fg : Array[Bool] = Array::new(capacity=game.floor_gems_collected.length())
+  let fg : Array[Bool] = Array(capacity=game.floor_gems_collected.length())
   for i in 0..<game.floor_gems_collected.length() {
     fg.push(game.floor_gems_collected[i])
   }
-  let cg : Array[Bool] = Array::new(
-    capacity=game.ceiling_gems_collected.length(),
-  )
+  let cg : Array[Bool] = Array(capacity=game.ceiling_gems_collected.length())
   for i in 0..<game.ceiling_gems_collected.length() {
     cg.push(game.ceiling_gems_collected[i])
   }
@@ -118,8 +116,8 @@ pub fn new_game() -> Game {
     selected_world: 0,
     selected_level: 0,
     current_level: None,
-    luna: new_character({ x: 0, y: 0 }),
-    sol: new_character({ x: 0, y: 0 }),
+    luna: new_character({ x: 0, y: 0, }),
+    sol: new_character({ x: 0, y: 0, }),
     door_states: [],
     floor_gems_collected: [],
     ceiling_gems_collected: [],
@@ -144,17 +142,17 @@ pub fn init_level(game : Game, level : Level) -> Unit {
   game.sol.on_anchor = false
   game.sol.reached_exit = false
   game.sol.alive = true
-  let ds : Array[Bool] = Array::new(capacity=max_door_ids)
+  let ds : Array[Bool] = Array(capacity=max_door_ids)
   for _i in 0..<max_door_ids {
     ds.push(false)
   }
   game.door_states = ds
-  let fg : Array[Bool] = Array::new(capacity=level.gems.length())
+  let fg : Array[Bool] = Array(capacity=level.gems.length())
   for _i in 0..<level.gems.length() {
     fg.push(false)
   }
   game.floor_gems_collected = fg
-  let cg : Array[Bool] = Array::new(capacity=level.ceiling_gems.length())
+  let cg : Array[Bool] = Array(capacity=level.ceiling_gems.length())
   for _i in 0..<level.ceiling_gems.length() {
     cg.push(false)
   }

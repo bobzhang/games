@@ -12,7 +12,7 @@ pub fn compute_preview(
   let mut py = start_pos.y
   let mut dx = @types.cosf(aim_angle)
   let mut dy = @types.sinf(aim_angle)
-  points.push({ pos: @types.vec2(px, py), is_bounce: false })
+  points.push({ pos: @types.vec2(px, py), is_bounce: false, })
   let step_dist : Float = 2.0
   let max_steps = 3000
   let mut bounces = 0
@@ -102,10 +102,10 @@ pub fn compute_preview(
     py = @types.clampf(py, br, @types.arena_height - br)
     if bounced {
       bounces += 1
-      points.push({ pos: @types.vec2(px, py), is_bounce: true })
+      points.push({ pos: @types.vec2(px, py), is_bounce: true, })
     }
   }
   // Add final position
-  points.push({ pos: @types.vec2(px, py), is_bounce: false })
+  points.push({ pos: @types.vec2(px, py), is_bounce: false, })
   points
 }

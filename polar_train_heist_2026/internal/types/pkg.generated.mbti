@@ -195,6 +195,8 @@ pub(all) enum EntityKind {
   Battery
   Signal
 } derive(Eq)
+pub fn EntityKind::equal(Self, Self) -> Bool
+pub fn EntityKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Fx {
   mut active : Bool
@@ -263,6 +265,8 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Player {
   mut x : Float
@@ -322,4 +326,3 @@ pub fn Shot::Shot() -> Self
 // Type aliases
 
 // Traits
-

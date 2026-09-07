@@ -27,4 +27,3 @@ pub fn score_patterns(@types.HexBoard, @types.Player) -> Int
 // Type aliases
 
 // Traits
-

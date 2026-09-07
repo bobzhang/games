@@ -58,7 +58,7 @@ fn make_bricks() -> Array[Brick] {
       let px = bricks_x0 + c * (brick_w + brick_gap)
       let py = bricks_y0 + r * (brick_h + brick_gap)
       let hp = if r < 2 { 3 } else if r < 5 { 2 } else { 1 }
-      arr.push({ alive: true, x: px, y: py, hp })
+      arr.push({ alive: true, x: px, y: py, hp, })
     }
   }
   arr

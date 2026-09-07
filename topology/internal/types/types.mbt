@@ -2,12 +2,24 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show, Compare)
+} derive(Eq, Debug, Compare)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
+
+///|
+pub extend Vec2i with Compare::{op_lt, op_le, op_ge, compare, op_gt}
 
 ///|
 pub(all) struct Shape {
   mut cells : Array[Vec2i]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Shape with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {

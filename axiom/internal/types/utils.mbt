@@ -1,11 +1,11 @@
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn vec2i_add(a : Vec2i, b : Vec2i) -> Vec2i {
-  { x: a.x + b.x, y: a.y + b.y }
+  { x: a.x + b.x, y: a.y + b.y, }
 }
 
 ///|
@@ -72,11 +72,11 @@ pub fn new_grid(w : Int, h : Int) -> Grid {
   for _y in 0..<h {
     let row : Array[Tile] = []
     for _x in 0..<w {
-      row.push({ kind: Floor })
+      row.push({ kind: Floor, })
     }
     tiles.push(row)
   }
-  { tiles, width: w, height: h }
+  { tiles, width: w, height: h, }
 }
 
 ///|
@@ -102,12 +102,12 @@ pub fn grid_set(g : Grid, x : Int, y : Int, kind : TileKind) -> Unit {
 
 ///|
 pub fn new_robot(x : Int, y : Int, dir : Direction) -> Robot {
-  { pos: vec2i(x, y), dir, alive: true }
+  { pos: vec2i(x, y), dir, alive: true, }
 }
 
 ///|
 pub fn new_program() -> Program {
-  { commands: [], max_slots: max_instructions }
+  { commands: [], max_slots: max_instructions, }
 }
 
 ///|
@@ -124,12 +124,12 @@ pub fn new_editor_state(available : Array[CommandKind]) -> EditorState {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, best_instructions: 999, medal: None_ }
+  { completed: false, best_instructions: 999, medal: None_, }
 }
 
 ///|
 pub fn clone_robot(r : Robot) -> Robot {
-  { pos: vec2i(r.pos.x, r.pos.y), dir: r.dir, alive: r.alive }
+  { pos: vec2i(r.pos.x, r.pos.y), dir: r.dir, alive: r.alive, }
 }
 
 ///|

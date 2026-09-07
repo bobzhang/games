@@ -37,4 +37,3 @@ pub fn update_timed_lava(@types.Level, Float) -> Unit
 // Type aliases
 
 // Traits
-

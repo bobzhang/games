@@ -192,6 +192,11 @@ pub(all) enum BallState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn BallState::equal(Self, Self) -> Bool
+pub fn BallState::not_equal(Self, Self) -> Bool
+pub fn BallState::output(Self, &Logger) -> Unit
+pub fn BallState::to_repr(Self) -> @debug.Repr
+pub fn BallState::to_string(Self) -> String
 pub impl Show for BallState
 
 pub(all) struct Bumper {
@@ -257,6 +262,11 @@ pub(all) enum ObjectKind {
   Bumper
   Pickup
 } derive(Eq, @debug.Debug)
+pub fn ObjectKind::equal(Self, Self) -> Bool
+pub fn ObjectKind::not_equal(Self, Self) -> Bool
+pub fn ObjectKind::output(Self, &Logger) -> Unit
+pub fn ObjectKind::to_repr(Self) -> @debug.Repr
+pub fn ObjectKind::to_string(Self) -> String
 pub impl Show for ObjectKind
 
 pub(all) struct PreviewPoint {
@@ -272,6 +282,11 @@ pub(all) enum Screen {
   Results
   Paused
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct Splitter {
@@ -290,7 +305,10 @@ pub(all) struct Target {
 pub(all) struct Vec2 {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2::equal(Self, Self) -> Bool
+pub fn Vec2::not_equal(Self, Self) -> Bool
+pub fn Vec2::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Wall {
   p1 : Vec2
@@ -300,4 +318,3 @@ pub(all) struct Wall {
 // Type aliases
 
 // Traits
-

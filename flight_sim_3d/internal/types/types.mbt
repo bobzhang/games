@@ -621,7 +621,7 @@ pub(all) struct GameMessage {
 ///|
 /// Creates an empty game message with no text or timer.
 pub fn GameMessage::empty() -> GameMessage {
-  { text: "", timer: 0.0, priority: 0 }
+  { text: "", timer: 0.0, priority: 0, }
 }
 
 // Mission definition

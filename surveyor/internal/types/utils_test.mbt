@@ -143,7 +143,7 @@ test "is_region_rectangular detects rectangles" {
   }
   assert_false(is_region_rectangular(r2))
   // Empty region is rectangular
-  let r3 : Region = { tiles: [], houses: [], has_road: false, area: 0 }
+  let r3 : Region = { tiles: [], houses: [], has_road: false, area: 0, }
   assert_true(is_region_rectangular(r3))
 }
 

@@ -220,6 +220,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Convert a game state to an integer.
 pub fn GameState::to_int(self : GameState) -> Int {
   match self {
@@ -770,6 +773,9 @@ pub(all) enum ShipClass {
 } derive(Eq)
 
 ///|
+pub extend ShipClass with Eq::{not_equal, equal}
+
+///|
 /// Enemy variant.
 pub(all) enum EnemyKind {
   None
@@ -787,6 +793,9 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Spell type.
 pub(all) enum Spell {
   None
@@ -799,6 +808,9 @@ pub(all) enum Spell {
 } derive(Eq)
 
 ///|
+pub extend Spell with Eq::{not_equal, equal}
+
+///|
 /// Trap variant.
 pub(all) enum TrapKind {
   Spike
@@ -807,6 +819,9 @@ pub(all) enum TrapKind {
   Poison
   Pitfall
 } derive(Eq)
+
+///|
+pub extend TrapKind with Eq::{not_equal, equal}
 
 ///|
 /// Weapon variant.
@@ -820,6 +835,9 @@ pub(all) enum WeaponKind {
 } derive(Eq)
 
 // Boss phase thresholds
+
+///|
+pub extend WeaponKind with Eq::{not_equal, equal}
 
 ///|
 /// HP fraction below which boss enters phase 2 (faster attacks, new patterns).
@@ -872,6 +890,9 @@ pub(all) enum WeaponAffix {
   AffixHeavy
   AffixKeen
 } derive(Eq)
+
+///|
+pub extend WeaponAffix with Eq::{not_equal, equal}
 
 ///|
 /// Returns display name for a weapon affix.

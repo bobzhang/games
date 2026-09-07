@@ -90,12 +90,7 @@ fn draw_background() -> Unit {
     )
   }
 
-  @raylib.draw_circle(
-    180,
-    120,
-    160.0,
-    @raylib.Color::new(70, 120, 210, 86),
-  )
+  @raylib.draw_circle(180, 120, 160.0, @raylib.Color::new(70, 120, 210, 86))
   @raylib.draw_circle(
     @types.screen_w - 220,
     160,

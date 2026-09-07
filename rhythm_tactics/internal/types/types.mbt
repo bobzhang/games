@@ -2,7 +2,13 @@
 pub(all) struct Cell {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Cell with Eq::{not_equal, equal}
+
+///|
+pub extend Cell with Debug::{to_repr}
 
 ///|
 pub(all) struct Tile {
@@ -10,16 +16,19 @@ pub(all) struct Tile {
   mut has_item : Bool
   mut item_kind : Int
   mut item : ItemKind?
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Tile with Debug::{to_repr}
 
 ///|
 pub fn Tile::floor() -> Tile {
-  { kind: Floor, has_item: false, item_kind: 0, item: None }
+  { kind: Floor, has_item: false, item_kind: 0, item: None, }
 }
 
 ///|
 pub fn Tile::wall() -> Tile {
-  { kind: Wall, has_item: false, item_kind: 0, item: None }
+  { kind: Wall, has_item: false, item_kind: 0, item: None, }
 }
 
 ///|
@@ -38,7 +47,10 @@ pub(all) struct Enemy {
   mut is_elite : Bool
   mut frozen_beats : Int
   mut stunned_beats : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Enemy with Debug::{to_repr}
 
 ///|
 pub fn Enemy::new(
@@ -75,7 +87,10 @@ pub(all) struct Weapon {
   range : Int
   beat_cost : Int
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Weapon with Debug::{to_repr}
 
 ///|
 pub(all) struct Player {
@@ -104,7 +119,10 @@ pub(all) struct Player {
   spell_slots : SpellSlots
   learned_spells : Array[SpellKind]
   mut floor_attacks : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Player with Debug::{to_repr}
 
 ///|
 pub fn Player::new() -> Player {
@@ -142,7 +160,10 @@ pub(all) struct Grid {
   width : Int
   height : Int
   tiles : Array[Tile]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Grid with Debug::{to_repr}
 
 ///|
 pub fn Grid::new(width : Int, height : Int) -> Grid {
@@ -150,7 +171,7 @@ pub fn Grid::new(width : Int, height : Int) -> Grid {
   for _ in 0..<(width * height) {
     tiles.push(Tile::floor())
   }
-  { width, height, tiles }
+  { width, height, tiles, }
 }
 
 ///|
@@ -165,7 +186,10 @@ pub(all) struct BeatState {
   mut max_combo : Int
   mut perfect_window : Float
   mut good_window : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend BeatState with Debug::{to_repr}
 
 ///|
 pub fn BeatState::new(bpm : Float) -> BeatState {
@@ -190,7 +214,10 @@ pub(all) struct Floor {
   floor_num : Int
   exit_x : Int
   exit_y : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Floor with Debug::{to_repr}
 
 ///|
 pub fn Floor::new(floor_num : Int) -> Floor {
@@ -215,7 +242,10 @@ pub(all) struct Particle {
   g : Int
   b : Int
   mut size : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Particle with Debug::{to_repr}
 
 ///|
 pub(all) struct ShopEntry {
@@ -223,7 +253,10 @@ pub(all) struct ShopEntry {
   price : Int
   name : String
   desc : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend ShopEntry with Debug::{to_repr}
 
 ///|
 pub(all) struct ScoreState {
@@ -232,11 +265,14 @@ pub(all) struct ScoreState {
   mut combo_bonus : Int
   mut floor_bonus : Int
   mut total : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend ScoreState with Debug::{to_repr}
 
 ///|
 pub fn ScoreState::new() -> ScoreState {
-  { base_kills: 0, beat_bonus: 0, combo_bonus: 0, floor_bonus: 0, total: 0 }
+  { base_kills: 0, beat_bonus: 0, combo_bonus: 0, floor_bonus: 0, total: 0, }
 }
 
 ///|
@@ -247,7 +283,7 @@ pub(all) struct FloorThemeData {
   wall_color : @raylib.Color
   accent_color : @raylib.Color
   name : String
-} derive(Show)
+}
 
 ///|
 pub(all) struct ComboState {
@@ -258,7 +294,10 @@ pub(all) struct ComboState {
   mut storm_triggered : Bool
   mut last_milestone : ComboMilestone
   mut milestone_flash_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend ComboState with Debug::{to_repr}
 
 ///|
 pub fn ComboState::new() -> ComboState {
@@ -285,7 +324,10 @@ pub(all) struct MetaProgress {
   unlocked_weapons : Array[WeaponKind]
   floor_mastery : Array[Int]
   run_history : Array[RunRecord]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend MetaProgress with Debug::{to_repr}
 
 ///|
 pub fn MetaProgress::new() -> MetaProgress {
@@ -314,16 +356,22 @@ pub(all) struct RunRecord {
   floors : Int
   weapon : WeaponKind
   grade : ScoreGrade
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend RunRecord with Debug::{to_repr}
 
 ///|
 pub(all) struct AbilityChoice {
   ability : AbilityKind
   name : String
   desc : String
-} derive(Show)
+} derive(Debug)
 
 // === Spell System ===
+
+///|
+pub extend AbilityChoice with Debug::{to_repr}
 
 ///|
 pub(all) struct SpellData {
@@ -336,17 +384,23 @@ pub(all) struct SpellData {
   damage : Int
   range : Int
   aoe_radius : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend SpellData with Debug::{to_repr}
 
 ///|
 pub(all) struct SpellSlots {
   spells : Array[SpellKind?]
   mut cooldowns : Array[Int]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend SpellSlots with Debug::{to_repr}
 
 ///|
 pub fn SpellSlots::new() -> SpellSlots {
-  { spells: [None, None, None, None], cooldowns: [0, 0, 0, 0] }
+  { spells: [None, None, None, None], cooldowns: [0, 0, 0, 0], }
 }
 
 // === Curse / Run Modifier System ===
@@ -354,11 +408,14 @@ pub fn SpellSlots::new() -> SpellSlots {
 ///|
 pub(all) struct CurseState {
   active_curses : Array[CurseKind]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend CurseState with Debug::{to_repr}
 
 ///|
 pub fn CurseState::new() -> CurseState {
-  { active_curses: [] }
+  { active_curses: [], }
 }
 
 // === Achievement System ===
@@ -369,19 +426,28 @@ pub(all) struct Achievement {
   name : String
   desc : String
   mut unlocked : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Achievement with Debug::{to_repr}
 
 ///|
 pub(all) struct AchievementState {
   achievements : Array[Achievement]
   toasts : Array[AchievementToast]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend AchievementState with Debug::{to_repr}
 
 ///|
 pub(all) struct AchievementToast {
   text : String
   mut timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend AchievementToast with Debug::{to_repr}
 
 ///|
 pub fn AchievementState::new() -> AchievementState {
@@ -423,7 +489,7 @@ pub fn AchievementState::new() -> AchievementState {
       unlocked: false,
     },
   ]
-  { achievements: achs, toasts: [] }
+  { achievements: achs, toasts: [], }
 }
 
 // === Visual Polish: Damage Numbers ===
@@ -436,7 +502,7 @@ pub(all) struct DamageNumber {
   mut life : Float
   value : Int
   color : @raylib.Color
-} derive(Show)
+}
 
 // === Weapon Visual Effects ===
 
@@ -448,7 +514,10 @@ pub(all) struct WeaponEffect {
   direction : Direction
   mut timer : Float
   max_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend WeaponEffect with Debug::{to_repr}
 
 ///|
 pub fn WeaponEffect::new(
@@ -457,7 +526,7 @@ pub fn WeaponEffect::new(
   y : Float,
   direction : Direction,
 ) -> WeaponEffect {
-  { kind, x, y, direction, timer: 0.2, max_timer: 0.2 }
+  { kind, x, y, direction, timer: 0.2, max_timer: 0.2, }
 }
 
 // === Boss Phase Tracking ===
@@ -470,7 +539,10 @@ pub(all) struct BossPhaseState {
   mut lich_teleport_cooldown : Int
   mut dragon_4dir_cooldown : Int
   mut lich_double_summon : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend BossPhaseState with Debug::{to_repr}
 
 ///|
 pub fn BossPhaseState::new() -> BossPhaseState {
@@ -495,7 +567,10 @@ pub(all) struct FloorStats {
   mut spells_cast : Int
   mut damage_taken : Int
   mut damage_dealt : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend FloorStats with Debug::{to_repr}
 
 ///|
 pub fn FloorStats::new(floor_num : Int) -> FloorStats {
@@ -521,7 +596,10 @@ pub(all) struct RunStats {
   mut total_spells_cast : Int
   mut total_damage_dealt : Int
   mut total_damage_taken : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend RunStats with Debug::{to_repr}
 
 ///|
 pub fn RunStats::new() -> RunStats {
@@ -597,7 +675,7 @@ pub(all) struct Game {
   mut weapon_switch_flash : Float
   mut floor_wipe_progress : Float
   mut boss_intro_pulse : Float
-} derive(Show)
+}
 
 ///|
 pub fn Game::new() -> Game {
@@ -655,3 +733,35 @@ pub fn Game::new() -> Game {
     boss_intro_pulse: 0.0,
   }
 }
+
+///|
+/// `@raylib.Color` has no `Debug` impl, so the color-carrying structs below
+/// cannot derive one. Render each color as its `(r, g, b, a)` channels.
+fn color_repr(c : @raylib.Color) -> (Byte, Byte, Byte, Byte) {
+  (c.r, c.g, c.b, c.a)
+}
+
+///|
+pub impl Debug for FloorThemeData with fn to_repr(self) {
+  Repr(
+    (
+      self.theme,
+      color_repr(self.bg_color),
+      color_repr(self.floor_color),
+      color_repr(self.wall_color),
+      color_repr(self.accent_color),
+      self.name,
+    ),
+  )
+}
+
+///|
+pub extend FloorThemeData with Debug::{to_repr}
+
+///|
+pub impl Debug for DamageNumber with fn to_repr(self) {
+  Repr((self.x, self.y, self.vy, self.life, self.value, color_repr(self.color)))
+}
+
+///|
+pub extend DamageNumber with Debug::{to_repr}

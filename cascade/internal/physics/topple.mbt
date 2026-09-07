@@ -11,7 +11,7 @@ pub fn simulate(
     if dominoes[i].is_starter && dominoes[i].state == Standing {
       dominoes[i].state = Toppling
       dominoes[i].topple_tick = 0
-      events.push({ pos: dominoes[i].pos, tick: 0, kind: dominoes[i].kind })
+      events.push({ pos: dominoes[i].pos, tick: 0, kind: dominoes[i].kind, })
     }
   }
   let mut current_tick = 0
@@ -118,7 +118,7 @@ fn trigger_in_direction(
         if target.kind == Delay {
           target.delay_remaining = 2
         }
-        events.push({ pos: target.pos, tick, kind: target.kind })
+        events.push({ pos: target.pos, tick, kind: target.kind, })
         // Only topple the first domino found in this direction
         return
       }

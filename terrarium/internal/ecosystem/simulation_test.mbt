@@ -112,8 +112,8 @@ test "herbivore_has_food_with_plant" {
 ///|
 test "count_alive_all_alive" {
   let orgs : Array[@types.OrganismState] = [
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
-    { kind: Beetle, row: 1, col: 1, alive: true, health: 100.0 },
+    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
+    { kind: Beetle, row: 1, col: 1, alive: true, health: 100.0, },
   ]
   assert_eq(count_alive(orgs), 2)
 }
@@ -121,9 +121,9 @@ test "count_alive_all_alive" {
 ///|
 test "count_alive_some_dead" {
   let orgs : Array[@types.OrganismState] = [
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
-    { kind: Beetle, row: 1, col: 1, alive: false, health: 0.0 },
-    { kind: Fern, row: 2, col: 2, alive: true, health: 50.0 },
+    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
+    { kind: Beetle, row: 1, col: 1, alive: false, health: 0.0, },
+    { kind: Fern, row: 2, col: 2, alive: true, health: 50.0, },
   ]
   assert_eq(count_alive(orgs), 2)
 }
@@ -131,7 +131,7 @@ test "count_alive_some_dead" {
 ///|
 test "count_alive_all_dead" {
   let orgs : Array[@types.OrganismState] = [
-    { kind: Moss, row: 0, col: 0, alive: false, health: 0.0 },
+    { kind: Moss, row: 0, col: 0, alive: false, health: 0.0, },
   ]
   assert_eq(count_alive(orgs), 0)
 }
@@ -148,7 +148,7 @@ test "apply_organism_effects_moss_produces_o2" {
   }
   grid[0][0] = Organism(Moss)
   let orgs : Array[@types.OrganismState] = [
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
+    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let events = apply_organism_effects(orgs, res, grid)
@@ -169,7 +169,7 @@ test "apply_organism_effects_beetle_no_food_loses_health" {
   }
   grid[2][2] = Organism(Beetle)
   let orgs : Array[@types.OrganismState] = [
-    { kind: Beetle, row: 2, col: 2, alive: true, health: 100.0 },
+    { kind: Beetle, row: 2, col: 2, alive: true, health: 100.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let events = apply_organism_effects(orgs, res, grid)
@@ -189,7 +189,7 @@ test "apply_organism_effects_beetle_starves" {
   }
   grid[2][2] = Organism(Beetle)
   let orgs : Array[@types.OrganismState] = [
-    { kind: Beetle, row: 2, col: 2, alive: true, health: 10.0 },
+    { kind: Beetle, row: 2, col: 2, alive: true, health: 10.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let _events = apply_organism_effects(orgs, res, grid)
@@ -209,7 +209,7 @@ test "check_resource_deaths_no_deaths" {
   }
   grid[0][0] = Organism(Moss)
   let orgs : Array[@types.OrganismState] = [
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
+    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let events = check_resource_deaths(orgs, res, grid)
@@ -229,7 +229,7 @@ test "check_resource_deaths_low_water_kills_moss" {
   }
   grid[0][0] = Organism(Moss)
   let orgs : Array[@types.OrganismState] = [
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
+    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 0.0, 50.0)
   let events = check_resource_deaths(orgs, res, grid)
@@ -242,7 +242,13 @@ test "check_resource_deaths_low_water_kills_moss" {
 test "simulate_turn_increments_turn" {
   let game = @types.new_game()
   game.grid[0][0] = Organism(Moss)
-  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
+  game.organisms.push({
+    kind: Moss,
+    row: 0,
+    col: 0,
+    alive: true,
+    health: 100.0,
+  })
   game.resources = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let log = simulate_turn(game)
   assert_eq(log.turn, 1)
@@ -253,7 +259,13 @@ test "simulate_turn_increments_turn" {
 test "simulate_turn_moss_changes_resources" {
   let game = @types.new_game()
   game.grid[0][0] = Organism(Moss)
-  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
+  game.organisms.push({
+    kind: Moss,
+    row: 0,
+    col: 0,
+    alive: true,
+    health: 100.0,
+  })
   game.resources = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let _log = simulate_turn(game)
   // Moss: o2+8, co2-4, water-3, nutrients-1
@@ -267,7 +279,13 @@ test "simulate_turn_moss_changes_resources" {
 test "evaluate_result_victory" {
   let game = @types.new_game()
   game.current_turn = 10
-  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
+  game.organisms.push({
+    kind: Moss,
+    row: 0,
+    col: 0,
+    alive: true,
+    health: 100.0,
+  })
   let result = evaluate_result(game)
   assert_eq(result, Victory)
 }
@@ -276,7 +294,7 @@ test "evaluate_result_victory" {
 test "evaluate_result_all_dead" {
   let game = @types.new_game()
   game.current_turn = 5
-  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: false, health: 0.0 })
+  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: false, health: 0.0, })
   let result = evaluate_result(game)
   assert_eq(result, Failure("All organisms died!"))
 }
@@ -285,7 +303,13 @@ test "evaluate_result_all_dead" {
 test "evaluate_result_collapse" {
   let game = @types.new_game()
   game.current_turn = 7
-  game.organisms.push({ kind: Moss, row: 0, col: 0, alive: true, health: 100.0 })
+  game.organisms.push({
+    kind: Moss,
+    row: 0,
+    col: 0,
+    alive: true,
+    health: 100.0,
+  })
   let result = evaluate_result(game)
   assert_eq(result, Failure("Ecosystem collapsed at turn 7"))
 }
@@ -296,8 +320,8 @@ test "run_full_simulation_10_turns" {
   game.grid[0][0] = Organism(Moss)
   game.grid[1][1] = Organism(Worm)
   game.organisms = [
-    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0 },
-    { kind: Worm, row: 1, col: 1, alive: true, health: 100.0 },
+    { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
+    { kind: Worm, row: 1, col: 1, alive: true, health: 100.0, },
   ]
   game.resources = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   run_full_simulation(game)
@@ -316,7 +340,7 @@ test "dead_organism_does_not_produce" {
     grid.push(row)
   }
   let orgs : Array[@types.OrganismState] = [
-    { kind: Moss, row: 0, col: 0, alive: false, health: 0.0 },
+    { kind: Moss, row: 0, col: 0, alive: false, health: 0.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
   let events = apply_organism_effects(orgs, res, grid)

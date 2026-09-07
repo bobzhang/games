@@ -14,7 +14,7 @@ fn main {
   ]
 
   let mut clipboard_text : String = ""
-  let input_buffer : Ref[String] = { val: "Hello from raylib!" }
+  let input_buffer : Ref[String] = { val: "Hello from raylib!", }
 
   // UI required variables
   let mut text_box_edit_mode = false
@@ -130,7 +130,7 @@ fn main {
       "Clipboard current text data:",
     )
     @raygui.gui_set_style(@raygui.ControlTextbox, @raygui.TextReadonly, 1)
-    let clipboard_ref : Ref[String] = { val: clipboard_text }
+    let clipboard_ref : Ref[String] = { val: clipboard_text, }
     @raygui.gui_text_box(
       @raylib.Rectangle::new(50.0, 300.0, 700.0, 40.0),
       clipboard_ref,

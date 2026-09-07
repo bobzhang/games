@@ -378,7 +378,7 @@ fn main {
   }
 
   let cows : Array[Cow] = Array::makei(max_cows, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, vx: 0.0, state: 0, t: 0.0, panic_t: 0.0 }
+    { active: false, x: 0.0, y: 0.0, vx: 0.0, state: 0, t: 0.0, panic_t: 0.0, }
   })
 
   let farmers : Array[Farmer] = Array::makei(max_farmers, fn(_i) {
@@ -394,11 +394,11 @@ fn main {
   })
 
   let bullets : Array[Bullet] = Array::makei(max_bullets, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, dmg: 0.0, life: 0.0 }
+    { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, dmg: 0.0, life: 0.0, }
   })
 
   let pickups : Array[Pickup] = Array::makei(max_pickups, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, kind: 0, t: 0.0 }
+    { active: false, x: 0.0, y: 0.0, kind: 0, t: 0.0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

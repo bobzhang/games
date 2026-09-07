@@ -1,20 +1,20 @@
 ///|
-let tex_title : Ref[@raylib.Texture?] = { val: None }
+let tex_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_sunny : Ref[@raylib.Texture?] = { val: None }
+let tex_sunny : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_rainy : Ref[@raylib.Texture?] = { val: None }
+let tex_rainy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_cloudy : Ref[@raylib.Texture?] = { val: None }
+let tex_cloudy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_windy : Ref[@raylib.Texture?] = { val: None }
+let tex_windy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_stormy : Ref[@raylib.Texture?] = { val: None }
+let tex_stormy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {

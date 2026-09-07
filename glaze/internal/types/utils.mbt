@@ -1,6 +1,6 @@
 ///|
 pub fn new_cell() -> Cell {
-  { glaze: Empty, fired: FEmpty }
+  { glaze: Empty, fired: FEmpty, }
 }
 
 ///|

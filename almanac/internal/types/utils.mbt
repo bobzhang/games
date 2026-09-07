@@ -149,7 +149,7 @@ pub fn make_grid(
       })
     }
   }
-  { width, height, tiles }
+  { width, height, tiles, }
 }
 
 ///|
@@ -179,7 +179,7 @@ pub fn clear_weather(g : Grid) -> Unit {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, sources_used: 0, turns_taken: 0 }
+  { stars: 0, completed: false, sources_used: 0, turns_taken: 0, }
 }
 
 ///|

@@ -11,7 +11,7 @@ pub fn normalize_rot(rot : Int) -> Int {
 ///|
 /// Helper constructor for tetromino block offsets.
 pub fn make_cell(x : Int, y : Int) -> Cell {
-  { x, y }
+  { x, y, }
 }
 
 ///|

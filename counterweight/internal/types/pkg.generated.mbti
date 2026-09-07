@@ -213,7 +213,8 @@ pub(all) struct Bucket {
   mut filling : Bool
   mut current_y : Float
   mut target_y : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Bucket::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ComponentKind {
   WeightComp
@@ -221,6 +222,11 @@ pub(all) enum ComponentKind {
   BucketComp
   BreakableRopeComp
 } derive(Eq, @debug.Debug)
+pub fn ComponentKind::equal(Self, Self) -> Bool
+pub fn ComponentKind::not_equal(Self, Self) -> Bool
+pub fn ComponentKind::output(Self, &Logger) -> Unit
+pub fn ComponentKind::to_repr(Self) -> @debug.Repr
+pub fn ComponentKind::to_string(Self) -> String
 pub impl Show for ComponentKind
 
 pub(all) struct Crate {
@@ -231,7 +237,8 @@ pub(all) struct Crate {
   mut target_y : Float
   mut target_height : Float
   mut at_target : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Crate::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -262,7 +269,8 @@ pub(all) struct Game {
   mut frame_count : Int
   mut grid_offset_x : Int
   mut grid_offset_y : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelDef {
   mut tier : Tier
@@ -279,20 +287,23 @@ pub(all) struct LevelDef {
   mut par_rehooks : Int
   mut has_waterfall : Bool
   mut waterfall_x : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut connections_used : Int
   mut rehooks : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelTarget {
   mut crate_index : Int
   mut target_height : Float
   mut tolerance : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelTarget::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Node {
   mut id : Int
@@ -303,7 +314,8 @@ pub(all) struct Node {
   mut height : Float
   mut base_height : Float
   mut locked : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Node::to_repr(Self) -> @debug.Repr
 
 pub(all) enum NodeKind {
   Pulley
@@ -312,6 +324,11 @@ pub(all) enum NodeKind {
   CrateHook
   Ratchet
 } derive(Eq, @debug.Debug)
+pub fn NodeKind::equal(Self, Self) -> Bool
+pub fn NodeKind::not_equal(Self, Self) -> Bool
+pub fn NodeKind::output(Self, &Logger) -> Unit
+pub fn NodeKind::to_repr(Self) -> @debug.Repr
+pub fn NodeKind::to_string(Self) -> String
 pub impl Show for NodeKind
 
 pub(all) struct Platform {
@@ -320,7 +337,8 @@ pub(all) struct Platform {
   mut width : Float
   mut height_val : Float
   mut connected_to : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Platform::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Idle
@@ -329,6 +347,11 @@ pub(all) enum PlayState {
   Won
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct Rope {
@@ -340,12 +363,18 @@ pub(all) struct Rope {
   mut max_load : Float
   mut broken : Bool
   mut breakable : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Rope::to_repr(Self) -> @debug.Repr
 
 pub(all) enum RopeSide {
   LeftSide
   RightSide
 } derive(Eq, @debug.Debug)
+pub fn RopeSide::equal(Self, Self) -> Bool
+pub fn RopeSide::not_equal(Self, Self) -> Bool
+pub fn RopeSide::output(Self, &Logger) -> Unit
+pub fn RopeSide::to_repr(Self) -> @debug.Repr
+pub fn RopeSide::to_string(Self) -> String
 pub impl Show for RopeSide
 
 pub(all) enum Screen {
@@ -355,6 +384,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -362,12 +396,20 @@ pub(all) enum Tier {
   Chains
   Workshop
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Weight {
   mut active : Bool
@@ -376,9 +418,9 @@ pub(all) struct Weight {
   mut current_y : Float
   mut target_y : Float
   mut bob_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Weight::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

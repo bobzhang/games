@@ -2,37 +2,58 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Robot {
   mut pos : Vec2i
   mut dir : Direction
   mut alive : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Robot with Debug::{to_repr}
 
 ///|
 pub(all) struct Command {
   mut kind : CommandKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Command with Debug::{to_repr}
 
 ///|
 pub(all) struct Program {
   mut commands : Array[Command]
   mut max_slots : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Program with Debug::{to_repr}
 
 ///|
 pub(all) struct Tile {
   mut kind : TileKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Tile with Debug::{to_repr}
 
 ///|
 pub(all) struct Grid {
   mut tiles : Array[Array[Tile]]
   mut width : Int
   mut height : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Grid with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -41,7 +62,10 @@ pub(all) struct Level {
   mut goals : Array[Vec2i]
   mut goals_collected : Array[Bool]
   mut blocks : Array[Vec2i]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelDef {
@@ -56,7 +80,10 @@ pub(all) struct LevelDef {
   optimal : Int
   hint : String
   available_commands : Array[CommandKind]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 pub(all) struct RobotState {
@@ -66,21 +93,30 @@ pub(all) struct RobotState {
   mut goals_collected : Array[Bool]
   mut blocks : Array[Vec2i]
   mut cmd_index : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend RobotState with Debug::{to_repr}
 
 ///|
 pub(all) struct ExecutionTrace {
   mut states : Array[RobotState]
   mut success : Bool
   mut fail_reason : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend ExecutionTrace with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_instructions : Int
   mut medal : Medal
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct EditorState {
@@ -90,7 +126,10 @@ pub(all) struct EditorState {
   mut palette_commands : Array[CommandKind]
   mut loop_count : Int
   mut condition_index : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend EditorState with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -112,4 +151,7 @@ pub(all) struct Game {
   mut message_timer : Float
   mut title_anim : Float
   mut total_stars : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

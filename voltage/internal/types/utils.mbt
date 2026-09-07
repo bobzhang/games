@@ -81,7 +81,7 @@ pub fn cosf(a : Float) -> Float {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 12345 }
+let rng_state : Ref[Int] = { val: 12345, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {
