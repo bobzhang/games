@@ -25,7 +25,7 @@ fn set_well(
   mass : Float,
   r : Float,
 ) -> Unit {
-  wells[i] = { x, y, mass, r }
+  wells[i] = { x, y, mass, r, }
 }
 
 ///|
@@ -74,7 +74,7 @@ fn main {
   defer @raylib.close_window()
 
   let wells : Array[Well] = Array::makei(4, fn(_i) {
-    { x: 0.0, y: 0.0, mass: 0.0, r: 0.0 }
+    { x: 0.0, y: 0.0, mass: 0.0, r: 0.0, }
   })
 
   let mut level = 1

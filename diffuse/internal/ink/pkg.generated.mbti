@@ -31,4 +31,3 @@ pub fn spread_once(@types.Grid) -> @types.Grid
 // Type aliases
 
 // Traits
-

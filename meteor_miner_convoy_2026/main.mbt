@@ -426,19 +426,19 @@ fn main {
   })
 
   let meteors : Array[Meteor] = Array::makei(max_meteors, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, r: 0.0, hp: 0, ore: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, r: 0.0, hp: 0, ore: 0, active: false, }
   })
 
   let bullets : Array[Bullet] = Array::makei(max_bullets, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false, }
   })
 
   let ores : Array[Ore] = Array::makei(max_ores, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, amount: 0, ttl: 0.0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, amount: 0, ttl: 0.0, active: false, }
   })
 
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false, }
   })
 
   let mut level = 1

@@ -135,6 +135,9 @@ pub(all) enum Ingredient {
 } derive(Eq)
 
 ///|
+pub extend Ingredient with Eq::{not_equal, equal}
+
+///|
 /// High-level game phase.
 pub(all) enum GameState {
   Title
@@ -142,6 +145,9 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Kitchen grid station identity.
@@ -159,3 +165,6 @@ pub(all) enum Station {
   Reputation
   Storage
 } derive(Eq)
+
+///|
+pub extend Station with Eq::{not_equal, equal}

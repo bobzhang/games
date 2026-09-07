@@ -2,7 +2,13 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Gear {
@@ -13,7 +19,10 @@ pub(all) struct Gear {
   mut dir : RotDir
   mut angle : Float
   mut active : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Gear with Debug::{to_repr}
 
 ///|
 pub(all) struct Connection {
@@ -21,7 +30,10 @@ pub(all) struct Connection {
   to : Int
   ratio : Float
   flips_dir : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Connection with Debug::{to_repr}
 
 ///|
 pub(all) struct Output {
@@ -29,7 +41,10 @@ pub(all) struct Output {
   target_rpm : Float
   target_dir : RotDir
   mut satisfied : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Output with Debug::{to_repr}
 
 ///|
 pub(all) struct InputGear {
@@ -37,14 +52,20 @@ pub(all) struct InputGear {
   rpm : Float
   dir : RotDir
   radius : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend InputGear with Debug::{to_repr}
 
 ///|
 pub(all) struct BeltLink {
   mut from_pos : Vec2i
   mut to_pos : Vec2i
   mut active : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend BeltLink with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -56,14 +77,20 @@ pub(all) struct Level {
   gear_budget : Int
   par_gears : Int
   hint : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut stars : Int
   mut gears_used : Int
   mut completed : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -85,4 +112,7 @@ pub(all) struct Game {
   mut message_timer : Float
   mut anim_timer : Float
   mut title_gear_angle : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

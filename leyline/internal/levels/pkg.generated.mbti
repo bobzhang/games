@@ -59,4 +59,3 @@ pub fn level_name(Int) -> String
 // Type aliases
 
 // Traits
-

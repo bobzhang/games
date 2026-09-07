@@ -410,7 +410,7 @@ fn draw_pattern_finder(
 
 ///|
 fn positions_to_string(positions : Array[Int]) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i in 0..<positions.length() {
     if i > 0 {
       buf.write_string(",")

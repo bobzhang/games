@@ -3,27 +3,42 @@ pub(all) struct Vec3i {
   x : Int
   y : Int
   z : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec3i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec3i with Debug::{to_repr}
 
 ///|
 pub(all) struct VoxelGrid {
   size : Int
   cells : Array[Bool]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend VoxelGrid with Debug::{to_repr}
 
 ///|
 pub(all) struct Silhouette {
   width : Int
   height : Int
   cells : Array[Bool]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Silhouette with Debug::{to_repr}
 
 ///|
 pub(all) struct TargetSet {
   top : Silhouette
   front : Silhouette
   side : Silhouette
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend TargetSet with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -35,7 +50,10 @@ pub(all) struct Level {
   par_voxels : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -43,7 +61,10 @@ pub(all) struct LevelScore {
   mut completed : Bool
   mut best_moves : Int
   mut best_voxels : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct UndoEntry {
@@ -51,7 +72,10 @@ pub(all) struct UndoEntry {
   y : Int
   z : Int
   was_filled : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend UndoEntry with Debug::{to_repr}
 
 ///|
 pub(all) struct HoverInfo {
@@ -60,7 +84,10 @@ pub(all) struct HoverInfo {
   mut vy : Int
   mut vz : Int
   mut view : ViewKind
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HoverInfo with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {

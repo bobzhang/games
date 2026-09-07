@@ -1,6 +1,6 @@
 ///|
 fn tp(col : Int, row : Int) -> @types.TargetPos {
-  { col, row }
+  { col, row, }
 }
 
 // ========================================

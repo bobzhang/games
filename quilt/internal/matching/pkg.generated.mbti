@@ -33,4 +33,3 @@ pub fn match_percentage(@types.Board) -> Float
 // Type aliases
 
 // Traits
-

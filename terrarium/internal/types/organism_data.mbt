@@ -11,7 +11,10 @@ pub(all) struct OrganismProfile {
   min_o2 : Float
   min_co2 : Float
   min_nutrients : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend OrganismProfile with Debug::{to_repr}
 
 ///|
 pub fn get_profile(kind : OrganismKind) -> OrganismProfile {

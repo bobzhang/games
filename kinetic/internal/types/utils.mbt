@@ -147,7 +147,7 @@ pub fn screen_to_grid(sx : Float, sy : Float) -> Vec2i? {
     let dx = sx - px
     let dy = sy - py
     if dx * dx + dy * dy < half * half {
-      Some({ x: col, y: row })
+      Some({ x: col, y: row, })
     } else {
       None
     }
@@ -186,22 +186,22 @@ pub fn new_output(
   target_rpm : Float,
   target_dir : RotDir,
 ) -> Output {
-  { pos, target_rpm, target_dir, satisfied: false }
+  { pos, target_rpm, target_dir, satisfied: false, }
 }
 
 ///|
 pub fn new_belt(from_pos : Vec2i, to_pos : Vec2i) -> BeltLink {
-  { from_pos, to_pos, active: true }
+  { from_pos, to_pos, active: true, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, gears_used: 0, completed: false }
+  { stars: 0, gears_used: 0, completed: false, }
 }
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

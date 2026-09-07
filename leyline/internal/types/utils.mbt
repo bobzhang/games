@@ -1,6 +1,6 @@
 ///|
 pub fn new_cell(kind : CellKind) -> Cell {
-  { kind, energy_received: 0.0, glow_anim: 0.0 }
+  { kind, energy_received: 0.0, glow_anim: 0.0, }
 }
 
 ///|
@@ -10,7 +10,7 @@ pub fn new_connection(
   to_col : Int,
   to_row : Int,
 ) -> Connection {
-  { from_col, from_row, to_col, to_row, energy_flow: 0.0, flow_anim: 0.0 }
+  { from_col, from_row, to_col, to_row, energy_flow: 0.0, flow_anim: 0.0, }
 }
 
 ///|

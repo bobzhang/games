@@ -473,6 +473,8 @@ pub(all) enum AiState {
   Evade
   Flee
 } derive(Eq)
+pub fn AiState::equal(Self, Self) -> Bool
+pub fn AiState::not_equal(Self, Self) -> Bool
 
 pub(all) struct AircraftStats {
   kind : Int
@@ -518,6 +520,8 @@ pub(all) enum CameraMode {
   Cockpit
   Free
 } derive(Eq)
+pub fn CameraMode::equal(Self, Self) -> Bool
+pub fn CameraMode::not_equal(Self, Self) -> Bool
 
 pub(all) struct Checkpoint {
   mut active : Bool
@@ -660,6 +664,8 @@ pub(all) enum GameState {
   AircraftSelect
   MissionBriefing
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Mission {
   name : String
@@ -785,6 +791,8 @@ pub(all) enum WeaponKind {
   Rockets
   Bombs
 } derive(Eq)
+pub fn WeaponKind::equal(Self, Self) -> Bool
+pub fn WeaponKind::not_equal(Self, Self) -> Bool
 
 pub(all) enum Weather {
   Clear
@@ -794,6 +802,8 @@ pub(all) enum Weather {
   Storm
   Night
 } derive(Eq)
+pub fn Weather::equal(Self, Self) -> Bool
+pub fn Weather::not_equal(Self, Self) -> Bool
 
 pub(all) struct WeatherState {
   mut kind : Weather
@@ -812,4 +822,3 @@ pub fn WeatherState::set_weather(Self, Weather) -> Unit
 // Type aliases
 
 // Traits
-

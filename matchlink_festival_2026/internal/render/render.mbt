@@ -779,7 +779,10 @@ fn @types.Game::draw_title(game : @types.Game, art : GameArt) -> Unit {
 
 ///|
 /// Draws the level-clear modal overlay showing score, time left, hints left, and a Next Stage button.
-fn @types.Game::draw_level_clear_overlay(game : @types.Game, art : GameArt) -> Unit {
+fn @types.Game::draw_level_clear_overlay(
+  game : @types.Game,
+  art : GameArt,
+) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -926,7 +929,10 @@ fn @types.Game::draw_fail_overlay(game : @types.Game, art : GameArt) -> Unit {
 
 ///|
 /// Draws the campaign-complete overlay showing final score, stages cleared, total play time, and a Restart Festival button.
-fn @types.Game::draw_campaign_overlay(game : @types.Game, art : GameArt) -> Unit {
+fn @types.Game::draw_campaign_overlay(
+  game : @types.Game,
+  art : GameArt,
+) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,

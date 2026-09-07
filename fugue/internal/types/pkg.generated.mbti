@@ -175,7 +175,8 @@ pub(all) struct Grid {
   cols : Int
   rows : Int
   cells : Array[Array[NoteCell]]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Grid::to_repr(Self) -> @debug.Repr
 
 pub(all) enum IntervalQuality {
   Unison
@@ -186,6 +187,11 @@ pub(all) enum IntervalQuality {
   Sixth
   Seventh
 } derive(Eq, @debug.Debug)
+pub fn IntervalQuality::equal(Self, Self) -> Bool
+pub fn IntervalQuality::not_equal(Self, Self) -> Bool
+pub fn IntervalQuality::output(Self, &Logger) -> Unit
+pub fn IntervalQuality::to_repr(Self) -> @debug.Repr
+pub fn IntervalQuality::to_string(Self) -> String
 pub impl Show for IntervalQuality
 
 pub(all) struct Level {
@@ -217,19 +223,30 @@ pub(all) enum Note {
   A
   B
 } derive(Eq, @debug.Debug)
+pub fn Note::equal(Self, Self) -> Bool
+pub fn Note::not_equal(Self, Self) -> Bool
+pub fn Note::output(Self, &Logger) -> Unit
+pub fn Note::to_repr(Self) -> @debug.Repr
+pub fn Note::to_string(Self) -> String
 pub impl Show for Note
 
 pub(all) struct NoteCell {
   mut has_note : Bool
   mut is_target : Bool
   mut is_locked : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn NoteCell::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Idle
   Playing
   Finished
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -239,18 +256,31 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct TargetPos {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn TargetPos::equal(Self, Self) -> Bool
+pub fn TargetPos::not_equal(Self, Self) -> Bool
+pub fn TargetPos::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tier {
   Melody
   Harmony
   Counterpoint
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct UndoEntry {
@@ -262,4 +292,3 @@ pub(all) struct UndoEntry {
 // Type aliases
 
 // Traits
-

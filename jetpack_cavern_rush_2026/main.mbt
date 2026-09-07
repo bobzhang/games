@@ -24,15 +24,15 @@ let world_h : Float = 820.0
 
 ///|
 /// Generated cavern parallax background texture.
-let tex_cavern_background : Ref[@raylib.Texture?] = { val: None }
+let tex_cavern_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated cavern wall texture.
-let tex_cavern_wall_texture : Ref[@raylib.Texture?] = { val: None }
+let tex_cavern_wall_texture : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated 4x2 pilot, enemy, pickup, portal, projectile, and ability sprite sheet.
-let tex_jetpack_cavern_sprites : Ref[@raylib.Texture?] = { val: None }
+let tex_jetpack_cavern_sprites : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Jetpack Cavern Rush texture.
@@ -394,7 +394,7 @@ fn emit_particle(
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
-      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
+      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind, }
       break
     }
   }

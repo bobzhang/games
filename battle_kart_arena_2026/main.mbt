@@ -259,7 +259,7 @@ fn set_pickup(
   y : Float,
   kind : Int,
 ) -> Unit {
-  pickups[i] = { x, y, kind, active: true, respawn: 0.0 }
+  pickups[i] = { x, y, kind, active: true, respawn: 0.0, }
 }
 
 ///|
@@ -478,17 +478,17 @@ fn main {
   reset_karts(karts)
 
   let shots : Array[Shot] = Array::makei(max_shots, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, owner: -1, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, owner: -1, active: false, }
   })
   clear_shots(shots)
 
   let pickups : Array[Pickup] = Array::makei(max_pickups, fn(_i) {
-    { x: 0.0, y: 0.0, kind: 0, active: false, respawn: 0.0 }
+    { x: 0.0, y: 0.0, kind: 0, active: false, respawn: 0.0, }
   })
   reset_pickups(pickups)
 
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false, }
   })
   clear_sparks(sparks)
 

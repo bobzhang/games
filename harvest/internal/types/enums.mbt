@@ -7,9 +7,18 @@ pub(all) enum Season {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Season with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Season with Eq::{not_equal, equal}
+
+///|
+pub extend Season with Debug::{to_repr}
+
+///|
+pub impl Show for Season with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Season with Show::{to_string, output}
 
 ///|
 pub(all) enum CropKind {
@@ -24,9 +33,18 @@ pub(all) enum CropKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CropKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CropKind with Eq::{not_equal, equal}
+
+///|
+pub extend CropKind with Debug::{to_repr}
+
+///|
+pub impl Show for CropKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CropKind with Show::{to_string, output}
 
 ///|
 pub(all) enum CropState {
@@ -39,9 +57,18 @@ pub(all) enum CropState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CropState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CropState with Eq::{not_equal, equal}
+
+///|
+pub extend CropState with Debug::{to_repr}
+
+///|
+pub impl Show for CropState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CropState with Show::{to_string, output}
 
 ///|
 pub(all) enum Screen {
@@ -53,9 +80,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum Nutrient {
@@ -65,9 +101,18 @@ pub(all) enum Nutrient {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Nutrient with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Nutrient with Eq::{not_equal, equal}
+
+///|
+pub extend Nutrient with Debug::{to_repr}
+
+///|
+pub impl Show for Nutrient with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Nutrient with Show::{to_string, output}
 
 ///|
 pub(all) enum Tier {
@@ -77,6 +122,15 @@ pub(all) enum Tier {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Tier with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tier with Eq::{not_equal, equal}
+
+///|
+pub extend Tier with Debug::{to_repr}
+
+///|
+pub impl Show for Tier with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tier with Show::{to_string, output}

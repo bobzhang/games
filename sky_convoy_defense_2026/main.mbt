@@ -224,7 +224,7 @@ fn main {
   @draw.init_font()
 
   let bullets : Array[Bullet] = Array::makei(max_bullets, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false, }
   })
   let drones : Array[Drone] = Array::makei(max_drones, fn(_i) {
     {
@@ -239,7 +239,7 @@ fn main {
     }
   })
   let bombs : Array[Bomb] = Array::makei(max_bombs, fn(_i) {
-    { x: 0.0, y: 0.0, vy: 0.0, active: false }
+    { x: 0.0, y: 0.0, vy: 0.0, active: false, }
   })
 
   clear_bullets(bullets)

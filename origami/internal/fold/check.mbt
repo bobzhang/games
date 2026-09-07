@@ -3,7 +3,10 @@ pub(all) struct CheckResult {
   silhouette_match : Bool
   layers_match : Bool
   checks_detail : Array[Bool]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend CheckResult with Debug::{to_repr}
 
 ///|
 pub fn check_completion(
@@ -11,7 +14,7 @@ pub fn check_completion(
   level : @types.Level,
 ) -> CheckResult {
   let sil = @types.paper_matches_silhouette(paper, level.target_silhouette)
-  let details : Array[Bool] = Array::new(capacity=level.layer_checks.length())
+  let details : Array[Bool] = Array(capacity=level.layer_checks.length())
   let mut all_layers = true
   for i in 0..<level.layer_checks.length() {
     let ok = @types.single_layer_check_ok(paper, level.layer_checks[i])
@@ -23,7 +26,7 @@ pub fn check_completion(
   if level.layer_checks.length() == 0 {
     all_layers = true
   }
-  { silhouette_match: sil, layers_match: all_layers, checks_detail: details }
+  { silhouette_match: sil, layers_match: all_layers, checks_detail: details, }
 }
 
 ///|

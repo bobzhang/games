@@ -152,39 +152,39 @@ struct Particle {
 
 ///|
 /// Generated title backdrop texture.
-let tex_factory_title : Ref[@raylib.Texture?] = { val: None }
+let tex_factory_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated factory core texture.
-let tex_core : Ref[@raylib.Texture?] = { val: None }
+let tex_core : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player defender texture.
-let tex_player : Ref[@raylib.Texture?] = { val: None }
+let tex_player : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated auto turret texture.
-let tex_auto_turret : Ref[@raylib.Texture?] = { val: None }
+let tex_auto_turret : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated cannon turret texture.
-let tex_cannon_turret : Ref[@raylib.Texture?] = { val: None }
+let tex_cannon_turret : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated basic drone enemy texture.
-let tex_enemy_drone : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_drone : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated shooter enemy texture.
-let tex_enemy_shooter : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_shooter : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated heavy enemy texture.
-let tex_enemy_heavy : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_heavy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated scrap pickup texture.
-let tex_scrap : Ref[@raylib.Texture?] = { val: None }
+let tex_scrap : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated factory art texture.
@@ -933,7 +933,7 @@ fn main {
   })
 
   let turrets : Array[Turret] = Array::makei(max_turrets, fn(_i) {
-    { active: false, kind: 0, x: 0.0, y: 0.0, hp: 0.0, fire_cd: 0.0, t: 0.0 }
+    { active: false, kind: 0, x: 0.0, y: 0.0, hp: 0.0, fire_cd: 0.0, t: 0.0, }
   })
 
   let scraps : Array[Scrap] = Array::makei(max_scraps, fn(_i) {

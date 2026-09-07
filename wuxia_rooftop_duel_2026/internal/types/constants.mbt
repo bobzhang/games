@@ -223,6 +223,9 @@ pub(all) enum Attack {
 } derive(Eq)
 
 ///|
+pub extend Attack with Eq::{not_equal, equal}
+
+///|
 /// Enemy AI behavior state.
 pub(all) enum EnemyState {
   Seek
@@ -233,6 +236,9 @@ pub(all) enum EnemyState {
 } derive(Eq)
 
 ///|
+pub extend EnemyState with Eq::{not_equal, equal}
+
+///|
 /// Top-level game state.
 pub(all) enum GameState {
   Title
@@ -240,3 +246,6 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

@@ -75,7 +75,7 @@ pub fn is_between(target : Vec2i, end_a : Vec2i, end_b : Vec2i) -> Bool {
 
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
@@ -85,7 +85,7 @@ pub fn pos_to_index(pos : Vec2i, size : Int) -> Int {
 
 ///|
 pub fn index_to_pos(idx : Int, size : Int) -> Vec2i {
-  { x: idx % size, y: idx / size }
+  { x: idx % size, y: idx / size, }
 }
 
 ///|
@@ -183,7 +183,7 @@ pub fn new_level(
 
 ///|
 pub fn new_score() -> LevelScore {
-  { completed: false, stars: 0, best_placements: 999 }
+  { completed: false, stars: 0, best_placements: 999, }
 }
 
 ///|

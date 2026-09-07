@@ -16,7 +16,7 @@ pub fn generate_plain(
         WeftOver
       }
       let ci = if is_warp_over { warp_colors[col] } else { weft_colors[row] }
-      @types.pattern_set(p, row, col, { state, color_index: ci })
+      @types.pattern_set(p, row, col, { state, color_index: ci, })
     }
   }
   p
@@ -44,7 +44,7 @@ pub fn generate_twill(
         WeftOver
       }
       let ci = if is_warp_over { warp_colors[col] } else { weft_colors[row] }
-      @types.pattern_set(p, row, col, { state, color_index: ci })
+      @types.pattern_set(p, row, col, { state, color_index: ci, })
     }
   }
   p
@@ -73,7 +73,7 @@ pub fn generate_satin(
         WeftOver
       }
       let ci = if is_warp_over { warp_colors[col] } else { weft_colors[row] }
-      @types.pattern_set(p, row, col, { state, color_index: ci })
+      @types.pattern_set(p, row, col, { state, color_index: ci, })
     }
   }
   p
@@ -104,7 +104,7 @@ pub fn generate_herringbone(
         WeftOver
       }
       let ci = if is_warp_over { warp_colors[col] } else { weft_colors[row] }
-      @types.pattern_set(p, row, col, { state, color_index: ci })
+      @types.pattern_set(p, row, col, { state, color_index: ci, })
     }
   }
   p
@@ -135,7 +135,7 @@ pub fn generate_diamond(
         WeftOver
       }
       let ci = if is_warp_over { warp_colors[col] } else { weft_colors[row] }
-      @types.pattern_set(p, row, col, { state, color_index: ci })
+      @types.pattern_set(p, row, col, { state, color_index: ci, })
     }
   }
   p

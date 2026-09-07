@@ -10,6 +10,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 pub(all) enum StarterKit {
   Vanguard
   Cutpurse
@@ -17,9 +20,18 @@ pub(all) enum StarterKit {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for StarterKit with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend StarterKit with Eq::{not_equal, equal}
+
+///|
+pub extend StarterKit with Debug::{to_repr}
+
+///|
+pub impl Show for StarterKit with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend StarterKit with Show::{to_string, output}
 
 ///|
 pub(all) enum PactKind {
@@ -31,9 +43,18 @@ pub(all) enum PactKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PactKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PactKind with Eq::{not_equal, equal}
+
+///|
+pub extend PactKind with Debug::{to_repr}
+
+///|
+pub impl Show for PactKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PactKind with Show::{to_string, output}
 
 ///|
 pub(all) enum MetaUpgrade {
@@ -46,9 +67,18 @@ pub(all) enum MetaUpgrade {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for MetaUpgrade with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend MetaUpgrade with Eq::{not_equal, equal}
+
+///|
+pub extend MetaUpgrade with Debug::{to_repr}
+
+///|
+pub impl Show for MetaUpgrade with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend MetaUpgrade with Show::{to_string, output}
 
 ///|
 pub(all) enum RoomState {
@@ -56,6 +86,9 @@ pub(all) enum RoomState {
   Sealed
   Cleared
 } derive(Eq)
+
+///|
+pub extend RoomState with Eq::{not_equal, equal}
 
 ///|
 pub(all) enum WeaponKind {
@@ -66,9 +99,18 @@ pub(all) enum WeaponKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for WeaponKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend WeaponKind with Eq::{not_equal, equal}
+
+///|
+pub extend WeaponKind with Debug::{to_repr}
+
+///|
+pub impl Show for WeaponKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend WeaponKind with Show::{to_string, output}
 
 ///|
 pub(all) enum EnemyKind {
@@ -84,9 +126,18 @@ pub(all) enum EnemyKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for EnemyKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
+pub extend EnemyKind with Debug::{to_repr}
+
+///|
+pub impl Show for EnemyKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend EnemyKind with Show::{to_string, output}
 
 ///|
 pub(all) enum ItemKind {
@@ -97,9 +148,15 @@ pub(all) enum ItemKind {
 } derive(Debug)
 
 ///|
-pub impl Show for ItemKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ItemKind with Debug::{to_repr}
+
+///|
+pub impl Show for ItemKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ItemKind with Show::{to_string, output}
 
 ///|
 pub(all) enum PassiveKind {
@@ -120,9 +177,18 @@ pub(all) enum PassiveKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PassiveKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PassiveKind with Eq::{not_equal, equal}
+
+///|
+pub extend PassiveKind with Debug::{to_repr}
+
+///|
+pub impl Show for PassiveKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PassiveKind with Show::{to_string, output}
 
 ///|
 pub(all) enum RoomKind {
@@ -137,9 +203,18 @@ pub(all) enum RoomKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for RoomKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend RoomKind with Eq::{not_equal, equal}
+
+///|
+pub extend RoomKind with Debug::{to_repr}
+
+///|
+pub impl Show for RoomKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend RoomKind with Show::{to_string, output}
 
 ///|
 pub(all) enum EncounterType {
@@ -153,9 +228,18 @@ pub(all) enum EncounterType {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for EncounterType with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend EncounterType with Eq::{not_equal, equal}
+
+///|
+pub extend EncounterType with Debug::{to_repr}
+
+///|
+pub impl Show for EncounterType with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend EncounterType with Show::{to_string, output}
 
 ///|
 pub fn encounter_name(encounter : EncounterType) -> String {
@@ -180,9 +264,18 @@ pub(all) enum ShrineKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ShrineKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ShrineKind with Eq::{not_equal, equal}
+
+///|
+pub extend ShrineKind with Debug::{to_repr}
+
+///|
+pub impl Show for ShrineKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ShrineKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -193,9 +286,18 @@ pub(all) enum Direction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum GameEvent {
@@ -211,9 +313,15 @@ pub(all) enum GameEvent {
 } derive(Debug)
 
 ///|
-pub impl Show for GameEvent with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend GameEvent with Debug::{to_repr}
+
+///|
+pub impl Show for GameEvent with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend GameEvent with Show::{to_string, output}
 
 ///|
 pub(all) enum AttackState {
@@ -222,6 +330,9 @@ pub(all) enum AttackState {
   Active(Float)
   Recovery(Float)
 } derive(Eq)
+
+///|
+pub extend AttackState with Eq::{not_equal, equal}
 
 ///|
 pub(all) enum EnemyState {
@@ -234,6 +345,9 @@ pub(all) enum EnemyState {
 } derive(Eq)
 
 ///|
+pub extend EnemyState with Eq::{not_equal, equal}
+
+///|
 pub(all) enum StatusEffect {
   Slow(Float)
   Poison(Float)
@@ -242,9 +356,15 @@ pub(all) enum StatusEffect {
 } derive(Debug)
 
 ///|
-pub impl Show for StatusEffect with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend StatusEffect with Debug::{to_repr}
+
+///|
+pub impl Show for StatusEffect with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend StatusEffect with Show::{to_string, output}
 
 ///|
 pub(all) enum EliteAffix {
@@ -257,9 +377,18 @@ pub(all) enum EliteAffix {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for EliteAffix with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend EliteAffix with Eq::{not_equal, equal}
+
+///|
+pub extend EliteAffix with Debug::{to_repr}
+
+///|
+pub impl Show for EliteAffix with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend EliteAffix with Show::{to_string, output}
 
 ///|
 pub(all) enum FloorPath {
@@ -271,9 +400,18 @@ pub(all) enum FloorPath {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for FloorPath with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend FloorPath with Eq::{not_equal, equal}
+
+///|
+pub extend FloorPath with Debug::{to_repr}
+
+///|
+pub impl Show for FloorPath with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend FloorPath with Show::{to_string, output}
 
 ///|
 pub fn path_name(path : FloorPath) -> String {

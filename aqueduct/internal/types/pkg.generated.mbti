@@ -122,7 +122,12 @@ pub(all) enum Direction {
 } derive(Eq, @debug.Debug)
 pub fn Direction::dx(Self) -> Int
 pub fn Direction::dy(Self) -> Int
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
 pub fn Direction::opposite(Self) -> Self
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct Game {
@@ -146,7 +151,8 @@ pub(all) struct Game {
   mut total_fountains : Int
   mut anim_timer : Float
   mut water_sources : Array[Pos]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   name : String
@@ -159,13 +165,15 @@ pub(all) struct Level {
   reservoirs : Array[Pos]
   dams : Array[(Pos, Direction)]
   par_segments : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut segments_used : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Placing
@@ -173,12 +181,27 @@ pub(all) enum PlayState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct Pos {
   x : Int
   y : Int
-} derive(Compare, Eq, Hash, Show)
+} derive(Compare, Eq, Hash, @debug.Debug)
+pub fn Pos::compare(Self, Self) -> Int
+pub fn Pos::equal(Self, Self) -> Bool
+pub fn Pos::hash(Self) -> Int
+pub fn Pos::hash_combine(Self, Hasher) -> Unit
+pub fn Pos::not_equal(Self, Self) -> Bool
+pub fn Pos::op_ge(Self, Self) -> Bool
+pub fn Pos::op_gt(Self, Self) -> Bool
+pub fn Pos::op_le(Self, Self) -> Bool
+pub fn Pos::op_lt(Self, Self) -> Bool
+pub fn Pos::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -187,6 +210,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -194,6 +222,11 @@ pub(all) enum Tier {
   Tier2
   Tier3
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Tile {
@@ -202,7 +235,8 @@ pub(all) struct Tile {
   mut has_water : Bool
   mut water_level : Int
   mut connections : Array[Direction]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Tile::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TileKind {
   Empty
@@ -212,15 +246,20 @@ pub(all) enum TileKind {
   Reservoir
   Dam
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) struct UndoEntry {
   pos : Pos
   prev_kind : TileKind
   prev_connections : Array[Direction]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn UndoEntry::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

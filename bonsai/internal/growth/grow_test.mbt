@@ -95,7 +95,7 @@ test "zone satisfaction - required" {
   @types.grid_set_kind(grid, 2, 5, Branch, Up)
   @types.grid_set_kind(grid, 2, 6, Branch, Up)
   let zones : Array[@types.Zone] = [
-    { positions: [{ x: 2, y: 5 }, { x: 2, y: 6 }], kind: Required },
+    { positions: [{ x: 2, y: 5, }, { x: 2, y: 6, }], kind: Required, },
   ]
   let (req_ok, forb_ok, tip_ok) = check_zones(grid, zones)
   assert_true(req_ok)
@@ -109,7 +109,7 @@ test "zone satisfaction - forbidden violated" {
   let grid = @types.new_grid(5, 10)
   @types.grid_set_kind(grid, 2, 5, Branch, Up)
   let zones : Array[@types.Zone] = [
-    { positions: [{ x: 2, y: 5 }], kind: Forbidden },
+    { positions: [{ x: 2, y: 5, }], kind: Forbidden, },
   ]
   let (_, forb_ok, _) = check_zones(grid, zones)
   assert_false(forb_ok)
@@ -153,7 +153,7 @@ test "star calculation" {
   // No forbidden zones
   // No tip targets
   let zones : Array[@types.Zone] = [
-    { positions: [{ x: 2, y: 5 }], kind: Required },
+    { positions: [{ x: 2, y: 5, }], kind: Required, },
   ]
   // 0 prunes, par 0 => 3 stars (no tip targets, so tip_ok is vacuously true)
   let stars = calculate_stars(grid, zones, 0, 0)

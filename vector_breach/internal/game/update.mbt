@@ -104,7 +104,7 @@ fn setup_battle(game : @types.Game, mission_id : Int) -> Unit {
     }
     battle.units.push(u)
     if battle.grid.in_bounds(px, py) {
-      battle.grid.set(px, py, { ..battle.grid.get(px, py), occupied_by: u.id })
+      battle.grid.set(px, py, { ..battle.grid.get(px, py), occupied_by: u.id, })
     }
   }
   // Spawn enemies based on mission
@@ -127,7 +127,7 @@ fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
     let wx = @types.rand_range(seed, 2, 6)
     let wy = @types.rand_range(seed, 0, @types.grid_h - 1)
     if battle.grid.in_bounds(wx, wy) {
-      battle.grid.set(wx, wy, { kind: Wall, hazard: None, occupied_by: -1 })
+      battle.grid.set(wx, wy, { kind: Wall, hazard: None, occupied_by: -1, })
     }
   }
   // Add hazard tiles - more variety on harder missions
@@ -138,7 +138,7 @@ fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
       let hx = @types.rand_range(seed, 3, 6)
       let hy = @types.rand_range(seed, 1, 6)
       if battle.grid.in_bounds(hx, hy) {
-        battle.grid.set(hx, hy, { kind: Lava, hazard: Fire, occupied_by: -1 })
+        battle.grid.set(hx, hy, { kind: Lava, hazard: Fire, occupied_by: -1, })
       }
     }
   }
@@ -149,7 +149,7 @@ fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
       let cx = @types.rand_range(seed, 3, 6)
       let cy = @types.rand_range(seed, 0, 7)
       if battle.grid.in_bounds(cx, cy) {
-        battle.grid.set(cx, cy, { kind: Chasm, hazard: None, occupied_by: -1 })
+        battle.grid.set(cx, cy, { kind: Chasm, hazard: None, occupied_by: -1, })
       }
     }
   }
@@ -158,13 +158,13 @@ fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
     let ix = @types.rand_range(seed, 2, 5)
     let iy = @types.rand_range(seed, 2, 5)
     if battle.grid.in_bounds(ix, iy) {
-      battle.grid.set(ix, iy, { kind: Water, hazard: None, occupied_by: -1 })
+      battle.grid.set(ix, iy, { kind: Water, hazard: None, occupied_by: -1, })
     }
   } else {
     let ix = @types.rand_range(seed, 2, 5)
     let iy = @types.rand_range(seed, 2, 5)
     if battle.grid.in_bounds(ix, iy) {
-      battle.grid.set(ix, iy, { kind: Ice, hazard: None, occupied_by: -1 })
+      battle.grid.set(ix, iy, { kind: Ice, hazard: None, occupied_by: -1, })
     }
   }
   // Expert tier: add acid hazards
@@ -174,7 +174,7 @@ fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
     if battle.grid.in_bounds(ax, ay) {
       let tile = battle.grid.get(ax, ay)
       if tile.kind == Floor {
-        battle.grid.set(ax, ay, { ..tile, hazard: Acid })
+        battle.grid.set(ax, ay, { ..tile, hazard: Acid, })
       }
     }
   }
@@ -287,7 +287,7 @@ fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
     }
     battle.units.push(eu)
     if battle.grid.in_bounds(ex, ey) {
-      battle.grid.set(ex, ey, { ..battle.grid.get(ex, ey), occupied_by: eu.id })
+      battle.grid.set(ex, ey, { ..battle.grid.get(ex, ey), occupied_by: eu.id, })
     }
   }
   // Boss on higher missions (tier 1+, i.e. mission 3+)
@@ -321,7 +321,7 @@ fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
         orbital_used: false,
       }
       battle.units.push(bu)
-      battle.grid.set(bx, by, { ..battle.grid.get(bx, by), occupied_by: bu.id })
+      battle.grid.set(bx, by, { ..battle.grid.get(bx, by), occupied_by: bu.id, })
     }
   }
 }
@@ -1057,7 +1057,7 @@ fn find_unit_at(battle : @types.BattleState, x : Int, y : Int) -> Int? {
 fn update_reward(game : @types.Game) -> Unit {
   // Generate offered augments if empty
   if game.run.offered_augments.length() == 0 {
-    let seed : Ref[UInt] = { val: game.rng_state }
+    let seed : Ref[UInt] = { val: game.rng_state, }
     game.run.offered_augments = @content.pick_random_augments(
       seed,
       game.run.augments,

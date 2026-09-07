@@ -12,7 +12,7 @@ fn make_level(
     @types.grid_set(grid, row, col, val)
     @types.grid_lock(grid, row, col)
   }
-  { tier, grid, constraints, par_time, level_index }
+  { tier, grid, constraints, par_time, level_index, }
 }
 
 ///|

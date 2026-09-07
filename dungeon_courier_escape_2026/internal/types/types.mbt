@@ -7,6 +7,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Stores runtime data for Player.
 pub(all) struct Player {
   mut x : Float
@@ -138,13 +141,13 @@ pub fn Player::Player() -> Player {
 ///|
 /// Creates a default Parcel value for a new session.
 pub fn Parcel::Parcel() -> Parcel {
-  { active: false, delivered: false, x: 0.0, y: 0.0, pulse: 0.0 }
+  { active: false, delivered: false, x: 0.0, y: 0.0, pulse: 0.0, }
 }
 
 ///|
 /// Creates a default ExitMarker value for a new session.
 pub fn ExitMarker::ExitMarker(x : Float, y : Float) -> ExitMarker {
-  { active: true, x, y, radius: exit_radius }
+  { active: true, x, y, radius: exit_radius, }
 }
 
 ///|
@@ -175,13 +178,13 @@ pub fn Guard::Guard() -> Guard {
 ///|
 /// Creates a default Trap value for a new session.
 pub fn Trap::Trap() -> Trap {
-  { active: false, x: 0.0, y: 0.0, radius: 0.0, blink_t: 0.0, cooldown: 0.0 }
+  { active: false, x: 0.0, y: 0.0, radius: 0.0, blink_t: 0.0, cooldown: 0.0, }
 }
 
 ///|
 /// Creates a default Smoke value for a new session.
 pub fn Smoke::Smoke() -> Smoke {
-  { active: false, x: 0.0, y: 0.0, radius: smoke_radius_base, life: 0.0 }
+  { active: false, x: 0.0, y: 0.0, radius: smoke_radius_base, life: 0.0, }
 }
 
 ///|

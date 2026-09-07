@@ -159,6 +159,9 @@ pub(all) enum HazardKind {
 } derive(Eq)
 
 ///|
+pub extend HazardKind with Eq::{not_equal, equal}
+
+///|
 /// Distinguishes the kind of pickup entity.
 pub(all) enum PickupKind {
   Fuel
@@ -167,12 +170,18 @@ pub(all) enum PickupKind {
 } derive(Eq)
 
 ///|
+pub extend PickupKind with Eq::{not_equal, equal}
+
+///|
 /// Identifies the current phase of the game loop.
 pub(all) enum GameState {
   Title
   Play
   Result
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Returns the on-screen repair button rectangle.

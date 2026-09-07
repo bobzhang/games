@@ -56,14 +56,7 @@ fn draw_blending(game : @types.Game) -> Unit {
     let size : Float = 12.0 * (1.0 - progress * shrink_s)
     match metal_art(ing.metal) {
       Some(texture) =>
-        draw_art_width(
-          texture,
-          px,
-          py,
-          size * 2.4,
-          angle * 18.0,
-          @raylib.white,
-        )
+        draw_art_width(texture, px, py, size * 2.4, angle * 18.0, @raylib.white)
       None => {
         let color = @types.metal_color(ing.metal)
         @raylib.draw_circle(px.to_int(), py.to_int(), size, color)

@@ -7,12 +7,18 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Tile classification used by pathing and collision.
 pub(all) enum Tile {
   Floor
   Wall
   Exit
 } derive(Eq)
+
+///|
+pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Ghost behavior mode used by AI updates.
@@ -23,12 +29,18 @@ pub(all) enum GhostMode {
 } derive(Eq)
 
 ///|
+pub extend GhostMode with Eq::{not_equal, equal}
+
+///|
 /// Particle effect category for rendering.
 pub(all) enum ParticleKind {
   Dust
   Gold
   Purple
 } derive(Eq)
+
+///|
+pub extend ParticleKind with Eq::{not_equal, equal}
 
 ///|
 /// Grid actor state with interpolation fields for smooth movement.

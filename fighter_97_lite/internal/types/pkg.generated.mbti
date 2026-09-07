@@ -301,12 +301,19 @@ pub(all) enum Action {
   ActionIntro
   ActionThrow
 } derive(Eq)
+pub fn Action::equal(Self, Self) -> Bool
+pub fn Action::not_equal(Self, Self) -> Bool
 
 pub(all) enum AiDifficulty {
   Easy
   Normal
   Hard
 } derive(Eq, @debug.Debug)
+pub fn AiDifficulty::equal(Self, Self) -> Bool
+pub fn AiDifficulty::not_equal(Self, Self) -> Bool
+pub fn AiDifficulty::output(Self, &Logger) -> Unit
+pub fn AiDifficulty::to_repr(Self) -> @debug.Repr
+pub fn AiDifficulty::to_string(Self) -> String
 pub impl Show for AiDifficulty
 
 pub(all) enum AiMode {
@@ -315,6 +322,8 @@ pub(all) enum AiMode {
   AiModeZone
   AiModeEvade
 } derive(Eq)
+pub fn AiMode::equal(Self, Self) -> Bool
+pub fn AiMode::not_equal(Self, Self) -> Bool
 
 pub(all) enum AttackId {
   AttackNone
@@ -326,6 +335,8 @@ pub(all) enum AttackId {
   AttackSpecialDp
   AttackSuper
 } derive(Eq)
+pub fn AttackId::equal(Self, Self) -> Bool
+pub fn AttackId::not_equal(Self, Self) -> Bool
 
 pub(all) struct CharacterArchetype {
   name : String
@@ -360,6 +371,8 @@ pub(all) enum Direction {
   DirDownBack
   DirDownForward
 } derive(Eq)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
 
 pub(all) struct Fighter {
   slot : Int
@@ -463,6 +476,11 @@ pub(all) enum GameState {
   StateMatchOver
   StatePause
 } derive(Eq, @debug.Debug)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
+pub fn GameState::output(Self, &Logger) -> Unit
+pub fn GameState::to_repr(Self) -> @debug.Repr
+pub fn GameState::to_string(Self) -> String
 pub impl Show for GameState
 
 pub(all) struct InputState {
@@ -500,12 +518,16 @@ pub(all) enum Motion {
   MotionQcf
   MotionDp
 } derive(Eq)
+pub fn Motion::equal(Self, Self) -> Bool
+pub fn Motion::not_equal(Self, Self) -> Bool
 
 pub(all) enum MoveKind {
   MoveKindNormal
   MoveKindSpecial
   MoveKindSuper
 } derive(Eq)
+pub fn MoveKind::equal(Self, Self) -> Bool
+pub fn MoveKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct MoveSpec {
   mut attack_id : AttackId
@@ -561,8 +583,9 @@ pub(all) enum SparkKind {
   SparkKindBlock
   SparkKindSuper
 } derive(Eq)
+pub fn SparkKind::equal(Self, Self) -> Bool
+pub fn SparkKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

@@ -90,14 +90,14 @@ fn clear_walls(walls : Array[Bool]) -> Unit {
 /// Resets every orb to the inactive default state at position (0, 0).
 fn clear_orbs(orbs : Array[Orb]) -> Unit {
   for i in 0..<orbs.length() {
-    orbs[i] = { x: 0, y: 0, active: false }
+    orbs[i] = { x: 0, y: 0, active: false, }
   }
 }
 
 ///|
 /// Places orb `i` at board position (x, y) and marks it active.
 fn set_orb(orbs : Array[Orb], i : Int, x : Int, y : Int) -> Unit {
-  orbs[i] = { x, y, active: true }
+  orbs[i] = { x, y, active: true, }
 }
 
 ///|
@@ -363,7 +363,7 @@ fn main {
 
   let walls : Array[Bool] = Array::make(gw * gh, false)
   let orbs : Array[Orb] = Array::makei(max_orbs, fn(_i) {
-    { x: 0, y: 0, active: false }
+    { x: 0, y: 0, active: false, }
   })
   let goals_x : Array[Int] = Array::make(max_orbs, 0)
   let goals_y : Array[Int] = Array::make(max_orbs, 0)

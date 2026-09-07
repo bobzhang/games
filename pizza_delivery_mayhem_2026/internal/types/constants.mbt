@@ -19,6 +19,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Represents the kind of traffic vehicle.
 pub(all) enum TrafficKind {
   Sedan
@@ -27,12 +30,18 @@ pub(all) enum TrafficKind {
 } derive(Eq)
 
 ///|
+pub extend TrafficKind with Eq::{not_equal, equal}
+
+///|
 /// Represents the kind of pickup item.
 pub(all) enum PickupKind {
   Fuel
   Repair
   Speed
 } derive(Eq)
+
+///|
+pub extend PickupKind with Eq::{not_equal, equal}
 
 ///|
 /// Maximum number of traffic entities in the pool.

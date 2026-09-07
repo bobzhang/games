@@ -160,7 +160,7 @@ fn emit_particle(
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
-      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
+      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind, }
       break
     }
   }
@@ -215,7 +215,7 @@ fn spawn_bullet(
 ) -> Unit {
   for i in 0..<bullets.length() {
     if !bullets[i].active {
-      bullets[i] = { active: true, from_player, x, y, vx, vy, dmg, life }
+      bullets[i] = { active: true, from_player, x, y, vx, vy, dmg, life, }
       break
     }
   }
@@ -225,7 +225,7 @@ fn spawn_bullet(
 fn spawn_ore(ores : FixedArray[Ore], x : Float, y : Float, value : Int) -> Unit {
   for i in 0..<ores.length() {
     if !ores[i].active {
-      ores[i] = { active: true, x, y, value, t: 0.0, life: 24.0 }
+      ores[i] = { active: true, x, y, value, t: 0.0, life: 24.0, }
       break
     }
   }

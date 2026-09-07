@@ -65,4 +65,3 @@ pub fn tier_unlocked(@types.Game, @types.Tier) -> Bool
 // Type aliases
 
 // Traits
-

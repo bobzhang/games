@@ -8,27 +8,27 @@ let sh : Int = 720
 
 ///|
 /// Generated lake background texture.
-let tex_lake_background : Ref[@raylib.Texture?] = { val: None }
+let tex_lake_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated boat sprite texture.
-let tex_boat : Ref[@raylib.Texture?] = { val: None }
+let tex_boat : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated common fish texture.
-let tex_fish_common : Ref[@raylib.Texture?] = { val: None }
+let tex_fish_common : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated silver fish texture.
-let tex_fish_silver : Ref[@raylib.Texture?] = { val: None }
+let tex_fish_silver : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated golden fish texture.
-let tex_fish_golden : Ref[@raylib.Texture?] = { val: None }
+let tex_fish_golden : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated hook sprite texture.
-let tex_hook : Ref[@raylib.Texture?] = { val: None }
+let tex_hook : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Represents a fish with position, velocity, kind, size, and alive state.
@@ -362,7 +362,7 @@ fn main {
   defer unload_assets()
 
   let fishes : Array[Fish] = Array::makei(90, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, vx: 0.0, kind: 0, size: 16.0 }
+    { alive: false, x: 0.0, y: 0.0, vx: 0.0, kind: 0, size: 16.0, }
   })
 
   let boat_y : Float = 150.0

@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Enumerates ObjKind variants used by runtime state.
 pub(all) enum ObjKind {
   Scout
@@ -18,6 +21,9 @@ pub(all) enum ObjKind {
   Coolant
   EmpCell
 } derive(Eq)
+
+///|
+pub extend ObjKind with Eq::{not_equal, equal}
 
 ///|
 /// Stores runtime data for Obj.
@@ -209,7 +215,7 @@ pub fn Spark::Spark() -> Spark {
 ///|
 /// Creates a default ShockRing value for a new session.
 pub fn ShockRing::ShockRing() -> ShockRing {
-  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
+  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0, }
 }
 
 ///|

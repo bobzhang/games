@@ -196,6 +196,11 @@ pub(all) enum CropKind {
   Berry
   Flower
 } derive(Eq, @debug.Debug)
+pub fn CropKind::equal(Self, Self) -> Bool
+pub fn CropKind::not_equal(Self, Self) -> Bool
+pub fn CropKind::output(Self, &Logger) -> Unit
+pub fn CropKind::to_repr(Self) -> @debug.Repr
+pub fn CropKind::to_string(Self) -> String
 pub impl Show for CropKind
 
 pub(all) enum CropState {
@@ -204,6 +209,11 @@ pub(all) enum CropState {
   Mature
   Harvested
 } derive(Eq, @debug.Debug)
+pub fn CropState::equal(Self, Self) -> Bool
+pub fn CropState::not_equal(Self, Self) -> Bool
+pub fn CropState::output(Self, &Logger) -> Unit
+pub fn CropState::to_repr(Self) -> @debug.Repr
+pub fn CropState::to_string(Self) -> String
 pub impl Show for CropState
 
 pub(all) enum Direction {
@@ -214,6 +224,11 @@ pub(all) enum Direction {
   W
   NW
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct Game {
@@ -248,23 +263,29 @@ pub(all) struct Game {
   mut click_feedback_timer : Float
   mut click_feedback_col : Int
   mut click_feedback_row : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct GoalPos {
   col : Int
   row : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn GoalPos::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexCoord {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn HexCoord::equal(Self, Self) -> Bool
+pub fn HexCoord::not_equal(Self, Self) -> Bool
+pub fn HexCoord::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexGrid {
   width : Int
   height : Int
   tiles : Array[Array[HexTile]]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HexGrid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HexTile {
   mut kind : TileKind
@@ -274,7 +295,8 @@ pub(all) struct HexTile {
   mut crop_state : CropState
   mut crop_turns : Int
   mut has_channel : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HexTile::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   mut grid : HexGrid
@@ -285,7 +307,8 @@ pub(all) struct Level {
   mut par_turns : Int
   mut name : String
   mut world : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut yield_collected : Int
@@ -296,12 +319,18 @@ pub(all) struct LevelScore {
   mut goals_collected : Int
   mut total_goals : Int
   mut stars : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlaceMode {
   CropPlace(CropKind)
   ChannelPlace
 } derive(Eq, @debug.Debug)
+pub fn PlaceMode::equal(Self, Self) -> Bool
+pub fn PlaceMode::not_equal(Self, Self) -> Bool
+pub fn PlaceMode::output(Self, &Logger) -> Unit
+pub fn PlaceMode::to_repr(Self) -> @debug.Repr
+pub fn PlaceMode::to_string(Self) -> String
 pub impl Show for PlaceMode
 
 pub(all) enum Screen {
@@ -311,6 +340,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum TileKind {
@@ -320,6 +354,11 @@ pub(all) enum TileKind {
   River
   Goal
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) enum TurnPhase {
@@ -329,6 +368,11 @@ pub(all) enum TurnPhase {
   Growing
   Harvesting
 } derive(Eq, @debug.Debug)
+pub fn TurnPhase::equal(Self, Self) -> Bool
+pub fn TurnPhase::not_equal(Self, Self) -> Bool
+pub fn TurnPhase::output(Self, &Logger) -> Unit
+pub fn TurnPhase::to_repr(Self) -> @debug.Repr
+pub fn TurnPhase::to_string(Self) -> String
 pub impl Show for TurnPhase
 
 pub(all) struct UndoState {
@@ -336,14 +380,15 @@ pub(all) struct UndoState {
   mut turn : Int
   mut yield_collected : Int
   mut goals_collected : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn UndoState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct WaterSource {
   col : Int
   row : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn WaterSource::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

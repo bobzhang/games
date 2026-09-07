@@ -116,7 +116,13 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     let tc = @types.tier_color(tier)
     // Background panel
     if !draw_tier_card_art(tier, bx, by, bw, bh) {
-      @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(50, 40, 30, 200))
+      @raylib.draw_rectangle(
+        bx,
+        by,
+        bw,
+        bh,
+        @raylib.Color::new(50, 40, 30, 200),
+      )
       @raylib.draw_rectangle_lines_ex(
         @raylib.Rectangle::new(
           Float::from_int(bx),

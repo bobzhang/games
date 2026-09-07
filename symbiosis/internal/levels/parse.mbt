@@ -8,8 +8,8 @@ pub fn parse_grid(
   Array[@types.Vec2i],
 ) {
   let grid : Array[Array[@types.TileKind]] = []
-  let mut start : @types.Vec2i = { x: 0, y: 0 }
-  let mut exit : @types.Vec2i = { x: 0, y: 0 }
+  let mut start : @types.Vec2i = { x: 0, y: 0, }
+  let mut exit : @types.Vec2i = { x: 0, y: 0, }
   let gems : Array[@types.Vec2i] = []
   for y in 0..<@types.grid_height {
     let row : Array[@types.TileKind] = []
@@ -21,18 +21,18 @@ pub fn parse_grid(
         '.' => row.push(Floor)
         'X' => {
           row.push(Exit)
-          exit = { x, y }
+          exit = { x, y, }
         }
         '@' => {
           row.push(Floor)
-          start = { x, y }
+          start = { x, y, }
         }
         'P' => row.push(Pit)
         'I' => row.push(Ice)
         'A' => row.push(Anchor)
         'G' => {
           row.push(Floor)
-          gems.push({ x, y })
+          gems.push({ x, y, })
         }
         '0' => row.push(Switch(0))
         '1' => row.push(Switch(1))

@@ -120,6 +120,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Classifies enemy behavior and visual style.
 pub(all) enum EnemyKind {
   /// Basic enemy: square shape, standard chase, moderate fire rate.
@@ -131,11 +134,17 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Classifies player bullet visual and behavior style.
 pub(all) enum BulletKind {
   /// Standard player bullet with cyan trail.
   Standard
 } derive(Eq)
+
+///|
+pub extend BulletKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies enemy bullet visual style based on firing enemy type.
@@ -149,6 +158,9 @@ pub(all) enum EnemyBulletKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyBulletKind with Eq::{not_equal, equal}
+
+///|
 /// Classifies particle visual style by color.
 pub(all) enum ParticleKind {
   /// Cyan spark from player fire.
@@ -158,3 +170,6 @@ pub(all) enum ParticleKind {
   /// Pink burst from damage.
   Damage
 } derive(Eq)
+
+///|
+pub extend ParticleKind with Eq::{not_equal, equal}

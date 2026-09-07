@@ -1,47 +1,47 @@
 ///|
-let tex_title : Ref[@raylib.Texture?] = { val: None }
+let tex_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_hero : Ref[@raylib.Texture?] = { val: None }
+let tex_hero : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_slime : Ref[@raylib.Texture?] = { val: None }
+let tex_slime : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_skeleton : Ref[@raylib.Texture?] = { val: None }
+let tex_skeleton : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_archer : Ref[@raylib.Texture?] = { val: None }
+let tex_archer : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_bat : Ref[@raylib.Texture?] = { val: None }
+let tex_bat : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_spider : Ref[@raylib.Texture?] = { val: None }
+let tex_spider : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_golem : Ref[@raylib.Texture?] = { val: None }
+let tex_golem : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_broodmother : Ref[@raylib.Texture?] = { val: None }
+let tex_broodmother : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_lich_king : Ref[@raylib.Texture?] = { val: None }
+let tex_lich_king : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_health_potion : Ref[@raylib.Texture?] = { val: None }
+let tex_health_potion : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_gold : Ref[@raylib.Texture?] = { val: None }
+let tex_gold : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_weapon_pickup : Ref[@raylib.Texture?] = { val: None }
+let tex_weapon_pickup : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_passive_relic : Ref[@raylib.Texture?] = { val: None }
+let tex_passive_relic : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_rift_stairs : Ref[@raylib.Texture?] = { val: None }
+let tex_rift_stairs : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {

@@ -215,7 +215,7 @@ test "target height satisfaction" {
   ]
   game.crates = [@types.new_crate(1, 2.0, -1.0)]
   game.weights = [@types.new_weight(2, 4.0)]
-  game.targets = [{ crate_index: 0, target_height: -1.0, tolerance: 0.5 }]
+  game.targets = [{ crate_index: 0, target_height: -1.0, tolerance: 0.5, }]
   solve_equilibrium(game)
   let met = check_targets(game)
   // The crate should move up (negative height) since the weight is heavier

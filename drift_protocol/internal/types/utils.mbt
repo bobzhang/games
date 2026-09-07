@@ -215,7 +215,7 @@ pub fn has_line_of_sight(
 // RNG
 
 ///|
-let rng_state : Ref[Int] = { val: 42 }
+let rng_state : Ref[Int] = { val: 42, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {
@@ -341,12 +341,12 @@ pub fn new_terminal(
   high_security : Bool,
   connected_id : Int,
 ) -> Terminal {
-  { gx, gy, hacked: false, high_security, connected_id, data_value: 100 }
+  { gx, gy, hacked: false, high_security, connected_id, data_value: 100, }
 }
 
 ///|
 pub fn new_door(gx : Int, gy : Int, power_id : Int) -> Door {
-  { gx, gy, open: false, locked: true, power_id }
+  { gx, gy, open: false, locked: true, power_id, }
 }
 
 ///|
@@ -357,7 +357,7 @@ pub fn new_laser(
   horizontal : Bool,
   length : Int,
 ) -> LaserGrid {
-  { gx, gy, active: true, power_id, horizontal, length }
+  { gx, gy, active: true, power_id, horizontal, length, }
 }
 
 ///|
@@ -367,7 +367,7 @@ pub fn new_power_node(
   node_id : Int,
   connected : Array[Int],
 ) -> PowerNode {
-  { gx, gy, powered: true, node_id, connected_ids: connected }
+  { gx, gy, powered: true, node_id, connected_ids: connected, }
 }
 
 ///|
@@ -404,9 +404,9 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_empty_level() -> Level {
-  let tiles : Array[Array[TileKind]] = Array::new(capacity=grid_height)
+  let tiles : Array[Array[TileKind]] = Array(capacity=grid_height)
   for _y in 0..<grid_height {
-    let row : Array[TileKind] = Array::new(capacity=grid_width)
+    let row : Array[TileKind] = Array(capacity=grid_width)
     for _x in 0..<grid_width {
       row.push(Floor)
     }
@@ -435,7 +435,7 @@ pub fn new_empty_level() -> Level {
 
 ///|
 pub fn new_game() -> Game {
-  let level_scores : Array[LevelScore?] = Array::new(capacity=total_levels)
+  let level_scores : Array[LevelScore?] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     level_scores.push(None)
   }

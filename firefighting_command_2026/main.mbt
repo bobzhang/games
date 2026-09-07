@@ -16,27 +16,27 @@ let rows : Int = 3
 
 ///|
 /// Generated city grid background texture.
-let tex_city_background : Ref[@raylib.Texture?] = { val: None }
+let tex_city_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated intact house texture.
-let tex_house_intact : Ref[@raylib.Texture?] = { val: None }
+let tex_house_intact : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated burned house texture.
-let tex_house_burned : Ref[@raylib.Texture?] = { val: None }
+let tex_house_burned : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated fire truck texture.
-let tex_fire_truck : Ref[@raylib.Texture?] = { val: None }
+let tex_fire_truck : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated flame texture.
-let tex_flame : Ref[@raylib.Texture?] = { val: None }
+let tex_flame : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated water spray texture.
-let tex_water_spray : Ref[@raylib.Texture?] = { val: None }
+let tex_water_spray : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Returns the pixel X coordinate for the center of grid column c.
@@ -340,7 +340,7 @@ fn main {
   defer unload_assets()
 
   let zones : Array[Zone] = Array::makei(cols * rows, fn(_i) {
-    { fire: 0.0, has_house: true }
+    { fire: 0.0, has_house: true, }
   })
   reset_zones(zones)
 

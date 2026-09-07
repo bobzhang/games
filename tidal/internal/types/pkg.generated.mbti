@@ -183,7 +183,8 @@ pub(all) struct Game {
   mut message : String
   mut message_timer : Float
   mut sim_speed : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   tier : Int
@@ -195,20 +196,23 @@ pub(all) struct Level {
   budget : Array[PlaceableBudget]
   par_objects : Int
   par_ticks : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut objects_used : Int
   mut ticks_used : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct PlaceableBudget {
   mut kind : PlaceableKind
   mut total : Int
   mut used : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PlaceableBudget::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlaceableKind {
   PlaceEmitter
@@ -216,6 +220,11 @@ pub(all) enum PlaceableKind {
   PlacePhaseShifter
   PlaceAbsorber
 } derive(Eq, @debug.Debug)
+pub fn PlaceableKind::equal(Self, Self) -> Bool
+pub fn PlaceableKind::not_equal(Self, Self) -> Bool
+pub fn PlaceableKind::output(Self, &Logger) -> Unit
+pub fn PlaceableKind::to_repr(Self) -> @debug.Repr
+pub fn PlaceableKind::to_string(Self) -> String
 pub impl Show for PlaceableKind
 
 pub(all) enum PlayState {
@@ -225,13 +234,19 @@ pub(all) enum PlayState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct PrePlaced {
   x : Int
   y : Int
   kind : TileKind
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PrePlaced::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -240,6 +255,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct TargetDef {
@@ -248,7 +268,8 @@ pub(all) struct TargetDef {
   min_amp : Float
   max_amp : Float
   phase : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn TargetDef::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TileKind {
   Empty
@@ -259,24 +280,34 @@ pub(all) enum TileKind {
   PhaseShifter
   Absorber
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 pub(all) struct WaveFront {
   mut amplitude : Float
   mut phase : Int
   mut direction : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn WaveFront::to_repr(Self) -> @debug.Repr
 
 pub(all) struct WaveGrid {
   width : Int
   height : Int
   tiles : Array[WaveTile]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn WaveGrid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct WaveTile {
   mut amplitude : Float
@@ -289,9 +320,9 @@ pub(all) struct WaveTile {
   mut target_phase : Int
   mut target_satisfied : Bool
   mut wave_fronts : Array[WaveFront]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn WaveTile::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

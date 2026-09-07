@@ -8,9 +8,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum DominoKind {
@@ -21,9 +30,18 @@ pub(all) enum DominoKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for DominoKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend DominoKind with Eq::{not_equal, equal}
+
+///|
+pub extend DominoKind with Debug::{to_repr}
+
+///|
+pub impl Show for DominoKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend DominoKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Orientation {
@@ -38,9 +56,18 @@ pub(all) enum Orientation {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Orientation with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Orientation with Eq::{not_equal, equal}
+
+///|
+pub extend Orientation with Debug::{to_repr}
+
+///|
+pub impl Show for Orientation with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Orientation with Show::{to_string, output}
 
 ///|
 pub(all) enum DominoState {
@@ -50,9 +77,18 @@ pub(all) enum DominoState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for DominoState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend DominoState with Eq::{not_equal, equal}
+
+///|
+pub extend DominoState with Debug::{to_repr}
+
+///|
+pub impl Show for DominoState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend DominoState with Show::{to_string, output}
 
 ///|
 pub(all) enum PlayState {
@@ -64,9 +100,18 @@ pub(all) enum PlayState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PlayState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PlayState with Eq::{not_equal, equal}
+
+///|
+pub extend PlayState with Debug::{to_repr}
+
+///|
+pub impl Show for PlayState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PlayState with Show::{to_string, output}
 
 ///|
 pub(all) enum Tier {
@@ -76,6 +121,15 @@ pub(all) enum Tier {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Tier with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tier with Eq::{not_equal, equal}
+
+///|
+pub extend Tier with Debug::{to_repr}
+
+///|
+pub impl Show for Tier with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tier with Show::{to_string, output}

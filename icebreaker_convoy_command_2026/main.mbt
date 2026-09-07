@@ -1,10 +1,10 @@
 ///|
 /// Generated Arctic sea map background texture.
-let tex_arctic_background : Ref[@raylib.Texture?] = { val: None }
+let tex_arctic_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated 3x2 convoy command sprite sheet texture.
-let tex_convoy_sprites : Ref[@raylib.Texture?] = { val: None }
+let tex_convoy_sprites : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Icebreaker Convoy Command texture.
@@ -431,7 +431,7 @@ fn init_route(
   let bottom_y : Float = Float::from_int(world_y + world_h - 90)
   let mid_y : Float = Float::from_int(world_y + world_h / 2)
 
-  route.push({ x: left_x, y: mid_y + randf(-40.0, 40.0) })
+  route.push({ x: left_x, y: mid_y + randf(-40.0, 40.0), })
   route.push({
     x: left_x + 190.0,
     y: clampf(mid_y + randf(-180.0, -40.0), top_y, bottom_y),
@@ -456,7 +456,7 @@ fn init_route(
     x: right_x - 170.0,
     y: clampf(mid_y + randf(-120.0, 120.0), top_y, bottom_y),
   })
-  route.push({ x: right_x, y: mid_y + randf(-50.0, 50.0) })
+  route.push({ x: right_x, y: mid_y + randf(-50.0, 50.0), })
 }
 
 ///|

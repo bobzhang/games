@@ -100,6 +100,8 @@ pub(all) enum GameState {
   Paused
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Hazard {
   mut active : Bool
@@ -136,4 +138,3 @@ pub fn Rival::Rival() -> Self
 // Type aliases
 
 // Traits
-

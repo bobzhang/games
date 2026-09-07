@@ -188,7 +188,7 @@ pub fn new_bell(col : Int, row : Int, target_tick : Int) -> Component {
 
 ///|
 pub fn new_palette() -> Palette {
-  { available: [], counts: [] }
+  { available: [], counts: [], }
 }
 
 ///|

@@ -9,9 +9,18 @@ pub(all) enum CellKind {
 } derive(Debug, Eq)
 
 ///|
-pub impl Show for CellKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CellKind with Debug::{to_repr}
+
+///|
+pub extend CellKind with Eq::{not_equal, equal}
+
+///|
+pub impl Show for CellKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CellKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Screen {
@@ -23,9 +32,18 @@ pub(all) enum Screen {
 } derive(Debug, Eq)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum Tool {
@@ -36,9 +54,18 @@ pub(all) enum Tool {
 } derive(Debug, Eq)
 
 ///|
-pub impl Show for Tool with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tool with Debug::{to_repr}
+
+///|
+pub extend Tool with Eq::{not_equal, equal}
+
+///|
+pub impl Show for Tool with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tool with Show::{to_string, output}
 
 ///|
 pub(all) enum StarRating {
@@ -49,9 +76,18 @@ pub(all) enum StarRating {
 } derive(Debug, Eq)
 
 ///|
-pub impl Show for StarRating with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend StarRating with Debug::{to_repr}
+
+///|
+pub extend StarRating with Eq::{not_equal, equal}
+
+///|
+pub impl Show for StarRating with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend StarRating with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -62,6 +98,15 @@ pub(all) enum Direction {
 } derive(Debug, Eq)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}

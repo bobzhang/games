@@ -16,7 +16,7 @@ pub fn find_enclosures(grid : @types.Grid) -> Array[@types.Enclosure] {
         let cells : Array[(Int, Int)] = []
         flood_fill(grid, c, r, visited, cells)
         if cells.length() > 0 {
-          let enc : @types.Enclosure = { id: next_id, cells, species: None }
+          let enc : @types.Enclosure = { id: next_id, cells, species: None, }
           next_id += 1
           enclosures.push(enc)
         }

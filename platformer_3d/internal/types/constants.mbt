@@ -1206,6 +1206,9 @@ pub(all) enum Deco {
 } derive(Eq)
 
 ///|
+pub extend Deco with Eq::{not_equal, equal}
+
+///|
 /// Current game state.
 pub(all) enum GameState {
   Menu
@@ -1219,3 +1222,6 @@ pub(all) enum GameState {
   DeathAnim
   WorldIntro
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

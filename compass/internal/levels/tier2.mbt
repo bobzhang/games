@@ -11,8 +11,8 @@ fn level_8() -> @types.LevelData {
   set_tile(grid, 11, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 11, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 11, y: 9, },
     par_steps: 24,
     landmark_count: count_landmarks(grid),
     tier: 2,
@@ -33,8 +33,8 @@ fn level_9() -> @types.LevelData {
   set_tile(grid, 0, 9, Lighthouse)
   {
     grid,
-    start: { x: 11, y: 0 },
-    lighthouse: { x: 0, y: 9 },
+    start: { x: 11, y: 0, },
+    lighthouse: { x: 0, y: 9, },
     par_steps: 24,
     landmark_count: count_landmarks(grid),
     tier: 2,
@@ -55,8 +55,8 @@ fn level_10() -> @types.LevelData {
   set_tile(grid, 11, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 11, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 11, y: 9, },
     par_steps: 26,
     landmark_count: count_landmarks(grid),
     tier: 2,
@@ -78,8 +78,8 @@ fn level_11() -> @types.LevelData {
   set_tile(grid, 10, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 10, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 10, y: 9, },
     par_steps: 22,
     landmark_count: count_landmarks(grid),
     tier: 2,
@@ -100,8 +100,8 @@ fn level_12() -> @types.LevelData {
   set_tile(grid, 7, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 7, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 7, y: 9, },
     par_steps: 20,
     landmark_count: count_landmarks(grid),
     tier: 2,
@@ -122,8 +122,8 @@ fn level_13() -> @types.LevelData {
   set_tile(grid, 0, 9, Lighthouse)
   {
     grid,
-    start: { x: 11, y: 0 },
-    lighthouse: { x: 0, y: 9 },
+    start: { x: 11, y: 0, },
+    lighthouse: { x: 0, y: 9, },
     par_steps: 26,
     landmark_count: count_landmarks(grid),
     tier: 2,
@@ -146,8 +146,8 @@ fn level_14() -> @types.LevelData {
   set_tile(grid, 11, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 11, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 11, y: 9, },
     par_steps: 24,
     landmark_count: count_landmarks(grid),
     tier: 2,

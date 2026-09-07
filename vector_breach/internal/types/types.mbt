@@ -2,7 +2,13 @@
 pub(all) struct Cell {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Cell with Eq::{not_equal, equal}
+
+///|
+pub extend Cell with Debug::{to_repr}
 
 ///|
 pub(all) struct Tile {
@@ -43,8 +49,8 @@ pub(all) struct Grid {
 
 ///|
 pub fn Grid::new(w : Int, h : Int) -> Grid {
-  let tiles = Array::make(w * h, { kind: Floor, hazard: None, occupied_by: -1 })
-  { width: w, height: h, tiles }
+  let tiles = Array::make(w * h, { kind: Floor, hazard: None, occupied_by: -1, })
+  { width: w, height: h, tiles, }
 }
 
 ///|
@@ -206,7 +212,10 @@ pub(all) struct PreviewTile {
   y : Int
   effect : EffectKind
   affected_unit : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PreviewTile with Debug::{to_repr}
 
 ///|
 pub(all) struct CampaignNode {

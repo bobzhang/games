@@ -71,7 +71,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
@@ -135,7 +135,14 @@ pub fn new_rope() -> Rope {
 
 ///|
 pub fn new_weight(node_id : Int, mass : Float) -> Weight {
-  { active: true, node_id, mass, current_y: 0.0, target_y: 0.0, bob_timer: 0.0 }
+  {
+    active: true,
+    node_id,
+    mass,
+    current_y: 0.0,
+    target_y: 0.0,
+    bob_timer: 0.0,
+  }
 }
 
 ///|
@@ -153,7 +160,7 @@ pub fn new_crate(node_id : Int, mass : Float, target_height : Float) -> Crate {
 
 ///|
 pub fn new_platform(node_id : Int, width : Float) -> Platform {
-  { active: true, node_id, width, height_val: 0.0, connected_to: -1 }
+  { active: true, node_id, width, height_val: 0.0, connected_to: -1, }
 }
 
 ///|
@@ -177,12 +184,12 @@ pub fn new_bucket(
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: 0, connections_used: 0, rehooks: 0 }
+  { completed: false, stars: 0, connections_used: 0, rehooks: 0, }
 }
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

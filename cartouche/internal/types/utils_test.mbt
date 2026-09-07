@@ -196,7 +196,7 @@ test "compute_symbol_positions basic" {
   inspect(positions[1].x, content="156")
   inspect(positions[1].y, content="200")
   // Third is a space
-  inspect(positions[2].symbol, content="None")
+  debug_inspect(positions[2].symbol, content="None")
   // Fourth symbol after space gap
   inspect(positions[3].x, content="242")
   inspect(positions[3].y, content="200")

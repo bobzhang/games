@@ -15,15 +15,15 @@ fn make_test_battle(
   // Apply special tiles
   for i = 0; i < tiles.length(); i = i + 1 {
     let (x, y, kind) = tiles[i]
-    grid.set(x, y, { kind, hazard: None, occupied_by: -1 })
+    grid.set(x, y, { kind, hazard: None, occupied_by: -1, })
   }
   // Apply hazards
   for i = 0; i < hazards.length(); i = i + 1 {
     let (x, y, haz) = hazards[i]
     let tile = grid.get(x, y)
-    grid.set(x, y, { ..tile, hazard: haz })
+    grid.set(x, y, { ..tile, hazard: haz, })
   }
-  { ..battle, grid, units: [], turn_log: [] }
+  { ..battle, grid, units: [], turn_log: [], }
 }
 
 ///|
@@ -65,7 +65,7 @@ fn add_unit(
   }
   battle.units.push(u)
   if battle.grid.in_bounds(x, y) {
-    battle.grid.set(x, y, { ..battle.grid.get(x, y), occupied_by: id })
+    battle.grid.set(x, y, { ..battle.grid.get(x, y), occupied_by: id, })
   }
   id
 }

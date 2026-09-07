@@ -49,7 +49,7 @@ fn @types.Game::draw_single_tile(
   let sy = @types.tile_to_screen_y(ty, shake_y)
 
   match tile {
-    Brick => {
+    Brick =>
       if !draw_tile_art(tile, game.base_alive, sx, sy) {
         @raylib.draw_rectangle(
           sx,
@@ -73,8 +73,7 @@ fn @types.Game::draw_single_tile(
           @raylib.Color::new(110, 55, 37, 255),
         )
       }
-    }
-    Steel => {
+    Steel =>
       if !draw_tile_art(tile, game.base_alive, sx, sy) {
         @raylib.draw_rectangle(
           sx,
@@ -98,8 +97,7 @@ fn @types.Game::draw_single_tile(
           @raylib.Color::new(84, 94, 108, 255),
         )
       }
-    }
-    Water => {
+    Water =>
       if !draw_tile_art(tile, game.base_alive, sx, sy) {
         @raylib.draw_rectangle(
           sx,
@@ -119,8 +117,7 @@ fn @types.Game::draw_single_tile(
           @raylib.Color::new(70, 130, 220, 255),
         )
       }
-    }
-    Ice => {
+    Ice =>
       if !draw_tile_art(tile, game.base_alive, sx, sy) {
         @raylib.draw_rectangle(
           sx,
@@ -137,7 +134,6 @@ fn @types.Game::draw_single_tile(
           @raylib.Color::new(210, 248, 255, 255),
         )
       }
-    }
     Base => {
       if !draw_tile_art(tile, game.base_alive, sx, sy) {
         let base_color = if game.base_alive {

@@ -196,7 +196,7 @@ pub fn Fx::Fx() -> Fx {
 ///|
 /// Creates an inactive ring effect record.
 pub fn Ring::Ring() -> Ring {
-  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
+  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0, }
 }
 
 ///|

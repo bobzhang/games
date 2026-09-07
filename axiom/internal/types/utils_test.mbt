@@ -285,8 +285,8 @@ test "world_name" {
 test "calculate_total_stars" {
   let scores : Array[Array[LevelScore]] = []
   let world1 : Array[LevelScore] = [
-    { completed: true, best_instructions: 3, medal: Gold },
-    { completed: true, best_instructions: 5, medal: Silver },
+    { completed: true, best_instructions: 3, medal: Gold, },
+    { completed: true, best_instructions: 5, medal: Silver, },
   ]
   scores.push(world1)
   inspect(calculate_total_stars(scores), content="5")

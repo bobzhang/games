@@ -40,7 +40,7 @@ pub fn get_codon_groups(seq : Array[@types.Base]) -> Array[@types.CodonResult] {
   let mut pos = start + 3
   while pos + 2 < seq.length() {
     let tr = @types.codon_to_trait(seq[pos], seq[pos + 1], seq[pos + 2])
-    groups.push({ trait_: tr, bases: [seq[pos], seq[pos + 1], seq[pos + 2]] })
+    groups.push({ trait_: tr, bases: [seq[pos], seq[pos + 1], seq[pos + 2]], })
     if tr == Stop {
       break
     }

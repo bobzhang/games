@@ -15,4 +15,3 @@ pub fn process_sound_queue(Array[@types.SoundEvent]) -> Unit
 // Type aliases
 
 // Traits
-

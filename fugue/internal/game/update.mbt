@@ -215,7 +215,7 @@ fn handle_grid_click(game : @types.Game) -> Unit {
       if cell.has_note {
         // Remove note
         cell.has_note = false
-        game.undo_stack.push({ col, row, was_note: true })
+        game.undo_stack.push({ col, row, was_note: true, })
       } else {
         // Check budget
         let used = @types.count_notes_in_grid(grid)
@@ -226,7 +226,7 @@ fn handle_grid_click(game : @types.Game) -> Unit {
         }
         // Place note
         cell.has_note = true
-        game.undo_stack.push({ col, row, was_note: false })
+        game.undo_stack.push({ col, row, was_note: false, })
       }
       // Update harmony score
       game.harmony_score = @harmony.compute_total_harmony(grid)

@@ -12,7 +12,7 @@ pub(all) struct StatusEffect {
 ///|
 /// Creates an empty status effect with no active debuff.
 pub fn StatusEffect::none() -> StatusEffect {
-  { kind: effect_none, duration: 0.0, strength: 0.0, tick_timer: 0.0 }
+  { kind: effect_none, duration: 0.0, strength: 0.0, tick_timer: 0.0, }
 }
 
 ///|
@@ -22,7 +22,7 @@ pub fn StatusEffect::StatusEffect(
   duration : Float,
   strength : Float,
 ) -> StatusEffect {
-  { kind, duration, strength, tick_timer: 0.0 }
+  { kind, duration, strength, tick_timer: 0.0, }
 }
 
 // Tower entity
@@ -687,7 +687,7 @@ pub fn Game::Game() -> Game {
     path_nodes: {
       let arr : Array[PathNode] = []
       for i in 0..<max_path_nodes {
-        arr.push({ x: 0.0, z: 0.0 })
+        arr.push({ x: 0.0, z: 0.0, })
         ignore(i)
       }
       arr

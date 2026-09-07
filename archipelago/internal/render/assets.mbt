@@ -1,14 +1,14 @@
 ///|
-let tex_archipelago_title : Ref[@raylib.Texture?] = { val: None }
+let tex_archipelago_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_ocean_texture : Ref[@raylib.Texture?] = { val: None }
+let tex_ocean_texture : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_island_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_island_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_bridge_segment : Ref[@raylib.Texture?] = { val: None }
+let tex_bridge_segment : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {

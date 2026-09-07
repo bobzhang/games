@@ -900,7 +900,7 @@ pub fn parse_level(def : @types.LevelDef) -> @types.Level {
     goals_collected.push(false)
   }
   let robot = @types.new_robot(def.start_x, def.start_y, def.start_dir)
-  { grid, robot, goals, goals_collected, blocks }
+  { grid, robot, goals, goals_collected, blocks, }
 }
 
 ///|

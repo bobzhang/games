@@ -128,14 +128,18 @@ pub let total_levels : Int
 // Types and methods
 pub(all) struct ForceAction {
   kind : ForceKind
-} derive(Show)
+} derive(@debug.Debug)
+pub fn ForceAction::to_repr(Self) -> @debug.Repr
 
 pub(all) struct ForceBudget {
   mut water : Int
   mut wind : Int
   mut frost : Int
   mut heat : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn ForceBudget::equal(Self, Self) -> Bool
+pub fn ForceBudget::not_equal(Self, Self) -> Bool
+pub fn ForceBudget::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ForceKind {
   Water
@@ -144,6 +148,11 @@ pub(all) enum ForceKind {
   Frost
   Heat
 } derive(Eq, @debug.Debug)
+pub fn ForceKind::equal(Self, Self) -> Bool
+pub fn ForceKind::not_equal(Self, Self) -> Bool
+pub fn ForceKind::output(Self, &Logger) -> Unit
+pub fn ForceKind::to_repr(Self) -> @debug.Repr
+pub fn ForceKind::to_string(Self) -> String
 pub impl Show for ForceKind
 
 pub(all) struct Game {
@@ -167,7 +176,10 @@ pub(all) struct Game {
 pub(all) struct Grid {
   size : Int
   cells : Array[Bool]
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Grid::equal(Self, Self) -> Bool
+pub fn Grid::not_equal(Self, Self) -> Bool
+pub fn Grid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   tier : Tier
@@ -176,13 +188,15 @@ pub(all) struct Level {
   target_shape : Grid
   budget : ForceBudget
   par_forces : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut forces_used : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct MatchResult {
   matching : Int
@@ -190,7 +204,8 @@ pub(all) struct MatchResult {
   under_eroded : Int
   total_target_empty : Int
   total_target_solid : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn MatchResult::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Selecting
@@ -199,6 +214,11 @@ pub(all) enum PlayState {
   Won
   Lost
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -208,6 +228,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -215,9 +240,13 @@ pub(all) enum Tier {
   Stone
   Crystal
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 // Type aliases
 
 // Traits
-

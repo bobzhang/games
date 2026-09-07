@@ -125,59 +125,59 @@ struct Particle {
 
 ///|
 /// Generated title backdrop texture.
-let tex_hacker_title : Ref[@raylib.Texture?] = { val: None }
+let tex_hacker_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated facility floor tile texture.
-let tex_floor_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_floor_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated facility wall tile texture.
-let tex_wall_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_wall_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player hacker texture.
-let tex_player_hacker : Ref[@raylib.Texture?] = { val: None }
+let tex_player_hacker : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated patrol guard texture.
-let tex_guard_patrol : Ref[@raylib.Texture?] = { val: None }
+let tex_guard_patrol : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated heavy guard texture.
-let tex_guard_heavy : Ref[@raylib.Texture?] = { val: None }
+let tex_guard_heavy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated drone guard texture.
-let tex_guard_drone : Ref[@raylib.Texture?] = { val: None }
+let tex_guard_drone : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated security camera texture.
-let tex_security_camera : Ref[@raylib.Texture?] = { val: None }
+let tex_security_camera : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated data terminal texture.
-let tex_data_terminal : Ref[@raylib.Texture?] = { val: None }
+let tex_data_terminal : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated extraction gate texture.
-let tex_exit_gate : Ref[@raylib.Texture?] = { val: None }
+let tex_exit_gate : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated med patch pickup texture.
-let tex_pickup_med : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_med : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated battery pickup texture.
-let tex_pickup_battery : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_battery : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated signal jammer pickup texture.
-let tex_pickup_jammer : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_jammer : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated data cache pickup texture.
-let tex_pickup_cache : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_cache : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated hacker art texture.
@@ -867,7 +867,7 @@ fn main {
   let tiles : Array[Int] = Array::makei(map_w * map_h, fn(_i) { 0 })
 
   let terminals : Array[Terminal] = Array::makei(max_terminals, fn(_i) {
-    { active: false, gx: 0, gy: 0, hacked: false }
+    { active: false, gx: 0, gy: 0, hacked: false, }
   })
 
   let guards : Array[Guard] = Array::makei(max_guards, fn(_i) {
@@ -886,11 +886,11 @@ fn main {
   })
 
   let cameras : Array[Camera] = Array::makei(max_cameras, fn(_i) {
-    { active: false, gx: 0, gy: 0, dir: 0, rot_t: 0.0, disable_t: 0.0 }
+    { active: false, gx: 0, gy: 0, dir: 0, rot_t: 0.0, disable_t: 0.0, }
   })
 
   let pickups : Array[Pickup] = Array::makei(max_pickups, fn(_i) {
-    { active: false, gx: 0, gy: 0, kind: 0 }
+    { active: false, gx: 0, gy: 0, kind: 0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

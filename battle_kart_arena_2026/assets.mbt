@@ -1,26 +1,26 @@
 ///|
 /// Generated battle kart arena backdrop texture.
-let tex_arena_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_arena_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated kart sprite texture.
-let tex_kart_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_kart_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated ammo pickup sprite texture.
-let tex_pickup_ammo : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_ammo : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated boost pickup sprite texture.
-let tex_pickup_boost : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_boost : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated repair pickup sprite texture.
-let tex_pickup_repair : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_repair : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated projectile sprite texture.
-let tex_projectile_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_projectile_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated battle kart texture.

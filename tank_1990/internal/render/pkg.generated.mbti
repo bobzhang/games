@@ -24,4 +24,3 @@ pub fn ui_font() -> @raylib.Font?
 // Type aliases
 
 // Traits
-

@@ -20,7 +20,7 @@ test "grid in_bounds returns false for out-of-bounds coordinates" {
 ///|
 test "grid get and set round-trip" {
   let g = @types.Grid::new(4, 4)
-  let wall_tile : @types.Tile = { kind: Wall, hazard: None, occupied_by: -1 }
+  let wall_tile : @types.Tile = { kind: Wall, hazard: None, occupied_by: -1, }
   g.set(2, 3, wall_tile)
   inspect(g.get(2, 3).kind, content="Wall")
   inspect(g.get(0, 0).kind, content="Floor")

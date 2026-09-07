@@ -150,6 +150,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Order {
   mut active : Bool
@@ -191,6 +193,8 @@ pub(all) enum PickupKind {
   Repair
   Speed
 } derive(Eq)
+pub fn PickupKind::equal(Self, Self) -> Bool
+pub fn PickupKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Traffic {
   mut active : Bool
@@ -210,8 +214,9 @@ pub(all) enum TrafficKind {
   Bus
   Van
 } derive(Eq)
+pub fn TrafficKind::equal(Self, Self) -> Bool
+pub fn TrafficKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

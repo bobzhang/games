@@ -1,6 +1,6 @@
 ///|
 fn make_grid_from(w : Int, h : Int, data : Array[Int]) -> @types.Grid {
-  let tiles : Array[@types.TileKind] = Array::new(capacity=w * h)
+  let tiles : Array[@types.TileKind] = Array(capacity=w * h)
   for i in 0..<data.length() {
     let t : @types.TileKind = match data[i] {
       0 => Empty

@@ -37,4 +37,3 @@ pub fn vigenere_encrypt(String, String) -> String
 // Type aliases
 
 // Traits
-

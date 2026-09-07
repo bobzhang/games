@@ -33,23 +33,23 @@ struct Target {
 
 ///|
 /// Generated archery range backdrop texture.
-let tex_archery_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_archery_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated archer sprite texture.
-let tex_archer : Ref[@raylib.Texture?] = { val: None }
+let tex_archer : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated target sprite texture.
-let tex_target : Ref[@raylib.Texture?] = { val: None }
+let tex_target : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated arrow sprite texture.
-let tex_arrow : Ref[@raylib.Texture?] = { val: None }
+let tex_arrow : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated wind pennant sprite texture.
-let tex_wind_pennant : Ref[@raylib.Texture?] = { val: None }
+let tex_wind_pennant : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated archery art texture.
@@ -178,10 +178,10 @@ fn draw_cover_art(texture : @raylib.Texture) -> Unit {
 ///|
 /// Resets all targets to their initial positions, sizes, velocities, and point values.
 fn reset_targets(ts : Array[Target]) -> Unit {
-  ts[0] = { alive: true, x: 920.0, y: 430.0, r: 34.0, vx: 90.0, points: 30 }
-  ts[1] = { alive: true, x: 1040.0, y: 360.0, r: 26.0, vx: -120.0, points: 45 }
-  ts[2] = { alive: true, x: 860.0, y: 300.0, r: 20.0, vx: 70.0, points: 60 }
-  ts[3] = { alive: true, x: 980.0, y: 250.0, r: 16.0, vx: -95.0, points: 75 }
+  ts[0] = { alive: true, x: 920.0, y: 430.0, r: 34.0, vx: 90.0, points: 30, }
+  ts[1] = { alive: true, x: 1040.0, y: 360.0, r: 26.0, vx: -120.0, points: 45, }
+  ts[2] = { alive: true, x: 860.0, y: 300.0, r: 20.0, vx: 70.0, points: 60, }
+  ts[3] = { alive: true, x: 980.0, y: 250.0, r: 16.0, vx: -95.0, points: 75, }
 }
 
 ///|
@@ -192,10 +192,10 @@ fn main {
   @draw.init_font()
   load_archery_art()
 
-  let arrow : Arrow = { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0 }
+  let arrow : Arrow = { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, }
 
   let targets : Array[Target] = Array::makei(4, fn(_i) {
-    { alive: true, x: 0.0, y: 0.0, r: 20.0, vx: 0.0, points: 20 }
+    { alive: true, x: 0.0, y: 0.0, r: 20.0, vx: 0.0, points: 20, }
   })
   reset_targets(targets)
 

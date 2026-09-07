@@ -38,31 +38,31 @@ fn draw_meter(
 
 ///|
 /// Generated dungeon floor background texture.
-let tex_floor : Ref[@raylib.Texture?] = { val: None }
+let tex_floor : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated courier character texture.
-let tex_courier : Ref[@raylib.Texture?] = { val: None }
+let tex_courier : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated guard character texture.
-let tex_guard : Ref[@raylib.Texture?] = { val: None }
+let tex_guard : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated parcel pickup texture.
-let tex_parcel : Ref[@raylib.Texture?] = { val: None }
+let tex_parcel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated exit marker texture.
-let tex_exit : Ref[@raylib.Texture?] = { val: None }
+let tex_exit : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated trap rune texture.
-let tex_trap : Ref[@raylib.Texture?] = { val: None }
+let tex_trap : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated smoke cloud texture.
-let tex_smoke : Ref[@raylib.Texture?] = { val: None }
+let tex_smoke : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Dungeon Courier Escape texture.
@@ -579,13 +579,23 @@ fn @types.Game::draw_smokes(game : @types.Game) -> Unit {
         smoke.x.to_int(),
         smoke.y.to_int(),
         smoke.radius,
-        @raylib.Color::new(154, 162, 176, ((56.0 : Float) * life_ratio).to_int()),
+        @raylib.Color::new(
+          154,
+          162,
+          176,
+          ((56.0 : Float) * life_ratio).to_int(),
+        ),
       )
       @raylib.draw_circle_lines(
         smoke.x.to_int(),
         smoke.y.to_int(),
         smoke.radius,
-        @raylib.Color::new(212, 220, 236, ((136.0 : Float) * life_ratio).to_int()),
+        @raylib.Color::new(
+          212,
+          220,
+          236,
+          ((136.0 : Float) * life_ratio).to_int(),
+        ),
       )
     }
   }

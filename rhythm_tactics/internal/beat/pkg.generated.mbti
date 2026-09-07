@@ -37,4 +37,3 @@ pub fn update_combo(@types.BeatState, @types.BeatRating) -> Unit
 // Type aliases
 
 // Traits
-

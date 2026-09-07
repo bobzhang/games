@@ -624,6 +624,8 @@ pub(all) enum Deco {
   Bush
   Lamp
 } derive(Eq)
+pub fn Deco::equal(Self, Self) -> Bool
+pub fn Deco::not_equal(Self, Self) -> Bool
 
 pub(all) struct Decoration {
   mut active : Bool
@@ -770,6 +772,8 @@ pub(all) enum GameState {
   DeathAnim
   WorldIntro
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Hazard {
   mut active : Bool
@@ -899,4 +903,3 @@ pub fn ScoreFly::inactive() -> Self
 // Type aliases
 
 // Traits
-

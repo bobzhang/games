@@ -8,5 +8,5 @@ pub(all) struct MinimapConfig {
 
 ///|
 pub fn default_minimap_config() -> MinimapConfig {
-  { x: @types.screen_w - 180, y: 55, scale: 3.0, room_size: 6 }
+  { x: @types.screen_w - 180, y: 55, scale: 3.0, room_size: 6, }
 }

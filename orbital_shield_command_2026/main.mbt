@@ -353,13 +353,13 @@ fn main {
   defer unload_game_art(art)
 
   let enemies : Array[Enemy] = Array::makei(max_enemies, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 0, kind: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 0, kind: 0, active: false, }
   })
   let shots : Array[Shot] = Array::makei(max_shots, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false, }
   })
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false, kind: 0 }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false, kind: 0, }
   })
 
   clear_enemies(enemies)

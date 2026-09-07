@@ -37,4 +37,3 @@ pub fn draw_ui_panel(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

@@ -21,4 +21,3 @@ pub fn propagate(@types.LevelState, @types.LevelData) -> (Bool, Int, Array[@type
 // Type aliases
 
 // Traits
-

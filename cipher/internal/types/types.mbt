@@ -2,7 +2,10 @@
 pub(all) struct Mapping {
   cipher_to_plain : Array[Int] // 26 elements, -1 = unmapped
   plain_used : Array[Bool] // 26 elements, tracks which plain letters are assigned
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Mapping with Debug::{to_repr}
 
 ///|
 pub(all) struct UndoEntry {
@@ -10,7 +13,10 @@ pub(all) struct UndoEntry {
   old_plain : Int // previous mapping value (-1 or 0-25)
   old_displaced_cipher : Int // if we displaced another mapping, which cipher letter (-1 if none)
   old_displaced_plain : Int // and what was its old plain value
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend UndoEntry with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -22,7 +28,10 @@ pub(all) struct Level {
   key_info : String // e.g. "shift=3" or "key=LEMON"
   par_swaps : Int
   hint_text : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -30,14 +39,20 @@ pub(all) struct LevelScore {
   mut stars : Int
   mut best_swaps : Int
   mut best_no_hints : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct PatternMatch {
   pattern : String
   positions : Array[Int]
   count : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend PatternMatch with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -65,4 +80,7 @@ pub(all) struct Game {
   mut patterns_dirty : Bool
   // Selected pattern for highlighting
   mut selected_pattern_idx : Int // -1 = none
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

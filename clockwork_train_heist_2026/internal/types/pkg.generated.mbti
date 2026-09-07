@@ -167,6 +167,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Guard {
   mut active : Bool
@@ -189,6 +191,8 @@ pub(all) enum GuardMode {
   Hunt
   Stunned
 } derive(Eq)
+pub fn GuardMode::equal(Self, Self) -> Bool
+pub fn GuardMode::not_equal(Self, Self) -> Bool
 
 pub(all) struct Loot {
   mut active : Bool
@@ -204,6 +208,8 @@ pub(all) enum LootKind {
   Keycard
   Gold
 } derive(Eq)
+pub fn LootKind::equal(Self, Self) -> Bool
+pub fn LootKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -222,6 +228,8 @@ pub(all) enum ParticleKind {
   Glitter
   Smoke
 } derive(Eq)
+pub fn ParticleKind::equal(Self, Self) -> Bool
+pub fn ParticleKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Smoke {
   mut active : Bool
@@ -237,8 +245,9 @@ pub(all) enum TileKind {
   Door
   Exit
 } derive(Eq)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

@@ -304,6 +304,9 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+pub extend Dir with Eq::{not_equal, equal}
+
+///|
 /// Converts an integer to a Dir value.
 pub fn Dir::from_int(v : Int) -> Dir {
   match v {
@@ -324,6 +327,9 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Identifies the type of powerup pickup.
 pub(all) enum PowerupKind {
   Shield
@@ -333,6 +339,9 @@ pub(all) enum PowerupKind {
   Shovel
   Tank
 } derive(Eq)
+
+///|
+pub extend PowerupKind with Eq::{not_equal, equal}
 
 ///|
 /// High-level game state for the campaign state machine.
@@ -347,6 +356,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Identifies which team owns a bullet or scores points.
 pub(all) enum Team {
   None
@@ -354,3 +366,6 @@ pub(all) enum Team {
   Player2
   Enemy
 } derive(Eq)
+
+///|
+pub extend Team with Eq::{not_equal, equal}

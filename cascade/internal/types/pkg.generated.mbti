@@ -168,14 +168,16 @@ pub(all) struct Domino {
   mut topple_tick : Int
   mut delay_remaining : Int
   mut anim_progress : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Domino::to_repr(Self) -> @debug.Repr
 
 pub(all) struct DominoBudget {
   mut normal : Int
   mut heavy : Int
   mut splitter : Int
   mut delay : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn DominoBudget::to_repr(Self) -> @debug.Repr
 
 pub(all) enum DominoKind {
   Normal
@@ -183,6 +185,11 @@ pub(all) enum DominoKind {
   Splitter
   Delay
 } derive(Eq, @debug.Debug)
+pub fn DominoKind::equal(Self, Self) -> Bool
+pub fn DominoKind::not_equal(Self, Self) -> Bool
+pub fn DominoKind::output(Self, &Logger) -> Unit
+pub fn DominoKind::to_repr(Self) -> @debug.Repr
+pub fn DominoKind::to_string(Self) -> String
 pub impl Show for DominoKind
 
 pub(all) enum DominoState {
@@ -190,6 +197,11 @@ pub(all) enum DominoState {
   Toppling
   Fallen
 } derive(Eq, @debug.Debug)
+pub fn DominoState::equal(Self, Self) -> Bool
+pub fn DominoState::not_equal(Self, Self) -> Bool
+pub fn DominoState::output(Self, &Logger) -> Unit
+pub fn DominoState::to_repr(Self) -> @debug.Repr
+pub fn DominoState::to_string(Self) -> String
 pub impl Show for DominoState
 
 pub(all) struct Game {
@@ -229,14 +241,16 @@ pub(all) struct Level {
   budget : DominoBudget
   par_count : Int
   par_ticks : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut dominoes_used : Int
   mut ticks_taken : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Orientation {
   N
@@ -248,6 +262,11 @@ pub(all) enum Orientation {
   W
   NW
 } derive(Eq, @debug.Debug)
+pub fn Orientation::equal(Self, Self) -> Bool
+pub fn Orientation::not_equal(Self, Self) -> Bool
+pub fn Orientation::output(Self, &Logger) -> Unit
+pub fn Orientation::to_repr(Self) -> @debug.Repr
+pub fn Orientation::to_string(Self) -> String
 pub impl Show for Orientation
 
 pub(all) enum PlayState {
@@ -257,6 +276,11 @@ pub(all) enum PlayState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -266,6 +290,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -273,20 +302,30 @@ pub(all) enum Tier {
   Splits
   Timing
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct ToppleEvent {
   pos : Vec2i
   tick : Int
   kind : DominoKind
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn ToppleEvent::equal(Self, Self) -> Bool
+pub fn ToppleEvent::not_equal(Self, Self) -> Bool
+pub fn ToppleEvent::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

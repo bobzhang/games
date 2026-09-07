@@ -6,7 +6,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 1: Just grow a tree
       {
         seed_columns: [5],
-        targets: [{ tree_index: 0, required_height: 5 }],
+        targets: [{ tree_index: 0, required_height: 5, }],
         turn_limit: 8,
         prune_budget: 0,
         par_prunes: 0,
@@ -18,7 +18,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 2: Grow taller
       {
         seed_columns: [6],
-        targets: [{ tree_index: 0, required_height: 7 }],
+        targets: [{ tree_index: 0, required_height: 7, }],
         turn_limit: 10,
         prune_budget: 1,
         par_prunes: 0,
@@ -30,7 +30,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 3: Water management
       {
         seed_columns: [4],
-        targets: [{ tree_index: 0, required_height: 6 }],
+        targets: [{ tree_index: 0, required_height: 6, }],
         turn_limit: 10,
         prune_budget: 2,
         par_prunes: 1,
@@ -42,7 +42,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 4: Pruning basics
       {
         seed_columns: [6],
-        targets: [{ tree_index: 0, required_height: 8 }],
+        targets: [{ tree_index: 0, required_height: 8, }],
         turn_limit: 12,
         prune_budget: 3,
         par_prunes: 2,
@@ -54,7 +54,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 5: Low water challenge
       {
         seed_columns: [5],
-        targets: [{ tree_index: 0, required_height: 5 }],
+        targets: [{ tree_index: 0, required_height: 5, }],
         turn_limit: 12,
         prune_budget: 3,
         par_prunes: 2,
@@ -66,7 +66,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 6: Rain timing
       {
         seed_columns: [3],
-        targets: [{ tree_index: 0, required_height: 7 }],
+        targets: [{ tree_index: 0, required_height: 7, }],
         turn_limit: 12,
         prune_budget: 2,
         par_prunes: 1,
@@ -78,7 +78,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 7: Max height challenge
       {
         seed_columns: [6],
-        targets: [{ tree_index: 0, required_height: 9 }],
+        targets: [{ tree_index: 0, required_height: 9, }],
         turn_limit: 14,
         prune_budget: 4,
         par_prunes: 2,
@@ -92,8 +92,8 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [3, 8],
         targets: [
-          { tree_index: 0, required_height: 5 },
-          { tree_index: 1, required_height: 5 },
+          { tree_index: 0, required_height: 5, },
+          { tree_index: 1, required_height: 5, },
         ],
         turn_limit: 10,
         prune_budget: 2,
@@ -107,8 +107,8 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [4, 6],
         targets: [
-          { tree_index: 0, required_height: 6 },
-          { tree_index: 1, required_height: 6 },
+          { tree_index: 0, required_height: 6, },
+          { tree_index: 1, required_height: 6, },
         ],
         turn_limit: 12,
         prune_budget: 4,
@@ -122,8 +122,8 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [3, 7],
         targets: [
-          { tree_index: 0, required_height: 7 },
-          { tree_index: 1, required_height: 4 },
+          { tree_index: 0, required_height: 7, },
+          { tree_index: 1, required_height: 4, },
         ],
         turn_limit: 12,
         prune_budget: 3,
@@ -137,9 +137,9 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [2, 6, 10],
         targets: [
-          { tree_index: 0, required_height: 5 },
-          { tree_index: 1, required_height: 5 },
-          { tree_index: 2, required_height: 5 },
+          { tree_index: 0, required_height: 5, },
+          { tree_index: 1, required_height: 5, },
+          { tree_index: 2, required_height: 5, },
         ],
         turn_limit: 10,
         prune_budget: 3,
@@ -152,7 +152,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 12: Pruning competition
       {
         seed_columns: [4, 5, 7],
-        targets: [{ tree_index: 1, required_height: 7 }],
+        targets: [{ tree_index: 1, required_height: 7, }],
         turn_limit: 12,
         prune_budget: 4,
         par_prunes: 3,
@@ -165,8 +165,8 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [3, 8],
         targets: [
-          { tree_index: 0, required_height: 6 },
-          { tree_index: 1, required_height: 6 },
+          { tree_index: 0, required_height: 6, },
+          { tree_index: 1, required_height: 6, },
         ],
         turn_limit: 14,
         prune_budget: 5,
@@ -179,7 +179,7 @@ pub fn get_level(index : Int) -> @types.Level {
       // Level 14: The tall one
       {
         seed_columns: [3, 6, 9],
-        targets: [{ tree_index: 1, required_height: 8 }],
+        targets: [{ tree_index: 1, required_height: 8, }],
         turn_limit: 14,
         prune_budget: 5,
         par_prunes: 3,
@@ -193,9 +193,9 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [1, 3, 5, 7, 9],
         targets: [
-          { tree_index: 0, required_height: 5 },
-          { tree_index: 2, required_height: 5 },
-          { tree_index: 4, required_height: 5 },
+          { tree_index: 0, required_height: 5, },
+          { tree_index: 2, required_height: 5, },
+          { tree_index: 4, required_height: 5, },
         ],
         turn_limit: 12,
         prune_budget: 6,
@@ -209,8 +209,8 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [2, 4, 6, 8, 10],
         targets: [
-          { tree_index: 1, required_height: 7 },
-          { tree_index: 3, required_height: 7 },
+          { tree_index: 1, required_height: 7, },
+          { tree_index: 3, required_height: 7, },
         ],
         turn_limit: 14,
         prune_budget: 8,
@@ -224,10 +224,10 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [2, 5, 8, 11],
         targets: [
-          { tree_index: 0, required_height: 6 },
-          { tree_index: 1, required_height: 6 },
-          { tree_index: 2, required_height: 6 },
-          { tree_index: 3, required_height: 6 },
+          { tree_index: 0, required_height: 6, },
+          { tree_index: 1, required_height: 6, },
+          { tree_index: 2, required_height: 6, },
+          { tree_index: 3, required_height: 6, },
         ],
         turn_limit: 16,
         prune_budget: 8,
@@ -241,8 +241,8 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [1, 3, 5, 7, 9, 11],
         targets: [
-          { tree_index: 2, required_height: 8 },
-          { tree_index: 3, required_height: 8 },
+          { tree_index: 2, required_height: 8, },
+          { tree_index: 3, required_height: 8, },
         ],
         turn_limit: 16,
         prune_budget: 10,
@@ -256,9 +256,9 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [0, 2, 4, 6, 8, 10],
         targets: [
-          { tree_index: 0, required_height: 7 },
-          { tree_index: 2, required_height: 9 },
-          { tree_index: 5, required_height: 7 },
+          { tree_index: 0, required_height: 7, },
+          { tree_index: 2, required_height: 9, },
+          { tree_index: 5, required_height: 7, },
         ],
         turn_limit: 18,
         prune_budget: 10,
@@ -272,10 +272,10 @@ pub fn get_level(index : Int) -> @types.Level {
       {
         seed_columns: [0, 2, 3, 5, 6, 8, 9, 11],
         targets: [
-          { tree_index: 0, required_height: 6 },
-          { tree_index: 3, required_height: 8 },
-          { tree_index: 4, required_height: 8 },
-          { tree_index: 7, required_height: 6 },
+          { tree_index: 0, required_height: 6, },
+          { tree_index: 3, required_height: 8, },
+          { tree_index: 4, required_height: 8, },
+          { tree_index: 7, required_height: 6, },
         ],
         turn_limit: 20,
         prune_budget: 12,

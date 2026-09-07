@@ -53,9 +53,9 @@ test "fired_name returns names" {
 
 ///|
 test "tier_level_range" {
-  inspect(@types.tier_level_range(Beginner), content="(0, 7)")
-  inspect(@types.tier_level_range(Intermediate), content="(7, 14)")
-  inspect(@types.tier_level_range(Advanced), content="(14, 20)")
+  debug_inspect(@types.tier_level_range(Beginner), content="(0, 7)")
+  debug_inspect(@types.tier_level_range(Intermediate), content="(7, 14)")
+  debug_inspect(@types.tier_level_range(Advanced), content="(14, 20)")
 }
 
 ///|

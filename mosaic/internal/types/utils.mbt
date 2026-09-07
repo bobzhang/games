@@ -45,17 +45,17 @@ pub fn new_tile(
   shape : TileShape,
   orientation : Orientation,
 ) -> Tile {
-  { color, shape, orientation }
+  { color, shape, orientation, }
 }
 
 ///|
 pub fn copy_tile(t : Tile) -> Tile {
-  { color: t.color, shape: t.shape, orientation: t.orientation }
+  { color: t.color, shape: t.shape, orientation: t.orientation, }
 }
 
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
@@ -96,12 +96,12 @@ pub fn set_tile(grid : MosaicGrid, x : Int, y : Int, tile : Tile?) -> Unit {
 ///|
 pub fn new_grid(width : Int, height : Int) -> MosaicGrid {
   let tiles : Array[Tile?] = Array::make(width * height, None)
-  { width, height, tiles, holes: [] }
+  { width, height, tiles, holes: [], }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: 0, errors: 0, guessed_symmetry: false }
+  { completed: false, stars: 0, errors: 0, guessed_symmetry: false, }
 }
 
 ///|

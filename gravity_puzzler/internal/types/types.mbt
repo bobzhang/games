@@ -231,7 +231,7 @@ pub fn Particle::new(
   b : Int,
   kind : Int,
 ) -> Particle {
-  { x, y, vx, vy, life, max_life: life, size, r, g, b, kind }
+  { x, y, vx, vy, life, max_life: life, size, r, g, b, kind, }
 }
 
 ///|
@@ -277,13 +277,13 @@ pub fn EditorState::new() -> EditorState {
 
 ///|
 pub fn AmbientState::new() -> AmbientState {
-  { particles: [], spawn_timer: 0.0 }
+  { particles: [], spawn_timer: 0.0, }
 }
 
 ///|
 pub fn AchievementState::new() -> AchievementState {
   let achievements = init_achievements()
-  { achievements, toast_queue: [], toast_timer: 0.0, current_toast: -1 }
+  { achievements, toast_queue: [], toast_timer: 0.0, current_toast: -1, }
 }
 
 ///|

@@ -38,7 +38,7 @@ fn find_bridges(
   let found : Array[(Int, Int, Int, Int)] = []
   for r in 0..<board.size {
     for c in 0..<board.size {
-      let coord : @types.HexCoord = { row: r, col: c }
+      let coord : @types.HexCoord = { row: r, col: c, }
       if @types.has_stone(board, coord, player) {
         let neighbors = @types.hex_neighbors_valid(coord, board.size)
         for ni in 0..<neighbors.length() {
@@ -110,7 +110,7 @@ fn find_chains(
   let found_set : Array[String] = []
   for r in 0..<board.size {
     for c in 0..<board.size {
-      let start : @types.HexCoord = { row: r, col: c }
+      let start : @types.HexCoord = { row: r, col: c, }
       if @types.has_stone(board, start, player) {
         // Direction 0: East (same row, col+1)
         check_chain_dir(board, player, start, 0, result, found_set)
@@ -130,20 +130,20 @@ fn next_in_direction(coord : @types.HexCoord, dir : Int) -> @types.HexCoord {
   let parity = row % 2
   match dir {
     // East
-    0 => { row, col: col + 1 }
+    0 => { row, col: col + 1, }
     // SE
     1 =>
       if parity == 0 {
-        { row: row + 1, col }
+        { row: row + 1, col, }
       } else {
-        { row: row + 1, col: col + 1 }
+        { row: row + 1, col: col + 1, }
       }
     // NE
     _ =>
       if parity == 0 {
-        { row: row - 1, col }
+        { row: row - 1, col, }
       } else {
-        { row: row - 1, col: col + 1 }
+        { row: row - 1, col: col + 1, }
       }
   }
 }
@@ -154,18 +154,18 @@ fn prev_in_direction(coord : @types.HexCoord, dir : Int) -> @types.HexCoord {
   let col = coord.col
   let parity = row % 2
   match dir {
-    0 => { row, col: col - 1 }
+    0 => { row, col: col - 1, }
     1 =>
       if parity == 0 {
-        { row: row - 1, col: col - 1 }
+        { row: row - 1, col: col - 1, }
       } else {
-        { row: row - 1, col }
+        { row: row - 1, col, }
       }
     _ =>
       if parity == 0 {
-        { row: row + 1, col: col - 1 }
+        { row: row + 1, col: col - 1, }
       } else {
-        { row: row + 1, col }
+        { row: row + 1, col, }
       }
   }
 }
@@ -200,7 +200,7 @@ fn check_chain_dir(
   }
   if stones.length() >= 3 {
     // Create a key to deduplicate
-    let key_buf = StringBuilder::new()
+    let key_buf = StringBuilder()
     key_buf.write_string(dir.to_string())
     for si in 0..<stones.length() {
       key_buf.write_string("_")
@@ -237,7 +237,7 @@ fn find_triangles(
   let found : Array[String] = []
   for r in 0..<board.size {
     for c in 0..<board.size {
-      let a : @types.HexCoord = { row: r, col: c }
+      let a : @types.HexCoord = { row: r, col: c, }
       if @types.has_stone(board, a, player) {
         let a_neighbors = @types.hex_neighbors_valid(a, board.size)
         for i in 0..<a_neighbors.length() {
@@ -341,7 +341,7 @@ fn find_diamonds(
   let found : Array[String] = []
   for r in 0..<board.size {
     for c in 0..<board.size {
-      let a : @types.HexCoord = { row: r, col: c }
+      let a : @types.HexCoord = { row: r, col: c, }
       if @types.has_stone(board, a, player) {
         let a_nbrs = @types.hex_neighbors_valid(a, board.size)
         for i in 0..<a_nbrs.length() {
@@ -443,7 +443,7 @@ fn find_fortresses(
 ) -> Unit {
   for r in 0..<board.size {
     for c in 0..<board.size {
-      let center : @types.HexCoord = { row: r, col: c }
+      let center : @types.HexCoord = { row: r, col: c, }
       if @types.has_stone(board, center, player) {
         let nbrs = @types.hex_neighbors_valid(center, board.size)
         let mut friendly_count = 0
@@ -475,7 +475,7 @@ fn find_rings(
 ) -> Unit {
   for r in 0..<board.size {
     for c in 0..<board.size {
-      let center : @types.HexCoord = { row: r, col: c }
+      let center : @types.HexCoord = { row: r, col: c, }
       if @types.get_cell(board, center) == Empty {
         let nbrs = @types.hex_neighbors_valid(center, board.size)
         if nbrs.length() == 6 {
@@ -490,7 +490,7 @@ fn find_rings(
             }
           }
           if all_friendly && positions.length() == 6 {
-            result.push({ kind: Ring, positions, points: @types.ring_points })
+            result.push({ kind: Ring, positions, points: @types.ring_points, })
           }
         }
       }
@@ -507,7 +507,7 @@ fn find_stars(
 ) -> Unit {
   for r in 0..<board.size {
     for c in 0..<board.size {
-      let center : @types.HexCoord = { row: r, col: c }
+      let center : @types.HexCoord = { row: r, col: c, }
       if @types.has_stone(board, center, player) {
         let nbrs = @types.hex_neighbors_valid(center, board.size)
         if nbrs.length() == 6 {
@@ -522,7 +522,7 @@ fn find_stars(
             }
           }
           if all_friendly {
-            result.push({ kind: Star, positions, points: @types.star_points })
+            result.push({ kind: Star, positions, points: @types.star_points, })
           }
         }
       }
@@ -558,7 +558,7 @@ fn check_wall_edge(
 ) -> Unit {
   let mut run : Array[@types.HexCoord] = []
   for c in 0..<board.size {
-    let coord : @types.HexCoord = { row, col: c }
+    let coord : @types.HexCoord = { row, col: c, }
     if @types.has_stone(board, coord, player) {
       run.push(coord)
     } else {
@@ -567,13 +567,13 @@ fn check_wall_edge(
         for i in 0..<run.length() {
           positions.push(run[i])
         }
-        result.push({ kind: Wall, positions, points: @types.wall_points })
+        result.push({ kind: Wall, positions, points: @types.wall_points, })
       }
       run = []
     }
   }
   if run.length() >= 4 {
-    result.push({ kind: Wall, positions: run, points: @types.wall_points })
+    result.push({ kind: Wall, positions: run, points: @types.wall_points, })
   }
 }
 
@@ -586,7 +586,7 @@ fn check_wall_edge_col(
 ) -> Unit {
   let mut run : Array[@types.HexCoord] = []
   for r in 0..<board.size {
-    let coord : @types.HexCoord = { row: r, col }
+    let coord : @types.HexCoord = { row: r, col, }
     if @types.has_stone(board, coord, player) {
       run.push(coord)
     } else {
@@ -595,12 +595,12 @@ fn check_wall_edge_col(
         for i in 0..<run.length() {
           positions.push(run[i])
         }
-        result.push({ kind: Wall, positions, points: @types.wall_points })
+        result.push({ kind: Wall, positions, points: @types.wall_points, })
       }
       run = []
     }
   }
   if run.length() >= 4 {
-    result.push({ kind: Wall, positions: run, points: @types.wall_points })
+    result.push({ kind: Wall, positions: run, points: @types.wall_points, })
   }
 }

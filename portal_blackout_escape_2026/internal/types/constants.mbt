@@ -151,12 +151,18 @@ pub(all) enum DroneMode {
 } derive(Eq)
 
 ///|
+pub extend DroneMode with Eq::{not_equal, equal}
+
+///|
 /// Top-level game state: title screen, active play, or result screen.
 pub(all) enum GameState {
   Title
   Play
   Result
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Grid tile type: impassable wall, walkable floor, or extraction exit.
@@ -167,12 +173,18 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+pub extend Tile with Eq::{not_equal, equal}
+
+///|
 /// Core kind enum: orange, blue, or green energy core.
 pub(all) enum CoreKind {
   Orange
   Blue
   Green
 } derive(Eq)
+
+///|
+pub extend CoreKind with Eq::{not_equal, equal}
 
 ///|
 /// Converts an integer (from level data) to a CoreKind.
@@ -193,3 +205,6 @@ pub(all) enum ParticleKind {
   YellowFlash
   PurpleSmoke
 } derive(Eq)
+
+///|
+pub extend ParticleKind with Eq::{not_equal, equal}

@@ -25,4 +25,3 @@ pub fn glaze_to_fired(@types.GlazeColor) -> @types.FiredColor
 // Type aliases
 
 // Traits
-

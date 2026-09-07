@@ -259,12 +259,12 @@ pub fn new_inscription(symbols : Array[InscriptionSymbol]) -> Inscription {
 
 ///|
 pub fn make_symbol(s : Symbol) -> InscriptionSymbol {
-  { symbol: Some(s) }
+  { symbol: Some(s), }
 }
 
 ///|
 pub fn make_space() -> InscriptionSymbol {
-  { symbol: None }
+  { symbol: None, }
 }
 
 ///|
@@ -318,7 +318,7 @@ pub fn get_inscription_symbols_unique(
 
 ///|
 pub fn new_tablet_score() -> TabletScore {
-  { solved: false, stars: 0, guesses_used: 0, wrong_count: 0 }
+  { solved: false, stars: 0, guesses_used: 0, wrong_count: 0, }
 }
 
 // New game
@@ -433,7 +433,10 @@ pub(all) struct SymbolPosition {
   x : Int
   y : Int
   symbol : Symbol?
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend SymbolPosition with Debug::{to_repr}
 
 ///|
 pub fn compute_symbol_positions(
@@ -456,14 +459,14 @@ pub fn compute_symbol_positions(
           cx = 0
           cy = cy + line_height
         }
-        result.push({ x: base_x + cx, y: base_y + cy, symbol: None })
+        result.push({ x: base_x + cx, y: base_y + cy, symbol: None, })
       }
       Some(sym) => {
         if cx > max_width - spacing {
           cx = 0
           cy = cy + line_height
         }
-        result.push({ x: base_x + cx, y: base_y + cy, symbol: Some(sym) })
+        result.push({ x: base_x + cx, y: base_y + cy, symbol: Some(sym), })
         cx = cx + spacing
       }
     }

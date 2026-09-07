@@ -49,4 +49,3 @@ pub fn silhouettes_match(@types.Silhouette, @types.Silhouette) -> Bool
 // Type aliases
 
 // Traits
-

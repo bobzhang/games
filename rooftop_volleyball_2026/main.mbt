@@ -517,10 +517,10 @@ fn main {
     serve_owner: 1,
   }
 
-  let wind : Wind = { dir: 1.0, strength: 0.0, ttl: 0.0, cd: 4.0 }
+  let wind : Wind = { dir: 1.0, strength: 0.0, ttl: 0.0, cd: 4.0, }
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false, }
   })
 
   setup_match(player, bot, ball, wind, particles)
@@ -797,10 +797,10 @@ fn main {
 
           let winner = if ball.x < Float::from_int(net_x) { 2 } else { 1 }
 
-          let msg_ref : Ref[String] = { val: round_msg }
-          let rally_ref : Ref[Float] = { val: rally_wait }
-          let over_ref : Ref[Bool] = { val: over }
-          let won_ref : Ref[Bool] = { val: won }
+          let msg_ref : Ref[String] = { val: round_msg, }
+          let rally_ref : Ref[Float] = { val: rally_wait, }
+          let over_ref : Ref[Bool] = { val: over, }
+          let won_ref : Ref[Bool] = { val: won, }
 
           resolve_point(
             winner, player, bot, ball, particles, msg_ref, rally_ref, over_ref, won_ref,

@@ -16,7 +16,7 @@ test "try_move_blocked_by_land" {
   let state = @levels.init_level(0)
   // Level 1 has land at (3,0)-(4,2)
   // Move ship to x:2, y:0 first
-  state.ship.pos = { x: 2, y: 0 }
+  state.ship.pos = { x: 2, y: 0, }
   let old_steps = state.ship.steps
   @navigation.try_move(state, East)
   // Should be blocked - land at x:3, y:0
@@ -28,7 +28,7 @@ test "try_move_blocked_by_land" {
 ///|
 test "try_move_out_of_bounds" {
   let state = @levels.init_level(0)
-  state.ship.pos = { x: 0, y: 0 }
+  state.ship.pos = { x: 0, y: 0, }
   let old_steps = state.ship.steps
   @navigation.try_move(state, North)
   inspect(state.ship.pos.y, content="0")
@@ -54,7 +54,7 @@ test "reef_damage" {
   let state = @levels.init_level(0)
   // Place reef east of ship
   state.data.grid[1][2] = Reef
-  state.ship.pos = { x: 1, y: 1 }
+  state.ship.pos = { x: 1, y: 1, }
   let hp_before = state.ship.hp
   @navigation.try_move(state, East)
   inspect(state.ship.hp, content="\{hp_before - 1}")
@@ -64,7 +64,7 @@ test "reef_damage" {
 test "reef_sinks_ship" {
   let state = @levels.init_level(0)
   state.data.grid[1][2] = Reef
-  state.ship.pos = { x: 1, y: 1 }
+  state.ship.pos = { x: 1, y: 1, }
   state.ship.hp = 1
   @navigation.try_move(state, East)
   inspect(state.ship.hp, content="0")
@@ -75,7 +75,7 @@ test "reef_sinks_ship" {
 test "landmark_reveals_area" {
   let state = @levels.init_level(0)
   // Level 1 has landmark at (6,2)
-  state.ship.pos = { x: 5, y: 2 }
+  state.ship.pos = { x: 5, y: 2, }
   @navigation.try_move(state, East)
   // Should reveal 3x3 around (6,2)
   inspect(state.revealed[1][5], content="true")
@@ -86,7 +86,7 @@ test "landmark_reveals_area" {
 ///|
 test "landmark_increments_count" {
   let state = @levels.init_level(0)
-  state.ship.pos = { x: 5, y: 2 }
+  state.ship.pos = { x: 5, y: 2, }
   // (6,2) is a landmark - area not yet revealed
   state.revealed[2][6] = false
   let before = state.ship.landmarks_found
@@ -98,7 +98,7 @@ test "landmark_increments_count" {
 test "lighthouse_completes_level" {
   let state = @levels.init_level(0)
   // Lighthouse at (10,8) - place ship adjacent
-  state.ship.pos = { x: 9, y: 8 }
+  state.ship.pos = { x: 9, y: 8, }
   @navigation.try_move(state, East)
   inspect(state.phase, content="LevelComplete")
 }
@@ -143,7 +143,7 @@ test "compute_star_rating_three_star" {
 ///|
 test "can_reach_adjacent" {
   let state = @levels.init_level(0)
-  state.ship.pos = { x: 1, y: 1 }
+  state.ship.pos = { x: 1, y: 1, }
   // East from (1,1) goes to (2,1) which is ocean
   inspect(@navigation.can_reach_adjacent(state, East), content="true")
   // North from (1,1) goes to (1,0) - check
@@ -157,14 +157,14 @@ test "can_reach_adjacent" {
 test "can_reach_adjacent_blocked" {
   let state = @levels.init_level(0)
   // Level 1 has land at (3,0)
-  state.ship.pos = { x: 2, y: 0 }
+  state.ship.pos = { x: 2, y: 0, }
   inspect(@navigation.can_reach_adjacent(state, East), content="false")
 }
 
 ///|
 test "can_reach_adjacent_out_of_bounds" {
   let state = @levels.init_level(0)
-  state.ship.pos = { x: 0, y: 0 }
+  state.ship.pos = { x: 0, y: 0, }
   inspect(@navigation.can_reach_adjacent(state, North), content="false")
   inspect(@navigation.can_reach_adjacent(state, West), content="false")
 }
@@ -173,7 +173,7 @@ test "can_reach_adjacent_out_of_bounds" {
 test "current_pushes_ship" {
   let state = @levels.init_level(7)
   // Level 8 has current East at (0,6)
-  state.ship.pos = { x: 0, y: 5 }
+  state.ship.pos = { x: 0, y: 5, }
   // Move south onto current
   @navigation.try_move(state, South)
   // Ship should be pushed east from (0,6) to (1,6)
@@ -193,7 +193,7 @@ test "no_move_when_not_playing" {
 ///|
 test "multiple_moves_step_count" {
   let state = @levels.init_level(0)
-  state.ship.pos = { x: 5, y: 5 }
+  state.ship.pos = { x: 5, y: 5, }
   // Ensure surrounding tiles are ocean
   state.data.grid[5][6] = Ocean
   state.data.grid[5][7] = Ocean

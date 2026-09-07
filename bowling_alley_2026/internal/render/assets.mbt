@@ -1,23 +1,25 @@
 ///|
 /// Generated neon bowling alley backdrop.
-let tex_alley_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_alley_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated polished lane wood texture.
-let tex_lane_wood : Ref[@raylib.Texture?] = { val: None }
+let tex_lane_wood : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated glossy bowling ball sprite.
-let tex_ball_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_ball_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated bowling pin sprite.
-let tex_pin_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_pin_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads a bilinear-filtered Bowling Alley texture.
 fn load_art_texture(file_name : String) -> @raylib.Texture {
-  let texture = @raylib.load_texture("bowling_alley_2026/resources/" + file_name)
+  let texture = @raylib.load_texture(
+    "bowling_alley_2026/resources/" + file_name,
+  )
   @raylib.set_texture_filter(texture, @raylib.TextureFilterBilinear)
   texture
 }
@@ -224,7 +226,11 @@ fn draw_pin_art(pin : @types.Pin, sx : Int, sy : Int) -> Bool {
         @types.pin_radius * 0.28,
         @raylib.Color::new(0, 0, 0, 80),
       )
-      let rotation : Float = if pin.standing { 0.0 } else { fallen_pin_rotation(pin) }
+      let rotation : Float = if pin.standing {
+        0.0
+      } else {
+        fallen_pin_rotation(pin)
+      }
       let scale_w : Float = if pin.standing { 31.0 } else { 28.0 }
       let scale_h : Float = if pin.standing { 58.0 } else { 64.0 }
       draw_art_centered(

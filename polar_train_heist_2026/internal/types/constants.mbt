@@ -347,6 +347,9 @@ pub(all) enum EntityKind {
 } derive(Eq)
 
 ///|
+pub extend EntityKind with Eq::{not_equal, equal}
+
+///|
 /// Game state machine states.
 pub(all) enum GameState {
   Title
@@ -354,3 +357,6 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

@@ -23,4 +23,3 @@ pub fn in_range(Float, @types.PropertyRange) -> Bool
 // Type aliases
 
 // Traits
-

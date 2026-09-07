@@ -218,6 +218,8 @@ pub(all) enum Dir {
   Down
   Left
 } derive(Eq)
+pub fn Dir::equal(Self, Self) -> Bool
+pub fn Dir::not_equal(Self, Self) -> Bool
 pub fn Dir::rotate_cw(Self) -> Self
 
 pub(all) struct Enemy {
@@ -242,6 +244,8 @@ pub(all) enum EnemyKind {
   Carapace
   Wraith
 } derive(Eq)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
 pub fn EnemyKind::to_int(Self) -> Int
 
 pub(all) struct Game {
@@ -286,6 +290,8 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Node {
   active : Bool
@@ -312,4 +318,3 @@ pub fn PulseFx::PulseFx() -> Self
 // Type aliases
 
 // Traits
-

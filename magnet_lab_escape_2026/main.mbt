@@ -893,7 +893,7 @@ fn main {
   })
 
   let gates : Array[Gate] = Array::makei(max_gates, fn(_i) {
-    { active: false, x: 0.0, req: 0, open: false }
+    { active: false, x: 0.0, req: 0, open: false, }
   })
 
   let cores : Array[Core] = Array::makei(max_cores, fn(_i) {

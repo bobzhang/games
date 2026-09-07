@@ -1,14 +1,14 @@
 ///|
 /// Generated moonlit temple background texture.
-let tex_jade_temple_background : Ref[@raylib.Texture?] = { val: None }
+let tex_jade_temple_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated jade courtyard floor texture.
-let tex_jade_floor_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_jade_floor_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated 4x2 bellkeeper, bell, shrine, foe, relic, and bolt sprite sheet.
-let tex_jade_guardian_sprites : Ref[@raylib.Texture?] = { val: None }
+let tex_jade_guardian_sprites : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Jade Temple Bellkeeper texture.
@@ -360,14 +360,14 @@ fn @types.Game::draw_shrine(
   )
 
   if !draw_sprite_cell(
-    2,
-    x,
-    y + 4.0,
-    @types.shrine_radius * 2.8,
-    @types.shrine_radius * 2.15,
-    0.0,
-    @raylib.Color::new(238, 252, 246, 220),
-  ) {
+      2,
+      x,
+      y + 4.0,
+      @types.shrine_radius * 2.8,
+      @types.shrine_radius * 2.15,
+      0.0,
+      @raylib.Color::new(238, 252, 246, 220),
+    ) {
     @raylib.draw_circle(
       x.to_int(),
       y.to_int(),
@@ -425,14 +425,14 @@ fn draw_bell(b : @types.Bell, i : Int, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   if !draw_sprite_cell(
-    1,
-    x,
-    y - 2.0,
-    68.0,
-    68.0,
-    0.0,
-    @raylib.Color::new(238, 252, 248, 238),
-  ) {
+      1,
+      x,
+      y - 2.0,
+      68.0,
+      68.0,
+      0.0,
+      @raylib.Color::new(238, 252, 248, 238),
+    ) {
     @raylib.draw_circle(
       x.to_int(),
       y.to_int(),
@@ -496,14 +496,14 @@ fn draw_wisp(
     @raylib.Color::new(255, 126, 190, 124),
   )
   if !draw_sprite_cell(
-    4,
-    x,
-    y,
-    f.w * 1.55,
-    f.h * 1.55,
-    @math.sinf(f.phase * 1.8) * 4.0,
-    @raylib.white,
-  ) {
+      4,
+      x,
+      y,
+      f.w * 1.55,
+      f.h * 1.55,
+      @math.sinf(f.phase * 1.8) * 4.0,
+      @raylib.white,
+    ) {
     @raylib.draw_circle(x.to_int(), y.to_int(), f.w * 0.25, @types.pink())
     @raylib.draw_circle(
       x.to_int(),
@@ -526,14 +526,14 @@ fn draw_brute(
   let y = f.y + cam_y
 
   if !draw_sprite_cell(
-    5,
-    x,
-    y,
-    f.w * 1.35,
-    f.h * 1.35,
-    @math.sinf(f.phase * 1.2) * 2.0,
-    @raylib.white,
-  ) {
+      5,
+      x,
+      y,
+      f.w * 1.35,
+      f.h * 1.35,
+      @math.sinf(f.phase * 1.2) * 2.0,
+      @raylib.white,
+    ) {
     @raylib.draw_rectangle(
       (x - f.w * 0.5).to_int(),
       (y - f.h * 0.5).to_int(),
@@ -570,14 +570,14 @@ fn draw_shaman(
   let y = f.y + cam_y
 
   if !draw_sprite_cell(
-    6,
-    x,
-    y,
-    f.w * 1.5,
-    f.h * 1.58,
-    @math.sinf(f.phase * 1.4) * 3.0,
-    @raylib.white,
-  ) {
+      6,
+      x,
+      y,
+      f.w * 1.5,
+      f.h * 1.58,
+      @math.sinf(f.phase * 1.4) * 3.0,
+      @raylib.white,
+    ) {
     @raylib.draw_triangle(
       @raylib.Vector2::new(x, y - f.h * 0.52),
       @raylib.Vector2::new(x - f.w * 0.46, y + f.h * 0.4),
@@ -611,14 +611,14 @@ fn draw_relic(
     @raylib.Color::new(118, 244, 202, 88),
   )
   if !draw_sprite_cell(
-    3,
-    x,
-    y,
-    f.w * 1.5,
-    f.h * 1.55,
-    @math.sinf(f.phase * 1.6) * 5.0,
-    @raylib.white,
-  ) {
+      3,
+      x,
+      y,
+      f.w * 1.5,
+      f.h * 1.55,
+      @math.sinf(f.phase * 1.6) * 5.0,
+      @raylib.white,
+    ) {
     @raylib.draw_rectangle(
       (x - f.w * 0.3).to_int(),
       (y - f.h * 0.3).to_int(),
@@ -718,15 +718,7 @@ fn @types.Game::draw_hero(
     )
   }
 
-  if !draw_sprite_cell(
-    0,
-    x,
-    y - 7.0,
-    h.w * 1.85,
-    h.h * 2.0,
-    h.angle,
-    body,
-  ) {
+  if !draw_sprite_cell(0, x, y - 7.0, h.w * 1.85, h.h * 2.0, h.angle, body) {
     @raylib.draw_triangle(
       @raylib.Vector2::new(x, y - h.h * 0.54),
       @raylib.Vector2::new(x - h.w * 0.5, y + h.h * 0.16),

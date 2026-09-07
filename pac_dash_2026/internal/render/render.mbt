@@ -106,11 +106,7 @@ fn @types.Game::draw_ghosts(game : @types.Game, art : GameArt) -> Unit {
   for ghost in game.ghosts {
     let cx = @types.tile_center_x(ghost.x)
     let cy = @types.tile_center_y(ghost.y)
-    let sprite = if game.frightened_timer > 0.0 {
-      8
-    } else {
-      4 + ghost_index
-    }
+    let sprite = if game.frightened_timer > 0.0 { 8 } else { 4 + ghost_index }
     draw_sprite_cell(
       art,
       sprite,

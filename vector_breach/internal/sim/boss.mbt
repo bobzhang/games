@@ -167,7 +167,7 @@ fn deploy_wall(battle : @types.BattleState, x : Int, y : Int) -> Unit {
   if battle.grid.in_bounds(x, y) {
     let tile = battle.grid.get(x, y)
     if tile.kind == Floor && tile.occupied_by < 0 {
-      battle.grid.set(x, y, { kind: Wall, hazard: None, occupied_by: -1 })
+      battle.grid.set(x, y, { kind: Wall, hazard: None, occupied_by: -1, })
       battle.boss_walls_deployed.push((x, y))
       battle.turn_log.push("  Wall deployed at (\{x}, \{y})")
     }
@@ -182,7 +182,7 @@ fn explode_deployed_walls(battle : @types.BattleState) -> Unit {
     let (wx, wy) = walls[w]
     if battle.grid.in_bounds(wx, wy) {
       // Destroy the wall
-      battle.grid.set(wx, wy, { kind: Floor, hazard: Fire, occupied_by: -1 })
+      battle.grid.set(wx, wy, { kind: Floor, hazard: Fire, occupied_by: -1, })
       battle.turn_log.push("  Wall at (\{wx}, \{wy}) EXPLODES!")
       // Damage adjacent units
       let dx_arr = [0, 0, 1, -1]
@@ -443,7 +443,7 @@ fn spawn_boss_minion(
   }
   battle.units.push(eu)
   if battle.grid.in_bounds(sx, sy) {
-    battle.grid.set(sx, sy, { ..battle.grid.get(sx, sy), occupied_by: eu.id })
+    battle.grid.set(sx, sy, { ..battle.grid.get(sx, sy), occupied_by: eu.id, })
   }
   let etype_name = @content.get_enemy_name(etype)
   battle.turn_log.push("  Boss summons \{etype_name} at (\{sx}, \{sy})!")

@@ -25,4 +25,3 @@ pub fn update_simulation(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

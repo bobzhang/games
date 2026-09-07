@@ -32,11 +32,11 @@ pub fn spread_once(grid : @types.Grid) -> @types.Grid {
         let ni = @types.grid_index(grid, nc, nr)
         let dest = new_tiles[ni]
         let mixed = @types.ink_mix(dest.ink, src.ink)
-        dest.ink = { c: mixed.c, m: mixed.m, y: mixed.y }
+        dest.ink = { c: mixed.c, m: mixed.m, y: mixed.y, }
       }
     }
   }
-  { width: w, height: h, tiles: new_tiles }
+  { width: w, height: h, tiles: new_tiles, }
 }
 
 ///|

@@ -320,15 +320,15 @@ fn main {
   let tiles : Array[Int] = Array::makei(map_w * map_h, fn(_i) { 0 })
 
   let crates : Array[Crate] = Array::makei(max_crates, fn(_i) {
-    { active: false, gx: 0, gy: 0 }
+    { active: false, gx: 0, gy: 0, }
   })
 
   let plates : Array[Plate] = Array::makei(max_plates, fn(_i) {
-    { active: false, gx: 0, gy: 0, pressed: false }
+    { active: false, gx: 0, gy: 0, pressed: false, }
   })
 
   let relics : Array[Relic] = Array::makei(max_relics, fn(_i) {
-    { active: false, gx: 0, gy: 0, taken: false }
+    { active: false, gx: 0, gy: 0, taken: false, }
   })
 
   let enemies : Array[Enemy] = Array::makei(max_enemies, fn(_i) {
@@ -346,7 +346,7 @@ fn main {
   })
 
   let spikes : Array[Spike] = Array::makei(max_spikes, fn(_i) {
-    { active: false, gx: 0, gy: 0, t: 0.0 }
+    { active: false, gx: 0, gy: 0, t: 0.0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

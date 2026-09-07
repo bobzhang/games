@@ -17,4 +17,3 @@ pub fn step(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

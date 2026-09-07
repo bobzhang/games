@@ -448,7 +448,7 @@ fn record_op(
   before : @types.Shape,
 ) -> Unit {
   let cost = @types.op_cost(kind)
-  game.ops_history.push({ kind, cost })
+  game.ops_history.push({ kind, cost, })
   game.shape_history.push(before)
   game.total_cost = game.total_cost + cost
   game.anim_shape_before = Some(before)

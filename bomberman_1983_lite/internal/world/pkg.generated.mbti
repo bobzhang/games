@@ -21,4 +21,3 @@ pub fn tank_hits_world(@types.Game, Float, Float) -> Bool
 // Type aliases
 
 // Traits
-

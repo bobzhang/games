@@ -1,30 +1,30 @@
 ///|
 /// Generated relay backdrop texture.
-let tex_relay_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_relay_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated icefield world texture.
-let tex_icefield_texture : Ref[@raylib.Texture?] = { val: None }
+let tex_icefield_texture : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated rover sprite texture.
-let tex_rover_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_rover_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated relay tower sprite texture.
-let tex_tower_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_tower_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated depot sprite texture.
-let tex_depot_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_depot_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated power-cell sprite texture.
-let tex_power_cell_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_power_cell_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated storm vortex sprite texture.
-let tex_storm_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_storm_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated arctic signal relay texture.

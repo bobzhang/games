@@ -7,12 +7,18 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Occupant of a board cell.
 pub(all) enum Player {
   Empty
   Human
   AI
 } derive(Eq)
+
+///|
+pub extend Player with Eq::{not_equal, equal}
 
 ///|
 /// Direction used for cursor movement and hold-repeat input.
@@ -25,6 +31,9 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+pub extend Dir with Eq::{not_equal, equal}
+
+///|
 /// Visual category for spark effects.
 pub(all) enum SparkKind {
   SparkAI
@@ -32,6 +41,9 @@ pub(all) enum SparkKind {
   SparkUndo
   SparkHint
 } derive(Eq)
+
+///|
+pub extend SparkKind with Eq::{not_equal, equal}
 
 ///|
 /// Runtime particle used for move, hint, and undo effects.

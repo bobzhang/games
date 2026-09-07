@@ -196,9 +196,9 @@ test "compute_stars_failure" {
 ///|
 test "total_stars_mixed" {
   let scores : Array[LevelScore] = [
-    { completed: true, best_cycles_survived: 3, stars: 3 },
-    { completed: true, best_cycles_survived: 3, stars: 2 },
-    { completed: false, best_cycles_survived: 1, stars: 0 },
+    { completed: true, best_cycles_survived: 3, stars: 3, },
+    { completed: true, best_cycles_survived: 3, stars: 2, },
+    { completed: false, best_cycles_survived: 1, stars: 0, },
   ]
   assert_eq(total_stars(scores), 5)
 }
@@ -206,9 +206,9 @@ test "total_stars_mixed" {
 ///|
 test "levels_completed_count" {
   let scores : Array[LevelScore] = [
-    { completed: true, best_cycles_survived: 3, stars: 3 },
-    { completed: false, best_cycles_survived: 0, stars: 0 },
-    { completed: true, best_cycles_survived: 3, stars: 1 },
+    { completed: true, best_cycles_survived: 3, stars: 3, },
+    { completed: false, best_cycles_survived: 0, stars: 0, },
+    { completed: true, best_cycles_survived: 3, stars: 1, },
   ]
   assert_eq(levels_completed(scores), 2)
 }

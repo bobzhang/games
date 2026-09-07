@@ -1,26 +1,26 @@
 ///|
 /// Generated festival backdrop texture.
-let tex_festival_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_festival_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated river surface texture.
-let tex_river_surface : Ref[@raylib.Texture?] = { val: None }
+let tex_river_surface : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player dragon boat sprite.
-let tex_player_boat : Ref[@raylib.Texture?] = { val: None }
+let tex_player_boat : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated rival dragon boat sprite.
-let tex_rival_boat : Ref[@raylib.Texture?] = { val: None }
+let tex_rival_boat : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated floating debris sprite.
-let tex_debris_log : Ref[@raylib.Texture?] = { val: None }
+let tex_debris_log : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated wave ring sprite.
-let tex_wave_ring : Ref[@raylib.Texture?] = { val: None }
+let tex_wave_ring : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated dragon boat texture.
@@ -221,7 +221,11 @@ fn draw_boat_art(
   hull : @raylib.Color,
   show_flag : Bool,
 ) -> Bool {
-  let texture_opt = if show_flag { tex_player_boat.val } else { tex_rival_boat.val }
+  let texture_opt = if show_flag {
+    tex_player_boat.val
+  } else {
+    tex_rival_boat.val
+  }
   match texture_opt {
     Some(texture) => {
       @raylib.draw_ellipse(
@@ -240,7 +244,11 @@ fn draw_boat_art(
           hull.r.to_int(),
           hull.g.to_int(),
           hull.b.to_int(),
-          if show_flag { 70 } else { 104 },
+          if show_flag {
+            70
+          } else {
+            104
+          },
         ),
       )
       draw_texture_fit(

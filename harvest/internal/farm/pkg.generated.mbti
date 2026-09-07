@@ -37,4 +37,3 @@ pub fn total_mature_value(Array[Array[@types.Plot]]) -> Int
 // Type aliases
 
 // Traits
-

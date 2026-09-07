@@ -96,7 +96,7 @@ pub fn Obstacle::Obstacle() -> Obstacle {
 ///|
 /// Create an inactive pickup slot.
 pub fn Pickup::Pickup() -> Pickup {
-  { active: false, x: 0.0, y: 0.0, kind: Coin, phase: 0.0 }
+  { active: false, x: 0.0, y: 0.0, kind: Coin, phase: 0.0, }
 }
 
 ///|

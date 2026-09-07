@@ -101,10 +101,10 @@ fn main {
   @draw.init_font()
 
   let bullets : Array[Bullet] = Array::makei(140, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, vy: -620.0 }
+    { alive: false, x: 0.0, y: 0.0, vy: -620.0, }
   })
   let enemies : Array[Enemy] = Array::makei(140, fn(_i) {
-    { alive: false, kind: 0, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 1 }
+    { alive: false, kind: 0, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 1, }
   })
 
   let mut player_x : Float = Float::from_int(sw / 2)

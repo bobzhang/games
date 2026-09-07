@@ -78,7 +78,7 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
   @types.sync_rng(game, rng)
   // Set the floor theme on game
   game.floor_theme = Some(@types.theme_data(theme))
-  { grid, enemies, floor_num, exit_x, exit_y }
+  { grid, enemies, floor_num, exit_x, exit_y, }
 }
 
 ///|
@@ -293,7 +293,7 @@ fn generate_boss_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
   }
   @types.sync_rng(game, rng)
   game.is_boss_floor = true
-  { grid, enemies, floor_num, exit_x, exit_y }
+  { grid, enemies, floor_num, exit_x, exit_y, }
 }
 
 ///|

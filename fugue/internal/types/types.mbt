@@ -3,20 +3,32 @@ pub(all) struct NoteCell {
   mut has_note : Bool
   mut is_target : Bool
   mut is_locked : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend NoteCell with Debug::{to_repr}
 
 ///|
 pub(all) struct Grid {
   cols : Int
   rows : Int
   cells : Array[Array[NoteCell]]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Grid with Debug::{to_repr}
 
 ///|
 pub(all) struct TargetPos {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend TargetPos with Eq::{not_equal, equal}
+
+///|
+pub extend TargetPos with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {

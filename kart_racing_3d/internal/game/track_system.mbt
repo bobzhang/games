@@ -7,7 +7,7 @@ pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
   game.waypoint_count = wp_data.length().clamp(min=0, max=@types.max_waypoints)
   for i in 0..<game.waypoint_count {
     let d = wp_data[i]
-    game.waypoints[i] = { x: d.0, y: d.1, z: d.2 }
+    game.waypoints[i] = { x: d.0, y: d.1, z: d.2, }
   }
   // Load segment metadata from level data
   let seg_data = @levels.get_track_segments(cup, race)

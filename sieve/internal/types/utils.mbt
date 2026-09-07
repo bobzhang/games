@@ -49,16 +49,16 @@ pub fn absi(v : Int) -> Int {
 
 ///|
 pub fn new_cell(value : Int, locked : Bool) -> Cell {
-  { value, locked }
+  { value, locked, }
 }
 
 ///|
 pub fn new_grid() -> Grid {
-  let cells : Array[Cell] = Array::new(capacity=grid_total_cells)
+  let cells : Array[Cell] = Array(capacity=grid_total_cells)
   for _i in 0..<grid_total_cells {
     cells.push(new_cell(0, false))
   }
-  { size: grid_size, cells }
+  { size: grid_size, cells, }
 }
 
 ///|
@@ -93,12 +93,12 @@ pub fn grid_is_full(g : Grid) -> Bool {
 
 ///|
 pub fn new_constraint(kind : ConstraintKind, params : Array[Int]) -> Constraint {
-  { kind, params, satisfied: false }
+  { kind, params, satisfied: false, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, best_time: 0.0, completed: false }
+  { stars: 0, best_time: 0.0, completed: false, }
 }
 
 ///|
@@ -151,11 +151,11 @@ pub fn constraint_kind_name(kind : ConstraintKind) -> String {
 
 ///|
 pub fn clone_grid(g : Grid) -> Grid {
-  let cells : Array[Cell] = Array::new(capacity=g.cells.length())
+  let cells : Array[Cell] = Array(capacity=g.cells.length())
   for i in 0..<g.cells.length() {
     cells.push(new_cell(g.cells[i].value, g.cells[i].locked))
   }
-  { size: g.size, cells }
+  { size: g.size, cells, }
 }
 
 ///|
@@ -200,7 +200,7 @@ pub fn cell_candidates(
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

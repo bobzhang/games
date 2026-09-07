@@ -179,38 +179,50 @@ pub(all) struct Game {
   mut frame_count : Int
   mut spread_timer : Float
   mut show_preview : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Grid {
   width : Int
   height : Int
   tiles : Array[Tile]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Grid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HistoryEntry {
   tiles : Array[Tile]
   budget : InkBudget
   drops_used : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HistoryEntry::to_repr(Self) -> @debug.Repr
 
 pub(all) struct InkBudget {
   mut cyan : Int
   mut magenta : Int
   mut yellow : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn InkBudget::to_repr(Self) -> @debug.Repr
 
 pub(all) enum InkChannel {
   Cyan
   Magenta
   Yellow
 } derive(Eq, @debug.Debug)
+pub fn InkChannel::equal(Self, Self) -> Bool
+pub fn InkChannel::not_equal(Self, Self) -> Bool
+pub fn InkChannel::output(Self, &Logger) -> Unit
+pub fn InkChannel::to_repr(Self) -> @debug.Repr
+pub fn InkChannel::to_string(Self) -> String
 pub impl Show for InkChannel
 
 pub(all) struct InkColor {
   mut c : Bool
   mut m : Bool
   mut y : Bool
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn InkColor::equal(Self, Self) -> Bool
+pub fn InkColor::not_equal(Self, Self) -> Bool
+pub fn InkColor::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   grid : Grid
@@ -218,13 +230,15 @@ pub(all) struct Level {
   par_drops : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : StarRating
   mut drops_used : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Placing
@@ -232,6 +246,11 @@ pub(all) enum PlayState {
   Won
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -241,6 +260,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum StarRating {
@@ -249,6 +273,11 @@ pub(all) enum StarRating {
   Two
   Three
 } derive(Eq, @debug.Debug)
+pub fn StarRating::equal(Self, Self) -> Bool
+pub fn StarRating::not_equal(Self, Self) -> Bool
+pub fn StarRating::output(Self, &Logger) -> Unit
+pub fn StarRating::to_repr(Self) -> @debug.Repr
+pub fn StarRating::to_string(Self) -> String
 pub impl Show for StarRating
 
 pub(all) enum Tier {
@@ -256,22 +285,32 @@ pub(all) enum Tier {
   Pigment
   Palette
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Tile {
   mut kind : TileKind
   mut ink : InkColor
   mut target_color : InkColor
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Tile::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TileKind {
   Paper
   Barrier
   Target
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 // Type aliases
 
 // Traits
-

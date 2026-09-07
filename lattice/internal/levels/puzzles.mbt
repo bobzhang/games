@@ -115,7 +115,7 @@ pub fn create_puzzles() -> Array[@types.PuzzleLevel] {
   puzzles.push(
     make_puzzle(12, "Complete the Ring", 7, fn(b) {
       // Set up 5 of 6 ring stones around center (3,3)
-      let neighbors = @types.hex_neighbors({ row: 3, col: 3 })
+      let neighbors = @types.hex_neighbors({ row: 3, col: 3, })
       for i in 0..<5 {
         let n = neighbors[i]
         if @types.in_bounds(n, @types.board_size) {
@@ -128,7 +128,7 @@ pub fn create_puzzles() -> Array[@types.PuzzleLevel] {
   puzzles.push(
     make_puzzle(13, "Almost a Star", 8, fn(b) {
       place(b, 3, 3, Black)
-      let neighbors = @types.hex_neighbors({ row: 3, col: 3 })
+      let neighbors = @types.hex_neighbors({ row: 3, col: 3, })
       for i in 0..<5 {
         let n = neighbors[i]
         if @types.in_bounds(n, @types.board_size) {
@@ -232,7 +232,7 @@ fn make_puzzle(
 ) -> @types.PuzzleLevel {
   let board = @types.new_board(@types.board_size)
   setup(board.cells)
-  { id, board, current_player: Black, target_score, hint }
+  { id, board, current_player: Black, target_score, hint, }
 }
 
 ///|

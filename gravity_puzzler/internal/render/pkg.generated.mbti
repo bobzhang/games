@@ -15,4 +15,3 @@ pub fn draw_game(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

@@ -730,7 +730,7 @@ fn main {
   @draw.init_font()
 
   let walls : Array[Wall] = Array::makei(max_walls, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0 }
+    { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, }
   })
 
   let anchors : Array[Anchor] = Array::makei(max_anchors, fn(_i) {

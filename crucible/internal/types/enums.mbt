@@ -8,9 +8,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum Element {
@@ -33,9 +42,18 @@ pub(all) enum Element {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Element with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Element with Eq::{not_equal, equal}
+
+///|
+pub extend Element with Debug::{to_repr}
+
+///|
+pub impl Show for Element with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Element with Show::{to_string, output}
 
 ///|
 pub(all) enum PlayState {
@@ -47,9 +65,18 @@ pub(all) enum PlayState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PlayState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PlayState with Eq::{not_equal, equal}
+
+///|
+pub extend PlayState with Debug::{to_repr}
+
+///|
+pub impl Show for PlayState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PlayState with Show::{to_string, output}
 
 ///|
 pub(all) enum Tier {
@@ -59,9 +86,18 @@ pub(all) enum Tier {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Tier with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tier with Eq::{not_equal, equal}
+
+///|
+pub extend Tier with Debug::{to_repr}
+
+///|
+pub impl Show for Tier with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tier with Show::{to_string, output}
 
 ///|
 pub(all) enum ReactionResult {
@@ -71,6 +107,15 @@ pub(all) enum ReactionResult {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ReactionResult with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ReactionResult with Eq::{not_equal, equal}
+
+///|
+pub extend ReactionResult with Debug::{to_repr}
+
+///|
+pub impl Show for ReactionResult with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ReactionResult with Show::{to_string, output}

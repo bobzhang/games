@@ -415,7 +415,7 @@ fn draw_editor_panel(ed : @types.EditorState) -> Unit {
 ///|
 /// Encode the editor level as a string for saving/sharing
 pub fn encode_editor_level(ed : @types.EditorState) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   // Header: width,height,gravity
   buf.write_string(ed.grid_w.to_string())
   buf.write_char('x')
@@ -590,7 +590,7 @@ pub fn decode_editor_level(ed : @types.EditorState, data : String) -> Bool {
 ///|
 fn split_lines_ed(s : String) -> Array[String] {
   let lines : Array[String] = []
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i in 0..<s.length() {
     let ch = Int::unsafe_to_char(s[i].to_int())
     if ch == '\n' {

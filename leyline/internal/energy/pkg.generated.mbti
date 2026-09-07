@@ -15,4 +15,3 @@ pub fn simulate(@types.LevelState) -> Unit
 // Type aliases
 
 // Traits
-

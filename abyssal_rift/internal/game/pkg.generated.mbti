@@ -110,4 +110,3 @@ pub fn InputState::new() -> Self
 // Type aliases
 
 // Traits
-

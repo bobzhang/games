@@ -215,7 +215,7 @@ fn update_playing(game : @types.Game) -> Unit {
       let gx = @types.screen_to_grid_x(mx)
       let gy = @types.screen_to_grid_y(my)
       if @types.grid_in_bounds(game.tree, gx, gy) {
-        game.hover_cell = Some({ x: gx, y: gy })
+        game.hover_cell = Some({ x: gx, y: gy, })
       } else {
         game.hover_cell = None
       }

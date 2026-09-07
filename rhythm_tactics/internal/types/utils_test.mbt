@@ -25,15 +25,15 @@ test "grid out of bounds returns false for walkable" {
 test "weapon_attack_cells Sword returns 1 cell" {
   let cells = weapon_attack_cells(Sword, East)
   inspect(cells.length(), content="1")
-  inspect(cells[0], content="(1, 0)")
+  debug_inspect(cells[0], content="(1, 0)")
 }
 
 ///|
 test "weapon_attack_cells Spear returns 2 cells" {
   let cells = weapon_attack_cells(Spear, East)
   inspect(cells.length(), content="2")
-  inspect(cells[0], content="(1, 0)")
-  inspect(cells[1], content="(2, 0)")
+  debug_inspect(cells[0], content="(1, 0)")
+  debug_inspect(cells[1], content="(2, 0)")
 }
 
 ///|
@@ -52,9 +52,9 @@ test "weapon_attack_cells Staff returns 9 cells (3x3)" {
 test "weapon_attack_cells Bow returns 3 cells" {
   let cells = weapon_attack_cells(Bow, West)
   inspect(cells.length(), content="3")
-  inspect(cells[0], content="(-1, 0)")
-  inspect(cells[1], content="(-2, 0)")
-  inspect(cells[2], content="(-3, 0)")
+  debug_inspect(cells[0], content="(-1, 0)")
+  debug_inspect(cells[1], content="(-2, 0)")
+  debug_inspect(cells[2], content="(-3, 0)")
 }
 
 ///|
@@ -323,8 +323,8 @@ test "check_achievement unlocks and creates toast" {
 ///|
 test "update_achievement_toasts removes expired" {
   let state = AchievementState::new()
-  state.toasts.push({ text: "Test", timer: 0.5 })
-  state.toasts.push({ text: "Test2", timer: 2.0 })
+  state.toasts.push({ text: "Test", timer: 0.5, })
+  state.toasts.push({ text: "Test2", timer: 2.0, })
   update_achievement_toasts(state, 1.0)
   // First toast should be removed (0.5 - 1.0 < 0)
   inspect(state.toasts.length(), content="1")
@@ -340,7 +340,7 @@ test "AchievementState::new has 6 achievements" {
 
 ///|
 test "should_spawn_elite respects floor threshold" {
-  let rng : Ref[Int] = { val: 12345 }
+  let rng : Ref[Int] = { val: 12345, }
   // Below threshold
   inspect(should_spawn_elite(2, rng), content="false")
   inspect(should_spawn_elite(3, rng), content="false")

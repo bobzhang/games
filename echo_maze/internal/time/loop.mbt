@@ -31,7 +31,7 @@ pub fn finish_loop(game : @types.Game) -> Bool {
     return false
   }
   // Save recording
-  let rec : @types.Recording = { moves: game.current_recording.copy() }
+  let rec : @types.Recording = { moves: game.current_recording.copy(), }
   game.recordings.push(rec)
   // Create ghost from recording
   let maze = game.maze.unwrap()

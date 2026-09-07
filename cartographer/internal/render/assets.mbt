@@ -1,35 +1,35 @@
 ///|
-let tex_map_board_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_map_board_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_title_atlas : Ref[@raylib.Texture?] = { val: None }
+let tex_title_atlas : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_compass_rose : Ref[@raylib.Texture?] = { val: None }
+let tex_compass_rose : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_feature_mountain : Ref[@raylib.Texture?] = { val: None }
+let tex_feature_mountain : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_feature_river : Ref[@raylib.Texture?] = { val: None }
+let tex_feature_river : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_feature_forest : Ref[@raylib.Texture?] = { val: None }
+let tex_feature_forest : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_feature_town : Ref[@raylib.Texture?] = { val: None }
+let tex_feature_town : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_feature_lake : Ref[@raylib.Texture?] = { val: None }
+let tex_feature_lake : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_feature_desert : Ref[@raylib.Texture?] = { val: None }
+let tex_feature_desert : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_feature_road : Ref[@raylib.Texture?] = { val: None }
+let tex_feature_road : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_star_icon : Ref[@raylib.Texture?] = { val: None }
+let tex_star_icon : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {
@@ -229,12 +229,7 @@ fn draw_compass_rose_art(cx : Int, cy : Int, size : Int) -> Bool {
 }
 
 ///|
-fn draw_star_art(
-  cx : Int,
-  cy : Int,
-  size : Int,
-  color : @raylib.Color,
-) -> Bool {
+fn draw_star_art(cx : Int, cy : Int, size : Int, color : @raylib.Color) -> Bool {
   match tex_star_icon.val {
     Some(texture) => {
       draw_art_centered(

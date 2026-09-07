@@ -138,6 +138,8 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Input {
   mut move_x : Int
@@ -157,7 +159,9 @@ pub(all) enum Room {
   Sparring
   Defense
 } derive(Eq)
+pub fn Room::equal(Self, Self) -> Bool
 pub fn Room::from_int(Int) -> Self
+pub fn Room::not_equal(Self, Self) -> Bool
 pub fn Room::to_int(Self) -> Int
 
 pub(all) struct Student {
@@ -171,4 +175,3 @@ pub fn Student::Student(String, Float) -> Self
 // Type aliases
 
 // Traits
-

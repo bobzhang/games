@@ -198,7 +198,7 @@ fn set_door(
   py : Int,
   title : String,
 ) -> Unit {
-  doors[i] = { active: true, x, y, plate_x: px, plate_y: py, title }
+  doors[i] = { active: true, x, y, plate_x: px, plate_y: py, title, }
 }
 
 ///|
@@ -576,9 +576,11 @@ fn main {
     }
   })
   let doors : Array[Door] = Array::makei(max_doors, fn(_i) {
-    { active: false, x: 0, y: 0, plate_x: 0, plate_y: 0, title: "" }
+    { active: false, x: 0, y: 0, plate_x: 0, plate_y: 0, title: "", }
   })
-  let ghosts : Array[Actor] = Array::makei(max_ghosts, fn(_i) { { x: 0, y: 0 } })
+  let ghosts : Array[Actor] = Array::makei(max_ghosts, fn(_i) {
+    { x: 0, y: 0, }
+  })
   let ghost_actions : Array[Array[Int]] = Array::makei(max_ghosts, fn(_i) {
     Array::makei(loop_len, fn(_j) { action_wait })
   })
@@ -593,7 +595,7 @@ fn main {
   let mut level_note = ""
   let mut intro_flash : Float = 0.0
 
-  let player = { x: 1, y: 1 }
+  let player = { x: 1, y: 1, }
   let mut start_x = 1
   let mut start_y = 1
   let mut vault_x = 8

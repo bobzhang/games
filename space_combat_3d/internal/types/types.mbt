@@ -433,7 +433,7 @@ pub(all) struct KillFeedEntry {
 ///|
 /// Creates an inactive kill feed entry slot.
 pub fn KillFeedEntry::inactive() -> KillFeedEntry {
-  { active: false, text: "", timer: 0.0, r: 255, g: 255, b: 255 }
+  { active: false, text: "", timer: 0.0, r: 255, g: 255, b: 255, }
 }
 
 // Damage number (floating combat text)
@@ -487,7 +487,7 @@ pub fn MissionObjective::MissionObjective(
   target_count : Int,
   description : String,
 ) -> MissionObjective {
-  { obj_type, target_count, current_count: 0, complete: false, description }
+  { obj_type, target_count, current_count: 0, complete: false, description, }
 }
 
 // Background star

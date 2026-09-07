@@ -1,34 +1,34 @@
 ///|
 /// Generated bamboo forest backdrop texture.
-let tex_bamboo_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_bamboo_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated corridor ground texture.
-let tex_corridor_texture : Ref[@raylib.Texture?] = { val: None }
+let tex_corridor_texture : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated sentinel player sprite texture.
-let tex_sentinel_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_sentinel_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated shrine beacon sprite texture.
-let tex_beacon_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_beacon_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated bamboo trap sprite texture.
-let tex_trap_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_trap_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated standard infiltrator sprite texture.
-let tex_enemy_standard : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_standard : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated swift infiltrator sprite texture.
-let tex_enemy_swift : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_swift : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated heavy infiltrator sprite texture.
-let tex_enemy_heavy : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_heavy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated bamboo forest texture.
@@ -161,12 +161,7 @@ fn draw_backdrop_art() -> Bool {
   match tex_bamboo_backdrop.val {
     Some(texture) => {
       draw_art_stretched(
-        texture,
-        0,
-        0,
-        @types.screen_w,
-        @types.screen_h,
-        @raylib.white,
+        texture, 0, 0, @types.screen_w, @types.screen_h, @raylib.white,
       )
       true
     }

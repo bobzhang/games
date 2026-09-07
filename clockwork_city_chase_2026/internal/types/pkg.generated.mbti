@@ -229,6 +229,8 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Ghost {
   mut active : Bool
@@ -269,6 +271,8 @@ pub(all) enum ObjKind {
   Coolant
   EmpCell
 } derive(Eq)
+pub fn ObjKind::equal(Self, Self) -> Bool
+pub fn ObjKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Player {
   mut x : Float
@@ -323,4 +327,3 @@ pub fn Spark::Spark() -> Self
 // Type aliases
 
 // Traits
-

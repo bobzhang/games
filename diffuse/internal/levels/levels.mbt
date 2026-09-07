@@ -31,7 +31,7 @@ fn build_level(
 }
 
 ///|
-let e : @types.InkColor = { c: false, m: false, y: false }
+let e : @types.InkColor = { c: false, m: false, y: false, }
 
 // ============================================================
 // TIER 1: WATERCOLOR (Levels 0-7) - Single colors, learn spreading

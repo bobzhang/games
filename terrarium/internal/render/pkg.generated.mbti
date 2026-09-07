@@ -41,4 +41,3 @@ pub fn draw_turn_info(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

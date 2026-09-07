@@ -39,4 +39,3 @@ pub fn validate_blueprint(@types.Blueprint) -> Bool
 // Type aliases
 
 // Traits
-

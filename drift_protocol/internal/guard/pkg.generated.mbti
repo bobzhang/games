@@ -31,4 +31,3 @@ pub fn update_guards(@types.Game, Float) -> Unit
 // Type aliases
 
 // Traits
-

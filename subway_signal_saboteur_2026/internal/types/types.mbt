@@ -7,6 +7,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Tile type stored in the subway board grid.
 pub(all) enum Tile {
   Void
@@ -14,6 +17,9 @@ pub(all) enum Tile {
   Track
   Wall
 } derive(Eq)
+
+///|
+pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Current AI behavior mode for an inspector.
@@ -24,6 +30,9 @@ pub(all) enum InspectorMode {
 } derive(Eq)
 
 ///|
+pub extend InspectorMode with Eq::{not_equal, equal}
+
+///|
 /// Visual effect category for pooled particles.
 pub(all) enum ParticleKind {
   Spark
@@ -32,12 +41,18 @@ pub(all) enum ParticleKind {
 } derive(Eq)
 
 ///|
+pub extend ParticleKind with Eq::{not_equal, equal}
+
+///|
 /// Lane color tag used by trains and route goals.
 pub(all) enum TrainColor {
   Red
   Blue
   Green
 } derive(Eq)
+
+///|
+pub extend TrainColor with Eq::{not_equal, equal}
 
 ///|
 /// Grid actor with tile coordinates and interpolation state.

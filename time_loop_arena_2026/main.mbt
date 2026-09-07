@@ -565,7 +565,7 @@ fn main {
   })
 
   let cores : Array[Core] = Array::makei(max_cores, fn(_i) {
-    { active: false, x: 0.0, y: 0.0, t: 0.0, life: 0.0, value: 0 }
+    { active: false, x: 0.0, y: 0.0, t: 0.0, life: 0.0, value: 0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

@@ -1,18 +1,18 @@
 ///|
 /// Generated cyberpunk operations backdrop texture.
-let tex_neon_ops_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_neon_ops_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated covered-cell board tile texture.
-let tex_covered_cell : Ref[@raylib.Texture?] = { val: None }
+let tex_covered_cell : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated cyber mine icon texture.
-let tex_cyber_mine : Ref[@raylib.Texture?] = { val: None }
+let tex_cyber_mine : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated flag marker icon texture.
-let tex_flag_marker : Ref[@raylib.Texture?] = { val: None }
+let tex_flag_marker : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Minesweeper Neon Ops texture.

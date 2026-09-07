@@ -23,4 +23,3 @@ pub fn unload_textures() -> Unit
 // Type aliases
 
 // Traits
-

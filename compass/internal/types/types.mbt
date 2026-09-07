@@ -2,7 +2,22 @@
 pub(all) struct Pos {
   x : Int
   y : Int
-} derive(Show, Eq, ToJson, Hash, Compare)
+} derive(Debug, Eq, ToJson, Hash, Compare)
+
+///|
+pub extend Pos with Debug::{to_repr}
+
+///|
+pub extend Pos with Eq::{not_equal, equal}
+
+///|
+pub extend Pos with ToJson::{to_json}
+
+///|
+pub extend Pos with Hash::{hash, hash_combine}
+
+///|
+pub extend Pos with Compare::{op_lt, op_le, op_ge, compare, op_gt}
 
 ///|
 pub(all) struct LevelData {
@@ -12,7 +27,13 @@ pub(all) struct LevelData {
   par_steps : Int
   landmark_count : Int
   tier : Int
-} derive(Show, ToJson)
+} derive(Debug, ToJson)
+
+///|
+pub extend LevelData with Debug::{to_repr}
+
+///|
+pub extend LevelData with ToJson::{to_json}
 
 ///|
 pub(all) struct Ship {
@@ -21,7 +42,13 @@ pub(all) struct Ship {
   mut steps : Int
   mut heading : Float
   mut landmarks_found : Int
-} derive(Show, ToJson)
+} derive(Debug, ToJson)
+
+///|
+pub extend Ship with Debug::{to_repr}
+
+///|
+pub extend Ship with ToJson::{to_json}
 
 ///|
 pub(all) struct LevelState {
@@ -33,7 +60,13 @@ pub(all) struct LevelState {
   mut message_timer : Float
   mut compass_beep : Bool
   mut near_land_dir : Direction
-} derive(Show, ToJson)
+} derive(Debug, ToJson)
+
+///|
+pub extend LevelState with Debug::{to_repr}
+
+///|
+pub extend LevelState with ToJson::{to_json}
 
 ///|
 pub(all) struct GameState {
@@ -43,11 +76,17 @@ pub(all) struct GameState {
   mut stars : Array[StarRating]
   mut anim_timer : Float
   mut frame_count : Int
-} derive(Show, ToJson)
+} derive(Debug, ToJson)
+
+///|
+pub extend GameState with Debug::{to_repr}
+
+///|
+pub extend GameState with ToJson::{to_json}
 
 ///|
 pub fn new_ship(start : Pos) -> Ship {
-  { pos: start, hp: max_hp, steps: 0, heading: 0.0, landmarks_found: 0 }
+  { pos: start, hp: max_hp, steps: 0, heading: 0.0, landmarks_found: 0, }
 }
 
 ///|

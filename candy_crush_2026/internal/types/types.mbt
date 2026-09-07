@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Full mutable game state for a candy-crush session, including the board grid,
 /// match/cascade logic buffers, UI overlays, input tracking, and scoring.
 pub(all) struct Game {

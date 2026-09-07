@@ -23,4 +23,3 @@ pub fn tier_start_level(@types.Tier) -> Int
 // Type aliases
 
 // Traits
-

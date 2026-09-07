@@ -125,6 +125,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Obstacle {
   mut active : Bool
@@ -144,6 +146,8 @@ pub(all) enum ObstacleKind {
   Log
   Mine
 } derive(Eq)
+pub fn ObstacleKind::equal(Self, Self) -> Bool
+pub fn ObstacleKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -162,6 +166,8 @@ pub(all) enum ParticleKind {
   Hit
   Bubble
 } derive(Eq)
+pub fn ParticleKind::equal(Self, Self) -> Bool
+pub fn ParticleKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -178,8 +184,9 @@ pub(all) enum PickupKind {
   Shield
   Repair
 } derive(Eq)
+pub fn PickupKind::equal(Self, Self) -> Bool
+pub fn PickupKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

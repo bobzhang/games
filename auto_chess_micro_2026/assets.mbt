@@ -1,18 +1,18 @@
 ///|
 /// Generated auto-chess arena backdrop texture.
-let tex_auto_chess_arena : Ref[@raylib.Texture?] = { val: None }
+let tex_auto_chess_arena : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated tank unit sprite texture.
-let tex_unit_tank : Ref[@raylib.Texture?] = { val: None }
+let tex_unit_tank : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated archer unit sprite texture.
-let tex_unit_archer : Ref[@raylib.Texture?] = { val: None }
+let tex_unit_archer : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated blade unit sprite texture.
-let tex_unit_blade : Ref[@raylib.Texture?] = { val: None }
+let tex_unit_blade : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated auto-chess texture.

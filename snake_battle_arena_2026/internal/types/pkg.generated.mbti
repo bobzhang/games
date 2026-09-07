@@ -85,12 +85,16 @@ pub(all) enum Dir {
   Up
   Down
 } derive(Eq)
+pub fn Dir::equal(Self, Self) -> Bool
 pub fn Dir::from_int(Int) -> Self
+pub fn Dir::not_equal(Self, Self) -> Bool
 
 pub(all) enum FoodKind {
   Normal
   Gold
 } derive(Eq)
+pub fn FoodKind::equal(Self, Self) -> Bool
+pub fn FoodKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   p_seg_x : Array[Int]
@@ -143,6 +147,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Rival {
   mut alive : Bool
@@ -175,8 +181,9 @@ pub(all) enum SparkKind {
   Eat
   Death
 } derive(Eq)
+pub fn SparkKind::equal(Self, Self) -> Bool
+pub fn SparkKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

@@ -92,7 +92,7 @@ pub fn parse_level(
 ///|
 fn split_lines(s : String) -> Array[String] {
   let lines : Array[String] = []
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i in 0..<s.length() {
     let b = s[i]
     let ch = Int::unsafe_to_char(b.to_int())

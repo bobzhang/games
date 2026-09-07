@@ -8,6 +8,9 @@ pub(all) enum DriftLevel {
 } derive(Eq)
 
 ///|
+pub extend DriftLevel with Eq::{not_equal, equal}
+
+///|
 /// Types of powerup items that can be held or used.
 pub(all) enum PowerupKind {
   NoPowerup
@@ -22,6 +25,9 @@ pub(all) enum PowerupKind {
 } derive(Eq)
 
 ///|
+pub extend PowerupKind with Eq::{not_equal, equal}
+
+///|
 /// Track surface material types affecting grip and speed.
 pub(all) enum Surface {
   Road
@@ -31,6 +37,9 @@ pub(all) enum Surface {
   Oil
   SurfaceIce
 } derive(Eq)
+
+///|
+pub extend Surface with Eq::{not_equal, equal}
 
 ///|
 /// Visual theme categories for track environments.
@@ -46,6 +55,9 @@ pub(all) enum Theme {
 } derive(Eq)
 
 ///|
+pub extend Theme with Eq::{not_equal, equal}
+
+///|
 /// Hazard event types that can be assigned to track segments.
 pub(all) enum HazardKind {
   NoHazard
@@ -57,11 +69,20 @@ pub(all) enum HazardKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for HazardKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend HazardKind with Eq::{not_equal, equal}
+
+///|
+pub extend HazardKind with Debug::{to_repr}
+
+///|
+pub impl Show for HazardKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
 
 // Screen
+
+///|
+pub extend HazardKind with Show::{to_string, output}
 
 ///|
 /// Window width in pixels.

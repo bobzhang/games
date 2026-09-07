@@ -149,19 +149,22 @@ pub(all) struct Game {
   mut hover_y : Int
   mut rising_anim : Float
   mut show_flood_preview : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Grid {
   width : Int
   height : Int
   tiles : Array[Tile]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Grid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct GridSnapshot {
   tiles : Array[Tile]
   sea_level : Int
   sand_remaining : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn GridSnapshot::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   grid_width : Int
@@ -173,12 +176,14 @@ pub(all) struct Level {
   par_sand : Int
   name : String
   tier : Tier
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Placing
@@ -186,6 +191,11 @@ pub(all) enum PlayState {
   Won
   Lost
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -195,6 +205,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -202,13 +217,21 @@ pub(all) enum Tier {
   Straits
   Archipelago
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Tile {
   mut height : Int
   mut is_settlement : Bool
   mut is_sand : Bool
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
+pub fn Tile::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TileKind {
   Land
@@ -216,9 +239,13 @@ pub(all) enum TileKind {
   Settlement
   Sand
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 // Type aliases
 
 // Traits
-

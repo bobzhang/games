@@ -17,4 +17,3 @@ pub fn is_mouse_in_rect(Int, Int, Int, Int) -> Bool
 // Type aliases
 
 // Traits
-

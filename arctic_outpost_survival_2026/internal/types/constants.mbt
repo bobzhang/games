@@ -143,6 +143,9 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Classifies the four supply pickup types that can spawn.
 pub(all) enum PickupKind {
   Fuel
@@ -152,11 +155,17 @@ pub(all) enum PickupKind {
 } derive(Eq)
 
 ///|
+pub extend PickupKind with Eq::{not_equal, equal}
+
+///|
 /// Classifies the two projectile types the player can fire.
 pub(all) enum BulletKind {
   Normal
   Pierce
 } derive(Eq)
+
+///|
+pub extend BulletKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies the three visual particle effect categories.
@@ -165,3 +174,6 @@ pub(all) enum ParticleKind {
   Damage
   OverdriveEffect
 } derive(Eq)
+
+///|
+pub extend ParticleKind with Eq::{not_equal, equal}

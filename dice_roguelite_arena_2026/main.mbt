@@ -842,11 +842,11 @@ fn main {
   }
 
   let dice : Array[Dice] = Array::makei(max_dice, fn(_i) {
-    { value: 1, face: 0, used: false, x: 0.0, y: 0.0, pulse_t: 0.0 }
+    { value: 1, face: 0, used: false, x: 0.0, y: 0.0, pulse_t: 0.0, }
   })
 
   let rewards : Array[RewardCard] = Array::makei(3, fn(_i) {
-    { kind: 0, value: 0, title: "", desc: "" }
+    { kind: 0, value: 0, title: "", desc: "", }
   })
 
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) {

@@ -39,4 +39,3 @@ pub fn world_wind_mult(Int) -> Float
 // Type aliases
 
 // Traits
-

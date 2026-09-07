@@ -31,4 +31,3 @@ pub fn satisfaction_counts(Array[@types.Island], Array[@types.Bridge]) -> (Int, 
 // Type aliases
 
 // Traits
-

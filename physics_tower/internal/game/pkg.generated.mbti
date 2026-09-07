@@ -137,4 +137,3 @@ pub fn world_stars(@types.Game, Int) -> Int
 // Type aliases
 
 // Traits
-

@@ -17,4 +17,3 @@ pub fn load_level_into_game(@types.Game, Int) -> Unit
 // Type aliases
 
 // Traits
-

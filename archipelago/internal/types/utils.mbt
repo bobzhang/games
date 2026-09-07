@@ -1,21 +1,21 @@
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn island(x : Int, y : Int, count : Int) -> Island {
-  { pos: vec2i(x, y), required_count: count }
+  { pos: vec2i(x, y), required_count: count, }
 }
 
 ///|
 pub fn new_bridge(a : Int, b : Int, dir : BridgeDir) -> Bridge {
-  { island_a: a, island_b: b, count: 1, direction: dir }
+  { island_a: a, island_b: b, count: 1, direction: dir, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_bridges: 0, best_no_removals: false }
+  { stars: 0, completed: false, best_bridges: 0, best_no_removals: false, }
 }
 
 ///|

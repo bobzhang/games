@@ -1,18 +1,18 @@
 ///|
 /// Generated full-screen ice lake background texture.
-let tex_ice_lake_background : Ref[@raylib.Texture?] = { val: None }
+let tex_ice_lake_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated world panel cross-section texture.
-let tex_ice_world_panel : Ref[@raylib.Texture?] = { val: None }
+let tex_ice_world_panel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated 3x3 entity sprite sheet texture.
-let tex_entity_sprites : Ref[@raylib.Texture?] = { val: None }
+let tex_entity_sprites : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated hook sprite texture.
-let tex_hook_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_hook_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Ice Fishing Blitz texture.
@@ -634,14 +634,14 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
   )
 
   if !draw_entity_sprite(
-    pickup_sprite_index(p.kind),
-    Float::from_int(x),
-    Float::from_int(y),
-    42.0,
-    42.0,
-    false,
-    @raylib.white,
-  ) {
+      pickup_sprite_index(p.kind),
+      Float::from_int(x),
+      Float::from_int(y),
+      42.0,
+      42.0,
+      false,
+      @raylib.white,
+    ) {
     match p.kind {
       Bait =>
         @raylib.draw_rectangle(

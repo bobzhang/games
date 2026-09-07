@@ -8,7 +8,7 @@ let frame_times : Array[Float] = Array::make(160, 1.0 / 60.0)
 
 ///|
 /// Write cursor into the ring buffer.
-let cursor : Ref[Int] = { val: 0 }
+let cursor : Ref[Int] = { val: 0, }
 
 ///|
 /// Records a single frame-time sample.

@@ -185,6 +185,11 @@ pub(all) enum Material {
   Insulator
   Glass
 } derive(Eq, @debug.Debug)
+pub fn Material::equal(Self, Self) -> Bool
+pub fn Material::not_equal(Self, Self) -> Bool
+pub fn Material::output(Self, &Logger) -> Unit
+pub fn Material::to_repr(Self) -> @debug.Repr
+pub fn Material::to_string(Self) -> String
 pub impl Show for Material
 
 pub(all) enum Screen {
@@ -195,6 +200,11 @@ pub(all) enum Screen {
   LevelComplete
   LevelFailed
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum StarRating {
@@ -203,6 +213,11 @@ pub(all) enum StarRating {
   Two
   Three
 } derive(Eq, @debug.Debug)
+pub fn StarRating::equal(Self, Self) -> Bool
+pub fn StarRating::not_equal(Self, Self) -> Bool
+pub fn StarRating::output(Self, &Logger) -> Unit
+pub fn StarRating::to_repr(Self) -> @debug.Repr
+pub fn StarRating::to_string(Self) -> String
 pub impl Show for StarRating
 
 pub(all) struct Tile {
@@ -217,15 +232,24 @@ pub(all) enum TileKind {
   HeatSource(Float)
   Target(Float, Float)
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) enum ToolMode {
   Place(Material)
   Erase
 } derive(Eq, @debug.Debug)
+pub fn ToolMode::equal(Self, Self) -> Bool
+pub fn ToolMode::not_equal(Self, Self) -> Bool
+pub fn ToolMode::output(Self, &Logger) -> Unit
+pub fn ToolMode::to_repr(Self) -> @debug.Repr
+pub fn ToolMode::to_string(Self) -> String
 pub impl Show for ToolMode
 
 // Type aliases
 
 // Traits
-

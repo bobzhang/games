@@ -1,34 +1,34 @@
 ///|
 /// Generated Ember Archive chamber background.
-let tex_room_ember : Ref[@raylib.Texture?] = { val: None }
+let tex_room_ember : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated Vault Core chamber background.
-let tex_room_core : Ref[@raylib.Texture?] = { val: None }
+let tex_room_core : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated Ink Seal chamber background.
-let tex_room_ink : Ref[@raylib.Texture?] = { val: None }
+let tex_room_ink : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated keeper sprite.
-let tex_keeper : Ref[@raylib.Texture?] = { val: None }
+let tex_keeper : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated raider sprite.
-let tex_raider : Ref[@raylib.Texture?] = { val: None }
+let tex_raider : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated breach portal sprite.
-let tex_breach : Ref[@raylib.Texture?] = { val: None }
+let tex_breach : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated flame sprite.
-let tex_flame : Ref[@raylib.Texture?] = { val: None }
+let tex_flame : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated dragon scroll core sprite.
-let tex_scroll_core : Ref[@raylib.Texture?] = { val: None }
+let tex_scroll_core : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Dragon Scroll Keeper texture.
@@ -219,11 +219,7 @@ fn draw_chamber_art(room : Int) -> Bool {
   match room_texture(room) {
     Some(texture) => {
       draw_texture_cover(
-        texture,
-        @types.chamber_left,
-        @types.chamber_top,
-        @types.chamber_w,
-        @types.chamber_h,
+        texture, @types.chamber_left, @types.chamber_top, @types.chamber_w, @types.chamber_h,
         @raylib.white,
       )
       @raylib.draw_rectangle(
@@ -302,7 +298,13 @@ fn draw_flame_art(x : Int, y : Int, heat : Float) -> Bool {
 fn draw_raider_art(x : Int, y : Int, panicked : Bool) -> Bool {
   match tex_raider.val {
     Some(texture) => {
-      @raylib.draw_ellipse(x, y + 12, 22.0, 8.0, @raylib.Color::new(2, 6, 8, 104))
+      @raylib.draw_ellipse(
+        x,
+        y + 12,
+        22.0,
+        8.0,
+        @raylib.Color::new(2, 6, 8, 104),
+      )
       draw_texture_fit(
         texture,
         Float::from_int(x),
@@ -326,7 +328,13 @@ fn draw_raider_art(x : Int, y : Int, panicked : Bool) -> Bool {
 fn draw_keeper_art(x : Int, y : Int, extinguisher_mode : Bool) -> Bool {
   match tex_keeper.val {
     Some(texture) => {
-      @raylib.draw_ellipse(x, y + 15, 26.0, 9.0, @raylib.Color::new(2, 8, 10, 108))
+      @raylib.draw_ellipse(
+        x,
+        y + 15,
+        26.0,
+        9.0,
+        @raylib.Color::new(2, 8, 10, 108),
+      )
       draw_texture_fit(
         texture,
         Float::from_int(x),

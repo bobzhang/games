@@ -64,6 +64,8 @@ pub(all) enum Direction {
   Up
   Down
 } derive(Eq)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   tiles : Array[Tile]
@@ -110,6 +112,8 @@ pub(all) enum GameState {
   LevelClear
   CampaignClear
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Spark {
   mut active : Bool
@@ -128,6 +132,8 @@ pub(all) enum SparkKind {
   Red
   Blue
 } derive(Eq)
+pub fn SparkKind::equal(Self, Self) -> Bool
+pub fn SparkKind::not_equal(Self, Self) -> Bool
 
 pub(all) enum Tile {
   Void
@@ -135,6 +141,8 @@ pub(all) enum Tile {
   Wall
   Goal
 } derive(Eq)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
 
 pub(all) struct UndoStep {
   mut valid : Bool
@@ -152,4 +160,3 @@ pub(all) struct UndoStep {
 // Type aliases
 
 // Traits
-

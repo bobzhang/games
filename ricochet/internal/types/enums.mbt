@@ -9,9 +9,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum ObjectKind {
@@ -24,9 +33,18 @@ pub(all) enum ObjectKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ObjectKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ObjectKind with Eq::{not_equal, equal}
+
+///|
+pub extend ObjectKind with Debug::{to_repr}
+
+///|
+pub impl Show for ObjectKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ObjectKind with Show::{to_string, output}
 
 ///|
 pub(all) enum BallState {
@@ -37,6 +55,15 @@ pub(all) enum BallState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for BallState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend BallState with Eq::{not_equal, equal}
+
+///|
+pub extend BallState with Debug::{to_repr}
+
+///|
+pub impl Show for BallState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend BallState with Show::{to_string, output}

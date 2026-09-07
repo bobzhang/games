@@ -8,12 +8,18 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Player action identifiers used by UI and input mapping.
 pub(all) enum Action {
   Strike
   Guard
   Burst
 } derive(Eq)
+
+///|
+pub extend Action with Eq::{not_equal, equal}
 
 ///|
 /// Per-frame input state captured for gameplay logic.

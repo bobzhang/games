@@ -9,9 +9,18 @@ pub(all) enum Material {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Material with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Material with Eq::{not_equal, equal}
+
+///|
+pub extend Material with Debug::{to_repr}
+
+///|
+pub impl Show for Material with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Material with Show::{to_string, output}
 
 ///|
 pub(all) enum TileKind {
@@ -21,9 +30,18 @@ pub(all) enum TileKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TileKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TileKind with Eq::{not_equal, equal}
+
+///|
+pub extend TileKind with Debug::{to_repr}
+
+///|
+pub impl Show for TileKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TileKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Screen {
@@ -36,9 +54,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum ToolMode {
@@ -47,9 +74,18 @@ pub(all) enum ToolMode {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ToolMode with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ToolMode with Eq::{not_equal, equal}
+
+///|
+pub extend ToolMode with Debug::{to_repr}
+
+///|
+pub impl Show for ToolMode with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ToolMode with Show::{to_string, output}
 
 ///|
 pub(all) enum StarRating {
@@ -60,6 +96,15 @@ pub(all) enum StarRating {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for StarRating with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend StarRating with Eq::{not_equal, equal}
+
+///|
+pub extend StarRating with Debug::{to_repr}
+
+///|
+pub impl Show for StarRating with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend StarRating with Show::{to_string, output}

@@ -19,4 +19,3 @@ pub fn level_tier(Int) -> @types.Tier
 // Type aliases
 
 // Traits
-

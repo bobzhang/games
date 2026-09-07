@@ -187,6 +187,8 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Ghost {
   mut active : Bool
@@ -218,6 +220,8 @@ pub(all) enum ObstacleKind {
   Drone
   Laser
 } derive(Eq)
+pub fn ObstacleKind::equal(Self, Self) -> Bool
+pub fn ObstacleKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -236,6 +240,8 @@ pub(all) enum ParticleKind {
   Glow
   Hurt
 } derive(Eq)
+pub fn ParticleKind::equal(Self, Self) -> Bool
+pub fn ParticleKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Player {
   mut x : Float
@@ -272,4 +278,3 @@ pub fn Segment::Segment() -> Self
 // Type aliases
 
 // Traits
-

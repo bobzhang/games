@@ -59,7 +59,7 @@ fn main {
   defer unload_game_art(art)
 
   let hazards : Array[Hazard] = Array::makei(120, fn(_i) {
-    { alive: false, x: 0.0, lane: 0, kind: 0 }
+    { alive: false, x: 0.0, lane: 0, kind: 0, }
   })
 
   let cart_x : Float = 220.0

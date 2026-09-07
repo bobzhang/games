@@ -55,4 +55,3 @@ pub fn wave_spawn_delay(Int, Int) -> Float
 // Type aliases
 
 // Traits
-

@@ -67,7 +67,7 @@ pub(all) struct Item {
 ///|
 /// Returns an empty hand item placeholder.
 pub fn Item::empty() -> Item {
-  { kind: None, flavor: 0, prepped: false }
+  { kind: None, flavor: 0, prepped: false, }
 }
 
 ///|

@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Cardinal movement direction plus no-input state.
 pub(all) enum Direction {
   None
@@ -16,6 +19,9 @@ pub(all) enum Direction {
   Up
   Down
 } derive(Eq)
+
+///|
+pub extend Direction with Eq::{not_equal, equal}
 
 ///|
 /// Base terrain tile kind for each cell.
@@ -27,6 +33,9 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+pub extend Tile with Eq::{not_equal, equal}
+
+///|
 /// Visual style for transient spark particles.
 pub(all) enum SparkKind {
   Gold
@@ -34,6 +43,9 @@ pub(all) enum SparkKind {
   Red
   Blue
 } derive(Eq)
+
+///|
+pub extend SparkKind with Eq::{not_equal, equal}
 
 ///|
 /// Snapshot used by the undo stack for one move.

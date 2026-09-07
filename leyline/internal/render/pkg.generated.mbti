@@ -88,4 +88,3 @@ pub let waystone_color : @raylib.Color
 // Type aliases
 
 // Traits
-

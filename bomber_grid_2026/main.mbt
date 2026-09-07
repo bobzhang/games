@@ -223,11 +223,11 @@ fn main {
   let mut player_y = 1
   let mut move_cd : Float = 0.0
 
-  let bomb : Bomb = { active: false, x: 0, y: 0, fuse: 0.0, blast: 0.0 }
+  let bomb : Bomb = { active: false, x: 0, y: 0, fuse: 0.0, blast: 0.0, }
 
   let enemies : Array[Enemy] = [
-    { alive: true, x: cols - 2, y: rows - 2, step_timer: 0.0 },
-    { alive: true, x: cols - 3, y: rows - 2, step_timer: 0.2 },
+    { alive: true, x: cols - 2, y: rows - 2, step_timer: 0.0, },
+    { alive: true, x: cols - 3, y: rows - 2, step_timer: 0.2, },
   ]
 
   let mut score = 0

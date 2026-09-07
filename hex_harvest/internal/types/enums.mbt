@@ -8,9 +8,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum TileKind {
@@ -22,9 +31,18 @@ pub(all) enum TileKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TileKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TileKind with Eq::{not_equal, equal}
+
+///|
+pub extend TileKind with Debug::{to_repr}
+
+///|
+pub impl Show for TileKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TileKind with Show::{to_string, output}
 
 ///|
 pub(all) enum CropKind {
@@ -35,9 +53,18 @@ pub(all) enum CropKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CropKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CropKind with Eq::{not_equal, equal}
+
+///|
+pub extend CropKind with Debug::{to_repr}
+
+///|
+pub impl Show for CropKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CropKind with Show::{to_string, output}
 
 ///|
 pub(all) enum CropState {
@@ -48,9 +75,18 @@ pub(all) enum CropState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CropState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CropState with Eq::{not_equal, equal}
+
+///|
+pub extend CropState with Debug::{to_repr}
+
+///|
+pub impl Show for CropState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CropState with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -63,9 +99,18 @@ pub(all) enum Direction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum PlaceMode {
@@ -74,9 +119,18 @@ pub(all) enum PlaceMode {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for PlaceMode with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend PlaceMode with Eq::{not_equal, equal}
+
+///|
+pub extend PlaceMode with Debug::{to_repr}
+
+///|
+pub impl Show for PlaceMode with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend PlaceMode with Show::{to_string, output}
 
 ///|
 pub(all) enum TurnPhase {
@@ -88,6 +142,15 @@ pub(all) enum TurnPhase {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TurnPhase with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TurnPhase with Eq::{not_equal, equal}
+
+///|
+pub extend TurnPhase with Debug::{to_repr}
+
+///|
+pub impl Show for TurnPhase with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TurnPhase with Show::{to_string, output}

@@ -15,4 +15,3 @@ pub fn simulate(@types.Program, @types.Level) -> @types.ExecutionTrace
 // Type aliases
 
 // Traits
-

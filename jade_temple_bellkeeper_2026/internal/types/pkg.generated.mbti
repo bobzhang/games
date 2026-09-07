@@ -235,6 +235,8 @@ pub(all) enum FoeKind {
   Shaman
   Relic
 } derive(Eq)
+pub fn FoeKind::equal(Self, Self) -> Bool
+pub fn FoeKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   bells : Array[Bell]
@@ -285,6 +287,8 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Hero {
   mut x : Float
@@ -328,4 +332,3 @@ pub fn Spark::Spark() -> Self
 // Type aliases
 
 // Traits
-

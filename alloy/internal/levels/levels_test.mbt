@@ -71,8 +71,8 @@ test "all levels have non-empty names and hints" {
 test "level 1 is solvable with iron and copper" {
   let level = @levels.get_level(0)
   let ingredients : Array[@types.Ingredient] = [
-    { metal: Iron, amount: 1 },
-    { metal: Copper, amount: 1 },
+    { metal: Iron, amount: 1, },
+    { metal: Copper, amount: 1, },
   ]
   let result = @forge.blend(ingredients, Medium)
   // hardness = (80+25)/2 = 52.5, target 40-65
@@ -86,8 +86,8 @@ test "level 1 is solvable with iron and copper" {
 test "level 4 steel is solvable with iron and carbon" {
   let level = @levels.get_level(3)
   let ingredients : Array[@types.Ingredient] = [
-    { metal: Iron, amount: 1 },
-    { metal: Carbon, amount: 1 },
+    { metal: Iron, amount: 1, },
+    { metal: Carbon, amount: 1, },
   ]
   let result = @forge.blend(ingredients, Medium)
   // hardness = (80+95)/2 = 87.5, target 82-100
@@ -101,8 +101,8 @@ test "level 4 steel is solvable with iron and carbon" {
 test "level 5 precious wire solvable with gold and copper" {
   let level = @levels.get_level(4)
   let ingredients : Array[@types.Ingredient] = [
-    { metal: Gold, amount: 1 },
-    { metal: Copper, amount: 1 },
+    { metal: Gold, amount: 1, },
+    { metal: Copper, amount: 1, },
   ]
   let result = @forge.blend(ingredients, Medium)
   // conductivity = (95+90)/2 = 92.5, target 88-100

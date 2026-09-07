@@ -71,7 +71,7 @@ fn draw_cells(game : @types.Game) -> Unit {
       let x = gx + c * cs
       let y = gy + r * cs
       match game.grid.cells[r][c] {
-        Trunk => {
+        Trunk =>
           if !draw_trunk_art(x, y) {
             @raylib.draw_rectangle(
               x + 12,
@@ -88,7 +88,6 @@ fn draw_cells(game : @types.Game) -> Unit {
               @raylib.Color::new(90, 60, 35, 180),
             )
           }
-        }
         Branch => {
           let leaf_pulse = sinf(time + Float::from_int(c * 3 + r * 7)) * 2.0
           if !draw_branch_art(x, y, leaf_pulse) {
@@ -101,7 +100,12 @@ fn draw_cells(game : @types.Game) -> Unit {
             )
             let lx = Float::from_int(x + cs / 2)
             let ly = Float::from_int(y + 8) + leaf_pulse
-            @raylib.draw_circle(lx.to_int(), ly.to_int(), 10.0, @types.color_leaf)
+            @raylib.draw_circle(
+              lx.to_int(),
+              ly.to_int(),
+              10.0,
+              @types.color_leaf,
+            )
           }
         }
         Leaf => {
@@ -123,11 +127,10 @@ fn draw_cells(game : @types.Game) -> Unit {
             )
           }
         }
-        Shadow => {
+        Shadow =>
           if !draw_shadow_art(x, y) {
             @raylib.draw_rectangle(x, y, cs, cs, @types.color_shadow)
           }
-        }
         Empty => ()
       }
     }
@@ -140,7 +143,13 @@ fn draw_ground(game : @types.Game) -> Unit {
   let gy = @types.grid_offset_y + @types.grid_rows * @types.cell_size
   let cs = @types.cell_size
   if !draw_ground_art(gx, gy, @types.grid_cols * cs, 40) {
-    @raylib.draw_rectangle(gx, gy, @types.grid_cols * cs, 40, @types.color_ground)
+    @raylib.draw_rectangle(
+      gx,
+      gy,
+      @types.grid_cols * cs,
+      40,
+      @types.color_ground,
+    )
   }
   // Water bars per column
   for i in 0..<game.ground.length() {

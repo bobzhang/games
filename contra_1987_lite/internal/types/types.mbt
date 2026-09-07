@@ -11,6 +11,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Cardinal movement directions.
 pub(all) enum Dir {
   Up
@@ -18,6 +21,9 @@ pub(all) enum Dir {
   Down
   Left
 } derive(Eq)
+
+///|
+pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Tile categories used by map collision and rendering.
@@ -32,6 +38,9 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+pub extend Tile with Eq::{not_equal, equal}
+
+///|
 /// Team affiliation used for friendly-fire and scoring.
 pub(all) enum Team {
   TeamNone
@@ -39,6 +48,9 @@ pub(all) enum Team {
   Player2
   Enemy
 } derive(Eq)
+
+///|
+pub extend Team with Eq::{not_equal, equal}
 
 ///|
 /// Enemy behavior archetypes.
@@ -50,6 +62,9 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Collectible powerup categories.
 pub(all) enum PowerupKind {
   Shield
@@ -59,6 +74,9 @@ pub(all) enum PowerupKind {
   Shovel
   ExtraLife
 } derive(Eq)
+
+///|
+pub extend PowerupKind with Eq::{not_equal, equal}
 
 ///|
 /// Returns a random direction from the game PRNG.
@@ -292,7 +310,7 @@ pub(all) struct BioCore {
 ///|
 /// Creates an inactive bio-core slot.
 pub fn BioCore::inactive() -> BioCore {
-  { active: false, x: 0.0, y: 0.0, hp: 0, max_hp: 1, pulse: 0.0, flash: 0.0 }
+  { active: false, x: 0.0, y: 0.0, hp: 0, max_hp: 1, pulse: 0.0, flash: 0.0, }
 }
 
 ///|
@@ -307,7 +325,7 @@ pub(all) struct Star {
 ///|
 /// Creates a star entry for the background layer.
 pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
-  { x, y, speed, twinkle }
+  { x, y, speed, twinkle, }
 }
 
 ///|

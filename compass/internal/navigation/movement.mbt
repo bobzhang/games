@@ -13,7 +13,7 @@ pub fn try_move(state : @types.LevelState, dir : @types.Direction) -> Unit {
     match tile {
       Land => set_message(state, "Blocked by land!", 1.5)
       _ => {
-        state.ship.pos = { x: nx, y: ny }
+        state.ship.pos = { x: nx, y: ny, }
         state.ship.steps += 1
         handle_tile_effect(state, nx, ny)
         update_compass(state)
@@ -53,7 +53,7 @@ fn handle_tile_effect(state : @types.LevelState, x : Int, y : Int) -> Unit {
       if @types.in_bounds(px, py) {
         let pushed_tile = state.data.grid[py][px]
         if !(pushed_tile is Land) {
-          state.ship.pos = { x: px, y: py }
+          state.ship.pos = { x: px, y: py, }
           set_message(
             state,
             "Current pushes you \{@types.direction_name(dir)}!",

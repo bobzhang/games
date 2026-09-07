@@ -34,21 +34,21 @@ test "direction_delta_right" {
 
 ///|
 test "in_bounds_valid" {
-  assert_true(in_bounds({ x: 0, y: 0 }))
-  assert_true(in_bounds({ x: 11, y: 7 }))
+  assert_true(in_bounds({ x: 0, y: 0, }))
+  assert_true(in_bounds({ x: 11, y: 7, }))
 }
 
 ///|
 test "in_bounds_invalid" {
-  assert_false(in_bounds({ x: -1, y: 0 }))
-  assert_false(in_bounds({ x: 12, y: 0 }))
-  assert_false(in_bounds({ x: 0, y: 8 }))
+  assert_false(in_bounds({ x: -1, y: 0, }))
+  assert_false(in_bounds({ x: 12, y: 0, }))
+  assert_false(in_bounds({ x: 0, y: 8, }))
 }
 
 ///|
 test "vec2i_add" {
-  let a : Vec2i = { x: 3, y: 4 }
-  let b : Vec2i = { x: 1, y: -2 }
+  let a : Vec2i = { x: 3, y: 4, }
+  let b : Vec2i = { x: 1, y: -2, }
   let c = vec2i_add(a, b)
   assert_eq(c.x, 4)
   assert_eq(c.y, 2)

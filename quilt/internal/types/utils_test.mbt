@@ -83,7 +83,7 @@ test "new_board creates empty board" {
   inspect(b.size, content="3")
   inspect(b.cells.length(), content="9")
   for i in 0..<9 {
-    inspect(b.cells[i], content="None")
+    debug_inspect(b.cells[i], content="None")
   }
 }
 
@@ -100,8 +100,8 @@ test "board_get and board_set" {
     None => inspect(false, content="true")
   }
   // Out of bounds returns None
-  inspect(@types.board_get(b, -1, 0), content="None")
-  inspect(@types.board_get(b, 3, 0), content="None")
+  debug_inspect(@types.board_get(b, -1, 0), content="None")
+  debug_inspect(@types.board_get(b, 3, 0), content="None")
 }
 
 ///|

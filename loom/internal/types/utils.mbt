@@ -1,6 +1,6 @@
 ///|
 pub fn new_heddle_row(cols : Int) -> HeddleRow {
-  { raised: Array::make(cols, false) }
+  { raised: Array::make(cols, false), }
 }
 
 ///|
@@ -14,7 +14,7 @@ pub fn new_fabric_pattern(
     state: WeftOver,
     color_index: 0,
   })
-  { rows, cols, cells, warp_colors, weft_colors }
+  { rows, cols, cells, warp_colors, weft_colors, }
 }
 
 ///|
@@ -34,7 +34,7 @@ pub fn pattern_set(
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_changes: 999 }
+  { stars: 0, completed: false, best_changes: 999, }
 }
 
 ///|
@@ -99,7 +99,7 @@ pub fn build_player_fabric(game : Game) -> FabricPattern {
       } else {
         game.weft_colors[row]
       }
-      pattern_set(p, row, col, { state, color_index: ci })
+      pattern_set(p, row, col, { state, color_index: ci, })
     }
   }
   p

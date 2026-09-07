@@ -1,15 +1,15 @@
 ///|
 pub fn new_tile(height : Int, is_settlement : Bool) -> Tile {
-  { height, is_settlement, is_sand: false }
+  { height, is_settlement, is_sand: false, }
 }
 
 ///|
 pub fn new_grid(width : Int, height : Int) -> Grid {
-  let tiles : Array[Tile] = Array::new(capacity=width * height)
+  let tiles : Array[Tile] = Array(capacity=width * height)
   for _i in 0..<(width * height) {
     tiles.push(new_tile(0, false))
   }
-  { width, height, tiles }
+  { width, height, tiles, }
 }
 
 ///|
@@ -47,7 +47,7 @@ pub fn tile_kind(tile : Tile, sea_level : Int) -> TileKind {
 
 ///|
 pub fn copy_grid(g : Grid) -> Grid {
-  let tiles : Array[Tile] = Array::new(capacity=g.tiles.length())
+  let tiles : Array[Tile] = Array(capacity=g.tiles.length())
   for i in 0..<g.tiles.length() {
     let t = g.tiles[i]
     tiles.push({
@@ -56,7 +56,7 @@ pub fn copy_grid(g : Grid) -> Grid {
       is_sand: t.is_sand,
     })
   }
-  { width: g.width, height: g.height, tiles }
+  { width: g.width, height: g.height, tiles, }
 }
 
 ///|
@@ -65,7 +65,7 @@ pub fn snapshot_grid(
   sea_level : Int,
   sand_remaining : Int,
 ) -> GridSnapshot {
-  let tiles : Array[Tile] = Array::new(capacity=g.tiles.length())
+  let tiles : Array[Tile] = Array(capacity=g.tiles.length())
   for i in 0..<g.tiles.length() {
     let t = g.tiles[i]
     tiles.push({
@@ -74,7 +74,7 @@ pub fn snapshot_grid(
       is_sand: t.is_sand,
     })
   }
-  { tiles, sea_level, sand_remaining }
+  { tiles, sea_level, sand_remaining, }
 }
 
 ///|
@@ -139,9 +139,9 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 
 ///|
 pub fn new_level_scores() -> Array[LevelScore] {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
-    scores.push({ completed: false, stars: 0 })
+    scores.push({ completed: false, stars: 0, })
   }
   scores
 }

@@ -67,7 +67,7 @@ pub fn resolve_captures(
   let checked : Array[@types.HexCoord] = []
   for r in 0..<board.size {
     for c in 0..<board.size {
-      let coord : @types.HexCoord = { row: r, col: c }
+      let coord : @types.HexCoord = { row: r, col: c, }
       if @types.has_stone(board, coord, opp) &&
         !@types.hex_contains(checked, coord) {
         let group = find_group(board, coord, opp)

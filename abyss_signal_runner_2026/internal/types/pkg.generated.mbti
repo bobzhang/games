@@ -191,6 +191,8 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Obj {
   mut active : Bool
@@ -214,6 +216,8 @@ pub(all) enum ObjKind {
   Current
   Scrap
 } derive(Eq)
+pub fn ObjKind::equal(Self, Self) -> Bool
+pub fn ObjKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Particle {
   mut active : Bool
@@ -263,4 +267,3 @@ pub fn Trail::Trail() -> Self
 // Type aliases
 
 // Traits
-

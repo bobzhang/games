@@ -38,6 +38,9 @@ pub(all) enum FoodKind {
 } derive(Eq)
 
 ///|
+pub extend FoodKind with Eq::{not_equal, equal}
+
+///|
 /// Starting life count per run.
 pub let lives_default : Int = 3
 
@@ -132,6 +135,9 @@ pub(all) enum SparkKind {
 } derive(Eq)
 
 ///|
+pub extend SparkKind with Eq::{not_equal, equal}
+
+///|
 /// Cardinal movement direction for snakes.
 pub(all) enum Dir {
   Left
@@ -141,9 +147,15 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+pub extend Dir with Eq::{not_equal, equal}
+
+///|
 /// Top-level game screen state.
 pub(all) enum GameState {
   Title
   Play
   Result
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

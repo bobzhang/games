@@ -77,6 +77,9 @@ pub(all) enum FoeKind {
 } derive(Eq)
 
 ///|
+pub extend FoeKind with Eq::{not_equal, equal}
+
+///|
 /// Maximum foe records in the pool.
 pub let max_foes : Int = 380
 

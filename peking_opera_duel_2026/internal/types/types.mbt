@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Per-frame input snapshot used by game logic.
 pub(all) struct InputState {
   mut axis_x : Int
@@ -83,7 +86,7 @@ pub fn Prompt::Prompt(
   stance : Stance,
   time_left : Float,
 ) -> Prompt {
-  { lane_x, lane_y, stance, time_left }
+  { lane_x, lane_y, stance, time_left, }
 }
 
 ///|

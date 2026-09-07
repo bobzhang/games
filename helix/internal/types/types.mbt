@@ -5,12 +5,24 @@ pub(all) struct Cell {
   switch_link_id : Int
   arrow_offset : Int
   has_pickup : Bool
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Cell with Eq::{not_equal, equal}
+
+///|
+pub extend Cell with Debug::{to_repr}
 
 ///|
 pub(all) struct Spiral {
   cells : Array[Cell]
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Spiral with Eq::{not_equal, equal}
+
+///|
+pub extend Spiral with Debug::{to_repr}
 
 ///|
 pub(all) struct SwitchLink {
@@ -18,7 +30,13 @@ pub(all) struct SwitchLink {
   switch_cell_ccw : Int
   gate_cells_cw : Array[Int]
   gate_cells_ccw : Array[Int]
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend SwitchLink with Eq::{not_equal, equal}
+
+///|
+pub extend SwitchLink with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -28,7 +46,10 @@ pub(all) struct Level {
   par_steps : Int
   pickups_total : Int
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -36,7 +57,10 @@ pub(all) struct LevelScore {
   mut steps : Int
   mut stars : Int
   mut pickups : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct HistoryEntry {
@@ -47,7 +71,10 @@ pub(all) struct HistoryEntry {
   oneshot_used : Array[Bool]
   pickups_collected : Array[Bool]
   pickups_count : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HistoryEntry with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -68,4 +95,7 @@ pub(all) struct Game {
   mut message_timer : Float
   mut frame_count : Int
   mut anim_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

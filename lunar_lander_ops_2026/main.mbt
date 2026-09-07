@@ -222,7 +222,7 @@ fn main {
 
   let heights : Array[Float] = Array::make(points, 0.0)
   let meteors : Array[Meteor] = Array::makei(max_meteors, fn(_i) {
-    { x: 0.0, y: 0.0, vy: 0.0, active: false }
+    { x: 0.0, y: 0.0, vy: 0.0, active: false, }
   })
 
   clear_meteors(meteors)

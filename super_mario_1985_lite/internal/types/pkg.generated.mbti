@@ -183,6 +183,11 @@ pub(all) enum GameState {
   Win
   GameOver
 } derive(Eq, @debug.Debug)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
+pub fn GameState::output(Self, &Logger) -> Unit
+pub fn GameState::to_repr(Self) -> @debug.Repr
+pub fn GameState::to_string(Self) -> String
 pub impl Show for GameState
 
 pub(all) struct Input {
@@ -235,8 +240,9 @@ pub(all) enum Tile {
   FlagPole
   Castle
 } derive(Eq)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

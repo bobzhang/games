@@ -6,7 +6,7 @@ pub fn blend(
   temperature : @types.Temperature,
 ) -> @types.BlendResult {
   if ingredients.is_empty() {
-    return { hardness: 0.0, flexibility: 0.0, conductivity: 0.0 }
+    return { hardness: 0.0, flexibility: 0.0, conductivity: 0.0, }
   }
   let mut total_h : Float = 0.0
   let mut total_f : Float = 0.0

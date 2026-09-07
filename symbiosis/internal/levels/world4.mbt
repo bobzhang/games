@@ -11,7 +11,15 @@ pub fn level_4_1() -> @types.Level {
     "############", "#....a....@#", "#.......A..#", "#.......0..#", "#..........#",
     "#X.........#", "############", "############",
   ]
-  make_level(3, 0, floor, ceiling, [{ switch_id: 0, door_id: 0 }], BothExit, 18)
+  make_level(
+    3,
+    0,
+    floor,
+    ceiling,
+    [{ switch_id: 0, door_id: 0, }],
+    BothExit,
+    18,
+  )
 }
 
 ///|
@@ -25,7 +33,15 @@ pub fn level_4_2() -> @types.Level {
     "############", "#.........@#", "#...a.III..#", "#..........#", "#.......0..#",
     "#X.........#", "############", "############",
   ]
-  make_level(3, 1, floor, ceiling, [{ switch_id: 0, door_id: 0 }], BothExit, 20)
+  make_level(
+    3,
+    1,
+    floor,
+    ceiling,
+    [{ switch_id: 0, door_id: 0, }],
+    BothExit,
+    20,
+  )
 }
 
 ///|
@@ -39,7 +55,15 @@ pub fn level_4_3() -> @types.Level {
     "############", "#.........@#", "#...a.P.A..#", "#..........#", "#.......0..#",
     "#X.........#", "############", "############",
   ]
-  make_level(3, 2, floor, ceiling, [{ switch_id: 0, door_id: 0 }], BothExit, 18)
+  make_level(
+    3,
+    2,
+    floor,
+    ceiling,
+    [{ switch_id: 0, door_id: 0, }],
+    BothExit,
+    18,
+  )
 }
 
 ///|
@@ -81,7 +105,15 @@ pub fn level_4_6() -> @types.Level {
     "############", "#...a..G..@#", "#.......A..#", "#.....III..#", "#.......0..#",
     "#X.........#", "############", "############",
   ]
-  make_level(3, 5, floor, ceiling, [{ switch_id: 0, door_id: 0 }], BothExit, 22)
+  make_level(
+    3,
+    5,
+    floor,
+    ceiling,
+    [{ switch_id: 0, door_id: 0, }],
+    BothExit,
+    22,
+  )
 }
 
 ///|
@@ -100,7 +132,7 @@ pub fn level_4_7() -> @types.Level {
     6,
     floor,
     ceiling,
-    [{ switch_id: 0, door_id: 0 }, { switch_id: 1, door_id: 1 }],
+    [{ switch_id: 0, door_id: 0, }, { switch_id: 1, door_id: 1, }],
     BothExit,
     25,
   )

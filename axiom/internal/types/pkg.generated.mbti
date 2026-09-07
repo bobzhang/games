@@ -212,7 +212,8 @@ pub fn world_name(Int) -> String
 // Types and methods
 pub(all) struct Command {
   mut kind : CommandKind
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Command::to_repr(Self) -> @debug.Repr
 
 pub(all) enum CommandKind {
   Move
@@ -223,6 +224,11 @@ pub(all) enum CommandKind {
   If(Condition)
   Loop(Int)
 } derive(Eq, @debug.Debug)
+pub fn CommandKind::equal(Self, Self) -> Bool
+pub fn CommandKind::not_equal(Self, Self) -> Bool
+pub fn CommandKind::output(Self, &Logger) -> Unit
+pub fn CommandKind::to_repr(Self) -> @debug.Repr
+pub fn CommandKind::to_string(Self) -> String
 pub impl Show for CommandKind
 
 pub(all) enum Condition {
@@ -231,6 +237,11 @@ pub(all) enum Condition {
   AtGoal
   OnColor(TileColor)
 } derive(Eq, @debug.Debug)
+pub fn Condition::equal(Self, Self) -> Bool
+pub fn Condition::not_equal(Self, Self) -> Bool
+pub fn Condition::output(Self, &Logger) -> Unit
+pub fn Condition::to_repr(Self) -> @debug.Repr
+pub fn Condition::to_string(Self) -> String
 pub impl Show for Condition
 
 pub(all) enum Direction {
@@ -239,6 +250,11 @@ pub(all) enum Direction {
   East
   West
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct EditorState {
@@ -248,13 +264,15 @@ pub(all) struct EditorState {
   mut palette_commands : Array[CommandKind]
   mut loop_count : Int
   mut condition_index : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn EditorState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct ExecutionTrace {
   mut states : Array[RobotState]
   mut success : Bool
   mut fail_reason : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn ExecutionTrace::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -275,13 +293,15 @@ pub(all) struct Game {
   mut message_timer : Float
   mut title_anim : Float
   mut total_stars : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Grid {
   mut tiles : Array[Array[Tile]]
   mut width : Int
   mut height : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Grid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   mut grid : Grid
@@ -289,7 +309,8 @@ pub(all) struct Level {
   mut goals : Array[Vec2i]
   mut goals_collected : Array[Bool]
   mut blocks : Array[Vec2i]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelDef {
   world : Int
@@ -303,13 +324,15 @@ pub(all) struct LevelDef {
   optimal : Int
   hint : String
   available_commands : Array[CommandKind]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_instructions : Int
   mut medal : Medal
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Medal {
   None_
@@ -317,18 +340,25 @@ pub(all) enum Medal {
   Silver
   Gold
 } derive(Eq, @debug.Debug)
+pub fn Medal::equal(Self, Self) -> Bool
+pub fn Medal::not_equal(Self, Self) -> Bool
+pub fn Medal::output(Self, &Logger) -> Unit
+pub fn Medal::to_repr(Self) -> @debug.Repr
+pub fn Medal::to_string(Self) -> String
 pub impl Show for Medal
 
 pub(all) struct Program {
   mut commands : Array[Command]
   mut max_slots : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Program::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Robot {
   mut pos : Vec2i
   mut dir : Direction
   mut alive : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Robot::to_repr(Self) -> @debug.Repr
 
 pub(all) struct RobotState {
   mut pos : Vec2i
@@ -337,7 +367,8 @@ pub(all) struct RobotState {
   mut goals_collected : Array[Bool]
   mut blocks : Array[Vec2i]
   mut cmd_index : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn RobotState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum RunState {
   Editing
@@ -346,6 +377,11 @@ pub(all) enum RunState {
   Complete
   Failed(String)
 } derive(Eq, @debug.Debug)
+pub fn RunState::equal(Self, Self) -> Bool
+pub fn RunState::not_equal(Self, Self) -> Bool
+pub fn RunState::output(Self, &Logger) -> Unit
+pub fn RunState::to_repr(Self) -> @debug.Repr
+pub fn RunState::to_string(Self) -> String
 pub impl Show for RunState
 
 pub(all) enum Screen {
@@ -356,17 +392,28 @@ pub(all) enum Screen {
   Results
   Sandbox
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct Tile {
   mut kind : TileKind
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Tile::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TileColor {
   Red
   Blue
   Green
 } derive(Eq, @debug.Debug)
+pub fn TileColor::equal(Self, Self) -> Bool
+pub fn TileColor::not_equal(Self, Self) -> Bool
+pub fn TileColor::output(Self, &Logger) -> Unit
+pub fn TileColor::to_repr(Self) -> @debug.Repr
+pub fn TileColor::to_string(Self) -> String
 pub impl Show for TileColor
 
 pub(all) enum TileKind {
@@ -378,14 +425,21 @@ pub(all) enum TileKind {
   Block
   Start
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

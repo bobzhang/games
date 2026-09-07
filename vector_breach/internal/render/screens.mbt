@@ -481,7 +481,7 @@ fn draw_wrapped_text(
 ///|
 fn split_by_space(s : String) -> Array[String] {
   let result : Array[String] = []
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for c in s {
     if c == ' ' {
       let word = buf.to_string()

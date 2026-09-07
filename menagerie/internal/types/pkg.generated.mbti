@@ -151,7 +151,8 @@ pub(all) struct Cell {
   mut fence_top : Bool
   mut fence_left : Bool
   mut animal : Species?
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Cell::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Direction {
   Up
@@ -159,18 +160,29 @@ pub(all) enum Direction {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct Enclosure {
   id : Int
   cells : Array[(Int, Int)]
   mut species : Species?
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Enclosure::to_repr(Self) -> @debug.Repr
 
 pub(all) enum FenceMode {
   Horizontal
   Vertical
 } derive(Eq, @debug.Debug)
+pub fn FenceMode::equal(Self, Self) -> Bool
+pub fn FenceMode::not_equal(Self, Self) -> Bool
+pub fn FenceMode::output(Self, &Logger) -> Unit
+pub fn FenceMode::to_repr(Self) -> @debug.Repr
+pub fn FenceMode::to_string(Self) -> String
 pub impl Show for FenceMode
 
 pub(all) struct Game {
@@ -193,14 +205,15 @@ pub(all) struct Game {
   mut levels_completed : Int
   mut level_select_scroll : Int
   mut show_needs_panel : Bool
-} derive(Show)
+} derive(@debug.Debug)
 pub fn Game::is_level_unlocked(Self, Int) -> Bool
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Grid {
   cells : Array[Array[Cell]]
   cols : Int
   rows : Int
-} derive(Show)
+} derive(@debug.Debug)
 pub fn Grid::clear(Self) -> Unit
 pub fn Grid::get(Self, Int, Int) -> Cell?
 pub fn Grid::new(Int, Int) -> Self
@@ -208,6 +221,7 @@ pub fn Grid::set_animal(Self, Int, Int, Species?) -> Unit
 pub fn Grid::set_fence_left(Self, Int, Int, Bool) -> Unit
 pub fn Grid::set_fence_top(Self, Int, Int, Bool) -> Unit
 pub fn Grid::set_terrain(Self, Int, Int, Terrain?) -> Unit
+pub fn Grid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelDef {
   id : Int
@@ -218,7 +232,8 @@ pub(all) struct LevelDef {
   description : String
   preset_terrain : Array[(Int, Int, Terrain)]
   preset_fences : Array[(Int, Int, Bool, Bool)]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelResult {
   mut stars : StarRating
@@ -227,7 +242,8 @@ pub(all) struct LevelResult {
   mut par_tiles : Int
   mut bonus_met : Bool
   mut messages : Array[String]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelResult::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -236,6 +252,11 @@ pub(all) enum Screen {
   LevelComplete
   Paused
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Species {
@@ -246,6 +267,16 @@ pub(all) enum Species {
   Monkey
   Bear
 } derive(Compare, Eq, @debug.Debug)
+pub fn Species::compare(Self, Self) -> Int
+pub fn Species::equal(Self, Self) -> Bool
+pub fn Species::not_equal(Self, Self) -> Bool
+pub fn Species::op_ge(Self, Self) -> Bool
+pub fn Species::op_gt(Self, Self) -> Bool
+pub fn Species::op_le(Self, Self) -> Bool
+pub fn Species::op_lt(Self, Self) -> Bool
+pub fn Species::output(Self, &Logger) -> Unit
+pub fn Species::to_repr(Self) -> @debug.Repr
+pub fn Species::to_string(Self) -> String
 pub impl Show for Species
 
 pub(all) struct SpeciesNeeds {
@@ -259,7 +290,8 @@ pub(all) struct SpeciesNeeds {
   min_space : Int
   is_predator : Bool
   fears_predators : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn SpeciesNeeds::to_repr(Self) -> @debug.Repr
 
 pub(all) enum StarRating {
   Zero
@@ -267,6 +299,11 @@ pub(all) enum StarRating {
   Two
   Three
 } derive(Eq, @debug.Debug)
+pub fn StarRating::equal(Self, Self) -> Bool
+pub fn StarRating::not_equal(Self, Self) -> Bool
+pub fn StarRating::output(Self, &Logger) -> Unit
+pub fn StarRating::to_repr(Self) -> @debug.Repr
+pub fn StarRating::to_string(Self) -> String
 pub impl Show for StarRating
 
 pub(all) enum Terrain {
@@ -276,6 +313,16 @@ pub(all) enum Terrain {
   Rock
   Trees
 } derive(Compare, Eq, @debug.Debug)
+pub fn Terrain::compare(Self, Self) -> Int
+pub fn Terrain::equal(Self, Self) -> Bool
+pub fn Terrain::not_equal(Self, Self) -> Bool
+pub fn Terrain::op_ge(Self, Self) -> Bool
+pub fn Terrain::op_gt(Self, Self) -> Bool
+pub fn Terrain::op_le(Self, Self) -> Bool
+pub fn Terrain::op_lt(Self, Self) -> Bool
+pub fn Terrain::output(Self, &Logger) -> Unit
+pub fn Terrain::to_repr(Self) -> @debug.Repr
+pub fn Terrain::to_string(Self) -> String
 pub impl Show for Terrain
 
 pub(all) enum Tool {
@@ -284,15 +331,21 @@ pub(all) enum Tool {
   EraserTool
   AnimalPlacer(Species)
 } derive(Eq, @debug.Debug)
+pub fn Tool::equal(Self, Self) -> Bool
+pub fn Tool::not_equal(Self, Self) -> Bool
+pub fn Tool::output(Self, &Logger) -> Unit
+pub fn Tool::to_repr(Self) -> @debug.Repr
+pub fn Tool::to_string(Self) -> String
 pub impl Show for Tool
 
 pub(all) struct ToolSlot {
   tool : Tool
   label : String
   color : @raylib.Color
-} derive(Show)
+}
+pub fn ToolSlot::to_repr(Self) -> @debug.Repr
+pub impl @debug.Debug for ToolSlot
 
 // Type aliases
 
 // Traits
-

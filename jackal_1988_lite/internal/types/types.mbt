@@ -217,7 +217,7 @@ pub(all) struct Hostage {
 ///|
 /// Creates an inactive hostage slot.
 pub fn Hostage::inactive() -> Hostage {
-  { active: false, x: 0.0, y: 0.0, bob: 0.0, blink: 0.0 }
+  { active: false, x: 0.0, y: 0.0, bob: 0.0, blink: 0.0, }
 }
 
 ///|
@@ -232,7 +232,7 @@ pub(all) struct Star {
 ///|
 /// Creates a star entry for the background layer.
 pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
-  { x, y, speed, twinkle }
+  { x, y, speed, twinkle, }
 }
 
 ///|

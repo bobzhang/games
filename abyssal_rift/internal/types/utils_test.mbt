@@ -3,13 +3,13 @@ test "rng_next produces deterministic sequence" {
   let (s1, v1) = @types.rng_next(12345U)
   let (s2, v2) = @types.rng_next(s1)
   let (s3, v3) = @types.rng_next(s2)
-  inspect(
+  debug_inspect(
     (v1, v2, v3),
     content=(
       #|(0.6330000162124634, 0.3806999921798706, 0.19040000438690186)
     ),
   )
-  inspect(
+  debug_inspect(
     (s1, s2, s3),
     content=(
       #|(3336926330, 1697253807, 2816511904)
@@ -196,7 +196,7 @@ test "absf" {
 test "normalize unit vector" {
   let (x, y) = @types.normalize(3.0, 4.0)
   // Should be (0.6, 0.8)
-  inspect(
+  debug_inspect(
     (x, y),
     content=(
       #|(0.6000000238418579, 0.800000011920929)
@@ -207,7 +207,7 @@ test "normalize unit vector" {
 ///|
 test "normalize zero vector" {
   let (x, y) = @types.normalize(0.0, 0.0)
-  inspect(
+  debug_inspect(
     (x, y),
     content=(
       #|(0, 0)
@@ -387,7 +387,7 @@ test "alloc_particle finds first inactive" {
     b: 255,
   }
   let particles = Array::make(4, p)
-  particles[2] = { ..p, active: false, life: 0.0 }
+  particles[2] = { ..p, active: false, life: 0.0, }
   inspect(
     @types.alloc_particle(particles),
     content=(
@@ -412,7 +412,7 @@ test "alloc_particle evicts shortest-lived when all active" {
     b: 255,
   }
   let particles = Array::make(3, p)
-  particles[1] = { ..p, life: 0.5 }
+  particles[1] = { ..p, life: 0.5, }
   inspect(
     @types.alloc_particle(particles),
     content=(

@@ -198,6 +198,8 @@ pub(all) enum GameState {
   Win
   Lose
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) enum LoseReason {
   None
@@ -205,6 +207,8 @@ pub(all) enum LoseReason {
   Fuel
   Hull
 } derive(Eq)
+pub fn LoseReason::equal(Self, Self) -> Bool
+pub fn LoseReason::not_equal(Self, Self) -> Bool
 
 pub(all) struct Mine {
   mut active : Bool
@@ -228,4 +232,3 @@ pub fn Target::Target() -> Self
 // Type aliases
 
 // Traits
-

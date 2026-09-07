@@ -13,7 +13,13 @@ pub(all) struct Connection {
   to_row : Int
   mut energy_flow : Float
   mut flow_anim : Float
-} derive(Show, Eq)
+} derive(Debug, Eq)
+
+///|
+pub extend Connection with Debug::{to_repr}
+
+///|
+pub extend Connection with Eq::{not_equal, equal}
 
 ///|
 pub(all) struct LevelDef {
@@ -25,7 +31,10 @@ pub(all) struct LevelDef {
   par_waystones : Int
   gold_threshold : Float
   silver_threshold : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelDef with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelState {

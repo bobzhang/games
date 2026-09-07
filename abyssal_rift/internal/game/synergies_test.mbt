@@ -43,7 +43,7 @@ test "no passives means no synergies" {
 ///|
 test "synergy names empty for no passives" {
   let syn = @types.SynergyBonuses::new()
-  inspect(
+  debug_inspect(
     get_active_synergy_names(syn),
     content=(
       #|[]
@@ -301,7 +301,7 @@ test "multiple synergies active at once" {
     ),
   )
   let names = get_active_synergy_names(syn)
-  inspect(
+  debug_inspect(
     names,
     content=(
       #|["Cleave", "Fortify", "Execute"]
@@ -315,7 +315,7 @@ test "synergy names list" {
   syn.cleave = true
   syn.multishot = true
   syn.execute = true
-  inspect(
+  debug_inspect(
     get_active_synergy_names(syn),
     content=(
       #|["Cleave", "Multishot", "Execute"]

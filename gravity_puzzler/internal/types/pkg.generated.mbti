@@ -185,6 +185,11 @@ pub(all) enum AccessibilityMode {
   HighContrast
   LargeText
 } derive(Eq, @debug.Debug)
+pub fn AccessibilityMode::equal(Self, Self) -> Bool
+pub fn AccessibilityMode::not_equal(Self, Self) -> Bool
+pub fn AccessibilityMode::output(Self, &Logger) -> Unit
+pub fn AccessibilityMode::to_repr(Self) -> @debug.Repr
+pub fn AccessibilityMode::to_string(Self) -> String
 pub impl Show for AccessibilityMode
 
 pub(all) struct Achievement {
@@ -211,6 +216,11 @@ pub(all) enum AchievementKind {
   IceSlider
   Completionist
 } derive(Eq, @debug.Debug)
+pub fn AchievementKind::equal(Self, Self) -> Bool
+pub fn AchievementKind::not_equal(Self, Self) -> Bool
+pub fn AchievementKind::output(Self, &Logger) -> Unit
+pub fn AchievementKind::to_repr(Self) -> @debug.Repr
+pub fn AchievementKind::to_string(Self) -> String
 pub impl Show for AchievementKind
 
 pub(all) struct AchievementState {
@@ -265,6 +275,11 @@ pub(all) enum EntityKind {
   Gem
   Enemy
 } derive(Eq, @debug.Debug)
+pub fn EntityKind::equal(Self, Self) -> Bool
+pub fn EntityKind::not_equal(Self, Self) -> Bool
+pub fn EntityKind::output(Self, &Logger) -> Unit
+pub fn EntityKind::to_repr(Self) -> @debug.Repr
+pub fn EntityKind::to_string(Self) -> String
 pub impl Show for EntityKind
 
 pub(all) struct Game {
@@ -343,6 +358,11 @@ pub(all) enum GravityDir {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn GravityDir::equal(Self, Self) -> Bool
+pub fn GravityDir::not_equal(Self, Self) -> Bool
+pub fn GravityDir::output(Self, &Logger) -> Unit
+pub fn GravityDir::to_repr(Self) -> @debug.Repr
+pub fn GravityDir::to_string(Self) -> String
 pub impl Show for GravityDir
 
 pub(all) struct HintState {
@@ -421,6 +441,11 @@ pub(all) enum Screen {
   Editor
   Statistics
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum TileKind {
@@ -440,6 +465,11 @@ pub(all) enum TileKind {
   TimedLava
   WindGust(GravityDir)
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) enum WorldTheme {
@@ -449,9 +479,13 @@ pub(all) enum WorldTheme {
   Magma
   Sky
 } derive(Eq, @debug.Debug)
+pub fn WorldTheme::equal(Self, Self) -> Bool
+pub fn WorldTheme::not_equal(Self, Self) -> Bool
+pub fn WorldTheme::output(Self, &Logger) -> Unit
+pub fn WorldTheme::to_repr(Self) -> @debug.Repr
+pub fn WorldTheme::to_string(Self) -> String
 pub impl Show for WorldTheme
 
 // Type aliases
 
 // Traits
-

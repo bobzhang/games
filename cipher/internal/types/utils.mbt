@@ -1,23 +1,23 @@
 ///|
 pub fn new_mapping() -> Mapping {
-  let c2p : Array[Int] = Array::new(capacity=alphabet_size)
-  let pu : Array[Bool] = Array::new(capacity=alphabet_size)
+  let c2p : Array[Int] = Array(capacity=alphabet_size)
+  let pu : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
     c2p.push(unmapped)
     pu.push(false)
   }
-  { cipher_to_plain: c2p, plain_used: pu }
+  { cipher_to_plain: c2p, plain_used: pu, }
 }
 
 ///|
 pub fn copy_mapping(src : Mapping) -> Mapping {
-  let c2p : Array[Int] = Array::new(capacity=alphabet_size)
-  let pu : Array[Bool] = Array::new(capacity=alphabet_size)
+  let c2p : Array[Int] = Array(capacity=alphabet_size)
+  let pu : Array[Bool] = Array(capacity=alphabet_size)
   for i in 0..<alphabet_size {
     c2p.push(src.cipher_to_plain[i])
     pu.push(src.plain_used[i])
   }
-  { cipher_to_plain: c2p, plain_used: pu }
+  { cipher_to_plain: c2p, plain_used: pu, }
 }
 
 ///|
@@ -52,7 +52,7 @@ pub fn assign_mapping(
   }
   m.cipher_to_plain[cipher_idx] = plain_idx
   m.plain_used[plain_idx] = true
-  { cipher_idx, old_plain, old_displaced_cipher, old_displaced_plain }
+  { cipher_idx, old_plain, old_displaced_cipher, old_displaced_plain, }
 }
 
 ///|
@@ -106,7 +106,7 @@ pub fn str_char_at(s : String, i : Int) -> Char {
 
 ///|
 pub fn apply_mapping_to_text(ciphertext : String, m : Mapping) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for i in 0..<ciphertext.length() {
     let c = str_char_at(ciphertext, i)
     if is_upper(c) {
@@ -154,7 +154,7 @@ pub fn count_correct(
   m : Mapping,
 ) -> Int {
   let mut count = 0
-  let checked : Array[Bool] = Array::new(capacity=alphabet_size)
+  let checked : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
     checked.push(false)
   }
@@ -179,7 +179,7 @@ pub fn count_correct(
 
 ///|
 pub fn count_unique_letters(text : String) -> Int {
-  let seen : Array[Bool] = Array::new(capacity=alphabet_size)
+  let seen : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
     seen.push(false)
   }
@@ -199,7 +199,7 @@ pub fn count_unique_letters(text : String) -> Int {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: 0, best_swaps: 9999, best_no_hints: false }
+  { completed: false, stars: 0, best_swaps: 9999, best_no_hints: false, }
 }
 
 ///|
@@ -244,7 +244,7 @@ pub fn tier_for_level(level_id : Int) -> Tier {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=25)
+  let scores : Array[LevelScore] = Array(capacity=25)
   for _i in 0..<25 {
     scores.push(new_level_score())
   }

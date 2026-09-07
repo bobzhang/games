@@ -25,4 +25,3 @@ pub fn total_levels() -> Int
 // Type aliases
 
 // Traits
-

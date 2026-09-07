@@ -444,6 +444,8 @@ pub(all) enum AiState {
   Chase
   Attack
 } derive(Eq)
+pub fn AiState::equal(Self, Self) -> Bool
+pub fn AiState::not_equal(Self, Self) -> Bool
 
 pub(all) enum Biome {
   Plains
@@ -453,6 +455,8 @@ pub(all) enum Biome {
   Tundra
   Swamp
 } derive(Eq)
+pub fn Biome::equal(Self, Self) -> Bool
+pub fn Biome::not_equal(Self, Self) -> Bool
 
 pub(all) struct BiomeParams {
   id : Int
@@ -600,6 +604,8 @@ pub(all) enum GameState {
   Crafting
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Inventory {
   slots : Array[ItemSlot]
@@ -689,4 +695,3 @@ pub fn Projectile::inactive() -> Self
 // Type aliases
 
 // Traits
-

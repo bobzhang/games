@@ -437,7 +437,7 @@ fn main {
   })
 
   let pickups : Array[Pickup] = Array::makei(max_pickups, fn(_i) {
-    { active: false, kind: 0, x: 0.0, lane: 0, t: 0.0 }
+    { active: false, kind: 0, x: 0.0, lane: 0, t: 0.0, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {

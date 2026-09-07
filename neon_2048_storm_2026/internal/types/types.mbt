@@ -7,6 +7,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Input direction for slide operations.
 pub(all) enum Direction {
   DirLeft
@@ -16,12 +19,18 @@ pub(all) enum Direction {
 } derive(Eq)
 
 ///|
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
 /// Visual spark effect category.
 pub(all) enum SparkKind {
   SparkDefault
   SparkMerge
   SparkExplosion
 } derive(Eq)
+
+///|
+pub extend SparkKind with Eq::{not_equal, equal}
 
 ///|
 /// Single pooled particle used by board effects.

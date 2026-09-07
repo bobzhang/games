@@ -117,6 +117,9 @@ pub(all) enum ObstacleKind {
 } derive(Eq)
 
 ///|
+pub extend ObstacleKind with Eq::{not_equal, equal}
+
+///|
 /// Kind of collectible pickup entity.
 pub(all) enum PickupKind {
   Coin
@@ -124,6 +127,9 @@ pub(all) enum PickupKind {
   Shield
   Repair
 } derive(Eq)
+
+///|
+pub extend PickupKind with Eq::{not_equal, equal}
 
 ///|
 /// Kind of visual particle effect.
@@ -134,9 +140,15 @@ pub(all) enum ParticleKind {
 } derive(Eq)
 
 ///|
+pub extend ParticleKind with Eq::{not_equal, equal}
+
+///|
 /// High-level game screen state.
 pub(all) enum GameState {
   Title
   Play
   Result
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

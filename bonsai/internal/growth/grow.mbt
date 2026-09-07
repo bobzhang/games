@@ -38,7 +38,7 @@ pub fn find_tips(g : @types.TreeGrid) -> Array[@types.Vec2i] {
           // A tip is a branch/trunk that has no solid cell in any forward direction
           // Simplified: just check the primary growth direction
           if !has_child {
-            tips.push({ x, y })
+            tips.push({ x, y, })
           }
         }
       }
@@ -60,7 +60,7 @@ pub fn find_growth_tips(g : @types.TreeGrid) -> Array[@types.Vec2i] {
         if @types.grid_in_bounds(g, nx, ny) {
           let next = @types.grid_get(g, nx, ny)
           if !@types.is_solid(next.kind) && next.kind != Pruned {
-            tips.push({ x, y })
+            tips.push({ x, y, })
           }
         }
         // if OOB, it's a tip but can't grow
@@ -227,7 +227,7 @@ pub fn prune_at(g : @types.TreeGrid, x : Int, y : Int) -> Int {
   // BFS/flood to find all cells that are "children" of this cell
   // A child is any adjacent solid cell that could have grown from this direction
   let to_remove : Array[@types.Vec2i] = []
-  let queue : Array[@types.Vec2i] = [{ x, y }]
+  let queue : Array[@types.Vec2i] = [{ x, y, }]
   let visited = Array::make(g.width * g.height, false)
   visited[@types.grid_index(g, x, y)] = true
   while queue.length() > 0 {
@@ -248,7 +248,7 @@ pub fn prune_at(g : @types.TreeGrid, x : Int, y : Int) -> Int {
             // i.e., its growth leads away from us, or it's above
             if ny <= pos.y || (ny == pos.y && nc.kind != Trunk) {
               visited[ni] = true
-              queue.push({ x: nx, y: ny })
+              queue.push({ x: nx, y: ny, })
             }
           }
         }

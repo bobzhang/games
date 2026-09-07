@@ -1,18 +1,18 @@
 ///|
 /// Generated noir investigation desk backdrop for the title screen.
-let tex_title_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_title_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated parchment texture for event cards.
-let tex_card_texture : Ref[@raylib.Texture?] = { val: None }
+let tex_card_texture : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated case-board texture for the clue panel.
-let tex_clue_panel : Ref[@raylib.Texture?] = { val: None }
+let tex_clue_panel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated recessed texture for empty timeline slots.
-let tex_timeline_slot : Ref[@raylib.Texture?] = { val: None }
+let tex_timeline_slot : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one bilinear-filtered Chronicle texture.
@@ -121,7 +121,12 @@ fn draw_card_art(
 
 ///|
 /// Draws the generated clue-panel texture if loaded.
-fn draw_clue_panel_art(x : Float, y : Float, width : Float, height : Float) -> Bool {
+fn draw_clue_panel_art(
+  x : Float,
+  y : Float,
+  width : Float,
+  height : Float,
+) -> Bool {
   match tex_clue_panel.val {
     Some(texture) => {
       draw_art_rect(texture, x, y, width, height, @raylib.white)

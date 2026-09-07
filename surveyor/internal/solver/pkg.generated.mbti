@@ -25,4 +25,3 @@ pub fn validate_level(@types.LevelDef, Array[@types.FenceEdge], Array[@types.Reg
 // Type aliases
 
 // Traits
-

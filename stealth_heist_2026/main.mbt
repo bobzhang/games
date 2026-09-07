@@ -114,10 +114,10 @@ fn reset_cards(cards : Array[Card]) -> Unit {
 
 ///|
 fn reset_guards(guards : Array[Guard]) -> Unit {
-  guards[0] = { x: 6, y: 2, dir: 0, stunned: 0 }
-  guards[1] = { x: 11, y: 4, dir: 2, stunned: 0 }
-  guards[2] = { x: 15, y: 9, dir: 3, stunned: 0 }
-  guards[3] = { x: 3, y: 8, dir: 1, stunned: 0 }
+  guards[0] = { x: 6, y: 2, dir: 0, stunned: 0, }
+  guards[1] = { x: 11, y: 4, dir: 2, stunned: 0, }
+  guards[2] = { x: 15, y: 9, dir: 3, stunned: 0, }
+  guards[3] = { x: 3, y: 8, dir: 1, stunned: 0, }
 }
 
 ///|
@@ -228,12 +228,12 @@ fn main {
   build_map(map)
 
   let guards : Array[Guard] = Array::makei(4, fn(_i) {
-    { x: 1, y: 1, dir: 0, stunned: 0 }
+    { x: 1, y: 1, dir: 0, stunned: 0, }
   })
   reset_guards(guards)
 
   let cards : Array[Card] = Array::makei(3, fn(_i) {
-    { x: 1, y: 1, collected: false }
+    { x: 1, y: 1, collected: false, }
   })
   reset_cards(cards)
 

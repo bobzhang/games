@@ -249,6 +249,8 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Player {
   mut x : Float
@@ -307,8 +309,9 @@ pub(all) enum Tea {
   Matcha
   Berry
 } derive(Eq)
+pub fn Tea::equal(Self, Self) -> Bool
+pub fn Tea::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

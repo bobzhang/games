@@ -131,7 +131,7 @@ fn draw_stone(
 
   @raylib.draw_circle(
     cx,
-    cy + (tile / 18),
+    cy + tile / 18,
     r * 1.05,
     @raylib.Color::new(10, 12, 18, 54),
   )

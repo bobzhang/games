@@ -12,7 +12,7 @@ pub(all) struct Bullet {
 ///|
 /// Returns an inactive bullet placeholder.
 pub fn Bullet::Bullet() -> Bullet {
-  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0 }
+  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, }
 }
 
 ///|
@@ -30,7 +30,7 @@ pub(all) struct Rock {
 ///|
 /// Returns an inactive rock placeholder.
 pub fn Rock::Rock() -> Rock {
-  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, radius: 0.0, size: 0 }
+  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, radius: 0.0, size: 0, }
 }
 
 ///|

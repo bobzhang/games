@@ -1,26 +1,26 @@
 ///|
-let tex_board_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_board_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_trunk_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_trunk_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_branch_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_branch_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_leaf_pine : Ref[@raylib.Texture?] = { val: None }
+let tex_leaf_pine : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_leaf_maple : Ref[@raylib.Texture?] = { val: None }
+let tex_leaf_maple : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_leaf_cherry : Ref[@raylib.Texture?] = { val: None }
+let tex_leaf_cherry : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_pruned_stump : Ref[@raylib.Texture?] = { val: None }
+let tex_pruned_stump : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_title_bonsai : Ref[@raylib.Texture?] = { val: None }
+let tex_title_bonsai : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {

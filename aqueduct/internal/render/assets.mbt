@@ -1,20 +1,20 @@
 ///|
-let tex_title : Ref[@raylib.Texture?] = { val: None }
+let tex_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_spring : Ref[@raylib.Texture?] = { val: None }
+let tex_spring : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_fountain : Ref[@raylib.Texture?] = { val: None }
+let tex_fountain : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_aqueduct : Ref[@raylib.Texture?] = { val: None }
+let tex_aqueduct : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_reservoir : Ref[@raylib.Texture?] = { val: None }
+let tex_reservoir : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_dam : Ref[@raylib.Texture?] = { val: None }
+let tex_dam : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {

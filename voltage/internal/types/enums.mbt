@@ -9,9 +9,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum ComponentKind {
@@ -24,9 +33,18 @@ pub(all) enum ComponentKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ComponentKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ComponentKind with Eq::{not_equal, equal}
+
+///|
+pub extend ComponentKind with Debug::{to_repr}
+
+///|
+pub impl Show for ComponentKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ComponentKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -37,9 +55,18 @@ pub(all) enum Direction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum ToolMode {
@@ -52,9 +79,18 @@ pub(all) enum ToolMode {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for ToolMode with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend ToolMode with Eq::{not_equal, equal}
+
+///|
+pub extend ToolMode with Debug::{to_repr}
+
+///|
+pub impl Show for ToolMode with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend ToolMode with Show::{to_string, output}
 
 ///|
 pub(all) enum Tier {
@@ -64,6 +100,15 @@ pub(all) enum Tier {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Tier with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Tier with Eq::{not_equal, equal}
+
+///|
+pub extend Tier with Debug::{to_repr}
+
+///|
+pub impl Show for Tier with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Tier with Show::{to_string, output}

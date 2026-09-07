@@ -152,7 +152,10 @@ pub(all) struct ArcPoint {
   gx : Int
   gy : Int
   angle : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn ArcPoint::equal(Self, Self) -> Bool
+pub fn ArcPoint::not_equal(Self, Self) -> Bool
+pub fn ArcPoint::to_repr(Self) -> @debug.Repr
 
 pub(all) enum CellKind {
   Empty
@@ -162,6 +165,11 @@ pub(all) enum CellKind {
   Wall
   Collectible
 } derive(Eq, @debug.Debug)
+pub fn CellKind::equal(Self, Self) -> Bool
+pub fn CellKind::not_equal(Self, Self) -> Bool
+pub fn CellKind::output(Self, &Logger) -> Unit
+pub fn CellKind::to_repr(Self) -> @debug.Repr
+pub fn CellKind::to_string(Self) -> String
 pub impl Show for CellKind
 
 pub(all) struct Game {
@@ -182,7 +190,8 @@ pub(all) struct Game {
   mut frame_count : Int
   mut anim_timer : Float
   mut title_angle : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct HistoryEntry {
   weight_pos : Vec2i
@@ -196,7 +205,8 @@ pub(all) struct HistoryEntry {
   collected : Array[Bool]
   launch_vel : Vec2f
   launch_pos : Vec2f
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HistoryEntry::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   id : Int
@@ -210,14 +220,16 @@ pub(all) struct Level {
   collectibles : Array[Vec2i]
   par_ticks : Int
   rope_length : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut best_ticks : Int
   mut collectibles_got : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Ready
@@ -225,13 +237,19 @@ pub(all) enum PlayState {
   Won
   Lost
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct Rope {
   mut anchor : Vec2i
   mut length : Int
   mut wrapped_pegs : Array[Vec2i]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Rope::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -240,12 +258,22 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum SwingDir {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn SwingDir::equal(Self, Self) -> Bool
+pub fn SwingDir::not_equal(Self, Self) -> Bool
+pub fn SwingDir::output(Self, &Logger) -> Unit
+pub fn SwingDir::to_repr(Self) -> @debug.Repr
+pub fn SwingDir::to_string(Self) -> String
 pub impl Show for SwingDir
 
 pub(all) enum Tier {
@@ -253,17 +281,28 @@ pub(all) enum Tier {
   Wrap
   Launch
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Vec2f {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2f::equal(Self, Self) -> Bool
+pub fn Vec2f::not_equal(Self, Self) -> Bool
+pub fn Vec2f::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Weight {
   mut pos : Vec2i
@@ -272,7 +311,8 @@ pub(all) struct Weight {
   mut arc_index : Int
   mut launch_vel : Vec2f
   mut launch_pos : Vec2f
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Weight::to_repr(Self) -> @debug.Repr
 
 pub(all) enum WeightState {
   Swinging
@@ -280,9 +320,13 @@ pub(all) enum WeightState {
   Stopped
   AtGoal
 } derive(Eq, @debug.Debug)
+pub fn WeightState::equal(Self, Self) -> Bool
+pub fn WeightState::not_equal(Self, Self) -> Bool
+pub fn WeightState::output(Self, &Logger) -> Unit
+pub fn WeightState::to_repr(Self) -> @debug.Repr
+pub fn WeightState::to_string(Self) -> String
 pub impl Show for WeightState
 
 // Type aliases
 
 // Traits
-

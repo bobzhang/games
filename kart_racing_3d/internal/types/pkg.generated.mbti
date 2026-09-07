@@ -473,6 +473,8 @@ pub(all) enum DriftLevel {
   Super
   Ultra
 } derive(Eq)
+pub fn DriftLevel::equal(Self, Self) -> Bool
+pub fn DriftLevel::not_equal(Self, Self) -> Bool
 
 pub(all) struct DroppedItem {
   mut active : Bool
@@ -560,6 +562,8 @@ pub(all) enum GameState {
   KartSelect
   TrackPreview
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) enum HazardKind {
   NoHazard
@@ -569,6 +573,11 @@ pub(all) enum HazardKind {
   IceSheet
   Shortcut
 } derive(Eq, @debug.Debug)
+pub fn HazardKind::equal(Self, Self) -> Bool
+pub fn HazardKind::not_equal(Self, Self) -> Bool
+pub fn HazardKind::output(Self, &Logger) -> Unit
+pub fn HazardKind::to_repr(Self) -> @debug.Repr
+pub fn HazardKind::to_string(Self) -> String
 pub impl Show for HazardKind
 
 pub(all) struct Kart {
@@ -680,6 +689,8 @@ pub(all) enum PowerupKind {
   Banana
   TripleMushroom
 } derive(Eq)
+pub fn PowerupKind::equal(Self, Self) -> Bool
+pub fn PowerupKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Projectile {
   mut active : Bool
@@ -712,6 +723,8 @@ pub(all) enum Surface {
   Oil
   SurfaceIce
 } derive(Eq)
+pub fn Surface::equal(Self, Self) -> Bool
+pub fn Surface::not_equal(Self, Self) -> Bool
 
 pub(all) enum Theme {
   Circuit
@@ -723,6 +736,8 @@ pub(all) enum Theme {
   Night
   Volcano
 } derive(Eq)
+pub fn Theme::equal(Self, Self) -> Bool
+pub fn Theme::not_equal(Self, Self) -> Bool
 
 pub(all) struct TrackData {
   mut track_name : String
@@ -755,4 +770,3 @@ pub(all) struct Waypoint {
 // Type aliases
 
 // Traits
-

@@ -9,11 +9,17 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Tile category used for collision and hazards.
 pub(all) enum TileKind {
   Solid
   Hazard
 } derive(Eq)
+
+///|
+pub extend TileKind with Eq::{not_equal, equal}
 
 ///|
 /// Reason a run ended in failure.
@@ -23,6 +29,9 @@ pub(all) enum LoseReason {
   Fall
   HitHazard
 } derive(Eq)
+
+///|
+pub extend LoseReason with Eq::{not_equal, equal}
 
 ///|
 /// Axis-aligned stage tile collider.
@@ -106,13 +115,13 @@ pub(all) struct Game {
 ///|
 /// Creates an empty solid tile placeholder.
 pub fn Tile::Tile() -> Tile {
-  { kind: Solid, x: 0.0, y: 0.0, w: 0.0, h: 0.0 }
+  { kind: Solid, x: 0.0, y: 0.0, w: 0.0, h: 0.0, }
 }
 
 ///|
 /// Creates an unchecked checkpoint placeholder.
 pub fn Checkpoint::Checkpoint() -> Checkpoint {
-  { x: 0.0, y: 0.0, w: 0.0, h: 0.0, bonus_s: 0, taken: false }
+  { x: 0.0, y: 0.0, w: 0.0, h: 0.0, bonus_s: 0, taken: false, }
 }
 
 ///|

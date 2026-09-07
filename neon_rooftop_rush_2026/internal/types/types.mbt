@@ -174,13 +174,13 @@ pub fn Obstacle::Obstacle() -> Obstacle {
 ///|
 /// Creates an inactive chip slot for the chip pool.
 pub fn Chip::Chip() -> Chip {
-  { active: false, x: 0.0, y: 0.0, bob_t: 0.0, spin_t: 0.0 }
+  { active: false, x: 0.0, y: 0.0, bob_t: 0.0, spin_t: 0.0, }
 }
 
 ///|
 /// Creates an inactive anchor slot for the anchor pool.
 pub fn Anchor::Anchor() -> Anchor {
-  { active: false, x: 0.0, y: 0.0, glow_t: 0.0 }
+  { active: false, x: 0.0, y: 0.0, glow_t: 0.0, }
 }
 
 ///|
@@ -201,7 +201,7 @@ pub fn Particle::Particle() -> Particle {
 ///|
 /// Creates an inactive ghost trail slot.
 pub fn Ghost::Ghost() -> Ghost {
-  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, hue: 0.0 }
+  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, hue: 0.0, }
 }
 
 ///|

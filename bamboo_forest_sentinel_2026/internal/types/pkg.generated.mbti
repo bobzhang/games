@@ -242,6 +242,8 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct InputState {
   mut move_x : Int
@@ -281,4 +283,3 @@ pub fn Trap::Trap(Int) -> Self
 // Type aliases
 
 // Traits
-

@@ -19,4 +19,3 @@ pub fn validate_constraint(@types.Grid, @types.Constraint) -> Bool
 // Type aliases
 
 // Traits
-

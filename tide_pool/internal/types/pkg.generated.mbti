@@ -181,6 +181,12 @@ pub(all) enum CellContent {
   Rock
   Organism(OrganismKind)
 } derive(Eq, ToJson, @debug.Debug)
+pub fn CellContent::equal(Self, Self) -> Bool
+pub fn CellContent::not_equal(Self, Self) -> Bool
+pub fn CellContent::output(Self, &Logger) -> Unit
+pub fn CellContent::to_json(Self) -> Json
+pub fn CellContent::to_repr(Self) -> @debug.Repr
+pub fn CellContent::to_string(Self) -> String
 pub impl Show for CellContent
 
 pub(all) struct Game {
@@ -205,7 +211,8 @@ pub(all) struct Game {
   mut sim_speed_timer : Float
   mut organisms_placed : Array[Int]
   mut anim_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelDef {
   id : Int
@@ -217,13 +224,15 @@ pub(all) struct LevelDef {
   organism_counts : Array[Int]
   target_species : Array[OrganismKind]
   rock_cells : Array[(Int, Int)]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_cycles_survived : Int
   mut stars : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum OrganismKind {
   Barnacle
@@ -233,6 +242,12 @@ pub(all) enum OrganismKind {
   Algae
   Urchin
 } derive(Eq, ToJson, @debug.Debug)
+pub fn OrganismKind::equal(Self, Self) -> Bool
+pub fn OrganismKind::not_equal(Self, Self) -> Bool
+pub fn OrganismKind::output(Self, &Logger) -> Unit
+pub fn OrganismKind::to_json(Self) -> Json
+pub fn OrganismKind::to_repr(Self) -> @debug.Repr
+pub fn OrganismKind::to_string(Self) -> String
 pub impl Show for OrganismKind
 
 pub(all) struct OrganismProfile {
@@ -248,7 +263,8 @@ pub(all) struct OrganismProfile {
   health_decay_submerged : Float
   health_decay_exposed : Float
   health_regen : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn OrganismProfile::to_repr(Self) -> @debug.Repr
 
 pub(all) struct OrganismState {
   kind : OrganismKind
@@ -257,13 +273,20 @@ pub(all) struct OrganismState {
   mut alive : Bool
   mut health : Float
   mut submerged : Bool
-} derive(Show, ToJson)
+} derive(ToJson, @debug.Debug)
+pub fn OrganismState::to_json(Self) -> Json
+pub fn OrganismState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayResult {
   None
   Victory
   Failure(String)
 } derive(Eq, @debug.Debug)
+pub fn PlayResult::equal(Self, Self) -> Bool
+pub fn PlayResult::not_equal(Self, Self) -> Bool
+pub fn PlayResult::output(Self, &Logger) -> Unit
+pub fn PlayResult::to_repr(Self) -> @debug.Repr
+pub fn PlayResult::to_string(Self) -> String
 pub impl Show for PlayResult
 
 pub(all) enum Screen {
@@ -273,6 +296,11 @@ pub(all) enum Screen {
   Simulating
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum TidePhase {
@@ -280,6 +308,12 @@ pub(all) enum TidePhase {
   Mid
   High
 } derive(Eq, ToJson, @debug.Debug)
+pub fn TidePhase::equal(Self, Self) -> Bool
+pub fn TidePhase::not_equal(Self, Self) -> Bool
+pub fn TidePhase::output(Self, &Logger) -> Unit
+pub fn TidePhase::to_json(Self) -> Json
+pub fn TidePhase::to_repr(Self) -> @debug.Repr
+pub fn TidePhase::to_string(Self) -> String
 pub impl Show for TidePhase
 
 pub(all) enum Tier {
@@ -287,6 +321,11 @@ pub(all) enum Tier {
   Middle
   Deep
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct TurnLog {
@@ -295,16 +334,22 @@ pub(all) struct TurnLog {
   phase : TidePhase
   events : Array[String]
   organisms_alive : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn TurnLog::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Zone {
   HighZone
   MidZone
   LowZone
 } derive(Eq, ToJson, @debug.Debug)
+pub fn Zone::equal(Self, Self) -> Bool
+pub fn Zone::not_equal(Self, Self) -> Bool
+pub fn Zone::output(Self, &Logger) -> Unit
+pub fn Zone::to_json(Self) -> Json
+pub fn Zone::to_repr(Self) -> @debug.Repr
+pub fn Zone::to_string(Self) -> String
 pub impl Show for Zone
 
 // Type aliases
 
 // Traits
-

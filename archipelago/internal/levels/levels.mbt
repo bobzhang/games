@@ -1,6 +1,6 @@
 ///|
 fn mk(grid : Int, islands : Array[@types.Island], par : Int) -> @types.Level {
-  { grid_size: grid, islands, par_bridges: par }
+  { grid_size: grid, islands, par_bridges: par, }
 }
 
 ///|

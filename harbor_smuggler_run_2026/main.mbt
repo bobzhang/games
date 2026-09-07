@@ -369,11 +369,11 @@ fn main {
   })
 
   let crates : Array[Crate] = Array::makei(max_crates, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, value: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, value: 0, active: false, }
   })
 
   let particles : Array[Particle] = Array::makei(max_particles, fn(_i) {
-    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false }
+    { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, kind: 0, active: false, }
   })
 
   let mut level = 1

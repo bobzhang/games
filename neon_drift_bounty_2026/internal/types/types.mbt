@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Enumerates EntityKind variants used by runtime state.
 pub(all) enum EntityKind {
   FoeBike
@@ -18,6 +21,9 @@ pub(all) enum EntityKind {
   ItemBattery
   ItemHackcell
 } derive(Eq)
+
+///|
+pub extend EntityKind with Eq::{not_equal, equal}
 
 ///|
 /// Stores runtime data for Entity.
@@ -218,7 +224,7 @@ pub fn Spark::Spark() -> Spark {
 ///|
 /// Creates a default GlowRing value for a new session.
 pub fn GlowRing::GlowRing() -> GlowRing {
-  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
+  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0, }
 }
 
 ///|

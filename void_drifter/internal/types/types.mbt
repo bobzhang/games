@@ -2,7 +2,13 @@
 pub(all) struct Vec2 {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2 with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2 with Debug::{to_repr}
 
 ///|
 pub(all) struct Ship {

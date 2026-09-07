@@ -1,39 +1,40 @@
 ///|
+
 ///|
 /// Generated full-screen sky ruins background texture.
-let tex_sky_ruins_background : Ref[@raylib.Texture?] = { val: None }
+let tex_sky_ruins_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player bird texture.
-let tex_player_bird : Ref[@raylib.Texture?] = { val: None }
+let tex_player_bird : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated standard gate pillar texture.
-let tex_gate_pillar : Ref[@raylib.Texture?] = { val: None }
+let tex_gate_pillar : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated beam hazard pillar texture.
-let tex_beam_pillar : Ref[@raylib.Texture?] = { val: None }
+let tex_beam_pillar : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated spinner hazard texture.
-let tex_spinner_core : Ref[@raylib.Texture?] = { val: None }
+let tex_spinner_core : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated score pickup texture.
-let tex_pickup_score : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_score : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated boost pickup texture.
-let tex_pickup_boost : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_boost : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated shield pickup texture.
-let tex_pickup_shield : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_shield : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated heart pickup texture.
-let tex_pickup_heart : Ref[@raylib.Texture?] = { val: None }
+let tex_pickup_heart : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Flappy Sky Ruins texture.
@@ -118,9 +119,17 @@ fn draw_texture_cover(
     texture,
     @raylib.Rectangle::new(
       src_x,
-      if flip_y { src_y + src_h } else { src_y },
+      if flip_y {
+        src_y + src_h
+      } else {
+        src_y
+      },
       src_w,
-      if flip_y { -src_h } else { src_h },
+      if flip_y {
+        -src_h
+      } else {
+        src_h
+      },
     ),
     @raylib.Rectangle::new(x, y, w, h),
     @raylib.Vector2::new(0.0, 0.0),
@@ -506,7 +515,7 @@ fn draw_pickup(pk : @types.Pickup) -> Unit {
   let c : @raylib.Color = pickup_color(pk.kind)
 
   match pickup_texture(pk.kind) {
-    Some(texture) => {
+    Some(texture) =>
       draw_texture_fit(
         texture,
         pk.x,
@@ -516,7 +525,6 @@ fn draw_pickup(pk : @types.Pickup) -> Unit {
         pulse * 4.0,
         @raylib.white,
       )
-    }
     None => @raylib.draw_circle(pk.x.to_int(), pk.y.to_int(), r, c)
   }
   @raylib.draw_circle_lines(

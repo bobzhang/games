@@ -119,3 +119,6 @@ pub(all) enum NavNode {
   WokStation
   PassStation
 } derive(Eq)
+
+///|
+pub extend NavNode with Eq::{not_equal, equal}

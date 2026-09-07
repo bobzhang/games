@@ -32,27 +32,27 @@ let max_particles : Int = 1200
 
 ///|
 /// Generated scrolling city road texture.
-let tex_city_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_city_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player getaway car sprite.
-let tex_player_car : Ref[@raylib.Texture?] = { val: None }
+let tex_player_car : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated patrol car sprite.
-let tex_police_car : Ref[@raylib.Texture?] = { val: None }
+let tex_police_car : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated interceptor car sprite.
-let tex_interceptor_car : Ref[@raylib.Texture?] = { val: None }
+let tex_interceptor_car : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated cash pickup sprite.
-let tex_cash_pickup : Ref[@raylib.Texture?] = { val: None }
+let tex_cash_pickup : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated smoke cloud sprite.
-let tex_smoke_cloud : Ref[@raylib.Texture?] = { val: None }
+let tex_smoke_cloud : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Represents the player's car with position, velocity, health, ability cooldowns, and score state.
@@ -183,7 +183,7 @@ fn emit_particle(
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
-      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
+      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind, }
       break
     }
   }
@@ -281,7 +281,7 @@ fn init_cops(cops : FixedArray[Cop], level : Int) -> Unit {
 fn spawn_smoke(smokes : FixedArray[Smoke], x : Float, y : Float) -> Unit {
   for i in 0..<smokes.length() {
     if !smokes[i].active {
-      smokes[i] = { active: true, x, y, r: 36.0, t: 0.0, life: 3.8 }
+      smokes[i] = { active: true, x, y, r: 36.0, t: 0.0, life: 3.8, }
       break
     }
   }

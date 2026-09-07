@@ -252,7 +252,7 @@ pub fn make_event_card(
   fixed_slot : Int,
 ) -> EventCard {
   let text = actor + " - " + action
-  { id, text, actor, action, time_hint, fixed_slot }
+  { id, text, actor, action, time_hint, fixed_slot, }
 }
 
 ///|
@@ -262,10 +262,10 @@ pub fn make_clue(
   card_b : Int,
   text : String,
 ) -> Clue {
-  { kind, card_a, card_b, text }
+  { kind, card_a, card_b, text, }
 }
 
 ///|
 pub fn make_link(from_id : Int, to_id : Int) -> CauseLink {
-  { from_id, to_id }
+  { from_id, to_id, }
 }

@@ -27,4 +27,3 @@ pub fn target_met(@types.Game, Int) -> Bool
 // Type aliases
 
 // Traits
-

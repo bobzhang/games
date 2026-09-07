@@ -77,7 +77,13 @@ test "new_maze_state guard states have alert fields" {
 test "update_door_animations opens smoothly" {
   let ms : @types.MazeState = {
     door_states: [
-      { door_id: 0, open: true, timer: 0, anim_progress: 0.0, prev_open: false },
+      {
+        door_id: 0,
+        open: true,
+        timer: 0,
+        anim_progress: 0.0,
+        prev_open: false,
+      },
     ],
     button_pressed: [],
     guard_states: [],
@@ -93,7 +99,13 @@ test "update_door_animations opens smoothly" {
 test "update_door_animations closes smoothly" {
   let ms : @types.MazeState = {
     door_states: [
-      { door_id: 0, open: false, timer: 0, anim_progress: 1.0, prev_open: true },
+      {
+        door_id: 0,
+        open: false,
+        timer: 0,
+        anim_progress: 1.0,
+        prev_open: true,
+      },
     ],
     button_pressed: [],
     guard_states: [],

@@ -103,6 +103,9 @@ pub(all) enum ObstacleKind {
 } derive(Eq)
 
 ///|
+pub extend ObstacleKind with Eq::{not_equal, equal}
+
+///|
 /// Kind of collectible pickup item.
 pub(all) enum PickupKind {
   Score
@@ -110,3 +113,6 @@ pub(all) enum PickupKind {
   Shield
   Heart
 } derive(Eq)
+
+///|
+pub extend PickupKind with Eq::{not_equal, equal}

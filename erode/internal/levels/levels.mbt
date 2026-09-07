@@ -22,7 +22,7 @@ fn make_level(
     name,
     initial_block: @types.grid_from_rows(size, initial),
     target_shape: @types.grid_from_rows(size, target),
-    budget: { water, wind, frost, heat },
+    budget: { water, wind, frost, heat, },
     par_forces: par,
   }
 }
@@ -720,7 +720,7 @@ fn level_20() -> @types.Level {
 }
 
 ///|
-let all_levels_cache : Ref[Array[@types.Level]?] = { val: None }
+let all_levels_cache : Ref[Array[@types.Level]?] = { val: None, }
 
 ///|
 pub fn get_all_levels() -> Array[@types.Level] {

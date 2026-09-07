@@ -24,6 +24,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Converts a GameState to its integer value.
 pub fn GameState::to_int(self : GameState) -> Int {
   match self {
@@ -68,6 +71,9 @@ pub(all) enum ShipKind {
 // Weapon types
 
 ///|
+pub extend ShipKind with Eq::{not_equal, equal}
+
+///|
 /// Weapon type identifiers for projectiles.
 pub(all) enum WeaponKind {
   Laser
@@ -77,6 +83,9 @@ pub(all) enum WeaponKind {
 } derive(Eq)
 
 // Enemy types
+
+///|
+pub extend WeaponKind with Eq::{not_equal, equal}
 
 ///|
 /// Enemy type identifier for standard fighter craft.
@@ -122,6 +131,9 @@ pub(all) enum AiState {
 // Power-up types
 
 ///|
+pub extend AiState with Eq::{not_equal, equal}
+
+///|
 /// Power-up pickup type identifiers.
 pub(all) enum PowerupKind {
   Health
@@ -131,6 +143,9 @@ pub(all) enum PowerupKind {
 } derive(Eq)
 
 // Asteroid size tiers
+
+///|
+pub extend PowerupKind with Eq::{not_equal, equal}
 
 ///|
 /// Size tier for large breakable asteroids.
@@ -158,6 +173,9 @@ pub(all) enum Formation {
 // Mission objective types
 
 ///|
+pub extend Formation with Eq::{not_equal, equal}
+
+///|
 /// Mission objective type identifiers.
 pub(all) enum Objective {
   DestroyAll
@@ -171,6 +189,9 @@ pub(all) enum Objective {
 } derive(Eq)
 
 // Pool sizes
+
+///|
+pub extend Objective with Eq::{not_equal, equal}
 
 ///|
 /// Maximum number of concurrent enemy entities.

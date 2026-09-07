@@ -23,4 +23,3 @@ pub fn sector_name(@types.SectorKind) -> String
 // Type aliases
 
 // Traits
-

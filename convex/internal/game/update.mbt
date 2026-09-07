@@ -132,7 +132,7 @@ fn update_playing(game : @types.Game) -> Unit {
   }
   let mx = Float::from_int(@raylib.get_mouse_x())
   let my = Float::from_int(@raylib.get_mouse_y())
-  let mouse_pt : @types.Point = { x: mx, y: my }
+  let mouse_pt : @types.Point = { x: mx, y: my, }
   // Update snap preview
   if @types.point_in_plane(mouse_pt) {
     let snapped = @types.snap_point(mouse_pt)
@@ -165,7 +165,7 @@ fn update_playing(game : @types.Game) -> Unit {
     }
     if best_idx >= 0 {
       @types.push_undo(game)
-      let new_pts : Array[@types.Point] = Array::new(
+      let new_pts : Array[@types.Point] = Array(
         capacity=game.placed_points.length() - 1,
       )
       for i in 0..<game.placed_points.length() {

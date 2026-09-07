@@ -58,27 +58,27 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 
 ///|
 pub fn vec2f(x : Float, y : Float) -> Vec2f {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn vec2f_zero() -> Vec2f {
-  { x: 0.0, y: 0.0 }
+  { x: 0.0, y: 0.0, }
 }
 
 ///|
 pub fn vec2f_add(a : Vec2f, b : Vec2f) -> Vec2f {
-  { x: a.x + b.x, y: a.y + b.y }
+  { x: a.x + b.x, y: a.y + b.y, }
 }
 
 ///|
 pub fn vec2f_sub(a : Vec2f, b : Vec2f) -> Vec2f {
-  { x: a.x - b.x, y: a.y - b.y }
+  { x: a.x - b.x, y: a.y - b.y, }
 }
 
 ///|
 pub fn vec2f_scale(v : Vec2f, s : Float) -> Vec2f {
-  { x: v.x * s, y: v.y * s }
+  { x: v.x * s, y: v.y * s, }
 }
 
 ///|
@@ -106,7 +106,7 @@ pub fn vec2f_normalize(v : Vec2f) -> Vec2f {
   if len < 0.001 {
     vec2f_zero()
   } else {
-    { x: v.x / len, y: v.y / len }
+    { x: v.x / len, y: v.y / len, }
   }
 }
 
@@ -134,17 +134,17 @@ pub fn make_planet(
   mass : Float,
   radius : Float,
 ) -> Planet {
-  { pos: vec2f(x, y), mass, radius }
+  { pos: vec2f(x, y), mass, radius, }
 }
 
 ///|
 pub fn make_station(x : Float, y : Float, radius : Float) -> Station {
-  { pos: vec2f(x, y), radius }
+  { pos: vec2f(x, y), radius, }
 }
 
 ///|
 pub fn make_waypoint(x : Float, y : Float, radius : Float) -> Waypoint {
-  { pos: vec2f(x, y), radius, collected: false }
+  { pos: vec2f(x, y), radius, collected: false, }
 }
 
 ///|
@@ -171,21 +171,21 @@ pub fn make_level(
 
 ///|
 pub fn make_star(x : Float, y : Float, brightness : Int, size : Float) -> Star {
-  { x, y, brightness, size }
+  { x, y, brightness, size, }
 }
 
 ///|
 pub fn new_probe() -> Probe {
-  { pos: vec2f_zero(), vel: vec2f_zero(), active: false }
+  { pos: vec2f_zero(), vel: vec2f_zero(), active: false, }
 }
 
 ///|
 pub fn new_score() -> LevelScore {
-  { completed: false, best_ticks: 9999, stars: 0 }
+  { completed: false, best_ticks: 9999, stars: 0, }
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 12345 }
+let rng_state : Ref[Int] = { val: 12345, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {

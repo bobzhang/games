@@ -4,11 +4,11 @@ fn draw_ui(game : @types.Game, tablet : @types.Tablet) -> Unit {
   let py = @types.palette_y
   // Panel background
   if !draw_decoder_panel_art(
-    px - 10,
-    py - 10,
-    @types.screen_width - px + 10 - 20,
-    @types.screen_height - py - 10,
-  ) {
+      px - 10,
+      py - 10,
+      @types.screen_width - px + 10 - 20,
+      @types.screen_height - py - 10,
+    ) {
     @raylib.draw_rectangle(
       px - 10,
       py - 10,

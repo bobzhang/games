@@ -162,12 +162,20 @@ pub(all) enum Base {
   G
   C
 } derive(Eq, @debug.Debug)
+pub fn Base::equal(Self, Self) -> Bool
+pub fn Base::not_equal(Self, Self) -> Bool
+pub fn Base::output(Self, &Logger) -> Unit
+pub fn Base::to_repr(Self) -> @debug.Repr
+pub fn Base::to_string(Self) -> String
 pub impl Show for Base
 
 pub(all) struct CodonResult {
   trait_ : Trait
   bases : Array[Base]
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn CodonResult::equal(Self, Self) -> Bool
+pub fn CodonResult::not_equal(Self, Self) -> Bool
+pub fn CodonResult::to_repr(Self) -> @debug.Repr
 
 pub(all) struct EditOp {
   kind : OpKind
@@ -176,7 +184,10 @@ pub(all) struct EditOp {
   range_end : Int
   insert_base : Base
   removed : Array[Base]
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn EditOp::equal(Self, Self) -> Bool
+pub fn EditOp::not_equal(Self, Self) -> Bool
+pub fn EditOp::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -210,13 +221,15 @@ pub(all) struct Level {
   available_ops : Array[OpKind]
   name : String
   description : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut best_edits : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum OpKind {
   Cut
@@ -225,6 +238,11 @@ pub(all) enum OpKind {
   Invert
   Delete
 } derive(Eq, @debug.Debug)
+pub fn OpKind::equal(Self, Self) -> Bool
+pub fn OpKind::not_equal(Self, Self) -> Bool
+pub fn OpKind::output(Self, &Logger) -> Unit
+pub fn OpKind::to_repr(Self) -> @debug.Repr
+pub fn OpKind::to_string(Self) -> String
 pub impl Show for OpKind
 
 pub(all) enum PlayState {
@@ -232,12 +250,20 @@ pub(all) enum PlayState {
   Verified
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct ReadResult {
   traits : Array[Trait]
   valid : Bool
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn ReadResult::equal(Self, Self) -> Bool
+pub fn ReadResult::not_equal(Self, Self) -> Bool
+pub fn ReadResult::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -246,6 +272,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -253,6 +284,11 @@ pub(all) enum Tier {
   GeneEditing
   Mastery
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) enum Trait {
@@ -268,9 +304,13 @@ pub(all) enum Trait {
   Vision
   Neutral
 } derive(Eq, @debug.Debug)
+pub fn Trait::equal(Self, Self) -> Bool
+pub fn Trait::not_equal(Self, Self) -> Bool
+pub fn Trait::output(Self, &Logger) -> Unit
+pub fn Trait::to_repr(Self) -> @debug.Repr
+pub fn Trait::to_string(Self) -> String
 pub impl Show for Trait
 
 // Type aliases
 
 // Traits
-

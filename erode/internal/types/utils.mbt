@@ -1,7 +1,7 @@
 ///|
 pub fn new_grid(size : Int, fill : Bool) -> Grid {
   let cells : Array[Bool] = Array::make(size * size, fill)
-  { size, cells }
+  { size, cells, }
 }
 
 ///|
@@ -14,7 +14,7 @@ pub fn grid_from_rows(size : Int, rows : Array[Array[Bool]]) -> Grid {
       }
     }
   }
-  { size, cells }
+  { size, cells, }
 }
 
 ///|
@@ -23,7 +23,7 @@ pub fn clone_grid(g : Grid) -> Grid {
   for i in 0..<(g.size * g.size) {
     cells[i] = g.cells[i]
   }
-  { size: g.size, cells }
+  { size: g.size, cells, }
 }
 
 ///|
@@ -99,7 +99,7 @@ pub fn grids_match(a : Grid, b : Grid) -> Bool {
 
 ///|
 pub fn clone_budget(b : ForceBudget) -> ForceBudget {
-  { water: b.water, wind: b.wind, frost: b.frost, heat: b.heat }
+  { water: b.water, wind: b.wind, frost: b.frost, heat: b.heat, }
 }
 
 ///|
@@ -177,7 +177,7 @@ pub fn tier_level_range(tier : Tier) -> (Int, Int) {
 pub fn new_level_scores() -> Array[LevelScore] {
   let scores : Array[LevelScore] = []
   for _i in 0..<total_levels {
-    scores.push({ stars: 0, completed: false, forces_used: 0 })
+    scores.push({ stars: 0, completed: false, forces_used: 0, })
   }
   scores
 }
@@ -194,7 +194,7 @@ pub fn new_game() -> Game {
     screen: Title,
     grid: clone_grid(empty),
     target: clone_grid(empty),
-    budget: { water: 0, wind: 0, frost: 0, heat: 0 },
+    budget: { water: 0, wind: 0, frost: 0, heat: 0, },
     history: [],
     current_level: 0,
     current_tier: Clay,

@@ -193,16 +193,25 @@ pub(all) enum PlayState {
   Placing
   Completed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct Point {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Point::equal(Self, Self) -> Bool
+pub fn Point::not_equal(Self, Self) -> Bool
+pub fn Point::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Polygon {
   vertices : Array[Point]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Polygon::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -211,6 +220,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -218,6 +232,11 @@ pub(all) enum Tier {
   Edges
   Sculpt
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct UndoEntry {
@@ -227,4 +246,3 @@ pub(all) struct UndoEntry {
 // Type aliases
 
 // Traits
-

@@ -58,27 +58,27 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 
 ///|
 pub fn vec2(x : Float, y : Float) -> Vec2 {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn vec2_zero() -> Vec2 {
-  { x: 0.0, y: 0.0 }
+  { x: 0.0, y: 0.0, }
 }
 
 ///|
 pub fn vec2_add(a : Vec2, b : Vec2) -> Vec2 {
-  { x: a.x + b.x, y: a.y + b.y }
+  { x: a.x + b.x, y: a.y + b.y, }
 }
 
 ///|
 pub fn vec2_sub(a : Vec2, b : Vec2) -> Vec2 {
-  { x: a.x - b.x, y: a.y - b.y }
+  { x: a.x - b.x, y: a.y - b.y, }
 }
 
 ///|
 pub fn vec2_scale(v : Vec2, s : Float) -> Vec2 {
-  { x: v.x * s, y: v.y * s }
+  { x: v.x * s, y: v.y * s, }
 }
 
 ///|
@@ -99,7 +99,7 @@ pub fn vec2_normalize(v : Vec2) -> Vec2 {
   if len < 0.0001 {
     vec2_zero()
   } else {
-    { x: v.x / len, y: v.y / len }
+    { x: v.x / len, y: v.y / len, }
   }
 }
 
@@ -111,19 +111,19 @@ pub fn vec2_dot(a : Vec2, b : Vec2) -> Float {
 ///|
 pub fn vec2_reflect(v : Vec2, normal : Vec2) -> Vec2 {
   let d : Float = 2.0 * vec2_dot(v, normal)
-  { x: v.x - d * normal.x, y: v.y - d * normal.y }
+  { x: v.x - d * normal.x, y: v.y - d * normal.y, }
 }
 
 ///|
 pub fn vec2_rotate(v : Vec2, angle : Float) -> Vec2 {
   let c = cosf(angle)
   let s = sinf(angle)
-  { x: v.x * c - v.y * s, y: v.x * s + v.y * c }
+  { x: v.x * c - v.y * s, y: v.x * s + v.y * c, }
 }
 
 ///|
 pub fn vec2_neg(v : Vec2) -> Vec2 {
-  { x: -v.x, y: -v.y }
+  { x: -v.x, y: -v.y, }
 }
 
 ///|
@@ -146,7 +146,7 @@ pub fn point_to_segment_dist(p : Vec2, a : Vec2, b : Vec2) -> (Float, Float) {
 pub fn segment_normal(a : Vec2, b : Vec2) -> Vec2 {
   let dx = b.x - a.x
   let dy = b.y - a.y
-  vec2_normalize({ x: -dy, y: dx })
+  vec2_normalize({ x: -dy, y: dx, })
 }
 
 ///|
@@ -170,7 +170,7 @@ pub fn segment_intersect(p1 : Vec2, p2 : Vec2, p3 : Vec2, p4 : Vec2) -> Float? {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 42 }
+let rng_state : Ref[Int] = { val: 42, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {
@@ -198,8 +198,8 @@ pub fn rng_float() -> Float {
 ///|
 pub fn new_ball(pos : Vec2, vel : Vec2) -> Ball {
   {
-    pos: { x: pos.x, y: pos.y },
-    vel: { x: vel.x, y: vel.y },
+    pos: { x: pos.x, y: pos.y, },
+    vel: { x: vel.x, y: vel.y, },
     active: true,
     bounce_count: 0,
     trail: [],
@@ -208,17 +208,17 @@ pub fn new_ball(pos : Vec2, vel : Vec2) -> Ball {
 
 ///|
 pub fn new_wall(x1 : Float, y1 : Float, x2 : Float, y2 : Float) -> Wall {
-  { p1: vec2(x1, y1), p2: vec2(x2, y2) }
+  { p1: vec2(x1, y1), p2: vec2(x2, y2), }
 }
 
 ///|
 pub fn new_target(x : Float, y : Float, radius : Float) -> Target {
-  { pos: vec2(x, y), radius, hit: false, hit_timer: 0.0 }
+  { pos: vec2(x, y), radius, hit: false, hit_timer: 0.0, }
 }
 
 ///|
 pub fn new_splitter(x : Float, y : Float, radius : Float) -> Splitter {
-  { pos: vec2(x, y), radius, pulse_timer: 0.0 }
+  { pos: vec2(x, y), radius, pulse_timer: 0.0, }
 }
 
 ///|
@@ -239,17 +239,17 @@ pub fn new_gate(
 
 ///|
 pub fn new_bumper(x : Float, y : Float, radius : Float) -> Bumper {
-  { pos: vec2(x, y), radius, hit_timer: 0.0 }
+  { pos: vec2(x, y), radius, hit_timer: 0.0, }
 }
 
 ///|
 pub fn new_pickup(x : Float, y : Float, radius : Float) -> LevelPickup {
-  { pos: vec2(x, y), radius, collected: false }
+  { pos: vec2(x, y), radius, collected: false, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_bounces: 999 }
+  { stars: 0, completed: false, best_bounces: 999, }
 }
 
 ///|

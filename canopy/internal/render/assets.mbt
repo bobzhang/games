@@ -1,41 +1,41 @@
 ///|
-let tex_forest_board_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_forest_board_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_title_tree : Ref[@raylib.Texture?] = { val: None }
+let tex_title_tree : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_trunk_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_trunk_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_branch_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_branch_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_leaf_cluster : Ref[@raylib.Texture?] = { val: None }
+let tex_leaf_cluster : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_shadow_overlay : Ref[@raylib.Texture?] = { val: None }
+let tex_shadow_overlay : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_ground_water_strip : Ref[@raylib.Texture?] = { val: None }
+let tex_ground_water_strip : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_target_marker : Ref[@raylib.Texture?] = { val: None }
+let tex_target_marker : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_seedling : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_seedling : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_grove : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_grove : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_tier_forest : Ref[@raylib.Texture?] = { val: None }
+let tex_tier_forest : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_star_icon : Ref[@raylib.Texture?] = { val: None }
+let tex_star_icon : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_prune_shears : Ref[@raylib.Texture?] = { val: None }
+let tex_prune_shears : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 fn load_art_texture(file_name : String) -> @raylib.Texture {
@@ -46,7 +46,9 @@ fn load_art_texture(file_name : String) -> @raylib.Texture {
 
 ///|
 pub fn load_assets() -> Unit {
-  tex_forest_board_backdrop.val = Some(load_art_texture("forest_board_backdrop.png"))
+  tex_forest_board_backdrop.val = Some(
+    load_art_texture("forest_board_backdrop.png"),
+  )
   tex_title_tree.val = Some(load_art_texture("title_tree.png"))
   tex_trunk_sprite.val = Some(load_art_texture("trunk_sprite.png"))
   tex_branch_sprite.val = Some(load_art_texture("branch_sprite.png"))

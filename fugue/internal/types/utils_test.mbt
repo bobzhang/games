@@ -157,7 +157,7 @@ test "total_harmony_score across columns" {
 ///|
 test "count_targets_matched" {
   let grid = new_grid(8, 7)
-  let targets : Array[TargetPos] = [{ col: 0, row: 6 }, { col: 2, row: 4 }]
+  let targets : Array[TargetPos] = [{ col: 0, row: 6, }, { col: 2, row: 4, }]
   // No notes placed yet
   assert_eq(count_targets_matched(grid, targets), 0)
   // Place one target
@@ -171,7 +171,7 @@ test "count_targets_matched" {
 ///|
 test "all_targets_matched" {
   let grid = new_grid(8, 7)
-  let targets : Array[TargetPos] = [{ col: 0, row: 6 }, { col: 2, row: 4 }]
+  let targets : Array[TargetPos] = [{ col: 0, row: 6, }, { col: 2, row: 4, }]
   assert_eq(all_targets_matched(grid, targets), false)
   grid.cells[0][6].has_note = true
   grid.cells[2][4].has_note = true

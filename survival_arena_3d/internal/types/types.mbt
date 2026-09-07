@@ -13,6 +13,9 @@ pub(all) enum GameState {
 // Player entity
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Player runtime state including movement, combat stats, progression, and UI-facing counters.
 pub(all) struct Player {
   mut x : Float
@@ -324,7 +327,7 @@ pub(all) struct Crate {
 ///|
 /// Creates an active crate instance at world position `(x, z)` with a weapon kind.
 pub fn Crate::Crate(x : Float, z : Float, kind : WeaponKind) -> Crate {
-  { active: true, x, z, respawn_timer: 0.0, kind }
+  { active: true, x, z, respawn_timer: 0.0, kind, }
 }
 
 // Low wall (half-cover)
@@ -424,7 +427,7 @@ pub(all) struct Barricade {
 ///|
 /// Creates an inactive barricade slot with default max HP.
 pub fn Barricade::inactive() -> Barricade {
-  { active: false, x: 0.0, z: 0.0, hp: 0.0, max_hp: barricade_max_hp }
+  { active: false, x: 0.0, z: 0.0, hp: 0.0, max_hp: barricade_max_hp, }
 }
 
 // Kill feed entry
@@ -466,7 +469,7 @@ pub(all) struct WeaponState {
 ///|
 /// Creates default weapon reload state.
 pub fn WeaponState::WeaponState() -> WeaponState {
-  { reload_timer: 0.0, reloading: false, reload_time: 0.0 }
+  { reload_timer: 0.0, reloading: false, reload_time: 0.0, }
 }
 
 // Shop item
@@ -492,7 +495,7 @@ pub(all) struct DamageIndicator {
 ///|
 /// Creates an inactive damage indicator slot.
 pub fn DamageIndicator::inactive() -> DamageIndicator {
-  { active: false, angle: 0.0, timer: 0.0 }
+  { active: false, angle: 0.0, timer: 0.0, }
 }
 
 // Main Game struct
@@ -599,7 +602,7 @@ pub fn Game::Game() -> Game {
     let dist : Float = 18.0
     let px = @math.cosf(angle) * dist
     let pz = @math.sinf(angle) * dist
-    pillars.push({ x: px, z: pz, radius: pillar_radius, height: pillar_height })
+    pillars.push({ x: px, z: pz, radius: pillar_radius, height: pillar_height, })
   }
   // Create ammo crates at various positions
   let crates : Array[Crate] = []

@@ -784,12 +784,18 @@ pub(all) enum AiState {
 } derive(Eq)
 
 ///|
+pub extend AiState with Eq::{not_equal, equal}
+
+///|
 /// Camera view mode.
 pub(all) enum CameraMode {
   Chase
   Cockpit
   Free
 } derive(Eq)
+
+///|
+pub extend CameraMode with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
@@ -804,12 +810,18 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Weapon variant.
 pub(all) enum WeaponKind {
   MachineGun
   Rockets
   Bombs
 } derive(Eq)
+
+///|
+pub extend WeaponKind with Eq::{not_equal, equal}
 
 ///|
 /// Weather condition.
@@ -823,6 +835,9 @@ pub(all) enum Weather {
 } derive(Eq)
 
 // Combat feedback constants
+
+///|
+pub extend Weather with Eq::{not_equal, equal}
 
 ///|
 /// Duration of the hit marker flash in seconds.

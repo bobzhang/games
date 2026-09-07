@@ -5,7 +5,7 @@ pub fn pos_to_index(p : Pos, cols : Int) -> Int {
 
 ///|
 pub fn index_to_pos(i : Int, cols : Int) -> Pos {
-  { x: i % cols, y: i / cols }
+  { x: i % cols, y: i / cols, }
 }
 
 ///|
@@ -15,7 +15,7 @@ pub fn in_bounds(p : Pos, cols : Int, rows : Int) -> Bool {
 
 ///|
 pub fn neighbor(p : Pos, d : Direction) -> Pos {
-  { x: p.x + d.dx(), y: p.y + d.dy() }
+  { x: p.x + d.dx(), y: p.y + d.dy(), }
 }
 
 ///|
@@ -30,12 +30,12 @@ pub fn get_tile(game : Game, p : Pos) -> Tile? {
 
 ///|
 pub fn new_tile(elevation : Int) -> Tile {
-  { kind: Empty, elevation, has_water: false, water_level: 0, connections: [] }
+  { kind: Empty, elevation, has_water: false, water_level: 0, connections: [], }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, stars: 0, segments_used: 0 }
+  { completed: false, stars: 0, segments_used: 0, }
 }
 
 ///|
@@ -141,7 +141,7 @@ pub fn screen_to_grid(mx : Int, my : Int) -> Pos? {
   let gx = (mx - grid_offset_x) / cell_size
   let gy = (my - grid_offset_y) / cell_size
   if gx >= 0 && gx < grid_cols && gy >= 0 && gy < grid_rows {
-    Some({ x: gx, y: gy })
+    Some({ x: gx, y: gy, })
   } else {
     None
   }

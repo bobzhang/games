@@ -63,7 +63,7 @@ pub fn new_game() -> Game {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, best_cycles_survived: 0, stars: 0 }
+  { completed: false, best_cycles_survived: 0, stars: 0, }
 }
 
 ///|

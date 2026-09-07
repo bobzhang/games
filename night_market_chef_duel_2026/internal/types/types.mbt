@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Dish catalog identifiers used by orders and cooking.
 pub(all) enum Dish {
   DishNone
@@ -18,6 +21,9 @@ pub(all) enum Dish {
 } derive(Eq)
 
 ///|
+pub extend Dish with Eq::{not_equal, equal}
+
+///|
 /// Cooking lane assignment for a dish.
 pub(all) enum Lane {
   Grill
@@ -25,11 +31,17 @@ pub(all) enum Lane {
 } derive(Eq)
 
 ///|
+pub extend Lane with Eq::{not_equal, equal}
+
+///|
 /// Two-step cooking phase state.
 pub(all) enum CookStage {
   Prep
   Heat
 } derive(Eq)
+
+///|
+pub extend CookStage with Eq::{not_equal, equal}
 
 ///|
 /// Active order ticket and timing data.

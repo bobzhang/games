@@ -70,4 +70,3 @@ pub fn stun_duration_for(@types.Enemy) -> Int
 // Type aliases
 
 // Traits
-

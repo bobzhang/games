@@ -35,4 +35,3 @@ pub fn resolve_until_stable(@types.HexGrid, Int) -> (Int, Array[Bool])
 // Type aliases
 
 // Traits
-

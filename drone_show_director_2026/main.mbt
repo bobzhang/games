@@ -100,27 +100,27 @@ struct Vec2f {
 
 ///|
 /// Generated aerial stage background texture.
-let tex_show_background : Ref[@raylib.Texture?] = { val: None }
+let tex_show_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated show director sprite.
-let tex_director : Ref[@raylib.Texture?] = { val: None }
+let tex_director : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated support station sprite.
-let tex_station : Ref[@raylib.Texture?] = { val: None }
+let tex_station : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated drone light sprite.
-let tex_drone_light : Ref[@raylib.Texture?] = { val: None }
+let tex_drone_light : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated wind gust sprite.
-let tex_wind_gust : Ref[@raylib.Texture?] = { val: None }
+let tex_wind_gust : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated firework burst sprite.
-let tex_firework_burst : Ref[@raylib.Texture?] = { val: None }
+let tex_firework_burst : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Returns v clamped to the range [lo, hi].
@@ -309,23 +309,23 @@ fn pattern_target(
   match pattern {
     0 => {
       let r : Float = 142.0 + @math.sinf(phase * 0.9 + t * 10.0) * 16.0
-      { x: cx + @math.cosf(a) * r, y: cy + @math.sinf(a) * r }
+      { x: cx + @math.cosf(a) * r, y: cy + @math.sinf(a) * r, }
     }
     1 => {
       let layer : Float = 48.0 + t * 210.0
       let aa : Float = a * 1.5 + t * 4.0
-      { x: cx + @math.cosf(aa) * layer, y: cy + @math.sinf(aa) * layer * 0.72 }
+      { x: cx + @math.cosf(aa) * layer, y: cy + @math.sinf(aa) * layer * 0.72, }
     }
     2 => {
       let px : Float = cx - 250.0 + t * 500.0
       let py : Float = cy + @math.sinf(t * 18.0 + phase * 3.2) * 112.0
-      { x: px, y: py }
+      { x: px, y: py, }
     }
     3 => {
       let rr : Float = 60.0 +
         (@math.sinf(t * 12.0 + phase * 2.4) * 0.5 + 0.5) * 168.0
       let aa : Float = a * 2.2
-      { x: cx + @math.cosf(aa) * rr * 0.62, y: cy + @math.sinf(aa) * rr }
+      { x: cx + @math.cosf(aa) * rr * 0.62, y: cy + @math.sinf(aa) * rr, }
     }
     _ => {
       let wing : Float = if t < 0.5 { -1.0 } else { 1.0 }
@@ -1890,9 +1890,9 @@ fn main {
   let stage_r : Float = 296.0
 
   let stations : Array[Station] = [
-    { x: world_l + 34.0, y: world_b - 128.0, w: 196.0, h: 92.0, kind: 0 },
-    { x: world_r - 230.0, y: world_b - 128.0, w: 196.0, h: 92.0, kind: 1 },
-    { x: stage_cx - 96.0, y: world_t + 38.0, w: 192.0, h: 92.0, kind: 2 },
+    { x: world_l + 34.0, y: world_b - 128.0, w: 196.0, h: 92.0, kind: 0, },
+    { x: world_r - 230.0, y: world_b - 128.0, w: 196.0, h: 92.0, kind: 1, },
+    { x: stage_cx - 96.0, y: world_t + 38.0, w: 192.0, h: 92.0, kind: 2, },
   ]
 
   let drones : Array[Drone] = Array::makei(58, fn(_i) {

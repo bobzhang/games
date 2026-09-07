@@ -1,30 +1,30 @@
 ///|
 /// Generated laboratory arena backdrop texture.
-let tex_lab_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_lab_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated heavy three-hit brick texture.
-let tex_brick_hp3 : Ref[@raylib.Texture?] = { val: None }
+let tex_brick_hp3 : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated medium two-hit brick texture.
-let tex_brick_hp2 : Ref[@raylib.Texture?] = { val: None }
+let tex_brick_hp2 : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated light one-hit brick texture.
-let tex_brick_hp1 : Ref[@raylib.Texture?] = { val: None }
+let tex_brick_hp1 : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated plasma ball texture.
-let tex_ball_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_ball_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated normal paddle texture.
-let tex_paddle_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_paddle_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated wide power paddle texture.
-let tex_paddle_wide : Ref[@raylib.Texture?] = { val: None }
+let tex_paddle_wide : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one bilinear-filtered Breakout Lab texture.

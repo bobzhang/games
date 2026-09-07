@@ -142,6 +142,8 @@ pub(all) enum AttackState {
   Active(Float)
   Recovery(Float)
 } derive(Eq)
+pub fn AttackState::equal(Self, Self) -> Bool
+pub fn AttackState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Camera {
   mut x : Float
@@ -172,6 +174,11 @@ pub(all) enum Direction {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) enum EliteAffix {
@@ -182,6 +189,11 @@ pub(all) enum EliteAffix {
   Vampiric
   Explosive
 } derive(Eq, @debug.Debug)
+pub fn EliteAffix::equal(Self, Self) -> Bool
+pub fn EliteAffix::not_equal(Self, Self) -> Bool
+pub fn EliteAffix::output(Self, &Logger) -> Unit
+pub fn EliteAffix::to_repr(Self) -> @debug.Repr
+pub fn EliteAffix::to_string(Self) -> String
 pub impl Show for EliteAffix
 
 pub(all) enum EncounterType {
@@ -193,6 +205,11 @@ pub(all) enum EncounterType {
   PoisonNest
   Ambush
 } derive(Eq, @debug.Debug)
+pub fn EncounterType::equal(Self, Self) -> Bool
+pub fn EncounterType::not_equal(Self, Self) -> Bool
+pub fn EncounterType::output(Self, &Logger) -> Unit
+pub fn EncounterType::to_repr(Self) -> @debug.Repr
+pub fn EncounterType::to_string(Self) -> String
 pub impl Show for EncounterType
 
 pub(all) struct Enemy {
@@ -232,6 +249,11 @@ pub(all) enum EnemyKind {
   BroodMother
   LichKing
 } derive(Eq, @debug.Debug)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
+pub fn EnemyKind::output(Self, &Logger) -> Unit
+pub fn EnemyKind::to_repr(Self) -> @debug.Repr
+pub fn EnemyKind::to_string(Self) -> String
 pub impl Show for EnemyKind
 
 pub(all) enum EnemyState {
@@ -242,6 +264,8 @@ pub(all) enum EnemyState {
   Hurt(Float)
   Dead(Float)
 } derive(Eq)
+pub fn EnemyState::equal(Self, Self) -> Bool
+pub fn EnemyState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Floor {
   rooms : Array[Room]
@@ -256,6 +280,11 @@ pub(all) enum FloorPath {
   Forge
   Gauntlet
 } derive(Eq, @debug.Debug)
+pub fn FloorPath::equal(Self, Self) -> Bool
+pub fn FloorPath::not_equal(Self, Self) -> Bool
+pub fn FloorPath::output(Self, &Logger) -> Unit
+pub fn FloorPath::to_repr(Self) -> @debug.Repr
+pub fn FloorPath::to_string(Self) -> String
 pub impl Show for FloorPath
 
 pub(all) struct Game {
@@ -322,6 +351,9 @@ pub(all) enum GameEvent {
   WeaponSwing(Float, Float, Float)
   SynergyUnlocked(String)
 } derive(@debug.Debug)
+pub fn GameEvent::output(Self, &Logger) -> Unit
+pub fn GameEvent::to_repr(Self) -> @debug.Repr
+pub fn GameEvent::to_string(Self) -> String
 pub impl Show for GameEvent
 
 pub(all) enum GameState {
@@ -333,6 +365,8 @@ pub(all) enum GameState {
   MetaScreen
   StarterSelect
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Hitbox {
   x : Float
@@ -357,6 +391,9 @@ pub(all) enum ItemKind {
   Gold(Int)
   PassiveItem(PassiveKind)
 } derive(@debug.Debug)
+pub fn ItemKind::output(Self, &Logger) -> Unit
+pub fn ItemKind::to_repr(Self) -> @debug.Repr
+pub fn ItemKind::to_string(Self) -> String
 pub impl Show for ItemKind
 
 pub(all) struct MetaProgress {
@@ -376,6 +413,11 @@ pub(all) enum MetaUpgrade {
   DashMastery
   PotionEfficiency
 } derive(Eq, @debug.Debug)
+pub fn MetaUpgrade::equal(Self, Self) -> Bool
+pub fn MetaUpgrade::not_equal(Self, Self) -> Bool
+pub fn MetaUpgrade::output(Self, &Logger) -> Unit
+pub fn MetaUpgrade::to_repr(Self) -> @debug.Repr
+pub fn MetaUpgrade::to_string(Self) -> String
 pub impl Show for MetaUpgrade
 
 pub(all) enum PactKind {
@@ -385,6 +427,11 @@ pub(all) enum PactKind {
   CursedStrength
   VoidHeart
 } derive(Eq, @debug.Debug)
+pub fn PactKind::equal(Self, Self) -> Bool
+pub fn PactKind::not_equal(Self, Self) -> Bool
+pub fn PactKind::output(Self, &Logger) -> Unit
+pub fn PactKind::to_repr(Self) -> @debug.Repr
+pub fn PactKind::to_string(Self) -> String
 pub impl Show for PactKind
 
 pub(all) struct Particle {
@@ -417,6 +464,11 @@ pub(all) enum PassiveKind {
   Vampiric
   ChainLightning
 } derive(Eq, @debug.Debug)
+pub fn PassiveKind::equal(Self, Self) -> Bool
+pub fn PassiveKind::not_equal(Self, Self) -> Bool
+pub fn PassiveKind::output(Self, &Logger) -> Unit
+pub fn PassiveKind::to_repr(Self) -> @debug.Repr
+pub fn PassiveKind::to_string(Self) -> String
 pub impl Show for PassiveKind
 
 pub(all) struct Player {
@@ -499,6 +551,11 @@ pub(all) enum RoomKind {
   EliteVault
   Challenge
 } derive(Eq, @debug.Debug)
+pub fn RoomKind::equal(Self, Self) -> Bool
+pub fn RoomKind::not_equal(Self, Self) -> Bool
+pub fn RoomKind::output(Self, &Logger) -> Unit
+pub fn RoomKind::to_repr(Self) -> @debug.Repr
+pub fn RoomKind::to_string(Self) -> String
 pub impl Show for RoomKind
 
 pub(all) enum RoomState {
@@ -506,6 +563,8 @@ pub(all) enum RoomState {
   Sealed
   Cleared
 } derive(Eq)
+pub fn RoomState::equal(Self, Self) -> Bool
+pub fn RoomState::not_equal(Self, Self) -> Bool
 
 pub(all) struct ShopItem {
   mut active : Bool
@@ -522,6 +581,11 @@ pub(all) enum ShrineKind {
   CursedChest
   ReforgeAnvil
 } derive(Eq, @debug.Debug)
+pub fn ShrineKind::equal(Self, Self) -> Bool
+pub fn ShrineKind::not_equal(Self, Self) -> Bool
+pub fn ShrineKind::output(Self, &Logger) -> Unit
+pub fn ShrineKind::to_repr(Self) -> @debug.Repr
+pub fn ShrineKind::to_string(Self) -> String
 pub impl Show for ShrineKind
 
 pub(all) enum StarterKit {
@@ -529,6 +593,11 @@ pub(all) enum StarterKit {
   Cutpurse
   Invoker
 } derive(Eq, @debug.Debug)
+pub fn StarterKit::equal(Self, Self) -> Bool
+pub fn StarterKit::not_equal(Self, Self) -> Bool
+pub fn StarterKit::output(Self, &Logger) -> Unit
+pub fn StarterKit::to_repr(Self) -> @debug.Repr
+pub fn StarterKit::to_string(Self) -> String
 pub impl Show for StarterKit
 
 pub(all) enum StatusEffect {
@@ -537,6 +606,9 @@ pub(all) enum StatusEffect {
   Shield(Float)
   Haste(Float)
 } derive(@debug.Debug)
+pub fn StatusEffect::output(Self, &Logger) -> Unit
+pub fn StatusEffect::to_repr(Self) -> @debug.Repr
+pub fn StatusEffect::to_string(Self) -> String
 pub impl Show for StatusEffect
 
 pub(all) struct SynergyBonuses {
@@ -565,9 +637,13 @@ pub(all) enum WeaponKind {
   Bow
   Staff
 } derive(Eq, @debug.Debug)
+pub fn WeaponKind::equal(Self, Self) -> Bool
+pub fn WeaponKind::not_equal(Self, Self) -> Bool
+pub fn WeaponKind::output(Self, &Logger) -> Unit
+pub fn WeaponKind::to_repr(Self) -> @debug.Repr
+pub fn WeaponKind::to_string(Self) -> String
 pub impl Show for WeaponKind
 
 // Type aliases
 
 // Traits
-

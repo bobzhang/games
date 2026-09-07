@@ -163,6 +163,11 @@ pub(all) enum CipherKind {
   Substitution
   Vigenere
 } derive(Eq, @debug.Debug)
+pub fn CipherKind::equal(Self, Self) -> Bool
+pub fn CipherKind::not_equal(Self, Self) -> Bool
+pub fn CipherKind::output(Self, &Logger) -> Unit
+pub fn CipherKind::to_repr(Self) -> @debug.Repr
+pub fn CipherKind::to_string(Self) -> String
 pub impl Show for CipherKind
 
 pub(all) struct Game {
@@ -185,7 +190,8 @@ pub(all) struct Game {
   mut cached_patterns : Array[PatternMatch]
   mut patterns_dirty : Bool
   mut selected_pattern_idx : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   id : Int
@@ -196,31 +202,40 @@ pub(all) struct Level {
   key_info : String
   par_swaps : Int
   hint_text : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut best_swaps : Int
   mut best_no_hints : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Mapping {
   cipher_to_plain : Array[Int]
   plain_used : Array[Bool]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Mapping::to_repr(Self) -> @debug.Repr
 
 pub(all) struct PatternMatch {
   pattern : String
   positions : Array[Int]
   count : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PatternMatch::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Solving
   Solved
   GaveUp
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -230,6 +245,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -237,6 +257,11 @@ pub(all) enum Tier {
   Agent
   Cryptographer
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) enum Tool {
@@ -244,6 +269,11 @@ pub(all) enum Tool {
   LetterSwap
   PatternFinder
 } derive(Eq, @debug.Debug)
+pub fn Tool::equal(Self, Self) -> Bool
+pub fn Tool::not_equal(Self, Self) -> Bool
+pub fn Tool::output(Self, &Logger) -> Unit
+pub fn Tool::to_repr(Self) -> @debug.Repr
+pub fn Tool::to_string(Self) -> String
 pub impl Show for Tool
 
 pub(all) struct UndoEntry {
@@ -251,9 +281,9 @@ pub(all) struct UndoEntry {
   old_plain : Int
   old_displaced_cipher : Int
   old_displaced_plain : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn UndoEntry::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

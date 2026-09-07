@@ -145,6 +145,8 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct InputState {
   mut axis_x : Int
@@ -172,9 +174,10 @@ pub(all) enum Stance {
   Guard
   Sleeve
 } derive(Eq)
+pub fn Stance::equal(Self, Self) -> Bool
 pub fn Stance::from_int(Int) -> Self
+pub fn Stance::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

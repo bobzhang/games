@@ -1,6 +1,6 @@
 ///|
 pub fn new_tile(kind : TileKind, elevation : Int) -> Tile {
-  { kind, elevation, has_signal: false, signal_anim: 0.0 }
+  { kind, elevation, has_signal: false, signal_anim: 0.0, }
 }
 
 ///|
@@ -10,7 +10,7 @@ pub fn new_signal_path(
   to_col : Int,
   to_row : Int,
 ) -> SignalPath {
-  { from_col, from_row, to_col, to_row, progress: 0.0, active: true }
+  { from_col, from_row, to_col, to_row, progress: 0.0, active: true, }
 }
 
 ///|
@@ -40,7 +40,7 @@ pub fn new_level_state(data : LevelData) -> LevelState {
 
 ///|
 pub fn new_level_progress() -> LevelProgress {
-  { completed: false, stars: None, best_towers: 999, best_chain: 999 }
+  { completed: false, stars: None, best_towers: 999, best_chain: 999, }
 }
 
 ///|

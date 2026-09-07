@@ -1,42 +1,42 @@
 ///|
 /// Generated celestial festival backdrop texture.
-let tex_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player kite sprite texture.
-let tex_kite : Ref[@raylib.Texture?] = { val: None }
+let tex_kite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated lantern collectible sprite texture.
-let tex_lantern : Ref[@raylib.Texture?] = { val: None }
+let tex_lantern : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated hostile bird sprite texture.
-let tex_bird : Ref[@raylib.Texture?] = { val: None }
+let tex_bird : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated storm cloud hazard sprite texture.
-let tex_storm_cloud : Ref[@raylib.Texture?] = { val: None }
+let tex_storm_cloud : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated energy orb collectible sprite texture.
-let tex_energy_orb : Ref[@raylib.Texture?] = { val: None }
+let tex_energy_orb : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated celestial koi collectible sprite texture.
-let tex_koi : Ref[@raylib.Texture?] = { val: None }
+let tex_koi : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated wind ribbon VFX texture.
-let tex_wind_ribbon : Ref[@raylib.Texture?] = { val: None }
+let tex_wind_ribbon : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated cloud wisp atmosphere texture.
-let tex_cloud_wisp : Ref[@raylib.Texture?] = { val: None }
+let tex_cloud_wisp : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated burst halo VFX texture.
-let tex_burst_halo : Ref[@raylib.Texture?] = { val: None }
+let tex_burst_halo : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated celestial kite festival texture.
@@ -333,7 +333,9 @@ fn draw_koi_art(
 ) -> Bool {
   match tex_koi.val {
     Some(texture) => {
-      draw_art_centered_flip_x(texture, cx, cy, width, height, 0.0, flip_x, tint)
+      draw_art_centered_flip_x(
+        texture, cx, cy, width, height, 0.0, flip_x, tint,
+      )
       true
     }
     None => false

@@ -21,4 +21,3 @@ pub fn update_boss(@types.Game, Float) -> Unit
 // Type aliases
 
 // Traits
-

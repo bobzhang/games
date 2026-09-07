@@ -297,7 +297,7 @@ fn place_number(game : @types.Game, level : @types.Level, num : Int) -> Unit {
     return
   }
   // Push undo
-  game.undo_stack.push({ row, col, old_value: old_val })
+  game.undo_stack.push({ row, col, old_value: old_val, })
   @types.grid_set(level.grid, row, col, num)
   // Check for conflicts (incremental)
   if num > 0 &&

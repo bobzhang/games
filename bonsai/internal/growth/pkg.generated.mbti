@@ -39,4 +39,3 @@ pub fn prune_at(@types.TreeGrid, Int, Int) -> Int
 // Type aliases
 
 // Traits
-

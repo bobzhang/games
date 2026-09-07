@@ -149,7 +149,7 @@ fn emit_particle(
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
-      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
+      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind, }
       break
     }
   }
@@ -230,7 +230,7 @@ fn spawn_orb(
 ) -> Unit {
   for i in 0..<orbs.length() {
     if !orbs[i].active {
-      orbs[i] = { active: true, kind, x, y, value, t: 0.0, life: 22.0 }
+      orbs[i] = { active: true, kind, x, y, value, t: 0.0, life: 22.0, }
       break
     }
   }

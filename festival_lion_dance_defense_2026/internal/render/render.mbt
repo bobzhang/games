@@ -53,23 +53,23 @@ fn draw_meter(
 
 ///|
 /// Generated festival street background texture.
-let tex_background : Ref[@raylib.Texture?] = { val: None }
+let tex_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated lion dance troupe texture.
-let tex_lion : Ref[@raylib.Texture?] = { val: None }
+let tex_lion : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated firecracker threat texture.
-let tex_firecracker : Ref[@raylib.Texture?] = { val: None }
+let tex_firecracker : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated crowd incident threat texture.
-let tex_incident : Ref[@raylib.Texture?] = { val: None }
+let tex_incident : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated strike ring effect texture.
-let tex_strike_ring : Ref[@raylib.Texture?] = { val: None }
+let tex_strike_ring : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Festival Lion Dance Defense texture.
@@ -313,7 +313,12 @@ fn draw_lion_art(game : @types.Game, x : Float, y : Float) -> Bool {
 
 ///|
 /// Draws the generated action ring art.
-fn draw_action_ring_art(x : Float, y : Float, radius : Float, alpha : Int) -> Bool {
+fn draw_action_ring_art(
+  x : Float,
+  y : Float,
+  radius : Float,
+  alpha : Int,
+) -> Bool {
   match tex_strike_ring.val {
     Some(texture) => {
       let tint_alpha = (Float::from_int(alpha) * 0.62).to_int()
@@ -401,9 +406,27 @@ fn @types.Game::draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let y0 = cy - @types.lane_height / 2
 
     let lane_tone = if lane % 2 == 0 {
-      @raylib.Color::new(42, 50, 74, if has_background_art() { 96 } else { 214 })
+      @raylib.Color::new(
+        42,
+        50,
+        74,
+        if has_background_art() {
+          96
+        } else {
+          214
+        },
+      )
     } else {
-      @raylib.Color::new(36, 44, 66, if has_background_art() { 78 } else { 214 })
+      @raylib.Color::new(
+        36,
+        44,
+        66,
+        if has_background_art() {
+          78
+        } else {
+          214
+        },
+      )
     }
 
     @raylib.draw_rectangle(
@@ -469,11 +492,7 @@ fn draw_firecracker(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(184, 46, 62, 206)
   }
 
-  if !draw_firecracker_art(
-    threat,
-    Float::from_int(cx),
-    Float::from_int(cy),
-  ) {
+  if !draw_firecracker_art(threat, Float::from_int(cx), Float::from_int(cy)) {
     @raylib.draw_circle(cx, cy, threat.radius + 4.0, shell)
     @raylib.draw_circle(cx, cy, threat.radius - 7.0, core)
 
@@ -528,11 +547,7 @@ fn draw_incident(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(250, 226, 168, 220)
   }
 
-  if !draw_incident_art(
-    threat,
-    Float::from_int(cx),
-    Float::from_int(cy),
-  ) {
+  if !draw_incident_art(threat, Float::from_int(cx), Float::from_int(cy)) {
     @raylib.draw_circle(cx - 14, cy - 9, 12.0, body)
     @raylib.draw_circle(cx + 12, cy - 8, 11.0, body)
     @raylib.draw_circle(cx, cy - 13, 11.0, body)
@@ -648,11 +663,11 @@ fn @types.Game::draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
       .clamp(min=0, max=220)
 
     if !draw_action_ring_art(
-      Float::from_int(cx),
-      Float::from_int(cy),
-      radius,
-      alpha,
-    ) {
+        Float::from_int(cx),
+        Float::from_int(cy),
+        radius,
+        alpha,
+      ) {
       @raylib.draw_circle_lines(
         cx,
         cy,
@@ -671,11 +686,11 @@ fn @types.Game::draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
       .clamp(min=0, max=230)
 
     if !draw_action_ring_art(
-      Float::from_int(cx),
-      Float::from_int(cy),
-      radius,
-      alpha,
-    ) {
+        Float::from_int(cx),
+        Float::from_int(cy),
+        radius,
+        alpha,
+      ) {
       @raylib.draw_circle_lines(
         cx,
         cy,

@@ -56,4 +56,3 @@ pub(all) struct MinimapConfig {
 // Type aliases
 
 // Traits
-

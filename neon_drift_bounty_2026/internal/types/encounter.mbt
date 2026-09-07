@@ -8,9 +8,18 @@ pub(all) enum Formation {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Formation with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Formation with Eq::{not_equal, equal}
+
+///|
+pub extend Formation with Debug::{to_repr}
+
+///|
+pub impl Show for Formation with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Formation with Show::{to_string, output}
 
 ///|
 /// Enumerates themed road zone types that affect gameplay feel.
@@ -21,9 +30,18 @@ pub(all) enum RoadZone {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for RoadZone with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend RoadZone with Eq::{not_equal, equal}
+
+///|
+pub extend RoadZone with Debug::{to_repr}
+
+///|
+pub impl Show for RoadZone with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend RoadZone with Show::{to_string, output}
 
 ///|
 /// Enumerates weapon upgrade paths the player can obtain.
@@ -34,9 +52,18 @@ pub(all) enum WeaponUpgrade {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for WeaponUpgrade with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend WeaponUpgrade with Eq::{not_equal, equal}
+
+///|
+pub extend WeaponUpgrade with Debug::{to_repr}
+
+///|
+pub impl Show for WeaponUpgrade with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend WeaponUpgrade with Show::{to_string, output}
 
 ///|
 /// Enumerates road hazard types that appear on the road surface.
@@ -47,9 +74,18 @@ pub(all) enum HazardKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for HazardKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend HazardKind with Eq::{not_equal, equal}
+
+///|
+pub extend HazardKind with Debug::{to_repr}
+
+///|
+pub impl Show for HazardKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend HazardKind with Show::{to_string, output}
 
 ///|
 /// Stores runtime data for a road hazard.
@@ -65,9 +101,15 @@ pub(all) struct Hazard {
 } derive(Debug)
 
 ///|
-pub impl Show for Hazard with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Hazard with Debug::{to_repr}
+
+///|
+pub impl Show for Hazard with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Hazard with Show::{to_string, output}
 
 ///|
 /// Maximum number of active road hazards.

@@ -124,7 +124,8 @@ pub(all) struct Branch {
   mut row : Int
   mut col_offset : Int
   mut pruned : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Branch::to_repr(Self) -> @debug.Repr
 
 pub(all) enum CellKind {
   Empty
@@ -133,6 +134,11 @@ pub(all) enum CellKind {
   Leaf
   Shadow
 } derive(Eq, @debug.Debug)
+pub fn CellKind::equal(Self, Self) -> Bool
+pub fn CellKind::not_equal(Self, Self) -> Bool
+pub fn CellKind::output(Self, &Logger) -> Unit
+pub fn CellKind::to_repr(Self) -> @debug.Repr
+pub fn CellKind::to_string(Self) -> String
 pub impl Show for CellKind
 
 pub(all) struct Game {
@@ -165,12 +171,14 @@ pub(all) struct Grid {
   width : Int
   height : Int
   cells : Array[Array[CellKind]]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Grid::to_repr(Self) -> @debug.Repr
 
 pub(all) struct GroundTile {
   mut water : Int
   mut has_seed : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn GroundTile::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   seed_columns : Array[Int]
@@ -181,14 +189,16 @@ pub(all) struct Level {
   par_turns : Int
   tier : Tier
   water_levels : Array[Int]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut turns_used : Int
   mut prunes_used : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Idle
@@ -196,6 +206,11 @@ pub(all) enum PlayState {
   Won
   Lost
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -205,18 +220,29 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct Target {
   tree_index : Int
   required_height : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Target::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tier {
   Seedling
   Grove
   Forest
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Tree {
@@ -225,21 +251,25 @@ pub(all) struct Tree {
   branches : Array[Branch]
   mut growth_timer : Int
   mut shadowed : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Tree::to_repr(Self) -> @debug.Repr
 
 pub(all) struct UndoState {
   trees : Array[Tree]
   turn : Int
   prunes_used : Int
   ground : Array[GroundTile]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn UndoState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

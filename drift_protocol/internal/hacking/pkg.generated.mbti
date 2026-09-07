@@ -27,4 +27,3 @@ pub fn update_hack_minigame(@types.Game, Float) -> Unit
 // Type aliases
 
 // Traits
-

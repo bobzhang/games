@@ -17,4 +17,3 @@ pub fn weapon_hack_bonus(@types.WeaponUpgrade?, Int) -> Float
 // Type aliases
 
 // Traits
-

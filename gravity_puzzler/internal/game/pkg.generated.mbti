@@ -59,4 +59,3 @@ pub fn update_play_time(@types.Game, Float) -> Unit
 // Type aliases
 
 // Traits
-

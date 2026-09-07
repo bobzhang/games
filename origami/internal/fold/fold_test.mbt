@@ -57,9 +57,9 @@ test "layer check satisfaction" {
   let paper = @types.full_paper(4, 4)
   // Fold left at 2 -> cols 0-1 have 2 layers
   let folded = execute_fold(paper, Left, 2)
-  let check : @types.LayerCheck = { pos: { x: 0, y: 0 }, required_layers: 2 }
+  let check : @types.LayerCheck = { pos: { x: 0, y: 0, }, required_layers: 2, }
   assert_true(@types.single_layer_check_ok(folded, check))
-  let check2 : @types.LayerCheck = { pos: { x: 0, y: 0 }, required_layers: 3 }
+  let check2 : @types.LayerCheck = { pos: { x: 0, y: 0, }, required_layers: 3, }
   assert_true(!@types.single_layer_check_ok(folded, check2))
 }
 

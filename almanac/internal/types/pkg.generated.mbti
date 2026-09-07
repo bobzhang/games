@@ -191,6 +191,11 @@ pub(all) enum PlayState {
   Won
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -200,6 +205,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct Source {
@@ -214,6 +224,11 @@ pub(all) enum SourceKind {
   Rain
   Wind
 } derive(Eq, @debug.Debug)
+pub fn SourceKind::equal(Self, Self) -> Bool
+pub fn SourceKind::not_equal(Self, Self) -> Bool
+pub fn SourceKind::output(Self, &Logger) -> Unit
+pub fn SourceKind::to_repr(Self) -> @debug.Repr
+pub fn SourceKind::to_string(Self) -> String
 pub impl Show for SourceKind
 
 pub(all) enum Tier {
@@ -221,6 +236,11 @@ pub(all) enum Tier {
   Summer
   Monsoon
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Tile {
@@ -238,6 +258,11 @@ pub(all) enum WeatherState {
   Windy
   Stormy
 } derive(Eq, @debug.Debug)
+pub fn WeatherState::equal(Self, Self) -> Bool
+pub fn WeatherState::not_equal(Self, Self) -> Bool
+pub fn WeatherState::output(Self, &Logger) -> Unit
+pub fn WeatherState::to_repr(Self) -> @debug.Repr
+pub fn WeatherState::to_string(Self) -> String
 pub impl Show for WeatherState
 
 pub(all) enum WindDir {
@@ -246,9 +271,13 @@ pub(all) enum WindDir {
   South
   West
 } derive(Eq, @debug.Debug)
+pub fn WindDir::equal(Self, Self) -> Bool
+pub fn WindDir::not_equal(Self, Self) -> Bool
+pub fn WindDir::output(Self, &Logger) -> Unit
+pub fn WindDir::to_repr(Self) -> @debug.Repr
+pub fn WindDir::to_string(Self) -> String
 pub impl Show for WindDir
 
 // Type aliases
 
 // Traits
-

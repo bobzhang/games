@@ -15,27 +15,27 @@ pub fn sqrtf(a : Float) -> Float {
 
 ///|
 pub fn vec2(x : Float, y : Float) -> Vec2 {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn vec2_zero() -> Vec2 {
-  { x: 0.0, y: 0.0 }
+  { x: 0.0, y: 0.0, }
 }
 
 ///|
 pub fn vec2_add(a : Vec2, b : Vec2) -> Vec2 {
-  { x: a.x + b.x, y: a.y + b.y }
+  { x: a.x + b.x, y: a.y + b.y, }
 }
 
 ///|
 pub fn vec2_sub(a : Vec2, b : Vec2) -> Vec2 {
-  { x: a.x - b.x, y: a.y - b.y }
+  { x: a.x - b.x, y: a.y - b.y, }
 }
 
 ///|
 pub fn vec2_scale(v : Vec2, s : Float) -> Vec2 {
-  { x: v.x * s, y: v.y * s }
+  { x: v.x * s, y: v.y * s, }
 }
 
 ///|
@@ -63,7 +63,7 @@ pub fn vec2_normalize(v : Vec2) -> Vec2 {
   if len < 0.001 {
     vec2_zero()
   } else {
-    { x: v.x / len, y: v.y / len }
+    { x: v.x / len, y: v.y / len, }
   }
 }
 
@@ -76,12 +76,12 @@ pub fn vec2_dot(a : Vec2, b : Vec2) -> Float {
 pub fn vec2_rotate(v : Vec2, angle : Float) -> Vec2 {
   let c = cosf(angle)
   let s = sinf(angle)
-  { x: v.x * c - v.y * s, y: v.x * s + v.y * c }
+  { x: v.x * c - v.y * s, y: v.x * s + v.y * c, }
 }
 
 ///|
 pub fn vec2_lerp(a : Vec2, b : Vec2, t : Float) -> Vec2 {
-  { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t }
+  { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, }
 }
 
 ///|
@@ -153,7 +153,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 12345 }
+let rng_state : Ref[Int] = { val: 12345, }
 
 ///|
 pub fn seed_rng(s : Int) -> Unit {
@@ -502,36 +502,34 @@ pub fn new_meta() -> MetaProgress {
 
 ///|
 pub fn new_shake() -> ScreenShake {
-  { intensity: 0.0, decay: shake_decay, offset_x: 0.0, offset_y: 0.0 }
+  { intensity: 0.0, decay: shake_decay, offset_x: 0.0, offset_y: 0.0, }
 }
 
 ///|
 pub fn new_game() -> Game {
-  let projectiles : Array[Projectile] = Array::new(
-    capacity=projectile_pool_size,
-  )
+  let projectiles : Array[Projectile] = Array(capacity=projectile_pool_size)
   for _i in 0..<projectile_pool_size {
     projectiles.push(new_projectile())
   }
-  let enemies : Array[Enemy] = Array::new(capacity=enemy_pool_size)
+  let enemies : Array[Enemy] = Array(capacity=enemy_pool_size)
   for _i in 0..<enemy_pool_size {
     enemies.push(new_enemy())
   }
-  let particles : Array[Particle] = Array::new(capacity=particle_pool_size)
+  let particles : Array[Particle] = Array(capacity=particle_pool_size)
   for _i in 0..<particle_pool_size {
     particles.push(new_particle())
   }
-  let asteroids : Array[Asteroid] = Array::new(capacity=asteroid_pool_size)
+  let asteroids : Array[Asteroid] = Array(capacity=asteroid_pool_size)
   for _i in 0..<asteroid_pool_size {
     asteroids.push(new_asteroid())
   }
-  let damage_numbers : Array[DamageNumber] = Array::new(
+  let damage_numbers : Array[DamageNumber] = Array(
     capacity=damage_number_pool_size,
   )
   for _i in 0..<damage_number_pool_size {
     damage_numbers.push(new_damage_number())
   }
-  let pickups : Array[Pickup] = Array::new(capacity=pickup_pool_size)
+  let pickups : Array[Pickup] = Array(capacity=pickup_pool_size)
   for _i in 0..<pickup_pool_size {
     pickups.push(new_pickup())
   }

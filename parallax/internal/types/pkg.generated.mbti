@@ -163,7 +163,8 @@ pub(all) struct HoverInfo {
   mut vy : Int
   mut vz : Int
   mut view : ViewKind
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HoverInfo::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   size : Int
@@ -174,19 +175,26 @@ pub(all) struct Level {
   par_voxels : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut best_moves : Int
   mut best_voxels : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Editing
   Complete
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -196,25 +204,37 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct Silhouette {
   width : Int
   height : Int
   cells : Array[Bool]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Silhouette::to_repr(Self) -> @debug.Repr
 
 pub(all) struct TargetSet {
   top : Silhouette
   front : Silhouette
   side : Silhouette
-} derive(Show)
+} derive(@debug.Debug)
+pub fn TargetSet::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tier {
   Shapes
   Structures
   Sculptures
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct UndoEntry {
@@ -222,27 +242,36 @@ pub(all) struct UndoEntry {
   y : Int
   z : Int
   was_filled : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn UndoEntry::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Vec3i {
   x : Int
   y : Int
   z : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec3i::equal(Self, Self) -> Bool
+pub fn Vec3i::not_equal(Self, Self) -> Bool
+pub fn Vec3i::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ViewKind {
   Top
   Front
   Side
 } derive(Eq, @debug.Debug)
+pub fn ViewKind::equal(Self, Self) -> Bool
+pub fn ViewKind::not_equal(Self, Self) -> Bool
+pub fn ViewKind::output(Self, &Logger) -> Unit
+pub fn ViewKind::to_repr(Self) -> @debug.Repr
+pub fn ViewKind::to_string(Self) -> String
 pub impl Show for ViewKind
 
 pub(all) struct VoxelGrid {
   size : Int
   cells : Array[Bool]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn VoxelGrid::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

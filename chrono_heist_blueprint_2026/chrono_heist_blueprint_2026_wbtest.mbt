@@ -25,13 +25,13 @@ fn make_guards() -> Array[Guard] {
 ///|
 fn make_doors() -> Array[Door] {
   Array::makei(max_doors, fn(_i) {
-    { active: false, x: 0, y: 0, plate_x: 0, plate_y: 0, title: "" }
+    { active: false, x: 0, y: 0, plate_x: 0, plate_y: 0, title: "", }
   })
 }
 
 ///|
 fn make_ghosts() -> Array[Actor] {
-  Array::makei(max_ghosts, fn(_i) { { x: 0, y: 0 } })
+  Array::makei(max_ghosts, fn(_i) { { x: 0, y: 0, } })
 }
 
 ///|
@@ -62,7 +62,7 @@ test "plate ghost opens breach door" {
   let doors = make_doors()
   ignore(setup_level(1, tiles, guards, doors))
 
-  let player = { x: 1, y: 1 }
+  let player = { x: 1, y: 1, }
   let ghosts = make_ghosts()
 
   assert_true(tile_blocked(tiles, doors, player, ghosts, 0, 5, 4))

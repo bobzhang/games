@@ -219,6 +219,8 @@ pub(all) enum GameState {
   Play
   Retry
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Guard {
   mut active : Bool
@@ -296,4 +298,3 @@ pub fn Trap::Trap() -> Self
 // Type aliases
 
 // Traits
-

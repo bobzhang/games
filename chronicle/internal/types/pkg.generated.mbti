@@ -153,7 +153,8 @@ pub(all) struct Case {
   tier : Tier
   title : String
   theme : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Case::to_repr(Self) -> @debug.Repr
 
 pub(all) struct CaseScore {
   mut order_correct : Bool
@@ -162,19 +163,26 @@ pub(all) struct CaseScore {
   mut stars : Int
   mut order_count : Int
   mut link_count : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn CaseScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct CauseLink {
   from_id : Int
   to_id : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn CauseLink::equal(Self, Self) -> Bool
+pub fn CauseLink::not_equal(Self, Self) -> Bool
+pub fn CauseLink::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Clue {
   kind : ClueKind
   card_a : Int
   card_b : Int
   text : String
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Clue::equal(Self, Self) -> Bool
+pub fn Clue::not_equal(Self, Self) -> Bool
+pub fn Clue::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ClueKind {
   Before
@@ -183,6 +191,11 @@ pub(all) enum ClueKind {
   During
   NotAdjacent
 } derive(Eq, @debug.Debug)
+pub fn ClueKind::equal(Self, Self) -> Bool
+pub fn ClueKind::not_equal(Self, Self) -> Bool
+pub fn ClueKind::output(Self, &Logger) -> Unit
+pub fn ClueKind::to_repr(Self) -> @debug.Repr
+pub fn ClueKind::to_string(Self) -> String
 pub impl Show for ClueKind
 
 pub(all) struct EventCard {
@@ -192,7 +205,10 @@ pub(all) struct EventCard {
   action : String
   time_hint : String
   fixed_slot : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn EventCard::equal(Self, Self) -> Bool
+pub fn EventCard::not_equal(Self, Self) -> Bool
+pub fn EventCard::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -218,13 +234,19 @@ pub(all) struct Game {
   mut message : String
   mut message_timer : Float
   mut title_pulse : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Arranging
   Linking
   Validated
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -234,6 +256,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -241,9 +268,13 @@ pub(all) enum Tier {
   Investigations
   ColdCases
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 // Type aliases
 
 // Traits
-

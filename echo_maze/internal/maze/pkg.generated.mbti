@@ -21,4 +21,3 @@ pub fn validate_maze(@types.Maze) -> Bool
 // Type aliases
 
 // Traits
-

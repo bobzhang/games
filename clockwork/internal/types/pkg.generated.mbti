@@ -210,6 +210,11 @@ pub(all) enum CamDirection {
   PushLeft
   PushRight
 } derive(Eq, @debug.Debug)
+pub fn CamDirection::equal(Self, Self) -> Bool
+pub fn CamDirection::not_equal(Self, Self) -> Bool
+pub fn CamDirection::output(Self, &Logger) -> Unit
+pub fn CamDirection::to_repr(Self) -> @debug.Repr
+pub fn CamDirection::to_string(Self) -> String
 pub impl Show for CamDirection
 
 pub(all) struct Component {
@@ -232,7 +237,8 @@ pub(all) struct Component {
   mut connected_to : Array[Int]
   mut fixed : Bool
   mut dragging : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Component::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ComponentKind {
   Gear(GearSize)
@@ -241,6 +247,11 @@ pub(all) enum ComponentKind {
   Escapement
   Bell
 } derive(Eq, @debug.Debug)
+pub fn ComponentKind::equal(Self, Self) -> Bool
+pub fn ComponentKind::not_equal(Self, Self) -> Bool
+pub fn ComponentKind::output(Self, &Logger) -> Unit
+pub fn ComponentKind::to_repr(Self) -> @debug.Repr
+pub fn ComponentKind::to_string(Self) -> String
 pub impl Show for ComponentKind
 
 pub(all) enum Direction {
@@ -249,6 +260,11 @@ pub(all) enum Direction {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct Game {
@@ -267,13 +283,19 @@ pub(all) struct Game {
   mut message : String
   mut message_timer : Float
   mut tier_scroll : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) enum GearSize {
   Small
   Medium
   Large
 } derive(Eq, @debug.Debug)
+pub fn GearSize::equal(Self, Self) -> Bool
+pub fn GearSize::not_equal(Self, Self) -> Bool
+pub fn GearSize::output(Self, &Logger) -> Unit
+pub fn GearSize::to_repr(Self) -> @debug.Repr
+pub fn GearSize::to_string(Self) -> String
 pub impl Show for GearSize
 
 pub(all) struct LevelDef {
@@ -285,12 +307,14 @@ pub(all) struct LevelDef {
   mut bell_targets : Array[Int]
   mut par_components : Int
   mut description : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Palette {
   mut available : Array[ComponentKind]
   mut counts : Array[Int]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Palette::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -300,6 +324,11 @@ pub(all) enum Screen {
   LevelComplete
   LevelFailed
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum SimState {
@@ -309,6 +338,11 @@ pub(all) enum SimState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn SimState::equal(Self, Self) -> Bool
+pub fn SimState::not_equal(Self, Self) -> Bool
+pub fn SimState::output(Self, &Logger) -> Unit
+pub fn SimState::to_repr(Self) -> @debug.Repr
+pub fn SimState::to_string(Self) -> String
 pub impl Show for SimState
 
 pub(all) struct Simulation {
@@ -320,21 +354,29 @@ pub(all) struct Simulation {
   mut bells_order : Array[Int]
   mut total_bells : Int
   mut speed_mult : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Simulation::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Tier {
   Ticks
   Timing
   Clockwork
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Vec2 {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2::equal(Self, Self) -> Bool
+pub fn Vec2::not_equal(Self, Self) -> Bool
+pub fn Vec2::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

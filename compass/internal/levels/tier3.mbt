@@ -13,8 +13,8 @@ fn level_15() -> @types.LevelData {
   set_tile(grid, 11, 6, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 11, y: 6 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 11, y: 6, },
     par_steps: 20,
     landmark_count: count_landmarks(grid),
     tier: 3,
@@ -37,8 +37,8 @@ fn level_16() -> @types.LevelData {
   set_tile(grid, 0, 9, Lighthouse)
   {
     grid,
-    start: { x: 11, y: 0 },
-    lighthouse: { x: 0, y: 9 },
+    start: { x: 11, y: 0, },
+    lighthouse: { x: 0, y: 9, },
     par_steps: 26,
     landmark_count: count_landmarks(grid),
     tier: 3,
@@ -62,8 +62,8 @@ fn level_17() -> @types.LevelData {
   set_tile(grid, 5, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 5, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 5, y: 9, },
     par_steps: 18,
     landmark_count: count_landmarks(grid),
     tier: 3,
@@ -88,8 +88,8 @@ fn level_18() -> @types.LevelData {
   set_tile(grid, 11, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 11, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 11, y: 9, },
     par_steps: 28,
     landmark_count: count_landmarks(grid),
     tier: 3,
@@ -115,8 +115,8 @@ fn level_19() -> @types.LevelData {
   set_tile(grid, 7, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 7, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 7, y: 9, },
     par_steps: 22,
     landmark_count: count_landmarks(grid),
     tier: 3,
@@ -144,8 +144,8 @@ fn level_20() -> @types.LevelData {
   set_tile(grid, 11, 9, Lighthouse)
   {
     grid,
-    start: { x: 0, y: 0 },
-    lighthouse: { x: 11, y: 9 },
+    start: { x: 0, y: 0, },
+    lighthouse: { x: 11, y: 9, },
     par_steps: 30,
     landmark_count: count_landmarks(grid),
     tier: 3,

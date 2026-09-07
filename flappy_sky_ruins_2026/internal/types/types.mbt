@@ -44,6 +44,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Full mutable game state for world simulation, UI, and input.
 pub(all) struct Game {
   obstacles : Array[Obstacle]
@@ -101,7 +104,7 @@ pub fn Obstacle::Obstacle() -> Obstacle {
 ///|
 /// Creates an inactive pickup with score type defaults.
 pub fn Pickup::Pickup() -> Pickup {
-  { active: false, x: 0.0, y: 0.0, kind: Score, phase: 0.0 }
+  { active: false, x: 0.0, y: 0.0, kind: Score, phase: 0.0, }
 }
 
 ///|

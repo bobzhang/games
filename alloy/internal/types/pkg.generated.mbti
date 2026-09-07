@@ -132,7 +132,10 @@ pub(all) struct BlendResult {
   hardness : Float
   flexibility : Float
   conductivity : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn BlendResult::equal(Self, Self) -> Bool
+pub fn BlendResult::not_equal(Self, Self) -> Bool
+pub fn BlendResult::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -156,7 +159,8 @@ pub(all) struct Game {
 pub(all) struct Ingredient {
   metal : MetalKind
   mut amount : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Ingredient::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelDef {
   id : Int
@@ -166,19 +170,22 @@ pub(all) struct LevelDef {
   target : TargetAlloy
   par_ingredients : Int
   hint : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelProgress {
   mut best_stars : StarRating
   mut completed : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelProgress::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelResult {
   mut stars : StarRating
   mut ingredients_used : Int
   mut blend : BlendResult
   mut all_in_range : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelResult::to_repr(Self) -> @debug.Repr
 
 pub(all) enum MetalKind {
   Iron
@@ -188,18 +195,27 @@ pub(all) enum MetalKind {
   Carbon
   Zinc
 } derive(Eq, @debug.Debug)
+pub fn MetalKind::equal(Self, Self) -> Bool
+pub fn MetalKind::not_equal(Self, Self) -> Bool
+pub fn MetalKind::output(Self, &Logger) -> Unit
+pub fn MetalKind::to_repr(Self) -> @debug.Repr
+pub fn MetalKind::to_string(Self) -> String
 pub impl Show for MetalKind
 
 pub(all) struct MetalProps {
   hardness : Float
   flexibility : Float
   conductivity : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn MetalProps::equal(Self, Self) -> Bool
+pub fn MetalProps::not_equal(Self, Self) -> Bool
+pub fn MetalProps::to_repr(Self) -> @debug.Repr
 
 pub(all) struct PropertyRange {
   min : Float
   max : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn PropertyRange::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -209,6 +225,11 @@ pub(all) enum Screen {
   LevelComplete
   LevelFailed
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum StarRating {
@@ -217,22 +238,32 @@ pub(all) enum StarRating {
   Two
   Three
 } derive(Eq, @debug.Debug)
+pub fn StarRating::equal(Self, Self) -> Bool
+pub fn StarRating::not_equal(Self, Self) -> Bool
+pub fn StarRating::output(Self, &Logger) -> Unit
+pub fn StarRating::to_repr(Self) -> @debug.Repr
+pub fn StarRating::to_string(Self) -> String
 pub impl Show for StarRating
 
 pub(all) struct TargetAlloy {
   hardness : PropertyRange
   flexibility : PropertyRange
   conductivity : PropertyRange
-} derive(Show)
+} derive(@debug.Debug)
+pub fn TargetAlloy::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Temperature {
   Low
   Medium
   High
 } derive(Eq, @debug.Debug)
+pub fn Temperature::equal(Self, Self) -> Bool
+pub fn Temperature::not_equal(Self, Self) -> Bool
+pub fn Temperature::output(Self, &Logger) -> Unit
+pub fn Temperature::to_repr(Self) -> @debug.Repr
+pub fn Temperature::to_string(Self) -> String
 pub impl Show for Temperature
 
 // Type aliases
 
 // Traits
-

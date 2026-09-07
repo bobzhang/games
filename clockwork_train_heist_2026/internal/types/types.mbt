@@ -7,6 +7,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Board tile classification used for movement and collision.
 pub(all) enum TileKind {
   Wall
@@ -14,6 +17,9 @@ pub(all) enum TileKind {
   Door
   Exit
 } derive(Eq)
+
+///|
+pub extend TileKind with Eq::{not_equal, equal}
 
 ///|
 /// AI behavior mode for guard updates.
@@ -24,6 +30,9 @@ pub(all) enum GuardMode {
 } derive(Eq)
 
 ///|
+pub extend GuardMode with Eq::{not_equal, equal}
+
+///|
 /// Loot category used for scoring and progression.
 pub(all) enum LootKind {
   Blueprint
@@ -32,12 +41,18 @@ pub(all) enum LootKind {
 } derive(Eq)
 
 ///|
+pub extend LootKind with Eq::{not_equal, equal}
+
+///|
 /// Particle effect category for rendering.
 pub(all) enum ParticleKind {
   Spark
   Glitter
   Smoke
 } derive(Eq)
+
+///|
+pub extend ParticleKind with Eq::{not_equal, equal}
 
 ///|
 /// Grid actor state with interpolation data for smooth movement.
@@ -285,13 +300,13 @@ pub fn Guard::Guard() -> Guard {
 ///|
 /// Creates an inactive loot slot.
 pub fn Loot::Loot() -> Loot {
-  { active: false, x: 0, y: 0, kind: Gold, value: 0 }
+  { active: false, x: 0, y: 0, kind: Gold, value: 0, }
 }
 
 ///|
 /// Creates an inactive smoke slot.
 pub fn Smoke::Smoke() -> Smoke {
-  { active: false, x: 0, y: 0, t: 0.0 }
+  { active: false, x: 0, y: 0, t: 0.0, }
 }
 
 ///|

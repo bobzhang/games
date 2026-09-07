@@ -229,6 +229,8 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Keeper {
   mut room : Int
@@ -260,4 +262,3 @@ pub fn Raider::Raider() -> Self
 // Type aliases
 
 // Traits
-

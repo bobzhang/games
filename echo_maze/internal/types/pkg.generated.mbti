@@ -141,7 +141,8 @@ pub fn world_stars(Game, Int) -> Int
 pub(all) struct ButtonLink {
   button_id : Int
   door_id : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn ButtonLink::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Direction {
   North
@@ -149,6 +150,11 @@ pub(all) enum Direction {
   East
   West
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct DoorState {
@@ -157,7 +163,8 @@ pub(all) struct DoorState {
   mut timer : Int
   mut anim_progress : Float
   mut prev_open : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn DoorState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -190,7 +197,8 @@ pub(all) struct Game {
   mut ghost_button_feedback : Array[GhostButtonEvent]
   mut planning_paused : Bool
   mut loop_transition_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Game::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Ghost {
   recording : Array[Direction?]
@@ -198,19 +206,26 @@ pub(all) struct Ghost {
   mut pos : Vec2i
   mut active : Bool
   trail_positions : Array[Vec2i]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Ghost::to_repr(Self) -> @debug.Repr
 
 pub(all) struct GhostButtonEvent {
   ghost_index : Int
   button_id : Int
   mut timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn GhostButtonEvent::to_repr(Self) -> @debug.Repr
 
 pub(all) enum GhostColor {
   Green
   Yellow
   Orange
 } derive(Eq, @debug.Debug)
+pub fn GhostColor::equal(Self, Self) -> Bool
+pub fn GhostColor::not_equal(Self, Self) -> Bool
+pub fn GhostColor::output(Self, &Logger) -> Unit
+pub fn GhostColor::to_repr(Self) -> @debug.Repr
+pub fn GhostColor::to_string(Self) -> String
 pub impl Show for GhostColor
 
 pub(all) enum GuardAlertState {
@@ -218,13 +233,19 @@ pub(all) enum GuardAlertState {
   Alert
   Chasing
 } derive(Eq, @debug.Debug)
+pub fn GuardAlertState::equal(Self, Self) -> Bool
+pub fn GuardAlertState::not_equal(Self, Self) -> Bool
+pub fn GuardAlertState::output(Self, &Logger) -> Unit
+pub fn GuardAlertState::to_repr(Self) -> @debug.Repr
+pub fn GuardAlertState::to_string(Self) -> String
 pub impl Show for GuardAlertState
 
 pub(all) struct GuardDef {
   patrol : Array[Vec2i]
   mut patrol_index : Int
   mut forward : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn GuardDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct GuardState {
   mut pos : Vec2i
@@ -232,7 +253,8 @@ pub(all) struct GuardState {
   mut forward : Bool
   mut alert : GuardAlertState
   mut alert_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn GuardState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelDef {
   world : Int
@@ -243,7 +265,8 @@ pub(all) struct LevelDef {
   timed_door_durations : Array[(Int, Int)]
   par_loops : Int
   name : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelDef::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut completed : Bool
@@ -251,7 +274,8 @@ pub(all) struct LevelScore {
   mut stars : Int
   mut collectibles_got : Int
   mut collectibles_total : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Maze {
   width : Int
@@ -262,14 +286,16 @@ pub(all) struct Maze {
   start : Vec2i
   exit : Vec2i
   collectible_positions : Array[Vec2i]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Maze::to_repr(Self) -> @debug.Repr
 
 pub(all) struct MazeState {
   mut door_states : Array[DoorState]
   mut button_pressed : Array[Bool]
   mut guard_states : Array[GuardState]
   mut collectibles_collected : Array[Bool]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn MazeState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Recording
@@ -277,17 +303,24 @@ pub(all) enum PlayState {
   Complete
   Failed
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct Player {
   mut pos : Vec2i
   mut dir : Direction
   mut alive : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Player::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Recording {
   moves : Array[Direction?]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Recording::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -298,11 +331,17 @@ pub(all) enum Screen {
   Results
   Paused
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct Tile {
   kind : TileKind
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Tile::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TileKind {
   Floor
@@ -315,6 +354,11 @@ pub(all) enum TileKind {
   Guard
   Collectible
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) struct TimelineEntry {
@@ -323,14 +367,17 @@ pub(all) struct TimelineEntry {
   guard_positions : Array[Vec2i]
   buttons_pressed : Array[Bool]
   doors_open : Array[Bool]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn TimelineEntry::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

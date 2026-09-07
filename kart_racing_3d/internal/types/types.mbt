@@ -16,6 +16,9 @@ pub(all) enum GameState {
 // Waypoint for track definition
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// A 3D position along the track centerline.
 pub(all) struct Waypoint {
   x : Float
@@ -546,7 +549,7 @@ pub fn Game::Game() -> Game {
     waypoints: {
       let arr : Array[Waypoint] = []
       for i in 0..<max_waypoints {
-        arr.push({ x: 0.0, y: 0.0, z: 0.0 })
+        arr.push({ x: 0.0, y: 0.0, z: 0.0, })
         ignore(i)
       }
       arr

@@ -49,7 +49,7 @@ pub fn compute_all_intersections(
       let p3 = pegs[s2.peg_a].pos
       let p4 = pegs[s2.peg_b].pos
       match segment_intersection(p1, p2, p3, p4) {
-        Some(pt) => result.push({ pos: pt, matched_target: -1 })
+        Some(pt) => result.push({ pos: pt, matched_target: -1, })
         None => ()
       }
     }

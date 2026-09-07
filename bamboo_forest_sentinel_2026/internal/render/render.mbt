@@ -171,7 +171,12 @@ fn @types.Game::draw_beacons(game : @types.Game) -> Unit {
           game.beacons[i].x.to_int(),
           game.beacons[i].y.to_int(),
           @types.beacon_radius + 16.0,
-          @raylib.Color::new(body_color.r.to_int(), body_color.g.to_int(), body_color.b.to_int(), 70),
+          @raylib.Color::new(
+            body_color.r.to_int(),
+            body_color.g.to_int(),
+            body_color.b.to_int(),
+            70,
+          ),
         )
         draw_art_fit(
           texture,
@@ -331,7 +336,12 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
         )
       }
       None =>
-        @raylib.draw_circle(enemy.x.to_int(), enemy.y.to_int(), radius, base_color)
+        @raylib.draw_circle(
+          enemy.x.to_int(),
+          enemy.y.to_int(),
+          radius,
+          base_color,
+        )
     }
 
     if enemy.slow_t > 0.0 {

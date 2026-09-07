@@ -72,6 +72,8 @@ pub(all) enum Dir {
   Up
   Down
 } derive(Eq)
+pub fn Dir::equal(Self, Self) -> Bool
+pub fn Dir::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   board : Array[Player]
@@ -120,12 +122,16 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) enum Player {
   Empty
   Human
   AI
 } derive(Eq)
+pub fn Player::equal(Self, Self) -> Bool
+pub fn Player::not_equal(Self, Self) -> Bool
 
 pub(all) struct Spark {
   mut active : Bool
@@ -144,8 +150,9 @@ pub(all) enum SparkKind {
   SparkUndo
   SparkHint
 } derive(Eq)
+pub fn SparkKind::equal(Self, Self) -> Bool
+pub fn SparkKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

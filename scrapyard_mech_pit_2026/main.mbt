@@ -438,7 +438,7 @@ fn main {
     }
   })
   let scraps : Array[Scrap] = Array::makei(max_scrap, fn(_i) {
-    { active: false, x: 0.0F, y: 0.0F, value: 0 }
+    { active: false, x: 0.0F, y: 0.0F, value: 0, }
   })
   let choices : Array[Int] = Array::make(3, 0)
 

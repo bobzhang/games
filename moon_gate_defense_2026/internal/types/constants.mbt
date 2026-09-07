@@ -260,6 +260,9 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+pub extend Dir with Eq::{not_equal, equal}
+
+///|
 /// Rotates a direction clockwise by one step.
 pub fn Dir::rotate_cw(self : Dir) -> Dir {
   match self {
@@ -279,6 +282,9 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Returns the integer ordinal of an enemy kind.
 pub fn EnemyKind::to_int(self : EnemyKind) -> Int {
   match self {
@@ -296,3 +302,6 @@ pub(all) enum GameState {
   Paused
   GameOver
 } derive(Eq)
+
+///|
+pub extend GameState with Eq::{not_equal, equal}

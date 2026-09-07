@@ -35,4 +35,3 @@ pub fn toggle_merge(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

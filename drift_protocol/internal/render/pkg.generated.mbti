@@ -65,4 +65,3 @@ pub fn draw_wall_edges(@types.Game) -> Unit
 // Type aliases
 
 // Traits
-

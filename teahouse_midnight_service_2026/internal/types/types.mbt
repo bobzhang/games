@@ -153,13 +153,13 @@ pub fn Spark::Spark() -> Spark {
 ///|
 /// Creates an inactive ring effect record.
 pub fn Ring::Ring() -> Ring {
-  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
+  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0, }
 }
 
 ///|
 /// Creates an inactive shadow effect record.
 pub fn Shadow::Shadow() -> Shadow {
-  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0 }
+  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0, }
 }
 
 ///|

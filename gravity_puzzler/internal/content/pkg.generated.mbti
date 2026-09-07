@@ -29,4 +29,3 @@ pub fn validate_level(@types.Level) -> Bool
 // Type aliases
 
 // Traits
-

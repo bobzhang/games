@@ -17,4 +17,3 @@ pub fn level_count() -> Int
 // Type aliases
 
 // Traits
-

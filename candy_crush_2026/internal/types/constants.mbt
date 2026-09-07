@@ -74,3 +74,6 @@ pub(all) enum Special {
   Col
   Bomb
 } derive(Eq)
+
+///|
+pub extend Special with Eq::{not_equal, equal}

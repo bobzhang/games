@@ -18,7 +18,7 @@ pub fn new_hex_cell() -> HexCell {
 
 ///|
 pub fn new_hex_grid() -> HexGrid {
-  let cells : Map[String, HexCell] = {}
+  let cells : Map[String, HexCell] = Map([])
   let radius = grid_radius
   // Generate axial coords for hex grid with given radius.
   // For a hex grid of radius R, valid cells are those where
@@ -31,7 +31,7 @@ pub fn new_hex_grid() -> HexGrid {
       }
     }
   }
-  { radius, cells }
+  { radius, cells, }
 }
 
 ///|
@@ -150,7 +150,7 @@ pub fn absf(v : Float) -> Float {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, solved: false, components_used: 0 }
+  { stars: 0, solved: false, components_used: 0, }
 }
 
 ///|
@@ -228,7 +228,7 @@ pub fn count_placed_components(grid : HexGrid) -> Int {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=20)
+  let scores : Array[LevelScore] = Array(capacity=20)
   for _i in 0..<20 {
     scores.push(new_level_score())
   }

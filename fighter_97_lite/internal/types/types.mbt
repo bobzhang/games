@@ -11,9 +11,18 @@ pub(all) enum GameState {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for GameState with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
+pub extend GameState with Debug::{to_repr}
+
+///|
+pub impl Show for GameState with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend GameState with Show::{to_string, output}
 
 ///|
 /// Fighter action state machine.
@@ -36,6 +45,9 @@ pub(all) enum Action {
 } derive(Eq)
 
 ///|
+pub extend Action with Eq::{not_equal, equal}
+
+///|
 /// Attack identifiers used by move specs and hit logic.
 pub(all) enum AttackId {
   AttackNone
@@ -49,12 +61,18 @@ pub(all) enum AttackId {
 } derive(Eq)
 
 ///|
+pub extend AttackId with Eq::{not_equal, equal}
+
+///|
 /// Move category for normal/special/super behavior.
 pub(all) enum MoveKind {
   MoveKindNormal
   MoveKindSpecial
   MoveKindSuper
 } derive(Eq)
+
+///|
+pub extend MoveKind with Eq::{not_equal, equal}
 
 ///|
 /// CPU behavior mode selector.
@@ -66,12 +84,18 @@ pub(all) enum AiMode {
 } derive(Eq)
 
 ///|
+pub extend AiMode with Eq::{not_equal, equal}
+
+///|
 /// Parsed directional motion command.
 pub(all) enum Motion {
   MotionNone
   MotionQcf
   MotionDp
 } derive(Eq)
+
+///|
+pub extend Motion with Eq::{not_equal, equal}
 
 ///|
 /// Direction entries stored in input history.
@@ -86,12 +110,18 @@ pub(all) enum Direction {
 } derive(Eq)
 
 ///|
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
 /// Hit spark visual category.
 pub(all) enum SparkKind {
   SparkKindHit
   SparkKindBlock
   SparkKindSuper
 } derive(Eq)
+
+///|
+pub extend SparkKind with Eq::{not_equal, equal}
 
 ///|
 /// CPU difficulty level.
@@ -102,9 +132,18 @@ pub(all) enum AiDifficulty {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for AiDifficulty with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend AiDifficulty with Eq::{not_equal, equal}
+
+///|
+pub extend AiDifficulty with Debug::{to_repr}
+
+///|
+pub impl Show for AiDifficulty with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend AiDifficulty with Show::{to_string, output}
 
 ///|
 /// Per-frame input state and motion buffers for one fighter.

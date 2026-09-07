@@ -8,7 +8,7 @@ pub fn update_enemy_ai(
   let base_stats = @data.get_enemy_stats(e.kind, game.floor_num)
   // Elite Fast affix: 50% faster movement
   let speed_mult : Float = if e.is_elite && e.affix == Fast { 1.5 } else { 1.0 }
-  let stats = { ..base_stats, speed: base_stats.speed * speed_mult }
+  let stats = { ..base_stats, speed: base_stats.speed * speed_mult, }
   // Update phase for oscillation
   e.phase += dt
   e.attack_cooldown -= dt

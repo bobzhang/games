@@ -39,4 +39,3 @@ pub fn upgrade_display_info(@types.Upgrade, Int) -> (String, String, Bool)
 // Type aliases
 
 // Traits
-

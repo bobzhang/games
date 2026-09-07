@@ -3,13 +3,25 @@ pub(all) struct BeamColor {
   r : Bool
   g : Bool
   b : Bool
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend BeamColor with Eq::{not_equal, equal}
+
+///|
+pub extend BeamColor with Debug::{to_repr}
 
 ///|
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct GridCell {

@@ -518,6 +518,8 @@ pub(all) enum EnemyKind {
   Camo
   Splitter
 } derive(Eq)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct FloatingText {
   mut active : Bool
@@ -621,6 +623,8 @@ pub(all) enum GameState {
   MapSelect
   TowerInfo
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct MapInfo {
   name : String
@@ -707,6 +711,8 @@ pub(all) enum TargetPriority {
   Strongest
   Closest
 } derive(Eq)
+pub fn TargetPriority::equal(Self, Self) -> Bool
+pub fn TargetPriority::not_equal(Self, Self) -> Bool
 
 pub(all) enum Tile {
   Grass
@@ -716,6 +722,8 @@ pub(all) enum Tile {
   Water
   Rock
 } derive(Eq)
+pub fn Tile::equal(Self, Self) -> Bool
+pub fn Tile::not_equal(Self, Self) -> Bool
 
 pub(all) struct Tower {
   mut active : Bool
@@ -749,6 +757,8 @@ pub(all) enum TowerKind {
   Splash
   Buff
 } derive(Eq)
+pub fn TowerKind::equal(Self, Self) -> Bool
+pub fn TowerKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct UpgradeInfo {
   cost : Int
@@ -783,4 +793,3 @@ pub(all) struct WaveSpawnEntry {
 // Type aliases
 
 // Traits
-

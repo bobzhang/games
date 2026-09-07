@@ -135,6 +135,11 @@ pub(all) enum ConstraintResult {
   Violated
   Unchecked
 } derive(Eq, @debug.Debug)
+pub fn ConstraintResult::equal(Self, Self) -> Bool
+pub fn ConstraintResult::not_equal(Self, Self) -> Bool
+pub fn ConstraintResult::output(Self, &Logger) -> Unit
+pub fn ConstraintResult::to_repr(Self) -> @debug.Repr
+pub fn ConstraintResult::to_string(Self) -> String
 pub impl Show for ConstraintResult
 
 pub(all) struct ConstraintStatus {
@@ -149,7 +154,10 @@ pub(all) struct FenceEdge {
   row : Int
   col : Int
   orient : Orientation
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn FenceEdge::equal(Self, Self) -> Bool
+pub fn FenceEdge::not_equal(Self, Self) -> Bool
+pub fn FenceEdge::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -208,6 +216,11 @@ pub(all) enum Orientation {
   Horizontal
   Vertical
 } derive(Eq, @debug.Debug)
+pub fn Orientation::equal(Self, Self) -> Bool
+pub fn Orientation::not_equal(Self, Self) -> Bool
+pub fn Orientation::output(Self, &Logger) -> Unit
+pub fn Orientation::to_repr(Self) -> @debug.Repr
+pub fn Orientation::to_string(Self) -> String
 pub impl Show for Orientation
 
 pub(all) enum PlayState {
@@ -215,6 +228,11 @@ pub(all) enum PlayState {
   Checking
   Complete
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) struct Region {
@@ -231,6 +249,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -238,6 +261,11 @@ pub(all) enum Tier {
   Districts
   Zoning
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) enum TileKind {
@@ -246,6 +274,11 @@ pub(all) enum TileKind {
   Road
   Water
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) struct UndoEntry {
@@ -255,9 +288,18 @@ pub(all) struct UndoEntry {
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Compare, Eq, Hash, Show)
+} derive(Compare, Eq, Hash, @debug.Debug)
+pub fn Vec2i::compare(Self, Self) -> Int
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::hash(Self) -> Int
+pub fn Vec2i::hash_combine(Self, Hasher) -> Unit
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::op_ge(Self, Self) -> Bool
+pub fn Vec2i::op_gt(Self, Self) -> Bool
+pub fn Vec2i::op_le(Self, Self) -> Bool
+pub fn Vec2i::op_lt(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

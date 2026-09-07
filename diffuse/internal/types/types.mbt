@@ -3,28 +3,43 @@ pub(all) struct InkColor {
   mut c : Bool
   mut m : Bool
   mut y : Bool
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend InkColor with Eq::{not_equal, equal}
+
+///|
+pub extend InkColor with Debug::{to_repr}
 
 ///|
 pub(all) struct Tile {
   mut kind : TileKind
   mut ink : InkColor
   mut target_color : InkColor
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Tile with Debug::{to_repr}
 
 ///|
 pub(all) struct Grid {
   width : Int
   height : Int
   tiles : Array[Tile]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Grid with Debug::{to_repr}
 
 ///|
 pub(all) struct InkBudget {
   mut cyan : Int
   mut magenta : Int
   mut yellow : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend InkBudget with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -33,21 +48,30 @@ pub(all) struct Level {
   par_drops : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : StarRating
   mut drops_used : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct HistoryEntry {
   tiles : Array[Tile]
   budget : InkBudget
   drops_used : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HistoryEntry with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -69,4 +93,7 @@ pub(all) struct Game {
   mut frame_count : Int
   mut spread_timer : Float
   mut show_preview : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

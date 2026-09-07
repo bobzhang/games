@@ -597,7 +597,7 @@ fn check_hazard_on_tile(
       let _ = apply_damage(battle, unit_id, 3)
       battle.turn_log.push("\{name} triggers a mine for 3 damage!")
       // Mine is consumed
-      battle.grid.set(x, y, { ..tile, hazard: None })
+      battle.grid.set(x, y, { ..tile, hazard: None, })
     }
     Smoke => battle.turn_log.push("\{name} enters smoke.")
     None => ()
@@ -632,7 +632,7 @@ fn ability_barricade(
     battle.turn_log.push("\{name} can only place barricade on empty floor!")
     return
   }
-  battle.grid.set(tx, ty, { kind: Wall, hazard: None, occupied_by: -1 })
+  battle.grid.set(tx, ty, { kind: Wall, hazard: None, occupied_by: -1, })
   battle.turn_log.push("\{name} places a barricade at (\{tx}, \{ty})!")
 }
 
@@ -660,7 +660,7 @@ fn ability_detonate(
     return
   }
   // Destroy the wall
-  battle.grid.set(tx, ty, { kind: Floor, hazard: None, occupied_by: -1 })
+  battle.grid.set(tx, ty, { kind: Floor, hazard: None, occupied_by: -1, })
   battle.turn_log.push("\{name} detonates the wall at (\{tx}, \{ty})!")
   // Deal 2 damage to all adjacent units
   let dx_arr = [0, 0, 1, -1]

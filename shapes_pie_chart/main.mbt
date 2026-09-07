@@ -11,32 +11,32 @@ fn main {
     screen_width, screen_height, "raylib [shapes] example - pie chart",
   )
 
-  let slice_count : Ref[Int] = Ref::new(7)
-  let donut_inner_radius : Ref[Float] = Ref::new(25.0)
-  let values : Array[Ref[Float]] = Array::make(max_pie_slices, Ref::new(0.0))
+  let slice_count : Ref[Int] = Ref(7)
+  let donut_inner_radius : Ref[Float] = Ref(25.0)
+  let values : Array[Ref[Float]] = Array::make(max_pie_slices, Ref(0.0))
   // Re-initialize each element to have its own Ref
-  values[0] = Ref::new(300.0)
-  values[1] = Ref::new(100.0)
-  values[2] = Ref::new(450.0)
-  values[3] = Ref::new(350.0)
-  values[4] = Ref::new(600.0)
-  values[5] = Ref::new(380.0)
-  values[6] = Ref::new(750.0)
+  values[0] = Ref(300.0)
+  values[1] = Ref(100.0)
+  values[2] = Ref(450.0)
+  values[3] = Ref(350.0)
+  values[4] = Ref(600.0)
+  values[5] = Ref(380.0)
+  values[6] = Ref(750.0)
   for i in 7..<max_pie_slices {
-    values[i] = Ref::new(0.0)
+    values[i] = Ref(0.0)
   }
 
-  let labels : Array[Ref[String]] = Array::make(max_pie_slices, Ref::new(""))
+  let labels : Array[Ref[String]] = Array::make(max_pie_slices, Ref(""))
   let editing_label : Array[Bool] = Array::make(max_pie_slices, false)
   for i in 0..<max_pie_slices {
     let num = i + 1
     let padded = if num < 10 { "0" } else { "" }
-    labels[i] = Ref::new("Slice " + padded + num.to_string())
+    labels[i] = Ref("Slice " + padded + num.to_string())
   }
 
-  let show_values : Ref[Bool] = Ref::new(true)
-  let show_percentages : Ref[Bool] = Ref::new(false)
-  let show_donut : Ref[Bool] = Ref::new(false)
+  let show_values : Ref[Bool] = Ref(true)
+  let show_percentages : Ref[Bool] = Ref(false)
+  let show_donut : Ref[Bool] = Ref(false)
   let mut hovered_slice = -1
 
   // UI layout parameters
@@ -288,8 +288,8 @@ fn main {
       Float::from_int(panel_margin)
     let content_height = slice_count.val * 35
 
-    let scroll : Ref[@raylib.Vector2] = Ref::new(@raylib.Vector2::new(0.0, 0.0))
-    let view : Ref[@raylib.Rectangle] = Ref::new(
+    let scroll : Ref[@raylib.Vector2] = Ref(@raylib.Vector2::new(0.0, 0.0))
+    let view : Ref[@raylib.Rectangle] = Ref(
       @raylib.Rectangle::new(0.0, 0.0, 0.0, 0.0),
     )
 

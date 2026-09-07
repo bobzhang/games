@@ -194,6 +194,8 @@ pub(all) enum BridgePhase {
   Falling
   Gone
 } derive(Eq)
+pub fn BridgePhase::equal(Self, Self) -> Bool
+pub fn BridgePhase::not_equal(Self, Self) -> Bool
 
 pub(all) struct BridgeState {
   mut active : Bool
@@ -260,6 +262,8 @@ pub(all) enum EnemyKind {
   Firebar
   BowserLite
 } derive(Eq)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct Fireball {
   mut active : Bool
@@ -355,6 +359,8 @@ pub(all) enum GameState {
   LevelTally
   BonusRoom
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Item {
   mut active : Bool
@@ -378,6 +384,8 @@ pub(all) enum ItemKind {
   OneUp
   CoinPopup
 } derive(Eq)
+pub fn ItemKind::equal(Self, Self) -> Bool
+pub fn ItemKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct LiftPlatform {
   mut active : Bool
@@ -454,6 +462,8 @@ pub(all) enum PowerState {
   Big
   Fire
 } derive(Eq)
+pub fn PowerState::equal(Self, Self) -> Bool
+pub fn PowerState::not_equal(Self, Self) -> Bool
 
 pub(all) struct ScorePopup {
   mut active : Bool
@@ -492,8 +502,9 @@ pub(all) enum TileKind {
   HiddenBonusOneUp
   BridgeTile
 } derive(Eq)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

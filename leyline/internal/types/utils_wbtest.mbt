@@ -84,9 +84,9 @@ test "tier_for_level returns correct tier" {
 ///|
 test "level_unlocked logic" {
   let progress : Array[LevelProgress] = [
-    { completed: true, stars: Bronze, best_waystones: 1, best_energy: 80.0 },
-    { completed: false, stars: None, best_waystones: 0, best_energy: 0.0 },
-    { completed: false, stars: None, best_waystones: 0, best_energy: 0.0 },
+    { completed: true, stars: Bronze, best_waystones: 1, best_energy: 80.0, },
+    { completed: false, stars: None, best_waystones: 0, best_energy: 0.0, },
+    { completed: false, stars: None, best_waystones: 0, best_energy: 0.0, },
   ]
   inspect(level_unlocked(progress, 0), content="true")
   inspect(level_unlocked(progress, 1), content="true")

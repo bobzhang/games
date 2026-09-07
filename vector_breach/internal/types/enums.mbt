@@ -16,9 +16,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum Command {
@@ -30,9 +39,15 @@ pub(all) enum Command {
 } derive(Debug)
 
 ///|
-pub impl Show for Command with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Command with Debug::{to_repr}
+
+///|
+pub impl Show for Command with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Command with Show::{to_string, output}
 
 ///|
 pub(all) enum Effect {
@@ -48,9 +63,15 @@ pub(all) enum Effect {
 } derive(Debug)
 
 ///|
-pub impl Show for Effect with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Effect with Debug::{to_repr}
+
+///|
+pub impl Show for Effect with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Effect with Show::{to_string, output}
 
 ///|
 pub(all) enum Intent {
@@ -64,9 +85,15 @@ pub(all) enum Intent {
 } derive(Debug)
 
 ///|
-pub impl Show for Intent with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Intent with Debug::{to_repr}
+
+///|
+pub impl Show for Intent with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Intent with Show::{to_string, output}
 
 ///|
 pub(all) enum Objective {
@@ -78,9 +105,18 @@ pub(all) enum Objective {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Objective with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Objective with Eq::{not_equal, equal}
+
+///|
+pub extend Objective with Debug::{to_repr}
+
+///|
+pub impl Show for Objective with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Objective with Show::{to_string, output}
 
 ///|
 pub(all) enum TileKind {
@@ -95,9 +131,18 @@ pub(all) enum TileKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TileKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TileKind with Eq::{not_equal, equal}
+
+///|
+pub extend TileKind with Debug::{to_repr}
+
+///|
+pub impl Show for TileKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TileKind with Show::{to_string, output}
 
 ///|
 pub(all) enum UnitTeam {
@@ -106,9 +151,18 @@ pub(all) enum UnitTeam {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for UnitTeam with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend UnitTeam with Eq::{not_equal, equal}
+
+///|
+pub extend UnitTeam with Debug::{to_repr}
+
+///|
+pub impl Show for UnitTeam with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend UnitTeam with Show::{to_string, output}
 
 ///|
 pub(all) enum MechClass {
@@ -118,9 +172,18 @@ pub(all) enum MechClass {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for MechClass with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend MechClass with Eq::{not_equal, equal}
+
+///|
+pub extend MechClass with Debug::{to_repr}
+
+///|
+pub impl Show for MechClass with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend MechClass with Show::{to_string, output}
 
 ///|
 pub(all) enum EnemyType {
@@ -135,9 +198,18 @@ pub(all) enum EnemyType {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for EnemyType with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend EnemyType with Eq::{not_equal, equal}
+
+///|
+pub extend EnemyType with Debug::{to_repr}
+
+///|
+pub impl Show for EnemyType with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend EnemyType with Show::{to_string, output}
 
 ///|
 pub(all) enum HazardKind {
@@ -149,9 +221,18 @@ pub(all) enum HazardKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for HazardKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend HazardKind with Eq::{not_equal, equal}
+
+///|
+pub extend HazardKind with Debug::{to_repr}
+
+///|
+pub impl Show for HazardKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend HazardKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Direction {
@@ -162,9 +243,18 @@ pub(all) enum Direction {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Direction with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Direction with Eq::{not_equal, equal}
+
+///|
+pub extend Direction with Debug::{to_repr}
+
+///|
+pub impl Show for Direction with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum EffectKind {
@@ -178,9 +268,18 @@ pub(all) enum EffectKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for EffectKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend EffectKind with Eq::{not_equal, equal}
+
+///|
+pub extend EffectKind with Debug::{to_repr}
+
+///|
+pub impl Show for EffectKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend EffectKind with Show::{to_string, output}
 
 ///|
 pub(all) enum AugmentKind {
@@ -197,9 +296,18 @@ pub(all) enum AugmentKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for AugmentKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend AugmentKind with Eq::{not_equal, equal}
+
+///|
+pub extend AugmentKind with Debug::{to_repr}
+
+///|
+pub impl Show for AugmentKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend AugmentKind with Show::{to_string, output}
 
 ///|
 pub(all) enum CampaignNodeKind {
@@ -212,9 +320,18 @@ pub(all) enum CampaignNodeKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for CampaignNodeKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend CampaignNodeKind with Eq::{not_equal, equal}
+
+///|
+pub extend CampaignNodeKind with Debug::{to_repr}
+
+///|
+pub impl Show for CampaignNodeKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend CampaignNodeKind with Show::{to_string, output}
 
 ///|
 pub(all) enum EventKind {
@@ -224,9 +341,18 @@ pub(all) enum EventKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for EventKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend EventKind with Eq::{not_equal, equal}
+
+///|
+pub extend EventKind with Debug::{to_repr}
+
+///|
+pub impl Show for EventKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend EventKind with Show::{to_string, output}
 
 ///|
 pub(all) enum BranchTheme {
@@ -237,9 +363,18 @@ pub(all) enum BranchTheme {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for BranchTheme with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend BranchTheme with Eq::{not_equal, equal}
+
+///|
+pub extend BranchTheme with Debug::{to_repr}
+
+///|
+pub impl Show for BranchTheme with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend BranchTheme with Show::{to_string, output}
 
 ///|
 pub(all) enum RewardChoice {
@@ -249,9 +384,18 @@ pub(all) enum RewardChoice {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for RewardChoice with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend RewardChoice with Eq::{not_equal, equal}
+
+///|
+pub extend RewardChoice with Debug::{to_repr}
+
+///|
+pub impl Show for RewardChoice with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend RewardChoice with Show::{to_string, output}
 
 ///|
 pub(all) enum AnimKind {
@@ -264,9 +408,18 @@ pub(all) enum AnimKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for AnimKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend AnimKind with Eq::{not_equal, equal}
+
+///|
+pub extend AnimKind with Debug::{to_repr}
+
+///|
+pub impl Show for AnimKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend AnimKind with Show::{to_string, output}
 
 ///|
 pub(all) enum StatusEffect {
@@ -275,6 +428,15 @@ pub(all) enum StatusEffect {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for StatusEffect with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend StatusEffect with Eq::{not_equal, equal}
+
+///|
+pub extend StatusEffect with Debug::{to_repr}
+
+///|
+pub impl Show for StatusEffect with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend StatusEffect with Show::{to_string, output}

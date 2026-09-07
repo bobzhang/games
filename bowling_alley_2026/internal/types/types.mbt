@@ -7,6 +7,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Physical state of a single pin.
 pub(all) struct Pin {
   mut standing : Bool
@@ -193,7 +196,7 @@ pub(all) struct Game {
 ///|
 /// Creates a standing pin with zero velocity.
 pub fn Pin::Pin() -> Pin {
-  { standing: true, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ang: 0.0, ang_v: 0.0 }
+  { standing: true, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ang: 0.0, ang_v: 0.0, }
 }
 
 ///|

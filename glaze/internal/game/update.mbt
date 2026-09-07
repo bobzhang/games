@@ -205,7 +205,7 @@ fn place_glaze(game : @types.Game, row : Int, col : Int) -> Unit {
   let cell = @types.get_cell(game.grid, row, col)
   let prev = cell.glaze
   // Save undo entry
-  game.undo_stack.push({ row, col, prev_glaze: prev })
+  game.undo_stack.push({ row, col, prev_glaze: prev, })
   cell.glaze = game.selected_glaze
   if prev is Empty {
     game.moves_used = game.moves_used + 1
@@ -219,7 +219,7 @@ fn erase_glaze(game : @types.Game, row : Int, col : Int) -> Unit {
     return
   }
   let prev = cell.glaze
-  game.undo_stack.push({ row, col, prev_glaze: prev })
+  game.undo_stack.push({ row, col, prev_glaze: prev, })
   cell.glaze = Empty
   game.moves_used = @types.maxi(0, game.moves_used - 1)
 }

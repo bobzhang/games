@@ -21,4 +21,3 @@ pub fn unload_assets() -> Unit
 // Type aliases
 
 // Traits
-

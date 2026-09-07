@@ -166,3 +166,6 @@ pub(all) enum Room {
   Sparring
   Defense
 } derive(Eq)
+
+///|
+pub extend Room with Eq::{not_equal, equal}

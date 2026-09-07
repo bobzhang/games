@@ -176,7 +176,8 @@ pub(all) struct Clue {
   count : Int
   text : String
   mut status : ClueStatus
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Clue::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ClueKind {
   Distance
@@ -186,6 +187,11 @@ pub(all) enum ClueKind {
   Between
   Not
 } derive(Eq, @debug.Debug)
+pub fn ClueKind::equal(Self, Self) -> Bool
+pub fn ClueKind::not_equal(Self, Self) -> Bool
+pub fn ClueKind::output(Self, &Logger) -> Unit
+pub fn ClueKind::to_repr(Self) -> @debug.Repr
+pub fn ClueKind::to_string(Self) -> String
 pub impl Show for ClueKind
 
 pub(all) enum ClueStatus {
@@ -193,6 +199,11 @@ pub(all) enum ClueStatus {
   Satisfied
   Violated
 } derive(Eq, @debug.Debug)
+pub fn ClueStatus::equal(Self, Self) -> Bool
+pub fn ClueStatus::not_equal(Self, Self) -> Bool
+pub fn ClueStatus::output(Self, &Logger) -> Unit
+pub fn ClueStatus::to_repr(Self) -> @debug.Repr
+pub fn ClueStatus::to_string(Self) -> String
 pub impl Show for ClueStatus
 
 pub(all) enum CompassDir {
@@ -205,6 +216,11 @@ pub(all) enum CompassDir {
   SE
   SW
 } derive(Eq, @debug.Debug)
+pub fn CompassDir::equal(Self, Self) -> Bool
+pub fn CompassDir::not_equal(Self, Self) -> Bool
+pub fn CompassDir::output(Self, &Logger) -> Unit
+pub fn CompassDir::to_repr(Self) -> @debug.Repr
+pub fn CompassDir::to_string(Self) -> String
 pub impl Show for CompassDir
 
 pub(all) enum FeatureKind {
@@ -216,6 +232,11 @@ pub(all) enum FeatureKind {
   Desert
   Road
 } derive(Eq, @debug.Debug)
+pub fn FeatureKind::equal(Self, Self) -> Bool
+pub fn FeatureKind::not_equal(Self, Self) -> Bool
+pub fn FeatureKind::output(Self, &Logger) -> Unit
+pub fn FeatureKind::to_repr(Self) -> @debug.Repr
+pub fn FeatureKind::to_string(Self) -> String
 pub impl Show for FeatureKind
 
 pub(all) struct Game {
@@ -258,6 +279,11 @@ pub(all) enum HintLevel {
   Reveal
   Answer
 } derive(Eq, @debug.Debug)
+pub fn HintLevel::equal(Self, Self) -> Bool
+pub fn HintLevel::not_equal(Self, Self) -> Bool
+pub fn HintLevel::output(Self, &Logger) -> Unit
+pub fn HintLevel::to_repr(Self) -> @debug.Repr
+pub fn HintLevel::to_string(Self) -> String
 pub impl Show for HintLevel
 
 pub(all) struct Level {
@@ -274,18 +300,27 @@ pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int
   mut best_placements : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Placement {
   pos : Vec2i
   feature : FeatureKind
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Placement::equal(Self, Self) -> Bool
+pub fn Placement::not_equal(Self, Self) -> Bool
+pub fn Placement::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Placing
   Complete
   Checking
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -295,6 +330,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -302,14 +342,21 @@ pub(all) enum Tier {
   Explorer
   Master
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2i::equal(Self, Self) -> Bool
+pub fn Vec2i::not_equal(Self, Self) -> Bool
+pub fn Vec2i::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
 // Traits
-

@@ -24,25 +24,25 @@ fn draw_right_text(
 }
 
 ///|
-let tex_title : Ref[@raylib.Texture?] = { val: None }
+let tex_title : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_submersible : Ref[@raylib.Texture?] = { val: None }
+let tex_submersible : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_rock : Ref[@raylib.Texture?] = { val: None }
+let tex_rock : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_mine : Ref[@raylib.Texture?] = { val: None }
+let tex_mine : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_data_node : Ref[@raylib.Texture?] = { val: None }
+let tex_data_node : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_oxygen : Ref[@raylib.Texture?] = { val: None }
+let tex_oxygen : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
-let tex_scrap : Ref[@raylib.Texture?] = { val: None }
+let tex_scrap : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Abyss Signal Runner texture from the game resources directory.

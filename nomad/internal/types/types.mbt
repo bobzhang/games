@@ -2,19 +2,34 @@
 pub(all) struct HexCoord {
   col : Int
   row : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend HexCoord with Eq::{not_equal, equal}
+
+///|
+pub extend HexCoord with Debug::{to_repr}
 
 ///|
 pub(all) struct HexTile {
   kind : TileKind
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend HexTile with Eq::{not_equal, equal}
+
+///|
+pub extend HexTile with Debug::{to_repr}
 
 ///|
 pub(all) struct HexMap {
   width : Int
   height : Int
   tiles : Array[Array[HexTile]]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend HexMap with Debug::{to_repr}
 
 ///|
 pub(all) struct Caravan {
@@ -26,7 +41,10 @@ pub(all) struct Caravan {
   mut route : Array[HexCoord]
   mut route_index : Int
   mut move_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Caravan with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -38,7 +56,10 @@ pub(all) struct Level {
   total_artifacts : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -46,7 +67,10 @@ pub(all) struct LevelScore {
   mut best_gold : Int
   mut best_artifacts : Int
   mut completed : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -69,4 +93,7 @@ pub(all) struct Game {
   mut result_stars : Int
   mut water_preview : Int
   mut anim_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

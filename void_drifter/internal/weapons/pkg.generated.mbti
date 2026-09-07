@@ -25,4 +25,3 @@ pub fn weapon_name(@types.WeaponKind) -> String
 // Type aliases
 
 // Traits
-

@@ -369,7 +369,7 @@ fn try_paint(game : @types.Game, col : Int, row : Int) -> Unit {
     return
   }
   // Save undo entry
-  game.undo_stack.push({ col, row, prev_biome: tile.biome, biome_used: biome })
+  game.undo_stack.push({ col, row, prev_biome: tile.biome, biome_used: biome, })
   // Apply paint
   @types.set_biome(game.grid, col, row, biome)
   @types.deduct_budget(game.budget, biome)

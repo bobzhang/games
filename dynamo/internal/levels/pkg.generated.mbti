@@ -21,4 +21,3 @@ pub fn load_level(Int) -> @types.LevelState
 // Type aliases
 
 // Traits
-

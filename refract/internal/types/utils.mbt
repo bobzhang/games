@@ -1,46 +1,46 @@
 ///|
 pub fn beam_color_black() -> BeamColor {
-  { r: false, g: false, b: false }
+  { r: false, g: false, b: false, }
 }
 
 ///|
 pub fn beam_color_red() -> BeamColor {
-  { r: true, g: false, b: false }
+  { r: true, g: false, b: false, }
 }
 
 ///|
 pub fn beam_color_green() -> BeamColor {
-  { r: false, g: true, b: false }
+  { r: false, g: true, b: false, }
 }
 
 ///|
 pub fn beam_color_blue() -> BeamColor {
-  { r: false, g: false, b: true }
+  { r: false, g: false, b: true, }
 }
 
 ///|
 pub fn beam_color_yellow() -> BeamColor {
-  { r: true, g: true, b: false }
+  { r: true, g: true, b: false, }
 }
 
 ///|
 pub fn beam_color_magenta() -> BeamColor {
-  { r: true, g: false, b: true }
+  { r: true, g: false, b: true, }
 }
 
 ///|
 pub fn beam_color_cyan() -> BeamColor {
-  { r: false, g: true, b: true }
+  { r: false, g: true, b: true, }
 }
 
 ///|
 pub fn beam_color_white() -> BeamColor {
-  { r: true, g: true, b: true }
+  { r: true, g: true, b: true, }
 }
 
 ///|
 pub fn beam_color_add(a : BeamColor, b : BeamColor) -> BeamColor {
-  { r: a.r || b.r, g: a.g || b.g, b: a.b || b.b }
+  { r: a.r || b.r, g: a.g || b.g, b: a.b || b.b, }
 }
 
 ///|
@@ -49,9 +49,9 @@ pub fn beam_color_remove_channel(
   filter : FilterColor,
 ) -> BeamColor {
   match filter {
-    Red => { r: false, g: color.g, b: color.b }
-    Green => { r: color.r, g: false, b: color.b }
-    Blue => { r: color.r, g: color.g, b: false }
+    Red => { r: false, g: color.g, b: color.b, }
+    Green => { r: color.r, g: false, b: color.b, }
+    Blue => { r: color.r, g: color.g, b: false, }
   }
 }
 
@@ -165,7 +165,7 @@ pub fn direction_name(d : Direction) -> String {
 
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
@@ -183,11 +183,11 @@ pub fn new_grid_cell() -> GridCell {
 ///|
 pub fn new_grid() -> Grid {
   let total = grid_width * grid_height
-  let cells : Array[GridCell] = Array::new(capacity=total)
+  let cells : Array[GridCell] = Array(capacity=total)
   for _i in 0..<total {
     cells.push(new_grid_cell())
   }
-  { width: grid_width, height: grid_height, cells }
+  { width: grid_width, height: grid_height, cells, }
 }
 
 ///|
@@ -226,7 +226,7 @@ pub fn grid_clear_received(grid : Grid) -> Unit {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, solved: false, components_used: 0, beam_crossings: 0 }
+  { stars: 0, solved: false, components_used: 0, beam_crossings: 0, }
 }
 
 ///|
@@ -341,7 +341,7 @@ pub fn count_placed_components(grid : Grid) -> Int {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=24)
+  let scores : Array[LevelScore] = Array(capacity=24)
   for _i in 0..<24 {
     scores.push(new_level_score())
   }

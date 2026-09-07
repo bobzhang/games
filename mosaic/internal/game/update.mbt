@@ -242,7 +242,10 @@ fn handle_tile_placement(game : @types.Game) -> Unit {
         if @types.vec2i_eq(pos, cell) {
           // Replace existing placement
           let (_, old_tile) = game.placed_tiles[i]
-          let undo : @types.UndoEntry = { pos: cell, prev_tile: Some(old_tile) }
+          let undo : @types.UndoEntry = {
+            pos: cell,
+            prev_tile: Some(old_tile),
+          }
           game.undo_stack.push(undo)
           let new_tile = @types.new_tile(
             game.selected_color,
@@ -275,7 +278,7 @@ fn handle_tile_placement(game : @types.Game) -> Unit {
         }
       }
       // New placement
-      let undo : @types.UndoEntry = { pos: cell, prev_tile: None }
+      let undo : @types.UndoEntry = { pos: cell, prev_tile: None, }
       game.undo_stack.push(undo)
       let new_tile = @types.new_tile(
         game.selected_color,

@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Two-axis puppet pose state.
 pub(all) struct Pose {
   mut ax : Int
@@ -60,7 +63,7 @@ pub(all) struct Game {
 ///|
 /// Creates a pose with explicit axis values.
 pub fn Pose::Pose(ax : Int, ay : Int) -> Pose {
-  { ax, ay }
+  { ax, ay, }
 }
 
 ///|

@@ -97,7 +97,7 @@ fn main {
   defer unload_game_art(art)
 
   let shots : Array[Shot] = Array::makei(260, fn(_i) {
-    { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, from_enemy: false }
+    { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, from_enemy: false, }
   })
 
   let bots : Array[Bot] = Array::makei(64, fn(_i) {

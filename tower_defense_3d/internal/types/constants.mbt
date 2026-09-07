@@ -596,6 +596,9 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Current game state.
 pub(all) enum GameState {
   Menu
@@ -610,6 +613,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Tower targeting priority.
 pub(all) enum TargetPriority {
   First
@@ -617,6 +623,9 @@ pub(all) enum TargetPriority {
   Strongest
   Closest
 } derive(Eq)
+
+///|
+pub extend TargetPriority with Eq::{not_equal, equal}
 
 ///|
 /// Map tile type.
@@ -630,6 +639,9 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+pub extend Tile with Eq::{not_equal, equal}
+
+///|
 /// Tower variant.
 pub(all) enum TowerKind {
   Arrow
@@ -641,3 +653,6 @@ pub(all) enum TowerKind {
   Splash
   Buff
 } derive(Eq)
+
+///|
+pub extend TowerKind with Eq::{not_equal, equal}

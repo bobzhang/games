@@ -3,7 +3,10 @@ pub(all) struct Soil {
   mut nitrogen : Int
   mut phosphorus : Int
   mut potassium : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Soil with Debug::{to_repr}
 
 ///|
 pub(all) struct Plot {
@@ -12,7 +15,10 @@ pub(all) struct Plot {
   mut growth_turns : Int
   mut soil : Soil
   mut season_planted : Season
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Plot with Debug::{to_repr}
 
 ///|
 pub(all) struct CropInfo {
@@ -24,7 +30,10 @@ pub(all) struct CropInfo {
   n_cost : Int
   p_cost : Int
   k_cost : Int
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend CropInfo with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelGoal {
@@ -35,19 +44,28 @@ pub(all) struct LevelGoal {
   hint : String
   locked_plots : Array[(Int, Int)]
   initial_soil : Array[Array[(Int, Int, Int)]]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelGoal with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
   mut value_earned : Int
   mut target_value : Int
   mut tier : Tier?
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct SeasonPlan {
   mut crops : Array[Array[CropKind]]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend SeasonPlan with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -77,4 +95,7 @@ pub(all) struct Game {
   mut anim_timer : Float
   mut harvest_flash : Array[Array[Float]]
   mut growth_anim : Array[Array[Float]]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

@@ -1,34 +1,34 @@
 ///|
 /// Texture handle for the full-screen battlefield backdrop.
-let tex_battlefield_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_battlefield_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Texture handle for the player's blue-gray castle.
-let tex_player_castle : Ref[@raylib.Texture?] = { val: None }
+let tex_player_castle : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Texture handle for the enemy's red fortress.
-let tex_enemy_castle : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_castle : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Texture handle for the central rocky obstacle.
-let tex_mountain_obstacle : Ref[@raylib.Texture?] = { val: None }
+let tex_mountain_obstacle : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Texture handle for the cannon sprite.
-let tex_cannon_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_cannon_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Texture handle for the cannonball projectile.
-let tex_cannonball : Ref[@raylib.Texture?] = { val: None }
+let tex_cannonball : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Texture handle for the animated explosion sprite.
-let tex_explosion : Ref[@raylib.Texture?] = { val: None }
+let tex_explosion : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Texture handle for the touch-control panel.
-let tex_control_panel : Ref[@raylib.Texture?] = { val: None }
+let tex_control_panel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads a texture from the Castle Siege resource directory.

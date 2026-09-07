@@ -139,7 +139,7 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
       let sx = @types.cell_screen_x(x)
       let sy = @types.cell_screen_y(y)
       match cell.kind {
-        Trunk => {
+        Trunk =>
           if !draw_trunk_art(sx, sy) {
             // Thick brown rectangle
             let pad = cs / 6
@@ -159,8 +159,7 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
               @raylib.Color::new(70, 45, 20, 255),
             )
           }
-        }
-        Branch => {
+        Branch =>
           if !draw_branch_art(sx, sy, cell.growth_dir) {
             let bcolor = @types.branch_color(species)
             // Thinner rectangle along growth direction
@@ -195,8 +194,7 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
               }
             }
           }
-        }
-        Leaf => {
+        Leaf =>
           if !draw_leaf_art(sx, sy, species) {
             let lcolor = @types.leaf_color(species)
             let cx = sx + cs / 2
@@ -216,8 +214,7 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
               ),
             )
           }
-        }
-        Pruned => {
+        Pruned =>
           if !draw_pruned_art(sx, sy) {
             // Faint mark
             @raylib.draw_rectangle(
@@ -228,7 +225,6 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
               @types.color_pruned,
             )
           }
-        }
         Empty => ()
       }
     }

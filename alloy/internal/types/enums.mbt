@@ -9,9 +9,18 @@ pub(all) enum MetalKind {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for MetalKind with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend MetalKind with Eq::{not_equal, equal}
+
+///|
+pub extend MetalKind with Debug::{to_repr}
+
+///|
+pub impl Show for MetalKind with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend MetalKind with Show::{to_string, output}
 
 ///|
 pub(all) enum Temperature {
@@ -21,9 +30,18 @@ pub(all) enum Temperature {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Temperature with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Temperature with Eq::{not_equal, equal}
+
+///|
+pub extend Temperature with Debug::{to_repr}
+
+///|
+pub impl Show for Temperature with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Temperature with Show::{to_string, output}
 
 ///|
 pub(all) enum Screen {
@@ -36,9 +54,18 @@ pub(all) enum Screen {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for Screen with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend Screen with Eq::{not_equal, equal}
+
+///|
+pub extend Screen with Debug::{to_repr}
+
+///|
+pub impl Show for Screen with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum StarRating {
@@ -49,6 +76,15 @@ pub(all) enum StarRating {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for StarRating with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend StarRating with Eq::{not_equal, equal}
+
+///|
+pub extend StarRating with Debug::{to_repr}
+
+///|
+pub impl Show for StarRating with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend StarRating with Show::{to_string, output}

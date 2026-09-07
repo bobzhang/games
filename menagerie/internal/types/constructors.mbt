@@ -33,13 +33,13 @@ pub fn new_game() -> Game {
 ///|
 pub fn build_tool_slots() -> Array[ToolSlot] {
   [
-    { tool: TerrainBrush(Grass), label: "Grass", color: color_grass },
-    { tool: TerrainBrush(Water), label: "Water", color: color_water },
-    { tool: TerrainBrush(Sand), label: "Sand", color: color_sand },
-    { tool: TerrainBrush(Rock), label: "Rock", color: color_rock },
-    { tool: TerrainBrush(Trees), label: "Trees", color: color_trees },
-    { tool: FenceTool, label: "Fence", color: color_fence },
-    { tool: EraserTool, label: "Erase", color: color_hud_text },
+    { tool: TerrainBrush(Grass), label: "Grass", color: color_grass, },
+    { tool: TerrainBrush(Water), label: "Water", color: color_water, },
+    { tool: TerrainBrush(Sand), label: "Sand", color: color_sand, },
+    { tool: TerrainBrush(Rock), label: "Rock", color: color_rock, },
+    { tool: TerrainBrush(Trees), label: "Trees", color: color_trees, },
+    { tool: FenceTool, label: "Fence", color: color_fence, },
+    { tool: EraserTool, label: "Erase", color: color_hud_text, },
   ]
 }
 

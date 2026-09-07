@@ -53,4 +53,3 @@ pub(all) struct WeaponStats {
 // Type aliases
 
 // Traits
-

@@ -8,9 +8,18 @@ pub(all) enum TickResult {
 } derive(Eq, Debug)
 
 ///|
-pub impl Show for TickResult with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TickResult with Eq::{not_equal, equal}
+
+///|
+pub extend TickResult with Debug::{to_repr}
+
+///|
+pub impl Show for TickResult with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TickResult with Show::{to_string, output}
 
 ///|
 fn compute_total_gravity(

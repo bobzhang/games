@@ -35,4 +35,3 @@ pub fn toggle_switch(@types.LevelState, Int, Int) -> Bool
 // Type aliases
 
 // Traits
-

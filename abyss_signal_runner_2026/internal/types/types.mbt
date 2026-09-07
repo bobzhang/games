@@ -8,6 +8,9 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Spawnable world object category.
 pub(all) enum ObjKind {
   Rock
@@ -17,6 +20,9 @@ pub(all) enum ObjKind {
   Current
   Scrap
 } derive(Eq)
+
+///|
+pub extend ObjKind with Eq::{not_equal, equal}
 
 ///|
 /// Dynamic obstacle or pickup instance in the scrolling world.
@@ -276,13 +282,13 @@ pub fn Particle::Particle() -> Particle {
 ///|
 /// Creates an inactive ripple slot for the ripple pool.
 pub fn Ripple::Ripple() -> Ripple {
-  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
+  { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0, }
 }
 
 ///|
 /// Creates an inactive trail slot for the trail pool.
 pub fn Trail::Trail() -> Trail {
-  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, kind: 0 }
+  { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, kind: 0, }
 }
 
 ///|

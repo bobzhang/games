@@ -166,7 +166,7 @@ fn emit_particle(
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
-      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
+      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind, }
       break
     }
   }
@@ -220,7 +220,7 @@ fn spawn_bullet(
 ) -> Unit {
   for i in 0..<bullets.length() {
     if !bullets[i].active {
-      bullets[i] = { active: true, kind, x, y, vx, vy, dmg, life }
+      bullets[i] = { active: true, kind, x, y, vx, vy, dmg, life, }
       break
     }
   }
@@ -235,7 +235,7 @@ fn spawn_drop(
 ) -> Unit {
   for i in 0..<drops.length() {
     if !drops[i].active {
-      drops[i] = { active: true, x, y, value, t: 0.0, life: 20.0 }
+      drops[i] = { active: true, x, y, value, t: 0.0, life: 20.0, }
       break
     }
   }
@@ -538,7 +538,7 @@ fn main {
   let pad_xs : FixedArray[Float] = FixedArray::make(pad_count, 0.0)
   let pad_ys : FixedArray[Float] = FixedArray::make(pad_count, 0.0)
 
-  let core = { x: world_w * 0.5, y: world_h * 0.5, hp: 1000.0, shield: 260.0 }
+  let core = { x: world_w * 0.5, y: world_h * 0.5, hp: 1000.0, shield: 260.0, }
 
   let hero = {
     x: world_w * 0.5 + 120.0,

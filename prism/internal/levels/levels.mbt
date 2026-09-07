@@ -5,7 +5,7 @@ fn make_avail(
   fc : @types.FilterColor?,
   cf : @types.CrystalFace?,
 ) -> @types.AvailableComponent {
-  { kind, filter_color: fc, crystal_face: cf, count }
+  { kind, filter_color: fc, crystal_face: cf, count, }
 }
 
 ///|

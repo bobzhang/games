@@ -1,42 +1,42 @@
 ///|
 /// Generated haunted library background texture.
-let tex_library_background : Ref[@raylib.Texture?] = { val: None }
+let tex_library_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated floor tile texture.
-let tex_floor_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_floor_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated wall/bookshelf tile texture.
-let tex_wall_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_wall_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated movable shelf texture.
-let tex_movable_shelf : Ref[@raylib.Texture?] = { val: None }
+let tex_movable_shelf : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated lost page texture.
-let tex_lost_page : Ref[@raylib.Texture?] = { val: None }
+let tex_lost_page : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated arcane seal texture.
-let tex_arcane_seal : Ref[@raylib.Texture?] = { val: None }
+let tex_arcane_seal : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated locked exit gate texture.
-let tex_exit_gate_locked : Ref[@raylib.Texture?] = { val: None }
+let tex_exit_gate_locked : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated open exit gate texture.
-let tex_exit_gate_open : Ref[@raylib.Texture?] = { val: None }
+let tex_exit_gate_open : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player librarian texture.
-let tex_player_librarian : Ref[@raylib.Texture?] = { val: None }
+let tex_player_librarian : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated ghost patrol texture.
-let tex_ghost_patrol : Ref[@raylib.Texture?] = { val: None }
+let tex_ghost_patrol : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Haunted Library texture.
@@ -674,7 +674,12 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
     return
   }
 
-  @raylib.draw_circle(cx + 12, cy + 8, 24.0, @raylib.Color::new(92, 196, 255, 48))
+  @raylib.draw_circle(
+    cx + 12,
+    cy + 8,
+    24.0,
+    @raylib.Color::new(92, 196, 255, 48),
+  )
 
   match tex_player_librarian.val {
     Some(texture) =>

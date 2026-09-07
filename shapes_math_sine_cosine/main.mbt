@@ -62,7 +62,7 @@ fn main {
   )
   let radius : Float = 130.0
   let mut angle : Float = 0.0
-  let pause : Ref[Bool] = { val: false }
+  let pause : Ref[Bool] = { val: false, }
 
   // Initialize wave points
   for i in 0..<wave_points {
@@ -378,7 +378,7 @@ fn main {
       pause,
     )
     |> ignore
-    let angle_ref : Ref[Float] = { val: angle }
+    let angle_ref : Ref[Float] = { val: angle, }
     @raygui.gui_set_style(
       @raygui.ControlLabel,
       @raygui.TextColorNormal,

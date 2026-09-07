@@ -66,9 +66,9 @@ test "tier_name values" {
 
 ///|
 test "tier_level_range values" {
-  inspect(tier_level_range(Surface), content="(0, 7)")
-  inspect(tier_level_range(Bedrock), content="(8, 16)")
-  inspect(tier_level_range(DeepCore), content="(17, 24)")
+  debug_inspect(tier_level_range(Surface), content="(0, 7)")
+  debug_inspect(tier_level_range(Bedrock), content="(8, 16)")
+  debug_inspect(tier_level_range(DeepCore), content="(17, 24)")
 }
 
 ///|
@@ -171,7 +171,7 @@ test "save_undo and pop_undo" {
   // Pop should restore
   let ok = pop_undo(g)
   inspect(ok, content="true")
-  inspect(g.slots[1], content="None")
+  debug_inspect(g.slots[1], content="None")
   inspect(g.tray.length(), content="2")
 }
 

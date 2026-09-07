@@ -15,4 +15,3 @@ pub fn get_level(Int) -> @types.Level
 // Type aliases
 
 // Traits
-

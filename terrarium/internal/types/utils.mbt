@@ -5,12 +5,12 @@ pub fn new_resources(
   water : Float,
   nutrients : Float,
 ) -> Resources {
-  { o2, co2, water, nutrients }
+  { o2, co2, water, nutrients, }
 }
 
 ///|
 pub fn clone_resources(r : Resources) -> Resources {
-  { o2: r.o2, co2: r.co2, water: r.water, nutrients: r.nutrients }
+  { o2: r.o2, co2: r.co2, water: r.water, nutrients: r.nutrients, }
 }
 
 ///|
@@ -75,7 +75,7 @@ pub fn new_game() -> Game {
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { completed: false, best_turns_survived: 0, stars: 0 }
+  { completed: false, best_turns_survived: 0, stars: 0, }
 }
 
 ///|

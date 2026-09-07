@@ -85,6 +85,8 @@ pub(all) enum Direction {
   DirUp
   DirDown
 } derive(Eq)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   board : Array[Int]
@@ -133,6 +135,8 @@ pub(all) enum GameState {
   Play
   Result
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Spark {
   mut active : Bool
@@ -151,8 +155,9 @@ pub(all) enum SparkKind {
   SparkMerge
   SparkExplosion
 } derive(Eq)
+pub fn SparkKind::equal(Self, Self) -> Bool
+pub fn SparkKind::not_equal(Self, Self) -> Bool
 
 // Type aliases
 
 // Traits
-

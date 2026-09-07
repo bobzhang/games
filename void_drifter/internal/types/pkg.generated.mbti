@@ -299,6 +299,11 @@ pub(all) enum BossKind {
   Hive
   Dreadnought
 } derive(Eq, @debug.Debug)
+pub fn BossKind::equal(Self, Self) -> Bool
+pub fn BossKind::not_equal(Self, Self) -> Bool
+pub fn BossKind::output(Self, &Logger) -> Unit
+pub fn BossKind::to_repr(Self) -> @debug.Repr
+pub fn BossKind::to_string(Self) -> String
 pub impl Show for BossKind
 
 pub(all) struct DamageNumber {
@@ -316,6 +321,11 @@ pub(all) enum Direction {
   Left
   Right
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) struct Enemy {
@@ -348,6 +358,11 @@ pub(all) enum EnemyKind {
   Bomber
   ShieldBearer
 } derive(Eq, @debug.Debug)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
+pub fn EnemyKind::output(Self, &Logger) -> Unit
+pub fn EnemyKind::to_repr(Self) -> @debug.Repr
+pub fn EnemyKind::to_string(Self) -> String
 pub impl Show for EnemyKind
 
 pub(all) struct Game {
@@ -400,6 +415,11 @@ pub(all) enum HazardKind {
   GravityWell
   MineField
 } derive(Eq, @debug.Debug)
+pub fn HazardKind::equal(Self, Self) -> Bool
+pub fn HazardKind::not_equal(Self, Self) -> Bool
+pub fn HazardKind::output(Self, &Logger) -> Unit
+pub fn HazardKind::to_repr(Self) -> @debug.Repr
+pub fn HazardKind::to_string(Self) -> String
 pub impl Show for HazardKind
 
 pub(all) struct MetaProgress {
@@ -420,6 +440,11 @@ pub(all) enum MetaUnlock {
   UnlockUtility(UtilityMod)
   UnlockShip(Int)
 } derive(Eq, @debug.Debug)
+pub fn MetaUnlock::equal(Self, Self) -> Bool
+pub fn MetaUnlock::not_equal(Self, Self) -> Bool
+pub fn MetaUnlock::output(Self, &Logger) -> Unit
+pub fn MetaUnlock::to_repr(Self) -> @debug.Repr
+pub fn MetaUnlock::to_string(Self) -> String
 pub impl Show for MetaUnlock
 
 pub(all) enum ModKind {
@@ -432,6 +457,11 @@ pub(all) enum ModKind {
   Bouncing
   Overcharge
 } derive(Eq, @debug.Debug)
+pub fn ModKind::equal(Self, Self) -> Bool
+pub fn ModKind::not_equal(Self, Self) -> Bool
+pub fn ModKind::output(Self, &Logger) -> Unit
+pub fn ModKind::to_repr(Self) -> @debug.Repr
+pub fn ModKind::to_string(Self) -> String
 pub impl Show for ModKind
 
 pub(all) struct Particle {
@@ -463,6 +493,11 @@ pub(all) enum PickupKind {
   HeatVent
   WeaponDrop(WeaponKind)
 } derive(Eq, @debug.Debug)
+pub fn PickupKind::equal(Self, Self) -> Bool
+pub fn PickupKind::not_equal(Self, Self) -> Bool
+pub fn PickupKind::output(Self, &Logger) -> Unit
+pub fn PickupKind::to_repr(Self) -> @debug.Repr
+pub fn PickupKind::to_string(Self) -> String
 pub impl Show for PickupKind
 
 pub(all) struct Projectile {
@@ -517,6 +552,11 @@ pub(all) enum Screen {
   BossIntro
   Victory
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct ScreenShake {
@@ -534,6 +574,11 @@ pub(all) enum SectorKind {
   EliteZone
   EmptySpace
 } derive(Eq, @debug.Debug)
+pub fn SectorKind::equal(Self, Self) -> Bool
+pub fn SectorKind::not_equal(Self, Self) -> Bool
+pub fn SectorKind::output(Self, &Logger) -> Unit
+pub fn SectorKind::to_repr(Self) -> @debug.Repr
+pub fn SectorKind::to_string(Self) -> String
 pub impl Show for SectorKind
 
 pub(all) struct SectorMap {
@@ -606,6 +651,11 @@ pub(all) enum SoundEvent {
   OverheatWarn
   SectorEnter
 } derive(Eq, @debug.Debug)
+pub fn SoundEvent::equal(Self, Self) -> Bool
+pub fn SoundEvent::not_equal(Self, Self) -> Bool
+pub fn SoundEvent::output(Self, &Logger) -> Unit
+pub fn SoundEvent::to_repr(Self) -> @debug.Repr
+pub fn SoundEvent::to_string(Self) -> String
 pub impl Show for SoundEvent
 
 pub(all) enum UtilityMod {
@@ -614,12 +664,20 @@ pub(all) enum UtilityMod {
   HeatSink
   Accelerator
 } derive(Eq, @debug.Debug)
+pub fn UtilityMod::equal(Self, Self) -> Bool
+pub fn UtilityMod::not_equal(Self, Self) -> Bool
+pub fn UtilityMod::output(Self, &Logger) -> Unit
+pub fn UtilityMod::to_repr(Self) -> @debug.Repr
+pub fn UtilityMod::to_string(Self) -> String
 pub impl Show for UtilityMod
 
 pub(all) struct Vec2 {
   mut x : Float
   mut y : Float
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Vec2::equal(Self, Self) -> Bool
+pub fn Vec2::not_equal(Self, Self) -> Bool
+pub fn Vec2::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Weapon {
   mut kind : WeaponKind
@@ -641,9 +699,13 @@ pub(all) enum WeaponKind {
   Flak
   Beam
 } derive(Eq, @debug.Debug)
+pub fn WeaponKind::equal(Self, Self) -> Bool
+pub fn WeaponKind::not_equal(Self, Self) -> Bool
+pub fn WeaponKind::output(Self, &Logger) -> Unit
+pub fn WeaponKind::to_repr(Self) -> @debug.Repr
+pub fn WeaponKind::to_string(Self) -> String
 pub impl Show for WeaponKind
 
 // Type aliases
 
 // Traits
-

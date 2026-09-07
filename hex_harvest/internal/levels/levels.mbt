@@ -45,13 +45,13 @@ fn build_level(
   let ws : Array[@types.WaterSource] = []
   for i in 0..<water_sources.length() {
     let (c, r) = water_sources[i]
-    ws.push({ col: c, row: r })
+    ws.push({ col: c, row: r, })
   }
   // Build goal list
   let gl : Array[@types.GoalPos] = []
   for i in 0..<goals.length() {
     let (c, r) = goals[i]
-    gl.push({ col: c, row: r })
+    gl.push({ col: c, row: r, })
   }
   {
     grid,

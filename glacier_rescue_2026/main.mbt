@@ -201,7 +201,7 @@ fn emit_particle(
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
-      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
+      particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind, }
       break
     }
   }
@@ -321,7 +321,7 @@ fn spawn_avalanche(avalanches : FixedArray[Avalanche], level : Int) -> Unit {
 fn spawn_flare(flares : FixedArray[Flare], x : Float, y : Float) -> Unit {
   for i in 0..<flares.length() {
     if !flares[i].active {
-      flares[i] = { active: true, x, y, r: 36.0, t: 0.0, life: 3.8 }
+      flares[i] = { active: true, x, y, r: 36.0, t: 0.0, life: 3.8, }
       break
     }
   }

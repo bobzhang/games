@@ -105,7 +105,7 @@ pub fn spawn_artifact(game : Game, x : Int, y : Int) -> Unit {
     return
   }
 
-  game.artifacts.push({ x, y, taken: false })
+  game.artifacts.push({ x, y, taken: false, })
   game.artifacts_total = game.artifacts_total + 1
 }
 

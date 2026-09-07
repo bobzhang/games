@@ -3,7 +3,7 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
   let size = @types.hex_size
   for r in 0..<@types.board_size {
     for c in 0..<@types.board_size {
-      let coord : @types.HexCoord = { row: r, col: c }
+      let coord : @types.HexCoord = { row: r, col: c, }
       let (px, py) = @types.hex_to_pixel(coord, size)
       let ix = px.to_int()
       let iy = py.to_int()

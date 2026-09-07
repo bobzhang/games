@@ -400,7 +400,7 @@ pub fn spawn_typed_particles(
 pub fn get_waypoint(game : Game, idx : Int) -> Waypoint {
   let wc = game.waypoint_count
   if wc == 0 {
-    return { x: 0.0, y: 0.0, z: 0.0 }
+    return { x: 0.0, y: 0.0, z: 0.0, }
   }
   let mut i = idx % wc
   if i < 0 {

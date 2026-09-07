@@ -73,13 +73,18 @@ test "tile_center_x and tile_center_y" {
 test "pixel_to_tile in bounds" {
   // Pixel at offset + cell_size/2 should be tile (0,0)
   let result = pixel_to_tile(grid_offset_x + 10, grid_offset_y + 10)
-  inspect(result, content="Some({x: 0, y: 0})")
+  debug_inspect(
+    result,
+    content=(
+      #|Some({ x: 0, y: 0 })
+    ),
+  )
 }
 
 ///|
 test "pixel_to_tile out of bounds" {
-  inspect(pixel_to_tile(0, 0), content="None")
-  inspect(pixel_to_tile(-10, -10), content="None")
+  debug_inspect(pixel_to_tile(0, 0), content="None")
+  debug_inspect(pixel_to_tile(-10, -10), content="None")
 }
 
 ///|

@@ -50,7 +50,7 @@ test "tile_kind" {
   let settlement = @types.new_tile(5, true)
   inspect(@types.tile_kind(settlement, 2), content="Settlement")
   inspect(@types.tile_kind(settlement, 5), content="Water")
-  let sand : @types.Tile = { height: 3, is_settlement: false, is_sand: true }
+  let sand : @types.Tile = { height: 3, is_settlement: false, is_sand: true, }
   inspect(@types.tile_kind(sand, 2), content="Sand")
 }
 

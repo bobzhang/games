@@ -1,14 +1,14 @@
 ///|
 /// Generated ink city backdrop texture.
-let tex_ink_city_background : Ref[@raylib.Texture?] = { val: None }
+let tex_ink_city_background : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated reusable district tile texture.
-let tex_district_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_district_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated clue/suspect/incident/deduction symbol sheet texture.
-let tex_symbol_sprites : Ref[@raylib.Texture?] = { val: None }
+let tex_symbol_sprites : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one generated Ink Scroll Detective texture.
@@ -412,13 +412,13 @@ fn @types.Game::draw_suspects(game : @types.Game) -> Unit {
 
     if game.suspects[i].deduction_unlocked {
       if !draw_symbol_sprite(
-        3,
-        x,
-        y - 32.0,
-        28.0,
-        28.0,
-        @raylib.Color::new(250, 244, 146, 230),
-      ) {
+          3,
+          x,
+          y - 32.0,
+          28.0,
+          28.0,
+          @raylib.Color::new(250, 244, 146, 230),
+        ) {
         @draw.draw_text(
           "D",
           (x - 5.0).to_int(),
@@ -469,13 +469,13 @@ fn @types.Game::draw_incidents(game : @types.Game) -> Unit {
       a_col(core_col, 88),
     )
     if !draw_symbol_sprite(
-      2,
-      x,
-      y,
-      34.0 + sevf * 8.0,
-      34.0 + sevf * 8.0,
-      @raylib.white,
-    ) {
+        2,
+        x,
+        y,
+        34.0 + sevf * 8.0,
+        34.0 + sevf * 8.0,
+        @raylib.white,
+      ) {
       @raylib.draw_circle(x.to_int(), y.to_int(), 6.0 + sevf * 3.5, core_col)
     }
 

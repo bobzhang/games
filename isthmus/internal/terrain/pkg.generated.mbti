@@ -39,4 +39,3 @@ pub fn will_settlement_flood_next(@types.Grid, Int) -> Bool
 // Type aliases
 
 // Traits
-

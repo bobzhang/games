@@ -15,4 +15,3 @@ pub fn make_all_levels() -> Array[@types.Level]
 // Type aliases
 
 // Traits
-

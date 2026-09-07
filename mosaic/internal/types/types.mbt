@@ -2,14 +2,26 @@
 pub(all) struct Vec2i {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Vec2i with Eq::{not_equal, equal}
+
+///|
+pub extend Vec2i with Debug::{to_repr}
 
 ///|
 pub(all) struct Tile {
   mut color : TileColor
   mut shape : TileShape
   mut orientation : Orientation
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub extend Tile with Eq::{not_equal, equal}
+
+///|
+pub extend Tile with Debug::{to_repr}
 
 ///|
 pub(all) struct MosaicGrid {
@@ -17,7 +29,10 @@ pub(all) struct MosaicGrid {
   height : Int
   tiles : Array[Tile?]
   holes : Array[Vec2i]
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend MosaicGrid with Debug::{to_repr}
 
 ///|
 pub(all) struct Level {
@@ -26,7 +41,10 @@ pub(all) struct Level {
   par_errors : Int
   tier : Tier
   name : String
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
@@ -34,13 +52,19 @@ pub(all) struct LevelScore {
   mut stars : Int
   mut errors : Int
   mut guessed_symmetry : Bool
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct UndoEntry {
   pos : Vec2i
   prev_tile : Tile?
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend UndoEntry with Debug::{to_repr}
 
 ///|
 pub(all) struct Game {
@@ -65,4 +89,7 @@ pub(all) struct Game {
   mut message_timer : Float
   mut show_symmetry_hint : Bool
   mut anim_timer : Float
-} derive(Show)
+} derive(Debug)
+
+///|
+pub extend Game with Debug::{to_repr}

@@ -29,4 +29,3 @@ pub fn update_challenge(@types.ChallengeState, @types.World, Float) -> Bool
 // Type aliases
 
 // Traits
-

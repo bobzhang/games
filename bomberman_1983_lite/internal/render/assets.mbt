@@ -1,102 +1,102 @@
 ///|
 /// Generated floor tile texture.
-let tex_floor_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_floor_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated destructible brick tile texture.
-let tex_brick_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_brick_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated indestructible steel tile texture.
-let tex_steel_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_steel_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated water tile texture.
-let tex_water_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_water_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated bush cover tile texture.
-let tex_bush_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_bush_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated ice tile texture.
-let tex_ice_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_ice_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated intact base tile texture.
-let tex_base_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_base_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated destroyed base tile texture.
-let tex_base_destroyed_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_base_destroyed_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player one tank texture.
-let tex_player1_tank : Ref[@raylib.Texture?] = { val: None }
+let tex_player1_tank : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player two tank texture.
-let tex_player2_tank : Ref[@raylib.Texture?] = { val: None }
+let tex_player2_tank : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated basic enemy tank texture.
-let tex_enemy_basic_tank : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_basic_tank : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated fast enemy tank texture.
-let tex_enemy_fast_tank : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_fast_tank : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated heavy enemy tank texture.
-let tex_enemy_heavy_tank : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_heavy_tank : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated sniper enemy tank texture.
-let tex_enemy_sniper_tank : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_sniper_tank : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated bomb sprite texture.
-let tex_bomb_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_bomb_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated blast sprite texture.
-let tex_blast_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_blast_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player bullet sprite texture.
-let tex_bullet_player : Ref[@raylib.Texture?] = { val: None }
+let tex_bullet_player : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player two bullet sprite texture.
-let tex_bullet_player2 : Ref[@raylib.Texture?] = { val: None }
+let tex_bullet_player2 : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated enemy bullet sprite texture.
-let tex_bullet_enemy : Ref[@raylib.Texture?] = { val: None }
+let tex_bullet_enemy : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated shield powerup texture.
-let tex_powerup_shield : Ref[@raylib.Texture?] = { val: None }
+let tex_powerup_shield : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated star powerup texture.
-let tex_powerup_star : Ref[@raylib.Texture?] = { val: None }
+let tex_powerup_star : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated grenade powerup texture.
-let tex_powerup_grenade : Ref[@raylib.Texture?] = { val: None }
+let tex_powerup_grenade : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated clock powerup texture.
-let tex_powerup_clock : Ref[@raylib.Texture?] = { val: None }
+let tex_powerup_clock : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated shovel powerup texture.
-let tex_powerup_shovel : Ref[@raylib.Texture?] = { val: None }
+let tex_powerup_shovel : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated extra-life powerup texture.
-let tex_powerup_life : Ref[@raylib.Texture?] = { val: None }
+let tex_powerup_life : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one bilinear-filtered Bomberman 1983 texture.
@@ -118,7 +118,9 @@ pub fn load_assets() -> Unit {
   tex_bush_tile.val = Some(load_art_texture("bush_tile.png"))
   tex_ice_tile.val = Some(load_art_texture("ice_tile.png"))
   tex_base_tile.val = Some(load_art_texture("base_tile.png"))
-  tex_base_destroyed_tile.val = Some(load_art_texture("base_destroyed_tile.png"))
+  tex_base_destroyed_tile.val = Some(
+    load_art_texture("base_destroyed_tile.png"),
+  )
   tex_player1_tank.val = Some(load_art_texture("player1_tank.png"))
   tex_player2_tank.val = Some(load_art_texture("player2_tank.png"))
   tex_enemy_basic_tank.val = Some(load_art_texture("enemy_basic_tank.png"))
@@ -356,11 +358,7 @@ fn draw_enemy_tank_art(
 
 ///|
 /// Draws a generated bomb sprite when loaded.
-fn draw_bomb_art(
-  center_x : Int,
-  center_y : Int,
-  pulse : Float,
-) -> Bool {
+fn draw_bomb_art(center_x : Int, center_y : Int, pulse : Float) -> Bool {
   match tex_bomb_sprite.val {
     Some(texture) => {
       let size = 20.0F + pulse * 2.0F
@@ -447,7 +445,12 @@ fn powerup_art(kind : @types.PowerupKind) -> @raylib.Texture? {
 
 ///|
 /// Draws a generated powerup sprite when loaded.
-fn draw_powerup_art(kind : @types.PowerupKind, sx : Int, sy : Int, pulse : Float) -> Bool {
+fn draw_powerup_art(
+  kind : @types.PowerupKind,
+  sx : Int,
+  sy : Int,
+  pulse : Float,
+) -> Bool {
   match powerup_art(kind) {
     Some(texture) => {
       let size = powerup_radius(kind) * 2.0F + pulse * 2.5F

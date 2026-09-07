@@ -165,7 +165,11 @@ fn @types.Game::draw_vault_core(game : @types.Game) -> Unit {
   @draw.draw_text(
     "Dragon Scroll",
     x - 70,
-    if has_scroll_core_art { y + 52 } else { y - 10 },
+    if has_scroll_core_art {
+      y + 52
+    } else {
+      y - 10
+    },
     20,
     @raylib.Color::new(238, 248, 255, 235),
   )
@@ -261,10 +265,10 @@ fn @types.Game::draw_raiders(game : @types.Game) -> Unit {
 
     let panic_alpha = if raider.panic_t > 0.0 { 220 } else { 176 }
     if !draw_raider_art(
-      raider.x.to_int(),
-      raider.y.to_int(),
-      raider.panic_t > 0.0,
-    ) {
+        raider.x.to_int(),
+        raider.y.to_int(),
+        raider.panic_t > 0.0,
+      ) {
       @raylib.draw_circle(
         raider.x.to_int(),
         raider.y.to_int(),

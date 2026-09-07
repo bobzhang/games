@@ -1,46 +1,46 @@
 ///|
 /// Generated heist planning backdrop for the title screen.
-let tex_title_backdrop : Ref[@raylib.Texture?] = { val: None }
+let tex_title_backdrop : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated dark facility floor tile.
-let tex_floor_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_floor_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated reinforced vault wall tile.
-let tex_wall_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_wall_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated thief operative sprite.
-let tex_player_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_player_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated time-loop ghost sprite.
-let tex_ghost_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_ghost_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated guard sprite.
-let tex_guard_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_guard_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated vault objective sprite.
-let tex_vault_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_vault_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated extraction exit sprite.
-let tex_exit_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_exit_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated key collectible sprite.
-let tex_key_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_key_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated breach door sprite.
-let tex_door_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_door_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated pressure plate sprite.
-let tex_pressure_plate_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_pressure_plate_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one bilinear-filtered Chrono Heist texture.

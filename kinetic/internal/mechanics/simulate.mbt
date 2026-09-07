@@ -25,7 +25,7 @@ pub fn simulate(game : @types.Game) -> Unit {
   game.placed_gears[input_idx].rpm = level.input.rpm
   game.placed_gears[input_idx].dir = level.input.dir
   // BFS from input gear
-  let visited : Array[Bool] = Array::new(capacity=game.placed_gears.length())
+  let visited : Array[Bool] = Array(capacity=game.placed_gears.length())
   for _i in 0..<game.placed_gears.length() {
     visited.push(false)
   }
@@ -58,7 +58,7 @@ pub fn simulate(game : @types.Game) -> Unit {
         let new_dir = @types.flip_dir(curr_gear.dir)
         other.rpm = new_rpm
         other.dir = new_dir
-        game.connections.push({ from: curr, to: j, ratio, flips_dir: true })
+        game.connections.push({ from: curr, to: j, ratio, flips_dir: true, })
         visited[j] = true
         queue.push(j)
       }

@@ -162,7 +162,7 @@ fn update_playing(game : @types.Game) -> Unit {
           save_history(game)
           // Apply ink drop
           let new_ink = @types.ink_add_channel(tile.ink, game.selected_channel)
-          tile.ink = { c: new_ink.c, m: new_ink.m, y: new_ink.y }
+          tile.ink = { c: new_ink.c, m: new_ink.m, y: new_ink.y, }
           @types.budget_use(game.budget, game.selected_channel)
           game.drops_used = game.drops_used + 1
           // Check game state after drop

@@ -483,7 +483,8 @@ pub(all) struct AbilityChoice {
   ability : AbilityKind
   name : String
   desc : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn AbilityChoice::to_repr(Self) -> @debug.Repr
 
 pub(all) enum AbilityKind {
   DoubleStep
@@ -492,6 +493,11 @@ pub(all) enum AbilityKind {
   ShadowDodge
   RhythmShield
 } derive(Eq, @debug.Debug)
+pub fn AbilityKind::equal(Self, Self) -> Bool
+pub fn AbilityKind::not_equal(Self, Self) -> Bool
+pub fn AbilityKind::output(Self, &Logger) -> Unit
+pub fn AbilityKind::to_repr(Self) -> @debug.Repr
+pub fn AbilityKind::to_string(Self) -> String
 pub impl Show for AbilityKind
 
 pub(all) struct Achievement {
@@ -499,7 +505,8 @@ pub(all) struct Achievement {
   name : String
   desc : String
   mut unlocked : Bool
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Achievement::to_repr(Self) -> @debug.Repr
 
 pub(all) enum AchievementKind {
   FirstBlood
@@ -509,24 +516,36 @@ pub(all) enum AchievementKind {
   SpeedDemon
   Pacifist
 } derive(Eq, @debug.Debug)
+pub fn AchievementKind::equal(Self, Self) -> Bool
+pub fn AchievementKind::not_equal(Self, Self) -> Bool
+pub fn AchievementKind::output(Self, &Logger) -> Unit
+pub fn AchievementKind::to_repr(Self) -> @debug.Repr
+pub fn AchievementKind::to_string(Self) -> String
 pub impl Show for AchievementKind
 
 pub(all) struct AchievementState {
   achievements : Array[Achievement]
   toasts : Array[AchievementToast]
-} derive(Show)
+} derive(@debug.Debug)
 pub fn AchievementState::new() -> Self
+pub fn AchievementState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct AchievementToast {
   text : String
   mut timer : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn AchievementToast::to_repr(Self) -> @debug.Repr
 
 pub(all) enum BeatRating {
   Perfect
   Good
   Miss
 } derive(Eq, @debug.Debug)
+pub fn BeatRating::equal(Self, Self) -> Bool
+pub fn BeatRating::not_equal(Self, Self) -> Bool
+pub fn BeatRating::output(Self, &Logger) -> Unit
+pub fn BeatRating::to_repr(Self) -> @debug.Repr
+pub fn BeatRating::to_string(Self) -> String
 pub impl Show for BeatRating
 
 pub(all) struct BeatState {
@@ -540,14 +559,20 @@ pub(all) struct BeatState {
   mut max_combo : Int
   mut perfect_window : Float
   mut good_window : Float
-} derive(Show)
+} derive(@debug.Debug)
 pub fn BeatState::new(Float) -> Self
+pub fn BeatState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum BossPhase {
   Phase1
   Phase2
   Phase3
 } derive(Eq, @debug.Debug)
+pub fn BossPhase::equal(Self, Self) -> Bool
+pub fn BossPhase::not_equal(Self, Self) -> Bool
+pub fn BossPhase::output(Self, &Logger) -> Unit
+pub fn BossPhase::to_repr(Self) -> @debug.Repr
+pub fn BossPhase::to_string(Self) -> String
 pub impl Show for BossPhase
 
 pub(all) struct BossPhaseState {
@@ -557,13 +582,17 @@ pub(all) struct BossPhaseState {
   mut lich_teleport_cooldown : Int
   mut dragon_4dir_cooldown : Int
   mut lich_double_summon : Bool
-} derive(Show)
+} derive(@debug.Debug)
 pub fn BossPhaseState::new() -> Self
+pub fn BossPhaseState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Cell {
   x : Int
   y : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn Cell::equal(Self, Self) -> Bool
+pub fn Cell::not_equal(Self, Self) -> Bool
+pub fn Cell::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ComboMilestone {
   Fever
@@ -571,6 +600,11 @@ pub(all) enum ComboMilestone {
   PerfectStorm
   NoMilestone
 } derive(Eq, @debug.Debug)
+pub fn ComboMilestone::equal(Self, Self) -> Bool
+pub fn ComboMilestone::not_equal(Self, Self) -> Bool
+pub fn ComboMilestone::output(Self, &Logger) -> Unit
+pub fn ComboMilestone::to_repr(Self) -> @debug.Repr
+pub fn ComboMilestone::to_string(Self) -> String
 pub impl Show for ComboMilestone
 
 pub(all) struct ComboState {
@@ -581,8 +615,9 @@ pub(all) struct ComboState {
   mut storm_triggered : Bool
   mut last_milestone : ComboMilestone
   mut milestone_flash_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
 pub fn ComboState::new() -> Self
+pub fn ComboState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum CurseKind {
   DoubleTime
@@ -590,12 +625,18 @@ pub(all) enum CurseKind {
   BlindBeat
   Swarm
 } derive(Eq, @debug.Debug)
+pub fn CurseKind::equal(Self, Self) -> Bool
+pub fn CurseKind::not_equal(Self, Self) -> Bool
+pub fn CurseKind::output(Self, &Logger) -> Unit
+pub fn CurseKind::to_repr(Self) -> @debug.Repr
+pub fn CurseKind::to_string(Self) -> String
 pub impl Show for CurseKind
 
 pub(all) struct CurseState {
   active_curses : Array[CurseKind]
-} derive(Show)
+} derive(@debug.Debug)
 pub fn CurseState::new() -> Self
+pub fn CurseState::to_repr(Self) -> @debug.Repr
 
 pub(all) struct DamageNumber {
   mut x : Float
@@ -604,7 +645,9 @@ pub(all) struct DamageNumber {
   mut life : Float
   value : Int
   color : @raylib.Color
-} derive(Show)
+}
+pub fn DamageNumber::to_repr(Self) -> @debug.Repr
+pub impl @debug.Debug for DamageNumber
 
 pub(all) enum Direction {
   North
@@ -612,6 +655,11 @@ pub(all) enum Direction {
   East
   West
 } derive(Eq, @debug.Debug)
+pub fn Direction::equal(Self, Self) -> Bool
+pub fn Direction::not_equal(Self, Self) -> Bool
+pub fn Direction::output(Self, &Logger) -> Unit
+pub fn Direction::to_repr(Self) -> @debug.Repr
+pub fn Direction::to_string(Self) -> String
 pub impl Show for Direction
 
 pub(all) enum Element {
@@ -620,6 +668,11 @@ pub(all) enum Element {
   Lightning
   Dark
 } derive(Eq, @debug.Debug)
+pub fn Element::equal(Self, Self) -> Bool
+pub fn Element::not_equal(Self, Self) -> Bool
+pub fn Element::output(Self, &Logger) -> Unit
+pub fn Element::to_repr(Self) -> @debug.Repr
+pub fn Element::to_string(Self) -> String
 pub impl Show for Element
 
 pub(all) struct Enemy {
@@ -637,8 +690,9 @@ pub(all) struct Enemy {
   mut is_elite : Bool
   mut frozen_beats : Int
   mut stunned_beats : Int
-} derive(Show)
+} derive(@debug.Debug)
 pub fn Enemy::new(Int, EnemyKind, Int, Int, hp~ : Int, damage~ : Int, beat_pattern~ : Array[Bool]) -> Self
+pub fn Enemy::to_repr(Self) -> @debug.Repr
 
 pub(all) enum EnemyIntent {
   Move(Direction)
@@ -649,6 +703,9 @@ pub(all) enum EnemyIntent {
   AoeFreeze(Int)
   Wait
 } derive(@debug.Debug)
+pub fn EnemyIntent::output(Self, &Logger) -> Unit
+pub fn EnemyIntent::to_repr(Self) -> @debug.Repr
+pub fn EnemyIntent::to_string(Self) -> String
 pub impl Show for EnemyIntent
 
 pub(all) enum EnemyKind {
@@ -663,6 +720,11 @@ pub(all) enum EnemyKind {
   BeatDragon
   RhythmLich
 } derive(Eq, @debug.Debug)
+pub fn EnemyKind::equal(Self, Self) -> Bool
+pub fn EnemyKind::not_equal(Self, Self) -> Bool
+pub fn EnemyKind::output(Self, &Logger) -> Unit
+pub fn EnemyKind::to_repr(Self) -> @debug.Repr
+pub fn EnemyKind::to_string(Self) -> String
 pub impl Show for EnemyKind
 
 pub(all) struct Floor {
@@ -671,8 +733,9 @@ pub(all) struct Floor {
   floor_num : Int
   exit_x : Int
   exit_y : Int
-} derive(Show)
+} derive(@debug.Debug)
 pub fn Floor::new(Int) -> Self
+pub fn Floor::to_repr(Self) -> @debug.Repr
 
 pub(all) struct FloorStats {
   mut floor_num : Int
@@ -682,8 +745,9 @@ pub(all) struct FloorStats {
   mut spells_cast : Int
   mut damage_taken : Int
   mut damage_dealt : Int
-} derive(Show)
+} derive(@debug.Debug)
 pub fn FloorStats::new(Int) -> Self
+pub fn FloorStats::to_repr(Self) -> @debug.Repr
 
 pub(all) enum FloorTheme {
   Meadow
@@ -693,6 +757,11 @@ pub(all) enum FloorTheme {
   Volcano
   FinalArena
 } derive(Eq, @debug.Debug)
+pub fn FloorTheme::equal(Self, Self) -> Bool
+pub fn FloorTheme::not_equal(Self, Self) -> Bool
+pub fn FloorTheme::output(Self, &Logger) -> Unit
+pub fn FloorTheme::to_repr(Self) -> @debug.Repr
+pub fn FloorTheme::to_string(Self) -> String
 pub impl Show for FloorTheme
 
 pub(all) struct FloorThemeData {
@@ -702,7 +771,9 @@ pub(all) struct FloorThemeData {
   wall_color : @raylib.Color
   accent_color : @raylib.Color
   name : String
-} derive(Show)
+}
+pub fn FloorThemeData::to_repr(Self) -> @debug.Repr
+pub impl @debug.Debug for FloorThemeData
 
 pub(all) struct Game {
   mut screen : Screen
@@ -756,15 +827,16 @@ pub(all) struct Game {
   mut weapon_switch_flash : Float
   mut floor_wipe_progress : Float
   mut boss_intro_pulse : Float
-} derive(Show)
+}
 pub fn Game::new() -> Self
 
 pub(all) struct Grid {
   width : Int
   height : Int
   tiles : Array[Tile]
-} derive(Show)
+} derive(@debug.Debug)
 pub fn Grid::new(Int, Int) -> Self
+pub fn Grid::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ItemKind {
   Gold(Int)
@@ -776,6 +848,9 @@ pub(all) enum ItemKind {
   SpecialCharge
   Bomb
 } derive(@debug.Debug)
+pub fn ItemKind::output(Self, &Logger) -> Unit
+pub fn ItemKind::to_repr(Self) -> @debug.Repr
+pub fn ItemKind::to_string(Self) -> String
 pub impl Show for ItemKind
 
 pub(all) struct MetaProgress {
@@ -789,8 +864,9 @@ pub(all) struct MetaProgress {
   unlocked_weapons : Array[WeaponKind]
   floor_mastery : Array[Int]
   run_history : Array[RunRecord]
-} derive(Show)
+} derive(@debug.Debug)
 pub fn MetaProgress::new() -> Self
+pub fn MetaProgress::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Particle {
   mut x : Float
@@ -803,7 +879,8 @@ pub(all) struct Particle {
   g : Int
   b : Int
   mut size : Float
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Particle::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Player {
   mut x : Int
@@ -831,8 +908,9 @@ pub(all) struct Player {
   spell_slots : SpellSlots
   learned_spells : Array[SpellKind]
   mut floor_attacks : Int
-} derive(Show)
+} derive(@debug.Debug)
 pub fn Player::new() -> Self
+pub fn Player::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayerAction {
   Move(Direction)
@@ -840,6 +918,9 @@ pub(all) enum PlayerAction {
   Special
   Wait
 } derive(@debug.Debug)
+pub fn PlayerAction::output(Self, &Logger) -> Unit
+pub fn PlayerAction::to_repr(Self) -> @debug.Repr
+pub fn PlayerAction::to_string(Self) -> String
 pub impl Show for PlayerAction
 
 pub(all) struct RunRecord {
@@ -848,7 +929,8 @@ pub(all) struct RunRecord {
   floors : Int
   weapon : WeaponKind
   grade : ScoreGrade
-} derive(Show)
+} derive(@debug.Debug)
+pub fn RunRecord::to_repr(Self) -> @debug.Repr
 
 pub(all) struct RunStats {
   floor_history : Array[FloorStats]
@@ -858,8 +940,9 @@ pub(all) struct RunStats {
   mut total_spells_cast : Int
   mut total_damage_dealt : Int
   mut total_damage_taken : Int
-} derive(Show)
+} derive(@debug.Debug)
 pub fn RunStats::new() -> Self
+pub fn RunStats::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ScoreGrade {
   GradeS
@@ -867,6 +950,9 @@ pub(all) enum ScoreGrade {
   GradeB
   GradeC
 } derive(@debug.Debug)
+pub fn ScoreGrade::output(Self, &Logger) -> Unit
+pub fn ScoreGrade::to_repr(Self) -> @debug.Repr
+pub fn ScoreGrade::to_string(Self) -> String
 pub impl Show for ScoreGrade
 
 pub(all) struct ScoreState {
@@ -875,8 +961,9 @@ pub(all) struct ScoreState {
   mut combo_bonus : Int
   mut floor_bonus : Int
   mut total : Int
-} derive(Show)
+} derive(@debug.Debug)
 pub fn ScoreState::new() -> Self
+pub fn ScoreState::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Screen {
   Title
@@ -892,6 +979,11 @@ pub(all) enum Screen {
   RunSummary
   CurseOffer
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) struct ShopEntry {
@@ -899,7 +991,8 @@ pub(all) struct ShopEntry {
   price : Int
   name : String
   desc : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn ShopEntry::to_repr(Self) -> @debug.Repr
 
 pub(all) enum ShopItemKind {
   ShopHealthPotion
@@ -911,6 +1004,9 @@ pub(all) enum ShopItemKind {
   ShopSpell(SpellKind)
   ShopManaPotion
 } derive(@debug.Debug)
+pub fn ShopItemKind::output(Self, &Logger) -> Unit
+pub fn ShopItemKind::to_repr(Self) -> @debug.Repr
+pub fn ShopItemKind::to_string(Self) -> String
 pub impl Show for ShopItemKind
 
 pub(all) enum SoundEvent {
@@ -931,6 +1027,9 @@ pub(all) enum SoundEvent {
   BossRoar
   CurseAccepted
 } derive(@debug.Debug)
+pub fn SoundEvent::output(Self, &Logger) -> Unit
+pub fn SoundEvent::to_repr(Self) -> @debug.Repr
+pub fn SoundEvent::to_string(Self) -> String
 pub impl Show for SoundEvent
 
 pub(all) struct SpellData {
@@ -943,7 +1042,8 @@ pub(all) struct SpellData {
   damage : Int
   range : Int
   aoe_radius : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn SpellData::to_repr(Self) -> @debug.Repr
 
 pub(all) enum SpellKind {
   Fireball
@@ -955,21 +1055,28 @@ pub(all) enum SpellKind {
   ThunderStrike
   VoidPulse
 } derive(Eq, @debug.Debug)
+pub fn SpellKind::equal(Self, Self) -> Bool
+pub fn SpellKind::not_equal(Self, Self) -> Bool
+pub fn SpellKind::output(Self, &Logger) -> Unit
+pub fn SpellKind::to_repr(Self) -> @debug.Repr
+pub fn SpellKind::to_string(Self) -> String
 pub impl Show for SpellKind
 
 pub(all) struct SpellSlots {
   spells : Array[SpellKind?]
   mut cooldowns : Array[Int]
-} derive(Show)
+} derive(@debug.Debug)
 pub fn SpellSlots::new() -> Self
+pub fn SpellSlots::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Tile {
   mut kind : TileKind
   mut has_item : Bool
   mut item_kind : Int
   mut item : ItemKind?
-} derive(Show)
+} derive(@debug.Debug)
 pub fn Tile::floor() -> Self
+pub fn Tile::to_repr(Self) -> @debug.Repr
 pub fn Tile::wall() -> Self
 
 pub(all) enum TileKind {
@@ -981,6 +1088,11 @@ pub(all) enum TileKind {
   Exit
   Lava
 } derive(Eq, @debug.Debug)
+pub fn TileKind::equal(Self, Self) -> Bool
+pub fn TileKind::not_equal(Self, Self) -> Bool
+pub fn TileKind::output(Self, &Logger) -> Unit
+pub fn TileKind::to_repr(Self) -> @debug.Repr
+pub fn TileKind::to_string(Self) -> String
 pub impl Show for TileKind
 
 pub(all) struct Weapon {
@@ -989,7 +1101,8 @@ pub(all) struct Weapon {
   range : Int
   beat_cost : Int
   name : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Weapon::to_repr(Self) -> @debug.Repr
 
 pub(all) struct WeaponEffect {
   kind : WeaponKind
@@ -998,8 +1111,9 @@ pub(all) struct WeaponEffect {
   direction : Direction
   mut timer : Float
   max_timer : Float
-} derive(Show)
+} derive(@debug.Debug)
 pub fn WeaponEffect::new(WeaponKind, Float, Float, Direction) -> Self
+pub fn WeaponEffect::to_repr(Self) -> @debug.Repr
 
 pub(all) enum WeaponKind {
   Sword
@@ -1009,9 +1123,13 @@ pub(all) enum WeaponKind {
   Bow
   Staff
 } derive(Eq, @debug.Debug)
+pub fn WeaponKind::equal(Self, Self) -> Bool
+pub fn WeaponKind::not_equal(Self, Self) -> Bool
+pub fn WeaponKind::output(Self, &Logger) -> Unit
+pub fn WeaponKind::to_repr(Self) -> @debug.Repr
+pub fn WeaponKind::to_string(Self) -> String
 pub impl Show for WeaponKind
 
 // Type aliases
 
 // Traits
-

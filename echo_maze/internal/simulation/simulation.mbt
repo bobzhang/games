@@ -378,9 +378,18 @@ pub(all) enum TickResult {
 } derive(Debug, Eq)
 
 ///|
-pub impl Show for TickResult with output(self, logger) {
-  Debug::to_repr(self).output(logger)
+pub extend TickResult with Debug::{to_repr}
+
+///|
+pub extend TickResult with Eq::{not_equal, equal}
+
+///|
+pub impl Show for TickResult with fn output(self, logger) {
+  Show::output(Debug::to_repr(self), logger)
 }
+
+///|
+pub extend TickResult with Show::{to_string, output}
 
 ///|
 /// Count total collectibles obtained

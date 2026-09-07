@@ -159,7 +159,7 @@ fn main {
   let art = load_game_art()
 
   let planes : Array[Plane] = Array::makei(100, fn(_i) {
-    { alive: false, runway: 0, x: 0.0, y: 0.0, vy: 80.0, fuel: 20.0 }
+    { alive: false, runway: 0, x: 0.0, y: 0.0, vy: 80.0, fuel: 20.0, }
   })
 
   let mut runway_open : Array[Bool] = [true, true, true]

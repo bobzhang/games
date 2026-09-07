@@ -1,30 +1,30 @@
 ///|
 /// Generated floor tile texture.
-let tex_floor_tile : Ref[@raylib.Texture?] = { val: None }
+let tex_floor_tile : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated permanent wall block texture.
-let tex_wall_block : Ref[@raylib.Texture?] = { val: None }
+let tex_wall_block : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated breakable crate block texture.
-let tex_crate_block : Ref[@raylib.Texture?] = { val: None }
+let tex_crate_block : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated player sprite texture.
-let tex_player_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_player_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated enemy sprite texture.
-let tex_enemy_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_enemy_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated bomb sprite texture.
-let tex_bomb_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_bomb_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Generated explosion fire sprite texture.
-let tex_fire_sprite : Ref[@raylib.Texture?] = { val: None }
+let tex_fire_sprite : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Loads one bilinear-filtered bomber grid texture.

@@ -124,12 +124,20 @@ pub(all) enum CellState {
   WarpOver
   WeftOver
 } derive(Eq, @debug.Debug)
+pub fn CellState::equal(Self, Self) -> Bool
+pub fn CellState::not_equal(Self, Self) -> Bool
+pub fn CellState::output(Self, &Logger) -> Unit
+pub fn CellState::to_repr(Self) -> @debug.Repr
+pub fn CellState::to_string(Self) -> String
 pub impl Show for CellState
 
 pub(all) struct FabricCell {
   state : CellState
   color_index : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn FabricCell::equal(Self, Self) -> Bool
+pub fn FabricCell::not_equal(Self, Self) -> Bool
+pub fn FabricCell::to_repr(Self) -> @debug.Repr
 
 pub(all) struct FabricPattern {
   rows : Int
@@ -137,7 +145,8 @@ pub(all) struct FabricPattern {
   cells : Array[FabricCell]
   warp_colors : Array[Int]
   weft_colors : Array[Int]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn FabricPattern::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Game {
   mut screen : Screen
@@ -164,7 +173,8 @@ pub(all) struct Game {
 
 pub(all) struct HeddleRow {
   mut raised : Array[Bool]
-} derive(Show)
+} derive(@debug.Debug)
+pub fn HeddleRow::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Level {
   target : FabricPattern
@@ -175,18 +185,25 @@ pub(all) struct Level {
   tier : Tier
   level_num : Int
   hint : String
-} derive(Show)
+} derive(@debug.Debug)
+pub fn Level::to_repr(Self) -> @debug.Repr
 
 pub(all) struct LevelScore {
   mut stars : Int
   mut completed : Bool
   mut best_changes : Int
-} derive(Show)
+} derive(@debug.Debug)
+pub fn LevelScore::to_repr(Self) -> @debug.Repr
 
 pub(all) enum PlayState {
   Weaving
   Complete
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -196,6 +213,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -203,6 +225,11 @@ pub(all) enum Tier {
   Journeyman
   Master
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 pub(all) enum WeaveType {
@@ -213,9 +240,13 @@ pub(all) enum WeaveType {
   Diamond
   Custom
 } derive(Eq, @debug.Debug)
+pub fn WeaveType::equal(Self, Self) -> Bool
+pub fn WeaveType::not_equal(Self, Self) -> Bool
+pub fn WeaveType::output(Self, &Logger) -> Unit
+pub fn WeaveType::to_repr(Self) -> @debug.Repr
+pub fn WeaveType::to_string(Self) -> String
 pub impl Show for WeaveType
 
 // Type aliases
 
 // Traits
-

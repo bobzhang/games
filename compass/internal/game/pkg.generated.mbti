@@ -15,4 +15,3 @@ pub fn update(@types.GameState) -> Unit
 // Type aliases
 
 // Traits
-

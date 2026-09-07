@@ -181,9 +181,9 @@ pub fn grid_index(col : Int, row : Int, width : Int) -> Int {
 pub fn new_grid(width : Int, height : Int, wrap_h : Bool) -> HexGrid {
   let tiles : Array[HexTile] = []
   for _i in 0..<(width * height) {
-    tiles.push({ biome: Barren, locked: false })
+    tiles.push({ biome: Barren, locked: false, })
   }
-  { width, height, tiles, wraps_horizontal: wrap_h }
+  { width, height, tiles, wraps_horizontal: wrap_h, }
 }
 
 ///|
@@ -338,7 +338,7 @@ pub fn level_name(index : Int) -> String {
 pub fn clone_grid(grid : HexGrid) -> HexGrid {
   let tiles : Array[HexTile] = []
   for i in 0..<grid.tiles.length() {
-    tiles.push({ biome: grid.tiles[i].biome, locked: grid.tiles[i].locked })
+    tiles.push({ biome: grid.tiles[i].biome, locked: grid.tiles[i].locked, })
   }
   {
     width: grid.width,
@@ -374,7 +374,7 @@ pub fn new_resolve_snapshot(
 
 ///|
 pub fn new_budget(forest : Int, ocean : Int, desert : Int) -> PaintBudget {
-  { forest, ocean, desert }
+  { forest, ocean, desert, }
 }
 
 ///|
@@ -398,7 +398,7 @@ pub fn new_targets(
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, best_turns: 999 }
+  { stars: 0, completed: false, best_turns: 999, }
 }
 
 ///|

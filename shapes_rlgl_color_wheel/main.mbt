@@ -45,7 +45,7 @@ fn main {
   let mut point_scale : Float = 150.0
 
   // Slider value, literally maps to value in HSV
-  let value : Ref[Float] = { val: 1.0 }
+  let value : Ref[Float] = { val: 1.0, }
 
   // The center of the screen
   let center_x : Float = Float::from_int(screen_width) / 2.0

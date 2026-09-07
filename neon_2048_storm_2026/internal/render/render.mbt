@@ -385,7 +385,9 @@ fn draw_touch_button(
     @raylib.Color::new(184, 216, 242, 218),
   )
 
-  let label_x = x + w / 2 - @draw.measure_text(label, 30) / 2 +
+  let label_x = x +
+    w / 2 -
+    @draw.measure_text(label, 30) / 2 +
     (if icon_index >= 0 { 18 } else { 0 })
   @draw.draw_text(
     label,
@@ -891,7 +893,11 @@ fn @types.Game::draw_result_overlay(game : @types.Game, art : GameArt) -> Unit {
   )
   draw_icon_cell(
     art,
-    if game.win { 3 } else { 2 },
+    if game.win {
+      3
+    } else {
+      2
+    },
     Float::from_int(px + pw - 132),
     Float::from_int(py + 122),
     142.0,

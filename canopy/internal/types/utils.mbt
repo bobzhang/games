@@ -1,21 +1,21 @@
 ///|
 pub fn vec2i(x : Int, y : Int) -> Vec2i {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn new_branch(row : Int, col_offset : Int) -> Branch {
-  { row, col_offset, pruned: false }
+  { row, col_offset, pruned: false, }
 }
 
 ///|
 pub fn new_tree(col : Int) -> Tree {
-  { col, height: 0, branches: [], growth_timer: 0, shadowed: false }
+  { col, height: 0, branches: [], growth_timer: 0, shadowed: false, }
 }
 
 ///|
 pub fn new_ground_tile(water : Int) -> GroundTile {
-  { water, has_seed: false }
+  { water, has_seed: false, }
 }
 
 ///|
@@ -28,12 +28,12 @@ pub fn new_grid() -> Grid {
     }
     cells.push(row)
   }
-  { width: grid_cols, height: grid_rows, cells }
+  { width: grid_cols, height: grid_rows, cells, }
 }
 
 ///|
 pub fn new_level_score() -> LevelScore {
-  { stars: 0, completed: false, turns_used: 0, prunes_used: 0 }
+  { stars: 0, completed: false, turns_used: 0, prunes_used: 0, }
 }
 
 ///|
@@ -41,7 +41,7 @@ pub fn clone_tree(t : Tree) -> Tree {
   let branches : Array[Branch] = []
   for i in 0..<t.branches.length() {
     let b = t.branches[i]
-    branches.push({ row: b.row, col_offset: b.col_offset, pruned: b.pruned })
+    branches.push({ row: b.row, col_offset: b.col_offset, pruned: b.pruned, })
   }
   {
     col: t.col,
@@ -66,7 +66,7 @@ pub fn clone_ground(ground : Array[GroundTile]) -> Array[GroundTile] {
   let result : Array[GroundTile] = []
   for i in 0..<ground.length() {
     let g = ground[i]
-    result.push({ water: g.water, has_seed: g.has_seed })
+    result.push({ water: g.water, has_seed: g.has_seed, })
   }
   result
 }

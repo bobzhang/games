@@ -14,12 +14,18 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+pub extend GameState with Eq::{not_equal, equal}
+
+///|
 /// Mario's current power-up state.
 pub(all) enum PowerState {
   Small
   Big
   Fire
 } derive(Eq)
+
+///|
+pub extend PowerState with Eq::{not_equal, equal}
 
 ///|
 /// Tile types that make up the level map.
@@ -52,6 +58,9 @@ pub(all) enum TileKind {
 } derive(Eq)
 
 ///|
+pub extend TileKind with Eq::{not_equal, equal}
+
+///|
 /// Enemy varieties.
 pub(all) enum EnemyKind {
   Goomba
@@ -64,6 +73,9 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+pub extend EnemyKind with Eq::{not_equal, equal}
+
+///|
 /// Collectible item varieties.
 pub(all) enum ItemKind {
   Mushroom
@@ -72,6 +84,9 @@ pub(all) enum ItemKind {
   OneUp
   CoinPopup
 } derive(Eq)
+
+///|
+pub extend ItemKind with Eq::{not_equal, equal}
 
 ///|
 /// Player character state.
@@ -332,13 +347,13 @@ pub(all) struct BowserFireball {
 ///|
 /// Creates a new Bowser fireball.
 pub fn BowserFireball::new() -> BowserFireball {
-  { active: false, x: 0.0, y: 0.0, vx: 0.0 }
+  { active: false, x: 0.0, y: 0.0, vx: 0.0, }
 }
 
 ///|
 /// Clone a Bowser fireball.
 pub fn BowserFireball::clone(self : BowserFireball) -> BowserFireball {
-  { active: self.active, x: self.x, y: self.y, vx: self.vx }
+  { active: self.active, x: self.x, y: self.y, vx: self.vx, }
 }
 
 ///|
@@ -354,13 +369,13 @@ pub(all) struct Fireball {
 ///|
 /// Creates a new fireball.
 pub fn Fireball::new() -> Fireball {
-  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0 }
+  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, }
 }
 
 ///|
 /// Clone a player fireball.
 pub fn Fireball::clone(self : Fireball) -> Fireball {
-  { active: self.active, x: self.x, y: self.y, vx: self.vx, vy: self.vy }
+  { active: self.active, x: self.x, y: self.y, vx: self.vx, vy: self.vy, }
 }
 
 ///|
@@ -409,7 +424,7 @@ pub(all) struct ScorePopup {
 ///|
 /// Creates a new score popup.
 pub fn ScorePopup::new() -> ScorePopup {
-  { active: false, x: 0.0, y: 0.0, vy: 0.0, life: 0.0, text: "" }
+  { active: false, x: 0.0, y: 0.0, vy: 0.0, life: 0.0, text: "", }
 }
 
 ///|
@@ -425,7 +440,7 @@ pub(all) struct BumpedBlock {
 ///|
 /// Creates a new bumped block tracker.
 pub fn BumpedBlock::new() -> BumpedBlock {
-  { active: false, tile_x: 0, tile_y: 0, offset_y: 0.0, velocity: 0.0 }
+  { active: false, tile_x: 0, tile_y: 0, offset_y: 0.0, velocity: 0.0, }
 }
 
 ///|
@@ -436,6 +451,9 @@ pub(all) enum BridgePhase {
   Falling
   Gone
 } derive(Eq)
+
+///|
+pub extend BridgePhase with Eq::{not_equal, equal}
 
 ///|
 /// Tracks a bridge tile that can collapse.

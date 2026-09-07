@@ -126,7 +126,7 @@ fn main {
       @raylib.Rectangle::new(40.0, 200.0, 120.0, 32.0),
       "CRC32 [32 bit]:",
     )
-    let crc32_ref : Ref[String] = { val: hash_crc32 }
+    let crc32_ref : Ref[String] = { val: hash_crc32, }
     @raygui.gui_text_box(
       @raylib.Rectangle::new(160.0, 200.0, 600.0, 32.0),
       crc32_ref,
@@ -139,7 +139,7 @@ fn main {
       @raylib.Rectangle::new(40.0, 236.0, 120.0, 32.0),
       "MD5 [128 bit]:",
     )
-    let md5_ref : Ref[String] = { val: hash_md5 }
+    let md5_ref : Ref[String] = { val: hash_md5, }
     @raygui.gui_text_box(
       @raylib.Rectangle::new(160.0, 236.0, 600.0, 32.0),
       md5_ref,
@@ -152,7 +152,7 @@ fn main {
       @raylib.Rectangle::new(40.0, 272.0, 120.0, 32.0),
       "SHA1 [160 bit]:",
     )
-    let sha1_ref : Ref[String] = { val: hash_sha1 }
+    let sha1_ref : Ref[String] = { val: hash_sha1, }
     @raygui.gui_text_box(
       @raylib.Rectangle::new(160.0, 272.0, 600.0, 32.0),
       sha1_ref,
@@ -165,7 +165,7 @@ fn main {
       @raylib.Rectangle::new(40.0, 308.0, 120.0, 32.0),
       "SHA256 [256 bit]:",
     )
-    let sha256_ref : Ref[String] = { val: "N/A (not available in raylib 5.5)" }
+    let sha256_ref : Ref[String] = { val: "N/A (not available in raylib 5.5)", }
     @raygui.gui_text_box(
       @raylib.Rectangle::new(160.0, 308.0, 600.0, 32.0),
       sha256_ref,
@@ -181,7 +181,7 @@ fn main {
       @raylib.Rectangle::new(40.0, 380.0, 120.0, 32.0),
       "BASE64 ENCODING:",
     )
-    let base64_ref : Ref[String] = { val: base64_text }
+    let base64_ref : Ref[String] = { val: base64_text, }
     @raygui.gui_text_box(
       @raylib.Rectangle::new(160.0, 380.0, 600.0, 32.0),
       base64_ref,

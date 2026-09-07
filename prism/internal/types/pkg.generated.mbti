@@ -195,7 +195,10 @@ pub(all) struct BeamColor {
   r : Bool
   g : Bool
   b : Bool
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn BeamColor::equal(Self, Self) -> Bool
+pub fn BeamColor::not_equal(Self, Self) -> Bool
+pub fn BeamColor::to_repr(Self) -> @debug.Repr
 
 pub(all) struct BeamSegment {
   start : HexCoord
@@ -211,12 +214,22 @@ pub(all) enum ComponentKind {
   Mirror
   Target
 } derive(Eq, @debug.Debug)
+pub fn ComponentKind::equal(Self, Self) -> Bool
+pub fn ComponentKind::not_equal(Self, Self) -> Bool
+pub fn ComponentKind::output(Self, &Logger) -> Unit
+pub fn ComponentKind::to_repr(Self) -> @debug.Repr
+pub fn ComponentKind::to_string(Self) -> String
 pub impl Show for ComponentKind
 
 pub(all) enum CrystalFace {
   Left60
   Right60
 } derive(Eq, @debug.Debug)
+pub fn CrystalFace::equal(Self, Self) -> Bool
+pub fn CrystalFace::not_equal(Self, Self) -> Bool
+pub fn CrystalFace::output(Self, &Logger) -> Unit
+pub fn CrystalFace::to_repr(Self) -> @debug.Repr
+pub fn CrystalFace::to_string(Self) -> String
 pub impl Show for CrystalFace
 
 pub(all) enum FilterColor {
@@ -224,6 +237,11 @@ pub(all) enum FilterColor {
   Green
   Blue
 } derive(Eq, @debug.Debug)
+pub fn FilterColor::equal(Self, Self) -> Bool
+pub fn FilterColor::not_equal(Self, Self) -> Bool
+pub fn FilterColor::output(Self, &Logger) -> Unit
+pub fn FilterColor::to_repr(Self) -> @debug.Repr
+pub fn FilterColor::to_string(Self) -> String
 pub impl Show for FilterColor
 
 pub(all) struct Game {
@@ -260,7 +278,10 @@ pub(all) struct HexCell {
 pub(all) struct HexCoord {
   q : Int
   r : Int
-} derive(Eq, Show)
+} derive(Eq, @debug.Debug)
+pub fn HexCoord::equal(Self, Self) -> Bool
+pub fn HexCoord::not_equal(Self, Self) -> Bool
+pub fn HexCoord::to_repr(Self) -> @debug.Repr
 
 pub(all) enum HexDir {
   E
@@ -270,6 +291,11 @@ pub(all) enum HexDir {
   SW
   SE
 } derive(Eq, @debug.Debug)
+pub fn HexDir::equal(Self, Self) -> Bool
+pub fn HexDir::not_equal(Self, Self) -> Bool
+pub fn HexDir::output(Self, &Logger) -> Unit
+pub fn HexDir::to_repr(Self) -> @debug.Repr
+pub fn HexDir::to_string(Self) -> String
 pub impl Show for HexDir
 
 pub(all) struct HexGrid {
@@ -296,6 +322,11 @@ pub(all) enum PlayState {
   Simulating
   Solved
 } derive(Eq, @debug.Debug)
+pub fn PlayState::equal(Self, Self) -> Bool
+pub fn PlayState::not_equal(Self, Self) -> Bool
+pub fn PlayState::output(Self, &Logger) -> Unit
+pub fn PlayState::to_repr(Self) -> @debug.Repr
+pub fn PlayState::to_string(Self) -> String
 pub impl Show for PlayState
 
 pub(all) enum Screen {
@@ -305,6 +336,11 @@ pub(all) enum Screen {
   Playing
   Results
 } derive(Eq, @debug.Debug)
+pub fn Screen::equal(Self, Self) -> Bool
+pub fn Screen::not_equal(Self, Self) -> Bool
+pub fn Screen::output(Self, &Logger) -> Unit
+pub fn Screen::to_repr(Self) -> @debug.Repr
+pub fn Screen::to_string(Self) -> String
 pub impl Show for Screen
 
 pub(all) enum Tier {
@@ -312,9 +348,13 @@ pub(all) enum Tier {
   Chromatics
   Mastery
 } derive(Eq, @debug.Debug)
+pub fn Tier::equal(Self, Self) -> Bool
+pub fn Tier::not_equal(Self, Self) -> Bool
+pub fn Tier::output(Self, &Logger) -> Unit
+pub fn Tier::to_repr(Self) -> @debug.Repr
+pub fn Tier::to_string(Self) -> String
 pub impl Show for Tier
 
 // Type aliases
 
 // Traits
-

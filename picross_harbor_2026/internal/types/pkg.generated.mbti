@@ -80,6 +80,8 @@ pub(all) enum Cell {
   Fill
   Cross
 } derive(Eq)
+pub fn Cell::equal(Self, Self) -> Bool
+pub fn Cell::not_equal(Self, Self) -> Bool
 
 pub(all) enum Dir {
   None
@@ -88,6 +90,8 @@ pub(all) enum Dir {
   Up
   Down
 } derive(Eq)
+pub fn Dir::equal(Self, Self) -> Bool
+pub fn Dir::not_equal(Self, Self) -> Bool
 
 pub(all) struct Game {
   solution : Array[Bool]
@@ -145,6 +149,8 @@ pub(all) enum GameState {
   CampaignClear
   LevelFail
 } derive(Eq)
+pub fn GameState::equal(Self, Self) -> Bool
+pub fn GameState::not_equal(Self, Self) -> Bool
 
 pub(all) struct Spark {
   mut active : Bool
@@ -163,11 +169,15 @@ pub(all) enum SparkKind {
   Error
   Mark
 } derive(Eq)
+pub fn SparkKind::equal(Self, Self) -> Bool
+pub fn SparkKind::not_equal(Self, Self) -> Bool
 
 pub(all) enum ToolKind {
   ToolFill
   ToolCross
 } derive(Eq)
+pub fn ToolKind::equal(Self, Self) -> Bool
+pub fn ToolKind::not_equal(Self, Self) -> Bool
 
 pub(all) struct UndoStep {
   valid : Bool
@@ -184,4 +194,3 @@ pub(all) struct UndoStep {
 // Type aliases
 
 // Traits
-

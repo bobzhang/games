@@ -32,7 +32,7 @@ fn build_level(
     let h = holes[i]
     grid.tiles[@types.grid_index(h.x, h.y, 8)] = None
   }
-  { grid, symmetry: sym, par_errors: par, tier, name }
+  { grid, symmetry: sym, par_errors: par, tier, name, }
 }
 
 ///|
