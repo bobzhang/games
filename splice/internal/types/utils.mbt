@@ -190,7 +190,7 @@ pub fn tier_level_offset(tier : Int) -> Int {
 
 ///|
 pub fn copy_sequence(seq : Array[Base]) -> Array[Base] {
-  let result : Array[Base] = Array(capacity=seq.length())
+  let result : Array[Base] = Array::new(capacity=seq.length())
   for i in 0..<seq.length() {
     result.push(seq[i])
   }
@@ -204,7 +204,7 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array(capacity=total_levels)
+  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

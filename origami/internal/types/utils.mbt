@@ -5,7 +5,7 @@ pub fn new_cell(has_paper : Bool, layers : Int) -> PaperCell {
 
 ///|
 pub fn new_paper(width : Int, height : Int) -> Paper {
-  let cells : Array[PaperCell] = Array(capacity=width * height)
+  let cells : Array[PaperCell] = Array::new(capacity=width * height)
   let total = width * height
   for _i in 0..<total {
     cells.push({ has_paper: false, layers: 0, })
@@ -15,7 +15,7 @@ pub fn new_paper(width : Int, height : Int) -> Paper {
 
 ///|
 pub fn full_paper(width : Int, height : Int) -> Paper {
-  let cells : Array[PaperCell] = Array(capacity=width * height)
+  let cells : Array[PaperCell] = Array::new(capacity=width * height)
   let total = width * height
   for _i in 0..<total {
     cells.push({ has_paper: true, layers: 1, })
@@ -49,7 +49,7 @@ pub fn set_cell(
 
 ///|
 pub fn clone_paper(paper : Paper) -> Paper {
-  let cells : Array[PaperCell] = Array(capacity=paper.width * paper.height)
+  let cells : Array[PaperCell] = Array::new(capacity=paper.width * paper.height)
   for i in 0..<paper.cells.length() {
     cells.push({
       has_paper: paper.cells[i].has_paper,
@@ -214,7 +214,7 @@ pub fn clamp_int(v : Int, lo : Int, hi : Int) -> Int {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array(capacity=total_levels)
+  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

@@ -10,7 +10,7 @@ pub fn shift(s : @types.Shape, dir : @types.Direction) -> @types.Shape {
     N => -1
     _ => 0
   }
-  let cells : Array[@types.Vec2i] = Array(capacity=s.cells.length())
+  let cells : Array[@types.Vec2i] = Array::new(capacity=s.cells.length())
   for i in 0..<s.cells.length() {
     let nx = s.cells[i].x + dx
     let ny = s.cells[i].y + dy
@@ -35,7 +35,7 @@ pub fn rotate_cw(s : @types.Shape) -> @types.Shape {
   let max_y = @types.shape_max_y(s)
   let cx2 = min_x + max_x
   let cy2 = min_y + max_y
-  let cells : Array[@types.Vec2i] = Array(capacity=s.cells.length())
+  let cells : Array[@types.Vec2i] = Array::new(capacity=s.cells.length())
   for i in 0..<s.cells.length() {
     let rx2 = s.cells[i].x * 2 - cx2
     let ry2 = s.cells[i].y * 2 - cy2
@@ -106,7 +106,7 @@ pub fn flip_h(s : @types.Shape) -> @types.Shape {
   let min_x = @types.shape_min_x(s)
   let max_x = @types.shape_max_x(s)
   let axis = min_x + max_x
-  let cells : Array[@types.Vec2i] = Array(capacity=s.cells.length())
+  let cells : Array[@types.Vec2i] = Array::new(capacity=s.cells.length())
   for i in 0..<s.cells.length() {
     let nx = axis - s.cells[i].x
     cells.push(@types.vec2i(nx, s.cells[i].y))
@@ -122,7 +122,7 @@ pub fn flip_v(s : @types.Shape) -> @types.Shape {
   let min_y = @types.shape_min_y(s)
   let max_y = @types.shape_max_y(s)
   let axis = min_y + max_y
-  let cells : Array[@types.Vec2i] = Array(capacity=s.cells.length())
+  let cells : Array[@types.Vec2i] = Array::new(capacity=s.cells.length())
   for i in 0..<s.cells.length() {
     let ny = axis - s.cells[i].y
     cells.push(@types.vec2i(s.cells[i].x, ny))
@@ -146,7 +146,7 @@ pub fn grow(s : @types.Shape, cell : @types.Vec2i) -> @types.Shape {
   if !is_adj {
     return @types.shape_clone(s)
   }
-  let cells : Array[@types.Vec2i] = Array(capacity=s.cells.length() + 1)
+  let cells : Array[@types.Vec2i] = Array::new(capacity=s.cells.length() + 1)
   for i in 0..<s.cells.length() {
     cells.push(s.cells[i])
   }
@@ -173,7 +173,7 @@ pub fn shrink(s : @types.Shape, cell : @types.Vec2i) -> @types.Shape {
   if !is_edge {
     return @types.shape_clone(s)
   }
-  let cells : Array[@types.Vec2i] = Array(capacity=s.cells.length() - 1)
+  let cells : Array[@types.Vec2i] = Array::new(capacity=s.cells.length() - 1)
   for i in 0..<s.cells.length() {
     if s.cells[i].x != cell.x || s.cells[i].y != cell.y {
       cells.push(s.cells[i])
@@ -190,7 +190,7 @@ fn is_connected(cells : Array[@types.Vec2i]) -> Bool {
   if cells.length() <= 1 {
     return true
   }
-  let visited : Array[Bool] = Array(capacity=cells.length())
+  let visited : Array[Bool] = Array::new(capacity=cells.length())
   for _i in 0..<cells.length() {
     visited.push(false)
   }

@@ -14,7 +14,7 @@ pub fn check_completion(
   level : @types.Level,
 ) -> CheckResult {
   let sil = @types.paper_matches_silhouette(paper, level.target_silhouette)
-  let details : Array[Bool] = Array(capacity=level.layer_checks.length())
+  let details : Array[Bool] = Array::new(capacity=level.layer_checks.length())
   let mut all_layers = true
   for i in 0..<level.layer_checks.length() {
     let ok = @types.single_layer_check_ok(paper, level.layer_checks[i])

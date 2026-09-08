@@ -183,7 +183,7 @@ pub fn new_grid_cell() -> GridCell {
 ///|
 pub fn new_grid() -> Grid {
   let total = grid_width * grid_height
-  let cells : Array[GridCell] = Array(capacity=total)
+  let cells : Array[GridCell] = Array::new(capacity=total)
   for _i in 0..<total {
     cells.push(new_grid_cell())
   }
@@ -341,7 +341,7 @@ pub fn count_placed_components(grid : Grid) -> Int {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array(capacity=24)
+  let scores : Array[LevelScore] = Array::new(capacity=24)
   for _i in 0..<24 {
     scores.push(new_level_score())
   }

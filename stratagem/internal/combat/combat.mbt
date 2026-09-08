@@ -107,7 +107,7 @@ pub fn compute_move_range(
   let h = battle.map.height
   // BFS
   let total = w * h
-  let costs : Array[Int] = Array(capacity=total)
+  let costs : Array[Int] = Array::new(capacity=total)
   for _i in 0..<total {
     costs.push(999)
   }

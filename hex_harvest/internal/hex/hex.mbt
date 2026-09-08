@@ -117,7 +117,7 @@ pub fn hex_corners(
   cy : Float,
   size : Float,
 ) -> Array[(Float, Float)] {
-  let corners : Array[(Float, Float)] = Array(capacity=6)
+  let corners : Array[(Float, Float)] = Array::new(capacity=6)
   for i in 0..<6 {
     let angle = @types.pi / 3.0 * Float::from_int(i) + @types.pi / 6.0
     let px = cx + size * @types.cosf(angle)

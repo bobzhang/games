@@ -201,7 +201,7 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array(capacity=total_levels)
+  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

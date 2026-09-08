@@ -9,7 +9,7 @@ pub fn blueprint_cost(bp : @types.Blueprint, game : @types.Game) -> Int {
 /// Checks if the player has enough inventory to place a blueprint.
 pub fn can_afford_blueprint(bp : @types.Blueprint, game : @types.Game) -> Bool {
   // Count required pieces by kind+material
-  let needs : Array[((@types.PieceKind, @types.Material), Int)] = Array(
+  let needs : Array[((@types.PieceKind, @types.Material), Int)] = Array::new(
     capacity=bp.pieces.length(),
   )
   for p in bp.pieces {
@@ -57,7 +57,7 @@ pub fn place_blueprint(
     return 0
   }
   let mut placed = 0
-  let ids : Array[Int] = Array(capacity=bp.pieces.length())
+  let ids : Array[Int] = Array::new(capacity=bp.pieces.length())
   for p in bp.pieces {
     let (kind, mat, ox, oy, angle) = p
     let wx = cx + ox
@@ -140,7 +140,7 @@ pub fn save_custom_blueprint(
   }
   let cx = sum_x / Float::from_int(count)
   let cy = sum_y / Float::from_int(count)
-  let pieces : Array[(@types.PieceKind, @types.Material, Float, Float, Float)] = Array(
+  let pieces : Array[(@types.PieceKind, @types.Material, Float, Float, Float)] = Array::new(
     capacity=count,
   )
   for body in world.bodies {
@@ -173,7 +173,7 @@ pub fn load_custom_blueprints(game : @types.Game) -> Unit {
 ///|
 /// Returns all available blueprints including custom ones.
 pub fn get_all_blueprints(game : @types.Game) -> Array[@types.Blueprint] {
-  let result : Array[@types.Blueprint] = Array(
+  let result : Array[@types.Blueprint] = Array::new(
     capacity=game.blueprints.length() + game.custom_blueprints.length(),
   )
   for bp in game.blueprints {
@@ -240,7 +240,7 @@ pub fn validate_blueprint(bp : @types.Blueprint) -> Bool {
 ///|
 /// Creates a column blueprint with the specified material and block count.
 pub fn make_column(mat : @types.Material, count : Int) -> @types.Blueprint {
-  let pieces : Array[(@types.PieceKind, @types.Material, Float, Float, Float)] = Array(
+  let pieces : Array[(@types.PieceKind, @types.Material, Float, Float, Float)] = Array::new(
     capacity=count,
   )
   for i in 0..<count {

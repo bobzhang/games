@@ -33,7 +33,7 @@ pub fn flood_fill_regions(
   let w = grid.width
   let h = grid.height
   let total = w * h
-  let visited : Array[Bool] = Array(capacity=total)
+  let visited : Array[Bool] = Array::new(capacity=total)
   for _i in 0..<total {
     visited.push(false)
   }

@@ -157,7 +157,7 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array(capacity=total_levels)
+  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }
@@ -184,7 +184,7 @@ pub fn new_game() -> Game {
 
 ///|
 pub fn clone_points(pts : Array[Point]) -> Array[Point] {
-  let result : Array[Point] = Array(capacity=pts.length())
+  let result : Array[Point] = Array::new(capacity=pts.length())
   for i in 0..<pts.length() {
     result.push({ x: pts[i].x, y: pts[i].y, })
   }
@@ -196,7 +196,7 @@ pub fn push_undo(game : Game) -> Unit {
   let entry : UndoEntry = { points: clone_points(game.placed_points), }
   game.undo_stack.push(entry)
   if game.undo_stack.length() > 50 {
-    let new_stack : Array[UndoEntry] = Array(capacity=50)
+    let new_stack : Array[UndoEntry] = Array::new(capacity=50)
     for i in 1..<game.undo_stack.length() {
       new_stack.push(game.undo_stack[i])
     }
@@ -209,7 +209,7 @@ pub fn pop_undo(game : Game) -> Bool {
   if game.undo_stack.length() > 0 {
     let entry = game.undo_stack[game.undo_stack.length() - 1]
     let old_len = game.undo_stack.length()
-    let new_stack : Array[UndoEntry] = Array(capacity=old_len - 1)
+    let new_stack : Array[UndoEntry] = Array::new(capacity=old_len - 1)
     let limit = old_len - 1
     for i in 0..<limit {
       new_stack.push(game.undo_stack[i])

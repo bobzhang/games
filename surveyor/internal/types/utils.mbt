@@ -68,7 +68,7 @@ pub fn toggle_fence(fences : Array[FenceEdge], f : FenceEdge) -> Unit {
 
 ///|
 pub fn copy_fences(fences : Array[FenceEdge]) -> Array[FenceEdge] {
-  let result : Array[FenceEdge] = Array(capacity=fences.length())
+  let result : Array[FenceEdge] = Array::new(capacity=fences.length())
   for i in 0..<fences.length() {
     result.push(fences[i])
   }
@@ -111,7 +111,7 @@ pub fn new_constraint_status(idx : Int) -> ConstraintStatus {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array(capacity=total_levels)
+  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }
