@@ -122,7 +122,7 @@ fn level_05() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   let r : Float = 140.0
-  let verts : Array[@types.Point] = Array(capacity=5)
+  let verts : Array[@types.Point] = Array::new(capacity=5)
   for i in 0..<5 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 5.0 - @types.pi / 2.0
     verts.push(
@@ -145,7 +145,7 @@ fn level_06() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   let r : Float = 130.0
-  let verts : Array[@types.Point] = Array(capacity=6)
+  let verts : Array[@types.Point] = Array::new(capacity=6)
   for i in 0..<6 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 6.0
     verts.push(
@@ -188,7 +188,7 @@ fn level_08() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   let r : Float = 140.0
-  let verts : Array[@types.Point] = Array(capacity=8)
+  let verts : Array[@types.Point] = Array::new(capacity=8)
   for i in 0..<8 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 8.0 + @types.pi / 8.0
     verts.push(
@@ -365,7 +365,7 @@ fn level_16() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   let r : Float = 150.0
-  let verts : Array[@types.Point] = Array(capacity=7)
+  let verts : Array[@types.Point] = Array::new(capacity=7)
   for i in 0..<7 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 7.0 - @types.pi / 2.0
     verts.push(
@@ -442,14 +442,14 @@ fn level_19() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   let r : Float = 120.0
-  let verts : Array[@types.Point] = Array(capacity=5)
+  let verts : Array[@types.Point] = Array::new(capacity=5)
   for i in 0..<5 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 5.0 - @types.pi / 2.0
     verts.push(
       @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
     )
   }
-  let pre : Array[@types.Point] = Array(capacity=8)
+  let pre : Array[@types.Point] = Array::new(capacity=8)
   for i in 0..<5 {
     pre.push(verts[i])
   }
@@ -500,14 +500,14 @@ fn level_21() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   let r : Float = 120.0
-  let verts : Array[@types.Point] = Array(capacity=6)
+  let verts : Array[@types.Point] = Array::new(capacity=6)
   for i in 0..<6 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 6.0
     verts.push(
       @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
     )
   }
-  let pre : Array[@types.Point] = Array(capacity=10)
+  let pre : Array[@types.Point] = Array::new(capacity=10)
   for i in 0..<6 {
     pre.push(verts[i])
   }
@@ -591,14 +591,14 @@ fn level_24() -> @types.Level {
   let cx : Float = 640.0
   let cy : Float = 360.0
   let r : Float = 120.0
-  let verts : Array[@types.Point] = Array(capacity=8)
+  let verts : Array[@types.Point] = Array::new(capacity=8)
   for i in 0..<8 {
     let angle = Float::from_int(i) * 2.0 * @types.pi / 8.0 + @types.pi / 8.0
     verts.push(
       @types.pt(cx + r * @types.cosf(angle), cy + r * @types.sinf(angle)),
     )
   }
-  let pre : Array[@types.Point] = Array(capacity=14)
+  let pre : Array[@types.Point] = Array::new(capacity=14)
   for i in 0..<8 {
     pre.push(verts[i])
   }
@@ -636,7 +636,7 @@ fn level_25() -> @types.Level {
     @types.pt(cx - 160.0, cy),
     @types.pt(cx - 120.0, cy - 100.0),
   ]
-  let pre : Array[@types.Point] = Array(capacity=18)
+  let pre : Array[@types.Point] = Array::new(capacity=18)
   for i in 0..<verts.length() {
     pre.push(verts[i])
   }

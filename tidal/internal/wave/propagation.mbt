@@ -5,7 +5,7 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
   let w = grid.width
   let h = grid.height
   // Track contributions for interference
-  let contributions : Array[Array[@types.WaveFront]] = Array(capacity=w * h)
+  let contributions : Array[Array[@types.WaveFront]] = Array::new(capacity=w * h)
   for _i in 0..<(w * h) {
     contributions.push([])
   }

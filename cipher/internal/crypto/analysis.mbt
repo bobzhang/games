@@ -1,6 +1,6 @@
 ///|
 pub fn letter_frequency(text : String) -> Array[Int] {
-  let counts : Array[Int] = Array(capacity=26)
+  let counts : Array[Int] = Array::new(capacity=26)
   for _i in 0..<26 {
     counts.push(0)
   }
@@ -21,7 +21,7 @@ pub fn letter_frequency_pct(text : String) -> Array[Float] {
   for i in 0..<26 {
     total += counts[i]
   }
-  let pcts : Array[Float] = Array(capacity=26)
+  let pcts : Array[Float] = Array::new(capacity=26)
   if total == 0 {
     for _i in 0..<26 {
       pcts.push(0.0)

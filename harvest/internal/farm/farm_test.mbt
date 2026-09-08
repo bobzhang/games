@@ -124,7 +124,7 @@ test "count_viable_all_default" {
 ///|
 test "simulate_year_produces_value" {
   let grid = @types.new_grid()
-  let plans : Array[@types.SeasonPlan] = Array(capacity=4)
+  let plans : Array[@types.SeasonPlan] = Array::new(capacity=4)
   for _i in 0..<4 {
     plans.push(@types.new_season_plan())
   }

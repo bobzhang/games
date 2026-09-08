@@ -72,7 +72,7 @@ pub fn bfs_connected(
   start_idx : Int,
   sea_level : Int,
 ) -> Array[Bool] {
-  let visited : Array[Bool] = Array(capacity=grid.tiles.length())
+  let visited : Array[Bool] = Array::new(capacity=grid.tiles.length())
   for _i in 0..<grid.tiles.length() {
     visited.push(false)
   }

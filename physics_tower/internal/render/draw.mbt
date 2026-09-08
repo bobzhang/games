@@ -1099,7 +1099,7 @@ fn sinf(angle : Float) -> Float {
 /// Returns level names for display.
 pub fn get_level_names() -> Array[String] {
   let levels = @content.get_levels()
-  let names : Array[String] = Array(capacity=levels.length())
+  let names : Array[String] = Array::new(capacity=levels.length())
   for level in levels {
     names.push(level.name)
   }

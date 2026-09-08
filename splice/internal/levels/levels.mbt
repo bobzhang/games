@@ -341,7 +341,7 @@ pub fn get_level(index : Int) -> @types.Level {
 pub fn get_tier_levels(tier : Int) -> Array[Int] {
   let offset = @types.tier_level_offset(tier)
   let count = @types.tier_level_count(tier)
-  let result : Array[Int] = Array(capacity=count)
+  let result : Array[Int] = Array::new(capacity=count)
   for i in 0..<count {
     result.push(offset + i)
   }

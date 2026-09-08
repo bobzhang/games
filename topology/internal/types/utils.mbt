@@ -10,7 +10,7 @@ pub fn new_shape(cells : Array[Vec2i]) -> Shape {
 
 ///|
 pub fn shape_clone(s : Shape) -> Shape {
-  let cells : Array[Vec2i] = Array(capacity=s.cells.length())
+  let cells : Array[Vec2i] = Array::new(capacity=s.cells.length())
   for i in 0..<s.cells.length() {
     cells.push(s.cells[i])
   }
@@ -102,7 +102,7 @@ pub fn shape_normalize(s : Shape) -> Shape {
   }
   let min_x = shape_min_x(s)
   let min_y = shape_min_y(s)
-  let cells : Array[Vec2i] = Array(capacity=s.cells.length())
+  let cells : Array[Vec2i] = Array::new(capacity=s.cells.length())
   for i in 0..<s.cells.length() {
     cells.push(vec2i(s.cells[i].x - min_x, s.cells[i].y - min_y))
   }
@@ -263,7 +263,7 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_game() -> Game {
-  let level_scores : Array[LevelScore] = Array(capacity=total_levels)
+  let level_scores : Array[LevelScore] = Array::new(capacity=total_levels)
   for _i in 0..<total_levels {
     level_scores.push(new_level_score())
   }

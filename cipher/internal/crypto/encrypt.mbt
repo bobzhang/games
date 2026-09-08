@@ -37,7 +37,7 @@ pub fn substitution_encrypt(plaintext : String, key : Array[Int]) -> String {
 
 ///|
 pub fn substitution_decrypt(ciphertext : String, key : Array[Int]) -> String {
-  let inv : Array[Int] = Array(capacity=26)
+  let inv : Array[Int] = Array::new(capacity=26)
   for _i in 0..<26 {
     inv.push(0)
   }
