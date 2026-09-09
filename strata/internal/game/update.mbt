@@ -101,13 +101,13 @@ fn start_level(game : @types.Game, level_idx : Int) -> Unit {
   let level = @levels.get_level(level_idx)
   // Initialize empty slots
   let num_slots = level.rocks.length()
-  let slots : Array[@types.RockKind?] = Array::new(capacity=num_slots)
+  let slots : Array[@types.RockKind?] = Array(capacity=num_slots)
   for _i in 0..<num_slots {
     slots.push(None)
   }
   game.slots = slots
   // Copy rocks to tray (shuffled)
-  let tray : Array[@types.RockKind] = Array::new(capacity=num_slots)
+  let tray : Array[@types.RockKind] = Array(capacity=num_slots)
   for i in 0..<level.rocks.length() {
     tray.push(level.rocks[i])
   }

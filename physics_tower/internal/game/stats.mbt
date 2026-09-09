@@ -156,7 +156,7 @@ fn material_index(mat : @types.Material) -> Int {
 /// Returns formatted statistics summary lines.
 pub fn stats_summary(game : @types.Game) -> Array[String] {
   let stats = game.statistics
-  let lines : Array[String] = Array::new(capacity=12)
+  let lines : Array[String] = Array(capacity=12)
   lines.push("Total Pieces Placed: " + stats.total_pieces_placed.to_string())
   lines.push("Total Tests Run: " + stats.total_tests_run.to_string())
   lines.push("Total Builds: " + stats.total_builds.to_string())

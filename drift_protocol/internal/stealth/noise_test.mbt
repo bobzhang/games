@@ -56,9 +56,9 @@ test "noise decays over time" {
 test "shadow state detection" {
   let game = @types.new_game()
   // Set up tiles with shadow
-  let tiles : Array[Array[@types.TileKind]] = Array::new(capacity=@types.grid_height)
+  let tiles : Array[Array[@types.TileKind]] = Array(capacity=@types.grid_height)
   for _y in 0..<@types.grid_height {
-    let row : Array[@types.TileKind] = Array::new(capacity=@types.grid_width)
+    let row : Array[@types.TileKind] = Array(capacity=@types.grid_width)
     for _x in 0..<@types.grid_width {
       row.push(Floor)
     }

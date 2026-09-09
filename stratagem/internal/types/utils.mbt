@@ -369,7 +369,7 @@ pub fn new_tile(terrain : Terrain) -> HexTile {
 
 ///|
 pub fn new_hex_map(w : Int, h : Int) -> HexMap {
-  let tiles : Array[HexTile] = Array::new(capacity=w * h)
+  let tiles : Array[HexTile] = Array(capacity=w * h)
   let total = w * h
   for _i in 0..<total {
     tiles.push(new_tile(Plains))
@@ -406,7 +406,7 @@ pub fn new_battle() -> Battle {
 
 ///|
 pub fn new_campaign() -> CampaignState {
-  let scores : Array[Int] = Array::new(capacity=total_campaign_levels)
+  let scores : Array[Int] = Array(capacity=total_campaign_levels)
   for _i in 0..<total_campaign_levels {
     scores.push(0)
   }

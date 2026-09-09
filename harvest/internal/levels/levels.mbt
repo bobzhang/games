@@ -66,9 +66,9 @@ pub fn level_tier(index : Int) -> String {
 
 ///|
 fn uniform_soil(n : Int, p : Int, k : Int) -> Array[Array[(Int, Int, Int)]] {
-  let data : Array[Array[(Int, Int, Int)]] = Array::new(capacity=@types.grid_rows)
+  let data : Array[Array[(Int, Int, Int)]] = Array(capacity=@types.grid_rows)
   for _r in 0..<@types.grid_rows {
-    let row : Array[(Int, Int, Int)] = Array::new(capacity=@types.grid_cols)
+    let row : Array[(Int, Int, Int)] = Array(capacity=@types.grid_cols)
     for _c in 0..<@types.grid_cols {
       row.push((n, p, k))
     }
@@ -84,9 +84,9 @@ fn varied_soil(
   base_k : Int,
   variation : Int,
 ) -> Array[Array[(Int, Int, Int)]] {
-  let data : Array[Array[(Int, Int, Int)]] = Array::new(capacity=@types.grid_rows)
+  let data : Array[Array[(Int, Int, Int)]] = Array(capacity=@types.grid_rows)
   for r in 0..<@types.grid_rows {
-    let row : Array[(Int, Int, Int)] = Array::new(capacity=@types.grid_cols)
+    let row : Array[(Int, Int, Int)] = Array(capacity=@types.grid_cols)
     for c in 0..<@types.grid_cols {
       let offset = ((r + c) % 3 - 1) * variation
       let n = @types.clampi(base_n + offset, 0, 100)

@@ -63,7 +63,7 @@ pub fn peg_position(index : Int) -> Vec2f {
 
 ///|
 pub fn make_pegs() -> Array[Peg] {
-  let pegs : Array[Peg] = Array::new(capacity=peg_count)
+  let pegs : Array[Peg] = Array(capacity=peg_count)
   for i in 0..<peg_count {
     pegs.push({ index: i, pos: peg_position(i), })
   }
@@ -124,7 +124,7 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_game(levels : Array[Level]) -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=levels.length())
+  let scores : Array[LevelScore] = Array(capacity=levels.length())
   for _i in 0..<levels.length() {
     scores.push(new_level_score())
   }
@@ -159,7 +159,7 @@ pub fn start_level(game : Game, level_index : Int) -> Unit {
   game.message = ""
   game.message_timer = 0.0
   let level = game.level_data[level_index]
-  let targets : Array[TargetDot] = Array::new(capacity=level.targets.length())
+  let targets : Array[TargetDot] = Array(capacity=level.targets.length())
   for i in 0..<level.targets.length() {
     targets.push({ pos: level.targets[i], hit: false, })
   }

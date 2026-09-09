@@ -97,14 +97,14 @@ fn start_level(game : @types.Game, level_idx : Int) -> Unit {
   // Initialize pickup tracking
   let total_cells = level.cw_spiral.cells.length() +
     level.ccw_spiral.cells.length()
-  let pc : Array[Bool] = Array::new(capacity=total_cells)
+  let pc : Array[Bool] = Array(capacity=total_cells)
   for _i in 0..<total_cells {
     pc.push(false)
   }
   game.pickups_collected = pc
   // Initialize oneshot tracking
   let link_count = level.switch_links.length()
-  let ou : Array[Bool] = Array::new(capacity=link_count)
+  let ou : Array[Bool] = Array(capacity=link_count)
   for _i in 0..<link_count {
     ou.push(false)
   }

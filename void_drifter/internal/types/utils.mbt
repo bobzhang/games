@@ -507,29 +507,29 @@ pub fn new_shake() -> ScreenShake {
 
 ///|
 pub fn new_game() -> Game {
-  let projectiles : Array[Projectile] = Array::new(capacity=projectile_pool_size)
+  let projectiles : Array[Projectile] = Array(capacity=projectile_pool_size)
   for _i in 0..<projectile_pool_size {
     projectiles.push(new_projectile())
   }
-  let enemies : Array[Enemy] = Array::new(capacity=enemy_pool_size)
+  let enemies : Array[Enemy] = Array(capacity=enemy_pool_size)
   for _i in 0..<enemy_pool_size {
     enemies.push(new_enemy())
   }
-  let particles : Array[Particle] = Array::new(capacity=particle_pool_size)
+  let particles : Array[Particle] = Array(capacity=particle_pool_size)
   for _i in 0..<particle_pool_size {
     particles.push(new_particle())
   }
-  let asteroids : Array[Asteroid] = Array::new(capacity=asteroid_pool_size)
+  let asteroids : Array[Asteroid] = Array(capacity=asteroid_pool_size)
   for _i in 0..<asteroid_pool_size {
     asteroids.push(new_asteroid())
   }
-  let damage_numbers : Array[DamageNumber] = Array::new(
+  let damage_numbers : Array[DamageNumber] = Array(
     capacity=damage_number_pool_size,
   )
   for _i in 0..<damage_number_pool_size {
     damage_numbers.push(new_damage_number())
   }
-  let pickups : Array[Pickup] = Array::new(capacity=pickup_pool_size)
+  let pickups : Array[Pickup] = Array(capacity=pickup_pool_size)
   for _i in 0..<pickup_pool_size {
     pickups.push(new_pickup())
   }
