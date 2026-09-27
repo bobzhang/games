@@ -1,6 +1,6 @@
 name = "bobzhang/games"
 
-version = "0.9.33"
+version = "0.9.34"
 
 import {
   "tonyfettes/raylib@0.3.1",
