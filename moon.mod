@@ -4,7 +4,7 @@ version = "0.9.34"
 
 import {
   "tonyfettes/raylib@0.3.1",
-  "moonbitlang/async@0.21.2",
+  "moonbitlang/async@0.22.4",
 }
 
 readme = "README.md"
