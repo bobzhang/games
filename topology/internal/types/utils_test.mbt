@@ -61,21 +61,33 @@ test "shape_center_x empty shape returns zero" {
 
 ///|
 test "shape_min_x and shape_max_x" {
-  let s = @types.new_shape([@types.vec2i(2, 5), @types.vec2i(7, 1), @types.vec2i(4, 3)])
+  let s = @types.new_shape([
+    @types.vec2i(2, 5),
+    @types.vec2i(7, 1),
+    @types.vec2i(4, 3),
+  ])
   inspect(@types.shape_min_x(s), content="2")
   inspect(@types.shape_max_x(s), content="7")
 }
 
 ///|
 test "shape_min_y and shape_max_y" {
-  let s = @types.new_shape([@types.vec2i(2, 5), @types.vec2i(7, 1), @types.vec2i(4, 3)])
+  let s = @types.new_shape([
+    @types.vec2i(2, 5),
+    @types.vec2i(7, 1),
+    @types.vec2i(4, 3),
+  ])
   inspect(@types.shape_min_y(s), content="1")
   inspect(@types.shape_max_y(s), content="5")
 }
 
 ///|
 test "shape_normalize shifts to origin and sorts" {
-  let s = @types.new_shape([@types.vec2i(5, 5), @types.vec2i(3, 3), @types.vec2i(4, 3)])
+  let s = @types.new_shape([
+    @types.vec2i(5, 5),
+    @types.vec2i(3, 3),
+    @types.vec2i(4, 3),
+  ])
   let n = @types.shape_normalize(s)
   // min_x=3, min_y=3, so shifted by (-3,-3)
   // cells become: (2,2), (0,0), (1,0) -> sorted: (0,0), (1,0), (2,2)
@@ -131,15 +143,28 @@ test "shape_exact_match fails for different sizes" {
 
 ///|
 test "shape_match_count" {
-  let current = @types.new_shape([@types.vec2i(1, 1), @types.vec2i(2, 2), @types.vec2i(3, 3)])
-  let target = @types.new_shape([@types.vec2i(2, 2), @types.vec2i(3, 3), @types.vec2i(4, 4)])
+  let current = @types.new_shape([
+    @types.vec2i(1, 1),
+    @types.vec2i(2, 2),
+    @types.vec2i(3, 3),
+  ])
+  let target = @types.new_shape([
+    @types.vec2i(2, 2),
+    @types.vec2i(3, 3),
+    @types.vec2i(4, 4),
+  ])
   inspect(@types.shape_match_count(current, target), content="2")
 }
 
 ///|
 test "shape_edge_cells" {
   // 2x2 block: all cells are edge cells (each has at least one empty neighbor)
-  let s = @types.new_shape([@types.vec2i(3, 3), @types.vec2i(4, 3), @types.vec2i(3, 4), @types.vec2i(4, 4)])
+  let s = @types.new_shape([
+    @types.vec2i(3, 3),
+    @types.vec2i(4, 3),
+    @types.vec2i(3, 4),
+    @types.vec2i(4, 4),
+  ])
   let edges = @types.shape_edge_cells(s)
   inspect(edges.length(), content="4")
 }

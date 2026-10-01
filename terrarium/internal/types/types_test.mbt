@@ -108,7 +108,14 @@ test "in_grid_invalid" {
 
 ///|
 test "organism_index_roundtrip" {
-  let kinds : Array[@types.OrganismKind] = [Moss, Fern, Beetle, Snail, Fungus, Worm]
+  let kinds : Array[@types.OrganismKind] = [
+    Moss,
+    Fern,
+    Beetle,
+    Snail,
+    Fungus,
+    Worm,
+  ]
   for i in 0..<kinds.length() {
     let idx = @types.organism_index(kinds[i])
     assert_eq(@types.organism_from_index(idx), kinds[i])
@@ -150,7 +157,14 @@ test "get_profile_worm" {
 
 ///|
 test "organism_symbol_unique" {
-  let kinds : Array[@types.OrganismKind] = [Moss, Fern, Beetle, Snail, Fungus, Worm]
+  let kinds : Array[@types.OrganismKind] = [
+    Moss,
+    Fern,
+    Beetle,
+    Snail,
+    Fungus,
+    Worm,
+  ]
   let syms : Array[String] = []
   for i in 0..<kinds.length() {
     let sym = @types.organism_symbol(kinds[i])

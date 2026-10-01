@@ -230,7 +230,9 @@ test "par gears increases with level complexity" {
   let tier1_last = @levels.get_level(@types.tier1_count - 1)
   assert_true(tier1_last.par_gears >= tier1_first.par_gears)
   let tier2_first = @levels.get_level(@types.tier1_count)
-  let tier2_last = @levels.get_level(@types.tier1_count + @types.tier2_count - 1)
+  let tier2_last = @levels.get_level(
+    @types.tier1_count + @types.tier2_count - 1,
+  )
   assert_true(tier2_last.par_gears >= tier2_first.par_gears)
   let tier3_start = @types.tier1_count + @types.tier2_count
   let tier3_first = @levels.get_level(tier3_start)

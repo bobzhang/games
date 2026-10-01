@@ -21,7 +21,10 @@ test "beam_color_add green+blue=cyan" {
 
 ///|
 test "beam_color_add all three=white" {
-  let rg = @types.beam_color_add(@types.beam_color_red(), @types.beam_color_green())
+  let rg = @types.beam_color_add(
+    @types.beam_color_red(),
+    @types.beam_color_green(),
+  )
   let result = @types.beam_color_add(rg, @types.beam_color_blue())
   assert_eq(result, @types.beam_color_white())
 }

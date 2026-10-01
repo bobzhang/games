@@ -99,7 +99,9 @@ test "multi-sensor overlap narrows region" {
 test "tolerance check for guess accuracy" {
   assert_true(@sensors.check_guess(@types.vec2i(5, 5), @types.vec2i(5, 5), 2.0))
   assert_true(@sensors.check_guess(@types.vec2i(6, 5), @types.vec2i(5, 5), 2.0))
-  assert_true(!@sensors.check_guess(@types.vec2i(10, 5), @types.vec2i(5, 5), 2.0))
+  assert_true(
+    !@sensors.check_guess(@types.vec2i(10, 5), @types.vec2i(5, 5), 2.0),
+  )
 }
 
 ///|

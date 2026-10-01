@@ -162,11 +162,17 @@ test "can_place_gear checks budget" {
     2, // budget = 2 (input uses 1)
   )
   // Can place one more
-  inspect(@mechanics.can_place_gear(game, { x: 4, y: 0, }, Medium), content="true")
+  inspect(
+    @mechanics.can_place_gear(game, { x: 4, y: 0, }, Medium),
+    content="true",
+  )
   // Place it
   game.placed_gears.push(@types.new_gear({ x: 4, y: 0, }, Medium))
   // Now at budget
-  inspect(@mechanics.can_place_gear(game, { x: 8, y: 0, }, Medium), content="false")
+  inspect(
+    @mechanics.can_place_gear(game, { x: 8, y: 0, }, Medium),
+    content="false",
+  )
 }
 
 ///|
@@ -175,9 +181,15 @@ test "can_place_gear checks overlap" {
   setup_level(game, { x: 0, y: 0, }, 60.0, CW, 2, [], 10)
   // Try to place Medium at (1,0): overlaps with input Medium at (0,0)
   // dist=1, min_dist = 2+2 = 4, 1 < 16 so overlap
-  inspect(@mechanics.can_place_gear(game, { x: 1, y: 0, }, Medium), content="false")
+  inspect(
+    @mechanics.can_place_gear(game, { x: 1, y: 0, }, Medium),
+    content="false",
+  )
   // Place at (4,0): dist=4, min_dist=4, 16 < 16 = false, so no overlap
-  inspect(@mechanics.can_place_gear(game, { x: 4, y: 0, }, Medium), content="true")
+  inspect(
+    @mechanics.can_place_gear(game, { x: 4, y: 0, }, Medium),
+    content="true",
+  )
 }
 
 ///|
@@ -185,7 +197,10 @@ test "can_place_gear checks occupied" {
   let game = make_test_game()
   setup_level(game, { x: 0, y: 0, }, 60.0, CW, 2, [], 10)
   // Input gear is at (0,0)
-  inspect(@mechanics.can_place_gear(game, { x: 0, y: 0, }, Small), content="false")
+  inspect(
+    @mechanics.can_place_gear(game, { x: 0, y: 0, }, Small),
+    content="false",
+  )
 }
 
 ///|

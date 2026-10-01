@@ -16,9 +16,18 @@ test "vec2i_add" {
 
 ///|
 test "vec2i_eq" {
-  inspect(@types.vec2i_eq(@types.vec2i(1, 2), @types.vec2i(1, 2)), content="true")
-  inspect(@types.vec2i_eq(@types.vec2i(1, 2), @types.vec2i(3, 2)), content="false")
-  inspect(@types.vec2i_eq(@types.vec2i(1, 2), @types.vec2i(1, 3)), content="false")
+  inspect(
+    @types.vec2i_eq(@types.vec2i(1, 2), @types.vec2i(1, 2)),
+    content="true",
+  )
+  inspect(
+    @types.vec2i_eq(@types.vec2i(1, 2), @types.vec2i(3, 2)),
+    content="false",
+  )
+  inspect(
+    @types.vec2i_eq(@types.vec2i(1, 2), @types.vec2i(1, 3)),
+    content="false",
+  )
 }
 
 ///|

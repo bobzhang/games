@@ -165,7 +165,10 @@ test "crop_yield_depleted_soil" {
 
 ///|
 test "pixel_to_grid_conversion" {
-  let (c, r) = @types.pixel_to_grid(@types.grid_offset_x + 50, @types.grid_offset_y + 50)
+  let (c, r) = @types.pixel_to_grid(
+    @types.grid_offset_x + 50,
+    @types.grid_offset_y + 50,
+  )
   assert_eq(c, 0)
   assert_eq(r, 0)
 }
@@ -276,6 +279,8 @@ test "lerpf_midpoint" {
 
 ///|
 test "in_grid_area_check" {
-  assert_true(@types.in_grid_area(@types.grid_offset_x + 1, @types.grid_offset_y + 1))
+  assert_true(
+    @types.in_grid_area(@types.grid_offset_x + 1, @types.grid_offset_y + 1),
+  )
   assert_false(@types.in_grid_area(0, 0))
 }

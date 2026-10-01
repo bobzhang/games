@@ -359,7 +359,9 @@ test "elite_suffix returns descriptions" {
 
 ///|
 test "make_elite doubles HP" {
-  let enemy = @types.Enemy::new(0, Slime, 1, 1, hp=4, damage=1, beat_pattern=[true])
+  let enemy = @types.Enemy::new(0, Slime, 1, 1, hp=4, damage=1, beat_pattern=[
+    true,
+  ])
   inspect(enemy.is_elite, content="false")
   inspect(enemy.hp, content="4")
   @types.make_elite(enemy)
@@ -439,9 +441,13 @@ test "spell_color matches element" {
 
 ///|
 test "enemy_threat_level categorizes correctly" {
-  let weak = @types.Enemy::new(0, Slime, 0, 0, hp=2, damage=1, beat_pattern=[true])
+  let weak = @types.Enemy::new(0, Slime, 0, 0, hp=2, damage=1, beat_pattern=[
+    true,
+  ])
   inspect(@types.enemy_threat_level(weak), content="")
-  let strong = @types.Enemy::new(1, Dragon, 0, 0, hp=5, damage=3, beat_pattern=[true])
+  let strong = @types.Enemy::new(1, Dragon, 0, 0, hp=5, damage=3, beat_pattern=[
+    true,
+  ])
   inspect(@types.enemy_threat_level(strong), content="!!")
   let elite_strong = @types.Enemy::new(2, Dragon, 0, 0, hp=5, damage=3, beat_pattern=[
     true,

@@ -3,7 +3,9 @@ test "new_hex_grid has correct cell count" {
   let grid = @types.new_hex_grid()
   // radius=3 hex grid: 3*3*3 + 3*3 + 1 = 27+9+1 = 37 cells
   // Formula: 3*R^2 + 3*R + 1
-  let expected = 3 * @types.grid_radius * @types.grid_radius + 3 * @types.grid_radius + 1
+  let expected = 3 * @types.grid_radius * @types.grid_radius +
+    3 * @types.grid_radius +
+    1
   assert_eq(@types.grid_cell_count(grid), expected)
 }
 

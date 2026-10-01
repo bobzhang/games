@@ -45,12 +45,16 @@ test "rects_overlap: overlapping rects" {
 
 ///|
 test "rects_overlap: non-overlapping rects" {
-  assert_false(@types.rects_overlap(0.0, 0.0, 10.0, 10.0, 20.0, 20.0, 30.0, 30.0))
+  assert_false(
+    @types.rects_overlap(0.0, 0.0, 10.0, 10.0, 20.0, 20.0, 30.0, 30.0),
+  )
 }
 
 ///|
 test "rects_overlap: touching edges do not overlap" {
-  assert_false(@types.rects_overlap(0.0, 0.0, 10.0, 10.0, 10.0, 0.0, 20.0, 10.0))
+  assert_false(
+    @types.rects_overlap(0.0, 0.0, 10.0, 10.0, 10.0, 0.0, 20.0, 10.0),
+  )
 }
 
 ///|

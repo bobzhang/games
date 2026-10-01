@@ -105,5 +105,8 @@ test "tier properties" {
   assert_eq(@types.tier_level_count(Launch), @types.tier3_count)
   assert_eq(@types.tier_level_offset(Swing), 0)
   assert_eq(@types.tier_level_offset(Wrap), @types.tier1_count)
-  assert_eq(@types.tier_level_offset(Launch), @types.tier1_count + @types.tier2_count)
+  assert_eq(
+    @types.tier_level_offset(Launch),
+    @types.tier1_count + @types.tier2_count,
+  )
 }

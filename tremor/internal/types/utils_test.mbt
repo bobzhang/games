@@ -72,7 +72,10 @@ test "tile_center_x and tile_center_y" {
 ///|
 test "pixel_to_tile in bounds" {
   // Pixel at offset + cell_size/2 should be tile (0,0)
-  let result = @types.pixel_to_tile(@types.grid_offset_x + 10, @types.grid_offset_y + 10)
+  let result = @types.pixel_to_tile(
+    @types.grid_offset_x + 10,
+    @types.grid_offset_y + 10,
+  )
   debug_inspect(
     result,
     content=(

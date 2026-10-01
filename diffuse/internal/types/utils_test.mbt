@@ -66,9 +66,15 @@ test "ink_black has all channels" {
 
 ///|
 test "ink_from_channel creates correct colors" {
-  assert_true(@types.ink_equals(@types.ink_from_channel(Cyan), @types.ink_cyan()))
-  assert_true(@types.ink_equals(@types.ink_from_channel(Magenta), @types.ink_magenta()))
-  assert_true(@types.ink_equals(@types.ink_from_channel(Yellow), @types.ink_yellow()))
+  assert_true(
+    @types.ink_equals(@types.ink_from_channel(Cyan), @types.ink_cyan()),
+  )
+  assert_true(
+    @types.ink_equals(@types.ink_from_channel(Magenta), @types.ink_magenta()),
+  )
+  assert_true(
+    @types.ink_equals(@types.ink_from_channel(Yellow), @types.ink_yellow()),
+  )
 }
 
 ///|
@@ -205,7 +211,10 @@ test "clone_tile creates independent copy" {
 
 ///|
 test "clone_tiles creates independent array" {
-  let tiles : Array[@types.Tile] = [@types.make_tile(Paper), @types.make_tile(Barrier)]
+  let tiles : Array[@types.Tile] = [
+    @types.make_tile(Paper),
+    @types.make_tile(Barrier),
+  ]
   tiles[0].ink = @types.ink_yellow()
   let cloned = @types.clone_tiles(tiles)
   inspect(cloned.length(), content="2")

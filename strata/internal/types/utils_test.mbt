@@ -53,7 +53,10 @@ test "rock_index and rock_from_index are inverses" {
     Slate,
   ]
   for i in 0..<rocks.length() {
-    inspect(@types.rock_from_index(@types.rock_index(rocks[i])) == rocks[i], content="true")
+    inspect(
+      @types.rock_from_index(@types.rock_index(rocks[i])) == rocks[i],
+      content="true",
+    )
   }
 }
 
@@ -122,7 +125,11 @@ test "new_level_score defaults" {
 
 ///|
 test "find_rock_slot finds present rock" {
-  let slots : Array[@types.RockKind?] = [Some(Granite), Some(Shale), Some(Sandstone)]
+  let slots : Array[@types.RockKind?] = [
+    Some(Granite),
+    Some(Shale),
+    Some(Sandstone),
+  ]
   inspect(@types.find_rock_slot(slots, Granite), content="0")
   inspect(@types.find_rock_slot(slots, Sandstone), content="2")
 }

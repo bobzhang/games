@@ -115,10 +115,23 @@ test "point_in_plane" {
 
 ///|
 test "point_in_polygon triangle" {
-  let triangle : Array[@types.Point] = [@types.pt(0.0, 0.0), @types.pt(10.0, 0.0), @types.pt(5.0, 10.0)]
-  inspect(@types.point_in_polygon(@types.pt(5.0, 3.0), triangle), content="true")
-  inspect(@types.point_in_polygon(@types.pt(-5.0, 0.0), triangle), content="false")
-  inspect(@types.point_in_polygon(@types.pt(20.0, 20.0), triangle), content="false")
+  let triangle : Array[@types.Point] = [
+    @types.pt(0.0, 0.0),
+    @types.pt(10.0, 0.0),
+    @types.pt(5.0, 10.0),
+  ]
+  inspect(
+    @types.point_in_polygon(@types.pt(5.0, 3.0), triangle),
+    content="true",
+  )
+  inspect(
+    @types.point_in_polygon(@types.pt(-5.0, 0.0), triangle),
+    content="false",
+  )
+  inspect(
+    @types.point_in_polygon(@types.pt(20.0, 20.0), triangle),
+    content="false",
+  )
 }
 
 ///|
@@ -150,7 +163,11 @@ test "point_to_segment_dist degenerate segment" {
 
 ///|
 test "make_polygon" {
-  let verts : Array[@types.Point] = [@types.pt(0.0, 0.0), @types.pt(1.0, 0.0), @types.pt(0.0, 1.0)]
+  let verts : Array[@types.Point] = [
+    @types.pt(0.0, 0.0),
+    @types.pt(1.0, 0.0),
+    @types.pt(0.0, 1.0),
+  ]
   let poly = @types.make_polygon(verts)
   inspect(poly.vertices.length(), content="3")
 }

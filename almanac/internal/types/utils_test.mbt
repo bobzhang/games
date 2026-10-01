@@ -82,7 +82,10 @@ test "make_grid creates grid with correct dimensions" {
 
 ///|
 test "make_grid marks targets correctly" {
-  let g = @types.make_grid(3, 2, [0, 0, 0, 0, 0, 0], [(1, 0, Sunny), (2, 1, Rainy)])
+  let g = @types.make_grid(3, 2, [0, 0, 0, 0, 0, 0], [
+    (1, 0, Sunny),
+    (2, 1, Rainy),
+  ])
   // Tile at col=1, row=0 should be target with Sunny
   let t1 = @types.grid_get(g, 1, 0)
   assert_true(t1.is_target)

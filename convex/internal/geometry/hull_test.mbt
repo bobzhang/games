@@ -145,9 +145,15 @@ test "is point on hull" {
   // Vertex is on hull
   inspect(@geometry.is_point_on_hull(@types.pt(0.0, 0.0), hull), content="true")
   // Midpoint of edge is on hull
-  inspect(@geometry.is_point_on_hull(@types.pt(50.0, 0.0), hull), content="true")
+  inspect(
+    @geometry.is_point_on_hull(@types.pt(50.0, 0.0), hull),
+    content="true",
+  )
   // Interior is not on hull
-  inspect(@geometry.is_point_on_hull(@types.pt(50.0, 50.0), hull), content="false")
+  inspect(
+    @geometry.is_point_on_hull(@types.pt(50.0, 50.0), hull),
+    content="false",
+  )
 }
 
 ///|

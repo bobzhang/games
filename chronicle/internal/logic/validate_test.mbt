@@ -218,7 +218,12 @@ test "compute_score three stars" {
     title: "Test",
     theme: "Test",
   }
-  let score = @logic.compute_score(case_, [0, 1, 2], [@types.make_link(0, 1)], 0)
+  let score = @logic.compute_score(
+    case_,
+    [0, 1, 2],
+    [@types.make_link(0, 1)],
+    0,
+  )
   assert_eq(score.stars, 3)
   assert_true(score.order_correct)
   assert_true(score.links_correct)

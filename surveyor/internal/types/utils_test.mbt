@@ -128,7 +128,12 @@ test "make_constraint creates correct constraint" {
 test "is_region_rectangular detects rectangles" {
   // 2x2 rectangle
   let r1 : @types.Region = {
-    tiles: [@types.vec2i(0, 0), @types.vec2i(1, 0), @types.vec2i(0, 1), @types.vec2i(1, 1)],
+    tiles: [
+      @types.vec2i(0, 0),
+      @types.vec2i(1, 0),
+      @types.vec2i(0, 1),
+      @types.vec2i(1, 1),
+    ],
     houses: [],
     has_road: false,
     area: 4,

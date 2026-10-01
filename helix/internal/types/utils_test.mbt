@@ -113,7 +113,11 @@ test "make_cell defaults" {
 
 ///|
 test "new_spiral" {
-  let s = @types.new_spiral([@types.new_cell(Path), @types.new_cell(Gate), @types.new_cell(Switch)])
+  let s = @types.new_spiral([
+    @types.new_cell(Path),
+    @types.new_cell(Gate),
+    @types.new_cell(Switch),
+  ])
   inspect(s.cells.length(), content="3")
   inspect(s.cells[0].kind, content="Path")
   inspect(s.cells[1].kind, content="Gate")

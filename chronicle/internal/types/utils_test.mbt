@@ -61,7 +61,11 @@ test "link_exists" {
 
 ///|
 test "remove_link" {
-  let links = [@types.make_link(0, 1), @types.make_link(2, 3), @types.make_link(4, 5)]
+  let links = [
+    @types.make_link(0, 1),
+    @types.make_link(2, 3),
+    @types.make_link(4, 5),
+  ]
   let result = @types.remove_link(links, 2, 3)
   assert_eq(result.length(), 2)
   assert_true(@types.link_exists(result, 0, 1))
