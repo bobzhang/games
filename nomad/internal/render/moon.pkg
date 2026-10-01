@@ -4,7 +4,6 @@ import {
   "bobzhang/games/nomad/internal/levels",
   "bobzhang/games/nomad/internal/world",
   "bobzhang/games/utils/draw",
-  "moonbitlang/core/math",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"

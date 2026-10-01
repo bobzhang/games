@@ -2,49 +2,49 @@
 test "check_order correct" {
   let timeline = [0, 1, 2, 3, 4, 5]
   let solution = [0, 1, 2, 3, 4, 5]
-  assert_true(check_order(timeline, solution))
+  assert_true(@logic.check_order(timeline, solution))
 }
 
 ///|
 test "check_order swapped" {
   let timeline = [1, 0, 2, 3, 4, 5]
   let solution = [0, 1, 2, 3, 4, 5]
-  assert_false(check_order(timeline, solution))
+  assert_false(@logic.check_order(timeline, solution))
 }
 
 ///|
 test "check_order partial" {
   let timeline = [0, 1, 3, 2, 4, 5]
   let solution = [0, 1, 2, 3, 4, 5]
-  assert_false(check_order(timeline, solution))
+  assert_false(@logic.check_order(timeline, solution))
 }
 
 ///|
 test "count_correct_positions" {
   let timeline = [0, 1, 3, 2, 4, 5]
   let solution = [0, 1, 2, 3, 4, 5]
-  assert_eq(count_correct_positions(timeline, solution), 4)
+  assert_eq(@logic.count_correct_positions(timeline, solution), 4)
 }
 
 ///|
 test "check_links correct" {
   let placed = [@types.make_link(0, 2), @types.make_link(1, 3)]
   let solution = [@types.make_link(0, 2), @types.make_link(1, 3)]
-  assert_true(check_links(placed, solution))
+  assert_true(@logic.check_links(placed, solution))
 }
 
 ///|
 test "check_links wrong" {
   let placed = [@types.make_link(0, 2), @types.make_link(1, 4)]
   let solution = [@types.make_link(0, 2), @types.make_link(1, 3)]
-  assert_false(check_links(placed, solution))
+  assert_false(@logic.check_links(placed, solution))
 }
 
 ///|
 test "check_links missing" {
   let placed : Array[@types.CauseLink] = [@types.make_link(0, 2)]
   let solution = [@types.make_link(0, 2), @types.make_link(1, 3)]
-  assert_false(check_links(placed, solution))
+  assert_false(@logic.check_links(placed, solution))
 }
 
 ///|
@@ -55,7 +55,7 @@ test "check_links extra" {
     @types.make_link(2, 4),
   ]
   let solution = [@types.make_link(0, 2), @types.make_link(1, 3)]
-  assert_false(check_links(placed, solution))
+  assert_false(@logic.check_links(placed, solution))
 }
 
 ///|
@@ -66,77 +66,77 @@ test "count_correct_links" {
     @types.make_link(3, 5),
   ]
   let solution = [@types.make_link(0, 2), @types.make_link(1, 3)]
-  assert_eq(count_correct_links(placed, solution), 1)
+  assert_eq(@logic.count_correct_links(placed, solution), 1)
 }
 
 ///|
 test "clue Before satisfied" {
   let clue = @types.make_clue(Before, 0, 2, "A before B")
   let timeline = [0, 1, 2, 3]
-  assert_true(check_clue_satisfied(clue, timeline))
+  assert_true(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue Before not satisfied" {
   let clue = @types.make_clue(Before, 2, 0, "B before A")
   let timeline = [0, 1, 2, 3]
-  assert_false(check_clue_satisfied(clue, timeline))
+  assert_false(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue After satisfied" {
   let clue = @types.make_clue(After, 3, 1, "A after B")
   let timeline = [0, 1, 2, 3]
-  assert_true(check_clue_satisfied(clue, timeline))
+  assert_true(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue After not satisfied" {
   let clue = @types.make_clue(After, 0, 2, "A after B but wrong")
   let timeline = [0, 1, 2, 3]
-  assert_false(check_clue_satisfied(clue, timeline))
+  assert_false(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue Because satisfied (A before B)" {
   let clue = @types.make_clue(Because, 1, 3, "A caused B")
   let timeline = [0, 1, 2, 3]
-  assert_true(check_clue_satisfied(clue, timeline))
+  assert_true(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue Because not satisfied" {
   let clue = @types.make_clue(Because, 3, 1, "B caused A but wrong")
   let timeline = [0, 1, 2, 3]
-  assert_false(check_clue_satisfied(clue, timeline))
+  assert_false(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue During satisfied (adjacent)" {
   let clue = @types.make_clue(During, 1, 2, "A during B")
   let timeline = [0, 1, 2, 3]
-  assert_true(check_clue_satisfied(clue, timeline))
+  assert_true(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue During not satisfied (not adjacent)" {
   let clue = @types.make_clue(During, 0, 2, "A during B but apart")
   let timeline = [0, 1, 2, 3]
-  assert_false(check_clue_satisfied(clue, timeline))
+  assert_false(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue NotAdjacent satisfied" {
   let clue = @types.make_clue(NotAdjacent, 0, 3, "not next to each other")
   let timeline = [0, 1, 2, 3]
-  assert_true(check_clue_satisfied(clue, timeline))
+  assert_true(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
 test "clue NotAdjacent not satisfied" {
   let clue = @types.make_clue(NotAdjacent, 1, 2, "should not be adjacent")
   let timeline = [0, 1, 2, 3]
-  assert_false(check_clue_satisfied(clue, timeline))
+  assert_false(@logic.check_clue_satisfied(clue, timeline))
 }
 
 ///|
@@ -146,7 +146,7 @@ test "check_all_clues all satisfied" {
     @types.make_clue(After, 3, 1, "C after D"),
   ]
   let timeline = [0, 1, 2, 3]
-  assert_true(check_all_clues(clues, timeline))
+  assert_true(@logic.check_all_clues(clues, timeline))
 }
 
 ///|
@@ -156,7 +156,7 @@ test "check_all_clues one fails" {
     @types.make_clue(Before, 3, 1, "D before B - wrong"),
   ]
   let timeline = [0, 1, 2, 3]
-  assert_false(check_all_clues(clues, timeline))
+  assert_false(@logic.check_all_clues(clues, timeline))
 }
 
 ///|
@@ -177,7 +177,7 @@ test "check_anchors correct" {
     theme: "Test",
   }
   let timeline = [0, 1, 2]
-  assert_true(check_anchors(case_, timeline))
+  assert_true(@logic.check_anchors(case_, timeline))
 }
 
 ///|
@@ -198,7 +198,7 @@ test "check_anchors wrong position" {
     theme: "Test",
   }
   let timeline = [2, 1, 0]
-  assert_false(check_anchors(case_, timeline))
+  assert_false(@logic.check_anchors(case_, timeline))
 }
 
 ///|
@@ -218,7 +218,12 @@ test "compute_score three stars" {
     title: "Test",
     theme: "Test",
   }
-  let score = compute_score(case_, [0, 1, 2], [@types.make_link(0, 1)], 0)
+  let score = @logic.compute_score(
+    case_,
+    [0, 1, 2],
+    [@types.make_link(0, 1)],
+    0,
+  )
   assert_eq(score.stars, 3)
   assert_true(score.order_correct)
   assert_true(score.links_correct)
@@ -242,7 +247,7 @@ test "compute_score one star (order only)" {
     title: "Test",
     theme: "Test",
   }
-  let score = compute_score(case_, [0, 1, 2], [], 0)
+  let score = @logic.compute_score(case_, [0, 1, 2], [], 0)
   assert_eq(score.stars, 1)
   assert_true(score.order_correct)
   assert_false(score.links_correct)
@@ -265,7 +270,7 @@ test "compute_score zero stars" {
     title: "Test",
     theme: "Test",
   }
-  let score = compute_score(case_, [2, 1, 0], [], 0)
+  let score = @logic.compute_score(case_, [2, 1, 0], [], 0)
   assert_eq(score.stars, 0)
   assert_false(score.order_correct)
 }
@@ -283,7 +288,7 @@ test "compute_score two stars (with rewinds)" {
     title: "Test",
     theme: "Test",
   }
-  let score = compute_score(case_, [0, 1], [@types.make_link(0, 1)], 2)
+  let score = @logic.compute_score(case_, [0, 1], [@types.make_link(0, 1)], 2)
   assert_eq(score.stars, 2)
   assert_false(score.no_rewinds)
 }

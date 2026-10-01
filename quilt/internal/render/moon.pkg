@@ -4,7 +4,6 @@ import {
   "bobzhang/games/quilt/internal/matching",
   "bobzhang/games/quilt/internal/levels",
   "bobzhang/games/utils/draw",
-  "moonbitlang/core/math",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"

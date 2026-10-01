@@ -2,11 +2,11 @@
 test "advance_tide_sets_correct_level" {
   let game = @types.new_game()
   game.current_turn = 0
-  advance_tide(game)
+  @ecology.advance_tide(game)
   assert_eq(game.tide_level, 1)
   assert_eq(game.tide_phase, Low)
   game.current_turn = 2
-  advance_tide(game)
+  @ecology.advance_tide(game)
   assert_eq(game.tide_level, 4)
   assert_eq(game.tide_phase, High)
 }
@@ -44,7 +44,7 @@ test "update_submersion_marks_organisms" {
     },
   ]
   game.tide_level = 4
-  update_submersion(game)
+  @ecology.update_submersion(game)
   assert_true(game.organisms[0].submerged)
   assert_false(game.organisms[1].submerged)
 }
@@ -62,7 +62,7 @@ test "apply_health_effects_submersion_heals_barnacle" {
   }
   game.organisms = [org]
   let events : Array[String] = []
-  apply_health_effects(game, events)
+  @ecology.apply_health_effects(game, events)
   assert_true(org.health > 50.0)
 }
 
@@ -79,7 +79,7 @@ test "apply_health_effects_exposure_damages_anemone" {
   }
   game.organisms = [org]
   let events : Array[String] = []
-  apply_health_effects(game, events)
+  @ecology.apply_health_effects(game, events)
   assert_true(org.health < 80.0)
 }
 
@@ -96,7 +96,7 @@ test "apply_health_effects_algae_thrives_exposed" {
   }
   game.organisms = [org]
   let events : Array[String] = []
-  apply_health_effects(game, events)
+  @ecology.apply_health_effects(game, events)
   assert_true(org.health > 50.0)
 }
 
@@ -113,7 +113,7 @@ test "apply_health_effects_algae_decays_submerged" {
   }
   game.organisms = [org]
   let events : Array[String] = []
-  apply_health_effects(game, events)
+  @ecology.apply_health_effects(game, events)
   assert_true(org.health < 50.0)
 }
 
@@ -131,7 +131,7 @@ test "check_deaths_kills_zero_health" {
   game.organisms = [org]
   game.grid[2][3] = Organism(Barnacle)
   let events : Array[String] = []
-  check_deaths(game, events)
+  @ecology.check_deaths(game, events)
   assert_false(org.alive)
   assert_eq(game.grid[2][3], Empty)
 }
@@ -157,7 +157,7 @@ test "apply_predation_starfish_attacks_barnacle" {
   }
   game.organisms = [starfish, barnacle]
   let events : Array[String] = []
-  apply_predation(game, events)
+  @ecology.apply_predation(game, events)
   assert_true(barnacle.health < 80.0)
   assert_true(starfish.health > 60.0)
 }
@@ -175,7 +175,7 @@ test "apply_predation_hungry_predator_loses_health" {
   }
   game.organisms = [starfish]
   let events : Array[String] = []
-  apply_predation(game, events)
+  @ecology.apply_predation(game, events)
   assert_true(starfish.health < 60.0)
 }
 
@@ -208,7 +208,7 @@ test "apply_algae_growth_bloom_without_grazers" {
   }
   game.organisms = [algae1, algae2, algae3]
   let events : Array[String] = []
-  apply_algae_growth(game, events)
+  @ecology.apply_algae_growth(game, events)
   assert_true(algae1.health > 50.0)
   assert_true(events.length() > 0)
 }
@@ -234,7 +234,7 @@ test "apply_algae_growth_controlled_by_urchin" {
   }
   game.organisms = [algae, urchin]
   let events : Array[String] = []
-  apply_algae_growth(game, events)
+  @ecology.apply_algae_growth(game, events)
   inspect(algae.health.to_double(), content="50")
 }
 
@@ -263,7 +263,7 @@ test "simulate_turn_advances_state" {
     },
   ]
   game.grid[5][7] = Organism(Barnacle)
-  let log = simulate_turn(game)
+  let log = @ecology.simulate_turn(game)
   assert_eq(game.current_turn, 1)
   assert_true(log.events.length() > 0)
 }
@@ -293,7 +293,7 @@ test "check_victory_all_targets_alive_after_3_cycles" {
     },
   ]
   game.current_cycle = 3
-  let result = check_victory(game)
+  let result = @ecology.check_victory(game)
   assert_eq(result, Victory)
 }
 
@@ -322,7 +322,7 @@ test "check_victory_target_died" {
     },
   ]
   game.current_cycle = 1
-  let result = check_victory(game)
+  let result = @ecology.check_victory(game)
   guard result is Failure(_) else {
     fail("expected Failure, got \{Repr(result)}")
   }
@@ -350,13 +350,13 @@ test "count_alive" {
       submerged: false,
     },
   ]
-  assert_eq(count_alive(game), 2)
+  assert_eq(@ecology.count_alive(game), 2)
 }
 
 ///|
 test "get_water_row" {
-  assert_eq(get_water_row(4, 0), 2)
-  assert_eq(get_water_row(1, 0), 5)
-  assert_eq(get_water_row(2, 1), 3)
-  assert_eq(get_water_row(4, 3), -1)
+  assert_eq(@ecology.get_water_row(4, 0), 2)
+  assert_eq(@ecology.get_water_row(1, 0), 5)
+  assert_eq(@ecology.get_water_row(2, 1), 3)
+  assert_eq(@ecology.get_water_row(4, 3), -1)
 }

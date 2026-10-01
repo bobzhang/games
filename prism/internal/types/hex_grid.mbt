@@ -228,7 +228,7 @@ pub fn count_placed_components(grid : HexGrid) -> Int {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=20)
+  let scores : Array[LevelScore] = Array(capacity=20)
   for _i in 0..<20 {
     scores.push(new_level_score())
   }

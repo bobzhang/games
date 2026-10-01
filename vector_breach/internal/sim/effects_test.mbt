@@ -75,7 +75,7 @@ test "push into wall deals collision damage" {
   // Unit at (1,0), wall at (0,0), push west
   let battle = make_test_battle(4, 4, tiles=[(0, 0, Wall)])
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
-  try_push(battle, uid, -1, 0, 1)
+  @sim.try_push(battle, uid, -1, 0, 1)
   // Unit should still be at (1,0) and took 1 collision damage
   inspect(battle.units[uid].hp, content="4")
   inspect(battle.units[uid].x, content="1")
@@ -86,7 +86,7 @@ test "push into wall deals collision damage" {
 test "push into map edge deals collision damage" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Enemy, 0, 0, hp=5)
-  try_push(battle, uid, -1, 0, 1)
+  @sim.try_push(battle, uid, -1, 0, 1)
   // Hit edge of map, took 1 damage
   inspect(battle.units[uid].hp, content="4")
   inspect(battle.units[uid].x, content="0")
@@ -96,7 +96,7 @@ test "push into map edge deals collision damage" {
 test "push into chasm kills unit" {
   let battle = make_test_battle(4, 4, tiles=[(2, 0, Chasm)])
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
-  try_push(battle, uid, 1, 0, 1)
+  @sim.try_push(battle, uid, 1, 0, 1)
   // Unit fell into chasm: hp=0, inactive
   inspect(battle.units[uid].hp, content="0")
   inspect(battle.units[uid].active, content="false")
@@ -110,7 +110,7 @@ test "chain push moves both units" {
   let battle = make_test_battle(4, 4)
   let a = add_unit(battle, Player, 1, 0, hp=5, mech_class=Vanguard)
   let b = add_unit(battle, Enemy, 2, 0, hp=5)
-  try_push(battle, a, 1, 0, 1)
+  @sim.try_push(battle, a, 1, 0, 1)
   // A collided with B: both took 1 collision damage
   inspect(battle.units[a].hp, content="4")
   inspect(battle.units[b].hp, content="4")
@@ -124,7 +124,7 @@ test "chain push moves both units" {
 test "push distance 2 moves unit 2 tiles" {
   let battle = make_test_battle(6, 4)
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
-  try_push(battle, uid, 1, 0, 2)
+  @sim.try_push(battle, uid, 1, 0, 2)
   // Should have moved 2 tiles east
   inspect(battle.units[uid].x, content="3")
   inspect(battle.units[uid].hp, content="5")
@@ -139,7 +139,7 @@ test "ice slide continues until wall" {
     (4, 0, Wall),
   ])
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
-  try_push(battle, uid, 1, 0, 1)
+  @sim.try_push(battle, uid, 1, 0, 1)
   // Unit slides on ice at (2,0), continues, slides on ice at (3,0),
   // then hits wall at (4,0): collision damage
   inspect(battle.units[uid].x, content="3")
@@ -151,7 +151,7 @@ test "ice slide to open space stops at edge of ice" {
   // Ice at (2,0), floor at (3,0). Unit pushed east from (1,0).
   let battle = make_test_battle(6, 4, tiles=[(2, 0, Ice)])
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
-  try_push(battle, uid, 1, 0, 1)
+  @sim.try_push(battle, uid, 1, 0, 1)
   // Lands on ice at (2,0), slides one more step to (3,0) which is floor
   inspect(battle.units[uid].x, content="3")
   inspect(battle.units[uid].hp, content="5")
@@ -162,7 +162,7 @@ test "shield absorbs damage before HP" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Enemy, 0, 0, hp=5, shield=2)
   // Deal 3 damage: shield absorbs 2, HP takes 1
-  let dealt = apply_damage(battle, uid, 3)
+  let dealt = @sim.apply_damage(battle, uid, 3)
   inspect(battle.units[uid].shield, content="0")
   inspect(battle.units[uid].hp, content="4")
   inspect(dealt, content="1")
@@ -172,7 +172,7 @@ test "shield absorbs damage before HP" {
 test "shield fully absorbs small damage" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Enemy, 0, 0, hp=5, shield=3)
-  let dealt = apply_damage(battle, uid, 2)
+  let dealt = @sim.apply_damage(battle, uid, 2)
   inspect(battle.units[uid].shield, content="1")
   inspect(battle.units[uid].hp, content="5")
   inspect(dealt, content="0")
@@ -182,7 +182,7 @@ test "shield fully absorbs small damage" {
 test "damage kills unit when HP reaches zero" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Enemy, 0, 0, hp=2)
-  let _ = apply_damage(battle, uid, 3)
+  let _ = @sim.apply_damage(battle, uid, 3)
   inspect(battle.units[uid].hp, content="0")
   inspect(battle.units[uid].active, content="false")
 }
@@ -191,7 +191,7 @@ test "damage kills unit when HP reaches zero" {
 test "apply heat increases heat" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Player, 0, 0, hp=5, heat=0, max_heat=3)
-  apply_heat(battle, uid, 2)
+  @sim.apply_heat(battle, uid, 2)
   inspect(battle.units[uid].heat, content="2")
   inspect(battle.units[uid].stunned, content="false")
 }
@@ -200,7 +200,7 @@ test "apply heat increases heat" {
 test "overheat stuns and resets heat" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Player, 0, 0, hp=5, heat=2, max_heat=3)
-  apply_heat(battle, uid, 2)
+  @sim.apply_heat(battle, uid, 2)
   // heat 2+2=4 > max_heat 3: overheated
   inspect(battle.units[uid].heat, content="0")
   inspect(battle.units[uid].stunned, content="true")
@@ -221,7 +221,7 @@ test "stun prevents action via player command" {
   let original_x = battle.units[uid].x
   let original_y = battle.units[uid].y
   // Try to move via player command
-  execute_player_command(battle, 0, Move(2, 1))
+  @sim.execute_player_command(battle, 0, Move(2, 1))
   // Unit should not have moved because it is stunned
   inspect(battle.units[uid].x, content=original_x.to_string())
   inspect(battle.units[uid].y, content=original_y.to_string())
@@ -231,7 +231,7 @@ test "stun prevents action via player command" {
 test "apply_shield adds shield" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Player, 0, 0, hp=5, shield=0)
-  apply_shield(battle, uid, 3)
+  @sim.apply_shield(battle, uid, 3)
   inspect(battle.units[uid].shield, content="3")
 }
 
@@ -239,7 +239,7 @@ test "apply_shield adds shield" {
 test "apply_stun sets stunned flag" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Enemy, 0, 0, hp=5)
-  apply_stun(battle, uid)
+  @sim.apply_stun(battle, uid)
   inspect(battle.units[uid].stunned, content="true")
 }
 
@@ -247,7 +247,7 @@ test "apply_stun sets stunned flag" {
 test "move_unit_to updates position and grid occupancy" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Player, 1, 1, hp=5)
-  move_unit_to(battle, uid, 2, 3)
+  @sim.move_unit_to(battle, uid, 2, 3)
   inspect(battle.units[uid].x, content="2")
   inspect(battle.units[uid].y, content="3")
   // Old tile should be clear
@@ -260,7 +260,7 @@ test "move_unit_to updates position and grid occupancy" {
 test "kill_unit marks inactive and clears tile" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Enemy, 2, 2, hp=5)
-  kill_unit(battle, uid)
+  @sim.kill_unit(battle, uid)
   inspect(battle.units[uid].active, content="false")
   inspect(battle.units[uid].hp, content="0")
   inspect(battle.grid.get(2, 2).occupied_by, content="-1")
@@ -270,20 +270,20 @@ test "kill_unit marks inactive and clears tile" {
 test "unit_at finds occupant" {
   let battle = make_test_battle(4, 4)
   let uid = add_unit(battle, Enemy, 2, 2, hp=5)
-  inspect(unit_at(battle, 2, 2), content=uid.to_string())
-  inspect(unit_at(battle, 0, 0), content="-1")
-  inspect(unit_at(battle, -1, 0), content="-1")
+  inspect(@sim.unit_at(battle, 2, 2), content=uid.to_string())
+  inspect(@sim.unit_at(battle, 0, 0), content="-1")
+  inspect(@sim.unit_at(battle, -1, 0), content="-1")
 }
 
 ///|
 test "is_walkable checks floors and occupancy" {
   let battle = make_test_battle(4, 4, tiles=[(1, 0, Wall), (2, 0, Chasm)])
   let _ = add_unit(battle, Enemy, 0, 0, hp=5)
-  inspect(is_walkable(battle, 0, 0), content="false") // occupied
-  inspect(is_walkable(battle, 1, 0), content="false") // wall
-  inspect(is_walkable(battle, 2, 0), content="false") // chasm
-  inspect(is_walkable(battle, 3, 0), content="true") // empty floor
-  inspect(is_walkable(battle, -1, 0), content="false") // out of bounds
+  inspect(@sim.is_walkable(battle, 0, 0), content="false") // occupied
+  inspect(@sim.is_walkable(battle, 1, 0), content="false") // wall
+  inspect(@sim.is_walkable(battle, 2, 0), content="false") // chasm
+  inspect(@sim.is_walkable(battle, 3, 0), content="true") // empty floor
+  inspect(@sim.is_walkable(battle, -1, 0), content="false") // out of bounds
 }
 
 ///|
@@ -291,7 +291,7 @@ test "find_nearest_unit returns closest by manhattan distance" {
   let battle = make_test_battle(8, 8)
   let _ = add_unit(battle, Enemy, 5, 5, hp=3)
   let closer = add_unit(battle, Enemy, 2, 2, hp=3)
-  let nearest = find_nearest_unit(battle, 1, 1, Enemy)
+  let nearest = @sim.find_nearest_unit(battle, 1, 1, Enemy)
   inspect(nearest, content=closer.to_string())
 }
 
@@ -299,7 +299,7 @@ test "find_nearest_unit returns closest by manhattan distance" {
 test "try_pull moves unit toward puller" {
   let battle = make_test_battle(6, 4)
   let uid = add_unit(battle, Enemy, 4, 0, hp=5)
-  try_pull(battle, uid, 1, 0, 2)
+  @sim.try_pull(battle, uid, 1, 0, 2)
   // Pulled west 2 tiles toward (1,0)
   inspect(battle.units[uid].x, content="2")
   inspect(battle.units[uid].hp, content="5")
@@ -311,7 +311,7 @@ test "simulate_turn advances turn counter" {
   let _ = add_unit(battle, Player, 1, 1, hp=5, mech_class=Vanguard)
   let _ = add_unit(battle, Enemy, 6, 6, hp=3)
   inspect(battle.turn, content="1")
-  let _ = simulate_turn(battle, [Wait])
+  let _ = @sim.simulate_turn(battle, [Wait])
   inspect(battle.turn, content="2")
 }
 
@@ -319,7 +319,7 @@ test "simulate_turn advances turn counter" {
 test "hazard damage applies to units on fire" {
   let battle = make_test_battle(4, 4, hazards=[(1, 1, Fire)])
   let uid = add_unit(battle, Enemy, 1, 1, hp=5)
-  let _ = simulate_turn(battle, [])
+  let _ = @sim.simulate_turn(battle, [])
   // Unit should have taken 1 fire hazard damage
   inspect(battle.units[uid].hp, content="4")
 }
@@ -329,7 +329,7 @@ test "overcharged_push augment adds distance" {
   let battle = make_test_battle(8, 4)
   battle.augments = [OverchargedPush]
   let uid = add_unit(battle, Enemy, 1, 0, hp=5)
-  try_push(battle, uid, 1, 0, 1)
+  @sim.try_push(battle, uid, 1, 0, 1)
   // Normal push 1 + bonus 1 = 2 tiles
   inspect(battle.units[uid].x, content="3")
 }

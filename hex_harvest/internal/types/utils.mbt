@@ -241,9 +241,9 @@ pub fn new_tile(kind : TileKind, height : Int) -> HexTile {
 
 ///|
 pub fn new_grid(width : Int, height : Int) -> HexGrid {
-  let tiles : Array[Array[HexTile]] = Array::new(capacity=height)
+  let tiles : Array[Array[HexTile]] = Array(capacity=height)
   for _r in 0..<height {
-    let row : Array[HexTile] = Array::new(capacity=width)
+    let row : Array[HexTile] = Array(capacity=width)
     for _c in 0..<width {
       row.push(new_tile(Dirt, 0))
     }
@@ -282,9 +282,9 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_game() -> Game {
-  let level_scores : Array[Array[LevelScore?]] = Array::new(capacity=total_worlds)
+  let level_scores : Array[Array[LevelScore?]] = Array(capacity=total_worlds)
   for _w in 0..<total_worlds {
-    let world_scores : Array[LevelScore?] = Array::new(capacity=levels_per_world)
+    let world_scores : Array[LevelScore?] = Array(capacity=levels_per_world)
     for _l in 0..<levels_per_world {
       world_scores.push(None)
     }
@@ -422,9 +422,9 @@ pub fn clone_tile(t : HexTile) -> HexTile {
 
 ///|
 pub fn clone_grid_tiles(grid : HexGrid) -> Array[Array[HexTile]] {
-  let result : Array[Array[HexTile]] = Array::new(capacity=grid.height)
+  let result : Array[Array[HexTile]] = Array(capacity=grid.height)
   for r in 0..<grid.height {
-    let row : Array[HexTile] = Array::new(capacity=grid.width)
+    let row : Array[HexTile] = Array(capacity=grid.width)
     for c in 0..<grid.width {
       row.push(clone_tile(grid.tiles[r][c]))
     }

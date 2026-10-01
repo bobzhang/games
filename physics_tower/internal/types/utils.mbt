@@ -149,8 +149,8 @@ pub fn new_joint(
 ///|
 pub fn new_world() -> World {
   {
-    bodies: Array::new(capacity=max_bodies),
-    joints: Array::new(capacity=max_joints),
+    bodies: Array(capacity=max_bodies),
+    joints: Array(capacity=max_joints),
     gravity,
     ground_y,
     wind_force: 0.0,
@@ -178,7 +178,7 @@ pub fn new_particle(
 ///|
 pub fn new_destruction_state() -> DestructionState {
   {
-    particles: Array::new(capacity=max_particles),
+    particles: Array(capacity=max_particles),
     slow_motion: 0.0,
     camera_shake: 0.0,
     shake_x: 0.0,
@@ -345,8 +345,8 @@ pub fn new_tutorial_state() -> TutorialState {
 
 ///|
 pub fn new_statistics(level_count : Int) -> Statistics {
-  let best = Array::new(capacity=level_count)
-  let stars = Array::new(capacity=level_count)
+  let best = Array(capacity=level_count)
+  let stars = Array(capacity=level_count)
   for _i in 0..<level_count {
     best.push(0.0F)
     stars.push(0)
@@ -368,7 +368,7 @@ pub fn new_statistics(level_count : Int) -> Statistics {
 ///|
 pub fn new_replay_state() -> ReplayState {
   {
-    actions: Array::new(capacity=64),
+    actions: Array(capacity=64),
     test_height: 0.0,
     test_score: 0,
     test_passed: false,
@@ -377,7 +377,7 @@ pub fn new_replay_state() -> ReplayState {
     playback_speed: 1.0,
     is_recording: false,
     is_playing: false,
-    ghost_pieces: Array::new(capacity=64),
+    ghost_pieces: Array(capacity=64),
     ghost_visible: false,
   }
 }
@@ -401,11 +401,11 @@ pub fn new_game() -> Game {
     rng_state: 12345U,
     message_text: "",
     message_timer: 0.0,
-    inventory: Array::new(capacity=20),
+    inventory: Array(capacity=20),
     tower_height: 0.0,
     blueprints: default_blueprints(),
     selected_blueprint: -1,
-    custom_blueprints: Array::new(capacity=10),
+    custom_blueprints: Array(capacity=10),
     destruction: new_destruction_state(),
     upgrades: default_upgrades(),
     challenge_state: None,
@@ -419,11 +419,11 @@ pub fn new_game() -> Game {
     lightweight_steel: false,
     flex_joints: false,
     deep_foundation: false,
-    active_combos: Array::new(capacity=32),
+    active_combos: Array(capacity=32),
     tutorial: new_tutorial_state(),
     statistics: new_statistics(20),
     replay: new_replay_state(),
-    sound_queue: Array::new(capacity=16),
+    sound_queue: Array(capacity=16),
     current_world: 0,
     tutorial_shown: false,
   }

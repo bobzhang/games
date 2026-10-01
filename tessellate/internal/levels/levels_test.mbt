@@ -1,7 +1,7 @@
 ///|
 test "all 30 levels load without error" {
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     // Region should have valid dimensions
     assert_true(level.region.width > 0)
     assert_true(level.region.height > 0)
@@ -13,7 +13,7 @@ test "all 30 levels load without error" {
 ///|
 test "all regions have active cells" {
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let count = @types.count_active_cells(level.region)
     assert_true(count > 0)
   }
@@ -23,7 +23,7 @@ test "all regions have active cells" {
 test "total piece cells can cover region" {
   // Total piece area should be >= region area (pieces must be able to fill the region)
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let region_cells = @types.count_active_cells(level.region)
     let mut piece_cells = 0
     for j in 0..<level.pieces.length() {
@@ -37,7 +37,7 @@ test "total piece cells can cover region" {
 ///|
 test "all pieces have at least one cell" {
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     for j in 0..<level.pieces.length() {
       assert_true(level.pieces[j].cells.length() > 0)
     }
@@ -47,7 +47,7 @@ test "all pieces have at least one cell" {
 ///|
 test "par time is positive for all levels" {
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.par_time > 0)
   }
 }
@@ -55,7 +55,7 @@ test "par time is positive for all levels" {
 ///|
 test "par rotations is positive for all levels" {
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.par_rotations > 0)
   }
 }
@@ -63,7 +63,7 @@ test "par rotations is positive for all levels" {
 ///|
 test "region dimensions match grid constants" {
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     inspect(level.region.width, content="10")
     inspect(level.region.height, content="10")
   }
@@ -72,7 +72,7 @@ test "region dimensions match grid constants" {
 ///|
 test "region active array dimensions match declared size" {
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     inspect(level.region.active.length() == level.region.height, content="true")
     for r in 0..<level.region.active.length() {
       inspect(
@@ -86,7 +86,7 @@ test "region active array dimensions match declared size" {
 ///|
 test "tier 1 levels are indices 0-9" {
   for i in 0..<10 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     // Tier 1 levels should be simpler (rectangular regions mostly)
     let count = @types.count_active_cells(level.region)
     assert_true(count > 0)
@@ -97,7 +97,7 @@ test "tier 1 levels are indices 0-9" {
 ///|
 test "tier 2 levels are indices 10-19" {
   for i in 10..<20 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let count = @types.count_active_cells(level.region)
     assert_true(count > 0)
     assert_true(count <= 100)
@@ -107,7 +107,7 @@ test "tier 2 levels are indices 10-19" {
 ///|
 test "tier 3 levels are indices 20-29" {
   for i in 20..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let count = @types.count_active_cells(level.region)
     assert_true(count > 0)
     assert_true(count <= 100)
@@ -119,10 +119,10 @@ test "later tiers have higher par times on average" {
   let mut tier1_total = 0
   let mut tier3_total = 0
   for i in 0..<10 {
-    tier1_total += get_level(i).par_time
+    tier1_total += @levels.get_level(i).par_time
   }
   for i in 20..<30 {
-    tier3_total += get_level(i).par_time
+    tier3_total += @levels.get_level(i).par_time
   }
   // Tier 3 (Art) should have higher par times than Tier 1 (Squares)
   assert_true(tier3_total > tier1_total)
@@ -132,7 +132,7 @@ test "later tiers have higher par times on average" {
 test "no piece has more than 5 cells" {
   // Pieces should be at most pentominoes (5 cells)
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     for j in 0..<level.pieces.length() {
       assert_true(level.pieces[j].cells.length() <= 5)
     }
@@ -148,7 +148,7 @@ test "total levels constant is 30" {
 test "piece cells are contiguous" {
   // Each piece should have contiguous cells (every cell adjacent to at least one other)
   for i in 0..<30 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     for j in 0..<level.pieces.length() {
       let cells = level.pieces[j].cells
       if cells.length() > 1 {

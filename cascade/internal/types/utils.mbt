@@ -226,7 +226,7 @@ pub fn clone_domino(d : Domino) -> Domino {
 
 ///|
 pub fn clone_dominoes(arr : Array[Domino]) -> Array[Domino] {
-  let result : Array[Domino] = Array::new(capacity=arr.length())
+  let result : Array[Domino] = Array(capacity=arr.length())
   for i in 0..<arr.length() {
     result.push(clone_domino(arr[i]))
   }
@@ -358,7 +358,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

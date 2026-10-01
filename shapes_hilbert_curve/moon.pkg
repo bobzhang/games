@@ -1,7 +1,6 @@
 import {
   "tonyfettes/raylib",
   "tonyfettes/raylib/raygui",
-  "moonbitlang/core/math",
   "bobzhang/games/utils/fps",
 }
 

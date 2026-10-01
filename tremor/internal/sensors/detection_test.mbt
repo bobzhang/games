@@ -22,7 +22,7 @@ test "broad sensor ring computation" {
   }
   let epicenter = @types.vec2i(8, 5)
   let tile = @types.new_tile(Empty)
-  match compute_reading(sensor, epicenter, tile.kind) {
+  match @sensors.compute_reading(sensor, epicenter, tile.kind) {
     Some(r) => {
       // distance is 3, uncertainty ±2
       assert_true(r.min_dist > 0.99 && r.min_dist < 1.01)
@@ -42,7 +42,7 @@ test "precise sensor narrower band" {
   }
   let epicenter = @types.vec2i(8, 5)
   let tile = @types.new_tile(Empty)
-  match compute_reading(sensor, epicenter, tile.kind) {
+  match @sensors.compute_reading(sensor, epicenter, tile.kind) {
     Some(r) => {
       // distance is 3, uncertainty ±1
       assert_true(r.min_dist > 1.99 && r.min_dist < 2.01)
@@ -63,11 +63,11 @@ test "directional wedge contains check" {
     kind: Directional,
   }
   // Point due east should be in wedge
-  assert_true(point_in_ring(reading, @types.vec2i(8, 5)))
+  assert_true(@sensors.point_in_ring(reading, @types.vec2i(8, 5)))
   // Point due west should NOT be in wedge
-  assert_true(!point_in_ring(reading, @types.vec2i(2, 5)))
+  assert_true(!@sensors.point_in_ring(reading, @types.vec2i(2, 5)))
   // Point due north should NOT be in wedge (outside 90 degree cone)
-  assert_true(!point_in_ring(reading, @types.vec2i(5, 2)))
+  assert_true(!@sensors.point_in_ring(reading, @types.vec2i(5, 2)))
 }
 
 ///|
@@ -88,8 +88,8 @@ test "multi-sensor overlap narrows region" {
     angle: 360.0,
     kind: Broad,
   }
-  let overlap1 = compute_overlap_tiles([r1])
-  let overlap2 = compute_overlap_tiles([r1, r2])
+  let overlap1 = @sensors.compute_overlap_tiles([r1])
+  let overlap2 = @sensors.compute_overlap_tiles([r1, r2])
   // Two readings should narrow the overlap
   assert_true(overlap2.length() <= overlap1.length())
   assert_true(overlap2.length() > 0)
@@ -97,9 +97,11 @@ test "multi-sensor overlap narrows region" {
 
 ///|
 test "tolerance check for guess accuracy" {
-  assert_true(check_guess(@types.vec2i(5, 5), @types.vec2i(5, 5), 2.0))
-  assert_true(check_guess(@types.vec2i(6, 5), @types.vec2i(5, 5), 2.0))
-  assert_true(!check_guess(@types.vec2i(10, 5), @types.vec2i(5, 5), 2.0))
+  assert_true(@sensors.check_guess(@types.vec2i(5, 5), @types.vec2i(5, 5), 2.0))
+  assert_true(@sensors.check_guess(@types.vec2i(6, 5), @types.vec2i(5, 5), 2.0))
+  assert_true(
+    !@sensors.check_guess(@types.vec2i(10, 5), @types.vec2i(5, 5), 2.0),
+  )
 }
 
 ///|
@@ -111,7 +113,7 @@ test "out of range sensor gives no reading" {
   }
   let epicenter = @types.vec2i(11, 9)
   let tile = @types.new_tile(Empty)
-  let result = compute_reading(sensor, epicenter, tile.kind)
+  let result = @sensors.compute_reading(sensor, epicenter, tile.kind)
   assert_true(result is None)
 }
 
@@ -123,8 +125,8 @@ test "noisy tile extra uncertainty" {
     direction: North,
   }
   let epicenter = @types.vec2i(8, 5)
-  let reading_clean = compute_reading(sensor, epicenter, Empty)
-  let reading_noisy = compute_reading(sensor, epicenter, Noisy)
+  let reading_clean = @sensors.compute_reading(sensor, epicenter, Empty)
+  let reading_noisy = @sensors.compute_reading(sensor, epicenter, Noisy)
   match (reading_clean, reading_noisy) {
     (Some(rc), Some(rn)) =>
       // Noisy should have wider band
@@ -151,10 +153,10 @@ test "budget validation" {
   game.level = Some(level)
   game.selected_sensor = Broad
   // Should be able to place (cost 1, budget 3)
-  assert_true(can_place_sensor(game, @types.vec2i(2, 2)))
+  assert_true(@sensors.can_place_sensor(game, @types.vec2i(2, 2)))
   // Simulate using up budget
   game.budget_used = 3
-  assert_true(!can_place_sensor(game, @types.vec2i(3, 3)))
+  assert_true(!@sensors.can_place_sensor(game, @types.vec2i(3, 3)))
 }
 
 ///|
@@ -166,12 +168,12 @@ test "dual epicenter detection" {
     @types.new_epicenter(e2.x, e2.y),
   ]
   // Find first
-  let idx1 = check_all_epicenters(@types.vec2i(3, 3), epicenters, 2.0)
+  let idx1 = @sensors.check_all_epicenters(@types.vec2i(3, 3), epicenters, 2.0)
   assert_true(idx1 == 0)
   epicenters[0].found = true
   // Find second
-  let idx2 = check_all_epicenters(@types.vec2i(8, 7), epicenters, 2.0)
+  let idx2 = @sensors.check_all_epicenters(@types.vec2i(8, 7), epicenters, 2.0)
   assert_true(idx2 == 1)
   epicenters[1].found = true
-  assert_true(all_epicenters_found(epicenters))
+  assert_true(@sensors.all_epicenters_found(epicenters))
 }

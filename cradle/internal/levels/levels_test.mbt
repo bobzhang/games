@@ -1,12 +1,12 @@
 ///|
 test "make_all_levels returns 25 levels" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   inspect(levels.length(), content="25")
 }
 
 ///|
 test "first 8 levels are Lines tier" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 0..<8 {
     inspect(levels[i].tier, content="Lines")
   }
@@ -14,7 +14,7 @@ test "first 8 levels are Lines tier" {
 
 ///|
 test "levels 8-16 are Weave tier" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 8..<17 {
     inspect(levels[i].tier, content="Weave")
   }
@@ -22,7 +22,7 @@ test "levels 8-16 are Weave tier" {
 
 ///|
 test "levels 17-24 are Art tier" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 17..<25 {
     inspect(levels[i].tier, content="Art")
   }
@@ -30,7 +30,7 @@ test "levels 17-24 are Art tier" {
 
 ///|
 test "all levels have positive par_strings" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 0..<levels.length() {
     assert_true(levels[i].par_strings > 0)
   }
@@ -38,7 +38,7 @@ test "all levels have positive par_strings" {
 
 ///|
 test "all levels have at least one target" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 0..<levels.length() {
     assert_true(levels[i].targets.length() > 0)
   }
@@ -46,7 +46,7 @@ test "all levels have at least one target" {
 
 ///|
 test "all levels have correct peg_count" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 0..<levels.length() {
     inspect(levels[i].peg_count, content="24")
   }
@@ -54,7 +54,7 @@ test "all levels have correct peg_count" {
 
 ///|
 test "first level has single target at center" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   let first = levels[0]
   inspect(first.name, content="First Cross")
   inspect(first.targets.length(), content="1")
@@ -67,7 +67,7 @@ test "first level has single target at center" {
 
 ///|
 test "level names are non-empty" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 0..<levels.length() {
     assert_true(levels[i].name.length() > 0)
   }
@@ -75,7 +75,7 @@ test "level names are non-empty" {
 
 ///|
 test "Lines tier target counts are 1-3" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 0..<8 {
     let count = levels[i].targets.length()
     assert_true(count >= 1 && count <= 3)
@@ -84,7 +84,7 @@ test "Lines tier target counts are 1-3" {
 
 ///|
 test "Weave tier has more targets than Lines" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   // Weave levels should have 4-6 targets
   for i in 8..<17 {
     let count = levels[i].targets.length()
@@ -94,7 +94,7 @@ test "Weave tier has more targets than Lines" {
 
 ///|
 test "Art tier has most targets" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   // Art levels should have 6-8 targets
   for i in 17..<25 {
     let count = levels[i].targets.length()
@@ -104,7 +104,7 @@ test "Art tier has most targets" {
 
 ///|
 test "par_strings increase with difficulty" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   // Lines tier par: 2-4
   for i in 0..<8 {
     assert_true(levels[i].par_strings >= 2 && levels[i].par_strings <= 4)
@@ -121,7 +121,7 @@ test "par_strings increase with difficulty" {
 
 ///|
 test "specific level names" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   inspect(levels[0].name, content="First Cross")
   inspect(levels[1].name, content="Twin Points")
   inspect(levels[8].name, content="Square")
@@ -131,7 +131,7 @@ test "specific level names" {
 
 ///|
 test "target positions are within frame bounds" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   for i in 0..<levels.length() {
     for j in 0..<levels[i].targets.length() {
       let t = levels[i].targets[j]
@@ -145,7 +145,7 @@ test "target positions are within frame bounds" {
 
 ///|
 test "Twin Points has two vertical targets" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   let level = levels[1]
   inspect(level.targets.length(), content="2")
   // Both targets should have same x
@@ -157,7 +157,7 @@ test "Twin Points has two vertical targets" {
 
 ///|
 test "Side by Side has two horizontal targets" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   let level = levels[2]
   inspect(level.targets.length(), content="2")
   // Both targets should have same y
@@ -169,7 +169,7 @@ test "Side by Side has two horizontal targets" {
 
 ///|
 test "Octagon has 8 targets" {
-  let levels = make_all_levels()
+  let levels = @levels.make_all_levels()
   let octagon = levels[21]
   inspect(octagon.name, content="Octagon")
   inspect(octagon.targets.length(), content="8")

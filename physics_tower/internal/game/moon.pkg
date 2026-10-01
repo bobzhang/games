@@ -7,7 +7,6 @@ import {
   "bobzhang/games/physics_tower/internal/challenge",
   "bobzhang/games/physics_tower/internal/upgrades",
   "tonyfettes/raylib",
-  "moonbitlang/core/math",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"

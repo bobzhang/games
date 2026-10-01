@@ -98,7 +98,7 @@ pub fn new_wave_tile() -> WaveTile {
 
 ///|
 pub fn new_wave_grid() -> WaveGrid {
-  let tiles : Array[WaveTile] = Array::new(capacity=grid_width * grid_height)
+  let tiles : Array[WaveTile] = Array(capacity=grid_width * grid_height)
   for _i in 0..<(grid_width * grid_height) {
     tiles.push(new_wave_tile())
   }
@@ -152,7 +152,7 @@ pub fn screen_to_grid_y(sy : Int) -> Int {
 
 ///|
 pub fn clone_grid(src : WaveGrid) -> WaveGrid {
-  let tiles : Array[WaveTile] = Array::new(capacity=src.tiles.length())
+  let tiles : Array[WaveTile] = Array(capacity=src.tiles.length())
   for i in 0..<src.tiles.length() {
     let t = src.tiles[i]
     tiles.push({
@@ -178,7 +178,7 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }

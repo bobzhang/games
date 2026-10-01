@@ -41,7 +41,7 @@ test "equal weights no movement" {
   let game = make_test_game()
   setup_simple_pulley(game)
   game.weights = [@types.new_weight(1, 3.0), @types.new_weight(2, 3.0)]
-  solve_equilibrium(game)
+  @physics.solve_equilibrium(game)
   // Equal weights - both should be at base height
   assert_true(@types.absf(game.nodes[1].height) < 0.1)
   assert_true(@types.absf(game.nodes[2].height) < 0.1)
@@ -52,7 +52,7 @@ test "heavier side goes down" {
   let game = make_test_game()
   setup_simple_pulley(game)
   game.weights = [@types.new_weight(1, 2.0), @types.new_weight(2, 4.0)]
-  solve_equilibrium(game)
+  @physics.solve_equilibrium(game)
   // Right side (mass 4) should go down (positive height), left side up (negative)
   assert_true(game.nodes[2].height > game.nodes[1].height)
 }
@@ -88,7 +88,7 @@ test "ratchet locks one direction" {
     },
   ]
   game.weights = [@types.new_weight(1, 5.0), @types.new_weight(2, 2.0)]
-  solve_equilibrium(game)
+  @physics.solve_equilibrium(game)
   // Ratchet - the solver ran; just check it completed without crash
   assert_true(true)
 }
@@ -124,7 +124,7 @@ test "breakable rope snaps at threshold" {
     },
   ]
   game.weights = [@types.new_weight(1, 5.0), @types.new_weight(2, 2.0)]
-  solve_equilibrium(game)
+  @physics.solve_equilibrium(game)
   // Rope 0 should be broken (load 5.0 > max_load 3.0)
   assert_true(game.ropes[0].broken)
 }
@@ -165,7 +165,7 @@ test "bucket mass increases" {
   game.buckets[0].filling = true
   game.weights = [@types.new_weight(2, 2.0)]
   let old_mass = game.buckets[0].mass
-  solve_equilibrium(game)
+  @physics.solve_equilibrium(game)
   assert_true(game.buckets[0].mass > old_mass)
 }
 
@@ -175,10 +175,10 @@ test "equilibrium converges" {
   setup_simple_pulley(game)
   game.weights = [@types.new_weight(1, 1.0), @types.new_weight(2, 3.0)]
   // Run multiple times - should converge to same result
-  solve_equilibrium(game)
+  @physics.solve_equilibrium(game)
   let h1 = game.nodes[1].height
   let h2 = game.nodes[2].height
-  solve_equilibrium(game)
+  @physics.solve_equilibrium(game)
   assert_true(@types.absf(game.nodes[1].height - h1) < 0.01)
   assert_true(@types.absf(game.nodes[2].height - h2) < 0.01)
 }
@@ -216,8 +216,8 @@ test "target height satisfaction" {
   game.crates = [@types.new_crate(1, 2.0, -1.0)]
   game.weights = [@types.new_weight(2, 4.0)]
   game.targets = [{ crate_index: 0, target_height: -1.0, tolerance: 0.5, }]
-  solve_equilibrium(game)
-  let met = check_targets(game)
+  @physics.solve_equilibrium(game)
+  let met = @physics.check_targets(game)
   // The crate should move up (negative height) since the weight is heavier
   assert_true(game.crates[0].target_y < 0.0 || met || !met)
 }
@@ -266,7 +266,7 @@ test "chained pulleys propagate" {
     },
   ]
   game.weights = [@types.new_weight(1, 3.0), @types.new_weight(3, 1.0)]
-  solve_equilibrium(game)
+  @physics.solve_equilibrium(game)
   // Chain propagated - solver completed
   assert_true(true)
 }

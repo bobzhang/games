@@ -1,7 +1,7 @@
 ///|
 pub fn new_mapping() -> Mapping {
-  let c2p : Array[Int] = Array::new(capacity=alphabet_size)
-  let pu : Array[Bool] = Array::new(capacity=alphabet_size)
+  let c2p : Array[Int] = Array(capacity=alphabet_size)
+  let pu : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
     c2p.push(unmapped)
     pu.push(false)
@@ -11,8 +11,8 @@ pub fn new_mapping() -> Mapping {
 
 ///|
 pub fn copy_mapping(src : Mapping) -> Mapping {
-  let c2p : Array[Int] = Array::new(capacity=alphabet_size)
-  let pu : Array[Bool] = Array::new(capacity=alphabet_size)
+  let c2p : Array[Int] = Array(capacity=alphabet_size)
+  let pu : Array[Bool] = Array(capacity=alphabet_size)
   for i in 0..<alphabet_size {
     c2p.push(src.cipher_to_plain[i])
     pu.push(src.plain_used[i])
@@ -154,7 +154,7 @@ pub fn count_correct(
   m : Mapping,
 ) -> Int {
   let mut count = 0
-  let checked : Array[Bool] = Array::new(capacity=alphabet_size)
+  let checked : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
     checked.push(false)
   }
@@ -179,7 +179,7 @@ pub fn count_correct(
 
 ///|
 pub fn count_unique_letters(text : String) -> Int {
-  let seen : Array[Bool] = Array::new(capacity=alphabet_size)
+  let seen : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
     seen.push(false)
   }
@@ -244,7 +244,7 @@ pub fn tier_for_level(level_id : Int) -> Tier {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=25)
+  let scores : Array[LevelScore] = Array(capacity=25)
   for _i in 0..<25 {
     scores.push(new_level_score())
   }

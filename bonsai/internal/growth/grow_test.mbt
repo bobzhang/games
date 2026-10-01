@@ -31,7 +31,7 @@ test "simple growth - pine grows upward" {
   @types.grid_set_kind(grid, 2, 9, Trunk, Up)
   grid.cells[@types.grid_index(grid, 2, 9)].age = 1
   // Grow one turn
-  let result = grow_one_turn(grid, Pine)
+  let result = @growth.grow_one_turn(grid, Pine)
   // Should have a new branch at (2, 8)
   let cell = @types.grid_get(result, 2, 8)
   assert_eq(cell.kind, Branch)
@@ -47,7 +47,7 @@ test "pine fork at interval 3" {
   // Grow 3 turns to trigger fork (age must reach fork_interval=3)
   let mut current = grid
   for _i in 0..<4 {
-    current = grow_one_turn(current, Pine)
+    current = @growth.grow_one_turn(current, Pine)
   }
   // After 4 turns of growth, there should be cells that forked
   // The trunk grows at age 0,1,2,3 and forks at age 3
@@ -71,7 +71,7 @@ test "prune removes above" {
   @types.grid_set_kind(grid, 2, 8, Branch, Up)
   @types.grid_set_kind(grid, 2, 7, Branch, Up)
   // Prune at (2,8) should remove (2,8) and (2,7)
-  let count = prune_at(grid, 2, 8)
+  let count = @growth.prune_at(grid, 2, 8)
   assert_eq(count, 2)
   // Both should be Pruned now
   assert_eq(@types.grid_get(grid, 2, 8).kind, Pruned)
@@ -84,7 +84,7 @@ test "prune removes above" {
 test "cannot prune trunk" {
   let grid = @types.new_grid(5, 10)
   @types.grid_set_kind(grid, 2, 9, Trunk, Up)
-  let count = prune_at(grid, 2, 9)
+  let count = @growth.prune_at(grid, 2, 9)
   assert_eq(count, 0)
   assert_eq(@types.grid_get(grid, 2, 9).kind, Trunk)
 }
@@ -97,7 +97,7 @@ test "zone satisfaction - required" {
   let zones : Array[@types.Zone] = [
     { positions: [{ x: 2, y: 5, }, { x: 2, y: 6, }], kind: Required, },
   ]
-  let (req_ok, forb_ok, tip_ok) = check_zones(grid, zones)
+  let (req_ok, forb_ok, tip_ok) = @growth.check_zones(grid, zones)
   assert_true(req_ok)
   assert_true(forb_ok)
   // tip_ok is true vacuously (no tip zones)
@@ -111,7 +111,7 @@ test "zone satisfaction - forbidden violated" {
   let zones : Array[@types.Zone] = [
     { positions: [{ x: 2, y: 5, }], kind: Forbidden, },
   ]
-  let (_, forb_ok, _) = check_zones(grid, zones)
+  let (_, forb_ok, _) = @growth.check_zones(grid, zones)
   assert_false(forb_ok)
 }
 
@@ -121,9 +121,9 @@ test "ghost preview matches actual growth" {
   @types.grid_set_kind(grid, 3, 11, Trunk, Up)
   grid.cells[@types.grid_index(grid, 3, 11)].age = 1
   // Preview 1 turn
-  let preview = preview_one_turn(grid, Pine)
+  let preview = @growth.preview_one_turn(grid, Pine)
   // Actually grow 1 turn
-  let actual = grow_one_turn(grid, Pine)
+  let actual = @growth.grow_one_turn(grid, Pine)
   // Compare all cells
   let mut match_ = true
   for i in 0..<preview.cells.length() {
@@ -141,7 +141,7 @@ test "leaf generation on stagnant tips" {
   @types.grid_set_kind(grid, 2, 0, Branch, Up)
   grid.cells[@types.grid_index(grid, 2, 0)].stagnant_turns = 2
   // Generate leaves
-  generate_leaves(grid)
+  @growth.generate_leaves(grid)
   assert_eq(@types.grid_get(grid, 2, 0).kind, Leaf)
 }
 
@@ -156,7 +156,7 @@ test "star calculation" {
     { positions: [{ x: 2, y: 5, }], kind: Required, },
   ]
   // 0 prunes, par 0 => 3 stars (no tip targets, so tip_ok is vacuously true)
-  let stars = calculate_stars(grid, zones, 0, 0)
+  let stars = @growth.calculate_stars(grid, zones, 0, 0)
   // Since there are no TipTarget zones, tip_ok is true => 3 stars
   assert_eq(stars, 3)
 }

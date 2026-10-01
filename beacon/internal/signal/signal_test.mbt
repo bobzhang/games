@@ -38,8 +38,8 @@ test "line_of_sight clear path" {
     kinds.push(empty_row())
   }
   let grid = make_test_grid(kinds)
-  assert_true(line_of_sight(grid, 0, 0, 5, 0))
-  assert_true(line_of_sight(grid, 3, 0, 3, 5))
+  assert_true(@signal.line_of_sight(grid, 0, 0, 5, 0))
+  assert_true(@signal.line_of_sight(grid, 3, 0, 3, 5))
 }
 
 ///|
@@ -50,7 +50,7 @@ test "line_of_sight blocked by mountain" {
   }
   kinds[0][2] = Mountain
   let grid = make_test_grid(kinds)
-  assert_false(line_of_sight(grid, 0, 0, 5, 0))
+  assert_false(@signal.line_of_sight(grid, 0, 0, 5, 0))
 }
 
 ///|
@@ -61,9 +61,9 @@ test "can_reach cardinal only" {
   }
   let grid = make_test_grid(kinds)
   // Diagonal should fail
-  assert_false(can_reach(grid, 0, 0, 2, 2, 5))
+  assert_false(@signal.can_reach(grid, 0, 0, 2, 2, 5))
   // Cardinal should succeed
-  assert_true(can_reach(grid, 0, 0, 3, 0, 5))
+  assert_true(@signal.can_reach(grid, 0, 0, 3, 0, 5))
 }
 
 ///|
@@ -73,8 +73,8 @@ test "can_reach respects range" {
     kinds.push(empty_row())
   }
   let grid = make_test_grid(kinds)
-  assert_true(can_reach(grid, 0, 0, 3, 0, 3))
-  assert_false(can_reach(grid, 0, 0, 4, 0, 3))
+  assert_true(@signal.can_reach(grid, 0, 0, 3, 0, 3))
+  assert_false(@signal.can_reach(grid, 0, 0, 4, 0, 3))
 }
 
 ///|
@@ -97,7 +97,7 @@ test "propagate simple transmitter to receiver" {
     elevations: elevs,
   }
   let state = @types.new_level_state(data)
-  let (all_lit, chain, paths) = propagate(state, data)
+  let (all_lit, chain, paths) = @signal.propagate(state, data)
   assert_true(all_lit)
   assert_eq(chain, 0)
   assert_true(paths.length() > 0)
@@ -124,7 +124,7 @@ test "propagate transmitter blocked by mountain" {
     elevations: elevs,
   }
   let state = @types.new_level_state(data)
-  let (all_lit, _chain, _paths) = propagate(state, data)
+  let (all_lit, _chain, _paths) = @signal.propagate(state, data)
   assert_false(all_lit)
 }
 
@@ -149,24 +149,24 @@ test "propagate relay through tower" {
     elevations: elevs,
   }
   let state = @types.new_level_state(data)
-  let (all_lit, chain, _paths) = propagate(state, data)
+  let (all_lit, chain, _paths) = @signal.propagate(state, data)
   assert_true(all_lit)
   assert_eq(chain, 1)
 }
 
 ///|
 test "compute_stars three stars" {
-  assert_eq(compute_stars(2, 1, 2, 2), Three)
+  assert_eq(@signal.compute_stars(2, 1, 2, 2), Three)
 }
 
 ///|
 test "compute_stars two stars" {
-  assert_eq(compute_stars(2, 3, 2, 2), Two)
+  assert_eq(@signal.compute_stars(2, 3, 2, 2), Two)
 }
 
 ///|
 test "compute_stars one star" {
-  assert_eq(compute_stars(4, 1, 2, 2), One)
+  assert_eq(@signal.compute_stars(4, 1, 2, 2), One)
 }
 
 ///|
@@ -191,6 +191,6 @@ test "propagate elevation extends range" {
     elevations: elevs,
   }
   let state = @types.new_level_state(data)
-  let (all_lit, _chain, _paths) = propagate(state, data)
+  let (all_lit, _chain, _paths) = @signal.propagate(state, data)
   assert_true(all_lit)
 }

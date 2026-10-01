@@ -7,7 +7,7 @@ test "zero velocity probe stays in place with no gravity" {
   let planets : Array[@types.Planet] = []
   let station = @types.make_station(9999.0, 9999.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let result = simulate_tick(probe, planets, station, waypoints, 1)
+  let result = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   inspect(result, content="Continue")
   inspect(probe.pos.x, content="400")
   inspect(probe.pos.y, content="300")
@@ -23,7 +23,7 @@ test "probe at boundary edge triggers out of bounds" {
   let planets : Array[@types.Planet] = []
   let station = @types.make_station(400.0, 300.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let result = simulate_tick(probe, planets, station, waypoints, 1)
+  let result = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   inspect(result, content="OutOfBounds")
 }
 
@@ -36,7 +36,7 @@ test "probe at negative boundary triggers out of bounds" {
   let planets : Array[@types.Planet] = []
   let station = @types.make_station(400.0, 300.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let result = simulate_tick(probe, planets, station, waypoints, 1)
+  let result = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   inspect(result, content="OutOfBounds")
 }
 
@@ -49,7 +49,7 @@ test "probe at top boundary triggers out of bounds" {
   let planets : Array[@types.Planet] = []
   let station = @types.make_station(400.0, 300.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let result = simulate_tick(probe, planets, station, waypoints, 1)
+  let result = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   inspect(result, content="OutOfBounds")
 }
 
@@ -62,7 +62,7 @@ test "probe at bottom boundary triggers out of bounds" {
   let planets : Array[@types.Planet] = []
   let station = @types.make_station(400.0, 300.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let result = simulate_tick(probe, planets, station, waypoints, 1)
+  let result = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   inspect(result, content="OutOfBounds")
 }
 
@@ -75,7 +75,7 @@ test "inactive probe returns continue without moving" {
   let planets = [@types.make_planet(100.0, 100.0, 5.0, 50.0)]
   let station = @types.make_station(100.0, 100.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let result = simulate_tick(probe, planets, station, waypoints, 1)
+  let result = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   inspect(result, content="Continue")
 }
 
@@ -92,7 +92,7 @@ test "multi-planet gravity cancels when symmetric" {
   ]
   let station = @types.make_station(9999.0, 9999.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let _ = simulate_tick(probe, planets, station, waypoints, 1)
+  let _ = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   // Probe should barely move (symmetric gravity cancels)
   inspect(@types.absf(probe.pos.x - 400.0) < 1.0, content="true")
   inspect(@types.absf(probe.pos.y - 300.0) < 1.0, content="true")
@@ -111,7 +111,7 @@ test "multi-planet net gravity pulls toward heavier planet" {
   ]
   let station = @types.make_station(9999.0, 9999.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let _ = simulate_tick(probe, planets, station, waypoints, 1)
+  let _ = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   // Probe should move left (toward heavier planet)
   inspect(probe.pos.x < 400.0, content="true")
 }
@@ -126,7 +126,7 @@ test "station reached takes priority over max ticks" {
   let station = @types.make_station(700.0, 300.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
   // Even at max ticks, station arrival should be detected first
-  let result = simulate_tick(
+  let result = @physics.simulate_tick(
     probe, planets, station, waypoints, @types.max_ticks,
   )
   inspect(result, content="ReachedStation")
@@ -142,7 +142,7 @@ test "planet collision at exact radius boundary" {
   let planets = [@types.make_planet(200.0, 300.0, 1.0, 30.0)]
   let station = @types.make_station(9999.0, 9999.0, 25.0)
   let waypoints : Array[@types.Waypoint] = []
-  let result = simulate_tick(probe, planets, station, waypoints, 1)
+  let result = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   inspect(result, content="HitPlanet")
   inspect(probe.active, content="false")
 }
@@ -159,12 +159,12 @@ test "multiple waypoints can be collected in sequence" {
   let wp2 = @types.make_waypoint(200.0, 300.0, 20.0)
   let waypoints = [wp1, wp2]
   // First tick: collect wp1
-  let _ = simulate_tick(probe, planets, station, waypoints, 1)
+  let _ = @physics.simulate_tick(probe, planets, station, waypoints, 1)
   inspect(waypoints[0].collected, content="true")
   inspect(waypoints[1].collected, content="false")
   // Continue ticking until reaching wp2
   for i in 2..<20 {
-    let _ = simulate_tick(probe, planets, station, waypoints, i)
+    let _ = @physics.simulate_tick(probe, planets, station, waypoints, i)
   }
   inspect(waypoints[1].collected, content="true")
 }
@@ -174,7 +174,7 @@ test "preview with no planets produces straight line" {
   let start = @types.vec2f(100.0, 300.0)
   let planets : Array[@types.Planet] = []
   let station = @types.make_station(9999.0, 9999.0, 25.0)
-  let preview = compute_preview(start, 0.0, planets, station)
+  let preview = @physics.compute_preview(start, 0.0, planets, station)
   assert_true(preview.length() > 0)
   // All positions should be at y=300 (horizontal straight line)
   for i in 0..<preview.length() {
@@ -191,7 +191,7 @@ test "preview stops when hitting planet" {
   let start = @types.vec2f(100.0, 300.0)
   let planets = [@types.make_planet(200.0, 300.0, 1.0, 30.0)]
   let station = @types.make_station(9999.0, 9999.0, 25.0)
-  let preview = compute_preview(start, 0.0, planets, station)
+  let preview = @physics.compute_preview(start, 0.0, planets, station)
   // Preview should stop before reaching full preview_ticks
   assert_true(preview.length() > 0)
   assert_true(preview.length() < @types.preview_ticks)
@@ -202,7 +202,7 @@ test "preview stops when reaching station" {
   let start = @types.vec2f(100.0, 300.0)
   let planets : Array[@types.Planet] = []
   let station = @types.make_station(200.0, 300.0, 30.0)
-  let preview = compute_preview(start, 0.0, planets, station)
+  let preview = @physics.compute_preview(start, 0.0, planets, station)
   assert_true(preview.length() > 0)
   assert_true(preview.length() < @types.preview_ticks)
 }

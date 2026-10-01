@@ -11,7 +11,7 @@ test "ai target selection" {
     b.map.tiles[i].fog_player = Visible
   }
   @types.seed_rng(42)
-  let messages = execute_ai_turn(b, Normal)
+  let messages = @ai.execute_ai_turn(b, Normal)
   // AI should have taken some action
   inspect(messages.length() > 0, content="true")
 }
@@ -29,7 +29,7 @@ test "ai attacks type-advantaged target" {
     b.map.tiles[i].fog_player = Visible
   }
   @types.seed_rng(42)
-  let messages = execute_ai_turn(b, Normal)
+  let messages = @ai.execute_ai_turn(b, Normal)
   // Should attack
   inspect(messages.length() > 0, content="true")
   // Player infantry should have taken damage
@@ -50,7 +50,7 @@ test "ai moves toward enemy when out of range" {
   @types.seed_rng(42)
   let old_col = e1.pos.col
   let old_row = e1.pos.row
-  let _ = execute_ai_turn(b, Normal)
+  let _ = @ai.execute_ai_turn(b, Normal)
   // Enemy should have moved (closer to player)
   let moved = e1.pos.col != old_col || e1.pos.row != old_row
   inspect(moved, content="true")
@@ -70,7 +70,7 @@ test "hard ai retreats when wounded" {
   }
   @types.seed_rng(42)
   let old_dist = @types.hex_distance(e1.pos, p1.pos)
-  let _ = execute_ai_turn(b, Hard)
+  let _ = @ai.execute_ai_turn(b, Hard)
   // Wounded unit should retreat (move away from player)
   let new_dist = @types.hex_distance(e1.pos, p1.pos)
   inspect(new_dist >= old_dist, content="true")
@@ -91,7 +91,7 @@ test "hard ai prefers defensive terrain" {
     b.map.tiles[i].fog_player = Visible
   }
   @types.seed_rng(42)
-  let _ = execute_ai_turn(b, Hard)
+  let _ = @ai.execute_ai_turn(b, Hard)
   // Hard AI should have moved (either into forest or toward player via forest)
   inspect(e1.moved, content="true")
 }
@@ -110,7 +110,7 @@ test "easy ai has randomness" {
     b.map.tiles[i].fog_player = Visible
   }
   @types.seed_rng(42)
-  let messages = execute_ai_turn(b, Easy)
+  let messages = @ai.execute_ai_turn(b, Easy)
   // Should still take some action
   inspect(messages.length() > 0, content="true")
 }
@@ -131,7 +131,7 @@ test "hard ai considers unit hp in attack evaluation" {
     b.map.tiles[i].fog_player = Visible
   }
   @types.seed_rng(42)
-  let messages = execute_ai_turn(b, Hard)
+  let messages = @ai.execute_ai_turn(b, Hard)
   // AI should have attacked (either target)
   inspect(messages.length() > 0, content="true")
   // The wounded unit p2 should have been targeted (kill bonus)

@@ -6,7 +6,7 @@ test "trace beam straight through empty grid" {
   cell.component = Some(Source)
   cell.direction = E
   cell.locked = true
-  let segments = trace_all_beams(grid)
+  let segments = @beam.trace_all_beams(grid)
   // Should have at least one segment
   assert_true(segments.length() > 0)
 }
@@ -25,9 +25,9 @@ test "trace beam to receiver" {
   recv.direction = W
   recv.target_color = Some(@types.beam_color_white())
   recv.locked = true
-  let _segments = trace_all_beams(grid)
+  let _segments = @beam.trace_all_beams(grid)
   // Check receiver satisfaction
-  let satisfied = check_all_receivers(grid)
+  let satisfied = @beam.check_all_receivers(grid)
   assert_true(satisfied)
 }
 
@@ -50,8 +50,8 @@ test "filter removes channel" {
   recv.direction = W
   recv.target_color = Some(@types.beam_color_cyan())
   recv.locked = true
-  let _segments = trace_all_beams(grid)
-  let satisfied = check_all_receivers(grid)
+  let _segments = @beam.trace_all_beams(grid)
+  let satisfied = @beam.check_all_receivers(grid)
   assert_true(satisfied)
 }
 
@@ -78,8 +78,8 @@ test "mirror reflects beam" {
   recv.direction = N
   recv.target_color = Some(@types.beam_color_white())
   recv.locked = true
-  let _segments = trace_all_beams(grid)
-  let satisfied = check_all_receivers(grid)
+  let _segments = @beam.trace_all_beams(grid)
+  let satisfied = @beam.check_all_receivers(grid)
   assert_true(satisfied)
 }
 
@@ -95,7 +95,7 @@ test "prism splits white into RGB" {
   let prism = grid.cells[3 * grid.width + 3]
   prism.component = Some(Prism)
   prism.direction = E
-  let segments = trace_all_beams(grid)
+  let segments = @beam.trace_all_beams(grid)
   // Should have the incoming segment + 3 split segments (R, G, B)
   // At minimum: 1 segment from source to prism + 3 from prism outward
   assert_true(segments.length() >= 4)
@@ -134,8 +134,8 @@ test "combiner merges colors" {
   recv.direction = W
   recv.target_color = Some(@types.beam_color_yellow())
   recv.locked = true
-  let _segments = trace_all_beams(grid)
-  let satisfied = check_all_receivers(grid)
+  let _segments = @beam.trace_all_beams(grid)
+  let satisfied = @beam.check_all_receivers(grid)
   assert_true(satisfied)
 }
 
@@ -153,8 +153,8 @@ test "receiver not satisfied with wrong color" {
   recv.direction = W
   recv.target_color = Some(@types.beam_color_red())
   recv.locked = true
-  let _segments = trace_all_beams(grid)
-  let satisfied = check_all_receivers(grid)
+  let _segments = @beam.trace_all_beams(grid)
+  let satisfied = @beam.check_all_receivers(grid)
   // White != Red
   assert_false(satisfied)
 }
@@ -175,6 +175,6 @@ test "beam crossing count" {
       direction: S,
     },
   ]
-  let crossings = count_beam_crossings(beams)
+  let crossings = @beam.count_beam_crossings(beams)
   assert_eq(crossings, 1)
 }

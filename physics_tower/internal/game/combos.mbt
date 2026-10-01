@@ -2,9 +2,9 @@
 /// Checks all joints in the world for material combo synergies.
 /// Returns the list of active combos that apply bonuses.
 pub fn check_combos(world : @types.World) -> Array[@types.ActiveCombo] {
-  let combos : Array[@types.ActiveCombo] = Array::new(capacity=32)
+  let combos : Array[@types.ActiveCombo] = Array(capacity=32)
   // Track which body pairs we have already evaluated to avoid duplicates
-  let checked : Array[(Int, Int)] = Array::new(capacity=64)
+  let checked : Array[(Int, Int)] = Array(capacity=64)
   for joint in world.joints {
     if !joint.active || joint.broken {
       continue

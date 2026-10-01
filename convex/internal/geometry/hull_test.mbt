@@ -22,7 +22,7 @@ test "graham scan triangle" {
     @types.pt(10.0, 0.0),
     @types.pt(5.0, 10.0),
   ]
-  let hull = compute_hull(pts)
+  let hull = @geometry.compute_hull(pts)
   inspect(hull.length(), content="3")
 }
 
@@ -34,7 +34,7 @@ test "graham scan square" {
     @types.pt(10.0, 10.0),
     @types.pt(0.0, 10.0),
   ]
-  let hull = compute_hull(pts)
+  let hull = @geometry.compute_hull(pts)
   inspect(hull.length(), content="4")
 }
 
@@ -50,7 +50,7 @@ test "graham scan pentagon" {
       ),
     )
   }
-  let hull = compute_hull(pts)
+  let hull = @geometry.compute_hull(pts)
   inspect(hull.length(), content="5")
 }
 
@@ -63,7 +63,7 @@ test "collinear point handling" {
     @types.pt(10.0, 0.0),
     @types.pt(5.0, 5.0),
   ]
-  let hull = compute_hull(pts)
+  let hull = @geometry.compute_hull(pts)
   // Should be a triangle: (0,0), (10,0), (5,5) - collinear middle removed
   inspect(hull.length(), content="3")
 }
@@ -77,7 +77,7 @@ test "interior point exclusion" {
     @types.pt(0.0, 10.0),
     @types.pt(5.0, 5.0), // Interior point
   ]
-  let hull = compute_hull(pts)
+  let hull = @geometry.compute_hull(pts)
   inspect(hull.length(), content="4")
 }
 
@@ -97,9 +97,9 @@ test "hull match with tolerance" {
     @types.pt(200.0, 200.0),
     @types.pt(100.0, 200.0),
   ]
-  let pct = match_hull_to_target(hull, target)
+  let pct = @geometry.match_hull_to_target(hull, target)
   inspect(pct >= 99.9, content="true")
-  inspect(hull_matches_target(hull, target), content="true")
+  inspect(@geometry.hull_matches_target(hull, target), content="true")
 }
 
 ///|
@@ -116,9 +116,9 @@ test "hull partial match" {
     @types.pt(200.0, 100.0),
     @types.pt(200.0, 200.0),
   ]
-  let pct = match_hull_to_target(hull, target)
+  let pct = @geometry.match_hull_to_target(hull, target)
   inspect(pct < 99.9, content="true")
-  inspect(hull_matches_target(hull, target), content="false")
+  inspect(@geometry.hull_matches_target(hull, target), content="false")
 }
 
 ///|
@@ -143,22 +143,28 @@ test "is point on hull" {
     @types.pt(0.0, 100.0),
   ]
   // Vertex is on hull
-  inspect(is_point_on_hull(@types.pt(0.0, 0.0), hull), content="true")
+  inspect(@geometry.is_point_on_hull(@types.pt(0.0, 0.0), hull), content="true")
   // Midpoint of edge is on hull
-  inspect(is_point_on_hull(@types.pt(50.0, 0.0), hull), content="true")
+  inspect(
+    @geometry.is_point_on_hull(@types.pt(50.0, 0.0), hull),
+    content="true",
+  )
   // Interior is not on hull
-  inspect(is_point_on_hull(@types.pt(50.0, 50.0), hull), content="false")
+  inspect(
+    @geometry.is_point_on_hull(@types.pt(50.0, 50.0), hull),
+    content="false",
+  )
 }
 
 ///|
 test "empty and small inputs" {
   let empty : Array[@types.Point] = []
-  let hull0 = compute_hull(empty)
+  let hull0 = @geometry.compute_hull(empty)
   inspect(hull0.length(), content="0")
   let one : Array[@types.Point] = [@types.pt(5.0, 5.0)]
-  let hull1 = compute_hull(one)
+  let hull1 = @geometry.compute_hull(one)
   inspect(hull1.length(), content="1")
   let two : Array[@types.Point] = [@types.pt(0.0, 0.0), @types.pt(10.0, 0.0)]
-  let hull2 = compute_hull(two)
+  let hull2 = @geometry.compute_hull(two)
   inspect(hull2.length(), content="2")
 }

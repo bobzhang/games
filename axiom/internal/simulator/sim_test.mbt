@@ -67,7 +67,7 @@ test "move forward reaches goal" {
     East,
   )
   let program = make_program([Move, Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
   assert_eq(trace.fail_reason, "")
 }
@@ -84,7 +84,7 @@ test "move into wall fails" {
     East,
   )
   let program = make_program([Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Robot walked into a wall!")
 }
@@ -101,7 +101,7 @@ test "move into gap fails" {
     East,
   )
   let program = make_program([Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Robot fell into a gap!")
 }
@@ -120,7 +120,7 @@ test "turn left from east faces north" {
     East,
   )
   let program = make_program([TurnLeft, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -136,7 +136,7 @@ test "turn right from east faces south" {
     East,
   )
   let program = make_program([TurnRight, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -159,7 +159,7 @@ test "four left turns returns to original direction" {
     Move,
     Move,
   ])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -177,7 +177,7 @@ test "jump over gap" {
     East,
   )
   let program = make_program([Move, Jump])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -193,7 +193,7 @@ test "jump over wall" {
     East,
   )
   let program = make_program([Move, Jump])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -209,7 +209,7 @@ test "jump landing on gap fails" {
     East,
   )
   let program = make_program([Move, Jump])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Robot landed in a gap!")
 }
@@ -226,7 +226,7 @@ test "jump out of bounds fails" {
     East,
   )
   let program = make_program([Jump])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Robot jumped out of bounds!")
 }
@@ -287,7 +287,7 @@ test "push block forward" {
   // Robot at (3,4) E. Move to (4,4). TurnLeft -> N. Push block from (4,3) to (4,2).
   // TurnRight -> E. Move to (5,4). Move to (6,4). Goal at (6,4).
   let program = make_program([Move, TurnLeft, Push, TurnRight, Move, Move])
-  let trace = simulate(program, level4)
+  let trace = @simulator.simulate(program, level4)
   assert_true(trace.success)
 }
 
@@ -306,7 +306,7 @@ test "push block into gap fills it" {
   // Now (4,3) is floor. Robot at (2,3).
   // Move(2->3), Move(3->4 filled), Move(4->5), Move(5->6), Move(6->7)=G
   let program = make_program([Move, Push, Move, Move, Move, Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -322,7 +322,7 @@ test "push nothing fails" {
     East,
   )
   let program = make_program([Push])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Nothing to push!")
 }
@@ -339,7 +339,7 @@ test "push block into wall fails" {
     East,
   )
   let program = make_program([Move, Push])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Can't push block there!")
 }
@@ -360,7 +360,7 @@ test "if wall ahead skips next command" {
   )
   // WallAhead is true (wall at 5,3), so TurnLeft executes, then Move goes north
   let program = make_program([If(WallAhead), TurnLeft, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -378,7 +378,7 @@ test "if condition false skips next command" {
   )
   // WallAhead is false (floor ahead), so TurnLeft is skipped, then Move goes east
   let program = make_program([If(WallAhead), TurnLeft, Move, Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -395,7 +395,7 @@ test "if path ahead" {
   )
   // PathAhead is true, so Move executes
   let program = make_program([If(PathAhead), Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -412,7 +412,7 @@ test "if on color red" {
   )
   // Move to (4,3) floor, Move to (5,3) red, If(OnColor(Red)) true, Move to (6,3) goal
   let program = make_program([Move, Move, If(OnColor(Red)), Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -431,7 +431,7 @@ test "loop repeats next command" {
   )
   // Loop(4) repeats Move 4 times -> 4 steps east from (3,3) to (7,3) = G
   let program = make_program([Loop(4), Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -448,7 +448,7 @@ test "loop without following command does nothing" {
   )
   // Loop at end has no next command, then Move
   let program = make_program([Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -466,7 +466,7 @@ test "collect two goals" {
     East,
   )
   let program = make_program([Move, Move, Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -483,7 +483,7 @@ test "missing one goal fails" {
   )
   // Only goes east, reaches one goal but misses the one above
   let program = make_program([Move, Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Not all goals collected!")
 }
@@ -502,7 +502,7 @@ test "empty program fails" {
     East,
   )
   let program = make_program([])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Empty program")
 }
@@ -521,7 +521,7 @@ test "trace records initial state" {
     East,
   )
   let program = make_program([Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   // Initial state + 1 move = 2 states
   assert_true(trace.states.length() >= 2)
   // First state should be at start position
@@ -542,7 +542,7 @@ test "trace records final position" {
     East,
   )
   let program = make_program([Move, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
   let last = trace.states[trace.states.length() - 1]
   assert_eq(last.pos.x, 5)
@@ -565,7 +565,7 @@ test "move in all four directions" {
   // Move north, turn right (east), turn right (south), move south x2, TL (east), TL (north)
   // Should reach G at (4,2)
   let program = make_program([Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -583,7 +583,7 @@ test "l-shape path with turn" {
     North,
   )
   let program = make_program([Move, Move, TurnRight, Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(trace.success)
 }
 
@@ -599,7 +599,7 @@ test "walk into block fails" {
     East,
   )
   let program = make_program([Move])
-  let trace = simulate(program, level)
+  let trace = @simulator.simulate(program, level)
   assert_true(!trace.success)
   assert_eq(trace.fail_reason, "Robot walked into a block!")
 }
