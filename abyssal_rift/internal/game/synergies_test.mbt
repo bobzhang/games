@@ -1,7 +1,7 @@
 ///|
 test "no passives means no synergies" {
   let p = @types.Player::new()
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.cleave,
     content=(
@@ -44,7 +44,7 @@ test "no passives means no synergies" {
 test "synergy names empty for no passives" {
   let syn = @types.SynergyBonuses::new()
   debug_inspect(
-    get_active_synergy_names(syn),
+    @game.get_active_synergy_names(syn),
     content=(
       #|[]
     ),
@@ -56,7 +56,7 @@ test "cleave synergy: DamageUp + Sword" {
   let p = @types.Player::new()
   p.weapon = Sword
   p.passives.push(DamageUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.cleave,
     content=(
@@ -69,7 +69,7 @@ test "cleave synergy: DamageUp + Sword" {
 test "no cleave without DamageUp" {
   let p = @types.Player::new()
   p.weapon = Sword
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.cleave,
     content=(
@@ -83,7 +83,7 @@ test "no cleave with wrong weapon" {
   let p = @types.Player::new()
   p.weapon = Bow
   p.passives.push(DamageUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.cleave,
     content=(
@@ -97,7 +97,7 @@ test "multishot synergy: AttackSpeedUp + Bow" {
   let p = @types.Player::new()
   p.weapon = Bow
   p.passives.push(AttackSpeedUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.multishot,
     content=(
@@ -117,7 +117,7 @@ test "bleed on crit synergy: CritUp + Daggers" {
   let p = @types.Player::new()
   p.weapon = Daggers
   p.passives.push(CritUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.bleed_on_crit,
     content=(
@@ -131,7 +131,7 @@ test "phantom dash synergy: SpeedUp + DashCooldownDown" {
   let p = @types.Player::new()
   p.passives.push(SpeedUp)
   p.passives.push(DashCooldownDown)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.dash_damages,
     content=(
@@ -151,7 +151,7 @@ test "fortify synergy: MaxHpUp + DefenseUp" {
   let p = @types.Player::new()
   p.passives.push(MaxHpUp)
   p.passives.push(DefenseUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.fortify,
     content=(
@@ -165,7 +165,7 @@ test "execute synergy: CritUp + DamageUp" {
   let p = @types.Player::new()
   p.passives.push(CritUp)
   p.passives.push(DamageUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.execute,
     content=(
@@ -191,7 +191,7 @@ test "vampiric aura synergy: PickupRange + MaxHpUp" {
   let p = @types.Player::new()
   p.passives.push(PickupRange)
   p.passives.push(MaxHpUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.vampiric,
     content=(
@@ -205,7 +205,7 @@ test "momentum synergy: SpeedUp + AttackSpeedUp" {
   let p = @types.Player::new()
   p.passives.push(SpeedUp)
   p.passives.push(AttackSpeedUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.momentum,
     content=(
@@ -219,7 +219,7 @@ test "chain lightning synergy: DamageUp + Staff" {
   let p = @types.Player::new()
   p.weapon = Staff
   p.passives.push(DamageUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.chain_projectile,
     content=(
@@ -233,7 +233,7 @@ test "iron maiden synergy: DefenseUp + Thorns" {
   let p = @types.Player::new()
   p.passives.push(DefenseUp)
   p.passives.push(Thorns)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.iron_maiden,
     content=(
@@ -247,7 +247,7 @@ test "blood rage synergy: LifeSteal + Berserker" {
   let p = @types.Player::new()
   p.passives.push(LifeSteal)
   p.passives.push(Berserker)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.blood_rage,
     content=(
@@ -261,7 +261,7 @@ test "destroyer synergy: DamageUp + GlassCannon" {
   let p = @types.Player::new()
   p.passives.push(DamageUp)
   p.passives.push(GlassCannon)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   inspect(
     syn.destroyer,
     content=(
@@ -278,7 +278,7 @@ test "multiple synergies active at once" {
   p.passives.push(CritUp)
   p.passives.push(MaxHpUp)
   p.passives.push(DefenseUp)
-  let syn = get_synergy_bonuses(p)
+  let syn = @game.get_synergy_bonuses(p)
   // Cleave: DamageUp + Sword
   inspect(
     syn.cleave,
@@ -300,7 +300,7 @@ test "multiple synergies active at once" {
       #|true
     ),
   )
-  let names = get_active_synergy_names(syn)
+  let names = @game.get_active_synergy_names(syn)
   debug_inspect(
     names,
     content=(
@@ -316,7 +316,7 @@ test "synergy names list" {
   syn.multishot = true
   syn.execute = true
   debug_inspect(
-    get_active_synergy_names(syn),
+    @game.get_active_synergy_names(syn),
     content=(
       #|["Cleave", "Multishot", "Execute"]
     ),
@@ -325,7 +325,7 @@ test "synergy names list" {
 
 ///|
 test "all_passives returns complete list" {
-  let all = all_passives()
+  let all = @game.all_passives()
   inspect(
     all.length(),
     content=(

@@ -49,7 +49,7 @@ test "gravity: player in air falls" {
   game.player.on_ground = false
   let y_before = game.player.y
   for _ in 0..<10 {
-    update_game(game, no_input, dt)
+    @game.update_game(game, no_input, dt)
   }
   assert_true(game.player.y > y_before)
 }
@@ -63,7 +63,7 @@ test "ground collision: player lands on tile" {
   game.player.vy = 200.0
   game.player.on_ground = false
   for _ in 0..<5 {
-    update_game(game, no_input, dt)
+    @game.update_game(game, no_input, dt)
   }
   assert_true(game.player.on_ground)
 }
@@ -80,7 +80,7 @@ test "jump: player vy goes negative on ground with jump_pressed" {
     accept: false,
     restart: false,
   }
-  update_game(game, jump_input, dt)
+  @game.update_game(game, jump_input, dt)
   assert_true(game.player.vy < 0.0)
 }
 
@@ -90,7 +90,7 @@ test "coin collection: player overlaps coin increments coins" {
   let player = game.player
   game.coins[0] = @types.Coin::spawn(player.x, player.y, 0.0)
   let coins_before = player.coins
-  update_game(game, no_input, dt)
+  @game.update_game(game, no_input, dt)
   assert_true(player.coins > coins_before)
   assert_false(game.coins[0].active)
 }
@@ -108,7 +108,7 @@ test "enemy stomp: player above enemy with high vy squashes enemy" {
   player.y = enemy_y - @types.player_half_h() - @types.enemy_half_h() + 5.0
   player.vy = 500.0
   player.on_ground = false
-  update_game(game, no_input, dt)
+  @game.update_game(game, no_input, dt)
   assert_true(game.enemies[0].squashed)
 }
 
@@ -121,7 +121,7 @@ test "enemy hurt: side collision decrements lives" {
   let enemy_y = player.y
   game.enemies[0] = @types.Enemy::spawn(enemy_x, enemy_y, -1)
   player.vy = 0.0
-  update_game(game, no_input, dt)
+  @game.update_game(game, no_input, dt)
   assert_true(player.lives < lives_before)
 }
 
@@ -133,7 +133,7 @@ test "invulnerable player falls off world: position reset, no extra life lost" {
   player.y = @types.world_height_px + 100.0
   player.on_ground = false
   let lives_before = player.lives
-  update_game(game, no_input, dt)
+  @game.update_game(game, no_input, dt)
   assert_eq(player.lives, lives_before)
   assert_true(player.y < @types.world_height_px)
 }
@@ -156,7 +156,7 @@ test "two adjacent enemies: stomp one, no hurt from second" {
   player.vy = 500.0
   player.on_ground = false
   let lives_before = player.lives
-  update_game(game, no_input, dt)
+  @game.update_game(game, no_input, dt)
   assert_true(game.enemies[0].squashed)
   assert_eq(player.lives, lives_before)
 }
@@ -177,7 +177,7 @@ test "flag trigger: player reaches flag x sets reached_flag" {
     restart: false,
   }
   for _ in 0..<30 {
-    update_game(game, right_input, dt)
+    @game.update_game(game, right_input, dt)
     if player.reached_flag {
       break
     }
@@ -194,7 +194,7 @@ test "timer expiry: time runs out triggers game over" {
     if game.state != Playing {
       break
     }
-    update_game(game, no_input, dt)
+    @game.update_game(game, no_input, dt)
   }
   assert_eq(game.state, GameOver)
 }

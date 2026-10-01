@@ -1,13 +1,13 @@
 ///|
 test "all 20 cases loaded" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   assert_eq(cases.length(), 20)
 }
 
 ///|
 test "tier 1 has 7 cases" {
   let mut count = 0
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     if cases[i].tier == Reports {
       count += 1
@@ -19,7 +19,7 @@ test "tier 1 has 7 cases" {
 ///|
 test "tier 2 has 7 cases" {
   let mut count = 0
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     if cases[i].tier == Investigations {
       count += 1
@@ -31,7 +31,7 @@ test "tier 2 has 7 cases" {
 ///|
 test "tier 3 has 6 cases" {
   let mut count = 0
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     if cases[i].tier == ColdCases {
       count += 1
@@ -42,7 +42,7 @@ test "tier 3 has 6 cases" {
 
 ///|
 test "tier 1 cases have 6 cards" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<7 {
     assert_eq(cases[i].cards.length(), 6)
   }
@@ -50,7 +50,7 @@ test "tier 1 cases have 6 cards" {
 
 ///|
 test "tier 2 cases have 7 cards" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 7..<14 {
     assert_eq(cases[i].cards.length(), 7)
   }
@@ -58,7 +58,7 @@ test "tier 2 cases have 7 cards" {
 
 ///|
 test "tier 3 cases have 8 cards" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 14..<20 {
     assert_eq(cases[i].cards.length(), 8)
   }
@@ -66,7 +66,7 @@ test "tier 3 cases have 8 cards" {
 
 ///|
 test "solution order length matches card count" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     assert_eq(cases[i].solution_order.length(), cases[i].cards.length())
   }
@@ -74,7 +74,7 @@ test "solution order length matches card count" {
 
 ///|
 test "each case has at least one clue" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     assert_true(cases[i].clues.length() > 0)
   }
@@ -82,7 +82,7 @@ test "each case has at least one clue" {
 
 ///|
 test "each case has at least one anchor" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     assert_true(cases[i].anchors.length() > 0)
   }
@@ -90,17 +90,17 @@ test "each case has at least one anchor" {
 
 ///|
 test "get_case returns correct case" {
-  let case_ = get_case(Reports, 0)
+  let case_ = @levels.get_case(Reports, 0)
   assert_eq(case_.title, "The Warehouse Fire")
-  let case2 = get_case(Investigations, 0)
+  let case2 = @levels.get_case(Investigations, 0)
   assert_eq(case2.title, "The Lab Incident")
-  let case3 = get_case(ColdCases, 0)
+  let case3 = @levels.get_case(ColdCases, 0)
   assert_eq(case3.title, "The Cover-Up")
 }
 
 ///|
 test "all case titles are unique" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     for j in (i + 1)..<cases.length() {
       assert_true(cases[i].title != cases[j].title)
@@ -110,7 +110,7 @@ test "all case titles are unique" {
 
 ///|
 test "card IDs are sequential within each case" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let cards = cases[i].cards
     for j in 0..<cards.length() {
@@ -121,7 +121,7 @@ test "card IDs are sequential within each case" {
 
 ///|
 test "solution order is a permutation of card IDs" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let case_ = cases[i]
     let n = case_.cards.length()
@@ -141,7 +141,7 @@ test "solution order is a permutation of card IDs" {
 
 ///|
 test "solution links reference valid card IDs" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let case_ = cases[i]
     let n = case_.cards.length()
@@ -156,7 +156,7 @@ test "solution links reference valid card IDs" {
 
 ///|
 test "clue card references are valid" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let case_ = cases[i]
     let n = case_.cards.length()
@@ -171,7 +171,7 @@ test "clue card references are valid" {
 
 ///|
 test "anchor card IDs are valid and have fixed_slot set" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let case_ = cases[i]
     let n = case_.cards.length()
@@ -187,7 +187,7 @@ test "anchor card IDs are valid and have fixed_slot set" {
 
 ///|
 test "anchors are in correct positions in solution order" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let case_ = cases[i]
     for j in 0..<case_.anchors.length() {
@@ -203,7 +203,7 @@ test "anchors are in correct positions in solution order" {
 
 ///|
 test "each case has at least 2 anchors" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     assert_true(cases[i].anchors.length() >= 2)
   }
@@ -211,7 +211,7 @@ test "each case has at least 2 anchors" {
 
 ///|
 test "all clues are satisfied by solution order" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let case_ = cases[i]
     for j in 0..<case_.clues.length() {
@@ -226,7 +226,7 @@ test "all clues are satisfied by solution order" {
 
 ///|
 test "solution links match cause links in solution" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let case_ = cases[i]
     // In the solution order, cause must come before effect
@@ -243,7 +243,7 @@ test "solution links match cause links in solution" {
 
 ///|
 test "no duplicate solution links" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let links = cases[i].solution_links
     for j in 0..<links.length() {
@@ -258,7 +258,7 @@ test "no duplicate solution links" {
 
 ///|
 test "tier 1 cases have 1-2 solution links" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<7 {
     let links = cases[i].solution_links.length()
     assert_true(links >= 1 && links <= 2)
@@ -267,7 +267,7 @@ test "tier 1 cases have 1-2 solution links" {
 
 ///|
 test "tier 2 cases have 2-3 solution links" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 7..<14 {
     let links = cases[i].solution_links.length()
     assert_true(links >= 2 && links <= 3)
@@ -276,7 +276,7 @@ test "tier 2 cases have 2-3 solution links" {
 
 ///|
 test "tier 3 cases have 3-4 solution links" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 14..<20 {
     let links = cases[i].solution_links.length()
     assert_true(links >= 3 && links <= 4)
@@ -285,7 +285,7 @@ test "tier 3 cases have 3-4 solution links" {
 
 ///|
 test "compute_score gives 3 stars for perfect solution" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     let case_ = cases[i]
     let score = @logic.compute_score(
@@ -303,7 +303,7 @@ test "compute_score gives 3 stars for perfect solution" {
 
 ///|
 test "each clue has non-empty text" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     for j in 0..<cases[i].clues.length() {
       assert_true(cases[i].clues[j].text.length() > 0)
@@ -313,7 +313,7 @@ test "each clue has non-empty text" {
 
 ///|
 test "each card has non-empty actor and action" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<cases.length() {
     for j in 0..<cases[i].cards.length() {
       assert_true(cases[i].cards[j].actor.length() > 0)
@@ -324,7 +324,7 @@ test "each card has non-empty actor and action" {
 
 ///|
 test "each case has correct tier assigned" {
-  let cases = get_all_cases()
+  let cases = @levels.get_all_cases()
   for i in 0..<7 {
     assert_eq(cases[i].tier, Reports)
   }

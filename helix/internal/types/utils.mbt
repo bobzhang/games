@@ -153,7 +153,7 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }
@@ -254,19 +254,19 @@ pub fn save_history(game : Game) -> Unit {
   match game.current_level {
     None => ()
     Some(level) => {
-      let gcw : Array[Bool] = Array::new(capacity=level.cw_spiral.cells.length())
+      let gcw : Array[Bool] = Array(capacity=level.cw_spiral.cells.length())
       for i in 0..<level.cw_spiral.cells.length() {
         gcw.push(level.cw_spiral.cells[i].gate_open)
       }
-      let gccw : Array[Bool] = Array::new(capacity=level.ccw_spiral.cells.length())
+      let gccw : Array[Bool] = Array(capacity=level.ccw_spiral.cells.length())
       for i in 0..<level.ccw_spiral.cells.length() {
         gccw.push(level.ccw_spiral.cells[i].gate_open)
       }
-      let ou : Array[Bool] = Array::new(capacity=game.oneshot_used.length())
+      let ou : Array[Bool] = Array(capacity=game.oneshot_used.length())
       for i in 0..<game.oneshot_used.length() {
         ou.push(game.oneshot_used[i])
       }
-      let pc : Array[Bool] = Array::new(capacity=game.pickups_collected.length())
+      let pc : Array[Bool] = Array(capacity=game.pickups_collected.length())
       for i in 0..<game.pickups_collected.length() {
         pc.push(game.pickups_collected[i])
       }

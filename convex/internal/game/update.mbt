@@ -165,7 +165,7 @@ fn update_playing(game : @types.Game) -> Unit {
     }
     if best_idx >= 0 {
       @types.push_undo(game)
-      let new_pts : Array[@types.Point] = Array::new(
+      let new_pts : Array[@types.Point] = Array(
         capacity=game.placed_points.length() - 1,
       )
       for i in 0..<game.placed_points.length() {

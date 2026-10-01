@@ -404,9 +404,9 @@ pub fn new_level_score() -> LevelScore {
 
 ///|
 pub fn new_empty_level() -> Level {
-  let tiles : Array[Array[TileKind]] = Array::new(capacity=grid_height)
+  let tiles : Array[Array[TileKind]] = Array(capacity=grid_height)
   for _y in 0..<grid_height {
-    let row : Array[TileKind] = Array::new(capacity=grid_width)
+    let row : Array[TileKind] = Array(capacity=grid_width)
     for _x in 0..<grid_width {
       row.push(Floor)
     }
@@ -435,7 +435,7 @@ pub fn new_empty_level() -> Level {
 
 ///|
 pub fn new_game() -> Game {
-  let level_scores : Array[LevelScore?] = Array::new(capacity=total_levels)
+  let level_scores : Array[LevelScore?] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     level_scores.push(None)
   }

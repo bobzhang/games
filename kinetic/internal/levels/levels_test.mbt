@@ -2,7 +2,7 @@
 test "all 25 levels are unique and have valid names" {
   let names : Array[String] = []
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.name.length() > 0)
     // Check name is unique
     for j in 0..<names.length() {
@@ -15,7 +15,7 @@ test "all 25 levels are unique and have valid names" {
 ///|
 test "all levels have input gear within grid bounds" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.input.pos.x >= 0)
     assert_true(level.input.pos.x < @types.grid_cols)
     assert_true(level.input.pos.y >= 0)
@@ -26,7 +26,7 @@ test "all levels have input gear within grid bounds" {
 ///|
 test "all levels have positive input rpm" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.input.rpm > 0.0)
   }
 }
@@ -34,7 +34,7 @@ test "all levels have positive input rpm" {
 ///|
 test "all levels have valid input radius" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(
       level.input.radius == 1 ||
       level.input.radius == 2 ||
@@ -46,7 +46,7 @@ test "all levels have valid input radius" {
 ///|
 test "all levels have at least one output" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.outputs.length() >= 1)
   }
 }
@@ -54,7 +54,7 @@ test "all levels have at least one output" {
 ///|
 test "all outputs are within grid bounds" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     for j in 0..<level.outputs.length() {
       let out = level.outputs[j]
       assert_true(out.pos.x >= 0)
@@ -68,7 +68,7 @@ test "all outputs are within grid bounds" {
 ///|
 test "all outputs have positive target rpm" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     for j in 0..<level.outputs.length() {
       assert_true(level.outputs[j].target_rpm > 0.0)
     }
@@ -78,7 +78,7 @@ test "all outputs have positive target rpm" {
 ///|
 test "output positions do not overlap with input position" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     for j in 0..<level.outputs.length() {
       let out = level.outputs[j]
       assert_true(
@@ -91,7 +91,7 @@ test "output positions do not overlap with input position" {
 ///|
 test "output positions are mutually distinct" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     for j in 0..<level.outputs.length() {
       for k in (j + 1)..<level.outputs.length() {
         let a = level.outputs[j]
@@ -105,7 +105,7 @@ test "output positions are mutually distinct" {
 ///|
 test "par gears is positive and within budget" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.par_gears > 0)
     assert_true(level.par_gears <= level.gear_budget)
   }
@@ -114,7 +114,7 @@ test "par gears is positive and within budget" {
 ///|
 test "gear budget is positive" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.gear_budget >= 2)
   }
 }
@@ -122,7 +122,7 @@ test "gear budget is positive" {
 ///|
 test "available gears list is non-empty" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.available_gears.length() >= 1)
   }
 }
@@ -130,7 +130,7 @@ test "available gears list is non-empty" {
 ///|
 test "tier 1 levels have correct tier tag" {
   for i in 0..<@types.tier1_count {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_eq(level.tier, Gears)
   }
 }
@@ -138,7 +138,7 @@ test "tier 1 levels have correct tier tag" {
 ///|
 test "tier 2 levels have correct tier tag" {
   for i in @types.tier1_count..<(@types.tier1_count + @types.tier2_count) {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_eq(level.tier, Trains)
   }
 }
@@ -147,7 +147,7 @@ test "tier 2 levels have correct tier tag" {
 test "tier 3 levels have correct tier tag" {
   let start = @types.tier1_count + @types.tier2_count
   for i in start..<(start + @types.tier3_count) {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_eq(level.tier, Workshop)
   }
 }
@@ -163,7 +163,7 @@ test "tier counts sum to total levels" {
 ///|
 test "all levels have non-empty hint" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.hint.length() > 0)
   }
 }
@@ -171,7 +171,7 @@ test "all levels have non-empty hint" {
 ///|
 test "outputs are reachable: not at same position as input" {
   for i in 0..<@types.total_levels {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let inp = level.input.pos
     for j in 0..<level.outputs.length() {
       let out = level.outputs[j]
@@ -185,8 +185,8 @@ test "outputs are reachable: not at same position as input" {
 ///|
 test "fallback level is level_1_1" {
   // Out-of-range indices should fall back to level_1_1
-  let fallback = get_level(999)
-  let first = get_level(0)
+  let fallback = @levels.get_level(999)
+  let first = @levels.get_level(0)
   assert_eq(fallback.name, first.name)
   assert_eq(fallback.tier, first.tier)
 }
@@ -195,7 +195,7 @@ test "fallback level is level_1_1" {
 test "belt availability only in tier 2 and 3" {
   // Tier 1 levels should not have Belt in available_gears
   for i in 0..<@types.tier1_count {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let mut has_belt = false
     for k in 0..<level.available_gears.length() {
       if level.available_gears[k] == Belt {
@@ -211,7 +211,7 @@ test "ratchet availability only in tier 3" {
   // Tier 1 and 2 levels should not have Ratchet in available_gears
   let tier12_end = @types.tier1_count + @types.tier2_count
   for i in 0..<tier12_end {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let mut has_ratchet = false
     for k in 0..<level.available_gears.length() {
       if level.available_gears[k] == Ratchet {
@@ -226,14 +226,14 @@ test "ratchet availability only in tier 3" {
 test "par gears increases with level complexity" {
   // Within each tier, par gears should generally not decrease dramatically
   // Check that the last level in each tier has at least as high par as the first
-  let tier1_first = get_level(0)
-  let tier1_last = get_level(@types.tier1_count - 1)
+  let tier1_first = @levels.get_level(0)
+  let tier1_last = @levels.get_level(@types.tier1_count - 1)
   assert_true(tier1_last.par_gears >= tier1_first.par_gears)
-  let tier2_first = get_level(@types.tier1_count)
-  let tier2_last = get_level(@types.tier1_count + @types.tier2_count - 1)
+  let tier2_first = @levels.get_level(@types.tier1_count)
+  let tier2_last = @levels.get_level(@types.tier1_count + @types.tier2_count - 1)
   assert_true(tier2_last.par_gears >= tier2_first.par_gears)
   let tier3_start = @types.tier1_count + @types.tier2_count
-  let tier3_first = get_level(tier3_start)
-  let tier3_last = get_level(tier3_start + @types.tier3_count - 1)
+  let tier3_first = @levels.get_level(tier3_start)
+  let tier3_last = @levels.get_level(tier3_start + @types.tier3_count - 1)
   assert_true(tier3_last.par_gears >= tier3_first.par_gears)
 }

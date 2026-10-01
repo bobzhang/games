@@ -1,7 +1,7 @@
 ///|
 test "all 25 levels are valid" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     // Target should be a non-base element (except for some apprentice levels
     // where base combos produce compound elements)
     let _target = @types.element_name(level.target)
@@ -14,18 +14,18 @@ test "all 25 levels are valid" {
 
 ///|
 test "tier levels have correct count" {
-  let apprentice = get_tier_levels(Apprentice)
+  let apprentice = @levels.get_tier_levels(Apprentice)
   assert_eq(apprentice.length(), 8)
-  let journeyman = get_tier_levels(Journeyman)
+  let journeyman = @levels.get_tier_levels(Journeyman)
   assert_eq(journeyman.length(), 9)
-  let master = get_tier_levels(Master)
+  let master = @levels.get_tier_levels(Master)
   assert_eq(master.length(), 8)
 }
 
 ///|
 test "apprentice levels have tier Apprentice" {
   for i in 0..<8 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_eq(level.tier, Apprentice)
   }
 }
@@ -33,7 +33,7 @@ test "apprentice levels have tier Apprentice" {
 ///|
 test "journeyman levels have tier Journeyman" {
   for i in 8..<17 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_eq(level.tier, Journeyman)
   }
 }
@@ -41,7 +41,7 @@ test "journeyman levels have tier Journeyman" {
 ///|
 test "master levels have tier Master" {
   for i in 17..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_eq(level.tier, Master)
   }
 }
@@ -52,9 +52,9 @@ test "first tier always unlocked" {
   for _i in 0..<25 {
     scores.push(@types.new_level_score())
   }
-  assert_eq(is_tier_unlocked(Apprentice, scores), true)
-  assert_eq(is_tier_unlocked(Journeyman, scores), false)
-  assert_eq(is_tier_unlocked(Master, scores), false)
+  assert_eq(@levels.is_tier_unlocked(Apprentice, scores), true)
+  assert_eq(@levels.is_tier_unlocked(Journeyman, scores), false)
+  assert_eq(@levels.is_tier_unlocked(Master, scores), false)
 }
 
 ///|
@@ -67,14 +67,14 @@ test "journeyman unlocks after 5 apprentice levels" {
   for i in 0..<5 {
     scores[i].completed = true
   }
-  assert_eq(is_tier_unlocked(Journeyman, scores), true)
+  assert_eq(@levels.is_tier_unlocked(Journeyman, scores), true)
 }
 
 ///|
 test "all 25 levels have non-base target elements" {
   // Targets should be compound elements (not Fire/Water/Earth/Air/Light/Shadow)
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     inspect(@types.is_base_element(level.target), content="false")
   }
 }
@@ -82,7 +82,7 @@ test "all 25 levels have non-base target elements" {
 ///|
 test "all 25 levels have positive budget totals" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let total = level.budget.fire +
       level.budget.water +
       level.budget.earth +
@@ -96,7 +96,7 @@ test "all 25 levels have positive budget totals" {
 ///|
 test "all budgets have non-negative values" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.budget.fire >= 0)
     assert_true(level.budget.water >= 0)
     assert_true(level.budget.earth >= 0)
@@ -109,7 +109,7 @@ test "all budgets have non-negative values" {
 ///|
 test "par steps at least 2 for all levels" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     assert_true(level.par_steps >= 2)
   }
 }
@@ -118,7 +118,7 @@ test "par steps at least 2 for all levels" {
 test "budget provides enough elements for par steps" {
   // Budget total should be >= par_steps (need at least 1 element per step)
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     let total = level.budget.fire +
       level.budget.water +
       level.budget.earth +
@@ -132,7 +132,7 @@ test "budget provides enough elements for par steps" {
 ///|
 test "steam targets have fire and water in budget" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     if level.target == Steam {
       // Steam needs Fire+Water or Ice+Fire (Ice needs Air+Water)
       let has_fire = level.budget.fire > 0
@@ -147,7 +147,7 @@ test "steam targets have fire and water in budget" {
 ///|
 test "void targets have light and shadow in budget" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     if level.target == Void {
       assert_true(level.budget.light > 0)
       assert_true(level.budget.shadow > 0)
@@ -158,7 +158,7 @@ test "void targets have light and shadow in budget" {
 ///|
 test "storm targets have required elements in budget" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     if level.target == Storm {
       // Storm = Lightning + Water; Lightning = Fire + Air
       assert_true(level.budget.fire > 0)
@@ -171,7 +171,7 @@ test "storm targets have required elements in budget" {
 ///|
 test "clay targets have required elements in budget" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     if level.target == Clay {
       // Clay = Steam + Earth; Steam = Fire + Water
       assert_true(level.budget.fire > 0)
@@ -184,7 +184,7 @@ test "clay targets have required elements in budget" {
 ///|
 test "obsidian targets have required elements in budget" {
   for i in 0..<25 {
-    let level = get_level(i)
+    let level = @levels.get_level(i)
     if level.target == Obsidian {
       // Obsidian = Magma + Water; Magma = Fire + Earth
       assert_true(level.budget.fire > 0)
@@ -217,7 +217,7 @@ test "master unlocks after 6 journeyman levels" {
   for i in 8..<14 {
     scores[i].completed = true
   }
-  assert_eq(is_tier_unlocked(Master, scores), true)
+  assert_eq(@levels.is_tier_unlocked(Master, scores), true)
 }
 
 ///|
@@ -229,5 +229,5 @@ test "master stays locked with only 5 journeyman levels" {
   for i in 8..<13 {
     scores[i].completed = true
   }
-  assert_eq(is_tier_unlocked(Master, scores), false)
+  assert_eq(@levels.is_tier_unlocked(Master, scores), false)
 }

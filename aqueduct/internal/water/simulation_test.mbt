@@ -19,7 +19,7 @@ test "water flows downhill through aqueduct" {
   let idx = @types.pos_to_index({ x: 1, y: 0, }, 3)
   game.grid[idx].kind = Aqueduct
   game.grid[idx].connections = @types.all_directions.copy()
-  run_simulation(game)
+  @water.run_simulation(game)
   inspect(game.fountains_filled, content="1")
   inspect(game.total_fountains, content="1")
 }
@@ -44,7 +44,7 @@ test "water does not flow uphill" {
   let idx = @types.pos_to_index({ x: 1, y: 0, }, 3)
   game.grid[idx].kind = Aqueduct
   game.grid[idx].connections = @types.all_directions.copy()
-  run_simulation(game)
+  @water.run_simulation(game)
   inspect(game.fountains_filled, content="0")
 }
 
@@ -68,8 +68,8 @@ test "star calculation" {
   let idx = @types.pos_to_index({ x: 1, y: 0, }, 3)
   game.grid[idx].kind = Aqueduct
   game.grid[idx].connections = @types.all_directions.copy()
-  run_simulation(game)
-  let stars = calculate_stars(game)
+  @water.run_simulation(game)
+  let stars = @water.calculate_stars(game)
   inspect(stars, content="3")
 }
 
@@ -93,9 +93,9 @@ test "reset_water clears water state" {
   let idx = @types.pos_to_index({ x: 1, y: 0, }, 3)
   game.grid[idx].kind = Aqueduct
   game.grid[idx].connections = @types.all_directions.copy()
-  run_simulation(game)
+  @water.run_simulation(game)
   inspect(game.fountains_filled, content="1")
-  reset_water(game)
+  @water.reset_water(game)
   inspect(game.fountains_filled, content="0")
   // Spring should still have water
   let spring_idx = @types.pos_to_index({ x: 0, y: 0, }, 3)
@@ -124,7 +124,7 @@ test "dam blocks flow in specified direction" {
   let game = @types.new_game([level])
   game.current_level = 0
   @types.init_grid(game)
-  run_simulation(game)
+  @water.run_simulation(game)
   inspect(game.fountains_filled, content="0")
 }
 
@@ -153,6 +153,6 @@ test "reservoir fills then releases" {
   let idx3 = @types.pos_to_index({ x: 3, y: 0, }, 5)
   game.grid[idx3].kind = Aqueduct
   game.grid[idx3].connections = @types.all_directions.copy()
-  run_simulation(game)
+  @water.run_simulation(game)
   inspect(game.fountains_filled, content="1")
 }

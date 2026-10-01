@@ -8,7 +8,7 @@ test "check_organism_alive_healthy" {
     health: 100.0,
   }
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  assert_true(check_organism_alive(org, res))
+  assert_true(@ecosystem.check_organism_alive(org, res))
 }
 
 ///|
@@ -21,7 +21,7 @@ test "check_organism_alive_no_water" {
     health: 100.0,
   }
   let res = @types.new_resources(50.0, 50.0, 0.0, 50.0)
-  assert_false(check_organism_alive(org, res))
+  assert_false(@ecosystem.check_organism_alive(org, res))
 }
 
 ///|
@@ -34,7 +34,7 @@ test "check_organism_alive_beetle_no_o2" {
     health: 100.0,
   }
   let res = @types.new_resources(0.0, 50.0, 50.0, 50.0)
-  assert_false(check_organism_alive(org, res))
+  assert_false(@ecosystem.check_organism_alive(org, res))
 }
 
 ///|
@@ -47,7 +47,7 @@ test "count_adjacent_plants_none" {
     }
     grid.push(row)
   }
-  assert_eq(count_adjacent_plants(grid, 3, 3), 0)
+  assert_eq(@ecosystem.count_adjacent_plants(grid, 3, 3), 0)
 }
 
 ///|
@@ -64,7 +64,7 @@ test "count_adjacent_plants_surrounded" {
   grid[4][3] = Organism(Fern)
   grid[3][2] = Organism(Moss)
   grid[3][4] = Organism(Fern)
-  assert_eq(count_adjacent_plants(grid, 3, 3), 4)
+  assert_eq(@ecosystem.count_adjacent_plants(grid, 3, 3), 4)
 }
 
 ///|
@@ -79,7 +79,7 @@ test "count_adjacent_plants_corner" {
   }
   grid[0][1] = Organism(Moss)
   grid[1][0] = Organism(Fern)
-  assert_eq(count_adjacent_plants(grid, 0, 0), 2)
+  assert_eq(@ecosystem.count_adjacent_plants(grid, 0, 0), 2)
 }
 
 ///|
@@ -92,7 +92,7 @@ test "herbivore_has_food_no_plants" {
     }
     grid.push(row)
   }
-  assert_false(herbivore_has_food(grid, 3, 3))
+  assert_false(@ecosystem.herbivore_has_food(grid, 3, 3))
 }
 
 ///|
@@ -106,7 +106,7 @@ test "herbivore_has_food_with_plant" {
     grid.push(row)
   }
   grid[2][3] = Organism(Moss)
-  assert_true(herbivore_has_food(grid, 3, 3))
+  assert_true(@ecosystem.herbivore_has_food(grid, 3, 3))
 }
 
 ///|
@@ -115,7 +115,7 @@ test "count_alive_all_alive" {
     { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
     { kind: Beetle, row: 1, col: 1, alive: true, health: 100.0, },
   ]
-  assert_eq(count_alive(orgs), 2)
+  assert_eq(@ecosystem.count_alive(orgs), 2)
 }
 
 ///|
@@ -125,7 +125,7 @@ test "count_alive_some_dead" {
     { kind: Beetle, row: 1, col: 1, alive: false, health: 0.0, },
     { kind: Fern, row: 2, col: 2, alive: true, health: 50.0, },
   ]
-  assert_eq(count_alive(orgs), 2)
+  assert_eq(@ecosystem.count_alive(orgs), 2)
 }
 
 ///|
@@ -133,7 +133,7 @@ test "count_alive_all_dead" {
   let orgs : Array[@types.OrganismState] = [
     { kind: Moss, row: 0, col: 0, alive: false, health: 0.0, },
   ]
-  assert_eq(count_alive(orgs), 0)
+  assert_eq(@ecosystem.count_alive(orgs), 0)
 }
 
 ///|
@@ -151,7 +151,7 @@ test "apply_organism_effects_moss_produces_o2" {
     { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  let events = apply_organism_effects(orgs, res, grid)
+  let events = @ecosystem.apply_organism_effects(orgs, res, grid)
   inspect(events.length(), content="0")
   // O2 should increase by moss o2_delta (8.0)
   inspect(res.o2.to_double(), content="58")
@@ -172,7 +172,7 @@ test "apply_organism_effects_beetle_no_food_loses_health" {
     { kind: Beetle, row: 2, col: 2, alive: true, health: 100.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  let events = apply_organism_effects(orgs, res, grid)
+  let events = @ecosystem.apply_organism_effects(orgs, res, grid)
   assert_true(events.length() > 0)
   inspect(orgs[0].health.to_double(), content="85")
 }
@@ -192,7 +192,7 @@ test "apply_organism_effects_beetle_starves" {
     { kind: Beetle, row: 2, col: 2, alive: true, health: 10.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  let _events = apply_organism_effects(orgs, res, grid)
+  let _events = @ecosystem.apply_organism_effects(orgs, res, grid)
   assert_false(orgs[0].alive)
   assert_eq(grid[2][2], Empty)
 }
@@ -212,7 +212,7 @@ test "check_resource_deaths_no_deaths" {
     { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  let events = check_resource_deaths(orgs, res, grid)
+  let events = @ecosystem.check_resource_deaths(orgs, res, grid)
   assert_eq(events.length(), 0)
   assert_true(orgs[0].alive)
 }
@@ -232,7 +232,7 @@ test "check_resource_deaths_low_water_kills_moss" {
     { kind: Moss, row: 0, col: 0, alive: true, health: 100.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 0.0, 50.0)
-  let events = check_resource_deaths(orgs, res, grid)
+  let events = @ecosystem.check_resource_deaths(orgs, res, grid)
   assert_true(events.length() > 0)
   assert_false(orgs[0].alive)
   assert_eq(grid[0][0], Empty)
@@ -250,7 +250,7 @@ test "simulate_turn_increments_turn" {
     health: 100.0,
   })
   game.resources = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  let log = simulate_turn(game)
+  let log = @ecosystem.simulate_turn(game)
   assert_eq(log.turn, 1)
   assert_eq(game.current_turn, 1)
 }
@@ -267,7 +267,7 @@ test "simulate_turn_moss_changes_resources" {
     health: 100.0,
   })
   game.resources = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  let _log = simulate_turn(game)
+  let _log = @ecosystem.simulate_turn(game)
   // Moss: o2+8, co2-4, water-3, nutrients-1
   inspect(game.resources.o2.to_double(), content="58")
   inspect(game.resources.co2.to_double(), content="46")
@@ -286,7 +286,7 @@ test "evaluate_result_victory" {
     alive: true,
     health: 100.0,
   })
-  let result = evaluate_result(game)
+  let result = @ecosystem.evaluate_result(game)
   assert_eq(result, Victory)
 }
 
@@ -295,7 +295,7 @@ test "evaluate_result_all_dead" {
   let game = @types.new_game()
   game.current_turn = 5
   game.organisms.push({ kind: Moss, row: 0, col: 0, alive: false, health: 0.0, })
-  let result = evaluate_result(game)
+  let result = @ecosystem.evaluate_result(game)
   assert_eq(result, Failure("All organisms died!"))
 }
 
@@ -310,7 +310,7 @@ test "evaluate_result_collapse" {
     alive: true,
     health: 100.0,
   })
-  let result = evaluate_result(game)
+  let result = @ecosystem.evaluate_result(game)
   assert_eq(result, Failure("Ecosystem collapsed at turn 7"))
 }
 
@@ -324,7 +324,7 @@ test "run_full_simulation_10_turns" {
     { kind: Worm, row: 1, col: 1, alive: true, health: 100.0, },
   ]
   game.resources = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  run_full_simulation(game)
+  @ecosystem.run_full_simulation(game)
   assert_true(game.sim_log.length() > 0)
   assert_true(game.sim_log.length() <= @types.max_turns)
 }
@@ -343,7 +343,7 @@ test "dead_organism_does_not_produce" {
     { kind: Moss, row: 0, col: 0, alive: false, health: 0.0, },
   ]
   let res = @types.new_resources(50.0, 50.0, 50.0, 50.0)
-  let events = apply_organism_effects(orgs, res, grid)
+  let events = @ecosystem.apply_organism_effects(orgs, res, grid)
   assert_eq(events.length(), 0)
   inspect(res.o2.to_double(), content="50")
 }

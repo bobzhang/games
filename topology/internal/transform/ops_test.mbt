@@ -5,7 +5,7 @@ test "shift north" {
     @types.vec2i(4, 3),
     @types.vec2i(3, 4),
   ])
-  let result = shift(shape, N)
+  let result = @transform.shift(shape, N)
   assert_true(result.cells.length() == 3)
   assert_true(@types.shape_contains(result, @types.vec2i(3, 2)))
   assert_true(@types.shape_contains(result, @types.vec2i(4, 2)))
@@ -15,7 +15,7 @@ test "shift north" {
 ///|
 test "shift east" {
   let shape = @types.new_shape([@types.vec2i(3, 3), @types.vec2i(4, 3)])
-  let result = shift(shape, E)
+  let result = @transform.shift(shape, E)
   assert_true(@types.shape_contains(result, @types.vec2i(4, 3)))
   assert_true(@types.shape_contains(result, @types.vec2i(5, 3)))
 }
@@ -23,7 +23,7 @@ test "shift east" {
 ///|
 test "shift south" {
   let shape = @types.new_shape([@types.vec2i(3, 3), @types.vec2i(4, 3)])
-  let result = shift(shape, S)
+  let result = @transform.shift(shape, S)
   assert_true(@types.shape_contains(result, @types.vec2i(3, 4)))
   assert_true(@types.shape_contains(result, @types.vec2i(4, 4)))
 }
@@ -31,7 +31,7 @@ test "shift south" {
 ///|
 test "shift west" {
   let shape = @types.new_shape([@types.vec2i(3, 3), @types.vec2i(4, 3)])
-  let result = shift(shape, W)
+  let result = @transform.shift(shape, W)
   assert_true(@types.shape_contains(result, @types.vec2i(2, 3)))
   assert_true(@types.shape_contains(result, @types.vec2i(3, 3)))
 }
@@ -39,7 +39,7 @@ test "shift west" {
 ///|
 test "shift blocked at boundary returns original" {
   let shape = @types.new_shape([@types.vec2i(0, 0), @types.vec2i(1, 0)])
-  let result = shift(shape, N)
+  let result = @transform.shift(shape, N)
   // Should return original because cells at y=0 can't go north
   assert_true(@types.shape_exact_match(result, shape))
 }
@@ -51,10 +51,10 @@ test "rotate 4 times equals original" {
     @types.vec2i(4, 3),
     @types.vec2i(4, 4),
   ])
-  let r1 = rotate_cw(shape)
-  let r2 = rotate_cw(r1)
-  let r3 = rotate_cw(r2)
-  let r4 = rotate_cw(r3)
+  let r1 = @transform.rotate_cw(shape)
+  let r2 = @transform.rotate_cw(r1)
+  let r3 = @transform.rotate_cw(r2)
+  let r4 = @transform.rotate_cw(r3)
   assert_true(@types.shape_equals(shape, r4))
 }
 
@@ -65,7 +65,7 @@ test "rotate changes shape" {
     @types.vec2i(4, 3),
     @types.vec2i(5, 3),
   ])
-  let rotated = rotate_cw(shape)
+  let rotated = @transform.rotate_cw(shape)
   // Horizontal bar should become vertical
   assert_true(rotated.cells.length() == 3)
   // After rotation, all cells should have same x
@@ -86,8 +86,8 @@ test "flip horizontal double flip equals original" {
     @types.vec2i(3, 3),
     @types.vec2i(3, 4),
   ])
-  let flipped = flip_h(shape)
-  let double_flipped = flip_h(flipped)
+  let flipped = @transform.flip_h(shape)
+  let double_flipped = @transform.flip_h(flipped)
   assert_true(@types.shape_equals(shape, double_flipped))
 }
 
@@ -98,15 +98,15 @@ test "flip vertical double flip equals original" {
     @types.vec2i(3, 3),
     @types.vec2i(4, 3),
   ])
-  let flipped = flip_v(shape)
-  let double_flipped = flip_v(flipped)
+  let flipped = @transform.flip_v(shape)
+  let double_flipped = @transform.flip_v(flipped)
   assert_true(@types.shape_equals(shape, double_flipped))
 }
 
 ///|
 test "grow adds cell" {
   let shape = @types.new_shape([@types.vec2i(3, 3), @types.vec2i(4, 3)])
-  let grown = grow(shape, @types.vec2i(3, 4))
+  let grown = @transform.grow(shape, @types.vec2i(3, 4))
   assert_true(grown.cells.length() == 3)
   assert_true(@types.shape_contains(grown, @types.vec2i(3, 4)))
 }
@@ -114,7 +114,7 @@ test "grow adds cell" {
 ///|
 test "grow non-adjacent returns original" {
   let shape = @types.new_shape([@types.vec2i(3, 3), @types.vec2i(4, 3)])
-  let grown = grow(shape, @types.vec2i(6, 6))
+  let grown = @transform.grow(shape, @types.vec2i(6, 6))
   assert_true(grown.cells.length() == 2)
 }
 
@@ -125,7 +125,7 @@ test "shrink removes cell" {
     @types.vec2i(4, 3),
     @types.vec2i(5, 3),
   ])
-  let shrunk = shrink(shape, @types.vec2i(5, 3))
+  let shrunk = @transform.shrink(shape, @types.vec2i(5, 3))
   assert_true(shrunk.cells.length() == 2)
   assert_true(!@types.shape_contains(shrunk, @types.vec2i(5, 3)))
 }
@@ -139,7 +139,7 @@ test "shrink rejects disconnecting removal" {
     @types.vec2i(4, 3),
     @types.vec2i(5, 3),
   ])
-  let shrunk = shrink(shape, @types.vec2i(4, 3))
+  let shrunk = @transform.shrink(shape, @types.vec2i(4, 3))
   // Should return original since removal disconnects
   assert_true(shrunk.cells.length() == 3)
 }
@@ -162,15 +162,15 @@ test "shape matching different" {
 test "check_match works" {
   let a = @types.new_shape([@types.vec2i(3, 3), @types.vec2i(4, 3)])
   let b = @types.new_shape([@types.vec2i(3, 3), @types.vec2i(4, 3)])
-  assert_true(check_match(a, b))
+  assert_true(@transform.check_match(a, b))
 }
 
 ///|
 test "calculate_stars" {
-  let three = calculate_stars(5, 8, 5)
+  let three = @transform.calculate_stars(5, 8, 5)
   assert_true(three == Three)
-  let two = calculate_stars(7, 8, 5)
+  let two = @transform.calculate_stars(7, 8, 5)
   assert_true(two == Two)
-  let one = calculate_stars(10, 8, 5)
+  let one = @transform.calculate_stars(10, 8, 5)
   assert_true(one == One)
 }

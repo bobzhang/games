@@ -6,7 +6,7 @@ test "flood fill: no fences gives single region" {
   }
   let grid = @types.make_grid(4, 4, tiles)
   let fences : Array[@types.FenceEdge] = []
-  let regions = flood_fill_regions(grid, fences)
+  let regions = @solver.flood_fill_regions(grid, fences)
   assert_eq(regions.length(), 1)
   assert_eq(regions[0].area, 16)
 }
@@ -25,7 +25,7 @@ test "flood fill: horizontal fence splits into two regions" {
     @types.make_fence(2, 2, Horizontal),
     @types.make_fence(2, 3, Horizontal),
   ]
-  let regions = flood_fill_regions(grid, fences)
+  let regions = @solver.flood_fill_regions(grid, fences)
   assert_eq(regions.length(), 2)
   assert_eq(regions[0].area, 8)
   assert_eq(regions[1].area, 8)
@@ -56,8 +56,8 @@ test "single house per region: satisfied" {
     "test",
   )
   let fences : Array[@types.FenceEdge] = []
-  let regions = flood_fill_regions(grid, fences)
-  let statuses = validate_level(level, fences, regions)
+  let regions = @solver.flood_fill_regions(grid, fences)
+  let statuses = @solver.validate_level(level, fences, regions)
   assert_eq(statuses.length(), 1)
   assert_eq(statuses[0].one_house, Satisfied)
   assert_eq(statuses[0].correct_area, Satisfied)
@@ -88,8 +88,8 @@ test "area constraint: violated when wrong" {
     "test",
   )
   let fences : Array[@types.FenceEdge] = []
-  let regions = flood_fill_regions(grid, fences)
-  let statuses = validate_level(level, fences, regions)
+  let regions = @solver.flood_fill_regions(grid, fences)
+  let statuses = @solver.validate_level(level, fences, regions)
   assert_eq(statuses[0].correct_area, Violated)
 }
 
@@ -118,8 +118,8 @@ test "road access: satisfied when region has road tile" {
     "test",
   )
   let fences : Array[@types.FenceEdge] = []
-  let regions = flood_fill_regions(grid, fences)
-  let statuses = validate_level(level, fences, regions)
+  let regions = @solver.flood_fill_regions(grid, fences)
+  let statuses = @solver.validate_level(level, fences, regions)
   assert_eq(statuses[0].road_access, Satisfied)
 }
 
@@ -154,8 +154,8 @@ test "road access: violated when region lacks road" {
     @types.make_fence(2, 1, Horizontal),
     @types.make_fence(2, 2, Horizontal),
   ]
-  let regions = flood_fill_regions(grid, fences)
-  let statuses = validate_level(level, fences, regions)
+  let regions = @solver.flood_fill_regions(grid, fences)
+  let statuses = @solver.validate_level(level, fences, regions)
   // House 0 region has no road -> Violated
   assert_eq(statuses[0].road_access, Violated)
   // House 1 region has road -> Satisfied
@@ -187,8 +187,8 @@ test "multiple houses in one region: violated" {
     "test",
   )
   let fences : Array[@types.FenceEdge] = []
-  let regions = flood_fill_regions(grid, fences)
-  let statuses = validate_level(level, fences, regions)
+  let regions = @solver.flood_fill_regions(grid, fences)
+  let statuses = @solver.validate_level(level, fences, regions)
   // Both houses in same region -> one_house violated
   assert_eq(statuses[0].one_house, Violated)
   assert_eq(statuses[1].one_house, Violated)
@@ -236,8 +236,8 @@ test "star computation" {
     Plots,
     "test",
   )
-  assert_eq(compute_stars(level, 5, true), 3)
-  assert_eq(compute_stars(level, 8, true), 2)
-  assert_eq(compute_stars(level, 12, true), 1)
-  assert_eq(compute_stars(level, 5, false), 0)
+  assert_eq(@solver.compute_stars(level, 5, true), 3)
+  assert_eq(@solver.compute_stars(level, 8, true), 2)
+  assert_eq(@solver.compute_stars(level, 12, true), 1)
+  assert_eq(@solver.compute_stars(level, 5, false), 0)
 }

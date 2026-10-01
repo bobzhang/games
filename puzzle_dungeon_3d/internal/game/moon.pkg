@@ -1,6 +1,5 @@
 import {
   "moonbitlang/core/encoding/utf8",
-  "moonbitlang/core/math",
   "tonyfettes/raylib",
   "bobzhang/games/puzzle_dungeon_3d/internal/levels",
   "bobzhang/games/puzzle_dungeon_3d/internal/types",

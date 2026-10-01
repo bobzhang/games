@@ -10,7 +10,7 @@ fn setup_emitter_grid(ex : Int, ey : Int, phase : Int) -> @types.WaveGrid {
 ///|
 test "emitter spreads to adjacent tiles after one tick" {
   let grid = setup_emitter_grid(5, 5, 0)
-  simulate_tick(grid)
+  @wave.simulate_tick(grid)
   // Emitter itself should have amplitude 1.0
   let emitter = @types.grid_get(grid, 5, 5)
   assert_true(emitter.amplitude >= 0.99)
@@ -31,9 +31,9 @@ test "emitter spreads to adjacent tiles after one tick" {
 test "wave decay over distance" {
   let grid = setup_emitter_grid(5, 5, 0)
   // Tick multiple times to let waves propagate
-  simulate_tick(grid)
-  simulate_tick(grid)
-  simulate_tick(grid)
+  @wave.simulate_tick(grid)
+  @wave.simulate_tick(grid)
+  @wave.simulate_tick(grid)
   // Tile 3 away should have lower amplitude than tile 1 away
   let near = @types.grid_get(grid, 6, 5)
   let far = @types.grid_get(grid, 8, 5)
@@ -56,7 +56,7 @@ test "wall blocks wave propagation" {
   wall3.object = Wall
   // Run several ticks
   for _i in 0..<5 {
-    simulate_tick(grid)
+    @wave.simulate_tick(grid)
   }
   // Tile immediately behind wall should have zero or very low amplitude
   // (wave would have to go around, but wall blocks 3 wide)
@@ -75,7 +75,7 @@ test "absorber stops waves" {
   let abs_tile = @types.grid_get(grid, 5, 5)
   abs_tile.object = Absorber
   for _i in 0..<5 {
-    simulate_tick(grid)
+    @wave.simulate_tick(grid)
   }
   // Absorber tile should have 0 amplitude
   let absorber = @types.grid_get(grid, 5, 5)
@@ -99,7 +99,7 @@ test "phase shifter shifts phase by 1" {
   }
   // Run enough ticks for wave to pass through
   for _i in 0..<5 {
-    simulate_tick(grid)
+    @wave.simulate_tick(grid)
   }
   // Tile past the shifter should have phase 1 (shifted from 0)
   let past = @types.grid_get(grid, 6, 5)
@@ -122,7 +122,7 @@ test "constructive interference same phase adds amplitude" {
   e2.object = Emitter(0)
   // Run several ticks for waves to meet at center
   for _i in 0..<4 {
-    simulate_tick(grid)
+    @wave.simulate_tick(grid)
   }
   let center = @types.grid_get(grid, 5, 5)
   // With two same-phase emitters, amplitude should be higher than one alone
@@ -139,7 +139,7 @@ test "destructive interference opposite phase cancels" {
   e2.object = Emitter(2)
   // Run several ticks
   for _i in 0..<4 {
-    simulate_tick(grid)
+    @wave.simulate_tick(grid)
   }
   let center = @types.grid_get(grid, 5, 5)
   // With opposite phases, amplitude at center should be reduced
@@ -157,8 +157,8 @@ test "target check satisfied" {
   target.target_max = 1.0
   target.target_phase = -1 // any phase
   target.object = Target
-  simulate_tick(grid)
-  let result = check_targets(grid)
+  @wave.simulate_tick(grid)
+  let result = @wave.check_targets(grid)
   assert_true(result)
   assert_true(target.target_satisfied)
 }
@@ -173,8 +173,8 @@ test "target check unsatisfied - amplitude too low" {
   target.target_max = 1.0
   target.target_phase = -1
   target.object = Target
-  simulate_tick(grid)
-  let result = check_targets(grid)
+  @wave.simulate_tick(grid)
+  let result = @wave.check_targets(grid)
   assert_true(!result)
 }
 
@@ -187,8 +187,8 @@ test "target check unsatisfied - wrong phase" {
   target.target_max = 1.0
   target.target_phase = 2 // require phase 2, but emitter is phase 0
   target.object = Target
-  simulate_tick(grid)
-  let result = check_targets(grid)
+  @wave.simulate_tick(grid)
+  let result = @wave.check_targets(grid)
   assert_true(!result)
 }
 
@@ -201,7 +201,7 @@ test "reflector bounces wave" {
   r.object = Reflector
   // Run ticks
   for _i in 0..<6 {
-    simulate_tick(grid)
+    @wave.simulate_tick(grid)
   }
   // Some amplitude should appear on the emitter side of the reflector
   // Reflector itself bounces waves back
@@ -218,10 +218,10 @@ test "level completion detection" {
   target.target_max = 1.0
   target.target_phase = -1
   target.object = Target
-  simulate_tick(grid)
-  let all_ok = check_targets(grid)
+  @wave.simulate_tick(grid)
+  let all_ok = @wave.check_targets(grid)
   assert_true(all_ok)
-  let counts = count_targets(grid)
+  let counts = @wave.count_targets(grid)
   assert_eq(counts.0, 1) // total
   assert_eq(counts.1, 1) // satisfied
 }

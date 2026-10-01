@@ -22,11 +22,11 @@ fn make_test_game() -> @types.Game {
 test "tree grows one cell per turn" {
   let game = make_test_game()
   inspect(game.trees[0].height, content="0")
-  simulate_turn(game)
+  @growth.simulate_turn(game)
   inspect(game.trees[0].height, content="1")
-  simulate_turn(game)
+  @growth.simulate_turn(game)
   inspect(game.trees[0].height, content="2")
-  simulate_turn(game)
+  @growth.simulate_turn(game)
   inspect(game.trees[0].height, content="3")
 }
 
@@ -34,9 +34,9 @@ test "tree grows one cell per turn" {
 test "tree gets branches at branch interval" {
   let game = make_test_game()
   // Grow to height 3 (branch_interval)
-  simulate_turn(game)
-  simulate_turn(game)
-  simulate_turn(game)
+  @growth.simulate_turn(game)
+  @growth.simulate_turn(game)
+  @growth.simulate_turn(game)
   inspect(game.trees[0].height, content="3")
   // Should have branches at height 3
   inspect(game.trees[0].branches.length() > 0, content="true")
@@ -47,7 +47,7 @@ test "shadow computation works" {
   let game = make_test_game()
   // Grow tree tall enough to have canopy
   for _i in 0..<5 {
-    simulate_turn(game)
+    @growth.simulate_turn(game)
   }
   // There should be shadow cells below leaves/branches
   let mut shadow_count = 0
@@ -68,7 +68,7 @@ test "water consumption prevents growth" {
   for i in 0..<game.ground.length() {
     game.ground[i].water = 0
   }
-  simulate_turn(game)
+  @growth.simulate_turn(game)
   // Tree should not have grown
   inspect(game.trees[0].height, content="0")
 }
@@ -78,11 +78,11 @@ test "pruning removes branch" {
   let game = make_test_game()
   // Grow to get branches
   for _i in 0..<4 {
-    simulate_turn(game)
+    @growth.simulate_turn(game)
   }
   let branch_count = game.trees[0].branches.length()
   if branch_count > 0 {
-    let result = prune_branch(game, 0, 0)
+    let result = @growth.prune_branch(game, 0, 0)
     inspect(result, content="true")
     inspect(game.trees[0].branches[0].pruned, content="true")
     inspect(game.prunes_used, content="1")
@@ -98,13 +98,13 @@ test "target satisfaction check" {
   // Set target to height 3 which is achievable with starting water 3
   game.targets = [{ tree_index: 0, required_height: 3, }]
   // Initially target not met
-  inspect(check_targets(game), content="false")
+  inspect(@growth.check_targets(game), content="false")
   // Grow 3 turns
   for _i in 0..<3 {
-    simulate_turn(game)
+    @growth.simulate_turn(game)
   }
   inspect(game.trees[0].height >= 3, content="true")
-  inspect(check_targets(game), content="true")
+  inspect(@growth.check_targets(game), content="true")
 }
 
 ///|
@@ -114,14 +114,14 @@ test "star calculation" {
   game.par_prunes = 2
   game.par_turns = 5
   // Not met - 0 stars
-  inspect(calculate_stars(game), content="0")
+  inspect(@growth.calculate_stars(game), content="0")
   // Grow 3 turns to meet target
   for _i in 0..<3 {
-    simulate_turn(game)
+    @growth.simulate_turn(game)
   }
   // 3 turns, 0 prunes. par_prunes=2, par_turns=5
-  inspect(check_targets(game), content="true")
-  let stars = calculate_stars(game)
+  inspect(@growth.check_targets(game), content="true")
+  let stars = @growth.calculate_stars(game)
   inspect(stars, content="3")
 }
 
@@ -135,7 +135,7 @@ test "rain refills water" {
   // Simulate 5 turns to trigger rain (rain_interval = 5)
   // First turns won't grow due to no water, but turn 5 will rain
   for _i in 0..<5 {
-    simulate_turn(game)
+    @growth.simulate_turn(game)
   }
   // After rain, water should be refilled
   inspect(game.ground[5].water > 0, content="true")
@@ -160,7 +160,7 @@ test "shadow slows growth of neighbor" {
   @types.compute_shadows(game)
   // Grow several turns - trees are close, one may shadow the other
   for _i in 0..<6 {
-    simulate_turn(game)
+    @growth.simulate_turn(game)
   }
   // Both trees should have grown, though possibly at different rates
   inspect(game.trees[0].height > 0, content="true")
@@ -173,14 +173,14 @@ test "prune budget enforced" {
   game.prune_budget = 1
   // Grow to get branches
   for _i in 0..<4 {
-    simulate_turn(game)
+    @growth.simulate_turn(game)
   }
   if game.trees[0].branches.length() >= 2 {
-    let r1 = prune_branch(game, 0, 0)
+    let r1 = @growth.prune_branch(game, 0, 0)
     inspect(r1, content="true")
     inspect(game.prunes_used, content="1")
     // Second prune should fail (budget exhausted)
-    let r2 = prune_branch(game, 0, 1)
+    let r2 = @growth.prune_branch(game, 0, 1)
     inspect(r2, content="false")
   } else {
     inspect(true, content="true")
@@ -190,7 +190,7 @@ test "prune budget enforced" {
 ///|
 test "undo restores state" {
   let game = make_test_game()
-  simulate_turn(game)
+  @growth.simulate_turn(game)
   inspect(game.trees[0].height, content="1")
   inspect(game.turn, content="1")
   // Undo
@@ -205,13 +205,13 @@ test "find_branch_at returns correct indices" {
   let game = make_test_game()
   // Grow to get branches
   for _i in 0..<4 {
-    simulate_turn(game)
+    @growth.simulate_turn(game)
   }
   if game.trees[0].branches.length() > 0 {
     let branch = game.trees[0].branches[0]
     let brow = game.grid.height - 1 - branch.row
     let bcol = game.trees[0].col + branch.col_offset
-    let result = find_branch_at(game, bcol, brow)
+    let result = @growth.find_branch_at(game, bcol, brow)
     inspect(result.0, content="0")
     inspect(result.1, content="0")
   } else {
@@ -237,6 +237,6 @@ test "water consumption increases with branches" {
 test "check_win_or_lose detects loss" {
   let game = make_test_game()
   game.turn = game.turn_limit
-  check_win_or_lose(game)
+  @growth.check_win_or_lose(game)
   inspect(game.play_state, content="Lost")
 }

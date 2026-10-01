@@ -4,7 +4,7 @@ test "Sun makes adjacent tiles Sunny" {
   let sources : Array[@types.Source] = [
     { kind: Sun, col: 2, row: 2, wind_dir: East, },
   ]
-  simulate_turn(grid, sources)
+  @weather.simulate_turn(grid, sources)
   // Center should be Sunny
   assert_eq(@types.grid_get(grid, 2, 2).weather, Sunny)
   // Adjacent tiles should be Sunny
@@ -24,7 +24,7 @@ test "Cloud blocks sun" {
   let sources : Array[@types.Source] = [
     { kind: Sun, col: 2, row: 2, wind_dir: East, },
   ]
-  simulate_turn(grid, sources)
+  @weather.simulate_turn(grid, sources)
   // The cloudy tile should remain cloudy (sun blocked)
   assert_eq(@types.grid_get(grid, 3, 2).weather, Cloudy)
 }
@@ -45,7 +45,7 @@ test "Rain flows downhill" {
   let sources : Array[@types.Source] = [
     { kind: Rain, col: 2, row: 2, wind_dir: East, },
   ]
-  simulate_turn(grid, sources)
+  @weather.simulate_turn(grid, sources)
   // Center should be Rainy
   assert_eq(@types.grid_get(grid, 2, 2).weather, Rainy)
   // Adjacent lower tiles should be Rainy
@@ -61,7 +61,7 @@ test "Wind pushes clouds" {
   let sources : Array[@types.Source] = [
     { kind: Wind, col: 1, row: 2, wind_dir: East, },
   ]
-  simulate_turn(grid, sources)
+  @weather.simulate_turn(grid, sources)
   // Cloud should have moved east to (3,2)
   assert_eq(@types.grid_get(grid, 3, 2).weather, Cloudy)
 }
@@ -73,7 +73,7 @@ test "Rain + Wind = Storm" {
     { kind: Rain, col: 2, row: 2, wind_dir: East, },
     { kind: Wind, col: 2, row: 3, wind_dir: East, },
   ]
-  simulate_turn(grid, sources)
+  @weather.simulate_turn(grid, sources)
   // The tile where rain and wind overlap should be Stormy
   // Wind at (2,3) affects adjacent (2,2), Rain at (2,2) is there
   // The rain source tile has rain influence and wind is adjacent, so should be stormy
@@ -88,7 +88,7 @@ test "Sunny + Rainy = Cancel to Clear" {
     { kind: Sun, col: 2, row: 2, wind_dir: East, },
     { kind: Rain, col: 2, row: 3, wind_dir: East, },
   ]
-  simulate_turn(grid, sources)
+  @weather.simulate_turn(grid, sources)
   // Tile (2,3) would get rain from source + sun adjacency, should cancel
   // Actually: (2,3) is rain source => Rainy, sun at (2,2) is adjacent => cancel to Clear
   assert_eq(@types.grid_get(grid, 2, 3).weather, Clear)
@@ -102,9 +102,9 @@ test "Target satisfaction" {
   ]
   let grid = @types.make_grid(5, 5, [], targets)
   // Not met initially
-  assert_eq(check_targets(grid), false)
+  assert_eq(@weather.check_targets(grid), false)
   // Set weather to match
   @types.grid_get(grid, 2, 2).weather = Sunny
   @types.grid_get(grid, 3, 3).weather = Rainy
-  assert_eq(check_targets(grid), true)
+  assert_eq(@weather.check_targets(grid), true)
 }

@@ -50,7 +50,7 @@ test "spread to adjacent tiles" {
   // Place cyan ink at center
   let center = @types.grid_get(g, 1, 1)
   center.ink = @types.ink_cyan()
-  let g2 = spread_once(g)
+  let g2 = @ink.spread_once(g)
   // Check 4 neighbors have cyan
   let up = @types.grid_get(g2, 1, 0)
   assert_true(up.ink.c)
@@ -73,7 +73,7 @@ test "barrier blocks spread" {
   left.ink = @types.ink_cyan()
   // Barrier in middle
   @types.grid_set(g, 1, 0, @types.make_tile(Barrier))
-  let g2 = spread_once(g)
+  let g2 = @ink.spread_once(g)
   // Right tile should NOT have ink (barrier blocks)
   let right = @types.grid_get(g2, 2, 0)
   assert_true(@types.ink_is_empty(right.ink))
@@ -85,15 +85,15 @@ test "target satisfaction check" {
   @types.grid_set(g, 0, 0, @types.make_target_tile(@types.ink_cyan()))
   @types.grid_set(g, 1, 0, @types.make_target_tile(@types.ink_magenta()))
   // No ink yet
-  assert_false(all_targets_satisfied(g))
+  assert_false(@ink.all_targets_satisfied(g))
   // Add correct ink to first target
   let t0 = @types.grid_get(g, 0, 0)
   t0.ink = @types.ink_cyan()
-  assert_false(all_targets_satisfied(g))
+  assert_false(@ink.all_targets_satisfied(g))
   // Add correct ink to second target
   let t1 = @types.grid_get(g, 1, 0)
   t1.ink = @types.ink_magenta()
-  assert_true(all_targets_satisfied(g))
+  assert_true(@ink.all_targets_satisfied(g))
 }
 
 ///|
@@ -107,7 +107,7 @@ test "waste counting" {
   let t1 = @types.grid_get(g, 1, 0)
   t1.ink = @types.ink_cyan()
   // Paper tile at 2 no ink -> NOT waste
-  assert_eq(count_waste(g), 1)
+  assert_eq(@ink.count_waste(g), 1)
 }
 
 ///|
@@ -116,14 +116,14 @@ test "multi-turn spread distance" {
   let left = @types.grid_get(g, 0, 0)
   left.ink = @types.ink_magenta()
   // After 1 turn, should reach tile 1
-  let g1 = spread_once(g)
+  let g1 = @ink.spread_once(g)
   assert_true(!@types.ink_is_empty(@types.grid_get(g1, 1, 0).ink))
   assert_true(@types.ink_is_empty(@types.grid_get(g1, 2, 0).ink))
   // After 2 turns, should reach tile 2
-  let g2 = spread_once(g1)
+  let g2 = @ink.spread_once(g1)
   assert_true(!@types.ink_is_empty(@types.grid_get(g2, 2, 0).ink))
   assert_true(@types.ink_is_empty(@types.grid_get(g2, 3, 0).ink))
   // After 4 turns, should reach tile 4
-  let g4 = spread_n_turns(g, 4)
+  let g4 = @ink.spread_n_turns(g, 4)
   assert_true(!@types.ink_is_empty(@types.grid_get(g4, 4, 0).ink))
 }

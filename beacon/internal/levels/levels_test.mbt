@@ -1,7 +1,7 @@
 ///|
 test "all 25 levels load without panic" {
   for i in 0..<25 {
-    let data = get_level(i)
+    let data = @levels.get_level(i)
     assert_true(data.id >= 1 && data.id <= 25)
     assert_true(data.budget > 0)
     assert_true(data.par_towers > 0)
@@ -18,7 +18,7 @@ test "all 25 levels load without panic" {
 ///|
 test "each level has at least one transmitter and receiver" {
   for i in 0..<25 {
-    let data = get_level(i)
+    let data = @levels.get_level(i)
     let mut has_tx = false
     let mut has_rx = false
     for r in 0..<@types.grid_rows {
@@ -39,34 +39,34 @@ test "each level has at least one transmitter and receiver" {
 ///|
 test "tier assignments are correct" {
   for i in 0..<8 {
-    assert_eq(get_level(i).tier, 1)
+    assert_eq(@levels.get_level(i).tier, 1)
   }
   for i in 8..<17 {
-    assert_eq(get_level(i).tier, 2)
+    assert_eq(@levels.get_level(i).tier, 2)
   }
   for i in 17..<25 {
-    assert_eq(get_level(i).tier, 3)
+    assert_eq(@levels.get_level(i).tier, 3)
   }
 }
 
 ///|
 test "tier_start_index correct" {
-  assert_eq(tier_start_index(1), 0)
-  assert_eq(tier_start_index(2), 8)
-  assert_eq(tier_start_index(3), 17)
+  assert_eq(@levels.tier_start_index(1), 0)
+  assert_eq(@levels.tier_start_index(2), 8)
+  assert_eq(@levels.tier_start_index(3), 17)
 }
 
 ///|
 test "tier_level_count correct" {
-  assert_eq(tier_level_count(1), 8)
-  assert_eq(tier_level_count(2), 9)
-  assert_eq(tier_level_count(3), 8)
+  assert_eq(@levels.tier_level_count(1), 8)
+  assert_eq(@levels.tier_level_count(2), 9)
+  assert_eq(@levels.tier_level_count(3), 8)
 }
 
 ///|
 test "elevations within valid range" {
   for i in 0..<25 {
-    let data = get_level(i)
+    let data = @levels.get_level(i)
     for r in 0..<@types.grid_rows {
       for c in 0..<@types.grid_cols {
         assert_true(data.elevations[r][c] >= 0)

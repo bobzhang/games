@@ -5,7 +5,7 @@ pub fn new_cell() -> TreeCell {
 
 ///|
 pub fn new_grid(w : Int, h : Int) -> TreeGrid {
-  let cells : Array[TreeCell] = Array::new(capacity=w * h)
+  let cells : Array[TreeCell] = Array(capacity=w * h)
   for _i in 0..<(w * h) {
     cells.push(new_cell())
   }
@@ -44,7 +44,7 @@ pub fn grid_set_kind(
 
 ///|
 pub fn clone_grid(g : TreeGrid) -> TreeGrid {
-  let cells : Array[TreeCell] = Array::new(capacity=g.cells.length())
+  let cells : Array[TreeCell] = Array(capacity=g.cells.length())
   for i in 0..<g.cells.length() {
     let c = g.cells[i]
     cells.push({
@@ -59,7 +59,7 @@ pub fn clone_grid(g : TreeGrid) -> TreeGrid {
 
 ///|
 pub fn snapshot_grid(g : TreeGrid) -> GridSnapshot {
-  let cells : Array[TreeCell] = Array::new(capacity=g.cells.length())
+  let cells : Array[TreeCell] = Array(capacity=g.cells.length())
   for i in 0..<g.cells.length() {
     let c = g.cells[i]
     cells.push({
@@ -214,7 +214,7 @@ pub fn dir_dy(dir : GrowthDir) -> Int {
 
 ///|
 pub fn new_level_scores() -> Array[LevelScore] {
-  let scores : Array[LevelScore] = Array::new(capacity=total_levels)
+  let scores : Array[LevelScore] = Array(capacity=total_levels)
   for _i in 0..<total_levels {
     scores.push({ stars: 0, completed: false, })
   }

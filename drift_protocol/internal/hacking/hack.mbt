@@ -53,8 +53,8 @@ fn start_hack_minigame(game : @types.Game, terminal_index : Int) -> Unit {
   hg.success = false
   hg.failed = false
   // Generate random binary sequence
-  hg.sequence = Array::new(capacity=@types.hack_sequence_length)
-  hg.input = Array::new(capacity=@types.hack_sequence_length)
+  hg.sequence = Array(capacity=@types.hack_sequence_length)
+  hg.input = Array(capacity=@types.hack_sequence_length)
   for _i in 0..<@types.hack_sequence_length {
     hg.sequence.push(@types.rng_int(2))
   }
@@ -113,7 +113,7 @@ pub fn hack_input(game : @types.Game, value : Int) -> Unit {
       hg.input = []
       hg.current_pos = 0
       // Generate new sequence
-      hg.sequence = Array::new(capacity=@types.hack_sequence_length)
+      hg.sequence = Array(capacity=@types.hack_sequence_length)
       for _i in 0..<@types.hack_sequence_length {
         hg.sequence.push(@types.rng_int(2))
       }

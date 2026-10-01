@@ -1,5 +1,4 @@
 import {
-  "moonbitlang/core/math",
   "tonyfettes/raylib",
   "bobzhang/games/dragon_scroll_keeper_2026/internal/types",
 }

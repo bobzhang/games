@@ -16,7 +16,7 @@ fn render_to_png(game : @types.Game, path : String) -> Unit {
   let rt = @raylib.load_render_texture(@types.screen_w, @types.screen_h)
   @raylib.begin_texture_mode(rt)
   @raylib.clear_background(@types.bg_color)
-  draw_frame(game)
+  @render.draw_frame(game)
   @raylib.end_texture_mode()
   let tex = @raylib.get_render_texture_texture(rt)
   let img = @raylib.load_image_from_texture(tex)

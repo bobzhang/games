@@ -10,7 +10,7 @@ test "trace beam straight through empty grid" {
     }
     None => fail("center cell missing")
   }
-  let segments = trace_all_beams(grid)
+  let segments = @optics.trace_all_beams(grid)
   assert_true(segments.length() > 0)
 }
 
@@ -36,8 +36,8 @@ test "trace beam to target" {
     }
     None => fail("target cell missing")
   }
-  let _segments = trace_all_beams(grid)
-  assert_true(check_all_targets(grid))
+  let _segments = @optics.trace_all_beams(grid)
+  assert_true(@optics.check_all_targets(grid))
 }
 
 ///|
@@ -71,8 +71,8 @@ test "filter passes correct color" {
     }
     None => fail("target cell missing")
   }
-  let _segments = trace_all_beams(grid)
-  assert_true(check_all_targets(grid))
+  let _segments = @optics.trace_all_beams(grid)
+  assert_true(@optics.check_all_targets(grid))
 }
 
 ///|
@@ -95,7 +95,7 @@ test "crystal refracts beam" {
     }
     None => fail("crystal cell missing")
   }
-  let segments = trace_all_beams(grid)
+  let segments = @optics.trace_all_beams(grid)
   // Should have at least 2 segments: source->crystal, crystal->edge
   assert_true(segments.length() >= 2)
   // The second segment should go SE direction
@@ -125,7 +125,7 @@ test "mirror reflects beam" {
     }
     None => fail("mirror cell missing")
   }
-  let segments = trace_all_beams(grid)
+  let segments = @optics.trace_all_beams(grid)
   assert_true(segments.length() >= 2)
   if segments.length() >= 2 {
     assert_eq(segments[1].direction, NW)
@@ -154,8 +154,8 @@ test "target not satisfied with wrong color" {
     }
     None => fail("target cell missing")
   }
-  let _segments = trace_all_beams(grid)
-  assert_false(check_all_targets(grid))
+  let _segments = @optics.trace_all_beams(grid)
+  assert_false(@optics.check_all_targets(grid))
 }
 
 ///|
@@ -170,8 +170,8 @@ test "unlit target is not satisfied" {
     }
     None => fail("target cell missing")
   }
-  let _segments = trace_all_beams(grid)
-  assert_false(check_all_targets(grid))
+  let _segments = @optics.trace_all_beams(grid)
+  assert_false(@optics.check_all_targets(grid))
 }
 
 ///|
@@ -203,6 +203,6 @@ test "multiple targets all satisfied" {
     }
     None => fail("target missing")
   }
-  let _segments = trace_all_beams(grid)
-  assert_true(check_all_targets(grid))
+  let _segments = @optics.trace_all_beams(grid)
+  assert_true(@optics.check_all_targets(grid))
 }

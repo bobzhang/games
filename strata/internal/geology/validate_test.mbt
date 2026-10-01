@@ -8,18 +8,18 @@ test "fossil age ordering - older below younger" {
     Some(Granite),
   ]
   // Sandstone(0) is older than Limestone(1)
-  inspect(check_fossil_age(slots, 0, 1), content="true")
+  inspect(@geology.check_fossil_age(slots, 0, 1), content="true")
   // Limestone(1) is NOT older than Sandstone(0)
-  inspect(check_fossil_age(slots, 1, 0), content="false")
+  inspect(@geology.check_fossil_age(slots, 1, 0), content="false")
   // Sandstone(0) is older than Granite(3)
-  inspect(check_fossil_age(slots, 0, 3), content="true")
+  inspect(@geology.check_fossil_age(slots, 0, 3), content="true")
 }
 
 ///|
 test "fossil age - missing rock returns false" {
   let slots : Array[@types.RockKind?] = [Some(Sandstone), None, Some(Shale)]
   // Coal (5) not in slots
-  inspect(check_fossil_age(slots, 0, 5), content="false")
+  inspect(@geology.check_fossil_age(slots, 0, 5), content="false")
 }
 
 ///|
@@ -30,11 +30,11 @@ test "superposition adjacency - directly above" {
     Some(Shale),
   ]
   // Limestone directly above Sandstone: pos_above=1, pos_below=0 => 1==0+1
-  inspect(check_superposition(slots, 1, 0), content="true")
+  inspect(@geology.check_superposition(slots, 1, 0), content="true")
   // Shale directly above Limestone
-  inspect(check_superposition(slots, 2, 1), content="true")
+  inspect(@geology.check_superposition(slots, 2, 1), content="true")
   // Shale NOT directly above Sandstone (gap)
-  inspect(check_superposition(slots, 2, 0), content="false")
+  inspect(@geology.check_superposition(slots, 2, 0), content="false")
 }
 
 ///|
@@ -45,9 +45,9 @@ test "superposition - wrong order" {
     Some(Shale),
   ]
   // Sandstone(pos=1) directly above Limestone(pos=0)
-  inspect(check_superposition(slots, 0, 1), content="true")
+  inspect(@geology.check_superposition(slots, 0, 1), content="true")
   // Limestone(pos=0) NOT directly above Sandstone(pos=1)
-  inspect(check_superposition(slots, 1, 0), content="false")
+  inspect(@geology.check_superposition(slots, 1, 0), content="false")
 }
 
 ///|
@@ -59,18 +59,18 @@ test "dating position check" {
     Some(Limestone),
   ]
   // Granite at slot 0
-  inspect(check_dating(slots, 3, 0), content="true")
+  inspect(@geology.check_dating(slots, 3, 0), content="true")
   // Sandstone at slot 2
-  inspect(check_dating(slots, 0, 2), content="true")
+  inspect(@geology.check_dating(slots, 0, 2), content="true")
   // Granite NOT at slot 1
-  inspect(check_dating(slots, 3, 1), content="false")
+  inspect(@geology.check_dating(slots, 3, 1), content="false")
 }
 
 ///|
 test "dating - missing rock" {
   let slots : Array[@types.RockKind?] = [Some(Sandstone), None]
   // Coal not placed
-  inspect(check_dating(slots, 5, 0), content="false")
+  inspect(@geology.check_dating(slots, 5, 0), content="false")
 }
 
 ///|
@@ -82,9 +82,9 @@ test "intrusion rule - intruder above host" {
     Some(Shale),
   ]
   // Basalt(pos=2) intrudes into Sandstone(pos=0): intruder above host
-  inspect(check_intrusion(slots, 4, 0), content="true")
+  inspect(@geology.check_intrusion(slots, 4, 0), content="true")
   // Sandstone(pos=0) does NOT intrude into Basalt(pos=2)
-  inspect(check_intrusion(slots, 0, 4), content="false")
+  inspect(@geology.check_intrusion(slots, 0, 4), content="false")
 }
 
 ///|
@@ -96,16 +96,16 @@ test "unconformity gap check - not adjacent" {
     Some(Limestone),
   ]
   // Chalk(pos=0) and Shale(pos=2): not adjacent (diff=2)
-  inspect(check_unconformity(slots, 6, 2), content="true")
+  inspect(@geology.check_unconformity(slots, 6, 2), content="true")
   // Chalk(pos=0) and Sandstone(pos=1): adjacent (diff=1)
-  inspect(check_unconformity(slots, 6, 0), content="false")
+  inspect(@geology.check_unconformity(slots, 6, 0), content="false")
 }
 
 ///|
 test "unconformity - adjacent returns false" {
   let slots : Array[@types.RockKind?] = [Some(Chalk), Some(Shale)]
   // Adjacent (diff=1), so unconformity NOT satisfied
-  inspect(check_unconformity(slots, 6, 2), content="false")
+  inspect(@geology.check_unconformity(slots, 6, 2), content="false")
   // With gap
   let slots2 : Array[@types.RockKind?] = [
     Some(Chalk),
@@ -113,7 +113,7 @@ test "unconformity - adjacent returns false" {
     Some(Shale),
   ]
   // diff=2, so unconformity satisfied
-  inspect(check_unconformity(slots2, 6, 2), content="true")
+  inspect(@geology.check_unconformity(slots2, 6, 2), content="true")
 }
 
 ///|
@@ -131,9 +131,9 @@ test "validate all clues" {
     @types.new_clue(FossilAge, 2, 0, "Shale is older than sandstone"),
     @types.new_clue(Dating, 1, 3, "Limestone is the top layer"),
   ]
-  let satisfied = validate_all(clues, slots)
+  let satisfied = @geology.validate_all(clues, slots)
   inspect(satisfied, content="4")
-  inspect(all_satisfied(clues), content="true")
+  inspect(@geology.all_satisfied(clues), content="true")
 }
 
 ///|
@@ -149,11 +149,11 @@ test "validate all - partial satisfaction" {
     @types.new_clue(Dating, 3, 0, "Granite is bottom"),
     @types.new_clue(FossilAge, 2, 0, "Shale is older than sandstone"),
   ]
-  let satisfied = validate_all(clues, slots)
+  let satisfied = @geology.validate_all(clues, slots)
   // Granite at pos 1, not 0 => fail
   // Shale at pos 3, Sandstone at pos 2 => Shale > Sandstone, so shale NOT older => fail
   inspect(satisfied, content="0")
-  inspect(all_satisfied(clues), content="false")
+  inspect(@geology.all_satisfied(clues), content="false")
 }
 
 ///|
@@ -164,21 +164,21 @@ test "check_clue dispatches correctly" {
     Some(Basalt),
   ]
   let clue_dating = @types.new_clue(Dating, 0, 0, "Sandstone at bottom")
-  inspect(check_clue(clue_dating, slots), content="true")
+  inspect(@geology.check_clue(clue_dating, slots), content="true")
   let clue_super = @types.new_clue(
     Superposition,
     1,
     0,
     "Limestone above sandstone",
   )
-  inspect(check_clue(clue_super, slots), content="true")
+  inspect(@geology.check_clue(clue_super, slots), content="true")
   let clue_intrusion = @types.new_clue(
     Intrusion,
     4,
     0,
     "Basalt intrudes sandstone",
   )
-  inspect(check_clue(clue_intrusion, slots), content="true")
+  inspect(@geology.check_clue(clue_intrusion, slots), content="true")
 }
 
 ///|

@@ -2,7 +2,7 @@
 pub fn compute_hull(points : Array[@types.Point]) -> Array[@types.Point] {
   let n = points.length()
   if n < 3 {
-    let result : Array[@types.Point] = Array::new(capacity=n)
+    let result : Array[@types.Point] = Array(capacity=n)
     for i in 0..<n {
       result.push(points[i])
     }
@@ -17,7 +17,7 @@ pub fn compute_hull(points : Array[@types.Point]) -> Array[@types.Point] {
     }
   }
   // Create sorted copy
-  let sorted : Array[@types.Point] = Array::new(capacity=n)
+  let sorted : Array[@types.Point] = Array(capacity=n)
   // Put pivot first
   sorted.push(points[lowest])
   for i in 0..<n {
@@ -38,7 +38,7 @@ pub fn compute_hull(points : Array[@types.Point]) -> Array[@types.Point] {
     sorted[j + 1] = key
   }
   // Remove collinear points (keep farthest)
-  let filtered : Array[@types.Point] = Array::new(capacity=n)
+  let filtered : Array[@types.Point] = Array(capacity=n)
   filtered.push(sorted[0])
   let mut i = 1
   while i < sorted.length() {
@@ -56,7 +56,7 @@ pub fn compute_hull(points : Array[@types.Point]) -> Array[@types.Point] {
     return filtered
   }
   // Graham scan
-  let stack : Array[@types.Point] = Array::new(capacity=filtered.length())
+  let stack : Array[@types.Point] = Array(capacity=filtered.length())
   stack.push(filtered[0])
   stack.push(filtered[1])
   for k in 2..<filtered.length() {

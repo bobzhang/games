@@ -4,7 +4,7 @@ test "find_chains detects chain of 3" {
   @types.set_cell(board, { row: 3, col: 1, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_chain = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Chain {
@@ -37,7 +37,7 @@ test "find_triangles detects triangle" {
       }
     }
     if bc_neighbors {
-      let patterns = find_all_patterns(board, Black)
+      let patterns = @board.find_all_patterns(board, Black)
       let mut found_triangle = false
       for i in 0..<patterns.length() {
         if patterns[i].kind == Triangle {
@@ -59,7 +59,7 @@ test "fortress detects center with 4+ neighbors" {
   for i in 0..<4 {
     @types.set_cell(board, nbrs[i], Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_fortress = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Fortress {
@@ -75,7 +75,7 @@ test "wall detects 4 stones on edge" {
   for c in 0..<4 {
     @types.set_cell(board, { row: 0, col: c, }, Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_wall = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Wall {
@@ -94,7 +94,7 @@ test "star detects center plus all 6 neighbors" {
   for i in 0..<nbrs.length() {
     @types.set_cell(board, nbrs[i], Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_star = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Star {
@@ -114,7 +114,7 @@ test "ring detects 6 stones around empty center" {
   for i in 0..<nbrs.length() {
     @types.set_cell(board, nbrs[i], Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_ring = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Ring {
@@ -129,7 +129,7 @@ test "count_liberties for single stone" {
   let board = @types.new_board(7)
   let coord : @types.HexCoord = { row: 3, col: 3, }
   @types.set_cell(board, coord, Occupied(Black))
-  let libs = count_liberties(board, coord)
+  let libs = @board.count_liberties(board, coord)
   assert_eq(libs, 6) // Center stone has 6 empty neighbors
 }
 
@@ -142,7 +142,7 @@ test "resolve_captures removes surrounded stone" {
   for i in 0..<nbrs.length() {
     @types.set_cell(board, nbrs[i], Occupied(Black))
   }
-  let captured = resolve_captures(board, Black)
+  let captured = @board.resolve_captures(board, Black)
   assert_eq(captured.length(), 1)
   assert_eq(@types.get_cell(board, center), Empty)
 }
@@ -154,7 +154,7 @@ test "score_patterns adds up correctly" {
   @types.set_cell(board, { row: 3, col: 1, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
-  let score = score_patterns(board, Black)
+  let score = @board.score_patterns(board, Black)
   assert_true(score >= @types.chain_points)
 }
 
@@ -171,7 +171,7 @@ test "cascading capture works" {
   }
   // Place the last black stone to complete the surround
   @types.set_cell(board, nbrs[nbrs.length() - 1], Occupied(Black))
-  let captured = resolve_captures_cascading(board, Black)
+  let captured = @board.resolve_captures_cascading(board, Black)
   assert_true(captured.length() >= 1)
 }
 
@@ -192,7 +192,7 @@ test "find_bridges detects bridge pattern" {
   // (3,2) is neighbor of (3,1) and also neighbor of (3,3)
   @types.set_cell(board, { row: 3, col: 1, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_bridge = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Bridge {
@@ -209,7 +209,7 @@ test "bridge not detected for direct neighbors" {
   // Two adjacent stones should NOT form a bridge
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_bridge = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Bridge {
@@ -226,7 +226,7 @@ test "bridge not detected when gap is occupied" {
   @types.set_cell(board, { row: 3, col: 1, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(White))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_bridge = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Bridge {
@@ -255,7 +255,7 @@ test "find_diamonds detects diamond pattern" {
   @types.set_cell(board, { row: 2, col: 3, }, Occupied(Black))
   @types.set_cell(board, { row: 2, col: 4, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(Black))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_diamond = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Diamond {
@@ -272,7 +272,7 @@ test "diamond not detected with only 3 stones" {
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
   @types.set_cell(board, { row: 2, col: 3, }, Occupied(Black))
   @types.set_cell(board, { row: 2, col: 4, }, Occupied(Black))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_diamond = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Diamond {
@@ -288,7 +288,7 @@ test "chain requires 3 or more stones" {
   // Only 2 stones in a row - not a chain
   @types.set_cell(board, { row: 3, col: 1, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(Black))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_chain = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Chain {
@@ -305,7 +305,7 @@ test "chain of 4 is detected" {
   @types.set_cell(board, { row: 3, col: 1, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_chain = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Chain {
@@ -323,7 +323,7 @@ test "triangle not detected for 3 non-mutual-neighbor stones" {
   @types.set_cell(board, { row: 3, col: 1, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_triangle = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Triangle {
@@ -343,7 +343,7 @@ test "fortress requires 4+ neighbors, not just 3" {
   for i in 0..<3 {
     @types.set_cell(board, nbrs[i], Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_fortress = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Fortress {
@@ -360,7 +360,7 @@ test "wall requires 4+ edge stones, not 3" {
   for c in 0..<3 {
     @types.set_cell(board, { row: 0, col: c, }, Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_wall = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Wall {
@@ -377,7 +377,7 @@ test "wall detected on column edge" {
   for r in 0..<4 {
     @types.set_cell(board, { row: r, col: 0, }, Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_wall = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Wall {
@@ -397,7 +397,7 @@ test "ring not detected when center is occupied" {
   for i in 0..<nbrs.length() {
     @types.set_cell(board, nbrs[i], Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_ring = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Ring {
@@ -418,7 +418,7 @@ test "star not detected when one neighbor is missing" {
   for i in 0..<5 {
     @types.set_cell(board, nbrs[i], Occupied(Black))
   }
-  let patterns = find_all_patterns(board, Black)
+  let patterns = @board.find_all_patterns(board, Black)
   let mut found_star = false
   for i in 0..<patterns.length() {
     if patterns[i].kind == Star {
@@ -436,18 +436,18 @@ test "patterns are player-specific" {
   @types.set_cell(board, { row: 3, col: 2, }, Occupied(Black))
   @types.set_cell(board, { row: 3, col: 3, }, Occupied(Black))
   // White should have no patterns
-  let white_patterns = find_all_patterns(board, White)
+  let white_patterns = @board.find_all_patterns(board, White)
   assert_eq(white_patterns.length(), 0)
   // Black should have patterns
-  let black_patterns = find_all_patterns(board, Black)
+  let black_patterns = @board.find_all_patterns(board, Black)
   assert_true(black_patterns.length() > 0)
 }
 
 ///|
 test "empty board has no patterns" {
   let board = @types.new_board(7)
-  let black_patterns = find_all_patterns(board, Black)
-  let white_patterns = find_all_patterns(board, White)
+  let black_patterns = @board.find_all_patterns(board, Black)
+  let white_patterns = @board.find_all_patterns(board, White)
   assert_eq(black_patterns.length(), 0)
   assert_eq(white_patterns.length(), 0)
 }
@@ -461,6 +461,6 @@ test "evaluate_captures counts correctly" {
     @types.set_cell(board, nbrs[i], Occupied(Black))
   }
   let last = nbrs[nbrs.length() - 1]
-  let cap_count = evaluate_captures(board, last, Black)
+  let cap_count = @board.evaluate_captures(board, last, Black)
   assert_eq(cap_count, 1)
 }

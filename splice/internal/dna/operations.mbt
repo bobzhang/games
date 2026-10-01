@@ -3,7 +3,7 @@ pub fn cut(seq : Array[@types.Base], pos : Int) -> Array[@types.Base] {
   if pos < 0 || pos >= seq.length() {
     return @types.copy_sequence(seq)
   }
-  let result : Array[@types.Base] = Array::new(capacity=seq.length() - 1)
+  let result : Array[@types.Base] = Array(capacity=seq.length() - 1)
   for i in 0..<seq.length() {
     if i != pos {
       result.push(seq[i])
@@ -25,7 +25,7 @@ pub fn insert(
   } else {
     pos
   }
-  let result : Array[@types.Base] = Array::new(capacity=seq.length() + 1)
+  let result : Array[@types.Base] = Array(capacity=seq.length() + 1)
   for i in 0..<p {
     result.push(seq[i])
   }
@@ -47,7 +47,7 @@ pub fn duplicate(
   if s >= e {
     return @types.copy_sequence(seq)
   }
-  let result : Array[@types.Base] = Array::new(capacity=seq.length() + e - s)
+  let result : Array[@types.Base] = Array(capacity=seq.length() + e - s)
   for i in 0..<e {
     result.push(seq[i])
   }
@@ -72,7 +72,7 @@ pub fn invert(
   if s >= e {
     return @types.copy_sequence(seq)
   }
-  let result : Array[@types.Base] = Array::new(capacity=seq.length())
+  let result : Array[@types.Base] = Array(capacity=seq.length())
   for i in 0..<s {
     result.push(seq[i])
   }
@@ -99,7 +99,7 @@ pub fn delete(
   if s >= e {
     return @types.copy_sequence(seq)
   }
-  let result : Array[@types.Base] = Array::new(capacity=seq.length() - (e - s))
+  let result : Array[@types.Base] = Array(capacity=seq.length() - (e - s))
   for i in 0..<s {
     result.push(seq[i])
   }

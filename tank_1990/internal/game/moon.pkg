@@ -1,5 +1,4 @@
 import {
-  "moonbitlang/core/encoding/utf8",
   "tonyfettes/raylib",
   "bobzhang/games/tank_1990/internal/levels",
   "bobzhang/games/tank_1990/internal/particles",

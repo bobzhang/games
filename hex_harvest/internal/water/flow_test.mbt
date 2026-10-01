@@ -7,7 +7,7 @@ test "water_flows_downhill" {
   grid.tiles[0][1].watered = true
   grid.tiles[1][1].kind = Dirt
   grid.tiles[1][1].height = 1
-  let newly = flow_water(grid)
+  let newly = @water.flow_water(grid)
   // Water should have spread to lower neighbor
   assert_true(newly.length() > 0)
 }
@@ -24,7 +24,7 @@ test "water_blocked_by_rock" {
   grid.tiles[1][0].kind = Rock
   grid.tiles[1][1].kind = Rock
   grid.tiles[1][2].kind = Rock
-  let newly = flow_water(grid)
+  let newly = @water.flow_water(grid)
   // No water should flow to rock tiles
   for i in 0..<newly.length() {
     let coord = newly[i]
@@ -43,7 +43,7 @@ test "channel_enables_same_height_flow" {
   grid.tiles[0][1].kind = Dirt
   grid.tiles[0][1].height = 1
   grid.tiles[0][1].has_channel = true
-  let newly = flow_water(grid)
+  let newly = @water.flow_water(grid)
   // The channeled tile should get watered
   let mut found = false
   for i in 0..<newly.length() {
@@ -59,5 +59,5 @@ test "count_watered" {
   let grid = @types.new_grid(3, 3)
   grid.tiles[0][0].watered = true
   grid.tiles[1][1].watered = true
-  assert_eq(count_watered(grid), 2)
+  assert_eq(@water.count_watered(grid), 2)
 }
