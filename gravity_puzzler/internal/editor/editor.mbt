@@ -158,7 +158,7 @@ pub fn update_editor(game : @types.Game) -> Unit {
 }
 
 ///|
-fn remove_entity_at(ed : @types.EditorState, x : Int, y : Int) -> Unit {
+fn remove_entity_at(ed : @types.EditorState, x : Int32, y : Int32) -> Unit {
   let mut i = 0
   while i < ed.entities.length() {
     let e = ed.entities[i]
@@ -501,7 +501,7 @@ pub fn decode_editor_level(ed : @types.EditorState, data : String) -> Bool {
   let mut x_pos = -1
   let mut colon_pos = -1
   for i in 0..<header.length() {
-    let ch = Int::unsafe_to_char(header[i].to_int())
+    let ch = Int32::unsafe_to_char(header[i].to_int())
     if ch == 'x' && x_pos < 0 {
       x_pos = i
     }
@@ -520,7 +520,7 @@ pub fn decode_editor_level(ed : @types.EditorState, data : String) -> Bool {
   }
   // Parse gravity
   if colon_pos + 1 < header.length() {
-    let g_ch = Int::unsafe_to_char(header[colon_pos + 1].to_int())
+    let g_ch = Int32::unsafe_to_char(header[colon_pos + 1].to_int())
     ed.gravity = match g_ch {
       'U' => Up
       'L' => Left
@@ -544,7 +544,7 @@ pub fn decode_editor_level(ed : @types.EditorState, data : String) -> Bool {
       if x >= w {
         break
       }
-      let ch = Int::unsafe_to_char(line[x].to_int())
+      let ch = Int32::unsafe_to_char(line[x].to_int())
       let idx = y * w + x
       match ch {
         '#' => ed.tiles[idx] = Wall
@@ -592,7 +592,7 @@ fn split_lines_ed(s : String) -> Array[String] {
   let lines : Array[String] = []
   let buf = StringBuilder()
   for i in 0..<s.length() {
-    let ch = Int::unsafe_to_char(s[i].to_int())
+    let ch = Int32::unsafe_to_char(s[i].to_int())
     if ch == '\n' {
       lines.push(buf.to_string())
       buf.reset()
@@ -610,7 +610,7 @@ fn split_lines_ed(s : String) -> Array[String] {
 }
 
 ///|
-fn parse_int_ed(s : String, start : Int, end_pos : Int) -> Int {
+fn parse_int_ed(s : String, start : Int32, end_pos : Int32) -> Int32 {
   let mut result = 0
   for i in start..<end_pos {
     if i < s.length() {

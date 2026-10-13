@@ -1,5 +1,5 @@
 ///|
-fn tp(col : Int, row : Int) -> @types.TargetPos {
+fn tp(col : Int32, row : Int32) -> @types.TargetPos {
   { col, row, }
 }
 
@@ -380,7 +380,7 @@ fn level_19() -> @types.Level {
 }
 
 ///|
-pub fn get_level(id : Int) -> @types.Level {
+pub fn get_level(id : Int32) -> @types.Level {
   match id {
     0 => level_0()
     1 => level_1()

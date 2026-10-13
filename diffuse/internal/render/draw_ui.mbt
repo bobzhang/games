@@ -110,10 +110,10 @@ pub fn draw_ui(game : @types.Game) -> Unit {
 fn draw_ink_button(
   game : @types.Game,
   channel : @types.InkChannel,
-  x : Int,
-  y : Int,
-  w : Int,
-  remaining : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  remaining : Int32,
 ) -> Unit {
   let h = 40
   let is_selected = game.selected_channel == channel
@@ -157,7 +157,7 @@ fn draw_ink_button(
 }
 
 ///|
-fn draw_target_list(game : @types.Game, x : Int, start_y : Int) -> Unit {
+fn draw_target_list(game : @types.Game, x : Int32, start_y : Int32) -> Unit {
   let g = game.grid
   let mut y = start_y
   let mut count = 0

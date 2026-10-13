@@ -86,10 +86,10 @@ fn draw_artwork_grid(game : @types.Game, level : @types.Level) -> Unit {
 fn draw_region(
   game : @types.Game,
   region : @types.Region,
-  x : Int,
-  y : Int,
-  size : Int,
-  idx : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
+  idx : Int32,
 ) -> Unit {
   let fx = Float::from_int(x)
   let fy = Float::from_int(y)
@@ -197,10 +197,10 @@ fn draw_region(
 ///|
 fn draw_damage_overlay(
   region : @types.Region,
-  x : Int,
-  y : Int,
-  size : Int,
-  frame : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
+  frame : Int32,
 ) -> Unit {
   let fx = Float::from_int(x)
   let fy = Float::from_int(y)
@@ -370,9 +370,9 @@ fn draw_damage_overlay(
 fn draw_tool_preview(
   game : @types.Game,
   region : @types.Region,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
 ) -> Unit {
   // Only show preview for actionable regions
   match region.state {

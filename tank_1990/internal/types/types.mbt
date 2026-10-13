@@ -3,7 +3,7 @@
 pub(all) struct Tank {
   mut active : Bool
   mut is_player : Bool
-  mut player_index : Int
+  mut player_index : Int32
   enemy_kind : EnemyKind
   mut x : Float
   mut y : Float
@@ -11,8 +11,8 @@ pub(all) struct Tank {
   mut spawn_y : Float
   mut dir : Dir
   mut move_speed : Float
-  mut hp : Int
-  mut max_hp : Int
+  mut hp : Int32
+  mut max_hp : Int32
   mut reload_timer : Float
   mut reload_delay : Float
   mut ai_move_timer : Float
@@ -22,9 +22,9 @@ pub(all) struct Tank {
   mut shield_timer : Float
   mut invuln_timer : Float
   mut respawn_timer : Float
-  mut lives : Int
-  mut score : Int
-  mut weapon_level : Int
+  mut lives : Int32
+  mut score : Int32
+  mut weapon_level : Int32
   mut blink_timer : Float
   mut skid_timer : Float
 }
@@ -64,7 +64,11 @@ pub fn Tank::inactive() -> Tank {
 
 ///|
 /// Creates a new player tank at the given spawn position.
-pub fn Tank::new_player(index : Int, spawn_x : Float, spawn_y : Float) -> Tank {
+pub fn Tank::new_player(
+  index : Int32,
+  spawn_x : Float,
+  spawn_y : Float,
+) -> Tank {
   {
     active: true,
     is_player: true,
@@ -148,8 +152,8 @@ pub(all) struct Bullet {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut damage : Int
-  mut power : Int
+  mut damage : Int32
+  mut power : Int32
   mut radius : Float
 }
 
@@ -293,9 +297,9 @@ pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
 pub(all) struct StageProfile {
   title : String
   subtitle : String
-  enemy_bonus : Int
+  enemy_bonus : Int32
   spawn_scale : Float
-  drop_bonus : Int
+  drop_bonus : Int32
   sky_top : @raylib.Color
   sky_bottom : @raylib.Color
   fog_alpha : Float
@@ -307,9 +311,9 @@ pub(all) struct StageProfile {
 pub fn StageProfile::StageProfile(
   title : String,
   subtitle : String,
-  enemy_bonus : Int,
+  enemy_bonus : Int32,
   spawn_scale : Float,
-  drop_bonus : Int,
+  drop_bonus : Int32,
   sky_top : @raylib.Color,
   sky_bottom : @raylib.Color,
   fog_alpha : Float,
@@ -371,7 +375,7 @@ pub(all) struct Game {
   /// How many demo campaigns have been started since the program launched.
   /// Incremented each time `start_demo_campaign()` is called.  Purely
   /// informational — not used for gameplay logic.
-  mut demo_runs : Int
+  mut demo_runs : Int32
   /// Seconds elapsed since the current demo campaign began.
   /// Accumulates every frame while `demo_mode` is `true` and the state
   /// is not `Menu`.  Reset to 0 when a new demo campaign starts.
@@ -382,7 +386,7 @@ pub(all) struct Game {
   /// Index of the currently highlighted menu item (0–3).
   /// 0 = Start Game, 1 = Demo, 2 = Co-op toggle, 3 = Quit.
   /// Changed with Up/Down arrow keys on the menu screen.
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   /// Timer that drives the blinking animation of the menu selection cursor.
   /// Continuously increases; a sine of this value controls the blink effect.
   mut menu_blink : Float
@@ -392,11 +396,11 @@ pub(all) struct Game {
   /// Total number of frames rendered since the game was created.
   /// Incremented by 1 every frame regardless of game state.
   /// Useful for frame-based animation or periodic events.
-  mut frame_counter : Int
+  mut frame_counter : Int32
   /// Zero-based index of the current campaign stage (level).
   /// Ranges from 0 to `level_count - 1` (0–95).  Advances by 1 each time
   /// the player clears a stage.
-  mut stage_index : Int
+  mut stage_index : Int32
 
   // ──────────────────────── Phase transition timers ───────────────
   // These countdown timers control how long each overlay screen is shown
@@ -478,11 +482,11 @@ pub(all) struct Game {
 
   /// Cumulative score across both players for the current campaign.
   /// Increased whenever an enemy is destroyed or a powerup is collected.
-  mut score_total : Int
+  mut score_total : Int32
   /// Highest `score_total` achieved across all campaigns in this session.
   /// Updated automatically whenever `score_total` exceeds it.
   /// (Not persisted to disk — resets when the program restarts.)
-  mut high_score : Int
+  mut high_score : Int32
 
   // ──────────────────────── Enemy spawning ────────────────────────
 
@@ -490,16 +494,16 @@ pub(all) struct Game {
   /// can be considered "cleared".  Calculated from the stage index
   /// (higher stages → more enemies) and the profile's `enemy_bonus`.
   /// Ranges from 18 to 60.
-  mut enemies_to_spawn : Int
+  mut enemies_to_spawn : Int32
   /// How many enemies have been spawned so far in this stage.
   /// Incremented each time a new enemy tank appears.  When this reaches
   /// `enemies_to_spawn`, no more enemies will spawn.
-  mut enemies_spawned : Int
+  mut enemies_spawned : Int32
   /// How many enemy tanks are currently alive on the battlefield.
   /// Incremented on spawn, decremented on destruction.  The stage is
   /// cleared when `enemies_spawned >= enemies_to_spawn` AND
   /// `enemies_alive <= 0`.
-  mut enemies_alive : Int
+  mut enemies_alive : Int32
   /// Countdown timer (in seconds) until the next enemy spawn attempt.
   /// When it reaches 0, the game tries to place a new enemy at one of
   /// three spawn lanes at the top of the map.  Then resets to
@@ -512,7 +516,7 @@ pub(all) struct Game {
   /// Incremented each time an enemy is destroyed.  Higher combos give a
   /// score multiplier: 1× (combo ≤ 1), 2× (≤ 3), 3× (≤ 6), 4× (≥ 7).
   /// Resets to 0 when `combo_timer` expires.
-  mut kill_combo : Int
+  mut kill_combo : Int32
   /// Seconds remaining before the kill combo resets.
   /// Set to 2.1 s each time a kill is scored.  If no enemy is killed
   /// within this window, `kill_combo` drops back to 0.
@@ -536,7 +540,7 @@ pub(all) struct Game {
   /// deterministic random values for enemy AI decisions, spawn rolls,
   /// powerup drops, and particle effects.  Seeded to `0x13572468` on
   /// creation.
-  mut rng_state : Int
+  mut rng_state : Int32
 
   // ──────────────────────── Tile map ──────────────────────────────
 
@@ -550,7 +554,7 @@ pub(all) struct Game {
   /// Brick tiles start at 1 HP and are destroyed when reduced to 0.
   /// Steel tiles have 999 HP (effectively indestructible unless bullet
   /// power ≥ 3).  Empty/Bush/Ice/Water tiles have 0 HP.
-  map_hp : Array[Int]
+  map_hp : Array[Int32]
 
   // ──────────────────────── Entity pools ──────────────────────────
   // All entities use pre-allocated fixed-size arrays ("object pools").

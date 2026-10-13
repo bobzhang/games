@@ -75,7 +75,7 @@ pub(all) struct Tank {
   mut y : Float
   mut dir : Dir
   mut move_speed : Float
-  mut hp : Int
+  mut hp : Int32
   mut reload_timer : Float
   mut reload_delay : Float
   mut ai_move_timer : Float
@@ -84,9 +84,9 @@ pub(all) struct Tank {
   mut shield_timer : Float
   mut invuln_timer : Float
   mut respawn_timer : Float
-  mut lives : Int
-  mut score : Int
-  mut weapon_level : Int
+  mut lives : Int32
+  mut score : Int32
+  mut weapon_level : Int32
   mut blink_timer : Float
   mut skid_timer : Float
 }
@@ -120,7 +120,11 @@ pub fn Tank::inactive() -> Tank {
 
 ///|
 /// Creates a player-controlled tank at a spawn point.
-pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank {
+pub fn Tank::new_player(
+  _index : Int32,
+  spawn_x : Float,
+  spawn_y : Float,
+) -> Tank {
   {
     active: true,
     enemy_kind: Basic,
@@ -192,8 +196,8 @@ pub(all) struct Bullet {
   vx : Float
   vy : Float
   mut ttl : Float
-  damage : Int
-  power : Int
+  damage : Int32
+  power : Int32
   radius : Float
 }
 
@@ -221,12 +225,12 @@ pub(all) struct Bomb {
   mut owner_team : Team
   mut x : Float
   mut y : Float
-  mut tile_x : Int
-  mut tile_y : Int
+  mut tile_x : Int32
+  mut tile_y : Int32
   mut fuse : Float
   mut blast_timer : Float
   mut exploding : Bool
-  mut blast_range : Int
+  mut blast_range : Int32
 }
 
 ///|
@@ -340,24 +344,24 @@ pub(all) struct Game {
   mut demo_mode : Bool
   /// Number of demo campaigns started this session. Incremented each time
   /// `start_demo_campaign` is called. Used for display/diagnostic purposes.
-  mut demo_runs : Int
+  mut demo_runs : Int32
   /// Wall-clock time elapsed during the current demo run, in seconds.
   /// Accumulates each frame while `demo_mode` is true and state is not Menu.
   mut demo_elapsed : Float
   // ──── Menu UI ────
   /// Currently highlighted menu item index (0 = Start, 1 = Demo,
   /// 2 = Co-op toggle, 3 = Quit). Navigated with Up/Down keys.
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   /// Accumulating timer that drives the blinking highlight animation on
   /// the selected menu item, in radians. Advances at `menu_select_blink_speed`.
   mut menu_blink : Float
   // ──── Frame & stage progression ────
   /// Global frame counter, incremented by 1 every `update_game` call.
   /// Used for timing-independent logic and animation phase offsets.
-  mut frame_counter : Int
+  mut frame_counter : Int32
   /// Zero-based index of the current stage within the campaign
   /// (0 to `level_count - 1`, i.e. 0..95). Advanced by 1 after each stage clear.
-  mut stage_index : Int
+  mut stage_index : Int32
   /// Countdown timer for the "STAGE N" intro overlay, in seconds.
   /// Set to `stage_intro_time` (1.6 s, or 0.45 s in demo) when a stage loads;
   /// play begins when it reaches 0.
@@ -415,21 +419,21 @@ pub(all) struct Game {
   /// Cumulative score for the current campaign run, in points.
   /// Increased by destroying enemies, collecting powerups, and combo bonuses.
   /// Displayed on the side panel and game-over screen.
-  mut score_total : Int
+  mut score_total : Int32
   /// Highest score achieved across all campaigns this session.
   /// Updated whenever `score_total` exceeds it. Shown on the game-over screen.
-  mut high_score : Int
+  mut high_score : Int32
   // ──── Enemy spawning ────
   /// Total number of enemies to spawn during the current stage.
   /// Computed from the stage index and profile on stage load (18..60 range).
-  mut enemies_to_spawn : Int
+  mut enemies_to_spawn : Int32
   /// Number of enemies already spawned this stage. Incremented each time
   /// `spawn_enemy` succeeds. Spawning stops when this equals `enemies_to_spawn`.
-  mut enemies_spawned : Int
+  mut enemies_spawned : Int32
   /// Number of enemies currently alive on the field. Incremented on spawn,
   /// decremented on destroy. Capped at `enemy_on_field_limit` (8) to
   /// prevent overcrowding.
-  mut enemies_alive : Int
+  mut enemies_alive : Int32
   /// Countdown timer until the next enemy spawn attempt, in seconds.
   /// Reset to `enemy_spawn_period * profile.spawn_scale` after each spawn.
   mut spawn_timer : Float
@@ -437,7 +441,7 @@ pub(all) struct Game {
   /// Current kill combo streak count (0..9). Incremented by `bump_combo`
   /// when an enemy is destroyed; reset to 0 when `combo_timer` expires.
   /// Higher combo values yield a score multiplier (1x / 2x / 3x / 5x).
-  mut kill_combo : Int
+  mut kill_combo : Int32
   /// Remaining time before the combo streak resets, in seconds.
   /// Set to 2.1 s on each kill; when it reaches 0, `kill_combo` resets to 0.
   mut combo_timer : Float
@@ -445,7 +449,7 @@ pub(all) struct Game {
   /// Internal state for the xorshift pseudo-random number generator.
   /// Used by `rand_range` and `rand_rangef` for all gameplay randomness
   /// (enemy spawn lanes, AI decisions, powerup drops). Seeded to 0x13572468.
-  mut rng_state : Int
+  mut rng_state : Int32
   // ──── Map data ────
   /// Flat array of tile kinds for the 26x26 tile map, indexed by
   /// `y * map_tiles_w + x`. Possible values: Empty, Brick, Steel, Water,
@@ -454,7 +458,7 @@ pub(all) struct Game {
   /// Hit-point values for each map tile, parallel to `map_tiles`.
   /// Brick tiles start at 1 HP; Steel tiles at 999 (indestructible by
   /// normal bullets). Decremented by bullet `power`; tile is cleared at 0.
-  map_hp : Array[Int]
+  map_hp : Array[Int32]
   // ──── Entity pools ────
   /// Fixed array of 2 player tanks (index 0 = P1, index 1 = P2).
   /// P2 is only active when `coop_enabled` is true. Each tank holds
@@ -544,7 +548,7 @@ pub fn Game::new() -> Game {
 
 ///|
 /// Returns the team enum for a player index.
-pub fn team_of_player(index : Int) -> Team {
+pub fn team_of_player(index : Int32) -> Team {
   if index == 0 {
     Player1
   } else {

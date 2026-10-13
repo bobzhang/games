@@ -27,12 +27,12 @@ pub extend Recipe with Debug::{to_repr}
 
 ///|
 pub(all) struct ElementBudget {
-  mut fire : Int
-  mut water : Int
-  mut earth : Int
-  mut air : Int
-  mut light : Int
-  mut shadow : Int
+  mut fire : Int32
+  mut water : Int32
+  mut earth : Int32
+  mut air : Int32
+  mut light : Int32
+  mut shadow : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -46,7 +46,7 @@ pub(all) struct Level {
   tier : Tier
   target : Element
   budget : ElementBudget
-  par_steps : Int
+  par_steps : Int32
   hint : String
 } derive(Eq, Debug)
 
@@ -59,8 +59,8 @@ pub extend Level with Debug::{to_repr}
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
-  mut stars : Int
-  mut best_steps : Int
+  mut stars : Int32
+  mut best_steps : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -113,23 +113,23 @@ pub(all) struct Game {
   mut cauldron_history : Array[Element]
   recipe_book : Array[Recipe]
   mut current_tier : Tier
-  mut current_level_index : Int
+  mut current_level_index : Int32
   level_scores : Array[LevelScore]
   mut budget : ElementBudget
-  mut steps_taken : Int
-  mut failed_attempts : Int
-  mut total_attempts : Int
-  mut discovered_count : Int
+  mut steps_taken : Int32
+  mut failed_attempts : Int32
+  mut total_attempts : Int32
+  mut discovered_count : Int32
   mut show_recipe_book : Bool
   mut message : String
   mut message_timer : Float
   mut anim : AnimState
-  mut frame_count : Int
+  mut frame_count : Int32
   mut selected_element : Element?
   mut add_anim_element : Element?
   mut add_anim_y : Float
-  mut result_stars : Int
-  mut result_steps : Int
+  mut result_stars : Int32
+  mut result_steps : Int32
 } derive(Debug)
 
 ///|

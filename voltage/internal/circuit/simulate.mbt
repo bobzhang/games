@@ -18,10 +18,10 @@ pub fn reset_simulation(state : @types.LevelState) -> Unit {
 /// Connect two adjacent cells bidirectionally
 pub fn connect_cells(
   state : @types.LevelState,
-  c1 : Int,
-  r1 : Int,
-  c2 : Int,
-  r2 : Int,
+  c1 : Int32,
+  r1 : Int32,
+  c2 : Int32,
+  r2 : Int32,
 ) -> Unit {
   if !@types.in_bounds(c1, r1) || !@types.in_bounds(c2, r2) {
     return
@@ -62,10 +62,10 @@ pub fn connect_cells(
 /// Disconnect two adjacent cells bidirectionally
 pub fn disconnect_cells(
   state : @types.LevelState,
-  c1 : Int,
-  r1 : Int,
-  c2 : Int,
-  r2 : Int,
+  c1 : Int32,
+  r1 : Int32,
+  c2 : Int32,
+  r2 : Int32,
 ) -> Unit {
   if !@types.in_bounds(c1, r1) || !@types.in_bounds(c2, r2) {
     return
@@ -91,7 +91,11 @@ pub fn disconnect_cells(
 
 ///|
 /// Auto-connect a placed component to all adjacent connectable components
-pub fn auto_connect(state : @types.LevelState, col : Int, row : Int) -> Unit {
+pub fn auto_connect(
+  state : @types.LevelState,
+  col : Int32,
+  row : Int32,
+) -> Unit {
   let dirs = @types.all_directions()
   for i in 0..<dirs.length() {
     let (dc, dr) = @types.direction_delta(dirs[i])
@@ -106,7 +110,11 @@ pub fn auto_connect(state : @types.LevelState, col : Int, row : Int) -> Unit {
 
 ///|
 /// Remove all connections from a cell
-pub fn disconnect_all(state : @types.LevelState, col : Int, row : Int) -> Unit {
+pub fn disconnect_all(
+  state : @types.LevelState,
+  col : Int32,
+  row : Int32,
+) -> Unit {
   let dirs = @types.all_directions()
   for i in 0..<dirs.length() {
     let (dc, dr) = @types.direction_delta(dirs[i])
@@ -123,12 +131,12 @@ pub fn disconnect_all(state : @types.LevelState, col : Int, row : Int) -> Unit {
 /// Returns array of (col, row) pairs
 fn flood_fill(
   state : @types.LevelState,
-  start_c : Int,
-  start_r : Int,
+  start_c : Int32,
+  start_r : Int32,
   visited : Array[Array[Bool]],
-) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = []
-  let stack : Array[(Int, Int)] = [(start_c, start_r)]
+) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = []
+  let stack : Array[(Int32, Int32)] = [(start_c, start_r)]
   visited[start_r][start_c] = true
   while stack.length() > 0 {
     let (c, r) = stack.pop().unwrap()
@@ -183,16 +191,16 @@ pub fn simulate(state : @types.LevelState) -> Unit {
     visited.push(row)
   }
   // Track which network each cell belongs to, and per-network battery count
-  let network_id : Array[Array[Int]] = []
+  let network_id : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
-    let row : Array[Int] = []
+    let row : Array[Int32] = []
     for _c in 0..<@types.grid_cols {
       row.push(-1)
     }
     network_id.push(row)
   }
-  let network_batteries : Array[Int] = []
-  let network_cells : Array[Array[(Int, Int)]] = []
+  let network_batteries : Array[Int32] = []
+  let network_cells : Array[Array[(Int32, Int32)]] = []
   let mut net_count = 0
   // Find all connected networks
   for r in 0..<@types.grid_rows {
@@ -225,8 +233,8 @@ pub fn simulate(state : @types.LevelState) -> Unit {
       continue
     }
     // Find batteries and devices in this network
-    let battery_positions : Array[(Int, Int)] = []
-    let device_positions : Array[(Int, Int)] = []
+    let battery_positions : Array[(Int32, Int32)] = []
+    let device_positions : Array[(Int32, Int32)] = []
     for j in 0..<cells.length() {
       let (cc, cr) = cells[j]
       match state.cells[cr][cc].component {
@@ -286,8 +294,8 @@ pub fn simulate(state : @types.LevelState) -> Unit {
 /// Parallel paths don't increase voltage, just the first path's voltage is used.
 fn compute_device_voltage(
   state : @types.LevelState,
-  dev_col : Int,
-  dev_row : Int,
+  dev_col : Int32,
+  dev_row : Int32,
 ) -> Float {
   // BFS/DFS to find all batteries reachable from this device
   // For series detection: count batteries along the longest chain path
@@ -309,8 +317,8 @@ fn compute_device_voltage(
 /// Each battery encountered adds 1.5V to the path voltage.
 fn dfs_voltage(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   visited : Array[Array[Bool]],
 ) -> Float {
   visited[row][col] = true
@@ -414,8 +422,8 @@ pub fn evaluate_level(state : @types.LevelState) -> @types.LevelResult {
 /// Check if a component can be placed at the given cell
 pub fn can_place(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   comp : @types.ComponentKind,
 ) -> Bool {
   if !@types.in_bounds(col, row) {
@@ -454,8 +462,8 @@ pub fn can_place(
 /// Place a component on the grid
 pub fn place_component(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   comp : @types.ComponentKind,
 ) -> Bool {
   if !can_place(state, col, row, comp) {
@@ -477,8 +485,8 @@ pub fn place_component(
 /// Remove a non-fixed component from the grid
 pub fn remove_component(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Bool {
   if !@types.in_bounds(col, row) {
     return false
@@ -501,7 +509,11 @@ pub fn remove_component(
 
 ///|
 /// Toggle a switch component
-pub fn toggle_switch(state : @types.LevelState, col : Int, row : Int) -> Bool {
+pub fn toggle_switch(
+  state : @types.LevelState,
+  col : Int32,
+  row : Int32,
+) -> Bool {
   if !@types.in_bounds(col, row) {
     return false
   }

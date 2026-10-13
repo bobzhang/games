@@ -3,7 +3,7 @@ fn detect_start_press(
   mouse_x : Float,
   mouse_y : Float,
   mouse_press : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Bool {
   let key_press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
@@ -21,7 +21,7 @@ fn detect_execute_press(
   mouse_x : Float,
   mouse_y : Float,
   mouse_press : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Bool {
   let key_press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -40,7 +40,7 @@ fn detect_clear_route_press(
   mouse_x : Float,
   mouse_y : Float,
   mouse_press : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Bool {
   let key_press : Bool = @raylib.is_key_pressed(@raylib.KeyBackspace) ||
     @raylib.is_key_pressed(@raylib.KeyDelete) ||
@@ -59,7 +59,7 @@ fn detect_coolant_press(
   mouse_x : Float,
   mouse_y : Float,
   mouse_press : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Bool {
   let key_press : Bool = @raylib.is_key_pressed(@raylib.KeyC)
 
@@ -76,7 +76,7 @@ fn detect_restart_press(
   mouse_x : Float,
   mouse_y : Float,
   mouse_press : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Bool {
   let key_press : Bool = @raylib.is_key_pressed(@raylib.KeyR)
 
@@ -98,7 +98,7 @@ fn detect_next_press(
   mouse_x : Float,
   mouse_y : Float,
   mouse_press : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Bool {
   let key_press : Bool = @raylib.is_key_pressed(@raylib.KeyN) ||
     @raylib.is_key_pressed(@raylib.KeyEnter)
@@ -116,7 +116,7 @@ fn detect_dir_press(
   mouse_x : Float,
   mouse_y : Float,
   mouse_press : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> @types.Dir {
   let mut dir : @types.Dir = None
 
@@ -201,8 +201,8 @@ fn detect_map_target(
   mouse_x : Float,
   mouse_y : Float,
   mouse_press : Bool,
-  touch_count : Int,
-) -> (Bool, Int, Int) {
+  touch_count : Int32,
+) -> (Bool, Int32, Int32) {
   let sample = @types.sample_pointer(mouse_x, mouse_y, mouse_press, touch_count)
   if !sample.0 {
     return (false, 0, 0)
@@ -213,8 +213,8 @@ fn detect_map_target(
     return (false, 0, 0)
   }
 
-  let gx : Int = (sample.1.to_int() - mx) / @types.tile_size
-  let gy : Int = (sample.2.to_int() - my) / @types.tile_size
+  let gx : Int32 = (sample.1.to_int() - mx) / @types.tile_size
+  let gy : Int32 = (sample.2.to_int() - my) / @types.tile_size
 
   if gx < 0 || gx >= @types.grid_w || gy < 0 || gy >= @types.grid_h {
     return (false, 0, 0)

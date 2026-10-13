@@ -179,10 +179,10 @@ fn draw_battlefield_art() -> Bool {
 /// Draws either castle sprite.
 fn draw_castle_art(
   is_enemy : Bool,
-  x : Int,
-  y : Int,
-  width : Int,
-  height : Int,
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
 ) -> Bool {
   let texture_ref = if is_enemy { tex_enemy_castle } else { tex_player_castle }
   match texture_ref.val {
@@ -203,7 +203,12 @@ fn draw_castle_art(
 
 ///|
 /// Draws the central mountain obstacle sprite.
-fn draw_mountain_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
+fn draw_mountain_art(
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
+) -> Bool {
   match tex_mountain_obstacle.val {
     Some(texture) => {
       draw_art_top_left(
@@ -269,7 +274,7 @@ fn draw_explosion_art(
   cx : Float,
   cy : Float,
   size : Float,
-  alpha : Int,
+  alpha : Int32,
 ) -> Bool {
   match tex_explosion.val {
     Some(texture) => {
@@ -290,7 +295,12 @@ fn draw_explosion_art(
 
 ///|
 /// Draws the decorative touch-control panel.
-fn draw_control_panel_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
+fn draw_control_panel_art(
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
+) -> Bool {
   match tex_control_panel.val {
     Some(texture) => {
       draw_art_top_left(

@@ -95,10 +95,10 @@ fn draw_ratio_bars(game : @types.Game) -> Unit {
 
 ///|
 fn draw_single_ratio_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   current : Float,
   target_min : Float,
@@ -198,7 +198,7 @@ fn draw_single_ratio_bar(
 }
 
 ///|
-fn draw_tiny_triangle(x : Int, y : Int, pointing_down : Bool) -> Unit {
+fn draw_tiny_triangle(x : Int32, y : Int32, pointing_down : Bool) -> Unit {
   let fx = Float::from_int(x)
   let fy = Float::from_int(y)
   if pointing_down {

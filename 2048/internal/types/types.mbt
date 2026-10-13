@@ -13,7 +13,7 @@ pub extend GameState with Eq::{not_equal, equal}
 ///|
 /// Mutable tile data used for value storage and render animation.
 pub(all) struct Tile {
-  mut value : Int
+  mut value : Int32
   mut anim_x : Float
   mut anim_y : Float
   mut target_x : Float
@@ -50,7 +50,7 @@ pub(all) struct Game {
   tiles : Array[Tile]
   /// Snapshot of every tile's `.value` taken just before the last move.
   /// Used by `undo` to restore the board. Length is always `cell_count` (16).
-  prev_values : Array[Int]
+  prev_values : Array[Int32]
   // ──── Core state ────
   /// Which screen/phase the game is currently in.
   /// Possible values: `Title`, `Play`, `Won`, `Over`.
@@ -60,13 +60,13 @@ pub(all) struct Game {
   /// Points earned in the current session from merging tiles.
   /// Increases by the merged tile's new value on each merge.
   /// Displayed in the score card; compared against `best_score` after moves.
-  mut score : Int
+  mut score : Int32
   /// Highest score ever reached across all sessions (not persisted to disk).
   /// Updated after every successful move when `score` exceeds it.
-  mut best_score : Int
+  mut best_score : Int32
   /// Score snapshot taken alongside `prev_values` before the last move.
   /// Restored by `undo` to revert the score together with the board.
-  mut prev_score : Int
+  mut prev_score : Int32
   /// Whether an undo operation is available (true after a successful move,
   /// cleared after undoing). Guards the `undo` action in input handling.
   mut can_undo : Bool

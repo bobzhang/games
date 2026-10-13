@@ -38,8 +38,8 @@ fn draw_title(game : @types.Game) -> Unit {
 
 ///|
 fn draw_gear(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   radius : Float,
   angle : Float,
   color : @raylib.Color,
@@ -226,7 +226,12 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star(cx : Int, cy : Int, radius : Float, color : @raylib.Color) -> Unit {
+fn draw_star(
+  cx : Int32,
+  cy : Int32,
+  radius : Float,
+  color : @raylib.Color,
+) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   // Simple 5-point star approximation with triangles

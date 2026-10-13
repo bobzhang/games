@@ -1,7 +1,7 @@
 ///|
 pub(all) struct Vec2i {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -31,7 +31,7 @@ pub extend Command with Debug::{to_repr}
 ///|
 pub(all) struct Program {
   mut commands : Array[Command]
-  mut max_slots : Int
+  mut max_slots : Int32
 } derive(Debug)
 
 ///|
@@ -48,8 +48,8 @@ pub extend Tile with Debug::{to_repr}
 ///|
 pub(all) struct Grid {
   mut tiles : Array[Array[Tile]]
-  mut width : Int
-  mut height : Int
+  mut width : Int32
+  mut height : Int32
 } derive(Debug)
 
 ///|
@@ -69,15 +69,15 @@ pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelDef {
-  world : Int
-  index : Int
+  world : Int32
+  index : Int32
   name : String
   ascii : Array[String]
-  start_x : Int
-  start_y : Int
+  start_x : Int32
+  start_y : Int32
   start_dir : Direction
-  par : Int
-  optimal : Int
+  par : Int32
+  optimal : Int32
   hint : String
   available_commands : Array[CommandKind]
 } derive(Debug)
@@ -92,7 +92,7 @@ pub(all) struct RobotState {
   mut alive : Bool
   mut goals_collected : Array[Bool]
   mut blocks : Array[Vec2i]
-  mut cmd_index : Int
+  mut cmd_index : Int32
 } derive(Debug)
 
 ///|
@@ -111,7 +111,7 @@ pub extend ExecutionTrace with Debug::{to_repr}
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
-  mut best_instructions : Int
+  mut best_instructions : Int32
   mut medal : Medal
 } derive(Debug)
 
@@ -120,12 +120,12 @@ pub extend LevelScore with Debug::{to_repr}
 
 ///|
 pub(all) struct EditorState {
-  mut cursor : Int
-  mut palette_cursor : Int
+  mut cursor : Int32
+  mut palette_cursor : Int32
   mut palette_open : Bool
   mut palette_commands : Array[CommandKind]
-  mut loop_count : Int
-  mut condition_index : Int
+  mut loop_count : Int32
+  mut condition_index : Int32
 } derive(Debug)
 
 ///|
@@ -134,23 +134,23 @@ pub extend EditorState with Debug::{to_repr}
 ///|
 pub(all) struct Game {
   mut screen : Screen
-  mut current_world : Int
-  mut current_level : Int
+  mut current_world : Int32
+  mut current_level : Int32
   mut level : Level?
   mut level_def : LevelDef?
   mut program : Program
   mut editor : EditorState
   mut run_state : RunState
   mut trace : ExecutionTrace?
-  mut trace_step : Int
+  mut trace_step : Int32
   mut trace_timer : Float
-  mut run_speed : Int
+  mut run_speed : Int32
   mut scores : Array[Array[LevelScore]]
-  mut frame_count : Int
+  mut frame_count : Int32
   mut message : String
   mut message_timer : Float
   mut title_anim : Float
-  mut total_stars : Int
+  mut total_stars : Int32
 } derive(Debug)
 
 ///|

@@ -34,7 +34,7 @@ fn @types.Game::spawn_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for spark in game.sparks {
     if spark.active {
@@ -59,8 +59,8 @@ fn @types.Game::burst_sparks(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.spawn_spark(
@@ -114,7 +114,7 @@ fn @types.Game::reset_full_rack(game : @types.Game) -> Unit {
   let cx : Float = @types.ball_start_x
   for idx, pin in game.pins {
     if idx < 10 {
-      let row : Int = if idx < 1 {
+      let row : Int32 = if idx < 1 {
         0
       } else if idx < 3 {
         1
@@ -123,8 +123,8 @@ fn @types.Game::reset_full_rack(game : @types.Game) -> Unit {
       } else {
         3
       }
-      let row_start : Int = row * (row + 1) / 2
-      let col : Int = idx - row_start
+      let row_start : Int32 = row * (row + 1) / 2
+      let col : Int32 = idx - row_start
       let y : Float = @types.pin_deck_y +
         Float::from_int(row) * @types.pin_row_gap
       let x0 : Float = cx - Float::from_int(row) * @types.pin_col_gap * 0.5
@@ -147,7 +147,7 @@ fn @types.Game::reset_full_rack(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the number of pins that are still standing.
-fn @types.Game::count_standing(game : @types.Game) -> Int {
+fn @types.Game::count_standing(game : @types.Game) -> Int32 {
   @utils.count_by(game.pins, fn(pin) { pin.standing })
 }
 
@@ -239,10 +239,10 @@ fn @types.Game::finalize_match(game : @types.Game) -> Unit {
 /// Topples pin `i` with the given impulse, spawns a spark burst, and triggers a screen shake.
 fn @types.Game::knock_pin(
   game : @types.Game,
-  i : Int,
+  i : Int32,
   vx : Float,
   vy : Float,
-  impact_kind : Int,
+  impact_kind : Int32,
 ) -> Unit {
   if i < 0 || i >= game.pins.length() {
     return
@@ -288,8 +288,8 @@ fn @types.Game::throw_ball(game : @types.Game) -> Bool {
 
 ///|
 /// Records a completed roll, updates frame progression and spare/strike counters, and prepares the next delivery.
-fn @types.Game::on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
-  let k : Int = if knocked < 0 {
+fn @types.Game::on_roll_scored(game : @types.Game, knocked : Int32) -> Unit {
+  let k : Int32 = if knocked < 0 {
     0
   } else if knocked > game.pins_before_roll {
     game.pins_before_roll
@@ -609,8 +609,8 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  let standing : Int = game.count_standing()
-  let knocked : Int = game.pins_before_roll - standing
+  let standing : Int32 = game.count_standing()
+  let knocked : Int32 = game.pins_before_roll - standing
   game.on_roll_scored(knocked)
 }
 

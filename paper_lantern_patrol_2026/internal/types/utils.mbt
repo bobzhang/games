@@ -53,13 +53,13 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
 /// Returns the configured UI or gameplay color for a col.
-pub fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
+pub fn a_col(c : @raylib.Color, a : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),

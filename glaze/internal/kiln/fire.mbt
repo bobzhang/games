@@ -40,8 +40,8 @@ fn is_blend_pair(
 
 ///|
 /// Get the 4-connected neighbors of a cell.
-fn neighbors(row : Int, col : Int) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = []
+fn neighbors(row : Int32, col : Int32) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = []
   if row > 0 {
     result.push((row - 1, col))
   }
@@ -59,7 +59,7 @@ fn neighbors(row : Int, col : Int) -> Array[(Int, Int)] {
 
 ///|
 /// Count how many neighbors have the same glaze color.
-fn count_same_neighbors(grid : @types.Grid, row : Int, col : Int) -> Int {
+fn count_same_neighbors(grid : @types.Grid, row : Int32, col : Int32) -> Int32 {
   let g = @types.get_cell(grid, row, col).glaze
   if g is Empty {
     return 0
@@ -77,7 +77,11 @@ fn count_same_neighbors(grid : @types.Grid, row : Int, col : Int) -> Int {
 
 ///|
 /// Check if any neighbor is incompatible (causes cracking).
-fn has_incompatible_neighbor(grid : @types.Grid, row : Int, col : Int) -> Bool {
+fn has_incompatible_neighbor(
+  grid : @types.Grid,
+  row : Int32,
+  col : Int32,
+) -> Bool {
   let g = @types.get_cell(grid, row, col).glaze
   if g is Empty {
     return false
@@ -100,8 +104,8 @@ fn has_incompatible_neighbor(grid : @types.Grid, row : Int, col : Int) -> Bool {
 /// Check if any neighbor forms a blend pair.
 fn find_blend_neighbor(
   grid : @types.Grid,
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
 ) -> @types.FiredColor? {
   let g = @types.get_cell(grid, row, col).glaze
   if g is Empty {
@@ -166,7 +170,7 @@ pub fn fire_grid(grid : @types.Grid) -> Unit {
 pub fn count_matches(
   grid : @types.Grid,
   target : Array[@types.FiredColor],
-) -> Int {
+) -> Int32 {
   let mut count = 0
   for i in 0..<@types.mini(grid.cells.length(), target.length()) {
     if grid.cells[i].fired == target[i] {
@@ -178,7 +182,7 @@ pub fn count_matches(
 
 ///|
 /// Count cracked cells after firing.
-pub fn count_cracked(grid : @types.Grid) -> Int {
+pub fn count_cracked(grid : @types.Grid) -> Int32 {
   let mut count = 0
   for i in 0..<grid.cells.length() {
     if grid.cells[i].fired is FCracked {
@@ -193,8 +197,8 @@ pub fn count_cracked(grid : @types.Grid) -> Int {
 pub fn calculate_score(
   grid : @types.Grid,
   target : Array[@types.FiredColor],
-  moves_used : Int,
-  par_moves : Int,
+  moves_used : Int32,
+  par_moves : Int32,
 ) -> @types.LevelScore {
   let total = @types.grid_cols * @types.grid_rows
   let matched = count_matches(grid, target)

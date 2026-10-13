@@ -1,5 +1,5 @@
 ///|
-fn @types.Game::shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -8,7 +8,7 @@ fn @types.Game::shake_x(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -31,10 +31,10 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.draw_circle(1240, 122, 72.0, @raylib.Color::new(232, 236, 255, 132))
 
   for i in 0..<20 {
-    let h : Int = 140 + i * 17 % 120
-    let w : Int = 28 + i * 29 % 54
-    let x : Int = 24 + i * 76
-    let y : Int = 310 - h / 3
+    let h : Int32 = 140 + i * 17 % 120
+    let w : Int32 = 28 + i * 29 % 54
+    let x : Int32 = 24 + i * 76
+    let y : Int32 = 310 - h / 3
 
     @raylib.draw_rectangle(
       x,
@@ -46,8 +46,8 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
   }
 
   for i in 0..<36 {
-    let x : Int = i * 43 + 10
-    let y : Int = 32 + i * 37 % 140
+    let x : Int32 = i * 43 + 10
+    let y : Int32 = 32 + i * 37 % 140
     @raylib.draw_circle(
       x,
       y,
@@ -58,7 +58,7 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_rooftop(ox : Int, oy : Int) -> Unit {
+fn draw_rooftop(ox : Int32, oy : Int32) -> Unit {
   @raylib.draw_rectangle(
     @types.arena_x + ox,
     @types.arena_y + oy,
@@ -68,7 +68,7 @@ fn draw_rooftop(ox : Int, oy : Int) -> Unit {
   )
 
   for i in 0..<21 {
-    let y : Int = @types.arena_y + oy + i * 36
+    let y : Int32 = @types.arena_y + oy + i * 36
     @raylib.draw_line(
       @types.arena_x + 8 + ox,
       y,
@@ -79,7 +79,7 @@ fn draw_rooftop(ox : Int, oy : Int) -> Unit {
   }
 
   for i in 0..<33 {
-    let x : Int = @types.arena_x + ox + i * 40
+    let x : Int32 = @types.arena_x + ox + i * 40
     @raylib.draw_line(
       x,
       @types.arena_y + 8 + oy,
@@ -127,15 +127,15 @@ fn enemy_color(enemy : @types.Enemy) -> @raylib.Color {
 fn draw_enemy(
   enemy : @types.Enemy,
   game : @types.Game,
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
 ) -> Unit {
   if !enemy.active {
     return
   }
 
-  let ex : Int = enemy.x.to_int() + ox
-  let ey : Int = enemy.y.to_int() + oy
+  let ex : Int32 = enemy.x.to_int() + ox
+  let ey : Int32 = enemy.y.to_int() + oy
   let body_color : @raylib.Color = enemy_color(enemy)
 
   @raylib.draw_circle(
@@ -160,7 +160,7 @@ fn draw_enemy(
     )
     let inv_ratio : Float = (1.0 : Float) - ratio
 
-    let alert_alpha : Int = 120 + (inv_ratio * 120.0).to_int()
+    let alert_alpha : Int32 = 120 + (inv_ratio * 120.0).to_int()
     let alert_color : @raylib.Color = if enemy.state_t <=
       @types.enemy_parry_window {
       @raylib.Color::new(255, 102, 122, alert_alpha)
@@ -200,8 +200,8 @@ fn draw_enemy(
     0.0,
     1.0,
   )
-  let bar_w : Int = 34
-  let fill_w : Int = (Float::from_int(bar_w) * hp_ratio).to_int()
+  let bar_w : Int32 = 34
+  let fill_w : Int32 = (Float::from_int(bar_w) * hp_ratio).to_int()
 
   @raylib.draw_rectangle(
     ex - bar_w / 2,
@@ -222,9 +222,9 @@ fn draw_enemy(
 }
 
 ///|
-fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  let px : Int = game.player_x.to_int() + ox
-  let py : Int = game.player_y.to_int() + oy
+fn @types.Game::draw_player(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
+  let px : Int32 = game.player_x.to_int() + ox
+  let py : Int32 = game.player_y.to_int() + oy
 
   let body_color : @raylib.Color = if game.invuln_t > 0.0 {
     @raylib.Color::new(250, 214, 180, 248)
@@ -246,10 +246,10 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   )
   @raylib.draw_circle(px, py, @types.player_radius - 6.0, body_color)
 
-  let blade_x : Int = (game.player_x + game.facing_x * 30.0).to_int() + ox
-  let blade_y : Int = (game.player_y + game.facing_y * 30.0).to_int() + oy
-  let blade_tip_x : Int = (game.player_x + game.facing_x * 62.0).to_int() + ox
-  let blade_tip_y : Int = (game.player_y + game.facing_y * 62.0).to_int() + oy
+  let blade_x : Int32 = (game.player_x + game.facing_x * 30.0).to_int() + ox
+  let blade_y : Int32 = (game.player_y + game.facing_y * 30.0).to_int() + oy
+  let blade_tip_x : Int32 = (game.player_x + game.facing_x * 62.0).to_int() + ox
+  let blade_tip_y : Int32 = (game.player_y + game.facing_y * 62.0).to_int() + oy
 
   @raylib.draw_line(
     px,
@@ -299,10 +299,10 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fill : @raylib.Color,
   back : @raylib.Color,
@@ -310,7 +310,7 @@ fn draw_bar(
   @raylib.draw_rectangle(x, y, w, h, back)
 
   let clamped : Float = @types.clampf(ratio, 0.0, 1.0)
-  let fill_w : Int = (Float::from_int(w) * clamped).to_int()
+  let fill_w : Int32 = (Float::from_int(w) * clamped).to_int()
   if fill_w > 0 {
     @raylib.draw_rectangle(x, y, fill_w, h, fill)
   }
@@ -457,15 +457,15 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     return
   }
 
-  let alpha : Int = if game.message_t >= 1.0 {
+  let alpha : Int32 = if game.message_t >= 1.0 {
     232
   } else {
     90 + (game.message_t * 142.0).to_int()
   }
 
-  let w : Int = @draw.measure_text(game.message, 30) + 42
-  let x : Int = @types.screen_w / 2 - w / 2
-  let y : Int = @types.arena_y + 16
+  let w : Int32 = @draw.measure_text(game.message, 30) + 42
+  let x : Int32 = @types.screen_w / 2 - w / 2
+  let y : Int32 = @types.arena_y + 16
 
   @raylib.draw_rectangle(x, y, w, 48, @raylib.Color::new(14, 20, 34, alpha))
   @raylib.draw_rectangle_lines(
@@ -648,8 +648,8 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_background()
 
-  let ox : Int = game.shake_x()
-  let oy : Int = game.shake_y()
+  let ox : Int32 = game.shake_x()
+  let oy : Int32 = game.shake_y()
 
   draw_rooftop(ox, oy)
 

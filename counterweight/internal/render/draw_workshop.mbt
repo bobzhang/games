@@ -47,8 +47,8 @@ fn draw_workshop_bg(game : @types.Game) -> Unit {
 
 ///|
 fn draw_bg_gear(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   radius : Float,
   angle : Float,
   color : @raylib.Color,
@@ -113,8 +113,8 @@ fn draw_nodes(game : @types.Game) -> Unit {
 
 ///|
 fn draw_pulley_node(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   hover : Bool,
   game : @types.Game,
 ) -> Unit {
@@ -147,7 +147,7 @@ fn draw_pulley_node(
 }
 
 ///|
-fn draw_anchor_node(cx : Int, cy : Int, hover : Bool) -> Unit {
+fn draw_anchor_node(cx : Int32, cy : Int32, hover : Bool) -> Unit {
   let r = @types.node_radius * 0.8
   if hover {
     @raylib.draw_circle(cx, cy, r + 4.0, @types.color_hook_highlight)
@@ -176,8 +176,8 @@ fn draw_anchor_node(cx : Int, cy : Int, hover : Bool) -> Unit {
 
 ///|
 fn draw_hook_node(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   hover : Bool,
   color : @raylib.Color,
 ) -> Unit {
@@ -192,8 +192,8 @@ fn draw_hook_node(
 
 ///|
 fn draw_ratchet_node(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   hover : Bool,
   game : @types.Game,
 ) -> Unit {

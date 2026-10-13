@@ -54,11 +54,11 @@ fn draw_playing(game : @types.Game) -> Unit {
 fn draw_patch(
   board : @types.Board,
   patch : @types.Patch,
-  x : Int,
-  y : Int,
-  size : Int,
-  row : Int,
-  col : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
+  row : Int32,
+  col : Int32,
 ) -> Unit {
   let base_color = if patch.pinned {
     @types.color_pinned
@@ -99,13 +99,13 @@ fn draw_patch(
 ///|
 fn draw_edge_pattern(
   patch : @types.Patch,
-  x : Int,
-  y : Int,
-  size : Int,
-  edge_idx : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
+  edge_idx : Int32,
   board : @types.Board,
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
 ) -> Unit {
   let pattern = patch.edges[edge_idx]
   let is_wildcard = patch.wildcard_edges[edge_idx]
@@ -241,13 +241,13 @@ fn draw_edge_pattern(
   }
   // Match/mismatch indicator - larger and more visible
   if has_neighbor {
-    let ix : Int = match edge_idx {
+    let ix : Int32 = match edge_idx {
       0 => x + size / 2
       1 => x + size - 12
       2 => x + size / 2
       _ => x + 8
     }
-    let iy : Int = match edge_idx {
+    let iy : Int32 = match edge_idx {
       0 => y + 12
       1 => y + size / 2
       2 => y + size - 16
@@ -275,10 +275,10 @@ fn draw_edge_pattern(
 fn draw_pattern_marks(
   pattern : @types.EdgePattern,
   is_wildcard : Bool,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   horizontal : Bool,
 ) -> Unit {
   let mark_color = @raylib.Color::new(255, 255, 255, 200)
@@ -480,7 +480,7 @@ fn draw_pattern_marks(
 }
 
 ///|
-fn draw_lock_icon(x : Int, y : Int) -> Unit {
+fn draw_lock_icon(x : Int32, y : Int32) -> Unit {
   // Simple lock icon
   @raylib.draw_rectangle(x, y + 5, 12, 8, @raylib.Color::new(100, 90, 80, 200))
   @raylib.draw_rectangle_lines(

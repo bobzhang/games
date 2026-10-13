@@ -1,10 +1,10 @@
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1024
+pub let screen_width : Int32 = 1024
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 // ========== Physics ==========
 
@@ -92,7 +92,7 @@ pub let player_height : Float = 0.8
 
 ///|
 /// Count limit or quantity for player max lives.
-pub let player_max_lives : Int = 5
+pub let player_max_lives : Int32 = 5
 
 ///|
 /// Time value for invincible time in seconds.
@@ -184,39 +184,39 @@ pub let speed_trail_threshold : Float = 5.0
 
 ///|
 /// Count limit or quantity for max platforms.
-pub let max_platforms : Int = 128
+pub let max_platforms : Int32 = 128
 
 ///|
 /// Count limit or quantity for max collectibles.
-pub let max_collectibles : Int = 64
+pub let max_collectibles : Int32 = 64
 
 ///|
 /// Count limit or quantity for max hazards.
-pub let max_hazards : Int = 32
+pub let max_hazards : Int32 = 32
 
 ///|
 /// Count limit or quantity for max particles.
-pub let max_particles : Int = 512
+pub let max_particles : Int32 = 512
 
 ///|
 /// Count limit or quantity for max checkpoints.
-pub let max_checkpoints : Int = 8
+pub let max_checkpoints : Int32 = 8
 
 ///|
 /// Count limit or quantity for max enemies.
-pub let max_enemies : Int = 32
+pub let max_enemies : Int32 = 32
 
 ///|
 /// Count limit or quantity for max powerups.
-pub let max_powerups : Int = 16
+pub let max_powerups : Int32 = 16
 
 ///|
 /// Count limit or quantity for max decorations.
-pub let max_decorations : Int = 64
+pub let max_decorations : Int32 = 64
 
 ///|
 /// Count limit or quantity for max projectiles.
-pub let max_projectiles : Int = 32
+pub let max_projectiles : Int32 = 32
 
 // ========== Game states ==========
 
@@ -224,187 +224,187 @@ pub let max_projectiles : Int = 32
 
 ///|
 /// Numeric id for static.
-pub let plat_static : Int = 0
+pub let plat_static : Int32 = 0
 
 ///|
 /// Numeric id for moving x.
-pub let plat_moving_x : Int = 1
+pub let plat_moving_x : Int32 = 1
 
 ///|
 /// Numeric id for moving y.
-pub let plat_moving_y : Int = 2
+pub let plat_moving_y : Int32 = 2
 
 ///|
 /// Numeric id for moving z.
-pub let plat_moving_z : Int = 3
+pub let plat_moving_z : Int32 = 3
 
 ///|
 /// Numeric id for falling.
-pub let plat_falling : Int = 4
+pub let plat_falling : Int32 = 4
 
 ///|
 /// Numeric id for bouncy.
-pub let plat_bouncy : Int = 5
+pub let plat_bouncy : Int32 = 5
 
 ///|
 /// Numeric id for ice.
-pub let plat_ice : Int = 6
+pub let plat_ice : Int32 = 6
 
 ///|
 /// Numeric id for crumbling.
-pub let plat_crumbling : Int = 7
+pub let plat_crumbling : Int32 = 7
 
 ///|
 /// Numeric id for rotating.
-pub let plat_rotating : Int = 8
+pub let plat_rotating : Int32 = 8
 
 ///|
 /// Numeric id for conveyor left.
-pub let plat_conveyor_l : Int = 9
+pub let plat_conveyor_l : Int32 = 9
 
 ///|
 /// Numeric id for conveyor right.
-pub let plat_conveyor_r : Int = 10
+pub let plat_conveyor_r : Int32 = 10
 
 ///|
 /// Numeric id for phasing.
-pub let plat_phasing : Int = 11
+pub let plat_phasing : Int32 = 11
 
 ///|
 /// Numeric id for size pulse.
-pub let plat_size_pulse : Int = 12
+pub let plat_size_pulse : Int32 = 12
 
 // ========== Collectible types ==========
 
 ///|
 /// Numeric id for gem.
-pub let collect_gem : Int = 0
+pub let collect_gem : Int32 = 0
 
 ///|
 /// Numeric id for star.
-pub let collect_star : Int = 1
+pub let collect_star : Int32 = 1
 
 ///|
 /// Numeric id for life.
-pub let collect_life : Int = 2
+pub let collect_life : Int32 = 2
 
 ///|
 /// Numeric id for coin bronze.
-pub let collect_coin_bronze : Int = 4
+pub let collect_coin_bronze : Int32 = 4
 
 ///|
 /// Numeric id for coin silver.
-pub let collect_coin_silver : Int = 5
+pub let collect_coin_silver : Int32 = 5
 
 ///|
 /// Numeric id for coin gold.
-pub let collect_coin_gold : Int = 6
+pub let collect_coin_gold : Int32 = 6
 
 ///|
 /// Numeric id for key.
-pub let collect_key : Int = 7
+pub let collect_key : Int32 = 7
 
 // ========== Hazard types ==========
 
 ///|
 /// Numeric id for spike.
-pub let hazard_spike : Int = 0
+pub let hazard_spike : Int32 = 0
 
 ///|
 /// Numeric id for lava.
-pub let hazard_lava : Int = 1
+pub let hazard_lava : Int32 = 1
 
 ///|
 /// Numeric id for saw.
-pub let hazard_saw : Int = 2
+pub let hazard_saw : Int32 = 2
 
 ///|
 /// Numeric id for fire jet.
-pub let hazard_fire_jet : Int = 4
+pub let hazard_fire_jet : Int32 = 4
 
 ///|
 /// Numeric id for pendulum.
-pub let hazard_pendulum : Int = 5
+pub let hazard_pendulum : Int32 = 5
 
 ///|
 /// Numeric id for crusher.
-pub let hazard_crusher : Int = 6
+pub let hazard_crusher : Int32 = 6
 
 // ========== Enemy types ==========
 
 ///|
 /// Numeric id for patrol.
-pub let enemy_patrol : Int = 0
+pub let enemy_patrol : Int32 = 0
 
 ///|
 /// Numeric id for bounce.
-pub let enemy_bounce : Int = 1
+pub let enemy_bounce : Int32 = 1
 
 ///|
 /// Numeric id for fly circle.
-pub let enemy_fly_circle : Int = 2
+pub let enemy_fly_circle : Int32 = 2
 
 ///|
 /// Numeric id for chase.
-pub let enemy_chase : Int = 3
+pub let enemy_chase : Int32 = 3
 
 ///|
 /// Numeric id for turret.
-pub let enemy_turret : Int = 4
+pub let enemy_turret : Int32 = 4
 
 ///|
 /// Numeric id for ghost.
-pub let enemy_ghost : Int = 5
+pub let enemy_ghost : Int32 = 5
 
 // ========== Power-up types ==========
 
 ///|
 /// Numeric id for double jump.
-pub let powerup_double_jump : Int = 0
+pub let powerup_double_jump : Int32 = 0
 
 ///|
 /// Numeric id for speed.
-pub let powerup_speed : Int = 1
+pub let powerup_speed : Int32 = 1
 
 ///|
 /// Numeric id for shield.
-pub let powerup_shield : Int = 2
+pub let powerup_shield : Int32 = 2
 
 ///|
 /// Numeric id for magnet.
-pub let powerup_magnet : Int = 3
+pub let powerup_magnet : Int32 = 3
 
 ///|
 /// Numeric id for slow fall.
-pub let powerup_slow_fall : Int = 4
+pub let powerup_slow_fall : Int32 = 4
 
 // ========== Worlds ==========
 
 ///|
 /// Count limit or quantity for num worlds.
-pub let num_worlds : Int = 4
+pub let num_worlds : Int32 = 4
 
 ///|
 /// Worlds setting for levels per world.
-pub let levels_per_world : Int = 5
+pub let levels_per_world : Int32 = 5
 
 ///|
 /// Count limit or quantity for total levels.
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 // ========== World theme indices ==========
 
 ///|
 /// Numeric id for forest.
-pub let world_forest : Int = 0
+pub let world_forest : Int32 = 0
 
 ///|
 /// Numeric id for crystal.
-pub let world_crystal : Int = 1
+pub let world_crystal : Int32 = 1
 
 ///|
 /// Numeric id for lava.
-pub let world_lava : Int = 2
+pub let world_lava : Int32 = 2
 
 // ========== Bouncy ==========
 
@@ -458,31 +458,31 @@ pub let conveyor_force : Float = 3.0
 
 ///|
 /// Scoring or progression value for gem score.
-pub let gem_score : Int = 10
+pub let gem_score : Int32 = 10
 
 ///|
 /// Scoring or progression value for star score.
-pub let star_score : Int = 50
+pub let star_score : Int32 = 50
 
 ///|
 /// Scoring or progression value for coin bronze score.
-pub let coin_bronze_score : Int = 5
+pub let coin_bronze_score : Int32 = 5
 
 ///|
 /// Scoring or progression value for coin silver score.
-pub let coin_silver_score : Int = 20
+pub let coin_silver_score : Int32 = 20
 
 ///|
 /// Scoring or progression value for coin gold score.
-pub let coin_gold_score : Int = 100
+pub let coin_gold_score : Int32 = 100
 
 ///|
 /// Scoring or progression value for key score.
-pub let key_score : Int = 200
+pub let key_score : Int32 = 200
 
 ///|
 /// Scoring or progression value for enemy kill score.
-pub let enemy_kill_score : Int = 30
+pub let enemy_kill_score : Int32 = 30
 
 ///|
 /// Multiplier used for combo base mult.
@@ -572,39 +572,39 @@ pub let powerup_spin_speed : Float = 4.0
 
 ///|
 /// Count limit or quantity for particle jump count.
-pub let particle_jump_count : Int = 6
+pub let particle_jump_count : Int32 = 6
 
 ///|
 /// Count limit or quantity for particle collect count.
-pub let particle_collect_count : Int = 8
+pub let particle_collect_count : Int32 = 8
 
 ///|
 /// Count limit or quantity for particle death count.
-pub let particle_death_count : Int = 16
+pub let particle_death_count : Int32 = 16
 
 ///|
 /// Count limit or quantity for particle stomp count.
-pub let particle_stomp_count : Int = 10
+pub let particle_stomp_count : Int32 = 10
 
 ///|
 /// Count limit or quantity for particle powerup count.
-pub let particle_powerup_count : Int = 12
+pub let particle_powerup_count : Int32 = 12
 
 ///|
 /// Count limit or quantity for particle checkpoint count.
-pub let particle_checkpoint_count : Int = 8
+pub let particle_checkpoint_count : Int32 = 8
 
 ///|
 /// Count limit or quantity for particle landing count.
-pub let particle_landing_count : Int = 4
+pub let particle_landing_count : Int32 = 4
 
 ///|
 /// Count limit or quantity for particle wall slide count.
-pub let particle_wall_slide_count : Int = 1
+pub let particle_wall_slide_count : Int32 = 1
 
 ///|
 /// Count limit or quantity for particle dash count.
-pub let particle_dash_count : Int = 6
+pub let particle_dash_count : Int32 = 6
 
 // ========== Decoration parameters ==========
 
@@ -612,7 +612,7 @@ pub let particle_dash_count : Int = 6
 
 ///|
 /// Numeric id for enemy shot.
-pub let proj_enemy_shot : Int = 0
+pub let proj_enemy_shot : Int32 = 0
 
 ///|
 /// Speed value for proj speed in world units per second.
@@ -632,7 +632,7 @@ pub let proj_radius : Float = 0.2
 /// Returns the total star count required to unlock a given world index.
 /// World 0 is always unlocked (0 stars). World 1 requires 3, world 2
 /// requires 8, and world 3 requires 15.
-pub fn stars_required_for_world(world : Int) -> Int {
+pub fn stars_required_for_world(world : Int32) -> Int32 {
   if world <= 0 {
     0
   } else if world == 1 {
@@ -646,7 +646,7 @@ pub fn stars_required_for_world(world : Int) -> Int {
 
 ///|
 /// Returns whether a world is unlocked based on total stars earned.
-pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
+pub fn is_world_unlocked(game : Game, world : Int32) -> Bool {
   if world <= 0 {
     return true
   }
@@ -667,7 +667,7 @@ pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
 /// Returns whether a level is unlocked. The first level of an unlocked world
 /// is always available; subsequent levels require at least 1 star on the
 /// previous level.
-pub fn is_level_unlocked(game : Game, world : Int, level : Int) -> Bool {
+pub fn is_level_unlocked(game : Game, world : Int32, level : Int32) -> Bool {
   if !is_world_unlocked(game, world) {
     return false
   }
@@ -686,11 +686,11 @@ pub let star_time_threshold_1 : Float = 60.0
 
 ///|
 /// Scoring or progression value for star no death bonus.
-pub let star_no_death_bonus : Int = 100
+pub let star_no_death_bonus : Int32 = 100
 
 ///|
 /// Scoring or progression value for star all gems bonus.
-pub let star_all_gems_bonus : Int = 200
+pub let star_all_gems_bonus : Int32 = 200
 
 // ========== UI animation ==========
 
@@ -700,23 +700,23 @@ pub let ui_blink_speed : Float = 3.5
 
 ///|
 /// UI sizing value for hud height in pixels.
-pub let hud_height : Int = 36
+pub let hud_height : Int32 = 36
 
 ///|
 /// UI sizing value for hud combo bar width in pixels.
-pub let hud_combo_bar_width : Int = 120
+pub let hud_combo_bar_width : Int32 = 120
 
 ///|
 /// UI sizing value for hud combo bar height in pixels.
-pub let hud_combo_bar_height : Int = 12
+pub let hud_combo_bar_height : Int32 = 12
 
 ///|
 /// UI sizing value for minimap size in pixels.
-pub let minimap_size : Int = 140
+pub let minimap_size : Int32 = 140
 
 ///|
 /// UI sizing value for minimap margin in pixels.
-pub let minimap_margin : Int = 10
+pub let minimap_margin : Int32 = 10
 
 // ========== World intro ==========
 
@@ -748,19 +748,19 @@ pub let checkpoint_flag_height : Float = 1.5
 
 ///|
 /// UI sizing value for level grid cols in pixels.
-pub let level_grid_cols : Int = 5
+pub let level_grid_cols : Int32 = 5
 
 ///|
 /// UI sizing value for level card width in pixels.
-pub let level_card_w : Int = 140
+pub let level_card_w : Int32 = 140
 
 ///|
 /// UI sizing value for level card height in pixels.
-pub let level_card_h : Int = 100
+pub let level_card_h : Int32 = 100
 
 ///|
 /// UI sizing value for level card gap in pixels.
-pub let level_card_gap : Int = 20
+pub let level_card_gap : Int32 = 20
 
 // ========== Shadow ==========
 
@@ -774,11 +774,11 @@ pub let shadow_max_height : Float = 20.0
 
 ///|
 /// Alpha/transparency value for shadow min alpha in 0-255 range.
-pub let shadow_min_alpha : Int = 20
+pub let shadow_min_alpha : Int32 = 20
 
 ///|
 /// Alpha/transparency value for shadow max alpha in 0-255 range.
-pub let shadow_max_alpha : Int = 80
+pub let shadow_max_alpha : Int32 = 80
 
 // ========== Math constants ==========
 
@@ -798,43 +798,43 @@ pub let deg2rad : Float = 0.01745329
 
 ///|
 /// Red channel (0-255) for forest trunk color.
-pub let forest_trunk_r : Int = 100
+pub let forest_trunk_r : Int32 = 100
 
 ///|
 /// Green channel (0-255) for forest trunk color.
-pub let forest_trunk_g : Int = 70
+pub let forest_trunk_g : Int32 = 70
 
 ///|
 /// Blue channel (0-255) for forest trunk color.
-pub let forest_trunk_b : Int = 40
+pub let forest_trunk_b : Int32 = 40
 
 // ========== Crystal world colors ==========
 
 ///|
 /// Red channel (0-255) for crystal ice color.
-pub let crystal_ice_r : Int = 150
+pub let crystal_ice_r : Int32 = 150
 
 ///|
 /// Green channel (0-255) for crystal ice color.
-pub let crystal_ice_g : Int = 210
+pub let crystal_ice_g : Int32 = 210
 
 ///|
 /// Blue channel (0-255) for crystal ice color.
-pub let crystal_ice_b : Int = 240
+pub let crystal_ice_b : Int32 = 240
 
 // ========== Lava world colors ==========
 
 ///|
 /// Red channel (0-255) for lava glow color.
-pub let lava_glow_r : Int = 255
+pub let lava_glow_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for lava glow color.
-pub let lava_glow_g : Int = 100
+pub let lava_glow_g : Int32 = 100
 
 ///|
 /// Blue channel (0-255) for lava glow color.
-pub let lava_glow_b : Int = 20
+pub let lava_glow_b : Int32 = 20
 
 // ========== Sky world colors ==========
 
@@ -842,353 +842,353 @@ pub let lava_glow_b : Int = 20
 
 ///|
 /// Red channel (0-255) for player body color.
-pub let player_body_r : Int = 60
+pub let player_body_r : Int32 = 60
 
 ///|
 /// Green channel (0-255) for player body color.
-pub let player_body_g : Int = 140
+pub let player_body_g : Int32 = 140
 
 ///|
 /// Blue channel (0-255) for player body color.
-pub let player_body_b : Int = 220
+pub let player_body_b : Int32 = 220
 
 ///|
 /// Red channel (0-255) for player head color.
-pub let player_head_r : Int = 80
+pub let player_head_r : Int32 = 80
 
 ///|
 /// Green channel (0-255) for player head color.
-pub let player_head_g : Int = 170
+pub let player_head_g : Int32 = 170
 
 ///|
 /// Blue channel (0-255) for player head color.
-pub let player_head_b : Int = 250
+pub let player_head_b : Int32 = 250
 
 ///|
 /// Red channel (0-255) for player eye color.
-pub let player_eye_r : Int = 255
+pub let player_eye_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for player eye color.
-pub let player_eye_g : Int = 255
+pub let player_eye_g : Int32 = 255
 
 ///|
 /// Blue channel (0-255) for player eye color.
-pub let player_eye_b : Int = 255
+pub let player_eye_b : Int32 = 255
 
 ///|
 /// Red channel (0-255) for player arm color.
-pub let player_arm_r : Int = 50
+pub let player_arm_r : Int32 = 50
 
 ///|
 /// Green channel (0-255) for player arm color.
-pub let player_arm_g : Int = 120
+pub let player_arm_g : Int32 = 120
 
 ///|
 /// Blue channel (0-255) for player arm color.
-pub let player_arm_b : Int = 200
+pub let player_arm_b : Int32 = 200
 
 ///|
 /// Red channel (0-255) for player leg color.
-pub let player_leg_r : Int = 40
+pub let player_leg_r : Int32 = 40
 
 ///|
 /// Green channel (0-255) for player leg color.
-pub let player_leg_g : Int = 100
+pub let player_leg_g : Int32 = 100
 
 ///|
 /// Blue channel (0-255) for player leg color.
-pub let player_leg_b : Int = 180
+pub let player_leg_b : Int32 = 180
 
 ///|
 /// Red channel (0-255) for player shield color.
-pub let player_shield_r : Int = 100
+pub let player_shield_r : Int32 = 100
 
 ///|
 /// Green channel (0-255) for player shield color.
-pub let player_shield_g : Int = 200
+pub let player_shield_g : Int32 = 200
 
 ///|
 /// Blue channel (0-255) for player shield color.
-pub let player_shield_b : Int = 255
+pub let player_shield_b : Int32 = 255
 
 ///|
 /// Alpha channel (0-255) for player shield.
-pub let player_shield_a : Int = 80
+pub let player_shield_a : Int32 = 80
 
 // ========== Gem colors ==========
 
 ///|
 /// Red channel (0-255) for gem color.
-pub let gem_r : Int = 0
+pub let gem_r : Int32 = 0
 
 ///|
 /// Green channel (0-255) for gem color.
-pub let gem_g : Int = 255
+pub let gem_g : Int32 = 255
 
 ///|
 /// Blue channel (0-255) for gem color.
-pub let gem_b : Int = 100
+pub let gem_b : Int32 = 100
 
 ///|
 /// Red channel (0-255) for star color.
-pub let star_r : Int = 255
+pub let star_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for star color.
-pub let star_g : Int = 255
+pub let star_g : Int32 = 255
 
 ///|
 /// Blue channel (0-255) for star color.
-pub let star_b : Int = 0
+pub let star_b : Int32 = 0
 
 ///|
 /// Red channel (0-255) for coin bronze color.
-pub let coin_bronze_r : Int = 180
+pub let coin_bronze_r : Int32 = 180
 
 ///|
 /// Green channel (0-255) for coin bronze color.
-pub let coin_bronze_g : Int = 130
+pub let coin_bronze_g : Int32 = 130
 
 ///|
 /// Blue channel (0-255) for coin bronze color.
-pub let coin_bronze_b : Int = 70
+pub let coin_bronze_b : Int32 = 70
 
 ///|
 /// Red channel (0-255) for coin silver color.
-pub let coin_silver_r : Int = 200
+pub let coin_silver_r : Int32 = 200
 
 ///|
 /// Green channel (0-255) for coin silver color.
-pub let coin_silver_g : Int = 200
+pub let coin_silver_g : Int32 = 200
 
 ///|
 /// Blue channel (0-255) for coin silver color.
-pub let coin_silver_b : Int = 210
+pub let coin_silver_b : Int32 = 210
 
 ///|
 /// Red channel (0-255) for coin gold color.
-pub let coin_gold_r : Int = 255
+pub let coin_gold_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for coin gold color.
-pub let coin_gold_g : Int = 215
+pub let coin_gold_g : Int32 = 215
 
 ///|
 /// Blue channel (0-255) for coin gold color.
-pub let coin_gold_b : Int = 0
+pub let coin_gold_b : Int32 = 0
 
 ///|
 /// Red channel (0-255) for key color.
-pub let key_r : Int = 255
+pub let key_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for key color.
-pub let key_g : Int = 200
+pub let key_g : Int32 = 200
 
 ///|
 /// Blue channel (0-255) for key color.
-pub let key_b : Int = 50
+pub let key_b : Int32 = 50
 
 // ========== Goal colors ==========
 
 ///|
 /// Red channel (0-255) for goal inner color.
-pub let goal_inner_r : Int = 255
+pub let goal_inner_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for goal inner color.
-pub let goal_inner_g : Int = 215
+pub let goal_inner_g : Int32 = 215
 
 ///|
 /// Blue channel (0-255) for goal inner color.
-pub let goal_inner_b : Int = 0
+pub let goal_inner_b : Int32 = 0
 
 ///|
 /// Red channel (0-255) for goal outer color.
-pub let goal_outer_r : Int = 255
+pub let goal_outer_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for goal outer color.
-pub let goal_outer_g : Int = 255
+pub let goal_outer_g : Int32 = 255
 
 ///|
 /// Blue channel (0-255) for goal outer color.
-pub let goal_outer_b : Int = 100
+pub let goal_outer_b : Int32 = 100
 
 // ========== Enemy colors ==========
 
 ///|
 /// Red channel (0-255) for enemy patrol color.
-pub let enemy_patrol_r : Int = 200
+pub let enemy_patrol_r : Int32 = 200
 
 ///|
 /// Green channel (0-255) for enemy patrol color.
-pub let enemy_patrol_g : Int = 60
+pub let enemy_patrol_g : Int32 = 60
 
 ///|
 /// Blue channel (0-255) for enemy patrol color.
-pub let enemy_patrol_b : Int = 60
+pub let enemy_patrol_b : Int32 = 60
 
 ///|
 /// Red channel (0-255) for enemy bounce color.
-pub let enemy_bounce_r : Int = 180
+pub let enemy_bounce_r : Int32 = 180
 
 ///|
 /// Green channel (0-255) for enemy bounce color.
-pub let enemy_bounce_g : Int = 100
+pub let enemy_bounce_g : Int32 = 100
 
 ///|
 /// Blue channel (0-255) for enemy bounce color.
-pub let enemy_bounce_b : Int = 200
+pub let enemy_bounce_b : Int32 = 200
 
 ///|
 /// Red channel (0-255) for enemy fly color.
-pub let enemy_fly_r : Int = 200
+pub let enemy_fly_r : Int32 = 200
 
 ///|
 /// Green channel (0-255) for enemy fly color.
-pub let enemy_fly_g : Int = 150
+pub let enemy_fly_g : Int32 = 150
 
 ///|
 /// Blue channel (0-255) for enemy fly color.
-pub let enemy_fly_b : Int = 50
+pub let enemy_fly_b : Int32 = 50
 
 ///|
 /// Red channel (0-255) for enemy chase color.
-pub let enemy_chase_r : Int = 220
+pub let enemy_chase_r : Int32 = 220
 
 ///|
 /// Green channel (0-255) for enemy chase color.
-pub let enemy_chase_g : Int = 50
+pub let enemy_chase_g : Int32 = 50
 
 ///|
 /// Blue channel (0-255) for enemy chase color.
-pub let enemy_chase_b : Int = 50
+pub let enemy_chase_b : Int32 = 50
 
 ///|
 /// Red channel (0-255) for enemy turret color.
-pub let enemy_turret_r : Int = 120
+pub let enemy_turret_r : Int32 = 120
 
 ///|
 /// Green channel (0-255) for enemy turret color.
-pub let enemy_turret_g : Int = 120
+pub let enemy_turret_g : Int32 = 120
 
 ///|
 /// Blue channel (0-255) for enemy turret color.
-pub let enemy_turret_b : Int = 130
+pub let enemy_turret_b : Int32 = 130
 
 ///|
 /// Red channel (0-255) for enemy ghost color.
-pub let enemy_ghost_r : Int = 160
+pub let enemy_ghost_r : Int32 = 160
 
 ///|
 /// Green channel (0-255) for enemy ghost color.
-pub let enemy_ghost_g : Int = 180
+pub let enemy_ghost_g : Int32 = 180
 
 ///|
 /// Blue channel (0-255) for enemy ghost color.
-pub let enemy_ghost_b : Int = 220
+pub let enemy_ghost_b : Int32 = 220
 
 // ========== Hazard colors ==========
 
 ///|
 /// Red channel (0-255) for spike color.
-pub let spike_r : Int = 200
+pub let spike_r : Int32 = 200
 
 ///|
 /// Green channel (0-255) for spike color.
-pub let spike_g : Int = 200
+pub let spike_g : Int32 = 200
 
 ///|
 /// Blue channel (0-255) for spike color.
-pub let spike_b : Int = 200
+pub let spike_b : Int32 = 200
 
 ///|
 /// Red channel (0-255) for saw color.
-pub let saw_r : Int = 180
+pub let saw_r : Int32 = 180
 
 ///|
 /// Green channel (0-255) for saw color.
-pub let saw_g : Int = 180
+pub let saw_g : Int32 = 180
 
 ///|
 /// Blue channel (0-255) for saw color.
-pub let saw_b : Int = 180
+pub let saw_b : Int32 = 180
 
 ///|
 /// Red channel (0-255) for fire jet color.
-pub let fire_jet_r : Int = 255
+pub let fire_jet_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for fire jet color.
-pub let fire_jet_g : Int = 150
+pub let fire_jet_g : Int32 = 150
 
 ///|
 /// Blue channel (0-255) for fire jet color.
-pub let fire_jet_b : Int = 30
+pub let fire_jet_b : Int32 = 30
 
 // ========== Power-up colors ==========
 
 ///|
 /// Red channel (0-255) for pu double jump color.
-pub let pu_double_jump_r : Int = 100
+pub let pu_double_jump_r : Int32 = 100
 
 ///|
 /// Green channel (0-255) for pu double jump color.
-pub let pu_double_jump_g : Int = 200
+pub let pu_double_jump_g : Int32 = 200
 
 ///|
 /// Blue channel (0-255) for pu double jump color.
-pub let pu_double_jump_b : Int = 255
+pub let pu_double_jump_b : Int32 = 255
 
 ///|
 /// Red channel (0-255) for pu speed color.
-pub let pu_speed_r : Int = 255
+pub let pu_speed_r : Int32 = 255
 
 ///|
 /// Green channel (0-255) for pu speed color.
-pub let pu_speed_g : Int = 200
+pub let pu_speed_g : Int32 = 200
 
 ///|
 /// Blue channel (0-255) for pu speed color.
-pub let pu_speed_b : Int = 50
+pub let pu_speed_b : Int32 = 50
 
 ///|
 /// Red channel (0-255) for pu shield color.
-pub let pu_shield_r : Int = 100
+pub let pu_shield_r : Int32 = 100
 
 ///|
 /// Green channel (0-255) for pu shield color.
-pub let pu_shield_g : Int = 255
+pub let pu_shield_g : Int32 = 255
 
 ///|
 /// Blue channel (0-255) for pu shield color.
-pub let pu_shield_b : Int = 200
+pub let pu_shield_b : Int32 = 200
 
 ///|
 /// Red channel (0-255) for pu magnet color.
-pub let pu_magnet_r : Int = 200
+pub let pu_magnet_r : Int32 = 200
 
 ///|
 /// Green channel (0-255) for pu magnet color.
-pub let pu_magnet_g : Int = 100
+pub let pu_magnet_g : Int32 = 100
 
 ///|
 /// Blue channel (0-255) for pu magnet color.
-pub let pu_magnet_b : Int = 255
+pub let pu_magnet_b : Int32 = 255
 
 ///|
 /// Red channel (0-255) for pu slow fall color.
-pub let pu_slow_fall_r : Int = 200
+pub let pu_slow_fall_r : Int32 = 200
 
 ///|
 /// Green channel (0-255) for pu slow fall color.
-pub let pu_slow_fall_g : Int = 255
+pub let pu_slow_fall_g : Int32 = 255
 
 ///|
 /// Blue channel (0-255) for pu slow fall color.
-pub let pu_slow_fall_b : Int = 200
+pub let pu_slow_fall_b : Int32 = 200
 
 ///|
 /// Decoration type.

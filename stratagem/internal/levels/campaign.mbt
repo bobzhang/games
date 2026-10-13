@@ -2,7 +2,7 @@
 // Terrain codes: 0=Plains, 1=Forest, 2=Hills, 3=Water
 
 ///|
-pub fn get_campaign_level(index : Int) -> @types.LevelDef {
+pub fn get_campaign_level(index : Int32) -> @types.LevelDef {
   match index {
     0 => level_01()
     1 => level_02()

@@ -23,7 +23,7 @@ struct Drone {
   mut vy : Float
   mut battery : Float
   mut temp : Float
-  mut state : Int
+  mut state : Int32
   mut flash_t : Float
 }
 
@@ -31,12 +31,12 @@ struct Drone {
 /// Represents an audience show request with pattern, deadline, quality threshold, and reward.
 struct Request {
   mut active : Bool
-  mut id : Int
-  mut pattern : Int
+  mut id : Int32
+  mut pattern : Int32
   mut deadline : Float
   mut max_deadline : Float
   mut min_quality : Float
-  mut reward : Int
+  mut reward : Int32
   mut progress : Float
   mut pulse : Float
 }
@@ -65,7 +65,7 @@ struct Firework {
   mut vy : Float
   mut life : Float
   mut burst_t : Float
-  mut color : Int
+  mut color : Int32
 }
 
 ///|
@@ -78,7 +78,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -88,7 +88,7 @@ struct Station {
   y : Float
   w : Float
   h : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
@@ -163,7 +163,7 @@ fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a random Int uniformly distributed in [lo, hi].
-fn randi(lo : Int, hi : Int) -> Int {
+fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
@@ -193,10 +193,10 @@ fn inside_rectf(
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -210,11 +210,11 @@ fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let mut hit : Bool = false
   if mouse_hold && inside_rect(mouse_x, mouse_y, x, y, w, h) {
@@ -237,7 +237,7 @@ fn pointer_on_circle(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   cx : Float,
   cy : Float,
   r : Float,
@@ -259,7 +259,7 @@ fn pointer_on_circle(
 
 ///|
 /// Returns the full display name for a drone formation pattern index.
-fn pattern_name(pattern : Int) -> String {
+fn pattern_name(pattern : Int32) -> String {
   match pattern {
     0 => "Solar Ring"
     1 => "Dragon Spiral"
@@ -271,7 +271,7 @@ fn pattern_name(pattern : Int) -> String {
 
 ///|
 /// Returns the abbreviated display name for a drone formation pattern index.
-fn pattern_short(pattern : Int) -> String {
+fn pattern_short(pattern : Int32) -> String {
   match pattern {
     0 => "Ring"
     1 => "Spiral"
@@ -283,7 +283,7 @@ fn pattern_short(pattern : Int) -> String {
 
 ///|
 /// Returns the highlight color associated with a drone formation pattern index.
-fn pattern_color(pattern : Int) -> @raylib.Color {
+fn pattern_color(pattern : Int32) -> @raylib.Color {
   match pattern {
     0 => @raylib.Color::new(120, 206, 255, 220)
     1 => @raylib.Color::new(255, 176, 116, 220)
@@ -296,9 +296,9 @@ fn pattern_color(pattern : Int) -> @raylib.Color {
 ///|
 /// Returns the target Vec2f position for drone idx within the given formation pattern centered at (cx, cy).
 fn pattern_target(
-  pattern : Int,
-  idx : Int,
-  count : Int,
+  pattern : Int32,
+  idx : Int32,
+  count : Int32,
   cx : Float,
   cy : Float,
   phase : Float,
@@ -410,7 +410,7 @@ fn spawn_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if part.active {
@@ -434,8 +434,8 @@ fn burst_particles(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_particle(
@@ -472,7 +472,11 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 
 ///|
 /// Spawns a new show request in the first available slot with wave-scaled deadline and quality requirements.
-fn spawn_request(requests : Array[Request], wave : Int, serial : Int) -> Bool {
+fn spawn_request(
+  requests : Array[Request],
+  wave : Int32,
+  serial : Int32,
+) -> Bool {
   let mut placed : Bool = false
   for request in requests {
     if request.active {
@@ -512,7 +516,7 @@ fn spawn_gust(
       continue
     }
 
-    let edge : Int = randi(0, 3)
+    let edge : Int32 = randi(0, 3)
     if edge == 0 {
       gust.x = world_l - 20.0
       gust.y = randf(world_t + 40.0, world_b - 40.0)
@@ -577,13 +581,13 @@ fn spawn_firework(
 /// Returns the current formation quality score (0-100) based on drone proximity to pattern targets.
 fn formation_quality(
   drones : Array[Drone],
-  pattern : Int,
+  pattern : Int32,
   cx : Float,
   cy : Float,
   phase : Float,
 ) -> Float {
   let mut total : Float = 0.0
-  let mut n : Int = 0
+  let mut n : Int32 = 0
 
   for i in 0..<drones.length() {
     if !drones[i].active {
@@ -623,7 +627,7 @@ fn nearest_station_kind(
   x : Float,
   y : Float,
   radius : Float,
-) -> Int {
+) -> Int32 {
   for station in stations; found = -1, best = radius * radius {
     let cx : Float = station.x + station.w * 0.5
     let cy : Float = station.y + station.h * 0.5
@@ -638,7 +642,7 @@ fn nearest_station_kind(
 
 ///|
 /// Returns the number of currently active show requests.
-fn active_requests_count(requests : Array[Request]) -> Int {
+fn active_requests_count(requests : Array[Request]) -> Int32 {
   @utils.count_by(requests, fn(request) { request.active })
 }
 
@@ -783,10 +787,10 @@ fn draw_texture_fit(
 ///|
 /// Draws the generated show-stage background inside the game world.
 fn draw_show_background_art(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Bool {
   match tex_show_background.val {
     Some(texture) => {
@@ -852,7 +856,7 @@ fn draw_station_art(
 
 ///|
 /// Draws the generated gust art.
-fn draw_gust_art(x : Int, y : Int, radius : Float, alpha : Int) -> Bool {
+fn draw_gust_art(x : Int32, y : Int32, radius : Float, alpha : Int32) -> Bool {
   match tex_wind_gust.val {
     Some(texture) => {
       draw_texture_fit(
@@ -947,10 +951,10 @@ fn draw_director_art(director : Director, bob : Float) -> Bool {
 ///|
 /// Draws the animated dark gradient background with horizontal light-wave bands.
 fn draw_background(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
   scene_t : Float,
 ) -> Unit {
   if !draw_show_background_art(world_x, world_y, world_w, world_h) {
@@ -970,7 +974,7 @@ fn draw_background(
     let wave : Float = @math.sinf(scene_t * 1.4 + Float::from_int(i) * 0.7) *
       0.5 +
       0.5
-    let alpha : Int = 8 + (wave * 26.0).to_int()
+    let alpha : Int32 = 8 + (wave * 26.0).to_int()
     @raylib.draw_rectangle(
       world_x,
       y0.to_int(),
@@ -1022,7 +1026,7 @@ fn draw_stage(cx : Float, cy : Float, radius : Float, scene_t : Float) -> Unit {
 /// Draws the target position markers for each drone in the current formation pattern.
 fn draw_targets(
   drones : Array[Drone],
-  pattern : Int,
+  pattern : Int32,
   cx : Float,
   cy : Float,
   phase : Float,
@@ -1144,9 +1148,9 @@ fn draw_drones(drones : Array[Drone], scene_t : Float) -> Unit {
 
     let b : Float = clampf(d.battery / 100.0, 0.0, 1.0)
     let t : Float = clampf(d.temp / 100.0, 0.0, 1.0)
-    let red : Int = 86 + (t * 168.0).to_int()
-    let green : Int = 94 + (b * 150.0).to_int()
-    let blue : Int = 186 + (b * 48.0).to_int() - (t * 80.0).to_int()
+    let red : Int32 = 86 + (t * 168.0).to_int()
+    let green : Int32 = 94 + (b * 150.0).to_int()
+    let blue : Int32 = 186 + (b * 48.0).to_int() - (t * 80.0).to_int()
 
     let radius : Float = if d.state == 2 {
       8.6
@@ -1210,7 +1214,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
       continue
     }
 
-    let alpha : Int = clampf(part.life * 255.0, 0.0, 255.0).to_int()
+    let alpha : Int32 = clampf(part.life * 255.0, 0.0, 255.0).to_int()
     let color = if part.kind == 0 {
       @raylib.Color::new(156, 222, 252, alpha)
     } else if part.kind == 1 {
@@ -1258,11 +1262,11 @@ fn draw_director(director : Director, scene_t : Float) -> Unit {
 ///|
 /// Draws the audience requests panel showing active requests with progress bars and urgency indicators.
 fn draw_requests_panel(
-  panel_x : Int,
-  panel_y : Int,
-  panel_w : Int,
+  panel_x : Int32,
+  panel_y : Int32,
+  panel_w : Int32,
   requests : Array[Request],
-  current_pattern : Int,
+  current_pattern : Int32,
   quality : Float,
   scene_t : Float,
 ) -> Unit {
@@ -1274,7 +1278,7 @@ fn draw_requests_panel(
     @raylib.Color::new(236, 246, 255, 238),
   )
 
-  let mut y : Int = panel_y + 438
+  let mut y : Int32 = panel_y + 438
   for request in requests {
     if !request.active {
       continue
@@ -1288,7 +1292,7 @@ fn draw_requests_panel(
 
     let blink : Float = @math.sinf(scene_t * 7.0 + request.pulse) * 0.5 + 0.5
     let matching : Bool = current_pattern == request.pattern
-    let row_h : Int = 84
+    let row_h : Int32 = 84
 
     @raylib.draw_rectangle(
       panel_x + 12,
@@ -1351,7 +1355,7 @@ fn draw_requests_panel(
       @raylib.Color::new(198, 220, 244, 226),
     )
 
-    let progress_bar_w : Int = 136
+    let progress_bar_w : Int32 = 136
     @raylib.draw_rectangle(
       panel_x + panel_w - progress_bar_w - 24,
       y + 46,
@@ -1389,21 +1393,21 @@ fn draw_requests_panel(
 ///|
 /// Draws the main HUD panel with score, timer, meter bars, controls reference, and status message.
 fn draw_hud(
-  panel_x : Int,
-  panel_y : Int,
-  panel_w : Int,
-  panel_h : Int,
+  panel_x : Int32,
+  panel_y : Int32,
+  panel_w : Int32,
+  panel_h : Int32,
   timer : Float,
-  score : Int,
-  score_target : Int,
+  score : Int32,
+  score_target : Int32,
   rep : Float,
   quality : Float,
   energy : Float,
   heat_avg : Float,
-  active_drones : Int,
-  drone_losses : Int,
-  combo : Int,
-  pattern : Int,
+  active_drones : Int32,
+  drone_losses : Int32,
+  combo : Int32,
+  pattern : Int32,
   msg : String,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -1429,8 +1433,8 @@ fn draw_hud(
     @raylib.Color::new(236, 246, 255, 242),
   )
 
-  let mm : Int = timer.to_int() / 60
-  let ss : Int = timer.to_int() % 60
+  let mm : Int32 = timer.to_int() / 60
+  let ss : Int32 = timer.to_int() % 60
   let ss_txt : String = if ss < 10 { "0\{ss}" } else { "\{ss}" }
 
   @draw.draw_text(
@@ -1466,10 +1470,10 @@ fn draw_hud(
     title : String,
     value : Float,
     max_value : Float,
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     color : @raylib.Color,
   ) -> Unit {
     let p : Float = if max_value <= 0.001 {
@@ -1583,16 +1587,16 @@ fn draw_hud(
 ///|
 /// Draws the on-screen touch D-pad and action buttons with visual active states.
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mouse_x : Float,
   mouse_y : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Unit {
-  let pad_x : Int = 28
-  let pad_y : Int = sh - 210
-  let cell : Int = 72
+  let pad_x : Int32 = 28
+  let pad_y : Int32 = sh - 210
+  let cell : Int32 = 72
 
   let up = pointer_on_rect(
     mouse_x,
@@ -1635,7 +1639,7 @@ fn draw_touch_controls(
     cell,
   )
 
-  fn pad(x : Int, y : Int, label : String, active : Bool) -> Unit {
+  fn pad(x : Int32, y : Int32, label : String, active : Bool) -> Unit {
     @raylib.draw_rectangle(
       x,
       y,
@@ -1691,9 +1695,9 @@ fn draw_touch_controls(
     r : Float,
     label : String,
     active : Bool,
-    cr : Int,
-    cg : Int,
-    cb : Int,
+    cr : Int32,
+    cg : Int32,
+    cb : Int32,
   ) -> Unit {
     @raylib.draw_circle_v(
       @raylib.Vector2::new(x, y),
@@ -1726,13 +1730,13 @@ fn draw_touch_controls(
 
 ///|
 /// Draws the main menu screen with animated background and start prompt.
-fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
+fn draw_menu(sw : Int32, sh : Int32, scene_t : Float) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 16, 28, 255))
 
   for i in 0..<24 {
     let yy : Float = Float::from_int(i) / 24.0
     let wave : Float = @math.sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
-    let alpha : Int = 18 + (wave * 44.0).to_int()
+    let alpha : Int32 = 18 + (wave * 44.0).to_int()
     @raylib.draw_rectangle(
       0,
       (yy * Float::from_int(sh)).to_int(),
@@ -1763,10 +1767,10 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
   )
 
   let pulse : Float = @math.sinf(scene_t * 3.8) * 0.5 + 0.5
-  let bw : Int = 476
-  let bh : Int = 94
-  let bx : Int = sw / 2 - bw / 2
-  let by : Int = 468
+  let bw : Int32 = 476
+  let bh : Int32 = 94
+  let bx : Int32 = sw / 2 - bw / 2
+  let by : Int32 = 468
   @raylib.draw_rectangle(
     bx,
     by,
@@ -1801,15 +1805,15 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 ///|
 /// Draws the end-of-show screen with win/lose title, final score, reputation, and performance stats.
 fn draw_end(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   win : Bool,
-  score : Int,
-  target : Int,
+  score : Int32,
+  target : Int32,
   rep : Float,
-  served : Int,
-  failed : Int,
-  losses : Int,
+  served : Int32,
+  failed : Int32,
+  losses : Int32,
 ) -> Unit {
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 222))
   let title : String = if win { "SHOW OVATION" } else { "SHOW COLLAPSED" }
@@ -1864,8 +1868,8 @@ fn draw_end(
 ///|
 /// Initializes and runs the Drone Show Director 2026 game loop.
 fn main {
-  let sw : Int = 1700
-  let sh : Int = 960
+  let sw : Int32 = 1700
+  let sh : Int32 = 960
   @raylib.init_window(sw, sh, "raylib [game] drone show director 2026")
   defer @raylib.close_window()
   defer @draw.cleanup()
@@ -1874,11 +1878,11 @@ fn main {
   load_assets()
   defer unload_assets()
 
-  let world_x : Int = 20
-  let world_y : Int = 20
-  let panel_w : Int = 460
-  let world_w : Int = sw - panel_w - 40
-  let world_h : Int = sh - 40
+  let world_x : Int32 = 20
+  let world_y : Int32 = 20
+  let panel_w : Int32 = 460
+  let world_w : Int32 = sw - panel_w - 40
+  let world_h : Int32 = sh - 40
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
@@ -1976,24 +1980,24 @@ fn main {
     step_t: 0.0,
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 420.0
   let mut scene_t : Float = 0.0
 
-  let mut current_pattern : Int = 0
+  let mut current_pattern : Int32 = 0
   let mut pattern_phase : Float = 0.0
   let mut quality : Float = 0.0
 
-  let mut score : Int = 0
-  let mut score_target : Int = 9800
+  let mut score : Int32 = 0
+  let mut score_target : Int32 = 9800
   let mut rep : Float = 90.0
-  let mut combo : Int = 0
-  let mut served : Int = 0
-  let mut failed : Int = 0
-  let mut drone_losses : Int = 0
+  let mut combo : Int32 = 0
+  let mut served : Int32 = 0
+  let mut failed : Int32 = 0
+  let mut drone_losses : Int32 = 0
 
-  let mut order_serial : Int = 1
-  let mut wave : Int = 1
+  let mut order_serial : Int32 = 1
+  let mut wave : Int32 = 1
   let mut order_spawn_cd : Float = 1.2
   let mut gust_spawn_cd : Float = 3.4
   let mut firework_cd : Float = 0.75
@@ -2064,7 +2068,7 @@ fn main {
     let mouse = @raylib.get_mouse_position()
     let click : Bool = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
     let hold : Bool = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
-    let mut touch_count : Int = @raylib.get_touch_point_count()
+    let mut touch_count : Int32 = @raylib.get_touch_point_count()
     if touch_count > 10 {
       touch_count = 10
     }
@@ -2269,7 +2273,7 @@ fn main {
       }
 
       if action_press && director.action_cd <= 0.0 {
-        let near : Int = nearest_station_kind(
+        let near : Int32 = nearest_station_kind(
           stations,
           director.x,
           director.y,
@@ -2418,7 +2422,7 @@ fn main {
       }
 
       // Update drones
-      let mut active_count : Int = 0
+      let mut active_count : Int32 = 0
       for i in 0..<drones.length() {
         if !drones[i].active {
           continue
@@ -2557,8 +2561,8 @@ fn main {
         requests[i].progress = clampf(requests[i].progress, 0.0, 100.0)
 
         if requests[i].progress >= 100.0 {
-          let urgency_bonus : Int = (requests[i].deadline * 2.3).to_int()
-          let gain : Int = requests[i].reward + urgency_bonus + combo * 12
+          let urgency_bonus : Int32 = (requests[i].deadline * 2.3).to_int()
+          let gain : Int32 = requests[i].reward + urgency_bonus + combo * 12
           score = score + gain
           served = served + 1
           combo = (30).min(combo + 1)
@@ -2649,7 +2653,7 @@ fn main {
       draw_director(director, scene_t)
 
       let mut heat_sum_draw : Float = 0.0
-      let mut active_count_draw : Int = 0
+      let mut active_count_draw : Int32 = 0
       for drone in drones {
         if drone.active {
           active_count_draw = active_count_draw + 1
@@ -2662,10 +2666,10 @@ fn main {
         heat_sum_draw / Float::from_int(active_count_draw)
       }
 
-      let panel_x : Int = world_x + world_w + 10
-      let panel_y : Int = world_y
-      let panel_w2 : Int = panel_w - 10
-      let panel_h : Int = world_h
+      let panel_x : Int32 = world_x + world_w + 10
+      let panel_y : Int32 = world_y
+      let panel_w2 : Int32 = panel_w - 10
+      let panel_h : Int32 = world_h
 
       draw_hud(
         panel_x,

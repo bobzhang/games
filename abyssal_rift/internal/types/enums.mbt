@@ -143,7 +143,7 @@ pub extend EnemyKind with Show::{to_string, output}
 pub(all) enum ItemKind {
   HealthPotion
   WeaponPickup(WeaponKind)
-  Gold(Int)
+  Gold(Int32)
   PassiveItem(PassiveKind)
 } derive(Debug)
 
@@ -301,12 +301,12 @@ pub extend Direction with Show::{to_string, output}
 
 ///|
 pub(all) enum GameEvent {
-  Hit(Float, Float, Int, Bool)
+  Hit(Float, Float, Int32, Bool)
   Kill(EnemyKind, Float, Float)
-  PlayerDamaged(Int, Float, Float)
+  PlayerDamaged(Int32, Float, Float)
   Pickup(ItemKind, Float, Float)
   RoomCleared
-  BossPhaseChange(Int)
+  BossPhaseChange(Int32)
   DashUsed(Float, Float, Float, Float)
   WeaponSwing(Float, Float, Float)
   SynergyUnlocked(String)

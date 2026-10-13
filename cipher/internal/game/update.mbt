@@ -123,7 +123,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_id : Int) -> Unit {
+fn start_level(game : @types.Game, level_id : Int32) -> Unit {
   game.current_level = level_id
   game.screen = Playing
   @types.reset_for_level(game)
@@ -296,8 +296,8 @@ fn update_playing(game : @types.Game) -> Unit {
 fn handle_message_click(
   game : @types.Game,
   level : @types.Level,
-  mx : Int,
-  my : Int,
+  mx : Int32,
+  my : Int32,
 ) -> Unit {
   let base_x = @types.msg_area_x
   let base_y = @types.msg_area_y + 20
@@ -340,7 +340,7 @@ fn handle_message_click(
 fn handle_cipher_select(
   game : @types.Game,
   level : @types.Level,
-  plain_idx : Int,
+  plain_idx : Int32,
 ) -> Unit {
   apply_letter_mapping(game, level, game.selected_cipher_letter, plain_idx)
 }
@@ -349,8 +349,8 @@ fn handle_cipher_select(
 fn apply_letter_mapping(
   game : @types.Game,
   level : @types.Level,
-  cipher_idx : Int,
-  plain_idx : Int,
+  cipher_idx : Int32,
+  plain_idx : Int32,
 ) -> Unit {
   let entry = @types.assign_mapping(game.mapping, cipher_idx, plain_idx)
   game.undo_stack.push(entry)

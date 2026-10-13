@@ -28,7 +28,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -48,7 +48,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -77,7 +77,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -86,7 +86,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -100,27 +100,27 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-pub fn tile_to_pixel_x(gx : Int) -> Float {
+pub fn tile_to_pixel_x(gx : Int32) -> Float {
   Float::from_int(grid_offset_x + gx * tile_size + tile_size / 2)
 }
 
 ///|
-pub fn tile_to_pixel_y(gy : Int) -> Float {
+pub fn tile_to_pixel_y(gy : Int32) -> Float {
   Float::from_int(grid_offset_y + gy * tile_size + tile_size / 2)
 }
 
 ///|
-pub fn pixel_to_tile_x(px : Float) -> Int {
+pub fn pixel_to_tile_x(px : Float) -> Int32 {
   (px.to_int() - grid_offset_x) / tile_size
 }
 
 ///|
-pub fn pixel_to_tile_y(py : Float) -> Int {
+pub fn pixel_to_tile_y(py : Float) -> Int32 {
   (py.to_int() - grid_offset_y) / tile_size
 }
 
 ///|
-pub fn in_bounds(x : Int, y : Int) -> Bool {
+pub fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < grid_width && y >= 0 && y < grid_height
 }
 
@@ -133,7 +133,7 @@ pub fn tile_walkable(tile : TileKind) -> Bool {
 }
 
 ///|
-pub fn direction_dx(d : Direction) -> Int {
+pub fn direction_dx(d : Direction) -> Int32 {
   match d {
     Left => -1
     Right => 1
@@ -142,7 +142,7 @@ pub fn direction_dx(d : Direction) -> Int {
 }
 
 ///|
-pub fn direction_dy(d : Direction) -> Int {
+pub fn direction_dy(d : Direction) -> Int32 {
   match d {
     Up => -1
     Down => 1
@@ -161,12 +161,12 @@ pub fn direction_angle(d : Direction) -> Float {
 }
 
 ///|
-pub fn manhattan_dist(x1 : Int, y1 : Int, x2 : Int, y2 : Int) -> Int {
+pub fn manhattan_dist(x1 : Int32, y1 : Int32, x2 : Int32, y2 : Int32) -> Int32 {
   absi(x1 - x2) + absi(y1 - y2)
 }
 
 ///|
-pub fn grid_dist(x1 : Int, y1 : Int, x2 : Int, y2 : Int) -> Float {
+pub fn grid_dist(x1 : Int32, y1 : Int32, x2 : Int32, y2 : Int32) -> Float {
   let dx = Float::from_int(x1 - x2)
   let dy = Float::from_int(y1 - y2)
   sqrtf(dx * dx + dy * dy)
@@ -177,10 +177,10 @@ pub fn grid_dist(x1 : Int, y1 : Int, x2 : Int, y2 : Int) -> Float {
 ///|
 pub fn has_line_of_sight(
   tiles : Array[Array[TileKind]],
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   let dx = absi(x1 - x0)
   let dy = absi(y1 - y0)
@@ -215,15 +215,15 @@ pub fn has_line_of_sight(
 // RNG
 
 ///|
-let rng_state : Ref[Int] = { val: 42, }
+let rng_state : Ref[Int32] = { val: 42, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -234,7 +234,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -250,7 +250,7 @@ pub fn rng_float() -> Float {
 // Constructors
 
 ///|
-pub fn new_agent(gx : Int, gy : Int) -> Agent {
+pub fn new_agent(gx : Int32, gy : Int32) -> Agent {
   {
     gx,
     gy,
@@ -272,8 +272,8 @@ pub fn new_agent(gx : Int, gy : Int) -> Agent {
 
 ///|
 pub fn new_guard(
-  gx : Int,
-  gy : Int,
+  gx : Int32,
+  gy : Int32,
   kind : GuardKind,
   patrol : Array[Vec2i],
 ) -> Guard {
@@ -322,7 +322,7 @@ pub fn new_guard(
 }
 
 ///|
-pub fn new_camera(gx : Int, gy : Int) -> Camera {
+pub fn new_camera(gx : Int32, gy : Int32) -> Camera {
   {
     gx,
     gy,
@@ -336,36 +336,36 @@ pub fn new_camera(gx : Int, gy : Int) -> Camera {
 
 ///|
 pub fn new_terminal(
-  gx : Int,
-  gy : Int,
+  gx : Int32,
+  gy : Int32,
   high_security : Bool,
-  connected_id : Int,
+  connected_id : Int32,
 ) -> Terminal {
   { gx, gy, hacked: false, high_security, connected_id, data_value: 100, }
 }
 
 ///|
-pub fn new_door(gx : Int, gy : Int, power_id : Int) -> Door {
+pub fn new_door(gx : Int32, gy : Int32, power_id : Int32) -> Door {
   { gx, gy, open: false, locked: true, power_id, }
 }
 
 ///|
 pub fn new_laser(
-  gx : Int,
-  gy : Int,
-  power_id : Int,
+  gx : Int32,
+  gy : Int32,
+  power_id : Int32,
   horizontal : Bool,
-  length : Int,
+  length : Int32,
 ) -> LaserGrid {
   { gx, gy, active: true, power_id, horizontal, length, }
 }
 
 ///|
 pub fn new_power_node(
-  gx : Int,
-  gy : Int,
-  node_id : Int,
-  connected : Array[Int],
+  gx : Int32,
+  gy : Int32,
+  node_id : Int32,
+  connected : Array[Int32],
 ) -> PowerNode {
   { gx, gy, powered: true, node_id, connected_ids: connected, }
 }
@@ -503,12 +503,12 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn is_adjacent(x1 : Int, y1 : Int, x2 : Int, y2 : Int) -> Bool {
+pub fn is_adjacent(x1 : Int32, y1 : Int32, x2 : Int32, y2 : Int32) -> Bool {
   manhattan_dist(x1, y1, x2, y2) == 1
 }
 
 ///|
-pub fn find_door_at(level : Level, gx : Int, gy : Int) -> Int {
+pub fn find_door_at(level : Level, gx : Int32, gy : Int32) -> Int32 {
   for i in 0..<level.doors.length() {
     if level.doors[i].gx == gx && level.doors[i].gy == gy {
       return i
@@ -518,7 +518,7 @@ pub fn find_door_at(level : Level, gx : Int, gy : Int) -> Int {
 }
 
 ///|
-pub fn find_laser_at(level : Level, gx : Int, gy : Int) -> Int {
+pub fn find_laser_at(level : Level, gx : Int32, gy : Int32) -> Int32 {
   for i in 0..<level.lasers.length() {
     let l = level.lasers[i]
     if l.horizontal {
@@ -533,7 +533,7 @@ pub fn find_laser_at(level : Level, gx : Int, gy : Int) -> Int {
 }
 
 ///|
-pub fn is_tile_blocked(game : Game, gx : Int, gy : Int) -> Bool {
+pub fn is_tile_blocked(game : Game, gx : Int32, gy : Int32) -> Bool {
   if !in_bounds(gx, gy) {
     return true
   }

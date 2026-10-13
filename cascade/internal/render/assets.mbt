@@ -217,10 +217,10 @@ fn tier_card_texture(tier : @types.Tier) -> @raylib.Texture? {
 ///|
 fn draw_tier_card_art(
   tier : @types.Tier,
-  x : Int,
-  y : Int,
-  width : Int,
-  height : Int,
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
 ) -> Bool {
   match tier_card_texture(tier) {
     Some(texture) => {
@@ -239,7 +239,12 @@ fn draw_tier_card_art(
 }
 
 ///|
-fn draw_ui_panel_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
+fn draw_ui_panel_art(
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
+) -> Bool {
   match tex_ui_panel.val {
     Some(texture) => {
       draw_art_top_left(

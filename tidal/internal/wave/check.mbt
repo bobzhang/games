@@ -23,7 +23,7 @@ pub fn check_targets(grid : @types.WaveGrid) -> Bool {
 
 ///|
 /// Count total targets and how many are satisfied
-pub fn count_targets(grid : @types.WaveGrid) -> (Int, Int) {
+pub fn count_targets(grid : @types.WaveGrid) -> (Int32, Int32) {
   let mut total = 0
   let mut satisfied = 0
   for y in 0..<grid.height {

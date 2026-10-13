@@ -25,19 +25,19 @@ pub extend Tea with Eq::{not_equal, equal}
 
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate for simulation and rendering.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Height of the top HUD region in pixels.
-pub let hud_h : Int = 110
+pub let hud_h : Int32 = 110
 
 ///|
 /// Left play-area boundary.
@@ -57,27 +57,27 @@ pub let play_bottom : Float = Float::from_int(screen_h) - 26.0
 
 ///|
 /// Number of distinct tea types.
-pub let tea_count : Int = 5
+pub let tea_count : Int32 = 5
 
 ///|
 /// Maximum customers tracked in the pool.
-pub let max_customers : Int = 24
+pub let max_customers : Int32 = 24
 
 ///|
 /// Maximum spark particles tracked in the pool.
-pub let max_sparks : Int = 860
+pub let max_sparks : Int32 = 860
 
 ///|
 /// Maximum ring effects tracked in the pool.
-pub let max_rings : Int = 86
+pub let max_rings : Int32 = 86
 
 ///|
 /// Maximum shadow effects tracked in the pool.
-pub let max_shadows : Int = 320
+pub let max_shadows : Int32 = 320
 
 ///|
 /// Number of simultaneous customer counter slots.
-pub let customer_slots : Int = 6
+pub let customer_slots : Int32 = 6
 
 ///|
 /// Player collision width.
@@ -129,11 +129,11 @@ pub let brew_time_min : Float = 1.1
 
 ///|
 /// Base score goal for stage 1.
-pub let stage_goal_base : Int = 1300
+pub let stage_goal_base : Int32 = 1300
 
 ///|
 /// Extra score goal added per stage.
-pub let stage_goal_bonus : Int = 760
+pub let stage_goal_bonus : Int32 = 760
 
 ///|
 /// Base stage timer in seconds.
@@ -185,7 +185,7 @@ pub let miss_penalty : Float = 12.0
 
 ///|
 /// Score bonus awarded when a stage is cleared.
-pub let stage_clear_bonus : Int = 340
+pub let stage_clear_bonus : Int32 = 340
 
 ///|
 /// Kettle station x-coordinate.
@@ -219,13 +219,13 @@ pub fn leaf_x() -> Float {
 
 ///|
 /// Returns the y-coordinate of a tea leaf slot for a tea index.
-pub fn leaf_y(tea : Int) -> Float {
+pub fn leaf_y(tea : Int32) -> Float {
   182.0 + Float::from_int(tea.clamp(min=0, max=tea_count - 1)) * 86.0
 }
 
 ///|
 /// Returns the integer index for a Tea enum value.
-pub fn tea_index(t : Tea) -> Int {
+pub fn tea_index(t : Tea) -> Int32 {
   match t {
     Jasmine => 0
     Oolong => 1
@@ -237,7 +237,7 @@ pub fn tea_index(t : Tea) -> Int {
 
 ///|
 /// Returns the Tea enum for an integer index, defaulting to Jasmine.
-pub fn tea_from_index(i : Int) -> Tea {
+pub fn tea_from_index(i : Int32) -> Tea {
   match i {
     0 => Jasmine
     1 => Oolong
@@ -250,7 +250,7 @@ pub fn tea_from_index(i : Int) -> Tea {
 
 ///|
 /// Returns world coordinates for a customer slot index.
-pub fn customer_slot_pos(slot : Int) -> (Float, Float) {
+pub fn customer_slot_pos(slot : Int32) -> (Float, Float) {
   let s = slot.clamp(min=0, max=customer_slots - 1)
   let row = s / 3
   let col = s % 3

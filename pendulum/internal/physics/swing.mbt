@@ -164,11 +164,11 @@ pub fn check_goal_on_swing(weight : @types.Weight, goal : @types.Vec2i) -> Unit 
 
 ///|
 pub fn compute_stars(
-  ticks : Int,
-  par : Int,
-  collectibles_total : Int,
-  collectibles_got : Int,
-) -> Int {
+  ticks : Int32,
+  par : Int32,
+  collectibles_total : Int32,
+  collectibles_got : Int32,
+) -> Int32 {
   let mut stars = 1 // reached goal
   if ticks <= par {
     stars = 2

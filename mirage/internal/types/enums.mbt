@@ -5,7 +5,7 @@ pub(all) enum Tile {
   Wall
   Gap
   Exit
-  Switch(Int)
+  Switch(Int32)
   Platform
   Gem
 } derive(Eq, Debug)

@@ -70,7 +70,7 @@ fn draw_title(game : @types.Game) -> Unit {
 ///|
 fn campaign_node_completed(
   campaign : @types.CampaignMap,
-  node_id : Int,
+  node_id : Int32,
 ) -> Bool {
   for i = 0; i < campaign.completed_nodes.length(); i = i + 1 {
     if campaign.completed_nodes[i] == node_id {
@@ -83,7 +83,7 @@ fn campaign_node_completed(
 ///|
 fn campaign_node_available(
   campaign : @types.CampaignMap,
-  node_id : Int,
+  node_id : Int32,
 ) -> Bool {
   if campaign.completed_nodes.length() == 0 && node_id == 0 {
     return true
@@ -363,7 +363,7 @@ fn draw_title_decorations(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_mechs(game : @types.Game, cx : Int, cy : Int) -> Unit {
+fn draw_title_mechs(game : @types.Game, cx : Int32, cy : Int32) -> Unit {
   let t = game.anim_timer.to_double()
   let bob = Float::from_double(@math.sin(t * 2.0)) * 6.0
   let fcx = Float::from_int(cx)
@@ -650,11 +650,11 @@ fn tile_color(kind : @types.TileKind) -> @raylib.Color {
 
 ///|
 fn draw_tile_detail(
-  _gx : Int,
-  _gy : Int,
+  _gx : Int32,
+  _gy : Int32,
   tile : @types.Tile,
-  sx : Int,
-  sy : Int,
+  sx : Int32,
+  sy : Int32,
 ) -> Unit {
   match tile.kind {
     Wall => {
@@ -747,7 +747,11 @@ fn draw_tile_detail(
 }
 
 ///|
-fn draw_hazard_overlay(hazard : @types.HazardKind, sx : Int, sy : Int) -> Unit {
+fn draw_hazard_overlay(
+  hazard : @types.HazardKind,
+  sx : Int32,
+  sy : Int32,
+) -> Unit {
   match hazard {
     Fire =>
       @raylib.draw_rectangle(
@@ -851,7 +855,7 @@ fn draw_single_intent(u : @types.CombatUnit) -> Unit {
 }
 
 ///|
-fn draw_intent_march(u : @types.CombatUnit, tx : Int, ty : Int) -> Unit {
+fn draw_intent_march(u : @types.CombatUnit, tx : Int32, ty : Int32) -> Unit {
   // Arrow trail from enemy position to target
   let from_x = Float::from_int(@types.tile_center_x(u.x))
   let from_y = Float::from_int(@types.tile_center_y(u.y))
@@ -879,9 +883,9 @@ fn draw_intent_march(u : @types.CombatUnit, tx : Int, ty : Int) -> Unit {
 ///|
 fn draw_intent_fireline(
   u : @types.CombatUnit,
-  fdx : Int,
-  fdy : Int,
-  range : Int,
+  fdx : Int32,
+  fdy : Int32,
+  range : Int32,
 ) -> Unit {
   let fire_color = @raylib.Color::new(255, 40, 40, 80)
   let line_color = @raylib.Color::new(255, 60, 60, 140)
@@ -921,7 +925,7 @@ fn draw_intent_fireline(
 }
 
 ///|
-fn draw_intent_leap(u : @types.CombatUnit, tx : Int, ty : Int) -> Unit {
+fn draw_intent_leap(u : @types.CombatUnit, tx : Int32, ty : Int32) -> Unit {
   // Arc path from enemy to landing spot
   let from_x = Float::from_int(@types.tile_center_x(u.x))
   let from_y = Float::from_int(@types.tile_center_y(u.y))
@@ -950,7 +954,7 @@ fn draw_intent_leap(u : @types.CombatUnit, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
-fn draw_intent_area_blast(acx : Int, acy : Int, arad : Int) -> Unit {
+fn draw_intent_area_blast(acx : Int32, acy : Int32, arad : Int32) -> Unit {
   let blast_color = @raylib.Color::new(255, 40, 40, 60)
   let border_color = @raylib.Color::new(255, 60, 60, 120)
   for dy = -arad; dy <= arad; dy = dy + 1 {
@@ -980,7 +984,7 @@ fn draw_intent_area_blast(acx : Int, acy : Int, arad : Int) -> Unit {
 }
 
 ///|
-fn draw_intent_charge(u : @types.CombatUnit, cdx : Int, cdy : Int) -> Unit {
+fn draw_intent_charge(u : @types.CombatUnit, cdx : Int32, cdy : Int32) -> Unit {
   let charge_color = @raylib.Color::new(255, 40, 40, 80)
   let arrow_color = @raylib.Color::new(255, 80, 80, 160)
   let mut cx = u.x + cdx
@@ -1020,7 +1024,7 @@ fn draw_intent_charge(u : @types.CombatUnit, cdx : Int, cdy : Int) -> Unit {
 }
 
 ///|
-fn draw_intent_mine(mx : Int, my : Int) -> Unit {
+fn draw_intent_mine(mx : Int32, my : Int32) -> Unit {
   if mx >= 0 && mx < @types.grid_w && my >= 0 && my < @types.grid_h {
     let sx = @types.tile_to_screen_x(mx)
     let sy = @types.tile_to_screen_y(my)
@@ -1045,7 +1049,7 @@ fn draw_intent_mine(mx : Int, my : Int) -> Unit {
 }
 
 ///|
-fn draw_intent_summon(sx_grid : Int, sy_grid : Int) -> Unit {
+fn draw_intent_summon(sx_grid : Int32, sy_grid : Int32) -> Unit {
   if sx_grid >= 0 &&
     sx_grid < @types.grid_w &&
     sy_grid >= 0 &&
@@ -1105,7 +1109,7 @@ fn draw_command_preview(battle : @types.BattleState) -> Unit {
 }
 
 ///|
-fn draw_move_range(u : @types.CombatUnit, move_range : Int) -> Unit {
+fn draw_move_range(u : @types.CombatUnit, move_range : Int32) -> Unit {
   let move_color = @raylib.Color::new(80, 160, 255, 50)
   let move_border = @raylib.Color::new(80, 160, 255, 100)
   for gy = 0; gy < @types.grid_h; gy = gy + 1 {
@@ -1134,7 +1138,7 @@ fn draw_move_range(u : @types.CombatUnit, move_range : Int) -> Unit {
 }
 
 ///|
-fn draw_attack_range(u : @types.CombatUnit, ability_range : Int) -> Unit {
+fn draw_attack_range(u : @types.CombatUnit, ability_range : Int32) -> Unit {
   let attack_color = @raylib.Color::new(255, 140, 40, 40)
   let attack_border = @raylib.Color::new(255, 140, 40, 100)
   for gy = 0; gy < @types.grid_h; gy = gy + 1 {
@@ -1233,8 +1237,8 @@ fn draw_units(battle : @types.BattleState, game : @types.Game) -> Unit {
 ///|
 fn draw_player_mech(
   u : @types.CombatUnit,
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   selected : Bool,
   game : @types.Game,
 ) -> Unit {
@@ -1308,8 +1312,8 @@ fn draw_player_mech(
 ///|
 fn draw_enemy_unit(
   u : @types.CombatUnit,
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   battle : @types.BattleState,
   game : @types.Game,
 ) -> Unit {
@@ -1447,8 +1451,8 @@ fn draw_enemy_unit(
 fn draw_boss_unit(
   fcx : Float,
   fcy : Float,
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   radius : Float,
   fill_color : @raylib.Color,
   edge_color : @raylib.Color,
@@ -1573,7 +1577,7 @@ fn draw_boss_unit(
 // ============================================================================
 
 ///|
-fn draw_health_bar(u : @types.CombatUnit, cx : Int, cy : Int) -> Unit {
+fn draw_health_bar(u : @types.CombatUnit, cx : Int32, cy : Int32) -> Unit {
   let radius = @types.tile_size / 3
   let bar_w = @types.tile_size - 8
   let bar_h = 4
@@ -1602,7 +1606,7 @@ fn draw_health_bar(u : @types.CombatUnit, cx : Int, cy : Int) -> Unit {
 }
 
 ///|
-fn draw_shield_indicator(u : @types.CombatUnit, cx : Int, cy : Int) -> Unit {
+fn draw_shield_indicator(u : @types.CombatUnit, cx : Int32, cy : Int32) -> Unit {
   let radius = Float::from_int(@types.tile_size / 3 + 4)
   @raylib.draw_circle_lines(cx, cy, radius, @types.color_shield)
   // Shield count
@@ -1616,7 +1620,7 @@ fn draw_shield_indicator(u : @types.CombatUnit, cx : Int, cy : Int) -> Unit {
 }
 
 ///|
-fn draw_heat_indicator(u : @types.CombatUnit, cx : Int, cy : Int) -> Unit {
+fn draw_heat_indicator(u : @types.CombatUnit, cx : Int32, cy : Int32) -> Unit {
   let base_y = cy + @types.tile_size / 3 + 4
   for h = 0; h < u.heat; h = h + 1 {
     let dot_x = cx - (u.heat - 1) * 5 + h * 10
@@ -1625,7 +1629,7 @@ fn draw_heat_indicator(u : @types.CombatUnit, cx : Int, cy : Int) -> Unit {
 }
 
 ///|
-fn draw_stun_indicator(cx : Int, cy : Int, game : @types.Game) -> Unit {
+fn draw_stun_indicator(cx : Int32, cy : Int32, game : @types.Game) -> Unit {
   let t = game.anim_timer.to_double()
   let stun_color = @raylib.Color::new(255, 255, 80, 200)
   let offset_y = cy - @types.tile_size / 3 - 18
@@ -1639,7 +1643,7 @@ fn draw_stun_indicator(cx : Int, cy : Int, game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_acted_indicator(cx : Int, cy : Int) -> Unit {
+fn draw_acted_indicator(cx : Int32, cy : Int32) -> Unit {
   let y = cy + @types.tile_size / 3 + 12
   @draw.draw_text(
     "done",
@@ -1814,7 +1818,11 @@ fn draw_ui_panel(battle : @types.BattleState, game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_objective_info(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+fn draw_objective_info(
+  battle : @types.BattleState,
+  x : Int32,
+  y : Int32,
+) -> Unit {
   let obj_text = match battle.objective {
     DefendGrid(n) => "Objective: Defend (\{battle.objective_progress}/\{n})"
     Survive(n) => "Objective: Survive \{n} turns (\{battle.turn}/\{n})"
@@ -1836,10 +1844,10 @@ fn draw_objective_info(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 fn draw_mech_card(
   battle : @types.BattleState,
   u : @types.CombatUnit,
-  idx : Int,
-  x : Int,
-  y : Int,
-) -> Int {
+  idx : Int32,
+  x : Int32,
+  y : Int32,
+) -> Int32 {
   let stats = @content.get_mech_stats(u.mech_class)
   let is_selected = idx == battle.selected_mech
   let name_color = if is_selected {
@@ -1915,7 +1923,7 @@ fn draw_mech_card(
 }
 
 ///|
-fn draw_turn_log(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+fn draw_turn_log(battle : @types.BattleState, x : Int32, y : Int32) -> Unit {
   @types.draw_shadow_text(
     "-- Log --",
     x,
@@ -1948,7 +1956,7 @@ fn draw_turn_log(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_controls_legend(x : Int, y : Int) -> Unit {
+fn draw_controls_legend(x : Int32, y : Int32) -> Unit {
   @types.draw_shadow_text(
     "Arrows:Move  Tab:Cycle  Enter/Click:Act",
     x,
@@ -2120,10 +2128,10 @@ fn draw_reward(game : @types.Game) -> Unit {
 
 ///|
 fn draw_reward_card(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   title : String,
   line1 : String,
   line2 : String,

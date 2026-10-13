@@ -1,37 +1,37 @@
 ///|
 /// Number of tile columns in the grid.
-let cols : Int = 15
+let cols : Int32 = 15
 
 ///|
 /// Number of tile rows in the grid.
-let rows : Int = 13
+let rows : Int32 = 13
 
 ///|
 /// Pixel size of each grid tile.
-let tile : Int = 46
+let tile : Int32 = 46
 
 ///|
 /// Horizontal pixel offset from the window edge to the grid origin.
-let off_x : Int = 38
+let off_x : Int32 = 38
 
 ///|
 /// Vertical pixel offset from the window top to the grid origin.
-let off_y : Int = 70
+let off_y : Int32 = 70
 
 ///|
 /// Total window width derived from grid columns, tile size, and horizontal offset.
-let screen_w : Int = off_x * 2 + cols * tile
+let screen_w : Int32 = off_x * 2 + cols * tile
 
 ///|
 /// Total window height derived from grid rows, tile size, and vertical offset.
-let screen_h : Int = off_y + rows * tile + 70
+let screen_h : Int32 = off_y + rows * tile + 70
 
 ///|
 /// Represents an enemy with alive state, grid position, and movement step timer.
 struct Enemy {
   mut alive : Bool
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
   mut step_timer : Float
 }
 
@@ -39,28 +39,28 @@ struct Enemy {
 /// Represents the player's bomb with active state, grid position, fuse timer, and blast duration.
 struct Bomb {
   mut active : Bool
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
   mut fuse : Float
   mut blast : Float
 }
 
 ///|
 /// Returns the flat array index for the given grid column and row.
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * cols + x
 }
 
 ///|
 /// Returns true if the given coordinates are within the grid bounds.
-fn in_grid(x : Int, y : Int) -> Bool {
+fn in_grid(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < cols && y >= 0 && y < rows
 }
 
 ///|
 /// Generates and returns a new grid map with walls, breakable blocks, and cleared spawn zones.
-fn init_map() -> Array[Int] {
-  let map : Array[Int] = Array::make(cols * rows, 0)
+fn init_map() -> Array[Int32] {
+  let map : Array[Int32] = Array::make(cols * rows, 0)
   for y in 0..<rows {
     for x in 0..<cols {
       let mut v = 0
@@ -78,7 +78,7 @@ fn init_map() -> Array[Int] {
   }
 
   // Player and enemy spawn clear zones.
-  let clear_cells : Array[(Int, Int)] = [
+  let clear_cells : Array[(Int32, Int32)] = [
     (1, 1),
     (1, 2),
     (2, 1),
@@ -96,7 +96,7 @@ fn init_map() -> Array[Int] {
 
 ///|
 /// Returns true if the given cell is within bounds, passable, and not blocked by an active bomb.
-fn is_walkable(map : Array[Int], x : Int, y : Int, bomb : Bomb) -> Bool {
+fn is_walkable(map : Array[Int32], x : Int32, y : Int32, bomb : Bomb) -> Bool {
   if !in_grid(x, y) {
     return false
   }
@@ -111,7 +111,7 @@ fn is_walkable(map : Array[Int], x : Int, y : Int, bomb : Bomb) -> Bool {
 
 ///|
 /// Returns true if the blast from an active exploding bomb reaches the target cell.
-fn fire_hits(map : Array[Int], bomb : Bomb, tx : Int, ty : Int) -> Bool {
+fn fire_hits(map : Array[Int32], bomb : Bomb, tx : Int32, ty : Int32) -> Bool {
   if !bomb.active || bomb.blast <= 0.0 {
     return false
   }
@@ -119,7 +119,7 @@ fn fire_hits(map : Array[Int], bomb : Bomb, tx : Int, ty : Int) -> Bool {
     return true
   }
 
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
   for dir in dirs {
     let (dx, dy) = dir
     let mut x = bomb.x
@@ -147,13 +147,13 @@ fn fire_hits(map : Array[Int], bomb : Bomb, tx : Int, ty : Int) -> Bool {
 
 ///|
 /// Destroys breakable blocks in the bomb's blast radius and returns the count of blocks destroyed.
-fn apply_explosion(map : Array[Int], bomb : Bomb) -> Int {
+fn apply_explosion(map : Array[Int32], bomb : Bomb) -> Int32 {
   if !bomb.active || bomb.blast <= 0.0 {
     return 0
   }
 
   let mut destroyed = 0
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
   for dir in dirs {
     let (dx, dy) = dir
     let mut x = bomb.x
@@ -181,10 +181,10 @@ fn apply_explosion(map : Array[Int], bomb : Bomb) -> Int {
 ///|
 /// Draws the explosion fire tiles extending in one direction from the bomb until blocked.
 fn draw_fire_arm(
-  map : Array[Int],
+  map : Array[Int32],
   bomb : Bomb,
-  dx : Int,
-  dy : Int,
+  dx : Int32,
+  dy : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let mut x = bomb.x
@@ -334,7 +334,7 @@ fn main {
         enemy.step_timer = enemy.step_timer + dt
         if enemy.step_timer >= 0.32 {
           enemy.step_timer = enemy.step_timer - 0.32
-          let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+          let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
           let start = @raylib.get_random_value(0, 3)
           for try_i in 0..<dirs.length() {
             let j = (start + try_i) % dirs.length()

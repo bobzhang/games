@@ -99,7 +99,7 @@ pub fn update_play_time(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Get total stars for a specific world from save data
-pub fn get_world_stars(game : @types.Game, world : Int) -> Int {
+pub fn get_world_stars(game : @types.Game, world : Int32) -> Int32 {
   let mut total = 0
   if world >= 0 && world < game.save_data.star_ratings.length() {
     let row = game.save_data.star_ratings[world]
@@ -112,7 +112,11 @@ pub fn get_world_stars(game : @types.Game, world : Int) -> Int {
 
 ///|
 /// Get best move count for a specific level from save data
-pub fn get_best_moves(game : @types.Game, world : Int, level : Int) -> Int {
+pub fn get_best_moves(
+  game : @types.Game,
+  world : Int32,
+  level : Int32,
+) -> Int32 {
   if world >= 0 &&
     world < game.save_data.best_moves.length() &&
     level >= 0 &&
@@ -125,7 +129,7 @@ pub fn get_best_moves(game : @types.Game, world : Int, level : Int) -> Int {
 
 ///|
 /// Get completion percentage for a world
-pub fn get_world_completion(game : @types.Game, world : Int) -> Int {
+pub fn get_world_completion(game : @types.Game, world : Int32) -> Int32 {
   let max_stars = @types.levels_per_world * 3
   let earned = get_world_stars(game, world)
   if max_stars > 0 {
@@ -137,7 +141,7 @@ pub fn get_world_completion(game : @types.Game, world : Int) -> Int {
 
 ///|
 /// Get overall completion percentage
-pub fn get_total_completion(game : @types.Game) -> Int {
+pub fn get_total_completion(game : @types.Game) -> Int32 {
   let max_stars = @types.total_levels * 3
   let mut earned = 0
   for w in 0..<@types.num_worlds {
@@ -152,7 +156,7 @@ pub fn get_total_completion(game : @types.Game) -> Int {
 
 ///|
 /// Count completed levels (any star)
-pub fn count_completed_levels(game : @types.Game) -> Int {
+pub fn count_completed_levels(game : @types.Game) -> Int32 {
   let mut count = 0
   for w in 0..<@types.num_worlds {
     if w < game.save_data.star_ratings.length() {
@@ -169,7 +173,7 @@ pub fn count_completed_levels(game : @types.Game) -> Int {
 
 ///|
 /// Get the world with the most completed levels
-pub fn get_favorite_world(game : @types.Game) -> Int {
+pub fn get_favorite_world(game : @types.Game) -> Int32 {
   let mut best_world = 0
   let mut best_count = 0
   for w in 0..<@types.num_worlds {

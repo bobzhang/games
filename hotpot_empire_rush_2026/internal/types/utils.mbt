@@ -1,42 +1,42 @@
 ///|
 /// Returns full kitchen grid width in pixels.
-pub fn kitchen_w() -> Int {
+pub fn kitchen_w() -> Int32 {
   station_cols * station_tile_w + (station_cols - 1) * station_gap
 }
 
 ///|
 /// Returns full kitchen grid height in pixels.
-pub fn kitchen_h() -> Int {
+pub fn kitchen_h() -> Int32 {
   station_rows * station_tile_h + (station_rows - 1) * station_gap
 }
 
 ///|
 /// Returns pixel X of a station column origin.
-pub fn station_x(col : Int) -> Int {
+pub fn station_x(col : Int32) -> Int32 {
   kitchen_left + col * (station_tile_w + station_gap)
 }
 
 ///|
 /// Returns pixel Y of a station row origin.
-pub fn station_y(row : Int) -> Int {
+pub fn station_y(row : Int32) -> Int32 {
   kitchen_top + row * (station_tile_h + station_gap)
 }
 
 ///|
 /// Returns left X coordinate of the right-side info panel.
-pub fn panel_x() -> Int {
+pub fn panel_x() -> Int32 {
   kitchen_left + kitchen_w() + 36
 }
 
 ///|
 /// Returns width of the right-side info panel.
-pub fn panel_w() -> Int {
+pub fn panel_w() -> Int32 {
   screen_w - panel_x() - 44
 }
 
 ///|
 /// Maps station grid coordinates to a station id.
-pub fn station_at(x : Int, y : Int) -> Station {
+pub fn station_at(x : Int32, y : Int32) -> Station {
   match (y, x) {
     (0, 0) => Broth
     (0, 1) => Protein
@@ -75,7 +75,7 @@ pub fn station_name(station : Station) -> String {
 
 ///|
 /// Returns display name for a broth kind id.
-pub fn broth_name(kind : Int) -> String {
+pub fn broth_name(kind : Int32) -> String {
   if kind == 0 {
     "Mala"
   } else if kind == 1 {
@@ -87,7 +87,7 @@ pub fn broth_name(kind : Int) -> String {
 
 ///|
 /// Returns display name for a protein kind id.
-pub fn protein_name(kind : Int) -> String {
+pub fn protein_name(kind : Int32) -> String {
   if kind == 0 {
     "Beef"
   } else if kind == 1 {
@@ -99,7 +99,7 @@ pub fn protein_name(kind : Int) -> String {
 
 ///|
 /// Returns display name for a vegetable kind id.
-pub fn veg_name(kind : Int) -> String {
+pub fn veg_name(kind : Int32) -> String {
   if kind == 0 {
     "Lotus"
   } else if kind == 1 {
@@ -111,7 +111,7 @@ pub fn veg_name(kind : Int) -> String {
 
 ///|
 /// Returns display name for a spice level.
-pub fn spice_name(level : Int) -> String {
+pub fn spice_name(level : Int32) -> String {
   if level <= 0 {
     "Mild"
   } else if level == 1 {

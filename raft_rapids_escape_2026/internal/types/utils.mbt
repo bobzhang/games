@@ -97,10 +97,10 @@ pub fn set_msg(game : Game, msg : String, ttl : Float) -> Unit {
 pub fn point_in_rect(
   x : Float,
   y : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -116,11 +116,11 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if hold && point_in_rect(mx, my, rx, ry, rw, rh) {
     return true

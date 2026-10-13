@@ -6,7 +6,7 @@ fn make_test_level(data : String) -> @types.Level {
 
 ///|
 /// Helper: get player position from level
-fn player_pos(level : @types.Level) -> (Int, Int) {
+fn player_pos(level : @types.Level) -> (Int32, Int32) {
   match @types.find_player(level) {
     Some(p) => (p.x, p.y)
     None => (-1, -1)

@@ -13,8 +13,8 @@ pub extend GameState with Eq::{not_equal, equal}
 ///|
 /// Per-frame input snapshot holding movement axes and action button press flags.
 pub(all) struct InputState {
-  mut move_x : Int
-  mut move_y : Int
+  mut move_x : Int32
+  mut move_y : Int32
   mut press_interact : Bool
   mut press_cancel : Bool
   mut press_calm : Bool
@@ -45,7 +45,7 @@ pub(all) struct Patrol {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut escort : Int
+  mut escort : Int32
   mut guard_t : Float
   mut calm_t : Float
   mut calm_cd : Float
@@ -76,7 +76,7 @@ pub(all) struct Lantern {
   mut vx : Float
   mut vy : Float
   mut flame : Float
-  mut target_shrine : Int
+  mut target_shrine : Int32
   mut escorting : Bool
   mut wobble : Float
 }
@@ -162,7 +162,7 @@ pub(all) struct Thief {
   mut vx : Float
   mut vy : Float
   mut speed : Float
-  mut target : Int
+  mut target : Int32
   mut steal_cd : Float
   mut life : Float
 }
@@ -193,11 +193,11 @@ pub(all) struct Game {
   sparks : Array[Spark]
   thieves : Array[Thief]
   mut state : GameState
-  mut score : Int
-  mut best_score : Int
-  mut deliveries : Int
-  mut extinguished : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut deliveries : Int32
+  mut extinguished : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut run_time : Float
   mut lantern_spawn_cd : Float
@@ -241,7 +241,7 @@ pub fn Game::Game() -> Game {
 
 ///|
 /// Returns a derived gameplay metric for active lantern count.
-pub fn active_lantern_count(game : Game) -> Int {
+pub fn active_lantern_count(game : Game) -> Int32 {
   let mut total = 0
   for lantern in game.lanterns {
     if lantern.active {
@@ -253,7 +253,7 @@ pub fn active_lantern_count(game : Game) -> Int {
 
 ///|
 /// Returns a derived gameplay metric for active gust count.
-pub fn active_gust_count(game : Game) -> Int {
+pub fn active_gust_count(game : Game) -> Int32 {
   let mut total = 0
   for gust in game.gusts {
     if gust.active {
@@ -265,7 +265,7 @@ pub fn active_gust_count(game : Game) -> Int {
 
 ///|
 /// Returns a derived gameplay metric for active thief count.
-pub fn active_thief_count(game : Game) -> Int {
+pub fn active_thief_count(game : Game) -> Int32 {
   let mut total = 0
   for thief in game.thieves {
     if thief.active {

@@ -6,8 +6,8 @@ pub(all) struct Player {
   mut vy : Float
   mut facing_x : Float
   mut facing_y : Float
-  mut hp : Int
-  mut max_hp : Int
+  mut hp : Int32
+  mut max_hp : Int32
   mut shield : Float
   mut max_shield : Float
   mut shield_regen_timer : Float
@@ -18,13 +18,13 @@ pub(all) struct Player {
   mut dash_dy : Float
   mut weapon : WeaponKind
   mut attack_state : AttackState
-  mut combo_count : Int
+  mut combo_count : Int32
   mut combo_timer : Float
   mut speed : Float
   mut damage_mult : Float
   mut crit_chance : Float
-  mut defense : Int
-  mut gold : Int
+  mut defense : Int32
+  mut gold : Int32
   mut dead : Bool
   mut attack_buffered : Bool
   passives : Array[PassiveKind]
@@ -76,8 +76,8 @@ pub(all) struct Enemy {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut hp : Int
-  mut max_hp : Int
+  mut hp : Int32
+  mut max_hp : Int32
   mut state : EnemyState
   mut facing_x : Float
   mut facing_y : Float
@@ -85,11 +85,11 @@ pub(all) struct Enemy {
   mut patrol_y : Float
   mut attack_cooldown : Float
   mut anim_timer : Float
-  mut anim_frame : Int
+  mut anim_frame : Int32
   mut flash_timer : Float
   mut knockback_timer : Float
   mut phase : Float
-  mut room_id : Int
+  mut room_id : Int32
   mut bleed_timer : Float
   mut is_elite : Bool
   mut affix : EliteAffix
@@ -102,7 +102,7 @@ pub(all) struct Projectile {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut damage : Int
+  mut damage : Int32
   mut is_player : Bool
   mut is_crit : Bool
   mut piercing : Bool
@@ -131,9 +131,9 @@ pub(all) struct Particle {
   mut life : Float
   mut max_life : Float
   mut size : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -143,7 +143,7 @@ pub(all) struct DamageNumber {
   mut y : Float
   mut vy : Float
   mut life : Float
-  mut value : Int
+  mut value : Int32
   mut is_crit : Bool
 }
 
@@ -151,11 +151,11 @@ pub(all) struct DamageNumber {
 pub(all) struct SynergyBonuses {
   mut bleed_on_crit : Bool
   mut dash_damages : Bool
-  mut dash_damage : Int
+  mut dash_damage : Int32
   mut cleave : Bool
   mut fortify : Bool
   mut multishot : Bool
-  mut multishot_count : Int
+  mut multishot_count : Int32
   mut execute : Bool
   mut execute_threshold : Float
   mut execute_mult : Float
@@ -194,7 +194,7 @@ pub(all) struct Hitbox {
   x : Float
   y : Float
   radius : Float
-  damage : Int
+  damage : Int32
   knockback : Float
   is_crit : Bool
 }
@@ -229,14 +229,14 @@ pub fn Camera::new() -> Camera {
 
 ///|
 pub(all) struct Room {
-  x : Int
-  y : Int
-  w : Int
-  h : Int
+  x : Int32
+  y : Int32
+  w : Int32
+  h : Int32
   kind : RoomKind
   mut state : RoomState
-  tiles : Array[Int]
-  mut enemies_remaining : Int
+  tiles : Array[Int32]
+  mut enemies_remaining : Int32
   connections : Array[Direction]
   mut visited : Bool
 }
@@ -244,8 +244,8 @@ pub(all) struct Room {
 ///|
 pub(all) struct Floor {
   rooms : Array[Room]
-  mut current_room : Int
-  floor_num : Int
+  mut current_room : Int32
+  floor_num : Int32
 }
 
 ///|
@@ -260,18 +260,18 @@ pub(all) struct RewardChoice {
 pub(all) struct ShopItem {
   mut active : Bool
   mut kind : ItemKind
-  mut price : Int
+  mut price : Int32
   mut x : Float
   mut y : Float
 }
 
 ///|
 pub(all) struct MetaProgress {
-  mut abyss_tokens : Int
-  mut total_runs : Int
-  mut best_floor : Int
-  mut total_kills : Int
-  upgrades : Array[Int]
+  mut abyss_tokens : Int32
+  mut total_runs : Int32
+  mut best_floor : Int32
+  mut total_kills : Int32
+  upgrades : Array[Int32]
 }
 
 ///|
@@ -297,21 +297,21 @@ pub(all) struct Game {
   damage_numbers : Array[DamageNumber]
   events : Array[GameEvent]
   mut floor : Floor?
-  mut floor_num : Int
-  mut frame_count : Int
+  mut floor_num : Int32
+  mut frame_count : Int32
   mut hit_pause_timer : Float
   mut room_clear_timer : Float
-  mut rng_state : UInt
+  mut rng_state : UInt32
   mut stairs_active : Bool
   mut stairs_x : Float
   mut stairs_y : Float
-  mut enemies_killed : Int
-  mut rooms_cleared : Int
-  mut floor_rooms_cleared : Int
+  mut enemies_killed : Int32
+  mut rooms_cleared : Int32
+  mut floor_rooms_cleared : Int32
   mut boss_active : Bool
-  mut boss_phase : Int
+  mut boss_phase : Int32
   mut boss_phase_timer : Float
-  mut boss_attack_pattern : Int
+  mut boss_attack_pattern : Int32
   mut floor_transition_timer : Float
   shop_items : Array[ShopItem]
   mut shop_active : Bool
@@ -327,13 +327,13 @@ pub(all) struct Game {
   mut encounter_flash_timer : Float
   meta : MetaProgress
   mut wave_timer : Float
-  mut wave_count : Int
-  mut wave_max : Int
+  mut wave_count : Int32
+  mut wave_max : Int32
   mut wave_active : Bool
   path_choices : Array[FloorPath]
   mut path_active : Bool
   mut current_path : FloorPath?
-  mut starter_hover : Int
+  mut starter_hover : Int32
   pact_offers : Array[PactKind]
   mut pact_offer_active : Bool
 }

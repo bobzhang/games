@@ -41,7 +41,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -50,7 +50,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -94,7 +94,7 @@ pub fn hex_neighbors(coord : HexCoord) -> Array[HexCoord] {
 
 ///|
 /// Filter neighbors to only valid board positions
-pub fn hex_neighbors_valid(coord : HexCoord, size : Int) -> Array[HexCoord] {
+pub fn hex_neighbors_valid(coord : HexCoord, size : Int32) -> Array[HexCoord] {
   let all = hex_neighbors(coord)
   let result : Array[HexCoord] = []
   for i in 0..<all.length() {
@@ -148,7 +148,7 @@ pub fn pixel_to_hex(px : Float, py : Float, size : Float) -> HexCoord? {
 
 ///|
 /// Check if a coord is on the board edge
-pub fn is_edge(coord : HexCoord, size : Int) -> Bool {
+pub fn is_edge(coord : HexCoord, size : Int32) -> Bool {
   coord.row == 0 ||
   coord.row == size - 1 ||
   coord.col == 0 ||
@@ -190,13 +190,13 @@ pub fn has_stone(board : HexBoard, coord : HexCoord, player : Player) -> Bool {
 
 ///|
 /// Check if a hex coordinate is within the board
-pub fn in_bounds(coord : HexCoord, size : Int) -> Bool {
+pub fn in_bounds(coord : HexCoord, size : Int32) -> Bool {
   coord.row >= 0 && coord.row < size && coord.col >= 0 && coord.col < size
 }
 
 ///|
 /// Create a new empty board
-pub fn new_board(size : Int) -> HexBoard {
+pub fn new_board(size : Int32) -> HexBoard {
   let cells : Array[Array[CellState]] = []
   for _r in 0..<size {
     let row : Array[CellState] = []
@@ -299,7 +299,7 @@ pub fn opponent(player : Player) -> Player {
 
 ///|
 /// Get pattern points for a given kind
-pub fn pattern_points(kind : PatternKind) -> Int {
+pub fn pattern_points(kind : PatternKind) -> Int32 {
   match kind {
     Bridge => bridge_points
     Chain => chain_points
@@ -329,7 +329,7 @@ pub fn pattern_name(kind : PatternKind) -> String {
 
 ///|
 /// Count total empty cells on the board
-pub fn count_empty(board : HexBoard) -> Int {
+pub fn count_empty(board : HexBoard) -> Int32 {
   let mut count = 0
   for r in 0..<board.size {
     for c in 0..<board.size {

@@ -1,23 +1,23 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
-let lane_count : Int = 4
+let lane_count : Int32 = 4
 
 ///|
-let lane_w : Int = 170
+let lane_w : Int32 = 170
 
 ///|
-let track_x : Int = (sw - lane_w * lane_count) / 2
+let track_x : Int32 = (sw - lane_w * lane_count) / 2
 
 ///|
-let track_y : Int = 88
+let track_y : Int32 = 88
 
 ///|
-let track_h : Int = 610
+let track_h : Int32 = 610
 
 ///|
 let hit_y : Float = 588.0
@@ -26,19 +26,19 @@ let hit_y : Float = 588.0
 let scroll_speed : Float = 390.0
 
 ///|
-let max_notes : Int = 920
+let max_notes : Int32 = 920
 
 ///|
-let max_particles : Int = 680
+let max_particles : Int32 = 680
 
 ///|
 struct Note {
   mut active : Bool
-  mut lane : Int
+  mut lane : Int32
   mut time : Float
-  mut kind : Int
+  mut kind : Int32
   mut end_time : Float
-  mut state : Int
+  mut state : Int32
   mut hold_ratio : Float
   mut pop_t : Float
 }
@@ -53,7 +53,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -89,10 +89,10 @@ fn maxf(a : Float, b : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(x)
   let y0 : Float = Float::from_int(y)
@@ -102,12 +102,12 @@ fn inside_rect(
 }
 
 ///|
-fn lane_x(i : Int) -> Int {
+fn lane_x(i : Int32) -> Int32 {
   track_x + i * lane_w
 }
 
 ///|
-fn lane_center(i : Int) -> Float {
+fn lane_center(i : Int32) -> Float {
   Float::from_int(lane_x(i) + lane_w / 2)
 }
 
@@ -151,7 +151,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for ps_elem in ps {
@@ -178,9 +178,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _ in 0..<count {
     spawn_particle(ps, x, y, speed, kind)
@@ -188,15 +188,15 @@ fn burst(
 }
 
 ///|
-fn build_chart(notes : Array[Note]) -> (Int, Float) {
+fn build_chart(notes : Array[Note]) -> (Int32, Float) {
   clear_notes(notes)
 
-  let mut n : Int = 0
+  let mut n : Int32 = 0
   let mut t : Float = 1.45
 
   for i in 0..<430 {
-    let lane : Int = (i * 7 + i / 5 * 3 + i / 23 * 2) % lane_count
-    let mut kind : Int = 0
+    let lane : Int32 = (i * 7 + i / 5 * 3 + i / 23 * 2) % lane_count
+    let mut kind : Int32 = 0
     let mut hold_len : Float = 0.0
 
     if i % 29 == 10 || i % 37 == 4 || (i % 41 == 0 && i > 30) {
@@ -217,7 +217,7 @@ fn build_chart(notes : Array[Note]) -> (Int, Float) {
     }
 
     if i % 11 == 6 || i % 17 == 8 {
-      let lane2 : Int = (lane + 1 + i / 13 % 3) % lane_count
+      let lane2 : Int32 = (lane + 1 + i / 13 % 3) % lane_count
       if n < notes.length() {
         notes[n].active = true
         notes[n].lane = lane2
@@ -231,7 +231,7 @@ fn build_chart(notes : Array[Note]) -> (Int, Float) {
       }
     }
 
-    let phase : Int = i / 56 % 4
+    let phase : Int32 = i / 56 % 4
     let mut step : Float = 0.28
     if phase == 1 {
       step = 0.24
@@ -290,18 +290,18 @@ fn main {
   let lane_press : Array[Bool] = Array::make(lane_count, false)
   let lane_touch_prev : Array[Bool] = Array::make(lane_count, false)
 
-  let mut state : Int = 0
-  let mut note_count : Int = 0
+  let mut state : Int32 = 0
+  let mut note_count : Int32 = 0
   let mut song_end : Float = 0.0
   let mut song_t : Float = 0.0
 
-  let mut score : Int = 0
-  let mut combo : Int = 0
-  let mut best_combo : Int = 0
-  let mut perfect : Int = 0
-  let mut great : Int = 0
-  let mut good : Int = 0
-  let mut miss : Int = 0
+  let mut score : Int32 = 0
+  let mut combo : Int32 = 0
+  let mut best_combo : Int32 = 0
+  let mut perfect : Int32 = 0
+  let mut great : Int32 = 0
+  let mut good : Int32 = 0
+  let mut miss : Int32 = 0
   let mut life : Float = 100.0
 
   let mut fever : Float = 0.0
@@ -309,7 +309,7 @@ fn main {
 
   let mut judge_text : String = ""
   let mut judge_t : Float = 0.0
-  let mut judge_kind : Int = 0
+  let mut judge_kind : Int32 = 0
 
   let mut pulse : Float = 0.0
   let mut camera_shake : Float = 0.0
@@ -364,7 +364,7 @@ fn main {
     camera_shake = camera_shake + 0.12
   }
 
-  let mark_hit = fn(base : Int, quality : Int, x : Float, y : Float) {
+  let mark_hit = fn(base : Int32, quality : Int32, x : Float, y : Float) {
     combo = combo + 1
     if combo > best_combo {
       best_combo = combo
@@ -467,10 +467,10 @@ fn main {
       }
 
       let mut fever_press : Bool = @raylib.is_key_pressed(@raylib.KeySpace)
-      let fever_x : Int = track_x + lane_w * lane_count + 26
-      let fever_y : Int = sh - 198
-      let fever_w : Int = 176
-      let fever_h : Int = 126
+      let fever_x : Int32 = track_x + lane_w * lane_count + 26
+      let fever_y : Int32 = sh - 198
+      let fever_w : Int32 = 176
+      let fever_h : Int32 = 126
 
       if mouse_press &&
         inside_rect(mouse.x, mouse.y, fever_x, fever_y, fever_w, fever_h) {
@@ -488,8 +488,8 @@ fn main {
 
       for lane in 0..<lane_count {
         let x = lane_x(lane)
-        let touch_area_y : Int = sh - 170
-        let touch_area_h : Int = 165
+        let touch_area_y : Int32 = sh - 170
+        let touch_area_h : Int32 = 165
 
         let mut key_d : Bool = false
         let mut key_p : Bool = false
@@ -590,7 +590,7 @@ fn main {
               mark_miss(lane_center(notes[i].lane), hit_y - 12.0, "MISS")
             }
           } else if notes[i].state == 1 {
-            let lane : Int = notes[i].lane
+            let lane : Int32 = notes[i].lane
             let hold_len : Float = notes[i].end_time - notes[i].time
             if hold_len > 0.03 {
               notes[i].hold_ratio = notes[i].hold_ratio + dt / hold_len
@@ -666,10 +666,10 @@ fn main {
 
     @raylib.begin_drawing()
 
-    let glow : Int = (pulse * 120.0).to_int()
-    let mut b0 : Int = 18 + glow / 8
-    let mut b1 : Int = 28 + glow / 6
-    let mut b2 : Int = 46 + glow / 4
+    let glow : Int32 = (pulse * 120.0).to_int()
+    let mut b0 : Int32 = 18 + glow / 8
+    let mut b1 : Int32 = 28 + glow / 6
+    let mut b2 : Int32 = 46 + glow / 4
 
     if fever > 0.0 {
       b0 = b0 + 16
@@ -750,7 +750,7 @@ fn main {
       )
     }
 
-    let mut hit_w : Int = lane_w * lane_count + 16
+    let mut hit_w : Int32 = lane_w * lane_count + 16
     if state == 1 {
       hit_w = hit_w + glow / 8
     }
@@ -782,7 +782,7 @@ fn main {
       }
 
       let lane = notes[i].lane
-      let lx : Int = lane_x(lane) + shake_x.to_int()
+      let lx : Int32 = lane_x(lane) + shake_x.to_int()
 
       let y0 : Float = note_y(notes[i].time, song_t) + shake_y
       let y1 : Float = note_y(notes[i].end_time, song_t) + shake_y
@@ -800,7 +800,7 @@ fn main {
             tail_col = @raylib.Color::new(218, 80, 92, 158)
           }
 
-          let h : Int = (bot - top).to_int()
+          let h : Int32 = (bot - top).to_int()
           @raylib.draw_rectangle(
             lx + 56,
             top.to_int(),
@@ -840,15 +840,15 @@ fn main {
           note_col = @raylib.Color::new(212, 78, 98, 210)
         }
 
-        let mut pop : Int = 0
+        let mut pop : Int32 = 0
         if notes[i].pop_t > 0.0 {
           pop = (notes[i].pop_t * 24.0).to_int()
         }
 
-        let w : Int = lane_w - 62 + pop
-        let h : Int = 24 + pop / 2
-        let x : Int = lx + (lane_w - w) / 2
-        let y : Int = y0.to_int() - h / 2
+        let w : Int32 = lane_w - 62 + pop
+        let h : Int32 = 24 + pop / 2
+        let x : Int32 = lx + (lane_w - w) / 2
+        let y : Int32 = y0.to_int() - h / 2
 
         @raylib.draw_rectangle(x, y, w, h, note_col)
         @raylib.draw_rectangle(
@@ -867,7 +867,7 @@ fn main {
       }
 
       let life_k = particle.t / particle.life
-      let alpha : Int = ((Float::from_int(1) - life_k) * 230.0).to_int()
+      let alpha : Int32 = ((Float::from_int(1) - life_k) * 230.0).to_int()
       let mut col = @raylib.Color::new(116, 220, 252, alpha)
       if particle.kind == 1 {
         col = @raylib.Color::new(136, 246, 176, alpha)
@@ -901,9 +901,9 @@ fn main {
       @raylib.Color::new(162, 188, 222, 255),
     )
 
-    let total_hit : Int = perfect + great + good
+    let total_hit : Int32 = perfect + great + good
     let mut acc : Float = 100.0
-    let total_judged : Int = total_hit + miss
+    let total_judged : Int32 = total_hit + miss
     if total_judged > 0 {
       let weighted = Float::from_int(perfect) +
         Float::from_int(great) * 0.82 +

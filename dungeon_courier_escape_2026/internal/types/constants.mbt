@@ -1,34 +1,34 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1440
+pub let screen_w : Int32 = 1440
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 900
+pub let screen_h : Int32 = 900
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Upper bound for max parcels in gameplay systems.
-pub let max_parcels : Int = 12
+pub let max_parcels : Int32 = 12
 
 ///|
 /// Upper bound for max exits in gameplay systems.
-pub let max_exits : Int = 3
+pub let max_exits : Int32 = 3
 
 ///|
 /// Upper bound for max guards in gameplay systems.
-pub let max_guards : Int = 16
+pub let max_guards : Int32 = 16
 
 ///|
 /// Upper bound for max traps in gameplay systems.
-pub let max_traps : Int = 28
+pub let max_traps : Int32 = 28
 
 ///|
 /// Upper bound for max smokes in gameplay systems.
-pub let max_smokes : Int = 8
+pub let max_smokes : Int32 = 8
 
 ///|
 /// Gameplay tuning constant for hud h.
@@ -188,15 +188,15 @@ pub let smoke_cover_factor : Float = 0.38
 
 ///|
 /// Base value before difficulty or progression scaling for smoke stock base.
-pub let smoke_stock_base : Int = 2
+pub let smoke_stock_base : Int32 = 2
 
 ///|
 /// Base value before difficulty or progression scaling for wave target base.
-pub let wave_target_base : Int = 2
+pub let wave_target_base : Int32 = 2
 
 ///|
 /// Upper bound for max delivery target in gameplay systems.
-pub let max_delivery_target : Int = 7
+pub let max_delivery_target : Int32 = 7
 
 ///|
 /// Base value before difficulty or progression scaling for wave time base.
@@ -216,11 +216,11 @@ pub let wave_clear_health_recover : Float = 12.0
 
 ///|
 /// Base value before difficulty or progression scaling for wave clear score base.
-pub let wave_clear_score_base : Int = 160
+pub let wave_clear_score_base : Int32 = 160
 
 ///|
 /// Progression and scoring constant for wave clear score wave bonus.
-pub let wave_clear_score_wave_bonus : Int = 38
+pub let wave_clear_score_wave_bonus : Int32 = 38
 
 ///|
 /// Movement or scaling coefficient for wave clear time score mult.

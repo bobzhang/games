@@ -163,8 +163,8 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
 ///|
 fn @types.Game::move_player_to(
   game : @types.Game,
-  nx : Int,
-  ny : Int,
+  nx : Int32,
+  ny : Int32,
   _dir : @types.Dir,
 ) -> Unit {
   // Collapse cracked tile when player leaves it
@@ -201,8 +201,8 @@ fn @types.Game::handle_block_land(
   game : @types.Game,
   entity : @types.Entity,
   tile : @types.Tile,
-  bx : Int,
-  by : Int,
+  bx : Int32,
+  by : Int32,
 ) -> Unit {
   // Check if block falls into pit
   if tile == TilePit {
@@ -233,8 +233,8 @@ fn @types.Game::handle_block_land(
 fn @types.Game::handle_tile_effect(
   game : @types.Game,
   target_tile : @types.Tile,
-  nx : Int,
-  ny : Int,
+  nx : Int32,
+  ny : Int32,
   dir : @types.Dir,
 ) -> Unit {
   if target_tile == TileSwitchOff {
@@ -379,8 +379,8 @@ fn @types.Game::handle_tile_effect(
 ///|
 fn @types.Game::handle_ice_sliding(
   game : @types.Game,
-  start_x : Int,
-  start_y : Int,
+  start_x : Int32,
+  start_y : Int32,
   dir : @types.Dir,
 ) -> Unit {
   let dx = @types.dir_dx(dir)
@@ -419,11 +419,11 @@ fn @types.Game::handle_ice_sliding(
 ///|
 fn @types.Game::rotate_adjacent_mirrors(
   game : @types.Game,
-  gx : Int,
-  gy : Int,
+  gx : Int32,
+  gy : Int32,
 ) -> Unit {
   // Check all 4 adjacent tiles for mirrors and rotate them
-  let neighbors : Array[(Int, Int)] = [
+  let neighbors : Array[(Int32, Int32)] = [
     (gx - 1, gy),
     (gx + 1, gy),
     (gx, gy - 1),
@@ -696,7 +696,7 @@ fn @types.Game::show_achievement(game : @types.Game, text : String) -> Unit {
 fn @types.Game::find_tile(
   game : @types.Game,
   tile_type : @types.Tile,
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   for gy in 0..<@types.grid_h {
     for gx in 0..<@types.grid_w {
       if @types.get_tile(game, gx, gy) == tile_type {

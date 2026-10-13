@@ -1,34 +1,34 @@
 ///|
-let sw : Int = 1120
+let sw : Int32 = 1120
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
-let gw : Int = 18
+let gw : Int32 = 18
 
 ///|
-let gh : Int = 12
+let gh : Int32 = 12
 
 ///|
-let cell : Int = 48
+let cell : Int32 = 48
 
 ///|
-let ox : Int = 120
+let ox : Int32 = 120
 
 ///|
-let oy : Int = 110
+let oy : Int32 = 110
 
 ///|
 struct Relic {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
   mut taken : Bool
-  value : Int
+  value : Int32
 }
 
 ///|
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * gw + x
 }
 
@@ -73,7 +73,7 @@ fn reset_relics(relics : Array[Relic]) -> Unit {
 }
 
 ///|
-fn reveal(seen : Array[Bool], cx : Int, cy : Int, rad : Int) -> Unit {
+fn reveal(seen : Array[Bool], cx : Int32, cy : Int32, rad : Int32) -> Unit {
   for y in (cy - rad)..<=(cy + rad) {
     for x in (cx - rad)..<=(cx + rad) {
       if x >= 0 && x < gw && y >= 0 && y < gh {

@@ -150,7 +150,7 @@ fn update_fireballs(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn check_fireball_enemy_hit(game : @types.Game, fb_index : Int) -> Unit {
+fn check_fireball_enemy_hit(game : @types.Game, fb_index : Int32) -> Unit {
   let fb = game.fireballs[fb_index]
   let fb_r : Float = 8.0
   for i in 0..<game.enemies.length() {

@@ -388,7 +388,7 @@ fn draw_card_at(
 }
 
 ///|
-fn truncate_text(s : String, max_len : Int) -> String {
+fn truncate_text(s : String, max_len : Int32) -> String {
   if s.length() <= max_len {
     s
   } else {
@@ -666,7 +666,7 @@ fn draw_clue_panel(game : @types.Game, case_ : @types.Case) -> Unit {
 }
 
 ///|
-fn check_clue_in_timeline(clue : @types.Clue, timeline : Array[Int]) -> Bool {
+fn check_clue_in_timeline(clue : @types.Clue, timeline : Array[Int32]) -> Bool {
   let pos_a = @types.card_in_slot(timeline, clue.card_a)
   let pos_b = @types.card_in_slot(timeline, clue.card_b)
   if pos_a < 0 || pos_b < 0 {

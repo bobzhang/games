@@ -28,16 +28,16 @@ pub extend Dir with Eq::{not_equal, equal}
 /// Undo snapshot for one removed pair action.
 pub(all) struct UndoPair {
   valid : Bool
-  x1 : Int
-  y1 : Int
-  kind1 : Int
-  x2 : Int
-  y2 : Int
-  kind2 : Int
-  prev_score : Int
-  prev_combo : Int
+  x1 : Int32
+  y1 : Int32
+  kind1 : Int32
+  x2 : Int32
+  y2 : Int32
+  kind2 : Int32
+  prev_score : Int32
+  prev_combo : Int32
   prev_timer : Float
-  prev_remaining : Int
+  prev_remaining : Int32
 }
 
 ///|
@@ -50,45 +50,45 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
 /// Full mutable game state for board logic, campaign progress, and input.
 pub(all) struct Game {
   active : Array[Bool]
-  cells : Array[Int]
+  cells : Array[Int32]
   undo : Array[UndoPair]
-  mut undo_len : Int
+  mut undo_len : Int32
   sparks : Array[Spark]
   mut state : GameState
-  mut level_index : Int
-  level_count : Int
+  mut level_index : Int32
+  level_count : Int32
   mut level_name : String
-  mut board_w : Int
-  mut board_h : Int
-  mut kind_count : Int
-  mut score : Int
-  mut combo : Int
+  mut board_w : Int32
+  mut board_h : Int32
+  mut kind_count : Int32
+  mut score : Int32
+  mut combo : Int32
   mut timer : Float
   mut time_limit : Float
-  mut remaining : Int
-  mut hints_left : Int
-  mut shuffles_left : Int
-  mut undos_left : Int
+  mut remaining : Int32
+  mut hints_left : Int32
+  mut shuffles_left : Int32
+  mut undos_left : Int32
   mut total_time : Float
-  mut total_levels : Int
-  mut cursor_x : Int
-  mut cursor_y : Int
+  mut total_levels : Int32
+  mut cursor_x : Int32
+  mut cursor_y : Int32
   mut select_active : Bool
-  mut select_x : Int
-  mut select_y : Int
+  mut select_x : Int32
+  mut select_y : Int32
   mut hint_active : Bool
   mut hint_ttl : Float
-  mut hint_x1 : Int
-  mut hint_y1 : Int
-  mut hint_x2 : Int
-  mut hint_y2 : Int
+  mut hint_x1 : Int32
+  mut hint_y1 : Int32
+  mut hint_x2 : Int32
+  mut hint_y2 : Int32
   mut hold_dir : Dir
   mut repeat_t : Float
   mut touch_action_cd : Float
@@ -100,7 +100,7 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut mouse_press : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

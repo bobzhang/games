@@ -48,7 +48,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.SparkKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -95,7 +95,7 @@ fn @types.Game::clear_board(game : @types.Game) -> Unit {
 
 ///|
 /// Copies all cells from `src` into `dst`.
-fn copy_board(dst : Array[Int], src : Array[Int]) -> Unit {
+fn copy_board(dst : Array[Int32], src : Array[Int32]) -> Unit {
   for i in 0..<dst.length() {
     dst[i] = src[i]
   }
@@ -145,7 +145,7 @@ fn @types.Game::restore_undo(game : @types.Game) -> Bool {
 
 ///|
 /// Maps a slide direction and line/position pair to a flat board index.
-fn line_index(line : Int, pos : Int, dir : @types.Direction) -> Int {
+fn line_index(line : Int32, pos : Int32, dir : @types.Direction) -> Int32 {
   match dir {
     DirLeft => @types.idx(pos, line)
     DirRight => @types.idx(@types.board_n - 1 - pos, line)
@@ -165,19 +165,19 @@ fn @types.Game::spawn_tile(game : @types.Game, kind : @types.SparkKind) -> Bool 
     return false
   }
 
-  let pick : Int = @raylib.get_random_value(0, empty_count - 1)
-  let mut seen : Int = 0
+  let pick : Int32 = @raylib.get_random_value(0, empty_count - 1)
+  let mut seen : Int32 = 0
 
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
-      let i : Int = @types.idx(x, y)
+      let i : Int32 = @types.idx(x, y)
       if game.board[i] != 0 {
         continue
       }
 
       if seen == pick {
-        let roll : Int = @raylib.get_random_value(0, 99)
-        let v : Int = if roll < 72 {
+        let roll : Int32 = @raylib.get_random_value(0, 99)
+        let v : Int32 = if roll < 72 {
           2
         } else if roll < 94 {
           4
@@ -223,12 +223,12 @@ fn @types.Game::spawn_blocker(game : @types.Game) -> Bool {
     return false
   }
 
-  let pick : Int = @raylib.get_random_value(0, empty_count - 1)
-  let mut seen : Int = 0
+  let pick : Int32 = @raylib.get_random_value(0, empty_count - 1)
+  let mut seen : Int32 = 0
 
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
-      let i : Int = @types.idx(x, y)
+      let i : Int32 = @types.idx(x, y)
       if game.board[i] != 0 {
         continue
       }
@@ -293,8 +293,8 @@ fn @types.Game::start_match(game : @types.Game) -> Unit {
 fn @types.Game::board_has_move(game : @types.Game) -> Bool {
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
-      let i : Int = @types.idx(x, y)
-      let v : Int = game.board[i]
+      let i : Int32 = @types.idx(x, y)
+      let v : Int32 = game.board[i]
 
       if v == 0 {
         return true
@@ -305,13 +305,13 @@ fn @types.Game::board_has_move(game : @types.Game) -> Bool {
       }
 
       if x + 1 < @types.board_n {
-        let r : Int = game.board[@types.idx(x + 1, y)]
+        let r : Int32 = game.board[@types.idx(x + 1, y)]
         if r == v {
           return true
         }
       }
       if y + 1 < @types.board_n {
-        let d : Int = game.board[@types.idx(x, y + 1)]
+        let d : Int32 = game.board[@types.idx(x, y + 1)]
         if d == v {
           return true
         }
@@ -366,21 +366,21 @@ fn @types.Game::apply_post_turn(game : @types.Game) -> Unit {
 /// Slides and merges one row or column segment-by-segment; returns changed flag, score delta, max tile seen, zap charge delta, and merge count.
 fn @types.Game::process_line(
   game : @types.Game,
-  line : Int,
+  line : Int32,
   dir : @types.Direction,
-) -> (Bool, Int, Int, Int, Int) {
+) -> (Bool, Int32, Int32, Int32, Int32) {
   // returns: changed, score_add, max_seen, charge_add, merges
   for p in 0..<@types.board_n {
     game.line_vals[p] = game.board[line_index(line, p, dir)]
     game.line_out[p] = game.line_vals[p]
   }
 
-  let mut score_add : Int = 0
-  let mut max_seen : Int = 0
-  let mut charge_add : Int = 0
-  let mut merges : Int = 0
+  let mut score_add : Int32 = 0
+  let mut max_seen : Int32 = 0
+  let mut charge_add : Int32 = 0
+  let mut merges : Int32 = 0
 
-  let mut seg_start : Int = 0
+  let mut seg_start : Int32 = 0
   while seg_start < @types.board_n {
     if game.line_vals[seg_start] == @types.blocker_value {
       game.line_out[seg_start] = @types.blocker_value
@@ -388,17 +388,17 @@ fn @types.Game::process_line(
       continue
     }
 
-    let mut seg_end : Int = seg_start
+    let mut seg_end : Int32 = seg_start
     while seg_end < @types.board_n &&
           game.line_vals[seg_end] != @types.blocker_value {
       seg_end = seg_end + 1
     }
 
-    let pack : Array[Int] = Array::make(@types.board_n, 0)
-    let mut len : Int = 0
+    let pack : Array[Int32] = Array::make(@types.board_n, 0)
+    let mut len : Int32 = 0
 
     for p in seg_start..<seg_end {
-      let v : Int = game.line_vals[p]
+      let v : Int32 = game.line_vals[p]
       if v > 0 {
         pack[len] = v
         len = len + 1
@@ -406,13 +406,13 @@ fn @types.Game::process_line(
       game.line_out[p] = 0
     }
 
-    let mut read : Int = 0
-    let mut write : Int = seg_start
+    let mut read : Int32 = 0
+    let mut write : Int32 = seg_start
 
     while read < len {
-      let a : Int = pack[read]
+      let a : Int32 = pack[read]
       if read + 1 < len && pack[read + 1] == a {
-        let merged : Int = a * 2
+        let merged : Int32 = a * 2
         game.line_out[write] = merged
 
         score_add = score_add + merged
@@ -463,10 +463,10 @@ fn @types.Game::try_move(game : @types.Game, dir : @types.Direction) -> Bool {
   game.save_undo()
 
   let mut changed_any : Bool = false
-  let mut score_add : Int = 0
-  let mut charge_add : Int = 0
-  let mut max_seen : Int = game.max_tile
-  let mut merge_count : Int = 0
+  let mut score_add : Int32 = 0
+  let mut charge_add : Int32 = 0
+  let mut max_seen : Int32 = game.max_tile
+  let mut merge_count : Int32 = 0
 
   for line in 0..<@types.board_n {
     let r = game.process_line(line, dir)
@@ -520,7 +520,7 @@ fn @types.Game::try_move(game : @types.Game, dir : @types.Direction) -> Bool {
 
 ///|
 /// Consumes a full zap charge to destroy the cell at `(x, y)`, then advances the storm countdown.
-fn @types.Game::use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::use_zap(game : @types.Game, x : Int32, y : Int32) -> Bool {
   if game.state != Play {
     return false
   }
@@ -534,8 +534,8 @@ fn @types.Game::use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
     return false
   }
 
-  let i : Int = @types.idx(x, y)
-  let v : Int = game.board[i]
+  let i : Int32 = @types.idx(x, y)
+  let v : Int32 = game.board[i]
   if v == 0 {
     @types.set_msg(game, "Empty cell", 0.6)
     return false

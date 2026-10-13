@@ -39,8 +39,8 @@ fn draw_world_backdrop(shake_x : Float, shake_y : Float) -> Unit {
 ///|
 fn @types.Game::draw_single_tile(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
   tile : @types.Tile,
   shake_x : Float,
   shake_y : Float,

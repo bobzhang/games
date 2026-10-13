@@ -3,7 +3,7 @@
 pub fn grant_score(
   game : @types.Game,
   team : @types.Team,
-  points : Int,
+  points : Int32,
 ) -> Unit {
   game.score_total += points
   match team {
@@ -28,7 +28,7 @@ pub fn bump_combo(game : @types.Game) -> Unit {
 
 ///|
 /// Returns score multiplier derived from current combo.
-pub fn combo_multiplier(game : @types.Game) -> Int {
+pub fn combo_multiplier(game : @types.Game) -> Int32 {
   if game.kill_combo <= 1 {
     1
   } else if game.kill_combo <= 3 {

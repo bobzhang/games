@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 800
+let sh : Int32 = 800
 
 ///|
 /// Total scrollable world width in pixels.
@@ -16,19 +16,19 @@ let world_h : Float = 3200.0
 
 ///|
 /// Maximum number of cop cars in the pool.
-let max_cops : Int = 26
+let max_cops : Int32 = 26
 
 ///|
 /// Maximum number of cash pickup items in the pool.
-let max_pickups : Int = 44
+let max_pickups : Int32 = 44
 
 ///|
 /// Maximum number of smoke screens active at once.
-let max_smokes : Int = 12
+let max_smokes : Int32 = 12
 
 ///|
 /// Maximum number of particles in the particle pool.
-let max_particles : Int = 1200
+let max_particles : Int32 = 1200
 
 ///|
 /// Generated scrolling city road texture.
@@ -71,15 +71,15 @@ struct Player {
   mut shake_t : Float
   mut flash_t : Float
   mut drift : Float
-  mut cash : Int
-  mut combo : Int
+  mut cash : Int32
+  mut combo : Int32
 }
 
 ///|
 /// Represents a pursuing police car with position, velocity, stun state, and aggression level.
 struct Cop {
   mut active : Bool
-  kind : Int
+  kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -95,7 +95,7 @@ struct Pickup {
   active : Bool
   x : Float
   y : Float
-  value : Int
+  value : Int32
   mut spin_t : Float
   mut pulse_t : Float
 }
@@ -122,7 +122,7 @@ struct Particle {
   size : Float
   mut t : Float
   life : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
@@ -157,10 +157,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(x)
   let y0 : Float = Float::from_int(y)
@@ -179,7 +179,7 @@ fn emit_particle(
   vy : Float,
   size : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
@@ -195,9 +195,9 @@ fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   power : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _ in 0..<count {
     let mut dx : Float = randf(-1.0, 1.0)
@@ -227,9 +227,13 @@ fn burst_particles(
 
 ///|
 /// Repositions a pickup at a random world location with a value scaled to the current level.
-fn respawn_pickup(pickups : FixedArray[Pickup], idx : Int, level : Int) -> Unit {
-  let base_value : Int = 60 + level * 18
-  let bonus : Int = @raylib.get_random_value(0, 80 + level * 20)
+fn respawn_pickup(
+  pickups : FixedArray[Pickup],
+  idx : Int32,
+  level : Int32,
+) -> Unit {
+  let base_value : Int32 = 60 + level * 18
+  let bonus : Int32 = @raylib.get_random_value(0, 80 + level * 20)
   pickups[idx] = {
     active: true,
     x: randf(240.0, world_w - 220.0),
@@ -242,7 +246,7 @@ fn respawn_pickup(pickups : FixedArray[Pickup], idx : Int, level : Int) -> Unit 
 
 ///|
 /// Spawns all pickups at random positions with values appropriate for the given level.
-fn init_pickups(pickups : FixedArray[Pickup], level : Int) -> Unit {
+fn init_pickups(pickups : FixedArray[Pickup], level : Int32) -> Unit {
   for i in 0..<pickups.length() {
     respawn_pickup(pickups, i, level)
   }
@@ -250,15 +254,15 @@ fn init_pickups(pickups : FixedArray[Pickup], level : Int) -> Unit {
 
 ///|
 /// Activates and positions a number of cops scaled to the current level with random starting velocities.
-fn init_cops(cops : FixedArray[Cop], level : Int) -> Unit {
-  let total : Int = clampf(
+fn init_cops(cops : FixedArray[Cop], level : Int32) -> Unit {
+  let total : Int32 = clampf(
     Float::from_int(10 + level * 3),
     10.0,
     Float::from_int(max_cops),
   ).to_int()
   for i in 0..<cops.length() {
     if i < total {
-      let kind : Int = if i % 4 == 0 { 1 } else { 0 }
+      let kind : Int32 = if i % 4 == 0 { 1 } else { 0 }
       cops[i] = {
         active: true,
         kind,
@@ -431,7 +435,7 @@ fn draw_city_art(
 
 ///|
 /// Draws the generated smoke screen art.
-fn draw_smoke_art(x : Int, y : Int, r : Float, life_ratio : Float) -> Bool {
+fn draw_smoke_art(x : Int32, y : Int32, r : Float, life_ratio : Float) -> Bool {
   match tex_smoke_cloud.val {
     Some(texture) => {
       draw_texture_fit(
@@ -456,7 +460,7 @@ fn draw_smoke_art(x : Int, y : Int, r : Float, life_ratio : Float) -> Bool {
 
 ///|
 /// Draws the generated cash pickup art.
-fn draw_cash_art(x : Int, y : Int, pulse : Float) -> Bool {
+fn draw_cash_art(x : Int32, y : Int32, pulse : Float) -> Bool {
   match tex_cash_pickup.val {
     Some(texture) => {
       draw_texture_fit(
@@ -477,8 +481,8 @@ fn draw_cash_art(x : Int, y : Int, pulse : Float) -> Bool {
 ///|
 /// Draws the generated player car art.
 fn draw_player_car_art(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   dir_x : Float,
   dir_y : Float,
   tint : @raylib.Color,
@@ -510,9 +514,9 @@ fn draw_player_car_art(
 ///|
 /// Draws generated police or interceptor car art.
 fn draw_cop_car_art(
-  kind : Int,
-  x : Int,
-  y : Int,
+  kind : Int32,
+  x : Int32,
+  y : Int32,
   vx : Float,
   vy : Float,
   stunned : Bool,
@@ -561,10 +565,10 @@ fn draw_cop_car_art(
 ///|
 /// Draws a filled progress bar at (x, y) with the given dimensions, fill ratio, foreground, and background colors.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fg : @raylib.Color,
   bg : @raylib.Color,
@@ -594,9 +598,9 @@ fn draw_touch_controls(show : Bool) -> Unit {
     return
   }
 
-  let pad_x : Int = 24
-  let pad_y : Int = sh - 224
-  let act_x : Int = sw - 214
+  let pad_x : Int32 = 24
+  let pad_y : Int32 = sh - 224
+  let act_x : Int32 = sw - 214
 
   @raylib.draw_rectangle(
     pad_x,
@@ -765,13 +769,13 @@ fn main {
   }
 
   let mut heat : Float = 10.0
-  let mut level : Int = 1
-  let mut goal_cash : Int = 1700
+  let mut level : Int32 = 1
+  let mut goal_cash : Int32 = 1700
   let mut time_left : Float = 178.0
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut announce_t : Float = 0.0
 
-  let reset_round = fn(new_level : Int) {
+  let reset_round = fn(new_level : Int32) {
     level = new_level
 
     goal_cash = 1700 + (level - 1) * 620
@@ -837,9 +841,9 @@ fn main {
       @raylib.is_key_down(@raylib.KeySpace)
     let mut smoke_press : Bool = @raylib.is_key_pressed(@raylib.KeyE)
 
-    let pad_x : Int = 24
-    let pad_y : Int = sh - 224
-    let act_x : Int = sw - 214
+    let pad_x : Int32 = 24
+    let pad_y : Int32 = sh - 224
+    let act_x : Int32 = sw - 214
 
     if touching {
       if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 62, 78, 78) {
@@ -1049,7 +1053,7 @@ fn main {
         }
       }
 
-      let mut near_cops : Int = 0
+      let mut near_cops : Int32 = 0
       for cop in cops {
         if !cop.active {
           continue
@@ -1179,7 +1183,7 @@ fn main {
         let grab_r : Float = 34.0
         if dist2(player.x, player.y, pickups[i].x, pickups[i].y) <=
           grab_r * grab_r {
-          let gain : Int = pickups[i].value + player.combo * 5
+          let gain : Int32 = pickups[i].value + player.combo * 5
           player.cash = player.cash + gain
           player.combo = player.combo + 1
           if player.combo > 20 {
@@ -1267,16 +1271,16 @@ fn main {
 
     if !draw_city_art(cam_x, cam_y, shake_x, shake_y) {
       let mut bx : Float = 120.0
-      let mut gx : Int = 0
+      let mut gx : Int32 = 0
       while bx < world_w {
         let mut by : Float = 120.0
-        let mut gy : Int = 0
+        let mut gy : Int32 = 0
         while by < world_h {
-          let px : Int = (bx - cam_x + shake_x).to_int()
-          let py : Int = (by - cam_y + shake_y).to_int()
+          let px : Int32 = (bx - cam_x + shake_x).to_int()
+          let py : Int32 = (by - cam_y + shake_y).to_int()
 
           if px > -220 && py > -220 && px < sw + 220 && py < sh + 220 {
-            let tone : Int = 34 + (gx + gy) % 3 * 12
+            let tone : Int32 = 34 + (gx + gy) % 3 * 12
             @raylib.draw_rectangle(
               px,
               py,
@@ -1304,7 +1308,7 @@ fn main {
       let lane_col = @raylib.Color::new(130, 138, 154, 115)
       let mut lx : Float = 0.0
       while lx <= world_w {
-        let sx : Int = (lx - cam_x + shake_x).to_int()
+        let sx : Int32 = (lx - cam_x + shake_x).to_int()
         if sx >= -4 && sx <= sw + 4 {
           @raylib.draw_line(sx, 0, sx, sh, lane_col)
         }
@@ -1313,7 +1317,7 @@ fn main {
 
       let mut ly : Float = 0.0
       while ly <= world_h {
-        let sy : Int = (ly - cam_y + shake_y).to_int()
+        let sy : Int32 = (ly - cam_y + shake_y).to_int()
         if sy >= -4 && sy <= sh + 4 {
           @raylib.draw_line(0, sy, sw, sy, lane_col)
         }
@@ -1334,7 +1338,7 @@ fn main {
         continue
       }
       let life_ratio : Float = 1.0 - smoke.t / smoke.life
-      let alpha : Int = clampf(110.0 * life_ratio, 0.0, 130.0).to_int()
+      let alpha : Int32 = clampf(110.0 * life_ratio, 0.0, 130.0).to_int()
       if !draw_smoke_art(sx.to_int(), sy.to_int(), smoke.r, life_ratio) {
         @raylib.draw_circle(
           sx.to_int(),
@@ -1537,7 +1541,7 @@ fn main {
       }
 
       let life_ratio : Float = 1.0 - particle.t / particle.life
-      let alpha : Int = clampf(life_ratio * 220.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(life_ratio * 220.0, 0.0, 220.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(206, 216, 228, alpha)
       } else if particle.kind == 1 {
@@ -1690,7 +1694,7 @@ fn main {
     )
 
     if announce_t > 0.0 {
-      let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
       @draw.draw_text(
         "Collect cash drops and outrun the police net.",
         sw / 2 - 320,

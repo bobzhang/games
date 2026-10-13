@@ -1,11 +1,11 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 pub let plane_x : Float = 240.0
@@ -35,16 +35,16 @@ pub let hull_point_radius : Float = 8.0
 pub let remove_radius : Float = 15.0
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 // Colors - dark geometric aesthetic
 

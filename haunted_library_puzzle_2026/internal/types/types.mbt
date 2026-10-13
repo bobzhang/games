@@ -45,12 +45,12 @@ pub extend ParticleKind with Eq::{not_equal, equal}
 ///|
 /// Grid actor state with interpolation fields for smooth movement.
 pub(all) struct Actor {
-  mut x : Int
-  mut y : Int
-  mut from_x : Int
-  mut from_y : Int
-  mut to_x : Int
-  mut to_y : Int
+  mut x : Int32
+  mut y : Int32
+  mut from_x : Int32
+  mut from_y : Int32
+  mut to_x : Int32
+  mut to_y : Int32
   mut fx : Float
   mut fy : Float
   mut t : Float
@@ -65,7 +65,7 @@ pub(all) struct Ghost {
   mut mode : GhostMode
   mut stun_t : Float
   mut move_cd : Float
-  mut seed : Int
+  mut seed : Int32
   mut alert_t : Float
 }
 
@@ -86,25 +86,25 @@ pub(all) struct Particle {
 /// Complete runtime game state for one puzzle session.
 pub(all) struct Game {
   map : Array[Tile]
-  shelf_x : Array[Int]
-  shelf_y : Array[Int]
-  mut shelf_n : Int
-  page_x : Array[Int]
-  page_y : Array[Int]
+  shelf_x : Array[Int32]
+  shelf_y : Array[Int32]
+  mut shelf_n : Int32
+  page_x : Array[Int32]
+  page_y : Array[Int32]
   page_taken : Array[Bool]
   ghosts : Array[Ghost]
   particles : Array[Particle]
   mut state : GameState
   player : Actor
-  mut lives : Int
-  mut pages : Int
-  mut seals_on : Int
+  mut lives : Int32
+  mut pages : Int32
+  mut seals_on : Int32
   mut gate_open : Bool
-  mut score : Int
-  mut steps : Int
+  mut score : Int32
+  mut steps : Int32
   mut time_s : Float
-  mut req_dx : Int
-  mut req_dy : Int
+  mut req_dx : Int32
+  mut req_dy : Int32
   mut action_down : Bool
   mut action_pressed : Bool
   mut move_cd : Float
@@ -115,13 +115,13 @@ pub(all) struct Game {
   mut msg_t : Float
   mut flash_t : Float
   mut shake_t : Float
-  mut hint_i : Int
+  mut hint_i : Int32
   mut win : Bool
   mut loss_reason : String
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

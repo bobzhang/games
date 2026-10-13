@@ -1,29 +1,29 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let tile_size : Int = 52
+pub let tile_size : Int32 = 52
 
 ///|
-pub let grid_width : Int = 12
+pub let grid_width : Int32 = 12
 
 ///|
-pub let grid_height : Int = 10
+pub let grid_height : Int32 = 10
 
 ///|
-pub let grid_offset_x : Int = 86
+pub let grid_offset_x : Int32 = 86
 
 ///|
-pub let grid_offset_y : Int = 40
+pub let grid_offset_y : Int32 = 40
 
 ///|
-pub let max_ticks : Int = 20
+pub let max_ticks : Int32 = 20
 
 ///|
 pub let decay_rate : Float = 0.15
@@ -32,10 +32,10 @@ pub let decay_rate : Float = 0.15
 pub let sim_tick_interval : Float = 0.35
 
 ///|
-pub let total_levels : Int = 30
+pub let total_levels : Int32 = 30
 
 ///|
-pub let levels_per_tier : Int = 10
+pub let levels_per_tier : Int32 = 10
 
 // Colors
 
@@ -108,16 +108,16 @@ pub let color_title_accent : @raylib.Color = @raylib.Color::new(
 // Palette panel
 
 ///|
-pub let palette_x : Int = 730
+pub let palette_x : Int32 = 730
 
 ///|
-pub let palette_y : Int = 50
+pub let palette_y : Int32 = 50
 
 ///|
-pub let palette_w : Int = 530
+pub let palette_w : Int32 = 530
 
 ///|
-pub let palette_h : Int = 660
+pub let palette_h : Int32 = 660
 
 // Wave visualization colors
 

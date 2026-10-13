@@ -1,45 +1,45 @@
 ///|
-let map_w : Int = 21
+let map_w : Int32 = 21
 
 ///|
-let map_h : Int = 15
+let map_h : Int32 = 15
 
 ///|
-let tile_sz : Int = 36
+let tile_sz : Int32 = 36
 
 ///|
-let view_x : Int = 34
+let view_x : Int32 = 34
 
 ///|
-let view_y : Int = 86
+let view_y : Int32 = 86
 
 ///|
-let screen_w : Int = view_x * 2 + map_w * tile_sz
+let screen_w : Int32 = view_x * 2 + map_w * tile_sz
 
 ///|
-let screen_h : Int = 720
+let screen_h : Int32 = 720
 
 ///|
 struct Mob {
   mut alive : Bool
-  mut x : Int
-  mut y : Int
-  mut hp : Int
+  mut x : Int32
+  mut y : Int32
+  mut hp : Int32
 }
 
 ///|
-fn mindex(x : Int, y : Int) -> Int {
+fn mindex(x : Int32, y : Int32) -> Int32 {
   y * map_w + x
 }
 
 ///|
-fn inside(x : Int, y : Int) -> Bool {
+fn inside(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < map_w && y >= 0 && y < map_h
 }
 
 ///|
-fn gen_level() -> Array[Int] {
-  let arr : Array[Int] = Array::make(map_w * map_h, 0)
+fn gen_level() -> Array[Int32] {
+  let arr : Array[Int32] = Array::make(map_w * map_h, 0)
   for y in 0..<map_h {
     for x in 0..<map_w {
       let mut v = 0
@@ -67,12 +67,17 @@ fn gen_level() -> Array[Int] {
 }
 
 ///|
-fn mob_at(mobs : Array[Mob], x : Int, y : Int) -> Int {
+fn mob_at(mobs : Array[Mob], x : Int32, y : Int32) -> Int32 {
   @utils.first_index_by(mobs, fn(mob) { mob.alive && mob.x == x && mob.y == y })
 }
 
 ///|
-fn passable(level : Array[Int], mobs : Array[Mob], x : Int, y : Int) -> Bool {
+fn passable(
+  level : Array[Int32],
+  mobs : Array[Mob],
+  x : Int32,
+  y : Int32,
+) -> Bool {
   if !inside(x, y) {
     return false
   }
@@ -83,7 +88,12 @@ fn passable(level : Array[Int], mobs : Array[Mob], x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn step_toward(ax : Int, ay : Int, bx : Int, by : Int) -> (Int, Int) {
+fn step_toward(
+  ax : Int32,
+  ay : Int32,
+  bx : Int32,
+  by : Int32,
+) -> (Int32, Int32) {
   let dx = bx - ax
   let dy = by - ay
   if dx.abs() > dy.abs() {
@@ -96,7 +106,7 @@ fn step_toward(ax : Int, ay : Int, bx : Int, by : Int) -> (Int, Int) {
 }
 
 ///|
-fn draw_board(level : Array[Int]) -> Unit {
+fn draw_board(level : Array[Int32]) -> Unit {
   for y in 0..<map_h {
     for x in 0..<map_w {
       let px = view_x + x * tile_sz
@@ -130,7 +140,12 @@ fn draw_board(level : Array[Int]) -> Unit {
 }
 
 ///|
-fn draw_unit(x : Int, y : Int, color : @raylib.Color, glyph : String) -> Unit {
+fn draw_unit(
+  x : Int32,
+  y : Int32,
+  color : @raylib.Color,
+  glyph : String,
+) -> Unit {
   let px = view_x + x * tile_sz
   let py = view_y + y * tile_sz
   @raylib.draw_rectangle(px + 6, py + 6, tile_sz - 12, tile_sz - 12, color)
@@ -138,7 +153,7 @@ fn draw_unit(x : Int, y : Int, color : @raylib.Color, glyph : String) -> Unit {
 }
 
 ///|
-fn alive_mobs(mobs : Array[Mob]) -> Int {
+fn alive_mobs(mobs : Array[Mob]) -> Int32 {
   let mut n = 0
   for mob in mobs {
     if mob.alive {
@@ -244,7 +259,12 @@ fn main {
             mob.x = nx
             mob.y = ny
           } else {
-            let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            let dirs : Array[(Int32, Int32)] = [
+              (-1, 0),
+              (1, 0),
+              (0, -1),
+              (0, 1),
+            ]
             let start = @raylib.get_random_value(0, 3)
             for t in 0..<4 {
               let (rx, ry) = dirs[(start + t) % 4]

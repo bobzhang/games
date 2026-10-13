@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Number of terrain height sample points defining the lunar surface.
-let points : Int = 17
+let points : Int32 = 17
 
 ///|
 /// Maximum number of active meteor objects in the pool.
-let max_meteors : Int = 24
+let max_meteors : Int32 = 24
 
 ///|
 /// Clamps `v` to the inclusive `[lo, hi]` range.
@@ -31,10 +31,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -71,7 +71,7 @@ struct Meteor {
 
 ///|
 /// Sets the terrain height sample at index `i` to `y`.
-fn set_height(heights : Array[Float], i : Int, y : Float) -> Unit {
+fn set_height(heights : Array[Float], i : Int32, y : Float) -> Unit {
   heights[i] = y
 }
 
@@ -106,7 +106,7 @@ fn clear_meteors(meteors : Array[Meteor]) -> Unit {
 
 ///|
 /// Activates an inactive meteor at a random horizontal position with downward speed scaled by `level`.
-fn spawn_meteor(meteors : Array[Meteor], level : Int) -> Unit {
+fn spawn_meteor(meteors : Array[Meteor], level : Int32) -> Unit {
   let mut placed = false
   for meteor in meteors {
     if placed {
@@ -127,7 +127,7 @@ fn spawn_meteor(meteors : Array[Meteor], level : Int) -> Unit {
 ///|
 /// Configures terrain heights for the given level and returns spawn x/y, pad x/width/y, and base wind speed.
 fn set_level(
-  level : Int,
+  level : Int32,
   heights : Array[Float],
 ) -> (Float, Float, Float, Float, Float, Float) {
   if level == 1 {

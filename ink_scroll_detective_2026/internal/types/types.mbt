@@ -1,10 +1,10 @@
 ///|
 /// One clue marker placed in the city grid.
 pub(all) struct Clue {
-  x : Int
-  y : Int
-  suspect : Int
-  chain : Int
+  x : Int32
+  y : Int32
+  suspect : Int32
+  chain : Int32
   mut discovered : Bool
   mut glow_t : Float
 }
@@ -13,8 +13,8 @@ pub(all) struct Clue {
 /// Suspect profile and deduction progress state.
 pub(all) struct Suspect {
   name : String
-  home_x : Int
-  home_y : Int
+  home_x : Int32
+  home_y : Int32
   mut deduction_unlocked : Bool
   mut suspicion : Float
 }
@@ -23,11 +23,11 @@ pub(all) struct Suspect {
 /// Active incident state that can be resolved by the player.
 pub(all) struct Incident {
   mut active : Bool
-  mut x : Int
-  mut y : Int
-  mut culprit : Int
+  mut x : Int32
+  mut y : Int32
+  mut culprit : Int32
   mut timer : Float
-  mut severity : Int
+  mut severity : Int32
   mut pulse_t : Float
 }
 
@@ -57,28 +57,28 @@ pub(all) struct Game {
   suspects : Array[Suspect]
   incidents : Array[Incident]
   pulses : Array[DistrictPulse]
-  chain_progress : Array[Int]
-  evidence_score : Array[Int]
+  chain_progress : Array[Int32]
+  evidence_score : Array[Int32]
   mut state : GameState
-  mut cursor_x : Int
-  mut cursor_y : Int
-  mut marked_suspect : Int
+  mut cursor_x : Int32
+  mut cursor_y : Int32
+  mut marked_suspect : Int32
   mut trust : Float
-  mut score : Int
-  mut best_score : Int
+  mut score : Int32
+  mut best_score : Int32
   mut case_time : Float
   mut spawn_t : Float
   mut focus_t : Float
   mut focus_cd : Float
   mut city_time : Float
-  mut solved_incidents : Int
-  mut failed_incidents : Int
-  mut wrong_accusations : Int
-  mut clue_found : Int
+  mut solved_incidents : Int32
+  mut failed_incidents : Int32
+  mut wrong_accusations : Int32
+  mut clue_found : Int32
   mut message : String
   mut message_t : Float
-  mut input_dx : Int
-  mut input_dy : Int
+  mut input_dx : Int32
+  mut input_dy : Int32
   mut input_inspect_press : Bool
   mut input_cancel_press : Bool
   mut input_focus_press : Bool
@@ -88,7 +88,7 @@ pub(all) struct Game {
 
 ///|
 /// Returns the display name for a suspect index (0-3).
-fn suspect_name(index : Int) -> String {
+fn suspect_name(index : Int32) -> String {
   if index == 0 {
     "Mara Quill"
   } else if index == 1 {
@@ -102,7 +102,7 @@ fn suspect_name(index : Int) -> String {
 
 ///|
 /// Returns the grid column of a suspect's home district by index.
-fn suspect_home_x(index : Int) -> Int {
+fn suspect_home_x(index : Int32) -> Int32 {
   if index == 0 {
     1
   } else if index == 1 {
@@ -116,7 +116,7 @@ fn suspect_home_x(index : Int) -> Int {
 
 ///|
 /// Returns the grid row of a suspect's home district by index.
-fn suspect_home_y(index : Int) -> Int {
+fn suspect_home_y(index : Int32) -> Int32 {
   if index == 0 {
     1
   } else if index == 1 {
@@ -130,7 +130,7 @@ fn suspect_home_y(index : Int) -> Int {
 
 ///|
 /// Returns true when the cell is reserved as a suspect home district.
-fn is_reserved_cell(cell_x : Int, cell_y : Int) -> Bool {
+fn is_reserved_cell(cell_x : Int32, cell_y : Int32) -> Bool {
   let mut i = 0
   while i < suspect_count {
     if cell_x == suspect_home_x(i) && cell_y == suspect_home_y(i) {
@@ -143,7 +143,7 @@ fn is_reserved_cell(cell_x : Int, cell_y : Int) -> Bool {
 
 ///|
 /// Creates a clue at a deterministic grid position for `index`.
-pub fn Clue::Clue(index : Int) -> Clue {
+pub fn Clue::Clue(index : Int32) -> Clue {
   let suspect = index % suspect_count
   let chain = index / suspect_count % chains_per_suspect
   let step = index / (suspect_count * chains_per_suspect)
@@ -163,7 +163,7 @@ pub fn Clue::Clue(index : Int) -> Clue {
 
 ///|
 /// Creates a suspect profile from a suspect index.
-pub fn Suspect::Suspect(index : Int) -> Suspect {
+pub fn Suspect::Suspect(index : Int32) -> Suspect {
   {
     name: suspect_name(index),
     home_x: suspect_home_x(index),
@@ -189,7 +189,7 @@ pub fn Incident::Incident() -> Incident {
 
 ///|
 /// Creates a district pulse state seeded by district index.
-pub fn DistrictPulse::DistrictPulse(index : Int) -> DistrictPulse {
+pub fn DistrictPulse::DistrictPulse(index : Int32) -> DistrictPulse {
   let drift_seed = Float::from_int((index * 71 + 17) % 1000) / 1000.0
   { heat: 0.0, drift: drift_seed * tau, }
 }

@@ -1,15 +1,15 @@
 ///|
-pub fn grid_index(x : Int, y : Int, width : Int) -> Int {
+pub fn grid_index(x : Int32, y : Int32, width : Int32) -> Int32 {
   y * width + x
 }
 
 ///|
-pub fn in_bounds(x : Int, y : Int, w : Int, h : Int) -> Bool {
+pub fn in_bounds(x : Int32, y : Int32, w : Int32, h : Int32) -> Bool {
   x >= 0 && y >= 0 && x < w && y < h
 }
 
 ///|
-pub fn grid_get(grid : Grid, x : Int, y : Int) -> Tile? {
+pub fn grid_get(grid : Grid, x : Int32, y : Int32) -> Tile? {
   if in_bounds(x, y, grid.width, grid.height) {
     Some(grid.tiles[grid_index(x, y, grid.width)])
   } else {
@@ -18,14 +18,19 @@ pub fn grid_get(grid : Grid, x : Int, y : Int) -> Tile? {
 }
 
 ///|
-pub fn grid_set_kind(grid : Grid, x : Int, y : Int, kind : TileKind) -> Unit {
+pub fn grid_set_kind(
+  grid : Grid,
+  x : Int32,
+  y : Int32,
+  kind : TileKind,
+) -> Unit {
   if in_bounds(x, y, grid.width, grid.height) {
     grid.tiles[grid_index(x, y, grid.width)].kind = kind
   }
 }
 
 ///|
-pub fn grid_is_walkable(grid : Grid, x : Int, y : Int) -> Bool {
+pub fn grid_is_walkable(grid : Grid, x : Int32, y : Int32) -> Bool {
   match grid_get(grid, x, y) {
     Some(tile) =>
       match tile.kind {
@@ -37,7 +42,7 @@ pub fn grid_is_walkable(grid : Grid, x : Int, y : Int) -> Bool {
 }
 
 ///|
-pub fn dir_dx(dir : Direction) -> Int {
+pub fn dir_dx(dir : Direction) -> Int32 {
   match dir {
     East => 1
     West => -1
@@ -46,7 +51,7 @@ pub fn dir_dx(dir : Direction) -> Int {
 }
 
 ///|
-pub fn dir_dy(dir : Direction) -> Int {
+pub fn dir_dy(dir : Direction) -> Int32 {
   match dir {
     South => 1
     North => -1
@@ -65,7 +70,7 @@ pub fn opposite_dir(dir : Direction) -> Direction {
 }
 
 ///|
-pub fn rand_next(state : Ref[Int]) -> Int {
+pub fn rand_next(state : Ref[Int32]) -> Int32 {
   let mut x = state.val
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -78,7 +83,7 @@ pub fn rand_next(state : Ref[Int]) -> Int {
 }
 
 ///|
-pub fn rand_range(state : Ref[Int], lo : Int, hi : Int) -> Int {
+pub fn rand_range(state : Ref[Int32], lo : Int32, hi : Int32) -> Int32 {
   if hi <= lo {
     lo
   } else {
@@ -125,7 +130,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -136,24 +141,29 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
-pub fn tile_screen_x(gx : Int) -> Int {
+pub fn tile_screen_x(gx : Int32) -> Int32 {
   grid_offset_x + gx * tile_size
 }
 
 ///|
-pub fn tile_screen_y(gy : Int) -> Int {
+pub fn tile_screen_y(gy : Int32) -> Int32 {
   grid_offset_y + gy * tile_size
 }
 
 ///|
-pub fn manhattan_dist(x1 : Int, y1 : Int, x2 : Int, y2 : Int) -> Int {
+pub fn manhattan_dist(x1 : Int32, y1 : Int32, x2 : Int32, y2 : Int32) -> Int32 {
   let dx = x1 - x2
   let dy = y1 - y2
   (if dx < 0 { -dx } else { dx }) + (if dy < 0 { -dy } else { dy })
 }
 
 ///|
-pub fn direction_from_to(fx : Int, fy : Int, tx : Int, ty : Int) -> Direction {
+pub fn direction_from_to(
+  fx : Int32,
+  fy : Int32,
+  tx : Int32,
+  ty : Int32,
+) -> Direction {
   let dx = tx - fx
   let dy = ty - fy
   let adx = if dx < 0 { -dx } else { dx }
@@ -172,7 +182,7 @@ pub fn direction_from_to(fx : Int, fy : Int, tx : Int, ty : Int) -> Direction {
 }
 
 ///|
-pub fn has_enemy_at(enemies : Array[Enemy], x : Int, y : Int) -> Bool {
+pub fn has_enemy_at(enemies : Array[Enemy], x : Int32, y : Int32) -> Bool {
   for e in enemies {
     if e.active && e.x == x && e.y == y {
       return true
@@ -182,7 +192,7 @@ pub fn has_enemy_at(enemies : Array[Enemy], x : Int, y : Int) -> Bool {
 }
 
 ///|
-pub fn find_enemy_at(enemies : Array[Enemy], x : Int, y : Int) -> Int {
+pub fn find_enemy_at(enemies : Array[Enemy], x : Int32, y : Int32) -> Int32 {
   for i, e in enemies {
     if e.active && e.x == x && e.y == y {
       return i
@@ -192,13 +202,13 @@ pub fn find_enemy_at(enemies : Array[Enemy], x : Int, y : Int) -> Int {
 }
 
 ///|
-pub fn game_rng(game : Game) -> Ref[Int] {
-  let r : Ref[Int] = { val: game.rng_state, }
+pub fn game_rng(game : Game) -> Ref[Int32] {
+  let r : Ref[Int32] = { val: game.rng_state, }
   r
 }
 
 ///|
-pub fn sync_rng(game : Game, r : Ref[Int]) -> Unit {
+pub fn sync_rng(game : Game, r : Ref[Int32]) -> Unit {
   game.rng_state = r.val
 }
 
@@ -256,7 +266,7 @@ pub fn rating_text(rating : BeatRating) -> String {
 }
 
 ///|
-pub fn bpm_for_floor(floor_num : Int) -> Float {
+pub fn bpm_for_floor(floor_num : Int32) -> Float {
   if floor_num <= 3 {
     bpm_floor_1_3
   } else if floor_num <= 6 {
@@ -269,7 +279,7 @@ pub fn bpm_for_floor(floor_num : Int) -> Float {
 }
 
 ///|
-pub fn perfect_window_for_floor(floor_num : Int) -> Float {
+pub fn perfect_window_for_floor(floor_num : Int32) -> Float {
   if floor_num <= 3 {
     perfect_window_early
   } else if floor_num <= 6 {
@@ -280,7 +290,7 @@ pub fn perfect_window_for_floor(floor_num : Int) -> Float {
 }
 
 ///|
-pub fn good_window_for_floor(floor_num : Int) -> Float {
+pub fn good_window_for_floor(floor_num : Int32) -> Float {
   if floor_num <= 3 {
     good_window_early
   } else if floor_num <= 6 {
@@ -291,7 +301,7 @@ pub fn good_window_for_floor(floor_num : Int) -> Float {
 }
 
 ///|
-pub fn is_boss_floor(floor_num : Int) -> Bool {
+pub fn is_boss_floor(floor_num : Int32) -> Bool {
   floor_num == 5 || floor_num == 10
 }
 
@@ -344,7 +354,7 @@ pub fn shop_item_desc(kind : ShopItemKind) -> String {
 }
 
 ///|
-pub fn shop_item_price(kind : ShopItemKind) -> Int {
+pub fn shop_item_price(kind : ShopItemKind) -> Int32 {
   match kind {
     ShopHealthPotion => price_health_potion
     ShopShield => price_shield
@@ -368,7 +378,7 @@ pub fn make_shop_entry(kind : ShopItemKind) -> ShopEntry {
 }
 
 ///|
-pub fn compute_score_grade(total : Int) -> ScoreGrade {
+pub fn compute_score_grade(total : Int32) -> ScoreGrade {
   if total >= grade_s_threshold {
     GradeS
   } else if total >= grade_a_threshold {
@@ -504,7 +514,7 @@ pub fn weapon_data(kind : WeaponKind) -> Weapon {
 
 ///|
 /// Returns true if the weapon can fire this beat (respects beat_cost cadence).
-pub fn weapon_can_attack(kind : WeaponKind, beat_counter : Int) -> Bool {
+pub fn weapon_can_attack(kind : WeaponKind, beat_counter : Int32) -> Bool {
   let data = weapon_data(kind)
   beat_counter % data.beat_cost == 0
 }
@@ -514,7 +524,7 @@ pub fn weapon_can_attack(kind : WeaponKind, beat_counter : Int) -> Bool {
 pub fn weapon_attack_cells(
   kind : WeaponKind,
   dir : Direction,
-) -> Array[(Int, Int)] {
+) -> Array[(Int32, Int32)] {
   let dx = dir_dx(dir)
   let dy = dir_dy(dir)
   match kind {
@@ -530,7 +540,7 @@ pub fn weapon_attack_cells(
     Bow => [(dx, dy), (dx * 2, dy * 2), (dx * 3, dy * 3)]
     Staff => {
       // 3x3 AoE centered on the tile in front
-      let cells : Array[(Int, Int)] = []
+      let cells : Array[(Int32, Int32)] = []
       for oy = -1; oy <= 1; oy = oy + 1 {
         for ox = -1; ox <= 1; ox = ox + 1 {
           cells.push((dx + ox, dy + oy))
@@ -542,7 +552,7 @@ pub fn weapon_attack_cells(
 }
 
 ///|
-pub fn weapon_base_damage(kind : WeaponKind) -> Int {
+pub fn weapon_base_damage(kind : WeaponKind) -> Int32 {
   weapon_data(kind).damage
 }
 
@@ -600,7 +610,7 @@ pub fn make_ability_choice(kind : AbilityKind) -> AbilityChoice {
 // === Floor Theme System ===
 
 ///|
-pub fn floor_theme(floor_num : Int) -> FloorTheme {
+pub fn floor_theme(floor_num : Int32) -> FloorTheme {
   if floor_num <= 2 {
     Meadow
   } else if floor_num <= 4 {
@@ -696,7 +706,7 @@ pub fn themed_tile_color(
 // === Combo Milestone System ===
 
 ///|
-pub fn check_combo_milestone(combo : Int) -> ComboMilestone {
+pub fn check_combo_milestone(combo : Int32) -> ComboMilestone {
   if combo == 50 {
     PerfectStorm
   } else if combo == 25 {
@@ -709,7 +719,7 @@ pub fn check_combo_milestone(combo : Int) -> ComboMilestone {
 }
 
 ///|
-pub fn combo_visual_level(combo : Int) -> Int {
+pub fn combo_visual_level(combo : Int32) -> Int32 {
   // 0: 0-4, 1: 5-14, 2: 15-29, 3: 30+
   if combo >= 30 {
     3
@@ -747,12 +757,12 @@ pub fn milestone_color(ms : ComboMilestone) -> @raylib.Color {
 ///|
 pub fn update_meta_after_run(
   meta : MetaProgress,
-  score : Int,
-  max_combo_val : Int,
-  floors : Int,
-  bosses : Int,
-  kills : Int,
-  perfects : Int,
+  score : Int32,
+  max_combo_val : Int32,
+  floors : Int32,
+  bosses : Int32,
+  kills : Int32,
+  perfects : Int32,
   weapon : WeaponKind,
 ) -> Unit {
   meta.total_runs = meta.total_runs + 1
@@ -787,8 +797,8 @@ pub fn update_meta_after_run(
 }
 
 ///|
-pub fn check_weapon_unlocks(meta : MetaProgress, floors : Int) -> Unit {
-  let unlocks : Array[(Int, WeaponKind)] = [
+pub fn check_weapon_unlocks(meta : MetaProgress, floors : Int32) -> Unit {
+  let unlocks : Array[(Int32, WeaponKind)] = [
     (2, Spear),
     (4, Whip),
     (5, Hammer),
@@ -815,8 +825,8 @@ pub fn check_weapon_unlocks(meta : MetaProgress, floors : Int) -> Unit {
 ///|
 pub fn update_floor_mastery(
   meta : MetaProgress,
-  floor_num : Int,
-  perfect_pct : Int,
+  floor_num : Int32,
+  perfect_pct : Int32,
 ) -> Unit {
   if floor_num >= 1 && floor_num <= max_floor {
     let idx = floor_num - 1
@@ -827,7 +837,7 @@ pub fn update_floor_mastery(
 }
 
 ///|
-pub fn mastery_rating(pct : Int) -> String {
+pub fn mastery_rating(pct : Int32) -> String {
   if pct >= 90 {
     "S"
   } else if pct >= 70 {
@@ -971,7 +981,7 @@ pub fn spell_color(kind : SpellKind) -> @raylib.Color {
 }
 
 ///|
-pub fn can_cast_spell(player : Player, slot : Int) -> Bool {
+pub fn can_cast_spell(player : Player, slot : Int32) -> Bool {
   if slot < 0 || slot >= 4 {
     return false
   }
@@ -1044,7 +1054,7 @@ pub fn make_elite(enemy : Enemy) -> Unit {
 }
 
 ///|
-pub fn should_spawn_elite(floor_num : Int, rng : Ref[Int]) -> Bool {
+pub fn should_spawn_elite(floor_num : Int32, rng : Ref[Int32]) -> Bool {
   if floor_num < elite_floor_threshold {
     return false
   }
@@ -1171,7 +1181,7 @@ pub fn spawn_damage_number(
   game : Game,
   x : Float,
   y : Float,
-  value : Int,
+  value : Int32,
   rating : BeatRating,
 ) -> Unit {
   let color = match rating {
@@ -1411,7 +1421,7 @@ pub fn direction_arrow(dir : Direction) -> String {
 // ============================================================
 
 ///|
-pub fn mana_cost_affordable(player : Player, cost : Int) -> Bool {
+pub fn mana_cost_affordable(player : Player, cost : Int32) -> Bool {
   player.mana >= cost
 }
 
@@ -1456,7 +1466,7 @@ pub fn theme_ambient_text(theme : FloorTheme) -> String {
 // ============================================================
 
 ///|
-pub fn combo_encouragement(combo : Int) -> String {
+pub fn combo_encouragement(combo : Int32) -> String {
   if combo >= 40 {
     "UNSTOPPABLE!"
   } else if combo >= 30 {
@@ -1521,11 +1531,11 @@ pub fn curse_risk_text(kind : CurseKind) -> String {
 
 ///|
 pub fn run_stats_summary(
-  floors : Int,
-  kills : Int,
-  perfects : Int,
-  max_combo_val : Int,
-  score : Int,
+  floors : Int32,
+  kills : Int32,
+  perfects : Int32,
+  max_combo_val : Int32,
+  score : Int32,
 ) -> String {
   let grade = compute_score_grade(score)
   "F\{floors} K\{kills} P\{perfects} C\{max_combo_val} = \{grade_text(grade)}"
@@ -1536,7 +1546,7 @@ pub fn run_stats_summary(
 // ============================================================
 
 ///|
-pub fn floor_difficulty_text(floor_num : Int) -> String {
+pub fn floor_difficulty_text(floor_num : Int32) -> String {
   if floor_num <= 2 {
     "Easy"
   } else if floor_num <= 4 {
@@ -1553,7 +1563,7 @@ pub fn floor_difficulty_text(floor_num : Int) -> String {
 }
 
 ///|
-pub fn floor_difficulty_color(floor_num : Int) -> @raylib.Color {
+pub fn floor_difficulty_color(floor_num : Int32) -> @raylib.Color {
   if floor_num <= 2 {
     @raylib.Color::new(80, 200, 80, 255)
   } else if floor_num <= 4 {
@@ -1646,8 +1656,8 @@ pub fn weapon_effect_color(kind : WeaponKind) -> @raylib.Color {
 ///|
 pub fn boss_phase_from_hp(
   kind : EnemyKind,
-  hp : Int,
-  max_hp : Int,
+  hp : Int32,
+  max_hp : Int32,
 ) -> BossPhase {
   let frac = Float::from_int(hp) / Float::from_int(max_hp)
   match kind {
@@ -1675,8 +1685,8 @@ pub fn boss_phase_from_hp(
 pub fn check_boss_phase_transition(
   game : Game,
   kind : EnemyKind,
-  hp : Int,
-  max_hp : Int,
+  hp : Int32,
+  max_hp : Int32,
 ) -> Bool {
   let new_phase = boss_phase_from_hp(kind, hp, max_hp)
   match kind {
@@ -1733,7 +1743,7 @@ pub fn boss_phase_color(phase : BossPhase) -> @raylib.Color {
 // ============================================================
 
 ///|
-pub fn start_floor_stats(game : Game, floor_num : Int) -> Unit {
+pub fn start_floor_stats(game : Game, floor_num : Int32) -> Unit {
   game.current_floor_stats = FloorStats::new(floor_num)
 }
 
@@ -1761,7 +1771,7 @@ pub fn record_weapon_usage(game : Game, kind : WeaponKind) -> Unit {
   }
   // Track via simple counter
   let mut found = false
-  let new_usage : Array[(WeaponKind, Int)] = []
+  let new_usage : Array[(WeaponKind, Int32)] = []
   for wu in game.run_stats.weapon_usage {
     let (wk, count) = wu
     if wk == kind {
@@ -1779,7 +1789,7 @@ pub fn record_weapon_usage(game : Game, kind : WeaponKind) -> Unit {
 
 ///|
 pub fn record_spell_usage(game : Game, kind : SpellKind) -> Unit {
-  let new_usage : Array[(SpellKind, Int)] = []
+  let new_usage : Array[(SpellKind, Int32)] = []
   let mut found = false
   for su in game.run_stats.spell_usage {
     let (sk, count) = su
@@ -1800,7 +1810,7 @@ pub fn record_spell_usage(game : Game, kind : SpellKind) -> Unit {
 }
 
 ///|
-pub fn most_used_weapon(stats : RunStats) -> (WeaponKind, Int) {
+pub fn most_used_weapon(stats : RunStats) -> (WeaponKind, Int32) {
   let mut best_kind : WeaponKind = Sword
   let mut best_count = 0
   for wu in stats.weapon_usage {
@@ -1814,7 +1824,7 @@ pub fn most_used_weapon(stats : RunStats) -> (WeaponKind, Int) {
 }
 
 ///|
-pub fn grade_distance_text(score : Int) -> String {
+pub fn grade_distance_text(score : Int32) -> String {
   if score >= grade_s_threshold {
     "MAX GRADE!"
   } else if score >= grade_a_threshold {

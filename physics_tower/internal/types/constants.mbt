@@ -1,11 +1,11 @@
 ///|
-pub let screen_w : Int = 1720
+pub let screen_w : Int32 = 1720
 
 ///|
-pub let screen_h : Int = 980
+pub let screen_h : Int32 = 980
 
 ///|
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 pub let ground_y : Float = 820.0
@@ -26,10 +26,10 @@ pub let build_area_top : Float = 40.0
 pub let snap_grid : Float = 20.0
 
 ///|
-pub let max_bodies : Int = 256
+pub let max_bodies : Int32 = 256
 
 ///|
-pub let max_joints : Int = 512
+pub let max_joints : Int32 = 512
 
 ///|
 pub let wind_test_force : Float = 180.0
@@ -95,13 +95,13 @@ pub let cable_h : Float = 6.0
 pub let test_phase_duration : Float = 6.0
 
 ///|
-pub let max_test_phases : Int = 3
+pub let max_test_phases : Int32 = 3
 
 ///|
-pub let panel_x : Int = 1540
+pub let panel_x : Int32 = 1540
 
 ///|
-pub let panel_w : Int = 168
+pub let panel_w : Int32 = 168
 
 ///|
 pub let restitution : Float = 0.2
@@ -122,7 +122,7 @@ pub let joint_stiffness : Float = 0.8
 pub let auto_joint_radius : Float = 30.0
 
 ///|
-pub let max_particles : Int = 256
+pub let max_particles : Int32 = 256
 
 ///|
 pub let particle_life : Float = 2.0
@@ -152,25 +152,25 @@ pub let time_attack_duration : Float = 60.0
 pub let precision_tolerance : Float = 1.0
 
 ///|
-pub let survival_rounds : Int = 5
+pub let survival_rounds : Int32 = 5
 
 ///|
-pub let upgrade_cost_reinforce : Int = 300
+pub let upgrade_cost_reinforce : Int32 = 300
 
 ///|
-pub let upgrade_cost_lightweight : Int = 250
+pub let upgrade_cost_lightweight : Int32 = 250
 
 ///|
-pub let upgrade_cost_flex : Int = 400
+pub let upgrade_cost_flex : Int32 = 400
 
 ///|
-pub let upgrade_cost_foundation : Int = 350
+pub let upgrade_cost_foundation : Int32 = 350
 
 ///|
-pub let wind_particle_count : Int = 20
+pub let wind_particle_count : Int32 = 20
 
 ///|
-pub let debris_per_break : Int = 8
+pub let debris_per_break : Int32 = 8
 
 ///|
 pub let star_anim_duration : Float = 2.0

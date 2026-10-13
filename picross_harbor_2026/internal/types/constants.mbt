@@ -1,22 +1,22 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1720
+pub let screen_w : Int32 = 1720
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 980
+pub let screen_h : Int32 = 980
 
 ///|
 /// Fixed update/render target frequency.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Maximum supported puzzle width/height.
-pub let max_board : Int = 12
+pub let max_board : Int32 = 12
 
 ///|
 /// Maximum number of cells in a puzzle grid.
-pub let max_cells : Int = max_board * max_board
+pub let max_cells : Int32 = max_board * max_board
 
 ///|
 /// Active tool the player is using to interact with cells.

@@ -13,8 +13,8 @@ pub extend GameState with Eq::{not_equal, equal}
 ///|
 /// Stores runtime data for InputState.
 pub(all) struct InputState {
-  mut move_x : Int
-  mut move_y : Int
+  mut move_x : Int32
+  mut move_y : Int32
   mut press_j : Bool
   mut press_k : Bool
   mut press_space : Bool
@@ -81,7 +81,7 @@ pub(all) struct Beacon {
 
 ///|
 /// Creates a default Beacon value for a new session.
-pub fn Beacon::Beacon(index : Int) -> Beacon {
+pub fn Beacon::Beacon(index : Int32) -> Beacon {
   let (x, y) = beacon_position(index)
   { x, y, integrity: beacon_integrity_max, pulse_t: 0.0, }
 }
@@ -98,7 +98,7 @@ pub(all) struct Trap {
 
 ///|
 /// Creates a default Trap value for a new session.
-pub fn Trap::Trap(index : Int) -> Trap {
+pub fn Trap::Trap(index : Int32) -> Trap {
   let (x, y) = trap_slot_position(index)
   { active: false, x, y, trigger_cd: 0.0, flash_t: 0.0, }
 }
@@ -115,9 +115,9 @@ pub(all) struct Enemy {
   mut max_hp : Float
   mut speed : Float
   mut damage : Float
-  mut target : Int
+  mut target : Int32
   mut slow_t : Float
-  mut kind : Int
+  mut kind : Int32
   mut anim_t : Float
 }
 
@@ -175,16 +175,16 @@ pub(all) struct Game {
   /// Current night (wave) number, starting at 1.
   /// Increases by 1 each time the player clears all spawned enemies.
   /// Controls enemy stat scaling, spawn pool size, and score bonuses.
-  mut night : Int
+  mut night : Int32
   /// Cumulative score for the current run, in points.
   /// Increased by killing enemies and clearing nights. Displayed on the HUD.
-  mut score : Int
+  mut score : Int32
   /// Highest score achieved across all runs in this session.
   /// Updated whenever `score` exceeds it. Displayed on the HUD for reference.
-  mut best_score : Int
+  mut best_score : Int32
   /// Total number of enemies killed in the current run.
   /// Incremented by `register_kill` and displayed on the HUD.
-  mut kills : Int
+  mut kills : Int32
   /// Wall-clock time elapsed during the current run, in seconds.
   /// Incremented every play-state frame by `dt`. Used for HUD display only.
   mut elapsed : Float
@@ -208,7 +208,7 @@ pub(all) struct Game {
   /// Set to `night_spawn_base + (night-1) * night_spawn_step` at the start
   /// of each night. Decremented by 1 each time an enemy is spawned.
   /// When 0 and no active enemies remain, the night is cleared.
-  mut spawn_pool : Int
+  mut spawn_pool : Int32
   /// Countdown timer until the next enemy spawn, in seconds.
   /// Reset to the night's spawn interval after each successful spawn.
   /// Decremented by `dt` every play frame.

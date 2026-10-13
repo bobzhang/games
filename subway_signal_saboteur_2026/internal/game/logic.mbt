@@ -45,7 +45,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -103,7 +103,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
   }
 
   for lane in 0..<@types.train_lane_n {
-    let ry : Int = @types.lane_to_y(lane)
+    let ry : Int32 = @types.lane_to_y(lane)
     for x in 1..<(@types.grid_w - 1) {
       @types.set_tile(game, x, ry, Track)
     }
@@ -119,7 +119,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
   }
 
   for i in 0..<@types.junction_n {
-    let jx : Int = @types.junction_x(i)
+    let jx : Int32 = @types.junction_x(i)
     @types.set_tile(game, jx, @types.signal_panel_top_y(), Floor)
     @types.set_tile(game, jx, @types.signal_panel_bottom_y(), Floor)
 
@@ -132,7 +132,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::init_inspectors(game : @types.Game) -> Unit {
-  let plan : Array[(Int, Int, Int, Int, Int)] = [
+  let plan : Array[(Int32, Int32, Int32, Int32, Int32)] = [
     (4, @types.signal_panel_top_y(), 2, 22, 1),
     (12, @types.signal_panel_bottom_y(), 2, 22, -1),
     (20, @types.signal_panel_top_y(), 2, 22, -1),
@@ -279,7 +279,7 @@ fn @types.Game::cycle_hint(game : @types.Game) -> Unit {
 }
 
 ///|
-fn train_color_from_target(target_lane : Int) -> @types.TrainColor {
+fn train_color_from_target(target_lane : Int32) -> @types.TrainColor {
   if target_lane == 0 {
     Red
   } else if target_lane == 1 {
@@ -290,18 +290,18 @@ fn train_color_from_target(target_lane : Int) -> @types.TrainColor {
 }
 
 ///|
-fn @types.Game::active_train_count(game : @types.Game) -> Int {
+fn @types.Game::active_train_count(game : @types.Game) -> Int32 {
   @utils.count_by(game.trains, fn(train) { train.active })
 }
 
 ///|
 fn @types.Game::spawn_train(game : @types.Game) -> Bool {
-  let active_n : Int = game.active_train_count()
+  let active_n : Int32 = game.active_train_count()
   if active_n >= 8 {
     return false
   }
 
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<game.trains.length() {
     if !game.trains[i].active {
       slot = i
@@ -313,8 +313,8 @@ fn @types.Game::spawn_train(game : @types.Game) -> Bool {
     return false
   }
 
-  let lane : Int = @raylib.get_random_value(0, @types.train_lane_n - 1)
-  let target : Int = @raylib.get_random_value(0, @types.train_lane_n - 1)
+  let lane : Int32 = @raylib.get_random_value(0, @types.train_lane_n - 1)
+  let target : Int32 = @raylib.get_random_value(0, @types.train_lane_n - 1)
 
   game.trains[slot].active = true
   game.trains[slot].x = @types.train_spawn_x
@@ -330,7 +330,7 @@ fn @types.Game::spawn_train(game : @types.Game) -> Bool {
 }
 
 ///|
-fn signal_cycle(v : Int) -> Int {
+fn signal_cycle(v : Int32) -> Int32 {
   if v == -1 {
     0
   } else if v == 0 {
@@ -347,9 +347,9 @@ fn @types.Game::try_toggle_switch(game : @types.Game) -> Bool {
     return false
   }
 
-  let px : Int = game.player.x
+  let px : Int32 = game.player.x
   let best_i = for i in 0..<@types.junction_n; best_i = -1, best_d = 999 {
-    let d : Int = (px - @types.junction_x(i)).abs()
+    let d : Int32 = (px - @types.junction_x(i)).abs()
     if d <= 1 && d < best_d {
       continue i, d
     }
@@ -398,13 +398,13 @@ fn @types.Game::deploy_emp(game : @types.Game) -> Bool {
   game.action_cd = 0.36
   game.slow_t = 1.7
 
-  let mut hits : Int = 0
+  let mut hits : Int32 = 0
   for inspector in game.inspectors {
     if !inspector.active || inspector.mode == Stunned {
       continue
     }
 
-    let d : Int = @types.manhattan(
+    let d : Int32 = @types.manhattan(
       game.player.x,
       game.player.y,
       inspector.body.x,
@@ -443,7 +443,11 @@ fn @types.Game::deploy_emp(game : @types.Game) -> Bool {
 }
 
 ///|
-fn @types.Game::blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_for_actor(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   if !@types.in_bounds(x, y) {
     return true
   }
@@ -455,7 +459,11 @@ fn @types.Game::blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool 
 }
 
 ///|
-fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::try_move_player(
+  game : @types.Game,
+  dx : Int32,
+  dy : Int32,
+) -> Bool {
   if dx == 0 && dy == 0 {
     return false
   }
@@ -463,8 +471,8 @@ fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool 
     return false
   }
 
-  let tx : Int = game.player.x + dx
-  let ty : Int = game.player.y + dy
+  let tx : Int32 = game.player.x + dx
+  let ty : Int32 = game.player.y + dy
 
   if game.blocked_for_actor(tx, ty) {
     return false
@@ -479,14 +487,14 @@ fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool 
 ///|
 fn @types.Game::line_of_sight(
   game : @types.Game,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   if x0 == x1 {
-    let y_min : Int = y0.min(y1)
-    let y_max : Int = y0.max(y1)
+    let y_min : Int32 = y0.min(y1)
+    let y_max : Int32 = y0.max(y1)
     for y in (y_min + 1)..<y_max {
       match @types.tile_at(game, x0, y) {
         Wall | Track => return false
@@ -497,8 +505,8 @@ fn @types.Game::line_of_sight(
   }
 
   if y0 == y1 {
-    let x_min : Int = x0.min(x1)
-    let x_max : Int = x0.max(x1)
+    let x_min : Int32 = x0.min(x1)
+    let x_max : Int32 = x0.max(x1)
     for x in (x_min + 1)..<x_max {
       match @types.tile_at(game, x, y0) {
         Wall | Track => return false
@@ -512,8 +520,8 @@ fn @types.Game::line_of_sight(
 }
 
 ///|
-fn inspector_seed_next(seed : Int) -> Int {
-  let n : Int = (seed * 48271 + 97) % 2147483647
+fn inspector_seed_next(seed : Int32) -> Int32 {
+  let n : Int32 = (seed * 48271 + 97) % 2147483647
   if n <= 0 {
     1
   } else {
@@ -524,8 +532,8 @@ fn inspector_seed_next(seed : Int) -> Int {
 ///|
 fn @types.Game::blocked_for_inspector(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Bool {
   if game.blocked_for_actor(x, y) {
     return true
@@ -547,15 +555,15 @@ fn @types.Game::blocked_for_inspector(
 ///|
 fn @types.Game::choose_inspector_step(
   game : @types.Game,
-  i : Int,
-) -> (Int, Int) {
+  i : Int32,
+) -> (Int32, Int32) {
   let g = game.inspectors[i]
-  let gx : Int = g.body.x
-  let gy : Int = g.body.y
-  let px : Int = game.player.x
-  let py : Int = game.player.y
+  let gx : Int32 = g.body.x
+  let gy : Int32 = g.body.y
+  let px : Int32 = game.player.x
+  let py : Int32 = game.player.y
 
-  let d : Int = @types.manhattan(gx, gy, px, py)
+  let d : Int32 = @types.manhattan(gx, gy, px, py)
   let sees : Bool = game.line_of_sight(gx, gy, px, py)
 
   if d <= 4 || (sees && d <= 8) {
@@ -569,15 +577,15 @@ fn @types.Game::choose_inspector_step(
   }
 
   if g.mode == Hunt {
-    let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     let best_i = for k in 0..<4; best_i = -1, best_d = 999999 {
-      let nx : Int = gx + dirs[k].0
-      let ny : Int = gy + dirs[k].1
+      let nx : Int32 = gx + dirs[k].0
+      let ny : Int32 = gy + dirs[k].1
       if game.blocked_for_inspector(nx, ny) {
         continue
       }
 
-      let dd : Int = @types.manhattan(nx, ny, px, py)
+      let dd : Int32 = @types.manhattan(nx, ny, px, py)
       if dd < best_d {
         continue k, dd
       }
@@ -590,7 +598,7 @@ fn @types.Game::choose_inspector_step(
     }
   }
 
-  let mut nx : Int = gx + g.dir_x
+  let mut nx : Int32 = gx + g.dir_x
   if nx < g.path_min_x ||
     nx > g.path_max_x ||
     game.blocked_for_actor(nx, g.path_y) {
@@ -605,13 +613,13 @@ fn @types.Game::choose_inspector_step(
   }
 
   g.seed = inspector_seed_next(g.seed)
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-  let start : Int = g.seed % 4
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let start : Int32 = g.seed % 4
 
   for t in 0..<4 {
-    let k : Int = (start + t) % 4
-    let xx : Int = gx + dirs[k].0
-    let yy : Int = gy + dirs[k].1
+    let k : Int32 = (start + t) % 4
+    let xx : Int32 = gx + dirs[k].0
+    let yy : Int32 = gy + dirs[k].1
     if game.blocked_for_inspector(xx, yy) {
       continue
     }
@@ -684,11 +692,11 @@ fn @types.Game::update_trains(game : @types.Game, dt : Float) -> Unit {
     train.x = train.x + train.speed * slow_mul * dt
 
     while train.passed_junction + 1 < @types.junction_n {
-      let j : Int = train.passed_junction + 1
+      let j : Int32 = train.passed_junction + 1
       let jx : Float = Float::from_int(@types.junction_x(j))
 
       if train.prev_x < jx && train.x >= jx {
-        let dir : Int = game.switch_state[j]
+        let dir : Int32 = game.switch_state[j]
         train.lane = (train.lane + dir).clamp(
           min=0,
           max=@types.train_lane_n - 1,

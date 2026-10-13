@@ -1,38 +1,38 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Upper bound for max objs in gameplay systems.
-pub let max_objs : Int = 420
+pub let max_objs : Int32 = 420
 
 ///|
 /// Upper bound for max shots in gameplay systems.
-pub let max_shots : Int = 480
+pub let max_shots : Int32 = 480
 
 ///|
 /// Upper bound for max sparks in gameplay systems.
-pub let max_sparks : Int = 760
+pub let max_sparks : Int32 = 760
 
 ///|
 /// Upper bound for max shock rings in gameplay systems.
-pub let max_shock_rings : Int = 84
+pub let max_shock_rings : Int32 = 84
 
 ///|
 /// Upper bound for max ghosts in gameplay systems.
-pub let max_ghosts : Int = 240
+pub let max_ghosts : Int32 = 240
 
 ///|
 /// Gameplay tuning constant for lane count.
-pub let lane_count : Int = 5
+pub let lane_count : Int32 = 5
 
 ///|
 /// Gameplay tuning constant for lane gap.
@@ -172,4 +172,4 @@ pub let invuln_time : Float = 0.64
 
 ///|
 /// Gameplay tuning constant for hud h.
-pub let hud_h : Int = 112
+pub let hud_h : Int32 = 112

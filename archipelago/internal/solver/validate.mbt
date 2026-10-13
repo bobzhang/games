@@ -2,7 +2,7 @@
 pub fn is_island_satisfied(
   islands : Array[@types.Island],
   bridges : Array[@types.Bridge],
-  idx : Int,
+  idx : Int32,
 ) -> Bool {
   let count = @types.count_bridges_for_island(bridges, idx)
   count == islands[idx].required_count
@@ -12,7 +12,7 @@ pub fn is_island_satisfied(
 pub fn is_island_over(
   islands : Array[@types.Island],
   bridges : Array[@types.Bridge],
-  idx : Int,
+  idx : Int32,
 ) -> Bool {
   let count = @types.count_bridges_for_island(bridges, idx)
   count > islands[idx].required_count
@@ -70,7 +70,7 @@ pub fn is_puzzle_solved(
 pub fn satisfaction_counts(
   islands : Array[@types.Island],
   bridges : Array[@types.Bridge],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   let mut satisfied = 0
   let total = islands.length()
   for i in 0..<total {
@@ -84,9 +84,9 @@ pub fn satisfaction_counts(
 ///|
 pub fn compute_stars(
   bridges : Array[@types.Bridge],
-  par : Int,
-  removals : Int,
-) -> Int {
+  par : Int32,
+  removals : Int32,
+) -> Int32 {
   let segments = @types.total_bridge_segments(bridges)
   let mut stars = 1 // Base: solved
   if segments <= par {

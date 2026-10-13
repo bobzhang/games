@@ -62,7 +62,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn pad_zero(n : Int) -> String {
+fn pad_zero(n : Int32) -> String {
   if n < 10 {
     "0\{n}"
   } else {
@@ -71,7 +71,7 @@ fn pad_zero(n : Int) -> String {
 }
 
 ///|
-fn draw_alert_status(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_alert_status(game : @types.Game, x : Int32, y : Int32) -> Unit {
   @draw.draw_text("ALERT STATUS", x, y, 12, @types.color_dim_text)
   let mut any_alert = false
   let mut any_suspicious = false
@@ -95,7 +95,7 @@ fn draw_alert_status(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_detection_bar(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_detection_bar(game : @types.Game, x : Int32, y : Int32) -> Unit {
   @draw.draw_text("DETECTION", x, y, 12, @types.color_dim_text)
   let bar_w = 150
   let bar_h = 10
@@ -134,7 +134,7 @@ fn draw_detection_bar(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_stealth_status(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_stealth_status(game : @types.Game, x : Int32, y : Int32) -> Unit {
   @draw.draw_text("STEALTH", x, y, 12, @types.color_dim_text)
   if game.player.in_shadow {
     @draw.draw_text("IN SHADOW", x, y + 16, 16, @types.color_neon_green)
@@ -156,7 +156,7 @@ fn draw_stealth_status(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_terminal_count(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_terminal_count(game : @types.Game, x : Int32, y : Int32) -> Unit {
   @draw.draw_text("TERMINALS", x, y, 12, @types.color_dim_text)
   let total = game.level.terminals.length()
   let hacked = game.player.hacked_terminals
@@ -169,7 +169,7 @@ fn draw_terminal_count(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_controls_hint(panel_x : Int, panel_w : Int) -> Unit {
+fn draw_controls_hint(panel_x : Int32, panel_w : Int32) -> Unit {
   let x = panel_x + 10
   let y = 420
   @draw.draw_text("CONTROLS", x, y, 10, @types.color_dim_text)
@@ -211,7 +211,7 @@ fn draw_controls_hint(panel_x : Int, panel_w : Int) -> Unit {
 }
 
 ///|
-fn draw_minimap(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_minimap(game : @types.Game, x : Int32, y : Int32) -> Unit {
   let scale = 4
   let w = @types.grid_width * scale
   let h = @types.grid_height * scale

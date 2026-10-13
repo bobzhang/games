@@ -1,44 +1,44 @@
 ///|
-pub let screen_width : Int = 960
+pub let screen_width : Int32 = 960
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 12
+pub let grid_cols : Int32 = 12
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let tile_size : Int = 64
+pub let tile_size : Int32 = 64
 
 ///|
-pub let grid_width : Int = 768
+pub let grid_width : Int32 = 768
 
 ///|
-pub let grid_height : Int = 512
+pub let grid_height : Int32 = 512
 
 ///|
-pub let grid_offset_x : Int = 96
+pub let grid_offset_x : Int32 = 96
 
 ///|
-pub let grid_offset_y : Int = 120
+pub let grid_offset_y : Int32 = 120
 
 ///|
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 ///|
-pub let tier1_count : Int = 7
+pub let tier1_count : Int32 = 7
 
 ///|
-pub let tier2_count : Int = 7
+pub let tier2_count : Int32 = 7
 
 ///|
-pub let tier3_count : Int = 6
+pub let tier3_count : Int32 = 6
 
 ///|
 pub let player_move_delay : Float = 0.12

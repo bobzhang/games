@@ -157,7 +157,7 @@ fn draw_alley_backdrop_art() -> Bool {
 
 ///|
 /// Draws the generated lane surface if loaded.
-fn draw_lane_art(sx : Int, sy : Int) -> Bool {
+fn draw_lane_art(sx : Int32, sy : Int32) -> Bool {
   match tex_lane_wood.val {
     Some(texture) => {
       draw_art_top_left(
@@ -176,7 +176,7 @@ fn draw_lane_art(sx : Int, sy : Int) -> Bool {
 
 ///|
 /// Draws the generated bowling ball sprite if loaded.
-fn draw_ball_art(x : Int, y : Int) -> Bool {
+fn draw_ball_art(x : Int32, y : Int32) -> Bool {
   match tex_ball_sprite.val {
     Some(texture) => {
       @raylib.draw_ellipse(
@@ -214,11 +214,11 @@ fn fallen_pin_rotation(pin : @types.Pin) -> Float {
 
 ///|
 /// Draws the generated bowling pin sprite if loaded.
-fn draw_pin_art(pin : @types.Pin, sx : Int, sy : Int) -> Bool {
+fn draw_pin_art(pin : @types.Pin, sx : Int32, sy : Int32) -> Bool {
   match tex_pin_sprite.val {
     Some(texture) => {
-      let px : Int = pin.x.to_int() + sx
-      let py : Int = pin.y.to_int() + sy
+      let px : Int32 = pin.x.to_int() + sx
+      let py : Int32 = pin.y.to_int() + sy
       @raylib.draw_ellipse(
         px,
         py + 14,

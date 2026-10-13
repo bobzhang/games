@@ -87,7 +87,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn load_level(game : @types.Game, level_idx : Int) -> Unit {
+fn load_level(game : @types.Game, level_idx : Int32) -> Unit {
   let def = @levels.get_level(level_idx)
   game.current_level = level_idx
   game.current_tier = def.tier
@@ -189,7 +189,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn find_nearest_node(game : @types.Game, mx : Int, my : Int) -> Int {
+fn find_nearest_node(game : @types.Game, mx : Int32, my : Int32) -> Int32 {
   let mut best = -1
   let mut best_dist : Float = 999999.0
   for i in 0..<game.nodes.length() {
@@ -232,7 +232,7 @@ fn update_idle_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_connecting_input(game : @types.Game, from_id : Int) -> Unit {
+fn update_connecting_input(game : @types.Game, from_id : Int32) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   game.hover_node = find_nearest_node(game, mx, my)
@@ -265,7 +265,7 @@ fn update_connecting_input(game : @types.Game, from_id : Int) -> Unit {
 }
 
 ///|
-fn add_rope(game : @types.Game, from_id : Int, to_id : Int) -> Unit {
+fn add_rope(game : @types.Game, from_id : Int32, to_id : Int32) -> Unit {
   let from_node = game.nodes[from_id]
   let to_node = game.nodes[to_id]
   // Determine sides
@@ -303,7 +303,7 @@ fn add_rope(game : @types.Game, from_id : Int, to_id : Int) -> Unit {
 }
 
 ///|
-fn remove_ropes_at_node(game : @types.Game, node_id : Int) -> Unit {
+fn remove_ropes_at_node(game : @types.Game, node_id : Int32) -> Unit {
   let mut removed = false
   for i in 0..<game.ropes.length() {
     if game.ropes[i].active {

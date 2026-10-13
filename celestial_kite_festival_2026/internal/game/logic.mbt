@@ -82,7 +82,7 @@ fn @types.Game::reset_kite(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of a free obj slot, evicting the slot with the lowest remaining life if all are active.
-fn @types.Game::alloc_obj(game : @types.Game) -> Int {
+fn @types.Game::alloc_obj(game : @types.Game) -> Int32 {
   for i, slot in game.objs {
     if !slot.active {
       break i
@@ -99,7 +99,7 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free spark slot, evicting the slot with the lowest remaining life if all are active.
-fn @types.Game::alloc_spark(game : @types.Game) -> Int {
+fn @types.Game::alloc_spark(game : @types.Game) -> Int32 {
   for i, slot in game.sparks {
     if !slot.active {
       break i
@@ -116,7 +116,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free halo slot, evicting the slot with the lowest remaining life if all are active.
-fn @types.Game::alloc_halo(game : @types.Game) -> Int {
+fn @types.Game::alloc_halo(game : @types.Game) -> Int32 {
   for i, slot in game.halos {
     if !slot.active {
       break i
@@ -133,7 +133,7 @@ fn @types.Game::alloc_halo(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free trail slot, evicting the slot with the lowest remaining life if all are active.
-fn @types.Game::alloc_trail(game : @types.Game) -> Int {
+fn @types.Game::alloc_trail(game : @types.Game) -> Int32 {
   for i, slot in game.trails {
     if !slot.active {
       break i
@@ -158,7 +158,7 @@ fn @types.Game::emit_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_spark()
   game.sparks[i].active = true
@@ -177,8 +177,8 @@ fn @types.Game::burst_sparks(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_spark(
@@ -201,7 +201,7 @@ fn @types.Game::spawn_halo(
   y : Float,
   r : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_halo()
   game.halos[i].active = true
@@ -245,7 +245,7 @@ fn @types.Game::spawn_obj(
   h : Float,
   hp : Float,
   life : Float,
-  value : Int,
+  value : Int32,
 ) -> Unit {
   let i = game.alloc_obj()
   game.objs[i].active = true
@@ -266,14 +266,14 @@ fn @types.Game::spawn_obj(
 
 ///|
 /// Returns the score delta for a collection event, scaling the base value by the current combo multiplier.
-fn @types.Game::score_gain(game : @types.Game, base : Int) -> Int {
+fn @types.Game::score_gain(game : @types.Game, base : Int32) -> Int32 {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
 /// Adds a combo-scaled score to the session total and updates the best-score if exceeded.
-fn @types.Game::add_score(game : @types.Game, base : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, base : Int32) -> Unit {
   let g = game.score_gain(base)
   game.score = game.score + g
   if game.score > game.best_score {
@@ -361,7 +361,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
 
 ///|
 /// Clears all entities, transitions to Play, sets stage-scaled goal, time limit, and wind power, then emits a spawn-in burst.
-fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_objs()
   game.clear_sparks()
   game.clear_halos()
@@ -724,7 +724,7 @@ fn @types.Game::update_kite(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::collect_obj(
   game : @types.Game,
   kind : @types.ObjKind,
-  value : Int,
+  value : Int32,
 ) -> Unit {
   match kind {
     Lantern => {

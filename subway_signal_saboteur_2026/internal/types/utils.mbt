@@ -25,129 +25,129 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Computes Manhattan distance between two grid cells.
-pub fn manhattan(x0 : Int, y0 : Int, x1 : Int, y1 : Int) -> Int {
+pub fn manhattan(x0 : Int32, y0 : Int32, x1 : Int32, y1 : Int32) -> Int32 {
   (x1 - x0).abs() + (y1 - y0).abs()
 }
 
 ///|
 /// Converts a grid X coordinate into board pixel X.
-pub fn board_px(x : Int) -> Int {
+pub fn board_px(x : Int32) -> Int32 {
   board_x0 + x * cell
 }
 
 ///|
 /// Converts a grid Y coordinate into board pixel Y.
-pub fn board_py(y : Int) -> Int {
+pub fn board_py(y : Int32) -> Int32 {
   board_y0 + y * cell
 }
 
 ///|
 /// Converts a float grid X into the pixel X of that cell center.
-pub fn cell_center_x(x : Float) -> Int {
+pub fn cell_center_x(x : Float) -> Int32 {
   board_x0 + (x * Float::from_int(cell)).to_int() + cell / 2
 }
 
 ///|
 /// Converts a float grid Y into the pixel Y of that cell center.
-pub fn cell_center_y(y : Float) -> Int {
+pub fn cell_center_y(y : Float) -> Int32 {
   board_y0 + (y * Float::from_int(cell)).to_int() + cell / 2
 }
 
 ///|
 /// Returns the board Y row used by a train lane index.
-pub fn lane_to_y(lane : Int) -> Int {
+pub fn lane_to_y(lane : Int32) -> Int32 {
   4 + lane * 2
 }
 
 ///|
 /// Returns the board X column of a junction by index.
-pub fn junction_x(i : Int) -> Int {
+pub fn junction_x(i : Int32) -> Int32 {
   6 + i * 4
 }
 
 ///|
 /// Returns the top board row used by the signal control panel.
-pub fn signal_panel_top_y() -> Int {
+pub fn signal_panel_top_y() -> Int32 {
   2
 }
 
 ///|
 /// Returns the bottom board row used by the signal control panel.
-pub fn signal_panel_bottom_y() -> Int {
+pub fn signal_panel_bottom_y() -> Int32 {
   10
 }
 
 ///|
 /// Returns the rectangle for the title screen start button.
-pub fn start_button_rect() -> (Int, Int, Int, Int) {
+pub fn start_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + 26, screen_h - 194, panel_w - 52, 72)
 }
 
 ///|
 /// Returns the rectangle for the result screen retry button.
-pub fn retry_button_rect() -> (Int, Int, Int, Int) {
+pub fn retry_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + 26, screen_h - 194, panel_w - 52, 72)
 }
 
 ///|
 /// Returns the touch rectangle for the left movement button.
-pub fn btn_left() -> (Int, Int, Int, Int) {
-  let x0 : Int = 36
-  let y0 : Int = screen_h - 244
+pub fn btn_left() -> (Int32, Int32, Int32, Int32) {
+  let x0 : Int32 = 36
+  let y0 : Int32 = screen_h - 244
   (x0, y0 + 72, 78, 78)
 }
 
 ///|
 /// Returns the touch rectangle for the right movement button.
-pub fn btn_right() -> (Int, Int, Int, Int) {
-  let x0 : Int = 36
-  let y0 : Int = screen_h - 244
+pub fn btn_right() -> (Int32, Int32, Int32, Int32) {
+  let x0 : Int32 = 36
+  let y0 : Int32 = screen_h - 244
   (x0 + 156, y0 + 72, 78, 78)
 }
 
 ///|
 /// Returns the touch rectangle for the up movement button.
-pub fn btn_up() -> (Int, Int, Int, Int) {
-  let x0 : Int = 36
-  let y0 : Int = screen_h - 244
+pub fn btn_up() -> (Int32, Int32, Int32, Int32) {
+  let x0 : Int32 = 36
+  let y0 : Int32 = screen_h - 244
   (x0 + 78, y0, 78, 78)
 }
 
 ///|
 /// Returns the touch rectangle for the down movement button.
-pub fn btn_down() -> (Int, Int, Int, Int) {
-  let x0 : Int = 36
-  let y0 : Int = screen_h - 244
+pub fn btn_down() -> (Int32, Int32, Int32, Int32) {
+  let x0 : Int32 = 36
+  let y0 : Int32 = screen_h - 244
   (x0 + 78, y0 + 144, 78, 78)
 }
 
 ///|
 /// Returns the touch rectangle for the main action button.
-pub fn btn_action() -> (Int, Int, Int, Int) {
+pub fn btn_action() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 192, screen_h - 226, 128, 128)
 }
 
 ///|
 /// Returns the touch rectangle for the hint button.
-pub fn btn_hint() -> (Int, Int, Int, Int) {
+pub fn btn_hint() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 338, screen_h - 182, 118, 70)
 }
 
 ///|
 /// Returns the touch rectangle for the restart shortcut button.
-pub fn btn_restart() -> (Int, Int, Int, Int) {
+pub fn btn_restart() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 338, screen_h - 266, 118, 70)
 }
 
 ///|
 /// Returns the touch rectangle for the menu shortcut button.
-pub fn btn_menu() -> (Int, Int, Int, Int) {
+pub fn btn_menu() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 338, screen_h - 350, 118, 70)
 }
 
 ///|
 /// Returns a hint string for the given rotating hint index.
-pub fn hint_text(i : Int) -> String {
+pub fn hint_text(i : Int32) -> String {
   if i == 0 {
     "Route trains to their target lane colors before they exit right."
   } else if i == 1 {
@@ -164,10 +164,10 @@ pub fn hint_text(i : Int) -> String {
 pub fn point_in_rect(
   x : Float,
   y : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -182,11 +182,11 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if hold && point_in_rect(mx, my, rx, ry, rw, rh) {
     return true
@@ -204,19 +204,19 @@ pub fn pointer_on_rect(
 
 ///|
 /// Converts `(x, y)` grid coordinates to a flat tile array index.
-pub fn idx(x : Int, y : Int) -> Int {
+pub fn idx(x : Int32, y : Int32) -> Int32 {
   y * grid_w + x
 }
 
 ///|
 /// Returns whether `(x, y)` is inside the subway grid bounds.
-pub fn in_bounds(x : Int, y : Int) -> Bool {
+pub fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < grid_w && y >= 0 && y < grid_h
 }
 
 ///|
 /// Reads a tile at `(x, y)` and returns `Void` when out of bounds.
-pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
+pub fn tile_at(game : Game, x : Int32, y : Int32) -> Tile {
   if !in_bounds(x, y) {
     Void
   } else {
@@ -226,7 +226,7 @@ pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
 
 ///|
 /// Writes a tile at `(x, y)` when the coordinates are in bounds.
-pub fn set_tile(game : Game, x : Int, y : Int, t : Tile) -> Unit {
+pub fn set_tile(game : Game, x : Int32, y : Int32, t : Tile) -> Unit {
   if !in_bounds(x, y) {
     return
   }
@@ -242,7 +242,7 @@ pub fn set_msg(game : Game, msg : String, ttl : Float) -> Unit {
 
 ///|
 /// Snaps an actor to a grid cell and resets interpolation state.
-pub fn actor_place(a : Actor, x : Int, y : Int) -> Unit {
+pub fn actor_place(a : Actor, x : Int32, y : Int32) -> Unit {
   a.x = x
   a.y = y
   a.from_x = x
@@ -257,7 +257,7 @@ pub fn actor_place(a : Actor, x : Int, y : Int) -> Unit {
 
 ///|
 /// Starts actor interpolation toward a target cell if it changed.
-pub fn actor_start_move(a : Actor, tx : Int, ty : Int) -> Unit {
+pub fn actor_start_move(a : Actor, tx : Int32, ty : Int32) -> Unit {
   if a.x == tx && a.y == ty {
     return
   }

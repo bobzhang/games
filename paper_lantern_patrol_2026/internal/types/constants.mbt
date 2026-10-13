@@ -1,46 +1,46 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1440
+pub let screen_w : Int32 = 1440
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 860
+pub let screen_h : Int32 = 860
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// World layout coordinate for play x.
-pub let play_x : Int = 36
+pub let play_x : Int32 = 36
 
 ///|
 /// World layout coordinate for play y.
-pub let play_y : Int = 70
+pub let play_y : Int32 = 70
 
 ///|
 /// Gameplay tuning constant for play w.
-pub let play_w : Int = 1046
+pub let play_w : Int32 = 1046
 
 ///|
 /// Gameplay tuning constant for play h.
-pub let play_h : Int = 752
+pub let play_h : Int32 = 752
 
 ///|
 /// World layout coordinate for hud x.
-pub let hud_x : Int = play_x + play_w + 18
+pub let hud_x : Int32 = play_x + play_w + 18
 
 ///|
 /// World layout coordinate for hud y.
-pub let hud_y : Int = play_y
+pub let hud_y : Int32 = play_y
 
 ///|
 /// Gameplay tuning constant for hud w.
-pub let hud_w : Int = screen_w - hud_x - play_x
+pub let hud_w : Int32 = screen_w - hud_x - play_x
 
 ///|
 /// Gameplay tuning constant for hud h.
-pub let hud_h : Int = play_h
+pub let hud_h : Int32 = play_h
 
 ///|
 /// World layout coordinate for play left.
@@ -60,23 +60,23 @@ pub let play_bottom : Float = Float::from_int(play_y + play_h - 12)
 
 ///|
 /// Gameplay tuning constant for shrine count.
-pub let shrine_count : Int = 4
+pub let shrine_count : Int32 = 4
 
 ///|
 /// Upper bound for max lanterns in gameplay systems.
-pub let max_lanterns : Int = 20
+pub let max_lanterns : Int32 = 20
 
 ///|
 /// Upper bound for max gusts in gameplay systems.
-pub let max_gusts : Int = 24
+pub let max_gusts : Int32 = 24
 
 ///|
 /// Upper bound for max sparks in gameplay systems.
-pub let max_sparks : Int = 180
+pub let max_sparks : Int32 = 180
 
 ///|
 /// Upper bound for max thieves in gameplay systems.
-pub let max_thieves : Int = 18
+pub let max_thieves : Int32 = 18
 
 ///|
 /// Spatial tuning constant for patrol radius.
@@ -152,19 +152,19 @@ pub let combo_window : Float = 4.2
 
 ///|
 /// Per-step progression tuning for combo bonus step.
-pub let combo_bonus_step : Int = 42
+pub let combo_bonus_step : Int32 = 42
 
 ///|
 /// Base value before difficulty or progression scaling for delivery score base.
-pub let delivery_score_base : Int = 128
+pub let delivery_score_base : Int32 = 128
 
 ///|
 /// Progression and scoring constant for score per flame.
-pub let score_per_flame : Int = 2
+pub let score_per_flame : Int32 = 2
 
 ///|
 /// Gameplay tuning constant for extinguish limit.
-pub let extinguish_limit : Int = 7
+pub let extinguish_limit : Int32 = 7
 
 ///|
 /// Gameplay tuning constant for interact stabilize boost.
@@ -242,7 +242,7 @@ pub fn gate_position() -> (Float, Float) {
 
 ///|
 /// Returns world-space coordinates for shrine position.
-pub fn shrine_position(index : Int) -> (Float, Float) {
+pub fn shrine_position(index : Int32) -> (Float, Float) {
   match index.clamp(min=0, max=shrine_count - 1) {
     0 => (Float::from_int(play_x + play_w - 140), Float::from_int(play_y + 126))
     1 =>

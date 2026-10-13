@@ -18,7 +18,7 @@ pub(all) struct Game {
   /// Candy colour index for each cell. Range `[0, candy_kinds)` for a live candy;
   /// `-1` means the cell is empty (cleared). Written by cascade/refill logic,
   /// read by match scanning, rendering, and hint search.
-  kinds : Array[Int]
+  kinds : Array[Int32]
   /// Special-candy marker on each cell. `None` for a normal candy; `Row`, `Col`,
   /// or `Bomb` for line-clear or area-clear specials. Set when a match of 4+
   /// is resolved; consumed during `expand_special_marks`.
@@ -26,7 +26,7 @@ pub(all) struct Game {
   /// Jelly layer count per cell. `0` = no jelly; `1` = one layer remaining.
   /// Decremented when the cell is cleared; the level is won when every jelly
   /// cell reaches 0. Assigned by `assign_jelly_targets` at level start.
-  jelly : Array[Int]
+  jelly : Array[Int32]
   /// Per-cell flash brightness used for clear/spawn animations.
   /// Set to `1.0` on clear or special spawn, decays toward `0.0` each frame.
   /// Read by the renderer to draw a white overlay on the cell.
@@ -46,25 +46,25 @@ pub(all) struct Game {
   /// Current level number, starting at 1. Incremented on level clear.
   /// Affects the move budget (`moves_base + (level-1) * moves_level_bonus`)
   /// and the jelly target count.
-  mut level : Int
+  mut level : Int32
   /// Cumulative score for the current run. Increased by match cascades;
   /// the formula is `cleared * (42 + chain * 18)` per cascade step.
-  mut score : Int
+  mut score : Int32
   /// Highest score achieved across all runs in this session.
   /// Updated whenever `score` exceeds it, displayed on the side panel
   /// and result overlay.
-  mut best_score : Int
+  mut best_score : Int32
   /// Longest cascade chain achieved during the current run.
   /// Updated after each cascade step; displayed on the HUD and result screen.
-  mut chain_best : Int
+  mut chain_best : Int32
   /// Number of swap moves the player has left before game over.
   /// Starts at `moves_base + (level-1) * moves_level_bonus`.
   /// Decremented by 1 on each successful swap and by manual shuffles.
-  mut moves_left : Int
+  mut moves_left : Int32
   /// Number of jelly-covered cells still remaining on the board.
   /// The level is cleared when this reaches 0.
   /// Decremented inside `remove_marked_cells` when a jelly layer is fully removed.
-  mut jelly_left : Int
+  mut jelly_left : Int32
   // ──── Selection and cursor ────
   /// Whether a cell is currently selected for swapping.
   /// Set to `true` on the first tap/enter; cleared after a swap attempt
@@ -72,28 +72,28 @@ pub(all) struct Game {
   mut selected : Bool
   /// Board column (x) of the currently selected cell.
   /// Only meaningful when `selected` is `true`.
-  mut sel_x : Int
+  mut sel_x : Int32
   /// Board row (y) of the currently selected cell.
   /// Only meaningful when `selected` is `true`.
-  mut sel_y : Int
+  mut sel_y : Int32
   /// Board column (x) of the keyboard cursor highlight.
   /// Moved by arrow/WASD keys; clamped to `[0, board_cols-1]`.
-  mut cursor_x : Int
+  mut cursor_x : Int32
   /// Board row (y) of the keyboard cursor highlight.
   /// Moved by arrow/WASD keys; clamped to `[0, board_rows-1]`.
-  mut cursor_y : Int
+  mut cursor_y : Int32
   // ──── Hint system ────
   /// Whether a hint pair is currently being displayed on the board.
   /// Set by `find_hint`; cleared when the hint timer expires or a swap occurs.
   mut hint_active : Bool
   /// Board column of the first cell in the hint pair.
-  mut hint_x0 : Int
+  mut hint_x0 : Int32
   /// Board row of the first cell in the hint pair.
-  mut hint_y0 : Int
+  mut hint_y0 : Int32
   /// Board column of the second cell in the hint pair.
-  mut hint_x1 : Int
+  mut hint_x1 : Int32
   /// Board row of the second cell in the hint pair.
-  mut hint_y1 : Int
+  mut hint_y1 : Int32
   /// Remaining display time for the hint animation, in seconds.
   /// Initialised to `hint_ttl_max` (2.2 s); counts down each frame.
   /// Also drives the pulsing sine wave in the hint renderer.
@@ -119,13 +119,13 @@ pub(all) struct Game {
   /// in seconds. Set to 0.42 s on a successful swap; decays to 0 each frame.
   mut swap_flash_t : Float
   /// Board column of the first cell in the last successful swap.
-  mut swap_x0 : Int
+  mut swap_x0 : Int32
   /// Board row of the first cell in the last successful swap.
-  mut swap_y0 : Int
+  mut swap_y0 : Int32
   /// Board column of the second cell in the last successful swap.
-  mut swap_x1 : Int
+  mut swap_x1 : Int32
   /// Board row of the second cell in the last successful swap.
-  mut swap_y1 : Int
+  mut swap_y1 : Int32
   // ──── Raw pointer state (written by main loop each frame) ────
   /// Current mouse or primary touch x position in screen pixels.
   /// Used by `pointer_on_rect` and `pointer_to_cell` for hit testing.
@@ -137,7 +137,7 @@ pub(all) struct Game {
   mut mouse_press : Bool
   /// Number of active touch points this frame (0 on desktop).
   /// A value > 0 enables `touch_mode` and activates touch hit-testing.
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

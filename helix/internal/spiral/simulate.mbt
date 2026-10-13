@@ -128,7 +128,7 @@ pub fn step(game : @types.Game) -> Unit {
 }
 
 ///|
-fn toggle_linked_gates(level : @types.Level, link_id : Int) -> Unit {
+fn toggle_linked_gates(level : @types.Level, link_id : Int32) -> Unit {
   for i in 0..<level.switch_links.length() {
     let link = level.switch_links[i]
     if i == link_id {
@@ -151,7 +151,7 @@ fn toggle_linked_gates(level : @types.Level, link_id : Int) -> Unit {
 }
 
 ///|
-fn open_linked_gates(level : @types.Level, link_id : Int) -> Unit {
+fn open_linked_gates(level : @types.Level, link_id : Int32) -> Unit {
   for i in 0..<level.switch_links.length() {
     let link = level.switch_links[i]
     if i == link_id {

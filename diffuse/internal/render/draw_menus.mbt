@@ -53,7 +53,7 @@ pub fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_drops(frame : Int) -> Unit {
+fn draw_title_drops(frame : Int32) -> Unit {
   let t : Float = Float::from_int(frame) * 0.02
   // Animated colored circles
   let colors = [
@@ -75,7 +75,7 @@ fn draw_title_drops(frame : Int) -> Unit {
 }
 
 ///|
-fn draw_color_legend(cx : Int, y : Int) -> Unit {
+fn draw_color_legend(cx : Int32, y : Int32) -> Unit {
   let label = "Color Mixing Guide"
   let lw = @draw.measure_text(label, 18)
   @draw.draw_text(label, cx - lw / 2, y, 18, @types.color_title_text)

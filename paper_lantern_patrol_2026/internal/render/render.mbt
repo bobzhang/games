@@ -2,8 +2,8 @@
 /// Draws text centered horizontally at the given y coordinate with the specified size and color.
 fn draw_centered(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let width = @draw.measure_text(text, size)
@@ -14,9 +14,9 @@ fn draw_centered(
 /// Draws a labeled progress bar at `(x, y)` with width `w`, filled proportionally to `value / max_value`.
 fn draw_meter(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
   value : Float,
   max_value : Float,
   fill : @raylib.Color,
@@ -47,7 +47,7 @@ fn draw_meter(
 
 ///|
 /// Returns the number of active lanterns currently assigned to the given shrine index.
-fn @types.Game::shrine_queue_count(game : @types.Game, shrine : Int) -> Int {
+fn @types.Game::shrine_queue_count(game : @types.Game, shrine : Int32) -> Int32 {
   let mut total = 0
   for lantern in game.lanterns {
     if lantern.active && lantern.target_shrine == shrine {

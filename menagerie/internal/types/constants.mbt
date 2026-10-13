@@ -1,50 +1,50 @@
 ///|
-pub let screen_width : Int = 1024
+pub let screen_width : Int32 = 1024
 
 ///|
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 10
+pub let grid_cols : Int32 = 10
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let cell_size : Int = 64
+pub let cell_size : Int32 = 64
 
 ///|
-pub let grid_offset_x : Int = 32
+pub let grid_offset_x : Int32 = 32
 
 ///|
-pub let grid_offset_y : Int = 96
+pub let grid_offset_y : Int32 = 96
 
 ///|
-pub let toolbar_height : Int = 80
+pub let toolbar_height : Int32 = 80
 
 ///|
-pub let hud_height : Int = 64
+pub let hud_height : Int32 = 64
 
 ///|
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 ///|
-pub let tier1_count : Int = 7
+pub let tier1_count : Int32 = 7
 
 ///|
-pub let tier2_count : Int = 7
+pub let tier2_count : Int32 = 7
 
 ///|
-pub let tier3_count : Int = 6
+pub let tier3_count : Int32 = 6
 
 ///|
-pub let max_species : Int = 6
+pub let max_species : Int32 = 6
 
 ///|
-pub let predator_safe_distance : Int = 3
+pub let predator_safe_distance : Int32 = 3
 
 // Colors - zoo / nature palette
 
@@ -159,33 +159,33 @@ pub let color_level_completed : @raylib.Color = @raylib.Color::new(
 // Level select layout
 
 ///|
-pub let level_button_y : Int = 140
+pub let level_button_y : Int32 = 140
 
 ///|
-pub let level_button_h : Int = 56
+pub let level_button_h : Int32 = 56
 
 ///|
-pub let level_button_gap : Int = 8
+pub let level_button_gap : Int32 = 8
 
 ///|
-pub let level_visible_count : Int = 9
+pub let level_visible_count : Int32 = 9
 
 ///|
-pub let level_button_x : Int = 80
+pub let level_button_x : Int32 = 80
 
 ///|
-pub let level_button_w : Int = 864
+pub let level_button_w : Int32 = 864
 
 // Toolbar layout
 
 ///|
-pub let toolbar_slot_w : Int = 72
+pub let toolbar_slot_w : Int32 = 72
 
 ///|
-pub let toolbar_slot_gap : Int = 4
+pub let toolbar_slot_gap : Int32 = 4
 
 ///|
-pub let toolbar_start_x : Int = 16
+pub let toolbar_start_x : Int32 = 16
 
 ///|
-pub let toolbar_slot_h : Int = 56
+pub let toolbar_slot_h : Int32 = 56

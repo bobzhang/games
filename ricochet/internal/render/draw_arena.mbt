@@ -7,7 +7,7 @@ let oy : Float = @types.arena_offset_y
 ///|
 /// Draw the arena background grid.
 fn draw_grid() -> Unit {
-  let grid_spacing : Int = 50
+  let grid_spacing : Int32 = 50
   let aw = @types.arena_width.to_int()
   let ah = @types.arena_height.to_int()
   let iox = ox.to_int()
@@ -88,7 +88,7 @@ pub fn draw_targets(level : @types.Level, anim : Float) -> Unit {
         let progress : Float = 1.0 - t.hit_timer
         // Ring 1: fast expanding
         let ring1_radius : Float = t.radius + progress * 60.0
-        let ring1_alpha : Int = (t.hit_timer * 255.0).to_int()
+        let ring1_alpha : Int32 = (t.hit_timer * 255.0).to_int()
         @raylib.draw_circle_lines(
           tx,
           ty,
@@ -99,7 +99,7 @@ pub fn draw_targets(level : @types.Level, anim : Float) -> Unit {
         if progress > 0.15 {
           let ring2_progress : Float = progress - 0.15
           let ring2_radius : Float = t.radius + ring2_progress * 45.0
-          let ring2_alpha : Int = ((t.hit_timer + 0.15) * 200.0).to_int()
+          let ring2_alpha : Int32 = ((t.hit_timer + 0.15) * 200.0).to_int()
           let clamped_alpha = if ring2_alpha > 255 { 255 } else { ring2_alpha }
           @raylib.draw_circle_lines(
             tx,
@@ -112,7 +112,7 @@ pub fn draw_targets(level : @types.Level, anim : Float) -> Unit {
         if progress > 0.3 {
           let ring3_progress : Float = progress - 0.3
           let ring3_radius : Float = t.radius + ring3_progress * 30.0
-          let ring3_alpha : Int = ((t.hit_timer + 0.3) * 150.0).to_int()
+          let ring3_alpha : Int32 = ((t.hit_timer + 0.3) * 150.0).to_int()
           let clamped_alpha3 = if ring3_alpha > 255 { 255 } else { ring3_alpha }
           @raylib.draw_circle_lines(
             tx,
@@ -123,7 +123,7 @@ pub fn draw_targets(level : @types.Level, anim : Float) -> Unit {
         }
         // Flash fill at impact moment
         if t.hit_timer > 0.8 {
-          let flash_alpha : Int = ((t.hit_timer - 0.8) * 5.0 * 100.0).to_int()
+          let flash_alpha : Int32 = ((t.hit_timer - 0.8) * 5.0 * 100.0).to_int()
           @raylib.draw_circle(
             tx,
             ty,

@@ -1,53 +1,53 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 8
+pub let grid_cols : Int32 = 8
 
 ///|
-pub let grid_rows : Int = 12
+pub let grid_rows : Int32 = 12
 
 ///|
-pub let cell_size : Int = 36
+pub let cell_size : Int32 = 36
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 100
+pub let grid_offset_y : Int32 = 100
 
 ///|
-pub let target_offset_x : Int = 720
+pub let target_offset_x : Int32 = 720
 
 ///|
-pub let target_offset_y : Int = 100
+pub let target_offset_y : Int32 = 100
 
 ///|
-pub let target_cell_size : Int = 24
+pub let target_cell_size : Int32 = 24
 
 ///|
-pub let heddle_panel_x : Int = 80
+pub let heddle_panel_x : Int32 = 80
 
 ///|
-pub let heddle_panel_y : Int = 560
+pub let heddle_panel_y : Int32 = 560
 
 ///|
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 ///|
-pub let tier1_count : Int = 7
+pub let tier1_count : Int32 = 7
 
 ///|
-pub let tier2_count : Int = 7
+pub let tier2_count : Int32 = 7
 
 ///|
-pub let tier3_count : Int = 6
+pub let tier3_count : Int32 = 6
 
 // Color palette - warm textile tones
 

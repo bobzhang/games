@@ -1,58 +1,58 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1420
+pub let screen_w : Int32 = 1420
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 900
+pub let screen_h : Int32 = 900
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Number of columns in the candy board.
-pub let board_cols : Int = 8
+pub let board_cols : Int32 = 8
 
 ///|
 /// Number of rows in the candy board.
-pub let board_rows : Int = 8
+pub let board_rows : Int32 = 8
 
 ///|
 /// Total number of cells in the board.
-pub let board_cells : Int = board_cols * board_rows
+pub let board_cells : Int32 = board_cols * board_rows
 
 ///|
 /// Number of regular candy kinds used for random spawning.
-pub let candy_kinds : Int = 6
+pub let candy_kinds : Int32 = 6
 
 ///|
 /// Pixel size of one board cell.
-pub let cell_px : Int = 84
+pub let cell_px : Int32 = 84
 
 ///|
 /// Padding used around board visuals.
-pub let board_pad : Int = 18
+pub let board_pad : Int32 = 18
 
 ///|
 /// Width of the right-side UI panel.
-pub let ui_panel_w : Int = 360
+pub let ui_panel_w : Int32 = 360
 
 ///|
 /// Base move budget for level 1.
-pub let moves_base : Int = 28
+pub let moves_base : Int32 = 28
 
 ///|
 /// Extra moves granted per level.
-pub let moves_level_bonus : Int = 2
+pub let moves_level_bonus : Int32 = 2
 
 ///|
 /// Base jelly target for level 1.
-pub let base_jelly : Int = 16
+pub let base_jelly : Int32 = 16
 
 ///|
 /// Extra jelly target added per level.
-pub let jelly_level_bonus : Int = 3
+pub let jelly_level_bonus : Int32 = 3
 
 ///|
 /// Maximum duration of a shown hint in seconds.

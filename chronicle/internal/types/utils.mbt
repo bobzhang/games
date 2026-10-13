@@ -53,7 +53,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn find_card(cards : Array[EventCard], id : Int) -> EventCard? {
+pub fn find_card(cards : Array[EventCard], id : Int32) -> EventCard? {
   for i in 0..<cards.length() {
     if cards[i].id == id {
       return Some(cards[i])
@@ -63,7 +63,7 @@ pub fn find_card(cards : Array[EventCard], id : Int) -> EventCard? {
 }
 
 ///|
-pub fn card_in_slot(timeline : Array[Int], card_id : Int) -> Int {
+pub fn card_in_slot(timeline : Array[Int32], card_id : Int32) -> Int32 {
   for i in 0..<timeline.length() {
     if timeline[i] == card_id {
       return i
@@ -73,12 +73,12 @@ pub fn card_in_slot(timeline : Array[Int], card_id : Int) -> Int {
 }
 
 ///|
-pub fn is_card_placed(timeline : Array[Int], card_id : Int) -> Bool {
+pub fn is_card_placed(timeline : Array[Int32], card_id : Int32) -> Bool {
   card_in_slot(timeline, card_id) >= 0
 }
 
 ///|
-pub fn is_slot_empty(timeline : Array[Int], slot : Int) -> Bool {
+pub fn is_slot_empty(timeline : Array[Int32], slot : Int32) -> Bool {
   if slot < 0 || slot >= timeline.length() {
     false
   } else {
@@ -87,7 +87,7 @@ pub fn is_slot_empty(timeline : Array[Int], slot : Int) -> Bool {
 }
 
 ///|
-pub fn count_placed(timeline : Array[Int]) -> Int {
+pub fn count_placed(timeline : Array[Int32]) -> Int32 {
   let mut count = 0
   for i in 0..<timeline.length() {
     if timeline[i] != -1 {
@@ -98,7 +98,7 @@ pub fn count_placed(timeline : Array[Int]) -> Int {
 }
 
 ///|
-pub fn is_anchor(case_ : Case, card_id : Int) -> Bool {
+pub fn is_anchor(case_ : Case, card_id : Int32) -> Bool {
   for i in 0..<case_.anchors.length() {
     if case_.anchors[i] == card_id {
       return true
@@ -108,7 +108,7 @@ pub fn is_anchor(case_ : Case, card_id : Int) -> Bool {
 }
 
 ///|
-pub fn get_fixed_slot(cards : Array[EventCard], card_id : Int) -> Int {
+pub fn get_fixed_slot(cards : Array[EventCard], card_id : Int32) -> Int32 {
   match find_card(cards, card_id) {
     Some(c) => c.fixed_slot
     None => -1
@@ -116,7 +116,7 @@ pub fn get_fixed_slot(cards : Array[EventCard], card_id : Int) -> Int {
 }
 
 ///|
-pub fn tier_index(tier : Tier) -> Int {
+pub fn tier_index(tier : Tier) -> Int32 {
   match tier {
     Reports => 0
     Investigations => 1
@@ -125,7 +125,7 @@ pub fn tier_index(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_from_index(idx : Int) -> Tier {
+pub fn tier_from_index(idx : Int32) -> Tier {
   match idx {
     0 => Reports
     1 => Investigations
@@ -134,7 +134,7 @@ pub fn tier_from_index(idx : Int) -> Tier {
 }
 
 ///|
-pub fn tier_case_count(tier : Tier) -> Int {
+pub fn tier_case_count(tier : Tier) -> Int32 {
   match tier {
     Reports => 7
     Investigations => 7
@@ -181,7 +181,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -190,7 +190,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -219,7 +219,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn link_exists(links : Array[CauseLink], from : Int, to : Int) -> Bool {
+pub fn link_exists(links : Array[CauseLink], from : Int32, to : Int32) -> Bool {
   for i in 0..<links.length() {
     if links[i].from_id == from && links[i].to_id == to {
       return true
@@ -231,8 +231,8 @@ pub fn link_exists(links : Array[CauseLink], from : Int, to : Int) -> Bool {
 ///|
 pub fn remove_link(
   links : Array[CauseLink],
-  from : Int,
-  to : Int,
+  from : Int32,
+  to : Int32,
 ) -> Array[CauseLink] {
   let result : Array[CauseLink] = []
   for i in 0..<links.length() {
@@ -245,11 +245,11 @@ pub fn remove_link(
 
 ///|
 pub fn make_event_card(
-  id : Int,
+  id : Int32,
   actor : String,
   action : String,
   time_hint : String,
-  fixed_slot : Int,
+  fixed_slot : Int32,
 ) -> EventCard {
   let text = actor + " - " + action
   { id, text, actor, action, time_hint, fixed_slot, }
@@ -258,14 +258,14 @@ pub fn make_event_card(
 ///|
 pub fn make_clue(
   kind : ClueKind,
-  card_a : Int,
-  card_b : Int,
+  card_a : Int32,
+  card_b : Int32,
   text : String,
 ) -> Clue {
   { kind, card_a, card_b, text, }
 }
 
 ///|
-pub fn make_link(from_id : Int, to_id : Int) -> CauseLink {
+pub fn make_link(from_id : Int32, to_id : Int32) -> CauseLink {
   { from_id, to_id, }
 }

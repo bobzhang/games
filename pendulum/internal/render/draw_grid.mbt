@@ -75,19 +75,19 @@ fn draw_grid_cells(level : @types.Level) -> Unit {
 }
 
 ///|
-fn draw_anchor(cx : Int, cy : Int) -> Unit {
+fn draw_anchor(cx : Int32, cy : Int32) -> Unit {
   @raylib.draw_circle(cx, cy, 10.0, @types.color_anchor)
   @raylib.draw_circle_lines(cx, cy, 14.0, @types.color_anchor)
 }
 
 ///|
-fn draw_peg(cx : Int, cy : Int) -> Unit {
+fn draw_peg(cx : Int32, cy : Int32) -> Unit {
   @raylib.draw_circle(cx, cy, 7.0, @types.color_peg)
   @raylib.draw_circle_lines(cx, cy, 9.0, @types.color_peg)
 }
 
 ///|
-fn draw_goal(cx : Int, cy : Int) -> Unit {
+fn draw_goal(cx : Int32, cy : Int32) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   // Draw a star shape
@@ -110,7 +110,7 @@ fn draw_goal(cx : Int, cy : Int) -> Unit {
 }
 
 ///|
-fn draw_collectible(cx : Int, cy : Int) -> Unit {
+fn draw_collectible(cx : Int32, cy : Int32) -> Unit {
   @raylib.draw_circle(cx, cy, 8.0, @types.color_collectible)
   @raylib.draw_circle(cx, cy, 4.0, @types.color_bg)
 }

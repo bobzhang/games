@@ -2,8 +2,8 @@
 /// Draws `text` horizontally centered on the screen at vertical position `y` with the given font size and color.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -14,10 +14,10 @@ fn draw_center_text(
 /// Draws a labeled horizontal progress bar at `(x, y)` sized `w×h`, filled proportionally to `ratio` in `fill` color.
 fn draw_meter(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fill : @raylib.Color,
 ) -> Unit {
@@ -254,7 +254,7 @@ fn draw_exit_art(exit : @types.ExitMarker, radius : Float) -> Bool {
 
 ///|
 /// Draws the generated trap rune art.
-fn draw_trap_art(trap : @types.Trap, alpha : Int) -> Bool {
+fn draw_trap_art(trap : @types.Trap, alpha : Int32) -> Bool {
   match tex_trap.val {
     Some(texture) => {
       draw_texture_fit(

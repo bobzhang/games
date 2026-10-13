@@ -1,10 +1,10 @@
 ///|
 /// Window width in pixels.
-let sw : Int = 1366
+let sw : Int32 = 1366
 
 ///|
 /// Window height in pixels.
-let sh : Int = 768
+let sh : Int32 = 768
 
 ///|
 /// Scrollable world width in pixels.
@@ -16,27 +16,27 @@ let world_h : Float = 2600.0
 
 ///|
 /// Maximum simultaneous active drones.
-let max_drones : Int = 240
+let max_drones : Int32 = 240
 
 ///|
 /// Maximum simultaneous active bullets.
-let max_bullets : Int = 980
+let max_bullets : Int32 = 980
 
 ///|
 /// Maximum simultaneous active scrap pieces.
-let max_scrap : Int = 360
+let max_scrap : Int32 = 360
 
 ///|
 /// Maximum simultaneous active mines.
-let max_mines : Int = 220
+let max_mines : Int32 = 220
 
 ///|
 /// Maximum simultaneous active particles.
-let max_particles : Int = 1700
+let max_particles : Int32 = 1700
 
 ///|
 /// Number of static wreck obstacles on the map.
-let max_wrecks : Int = 120
+let max_wrecks : Int32 = 120
 
 ///|
 /// Collision radius of the player ship.
@@ -44,7 +44,7 @@ let player_radius : Float = 18.0
 
 ///|
 /// Scrap units that must be deposited to win.
-let target_salvage : Int = 120
+let target_salvage : Int32 = 120
 
 ///|
 /// X position of the salvage deposit beacon.
@@ -71,11 +71,11 @@ struct Player {
   mut pulse_cd : Float
   mut boost_cd : Float
   mut boost_t : Float
-  mut cargo : Int
-  mut deposited : Int
-  mut score : Int
-  mut combo : Int
-  mut best_combo : Int
+  mut cargo : Int32
+  mut deposited : Int32
+  mut score : Int32
+  mut combo : Int32
+  mut best_combo : Int32
   mut tractor_on : Bool
 }
 
@@ -83,7 +83,7 @@ struct Player {
 /// Enemy drone: position, velocity, HP, fire cooldown, and kind (0=scout, 1=fighter, 2=heavy).
 struct Drone {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -97,8 +97,8 @@ struct Drone {
 /// Projectile for both player and drone teams: position, velocity, damage, radius, and remaining lifetime.
 struct Bullet {
   mut active : Bool
-  mut team : Int
-  mut kind : Int
+  mut team : Int32
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -112,12 +112,12 @@ struct Bullet {
 /// Collectible salvage piece: position, velocity, value, animation timer, and tractor-beam magnet flag.
 struct Scrap {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut value : Int
+  mut value : Int32
   mut t : Float
   mut magnet : Bool
 }
@@ -148,7 +148,7 @@ struct Wreck {
 /// Visual effect particle: position, velocity, size, lifetime, and kind for colour selection.
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -215,10 +215,10 @@ fn angle_from_vector(x : Float, y : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -228,7 +228,7 @@ fn inside_rect(
 
 ///|
 /// Returns the collision radius for a drone of the given kind.
-fn drone_radius(kind : Int) -> Float {
+fn drone_radius(kind : Int32) -> Float {
   if kind == 0 {
     16.0
   } else if kind == 1 {
@@ -240,7 +240,7 @@ fn drone_radius(kind : Int) -> Float {
 
 ///|
 /// Returns the starting HP for a drone of the given kind at the given level.
-fn drone_hp(kind : Int, level : Int) -> Float {
+fn drone_hp(kind : Int32, level : Int32) -> Float {
   if kind == 0 {
     38.0 + Float::from_int(level) * 3.0
   } else if kind == 1 {
@@ -345,10 +345,10 @@ fn clear_wrecks(wrecks : Array[Wreck]) -> Unit {
 /// Activates the first free drone slot at position `(x, y)` with stats for the given kind and level.
 fn add_drone(
   drones : Array[Drone],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
-  level : Int,
+  level : Int32,
 ) -> Bool {
   for drone in drones {
     if !drone.active {
@@ -377,8 +377,8 @@ fn add_drone(
 /// Activates the first free bullet slot with full physics and damage parameters.
 fn add_bullet(
   bullets : Array[Bullet],
-  team : Int,
-  kind : Int,
+  team : Int32,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -409,12 +409,12 @@ fn add_bullet(
 /// Activates the first free scrap slot at position `(x, y)` with velocity and value.
 fn add_scrap(
   scraps : Array[Scrap],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
   vy : Float,
-  value : Int,
+  value : Int32,
 ) -> Bool {
   for scrap in scraps {
     if !scrap.active {
@@ -463,7 +463,7 @@ fn add_mine(
 /// Activates the first free particle slot with full visual parameters.
 fn add_particle(
   parts : Array[Particle],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -494,9 +494,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     let ang : Float = randf(0.0, 6.283)
@@ -563,15 +563,15 @@ fn spawn_map_wrecks(wrecks : Array[Wreck]) -> Unit {
 
 ///|
 /// Draws the on-screen touch control overlay (movement pad and action buttons) during play state.
-fn draw_touch_ui(state : Int) -> Unit {
+fn draw_touch_ui(state : Int32) -> Unit {
   if state != 1 {
     ignore(())
   } else {
-    let pad_x : Int = 24
-    let pad_y : Int = sh - 228
+    let pad_x : Int32 = 24
+    let pad_y : Int32 = sh - 228
 
-    let btn_x : Int = sw - 340
-    let btn_y : Int = sh - 238
+    let btn_x : Int32 = sw - 340
+    let btn_y : Int32 = sh - 238
 
     @raylib.draw_rectangle(
       pad_x,
@@ -842,7 +842,7 @@ fn main {
     t: 0.0,
   }
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut cam_x : Float = 0.0
   let mut cam_y : Float = 0.0
   let mut timer : Float = 420.0
@@ -962,7 +962,7 @@ fn main {
     }
   }
 
-  let pop_mine = fn(m : Mine, team : Int) {
+  let pop_mine = fn(m : Mine, team : Int32) {
     if !m.active {
       ignore(())
     } else {
@@ -1067,7 +1067,7 @@ fn main {
       }
 
       let elapsed : Float = Float::from_int(420) - timer
-      let level : Int = player.deposited / 14 + elapsed.to_int() / 42 + 1
+      let level : Int32 = player.deposited / 14 + elapsed.to_int() / 42 + 1
 
       player.inv_t = player.inv_t - dt
       if player.inv_t < 0.0 {
@@ -1119,10 +1119,10 @@ fn main {
       let mut boost_hold : Bool = @raylib.is_key_down(@raylib.KeyRightShift)
       let mut pulse_press : Bool = @raylib.is_key_pressed(@raylib.KeyL)
 
-      let pad_x : Int = 24
-      let pad_y : Int = sh - 228
-      let btn_x : Int = sw - 340
-      let btn_y : Int = sh - 238
+      let pad_x : Int32 = 24
+      let pad_y : Int32 = sh - 228
+      let btn_x : Int32 = sw - 340
+      let btn_y : Int32 = sh - 238
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x + 14, pad_y + 74, 58, 58) {
@@ -1457,7 +1457,7 @@ fn main {
       // Dynamic spawning.
       drone_cd = drone_cd - dt
       if drone_cd <= 0.0 {
-        let mut kind : Int = 0
+        let mut kind : Int32 = 0
         let roll = @raylib.get_random_value(0, 99)
         if level >= 3 && roll > 48 {
           kind = 1
@@ -2121,7 +2121,7 @@ fn main {
       Float::from_int(sw)).to_int()
       let sy = ((fi * 127.0 + stars_t * (0.14 + Float::from_int(i % 7) * 0.07)) %
       Float::from_int(sh)).to_int()
-      let br : Int = 88 + i % 12 * 12
+      let br : Int32 = 88 + i % 12 * 12
       @raylib.draw_circle(
         sx,
         sy,
@@ -2222,10 +2222,10 @@ fn main {
       } else {
         @raylib.Color::new(156, 168, 190, 210)
       }
-      let mine_top : Int = (mine.y - cam_y - mine.radius - 7.0).to_int()
-      let mine_bottom : Int = (mine.y - cam_y + mine.radius + 7.0).to_int()
-      let mine_left : Int = (mine.x - cam_x - mine.radius - 7.0).to_int()
-      let mine_right : Int = (mine.x - cam_x + mine.radius + 7.0).to_int()
+      let mine_top : Int32 = (mine.y - cam_y - mine.radius - 7.0).to_int()
+      let mine_bottom : Int32 = (mine.y - cam_y + mine.radius + 7.0).to_int()
+      let mine_left : Int32 = (mine.x - cam_x - mine.radius - 7.0).to_int()
+      let mine_right : Int32 = (mine.x - cam_x + mine.radius + 7.0).to_int()
 
       draw_sprite_cell(
         art,
@@ -2304,7 +2304,7 @@ fn main {
       let dx = (drone.x - cam_x).to_int()
       let dy = (drone.y - cam_y).to_int()
 
-      let drone_sprite : Int = if drone.kind == 0 {
+      let drone_sprite : Int32 = if drone.kind == 0 {
         2
       } else if drone.kind == 1 {
         3
@@ -2475,7 +2475,7 @@ fn main {
         continue
       }
 
-      let a : Int = (clampf(particle.life / 0.8, 0.0, 1.0) * 255.0).to_int()
+      let a : Int32 = (clampf(particle.life / 0.8, 0.0, 1.0) * 255.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(112, 224, 250, a)
       } else if particle.kind == 1 {
@@ -2614,10 +2614,10 @@ fn main {
     )
 
     // Minimap.
-    let map_w : Int = 236
-    let map_h : Int = 162
-    let map_x : Int = sw - map_w - 20
-    let map_y : Int = 94
+    let map_w : Int32 = 236
+    let map_h : Int32 = 162
+    let map_x : Int32 = sw - map_w - 20
+    let map_y : Int32 = 94
 
     @raylib.draw_rectangle(
       map_x,
@@ -2637,21 +2637,21 @@ fn main {
     let map_fx : Float = Float::from_int(map_w) / world_w
     let map_fy : Float = Float::from_int(map_h) / world_h
 
-    let bmx : Int = map_x + (beacon_x * map_fx).to_int()
-    let bmy : Int = map_y + (beacon_y * map_fy).to_int()
+    let bmx : Int32 = map_x + (beacon_x * map_fx).to_int()
+    let bmy : Int32 = map_y + (beacon_y * map_fy).to_int()
     @raylib.draw_circle(bmx, bmy, 4.0, @raylib.Color::new(130, 230, 252, 250))
 
     for drone in drones {
       if !drone.active {
         continue
       }
-      let ex : Int = map_x + (drone.x * map_fx).to_int()
-      let ey : Int = map_y + (drone.y * map_fy).to_int()
+      let ex : Int32 = map_x + (drone.x * map_fx).to_int()
+      let ey : Int32 = map_y + (drone.y * map_fy).to_int()
       @raylib.draw_circle(ex, ey, 2.0, @raylib.Color::new(252, 122, 132, 226))
     }
 
-    let pmx : Int = map_x + (player.x * map_fx).to_int()
-    let pmy : Int = map_y + (player.y * map_fy).to_int()
+    let pmx : Int32 = map_x + (player.x * map_fx).to_int()
+    let pmy : Int32 = map_y + (player.y * map_fy).to_int()
     @raylib.draw_circle(pmx, pmy, 3.0, @raylib.Color::new(120, 206, 252, 248))
 
     // Message banner.

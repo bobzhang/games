@@ -30,7 +30,7 @@ pub(all) enum CommandKind {
   Jump
   Push
   If(Condition)
-  Loop(Int)
+  Loop(Int32)
 } derive(Eq, Debug)
 
 ///|

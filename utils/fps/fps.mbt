@@ -1,6 +1,6 @@
 ///|
 /// Number of frame-time samples stored in the ring buffer.
-let history_len : Int = 160
+let history_len : Int32 = 160
 
 ///|
 /// Ring buffer of raw frame-time values (seconds).
@@ -8,7 +8,7 @@ let frame_times : Array[Float] = Array::make(160, 1.0 / 60.0)
 
 ///|
 /// Write cursor into the ring buffer.
-let cursor : Ref[Int] = { val: 0, }
+let cursor : Ref[Int32] = { val: 0, }
 
 ///|
 /// Records a single frame-time sample.

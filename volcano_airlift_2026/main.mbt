@@ -1,20 +1,20 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
-let max_survivors : Int = 8
+let max_survivors : Int32 = 8
 
 ///|
-let max_clouds : Int = 20
+let max_clouds : Int32 = 20
 
 ///|
 struct Survivor {
   x : Float
   y : Float
-  mut state : Int
+  mut state : Int32
 }
 
 ///|
@@ -41,10 +41,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -81,7 +81,7 @@ fn clear_survivors(survivors : Array[Survivor]) -> Unit {
 ///|
 fn set_survivor(
   survivors : Array[Survivor],
-  i : Int,
+  i : Int32,
   x : Float,
   y : Float,
 ) -> Unit {
@@ -96,7 +96,7 @@ fn clear_clouds(clouds : Array[Cloud]) -> Unit {
 }
 
 ///|
-fn spawn_cloud(clouds : Array[Cloud], level : Int) -> Unit {
+fn spawn_cloud(clouds : Array[Cloud], level : Int32) -> Unit {
   let side = @raylib.get_random_value(0, 1)
   let y = Float::from_int(@raylib.get_random_value(120, 560))
   let mut speed = Float::from_int(
@@ -128,10 +128,10 @@ fn spawn_cloud(clouds : Array[Cloud], level : Int) -> Unit {
 
 ///|
 fn setup_level(
-  level : Int,
+  level : Int32,
   survivors : Array[Survivor],
   clouds : Array[Cloud],
-) -> (Int, Int, Float, Float, Float, Float, Float, Float) {
+) -> (Int32, Int32, Float, Float, Float, Float, Float, Float) {
   clear_survivors(survivors)
   clear_clouds(clouds)
 
@@ -171,9 +171,9 @@ fn setup_level(
 ///|
 fn survivors_count(
   survivors : Array[Survivor],
-  total : Int,
-  state : Int,
-) -> Int {
+  total : Int32,
+  state : Int32,
+) -> Int32 {
   @utils.count_by_view(survivors[0:total], fn(survivor) {
     survivor.state == state
   })

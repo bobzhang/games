@@ -93,9 +93,9 @@ pub fn draw_hover(game : @types.Game) -> Unit {
 ///|
 fn draw_organism_icon(
   kind : @types.OrganismKind,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
 ) -> Unit {
   let color = @types.organism_color(kind)
   let profile = @types.get_profile(kind)

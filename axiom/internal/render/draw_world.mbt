@@ -102,7 +102,7 @@ pub fn draw_grid(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_goal_collected(game : @types.Game, x : Int, y : Int) -> Bool {
+fn is_goal_collected(game : @types.Game, x : Int32, y : Int32) -> Bool {
   match game.trace {
     Some(trace) =>
       if game.trace_step >= 0 && game.trace_step < trace.states.length() {
@@ -247,7 +247,9 @@ fn draw_robot(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_robot_state(game : @types.Game) -> (Int, Int, @types.Direction, Bool) {
+fn get_robot_state(
+  game : @types.Game,
+) -> (Int32, Int32, @types.Direction, Bool) {
   match game.trace {
     Some(trace) =>
       if game.trace_step >= 0 && game.trace_step < trace.states.length() {
@@ -261,7 +263,9 @@ fn get_robot_state(game : @types.Game) -> (Int, Int, @types.Direction, Bool) {
 }
 
 ///|
-fn get_level_robot(game : @types.Game) -> (Int, Int, @types.Direction, Bool) {
+fn get_level_robot(
+  game : @types.Game,
+) -> (Int32, Int32, @types.Direction, Bool) {
   match game.level {
     Some(level) =>
       (level.robot.pos.x, level.robot.pos.y, level.robot.dir, level.robot.alive)

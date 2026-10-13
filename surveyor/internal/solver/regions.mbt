@@ -1,10 +1,10 @@
 ///|
 pub fn has_fence_between(
   fences : Array[@types.FenceEdge],
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
 ) -> Bool {
   // Moving right: vertical fence at (y1, x2, Vertical)
   if x2 == x1 + 1 && y2 == y1 {
@@ -92,9 +92,9 @@ pub fn flood_fill_regions(
 ///|
 pub fn find_region_for_tile(
   regions : Array[@types.Region],
-  x : Int,
-  y : Int,
-) -> Int {
+  x : Int32,
+  y : Int32,
+) -> Int32 {
   for i in 0..<regions.length() {
     let r = regions[i]
     for j in 0..<r.tiles.length() {

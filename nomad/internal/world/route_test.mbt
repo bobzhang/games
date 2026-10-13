@@ -13,8 +13,8 @@ fn make_test_map() -> @types.HexMap {
 ///|
 fn set_tile(
   m : @types.HexMap,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   kind : @types.TileKind,
 ) -> Unit {
   m.tiles[row][col] = { kind, }

@@ -38,7 +38,7 @@ pub(all) struct Order {
   mut x_to : Float
   mut y_to : Float
   mut timer : Float
-  mut value : Int
+  mut value : Int32
 }
 
 ///|
@@ -84,7 +84,7 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -118,25 +118,25 @@ pub(all) struct Game {
   mut move_y : Float
   mut boost_on : Bool
   mut action_on : Bool
-  mut cargo_idx : Int
-  mut lives : Int
+  mut cargo_idx : Int32
+  mut lives : Int32
   mut scooter_hp : Float
   mut fuel : Float
   mut turbo_t : Float
   mut action_cd : Float
-  mut score : Int
-  mut best_score : Int
-  mut delivered : Int
-  mut missed : Int
-  mut wave : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut delivered : Int32
+  mut missed : Int32
+  mut wave : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut order_spawn_t : Float
   mut traffic_spawn_t : Float
   mut pickup_spawn_t : Float
   mut game_t : Float
   mut ui_t : Float
-  mut hint_left : Int
+  mut hint_left : Int32
   mut hint_t : Float
   mut hint_x : Float
   mut hint_y : Float
@@ -148,7 +148,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

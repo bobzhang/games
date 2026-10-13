@@ -1,41 +1,41 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let cell_size : Int = 64
+pub let cell_size : Int32 = 64
 
 ///|
-pub let grid_cols : Int = 10
+pub let grid_cols : Int32 = 10
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let max_ropes : Int = 32
+pub let max_ropes : Int32 = 32
 
 ///|
-pub let max_nodes : Int = 40
+pub let max_nodes : Int32 = 40
 
 ///|
-pub let max_weights : Int = 16
+pub let max_weights : Int32 = 16
 
 ///|
-pub let max_crates : Int = 8
+pub let max_crates : Int32 = 8
 
 ///|
-pub let max_platforms : Int = 8
+pub let max_platforms : Int32 = 8
 
 ///|
-pub let max_buckets : Int = 4
+pub let max_buckets : Int32 = 4
 
 ///|
-pub let max_settle_iterations : Int = 20
+pub let max_settle_iterations : Int32 = 20
 
 ///|
 pub let settle_duration : Float = 0.8
@@ -47,16 +47,16 @@ pub let height_per_mass_diff : Float = 0.5
 pub let target_tolerance : Float = 0.3
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_levels : Int = 8
+pub let tier1_levels : Int32 = 8
 
 ///|
-pub let tier2_levels : Int = 9
+pub let tier2_levels : Int32 = 9
 
 ///|
-pub let tier3_levels : Int = 8
+pub let tier3_levels : Int32 = 8
 
 ///|
 pub let node_radius : Float = 14.0

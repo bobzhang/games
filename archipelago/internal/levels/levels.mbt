@@ -1,10 +1,14 @@
 ///|
-fn mk(grid : Int, islands : Array[@types.Island], par : Int) -> @types.Level {
+fn mk(
+  grid : Int32,
+  islands : Array[@types.Island],
+  par : Int32,
+) -> @types.Level {
   { grid_size: grid, islands, par_bridges: par, }
 }
 
 ///|
-fn isl(x : Int, y : Int, c : Int) -> @types.Island {
+fn isl(x : Int32, y : Int32, c : Int32) -> @types.Island {
   @types.island(x, y, c)
 }
 
@@ -494,7 +498,7 @@ fn level_25() -> @types.Level {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_01()
     1 => level_02()

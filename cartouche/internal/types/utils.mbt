@@ -36,7 +36,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -45,7 +45,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -67,7 +67,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 // Symbol utilities
 
 ///|
-pub fn symbol_index(s : Symbol) -> Int {
+pub fn symbol_index(s : Symbol) -> Int32 {
   match s {
     Circle => 0
     Triangle => 1
@@ -93,7 +93,7 @@ pub fn symbol_index(s : Symbol) -> Int {
 }
 
 ///|
-pub fn symbol_from_index(i : Int) -> Symbol {
+pub fn symbol_from_index(i : Int32) -> Symbol {
   match i {
     0 => Circle
     1 => Triangle
@@ -145,7 +145,7 @@ pub fn all_symbols() -> Array[Symbol] {
 }
 
 ///|
-pub fn letter_from_index(i : Int) -> String {
+pub fn letter_from_index(i : Int32) -> String {
   match i {
     0 => "A"
     1 => "B"
@@ -172,7 +172,7 @@ pub fn letter_from_index(i : Int) -> String {
 }
 
 ///|
-pub fn letter_index(ch : String) -> Int {
+pub fn letter_index(ch : String) -> Int32 {
   match ch {
     "A" => 0
     "B" => 1
@@ -202,13 +202,13 @@ pub fn letter_index(ch : String) -> Int {
 
 ///|
 pub fn new_mapping() -> Mapping {
-  let values : Array[Int] = Array::make(symbol_count, -1)
+  let values : Array[Int32] = Array::make(symbol_count, -1)
   { values, }
 }
 
 ///|
 pub fn copy_mapping(m : Mapping) -> Mapping {
-  let values : Array[Int] = Array::make(symbol_count, -1)
+  let values : Array[Int32] = Array::make(symbol_count, -1)
   for i in 0..<symbol_count {
     values[i] = m.values[i]
   }
@@ -216,12 +216,12 @@ pub fn copy_mapping(m : Mapping) -> Mapping {
 }
 
 ///|
-pub fn mapping_set(m : Mapping, sym : Symbol, letter_idx : Int) -> Unit {
+pub fn mapping_set(m : Mapping, sym : Symbol, letter_idx : Int32) -> Unit {
   m.values[symbol_index(sym)] = letter_idx
 }
 
 ///|
-pub fn mapping_get(m : Mapping, sym : Symbol) -> Int {
+pub fn mapping_get(m : Mapping, sym : Symbol) -> Int32 {
   m.values[symbol_index(sym)]
 }
 
@@ -231,7 +231,7 @@ pub fn mapping_clear(m : Mapping, sym : Symbol) -> Unit {
 }
 
 ///|
-pub fn is_letter_used(m : Mapping, letter_idx : Int) -> Bool {
+pub fn is_letter_used(m : Mapping, letter_idx : Int32) -> Bool {
   for i in 0..<symbol_count {
     if m.values[i] == letter_idx {
       return true
@@ -241,7 +241,7 @@ pub fn is_letter_used(m : Mapping, letter_idx : Int) -> Bool {
 }
 
 ///|
-pub fn find_symbol_for_letter(m : Mapping, letter_idx : Int) -> Int {
+pub fn find_symbol_for_letter(m : Mapping, letter_idx : Int32) -> Int32 {
   for i in 0..<symbol_count {
     if m.values[i] == letter_idx {
       return i
@@ -374,7 +374,7 @@ pub fn tier_color(tier : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn tier_tablet_offset(tier : Tier) -> Int {
+pub fn tier_tablet_offset(tier : Tier) -> Int32 {
   match tier {
     Fragments => 0
     Scrolls => tier1_count
@@ -383,7 +383,7 @@ pub fn tier_tablet_offset(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_tablet_count(tier : Tier) -> Int {
+pub fn tier_tablet_count(tier : Tier) -> Int32 {
   match tier {
     Fragments => tier1_count
     Scrolls => tier2_count
@@ -392,7 +392,7 @@ pub fn tier_tablet_count(tier : Tier) -> Int {
 }
 
 ///|
-pub fn total_stars_for_tier(game : Game, tier : Tier) -> Int {
+pub fn total_stars_for_tier(game : Game, tier : Tier) -> Int32 {
   let offset = tier_tablet_offset(tier)
   let count = tier_tablet_count(tier)
   let mut total = 0
@@ -403,7 +403,7 @@ pub fn total_stars_for_tier(game : Game, tier : Tier) -> Int {
 }
 
 ///|
-pub fn total_stars(game : Game) -> Int {
+pub fn total_stars(game : Game) -> Int32 {
   let mut total = 0
   for i in 0..<total_tablets {
     total = total + game.scores[i].stars
@@ -417,7 +417,7 @@ pub fn is_given_symbol(tablet : Tablet, sym : Symbol) -> Bool {
 }
 
 ///|
-pub fn count_symbol_frequency(inscription : Inscription, sym : Symbol) -> Int {
+pub fn count_symbol_frequency(inscription : Inscription, sym : Symbol) -> Int32 {
   let mut count = 0
   for j in 0..<inscription.symbols.length() {
     match inscription.symbols[j].symbol {
@@ -430,8 +430,8 @@ pub fn count_symbol_frequency(inscription : Inscription, sym : Symbol) -> Int {
 
 ///|
 pub(all) struct SymbolPosition {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
   symbol : Symbol?
 } derive(Debug)
 
@@ -441,12 +441,12 @@ pub extend SymbolPosition with Debug::{to_repr}
 ///|
 pub fn compute_symbol_positions(
   inscription : Inscription,
-  base_x : Int,
-  base_y : Int,
-  max_width : Int,
-  line_height : Int,
-  spacing : Int,
-  gap : Int,
+  base_x : Int32,
+  base_y : Int32,
+  max_width : Int32,
+  line_height : Int32,
+  spacing : Int32,
+  gap : Int32,
 ) -> Array[SymbolPosition] {
   let result : Array[SymbolPosition] = []
   let mut cx = 0
@@ -476,14 +476,14 @@ pub fn compute_symbol_positions(
 
 ///|
 pub fn palette_button_pos(
-  index : Int,
-  px : Int,
-  py : Int,
-  btn_size : Int,
-  btn_gap : Int,
-  cols : Int,
-  label_offset_y : Int,
-) -> (Int, Int) {
+  index : Int32,
+  px : Int32,
+  py : Int32,
+  btn_size : Int32,
+  btn_gap : Int32,
+  cols : Int32,
+  label_offset_y : Int32,
+) -> (Int32, Int32) {
   let row = index / cols
   let col = index % cols
   let bx = px + col * (btn_size + btn_gap)

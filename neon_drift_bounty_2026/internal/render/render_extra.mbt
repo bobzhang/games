@@ -178,7 +178,7 @@ fn @types.Game::draw_oil_effect(game : @types.Game) -> Unit {
   // "OIL" warning text
   if game.oil_t > 0.3 {
     let pulse = @math.sinf(game.time_s * 8.0)
-    let text_a : Int = (Float::from_int(140) + pulse * 60.0)
+    let text_a : Int32 = (Float::from_int(140) + pulse * 60.0)
       .to_int()
       .clamp(min=80, max=200)
     let tw = @draw.measure_text("OIL SLICK", 28)
@@ -227,7 +227,7 @@ fn @types.Game::draw_cooldown_indicators(game : @types.Game) -> Unit {
   } else {
     // Ready pulse
     let pulse = @math.sinf(game.time_s * 4.0) * 0.5 + 0.5
-    let a : Int = (Float::from_int(100) + pulse * 80.0).to_int()
+    let a : Int32 = (Float::from_int(100) + pulse * 80.0).to_int()
     @raylib.draw_rectangle(
       327,
       70,
@@ -249,7 +249,7 @@ fn @types.Game::draw_cooldown_indicators(game : @types.Game) -> Unit {
     )
   } else {
     let pulse = @math.sinf(game.time_s * 4.0 + 1.0) * 0.5 + 0.5
-    let a : Int = (Float::from_int(100) + pulse * 80.0).to_int()
+    let a : Int32 = (Float::from_int(100) + pulse * 80.0).to_int()
     @raylib.draw_rectangle(
       487,
       70,

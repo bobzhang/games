@@ -55,7 +55,7 @@ pub(all) struct Level {
   station : Station
   waypoints : Array[Waypoint]
   launch_pos : Vec2f
-  par_ticks : Int
+  par_ticks : Int32
   name : String
   tier : Tier
 } derive(Debug)
@@ -66,8 +66,8 @@ pub extend Level with Debug::{to_repr}
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
-  mut best_ticks : Int
-  mut stars : Int
+  mut best_ticks : Int32
+  mut stars : Int32
 } derive(Debug)
 
 ///|
@@ -77,7 +77,7 @@ pub extend LevelScore with Debug::{to_repr}
 pub(all) struct Star {
   x : Float
   y : Float
-  brightness : Int
+  brightness : Int32
   size : Float
 } derive(Debug)
 
@@ -89,14 +89,14 @@ pub(all) struct Game {
   mut screen : Screen
   mut play_state : PlayState
   mut current_tier : Tier
-  mut current_level : Int
+  mut current_level : Int32
   mut launch_angle : Float
   probe : Probe
-  mut tick_count : Int
+  mut tick_count : Int32
   mut trail : Array[Vec2f]
   mut preview : Array[Vec2f]
   mut scores : Array[LevelScore]
-  mut frame_count : Int
+  mut frame_count : Int32
   stars : Array[Star]
   mut message : String
   mut message_timer : Float

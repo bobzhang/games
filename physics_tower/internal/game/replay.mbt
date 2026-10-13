@@ -21,7 +21,7 @@ pub fn start_recording(game : @types.Game) -> Unit {
 pub fn stop_recording(
   game : @types.Game,
   height : Float,
-  score : Int,
+  score : Int32,
   passed : Bool,
 ) -> Unit {
   let replay = game.replay
@@ -49,7 +49,7 @@ pub fn record_place(
 
 ///|
 /// Records a piece rotation action.
-pub fn record_rotate(game : @types.Game, body_id : Int) -> Unit {
+pub fn record_rotate(game : @types.Game, body_id : Int32) -> Unit {
   if !game.replay.is_recording {
     return
   }
@@ -176,7 +176,7 @@ pub fn toggle_ghost(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the current playback progress as a percentage.
-pub fn playback_progress(game : @types.Game) -> Int {
+pub fn playback_progress(game : @types.Game) -> Int32 {
   let replay = game.replay
   if replay.actions.length() == 0 {
     return 100
@@ -206,7 +206,7 @@ pub fn ghost_pieces(
 
 ///|
 /// Returns the replay action count.
-pub fn replay_action_count(game : @types.Game) -> Int {
+pub fn replay_action_count(game : @types.Game) -> Int32 {
   game.replay.actions.length()
 }
 

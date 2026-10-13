@@ -1,6 +1,6 @@
 ///|
 /// Returns a random horizontal screen-shake offset when the shake timer is active.
-fn @types.Game::shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -10,7 +10,7 @@ fn @types.Game::shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical screen-shake offset when the shake timer is active.
-fn @types.Game::shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -21,10 +21,10 @@ fn @types.Game::shake_y(game : @types.Game) -> Int {
 ///|
 /// Draws a labeled progress meter bar filled to `ratio` of its width, with a percentage label.
 fn draw_meter(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   ratio : Float,
   bg : @raylib.Color,
@@ -317,7 +317,7 @@ fn draw_action_ring_art(
   x : Float,
   y : Float,
   radius : Float,
-  alpha : Int,
+  alpha : Int32,
 ) -> Bool {
   match tex_strike_ring.val {
     Some(texture) => {
@@ -339,7 +339,11 @@ fn draw_action_ring_art(
 
 ///|
 /// Draws the gradient sky background with animated glow circles, the street area backing, and a flash overlay when hit.
-fn @types.Game::draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_background(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 16, 24, 255))
 
   if !draw_background_art() {
@@ -398,7 +402,7 @@ fn @types.Game::draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit 
 
 ///|
 /// Draws all parade lanes with alternating tone, center dash marks, lane number labels, and a border outline.
-fn @types.Game::draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_lanes(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   ignore(game)
 
   for lane in 0..<@types.lane_count {
@@ -476,7 +480,7 @@ fn @types.Game::draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws a firecracker threat as a spinning radiant circle with directional rays, tinting blue when stunned.
-fn draw_firecracker(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
+fn draw_firecracker(threat : @types.Threat, ox : Int32, oy : Int32) -> Unit {
   let cx = threat.x.to_int() + ox
   let cy = threat.y.to_int() + oy
 
@@ -531,7 +535,7 @@ fn draw_firecracker(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws an incident threat as a crowd cluster shape, tinting blue and adding an aura ring when stunned.
-fn draw_incident(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
+fn draw_incident(threat : @types.Threat, ox : Int32, oy : Int32) -> Unit {
   let cx = threat.x.to_int() + ox
   let cy = threat.y.to_int() + oy
 
@@ -569,7 +573,7 @@ fn draw_incident(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Dispatches rendering to the appropriate threat-specific draw function based on kind.
-fn draw_threat(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
+fn draw_threat(threat : @types.Threat, ox : Int32, oy : Int32) -> Unit {
   if !threat.active {
     return
   }
@@ -583,7 +587,7 @@ fn draw_threat(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the lion dance troupe sprite, with color shifts for burst or guard states and a guard radius ring.
-fn @types.Game::draw_troupe(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_troupe(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   let cx = game.troupe_x.to_int() + ox
   let cy = game.troupe_y.to_int() + oy
 
@@ -650,7 +654,11 @@ fn @types.Game::draw_troupe(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws expanding ring animations for active strike and burst action effects around the troupe center.
-fn @types.Game::draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_action_fx(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   let cx = game.troupe_x.to_int() + ox
   let cy = game.troupe_y.to_int() + oy
 

@@ -31,7 +31,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -53,15 +53,15 @@ pub(all) struct Game {
   /// Flat log of knocked-pin counts for every delivery, up to `max_rolls` (24).
   /// Entry `i` holds the number of pins knocked on the i-th roll.
   /// Read by `recompute_score` to calculate running frame totals.
-  rolls : Array[Int]
+  rolls : Array[Int32]
   /// Running cumulative score for each of the 10 frames.
   /// A value of -1 means the frame's total is not yet resolved (awaiting
   /// bonus rolls for a strike or spare). Recomputed after every scored roll.
-  frame_totals : Array[Int]
+  frame_totals : Array[Int32]
   /// Number of valid entries currently stored in `rolls`.
   /// Incremented by `push_roll`; used as the upper bound when walking the
   /// roll log in `recompute_score`.
-  mut roll_count : Int
+  mut roll_count : Int32
   // ──── Core state ────
   /// Which screen/phase the game is currently in.
   /// Possible values: `Title`, `Play`, `Result`.
@@ -70,22 +70,22 @@ pub(all) struct Game {
   /// Current bowling frame index, 0-based (0..9 for frames 1..10).
   /// Advanced after completing all rolls in a frame. Triggers `finalize_match`
   /// when it reaches 10.
-  mut frame : Int
+  mut frame : Int32
   /// Which roll within the current frame (0 = first, 1 = second, 2 = third
   /// in the 10th frame only). Used to determine whether a strike/spare
   /// occurred and what happens next.
-  mut roll_in_frame : Int
+  mut roll_in_frame : Int32
   /// Number of pins knocked on the first roll of the current frame.
   /// Stored to detect spares (first_roll + second_roll == 10) and to
   /// handle 10th-frame bonus logic.
-  mut first_roll : Int
+  mut first_roll : Int32
   /// Number of pins standing just before the current delivery was thrown.
   /// Typically 10 after a reset or equal to `pins_left` from the prior roll.
   /// The difference `pins_before_roll - count_standing()` gives the knocked count.
-  mut pins_before_roll : Int
+  mut pins_before_roll : Int32
   /// Number of pins currently standing (0..10). Updated in real time as
   /// pins are knocked by `knock_pin`. Read by the scoring and UI systems.
-  mut pins_left : Int
+  mut pins_left : Int32
   // ──── Ball physics ────
   /// Current x position of the bowling ball center, in pixels.
   /// Starts at `ball_start_x` (lane center) before each throw.
@@ -158,23 +158,23 @@ pub(all) struct Game {
   // ──── Match statistics ────
   /// Number of strikes rolled in the current match.
   /// Incremented when 10 pins are knocked on the first delivery of a frame.
-  mut strikes : Int
+  mut strikes : Int32
   /// Number of spares rolled in the current match.
   /// Incremented when the first and second rolls of a frame total 10.
-  mut spares : Int
+  mut spares : Int32
   /// Number of open frames (neither strike nor spare) in the current match.
   /// Incremented when a non-10th frame ends without all pins knocked.
-  mut opens : Int
+  mut opens : Int32
   /// Current match score, recomputed after each scored roll using standard
   /// bowling rules (strikes and spares add bonus from subsequent rolls).
   /// Range 0..300.
-  mut score : Int
+  mut score : Int32
   /// Highest score achieved across all matches this session.
   /// Updated whenever `score` exceeds it. Displayed on the result screen.
-  mut best_score : Int
+  mut best_score : Int32
   /// Number of pins knocked on the most recent delivery.
   /// Used by the UI to display per-roll feedback. Reset to 0 at throw time.
-  mut last_knock : Int
+  mut last_knock : Int32
   // ──── Touch / mouse input ────
   /// Cooldown timer preventing rapid repeated touch presses, in seconds.
   /// Set to 0.18 s after a touch-triggered action; counts down to 0.
@@ -190,7 +190,7 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   /// Number of active touch points this frame (0 if no touches).
   /// Used to distinguish touch input from mouse input for button detection.
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1200
+let sw : Int32 = 1200
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Represents a gravitational well with position, gravitational mass, and collision radius.
@@ -19,7 +19,7 @@ struct Well {
 /// Sets the well at index i to the specified position, mass, and radius.
 fn set_well(
   wells : Array[Well],
-  i : Int,
+  i : Int32,
   x : Float,
   y : Float,
   mass : Float,
@@ -39,9 +39,9 @@ fn clear_wells(wells : Array[Well]) -> Unit {
 ///|
 /// Configures gravity wells for the given level and returns the ball start position, hole position, and shot count.
 fn setup_level(
-  level : Int,
+  level : Int32,
   wells : Array[Well],
-) -> (Float, Float, Float, Float, Int) {
+) -> (Float, Float, Float, Float, Int32) {
   clear_wells(wells)
   if level == 1 {
     set_well(wells, 0, 520.0, 360.0, 56000.0, 34.0)

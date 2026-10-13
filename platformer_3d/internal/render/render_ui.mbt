@@ -277,7 +277,7 @@ fn @types.Game::draw_combo_bar(game : @types.Game) -> Unit {
   // Fill
   let fill_ratio : Float = game.combo_timer / @types.combo_decay_time
   let fill_w = (Float::from_int(bar_w) * fill_ratio).to_int()
-  let combo_r : Int = (game.combo_mult * 50.0).to_int().clamp(min=0, max=255)
+  let combo_r : Int32 = (game.combo_mult * 50.0).to_int().clamp(min=0, max=255)
   @raylib.draw_rectangle(
     bar_x,
     bar_y,
@@ -322,7 +322,7 @@ fn @types.Game::draw_powerup_indicator(game : @types.Game) -> Unit {
   let time_left = game.powerup_timer.to_int()
   let text = "\{name} [\{time_left}s]"
   // Flash when about to expire
-  let alpha : Int = if game.powerup_timer < 2.0 {
+  let alpha : Int32 = if game.powerup_timer < 2.0 {
     let flash = @math.sinf(game.powerup_timer * 8.0)
     if flash > 0.0 {
       255
@@ -600,7 +600,12 @@ fn @types.Game::draw_level_complete(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star_rating(x : Int, y : Int, filled : Int, total : Int) -> Unit {
+fn draw_star_rating(
+  x : Int32,
+  y : Int32,
+  filled : Int32,
+  total : Int32,
+) -> Unit {
   for i in 0..<total {
     let sx = x + i * 30
     let color = if i < filled {
@@ -862,7 +867,7 @@ fn @types.Game::draw_level_select(game : @types.Game) -> Unit {
     let level = i % @types.levels_per_world
     // Card background
     let wbg = @levels.world_bg_color(world)
-    let bg_alpha : Int = if is_sel { 200 } else { 120 }
+    let bg_alpha : Int32 = if is_sel { 200 } else { 120 }
     @raylib.draw_rectangle(
       x,
       y,
@@ -942,7 +947,7 @@ fn @types.Game::draw_world_intro(game : @types.Game) -> Unit {
     @raylib.Color::new(bg.0, bg.1, bg.2, 255),
   )
   // Fade in
-  let fade_alpha : Int = if progress < 0.2 {
+  let fade_alpha : Int32 = if progress < 0.2 {
     (progress / 0.2 * 255.0).to_int()
   } else {
     255

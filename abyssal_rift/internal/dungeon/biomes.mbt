@@ -9,7 +9,7 @@ pub(all) struct BiomeTheme {
 
 ///|
 /// Return the biome theme for a given floor number.
-pub fn get_biome(floor_num : Int) -> BiomeTheme {
+pub fn get_biome(floor_num : Int32) -> BiomeTheme {
   if floor_num <= 5 {
     // Stone Crypt  --  dark purple-gray tones
     {

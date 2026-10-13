@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Horizontal center of the screen in pixels.
@@ -24,15 +24,15 @@ let shield_r : Float = 148.0
 
 ///|
 /// Maximum number of enemies that can be active simultaneously.
-let max_enemies : Int = 96
+let max_enemies : Int32 = 96
 
 ///|
 /// Maximum number of player shots that can be active simultaneously.
-let max_shots : Int = 180
+let max_shots : Int32 = 180
 
 ///|
 /// Maximum number of particle sparks that can be active simultaneously.
-let max_sparks : Int = 220
+let max_sparks : Int32 = 220
 
 ///|
 /// An enemy entity approaching the planet from outside the screen.
@@ -41,8 +41,8 @@ struct Enemy {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut hp : Int
-  mut kind : Int
+  mut hp : Int32
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -66,7 +66,7 @@ struct Spark {
   mut vy : Float
   mut ttl : Float
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -74,10 +74,10 @@ struct Spark {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -115,7 +115,7 @@ fn angle_from_vector(x : Float, y : Float) -> Float {
 
 ///|
 /// Returns the collision radius of an enemy based on its kind (0=small, 1=medium, 2=large).
-fn enemy_radius(kind : Int) -> Float {
+fn enemy_radius(kind : Int32) -> Float {
   if kind == 0 {
     12.0
   } else if kind == 1 {
@@ -127,7 +127,7 @@ fn enemy_radius(kind : Int) -> Float {
 
 ///|
 /// Returns the score awarded for destroying an enemy of the given kind.
-fn enemy_score(kind : Int) -> Int {
+fn enemy_score(kind : Int32) -> Int32 {
   if kind == 0 {
     24
   } else if kind == 1 {
@@ -139,7 +139,7 @@ fn enemy_score(kind : Int) -> Int {
 
 ///|
 /// Returns the planet HP damage dealt when an enemy of the given kind reaches the planet.
-fn enemy_damage(kind : Int) -> Int {
+fn enemy_damage(kind : Int32) -> Int32 {
   if kind == 0 {
     10
   } else if kind == 1 {
@@ -151,7 +151,7 @@ fn enemy_damage(kind : Int) -> Int {
 
 ///|
 /// Returns the starting hit-points for an enemy of the given kind.
-fn enemy_hp(kind : Int) -> Int {
+fn enemy_hp(kind : Int32) -> Int32 {
   if kind == 0 {
     1
   } else if kind == 1 {
@@ -209,7 +209,7 @@ fn spawn_spark(
   x : Float,
   y : Float,
   speed_scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for spark in sparks {
@@ -238,9 +238,9 @@ fn spawn_burst(
   sparks : Array[Spark],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed_scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_spark(sparks, x, y, speed_scale, kind)
@@ -284,7 +284,7 @@ fn spawn_shot(
 
 ///|
 /// Spawns a new enemy from a random screen edge aimed toward the planet, with speed scaled by sector.
-fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
+fn spawn_enemy(enemies : Array[Enemy], sector : Int32) -> Unit {
   let side = @raylib.get_random_value(0, 3)
   let kind_roll = @raylib.get_random_value(0, 99)
   let kind = if kind_roll < 56 { 0 } else if kind_roll < 86 { 1 } else { 2 }
@@ -769,7 +769,7 @@ fn main {
       }
       let ex = enemy.x + shake_x
       let ey = enemy.y + shake_y
-      let enemy_sprite : Int = if enemy.kind == 0 {
+      let enemy_sprite : Int32 = if enemy.kind == 0 {
         3
       } else if enemy.kind == 1 {
         4
@@ -840,7 +840,7 @@ fn main {
       } else {
         @raylib.Color::new(252, 124, 124, a)
       }
-      let spark_sprite : Int = if spark.kind == 0 {
+      let spark_sprite : Int32 = if spark.kind == 0 {
         7
       } else if spark.kind == 1 {
         8

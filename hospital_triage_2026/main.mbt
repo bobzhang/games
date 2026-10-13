@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1120
+let sw : Int32 = 1120
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 /// Number of hospital ward columns displayed on screen.
-let ward_count : Int = 4
+let ward_count : Int32 = 4
 
 ///|
 /// Returns the horizontal centre pixel coordinate for the given ward index.
-fn ward_x(ward : Int) -> Float {
+fn ward_x(ward : Int32) -> Float {
   170.0 + Float::from_int(ward) * 240.0
 }
 
@@ -48,10 +48,10 @@ let tex_treatment_station : Ref[@raylib.Texture?] = { val: None, }
 /// A hospital patient with liveness flag, assigned ward, screen position, severity level (0=mild/1=medium/2=critical), and elapsed wait time.
 struct Patient {
   mut alive : Bool
-  mut ward : Int
+  mut ward : Int32
   mut x : Float
   mut y : Float
-  mut severity : Int // 0 mild, 1 medium, 2 critical
+  mut severity : Int32 // 0 mild, 1 medium, 2 critical
   mut wait : Float
 }
 
@@ -244,7 +244,7 @@ fn draw_ward_bay_art(x : Float) -> Bool {
 
 ///|
 /// Returns the generated patient texture for the severity.
-fn patient_texture(sev : Int) -> @raylib.Texture? {
+fn patient_texture(sev : Int32) -> @raylib.Texture? {
   if sev == 0 {
     tex_patient_mild.val
   } else if sev == 1 {
@@ -290,7 +290,7 @@ fn draw_patient_art(patient : Patient) -> Bool {
 
 ///|
 /// Draws generated nurse art at the current ward station.
-fn draw_nurse_art(x : Float, y : Int) -> Bool {
+fn draw_nurse_art(x : Float, y : Int32) -> Bool {
   match tex_nurse.val {
     Some(texture) => {
       @raylib.draw_circle(
@@ -363,7 +363,7 @@ fn spawn_patient(ps : Array[Patient]) -> Unit {
 
 ///|
 /// Returns the treatment duration in seconds for the given severity (2.2s mild, 3.4s medium, 4.8s critical).
-fn treat_time(sev : Int) -> Float {
+fn treat_time(sev : Int32) -> Float {
   if sev == 0 {
     2.2
   } else if sev == 1 {
@@ -375,7 +375,7 @@ fn treat_time(sev : Int) -> Float {
 
 ///|
 /// Returns the score awarded for successfully treating a patient of the given severity (28/48/92).
-fn treat_score(sev : Int) -> Int {
+fn treat_score(sev : Int32) -> Int32 {
   if sev == 0 {
     28
   } else if sev == 1 {
@@ -387,7 +387,7 @@ fn treat_score(sev : Int) -> Int {
 
 ///|
 /// Maps a severity index to its display colour (lime=mild, orange=medium, red=critical).
-fn severity_color(sev : Int) -> @raylib.Color {
+fn severity_color(sev : Int32) -> @raylib.Color {
   if sev == 0 {
     @raylib.lime
   } else if sev == 1 {
@@ -399,7 +399,7 @@ fn severity_color(sev : Int) -> @raylib.Color {
 
 ///|
 /// Maps a severity index to a short label string ("MILD"/"MED"/"CRIT").
-fn severity_name(sev : Int) -> String {
+fn severity_name(sev : Int32) -> String {
   if sev == 0 {
     "MILD"
   } else if sev == 1 {

@@ -84,7 +84,7 @@ fn @types.Game::draw_platforms(game : @types.Game) -> Unit {
     if plat.kind == @types.plat_phasing && !plat.phase_visible {
       continue
     }
-    let alpha : Int = if plat.crumbling {
+    let alpha : Int32 = if plat.crumbling {
       let t : Float = plat.crumble_timer / @types.crumble_time
       (t * 255.0).to_int()
     } else if plat.kind == @types.plat_phasing {
@@ -327,7 +327,13 @@ fn @types.Game::draw_collectibles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_gem(x : Float, y : Float, z : Float, spin : Float, frame : Int) -> Unit {
+fn draw_gem(
+  x : Float,
+  y : Float,
+  z : Float,
+  spin : Float,
+  frame : Int32,
+) -> Unit {
   // Diamond shape: two cubes rotated
   let size : Float = 0.3
   @raylib.draw_cube(
@@ -417,9 +423,9 @@ fn draw_coin(
   y : Float,
   z : Float,
   spin : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   // Coin is a flat cylinder
   let scale = @math.cosf(spin).abs() * 0.15 + 0.05
@@ -486,7 +492,7 @@ fn @types.Game::draw_powerups_3d(game : @types.Game) -> Unit {
     let bob = @math.sinf(pu.bob_timer * @types.powerup_bob_speed) * 0.3
     let y = pu.y + bob
     // Power-up color
-    let pr : Int = if pu.kind == @types.powerup_double_jump {
+    let pr : Int32 = if pu.kind == @types.powerup_double_jump {
       @types.pu_double_jump_r
     } else if pu.kind == @types.powerup_speed {
       @types.pu_speed_r
@@ -497,7 +503,7 @@ fn @types.Game::draw_powerups_3d(game : @types.Game) -> Unit {
     } else {
       @types.pu_slow_fall_r
     }
-    let pg : Int = if pu.kind == @types.powerup_double_jump {
+    let pg : Int32 = if pu.kind == @types.powerup_double_jump {
       @types.pu_double_jump_g
     } else if pu.kind == @types.powerup_speed {
       @types.pu_speed_g
@@ -508,7 +514,7 @@ fn @types.Game::draw_powerups_3d(game : @types.Game) -> Unit {
     } else {
       @types.pu_slow_fall_g
     }
-    let pb : Int = if pu.kind == @types.powerup_double_jump {
+    let pb : Int32 = if pu.kind == @types.powerup_double_jump {
       @types.pu_double_jump_b
     } else if pu.kind == @types.powerup_speed {
       @types.pu_speed_b

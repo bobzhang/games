@@ -15,16 +15,16 @@ pub fn new_region(damages : Array[DamageKind]) -> Region {
 }
 
 ///|
-pub fn new_artwork(w : Int, h : Int, regions : Array[Region]) -> Artwork {
+pub fn new_artwork(w : Int32, h : Int32, regions : Array[Region]) -> Artwork {
   { width: w, height: h, regions, }
 }
 
 ///|
 pub fn new_budget(
-  clean : Int,
-  fill : Int,
-  retouch : Int,
-  seal : Int,
+  clean : Int32,
+  fill : Int32,
+  retouch : Int32,
+  seal : Int32,
 ) -> ToolBudget {
   { clean, fill, retouch, seal, }
 }
@@ -40,7 +40,7 @@ pub fn new_level(
   name : String,
   regions : Array[Region],
   budget : ToolBudget,
-  par_tools : Int,
+  par_tools : Int32,
 ) -> Level {
   let art = new_artwork(grid_cols, grid_rows, regions)
   { tier, name, artwork: art, budget, par_tools, }
@@ -122,7 +122,7 @@ pub fn state_color(s : RegionState) -> @raylib.Color {
 }
 
 ///|
-pub fn get_budget_for_tool(budget : ToolBudget, tool : ToolKind) -> Int {
+pub fn get_budget_for_tool(budget : ToolBudget, tool : ToolKind) -> Int32 {
   match tool {
     Clean => budget.clean
     Fill => budget.fill
@@ -161,7 +161,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_index(t : Tier) -> Int {
+pub fn tier_index(t : Tier) -> Int32 {
   match t {
     Sketches => 0
     Paintings => 1
@@ -170,7 +170,7 @@ pub fn tier_index(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_from_index(i : Int) -> Tier {
+pub fn tier_from_index(i : Int32) -> Tier {
   if i == 0 {
     Sketches
   } else if i == 1 {
@@ -181,7 +181,7 @@ pub fn tier_from_index(i : Int) -> Tier {
 }
 
 ///|
-pub fn tier_level_range(t : Tier) -> (Int, Int) {
+pub fn tier_level_range(t : Tier) -> (Int32, Int32) {
   match t {
     Sketches => (0, 7)
     Paintings => (7, 14)
@@ -210,7 +210,7 @@ pub fn clone_region(r : Region) -> Region {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[Int] = []
+  let scores : Array[Int32] = []
   for _i in 0..<20 {
     scores.push(0)
   }
@@ -294,7 +294,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -303,7 +303,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {

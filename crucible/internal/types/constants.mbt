@@ -1,11 +1,11 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 // Cauldron layout
 
@@ -66,12 +66,12 @@ pub let message_duration : Float = 2.0
 // Total reactions in the game
 
 ///|
-pub let total_reactions : Int = 12
+pub let total_reactions : Int32 = 12
 
 // Total levels
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 // Colors - Dark alchemy theme
 

@@ -2,7 +2,7 @@
 
 ///|
 /// Loads the map at `map_idx`, resetting all game state and tracing the enemy path.
-pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
+pub fn load_map(game : @types.Game, map_idx : Int32) -> Unit {
   // Reset state
   let map_info = @levels.get_map_info(map_idx)
   game.gold = @types.starting_gold + map_info.starting_gold_bonus
@@ -122,8 +122,8 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
 fn @types.Game::trace_path(
   game : @types.Game,
   data : Array[String],
-  start_gx : Int,
-  start_gy : Int,
+  start_gx : Int32,
+  start_gy : Int32,
   path : Array[@types.PathNode],
 ) -> Unit {
   let visited = Array::make(@types.map_total, false)
@@ -139,7 +139,7 @@ fn @types.Game::trace_path(
       return
     }
     // Find unvisited path neighbor
-    let dirs : Array[(Int, Int)] = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+    let dirs : Array[(Int32, Int32)] = [(1, 0), (0, 1), (-1, 0), (0, -1)]
     let mut found = false
     for d in 0..<4 {
       let nx = cx + dirs[d].0

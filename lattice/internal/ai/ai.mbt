@@ -93,7 +93,7 @@ pub fn rank_moves(
   player : @types.Player,
   empty : Array[@types.HexCoord],
 ) -> Array[@types.HexCoord] {
-  let scored : Array[(Int, Int)] = [] // (score, index)
+  let scored : Array[(Int32, Int32)] = [] // (score, index)
   for i in 0..<empty.length() {
     scored.push((evaluate_move(board, empty[i], player), i))
   }
@@ -174,10 +174,10 @@ fn get_candidate_moves(
   board : @types.HexBoard,
   player : @types.Player,
   empty : Array[@types.HexCoord],
-  max_count : Int,
+  max_count : Int32,
 ) -> Array[@types.HexCoord] {
   // Score each move quickly and take the top ones
-  let scores : Array[(Int, Int)] = [] // (score, index)
+  let scores : Array[(Int32, Int32)] = [] // (score, index)
   for i in 0..<empty.length() {
     let s = evaluate_move(board, empty[i], player)
     scores.push((s, i))
@@ -209,11 +209,11 @@ fn minimax(
   board : @types.HexBoard,
   current : @types.Player,
   ai_player : @types.Player,
-  depth : Int,
-  alpha_in : Int,
-  beta_in : Int,
+  depth : Int32,
+  alpha_in : Int32,
+  beta_in : Int32,
   maximizing : Bool,
-) -> Int {
+) -> Int32 {
   if depth == 0 {
     return evaluate_board(board, ai_player)
   }
@@ -285,7 +285,7 @@ fn minimax(
 
 ///|
 /// Quick board evaluation for a player
-pub fn evaluate_board(board : @types.HexBoard, player : @types.Player) -> Int {
+pub fn evaluate_board(board : @types.HexBoard, player : @types.Player) -> Int32 {
   let my_patterns = @board.score_patterns(board, player)
   let opp_patterns = @board.score_patterns(board, @types.opponent(player))
   let mut my_stones = 0
@@ -320,7 +320,7 @@ pub fn evaluate_move(
   board : @types.HexBoard,
   pos : @types.HexCoord,
   player : @types.Player,
-) -> Int {
+) -> Int32 {
   let before = @board.score_patterns(board, player)
   let test_board = @types.clone_board(board)
   @types.set_cell(test_board, pos, Occupied(player))

@@ -99,10 +99,10 @@ fn rock_text_color(rock : @types.RockKind) -> @raylib.Color {
 
 ///|
 fn draw_rock_texture(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   rock : @types.RockKind,
 ) -> Unit {
   match rock {

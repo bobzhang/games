@@ -108,7 +108,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, index : Int) -> Unit {
+fn start_level(game : @types.Game, index : Int32) -> Unit {
   let level = @levels.get_level(index)
   game.current_level = Some(level)
   game.current_level_index = index
@@ -218,8 +218,8 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 fn handle_grid_click(
   game : @types.Game,
   level : @types.Level,
-  mx : Int,
-  my : Int,
+  mx : Int32,
+  my : Int32,
 ) -> Unit {
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
@@ -239,8 +239,8 @@ fn handle_grid_click(
 fn handle_palette_click(
   game : @types.Game,
   level : @types.Level,
-  mx : Int,
-  my : Int,
+  mx : Int32,
+  my : Int32,
 ) -> Unit {
   let px = @types.palette_x
   let py = @types.palette_y
@@ -283,7 +283,7 @@ fn handle_number_keys(game : @types.Game, level : @types.Level) -> Unit {
 }
 
 ///|
-fn place_number(game : @types.Game, level : @types.Level, num : Int) -> Unit {
+fn place_number(game : @types.Game, level : @types.Level, num : Int32) -> Unit {
   let row = game.selected_row
   let col = game.selected_col
   if row < 0 || col < 0 {

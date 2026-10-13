@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1120
+let sw : Int32 = 1120
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 /// Number of grid columns in the city zone layout.
-let cols : Int = 5
+let cols : Int32 = 5
 
 ///|
 /// Number of grid rows in the city zone layout.
-let rows : Int = 3
+let rows : Int32 = 3
 
 ///|
 /// Generated city grid background texture.
@@ -40,13 +40,13 @@ let tex_water_spray : Ref[@raylib.Texture?] = { val: None, }
 
 ///|
 /// Returns the pixel X coordinate for the center of grid column c.
-fn cell_x(c : Int) -> Float {
+fn cell_x(c : Int32) -> Float {
   150.0 + Float::from_int(c) * 180.0
 }
 
 ///|
 /// Returns the pixel Y coordinate for the center of grid row r.
-fn cell_y(r : Int) -> Float {
+fn cell_y(r : Int32) -> Float {
   200.0 + Float::from_int(r) * 170.0
 }
 
@@ -294,7 +294,7 @@ fn draw_water_spray_art(x : Float, y : Float) -> Bool {
 
 ///|
 /// Returns the flat array index for grid cell at column c and row r.
-fn idx(c : Int, r : Int) -> Int {
+fn idx(c : Int32, r : Int32) -> Int32 {
   r * cols + c
 }
 
@@ -318,7 +318,7 @@ fn reset_zones(zones : Array[Zone]) -> Unit {
 
 ///|
 /// Returns the number of zones currently on fire.
-fn active_fire_count(zones : Array[Zone]) -> Int {
+fn active_fire_count(zones : Array[Zone]) -> Int32 {
   let mut n = 0
   for zone in zones {
     if zone.fire > 0.0 {

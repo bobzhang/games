@@ -1,5 +1,5 @@
 ///|
-fn clamp_channel(v : Int) -> Int {
+fn clamp_channel(v : Int32) -> Int32 {
   if v < 0 {
     0
   } else if v > 255 {
@@ -10,7 +10,7 @@ fn clamp_channel(v : Int) -> Int {
 }
 
 ///|
-fn color_with_alpha(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn color_with_alpha(c : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),
@@ -20,7 +20,7 @@ fn color_with_alpha(c : @raylib.Color, alpha : Int) -> @raylib.Color {
 }
 
 ///|
-fn lighten_color(c : @raylib.Color, amount : Int) -> @raylib.Color {
+fn lighten_color(c : @raylib.Color, amount : Int32) -> @raylib.Color {
   @raylib.Color::new(
     clamp_channel(c.r.to_int() + amount),
     clamp_channel(c.g.to_int() + amount),
@@ -30,7 +30,7 @@ fn lighten_color(c : @raylib.Color, amount : Int) -> @raylib.Color {
 }
 
 ///|
-fn darken_color(c : @raylib.Color, amount : Int) -> @raylib.Color {
+fn darken_color(c : @raylib.Color, amount : Int32) -> @raylib.Color {
   @raylib.Color::new(
     clamp_channel(c.r.to_int() - amount),
     clamp_channel(c.g.to_int() - amount),
@@ -42,9 +42,9 @@ fn darken_color(c : @raylib.Color, amount : Int) -> @raylib.Color {
 ///|
 fn draw_centered_text(
   text : String,
-  cx : Int,
-  y : Int,
-  size : Int,
+  cx : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -52,7 +52,7 @@ fn draw_centered_text(
 }
 
 ///|
-fn board_bounds() -> (Int, Int, Int, Int) {
+fn board_bounds() -> (Int32, Int32, Int32, Int32) {
   let w = @types.grid_cols * (@types.cell_px + @types.cell_gap) -
     @types.cell_gap +
     16
@@ -175,9 +175,9 @@ fn draw_jewel(
 
 ///|
 fn draw_stat_tile(
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
   label : String,
   value : String,
   accent : @raylib.Color,

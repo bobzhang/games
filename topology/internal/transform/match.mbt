@@ -4,7 +4,7 @@ pub fn check_match(current : @types.Shape, target : @types.Shape) -> Bool {
 }
 
 ///|
-pub fn match_percentage(current : @types.Shape, target : @types.Shape) -> Int {
+pub fn match_percentage(current : @types.Shape, target : @types.Shape) -> Int32 {
   if target.cells.length() == 0 {
     return 100
   }
@@ -18,9 +18,9 @@ pub fn match_percentage(current : @types.Shape, target : @types.Shape) -> Int {
 
 ///|
 pub fn calculate_stars(
-  cost : Int,
-  par : Int,
-  min_cost : Int,
+  cost : Int32,
+  par : Int32,
+  min_cost : Int32,
 ) -> @types.StarRating {
   if cost <= min_cost {
     Three

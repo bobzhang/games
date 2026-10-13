@@ -84,7 +84,7 @@ pub fn program_add(program : @types.Program, kind : @types.CommandKind) -> Bool 
 ///|
 pub fn program_insert(
   program : @types.Program,
-  index : Int,
+  index : Int32,
   kind : @types.CommandKind,
 ) -> Bool {
   if program.commands.length() < program.max_slots &&
@@ -98,7 +98,7 @@ pub fn program_insert(
 }
 
 ///|
-pub fn program_remove(program : @types.Program, index : Int) -> Bool {
+pub fn program_remove(program : @types.Program, index : Int32) -> Bool {
   if index >= 0 && index < program.commands.length() {
     program.commands.remove(index) |> ignore
     true
@@ -113,7 +113,7 @@ pub fn program_clear(program : @types.Program) -> Unit {
 }
 
 ///|
-pub fn program_move_up(program : @types.Program, index : Int) -> Bool {
+pub fn program_move_up(program : @types.Program, index : Int32) -> Bool {
   if index > 0 && index < program.commands.length() {
     let temp = program.commands[index]
     program.commands[index] = program.commands[index - 1]
@@ -125,7 +125,7 @@ pub fn program_move_up(program : @types.Program, index : Int) -> Bool {
 }
 
 ///|
-pub fn program_move_down(program : @types.Program, index : Int) -> Bool {
+pub fn program_move_down(program : @types.Program, index : Int32) -> Bool {
   if index >= 0 && index < program.commands.length() - 1 {
     let temp = program.commands[index]
     program.commands[index] = program.commands[index + 1]

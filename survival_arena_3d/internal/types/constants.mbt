@@ -2,11 +2,11 @@
 
 ///|
 /// Framebuffer width in pixels.
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
 /// Framebuffer height in pixels.
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 // Arena dimensions
 
@@ -30,7 +30,7 @@ pub let arena_wall_thickness : Float = 1.0
 
 ///|
 /// Number of central arena pillars spawned at match start.
-pub let pillar_count : Int = 8
+pub let pillar_count : Int32 = 8
 
 ///|
 /// Radius of each pillar collider/mesh.
@@ -78,7 +78,7 @@ pub let low_wall_depth : Float = 0.6
 
 ///|
 /// Total number of weapon ids.
-pub let weapon_count : Int = 6
+pub let weapon_count : Int32 = 6
 
 // Weapon fire rates (seconds between shots)
 
@@ -136,27 +136,27 @@ pub let dmg_minigun : Float = 6.0
 
 ///|
 /// Starting reserve ammo for pistol (effectively infinite economy baseline).
-pub let ammo_pistol : Int = 999
+pub let ammo_pistol : Int32 = 999
 
 ///|
 /// Starting reserve ammo for shotgun.
-pub let ammo_shotgun : Int = 20
+pub let ammo_shotgun : Int32 = 20
 
 ///|
 /// Starting reserve ammo for rifle.
-pub let ammo_rifle : Int = 90
+pub let ammo_rifle : Int32 = 90
 
 ///|
 /// Starting reserve ammo for sniper rifle.
-pub let ammo_sniper : Int = 10
+pub let ammo_sniper : Int32 = 10
 
 ///|
 /// Starting reserve ammo for rocket launcher.
-pub let ammo_rocket : Int = 5
+pub let ammo_rocket : Int32 = 5
 
 ///|
 /// Starting reserve ammo for minigun.
-pub let ammo_minigun : Int = 200
+pub let ammo_minigun : Int32 = 200
 
 // Weapon max reserve ammo
 
@@ -190,7 +190,7 @@ pub let speed_minigun : Float = 70.0
 
 ///|
 /// Pellet count fired per shotgun shot.
-pub let shotgun_pellets : Int = 8
+pub let shotgun_pellets : Int32 = 8
 
 ///|
 /// Random spread cone factor for shotgun pellets.
@@ -200,7 +200,7 @@ pub let shotgun_spread : Float = 0.12
 
 ///|
 /// Number of enemies a sniper round can penetrate.
-pub let sniper_penetration : Int = 3
+pub let sniper_penetration : Int32 = 3
 
 // Rocket splash
 
@@ -252,41 +252,41 @@ pub let reload_minigun : Float = 4.0
 
 ///|
 /// Magazine size for pistol.
-pub let mag_pistol : Int = 12
+pub let mag_pistol : Int32 = 12
 
 ///|
 /// Magazine size for shotgun.
-pub let mag_shotgun : Int = 6
+pub let mag_shotgun : Int32 = 6
 
 ///|
 /// Magazine size for rifle.
-pub let mag_rifle : Int = 30
+pub let mag_rifle : Int32 = 30
 
 ///|
 /// Magazine size for sniper rifle.
-pub let mag_sniper : Int = 5
+pub let mag_sniper : Int32 = 5
 
 ///|
 /// Magazine size for rocket launcher.
-pub let mag_rocket : Int = 1
+pub let mag_rocket : Int32 = 1
 
 ///|
 /// Magazine size for minigun.
-pub let mag_minigun : Int = 100
+pub let mag_minigun : Int32 = 100
 
 // Weapon upgrade cost multiplier per level
 
 ///|
 /// Base gold cost for the first weapon upgrade tier.
-pub let upgrade_base_cost : Int = 75
+pub let upgrade_base_cost : Int32 = 75
 
 ///|
 /// Cost multiplier added per existing upgrade level.
-pub let upgrade_cost_per_level : Int = 50
+pub let upgrade_cost_per_level : Int32 = 50
 
 ///|
 /// Maximum upgrade level for any single weapon stat.
-pub let upgrade_max_level : Int = 4
+pub let upgrade_max_level : Int32 = 4
 
 ///|
 /// Damage multiplier steps per upgrade level: 1.0, 1.2, 1.4, 1.6, 1.8.
@@ -354,31 +354,31 @@ pub let camera_fovy : Float = 70.0
 
 ///|
 /// Maximum active enemies in pool.
-pub let max_enemies : Int = 128
+pub let max_enemies : Int32 = 128
 
 ///|
 /// Maximum active projectiles in pool.
-pub let max_projectiles : Int = 256
+pub let max_projectiles : Int32 = 256
 
 ///|
 /// Maximum active particles in pool.
-pub let max_particles : Int = 512
+pub let max_particles : Int32 = 512
 
 ///|
 /// Maximum active pickups in pool.
-pub let max_pickups : Int = 32
+pub let max_pickups : Int32 = 32
 
 ///|
 /// Maximum active arena traps in pool.
-pub let max_traps : Int = 12
+pub let max_traps : Int32 = 12
 
 ///|
 /// Maximum active barricades in pool.
-pub let max_barricades : Int = 16
+pub let max_barricades : Int32 = 16
 
 ///|
 /// Number of kill-feed lines shown simultaneously.
-pub let max_kill_feed : Int = 5
+pub let max_kill_feed : Int32 = 5
 
 // Wave timing
 
@@ -392,7 +392,7 @@ pub let spawn_interval : Float = 0.6
 
 ///|
 /// Total number of waves in the full run.
-pub let max_waves : Int = 30
+pub let max_waves : Int32 = 30
 
 // Spawn distance from center range
 
@@ -408,85 +408,85 @@ pub let spawn_max_dist : Float = 28.0
 
 ///|
 /// Shop price for health restoration.
-pub let cost_heal : Int = 50
+pub let cost_heal : Int32 = 50
 
 ///|
 /// Shop price for armor restoration.
-pub let cost_armor : Int = 40
+pub let cost_armor : Int32 = 40
 
 ///|
 /// Shop price for shotgun ammo bundle.
-pub let cost_shotgun_ammo : Int = 30
+pub let cost_shotgun_ammo : Int32 = 30
 
 ///|
 /// Shop price for rifle ammo bundle.
-pub let cost_rifle_ammo : Int = 25
+pub let cost_rifle_ammo : Int32 = 25
 
 ///|
 /// Shop price for sniper ammo bundle.
-pub let cost_sniper_ammo : Int = 50
+pub let cost_sniper_ammo : Int32 = 50
 
 ///|
 /// Shop price for rocket ammo bundle.
-pub let cost_rocket_ammo : Int = 60
+pub let cost_rocket_ammo : Int32 = 60
 
 ///|
 /// Shop price for minigun ammo bundle.
-pub let cost_minigun_ammo : Int = 45
+pub let cost_minigun_ammo : Int32 = 45
 
 ///|
 /// Shop price for damage upgrade.
-pub let cost_damage_up : Int = 100
+pub let cost_damage_up : Int32 = 100
 
 ///|
 /// Shop price for speed upgrade.
-pub let cost_speed_up : Int = 80
+pub let cost_speed_up : Int32 = 80
 
 ///|
 /// Shop price to unlock sniper weapon.
-pub let cost_buy_sniper : Int = 200
+pub let cost_buy_sniper : Int32 = 200
 
 ///|
 /// Shop price to unlock rocket launcher.
-pub let cost_buy_rocket : Int = 300
+pub let cost_buy_rocket : Int32 = 300
 
 ///|
 /// Shop price to unlock minigun.
-pub let cost_buy_minigun : Int = 400
+pub let cost_buy_minigun : Int32 = 400
 
 ///|
 /// Shop price to place one barricade.
-pub let cost_barricade : Int = 60
+pub let cost_barricade : Int32 = 60
 
 ///|
 /// Shop price to place one spike trap.
-pub let cost_trap_spike : Int = 80
+pub let cost_trap_spike : Int32 = 80
 
 // Pickup types
 
 ///|
 /// Pickup id for health restoration.
-pub let pickup_health : Int = 0
+pub let pickup_health : Int32 = 0
 
 ///|
 /// Pickup id for ammo refill.
-pub let pickup_ammo : Int = 1
+pub let pickup_ammo : Int32 = 1
 
 ///|
 /// Pickup id for temporary speed boost.
-pub let pickup_speed_boost : Int = 2
+pub let pickup_speed_boost : Int32 = 2
 
 ///|
 /// Pickup id for temporary damage boost.
-pub let pickup_damage_boost : Int = 3
+pub let pickup_damage_boost : Int32 = 3
 
 ///|
 /// Pickup id for temporary shield.
-pub let pickup_shield : Int = 4
+pub let pickup_shield : Int32 = 4
 
 ///|
 /// Pickup id for nuke effect.
-pub let pickup_nuke : Int = 5
+pub let pickup_nuke : Int32 = 5
 
 // Pickup durations
 
@@ -600,19 +600,19 @@ pub let shield_block_angle : Float = 1.2
 
 ///|
 /// Bonus score/money granted for headshot kills.
-pub let bonus_headshot : Int = 25
+pub let bonus_headshot : Int32 = 25
 
 ///|
 /// Bonus granted for rapid double kill streak.
-pub let bonus_double_kill : Int = 50
+pub let bonus_double_kill : Int32 = 50
 
 ///|
 /// Bonus granted for rapid triple kill streak.
-pub let bonus_triple_kill : Int = 100
+pub let bonus_triple_kill : Int32 = 100
 
 ///|
 /// Bonus granted for larger multi-kill streaks.
-pub let bonus_multi_kill : Int = 200
+pub let bonus_multi_kill : Int32 = 200
 
 // Kill feed
 

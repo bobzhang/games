@@ -1,41 +1,41 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let cell_size : Int = 48
+pub let cell_size : Int32 = 48
 
 ///|
-pub let grid_cols : Int = 16
+pub let grid_cols : Int32 = 16
 
 ///|
-pub let grid_rows : Int = 12
+pub let grid_rows : Int32 = 12
 
 ///|
-pub let grid_offset_x : Int = 64
+pub let grid_offset_x : Int32 = 64
 
 ///|
-pub let grid_offset_y : Int = 72
+pub let grid_offset_y : Int32 = 72
 
 ///|
 pub let pi : Float = 3.14159265
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 // Colors
 

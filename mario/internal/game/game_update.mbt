@@ -566,7 +566,7 @@ pub fn spawn_skid_dust(game : @types.Game, wx : Float, wy : Float) -> Unit {
 
 ///|
 /// Start a block bump animation.
-pub fn bump_block(game : @types.Game, tx : Int, ty : Int) -> Unit {
+pub fn bump_block(game : @types.Game, tx : Int32, ty : Int32) -> Unit {
   for i in 0..<game.bumped_blocks.length() {
     if !game.bumped_blocks[i].active {
       let b = game.bumped_blocks[i]
@@ -645,7 +645,7 @@ pub fn enter_bonus_room(game : @types.Game) -> Unit {
       if x >= row.length() {
         continue
       }
-      let ch = Int::unsafe_to_char(row[x].to_int())
+      let ch = Int32::unsafe_to_char(row[x].to_int())
       let tile = parse_tile_char(ch)
       @types.set_tile(game, x, y, tile)
       match ch {
@@ -762,7 +762,7 @@ pub fn exit_bonus_room(game : @types.Game) -> Unit {
 
 ///|
 /// Load a level from the level data.
-pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
+pub fn load_level(game : @types.Game, level_index : Int32) -> Unit {
   let rows = @levels.level_rows(level_index)
   let height = rows.length()
   let width = rows[0].length()
@@ -842,7 +842,7 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
       if x >= row.length() {
         continue
       }
-      let ch = Int::unsafe_to_char(row[x].to_int())
+      let ch = Int32::unsafe_to_char(row[x].to_int())
       let tile = parse_tile_char(ch)
       @types.set_tile(game, x, y, tile)
       // Handle special spawn characters
@@ -880,13 +880,13 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
 
 ///|
 /// Helper: convert tile column/row to world-pixel Float.
-fn tile_f(n : Int) -> Float {
+fn tile_f(n : Int32) -> Float {
   Float::from_int(n * @types.tile_size)
 }
 
 ///|
 /// Spawn moving platforms, lift platforms, and configure bridge tiles per level.
-fn spawn_level_platforms(game : @types.Game, level_index : Int) -> Unit {
+fn spawn_level_platforms(game : @types.Game, level_index : Int32) -> Unit {
   match level_index {
     0 => {
       // 1-1: One horizontal moving platform over the main gap (columns 52-54)
@@ -950,8 +950,8 @@ fn parse_tile_char(ch : Char) -> @types.TileKind {
 fn spawn_enemy_at(
   game : @types.Game,
   kind : @types.EnemyKind,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   for i in 0..<game.enemies.length() {
     if !game.enemies[i].active {
@@ -1125,7 +1125,7 @@ fn update_bridges(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Start the collapse process for a bridge tile if not already tracked.
-fn start_bridge_collapse(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn start_bridge_collapse(game : @types.Game, tx : Int32, ty : Int32) -> Unit {
   for i in 0..<game.bridges.length() {
     let b = game.bridges[i]
     if b.active && b.tile_x == tx && b.tile_y == ty {
@@ -1151,7 +1151,7 @@ fn start_bridge_collapse(game : @types.Game, tx : Int, ty : Int) -> Unit {
 
 ///|
 /// Trigger a chain collapse for adjacent bridge tiles with a short delay.
-fn chain_bridge_collapse(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn chain_bridge_collapse(game : @types.Game, tx : Int32, ty : Int32) -> Unit {
   if @types.get_tile(game, tx, ty) != BridgeTile {
     return
   }

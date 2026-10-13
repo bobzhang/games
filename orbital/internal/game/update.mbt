@@ -36,7 +36,7 @@ fn launch_probe(game : @types.Game) -> Unit {
 }
 
 ///|
-fn compute_stars(game : @types.Game, level : @types.Level) -> Int {
+fn compute_stars(game : @types.Game, level : @types.Level) -> Int32 {
   let mut stars = 1 // Completed = 1 star
   // Under par = 2 stars
   if game.tick_count <= level.par_ticks {

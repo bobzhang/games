@@ -155,10 +155,10 @@ fn draw_city_backdrop_art(art : GameArt, flash_t : Float) -> Unit {
 /// Draws one clipped road strip using the generated surface texture.
 fn draw_road_strip_art(
   art : GameArt,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   @raylib.draw_rectangle(x, y, w, h, tint)

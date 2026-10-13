@@ -1,10 +1,10 @@
 ///|
 fn draw_parchment_texture(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
-  seed : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
+  seed : Int32,
 ) -> Unit {
   // Deterministic pseudo-random stipple dots for aged paper effect
   let dot_color = @types.color_parchment_dark
@@ -38,7 +38,7 @@ fn draw_parchment_texture(
 }
 
 ///|
-fn draw_corner_flourish(cx : Int, cy : Int) -> Unit {
+fn draw_corner_flourish(cx : Int32, cy : Int32) -> Unit {
   // Small decorative corner mark
   let color = @types.color_compass_ring
   let s = 6

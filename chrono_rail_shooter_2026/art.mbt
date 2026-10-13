@@ -131,7 +131,7 @@ fn draw_texture_cover(
 
 ///|
 /// Draws the generated timeline rail background with live rail bounds.
-fn draw_chrono_backdrop(art : GameArt, storm_t : Float, state : Int) -> Unit {
+fn draw_chrono_backdrop(art : GameArt, storm_t : Float, state : Int32) -> Unit {
   draw_texture_cover(
     art.chrono_rail_backdrop,
     0.0,

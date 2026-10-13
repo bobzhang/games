@@ -69,7 +69,7 @@ pub extend ComponentKind with Show::{to_string, output}
 ///|
 pub(all) enum PlayState {
   Idle
-  ConnectingRope(Int)
+  ConnectingRope(Int32)
   Settling
   Won
   Failed

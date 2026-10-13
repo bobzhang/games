@@ -76,7 +76,7 @@ fn draw_spiral_view(game : @types.Game) -> Unit {
 
 ///|
 fn draw_spiral_path(
-  total : Int,
+  total : Int32,
   is_cw : Bool,
   cx : Float,
   cy : Float,

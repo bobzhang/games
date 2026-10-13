@@ -1,7 +1,7 @@
 ///|
 fn make_avail(
   kind : @types.ComponentKind,
-  count : Int,
+  count : Int32,
   fc : @types.FilterColor?,
   cf : @types.CrystalFace?,
 ) -> @types.AvailableComponent {
@@ -324,7 +324,7 @@ pub fn get_all_levels() -> Array[@types.Level] {
 }
 
 ///|
-pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
+pub fn load_level(game : @types.Game, level_index : Int32) -> Unit {
   let levels = get_all_levels()
   if level_index < 0 || level_index >= levels.length() {
     return
@@ -367,7 +367,7 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
 }
 
 ///|
-pub fn tier_level_range(tier : @types.Tier) -> (Int, Int) {
+pub fn tier_level_range(tier : @types.Tier) -> (Int32, Int32) {
   match tier {
     Fundamentals => (0, 7)
     Chromatics => (7, 14)
@@ -376,7 +376,7 @@ pub fn tier_level_range(tier : @types.Tier) -> (Int, Int) {
 }
 
 ///|
-pub fn tier_level_count(tier : @types.Tier) -> Int {
+pub fn tier_level_count(tier : @types.Tier) -> Int32 {
   match tier {
     Fundamentals => 7
     Chromatics => 7

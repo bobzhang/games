@@ -20,7 +20,7 @@ let assets : RenderAssets = RenderAssets::new()
 /// Selects a texture from the given array using `seed` as an index (wrapping around), or returns `None` if the array is empty.
 fn pick_texture(
   textures : Array[@raylib.Texture],
-  seed : Int,
+  seed : Int32,
 ) -> @raylib.Texture? {
   let len = textures.length()
   if len == 0 {
@@ -32,13 +32,13 @@ fn pick_texture(
 
 ///|
 /// Returns the explosion animation frame at `index`.
-pub fn explosion_frame(index : Int) -> @raylib.Texture? {
+pub fn explosion_frame(index : Int32) -> @raylib.Texture? {
   pick_texture(assets.explosion_frames, index)
 }
 
 ///|
 /// Returns the smoke animation frame at `index`.
-pub fn smoke_frame(index : Int) -> @raylib.Texture? {
+pub fn smoke_frame(index : Int32) -> @raylib.Texture? {
   pick_texture(assets.smoke_frames, index)
 }
 

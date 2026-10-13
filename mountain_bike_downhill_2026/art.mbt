@@ -134,7 +134,7 @@ fn draw_texture_cover(
 
 ///|
 /// Draws the generated mountain trail backdrop with subtle speed lines.
-fn draw_downhill_backdrop(art : GameArt, cam_y : Float, state : Int) -> Unit {
+fn draw_downhill_backdrop(art : GameArt, cam_y : Float, state : Int32) -> Unit {
   draw_texture_cover(
     art.downhill_trail_backdrop,
     0.0,
@@ -153,10 +153,10 @@ fn draw_downhill_backdrop(art : GameArt, cam_y : Float, state : Int) -> Unit {
     @raylib.Color::new(4, 10, 16, overlay_alpha),
   )
 
-  let drift : Int = (cam_y * 0.52).to_int() % 54
+  let drift : Int32 = (cam_y * 0.52).to_int() % 54
   for idx in 0..<20 {
-    let sy : Int = idx * 54 - drift
-    let lane_w : Int = 480 + idx % 4 * 34
+    let sy : Int32 = idx * 54 - drift
+    let lane_w : Int32 = 480 + idx % 4 * 34
     @raylib.draw_rectangle(
       sw / 2 - lane_w / 2,
       sy,
@@ -268,7 +268,7 @@ fn draw_pickup_art(
   pickup : Pickup,
   art : GameArt,
   psy : Float,
-  blink : Int,
+  blink : Int32,
 ) -> Unit {
   let mut texture = art.repair_pickup
   let mut glow_col = @raylib.Color::new(242, 112, 126, 76)

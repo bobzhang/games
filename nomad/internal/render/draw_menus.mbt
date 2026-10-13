@@ -95,7 +95,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     40,
     @types.color_title_text,
   )
-  let tiers : Array[(@types.Tier, String, String, Int, Int)] = [
+  let tiers : Array[(@types.Tier, String, String, Int32, Int32)] = [
     (OasisTrail, "Oasis Trail", "Levels 1-8: Gentle Introduction", 0, 8),
     (DuneSea, "Dune Sea", "Levels 9-17: Complex Routing", 8, 17),
     (LostCity, "Lost City", "Levels 18-25: Advanced Puzzles", 17, 25),
@@ -328,7 +328,12 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars_inline(x : Int, y : Int, filled : Int, total : Int) -> Unit {
+fn draw_stars_inline(
+  x : Int32,
+  y : Int32,
+  filled : Int32,
+  total : Int32,
+) -> Unit {
   let display_total = if total > 9 { 9 } else { total }
   for i in 0..<display_total {
     let sx = x + i * 18

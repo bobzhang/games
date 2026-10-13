@@ -7,7 +7,7 @@ pub fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_particle(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle(game : @types.Game) -> Int32 {
   for i, slot in game.particles {
     if !slot.active {
       break i

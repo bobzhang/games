@@ -74,7 +74,11 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_level_select_click(game : @types.Game, mx : Int, my : Int) -> Unit {
+fn handle_level_select_click(
+  game : @types.Game,
+  mx : Int32,
+  my : Int32,
+) -> Unit {
   let start_y = @types.level_button_y
   let button_h = @types.level_button_h
   let gap = @types.level_button_gap
@@ -97,7 +101,7 @@ fn handle_level_select_click(game : @types.Game, mx : Int, my : Int) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_id : Int) -> Unit {
+fn start_level(game : @types.Game, level_id : Int32) -> Unit {
   game.current_level = level_id
   game.screen = Playing
   game.grid.clear()
@@ -236,7 +240,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_toolbar_click(game : @types.Game, mx : Int, _my : Int) -> Unit {
+fn handle_toolbar_click(game : @types.Game, mx : Int32, _my : Int32) -> Unit {
   let slot_w = @types.toolbar_slot_w
   let slot_gap = @types.toolbar_slot_gap
   let start_x = @types.toolbar_start_x
@@ -250,7 +254,7 @@ fn handle_toolbar_click(game : @types.Game, mx : Int, _my : Int) -> Unit {
 }
 
 ///|
-fn handle_grid_click(game : @types.Game, col : Int, row : Int) -> Unit {
+fn handle_grid_click(game : @types.Game, col : Int32, row : Int32) -> Unit {
   match game.current_tool {
     TerrainBrush(terrain) => {
       game.grid.set_terrain(col, row, Some(terrain))
@@ -292,7 +296,7 @@ fn handle_grid_click(game : @types.Game, col : Int, row : Int) -> Unit {
 }
 
 ///|
-fn handle_grid_erase(game : @types.Game, col : Int, row : Int) -> Unit {
+fn handle_grid_erase(game : @types.Game, col : Int32, row : Int32) -> Unit {
   game.grid.set_terrain(col, row, None)
   game.grid.set_animal(col, row, None)
   game.grid.set_fence_top(col, row, false)
@@ -350,7 +354,7 @@ fn recount_total_stars(game : @types.Game) -> Unit {
 }
 
 ///|
-fn count_completed(game : @types.Game) -> Int {
+fn count_completed(game : @types.Game) -> Int32 {
   let mut count = 0
   for s in game.stars_earned {
     if s > 0 {

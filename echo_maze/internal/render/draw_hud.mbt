@@ -216,7 +216,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_controls_hint(x : Int, y : Int) -> Unit {
+fn draw_controls_hint(x : Int32, y : Int32) -> Unit {
   let dim = @raylib.Color::new(100, 95, 130, 255)
   @draw.draw_text("CONTROLS", x, y, 10, @raylib.Color::new(120, 110, 150, 255))
   @draw.draw_text("WASD/Arrows  Move", x, y + 13, 10, dim)
@@ -229,8 +229,8 @@ fn draw_controls_hint(x : Int, y : Int) -> Unit {
 fn draw_minimap(
   game : @types.Game,
   maze : @types.Maze,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   let scale = 4
   let w = maze.width * scale

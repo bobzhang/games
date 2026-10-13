@@ -1,17 +1,17 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 pub let hex_size : Float = 34.0
 
 ///|
-pub let board_size : Int = 7
+pub let board_size : Int32 = 7
 
 ///|
 pub let board_offset_x : Float = 380.0
@@ -20,28 +20,28 @@ pub let board_offset_x : Float = 380.0
 pub let board_offset_y : Float = 360.0
 
 ///|
-pub let bridge_points : Int = 2
+pub let bridge_points : Int32 = 2
 
 ///|
-pub let chain_points : Int = 3
+pub let chain_points : Int32 = 3
 
 ///|
-pub let triangle_points : Int = 4
+pub let triangle_points : Int32 = 4
 
 ///|
-pub let diamond_points : Int = 5
+pub let diamond_points : Int32 = 5
 
 ///|
-pub let fortress_points : Int = 6
+pub let fortress_points : Int32 = 6
 
 ///|
-pub let ring_points : Int = 7
+pub let ring_points : Int32 = 7
 
 ///|
-pub let star_points : Int = 8
+pub let star_points : Int32 = 8
 
 ///|
-pub let wall_points : Int = 3
+pub let wall_points : Int32 = 3
 
 ///|
 pub let ai_think_delay : Float = 0.4

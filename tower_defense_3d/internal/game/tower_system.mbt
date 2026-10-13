@@ -88,7 +88,7 @@ fn @types.Game::update_towers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::apply_buff_tower(game : @types.Game, buff_idx : Int) -> Unit {
+fn @types.Game::apply_buff_tower(game : @types.Game, buff_idx : Int32) -> Unit {
   let buff = game.towers[buff_idx]
   let bx = @types.grid_to_world_x(buff.gx)
   let bz = @types.grid_to_world_z(buff.gy)
@@ -125,7 +125,7 @@ fn @types.Game::apply_buff_tower(game : @types.Game, buff_idx : Int) -> Unit {
 ///|
 fn @types.Game::update_buff_pulse(
   game : @types.Game,
-  buff_idx : Int,
+  buff_idx : Int32,
   dt : Float,
 ) -> Unit {
   let buff = game.towers[buff_idx]
@@ -155,7 +155,7 @@ fn @types.Game::update_buff_pulse(
 ///|
 fn @types.Game::update_flame_aura(
   game : @types.Game,
-  tower_idx : Int,
+  tower_idx : Int32,
   dt : Float,
 ) -> Unit {
   let tower = game.towers[tower_idx]
@@ -182,7 +182,7 @@ fn @types.Game::update_flame_aura(
 }
 
 ///|
-fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
+fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int32) -> Unit {
   let tower = game.towers[tower_idx]
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
@@ -234,7 +234,7 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
   // Lightning tower: chain
   match tower.kind {
     Lightning => {
-      let chains : Int = if tower.level >= 3 {
+      let chains : Int32 = if tower.level >= 3 {
         @types.chain_count + 2
       } else {
         @types.chain_count
@@ -285,7 +285,7 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
 ///|
 fn @types.Game::fire_tower_secondary(
   game : @types.Game,
-  tower_idx : Int,
+  tower_idx : Int32,
 ) -> Unit {
   let tower = game.towers[tower_idx]
   let idx = @types.alloc_projectile(game)

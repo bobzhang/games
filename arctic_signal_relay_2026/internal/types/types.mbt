@@ -4,8 +4,8 @@ pub(all) struct Tower {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut need : Int
-  mut delivered : Int
+  mut need : Int32
+  mut delivered : Int32
   mut pulse_t : Float
 }
 
@@ -39,22 +39,22 @@ pub(all) struct Game {
   towers : Array[Tower]
   storms : Array[Storm]
   mut state : GameState
-  mut stage : Int
-  mut best_stage : Int
+  mut stage : Int32
+  mut best_stage : Int32
   mut mission_limit_s : Float
   mut timer_s : Float
-  mut objective_total : Int
-  mut objective_done : Int
+  mut objective_total : Int32
+  mut objective_done : Int32
   mut rover_x : Float
   mut rover_y : Float
   mut rover_vx : Float
   mut rover_vy : Float
   mut rover_energy : Float
   mut rover_heat : Float
-  mut cargo_cells : Int
+  mut cargo_cells : Int32
   mut storm_intensity : Float
   mut in_depot : Bool
-  mut nearby_tower : Int
+  mut nearby_tower : Int32
   mut result_win : Bool
   mut result_note : String
   mut ui_t : Float
@@ -75,7 +75,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

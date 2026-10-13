@@ -123,8 +123,8 @@ fn draw_command_ship_art(art : GameArt, x : Float, y : Float) -> Unit {
 fn draw_convoy_truck_art(
   art : GameArt,
   truck : Truck,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   @raylib.draw_rectangle(
     tx - 52,
@@ -152,7 +152,12 @@ fn draw_convoy_truck_art(
 
 ///|
 /// Draws a generated meteor sprite scaled to the current collision radius.
-fn draw_meteor_art(art : GameArt, meteor : Meteor, mx : Int, my : Int) -> Unit {
+fn draw_meteor_art(
+  art : GameArt,
+  meteor : Meteor,
+  mx : Int32,
+  my : Int32,
+) -> Unit {
   let size = meteor.r * 2.55
   @raylib.draw_circle(
     mx,
@@ -172,7 +177,7 @@ fn draw_meteor_art(art : GameArt, meteor : Meteor, mx : Int, my : Int) -> Unit {
 
 ///|
 /// Draws a generated ore pickup sprite with a cyan pickup glow.
-fn draw_ore_art(art : GameArt, ore : Ore, ox : Int, oy : Int) -> Unit {
+fn draw_ore_art(art : GameArt, ore : Ore, ox : Int32, oy : Int32) -> Unit {
   @raylib.draw_circle(ox, oy + 2, 14.0, @raylib.Color::new(70, 232, 226, 58))
   draw_texture_centered(
     art.ore_crystal,

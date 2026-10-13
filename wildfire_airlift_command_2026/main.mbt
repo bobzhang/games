@@ -9,8 +9,8 @@ struct Player {
   hull_max : Float
   mut fuel : Float
   fuel_max : Float
-  mut onboard : Int
-  capacity : Int
+  mut onboard : Int32
+  capacity : Int32
   mut water : Float
   water_max : Float
   mut action_cd : Float
@@ -25,8 +25,8 @@ struct Player {
 struct Base {
   x : Float
   y : Float
-  w : Int
-  h : Int
+  w : Int32
+  h : Int32
 }
 
 ///|
@@ -37,7 +37,7 @@ struct EvacZone {
   mut queue : Float
   mut heat : Float
   mut alarm_t : Float
-  id : Int
+  id : Int32
 }
 
 ///|
@@ -45,12 +45,12 @@ struct EvacGroup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut count : Int
+  mut count : Int32
   mut panic : Float
   mut drift_x : Float
   mut drift_y : Float
   mut flare_t : Float
-  mut id : Int
+  mut id : Int32
 }
 
 ///|
@@ -100,7 +100,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -149,10 +149,10 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -250,7 +250,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if part.active {
@@ -294,8 +294,8 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -337,10 +337,10 @@ fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
 ///|
 fn init_zones(
   zones : Array[EvacZone],
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
   clear_zones(zones)
 
@@ -422,8 +422,8 @@ fn init_debris(
 ) -> Unit {
   clear_debris(debris)
 
-  let mut filled : Int = 0
-  let target : Int = debris.length() - 12
+  let mut filled : Int32 = 0
+  let target : Int32 = debris.length() - 12
 
   while filled < target {
     let x : Float = randf(world_l + 24.0, world_r - 24.0)
@@ -482,15 +482,15 @@ fn spawn_group(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
-  serial : Int,
+  tier : Int32,
+  serial : Int32,
 ) -> Bool {
   for group in groups {
     if group.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       group.x = world_l + randf(26.0, 60.0)
       group.y = randf(world_t + 30.0, world_b - 30.0)
@@ -531,14 +531,14 @@ fn spawn_fire(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
+  tier : Int32,
 ) -> Bool {
   for fire in fires {
     if fire.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       fire.x = world_l - 84.0
       fire.y = randf(world_t + 20.0, world_b - 20.0)
@@ -600,17 +600,17 @@ fn spawn_smoke(
 }
 
 ///|
-fn active_groups(groups : Array[EvacGroup]) -> Int {
+fn active_groups(groups : Array[EvacGroup]) -> Int32 {
   @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
-fn active_fires(fires : Array[FireZone]) -> Int {
+fn active_fires(fires : Array[FireZone]) -> Int32 {
   @utils.count_by(fires, fn(fire) { fire.active })
 }
 
 ///|
-fn active_critical(groups : Array[EvacGroup]) -> Int {
+fn active_critical(groups : Array[EvacGroup]) -> Int32 {
   @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
@@ -771,8 +771,8 @@ fn update_groups(
   world_b : Float,
   safe_x : Float,
   safe_y : Float,
-) -> (Int, Float) {
-  let mut lost : Int = 0
+) -> (Int32, Float) {
+  let mut lost : Int32 = 0
   let mut panic_sum : Float = 0.0
 
   for group in groups {
@@ -848,12 +848,12 @@ fn rescue_groups(
   player : Player,
   groups : Array[EvacGroup],
   parts : Array[Particle],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   if player.action_cd > 0.0 || player.onboard >= player.capacity {
     (0, 0)
   } else {
-    let mut rescued_people : Int = 0
-    let mut groups_hit : Int = 0
+    let mut rescued_people : Int32 = 0
+    let mut groups_hit : Int32 = 0
 
     for group in groups {
       if !group.active || group.count <= 0 {
@@ -865,12 +865,12 @@ fn rescue_groups(
         continue
       }
 
-      let cap_left : Int = player.capacity - player.onboard
+      let cap_left : Int32 = player.capacity - player.onboard
       if cap_left <= 0 {
         break
       }
 
-      let take : Int = group.count.min(cap_left.min(8))
+      let take : Int32 = group.count.min(cap_left.min(8))
       if take <= 0 {
         continue
       }
@@ -901,11 +901,11 @@ fn suppress_fire(
   player : Player,
   fires : Array[FireZone],
   parts : Array[Particle],
-) -> (Int, Float) {
+) -> (Int32, Float) {
   if player.action_cd > 0.0 || player.water <= 0.1 {
     (0, 0.0)
   } else {
-    let mut hits : Int = 0
+    let mut hits : Int32 = 0
     let mut reduction : Float = 0.0
 
     for fire in fires {
@@ -1010,10 +1010,10 @@ fn nearest_hot_fire(
 
 ///|
 fn draw_ground(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
   t : Float,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -1024,15 +1024,15 @@ fn draw_ground(
     @raylib.Color::new(22, 40, 26, 255),
   )
 
-  let mut y : Int = world_y
+  let mut y : Int32 = world_y
   while y < world_y + world_h {
     let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
     let wave : Float = @math.sinf(t * 0.8 + Float::from_int(y) * 0.02) * 0.5 +
       0.5
 
-    let r : Int = 30 + (p * 28.0).to_int() + (wave * 6.0).to_int()
-    let g : Int = 58 + (p * 34.0).to_int() + (wave * 8.0).to_int()
-    let b : Int = 30 + (p * 20.0).to_int() + (wave * 5.0).to_int()
+    let r : Int32 = 30 + (p * 28.0).to_int() + (wave * 6.0).to_int()
+    let g : Int32 = 58 + (p * 34.0).to_int() + (wave * 8.0).to_int()
+    let b : Int32 = 30 + (p * 20.0).to_int() + (wave * 5.0).to_int()
 
     @raylib.draw_rectangle(
       world_x,
@@ -1045,7 +1045,7 @@ fn draw_ground(
   }
 
   // city road grid
-  let mut gx : Int = world_x + 40
+  let mut gx : Int32 = world_x + 40
   while gx < world_x + world_w {
     @raylib.draw_line(
       gx,
@@ -1056,7 +1056,7 @@ fn draw_ground(
     )
     gx = gx + 78
   }
-  let mut gy : Int = world_y + 36
+  let mut gy : Int32 = world_y + 36
   while gy < world_y + world_h {
     @raylib.draw_line(
       world_x + 4,
@@ -1094,7 +1094,7 @@ fn draw_base(base : Base) -> Unit {
     @raylib.Color::new(176, 214, 244, 246),
   )
 
-  let mut x : Int = base.x.to_int() + 10
+  let mut x : Int32 = base.x.to_int() + 10
   while x < base.x.to_int() + base.w - 8 {
     @raylib.draw_line(
       x,
@@ -1237,8 +1237,8 @@ fn draw_fires(fires : Array[FireZone], t : Float) -> Unit {
     let r0 : Float = fire.radius * pulse
     let r1 : Float = fire.radius * (0.58 + pulse * 0.18)
 
-    let a0 : Int = 24 + (fire.intensity * 42.0).to_int()
-    let a1 : Int = 12 + (fire.intensity * 24.0).to_int()
+    let a0 : Int32 = 24 + (fire.intensity * 42.0).to_int()
+    let a1 : Int32 = 12 + (fire.intensity * 24.0).to_int()
 
     @raylib.draw_circle(
       fire.x.to_int(),
@@ -1278,8 +1278,8 @@ fn draw_smokes(smokes : Array[SmokePlume], t : Float) -> Unit {
     let r0 : Float = smoke.radius * pulse
     let r1 : Float = smoke.radius * (0.62 + pulse * 0.14)
 
-    let a0 : Int = 20 + (smoke.density * 56.0).to_int()
-    let a1 : Int = 10 + (smoke.density * 30.0).to_int()
+    let a0 : Int32 = 20 + (smoke.density * 56.0).to_int()
+    let a1 : Int32 = 10 + (smoke.density * 30.0).to_int()
 
     @raylib.draw_circle(
       smoke.x.to_int(),
@@ -1307,9 +1307,9 @@ fn draw_debris(debris : Array[Debris], t : Float) -> Unit {
     let rr : Float = debris.size * (0.88 + wob * 0.2)
     let h01 : Float = clampf(debris.hard / 100.0, 0.0, 1.0)
 
-    let r : Int = 92 + (h01 * 54.0).to_int()
-    let g : Int = 88 + (h01 * 38.0).to_int()
-    let b : Int = 74 + (h01 * 22.0).to_int()
+    let r : Int32 = 92 + (h01 * 54.0).to_int()
+    let g : Int32 = 88 + (h01 * 38.0).to_int()
+    let b : Int32 = 74 + (h01 * 22.0).to_int()
 
     @raylib.draw_circle(
       debris.x.to_int(),
@@ -1391,15 +1391,15 @@ fn draw_player(player : Player, t : Float) -> Unit {
     @raylib.Color::new(176, 214, 246, 86),
   )
 
-  let shown_people : Int = player.onboard.min(6)
+  let shown_people : Int32 = player.onboard.min(6)
   for i in 0..<shown_people {
-    let px : Int = (x - 12.0 + Float::from_int(i % 3) * 8.0).to_int()
-    let py : Int = (y + 2.0 + Float::from_int(i / 3) * 5.0).to_int()
+    let px : Int32 = (x - 12.0 + Float::from_int(i % 3) * 8.0).to_int()
+    let py : Int32 = (y + 2.0 + Float::from_int(i / 3) * 5.0).to_int()
     @raylib.draw_rectangle(px, py, 6, 4, @raylib.Color::new(222, 176, 120, 236))
   }
 
   // water tank indicator on tail
-  let water_w : Int = (Float::from_int(22) *
+  let water_w : Int32 = (Float::from_int(22) *
   clampf(player.water / player.water_max, 0.0, 1.0)).to_int()
   @raylib.draw_rectangle(
     (x - 11.0).to_int(),
@@ -1450,20 +1450,20 @@ fn draw_parts(parts : Array[Particle]) -> Unit {
 
 ///|
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mx : Float,
   my : Float,
   hold : Bool,
 ) -> Unit {
-  let pad_x : Int = 30
-  let pad_y : Int = sh - 198
+  let pad_x : Int32 = 30
+  let pad_y : Int32 = sh - 198
 
   fn dpad_box(
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     text : String,
     active : Bool,
   ) -> Unit {
@@ -1582,8 +1582,8 @@ fn draw_touch_controls(
 
 ///|
 fn draw_bar(
-  panel_x : Int,
-  y : Int,
+  panel_x : Int32,
+  y : Int32,
   label : String,
   value : Float,
   maxv : Float,
@@ -1609,7 +1609,7 @@ fn draw_bar(
   } else {
     clampf(value / maxv, 0.0, 1.0)
   }
-  let fw : Int = (Float::from_int(364) * p01).to_int()
+  let fw : Int32 = (Float::from_int(364) * p01).to_int()
 
   @raylib.draw_rectangle(panel_x + 16, y + 28, fw, 20, col)
   @raylib.draw_rectangle_lines(
@@ -1631,10 +1631,10 @@ fn draw_bar(
 
 ///|
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   hover : Bool,
 ) -> Unit {
@@ -1663,8 +1663,8 @@ fn draw_button(
 
 ///|
 fn main {
-  let sw : Int = 1680
-  let sh : Int = 940
+  let sw : Int32 = 1680
+  let sh : Int32 = 940
   @raylib.init_window(sw, sh, "raylib [game] wildfire airlift command 2026")
   @draw.cleanup()
   defer @raylib.close_window()
@@ -1672,11 +1672,11 @@ fn main {
   @raylib.set_target_fps(120)
   @draw.init_font()
 
-  let world_x : Int = 20
-  let world_y : Int = 20
-  let panel_w : Int = 420
-  let world_w : Int = sw - panel_w - 40
-  let world_h : Int = sh - 40
+  let world_x : Int32 = 20
+  let world_y : Int32 = 20
+  let panel_w : Int32 = 420
+  let world_w : Int32 = sw - panel_w - 40
+  let world_h : Int32 = sh - 40
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
@@ -1795,15 +1795,15 @@ fn main {
     rotor_t: randf(0.0, 20.0),
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 430.0
-  let mut rescued_total : Int = 0
-  let mut target_rescued : Int = 680
-  let mut score : Int = 0
-  let mut tier : Int = 1
+  let mut rescued_total : Int32 = 0
+  let mut target_rescued : Int32 = 680
+  let mut score : Int32 = 0
+  let mut tier : Int32 = 1
 
-  let mut lost_people : Int = 0
-  let mut lost_limit : Int = 170
+  let mut lost_people : Int32 = 0
+  let mut lost_limit : Int32 = 170
 
   let mut spawn_cd : Float = 1.2
   let mut fire_cd : Float = 4.8
@@ -1816,8 +1816,8 @@ fn main {
   let mut base_queue_max : Float = 280.0
   let mut unload_cd : Float = 0.0
 
-  let mut group_serial : Int = 1
-  let mut urgent_peak : Int = 0
+  let mut group_serial : Int32 = 1
+  let mut urgent_peak : Int32 = 0
   let mut suppressed_total : Float = 0.0
 
   fn reset_run() -> Unit {
@@ -1961,8 +1961,8 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyH)
 
       if hold {
-        let pad_x : Int = 30
-        let pad_y : Int = sh - 198
+        let pad_x : Int32 = 30
+        let pad_y : Int32 = sh - 198
 
         if inside_rect(mouse.x, mouse.y, pad_x + 84, pad_y, 76, 56) {
           move_u = true
@@ -2093,7 +2093,7 @@ fn main {
         player.water = minf(player.water_max, player.water + dt * 38.0)
 
         if player.onboard > 0 && unload_cd <= 0.0 {
-          let unload_n : Int = player.onboard.min(3)
+          let unload_n : Int32 = player.onboard.min(3)
           player.onboard = player.onboard - unload_n
           rescued_total = rescued_total + unload_n
           score = score + unload_n * 10
@@ -2265,7 +2265,7 @@ fn main {
 
       fire_cd = fire_cd - dt
       if fire_cd <= 0.0 {
-        let max_f : Int = 2 + tier / 2
+        let max_f : Int32 = 2 + tier / 2
         if active_fires(fires) < max_f {
           ignore(spawn_fire(fires, world_l, world_t, world_r, world_b, tier))
         }
@@ -2275,7 +2275,7 @@ fn main {
         }
       }
 
-      let urgent_now : Int = active_critical(groups)
+      let urgent_now : Int32 = active_critical(groups)
       if urgent_now > urgent_peak {
         urgent_peak = urgent_now
       }
@@ -2352,7 +2352,7 @@ fn main {
 
     draw_parts(parts)
 
-    let panel_x : Int = world_x + world_w + 16
+    let panel_x : Int32 = world_x + world_w + 16
     @raylib.draw_rectangle(
       panel_x,
       world_y,
@@ -2657,8 +2657,8 @@ fn main {
     draw_touch_controls(sw, sh, mouse.x, mouse.y, hold)
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = world_x + world_w / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = world_x + world_w / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         18,

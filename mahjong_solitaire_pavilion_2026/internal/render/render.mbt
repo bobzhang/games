@@ -1,17 +1,17 @@
 ///|
 /// Generates a deterministic display colour from a tile kind integer.
-fn color_for_kind(kind : Int) -> @raylib.Color {
-  let r : Int = 70 + kind * 37 % 168
-  let g : Int = 78 + kind * 61 % 158
-  let b : Int = 86 + kind * 49 % 146
+fn color_for_kind(kind : Int32) -> @raylib.Color {
+  let r : Int32 = 70 + kind * 37 % 168
+  let g : Int32 = 78 + kind * 61 % 158
+  let b : Int32 = 86 + kind * 49 % 146
   @raylib.Color::new(r, g, b, 255)
 }
 
 ///|
 /// Returns a short suit+rank label string for a tile kind integer.
-fn tile_label(kind : Int) -> String {
-  let suit : Int = kind % 4
-  let rank : Int = kind % 9 + 1
+fn tile_label(kind : Int32) -> String {
+  let suit : Int32 = kind % 4
+  let rank : Int32 = kind % 9 + 1
   if suit == 0 {
     "B\{rank}"
   } else if suit == 1 {
@@ -80,10 +80,10 @@ fn @types.Game::draw_hint(game : @types.Game) -> Unit {
 
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
-  let x1 : Int = board_x + (game.hint_x1 - 1) * tile
-  let y1 : Int = board_y + (game.hint_y1 - 1) * tile
-  let x2 : Int = board_x + (game.hint_x2 - 1) * tile
-  let y2 : Int = board_y + (game.hint_y2 - 1) * tile
+  let x1 : Int32 = board_x + (game.hint_x1 - 1) * tile
+  let y1 : Int32 = board_y + (game.hint_y1 - 1) * tile
+  let x2 : Int32 = board_x + (game.hint_x2 - 1) * tile
+  let y2 : Int32 = board_y + (game.hint_y2 - 1) * tile
 
   @raylib.draw_rectangle_lines_ex(
     @raylib.Rectangle::new(
@@ -128,12 +128,12 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
     @raylib.Color::new(110, 150, 182, 182),
   )
 
-  let font_size : Int = (tile / 3).clamp(min=16, max=28)
+  let font_size : Int32 = (tile / 3).clamp(min=16, max=28)
 
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {
-      let px : Int = board_x + (x - 1) * tile
-      let py : Int = board_y + (y - 1) * tile
+      let px : Int32 = board_x + (x - 1) * tile
+      let py : Int32 = board_y + (y - 1) * tile
 
       if !@types.active_at(game, x, y) {
         @raylib.draw_rectangle(
@@ -158,7 +158,7 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
         },
       )
 
-      let k : Int = @types.cell_at(game, x, y)
+      let k : Int32 = @types.cell_at(game, x, y)
       if k > 0 {
         let c : @raylib.Color = color_for_kind(k)
 
@@ -231,8 +231,8 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
   }
 
   if game.select_active {
-    let sx : Int = board_x + (game.select_x - 1) * tile
-    let sy : Int = board_y + (game.select_y - 1) * tile
+    let sx : Int32 = board_x + (game.select_x - 1) * tile
+    let sy : Int32 = board_y + (game.select_y - 1) * tile
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(
         Float::from_int(sx + 1),
@@ -246,8 +246,8 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
   }
 
   if game.state == Play {
-    let cx : Int = board_x + (game.cursor_x - 1) * tile
-    let cy : Int = board_y + (game.cursor_y - 1) * tile
+    let cx : Int32 = board_x + (game.cursor_x - 1) * tile
+    let cy : Int32 = board_y + (game.cursor_y - 1) * tile
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(
         Float::from_int(cx + 3),
@@ -268,10 +268,10 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
 fn draw_button(
   art : GameArt,
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   active : Bool,
   accent : @raylib.Color,
 ) -> Unit {
@@ -309,7 +309,7 @@ fn draw_button(
     @raylib.Color::new(190, 220, 242, 236),
   )
 
-  let fs : Int = 28
+  let fs : Int32 = 28
   @draw.draw_text(
     label,
     x + w / 2 - @draw.measure_text(label, fs) / 2,
@@ -322,10 +322,10 @@ fn draw_button(
 ///|
 /// Draws the right-side panel with game stats, keyboard help text, action buttons, and the status message.
 fn @types.Game::draw_side_panel(game : @types.Game, art : GameArt) -> Unit {
-  let px : Int = @types.panel_x()
-  let py : Int = 20
-  let pw : Int = 396
-  let ph : Int = @types.screen_h - 40
+  let px : Int32 = @types.panel_x()
+  let py : Int32 = 20
+  let pw : Int32 = 396
+  let ph : Int32 = @types.screen_h - 40
 
   draw_texture_rect(
     art.panel_skin,
@@ -605,9 +605,9 @@ fn @types.Game::draw_side_panel(game : @types.Game, art : GameArt) -> Unit {
 ///|
 /// Draws the on-screen D-pad directional buttons with active highlight when pressed.
 fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
-  let cx : Int = @types.dpad_center_x()
-  let cy : Int = @types.dpad_center_y()
-  let s : Int = @types.dpad_size()
+  let cx : Int32 = @types.dpad_center_x()
+  let cy : Int32 = @types.dpad_center_y()
+  let s : Int32 = @types.dpad_size()
 
   let left_on : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -818,10 +818,10 @@ fn @types.Game::draw_level_clear_overlay(
     @raylib.Color::new(6, 10, 16, 168),
   )
 
-  let pw : Int = 760
-  let ph : Int = 390
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 760
+  let ph : Int32 = 390
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   draw_texture_cover(
     art.title_art,
@@ -896,10 +896,10 @@ fn @types.Game::draw_fail_overlay(game : @types.Game, art : GameArt) -> Unit {
     @raylib.Color::new(14, 6, 6, 170),
   )
 
-  let pw : Int = 760
-  let ph : Int = 380
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 760
+  let ph : Int32 = 380
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   draw_texture_cover(
     art.title_art,
@@ -977,10 +977,10 @@ fn @types.Game::draw_campaign_overlay(
     @raylib.Color::new(6, 10, 16, 176),
   )
 
-  let pw : Int = 900
-  let ph : Int = 520
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 900
+  let ph : Int32 = 520
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   draw_texture_cover(
     art.title_art,

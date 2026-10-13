@@ -1,7 +1,7 @@
 ///|
 pub(all) struct Vec2i {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -14,7 +14,7 @@ pub extend Vec2i with Debug::{to_repr}
 pub(all) struct Gear {
   mut pos : Vec2i
   mut kind : GearKind
-  mut radius : Int
+  mut radius : Int32
   mut rpm : Float
   mut dir : RotDir
   mut angle : Float
@@ -26,8 +26,8 @@ pub extend Gear with Debug::{to_repr}
 
 ///|
 pub(all) struct Connection {
-  from : Int
-  to : Int
+  from : Int32
+  to : Int32
   ratio : Float
   flips_dir : Bool
 } derive(Debug)
@@ -51,7 +51,7 @@ pub(all) struct InputGear {
   pos : Vec2i
   rpm : Float
   dir : RotDir
-  radius : Int
+  radius : Int32
 } derive(Debug)
 
 ///|
@@ -74,8 +74,8 @@ pub(all) struct Level {
   input : InputGear
   outputs : Array[Output]
   available_gears : Array[GearKind]
-  gear_budget : Int
-  par_gears : Int
+  gear_budget : Int32
+  par_gears : Int32
   hint : String
 } derive(Debug)
 
@@ -84,8 +84,8 @@ pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
-  mut stars : Int
-  mut gears_used : Int
+  mut stars : Int32
+  mut gears_used : Int32
   mut completed : Bool
 } derive(Debug)
 
@@ -96,7 +96,7 @@ pub extend LevelScore with Debug::{to_repr}
 pub(all) struct Game {
   mut screen : Screen
   mut selected_tier : Tier
-  mut selected_level : Int
+  mut selected_level : Int32
   mut play_state : PlayState
   mut placed_gears : Array[Gear]
   mut belts : Array[BeltLink]
@@ -107,7 +107,7 @@ pub(all) struct Game {
   mut scores : Array[LevelScore]
   mut hover_peg : Vec2i?
   mut sim_time : Float
-  mut frame_count : Int
+  mut frame_count : Int32
   mut message : String
   mut message_timer : Float
   mut anim_timer : Float

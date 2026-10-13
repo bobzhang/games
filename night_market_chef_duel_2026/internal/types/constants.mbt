@@ -1,26 +1,26 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Fixed update/render target frequency.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Height of the top HUD band.
-pub let hud_h : Int = 112
+pub let hud_h : Int32 = 112
 
 ///|
 /// Maximum simultaneous active order slots.
-pub let max_orders : Int = 6
+pub let max_orders : Int32 = 6
 
 ///|
 /// Failed-order count that ends the run.
-pub let fail_limit : Int = 6
+pub let fail_limit : Int32 = 6
 
 ///|
 /// Seconds before combo score bonus expires.
@@ -113,7 +113,7 @@ pub let pass_y : Float = 312.0
 ///|
 /// Navigation node identifiers for cursor placement.
 pub(all) enum NavNode {
-  OrderSlot(Int)
+  OrderSlot(Int32)
   PrepStation
   GrillStation
   WokStation

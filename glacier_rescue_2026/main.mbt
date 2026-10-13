@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 800
+let sh : Int32 = 800
 
 ///|
 /// Total scrollable world width in pixels.
@@ -16,23 +16,23 @@ let world_h : Float = 2800.0
 
 ///|
 /// Maximum number of survivors that can exist in a mission.
-let max_survivors : Int = 44
+let max_survivors : Int32 = 44
 
 ///|
 /// Maximum number of environmental hazards that can be active at once.
-let max_hazards : Int = 52
+let max_hazards : Int32 = 52
 
 ///|
 /// Maximum number of visual particles that can be active simultaneously.
-let max_particles : Int = 1100
+let max_particles : Int32 = 1100
 
 ///|
 /// Maximum number of active flares that can exist at one time.
-let max_flares : Int = 8
+let max_flares : Int32 = 8
 
 ///|
 /// Maximum number of simultaneous avalanche hazards allowed.
-let max_avalanches : Int = 10
+let max_avalanches : Int32 = 10
 
 ///|
 /// X coordinate of the rescue base where survivors are dropped off.
@@ -58,10 +58,10 @@ struct Helicopter {
   mut flare_cd : Float
   mut shake_t : Float
   mut flash_t : Float
-  mut onboard : Int
-  mut rescued : Int
-  mut lost : Int
-  mut score : Int
+  mut onboard : Int32
+  mut rescued : Int32
+  mut lost : Int32
+  mut score : Int32
 }
 
 ///|
@@ -80,7 +80,7 @@ struct Survivor {
 /// Represents a moving environmental hazard such as ice chunks or rocks with position, velocity, and radius.
 struct Hazard {
   mut active : Bool
-  kind : Int
+  kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -123,7 +123,7 @@ struct Particle {
   size : Float
   mut t : Float
   life : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
@@ -175,10 +175,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let x0 = Float::from_int(x)
   let y0 = Float::from_int(y)
@@ -197,7 +197,7 @@ fn emit_particle(
   vy : Float,
   size : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
@@ -213,9 +213,9 @@ fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   power : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _ in 0..<count {
     let ang = randf(0.0, 6.283)
@@ -235,7 +235,7 @@ fn burst_particles(
 
 ///|
 /// Populates the survivors array with active survivors at scattered positions appropriate for the level.
-fn spawn_survivors(survivors : FixedArray[Survivor], level : Int) -> Unit {
+fn spawn_survivors(survivors : FixedArray[Survivor], level : Int32) -> Unit {
   let total = clampf(
     Float::from_int(20 + level * 4),
     20.0,
@@ -267,7 +267,7 @@ fn spawn_survivors(survivors : FixedArray[Survivor], level : Int) -> Unit {
 
 ///|
 /// Populates the hazards array with active hazards of varying types and speeds scaled to the level.
-fn spawn_hazards(hazards : FixedArray[Hazard], level : Int) -> Unit {
+fn spawn_hazards(hazards : FixedArray[Hazard], level : Int32) -> Unit {
   let total = clampf(
     Float::from_int(18 + level * 5),
     18.0,
@@ -298,7 +298,7 @@ fn spawn_hazards(hazards : FixedArray[Hazard], level : Int) -> Unit {
 
 ///|
 /// Spawns a new avalanche at a random vertical position with speed and width scaled to the level.
-fn spawn_avalanche(avalanches : FixedArray[Avalanche], level : Int) -> Unit {
+fn spawn_avalanche(avalanches : FixedArray[Avalanche], level : Int32) -> Unit {
   for i in 0..<avalanches.length() {
     if !avalanches[i].active {
       let y = randf(160.0, world_h - 240.0)
@@ -330,10 +330,10 @@ fn spawn_flare(flares : FixedArray[Flare], x : Float, y : Float) -> Unit {
 ///|
 /// Draws a filled progress bar with a foreground and background colour at the specified position and size.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fg : @raylib.Color,
   bg : @raylib.Color,
@@ -551,14 +551,14 @@ fn main {
     severity: 0.36,
   }
 
-  let mut level : Int = 1
-  let mut mission_target : Int = 12
+  let mut level : Int32 = 1
+  let mut mission_target : Int32 = 12
   let mut mission_time : Float = 230.0
   let mut avalanche_cd : Float = 5.0
   let mut announce_t : Float = 0.0
-  let mut state : Int = 0
+  let mut state : Int32 = 0
 
-  let reset_round = fn(new_level : Int) {
+  let reset_round = fn(new_level : Int32) {
     level = new_level
     mission_target = 12 + (level - 1) * 4
     mission_time = 236.0 - Float::from_int(level - 1) * 16.0
@@ -960,7 +960,7 @@ fn main {
         heli.flash_t = 0.18
       }
 
-      let mut carrying_now : Int = 0
+      let mut carrying_now : Int32 = 0
       for survivor in survivors {
         if !survivor.active {
           continue

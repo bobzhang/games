@@ -1,10 +1,10 @@
 ///|
 /// Window width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Horizontal extent of the rooftop run world.
@@ -16,23 +16,23 @@ let player_x : Float = 220.0
 
 ///|
 /// Number of parallel rooftop running lanes.
-let lane_count : Int = 3
+let lane_count : Int32 = 3
 
 ///|
 /// Maximum simultaneous active obstacles.
-let max_obstacles : Int = 260
+let max_obstacles : Int32 = 260
 
 ///|
 /// Maximum simultaneous active projectile shots.
-let max_shots : Int = 420
+let max_shots : Int32 = 420
 
 ///|
 /// Maximum simultaneous active pickup items.
-let max_pickups : Int = 140
+let max_pickups : Int32 = 140
 
 ///|
 /// Maximum simultaneous active particles.
-let max_particles : Int = 920
+let max_particles : Int32 = 920
 
 ///|
 /// Distance in metres required to complete the run.
@@ -41,7 +41,7 @@ let target_distance : Float = 5600.0
 ///|
 /// Player ninja state: lane, jump height, velocity, cooldowns, HP, energy, score, combo, coins, and distance.
 struct Player {
-  mut lane : Int
+  mut lane : Int32
   mut z : Float
   mut vz : Float
   mut slide_t : Float
@@ -54,9 +54,9 @@ struct Player {
   mut throw_cd : Float
   mut flash_t : Float
   mut trick_t : Float
-  mut score : Int
-  mut combo : Int
-  mut coins : Int
+  mut score : Int32
+  mut combo : Int32
+  mut coins : Int32
   mut distance : Float
 }
 
@@ -64,9 +64,9 @@ struct Player {
 /// A rooftop obstacle or enemy: position, lane, kind, HP, attack cooldown, and pulse timer.
 struct Obstacle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
-  mut lane : Int
+  mut lane : Int32
   mut hp : Float
   mut atk_cd : Float
   mut pulse_t : Float
@@ -78,7 +78,7 @@ struct Shot {
   mut active : Bool
   mut from_player : Bool
   mut x : Float
-  mut lane : Int
+  mut lane : Int32
   mut z : Float
   mut vx : Float
   mut dmg : Float
@@ -89,9 +89,9 @@ struct Shot {
 /// A collectible item on a lane: position, kind (coin/medpack/energy), and animation timer.
 struct Pickup {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
-  mut lane : Int
+  mut lane : Int32
   mut t : Float
 }
 
@@ -106,7 +106,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -114,10 +114,10 @@ struct Particle {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -135,7 +135,7 @@ fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns the screen Y coordinate for the ground level of the given lane.
-fn lane_y(lane : Int) -> Float {
+fn lane_y(lane : Int32) -> Float {
   if lane == 0 {
     248.0
   } else if lane == 1 {
@@ -149,7 +149,7 @@ fn lane_y(lane : Int) -> Float {
 /// Returns the hover height of an obstacle (nonzero only for floating drone kind 3).
 fn obstacle_z(obs : Obstacle) -> Float {
   if obs.kind == 3 {
-    let phase : Int = (obs.pulse_t * 4.0).to_int() % 2
+    let phase : Int32 = (obs.pulse_t * 4.0).to_int() % 2
     if phase == 0 {
       44.0
     } else {
@@ -224,7 +224,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for part in parts {
@@ -253,9 +253,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<count {
     ignore(i)
@@ -269,13 +269,13 @@ fn spawn_shot(
   shots : Array[Shot],
   from_player : Bool,
   x : Float,
-  lane : Int,
+  lane : Int32,
   z : Float,
   vx : Float,
   dmg : Float,
   life : Float,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<shots.length() {
     if slot < 0 && !shots[i].active {
       slot = i
@@ -299,8 +299,8 @@ fn spawn_shot(
 
 ///|
 /// Activates a new obstacle of a random kind at the right edge of the world, scaled to the current level.
-fn spawn_obstacle(obs : Array[Obstacle], level : Int) -> Bool {
-  let mut slot : Int = -1
+fn spawn_obstacle(obs : Array[Obstacle], level : Int32) -> Bool {
+  let mut slot : Int32 = -1
   for i in 0..<obs.length() {
     if slot < 0 && !obs[i].active {
       slot = i
@@ -310,8 +310,8 @@ fn spawn_obstacle(obs : Array[Obstacle], level : Int) -> Bool {
   if slot < 0 {
     false
   } else {
-    let roll : Int = @raylib.get_random_value(0, 99)
-    let kind : Int = if roll < 30 {
+    let roll : Int32 = @raylib.get_random_value(0, 99)
+    let kind : Int32 = if roll < 30 {
       0
     } else if roll < 55 {
       1
@@ -341,7 +341,7 @@ fn spawn_obstacle(obs : Array[Obstacle], level : Int) -> Bool {
 ///|
 /// Activates a new pickup of a random kind at a random lane and off-screen position.
 fn spawn_pickup(items : Array[Pickup]) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<items.length() {
     if slot < 0 && !items[i].active {
       slot = i
@@ -352,7 +352,7 @@ fn spawn_pickup(items : Array[Pickup]) -> Bool {
     false
   } else {
     let roll = @raylib.get_random_value(0, 99)
-    let kind : Int = if roll < 58 { 0 } else if roll < 84 { 1 } else { 2 }
+    let kind : Int32 = if roll < 58 { 0 } else if roll < 84 { 1 } else { 2 }
 
     items[slot].active = true
     items[slot].kind = kind
@@ -365,9 +365,9 @@ fn spawn_pickup(items : Array[Pickup]) -> Bool {
 
 ///|
 /// Returns the pixel distance to the nearest active obstacle ahead of the player.
-fn nearest_obstacle_dy(obs : Array[Obstacle], player_dist : Float) -> Int {
+fn nearest_obstacle_dy(obs : Array[Obstacle], player_dist : Float) -> Int32 {
   ignore(player_dist)
-  let mut closest : Int = 9999
+  let mut closest : Int32 = 9999
   for ob in obs {
     if !ob.active {
       continue
@@ -454,8 +454,8 @@ fn main {
     }
   })
 
-  let mut state : Int = 0
-  let mut level : Int = 1
+  let mut state : Int32 = 0
+  let mut level : Int32 = 1
   let mut time_left : Float = 228.0
   let mut obstacle_cd : Float = 0.35
   let mut pickup_cd : Float = 2.4
@@ -464,8 +464,8 @@ fn main {
   let mut msg : String = "Dash the rooftops"
   let mut msg_t : Float = 3.0
 
-  let mut kills : Int = 0
-  let mut missed : Int = 0
+  let mut kills : Int32 = 0
+  let mut missed : Int32 = 0
 
   let reset_run = fn() {
     player.lane = 1
@@ -522,8 +522,8 @@ fn main {
     burst(particles, player_x, lane_y(player.lane) - player.z, 14, 0.24, 3)
   }
 
-  let on_kill = fn(x : Float, lane : Int, bonus : Int) {
-    let pts : Int = 92 + player.combo * 6 + bonus
+  let on_kill = fn(x : Float, lane : Int32, bonus : Int32) {
+    let pts : Int32 = 92 + player.combo * 6 + bonus
     player.score = player.score + pts
     player.combo = player.combo + 1
     kills = kills + 1
@@ -608,10 +608,10 @@ fn main {
       let mut throw_press : Bool = @raylib.is_key_pressed(@raylib.KeyK)
       let mut dash_press : Bool = @raylib.is_key_pressed(@raylib.KeyL)
 
-      let pad_x : Int = 22
-      let pad_y : Int = sh - 194
-      let btn_x : Int = sw - 266
-      let btn_y : Int = sh - 230
+      let pad_x : Int32 = 22
+      let pad_y : Int32 = sh - 194
+      let btn_x : Int32 = sw - 266
+      let btn_y : Int32 = sh - 230
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 56, 74, 56) {
@@ -1047,7 +1047,7 @@ fn main {
       }
 
       let py = lane_y(pickup.lane)
-      let blink : Int = if (pickup.t * 7.0).to_int() % 2 == 0 {
+      let blink : Int32 = if (pickup.t * 7.0).to_int() % 2 == 0 {
         255
       } else {
         180
@@ -1174,7 +1174,7 @@ fn main {
         continue
       }
       let k = particle.t / particle.life
-      let a : Int = ((Float::from_int(1) - k) * 220.0).to_int()
+      let a : Int32 = ((Float::from_int(1) - k) * 220.0).to_int()
       let mut c = @raylib.Color::new(122, 224, 252, a)
       if particle.kind == 1 {
         c = @raylib.Color::new(142, 246, 182, a)
@@ -1325,7 +1325,7 @@ fn main {
       @raylib.Color::new(182, 208, 230, 255),
     )
 
-    let nearest : Int = nearest_obstacle_dy(obstacles, player.distance)
+    let nearest : Int32 = nearest_obstacle_dy(obstacles, player.distance)
     @draw.draw_text(
       "Kills \{kills}",
       520,

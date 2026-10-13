@@ -74,7 +74,7 @@ pub fn handle_playing_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_playing_click(game : @types.Game, mx : Int, my : Int) -> Unit {
+fn handle_playing_click(game : @types.Game, mx : Int32, my : Int32) -> Unit {
   let btn_y = @types.screen_height - 56
   if mx >= 40 && mx < 180 && my >= btn_y && my < btn_y + 40 {
     start_simulation(game)
@@ -96,7 +96,7 @@ fn handle_playing_click(game : @types.Game, mx : Int, my : Int) -> Unit {
 }
 
 ///|
-fn handle_palette_click(game : @types.Game, mx : Int, my : Int) -> Unit {
+fn handle_palette_click(game : @types.Game, mx : Int32, my : Int32) -> Unit {
   match game.current_level {
     None => ()
     Some(level) => {
@@ -126,7 +126,7 @@ fn handle_palette_click(game : @types.Game, mx : Int, my : Int) -> Unit {
 }
 
 ///|
-fn handle_grid_click(game : @types.Game, mx : Int, my : Int) -> Unit {
+fn handle_grid_click(game : @types.Game, mx : Int32, my : Int32) -> Unit {
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
   let cs = @types.cell_size
@@ -148,8 +148,8 @@ fn handle_grid_click(game : @types.Game, mx : Int, my : Int) -> Unit {
 fn place_organism(
   game : @types.Game,
   kind : @types.OrganismKind,
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
 ) -> Unit {
   if !@types.in_grid(row, col) {
     return
@@ -182,7 +182,7 @@ fn place_organism(
 }
 
 ///|
-fn remove_organism(game : @types.Game, row : Int, col : Int) -> Unit {
+fn remove_organism(game : @types.Game, row : Int32, col : Int32) -> Unit {
   match game.grid[row][col] {
     Organism(kind) => {
       game.grid[row][col] = Empty

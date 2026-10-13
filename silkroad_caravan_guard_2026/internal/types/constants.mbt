@@ -1,38 +1,38 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1360
+pub let screen_w : Int32 = 1360
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 820
+pub let screen_h : Int32 = 820
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Gameplay tuning constant for wagon count.
-pub let wagon_count : Int = 3
+pub let wagon_count : Int32 = 3
 
 ///|
 /// Gameplay tuning constant for lane count.
-pub let lane_count : Int = 5
+pub let lane_count : Int32 = 5
 
 ///|
 /// Upper bound for max raiders in gameplay systems.
-pub let max_raiders : Int = 180
+pub let max_raiders : Int32 = 180
 
 ///|
 /// Upper bound for max bullets in gameplay systems.
-pub let max_bullets : Int = 260
+pub let max_bullets : Int32 = 260
 
 ///|
 /// Upper bound for max dust in gameplay systems.
-pub let max_dust : Int = 960
+pub let max_dust : Int32 = 960
 
 ///|
 /// Gameplay tuning constant for checkpoint total.
-pub let checkpoint_total : Int = 4
+pub let checkpoint_total : Int32 = 4
 
 ///|
 /// Spatial tuning constant for checkpoint base span.
@@ -104,7 +104,7 @@ pub let bullet_dmg : Float = 28.0
 
 ///|
 /// Maximum value configured for ammo max.
-pub let ammo_max : Int = 42
+pub let ammo_max : Int32 = 42
 
 ///|
 /// Base value before difficulty or progression scaling for ammo regen base.
@@ -124,7 +124,7 @@ pub let repair_cd : Float = 0.7
 
 ///|
 /// Maximum value configured for kit max.
-pub let kit_max : Int = 8
+pub let kit_max : Int32 = 8
 
 ///|
 /// Maximum value configured for morale max.

@@ -1,5 +1,10 @@
 ///|
-fn c(kind : @types.ClueKind, a : Int, b : Int, text : String) -> @types.Clue {
+fn c(
+  kind : @types.ClueKind,
+  a : Int32,
+  b : Int32,
+  text : String,
+) -> @types.Clue {
   @types.new_clue(kind, a, b, text)
 }
 
@@ -7,7 +12,7 @@ fn c(kind : @types.ClueKind, a : Int, b : Int, text : String) -> @types.Clue {
 // 0=Sandstone, 1=Limestone, 2=Shale, 3=Granite, 4=Basalt, 5=Coal, 6=Chalk, 7=Slate
 
 ///|
-pub fn get_level(idx : Int) -> @types.Level {
+pub fn get_level(idx : Int32) -> @types.Level {
   match idx {
     // ===== TIER 1: Surface (levels 0-7, 4-5 layers, 3-4 clues) =====
     0 =>
@@ -391,6 +396,6 @@ pub fn get_level(idx : Int) -> @types.Level {
 }
 
 ///|
-pub fn level_count() -> Int {
+pub fn level_count() -> Int32 {
   @types.total_levels
 }

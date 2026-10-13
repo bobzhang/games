@@ -239,8 +239,8 @@ fn move_guard_patrol(g : @types.Guard, game : @types.Game) -> Unit {
 /// Move guard toward a target position
 fn move_guard_toward(
   g : @types.Guard,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
   game : @types.Game,
 ) -> Unit {
   step_toward(g, tx, ty, game)
@@ -250,8 +250,8 @@ fn move_guard_toward(
 /// Take one step toward target
 fn step_toward(
   g : @types.Guard,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
   game : @types.Game,
 ) -> Unit {
   let dx = tx - g.gx
@@ -295,7 +295,7 @@ fn step_toward(
 }
 
 ///|
-fn is_guard_at(game : @types.Game, gx : Int, gy : Int) -> Bool {
+fn is_guard_at(game : @types.Game, gx : Int32, gy : Int32) -> Bool {
   for i in 0..<game.level.guards.length() {
     let g = game.level.guards[i]
     if g.active && g.gx == gx && g.gy == gy {
@@ -322,7 +322,7 @@ fn update_facing_from_angle(g : @types.Guard) -> Unit {
 
 ///|
 /// Alert nearby guards to investigate a position
-pub fn alert_nearby_guards(game : @types.Game, ix : Int, iy : Int) -> Unit {
+pub fn alert_nearby_guards(game : @types.Game, ix : Int32, iy : Int32) -> Unit {
   for i in 0..<game.level.guards.length() {
     let g = game.level.guards[i]
     if g.active && g.alert_state is Patrolling {
@@ -341,9 +341,9 @@ pub fn alert_nearby_guards(game : @types.Game, ix : Int, iy : Int) -> Unit {
 /// Make guards react to noise at a position
 pub fn guards_hear_noise(
   game : @types.Game,
-  nx : Int,
-  ny : Int,
-  radius : Int,
+  nx : Int32,
+  ny : Int32,
+  radius : Int32,
 ) -> Unit {
   for i in 0..<game.level.guards.length() {
     let g = game.level.guards[i]

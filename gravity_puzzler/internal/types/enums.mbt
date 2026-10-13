@@ -53,13 +53,13 @@ pub(all) enum TileKind {
   Exit
   Spike
   Ice
-  Portal(Int)
-  Switch(Int)
-  Gate(Int)
+  Portal(Int32)
+  Switch(Int32)
+  Gate(Int32)
   Crumble
   Conveyor(GravityDir)
-  PressurePlate(Int)
-  Mirror(Int)
+  PressurePlate(Int32)
+  Mirror(Int32)
   GravityWell
   TimedLava
   WindGust(GravityDir)
@@ -129,7 +129,7 @@ pub extend WorldTheme with Show::{to_string, output}
 ///|
 pub(all) enum AchievementKind {
   FirstStep
-  WorldMaster(Int)
+  WorldMaster(Int32)
   Speedster
   Perfectionist
   NoHints

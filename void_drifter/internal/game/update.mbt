@@ -746,7 +746,7 @@ fn resolve_collisions(game : @types.Game) -> Unit {
 }
 
 ///|
-fn damage_player(game : @types.Game, amount : Int) -> Unit {
+fn damage_player(game : @types.Game, amount : Int32) -> Unit {
   let ship = game.ship
   if ship.shield > 0 {
     let absorbed = @types.mini(ship.shield, amount)
@@ -783,7 +783,7 @@ fn damage_player(game : @types.Game, amount : Int) -> Unit {
 }
 
 ///|
-fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
+fn kill_enemy(game : @types.Game, idx : Int32) -> Unit {
   let e = game.enemies[idx]
   e.active = false
   game.stats.kills += 1
@@ -821,7 +821,7 @@ fn apply_explosion(
   x : Float,
   y : Float,
   radius : Float,
-  damage : Int,
+  damage : Int32,
 ) -> Unit {
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]

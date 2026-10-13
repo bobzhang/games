@@ -45,13 +45,13 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
 /// Returns a computed helper value for chance.
-pub fn chance(pct : Int) -> Bool {
+pub fn chance(pct : Int32) -> Bool {
   randi(0, 99) < pct
 }
 
@@ -82,7 +82,7 @@ pub fn road_center_at(depth : Float, time_s : Float) -> Float {
 
 ///|
 /// Returns geometry information for road half width.
-pub fn road_half_width(stage : Int, depth : Float, time_s : Float) -> Float {
+pub fn road_half_width(stage : Int32, depth : Float, time_s : Float) -> Float {
   let pulse = @math.sinf(depth * 0.0037 + time_s * 0.95 + 0.7) * 62.0
   let shrink = Float::from_int(stage - 1) * 10.0
   clampf(
@@ -94,19 +94,23 @@ pub fn road_half_width(stage : Int, depth : Float, time_s : Float) -> Float {
 
 ///|
 /// Returns derived layout data for lane to offset.
-pub fn lane_to_offset(lane : Int) -> Float {
+pub fn lane_to_offset(lane : Int32) -> Float {
   (Float::from_int(lane) - Float::from_int(lanes_count - 1) * 0.5) * lane_gap
 }
 
 ///|
 /// Returns world-space coordinates for lane x.
-pub fn lane_x(lane : Int, center : Float) -> Float {
+pub fn lane_x(lane : Int32, center : Float) -> Float {
   center + lane_to_offset(lane.clamp(min=0, max=lanes_count - 1))
 }
 
 ///|
 /// Returns geometry information for road edges.
-pub fn road_edges(stage : Int, depth : Float, time_s : Float) -> (Float, Float) {
+pub fn road_edges(
+  stage : Int32,
+  depth : Float,
+  time_s : Float,
+) -> (Float, Float) {
   let c = road_center_at(depth, time_s)
   let hw = road_half_width(stage, depth, time_s)
   (c - hw, c + hw)
@@ -117,7 +121,7 @@ pub fn road_edges(stage : Int, depth : Float, time_s : Float) -> (Float, Float) 
 pub fn road_spawn_x(
   game_depth : Float,
   game_time : Float,
-  stage : Int,
+  stage : Int32,
   y : Float,
 ) -> Float {
   let d = game_depth + (Float::from_int(screen_h) - y)
@@ -353,7 +357,7 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   rx : Float,
   ry : Float,
   rw : Float,

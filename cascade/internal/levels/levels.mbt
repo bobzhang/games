@@ -1,7 +1,7 @@
 ///|
 fn mk(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   kind : @types.DominoKind,
   o : @types.Orientation,
   target : Bool,
@@ -10,7 +10,7 @@ fn mk(
 }
 
 ///|
-fn mk_starter(x : Int, y : Int, o : @types.Orientation) -> @types.Domino {
+fn mk_starter(x : Int32, y : Int32, o : @types.Orientation) -> @types.Domino {
   @types.new_domino(@types.vec2i(x, y), Normal, o, false, true)
 }
 
@@ -541,7 +541,7 @@ fn level_23() -> @types.Level {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_0()
     1 => level_1()
@@ -572,7 +572,7 @@ pub fn get_level(index : Int) -> @types.Level {
 }
 
 ///|
-pub fn level_name(index : Int) -> String {
+pub fn level_name(index : Int32) -> String {
   get_level(index).name
 }
 

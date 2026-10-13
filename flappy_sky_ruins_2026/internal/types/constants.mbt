@@ -1,14 +1,14 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1720
+pub let screen_w : Int32 = 1720
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 980
+pub let screen_h : Int32 = 980
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Player collision radius.
@@ -24,73 +24,73 @@ pub let flap_impulse : Float = -420.0
 
 ///|
 /// Maximum number of pooled obstacles.
-pub let max_obs : Int = 72
+pub let max_obs : Int32 = 72
 
 ///|
 /// Maximum number of pooled pickups.
-pub let max_pickups : Int = 64
+pub let max_pickups : Int32 = 64
 
 ///|
 /// Maximum number of pooled particles.
-pub let max_particles : Int = 1300
+pub let max_particles : Int32 = 1300
 
 ///|
 /// Left x coordinate of the side panel.
-pub let panel_x0 : Int = 1180
+pub let panel_x0 : Int32 = 1180
 
 ///|
 /// Width of the side panel.
-pub let panel_w : Int = screen_w - panel_x0 - 24
+pub let panel_w : Int32 = screen_w - panel_x0 - 24
 
 ///|
 /// Left edge of the playable world area.
-pub let world_x0 : Int = 24
+pub let world_x0 : Int32 = 24
 
 ///|
 /// Top edge of the playable world area.
-pub let world_y0 : Int = 20
+pub let world_y0 : Int32 = 20
 
 ///|
 /// Width of the playable world area.
-pub let world_w : Int = panel_x0 - world_x0 - 24
+pub let world_w : Int32 = panel_x0 - world_x0 - 24
 
 ///|
 /// Height of the playable world area.
-pub let world_h : Int = screen_h - 40
+pub let world_h : Int32 = screen_h - 40
 
 ///|
 /// Returns the title-screen start button rectangle.
-pub fn start_button_rect() -> (Int, Int, Int, Int) {
+pub fn start_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 260, 620, 520, 118)
 }
 
 ///|
 /// Returns the result-screen retry button rectangle.
-pub fn retry_button_rect() -> (Int, Int, Int, Int) {
+pub fn retry_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 230, 652, 460, 108)
 }
 
 ///|
 /// Returns the touch rectangle for flap input.
-pub fn btn_flap_rect() -> (Int, Int, Int, Int) {
+pub fn btn_flap_rect() -> (Int32, Int32, Int32, Int32) {
   (1250, 730, 188, 126)
 }
 
 ///|
 /// Returns the touch rectangle for boost input.
-pub fn btn_boost_rect() -> (Int, Int, Int, Int) {
+pub fn btn_boost_rect() -> (Int32, Int32, Int32, Int32) {
   (1454, 730, 188, 126)
 }
 
 ///|
 /// Returns the touch rectangle for restarting the run.
-pub fn btn_restart_rect() -> (Int, Int, Int, Int) {
+pub fn btn_restart_rect() -> (Int32, Int32, Int32, Int32) {
   (1454, 876, 188, 74)
 }
 
 ///|
 /// Returns the touch rectangle for using hints.
-pub fn btn_hint_rect() -> (Int, Int, Int, Int) {
+pub fn btn_hint_rect() -> (Int32, Int32, Int32, Int32) {
   (1250, 876, 188, 74)
 }
 

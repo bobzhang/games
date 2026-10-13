@@ -1,6 +1,6 @@
 ///|
 /// Get level data by 0-based index
-pub fn get_level(index : Int) -> @types.LevelData {
+pub fn get_level(index : Int32) -> @types.LevelData {
   match index {
     0 => level_01()
     1 => level_02()
@@ -33,7 +33,7 @@ pub fn get_level(index : Int) -> @types.LevelData {
 
 ///|
 /// Get tier name for display
-pub fn tier_name(tier : Int) -> String {
+pub fn tier_name(tier : Int32) -> String {
   match tier {
     1 => "Basics"
     2 => "Mountains"
@@ -44,7 +44,7 @@ pub fn tier_name(tier : Int) -> String {
 
 ///|
 /// Get number of levels in a tier
-pub fn tier_level_count(tier : Int) -> Int {
+pub fn tier_level_count(tier : Int32) -> Int32 {
   match tier {
     1 => @types.tier1_count
     2 => @types.tier2_count
@@ -55,7 +55,7 @@ pub fn tier_level_count(tier : Int) -> Int {
 
 ///|
 /// Get the starting index (0-based) for a tier
-pub fn tier_start_index(tier : Int) -> Int {
+pub fn tier_start_index(tier : Int32) -> Int32 {
   match tier {
     1 => 0
     2 => @types.tier1_count

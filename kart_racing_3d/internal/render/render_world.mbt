@@ -55,7 +55,7 @@ fn @types.Game::draw_ground(game : @types.Game) -> Unit {
   )
   // Subtle grid lines on the ground for depth cues
   let grid_step : Float = 10.0
-  let grid_half : Int = 10
+  let grid_half : Int32 = 10
   let grid_r = (gc.0 - 15).clamp(min=0, max=255)
   let grid_g = (gc.1 - 15).clamp(min=0, max=255)
   let grid_b = (gc.2 - 15).clamp(min=0, max=255)
@@ -777,9 +777,9 @@ fn @types.Game::draw_karts(game : @types.Game) -> Unit {
       let flame_len : Float = 0.4 + flicker * 0.12
       // Determine flame color: blue for drift boost, orange for mushroom
       let is_drift_boost = kart.boost_power < @types.boost_speed_add - 0.5
-      let flame_r : Int = if is_drift_boost { 80 } else { 255 }
-      let flame_g : Int = if is_drift_boost { 140 } else { 160 }
-      let flame_b : Int = if is_drift_boost { 255 } else { 30 }
+      let flame_r : Int32 = if is_drift_boost { 80 } else { 255 }
+      let flame_g : Int32 = if is_drift_boost { 140 } else { 160 }
+      let flame_b : Int32 = if is_drift_boost { 255 } else { 30 }
       // Left exhaust flame
       let fl_ex = cx - sin_a * (ex_back + flame_len * 0.5) + cos_a * ex_side
       let fl_ez = cz - cos_a * (ex_back + flame_len * 0.5) - sin_a * ex_side
@@ -986,7 +986,7 @@ fn sf(v : Float, s : Float) -> Float {
 
 ///|
 fn draw_decoration_object(
-  deco_type : Int,
+  deco_type : Int32,
   x : Float,
   y : Float,
   z : Float,
@@ -1522,7 +1522,7 @@ fn @types.Game::draw_kart_details(game : @types.Game) -> Unit {
 fn draw_sky_gradient(game : @types.Game) -> Unit {
   let theme = @levels.get_track_theme(game.current_cup, game.current_race)
   // Per-theme sky gradient: top color -> bottom color
-  let top : (Int, Int, Int) = match theme {
+  let top : (Int32, Int32, Int32) = match theme {
     Circuit => (70, 140, 230)
     Beach => (80, 160, 240)
     Mountain => (100, 130, 190)
@@ -1532,7 +1532,7 @@ fn draw_sky_gradient(game : @types.Game) -> Unit {
     Night => (8, 10, 30)
     Volcano => (90, 40, 25)
   }
-  let bot : (Int, Int, Int) = match theme {
+  let bot : (Int32, Int32, Int32) = match theme {
     Circuit => (200, 220, 255)
     Beach => (220, 240, 255)
     Mountain => (200, 210, 235)

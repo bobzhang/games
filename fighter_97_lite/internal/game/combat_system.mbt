@@ -50,7 +50,7 @@ fn can_defender_block(
 fn attacker_remaining_recovery(
   attacker : @types.Fighter,
   mv : @types.MoveSpec,
-) -> Int {
+) -> Int32 {
   (mv.total_frames - attacker.action_frame).clamp(min=0, max=999)
 }
 
@@ -61,7 +61,7 @@ fn compute_damage(
   attacker_archetype : @types.CharacterArchetype,
   defender_archetype : @types.CharacterArchetype,
   mv : @types.MoveSpec,
-) -> (Int, Bool) {
+) -> (Int32, Bool) {
   let counter_hit = defender.action == ActionAttack &&
     defender.action_frame < defender.current_move.startup_frames
 
@@ -86,8 +86,8 @@ fn compute_damage(
 ///|
 fn @types.Game::apply_successful_hit(
   game : @types.Game,
-  attacker_slot : Int,
-  defender_slot : Int,
+  attacker_slot : Int32,
+  defender_slot : Int32,
   hitbox_center_x : Float,
   hitbox_center_y : Float,
 ) -> Unit {
@@ -238,8 +238,8 @@ fn @types.Game::apply_successful_hit(
 ///|
 fn @types.Game::apply_blocked_hit(
   game : @types.Game,
-  attacker_slot : Int,
-  defender_slot : Int,
+  attacker_slot : Int32,
+  defender_slot : Int32,
   hitbox_center_x : Float,
   hitbox_center_y : Float,
 ) -> Unit {
@@ -323,8 +323,8 @@ fn @types.Game::apply_blocked_hit(
 ///|
 fn @types.Game::process_attack_contact(
   game : @types.Game,
-  attacker_slot : Int,
-  defender_slot : Int,
+  attacker_slot : Int32,
+  defender_slot : Int32,
 ) -> Unit {
   let attacker = game.fighters[attacker_slot]
   let defender = game.fighters[defender_slot]
@@ -392,8 +392,8 @@ fn check_attack_will_connect(
 /// invalidates the other side's hit.
 fn @types.Game::apply_trade_hit(
   game : @types.Game,
-  attacker_slot : Int,
-  defender_slot : Int,
+  attacker_slot : Int32,
+  defender_slot : Int32,
 ) -> Unit {
   let attacker = game.fighters[attacker_slot]
   let defender = game.fighters[defender_slot]

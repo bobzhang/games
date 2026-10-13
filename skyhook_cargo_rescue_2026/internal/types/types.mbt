@@ -47,7 +47,7 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -68,18 +68,18 @@ pub(all) struct Game {
   mut hook_len : Float
   mut hook_target : Float
   mut hook_extending : Bool
-  mut carrying_idx : Int
-  mut lives : Int
+  mut carrying_idx : Int32
+  mut lives : Int32
   mut hull : Float
   mut fuel : Float
   mut turbo_t : Float
   mut repair_cd : Float
-  mut score : Int
-  mut best_score : Int
-  mut rescued : Int
-  mut lost : Int
-  mut wave : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut rescued : Int32
+  mut lost : Int32
+  mut wave : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut survivor_spawn_t : Float
   mut hazard_spawn_t : Float
@@ -87,7 +87,7 @@ pub(all) struct Game {
   mut storm_t : Float
   mut game_t : Float
   mut ui_t : Float
-  mut hint_left : Int
+  mut hint_left : Int32
   mut hint_t : Float
   mut hint_x : Float
   mut hint_y : Float
@@ -99,7 +99,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

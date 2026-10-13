@@ -1,38 +1,38 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
-let gw : Int = 6
+let gw : Int32 = 6
 
 ///|
-let gh : Int = 6
+let gh : Int32 = 6
 
 ///|
-let cell : Int = 90
+let cell : Int32 = 90
 
 ///|
-let ox : Int = 370
+let ox : Int32 = 370
 
 ///|
-let oy : Int = 126
+let oy : Int32 = 126
 
 ///|
-let exit_row : Int = 2
+let exit_row : Int32 = 2
 
 ///|
-let max_cars : Int = 14
+let max_cars : Int32 = 14
 
 ///|
 struct Car {
-  mut x : Int
-  mut y : Int
-  len : Int
+  mut x : Int32
+  mut y : Int32
+  len : Int32
   horizontal : Bool
   player : Bool
-  color : Int
+  color : Int32
   active : Bool
 }
 
@@ -40,10 +40,10 @@ struct Car {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -69,19 +69,19 @@ fn clear_cars(cars : Array[Car]) -> Unit {
 ///|
 fn put_car(
   cars : Array[Car],
-  i : Int,
-  x : Int,
-  y : Int,
-  len : Int,
+  i : Int32,
+  x : Int32,
+  y : Int32,
+  len : Int32,
   horizontal : Bool,
   player : Bool,
-  color : Int,
+  color : Int32,
 ) -> Unit {
   cars[i] = { x, y, len, horizontal, player, color, active: true, }
 }
 
 ///|
-fn setup_level(level : Int, cars : Array[Car]) -> (Int, Int) {
+fn setup_level(level : Int32, cars : Array[Car]) -> (Int32, Int32) {
   clear_cars(cars)
 
   if level == 1 {
@@ -124,7 +124,7 @@ fn setup_level(level : Int, cars : Array[Car]) -> (Int, Int) {
 }
 
 ///|
-fn color_for(color : Int) -> @raylib.Color {
+fn color_for(color : Int32) -> @raylib.Color {
   if color == 0 {
     @raylib.Color::new(238, 96, 92, 255)
   } else if color % 8 == 1 {
@@ -145,17 +145,17 @@ fn color_for(color : Int) -> @raylib.Color {
 }
 
 ///|
-fn in_board(x : Int, y : Int) -> Bool {
+fn in_board(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < gw && y >= 0 && y < gh
 }
 
 ///|
 fn occupied_by(
   cars : Array[Car],
-  count : Int,
-  skip : Int,
-  gx : Int,
-  gy : Int,
+  count : Int32,
+  skip : Int32,
+  gx : Int32,
+  gy : Int32,
 ) -> Bool {
   @utils.first_indexi_by_view(cars[0:count], fn(i, car) {
     i != skip &&
@@ -169,7 +169,12 @@ fn occupied_by(
 }
 
 ///|
-fn find_car_at(cars : Array[Car], count : Int, gx : Int, gy : Int) -> Int {
+fn find_car_at(
+  cars : Array[Car],
+  count : Int32,
+  gx : Int32,
+  gy : Int32,
+) -> Int32 {
   @utils.first_index_by_view(cars[0:count], fn(car) {
     car.active &&
     (
@@ -180,7 +185,12 @@ fn find_car_at(cars : Array[Car], count : Int, gx : Int, gy : Int) -> Int {
 }
 
 ///|
-fn can_move(cars : Array[Car], count : Int, car_id : Int, step : Int) -> Bool {
+fn can_move(
+  cars : Array[Car],
+  count : Int32,
+  car_id : Int32,
+  step : Int32,
+) -> Bool {
   if car_id < 0 || car_id >= count || !cars[car_id].active {
     return false
   }
@@ -212,7 +222,12 @@ fn can_move(cars : Array[Car], count : Int, car_id : Int, step : Int) -> Bool {
 }
 
 ///|
-fn try_move(cars : Array[Car], count : Int, car_id : Int, step : Int) -> Bool {
+fn try_move(
+  cars : Array[Car],
+  count : Int32,
+  car_id : Int32,
+  step : Int32,
+) -> Bool {
   if !can_move(cars, count, car_id, step) {
     return false
   }

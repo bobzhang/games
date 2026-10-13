@@ -146,11 +146,11 @@ pub extend PlayerAction with Show::{to_string, output}
 ///|
 pub(all) enum EnemyIntent {
   Move(Direction)
-  Attack(Direction, Int)
-  Charge(Direction, Int)
-  Summon(EnemyKind, Int, Int)
-  BreathFire(Direction, Int)
-  AoeFreeze(Int)
+  Attack(Direction, Int32)
+  Charge(Direction, Int32)
+  Summon(EnemyKind, Int32, Int32)
+  BreathFire(Direction, Int32)
+  AoeFreeze(Int32)
   Wait
 } derive(Debug)
 
@@ -167,7 +167,7 @@ pub extend EnemyIntent with Show::{to_string, output}
 
 ///|
 pub(all) enum ItemKind {
-  Gold(Int)
+  Gold(Int32)
   HealthPotion
   ShieldOrb
   SpeedBoost

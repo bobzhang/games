@@ -5,12 +5,12 @@
 /// Draws a colored line from tower to enemy and spawns combo particles.
 fn @types.Game::show_synergy_combo(
   game : @types.Game,
-  tower_idx : Int,
+  tower_idx : Int32,
   enemy : @types.Enemy,
   label : String,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   if tower_idx < 0 || tower_idx >= game.towers.length() {
     return

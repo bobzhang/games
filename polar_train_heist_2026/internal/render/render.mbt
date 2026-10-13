@@ -2,8 +2,8 @@
 /// Draws text centered horizontally at the given y position.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -14,9 +14,9 @@ fn draw_center_text(
 /// Draws text right-aligned so its rightmost pixel aligns with `x`.
 fn draw_right_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -25,7 +25,7 @@ fn draw_right_text(
 
 ///|
 /// Returns a copy of `c` with its alpha channel replaced by `a`.
-fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
+fn a_col(c : @raylib.Color, a : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),
@@ -151,7 +151,7 @@ fn @types.Game::draw_sky(
 
 ///|
 /// Returns the fill color for a parallax mountain layer at the given depth index.
-fn mountain_col(depth : Int) -> @raylib.Color {
+fn mountain_col(depth : Int32) -> @raylib.Color {
   if depth == 0 {
     @raylib.Color::new(20, 34, 58, 220)
   } else if depth == 1 {
@@ -904,7 +904,7 @@ fn @types.Game::draw_shots(
 
 ///|
 /// Returns the display color for a particle effect based on its kind.
-fn fx_col(kind : Int) -> @raylib.Color {
+fn fx_col(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @types.cyan()
   } else if kind == 1 {
@@ -985,10 +985,10 @@ fn @types.Game::draw_fx(
 ///|
 /// Draws a filled progress bar with a label, dark background, colored fill, and outlined border.
 fn draw_hud_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   maxv : Float,
   label : String,
@@ -1031,9 +1031,9 @@ fn draw_cooldown(
   label : String,
   value : Float,
   maxv : Float,
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
 ) -> Unit {
   let pct : Float = if maxv <= 0.0 {
     0.0

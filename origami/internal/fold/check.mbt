@@ -32,8 +32,8 @@ pub fn check_completion(
 ///|
 pub fn compute_stars(
   result : CheckResult,
-  folds_used : Int,
-  par_folds : Int,
+  folds_used : Int32,
+  par_folds : Int32,
 ) -> @types.StarRating {
   if !result.silhouette_match {
     return Zero

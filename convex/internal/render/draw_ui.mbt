@@ -163,7 +163,7 @@ fn get_current_level_info(game : @types.Game) -> @types.Level {
 }
 
 ///|
-fn get_level_tier(index : Int) -> @types.Tier {
+fn get_level_tier(index : Int32) -> @types.Tier {
   if index < @types.tier1_count {
     Vertices
   } else if index < @types.tier1_count + @types.tier2_count {
@@ -174,7 +174,7 @@ fn get_level_tier(index : Int) -> @types.Tier {
 }
 
 ///|
-fn get_level_name_str(index : Int) -> String {
+fn get_level_name_str(index : Int32) -> String {
   // Names for each level
   let names : Array[String] = [
     "Right Triangle", "Tall Triangle", "Square", "Rectangle", "Pentagon", "Hexagon",
@@ -191,8 +191,8 @@ fn get_level_name_str(index : Int) -> String {
 }
 
 ///|
-fn get_level_par(index : Int) -> Int {
-  let pars : Array[Int] = [
+fn get_level_par(index : Int32) -> Int32 {
+  let pars : Array[Int32] = [
     4, 4, 5, 5, 6, 7, 5, 9, 4, 5, 5, 6, 7, 5, 6, 8, 4, 5, 6, 4, 7, 5, 5, 9, 11,
   ]
   if index >= 0 && index < pars.length() {
@@ -203,8 +203,8 @@ fn get_level_par(index : Int) -> Int {
 }
 
 ///|
-fn get_level_min(index : Int) -> Int {
-  let mins : Array[Int] = [
+fn get_level_min(index : Int32) -> Int32 {
+  let mins : Array[Int32] = [
     3, 3, 4, 4, 5, 6, 4, 8, 3, 4, 4, 5, 6, 4, 5, 7, 3, 4, 5, 3, 6, 4, 4, 8, 10,
   ]
   if index >= 0 && index < mins.length() {
@@ -215,7 +215,7 @@ fn get_level_min(index : Int) -> Int {
 }
 
 ///|
-fn draw_stars(x : Int, y : Int, filled : Int, total : Int) -> Unit {
+fn draw_stars(x : Int32, y : Int32, filled : Int32, total : Int32) -> Unit {
   for i in 0..<total {
     let sx = x + i * 28
     let color = if i < filled {
@@ -229,8 +229,8 @@ fn draw_stars(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 
 ///|
 fn draw_star_shape(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   radius : Float,
   color : @raylib.Color,
 ) -> Unit {

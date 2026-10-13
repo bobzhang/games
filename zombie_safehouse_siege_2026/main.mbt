@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 let world_w : Float = 1280.0
@@ -17,16 +17,16 @@ let base_x : Float = 640.0
 let base_y : Float = 372.0
 
 ///|
-let max_zombies : Int = 220
+let max_zombies : Int32 = 220
 
 ///|
-let max_bullets : Int = 560
+let max_bullets : Int32 = 560
 
 ///|
-let max_scraps : Int = 180
+let max_scraps : Int32 = 180
 
 ///|
-let max_particles : Int = 900
+let max_particles : Int32 = 900
 
 ///|
 struct Survivor {
@@ -36,8 +36,8 @@ struct Survivor {
   mut vy : Float
   mut hp : Float
   mut stamina : Float
-  mut ammo : Int
-  mut max_ammo : Int
+  mut ammo : Int32
+  mut max_ammo : Int32
   mut fire_cd : Float
   mut reload_cd : Float
   mut dash_cd : Float
@@ -53,7 +53,7 @@ struct Safehouse {
   mut hp : Float
   mut max_hp : Float
   mut shield : Float
-  mut level : Int
+  mut level : Int32
   mut turret_cd : Float
   mut repair_cd : Float
 }
@@ -61,7 +61,7 @@ struct Safehouse {
 ///|
 struct Zombie {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -77,7 +77,7 @@ struct Zombie {
 ///|
 struct Bullet {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -91,7 +91,7 @@ struct Scrap {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut value : Int
+  mut value : Int32
   mut t : Float
   mut life : Float
 }
@@ -106,7 +106,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -131,10 +131,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -223,7 +223,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done : Bool = false
   for ps_elem in ps {
@@ -251,9 +251,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<count {
     ignore(i)
@@ -270,7 +270,7 @@ fn spawn_bullet(
   dy : Float,
   speed : Float,
   dmg : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done : Bool = false
   for bs_elem in bs {
@@ -293,8 +293,8 @@ fn spawn_bullet(
 }
 
 ///|
-fn spawn_zombie(zs : Array[Zombie], wave : Int) -> Bool {
-  let mut slot : Int = -1
+fn spawn_zombie(zs : Array[Zombie], wave : Int32) -> Bool {
+  let mut slot : Int32 = -1
   for i in 0..<zs.length() {
     if slot < 0 && !zs[i].active {
       slot = i
@@ -322,7 +322,7 @@ fn spawn_zombie(zs : Array[Zombie], wave : Int) -> Bool {
       y = world_h + 30.0
     }
 
-    let mut kind : Int = 0
+    let mut kind : Int32 = 0
     let roll = @raylib.get_random_value(0, 99)
     if roll > 84 {
       kind = 2
@@ -363,8 +363,8 @@ fn spawn_zombie(zs : Array[Zombie], wave : Int) -> Bool {
 }
 
 ///|
-fn spawn_scrap(ss : Array[Scrap], x : Float, y : Float, value : Int) -> Bool {
-  let mut slot : Int = -1
+fn spawn_scrap(ss : Array[Scrap], x : Float, y : Float, value : Int32) -> Bool {
+  let mut slot : Int32 = -1
   for i in 0..<ss.length() {
     if slot < 0 && !ss[i].active {
       slot = i
@@ -385,9 +385,9 @@ fn spawn_scrap(ss : Array[Scrap], x : Float, y : Float, value : Int) -> Bool {
 }
 
 ///|
-fn seed_day_scraps(ss : Array[Scrap], wave : Int) -> Unit {
+fn seed_day_scraps(ss : Array[Scrap], wave : Int32) -> Unit {
   clear_scraps(ss)
-  let total : Int = 42 + wave * 4
+  let total : Int32 = 42 + wave * 4
   for i in 0..<total {
     ignore(i)
     let x = randf(60.0, world_w - 60.0)
@@ -488,18 +488,18 @@ fn main {
   clear_particles(particles)
   clear_scraps(scraps)
 
-  let mut state : Int = 0
-  let mut phase : Int = 0 // 0 day, 1 night
-  let mut wave : Int = 1
+  let mut state : Int32 = 0
+  let mut phase : Int32 = 0 // 0 day, 1 night
+  let mut wave : Int32 = 1
 
   let mut phase_t : Float = 45.0
   let mut spawn_cd : Float = 0.4
   let mut night_budget : Float = 0.0
-  let mut score : Int = 0
-  let mut scrap_bank : Int = 0
-  let mut combo : Int = 0
-  let mut day_collected : Int = 0
-  let mut rescued : Int = 0
+  let mut score : Int32 = 0
+  let mut scrap_bank : Int32 = 0
+  let mut combo : Int32 = 0
+  let mut day_collected : Int32 = 0
+  let mut rescued : Int32 = 0
 
   let mut msg : String = "Collect scrap by day, survive the siege by night"
   let mut msg_t : Float = 4.0
@@ -637,10 +637,10 @@ fn main {
     let mut action_press : Bool = @raylib.is_key_pressed(@raylib.KeyL) ||
       @raylib.is_key_pressed(@raylib.KeyR)
 
-    let pad_x : Int = 26
-    let pad_y : Int = sh - 194
-    let btn_x : Int = sw - 238
-    let btn_y : Int = sh - 224
+    let pad_x : Int32 = 26
+    let pad_y : Int32 = sh - 194
+    let btn_x : Int32 = sw - 238
+    let btn_y : Int32 = sh - 224
 
     if touching {
       if inside_rect(mouse.x, mouse.y, pad_x + 78, pad_y, 72, 56) {
@@ -898,7 +898,7 @@ fn main {
       } else {
         spawn_cd = spawn_cd - dt
         if spawn_cd <= 0.0 && night_budget > 0.0 {
-          let mut n : Int = 1
+          let mut n : Int32 = 1
           if wave > 4 {
             n = 2
           }
@@ -1242,9 +1242,9 @@ fn main {
     @raylib.begin_drawing()
 
     let sky_phase = if phase == 0 { 1.0 } else { 0.0 }
-    let mut bg_r : Int = (22.0 + sky_phase * 24.0).to_int()
-    let mut bg_g : Int = (26.0 + sky_phase * 30.0).to_int()
-    let mut bg_b : Int = (34.0 + sky_phase * 42.0).to_int()
+    let mut bg_r : Int32 = (22.0 + sky_phase * 24.0).to_int()
+    let mut bg_g : Int32 = (26.0 + sky_phase * 30.0).to_int()
+    let mut bg_b : Int32 = (34.0 + sky_phase * 42.0).to_int()
 
     if thunder_t > 0.0 {
       bg_r = bg_r + 80
@@ -1302,7 +1302,7 @@ fn main {
       @raylib.Color::new(26, 36, 52, 255),
     )
 
-    let shield_alpha : Int = (home.shield / 120.0 * 190.0).to_int()
+    let shield_alpha : Int32 = (home.shield / 120.0 * 190.0).to_int()
     @raylib.draw_circle_lines(
       base_x.to_int(),
       base_y.to_int(),
@@ -1345,7 +1345,7 @@ fn main {
         continue
       }
 
-      let bob_phase : Int = (scrap.t * 8.0).to_int() % 4
+      let bob_phase : Int32 = (scrap.t * 8.0).to_int() % 4
       let bob : Float = if bob_phase < 2 { 2.0 } else { -2.0 }
       let mut col = @raylib.Color::new(218, 198, 112, 255)
       if scrap.value >= 3 {
@@ -1455,7 +1455,7 @@ fn main {
       }
 
       let k = particle.t / particle.life
-      let a : Int = ((Float::from_int(1) - k) * 220.0).to_int()
+      let a : Int32 = ((Float::from_int(1) - k) * 220.0).to_int()
       let mut c = @raylib.Color::new(126, 228, 248, a)
       if particle.kind == 1 {
         c = @raylib.Color::new(152, 244, 188, a)

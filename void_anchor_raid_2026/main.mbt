@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 let world_l : Float = 34.0
@@ -17,22 +17,22 @@ let world_t : Float = 90.0
 let world_b : Float = Float::from_int(sh) - 34.0
 
 ///|
-let max_anchors : Int = 12
+let max_anchors : Int32 = 12
 
 ///|
-let max_enemies : Int = 260
+let max_enemies : Int32 = 260
 
 ///|
-let max_bullets : Int = 1200
+let max_bullets : Int32 = 1200
 
 ///|
-let max_orbs : Int = 300
+let max_orbs : Int32 = 300
 
 ///|
-let max_walls : Int = 80
+let max_walls : Int32 = 80
 
 ///|
-let max_particles : Int = 1800
+let max_particles : Int32 = 1800
 
 ///|
 let anchor_hold_goal : Float = 10.0
@@ -53,9 +53,9 @@ struct Player {
   mut dash_cd : Float
   mut dash_t : Float
   mut pulse_cd : Float
-  mut score : Int
-  mut combo : Int
-  mut best_combo : Int
+  mut score : Int32
+  mut combo : Int32
+  mut best_combo : Int32
 }
 
 ///|
@@ -65,7 +65,7 @@ struct Anchor {
   mut y : Float
   mut r : Float
   mut progress : Float
-  mut owner : Int
+  mut owner : Int32
   mut fire_cd : Float
   mut t : Float
 }
@@ -73,7 +73,7 @@ struct Anchor {
 ///|
 struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -87,8 +87,8 @@ struct Enemy {
 ///|
 struct Bullet {
   mut active : Bool
-  mut team : Int
-  mut kind : Int
+  mut team : Int32
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -101,12 +101,12 @@ struct Bullet {
 ///|
 struct Orb {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut value : Int
+  mut value : Int32
   mut life : Float
   mut t : Float
 }
@@ -123,7 +123,7 @@ struct Wall {
 ///|
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -161,10 +161,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -173,7 +173,7 @@ fn inside_rect(
 }
 
 ///|
-fn enemy_radius(kind : Int) -> Float {
+fn enemy_radius(kind : Int32) -> Float {
   if kind == 0 {
     15.0
   } else if kind == 1 {
@@ -184,7 +184,7 @@ fn enemy_radius(kind : Int) -> Float {
 }
 
 ///|
-fn enemy_hp(kind : Int, wave : Int) -> Float {
+fn enemy_hp(kind : Int32, wave : Int32) -> Float {
   if kind == 0 {
     26.0 + Float::from_int(wave) * 2.8
   } else if kind == 1 {
@@ -361,10 +361,10 @@ fn add_anchor(anchors : Array[Anchor], x : Float, y : Float, r : Float) -> Bool 
 ///|
 fn add_enemy(
   enemies : Array[Enemy],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
-  wave : Int,
+  wave : Int32,
 ) -> Bool {
   for enemy in enemies {
     if !enemy.active {
@@ -387,8 +387,8 @@ fn add_enemy(
 ///|
 fn add_bullet(
   bullets : Array[Bullet],
-  team : Int,
-  kind : Int,
+  team : Int32,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -418,12 +418,12 @@ fn add_bullet(
 ///|
 fn add_orb(
   orbs : Array[Orb],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
   vy : Float,
-  value : Int,
+  value : Int32,
   life : Float,
 ) -> Bool {
   for orb in orbs {
@@ -467,7 +467,7 @@ fn add_wall(
 ///|
 fn add_particle(
   parts : Array[Particle],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -497,9 +497,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     let ang : Float = randf(0.0, 6.283)
@@ -520,17 +520,17 @@ fn burst(
 }
 
 ///|
-fn count_active_enemies(enemies : Array[Enemy]) -> Int {
+fn count_active_enemies(enemies : Array[Enemy]) -> Int32 {
   @utils.count_by(enemies, fn(enemy) { enemy.active })
 }
 
 ///|
-fn count_owned_anchors(anchors : Array[Anchor], owner : Int) -> Int {
+fn count_owned_anchors(anchors : Array[Anchor], owner : Int32) -> Int32 {
   @utils.count_by(anchors, fn(anchor) { anchor.active && anchor.owner == owner })
 }
 
 ///|
-fn count_total_anchors(anchors : Array[Anchor]) -> Int {
+fn count_total_anchors(anchors : Array[Anchor]) -> Int32 {
   @utils.count_by(anchors, fn(anchor) { anchor.active })
 }
 
@@ -565,15 +565,15 @@ fn setup_map(walls : Array[Wall], anchors : Array[Anchor]) -> Unit {
 }
 
 ///|
-fn draw_touch_ui(state : Int) -> Unit {
+fn draw_touch_ui(state : Int32) -> Unit {
   if state != 1 {
     ignore(())
   } else {
-    let pad_x : Int = 20
-    let pad_y : Int = sh - 220
+    let pad_x : Int32 = 20
+    let pad_y : Int32 = sh - 220
 
-    let btn_x : Int = sw - 338
-    let btn_y : Int = sh - 236
+    let btn_x : Int32 = sw - 338
+    let btn_y : Int32 = sh - 236
 
     @raylib.draw_rectangle(
       pad_x,
@@ -824,15 +824,15 @@ fn main {
     best_combo: 0,
   }
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
 
   let mut timer : Float = 420.0
   let mut hold_t : Float = 0.0
 
-  let mut wave : Int = 1
+  let mut wave : Int32 = 1
   let mut wave_active : Bool = false
   let mut wave_prep_t : Float = 1.8
-  let mut to_spawn : Int = 0
+  let mut to_spawn : Int32 = 0
   let mut spawn_cd : Float = 0.0
 
   let mut msg : String = "Capture all anchors"
@@ -991,7 +991,7 @@ fn main {
       } else {
         spawn_cd = spawn_cd - dt
         if to_spawn > 0 && spawn_cd <= 0.0 {
-          let edge : Int = @raylib.get_random_value(0, 3)
+          let edge : Int32 = @raylib.get_random_value(0, 3)
           let mut ex : Float = 0.0
           let mut ey : Float = 0.0
           if edge == 0 {
@@ -1008,8 +1008,8 @@ fn main {
             ey = randf(world_t + 20.0, world_b - 20.0)
           }
 
-          let roll : Int = @raylib.get_random_value(0, 99)
-          let mut kind : Int = 0
+          let roll : Int32 = @raylib.get_random_value(0, 99)
+          let mut kind : Int32 = 0
           if wave >= 3 && roll >= 45 {
             kind = 1
           }
@@ -1052,10 +1052,10 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyRightShift)
       let mut pulse_press : Bool = @raylib.is_key_pressed(@raylib.KeyL)
 
-      let pad_x : Int = 20
-      let pad_y : Int = sh - 220
-      let btn_x : Int = sw - 338
-      let btn_y : Int = sh - 236
+      let pad_x : Int32 = 20
+      let pad_y : Int32 = sh - 220
+      let btn_x : Int32 = sw - 338
+      let btn_y : Int32 = sh - 236
 
       if touch_down {
         if inside_rect(mouse.x, mouse.y, pad_x + 12, pad_y + 70, 60, 60) {
@@ -1299,7 +1299,7 @@ fn main {
           ) <=
           (anchors[i].r + 18.0) * (anchors[i].r + 18.0)
 
-        let mut enemy_near : Int = 0
+        let mut enemy_near : Int32 = 0
         for enemy in enemies {
           if !enemy.active {
             continue
@@ -1414,8 +1414,8 @@ fn main {
       }
 
       // hold objective
-      let owned_n : Int = count_owned_anchors(anchors, 1)
-      let total_n : Int = count_total_anchors(anchors)
+      let owned_n : Int32 = count_owned_anchors(anchors, 1)
+      let total_n : Int32 = count_total_anchors(anchors)
       if owned_n == total_n {
         hold_t = hold_t + dt
       } else {
@@ -1614,16 +1614,16 @@ fn main {
         }
 
         if enemy.hp <= 0.0 {
-          let reward : Int = 52 + enemy.kind * 28 + player.combo * 2
+          let reward : Int32 = 52 + enemy.kind * 28 + player.combo * 2
           player.score = player.score + reward
           player.combo = player.combo + 1
           if player.combo > player.best_combo {
             player.best_combo = player.combo
           }
 
-          let drops : Int = 1 + @raylib.get_random_value(0, 2)
+          let drops : Int32 = 1 + @raylib.get_random_value(0, 2)
           for _ in 0..<drops {
-            let kind : Int = @raylib.get_random_value(0, 1)
+            let kind : Int32 = @raylib.get_random_value(0, 1)
             ignore(
               add_orb(
                 orbs,
@@ -1828,25 +1828,25 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(8, 12, 20, 255))
 
     for gy in 0..<15 {
-      let y : Int = 90 + gy * 44
+      let y : Int32 = 90 + gy * 44
       @raylib.draw_line(0, y, sw, y, @raylib.Color::new(22, 30, 46, 122))
     }
     for gx in 0..<26 {
-      let x : Int = gx * 50
+      let x : Int32 = gx * 50
       @raylib.draw_line(x, 90, x, sh, @raylib.Color::new(22, 30, 46, 102))
     }
 
     for i in 0..<170 {
       let fi : Float = Float::from_int(i)
-      let sx : Int = ((
+      let sx : Int32 = ((
         fi * 79.0 + stars_t * (0.2 + Float::from_int(i % 7) * 0.08)
       ) %
       Float::from_int(sw)).to_int()
-      let sy : Int = ((
+      let sy : Int32 = ((
         fi * 137.0 + stars_t * (0.16 + Float::from_int(i % 5) * 0.09)
       ) %
       Float::from_int(sh)).to_int()
-      let br : Int = 70 + i % 10 * 12
+      let br : Int32 = 70 + i % 10 * 12
       @raylib.draw_circle(
         sx,
         sy,
@@ -1918,7 +1918,7 @@ fn main {
       )
 
       let p01 : Float = clampf((anchor.progress + 100.0) / 200.0, 0.0, 1.0)
-      let prog_fill : Int = (Float::from_int(80) * p01).to_int()
+      let prog_fill : Int32 = (Float::from_int(80) * p01).to_int()
       @raylib.draw_rectangle(
         (anchor.x - 40.0).to_int(),
         (anchor.y + anchor.r + 8.0).to_int(),
@@ -2053,7 +2053,7 @@ fn main {
       if !particle.active {
         continue
       }
-      let alpha : Int = (clampf(particle.life / 0.84, 0.0, 1.0) * 255.0).to_int()
+      let alpha : Int32 = (clampf(particle.life / 0.84, 0.0, 1.0) * 255.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(114, 224, 252, alpha)
       } else if particle.kind == 1 {
@@ -2135,10 +2135,10 @@ fn main {
     let heat_ratio : Float = clampf(player.heat / 100.0, 0.0, 1.0)
     let hold_ratio : Float = clampf(hold_t / anchor_hold_goal, 0.0, 1.0)
 
-    let hp_fill : Int = (hp_ratio * 230.0).to_int()
-    let en_fill : Int = (en_ratio * 230.0).to_int()
-    let heat_fill : Int = (heat_ratio * 230.0).to_int()
-    let hold_fill : Int = (hold_ratio * 290.0).to_int()
+    let hp_fill : Int32 = (hp_ratio * 230.0).to_int()
+    let en_fill : Int32 = (en_ratio * 230.0).to_int()
+    let heat_fill : Int32 = (heat_ratio * 230.0).to_int()
+    let hold_fill : Int32 = (hold_ratio * 290.0).to_int()
 
     @raylib.draw_rectangle(16, 94, 290, 12, @raylib.Color::new(22, 28, 40, 255))
     @raylib.draw_rectangle(

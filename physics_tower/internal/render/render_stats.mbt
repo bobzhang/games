@@ -139,7 +139,7 @@ pub fn draw_stats_screen(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a single statistic line with label and value.
-fn draw_stat_line(x : Int, y : Int, label : String, value : String) -> Unit {
+fn draw_stat_line(x : Int32, y : Int32, label : String, value : String) -> Unit {
   @draw.draw_text(
     label + ": ",
     x,
@@ -152,7 +152,13 @@ fn draw_stat_line(x : Int, y : Int, label : String, value : String) -> Unit {
 
 ///|
 /// Draws a horizontal progress bar.
-fn draw_progress_bar(x : Int, y : Int, w : Int, h : Int, percent : Int) -> Unit {
+fn draw_progress_bar(
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
+  percent : Int32,
+) -> Unit {
   let pct = percent.clamp(min=0, max=100)
   // Background
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(30, 36, 52, 200))
@@ -180,15 +186,15 @@ fn draw_progress_bar(x : Int, y : Int, w : Int, h : Int, percent : Int) -> Unit 
 ///|
 /// Draws a material usage bar with label.
 fn draw_material_bar(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   name : String,
-  count : Int,
-  max_count : Int,
-  max_w : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  max_count : Int32,
+  max_w : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   @draw.draw_text(name, x, y, 18, @raylib.Color::new(200, 210, 230, 255))
   let bar_x = x + 80
@@ -245,7 +251,12 @@ pub fn draw_combo_indicators(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a colored outline around a body to indicate a combo.
-fn draw_combo_outline(body : @types.Body, r : Int, g : Int, b : Int) -> Unit {
+fn draw_combo_outline(
+  body : @types.Body,
+  r : Int32,
+  g : Int32,
+  b : Int32,
+) -> Unit {
   let cx = body.x.to_int()
   let cy = body.y.to_int()
   let hw = (body.width * 0.5).to_int() + 3
@@ -283,7 +294,7 @@ fn draw_combo_outline(body : @types.Body, r : Int, g : Int, b : Int) -> Unit {
 
 ///|
 /// Draws the combo summary HUD showing active combos.
-pub fn draw_combo_hud(game : @types.Game, y_offset : Int) -> Unit {
+pub fn draw_combo_hud(game : @types.Game, y_offset : Int32) -> Unit {
   if game.active_combos.length() == 0 {
     return
   }
@@ -574,7 +585,7 @@ fn draw_world_internal(game : @types.Game) -> Unit {
 
 ///|
 /// Returns color for a body during replay.
-fn replay_body_color(mat : @types.Material) -> (Int, Int, Int) {
+fn replay_body_color(mat : @types.Material) -> (Int32, Int32, Int32) {
   match mat {
     Wood => (160, 120, 60)
     Stone => (140, 140, 150)
@@ -583,7 +594,7 @@ fn replay_body_color(mat : @types.Material) -> (Int, Int, Int) {
 }
 
 ///|
-fn max3(a : Int, b : Int, c : Int) -> Int {
+fn max3(a : Int32, b : Int32, c : Int32) -> Int32 {
   let m = if a > b { a } else { b }
   if m > c {
     m

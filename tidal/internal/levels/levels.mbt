@@ -39,13 +39,13 @@ pub fn get_all_levels() -> Array[@types.Level] {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   let levels = get_all_levels()
   levels[index]
 }
 
 ///|
-pub fn tier_name(tier : Int) -> String {
+pub fn tier_name(tier : Int32) -> String {
   match tier {
     0 => "Propagation"
     1 => "Reflection"

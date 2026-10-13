@@ -54,7 +54,7 @@ fn shade_color(base : @raylib.Color, factor : Float) -> @raylib.Color {
 }
 
 ///|
-fn alpha_color(base : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn alpha_color(base : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(base.r.to_int(), base.g.to_int(), base.b.to_int(), alpha)
 }
 
@@ -64,8 +64,8 @@ fn draw_biome_decoration(
   cy : Float,
   biome : @types.BiomeKind,
   time : Float,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Unit {
   let seed = Float::from_int(col * 17 + row * 31)
   match biome {
@@ -407,7 +407,7 @@ fn draw_wrap_indicators(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_mini_planet(x : Int, y : Int, grid : @types.HexGrid) -> Unit {
+fn draw_mini_planet(x : Int32, y : Int32, grid : @types.HexGrid) -> Unit {
   // Draw a tiny circular representation of the planet
   let radius : Float = 35.0
   let cx = Float::from_int(x)

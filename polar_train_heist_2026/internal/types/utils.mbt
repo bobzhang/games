@@ -45,13 +45,13 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a random integer in `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
 /// Returns true with probability `pct / 100`.
-pub fn chance(pct : Int) -> Bool {
+pub fn chance(pct : Int32) -> Bool {
   randi(0, 99) < pct
 }
 
@@ -73,7 +73,7 @@ pub fn ease_out_cubic(t : Float) -> Float {
 
 ///|
 /// Returns the world y-coordinate of a lane center.
-pub fn lane_y(lane : Int) -> Float {
+pub fn lane_y(lane : Int32) -> Float {
   lane_top + Float::from_int(lane.clamp(min=0, max=lane_count - 1)) * lane_gap
 }
 
@@ -126,7 +126,7 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   rx : Float,
   ry : Float,
   rw : Float,

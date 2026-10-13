@@ -154,7 +154,7 @@ pub fn make_level(
   waypoints : Array[Waypoint],
   launch_x : Float,
   launch_y : Float,
-  par_ticks : Int,
+  par_ticks : Int32,
   name : String,
   tier : Tier,
 ) -> Level {
@@ -170,7 +170,12 @@ pub fn make_level(
 }
 
 ///|
-pub fn make_star(x : Float, y : Float, brightness : Int, size : Float) -> Star {
+pub fn make_star(
+  x : Float,
+  y : Float,
+  brightness : Int32,
+  size : Float,
+) -> Star {
   { x, y, brightness, size, }
 }
 
@@ -185,15 +190,15 @@ pub fn new_score() -> LevelScore {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 12345, }
+let rng_state : Ref[Int32] = { val: 12345, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -204,7 +209,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -256,7 +261,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn tier_start_index(tier : Tier) -> Int {
+pub fn tier_start_index(tier : Tier) -> Int32 {
   match tier {
     Launch => 0
     Slingshot => tier1_count
@@ -265,7 +270,7 @@ pub fn tier_start_index(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Launch => tier1_count
     Slingshot => tier2_count
@@ -317,7 +322,7 @@ pub fn tier_unlocked(tier : Tier, scores : Array[LevelScore]) -> Bool {
 }
 
 ///|
-pub fn level_index_for(tier : Tier, idx : Int) -> Int {
+pub fn level_index_for(tier : Tier, idx : Int32) -> Int32 {
   tier_start_index(tier) + idx
 }
 

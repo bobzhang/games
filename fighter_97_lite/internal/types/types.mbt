@@ -148,9 +148,9 @@ pub extend AiDifficulty with Show::{to_string, output}
 ///|
 /// Per-frame input state and motion buffers for one fighter.
 pub(all) struct InputState {
-  mut x : Int
-  mut y : Int
-  mut prev_x : Int
+  mut x : Int32
+  mut y : Int32
+  mut prev_x : Int32
   mut hold_forward : Bool
   mut hold_back : Bool
   mut hold_up : Bool
@@ -168,7 +168,7 @@ pub(all) struct InputState {
   mut dash_forward_pressed : Bool
   mut dash_back_pressed : Bool
   dir_history : Array[Direction]
-  mut dir_head : Int
+  mut dir_head : Int32
   mut tap_forward_timer : Float
   mut tap_back_timer : Float
   mut buffered_motion : Motion
@@ -214,21 +214,21 @@ pub fn InputState::InputState() -> InputState {
 pub(all) struct MoveSpec {
   mut attack_id : AttackId
   mut move_kind : MoveKind
-  mut total_frames : Int
-  mut startup_frames : Int
-  mut active_frames : Int
-  mut recovery_frames : Int
-  mut damage : Int
-  mut chip_damage : Int
-  mut hitstun_frames : Int
-  mut blockstun_frames : Int
-  mut hitstop_frames : Int
+  mut total_frames : Int32
+  mut startup_frames : Int32
+  mut active_frames : Int32
+  mut recovery_frames : Int32
+  mut damage : Int32
+  mut chip_damage : Int32
+  mut hitstun_frames : Int32
+  mut blockstun_frames : Int32
+  mut hitstop_frames : Int32
   mut pushback : Float
   mut launch_x : Float
   mut launch_y : Float
   mut drift_speed : Float
-  mut meter_gain_on_use : Int
-  mut meter_gain_on_hit : Int
+  mut meter_gain_on_use : Int32
+  mut meter_gain_on_hit : Int32
   mut hitbox_x : Float
   mut hitbox_y : Float
   mut hitbox_w : Float
@@ -238,9 +238,9 @@ pub(all) struct MoveSpec {
   mut overhead_attack : Bool
   airborne_only : Bool
   crouch_only : Bool
-  mut invuln_end : Int
-  mut cancel_window_start : Int
-  mut cancel_window_end : Int
+  mut invuln_end : Int32
+  mut cancel_window_start : Int32
+  mut cancel_window_end : Int32
   mut cancel_on_hit : Bool
   mut auto_dash : Bool
 }
@@ -299,7 +299,7 @@ pub(all) struct CharacterArchetype {
   offense_mul : Float
   defense_mul : Float
   meter_mul : Float
-  max_guard_bonus : Int
+  max_guard_bonus : Int32
   normal_lp : MoveSpec
   normal_hp : MoveSpec
   normal_lk : MoveSpec
@@ -344,34 +344,34 @@ pub fn Particle::inactive() -> Particle {
 ///|
 /// Runtime fighter state for one player slot.
 pub(all) struct Fighter {
-  slot : Int
+  slot : Int32
   mut is_cpu : Bool
-  mut archetype_index : Int
+  mut archetype_index : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut facing : Int
+  mut facing : Int32
   mut on_ground : Bool
   mut crouching : Bool
-  mut health : Int
-  mut guard_meter : Int
-  mut super_meter : Int
-  mut round_wins : Int
+  mut health : Int32
+  mut guard_meter : Int32
+  mut super_meter : Int32
+  mut round_wins : Int32
   mut action : Action
-  mut action_frame : Int
+  mut action_frame : Int32
   mut action_elapsed : Float
   mut current_move : MoveSpec
   mut move_connected : Bool
   mut move_cancel_enabled : Bool
-  mut hitstop : Int
-  mut hitstun : Int
-  mut blockstun : Int
-  mut knockdown : Int
-  mut invuln : Int
-  mut throw_tech_timer : Int
-  mut combo_counter : Int
-  mut combo_timer : Int
+  mut hitstop : Int32
+  mut hitstun : Int32
+  mut blockstun : Int32
+  mut knockdown : Int32
+  mut invuln : Int32
+  mut throw_tech_timer : Int32
+  mut combo_counter : Int32
+  mut combo_timer : Int32
   mut flash_timer : Float
   mut shake_timer : Float
   mut hurt_shake_x : Float
@@ -389,7 +389,7 @@ pub(all) struct Fighter {
 
 ///|
 /// Creates a fighter with default stats and controls.
-pub fn Fighter::Fighter(slot : Int, is_cpu : Bool) -> Fighter {
+pub fn Fighter::Fighter(slot : Int32, is_cpu : Bool) -> Fighter {
   {
     slot,
     is_cpu,
@@ -447,24 +447,24 @@ pub fn Fighter::Fighter(slot : Int, is_cpu : Bool) -> Fighter {
 /// Global mutable match state.
 pub(all) struct Game {
   mut state : GameState
-  mut frame_count : Int
-  mut rng_state : Int
+  mut frame_count : Int32
+  mut rng_state : Int32
   roster : Array[CharacterArchetype]
   fighters : Array[Fighter]
   mut mode_vs_cpu : Bool
   mut mode_training : Bool
-  mut select_cursor_p1 : Int
-  mut select_cursor_p2 : Int
+  mut select_cursor_p1 : Int32
+  mut select_cursor_p2 : Int32
   mut p1_confirmed : Bool
   mut p2_confirmed : Bool
-  mut round_index : Int
+  mut round_index : Int32
   mut round_timer : Float
   mut intro_timer : Float
   mut round_over_timer : Float
   mut match_over_timer : Float
-  mut winner_slot : Int
+  mut winner_slot : Int32
   mut pause_blink : Float
-  mut dramatic_freeze : Int
+  mut dramatic_freeze : Int32
   mut hud_flash : Float
   mut announcer_text : String
   mut announcer_timer : Float
@@ -486,9 +486,9 @@ pub(all) struct Game {
   mut guard_break_flash : Float
   mut combat_badge_text : String
   mut combat_badge_timer : Float
-  mut combat_badge_color_r : Int
-  mut combat_badge_color_g : Int
-  mut combat_badge_color_b : Int
+  mut combat_badge_color_r : Int32
+  mut combat_badge_color_g : Int32
+  mut combat_badge_color_b : Int32
   mut slowmo_timer : Float
 }
 

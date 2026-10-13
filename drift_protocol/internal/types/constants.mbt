@@ -1,26 +1,26 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let tile_size : Int = 40
+pub let tile_size : Int32 = 40
 
 ///|
-pub let grid_width : Int = 20
+pub let grid_width : Int32 = 20
 
 ///|
-pub let grid_height : Int = 15
+pub let grid_height : Int32 = 15
 
 ///|
-pub let grid_offset_x : Int = 40
+pub let grid_offset_x : Int32 = 40
 
 ///|
-pub let grid_offset_y : Int = 40
+pub let grid_offset_y : Int32 = 40
 
 ///|
 pub let move_lerp_speed : Float = 12.0
@@ -29,13 +29,13 @@ pub let move_lerp_speed : Float = 12.0
 pub let move_cooldown_time : Float = 0.12
 
 ///|
-pub let walk_noise_radius : Int = 1
+pub let walk_noise_radius : Int32 = 1
 
 ///|
-pub let run_noise_radius : Int = 3
+pub let run_noise_radius : Int32 = 3
 
 ///|
-pub let coin_noise_radius : Int = 4
+pub let coin_noise_radius : Int32 = 4
 
 ///|
 pub let coin_duration : Float = 2.0
@@ -59,7 +59,7 @@ pub let alert_duration : Float = 5.0
 pub let guard_move_interval : Float = 0.5
 
 ///|
-pub let hack_sequence_length : Int = 4
+pub let hack_sequence_length : Int32 = 4
 
 ///|
 pub let hack_time_limit : Float = 3.0
@@ -77,7 +77,7 @@ pub let camera_rotation_speed : Float = 1.0
 pub let camera_vision_range : Float = 5.0
 
 ///|
-pub let total_levels : Int = 8
+pub let total_levels : Int32 = 8
 
 ///|
 pub let search_look_duration : Float = 0.6

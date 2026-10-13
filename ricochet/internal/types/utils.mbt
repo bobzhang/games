@@ -170,15 +170,15 @@ pub fn segment_intersect(p1 : Vec2, p2 : Vec2, p3 : Vec2, p4 : Vec2) -> Float? {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 42, }
+let rng_state : Ref[Int32] = { val: 42, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -329,7 +329,7 @@ pub fn any_ball_active(balls : Array[Ball]) -> Bool {
 }
 
 ///|
-pub fn count_targets_hit(level : Level) -> Int {
+pub fn count_targets_hit(level : Level) -> Int32 {
   let mut count = 0
   for i in 0..<level.targets.length() {
     if level.targets[i].hit {
@@ -350,6 +350,6 @@ pub fn pickup_collected(level : Level) -> Bool {
 }
 
 ///|
-pub fn global_level_index(world : Int, level : Int) -> Int {
+pub fn global_level_index(world : Int32, level : Int32) -> Int32 {
   world * levels_per_world + level
 }

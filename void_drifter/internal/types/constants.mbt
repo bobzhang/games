@@ -1,11 +1,11 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 pub let arena_default_width : Float = 2400.0
@@ -28,10 +28,10 @@ pub let ship_boost_mult : Float = 1.8
 pub let ship_boost_heat : Float = 15.0
 
 ///|
-pub let ship_base_hp : Int = 5
+pub let ship_base_hp : Int32 = 5
 
 ///|
-pub let ship_base_shield : Int = 3
+pub let ship_base_shield : Int32 = 3
 
 ///|
 pub let shield_regen_delay : Float = 3.0
@@ -68,7 +68,7 @@ pub let heat_sink_bonus : Float = 1.5
 // Projectile defaults
 
 ///|
-pub let projectile_pool_size : Int = 256
+pub let projectile_pool_size : Int32 = 256
 
 ///|
 pub let default_projectile_radius : Float = 4.0
@@ -79,7 +79,7 @@ pub let default_projectile_lifetime : Float = 2.0
 // Enemy pool
 
 ///|
-pub let enemy_pool_size : Int = 64
+pub let enemy_pool_size : Int32 = 64
 
 ///|
 pub let enemy_spawn_margin : Float = 100.0
@@ -87,7 +87,7 @@ pub let enemy_spawn_margin : Float = 100.0
 // Particle pool
 
 ///|
-pub let particle_pool_size : Int = 512
+pub let particle_pool_size : Int32 = 512
 
 ///|
 pub let particle_default_life : Float = 0.8
@@ -95,15 +95,15 @@ pub let particle_default_life : Float = 0.8
 // Asteroid pool
 
 ///|
-pub let asteroid_pool_size : Int = 32
+pub let asteroid_pool_size : Int32 = 32
 
 ///|
-pub let asteroid_base_hp : Int = 2
+pub let asteroid_base_hp : Int32 = 2
 
 // Pickup
 
 ///|
-pub let pickup_pool_size : Int = 16
+pub let pickup_pool_size : Int32 = 16
 
 ///|
 pub let pickup_lifetime : Float = 15.0
@@ -114,7 +114,7 @@ pub let pickup_radius : Float = 12.0
 // Damage numbers
 
 ///|
-pub let damage_number_pool_size : Int = 32
+pub let damage_number_pool_size : Int32 = 32
 
 ///|
 pub let damage_number_life : Float = 0.8
@@ -150,29 +150,29 @@ pub let combo_multiplier_per : Float = 0.1
 pub let wave_interval : Float = 4.0
 
 ///|
-pub let base_wave_enemies : Int = 3
+pub let base_wave_enemies : Int32 = 3
 
 // Sector map
 
 ///|
-pub let sector_map_layers : Int = 4
+pub let sector_map_layers : Int32 = 4
 
 ///|
-pub let nodes_per_layer : Int = 3
+pub let nodes_per_layer : Int32 = 3
 
 // Shop
 
 ///|
-pub let shop_heal_cost : Int = 30
+pub let shop_heal_cost : Int32 = 30
 
 ///|
-pub let shop_shield_cost : Int = 40
+pub let shop_shield_cost : Int32 = 40
 
 ///|
-pub let shop_mod_cost : Int = 80
+pub let shop_mod_cost : Int32 = 80
 
 ///|
-pub let shop_weapon_cost : Int = 100
+pub let shop_weapon_cost : Int32 = 100
 
 // Boss intro
 

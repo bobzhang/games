@@ -41,7 +41,7 @@ fn set_noisy(
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_01()
     1 => level_02()

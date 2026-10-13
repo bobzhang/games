@@ -106,13 +106,13 @@ pub(all) struct Player {
   mut death_timer : Float
   mut death_vy : Float
   mut anim_timer : Float
-  mut anim_frame : Int
+  mut anim_frame : Int32
   mut grow_timer : Float
   mut shrink_timer : Float
   mut coyote_timer : Float
   mut jump_buffer : Float
   mut skid_timer : Float
-  mut stomp_combo : Int
+  mut stomp_combo : Int32
 }
 
 ///|
@@ -170,7 +170,7 @@ pub(all) struct Enemy {
   mut dead_timer : Float
   mut squished : Bool
   mut anim_timer : Float
-  mut anim_frame : Int
+  mut anim_frame : Int32
   mut shell_moving : Bool
   mut width : Float
   mut height : Float
@@ -178,8 +178,8 @@ pub(all) struct Enemy {
   mut extended : Bool
   mut hop_timer : Float
   mut firebar_angle : Float
-  mut firebar_segments : Int
-  mut boss_hp : Int
+  mut firebar_segments : Int32
+  mut boss_hp : Int32
   mut fire_cooldown : Float
   mut patrol_left : Float
   mut patrol_right : Float
@@ -431,8 +431,8 @@ pub fn ScorePopup::new() -> ScorePopup {
 /// A block that bounces when hit from below.
 pub(all) struct BumpedBlock {
   mut active : Bool
-  mut tile_x : Int
-  mut tile_y : Int
+  mut tile_x : Int32
+  mut tile_y : Int32
   mut offset_y : Float
   mut velocity : Float
 }
@@ -459,8 +459,8 @@ pub extend BridgePhase with Eq::{not_equal, equal}
 /// Tracks a bridge tile that can collapse.
 pub(all) struct BridgeState {
   mut active : Bool
-  mut tile_x : Int
-  mut tile_y : Int
+  mut tile_x : Int32
+  mut tile_y : Int32
   mut phase : BridgePhase
   mut timer : Float
   mut fall_y : Float
@@ -492,7 +492,7 @@ pub(all) struct MovingPlatform {
   mut end_y : Float
   mut speed : Float
   mut progress : Float
-  mut direction : Int
+  mut direction : Int32
   mut prev_x : Float
   mut prev_y : Float
 }
@@ -559,9 +559,9 @@ pub(all) struct Cloud {
 pub(all) struct Game {
   // ── Phase ──
   mut state : GameState
-  mut world_num : Int
-  mut level_num : Int
-  mut level_index : Int
+  mut world_num : Int32
+  mut level_num : Int32
+  mut level_index : Int32
   // ── Player ──
   player : Player
   // ── Entities ──
@@ -580,14 +580,14 @@ pub(all) struct Game {
   mut boss_defeated : Bool
   // ── Map ──
   mut map_tiles : Array[TileKind]
-  mut map_width : Int
-  mut map_height : Int
+  mut map_width : Int32
+  mut map_height : Int32
   // ── Camera ──
   mut camera_x : Float
   // ── HUD ──
-  mut score : Int
-  mut coins : Int
-  mut lives : Int
+  mut score : Int32
+  mut coins : Int32
+  mut lives : Int32
   mut time_remaining : Float
   // ── Timers ──
   mut intro_timer : Float
@@ -601,8 +601,8 @@ pub(all) struct Game {
   mut mario_auto : Bool
   mut mario_target_x : Float
   // ── Misc ──
-  mut frame_counter : Int
-  mut rng_state : Int
+  mut frame_counter : Int32
+  mut rng_state : Int32
   // ── Decoration ──
   clouds : Array[Cloud]
   // ── Checkpoint ──
@@ -613,26 +613,26 @@ pub(all) struct Game {
   mut saved_power : PowerState
   // ── Level tally ──
   mut tally_timer : Float
-  mut tally_phase : Int
-  mut tally_time_bonus : Int
-  mut tally_coin_bonus : Int
-  mut tally_enemy_bonus : Int
-  mut tally_height_bonus : Int
+  mut tally_phase : Int32
+  mut tally_time_bonus : Int32
+  mut tally_coin_bonus : Int32
+  mut tally_enemy_bonus : Int32
+  mut tally_height_bonus : Int32
   mut tally_rank : String
-  mut enemies_defeated : Int
-  mut level_coins_collected : Int
-  mut level_total_coins : Int
-  mut level_deaths : Int
+  mut enemies_defeated : Int32
+  mut level_coins_collected : Int32
+  mut level_total_coins : Int32
+  mut level_deaths : Int32
   // ── Flagpole height fraction ──
   mut flag_height_frac : Float
   // ── Bonus room ──
   mut in_bonus_room : Bool
   mut bonus_return_x : Float
   mut bonus_return_y : Float
-  mut bonus_return_level : Int
+  mut bonus_return_level : Int32
   mut bonus_saved_tiles : Array[TileKind]
-  mut bonus_saved_width : Int
-  mut bonus_saved_height : Int
+  mut bonus_saved_width : Int32
+  mut bonus_saved_height : Int32
   mut bonus_saved_enemies : Array[Enemy]
   mut bonus_saved_items : Array[Item]
   mut bonus_saved_fireballs : Array[Fireball]

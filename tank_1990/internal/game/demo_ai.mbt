@@ -15,7 +15,7 @@ fn @types.Game::demo_nearest_enemy(
   game : @types.Game,
   x : Float,
   y : Float,
-) -> (Int, Float) {
+) -> (Int32, Float) {
   for
     i, enemy in game.enemies
     best_idx = -1, best_dist = Float::from_int(1000000000) {
@@ -37,7 +37,7 @@ fn @types.Game::demo_nearest_powerup(
   game : @types.Game,
   x : Float,
   y : Float,
-) -> (Int, Float) {
+) -> (Int32, Float) {
   for i, powerup in game.powerups; best_idx = -1, best_dist = 1000000000.F {
     if !powerup.active {
       continue
@@ -55,7 +55,7 @@ fn @types.Game::demo_nearest_powerup(
 /// Checks whether the player tank at the given index can move one step in the specified direction without colliding with walls, other players, or enemies.
 fn @types.Game::demo_can_step(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dir : @types.Dir,
   dt : Float,
 ) -> Bool {
@@ -84,7 +84,7 @@ fn @types.Game::demo_can_step(
 /// Tries each of four candidate directions in priority order and returns the first one the player can actually step into, or None if all are blocked.
 fn @types.Game::demo_priority_dir(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dt : Float,
   a : @types.Dir,
   b : @types.Dir,
@@ -108,7 +108,7 @@ fn @types.Game::demo_priority_dir(
 /// Decides which direction the AI player should move to reach the target position, preferring the axis with the larger gap and falling back to a random direction if stuck.
 fn @types.Game::demo_choose_move_dir(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dt : Float,
   target_x : Float,
   target_y : Float,
@@ -178,9 +178,9 @@ fn demo_line_shot_dir(
 fn @types.Game::demo_target_position(
   game : @types.Game,
   player : @types.Tank,
-  nearest_enemy : Int,
+  nearest_enemy : Int32,
   enemy_dist : Float,
-  nearest_powerup : Int,
+  nearest_powerup : Int32,
   powerup_dist : Float,
 ) -> (Float, Float) {
   if nearest_powerup >= 0 &&
@@ -204,7 +204,7 @@ fn @types.Game::demo_target_position(
 /// Produces the AI move direction and shoot decision for one demo player each frame, combining target selection, pathfinding, line-of-sight shooting, and random fire.
 fn @types.Game::demo_player_command(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dt : Float,
 ) -> (@types.Dir?, Bool) {
   let player = game.players[index]

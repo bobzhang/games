@@ -1,26 +1,26 @@
 ///|
-let sw : Int = 1080
+let sw : Int32 = 1080
 
 ///|
-let sh : Int = 700
+let sh : Int32 = 700
 
 ///|
-let lanes : Int = 3
+let lanes : Int32 = 3
 
 ///|
-fn lane_y(lane : Int) -> Int {
+fn lane_y(lane : Int32) -> Int32 {
   180 + lane * 170
 }
 
 ///|
 struct CombatUnit {
   mut alive : Bool
-  mut team : Int
-  mut kind : Int
-  mut lane : Int
+  mut team : Int32
+  mut kind : Int32
+  mut lane : Int32
   mut x : Float
-  mut hp : Int
-  mut atk : Int
+  mut hp : Int32
+  mut atk : Int32
   mut range : Float
   mut speed : Float
   mut cooldown : Float
@@ -29,9 +29,9 @@ struct CombatUnit {
 ///|
 fn spawn_unit(
   units : Array[CombatUnit],
-  team : Int,
-  kind : Int,
-  lane : Int,
+  team : Int32,
+  kind : Int32,
+  lane : Int32,
 ) -> Bool {
   let mut slot = -1
   for i in 0..<units.length() {
@@ -64,7 +64,7 @@ fn spawn_unit(
 }
 
 ///|
-fn closest_enemy(units : Array[CombatUnit], me : Int) -> Int {
+fn closest_enemy(units : Array[CombatUnit], me : Int32) -> Int32 {
   for i in 0..<units.length(); best = -1, best_d = 1_000_000.0F {
     if i == me || !units[i].alive {
       continue

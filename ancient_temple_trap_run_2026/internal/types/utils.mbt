@@ -56,10 +56,10 @@ pub fn rects_overlap(
 pub fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -73,11 +73,11 @@ pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   if mouse_hold && inside_rect(mouse_x, mouse_y, x, y, w, h) {
     return true
@@ -98,10 +98,10 @@ pub fn pointer_on_rect(
 pub fn mouse_click_on_rect(
   mouse_x : Float,
   mouse_y : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) &&
   inside_rect(mouse_x, mouse_y, x, y, w, h)
@@ -153,7 +153,7 @@ pub fn exit_unlocked(game : Game) -> Bool {
 
 ///|
 /// Display name for stage index.
-pub fn stage_name(index : Int) -> String {
+pub fn stage_name(index : Int32) -> String {
   match index {
     0 => "Sunken Antechamber"
     1 => "Obsidian Gauntlet"

@@ -26,23 +26,23 @@ pub(all) struct Player {
   mut hp : Float
   mut armor : Float
   mut current_weapon : WeaponKind
-  ammo : Array[Int]
-  magazine : Array[Int]
-  mag_size : Array[Int]
+  ammo : Array[Int32]
+  magazine : Array[Int32]
+  mag_size : Array[Int32]
   mut speed_mult : Float
   mut damage_mult : Float
   mut damage_timer : Float
-  mut score : Int
-  mut money : Int
-  mut kills : Int
-  mut headshots : Int
+  mut score : Int32
+  mut money : Int32
+  mut kills : Int32
+  mut headshots : Int32
   mut bob_timer : Float
   mut flash_timer : Float
   mut sprint : Bool
   mut crouching : Bool
   mut crouch_lerp : Float
   // Combo system
-  mut combo_count : Int
+  mut combo_count : Int32
   mut combo_timer : Float
   mut combo_mult : Float
   // Boost timers
@@ -51,7 +51,7 @@ pub(all) struct Player {
   mut shield_timer : Float
   // Kill tracking for multi-kill
   mut recent_kill_timer : Float
-  mut recent_kill_count : Int
+  mut recent_kill_count : Int32
   // Weapons owned
   owns_weapon : Array[Bool]
   // Minigun state
@@ -61,9 +61,9 @@ pub(all) struct Player {
   mut recoil_offset : Float
   mut recoil_recover : Float
   // Weapon upgrade levels: [damage_lvl, fire_rate_lvl, mag_lvl] per weapon
-  weapon_damage_level : Array[Int]
-  weapon_rate_level : Array[Int]
-  weapon_mag_level : Array[Int]
+  weapon_damage_level : Array[Int32]
+  weapon_rate_level : Array[Int32]
+  weapon_mag_level : Array[Int32]
   // Weapon switch equip delay
   mut weapon_switch_timer : Float
   // Recoil pitch kick (applied to camera pitch directly)
@@ -73,13 +73,13 @@ pub(all) struct Player {
 ///|
 /// Constructs a fresh player with starter weapons, base stats, and empty combo/boost timers.
 pub fn Player::Player() -> Player {
-  let ammo : Array[Int] = [
+  let ammo : Array[Int32] = [
     ammo_pistol, ammo_shotgun, ammo_rifle, ammo_sniper, ammo_rocket, ammo_minigun,
   ]
-  let magazine : Array[Int] = [
+  let magazine : Array[Int32] = [
     mag_pistol, mag_shotgun, mag_rifle, mag_sniper, mag_rocket, mag_minigun,
   ]
-  let mag_size : Array[Int] = [
+  let mag_size : Array[Int32] = [
     mag_pistol, mag_shotgun, mag_rifle, mag_sniper, mag_rocket, mag_minigun,
   ]
   let owns_weapon : Array[Bool] = [true, true, true, false, false, false]
@@ -148,8 +148,8 @@ pub(all) struct Enemy {
   mut attack_timer : Float
   mut attack_range : Float
   mut size : Float
-  mut gold_value : Int
-  mut score_value : Int
+  mut gold_value : Int32
+  mut score_value : Int32
   mut spit_timer : Float
   mut spit_cooldown : Float
   mut stun_timer : Float
@@ -162,10 +162,10 @@ pub(all) struct Enemy {
   // Shielded state - angle facing
   mut facing_angle : Float
   // Boss phase
-  mut boss_phase : Int
+  mut boss_phase : Int32
   mut boss_ability_timer : Float
   // State machine: 0=spawn, 1=chase, 2=attack, 3=stagger, 4=die_anim
-  mut state : Int
+  mut state : Int32
   mut state_timer : Float
   // Death position for necromancer revive
   mut death_x : Float
@@ -221,7 +221,7 @@ pub fn Enemy::inactive() -> Enemy {
 /// Projectile state for both player shots and enemy ranged attacks.
 pub(all) struct Projectile {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -233,7 +233,7 @@ pub(all) struct Projectile {
   mut life : Float
   mut is_enemy : Bool
   mut splash_radius : Float
-  mut penetration : Int
+  mut penetration : Int32
   mut is_headshot_capable : Bool
 }
 
@@ -273,9 +273,9 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
   mut kind : ParticleKind
 }
@@ -362,7 +362,7 @@ pub(all) struct Ramp {
 /// Temporary pickup entity dropped in the arena.
 pub(all) struct Pickup {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -438,9 +438,9 @@ pub(all) struct KillFeedEntry {
   mut active : Bool
   mut text : String
   mut timer : Float
-  mut color_r : Int
-  mut color_g : Int
-  mut color_b : Int
+  mut color_r : Int32
+  mut color_g : Int32
+  mut color_b : Int32
 }
 
 ///|
@@ -478,8 +478,8 @@ pub fn WeaponState::WeaponState() -> WeaponState {
 /// Shop catalog entry containing label, price, and effect kind id.
 pub(all) struct ShopItem {
   name : String
-  cost : Int
-  kind : Int
+  cost : Int32
+  kind : Int32
 }
 
 // Damage indicator direction
@@ -510,14 +510,14 @@ pub(all) struct Game {
   weapons : Array[WeaponState]
 
   // Wave system
-  mut current_wave : Int
+  mut current_wave : Int32
   mut wave_timer : Float
   mut spawn_timer : Float
-  mut enemies_to_spawn : Int
-  mut enemies_spawned : Int
+  mut enemies_to_spawn : Int32
+  mut enemies_spawned : Int32
   mut wave_enemy_kinds : Array[EnemyKind]
-  mut wave_enemy_counts : Array[Int]
-  mut wave_spawn_idx : Int
+  mut wave_enemy_counts : Array[Int32]
+  mut wave_spawn_idx : Int32
   mut wave_hp_mult : Float
   mut wave_speed_mult : Float
   mut wave_active : Bool
@@ -551,19 +551,19 @@ pub(all) struct Game {
   mut cam_target_z : Float
 
   // UI
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
-  mut shop_cursor : Int
+  mut shop_cursor : Int32
   mut message_timer : Float
   mut message_text : String
   mut show_wave_summary : Bool
   mut wave_summary_timer : Float
-  mut wave_summary_kills : Int
-  mut wave_summary_money : Int
+  mut wave_summary_kills : Int32
+  mut wave_summary_money : Int32
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // Crosshair hit marker
   mut hit_marker_timer : Float
@@ -573,17 +573,17 @@ pub(all) struct Game {
   mut difficulty : Float
 
   // Stats tracking
-  mut total_shots_fired : Int
-  mut total_shots_hit : Int
-  mut highest_combo : Int
+  mut total_shots_fired : Int32
+  mut total_shots_hit : Int32
+  mut highest_combo : Int32
   mut total_damage_dealt : Float
   mut total_damage_taken : Float
 
   // Per-wave stat snapshots (captured at wave start, used to compute deltas)
-  mut wave_start_kills : Int
-  mut wave_start_shots_fired : Int
-  mut wave_start_shots_hit : Int
-  mut wave_start_money : Int
+  mut wave_start_kills : Int32
+  mut wave_start_shots_fired : Int32
+  mut wave_start_shots_hit : Int32
+  mut wave_start_money : Int32
 }
 
 ///|

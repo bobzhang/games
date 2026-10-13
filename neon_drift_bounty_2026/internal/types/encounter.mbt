@@ -113,7 +113,7 @@ pub extend Hazard with Show::{to_string, output}
 
 ///|
 /// Maximum number of active road hazards.
-pub let max_hazards : Int = 40
+pub let max_hazards : Int32 = 40
 
 ///|
 /// Creates a default inactive Hazard.
@@ -132,7 +132,7 @@ pub fn Hazard::new() -> Hazard {
 
 ///|
 /// Returns the road zone for a given stage number.
-pub fn road_zone_for_stage(stage : Int) -> RoadZone {
+pub fn road_zone_for_stage(stage : Int32) -> RoadZone {
   match stage % 3 {
     1 => NeonAlley
     2 => IndustrialStrip
@@ -142,13 +142,13 @@ pub fn road_zone_for_stage(stage : Int) -> RoadZone {
 
 ///|
 /// Returns true if the given stage number is a boss stage (every 3rd).
-pub fn is_boss_stage(stage : Int) -> Bool {
+pub fn is_boss_stage(stage : Int32) -> Bool {
   stage >= 3 && stage % 3 == 0
 }
 
 ///|
 /// Selects a formation based on stage progression and a roll value 0..99.
-pub fn select_formation(stage : Int, roll : Int) -> Formation {
+pub fn select_formation(stage : Int32, roll : Int32) -> Formation {
   if stage <= 2 {
     // Early stages: mostly random, occasional V-shape
     if roll < 70 {

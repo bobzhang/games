@@ -1,5 +1,5 @@
 ///|
-fn draw_fog_overlay(state : @types.LevelState, frame : Int) -> Unit {
+fn draw_fog_overlay(state : @types.LevelState, frame : Int32) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
@@ -45,7 +45,7 @@ fn draw_fog_overlay(state : @types.LevelState, frame : Int) -> Unit {
 }
 
 ///|
-fn draw_water_ripples(state : @types.LevelState, frame : Int) -> Unit {
+fn draw_water_ripples(state : @types.LevelState, frame : Int32) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y

@@ -1,29 +1,29 @@
 ///|
 /// Relative block coordinate inside a tetromino.
 pub(all) struct Cell {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
 }
 
 ///|
 /// Full mutable state for one Tetris match.
 pub(all) struct Game {
-  board : Array[Int]
-  mut piece_kind : Int
-  mut piece_rot : Int
-  mut piece_x : Int
-  mut piece_y : Int
-  mut next_kind : Int
-  mut hold_kind : Int
+  board : Array[Int32]
+  mut piece_kind : Int32
+  mut piece_rot : Int32
+  mut piece_x : Int32
+  mut piece_y : Int32
+  mut next_kind : Int32
+  mut hold_kind : Int32
   mut hold_used : Bool
-  mut score : Int
-  mut lines : Int
-  mut level : Int
+  mut score : Int32
+  mut lines : Int32
+  mut level : Int32
   mut drop_timer : Float
   mut drop_interval : Float
   mut over : Bool
-  bag : Array[Int]
-  mut bag_pos : Int
+  bag : Array[Int32]
+  mut bag_pos : Int32
 }
 
 ///|

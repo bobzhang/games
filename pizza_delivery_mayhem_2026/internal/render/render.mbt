@@ -6,7 +6,7 @@ fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
 
 ///|
 /// Returns a random horizontal screen-shake offset when the shake timer is active.
-fn @types.Game::shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -16,7 +16,7 @@ fn @types.Game::shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical screen-shake offset when the shake timer is active.
-fn @types.Game::shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -52,7 +52,11 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the city grid background including road lanes, dashes, restaurant buildings, and the depot.
-fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_world_back(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0 + ox,
     @types.world_y0 + oy,
@@ -68,7 +72,7 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
     @raylib.Color::new(176, 206, 226, 206),
   )
   for i in 0..<=(@types.world_w / @types.road_step) {
-    let x : Int = @types.world_x0 + ox + i * @types.road_step
+    let x : Int32 = @types.world_x0 + ox + i * @types.road_step
     @raylib.draw_rectangle(
       x - 22,
       @types.world_y0 + oy,
@@ -87,7 +91,7 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
     }
   }
   for i in 0..<=(@types.world_h / @types.road_step) {
-    let y : Int = @types.world_y0 + oy + i * @types.road_step
+    let y : Int32 = @types.world_y0 + oy + i * @types.road_step
     @raylib.draw_rectangle(
       @types.world_x0 + ox,
       y - 22,
@@ -106,8 +110,8 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
     }
   }
   for i in 0..<3 {
-    let rx : Int = @types.restaurant_x(i).to_int() - 42 + ox
-    let ry : Int = @types.restaurant_y(i).to_int() - 36 + oy
+    let rx : Int32 = @types.restaurant_x(i).to_int() - 42 + ox
+    let ry : Int32 = @types.restaurant_y(i).to_int() - 36 + oy
     @raylib.draw_rectangle(rx, ry, 84, 72, @raylib.Color::new(168, 86, 64, 236))
     @raylib.draw_rectangle_lines(
       rx,
@@ -124,8 +128,8 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
       @raylib.Color::new(252, 240, 226, 242),
     )
   }
-  let depx : Int = @types.depot_x().to_int() + ox
-  let depy : Int = @types.depot_y().to_int() + oy
+  let depx : Int32 = @types.depot_x().to_int() + ox
+  let depy : Int32 = @types.depot_y().to_int() + oy
   @raylib.draw_rectangle(
     depx - @types.depot_w() / 2,
     depy - @types.depot_h() / 2,
@@ -147,7 +151,7 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
     24,
     @raylib.Color::new(236, 248, 255, 240),
   )
-  let city_flash : Int = (game.bg_wave(2.1) * 16.0).to_int()
+  let city_flash : Int32 = (game.bg_wave(2.1) * 16.0).to_int()
   @raylib.draw_circle(
     depx + 44,
     depy - 34,
@@ -168,12 +172,12 @@ fn traffic_color(kind : @types.TrafficKind) -> @raylib.Color {
 
 ///|
 /// Draws a traffic vehicle as a filled rectangle with an outline and a centre dot.
-fn draw_traffic(t : @types.Traffic, ox : Int, oy : Int) -> Unit {
+fn draw_traffic(t : @types.Traffic, ox : Int32, oy : Int32) -> Unit {
   if !t.active {
     return
   }
-  let x : Int = (t.x - t.w * 0.5).to_int() + ox
-  let y : Int = (t.y - t.h * 0.5).to_int() + oy
+  let x : Int32 = (t.x - t.w * 0.5).to_int() + ox
+  let y : Int32 = (t.y - t.h * 0.5).to_int() + oy
   let c0 : @raylib.Color = traffic_color(t.kind)
   @raylib.draw_rectangle(x, y, t.w.to_int(), t.h.to_int(), c0)
   @raylib.draw_rectangle_lines(
@@ -193,14 +197,19 @@ fn draw_traffic(t : @types.Traffic, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws an active delivery order as a line between source and destination, with pickup or drop-off circle and label.
-fn draw_order(o : @types.Order, highlight : Bool, ox : Int, oy : Int) -> Unit {
+fn draw_order(
+  o : @types.Order,
+  highlight : Bool,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   if !o.active {
     return
   }
-  let src_x : Int = o.x_from.to_int() + ox
-  let src_y : Int = o.y_from.to_int() + oy
-  let dst_x : Int = o.x_to.to_int() + ox
-  let dst_y : Int = o.y_to.to_int() + oy
+  let src_x : Int32 = o.x_from.to_int() + ox
+  let src_y : Int32 = o.y_from.to_int() + oy
+  let dst_x : Int32 = o.x_to.to_int() + ox
+  let dst_y : Int32 = o.y_to.to_int() + oy
   @raylib.draw_line(
     src_x,
     src_y,
@@ -259,12 +268,12 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 
 ///|
 /// Draws a pulsing pickup circle with a kind-specific icon (fuel canister, repair cross, or speed ring).
-fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
+fn draw_pickup(p : @types.Pickup, ox : Int32, oy : Int32) -> Unit {
   if !p.active {
     return
   }
-  let x : Int = p.x.to_int() + ox
-  let y : Int = p.y.to_int() + oy
+  let x : Int32 = p.x.to_int() + ox
+  let y : Int32 = p.y.to_int() + oy
   let pulse : Float = @math.sinf(p.phase * 2.4)
   let rr : Float = 15.0 + pulse * 1.6
   let c0 : @raylib.Color = pickup_color(p.kind)
@@ -312,12 +321,16 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active particles as circles with alpha that fades as their lifetime decreases.
-fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for particle in game.particles {
     if !particle.active {
       continue
     }
-    let a : Int = if particle.life > 0.7 {
+    let a : Int32 = if particle.life > 0.7 {
       236
     } else if particle.life > 0.4 {
       184
@@ -342,9 +355,9 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the player's delivery rider as a circle with a tilt-offset head, a scooter base, and optional boost flame or cargo box.
-fn @types.Game::draw_rider(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  let x : Int = game.rider_x.to_int() + ox
-  let y : Int = game.rider_y.to_int() + oy
+fn @types.Game::draw_rider(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
+  let x : Int32 = game.rider_x.to_int() + ox
+  let y : Int32 = game.rider_y.to_int() + oy
   let tilt : Float = @types.clampf(game.rider_vx * 0.0014, -0.45, 0.45)
   @raylib.draw_circle(
     x,
@@ -392,12 +405,12 @@ fn @types.Game::draw_rider(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the active hint as a pulsing ring and a line from the rider to the hint target.
-fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
   let pulse : Float = @math.sinf(game.ui_t * 10.0)
-  let alpha : Int = if game.hint_t > 1.2 {
+  let alpha : Int32 = if game.hint_t > 1.2 {
     238
   } else {
     100 + (game.hint_t * 110.0).to_int()
@@ -420,17 +433,17 @@ fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
 ///|
 /// Draws a filled progress bar clipped to ratio, with a background, fill colour, and border.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fill : @raylib.Color,
   back : @raylib.Color,
 ) -> Unit {
   @raylib.draw_rectangle(x, y, w, h, back)
   let rr : Float = @types.clampf(ratio, 0.0, 1.0)
-  let fw : Int = (Float::from_int(w) * rr).to_int()
+  let fw : Int32 = (Float::from_int(w) * rr).to_int()
   if fw > 0 {
     @raylib.draw_rectangle(x, y, fw, h, fill)
   }
@@ -623,7 +636,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 /// Draws a labelled touch button that highlights when the pointer is over its rectangle.
 fn @types.Game::draw_touch_button(
   game : @types.Game,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   c_idle : @raylib.Color,
   c_on : @raylib.Color,
@@ -656,8 +669,8 @@ fn @types.Game::draw_touch_button(
     rect.3,
     @raylib.Color::new(220, 236, 248, 190),
   )
-  let fs : Int = if rect.3 <= 96 { 24 } else { 30 }
-  let tw : Int = @draw.measure_text(label, fs)
+  let fs : Int32 = if rect.3 <= 96 { 24 } else { 30 }
+  let tw : Int32 = @draw.measure_text(label, fs)
   @draw.draw_text(
     label,
     rect.0 + (rect.2 - tw) / 2,
@@ -737,14 +750,14 @@ fn @types.Game::draw_msg(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
   }
-  let a : Int = if game.msg_t > 1.0 {
+  let a : Int32 = if game.msg_t > 1.0 {
     228
   } else {
     90 + (game.msg_t * 136.0).to_int()
   }
-  let w : Int = @draw.measure_text(game.msg, 28) + 38
-  let x : Int = @types.world_x0 + (@types.world_w - w) / 2
-  let y : Int = @types.world_y0 + 16
+  let w : Int32 = @draw.measure_text(game.msg, 28) + 38
+  let x : Int32 = @types.world_x0 + (@types.world_w - w) / 2
+  let y : Int32 = @types.world_y0 + 16
   @raylib.draw_rectangle(x, y, w, 46, @raylib.Color::new(22, 34, 52, a))
   @raylib.draw_rectangle_lines(
     x,
@@ -954,8 +967,8 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 /// Draws the complete frame for the current delivery game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_background()
-  let ox : Int = game.shake_x()
-  let oy : Int = game.shake_y()
+  let ox : Int32 = game.shake_x()
+  let oy : Int32 = game.shake_y()
   game.draw_world_back(ox, oy)
   for i in 0..<game.orders.length() {
     let highlight : Bool = game.cargo_idx == i

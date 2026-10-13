@@ -10,10 +10,10 @@ struct Player {
   hull_max : Float
   mut battery : Float
   battery_max : Float
-  mut onboard : Int
-  capacity : Int
-  mut medkits : Int
-  medkit_max : Int
+  mut onboard : Int32
+  capacity : Int32
+  mut medkits : Int32
+  medkit_max : Int32
   mut action_cd : Float
   mut ping_cd : Float
   mut ping_t : Float
@@ -27,8 +27,8 @@ struct Player {
 struct Hospital {
   x : Float
   y : Float
-  w : Int
-  h : Int
+  w : Int32
+  h : Int32
 }
 
 ///|
@@ -40,7 +40,7 @@ struct District {
   mut queue : Float
   mut stress : Float
   mut alarm_t : Float
-  id : Int
+  id : Int32
 }
 
 ///|
@@ -49,12 +49,12 @@ struct SurvivorGroup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut count : Int
+  mut count : Int32
   mut panic : Float
   mut drift_x : Float
   mut drift_y : Float
   mut flare_t : Float
-  mut id : Int
+  mut id : Int32
 }
 
 ///|
@@ -108,7 +108,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -175,10 +175,10 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -319,7 +319,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if part.active {
@@ -364,8 +364,8 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -409,10 +409,10 @@ fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
 /// Initialises all districts with preset positions and stress values within the world bounds.
 fn init_districts(
   districts : Array[District],
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
   clear_districts(districts)
 
@@ -495,8 +495,8 @@ fn init_obstacles(
 ) -> Unit {
   clear_obstacles(obstacles)
 
-  let mut filled : Int = 0
-  let target : Int = obstacles.length() - 12
+  let mut filled : Int32 = 0
+  let target : Int32 = obstacles.length() - 12
 
   while filled < target {
     let x : Float = randf(world_l + 24.0, world_r - 24.0)
@@ -556,15 +556,15 @@ fn spawn_group(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
-  serial : Int,
+  tier : Int32,
+  serial : Int32,
 ) -> Bool {
   for group in groups {
     if group.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       group.x = world_l + randf(26.0, 60.0)
       group.y = randf(world_t + 30.0, world_b - 30.0)
@@ -606,14 +606,14 @@ fn spawn_crack(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
+  tier : Int32,
 ) -> Bool {
   for crack in cracks {
     if crack.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       crack.x = world_l - 84.0
       crack.y = randf(world_t + 20.0, world_b - 20.0)
@@ -677,19 +677,19 @@ fn spawn_dust(
 
 ///|
 /// Returns the count of currently active survivor groups.
-fn active_groups(groups : Array[SurvivorGroup]) -> Int {
+fn active_groups(groups : Array[SurvivorGroup]) -> Int32 {
   @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
 /// Returns the count of currently active crack zones.
-fn active_cracks(cracks : Array[CrackZone]) -> Int {
+fn active_cracks(cracks : Array[CrackZone]) -> Int32 {
   @utils.count_by(cracks, fn(crack) { crack.active })
 }
 
 ///|
 /// Returns the count of active survivor groups whose panic level is at or above the critical threshold.
-fn active_critical(groups : Array[SurvivorGroup]) -> Int {
+fn active_critical(groups : Array[SurvivorGroup]) -> Int32 {
   @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
@@ -855,8 +855,8 @@ fn update_groups(
   world_b : Float,
   safe_x : Float,
   safe_y : Float,
-) -> (Int, Float) {
-  let mut lost : Int = 0
+) -> (Int32, Float) {
+  let mut lost : Int32 = 0
   let mut panic_sum : Float = 0.0
 
   for group in groups {
@@ -933,12 +933,12 @@ fn rescue_groups(
   player : Player,
   groups : Array[SurvivorGroup],
   parts : Array[Particle],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   if player.action_cd > 0.0 || player.onboard >= player.capacity {
     (0, 0)
   } else {
-    let mut rescued_people : Int = 0
-    let mut groups_hit : Int = 0
+    let mut rescued_people : Int32 = 0
+    let mut groups_hit : Int32 = 0
 
     for group in groups {
       if !group.active || group.count <= 0 {
@@ -950,12 +950,12 @@ fn rescue_groups(
         continue
       }
 
-      let cap_left : Int = player.capacity - player.onboard
+      let cap_left : Int32 = player.capacity - player.onboard
       if cap_left <= 0 {
         break
       }
 
-      let take : Int = group.count.min(cap_left.min(8))
+      let take : Int32 = group.count.min(cap_left.min(8))
       if take <= 0 {
         continue
       }
@@ -987,11 +987,11 @@ fn stabilize_cracks(
   player : Player,
   cracks : Array[CrackZone],
   parts : Array[Particle],
-) -> (Int, Float) {
+) -> (Int32, Float) {
   if player.action_cd > 0.0 || player.medkits <= 0 {
     (0, 0.0)
   } else {
-    let mut hits : Int = 0
+    let mut hits : Int32 = 0
     let mut reduction : Float = 0.0
 
     for crack in cracks {
@@ -1097,10 +1097,10 @@ fn nearest_hot_crack(
 ///|
 /// Draws the city background with a gradient, road grid, and animated lighting effects.
 fn draw_city(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
   t : Float,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -1111,15 +1111,15 @@ fn draw_city(
     @raylib.Color::new(18, 30, 28, 255),
   )
 
-  let mut y : Int = world_y
+  let mut y : Int32 = world_y
   while y < world_y + world_h {
     let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
     let wave : Float = @math.sinf(t * 0.8 + Float::from_int(y) * 0.02) * 0.5 +
       0.5
 
-    let r : Int = 26 + (p * 20.0).to_int() + (wave * 6.0).to_int()
-    let g : Int = 44 + (p * 26.0).to_int() + (wave * 8.0).to_int()
-    let b : Int = 32 + (p * 18.0).to_int() + (wave * 5.0).to_int()
+    let r : Int32 = 26 + (p * 20.0).to_int() + (wave * 6.0).to_int()
+    let g : Int32 = 44 + (p * 26.0).to_int() + (wave * 8.0).to_int()
+    let b : Int32 = 32 + (p * 18.0).to_int() + (wave * 5.0).to_int()
 
     @raylib.draw_rectangle(
       world_x,
@@ -1132,7 +1132,7 @@ fn draw_city(
   }
 
   // road grid
-  let mut gx : Int = world_x + 40
+  let mut gx : Int32 = world_x + 40
   while gx < world_x + world_w {
     @raylib.draw_line(
       gx,
@@ -1143,7 +1143,7 @@ fn draw_city(
     )
     gx = gx + 78
   }
-  let mut gy : Int = world_y + 36
+  let mut gy : Int32 = world_y + 36
   while gy < world_y + world_h {
     @raylib.draw_line(
       world_x + 4,
@@ -1373,8 +1373,8 @@ fn draw_cracks(cracks : Array[CrackZone], t : Float, art : GameArt) -> Unit {
     let r0 : Float = crack.radius * pulse
     let r1 : Float = crack.radius * (0.58 + pulse * 0.18)
 
-    let a0 : Int = 24 + (crack.intensity * 42.0).to_int()
-    let a1 : Int = 12 + (crack.intensity * 24.0).to_int()
+    let a0 : Int32 = 24 + (crack.intensity * 42.0).to_int()
+    let a1 : Int32 = 12 + (crack.intensity * 24.0).to_int()
 
     @raylib.draw_circle(
       crack.x.to_int(),
@@ -1431,8 +1431,8 @@ fn draw_dusts(dusts : Array[DustCloud], t : Float) -> Unit {
     let r0 : Float = dust.radius * pulse
     let r1 : Float = dust.radius * (0.62 + pulse * 0.14)
 
-    let a0 : Int = 20 + (dust.density * 56.0).to_int()
-    let a1 : Int = 10 + (dust.density * 30.0).to_int()
+    let a0 : Int32 = 20 + (dust.density * 56.0).to_int()
+    let a1 : Int32 = 10 + (dust.density * 30.0).to_int()
 
     @raylib.draw_circle(
       dust.x.to_int(),
@@ -1546,15 +1546,15 @@ fn draw_player(player : Player, t : Float, art : GameArt) -> Unit {
     convoy_tint,
   )
 
-  let shown_people : Int = player.onboard.min(6)
+  let shown_people : Int32 = player.onboard.min(6)
   for i in 0..<shown_people {
-    let px : Int = (x - 12.0 + Float::from_int(i % 3) * 8.0).to_int()
-    let py : Int = (y + 2.0 + Float::from_int(i / 3) * 5.0).to_int()
+    let px : Int32 = (x - 12.0 + Float::from_int(i % 3) * 8.0).to_int()
+    let py : Int32 = (y + 2.0 + Float::from_int(i / 3) * 5.0).to_int()
     @raylib.draw_rectangle(px, py, 6, 4, @raylib.Color::new(222, 176, 120, 236))
   }
 
   // medkit indicator
-  let kit_w : Int = (Float::from_int(22) *
+  let kit_w : Int32 = (Float::from_int(22) *
   (Float::from_int(player.medkits) / Float::from_int(player.medkit_max))).to_int()
   @raylib.draw_rectangle(
     (x - 11.0).to_int(),
@@ -1607,20 +1607,20 @@ fn draw_parts(parts : Array[Particle]) -> Unit {
 ///|
 /// Draws the on-screen touch controls including a d-pad and action buttons.
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mx : Float,
   my : Float,
   hold : Bool,
 ) -> Unit {
-  let pad_x : Int = 30
-  let pad_y : Int = sh - 198
+  let pad_x : Int32 = 30
+  let pad_y : Int32 = sh - 198
 
   fn dpad_box(
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     text : String,
     active : Bool,
   ) -> Unit {
@@ -1740,8 +1740,8 @@ fn draw_touch_controls(
 ///|
 /// Draws a labelled progress bar at the specified panel position with the given value and colour.
 fn draw_bar(
-  panel_x : Int,
-  y : Int,
+  panel_x : Int32,
+  y : Int32,
   label : String,
   value : Float,
   maxv : Float,
@@ -1767,7 +1767,7 @@ fn draw_bar(
   } else {
     clampf(value / maxv, 0.0, 1.0)
   }
-  let fw : Int = (Float::from_int(364) * p01).to_int()
+  let fw : Int32 = (Float::from_int(364) * p01).to_int()
 
   @raylib.draw_rectangle(panel_x + 16, y + 28, fw, 20, col)
   @raylib.draw_rectangle_lines(
@@ -1790,10 +1790,10 @@ fn draw_bar(
 ///|
 /// Draws a rectangular button with a label, highlighting it when hovered.
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   hover : Bool,
 ) -> Unit {
@@ -1850,8 +1850,8 @@ fn draw_centered_art(
 /// Draws title artwork full-bleed without distorting its source aspect ratio.
 fn draw_title_art(
   title_art : @raylib.Texture,
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   let source_w : Float = Float::from_int(title_art.width())
@@ -1887,8 +1887,8 @@ fn draw_title_art(
 ///|
 /// Initializes the window and runs the main aftershock rescue convoy game loop.
 fn main {
-  let sw : Int = 1680
-  let sh : Int = 940
+  let sw : Int32 = 1680
+  let sh : Int32 = 940
   @raylib.init_window(sw, sh, "raylib [game] aftershock rescue convoy 2026")
   @draw.cleanup()
   defer @raylib.close_window()
@@ -1898,11 +1898,11 @@ fn main {
 
   let art = load_game_art()
 
-  let world_x : Int = 20
-  let world_y : Int = 20
-  let panel_w : Int = 420
-  let world_w : Int = sw - panel_w - 40
-  let world_h : Int = sh - 40
+  let world_x : Int32 = 20
+  let world_y : Int32 = 20
+  let panel_w : Int32 = 420
+  let world_w : Int32 = sw - panel_w - 40
+  let world_h : Int32 = sh - 40
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
@@ -2021,15 +2021,15 @@ fn main {
     engine_t: randf(0.0, 20.0),
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 430.0
-  let mut rescued_total : Int = 0
-  let mut target_rescued : Int = 680
-  let mut score : Int = 0
-  let mut tier : Int = 1
+  let mut rescued_total : Int32 = 0
+  let mut target_rescued : Int32 = 680
+  let mut score : Int32 = 0
+  let mut tier : Int32 = 1
 
-  let mut lost_people : Int = 0
-  let mut lost_limit : Int = 170
+  let mut lost_people : Int32 = 0
+  let mut lost_limit : Int32 = 170
 
   let mut spawn_cd : Float = 1.2
   let mut crack_cd : Float = 4.8
@@ -2042,8 +2042,8 @@ fn main {
   let mut hospital_queue_max : Float = 280.0
   let mut unload_cd : Float = 0.0
 
-  let mut group_serial : Int = 1
-  let mut urgent_peak : Int = 0
+  let mut group_serial : Int32 = 1
+  let mut urgent_peak : Int32 = 0
   let mut stabilized_total : Float = 0.0
 
   fn reset_run() -> Unit {
@@ -2187,8 +2187,8 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyH)
 
       if hold {
-        let pad_x : Int = 30
-        let pad_y : Int = sh - 198
+        let pad_x : Int32 = 30
+        let pad_y : Int32 = sh - 198
 
         if inside_rect(mouse.x, mouse.y, pad_x + 84, pad_y, 76, 56) {
           move_u = true
@@ -2325,7 +2325,7 @@ fn main {
         }
 
         if player.onboard > 0 && unload_cd <= 0.0 {
-          let unload_n : Int = player.onboard.min(3)
+          let unload_n : Int32 = player.onboard.min(3)
           player.onboard = player.onboard - unload_n
           rescued_total = rescued_total + unload_n
           score = score + unload_n * 10
@@ -2505,7 +2505,7 @@ fn main {
 
       crack_cd = crack_cd - dt
       if crack_cd <= 0.0 {
-        let max_c : Int = 2 + tier / 2
+        let max_c : Int32 = 2 + tier / 2
         if active_cracks(cracks) < max_c {
           ignore(spawn_crack(cracks, world_l, world_t, world_r, world_b, tier))
         }
@@ -2515,7 +2515,7 @@ fn main {
         }
       }
 
-      let urgent_now : Int = active_critical(groups)
+      let urgent_now : Int32 = active_critical(groups)
       if urgent_now > urgent_peak {
         urgent_peak = urgent_now
       }
@@ -2592,7 +2592,7 @@ fn main {
 
     draw_parts(parts)
 
-    let panel_x : Int = world_x + world_w + 16
+    let panel_x : Int32 = world_x + world_w + 16
     @raylib.draw_rectangle(
       panel_x,
       world_y,
@@ -2897,8 +2897,8 @@ fn main {
     draw_touch_controls(sw, sh, mouse.x, mouse.y, hold)
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = world_x + world_w / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = world_x + world_w / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         18,

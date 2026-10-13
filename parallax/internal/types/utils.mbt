@@ -1,10 +1,10 @@
 ///|
-pub fn xyz_to_idx(x : Int, y : Int, z : Int, size : Int) -> Int {
+pub fn xyz_to_idx(x : Int32, y : Int32, z : Int32, size : Int32) -> Int32 {
   x + y * size + z * size * size
 }
 
 ///|
-pub fn idx_to_xyz(idx : Int, size : Int) -> Vec3i {
+pub fn idx_to_xyz(idx : Int32, size : Int32) -> Vec3i {
   let x = idx % size
   let y = idx / size % size
   let z = idx / (size * size)
@@ -12,7 +12,7 @@ pub fn idx_to_xyz(idx : Int, size : Int) -> Vec3i {
 }
 
 ///|
-pub fn new_voxel_grid(size : Int) -> VoxelGrid {
+pub fn new_voxel_grid(size : Int32) -> VoxelGrid {
   let count = size * size * size
   let cells : Array[Bool] = Array::make(count, false)
   { size, cells, }
@@ -28,16 +28,16 @@ pub fn copy_grid(g : VoxelGrid) -> VoxelGrid {
 }
 
 ///|
-pub fn new_silhouette(width : Int, height : Int) -> Silhouette {
+pub fn new_silhouette(width : Int32, height : Int32) -> Silhouette {
   let cells : Array[Bool] = Array::make(width * height, false)
   { width, height, cells, }
 }
 
 ///|
 pub fn silhouette_from_bits(
-  width : Int,
-  height : Int,
-  bits : Array[Int],
+  width : Int32,
+  height : Int32,
+  bits : Array[Int32],
 ) -> Silhouette {
   let cells : Array[Bool] = Array::make(width * height, false)
   for row = 0; row < height; row = row + 1 {
@@ -62,7 +62,7 @@ pub fn new_target_set(
 }
 
 ///|
-pub fn cell_size_for_grid(size : Int) -> Int {
+pub fn cell_size_for_grid(size : Int32) -> Int32 {
   if size <= 3 {
     cell_size_3
   } else if size <= 4 {
@@ -107,7 +107,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn tier_name(tier : Int) -> String {
+pub fn tier_name(tier : Int32) -> String {
   match tier {
     0 => "Shapes"
     1 => "Structures"
@@ -116,7 +116,7 @@ pub fn tier_name(tier : Int) -> String {
 }
 
 ///|
-pub fn tier_color(tier : Int) -> @raylib.Color {
+pub fn tier_color(tier : Int32) -> @raylib.Color {
   match tier {
     0 => color_tier_shapes
     1 => color_tier_structures
@@ -125,7 +125,7 @@ pub fn tier_color(tier : Int) -> @raylib.Color {
 }
 
 ///|
-pub fn level_index(tier : Int, level_in_tier : Int) -> Int {
+pub fn level_index(tier : Int32, level_in_tier : Int32) -> Int32 {
   tier * levels_per_tier + level_in_tier
 }
 
@@ -157,7 +157,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -166,7 +166,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {

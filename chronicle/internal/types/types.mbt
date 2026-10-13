@@ -1,11 +1,11 @@
 ///|
 pub(all) struct EventCard {
-  id : Int
+  id : Int32
   text : String
   actor : String
   action : String
   time_hint : String
-  fixed_slot : Int // -1 means not fixed
+  fixed_slot : Int32 // -1 means not fixed
 } derive(Eq, Debug)
 
 ///|
@@ -16,8 +16,8 @@ pub extend EventCard with Debug::{to_repr}
 
 ///|
 pub(all) struct CauseLink {
-  from_id : Int
-  to_id : Int
+  from_id : Int32
+  to_id : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -29,8 +29,8 @@ pub extend CauseLink with Debug::{to_repr}
 ///|
 pub(all) struct Clue {
   kind : ClueKind
-  card_a : Int
-  card_b : Int
+  card_a : Int32
+  card_b : Int32
   text : String
 } derive(Eq, Debug)
 
@@ -43,10 +43,10 @@ pub extend Clue with Debug::{to_repr}
 ///|
 pub(all) struct Case {
   cards : Array[EventCard]
-  solution_order : Array[Int]
+  solution_order : Array[Int32]
   solution_links : Array[CauseLink]
   clues : Array[Clue]
-  anchors : Array[Int] // card ids with fixed positions
+  anchors : Array[Int32] // card ids with fixed positions
   tier : Tier
   title : String
   theme : String
@@ -60,9 +60,9 @@ pub(all) struct CaseScore {
   mut order_correct : Bool
   mut links_correct : Bool
   mut no_rewinds : Bool
-  mut stars : Int
-  mut order_count : Int
-  mut link_count : Int
+  mut stars : Int32
+  mut order_count : Int32
+  mut link_count : Int32
 } derive(Debug)
 
 ///|
@@ -73,23 +73,23 @@ pub(all) struct Game {
   mut screen : Screen
   mut play_state : PlayState
   mut current_tier : Tier
-  mut current_case_index : Int
-  mut timeline_slots : Array[Int] // card ids in slots, -1 = empty
+  mut current_case_index : Int32
+  mut timeline_slots : Array[Int32] // card ids in slots, -1 = empty
   mut placed_links : Array[CauseLink]
-  mut rewinds : Int
-  mut selected_card : Int // -1 = none
-  mut link_from : Int // -1 = none, card id for linking
+  mut rewinds : Int32
+  mut selected_card : Int32 // -1 = none
+  mut link_from : Int32 // -1 = none, card id for linking
   mut dragging : Bool
-  mut drag_card_id : Int // card id being dragged
+  mut drag_card_id : Int32 // card id being dragged
   mut drag_x : Float
   mut drag_y : Float
-  mut hover_slot : Int // -1 = none
-  mut hover_card : Int // -1 = none
+  mut hover_slot : Int32 // -1 = none
+  mut hover_card : Int32 // -1 = none
   mut scroll_offset : Float
   mut anim_timer : Float
   mut result_score : CaseScore
   mut case_scores : Array[Array[CaseScore]] // per tier, per case
-  mut frame_count : Int
+  mut frame_count : Int32
   mut message : String
   mut message_timer : Float
   mut title_pulse : Float

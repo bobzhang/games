@@ -247,7 +247,7 @@ pub fn get_cannon_arc(cannon_type : Cannon) -> Float {
 
 ///|
 /// Returns hull damage multiplier for an ammo type.
-pub fn get_ammo_hull_mult(ammo_type : Int) -> Float {
+pub fn get_ammo_hull_mult(ammo_type : Int32) -> Float {
   if ammo_type == ammo_round_shot {
     round_shot_hull_mult
   } else if ammo_type == ammo_chain_shot {
@@ -261,7 +261,7 @@ pub fn get_ammo_hull_mult(ammo_type : Int) -> Float {
 
 ///|
 /// Returns mast damage multiplier for an ammo type.
-pub fn get_ammo_mast_mult(ammo_type : Int) -> Float {
+pub fn get_ammo_mast_mult(ammo_type : Int32) -> Float {
   if ammo_type == ammo_round_shot {
     round_shot_mast_mult
   } else if ammo_type == ammo_chain_shot {
@@ -275,7 +275,7 @@ pub fn get_ammo_mast_mult(ammo_type : Int) -> Float {
 
 ///|
 /// Returns crew damage multiplier for an ammo type.
-pub fn get_ammo_crew_mult(ammo_type : Int) -> Float {
+pub fn get_ammo_crew_mult(ammo_type : Int32) -> Float {
   if ammo_type == ammo_round_shot {
     round_shot_crew_mult
   } else if ammo_type == ammo_chain_shot {
@@ -351,7 +351,7 @@ pub fn get_class_turn_rate(ship_class : ShipClass) -> Float {
 
 ///|
 /// Returns broadside cannon count for a ship class.
-pub fn get_class_cannon_count(ship_class : ShipClass) -> Int {
+pub fn get_class_cannon_count(ship_class : ShipClass) -> Int32 {
   match ship_class {
     Sloop => sloop_cannon_count
     Brigantine => brigantine_cannon_count
@@ -363,7 +363,7 @@ pub fn get_class_cannon_count(ship_class : ShipClass) -> Int {
 
 ///|
 /// Returns maximum crew capacity for a ship class.
-pub fn get_class_max_crew(ship_class : ShipClass) -> Int {
+pub fn get_class_max_crew(ship_class : ShipClass) -> Int32 {
   match ship_class {
     Sloop => sloop_max_crew
     Brigantine => brigantine_max_crew
@@ -413,7 +413,7 @@ pub fn get_class_name(ship_class : ShipClass) -> String {
 
 ///|
 /// Advances RNG state and returns the next pseudo-random integer.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -427,7 +427,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns random integer in inclusive range `[low, high]`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -446,37 +446,37 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 ///|
 /// Returns the first inactive enemy slot index, or `-1` when full.
-pub fn alloc_enemy(game : Game) -> Int {
+pub fn alloc_enemy(game : Game) -> Int32 {
   @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive cannonball slot index, or `-1` when full.
-pub fn alloc_cannonball(game : Game) -> Int {
+pub fn alloc_cannonball(game : Game) -> Int32 {
   @utils.first_index_by(game.cannonballs, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive particle slot index, or `-1` when full.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive wake slot index, or `-1` when full.
-pub fn alloc_wake(game : Game) -> Int {
+pub fn alloc_wake(game : Game) -> Int32 {
   @utils.first_index_by(game.wakes, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive debris slot index, or `-1` when full.
-pub fn alloc_debris(game : Game) -> Int {
+pub fn alloc_debris(game : Game) -> Int32 {
   @utils.first_index_by(game.debris_pool, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns a free battle-message slot, replacing the oldest if necessary.
-pub fn alloc_message(game : Game) -> Int {
+pub fn alloc_message(game : Game) -> Int32 {
   let best = @utils.first_index_by(game.messages, fn(slot) { !slot.active })
   if best >= 0 {
     return best
@@ -498,9 +498,9 @@ pub fn alloc_message(game : Game) -> Int {
 pub fn add_battle_message(
   game : Game,
   text : String,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let idx = alloc_message(game)
   let msg = game.messages[idx]
@@ -535,10 +535,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -571,7 +571,7 @@ pub fn spawn_smoke(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -604,7 +604,7 @@ pub fn spawn_fire(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -636,7 +636,7 @@ pub fn spawn_water_splash(
   game : Game,
   wx : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -668,7 +668,7 @@ pub fn spawn_debris_cluster(
   game : Game,
   wx : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_debris(game)
@@ -773,8 +773,8 @@ pub fn check_island_collision(
 ///|
 /// Resolves boarding success using crew strength and randomness.
 pub fn resolve_boarding(
-  player_crew : Int,
-  enemy_crew : Int,
+  player_crew : Int32,
+  enemy_crew : Int32,
   game : Game,
 ) -> Bool {
   // Random factor for some variance
@@ -790,7 +790,7 @@ pub fn resolve_boarding(
 
 ///|
 /// Counts active convoy ships.
-pub fn count_convoy_alive(game : Game) -> Int {
+pub fn count_convoy_alive(game : Game) -> Int32 {
   let mut count = 0
   for convoy_ship in game.convoy_ships {
     if convoy_ship.active {

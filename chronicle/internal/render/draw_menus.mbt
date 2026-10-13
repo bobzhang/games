@@ -51,7 +51,7 @@ fn draw_title(game : @types.Game) -> Unit {
   // Prompt
   let prompt = "Press ENTER to begin"
   let pw = @draw.measure_text(prompt, 22)
-  let prompt_alpha : Int = 140 +
+  let prompt_alpha : Int32 = 140 +
     Float::to_int(
       Float::from_double(@math.sin(game.title_pulse.to_double() * 3.0)) * 115.0,
     )
@@ -235,7 +235,7 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clamp_color(v : Int) -> Int {
+fn clamp_color(v : Int32) -> Int32 {
   if v < 0 {
     0
   } else if v > 255 {
@@ -246,7 +246,7 @@ fn clamp_color(v : Int) -> Int {
 }
 
 ///|
-fn draw_star(x : Int, y : Int, size : Float, color : @raylib.Color) -> Unit {
+fn draw_star(x : Int32, y : Int32, size : Float, color : @raylib.Color) -> Unit {
   // Simple star: draw filled circle + small accent
   let cx = Float::from_int(x) + size
   let cy = Float::from_int(y) + size

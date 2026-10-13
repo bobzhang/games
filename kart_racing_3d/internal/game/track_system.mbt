@@ -2,7 +2,7 @@
 
 ///|
 /// Loads a track by cup and race index, resetting all entity pools and spawning karts and powerups.
-pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
+pub fn load_track(game : @types.Game, cup : Int32, race : Int32) -> Unit {
   let wp_data = @levels.get_track_waypoints(cup, race)
   game.waypoint_count = wp_data.length().clamp(min=0, max=@types.max_waypoints)
   for i in 0..<game.waypoint_count {
@@ -179,7 +179,7 @@ fn @types.Game::spawn_track_powerups(game : @types.Game) -> Unit {
 
 ///|
 /// Updates the waypoint index, segment progress, and lap count for the specified kart.
-pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
+pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int32) -> Unit {
   let kart = game.karts[kart_idx]
   if !kart.active || kart.finished {
     return
@@ -261,7 +261,7 @@ pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
 /// Updates race position rankings for all karts based on progress and finish times.
 pub fn update_positions(game : @types.Game) -> Unit {
   // Simple bubble sort by total_progress (descending = better position)
-  let positions : Array[Int] = []
+  let positions : Array[Int32] = []
   for i in 0..<@types.max_karts {
     positions.push(i)
   }

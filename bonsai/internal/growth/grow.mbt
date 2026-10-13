@@ -96,7 +96,7 @@ pub fn fork_right(dir : @types.GrowthDir) -> @types.GrowthDir {
 
 ///|
 /// Cherry species has curved growth: directions rotate slightly
-pub fn cherry_curve(dir : @types.GrowthDir, age : Int) -> @types.GrowthDir {
+pub fn cherry_curve(dir : @types.GrowthDir, age : Int32) -> @types.GrowthDir {
   if age % 4 == 0 {
     // Slight curve
     match dir {
@@ -215,7 +215,7 @@ pub fn generate_leaves(g : @types.TreeGrid) -> Unit {
 /// Prune: remove the cell at (x,y) and everything "above" it (all cells
 /// reachable by following growth directions from this cell).
 /// Returns the number of cells pruned.
-pub fn prune_at(g : @types.TreeGrid, x : Int, y : Int) -> Int {
+pub fn prune_at(g : @types.TreeGrid, x : Int32, y : Int32) -> Int32 {
   let cell = @types.grid_get(g, x, y)
   if !@types.is_solid(cell.kind) {
     return 0
@@ -352,9 +352,9 @@ pub fn check_zones(
 pub fn calculate_stars(
   g : @types.TreeGrid,
   zones : Array[@types.Zone],
-  total_prunes : Int,
-  par : Int,
-) -> Int {
+  total_prunes : Int32,
+  par : Int32,
+) -> Int32 {
   let (req_ok, forb_ok, tip_ok) = check_zones(g, zones)
   if req_ok && forb_ok {
     if tip_ok {

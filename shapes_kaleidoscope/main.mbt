@@ -5,7 +5,7 @@ struct Line {
 }
 
 ///|
-let max_draw_lines : Int = 8192
+let max_draw_lines : Int32 = 8192
 
 ///|
 fn vec2_rotate(v : @raylib.Vector2, angle : Float) -> @raylib.Vector2 {

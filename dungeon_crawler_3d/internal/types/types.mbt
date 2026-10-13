@@ -7,26 +7,26 @@ pub(all) struct Enemy {
   mut kind : EnemyKind
   mut x : Float
   mut z : Float
-  mut hp : Int
-  mut max_hp : Int
-  mut atk : Int
-  mut def : Int
+  mut hp : Int32
+  mut max_hp : Int32
+  mut atk : Int32
+  mut def : Int32
   mut attack_timer : Float
   mut move_timer : Float
   mut alerted : Bool
   mut hit_flash : Float
-  mut ai_state : Int
+  mut ai_state : Int32
   mut patrol_x : Float
   mut patrol_z : Float
   mut speed_mult : Float
   mut ability_cooldown : Float
   mut stun_timer : Float
   mut slow_timer : Float
-  mut xp_value : Int
+  mut xp_value : Int32
   mut facing_angle : Float
   mut telegraph_timer : Float
-  mut telegraph_kind : Int
-  mut boss_phase : Int
+  mut telegraph_kind : Int32
+  mut boss_phase : Int32
   mut strafe_dir : Float
   mut aura_timer : Float
 }
@@ -75,7 +75,7 @@ pub(all) struct Projectile {
   mut z : Float
   mut vx : Float
   mut vz : Float
-  mut damage : Int
+  mut damage : Int32
   mut lifetime : Float
   mut from_enemy : Bool
   mut aoe_radius : Float
@@ -114,9 +114,9 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
 }
 
@@ -146,12 +146,12 @@ pub fn Particle::inactive() -> Particle {
 /// Ground loot entity with pickup metadata and bobbing animation state.
 pub(all) struct Loot {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut z : Float
   mut bob_phase : Float
-  mut rarity : Int
-  mut value : Int
+  mut rarity : Int32
+  mut value : Int32
   mut affix : WeaponAffix
   mut weapon_type : WeaponKind
 }
@@ -177,11 +177,11 @@ pub fn Loot::inactive() -> Loot {
 ///|
 /// Inventory entry containing item identity, rarity, and stat bonuses.
 pub(all) struct InvItem {
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
-  mut rarity : Int
-  mut stat_bonus : Int
-  mut name_idx : Int
+  mut rarity : Int32
+  mut stat_bonus : Int32
+  mut name_idx : Int32
 }
 
 ///|
@@ -197,8 +197,8 @@ pub fn InvItem::empty() -> InvItem {
 pub(all) struct Trap {
   mut active : Bool
   mut kind : TrapKind
-  mut gx : Int
-  mut gz : Int
+  mut gx : Int32
+  mut gz : Int32
   mut armed : Bool
   mut cooldown : Float
   mut triggered : Bool
@@ -226,8 +226,8 @@ pub fn Trap::inactive() -> Trap {
 /// Torch entity used to drive dungeon lighting and flicker effects.
 pub(all) struct Torch {
   mut active : Bool
-  mut gx : Int
-  mut gz : Int
+  mut gx : Int32
+  mut gz : Int32
   mut flicker_phase : Float
 }
 
@@ -244,9 +244,9 @@ pub fn Torch::inactive() -> Torch {
 pub(all) struct MessageEntry {
   mut text : String
   mut timer : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -261,10 +261,10 @@ pub fn MessageEntry::empty() -> MessageEntry {
 /// Shop entry containing item type, price, and bonus metadata.
 pub(all) struct ShopItem {
   mut active : Bool
-  mut kind : Int
-  mut price : Int
-  mut name_idx : Int
-  mut stat_bonus : Int
+  mut kind : Int32
+  mut price : Int32
+  mut name_idx : Int32
+  mut stat_bonus : Int32
 }
 
 ///|
@@ -278,30 +278,30 @@ pub fn ShopItem::empty() -> ShopItem {
 ///|
 /// Axis-aligned dungeon room rectangle used during generation and exploration.
 pub(all) struct Room {
-  mut x : Int
-  mut y : Int
-  mut w : Int
-  mut h : Int
-  mut kind : Int
+  mut x : Int32
+  mut y : Int32
+  mut w : Int32
+  mut h : Int32
+  mut kind : Int32
   mut explored : Bool
   mut enemies_cleared : Bool
 }
 
 ///|
 /// Constructs a room with bounds and default room-state flags.
-pub fn Room::Room(x : Int, y : Int, w : Int, h : Int) -> Room {
+pub fn Room::Room(x : Int32, y : Int32, w : Int32, h : Int32) -> Room {
   { x, y, w, h, kind: 0, explored: false, enemies_cleared: false, }
 }
 
 ///|
 /// Returns the room center X coordinate in grid space.
-pub fn Room::center_x(self : Room) -> Int {
+pub fn Room::center_x(self : Room) -> Int32 {
   self.x + self.w / 2
 }
 
 ///|
 /// Returns the room center Y coordinate in grid space.
-pub fn Room::center_y(self : Room) -> Int {
+pub fn Room::center_y(self : Room) -> Int32 {
   self.y + self.h / 2
 }
 
@@ -309,23 +309,23 @@ pub fn Room::center_y(self : Room) -> Int {
 
 ///|
 /// Room kind id for standard combat/exploration rooms.
-pub let room_normal : Int = 0
+pub let room_normal : Int32 = 0
 
 ///|
 /// Room kind id for treasure-focused rooms.
-pub let room_treasure : Int = 1
+pub let room_treasure : Int32 = 1
 
 ///|
 /// Room kind id for boss encounter rooms.
-pub let room_boss : Int = 2
+pub let room_boss : Int32 = 2
 
 ///|
 /// Room kind id for merchant/shop rooms.
-pub let room_shop : Int = 3
+pub let room_shop : Int32 = 3
 
 ///|
 /// Room kind id for shrine/boon rooms.
-pub let room_shrine : Int = 4
+pub let room_shrine : Int32 = 4
 
 // Floor info
 
@@ -333,8 +333,8 @@ pub let room_shrine : Int = 4
 /// Per-floor progress summary stored across dungeon runs.
 pub(all) struct FloorInfo {
   mut cleared : Bool
-  mut enemies_killed : Int
-  mut enemies_total : Int
+  mut enemies_killed : Int32
+  mut enemies_total : Int32
 }
 
 ///|
@@ -363,9 +363,9 @@ pub fn SpellSlot::empty() -> SpellSlot {
 ///|
 /// Active timed buff with effect kind, value, and remaining duration.
 pub(all) struct Buff {
-  mut kind : Int
+  mut kind : Int32
   mut timer : Float
-  mut value : Int
+  mut value : Int32
   mut active : Bool
 }
 
@@ -379,19 +379,19 @@ pub fn Buff::inactive() -> Buff {
 
 ///|
 /// Buff kind id for movement speed effects.
-pub let buff_speed : Int = 0
+pub let buff_speed : Int32 = 0
 
 ///|
 /// Buff kind id for attack-strength effects.
-pub let buff_strength : Int = 1
+pub let buff_strength : Int32 = 1
 
 ///|
 /// Buff kind id for defensive shield effects.
-pub let buff_shield : Int = 2
+pub let buff_shield : Int32 = 2
 
 ///|
 /// Maximum number of simultaneously tracked buffs.
-pub let max_buffs : Int = 4
+pub let max_buffs : Int32 = 4
 
 // Main Game struct
 
@@ -406,27 +406,27 @@ pub(all) struct Game {
   mut player_x : Float
   mut player_z : Float
   mut player_yaw : Float
-  mut player_hp : Int
-  mut player_max_hp : Int
-  mut player_mana : Int
-  mut player_max_mana : Int
-  mut player_atk : Int
-  mut player_def : Int
-  mut player_str : Int
-  mut player_dex : Int
-  mut player_int_stat : Int
-  mut player_level : Int
-  mut player_xp : Int
-  mut player_xp_next : Int
+  mut player_hp : Int32
+  mut player_max_hp : Int32
+  mut player_mana : Int32
+  mut player_max_mana : Int32
+  mut player_atk : Int32
+  mut player_def : Int32
+  mut player_str : Int32
+  mut player_dex : Int32
+  mut player_int_stat : Int32
+  mut player_level : Int32
+  mut player_xp : Int32
+  mut player_xp_next : Int32
   mut player_hit_flash : Float
-  mut player_gold : Int
-  mut player_keys : Int
-  mut player_boss_keys : Int
+  mut player_gold : Int32
+  mut player_keys : Int32
+  mut player_boss_keys : Int32
   mut player_weapon : WeaponKind
-  mut player_armor : Int
+  mut player_armor : Int32
   mut player_class : ShipClass
-  mut player_kills : Int
-  mut player_total_gold : Int
+  mut player_kills : Int32
+  mut player_total_gold : Int32
 
   // Sword swing
   mut swing_timer : Float
@@ -438,14 +438,14 @@ pub(all) struct Game {
   mut camera_pitch : Float
 
   // Dungeon
-  mut current_floor : Int
-  tiles : Array[Int]
+  mut current_floor : Int32
+  tiles : Array[Int32]
   explored : Array[Bool]
   rooms : Array[Room]
-  mut room_count : Int
-  mut stairs_x : Int
-  mut stairs_z : Int
-  mut floor_theme : Int
+  mut room_count : Int32
+  mut stairs_x : Int32
+  mut stairs_z : Int32
+  mut floor_theme : Int32
 
   // Enemies
   enemies : Array[Enemy]
@@ -470,11 +470,11 @@ pub(all) struct Game {
 
   // Inventory
   inventory : Array[InvItem]
-  mut inv_cursor : Int
+  mut inv_cursor : Int32
 
   // Spells
   spells : Array[SpellSlot]
-  mut selected_spell : Int
+  mut selected_spell : Int32
   mut spell_cooldown : Float
 
   // Buffs
@@ -482,12 +482,12 @@ pub(all) struct Game {
 
   // Shop
   shop_items : Array[ShopItem]
-  mut shop_cursor : Int
+  mut shop_cursor : Int32
 
   // Shrine
-  mut shrine_cursor : Int
+  mut shrine_cursor : Int32
   mut shrine_used : Bool
-  shrine_options : Array[Int]
+  shrine_options : Array[Int32]
 
   // Message log
   messages : Array[MessageEntry]
@@ -497,17 +497,17 @@ pub(all) struct Game {
   mut boss_intro_name : String
 
   // UI
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
   mut message_timer : Float
   mut message_text : String
   mut damage_flash : Float
   mut level_up_timer : Float
-  mut class_select_cursor : Int
+  mut class_select_cursor : Int32
 
   // Stats tracking
-  mut floors_cleared : Int
-  mut total_enemies_killed : Int
+  mut floors_cleared : Int32
+  mut total_enemies_killed : Int32
 
   // Sprint
   mut sprinting : Bool
@@ -517,8 +517,8 @@ pub(all) struct Game {
   mut poison_remaining : Float
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // Screen shake
   mut shake_timer : Float
@@ -531,13 +531,13 @@ pub(all) struct Game {
   damage_numbers : Array[DamageNumber]
 
   // Equipment slots
-  mut equip_weapon_rarity : Int
-  mut equip_weapon_bonus : Int
-  mut equip_armor_rarity : Int
-  mut equip_armor_bonus : Int
-  mut equip_ring_kind : Int
-  mut equip_ring_rarity : Int
-  mut equip_ring_bonus : Int
+  mut equip_weapon_rarity : Int32
+  mut equip_weapon_bonus : Int32
+  mut equip_armor_rarity : Int32
+  mut equip_armor_bonus : Int32
+  mut equip_ring_kind : Int32
+  mut equip_ring_rarity : Int32
+  mut equip_ring_bonus : Int32
 
   // Mana regen accumulator (fractional mana between frames)
   mut mana_regen_accum : Float
@@ -549,20 +549,20 @@ pub(all) struct Game {
   mut weapon_affix : WeaponAffix
 
   // Pending equipment popup data
-  mut pending_equip_kind : Int
-  mut pending_equip_bonus : Int
-  mut pending_equip_rarity : Int
+  mut pending_equip_kind : Int32
+  mut pending_equip_bonus : Int32
+  mut pending_equip_rarity : Int32
   mut pending_equip_affix : WeaponAffix
   mut pending_equip_weapon_type : WeaponKind
-  mut pending_equip_ring_kind : Int
+  mut pending_equip_ring_kind : Int32
 
   // Level-up card choices (indices into card type table)
-  levelup_cards : Array[Int]
-  mut levelup_card_cursor : Int
+  levelup_cards : Array[Int32]
+  mut levelup_card_cursor : Int32
 
   // Shrine boon descriptions (dynamic per build)
   shrine_boon_names : Array[String]
-  shrine_boon_ids : Array[Int]
+  shrine_boon_ids : Array[Int32]
 
   // Fire DOT tracking on enemies
   enemy_fire_dot : Array[Float]
@@ -575,11 +575,11 @@ pub(all) struct DamageNumber {
   mut x : Float
   mut y : Float
   mut z : Float
-  mut value : Int
+  mut value : Int32
   mut timer : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut is_crit : Bool
 }
 
@@ -602,7 +602,7 @@ pub fn DamageNumber::inactive() -> DamageNumber {
 
 ///|
 /// Maximum number of simultaneous floating damage numbers.
-pub let max_damage_numbers : Int = 32
+pub let max_damage_numbers : Int32 = 32
 
 ///|
 /// Constructs a fresh game state with initialized pools and class-select defaults.
@@ -652,7 +652,7 @@ pub fn Game::Game() -> Game {
     torches.push(Torch::inactive())
     ignore(i)
   }
-  let shrine_options : Array[Int] = [0, 1, 2]
+  let shrine_options : Array[Int32] = [0, 1, 2]
   {
     state: StateClassSelect,
     prev_state: StateMenu,

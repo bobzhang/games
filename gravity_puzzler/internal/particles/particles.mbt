@@ -91,7 +91,7 @@ pub fn spawn_portal_swirl(
   game : @types.Game,
   x : Float,
   y : Float,
-  portal_id : Int,
+  portal_id : Int32,
 ) -> Unit {
   let (r, g, b) = match portal_id {
     1 => (200, 100, 255)

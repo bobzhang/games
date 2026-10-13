@@ -1,23 +1,23 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 let ground_y : Float = 700.0
 
 ///|
-let net_x : Int = 640
+let net_x : Int32 = 640
 
 ///|
-let net_h : Int = 172
+let net_h : Int32 = 172
 
 ///|
-let set_points : Int = 11
+let set_points : Int32 = 11
 
 ///|
-let max_particles : Int = 460
+let max_particles : Int32 = 460
 
 ///|
 struct Athlete {
@@ -31,8 +31,8 @@ struct Athlete {
   mut jump_cd : Float
   mut dash_t : Float
   mut flash_t : Float
-  mut score : Int
-  mut sets : Int
+  mut score : Int32
+  mut sets : Int32
 }
 
 ///|
@@ -44,7 +44,7 @@ struct Ball {
   r : Float
   mut spin : Float
   mut active : Bool
-  mut serve_owner : Int
+  mut serve_owner : Int32
 }
 
 ///|
@@ -54,7 +54,7 @@ struct Particle {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -88,10 +88,10 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -118,7 +118,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for ps_elem in ps {
@@ -145,9 +145,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_particle(ps, x, y, speed, kind)
@@ -173,7 +173,7 @@ fn setup_rally(
   player : Athlete,
   bot : Athlete,
   ball : Ball,
-  serve_owner : Int,
+  serve_owner : Int32,
 ) -> Unit {
   reset_athlete(player, 284.0)
   reset_athlete(bot, 996.0)
@@ -325,7 +325,7 @@ fn update_athlete_movement(
 fn attempt_hit_ball(
   a : Athlete,
   ball : Ball,
-  owner : Int,
+  owner : Int32,
   ps : Array[Particle],
 ) -> Bool {
   if a.hit_cd > 0.0 {
@@ -377,7 +377,7 @@ fn attempt_hit_ball(
 }
 
 ///|
-fn spawn_wind(wind : Wind, set_no : Int) -> Unit {
+fn spawn_wind(wind : Wind, set_no : Int32) -> Unit {
   wind.dir = if @raylib.get_random_value(0, 1) == 0 { -1.0 } else { 1.0 }
   wind.strength = Float::from_int(
     @raylib.get_random_value(36 + set_no * 8, 86 + set_no * 11),
@@ -389,7 +389,7 @@ fn spawn_wind(wind : Wind, set_no : Int) -> Unit {
 }
 
 ///|
-fn update_wind(wind : Wind, dt : Float, set_no : Int) -> Unit {
+fn update_wind(wind : Wind, dt : Float, set_no : Int32) -> Unit {
   if wind.ttl > 0.0 {
     wind.ttl = wind.ttl - dt
     if wind.ttl < 0.0 {
@@ -404,13 +404,13 @@ fn update_wind(wind : Wind, dt : Float, set_no : Int) -> Unit {
 }
 
 ///|
-fn set_no(player : Athlete, bot : Athlete) -> Int {
+fn set_no(player : Athlete, bot : Athlete) -> Int32 {
   player.sets + bot.sets + 1
 }
 
 ///|
 fn resolve_point(
-  winner : Int,
+  winner : Int32,
   player : Athlete,
   bot : Athlete,
   ball : Ball,

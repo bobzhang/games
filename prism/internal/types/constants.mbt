@@ -1,33 +1,33 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 /// Hex cell outer radius (center to vertex).
-pub let hex_size : Int = 38
+pub let hex_size : Int32 = 38
 
 ///|
-pub let grid_radius : Int = 3
+pub let grid_radius : Int32 = 3
 
 ///|
-pub let grid_offset_x : Int = 420
+pub let grid_offset_x : Int32 = 420
 
 ///|
-pub let grid_offset_y : Int = 360
+pub let grid_offset_y : Int32 = 360
 
 ///|
-pub let palette_x : Int = 900
+pub let palette_x : Int32 = 900
 
 ///|
-pub let palette_y : Int = 80
+pub let palette_y : Int32 = 80
 
 ///|
-pub let palette_item_h : Int = 50
+pub let palette_item_h : Int32 = 50
 
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(12, 8, 24, 255)

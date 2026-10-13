@@ -1,26 +1,26 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let symbol_count : Int = 20
+pub let symbol_count : Int32 = 20
 
 ///|
-pub let total_tablets : Int = 20
+pub let total_tablets : Int32 = 20
 
 ///|
-pub let tier1_count : Int = 7
+pub let tier1_count : Int32 = 7
 
 ///|
-pub let tier2_count : Int = 7
+pub let tier2_count : Int32 = 7
 
 ///|
-pub let tier3_count : Int = 6
+pub let tier3_count : Int32 = 6
 
 ///|
 pub let pi : Float = 3.14159265
@@ -103,57 +103,57 @@ pub let color_sym_accent : @raylib.Color = @raylib.Color::new(160, 120, 40, 255)
 // Layout constants
 
 ///|
-pub let tablet_x : Int = 40
+pub let tablet_x : Int32 = 40
 
 ///|
-pub let tablet_y : Int = 60
+pub let tablet_y : Int32 = 60
 
 ///|
-pub let tablet_width : Int = 800
+pub let tablet_width : Int32 = 800
 
 ///|
-pub let tablet_height : Int = 500
+pub let tablet_height : Int32 = 500
 
 ///|
 pub let symbol_size : Float = 36.0
 
 ///|
-pub let symbol_spacing : Int = 56
+pub let symbol_spacing : Int32 = 56
 
 ///|
-pub let word_gap : Int = 30
+pub let word_gap : Int32 = 30
 
 ///|
-pub let palette_x : Int = 870
+pub let palette_x : Int32 = 870
 
 ///|
-pub let palette_y : Int = 60
+pub let palette_y : Int32 = 60
 
 ///|
-pub let palette_btn_size : Int = 44
+pub let palette_btn_size : Int32 = 44
 
 ///|
-pub let palette_cols : Int = 5
+pub let palette_cols : Int32 = 5
 
 ///|
-pub let mapping_table_y : Int = 340
+pub let mapping_table_y : Int32 = 340
 
 // Inscription layout
 
 ///|
-pub let inscription_margin_x : Int = 30
+pub let inscription_margin_x : Int32 = 30
 
 ///|
-pub let inscription_margin_y : Int = 40
+pub let inscription_margin_y : Int32 = 40
 
 ///|
-pub let inscription_max_margin : Int = 60
+pub let inscription_max_margin : Int32 = 60
 
 ///|
-pub let inscription_line_height : Int = 90
+pub let inscription_line_height : Int32 = 90
 
 ///|
-pub let palette_btn_gap : Int = 6
+pub let palette_btn_gap : Int32 = 6
 
 ///|
-pub let palette_label_offset_y : Int = 28
+pub let palette_label_offset_y : Int32 = 28

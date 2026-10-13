@@ -28,15 +28,15 @@ pub extend Direction with Eq::{not_equal, equal}
 /// Polyline result for a valid tile link path (up to 4 points).
 pub(all) struct LinkPath {
   found : Bool
-  points : Int
-  x0 : Int
-  y0 : Int
-  x1 : Int
-  y1 : Int
-  x2 : Int
-  y2 : Int
-  x3 : Int
-  y3 : Int
+  points : Int32
+  x0 : Int32
+  y0 : Int32
+  x1 : Int32
+  y1 : Int32
+  x2 : Int32
+  y2 : Int32
+  x3 : Int32
+  y3 : Int32
 }
 
 ///|
@@ -66,52 +66,52 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
 /// Full mutable game state for board logic, campaign progress, and input.
 pub(all) struct Game {
-  cells : Array[Int]
+  cells : Array[Int32]
   sparks : Array[Spark]
   mut state : GameState
-  mut level_index : Int
-  level_count : Int
+  mut level_index : Int32
+  level_count : Int32
   mut level_name : String
-  mut board_w : Int
-  mut board_h : Int
-  mut kind_count : Int
-  mut score : Int
-  mut combo : Int
+  mut board_w : Int32
+  mut board_h : Int32
+  mut kind_count : Int32
+  mut score : Int32
+  mut combo : Int32
   mut timer : Float
   mut time_limit : Float
-  mut remaining : Int
-  mut hints_left : Int
-  mut shuffles_left : Int
-  mut total_levels : Int
+  mut remaining : Int32
+  mut hints_left : Int32
+  mut shuffles_left : Int32
+  mut total_levels : Int32
   mut total_time : Float
-  mut cursor_x : Int
-  mut cursor_y : Int
+  mut cursor_x : Int32
+  mut cursor_y : Int32
   mut select_active : Bool
-  mut select_x : Int
-  mut select_y : Int
+  mut select_x : Int32
+  mut select_y : Int32
   mut path_active : Bool
   mut path_ttl : Float
-  mut path_points : Int
-  mut path_x0 : Int
-  mut path_y0 : Int
-  mut path_x1 : Int
-  mut path_y1 : Int
-  mut path_x2 : Int
-  mut path_y2 : Int
-  mut path_x3 : Int
-  mut path_y3 : Int
+  mut path_points : Int32
+  mut path_x0 : Int32
+  mut path_y0 : Int32
+  mut path_x1 : Int32
+  mut path_y1 : Int32
+  mut path_x2 : Int32
+  mut path_y2 : Int32
+  mut path_x3 : Int32
+  mut path_y3 : Int32
   mut hint_active : Bool
   mut hint_ttl : Float
-  mut hint_x0 : Int
-  mut hint_y0 : Int
-  mut hint_x1 : Int
-  mut hint_y1 : Int
+  mut hint_x0 : Int32
+  mut hint_y0 : Int32
+  mut hint_x1 : Int32
+  mut hint_y1 : Int32
   mut hold_dir : Direction
   mut repeat_t : Float
   mut touch_action_cd : Float
@@ -123,7 +123,7 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut mouse_press : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

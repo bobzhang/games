@@ -50,7 +50,7 @@ pub(all) struct Checkpoint {
   mut y : Float
   mut w : Float
   mut h : Float
-  mut bonus_s : Int
+  mut bonus_s : Int32
   mut taken : Bool
 }
 
@@ -62,12 +62,12 @@ pub(all) struct Player {
   mut vx : Float
   mut vy : Float
   mut on_ground : Bool
-  mut wall_side : Int
+  mut wall_side : Int32
   mut wall_window_t : Float
   mut wall_climb_t : Float
   mut coyote_t : Float
   mut jump_buffer_t : Float
-  mut facing : Int
+  mut facing : Int32
 }
 
 ///|
@@ -76,11 +76,11 @@ pub(all) struct Game {
   tiles : Array[Tile]
   checkpoints : Array[Checkpoint]
   hero : Player
-  mut tile_count : Int
-  mut checkpoint_count : Int
+  mut tile_count : Int32
+  mut checkpoint_count : Int32
   mut state : GameState
-  mut stage : Int
-  mut pending_next_stage : Int
+  mut stage : Int32
+  mut pending_next_stage : Int32
   mut stage_width : Float
   mut stage_fail_y : Float
   mut start_x : Float
@@ -93,8 +93,8 @@ pub(all) struct Game {
   mut run_time_s : Float
   mut stage_time_s : Float
   mut bonus_popup_t : Float
-  mut bonus_popup_value : Int
-  mut checkpoints_hit : Int
+  mut bonus_popup_value : Int32
+  mut checkpoints_hit : Int32
   mut lose_reason : LoseReason
   mut input_x : Float
   mut input_jump_press : Bool
@@ -109,7 +109,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

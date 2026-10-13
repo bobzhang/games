@@ -86,21 +86,21 @@ pub extend HazardKind with Show::{to_string, output}
 
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1024
+pub let screen_width : Int32 = 1024
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 // Kart constants
 
 ///|
 /// Maximum number of karts in a race.
-pub let max_karts : Int = 8
+pub let max_karts : Int32 = 8
 
 ///|
 /// Index of the player-controlled kart.
-pub let player_kart : Int = 0
+pub let player_kart : Int32 = 0
 
 ///|
 /// Kart body width in world units.
@@ -118,11 +118,11 @@ pub let kart_length : Float = 1.2
 
 ///|
 /// Kart type index for balanced all-round stats.
-pub let kart_type_balanced : Int = 0
+pub let kart_type_balanced : Int32 = 0
 
 ///|
 /// Total number of available kart types.
-pub let kart_type_count : Int = 8
+pub let kart_type_count : Int32 = 8
 
 // Kart type stats: (max_speed, acceleration, handling, weight, drift_boost)
 
@@ -197,7 +197,7 @@ pub let air_steer_mult : Float = 0.4
 
 ///|
 /// Total number of distinct powerup types including none.
-pub let powerup_type_count : Int = 9
+pub let powerup_type_count : Int32 = 9
 
 // Powerup effects
 
@@ -249,25 +249,25 @@ pub let triple_mushroom_boost : Float = 1.2
 
 ///|
 /// Maximum number of powerup pickups on the track.
-pub let max_powerups : Int = 32
+pub let max_powerups : Int32 = 32
 
 ///|
 /// Maximum number of active projectiles in flight.
-pub let max_projectiles : Int = 16
+pub let max_projectiles : Int32 = 16
 
 ///|
 /// Maximum number of active particles for visual effects.
-pub let max_particles : Int = 256
+pub let max_particles : Int32 = 256
 
 ///|
 /// Maximum number of dropped items on the track.
-pub let max_dropped_items : Int = 24
+pub let max_dropped_items : Int32 = 24
 
 // Track segment types
 
 ///|
 /// Segment type ID for a straight section.
-pub let seg_straight : Int = 0
+pub let seg_straight : Int32 = 0
 
 // Track surface types
 
@@ -331,7 +331,7 @@ pub let speed_mult_ice : Float = 0.95
 
 ///|
 /// Number of segments to scan ahead for upcoming corners.
-pub let ai_lookahead_segments : Int = 5
+pub let ai_lookahead_segments : Int32 = 5
 
 ///|
 /// Braking deceleration used for AI braking distance calculation.
@@ -403,7 +403,7 @@ pub let ai_block_offset : Float = 2.0
 
 ///|
 /// Forward scan distance in segments for hazard detection.
-pub let ai_hazard_lookahead : Int = 3
+pub let ai_hazard_lookahead : Int32 = 3
 
 ///|
 /// Width of the forward cone for obstacle scanning (radians).
@@ -465,7 +465,7 @@ pub let drift_ultra_duration : Float = 1.3
 
 ///|
 /// Maximum number of waypoints per track layout.
-pub let max_waypoints : Int = 64
+pub let max_waypoints : Int32 = 64
 
 ///|
 /// Full width of the road surface in world units.
@@ -477,23 +477,23 @@ pub let road_half : Float = 4.0
 
 ///|
 /// Default number of laps per race.
-pub let total_laps : Int = 3
+pub let total_laps : Int32 = 3
 
 // Cup / race
 
 ///|
 /// Total number of cups in the championship.
-pub let cups_count : Int = 4
+pub let cups_count : Int32 = 4
 
 ///|
 /// Number of races in each cup.
-pub let races_per_cup : Int = 4
+pub let races_per_cup : Int32 = 4
 
 // Cup point system (position 1-8)
 
 ///|
 /// Points awarded per finishing position from 1st through 8th place.
-pub let cup_points_table : Array[Int] = [15, 12, 10, 8, 6, 5, 4, 3]
+pub let cup_points_table : Array[Int32] = [15, 12, 10, 8, 6, 5, 4, 3]
 
 // Camera
 
@@ -565,7 +565,7 @@ pub let dirt_decel : Float = 5.0
 
 ///|
 /// Probability of spin per second on deep off-road.
-pub let offroad_spin_chance : Int = 80
+pub let offroad_spin_chance : Int32 = 80
 
 // Landing boost
 
@@ -607,7 +607,7 @@ pub let ai_rubberband_ahead : Float = 0.04
 
 ///|
 /// AI difficulty level ID for medium mode.
-pub let ai_difficulty_medium : Int = 1
+pub let ai_difficulty_medium : Int32 = 1
 
 // AI difficulty modifiers: (speed_mult, item_luck, line_accuracy, reaction_time)
 
@@ -631,7 +631,7 @@ pub let countdown_total : Float = 3.0
 
 ///|
 /// Primary RGB colors for each kart, indexed by kart slot.
-pub let kart_colors : Array[(Int, Int, Int)] = [
+pub let kart_colors : Array[(Int32, Int32, Int32)] = [
   (220, 40, 40), // Player - Red
   (40, 100, 220), // Blue
   (40, 200, 40), // Green
@@ -648,7 +648,7 @@ pub let kart_colors : Array[(Int, Int, Int)] = [
 
 ///|
 /// Sky background RGB colors for each track theme.
-pub let theme_sky_colors : Array[(Int, Int, Int)] = [
+pub let theme_sky_colors : Array[(Int32, Int32, Int32)] = [
   (100, 180, 255), // Circuit - blue sky
   (130, 200, 255), // Beach - bright sky
   (140, 160, 200), // Mountain - hazy
@@ -663,7 +663,7 @@ pub let theme_sky_colors : Array[(Int, Int, Int)] = [
 
 ///|
 /// Ground plane RGB colors for each track theme.
-pub let theme_ground_colors : Array[(Int, Int, Int)] = [
+pub let theme_ground_colors : Array[(Int32, Int32, Int32)] = [
   (80, 160, 60), // Circuit - green grass
   (220, 200, 140), // Beach - sand
   (100, 120, 80), // Mountain - alpine
@@ -728,75 +728,75 @@ pub let two_pi : Float = 6.28318530
 
 ///|
 /// Decoration type ID for green deciduous tree.
-pub let deco_tree_green : Int = 1
+pub let deco_tree_green : Int32 = 1
 
 ///|
 /// Decoration type ID for pine tree.
-pub let deco_tree_pine : Int = 2
+pub let deco_tree_pine : Int32 = 2
 
 ///|
 /// Decoration type ID for palm tree.
-pub let deco_tree_palm : Int = 3
+pub let deco_tree_palm : Int32 = 3
 
 ///|
 /// Decoration type ID for small rock.
-pub let deco_rock_small : Int = 4
+pub let deco_rock_small : Int32 = 4
 
 ///|
 /// Decoration type ID for large rock.
-pub let deco_rock_large : Int = 5
+pub let deco_rock_large : Int32 = 5
 
 ///|
 /// Decoration type ID for metal barrier.
-pub let deco_barrier_metal : Int = 6
+pub let deco_barrier_metal : Int32 = 6
 
 ///|
 /// Decoration type ID for tire barrier stack.
-pub let deco_barrier_tire : Int = 7
+pub let deco_barrier_tire : Int32 = 7
 
 ///|
 /// Decoration type ID for spectator grandstand.
-pub let deco_grandstand : Int = 8
+pub let deco_grandstand : Int32 = 8
 
 ///|
 /// Decoration type ID for small building.
-pub let deco_building_small : Int = 9
+pub let deco_building_small : Int32 = 9
 
 ///|
 /// Decoration type ID for tall building.
-pub let deco_building_tall : Int = 10
+pub let deco_building_tall : Int32 = 10
 
 ///|
 /// Decoration type ID for cactus.
-pub let deco_cactus : Int = 11
+pub let deco_cactus : Int32 = 11
 
 ///|
 /// Decoration type ID for snow mound.
-pub let deco_snow_mound : Int = 12
+pub let deco_snow_mound : Int32 = 12
 
 ///|
 /// Decoration type ID for volcanic lava rock.
-pub let deco_lava_rock : Int = 13
+pub let deco_lava_rock : Int32 = 13
 
 ///|
 /// Decoration type ID for lamp post.
-pub let deco_lamp_post : Int = 14
+pub let deco_lamp_post : Int32 = 14
 
 ///|
 /// Decoration type ID for sign board.
-pub let deco_sign_board : Int = 15
+pub let deco_sign_board : Int32 = 15
 
 // Particle configuration constants
 
 ///|
 /// Number of confetti particles spawned at race start.
-pub let confetti_count : Int = 20
+pub let confetti_count : Int32 = 20
 
 // Kart accent colors (for trim/details)
 
 ///|
 /// Dark accent RGB colors for kart trim and detail rendering.
-pub let kart_accent_colors : Array[(Int, Int, Int)] = [
+pub let kart_accent_colors : Array[(Int32, Int32, Int32)] = [
   (150, 20, 20), // Dark Red
   (20, 60, 150), // Dark Blue
   (20, 130, 20), // Dark Green
@@ -849,7 +849,7 @@ pub let track_record_times : Array[Float] = [
 
 ///|
 /// Difficulty star ratings from 1 to 5 for each track, indexed by track ID.
-pub let track_difficulty_ratings : Array[Int] = [
+pub let track_difficulty_ratings : Array[Int32] = [
   1, // Green Meadow Oval
    1, // Crosswind Circuit
    2, // Sunny Circuit
@@ -888,7 +888,7 @@ pub let lava_burst_spin_time : Float = 1.0
 
 ///|
 /// Maximum number of falling rock obstacles per segment.
-pub let falling_rocks_max : Int = 4
+pub let falling_rocks_max : Int32 = 4
 
 ///|
 /// Collision radius for falling rock obstacles.

@@ -2,8 +2,8 @@
 fn sort_indices_by_gravity(
   entities : Array[@types.Entity],
   dir : @types.GravityDir,
-) -> Array[Int] {
-  let indices : Array[Int] = []
+) -> Array[Int32] {
+  let indices : Array[Int32] = []
   for i in 0..<entities.length() {
     indices.push(i)
   }
@@ -34,8 +34,8 @@ fn sort_indices_by_gravity(
 fn can_move_to(
   level : @types.Level,
   entity : @types.Entity,
-  nx : Int,
-  ny : Int,
+  nx : Int32,
+  ny : Int32,
 ) -> Bool {
   if nx < 0 || nx >= level.width || ny < 0 || ny >= level.height {
     return false
@@ -51,7 +51,7 @@ fn can_move_to(
 }
 
 ///|
-fn can_push_to(level : @types.Level, nx : Int, ny : Int) -> Bool {
+fn can_push_to(level : @types.Level, nx : Int32, ny : Int32) -> Bool {
   if nx < 0 || nx >= level.width || ny < 0 || ny >= level.height {
     return false
   }
@@ -270,8 +270,8 @@ pub fn rotate_gravity(
 pub fn try_move_player(
   level : @types.Level,
   game : @types.Game,
-  dx : Int,
-  dy : Int,
+  dx : Int32,
+  dy : Int32,
 ) -> Bool {
   let player = match @types.find_player(level) {
     Some(p) => p

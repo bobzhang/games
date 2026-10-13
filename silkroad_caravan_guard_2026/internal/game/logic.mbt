@@ -108,7 +108,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_raider(game : @types.Game) -> Int {
+fn @types.Game::alloc_raider(game : @types.Game) -> Int32 {
   for i, slot in game.raiders {
     if !slot.active {
       break i
@@ -125,7 +125,7 @@ fn @types.Game::alloc_raider(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
+fn @types.Game::alloc_bullet(game : @types.Game) -> Int32 {
   for i, slot in game.bullets {
     if !slot.active {
       break i
@@ -144,7 +144,7 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_dust(game : @types.Game) -> Int {
+fn @types.Game::alloc_dust(game : @types.Game) -> Int32 {
   for i, slot in game.dusts {
     if !slot.active {
       break i
@@ -163,7 +163,7 @@ fn @types.Game::emit_dust(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_dust()
   game.dusts[i].active = true
@@ -181,8 +181,8 @@ fn @types.Game::burst_dust(
   game : @types.Game,
   x : Float,
   y : Float,
-  count : Int,
-  kind : Int,
+  count : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     game.emit_dust(
@@ -198,7 +198,7 @@ fn @types.Game::burst_dust(
 }
 
 ///|
-fn @types.Game::lane_y(game : @types.Game, index : Int) -> Float {
+fn @types.Game::lane_y(game : @types.Game, index : Int32) -> Float {
   let i = index.clamp(min=0, max=@types.lane_count - 1)
   let fi = Float::from_int(i)
   let base = @types.lane_base_y(i)
@@ -212,7 +212,7 @@ fn @types.Game::lane_y(game : @types.Game, index : Int) -> Float {
 }
 
 ///|
-fn @types.Game::active_raider_count(game : @types.Game) -> Int {
+fn @types.Game::active_raider_count(game : @types.Game) -> Int32 {
   let mut c = 0
   for raider in game.raiders {
     if raider.active {
@@ -228,7 +228,7 @@ fn @types.Game::nearest_raider_index(
   x : Float,
   y : Float,
   max_dist2 : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<game.raiders.length(); best = -1, best_d2 = max_dist2 {
     if !game.raiders[i].active {
       continue
@@ -248,7 +248,7 @@ fn @types.Game::nearest_wagon_index(
   x : Float,
   y : Float,
   only_alive : Bool,
-) -> Int {
+) -> Int32 {
   for i in 0..<game.wagons.length(); best = -1, best_d2 = 99999999.0F {
     if only_alive && game.wagons[i].hp <= 0.0 {
       continue
@@ -291,7 +291,7 @@ fn @types.Game::update_wagons(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::heal_wagon(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   value : Float,
 ) -> Unit {
   if index < 0 || index >= game.wagons.length() {
@@ -307,7 +307,7 @@ fn @types.Game::heal_wagon(
 ///|
 fn @types.Game::damage_wagon(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   value : Float,
 ) -> Unit {
   if index < 0 || index >= game.wagons.length() {
@@ -337,8 +337,8 @@ fn @types.Game::damage_wagon(
 ///|
 fn @types.Game::kill_raider(
   game : @types.Game,
-  index : Int,
-  score_gain : Int,
+  index : Int32,
+  score_gain : Int32,
 ) -> Unit {
   if index < 0 || index >= game.raiders.length() {
     return
@@ -411,7 +411,7 @@ fn @types.Game::choose_target_wagon(
   game : @types.Game,
   x : Float,
   y : Float,
-) -> Int {
+) -> Int32 {
   let target = game.nearest_wagon_index(x, y, true)
   if target >= 0 {
     target
@@ -423,7 +423,7 @@ fn @types.Game::choose_target_wagon(
 ///|
 fn @types.Game::spawn_raider(
   game : @types.Game,
-  lane : Int,
+  lane : Int32,
   kind : @types.RaiderKind,
 ) -> Unit {
   let i = game.alloc_raider()

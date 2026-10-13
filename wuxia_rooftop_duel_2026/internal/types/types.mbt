@@ -39,18 +39,18 @@ pub(all) struct Game {
   mut attack_cd : Float
   mut attack_anim_t : Float
   mut attack_kind : Attack
-  mut wave : Int
-  mut wave_enemies_total : Int
-  mut wave_spawned : Int
-  mut wave_defeated : Int
+  mut wave : Int32
+  mut wave_enemies_total : Int32
+  mut wave_spawned : Int32
+  mut wave_defeated : Int32
   mut spawn_cd : Float
   mut wave_gap_t : Float
-  mut stage_score : Int
-  mut last_stage_bonus : Int
-  mut combo : Int
+  mut stage_score : Int32
+  mut last_stage_bonus : Int32
+  mut combo : Int32
   mut combo_t : Float
-  mut score : Int
-  mut best_score : Int
+  mut score : Int32
+  mut best_score : Int32
   mut game_t : Float
   mut ui_t : Float
   mut shake_t : Float

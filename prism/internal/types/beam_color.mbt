@@ -58,7 +58,7 @@ pub fn beam_color_is_black(c : BeamColor) -> Bool {
 }
 
 ///|
-pub fn beam_color_channel_count(c : BeamColor) -> Int {
+pub fn beam_color_channel_count(c : BeamColor) -> Int32 {
   let mut n = 0
   if c.r {
     n += 1

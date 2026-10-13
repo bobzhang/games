@@ -2,14 +2,14 @@
 /// One undo record capturing previous cell and counters.
 pub(all) struct UndoStep {
   valid : Bool
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
   prev_state : Cell
-  prev_mistakes : Int
-  prev_filled_correct : Int
-  prev_filled_wrong : Int
-  prev_hints_left : Int
-  prev_hints_used : Int
+  prev_mistakes : Int32
+  prev_filled_correct : Int32
+  prev_filled_wrong : Int32
+  prev_hints_left : Int32
+  prev_hints_used : Int32
 }
 
 ///|
@@ -30,37 +30,37 @@ pub(all) struct Spark {
 pub(all) struct Game {
   solution : Array[Bool]
   cells : Array[Cell]
-  row_clues : Array[Int]
-  row_clue_counts : Array[Int]
-  col_clues : Array[Int]
-  col_clue_counts : Array[Int]
+  row_clues : Array[Int32]
+  row_clue_counts : Array[Int32]
+  col_clues : Array[Int32]
+  col_clue_counts : Array[Int32]
   undo : Array[UndoStep]
   sparks : Array[Spark]
   mut state : GameState
-  mut level_index : Int
-  level_count : Int
+  mut level_index : Int32
+  level_count : Int32
   mut level_name : String
-  mut level_par_time : Int
-  mut level_mistake_limit : Int
-  mut grid_w : Int
-  mut grid_h : Int
-  mut cursor_x : Int
-  mut cursor_y : Int
+  mut level_par_time : Int32
+  mut level_mistake_limit : Int32
+  mut grid_w : Int32
+  mut grid_h : Int32
+  mut cursor_x : Int32
+  mut cursor_y : Int32
   mut tool_mode : ToolKind
   mut level_time : Float
-  mut mistakes : Int
-  mut hints_left : Int
-  mut hints_used : Int
-  mut filled_correct : Int
-  mut filled_wrong : Int
-  mut solution_total : Int
+  mut mistakes : Int32
+  mut hints_left : Int32
+  mut hints_used : Int32
+  mut filled_correct : Int32
+  mut filled_wrong : Int32
+  mut solution_total : Int32
   mut total_time : Float
-  mut total_mistakes : Int
-  mut total_hints : Int
-  mut total_stars : Int
-  mut total_completed : Int
-  mut last_level_stars : Int
-  mut undo_len : Int
+  mut total_mistakes : Int32
+  mut total_hints : Int32
+  mut total_stars : Int32
+  mut total_completed : Int32
+  mut last_level_stars : Int32
+  mut undo_len : Int32
   mut message : String
   mut message_t : Float
   mut shake_t : Float
@@ -72,7 +72,7 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut mouse_press : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

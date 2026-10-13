@@ -50,7 +50,7 @@ fn @types.Game::clear_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Returns 1 if the cell is filled and the solution requires it to be filled, otherwise 0.
-fn contribution_correct(cell_state : @types.Cell, sol : Bool) -> Int {
+fn contribution_correct(cell_state : @types.Cell, sol : Bool) -> Int32 {
   if cell_state == Fill {
     if sol {
       1
@@ -64,7 +64,7 @@ fn contribution_correct(cell_state : @types.Cell, sol : Bool) -> Int {
 
 ///|
 /// Returns 1 if the cell is filled but the solution requires it to be empty, otherwise 0.
-fn contribution_wrong(cell_state : @types.Cell, sol : Bool) -> Int {
+fn contribution_wrong(cell_state : @types.Cell, sol : Bool) -> Int32 {
   if cell_state == Fill {
     if !sol {
       1
@@ -78,15 +78,15 @@ fn contribution_wrong(cell_state : @types.Cell, sol : Bool) -> Int {
 
 ///|
 /// Computes the nonogram run-length clues for the given row and stores them in the row_clues array along with the clue count.
-fn @types.Game::compute_row_clues(game : @types.Game, y : Int) -> Unit {
-  let base : Int = y * @types.max_board
+fn @types.Game::compute_row_clues(game : @types.Game, y : Int32) -> Unit {
+  let base : Int32 = y * @types.max_board
 
   for k in 0..<@types.max_board {
     game.row_clues[base + k] = 0
   }
 
-  let mut run : Int = 0
-  let mut cnt : Int = 0
+  let mut run : Int32 = 0
+  let mut cnt : Int32 = 0
 
   for x in 0..<game.grid_w {
     if @types.solution_at(game, x, y) {
@@ -113,15 +113,15 @@ fn @types.Game::compute_row_clues(game : @types.Game, y : Int) -> Unit {
 
 ///|
 /// Computes the nonogram run-length clues for the given column and stores them in the col_clues array along with the clue count.
-fn @types.Game::compute_col_clues(game : @types.Game, x : Int) -> Unit {
-  let base : Int = x * @types.max_board
+fn @types.Game::compute_col_clues(game : @types.Game, x : Int32) -> Unit {
+  let base : Int32 = x * @types.max_board
 
   for k in 0..<@types.max_board {
     game.col_clues[base + k] = 0
   }
 
-  let mut run : Int = 0
-  let mut cnt : Int = 0
+  let mut run : Int32 = 0
+  let mut cnt : Int32 = 0
 
   for y in 0..<game.grid_h {
     if @types.solution_at(game, x, y) {
@@ -162,11 +162,11 @@ fn @types.Game::compute_all_clues(game : @types.Game) -> Unit {
 /// Loads a level from a row-major binary grid, computes all clues, places the cursor at the board center, and resets all per-level counters.
 fn @types.Game::apply_level_rows(
   game : @types.Game,
-  rows : Array[Array[Int]],
+  rows : Array[Array[Int32]],
   title : String,
-  par_time : Int,
-  mistake_limit : Int,
-  hints : Int,
+  par_time : Int32,
+  mistake_limit : Int32,
+  hints : Int32,
 ) -> Unit {
   game.clear_solution_and_cells()
   game.clear_undo()
@@ -253,9 +253,9 @@ fn @types.Game::spawn_spark(
 /// Spawns a burst of spark particles centred on the world position of the given board cell.
 fn @types.Game::burst_cell(
   game : @types.Game,
-  x : Int,
-  y : Int,
-  amount : Int,
+  x : Int32,
+  y : Int32,
+  amount : Int32,
   kind : @types.SparkKind,
 ) -> Unit {
   let (cx, cy, tile_f) = @types.world_for_cell(game, x, y)
@@ -311,8 +311,8 @@ fn @types.Game::push_undo(game : @types.Game, step : @types.UndoStep) -> Unit {
 
 ///|
 /// Returns 1 to 3 stars based on whether the player beat the par time, made no mistakes, and used no hints.
-fn @types.Game::score_stars(game : @types.Game) -> Int {
-  let mut stars : Int = 3
+fn @types.Game::score_stars(game : @types.Game) -> Int32 {
+  let mut stars : Int32 = 3
 
   if game.level_time > Float::from_int(game.level_par_time) {
     stars = stars - 1
@@ -336,7 +336,7 @@ fn @types.Game::score_stars(game : @types.Game) -> Int {
 ///|
 /// Scores the completed level, stores the star result, and accumulates campaign-wide totals for time, mistakes, hints, stars, and completed count.
 fn @types.Game::finalize_level_success(game : @types.Game) -> Unit {
-  let stars : Int = game.score_stars()
+  let stars : Int32 = game.score_stars()
   game.last_level_stars = stars
 
   game.total_time = game.total_time + game.level_time
@@ -398,8 +398,8 @@ fn @types.Game::fail_level(game : @types.Game) -> Unit {
 /// Applies a new cell state at (x, y), records an undo step, updates correct/wrong fill counts, optionally counts mistakes or consumes a hint, spawns a spark burst, and checks for puzzle completion or failure.
 fn @types.Game::apply_cell_state(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   new_state : @types.Cell,
   count_mistake : Bool,
   consume_hint : Bool,
@@ -413,7 +413,7 @@ fn @types.Game::apply_cell_state(
     return false
   }
 
-  let idx : Int = @types.board_index(x, y)
+  let idx : Int32 = @types.board_index(x, y)
   let prev_state : @types.Cell = game.cells[idx]
   if prev_state == new_state {
     return false
@@ -480,8 +480,8 @@ fn @types.Game::apply_cell_state(
 /// Applies the fill or mark tool to the cell at (x, y): toggles the state between filled/unknown or crossed/unknown, moves the cursor, and returns whether the cell changed.
 fn @types.Game::apply_tool_on_cell(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   tool : @types.ToolKind,
 ) -> Bool {
   if game.state != Play {
@@ -701,8 +701,8 @@ fn @types.Game::switch_tool(game : @types.Game) -> Unit {
 
 ///|
 /// Loads the puzzle for the given level ID by calling apply_level_rows with the appropriate hardcoded grid, then transitions to the play state.
-fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
-  let mut id : Int = level_id
+fn @types.Game::load_level(game : @types.Game, level_id : Int32) -> Unit {
+  let mut id : Int32 = level_id
   if id < 0 {
     id = 0
   }
@@ -711,7 +711,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
   }
 
   if id == 0 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 1, 1, 0, 0, 0, 0],
       [0, 1, 1, 1, 1, 0, 0, 0],
       [0, 0, 1, 1, 0, 0, 0, 0],
@@ -723,7 +723,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Lighthouse Watch", 70, 7, 3)
   } else if id == 1 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 0, 0, 1, 0, 0, 0, 0],
       [0, 0, 0, 1, 1, 1, 0, 0, 0],
       [0, 0, 1, 1, 1, 1, 1, 0, 0],
@@ -736,7 +736,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Tugboat Shift", 82, 8, 3)
   } else if id == 2 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
       [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
       [0, 1, 1, 0, 0, 1, 1, 0, 0, 0],
@@ -750,7 +750,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Anchor Draft", 96, 9, 3)
   } else if id == 3 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
       [0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
       [0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
@@ -764,7 +764,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Crane Hook", 96, 8, 3)
   } else if id == 4 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
       [0, 1, 1, 0, 0, 0, 0, 1, 1, 0],
       [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
@@ -778,7 +778,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Cargo Crate", 104, 9, 3)
   } else if id == 5 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
@@ -793,7 +793,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Wave Beacon", 118, 10, 3)
   } else if id == 6 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
@@ -807,7 +807,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Harbor Bridge", 126, 10, 3)
   } else if id == 7 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0],
       [0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1],
       [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -821,7 +821,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Seagull Pass", 132, 11, 3)
   } else if id == 8 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
       [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
       [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -837,7 +837,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Submarine Echo", 142, 12, 2)
   } else if id == 9 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0],
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
       [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
@@ -853,7 +853,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Shipyard Gear", 152, 12, 2)
   } else if id == 10 {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
       [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
@@ -869,7 +869,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ]
     game.apply_level_rows(rows, "Fleet Signal", 160, 13, 2)
   } else {
-    let rows : Array[Array[Int]] = [
+    let rows : Array[Array[Int32]] = [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
@@ -927,7 +927,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.mouse_y = mouse.y
   game.mouse_hold = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
   game.mouse_press = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let mut tc : Int = @raylib.get_touch_point_count()
+  let mut tc : Int32 = @raylib.get_touch_point_count()
   if tc < 0 {
     tc = 0
   }

@@ -1,5 +1,5 @@
 ///|
-pub fn note_index(note : Note) -> Int {
+pub fn note_index(note : Note) -> Int32 {
   match note {
     C => 0
     D => 1
@@ -12,7 +12,7 @@ pub fn note_index(note : Note) -> Int {
 }
 
 ///|
-pub fn note_from_row(row : Int) -> Note {
+pub fn note_from_row(row : Int32) -> Note {
   match row {
     0 => B
     1 => A
@@ -38,7 +38,7 @@ pub fn note_name(note : Note) -> String {
 }
 
 ///|
-pub fn row_from_note(note : Note) -> Int {
+pub fn row_from_note(note : Note) -> Int32 {
   match note {
     B => 0
     A => 1
@@ -82,7 +82,7 @@ pub fn tier_color(tier : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn tier_level_range(tier : Tier) -> (Int, Int) {
+pub fn tier_level_range(tier : Tier) -> (Int32, Int32) {
   match tier {
     Melody => (0, 6)
     Harmony => (7, 13)
@@ -91,13 +91,13 @@ pub fn tier_level_range(tier : Tier) -> (Int, Int) {
 }
 
 ///|
-pub fn interval_between(row_a : Int, row_b : Int) -> Int {
+pub fn interval_between(row_a : Int32, row_b : Int32) -> Int32 {
   let diff = if row_a > row_b { row_a - row_b } else { row_b - row_a }
   diff % 7
 }
 
 ///|
-pub fn interval_quality(steps : Int) -> IntervalQuality {
+pub fn interval_quality(steps : Int32) -> IntervalQuality {
   match steps {
     0 => Unison
     1 => Second
@@ -111,7 +111,7 @@ pub fn interval_quality(steps : Int) -> IntervalQuality {
 }
 
 ///|
-pub fn interval_score(quality : IntervalQuality) -> Int {
+pub fn interval_score(quality : IntervalQuality) -> Int32 {
   match quality {
     Unison => score_unison
     Second => score_second
@@ -124,7 +124,7 @@ pub fn interval_score(quality : IntervalQuality) -> Int {
 }
 
 ///|
-pub fn harmony_between(row_a : Int, row_b : Int) -> Int {
+pub fn harmony_between(row_a : Int32, row_b : Int32) -> Int32 {
   let steps = interval_between(row_a, row_b)
   let quality = interval_quality(steps)
   interval_score(quality)
@@ -136,7 +136,7 @@ pub fn new_note_cell() -> NoteCell {
 }
 
 ///|
-pub fn new_grid(cols : Int, rows : Int) -> Grid {
+pub fn new_grid(cols : Int32, rows : Int32) -> Grid {
   let cells : Array[Array[NoteCell]] = []
   for _c in 0..<cols {
     let col : Array[NoteCell] = []
@@ -203,7 +203,7 @@ pub fn placeholder_level() -> Level {
 }
 
 ///|
-pub fn count_notes_in_grid(grid : Grid) -> Int {
+pub fn count_notes_in_grid(grid : Grid) -> Int32 {
   let mut count = 0
   for c in 0..<grid.cols {
     for r in 0..<grid.rows {
@@ -216,7 +216,7 @@ pub fn count_notes_in_grid(grid : Grid) -> Int {
 }
 
 ///|
-pub fn count_targets_matched(grid : Grid, targets : Array[TargetPos]) -> Int {
+pub fn count_targets_matched(grid : Grid, targets : Array[TargetPos]) -> Int32 {
   let mut count = 0
   for i in 0..<targets.length() {
     let t = targets[i]
@@ -235,8 +235,8 @@ pub fn all_targets_matched(grid : Grid, targets : Array[TargetPos]) -> Bool {
 }
 
 ///|
-pub fn column_notes(grid : Grid, col : Int) -> Array[Int] {
-  let notes : Array[Int] = []
+pub fn column_notes(grid : Grid, col : Int32) -> Array[Int32] {
+  let notes : Array[Int32] = []
   for r in 0..<grid.rows {
     if grid.cells[col][r].has_note {
       notes.push(r)
@@ -246,7 +246,7 @@ pub fn column_notes(grid : Grid, col : Int) -> Array[Int] {
 }
 
 ///|
-pub fn column_harmony_score(grid : Grid, col : Int) -> Int {
+pub fn column_harmony_score(grid : Grid, col : Int32) -> Int32 {
   let notes = column_notes(grid, col)
   let mut score = 0
   for i in 0..<notes.length() {
@@ -258,7 +258,7 @@ pub fn column_harmony_score(grid : Grid, col : Int) -> Int {
 }
 
 ///|
-pub fn total_harmony_score(grid : Grid) -> Int {
+pub fn total_harmony_score(grid : Grid) -> Int32 {
   let mut score = 0
   for c in 0..<grid.cols {
     score += column_harmony_score(grid, c)
@@ -276,7 +276,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {

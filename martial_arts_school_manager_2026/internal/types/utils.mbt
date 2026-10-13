@@ -32,33 +32,33 @@ pub fn maxf(a : Float, b : Float) -> Float {
 
 ///|
 /// Compute week duration after progression scaling.
-pub fn week_duration_for(week : Int) -> Float {
+pub fn week_duration_for(week : Int32) -> Float {
   let raw = week_duration_base - Float::from_int(week - 1) * week_duration_drop
   maxf(week_duration_min, raw)
 }
 
 ///|
 /// Compute weekly upkeep cost for the given week.
-pub fn upkeep_for(week : Int) -> Float {
+pub fn upkeep_for(week : Int32) -> Float {
   week_upkeep_base + Float::from_int(week - 1) * week_upkeep_growth
 }
 
 ///|
 /// Compute average delay between incidents for a week.
-pub fn incident_gap_for(week : Int) -> Float {
+pub fn incident_gap_for(week : Int32) -> Float {
   let raw = incident_gap_base - Float::from_int(week - 1) * incident_gap_drop
   maxf(incident_gap_min, raw)
 }
 
 ///|
 /// Compute incident severity multiplier for a week.
-pub fn incident_severity_for(week : Int) -> Float {
+pub fn incident_severity_for(week : Int32) -> Float {
   incident_severity_base + Float::from_int(week - 1) * incident_severity_growth
 }
 
 ///|
 /// Convert a Room enum to its integer index.
-pub fn Room::to_int(self : Room) -> Int {
+pub fn Room::to_int(self : Room) -> Int32 {
   match self {
     Rest => 0
     Train => 1
@@ -69,7 +69,7 @@ pub fn Room::to_int(self : Room) -> Int {
 
 ///|
 /// Convert an integer index to a Room enum value.
-pub fn Room::from_int(v : Int) -> Room {
+pub fn Room::from_int(v : Int32) -> Room {
   match v {
     1 => Train
     2 => Sparring

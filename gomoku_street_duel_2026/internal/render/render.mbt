@@ -21,7 +21,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   )
 
   for i in 0..<16 {
-    let y : Int = i * 66 - 20
+    let y : Int32 = i * 66 - 20
     @raylib.draw_rectangle(
       0,
       y,
@@ -40,12 +40,12 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 ///|
 /// Draws the wooden board background, grid lines, and traditional star-point dots at the nine hoshi intersections.
 fn draw_board_grid(
-  board_x : Int,
-  board_y : Int,
-  tile : Int,
+  board_x : Int32,
+  board_y : Int32,
+  tile : Int32,
   art : GameArt,
 ) -> Unit {
-  let size : Int = @types.board_n * tile
+  let size : Int32 = @types.board_n * tile
 
   draw_texture_stretch(
     art.board_surface,
@@ -71,8 +71,8 @@ fn draw_board_grid(
   )
 
   for i in 0..<@types.board_n {
-    let px : Int = board_x + i * tile
-    let py : Int = board_y + i * tile
+    let px : Int32 = board_x + i * tile
+    let py : Int32 = board_y + i * tile
 
     @raylib.draw_line(
       board_x,
@@ -91,7 +91,7 @@ fn draw_board_grid(
     )
   }
 
-  let stars : Array[(Int, Int)] = [
+  let stars : Array[(Int32, Int32)] = [
     (3, 3),
     (3, 7),
     (3, 11),
@@ -117,16 +117,16 @@ fn draw_board_grid(
 ///|
 /// Draws a black (Human) or white (AI) stone with a highlight at board cell `(x, y)`.
 fn draw_stone(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
-  board_x : Int,
-  board_y : Int,
-  tile : Int,
+  board_x : Int32,
+  board_y : Int32,
+  tile : Int32,
   art : GameArt,
 ) -> Unit {
-  let cx : Int = board_x + x * tile
-  let cy : Int = board_y + y * tile
+  let cx : Int32 = board_x + x * tile
+  let cy : Int32 = board_y + y * tile
   let r : Float = Float::from_int(tile) * 0.42
 
   @raylib.draw_circle(
@@ -150,16 +150,16 @@ fn draw_stone(
 /// Draws a double golden ring at the active hint cell when a hint is currently shown.
 fn @types.Game::draw_hint(
   game : @types.Game,
-  board_x : Int,
-  board_y : Int,
-  tile : Int,
+  board_x : Int32,
+  board_y : Int32,
+  tile : Int32,
 ) -> Unit {
   if !game.hint_active {
     return
   }
 
-  let hx : Int = board_x + game.hint_x * tile
-  let hy : Int = board_y + game.hint_y * tile
+  let hx : Int32 = board_x + game.hint_x * tile
+  let hy : Int32 = board_y + game.hint_y * tile
   let r : Float = Float::from_int(tile) * 0.48
 
   @raylib.draw_circle_lines(hx, hy, r, @raylib.Color::new(255, 230, 132, 250))
@@ -175,13 +175,13 @@ fn @types.Game::draw_hint(
 /// Draws a small ring over the last human move (gold) and the last AI move (blue) to highlight the most recent stones.
 fn @types.Game::draw_last_markers(
   game : @types.Game,
-  board_x : Int,
-  board_y : Int,
-  tile : Int,
+  board_x : Int32,
+  board_y : Int32,
+  tile : Int32,
 ) -> Unit {
   if game.last_hx >= 0 && game.last_hy >= 0 {
-    let x : Int = board_x + game.last_hx * tile
-    let y : Int = board_y + game.last_hy * tile
+    let x : Int32 = board_x + game.last_hx * tile
+    let y : Int32 = board_y + game.last_hy * tile
     @raylib.draw_circle_lines(
       x,
       y,
@@ -191,8 +191,8 @@ fn @types.Game::draw_last_markers(
   }
 
   if game.last_ax >= 0 && game.last_ay >= 0 {
-    let x : Int = board_x + game.last_ax * tile
-    let y : Int = board_y + game.last_ay * tile
+    let x : Int32 = board_x + game.last_ax * tile
+    let y : Int32 = board_y + game.last_ay * tile
     @raylib.draw_circle_lines(
       x,
       y,
@@ -222,8 +222,8 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
   game.draw_last_markers(board_x, board_y, tile)
 
   if game.state == Play {
-    let cx : Int = board_x + game.cursor_x * tile
-    let cy : Int = board_y + game.cursor_y * tile
+    let cx : Int32 = board_x + game.cursor_x * tile
+    let cy : Int32 = board_y + game.cursor_y * tile
     @raylib.draw_circle_lines(
       cx,
       cy,
@@ -237,10 +237,10 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
 /// Draws a rectangular button with `label` centered inside, using `accent` fill when `active` and a dark default fill otherwise.
 fn draw_button(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   active : Bool,
   accent : @raylib.Color,
 ) -> Unit {
@@ -263,7 +263,7 @@ fn draw_button(
     @raylib.Color::new(190, 220, 242, 236),
   )
 
-  let fs : Int = 28
+  let fs : Int32 = 28
   @draw.draw_text(
     label,
     x + w / 2 - @draw.measure_text(label, fs) / 2,
@@ -276,10 +276,10 @@ fn draw_button(
 ///|
 /// Draws the side panel with game title, turn indicator, move count, time, win/draw scores, hints remaining, keyboard reference, action buttons (PLACE/HINT/UNDO/CLEAR/RESET), and the transient message box.
 fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
-  let px : Int = @types.panel_x()
-  let py : Int = 20
-  let pw : Int = 396
-  let ph : Int = @types.screen_h - 40
+  let px : Int32 = @types.panel_x()
+  let py : Int32 = 20
+  let pw : Int32 = 396
+  let ph : Int32 = @types.screen_h - 40
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(12, 18, 30, 242))
   @raylib.draw_rectangle_lines(
@@ -478,9 +478,9 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
 ///|
 /// Draws the on-screen D-pad (L/R/U/D buttons) with active highlight when the corresponding direction is pressed.
 fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
-  let cx : Int = @types.dpad_center_x()
-  let cy : Int = @types.dpad_center_y()
-  let s : Int = @types.dpad_size()
+  let cx : Int32 = @types.dpad_center_x()
+  let cy : Int32 = @types.dpad_center_y()
+  let s : Int32 = @types.dpad_size()
 
   let left_on : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -615,7 +615,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
       continue
     }
 
-    let alpha : Int = if spark.life > 0.72 {
+    let alpha : Int32 = if spark.life > 0.72 {
       244
     } else if spark.life > 0.44 {
       206
@@ -638,8 +638,8 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
     }
 
     let r : Float = 1.2 + spark.size * (0.46 + spark.life * 0.84)
-    let x : Int = spark.x.to_int()
-    let y : Int = spark.y.to_int()
+    let x : Int32 = spark.x.to_int()
+    let y : Int32 = spark.y.to_int()
 
     @raylib.draw_circle(x, y, r, core)
     @raylib.draw_circle_lines(x, y, r + 1.0, edge)
@@ -730,10 +730,10 @@ fn @types.Game::draw_result_overlay(game : @types.Game, art : GameArt) -> Unit {
     @raylib.Color::new(6, 10, 16, 176),
   )
 
-  let pw : Int = 760
-  let ph : Int = 390
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 760
+  let ph : Int32 = 390
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 26, 36, 246))
   @raylib.draw_rectangle_lines(

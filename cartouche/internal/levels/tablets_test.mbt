@@ -42,7 +42,7 @@ test "solution_mappings_are_injective" {
   for i in 0..<20 {
     let tablet = @levels.get_tablet(i)
     let unique = @types.get_inscription_symbols_unique(tablet.inscription)
-    let used : Array[Int] = []
+    let used : Array[Int32] = []
     for j in 0..<unique.length() {
       let letter = @types.mapping_get(tablet.solution_mapping, unique[j])
       if letter >= 0 {

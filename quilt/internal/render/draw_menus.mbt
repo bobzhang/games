@@ -84,7 +84,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_menu_button(text : String, cx : Int, y : Int, size : Int) -> Unit {
+fn draw_menu_button(text : String, cx : Int32, y : Int32, size : Int32) -> Unit {
   let tw = @draw.measure_text(text, size)
   let bx = cx - tw / 2 - 20
   let by = y - 4

@@ -135,7 +135,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -144,7 +144,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -153,15 +153,15 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 12345, }
+let rng_state : Ref[Int32] = { val: 12345, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -172,7 +172,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -202,7 +202,7 @@ pub fn rng_sign() -> Float {
 // Pool allocation helpers
 
 ///|
-pub fn alloc_projectile(pool : Array[Projectile]) -> Int {
+pub fn alloc_projectile(pool : Array[Projectile]) -> Int32 {
   for i in 0..<pool.length() {
     if !pool[i].active {
       return i
@@ -212,7 +212,7 @@ pub fn alloc_projectile(pool : Array[Projectile]) -> Int {
 }
 
 ///|
-pub fn alloc_enemy(pool : Array[Enemy]) -> Int {
+pub fn alloc_enemy(pool : Array[Enemy]) -> Int32 {
   for i in 0..<pool.length() {
     if !pool[i].active {
       return i
@@ -222,7 +222,7 @@ pub fn alloc_enemy(pool : Array[Enemy]) -> Int {
 }
 
 ///|
-pub fn alloc_particle(pool : Array[Particle]) -> Int {
+pub fn alloc_particle(pool : Array[Particle]) -> Int32 {
   for i in 0..<pool.length() {
     if !pool[i].active {
       return i
@@ -242,7 +242,7 @@ pub fn alloc_particle(pool : Array[Particle]) -> Int {
 }
 
 ///|
-pub fn alloc_damage_number(pool : Array[DamageNumber]) -> Int {
+pub fn alloc_damage_number(pool : Array[DamageNumber]) -> Int32 {
   for i in 0..<pool.length() {
     if !pool[i].active {
       return i
@@ -252,7 +252,7 @@ pub fn alloc_damage_number(pool : Array[DamageNumber]) -> Int {
 }
 
 ///|
-pub fn count_active_enemies(pool : Array[Enemy]) -> Int {
+pub fn count_active_enemies(pool : Array[Enemy]) -> Int32 {
   let mut count = 0
   for i in 0..<pool.length() {
     if pool[i].active {
@@ -600,7 +600,7 @@ pub fn spawn_damage_number(
   game : Game,
   x : Float,
   y : Float,
-  value : Int,
+  value : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let idx = alloc_damage_number(game.damage_numbers)

@@ -192,7 +192,7 @@ fn draw_moon_gate_asset(x : Float, y : Float, pulse : Float) -> Unit {
 
 ///|
 /// Returns the generated texture ref for a guardian node level.
-fn node_texture_ref(level : Int) -> Ref[@raylib.Texture?] {
+fn node_texture_ref(level : Int32) -> Ref[@raylib.Texture?] {
   if level <= 1 {
     tex_guardian_node_l1
   } else if level == 2 {
@@ -216,7 +216,7 @@ fn dir_rotation_degrees(dir : @types.Dir) -> Float {
 ///|
 /// Draws a generated guardian node sprite for a given level and facing direction.
 fn draw_guardian_node_asset(
-  level : Int,
+  level : Int32,
   facing : @types.Dir,
   x : Float,
   y : Float,

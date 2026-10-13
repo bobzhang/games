@@ -31,7 +31,9 @@ pub fn spawn_enemy(
 }
 
 ///|
-fn enemy_stats(kind : @types.EnemyKind) -> (Int, Int, Float, Float, Float, Int) {
+fn enemy_stats(
+  kind : @types.EnemyKind,
+) -> (Int32, Int32, Float, Float, Float, Int32) {
   // (hp, damage, speed, fire_rate, radius, score)
   match kind {
     Drone => (2, 1, 150.0, 2.0, 14.0, 10)
@@ -218,7 +220,7 @@ pub fn update_enemy_ai(
 ///|
 pub fn spawn_wave(
   game : @types.Game,
-  wave : Int,
+  wave : Int32,
   sector_kind : @types.SectorKind,
 ) -> Unit {
   let count = @types.base_wave_enemies + wave
@@ -246,7 +248,7 @@ pub fn spawn_wave(
 
 ///|
 fn wave_enemy_pool(
-  wave : Int,
+  wave : Int32,
   sector_kind : @types.SectorKind,
 ) -> Array[@types.EnemyKind] {
   let base : Array[@types.EnemyKind] = match sector_kind {
@@ -266,7 +268,7 @@ fn wave_enemy_pool(
 }
 
 ///|
-pub fn enemy_shape_sides(kind : @types.EnemyKind) -> Int {
+pub fn enemy_shape_sides(kind : @types.EnemyKind) -> Int32 {
   match kind {
     Drone => 3
     Fighter => 4

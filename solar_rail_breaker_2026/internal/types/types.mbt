@@ -3,12 +3,12 @@
 pub(all) struct Enemy {
   mut active : Bool
   mut kind : EnemyKind
-  mut ring : Int
+  mut ring : Int32
   mut angle : Float
   mut ang_v : Float
   mut hp : Float
   mut fire_cd : Float
-  mut phase_mask : Int
+  mut phase_mask : Int32
   mut size : Float
   mut spin : Float
 }
@@ -43,7 +43,7 @@ pub(all) struct EnemyBullet {
 /// Stores runtime data for Flare.
 pub(all) struct Flare {
   mut active : Bool
-  mut ring : Int
+  mut ring : Int32
   mut angle : Float
   mut span : Float
   mut spin_v : Float
@@ -68,7 +68,7 @@ pub(all) struct Particle {
 /// Stores runtime data for Shock.
 pub(all) struct Shock {
   mut active : Bool
-  mut ring : Int
+  mut ring : Int32
   mut a0 : Float
   mut a1 : Float
   mut life : Float
@@ -78,7 +78,7 @@ pub(all) struct Shock {
 ///|
 /// Stores runtime data for Player.
 pub(all) struct Player {
-  mut ring : Int
+  mut ring : Int32
   mut ring_f : Float
   mut angle : Float
   mut ang_v : Float
@@ -101,14 +101,14 @@ pub(all) struct Game {
   shocks : Array[Shock]
   player : Player
   mut state : GameState
-  mut stage : Int
+  mut stage : Int32
   mut stage_time_left : Float
-  mut stage_goal : Int
-  mut stage_kills : Int
-  mut stage_bonus : Int
-  mut score : Int
-  mut best_score : Int
-  mut combo : Int
+  mut stage_goal : Int32
+  mut stage_kills : Int32
+  mut stage_bonus : Int32
+  mut score : Int32
+  mut best_score : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut hp : Float
   mut phase : Float
@@ -121,13 +121,13 @@ pub(all) struct Game {
   mut wave_timer : Float
   mut flare_timer : Float
   mut input_turn : Float
-  mut input_ring_move : Int
+  mut input_ring_move : Int32
   mut input_fire_hold : Bool
   mut input_beam_press : Bool
   mut input_restart_press : Bool
   mut input_pause_press : Bool
   mut touch_mode : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
   mut pointer_x : Float
   mut pointer_y : Float
   mut touch_in_prev : Bool

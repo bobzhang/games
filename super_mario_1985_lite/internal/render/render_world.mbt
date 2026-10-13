@@ -43,8 +43,8 @@ fn @types.Game::draw_background(game : @types.Game, shake_y : Float) -> Unit {
 ///|
 fn @types.Game::draw_tile(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
   tile : @types.Tile,
   cam_x : Float,
   shake_y : Float,

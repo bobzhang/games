@@ -2,11 +2,11 @@
 
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 // Game states
 
@@ -24,19 +24,19 @@ pub let two_pi : Float = 6.2831853
 
 ///|
 /// Aircraft type identifier for the trainer.
-pub let aircraft_trainer : Int = 0
+pub let aircraft_trainer : Int32 = 0
 
 ///|
 /// Aircraft type identifier for the fighter.
-pub let aircraft_fighter : Int = 1
+pub let aircraft_fighter : Int32 = 1
 
 ///|
 /// Aircraft type identifier for the bomber.
-pub let aircraft_bomber : Int = 2
+pub let aircraft_bomber : Int32 = 2
 
 ///|
 /// Aircraft type identifier for the interceptor.
-pub let aircraft_interceptor : Int = 3
+pub let aircraft_interceptor : Int32 = 3
 
 // Trainer stats
 
@@ -70,15 +70,15 @@ pub let trainer_hp : Float = 80.0
 
 ///|
 /// Trainer machine gun ammunition count.
-pub let trainer_ammo_mg : Int = 300
+pub let trainer_ammo_mg : Int32 = 300
 
 ///|
 /// Trainer rocket ammunition count.
-pub let trainer_ammo_rockets : Int = 4
+pub let trainer_ammo_rockets : Int32 = 4
 
 ///|
 /// Trainer bomb ammunition count.
-pub let trainer_ammo_bombs : Int = 2
+pub let trainer_ammo_bombs : Int32 = 2
 
 // Fighter stats
 
@@ -112,15 +112,15 @@ pub let fighter_hp : Float = 100.0
 
 ///|
 /// Fighter machine gun ammunition count.
-pub let fighter_ammo_mg : Int = 500
+pub let fighter_ammo_mg : Int32 = 500
 
 ///|
 /// Fighter rocket ammunition count.
-pub let fighter_ammo_rockets : Int = 8
+pub let fighter_ammo_rockets : Int32 = 8
 
 ///|
 /// Fighter bomb ammunition count.
-pub let fighter_ammo_bombs : Int = 4
+pub let fighter_ammo_bombs : Int32 = 4
 
 // Bomber stats
 
@@ -154,15 +154,15 @@ pub let bomber_hp : Float = 160.0
 
 ///|
 /// Bomber machine gun ammunition count.
-pub let bomber_ammo_mg : Int = 200
+pub let bomber_ammo_mg : Int32 = 200
 
 ///|
 /// Bomber rocket ammunition count.
-pub let bomber_ammo_rockets : Int = 6
+pub let bomber_ammo_rockets : Int32 = 6
 
 ///|
 /// Bomber bomb ammunition count.
-pub let bomber_ammo_bombs : Int = 12
+pub let bomber_ammo_bombs : Int32 = 12
 
 // Interceptor stats
 
@@ -196,15 +196,15 @@ pub let interceptor_hp : Float = 70.0
 
 ///|
 /// Interceptor machine gun ammunition count.
-pub let interceptor_ammo_mg : Int = 400
+pub let interceptor_ammo_mg : Int32 = 400
 
 ///|
 /// Interceptor rocket ammunition count.
-pub let interceptor_ammo_rockets : Int = 12
+pub let interceptor_ammo_rockets : Int32 = 12
 
 ///|
 /// Interceptor bomb ammunition count.
-pub let interceptor_ammo_bombs : Int = 0
+pub let interceptor_ammo_bombs : Int32 = 0
 
 // Player aircraft (legacy / defaults)
 
@@ -304,11 +304,11 @@ pub let terrain_max_height : Float = 15.0
 
 ///|
 /// Number of terrain chunks visible in each direction from the player.
-pub let terrain_view_range : Int = 8
+pub let terrain_view_range : Int32 = 8
 
 ///|
 /// Maximum number of terrain chunks in the pool.
-pub let max_terrain_chunks : Int = 256
+pub let max_terrain_chunks : Int32 = 256
 
 ///|
 /// Terrain height below which water is rendered.
@@ -338,7 +338,7 @@ pub let bomb_gravity : Float = 9.8
 
 ///|
 /// Maximum number of active projectiles in the pool.
-pub let max_projectiles : Int = 128
+pub let max_projectiles : Int32 = 128
 
 ///|
 /// Default projectile travel speed.
@@ -360,25 +360,25 @@ pub let fire_cooldown : Float = 0.15
 
 ///|
 /// Projectile type identifier for bullets.
-pub let proj_bullet : Int = 0
+pub let proj_bullet : Int32 = 0
 
 ///|
 /// Projectile type identifier for rockets.
-pub let proj_rocket : Int = 1
+pub let proj_rocket : Int32 = 1
 
 ///|
 /// Projectile type identifier for bombs.
-pub let proj_bomb : Int = 2
+pub let proj_bomb : Int32 = 2
 
 ///|
 /// Projectile type identifier for anti-aircraft shells.
-pub let proj_aa_shell : Int = 3
+pub let proj_aa_shell : Int32 = 3
 
 // Enemies
 
 ///|
 /// Maximum number of active enemies in the pool.
-pub let max_enemies : Int = 32
+pub let max_enemies : Int32 = 32
 
 ///|
 /// Default airspeed for airborne enemies.
@@ -410,11 +410,11 @@ pub let enemy_fire_range : Float = 60.0
 
 ///|
 /// Enemy type identifier for airborne fighters.
-pub let enemy_type_air : Int = 0
+pub let enemy_type_air : Int32 = 0
 
 ///|
 /// Enemy type identifier for ground emplacements.
-pub let enemy_type_ground : Int = 1
+pub let enemy_type_ground : Int32 = 1
 
 // Enemy AI states
 
@@ -440,7 +440,7 @@ pub let ai_evade_duration : Float = 3.0
 
 ///|
 /// Maximum number of active turrets in the pool.
-pub let max_turrets : Int = 16
+pub let max_turrets : Int32 = 16
 
 ///|
 /// Turret fire interval in seconds.
@@ -466,63 +466,63 @@ pub let turret_shell_speed : Float = 80.0
 
 ///|
 /// Maximum number of active buildings in the pool.
-pub let max_buildings : Int = 32
+pub let max_buildings : Int32 = 32
 
 ///|
 /// Building type identifier for hangars.
-pub let building_hangar : Int = 0
+pub let building_hangar : Int32 = 0
 
 ///|
 /// Building type identifier for control towers.
-pub let building_tower : Int = 1
+pub let building_tower : Int32 = 1
 
 ///|
 /// Building type identifier for runways.
-pub let building_runway : Int = 2
+pub let building_runway : Int32 = 2
 
 ///|
 /// Building type identifier for houses.
-pub let building_house : Int = 3
+pub let building_house : Int32 = 3
 
 ///|
 /// Building type identifier for factories.
-pub let building_factory : Int = 4
+pub let building_factory : Int32 = 4
 
 // Particles
 
 ///|
 /// Maximum number of active particles in the pool.
-pub let max_particles : Int = 512
+pub let max_particles : Int32 = 512
 
 ///|
 /// Particle type identifier for engine exhaust.
-pub let particle_exhaust : Int = 0
+pub let particle_exhaust : Int32 = 0
 
 ///|
 /// Particle type identifier for smoke trails.
-pub let particle_smoke : Int = 1
+pub let particle_smoke : Int32 = 1
 
 ///|
 /// Particle type identifier for fire effects.
-pub let particle_fire : Int = 2
+pub let particle_fire : Int32 = 2
 
 ///|
 /// Particle type identifier for explosion fragments.
-pub let particle_explosion : Int = 4
+pub let particle_explosion : Int32 = 4
 
 ///|
 /// Particle type identifier for debris chunks.
-pub let particle_debris : Int = 5
+pub let particle_debris : Int32 = 5
 
 ///|
 /// Particle type identifier for rain droplets.
-pub let particle_rain : Int = 6
+pub let particle_rain : Int32 = 6
 
 // Checkpoints
 
 ///|
 /// Maximum number of active checkpoints in the pool.
-pub let max_checkpoints : Int = 16
+pub let max_checkpoints : Int32 = 16
 
 ///|
 /// Trigger radius for collecting a checkpoint ring.
@@ -532,67 +532,67 @@ pub let checkpoint_radius : Float = 8.0
 
 ///|
 /// Mission type identifier for checkpoint navigation.
-pub let mission_checkpoint : Int = 0
+pub let mission_checkpoint : Int32 = 0
 
 ///|
 /// Mission type identifier for destroy-all-targets.
-pub let mission_destroy : Int = 1
+pub let mission_destroy : Int32 = 1
 
 ///|
 /// Mission type identifier for landing challenges.
-pub let mission_landing : Int = 2
+pub let mission_landing : Int32 = 2
 
 ///|
 /// Mission type identifier for timed survival.
-pub let mission_survive : Int = 3
+pub let mission_survive : Int32 = 3
 
 ///|
 /// Mission type identifier for escort duties.
-pub let mission_escort : Int = 4
+pub let mission_escort : Int32 = 4
 
 ///|
 /// Mission type identifier for patrol routes.
-pub let mission_patrol : Int = 5
+pub let mission_patrol : Int32 = 5
 
 ///|
 /// Mission type identifier for intercepting enemy formations.
-pub let mission_intercept : Int = 6
+pub let mission_intercept : Int32 = 6
 
 ///|
 /// Mission type identifier for bombing run sorties.
-pub let mission_bombing_run : Int = 7
+pub let mission_bombing_run : Int32 = 7
 
 ///|
 /// Mission type identifier for air-to-air dogfights.
-pub let mission_dogfight : Int = 8
+pub let mission_dogfight : Int32 = 8
 
 ///|
 /// Mission type identifier for reconnaissance flyovers.
-pub let mission_recon : Int = 9
+pub let mission_recon : Int32 = 9
 
 ///|
 /// Mission type identifier for base defense.
-pub let mission_defense : Int = 10
+pub let mission_defense : Int32 = 10
 
 ///|
 /// Mission type identifier for attacking an enemy base.
-pub let mission_attack_base : Int = 11
+pub let mission_attack_base : Int32 = 11
 
 ///|
 /// Mission type identifier for high-speed canyon runs.
-pub let mission_canyon_run : Int = 12
+pub let mission_canyon_run : Int32 = 12
 
 ///|
 /// Mission type identifier for night operations.
-pub let mission_night_mission : Int = 13
+pub let mission_night_mission : Int32 = 13
 
 ///|
 /// Mission type identifier for the final boss encounter.
-pub let mission_boss : Int = 14
+pub let mission_boss : Int32 = 14
 
 ///|
 /// Total number of missions available in the campaign.
-pub let total_missions : Int = 15
+pub let total_missions : Int32 = 15
 
 // Weather
 
@@ -682,7 +682,7 @@ pub let cloud_base_height : Float = 50.0
 
 ///|
 /// Maximum number of active clouds in the pool.
-pub let max_clouds : Int = 40
+pub let max_clouds : Int32 = 40
 
 // Landing parameters
 
@@ -692,45 +692,45 @@ pub let max_clouds : Int = 40
 
 ///|
 /// Score awarded for collecting a checkpoint.
-pub let score_checkpoint : Int = 100
+pub let score_checkpoint : Int32 = 100
 
 ///|
 /// Score awarded for destroying an airborne enemy.
-pub let score_air_kill : Int = 150
+pub let score_air_kill : Int32 = 150
 
 ///|
 /// Score awarded for destroying a ground enemy.
-pub let score_ground_kill : Int = 75
+pub let score_ground_kill : Int32 = 75
 
 ///|
 /// Score awarded for destroying a turret.
-pub let score_turret_kill : Int = 50
+pub let score_turret_kill : Int32 = 50
 
 ///|
 /// Score awarded for destroying a building.
-pub let score_building_destroy : Int = 100
+pub let score_building_destroy : Int32 = 100
 
 ///|
 /// Score awarded for completing a mission.
-pub let score_mission_complete : Int = 500
+pub let score_mission_complete : Int32 = 500
 
 // Mission rating thresholds
 
 ///|
 /// Minimum score required for an S rating.
-pub let rating_s_threshold : Int = 2000
+pub let rating_s_threshold : Int32 = 2000
 
 ///|
 /// Minimum score required for an A rating.
-pub let rating_a_threshold : Int = 1500
+pub let rating_a_threshold : Int32 = 1500
 
 ///|
 /// Minimum score required for a B rating.
-pub let rating_b_threshold : Int = 1000
+pub let rating_b_threshold : Int32 = 1000
 
 ///|
 /// Minimum score required for a C rating.
-pub let rating_c_threshold : Int = 500
+pub let rating_c_threshold : Int32 = 500
 
 // Building types (extended)
 
@@ -758,7 +758,7 @@ pub let radar_range : Float = 120.0
 
 ///|
 /// Radar display size in pixels.
-pub let radar_size : Int = 100
+pub let radar_size : Int32 = 100
 
 // Warning flash rates
 
@@ -881,14 +881,14 @@ pub let stall_speed_ratio : Float = 1.3
 
 ///|
 /// Message priority for mission updates (green).
-pub let msg_priority_info : Int = 0
+pub let msg_priority_info : Int32 = 0
 
 ///|
 /// Message priority for warnings (yellow).
-pub let msg_priority_warning : Int = 1
+pub let msg_priority_warning : Int32 = 1
 
 ///|
 /// Message priority for critical alerts (red).
-pub let msg_priority_critical : Int = 2
+pub let msg_priority_critical : Int32 = 2
 
 // Mission par times (for time bonus calculation)

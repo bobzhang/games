@@ -649,12 +649,12 @@ pub fn draw_results(game : @types.Game) -> Unit {
 
 ///|
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
-  size : Int,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let mx = @raylib.get_mouse_x()

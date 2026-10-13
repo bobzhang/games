@@ -114,7 +114,7 @@ pub fn has_status_haste(p : @types.Player) -> Bool {
 }
 
 ///|
-pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
+pub fn damage_player(game : @types.Game, amount : Int32) -> Unit {
   let p = game.player
   if p.dead || p.invuln_timer > 0.0 {
     return

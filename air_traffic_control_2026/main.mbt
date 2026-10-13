@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1160
+let sw : Int32 = 1160
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 /// Number of runways available for landing.
-let runway_count : Int = 3
+let runway_count : Int32 = 3
 
 ///|
 /// Returns the horizontal screen position of a runway by index.
-fn runway_x(idx : Int) -> Float {
+fn runway_x(idx : Int32) -> Float {
   250.0 + Float::from_int(idx) * 330.0
 }
 
@@ -20,7 +20,7 @@ fn runway_x(idx : Int) -> Float {
 /// Represents an in-flight plane with position, velocity, fuel, and runway assignment.
 struct Plane {
   mut alive : Bool
-  mut runway : Int
+  mut runway : Int32
   mut x : Float
   mut y : Float
   mut vy : Float
@@ -94,7 +94,7 @@ fn draw_centered_art(
 
 ///|
 /// Draws a texture full-screen without distorting its source aspect ratio.
-fn draw_cover_art(texture : @raylib.Texture, sw : Int, sh : Int) -> Unit {
+fn draw_cover_art(texture : @raylib.Texture, sw : Int32, sh : Int32) -> Unit {
   let source_w : Float = Float::from_int(texture.width())
   let source_h : Float = Float::from_int(texture.height())
   let screen_w : Float = Float::from_int(sw)

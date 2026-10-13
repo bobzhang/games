@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(index : Int) -> @types.LevelData {
+pub fn get_level(index : Int32) -> @types.LevelData {
   match index {
     0 => level_1()
     1 => level_2()
@@ -26,7 +26,7 @@ pub fn get_level(index : Int) -> @types.LevelData {
 }
 
 ///|
-pub fn init_level(index : Int) -> @types.LevelState {
+pub fn init_level(index : Int32) -> @types.LevelState {
   let data = get_level(index)
   let revealed : Array[Array[Bool]] = []
   for _y in 0..<@types.grid_rows {
@@ -50,7 +50,11 @@ pub fn init_level(index : Int) -> @types.LevelState {
 }
 
 ///|
-pub fn reveal_area(revealed : Array[Array[Bool]], cx : Int, cy : Int) -> Unit {
+pub fn reveal_area(
+  revealed : Array[Array[Bool]],
+  cx : Int32,
+  cy : Int32,
+) -> Unit {
   let r = @types.reveal_radius
   for dy in -r..<=r {
     for dx in -r..<=r {
@@ -64,7 +68,7 @@ pub fn reveal_area(revealed : Array[Array[Bool]], cx : Int, cy : Int) -> Unit {
 }
 
 ///|
-pub fn tier_name(tier : Int) -> String {
+pub fn tier_name(tier : Int32) -> String {
   match tier {
     1 => "Calm Seas"
     2 => "Rough Waters"

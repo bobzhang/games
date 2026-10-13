@@ -13,8 +13,8 @@ fn @types.Game::set_status(
 /// Returns `preferred` if that beacon is still alive, otherwise returns the index of the beacon with the highest remaining integrity, or -1 if all beacons are destroyed.
 fn @types.Game::preferred_alive_beacon(
   game : @types.Game,
-  preferred : Int,
-) -> Int {
+  preferred : Int32,
+) -> Int32 {
   if preferred >= 0 &&
     preferred < game.beacons.length() &&
     game.beacons[preferred].integrity > 0.0 {
@@ -84,7 +84,7 @@ fn @types.Game::reset_enemies(game : @types.Game) -> Unit {
 
 ///|
 /// Sets up the given night number, computing its spawn pool size and resetting the spawn timer and night-banner display.
-fn @types.Game::begin_night(game : @types.Game, night : Int) -> Unit {
+fn @types.Game::begin_night(game : @types.Game, night : Int32) -> Unit {
   game.night = night
   game.spawn_pool = @types.night_spawn_base +
     (night - 1) * @types.night_spawn_step
@@ -164,7 +164,7 @@ fn @types.Game::nearest_trap_slot(
   game : @types.Game,
   want_active : Bool,
   max_distance : Float,
-) -> Int {
+) -> Int32 {
   for
     i in 0..<game.traps.length()
     best = -1, best_d2 = @types.squaref(max_distance) {
@@ -237,7 +237,7 @@ fn @types.Game::try_remove_trap(game : @types.Game) -> Bool {
 
 ///|
 /// Increments the kill counter, awards night- and kind-scaled score, updates the best score, and grants a small energy and sweep-charge bonus.
-fn @types.Game::register_kill(game : @types.Game, enemy_kind : Int) -> Unit {
+fn @types.Game::register_kill(game : @types.Game, enemy_kind : Int32) -> Unit {
   game.kills = game.kills + 1
 
   let gain_score = @types.score_kill_base +
@@ -261,7 +261,7 @@ fn @types.Game::register_kill(game : @types.Game, enemy_kind : Int) -> Unit {
 /// Applies `damage` to the enemy at `enemy_index`, optionally extends its slow timer to `slow_t`, and deactivates and registers a kill if HP drops to zero; returns true on kill, false otherwise.
 fn @types.Game::damage_enemy(
   game : @types.Game,
-  enemy_index : Int,
+  enemy_index : Int32,
   damage : Float,
   slow_t : Float,
 ) -> Bool {
@@ -465,7 +465,7 @@ fn @types.Game::handle_player_actions(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if all slots are occupied.
-fn @types.Game::free_enemy_slot(game : @types.Game) -> Int {
+fn @types.Game::free_enemy_slot(game : @types.Game) -> Int32 {
   @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 

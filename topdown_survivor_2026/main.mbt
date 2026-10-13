@@ -1,15 +1,15 @@
 ///|
-let sw : Int = 1000
+let sw : Int32 = 1000
 
 ///|
-let sh : Int = 700
+let sh : Int32 = 700
 
 ///|
 struct Enemy {
   mut alive : Bool
   mut x : Float
   mut y : Float
-  mut hp : Int
+  mut hp : Int32
   mut speed : Float
 }
 
@@ -20,7 +20,7 @@ struct Shot {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut dmg : Int
+  mut dmg : Int32
   mut ttl : Float
 }
 
@@ -81,7 +81,7 @@ fn fire_shot(
   tx : Float,
   ty : Float,
   speed : Float,
-  dmg : Int,
+  dmg : Int32,
 ) -> Unit {
   let dx = tx - x
   let dy = ty - y

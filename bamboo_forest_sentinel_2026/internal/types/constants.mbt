@@ -1,62 +1,62 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1500
+pub let screen_w : Int32 = 1500
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 900
+pub let screen_h : Int32 = 900
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// World layout coordinate for world x.
-pub let world_x : Int = 44
+pub let world_x : Int32 = 44
 
 ///|
 /// World layout coordinate for world y.
-pub let world_y : Int = 48
+pub let world_y : Int32 = 48
 
 ///|
 /// Gameplay tuning constant for world w.
-pub let world_w : Int = 1040
+pub let world_w : Int32 = 1040
 
 ///|
 /// Gameplay tuning constant for world h.
-pub let world_h : Int = 804
+pub let world_h : Int32 = 804
 
 ///|
 /// World layout coordinate for hud x.
-pub let hud_x : Int = world_x + world_w + 24
+pub let hud_x : Int32 = world_x + world_w + 24
 
 ///|
 /// World layout coordinate for hud y.
-pub let hud_y : Int = world_y
+pub let hud_y : Int32 = world_y
 
 ///|
 /// Gameplay tuning constant for hud w.
-pub let hud_w : Int = 348
+pub let hud_w : Int32 = 348
 
 ///|
 /// Gameplay tuning constant for hud h.
-pub let hud_h : Int = world_h
+pub let hud_h : Int32 = world_h
 
 ///|
 /// Gameplay tuning constant for corridor lanes.
-pub let corridor_lanes : Int = 3
+pub let corridor_lanes : Int32 = 3
 
 ///|
 /// World layout coordinate for lane top y.
-pub let lane_top_y : Int = world_y + 176
+pub let lane_top_y : Int32 = world_y + 176
 
 ///|
 /// World layout coordinate for lane mid y.
-pub let lane_mid_y : Int = world_y + world_h / 2
+pub let lane_mid_y : Int32 = world_y + world_h / 2
 
 ///|
 /// World layout coordinate for lane bottom y.
-pub let lane_bottom_y : Int = world_y + world_h - 176
+pub let lane_bottom_y : Int32 = world_y + world_h - 176
 
 ///|
 /// Spatial tuning constant for player radius.
@@ -144,15 +144,15 @@ pub let sweep_fx_time : Float = 0.34
 
 ///|
 /// Visual tuning constant for trap slot cols.
-pub let trap_slot_cols : Int = 6
+pub let trap_slot_cols : Int32 = 6
 
 ///|
 /// Gameplay tuning constant for trap slot rows.
-pub let trap_slot_rows : Int = 3
+pub let trap_slot_rows : Int32 = 3
 
 ///|
 /// Gameplay tuning constant for trap slot count.
-pub let trap_slot_count : Int = trap_slot_cols * trap_slot_rows
+pub let trap_slot_count : Int32 = trap_slot_cols * trap_slot_rows
 
 ///|
 /// Spatial tuning constant for trap place range.
@@ -200,7 +200,7 @@ pub let trap_remove_refund : Float = 8.0
 
 ///|
 /// Gameplay tuning constant for beacon count.
-pub let beacon_count : Int = 3
+pub let beacon_count : Int32 = 3
 
 ///|
 /// Spatial tuning constant for beacon radius.
@@ -212,7 +212,7 @@ pub let beacon_integrity_max : Float = 140.0
 
 ///|
 /// Upper bound for max enemies in gameplay systems.
-pub let max_enemies : Int = 260
+pub let max_enemies : Int32 = 260
 
 ///|
 /// Spatial tuning constant for enemy radius.
@@ -244,11 +244,11 @@ pub let enemy_damage_step : Float = 1.5
 
 ///|
 /// Base value before difficulty or progression scaling for night spawn base.
-pub let night_spawn_base : Int = 10
+pub let night_spawn_base : Int32 = 10
 
 ///|
 /// Per-step progression tuning for night spawn step.
-pub let night_spawn_step : Int = 4
+pub let night_spawn_step : Int32 = 4
 
 ///|
 /// Gameplay tuning constant for spawn interval start.
@@ -276,11 +276,11 @@ pub let night_clear_charge_bonus : Float = 22.0
 
 ///|
 /// Base value before difficulty or progression scaling for score kill base.
-pub let score_kill_base : Int = 40
+pub let score_kill_base : Int32 = 40
 
 ///|
 /// Progression and scoring constant for score night clear bonus.
-pub let score_night_clear_bonus : Int = 220
+pub let score_night_clear_bonus : Int32 = 220
 
 ///|
 /// Gameplay tuning constant for status default t.

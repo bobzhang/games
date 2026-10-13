@@ -110,7 +110,7 @@ fn @types.Game::ai_pick_desired_axis(
   fighter : @types.Fighter,
   opponent : @types.Fighter,
   distance : Float,
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   let dx = opponent.x - fighter.x
   let toward = if dx > 0.0 { 1 } else { -1 }
 
@@ -273,7 +273,7 @@ fn rand_rangef_by_seedless(fighter : @types.Fighter) -> Float {
 ///|
 fn @types.Game::update_cpu_input(
   game : @types.Game,
-  slot : Int,
+  slot : Int32,
   dt : Float,
 ) -> Unit {
   let fighter = game.fighters[slot]

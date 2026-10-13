@@ -1,26 +1,26 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Maximum number of guards that can be active simultaneously.
-let max_guards : Int = 28
+let max_guards : Int32 = 28
 
 ///|
 /// Maximum number of keycards that can be placed in the level.
-let max_keycards : Int = 24
+let max_keycards : Int32 = 24
 
 ///|
 /// Maximum number of bullets in flight at one time.
-let max_bullets : Int = 320
+let max_bullets : Int32 = 320
 
 ///|
 /// Maximum number of visual particles for effects.
-let max_particles : Int = 640
+let max_particles : Int32 = 640
 
 ///|
 /// Represents the player-controlled thief with position, health, and ability cooldowns.
@@ -29,7 +29,7 @@ struct Thief {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut hp : Int
+  mut hp : Int32
   mut stamina : Float
   mut pulse_cd : Float
   mut cloak_t : Float
@@ -62,7 +62,7 @@ struct Guard {
 struct Keycard {
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -74,7 +74,7 @@ struct Bullet {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut owner : Int
+  mut owner : Int32
   mut active : Bool
 }
 
@@ -86,7 +86,7 @@ struct Particle {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -115,10 +115,10 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -144,7 +144,7 @@ fn circle_hits_rect(
 
 ///|
 /// Returns true if a circle of radius r centered at (x, y) collides with any wall or boundary for the given level.
-fn blocked(level : Int, x : Float, y : Float, r : Float) -> Bool {
+fn blocked(level : Int32, x : Float, y : Float, r : Float) -> Bool {
   if x - r < 24.0 ||
     x + r > Float::from_int(sw - 24) ||
     y - r < 132.0 ||
@@ -250,7 +250,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for ps_elem in ps {
@@ -277,9 +277,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_particle(ps, x, y, speed, kind)
@@ -294,7 +294,7 @@ fn spawn_bullet(
   y : Float,
   dx : Float,
   dy : Float,
-  owner : Int,
+  owner : Int32,
   speed : Float,
 ) -> Unit {
   let d2 = dx * dx + dy * dy
@@ -340,10 +340,10 @@ fn reset_player(p : Thief) -> Unit {
 /// Sets the position, kind, and active state for the keycard at the given index.
 fn set_keycard(
   cards : Array[Keycard],
-  idx : Int,
+  idx : Int32,
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   cards[idx].x = x
   cards[idx].y = y
@@ -353,7 +353,7 @@ fn set_keycard(
 
 ///|
 /// Places all keycards for the given level and returns the number that must be collected to win.
-fn init_keycards(level : Int, cards : Array[Keycard]) -> Int {
+fn init_keycards(level : Int32, cards : Array[Keycard]) -> Int32 {
   clear_keycards(cards)
 
   set_keycard(cards, 0, 136.0, 190.0, 0)
@@ -399,7 +399,7 @@ fn init_keycards(level : Int, cards : Array[Keycard]) -> Int {
 /// Configures a guard at index i with patrol waypoints, movement speed, and detection radius.
 fn set_guard(
   gs : Array[Guard],
-  i : Int,
+  i : Int32,
   ax : Float,
   ay : Float,
   bx : Float,
@@ -427,7 +427,7 @@ fn set_guard(
 
 ///|
 /// Initialises all guards with their patrol routes and stats for the given level.
-fn init_guards(level : Int, gs : Array[Guard]) -> Unit {
+fn init_guards(level : Int32, gs : Array[Guard]) -> Unit {
   clear_guards(gs)
 
   set_guard(gs, 0, 156.0, 210.0, 224.0, 286.0, 108.0, 250.0)
@@ -457,13 +457,13 @@ fn init_guards(level : Int, gs : Array[Guard]) -> Unit {
 ///|
 /// Sets up all entities and returns the keycard target count and guard detection radius scale for the given level.
 fn setup_level(
-  level : Int,
+  level : Int32,
   player : Thief,
   guards : Array[Guard],
   cards : Array[Keycard],
   bullets : Array[Bullet],
   particles : Array[Particle],
-) -> (Int, Float) {
+) -> (Int32, Float) {
   reset_player(player)
   init_guards(level, guards)
   clear_bullets(bullets)

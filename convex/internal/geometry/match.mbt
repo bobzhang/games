@@ -71,6 +71,6 @@ pub fn hull_matches_target(
 }
 
 ///|
-pub fn count_hull_vertices(hull : Array[@types.Point]) -> Int {
+pub fn count_hull_vertices(hull : Array[@types.Point]) -> Int32 {
   hull.length()
 }

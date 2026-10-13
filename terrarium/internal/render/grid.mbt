@@ -59,7 +59,7 @@ pub fn draw_grid_cells(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_soil_texture(cx : Int, cy : Int) -> Unit {
+fn draw_soil_texture(cx : Int32, cy : Int32) -> Unit {
   let s = @types.cell_size
   let dark = @types.color_soil
   let seed1 = (cx * 7 + cy * 13) % 5
@@ -77,9 +77,9 @@ fn draw_soil_texture(cx : Int, cy : Int) -> Unit {
 ///|
 fn draw_organism_cell(
   kind : @types.OrganismKind,
-  cx : Int,
-  cy : Int,
-  frame : Int,
+  cx : Int32,
+  cy : Int32,
+  frame : Int32,
 ) -> Unit {
   let color = @types.organism_color(kind)
   let half = @types.cell_size / 2

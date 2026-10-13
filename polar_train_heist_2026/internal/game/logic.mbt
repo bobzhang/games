@@ -101,7 +101,7 @@ fn reset_player(hero : @types.Player) -> Unit {
 
 ///|
 /// Returns the index of a free entity slot, evicting the leftmost active entity if the pool is full.
-fn @types.Game::alloc_ent(game : @types.Game) -> Int {
+fn @types.Game::alloc_ent(game : @types.Game) -> Int32 {
   for i, slot in game.ents {
     if !slot.active {
       break i
@@ -118,7 +118,7 @@ fn @types.Game::alloc_ent(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free shot slot, evicting the shortest-lived active shot if the pool is full.
-fn @types.Game::alloc_shot(game : @types.Game) -> Int {
+fn @types.Game::alloc_shot(game : @types.Game) -> Int32 {
   for i, slot in game.shots {
     if !slot.active {
       break i
@@ -135,7 +135,7 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free particle slot, evicting the shortest-lived active particle if the pool is full.
-fn @types.Game::alloc_fx(game : @types.Game) -> Int {
+fn @types.Game::alloc_fx(game : @types.Game) -> Int32 {
   for i, slot in game.fxs {
     if !slot.active {
       break i
@@ -152,7 +152,7 @@ fn @types.Game::alloc_fx(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free ring slot, evicting the shortest-lived active ring if the pool is full.
-fn @types.Game::alloc_ring(game : @types.Game) -> Int {
+fn @types.Game::alloc_ring(game : @types.Game) -> Int32 {
   for i, slot in game.rings {
     if !slot.active {
       break i
@@ -169,7 +169,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free shadow slot, evicting the shortest-lived active shadow if the pool is full.
-fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
+fn @types.Game::alloc_shadow(game : @types.Game) -> Int32 {
   for i, slot in game.shadows {
     if !slot.active {
       break i
@@ -194,7 +194,7 @@ fn @types.Game::emit_fx(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_fx()
   game.fxs[i].active = true
@@ -213,8 +213,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  count : Int,
-  kind : Int,
+  count : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     game.emit_fx(
@@ -237,7 +237,7 @@ fn @types.Game::spawn_ring(
   y : Float,
   r : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_ring()
   game.rings[i].active = true
@@ -258,7 +258,7 @@ fn @types.Game::emit_shadow(
   h : Float,
   rot : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_shadow()
   game.shadows[i].active = true
@@ -282,7 +282,7 @@ fn @types.Game::spawn_shot(
   vy : Float,
   life : Float,
   dmg : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_shot()
   game.shots[i].active = true
@@ -301,7 +301,7 @@ fn @types.Game::spawn_shot(
 fn @types.Game::spawn_ent(
   game : @types.Game,
   kind : @types.EntityKind,
-  lane : Int,
+  lane : Int32,
   x : Float,
   vx : Float,
   vy : Float,
@@ -310,7 +310,7 @@ fn @types.Game::spawn_ent(
   hp : Float,
   shot_cd : Float,
   cloak : Bool,
-  reward : Int,
+  reward : Int32,
 ) -> Unit {
   let i = game.alloc_ent()
   game.ents[i].active = true
@@ -332,14 +332,14 @@ fn @types.Game::spawn_ent(
 
 ///|
 /// Returns the score gain for a base value scaled by the current combo multiplier.
-fn @types.Game::score_gain(game : @types.Game, base : Int) -> Int {
+fn @types.Game::score_gain(game : @types.Game, base : Int32) -> Int32 {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
 /// Adds combo-scaled score to the game total and updates the best score if exceeded.
-fn @types.Game::add_score(game : @types.Game, base : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, base : Int32) -> Unit {
   let g = game.score_gain(base)
   game.score = game.score + g
   if game.score > game.best_score {
@@ -385,7 +385,7 @@ fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
 
 ///|
 /// Clears all pools, resets the player, and initializes game state for the given stage number.
-fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_ents()
   game.clear_shots()
   game.clear_fx()
@@ -887,9 +887,9 @@ fn @types.Game::enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
 /// Deactivates an entity, awards score with combo scaling, increments kill count, and emits death effects.
 fn @types.Game::kill_ent(
   game : @types.Game,
-  i : Int,
-  base : Int,
-  burst_kind : Int,
+  i : Int32,
+  base : Int32,
+  burst_kind : Int32,
 ) -> Unit {
   let x = game.ents[i].x
   let y = game.ents[i].y

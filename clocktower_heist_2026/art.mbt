@@ -128,7 +128,11 @@ fn draw_texture_cover(
 
 ///|
 /// Draws the generated night skyline behind the heist floor.
-fn draw_clocktower_backdrop(art : GameArt, flash_t : Float, glow : Int) -> Unit {
+fn draw_clocktower_backdrop(
+  art : GameArt,
+  flash_t : Float,
+  glow : Int32,
+) -> Unit {
   draw_texture_cover(
     art.clocktower_backdrop,
     0.0,
@@ -182,7 +186,13 @@ fn draw_floor_art(art : GameArt) -> Unit {
 
 ///|
 /// Draws one generated stone-and-brass wall segment.
-fn draw_wall_art(art : GameArt, x : Int, y : Int, w : Int, h : Int) -> Unit {
+fn draw_wall_art(
+  art : GameArt,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
+) -> Unit {
   @raylib.draw_rectangle(
     x - 2,
     y - 2,
@@ -211,8 +221,8 @@ fn draw_wall_art(art : GameArt, x : Int, y : Int, w : Int, h : Int) -> Unit {
 /// Draws the generated vault console with state tinting.
 fn draw_vault_art(
   art : GameArt,
-  collected : Int,
-  target_cards : Int,
+  collected : Int32,
+  target_cards : Int32,
   vault_open : Bool,
 ) -> Unit {
   let glow = if collected >= target_cards {
@@ -259,7 +269,7 @@ fn draw_exit_art(art : GameArt, vault_open : Bool) -> Unit {
 
 ///|
 /// Returns the accent color for a keycard type.
-fn keycard_color(kind : Int) -> @raylib.Color {
+fn keycard_color(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @raylib.Color::new(246, 212, 124, 255)
   } else if kind == 1 {

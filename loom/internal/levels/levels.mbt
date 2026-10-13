@@ -1,6 +1,6 @@
 ///|
 /// Get a level by index (0-based)
-pub fn get_level(idx : Int) -> @types.Level {
+pub fn get_level(idx : Int32) -> @types.Level {
   if idx < @types.tier1_count {
     get_tier1_level(idx)
   } else if idx < @types.tier1_count + @types.tier2_count {
@@ -12,7 +12,7 @@ pub fn get_level(idx : Int) -> @types.Level {
 
 ///|
 /// Tier 1: Plain weave, simple 2-color (7 levels)
-fn get_tier1_level(idx : Int) -> @types.Level {
+fn get_tier1_level(idx : Int32) -> @types.Level {
   let rows = @types.grid_rows
   let cols = @types.grid_cols
   match idx {
@@ -133,7 +133,7 @@ fn get_tier1_level(idx : Int) -> @types.Level {
 
 ///|
 /// Tier 2: Twill patterns, 3 colors (7 levels)
-fn get_tier2_level(idx : Int) -> @types.Level {
+fn get_tier2_level(idx : Int32) -> @types.Level {
   let rows = @types.grid_rows
   let cols = @types.grid_cols
   match idx {
@@ -254,7 +254,7 @@ fn get_tier2_level(idx : Int) -> @types.Level {
 
 ///|
 /// Tier 3: Complex patterns - herringbone, diamond, 4 colors (6 levels)
-fn get_tier3_level(idx : Int) -> @types.Level {
+fn get_tier3_level(idx : Int32) -> @types.Level {
   let rows = @types.grid_rows
   let cols = @types.grid_cols
   match idx {
@@ -361,9 +361,9 @@ fn get_tier3_level(idx : Int) -> @types.Level {
 /// Compute star rating for a level
 pub fn compute_stars(
   level : @types.Level,
-  heddle_changes : Int,
+  heddle_changes : Int32,
   correct_type : Bool,
-) -> Int {
+) -> Int32 {
   let mut stars = 1
   if heddle_changes <= level.par_changes {
     stars = 2

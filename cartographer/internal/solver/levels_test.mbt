@@ -2,7 +2,7 @@
 /// Helper: set up a grid with the given solution and verify all clues are satisfied.
 fn verify_solution(
   level : @types.Level,
-  placements : Array[(@types.FeatureKind, Int, Int)],
+  placements : Array[(@types.FeatureKind, Int32, Int32)],
 ) -> Bool {
   let grid : Array[@types.FeatureKind?] = Array::make(
     level.grid_size * level.grid_size,

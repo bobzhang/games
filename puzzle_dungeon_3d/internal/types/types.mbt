@@ -99,7 +99,7 @@ pub extend World with Eq::{not_equal, equal}
 
 ///|
 /// Maps a world-selection index to a `World` enum, defaulting to `WorldVoid`.
-pub fn int_to_world(i : Int) -> World {
+pub fn int_to_world(i : Int32) -> World {
   if i == 0 {
     WorldDungeon
   } else if i == 1 {
@@ -115,7 +115,7 @@ pub fn int_to_world(i : Int) -> World {
 
 ///|
 /// Converts a `World` enum to its stable integer index for save/UI usage.
-pub fn world_to_int(w : World) -> Int {
+pub fn world_to_int(w : World) -> Int32 {
   match w {
     WorldDungeon => 0
     WorldIce => 1
@@ -148,8 +148,8 @@ pub extend DecoKind with Eq::{not_equal, equal}
 pub(all) struct Entity {
   mut active : Bool
   mut kind : EntityKind
-  mut gx : Int // grid x
-  mut gy : Int // grid y
+  mut gx : Int32 // grid x
+  mut gy : Int32 // grid y
   mut anim_x : Float // animated world x
   mut anim_y : Float // animated world z (y in grid = z in world)
   mut anim_timer : Float
@@ -177,7 +177,7 @@ pub fn Entity::inactive() -> Entity {
 
 ///|
 /// Creates an active push-block entity at grid coordinates `(gx, gy)`.
-pub fn Entity::new_block(gx : Int, gy : Int) -> Entity {
+pub fn Entity::new_block(gx : Int32, gy : Int32) -> Entity {
   {
     active: true,
     kind: EntityBlock,
@@ -194,7 +194,7 @@ pub fn Entity::new_block(gx : Int, gy : Int) -> Entity {
 
 ///|
 /// Creates an active diamond pickup entity at grid coordinates `(gx, gy)`.
-pub fn Entity::new_diamond(gx : Int, gy : Int) -> Entity {
+pub fn Entity::new_diamond(gx : Int32, gy : Int32) -> Entity {
   {
     active: true,
     kind: EntityDiamond,
@@ -211,7 +211,7 @@ pub fn Entity::new_diamond(gx : Int, gy : Int) -> Entity {
 
 ///|
 /// Creates an active key pickup entity at grid coordinates `(gx, gy)`.
-pub fn Entity::new_key(gx : Int, gy : Int) -> Entity {
+pub fn Entity::new_key(gx : Int32, gy : Int32) -> Entity {
   {
     active: true,
     kind: EntityKey,
@@ -240,9 +240,9 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
 }
 
@@ -272,10 +272,10 @@ pub fn Particle::inactive() -> Particle {
 /// One rendered laser segment between two grid points after mirror tracing.
 pub(all) struct LaserSegment {
   mut active : Bool
-  mut start_gx : Int
-  mut start_gy : Int
-  mut end_gx : Int
-  mut end_gy : Int
+  mut start_gx : Int32
+  mut start_gy : Int32
+  mut end_gx : Int32
+  mut end_gy : Int32
   mut dir : Dir
 }
 
@@ -325,16 +325,16 @@ pub fn Decoration::inactive() -> Decoration {
 ///|
 /// Snapshot data captured before a move to support deterministic undo playback.
 pub(all) struct UndoState {
-  mut player_gx : Int
-  mut player_gy : Int
+  mut player_gx : Int32
+  mut player_gy : Int32
   tiles : FixedArray[Tile]
-  entity_gx : FixedArray[Int]
-  entity_gy : FixedArray[Int]
+  entity_gx : FixedArray[Int32]
+  entity_gy : FixedArray[Int32]
   entity_active : FixedArray[Bool]
   entity_kind : FixedArray[EntityKind]
-  mut moves : Int
-  mut keys_held : Int
-  mut diamonds_collected : Int
+  mut moves : Int32
+  mut keys_held : Int32
+  mut diamonds_collected : Int32
 }
 
 ///|
@@ -361,8 +361,8 @@ pub fn UndoState::empty() -> UndoState {
 pub(all) struct FloorInfo {
   mut unlocked : Bool
   mut completed : Bool
-  mut best_moves : Int
-  mut stars : Int
+  mut best_moves : Int32
+  mut stars : Int32
 }
 
 ///|
@@ -396,10 +396,10 @@ pub(all) struct Game {
   mut prev_state : GameState
 
   // Player
-  mut player_gx : Int
-  mut player_gy : Int
-  mut prev_tile_x : Int
-  mut prev_tile_y : Int
+  mut player_gx : Int32
+  mut player_gy : Int32
+  mut prev_tile_x : Int32
+  mut prev_tile_y : Int32
   mut player_anim_x : Float
   mut player_anim_z : Float
   mut player_anim_timer : Float
@@ -409,14 +409,14 @@ pub(all) struct Game {
   mut player_push_anim : Float
 
   // Level
-  mut current_floor : Int
+  mut current_floor : Int32
   mut current_world : World
-  mut moves : Int
-  mut keys_held : Int
-  mut diamonds_collected : Int
-  mut diamonds_total : Int
-  mut plates_active : Int
-  mut plates_total : Int
+  mut moves : Int32
+  mut keys_held : Int32
+  mut diamonds_collected : Int32
+  mut diamonds_total : Int32
+  mut plates_active : Int32
+  mut plates_total : Int32
   mut exit_open : Bool
   tiles : Array[Tile]
   entities : Array[Entity]
@@ -425,13 +425,13 @@ pub(all) struct Game {
 
   // Laser system
   laser_segments : Array[LaserSegment]
-  mut laser_segment_count : Int
-  mut laser_targets_hit : Int
-  mut laser_targets_total : Int
+  mut laser_segment_count : Int32
+  mut laser_targets_hit : Int32
+  mut laser_targets_total : Int32
 
   // Decorations
   decorations : Array[Decoration]
-  mut decoration_count : Int
+  mut decoration_count : Int32
 
   // Conveyor / spike timing
   mut spike_timer : Float
@@ -444,7 +444,7 @@ pub(all) struct Game {
 
   // Undo
   undo_stack : Array[UndoState]
-  mut undo_count : Int
+  mut undo_count : Int32
 
   // Particles
   particles : Array[Particle]
@@ -463,36 +463,36 @@ pub(all) struct Game {
   mut camera_target_z : Float
 
   // UI
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
   mut transition_timer : Float
   mut transition_out : Bool
   mut message_timer : Float
   mut message_text : String
-  mut floor_select_cursor : Int
-  mut world_select_cursor : Int
-  mut tutorial_step : Int
+  mut floor_select_cursor : Int32
+  mut world_select_cursor : Int32
+  mut tutorial_step : Int32
   mut tutorial_timer : Float
   mut tutorial_active : Bool
   mut tutorial_text : String
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // Level complete display
   mut complete_timer : Float
-  mut complete_stars : Int
+  mut complete_stars : Int32
 
   // Undo feedback
   mut undo_flash_timer : Float
   mut undo_is_last : Bool
 
   // Stats
-  mut total_stars : Int
-  mut total_moves : Int
-  mut total_undos : Int
-  mut levels_completed : Int
+  mut total_stars : Int32
+  mut total_moves : Int32
+  mut total_undos : Int32
+  mut levels_completed : Int32
 }
 
 ///|

@@ -232,7 +232,7 @@ fn update_editing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_domino(game : @types.Game, gx : Int, gy : Int) -> Unit {
+fn place_domino(game : @types.Game, gx : Int32, gy : Int32) -> Unit {
   let pos = @types.vec2i(gx, gy)
   // Check if socket is already occupied
   let existing = @types.find_domino_at(game.dominoes, pos)
@@ -272,7 +272,7 @@ fn place_domino(game : @types.Game, gx : Int, gy : Int) -> Unit {
 }
 
 ///|
-fn remove_domino(game : @types.Game, gx : Int, gy : Int) -> Unit {
+fn remove_domino(game : @types.Game, gx : Int32, gy : Int32) -> Unit {
   let pos = @types.vec2i(gx, gy)
   let idx = @types.find_domino_at(game.dominoes, pos)
   if idx >= 0 {

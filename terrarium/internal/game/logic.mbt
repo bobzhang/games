@@ -1,5 +1,5 @@
 ///|
-pub fn start_level(game : @types.Game, level_id : Int) -> Unit {
+pub fn start_level(game : @types.Game, level_id : Int32) -> Unit {
   let level = @levels.get_level(level_id)
   game.current_level = Some(level)
   game.selected_level = level_id
@@ -86,7 +86,7 @@ pub fn finish_simulation(game : @types.Game) -> Unit {
 }
 
 ///|
-fn count_total_placed(game : @types.Game) -> Int {
+fn count_total_placed(game : @types.Game) -> Int32 {
   let mut total = 0
   for i in 0..<@types.num_organisms {
     total += game.organisms_placed[i]

@@ -62,7 +62,7 @@ pub fn draw_title_screen(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_jar_preview(cx : Int, cy : Int, frame : Int) -> Unit {
+fn draw_jar_preview(cx : Int32, cy : Int32, frame : Int32) -> Unit {
   let jar_w = 100
   let jar_h = 80
   @raylib.draw_rectangle_rounded(
@@ -86,7 +86,7 @@ fn draw_jar_preview(cx : Int, cy : Int, frame : Int) -> Unit {
 }
 
 ///|
-fn truncate_string(s : String, max_len : Int) -> String {
+fn truncate_string(s : String, max_len : Int32) -> String {
   if s.length() > max_len {
     let mut result = ""
     let mut count = 0
@@ -157,7 +157,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars_small(x : Int, y : Int, count : Int) -> Unit {
+fn draw_stars_small(x : Int32, y : Int32, count : Int32) -> Unit {
   for i in 0..<3 {
     let color = if i < count {
       @types.color_star
@@ -340,7 +340,7 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars_large(x : Int, y : Int, count : Int) -> Unit {
+fn draw_stars_large(x : Int32, y : Int32, count : Int32) -> Unit {
   for i in 0..<3 {
     let color = if i < count {
       @types.color_star

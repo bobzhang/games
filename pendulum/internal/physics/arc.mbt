@@ -1,13 +1,13 @@
 ///|
 pub fn compute_arc(
   anchor : @types.Vec2i,
-  length : Int,
+  length : Int32,
 ) -> Array[@types.ArcPoint] {
   @types.compute_arc_points(anchor, length)
 }
 
 ///|
-pub fn find_bottom_index(arc : Array[@types.ArcPoint]) -> Int {
+pub fn find_bottom_index(arc : Array[@types.ArcPoint]) -> Int32 {
   // Find the arc point that is most directly below the anchor (angle closest to PI/2)
   let target : Float = @types.pi / 2.0
   let mut best = 0
@@ -25,8 +25,8 @@ pub fn find_bottom_index(arc : Array[@types.ArcPoint]) -> Int {
 ///|
 pub fn compute_swing_extent(
   arc : Array[@types.ArcPoint],
-  bottom_index : Int,
-) -> (Int, Int) {
+  bottom_index : Int32,
+) -> (Int32, Int32) {
   // Returns (left_limit, right_limit) indices
   // Gravity effect: weight swings less far up.
   // Simple model: can swing up to 70% of the arc each side from bottom
@@ -103,7 +103,7 @@ pub fn check_peg_wrap(
 pub fn compute_new_rope_length(
   new_anchor : @types.Vec2i,
   weight_pos : @types.Vec2i,
-) -> Int {
+) -> Int32 {
   let dx = @types.absi(weight_pos.x - new_anchor.x)
   let dy = @types.absi(weight_pos.y - new_anchor.y)
   let dist = @types.sqrtf(Float::from_int(dx * dx + dy * dy))

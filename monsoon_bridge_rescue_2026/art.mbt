@@ -130,10 +130,10 @@ fn draw_texture_cover(
 /// Draws the generated river backdrop with a storm-darkening overlay.
 fn draw_monsoon_backdrop(
   art : GameArt,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   storm : Float,
 ) -> Unit {
   draw_texture_cover(
@@ -159,7 +159,7 @@ fn draw_bridge_span_art(
   art : GameArt,
   span : BridgeSpan,
   scene_t : Float,
-  index : Int,
+  index : Int32,
 ) -> Unit {
   let cx : Float = span.x + span.w * 0.5
   let cy : Float = span.y + span.h * 0.5
@@ -184,11 +184,11 @@ fn draw_bridge_span_art(
     @raylib.white,
   )
 
-  let bar_w : Int = (span.w * 1.04).to_int()
-  let bar_x : Int = (cx - Float::from_int(bar_w) * 0.5).to_int()
-  let bar_y : Int = (span.y + span.h + 8.0).to_int()
-  let red : Int = 224 - (p * 102.0).to_int()
-  let green : Int = 48 + (p * 174.0).to_int()
+  let bar_w : Int32 = (span.w * 1.04).to_int()
+  let bar_x : Int32 = (cx - Float::from_int(bar_w) * 0.5).to_int()
+  let bar_y : Int32 = (span.y + span.h + 8.0).to_int()
+  let red : Int32 = 224 - (p * 102.0).to_int()
+  let green : Int32 = 48 + (p * 174.0).to_int()
   @raylib.draw_rectangle(
     bar_x,
     bar_y,
@@ -226,7 +226,7 @@ fn draw_bridge_span_art(
 ///|
 /// Draws a generated survivor raft with its gameplay passenger count.
 fn draw_raft_art(art : GameArt, raft : RaftGroup, scene_t : Float) -> Unit {
-  let panic_col : Int = 80 + (clampf(raft.panic, 0.0, 1.0) * 132.0).to_int()
+  let panic_col : Int32 = 80 + (clampf(raft.panic, 0.0, 1.0) * 132.0).to_int()
   @raylib.draw_circle_v(
     @raylib.Vector2::new(raft.x, raft.y),
     28.0,
@@ -336,7 +336,7 @@ fn draw_rescue_boat_art(
   let y : Float = boat.y + bob
   let c : Float = @math.cosf(boat.heading)
   let s : Float = @math.sinf(boat.heading)
-  let heat_alpha : Int = clampf(boat.boost_heat * 170.0, 0.0, 180.0).to_int()
+  let heat_alpha : Int32 = clampf(boat.boost_heat * 170.0, 0.0, 180.0).to_int()
   if heat_alpha > 0 {
     @raylib.draw_circle_v(
       @raylib.Vector2::new(x - c * 31.0, y - s * 31.0),

@@ -1,5 +1,5 @@
 ///|
-pub fn generate_sector_map(depth : Int) -> @types.SectorMap {
+pub fn generate_sector_map(depth : Int32) -> @types.SectorMap {
   let nodes : Array[@types.SectorNode] = []
   let layers = @types.sector_map_layers
   let per_layer = @types.nodes_per_layer
@@ -86,7 +86,7 @@ pub fn generate_sector_map(depth : Int) -> @types.SectorMap {
 }
 
 ///|
-fn random_sector_kind(seed : Int) -> @types.SectorKind {
+fn random_sector_kind(seed : Int32) -> @types.SectorKind {
   let roll = (@types.rng_int(100) + seed) % 100
   if roll < 30 {
     Asteroids
@@ -112,13 +112,13 @@ pub fn sector_name(kind : @types.SectorKind) -> String {
 }
 
 ///|
-pub fn can_travel_to(map : @types.SectorMap, target : Int) -> Bool {
+pub fn can_travel_to(map : @types.SectorMap, target : Int32) -> Bool {
   let current = map.nodes[map.current]
   current.connections.contains(target)
 }
 
 ///|
-pub fn enter_sector(game : @types.Game, node_idx : Int) -> Unit {
+pub fn enter_sector(game : @types.Game, node_idx : Int32) -> Unit {
   match game.sector_map {
     None => ()
     Some(map) => {
@@ -162,7 +162,7 @@ pub fn enter_sector(game : @types.Game, node_idx : Int) -> Unit {
 }
 
 ///|
-fn spawn_asteroids(game : @types.Game, count : Int) -> Unit {
+fn spawn_asteroids(game : @types.Game, count : Int32) -> Unit {
   for _i in 0..<count {
     for j in 0..<game.asteroids.length() {
       if !game.asteroids[j].active {

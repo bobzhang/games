@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Total world width in game units.
@@ -20,31 +20,31 @@ let gravity : Float = 920.0
 
 ///|
 /// Maximum number of platform records in the pool.
-let max_platforms : Int = 280
+let max_platforms : Int32 = 280
 
 ///|
 /// Maximum number of gate records in the pool.
-let max_gates : Int = 8
+let max_gates : Int32 = 8
 
 ///|
 /// Maximum number of energy core records in the pool.
-let max_cores : Int = 340
+let max_cores : Int32 = 340
 
 ///|
 /// Maximum number of box records in the pool.
-let max_boxes : Int = 220
+let max_boxes : Int32 = 220
 
 ///|
 /// Maximum number of drone records in the pool.
-let max_drones : Int = 180
+let max_drones : Int32 = 180
 
 ///|
 /// Maximum number of bolt projectile records in the pool.
-let max_bolts : Int = 1100
+let max_bolts : Int32 = 1100
 
 ///|
 /// Maximum number of particle effect records in the pool.
-let max_particles : Int = 1700
+let max_particles : Int32 = 1700
 
 ///|
 /// X position of the reactor delivery zone (world_w - 220).
@@ -56,7 +56,7 @@ let reactor_y : Float = floor_y - 100.0
 
 ///|
 /// Number of cores that must be delivered to win the level.
-let target_cores : Int = 120
+let target_cores : Int32 = 120
 
 ///|
 /// Player state including position, physics, resources (HP, energy, weapon heat), cooldowns, jump state, magnet, scoring, and cargo.
@@ -65,7 +65,7 @@ struct Player {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut face : Int
+  mut face : Int32
   mut hp : Float
   mut energy : Float
   mut heat : Float
@@ -77,12 +77,12 @@ struct Player {
   mut coyote_t : Float
   mut grounded : Bool
   mut magnet_on : Bool
-  mut polarity : Int
-  mut score : Int
-  mut cargo : Int
-  mut delivered : Int
-  mut combo : Int
-  mut best_combo : Int
+  mut polarity : Int32
+  mut score : Int32
+  mut cargo : Int32
+  mut delivered : Int32
+  mut combo : Int32
+  mut best_combo : Int32
 }
 
 ///|
@@ -104,7 +104,7 @@ struct Platform {
 struct Gate {
   mut active : Bool
   mut x : Float
-  mut req : Int
+  mut req : Int32
   mut open : Bool
 }
 
@@ -112,13 +112,13 @@ struct Gate {
 /// Collectible energy core with physics, magnetic state, point value, and animation timer.
 struct Core {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
   mut vy : Float
   mut r : Float
-  mut value : Int
+  mut value : Int32
   mut magnetized : Bool
   mut t : Float
 }
@@ -127,7 +127,7 @@ struct Core {
 /// Destructible metal box with physics, HP, magnetic state, and animation timer; drops cores when destroyed.
 struct Box {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -142,7 +142,7 @@ struct Box {
 /// Enemy drone with kind-specific AI (0=chaser, 1=orbiter, 2=heavy), HP, fire cooldown, and animation timer.
 struct Drone {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -156,8 +156,8 @@ struct Drone {
 /// Projectile with team affiliation (1=player, 2=enemy), kind, physics, damage, collision radius, and lifetime.
 struct Bolt {
   mut active : Bool
-  mut team : Int
-  mut kind : Int
+  mut team : Int32
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -171,7 +171,7 @@ struct Bolt {
 /// Visual particle with pooling flag, kind, physics, size, lifetime, and age timer.
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -213,10 +213,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -226,7 +226,7 @@ fn inside_rect(
 
 ///|
 /// Returns the collision radius for a drone based on its kind: 16 for chasers, 21 for orbiters, 27 for heavies.
-fn drone_radius(kind : Int) -> Float {
+fn drone_radius(kind : Int32) -> Float {
   if kind == 0 {
     16.0
   } else if kind == 1 {
@@ -238,7 +238,7 @@ fn drone_radius(kind : Int) -> Float {
 
 ///|
 /// Returns the starting HP for a drone scaled by its kind and the current difficulty level.
-fn drone_hp(kind : Int, level : Int) -> Float {
+fn drone_hp(kind : Int32, level : Int32) -> Float {
   if kind == 0 {
     34.0 + Float::from_int(level) * 3.0
   } else if kind == 1 {
@@ -389,7 +389,7 @@ fn add_platform(
 
 ///|
 /// Activates an inactive gate at position `x` requiring `req` delivered cores to open.
-fn add_gate(gates : Array[Gate], x : Float, req : Int) -> Bool {
+fn add_gate(gates : Array[Gate], x : Float, req : Int32) -> Bool {
   for gate in gates {
     if !gate.active {
       gate.active = true
@@ -406,12 +406,12 @@ fn add_gate(gates : Array[Gate], x : Float, req : Int) -> Bool {
 /// Activates an inactive energy core with kind, position, velocity, and point value.
 fn add_core(
   cores : Array[Core],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
   vy : Float,
-  value : Int,
+  value : Int32,
 ) -> Bool {
   for core in cores {
     if !core.active {
@@ -441,7 +441,7 @@ fn add_core(
 /// Activates an inactive box with kind, position, and initial velocity.
 fn add_box(
   boxes : Array[Box],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -473,10 +473,10 @@ fn add_box(
 /// Activates an inactive drone with the given kind, position, and level-scaled HP.
 fn add_drone(
   drones : Array[Drone],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
-  level : Int,
+  level : Int32,
 ) -> Bool {
   for drone in drones {
     if !drone.active {
@@ -505,8 +505,8 @@ fn add_drone(
 /// Activates an inactive bolt with team, kind, position, velocity, damage, collision radius, and lifetime.
 fn add_bolt(
   bolts : Array[Bolt],
-  team : Int,
-  kind : Int,
+  team : Int32,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -537,7 +537,7 @@ fn add_bolt(
 /// Activates an inactive particle with kind, position, velocity, size, and lifetime.
 fn add_particle(
   parts : Array[Particle],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -568,9 +568,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     let ang : Float = randf(0.0, 6.283)
@@ -691,7 +691,7 @@ fn setup_world(
   for _ in 0..<95 {
     let x : Float = randf(120.0, world_w - 420.0)
     let y : Float = randf(220.0, 620.0)
-    let value : Int = 1 + @raylib.get_random_value(0, 2)
+    let value : Int32 = 1 + @raylib.get_random_value(0, 2)
     ignore(
       add_core(
         cores,
@@ -723,15 +723,15 @@ fn setup_world(
 
 ///|
 /// Renders on-screen touch controls (D-pad and action buttons) for the given game state.
-fn draw_touch_ui(state : Int) -> Unit {
+fn draw_touch_ui(state : Int32) -> Unit {
   if state != 1 {
     ignore(())
   } else {
-    let pad_x : Int = 20
-    let pad_y : Int = sh - 208
+    let pad_x : Int32 = 20
+    let pad_y : Int32 = sh - 208
 
-    let btn_x : Int = sw - 342
-    let btn_y : Int = sh - 244
+    let btn_x : Int32 = sw - 342
+    let btn_y : Int32 = sh - 244
 
     @raylib.draw_rectangle(
       pad_x,
@@ -994,7 +994,7 @@ fn main {
     best_combo: 0,
   }
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut cam_x : Float = 0.0
 
   let mut timer : Float = 420.0
@@ -1119,7 +1119,7 @@ fn main {
         }
       }
 
-      let level : Int = player.delivered / 10 +
+      let level : Int32 = player.delivered / 10 +
         (Float::from_int(420) - timer).to_int() / 48 +
         1
 
@@ -1175,11 +1175,11 @@ fn main {
       let mut polarity_press : Bool = @raylib.is_key_pressed(@raylib.KeyK)
       let mut dash_press : Bool = @raylib.is_key_pressed(@raylib.KeyRightShift)
 
-      let pad_x : Int = 20
-      let pad_y : Int = sh - 208
+      let pad_x : Int32 = 20
+      let pad_y : Int32 = sh - 208
 
-      let btn_x : Int = sw - 342
-      let btn_y : Int = sh - 244
+      let btn_x : Int32 = sw - 342
+      let btn_y : Int32 = sh - 244
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x + 12, pad_y + 66, 62, 62) {
@@ -1467,8 +1467,8 @@ fn main {
         spawn_x = clampf(spawn_x, 80.0, frontier)
         let spawn_y : Float = randf(160.0, 560.0)
 
-        let roll : Int = @raylib.get_random_value(0, 99)
-        let mut kind : Int = 0
+        let roll : Int32 = @raylib.get_random_value(0, 99)
+        let mut kind : Int32 = 0
         if level >= 4 && roll >= 48 {
           kind = 1
         }
@@ -1853,7 +1853,7 @@ fn main {
 
         // Destroyed.
         if drone.hp <= 0.0 {
-          let reward : Int = 60 + drone.kind * 34 + player.combo * 3
+          let reward : Int32 = 60 + drone.kind * 34 + player.combo * 3
           player.score = player.score + reward
           player.combo = player.combo + 1
           if player.combo > player.best_combo {
@@ -2073,8 +2073,8 @@ fn main {
     )
 
     // Reactor zone.
-    let rx : Int = (reactor_x - cam_x).to_int()
-    let ry : Int = reactor_y.to_int()
+    let rx : Int32 = (reactor_x - cam_x).to_int()
+    let ry : Int32 = reactor_y.to_int()
     draw_texture_centered(
       art.reactor_sprite,
       Float::from_int(rx),
@@ -2106,10 +2106,10 @@ fn main {
         continue
       }
 
-      let x : Int = (platform.x - platform.w * 0.5 - cam_x).to_int()
-      let y : Int = (platform.y - platform.h * 0.5).to_int()
-      let w : Int = platform.w.to_int()
-      let h : Int = platform.h.to_int()
+      let x : Int32 = (platform.x - platform.w * 0.5 - cam_x).to_int()
+      let y : Int32 = (platform.y - platform.h * 0.5).to_int()
+      let w : Int32 = platform.w.to_int()
+      let h : Int32 = platform.h.to_int()
 
       @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(58, 68, 90, 236))
       @raylib.draw_rectangle_lines(
@@ -2121,8 +2121,8 @@ fn main {
       )
 
       for s in 0..<5 {
-        let lx0 : Int = x + s * (w / 5)
-        let lx1 : Int = lx0 + 10
+        let lx0 : Int32 = x + s * (w / 5)
+        let lx1 : Int32 = lx0 + 10
         @raylib.draw_line(
           lx0,
           y + h - 1,
@@ -2139,7 +2139,7 @@ fn main {
         continue
       }
 
-      let gx : Int = (gate.x - cam_x).to_int()
+      let gx : Int32 = (gate.x - cam_x).to_int()
       if gate.open {
         @raylib.draw_line(
           gx,
@@ -2185,8 +2185,8 @@ fn main {
       if !core.active {
         continue
       }
-      let cx : Int = (core.x - cam_x).to_int()
-      let cy : Int = core.y.to_int()
+      let cx : Int32 = (core.x - cam_x).to_int()
+      let cy : Int32 = core.y.to_int()
       let col = if core.kind == 0 {
         @raylib.Color::new(112, 234, 194, 244)
       } else if core.kind == 1 {
@@ -2231,7 +2231,7 @@ fn main {
       if !box.active {
         continue
       }
-      let bs : Int = (box.r * 2.0).to_int()
+      let bs : Int32 = (box.r * 2.0).to_int()
       let col = if box.kind == 0 {
         @raylib.Color::new(238, 248, 255, 246)
       } else {
@@ -2262,8 +2262,8 @@ fn main {
         continue
       }
 
-      let dx : Int = (drone.x - cam_x).to_int()
-      let dy : Int = drone.y.to_int()
+      let dx : Int32 = (drone.x - cam_x).to_int()
+      let dy : Int32 = drone.y.to_int()
       let radius = drone_radius(drone.kind)
       let drone_tint = if drone.kind == 0 {
         @raylib.Color::new(255, 255, 255, 250)
@@ -2294,8 +2294,8 @@ fn main {
       if !bolt.active {
         continue
       }
-      let bx : Int = (bolt.x - cam_x).to_int()
-      let by : Int = bolt.y.to_int()
+      let bx : Int32 = (bolt.x - cam_x).to_int()
+      let by : Int32 = bolt.y.to_int()
       let col = if bolt.team == 1 {
         @raylib.Color::new(248, 244, 152, 250)
       } else if bolt.kind == 1 {
@@ -2307,8 +2307,8 @@ fn main {
     }
 
     // Player.
-    let px : Int = (player.x - cam_x).to_int()
-    let py : Int = player.y.to_int()
+    let px : Int32 = (player.x - cam_x).to_int()
+    let py : Int32 = player.y.to_int()
     let pcol = if player.inv_t > 0.0 {
       @raylib.Color::new(252, 252, 252, 236)
     } else {
@@ -2372,7 +2372,7 @@ fn main {
       if !particle.active {
         continue
       }
-      let alpha : Int = (clampf(particle.life / 0.82, 0.0, 1.0) * 255.0).to_int()
+      let alpha : Int32 = (clampf(particle.life / 0.82, 0.0, 1.0) * 255.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(112, 224, 252, alpha)
       } else if particle.kind == 1 {
@@ -2460,9 +2460,9 @@ fn main {
     )
 
     // Gauges.
-    let hp_fill : Int = (clampf(player.hp / 100.0, 0.0, 1.0) * 230.0).to_int()
-    let en_fill : Int = (clampf(player.energy / 100.0, 0.0, 1.0) * 230.0).to_int()
-    let heat_fill : Int = (clampf(player.heat / 100.0, 0.0, 1.0) * 230.0).to_int()
+    let hp_fill : Int32 = (clampf(player.hp / 100.0, 0.0, 1.0) * 230.0).to_int()
+    let en_fill : Int32 = (clampf(player.energy / 100.0, 0.0, 1.0) * 230.0).to_int()
+    let heat_fill : Int32 = (clampf(player.heat / 100.0, 0.0, 1.0) * 230.0).to_int()
 
     @raylib.draw_rectangle(16, 92, 230, 11, @raylib.Color::new(22, 26, 38, 255))
     @raylib.draw_rectangle(
@@ -2523,10 +2523,10 @@ fn main {
     )
 
     // Navigation strip.
-    let nav_x : Int = 446
-    let nav_y : Int = 98
-    let nav_w : Int = 790
-    let nav_h : Int = 28
+    let nav_x : Int32 = 446
+    let nav_y : Int32 = 98
+    let nav_w : Int32 = 790
+    let nav_h : Int32 = 28
     @raylib.draw_rectangle(
       nav_x,
       nav_y,
@@ -2542,7 +2542,7 @@ fn main {
       @raylib.Color::new(90, 126, 166, 210),
     )
 
-    let pnx : Int = nav_x +
+    let pnx : Int32 = nav_x +
       (player.x / world_w * Float::from_int(nav_w)).to_int()
     @raylib.draw_circle(
       pnx,
@@ -2551,7 +2551,7 @@ fn main {
       @raylib.Color::new(128, 214, 252, 252),
     )
 
-    let rnx : Int = nav_x +
+    let rnx : Int32 = nav_x +
       (reactor_x / world_w * Float::from_int(nav_w)).to_int()
     @raylib.draw_circle(
       rnx,
@@ -2564,7 +2564,7 @@ fn main {
       if !gate.active {
         continue
       }
-      let gx : Int = nav_x +
+      let gx : Int32 = nav_x +
         (gate.x / world_w * Float::from_int(nav_w)).to_int()
       let gc = if gate.open {
         @raylib.Color::new(112, 224, 166, 236)

@@ -2,12 +2,12 @@
 pub(all) struct SpeciesNeeds {
   name : String
   terrain_primary : Terrain
-  terrain_primary_count : Int
+  terrain_primary_count : Int32
   terrain_secondary : Terrain?
-  terrain_secondary_count : Int
+  terrain_secondary_count : Int32
   water_adjacent : Bool
-  water_adjacent_count : Int
-  min_space : Int
+  water_adjacent_count : Int32
+  min_space : Int32
   is_predator : Bool
   fears_predators : Bool
 } derive(Debug)

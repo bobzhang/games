@@ -12,15 +12,15 @@ pub extend Cell with Debug::{to_repr}
 ///|
 pub(all) struct Grid {
   cells : Array[Array[Cell]]
-  cols : Int
-  rows : Int
+  cols : Int32
+  rows : Int32
 } derive(Debug)
 
 ///|
 pub extend Grid with Debug::{to_repr}
 
 ///|
-pub fn Grid::new(cols : Int, rows : Int) -> Grid {
+pub fn Grid::new(cols : Int32, rows : Int32) -> Grid {
   let cells : Array[Array[Cell]] = []
   for _r in 0..<rows {
     let row : Array[Cell] = []
@@ -38,7 +38,7 @@ pub fn Grid::new(cols : Int, rows : Int) -> Grid {
 }
 
 ///|
-pub fn Grid::get(self : Grid, col : Int, row : Int) -> Cell? {
+pub fn Grid::get(self : Grid, col : Int32, row : Int32) -> Cell? {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
     Some(self.cells[row][col])
   } else {
@@ -49,8 +49,8 @@ pub fn Grid::get(self : Grid, col : Int, row : Int) -> Cell? {
 ///|
 pub fn Grid::set_terrain(
   self : Grid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   t : Terrain?,
 ) -> Unit {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
@@ -61,8 +61,8 @@ pub fn Grid::set_terrain(
 ///|
 pub fn Grid::set_animal(
   self : Grid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   a : Species?,
 ) -> Unit {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
@@ -71,7 +71,12 @@ pub fn Grid::set_animal(
 }
 
 ///|
-pub fn Grid::set_fence_top(self : Grid, col : Int, row : Int, v : Bool) -> Unit {
+pub fn Grid::set_fence_top(
+  self : Grid,
+  col : Int32,
+  row : Int32,
+  v : Bool,
+) -> Unit {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
     self.cells[row][col].fence_top = v
   }
@@ -80,8 +85,8 @@ pub fn Grid::set_fence_top(self : Grid, col : Int, row : Int, v : Bool) -> Unit 
 ///|
 pub fn Grid::set_fence_left(
   self : Grid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   v : Bool,
 ) -> Unit {
   if col >= 0 && col < self.cols && row >= 0 && row < self.rows {
@@ -103,8 +108,8 @@ pub fn Grid::clear(self : Grid) -> Unit {
 
 ///|
 pub(all) struct Enclosure {
-  id : Int
-  cells : Array[(Int, Int)]
+  id : Int32
+  cells : Array[(Int32, Int32)]
   mut species : Species?
 } derive(Debug)
 
@@ -113,14 +118,14 @@ pub extend Enclosure with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelDef {
-  id : Int
-  tier : Int
+  id : Int32
+  tier : Int32
   species : Array[Species]
-  par_tiles : Int
-  bonus_space : Int
+  par_tiles : Int32
+  bonus_space : Int32
   description : String
-  preset_terrain : Array[(Int, Int, Terrain)]
-  preset_fences : Array[(Int, Int, Bool, Bool)]
+  preset_terrain : Array[(Int32, Int32, Terrain)]
+  preset_fences : Array[(Int32, Int32, Bool, Bool)]
 } derive(Debug)
 
 ///|
@@ -130,8 +135,8 @@ pub extend LevelDef with Debug::{to_repr}
 pub(all) struct LevelResult {
   mut stars : StarRating
   mut all_needs_met : Bool
-  mut tiles_used : Int
-  mut par_tiles : Int
+  mut tiles_used : Int32
+  mut par_tiles : Int32
   mut bonus_met : Bool
   mut messages : Array[String]
 } derive(Debug)
@@ -150,22 +155,22 @@ pub(all) struct ToolSlot {
 pub(all) struct Game {
   mut screen : Screen
   grid : Grid
-  mut current_level : Int
+  mut current_level : Int32
   mut current_tool : Tool
   mut tool_slots : Array[ToolSlot]
   mut enclosures : Array[Enclosure]
   mut level_results : Array[LevelResult?]
-  mut stars_earned : Array[Int]
-  mut hover_col : Int
-  mut hover_row : Int
+  mut stars_earned : Array[Int32]
+  mut hover_col : Int32
+  mut hover_row : Int32
   mut fence_mode : FenceMode
   mut message : String
   mut message_timer : Float
   mut anim_timer : Float
-  mut frame_count : Int
-  mut total_stars : Int
-  mut levels_completed : Int
-  mut level_select_scroll : Int
+  mut frame_count : Int32
+  mut total_stars : Int32
+  mut levels_completed : Int32
+  mut level_select_scroll : Int32
   mut show_needs_panel : Bool
 } derive(Debug)
 

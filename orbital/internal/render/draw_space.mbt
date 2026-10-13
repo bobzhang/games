@@ -9,12 +9,12 @@ fn space_offset_y() -> Float {
 }
 
 ///|
-fn to_screen_x(x : Float) -> Int {
+fn to_screen_x(x : Float) -> Int32 {
   (x + space_offset_x()).to_int()
 }
 
 ///|
-fn to_screen_y(y : Float) -> Int {
+fn to_screen_y(y : Float) -> Int32 {
   (y + space_offset_y()).to_int()
 }
 
@@ -53,7 +53,7 @@ fn draw_space_border() -> Unit {
 }
 
 ///|
-fn draw_planets(level : @types.Level, frame : Int) -> Unit {
+fn draw_planets(level : @types.Level, frame : Int32) -> Unit {
   for i in 0..<level.planets.length() {
     let p = level.planets[i]
     let sx = to_screen_x(p.pos.x)
@@ -95,7 +95,7 @@ fn draw_planets(level : @types.Level, frame : Int) -> Unit {
 }
 
 ///|
-fn draw_station(station : @types.Station, frame : Int) -> Unit {
+fn draw_station(station : @types.Station, frame : Int32) -> Unit {
   let sx = to_screen_x(station.pos.x)
   let sy = to_screen_y(station.pos.y)
   // Pulsing glow
@@ -125,7 +125,7 @@ fn draw_station(station : @types.Station, frame : Int) -> Unit {
 }
 
 ///|
-fn draw_waypoints(waypoints : Array[@types.Waypoint], frame : Int) -> Unit {
+fn draw_waypoints(waypoints : Array[@types.Waypoint], frame : Int32) -> Unit {
   for i in 0..<waypoints.length() {
     let wp = waypoints[i]
     let sx = to_screen_x(wp.pos.x)
@@ -170,7 +170,7 @@ fn draw_waypoints(waypoints : Array[@types.Waypoint], frame : Int) -> Unit {
 fn draw_launch_indicator(
   launch_pos : @types.Vec2f,
   angle : Float,
-  frame : Int,
+  frame : Int32,
 ) -> Unit {
   let sx = to_screen_x(launch_pos.x)
   let sy = to_screen_y(launch_pos.y)
@@ -186,7 +186,7 @@ fn draw_launch_indicator(
   // Pulsing arrow
   let base : Float = 180.0
   let sin_val : Float = @types.sinf(Float::from_int(frame) * 0.1) * 75.0
-  let pulse_alpha : Int = (base + sin_val).to_int()
+  let pulse_alpha : Int32 = (base + sin_val).to_int()
   let arrow_color = @raylib.Color::new(255, 100, 60, pulse_alpha)
   @raylib.draw_line(sx, sy, ex, ey, arrow_color)
   // Arrowhead
@@ -220,7 +220,7 @@ fn draw_preview(preview : Array[@types.Vec2f]) -> Unit {
 }
 
 ///|
-fn draw_probe(probe : @types.Probe, frame : Int) -> Unit {
+fn draw_probe(probe : @types.Probe, frame : Int32) -> Unit {
   if !probe.active {
     return
   }

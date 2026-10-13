@@ -1,41 +1,41 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_width : Int = 12
+pub let grid_width : Int32 = 12
 
 ///|
-pub let grid_height : Int = 16
+pub let grid_height : Int32 = 16
 
 ///|
-pub let cell_render_size : Int = 36
+pub let cell_render_size : Int32 = 36
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 40
+pub let grid_offset_y : Int32 = 40
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let pine_fork_interval : Int = 3
+pub let pine_fork_interval : Int32 = 3
 
 ///|
-pub let maple_fork_interval : Int = 2
+pub let maple_fork_interval : Int32 = 2
 
 ///|
-pub let cherry_fork_interval : Int = 2
+pub let cherry_fork_interval : Int32 = 2
 
 ///|
-pub let leaf_stagnant_threshold : Int = 2
+pub let leaf_stagnant_threshold : Int32 = 2
 
 // Colors
 

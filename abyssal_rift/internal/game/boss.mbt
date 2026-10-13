@@ -1,5 +1,5 @@
 ///|
-fn count_active_minions(game : @types.Game) -> Int {
+fn count_active_minions(game : @types.Game) -> Int32 {
   let mut count = 0
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]

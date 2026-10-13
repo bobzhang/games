@@ -1,6 +1,6 @@
 ///|
 pub fn new_mapping() -> Mapping {
-  let c2p : Array[Int] = Array(capacity=alphabet_size)
+  let c2p : Array[Int32] = Array(capacity=alphabet_size)
   let pu : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
     c2p.push(unmapped)
@@ -11,7 +11,7 @@ pub fn new_mapping() -> Mapping {
 
 ///|
 pub fn copy_mapping(src : Mapping) -> Mapping {
-  let c2p : Array[Int] = Array(capacity=alphabet_size)
+  let c2p : Array[Int32] = Array(capacity=alphabet_size)
   let pu : Array[Bool] = Array(capacity=alphabet_size)
   for i in 0..<alphabet_size {
     c2p.push(src.cipher_to_plain[i])
@@ -31,8 +31,8 @@ pub fn clear_mapping(m : Mapping) -> Unit {
 ///|
 pub fn assign_mapping(
   m : Mapping,
-  cipher_idx : Int,
-  plain_idx : Int,
+  cipher_idx : Int32,
+  plain_idx : Int32,
 ) -> UndoEntry {
   let old_plain = m.cipher_to_plain[cipher_idx]
   let mut old_displaced_cipher = -1
@@ -90,17 +90,17 @@ pub fn is_upper(c : Char) -> Bool {
 }
 
 ///|
-pub fn char_to_idx(c : Char) -> Int {
+pub fn char_to_idx(c : Char) -> Int32 {
   c.to_int() - 'A'.to_int()
 }
 
 ///|
-pub fn idx_to_char(i : Int) -> Char {
-  Int::unsafe_to_char('A'.to_int() + i)
+pub fn idx_to_char(i : Int32) -> Char {
+  Int32::unsafe_to_char('A'.to_int() + i)
 }
 
 ///|
-pub fn str_char_at(s : String, i : Int) -> Char {
+pub fn str_char_at(s : String, i : Int32) -> Char {
   s[i].to_int().unsafe_to_char()
 }
 
@@ -152,7 +152,7 @@ pub fn count_correct(
   ciphertext : String,
   plaintext : String,
   m : Mapping,
-) -> Int {
+) -> Int32 {
   let mut count = 0
   let checked : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
@@ -178,7 +178,7 @@ pub fn count_correct(
 }
 
 ///|
-pub fn count_unique_letters(text : String) -> Int {
+pub fn count_unique_letters(text : String) -> Int32 {
   let seen : Array[Bool] = Array(capacity=alphabet_size)
   for _i in 0..<alphabet_size {
     seen.push(false)
@@ -203,7 +203,11 @@ pub fn new_level_score() -> LevelScore {
 }
 
 ///|
-pub fn calc_stars(swap_count : Int, par_swaps : Int, hints_used : Int) -> Int {
+pub fn calc_stars(
+  swap_count : Int32,
+  par_swaps : Int32,
+  hints_used : Int32,
+) -> Int32 {
   if hints_used == 0 && swap_count <= par_swaps {
     3
   } else if swap_count <= par_swaps {
@@ -223,7 +227,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_level_range(t : Tier) -> (Int, Int) {
+pub fn tier_level_range(t : Tier) -> (Int32, Int32) {
   match t {
     Recruit => (0, 7)
     Agent => (8, 16)
@@ -232,7 +236,7 @@ pub fn tier_level_range(t : Tier) -> (Int, Int) {
 }
 
 ///|
-pub fn tier_for_level(level_id : Int) -> Tier {
+pub fn tier_for_level(level_id : Int32) -> Tier {
   if level_id <= 7 {
     Recruit
   } else if level_id <= 16 {
@@ -291,7 +295,7 @@ pub fn reset_for_level(game : Game) -> Unit {
 ///|
 pub fn is_position_in_pattern(
   game : Game,
-  text_pos : Int,
+  text_pos : Int32,
   ciphertext : String,
 ) -> Bool {
   if game.selected_pattern_idx < 0 ||
@@ -325,7 +329,7 @@ pub fn is_position_in_pattern(
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -334,7 +338,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {

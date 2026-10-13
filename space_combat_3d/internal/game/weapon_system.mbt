@@ -177,19 +177,19 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
           game.player.shots_hit += 1
 
           // Hit sparks by weapon type
-          let spark_r : Int = match proj.kind {
+          let spark_r : Int32 = match proj.kind {
             Laser => 255
             Missile => 255
             Plasma => 100
             _ => 150
           }
-          let spark_g : Int = match proj.kind {
+          let spark_g : Int32 = match proj.kind {
             Laser => 50
             Missile => 180
             Plasma => 255
             _ => 200
           }
-          let spark_b : Int = match proj.kind {
+          let spark_b : Int32 = match proj.kind {
             Laser => 50
             Missile => 50
             Plasma => 100
@@ -373,7 +373,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::missile_detonate(game : @types.Game, proj_idx : Int) -> Unit {
+fn @types.Game::missile_detonate(game : @types.Game, proj_idx : Int32) -> Unit {
   let proj = game.projectiles[proj_idx]
   proj.active = false
 
@@ -463,7 +463,7 @@ pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
 /// Checks if a hit on a capital ship struck a weak point. Returns actual damage to apply.
 fn check_weak_point_hit(
   game : @types.Game,
-  enemy_idx : Int,
+  enemy_idx : Int32,
   hit_x : Float,
   hit_y : Float,
   hit_z : Float,

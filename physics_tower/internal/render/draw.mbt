@@ -1053,7 +1053,7 @@ fn draw_challenge_results_screen(game : @types.Game) -> Unit {
 }
 
 ///|
-fn material_color(mat : @types.Material) -> (Int, Int, Int) {
+fn material_color(mat : @types.Material) -> (Int32, Int32, Int32) {
   match mat {
     Wood => (160, 120, 60)
     Stone => (140, 140, 150)

@@ -1,6 +1,6 @@
 ///|
 /// Load a level by global index (0-23)
-pub fn load_level(index : Int) -> @types.Level {
+pub fn load_level(index : Int32) -> @types.Level {
   let world = index / @types.levels_per_world
   let level_in_world = index % @types.levels_per_world
   match world {
@@ -15,13 +15,13 @@ pub fn load_level(index : Int) -> @types.Level {
 /// Helper: build a level from compact tile data
 fn build_level(
   name : String,
-  world : Int,
-  tile_data : Array[(Int, Int, @types.TileKind, Int)],
-  water_sources : Array[(Int, Int)],
-  goals : Array[(Int, Int)],
-  turn_budget : Int,
-  target_yield : Int,
-  par_turns : Int,
+  world : Int32,
+  tile_data : Array[(Int32, Int32, @types.TileKind, Int32)],
+  water_sources : Array[(Int32, Int32)],
+  goals : Array[(Int32, Int32)],
+  turn_budget : Int32,
+  target_yield : Int32,
+  par_turns : Int32,
 ) -> @types.Level {
   let grid = @types.new_grid(@types.grid_cols, @types.grid_rows)
   // Apply tile data
@@ -70,7 +70,7 @@ fn build_level(
 // ============================================================
 
 ///|
-fn load_valley_level(idx : Int) -> @types.Level {
+fn load_valley_level(idx : Int32) -> @types.Level {
   match idx {
     0 => valley_01()
     1 => valley_02()
@@ -87,7 +87,7 @@ fn load_valley_level(idx : Int) -> @types.Level {
 ///|
 fn valley_01() -> @types.Level {
   // "First Sprout" - Simple intro: one water source, plant wheat
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 1),
     (1, 0, Dirt, 1),
     (2, 0, Dirt, 1),
@@ -143,7 +143,7 @@ fn valley_01() -> @types.Level {
 ///|
 fn valley_02() -> @types.Level {
   // "Flowing Fields" - Water flows downhill to reach crops
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Rock, 0),
     (1, 0, Rock, 0),
     (2, 0, Dirt, 2),
@@ -199,7 +199,7 @@ fn valley_02() -> @types.Level {
 ///|
 fn valley_03() -> @types.Level {
   // "Wheat Cluster" - Learn adjacency: plant wheat near wheat
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 1),
     (1, 0, Dirt, 1),
     (2, 0, Dirt, 1),
@@ -255,7 +255,7 @@ fn valley_03() -> @types.Level {
 ///|
 fn valley_04() -> @types.Level {
   // "Corn Valley" - Introduction of corn (higher yield, longer grow)
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 1),
     (1, 0, Dirt, 1),
     (2, 0, Dirt, 1),
@@ -311,7 +311,7 @@ fn valley_04() -> @types.Level {
 ///|
 fn valley_05() -> @types.Level {
   // "Flower Power" - Intro flowers as adjacency specialists
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Rock, 0),
     (1, 0, Dirt, 1),
     (2, 0, Dirt, 1),
@@ -367,7 +367,7 @@ fn valley_05() -> @types.Level {
 ///|
 fn valley_06() -> @types.Level {
   // "Berry Patch" - Berries: high yield, slow grow
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 1),
     (1, 0, Dirt, 1),
     (2, 0, Dirt, 2),
@@ -423,7 +423,7 @@ fn valley_06() -> @types.Level {
 ///|
 fn valley_07() -> @types.Level {
   // "Combo Garden" - Wheat+Corn combo bonus
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 1),
     (1, 0, Dirt, 1),
     (2, 0, Dirt, 1),
@@ -479,7 +479,7 @@ fn valley_07() -> @types.Level {
 ///|
 fn valley_08() -> @types.Level {
   // "Valley Harvest" - Goal tiles, full Valley mechanics
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 2),
     (1, 0, Dirt, 2),
     (2, 0, Dirt, 2),
@@ -537,7 +537,7 @@ fn valley_08() -> @types.Level {
 // ============================================================
 
 ///|
-fn load_hills_level(idx : Int) -> @types.Level {
+fn load_hills_level(idx : Int32) -> @types.Level {
   match idx {
     0 => hills_01()
     1 => hills_02()
@@ -554,7 +554,7 @@ fn load_hills_level(idx : Int) -> @types.Level {
 ///|
 fn hills_01() -> @types.Level {
   // "Rolling Start" - Gentle hills, learn height differences
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 3),
     (1, 0, Dirt, 3),
     (2, 0, Dirt, 2),
@@ -610,7 +610,7 @@ fn hills_01() -> @types.Level {
 ///|
 fn hills_02() -> @types.Level {
   // "Channel Basics" - First channel placement
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Rock, 0),
     (1, 0, Dirt, 2),
     (2, 0, Dirt, 2),
@@ -666,7 +666,7 @@ fn hills_02() -> @types.Level {
 ///|
 fn hills_03() -> @types.Level {
   // "Terraced Fields" - Step terrain with multiple heights
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, WaterSource, 3),
     (1, 0, Dirt, 3),
     (2, 0, Dirt, 2),
@@ -722,7 +722,7 @@ fn hills_03() -> @types.Level {
 ///|
 fn hills_04() -> @types.Level {
   // "River Bend" - Pre-placed river tiles
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 2),
     (1, 0, Dirt, 2),
     (2, 0, Dirt, 1),
@@ -778,7 +778,7 @@ fn hills_04() -> @types.Level {
 ///|
 fn hills_05() -> @types.Level {
   // "Split Stream" - Water source splits into two paths
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 1),
     (1, 0, Dirt, 2),
     (2, 0, Dirt, 3),
@@ -834,7 +834,7 @@ fn hills_05() -> @types.Level {
 ///|
 fn hills_06() -> @types.Level {
   // "Highland Goals" - Goal tiles on hills
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 3),
     (1, 0, Dirt, 3),
     (2, 0, Dirt, 2),
@@ -899,7 +899,7 @@ fn hills_06() -> @types.Level {
 ///|
 fn hills_07() -> @types.Level {
   // "Cascade" - Long cascading water path
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, WaterSource, 3),
     (1, 0, Dirt, 3),
     (2, 0, Rock, 3),
@@ -955,7 +955,7 @@ fn hills_07() -> @types.Level {
 ///|
 fn hills_08() -> @types.Level {
   // "Hill Master" - All hills mechanics combined
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 3),
     (1, 0, Dirt, 3),
     (2, 0, Dirt, 2),
@@ -1022,7 +1022,7 @@ fn hills_08() -> @types.Level {
 // ============================================================
 
 ///|
-fn load_peaks_level(idx : Int) -> @types.Level {
+fn load_peaks_level(idx : Int32) -> @types.Level {
   match idx {
     0 => peaks_01()
     1 => peaks_02()
@@ -1039,7 +1039,7 @@ fn load_peaks_level(idx : Int) -> @types.Level {
 ///|
 fn peaks_01() -> @types.Level {
   // "Mountain Spring" - High peak with single water source
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Rock, 0),
     (1, 0, Rock, 0),
     (2, 0, Dirt, 3),
@@ -1095,7 +1095,7 @@ fn peaks_01() -> @types.Level {
 ///|
 fn peaks_02() -> @types.Level {
   // "Narrow Path" - Water must navigate through gaps
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, WaterSource, 3),
     (1, 0, Dirt, 3),
     (2, 0, Rock, 3),
@@ -1151,7 +1151,7 @@ fn peaks_02() -> @types.Level {
 ///|
 fn peaks_03() -> @types.Level {
   // "Twin Peaks" - Two water sources, separate valleys
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, WaterSource, 3),
     (1, 0, Dirt, 2),
     (2, 0, Rock, 3),
@@ -1207,7 +1207,7 @@ fn peaks_03() -> @types.Level {
 ///|
 fn peaks_04() -> @types.Level {
   // "Aqueduct" - Long channel puzzle
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, WaterSource, 3),
     (1, 0, Dirt, 3),
     (2, 0, Rock, 0),
@@ -1263,7 +1263,7 @@ fn peaks_04() -> @types.Level {
 ///|
 fn peaks_05() -> @types.Level {
   // "Cliff Garden" - Steep drops, limited planting space
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Rock, 3),
     (1, 0, Rock, 3),
     (2, 0, WaterSource, 3),
@@ -1319,7 +1319,7 @@ fn peaks_05() -> @types.Level {
 ///|
 fn peaks_06() -> @types.Level {
   // "Summit Relay" - Chain of channels across peaks
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, WaterSource, 3),
     (1, 0, Dirt, 3),
     (2, 0, Rock, 2),
@@ -1375,7 +1375,7 @@ fn peaks_06() -> @types.Level {
 ///|
 fn peaks_07() -> @types.Level {
   // "Grand Harvest" - Large playable area, multiple goals
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, Dirt, 3),
     (1, 0, Dirt, 3),
     (2, 0, WaterSource, 3),
@@ -1440,7 +1440,7 @@ fn peaks_07() -> @types.Level {
 ///|
 fn peaks_08() -> @types.Level {
   // "Peak Mastery" - Final challenge, all mechanics
-  let data : Array[(Int, Int, @types.TileKind, Int)] = [
+  let data : Array[(Int32, Int32, @types.TileKind, Int32)] = [
     (0, 0, WaterSource, 3),
     (1, 0, Rock, 3),
     (2, 0, Dirt, 2),

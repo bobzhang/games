@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_1_1()
     1 => level_1_2()

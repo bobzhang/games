@@ -29,9 +29,9 @@ pub(all) enum TileKind {
   Wall
   Start
   Exit
-  Button(Int) // button_id
-  Door(Int) // door_id
-  TimedDoor(Int, Int) // door_id, duration in ticks
+  Button(Int32) // button_id
+  Door(Int32) // door_id
+  TimedDoor(Int32, Int32) // door_id, duration in ticks
   Guard
   Collectible
 } derive(Eq, Debug)

@@ -1,5 +1,5 @@
 ///|
-fn wrap_index(value : Int, size : Int) -> Int {
+fn wrap_index(value : Int32, size : Int32) -> Int32 {
   let mut v = value
   while v < 0 {
     v += size
@@ -109,7 +109,7 @@ fn @types.Game::start_next_round(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::choose_round_winner(game : @types.Game) -> Int {
+fn @types.Game::choose_round_winner(game : @types.Game) -> Int32 {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
 
@@ -133,7 +133,7 @@ fn @types.Game::choose_round_winner(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::enter_round_over(game : @types.Game, winner : Int) -> Unit {
+fn @types.Game::enter_round_over(game : @types.Game, winner : Int32) -> Unit {
   game.state = StateRoundOver
   game.round_over_timer = @types.round_over_duration
   game.winner_slot = winner

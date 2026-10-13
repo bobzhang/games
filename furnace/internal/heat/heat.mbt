@@ -118,8 +118,12 @@ fn propagate_glass(
 }
 
 ///|
-pub fn get_neighbors(r : Int, c : Int, size : Int) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = []
+pub fn get_neighbors(
+  r : Int32,
+  c : Int32,
+  size : Int32,
+) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = []
   if r > 0 {
     result.push((r - 1, c))
   }
@@ -167,7 +171,7 @@ pub fn is_stable(grid : @types.Grid, threshold : Float) -> Bool {
 }
 
 ///|
-pub fn run_simulation(grid : @types.Grid, max_turns : Int) -> Int {
+pub fn run_simulation(grid : @types.Grid, max_turns : Int32) -> Int32 {
   let stability_threshold : Float = 0.5
   for turn in 1..<=max_turns {
     simulate_step(grid)

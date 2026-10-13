@@ -1,5 +1,5 @@
 ///|
-pub fn date_hash(year : Int, month : Int, day : Int) -> Int {
+pub fn date_hash(year : Int32, month : Int32, day : Int32) -> Int32 {
   let mut h = year * 10000 + month * 100 + day
   h = h * 1103515245 + 12345
   let v = h / 65536
@@ -11,7 +11,9 @@ pub fn date_hash(year : Int, month : Int, day : Int) -> Int {
 }
 
 ///|
-pub fn generate_daily_board(seed : Int) -> (@types.Board, Array[@types.Patch]) {
+pub fn generate_daily_board(
+  seed : Int32,
+) -> (@types.Board, Array[@types.Patch]) {
   @types.seed_rng(seed)
   let size = 4
   let board = @types.new_board(size)
@@ -39,7 +41,7 @@ pub fn generate_daily_board(seed : Int) -> (@types.Board, Array[@types.Patch]) {
   }
   // Shuffle into tray with random rotations
   let tray : Array[@types.Patch] = []
-  let indices : Array[Int] = []
+  let indices : Array[Int32] = []
   let total = size * size
   for i in 0..<total {
     indices.push(i)

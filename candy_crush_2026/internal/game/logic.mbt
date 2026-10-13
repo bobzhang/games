@@ -1,6 +1,6 @@
 ///|
 /// Returns a random candy kind index in the range `[0, candy_kinds)`.
-fn random_kind() -> Int {
+fn random_kind() -> Int32 {
   @raylib.get_random_value(0, @types.candy_kinds - 1)
 }
 
@@ -49,9 +49,9 @@ fn merge_special(a : @types.Special, b : @types.Special) -> @types.Special {
 /// Marks a horizontal run of `len` cells starting at `(start_x, y)` and queues a special spawn for runs of 4 or 5+.
 fn @types.Game::mark_horizontal_run(
   game : @types.Game,
-  y : Int,
-  start_x : Int,
-  len : Int,
+  y : Int32,
+  start_x : Int32,
+  len : Int32,
 ) -> Unit {
   for k in 0..<len {
     game.marks[@types.idx(start_x + k, y)] = true
@@ -70,9 +70,9 @@ fn @types.Game::mark_horizontal_run(
 /// Marks a vertical run of `len` cells starting at `(x, start_y)` and queues a special spawn for runs of 4 or 5+.
 fn @types.Game::mark_vertical_run(
   game : @types.Game,
-  x : Int,
-  start_y : Int,
-  len : Int,
+  x : Int32,
+  start_y : Int32,
+  len : Int32,
 ) -> Unit {
   for k in 0..<len {
     game.marks[@types.idx(x, start_y + k)] = true
@@ -89,7 +89,7 @@ fn @types.Game::mark_vertical_run(
 
 ///|
 /// Scans all rows and columns for runs of 3+ matching candies, marks them, and returns the total count of marked cells.
-fn @types.Game::scan_and_mark_matches(game : @types.Game) -> Int {
+fn @types.Game::scan_and_mark_matches(game : @types.Game) -> Int32 {
   game.clear_marks()
 
   for y in 0..<@types.board_rows {
@@ -205,7 +205,7 @@ fn @types.Game::expand_special_marks(game : @types.Game) -> Unit {
 
 ///|
 /// Removes all marked cells from the board, decrementing jelly counters, and returns the count of removed candies.
-fn @types.Game::remove_marked_cells(game : @types.Game) -> Int {
+fn @types.Game::remove_marked_cells(game : @types.Game) -> Int32 {
   let mut removed = 0
 
   for i in 0..<@types.board_cells {
@@ -243,7 +243,7 @@ fn @types.Game::remove_marked_cells(game : @types.Game) -> Int {
 ///|
 /// Drops existing candies downward to fill gaps in each column and spawns new random candies at the top.
 fn @types.Game::collapse_and_refill(game : @types.Game) -> Unit {
-  let col_kind : Array[Int] = Array::make(@types.board_rows, -1)
+  let col_kind : Array[Int32] = Array::make(@types.board_rows, -1)
   let col_special : Array[@types.Special] = Array::make(@types.board_rows, None)
 
   for x in 0..<@types.board_cols {
@@ -278,7 +278,7 @@ fn @types.Game::collapse_and_refill(game : @types.Game) -> Unit {
 
 ///|
 /// Returns true if the given kinds array contains any horizontal or vertical run of 3+ matching candies.
-fn has_any_match(kinds : Array[Int]) -> Bool {
+fn has_any_match(kinds : Array[Int32]) -> Bool {
   for y in 0..<@types.board_rows {
     let mut x = 0
     while x < @types.board_cols {
@@ -325,11 +325,11 @@ fn has_any_match(kinds : Array[Int]) -> Bool {
 ///|
 /// Returns true if swapping two board cells would produce at least one match.
 fn would_swap_match(
-  kinds : Array[Int],
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  kinds : Array[Int32],
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   let a = @types.idx(x0, y0)
   let b = @types.idx(x1, y1)
@@ -341,7 +341,7 @@ fn would_swap_match(
 
 ///|
 /// Returns true if any adjacent pair of cells can be swapped to produce a match.
-fn has_possible_swap(kinds : Array[Int]) -> Bool {
+fn has_possible_swap(kinds : Array[Int32]) -> Bool {
   for y in 0..<@types.board_rows {
     for x in 0..<@types.board_cols {
       if x + 1 < @types.board_cols && would_swap_match(kinds, x, y, x + 1, y) {
@@ -358,7 +358,7 @@ fn has_possible_swap(kinds : Array[Int]) -> Bool {
 ///|
 /// Randomly shuffles board candies until a valid board with no initial matches but at least one possible swap is found, returning true on success.
 fn @types.Game::shuffle_board(game : @types.Game) -> Bool {
-  let bucket : Array[Int] = Array::make(@types.board_cells, 0)
+  let bucket : Array[Int32] = Array::make(@types.board_cells, 0)
 
   let mut tries = 0
   while tries < 160 {
@@ -576,10 +576,10 @@ fn @types.Game::find_hint(game : @types.Game) -> Bool {
 /// Records the two cells involved in the last successful swap and starts their flash animation timer.
 fn @types.Game::set_swap_flash(
   game : @types.Game,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Unit {
   game.swap_flash_t = 0.42
   game.swap_x0 = x0
@@ -590,7 +590,7 @@ fn @types.Game::set_swap_flash(
 
 ///|
 /// Repeatedly scans, expands, removes, and refills until no more matches exist, accumulating score per chain step.
-fn @types.Game::run_cascade(game : @types.Game) -> Int {
+fn @types.Game::run_cascade(game : @types.Game) -> Int32 {
   let mut chain = 0
 
   while true {
@@ -622,10 +622,10 @@ fn @types.Game::run_cascade(game : @types.Game) -> Int {
 /// Attempts to swap two adjacent cells; runs the cascade if the swap creates a match, returns true on success.
 fn @types.Game::attempt_swap(
   game : @types.Game,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   if !@types.in_board(x0, y0) || !@types.in_board(x1, y1) {
     return false
@@ -678,7 +678,11 @@ fn @types.Game::attempt_swap(
 
 ///|
 /// Selects a cell on first tap or attempts a swap if an adjacent cell is already selected.
-fn @types.Game::select_or_swap(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::select_or_swap(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Unit {
   if !@types.in_board(x, y) {
     return
   }
@@ -711,7 +715,7 @@ fn @types.Game::select_or_swap(game : @types.Game, x : Int, y : Int) -> Unit {
 
 ///|
 /// Moves the keyboard cursor by `(dx, dy)`, clamped to valid board bounds.
-fn @types.Game::move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
+fn @types.Game::move_cursor(game : @types.Game, dx : Int32, dy : Int32) -> Unit {
   game.cursor_x = (game.cursor_x + dx).clamp(min=0, max=@types.board_cols - 1)
   game.cursor_y = (game.cursor_y + dy).clamp(min=0, max=@types.board_rows - 1)
 }

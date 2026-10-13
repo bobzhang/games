@@ -1,29 +1,29 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 16
+pub let grid_cols : Int32 = 16
 
 ///|
-pub let grid_rows : Int = 12
+pub let grid_rows : Int32 = 12
 
 ///|
-pub let socket_spacing : Int = 48
+pub let socket_spacing : Int32 = 48
 
 ///|
-pub let grid_offset_x : Int = 176
+pub let grid_offset_x : Int32 = 176
 
 ///|
-pub let grid_offset_y : Int = 60
+pub let grid_offset_y : Int32 = 60
 
 ///|
-pub let max_ticks : Int = 200
+pub let max_ticks : Int32 = 200
 
 ///|
 pub let tick_interval_base : Float = 0.3
@@ -38,10 +38,10 @@ pub let domino_width : Float = 8.0
 pub let domino_height : Float = 32.0
 
 ///|
-pub let total_levels : Int = 24
+pub let total_levels : Int32 = 24
 
 ///|
-pub let levels_per_tier : Int = 8
+pub let levels_per_tier : Int32 = 8
 
 // Colors
 

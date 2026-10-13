@@ -4,28 +4,28 @@
 const TARGET_URL : String = "https://example.com"
 
 ///|
-const SCREEN_WIDTH : Int = 960
+const SCREEN_WIDTH : Int32 = 960
 
 ///|
-const SCREEN_HEIGHT : Int = 620
+const SCREEN_HEIGHT : Int32 = 620
 
 ///|
-const FONT_SIZE : Int = 14
+const FONT_SIZE : Int32 = 14
 
 ///|
-const LINE_HEIGHT : Int = 18
+const LINE_HEIGHT : Int32 = 18
 
 ///|
-const HEADER_H : Int = 40
+const HEADER_H : Int32 = 40
 
 ///|
-const FOOTER_H : Int = 28
+const FOOTER_H : Int32 = 28
 
 ///|
-const MARGIN : Int = 8
+const MARGIN : Int32 = 8
 
 ///|
-const MAX_LINE_CHARS : Int = 130
+const MAX_LINE_CHARS : Int32 = 130
 
 // ── Mutable app state (safe: async runtime is single-threaded) ────────────────
 
@@ -34,11 +34,11 @@ struct AppState {
   mut loading : Bool
   mut lines : Array[String]
   mut status : String
-  mut scroll : Int
+  mut scroll : Int32
 }
 
 ///|
-fn split_lines(content : String, max_chars : Int) -> Array[String] {
+fn split_lines(content : String, max_chars : Int32) -> Array[String] {
   let lines : Array[String] = []
   let line : StringBuilder = StringBuilder()
   let mut n = 0

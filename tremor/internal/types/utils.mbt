@@ -57,7 +57,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -68,7 +68,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -77,7 +77,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -93,22 +93,22 @@ pub fn dist_i(a : Vec2i, b : Vec2i) -> Float {
 }
 
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
 ///|
-pub fn tile_center_x(col : Int) -> Float {
+pub fn tile_center_x(col : Int32) -> Float {
   Float::from_int(grid_offset_x + col * cell_size + cell_size / 2)
 }
 
 ///|
-pub fn tile_center_y(row : Int) -> Float {
+pub fn tile_center_y(row : Int32) -> Float {
   Float::from_int(grid_offset_y + row * cell_size + cell_size / 2)
 }
 
 ///|
-pub fn pixel_to_tile(px : Int, py : Int) -> Vec2i? {
+pub fn pixel_to_tile(px : Int32, py : Int32) -> Vec2i? {
   let col = (px - grid_offset_x) / cell_size
   let row = (py - grid_offset_y) / cell_size
   if col >= 0 && col < grid_cols && row >= 0 && row < grid_rows {
@@ -119,7 +119,7 @@ pub fn pixel_to_tile(px : Int, py : Int) -> Vec2i? {
 }
 
 ///|
-pub fn sensor_cost(kind : SensorKind) -> Int {
+pub fn sensor_cost(kind : SensorKind) -> Int32 {
   match kind {
     Broad => broad_cost
     Precise => precise_cost
@@ -169,7 +169,7 @@ pub fn new_tile(kind : TileKind) -> TileInfo {
 }
 
 ///|
-pub fn new_epicenter(x : Int, y : Int) -> Epicenter {
+pub fn new_epicenter(x : Int32, y : Int32) -> Epicenter {
   { pos: vec2i(x, y), found: false, }
 }
 
@@ -179,7 +179,7 @@ pub fn new_level_score() -> LevelScore {
 }
 
 ///|
-pub fn make_grid(rows : Int, cols : Int) -> Array[Array[TileInfo]] {
+pub fn make_grid(rows : Int32, cols : Int32) -> Array[Array[TileInfo]] {
   let grid : Array[Array[TileInfo]] = []
   for _r in 0..<rows {
     let row : Array[TileInfo] = []
@@ -212,15 +212,15 @@ pub fn next_compass(dir : CompassDir) -> CompassDir {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 42, }
+let rng_state : Ref[Int32] = { val: 42, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -231,7 +231,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -276,7 +276,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn tier_start_index(tier : Tier) -> Int {
+pub fn tier_start_index(tier : Tier) -> Int32 {
   match tier {
     Detection => 0
     Precision => tier1_count
@@ -285,7 +285,7 @@ pub fn tier_start_index(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Detection => tier1_count
     Precision => tier2_count
@@ -329,7 +329,7 @@ pub fn tier_unlocked(game : Game, tier : Tier) -> Bool {
 }
 
 ///|
-pub fn level_unlocked(game : Game, index : Int) -> Bool {
+pub fn level_unlocked(game : Game, index : Int32) -> Bool {
   if index == 0 {
     return true
   }

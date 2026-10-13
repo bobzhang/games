@@ -31,11 +31,11 @@ pub extend Screen with Show::{to_string, output}
 
 ///|
 pub(all) enum Command {
-  Move(Int, Int)
-  Attack(Int, Int, Int)
-  Overclock(Int)
+  Move(Int32, Int32)
+  Attack(Int32, Int32, Int32)
+  Overclock(Int32)
   Wait
-  Push(Int, Int, Int)
+  Push(Int32, Int32, Int32)
 } derive(Debug)
 
 ///|
@@ -51,15 +51,15 @@ pub extend Command with Show::{to_string, output}
 
 ///|
 pub(all) enum Effect {
-  Damage(Int)
-  Push(Int, Int)
-  Pull(Int, Int)
-  Shield(Int)
-  Heal(Int)
+  Damage(Int32)
+  Push(Int32, Int32)
+  Pull(Int32, Int32)
+  Shield(Int32)
+  Heal(Int32)
   Stun
-  Spawn(Int, Int, Int)
-  DestroyTile(Int, Int)
-  ApplyHazard(Int, Int, Int)
+  Spawn(Int32, Int32, Int32)
+  DestroyTile(Int32, Int32)
+  ApplyHazard(Int32, Int32, Int32)
 } derive(Debug)
 
 ///|
@@ -75,13 +75,13 @@ pub extend Effect with Show::{to_string, output}
 
 ///|
 pub(all) enum Intent {
-  March(Int, Int)
-  FireLine(Int, Int, Int)
-  Leap(Int, Int)
-  AreaBlast(Int, Int, Int)
-  Summon(Int, Int, Int)
-  Charge(Int, Int)
-  MinePlace(Int, Int)
+  March(Int32, Int32)
+  FireLine(Int32, Int32, Int32)
+  Leap(Int32, Int32)
+  AreaBlast(Int32, Int32, Int32)
+  Summon(Int32, Int32, Int32)
+  Charge(Int32, Int32)
+  MinePlace(Int32, Int32)
 } derive(Debug)
 
 ///|
@@ -97,11 +97,11 @@ pub extend Intent with Show::{to_string, output}
 
 ///|
 pub(all) enum Objective {
-  DefendGrid(Int)
-  Survive(Int)
-  Assassinate(Int)
-  CapturePoints(Int)
-  Escort(Int, Int)
+  DefendGrid(Int32)
+  Survive(Int32)
+  Assassinate(Int32)
+  CapturePoints(Int32)
+  Escort(Int32, Int32)
 } derive(Eq, Debug)
 
 ///|
@@ -311,12 +311,12 @@ pub extend AugmentKind with Show::{to_string, output}
 
 ///|
 pub(all) enum CampaignNodeKind {
-  Mission(Int) // mission def index
-  Boss(Int) // boss mission def index
+  Mission(Int32) // mission def index
+  Boss(Int32) // boss mission def index
   Rest // heal opportunity
   Shop // buy augments
   Event // random risk/reward event
-  Elite(Int) // harder mission with guaranteed rare augment
+  Elite(Int32) // harder mission with guaranteed rare augment
 } derive(Eq, Debug)
 
 ///|
@@ -378,7 +378,7 @@ pub extend BranchTheme with Show::{to_string, output}
 
 ///|
 pub(all) enum RewardChoice {
-  PickAugment(Int) // index into offered augments
+  PickAugment(Int32) // index into offered augments
   RepairAll
   GainGridPower
 } derive(Eq, Debug)
@@ -423,8 +423,8 @@ pub extend AnimKind with Show::{to_string, output}
 
 ///|
 pub(all) enum StatusEffect {
-  OnFire(Int) // turns remaining
-  Immobilized(Int) // turns remaining
+  OnFire(Int32) // turns remaining
+  Immobilized(Int32) // turns remaining
 } derive(Eq, Debug)
 
 ///|

@@ -85,7 +85,7 @@ fn draw_grid(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_locked(col : Int, row : Int, locked : Array[(Int, Int)]) -> Bool {
+fn is_locked(col : Int32, row : Int32, locked : Array[(Int32, Int32)]) -> Bool {
   for i in 0..<locked.length() {
     let (lc, lr) = locked[i]
     if lc == col && lr == row {
@@ -96,7 +96,7 @@ fn is_locked(col : Int, row : Int, locked : Array[(Int, Int)]) -> Bool {
 }
 
 ///|
-fn draw_empty_plot(x : Int, y : Int, s : Int) -> Unit {
+fn draw_empty_plot(x : Int32, y : Int32, s : Int32) -> Unit {
   // Small furrow lines
   let line_col = @raylib.Color::new(130, 100, 60, 60)
   for i in 0..<3 {
@@ -106,7 +106,12 @@ fn draw_empty_plot(x : Int, y : Int, s : Int) -> Unit {
 }
 
 ///|
-fn draw_planted_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
+fn draw_planted_plot(
+  x : Int32,
+  y : Int32,
+  s : Int32,
+  plot : @types.Plot,
+) -> Unit {
   let cc = @types.crop_color(plot.crop)
   // Small seed dots
   let alpha_col = @raylib.Color::new(
@@ -131,7 +136,12 @@ fn draw_planted_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
 }
 
 ///|
-fn draw_growing_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
+fn draw_growing_plot(
+  x : Int32,
+  y : Int32,
+  s : Int32,
+  plot : @types.Plot,
+) -> Unit {
   let cc = @types.crop_color(plot.crop)
   // Growing sprouts
   let mid_x = x + s / 2
@@ -154,7 +164,12 @@ fn draw_growing_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
 }
 
 ///|
-fn draw_mature_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
+fn draw_mature_plot(
+  x : Int32,
+  y : Int32,
+  s : Int32,
+  plot : @types.Plot,
+) -> Unit {
   let cc = @types.crop_color(plot.crop)
   // Full crop icon
   let mid_x = x + s / 2
@@ -286,7 +301,7 @@ fn draw_mature_plot(x : Int, y : Int, s : Int, plot : @types.Plot) -> Unit {
 }
 
 ///|
-fn draw_harvested_plot(x : Int, y : Int, s : Int) -> Unit {
+fn draw_harvested_plot(x : Int32, y : Int32, s : Int32) -> Unit {
   // Stubble
   let stub_col = @raylib.Color::new(160, 140, 100, 150)
   for i in 0..<5 {
@@ -296,7 +311,7 @@ fn draw_harvested_plot(x : Int, y : Int, s : Int) -> Unit {
 }
 
 ///|
-fn draw_withered_plot(x : Int, y : Int, s : Int) -> Unit {
+fn draw_withered_plot(x : Int32, y : Int32, s : Int32) -> Unit {
   // Wilted brown
   let mid_x = x + s / 2
   @raylib.draw_line(

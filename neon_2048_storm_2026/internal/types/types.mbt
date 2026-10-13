@@ -48,32 +48,32 @@ pub(all) struct Spark {
 ///|
 /// Full mutable game state for simulation, UI, and input.
 pub(all) struct Game {
-  board : Array[Int]
-  prev_board : Array[Int]
+  board : Array[Int32]
+  prev_board : Array[Int32]
   sparks : Array[Spark]
-  line_vals : Array[Int]
-  line_out : Array[Int]
+  line_vals : Array[Int32]
+  line_out : Array[Int32]
   mut state : GameState
-  mut score : Int
-  mut best_score : Int
-  mut moves : Int
-  mut max_tile : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut moves : Int32
+  mut max_tile : Int32
   mut target_reached : Bool
   mut win : Bool
-  mut cursor_x : Int
-  mut cursor_y : Int
-  mut zap_charge : Int
+  mut cursor_x : Int32
+  mut cursor_y : Int32
+  mut zap_charge : Int32
   mut zap_ready : Bool
-  mut blockers_spawned : Int
-  mut turns_to_storm : Int
+  mut blockers_spawned : Int32
+  mut turns_to_storm : Int32
   mut can_undo : Bool
-  mut prev_score : Int
-  mut prev_moves : Int
-  mut prev_max_tile : Int
-  mut prev_zap_charge : Int
+  mut prev_score : Int32
+  mut prev_moves : Int32
+  mut prev_max_tile : Int32
+  mut prev_zap_charge : Int32
   mut prev_zap_ready : Bool
-  mut prev_turns_to_storm : Int
-  mut prev_blockers_spawned : Int
+  mut prev_turns_to_storm : Int32
+  mut prev_blockers_spawned : Int32
   mut prev_target_reached : Bool
   mut game_t : Float
   mut ui_t : Float
@@ -85,7 +85,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

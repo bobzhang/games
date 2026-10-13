@@ -14,7 +14,7 @@ pub fn get_levels() -> Array[@types.Level] {
 }
 
 ///|
-pub fn get_level(idx : Int) -> @types.Level {
+pub fn get_level(idx : Int32) -> @types.Level {
   get_levels()[idx]
 }
 
@@ -24,7 +24,7 @@ fn s(cells : Array[@types.Vec2i]) -> @types.Shape {
 }
 
 ///|
-fn v(x : Int, y : Int) -> @types.Vec2i {
+fn v(x : Int32, y : Int32) -> @types.Vec2i {
   @types.vec2i(x, y)
 }
 

@@ -9,8 +9,8 @@ struct Player {
   hull_max : Float
   mut fuel : Float
   fuel_max : Float
-  mut onboard : Int
-  capacity : Int
+  mut onboard : Int32
+  capacity : Int32
   mut rescue_cd : Float
   mut ping_cd : Float
   mut ping_t : Float
@@ -27,7 +27,7 @@ struct Shelter {
   mut queue : Float
   mut risk : Float
   mut alarm_t : Float
-  id : Int
+  id : Int32
 }
 
 ///|
@@ -35,12 +35,12 @@ struct Group {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut count : Int
+  mut count : Int32
   mut panic : Float
   mut drift_x : Float
   mut drift_y : Float
   mut flare_t : Float
-  mut id : Int
+  mut id : Int32
 }
 
 ///|
@@ -77,7 +77,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -126,10 +126,10 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -212,7 +212,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if part.active {
@@ -252,8 +252,8 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -292,10 +292,10 @@ fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
 ///|
 fn init_shelters(
   shelters : Array[Shelter],
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
   clear_shelters(shelters)
 
@@ -377,8 +377,8 @@ fn init_barriers(
 ) -> Unit {
   clear_barriers(barriers)
 
-  let mut filled : Int = 0
-  let target : Int = barriers.length() - 12
+  let mut filled : Int32 = 0
+  let target : Int32 = barriers.length() - 12
 
   while filled < target {
     let x : Float = randf(world_l + 24.0, world_r - 24.0)
@@ -437,15 +437,15 @@ fn spawn_group(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
-  serial : Int,
+  tier : Int32,
+  serial : Int32,
 ) -> Bool {
   for group in groups {
     if group.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       group.x = world_l + randf(26.0, 60.0)
       group.y = randf(world_t + 30.0, world_b - 30.0)
@@ -486,14 +486,14 @@ fn spawn_flood(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
+  tier : Int32,
 ) -> Bool {
   for flood in floods {
     if flood.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       flood.x = world_l - 84.0
       flood.y = randf(world_t + 20.0, world_b - 20.0)
@@ -528,17 +528,17 @@ fn spawn_flood(
 }
 
 ///|
-fn active_groups(groups : Array[Group]) -> Int {
+fn active_groups(groups : Array[Group]) -> Int32 {
   @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
-fn active_floods(floods : Array[FloodCell]) -> Int {
+fn active_floods(floods : Array[FloodCell]) -> Int32 {
   @utils.count_by(floods, fn(flood) { flood.active })
 }
 
 ///|
-fn active_critical(groups : Array[Group]) -> Int {
+fn active_critical(groups : Array[Group]) -> Int32 {
   @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
@@ -648,8 +648,8 @@ fn update_groups(
   world_b : Float,
   safe_x : Float,
   safe_y : Float,
-) -> (Int, Float) {
-  let mut lost : Int = 0
+) -> (Int32, Float) {
+  let mut lost : Int32 = 0
   let mut panic_sum : Float = 0.0
 
   for group in groups {
@@ -712,12 +712,12 @@ fn rescue_groups(
   player : Player,
   groups : Array[Group],
   parts : Array[Particle],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   if player.rescue_cd > 0.0 || player.onboard >= player.capacity {
     (0, 0)
   } else {
-    let mut rescued_people : Int = 0
-    let mut groups_hit : Int = 0
+    let mut rescued_people : Int32 = 0
+    let mut groups_hit : Int32 = 0
 
     for group in groups {
       if !group.active || group.count <= 0 {
@@ -729,12 +729,12 @@ fn rescue_groups(
         continue
       }
 
-      let cap_left : Int = player.capacity - player.onboard
+      let cap_left : Int32 = player.capacity - player.onboard
       if cap_left <= 0 {
         break
       }
 
-      let take : Int = group.count.min(cap_left.min(8))
+      let take : Int32 = group.count.min(cap_left.min(8))
       if take <= 0 {
         continue
       }
@@ -792,10 +792,10 @@ fn nearest_urgent_group(
 
 ///|
 fn draw_city(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
   t : Float,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -806,15 +806,15 @@ fn draw_city(
     @raylib.Color::new(12, 32, 54, 255),
   )
 
-  let mut y : Int = world_y
+  let mut y : Int32 = world_y
   while y < world_y + world_h {
     let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
     let wave : Float = @math.sinf(t * 0.9 + Float::from_int(y) * 0.02) * 0.5 +
       0.5
 
-    let r : Int = 16 + (p * 22.0).to_int() + (wave * 6.0).to_int()
-    let g : Int = 58 + (p * 40.0).to_int() + (wave * 8.0).to_int()
-    let b : Int = 100 + (p * 34.0).to_int() + (wave * 12.0).to_int()
+    let r : Int32 = 16 + (p * 22.0).to_int() + (wave * 6.0).to_int()
+    let g : Int32 = 58 + (p * 40.0).to_int() + (wave * 8.0).to_int()
+    let b : Int32 = 100 + (p * 34.0).to_int() + (wave * 12.0).to_int()
 
     @raylib.draw_rectangle(
       world_x,
@@ -827,7 +827,7 @@ fn draw_city(
   }
 
   // submerged road grid
-  let mut gx : Int = world_x + 40
+  let mut gx : Int32 = world_x + 40
   while gx < world_x + world_w {
     @raylib.draw_line(
       gx,
@@ -838,7 +838,7 @@ fn draw_city(
     )
     gx = gx + 78
   }
-  let mut gy : Int = world_y + 36
+  let mut gy : Int32 = world_y + 36
   while gy < world_y + world_h {
     @raylib.draw_line(
       world_x + 4,
@@ -860,7 +860,7 @@ fn draw_city(
 }
 
 ///|
-fn draw_safe_zone(sx : Int, sy : Int, sw : Int, sh : Int) -> Unit {
+fn draw_safe_zone(sx : Int32, sy : Int32, sw : Int32, sh : Int32) -> Unit {
   @raylib.draw_rectangle(sx, sy, sw, sh, @raylib.Color::new(42, 78, 114, 236))
   @raylib.draw_rectangle_lines(
     sx,
@@ -870,7 +870,7 @@ fn draw_safe_zone(sx : Int, sy : Int, sw : Int, sh : Int) -> Unit {
     @raylib.Color::new(176, 214, 244, 246),
   )
 
-  let mut x : Int = sx + 10
+  let mut x : Int32 = sx + 10
   while x < sx + sw - 8 {
     @raylib.draw_line(
       x,
@@ -1004,8 +1004,8 @@ fn draw_floods(floods : Array[FloodCell], t : Float) -> Unit {
     let r0 : Float = flood.radius * pulse
     let r1 : Float = flood.radius * (0.58 + pulse * 0.18)
 
-    let a0 : Int = 24 + (flood.pressure * 42.0).to_int()
-    let a1 : Int = 12 + (flood.pressure * 24.0).to_int()
+    let a0 : Int32 = 24 + (flood.pressure * 42.0).to_int()
+    let a1 : Int32 = 12 + (flood.pressure * 24.0).to_int()
 
     @raylib.draw_circle(
       flood.x.to_int(),
@@ -1033,9 +1033,9 @@ fn draw_barriers(barriers : Array[Barrier], t : Float) -> Unit {
     let rr : Float = barrier.size * (0.88 + wob * 0.2)
     let h01 : Float = clampf(barrier.hard / 100.0, 0.0, 1.0)
 
-    let r : Int = 88 + (h01 * 58.0).to_int()
-    let g : Int = 98 + (h01 * 44.0).to_int()
-    let b : Int = 88 + (h01 * 24.0).to_int()
+    let r : Int32 = 88 + (h01 * 58.0).to_int()
+    let g : Int32 = 98 + (h01 * 44.0).to_int()
+    let b : Int32 = 88 + (h01 * 24.0).to_int()
 
     @raylib.draw_circle(
       barrier.x.to_int(),
@@ -1098,10 +1098,10 @@ fn draw_player(player : Player, t : Float) -> Unit {
     @raylib.Color::new(176, 214, 246, 86),
   )
 
-  let shown : Int = player.onboard.min(6)
+  let shown : Int32 = player.onboard.min(6)
   for i in 0..<shown {
-    let px : Int = (x - 10.0 + Float::from_int(i % 3) * 8.0).to_int()
-    let py : Int = (y + 3.0 + Float::from_int(i / 3) * 5.0).to_int()
+    let px : Int32 = (x - 10.0 + Float::from_int(i % 3) * 8.0).to_int()
+    let py : Int32 = (y + 3.0 + Float::from_int(i / 3) * 5.0).to_int()
     @raylib.draw_rectangle(px, py, 6, 4, @raylib.Color::new(222, 176, 120, 236))
   }
 
@@ -1137,20 +1137,20 @@ fn draw_parts(parts : Array[Particle]) -> Unit {
 
 ///|
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mx : Float,
   my : Float,
   hold : Bool,
 ) -> Unit {
-  let pad_x : Int = 30
-  let pad_y : Int = sh - 198
+  let pad_x : Int32 = 30
+  let pad_y : Int32 = sh - 198
 
   fn dpad_box(
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     text : String,
     active : Bool,
   ) -> Unit {
@@ -1269,8 +1269,8 @@ fn draw_touch_controls(
 
 ///|
 fn draw_bar(
-  panel_x : Int,
-  y : Int,
+  panel_x : Int32,
+  y : Int32,
   label : String,
   value : Float,
   maxv : Float,
@@ -1296,7 +1296,7 @@ fn draw_bar(
   } else {
     clampf(value / maxv, 0.0, 1.0)
   }
-  let fw : Int = (Float::from_int(364) * p01).to_int()
+  let fw : Int32 = (Float::from_int(364) * p01).to_int()
 
   @raylib.draw_rectangle(panel_x + 16, y + 28, fw, 20, col)
   @raylib.draw_rectangle_lines(
@@ -1318,10 +1318,10 @@ fn draw_bar(
 
 ///|
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   hover : Bool,
 ) -> Unit {
@@ -1350,8 +1350,8 @@ fn draw_button(
 
 ///|
 fn main {
-  let sw : Int = 1680
-  let sh : Int = 940
+  let sw : Int32 = 1680
+  let sh : Int32 = 940
   @raylib.init_window(sw, sh, "raylib [game] urban flood evacuation 2026")
   @draw.cleanup()
   defer @raylib.close_window()
@@ -1359,21 +1359,21 @@ fn main {
   @raylib.set_target_fps(120)
   @draw.init_font()
 
-  let world_x : Int = 20
-  let world_y : Int = 20
-  let panel_w : Int = 420
-  let world_w : Int = sw - panel_w - 40
-  let world_h : Int = sh - 40
+  let world_x : Int32 = 20
+  let world_y : Int32 = 20
+  let panel_w : Int32 = 420
+  let world_w : Int32 = sw - panel_w - 40
+  let world_h : Int32 = sh - 40
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
   let world_r : Float = Float::from_int(world_x + world_w)
   let world_b : Float = Float::from_int(world_y + world_h)
 
-  let safe_x : Int = world_x + 18
-  let safe_y : Int = world_y + world_h / 2 - 72
-  let safe_w : Int = 128
-  let safe_h : Int = 144
+  let safe_x : Int32 = world_x + 18
+  let safe_y : Int32 = world_y + world_h / 2 - 72
+  let safe_w : Int32 = 128
+  let safe_h : Int32 = 144
 
   let safe_cx : Float = Float::from_int(safe_x + safe_w / 2)
   let safe_cy : Float = Float::from_int(safe_y + safe_h / 2)
@@ -1464,15 +1464,15 @@ fn main {
     wake_t: randf(0.0, 20.0),
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 420.0
-  let mut rescued_total : Int = 0
-  let mut target_rescued : Int = 620
-  let mut score : Int = 0
-  let mut tier : Int = 1
+  let mut rescued_total : Int32 = 0
+  let mut target_rescued : Int32 = 620
+  let mut score : Int32 = 0
+  let mut tier : Int32 = 1
 
-  let mut lost_people : Int = 0
-  let mut lost_limit : Int = 150
+  let mut lost_people : Int32 = 0
+  let mut lost_limit : Int32 = 150
 
   let mut spawn_cd : Float = 1.2
   let mut flood_cd : Float = 4.8
@@ -1485,8 +1485,8 @@ fn main {
   let mut safe_queue_max : Float = 260.0
   let mut unload_cd : Float = 0.0
 
-  let mut group_serial : Int = 1
-  let mut urgent_peak : Int = 0
+  let mut group_serial : Int32 = 1
+  let mut urgent_peak : Int32 = 0
 
   fn reset_run() -> Unit {
     init_shelters(shelters, world_x, world_y, world_w, world_h)
@@ -1624,8 +1624,8 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyH)
 
       if hold {
-        let pad_x : Int = 30
-        let pad_y : Int = sh - 198
+        let pad_x : Int32 = 30
+        let pad_y : Int32 = sh - 198
 
         if inside_rect(mouse.x, mouse.y, pad_x + 84, pad_y, 76, 56) {
           move_u = true
@@ -1735,7 +1735,7 @@ fn main {
         player.hull = minf(player.hull_max, player.hull + dt * 5.4)
 
         if player.onboard > 0 && unload_cd <= 0.0 {
-          let unload_n : Int = player.onboard.min(3)
+          let unload_n : Int32 = player.onboard.min(3)
           player.onboard = player.onboard - unload_n
           rescued_total = rescued_total + unload_n
           score = score + unload_n * 10
@@ -1878,7 +1878,7 @@ fn main {
 
       flood_cd = flood_cd - dt
       if flood_cd <= 0.0 {
-        let max_f : Int = 2 + tier / 2
+        let max_f : Int32 = 2 + tier / 2
         if active_floods(floods) < max_f {
           ignore(spawn_flood(floods, world_l, world_t, world_r, world_b, tier))
         }
@@ -1888,7 +1888,7 @@ fn main {
         }
       }
 
-      let urgent_now : Int = active_critical(groups)
+      let urgent_now : Int32 = active_critical(groups)
       if urgent_now > urgent_peak {
         urgent_peak = urgent_now
       }
@@ -1964,7 +1964,7 @@ fn main {
 
     draw_parts(parts)
 
-    let panel_x : Int = world_x + world_w + 16
+    let panel_x : Int32 = world_x + world_w + 16
     @raylib.draw_rectangle(
       panel_x,
       world_y,
@@ -2216,8 +2216,8 @@ fn main {
     draw_touch_controls(sw, sh, mouse.x, mouse.y, hold)
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = world_x + world_w / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = world_x + world_w / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         18,

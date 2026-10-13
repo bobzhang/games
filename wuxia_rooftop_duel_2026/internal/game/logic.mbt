@@ -18,17 +18,17 @@ fn @types.Game::clear_enemies(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::active_enemy_count(game : @types.Game) -> Int {
+fn @types.Game::active_enemy_count(game : @types.Game) -> Int32 {
   @utils.count_by(game.enemies, fn(enemy) { enemy.active })
 }
 
 ///|
-fn wave_enemy_total(wave : Int) -> Int {
+fn wave_enemy_total(wave : Int32) -> Int32 {
   (30).min(4 + wave * 2)
 }
 
 ///|
-fn wave_spawn_interval(wave : Int) -> Float {
+fn wave_spawn_interval(wave : Int32) -> Float {
   @types.maxf(
     @types.spawn_interval_min,
     @types.spawn_interval_base - Float::from_int(wave - 1) * 0.06,
@@ -110,11 +110,11 @@ fn @types.Game::finish_game_over(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::add_score_event(
   game : @types.Game,
-  base : Int,
-  stage_points : Int,
+  base : Int32,
+  stage_points : Int32,
 ) -> Unit {
-  let combo_bonus_percent : Int = (240).min(game.combo * 13)
-  let gained : Int = base * (100 + combo_bonus_percent) / 100
+  let combo_bonus_percent : Int32 = (240).min(game.combo * 13)
+  let gained : Int32 = base * (100 + combo_bonus_percent) / 100
 
   game.score = game.score + gained
   game.stage_score = game.stage_score + stage_points + game.combo / 2
@@ -154,7 +154,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
 
     let wave_f : Float = Float::from_int(game.wave)
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       enemy.x = @types.randf(
         @types.arena_left() + 26.0,
@@ -202,7 +202,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
 ///|
 fn @types.Game::defeat_enemy(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   parry_kill : Bool,
 ) -> Unit {
   if !game.enemies[idx].active {
@@ -212,8 +212,8 @@ fn @types.Game::defeat_enemy(
   game.enemies[idx].active = false
   game.wave_defeated = game.wave_defeated + 1
 
-  let base : Int = if parry_kill { 54 } else { 38 }
-  let stage : Int = if parry_kill { 24 } else { 18 }
+  let base : Int32 = if parry_kill { 54 } else { 38 }
+  let stage : Int32 = if parry_kill { 24 } else { 18 }
   game.add_score_event(base, stage)
 
   let stamina_gain : Float = if parry_kill { 16.0 } else { 8.0 }
@@ -227,7 +227,7 @@ fn @types.Game::defeat_enemy(
 ///|
 fn @types.Game::stun_enemy_from_parry(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   from_strike : Bool,
 ) -> Unit {
   if !game.enemies[idx].active {
@@ -265,12 +265,12 @@ fn @types.Game::stun_enemy_from_parry(
 }
 
 ///|
-fn @types.Game::resolve_parry_window(game : @types.Game) -> Int {
+fn @types.Game::resolve_parry_window(game : @types.Game) -> Int32 {
   if game.state != Playing || game.parry_t <= 0.0 {
     return 0
   }
 
-  let mut parried : Int = 0
+  let mut parried : Int32 = 0
 
   for i in 0..<game.enemies.length() {
     if !game.enemies[i].active {
@@ -306,7 +306,7 @@ fn @types.Game::resolve_parry_window(game : @types.Game) -> Int {
 ///|
 fn @types.Game::apply_attack_hit(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   damage : Float,
   knockback : Float,
   telegraph_stagger : Bool,
@@ -384,7 +384,7 @@ fn @types.Game::try_player_attack(
   }
   game.attack_kind = attack
 
-  let mut hit_count : Int = 0
+  let mut hit_count : Int32 = 0
 
   for i in 0..<game.enemies.length() {
     if !game.enemies[i].active {
@@ -472,7 +472,7 @@ fn @types.Game::trigger_parry_dash(game : @types.Game) -> Bool {
   game.player_vx = game.player_vx + game.dash_dir_x * @types.dash_speed
   game.player_vy = game.player_vy + game.dash_dir_y * @types.dash_speed
 
-  let parry_now : Int = game.resolve_parry_window()
+  let parry_now : Int32 = game.resolve_parry_window()
   if parry_now > 0 {
     @types.set_message(game, "Perfect parry x" + parry_now.to_string(), 0.70)
     game.shake_t = @types.maxf(game.shake_t, 0.20)
@@ -523,7 +523,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_enemy_seek(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
 ) -> Unit {
   let dir = @types.normalize(
@@ -569,7 +569,7 @@ fn @types.Game::update_enemy_seek(
 ///|
 fn @types.Game::update_enemy_telegraph(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
 ) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
@@ -605,7 +605,7 @@ fn @types.Game::update_enemy_telegraph(
 ///|
 fn @types.Game::update_enemy_strike(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
 ) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
@@ -647,7 +647,7 @@ fn @types.Game::update_enemy_strike(
 ///|
 fn @types.Game::update_enemy_recover(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
 ) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
@@ -667,7 +667,7 @@ fn @types.Game::update_enemy_recover(
 ///|
 fn @types.Game::update_enemy_stunned(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
 ) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
@@ -687,7 +687,7 @@ fn @types.Game::update_enemy_stunned(
 ///|
 fn @types.Game::keep_enemy_inside_rooftop(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
 ) -> Unit {
   let left : Float = @types.arena_left() - 120.0
   let right : Float = @types.arena_right() + 120.0
@@ -768,8 +768,8 @@ fn @types.Game::update_wave_flow(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  let cleared_wave : Int = game.wave
-  let bonus : Int = 100 +
+  let cleared_wave : Int32 = game.wave
+  let bonus : Int32 = 100 +
     cleared_wave * 44 +
     game.stage_score / 2 +
     (500).min(game.combo * 6)
@@ -856,7 +856,7 @@ fn @types.Game::update_logic(game : @types.Game, dt : Float) -> Unit {
   game.update_player(step)
 
   if game.parry_t > 0.0 {
-    let parried : Int = game.resolve_parry_window()
+    let parried : Int32 = game.resolve_parry_window()
     if parried > 0 {
       @types.set_message(game, "Perfect parry x" + parried.to_string(), 0.65)
     }

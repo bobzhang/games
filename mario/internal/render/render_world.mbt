@@ -125,7 +125,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hills(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_hills(game : @types.Game, cam_x : Int32) -> Unit {
   let parallax_x = cam_x * 3 / 10
   let ground_y = 13 * @types.tile_size
   for i in 0..<8 {
@@ -153,7 +153,7 @@ fn draw_hills(game : @types.Game, cam_x : Int) -> Unit {
 }
 
 ///|
-fn draw_clouds(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_clouds(game : @types.Game, cam_x : Int32) -> Unit {
   for i in 0..<game.clouds.length() {
     let c = game.clouds[i]
     let sx = (c.x - Float::from_int(cam_x) * 0.3).to_int()
@@ -195,7 +195,7 @@ fn draw_clouds(game : @types.Game, cam_x : Int) -> Unit {
 
 ///|
 /// Draw a lava glow effect at the bottom of castle levels.
-fn draw_castle_lava_glow(game : @types.Game, _cam_x : Int) -> Unit {
+fn draw_castle_lava_glow(game : @types.Game, _cam_x : Int32) -> Unit {
   let ground_y = 13 * @types.tile_size
   // Animated lava shimmer
   let phase = game.frame_counter % 60
@@ -220,7 +220,7 @@ fn draw_castle_lava_glow(game : @types.Game, _cam_x : Int) -> Unit {
 // ── Tiles ───────────────────────────────────────────────────────
 
 ///|
-fn draw_tiles(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_tiles(game : @types.Game, cam_x : Int32) -> Unit {
   let ts = @types.tile_size
   let start_tx = cam_x / ts
   let end_tx = (cam_x + @types.screen_w) / ts + 1
@@ -267,10 +267,10 @@ fn draw_tiles(game : @types.Game, cam_x : Int) -> Unit {
 ///|
 fn draw_ground_tile(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
-  sx : Int,
-  sy : Int,
+  tx : Int32,
+  ty : Int32,
+  sx : Int32,
+  sy : Int32,
 ) -> Unit {
   match tex_ground.val {
     Some(tex) => {
@@ -291,10 +291,10 @@ fn draw_ground_tile(
 ///|
 fn draw_ground_tile_fallback(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
-  sx : Int,
-  sy : Int,
+  tx : Int32,
+  ty : Int32,
+  sx : Int32,
+  sy : Int32,
 ) -> Unit {
   let ts = @types.tile_size
   let ground_brown = @raylib.Color::new(192, 96, 0, 255)
@@ -318,7 +318,7 @@ fn draw_ground_tile_fallback(
 }
 
 ///|
-fn draw_brick_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn draw_brick_tile(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   match tex_blocks.val {
     Some(tex) => {
       // Brick: src_offset=(0,0), 5 frames animated, 16x16
@@ -330,7 +330,7 @@ fn draw_brick_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_brick_tile_fallback(sx : Int, sy : Int) -> Unit {
+fn draw_brick_tile_fallback(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   let brick_col = @raylib.Color::new(200, 88, 24, 255)
   let brick_dark = @raylib.Color::new(148, 64, 16, 255)
@@ -346,7 +346,7 @@ fn draw_brick_tile_fallback(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_question_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn draw_question_tile(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   match tex_blocks.val {
     Some(tex) => {
       // QBlock: src_offset=(0,16), 4 frames animated, 16x16
@@ -358,7 +358,11 @@ fn draw_question_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_question_tile_fallback(_game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn draw_question_tile_fallback(
+  _game : @types.Game,
+  sx : Int32,
+  sy : Int32,
+) -> Unit {
   let ts = @types.tile_size
   let question_yellow = @raylib.Color::new(248, 184, 0, 255)
   let question_dark = @raylib.Color::new(200, 136, 0, 255)
@@ -375,7 +379,7 @@ fn draw_question_tile_fallback(_game : @types.Game, sx : Int, sy : Int) -> Unit 
 }
 
 ///|
-fn draw_used_tile(sx : Int, sy : Int) -> Unit {
+fn draw_used_tile(sx : Int32, sy : Int32) -> Unit {
   match tex_blocks.val {
     Some(tex) =>
       // QBlockUsed: src_offset=(0,32), 1 frame, 16x16
@@ -385,7 +389,7 @@ fn draw_used_tile(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_used_tile_fallback(sx : Int, sy : Int) -> Unit {
+fn draw_used_tile_fallback(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   let used_color = @raylib.Color::new(148, 108, 60, 255)
   let used_dark = @raylib.Color::new(108, 76, 40, 255)
@@ -400,7 +404,7 @@ fn draw_used_tile_fallback(sx : Int, sy : Int) -> Unit {
 // ── Pipes (no sprite assets — keep rectangle drawing) ───────────
 
 ///|
-fn draw_pipe_top_left(sx : Int, sy : Int) -> Unit {
+fn draw_pipe_top_left(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx, sy, ts, ts, pipe_green)
   @raylib.draw_rectangle(sx, sy, 8, ts, pipe_light)
@@ -411,7 +415,7 @@ fn draw_pipe_top_left(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_pipe_top_right(sx : Int, sy : Int) -> Unit {
+fn draw_pipe_top_right(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx, sy, ts, ts, pipe_green)
   @raylib.draw_rectangle(sx, sy, 4, ts, pipe_light)
@@ -422,7 +426,7 @@ fn draw_pipe_top_right(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_pipe_body_left(sx : Int, sy : Int) -> Unit {
+fn draw_pipe_body_left(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx, sy, ts, ts, pipe_green)
   @raylib.draw_rectangle(sx, sy, 8, ts, pipe_light)
@@ -430,7 +434,7 @@ fn draw_pipe_body_left(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_pipe_body_right(sx : Int, sy : Int) -> Unit {
+fn draw_pipe_body_right(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx, sy, ts, ts, pipe_green)
   @raylib.draw_rectangle(sx, sy, 4, ts, pipe_light)
@@ -442,7 +446,7 @@ fn draw_pipe_body_right(sx : Int, sy : Int) -> Unit {
 // ── Flagpole / Castle (no sprite assets — keep rectangles) ──────
 
 ///|
-fn draw_flagpole_tile(sx : Int, sy : Int) -> Unit {
+fn draw_flagpole_tile(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx + ts / 2 - 3, sy, 6, ts, pole_gray)
   @raylib.draw_rectangle(
@@ -455,7 +459,7 @@ fn draw_flagpole_tile(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_flag_top_tile(sx : Int, sy : Int) -> Unit {
+fn draw_flag_top_tile(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx + ts / 2 - 3, sy, 6, ts, pole_gray)
   @raylib.draw_circle(
@@ -467,7 +471,7 @@ fn draw_flag_top_tile(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_flag(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_flag(game : @types.Game, cam_x : Int32) -> Unit {
   if game.state != LevelClear &&
     game.state != Playing &&
     game.state != BonusRoom {
@@ -500,7 +504,7 @@ fn draw_flag(game : @types.Game, cam_x : Int) -> Unit {
 }
 
 ///|
-fn draw_castle_tile(sx : Int, sy : Int) -> Unit {
+fn draw_castle_tile(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx, sy, ts, ts, castle_gray)
   @raylib.draw_rectangle(sx, sy + ts / 2 - 1, ts, 2, castle_dark)
@@ -516,7 +520,7 @@ fn draw_castle_tile(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_castle_top_tile(sx : Int, sy : Int) -> Unit {
+fn draw_castle_top_tile(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx, sy + ts / 2, ts, ts / 2, castle_gray)
   @raylib.draw_rectangle(sx + 2, sy + ts / 4, ts / 2 - 4, ts / 2, castle_top_c)
@@ -530,7 +534,7 @@ fn draw_castle_top_tile(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_castle_door(sx : Int, sy : Int) -> Unit {
+fn draw_castle_door(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx, sy, ts, ts, castle_gray)
   @raylib.draw_rectangle(
@@ -546,7 +550,7 @@ fn draw_castle_door(sx : Int, sy : Int) -> Unit {
 // ── Player ──────────────────────────────────────────────────────
 
 ///|
-fn draw_player(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_player(game : @types.Game, cam_x : Int32) -> Unit {
   let p = game.player
   // Invulnerability blink
   if p.invuln_timer > 0.0 {
@@ -608,10 +612,10 @@ fn draw_player(game : @types.Game, cam_x : Int) -> Unit {
 
 ///|
 fn draw_mario_small_sprite(
-  sx : Int,
-  sy : Int,
+  sx : Int32,
+  sy : Int32,
   facing_right : Bool,
-  frame : Int,
+  frame : Int32,
   on_ground : Bool,
   jumping : Bool,
   tint : @raylib.Color,
@@ -660,10 +664,10 @@ fn draw_mario_small_sprite(
 
 ///|
 fn draw_mario_small_fallback(
-  sx : Int,
-  sy : Int,
-  flip : Int,
-  frame : Int,
+  sx : Int32,
+  sy : Int32,
+  flip : Int32,
+  frame : Int32,
   on_ground : Bool,
   jumping : Bool,
   _tint : @raylib.Color,
@@ -732,10 +736,10 @@ fn draw_mario_small_fallback(
 
 ///|
 fn draw_mario_big_sprite(
-  sx : Int,
-  sy : Int,
+  sx : Int32,
+  sy : Int32,
   facing_right : Bool,
-  frame : Int,
+  frame : Int32,
   on_ground : Bool,
   jumping : Bool,
   ducking : Bool,
@@ -787,10 +791,10 @@ fn draw_mario_big_sprite(
 
 ///|
 fn draw_mario_big_fallback(
-  sx : Int,
-  sy : Int,
-  flip : Int,
-  frame : Int,
+  sx : Int32,
+  sy : Int32,
+  flip : Int32,
+  frame : Int32,
   on_ground : Bool,
   jumping : Bool,
   _tint : @raylib.Color,
@@ -876,7 +880,7 @@ fn draw_mario_big_fallback(
 }
 
 ///|
-fn draw_mario_dead(sx : Int, sy : Int, h : Int) -> Unit {
+fn draw_mario_dead(sx : Int32, sy : Int32, h : Int32) -> Unit {
   let mario_red = @raylib.Color::new(228, 0, 0, 255)
   let mario_blue = @raylib.Color::new(32, 64, 200, 255)
   let bx = sx - 16
@@ -893,7 +897,7 @@ fn draw_mario_dead(sx : Int, sy : Int, h : Int) -> Unit {
 // ── Enemies ─────────────────────────────────────────────────────
 
 ///|
-fn draw_enemies(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_enemies(game : @types.Game, cam_x : Int32) -> Unit {
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
     if !e.active {
@@ -932,7 +936,7 @@ fn draw_enemies(game : @types.Game, cam_x : Int) -> Unit {
 }
 
 ///|
-fn draw_goomba(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_goomba(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   match tex_enemies.val {
     Some(tex) => {
       if e.squished && e.dead {
@@ -979,7 +983,7 @@ fn draw_goomba(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_goomba_fallback(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_goomba_fallback(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   let goomba_body = @raylib.Color::new(172, 80, 28, 255)
   let goomba_dark = @raylib.Color::new(120, 52, 12, 255)
   if e.squished && e.dead {
@@ -1044,7 +1048,7 @@ fn draw_goomba_fallback(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_koopa(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_koopa(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   match tex_enemies.val {
     Some(tex) => {
       if e.dead {
@@ -1089,7 +1093,7 @@ fn draw_koopa(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_koopa_fallback(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_koopa_fallback(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   let koopa_green_c = @raylib.Color::new(0, 168, 68, 255)
   let koopa_shell_c = @raylib.Color::new(0, 128, 48, 255)
   let koopa_belly = @raylib.Color::new(252, 216, 108, 255)
@@ -1135,7 +1139,7 @@ fn draw_koopa_fallback(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_shell(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_shell(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   match tex_enemies.val {
     Some(tex) => {
       // Green Koopa Shell: src_offset=(0, 96), 4 frames, 16x16
@@ -1153,7 +1157,7 @@ fn draw_shell(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_shell_fallback(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_shell_fallback(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   let koopa_green_c = @raylib.Color::new(0, 168, 68, 255)
   let koopa_shell_c = @raylib.Color::new(0, 128, 48, 255)
   let koopa_belly = @raylib.Color::new(252, 216, 108, 255)
@@ -1172,7 +1176,7 @@ fn draw_shell_fallback(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 // ── Items ───────────────────────────────────────────────────────
 
 ///|
-fn draw_items(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_items(game : @types.Game, cam_x : Int32) -> Unit {
   for i in 0..<game.items.length() {
     let it = game.items[i]
     if !it.active {
@@ -1194,7 +1198,7 @@ fn draw_items(game : @types.Game, cam_x : Int) -> Unit {
 }
 
 ///|
-fn draw_mushroom_sprite(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn draw_mushroom_sprite(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   match tex_items.val {
     Some(tex) => {
       // Mushroom: src_offset=(0, 0), 1 frame, 16x16
@@ -1208,7 +1212,7 @@ fn draw_mushroom_sprite(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_mushroom_fallback(sx : Int, sy : Int) -> Unit {
+fn draw_mushroom_fallback(sx : Int32, sy : Int32) -> Unit {
   let mushroom_red = @raylib.Color::new(228, 0, 0, 255)
   let mushroom_white = @raylib.Color::new(252, 252, 252, 255)
   @raylib.draw_rectangle(sx - 18, sy - 36, 36, 18, mushroom_red)
@@ -1234,7 +1238,7 @@ fn draw_mushroom_fallback(sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_fire_flower(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn draw_fire_flower(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   let phase = game.frame_counter / 8 % 2
   let col1 = if phase == 0 {
     @raylib.Color::new(252, 148, 0, 255)
@@ -1261,7 +1265,7 @@ fn draw_fire_flower(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_star(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn draw_star(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   let col = @types.star_color(game.frame_counter / 4 % 5)
   let star_yellow = @raylib.Color::new(252, 228, 0, 255)
   let star_body = @raylib.Color::new(200, 176, 0, 255)
@@ -1285,7 +1289,7 @@ fn draw_star(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
-fn draw_oneup(sx : Int, sy : Int) -> Unit {
+fn draw_oneup(sx : Int32, sy : Int32) -> Unit {
   let mushroom_white = @raylib.Color::new(252, 252, 252, 255)
   @raylib.draw_rectangle(
     sx - 18,
@@ -1323,7 +1327,7 @@ fn draw_oneup(sx : Int, sy : Int) -> Unit {
 // ── Fireballs ───────────────────────────────────────────────────
 
 ///|
-fn draw_fireballs(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_fireballs(game : @types.Game, cam_x : Int32) -> Unit {
   for i in 0..<game.fireballs.length() {
     let fb = game.fireballs[i]
     if !fb.active {
@@ -1348,7 +1352,7 @@ fn draw_fireballs(game : @types.Game, cam_x : Int) -> Unit {
 // ── Particles ───────────────────────────────────────────────────
 
 ///|
-fn draw_particles(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_particles(game : @types.Game, cam_x : Int32) -> Unit {
   for i in 0..<game.particles.length() {
     let p = game.particles[i]
     if !p.active {
@@ -1369,7 +1373,7 @@ fn draw_particles(game : @types.Game, cam_x : Int) -> Unit {
 }
 
 ///|
-fn draw_score_popups(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_score_popups(game : @types.Game, cam_x : Int32) -> Unit {
   for i in 0..<game.score_popups.length() {
     let s = game.score_popups[i]
     if !s.active {
@@ -1387,7 +1391,7 @@ fn draw_score_popups(game : @types.Game, cam_x : Int) -> Unit {
 
 ///|
 /// Draw a spinning coin tile (animated rotation effect).
-fn draw_coin_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn draw_coin_tile(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   let coin_gold = @raylib.Color::new(252, 200, 32, 255)
   let coin_light = @raylib.Color::new(252, 228, 120, 255)
@@ -1414,7 +1418,7 @@ fn draw_coin_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
 // ── Pipe entrance tile ────────────────────────────────────────
 
 ///|
-fn draw_pipe_entrance_tile(sx : Int, sy : Int) -> Unit {
+fn draw_pipe_entrance_tile(sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   @raylib.draw_rectangle(sx, sy, ts, ts, pipe_green)
   @raylib.draw_rectangle(sx, sy, 8, ts, pipe_light)
@@ -1434,7 +1438,7 @@ fn draw_pipe_entrance_tile(sx : Int, sy : Int) -> Unit {
 // ── Checkpoint tile ───────────────────────────────────────────
 
 ///|
-fn draw_checkpoint_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn draw_checkpoint_tile(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   let ts = @types.tile_size
   let pole_x = sx + ts / 2 - 2
   @raylib.draw_rectangle(
@@ -1489,7 +1493,7 @@ pub fn draw_fade_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draw a PiranhaPlant popping out of a pipe.
-fn draw_piranha_plant(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_piranha_plant(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   if e.dead {
     return
   }
@@ -1526,7 +1530,7 @@ fn draw_piranha_plant(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 
 ///|
 /// Draw a BuzzyBeetle (Goomba-like with wings).
-fn draw_buzzy_beetle(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_buzzy_beetle(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   let beetle_body = @raylib.Color::new(40, 80, 180, 255)
   let beetle_dark = @raylib.Color::new(20, 50, 120, 255)
   let wing_white = @raylib.Color::new(240, 240, 255, 255)
@@ -1594,7 +1598,7 @@ fn draw_buzzy_beetle(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 
 ///|
 /// Draw a Firebar (rotating fire chain around a center block).
-fn draw_firebar(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+fn draw_firebar(e : @types.Enemy, sx : Int32, sy : Int32) -> Unit {
   // Center block (gray)
   let center_gray = @raylib.Color::new(140, 140, 140, 255)
   @raylib.draw_rectangle(sx - 8, sy - 24, 16, 16, center_gray)
@@ -1626,8 +1630,8 @@ fn draw_firebar(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 fn draw_bowser_lite(
   game : @types.Game,
   e : @types.Enemy,
-  sx : Int,
-  sy : Int,
+  sx : Int32,
+  sy : Int32,
 ) -> Unit {
   if e.dead {
     // Death animation — falls off screen
@@ -1722,7 +1726,7 @@ fn draw_bowser_lite(
 
 ///|
 /// Draw Bowser fire breath projectiles.
-fn draw_bowser_fireballs(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_bowser_fireballs(game : @types.Game, cam_x : Int32) -> Unit {
   for i in 0..<game.bowser_fireballs.length() {
     let bf = game.bowser_fireballs[i]
     if !bf.active {
@@ -1780,7 +1784,7 @@ let bridge_dark_c : @raylib.Color = @raylib.Color::new(110, 56, 30, 255)
 
 ///|
 /// Draw all active moving platforms.
-fn draw_platforms(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_platforms(game : @types.Game, cam_x : Int32) -> Unit {
   let th = @types.platform_thickness
   for i in 0..<game.platforms.length() {
     let plat = game.platforms[i]
@@ -1814,7 +1818,7 @@ fn draw_platforms(game : @types.Game, cam_x : Int) -> Unit {
 
 ///|
 /// Draw all active lift platforms.
-fn draw_lifts(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_lifts(game : @types.Game, cam_x : Int32) -> Unit {
   let th = @types.platform_thickness
   for i in 0..<game.lifts.length() {
     let lift = game.lifts[i]
@@ -1847,7 +1851,7 @@ fn draw_lifts(game : @types.Game, cam_x : Int) -> Unit {
 
 ///|
 /// Draw bridge tiles that are in falling phase (already removed from tilemap).
-fn draw_bridge_falling(game : @types.Game, cam_x : Int) -> Unit {
+fn draw_bridge_falling(game : @types.Game, cam_x : Int32) -> Unit {
   let ts = @types.tile_size
   for i in 0..<game.bridges.length() {
     let b = game.bridges[i]
@@ -1876,10 +1880,10 @@ fn draw_bridge_falling(game : @types.Game, cam_x : Int) -> Unit {
 /// Draw a bridge tile in the tilemap with optional shaking offset.
 fn draw_bridge_tile(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
-  sx : Int,
-  sy : Int,
+  tx : Int32,
+  ty : Int32,
+  sx : Int32,
+  sy : Int32,
 ) -> Unit {
   let ts = @types.tile_size
   // Check if this bridge tile is shaking

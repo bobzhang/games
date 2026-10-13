@@ -1,41 +1,41 @@
 ///|
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
-  let w : Int = @draw.measure_text(text, size)
+  let w : Int32 = @draw.measure_text(text, size)
   @draw.draw_text(text, @types.screen_w / 2 - w / 2, y, size, color)
 }
 
 ///|
-fn map_px_w() -> Int {
+fn map_px_w() -> Int32 {
   @types.grid_w * @types.tile_size
 }
 
 ///|
-fn map_px_h() -> Int {
+fn map_px_h() -> Int32 {
   @types.grid_h * @types.tile_size
 }
 
 ///|
-fn cell_screen_x(x : Int) -> Int {
+fn cell_screen_x(x : Int32) -> Int32 {
   @types.map_x + x * @types.tile_size
 }
 
 ///|
-fn cell_screen_y(y : Int) -> Int {
+fn cell_screen_y(y : Int32) -> Int32 {
   @types.map_y + y * @types.tile_size
 }
 
 ///|
-fn cell_center_x(x : Int) -> Int {
+fn cell_center_x(x : Int32) -> Int32 {
   cell_screen_x(x) + @types.tile_size / 2
 }
 
 ///|
-fn cell_center_y(y : Int) -> Int {
+fn cell_center_y(y : Int32) -> Int32 {
   cell_screen_y(y) + @types.tile_size / 2
 }
 
@@ -61,7 +61,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   )
 
   for i in 0..<16 {
-    let y : Int = i * 66 - 24
+    let y : Int32 = i * 66 - 24
     @raylib.draw_rectangle(
       0,
       y,
@@ -73,9 +73,13 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_cell_base(game : @types.Game, x : Int, y : Int) -> Unit {
-  let px : Int = cell_screen_x(x)
-  let py : Int = cell_screen_y(y)
+fn @types.Game::draw_cell_base(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Unit {
+  let px : Int32 = cell_screen_x(x)
+  let py : Int32 = cell_screen_y(y)
   let t : @types.Tile = @types.tile_at(game, x, y)
 
   let base : @raylib.Color = match t {
@@ -139,8 +143,8 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
   }
 
   if game.selected_tx >= 0 && game.selected_ty >= 0 {
-    let sx : Int = cell_screen_x(game.selected_tx)
-    let sy : Int = cell_screen_y(game.selected_ty)
+    let sx : Int32 = cell_screen_x(game.selected_tx)
+    let sy : Int32 = cell_screen_y(game.selected_ty)
     let col : @raylib.Color = if game.last_plan_ok {
       @raylib.Color::new(158, 240, 136, 255)
     } else {
@@ -171,10 +175,10 @@ fn @types.Game::draw_sites(game : @types.Game) -> Unit {
       continue
     }
 
-    let x : Int = game.sites[i].x
-    let y : Int = game.sites[i].y
-    let cx : Int = cell_center_x(x)
-    let cy : Int = cell_center_y(y)
+    let x : Int32 = game.sites[i].x
+    let y : Int32 = game.sites[i].y
+    let cx : Int32 = cell_center_x(x)
+    let cy : Int32 = cell_center_y(y)
 
     if game.sites[i].waiting > 0 {
       @raylib.draw_circle(cx, cy, 18.0, @raylib.Color::new(198, 228, 242, 230))
@@ -214,19 +218,19 @@ fn @types.Game::draw_sites(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_route_preview(game : @types.Game) -> Unit {
-  let mut x : Int = game.truck_x
-  let mut y : Int = game.truck_y
+  let mut x : Int32 = game.truck_x
+  let mut y : Int32 = game.truck_y
 
-  let mut px : Int = cell_center_x(x)
-  let mut py : Int = cell_center_y(y)
+  let mut px : Int32 = cell_center_x(x)
+  let mut py : Int32 = cell_center_y(y)
 
   for i in 0..<game.route_len {
     let dir : @types.Dir = game.route[i]
     x = x + @types.route_dx(dir)
     y = y + @types.route_dy(dir)
 
-    let nx : Int = cell_center_x(x)
-    let ny : Int = cell_center_y(y)
+    let nx : Int32 = cell_center_x(x)
+    let ny : Int32 = cell_center_y(y)
 
     @raylib.draw_line(
       px,
@@ -258,8 +262,8 @@ fn @types.Game::draw_route_preview(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_truck(game : @types.Game) -> Unit {
-  let cx : Int = cell_center_x(game.truck_x)
-  let cy : Int = cell_center_y(game.truck_y)
+  let cx : Int32 = cell_center_x(game.truck_x)
+  let cy : Int32 = cell_center_y(game.truck_y)
 
   @raylib.draw_rectangle(
     cx - 18,
@@ -306,10 +310,10 @@ fn draw_metric_bar(
   label : String,
   value : Float,
   maxv : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   fill : @raylib.Color,
   back : @raylib.Color,
   text : @raylib.Color,
@@ -333,7 +337,7 @@ fn draw_metric_bar(
 ///|
 fn draw_button(
   label : String,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   active : Bool,
   base : @raylib.Color,
 ) -> Unit {
@@ -371,7 +375,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let mouse_x : Float = game.mouse_x
   let mouse_y : Float = game.mouse_y
   let mouse_hold : Bool = game.mouse_hold
-  let touch_count : Int = game.touch_count
+  let touch_count : Int32 = game.touch_count
 
   @raylib.draw_rectangle(
     @types.panel_x,
@@ -419,7 +423,9 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 212, 226, 230),
   )
 
-  let remain : Int = (0).max((game.mission_limit - game.mission_time).to_int())
+  let remain : Int32 = (0).max(
+    (game.mission_limit - game.mission_time).to_int(),
+  )
   @draw.draw_text(
     "Time " + remain.to_string() + "s",
     @types.panel_x + 18,
@@ -642,7 +648,7 @@ fn @types.Game::draw_title_scene(game : @types.Game) -> Unit {
   let mouse_x : Float = game.mouse_x
   let mouse_y : Float = game.mouse_y
   let mouse_hold : Bool = game.mouse_hold
-  let touch_count : Int = game.touch_count
+  let touch_count : Int32 = game.touch_count
 
   draw_center_text(
     "VOLCANO RESCUE OPERATIONS",
@@ -754,10 +760,10 @@ fn @types.Game::draw_result_scene(game : @types.Game) -> Unit {
   let mouse_x : Float = game.mouse_x
   let mouse_y : Float = game.mouse_y
   let mouse_hold : Bool = game.mouse_hold
-  let touch_count : Int = game.touch_count
+  let touch_count : Int32 = game.touch_count
 
-  let panel_wide : Int = 920
-  let panel_x0 : Int = @types.screen_w / 2 - panel_wide / 2
+  let panel_wide : Int32 = 920
+  let panel_x0 : Int32 = @types.screen_w / 2 - panel_wide / 2
 
   @raylib.draw_rectangle(
     panel_x0,
@@ -888,8 +894,8 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     return
   }
 
-  let text_w : Int = @draw.measure_text(game.msg, 26)
-  let box_w : Int = text_w + 44
+  let text_w : Int32 = @draw.measure_text(game.msg, 26)
+  let box_w : Int32 = text_w + 44
 
   @raylib.draw_rectangle(
     @types.screen_w / 2 - box_w / 2,

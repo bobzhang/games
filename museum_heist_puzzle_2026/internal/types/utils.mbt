@@ -1,30 +1,30 @@
 ///|
 /// Converts `(x, y)` to a linear board index.
-pub fn cell_index(x : Int, y : Int) -> Int {
+pub fn cell_index(x : Int32, y : Int32) -> Int32 {
   y * board_cols + x
 }
 
 ///|
 /// Returns x-coordinate for a linear board index.
-pub fn cell_x(idx : Int) -> Int {
+pub fn cell_x(idx : Int32) -> Int32 {
   idx % board_cols
 }
 
 ///|
 /// Returns y-coordinate for a linear board index.
-pub fn cell_y(idx : Int) -> Int {
+pub fn cell_y(idx : Int32) -> Int32 {
   idx / board_cols
 }
 
 ///|
 /// Returns whether `(x, y)` lies inside board bounds.
-pub fn in_bounds(x : Int, y : Int) -> Bool {
+pub fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < board_cols && y >= 0 && y < board_rows
 }
 
 ///|
 /// Returns tile kind at `(x, y)`, defaulting to `Wall` when out of bounds.
-pub fn tile_at(game : Game, x : Int, y : Int) -> TileKind {
+pub fn tile_at(game : Game, x : Int32, y : Int32) -> TileKind {
   if in_bounds(x, y) {
     game.tiles[cell_index(x, y)]
   } else {
@@ -34,7 +34,7 @@ pub fn tile_at(game : Game, x : Int, y : Int) -> TileKind {
 
 ///|
 /// Sets tile kind at `(x, y)` when the coordinate is in bounds.
-pub fn set_tile(game : Game, x : Int, y : Int, tile : TileKind) -> Unit {
+pub fn set_tile(game : Game, x : Int32, y : Int32, tile : TileKind) -> Unit {
   if in_bounds(x, y) {
     game.tiles[cell_index(x, y)] = tile
   }
@@ -42,7 +42,7 @@ pub fn set_tile(game : Game, x : Int, y : Int, tile : TileKind) -> Unit {
 
 ///|
 /// Returns whether `(x, y)` is walkable floor.
-pub fn walkable(game : Game, x : Int, y : Int) -> Bool {
+pub fn walkable(game : Game, x : Int32, y : Int32) -> Bool {
   tile_at(game, x, y) == Floor
 }
 
@@ -56,7 +56,13 @@ pub fn fill_board_floor(game : Game) -> Unit {
 
 ///|
 /// Fills a rectangular region with `Wall` tiles.
-pub fn add_wall_rect(game : Game, x : Int, y : Int, w : Int, h : Int) -> Unit {
+pub fn add_wall_rect(
+  game : Game,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
+) -> Unit {
   for yy in y..<(y + h) {
     for xx in x..<(x + w) {
       set_tile(game, xx, yy, Wall)
@@ -68,10 +74,10 @@ pub fn add_wall_rect(game : Game, x : Int, y : Int, w : Int, h : Int) -> Unit {
 /// Carves a rectangular region back to `Floor` tiles.
 pub fn carve_floor_rect(
   game : Game,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Unit {
   for yy in y..<(y + h) {
     for xx in x..<(x + w) {
@@ -100,7 +106,7 @@ pub fn clear_entities(game : Game) -> Unit {
 
 ///|
 /// Spawns one artifact at `(x, y)` when the tile is walkable.
-pub fn spawn_artifact(game : Game, x : Int, y : Int) -> Unit {
+pub fn spawn_artifact(game : Game, x : Int32, y : Int32) -> Unit {
   if tile_at(game, x, y) != Floor {
     return
   }
@@ -113,8 +119,8 @@ pub fn spawn_artifact(game : Game, x : Int, y : Int) -> Unit {
 /// Spawns one guard with a patrol path and view range.
 pub fn spawn_guard(
   game : Game,
-  path : Array[Int],
-  view_range : Int,
+  path : Array[Int32],
+  view_range : Int32,
   phase : Float,
 ) -> Unit {
   if path.length() == 0 {
@@ -125,9 +131,9 @@ pub fn spawn_guard(
   let gx = cell_x(first)
   let gy = cell_y(first)
 
-  let mut dir_x : Int = 1
-  let mut dir_y : Int = 0
-  let mut next_idx : Int = 0
+  let mut dir_x : Int32 = 1
+  let mut dir_y : Int32 = 0
+  let mut next_idx : Int32 = 0
 
   if path.length() > 1 {
     next_idx = 1
@@ -162,13 +168,13 @@ pub fn spawn_guard(
 
 ///|
 /// Convenience alias for `cell_index`.
-pub fn pc(x : Int, y : Int) -> Int {
+pub fn pc(x : Int32, y : Int32) -> Int32 {
   cell_index(x, y)
 }
 
 ///|
 /// Converts a direction to `(dx, dy)` movement delta.
-pub fn dir_delta(dir : Direction) -> (Int, Int) {
+pub fn dir_delta(dir : Direction) -> (Int32, Int32) {
   match dir {
     DirNone => (0, 0)
     Left => (-1, 0)
@@ -182,10 +188,10 @@ pub fn dir_delta(dir : Direction) -> (Int, Int) {
 /// Returns whether two cells have unobstructed line of sight.
 pub fn has_line_of_sight(
   game : Game,
-  from_x : Int,
-  from_y : Int,
-  to_x : Int,
-  to_y : Int,
+  from_x : Int32,
+  from_y : Int32,
+  to_x : Int32,
+  to_y : Int32,
 ) -> Bool {
   let mut x = from_x
   let mut y = from_y
@@ -223,7 +229,7 @@ pub fn has_line_of_sight(
 
 ///|
 /// Returns whether a target delta lies inside the guard forward cone.
-pub fn in_guard_front(g : Guard, dx : Int, dy : Int) -> Bool {
+pub fn in_guard_front(g : Guard, dx : Int32, dy : Int32) -> Bool {
   let adx = dx.abs()
   let ady = dy.abs()
 
@@ -242,7 +248,7 @@ pub fn in_guard_front(g : Guard, dx : Int, dy : Int) -> Bool {
 
 ///|
 /// Returns whether guard `g` can currently see cell `(cx, cy)`.
-pub fn guard_sees_cell(game : Game, g : Guard, cx : Int, cy : Int) -> Bool {
+pub fn guard_sees_cell(game : Game, g : Guard, cx : Int32, cy : Int32) -> Bool {
   if !in_bounds(cx, cy) {
     return false
   }
@@ -268,7 +274,7 @@ pub fn guard_sees_cell(game : Game, g : Guard, cx : Int, cy : Int) -> Bool {
 
 ///|
 /// Returns whether any guard occupies cell `(cx, cy)`.
-pub fn any_guard_on_cell(game : Game, cx : Int, cy : Int) -> Bool {
+pub fn any_guard_on_cell(game : Game, cx : Int32, cy : Int32) -> Bool {
   @utils.any_by(game.guards, fn(guard_val) {
     guard_val.x == cx && guard_val.y == cy
   })
@@ -294,25 +300,25 @@ pub fn player_spotted(game : Game) -> Bool {
 
 ///|
 /// Converts board x-coordinate to pixel x-coordinate.
-pub fn cell_px(x : Int) -> Int {
+pub fn cell_px(x : Int32) -> Int32 {
   board_origin_x + x * tile_size
 }
 
 ///|
 /// Converts board y-coordinate to pixel y-coordinate.
-pub fn cell_py(y : Int) -> Int {
+pub fn cell_py(y : Int32) -> Int32 {
   board_origin_y + y * tile_size
 }
 
 ///|
 /// Returns the board right edge in pixels.
-pub fn board_right() -> Int {
+pub fn board_right() -> Int32 {
   board_origin_x + board_cols * tile_size
 }
 
 ///|
 /// Returns the board bottom edge in pixels.
-pub fn board_bottom() -> Int {
+pub fn board_bottom() -> Int32 {
   board_origin_y + board_rows * tile_size
 }
 
@@ -321,10 +327,10 @@ pub fn board_bottom() -> Int {
 pub fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -338,11 +344,11 @@ pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_flag : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let mut hit = false
   if mouse_flag && inside_rect(mouse_x, mouse_y, x, y, w, h) {
@@ -363,25 +369,25 @@ pub fn pointer_on_rect(
 
 ///|
 /// Returns center x-position of the on-screen d-pad.
-pub fn dpad_center_x() -> Int {
+pub fn dpad_center_x() -> Int32 {
   162
 }
 
 ///|
 /// Returns center y-position of the on-screen d-pad.
-pub fn dpad_center_y() -> Int {
+pub fn dpad_center_y() -> Int32 {
   screen_h - 122
 }
 
 ///|
 /// Returns size of each square d-pad button.
-pub fn dpad_button_size() -> Int {
+pub fn dpad_button_size() -> Int32 {
   68
 }
 
 ///|
 /// Returns rectangle for the d-pad left button.
-pub fn dpad_left_rect() -> (Int, Int, Int, Int) {
+pub fn dpad_left_rect() -> (Int32, Int32, Int32, Int32) {
   let s = dpad_button_size()
   let cx = dpad_center_x()
   let cy = dpad_center_y()
@@ -390,7 +396,7 @@ pub fn dpad_left_rect() -> (Int, Int, Int, Int) {
 
 ///|
 /// Returns rectangle for the d-pad right button.
-pub fn dpad_right_rect() -> (Int, Int, Int, Int) {
+pub fn dpad_right_rect() -> (Int32, Int32, Int32, Int32) {
   let s = dpad_button_size()
   let cx = dpad_center_x()
   let cy = dpad_center_y()
@@ -399,7 +405,7 @@ pub fn dpad_right_rect() -> (Int, Int, Int, Int) {
 
 ///|
 /// Returns rectangle for the d-pad up button.
-pub fn dpad_up_rect() -> (Int, Int, Int, Int) {
+pub fn dpad_up_rect() -> (Int32, Int32, Int32, Int32) {
   let s = dpad_button_size()
   let cx = dpad_center_x()
   let cy = dpad_center_y()
@@ -408,7 +414,7 @@ pub fn dpad_up_rect() -> (Int, Int, Int, Int) {
 
 ///|
 /// Returns rectangle for the d-pad down button.
-pub fn dpad_down_rect() -> (Int, Int, Int, Int) {
+pub fn dpad_down_rect() -> (Int32, Int32, Int32, Int32) {
   let s = dpad_button_size()
   let cx = dpad_center_x()
   let cy = dpad_center_y()
@@ -417,24 +423,24 @@ pub fn dpad_down_rect() -> (Int, Int, Int, Int) {
 
 ///|
 /// Returns rectangle for the title start button.
-pub fn start_button_rect() -> (Int, Int, Int, Int) {
+pub fn start_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 190, screen_h - 250, 380, 80)
 }
 
 ///|
 /// Returns rectangle for the next-level button.
-pub fn next_button_rect() -> (Int, Int, Int, Int) {
+pub fn next_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 190, screen_h - 154, 380, 80)
 }
 
 ///|
 /// Returns rectangle for the retry-level button.
-pub fn retry_button_rect() -> (Int, Int, Int, Int) {
+pub fn retry_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 190, screen_h - 250, 380, 80)
 }
 
 ///|
 /// Returns rectangle for the in-game restart button.
-pub fn restart_button_rect() -> (Int, Int, Int, Int) {
+pub fn restart_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x + 20, screen_h - 122, panel_w - 40, 72)
 }

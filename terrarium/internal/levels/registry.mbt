@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(id : Int) -> @types.LevelDef {
+pub fn get_level(id : Int32) -> @types.LevelDef {
   match id {
     0 => level_01()
     1 => level_02()
@@ -25,7 +25,7 @@ pub fn get_level(id : Int) -> @types.LevelDef {
 }
 
 ///|
-pub fn get_tier_for_level(id : Int) -> @types.Tier {
+pub fn get_tier_for_level(id : Int32) -> @types.Tier {
   if id < 7 {
     Beginner
   } else if id < 14 {
@@ -36,7 +36,7 @@ pub fn get_tier_for_level(id : Int) -> @types.Tier {
 }
 
 ///|
-pub fn get_tier_start(tier : Int) -> Int {
+pub fn get_tier_start(tier : Int32) -> Int32 {
   match tier {
     0 => 0
     1 => 7
@@ -45,7 +45,7 @@ pub fn get_tier_start(tier : Int) -> Int {
 }
 
 ///|
-pub fn get_tier_count(tier : Int) -> Int {
+pub fn get_tier_count(tier : Int32) -> Int32 {
   match tier {
     0 => 7
     1 => 7

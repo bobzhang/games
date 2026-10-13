@@ -57,12 +57,12 @@ pub extend TrainColor with Eq::{not_equal, equal}
 ///|
 /// Grid actor with tile coordinates and interpolation state.
 pub(all) struct Actor {
-  mut x : Int
-  mut y : Int
-  mut from_x : Int
-  mut from_y : Int
-  mut to_x : Int
-  mut to_y : Int
+  mut x : Int32
+  mut y : Int32
+  mut from_x : Int32
+  mut from_y : Int32
+  mut to_x : Int32
+  mut to_y : Int32
   mut fx : Float
   mut fy : Float
   mut t : Float
@@ -75,10 +75,10 @@ pub(all) struct Train {
   mut active : Bool
   mut x : Float
   mut prev_x : Float
-  mut lane : Int
-  mut target_lane : Int
+  mut lane : Int32
+  mut target_lane : Int32
   mut speed : Float
-  mut passed_junction : Int
+  mut passed_junction : Int32
   mut color_id : TrainColor
 }
 
@@ -89,12 +89,12 @@ pub(all) struct Inspector {
   body : Actor
   mut mode : InspectorMode
   mut move_cd : Float
-  mut dir_x : Int
-  mut path_y : Int
-  mut path_min_x : Int
-  mut path_max_x : Int
+  mut dir_x : Int32
+  mut path_y : Int32
+  mut path_min_x : Int32
+  mut path_max_x : Int32
   mut stun_t : Float
-  mut seed : Int
+  mut seed : Int32
   mut alert_t : Float
 }
 
@@ -115,23 +115,23 @@ pub(all) struct Particle {
 /// Complete mutable game state for one subway run.
 pub(all) struct Game {
   map : Array[Tile]
-  switch_state : Array[Int]
+  switch_state : Array[Int32]
   trains : Array[Train]
   inspectors : Array[Inspector]
   particles : Array[Particle]
   mut state : GameState
   player : Actor
-  mut lives : Int
-  mut score : Int
-  mut best_score : Int
-  mut routed_ok : Int
-  mut routed_bad : Int
-  mut collisions : Int
+  mut lives : Int32
+  mut score : Int32
+  mut best_score : Int32
+  mut routed_ok : Int32
+  mut routed_bad : Int32
+  mut collisions : Int32
   mut spawn_t : Float
   mut slow_t : Float
   mut time_left : Float
-  mut req_dx : Int
-  mut req_dy : Int
+  mut req_dx : Int32
+  mut req_dy : Int32
   mut action_down : Bool
   mut action_pressed : Bool
   mut move_cd : Float
@@ -143,13 +143,13 @@ pub(all) struct Game {
   mut flash_t : Float
   mut shake_t : Float
   mut time_s : Float
-  mut hint_i : Int
+  mut hint_i : Int32
   mut win : Bool
   mut loss_reason : String
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

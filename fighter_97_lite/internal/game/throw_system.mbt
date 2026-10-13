@@ -49,8 +49,8 @@ fn throw_horizontal_velocity(
 ///|
 fn @types.Game::apply_throw_tech(
   game : @types.Game,
-  first_slot : Int,
-  second_slot : Int,
+  first_slot : Int32,
+  second_slot : Int32,
 ) -> Unit {
   let first = game.fighters[first_slot]
   let second = game.fighters[second_slot]
@@ -92,8 +92,8 @@ fn @types.Game::apply_throw_tech(
 ///|
 fn @types.Game::apply_throw_hit(
   game : @types.Game,
-  attacker_slot : Int,
-  defender_slot : Int,
+  attacker_slot : Int32,
+  defender_slot : Int32,
 ) -> Unit {
   let attacker = game.fighters[attacker_slot]
   let defender = game.fighters[defender_slot]
@@ -148,8 +148,8 @@ fn @types.Game::apply_throw_hit(
 ///|
 fn @types.Game::try_throw(
   game : @types.Game,
-  attacker_slot : Int,
-  defender_slot : Int,
+  attacker_slot : Int32,
+  defender_slot : Int32,
   attacker_intent : Bool,
 ) -> Bool {
   if !attacker_intent {

@@ -13,13 +13,13 @@ pub fn draw_frame(game : @types.Game) -> Unit {
 }
 
 ///|
-fn color_with_alpha(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn color_with_alpha(c : @raylib.Color, alpha : Int32) -> @raylib.Color {
   let a = if alpha < 0 { 0 } else if alpha > 255 { 255 } else { alpha }
   @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), a)
 }
 
 ///|
-fn overlay_color(alpha : Int) -> @raylib.Color {
+fn overlay_color(alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(0, 0, 0, alpha)
 }
 
@@ -113,7 +113,12 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_level_button(game : @types.Game, idx : Int, bx : Int, by : Int) -> Unit {
+fn draw_level_button(
+  game : @types.Game,
+  idx : Int32,
+  bx : Int32,
+  by : Int32,
+) -> Unit {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   let hovered = mx >= bx && mx <= bx + 160 && my >= by && my <= by + 55
@@ -141,7 +146,7 @@ fn draw_level_button(game : @types.Game, idx : Int, bx : Int, by : Int) -> Unit 
 }
 
 ///|
-fn draw_star_icon(x : Int, y : Int, color : @raylib.Color) -> Unit {
+fn draw_star_icon(x : Int32, y : Int32, color : @raylib.Color) -> Unit {
   let cx = Float::from_int(x) + 7.0
   let cy = Float::from_int(y) + 7.0
   @raylib.draw_circle(cx.to_int(), cy.to_int(), 6.0, color)
@@ -155,7 +160,7 @@ fn draw_star_icon(x : Int, y : Int, color : @raylib.Color) -> Unit {
 }
 
 ///|
-fn count_total_stars(game : @types.Game) -> Int {
+fn count_total_stars(game : @types.Game) -> Int32 {
   let mut total = 0
   for i in 0..<@types.total_levels {
     total += @types.star_count(game.progress[i].stars)
@@ -218,7 +223,7 @@ fn draw_grid(
 }
 
 ///|
-fn elevation_color(elev : Int) -> @raylib.Color {
+fn elevation_color(elev : Int32) -> @raylib.Color {
   match elev {
     0 => @types.color_elevation0
     1 => @types.color_elevation1
@@ -228,7 +233,7 @@ fn elevation_color(elev : Int) -> @raylib.Color {
 }
 
 ///|
-fn draw_mountain(sx : Int, sy : Int, ts : Int) -> Unit {
+fn draw_mountain(sx : Int32, sy : Int32, ts : Int32) -> Unit {
   let cx = Float::from_int(sx + ts / 2)
   let top_y = Float::from_int(sy + 8)
   let bot_y = Float::from_int(sy + ts - 4)
@@ -250,7 +255,12 @@ fn draw_mountain(sx : Int, sy : Int, ts : Int) -> Unit {
 }
 
 ///|
-fn draw_transmitter(sx : Int, sy : Int, ts : Int, game : @types.Game) -> Unit {
+fn draw_transmitter(
+  sx : Int32,
+  sy : Int32,
+  ts : Int32,
+  game : @types.Game,
+) -> Unit {
   let cx = Float::from_int(sx + ts / 2)
   let cy = Float::from_int(sy + ts / 2)
   let r = Float::from_int(ts) * 0.35
@@ -271,9 +281,9 @@ fn draw_transmitter(sx : Int, sy : Int, ts : Int, game : @types.Game) -> Unit {
 
 ///|
 fn draw_receiver(
-  sx : Int,
-  sy : Int,
-  ts : Int,
+  sx : Int32,
+  sy : Int32,
+  ts : Int32,
   lit : Bool,
   game : @types.Game,
 ) -> Unit {
@@ -301,9 +311,9 @@ fn draw_receiver(
 
 ///|
 fn draw_tower(
-  sx : Int,
-  sy : Int,
-  ts : Int,
+  sx : Int32,
+  sy : Int32,
+  ts : Int32,
   has_signal : Bool,
   game : @types.Game,
 ) -> Unit {

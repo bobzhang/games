@@ -51,15 +51,15 @@ pub extend SparkKind with Eq::{not_equal, equal}
 /// Snapshot used by the undo stack for one move.
 pub(all) struct UndoStep {
   mut valid : Bool
-  player_x : Int
-  player_y : Int
-  moves_before : Int
-  pushes_before : Int
+  player_x : Int32
+  player_y : Int32
+  moves_before : Int32
+  pushes_before : Int32
   mut pushed_box : Bool
-  mut box_from_x : Int
-  mut box_from_y : Int
-  mut box_to_x : Int
-  mut box_to_y : Int
+  mut box_from_x : Int32
+  mut box_from_y : Int32
+  mut box_to_x : Int32
+  mut box_to_y : Int32
 }
 
 ///|
@@ -83,24 +83,24 @@ pub(all) struct Game {
   undo : Array[UndoStep]
   sparks : Array[Spark]
   mut state : GameState
-  mut level_index : Int
+  mut level_index : Int32
   mut level_name : String
-  mut level_par : Int
-  level_count : Int
-  mut grid_w : Int
-  mut grid_h : Int
-  mut player_x : Int
-  mut player_y : Int
-  mut moves : Int
-  mut pushes : Int
+  mut level_par : Int32
+  level_count : Int32
+  mut grid_w : Int32
+  mut grid_h : Int32
+  mut player_x : Int32
+  mut player_y : Int32
+  mut moves : Int32
+  mut pushes : Int32
   mut elapsed : Float
-  mut goals_total : Int
-  mut total_moves : Int
-  mut total_pushes : Int
+  mut goals_total : Int32
+  mut total_moves : Int32
+  mut total_pushes : Int32
   mut total_elapsed : Float
-  mut last_level_stars : Int
-  mut campaign_stars : Int
-  mut undo_len : Int
+  mut last_level_stars : Int32
+  mut campaign_stars : Int32
+  mut undo_len : Int32
   mut message : String
   mut message_t : Float
   mut shake_t : Float
@@ -112,7 +112,7 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut mouse_press : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

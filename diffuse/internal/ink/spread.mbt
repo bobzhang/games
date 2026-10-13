@@ -1,8 +1,8 @@
 ///|
-let dir_dx : Array[Int] = [0, 0, -1, 1]
+let dir_dx : Array[Int32] = [0, 0, -1, 1]
 
 ///|
-let dir_dy : Array[Int] = [-1, 1, 0, 0]
+let dir_dy : Array[Int32] = [-1, 1, 0, 0]
 
 ///|
 pub fn spread_once(grid : @types.Grid) -> @types.Grid {
@@ -40,7 +40,7 @@ pub fn spread_once(grid : @types.Grid) -> @types.Grid {
 }
 
 ///|
-pub fn spread_n_turns(grid : @types.Grid, turns : Int) -> @types.Grid {
+pub fn spread_n_turns(grid : @types.Grid, turns : Int32) -> @types.Grid {
   let mut current = grid
   for i = 0; i < turns; i = i + 1 {
     current = spread_once(current)

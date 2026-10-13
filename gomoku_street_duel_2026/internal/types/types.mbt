@@ -62,28 +62,28 @@ pub(all) struct Spark {
 /// Entire mutable state for one gomoku street duel.
 pub(all) struct Game {
   board : Array[Player]
-  hist_x : Array[Int]
-  hist_y : Array[Int]
+  hist_x : Array[Int32]
+  hist_y : Array[Int32]
   hist_p : Array[Player]
-  mut hist_len : Int
+  mut hist_len : Int32
   sparks : Array[Spark]
   mut state : GameState
   mut turn : Player
   mut winner : Player
-  mut move_count : Int
-  mut human_wins : Int
-  mut ai_wins : Int
-  mut draws : Int
-  mut cursor_x : Int
-  mut cursor_y : Int
-  mut last_hx : Int
-  mut last_hy : Int
-  mut last_ax : Int
-  mut last_ay : Int
-  mut hints_left : Int
+  mut move_count : Int32
+  mut human_wins : Int32
+  mut ai_wins : Int32
+  mut draws : Int32
+  mut cursor_x : Int32
+  mut cursor_y : Int32
+  mut last_hx : Int32
+  mut last_hy : Int32
+  mut last_ax : Int32
+  mut last_ay : Int32
+  mut hints_left : Int32
   mut hint_active : Bool
-  mut hint_x : Int
-  mut hint_y : Int
+  mut hint_x : Int32
+  mut hint_y : Int32
   mut hint_ttl : Float
   mut ai_delay : Float
   mut game_time : Float
@@ -98,7 +98,7 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut mouse_press : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

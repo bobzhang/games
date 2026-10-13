@@ -148,7 +148,7 @@ fn draw_preview(game : @types.Game) -> Unit {
 }
 
 ///|
-fn star_string(stars : Int) -> String {
+fn star_string(stars : Int32) -> String {
   match stars {
     1 => "* . ."
     2 => "* * ."

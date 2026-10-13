@@ -1,53 +1,53 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let cell_size : Int = 56
+pub let cell_size : Int32 = 56
 
 ///|
-pub let grid_cols : Int = 8
+pub let grid_cols : Int32 = 8
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
-pub let cost_shift : Int = 1
+pub let cost_shift : Int32 = 1
 
 ///|
-pub let cost_rotate : Int = 2
+pub let cost_rotate : Int32 = 2
 
 ///|
-pub let cost_flip : Int = 2
+pub let cost_flip : Int32 = 2
 
 ///|
-pub let cost_grow : Int = 3
+pub let cost_grow : Int32 = 3
 
 ///|
-pub let cost_shrink : Int = 3
+pub let cost_shrink : Int32 = 3
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let morph_levels : Int = 8
+pub let morph_levels : Int32 = 8
 
 ///|
-pub let sculpt_levels : Int = 9
+pub let sculpt_levels : Int32 = 9
 
 ///|
-pub let transform_levels : Int = 8
+pub let transform_levels : Int32 = 8
 
 ///|
 pub let anim_duration : Float = 0.2

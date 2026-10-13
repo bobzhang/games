@@ -1,40 +1,40 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1100
+let sw : Int32 = 1100
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 700
+let sh : Int32 = 700
 
 ///|
 /// Axis-aligned rectangle representing a solid platform.
 struct Platform {
-  x : Int
-  y : Int
-  w : Int
-  h : Int
+  x : Int32
+  y : Int32
+  w : Int32
+  h : Int32
 }
 
 ///|
 /// Axis-aligned rectangle representing an instant-death spike zone.
 struct Spike {
-  x : Int
-  y : Int
-  w : Int
-  h : Int
+  x : Int32
+  y : Int32
+  w : Int32
+  h : Int32
 }
 
 ///|
 /// Returns true when two axis-aligned rectangles overlap.
 fn hit(
-  ax : Int,
-  ay : Int,
-  aw : Int,
-  ah : Int,
-  bx : Int,
-  by : Int,
-  bw : Int,
-  bh : Int,
+  ax : Int32,
+  ay : Int32,
+  aw : Int32,
+  ah : Int32,
+  bx : Int32,
+  by : Int32,
+  bw : Int32,
+  bh : Int32,
 ) -> Bool {
   !(ax + aw < bx || ax > bx + bw || ay + ah < by || ay > by + bh)
 }
@@ -72,7 +72,7 @@ fn main {
     { x: 3250, y: 620, w: 110, h: 10, },
   ]
 
-  let checkpoints : Array[Int] = [80, 1000, 2050, 3000]
+  let checkpoints : Array[Int32] = [80, 1000, 2050, 3000]
   let mut cp = 0
 
   let mut spawn_x = checkpoints[0]

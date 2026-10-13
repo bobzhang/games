@@ -43,7 +43,7 @@ pub fn stance_name(stance : Stance) -> String {
 
 ///|
 /// Map current acclaim score to a final grade label.
-pub fn grade_for_acclaim(acclaim : Int) -> String {
+pub fn grade_for_acclaim(acclaim : Int32) -> String {
   if acclaim >= 1700 {
     "Legendary Curtain Call"
   } else if acclaim >= 1200 {
@@ -64,13 +64,13 @@ pub fn set_message(game : Game, text : String, ttl : Float) -> Unit {
 
 ///|
 /// Build a raylib color from RGBA components.
-pub fn col(r : Int, g : Int, b : Int, a : Int) -> @raylib.Color {
+pub fn col(r : Int32, g : Int32, b : Int32, a : Int32) -> @raylib.Color {
   @raylib.Color::new(r, g, b, a)
 }
 
 ///|
 /// Select the UI color for a stance with the given alpha.
-pub fn stance_color(stance : Stance, alpha : Int) -> @raylib.Color {
+pub fn stance_color(stance : Stance, alpha : Int32) -> @raylib.Color {
   match stance {
     Spear => col(231, 103, 80, alpha)
     Fan => col(255, 195, 84, alpha)
@@ -81,13 +81,13 @@ pub fn stance_color(stance : Stance, alpha : Int) -> @raylib.Color {
 
 ///|
 /// Convert lane x index to world x position.
-pub fn lane_to_x(lane_x : Int) -> Int {
+pub fn lane_to_x(lane_x : Int32) -> Int32 {
   screen_w / 2 + lane_x * lane_step_x
 }
 
 ///|
 /// Convert lane y index to world y position.
-pub fn lane_to_y(lane_y : Int) -> Int {
+pub fn lane_to_y(lane_y : Int32) -> Int32 {
   stage_top + stage_h / 2 + lane_y * lane_step_y
 }
 
@@ -95,8 +95,8 @@ pub fn lane_to_y(lane_y : Int) -> Int {
 /// Draw centered text horizontally at the given y coordinate.
 pub fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, size)

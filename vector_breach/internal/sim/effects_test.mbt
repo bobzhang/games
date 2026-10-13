@@ -4,10 +4,10 @@
 ///|
 /// Helper: create a minimal battle with given grid size and units placed.
 fn make_test_battle(
-  width : Int,
-  height : Int,
-  tiles? : Array[(Int, Int, @types.TileKind)] = [],
-  hazards? : Array[(Int, Int, @types.HazardKind)] = [],
+  width : Int32,
+  height : Int32,
+  tiles~ : Array[(Int32, Int32, @types.TileKind)] = [],
+  hazards~ : Array[(Int32, Int32, @types.HazardKind)] = [],
 ) -> @types.BattleState {
   let battle = @types.new_battle(DefendGrid(5))
   // Replace the grid with a custom-sized one
@@ -31,16 +31,16 @@ fn make_test_battle(
 fn add_unit(
   battle : @types.BattleState,
   team : @types.UnitTeam,
-  x : Int,
-  y : Int,
-  hp? : Int = 5,
-  shield? : Int = 0,
-  heat? : Int = 0,
-  max_heat? : Int = 3,
-  stunned? : Bool = false,
-  mech_class? : @types.MechClass = Vanguard,
-  enemy_type? : @types.EnemyType = Rammer,
-) -> Int {
+  x : Int32,
+  y : Int32,
+  hp~ : Int32 = 5,
+  shield~ : Int32 = 0,
+  heat~ : Int32 = 0,
+  max_heat~ : Int32 = 3,
+  stunned~ : Bool = false,
+  mech_class~ : @types.MechClass = Vanguard,
+  enemy_type~ : @types.EnemyType = Rammer,
+) -> Int32 {
   let id = battle.units.length()
   let u : @types.CombatUnit = {
     id,

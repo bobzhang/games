@@ -68,7 +68,7 @@ fn @types.Game::splash(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -198,7 +198,7 @@ fn circle_rect_hit(
 }
 
 ///|
-fn obstacle_hit_cost(kind : @types.ObstacleKind) -> Int {
+fn obstacle_hit_cost(kind : @types.ObstacleKind) -> Int32 {
   match kind {
     Mine => 2
     _ => 1
@@ -320,7 +320,7 @@ fn @types.Game::spawn_obstacle(game : @types.Game) -> Bool {
       continue
     }
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     let kind : @types.ObstacleKind = if roll < 46 {
       Rock
     } else if roll < 84 {
@@ -381,7 +381,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
     pickup.y = @types.world_top() - @types.randf(50.0, 260.0)
     pickup.phase = @types.randf(0.0, 6.28)
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 58 {
       Coin
     } else if roll < 80 {
@@ -702,7 +702,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   game.level = (1 + (game.game_t / 24.0).to_int()).clamp(min=1, max=10)
 
-  let old_band : Int = game.distance / 120
+  let old_band : Int32 = game.distance / 120
   let speed_base : Float = 170.0 + Float::from_int(game.level) * 18.0
   let speed_mul : Float = if game.boost_on && game.fuel > 0.6 {
     1.65
@@ -711,7 +711,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   }
   game.distance = game.distance + (speed_base * speed_mul * step).to_int()
 
-  let new_band : Int = game.distance / 120
+  let new_band : Int32 = game.distance / 120
   if new_band > old_band {
     game.score = game.score + (new_band - old_band)
   }

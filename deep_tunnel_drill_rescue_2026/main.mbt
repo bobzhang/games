@@ -1,38 +1,38 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1366
+let sw : Int32 = 1366
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 768
+let sh : Int32 = 768
 
 ///|
 /// Number of tile columns in the underground grid.
-let grid_w : Int = 42
+let grid_w : Int32 = 42
 
 ///|
 /// Number of tile rows in the underground grid.
-let grid_h : Int = 28
+let grid_h : Int32 = 28
 
 ///|
 /// Pixel size of each square tile.
-let tile_sz : Int = 24
+let tile_sz : Int32 = 24
 
 ///|
 /// Screen X offset in pixels where the tile grid begins.
-let world_x : Int = 24
+let world_x : Int32 = 24
 
 ///|
 /// Screen Y offset in pixels where the tile grid begins.
-let world_y : Int = 72
+let world_y : Int32 = 72
 
 ///|
 /// Total pixel width of the tile grid.
-let world_w : Int = grid_w * tile_sz
+let world_w : Int32 = grid_w * tile_sz
 
 ///|
 /// Total pixel height of the tile grid.
-let world_h : Int = grid_h * tile_sz
+let world_h : Int32 = grid_h * tile_sz
 
 ///|
 /// Left boundary of the tile grid as a float.
@@ -52,43 +52,43 @@ let world_b : Float = Float::from_int(world_y + world_h)
 
 ///|
 /// Screen X coordinate where the side UI panel begins.
-let panel_x : Int = world_x + world_w + 18
+let panel_x : Int32 = world_x + world_w + 18
 
 ///|
 /// Width in pixels of the side UI panel.
-let panel_w : Int = sw - panel_x - 20
+let panel_w : Int32 = sw - panel_x - 20
 
 ///|
 /// Maximum number of concurrent particles in the particle pool.
-let max_particles : Int = 420
+let max_particles : Int32 = 420
 
 ///|
 /// Tile kind constant representing an empty tunnel cell.
-let tile_empty : Int = 0
+let tile_empty : Int32 = 0
 
 ///|
 /// Tile kind constant representing a drillable dirt cell.
-let tile_dirt : Int = 1
+let tile_dirt : Int32 = 1
 
 ///|
 /// Tile kind constant representing an impassable rock cell.
-let tile_rock : Int = 2
+let tile_rock : Int32 = 2
 
 ///|
 /// Tile kind constant representing a hazardous gas pocket cell.
-let tile_gas : Int = 3
+let tile_gas : Int32 = 3
 
 ///|
 /// Tile kind constant representing a collectible crystal cell.
-let tile_crystal : Int = 4
+let tile_crystal : Int32 = 4
 
 ///|
 /// Tile kind constant representing a trapped miner that the player must rescue.
-let tile_miner : Int = 5
+let tile_miner : Int32 = 5
 
 ///|
 /// Tile kind constant representing the player's rescue base at the top of the grid.
-let tile_base : Int = 6
+let tile_base : Int32 = 6
 
 ///|
 /// Represents the player-controlled drill vehicle with position, fuel, oxygen, hull, heat, bombs, sonar, and carried miner state.
@@ -105,15 +105,15 @@ struct Player {
   hull_max : Float
   mut heat : Float
   heat_max : Float
-  mut bombs : Int
+  mut bombs : Int32
   mut bomb_cd : Float
   mut rescue_cd : Float
   mut sonar_cd : Float
   mut sonar_t : Float
   mut sonar_tx : Float
   mut sonar_ty : Float
-  mut carried : Int
-  carry_max : Int
+  mut carried : Int32
+  carry_max : Int32
   wobble : Float
 }
 
@@ -121,7 +121,7 @@ struct Player {
 /// Represents a visual particle effect with position, velocity, size, lifetime, pulse phase, kind, and active state.
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -180,19 +180,19 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 
 ///|
 /// Returns the flat array index for grid coordinates (gx, gy).
-fn idx(gx : Int, gy : Int) -> Int {
+fn idx(gx : Int32, gy : Int32) -> Int32 {
   gy * grid_w + gx
 }
 
 ///|
 /// Returns true if (gx, gy) is within the valid grid bounds.
-fn in_bounds(gx : Int, gy : Int) -> Bool {
+fn in_bounds(gx : Int32, gy : Int32) -> Bool {
   gx >= 0 && gx < grid_w && gy >= 0 && gy < grid_h
 }
 
 ///|
 /// Returns the tile kind at (gx, gy), or tile_rock if out of bounds.
-fn get_tile(tiles : Array[Int], gx : Int, gy : Int) -> Int {
+fn get_tile(tiles : Array[Int32], gx : Int32, gy : Int32) -> Int32 {
   if in_bounds(gx, gy) {
     tiles[idx(gx, gy)]
   } else {
@@ -202,7 +202,7 @@ fn get_tile(tiles : Array[Int], gx : Int, gy : Int) -> Int {
 
 ///|
 /// Sets the tile kind at (gx, gy) if the coordinates are in bounds.
-fn set_tile(tiles : Array[Int], gx : Int, gy : Int, t : Int) -> Unit {
+fn set_tile(tiles : Array[Int32], gx : Int32, gy : Int32, t : Int32) -> Unit {
   if in_bounds(gx, gy) {
     tiles[idx(gx, gy)] = t
   }
@@ -210,25 +210,25 @@ fn set_tile(tiles : Array[Int], gx : Int, gy : Int, t : Int) -> Unit {
 
 ///|
 /// Converts a world X pixel coordinate to a grid column index.
-fn world_to_gx(x : Float) -> Int {
+fn world_to_gx(x : Float) -> Int32 {
   ((x - world_l) / Float::from_int(tile_sz)).to_int()
 }
 
 ///|
 /// Converts a world Y pixel coordinate to a grid row index.
-fn world_to_gy(y : Float) -> Int {
+fn world_to_gy(y : Float) -> Int32 {
   ((y - world_t) / Float::from_int(tile_sz)).to_int()
 }
 
 ///|
 /// Returns the world X pixel coordinate of the center of grid column gx.
-fn cell_center_x(gx : Int) -> Float {
+fn cell_center_x(gx : Int32) -> Float {
   world_l + Float::from_int(gx * tile_sz + tile_sz / 2)
 }
 
 ///|
 /// Returns the world Y pixel coordinate of the center of grid row gy.
-fn cell_center_y(gy : Int) -> Float {
+fn cell_center_y(gy : Int32) -> Float {
   world_t + Float::from_int(gy * tile_sz + tile_sz / 2)
 }
 
@@ -237,10 +237,10 @@ fn cell_center_y(gy : Int) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -270,7 +270,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if !part.active {
@@ -296,8 +296,8 @@ fn burst_particles(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -357,10 +357,10 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 
 ///|
 /// Fills the tile grid with terrain and places miners, returning the number of miners actually placed.
-fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
+fn setup_map(tiles : Array[Int32], target_miners : Int32) -> Int32 {
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
-      let i : Int = idx(gx, gy)
+      let i : Int32 = idx(gx, gy)
 
       if gx == 0 || gx == grid_w - 1 || gy == grid_h - 1 {
         tiles[i] = tile_rock
@@ -372,7 +372,7 @@ fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
         continue
       }
 
-      let r : Int = @raylib.get_random_value(0, 99)
+      let r : Int32 = @raylib.get_random_value(0, 99)
       if r < 50 {
         tiles[i] = tile_dirt
       } else if r < 76 {
@@ -388,7 +388,7 @@ fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
   }
 
   // base platform near top center
-  let base_cx : Int = grid_w / 2
+  let base_cx : Int32 = grid_w / 2
   for gy in 0..<=2 {
     for gx in (base_cx - 2)..<=(base_cx + 2) {
       if in_bounds(gx, gy) {
@@ -406,13 +406,13 @@ fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
     }
   }
 
-  let mut miners_placed : Int = 0
-  let mut tries : Int = 0
+  let mut miners_placed : Int32 = 0
+  let mut tries : Int32 = 0
   while miners_placed < target_miners && tries < 4000 {
     tries = tries + 1
-    let gx : Int = @raylib.get_random_value(2, grid_w - 3)
-    let gy : Int = @raylib.get_random_value(8, grid_h - 3)
-    let t : Int = get_tile(tiles, gx, gy)
+    let gx : Int32 = @raylib.get_random_value(2, grid_w - 3)
+    let gy : Int32 = @raylib.get_random_value(8, grid_h - 3)
+    let t : Int32 = get_tile(tiles, gx, gy)
     if t == tile_empty || t == tile_dirt {
       set_tile(tiles, gx, gy, tile_miner)
       miners_placed = miners_placed + 1
@@ -421,8 +421,8 @@ fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
 
   // extra crystals deeper
   for _i in 0..<34 {
-    let gx : Int = @raylib.get_random_value(2, grid_w - 3)
-    let gy : Int = @raylib.get_random_value(6, grid_h - 3)
+    let gx : Int32 = @raylib.get_random_value(2, grid_w - 3)
+    let gy : Int32 = @raylib.get_random_value(6, grid_h - 3)
     if get_tile(tiles, gx, gy) == tile_empty {
       set_tile(tiles, gx, gy, tile_crystal)
     }
@@ -433,18 +433,18 @@ fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
 
 ///|
 /// Returns the number of tiles in the grid that match the given kind.
-fn count_tiles(tiles : Array[Int], kind : Int) -> Int {
+fn count_tiles(tiles : Array[Int32], kind : Int32) -> Int32 {
   @utils.count_by(tiles, fn(tile) { tile == kind })
 }
 
 ///|
 /// Returns the (x, y, width, height) pixel bounds of the rescue base platform.
-fn base_bounds() -> (Int, Int, Int, Int) {
-  let base_cx : Int = grid_w / 2
-  let x : Int = world_x + (base_cx - 2) * tile_sz
-  let y : Int = world_y
-  let w : Int = 5 * tile_sz
-  let h : Int = 3 * tile_sz
+fn base_bounds() -> (Int32, Int32, Int32, Int32) {
+  let base_cx : Int32 = grid_w / 2
+  let x : Int32 = world_x + (base_cx - 2) * tile_sz
+  let y : Int32 = world_y
+  let w : Int32 = 5 * tile_sz
+  let h : Int32 = 3 * tile_sz
   (x, y, w, h)
 }
 
@@ -457,15 +457,15 @@ fn is_in_base(px : Float, py : Float) -> Bool {
 
 ///|
 /// Returns the number of gas tiles in the 3x3 neighborhood surrounding the given world position.
-fn gas_near_count(tiles : Array[Int], px : Float, py : Float) -> Int {
-  let gx : Int = world_to_gx(px)
-  let gy : Int = world_to_gy(py)
+fn gas_near_count(tiles : Array[Int32], px : Float, py : Float) -> Int32 {
+  let gx : Int32 = world_to_gx(px)
+  let gy : Int32 = world_to_gy(py)
 
-  let mut c : Int = 0
+  let mut c : Int32 = 0
   for oy in -1..<=1 {
     for ox in -1..<=1 {
-      let tx : Int = gx + ox
-      let ty : Int = gy + oy
+      let tx : Int32 = gx + ox
+      let ty : Int32 = gy + oy
       if get_tile(tiles, tx, ty) == tile_gas {
         c = c + 1
       }
@@ -478,14 +478,14 @@ fn gas_near_count(tiles : Array[Int], px : Float, py : Float) -> Int {
 /// Attempts to move the player to (nx, ny), drilling through dirt if possible, and returns the new position and whether drilling occurred.
 fn try_move_axis(
   player : Player,
-  tiles : Array[Int],
+  tiles : Array[Int32],
   nx : Float,
   ny : Float,
   parts : Array[Particle],
 ) -> (Float, Float, Bool) {
-  let gx : Int = world_to_gx(nx)
-  let gy : Int = world_to_gy(ny)
-  let t : Int = get_tile(tiles, gx, gy)
+  let gx : Int32 = world_to_gx(nx)
+  let gy : Int32 = world_to_gy(ny)
+  let t : Int32 = get_tile(tiles, gx, gy)
 
   if t == tile_dirt {
     if player.fuel > 0.15 && player.heat < player.heat_max * 0.96 {
@@ -508,11 +508,11 @@ fn try_move_axis(
 /// Detonates a bomb at the player's position, clearing nearby tiles and returning updated casualty and crystal counts.
 fn drop_bomb(
   player : Player,
-  tiles : Array[Int],
+  tiles : Array[Int32],
   parts : Array[Particle],
-  casualties_ref : Int,
-  crystals_ref : Int,
-) -> (Int, Int) {
+  casualties_ref : Int32,
+  crystals_ref : Int32,
+) -> (Int32, Int32) {
   if player.bombs <= 0 || player.bomb_cd > 0.0 {
     return (casualties_ref, crystals_ref)
   }
@@ -520,26 +520,26 @@ fn drop_bomb(
   player.bombs = player.bombs - 1
   player.bomb_cd = 0.38
 
-  let gx : Int = world_to_gx(player.x)
-  let gy : Int = world_to_gy(player.y)
+  let gx : Int32 = world_to_gx(player.x)
+  let gy : Int32 = world_to_gy(player.y)
 
-  let mut casualties : Int = casualties_ref
-  let mut crystals : Int = crystals_ref
+  let mut casualties : Int32 = casualties_ref
+  let mut crystals : Int32 = crystals_ref
 
   for oy in -2..<=2 {
     for ox in -2..<=2 {
-      let tx : Int = gx + ox
-      let ty : Int = gy + oy
+      let tx : Int32 = gx + ox
+      let ty : Int32 = gy + oy
       if !in_bounds(tx, ty) {
         continue
       }
 
-      let d2 : Int = ox * ox + oy * oy
+      let d2 : Int32 = ox * ox + oy * oy
       if d2 > 5 {
         continue
       }
 
-      let t : Int = get_tile(tiles, tx, ty)
+      let t : Int32 = get_tile(tiles, tx, ty)
       if t == tile_rock || t == tile_dirt || t == tile_gas || t == tile_crystal {
         if t == tile_crystal {
           crystals = crystals + 1
@@ -561,14 +561,14 @@ fn drop_bomb(
 ///|
 /// Returns the grid coordinates and squared distance of the nearest miner tile to position (px, py).
 fn nearest_miner(
-  tiles : Array[Int],
+  tiles : Array[Int32],
   px : Float,
   py : Float,
-) -> (Int, Int, Float) {
-  let total_cells : Int = grid_w * grid_h
+) -> (Int32, Int32, Float) {
+  let total_cells : Int32 = grid_w * grid_h
   for idx in 0..<total_cells; best_x = -1, best_y = -1, best_d2 = 99999999.0F {
-    let gy : Int = idx / grid_w
-    let gx : Int = idx % grid_w
+    let gy : Int32 = idx / grid_w
+    let gx : Int32 = idx % grid_w
     if get_tile(tiles, gx, gy) != tile_miner {
       continue
     }
@@ -587,17 +587,17 @@ fn nearest_miner(
 ///|
 /// Randomly triggers cave-in and gas-pocket events scaled to tier, updating the tile grid and returning counts of each.
 fn apply_hazard_events(
-  tiles : Array[Int],
-  tier : Int,
+  tiles : Array[Int32],
+  tier : Int32,
   parts : Array[Particle],
-) -> (Int, Int) {
-  let mut caveins : Int = 0
-  let mut gas_pockets : Int = 0
+) -> (Int32, Int32) {
+  let mut caveins : Int32 = 0
+  let mut gas_pockets : Int32 = 0
 
-  let event_n : Int = 1 + @raylib.get_random_value(0, tier / 2)
+  let event_n : Int32 = 1 + @raylib.get_random_value(0, tier / 2)
   for _e in 0..<event_n {
-    let gx : Int = @raylib.get_random_value(2, grid_w - 3)
-    let gy : Int = @raylib.get_random_value(5, grid_h - 3)
+    let gx : Int32 = @raylib.get_random_value(2, grid_w - 3)
+    let gy : Int32 = @raylib.get_random_value(5, grid_h - 3)
 
     if get_tile(tiles, gx, gy) == tile_empty {
       set_tile(tiles, gx, gy, tile_rock)
@@ -606,11 +606,11 @@ fn apply_hazard_events(
     }
   }
 
-  let gas_n : Int = @raylib.get_random_value(1, 2 + tier / 3)
+  let gas_n : Int32 = @raylib.get_random_value(1, 2 + tier / 3)
   for _g in 0..<gas_n {
-    let gx : Int = @raylib.get_random_value(2, grid_w - 3)
-    let gy : Int = @raylib.get_random_value(5, grid_h - 3)
-    let t : Int = get_tile(tiles, gx, gy)
+    let gx : Int32 = @raylib.get_random_value(2, grid_w - 3)
+    let gy : Int32 = @raylib.get_random_value(5, grid_h - 3)
+    let t : Int32 = get_tile(tiles, gx, gy)
     if t == tile_dirt || t == tile_empty {
       set_tile(tiles, gx, gy, tile_gas)
       gas_pockets = gas_pockets + 1
@@ -623,12 +623,12 @@ fn apply_hazard_events(
 
 ///|
 /// Draws all tiles in the grid using generated material and objective textures.
-fn draw_tiles(art : GameArt, tiles : Array[Int], t : Float) -> Unit {
+fn draw_tiles(art : GameArt, tiles : Array[Int32], t : Float) -> Unit {
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
-      let tx : Int = world_x + gx * tile_sz
-      let ty : Int = world_y + gy * tile_sz
-      let tile : Int = get_tile(tiles, gx, gy)
+      let tx : Int32 = world_x + gx * tile_sz
+      let ty : Int32 = world_y + gy * tile_sz
+      let tile : Int32 = get_tile(tiles, gx, gy)
       draw_tile_art(art, tile, tx, ty, gx, gy, t)
     }
   }
@@ -637,8 +637,8 @@ fn draw_tiles(art : GameArt, tiles : Array[Int], t : Float) -> Unit {
 ///|
 /// Draws the on-screen directional pad and ability buttons for touch input.
 fn draw_touch_ui() -> Unit {
-  let pad_x : Int = 28
-  let pad_y : Int = sh - 196
+  let pad_x : Int32 = 28
+  let pad_y : Int32 = sh - 196
 
   @raylib.draw_rectangle(
     pad_x + 86,
@@ -705,8 +705,8 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(236, 244, 255, 244),
   )
 
-  let bomb_x : Int = sw - 290
-  let bomb_y : Int = sh - 176
+  let bomb_x : Int32 = sw - 290
+  let bomb_y : Int32 = sh - 176
   @raylib.draw_circle(
     bomb_x,
     bomb_y,
@@ -721,8 +721,8 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(252, 246, 246, 248),
   )
 
-  let sonar_x : Int = sw - 154
-  let sonar_y : Int = sh - 248
+  let sonar_x : Int32 = sw - 154
+  let sonar_y : Int32 = sh - 248
   @raylib.draw_circle(
     sonar_x,
     sonar_y,
@@ -743,13 +743,13 @@ fn draw_touch_ui() -> Unit {
 fn draw_ui(
   player : Player,
   timer : Float,
-  rescued : Int,
-  target : Int,
-  casualties : Int,
-  crystals : Int,
-  tier : Int,
-  miners_left : Int,
-  score : Int,
+  rescued : Int32,
+  target : Int32,
+  casualties : Int32,
+  crystals : Int32,
+  tier : Int32,
+  miners_left : Int32,
+  score : Int32,
   impossible : Bool,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -888,7 +888,7 @@ fn draw_ui(
   )
 
   fn draw_bar(
-    y : Int,
+    y : Int32,
     label : String,
     value : Float,
     maxv : Float,
@@ -909,7 +909,7 @@ fn draw_ui(
       @raylib.Color::new(24, 32, 46, 255),
     )
     let p01 : Float = clampf(value / maxv, 0.0, 1.0)
-    let fw : Int = (Float::from_int(panel_w - 32) * p01).to_int()
+    let fw : Int32 = (Float::from_int(panel_w - 32) * p01).to_int()
     @raylib.draw_rectangle(panel_x + 16, y + 30, fw, 22, col)
     @raylib.draw_rectangle_lines(
       panel_x + 16,
@@ -1001,7 +1001,7 @@ fn main {
   let art = load_game_art()
   defer unload_game_art(art)
 
-  let tiles : Array[Int] = Array::make(grid_w * grid_h, tile_empty)
+  let tiles : Array[Int32] = Array::make(grid_w * grid_h, tile_empty)
 
   let parts : Array[Particle] = Array::makei(max_particles, fn(_i) {
     {
@@ -1042,15 +1042,15 @@ fn main {
     wobble: randf(0.0, 20.0),
   }
 
-  let target_miners : Int = 16
+  let target_miners : Int32 = 16
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 360.0
-  let mut rescued_total : Int = 0
-  let mut casualties_total : Int = 0
-  let mut crystals_total : Int = 0
-  let mut tier : Int = 1
-  let mut score : Int = 0
+  let mut rescued_total : Int32 = 0
+  let mut casualties_total : Int32 = 0
+  let mut crystals_total : Int32 = 0
+  let mut tier : Int32 = 1
+  let mut score : Int32 = 0
 
   let mut msg : String = ""
   let mut msg_t : Float = 0.0
@@ -1059,7 +1059,7 @@ fn main {
   let mut event_cd : Float = 9.0
 
   fn reset_run() -> Unit {
-    let miners_placed : Int = setup_map(tiles, target_miners)
+    let miners_placed : Int32 = setup_map(tiles, target_miners)
     ignore(miners_placed)
 
     clear_particles(parts)
@@ -1183,8 +1183,8 @@ fn main {
       let mut rescue_action : Bool = @raylib.is_key_pressed(@raylib.KeyL)
 
       if hold {
-        let pad_x : Int = 28
-        let pad_y : Int = sh - 196
+        let pad_x : Int32 = 28
+        let pad_y : Int32 = sh - 196
 
         if inside_rect(mouse.x, mouse.y, pad_x + 86, pad_y, 78, 58) {
           move_u = true
@@ -1272,7 +1272,7 @@ fn main {
       }
 
       // environment
-      let gas_n : Int = gas_near_count(tiles, player.x, player.y)
+      let gas_n : Int32 = gas_near_count(tiles, player.x, player.y)
       let oxy_loss : Float = dt *
         (0.92 + Float::from_int(tier) * 0.08 + Float::from_int(gas_n) * 0.20)
       player.oxygen = player.oxygen - oxy_loss
@@ -1298,9 +1298,9 @@ fn main {
       }
 
       // collect crystals by contact
-      let cgx : Int = world_to_gx(player.x)
-      let cgy : Int = world_to_gy(player.y)
-      let tile_here : Int = get_tile(tiles, cgx, cgy)
+      let cgx : Int32 = world_to_gx(player.x)
+      let cgy : Int32 = world_to_gy(player.y)
+      let tile_here : Int32 = get_tile(tiles, cgx, cgy)
       if tile_here == tile_crystal {
         set_tile(tiles, cgx, cgy, tile_empty)
         crystals_total = crystals_total + 1
@@ -1314,11 +1314,11 @@ fn main {
           rescue_action ||
           (tile_here == tile_miner && player.carried < player.carry_max)
         ) {
-        let mut rescued_now : Int = 0
+        let mut rescued_now : Int32 = 0
         for oy in -1..<=1 {
           for ox in -1..<=1 {
-            let gx : Int = cgx + ox
-            let gy : Int = cgy + oy
+            let gx : Int32 = cgx + ox
+            let gy : Int32 = cgy + oy
             if get_tile(tiles, gx, gy) == tile_miner {
               if player.carried < player.carry_max {
                 set_tile(tiles, gx, gy, tile_empty)
@@ -1391,7 +1391,7 @@ fn main {
           player.sonar_t = 2.0
           player.sonar_cd = 2.2
 
-          let d : Int = d2.sqrt().to_int()
+          let d : Int32 = d2.sqrt().to_int()
           msg = "Sonar ping: nearest miner \{d}m"
           msg_t = 1.1
           burst_particles(parts, player.x, player.y, 10, 3)
@@ -1417,7 +1417,7 @@ fn main {
         }
       }
 
-      let miners_left : Int = count_tiles(tiles, tile_miner)
+      let miners_left : Int32 = count_tiles(tiles, tile_miner)
       let impossible : Bool = rescued_total + player.carried + miners_left <
         target_miners
 
@@ -1486,7 +1486,9 @@ fn main {
     draw_player_art(art, player, scene_t)
 
     if player.sonar_t > 0.0 {
-      let alpha : Int = (player.sonar_t * 130.0).to_int().clamp(min=0, max=220)
+      let alpha : Int32 = (player.sonar_t * 130.0)
+        .to_int()
+        .clamp(min=0, max=220)
       @raylib.draw_line_ex(
         @raylib.Vector2::new(player.x, player.y),
         @raylib.Vector2::new(player.sonar_tx, player.sonar_ty),
@@ -1503,7 +1505,7 @@ fn main {
 
     draw_particles(parts)
 
-    let miners_left_ui : Int = count_tiles(tiles, tile_miner)
+    let miners_left_ui : Int32 = count_tiles(tiles, tile_miner)
     let impossible_ui : Bool = rescued_total + player.carried + miners_left_ui <
       target_miners
     draw_ui(
@@ -1522,8 +1524,8 @@ fn main {
     )
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = sw / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         16,

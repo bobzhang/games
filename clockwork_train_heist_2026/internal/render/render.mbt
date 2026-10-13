@@ -1,6 +1,6 @@
 ///|
 /// Returns a random horizontal screen-shake offset when the shake timer is active.
-fn @types.Game::shake_dx(game : @types.Game) -> Int {
+fn @types.Game::shake_dx(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -10,7 +10,7 @@ fn @types.Game::shake_dx(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical screen-shake offset when the shake timer is active.
-fn @types.Game::shake_dy(game : @types.Game) -> Int {
+fn @types.Game::shake_dy(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -26,7 +26,7 @@ fn @types.Game::pulse(game : @types.Game, f : Float) -> Float {
 
 ///|
 /// Maps a guard color identifier to its base uniform color used in patrol mode.
-fn guard_base_color(id : Int) -> @raylib.Color {
+fn guard_base_color(id : Int32) -> @raylib.Color {
   if id == 0 {
     @raylib.Color::new(220, 154, 120, 232)
   } else if id == 1 {
@@ -44,8 +44,8 @@ fn @types.Game::draw_background(game : @types.Game, art : GameArt) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 12, 20, 255))
   draw_train_backdrop_art(art)
 
-  let glow0 : Int = 24 + (game.pulse(0.38) * 26.0).to_int()
-  let glow1 : Int = 38 + (game.pulse(0.58) * 32.0).to_int()
+  let glow0 : Int32 = 24 + (game.pulse(0.38) * 26.0).to_int()
+  let glow1 : Int32 = 38 + (game.pulse(0.58) * 32.0).to_int()
 
   @raylib.draw_circle(180, 118, 220.0, @raylib.Color::new(126, 146, 214, glow0))
   @raylib.draw_circle(
@@ -69,13 +69,13 @@ fn @types.Game::draw_background(game : @types.Game, art : GameArt) -> Unit {
 fn @types.Game::draw_tile_map(
   game : @types.Game,
   art : GameArt,
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
 ) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
-      let rx : Int = @types.board_px(x) + ox
-      let ry : Int = @types.board_py(y) + oy
+      let rx : Int32 = @types.board_px(x) + ox
+      let ry : Int32 = @types.board_py(y) + oy
       let t = game.map[y * @types.grid_w + x]
       let xf : Float = Float::from_int(rx)
       let yf : Float = Float::from_int(ry)
@@ -186,12 +186,12 @@ fn @types.Game::draw_tile_map(
 
 ///|
 /// Draws the decorative train-car outlines and inter-car connector circles over the map.
-fn draw_train_shell(ox : Int, oy : Int) -> Unit {
+fn draw_train_shell(ox : Int32, oy : Int32) -> Unit {
   for car in 0..<5 {
-    let x0 : Int = @types.board_px(1 + car * 5) + ox
-    let y0 : Int = @types.board_py(2) + oy
-    let cw : Int = @types.cell * 4
-    let ch : Int = @types.cell * 9
+    let x0 : Int32 = @types.board_px(1 + car * 5) + ox
+    let y0 : Int32 = @types.board_py(2) + oy
+    let cw : Int32 = @types.cell * 4
+    let ch : Int32 = @types.cell * 9
 
     @raylib.draw_rectangle_lines(
       x0 - 4,
@@ -211,8 +211,8 @@ fn draw_train_shell(ox : Int, oy : Int) -> Unit {
   }
 
   for c in 0..<4 {
-    let cx : Int = @types.board_px(5 + c * 5) + @types.cell / 2 + ox
-    let cy : Int = @types.board_py(6) + @types.cell / 2 + oy
+    let cx : Int32 = @types.board_px(5 + c * 5) + @types.cell / 2 + ox
+    let cy : Int32 = @types.board_py(6) + @types.cell / 2 + oy
     @raylib.draw_circle(cx, cy, 13.0, @raylib.Color::new(174, 210, 244, 84))
   }
 }
@@ -222,16 +222,16 @@ fn draw_train_shell(ox : Int, oy : Int) -> Unit {
 fn @types.Game::draw_loot(
   game : @types.Game,
   art : GameArt,
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
 ) -> Unit {
   for loot in game.loots {
     if !loot.active {
       continue
     }
 
-    let cx : Int = @types.board_px(loot.x) + @types.cell / 2 + ox
-    let cy : Int = @types.board_py(loot.y) + @types.cell / 2 + oy
+    let cx : Int32 = @types.board_px(loot.x) + @types.cell / 2 + ox
+    let cy : Int32 = @types.board_py(loot.y) + @types.cell / 2 + oy
     @raylib.draw_circle(cx, cy, 26.0, @raylib.Color::new(250, 232, 170, 58))
 
     match loot.kind {
@@ -268,16 +268,18 @@ fn @types.Game::draw_loot(
 
 ///|
 /// Draws all active smoke clouds with pulsing opacity based on their remaining lifetime.
-fn @types.Game::draw_smokes(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_smokes(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   for i in 0..<game.smokes.length() {
     if !game.smokes[i].active {
       continue
     }
 
-    let cx : Int = @types.board_px(game.smokes[i].x) + @types.cell / 2 + ox
-    let cy : Int = @types.board_py(game.smokes[i].y) + @types.cell / 2 + oy
+    let cx : Int32 = @types.board_px(game.smokes[i].x) + @types.cell / 2 + ox
+    let cy : Int32 = @types.board_py(game.smokes[i].y) + @types.cell / 2 + oy
 
-    let alpha : Int = (game.smokes[i].t * 52.0).to_int().clamp(min=56, max=188)
+    let alpha : Int32 = (game.smokes[i].t * 52.0)
+      .to_int()
+      .clamp(min=56, max=188)
 
     @raylib.draw_circle(
       cx,
@@ -297,13 +299,13 @@ fn @types.Game::draw_smokes(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws a single guard sprite at its interpolated position, coloring it by mode (patrol, hunt, stunned).
-fn draw_guard(g : @types.Guard, art : GameArt, ox : Int, oy : Int) -> Unit {
+fn draw_guard(g : @types.Guard, art : GameArt, ox : Int32, oy : Int32) -> Unit {
   if !g.active {
     return
   }
 
-  let cx : Int = @types.cell_center_x(g.body.fx) + ox
-  let cy : Int = @types.cell_center_y(g.body.fy) + oy
+  let cx : Int32 = @types.cell_center_x(g.body.fx) + ox
+  let cy : Int32 = @types.cell_center_y(g.body.fy) + oy
 
   let col = match g.mode {
     Stunned => @raylib.Color::new(164, 144, 246, 226)
@@ -350,8 +352,8 @@ fn draw_guard(g : @types.Guard, art : GameArt, ox : Int, oy : Int) -> Unit {
 fn @types.Game::draw_player(
   game : @types.Game,
   art : GameArt,
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
 ) -> Unit {
   let blink : Bool = game.flash_t > 0.0 &&
     (game.flash_t * 14.0).to_int() % 2 == 0
@@ -359,8 +361,8 @@ fn @types.Game::draw_player(
     return
   }
 
-  let cx : Int = @types.cell_center_x(game.player.fx) + ox
-  let cy : Int = @types.cell_center_y(game.player.fy) + oy
+  let cx : Int32 = @types.cell_center_x(game.player.fx) + ox
+  let cy : Int32 = @types.cell_center_y(game.player.fy) + oy
 
   @raylib.draw_circle(cx, cy - 1, 26.0, @raylib.Color::new(82, 196, 236, 78))
   draw_texture_fit_centered(
@@ -375,7 +377,11 @@ fn @types.Game::draw_player(
 
 ///|
 /// Draws all active particles as colored circles sized by the particle's size field.
-fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for particle in game.particles {
     if !particle.active {
       continue
@@ -401,8 +407,8 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 fn @types.Game::draw_board(
   game : @types.Game,
   art : GameArt,
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
 ) -> Unit {
   game.draw_tile_map(art, ox, oy)
   draw_train_shell(ox, oy)
@@ -429,7 +435,7 @@ fn @types.Game::draw_board(
 /// Draws a single touch button, switching between idle and pressed colors when the pointer is over it.
 fn @types.Game::draw_touch_button(
   game : @types.Game,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   c_idle : @raylib.Color,
   c_on : @raylib.Color,
@@ -456,8 +462,8 @@ fn @types.Game::draw_touch_button(
     @raylib.Color::new(216, 232, 248, 186),
   )
 
-  let fs : Int = if rect.3 >= 100 { 32 } else { 22 }
-  let tw : Int = @draw.measure_text(label, fs)
+  let fs : Int32 = if rect.3 >= 100 { 32 } else { 22 }
+  let tw : Int32 = @draw.measure_text(label, fs)
 
   @draw.draw_text(
     label,
@@ -909,8 +915,8 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game, art : GameArt) -> Unit {
   game.draw_background(art)
 
-  let ox : Int = game.shake_dx()
-  let oy : Int = game.shake_dy()
+  let ox : Int32 = game.shake_dx()
+  let oy : Int32 = game.shake_dy()
 
   game.draw_board(art, ox, oy)
   game.draw_panel()

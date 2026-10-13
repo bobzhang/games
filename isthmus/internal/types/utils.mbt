@@ -1,10 +1,10 @@
 ///|
-pub fn new_tile(height : Int, is_settlement : Bool) -> Tile {
+pub fn new_tile(height : Int32, is_settlement : Bool) -> Tile {
   { height, is_settlement, is_sand: false, }
 }
 
 ///|
-pub fn new_grid(width : Int, height : Int) -> Grid {
+pub fn new_grid(width : Int32, height : Int32) -> Grid {
   let tiles : Array[Tile] = Array(capacity=width * height)
   for _i in 0..<(width * height) {
     tiles.push(new_tile(0, false))
@@ -13,27 +13,27 @@ pub fn new_grid(width : Int, height : Int) -> Grid {
 }
 
 ///|
-pub fn grid_index(g : Grid, x : Int, y : Int) -> Int {
+pub fn grid_index(g : Grid, x : Int32, y : Int32) -> Int32 {
   y * g.width + x
 }
 
 ///|
-pub fn grid_get(g : Grid, x : Int, y : Int) -> Tile {
+pub fn grid_get(g : Grid, x : Int32, y : Int32) -> Tile {
   g.tiles[grid_index(g, x, y)]
 }
 
 ///|
-pub fn grid_in_bounds(g : Grid, x : Int, y : Int) -> Bool {
+pub fn grid_in_bounds(g : Grid, x : Int32, y : Int32) -> Bool {
   x >= 0 && x < g.width && y >= 0 && y < g.height
 }
 
 ///|
-pub fn tile_is_above_water(tile : Tile, sea_level : Int) -> Bool {
+pub fn tile_is_above_water(tile : Tile, sea_level : Int32) -> Bool {
   tile.height > sea_level
 }
 
 ///|
-pub fn tile_kind(tile : Tile, sea_level : Int) -> TileKind {
+pub fn tile_kind(tile : Tile, sea_level : Int32) -> TileKind {
   if tile.height <= sea_level {
     Water
   } else if tile.is_settlement {
@@ -62,8 +62,8 @@ pub fn copy_grid(g : Grid) -> Grid {
 ///|
 pub fn snapshot_grid(
   g : Grid,
-  sea_level : Int,
-  sand_remaining : Int,
+  sea_level : Int32,
+  sand_remaining : Int32,
 ) -> GridSnapshot {
   let tiles : Array[Tile] = Array(capacity=g.tiles.length())
   for i in 0..<g.tiles.length() {
@@ -100,7 +100,7 @@ pub fn grid_from_level(level : Level) -> Grid {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -109,7 +109,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -118,7 +118,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn absi(a : Int) -> Int {
+pub fn absi(a : Int32) -> Int32 {
   if a < 0 {
     -a
   } else {
@@ -179,7 +179,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn tier_index(tier : Tier) -> Int {
+pub fn tier_index(tier : Tier) -> Int32 {
   match tier {
     Shores => 0
     Straits => 1
@@ -188,7 +188,7 @@ pub fn tier_index(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_from_index(i : Int) -> Tier {
+pub fn tier_from_index(i : Int32) -> Tier {
   match i {
     0 => Shores
     1 => Straits
@@ -197,7 +197,7 @@ pub fn tier_from_index(i : Int) -> Tier {
 }
 
 ///|
-pub fn tier_start_level(tier : Tier) -> Int {
+pub fn tier_start_level(tier : Tier) -> Int32 {
   match tier {
     Shores => 0
     Straits => 7
@@ -206,7 +206,7 @@ pub fn tier_start_level(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Shores => 7
     Straits => 7
@@ -224,8 +224,8 @@ pub fn tier_name(tier : Tier) -> String {
 }
 
 ///|
-pub fn settlement_positions(g : Grid) -> Array[Int] {
-  let result : Array[Int] = []
+pub fn settlement_positions(g : Grid) -> Array[Int32] {
+  let result : Array[Int32] = []
   for i in 0..<g.tiles.length() {
     if g.tiles[i].is_settlement {
       result.push(i)
@@ -235,7 +235,7 @@ pub fn settlement_positions(g : Grid) -> Array[Int] {
 }
 
 ///|
-pub fn index_to_xy(g : Grid, idx : Int) -> (Int, Int) {
+pub fn index_to_xy(g : Grid, idx : Int32) -> (Int32, Int32) {
   (idx % g.width, idx / g.width)
 }
 

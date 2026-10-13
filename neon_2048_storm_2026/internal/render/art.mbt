@@ -76,9 +76,9 @@ fn draw_texture_cover(
 /// Draws the generated numbered-tile overlay cropped to its visible frame.
 fn draw_tile_overlay(
   art : GameArt,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   let source_w : Float = Float::from_int(art.tile_overlay.width())
@@ -103,7 +103,7 @@ fn draw_tile_overlay(
 /// Draws one 2x2 generated icon sheet cell centered on the destination point.
 fn draw_icon_cell(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,

@@ -32,7 +32,7 @@ test "Cloud blocks sun" {
 ///|
 test "Rain flows downhill" {
   // Height layout: center is 2, neighbors are 0
-  let heights : Array[Int] = []
+  let heights : Array[Int32] = []
   for i in 0..<25 {
     if i == 12 {
       // (2,2)
@@ -96,7 +96,7 @@ test "Sunny + Rainy = Cancel to Clear" {
 
 ///|
 test "Target satisfaction" {
-  let targets : Array[(Int, Int, @types.WeatherState)] = [
+  let targets : Array[(Int32, Int32, @types.WeatherState)] = [
     (2, 2, Sunny),
     (3, 3, Rainy),
   ]

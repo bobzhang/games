@@ -1,7 +1,7 @@
 ///|
 /// Stores runtime data for Breach.
 pub(all) struct Breach {
-  room : Int
+  room : Int32
   mut severity : Float
   mut raider_cd : Float
   mut ember_cd : Float
@@ -11,7 +11,7 @@ pub(all) struct Breach {
 /// Stores runtime data for Raider.
 pub(all) struct Raider {
   active : Bool
-  mut room : Int
+  mut room : Int32
   mut x : Float
   mut y : Float
   mut hp : Float
@@ -24,7 +24,7 @@ pub(all) struct Raider {
 /// Stores runtime data for Flame.
 pub(all) struct Flame {
   active : Bool
-  room : Int
+  room : Int32
   x : Float
   y : Float
   mut intensity : Float
@@ -46,7 +46,7 @@ pub extend GameState with Eq::{not_equal, equal}
 ///|
 /// Stores runtime data for Keeper.
 pub(all) struct Keeper {
-  mut room : Int
+  mut room : Int32
   mut x : Float
   mut y : Float
   mut facing_x : Float
@@ -90,7 +90,7 @@ pub(all) struct Game {
   /// Current wave number, starting at 1 and incrementing each time the wave
   /// timer elapses. Higher waves increase breach pressure, raider HP/speed,
   /// and flame spawn rates.
-  mut wave : Int
+  mut wave : Int32
   /// Elapsed time within the current wave, in seconds.
   /// Compared against `wave_goal_t` to determine when to advance to the
   /// next wave. Reset to 0 on each wave transition.
@@ -112,26 +112,26 @@ pub(all) struct Game {
   /// Number of seal charges available this wave.
   /// Starts at `seal_charges_start` (4) and gains 1 per wave (max 7).
   /// Each seal action consumes one charge to reduce a breach's severity.
-  mut seal_charges : Int
+  mut seal_charges : Int32
   // ──── Scoring ────
   /// Cumulative score for the current run.
   /// Increased by attacking raiders, sealing breaches, extinguishing flames,
   /// ink shield hits, and wave-completion bonuses.
-  mut score : Int
+  mut score : Int32
   /// Highest score achieved across all runs in this session.
   /// Updated at game-over if the current `score` exceeds it.
-  mut best_score : Int
+  mut best_score : Int32
   // ──── Session statistics ────
   /// Total number of raiders defeated in the current run.
   /// Incremented each time a raider's HP drops to 0.
-  mut raiders_defeated : Int
+  mut raiders_defeated : Int32
   /// Total number of flames fully extinguished in the current run.
   /// Incremented when a flame's intensity reaches 0 via extinguisher or
   /// ink shield burst.
-  mut flames_cleared : Int
+  mut flames_cleared : Int32
   /// Total number of breaches fully sealed in the current run.
   /// Incremented when a seal action reduces a breach's severity to 0.
-  mut seals_done : Int
+  mut seals_done : Int32
   /// Wall-clock game time elapsed since the run started, in seconds.
   /// Accumulated each frame with a clamped dt (max 0.05s). Used for
   /// display and message lifetime tracking.
@@ -175,7 +175,7 @@ pub(all) struct Game {
 
 ///|
 /// Creates a default Breach value for a new session.
-pub fn Breach::Breach(room : Int) -> Breach {
+pub fn Breach::Breach(room : Int32) -> Breach {
   {
     room,
     severity: 0.0,

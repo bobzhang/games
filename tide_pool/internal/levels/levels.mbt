@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(id : Int) -> @types.LevelDef {
+pub fn get_level(id : Int32) -> @types.LevelDef {
   match id {
     0 => get_level_1()
     1 => get_level_2()
@@ -25,7 +25,7 @@ pub fn get_level(id : Int) -> @types.LevelDef {
 }
 
 ///|
-pub fn get_tier_for_level(id : Int) -> @types.Tier {
+pub fn get_tier_for_level(id : Int32) -> @types.Tier {
   if id < 7 {
     Shallow
   } else if id < 14 {
@@ -36,12 +36,12 @@ pub fn get_tier_for_level(id : Int) -> @types.Tier {
 }
 
 ///|
-pub fn get_level_name(id : Int) -> String {
+pub fn get_level_name(id : Int32) -> String {
   get_level(id).name
 }
 
 ///|
-pub fn setup_level(game : @types.Game, level_id : Int) -> Unit {
+pub fn setup_level(game : @types.Game, level_id : Int32) -> Unit {
   let level = get_level(level_id)
   game.current_level = Some(level)
   game.current_turn = 0

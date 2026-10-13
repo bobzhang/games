@@ -49,9 +49,9 @@ fn @types.Game::draw_sky_objects(game : @types.Game) -> Unit {
   let sun_z = game.cam_pos_z + sun_z_offset
   if sun_y > -10.0 {
     // Sun color changes throughout day
-    let sun_r : Int = if t < 0.15 || t > 0.5 { 255 } else { 255 }
-    let sun_g : Int = if t < 0.15 || t > 0.5 { 180 } else { 230 }
-    let sun_b : Int = if t < 0.15 || t > 0.5 { 50 } else { 100 }
+    let sun_r : Int32 = if t < 0.15 || t > 0.5 { 255 } else { 255 }
+    let sun_g : Int32 = if t < 0.15 || t > 0.5 { 180 } else { 230 }
+    let sun_b : Int32 = if t < 0.15 || t > 0.5 { 50 } else { 100 }
     let sun_color = @raylib.Color::new(sun_r, sun_g, sun_b, 255)
     @raylib.draw_sphere(
       @raylib.Vector3::new(sun_x, sun_y + 50.0, sun_z),
@@ -95,7 +95,7 @@ fn @types.Game::draw_stars(game : @types.Game) -> Unit {
     let sz = game.cam_pos_z + @math.sinf(angle) * radius
     // Twinkle effect
     let twinkle = @math.sinf(game.day_timer * 3.0 + fi * 1.5)
-    let alpha : Int = if twinkle > 0.0 { 255 } else { 140 }
+    let alpha : Int32 = if twinkle > 0.0 { 255 } else { 140 }
     @raylib.draw_sphere(
       @raylib.Vector3::new(sx, sy, sz),
       0.3,
@@ -131,8 +131,8 @@ fn @types.Game::draw_chunks(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_chunk_blocks(
   game : @types.Game,
-  cx : Int,
-  cz : Int,
+  cx : Int32,
+  cz : Int32,
 ) -> Unit {
   let chunk = game.chunks[cz * @types.world_chunks_x + cx]
   let base_wx = cx * @types.chunk_x
@@ -195,10 +195,10 @@ fn @types.Game::draw_chunk_blocks(
 ///|
 fn @types.Game::draw_block_with_lighting(
   game : @types.Game,
-  block : Int,
-  wx : Int,
-  wy : Int,
-  wz : Int,
+  block : Int32,
+  wx : Int32,
+  wy : Int32,
+  wz : Int32,
   dist : Float,
 ) -> Unit {
   let fx = Float::from_int(wx) + 0.5
@@ -317,8 +317,8 @@ fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_chunk_decorations(
   game : @types.Game,
-  cx : Int,
-  cz : Int,
+  cx : Int32,
+  cz : Int32,
 ) -> Unit {
   let chunk = game.chunks[cz * @types.world_chunks_x + cx]
   let base_wx = cx * @types.chunk_x
@@ -562,8 +562,8 @@ fn @types.Game::draw_mining_progress(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, crack_alpha.clamp(min=0, max=180)),
   )
   // Draw wireframe showing progress
-  let wire_r : Int = @types.lerpi(255, 255, progress)
-  let wire_g : Int = @types.lerpi(255, 0, progress)
+  let wire_r : Int32 = @types.lerpi(255, 255, progress)
+  let wire_g : Int32 = @types.lerpi(255, 0, progress)
   let wire_b = 0
   @raylib.draw_cube_wires(
     @raylib.Vector3::new(fx, fy, fz),
@@ -631,8 +631,8 @@ fn @types.Game::draw_entity(game : @types.Game, ent : @types.Entity) -> Unit {
     // Health fill
     let fill_w = bar_width * health_pct
     let offset = (bar_width - fill_w) * 0.5
-    let hr : Int = if health_pct > 0.5 { 0 } else { 255 }
-    let hg : Int = if health_pct > 0.5 { 200 } else { 0 }
+    let hr : Int32 = if health_pct > 0.5 { 0 } else { 255 }
+    let hg : Int32 = if health_pct > 0.5 { 200 } else { 0 }
     @raylib.draw_cube(
       @raylib.Vector3::new(x - offset, bar_y, z),
       fill_w,
@@ -1440,35 +1440,35 @@ fn @types.Game::draw_tool_in_hand(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_pickaxe_tool(tool : Int) -> Bool {
+fn is_pickaxe_tool(tool : Int32) -> Bool {
   tool == @types.tool_wooden_pickaxe ||
   tool == @types.tool_stone_pickaxe ||
   tool == @types.tool_iron_pickaxe
 }
 
 ///|
-fn is_axe_tool(tool : Int) -> Bool {
+fn is_axe_tool(tool : Int32) -> Bool {
   tool == @types.tool_wooden_axe ||
   tool == @types.tool_stone_axe ||
   tool == @types.tool_iron_axe
 }
 
 ///|
-fn is_sword_tool(tool : Int) -> Bool {
+fn is_sword_tool(tool : Int32) -> Bool {
   tool == @types.tool_wooden_sword ||
   tool == @types.tool_stone_sword ||
   tool == @types.tool_iron_sword
 }
 
 ///|
-fn is_shovel_tool(tool : Int) -> Bool {
+fn is_shovel_tool(tool : Int32) -> Bool {
   tool == @types.tool_wooden_shovel ||
   tool == @types.tool_stone_shovel ||
   tool == @types.tool_iron_shovel
 }
 
 ///|
-fn get_tool_head_color(tool : Int) -> @raylib.Color {
+fn get_tool_head_color(tool : Int32) -> @raylib.Color {
   if tool == @types.tool_wooden_pickaxe ||
     tool == @types.tool_wooden_axe ||
     tool == @types.tool_wooden_shovel ||

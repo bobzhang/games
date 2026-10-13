@@ -29,32 +29,32 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Converts board coordinates into a flat row-major index.
-pub fn idx(x : Int, y : Int) -> Int {
+pub fn idx(x : Int32, y : Int32) -> Int32 {
   y * board_n + x
 }
 
 ///|
 /// Returns true when a board coordinate lies inside the grid.
-pub fn in_board(x : Int, y : Int) -> Bool {
+pub fn in_board(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < board_n && y >= 0 && y < board_n
 }
 
 ///|
 /// Computes board origin and tile size, including active screen-shake offsets.
-pub fn board_metrics(game : Game) -> (Int, Int, Int) {
-  let area_x : Int = board_area_x()
-  let area_y : Int = board_area_y()
-  let area_w : Int = board_area_w()
-  let area_h : Int = board_area_h()
+pub fn board_metrics(game : Game) -> (Int32, Int32, Int32) {
+  let area_x : Int32 = board_area_x()
+  let area_y : Int32 = board_area_y()
+  let area_w : Int32 = board_area_w()
+  let area_h : Int32 = board_area_h()
 
-  let tile_x : Int = area_w / board_n
-  let tile_y : Int = area_h / board_n
+  let tile_x : Int32 = area_w / board_n
+  let tile_y : Int32 = area_h / board_n
 
-  let mut tile : Int = tile_x.min(tile_y)
+  let mut tile : Int32 = tile_x.min(tile_y)
   tile = tile.clamp(min=120, max=170)
 
-  let mut bx : Int = area_x + (area_w - board_n * tile) / 2
-  let mut by : Int = area_y + (area_h - board_n * tile) / 2
+  let mut bx : Int32 = area_x + (area_w - board_n * tile) / 2
+  let mut by : Int32 = area_y + (area_h - board_n * tile) / 2
 
   if game.shake_t > 0.0 {
     bx = bx + @raylib.get_random_value(-3, 3)
@@ -66,7 +66,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
 
 ///|
 /// Returns the world-space center of a board cell.
-pub fn cell_world_center(game : Game, x : Int, y : Int) -> (Float, Float) {
+pub fn cell_world_center(game : Game, x : Int32, y : Int32) -> (Float, Float) {
   let (bx, by, tile) = board_metrics(game)
   (
     Float::from_int(bx + x * tile + tile / 2),
@@ -87,11 +87,11 @@ pub fn pointer_on_rect(
   x : Float,
   y : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if !hold && touch_count <= 0 {
     return false
@@ -107,11 +107,15 @@ pub fn pointer_on_rect(
 
 ///|
 /// Converts pointer position to a board cell if the pointer is on the board.
-pub fn pointer_cell(game : Game, mx : Float, my : Float) -> (Bool, Int, Int) {
+pub fn pointer_cell(
+  game : Game,
+  mx : Float,
+  my : Float,
+) -> (Bool, Int32, Int32) {
   let (bx, by, tile) = board_metrics(game)
 
-  let x : Int = (mx.to_int() - bx) / tile
-  let y : Int = (my.to_int() - by) / tile
+  let x : Int32 = (mx.to_int() - bx) / tile
+  let y : Int32 = (my.to_int() - by) / tile
 
   if in_board(x, y) {
     (true, x, y)
@@ -122,7 +126,7 @@ pub fn pointer_cell(game : Game, mx : Float, my : Float) -> (Bool, Int, Int) {
 
 ///|
 /// Returns zap charge gained by merging a tile of value `v`.
-pub fn charge_for_merge(v : Int) -> Int {
+pub fn charge_for_merge(v : Int32) -> Int32 {
   if v >= 1024 {
     40
   } else if v >= 512 {
@@ -140,7 +144,7 @@ pub fn charge_for_merge(v : Int) -> Int {
 
 ///|
 /// Returns bonus score for merge chains longer than one merge.
-pub fn bonus_for_chain(chain : Int) -> Int {
+pub fn bonus_for_chain(chain : Int32) -> Int32 {
   if chain <= 1 {
     0
   } else if chain == 2 {
@@ -154,7 +158,7 @@ pub fn bonus_for_chain(chain : Int) -> Int {
 
 ///|
 /// Maps tile value to an integer progression rank.
-pub fn tile_rank(v : Int) -> Int {
+pub fn tile_rank(v : Int32) -> Int32 {
   if v <= 0 {
     0
   } else if v == 2 {
@@ -190,7 +194,7 @@ pub fn tile_rank(v : Int) -> Int {
 
 ///|
 /// Returns the display rank title for a computed tile rank.
-pub fn rank_name(rank : Int) -> String {
+pub fn rank_name(rank : Int32) -> String {
   if rank >= 13 {
     "Storm God"
   } else if rank >= 12 {
@@ -211,8 +215,8 @@ pub fn rank_name(rank : Int) -> String {
 ///|
 /// Returns the final letter grade from max tile and score.
 pub fn final_grade(game : Game) -> String {
-  let rank : Int = tile_rank(game.max_tile)
-  let score : Int = game.score
+  let rank : Int32 = tile_rank(game.max_tile)
+  let score : Int32 = game.score
 
   if rank >= 12 || score >= 18000 {
     "S"

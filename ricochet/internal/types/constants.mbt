@@ -1,11 +1,11 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 pub let arena_width : Float = 1000.0
@@ -38,16 +38,16 @@ pub let bumper_radius : Float = 14.0
 pub let pickup_radius : Float = 10.0
 
 ///|
-pub let max_bounces : Int = 50
+pub let max_bounces : Int32 = 50
 
 ///|
-pub let max_balls : Int = 8
+pub let max_balls : Int32 = 8
 
 ///|
-pub let preview_bounces : Int = 10
+pub let preview_bounces : Int32 = 10
 
 ///|
-pub let trail_length : Int = 12
+pub let trail_length : Int32 = 12
 
 ///|
 pub let aim_speed : Float = 1.5
@@ -130,7 +130,7 @@ pub let color_menu_highlight : @raylib.Color = @raylib.Color::new(
 )
 
 ///|
-pub let total_levels : Int = 30
+pub let total_levels : Int32 = 30
 
 ///|
-pub let levels_per_world : Int = 10
+pub let levels_per_world : Int32 = 10

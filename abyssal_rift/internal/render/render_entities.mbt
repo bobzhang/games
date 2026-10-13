@@ -327,8 +327,8 @@ fn get_enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
 ///|
 fn draw_enemy_shape(
   kind : @types.EnemyKind,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   r : Float,
   color : @raylib.Color,
 ) -> Unit {

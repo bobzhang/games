@@ -61,7 +61,7 @@ pub fn get_worlds() -> Array[@types.WorldInfo] {
 
 ///|
 /// Returns the world index for a given level index.
-pub fn world_for_level(level_idx : Int) -> Int {
+pub fn world_for_level(level_idx : Int32) -> Int32 {
   let worlds = get_worlds()
   for i, w in worlds {
     if level_idx >= w.level_start && level_idx <= w.level_end {
@@ -73,7 +73,7 @@ pub fn world_for_level(level_idx : Int) -> Int {
 
 ///|
 /// Checks if a world is unlocked given the total stars earned.
-pub fn is_world_unlocked(world_idx : Int, total_stars : Int) -> Bool {
+pub fn is_world_unlocked(world_idx : Int32, total_stars : Int32) -> Bool {
   let worlds = get_worlds()
   if world_idx < 0 || world_idx >= worlds.length() {
     return false
@@ -83,7 +83,7 @@ pub fn is_world_unlocked(world_idx : Int, total_stars : Int) -> Bool {
 
 ///|
 /// Returns the theme colors for a world.
-pub fn world_bg_color(world_idx : Int) -> (Int, Int, Int) {
+pub fn world_bg_color(world_idx : Int32) -> (Int32, Int32, Int32) {
   let worlds = get_worlds()
   if world_idx >= 0 && world_idx < worlds.length() {
     let w = worlds[world_idx]
@@ -95,7 +95,7 @@ pub fn world_bg_color(world_idx : Int) -> (Int, Int, Int) {
 
 ///|
 /// Returns the accent color for a world.
-pub fn world_accent_color(world_idx : Int) -> (Int, Int, Int) {
+pub fn world_accent_color(world_idx : Int32) -> (Int32, Int32, Int32) {
   let worlds = get_worlds()
   if world_idx >= 0 && world_idx < worlds.length() {
     let w = worlds[world_idx]
@@ -408,7 +408,7 @@ pub fn get_levels() -> Array[@types.Level] {
 
 ///|
 pub fn get_sandbox_inventory() -> Array[
-  (@types.PieceKind, @types.Material, Int),
+  (@types.PieceKind, @types.Material, Int32),
 ] {
   [
     (Block, Wood, 99),
@@ -427,7 +427,7 @@ pub fn get_sandbox_inventory() -> Array[
 
 ///|
 /// Returns the number of levels in a given world.
-pub fn world_level_count(world_idx : Int) -> Int {
+pub fn world_level_count(world_idx : Int32) -> Int32 {
   let worlds = get_worlds()
   if world_idx >= 0 && world_idx < worlds.length() {
     let w = worlds[world_idx]
@@ -439,7 +439,7 @@ pub fn world_level_count(world_idx : Int) -> Int {
 
 ///|
 /// Returns the world name for display.
-pub fn world_name(world_idx : Int) -> String {
+pub fn world_name(world_idx : Int32) -> String {
   let worlds = get_worlds()
   if world_idx >= 0 && world_idx < worlds.length() {
     worlds[world_idx].name
@@ -450,7 +450,7 @@ pub fn world_name(world_idx : Int) -> String {
 
 ///|
 /// Returns the world theme for a given world index.
-pub fn world_theme(world_idx : Int) -> @types.WorldTheme {
+pub fn world_theme(world_idx : Int32) -> @types.WorldTheme {
   let worlds = get_worlds()
   if world_idx >= 0 && world_idx < worlds.length() {
     worlds[world_idx].theme
@@ -461,7 +461,7 @@ pub fn world_theme(world_idx : Int) -> @types.WorldTheme {
 
 ///|
 /// Returns physics modifiers for a world.
-pub fn world_gravity_mult(world_idx : Int) -> Float {
+pub fn world_gravity_mult(world_idx : Int32) -> Float {
   let worlds = get_worlds()
   if world_idx >= 0 && world_idx < worlds.length() {
     worlds[world_idx].gravity_mult
@@ -472,7 +472,7 @@ pub fn world_gravity_mult(world_idx : Int) -> Float {
 
 ///|
 /// Returns the wind multiplier for a world.
-pub fn world_wind_mult(world_idx : Int) -> Float {
+pub fn world_wind_mult(world_idx : Int32) -> Float {
   let worlds = get_worlds()
   if world_idx >= 0 && world_idx < worlds.length() {
     worlds[world_idx].wind_mult
@@ -483,7 +483,7 @@ pub fn world_wind_mult(world_idx : Int) -> Float {
 
 ///|
 /// Returns the friction multiplier for a world.
-pub fn world_friction_mult(world_idx : Int) -> Float {
+pub fn world_friction_mult(world_idx : Int32) -> Float {
   let worlds = get_worlds()
   if world_idx >= 0 && world_idx < worlds.length() {
     worlds[world_idx].friction_mult

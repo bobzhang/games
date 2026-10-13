@@ -85,7 +85,7 @@ fn draw_texture_cover(
 ///|
 /// Draws one cell from the generated 4x2 sprite sheet.
 fn draw_sprite_cell(
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -130,8 +130,8 @@ struct Player {
   hull_max : Float
   mut energy : Float
   energy_max : Float
-  mut cargo : Int
-  cargo_cap : Int
+  mut cargo : Int32
+  cargo_cap : Int32
   mut ping_cd : Float
   mut ping_t : Float
   mut ping_x : Float
@@ -147,9 +147,9 @@ struct Lighthouse {
   mut y : Float
   mut demand : Float
   mut warning_t : Float
-  mut priority : Int
-  mut served : Int
-  mut id : Int
+  mut priority : Int32
+  mut served : Int32
+  mut id : Int32
 }
 
 ///|
@@ -188,8 +188,8 @@ struct Pirate {
   mut speed : Float
   mut attack_cd : Float
   mut blink_t : Float
-  mut target_i : Int
-  mut id : Int
+  mut target_i : Int32
+  mut id : Int32
 }
 
 ///|
@@ -202,7 +202,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -257,10 +257,10 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -350,7 +350,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if part.active {
@@ -389,8 +389,8 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -431,10 +431,10 @@ fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
 /// Places and activates lighthouses at fixed positions with initial demand values and priorities.
 fn init_lights(
   lights : Array[Lighthouse],
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
   clear_lights(lights)
 
@@ -445,7 +445,7 @@ fn init_lights(
   let mid_x : Float = Float::from_int(world_x + world_w / 2)
   let mid_y : Float = Float::from_int(world_y + world_h / 2)
 
-  let spots : Array[(Float, Float, Int)] = [
+  let spots : Array[(Float, Float, Int32)] = [
     (left + 160.0, top + 30.0, 3),
     (left + 320.0, mid_y - 160.0, 2),
     (mid_x - 60.0, bottom - 80.0, 4),
@@ -482,8 +482,8 @@ fn init_reefs(
 ) -> Unit {
   clear_reefs(reefs)
 
-  let mut count : Int = 0
-  let target : Int = reefs.length() - 16
+  let mut count : Int32 = 0
+  let target : Int32 = reefs.length() - 16
 
   while count < target {
     let x : Float = randf(world_l + 30.0, world_r - 30.0)
@@ -537,13 +537,13 @@ fn init_reefs(
 
 ///|
 /// Returns the count of currently active storm records.
-fn active_storms(storms : Array[Storm]) -> Int {
+fn active_storms(storms : Array[Storm]) -> Int32 {
   @utils.count_by(storms, fn(storm) { storm.active })
 }
 
 ///|
 /// Returns the count of currently active pirate records.
-fn active_pirates(pirates : Array[Pirate]) -> Int {
+fn active_pirates(pirates : Array[Pirate]) -> Int32 {
   @utils.count_by(pirates, fn(pirate) { pirate.active })
 }
 
@@ -582,14 +582,14 @@ fn spawn_storm(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
+  tier : Int32,
 ) -> Bool {
   for storm in storms {
     if storm.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       storm.x = world_l - 56.0
       storm.y = randf(world_t + 20.0, world_b - 20.0)
@@ -630,15 +630,15 @@ fn spawn_pirate(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
-  serial : Int,
+  tier : Int32,
+  serial : Int32,
 ) -> Bool {
   for pirate in pirates {
     if pirate.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       pirate.x = world_l - 34.0
       pirate.y = randf(world_t + 16.0, world_b - 16.0)
@@ -713,7 +713,7 @@ fn update_storms(
 
 ///|
 /// Returns the index of the active lighthouse with the highest current demand, or -1 if none are active.
-fn highest_demand_light(lights : Array[Lighthouse]) -> Int {
+fn highest_demand_light(lights : Array[Lighthouse]) -> Int32 {
   for i in 0..<lights.length(); best_i = -1, best = -1.0F {
     if !lights[i].active {
       continue
@@ -738,11 +738,11 @@ fn update_pirates(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-) -> (Int, Float) {
-  let mut steals : Int = 0
+) -> (Int32, Float) {
+  let mut steals : Int32 = 0
   let mut hull_dmg : Float = 0.0
 
-  let best_light : Int = highest_demand_light(lights)
+  let best_light : Int32 = highest_demand_light(lights)
 
   for i in 0..<pirates.length() {
     if !pirates[i].active {
@@ -814,10 +814,10 @@ fn update_pirates(
 fn update_light_demands(
   lights : Array[Lighthouse],
   dt : Float,
-  tier : Int,
-) -> (Int, Int, Float) {
-  let mut blackout_gain : Int = 0
-  let mut urgent_count : Int = 0
+  tier : Int32,
+) -> (Int32, Int32, Float) {
+  let mut blackout_gain : Int32 = 0
+  let mut urgent_count : Int32 = 0
   let mut demand_sum : Float = 0.0
 
   for light in lights {
@@ -862,12 +862,12 @@ fn deliver_to_lights(
   player : Player,
   lights : Array[Lighthouse],
   parts : Array[Particle],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   if player.cargo <= 0 {
     (0, 0)
   } else {
-    let mut used : Int = 0
-    let mut lights_served : Int = 0
+    let mut used : Int32 = 0
+    let mut lights_served : Int32 = 0
 
     for light in lights {
       if !light.active || light.demand <= 0.1 || player.cargo <= 0 {
@@ -879,8 +879,8 @@ fn deliver_to_lights(
         continue
       }
 
-      let need_i : Int = light.demand.to_int() + 1
-      let give : Int = player.cargo.min(need_i.min(18))
+      let need_i : Int32 = light.demand.to_int() + 1
+      let give : Int32 = player.cargo.min(need_i.min(18))
       if give <= 0 {
         continue
       }
@@ -929,10 +929,10 @@ fn nearest_urgent_light(
 ///|
 /// Draws the animated ocean background with gradient waves and scrolling ripple lines.
 fn draw_ocean(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
   t : Float,
 ) -> Unit {
   let using_art = match tex_ocean_route_background.val {
@@ -967,15 +967,15 @@ fn draw_ocean(
   }
 
   if !using_art {
-    let mut y : Int = world_y
+    let mut y : Int32 = world_y
     while y < world_y + world_h {
       let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
       let w : Float = @math.sinf(t * 0.8 + Float::from_int(y) * 0.018) * 0.5 +
         0.5
 
-      let r : Int = 18 + (p * 24.0).to_int() + (w * 6.0).to_int()
-      let g : Int = 64 + (p * 44.0).to_int() + (w * 8.0).to_int()
-      let b : Int = 108 + (p * 34.0).to_int() + (w * 11.0).to_int()
+      let r : Int32 = 18 + (p * 24.0).to_int() + (w * 6.0).to_int()
+      let g : Int32 = 64 + (p * 44.0).to_int() + (w * 8.0).to_int()
+      let b : Int32 = 108 + (p * 34.0).to_int() + (w * 11.0).to_int()
 
       @raylib.draw_rectangle(
         world_x,
@@ -1000,10 +1000,10 @@ fn draw_ocean(
 ///|
 /// Draws the home harbor dock area with pier structures and a cargo loading zone indicator.
 fn draw_harbor(
-  harbor_x : Int,
-  harbor_y : Int,
-  harbor_w : Int,
-  harbor_h : Int,
+  harbor_x : Int32,
+  harbor_y : Int32,
+  harbor_w : Int32,
+  harbor_h : Int32,
 ) -> Unit {
   if !draw_sprite_cell(
       5,
@@ -1029,7 +1029,7 @@ fn draw_harbor(
       @raylib.Color::new(178, 214, 244, 242),
     )
 
-    let mut x : Int = harbor_x + 10
+    let mut x : Int32 = harbor_x + 10
     while x < harbor_x + harbor_w - 8 {
       @raylib.draw_line(
         x,
@@ -1108,7 +1108,7 @@ fn draw_lights(lights : Array[Lighthouse], t : Float) -> Unit {
     }
 
     let beam_r : Float = 30.0 + p01 * 72.0 + blink * 6.0
-    let beam_a : Int = 54 + (p01 * 88.0).to_int()
+    let beam_a : Int32 = 54 + (p01 * 88.0).to_int()
     @raylib.draw_circle(
       lights[i].x.to_int(),
       (lights[i].y - 38.0).to_int(),
@@ -1146,9 +1146,9 @@ fn draw_reefs(reefs : Array[Reef], t : Float) -> Unit {
     let rr : Float = reef.radius * pulse
     let h01 : Float = clampf(reef.hardness / 120.0, 0.0, 1.0)
 
-    let r : Int = 88 + (h01 * 40.0).to_int()
-    let g : Int = 130 + (h01 * 44.0).to_int()
-    let b : Int = 120 + (h01 * 14.0).to_int()
+    let r : Int32 = 88 + (h01 * 40.0).to_int()
+    let g : Int32 = 130 + (h01 * 44.0).to_int()
+    let b : Int32 = 120 + (h01 * 14.0).to_int()
 
     if !draw_sprite_cell(
         2,
@@ -1188,8 +1188,8 @@ fn draw_storms(storms : Array[Storm], t : Float) -> Unit {
     let rr0 : Float = storm.radius * p
     let rr1 : Float = storm.radius * (0.58 + p * 0.2)
 
-    let a0 : Int = 50 + (storm.intensity * 62.0).to_int()
-    let a1 : Int = 22 + (storm.intensity * 30.0).to_int()
+    let a0 : Int32 = 50 + (storm.intensity * 62.0).to_int()
+    let a1 : Int32 = 22 + (storm.intensity * 30.0).to_int()
 
     if !draw_sprite_cell(
         3,
@@ -1214,9 +1214,9 @@ fn draw_storms(storms : Array[Storm], t : Float) -> Unit {
       )
     }
 
-    let bx : Int = (storm.x +
+    let bx : Int32 = (storm.x +
     @math.sinf(t * 5.2 + storm.phase) * storm.radius * 0.24).to_int()
-    let by : Int = (storm.y +
+    let by : Int32 = (storm.y +
     @math.cosf(t * 4.4 + storm.phase * 0.6) * storm.radius * 0.24).to_int()
     @raylib.draw_circle(
       bx,
@@ -1339,10 +1339,10 @@ fn draw_player(player : Player, t : Float) -> Unit {
   }
 
   // cargo markers on deck
-  let shown : Int = player.cargo.min(6)
+  let shown : Int32 = player.cargo.min(6)
   for i in 0..<shown {
-    let cx : Int = (x - 10.0 + Float::from_int(i % 3) * 8.0).to_int()
-    let cy : Int = (y + 3.0 + Float::from_int(i / 3) * 5.0).to_int()
+    let cx : Int32 = (x - 10.0 + Float::from_int(i % 3) * 8.0).to_int()
+    let cy : Int32 = (y + 3.0 + Float::from_int(i / 3) * 5.0).to_int()
     @raylib.draw_rectangle(cx, cy, 6, 4, @raylib.Color::new(180, 132, 92, 234))
   }
 
@@ -1380,20 +1380,20 @@ fn draw_parts(parts : Array[Particle]) -> Unit {
 ///|
 /// Renders on-screen touch buttons for directional steering and action inputs.
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mx : Float,
   my : Float,
   hold : Bool,
 ) -> Unit {
-  let pad_x : Int = 28
-  let pad_y : Int = sh - 198
+  let pad_x : Int32 = 28
+  let pad_y : Int32 = sh - 198
 
   fn draw_dpad(
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     text : String,
     active : Bool,
   ) -> Unit {
@@ -1515,8 +1515,8 @@ fn draw_touch_controls(
 ///|
 /// Draws a labeled horizontal progress bar filled proportionally to the given value and maximum.
 fn draw_bar(
-  panel_x : Int,
-  y : Int,
+  panel_x : Int32,
+  y : Int32,
   label : String,
   value : Float,
   maxv : Float,
@@ -1542,7 +1542,7 @@ fn draw_bar(
   } else {
     clampf(value / maxv, 0.0, 1.0)
   }
-  let fw : Int = (Float::from_int(364) * p01).to_int()
+  let fw : Int32 = (Float::from_int(364) * p01).to_int()
 
   @raylib.draw_rectangle(panel_x + 16, y + 28, fw, 20, col)
   @raylib.draw_rectangle_lines(
@@ -1565,10 +1565,10 @@ fn draw_bar(
 ///|
 /// Draws a rectangular button with label and highlight state based on whether it is currently pressed.
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   hover : Bool,
 ) -> Unit {
@@ -1598,8 +1598,8 @@ fn draw_button(
 ///|
 /// Initializes the window, creates all game objects, and runs the full lighthouse supply run game loop.
 fn main {
-  let sw : Int = 1680
-  let sh : Int = 940
+  let sw : Int32 = 1680
+  let sh : Int32 = 940
   @raylib.init_window(sw, sh, "raylib [game] lighthouse supply run 2026")
   defer @draw.cleanup()
   defer @raylib.close_window()
@@ -1609,21 +1609,21 @@ fn main {
   load_assets()
   defer unload_assets()
 
-  let world_x : Int = 20
-  let world_y : Int = 20
-  let panel_w : Int = 420
-  let world_w : Int = sw - panel_w - 40
-  let world_h : Int = sh - 40
+  let world_x : Int32 = 20
+  let world_y : Int32 = 20
+  let panel_w : Int32 = 420
+  let world_w : Int32 = sw - panel_w - 40
+  let world_h : Int32 = sh - 40
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
   let world_r : Float = Float::from_int(world_x + world_w)
   let world_b : Float = Float::from_int(world_y + world_h)
 
-  let harbor_x : Int = world_x + 16
-  let harbor_y : Int = world_y + world_h / 2 - 70
-  let harbor_w : Int = 118
-  let harbor_h : Int = 140
+  let harbor_x : Int32 = world_x + 16
+  let harbor_y : Int32 = world_y + world_h / 2 - 70
+  let harbor_w : Int32 = 118
+  let harbor_h : Int32 = 140
 
   let harbor_cx : Float = Float::from_int(harbor_x + harbor_w / 2)
   let harbor_cy : Float = Float::from_int(harbor_y + harbor_h / 2)
@@ -1706,14 +1706,14 @@ fn main {
     wake_t: randf(0.0, 20.0),
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 420.0
-  let mut delivered_total : Int = 0
-  let mut target_delivered : Int = 560
-  let mut score : Int = 0
-  let mut tier : Int = 1
-  let mut blackouts : Int = 0
-  let mut blackout_limit : Int = 14
+  let mut delivered_total : Int32 = 0
+  let mut target_delivered : Int32 = 560
+  let mut score : Int32 = 0
+  let mut tier : Int32 = 1
+  let mut blackouts : Int32 = 0
+  let mut blackout_limit : Int32 = 14
   let mut msg : String = ""
   let mut msg_t : Float = 0.0
   let mut scene_t : Float = 0.0
@@ -1724,10 +1724,10 @@ fn main {
 
   let mut storm_cd : Float = 5.5
   let mut pirate_cd : Float = 8.0
-  let mut pirate_serial : Int = 1
+  let mut pirate_serial : Int32 = 1
 
-  let mut steals_total : Int = 0
-  let mut urgency_peak : Int = 0
+  let mut steals_total : Int32 = 0
+  let mut urgency_peak : Int32 = 0
 
   fn reset_run() -> Unit {
     init_lights(lights, world_x, world_y, world_w, world_h)
@@ -1856,8 +1856,8 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyH)
 
       if hold {
-        let pad_x : Int = 28
-        let pad_y : Int = sh - 198
+        let pad_x : Int32 = 28
+        let pad_y : Int32 = sh - 198
 
         if inside_rect(mouse.x, mouse.y, pad_x + 84, pad_y, 74, 56) {
           move_u = true
@@ -1967,8 +1967,8 @@ fn main {
       if drop_press {
         if near_harbor {
           // quick load action at harbor
-          let can_load : Int = player.cargo_cap - player.cargo
-          let load_n : Int = can_load.min((18).min(harbor_stock.to_int()))
+          let can_load : Int32 = player.cargo_cap - player.cargo
+          let load_n : Int32 = can_load.min((18).min(harbor_stock.to_int()))
           if load_n > 0 {
             player.cargo = player.cargo + load_n
             harbor_stock = harbor_stock - Float::from_int(load_n)
@@ -2098,7 +2098,7 @@ fn main {
 
       storm_cd = storm_cd - dt
       if storm_cd <= 0.0 {
-        let max_s : Int = 2 + tier / 2
+        let max_s : Int32 = 2 + tier / 2
         if active_storms(storms) < max_s {
           ignore(spawn_storm(storms, world_l, world_t, world_r, world_b, tier))
         }
@@ -2110,7 +2110,7 @@ fn main {
 
       pirate_cd = pirate_cd - dt
       if pirate_cd <= 0.0 {
-        let max_p : Int = 1 + tier / 2
+        let max_p : Int32 = 1 + tier / 2
         if active_pirates(pirates) < max_p {
           if spawn_pirate(
               pirates, world_l, world_t, world_r, world_b, tier, pirate_serial,
@@ -2197,7 +2197,7 @@ fn main {
 
     draw_parts(parts)
 
-    let panel_x : Int = world_x + world_w + 16
+    let panel_x : Int32 = world_x + world_w + 16
     @raylib.draw_rectangle(
       panel_x,
       world_y,
@@ -2449,8 +2449,8 @@ fn main {
     draw_touch_controls(sw, sh, mouse.x, mouse.y, hold)
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = world_x + world_w / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = world_x + world_w / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         18,

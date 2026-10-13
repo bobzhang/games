@@ -77,10 +77,10 @@ fn draw_texture_cover(
 fn draw_texture_band(
   texture : @raylib.Texture,
   src_y : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   let source_w : Float = Float::from_int(texture.width())
@@ -107,7 +107,7 @@ fn draw_texture_band(
 /// Draws one 4x3 generated sprite sheet cell centered on the destination point.
 fn draw_sprite_cell_rotated(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -138,7 +138,7 @@ fn draw_sprite_cell_rotated(
 /// Draws one 4x3 generated sprite sheet cell without rotation.
 fn draw_sprite_cell(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,

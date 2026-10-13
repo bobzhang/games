@@ -1,6 +1,6 @@
 ///|
 /// Total number of tutorial steps.
-let tutorial_total_steps : Int = 3
+let tutorial_total_steps : Int32 = 3
 
 ///|
 /// Duration between blinks for tutorial highlights.
@@ -27,7 +27,7 @@ pub fn init_tutorial(game : @types.Game) -> Unit {
 /// Sets up the visual state for a given tutorial step.
 fn setup_tutorial_step(
   tut : @types.TutorialState,
-  step : Int,
+  step : Int32,
   game : @types.Game,
 ) -> Unit {
   ignore(game)
@@ -162,13 +162,13 @@ pub fn tutorial_message(game : @types.Game) -> String {
 
 ///|
 /// Returns the current tutorial step number (1-based for display).
-pub fn tutorial_step_number(game : @types.Game) -> Int {
+pub fn tutorial_step_number(game : @types.Game) -> Int32 {
   game.tutorial.step + 1
 }
 
 ///|
 /// Returns total tutorial steps.
-pub fn tutorial_total() -> Int {
+pub fn tutorial_total() -> Int32 {
   tutorial_total_steps
 }
 
@@ -185,14 +185,16 @@ pub fn tutorial_highlight_visible(game : @types.Game) -> Bool {
 
 ///|
 /// Returns the highlight rectangle for the current tutorial step.
-pub fn tutorial_highlight_rect(game : @types.Game) -> (Int, Int, Int, Int) {
+pub fn tutorial_highlight_rect(
+  game : @types.Game,
+) -> (Int32, Int32, Int32, Int32) {
   let tut = game.tutorial
   (tut.highlight_x, tut.highlight_y, tut.highlight_w, tut.highlight_h)
 }
 
 ///|
 /// Returns the arrow position for the current tutorial step.
-pub fn tutorial_arrow_pos(game : @types.Game) -> (Int, Int, Bool) {
+pub fn tutorial_arrow_pos(game : @types.Game) -> (Int32, Int32, Bool) {
   let tut = game.tutorial
   (tut.arrow_x, tut.arrow_y, tut.show_arrow)
 }

@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Width of each cave segment in world units.
@@ -12,7 +12,7 @@ let seg_w : Float = 40.0
 
 ///|
 /// Number of horizontal cave segments in the generated level.
-let seg_count : Int = 210
+let seg_count : Int32 = 210
 
 ///|
 /// Total world width derived from segment count and segment width.
@@ -168,7 +168,7 @@ fn draw_wall_texture_segment(
 ///|
 /// Draws one cell from the generated 4x2 sprite sheet.
 fn draw_sprite_cell(
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -203,19 +203,19 @@ fn draw_sprite_cell(
 
 ///|
 /// Maximum number of active enemy objects in the pool.
-let max_enemies : Int = 64
+let max_enemies : Int32 = 64
 
 ///|
 /// Maximum number of active projectile objects in the pool.
-let max_projectiles : Int = 620
+let max_projectiles : Int32 = 620
 
 ///|
 /// Maximum number of crystal collectibles in the pool.
-let max_crystals : Int = 120
+let max_crystals : Int32 = 120
 
 ///|
 /// Maximum number of active particle effect objects in the pool.
-let max_particles : Int = 1600
+let max_particles : Int32 = 1600
 
 ///|
 /// Player state including position, velocity, aim direction, resources, ability cooldowns, and score.
@@ -236,16 +236,16 @@ struct Player {
   mut hit_cd : Float
   mut flash_t : Float
   mut shake_t : Float
-  mut crystals : Int
-  mut score : Int
-  mut combo : Int
+  mut crystals : Int32
+  mut score : Int32
+  mut combo : Int32
 }
 
 ///|
 /// Enemy state with pooling flag, kind, physics, HP, and status effect timers.
 struct Enemy {
   mut active : Bool
-  kind : Int
+  kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -262,7 +262,7 @@ struct Enemy {
 /// Projectile state with pooling flag, kind, team affiliation, physics, damage, and remaining lifetime.
 struct Projectile {
   mut active : Bool
-  kind : Int
+  kind : Int32
   from_player : Bool
   mut x : Float
   mut y : Float
@@ -278,7 +278,7 @@ struct Crystal {
   mut active : Bool
   x : Float
   y : Float
-  value : Int
+  value : Int32
   mut spin_t : Float
 }
 
@@ -293,7 +293,7 @@ struct Particle {
   size : Float
   mut t : Float
   life : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
@@ -328,10 +328,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(x)
   let y0 : Float = Float::from_int(y)
@@ -344,8 +344,8 @@ fn inside_rect(
 /// Returns the linearly interpolated value from a cave boundary array at world x-coordinate `x`.
 fn sample_line(line : FixedArray[Float], x : Float) -> Float {
   let fx : Float = x / seg_w
-  let i0 : Int = fx.to_int().clamp(min=0, max=seg_count - 1)
-  let i1 : Int = i0 + 1
+  let i0 : Int32 = fx.to_int().clamp(min=0, max=seg_count - 1)
+  let i1 : Int32 = i0 + 1
   let t : Float = fx - Float::from_int(i0)
   line[i0] + (line[i1] - line[i0]) * t
 }
@@ -390,7 +390,7 @@ fn emit_particle(
   vy : Float,
   size : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
@@ -406,9 +406,9 @@ fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _ in 0..<count {
     let mut dx : Float = randf(-1.0, 1.0)
@@ -440,7 +440,7 @@ fn burst_particles(
 /// Activates an inactive projectile slot with the given kind, origin flag, position, velocity, damage, and lifetime.
 fn spawn_projectile(
   projectiles : FixedArray[Projectile],
-  kind : Int,
+  kind : Int32,
   from_player : Bool,
   x : Float,
   y : Float,
@@ -473,7 +473,7 @@ fn init_crystals(
   crystals : FixedArray[Crystal],
   cave_top : FixedArray[Float],
   cave_bottom : FixedArray[Float],
-  target : Int,
+  target : Int32,
 ) -> Unit {
   for i in 0..<crystals.length() {
     let frac : Float = Float::from_int(i) / Float::from_int(crystals.length())
@@ -496,14 +496,14 @@ fn init_crystals(
 /// Activates an inactive enemy ahead of the player, choosing kind by level-scaled probability and placing it within cave bounds.
 fn spawn_enemy(
   enemies : FixedArray[Enemy],
-  level : Int,
+  level : Int32,
   player_x : Float,
   cave_top : FixedArray[Float],
   cave_bottom : FixedArray[Float],
 ) -> Unit {
   for i in 0..<enemies.length() {
     if !enemies[i].active {
-      let kind : Int = if @raylib.get_random_value(0, 100) < 22 + level * 6 {
+      let kind : Int32 = if @raylib.get_random_value(0, 100) < 22 + level * 6 {
         1
       } else {
         0
@@ -544,7 +544,7 @@ fn spawn_enemy(
 /// Clears all active enemies and spawns an initial batch scaled by `level` around the player's position.
 fn init_wave(
   enemies : FixedArray[Enemy],
-  level : Int,
+  level : Int32,
   player_x : Float,
   cave_top : FixedArray[Float],
   cave_bottom : FixedArray[Float],
@@ -552,7 +552,7 @@ fn init_wave(
   for enemy in enemies {
     enemy.active = false
   }
-  let initial : Int = 12 + level * 4
+  let initial : Int32 = 12 + level * 4
   for _ in 0..<initial {
     spawn_enemy(enemies, level, player_x, cave_top, cave_bottom)
   }
@@ -561,10 +561,10 @@ fn init_wave(
 ///|
 /// Draws a rectangular progress bar filled to `ratio` in `fg` color on a `bg` background with a border.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fg : @raylib.Color,
   bg : @raylib.Color,
@@ -594,9 +594,9 @@ fn draw_touch_controls(show : Bool) -> Unit {
     return
   }
 
-  let bx : Int = 24
-  let by : Int = sh - 226
-  let ax : Int = sw - 244
+  let bx : Int32 = 24
+  let by : Int32 = sh - 226
+  let ax : Int32 = sw - 244
 
   @raylib.draw_rectangle(
     bx,
@@ -790,14 +790,14 @@ fn main {
     combo: 0,
   }
 
-  let mut level : Int = 1
+  let mut level : Int32 = 1
   let mut timer : Float = 194.0
   let mut spawn_cd : Float = 0.9
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut announce_t : Float = 0.0
-  let mut target_crystals : Int = 42
+  let mut target_crystals : Int32 = 42
 
-  let reset_round = fn(new_level : Int) {
+  let reset_round = fn(new_level : Int32) {
     level = new_level
     timer = 198.0 - Float::from_int(level - 1) * 9.0
     if timer < 108.0 {
@@ -879,9 +879,9 @@ fn main {
     let mut dash_press : Bool = @raylib.is_key_pressed(@raylib.KeySpace) ||
       @raylib.is_key_pressed(@raylib.KeyLeftShift)
 
-    let bx : Int = 24
-    let by : Int = sh - 226
-    let ax : Int = sw - 244
+    let bx : Int32 = 24
+    let by : Int32 = sh - 226
+    let ax : Int32 = sw - 244
 
     if touching {
       if inside_rect(mouse.x, mouse.y, bx, by + 70, 78, 78) {
@@ -1342,7 +1342,7 @@ fn main {
 
         if enemy.hp <= 0.0 {
           enemy.active = false
-          let kill_score : Int = if enemy.kind == 0 { 22 } else { 54 }
+          let kill_score : Int32 = if enemy.kind == 0 { 22 } else { 54 }
           player.score = player.score + kill_score + player.combo
           player.combo = player.combo + 1
           if player.combo > 60 {
@@ -1448,11 +1448,11 @@ fn main {
       None => ()
     }
 
-    let start_seg : Int = ((cam_x / seg_w).to_int() - 2).clamp(
+    let start_seg : Int32 = ((cam_x / seg_w).to_int() - 2).clamp(
       min=0,
       max=seg_count - 1,
     )
-    let end_seg : Int = (start_seg + sw / seg_w.to_int() + 6).clamp(
+    let end_seg : Int32 = (start_seg + sw / seg_w.to_int() + 6).clamp(
       min=0,
       max=seg_count - 1,
     )
@@ -1779,7 +1779,7 @@ fn main {
       }
 
       let life_r : Float = 1.0 - particle.t / particle.life
-      let alpha : Int = clampf(life_r * 220.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(life_r * 220.0, 0.0, 220.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(252, 186, 122, alpha)
       } else if particle.kind == 1 {
@@ -1912,7 +1912,7 @@ fn main {
     )
 
     if announce_t > 0.0 {
-      let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
       @draw.draw_text(
         "Collect enough crystals, then reach the portal at the cavern end.",
         sw / 2 - 420,

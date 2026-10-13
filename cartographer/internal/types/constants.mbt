@@ -1,44 +1,44 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_size : Int = 8
+pub let grid_size : Int32 = 8
 
 ///|
-pub let cell_size : Int = 64
+pub let cell_size : Int32 = 64
 
 ///|
-pub let grid_offset_x : Int = 40
+pub let grid_offset_x : Int32 = 40
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
-pub let clue_panel_x : Int = 600
+pub let clue_panel_x : Int32 = 600
 
 ///|
-pub let clue_panel_y : Int = 80
+pub let clue_panel_y : Int32 = 80
 
 ///|
-pub let clue_panel_width : Int = 640
+pub let clue_panel_width : Int32 = 640
 
 ///|
-pub let palette_x : Int = 40
+pub let palette_x : Int32 = 40
 
 ///|
-pub let palette_y : Int = 620
+pub let palette_y : Int32 = 620
 
 ///|
-pub let palette_cell : Int = 50
+pub let palette_cell : Int32 = 50
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 // Colors - Parchment/cartography aesthetic
 

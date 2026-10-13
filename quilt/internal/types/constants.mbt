@@ -1,53 +1,53 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let cell_size_3x3 : Int = 120
+pub let cell_size_3x3 : Int32 = 120
 
 ///|
-pub let cell_size_4x4 : Int = 100
+pub let cell_size_4x4 : Int32 = 100
 
 ///|
-pub let cell_size_5x5 : Int = 80
+pub let cell_size_5x5 : Int32 = 80
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 100
+pub let grid_offset_y : Int32 = 100
 
 ///|
-pub let tray_x : Int = 620
+pub let tray_x : Int32 = 620
 
 ///|
-pub let tray_y : Int = 100
+pub let tray_y : Int32 = 100
 
 ///|
-pub let tray_patch_size : Int = 60
+pub let tray_patch_size : Int32 = 60
 
 ///|
-pub let tray_gap : Int = 8
+pub let tray_gap : Int32 = 8
 
 ///|
-pub let tray_cols : Int = 4
+pub let tray_cols : Int32 = 4
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 // Fabric-themed palette
 

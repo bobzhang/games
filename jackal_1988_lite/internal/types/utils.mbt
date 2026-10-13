@@ -12,7 +12,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 
 ///|
 /// Advances and returns the PRNG state.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -26,7 +26,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer in `[low, high]`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -43,19 +43,19 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 ///|
 /// Converts tile coordinates to a linear map index.
-pub fn tile_index(tx : Int, ty : Int) -> Int {
+pub fn tile_index(tx : Int32, ty : Int32) -> Int32 {
   ty * map_tiles_w + tx
 }
 
 ///|
 /// Returns whether tile coordinates are inside map bounds.
-pub fn in_tile_bounds(tx : Int, ty : Int) -> Bool {
+pub fn in_tile_bounds(tx : Int32, ty : Int32) -> Bool {
   tx >= 0 && ty >= 0 && tx < map_tiles_w && ty < map_tiles_h
 }
 
 ///|
 /// Reads a tile at coordinates, treating out-of-bounds as steel.
-pub fn get_tile(game : Game, tx : Int, ty : Int) -> Int {
+pub fn get_tile(game : Game, tx : Int32, ty : Int32) -> Int32 {
   if in_tile_bounds(tx, ty) {
     game.map_tiles[tile_index(tx, ty)]
   } else {
@@ -65,7 +65,13 @@ pub fn get_tile(game : Game, tx : Int, ty : Int) -> Int {
 
 ///|
 /// Writes tile type and hp when coordinates are in bounds.
-pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Int, hp : Int) -> Unit {
+pub fn set_tile(
+  game : Game,
+  tx : Int32,
+  ty : Int32,
+  tile : Int32,
+  hp : Int32,
+) -> Unit {
   if in_tile_bounds(tx, ty) {
     let idx = tile_index(tx, ty)
     game.map_tiles[idx] = tile
@@ -75,49 +81,49 @@ pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Int, hp : Int) -> Unit {
 
 ///|
 /// Converts world x-coordinate to tile x index.
-pub fn world_x_to_tile(x : Float) -> Int {
+pub fn world_x_to_tile(x : Float) -> Int32 {
   (x / Float::from_int(tile_size)).to_int().clamp(min=0, max=map_tiles_w - 1)
 }
 
 ///|
 /// Converts world y-coordinate to tile y index.
-pub fn world_y_to_tile(y : Float) -> Int {
+pub fn world_y_to_tile(y : Float) -> Int32 {
   (y / Float::from_int(tile_size)).to_int().clamp(min=0, max=map_tiles_h - 1)
 }
 
 ///|
 /// Returns world x-coordinate of tile center.
-pub fn tile_center_x(tx : Int) -> Float {
+pub fn tile_center_x(tx : Int32) -> Float {
   Float::from_int(tx * tile_size + tile_size / 2)
 }
 
 ///|
 /// Returns world y-coordinate of tile center.
-pub fn tile_center_y(ty : Int) -> Float {
+pub fn tile_center_y(ty : Int32) -> Float {
   Float::from_int(ty * tile_size + tile_size / 2)
 }
 
 ///|
 /// Converts world x to screen x with shake offset.
-pub fn world_to_screen_x(x : Float, shake_x : Float) -> Int {
+pub fn world_to_screen_x(x : Float, shake_x : Float) -> Int32 {
   map_offset_x + x.to_int() + shake_x.to_int()
 }
 
 ///|
 /// Converts world y to screen y with shake offset.
-pub fn world_to_screen_y(y : Float, shake_y : Float) -> Int {
+pub fn world_to_screen_y(y : Float, shake_y : Float) -> Int32 {
   map_offset_y + y.to_int() + shake_y.to_int()
 }
 
 ///|
 /// Converts tile x to screen x with shake offset.
-pub fn tile_to_screen_x(tx : Int, shake_x : Float) -> Int {
+pub fn tile_to_screen_x(tx : Int32, shake_x : Float) -> Int32 {
   map_offset_x + tx * tile_size + shake_x.to_int()
 }
 
 ///|
 /// Converts tile y to screen y with shake offset.
-pub fn tile_to_screen_y(ty : Int, shake_y : Float) -> Int {
+pub fn tile_to_screen_y(ty : Int32, shake_y : Float) -> Int32 {
   map_offset_y + ty * tile_size + shake_y.to_int()
 }
 
@@ -169,7 +175,7 @@ pub fn distance_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 
 ///|
 /// Returns whether a tile blocks tank movement.
-pub fn is_tile_solid_for_tank(tile : Int) -> Bool {
+pub fn is_tile_solid_for_tank(tile : Int32) -> Bool {
   tile == tile_brick ||
   tile == tile_steel ||
   tile == tile_water ||
@@ -178,13 +184,13 @@ pub fn is_tile_solid_for_tank(tile : Int) -> Bool {
 
 ///|
 /// Returns whether a tile blocks bullets.
-pub fn is_tile_solid_for_bullet(tile : Int) -> Bool {
+pub fn is_tile_solid_for_bullet(tile : Int32) -> Bool {
   tile == tile_brick || tile == tile_steel || tile == tile_base
 }
 
 ///|
 /// Returns score awarded for defeating an enemy kind.
-pub fn enemy_score(kind : EnemyKind) -> Int {
+pub fn enemy_score(kind : EnemyKind) -> Int32 {
   match kind {
     Fast => 200
     Heavy => 400
@@ -208,9 +214,9 @@ pub fn enemy_color(kind : EnemyKind) -> @raylib.Color {
 /// Draws centered text at `center_x`.
 pub fn draw_centered_text(
   text : String,
-  center_x : Int,
-  y : Int,
-  font_size : Int,
+  center_x : Int32,
+  y : Int32,
+  font_size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, font_size)
@@ -221,9 +227,9 @@ pub fn draw_centered_text(
 /// Draws text with a black shadow offset.
 pub fn draw_shadow_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   @draw.draw_text(text, x + 2, y + 2, size, @raylib.black)

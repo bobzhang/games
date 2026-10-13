@@ -157,7 +157,7 @@ fn try_unlock_achievement(
 
 ///|
 /// Check if a specific world has all 3 stars on every level
-fn check_world_master(game : @types.Game, world : Int) -> Unit {
+fn check_world_master(game : @types.Game, world : Int32) -> Unit {
   let start = world * @types.levels_per_world
   let mut all_3_stars = true
   for l in 0..<@types.levels_per_world {
@@ -270,7 +270,7 @@ pub fn update_achievement_toasts(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Get total unlocked achievement count
-pub fn unlocked_count(game : @types.Game) -> Int {
+pub fn unlocked_count(game : @types.Game) -> Int32 {
   let mut count = 0
   for i in 0..<game.achievement_state.achievements.length() {
     if game.achievement_state.achievements[i].unlocked {
@@ -282,6 +282,6 @@ pub fn unlocked_count(game : @types.Game) -> Int {
 
 ///|
 /// Get total achievement count
-pub fn total_achievement_count(game : @types.Game) -> Int {
+pub fn total_achievement_count(game : @types.Game) -> Int32 {
   game.achievement_state.achievements.length()
 }

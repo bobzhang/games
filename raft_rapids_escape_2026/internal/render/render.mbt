@@ -4,7 +4,7 @@ fn @types.Game::ui_wave(game : @types.Game, k : Float) -> Float {
 }
 
 ///|
-fn @types.Game::shake_offset_x(game : @types.Game) -> Int {
+fn @types.Game::shake_offset_x(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -13,7 +13,7 @@ fn @types.Game::shake_offset_x(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::shake_offset_y(game : @types.Game) -> Int {
+fn @types.Game::shake_offset_y(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -48,7 +48,7 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
   )
 
   for i in 0..<16 {
-    let y : Int = i * 70
+    let y : Int32 = i * 70
     @raylib.draw_rectangle(
       0,
       y,
@@ -65,7 +65,11 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_world_back(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0 + ox,
     @types.world_y0 + oy,
@@ -83,8 +87,8 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
   )
 
   for i in 0..<23 {
-    let y : Int = @types.world_y0 + oy + i * 42
-    let shift : Int = (game.ui_wave(1.0 + Float::from_int(i) * 0.07) * 18.0).to_int()
+    let y : Int32 = @types.world_y0 + oy + i * 42
+    let shift : Int32 = (game.ui_wave(1.0 + Float::from_int(i) * 0.07) * 18.0).to_int()
 
     @raylib.draw_line(
       @types.world_x0 + 14 + ox,
@@ -95,7 +99,7 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
     )
   }
 
-  let bank_wave : Int = (game.ui_wave(1.32) * 8.0).to_int()
+  let bank_wave : Int32 = (game.ui_wave(1.32) * 8.0).to_int()
 
   @raylib.draw_rectangle(
     @types.world_x0 - 10 + ox + bank_wave,
@@ -114,7 +118,11 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
 }
 
 ///|
-fn @types.Game::draw_currents(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_currents(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for r in 0..<12 {
     let row_y : Float = @types.world_top() + 38.0 + Float::from_int(r) * 76.0
 
@@ -123,10 +131,10 @@ fn @types.Game::draw_currents(game : @types.Game, ox : Int, oy : Int) -> Unit {
       let cx : Float = @types.water_current_x(game, row_y)
       let cy : Float = @types.water_current_y(game, x)
 
-      let sx : Int = x.to_int() + ox
-      let sy : Int = row_y.to_int() + oy
-      let ex : Int = (x + cx * 0.16).to_int() + ox
-      let ey : Int = (row_y + cy * 0.08).to_int() + oy
+      let sx : Int32 = x.to_int() + ox
+      let sy : Int32 = row_y.to_int() + oy
+      let ex : Int32 = (x + cx * 0.16).to_int() + ox
+      let ey : Int32 = (row_y + cy * 0.08).to_int() + oy
 
       @raylib.draw_line(sx, sy, ex, ey, @raylib.Color::new(180, 236, 248, 70))
       @raylib.draw_circle(ex, ey, 2.0, @raylib.Color::new(188, 244, 255, 84))
@@ -144,15 +152,15 @@ fn obstacle_color(kind : @types.ObstacleKind) -> @raylib.Color {
 }
 
 ///|
-fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
+fn draw_obstacle(ob : @types.Obstacle, ox : Int32, oy : Int32) -> Unit {
   if !ob.active {
     return
   }
 
-  let x : Int = ob.x.to_int() + ox
-  let y : Int = ob.y.to_int() + oy
-  let w : Int = ob.w.to_int()
-  let h : Int = ob.h.to_int()
+  let x : Int32 = ob.x.to_int() + ox
+  let y : Int32 = ob.y.to_int() + oy
+  let w : Int32 = ob.w.to_int()
+  let h : Int32 = ob.h.to_int()
 
   let c0 : @raylib.Color = obstacle_color(ob.kind)
 
@@ -188,7 +196,7 @@ fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
         @raylib.Color::new(146, 112, 74, 240),
       )
       for i in 0..<4 {
-        let px : Int = x + 16 + i * (w - 32) / 3
+        let px : Int32 = x + 16 + i * (w - 32) / 3
         @raylib.draw_line(
           px,
           y + 4,
@@ -200,8 +208,8 @@ fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
     }
     Mine => {
       let r : Float = Float::from_int(w.min(h)) * 0.42
-      let cx : Int = x + w / 2
-      let cy : Int = y + h / 2
+      let cx : Int32 = x + w / 2
+      let cy : Int32 = y + h / 2
       @raylib.draw_circle(cx, cy, r, c0)
       @raylib.draw_circle_lines(
         cx,
@@ -211,10 +219,10 @@ fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
       )
       for i in 0..<8 {
         let a : Float = ob.phase + Float::from_int(i) * 0.785
-        let px0 : Int = (Float::from_int(cx) + @math.cosf(a) * (r - 2.0)).to_int()
-        let py0 : Int = (Float::from_int(cy) + @math.sinf(a) * (r - 2.0)).to_int()
-        let px1 : Int = (Float::from_int(cx) + @math.cosf(a) * (r + 10.0)).to_int()
-        let py1 : Int = (Float::from_int(cy) + @math.sinf(a) * (r + 10.0)).to_int()
+        let px0 : Int32 = (Float::from_int(cx) + @math.cosf(a) * (r - 2.0)).to_int()
+        let py0 : Int32 = (Float::from_int(cy) + @math.sinf(a) * (r - 2.0)).to_int()
+        let px1 : Int32 = (Float::from_int(cx) + @math.cosf(a) * (r + 10.0)).to_int()
+        let py1 : Int32 = (Float::from_int(cy) + @math.sinf(a) * (r + 10.0)).to_int()
         @raylib.draw_line(
           px0,
           py0,
@@ -247,7 +255,7 @@ fn pickup_radius(kind : @types.PickupKind) -> Float {
 }
 
 ///|
-fn draw_pickup(pk : @types.Pickup, ox : Int, oy : Int) -> Unit {
+fn draw_pickup(pk : @types.Pickup, ox : Int32, oy : Int32) -> Unit {
   if !pk.active {
     return
   }
@@ -256,8 +264,8 @@ fn draw_pickup(pk : @types.Pickup, ox : Int, oy : Int) -> Unit {
   let rr : Float = pickup_radius(pk.kind) + pulse * 1.8
   let c : @raylib.Color = pickup_color(pk.kind)
 
-  let x : Int = pk.x.to_int() + ox
-  let y : Int = pk.y.to_int() + oy
+  let x : Int32 = pk.x.to_int() + ox
+  let y : Int32 = pk.y.to_int() + oy
 
   @raylib.draw_circle(x, y, rr, c)
   @raylib.draw_circle_lines(
@@ -304,13 +312,17 @@ fn draw_pickup(pk : @types.Pickup, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for particle in game.particles {
     if !particle.active {
       continue
     }
 
-    let a : Int = if particle.life > 0.7 {
+    let a : Int32 = if particle.life > 0.7 {
       236
     } else if particle.life > 0.4 {
       186
@@ -334,9 +346,9 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_raft(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  let cx : Int = game.raft_x.to_int() + ox
-  let cy : Int = game.raft_y.to_int() + oy
+fn @types.Game::draw_raft(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
+  let cx : Int32 = game.raft_x.to_int() + ox
+  let cy : Int32 = game.raft_y.to_int() + oy
 
   let tilt : Float = @types.clampf(game.raft_vx * 0.0016, -0.55, 0.55)
 
@@ -359,7 +371,7 @@ fn @types.Game::draw_raft(game : @types.Game, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(230, 206, 142, 210),
   )
 
-  let prow_x : Int = (Float::from_int(cx) + tilt * 18.0).to_int()
+  let prow_x : Int32 = (Float::from_int(cx) + tilt * 18.0).to_int()
   @raylib.draw_triangle(
     @raylib.Vector2::new(Float::from_int(prow_x), Float::from_int(cy - 24)),
     @raylib.Vector2::new(Float::from_int(cx - 12), Float::from_int(cy - 8)),
@@ -386,13 +398,13 @@ fn @types.Game::draw_raft(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
 
   let pulse : Float = @math.sinf(game.ui_t * 10.0)
-  let alpha : Int = if game.hint_t > 1.2 {
+  let alpha : Int32 = if game.hint_t > 1.2 {
     238
   } else {
     112 + (game.hint_t * 100.0).to_int()
@@ -416,10 +428,10 @@ fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 fn draw_progress_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   c_fill : @raylib.Color,
   c_back : @raylib.Color,
@@ -427,7 +439,7 @@ fn draw_progress_bar(
   @raylib.draw_rectangle(x, y, w, h, c_back)
 
   let clamped : Float = @types.clampf(ratio, 0.0, 1.0)
-  let fw : Int = (Float::from_int(w) * clamped).to_int()
+  let fw : Int32 = (Float::from_int(w) * clamped).to_int()
 
   if fw > 0 {
     @raylib.draw_rectangle(x, y, fw, h, c_fill)
@@ -617,7 +629,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_touch_button(
   game : @types.Game,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   base : @raylib.Color,
 ) -> Unit {
@@ -652,8 +664,8 @@ fn @types.Game::draw_touch_button(
     @raylib.Color::new(220, 236, 246, 188),
   )
 
-  let fs : Int = if rect.3 <= 96 { 24 } else { 30 }
-  let tw : Int = @draw.measure_text(label, fs)
+  let fs : Int32 = if rect.3 <= 96 { 24 } else { 30 }
+  let tw : Int32 = @draw.measure_text(label, fs)
   @draw.draw_text(
     label,
     rect.0 + (rect.2 - tw) / 2,
@@ -725,8 +737,8 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let title : String = "RAFT RAPIDS ESCAPE"
   let sub : String = "Survive 180 seconds through chaotic river channels"
 
-  let tw : Int = @draw.measure_text(title, 82)
-  let sw : Int = @draw.measure_text(sub, 30)
+  let tw : Int32 = @draw.measure_text(title, 82)
+  let sw : Int32 = @draw.measure_text(sub, 30)
 
   @draw.draw_text(
     title,
@@ -793,7 +805,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   )
 
   let txt : String = "START EXPEDITION"
-  let txt_w : Int = @draw.measure_text(txt, 44)
+  let txt_w : Int32 = @draw.measure_text(txt, 44)
   @draw.draw_text(
     txt,
     b.0 + (b.2 - txt_w) / 2,
@@ -928,15 +940,15 @@ fn @types.Game::draw_msg(game : @types.Game) -> Unit {
     return
   }
 
-  let a : Int = if game.msg_t > 1.0 {
+  let a : Int32 = if game.msg_t > 1.0 {
     230
   } else {
     90 + (game.msg_t * 140.0).to_int()
   }
 
-  let w : Int = @draw.measure_text(game.msg, 28) + 36
-  let x : Int = @types.world_x0 + (@types.world_w - w) / 2
-  let y : Int = @types.world_y0 + 18
+  let w : Int32 = @draw.measure_text(game.msg, 28) + 36
+  let x : Int32 = @types.world_x0 + (@types.world_w - w) / 2
+  let y : Int32 = @types.world_y0 + 18
 
   @raylib.draw_rectangle(x, y, w, 46, @raylib.Color::new(22, 34, 54, a))
   @raylib.draw_rectangle_lines(
@@ -960,8 +972,8 @@ fn @types.Game::draw_msg(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_background()
 
-  let ox : Int = game.shake_offset_x()
-  let oy : Int = game.shake_offset_y()
+  let ox : Int32 = game.shake_offset_x()
+  let oy : Int32 = game.shake_offset_y()
 
   game.draw_world_back(ox, oy)
   game.draw_currents(ox, oy)

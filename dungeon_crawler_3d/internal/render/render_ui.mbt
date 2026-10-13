@@ -146,7 +146,11 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_menu_torch(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::draw_menu_torch(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Unit {
   // Torch post
   @raylib.draw_rectangle(x + 6, y, 8, 40, @raylib.Color::new(100, 70, 30, 255))
   // Flame (animated)

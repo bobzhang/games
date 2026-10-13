@@ -1,46 +1,46 @@
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 980
+pub let screen_width : Int32 = 980
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 760
+pub let screen_height : Int32 = 760
 
 ///|
 /// Map width in tiles.
-pub let map_tiles_w : Int = 26
+pub let map_tiles_w : Int32 = 26
 
 ///|
 /// Map height in tiles.
-pub let map_tiles_h : Int = 26
+pub let map_tiles_h : Int32 = 26
 
 ///|
 /// Size of one map tile in pixels.
-pub let tile_size : Int = 24
+pub let tile_size : Int32 = 24
 
 ///|
 /// Total map width in pixels.
-pub let map_pixel_w : Int = map_tiles_w * tile_size
+pub let map_pixel_w : Int32 = map_tiles_w * tile_size
 
 ///|
 /// Total map height in pixels.
-pub let map_pixel_h : Int = map_tiles_h * tile_size
+pub let map_pixel_h : Int32 = map_tiles_h * tile_size
 
 ///|
 /// Horizontal screen offset of the map.
-pub let map_offset_x : Int = 36
+pub let map_offset_x : Int32 = 36
 
 ///|
 /// Vertical screen offset of the map.
-pub let map_offset_y : Int = 50
+pub let map_offset_y : Int32 = 50
 
 ///|
 /// Left x-coordinate of the side panel.
-pub let panel_x : Int = map_offset_x + map_pixel_w + 20
+pub let panel_x : Int32 = map_offset_x + map_pixel_w + 20
 
 ///|
 /// Width of the side panel.
-pub let panel_w : Int = screen_width - panel_x - 24
+pub let panel_w : Int32 = screen_width - panel_x - 24
 
 ///|
 /// Tank body size in pixels.
@@ -56,35 +56,35 @@ pub let bullet_radius : Float = 3.0
 
 ///|
 /// Maximum number of player tanks.
-pub let max_players : Int = 2
+pub let max_players : Int32 = 2
 
 ///|
 /// Maximum enemy tank slots.
-pub let max_enemies : Int = 42
+pub let max_enemies : Int32 = 42
 
 ///|
 /// Maximum bullet slots.
-pub let max_bullets : Int = 320
+pub let max_bullets : Int32 = 320
 
 ///|
 /// Maximum particle slots.
-pub let max_particles : Int = 960
+pub let max_particles : Int32 = 960
 
 ///|
 /// Maximum powerup slots.
-pub let max_powerups : Int = 32
+pub let max_powerups : Int32 = 32
 
 ///|
 /// Maximum hostage slots.
-pub let max_hostages : Int = 56
+pub let max_hostages : Int32 = 56
 
 ///|
 /// Total number of tiles in the map array.
-pub let max_tiles : Int = map_tiles_w * map_tiles_h
+pub let max_tiles : Int32 = map_tiles_w * map_tiles_h
 
 ///|
 /// Maximum enemies allowed simultaneously on field.
-pub let enemy_on_field_limit : Int = 8
+pub let enemy_on_field_limit : Int32 = 8
 
 ///|
 /// Stage intro overlay duration.
@@ -164,11 +164,11 @@ pub let speed_enemy_sniper : Float = 84.0
 
 ///|
 /// Base tile x-coordinate.
-pub let base_tile_x : Int = 12
+pub let base_tile_x : Int32 = 12
 
 ///|
 /// Base tile y-coordinate.
-pub let base_tile_y : Int = 24
+pub let base_tile_y : Int32 = 24
 
 ///|
 /// Blink speed for menu selection highlight.
@@ -184,11 +184,11 @@ pub let camera_shake_power : Float = 7.5
 
 ///|
 /// Total number of campaign stages.
-pub let level_count : Int = 96
+pub let level_count : Int32 = 96
 
 ///|
 /// Number of unique map pattern templates.
-pub let map_pattern_count : Int = 48
+pub let map_pattern_count : Int32 = 48
 
 ///|
 /// Radius within which hostages can be rescued.
@@ -196,47 +196,47 @@ pub let rescue_pickup_radius : Float = 20.0
 
 ///|
 /// Score granted per rescued hostage.
-pub let rescue_score_each : Int = 120
+pub let rescue_score_each : Int32 = 120
 
 ///|
 /// Bonus score granted when rescue goal is met.
-pub let rescue_stage_bonus : Int = 300
+pub let rescue_stage_bonus : Int32 = 300
 
 ///|
 /// Base rescue target per stage.
-pub let rescue_goal_base : Int = 5
+pub let rescue_goal_base : Int32 = 5
 
 ///|
 /// Tile id for empty space.
-pub let tile_empty : Int = 0
+pub let tile_empty : Int32 = 0
 
 ///|
 /// Tile id for destructible brick.
-pub let tile_brick : Int = 1
+pub let tile_brick : Int32 = 1
 
 ///|
 /// Tile id for steel wall.
-pub let tile_steel : Int = 2
+pub let tile_steel : Int32 = 2
 
 ///|
 /// Tile id for water hazard.
-pub let tile_water : Int = 3
+pub let tile_water : Int32 = 3
 
 ///|
 /// Tile id for bush cover.
-pub let tile_bush : Int = 4
+pub let tile_bush : Int32 = 4
 
 ///|
 /// Tile id for ice surface.
-pub let tile_ice : Int = 5
+pub let tile_ice : Int32 = 5
 
 ///|
 /// Tile id for base objective.
-pub let tile_base : Int = 6
+pub let tile_base : Int32 = 6
 
 ///|
 /// Tile id for hostage camp.
-pub let tile_camp : Int = 7
+pub let tile_camp : Int32 = 7
 
 ///|
 /// Enemy spawn point x for left lane.
@@ -272,25 +272,25 @@ pub let player2_spawn_y : Float = 24.0 * Float::from_int(tile_size) + tank_half
 
 ///|
 /// Number of rows for enemy icon display.
-pub let enemy_icon_rows : Int = 10
+pub let enemy_icon_rows : Int32 = 10
 
 ///|
 /// Number of columns for enemy icon display.
-pub let enemy_icon_cols : Int = 2
+pub let enemy_icon_cols : Int32 = 2
 
 ///|
 /// Count of tiles surrounding the base ring.
-pub let base_ring_count : Int = 14
+pub let base_ring_count : Int32 = 14
 
 ///|
 /// X tile coordinates for protected base ring.
-pub let base_ring_x : Array[Int] = [
+pub let base_ring_x : Array[Int32] = [
   11, 12, 13, 14, 11, 14, 11, 14, 11, 12, 13, 14, 12, 13,
 ]
 
 ///|
 /// Y tile coordinates for protected base ring.
-pub let base_ring_y : Array[Int] = [
+pub let base_ring_y : Array[Int32] = [
   22, 22, 22, 22, 23, 23, 24, 24, 25, 25, 25, 25, 24, 24,
 ]
 
@@ -308,7 +308,7 @@ pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Converts an integer to a Dir value.
-pub fn Dir::from_int(v : Int) -> Dir {
+pub fn Dir::from_int(v : Int32) -> Dir {
   match v {
     0 => Up
     1 => Right

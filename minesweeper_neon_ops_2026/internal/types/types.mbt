@@ -39,7 +39,7 @@ pub(all) struct Cell {
   mut revealed : Bool
   mut flagged : Bool
   mut exploded : Bool
-  mut around : Int
+  mut around : Int32
 }
 
 ///|
@@ -52,7 +52,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -60,26 +60,26 @@ pub(all) struct Spark {
 pub(all) struct Game {
   cells : Array[Cell]
   sparks : Array[Spark]
-  queue_x : Array[Int]
-  queue_y : Array[Int]
+  queue_x : Array[Int32]
+  queue_y : Array[Int32]
   mut state : GameState
   mut mode : PlayMode
   mut first_move : Bool
-  mut frame_seed : Int
-  mut mine_count : Int
-  mut revealed_safe : Int
-  mut flagged_count : Int
-  mut cursor_x : Int
-  mut cursor_y : Int
-  mut last_reveal_x : Int
-  mut last_reveal_y : Int
-  mut lives : Int
-  mut hints : Int
-  mut mistakes : Int
-  mut combo : Int
-  mut combo_best : Int
-  mut score : Int
-  mut best_score : Int
+  mut frame_seed : Int32
+  mut mine_count : Int32
+  mut revealed_safe : Int32
+  mut flagged_count : Int32
+  mut cursor_x : Int32
+  mut cursor_y : Int32
+  mut last_reveal_x : Int32
+  mut last_reveal_y : Int32
+  mut lives : Int32
+  mut hints : Int32
+  mut mistakes : Int32
+  mut combo : Int32
+  mut combo_best : Int32
+  mut score : Int32
+  mut best_score : Int32
   mut game_t : Float
   mut ui_t : Float
   mut combo_t : Float
@@ -92,7 +92,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

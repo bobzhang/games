@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 let ground_y : Float = 706.0
@@ -17,10 +17,10 @@ let right_hoop_x : Float = 1094.0
 let rim_y : Float = 458.0
 
 ///|
-let set_target : Int = 21
+let set_target : Int32 = 21
 
 ///|
-let max_particles : Int = 520
+let max_particles : Int32 = 520
 
 ///|
 struct Athlete {
@@ -34,7 +34,7 @@ struct Athlete {
   mut shoot_cd : Float
   mut catch_cd : Float
   mut flash_t : Float
-  mut score : Int
+  mut score : Int32
 }
 
 ///|
@@ -45,8 +45,8 @@ struct Ball {
   mut vy : Float
   r : Float
   mut spin : Float
-  mut owner : Int
-  mut shooter : Int
+  mut owner : Int32
+  mut shooter : Int32
   mut shot_from_x : Float
   mut last_y : Float
   mut active : Bool
@@ -59,7 +59,7 @@ struct Particle {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -85,10 +85,10 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -115,7 +115,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for ps_elem in ps {
@@ -141,9 +141,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_particle(ps, x, y, speed, kind)
@@ -169,7 +169,7 @@ fn setup_possession(
   player : Athlete,
   rival : Athlete,
   ball : Ball,
-  owner : Int,
+  owner : Int32,
 ) -> Unit {
   reset_athlete(player, 294.0)
   reset_athlete(rival, 986.0)
@@ -300,7 +300,7 @@ fn update_athlete_move(
 ///|
 fn release_shot(
   shooter : Athlete,
-  team : Int,
+  team : Int32,
   ball : Ball,
   target_x : Float,
   target_y : Float,
@@ -346,7 +346,7 @@ fn resolve_rim_collision(ball : Ball, cx : Float, cy : Float) -> Unit {
 }
 
 ///|
-fn draw_hoop(x : Float, side : Int) -> Unit {
+fn draw_hoop(x : Float, side : Int32) -> Unit {
   let board_x = if side == 1 {
     (x - 48.0).to_int()
   } else {

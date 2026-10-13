@@ -380,7 +380,12 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star(cx : Int, cy : Int, size : Int, color : @raylib.Color) -> Unit {
+fn draw_star(
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
+  color : @raylib.Color,
+) -> Unit {
   let s = Float::from_int(size)
   let outer = s
   let inner = s * 0.4

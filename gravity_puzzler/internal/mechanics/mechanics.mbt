@@ -75,7 +75,7 @@ pub fn apply_mirror_movement(
 pub fn apply_gravity_wells(level : @types.Level) -> Bool {
   let mut moved = false
   // Find all gravity well tiles
-  let wells : Array[(Int, Int)] = []
+  let wells : Array[(Int32, Int32)] = []
   for y in 0..<level.height {
     for x in 0..<level.width {
       if @types.get_tile(level, x, y) == GravityWell {
@@ -173,7 +173,7 @@ pub fn is_lava_deadly(lava_timer : Float) -> Bool {
 
 ///|
 /// Sky Citadel: Wind gusts push entities sideways on certain beats
-pub fn apply_wind_gusts(level : @types.Level, wind_beat : Int) -> Bool {
+pub fn apply_wind_gusts(level : @types.Level, wind_beat : Int32) -> Bool {
   // Wind blows every other beat
   if wind_beat % 2 != 0 {
     return false

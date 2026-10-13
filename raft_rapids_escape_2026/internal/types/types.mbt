@@ -48,21 +48,21 @@ pub(all) struct Game {
   mut raft_vy : Float
   mut move_x : Float
   mut move_y : Float
-  mut lives : Int
+  mut lives : Int32
   mut shield_t : Float
   mut fuel : Float
   mut boost_on : Bool
-  mut score : Int
-  mut best_score : Int
-  mut distance : Int
-  mut level : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut distance : Int32
+  mut level : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut spawn_t : Float
   mut pickup_t : Float
   mut game_t : Float
   mut ui_t : Float
-  mut hint_left : Int
+  mut hint_left : Int32
   mut hint_t : Float
   mut hint_x : Float
   mut hint_y : Float
@@ -74,7 +74,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

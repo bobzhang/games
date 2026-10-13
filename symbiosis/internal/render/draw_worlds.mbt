@@ -92,7 +92,7 @@ fn draw_worlds(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_grid_bg(ox : Int, oy : Int, tint : @raylib.Color) -> Unit {
+fn draw_grid_bg(ox : Int32, oy : Int32, tint : @raylib.Color) -> Unit {
   let w = @types.grid_width * @types.tile_size
   let h = @types.grid_height * @types.tile_size
   @raylib.draw_rectangle(ox - 2, oy - 2, w + 4, h + 4, tint)
@@ -101,10 +101,10 @@ fn draw_grid_bg(ox : Int, oy : Int, tint : @raylib.Color) -> Unit {
 ///|
 fn draw_grid(
   tiles : Array[Array[@types.TileKind]],
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
   door_states : Array[Bool],
-  frame_count : Int,
+  frame_count : Int32,
 ) -> Unit {
   let ts = @types.tile_size
   for y in 0..<@types.grid_height {
@@ -195,7 +195,7 @@ fn draw_grid(
 fn tile_color(
   tile : @types.TileKind,
   door_states : Array[Bool],
-  _frame_count : Int,
+  _frame_count : Int32,
 ) -> @raylib.Color {
   match tile {
     Floor => @types.color_floor
@@ -225,9 +225,9 @@ fn tile_color(
 fn draw_gems(
   gems : Array[@types.Vec2i],
   collected : Array[Bool],
-  ox : Int,
-  oy : Int,
-  frame_count : Int,
+  ox : Int32,
+  oy : Int32,
+  frame_count : Int32,
 ) -> Unit {
   let ts = @types.tile_size
   for i in 0..<gems.length() {
@@ -252,8 +252,8 @@ fn draw_gems(
 ///|
 fn draw_character(
   ch : @types.Character,
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
   color : @raylib.Color,
   label : String,
 ) -> Unit {

@@ -128,7 +128,12 @@ fn draw_art_centered(
 }
 
 ///|
-fn draw_map_board_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
+fn draw_map_board_art(
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
+) -> Bool {
   match tex_map_board_backdrop.val {
     Some(texture) => {
       draw_art_top_left(
@@ -146,7 +151,7 @@ fn draw_map_board_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
 }
 
 ///|
-fn draw_title_atlas_art(cx : Int, cy : Int) -> Bool {
+fn draw_title_atlas_art(cx : Int32, cy : Int32) -> Bool {
   match tex_title_atlas.val {
     Some(texture) => {
       @raylib.draw_ellipse(
@@ -186,11 +191,11 @@ fn feature_art(feature : @types.FeatureKind) -> @raylib.Texture? {
 
 ///|
 fn draw_feature_art(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   feature : @types.FeatureKind,
-  size : Int,
-  alpha : Int,
+  size : Int32,
+  alpha : Int32,
 ) -> Bool {
   match feature_art(feature) {
     Some(texture) => {
@@ -210,7 +215,7 @@ fn draw_feature_art(
 }
 
 ///|
-fn draw_compass_rose_art(cx : Int, cy : Int, size : Int) -> Bool {
+fn draw_compass_rose_art(cx : Int32, cy : Int32, size : Int32) -> Bool {
   match tex_compass_rose.val {
     Some(texture) => {
       draw_art_centered(
@@ -229,7 +234,12 @@ fn draw_compass_rose_art(cx : Int, cy : Int, size : Int) -> Bool {
 }
 
 ///|
-fn draw_star_art(cx : Int, cy : Int, size : Int, color : @raylib.Color) -> Bool {
+fn draw_star_art(
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
+  color : @raylib.Color,
+) -> Bool {
   match tex_star_icon.val {
     Some(texture) => {
       draw_art_centered(

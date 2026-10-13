@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1366
+let sw : Int32 = 1366
 
 ///|
-let sh : Int = 768
+let sh : Int32 = 768
 
 ///|
 let world_l : Float = 24.0
@@ -17,37 +17,37 @@ let world_r : Float = 970.0
 let world_b : Float = 744.0
 
 ///|
-let reservoir_x : Int = 42
+let reservoir_x : Int32 = 42
 
 ///|
-let reservoir_y : Int = 596
+let reservoir_y : Int32 = 596
 
 ///|
-let reservoir_w : Int = 250
+let reservoir_w : Int32 = 250
 
 ///|
-let reservoir_h : Int = 128
+let reservoir_h : Int32 = 128
 
 ///|
-let hospital_x : Int = 700
+let hospital_x : Int32 = 700
 
 ///|
-let hospital_y : Int = 596
+let hospital_y : Int32 = 596
 
 ///|
-let hospital_w : Int = 244
+let hospital_w : Int32 = 244
 
 ///|
-let hospital_h : Int = 128
+let hospital_h : Int32 = 128
 
 ///|
-let max_buildings : Int = 28
+let max_buildings : Int32 = 28
 
 ///|
-let max_drops : Int = 220
+let max_drops : Int32 = 220
 
 ///|
-let max_particles : Int = 360
+let max_particles : Int32 = 360
 
 ///|
 struct Helicopter {
@@ -57,8 +57,8 @@ struct Helicopter {
   mut vy : Float
   mut water : Float
   mut water_max : Float
-  mut passengers : Int
-  mut capacity : Int
+  mut passengers : Int32
+  mut capacity : Int32
   mut fire_cd : Float
   mut rescue_cd : Float
   wobble : Float
@@ -73,8 +73,8 @@ struct Building {
   mut h : Float
   mut fire : Float
   mut integrity : Float
-  mut people : Int
-  mut casualties : Int
+  mut people : Int32
+  mut casualties : Int32
   mut spread_cd : Float
   mut emergency_cd : Float
   mut collapsed : Bool
@@ -91,13 +91,13 @@ struct WaterDrop {
   mut vy : Float
   mut power : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -135,10 +135,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -229,7 +229,7 @@ fn add_building(
   y : Float,
   w : Float,
   h : Float,
-  people : Int,
+  people : Int32,
   fire : Float,
   name : String,
 ) -> Bool {
@@ -330,7 +330,7 @@ fn add_drop(
   vy : Float,
   power : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Bool {
   for drop in drops {
     if !drop.active {
@@ -353,7 +353,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if !part.active {
@@ -378,8 +378,8 @@ fn burst_particles(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -502,7 +502,7 @@ fn nearest_viable_building(
   buildings : Array[Building],
   x : Float,
   y : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<buildings.length(); best = -1, best_d2 = 99999999.0F {
     if !buildings[i].active || buildings[i].collapsed {
       continue
@@ -523,12 +523,12 @@ fn nearest_viable_building(
 fn update_fire_system(
   buildings : Array[Building],
   dt : Float,
-  tier : Int,
+  tier : Int32,
   parts : Array[Particle],
-) -> (Int, Int, Int) {
-  let mut active_fire_n : Int = 0
-  let mut new_casualties : Int = 0
-  let mut collapsed_n : Int = 0
+) -> (Int32, Int32, Int32) {
+  let mut active_fire_n : Int32 = 0
+  let mut new_casualties : Int32 = 0
+  let mut collapsed_n : Int32 = 0
 
   for i in 0..<buildings.length() {
     if !buildings[i].active {
@@ -560,7 +560,7 @@ fn update_fire_system(
     if buildings[i].people > 0 {
       let hazard : Float = buildings[i].fire - 54.0
       if hazard > 0.0 {
-        let lose_prob : Int = (hazard * dt * 9.0).to_int() + 1
+        let lose_prob : Int32 = (hazard * dt * 9.0).to_int() + 1
         if @raylib.get_random_value(0, 99) < lose_prob.clamp(min=0, max=70) {
           buildings[i].people = buildings[i].people - 1
           buildings[i].casualties = buildings[i].casualties + 1
@@ -581,7 +581,7 @@ fn update_fire_system(
     if buildings[i].spread_cd <= 0.0 {
       buildings[i].spread_cd = randf(2.5, 5.4)
       if buildings[i].fire >= 52.0 {
-        let target : Int = nearest_viable_building(
+        let target : Int32 = nearest_viable_building(
           buildings,
           building_center_x(buildings[i]),
           building_center_y(buildings[i]),
@@ -651,12 +651,12 @@ fn try_rescue(
   heli : Helicopter,
   buildings : Array[Building],
   parts : Array[Particle],
-) -> Int {
+) -> Int32 {
   if heli.passengers >= heli.capacity {
     return 0
   }
 
-  let mut loaded : Int = 0
+  let mut loaded : Int32 = 0
 
   for building in buildings {
     if !building.active || building.collapsed {
@@ -699,9 +699,9 @@ fn draw_city_bg(t : Float) -> Unit {
   )
 
   // roads
-  let road_x : Int = world_l.to_int()
+  let road_x : Int32 = world_l.to_int()
   for i in 0..<4 {
-    let y : Int = 94 + i * 168
+    let y : Int32 = 94 + i * 168
     @raylib.draw_rectangle(
       road_x,
       y,
@@ -710,7 +710,7 @@ fn draw_city_bg(t : Float) -> Unit {
       @raylib.Color::new(40, 46, 62, 236),
     )
     for k in 0..<28 {
-      let x : Int = road_x + k * 38
+      let x : Int32 = road_x + k * 38
       @raylib.draw_rectangle(
         x + (t * 120.0).to_int() % 38,
         y + 9,
@@ -722,7 +722,7 @@ fn draw_city_bg(t : Float) -> Unit {
   }
 
   for i in 0..<5 {
-    let x : Int = 130 + i * 178
+    let x : Int32 = 130 + i * 178
     @raylib.draw_rectangle(
       x,
       world_t.to_int(),
@@ -735,10 +735,10 @@ fn draw_city_bg(t : Float) -> Unit {
   // skyline lights
   for i in 0..<44 {
     let fi : Float = Float::from_int(i)
-    let x : Int = (fi * 71.0 + t * (20.0 + Float::from_int(i % 6) * 7.0)).to_int() %
+    let x : Int32 = (fi * 71.0 + t * (20.0 + Float::from_int(i % 6) * 7.0)).to_int() %
       (world_r - world_l).to_int() +
       world_l.to_int()
-    let y : Int = (fi * 143.0 + t * 28.0).to_int() %
+    let y : Int32 = (fi * 143.0 + t * 28.0).to_int() %
       (world_b - world_t).to_int() +
       world_t.to_int()
     @raylib.draw_circle(
@@ -818,10 +818,10 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
       continue
     }
 
-    let bx : Int = buildings[i].x.to_int()
-    let by : Int = buildings[i].y.to_int()
-    let bw : Int = buildings[i].w.to_int()
-    let bh : Int = buildings[i].h.to_int()
+    let bx : Int32 = buildings[i].x.to_int()
+    let by : Int32 = buildings[i].y.to_int()
+    let bw : Int32 = buildings[i].w.to_int()
+    let bh : Int32 = buildings[i].h.to_int()
 
     let base = if buildings[i].collapsed {
       @raylib.Color::new(56, 44, 52, 226)
@@ -840,8 +840,8 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
     // windows
     for wy in 0..<4 {
       for wx in 0..<5 {
-        let px : Int = bx + 12 + wx * ((bw - 24) / 5)
-        let py : Int = by + 12 + wy * ((bh - 24) / 4)
+        let px : Int32 = bx + 12 + wx * ((bw - 24) / 5)
+        let py : Int32 = by + 12 + wy * ((bh - 24) / 4)
 
         let light = if buildings[i].collapsed {
           @raylib.Color::new(74, 74, 86, 160)
@@ -855,7 +855,9 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
     }
 
     if !buildings[i].collapsed {
-      let fire_n : Int = (buildings[i].fire / 18.0).to_int().clamp(min=0, max=7)
+      let fire_n : Int32 = (buildings[i].fire / 18.0)
+        .to_int()
+        .clamp(min=0, max=7)
       for f in 0..<fire_n {
         let fx : Float = buildings[i].x + randf(10.0, buildings[i].w - 10.0)
         let fy : Float = buildings[i].y + randf(8.0, buildings[i].h - 8.0)
@@ -878,8 +880,8 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
 
       if buildings[i].fire > 0.0 {
         for s in 0..<3 {
-          let sx : Int = (buildings[i].x + randf(8.0, buildings[i].w - 8.0)).to_int()
-          let sy : Int = (buildings[i].y -
+          let sx : Int32 = (buildings[i].x + randf(8.0, buildings[i].w - 8.0)).to_int()
+          let sy : Int32 = (buildings[i].y -
           randf(8.0, 24.0) -
           Float::from_int(s) * 10.0).to_int()
           @raylib.draw_circle(
@@ -902,7 +904,7 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
       )
     }
 
-    let hpw : Int = (buildings[i].integrity * Float::from_int(bw - 8) / 100.0).to_int()
+    let hpw : Int32 = (buildings[i].integrity * Float::from_int(bw - 8) / 100.0).to_int()
     @raylib.draw_rectangle(
       bx + 4,
       by + bh - 10,
@@ -1014,8 +1016,8 @@ fn draw_helicopter(heli : Helicopter, t : Float) -> Unit {
 
 ///|
 fn draw_touch_ui() -> Unit {
-  let pad_x : Int = 28
-  let pad_y : Int = sh - 194
+  let pad_x : Int32 = 28
+  let pad_y : Int32 = sh - 194
 
   @raylib.draw_rectangle(
     pad_x + 84,
@@ -1082,8 +1084,8 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(234, 242, 255, 240),
   )
 
-  let fire_x : Int = sw - 292
-  let fire_y : Int = sh - 180
+  let fire_x : Int32 = sw - 292
+  let fire_y : Int32 = sh - 180
   @raylib.draw_circle(
     fire_x,
     fire_y,
@@ -1098,8 +1100,8 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(248, 244, 244, 248),
   )
 
-  let rescue_x : Int = sw - 160
-  let rescue_y : Int = sh - 246
+  let rescue_x : Int32 = sw - 160
+  let rescue_y : Int32 = sh - 246
   @raylib.draw_circle(
     rescue_x,
     rescue_y,
@@ -1181,13 +1183,13 @@ fn main {
     }
   })
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 300.0
-  let mut rescued_total : Int = 0
-  let mut casualties_total : Int = 0
-  let mut collapsed_total : Int = 0
-  let mut score : Int = 0
-  let mut tier : Int = 1
+  let mut rescued_total : Int32 = 0
+  let mut casualties_total : Int32 = 0
+  let mut collapsed_total : Int32 = 0
+  let mut score : Int32 = 0
+  let mut tier : Int32 = 1
 
   let mut msg : String = ""
   let mut msg_t : Float = 0.0
@@ -1292,8 +1294,8 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyH)
 
       if hold {
-        let pad_x : Int = 28
-        let pad_y : Int = sh - 194
+        let pad_x : Int32 = 28
+        let pad_y : Int32 = sh - 194
         if inside_rect(mouse.x, mouse.y, pad_x + 84, pad_y, 76, 58) {
           move_u = true
         }
@@ -1390,7 +1392,7 @@ fn main {
 
       // rescue action
       if rescue_action && heli.rescue_cd <= 0.0 {
-        let loaded : Int = try_rescue(heli, buildings, parts)
+        let loaded : Int32 = try_rescue(heli, buildings, parts)
         if loaded > 0 {
           score = score + loaded * 20
           msg = "Rescued \{loaded} civilians"
@@ -1404,7 +1406,7 @@ fn main {
 
       // fire water action
       if fire_action && heli.fire_cd <= 0.0 && heli.water >= 2.0 {
-        let n : Int = 6 + @raylib.get_random_value(0, 3)
+        let n : Int32 = 6 + @raylib.get_random_value(0, 3)
         for _ in 0..<n {
           let ax : Float = randf(-0.6, 0.6)
           let vx : Float = ax * 80.0 + heli.vx * 0.3
@@ -1452,7 +1454,7 @@ fn main {
       event_cd = event_cd - dt
       if event_cd <= 0.0 {
         event_cd = randf(8.0, 14.0)
-        let bid : Int = @raylib.get_random_value(0, buildings.length() - 1)
+        let bid : Int32 = @raylib.get_random_value(0, buildings.length() - 1)
         if buildings[bid].active && !buildings[bid].collapsed {
           buildings[bid].fire = buildings[bid].fire + randf(8.0, 18.0)
           if buildings[bid].fire > 120.0 {
@@ -1651,7 +1653,7 @@ fn main {
       @raylib.Color::new(24, 32, 48, 255),
     )
     let w01 : Float = clampf(heli.water / heli.water_max, 0.0, 1.0)
-    let wf : Int = (Float::from_int(312) * w01).to_int()
+    let wf : Int32 = (Float::from_int(312) * w01).to_int()
     @raylib.draw_rectangle(
       1004,
       418,
@@ -1728,8 +1730,8 @@ fn main {
     draw_touch_ui()
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = sw / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         20,

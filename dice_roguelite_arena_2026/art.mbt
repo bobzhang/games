@@ -134,7 +134,7 @@ fn draw_arena_backdrop_art(art : GameArt, bg_t : Float) -> Unit {
 
 ///|
 /// Draws the generated player avatar at arena scale.
-fn draw_player_avatar_art(art : GameArt, cx : Int, cy : Int) -> Unit {
+fn draw_player_avatar_art(art : GameArt, cx : Int32, cy : Int32) -> Unit {
   draw_texture_centered(
     art.pilot_avatar,
     Float::from_int(cx),
@@ -155,7 +155,7 @@ fn draw_player_avatar_art(art : GameArt, cx : Int, cy : Int) -> Unit {
 
 ///|
 /// Draws the generated enemy sprite selected by enemy kind.
-fn draw_enemy_art(art : GameArt, kind : Int, cx : Int, cy : Int) -> Unit {
+fn draw_enemy_art(art : GameArt, kind : Int32, cx : Int32, cy : Int32) -> Unit {
   let texture = if kind == 0 {
     art.scrap_berserker
   } else if kind == 1 {
@@ -199,9 +199,9 @@ fn draw_enemy_art(art : GameArt, kind : Int, cx : Int, cy : Int) -> Unit {
 /// Draws the generated dice tile frame with state tinting.
 fn draw_dice_tile_art(
   art : GameArt,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   used : Bool,
   hover : Bool,
   pulse_t : Float,
@@ -240,10 +240,10 @@ fn draw_dice_tile_art(
 /// Draws the generated reward card frame.
 fn draw_reward_card_art(
   art : GameArt,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   hover : Bool,
 ) -> Unit {
   let tint = if hover {
