@@ -19,8 +19,8 @@ pub(all) struct Raider {
   mut vy : Float
   mut speed : Float
   mut hp : Float
-  mut target_wagon : Int
-  mut lane : Int
+  mut target_wagon : Int32
+  mut lane : Int32
   mut attack_cd : Float
   mut flash_t : Float
   mut radius : Float
@@ -48,7 +48,7 @@ pub(all) struct Dust {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -78,17 +78,17 @@ pub(all) struct Game {
   dusts : Array[Dust]
   hero : Player
   mut state : GameState
-  mut score : Int
-  mut best_score : Int
-  mut kills : Int
-  mut checkpoint : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut kills : Int32
+  mut checkpoint : Int32
   mut distance : Float
   mut checkpoint_start : Float
   mut next_checkpoint : Float
   mut morale : Float
-  mut ammo : Int
+  mut ammo : Int32
   mut ammo_regen_t : Float
-  mut repair_kits : Int
+  mut repair_kits : Int32
   mut spawn_t : Float
   mut time_s : Float
   mut flash_t : Float
@@ -108,7 +108,7 @@ pub(all) struct Game {
 
 ///|
 /// Creates a default Wagon value for a new session.
-pub fn Wagon::Wagon(index : Int) -> Wagon {
+pub fn Wagon::Wagon(index : Int32) -> Wagon {
   {
     x: wagon_slot_x(index),
     y: wagon_slot_y(index),

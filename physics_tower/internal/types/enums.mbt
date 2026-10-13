@@ -120,7 +120,7 @@ pub(all) enum BlueprintKind {
   ArchWay
   Truss
   Foundation
-  Custom(Int)
+  Custom(Int32)
 } derive(Eq, Debug)
 
 ///|
@@ -258,7 +258,7 @@ pub extend SoundEvent with Show::{to_string, output}
 ///|
 pub(all) enum ReplayAction {
   Place(PieceKind, Material, Float, Float, Float) // kind, material, x, y, angle
-  Rotate(Int) // body_id
+  Rotate(Int32) // body_id
   BlueprintPlace(BlueprintKind, Float, Float) // kind, x, y
 } derive(Eq, Debug)
 

@@ -25,15 +25,15 @@ pub(all) struct Ship {
   mut cannon_damage : Float
   mut reload_time : Float
   mut ship_class : ShipClass
-  mut cannon_count : Int
+  mut cannon_count : Int32
   mut cannon_type : Cannon
-  mut ammo_type : Int
-  mut ammo_round : Int
-  mut ammo_chain : Int
-  mut ammo_grape : Int
-  mut crew : Int
-  mut max_crew : Int
-  mut crew_action : Int
+  mut ammo_type : Int32
+  mut ammo_round : Int32
+  mut ammo_chain : Int32
+  mut ammo_grape : Int32
+  mut crew : Int32
+  mut max_crew : Int32
+  mut crew_action : Int32
   mut turn_rate_base : Float
   mut ship_length : Float
   mut ship_width : Float
@@ -42,9 +42,9 @@ pub(all) struct Ship {
   mut taking_water : Float
   mut on_fire : Bool
   mut fire_timer : Float
-  mut boarding_target : Int
+  mut boarding_target : Int32
   mut boarding_timer : Float
-  mut kills : Int
+  mut kills : Int32
   mut damage_dealt : Float
   mut damage_taken : Float
 }
@@ -128,13 +128,13 @@ pub(all) struct EnemyShip {
   mut fire_rate : Float
   mut cannon_damage : Float
   mut cannon_type : Cannon
-  mut cannon_count : Int
+  mut cannon_count : Int32
   mut detect_range : Float
   mut attack_range : Float
-  mut score_value : Int
+  mut score_value : Int32
   mut ship_class : ShipClass
-  mut crew : Int
-  mut max_crew : Int
+  mut crew : Int32
+  mut max_crew : Int32
   mut sail_amount : Float
   mut turn_rate_base : Float
   mut ship_length : Float
@@ -225,7 +225,7 @@ pub(all) struct Cannonball {
   mut life : Float
   mut damage : Float
   mut from_player : Bool
-  mut ammo_type : Int
+  mut ammo_type : Int32
   mut cannon_type : Cannon
   mut wind_drift : Float
   mut trail_timer : Float
@@ -266,28 +266,28 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
-  mut particle_type : Int
+  mut particle_type : Int32
 }
 
 ///|
 /// Particle type id for generic impact/splash particles.
-pub let particle_generic : Int = 0
+pub let particle_generic : Int32 = 0
 
 ///|
 /// Particle type id for smoke particles.
-pub let particle_smoke : Int = 1
+pub let particle_smoke : Int32 = 1
 
 ///|
 /// Particle type id for fire particles.
-pub let particle_fire : Int = 2
+pub let particle_fire : Int32 = 2
 
 ///|
 /// Particle type id for water splash particles.
-pub let particle_splash : Int = 3
+pub let particle_splash : Int32 = 3
 
 ///|
 /// Creates an inactive particle slot with neutral defaults.
@@ -320,17 +320,17 @@ pub(all) struct Island {
   mut z : Float
   mut radius : Float
   mut height : Float
-  mut blocks : Int
+  mut blocks : Int32
   mut island_type : IslandKind
   mut has_fortress : Bool
   mut fortress_hp : Float
   mut fortress_max_hp : Float
   mut fortress_fire_timer : Float
-  mut fortress_cannons_active : Int
-  mut beach_color_r : Int
-  mut beach_color_g : Int
-  mut beach_color_b : Int
-  mut vegetation_density : Int
+  mut fortress_cannons_active : Int32
+  mut beach_color_r : Int32
+  mut beach_color_g : Int32
+  mut beach_color_b : Int32
+  mut vegetation_density : Int32
 }
 
 ///|
@@ -401,23 +401,23 @@ pub(all) struct Debris {
   mut rot_speed : Float
   mut life : Float
   mut size : Float
-  mut debris_type : Int
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut debris_type : Int32
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
 /// Debris type id for wooden planks.
-pub let debris_plank : Int = 0
+pub let debris_plank : Int32 = 0
 
 ///|
 /// Debris type id for barrels.
-pub let debris_barrel : Int = 1
+pub let debris_barrel : Int32 = 1
 
 ///|
 /// Debris type id for torn sail cloth.
-pub let debris_sail_scrap : Int = 2
+pub let debris_sail_scrap : Int32 = 2
 
 ///|
 /// Creates an inactive debris slot.
@@ -482,10 +482,10 @@ pub(all) struct BattleMessage {
   mut active : Bool
   mut text : String
   mut timer : Float
-  mut priority : Int
-  mut color_r : Int
-  mut color_g : Int
-  mut color_b : Int
+  mut priority : Int32
+  mut color_r : Int32
+  mut color_g : Int32
+  mut color_b : Int32
 }
 
 ///|
@@ -507,9 +507,9 @@ pub fn BattleMessage::inactive() -> BattleMessage {
 ///|
 /// Tracks objective type, progress counters, and completion state for a battle.
 pub(all) struct BattleObjective {
-  mut objective_type : Int
-  mut target_count : Int
-  mut current_count : Int
+  mut objective_type : Int32
+  mut target_count : Int32
+  mut current_count : Int32
   mut time_limit : Float
   mut time_elapsed : Float
   mut completed : Bool
@@ -537,16 +537,16 @@ pub fn BattleObjective::BattleObjective() -> BattleObjective {
 ///|
 /// Per-battle performance statistics for scoring and summary screens.
 pub(all) struct BattleStats {
-  mut ships_sunk : Int
+  mut ships_sunk : Int32
   mut damage_dealt : Float
   mut damage_taken : Float
-  mut crew_lost : Int
-  mut ammo_used : Int
+  mut crew_lost : Int32
+  mut ammo_used : Int32
   mut time_elapsed : Float
-  mut accuracy_hits : Int
-  mut accuracy_shots : Int
-  mut boarding_wins : Int
-  mut fortresses_destroyed : Int
+  mut accuracy_hits : Int32
+  mut accuracy_shots : Int32
+  mut boarding_wins : Int32
+  mut fortresses_destroyed : Int32
 }
 
 ///|
@@ -611,37 +611,37 @@ pub(all) struct FleetShip {
   mut mast_hp : Float
   mut max_mast_hp : Float
   mut ship_class : ShipClass
-  mut cannon_count : Int
+  mut cannon_count : Int32
   mut fire_timer : Float
   mut fire_rate : Float
   mut cannon_damage : Float
-  mut crew : Int
-  mut max_crew : Int
+  mut crew : Int32
+  mut max_crew : Int32
   mut sail_amount : Float
   mut turn_rate_base : Float
   mut ship_length : Float
   mut ship_width : Float
   mut bob_phase : Float
-  mut order : Int
+  mut order : Int32
   mut target_x : Float
   mut target_z : Float
 }
 
 ///|
 /// Fleet order id to follow the player ship.
-pub let fleet_order_follow : Int = 0
+pub let fleet_order_follow : Int32 = 0
 
 ///|
 /// Fleet order id to attack designated enemies.
-pub let fleet_order_attack : Int = 1
+pub let fleet_order_attack : Int32 = 1
 
 ///|
 /// Fleet order id to defend nearby allies/objectives.
-pub let fleet_order_defend : Int = 2
+pub let fleet_order_defend : Int32 = 2
 
 ///|
 /// Fleet order id to hold current position.
-pub let fleet_order_hold : Int = 3
+pub let fleet_order_hold : Int32 = 3
 
 ///|
 /// Creates an inactive allied fleet ship slot.
@@ -676,11 +676,11 @@ pub fn FleetShip::inactive() -> FleetShip {
 
 ///|
 /// Maximum number of simultaneously tracked allied fleet ships.
-pub let max_fleet_ships : Int = 4
+pub let max_fleet_ships : Int32 = 4
 
 ///|
 /// Maximum number of simultaneously tracked convoy ships.
-pub let max_convoy_ships : Int = 4
+pub let max_convoy_ships : Int32 = 4
 
 // Main Game struct
 
@@ -693,11 +693,11 @@ pub(all) struct Game {
   player : Ship
 
   // Score and battle
-  mut score : Int
-  mut reputation : Int
-  mut current_battle : Int
-  mut enemies_alive : Int
-  mut total_battles : Int
+  mut score : Int32
+  mut reputation : Int32
+  mut current_battle : Int32
+  mut enemies_alive : Int32
+  mut total_battles : Int32
 
   // Wind
   wind : Wind
@@ -721,7 +721,7 @@ pub(all) struct Game {
   debris_pool : Array[Debris]
   fleet_ships : Array[FleetShip]
   convoy_ships : Array[ConvoyShip]
-  mut island_count : Int
+  mut island_count : Int32
 
   // Battle messages
   messages : Array[BattleMessage]
@@ -732,23 +732,23 @@ pub(all) struct Game {
   mut camera_height_offset : Float
 
   // UI state
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
   mut message_timer : Float
   mut message_text : String
   mut show_minimap : Bool
   mut show_battle_log : Bool
-  mut selected_fleet_ship : Int
-  mut battle_select_cursor : Int
+  mut selected_fleet_ship : Int32
+  mut battle_select_cursor : Int32
   mut fleet_command_mode : Bool
 
   // Battle log
   battle_log : Array[String]
-  mut battle_log_count : Int
+  mut battle_log_count : Int32
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // Timers
   mut battle_timer : Float
@@ -758,7 +758,7 @@ pub(all) struct Game {
   // Convoy
   mut convoy_target_x : Float
   mut convoy_target_z : Float
-  mut convoy_arrived_count : Int
+  mut convoy_arrived_count : Int32
 }
 
 ///|

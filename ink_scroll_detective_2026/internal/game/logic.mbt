@@ -68,9 +68,9 @@ fn @types.Game::reset_case(game : @types.Game) -> Unit {
 /// Returns the index of the suspect whose home district is at `(cell_x, cell_y)`, or -1.
 fn @types.Game::suspect_index_at_cell(
   game : @types.Game,
-  cell_x : Int,
-  cell_y : Int,
-) -> Int {
+  cell_x : Int32,
+  cell_y : Int32,
+) -> Int32 {
   @utils.first_index_by(game.suspects, fn(suspect) {
     suspect.home_x == cell_x && suspect.home_y == cell_y
   })
@@ -80,10 +80,10 @@ fn @types.Game::suspect_index_at_cell(
 /// Returns the index of a clue at the given cell; optionally filters to undiscovered only.
 fn @types.Game::clue_index_at_cell(
   game : @types.Game,
-  cell_x : Int,
-  cell_y : Int,
+  cell_x : Int32,
+  cell_y : Int32,
   undiscovered_only : Bool,
-) -> Int {
+) -> Int32 {
   @utils.first_index_by(game.clues, fn(clue) {
     clue.x == cell_x &&
     clue.y == cell_y &&
@@ -95,9 +95,9 @@ fn @types.Game::clue_index_at_cell(
 /// Returns the index of an active incident at the given cell, or -1 if none.
 fn @types.Game::incident_index_at_cell(
   game : @types.Game,
-  cell_x : Int,
-  cell_y : Int,
-) -> Int {
+  cell_x : Int32,
+  cell_y : Int32,
+) -> Int32 {
   @utils.first_index_by(game.incidents, fn(incident) {
     incident.active && incident.x == cell_x && incident.y == cell_y
   })
@@ -105,7 +105,7 @@ fn @types.Game::incident_index_at_cell(
 
 ///|
 /// Returns the number of fully completed evidence chains for `suspect`.
-fn @types.Game::completed_chains(game : @types.Game, suspect : Int) -> Int {
+fn @types.Game::completed_chains(game : @types.Game, suspect : Int32) -> Int32 {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
   }
@@ -122,7 +122,10 @@ fn @types.Game::completed_chains(game : @types.Game, suspect : Int) -> Int {
 
 ///|
 /// Returns the total confidence score for `suspect` based on evidence, chains, and deduction.
-fn @types.Game::suspect_confidence(game : @types.Game, suspect : Int) -> Int {
+fn @types.Game::suspect_confidence(
+  game : @types.Game,
+  suspect : Int32,
+) -> Int32 {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
   }
@@ -148,7 +151,7 @@ fn @types.Game::update_suspect_suspicion(game : @types.Game) -> Unit {
 /// Unlocks the deduction for `suspect` if enough chains are complete; awards score and trust.
 fn @types.Game::unlock_deduction_if_ready(
   game : @types.Game,
-  suspect : Int,
+  suspect : Int32,
 ) -> Unit {
   if suspect < 0 || suspect >= @types.suspect_count {
     return
@@ -173,7 +176,7 @@ fn @types.Game::unlock_deduction_if_ready(
 
 ///|
 /// Discovers a clue at `clue_index`: awards evidence, advances chain progress, and triggers deduction check.
-fn @types.Game::discover_clue(game : @types.Game, clue_index : Int) -> Unit {
+fn @types.Game::discover_clue(game : @types.Game, clue_index : Int32) -> Unit {
   if clue_index < 0 || clue_index >= game.clues.length() {
     return
   }
@@ -227,7 +230,7 @@ fn @types.Game::discover_clue(game : @types.Game, clue_index : Int) -> Unit {
 
 ///|
 /// Returns the index of a free incident slot, or the slot with the highest remaining timer.
-fn @types.Game::alloc_incident_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_incident_slot(game : @types.Game) -> Int32 {
   for i, slot in game.incidents {
     if !slot.active {
       break i
@@ -439,7 +442,7 @@ fn @types.Game::handle_cancel_or_mark(game : @types.Game) -> Unit {
 /// Attempts to resolve an incident using the marked suspect; handles correct, blocked, and wrong cases.
 fn @types.Game::attempt_incident_resolution(
   game : @types.Game,
-  incident_index : Int,
+  incident_index : Int32,
 ) -> Unit {
   if incident_index < 0 || incident_index >= game.incidents.length() {
     return
@@ -509,7 +512,7 @@ fn @types.Game::attempt_incident_resolution(
 
 ///|
 /// Prints a confidence/chains/deduction summary for `suspect` as a HUD message.
-fn @types.Game::inspect_suspect(game : @types.Game, suspect : Int) -> Unit {
+fn @types.Game::inspect_suspect(game : @types.Game, suspect : Int32) -> Unit {
   if suspect < 0 || suspect >= @types.suspect_count {
     return
   }

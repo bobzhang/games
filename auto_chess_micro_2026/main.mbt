@@ -1,56 +1,56 @@
 ///|
 /// Number of grid columns on the battle board.
-let gw : Int = 7
+let gw : Int32 = 7
 
 ///|
 /// Number of grid rows on the battle board.
-let gh : Int = 5
+let gh : Int32 = 5
 
 ///|
 /// Pixel size of each grid tile.
-let tile : Int = 86
+let tile : Int32 = 86
 
 ///|
 /// Horizontal pixel offset for the grid origin.
-let ox : Int = 120
+let ox : Int32 = 120
 
 ///|
 /// Vertical pixel offset for the grid origin.
-let oy : Int = 120
+let oy : Int32 = 120
 
 ///|
 /// Screen width in pixels.
-let sw : Int = 980
+let sw : Int32 = 980
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 680
+let sh : Int32 = 680
 
 ///|
 /// Phase constant indicating the preparation/placement phase.
-let phase_prep : Int = 0
+let phase_prep : Int32 = 0
 
 ///|
 /// Phase constant indicating the active battle phase.
-let phase_battle : Int = 1
+let phase_battle : Int32 = 1
 
 ///|
 /// Represents a combat unit with team, role, grid position, stats, and attack cooldown.
 struct Piece {
   mut alive : Bool
-  team : Int
-  role : Int
-  mut x : Int
-  mut y : Int
-  mut hp : Int
-  atk : Int
-  rng : Int
+  team : Int32
+  role : Int32
+  mut x : Int32
+  mut y : Int32
+  mut hp : Int32
+  atk : Int32
+  rng : Int32
   mut cooldown : Float
 }
 
 ///|
 /// Returns the display name string for the given role integer.
-fn role_name(role : Int) -> String {
+fn role_name(role : Int32) -> String {
   match role {
     0 => "Tank"
     1 => "Archer"
@@ -60,7 +60,7 @@ fn role_name(role : Int) -> String {
 
 ///|
 /// Returns the gold cost to place a unit of the given role.
-fn role_cost(role : Int) -> Int {
+fn role_cost(role : Int32) -> Int32 {
   match role {
     0 => 5
     1 => 4
@@ -70,7 +70,7 @@ fn role_cost(role : Int) -> Int {
 
 ///|
 /// Returns the base hit points for a unit of the given role.
-fn role_hp(role : Int) -> Int {
+fn role_hp(role : Int32) -> Int32 {
   match role {
     0 => 24
     1 => 13
@@ -80,7 +80,7 @@ fn role_hp(role : Int) -> Int {
 
 ///|
 /// Returns the base attack damage for a unit of the given role.
-fn role_atk(role : Int) -> Int {
+fn role_atk(role : Int32) -> Int32 {
   match role {
     0 => 5
     1 => 6
@@ -90,7 +90,7 @@ fn role_atk(role : Int) -> Int {
 
 ///|
 /// Returns the attack range in grid tiles for a unit of the given role.
-fn role_rng(role : Int) -> Int {
+fn role_rng(role : Int32) -> Int32 {
   match role {
     0 => 1
     1 => 3
@@ -100,7 +100,7 @@ fn role_rng(role : Int) -> Int {
 
 ///|
 /// Creates and returns a new Piece with stats derived from the given team, role, and grid position.
-fn setup_piece(team : Int, role : Int, x : Int, y : Int) -> Piece {
+fn setup_piece(team : Int32, role : Int32, x : Int32, y : Int32) -> Piece {
   {
     alive: true,
     team,
@@ -116,13 +116,13 @@ fn setup_piece(team : Int, role : Int, x : Int, y : Int) -> Piece {
 
 ///|
 /// Returns the Manhattan distance between two grid positions.
-fn manhattan(ax : Int, ay : Int, bx : Int, by : Int) -> Int {
+fn manhattan(ax : Int32, ay : Int32, bx : Int32, by : Int32) -> Int32 {
   (ax - bx).abs() + (ay - by).abs()
 }
 
 ///|
 /// Returns the index of the nearest enemy unit to the unit at the given index, or -1 if none exists.
-fn find_target(units : Array[Piece], idx : Int) -> Int {
+fn find_target(units : Array[Piece], idx : Int32) -> Int32 {
   let self = units[idx]
   for i in 0..<units.length(); best = -1, best_d = 1_000_000 {
     if i == idx || !units[i].alive || units[i].team == self.team {
@@ -139,13 +139,13 @@ fn find_target(units : Array[Piece], idx : Int) -> Int {
 
 ///|
 /// Returns true if any alive unit currently occupies the given grid position.
-fn occupied(units : Array[Piece], x : Int, y : Int) -> Bool {
+fn occupied(units : Array[Piece], x : Int32, y : Int32) -> Bool {
   @utils.any_by(units, fn(unit) { unit.alive && unit.x == x && unit.y == y })
 }
 
 ///|
 /// Converts the placement board state into live Piece units for the player team.
-fn copy_board_to_units(board : Array[Int], units : Array[Piece]) -> Unit {
+fn copy_board_to_units(board : Array[Int32], units : Array[Piece]) -> Unit {
   units.clear()
   for y in 0..<gh {
     for x in 0..<gw {
@@ -159,7 +159,7 @@ fn copy_board_to_units(board : Array[Int], units : Array[Piece]) -> Unit {
 
 ///|
 /// Spawns enemy units scaled to the current round number and appends them to the units array.
-fn spawn_enemy_round(round : Int, units : Array[Piece]) -> Unit {
+fn spawn_enemy_round(round : Int32, units : Array[Piece]) -> Unit {
   let enemy_count = 2 + round
   for _ in 0..<enemy_count {
     let role = @raylib.get_random_value(0, 2)
@@ -171,7 +171,7 @@ fn spawn_enemy_round(round : Int, units : Array[Piece]) -> Unit {
 
 ///|
 /// Returns the count of alive units belonging to the specified team.
-fn alive_team(units : Array[Piece], team : Int) -> Int {
+fn alive_team(units : Array[Piece], team : Int32) -> Int32 {
   let mut n = 0
   for unit in units {
     if unit.alive && unit.team == team {
@@ -189,7 +189,7 @@ fn main {
   @draw.init_font()
   load_assets()
 
-  let board : Array[Int] = Array::make(gw * gh, -1)
+  let board : Array[Int32] = Array::make(gw * gh, -1)
   let units : Array[Piece] = []
 
   let mut gold = 12

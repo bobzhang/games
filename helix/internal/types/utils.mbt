@@ -41,7 +41,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -50,7 +50,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -70,7 +70,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -99,10 +99,10 @@ pub fn new_cell(kind : CellKind) -> Cell {
 ///|
 pub fn make_cell(
   kind : CellKind,
-  gate_open? : Bool = true,
-  switch_link_id? : Int = -1,
-  arrow_offset? : Int = 0,
-  has_pickup? : Bool = false,
+  gate_open~ : Bool = true,
+  switch_link_id~ : Int32 = -1,
+  arrow_offset~ : Int32 = 0,
+  has_pickup~ : Bool = false,
 ) -> Cell {
   { kind, gate_open, switch_link_id, arrow_offset, has_pickup, }
 }
@@ -114,10 +114,10 @@ pub fn new_spiral(cells : Array[Cell]) -> Spiral {
 
 ///|
 pub fn new_switch_link(
-  cw : Int,
-  ccw : Int,
-  gcw : Array[Int],
-  gccw : Array[Int],
+  cw : Int32,
+  ccw : Int32,
+  gcw : Array[Int32],
+  gccw : Array[Int32],
 ) -> SwitchLink {
   {
     switch_cell_cw: cw,
@@ -132,8 +132,8 @@ pub fn new_level(
   cw : Spiral,
   ccw : Spiral,
   links : Array[SwitchLink],
-  par : Int,
-  pickups : Int,
+  par : Int32,
+  pickups : Int32,
   name : String,
 ) -> Level {
   {
@@ -180,8 +180,8 @@ pub fn new_game() -> Game {
 
 ///|
 pub fn cell_pos_on_spiral(
-  index : Int,
-  total : Int,
+  index : Int32,
+  total : Int32,
   is_cw : Bool,
   cx : Float,
   cy : Float,
@@ -203,7 +203,7 @@ pub fn cell_pos_on_spiral(
 }
 
 ///|
-pub fn tier_of_level(level_index : Int) -> Tier {
+pub fn tier_of_level(level_index : Int32) -> Tier {
   if level_index < tier1_count {
     Coil
   } else if level_index < tier1_count + tier2_count {
@@ -214,7 +214,7 @@ pub fn tier_of_level(level_index : Int) -> Tier {
 }
 
 ///|
-pub fn tier_start_index(tier : Tier) -> Int {
+pub fn tier_start_index(tier : Tier) -> Int32 {
   match tier {
     Coil => 0
     Twist => tier1_count
@@ -223,7 +223,7 @@ pub fn tier_start_index(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Coil => tier1_count
     Twist => tier2_count
@@ -315,11 +315,11 @@ pub fn restore_history(game : Game) -> Unit {
 
 ///|
 pub fn calculate_stars(
-  steps : Int,
-  par : Int,
-  pickups : Int,
-  total_pickups : Int,
-) -> Int {
+  steps : Int32,
+  par : Int32,
+  pickups : Int32,
+  total_pickups : Int32,
+) -> Int32 {
   if steps <= par && pickups >= total_pickups {
     3
   } else if steps <= par {

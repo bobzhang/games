@@ -56,7 +56,7 @@ fn @types.Game::reset_pellets(game : @types.Game) -> Unit {
   }
 
   // Spawn zones without pellets.
-  let spawn_cells : Array[(Int, Int)] = [
+  let spawn_cells : Array[(Int32, Int32)] = [
     (@types.maze_cols / 2, @types.maze_rows - 4),
     (@types.maze_cols / 2, @types.maze_rows / 2),
     (@types.maze_cols / 2 - 1, @types.maze_rows / 2),
@@ -72,7 +72,7 @@ fn @types.Game::reset_pellets(game : @types.Game) -> Unit {
     }
   }
 
-  let power_spots : Array[(Int, Int)] = [
+  let power_spots : Array[(Int32, Int32)] = [
     (1, 1),
     (@types.maze_cols - 2, 1),
     (1, @types.maze_rows - 2),
@@ -159,7 +159,7 @@ pub fn init_game(game : @types.Game) -> Unit {
 
 ///|
 /// Returns true when direction `(dx, dy)` is the direct reverse of `(ox, oy)`.
-fn is_reverse(dx : Int, dy : Int, ox : Int, oy : Int) -> Bool {
+fn is_reverse(dx : Int32, dy : Int32, ox : Int32, oy : Int32) -> Bool {
   dx == -ox && dy == -oy
 }
 
@@ -219,7 +219,7 @@ fn @types.Game::step_player(game : @types.Game) -> Unit {
 fn @types.Game::choose_ghost_target(
   game : @types.Game,
   ghost : @types.Ghost,
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   if game.frightened_timer > 0.0 {
     let tx = @raylib.get_random_value(1, @types.maze_cols - 2)
     let ty = @raylib.get_random_value(1, @types.maze_rows - 2)
@@ -235,7 +235,7 @@ fn @types.Game::choose_ghost_target(
 /// Moves a ghost one tile toward its target using Manhattan-distance minimisation, without reversing direction.
 fn @types.Game::step_ghost(game : @types.Game, ghost : @types.Ghost) -> Unit {
   let (target_x, target_y) = game.choose_ghost_target(ghost)
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
   let mut best_dx = ghost.dir_x
   let mut best_dy = ghost.dir_y

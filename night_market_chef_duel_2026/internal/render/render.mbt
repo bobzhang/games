@@ -2,8 +2,8 @@
 /// Draws text centred horizontally at the given Y position, size, and colour.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -12,7 +12,7 @@ fn draw_center_text(
 
 ///|
 /// Returns the generated sprite-sheet cell for a dish icon.
-fn dish_sprite_index(dish : @types.Dish) -> Int {
+fn dish_sprite_index(dish : @types.Dish) -> Int32 {
   match dish {
     Skewers => 0
     Noodles => 1
@@ -37,10 +37,10 @@ fn patience_color(ratio : Float) -> @raylib.Color {
 ///|
 /// Draws a filled progress bar with an inner fill rectangle and border.
 fn progress_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   base : @raylib.Color,
   fill : @raylib.Color,
@@ -150,7 +150,7 @@ fn @types.Game::draw_background(game : @types.Game, art : GameArt) -> Unit {
 /// Draws a single order slot showing dish name, ticket number, and patience bar.
 fn @types.Game::draw_order_slot(
   game : @types.Game,
-  slot : Int,
+  slot : Int32,
   art : GameArt,
 ) -> Unit {
   let x = @types.orders_x - 122.0
@@ -265,8 +265,8 @@ fn draw_station_base(
   label : String,
   x : Float,
   y : Float,
-  w : Int,
-  h : Int,
+  w : Int32,
+  h : Int32,
   fill : @raylib.Color,
   border : @raylib.Color,
   art : GameArt,

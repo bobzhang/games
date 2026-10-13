@@ -53,10 +53,10 @@ fn draw_beams(game : @types.Game) -> Unit {
 
 ///|
 fn draw_beam_line(
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
   thickness : Float,
   color : @raylib.Color,
 ) -> Unit {

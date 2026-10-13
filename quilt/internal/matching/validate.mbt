@@ -1,5 +1,5 @@
 ///|
-pub fn count_edge_pairs(board : @types.Board) -> Int {
+pub fn count_edge_pairs(board : @types.Board) -> Int32 {
   let size = board.size
   let mut count = 0
   for row in 0..<size {
@@ -18,7 +18,7 @@ pub fn count_edge_pairs(board : @types.Board) -> Int {
 }
 
 ///|
-pub fn count_matched_pairs(board : @types.Board) -> Int {
+pub fn count_matched_pairs(board : @types.Board) -> Int32 {
   let size = board.size
   let mut matched = 0
   for row in 0..<size {
@@ -64,7 +64,7 @@ pub fn count_matched_pairs(board : @types.Board) -> Int {
 }
 
 ///|
-pub fn count_filled_cells(board : @types.Board) -> Int {
+pub fn count_filled_cells(board : @types.Board) -> Int32 {
   let mut count = 0
   for i in 0..<board.cells.length() {
     match board.cells[i] {
@@ -103,8 +103,8 @@ pub fn match_percentage(board : @types.Board) -> Float {
 ///|
 pub fn edge_matched_at(
   board : @types.Board,
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
   dir : @types.Direction,
 ) -> Bool {
   match @types.board_get(board, row, col) {
@@ -176,7 +176,11 @@ pub fn edge_matched_at(
 }
 
 ///|
-pub fn compute_stars(level : @types.Level, rotations : Int, swaps : Int) -> Int {
+pub fn compute_stars(
+  level : @types.Level,
+  rotations : Int32,
+  swaps : Int32,
+) -> Int32 {
   // 1 star: all matched
   // 2 stars: within par rotations
   // 3 stars: par rotations + par swaps

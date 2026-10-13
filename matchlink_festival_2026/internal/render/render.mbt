@@ -1,9 +1,9 @@
 ///|
 /// Returns a deterministic RGB colour for a given tile kind index, used to visually distinguish tile types on the board.
-fn color_for_kind(kind : Int) -> @raylib.Color {
-  let r : Int = 72 + kind * 41 % 166
-  let g : Int = 74 + kind * 67 % 158
-  let b : Int = 80 + kind * 53 % 150
+fn color_for_kind(kind : Int32) -> @raylib.Color {
+  let r : Int32 = 72 + kind * 41 % 166
+  let g : Int32 = 74 + kind * 67 % 158
+  let b : Int32 = 80 + kind * 53 % 150
   @raylib.Color::new(r, g, b, 255)
 }
 
@@ -45,7 +45,7 @@ fn @types.Game::draw_bg(game : @types.Game, art : GameArt) -> Unit {
   )
 
   for i in 0..<16 {
-    let y : Int = i * 66 - 20
+    let y : Int32 = i * 66 - 20
     @raylib.draw_rectangle(
       0,
       y,
@@ -120,10 +120,10 @@ fn @types.Game::draw_hint_pair(game : @types.Game) -> Unit {
 
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
-  let hx0 : Int = board_x + (game.hint_x0 - 1) * tile
-  let hy0 : Int = board_y + (game.hint_y0 - 1) * tile
-  let hx1 : Int = board_x + (game.hint_x1 - 1) * tile
-  let hy1 : Int = board_y + (game.hint_y1 - 1) * tile
+  let hx0 : Int32 = board_x + (game.hint_x0 - 1) * tile
+  let hy0 : Int32 = board_y + (game.hint_y0 - 1) * tile
+  let hx1 : Int32 = board_x + (game.hint_x1 - 1) * tile
+  let hy1 : Int32 = board_y + (game.hint_y1 - 1) * tile
 
   @raylib.draw_rectangle_lines_ex(
     @raylib.Rectangle::new(
@@ -168,13 +168,13 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
     @raylib.Color::new(110, 150, 182, 182),
   )
 
-  let text_size : Int = (tile / 2).clamp(min=16, max=30)
+  let text_size : Int32 = (tile / 2).clamp(min=16, max=30)
 
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {
-      let k : Int = @types.cell_at(game, x, y)
-      let px : Int = board_x + (x - 1) * tile
-      let py : Int = board_y + (y - 1) * tile
+      let k : Int32 = @types.cell_at(game, x, y)
+      let px : Int32 = board_x + (x - 1) * tile
+      let py : Int32 = board_y + (y - 1) * tile
 
       @raylib.draw_rectangle(
         px,
@@ -234,8 +234,8 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
   }
 
   if game.select_active {
-    let sx : Int = board_x + (game.select_x - 1) * tile
-    let sy : Int = board_y + (game.select_y - 1) * tile
+    let sx : Int32 = board_x + (game.select_x - 1) * tile
+    let sy : Int32 = board_y + (game.select_y - 1) * tile
 
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(
@@ -250,8 +250,8 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
   }
 
   if game.state == Play {
-    let cx : Int = board_x + (game.cursor_x - 1) * tile
-    let cy : Int = board_y + (game.cursor_y - 1) * tile
+    let cx : Int32 = board_x + (game.cursor_x - 1) * tile
+    let cy : Int32 = board_y + (game.cursor_y - 1) * tile
 
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(
@@ -274,10 +274,10 @@ fn @types.Game::draw_board(game : @types.Game, art : GameArt) -> Unit {
 fn draw_button(
   art : GameArt,
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   active : Bool,
   accent : @raylib.Color,
 ) -> Unit {
@@ -305,7 +305,7 @@ fn draw_button(
     },
   )
 
-  let fs : Int = 28
+  let fs : Int32 = 28
   @draw.draw_text(
     label,
     x + w / 2 - @draw.measure_text(label, fs) / 2,
@@ -318,10 +318,10 @@ fn draw_button(
 ///|
 /// Draws the right-side panel showing level info, stats, action buttons, and the current message.
 fn @types.Game::draw_side_panel(game : @types.Game, art : GameArt) -> Unit {
-  let px : Int = @types.panel_x()
-  let py : Int = 20
-  let pw : Int = 396
-  let ph : Int = @types.screen_h - 40
+  let px : Int32 = @types.panel_x()
+  let py : Int32 = 20
+  let pw : Int32 = 396
+  let ph : Int32 = @types.screen_h - 40
 
   draw_texture_cover(
     art.panel_skin,
@@ -577,9 +577,9 @@ fn @types.Game::draw_side_panel(game : @types.Game, art : GameArt) -> Unit {
 ///|
 /// Draws the on-screen D-pad directional buttons with active-state highlighting for touch and mouse input.
 fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
-  let cx : Int = @types.dpad_center_x()
-  let cy : Int = @types.dpad_center_y()
-  let s : Int = @types.dpad_size()
+  let cx : Int32 = @types.dpad_center_x()
+  let cy : Int32 = @types.dpad_center_y()
+  let s : Int32 = @types.dpad_size()
 
   let left_on : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -791,10 +791,10 @@ fn @types.Game::draw_level_clear_overlay(
     @raylib.Color::new(6, 10, 16, 168),
   )
 
-  let pw : Int = 760
-  let ph : Int = 390
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 760
+  let ph : Int32 = 390
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 26, 36, 244))
   @raylib.draw_rectangle_lines(
@@ -868,10 +868,10 @@ fn @types.Game::draw_fail_overlay(game : @types.Game, art : GameArt) -> Unit {
     @raylib.Color::new(14, 6, 6, 170),
   )
 
-  let pw : Int = 760
-  let ph : Int = 380
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 760
+  let ph : Int32 = 380
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(44, 20, 20, 246))
   @raylib.draw_rectangle_lines(
@@ -941,10 +941,10 @@ fn @types.Game::draw_campaign_overlay(
     @raylib.Color::new(6, 10, 16, 176),
   )
 
-  let pw : Int = 900
-  let ph : Int = 520
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 900
+  let ph : Int32 = 520
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 25, 35, 246))
   @raylib.draw_rectangle_lines(

@@ -1,18 +1,22 @@
 ///|
 /// Converts grid coordinates `(x, y)` to a flat array index for `game.map`.
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * @types.grid_w + x
 }
 
 ///|
 /// Returns true if the grid cell `(x, y)` is within the 21x13 board bounds.
-fn in_bounds(x : Int, y : Int) -> Bool {
+fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < @types.grid_w && y >= 0 && y < @types.grid_h
 }
 
 ///|
 /// Returns the tile type at `(x, y)`, treating out-of-bounds cells as `Wall`.
-fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
+fn @types.Game::tile_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> @types.Tile {
   if !in_bounds(x, y) {
     Wall
   } else {
@@ -24,8 +28,8 @@ fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
 /// Sets the tile at `(x, y)` to `t`; silently ignores out-of-bounds coordinates.
 fn @types.Game::set_tile(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   t : @types.Tile,
 ) -> Unit {
   if !in_bounds(x, y) {
@@ -43,7 +47,7 @@ fn @types.Game::set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
 
 ///|
 /// Teleports an actor to `(x, y)` and resets all interpolation fields to the new position.
-fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
+fn actor_place(a : @types.Actor, x : Int32, y : Int32) -> Unit {
   a.x = x
   a.y = y
   a.from_x = x
@@ -58,7 +62,7 @@ fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
 
 ///|
 /// Initiates a smooth grid move for actor `a` towards target cell `(tx, ty)`.
-fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
+fn actor_start_move(a : @types.Actor, tx : Int32, ty : Int32) -> Unit {
   if a.x == tx && a.y == ty {
     return
   }
@@ -144,7 +148,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -192,7 +196,11 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns the index of the shelf located at grid cell `(x, y)`, or -1 if none exists.
-fn @types.Game::shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::shelf_index_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Int32 {
   for i in 0..<game.shelf_n {
     if game.shelf_x[i] == x && game.shelf_y[i] == y {
       return i
@@ -203,7 +211,11 @@ fn @types.Game::shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Returns the index of an uncollected page at grid cell `(x, y)`, or -1 if none exists.
-fn @types.Game::page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::page_index_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Int32 {
   for i in 0..<@types.max_pages {
     if !game.page_taken[i] && game.page_x[i] == x && game.page_y[i] == y {
       return i
@@ -216,10 +228,10 @@ fn @types.Game::page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 /// Returns the index of an active ghost at `(x, y)` other than `skip`, or -1 if none exists.
 fn @types.Game::ghost_index_at(
   game : @types.Game,
-  x : Int,
-  y : Int,
-  skip : Int,
-) -> Int {
+  x : Int32,
+  y : Int32,
+  skip : Int32,
+) -> Int32 {
   @utils.first_indexi_by(game.ghosts, fn(i, ghost) {
     i != skip && ghost.active && ghost.body.x == x && ghost.body.y == y
   })
@@ -227,7 +239,11 @@ fn @types.Game::ghost_index_at(
 
 ///|
 /// Returns true if `(x, y)` is out of bounds, a wall tile, or a locked exit tile.
-fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_by_map(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   if !in_bounds(x, y) {
     return true
   }
@@ -244,9 +260,9 @@ fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 /// Returns true if `(x, y)` is blocked for ghost `gid` by the map, a shelf, or another ghost.
 fn @types.Game::blocked_for_actor(
   game : @types.Game,
-  gid : Int,
-  x : Int,
-  y : Int,
+  gid : Int32,
+  x : Int32,
+  y : Int32,
 ) -> Bool {
   if game.blocked_by_map(x, y) {
     return true
@@ -255,7 +271,7 @@ fn @types.Game::blocked_for_actor(
     return true
   }
 
-  let g2 : Int = game.ghost_index_at(x, y, gid)
+  let g2 : Int32 = game.ghost_index_at(x, y, gid)
   g2 >= 0
 }
 
@@ -297,7 +313,7 @@ fn @types.Game::clear_map(game : @types.Game) -> Unit {
 ///|
 /// Populates shelves, pages, and ghost spawn positions from hard-coded layout data for the puzzle.
 fn @types.Game::load_layout(game : @types.Game) -> Unit {
-  let shelf_list : Array[(Int, Int)] = [
+  let shelf_list : Array[(Int32, Int32)] = [
     (5, 9),
     (7, 9),
     (10, 5),
@@ -318,7 +334,7 @@ fn @types.Game::load_layout(game : @types.Game) -> Unit {
     game.shelf_y[i] = shelf_list[i].1
   }
 
-  let page_list : Array[(Int, Int)] = [
+  let page_list : Array[(Int32, Int32)] = [
     (2, 10),
     (9, 1),
     (18, 4),
@@ -331,7 +347,7 @@ fn @types.Game::load_layout(game : @types.Game) -> Unit {
     game.page_taken[i] = false
   }
 
-  let ghost_spawn : Array[(Int, Int)] = [
+  let ghost_spawn : Array[(Int32, Int32)] = [
     (18, 1),
     (18, 10),
     (10, 10),
@@ -348,8 +364,8 @@ fn @types.Game::load_layout(game : @types.Game) -> Unit {
     game.ghosts[i].alert_t = 0.0
 
     if game.ghosts[i].active {
-      let gx : Int = ghost_spawn[i].0
-      let gy : Int = ghost_spawn[i].1
+      let gx : Int32 = ghost_spawn[i].0
+      let gy : Int32 = ghost_spawn[i].1
       actor_place(game.ghosts[i].body, gx, gy)
     }
   }
@@ -357,8 +373,8 @@ fn @types.Game::load_layout(game : @types.Game) -> Unit {
 
 ///|
 /// Counts and returns how many seals currently have a shelf pushed onto their position.
-fn @types.Game::count_seals_on(game : @types.Game) -> Int {
-  let mut n : Int = 0
+fn @types.Game::count_seals_on(game : @types.Game) -> Int32 {
+  let mut n : Int32 = 0
   for i in 0..<@types.seal_need {
     let p = @types.seal_pos(i)
     if game.shelf_index_at(p.0, p.1) >= 0 {
@@ -494,12 +510,12 @@ pub fn cycle_hint(game : @types.Game) -> Unit {
 /// Attempts to push shelf `sidx` one step in direction `(dx, dy)`; returns false if the destination is blocked.
 fn @types.Game::push_shelf(
   game : @types.Game,
-  sidx : Int,
-  dx : Int,
-  dy : Int,
+  sidx : Int32,
+  dx : Int32,
+  dy : Int32,
 ) -> Bool {
-  let nx : Int = game.shelf_x[sidx] + dx
-  let ny : Int = game.shelf_y[sidx] + dy
+  let nx : Int32 = game.shelf_x[sidx] + dx
+  let ny : Int32 = game.shelf_y[sidx] + dy
 
   if game.blocked_by_map(nx, ny) {
     return false
@@ -520,7 +536,11 @@ fn @types.Game::push_shelf(
 
 ///|
 /// Attempts to move the player one step in direction `(dx, dy)`, pushing a shelf if one is in the way; returns false if blocked.
-fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::try_move_player(
+  game : @types.Game,
+  dx : Int32,
+  dy : Int32,
+) -> Bool {
   if dx == 0 && dy == 0 {
     return false
   }
@@ -528,8 +548,8 @@ fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool 
     return false
   }
 
-  let tx : Int = game.player.x + dx
-  let ty : Int = game.player.y + dy
+  let tx : Int32 = game.player.x + dx
+  let ty : Int32 = game.player.y + dy
 
   if game.blocked_by_map(tx, ty) {
     return false
@@ -539,7 +559,7 @@ fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool 
     return false
   }
 
-  let sidx : Int = game.shelf_index_at(tx, ty)
+  let sidx : Int32 = game.shelf_index_at(tx, ty)
   if sidx >= 0 && !game.push_shelf(sidx, dx, dy) {
     return false
   }
@@ -565,7 +585,7 @@ fn @types.Game::collect_page_if_needed(game : @types.Game) -> Unit {
     return
   }
 
-  let i : Int = game.page_index_at(game.player.x, game.player.y)
+  let i : Int32 = game.page_index_at(game.player.x, game.player.y)
   if i < 0 {
     return
   }
@@ -589,14 +609,14 @@ fn @types.Game::collect_page_if_needed(game : @types.Game) -> Unit {
 /// Returns true if the axis-aligned line between `(x0,y0)` and `(x1,y1)` is unobstructed by walls and shelves.
 fn @types.Game::line_of_sight(
   game : @types.Game,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   if x0 == x1 {
-    let y_min : Int = y0.min(y1)
-    let y_max : Int = y0.max(y1)
+    let y_min : Int32 = y0.min(y1)
+    let y_max : Int32 = y0.max(y1)
     for y in (y_min + 1)..<y_max {
       if game.tile_at(x0, y) == Wall || game.shelf_index_at(x0, y) >= 0 {
         return false
@@ -606,8 +626,8 @@ fn @types.Game::line_of_sight(
   }
 
   if y0 == y1 {
-    let x_min : Int = x0.min(x1)
-    let x_max : Int = x0.max(x1)
+    let x_min : Int32 = x0.min(x1)
+    let x_max : Int32 = x0.max(x1)
     for x in (x_min + 1)..<x_max {
       if game.tile_at(x, y0) == Wall || game.shelf_index_at(x, y0) >= 0 {
         return false
@@ -621,8 +641,8 @@ fn @types.Game::line_of_sight(
 
 ///|
 /// Advances a deterministic LCG seed value for ghost pseudo-random patrol direction selection.
-fn ghost_seed_next(seed : Int) -> Int {
-  let n : Int = (seed * 48271 + 97) % 2147483647
+fn ghost_seed_next(seed : Int32) -> Int32 {
+  let n : Int32 = (seed * 48271 + 97) % 2147483647
   if n <= 0 {
     1
   } else {
@@ -632,14 +652,17 @@ fn ghost_seed_next(seed : Int) -> Int {
 
 ///|
 /// Selects the next move direction for ghost `gid`: greedy Manhattan minimisation when hunting, or seeded pseudo-random patrol otherwise.
-fn @types.Game::ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
+fn @types.Game::ghost_choose_step(
+  game : @types.Game,
+  gid : Int32,
+) -> (Int32, Int32) {
   let g = game.ghosts[gid]
-  let gx : Int = g.body.x
-  let gy : Int = g.body.y
-  let px : Int = game.player.x
-  let py : Int = game.player.y
+  let gx : Int32 = g.body.x
+  let gy : Int32 = g.body.y
+  let px : Int32 = game.player.x
+  let py : Int32 = game.player.y
 
-  let dist : Int = @types.manhattan(gx, gy, px, py)
+  let dist : Int32 = @types.manhattan(gx, gy, px, py)
   let sees : Bool = game.line_of_sight(gx, gy, px, py)
   let hunt_now : Bool = dist <= 4 || (sees && dist <= 8)
 
@@ -653,17 +676,17 @@ fn @types.Game::ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
     }
   }
 
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
   if g.mode == Hunt {
     let best_i = for i in 0..<4; best_i = -1, best_d = 999999 {
-      let nx : Int = gx + dirs[i].0
-      let ny : Int = gy + dirs[i].1
+      let nx : Int32 = gx + dirs[i].0
+      let ny : Int32 = gy + dirs[i].1
       if game.blocked_for_actor(gid, nx, ny) {
         continue
       }
 
-      let d : Int = @types.manhattan(nx, ny, px, py)
+      let d : Int32 = @types.manhattan(nx, ny, px, py)
       if d < best_d {
         continue i, d
       }
@@ -677,12 +700,12 @@ fn @types.Game::ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
   }
 
   g.seed = ghost_seed_next(g.seed)
-  let start : Int = g.seed % 4
+  let start : Int32 = g.seed % 4
 
   for t in 0..<4 {
-    let k : Int = (start + t) % 4
-    let nx : Int = gx + dirs[k].0
-    let ny : Int = gy + dirs[k].1
+    let k : Int32 = (start + t) % 4
+    let nx : Int32 = gx + dirs[k].0
+    let ny : Int32 = gy + dirs[k].1
 
     if game.blocked_for_actor(gid, nx, ny) {
       continue
@@ -750,13 +773,13 @@ fn @types.Game::try_stun_pulse(game : @types.Game) -> Bool {
     return false
   }
 
-  let mut hits : Int = 0
+  let mut hits : Int32 = 0
   for ghost in game.ghosts {
     if !ghost.active || ghost.mode == Stunned {
       continue
     }
 
-    let d : Int = @types.manhattan(
+    let d : Int32 = @types.manhattan(
       game.player.x,
       game.player.y,
       ghost.body.x,

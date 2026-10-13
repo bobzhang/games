@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 let world_w : Float = 4600.0
@@ -11,19 +11,19 @@ let world_w : Float = 4600.0
 let world_h : Float = 2300.0
 
 ///|
-let max_enemies : Int = 72
+let max_enemies : Int32 = 72
 
 ///|
-let max_bullets : Int = 640
+let max_bullets : Int32 = 640
 
 ///|
-let max_ores : Int = 120
+let max_ores : Int32 = 120
 
 ///|
-let max_particles : Int = 1600
+let max_particles : Int32 = 1600
 
 ///|
-let convoy_count : Int = 3
+let convoy_count : Int32 = 3
 
 ///|
 struct Pilot {
@@ -42,9 +42,9 @@ struct Pilot {
   mut hit_cd : Float
   mut flash_t : Float
   mut shake_t : Float
-  mut ore : Int
-  mut score : Int
-  mut combo : Int
+  mut ore : Int32
+  mut score : Int32
+  mut combo : Int32
 }
 
 ///|
@@ -60,7 +60,7 @@ struct Truck {
 ///|
 struct Enemy {
   mut active : Bool
-  kind : Int
+  kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -89,7 +89,7 @@ struct Ore {
   mut active : Bool
   x : Float
   y : Float
-  value : Int
+  value : Int32
   mut t : Float
   mut life : Float
 }
@@ -104,7 +104,7 @@ struct Particle {
   size : Float
   mut t : Float
   life : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
@@ -135,10 +135,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(x)
   let y0 : Float = Float::from_int(y)
@@ -156,7 +156,7 @@ fn emit_particle(
   vy : Float,
   size : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
@@ -171,9 +171,9 @@ fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _ in 0..<count {
     let mut dx : Float = randf(-1.0, 1.0)
@@ -204,7 +204,7 @@ fn burst_particles(
 ///|
 fn spawn_bullet(
   bullets : FixedArray[Bullet],
-  _kind : Int,
+  _kind : Int32,
   from_player : Bool,
   x : Float,
   y : Float,
@@ -222,7 +222,12 @@ fn spawn_bullet(
 }
 
 ///|
-fn spawn_ore(ores : FixedArray[Ore], x : Float, y : Float, value : Int) -> Unit {
+fn spawn_ore(
+  ores : FixedArray[Ore],
+  x : Float,
+  y : Float,
+  value : Int32,
+) -> Unit {
   for i in 0..<ores.length() {
     if !ores[i].active {
       ores[i] = { active: true, x, y, value, t: 0.0, life: 24.0, }
@@ -234,17 +239,17 @@ fn spawn_ore(ores : FixedArray[Ore], x : Float, y : Float, value : Int) -> Unit 
 ///|
 fn spawn_enemy(
   enemies : FixedArray[Enemy],
-  level : Int,
+  level : Int32,
   convoy_x : Float,
 ) -> Unit {
   for i in 0..<enemies.length() {
     if !enemies[i].active {
-      let kind : Int = if @raylib.get_random_value(0, 100) < 26 + level * 6 {
+      let kind : Int32 = if @raylib.get_random_value(0, 100) < 26 + level * 6 {
         1
       } else {
         0
       }
-      let side : Int = @raylib.get_random_value(0, 1)
+      let side : Int32 = @raylib.get_random_value(0, 1)
       let x : Float = if side == 0 {
         convoy_x + randf(560.0, 980.0)
       } else {
@@ -277,13 +282,13 @@ fn spawn_enemy(
 ///|
 fn init_wave(
   enemies : FixedArray[Enemy],
-  level : Int,
+  level : Int32,
   convoy_x : Float,
 ) -> Unit {
   for enemy in enemies {
     enemy.active = false
   }
-  let initial : Int = 14 + level * 4
+  let initial : Int32 = 14 + level * 4
   for _ in 0..<initial {
     spawn_enemy(enemies, level, convoy_x)
   }
@@ -291,10 +296,10 @@ fn init_wave(
 
 ///|
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fg : @raylib.Color,
   bg : @raylib.Color,
@@ -323,9 +328,9 @@ fn draw_touch_controls(show : Bool) -> Unit {
     return
   }
 
-  let bx : Int = 24
-  let by : Int = sh - 228
-  let ax : Int = sw - 236
+  let bx : Int32 = 24
+  let by : Int32 = sh - 228
+  let ax : Int32 = sw - 236
 
   @raylib.draw_rectangle(
     bx,
@@ -520,14 +525,14 @@ fn main {
     combo: 0,
   }
 
-  let mut level : Int = 1
+  let mut level : Int32 = 1
   let mut timer : Float = 210.0
   let mut spawn_cd : Float = 0.8
   let mut convoy_speed : Float = 88.0
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut announce_t : Float = 0.0
 
-  let reset_round = fn(new_level : Int) {
+  let reset_round = fn(new_level : Int32) {
     level = new_level
 
     timer = 212.0 - Float::from_int(level - 1) * 9.0
@@ -626,9 +631,9 @@ fn main {
     let mut overdrive_press : Bool = @raylib.is_key_pressed(@raylib.KeySpace) ||
       @raylib.is_key_pressed(@raylib.KeyLeftShift)
 
-    let bx : Int = 24
-    let by : Int = sh - 228
-    let ax : Int = sw - 236
+    let bx : Int32 = 24
+    let by : Int32 = sh - 228
+    let ax : Int32 = sw - 236
 
     if touching {
       if inside_rect(mouse.x, mouse.y, bx, by + 70, 78, 78) {
@@ -886,7 +891,7 @@ fn main {
         pilot.vy = -pilot.vy.abs() * 0.2
       }
 
-      let mut alive_trucks : Int = 0
+      let mut alive_trucks : Int32 = 0
       for truck in trucks {
         if !truck.active {
           continue
@@ -1136,14 +1141,14 @@ fn main {
         }
         if enemy.hp <= 0.0 {
           enemy.active = false
-          let ore_value : Int = if enemy.kind == 0 {
+          let ore_value : Int32 = if enemy.kind == 0 {
             18 + level * 3
           } else {
             28 + level * 4
           }
           spawn_ore(ores, enemy.x, enemy.y, ore_value)
 
-          let kill_score : Int = if enemy.kind == 0 { 22 } else { 52 }
+          let kill_score : Int32 = if enemy.kind == 0 { 22 } else { 52 }
           pilot.score = pilot.score + kill_score + pilot.combo
           pilot.combo = pilot.combo + 1
           if pilot.combo > 60 {
@@ -1211,7 +1216,7 @@ fn main {
       } else if timer <= 0.0 {
         state = 3
       } else {
-        let mut alive : Int = 0
+        let mut alive : Int32 = 0
         let mut max_x : Float = 0.0
         for truck in trucks {
           if truck.active {
@@ -1485,7 +1490,7 @@ fn main {
       }
 
       let life_r : Float = 1.0 - particle.t / particle.life
-      let alpha : Int = clampf(life_r * 220.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(life_r * 220.0, 0.0, 220.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(252, 186, 122, alpha)
       } else if particle.kind == 1 {
@@ -1617,7 +1622,7 @@ fn main {
       @raylib.Color::new(210, 192, 252, 248),
     )
 
-    let mut alive_trucks : Int = 0
+    let mut alive_trucks : Int32 = 0
     for truck in trucks {
       if truck.active {
         alive_trucks = alive_trucks + 1
@@ -1633,7 +1638,7 @@ fn main {
     )
 
     if announce_t > 0.0 {
-      let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
       @draw.draw_text(
         "Escort the convoy to the portal while harvesting ore.",
         sw / 2 - 340,

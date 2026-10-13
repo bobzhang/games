@@ -162,7 +162,7 @@ fn draw_texture_cover(
 
 ///|
 /// Draws the generated background art for one crossing row.
-fn draw_lane_art(art : GameArt, row : Int) -> Unit {
+fn draw_lane_art(art : GameArt, row : Int32) -> Unit {
   let y = oy + row * cell
   let texture = if is_river_row(row) {
     art.lane_river
@@ -183,7 +183,7 @@ fn draw_lane_art(art : GameArt, row : Int) -> Unit {
 
 ///|
 /// Draws one generated home-slot dock, with a small frog marker when filled.
-fn draw_home_slot_art(art : GameArt, slot : Int, filled : Bool) -> Unit {
+fn draw_home_slot_art(art : GameArt, slot : Int32, filled : Bool) -> Unit {
   let cx = slot_center_x(slot)
   let cy = Float::from_int(oy + cell / 2)
   let tint = if filled {

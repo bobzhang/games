@@ -1,5 +1,5 @@
 ///|
-fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
+fn @types.Game::alloc_powerup(game : @types.Game) -> Int32 {
   for i, slot in game.powerups {
     if !slot.active {
       break i
@@ -40,7 +40,7 @@ fn @types.Game::spawn_powerup(
 ///|
 /// Returns the Grenade drop percentage scaled by stage progression.
 /// Early stages get 10%, stage 20+ gets 15%, stage 50+ gets 18%.
-fn grenade_chance(stage : Int) -> Int {
+fn grenade_chance(stage : Int32) -> Int32 {
   if stage >= 50 {
     18
   } else if stage >= 20 {
@@ -115,7 +115,7 @@ fn @types.Game::clear_all_enemies_by_grenade(
 ///|
 fn @types.Game::apply_powerup(
   game : @types.Game,
-  player_index : Int,
+  player_index : Int32,
   kind : @types.PowerupKind,
 ) -> Unit {
   let player = game.players[player_index]

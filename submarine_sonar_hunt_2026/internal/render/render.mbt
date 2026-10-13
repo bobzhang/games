@@ -255,10 +255,10 @@ fn @types.Game::draw_bearing_indicator(game : @types.Game) -> Unit {
 
 ///|
 fn draw_value_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   max_value : Float,
   label : String,
@@ -374,11 +374,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
 ///|
 fn draw_touch_button(
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   active : Bool,
   hover : Bool,
-  accent : (Int, Int, Int),
+  accent : (Int32, Int32, Int32),
 ) -> Unit {
   let alpha = if active { 188 } else if hover { 156 } else { 110 }
   @raylib.draw_rectangle(
@@ -543,8 +543,8 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
 ///|
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -553,10 +553,10 @@ fn draw_center_text(
 
 ///|
 fn draw_menu_button(
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   hover : Bool,
-  accent : (Int, Int, Int),
+  accent : (Int32, Int32, Int32),
 ) -> Unit {
   let bg_alpha = if hover { 198 } else { 162 }
   @raylib.draw_rectangle(

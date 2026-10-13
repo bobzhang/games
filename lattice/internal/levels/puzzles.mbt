@@ -225,9 +225,9 @@ pub fn create_puzzles() -> Array[@types.PuzzleLevel] {
 
 ///|
 fn make_puzzle(
-  id : Int,
+  id : Int32,
   hint : String,
-  target_score : Int,
+  target_score : Int32,
   setup : (Array[Array[@types.CellState]]) -> Unit,
 ) -> @types.PuzzleLevel {
   let board = @types.new_board(@types.board_size)
@@ -238,8 +238,8 @@ fn make_puzzle(
 ///|
 fn place(
   cells : Array[Array[@types.CellState]],
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
   player : @types.Player,
 ) -> Unit {
   if row >= 0 && row < @types.board_size && col >= 0 && col < @types.board_size {

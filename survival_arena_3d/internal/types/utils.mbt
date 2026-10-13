@@ -1,6 +1,6 @@
 ///|
 /// Converts EnemyKind to integer.
-pub fn EnemyKind::to_int(self : EnemyKind) -> Int {
+pub fn EnemyKind::to_int(self : EnemyKind) -> Int32 {
   match self {
     Zombie => 0
     Runner => 1
@@ -15,7 +15,7 @@ pub fn EnemyKind::to_int(self : EnemyKind) -> Int {
 
 ///|
 /// Converts integer to EnemyKind.
-pub fn EnemyKind::from_int(v : Int) -> EnemyKind {
+pub fn EnemyKind::from_int(v : Int32) -> EnemyKind {
   match v {
     0 => Zombie
     1 => Runner
@@ -30,7 +30,7 @@ pub fn EnemyKind::from_int(v : Int) -> EnemyKind {
 
 ///|
 /// Converts WeaponKind to integer.
-pub fn WeaponKind::to_int(self : WeaponKind) -> Int {
+pub fn WeaponKind::to_int(self : WeaponKind) -> Int32 {
   match self {
     Pistol => 0
     Shotgun => 1
@@ -43,7 +43,7 @@ pub fn WeaponKind::to_int(self : WeaponKind) -> Int {
 
 ///|
 /// Converts integer to WeaponKind.
-pub fn WeaponKind::from_int(v : Int) -> WeaponKind {
+pub fn WeaponKind::from_int(v : Int32) -> WeaponKind {
   match v {
     0 => Pistol
     1 => Shotgun
@@ -56,7 +56,7 @@ pub fn WeaponKind::from_int(v : Int) -> WeaponKind {
 
 ///|
 /// Converts ParticleKind to integer.
-pub fn ParticleKind::to_int(self : ParticleKind) -> Int {
+pub fn ParticleKind::to_int(self : ParticleKind) -> Int32 {
   match self {
     Blood => 0
     Muzzle => 1
@@ -69,7 +69,7 @@ pub fn ParticleKind::to_int(self : ParticleKind) -> Int {
 
 ///|
 /// Converts integer to ParticleKind.
-pub fn ParticleKind::from_int(v : Int) -> ParticleKind {
+pub fn ParticleKind::from_int(v : Int32) -> ParticleKind {
   match v {
     0 => Blood
     1 => Muzzle
@@ -82,7 +82,7 @@ pub fn ParticleKind::from_int(v : Int) -> ParticleKind {
 
 ///|
 /// Converts Trap to integer.
-pub fn Trap::to_int(self : Trap) -> Int {
+pub fn Trap::to_int(self : Trap) -> Int32 {
   match self {
     Spike => 0
     Flame => 1
@@ -92,7 +92,7 @@ pub fn Trap::to_int(self : Trap) -> Int {
 
 ///|
 /// Converts integer to Trap.
-pub fn Trap::from_int(v : Int) -> Trap {
+pub fn Trap::from_int(v : Int32) -> Trap {
   match v {
     0 => Spike
     1 => Flame
@@ -206,7 +206,7 @@ pub fn angle_within(angle1 : Float, angle2 : Float, threshold : Float) -> Bool {
 
 ///|
 /// Advances xorshift RNG state and returns next random integer.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -220,7 +220,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns integer random value in inclusive range `[low, high]`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -245,37 +245,37 @@ pub fn rand_bool(game : Game, chance : Float) -> Bool {
 
 ///|
 /// Finds a free enemy slot in the enemy pool.
-pub fn alloc_enemy(game : Game) -> Int {
+pub fn alloc_enemy(game : Game) -> Int32 {
   @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free projectile slot in the projectile pool.
-pub fn alloc_projectile(game : Game) -> Int {
+pub fn alloc_projectile(game : Game) -> Int32 {
   @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free particle slot in the particle pool.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free pickup slot in the pickup pool.
-pub fn alloc_pickup(game : Game) -> Int {
+pub fn alloc_pickup(game : Game) -> Int32 {
   @utils.first_index_by(game.pickups, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free barricade slot in the barricade pool.
-pub fn alloc_barricade(game : Game) -> Int {
+pub fn alloc_barricade(game : Game) -> Int32 {
   @utils.first_index_by(game.barricades, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free trap slot in the trap pool.
-pub fn alloc_trap(game : Game) -> Int {
+pub fn alloc_trap(game : Game) -> Int32 {
   @utils.first_index_by(game.traps, fn(slot) { !slot.active })
 }
 
@@ -288,10 +288,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -326,10 +326,10 @@ pub fn spawn_particles_typed(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   kind : ParticleKind,
 ) -> Unit {
   for i in 0..<count {
@@ -368,10 +368,10 @@ pub fn spawn_particles_dir(
   dx : Float,
   dy : Float,
   dz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -524,7 +524,7 @@ pub fn push_from_box(
 
 ///|
 /// Returns full display name for weapon type id.
-pub fn weapon_name(kind : Int) -> String {
+pub fn weapon_name(kind : Int32) -> String {
   match WeaponKind::from_int(kind) {
     Pistol => "Pistol"
     Shotgun => "Shotgun"
@@ -541,7 +541,7 @@ pub fn weapon_name(kind : Int) -> String {
 
 ///|
 /// Returns base fire interval (seconds between shots) for a weapon type.
-pub fn weapon_fire_rate(kind : Int) -> Float {
+pub fn weapon_fire_rate(kind : Int32) -> Float {
   match WeaponKind::from_int(kind) {
     Pistol => rate_pistol
     Shotgun => rate_shotgun
@@ -556,7 +556,7 @@ pub fn weapon_fire_rate(kind : Int) -> Float {
 
 ///|
 /// Returns base damage for a weapon type.
-pub fn weapon_damage(kind : Int) -> Float {
+pub fn weapon_damage(kind : Int32) -> Float {
   match WeaponKind::from_int(kind) {
     Pistol => dmg_pistol
     Shotgun => dmg_shotgun
@@ -571,7 +571,7 @@ pub fn weapon_damage(kind : Int) -> Float {
 
 ///|
 /// Returns base projectile speed for a weapon type.
-pub fn weapon_proj_speed(kind : Int) -> Float {
+pub fn weapon_proj_speed(kind : Int32) -> Float {
   match WeaponKind::from_int(kind) {
     Pistol => speed_pistol
     Shotgun => speed_shotgun
@@ -586,7 +586,7 @@ pub fn weapon_proj_speed(kind : Int) -> Float {
 
 ///|
 /// Returns base reload time for a weapon type.
-pub fn weapon_reload_time(kind : Int) -> Float {
+pub fn weapon_reload_time(kind : Int32) -> Float {
   match WeaponKind::from_int(kind) {
     Pistol => reload_pistol
     Shotgun => reload_shotgun
@@ -601,7 +601,7 @@ pub fn weapon_reload_time(kind : Int) -> Float {
 
 ///|
 /// Returns base magazine size for a weapon type.
-pub fn weapon_mag_size(kind : Int) -> Int {
+pub fn weapon_mag_size(kind : Int32) -> Int32 {
   match WeaponKind::from_int(kind) {
     Pistol => mag_pistol
     Shotgun => mag_shotgun
@@ -616,7 +616,7 @@ pub fn weapon_mag_size(kind : Int) -> Int {
 
 ///|
 /// Returns player-adjusted fire interval after weapon upgrades.
-pub fn effective_fire_rate(player : Player, kind : Int) -> Float {
+pub fn effective_fire_rate(player : Player, kind : Int32) -> Float {
   let base = weapon_fire_rate(kind)
   let lvl = Float::from_int(player.weapon_rate_level[kind])
   let mult : Float = 1.0 - lvl * upgrade_rate_step
@@ -627,7 +627,7 @@ pub fn effective_fire_rate(player : Player, kind : Int) -> Float {
 
 ///|
 /// Returns effective damage after upgrades and temporary buffs.
-pub fn effective_damage(player : Player, kind : Int) -> Float {
+pub fn effective_damage(player : Player, kind : Int32) -> Float {
   let base = weapon_damage(kind)
   let lvl = Float::from_int(player.weapon_damage_level[kind])
   let upgrade_mult : Float = 1.0 + lvl * upgrade_damage_step
@@ -643,7 +643,7 @@ pub fn effective_damage(player : Player, kind : Int) -> Float {
 
 ///|
 /// Returns effective magazine size after magazine upgrades.
-pub fn effective_mag_size(player : Player, kind : Int) -> Int {
+pub fn effective_mag_size(player : Player, kind : Int32) -> Int32 {
   let base = weapon_mag_size(kind)
   let lvl = player.weapon_mag_level[kind]
   let bonus_f : Float = Float::from_int(base) *
@@ -654,13 +654,13 @@ pub fn effective_mag_size(player : Player, kind : Int) -> Int {
 
 ///|
 /// Returns the gold cost for upgrading a weapon stat at the given current level.
-pub fn upgrade_cost(current_level : Int) -> Int {
+pub fn upgrade_cost(current_level : Int32) -> Int32 {
   upgrade_base_cost + current_level * upgrade_cost_per_level
 }
 
 ///|
 /// Returns the recoil kick amount for a weapon kind (camera pitch kick in radians).
-pub fn weapon_recoil_kick(kind : Int) -> Float {
+pub fn weapon_recoil_kick(kind : Int32) -> Float {
   match WeaponKind::from_int(kind) {
     Pistol => 0.025
     Shotgun => 0.06
@@ -679,7 +679,7 @@ pub fn weapon_recoil_kick(kind : Int) -> Float {
 
 ///|
 /// Counts currently active enemies in the arena.
-pub fn count_active_enemies(game : Game) -> Int {
+pub fn count_active_enemies(game : Game) -> Int32 {
   let mut count = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -705,9 +705,9 @@ pub fn show_message(game : Game, text : String, duration : Float) -> Unit {
 pub fn add_kill_feed(
   game : Game,
   text : String,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   // Shift existing entries down
   for i = max_kill_feed - 1; i > 0; i = i - 1 {

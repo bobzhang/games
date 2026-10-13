@@ -1,8 +1,8 @@
 ///|
 fn make_test_level(
   ascii : Array[String],
-  start_x : Int,
-  start_y : Int,
+  start_x : Int32,
+  start_y : Int32,
   start_dir : @types.Direction,
 ) -> @types.Level {
   let grid = @types.new_grid(@types.grid_width, @types.grid_height)

@@ -2,9 +2,9 @@
 /// Civilian pickup site tracked on the mission grid.
 pub(all) struct CivilianSite {
   mut active : Bool
-  mut x : Int
-  mut y : Int
-  mut waiting : Int
+  mut x : Int32
+  mut y : Int32
+  mut waiting : Int32
 }
 
 ///|
@@ -15,29 +15,29 @@ pub(all) struct Game {
   lava_buf : Array[Bool]
   route : Array[Dir]
   sites : Array[CivilianSite]
-  mut route_len : Int
+  mut route_len : Int32
   mut route_running : Bool
   mut step_timer : Float
   mut lava_timer : Float
   mut lava_interval : Float
-  mut site_count : Int
-  mut truck_x : Int
-  mut truck_y : Int
-  mut start_x : Int
-  mut start_y : Int
-  mut shelter_x : Int
-  mut shelter_y : Int
-  mut carrying : Int
-  mut rescued : Int
-  mut lost : Int
-  mut goal_rescue : Int
-  mut total_civilians : Int
+  mut site_count : Int32
+  mut truck_x : Int32
+  mut truck_y : Int32
+  mut start_x : Int32
+  mut start_y : Int32
+  mut shelter_x : Int32
+  mut shelter_y : Int32
+  mut carrying : Int32
+  mut rescued : Int32
+  mut lost : Int32
+  mut goal_rescue : Int32
+  mut total_civilians : Int32
   mut heat : Float
   mut fuel : Float
   mut coolant : Float
   mut mission_time : Float
   mut mission_limit : Float
-  mut level_index : Int
+  mut level_index : Int32
   mut state : GameState
   mut result : GameResult
   mut ui_t : Float
@@ -45,13 +45,13 @@ pub(all) struct Game {
   mut msg_t : Float
   mut touch_cd : Float
   mut last_plan_ok : Bool
-  mut selected_tx : Int
-  mut selected_ty : Int
+  mut selected_tx : Int32
+  mut selected_ty : Int32
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut mouse_press : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

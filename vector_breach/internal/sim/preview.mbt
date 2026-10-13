@@ -6,7 +6,7 @@
 /// Preview a player command: return which tiles will be affected and how.
 pub fn preview_command(
   battle : @types.BattleState,
-  mech_idx : Int,
+  mech_idx : Int32,
   command : @types.Command,
 ) -> Array[@types.PreviewTile] {
   let result : Array[@types.PreviewTile] = []
@@ -31,7 +31,7 @@ pub fn preview_command(
 }
 
 ///|
-fn preview_find_player_id(battle : @types.BattleState, idx : Int) -> Int {
+fn preview_find_player_id(battle : @types.BattleState, idx : Int32) -> Int32 {
   let mut count = 0
   for i = 0; i < battle.units.length(); i = i + 1 {
     if battle.units[i].team == Player {
@@ -48,9 +48,9 @@ fn preview_find_player_id(battle : @types.BattleState, idx : Int) -> Int {
 /// Preview a move command.
 fn preview_move(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -83,10 +83,10 @@ fn preview_move(
 /// Preview an attack command.
 fn preview_attack(
   battle : @types.BattleState,
-  unit_id : Int,
-  ability_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  ability_id : Int32,
+  tx : Int32,
+  ty : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -116,9 +116,9 @@ fn preview_attack(
 /// Preview Vanguard Ram: show move tile, damage tile, and push trajectory.
 fn preview_vanguard_ram(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -155,9 +155,9 @@ fn preview_vanguard_ram(
 /// Preview Vanguard Tractor Beam: show pull trajectory.
 fn preview_vanguard_tractor(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -182,9 +182,9 @@ fn preview_vanguard_tractor(
 /// Preview Striker Blade: just the damage tile.
 fn preview_striker_blade(
   battle : @types.BattleState,
-  _unit_id : Int,
-  tx : Int,
-  ty : Int,
+  _unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let target_id = unit_at(battle, tx, ty)
@@ -204,9 +204,9 @@ fn preview_striker_blade(
 /// Preview Striker Dash: show dash path and damage.
 fn preview_striker_dash(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -241,9 +241,9 @@ fn preview_striker_dash(
 /// Preview Sentinel Cannon: LOS line and damage.
 fn preview_sentinel_cannon(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -262,9 +262,9 @@ fn preview_sentinel_cannon(
 /// Preview Sentinel Artillery: show all tiles in the 3x3 area.
 fn preview_sentinel_artillery(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -302,8 +302,8 @@ fn preview_sentinel_artillery(
 /// Preview overclock: same as attack preview but targeting nearest enemy.
 fn preview_overclock(
   battle : @types.BattleState,
-  unit_id : Int,
-  ability_id : Int,
+  unit_id : Int32,
+  ability_id : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -318,10 +318,10 @@ fn preview_overclock(
 /// Preview a push command.
 fn preview_push(
   battle : @types.BattleState,
-  _unit_id : Int,
-  tx : Int,
-  ty : Int,
-  dir : Int,
+  _unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
+  dir : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let target_id = unit_at(battle, tx, ty)
@@ -334,7 +334,7 @@ fn preview_push(
 }
 
 ///|
-fn preview_decode_dir(dir : Int) -> (Int, Int) {
+fn preview_decode_dir(dir : Int32) -> (Int32, Int32) {
   match dir {
     0 => (0, -1)
     1 => (0, 1)
@@ -348,10 +348,10 @@ fn preview_decode_dir(dir : Int) -> (Int, Int) {
 /// Simulates push physics without modifying state.
 fn preview_push_trajectory(
   battle : @types.BattleState,
-  unit_id : Int,
-  dx : Int,
-  dy : Int,
-  distance : Int,
+  unit_id : Int32,
+  dx : Int32,
+  dy : Int32,
+  distance : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]
@@ -418,7 +418,7 @@ pub fn preview_enemy_intents(
 /// Preview a single enemy's intent.
 fn preview_single_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   result : Array[@types.PreviewTile],
 ) -> Unit {
   let u = battle.units[unit_id]

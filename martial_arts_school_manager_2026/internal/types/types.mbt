@@ -22,8 +22,8 @@ pub(all) struct Student {
 ///|
 /// Per-frame input actions consumed by game logic.
 pub(all) struct Input {
-  mut move_x : Int
-  mut move_y : Int
+  mut move_x : Int32
+  mut move_y : Int32
   mut confirm_pressed : Bool
   mut cancel_pressed : Bool
   mut burst_pressed : Bool
@@ -38,31 +38,31 @@ pub(all) struct Game {
   input : Input
   students : Array[Student]
   mut state : GameState
-  mut week : Int
+  mut week : Int32
   mut funds : Float
   mut reputation : Float
   mut week_duration : Float
   mut week_time_left : Float
-  mut cursor_row : Int
-  mut cursor_col : Int
+  mut cursor_row : Int32
+  mut cursor_col : Int32
   mut speed_burst_t : Float
   mut speed_burst_cd : Float
   mut incident_timer : Float
-  mut incident_count_week : Int
-  mut total_incidents : Int
+  mut incident_count_week : Int32
+  mut total_incidents : Int32
   mut incident_flash_t : Float
   mut message : String
   mut message_t : Float
   mut scene_t : Float
   mut week_banner_t : Float
-  mut weeks_survived : Int
-  mut best_week : Int
+  mut weeks_survived : Int32
+  mut best_week : Int32
   mut defeat_reason : String
 }
 
 ///|
 /// Return the display name for a roster slot index.
-pub fn student_name(slot : Int) -> String {
+pub fn student_name(slot : Int32) -> String {
   if slot == 0 {
     "Aiko"
   } else if slot == 1 {
@@ -80,7 +80,7 @@ pub fn student_name(slot : Int) -> String {
 
 ///|
 /// Return starting skill for a roster slot index.
-pub fn starting_skill(slot : Int) -> Float {
+pub fn starting_skill(slot : Int32) -> Float {
   if slot == 0 {
     34.0
   } else if slot == 1 {

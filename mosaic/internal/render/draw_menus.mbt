@@ -293,7 +293,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star(x : Int, y : Int, size : Int, color : @raylib.Color) -> Unit {
+fn draw_star(x : Int32, y : Int32, size : Int32, color : @raylib.Color) -> Unit {
   let cx = Float::from_int(x)
   let cy = Float::from_int(y)
   let s = Float::from_int(size)

@@ -1,42 +1,42 @@
 ///|
 /// Width of the game arena in pixels.
-let arena_w : Int = 960
+let arena_w : Int32 = 960
 
 ///|
 /// Height of the game arena in pixels.
-let arena_h : Int = 720
+let arena_h : Int32 = 720
 
 ///|
 /// Number of brick columns in the brick grid layout.
-let bricks_cols : Int = 12
+let bricks_cols : Int32 = 12
 
 ///|
 /// Number of brick rows in the brick grid layout.
-let bricks_rows : Int = 8
+let bricks_rows : Int32 = 8
 
 ///|
 /// Width of a single brick in pixels.
-let brick_w : Int = 70
+let brick_w : Int32 = 70
 
 ///|
 /// Height of a single brick in pixels.
-let brick_h : Int = 24
+let brick_h : Int32 = 24
 
 ///|
 /// Pixel gap between adjacent bricks in the grid.
-let brick_gap : Int = 5
+let brick_gap : Int32 = 5
 
 ///|
 /// Horizontal pixel offset to the top-left corner of the brick grid.
-let bricks_x0 : Int = 36
+let bricks_x0 : Int32 = 36
 
 ///|
 /// Vertical pixel offset to the top-left corner of the brick grid.
-let bricks_y0 : Int = 80
+let bricks_y0 : Int32 = 80
 
 ///|
 /// Converts an integer to a Float for use in floating-point calculations.
-fn fi(v : Int) -> Float {
+fn fi(v : Int32) -> Float {
   Float::from_int(v)
 }
 
@@ -44,9 +44,9 @@ fn fi(v : Int) -> Float {
 /// Represents a single brick with alive state, pixel position, and remaining hit points.
 struct Brick {
   mut alive : Bool
-  x : Int
-  y : Int
-  mut hp : Int
+  x : Int32
+  y : Int32
+  mut hp : Int32
 }
 
 ///|
@@ -72,7 +72,7 @@ fn reset_ball() -> (Float, Float, Float, Float) {
 
 ///|
 /// Returns the display color for a brick based on its remaining hit points.
-fn brick_color(hp : Int) -> @raylib.Color {
+fn brick_color(hp : Int32) -> @raylib.Color {
   match hp {
     3 => @raylib.maroon
     2 => @raylib.orange

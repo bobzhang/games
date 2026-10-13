@@ -254,7 +254,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_weapon_icon(weapon : @types.WeaponKind, x : Int, y : Int) -> Unit {
+fn draw_weapon_icon(weapon : @types.WeaponKind, x : Int32, y : Int32) -> Unit {
   let color = @raylib.Color::new(220, 220, 240, 220)
   match weapon {
     Sword =>

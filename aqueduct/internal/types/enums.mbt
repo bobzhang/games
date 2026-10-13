@@ -121,7 +121,7 @@ pub fn Direction::opposite(self : Direction) -> Direction {
 }
 
 ///|
-pub fn Direction::dx(self : Direction) -> Int {
+pub fn Direction::dx(self : Direction) -> Int32 {
   match self {
     East => 1
     West => -1
@@ -130,7 +130,7 @@ pub fn Direction::dx(self : Direction) -> Int {
 }
 
 ///|
-pub fn Direction::dy(self : Direction) -> Int {
+pub fn Direction::dy(self : Direction) -> Int32 {
   match self {
     South => 1
     North => -1

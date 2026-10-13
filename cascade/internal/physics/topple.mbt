@@ -4,7 +4,7 @@
 /// Returns the array of topple events and the final tick count.
 pub fn simulate(
   dominoes : Array[@types.Domino],
-) -> (Array[@types.ToppleEvent], Int) {
+) -> (Array[@types.ToppleEvent], Int32) {
   let events : Array[@types.ToppleEvent] = []
   // Find the starter and begin it toppling
   for i in 0..<dominoes.length() {
@@ -96,8 +96,8 @@ fn trigger_in_direction(
   dominoes : Array[@types.Domino],
   from : @types.Vec2i,
   orientation : @types.Orientation,
-  range : Int,
-  tick : Int,
+  range : Int32,
+  tick : Int32,
   events : Array[@types.ToppleEvent],
 ) -> Unit {
   let dx = @types.orientation_dx(orientation)
@@ -139,7 +139,7 @@ pub fn all_targets_fallen(dominoes : Array[@types.Domino]) -> Bool {
 
 ///|
 /// Count the number of player-placed (non-target, non-starter) dominoes
-pub fn count_placed(dominoes : Array[@types.Domino]) -> Int {
+pub fn count_placed(dominoes : Array[@types.Domino]) -> Int32 {
   let mut count = 0
   for i in 0..<dominoes.length() {
     if !dominoes[i].is_target && !dominoes[i].is_starter {
@@ -153,11 +153,11 @@ pub fn count_placed(dominoes : Array[@types.Domino]) -> Int {
 /// Calculate star rating
 pub fn calculate_stars(
   all_hit : Bool,
-  dominoes_used : Int,
-  ticks_taken : Int,
-  par_count : Int,
-  par_ticks : Int,
-) -> Int {
+  dominoes_used : Int32,
+  ticks_taken : Int32,
+  par_count : Int32,
+  par_ticks : Int32,
+) -> Int32 {
   if !all_hit {
     return 0
   }

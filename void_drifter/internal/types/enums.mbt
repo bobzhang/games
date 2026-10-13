@@ -197,7 +197,7 @@ pub(all) enum PickupKind {
   ShieldRecharge
   WeaponMod(ModKind)
   UtilityPickup(UtilityMod)
-  Credits(Int)
+  Credits(Int32)
   HeatVent
   WeaponDrop(WeaponKind)
 } derive(Eq, Debug)
@@ -253,7 +253,7 @@ pub(all) enum MetaUnlock {
   UnlockWeapon(WeaponKind)
   UnlockMod(ModKind)
   UnlockUtility(UtilityMod)
-  UnlockShip(Int)
+  UnlockShip(Int32)
 } derive(Eq, Debug)
 
 ///|

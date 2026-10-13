@@ -8,7 +8,7 @@ fn @types.Game::clear_hostages(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_hostage_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_hostage_slot(game : @types.Game) -> Int32 {
   for i, slot in game.hostages {
     if !slot.active {
       break i
@@ -19,7 +19,7 @@ fn @types.Game::alloc_hostage_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn hostage_goal_for_stage(stage : Int) -> Int {
+fn hostage_goal_for_stage(stage : Int32) -> Int32 {
   let wave = stage + 1
   (@types.rescue_goal_base + wave / 3).clamp(
     min=@types.rescue_goal_base,
@@ -28,14 +28,14 @@ fn hostage_goal_for_stage(stage : Int) -> Int {
 }
 
 ///|
-fn tile_is_hostage_spawnable(tile : Int) -> Bool {
+fn tile_is_hostage_spawnable(tile : Int32) -> Bool {
   tile == @types.tile_empty ||
   tile == @types.tile_bush ||
   tile == @types.tile_ice
 }
 
 ///|
-fn tile_has_hostage(game : @types.Game, tx : Int, ty : Int) -> Bool {
+fn tile_has_hostage(game : @types.Game, tx : Int32, ty : Int32) -> Bool {
   let cx = @types.tile_center_x(tx)
   let cy = @types.tile_center_y(ty)
   for hostage in game.hostages {
@@ -51,8 +51,8 @@ fn tile_has_hostage(game : @types.Game, tx : Int, ty : Int) -> Bool {
 ///|
 fn @types.Game::try_spawn_hostage_at_tile(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Bool {
   if !@types.in_tile_bounds(tx, ty) {
     return false
@@ -88,7 +88,7 @@ fn @types.Game::try_spawn_hostage_at_tile(
 }
 
 ///|
-fn @types.Game::seed_stage_hostages(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::seed_stage_hostages(game : @types.Game, stage : Int32) -> Unit {
   game.clear_hostages()
   game.hostages_goal = hostage_goal_for_stage(stage)
 

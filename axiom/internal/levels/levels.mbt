@@ -1,5 +1,5 @@
 ///|
-pub fn get_level_def(world : Int, index : Int) -> @types.LevelDef {
+pub fn get_level_def(world : Int32, index : Int32) -> @types.LevelDef {
   match (world, index) {
     // ========================================
     // WORLD 1: BASICS (Move, TurnLeft, TurnRight)
@@ -909,17 +909,17 @@ pub fn reload_level(def : @types.LevelDef) -> @types.Level {
 }
 
 ///|
-pub fn get_world_name(world : Int) -> String {
+pub fn get_world_name(world : Int32) -> String {
   @types.world_name(world)
 }
 
 ///|
-pub fn get_level_name(world : Int, index : Int) -> String {
+pub fn get_level_name(world : Int32, index : Int32) -> String {
   let def = get_level_def(world, index)
   def.name
 }
 
 ///|
-pub fn total_levels() -> Int {
+pub fn total_levels() -> Int32 {
   @types.num_worlds * @types.levels_per_world
 }

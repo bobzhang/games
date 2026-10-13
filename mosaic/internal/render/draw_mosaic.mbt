@@ -76,10 +76,10 @@ fn draw_filled_tiles(game : @types.Game, level : @types.Level) -> Unit {
 ///|
 fn draw_tile_at(
   tile : @types.Tile,
-  px : Int,
-  py : Int,
-  cs : Int,
-  alpha : Int,
+  px : Int32,
+  py : Int32,
+  cs : Int32,
+  alpha : Int32,
 ) -> Unit {
   let color = @types.tile_color_to_raylib(tile.color)
   let r = color.r.to_int()
@@ -681,9 +681,9 @@ fn draw_symmetry_indicator(game : @types.Game, level : @types.Level) -> Unit {
 
 ///|
 fn draw_axis_arrow(
-  x : Int,
-  y : Int,
-  direction : Int,
+  x : Int32,
+  y : Int32,
+  direction : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let s : Float = 8.0
@@ -729,9 +729,9 @@ fn draw_axis_arrow(
 
 ///|
 fn draw_diamond_marker(
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let cx = Float::from_int(x)
@@ -755,8 +755,8 @@ fn draw_diamond_marker(
 
 ///|
 fn draw_shift_arrow(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   _right : Bool,
   color : @raylib.Color,
 ) -> Unit {

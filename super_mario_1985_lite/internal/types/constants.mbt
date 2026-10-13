@@ -1,18 +1,18 @@
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
 /// HUD band height in pixels.
-pub let hud_height : Int = 84
+pub let hud_height : Int32 = 84
 
 ///|
 /// Size of one tile in pixels.
-pub let tile_size : Int = 32
+pub let tile_size : Int32 = 32
 
 ///|
 /// Size of one tile as a float value.
@@ -20,11 +20,11 @@ pub let tile_size_f : Float = 32.0
 
 ///|
 /// Number of horizontal tiles in the level.
-pub let world_tiles_w : Int = 236
+pub let world_tiles_w : Int32 = 236
 
 ///|
 /// Number of vertical tiles in the level.
-pub let world_tiles_h : Int = 22
+pub let world_tiles_h : Int32 = 22
 
 ///|
 /// Total level width in pixels.
@@ -36,7 +36,7 @@ pub let world_height_px : Float = Float::from_int(world_tiles_h * tile_size)
 
 ///|
 /// Tile row index used for baseline ground.
-pub let ground_row : Int = 17
+pub let ground_row : Int32 = 17
 
 ///|
 /// Player collision width.
@@ -100,7 +100,7 @@ pub let player_invuln_time : Float = 1.3
 
 ///|
 /// Starting level timer value in seconds.
-pub let start_time_seconds : Int = 400
+pub let start_time_seconds : Int32 = 400
 
 ///|
 /// Sliding speed down the flagpole.
@@ -132,27 +132,27 @@ pub let enemy_speed : Float = 88.0
 
 ///|
 /// Maximum enemies tracked in the pool.
-pub let max_enemies : Int = 56
+pub let max_enemies : Int32 = 56
 
 ///|
 /// Maximum coin entities tracked in the pool.
-pub let max_coins : Int = 256
+pub let max_coins : Int32 = 256
 
 ///|
 /// Maximum particles tracked in the pool.
-pub let max_particles : Int = 720
+pub let max_particles : Int32 = 720
 
 ///|
 /// Score gained when collecting a coin.
-pub let coin_collect_score : Int = 200
+pub let coin_collect_score : Int32 = 200
 
 ///|
 /// Score gained when stomping an enemy.
-pub let stomp_score : Int = 400
+pub let stomp_score : Int32 = 400
 
 ///|
 /// Score gained when hitting a block.
-pub let block_hit_score : Int = 50
+pub let block_hit_score : Int32 = 50
 
 ///|
 /// Game state machine phases.

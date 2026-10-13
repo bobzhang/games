@@ -822,7 +822,7 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
     "Rocket Ammo +3", "Minigun Ammo +100", dmg_label, rate_label, mag_label, "Buy Sniper Rifle",
     "Buy Rocket Launcher", "Buy Minigun", "Place Barricade", "Place Spike Trap",
   ]
-  let item_costs : Array[Int] = [
+  let item_costs : Array[Int32] = [
     @types.cost_heal, @types.cost_armor, @types.cost_shotgun_ammo, @types.cost_rifle_ammo,
     @types.cost_sniper_ammo, @types.cost_rocket_ammo, @types.cost_minigun_ammo, dmg_cost,
     rate_cost, mag_cost, @types.cost_buy_sniper, @types.cost_buy_rocket, @types.cost_buy_minigun,

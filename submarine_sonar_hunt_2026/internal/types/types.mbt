@@ -49,11 +49,11 @@ pub(all) struct Game {
   mines : Array[Mine]
   targets : Array[Target]
   mut state : GameState
-  mut mission : Int
-  mut best_mission : Int
-  mut mine_count : Int
-  mut target_goal : Int
-  mut targets_found : Int
+  mut mission : Int32
+  mut best_mission : Int32
+  mut mine_count : Int32
+  mut target_goal : Int32
+  mut targets_found : Int32
   mut sub_x : Float
   mut sub_y : Float
   mut sub_vx : Float
@@ -76,7 +76,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

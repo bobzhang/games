@@ -40,7 +40,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   )
 
   for i in 0..<14 {
-    let y : Int = i * 76
+    let y : Int32 = i * 76
     @raylib.draw_rectangle(
       0,
       y,
@@ -58,7 +58,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 
 ///|
 /// Returns a random horizontal screen-shake offset when the shake timer is active.
-fn @types.Game::lane_shake_x(game : @types.Game) -> Int {
+fn @types.Game::lane_shake_x(game : @types.Game) -> Int32 {
   if game.shake_t > 0.0 {
     @raylib.get_random_value(-4, 4)
   } else {
@@ -68,7 +68,7 @@ fn @types.Game::lane_shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical screen-shake offset when the shake timer is active.
-fn @types.Game::lane_shake_y(game : @types.Game) -> Int {
+fn @types.Game::lane_shake_y(game : @types.Game) -> Int32 {
   if game.shake_t > 0.0 {
     @raylib.get_random_value(-4, 4)
   } else {
@@ -78,9 +78,9 @@ fn @types.Game::lane_shake_y(game : @types.Game) -> Int {
 
 ///|
 /// Draws the lane, gutters, foul line, and pin deck with current shake offset; returns `(sx, sy)`.
-fn @types.Game::draw_lane(game : @types.Game) -> (Int, Int) {
-  let sx : Int = game.lane_shake_x()
-  let sy : Int = game.lane_shake_y()
+fn @types.Game::draw_lane(game : @types.Game) -> (Int32, Int32) {
+  let sx : Int32 = game.lane_shake_x()
+  let sy : Int32 = game.lane_shake_y()
 
   @raylib.draw_rectangle(
     @types.lane_x + sx - 18,
@@ -107,7 +107,7 @@ fn @types.Game::draw_lane(game : @types.Game) -> (Int, Int) {
     )
 
     for i in 0..<26 {
-      let y : Int = @types.lane_y + sy + i * 36
+      let y : Int32 = @types.lane_y + sy + i * 36
       @raylib.draw_rectangle(
         @types.lane_x + sx + 6,
         y,
@@ -138,7 +138,7 @@ fn @types.Game::draw_lane(game : @types.Game) -> (Int, Int) {
     @raylib.Color::new(58, 42, 32, 140),
   )
 
-  let foul_y : Int = @types.foul_line_y.to_int() + sy
+  let foul_y : Int32 = @types.foul_line_y.to_int() + sy
   @raylib.draw_rectangle(
     @types.lane_x + sx + 24,
     foul_y,
@@ -147,7 +147,7 @@ fn @types.Game::draw_lane(game : @types.Game) -> (Int, Int) {
     @raylib.Color::new(218, 64, 64, 232),
   )
 
-  let deck_y : Int = @types.pin_deck_y.to_int() + sy - 34
+  let deck_y : Int32 = @types.pin_deck_y.to_int() + sy - 34
   @raylib.draw_rectangle(
     @types.lane_x + sx + 80,
     deck_y,
@@ -161,7 +161,11 @@ fn @types.Game::draw_lane(game : @types.Game) -> (Int, Int) {
 
 ///|
 /// Draws an aim line and target circle projected from the ball in the current aim direction.
-fn @types.Game::draw_aim_guide(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn @types.Game::draw_aim_guide(
+  game : @types.Game,
+  sx : Int32,
+  sy : Int32,
+) -> Unit {
   if !game.can_throw {
     return
   }
@@ -170,10 +174,10 @@ fn @types.Game::draw_aim_guide(game : @types.Game, sx : Int, sy : Int) -> Unit {
   let ux : Float = @math.sinf(angle)
   let uy : Float = -@math.cosf(angle)
 
-  let x0 : Int = game.ball_x.to_int() + sx
-  let y0 : Int = game.ball_y.to_int() + sy
-  let x1 : Int = (game.ball_x + ux * 350.0).to_int() + sx
-  let y1 : Int = (game.ball_y + uy * 350.0).to_int() + sy
+  let x0 : Int32 = game.ball_x.to_int() + sx
+  let y0 : Int32 = game.ball_y.to_int() + sy
+  let x1 : Int32 = (game.ball_x + ux * 350.0).to_int() + sx
+  let y1 : Int32 = (game.ball_y + uy * 350.0).to_int() + sy
 
   @raylib.draw_line(x0, y0, x1, y1, @raylib.Color::new(228, 240, 255, 220))
   @raylib.draw_circle_lines(
@@ -186,9 +190,9 @@ fn @types.Game::draw_aim_guide(game : @types.Game, sx : Int, sy : Int) -> Unit {
 
 ///|
 /// Draws a single pin: upright with red stripe when standing, or a faded circle with motion trail when knocked.
-fn draw_pin(pin : @types.Pin, sx : Int, sy : Int) -> Unit {
-  let px : Int = pin.x.to_int() + sx
-  let py : Int = pin.y.to_int() + sy
+fn draw_pin(pin : @types.Pin, sx : Int32, sy : Int32) -> Unit {
+  let px : Int32 = pin.x.to_int() + sx
+  let py : Int32 = pin.y.to_int() + sy
 
   if draw_pin_art(pin, sx, sy) {
     return
@@ -247,7 +251,7 @@ fn draw_pin(pin : @types.Pin, sx : Int, sy : Int) -> Unit {
 
 ///|
 /// Iterates the pin array and delegates each to `draw_pin`.
-fn @types.Game::draw_pins(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn @types.Game::draw_pins(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   for pin in game.pins {
     draw_pin(pin, sx, sy)
   }
@@ -255,9 +259,9 @@ fn @types.Game::draw_pins(game : @types.Game, sx : Int, sy : Int) -> Unit {
 
 ///|
 /// Draws the bowling ball as a dark sphere with a highlight circle and rim outline.
-fn @types.Game::draw_ball(game : @types.Game, sx : Int, sy : Int) -> Unit {
-  let bx : Int = game.ball_x.to_int() + sx
-  let by : Int = game.ball_y.to_int() + sy
+fn @types.Game::draw_ball(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
+  let bx : Int32 = game.ball_x.to_int() + sx
+  let by : Int32 = game.ball_y.to_int() + sy
 
   if draw_ball_art(bx, by) {
     return
@@ -285,13 +289,13 @@ fn @types.Game::draw_ball(game : @types.Game, sx : Int, sy : Int) -> Unit {
 
 ///|
 /// Renders all active spark particles with color and alpha based on kind and remaining lifetime.
-fn @types.Game::draw_sparks(game : @types.Game, sx : Int, sy : Int) -> Unit {
+fn @types.Game::draw_sparks(game : @types.Game, sx : Int32, sy : Int32) -> Unit {
   for spark in game.sparks {
     if !spark.active {
       continue
     }
 
-    let alpha : Int = if spark.life > 0.7 {
+    let alpha : Int32 = if spark.life > 0.7 {
       238
     } else if spark.life > 0.4 {
       200
@@ -320,9 +324,9 @@ fn @types.Game::draw_sparks(game : @types.Game, sx : Int, sy : Int) -> Unit {
 /// Draws the ten-frame scorecard grid with roll marks and running totals.
 fn @types.Game::draw_score_grid(
   game : @types.Game,
-  px : Int,
-  py : Int,
-  pw : Int,
+  px : Int32,
+  py : Int32,
+  pw : Int32,
 ) -> Unit {
   @draw.draw_text(
     "Frames",
@@ -332,9 +336,9 @@ fn @types.Game::draw_score_grid(
     @raylib.Color::new(238, 246, 255, 248),
   )
 
-  let mut x : Int = px + 16
+  let mut x : Int32 = px + 16
   for f in 0..<10 {
-    let fw : Int = if f < 9 { 74 } else { 112 }
+    let fw : Int32 = if f < 9 { 74 } else { 112 }
 
     @raylib.draw_rectangle(
       x,
@@ -372,7 +376,7 @@ fn @types.Game::draw_score_grid(
       30,
       @raylib.Color::new(244, 250, 255, 248),
     )
-    let second_x : Int = if f < 9 { x + 40 } else { x + 46 }
+    let second_x : Int32 = if f < 9 { x + 40 } else { x + 46 }
     @draw.draw_text(
       b,
       second_x,
@@ -419,8 +423,8 @@ fn @types.Game::draw_score_grid(
 /// Draws the keyboard/touch control reference and the current status message if active.
 fn @types.Game::draw_control_hint(
   game : @types.Game,
-  px : Int,
-  py : Int,
+  px : Int32,
+  py : Int32,
 ) -> Unit {
   @draw.draw_text(
     "Controls",
@@ -545,9 +549,9 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
 
   game.draw_score_grid(px, py + 194, pw)
 
-  let ap : Int = (game.aim * 10.0).to_int()
-  let sp : Int = (game.spin * 100.0).to_int()
-  let pwv : Int = (game.power * 100.0).to_int()
+  let ap : Int32 = (game.aim * 10.0).to_int()
+  let sp : Int32 = (game.spin * 100.0).to_int()
+  let pwv : Int32 = (game.power * 100.0).to_int()
 
   @draw.draw_text(
     "Aim \{ap / 10}.\{(Float::from_int(ap % 10)).abs().to_int()} deg",
@@ -608,10 +612,10 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
 /// Draws a labelled on-screen button, highlighted in `tint` when `active` is true.
 fn draw_touch_button(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   active : Bool,
   tint : @raylib.Color,
 ) -> Unit {
@@ -823,10 +827,10 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(6, 10, 16, 170),
   )
 
-  let pw : Int = 840
-  let ph : Int = 470
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 840
+  let ph : Int32 = 470
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 28, 42, 246))
   @raylib.draw_rectangle_lines(

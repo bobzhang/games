@@ -1,5 +1,5 @@
 ///|
-fn compute_hilbert_step(order : Int, index : Int) -> (Float, Float) {
+fn compute_hilbert_step(order : Int32, index : Int32) -> (Float, Float) {
   // Hilbert points base pattern
   let hilbert_points_x : FixedArray[Float] = [0.0, 0.0, 1.0, 1.0]
   let hilbert_points_y : FixedArray[Float] = [0.0, 1.0, 1.0, 0.0]
@@ -29,7 +29,7 @@ fn compute_hilbert_step(order : Int, index : Int) -> (Float, Float) {
 }
 
 ///|
-fn load_hilbert_path(order : Int, size : Float) -> Array[@raylib.Vector2] {
+fn load_hilbert_path(order : Int32, size : Float) -> Array[@raylib.Vector2] {
   let n = 1 << order
   let len : Float = size / Float::from_int(n)
   let stroke_count = n * n
@@ -55,7 +55,7 @@ fn main {
     screen_width, screen_height, "raylib [shapes] example - hilbert curve",
   )
 
-  let order : Ref[Int] = { val: 2, }
+  let order : Ref[Int32] = { val: 2, }
   let size : Ref[Float] = { val: Float::from_int(@raylib.get_screen_height()), }
   let mut hilbert_path = load_hilbert_path(order.val, size.val)
   let mut stroke_count = hilbert_path.length()

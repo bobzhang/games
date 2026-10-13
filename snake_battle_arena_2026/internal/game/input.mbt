@@ -29,11 +29,13 @@ fn @types.Game::result_hover(game : @types.Game) -> Bool {
 }
 
 ///|
-fn @types.Game::board_cell_from_pointer(game : @types.Game) -> (Bool, Int, Int) {
+fn @types.Game::board_cell_from_pointer(
+  game : @types.Game,
+) -> (Bool, Int32, Int32) {
   let (bx, by, tile) = @types.board_metrics(game.shake_t)
 
-  let x : Int = (game.mouse_x.to_int() - bx) / tile
-  let y : Int = (game.mouse_y.to_int() - by) / tile
+  let x : Int32 = (game.mouse_x.to_int() - bx) / tile
+  let y : Int32 = (game.mouse_y.to_int() - by) / tile
 
   if x >= 0 && x < @types.grid_w && y >= 0 && y < @types.grid_h {
     (true, x, y)
@@ -45,14 +47,14 @@ fn @types.Game::board_cell_from_pointer(game : @types.Game) -> (Bool, Int, Int) 
 ///|
 fn @types.Game::direction_to_cell(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> @types.Dir {
-  let hx : Int = game.p_seg_x[0]
-  let hy : Int = game.p_seg_y[0]
+  let hx : Int32 = game.p_seg_x[0]
+  let hy : Int32 = game.p_seg_y[0]
 
-  let mut dx : Int = tx - hx
-  let mut dy : Int = ty - hy
+  let mut dx : Int32 = tx - hx
+  let mut dy : Int32 = ty - hy
 
   if Float::from_int(dx).abs() > Float::from_int(@types.grid_w / 2) {
     dx = if dx > 0 { dx - @types.grid_w } else { dx + @types.grid_w }

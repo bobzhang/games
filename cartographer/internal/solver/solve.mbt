@@ -4,10 +4,10 @@
 /// Stops early after finding `max_solutions` to avoid exhaustive search.
 pub fn solve(
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
   features_to_place : Array[@types.FeatureKind],
   clues : Array[@types.Clue],
-  max_solutions? : Int = 2,
+  max_solutions~ : Int32 = 2,
 ) -> Array[Array[@types.FeatureKind?]] {
   let solutions : Array[Array[@types.FeatureKind?]] = []
   let needed = get_needed_features(grid, features_to_place)
@@ -30,12 +30,12 @@ pub fn solve(
 ///|
 fn solve_recursive(
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
   needed : Array[@types.FeatureKind],
-  idx : Int,
+  idx : Int32,
   clues : Array[@types.Clue],
   solutions : Array[Array[@types.FeatureKind?]],
-  max_solutions : Int,
+  max_solutions : Int32,
 ) -> Unit {
   if solutions.length() >= max_solutions {
     return
@@ -82,11 +82,11 @@ fn solve_recursive(
 ///|
 /// Count the number of valid solutions for a level (up to max_solutions).
 pub fn count_solutions(
-  size : Int,
+  size : Int32,
   features_to_place : Array[@types.FeatureKind],
   clues : Array[@types.Clue],
-  max_solutions? : Int = 2,
-) -> Int {
+  max_solutions~ : Int32 = 2,
+) -> Int32 {
   let grid : Array[@types.FeatureKind?] = Array::make(size * size, None)
   let solutions = solve(grid, size, features_to_place, clues, max_solutions~)
   // Reset clue statuses

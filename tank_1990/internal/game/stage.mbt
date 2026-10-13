@@ -36,7 +36,7 @@ fn @types.Game::clear_entities_for_stage(game : @types.Game) -> Unit {
 ///|
 /// Calculates the total number of enemies for a given stage. Higher stages
 /// have more enemies, clamped between 18 and 44.
-fn stage_enemy_total(stage : Int) -> Int {
+fn stage_enemy_total(stage : Int32) -> Int32 {
   let wave = stage + 1
   (16 + wave * 2).clamp(min=18, max=44)
 }
@@ -46,8 +46,8 @@ fn stage_enemy_total(stage : Int) -> Int {
 /// spawned enemy. Later stages increase the chance of tougher enemy types.
 fn @types.Game::stage_enemy_kind(
   game : @types.Game,
-  stage : Int,
-  spawned_index : Int,
+  stage : Int32,
+  spawned_index : Int32,
 ) -> @types.EnemyKind {
   let wave = stage + 1
   let roll = @types.rand_range(game, 0, 99)
@@ -90,7 +90,7 @@ fn @types.Game::stage_enemy_kind(
 ///|
 /// Converts a single ASCII character from a level pattern string into its
 /// corresponding tile type and hit-point value (e.g., '#' becomes Brick with 1 HP).
-fn parse_level_char(ch : Byte) -> (@types.Tile, Int) {
+fn parse_level_char(ch : Byte) -> (@types.Tile, Int32) {
   if ch == b'#' {
     (Brick, 1)
   } else if ch == b'@' {
@@ -155,7 +155,7 @@ fn @types.Game::restore_base_ring(game : @types.Game) -> Unit {
 ///|
 /// Places a player tank back at its spawn point with default stats and a brief
 /// invulnerability period. The player index (0 or 1) determines the spawn location.
-fn @types.Game::respawn_player_tank(game : @types.Game, index : Int) -> Unit {
+fn @types.Game::respawn_player_tank(game : @types.Game, index : Int32) -> Unit {
   let spawn_x = if index == 0 {
     @types.player1_spawn_x
   } else {
@@ -215,7 +215,7 @@ fn @types.Game::prepare_players_for_stage(game : @types.Game) -> Unit {
 ///|
 /// Reads the level pattern for the given stage and fills the tile map with
 /// walls, water, bushes, ice, and the player base.
-fn @types.Game::load_stage_map(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::load_stage_map(game : @types.Game, stage : Int32) -> Unit {
   let rows = @levels.level_pattern(stage)
   for y in 0..<@types.map_tiles_h {
     let bytes = rows[y]
@@ -264,7 +264,7 @@ fn @types.Game::reset_campaign(game : @types.Game) -> Unit {
 ///|
 /// Loads a specific stage by clearing old entities, building the tile map,
 /// spawning players, and configuring enemy counts and intro timing.
-fn @types.Game::load_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::load_stage(game : @types.Game, stage : Int32) -> Unit {
   game.profile = @levels.get_stage_profile(stage)
   game.clear_entities_for_stage()
   game.load_stage_map(stage)

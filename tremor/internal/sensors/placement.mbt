@@ -81,7 +81,7 @@ pub fn recompute_readings(game : @types.Game) -> Unit {
 }
 
 ///|
-pub fn remaining_budget(game : @types.Game) -> Int {
+pub fn remaining_budget(game : @types.Game) -> Int32 {
   match game.level {
     Some(level) => level.sensor_budget - game.budget_used
     None => 0

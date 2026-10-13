@@ -2,7 +2,7 @@
 pub fn execute_fold(
   paper : @types.Paper,
   dir : @types.FoldDir,
-  line_pos : Int,
+  line_pos : Int32,
 ) -> @types.Paper {
   let result = @types.clone_paper(paper)
   match dir {
@@ -15,7 +15,7 @@ pub fn execute_fold(
 }
 
 ///|
-fn fold_left(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
+fn fold_left(src : @types.Paper, dst : @types.Paper, line : Int32) -> Unit {
   // Fold right side onto left side along vertical line at column 'line'
   // Cells at x >= line get mirrored to x' = 2*line - 1 - x
   // First, clear cells on the right side of fold line in dst
@@ -46,7 +46,7 @@ fn fold_left(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
 }
 
 ///|
-fn fold_right(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
+fn fold_right(src : @types.Paper, dst : @types.Paper, line : Int32) -> Unit {
   // Fold left side onto right side along vertical line at column 'line'
   // Cells at x < line get mirrored to x' = 2*line - 1 - x
   for y in 0..<src.height {
@@ -75,7 +75,7 @@ fn fold_right(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
 }
 
 ///|
-fn fold_up(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
+fn fold_up(src : @types.Paper, dst : @types.Paper, line : Int32) -> Unit {
   // Fold bottom half onto top half along horizontal line at row 'line'
   // Cells at y >= line get mirrored to y' = 2*line - 1 - y
   for y in line..<src.height {
@@ -104,7 +104,7 @@ fn fold_up(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
 }
 
 ///|
-fn fold_down(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
+fn fold_down(src : @types.Paper, dst : @types.Paper, line : Int32) -> Unit {
   // Fold top half onto bottom half along horizontal line at row 'line'
   // Cells at y < line get mirrored to y' = 2*line - 1 - y
   for y = line - 1; y >= 0; y = y - 1 {
@@ -136,7 +136,7 @@ fn fold_down(src : @types.Paper, dst : @types.Paper, line : Int) -> Unit {
 pub fn is_valid_fold(
   paper : @types.Paper,
   dir : @types.FoldDir,
-  line_pos : Int,
+  line_pos : Int32,
 ) -> Bool {
   // Must have at least 1 cell on folding side
   match dir {

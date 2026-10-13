@@ -269,7 +269,7 @@ fn draw_game_hud(game : @types.Game, level : @types.Level) -> Unit {
 }
 
 ///|
-pub fn is_mouse_in_rect(x : Int, y : Int, w : Int, h : Int) -> Bool {
+pub fn is_mouse_in_rect(x : Int32, y : Int32, w : Int32, h : Int32) -> Bool {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   mx >= x && mx < x + w && my >= y && my < y + h

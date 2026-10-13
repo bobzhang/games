@@ -1,56 +1,56 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Number of tile columns in the map grid.
-let map_w : Int = 22
+let map_w : Int32 = 22
 
 ///|
 /// Number of tile rows in the map grid.
-let map_h : Int = 13
+let map_h : Int32 = 13
 
 ///|
 /// Pixel size of each map tile.
-let tile : Int = 48
+let tile : Int32 = 48
 
 ///|
 /// Pixel offset from the left edge where the map is drawn.
-let map_x : Int = 112
+let map_x : Int32 = 112
 
 ///|
 /// Pixel offset from the top edge where the map is drawn.
-let map_y : Int = 72
+let map_y : Int32 = 72
 
 ///|
 /// Maximum number of data terminals that can exist on a stage.
-let max_terminals : Int = 20
+let max_terminals : Int32 = 20
 
 ///|
 /// Maximum number of guards that can exist simultaneously.
-let max_guards : Int = 64
+let max_guards : Int32 = 64
 
 ///|
 /// Maximum number of surveillance cameras that can exist simultaneously.
-let max_cameras : Int = 30
+let max_cameras : Int32 = 30
 
 ///|
 /// Maximum number of pickups that can exist simultaneously.
-let max_pickups : Int = 30
+let max_pickups : Int32 = 30
 
 ///|
 /// Maximum number of particles in the effects pool.
-let max_particles : Int = 960
+let max_particles : Int32 = 960
 
 ///|
 /// Represents the player hacker with grid position, health, energy, ability cooldowns, facing direction, and score.
 struct Player {
-  mut gx : Int
-  mut gy : Int
+  mut gx : Int32
+  mut gy : Int32
   mut hp : Float
   mut energy : Float
   mut hack_cd : Float
@@ -58,19 +58,19 @@ struct Player {
   mut cloak_cd : Float
   mut cloak_t : Float
   mut hurt_cd : Float
-  mut face_x : Int
-  mut face_y : Int
-  mut score : Int
-  mut combo : Int
-  mut hacked_total : Int
+  mut face_x : Int32
+  mut face_y : Int32
+  mut score : Int32
+  mut combo : Int32
+  mut hacked_total : Int32
 }
 
 ///|
 /// Represents a hackable data terminal with grid position and hacked state.
 struct Terminal {
   mut active : Bool
-  mut gx : Int
-  mut gy : Int
+  mut gx : Int32
+  mut gy : Int32
   mut hacked : Bool
 }
 
@@ -78,24 +78,24 @@ struct Terminal {
 /// Represents a security guard with grid position, health, movement and attack cooldowns, stun timer, and patrol direction.
 struct Guard {
   mut active : Bool
-  mut kind : Int
-  mut gx : Int
-  mut gy : Int
+  mut kind : Int32
+  mut gx : Int32
+  mut gy : Int32
   mut hp : Float
   mut move_cd : Float
   mut atk_cd : Float
   mut stun_t : Float
   mut alert_t : Float
-  mut patrol_dir : Int
+  mut patrol_dir : Int32
 }
 
 ///|
 /// Represents a surveillance camera with grid position, facing direction, rotation timer, and disable timer.
 struct Camera {
   mut active : Bool
-  mut gx : Int
-  mut gy : Int
-  mut dir : Int
+  mut gx : Int32
+  mut gy : Int32
+  mut dir : Int32
   mut rot_t : Float
   mut disable_t : Float
 }
@@ -104,9 +104,9 @@ struct Camera {
 /// Represents a collectible pickup item with grid position and item kind.
 struct Pickup {
   mut active : Bool
-  mut gx : Int
-  mut gy : Int
-  mut kind : Int
+  mut gx : Int32
+  mut gy : Int32
+  mut kind : Int32
 }
 
 ///|
@@ -120,7 +120,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -290,10 +290,10 @@ fn draw_art_fit(
 /// Draws a generated tile texture into a map cell.
 fn draw_art_tile(
   texture : @raylib.Texture,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   @raylib.draw_texture_pro(
@@ -351,7 +351,7 @@ fn draw_cover_art(texture : @raylib.Texture) -> Unit {
 
 ///|
 /// Returns the generated guard texture for a guard kind.
-fn guard_art(kind : Int) -> @raylib.Texture? {
+fn guard_art(kind : Int32) -> @raylib.Texture? {
   if kind == 0 {
     tex_guard_patrol.val
   } else if kind == 1 {
@@ -363,7 +363,7 @@ fn guard_art(kind : Int) -> @raylib.Texture? {
 
 ///|
 /// Returns the generated pickup texture for a pickup kind.
-fn pickup_art(kind : Int) -> @raylib.Texture? {
+fn pickup_art(kind : Int32) -> @raylib.Texture? {
   if kind == 0 {
     tex_pickup_med.val
   } else if kind == 1 {
@@ -377,13 +377,13 @@ fn pickup_art(kind : Int) -> @raylib.Texture? {
 
 ///|
 /// Returns the flat array index for a tile at grid coordinates (gx, gy).
-fn idx(gx : Int, gy : Int) -> Int {
+fn idx(gx : Int32, gy : Int32) -> Int32 {
   gy * map_w + gx
 }
 
 ///|
 /// Returns true if the grid coordinates (gx, gy) are within the map bounds.
-fn in_bounds(gx : Int, gy : Int) -> Bool {
+fn in_bounds(gx : Int32, gy : Int32) -> Bool {
   gx >= 0 && gy >= 0 && gx < map_w && gy < map_h
 }
 
@@ -411,10 +411,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -424,13 +424,13 @@ fn inside_rect(
 
 ///|
 /// Returns the horizontal pixel centre of the tile at grid column gx.
-fn cell_center_x(gx : Int) -> Float {
+fn cell_center_x(gx : Int32) -> Float {
   Float::from_int(map_x + gx * tile + tile / 2)
 }
 
 ///|
 /// Returns the vertical pixel centre of the tile at grid row gy.
-fn cell_center_y(gy : Int) -> Float {
+fn cell_center_y(gy : Int32) -> Float {
   Float::from_int(map_y + gy * tile + tile / 2)
 }
 
@@ -504,8 +504,8 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 
 ///|
 /// Returns the index of the active guard at grid position (gx, gy), or -1 if none found.
-fn guard_at(guards : Array[Guard], gx : Int, gy : Int) -> Int {
-  let mut found : Int = -1
+fn guard_at(guards : Array[Guard], gx : Int32, gy : Int32) -> Int32 {
+  let mut found : Int32 = -1
   for i in 0..<guards.length() {
     if guards[i].active && guards[i].gx == gx && guards[i].gy == gy {
       found = i
@@ -517,8 +517,8 @@ fn guard_at(guards : Array[Guard], gx : Int, gy : Int) -> Int {
 
 ///|
 /// Returns the index of the active unhacked terminal at grid position (gx, gy), or -1 if none found.
-fn terminal_at(terminals : Array[Terminal], gx : Int, gy : Int) -> Int {
-  let mut found : Int = -1
+fn terminal_at(terminals : Array[Terminal], gx : Int32, gy : Int32) -> Int32 {
+  let mut found : Int32 = -1
   for i in 0..<terminals.length() {
     if terminals[i].active &&
       terminals[i].gx == gx &&
@@ -533,8 +533,8 @@ fn terminal_at(terminals : Array[Terminal], gx : Int, gy : Int) -> Int {
 
 ///|
 /// Returns the index of the active pickup at grid position (gx, gy), or -1 if none found.
-fn pickup_at(pickups : Array[Pickup], gx : Int, gy : Int) -> Int {
-  let mut found : Int = -1
+fn pickup_at(pickups : Array[Pickup], gx : Int32, gy : Int32) -> Int32 {
+  let mut found : Int32 = -1
   for i in 0..<pickups.length() {
     if pickups[i].active && pickups[i].gx == gx && pickups[i].gy == gy {
       found = i
@@ -546,8 +546,8 @@ fn pickup_at(pickups : Array[Pickup], gx : Int, gy : Int) -> Int {
 
 ///|
 /// Returns the index of the active camera at grid position (gx, gy), or -1 if none found.
-fn camera_at(cameras : Array[Camera], gx : Int, gy : Int) -> Int {
-  let mut found : Int = -1
+fn camera_at(cameras : Array[Camera], gx : Int32, gy : Int32) -> Int32 {
+  let mut found : Int32 = -1
   for i in 0..<cameras.length() {
     if cameras[i].active && cameras[i].gx == gx && cameras[i].gy == gy {
       found = i
@@ -559,21 +559,21 @@ fn camera_at(cameras : Array[Camera], gx : Int, gy : Int) -> Int {
 
 ///|
 /// Returns true if the tile at (gx, gy) is within bounds and passable (not a wall).
-fn can_walk(tiles : Array[Int], gx : Int, gy : Int) -> Bool {
+fn can_walk(tiles : Array[Int32], gx : Int32, gy : Int32) -> Bool {
   in_bounds(gx, gy) && tiles[idx(gx, gy)] == 0
 }
 
 ///|
 /// Returns true if there are no wall tiles between two axially aligned grid positions.
 fn line_clear(
-  tiles : Array[Int],
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  tiles : Array[Int32],
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   if x0 == x1 {
-    let step : Int = if y1 > y0 { 1 } else { -1 }
+    let step : Int32 = if y1 > y0 { 1 } else { -1 }
     let mut y = y0 + step
     let mut clear = true
     while y != y1 {
@@ -585,7 +585,7 @@ fn line_clear(
     }
     clear
   } else if y0 == y1 {
-    let step : Int = if x1 > x0 { 1 } else { -1 }
+    let step : Int32 = if x1 > x0 { 1 } else { -1 }
     let mut x = x0 + step
     let mut clear = true
     while x != x1 {
@@ -604,12 +604,12 @@ fn line_clear(
 ///|
 /// Returns true if two axially aligned grid positions are within max_dist tiles and have an unobstructed line of sight.
 fn visible_line(
-  tiles : Array[Int],
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
-  max_dist : Int,
+  tiles : Array[Int32],
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
+  max_dist : Int32,
 ) -> Bool {
   if x0 == x1 {
     let dist = (y1 - y0).abs()
@@ -624,7 +624,7 @@ fn visible_line(
 
 ///|
 /// Returns true if the target grid position is within the camera's current facing direction.
-fn camera_facing(cam : Camera, tx : Int, ty : Int) -> Bool {
+fn camera_facing(cam : Camera, tx : Int32, ty : Int32) -> Bool {
   if cam.dir == 0 {
     tx == cam.gx && ty < cam.gy
   } else if cam.dir == 1 {
@@ -640,12 +640,12 @@ fn camera_facing(cam : Camera, tx : Int, ty : Int) -> Bool {
 /// Spawns a guard of the given kind at the specified grid position with stage-scaled health.
 fn spawn_guard(
   guards : Array[Guard],
-  gx : Int,
-  gy : Int,
-  kind : Int,
-  stage : Int,
+  gx : Int32,
+  gy : Int32,
+  kind : Int32,
+  stage : Int32,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<guards.length() {
     if !guards[i].active {
       slot = i
@@ -676,11 +676,11 @@ fn spawn_guard(
 /// Spawns a pickup of the given kind at the specified grid position.
 fn spawn_pickup(
   pickups : Array[Pickup],
-  gx : Int,
-  gy : Int,
-  kind : Int,
+  gx : Int32,
+  gy : Int32,
+  kind : Int32,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<pickups.length() {
     if !pickups[i].active {
       slot = i
@@ -705,9 +705,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut left = n
   for part in parts {
@@ -864,7 +864,7 @@ fn main {
   @draw.init_font()
   load_hacker_art()
 
-  let tiles : Array[Int] = Array::makei(map_w * map_h, fn(_i) { 0 })
+  let tiles : Array[Int32] = Array::makei(map_w * map_h, fn(_i) { 0 })
 
   let terminals : Array[Terminal] = Array::makei(max_terminals, fn(_i) {
     { active: false, gx: 0, gy: 0, hacked: false, }
@@ -924,22 +924,22 @@ fn main {
     hacked_total: 0,
   }
 
-  let mut state : Int = 0
-  let mut stage : Int = 1
-  let max_stage : Int = 4
+  let mut state : Int32 = 0
+  let mut stage : Int32 = 1
+  let max_stage : Int32 = 4
 
   let mut mission_time : Float = 420.0
   let mut stage_time : Float = 110.0
 
   let mut alarm : Float = 0.0
-  let mut strikes : Int = 0
+  let mut strikes : Int32 = 0
 
-  let mut exit_x : Int = map_w - 2
-  let mut exit_y : Int = 1
+  let mut exit_x : Int32 = map_w - 2
+  let mut exit_y : Int32 = 1
   let mut exit_open : Bool = false
 
-  let mut terminal_total : Int = 0
-  let mut terminal_done : Int = 0
+  let mut terminal_total : Int32 = 0
+  let mut terminal_done : Int32 = 0
 
   let mut guard_spawn_cd : Float = 7.0
   let mut pickup_spawn_cd : Float = 6.0
@@ -949,7 +949,7 @@ fn main {
 
   let mut move_repeat_t : Float = 0.0
 
-  let cell_free_for_spawn = fn(gx : Int, gy : Int, min_dist : Int) {
+  let cell_free_for_spawn = fn(gx : Int32, gy : Int32, min_dist : Int32) {
     if !can_walk(tiles, gx, gy) {
       false
     } else if (gx - player.gx).abs() + (gy - player.gy).abs() < min_dist {
@@ -979,7 +979,7 @@ fn main {
     done
   }
 
-  let setup_stage = fn(stage_i : Int) {
+  let setup_stage = fn(stage_i : Int32) {
     for y in 0..<map_h {
       for x in 0..<map_w {
         if x == 0 || y == 0 || x == map_w - 1 || y == map_h - 1 {
@@ -1066,7 +1066,7 @@ fn main {
         let gx = @raylib.get_random_value(1, map_w - 2)
         let gy = @raylib.get_random_value(1, map_h - 2)
         if cell_free_for_spawn(gx, gy, 6) {
-          let mut slot : Int = -1
+          let mut slot : Int32 = -1
           for k in 0..<terminals.length() {
             if !terminals[k].active {
               slot = k
@@ -1091,7 +1091,7 @@ fn main {
         let gx = @raylib.get_random_value(1, map_w - 2)
         let gy = @raylib.get_random_value(1, map_h - 2)
         if cell_free_for_spawn(gx, gy, 5) {
-          let mut slot : Int = -1
+          let mut slot : Int32 = -1
           for k in 0..<cameras.length() {
             if !cameras[k].active {
               slot = k
@@ -1184,7 +1184,7 @@ fn main {
     }
   }
 
-  let defeat_guard = fn(slot : Int, pts : Int) {
+  let defeat_guard = fn(slot : Int32, pts : Int32) {
     let gx = guards[slot].gx
     let gy = guards[slot].gy
     guards[slot].active = false
@@ -1198,7 +1198,7 @@ fn main {
     }
   }
 
-  let attempt_move = fn(dx : Int, dy : Int) {
+  let attempt_move = fn(dx : Int32, dy : Int32) {
     if dx == 0 && dy == 0 {
       ignore(())
     } else {

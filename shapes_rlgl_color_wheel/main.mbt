@@ -10,7 +10,7 @@ fn clamp(val : Float, min : Float, max : Float) -> Float {
 }
 
 ///|
-fn hex2(value : Int) -> String {
+fn hex2(value : Int32) -> String {
   let digits = "0123456789ABCDEF"
   let hi = (value >> 4) & 0xF
   let lo = value & 0xF

@@ -298,7 +298,7 @@ fn @types.Game::complete_mission(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::check_station_alive(game : @types.Game, kind : Int) -> Bool {
+fn @types.Game::check_station_alive(game : @types.Game, kind : Int32) -> Bool {
   @utils.any_by(game.stations, fn(station) {
     station.active && station.kind == kind
   })
@@ -442,7 +442,7 @@ fn @types.Game::update_loadout(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
+fn @types.Game::start_mission(game : @types.Game, mission : Int32) -> Unit {
   game.current_mission = mission
   game.state = StatePlaying
   game.mission_timer = 0.0
@@ -769,7 +769,7 @@ fn @types.Game::update_patrol_waypoints(game : @types.Game) -> Unit {
 /// Spawns a small ambush squad near the player.
 fn @types.Game::spawn_ambush_squad(game : @types.Game) -> Unit {
   let hp_mult = @types.mission_difficulty_hp_mult(game.current_mission)
-  let num_ambush : Int = 2 + game.ai_difficulty
+  let num_ambush : Int32 = 2 + game.ai_difficulty
   for i in 0..<num_ambush {
     let idx = @types.alloc_enemy(game)
     if idx < 0 {
@@ -922,8 +922,8 @@ fn @types.Game::spawn_hazard_asteroids(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::spawn_wave(
   game : @types.Game,
-  mission : Int,
-  wave : Int,
+  mission : Int32,
+  wave : Int32,
 ) -> Unit {
   let comp = @levels.wave_composition(mission, wave)
   let hp_mult = @types.mission_difficulty_hp_mult(mission)
@@ -1024,12 +1024,12 @@ fn @types.Game::spawn_wave(
 ///|
 fn @types.Game::spawn_enemy_of_type(
   game : @types.Game,
-  kind : Int,
+  kind : Int32,
   hp_mult : Float,
   spd_mult : Float,
   formation : @types.Formation,
-  form_index : Int,
-  wave : Int,
+  form_index : Int32,
+  wave : Int32,
 ) -> Unit {
   let idx = @types.alloc_enemy(game)
   if idx < 0 {
@@ -1150,7 +1150,7 @@ fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::collect_powerup(game : @types.Game, idx : Int32) -> Unit {
   let pu = game.powerups[idx]
   let p = game.player
   pu.active = false

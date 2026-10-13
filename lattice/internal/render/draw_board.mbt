@@ -70,8 +70,8 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
 
 ///|
 fn draw_hexagon_filled(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   radius : Float,
   color : @raylib.Color,
 ) -> Unit {
@@ -86,8 +86,8 @@ fn draw_hexagon_filled(
 
 ///|
 fn draw_hexagon_outline(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   radius : Float,
   color : @raylib.Color,
 ) -> Unit {
@@ -101,7 +101,12 @@ fn draw_hexagon_outline(
 }
 
 ///|
-fn draw_stone(cx : Int, cy : Int, hex_size : Float, is_black : Bool) -> Unit {
+fn draw_stone(
+  cx : Int32,
+  cy : Int32,
+  hex_size : Float,
+  is_black : Bool,
+) -> Unit {
   let stone_radius = hex_size * 0.55
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)

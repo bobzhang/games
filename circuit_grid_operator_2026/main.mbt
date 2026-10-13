@@ -28,11 +28,11 @@ let cell_sz = 84
 
 ///|
 /// Total pixel width of the circuit board.
-let board_w : Int = cols * cell_sz
+let board_w : Int32 = cols * cell_sz
 
 ///|
 /// Total pixel height of the circuit board.
-let board_h : Int = rows * cell_sz
+let board_h : Int32 = rows * cell_sz
 
 ///|
 /// Left X pixel coordinate of the side info panel.
@@ -48,18 +48,18 @@ let max_pulses = 340
 
 ///|
 /// Total number of cells in the grid (cols * rows).
-let max_cells : Int = cols * rows
+let max_cells : Int32 = cols * rows
 
 ///|
 /// Represents a single grid cell holding a wire tile with kind, rotation, health, charge, and demand state.
 struct Cell {
-  mut kind : Int // 0 empty, 1 straight, 2 corner, 3 tee, 4 cross, 5 source, 6 sink
-  mut rot : Int
+  mut kind : Int32 // 0 empty, 1 straight, 2 corner, 3 tee, 4 cross, 5 source, 6 sink
+  mut rot : Int32
   mut health : Float
   mut fault_t : Float
   mut charge : Float
-  mut demand : Int
-  mut stored : Int
+  mut demand : Int32
+  mut stored : Int32
   mut pulse : Float
   mut label : String
 }
@@ -74,7 +74,7 @@ struct Pulse {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -98,19 +98,19 @@ fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns the flat array index for the grid cell at column x and row y.
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * cols + x
 }
 
 ///|
 /// Returns true if the grid coordinates (x, y) are within the board boundaries.
-fn in_bounds(x : Int, y : Int) -> Bool {
+fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < cols && y >= 0 && y < rows
 }
 
 ///|
 /// Returns the direction index opposite to the given cardinal direction (0=up, 1=right, 2=down, 3=left).
-fn opposite(dir : Int) -> Int {
+fn opposite(dir : Int32) -> Int32 {
   if dir == 0 {
     2
   } else if dir == 1 {
@@ -124,7 +124,7 @@ fn opposite(dir : Int) -> Int {
 
 ///|
 /// Returns the column delta (horizontal step) for the given cardinal direction index.
-fn dir_dx(dir : Int) -> Int {
+fn dir_dx(dir : Int32) -> Int32 {
   if dir == 0 {
     0
   } else if dir == 1 {
@@ -138,7 +138,7 @@ fn dir_dx(dir : Int) -> Int {
 
 ///|
 /// Returns the row delta (vertical step) for the given cardinal direction index.
-fn dir_dy(dir : Int) -> Int {
+fn dir_dy(dir : Int32) -> Int32 {
   if dir == 0 {
     -1
   } else if dir == 1 {
@@ -152,25 +152,25 @@ fn dir_dy(dir : Int) -> Int {
 
 ///|
 /// Returns the left pixel X coordinate of the grid cell at column x.
-fn cell_px(x : Int) -> Int {
+fn cell_px(x : Int32) -> Int32 {
   board_x + x * cell_sz
 }
 
 ///|
 /// Returns the top pixel Y coordinate of the grid cell at row y.
-fn cell_py(y : Int) -> Int {
+fn cell_py(y : Int32) -> Int32 {
   board_y + y * cell_sz
 }
 
 ///|
 /// Returns the center pixel X coordinate of the grid cell at column x as a Float.
-fn cell_cx(x : Int) -> Float {
+fn cell_cx(x : Int32) -> Float {
   Float::from_int(cell_px(x) + cell_sz / 2)
 }
 
 ///|
 /// Returns the center pixel Y coordinate of the grid cell at row y as a Float.
-fn cell_cy(y : Int) -> Float {
+fn cell_cy(y : Int32) -> Float {
   Float::from_int(cell_py(y) + cell_sz / 2)
 }
 
@@ -188,10 +188,10 @@ fn board_contains(px : Float, py : Float) -> Bool {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -201,13 +201,13 @@ fn inside_rect(
 
 ///|
 /// Returns the flat cell index at screen position (px, py), or -1 if outside the board.
-fn pick_cell(px : Float, py : Float) -> Int {
+fn pick_cell(px : Float, py : Float) -> Int32 {
   if !board_contains(px, py) {
     return -1
   }
 
-  let gx : Int = ((px - Float::from_int(board_x)) / Float::from_int(cell_sz)).to_int()
-  let gy : Int = ((py - Float::from_int(board_y)) / Float::from_int(cell_sz)).to_int()
+  let gx : Int32 = ((px - Float::from_int(board_x)) / Float::from_int(cell_sz)).to_int()
+  let gy : Int32 = ((py - Float::from_int(board_y)) / Float::from_int(cell_sz)).to_int()
 
   if in_bounds(gx, gy) {
     idx(gx, gy)
@@ -218,7 +218,7 @@ fn pick_cell(px : Float, py : Float) -> Int {
 
 ///|
 /// Returns the display name string for the given wire tile kind index.
-fn wire_name(kind : Int) -> String {
+fn wire_name(kind : Int32) -> String {
   if kind == 1 {
     "STRAIGHT"
   } else if kind == 2 {
@@ -238,8 +238,8 @@ fn wire_name(kind : Int) -> String {
 
 ///|
 /// Returns a randomly selected wire tile kind (straight, corner, tee, or cross) with weighted probability.
-fn rand_wire_kind() -> Int {
-  let r : Int = @raylib.get_random_value(0, 99)
+fn rand_wire_kind() -> Int32 {
+  let r : Int32 = @raylib.get_random_value(0, 99)
   if r < 34 {
     1
   } else if r < 62 {
@@ -253,7 +253,7 @@ fn rand_wire_kind() -> Int {
 
 ///|
 /// Returns true if a wire tile of the given kind and rotation has a connection port facing the specified direction.
-fn has_port(kind : Int, rot : Int, dir : Int) -> Bool {
+fn has_port(kind : Int32, rot : Int32, dir : Int32) -> Bool {
   if kind == 0 {
     false
   } else if kind == 1 {
@@ -265,7 +265,7 @@ fn has_port(kind : Int, rot : Int, dir : Int) -> Bool {
     }
   } else if kind == 2 {
     // corner
-    let r : Int = (rot % 4 + 4) % 4
+    let r : Int32 = (rot % 4 + 4) % 4
     if r == 0 {
       dir == 0 || dir == 1
     } else if r == 1 {
@@ -277,7 +277,7 @@ fn has_port(kind : Int, rot : Int, dir : Int) -> Bool {
     }
   } else if kind == 3 {
     // tee
-    let r : Int = (rot % 4 + 4) % 4
+    let r : Int32 = (rot % 4 + 4) % 4
     if r == 0 {
       dir != 2
     } else if r == 1 {
@@ -310,7 +310,7 @@ fn clear_pulses(ps : Array[Pulse]) -> Unit {
 
 ///|
 /// Activates an idle pulse particle at (x, y) with a random velocity and visual kind.
-fn add_pulse(ps : Array[Pulse], x : Float, y : Float, kind : Int) -> Unit {
+fn add_pulse(ps : Array[Pulse], x : Float, y : Float, kind : Int32) -> Unit {
   for ps_elem in ps {
     if !ps_elem.active {
       ps_elem.active = true
@@ -334,8 +334,8 @@ fn burst_pulses(
   ps : Array[Pulse],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_pulse(ps, x, y, kind)
@@ -413,7 +413,7 @@ fn setup_grid(cells : Array[Cell]) -> Unit {
 
   for y in 0..<rows {
     for x in 0..<cols {
-      let i : Int = idx(x, y)
+      let i : Int32 = idx(x, y)
       cells[i].kind = rand_wire_kind()
       cells[i].rot = @raylib.get_random_value(0, 3)
       cells[i].health = randf(84.0, 100.0)
@@ -427,10 +427,10 @@ fn setup_grid(cells : Array[Cell]) -> Unit {
   }
 
   // sources on left edge
-  let src_ys : Array[Int] = [1, 3, 5]
+  let src_ys : Array[Int32] = [1, 3, 5]
   for i in 0..<src_ys.length() {
-    let y : Int = src_ys[i]
-    let id : Int = idx(0, y)
+    let y : Int32 = src_ys[i]
+    let id : Int32 = idx(0, y)
     cells[id].kind = 5
     cells[id].rot = 1
     cells[id].health = 100.0
@@ -439,10 +439,10 @@ fn setup_grid(cells : Array[Cell]) -> Unit {
   }
 
   // sinks on right edge
-  let sink_ys : Array[Int] = [1, 3, 5]
+  let sink_ys : Array[Int32] = [1, 3, 5]
   for i in 0..<sink_ys.length() {
-    let y : Int = sink_ys[i]
-    let id : Int = idx(cols - 1, y)
+    let y : Int32 = sink_ys[i]
+    let id : Int32 = idx(cols - 1, y)
     cells[id].kind = 6
     cells[id].rot = 3
     cells[id].health = 100.0
@@ -453,7 +453,7 @@ fn setup_grid(cells : Array[Cell]) -> Unit {
   }
 
   // fixed hubs
-  let hub_xy : Array[(Int, Int)] = [
+  let hub_xy : Array[(Int32, Int32)] = [
     (2, 2),
     (4, 1),
     (5, 3),
@@ -463,14 +463,14 @@ fn setup_grid(cells : Array[Cell]) -> Unit {
   ]
   for hub_xy_elem in hub_xy {
     let (hx, hy) = hub_xy_elem
-    let id : Int = idx(hx, hy)
+    let id : Int32 = idx(hx, hy)
     cells[id].kind = 4
     cells[id].rot = 0
     cells[id].health = 100.0
   }
 
   // a few void spots force rerouting puzzles
-  let void_xy : Array[(Int, Int)] = [
+  let void_xy : Array[(Int32, Int32)] = [
     (1, 0),
     (2, 6),
     (6, 0),
@@ -480,7 +480,7 @@ fn setup_grid(cells : Array[Cell]) -> Unit {
   ]
   for void_xy_elem in void_xy {
     let (vx, vy) = void_xy_elem
-    let id : Int = idx(vx, vy)
+    let id : Int32 = idx(vx, vy)
     cells[id].kind = 0
     cells[id].rot = 0
     cells[id].health = 0.0
@@ -489,9 +489,9 @@ fn setup_grid(cells : Array[Cell]) -> Unit {
 
 ///|
 /// Randomizes the wire kind and rotation of all non-fixed cells in the specified grid row.
-fn reroll_row(cells : Array[Cell], y : Int) -> Unit {
+fn reroll_row(cells : Array[Cell], y : Int32) -> Unit {
   for x in 1..<(cols - 1) {
-    let id : Int = idx(x, y)
+    let id : Int32 = idx(x, y)
     if cells[id].kind == 0 || cells[id].kind == 5 || cells[id].kind == 6 {
       continue
     }
@@ -505,14 +505,14 @@ fn reroll_row(cells : Array[Cell], y : Int) -> Unit {
 
 ///|
 /// Returns the number of non-empty grid cells that currently have an active fault timer.
-fn count_faults(cells : Array[Cell]) -> Int {
+fn count_faults(cells : Array[Cell]) -> Int32 {
   @utils.count_by(cells, fn(cell) { cell.kind != 0 && cell.fault_t > 0.0 })
 }
 
 ///|
 /// Reduces the fault timer of all faulted cells by the given amount and restores their health, returning the count of patched cells.
-fn patch_faults(cells : Array[Cell], amount : Float) -> Int {
-  let mut patched : Int = 0
+fn patch_faults(cells : Array[Cell], amount : Float) -> Int32 {
+  let mut patched : Int32 = 0
   for cell in cells {
     if cell.fault_t > 0.0 {
       cell.fault_t = cell.fault_t - amount
@@ -528,13 +528,13 @@ fn patch_faults(cells : Array[Cell], amount : Float) -> Int {
 
 ///|
 /// Randomly introduces up to count new faults on eligible grid cells scaled by tier difficulty, returning how many were created.
-fn induce_faults(cells : Array[Cell], count : Int, tier : Int) -> Int {
-  let mut made : Int = 0
-  let mut tries : Int = 0
+fn induce_faults(cells : Array[Cell], count : Int32, tier : Int32) -> Int32 {
+  let mut made : Int32 = 0
+  let mut tries : Int32 = 0
 
   while made < count && tries < 800 {
     tries = tries + 1
-    let i : Int = @raylib.get_random_value(0, cells.length() - 1)
+    let i : Int32 = @raylib.get_random_value(0, cells.length() - 1)
     if cells[i].kind <= 0 || cells[i].kind == 5 {
       continue
     }
@@ -591,14 +591,14 @@ fn degrade_faults(cells : Array[Cell], dt : Float) -> Unit {
 /// Propagates charge from source cells through connected wires via BFS, delivers power to sinks, and returns gain, miss, and powered-sink counts.
 fn run_network_step(
   cells : Array[Cell],
-  q : Array[Int],
-  seen : Array[Int],
-  seen_mark : Int,
-  tier : Int,
+  q : Array[Int32],
+  seen : Array[Int32],
+  seen_mark : Int32,
+  tier : Int32,
   overclock_t : Float,
-) -> (Int, Int, Int) {
-  let mut head : Int = 0
-  let mut tail : Int = 0
+) -> (Int32, Int32, Int32) {
+  let mut head : Int32 = 0
+  let mut tail : Int32 = 0
 
   let src_boost : Float = if overclock_t > 0.0 { 1.55 } else { 1.0 }
 
@@ -612,15 +612,15 @@ fn run_network_step(
   }
 
   while head < tail {
-    let cur : Int = q[head]
+    let cur : Int32 = q[head]
     head = head + 1
 
     if cells[cur].kind == 0 || cells[cur].fault_t > 0.0 {
       continue
     }
 
-    let cx : Int = cur % cols
-    let cy : Int = cur / cols
+    let cx : Int32 = cur % cols
+    let cy : Int32 = cur / cols
     let cur_charge : Float = cells[cur].charge
 
     for dir in 0..<4 {
@@ -628,13 +628,13 @@ fn run_network_step(
         continue
       }
 
-      let nx : Int = cx + dir_dx(dir)
-      let ny : Int = cy + dir_dy(dir)
+      let nx : Int32 = cx + dir_dx(dir)
+      let ny : Int32 = cy + dir_dy(dir)
       if !in_bounds(nx, ny) {
         continue
       }
 
-      let ni : Int = idx(nx, ny)
+      let ni : Int32 = idx(nx, ny)
       if cells[ni].kind == 0 || cells[ni].fault_t > 0.0 {
         continue
       }
@@ -656,16 +656,16 @@ fn run_network_step(
     }
   }
 
-  let mut gain : Int = 0
-  let mut miss : Int = 0
-  let mut powered_sinks : Int = 0
+  let mut gain : Int32 = 0
+  let mut miss : Int32 = 0
+  let mut powered_sinks : Int32 = 0
 
   for cell in cells {
     if cell.kind != 6 {
       continue
     }
 
-    let need : Int = (cell.demand + tier / 2).clamp(min=1, max=30)
+    let need : Int32 = (cell.demand + tier / 2).clamp(min=1, max=30)
 
     if cell.fault_t > 0.0 {
       miss = miss + need
@@ -674,13 +674,13 @@ fn run_network_step(
 
     if cell.charge > 0.25 {
       powered_sinks = powered_sinks + 1
-      let delivered : Int = (cell.charge * Float::from_int(need))
+      let delivered : Int32 = (cell.charge * Float::from_int(need))
         .to_int()
         .clamp(min=1, max=need + 3)
       cell.stored = cell.stored + delivered
       gain = gain + delivered
 
-      let threshold : Int = 60 + tier * 10
+      let threshold : Int32 = 60 + tier * 10
       while cell.stored >= threshold {
         cell.stored = cell.stored - threshold
         cell.demand = cell.demand + 1
@@ -699,10 +699,10 @@ fn run_network_step(
 ///|
 /// Draws the wire segments and center node for a tile of the given kind and rotation at pixel position (gx, gy).
 fn draw_cell_wires(
-  kind : Int,
-  rot : Int,
-  gx : Int,
-  gy : Int,
+  kind : Int32,
+  rot : Int32,
+  gx : Int32,
+  gy : Int32,
   charged : Bool,
 ) -> Unit {
   let cx : Float = Float::from_int(gx + cell_sz / 2)
@@ -737,8 +737,8 @@ fn draw_cell_wires(
 /// Draws all grid cells including background, charge glow, fault flash, wire glyphs, labels, and selection highlight.
 fn draw_board(
   cells : Array[Cell],
-  selected : Int,
-  hover : Int,
+  selected : Int32,
+  hover : Int32,
   grid_t : Float,
   art : GameArt,
 ) -> Unit {
@@ -759,9 +759,9 @@ fn draw_board(
 
   for y in 0..<rows {
     for x in 0..<cols {
-      let i : Int = idx(x, y)
-      let gx : Int = cell_px(x)
-      let gy : Int = cell_py(y)
+      let i : Int32 = idx(x, y)
+      let gx : Int32 = cell_px(x)
+      let gy : Int32 = cell_py(y)
 
       let mut base = if cells[i].kind == 0 {
         @raylib.Color::new(24, 28, 42, 230)
@@ -774,7 +774,7 @@ fn draw_board(
       }
 
       if cells[i].charge > 0.05 {
-        let glow : Int = (cells[i].charge * 120.0)
+        let glow : Int32 = (cells[i].charge * 120.0)
           .to_int()
           .clamp(min=0, max=130)
         base = @raylib.Color::new(
@@ -789,7 +789,7 @@ fn draw_board(
         let flash : Float = @math.sinf(grid_t * 14.0 + Float::from_int(i) * 0.8) *
           0.5 +
           0.5
-        let r : Int = 160 + (flash * 70.0).to_int()
+        let r : Int32 = 160 + (flash * 70.0).to_int()
         base = @raylib.Color::new(r, 52, 66, 238)
       }
 
@@ -885,7 +885,7 @@ fn draw_board(
         )
       }
 
-      let hpw : Int = (cells[i].health * Float::from_int(cell_sz - 8) / 100.0).to_int()
+      let hpw : Int32 = (cells[i].health * Float::from_int(cell_sz - 8) / 100.0).to_int()
       @raylib.draw_rectangle(
         gx + 4,
         gy + cell_sz - 10,
@@ -908,10 +908,10 @@ fn draw_board(
 ///|
 /// Draws a labeled UI button with enabled and hover visual states at the given position and size.
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   enabled : Bool,
   hover : Bool,
@@ -933,7 +933,7 @@ fn draw_button(
     @raylib.Color::new(216, 230, 252, 246),
   )
 
-  let tw : Int = @draw.measure_text(label, 24)
+  let tw : Int32 = @draw.measure_text(label, 24)
   @draw.draw_text(
     label,
     x + (w - tw) / 2,
@@ -948,15 +948,15 @@ fn draw_button(
 fn draw_panel(
   timer : Float,
   stability : Float,
-  budget : Int,
-  delivered : Int,
-  goal : Int,
-  tier : Int,
-  faults : Int,
+  budget : Int32,
+  delivered : Int32,
+  goal : Int32,
+  tier : Int32,
+  faults : Int32,
   overclock_t : Float,
-  selected : Int,
+  selected : Int32,
   cells : Array[Cell],
-  net_rate : Int,
+  net_rate : Int32,
   storm_cd : Float,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -1050,7 +1050,7 @@ fn draw_panel(
   )
 
   let st01 : Float = clampf(stability / 100.0, 0.0, 1.0)
-  let stw : Int = (Float::from_int(392) * st01).to_int()
+  let stw : Int32 = (Float::from_int(392) * st01).to_int()
   @raylib.draw_rectangle(
     panel_x + 16,
     202,
@@ -1277,26 +1277,26 @@ fn main {
     }
   })
 
-  let queue : Array[Int] = Array::make(max_cells, 0)
-  let seen : Array[Int] = Array::make(max_cells, 0)
+  let queue : Array[Int32] = Array::make(max_cells, 0)
+  let seen : Array[Int32] = Array::make(max_cells, 0)
 
-  let mut state : Int = 0 // 0 menu, 1 play, 2 win, 3 lose
+  let mut state : Int32 = 0 // 0 menu, 1 play, 2 win, 3 lose
   let mut timer : Float = 240.0
   let mut stability : Float = 100.0
-  let mut budget : Int = 124
-  let mut delivered : Int = 0
-  let mut goal : Int = 560
-  let mut tier : Int = 1
+  let mut budget : Int32 = 124
+  let mut delivered : Int32 = 0
+  let mut goal : Int32 = 560
+  let mut tier : Int32 = 1
 
-  let mut selected : Int = -1
-  let mut hover : Int = -1
+  let mut selected : Int32 = -1
+  let mut hover : Int32 = -1
 
   let mut step_cd : Float = 0.42
   let mut fault_cd : Float = 6.0
   let mut overclock_t : Float = 0.0
-  let mut seen_mark : Int = 1
+  let mut seen_mark : Int32 = 1
 
-  let mut net_rate : Int = 0
+  let mut net_rate : Int32 = 0
 
   let mut msg : String = ""
   let mut msg_t : Float = 0.0
@@ -1384,15 +1384,15 @@ fn main {
 
       fault_cd = fault_cd - dt
       if fault_cd <= 0.0 {
-        let n : Int = 1 + @raylib.get_random_value(0, tier / 2)
-        let made : Int = induce_faults(cells, n, tier)
+        let n : Int32 = 1 + @raylib.get_random_value(0, tier / 2)
+        let made : Int32 = induce_faults(cells, n, tier)
         if made > 0 {
           msg = "Fault event: \{made} nodes"
           msg_t = 1.2
           for i in 0..<cells.length() {
             if cells[i].fault_t > 0.0 {
-              let x : Int = i % cols
-              let y : Int = i / cols
+              let x : Int32 = i % cols
+              let y : Int32 = i / cols
               burst_pulses(pulses, cell_cx(x), cell_cy(y), 5, 3)
             }
           }
@@ -1427,7 +1427,7 @@ fn main {
         }
 
         stability = stability - Float::from_int(miss) * 0.065
-        let fault_n : Int = count_faults(cells)
+        let fault_n : Int32 = count_faults(cells)
         stability = stability - Float::from_int(fault_n) * 0.03
 
         if stability > 100.0 {
@@ -1437,8 +1437,8 @@ fn main {
         if gain > 0 {
           for i in 0..<cells.length() {
             if cells[i].kind == 6 && cells[i].charge > 0.2 {
-              let x : Int = i % cols
-              let y : Int = i / cols
+              let x : Int32 = i % cols
+              let y : Int32 = i / cols
               burst_pulses(pulses, cell_cx(x), cell_cy(y), 2 + gain / 10, 2)
             }
           }
@@ -1494,16 +1494,16 @@ fn main {
         b_over_h,
       )
 
-      let patch_cost : Int = 32
-      let row_cost : Int = 24
-      let over_cost : Int = 42
+      let patch_cost : Int32 = 32
+      let row_cost : Int32 = 24
+      let over_cost : Int32 = 42
 
       let patch_trigger : Bool = @raylib.is_key_pressed(@raylib.KeyF) ||
         (click && patch_hover)
       if patch_trigger {
         if budget >= patch_cost {
           budget = budget - patch_cost
-          let patched : Int = patch_faults(cells, 4.0)
+          let patched : Int32 = patch_faults(cells, 4.0)
           msg = "Patched \{patched} faulted nodes"
           msg_t = 1.0
           if patched > 0 {
@@ -1526,7 +1526,7 @@ fn main {
       if row_trigger {
         if budget >= row_cost {
           budget = budget - row_cost
-          let y : Int = @raylib.get_random_value(1, rows - 2)
+          let y : Int32 = @raylib.get_random_value(1, rows - 2)
           reroll_row(cells, y)
           msg = "Rerouted row \{y + 1}"
           msg_t = 1.0
@@ -1548,7 +1548,7 @@ fn main {
           msg = "Overclock engaged"
           msg_t = 1.2
           for y in 0..<rows {
-            let i : Int = idx(0, y)
+            let i : Int32 = idx(0, y)
             if cells[i].kind == 5 {
               burst_pulses(pulses, cell_cx(0), cell_cy(y), 8, 0)
             }
@@ -1560,7 +1560,7 @@ fn main {
       }
 
       if click && !patch_hover && !row_hover && !over_hover {
-        let ci : Int = pick_cell(mouse.x, mouse.y)
+        let ci : Int32 = pick_cell(mouse.x, mouse.y)
         if ci >= 0 {
           selected = ci
           if cells[ci].kind == 0 {
@@ -1573,8 +1573,8 @@ fn main {
               cells[ci].charge = 0.0
               msg = "Constructed new wire node"
               msg_t = 0.9
-              let x : Int = ci % cols
-              let y : Int = ci / cols
+              let x : Int32 = ci % cols
+              let y : Int32 = ci / cols
               burst_pulses(pulses, cell_cx(x), cell_cy(y), 10, 1)
             } else {
               msg = "Need $14 to construct node"
@@ -1593,8 +1593,8 @@ fn main {
               cells[ci].health = clampf(cells[ci].health + 4.0, 0.0, 100.0)
               msg = "Manual patch applied"
               msg_t = 0.7
-              let x : Int = ci % cols
-              let y : Int = ci / cols
+              let x : Int32 = ci % cols
+              let y : Int32 = ci / cols
               burst_pulses(pulses, cell_cx(x), cell_cy(y), 6, 1)
             } else {
               msg = "Need $6 for local patch"
@@ -1650,15 +1650,15 @@ fn main {
     draw_operator_room_backdrop(art, state)
     draw_board(cells, selected, hover, scene_t, art)
 
-    let faults_now : Int = count_faults(cells)
+    let faults_now : Int32 = count_faults(cells)
     draw_panel(
       timer, stability, budget, delivered, goal, tier, faults_now, overclock_t, selected,
       cells, net_rate, fault_cd,
     )
 
-    let patch_cost : Int = 32
-    let row_cost : Int = 24
-    let over_cost : Int = 42
+    let patch_cost : Int32 = 32
+    let row_cost : Int32 = 24
+    let over_cost : Int32 = 42
 
     draw_button(
       panel_x + 16,
@@ -1699,8 +1699,8 @@ fn main {
     )
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = sw / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         16,

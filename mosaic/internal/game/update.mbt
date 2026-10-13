@@ -105,7 +105,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_index : Int) -> Unit {
+fn start_level(game : @types.Game, level_index : Int32) -> Unit {
   game.current_level = level_index
   game.screen = Playing
   game.play_state = Placing

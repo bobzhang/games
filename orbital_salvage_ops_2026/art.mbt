@@ -76,7 +76,7 @@ fn draw_texture_cover(
 /// Draws one 4x3 generated sprite-sheet cell centered on the destination point.
 fn draw_sprite_cell(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -90,7 +90,7 @@ fn draw_sprite_cell(
 /// Draws one 4x3 generated sprite-sheet cell centered and rotated in degrees.
 fn draw_sprite_cell_rotated(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,

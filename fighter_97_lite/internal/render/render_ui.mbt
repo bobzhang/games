@@ -1,9 +1,9 @@
 ///|
 fn draw_health_gauge(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   base_color : @raylib.Color,
 ) -> Unit {
@@ -16,10 +16,10 @@ fn draw_health_gauge(
 
 ///|
 fn draw_meter_gauge(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   base_color : @raylib.Color,
 ) -> Unit {
@@ -44,9 +44,9 @@ fn draw_meter_gauge(
 
 ///|
 fn draw_round_win_markers(
-  x : Int,
-  y : Int,
-  wins : Int,
+  x : Int32,
+  y : Int32,
+  wins : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   for i in 0..<@types.max_round_wins {
@@ -106,8 +106,8 @@ fn training_button_color(down : Bool, pressed : Bool) -> @raylib.Color {
 
 ///|
 fn draw_training_input_panel(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   title : String,
   tint : @raylib.Color,
   input : @types.InputState,
@@ -203,13 +203,13 @@ fn guard_meter_color(ratio : Float, game : @types.Game) -> @raylib.Color {
 
 ///|
 fn draw_guard_gauge(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   base_color : @raylib.Color,
-  frame_count : Int,
+  frame_count : Int32,
 ) -> Unit {
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(16, 18, 26, 220))
   @raylib.draw_rectangle_lines(
@@ -615,9 +615,9 @@ fn @types.Game::draw_title_screen(game : @types.Game) -> Unit {
 fn draw_select_card(
   _game : @types.Game,
   archetype : @types.CharacterArchetype,
-  index : Int,
-  x : Int,
-  y : Int,
+  index : Int32,
+  x : Int32,
+  y : Int32,
   selected_p1 : Bool,
   selected_p2 : Bool,
 ) -> Unit {

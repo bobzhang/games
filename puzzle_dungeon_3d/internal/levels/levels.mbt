@@ -12,7 +12,7 @@
 ///|
 /// Returns ASCII tile rows for a floor index, defining static geometry and
 /// entity placement used by the stage loader.
-pub fn get_floor_data(floor : Int) -> Array[String] {
+pub fn get_floor_data(floor : Int32) -> Array[String] {
   if floor == 0 {
     // World 1 Floor 1: Tutorial - push block onto plate
     [
@@ -237,7 +237,7 @@ pub fn get_floor_data(floor : Int) -> Array[String] {
 
 ///|
 /// Returns the display name shown in HUD and floor-select menus for a floor.
-pub fn get_floor_name(floor : Int) -> String {
+pub fn get_floor_name(floor : Int32) -> String {
   if floor == 0 {
     "First Steps"
   } else if floor == 1 {
@@ -305,7 +305,7 @@ pub fn get_floor_name(floor : Int) -> String {
 
 ///|
 /// Returns the par-move target used to award 1-3 stars on floor completion.
-pub fn get_par_moves(floor : Int) -> Int {
+pub fn get_par_moves(floor : Int32) -> Int32 {
   if floor == 0 {
     8
   } else if floor == 1 {

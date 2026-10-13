@@ -45,7 +45,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   )
 
   for i in 0..<14 {
-    let y : Int = i * 74
+    let y : Int32 = i * 74
     @raylib.draw_rectangle(
       0,
       y,
@@ -63,9 +63,9 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the background panel and border rectangle behind the minefield.
-fn draw_board_back(bx : Int, by : Int, tile : Int) -> Unit {
-  let bw : Int = @types.board_w * tile
-  let bh : Int = @types.board_h * tile
+fn draw_board_back(bx : Int32, by : Int32, tile : Int32) -> Unit {
+  let bw : Int32 = @types.board_w * tile
+  let bh : Int32 = @types.board_h * tile
 
   @raylib.draw_rectangle(
     bx - 18,
@@ -87,7 +87,7 @@ fn draw_board_back(bx : Int, by : Int, tile : Int) -> Unit {
 
 ///|
 /// Draws an unrevealed cell tile with a highlight bevel; includes a flag triangle when flagged.
-fn draw_cell_hidden(x : Int, y : Int, tile : Int, flagged : Bool) -> Unit {
+fn draw_cell_hidden(x : Int32, y : Int32, tile : Int32, flagged : Bool) -> Unit {
   match tex_covered_cell.val {
     Some(texture) =>
       draw_art_centered(
@@ -158,7 +158,7 @@ fn draw_cell_hidden(x : Int, y : Int, tile : Int, flagged : Bool) -> Unit {
 
 ///|
 /// Returns the themed colour for the adjacency number `v` (1–8+).
-fn number_color(v : Int) -> @raylib.Color {
+fn number_color(v : Int32) -> @raylib.Color {
   if v == 1 {
     @raylib.Color::new(120, 188, 255, 255)
   } else if v == 2 {
@@ -181,10 +181,10 @@ fn number_color(v : Int) -> @raylib.Color {
 ///|
 /// Draws a revealed cell: explosion background for detonated mines, mine glyph for all mines, or an adjacency number for safe cells.
 fn draw_cell_revealed(
-  x : Int,
-  y : Int,
-  tile : Int,
-  around : Int,
+  x : Int32,
+  y : Int32,
+  tile : Int32,
+  around : Int32,
   mine : Bool,
   exploded : Bool,
 ) -> Unit {
@@ -231,7 +231,7 @@ fn draw_cell_revealed(
 
   if around > 0 {
     let s : String = around.to_string()
-    let fs : Int = tile / 2 + 6
+    let fs : Int32 = tile / 2 + 6
     @draw.draw_text(
       s,
       x + tile / 2 - @draw.measure_text(s, fs) / 2,
@@ -244,12 +244,12 @@ fn draw_cell_revealed(
 
 ///|
 /// Draws the grid line overlay across the full board area.
-fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
-  let bw : Int = @types.board_w * tile
-  let bh : Int = @types.board_h * tile
+fn draw_grid_lines(bx : Int32, by : Int32, tile : Int32) -> Unit {
+  let bw : Int32 = @types.board_w * tile
+  let bh : Int32 = @types.board_h * tile
 
   for x in 0..<=@types.board_w {
-    let px : Int = bx + x * tile
+    let px : Int32 = bx + x * tile
     @raylib.draw_line(
       px,
       by,
@@ -260,7 +260,7 @@ fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
   }
 
   for y in 0..<=@types.board_h {
-    let py : Int = by + y * tile
+    let py : Int32 = by + y * tile
     @raylib.draw_line(
       bx,
       py,
@@ -275,15 +275,15 @@ fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
 /// Iterates every board cell and draws it as either revealed or hidden, then draws the grid lines on top.
 fn @types.Game::draw_cells(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   for y in 0..<@types.board_h {
     for x in 0..<@types.board_w {
-      let i : Int = @types.idx(x, y)
-      let px : Int = bx + x * tile
-      let py : Int = by + y * tile
+      let i : Int32 = @types.idx(x, y)
+      let px : Int32 = bx + x * tile
+      let py : Int32 = by + y * tile
 
       if game.cells[i].revealed || (game.state == Result && game.cells[i].mine) {
         draw_cell_revealed(
@@ -307,16 +307,16 @@ fn @types.Game::draw_cells(
 /// Draws a highlight rectangle around the most recently revealed cell.
 fn @types.Game::draw_last_reveal(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   if game.last_reveal_x < 0 || game.last_reveal_y < 0 {
     return
   }
 
-  let px : Int = bx + game.last_reveal_x * tile
-  let py : Int = by + game.last_reveal_y * tile
+  let px : Int32 = bx + game.last_reveal_x * tile
+  let py : Int32 = by + game.last_reveal_y * tile
 
   @raylib.draw_rectangle_lines_ex(
     @raylib.Rectangle::new(
@@ -334,16 +334,16 @@ fn @types.Game::draw_last_reveal(
 /// Draws the keyboard navigation cursor outline on the current cursor cell during Play state; colour reflects the active mode.
 fn @types.Game::draw_cursor(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   if game.state != Play {
     return
   }
 
-  let x : Int = bx + game.cursor_x * tile
-  let y : Int = by + game.cursor_y * tile
+  let x : Int32 = bx + game.cursor_x * tile
+  let y : Int32 = by + game.cursor_y * tile
 
   @raylib.draw_rectangle_lines_ex(
     @raylib.Rectangle::new(
@@ -368,7 +368,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
       continue
     }
 
-    let a : Int = if spark.life > 0.7 {
+    let a : Int32 = if spark.life > 0.7 {
       236
     } else if spark.life > 0.4 {
       196
@@ -392,12 +392,12 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 /// Draws a board-clear progress bar at the given position showing the current reveal percentage.
 fn @types.Game::draw_progress_bar(
   game : @types.Game,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Unit {
-  let pct : Int = @types.clear_ratio_pct(game)
+  let pct : Int32 = @types.clear_ratio_pct(game)
 
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(28, 42, 60, 220))
   @raylib.draw_rectangle(
@@ -429,10 +429,10 @@ fn @types.Game::draw_progress_bar(
 /// Draws a labelled touch button, highlighted in `color` when `active` or using the default dim style otherwise.
 fn draw_touch_button(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   active : Bool,
   color : @raylib.Color,
 ) -> Unit {
@@ -540,10 +540,10 @@ fn @types.Game::draw_touch_ui(game : @types.Game) -> Unit {
 ///|
 /// Draws the right-side information panel with score, lives, mines, flags, time, combo, progress bar, controls, and the current HUD message.
 fn @types.Game::draw_panel(game : @types.Game) -> Unit {
-  let px : Int = @types.panel_x()
-  let py : Int = 20
-  let pw : Int = @types.screen_w - @types.panel_x() - 22
-  let ph : Int = @types.screen_h - 40
+  let px : Int32 = @types.panel_x()
+  let py : Int32 = 20
+  let pw : Int32 = @types.screen_w - @types.panel_x() - 22
+  let ph : Int32 = @types.screen_h - 40
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(14, 22, 36, 244))
   @raylib.draw_rectangle_lines(
@@ -807,10 +807,10 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(6, 10, 16, 170),
   )
 
-  let pw : Int = 840
-  let ph : Int = 500
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 840
+  let ph : Int32 = 500
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(16, 24, 36, 246))
   @raylib.draw_rectangle_lines(

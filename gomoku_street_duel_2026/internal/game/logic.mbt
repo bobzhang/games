@@ -45,8 +45,8 @@ fn @types.Game::clear_last_moves(game : @types.Game) -> Unit {
 /// Appends a move `(x, y, p)` to the history stack, silently capping at the maximum capacity.
 fn @types.Game::push_history(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
 ) -> Unit {
   if game.hist_len >= game.hist_x.length() {
@@ -63,7 +63,7 @@ fn @types.Game::push_history(
 /// Removes and returns the most recent history entry as `(true, x, y, player)`, or `(false, 0, 0, Empty)` if the stack is empty.
 fn @types.Game::pop_history(
   game : @types.Game,
-) -> (Bool, Int, Int, @types.Player) {
+) -> (Bool, Int32, Int32, @types.Player) {
   if game.hist_len <= 0 {
     return (false, 0, 0, Empty)
   }
@@ -81,15 +81,15 @@ fn @types.Game::pop_history(
 /// Counts consecutive cells belonging to `p` starting from `(x+dx, y+dy)` and advancing in direction `(dx, dy)`.
 fn @types.Game::count_one_side(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
-  dx : Int,
-  dy : Int,
-) -> Int {
-  let mut cx : Int = x + dx
-  let mut cy : Int = y + dy
-  let mut c : Int = 0
+  dx : Int32,
+  dy : Int32,
+) -> Int32 {
+  let mut cx : Int32 = x + dx
+  let mut cy : Int32 = y + dy
+  let mut c : Int32 = 0
 
   while @types.in_board(cx, cy) && @types.cell_at(game, cx, cy) == p {
     c = c + 1
@@ -104,16 +104,16 @@ fn @types.Game::count_one_side(
 /// Returns true if placing `p` at `(x, y)` forms a five-in-a-row in any of the four line directions.
 fn @types.Game::check_five_from(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
 ) -> Bool {
-  let dirs : Array[(Int, Int)] = [(1, 0), (0, 1), (1, 1), (1, -1)]
+  let dirs : Array[(Int32, Int32)] = [(1, 0), (0, 1), (1, 1), (1, -1)]
 
   for dir in dirs {
     let (dx, dy) = dir
-    let c1 : Int = game.count_one_side(x, y, p, dx, dy)
-    let c2 : Int = game.count_one_side(x, y, p, -dx, -dy)
+    let c1 : Int32 = game.count_one_side(x, y, p, dx, dy)
+    let c2 : Int32 = game.count_one_side(x, y, p, -dx, -dy)
 
     if 1 + c1 + c2 >= 5 {
       return true
@@ -133,8 +133,8 @@ fn @types.Game::board_full(game : @types.Game) -> Bool {
 /// Places player `p`'s stone at `(x, y)`, records history, emits sparks, checks for a win or draw, and advances the turn; returns false if placement is invalid.
 fn @types.Game::place_stone(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
 ) -> Bool {
   if game.state != Play {
@@ -208,8 +208,8 @@ fn @types.Game::undo_round_step(game : @types.Game) -> Bool {
     return false
   }
 
-  let x : Int = pop.1
-  let y : Int = pop.2
+  let x : Int32 = pop.1
+  let y : Int32 = pop.2
 
   if @types.in_board(x, y) && @types.cell_at(game, x, y) != Empty {
     @types.set_cell(game, x, y, Empty)

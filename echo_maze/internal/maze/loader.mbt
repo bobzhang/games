@@ -33,7 +33,7 @@ pub fn parse_maze(level_def : @types.LevelDef) -> @types.Maze {
   let mut cur_button = 0
   let mut cur_door = 0
   // Map timed door durations by door_id
-  let timed_durations : Array[(Int, Int)] = level_def.timed_door_durations
+  let timed_durations : Array[(Int32, Int32)] = level_def.timed_door_durations
   for y, line in lines {
     let row : Array[@types.Tile] = []
     for x = 0; x < width; x = x + 1 {
@@ -97,7 +97,10 @@ pub fn parse_maze(level_def : @types.LevelDef) -> @types.Maze {
 }
 
 ///|
-fn find_timed_duration(durations : Array[(Int, Int)], door_id : Int) -> Int {
+fn find_timed_duration(
+  durations : Array[(Int32, Int32)],
+  door_id : Int32,
+) -> Int32 {
   for pair in durations {
     if pair.0 == door_id {
       return pair.1

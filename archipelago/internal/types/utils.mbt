@@ -1,15 +1,15 @@
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
 ///|
-pub fn island(x : Int, y : Int, count : Int) -> Island {
+pub fn island(x : Int32, y : Int32, count : Int32) -> Island {
   { pos: vec2i(x, y), required_count: count, }
 }
 
 ///|
-pub fn new_bridge(a : Int, b : Int, dir : BridgeDir) -> Bridge {
+pub fn new_bridge(a : Int32, b : Int32, dir : BridgeDir) -> Bridge {
   { island_a: a, island_b: b, count: 1, direction: dir, }
 }
 
@@ -49,7 +49,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn cell_size_for_grid(grid : Int) -> Int {
+pub fn cell_size_for_grid(grid : Int32) -> Int32 {
   if grid <= 5 {
     cell_size_5
   } else if grid <= 7 {
@@ -60,7 +60,7 @@ pub fn cell_size_for_grid(grid : Int) -> Int {
 }
 
 ///|
-pub fn island_radius_for_grid(grid : Int) -> Float {
+pub fn island_radius_for_grid(grid : Int32) -> Float {
   if grid <= 5 {
     island_radius_5
   } else if grid <= 7 {
@@ -71,13 +71,13 @@ pub fn island_radius_for_grid(grid : Int) -> Float {
 }
 
 ///|
-pub fn island_screen_x(isl : Island, grid : Int) -> Int {
+pub fn island_screen_x(isl : Island, grid : Int32) -> Int32 {
   let cs = cell_size_for_grid(grid)
   grid_offset_x + isl.pos.x * cs + cs / 2
 }
 
 ///|
-pub fn island_screen_y(isl : Island, grid : Int) -> Int {
+pub fn island_screen_y(isl : Island, grid : Int32) -> Int32 {
   let cs = cell_size_for_grid(grid)
   grid_offset_y + isl.pos.y * cs + cs / 2
 }
@@ -85,8 +85,8 @@ pub fn island_screen_y(isl : Island, grid : Int) -> Int {
 ///|
 pub fn count_bridges_for_island(
   bridges : Array[Bridge],
-  island_idx : Int,
-) -> Int {
+  island_idx : Int32,
+) -> Int32 {
   let mut total = 0
   for b in bridges {
     if b.island_a == island_idx || b.island_b == island_idx {
@@ -97,7 +97,7 @@ pub fn count_bridges_for_island(
 }
 
 ///|
-pub fn find_bridge(bridges : Array[Bridge], a : Int, b : Int) -> Int {
+pub fn find_bridge(bridges : Array[Bridge], a : Int32, b : Int32) -> Int32 {
   for i, br in bridges {
     if (br.island_a == a && br.island_b == b) ||
       (br.island_a == b && br.island_b == a) {
@@ -108,17 +108,17 @@ pub fn find_bridge(bridges : Array[Bridge], a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn same_row(islands : Array[Island], a : Int, b : Int) -> Bool {
+pub fn same_row(islands : Array[Island], a : Int32, b : Int32) -> Bool {
   islands[a].pos.y == islands[b].pos.y
 }
 
 ///|
-pub fn same_col(islands : Array[Island], a : Int, b : Int) -> Bool {
+pub fn same_col(islands : Array[Island], a : Int32, b : Int32) -> Bool {
   islands[a].pos.x == islands[b].pos.x
 }
 
 ///|
-pub fn can_connect(islands : Array[Island], a : Int, b : Int) -> Bool {
+pub fn can_connect(islands : Array[Island], a : Int32, b : Int32) -> Bool {
   if a == b {
     return false
   }
@@ -126,7 +126,11 @@ pub fn can_connect(islands : Array[Island], a : Int, b : Int) -> Bool {
 }
 
 ///|
-pub fn has_island_between(islands : Array[Island], a : Int, b : Int) -> Bool {
+pub fn has_island_between(
+  islands : Array[Island],
+  a : Int32,
+  b : Int32,
+) -> Bool {
   let pa = islands[a].pos
   let pb = islands[b].pos
   if pa.y == pb.y {
@@ -165,10 +169,10 @@ pub fn has_island_between(islands : Array[Island], a : Int, b : Int) -> Bool {
 ///|
 pub fn bridges_cross(
   islands : Array[Island],
-  br1_a : Int,
-  br1_b : Int,
-  br2_a : Int,
-  br2_b : Int,
+  br1_a : Int32,
+  br1_b : Int32,
+  br2_a : Int32,
+  br2_b : Int32,
 ) -> Bool {
   let a1 = islands[br1_a].pos
   let b1 = islands[br1_b].pos
@@ -202,8 +206,8 @@ pub fn bridges_cross(
 pub fn would_cross_existing(
   islands : Array[Island],
   bridges : Array[Bridge],
-  a : Int,
-  b : Int,
+  a : Int32,
+  b : Int32,
 ) -> Bool {
   for br in bridges {
     if bridges_cross(islands, a, b, br.island_a, br.island_b) {
@@ -214,7 +218,11 @@ pub fn would_cross_existing(
 }
 
 ///|
-pub fn bridge_direction(islands : Array[Island], a : Int, b : Int) -> BridgeDir {
+pub fn bridge_direction(
+  islands : Array[Island],
+  a : Int32,
+  b : Int32,
+) -> BridgeDir {
   if islands[a].pos.y == islands[b].pos.y {
     Horizontal
   } else {
@@ -234,7 +242,7 @@ pub fn is_connected(islands : Array[Island], bridges : Array[Bridge]) -> Bool {
   for _i in 0..<islands.length() {
     visited.push(false)
   }
-  let queue : Array[Int] = [0]
+  let queue : Array[Int32] = [0]
   visited[0] = true
   while queue.length() > 0 {
     let current = queue.unsafe_pop()
@@ -257,7 +265,7 @@ pub fn is_connected(islands : Array[Island], bridges : Array[Bridge]) -> Bool {
 }
 
 ///|
-pub fn total_bridge_segments(bridges : Array[Bridge]) -> Int {
+pub fn total_bridge_segments(bridges : Array[Bridge]) -> Int32 {
   let mut total = 0
   for b in bridges {
     total = total + b.count
@@ -280,7 +288,7 @@ pub fn clone_bridges(bridges : Array[Bridge]) -> Array[Bridge] {
 }
 
 ///|
-pub fn tier_for_level(level : Int) -> Tier {
+pub fn tier_for_level(level : Int32) -> Tier {
   if level < tier1_count {
     Shores
   } else if level < tier1_count + tier2_count {
@@ -291,7 +299,7 @@ pub fn tier_for_level(level : Int) -> Tier {
 }
 
 ///|
-pub fn tier_start_level(tier : Tier) -> Int {
+pub fn tier_start_level(tier : Tier) -> Int32 {
   match tier {
     Shores => 0
     Straits => tier1_count
@@ -300,7 +308,7 @@ pub fn tier_start_level(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Shores => tier1_count
     Straits => tier2_count
@@ -355,7 +363,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn min_int(a : Int, b : Int) -> Int {
+pub fn min_int(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -364,7 +372,7 @@ pub fn min_int(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn max_int(a : Int, b : Int) -> Int {
+pub fn max_int(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -375,10 +383,10 @@ pub fn max_int(a : Int, b : Int) -> Int {
 ///|
 pub fn find_nearest_island(
   islands : Array[Island],
-  grid_size : Int,
-  mx : Int,
-  my : Int,
-) -> Int {
+  grid_size : Int32,
+  mx : Int32,
+  my : Int32,
+) -> Int32 {
   let radius = island_radius_for_grid(grid_size)
   let click_radius = radius + 10.0
   let mut best = -1
@@ -401,11 +409,11 @@ pub fn find_nearest_island(
 pub fn find_connectable_island_at(
   islands : Array[Island],
   bridges : Array[Bridge],
-  selected : Int,
-  grid_size : Int,
-  mx : Int,
-  my : Int,
-) -> Int {
+  selected : Int32,
+  grid_size : Int32,
+  mx : Int32,
+  my : Int32,
+) -> Int32 {
   let idx = find_nearest_island(islands, grid_size, mx, my)
   if idx < 0 || idx == selected {
     return -1

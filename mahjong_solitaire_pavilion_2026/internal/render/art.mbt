@@ -69,10 +69,10 @@ fn draw_texture_centered(
 /// Draws a texture stretched into the full destination rectangle.
 fn draw_texture_rect(
   texture : @raylib.Texture,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   @raylib.draw_texture_pro(

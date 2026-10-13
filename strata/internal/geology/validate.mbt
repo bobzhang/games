@@ -4,8 +4,8 @@
 /// param_a = rock_index of older rock, param_b = rock_index of younger rock.
 pub fn check_fossil_age(
   slots : Array[@types.RockKind?],
-  older_rock_idx : Int,
-  younger_rock_idx : Int,
+  older_rock_idx : Int32,
+  younger_rock_idx : Int32,
 ) -> Bool {
   let older_rock = @types.rock_from_index(older_rock_idx)
   let younger_rock = @types.rock_from_index(younger_rock_idx)
@@ -23,8 +23,8 @@ pub fn check_fossil_age(
 /// "above" means higher slot index (param_a slot = param_b slot + 1).
 pub fn check_superposition(
   slots : Array[@types.RockKind?],
-  above_rock_idx : Int,
-  below_rock_idx : Int,
+  above_rock_idx : Int32,
+  below_rock_idx : Int32,
 ) -> Bool {
   let above_rock = @types.rock_from_index(above_rock_idx)
   let below_rock = @types.rock_from_index(below_rock_idx)
@@ -40,8 +40,8 @@ pub fn check_superposition(
 /// Check Dating clue: rock at param_a must be at exactly slot param_b (0-based).
 pub fn check_dating(
   slots : Array[@types.RockKind?],
-  rock_idx : Int,
-  target_slot : Int,
+  rock_idx : Int32,
+  target_slot : Int32,
 ) -> Bool {
   let rock = @types.rock_from_index(rock_idx)
   let pos = @types.find_rock_slot(slots, rock)
@@ -56,8 +56,8 @@ pub fn check_dating(
 /// rock at param_b. The intruding rock must be younger (higher slot).
 pub fn check_intrusion(
   slots : Array[@types.RockKind?],
-  intruder_idx : Int,
-  host_idx : Int,
+  intruder_idx : Int32,
+  host_idx : Int32,
 ) -> Bool {
   let intruder = @types.rock_from_index(intruder_idx)
   let host = @types.rock_from_index(host_idx)
@@ -73,8 +73,8 @@ pub fn check_intrusion(
 /// Check Unconformity clue: rocks at param_a and param_b must NOT be adjacent.
 pub fn check_unconformity(
   slots : Array[@types.RockKind?],
-  rock_a_idx : Int,
-  rock_b_idx : Int,
+  rock_a_idx : Int32,
+  rock_b_idx : Int32,
 ) -> Bool {
   let rock_a = @types.rock_from_index(rock_a_idx)
   let rock_b = @types.rock_from_index(rock_b_idx)
@@ -105,7 +105,7 @@ pub fn check_clue(clue : @types.Clue, slots : Array[@types.RockKind?]) -> Bool {
 pub fn validate_all(
   clues : Array[@types.Clue],
   slots : Array[@types.RockKind?],
-) -> Int {
+) -> Int32 {
   let mut satisfied = 0
   for i in 0..<clues.length() {
     let ok = check_clue(clues[i], slots)

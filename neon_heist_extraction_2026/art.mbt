@@ -36,7 +36,7 @@ fn unload_game_art(art : GameArt) -> Unit {
 
 ///|
 /// Returns a color with the same RGB channels and a replaced alpha channel.
-fn alpha_color(c : @raylib.Color, a : Int) -> @raylib.Color {
+fn alpha_color(c : @raylib.Color, a : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),
@@ -112,7 +112,7 @@ fn draw_texture_rect(
 /// Draws one 4x3 generated sprite sheet cell centered on the destination point.
 fn draw_sprite_cell_rotated(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -143,7 +143,7 @@ fn draw_sprite_cell_rotated(
 /// Draws one 4x3 generated sprite sheet cell without rotation.
 fn draw_sprite_cell(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,

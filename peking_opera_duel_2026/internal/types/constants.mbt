@@ -1,26 +1,26 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1600
+pub let screen_w : Int32 = 1600
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 960
+pub let screen_h : Int32 = 960
 
 ///|
 /// Fixed update and render rate target.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Number of supported stance ids.
-pub let stance_count : Int = 4
+pub let stance_count : Int32 = 4
 
 ///|
 /// Minimum lane coordinate on each axis.
-pub let lane_axis_min : Int = -1
+pub let lane_axis_min : Int32 = -1
 
 ///|
 /// Maximum lane coordinate on each axis.
-pub let lane_axis_max : Int = 1
+pub let lane_axis_max : Int32 = 1
 
 ///|
 /// Duel timer duration in seconds.
@@ -96,19 +96,19 @@ pub let deflect_harmony_penalty : Float = 4.2
 
 ///|
 /// Acclaim gained from a successful deflect.
-pub let deflect_acclaim_gain : Int = 8
+pub let deflect_acclaim_gain : Int32 = 8
 
 ///|
 /// Base acclaim gained from a good hit.
-pub let good_acclaim_gain : Int = 22
+pub let good_acclaim_gain : Int32 = 22
 
 ///|
 /// Base acclaim gained from a perfect hit.
-pub let perfect_acclaim_gain : Int = 32
+pub let perfect_acclaim_gain : Int32 = 32
 
 ///|
 /// Bonus acclaim gained per combo stack.
-pub let combo_acclaim_step : Int = 3
+pub let combo_acclaim_step : Int32 = 3
 
 ///|
 /// Health restored by a successful hit.
@@ -132,27 +132,27 @@ pub let burst_slow_factor : Float = 0.46
 
 ///|
 /// Left x bound of the stage drawing area.
-pub let stage_left : Int = 140
+pub let stage_left : Int32 = 140
 
 ///|
 /// Top y bound of the stage drawing area.
-pub let stage_top : Int = 110
+pub let stage_top : Int32 = 110
 
 ///|
 /// Stage drawing width in pixels.
-pub let stage_w : Int = 1320
+pub let stage_w : Int32 = 1320
 
 ///|
 /// Stage drawing height in pixels.
-pub let stage_h : Int = 740
+pub let stage_h : Int32 = 740
 
 ///|
 /// Horizontal pixel step per lane index.
-pub let lane_step_x : Int = 220
+pub let lane_step_x : Int32 = 220
 
 ///|
 /// Vertical pixel step per lane index.
-pub let lane_step_y : Int = 120
+pub let lane_step_y : Int32 = 120
 
 ///|
 /// Available stance types for player and rival.
@@ -168,7 +168,7 @@ pub extend Stance with Eq::{not_equal, equal}
 
 ///|
 /// Convert an integer index (mod 4) to the corresponding stance.
-pub fn Stance::from_int(i : Int) -> Stance {
+pub fn Stance::from_int(i : Int32) -> Stance {
   match i % stance_count {
     0 => Spear
     1 => Fan

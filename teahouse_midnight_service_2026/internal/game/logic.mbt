@@ -73,7 +73,7 @@ fn @types.Game::reset_player(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_spark(game : @types.Game) -> Int {
+fn @types.Game::alloc_spark(game : @types.Game) -> Int32 {
   for i, slot in game.sparks {
     if !slot.active {
       break i
@@ -89,7 +89,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_ring(game : @types.Game) -> Int {
+fn @types.Game::alloc_ring(game : @types.Game) -> Int32 {
   for i, slot in game.rings {
     if !slot.active {
       break i
@@ -105,7 +105,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
+fn @types.Game::alloc_shadow(game : @types.Game) -> Int32 {
   for i, slot in game.shadows {
     if !slot.active {
       break i
@@ -129,7 +129,7 @@ fn @types.Game::emit_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_spark()
   game.sparks[i].active = true
@@ -147,8 +147,8 @@ fn @types.Game::burst_sparks(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_spark(
@@ -170,7 +170,7 @@ fn @types.Game::spawn_ring(
   y : Float,
   r : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_ring()
   game.rings[i].active = true
@@ -202,13 +202,13 @@ fn @types.Game::spawn_shadow(
 }
 
 ///|
-fn @types.Game::score_gain(game : @types.Game, base : Int) -> Int {
+fn @types.Game::score_gain(game : @types.Game, base : Int32) -> Int32 {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
-fn @types.Game::add_score(game : @types.Game, base : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, base : Int32) -> Unit {
   let g = game.score_gain(base)
   game.score = game.score + g
   if game.score > game.best_score {
@@ -229,14 +229,14 @@ fn @types.Game::clear_combo(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::slot_used(game : @types.Game, slot : Int) -> Bool {
+fn @types.Game::slot_used(game : @types.Game, slot : Int32) -> Bool {
   @utils.any_by(game.customers, fn(customer) {
     customer.active && customer.slot == slot
   })
 }
 
 ///|
-fn @types.Game::find_open_slot(game : @types.Game) -> Int {
+fn @types.Game::find_open_slot(game : @types.Game) -> Int32 {
   for s in 0..<@types.customer_slots {
     if !game.slot_used(s) {
       return s
@@ -246,7 +246,7 @@ fn @types.Game::find_open_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_customer(game : @types.Game) -> Int {
+fn @types.Game::alloc_customer(game : @types.Game) -> Int32 {
   for i, slot in game.customers {
     if !slot.active {
       break i
@@ -265,12 +265,12 @@ fn @types.Game::alloc_customer(game : @types.Game) -> Int {
 }
 
 ///|
-fn customer_base_patience(stage : Int) -> Float {
+fn customer_base_patience(stage : Int32) -> Float {
   @types.maxf(8.0, 20.0 - Float::from_int(stage - 1) * 1.1)
 }
 
 ///|
-fn pick_tea_type(stage : Int) -> @types.Tea {
+fn pick_tea_type(stage : Int32) -> @types.Tea {
   let r = @types.randi(0, 99)
 
   if stage <= 1 {
@@ -331,7 +331,7 @@ fn @types.Game::spawn_customer(game : @types.Game) -> Unit {
 }
 
 ///|
-fn nearest_leaf_station(px : Float, py : Float, reach : Float) -> Int {
+fn nearest_leaf_station(px : Float, py : Float, reach : Float) -> Int32 {
   for tea in 0..<@types.tea_count; best = -1, best_d2 = reach * reach {
     let d2 = @types.dist2(px, py, @types.leaf_x(), @types.leaf_y(tea))
     if d2 <= best_d2 {
@@ -348,7 +348,7 @@ fn @types.Game::nearest_customer(
   x : Float,
   y : Float,
   reach : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<game.customers.length(); best = -1, best_d2 = reach * reach {
     if !game.customers[i].active {
       continue
@@ -391,7 +391,7 @@ fn @types.Game::finish_brew(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::serve_customer(game : @types.Game, ci : Int) -> Unit {
+fn @types.Game::serve_customer(game : @types.Game, ci : Int32) -> Unit {
   if ci < 0 || ci >= game.customers.length() {
     return
   }
@@ -778,7 +778,7 @@ fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_customers()
   game.clear_sparks()
   game.clear_rings()

@@ -32,7 +32,7 @@ pub fn has_sound_event(game : @types.Game, target : @types.SoundEvent) -> Bool {
 pub fn count_sound_events(
   game : @types.Game,
   target : @types.SoundEvent,
-) -> Int {
+) -> Int32 {
   let mut count = 0
   for event in game.sound_queue {
     if event == target {
@@ -65,7 +65,7 @@ pub fn sound_event_name(event : @types.SoundEvent) -> String {
 ///|
 /// Returns the priority of a sound event (higher = more important).
 /// Used to prevent too many sounds playing simultaneously.
-pub fn sound_event_priority(event : @types.SoundEvent) -> Int {
+pub fn sound_event_priority(event : @types.SoundEvent) -> Int32 {
   match event {
     LevelComplete => 10
     StarEarned => 9
@@ -88,7 +88,7 @@ pub fn sound_event_priority(event : @types.SoundEvent) -> Int {
 /// when too many events are queued in a single frame.
 pub fn filter_sound_queue(
   game : @types.Game,
-  max_events : Int,
+  max_events : Int32,
 ) -> Array[@types.SoundEvent] {
   let queue = game.sound_queue
   if queue.length() <= max_events {

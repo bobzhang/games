@@ -2,11 +2,11 @@
 
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1024
+pub let screen_width : Int32 = 1024
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 // Game states
 
@@ -29,11 +29,11 @@ pub let sloop_max_rudder : Float = 45.0
 
 ///|
 /// Crew-related value for sloop max crew.
-pub let sloop_max_crew : Int = 20
+pub let sloop_max_crew : Int32 = 20
 
 ///|
 /// Count limit or quantity for sloop cannon count.
-pub let sloop_cannon_count : Int = 4
+pub let sloop_cannon_count : Int32 = 4
 
 ///|
 /// Speed value for sloop base speed in world units per second.
@@ -67,11 +67,11 @@ pub let brigantine_max_rudder : Float = 60.0
 
 ///|
 /// Crew-related value for brigantine max crew.
-pub let brigantine_max_crew : Int = 40
+pub let brigantine_max_crew : Int32 = 40
 
 ///|
 /// Count limit or quantity for brigantine cannon count.
-pub let brigantine_cannon_count : Int = 8
+pub let brigantine_cannon_count : Int32 = 8
 
 ///|
 /// Speed value for brigantine base speed in world units per second.
@@ -105,11 +105,11 @@ pub let frigate_max_rudder : Float = 75.0
 
 ///|
 /// Crew-related value for frigate max crew.
-pub let frigate_max_crew : Int = 80
+pub let frigate_max_crew : Int32 = 80
 
 ///|
 /// Count limit or quantity for frigate cannon count.
-pub let frigate_cannon_count : Int = 16
+pub let frigate_cannon_count : Int32 = 16
 
 ///|
 /// Speed value for frigate base speed in world units per second.
@@ -143,11 +143,11 @@ pub let galleon_max_rudder : Float = 90.0
 
 ///|
 /// Crew-related value for galleon max crew.
-pub let galleon_max_crew : Int = 120
+pub let galleon_max_crew : Int32 = 120
 
 ///|
 /// Count limit or quantity for galleon cannon count.
-pub let galleon_cannon_count : Int = 20
+pub let galleon_cannon_count : Int32 = 20
 
 ///|
 /// Speed value for galleon base speed in world units per second.
@@ -181,11 +181,11 @@ pub let mow_max_rudder : Float = 110.0
 
 ///|
 /// Crew-related value for mow max crew.
-pub let mow_max_crew : Int = 200
+pub let mow_max_crew : Int32 = 200
 
 ///|
 /// Count limit or quantity for mow cannon count.
-pub let mow_cannon_count : Int = 30
+pub let mow_cannon_count : Int32 = 30
 
 ///|
 /// Speed value for mow base speed in world units per second.
@@ -271,15 +271,15 @@ pub let chain_shot_arc : Float = 3.0
 
 ///|
 /// Numeric id for round shot.
-pub let ammo_round_shot : Int = 0
+pub let ammo_round_shot : Int32 = 0
 
 ///|
 /// Numeric id for chain shot.
-pub let ammo_chain_shot : Int = 1
+pub let ammo_chain_shot : Int32 = 1
 
 ///|
 /// Numeric id for grapeshot.
-pub let ammo_grapeshot : Int = 2
+pub let ammo_grapeshot : Int32 = 2
 
 // Ammo multipliers
 
@@ -437,19 +437,19 @@ pub let repair_rudder_speed : Float = 0.6
 
 ///|
 /// Numeric id for cannons.
-pub let crew_action_cannons : Int = 1
+pub let crew_action_cannons : Int32 = 1
 
 ///|
 /// Numeric id for repair hull.
-pub let crew_action_repair_hull : Int = 2
+pub let crew_action_repair_hull : Int32 = 2
 
 ///|
 /// Numeric id for repair mast.
-pub let crew_action_repair_mast : Int = 3
+pub let crew_action_repair_mast : Int32 = 3
 
 ///|
 /// Numeric id for repair rudder.
-pub let crew_action_repair_rudder : Int = 4
+pub let crew_action_repair_rudder : Int32 = 4
 
 // AI captain personality types
 
@@ -459,15 +459,15 @@ pub let crew_action_repair_rudder : Int = 4
 
 ///|
 /// Numeric id for destroy all.
-pub let objective_destroy_all : Int = 0
+pub let objective_destroy_all : Int32 = 0
 
 ///|
 /// Numeric id for escort convoy.
-pub let objective_escort_convoy : Int = 3
+pub let objective_escort_convoy : Int32 = 3
 
 ///|
 /// Numeric id for blockade run.
-pub let objective_blockade_run : Int = 4
+pub let objective_blockade_run : Int32 = 4
 
 // Island types
 
@@ -475,31 +475,31 @@ pub let objective_blockade_run : Int = 4
 
 ///|
 /// Count limit or quantity for max enemies.
-pub let max_enemies : Int = 16
+pub let max_enemies : Int32 = 16
 
 ///|
 /// Count limit or quantity for max cannonballs.
-pub let max_cannonballs : Int = 192
+pub let max_cannonballs : Int32 = 192
 
 ///|
 /// Count limit or quantity for max particles.
-pub let max_particles : Int = 640
+pub let max_particles : Int32 = 640
 
 ///|
 /// Count limit or quantity for max islands.
-pub let max_islands : Int = 32
+pub let max_islands : Int32 = 32
 
 ///|
 /// Count limit or quantity for max wakes.
-pub let max_wakes : Int = 256
+pub let max_wakes : Int32 = 256
 
 ///|
 /// Count limit or quantity for max debris.
-pub let max_debris : Int = 128
+pub let max_debris : Int32 = 128
 
 ///|
 /// Count limit or quantity for max messages.
-pub let max_messages : Int = 8
+pub let max_messages : Int32 = 8
 
 // Camera
 
@@ -561,11 +561,11 @@ pub let player_cannon_damage : Float = 15.0
 
 ///|
 /// Crew-related value for player start crew.
-pub let player_start_crew : Int = 80
+pub let player_start_crew : Int32 = 80
 
 ///|
 /// Player ship defaults (frigate class) setting for player start ammo.
-pub let player_start_ammo : Int = 60
+pub let player_start_ammo : Int32 = 60
 
 // Boarding combat
 
@@ -589,7 +589,7 @@ pub let fortress_base_hp : Float = 200.0
 
 ///|
 /// Count limit or quantity for fortress cannon count.
-pub let fortress_cannon_count : Int = 6
+pub let fortress_cannon_count : Int32 = 6
 
 ///|
 /// Rate value for fortress fire rate.
@@ -645,7 +645,7 @@ pub let two_pi : Float = 6.28318
 
 ///|
 /// Scoring or progression value for score fortress kill.
-pub let score_fortress_kill : Int = 500
+pub let score_fortress_kill : Int32 = 500
 
 // Reputation thresholds
 

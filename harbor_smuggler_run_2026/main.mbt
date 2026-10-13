@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Top edge of the navigable water area in pixels.
@@ -16,15 +16,15 @@ let water_bottom : Float = 760.0
 
 ///|
 /// Maximum number of simultaneous patrol boat slots.
-let max_patrol : Int = 24
+let max_patrol : Int32 = 24
 
 ///|
 /// Maximum number of simultaneous cargo crate slots.
-let max_crates : Int = 56
+let max_crates : Int32 = 56
 
 ///|
 /// Maximum number of simultaneous particle slots.
-let max_particles : Int = 520
+let max_particles : Int32 = 520
 
 ///|
 /// Player-controlled smuggler boat with position, velocity, HP, fuel gauge, held cargo value, and cooldown timers for turbo/stealth/hit/flash/delivery.
@@ -33,9 +33,9 @@ struct Smuggler {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut hp : Int
+  mut hp : Int32
   mut fuel : Float
-  mut cargo : Int
+  mut cargo : Int32
   mut dash_t : Float
   mut stealth_t : Float
   mut hit_cd : Float
@@ -52,7 +52,7 @@ struct Patrol {
   mut vy : Float
   mut speed : Float
   mut radius : Float
-  mut kind : Int
+  mut kind : Int32
   mut alert_t : Float
   mut active : Bool
 }
@@ -64,7 +64,7 @@ struct Crate {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut value : Int
+  mut value : Int32
   mut active : Bool
 }
 
@@ -76,7 +76,7 @@ struct Particle {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -105,10 +105,10 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -166,7 +166,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for ps_elem in ps {
@@ -194,9 +194,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_particle(ps, x, y, speed, kind)
@@ -222,7 +222,7 @@ fn reset_player(p : Smuggler) -> Unit {
 
 ///|
 /// Spawns a patrol boat from a random screen side at a random vertical position with speed and detection radius scaled to the current level.
-fn spawn_patrol(ps : Array[Patrol], level : Int, wave_t : Float) -> Unit {
+fn spawn_patrol(ps : Array[Patrol], level : Int32, wave_t : Float) -> Unit {
   let side = @raylib.get_random_value(0, 1)
   let y = Float::from_int(
     @raylib.get_random_value(
@@ -264,7 +264,7 @@ fn spawn_patrol(ps : Array[Patrol], level : Int, wave_t : Float) -> Unit {
 
 ///|
 /// Spawns a cargo crate at a random horizontal lane position with a value weighted by the current level.
-fn spawn_crate(cs : Array[Crate], level : Int, wave_t : Float) -> Unit {
+fn spawn_crate(cs : Array[Crate], level : Int32, wave_t : Float) -> Unit {
   let lane = @raylib.get_random_value(0, 4)
   let y : Float = if lane == 0 {
     202.0
@@ -308,12 +308,12 @@ fn spawn_crate(cs : Array[Crate], level : Int, wave_t : Float) -> Unit {
 ///|
 /// Resets all entities and returns `(quota, timer, patrol_cd, crate_cd)` tuned for the given level (1-3).
 fn setup_level(
-  level : Int,
+  level : Int32,
   player : Smuggler,
   patrols : Array[Patrol],
   crates : Array[Crate],
   particles : Array[Particle],
-) -> (Int, Float, Float, Float) {
+) -> (Int32, Float, Float, Float) {
   reset_player(player)
   clear_patrols(patrols)
   clear_crates(crates)

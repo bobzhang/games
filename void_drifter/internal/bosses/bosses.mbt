@@ -21,7 +21,7 @@ pub fn spawn_boss(game : @types.Game, kind : @types.BossKind) -> Unit {
 }
 
 ///|
-fn boss_stats(kind : @types.BossKind) -> (Int, Float, Int, Int) {
+fn boss_stats(kind : @types.BossKind) -> (Int32, Float, Int32, Int32) {
   // (hp, radius, shield, score)
   match kind {
     Leviathan => (60, 50.0, 0, 500)
@@ -237,7 +237,7 @@ pub fn boss_name(kind : @types.BossKind) -> String {
 }
 
 ///|
-pub fn boss_for_depth(depth : Int) -> @types.BossKind {
+pub fn boss_for_depth(depth : Int32) -> @types.BossKind {
   match depth % 3 {
     0 => Leviathan
     1 => Hive

@@ -1,17 +1,17 @@
 ///|
 pub fn select_encounter(
-  floor_num : Int,
-  rng : UInt,
-) -> (@types.EncounterType, UInt) {
+  floor_num : Int32,
+  rng : UInt32,
+) -> (@types.EncounterType, UInt32) {
   select_encounter_with_path(floor_num, rng, None)
 }
 
 ///|
 pub fn select_encounter_with_path(
-  floor_num : Int,
-  rng : UInt,
+  floor_num : Int32,
+  rng : UInt32,
   path : @types.FloorPath?,
-) -> (@types.EncounterType, UInt) {
+) -> (@types.EncounterType, UInt32) {
   let (s, roll) = @types.rng_next(rng)
   let encounter : @types.EncounterType = match path {
     Some(Hunter) =>

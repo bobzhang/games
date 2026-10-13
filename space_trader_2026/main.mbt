@@ -1,14 +1,14 @@
 ///|
-let sw : Int = 1020
+let sw : Int32 = 1020
 
 ///|
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
-let goods_count : Int = 5
+let goods_count : Int32 = 5
 
 ///|
-let planet_count : Int = 6
+let planet_count : Int32 = 6
 
 ///|
 let good_names : FixedArray[String] = ["Ore", "Food", "Tech", "Med", "Fuel"]
@@ -19,7 +19,12 @@ let planet_names : FixedArray[String] = [
 ]
 
 ///|
-fn wealth(cash : Int, cargo : Array[Int], prices : Array[Int], at : Int) -> Int {
+fn wealth(
+  cash : Int32,
+  cargo : Array[Int32],
+  prices : Array[Int32],
+  at : Int32,
+) -> Int32 {
   let mut v = cash
   for g in 0..<goods_count {
     v = v + cargo[g] * prices[at * goods_count + g]
@@ -28,7 +33,7 @@ fn wealth(cash : Int, cargo : Array[Int], prices : Array[Int], at : Int) -> Int 
 }
 
 ///|
-fn roll_prices(prices : Array[Int], day : Int) -> Unit {
+fn roll_prices(prices : Array[Int32], day : Int32) -> Unit {
   for p in 0..<planet_count {
     for g in 0..<goods_count {
       let base = match g {
@@ -62,8 +67,8 @@ fn main {
   @raylib.set_target_fps(60)
   @draw.init_font()
 
-  let prices : Array[Int] = Array::make(planet_count * goods_count, 0)
-  let cargo : Array[Int] = Array::make(goods_count, 0)
+  let prices : Array[Int32] = Array::make(planet_count * goods_count, 0)
+  let cargo : Array[Int32] = Array::make(goods_count, 0)
 
   let mut day = 1
   let mut fuel = 12

@@ -31,12 +31,12 @@ pub(all) struct Waypoint {
 ///|
 /// Metadata for a segment between two waypoints describing surface, geometry, and features.
 pub(all) struct TrackSegment {
-  mut seg_type : Int
+  mut seg_type : Int32
   mut surface_type : Surface
   mut width_mult : Float
   mut banking : Float
   mut has_item_boxes : Bool
-  mut decoration_type : Int
+  mut decoration_type : Int32
   mut is_ramp : Bool
   mut ramp_height : Float
   mut hazard : HazardKind
@@ -64,8 +64,8 @@ pub fn TrackSegment::default() -> TrackSegment {
 /// Kart entity with physics, item state, drift mechanics, and AI fields.
 pub(all) struct Kart {
   mut active : Bool
-  mut character_id : Int
-  mut kart_type : Int
+  mut character_id : Int32
+  mut kart_type : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -74,13 +74,13 @@ pub(all) struct Kart {
   mut steer : Float
   mut vy : Float
   mut on_ground : Bool
-  mut lap : Int
-  mut waypoint_idx : Int
+  mut lap : Int32
+  mut waypoint_idx : Int32
   mut waypoint_progress : Float
   mut total_progress : Float
-  mut place : Int
+  mut place : Int32
   mut held_powerup : PowerupKind
-  mut item_count : Int
+  mut item_count : Int32
   mut boost_timer : Float
   mut boost_power : Float
   mut shield_timer : Float
@@ -109,14 +109,14 @@ pub(all) struct Kart {
   mut ai_steer_target : Float
   mut ai_accel : Float
   mut ai_use_item_timer : Float
-  mut ai_difficulty : Int
+  mut ai_difficulty : Int32
   mut ai_line_offset : Float
   mut ai_reaction_timer : Float
   mut ai_brake_timer : Float
   // Predictive cornering state
   mut ai_braking_for_corner : Bool
   mut ai_corner_target_speed : Float
-  mut ai_corner_phase : Int // 0=approach, 1=apex, 2=exit
+  mut ai_corner_phase : Int32 // 0=approach, 1=apex, 2=exit
   // Pack racing state
   mut ai_draft_timer : Float
   mut ai_draft_boost : Float
@@ -250,7 +250,7 @@ pub(all) struct DroppedItem {
   mut y : Float
   mut z : Float
   mut lifetime : Float
-  mut owner : Int
+  mut owner : Int32
   mut rotation : Float
 }
 
@@ -280,9 +280,9 @@ pub(all) struct Projectile {
   mut z : Float
   mut angle : Float
   mut speed : Float
-  mut owner : Int
+  mut owner : Int32
   mut life : Float
-  mut target_kart : Int
+  mut target_kart : Int32
   mut homing_strength : Float
 }
 
@@ -309,7 +309,7 @@ pub fn Projectile::inactive() -> Projectile {
 /// A visual particle for effects like sparks, dust, and explosions.
 pub(all) struct Particle {
   mut active : Bool
-  mut particle_type : Int
+  mut particle_type : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -318,9 +318,9 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
 }
 
@@ -328,31 +328,31 @@ pub(all) struct Particle {
 
 ///|
 /// Particle type ID for drift spark effects.
-pub let particle_drift_spark : Int = 0
+pub let particle_drift_spark : Int32 = 0
 
 ///|
 /// Particle type ID for boost exhaust flame.
-pub let particle_boost_flame : Int = 1
+pub let particle_boost_flame : Int32 = 1
 
 ///|
 /// Particle type ID for surface dust trail.
-pub let particle_dust : Int = 2
+pub let particle_dust : Int32 = 2
 
 ///|
 /// Particle type ID for liquid splash effect.
-pub let particle_splash : Int = 3
+pub let particle_splash : Int32 = 3
 
 ///|
 /// Particle type ID for explosion burst.
-pub let particle_explosion : Int = 4
+pub let particle_explosion : Int32 = 4
 
 ///|
 /// Particle type ID for star power sparkle.
-pub let particle_star_sparkle : Int = 5
+pub let particle_star_sparkle : Int32 = 5
 
 ///|
 /// Particle type ID for lightning strike effect.
-pub let particle_lightning : Int = 6
+pub let particle_lightning : Int32 = 6
 
 ///|
 /// Creates an inactive particle with default values.
@@ -380,7 +380,7 @@ pub fn Particle::inactive() -> Particle {
 ///|
 /// Accumulated cup championship point totals.
 pub(all) struct CupStanding {
-  mut points : Array[Int]
+  mut points : Array[Int32]
 }
 
 // Track data for a single track
@@ -390,8 +390,8 @@ pub(all) struct CupStanding {
 pub(all) struct TrackData {
   mut track_name : String
   mut theme : Theme
-  mut lap_count : Int
-  mut cup_index : Int
+  mut lap_count : Int32
+  mut cup_index : Int32
   mut segments : Array[TrackSegment]
 }
 
@@ -412,11 +412,11 @@ pub fn TrackData::default() -> TrackData {
 ///|
 /// Final result for a single kart at the end of a race.
 pub(all) struct RaceResult {
-  mut kart_index : Int
-  mut position : Int
+  mut kart_index : Int32
+  mut position : Int32
   mut finish_time : Float
   mut best_lap : Float
-  mut points_earned : Int
+  mut points_earned : Int32
 }
 
 ///|
@@ -439,8 +439,8 @@ pub(all) struct Game {
   mut state : GameState
 
   // Race info
-  mut current_cup : Int
-  mut current_race : Int
+  mut current_cup : Int32
+  mut current_race : Int32
   mut race_time : Float
   mut countdown_timer : Float
   mut best_lap_time : Float
@@ -449,11 +449,11 @@ pub(all) struct Game {
 
   // Track
   waypoints : Array[Waypoint]
-  mut waypoint_count : Int
+  mut waypoint_count : Int32
   segments : Array[TrackSegment]
   mut track_theme : Theme
   mut track_name : String
-  mut track_laps : Int
+  mut track_laps : Int32
 
   // Entity pools
   karts : Array[Kart]
@@ -463,7 +463,7 @@ pub(all) struct Game {
   dropped_items : Array[DroppedItem]
 
   // Cup points (index = kart index)
-  cup_points : Array[Int]
+  cup_points : Array[Int32]
 
   // Race results history
   race_results : Array[RaceResult]
@@ -479,50 +479,50 @@ pub(all) struct Game {
   mut camera_shake : Float
 
   // UI
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
   mut results_scroll : Float
-  mut selected_kart_type : Int
-  mut selected_character : Int
-  mut kart_select_cursor : Int
+  mut selected_kart_type : Int32
+  mut selected_character : Int32
+  mut kart_select_cursor : Int32
   mut wrong_way_flash : Float
 
   // Lightning effect
   mut lightning_active : Bool
   mut lightning_timer : Float
-  mut lightning_source : Int
+  mut lightning_source : Int32
 
   // Star effect visuals
   mut star_rainbow_timer : Float
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // Track preview
   mut preview_rotation : Float
   mut preview_timer : Float
 
   // Lap tracking
-  mut fastest_lap_kart : Int
+  mut fastest_lap_kart : Int32
   mut fastest_lap_time : Float
 
   // HUD feedback state
-  mut prev_player_place : Int
+  mut prev_player_place : Int32
   mut place_change_timer : Float
-  mut place_change_place : Int
+  mut place_change_place : Int32
   mut drift_boost_text_timer : Float
   mut drift_boost_text_level : DriftLevel
   mut item_pickup_flash_timer : Float
 
   // Lap completion flash
   mut lap_flash_timer : Float
-  mut lap_flash_lap : Int
+  mut lap_flash_lap : Int32
 
   // Skid mark trail storage (ring buffer of positions)
   skid_marks : Array[(Float, Float, Float, Float, Float, Float, Float)]
   // (x1,z1,x2,z2,y,life,max_life)
-  mut skid_mark_count : Int
+  mut skid_mark_count : Int32
 
   // Hit effect
   mut hit_flash_timer : Float
@@ -530,8 +530,8 @@ pub(all) struct Game {
   // Hazard system state
   mut hazard_timer : Float
   // Falling rock positions per segment: (seg_idx, offset_x, offset_z, active)
-  falling_rocks : Array[(Int, Float, Float, Bool)]
-  mut falling_rocks_count : Int
+  falling_rocks : Array[(Int32, Float, Float, Bool)]
+  mut falling_rocks_count : Int32
 }
 
 ///|

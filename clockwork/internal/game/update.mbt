@@ -185,7 +185,7 @@ fn update_placing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_component(game : @types.Game, col : Int, row : Int) -> Unit {
+fn place_component(game : @types.Game, col : Int32, row : Int32) -> Unit {
   let palette = game.level_def.palette
   let pal_idx = game.selected_palette
   if pal_idx < 0 || pal_idx >= palette.available.length() {
@@ -206,7 +206,7 @@ fn place_component(game : @types.Game, col : Int, row : Int) -> Unit {
 }
 
 ///|
-fn remove_component(game : @types.Game, idx : Int) -> Unit {
+fn remove_component(game : @types.Game, idx : Int32) -> Unit {
   let comp = game.components[idx]
   if comp.fixed {
     return

@@ -39,8 +39,8 @@ pub(all) struct Player {
   mut speed : Float
   mut ship_class : ShipKind
   mut turn_rate : Float
-  mut weapon_level : Int
-  mut missile_ammo : Int
+  mut weapon_level : Int32
+  mut missile_ammo : Int32
   mut weapon_energy : Float
   mut boost_fuel : Float
   mut weapon_boost_timer : Float
@@ -48,9 +48,9 @@ pub(all) struct Player {
   mut damage_flash : Float
   mut strafe_x : Float
   mut strafe_y : Float
-  mut kills : Int
-  mut shots_fired : Int
-  mut shots_hit : Int
+  mut kills : Int32
+  mut shots_fired : Int32
+  mut shots_hit : Int32
 }
 
 ///|
@@ -111,7 +111,7 @@ pub fn Player::Player() -> Player {
 /// Enemy ship entity with AI state, weapons, shields, and squad membership.
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -127,10 +127,10 @@ pub(all) struct Enemy {
   mut fire_timer : Float
   mut ai_timer : Float
   mut ai_state : AiState
-  mut score_value : Int
+  mut score_value : Int32
   mut size : Float
-  mut squad_id : Int
-  mut formation_index : Int
+  mut squad_id : Int32
+  mut formation_index : Int32
   mut aggression : Float
   mut flee_threshold : Float
   mut detect_range : Float
@@ -197,7 +197,7 @@ pub(all) struct Projectile {
   mut damage : Float
   mut life : Float
   mut from_player : Bool
-  mut target_idx : Int
+  mut target_idx : Int32
   mut size : Float
   mut fuel : Float
   mut piercing : Bool
@@ -239,11 +239,11 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -285,7 +285,7 @@ pub(all) struct Asteroid {
   mut rot_speed : Float
   mut hp : Float
   mut size : Float
-  mut size_tier : Int
+  mut size_tier : Int32
   mut breakable : Bool
 }
 
@@ -347,7 +347,7 @@ pub fn PowerUp::inactive() -> PowerUp {
 /// Space station entity with allegiance, position, health, and rotation state.
 pub(all) struct SpaceStation {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -390,9 +390,9 @@ pub(all) struct Debris {
   mut rot_speed : Float
   mut life : Float
   mut size : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -425,9 +425,9 @@ pub(all) struct KillFeedEntry {
   mut active : Bool
   mut text : String
   mut timer : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -445,11 +445,11 @@ pub(all) struct DamageNumber {
   mut x : Float
   mut y : Float
   mut z : Float
-  mut value : Int
+  mut value : Int32
   mut timer : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -474,8 +474,8 @@ pub fn DamageNumber::inactive() -> DamageNumber {
 /// Mission objective tracking type, target count, and completion status.
 pub(all) struct MissionObjective {
   mut obj_type : Objective
-  mut target_count : Int
-  mut current_count : Int
+  mut target_count : Int32
+  mut current_count : Int32
   mut complete : Bool
   mut description : String
 }
@@ -484,7 +484,7 @@ pub(all) struct MissionObjective {
 /// Creates a new mission objective with the given type, target count, and description.
 pub fn MissionObjective::MissionObjective(
   obj_type : Objective,
-  target_count : Int,
+  target_count : Int32,
   description : String,
 ) -> MissionObjective {
   { obj_type, target_count, current_count: 0, complete: false, description, }
@@ -498,10 +498,10 @@ pub(all) struct Star {
   x : Float
   y : Float
   z : Float
-  brightness : Int
-  r : Int
-  g : Int
-  b : Int
+  brightness : Int32
+  r : Int32
+  g : Int32
+  b : Int32
 }
 
 // Main Game struct
@@ -515,24 +515,24 @@ pub(all) struct Game {
   player : Player
 
   // Targeting
-  mut target_idx : Int
+  mut target_idx : Int32
   mut target_lock_timer : Float
 
   // Score / mission
-  mut score : Int
-  mut current_mission : Int
-  mut enemies_remaining : Int
+  mut score : Int32
+  mut current_mission : Int32
+  mut enemies_remaining : Int32
   mut mission_timer : Float
-  mut total_kills : Int
+  mut total_kills : Int32
 
   // Combo system
-  mut combo_count : Int
+  mut combo_count : Int32
   mut combo_timer : Float
   mut combo_multiplier : Float
 
   // Mission objectives
   objectives : Array[MissionObjective]
-  mut objectives_count : Int
+  mut objectives_count : Int32
 
   // Entity pools
   enemies : Array[Enemy]
@@ -556,43 +556,43 @@ pub(all) struct Game {
   mut cam_pitch : Float
 
   // UI
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
   mut message_text : String
   mut message_timer : Float
-  mut briefing_scroll : Int
+  mut briefing_scroll : Int32
 
   // Pause menu
-  mut pause_cursor : Int
+  mut pause_cursor : Int32
 
   // Mission select
-  mut select_cursor : Int
+  mut select_cursor : Int32
 
   // Loadout
-  mut loadout_cursor : Int
+  mut loadout_cursor : Int32
   mut selected_ship_class : ShipKind
 
   // Wave spawning
   mut wave_timer : Float
-  mut wave_number : Int
-  mut waves_total : Int
+  mut wave_number : Int32
+  mut waves_total : Int32
 
   // Mission stats
   mut mission_time : Float
-  mut mission_kills : Int
+  mut mission_kills : Int32
 
   // Damage flash overlay
   mut screen_flash : Float
-  mut flash_r : Int
-  mut flash_g : Int
-  mut flash_b : Int
+  mut flash_r : Int32
+  mut flash_g : Int32
+  mut flash_b : Int32
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // AI difficulty level for current mission (0-3)
-  mut ai_difficulty : Int
+  mut ai_difficulty : Int32
 
   // Survive mission: time remaining
   mut survive_timer : Float
@@ -602,13 +602,13 @@ pub(all) struct Game {
   patrol_waypoints_x : Array[Float]
   patrol_waypoints_y : Array[Float]
   patrol_waypoints_z : Array[Float]
-  mut patrol_current : Int
-  mut patrol_total : Int
+  mut patrol_current : Int32
+  mut patrol_total : Int32
 
   // Mid-mission events
   mut reinforcement_spawned : Bool
   mut mid_event_timer : Float
-  mut mid_event_count : Int
+  mut mid_event_count : Int32
 
   // Shock rings from large explosions
   shock_rings : Array[ShockRing]
@@ -630,9 +630,9 @@ pub(all) struct ShockRing {
   mut max_radius : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -670,17 +670,17 @@ pub fn Game::Game() -> Game {
     // Slight color variation for stars
     rng = xor_rng(rng)
     let color_type = xor_rng_abs(rng) % 5
-    let sr : Int = if color_type == 0 {
+    let sr : Int32 = if color_type == 0 {
       bright
     } else if color_type == 1 {
-      let v : Int = bright + 30
+      let v : Int32 = bright + 30
       if v > 255 {
         255
       } else {
         v
       }
     } else if color_type == 2 {
-      let v : Int = bright - 20
+      let v : Int32 = bright - 20
       if v < 80 {
         80
       } else {
@@ -689,17 +689,17 @@ pub fn Game::Game() -> Game {
     } else {
       bright
     }
-    let sg : Int = if color_type == 0 {
+    let sg : Int32 = if color_type == 0 {
       bright
     } else if color_type == 1 {
-      let v : Int = bright - 10
+      let v : Int32 = bright - 10
       if v < 80 {
         80
       } else {
         v
       }
     } else if color_type == 2 {
-      let v : Int = bright + 20
+      let v : Int32 = bright + 20
       if v > 255 {
         255
       } else {
@@ -708,10 +708,10 @@ pub fn Game::Game() -> Game {
     } else {
       bright
     }
-    let sb : Int = if color_type == 0 {
+    let sb : Int32 = if color_type == 0 {
       bright
     } else if color_type == 3 {
-      let v : Int = bright + 40
+      let v : Int32 = bright + 40
       if v > 255 {
         255
       } else {
@@ -873,7 +873,7 @@ pub fn Game::Game() -> Game {
 }
 
 ///|
-fn xor_rng(state : Int) -> Int {
+fn xor_rng(state : Int32) -> Int32 {
   let mut x = state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -882,7 +882,7 @@ fn xor_rng(state : Int) -> Int {
 }
 
 ///|
-fn xor_rng_abs(state : Int) -> Int {
+fn xor_rng_abs(state : Int32) -> Int32 {
   let x = xor_rng(state)
   if x < 0 {
     -x
@@ -892,7 +892,7 @@ fn xor_rng_abs(state : Int) -> Int {
 }
 
 ///|
-fn rand_float_from(state : Int, low : Float, high : Float) -> Float {
+fn rand_float_from(state : Int32, low : Float, high : Float) -> Float {
   let v = xor_rng_abs(state) % 10000
   let n = Float::from_int(v) / 10000.0
   low + (high - low) * n

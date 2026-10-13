@@ -88,8 +88,8 @@ fn draw_wall(
   wx : Float,
   wz : Float,
   game : @types.Game,
-  gx : Int,
-  gz : Int,
+  gx : Int32,
+  gz : Int32,
 ) -> Unit {
   // Only draw wall faces that are adjacent to walkable tiles for performance
   let has_floor_neighbor = @types.is_walkable(@types.get_tile(game, gx - 1, gz)) ||
@@ -455,7 +455,7 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
       let pulse_abs = if pulse > 0.0 { pulse } else { -pulse }
       let glow_size : Float = 0.5 + pulse_abs * 0.3
       // Color based on telegraph kind: red for melee, blue for ice, orange for fire
-      let glow_color : (Int, Int, Int) = match e.telegraph_kind {
+      let glow_color : (Int32, Int32, Int32) = match e.telegraph_kind {
         0 => (255, 60, 30) // Standard melee - red
         1 => (255, 150, 30) // Heavy melee - orange
         2 => (80, 200, 60) // Archer shot - green

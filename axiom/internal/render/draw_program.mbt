@@ -60,11 +60,11 @@ pub fn draw_program_panel(game : @types.Game) -> Unit {
 ///|
 fn draw_command_slot(
   game : @types.Game,
-  index : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  index : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Unit {
   let cmd = game.program.commands[index]
   let is_cursor = index == game.editor.cursor && game.run_state == Editing
@@ -99,7 +99,7 @@ fn draw_command_slot(
 }
 
 ///|
-fn is_step_executing(game : @types.Game, cmd_index : Int) -> Bool {
+fn is_step_executing(game : @types.Game, cmd_index : Int32) -> Bool {
   match game.trace {
     Some(trace) =>
       if game.trace_step >= 0 && game.trace_step < trace.states.length() {
@@ -154,7 +154,7 @@ fn draw_palette(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_execution_info(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_execution_info(game : @types.Game, x : Int32, y : Int32) -> Unit {
   match game.run_state {
     Editing => {
       @draw.draw_text(

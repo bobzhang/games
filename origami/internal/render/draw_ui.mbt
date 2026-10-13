@@ -120,7 +120,7 @@ fn draw_controls_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star(x : Int, y : Int, size : Int, filled : Bool) -> Unit {
+fn draw_star(x : Int32, y : Int32, size : Int32, filled : Bool) -> Unit {
   let col = if filled { @types.color_star_on } else { @types.color_star_off }
   // Simple star as a filled circle with text
   let txt = "*"
@@ -130,10 +130,10 @@ fn draw_star(x : Int, y : Int, size : Int, filled : Bool) -> Unit {
 
 ///|
 fn draw_stars_row(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   rating : @types.StarRating,
-  size : Int,
+  size : Int32,
 ) -> Unit {
   let gap = size + 4
   let star_count = match rating {

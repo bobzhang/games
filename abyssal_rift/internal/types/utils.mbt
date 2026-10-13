@@ -15,7 +15,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -26,7 +26,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -35,7 +35,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -107,7 +107,7 @@ pub fn normalize(x : Float, y : Float) -> (Float, Float) {
 
 ///|
 /// Simple xorshift RNG
-pub fn rng_next(state : UInt) -> (UInt, Float) {
+pub fn rng_next(state : UInt32) -> (UInt32, Float) {
   let mut s = state
   s = s ^ (s << 13)
   s = s ^ (s >> 17)
@@ -118,14 +118,14 @@ pub fn rng_next(state : UInt) -> (UInt, Float) {
 
 ///|
 /// Random float in range [lo, hi)
-pub fn rng_range(state : UInt, lo : Float, hi : Float) -> (UInt, Float) {
+pub fn rng_range(state : UInt32, lo : Float, hi : Float) -> (UInt32, Float) {
   let (s, f) = rng_next(state)
   (s, lo + f * (hi - lo))
 }
 
 ///|
 /// Random int in range [lo, hi]
-pub fn rng_int(state : UInt, lo : Int, hi : Int) -> (UInt, Int) {
+pub fn rng_int(state : UInt32, lo : Int32, hi : Int32) -> (UInt32, Int32) {
   let (s, f) = rng_next(state)
   let range = hi - lo + 1
   let v = lo + (f * Float::from_int(range)).to_int()
@@ -134,7 +134,7 @@ pub fn rng_int(state : UInt, lo : Int, hi : Int) -> (UInt, Int) {
 
 ///|
 /// Allocate from pool: find first inactive slot, or evict shortest-lived
-pub fn alloc_particle(particles : Array[Particle]) -> Int {
+pub fn alloc_particle(particles : Array[Particle]) -> Int32 {
   for i, p in particles {
     if !p.active {
       return i
@@ -153,7 +153,7 @@ pub fn alloc_particle(particles : Array[Particle]) -> Int {
 }
 
 ///|
-pub fn alloc_enemy(enemies : Array[Enemy]) -> Int {
+pub fn alloc_enemy(enemies : Array[Enemy]) -> Int32 {
   // First: find inactive slot
   for i, e in enemies {
     if !e.active {
@@ -180,7 +180,7 @@ pub fn alloc_enemy(enemies : Array[Enemy]) -> Int {
 }
 
 ///|
-pub fn alloc_projectile(projectiles : Array[Projectile]) -> Int {
+pub fn alloc_projectile(projectiles : Array[Projectile]) -> Int32 {
   for i, p in projectiles {
     if !p.active {
       return i
@@ -198,7 +198,7 @@ pub fn alloc_projectile(projectiles : Array[Projectile]) -> Int {
 }
 
 ///|
-pub fn alloc_item(items : Array[Item]) -> Int {
+pub fn alloc_item(items : Array[Item]) -> Int32 {
   for i, it in items {
     if !it.active {
       return i
@@ -215,7 +215,7 @@ pub fn alloc_item(items : Array[Item]) -> Int {
 }
 
 ///|
-pub fn alloc_damage_num(nums : Array[DamageNumber]) -> Int {
+pub fn alloc_damage_num(nums : Array[DamageNumber]) -> Int32 {
   for i, d in nums {
     if !d.active {
       return i

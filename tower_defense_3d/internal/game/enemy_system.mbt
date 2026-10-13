@@ -1,7 +1,7 @@
 // Enemy spawning, movement, and special abilities
 
 ///|
-fn @types.Game::start_wave(game : @types.Game, wave : Int) -> Unit {
+fn @types.Game::start_wave(game : @types.Game, wave : Int32) -> Unit {
   let def = @levels.get_wave_def(wave)
   game.wave_enemy_kind = def.0
   game.enemies_to_spawn = def.1
@@ -181,7 +181,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     // Check if reached end
     if enemy.path_index >= game.path_count - 1 && enemy.path_progress >= 1.0 {
       enemy.active = false
-      let lives_lost : Int = if enemy.is_boss { 5 } else { 1 }
+      let lives_lost : Int32 = if enemy.is_boss { 5 } else { 1 }
       game.lives -= lives_lost
     }
   }
@@ -254,7 +254,7 @@ fn update_enemy_shield(enemy : @types.Enemy, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_healer(
   game : @types.Game,
-  healer_idx : Int,
+  healer_idx : Int32,
   dt : Float,
 ) -> Unit {
   let healer = game.enemies[healer_idx]
@@ -327,7 +327,7 @@ fn @types.Game::kill_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
 ///|
 fn @types.Game::move_enemy_along_path(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   speed : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
@@ -430,7 +430,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::apply_projectile_hit(
   game : @types.Game,
-  proj_idx : Int,
+  proj_idx : Int32,
 ) -> Unit {
   let proj = game.projectiles[proj_idx]
   // Determine tower kind for resistance calculation
@@ -564,7 +564,7 @@ fn @types.Game::apply_projectile_hit(
 fn @types.Game::apply_projectile_effects(
   game : @types.Game,
   proj : @types.Projectile,
-  enemy_idx : Int,
+  enemy_idx : Int32,
 ) -> Unit {
   let enemy = game.enemies[enemy_idx]
   // Slow effect - take strongest slow, don't blindly overwrite
@@ -774,9 +774,9 @@ fn @types.Game::apply_chain_lightning(
 ///|
 fn @types.Game::damage_enemy(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   damage : Float,
-  tower_idx : Int,
+  tower_idx : Int32,
 ) -> Unit {
   let enemy = game.enemies[idx]
   // Determine if this is a crit for floating text color

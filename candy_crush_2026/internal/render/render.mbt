@@ -3,7 +3,7 @@
 fn draw_button(
   label : String,
   caption : String,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   hover : Bool,
   enabled : Bool,
 ) -> Unit {
@@ -135,7 +135,7 @@ fn draw_board_frame() -> Unit {
 
 ///|
 /// Draws the visual indicator for a special candy (row stripe, column stripe, or bomb ring) at the given center pixel.
-fn draw_special_overlay(cx : Int, cy : Int, sp : @types.Special) -> Unit {
+fn draw_special_overlay(cx : Int32, cy : Int32, sp : @types.Special) -> Unit {
   if draw_special_art(cx, cy, sp) {
     return
   }

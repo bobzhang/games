@@ -26,7 +26,7 @@ pub(all) struct SkyObj {
   mut max_hp : Float
   mut life : Float
   mut phase : Float
-  mut value : Int
+  mut value : Int32
   mut flagged : Bool
 }
 
@@ -40,7 +40,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -51,7 +51,7 @@ pub(all) struct Halo {
   mut y : Float
   mut r : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -104,12 +104,12 @@ pub(all) struct Game {
   trails : Array[Trail]
   kite : Kite
   mut state : GameState
-  mut stage : Int
-  mut stage_goal : Int
-  mut score : Int
-  mut best_score : Int
-  mut rescued : Int
-  mut hits : Int
+  mut stage : Int32
+  mut stage_goal : Int32
+  mut score : Int32
+  mut best_score : Int32
+  mut rescued : Int32
+  mut hits : Int32
   mut time_left : Float
   mut calm : Float
   mut energy : Float
@@ -123,7 +123,7 @@ pub(all) struct Game {
   mut burst_t : Float
   mut spawn_t : Float
   mut wave_t : Float
-  mut combo : Int
+  mut combo : Int32
   mut combo_t : Float
   mut flash_t : Float
   mut shake_t : Float
@@ -141,7 +141,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

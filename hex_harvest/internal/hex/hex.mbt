@@ -1,8 +1,8 @@
 ///|
 /// Get all neighbors that are in-bounds
-pub fn valid_neighbors(col : Int, row : Int) -> Array[(Int, Int)] {
+pub fn valid_neighbors(col : Int32, row : Int32) -> Array[(Int32, Int32)] {
   let all = @types.hex_neighbors(col, row)
-  let result : Array[(Int, Int)] = []
+  let result : Array[(Int32, Int32)] = []
   for i in 0..<all.length() {
     let (c, r) = all[i]
     if @types.hex_in_bounds(c, r) {
@@ -15,11 +15,11 @@ pub fn valid_neighbors(col : Int, row : Int) -> Array[(Int, Int)] {
 ///|
 /// Get a ring of hexes at a given distance
 pub fn hex_ring(
-  center_col : Int,
-  center_row : Int,
-  radius : Int,
-) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = []
+  center_col : Int32,
+  center_row : Int32,
+  radius : Int32,
+) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = []
   if radius == 0 {
     result.push((center_col, center_row))
     return result
@@ -36,7 +36,7 @@ pub fn hex_ring(
 
 ///|
 /// Check if a hex coordinate is adjacent to another
-pub fn is_adjacent(c1 : Int, r1 : Int, c2 : Int, r2 : Int) -> Bool {
+pub fn is_adjacent(c1 : Int32, r1 : Int32, c2 : Int32, r2 : Int32) -> Bool {
   @types.hex_distance(c1, r1, c2, r2) == 1
 }
 
@@ -44,12 +44,12 @@ pub fn is_adjacent(c1 : Int, r1 : Int, c2 : Int, r2 : Int) -> Bool {
 /// Get all tiles adjacent to given tile that match a predicate
 pub fn adjacent_matching(
   grid : @types.HexGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   pred : (@types.HexTile) -> Bool,
-) -> Array[(Int, Int)] {
+) -> Array[(Int32, Int32)] {
   let neighbors = valid_neighbors(col, row)
-  let result : Array[(Int, Int)] = []
+  let result : Array[(Int32, Int32)] = []
   for i in 0..<neighbors.length() {
     let (c, r) = neighbors[i]
     if pred(grid.tiles[r][c]) {
@@ -63,10 +63,10 @@ pub fn adjacent_matching(
 /// Count adjacent tiles matching a predicate
 pub fn count_adjacent_matching(
   grid : @types.HexGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   pred : (@types.HexTile) -> Bool,
-) -> Int {
+) -> Int32 {
   adjacent_matching(grid, col, row, pred).length()
 }
 
@@ -75,12 +75,12 @@ pub fn count_adjacent_matching(
 /// Water flows to neighbors with lower or equal height (equal only with channel)
 pub fn water_flow_targets(
   grid : @types.HexGrid,
-  col : Int,
-  row : Int,
-) -> Array[(Int, Int)] {
+  col : Int32,
+  row : Int32,
+) -> Array[(Int32, Int32)] {
   let src = grid.tiles[row][col]
   let neighbors = valid_neighbors(col, row)
-  let result : Array[(Int, Int)] = []
+  let result : Array[(Int32, Int32)] = []
   for i in 0..<neighbors.length() {
     let (c, r) = neighbors[i]
     let dst = grid.tiles[r][c]
@@ -100,13 +100,13 @@ pub fn water_flow_targets(
 
 ///|
 /// Get screen position for drawing hex center
-pub fn hex_screen_pos(col : Int, row : Int) -> (Float, Float) {
+pub fn hex_screen_pos(col : Int32, row : Int32) -> (Float, Float) {
   (@types.hex_to_pixel_x(col, row), @types.hex_to_pixel_y(col~, row))
 }
 
 ///|
 /// Hit test - which hex is the mouse over?
-pub fn hex_at_screen(px : Float, py : Float) -> (Int, Int) {
+pub fn hex_at_screen(px : Float, py : Float) -> (Int32, Int32) {
   @types.pixel_to_hex(px, py)
 }
 

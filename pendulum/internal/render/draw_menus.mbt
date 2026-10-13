@@ -38,7 +38,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_pendulum(game : @types.Game, cx : Int, cy : Int) -> Unit {
+fn draw_title_pendulum(game : @types.Game, cx : Int32, cy : Int32) -> Unit {
   let angle = @types.sinf(game.title_angle) * 0.8
   let rope_len : Float = 120.0
   let wx = Float::from_int(cx) + @types.sinf(angle) * rope_len

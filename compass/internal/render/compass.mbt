@@ -1,5 +1,5 @@
 ///|
-fn draw_compass(state : @types.LevelState, frame : Int) -> Unit {
+fn draw_compass(state : @types.LevelState, frame : Int32) -> Unit {
   let cx = 160
   let cy = 200
   let radius : Float = 80.0

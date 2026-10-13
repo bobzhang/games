@@ -13,8 +13,8 @@ pub extend BeamColor with Debug::{to_repr}
 
 ///|
 pub(all) struct Vec2i {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -35,8 +35,8 @@ pub(all) struct GridCell {
 
 ///|
 pub(all) struct Grid {
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   cells : Array[GridCell]
 }
 
@@ -52,7 +52,7 @@ pub(all) struct BeamSegment {
 pub(all) struct AvailableComponent {
   kind : ComponentKind
   mut filter_color : FilterColor?
-  mut count : Int
+  mut count : Int32
 }
 
 ///|
@@ -60,37 +60,37 @@ pub(all) struct Level {
   name : String
   tier : Tier
   grid_template : Array[
-    (Int, Int, ComponentKind, Direction, FilterColor?, BeamColor?),
+    (Int32, Int32, ComponentKind, Direction, FilterColor?, BeamColor?),
   ]
   available : Array[AvailableComponent]
-  par_count : Int
+  par_count : Int32
 }
 
 ///|
 pub(all) struct LevelScore {
-  mut stars : Int
+  mut stars : Int32
   mut solved : Bool
-  mut components_used : Int
-  mut beam_crossings : Int
+  mut components_used : Int32
+  mut beam_crossings : Int32
 }
 
 ///|
 pub(all) struct Game {
   mut screen : Screen
   mut selected_tier : Tier
-  mut selected_level : Int
+  mut selected_level : Int32
   grid : Grid
   mut beams : Array[BeamSegment]
   mut play_state : PlayState
   mut palette : Array[AvailableComponent]
-  mut selected_palette : Int
-  mut current_level_index : Int
-  mut current_tier_index : Int
-  mut hover_x : Int
-  mut hover_y : Int
+  mut selected_palette : Int32
+  mut current_level_index : Int32
+  mut current_tier_index : Int32
+  mut hover_x : Int32
+  mut hover_y : Int32
   mut scores : Array[LevelScore]
-  mut frame_count : Int
-  mut par_count : Int
+  mut frame_count : Int32
+  mut par_count : Int32
   mut level_name : String
   mut show_help : Bool
 }

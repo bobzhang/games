@@ -16,7 +16,7 @@ pub extend MetalProps with Eq::{not_equal, equal}
 /// An ingredient added to the crucible
 pub(all) struct Ingredient {
   metal : MetalKind
-  mut amount : Int
+  mut amount : Int32
 } derive(Debug)
 
 ///|
@@ -60,12 +60,12 @@ pub extend BlendResult with Eq::{not_equal, equal}
 ///|
 /// A level definition
 pub(all) struct LevelDef {
-  id : Int
+  id : Int32
   name : String
-  tier : Int
+  tier : Int32
   available_metals : Array[MetalKind]
   target : TargetAlloy
-  par_ingredients : Int
+  par_ingredients : Int32
   hint : String
 } derive(Debug)
 
@@ -76,7 +76,7 @@ pub extend LevelDef with Debug::{to_repr}
 /// Scoring result
 pub(all) struct LevelResult {
   mut stars : StarRating
-  mut ingredients_used : Int
+  mut ingredients_used : Int32
   mut blend : BlendResult
   mut all_in_range : Bool
 } derive(Debug)
@@ -98,7 +98,7 @@ pub extend LevelProgress with Debug::{to_repr}
 /// Main game state
 pub(all) struct Game {
   mut screen : Screen
-  mut current_level : Int
+  mut current_level : Int32
   crucible : Array[Ingredient]
   mut temperature : Temperature
   mut blend_result : BlendResult
@@ -106,11 +106,11 @@ pub(all) struct Game {
   mut blend_animating : Bool
   level_progress : Array[LevelProgress]
   mut result : LevelResult
-  mut frame_count : Int
+  mut frame_count : Int32
   mut message : String
   mut message_timer : Float
-  mut total_stars : Int
-  mut hover_metal : Int
+  mut total_stars : Int32
+  mut hover_metal : Int32
   mut hover_button : String
-  mut selected_slot : Int
+  mut selected_slot : Int32
 }

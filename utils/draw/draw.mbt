@@ -40,7 +40,7 @@ pub fn cleanup() -> Unit {
 
 ///|
 /// Computes inter-character spacing proportional to font size.
-fn spacing(size : Int) -> Float {
+fn spacing(size : Int32) -> Float {
   Float::from_int(size) / 10.0
 }
 
@@ -49,9 +49,9 @@ fn spacing(size : Int) -> Float {
 /// Falls back to the default raylib font if `init` has not been called.
 pub fn draw_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   match font_state.val {
@@ -71,7 +71,7 @@ pub fn draw_text(
 ///|
 /// Drop-in replacement for `@raylib.measure_text` that uses the loaded TTF font.
 /// Falls back to the default raylib measurement if `init` has not been called.
-pub fn measure_text(text : String, size : Int) -> Int {
+pub fn measure_text(text : String, size : Int32) -> Int32 {
   match font_state.val {
     Some(f) => {
       let v = @raylib.measure_text_ex(

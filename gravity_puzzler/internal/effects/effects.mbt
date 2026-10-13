@@ -211,7 +211,7 @@ pub fn update_bounce(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Trigger a bounce for an entity when it lands
-pub fn trigger_bounce(game : @types.Game, entity_id : Int) -> Unit {
+pub fn trigger_bounce(game : @types.Game, entity_id : Int32) -> Unit {
   if entity_id >= 0 && entity_id < game.bounce_timers.length() {
     game.bounce_timers[entity_id] = @types.bounce_duration
   }
@@ -219,7 +219,7 @@ pub fn trigger_bounce(game : @types.Game, entity_id : Int) -> Unit {
 
 ///|
 /// Get bounce offset for rendering (vertical squish-stretch)
-pub fn get_bounce_offset(game : @types.Game, entity_id : Int) -> Float {
+pub fn get_bounce_offset(game : @types.Game, entity_id : Int32) -> Float {
   if entity_id < 0 || entity_id >= game.bounce_timers.length() {
     return 0.0
   }
@@ -269,7 +269,7 @@ pub fn draw_wall_shadows(level : @types.Level) -> Unit {
 
 ///|
 /// Draw exit portal pulsing glow effect
-pub fn draw_exit_glow(level : @types.Level, frame_count : Int) -> Unit {
+pub fn draw_exit_glow(level : @types.Level, frame_count : Int32) -> Unit {
   for y in 0..<level.height {
     for x in 0..<level.width {
       if @types.get_tile(level, x, y) == Exit {
@@ -332,7 +332,7 @@ pub fn update_speedrun_timer(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Draw world-specific new tile types
-pub fn draw_world_tiles(level : @types.Level, frame_count : Int) -> Unit {
+pub fn draw_world_tiles(level : @types.Level, frame_count : Int32) -> Unit {
   for y in 0..<level.height {
     for x in 0..<level.width {
       let px = @types.grid_offset_x + x * @types.tile_size
@@ -496,8 +496,8 @@ fn rand_float_eff(game : @types.Game) -> Float {
 ///|
 /// Draw high-contrast pattern overlay for a tile
 pub fn draw_high_contrast_tile_overlay(
-  px : Int,
-  py : Int,
+  px : Int32,
+  py : Int32,
   tile : @types.TileKind,
 ) -> Unit {
   let pattern_color = @raylib.Color::new(255, 255, 255, 50)
@@ -654,7 +654,7 @@ pub fn draw_high_contrast_tile_overlay(
 
 ///|
 /// Draw enemy warning indicator (flashing exclamation near enemies)
-pub fn draw_enemy_warning(level : @types.Level, frame_count : Int) -> Unit {
+pub fn draw_enemy_warning(level : @types.Level, frame_count : Int32) -> Unit {
   let enemies = @types.find_enemies(level)
   if enemies.length() == 0 {
     return
@@ -695,7 +695,7 @@ pub fn draw_enemy_warning(level : @types.Level, frame_count : Int) -> Unit {
 /// Draw enemy proximity lines (thin red lines from enemy to player)
 pub fn draw_enemy_tracking_lines(
   level : @types.Level,
-  frame_count : Int,
+  frame_count : Int32,
 ) -> Unit {
   let enemies = @types.find_enemies(level)
   if enemies.length() == 0 {

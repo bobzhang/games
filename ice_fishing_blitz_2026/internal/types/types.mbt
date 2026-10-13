@@ -7,7 +7,7 @@ pub(all) struct Fish {
   mut vx : Float
   mut vy : Float
   mut r : Float
-  mut value : Int
+  mut value : Int32
   mut kind : FishKind
   mut phase : Float
   mut hooked : Bool
@@ -91,25 +91,25 @@ pub(all) struct Game {
   mut move_y : Float
   mut grab_on : Bool
   mut boost_on : Bool
-  mut carrying_idx : Int
-  mut lives : Int
+  mut carrying_idx : Int32
+  mut lives : Int32
   mut line_hp : Float
   mut bait : Float
   mut turbo_t : Float
   mut repair_cd : Float
-  mut score : Int
-  mut best_score : Int
-  mut caught : Int
-  mut escaped : Int
-  mut wave : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut caught : Int32
+  mut escaped : Int32
+  mut wave : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut fish_spawn_t : Float
   mut hazard_spawn_t : Float
   mut pickup_spawn_t : Float
   mut game_t : Float
   mut ui_t : Float
-  mut hint_left : Int
+  mut hint_left : Int32
   mut hint_t : Float
   mut hint_x : Float
   mut hint_y : Float
@@ -121,7 +121,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

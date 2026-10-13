@@ -310,7 +310,7 @@ fn draw_failed_ui(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars(count : Int, x : Int, y : Int, size : Int) -> Unit {
+fn draw_stars(count : Int32, x : Int32, y : Int32, size : Int32) -> Unit {
   for i in 0..<3 {
     let star_x = x + i * (size + 10)
     let c = if i < count {

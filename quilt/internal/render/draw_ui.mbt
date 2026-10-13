@@ -51,7 +51,12 @@ fn draw_tray(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_mini_patch(patch : @types.Patch, x : Int, y : Int, size : Int) -> Unit {
+fn draw_mini_patch(
+  patch : @types.Patch,
+  x : Int32,
+  y : Int32,
+  size : Int32,
+) -> Unit {
   let base = if patch.pinned {
     @types.color_pinned
   } else {
@@ -87,7 +92,7 @@ fn draw_mini_patch(patch : @types.Patch, x : Int, y : Int, size : Int) -> Unit {
 }
 
 ///|
-fn edge_display_color(patch : @types.Patch, idx : Int) -> @raylib.Color {
+fn edge_display_color(patch : @types.Patch, idx : Int32) -> @raylib.Color {
   if patch.wildcard_edges[idx] {
     @types.color_wildcard
   } else {
@@ -178,7 +183,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_controls_help(x : Int, y : Int) -> Unit {
+fn draw_controls_help(x : Int32, y : Int32) -> Unit {
   @draw.draw_text(
     "[R] Rotate  [Click] Place/Select  [Right-click] Remove  [Esc] Back", x, y, 13,
     @types.color_text_light,
@@ -219,7 +224,7 @@ fn draw_legend() -> Unit {
 }
 
 ///|
-fn draw_stars(x : Int, y : Int, count : Int, size : Int) -> Unit {
+fn draw_stars(x : Int32, y : Int32, count : Int32, size : Int32) -> Unit {
   for i in 0..<3 {
     let sx = x + i * (size + 4)
     let c = if i < count {

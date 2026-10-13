@@ -186,7 +186,7 @@ fn draw_playing_ui(game : @types.Game, level : @types.Level) -> Unit {
 }
 
 ///|
-fn draw_result_overlay(text : String, stars : Int) -> Unit {
+fn draw_result_overlay(text : String, stars : Int32) -> Unit {
   let sw = @types.screen_width
   let sh = @types.screen_height
   // Darken overlay
@@ -231,7 +231,12 @@ fn draw_result_overlay(text : String, stars : Int) -> Unit {
 }
 
 ///|
-fn draw_star(cx : Int, cy : Int, radius : Float, color : @raylib.Color) -> Unit {
+fn draw_star(
+  cx : Int32,
+  cy : Int32,
+  radius : Float,
+  color : @raylib.Color,
+) -> Unit {
   // Simple 5-pointed star using triangles
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)

@@ -146,7 +146,7 @@ fn choose_attack_from_input(
 }
 
 ///|
-fn @types.Game::try_start_attack(game : @types.Game, slot : Int) -> Unit {
+fn @types.Game::try_start_attack(game : @types.Game, slot : Int32) -> Unit {
   let fighter = game.fighters[slot]
   let archetype = @types.fighter_archetype(game, fighter)
   let input = fighter.input
@@ -503,7 +503,7 @@ fn @types.Game::resolve_push_collision(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::update_fighter_core(
   game : @types.Game,
-  slot : Int,
+  slot : Int32,
   dt : Float,
 ) -> Unit {
   let fighter = game.fighters[slot]

@@ -82,7 +82,7 @@ fn compare_angle(
   pivot : @types.Point,
   a : @types.Point,
   b : @types.Point,
-) -> Int {
+) -> Int32 {
   let cross = @types.cross_product(pivot, a, b)
   if @types.absf(cross) < 0.001 {
     // Collinear - closer one first
@@ -103,7 +103,7 @@ fn compare_angle(
 }
 
 ///|
-pub fn hull_edge_count(hull : Array[@types.Point]) -> Int {
+pub fn hull_edge_count(hull : Array[@types.Point]) -> Int32 {
   hull.length()
 }
 

@@ -169,7 +169,7 @@ pub fn draw_turn_info(game : @types.Game) -> Unit {
 }
 
 ///|
-fn count_alive_organisms(game : @types.Game) -> Int {
+fn count_alive_organisms(game : @types.Game) -> Int32 {
   let mut c = 0
   for i in 0..<game.organisms.length() {
     if game.organisms[i].alive {

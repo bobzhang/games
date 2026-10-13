@@ -19,7 +19,7 @@ pub fn record_build(game : @types.Game) -> Unit {
 
 ///|
 /// Records breaks that occurred during a test.
-pub fn record_breaks(game : @types.Game, break_count : Int) -> Unit {
+pub fn record_breaks(game : @types.Game, break_count : Int32) -> Unit {
   game.statistics.total_breaks = game.statistics.total_breaks + break_count
 }
 
@@ -27,9 +27,9 @@ pub fn record_breaks(game : @types.Game, break_count : Int) -> Unit {
 /// Records the result of a level test.
 pub fn record_level_result(
   game : @types.Game,
-  level_idx : Int,
+  level_idx : Int32,
   height : Float,
-  stars : Int,
+  stars : Int32,
   passed : Bool,
 ) -> Unit {
   let stats = game.statistics
@@ -67,13 +67,13 @@ pub fn record_challenge_complete(game : @types.Game) -> Unit {
 
 ///|
 /// Returns total stars earned across all levels.
-pub fn total_stars(game : @types.Game) -> Int {
+pub fn total_stars(game : @types.Game) -> Int32 {
   game.statistics.stars_earned
 }
 
 ///|
 /// Returns the completion percentage (levels completed / total levels).
-pub fn completion_percentage(game : @types.Game) -> Int {
+pub fn completion_percentage(game : @types.Game) -> Int32 {
   let total = game.statistics.best_heights.length()
   if total == 0 {
     return 0
@@ -89,7 +89,7 @@ pub fn completion_percentage(game : @types.Game) -> Int {
 
 ///|
 /// Returns the star count for a specific world.
-pub fn world_stars(game : @types.Game, world_idx : Int) -> Int {
+pub fn world_stars(game : @types.Game, world_idx : Int32) -> Int32 {
   let worlds = @content.get_worlds()
   if world_idx < 0 || world_idx >= worlds.length() {
     return 0
@@ -106,7 +106,7 @@ pub fn world_stars(game : @types.Game, world_idx : Int) -> Int {
 
 ///|
 /// Returns the max possible stars for a specific world.
-pub fn world_max_stars(world_idx : Int) -> Int {
+pub fn world_max_stars(world_idx : Int32) -> Int32 {
   let worlds = @content.get_worlds()
   if world_idx < 0 || world_idx >= worlds.length() {
     return 0
@@ -117,14 +117,14 @@ pub fn world_max_stars(world_idx : Int) -> Int {
 
 ///|
 /// Returns material usage as [wood, stone, steel].
-pub fn material_usage(game : @types.Game) -> (Int, Int, Int) {
+pub fn material_usage(game : @types.Game) -> (Int32, Int32, Int32) {
   let m = game.statistics.materials_used
   (m[0], m[1], m[2])
 }
 
 ///|
 /// Returns the best height for a level.
-pub fn best_height_for_level(game : @types.Game, level_idx : Int) -> Float {
+pub fn best_height_for_level(game : @types.Game, level_idx : Int32) -> Float {
   if level_idx >= 0 && level_idx < game.statistics.best_heights.length() {
     game.statistics.best_heights[level_idx]
   } else {
@@ -134,7 +134,7 @@ pub fn best_height_for_level(game : @types.Game, level_idx : Int) -> Float {
 
 ///|
 /// Returns stars for a specific level.
-pub fn stars_for_level(game : @types.Game, level_idx : Int) -> Int {
+pub fn stars_for_level(game : @types.Game, level_idx : Int32) -> Int32 {
   if level_idx >= 0 && level_idx < game.statistics.level_stars.length() {
     game.statistics.level_stars[level_idx]
   } else {
@@ -144,7 +144,7 @@ pub fn stars_for_level(game : @types.Game, level_idx : Int) -> Int {
 
 ///|
 /// Returns the material index for statistics tracking.
-fn material_index(mat : @types.Material) -> Int {
+fn material_index(mat : @types.Material) -> Int32 {
   match mat {
     Wood => 0
     Stone => 1

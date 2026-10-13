@@ -1,5 +1,5 @@
 ///|
-fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
+fn @types.Game::alloc_bullet(game : @types.Game) -> Int32 {
   for i, slot in game.bullets {
     if !slot.active {
       break i
@@ -17,7 +17,7 @@ fn @types.Game::spawn_bullet(
   y : Float,
   dir : @types.Dir,
   speed : Float,
-  power : Int,
+  power : Int32,
 ) -> Unit {
   let idx = game.alloc_bullet()
   if idx < 0 {

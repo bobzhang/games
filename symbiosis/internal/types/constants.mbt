@@ -1,44 +1,44 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let tile_size : Int = 40
+pub let tile_size : Int32 = 40
 
 ///|
-pub let grid_width : Int = 12
+pub let grid_width : Int32 = 12
 
 ///|
-pub let grid_height : Int = 8
+pub let grid_height : Int32 = 8
 
 ///|
-pub let left_grid_x : Int = 40
+pub let left_grid_x : Int32 = 40
 
 ///|
-pub let left_grid_y : Int = 100
+pub let left_grid_y : Int32 = 100
 
 ///|
-pub let right_grid_x : Int = 560
+pub let right_grid_x : Int32 = 560
 
 ///|
-pub let right_grid_y : Int = 100
+pub let right_grid_y : Int32 = 100
 
 ///|
-pub let max_moves : Int = 100
+pub let max_moves : Int32 = 100
 
 ///|
-pub let max_door_ids : Int = 8
+pub let max_door_ids : Int32 = 8
 
 ///|
-pub let num_worlds : Int = 4
+pub let num_worlds : Int32 = 4
 
 ///|
-pub let levels_per_world : Int = 7
+pub let levels_per_world : Int32 = 7
 
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(20, 20, 30, 255)

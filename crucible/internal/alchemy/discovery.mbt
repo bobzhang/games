@@ -40,7 +40,7 @@ pub fn discover_reaction(
 ///|
 /// Count how many unique reactions have been discovered.
 /// We count unique outputs, not direction variants.
-pub fn count_discovered(book : Array[@types.Recipe]) -> Int {
+pub fn count_discovered(book : Array[@types.Recipe]) -> Int32 {
   let mut count = 0
   for i in 0..<book.length() {
     if book[i].discovered {
@@ -53,7 +53,7 @@ pub fn count_discovered(book : Array[@types.Recipe]) -> Int {
 
 ///|
 /// Count total unique reactions possible.
-pub fn count_total() -> Int {
+pub fn count_total() -> Int32 {
   @types.total_reactions
 }
 

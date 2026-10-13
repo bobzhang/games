@@ -4,7 +4,7 @@
 
 ///|
 /// Returns the localized display name for a world index.
-pub fn get_world_name(world : Int) -> String {
+pub fn get_world_name(world : Int32) -> String {
   if world == 0 {
     "Green Hills"
   } else if world == 1 {
@@ -18,7 +18,7 @@ pub fn get_world_name(world : Int) -> String {
 
 ///|
 /// Returns the display title for a level index inside a world.
-pub fn get_level_name(world : Int, level : Int) -> String {
+pub fn get_level_name(world : Int32, level : Int32) -> String {
   if world == 0 {
     if level == 0 {
       "Meadow Path"
@@ -72,7 +72,7 @@ pub fn get_level_name(world : Int, level : Int) -> String {
 
 ///|
 /// Returns the base platform RGB color tuple for a world theme.
-pub fn world_platform_color(world : Int) -> (Int, Int, Int) {
+pub fn world_platform_color(world : Int32) -> (Int32, Int32, Int32) {
   if world == 0 {
     (80, 160, 60)
   } else if world == 1 {
@@ -86,7 +86,7 @@ pub fn world_platform_color(world : Int) -> (Int, Int, Int) {
 
 ///|
 /// Returns the background RGB color tuple for a world theme.
-pub fn world_bg_color(world : Int) -> (Int, Int, Int) {
+pub fn world_bg_color(world : Int32) -> (Int32, Int32, Int32) {
   if world == 0 {
     (100, 180, 255)
   } else if world == 1 {
@@ -102,7 +102,7 @@ pub fn world_bg_color(world : Int) -> (Int, Int, Int) {
 
 ///|
 /// Returns the primary decoration RGB color tuple for a world.
-pub fn world_deco_color_1(world : Int) -> (Int, Int, Int) {
+pub fn world_deco_color_1(world : Int32) -> (Int32, Int32, Int32) {
   if world == 0 {
     (60, 130, 40)
   } else if world == 1 {
@@ -116,7 +116,7 @@ pub fn world_deco_color_1(world : Int) -> (Int, Int, Int) {
 
 ///|
 /// Returns the secondary decoration RGB color tuple for a world.
-pub fn world_deco_color_2(world : Int) -> (Int, Int, Int) {
+pub fn world_deco_color_2(world : Int32) -> (Int32, Int32, Int32) {
   if world == 0 {
     (100, 70, 40)
   } else if world == 1 {
@@ -134,10 +134,12 @@ pub fn world_deco_color_2(world : Int) -> (Int, Int, Int) {
 ///|
 /// Builds platform spawn tuples `(kind, x, y, z, w, d, move_range, move_speed)` for a level.
 pub fn get_platform_data(
-  world : Int,
-  level : Int,
-) -> Array[(Int, Float, Float, Float, Float, Float, Float, Float)] {
-  let platforms : Array[(Int, Float, Float, Float, Float, Float, Float, Float)] = []
+  world : Int32,
+  level : Int32,
+) -> Array[(Int32, Float, Float, Float, Float, Float, Float, Float)] {
+  let platforms : Array[
+    (Int32, Float, Float, Float, Float, Float, Float, Float),
+  ] = []
   // Start platform (always)
   platforms.push((0, 0.0, 0.0, 0.0, 4.0, 4.0, 0.0, 0.0))
   if world == 0 {
@@ -156,8 +158,8 @@ pub fn get_platform_data(
 
 ///|
 fn build_forest_level(
-  platforms : Array[(Int, Float, Float, Float, Float, Float, Float, Float)],
-  level : Int,
+  platforms : Array[(Int32, Float, Float, Float, Float, Float, Float, Float)],
+  level : Int32,
 ) -> Unit {
   if level == 0 {
     // Meadow Path - gentle introduction
@@ -240,8 +242,8 @@ fn build_forest_level(
 
 ///|
 fn build_crystal_level(
-  platforms : Array[(Int, Float, Float, Float, Float, Float, Float, Float)],
-  level : Int,
+  platforms : Array[(Int32, Float, Float, Float, Float, Float, Float, Float)],
+  level : Int32,
 ) -> Unit {
   if level == 0 {
     // Ice Entry - introduces ice platforms
@@ -321,8 +323,8 @@ fn build_crystal_level(
 
 ///|
 fn build_lava_level(
-  platforms : Array[(Int, Float, Float, Float, Float, Float, Float, Float)],
-  level : Int,
+  platforms : Array[(Int32, Float, Float, Float, Float, Float, Float, Float)],
+  level : Int32,
 ) -> Unit {
   if level == 0 {
     // Ember Walk - introduces falling platforms
@@ -406,8 +408,8 @@ fn build_lava_level(
 
 ///|
 fn build_sky_level(
-  platforms : Array[(Int, Float, Float, Float, Float, Float, Float, Float)],
-  level : Int,
+  platforms : Array[(Int32, Float, Float, Float, Float, Float, Float, Float)],
+  level : Int32,
 ) -> Unit {
   if level == 0 {
     // Cloud Step - moving platforms focus
@@ -494,10 +496,10 @@ fn build_sky_level(
 ///|
 /// Builds collectible spawn tuples `(kind, x, y, z)` for a level.
 pub fn get_collectible_data(
-  world : Int,
-  level : Int,
-) -> Array[(Int, Float, Float, Float)] {
-  let items : Array[(Int, Float, Float, Float)] = []
+  world : Int32,
+  level : Int32,
+) -> Array[(Int32, Float, Float, Float)] {
+  let items : Array[(Int32, Float, Float, Float)] = []
   let plats = get_platform_data(world, level)
   // Place gems on platforms and vary by world/level
   for i in 1..<(plats.length() - 1) {
@@ -508,7 +510,7 @@ pub fn get_collectible_data(
     }
     // Coins near some platforms
     if i % 3 == 1 {
-      let coin_kind : Int = if level >= 3 {
+      let coin_kind : Int32 = if level >= 3 {
         6
       } else if level >= 1 {
         5
@@ -537,10 +539,10 @@ pub fn get_collectible_data(
 ///|
 /// Builds enemy spawn tuples `(kind, x, y, z, patrol_range)` for a level.
 pub fn get_enemy_data(
-  world : Int,
-  level : Int,
-) -> Array[(Int, Float, Float, Float, Float)] {
-  let enemies : Array[(Int, Float, Float, Float, Float)] = []
+  world : Int32,
+  level : Int32,
+) -> Array[(Int32, Float, Float, Float, Float)] {
+  let enemies : Array[(Int32, Float, Float, Float, Float)] = []
   let plats = get_platform_data(world, level)
   // Enemies start appearing from level 1 onwards
   if level == 0 {
@@ -579,10 +581,10 @@ pub fn get_enemy_data(
 ///|
 /// Builds hazard spawn tuples `(kind, x, y, z, w, h, d)` for a level.
 pub fn get_hazard_data(
-  world : Int,
-  level : Int,
-) -> Array[(Int, Float, Float, Float, Float, Float, Float)] {
-  let hazards : Array[(Int, Float, Float, Float, Float, Float, Float)] = []
+  world : Int32,
+  level : Int32,
+) -> Array[(Int32, Float, Float, Float, Float, Float, Float)] {
+  let hazards : Array[(Int32, Float, Float, Float, Float, Float, Float)] = []
   let plats = get_platform_data(world, level)
   // Place hazards between platforms where gaps exist
   for i in 1..<(plats.length() - 1) {
@@ -626,16 +628,16 @@ pub fn get_hazard_data(
 ///|
 /// Builds power-up spawn tuples `(kind, x, y, z)` for a level.
 pub fn get_powerup_data(
-  world : Int,
-  level : Int,
-) -> Array[(Int, Float, Float, Float)] {
-  let powerups : Array[(Int, Float, Float, Float)] = []
+  world : Int32,
+  level : Int32,
+) -> Array[(Int32, Float, Float, Float)] {
+  let powerups : Array[(Int32, Float, Float, Float)] = []
   let plats = get_platform_data(world, level)
   // One power-up per level, placed on a platform roughly 40% through
   let pu_idx = plats.length() * 2 / 5
   if pu_idx > 0 && pu_idx < plats.length() {
     let p = plats[pu_idx]
-    let kind : Int = if world == 0 {
+    let kind : Int32 = if world == 0 {
       0
     } else if world == 1 {
       1
@@ -651,7 +653,7 @@ pub fn get_powerup_data(
     let pu_idx2 = plats.length() * 3 / 4
     if pu_idx2 > 0 && pu_idx2 < plats.length() {
       let p2 = plats[pu_idx2]
-      let kind2 : Int = if world == 0 {
+      let kind2 : Int32 = if world == 0 {
         1
       } else if world == 1 {
         2
@@ -672,10 +674,10 @@ pub fn get_powerup_data(
 ///|
 /// Builds decorative prop tuples `(kind, x, y, z, scale)` for a level.
 pub fn get_decoration_data(
-  world : Int,
-  level : Int,
-) -> Array[(Int, Float, Float, Float, Float)] {
-  let decos : Array[(Int, Float, Float, Float, Float)] = []
+  world : Int32,
+  level : Int32,
+) -> Array[(Int32, Float, Float, Float, Float)] {
+  let decos : Array[(Int32, Float, Float, Float, Float)] = []
   let plats = get_platform_data(world, level)
   for i in 0..<plats.length() {
     let p = plats[i]
@@ -733,7 +735,7 @@ pub fn get_decoration_data(
 
 ///|
 /// Returns the 3D goal location, anchored above the final platform in the level path.
-pub fn get_goal_position(world : Int, level : Int) -> (Float, Float, Float) {
+pub fn get_goal_position(world : Int32, level : Int32) -> (Float, Float, Float) {
   let plats = get_platform_data(world, level)
   let last = plats[plats.length() - 1]
   (last.1, last.2 + 1.0, last.3)
@@ -743,9 +745,9 @@ pub fn get_goal_position(world : Int, level : Int) -> (Float, Float, Float) {
 
 ///|
 /// Computes a clamped difficulty rating from `1` to `5` using world and level progression.
-pub fn get_level_difficulty(world : Int, level : Int) -> Int {
-  let base : Int = world + 1
-  let lvl_add : Int = level / 2
+pub fn get_level_difficulty(world : Int32, level : Int32) -> Int32 {
+  let base : Int32 = world + 1
+  let lvl_add : Int32 = level / 2
   let v = base + lvl_add
   if v < 1 {
     1

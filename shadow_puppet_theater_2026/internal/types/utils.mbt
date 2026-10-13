@@ -45,7 +45,7 @@ pub fn set_message(game : Game, text : String, ttl : Float) -> Unit {
 
 ///|
 /// Adds score delta while keeping score non-negative and updating best score.
-pub fn add_score(game : Game, delta : Int) -> Unit {
+pub fn add_score(game : Game, delta : Int32) -> Unit {
   game.score = (0).max(game.score + delta)
   if game.score > game.best_score {
     game.best_score = game.score

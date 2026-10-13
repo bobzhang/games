@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 let field_l : Float = 86.0
@@ -35,10 +35,10 @@ let center_y : Float = (field_t + field_b) * 0.5
 let car_r : Float = 24.0
 
 ///|
-let max_pickups : Int = 30
+let max_pickups : Int32 = 30
 
 ///|
-let max_particles : Int = 980
+let max_particles : Int32 = 980
 
 ///|
 struct Car {
@@ -60,7 +60,7 @@ struct Ball {
   mut vx : Float
   mut vy : Float
   r : Float
-  mut last_touch : Int
+  mut last_touch : Int32
   mut fire_t : Float
 }
 
@@ -69,7 +69,7 @@ struct Pickup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : Int32
   mut t : Float
   mut life : Float
 }
@@ -84,7 +84,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -142,10 +142,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -182,7 +182,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 
 ///|
 fn spawn_pickup(items : Array[Pickup]) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<items.length() {
     if !items[i].active {
       slot = i
@@ -208,9 +208,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut left = n
   for part in parts {
@@ -301,7 +301,7 @@ fn cap_car_in_field(car : Car) -> Bool {
 fn collide_car_ball(
   car : Car,
   ball : Ball,
-  owner : Int,
+  owner : Int32,
   parts : Array[Particle],
 ) -> Unit {
   let dx = ball.x - car.x
@@ -381,7 +381,7 @@ fn collide_cars(a : Car, b : Car, parts : Array[Particle]) -> Unit {
 }
 
 ///|
-fn update_ball(ball : Ball, dt : Float) -> Int {
+fn update_ball(ball : Ball, dt : Float) -> Int32 {
   ball.x = ball.x + ball.vx * dt
   ball.y = ball.y + ball.vy * dt
 
@@ -642,11 +642,11 @@ fn main {
     }
   })
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut match_time : Float = 210.0
-  let mut player_score : Int = 0
-  let mut ai_score : Int = 0
-  let mut style_pts : Int = 0
+  let mut player_score : Int32 = 0
+  let mut ai_score : Int32 = 0
+  let mut style_pts : Int32 = 0
 
   let mut kickoff_right : Bool = true
   let mut goal_pause_t : Float = 0.0

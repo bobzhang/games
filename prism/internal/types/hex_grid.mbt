@@ -1,5 +1,5 @@
 ///|
-pub fn hex_key(q : Int, r : Int) -> String {
+pub fn hex_key(q : Int32, r : Int32) -> String {
   q.to_string() + "," + r.to_string()
 }
 
@@ -35,12 +35,12 @@ pub fn new_hex_grid() -> HexGrid {
 }
 
 ///|
-pub fn grid_get(grid : HexGrid, q : Int, r : Int) -> HexCell? {
+pub fn grid_get(grid : HexGrid, q : Int32, r : Int32) -> HexCell? {
   grid.cells.get(hex_key(q, r))
 }
 
 ///|
-pub fn grid_in_bounds(grid : HexGrid, q : Int, r : Int) -> Bool {
+pub fn grid_in_bounds(grid : HexGrid, q : Int32, r : Int32) -> Bool {
   grid.cells.contains(hex_key(q, r))
 }
 
@@ -65,7 +65,7 @@ pub fn grid_clear_received(grid : HexGrid) -> Unit {
 }
 
 ///|
-pub fn grid_cell_count(grid : HexGrid) -> Int {
+pub fn grid_cell_count(grid : HexGrid) -> Int32 {
   grid.cells.length()
 }
 
@@ -74,14 +74,14 @@ pub fn grid_cell_count(grid : HexGrid) -> Int {
 /// For flat-top hexes:
 ///   x = size * (3/2 * q)
 ///   y = size * (sqrt(3)/2 * q + sqrt(3) * r)
-pub fn hex_to_pixel_x(q : Int, _r : Int) -> Float {
+pub fn hex_to_pixel_x(q : Int32, _r : Int32) -> Float {
   let fq = Float::from_int(q)
   let size = Float::from_int(hex_size)
   Float::from_int(grid_offset_x) + size * 1.5 * fq
 }
 
 ///|
-pub fn hex_to_pixel_y(q : Int, r : Int) -> Float {
+pub fn hex_to_pixel_y(q : Int32, r : Int32) -> Float {
   let fq = Float::from_int(q)
   let fr = Float::from_int(r)
   let size = Float::from_int(hex_size)
@@ -91,7 +91,7 @@ pub fn hex_to_pixel_y(q : Int, r : Int) -> Float {
 
 ///|
 /// Convert pixel coords to nearest hex axial coords (flat-top).
-pub fn pixel_to_hex(px : Float, py : Float) -> (Int, Int) {
+pub fn pixel_to_hex(px : Float, py : Float) -> (Int32, Int32) {
   let size = Float::from_int(hex_size)
   let x = px - Float::from_int(grid_offset_x)
   let y = py - Float::from_int(grid_offset_y)
@@ -104,7 +104,7 @@ pub fn pixel_to_hex(px : Float, py : Float) -> (Int, Int) {
 }
 
 ///|
-fn roundf(v : Float) -> Int {
+fn roundf(v : Float) -> Int32 {
   if v >= 0.0 {
     (v + 0.5).to_int()
   } else {
@@ -114,7 +114,7 @@ fn roundf(v : Float) -> Int {
 
 ///|
 /// Round fractional hex coords to nearest integer hex.
-fn hex_round(fq : Float, fr : Float) -> (Int, Int) {
+fn hex_round(fq : Float, fr : Float) -> (Int32, Int32) {
   let fs = -fq - fr
   let mut q = roundf(fq)
   let mut r = roundf(fr)
@@ -131,7 +131,7 @@ fn hex_round(fq : Float, fr : Float) -> (Int, Int) {
 }
 
 ///|
-pub fn absint(v : Int) -> Int {
+pub fn absint(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -191,7 +191,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_index(t : Tier) -> Int {
+pub fn tier_index(t : Tier) -> Int32 {
   match t {
     Fundamentals => 0
     Chromatics => 1
@@ -200,7 +200,7 @@ pub fn tier_index(t : Tier) -> Int {
 }
 
 ///|
-pub fn index_to_tier(i : Int) -> Tier {
+pub fn index_to_tier(i : Int32) -> Tier {
   match i {
     0 => Fundamentals
     1 => Chromatics
@@ -209,7 +209,7 @@ pub fn index_to_tier(i : Int) -> Tier {
 }
 
 ///|
-pub fn count_placed_components(grid : HexGrid) -> Int {
+pub fn count_placed_components(grid : HexGrid) -> Int32 {
   let mut count = 0
   for _k, cell in grid.cells {
     match cell.component {
@@ -266,8 +266,8 @@ pub fn cosf(a : Float) -> Float {
 
 ///|
 /// Get all valid hex coordinates in the grid, sorted consistently.
-pub fn grid_all_coords(grid : HexGrid) -> Array[(Int, Int)] {
-  let coords : Array[(Int, Int)] = []
+pub fn grid_all_coords(grid : HexGrid) -> Array[(Int32, Int32)] {
+  let coords : Array[(Int32, Int32)] = []
   let radius = grid.radius
   for q in -radius..<=radius {
     for r in -radius..<=radius {

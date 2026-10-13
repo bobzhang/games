@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     // Tier 1: Seedling (7 levels) - Single trees, learn growth and water
     0 =>
@@ -288,7 +288,7 @@ pub fn get_level(index : Int) -> @types.Level {
 }
 
 ///|
-pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
+pub fn load_level(game : @types.Game, level_index : Int32) -> Unit {
   let level = get_level(level_index)
   game.current_level = level_index
   game.turn = 0
@@ -330,7 +330,7 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
 }
 
 ///|
-pub fn tier_for_level(index : Int) -> @types.Tier {
+pub fn tier_for_level(index : Int32) -> @types.Tier {
   if index < 7 {
     Seedling
   } else if index < 14 {
@@ -341,7 +341,7 @@ pub fn tier_for_level(index : Int) -> @types.Tier {
 }
 
 ///|
-pub fn tier_start_level(tier : @types.Tier) -> Int {
+pub fn tier_start_level(tier : @types.Tier) -> Int32 {
   match tier {
     Seedling => 0
     Grove => 7
@@ -350,7 +350,7 @@ pub fn tier_start_level(tier : @types.Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(tier : @types.Tier) -> Int {
+pub fn tier_level_count(tier : @types.Tier) -> Int32 {
   match tier {
     Seedling => 7
     Grove => 7

@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Horizontal world bounds matching screen width.
@@ -16,19 +16,19 @@ let rider_screen_y : Float = 538.0
 
 ///|
 /// Maximum number of checkpoint slots in the pool.
-let max_checkpoints : Int = 80
+let max_checkpoints : Int32 = 80
 
 ///|
 /// Maximum number of hazard slots in the pool.
-let max_hazards : Int = 320
+let max_hazards : Int32 = 320
 
 ///|
 /// Maximum number of pickup slots in the pool.
-let max_pickups : Int = 140
+let max_pickups : Int32 = 140
 
 ///|
 /// Maximum number of particle slots in the pool.
-let max_particles : Int = 980
+let max_particles : Int32 = 980
 
 ///|
 /// Player-controlled mountain bike rider with position, physics, and stats.
@@ -45,9 +45,9 @@ struct Rider {
   mut boost_t : Float
   mut boost_cd : Float
   mut flash_t : Float
-  mut score : Int
-  mut combo : Int
-  mut coins : Int
+  mut score : Int32
+  mut combo : Int32
+  mut coins : Int32
 }
 
 ///|
@@ -57,7 +57,7 @@ struct Checkpoint {
   mut x : Float
   mut y : Float
   mut width : Float
-  mut state : Int
+  mut state : Int32
   mut pulse_t : Float
 }
 
@@ -67,7 +67,7 @@ struct Hazard {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : Int32
   mut size : Float
 }
 
@@ -77,7 +77,7 @@ struct Pickup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : Int32
   mut t : Float
 }
 
@@ -92,7 +92,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -120,10 +120,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -205,7 +205,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for ps_elem in ps {
@@ -234,9 +234,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<count {
     ignore(i)
@@ -248,7 +248,7 @@ fn burst(
 /// Returns the smallest positive y-distance to the next unhit checkpoint, or a large sentinel value.
 fn nearest_checkpoint_dy(
   cps : Array[Checkpoint],
-  cp_count : Int,
+  cp_count : Int32,
   rider_y : Float,
 ) -> Float {
   for i in 0..<cp_count; best = 9999999.0F {
@@ -271,12 +271,12 @@ fn generate_course(
   cps : Array[Checkpoint],
   hs : Array[Hazard],
   items : Array[Pickup],
-) -> (Int, Float) {
+) -> (Int32, Float) {
   clear_checkpoints(cps)
   clear_hazards(hs)
   clear_pickups(items)
 
-  let cp_count : Int = 68
+  let cp_count : Int32 = 68
 
   let mut y : Float = 420.0
   for i in 0..<cp_count {
@@ -378,14 +378,14 @@ fn main {
     }
   })
 
-  let mut checkpoint_count : Int = 0
+  let mut checkpoint_count : Int32 = 0
   let mut course_end : Float = 0.0
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut time_left : Float = 248.0
-  let mut clean_count : Int = 0
-  let mut miss_count : Int = 0
-  let mut tier : Int = 1
+  let mut clean_count : Int32 = 0
+  let mut miss_count : Int32 = 0
+  let mut tier : Int32 = 1
 
   let mut msg : String = "Pedal hard, clear checkpoints, avoid obstacles"
   let mut msg_t : Float = 3.0
@@ -485,10 +485,10 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeySpace)
       let mut boost_press : Bool = @raylib.is_key_pressed(@raylib.KeyK)
 
-      let pad_x : Int = 24
-      let pad_y : Int = sh - 194
-      let btn_x : Int = sw - 252
-      let btn_y : Int = sh - 220
+      let pad_x : Int32 = 24
+      let pad_y : Int32 = sh - 194
+      let btn_x : Int32 = sw - 252
+      let btn_y : Int32 = sh - 220
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 56, 74, 56) {
@@ -514,7 +514,7 @@ fn main {
         }
       }
 
-      let steer : Int = if move_l && !move_r {
+      let steer : Int32 = if move_l && !move_r {
         -1
       } else if move_r && !move_l {
         1
@@ -797,7 +797,7 @@ fn main {
         continue
       }
 
-      let blink : Int = if (pickup.t * 7.0).to_int() % 2 == 0 {
+      let blink : Int32 = if (pickup.t * 7.0).to_int() % 2 == 0 {
         255
       } else {
         180
@@ -812,7 +812,7 @@ fn main {
 
       let psy : Float = world_to_screen_y(particle.y, rider.y)
       let k = particle.t / particle.life
-      let a : Int = ((Float::from_int(1) - k) * 220.0).to_int()
+      let a : Int32 = ((Float::from_int(1) - k) * 220.0).to_int()
       let mut c = @raylib.Color::new(118, 220, 252, a)
       if particle.kind == 1 {
         c = @raylib.Color::new(142, 248, 188, a)

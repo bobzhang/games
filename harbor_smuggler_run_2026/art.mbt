@@ -112,7 +112,7 @@ fn draw_texture_cover(
 
 ///|
 /// Returns the generated patrol texture associated with the gameplay patrol kind.
-fn patrol_texture(art : GameArt, kind : Int) -> @raylib.Texture {
+fn patrol_texture(art : GameArt, kind : Int32) -> @raylib.Texture {
   match kind {
     1 => art.patrol_interceptor_sprite
     2 => art.patrol_cutter_sprite

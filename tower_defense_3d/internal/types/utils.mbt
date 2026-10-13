@@ -1,6 +1,6 @@
 ///|
 /// Converts an integer to an EnemyKind enum value.
-pub fn enemy_kind_from_int(n : Int) -> EnemyKind {
+pub fn enemy_kind_from_int(n : Int32) -> EnemyKind {
   if n == 0 {
     Basic
   } else if n == 1 {
@@ -26,7 +26,7 @@ pub fn enemy_kind_from_int(n : Int) -> EnemyKind {
 
 ///|
 /// Converts an EnemyKind enum value to an integer.
-pub fn enemy_kind_to_int(kind : EnemyKind) -> Int {
+pub fn enemy_kind_to_int(kind : EnemyKind) -> Int32 {
   match kind {
     Basic => 0
     Fast => 1
@@ -43,7 +43,7 @@ pub fn enemy_kind_to_int(kind : EnemyKind) -> Int {
 
 ///|
 /// Converts an integer to a TargetPriority enum value.
-pub fn target_priority_from_int(n : Int) -> TargetPriority {
+pub fn target_priority_from_int(n : Int32) -> TargetPriority {
   if n == 0 {
     First
   } else if n == 1 {
@@ -57,7 +57,7 @@ pub fn target_priority_from_int(n : Int) -> TargetPriority {
 
 ///|
 /// Converts a TargetPriority enum value to an integer.
-pub fn target_priority_to_int(mode : TargetPriority) -> Int {
+pub fn target_priority_to_int(mode : TargetPriority) -> Int32 {
   match mode {
     First => 0
     Last => 1
@@ -128,19 +128,19 @@ pub fn distance3d(
 
 ///|
 /// Returns whether grid coordinates (`gx`, `gy`) are within the map bounds.
-pub fn in_bounds(gx : Int, gy : Int) -> Bool {
+pub fn in_bounds(gx : Int32, gy : Int32) -> Bool {
   gx >= 0 && gy >= 0 && gx < map_w && gy < map_h
 }
 
 ///|
 /// Returns the flat array index for grid coordinates (`gx`, `gy`).
-pub fn tile_index(gx : Int, gy : Int) -> Int {
+pub fn tile_index(gx : Int32, gy : Int32) -> Int32 {
   gy * map_w + gx
 }
 
 ///|
 /// Returns the tile type at grid position (`gx`, `gy`), or rock if out of bounds.
-pub fn get_tile(game : Game, gx : Int, gy : Int) -> Tile {
+pub fn get_tile(game : Game, gx : Int32, gy : Int32) -> Tile {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)]
   } else {
@@ -150,7 +150,7 @@ pub fn get_tile(game : Game, gx : Int, gy : Int) -> Tile {
 
 ///|
 /// Sets the tile type at grid position (`gx`, `gy`) to `tile`.
-pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Tile) -> Unit {
+pub fn set_tile(game : Game, gx : Int32, gy : Int32, tile : Tile) -> Unit {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)] = tile
   }
@@ -158,31 +158,31 @@ pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Tile) -> Unit {
 
 ///|
 /// Returns the world-space X coordinate for grid column `gx`.
-pub fn grid_to_world_x(gx : Int) -> Float {
+pub fn grid_to_world_x(gx : Int32) -> Float {
   Float::from_int(gx) * cell_size + cell_size / 2.0
 }
 
 ///|
 /// Returns the world-space Z coordinate for grid row `gy`.
-pub fn grid_to_world_z(gy : Int) -> Float {
+pub fn grid_to_world_z(gy : Int32) -> Float {
   Float::from_int(gy) * cell_size + cell_size / 2.0
 }
 
 ///|
 /// Returns the grid column for world-space X coordinate `wx`.
-pub fn world_to_grid_x(wx : Float) -> Int {
+pub fn world_to_grid_x(wx : Float) -> Int32 {
   (wx / cell_size).to_int()
 }
 
 ///|
 /// Returns the grid row for world-space Z coordinate `wz`.
-pub fn world_to_grid_y(wz : Float) -> Int {
+pub fn world_to_grid_y(wz : Float) -> Int32 {
   (wz / cell_size).to_int()
 }
 
 ///|
 /// Returns the tower pool index at grid position (`gx`, `gy`), or -1 if none.
-pub fn tower_at(game : Game, gx : Int, gy : Int) -> Int {
+pub fn tower_at(game : Game, gx : Int32, gy : Int32) -> Int32 {
   @utils.first_index_by(game.towers, fn(tower) {
     tower.active && tower.gx == gx && tower.gy == gy
   })
@@ -190,25 +190,25 @@ pub fn tower_at(game : Game, gx : Int, gy : Int) -> Int {
 
 ///|
 /// Returns the index of the first inactive tower slot, or -1 if full.
-pub fn alloc_tower(game : Game) -> Int {
+pub fn alloc_tower(game : Game) -> Int32 {
   @utils.first_index_by(game.towers, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if full.
-pub fn alloc_enemy(game : Game) -> Int {
+pub fn alloc_enemy(game : Game) -> Int32 {
   @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if full.
-pub fn alloc_projectile(game : Game) -> Int {
+pub fn alloc_projectile(game : Game) -> Int32 {
   @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive particle slot, or -1 if full.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
@@ -216,7 +216,7 @@ pub fn alloc_particle(game : Game) -> Int {
 
 ///|
 /// Returns the base gold cost for building a tower of the given `kind`.
-pub fn tower_cost_for(kind : TowerKind) -> Int {
+pub fn tower_cost_for(kind : TowerKind) -> Int32 {
   match kind {
     Arrow => cost_arrow
     Cannon => cost_cannon
@@ -233,7 +233,7 @@ pub fn tower_cost_for(kind : TowerKind) -> Int {
 
 ///|
 /// Returns the base gold cost for a tower type (backward-compatible alias).
-pub fn tower_cost(kind : TowerKind) -> Int {
+pub fn tower_cost(kind : TowerKind) -> Int32 {
   tower_cost_for(kind)
 }
 
@@ -241,7 +241,7 @@ pub fn tower_cost(kind : TowerKind) -> Int {
 
 ///|
 /// Returns the gold cost to upgrade a tower of `kind` from `current_level`.
-pub fn tower_upgrade_cost(kind : TowerKind, current_level : Int) -> Int {
+pub fn tower_upgrade_cost(kind : TowerKind, current_level : Int32) -> Int32 {
   let base = tower_cost_for(kind)
   if current_level == 1 {
     let cost : Float = Float::from_int(base) * upgrade_cost_mult_2
@@ -258,7 +258,7 @@ pub fn tower_upgrade_cost(kind : TowerKind, current_level : Int) -> Int {
 
 ///|
 /// Returns the total gold invested in a tower of `kind` at the given `level`.
-pub fn tower_total_investment(kind : TowerKind, level : Int) -> Int {
+pub fn tower_total_investment(kind : TowerKind, level : Int32) -> Int32 {
   let mut total = tower_cost_for(kind)
   if level >= 2 {
     let cost2 : Float = Float::from_int(tower_cost_for(kind)) *
@@ -277,7 +277,7 @@ pub fn tower_total_investment(kind : TowerKind, level : Int) -> Int {
 
 ///|
 /// Returns the gold refund for selling a tower of `kind` at the given `level`.
-pub fn tower_sell_value(kind : TowerKind, level : Int) -> Int {
+pub fn tower_sell_value(kind : TowerKind, level : Int32) -> Int32 {
   let invested = tower_total_investment(kind, level)
   let value : Float = Float::from_int(invested) * sell_value_pct
   value.to_int()
@@ -529,7 +529,7 @@ pub fn find_target(
   range : Float,
   mode : TargetPriority,
   can_see_camo : Bool,
-) -> Int {
+) -> Int32 {
   for j, enemy in game.enemies; best_idx = -1, best_score = -999999.0F {
     if !enemy.active || enemy.hp <= 0.0 {
       continue
@@ -567,7 +567,7 @@ pub fn find_target(
 
 ///|
 /// Returns the number of currently active enemies on the field.
-pub fn count_active_enemies(game : Game) -> Int {
+pub fn count_active_enemies(game : Game) -> Int32 {
   let mut count = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -581,7 +581,7 @@ pub fn count_active_enemies(game : Game) -> Int {
 
 ///|
 /// Returns the number of currently active towers on the map.
-pub fn count_active_towers(game : Game) -> Int {
+pub fn count_active_towers(game : Game) -> Int32 {
   let mut count = 0
   for tower in game.towers {
     if tower.active {
@@ -633,7 +633,7 @@ pub fn splash_radius_for(kind : TowerKind) -> Float {
 
 ///|
 /// Returns the next pseudorandom integer and advances the RNG state.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -647,7 +647,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer between `low` and `high` inclusive.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -675,10 +675,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -711,11 +711,11 @@ pub fn spawn_particles_typed(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
-  kind : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -763,7 +763,7 @@ pub fn spawn_explosion_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  size : Int,
+  size : Int32,
 ) -> Unit {
   spawn_particles_typed(
     game, wx, wy, wz, size, 255, 150, 50, particle_explosion,
@@ -824,7 +824,7 @@ pub fn spawn_build_particles(
 
 ///|
 /// Returns whether a tower can be placed at grid position (`gx`, `gy`).
-pub fn can_place_tower(game : Game, gx : Int, gy : Int) -> Bool {
+pub fn can_place_tower(game : Game, gx : Int32, gy : Int32) -> Bool {
   if !in_bounds(gx, gy) {
     return false
   }
@@ -851,7 +851,7 @@ pub fn set_notification(game : Game, text : String, duration : Float) -> Unit {
 
 ///|
 /// Returns the enemy HP multiplier for the given `difficulty` level.
-pub fn difficulty_hp_mult(difficulty : Int) -> Float {
+pub fn difficulty_hp_mult(difficulty : Int32) -> Float {
   if difficulty == 0 {
     difficulty_easy_hp
   } else if difficulty == 2 {
@@ -865,7 +865,7 @@ pub fn difficulty_hp_mult(difficulty : Int) -> Float {
 
 ///|
 /// Returns the enemy speed multiplier for the given `difficulty` level.
-pub fn difficulty_speed_mult(difficulty : Int) -> Float {
+pub fn difficulty_speed_mult(difficulty : Int32) -> Float {
   if difficulty == 0 {
     difficulty_easy_speed
   } else if difficulty == 2 {
@@ -877,7 +877,7 @@ pub fn difficulty_speed_mult(difficulty : Int) -> Float {
 
 ///|
 /// Returns the display name for the given `difficulty` level.
-pub fn difficulty_name(difficulty : Int) -> String {
+pub fn difficulty_name(difficulty : Int32) -> String {
   if difficulty == 0 {
     "Easy"
   } else if difficulty == 2 {
@@ -891,7 +891,7 @@ pub fn difficulty_name(difficulty : Int) -> String {
 
 ///|
 /// Returns the upgrade cost and stat preview for a tower of `kind` at `level`.
-pub fn get_upgrade_info(kind : TowerKind, level : Int) -> UpgradeInfo {
+pub fn get_upgrade_info(kind : TowerKind, level : Int32) -> UpgradeInfo {
   let cost = tower_upgrade_cost(kind, level)
   let dmg_mult : Float = 1.0 + Float::from_int(level) * upgrade_damage_mult
   let rng_mult : Float = 1.0 + Float::from_int(level) * upgrade_range_mult
@@ -961,7 +961,7 @@ pub fn add_chain_line(
 
 ///|
 /// Returns the display label for the given speed `setting`.
-pub fn speed_name(setting : Int) -> String {
+pub fn speed_name(setting : Int32) -> String {
   if setting == 0 {
     "1x"
   } else if setting == 1 {
@@ -975,7 +975,7 @@ pub fn speed_name(setting : Int) -> String {
 
 ///|
 /// Returns the time multiplier for the given speed `setting`.
-pub fn speed_from_setting(setting : Int) -> Float {
+pub fn speed_from_setting(setting : Int32) -> Float {
   if setting == 0 {
     speed_1x
   } else if setting == 1 {
@@ -1021,9 +1021,9 @@ pub fn add_synergy_line(
   x2 : Float,
   y2 : Float,
   z2 : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   label : String,
 ) -> Unit {
   for sl in game.synergy_lines {
@@ -1050,9 +1050,9 @@ pub fn add_synergy_line(
 /// Returns 0 if no buff tower is nearby, otherwise returns the buff tower level.
 pub fn find_nearby_buff_level(
   game : Game,
-  tower_gx : Int,
-  tower_gy : Int,
-) -> Int {
+  tower_gx : Int32,
+  tower_gy : Int32,
+) -> Int32 {
   let tx = grid_to_world_x(tower_gx)
   let tz = grid_to_world_z(tower_gy)
   let mut best_level = 0
@@ -1080,10 +1080,10 @@ pub fn spawn_floating_text(
   x : Float,
   y : Float,
   z : Float,
-  value : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  value : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   is_gold : Bool,
 ) -> Unit {
   for ft in game.floating_texts {
@@ -1112,9 +1112,9 @@ pub fn spawn_break_flash(
   x : Float,
   y : Float,
   z : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for bf in game.break_flashes {
     if !bf.active {
@@ -1144,21 +1144,21 @@ pub fn add_attack_beam(
   z2 : Float,
   kind : TowerKind,
 ) -> Unit {
-  let r : Int = match kind {
+  let r : Int32 = match kind {
     Frost => 100
     Sniper => 255
     Flame => 255
     Lightning => 255
     _ => 200
   }
-  let g : Int = match kind {
+  let g : Int32 = match kind {
     Frost => 200
     Sniper => 200
     Flame => 100
     Lightning => 255
     _ => 200
   }
-  let b : Int = match kind {
+  let b : Int32 = match kind {
     Frost => 255
     Sniper => 50
     Flame => 30

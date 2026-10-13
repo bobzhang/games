@@ -191,8 +191,8 @@ pub fn draw_constraint_panel(game : @types.Game) -> Unit {
 
 ///|
 fn draw_constraint_dot(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   result : @types.ConstraintResult,
   label : String,
 ) -> Unit {

@@ -3,7 +3,7 @@
 // Draw animated grid background for menus
 
 ///|
-pub fn draw_grid_background(frame : Int) -> Unit {
+pub fn draw_grid_background(frame : Int32) -> Unit {
   let spacing = 40
   let offset = frame % spacing
   let line_color = @raylib.Color::new(25, 25, 45, 255)
@@ -25,11 +25,11 @@ pub fn draw_grid_background(frame : Int) -> Unit {
 
 ///|
 pub fn draw_pulse_border(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
-  frame : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
+  frame : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let t : Float = Float::from_int(frame) * 0.05
@@ -48,7 +48,7 @@ pub fn draw_pulse_border(
 // Draw difficulty dots
 
 ///|
-pub fn draw_difficulty(x : Int, y : Int, rating : Int) -> Unit {
+pub fn draw_difficulty(x : Int32, y : Int32, rating : Int32) -> Unit {
   for i in 0..<5 {
     let dx = x + i * 12
     let color = if i < rating {
@@ -64,10 +64,10 @@ pub fn draw_difficulty(x : Int, y : Int, rating : Int) -> Unit {
 
 ///|
 pub fn draw_progress_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   progress : Float,
   bar_color : @raylib.Color,
   bg_color : @raylib.Color,
@@ -81,7 +81,7 @@ pub fn draw_progress_bar(
 // Draw completion celebration effect
 
 ///|
-pub fn draw_completion_particles(cx : Int, cy : Int, frame : Int) -> Unit {
+pub fn draw_completion_particles(cx : Int32, cy : Int32, frame : Int32) -> Unit {
   let pi : Float = 3.14159265
   let particle_count = 12
   let t : Float = Float::from_int(frame) * 0.04
@@ -107,7 +107,7 @@ pub fn draw_completion_particles(cx : Int, cy : Int, frame : Int) -> Unit {
 // Simple HSV to RGB conversion for celebration colors
 
 ///|
-fn hue_to_color(hue : Int) -> @raylib.Color {
+fn hue_to_color(hue : Int32) -> @raylib.Color {
   let h = hue % 360
   let sector = h / 60
   let f : Float = Float::from_int(h % 60) / 60.0
@@ -129,8 +129,8 @@ fn hue_to_color(hue : Int) -> @raylib.Color {
 
 ///|
 pub fn draw_view_label(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   label : String,
   icon_type : @types.ViewKind,
   color : @raylib.Color,
@@ -165,7 +165,7 @@ pub fn draw_view_label(
 // Draw a tooltip box
 
 ///|
-pub fn draw_tooltip(x : Int, y : Int, text : String) -> Unit {
+pub fn draw_tooltip(x : Int32, y : Int32, text : String) -> Unit {
   let tw = @draw.measure_text(text, 14)
   let pad = 6
   let bx = x - pad
@@ -181,10 +181,10 @@ pub fn draw_tooltip(x : Int, y : Int, text : String) -> Unit {
 
 ///|
 pub fn draw_voxel_budget_bar(
-  x : Int,
-  y : Int,
-  filled : Int,
-  budget : Int,
+  x : Int32,
+  y : Int32,
+  filled : Int32,
+  budget : Int32,
 ) -> Unit {
   let w = 120
   let h = 12
@@ -214,11 +214,11 @@ pub fn draw_voxel_budget_bar(
 ///|
 pub fn draw_animated_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
-  reveal_count : Int,
+  reveal_count : Int32,
 ) -> Unit {
   // Simple: draw the full text if reveal_count exceeds length
   let len = text.length()
@@ -235,12 +235,12 @@ pub fn draw_animated_text(
 
 ///|
 pub fn draw_connection_indicator(
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
   connected : Bool,
-  frame : Int,
+  frame : Int32,
 ) -> Unit {
   let color = if connected {
     @types.color_matched

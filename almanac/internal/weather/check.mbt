@@ -12,7 +12,7 @@ pub fn check_targets(grid : @types.Grid) -> Bool {
 }
 
 ///|
-pub fn count_targets_met(grid : @types.Grid) -> (Int, Int) {
+pub fn count_targets_met(grid : @types.Grid) -> (Int32, Int32) {
   let mut met = 0
   let mut total = 0
   for i in 0..<grid.tiles.length() {
@@ -46,11 +46,11 @@ pub fn check_stable(
 ///|
 pub fn calculate_stars(
   targets_met : Bool,
-  sources_used : Int,
-  turns_taken : Int,
-  par_sources : Int,
-  par_turns : Int,
-) -> Int {
+  sources_used : Int32,
+  turns_taken : Int32,
+  par_sources : Int32,
+  par_turns : Int32,
+) -> Int32 {
   if !targets_met {
     return 0
   }

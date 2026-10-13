@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 let arena_l : Float = 96.0
@@ -26,46 +26,46 @@ let center_y : Float = (arena_t + arena_b) * 0.5
 let loop_seconds : Float = 20.0
 
 ///|
-let max_frames : Int = 1300
+let max_frames : Int32 = 1300
 
 ///|
-let max_loops : Int = 4
+let max_loops : Int32 = 4
 
 ///|
-let max_ghosts : Int = 4
+let max_ghosts : Int32 = 4
 
 ///|
-let max_enemies : Int = 140
+let max_enemies : Int32 = 140
 
 ///|
-let max_bullets : Int = 640
+let max_bullets : Int32 = 640
 
 ///|
-let max_cores : Int = 120
+let max_cores : Int32 = 120
 
 ///|
-let max_particles : Int = 1000
+let max_particles : Int32 = 1000
 
 ///|
-let bit_up : Int = 1
+let bit_up : Int32 = 1
 
 ///|
-let bit_down : Int = 2
+let bit_down : Int32 = 2
 
 ///|
-let bit_left : Int = 4
+let bit_left : Int32 = 4
 
 ///|
-let bit_right : Int = 8
+let bit_right : Int32 = 8
 
 ///|
-let bit_shoot : Int = 16
+let bit_shoot : Int32 = 16
 
 ///|
-let bit_dash : Int = 32
+let bit_dash : Int32 = 32
 
 ///|
-let bit_bomb : Int = 64
+let bit_bomb : Int32 = 64
 
 ///|
 struct Pilot {
@@ -80,15 +80,15 @@ struct Pilot {
   mut dash_cd : Float
   mut bomb_cd : Float
   mut flash_t : Float
-  mut score : Int
-  mut combo : Int
-  mut loops_cleared : Int
+  mut score : Int32
+  mut combo : Int32
+  mut loops_cleared : Int32
 }
 
 ///|
 struct Ghost {
   mut active : Bool
-  mut slot : Int
+  mut slot : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -102,7 +102,7 @@ struct Ghost {
 ///|
 struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -122,7 +122,7 @@ struct Bullet {
   mut vy : Float
   mut dmg : Float
   mut life : Float
-  mut team : Int
+  mut team : Int32
 }
 
 ///|
@@ -132,7 +132,7 @@ struct Core {
   mut y : Float
   mut t : Float
   mut life : Float
-  mut value : Int
+  mut value : Int32
 }
 
 ///|
@@ -145,7 +145,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -191,10 +191,10 @@ fn cosf_deg(a : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -211,8 +211,8 @@ fn encode_input(
   shoot : Bool,
   dash : Bool,
   bomb : Bool,
-) -> Int {
-  let mut m : Int = 0
+) -> Int32 {
+  let mut m : Int32 = 0
   if up {
     m = m + bit_up
   }
@@ -238,7 +238,7 @@ fn encode_input(
 }
 
 ///|
-fn has_flag(mask : Int, flag : Int) -> Bool {
+fn has_flag(mask : Int32, flag : Int32) -> Bool {
   mask / flag % 2 == 1
 }
 
@@ -316,8 +316,8 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
-fn spawn_enemy(enemies : Array[Enemy], level : Int) -> Bool {
-  let mut slot : Int = -1
+fn spawn_enemy(enemies : Array[Enemy], level : Int32) -> Bool {
+  let mut slot : Int32 = -1
   for i in 0..<enemies.length() {
     if !enemies[i].active {
       slot = i
@@ -372,9 +372,9 @@ fn spawn_bullet(
   vy : Float,
   dmg : Float,
   life : Float,
-  team : Int,
+  team : Int32,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<bullets.length() {
     if !bullets[i].active {
       slot = i
@@ -398,8 +398,8 @@ fn spawn_bullet(
 }
 
 ///|
-fn spawn_core(cores : Array[Core], x : Float, y : Float, value : Int) -> Bool {
-  let mut slot : Int = -1
+fn spawn_core(cores : Array[Core], x : Float, y : Float, value : Int32) -> Bool {
+  let mut slot : Int32 = -1
   for i in 0..<cores.length() {
     if !cores[i].active {
       slot = i
@@ -425,9 +425,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut left = n
   for part in parts {
@@ -462,9 +462,9 @@ fn reset_actor(p : Pilot) -> Unit {
 ///|
 fn rebuild_ghosts(
   ghosts : Array[Ghost],
-  recorded_loops : Int,
-  current_slot : Int,
-) -> Int {
+  recorded_loops : Int32,
+  current_slot : Int32,
+) -> Int32 {
   clear_ghosts(ghosts)
 
   let available = if recorded_loops < max_loops {
@@ -472,7 +472,7 @@ fn rebuild_ghosts(
   } else {
     max_loops
   }
-  let mut gc : Int = 0
+  let mut gc : Int32 = 0
 
   for slot in 0..<available {
     if slot == current_slot {
@@ -582,22 +582,22 @@ fn main {
     }
   })
 
-  let loop_masks : Array[Int] = Array::makei(max_loops * max_frames, fn(_i) {
+  let loop_masks : Array[Int32] = Array::makei(max_loops * max_frames, fn(_i) {
     0
   })
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut mission_time : Float = 240.0
   let mut loop_t : Float = loop_seconds
 
-  let mut recorded_loops : Int = 0
-  let mut current_slot : Int = 0
-  let mut frame_idx : Int = 0
-  let mut ghost_count : Int = 0
+  let mut recorded_loops : Int32 = 0
+  let mut current_slot : Int32 = 0
+  let mut frame_idx : Int32 = 0
+  let mut ghost_count : Int32 = 0
 
-  let mut target_score : Int = 3200
+  let mut target_score : Int32 = 3200
   let mut spawn_cd : Float = 0.46
-  let mut strike_count : Int = 0
+  let mut strike_count : Int32 = 0
 
   let mut msg : String = "Record actions, then fight beside your echoes"
   let mut msg_t : Float = 3.0
@@ -695,7 +695,7 @@ fn main {
       mission_time = mission_time - dt
       loop_t = loop_t - dt
 
-      let level : Int = pilot.score / 520 + pilot.loops_cleared + 1
+      let level : Int32 = pilot.score / 520 + pilot.loops_cleared + 1
 
       pilot.energy = pilot.energy + dt * 12.0
       if pilot.energy > 100.0 {
@@ -728,10 +728,10 @@ fn main {
       let mut dash_press : Bool = @raylib.is_key_pressed(@raylib.KeyK)
       let mut bomb_press : Bool = @raylib.is_key_pressed(@raylib.KeyL)
 
-      let pad_x : Int = 20
-      let pad_y : Int = sh - 198
-      let btn_x : Int = sw - 296
-      let btn_y : Int = sh - 236
+      let pad_x : Int32 = 20
+      let pad_y : Int32 = sh - 198
+      let btn_x : Int32 = sw - 296
+      let btn_y : Int32 = sh - 236
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 58, 78, 58) {

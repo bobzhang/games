@@ -1,5 +1,5 @@
 ///|
-fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
+fn @types.Game::alloc_powerup(game : @types.Game) -> Int32 {
   for i, slot in game.powerups {
     if !slot.active {
       break i
@@ -75,7 +75,7 @@ fn @types.Game::clear_all_enemies_by_grenade(
 ///|
 fn @types.Game::apply_powerup(
   game : @types.Game,
-  player_index : Int,
+  player_index : Int32,
   kind : @types.PowerupKind,
 ) -> Unit {
   let player = game.players[player_index]

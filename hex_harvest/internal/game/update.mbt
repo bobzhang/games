@@ -334,7 +334,7 @@ pub fn check_goals(game : @types.Game) -> Unit {
 
 ///|
 /// Start a level
-pub fn start_level(game : @types.Game, index : Int) -> Unit {
+pub fn start_level(game : @types.Game, index : Int32) -> Unit {
   game.level = @levels.load_level(index)
   game.level_index = index
   game.turn = 0

@@ -28,7 +28,7 @@ pub fn get_all_cases() -> Array[@types.Case] {
 }
 
 ///|
-pub fn get_case(tier : @types.Tier, index : Int) -> @types.Case {
+pub fn get_case(tier : @types.Tier, index : Int32) -> @types.Case {
   let cases = get_all_cases()
   let offset = match tier {
     Reports => 0

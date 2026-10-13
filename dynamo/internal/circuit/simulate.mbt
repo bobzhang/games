@@ -19,10 +19,10 @@ pub fn reset_simulation(state : @types.LevelState) -> Unit {
 /// Connect two adjacent cells bidirectionally
 pub fn connect_cells(
   state : @types.LevelState,
-  c1 : Int,
-  r1 : Int,
-  c2 : Int,
-  r2 : Int,
+  c1 : Int32,
+  r1 : Int32,
+  c2 : Int32,
+  r2 : Int32,
 ) -> Unit {
   if !@types.in_bounds(c1, r1) || !@types.in_bounds(c2, r2) {
     return
@@ -57,10 +57,10 @@ pub fn connect_cells(
 /// Disconnect two adjacent cells bidirectionally
 pub fn disconnect_cells(
   state : @types.LevelState,
-  c1 : Int,
-  r1 : Int,
-  c2 : Int,
-  r2 : Int,
+  c1 : Int32,
+  r1 : Int32,
+  c2 : Int32,
+  r2 : Int32,
 ) -> Unit {
   if !@types.in_bounds(c1, r1) || !@types.in_bounds(c2, r2) {
     return
@@ -86,7 +86,11 @@ pub fn disconnect_cells(
 
 ///|
 /// Auto-connect a placed component to all adjacent connectable components
-pub fn auto_connect(state : @types.LevelState, col : Int, row : Int) -> Unit {
+pub fn auto_connect(
+  state : @types.LevelState,
+  col : Int32,
+  row : Int32,
+) -> Unit {
   let dirs = @types.all_directions()
   for i in 0..<dirs.length() {
     let (dc, dr) = @types.direction_delta(dirs[i])
@@ -101,7 +105,11 @@ pub fn auto_connect(state : @types.LevelState, col : Int, row : Int) -> Unit {
 
 ///|
 /// Remove all connections from a cell
-pub fn disconnect_all(state : @types.LevelState, col : Int, row : Int) -> Unit {
+pub fn disconnect_all(
+  state : @types.LevelState,
+  col : Int32,
+  row : Int32,
+) -> Unit {
   let dirs = @types.all_directions()
   for i in 0..<dirs.length() {
     let (dc, dr) = @types.direction_delta(dirs[i])
@@ -131,7 +139,11 @@ fn compute_field_lines(state : @types.LevelState) -> Unit {
 
 ///|
 /// Emit field lines from a magnet in all 4 directions
-fn emit_field_lines(state : @types.LevelState, col : Int, row : Int) -> Unit {
+fn emit_field_lines(
+  state : @types.LevelState,
+  col : Int32,
+  row : Int32,
+) -> Unit {
   let dirs = @types.all_directions()
   for i in 0..<dirs.length() {
     let (dc, dr) = @types.direction_delta(dirs[i])
@@ -179,12 +191,12 @@ fn emit_field_lines(state : @types.LevelState, col : Int, row : Int) -> Unit {
 /// Find all cells connected to a starting cell via wire/coil/device connections
 fn flood_fill(
   state : @types.LevelState,
-  start_c : Int,
-  start_r : Int,
+  start_c : Int32,
+  start_r : Int32,
   visited : Array[Array[Bool]],
-) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = []
-  let stack : Array[(Int, Int)] = [(start_c, start_r)]
+) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = []
+  let stack : Array[(Int32, Int32)] = [(start_c, start_r)]
   visited[start_r][start_c] = true
   while stack.length() > 0 {
     let (c, r) = stack.pop().unwrap()
@@ -267,7 +279,7 @@ pub fn simulate(state : @types.LevelState) -> Unit {
         // Distribute network power to devices and mark powered
         if network_watts > 0.0 {
           // Count devices in network
-          let device_positions : Array[(Int, Int)] = []
+          let device_positions : Array[(Int32, Int32)] = []
           for j in 0..<cells.length() {
             let (cc, cr) = cells[j]
             match state.cells[cr][cc].component {
@@ -347,8 +359,8 @@ pub fn evaluate_level(state : @types.LevelState) -> @types.LevelResult {
 /// Check if a component can be placed at the given cell
 pub fn can_place(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   comp : @types.ComponentKind,
 ) -> Bool {
   if !@types.in_bounds(col, row) {
@@ -382,8 +394,8 @@ pub fn can_place(
 /// Place a component on the grid
 pub fn place_component(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   comp : @types.ComponentKind,
 ) -> Bool {
   if !can_place(state, col, row, comp) {
@@ -403,8 +415,8 @@ pub fn place_component(
 /// Remove a non-fixed component from the grid
 pub fn remove_component(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Bool {
   if !@types.in_bounds(col, row) {
     return false
@@ -428,9 +440,9 @@ pub fn remove_component(
 /// Count field lines passing through a specific cell position
 pub fn count_field_lines_at(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
-) -> Int {
+  col : Int32,
+  row : Int32,
+) -> Int32 {
   let mut count = 0
   for i in 0..<state.field_lines.length() {
     let fl = state.field_lines[i]

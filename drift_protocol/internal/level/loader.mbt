@@ -91,7 +91,7 @@ fn setup_power_connections(level : @types.Level) -> Unit {
   // Each power node connects to all doors and lasers within 5 tiles
   for i in 0..<level.power_nodes.length() {
     let pn = level.power_nodes[i]
-    let connections : Array[Int] = []
+    let connections : Array[Int32] = []
     for j in 0..<level.doors.length() {
       let d = level.doors[j]
       if @types.manhattan_dist(pn.gx, pn.gy, d.gx, d.gy) <= 5 {

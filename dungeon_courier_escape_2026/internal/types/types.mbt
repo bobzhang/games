@@ -19,7 +19,7 @@ pub(all) struct Player {
   mut facing_deg : Float
   mut health : Float
   mut stealth : Float
-  mut carrying_parcel : Int
+  mut carrying_parcel : Int32
 }
 
 ///|
@@ -108,19 +108,19 @@ pub(all) struct Game {
   smokes : Array[Smoke]
   input : InputState
   mut state : GameState
-  mut wave : Int
-  mut score : Int
-  mut delivered_total : Int
-  mut delivered_wave : Int
-  mut target_deliveries : Int
-  mut smoke_stock : Int
+  mut wave : Int32
+  mut score : Int32
+  mut delivered_total : Int32
+  mut delivered_wave : Int32
+  mut target_deliveries : Int32
+  mut smoke_stock : Int32
   mut time_left : Float
   mut wave_clock : Float
   mut alarm_flash : Float
   mut info_t : Float
   mut hint : String
   mut fail_reason : String
-  mut best_wave : Int
+  mut best_wave : Int32
 }
 
 ///|

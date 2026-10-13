@@ -26,8 +26,8 @@ pub(all) enum TileKind {
   Floor
   Wall
   Exit
-  Switch(Int)
-  Door(Int)
+  Switch(Int32)
+  Door(Int32)
   Pit
   Ice
   Anchor
@@ -52,7 +52,7 @@ pub extend TileKind with Show::{to_string, output}
 pub(all) enum GoalKind {
   BothExit
   BothSwitch
-  ExitInMoves(Int)
+  ExitInMoves(Int32)
 } derive(Eq, Debug)
 
 ///|

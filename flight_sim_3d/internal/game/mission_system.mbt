@@ -515,7 +515,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
           if e.hp <= 0.0 {
             e.active = false
             game.kills += 1
-            let kill_score : Int = if e.kind == @types.enemy_type_air {
+            let kill_score : Int32 = if e.kind == @types.enemy_type_air {
               @types.score_air_kill
             } else {
               @types.score_ground_kill

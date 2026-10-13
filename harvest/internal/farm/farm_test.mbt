@@ -175,9 +175,9 @@ test "wither_past_harvest_season" {
 test "reset_grid_restores" {
   let grid = @types.new_grid()
   let _ = @farm.plant_crop(grid[0][0], Wheat, Spring)
-  let soil_data : Array[Array[(Int, Int, Int)]] = []
+  let soil_data : Array[Array[(Int32, Int32, Int32)]] = []
   for _r in 0..<@types.grid_rows {
-    let row : Array[(Int, Int, Int)] = []
+    let row : Array[(Int32, Int32, Int32)] = []
     for _c in 0..<@types.grid_cols {
       row.push((60, 60, 60))
     }

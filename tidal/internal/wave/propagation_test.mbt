@@ -1,6 +1,6 @@
 ///|
 // Helper: create a grid with a single emitter at (x,y) with given phase
-fn setup_emitter_grid(ex : Int, ey : Int, phase : Int) -> @types.WaveGrid {
+fn setup_emitter_grid(ex : Int32, ey : Int32, phase : Int32) -> @types.WaveGrid {
   let grid = @types.new_wave_grid()
   let tile = @types.grid_get(grid, ex, ey)
   tile.object = Emitter(phase)

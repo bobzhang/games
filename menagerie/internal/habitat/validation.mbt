@@ -91,7 +91,7 @@ fn check_predator_proximity(
 }
 
 ///|
-fn min_enclosure_distance(a : @types.Enclosure, b : @types.Enclosure) -> Int {
+fn min_enclosure_distance(a : @types.Enclosure, b : @types.Enclosure) -> Int32 {
   let mut min_dist = 999
   for ca in a.cells {
     for cb in b.cells {
@@ -166,7 +166,7 @@ pub fn validate_level(
 fn compute_bonus_space(
   _grid : @types.Grid,
   enclosures : Array[@types.Enclosure],
-) -> Int {
+) -> Int32 {
   let mut total = 0
   for enc in enclosures {
     match enc.species {
@@ -184,7 +184,7 @@ fn compute_bonus_space(
 }
 
 ///|
-pub fn star_count(rating : @types.StarRating) -> Int {
+pub fn star_count(rating : @types.StarRating) -> Int32 {
   match rating {
     Zero => 0
     One => 1

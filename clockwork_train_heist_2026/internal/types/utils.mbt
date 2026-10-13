@@ -25,105 +25,105 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns Manhattan distance between two grid cells.
-pub fn manhattan(x0 : Int, y0 : Int, x1 : Int, y1 : Int) -> Int {
+pub fn manhattan(x0 : Int32, y0 : Int32, x1 : Int32, y1 : Int32) -> Int32 {
   (x1 - x0).abs() + (y1 - y0).abs()
 }
 
 ///|
 /// Converts a board x-index to screen x-coordinate.
-pub fn board_px(x : Int) -> Int {
+pub fn board_px(x : Int32) -> Int32 {
   board_x0 + x * cell
 }
 
 ///|
 /// Converts a board y-index to screen y-coordinate.
-pub fn board_py(y : Int) -> Int {
+pub fn board_py(y : Int32) -> Int32 {
   board_y0 + y * cell
 }
 
 ///|
 /// Converts an interpolated x-position to pixel center x.
-pub fn cell_center_x(x : Float) -> Int {
+pub fn cell_center_x(x : Float) -> Int32 {
   board_x0 + (x * Float::from_int(cell)).to_int() + cell / 2
 }
 
 ///|
 /// Converts an interpolated y-position to pixel center y.
-pub fn cell_center_y(y : Float) -> Int {
+pub fn cell_center_y(y : Float) -> Int32 {
   board_y0 + (y * Float::from_int(cell)).to_int() + cell / 2
 }
 
 ///|
 /// Returns the title-screen start button rectangle.
-pub fn start_button_rect() -> (Int, Int, Int, Int) {
+pub fn start_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + 30, screen_h - 192, panel_w - 60, 72)
 }
 
 ///|
 /// Returns the result-screen retry button rectangle.
-pub fn retry_button_rect() -> (Int, Int, Int, Int) {
+pub fn retry_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + 30, screen_h - 192, panel_w - 60, 72)
 }
 
 ///|
 /// Returns the on-screen left movement button rectangle.
-pub fn btn_left() -> (Int, Int, Int, Int) {
-  let x0 : Int = 40
-  let y0 : Int = screen_h - 244
+pub fn btn_left() -> (Int32, Int32, Int32, Int32) {
+  let x0 : Int32 = 40
+  let y0 : Int32 = screen_h - 244
   (x0, y0 + 72, 76, 76)
 }
 
 ///|
 /// Returns the on-screen right movement button rectangle.
-pub fn btn_right() -> (Int, Int, Int, Int) {
-  let x0 : Int = 40
-  let y0 : Int = screen_h - 244
+pub fn btn_right() -> (Int32, Int32, Int32, Int32) {
+  let x0 : Int32 = 40
+  let y0 : Int32 = screen_h - 244
   (x0 + 152, y0 + 72, 76, 76)
 }
 
 ///|
 /// Returns the on-screen up movement button rectangle.
-pub fn btn_up() -> (Int, Int, Int, Int) {
-  let x0 : Int = 40
-  let y0 : Int = screen_h - 244
+pub fn btn_up() -> (Int32, Int32, Int32, Int32) {
+  let x0 : Int32 = 40
+  let y0 : Int32 = screen_h - 244
   (x0 + 76, y0, 76, 76)
 }
 
 ///|
 /// Returns the on-screen down movement button rectangle.
-pub fn btn_down() -> (Int, Int, Int, Int) {
-  let x0 : Int = 40
-  let y0 : Int = screen_h - 244
+pub fn btn_down() -> (Int32, Int32, Int32, Int32) {
+  let x0 : Int32 = 40
+  let y0 : Int32 = screen_h - 244
   (x0 + 76, y0 + 144, 76, 76)
 }
 
 ///|
 /// Returns the on-screen action button rectangle.
-pub fn btn_action() -> (Int, Int, Int, Int) {
+pub fn btn_action() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 190, screen_h - 224, 126, 126)
 }
 
 ///|
 /// Returns the on-screen hint button rectangle.
-pub fn btn_hint() -> (Int, Int, Int, Int) {
+pub fn btn_hint() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 334, screen_h - 182, 116, 70)
 }
 
 ///|
 /// Returns the on-screen restart button rectangle.
-pub fn btn_restart() -> (Int, Int, Int, Int) {
+pub fn btn_restart() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 334, screen_h - 266, 116, 70)
 }
 
 ///|
 /// Returns the on-screen menu button rectangle.
-pub fn btn_menu() -> (Int, Int, Int, Int) {
+pub fn btn_menu() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 334, screen_h - 350, 116, 70)
 }
 
 ///|
 /// Returns contextual hint text for the given hint index.
-pub fn hint_text(i : Int) -> String {
+pub fn hint_text(i : Int32) -> String {
   if i == 0 {
     "Collect 6 loot pieces across train cars to unlock the escape cable."
   } else if i == 1 {
@@ -140,10 +140,10 @@ pub fn hint_text(i : Int) -> String {
 pub fn point_in_rect(
   x : Float,
   y : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -156,10 +156,10 @@ pub fn point_in_rect(
 /// Tests whether mouse hold or any touch point is inside a rectangle.
 pub fn pointer_on_rect(
   game : Game,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if game.mouse_hold &&
     point_in_rect(game.mouse_x, game.mouse_y, rx, ry, rw, rh) {

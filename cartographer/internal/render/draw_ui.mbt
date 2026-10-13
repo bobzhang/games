@@ -6,7 +6,7 @@ fn draw_palette(game : @types.Game) -> Unit {
   @draw.draw_text("Features:", px, py - 25, 18, @types.color_text)
   // Get unique feature kinds and their counts
   let feature_kinds : Array[@types.FeatureKind] = []
-  let feature_counts : Array[Int] = []
+  let feature_counts : Array[Int32] = []
   for i in 0..<level.features_to_place.length() {
     let f = level.features_to_place[i]
     let mut found = false

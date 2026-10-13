@@ -1,62 +1,62 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1680
+pub let screen_w : Int32 = 1680
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 960
+pub let screen_h : Int32 = 960
 
 ///|
 /// Target frame rate for simulation and rendering.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Number of grid columns in the mission map.
-pub let grid_w : Int = 15
+pub let grid_w : Int32 = 15
 
 ///|
 /// Number of grid rows in the mission map.
-pub let grid_h : Int = 10
+pub let grid_h : Int32 = 10
 
 ///|
 /// Total number of map cells.
-pub let max_cells : Int = grid_w * grid_h
+pub let max_cells : Int32 = grid_w * grid_h
 
 ///|
 /// Maximum number of civilian sites stored in the pool.
-pub let max_sites : Int = 12
+pub let max_sites : Int32 = 12
 
 ///|
 /// Maximum number of planned route steps.
-pub let max_route_steps : Int = 96
+pub let max_route_steps : Int32 = 96
 
 ///|
 /// Number of mission levels in the campaign.
-pub let level_count : Int = 3
+pub let level_count : Int32 = 3
 
 ///|
 /// X-coordinate of the map origin in screen pixels.
-pub let map_x : Int = 44
+pub let map_x : Int32 = 44
 
 ///|
 /// Y-coordinate of the map origin in screen pixels.
-pub let map_y : Int = 124
+pub let map_y : Int32 = 124
 
 ///|
 /// Size of one map tile in pixels.
-pub let tile_size : Int = 56
+pub let tile_size : Int32 = 56
 
 ///|
 /// Left edge of the mission control panel.
-pub let panel_x : Int = map_x + grid_w * tile_size + 32
+pub let panel_x : Int32 = map_x + grid_w * tile_size + 32
 
 ///|
 /// Width of the mission control panel.
-pub let panel_w : Int = screen_w - panel_x - 24
+pub let panel_w : Int32 = screen_w - panel_x - 24
 
 ///|
 /// Maximum number of civilians that can be carried at once.
-pub let vehicle_capacity : Int = 6
+pub let vehicle_capacity : Int32 = 6
 
 ///|
 /// Maximum allowed vehicle heat.

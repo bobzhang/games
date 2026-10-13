@@ -2,21 +2,21 @@
 
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1024
+pub let screen_width : Int32 = 1024
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 // Map grid
 
 ///|
 /// Map grid width in cells.
-pub let map_w : Int = 20
+pub let map_w : Int32 = 20
 
 ///|
 /// Map grid height in cells.
-pub let map_h : Int = 15
+pub let map_h : Int32 = 15
 
 ///|
 /// World-space size of each grid cell.
@@ -24,7 +24,7 @@ pub let cell_size : Float = 2.0
 
 ///|
 /// Total number of cells in the map grid.
-pub let map_total : Int = 300 // map_w * map_h
+pub let map_total : Int32 = 300 // map_w * map_h
 
 // Tile types
 
@@ -34,35 +34,35 @@ pub let map_total : Int = 300 // map_w * map_h
 
 ///|
 /// Base gold cost to build an arrow tower.
-pub let cost_arrow : Int = 50
+pub let cost_arrow : Int32 = 50
 
 ///|
 /// Base gold cost to build a cannon tower.
-pub let cost_cannon : Int = 100
+pub let cost_cannon : Int32 = 100
 
 ///|
 /// Base gold cost to build a frost tower.
-pub let cost_frost : Int = 75
+pub let cost_frost : Int32 = 75
 
 ///|
 /// Base gold cost to build a lightning tower.
-pub let cost_lightning : Int = 150
+pub let cost_lightning : Int32 = 150
 
 ///|
 /// Base gold cost to build a flame tower.
-pub let cost_flame : Int = 120
+pub let cost_flame : Int32 = 120
 
 ///|
 /// Base gold cost to build a sniper tower.
-pub let cost_sniper : Int = 200
+pub let cost_sniper : Int32 = 200
 
 ///|
 /// Base gold cost to build a splash tower.
-pub let cost_splash : Int = 130
+pub let cost_splash : Int32 = 130
 
 ///|
 /// Base gold cost to build a buff tower.
-pub let cost_buff : Int = 175
+pub let cost_buff : Int32 = 175
 
 // Tower ranges (base range)
 
@@ -200,7 +200,7 @@ pub let sell_value_pct : Float = 0.6
 
 ///|
 /// Total number of available targeting modes.
-pub let target_mode_count : Int = 4
+pub let target_mode_count : Int32 = 4
 
 // Projectile types
 
@@ -252,7 +252,7 @@ pub let splash_radius_flame : Float = 1.5
 
 ///|
 /// Status effect type for no active effect.
-pub let effect_none : Int = 0
+pub let effect_none : Int32 = 0
 
 // Status effect durations
 
@@ -282,7 +282,7 @@ pub let burn_dps : Float = 5.0
 
 ///|
 /// Number of additional enemies hit by lightning chain bounces.
-pub let chain_count : Int = 3
+pub let chain_count : Int32 = 3
 
 ///|
 /// Maximum distance a lightning chain can jump between enemies.
@@ -382,7 +382,7 @@ pub let healer_heal_interval : Float = 1.5
 
 ///|
 /// Number of child enemies spawned when a splitter dies.
-pub let splitter_children : Int = 3
+pub let splitter_children : Int32 = 3
 
 ///|
 /// HP fraction of parent that each splitter child inherits.
@@ -408,27 +408,27 @@ pub let shield_max_pct : Float = 0.4
 
 ///|
 /// Maximum number of towers that can exist simultaneously.
-pub let max_towers : Int = 64
+pub let max_towers : Int32 = 64
 
 ///|
 /// Maximum number of enemies that can exist simultaneously.
-pub let max_enemies : Int = 200
+pub let max_enemies : Int32 = 200
 
 ///|
 /// Maximum number of projectiles that can exist simultaneously.
-pub let max_projectiles : Int = 300
+pub let max_projectiles : Int32 = 300
 
 ///|
 /// Maximum number of visual particles that can exist simultaneously.
-pub let max_particles : Int = 600
+pub let max_particles : Int32 = 600
 
 ///|
 /// Maximum number of waypoints in an enemy path.
-pub let max_path_nodes : Int = 64
+pub let max_path_nodes : Int32 = 64
 
 ///|
 /// Total number of enemy waves per game session.
-pub let max_waves : Int = 30
+pub let max_waves : Int32 = 30
 
 // Camera
 
@@ -448,11 +448,11 @@ pub let camera_max_dist : Float = 40.0
 
 ///|
 /// Gold amount the player starts with.
-pub let starting_gold : Int = 250
+pub let starting_gold : Int32 = 250
 
 ///|
 /// Number of lives the player starts with.
-pub let starting_lives : Int = 25
+pub let starting_lives : Int32 = 25
 
 ///|
 /// Fraction of current gold awarded as interest each interval.
@@ -464,11 +464,11 @@ pub let interest_interval : Float = 10.0
 
 ///|
 /// Maximum gold gained from a single interest payout.
-pub let interest_cap : Int = 50
+pub let interest_cap : Int32 = 50
 
 ///|
 /// Bonus gold awarded for completing a wave.
-pub let wave_completion_bonus : Int = 25
+pub let wave_completion_bonus : Int32 = 25
 
 // Wave timing
 
@@ -528,7 +528,7 @@ pub let difficulty_hard_speed : Float = 1.15
 
 ///|
 /// Total number of available maps.
-pub let map_count : Int = 5
+pub let map_count : Int32 = 5
 
 // Special ability cooldowns
 
@@ -556,29 +556,29 @@ pub let health_bar_height : Float = 0.08
 
 ///|
 /// Side length of the minimap overlay in pixels.
-pub let minimap_size : Int = 150
+pub let minimap_size : Int32 = 150
 
 ///|
 /// Horizontal screen position of the minimap in pixels.
-pub let minimap_x : Int = 10
+pub let minimap_x : Int32 = 10
 
 ///|
 /// Vertical screen position of the minimap in pixels.
-pub let minimap_y : Int = 60
+pub let minimap_y : Int32 = 60
 
 // Combat readability pool sizes
 
 ///|
 /// Maximum number of floating damage/gold text entries.
-pub let max_floating_texts : Int = 64
+pub let max_floating_texts : Int32 = 64
 
 ///|
 /// Maximum number of shield/armor break flash effects.
-pub let max_break_flashes : Int = 16
+pub let max_break_flashes : Int32 = 16
 
 ///|
 /// Maximum number of tower attack beam visuals.
-pub let max_attack_beams : Int = 32
+pub let max_attack_beams : Int32 = 32
 
 ///|
 /// Enemy variant.

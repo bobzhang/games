@@ -118,7 +118,7 @@ fn main {
 
 ///|
 fn generate_sequence(
-  rect_count : Int,
+  rect_count : Int32,
   rect_width : Float,
   screen_width : Float,
   screen_height : Float,
@@ -157,7 +157,7 @@ fn generate_sequence(
 fn shuffle_sequence(
   colors : Array[@raylib.Color],
   rects : Array[@raylib.Rectangle],
-  rect_count : Int,
+  rect_count : Int32,
 ) -> Unit {
   let seq = @raylib.load_random_sequence(rect_count, 0, rect_count - 1)
   for i in 0..<rect_count {
@@ -182,9 +182,9 @@ fn shuffle_sequence(
 fn draw_text_center_key_help(
   key : String,
   text : String,
-  pos_x : Int,
-  pos_y : Int,
-  font_size : Int,
+  pos_x : Int32,
+  pos_y : Int32,
+  font_size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let space_size = @draw.measure_text(" ", font_size)

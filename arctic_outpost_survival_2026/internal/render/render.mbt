@@ -6,7 +6,7 @@ fn @types.Game::bg_noise(game : @types.Game, k : Float) -> Float {
 
 ///|
 /// Returns a random horizontal camera shake offset when the shake timer is active, or 0 otherwise.
-fn @types.Game::shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -16,7 +16,7 @@ fn @types.Game::shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical camera shake offset when the shake timer is active, or 0 otherwise.
-fn @types.Game::shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -62,7 +62,7 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
   )
 
   for i in 0..<16 {
-    let y : Int = i * 66
+    let y : Int32 = i * 66
     @raylib.draw_rectangle(
       0,
       y,
@@ -80,7 +80,7 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the world-area backdrop: a dark fill, a border outline, a faint grid of horizontal and vertical lines, and two narrow side-wall panels.
-fn draw_world_back(_game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn draw_world_back(_game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   if draw_snowfield_art(ox, oy) {
     @raylib.draw_rectangle(
       @types.world_x0 + ox,
@@ -108,7 +108,7 @@ fn draw_world_back(_game : @types.Game, ox : Int, oy : Int) -> Unit {
   )
 
   for i in 0..<20 {
-    let y : Int = @types.world_y0 + oy + i * 48
+    let y : Int32 = @types.world_y0 + oy + i * 48
     @raylib.draw_line(
       @types.world_x0 + 12 + ox,
       y,
@@ -119,7 +119,7 @@ fn draw_world_back(_game : @types.Game, ox : Int, oy : Int) -> Unit {
   }
 
   for i in 0..<22 {
-    let x : Int = @types.world_x0 + ox + i * 52
+    let x : Int32 = @types.world_x0 + ox + i * 52
     @raylib.draw_line(
       x,
       @types.world_y0 + 12 + oy,
@@ -147,9 +147,9 @@ fn draw_world_back(_game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws 80 animated blizzard streak lines across the world area with intensity and alpha scaled by the current wave number.
-fn @types.Game::draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_storm(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   let swirl : Float = 0.7 + Float::from_int(game.wave) * 0.08
-  let alpha : Int = 36 + game.wave * 7
+  let alpha : Int32 = 36 + game.wave * 7
 
   for i in 0..<80 {
     let t : Float = Float::from_int(i)
@@ -175,12 +175,12 @@ fn @types.Game::draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the central generator: a dark outer ring, a heat-ratio-colored pulsing body circle, a dark inner circle, six orbiting satellite dots, and a "CORE" label.
-fn @types.Game::draw_core(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_core(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   let heat_ratio : Float = @types.clampf(game.core_heat / 100.0, 0.0, 1.0)
   let pulse : Float = @math.sinf(game.ui_t * 6.0)
 
-  let cx : Int = @types.core_x().to_int() + ox
-  let cy : Int = @types.core_y().to_int() + oy
+  let cx : Int32 = @types.core_x().to_int() + ox
+  let cy : Int32 = @types.core_y().to_int() + oy
 
   @raylib.draw_circle(
     cx,
@@ -230,9 +230,9 @@ fn @types.Game::draw_core(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
   for i in 0..<6 {
     let a : Float = game.ui_t * 0.8 + Float::from_int(i) * 1.047
-    let px : Int = (@types.core_x() + @math.cosf(a) * (@types.core_r + 20.0)).to_int() +
+    let px : Int32 = (@types.core_x() + @math.cosf(a) * (@types.core_r + 20.0)).to_int() +
       ox
-    let py : Int = (@types.core_y() + @math.sinf(a) * (@types.core_r + 20.0)).to_int() +
+    let py : Int32 = (@types.core_y() + @math.sinf(a) * (@types.core_r + 20.0)).to_int() +
       oy
     @raylib.draw_circle(px, py, 6.0, @raylib.Color::new(212, 236, 255, 186))
   }
@@ -258,13 +258,13 @@ fn enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
 
 ///|
 /// Draws an enemy using a shape specific to its kind: wolf as a circle with ear triangles, brute as a double ring, and shard as four spinning blade triangles, plus a compact HP bar above the body.
-fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
+fn draw_enemy(enemy : @types.Enemy, ox : Int32, oy : Int32) -> Unit {
   if !enemy.active {
     return
   }
 
-  let x : Int = enemy.x.to_int() + ox
-  let y : Int = enemy.y.to_int() + oy
+  let x : Int32 = enemy.x.to_int() + ox
+  let y : Int32 = enemy.y.to_int() + oy
 
   let c0 : @raylib.Color = enemy_color(enemy.kind)
 
@@ -366,10 +366,10 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
     0.0,
     1.0,
   )
-  let bar_w : Int = (enemy.r * 2.1).to_int().clamp(min=28, max=44)
-  let fill_w : Int = (Float::from_int(bar_w - 2) * hp_ratio).to_int()
-  let bar_x : Int = x - bar_w / 2
-  let bar_y : Int = y - enemy.r.to_int() - 14
+  let bar_w : Int32 = (enemy.r * 2.1).to_int().clamp(min=28, max=44)
+  let fill_w : Int32 = (Float::from_int(bar_w - 2) * hp_ratio).to_int()
+  let bar_x : Int32 = x - bar_w / 2
+  let bar_y : Int32 = y - enemy.r.to_int() - 14
 
   @raylib.draw_rectangle(
     bar_x,
@@ -400,13 +400,13 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 
 ///|
 /// Draws a pickup with generated art when available, falling back to a pulsing procedural icon.
-fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
+fn draw_pickup(p : @types.Pickup, ox : Int32, oy : Int32) -> Unit {
   if !p.active {
     return
   }
 
-  let x : Int = p.x.to_int() + ox
-  let y : Int = p.y.to_int() + oy
+  let x : Int32 = p.x.to_int() + ox
+  let y : Int32 = p.y.to_int() + oy
   let pulse : Float = @math.sinf(p.phase * 2.4)
   let rr : Float = @types.pickup_radius(p.kind) + pulse * 1.8
 
@@ -490,7 +490,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws a bullet with generated projectile art when available, falling back to a colored dot.
-fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
+fn draw_bullet(b : @types.Bullet, ox : Int32, oy : Int32) -> Unit {
   if !b.active {
     return
   }
@@ -538,13 +538,17 @@ fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active particles as small circles with stepped alpha based on remaining life and colors by kind: violet for overdrive, pink for damage, and light-blue for default.
-fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for particle in game.particles {
     if !particle.active {
       continue
     }
 
-    let a : Int = if particle.life > 0.7 {
+    let a : Int32 = if particle.life > 0.7 {
       236
     } else if particle.life > 0.4 {
       180
@@ -569,9 +573,9 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the player as a ring body with a triangular visor piece, a velocity-tilting eye dot, an aim-line toward the crosshair, and an overdrive pulsing ring when active.
-fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  let x : Int = game.player_x.to_int() + ox
-  let y : Int = game.player_y.to_int() + oy
+fn @types.Game::draw_player(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
+  let x : Int32 = game.player_x.to_int() + ox
+  let y : Int32 = game.player_y.to_int() + oy
 
   let tilt : Float = @types.clampf(game.player_vx * 0.0015, -0.5, 0.5)
 
@@ -620,8 +624,8 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
     }
   }
 
-  let ax : Int = game.aim_x.to_int() + ox
-  let ay : Int = game.aim_y.to_int() + oy
+  let ax : Int32 = game.aim_x.to_int() + ox
+  let ay : Int32 = game.aim_y.to_int() + oy
   @raylib.draw_line(
     x,
     y,
@@ -643,13 +647,13 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws a pulsing yellow target ring at the hint location and a line from the player to it, fading out as the hint timer expires.
-fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
 
   let pulse : Float = @math.sinf(game.ui_t * 11.0)
-  let alpha : Int = if game.hint_t > 1.2 {
+  let alpha : Int32 = if game.hint_t > 1.2 {
     238
   } else {
     100 + (game.hint_t * 110.0).to_int()
@@ -673,10 +677,10 @@ fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
 ///|
 /// Draws a horizontal progress bar at `(x, y)` with a `back`-colored background, a `fill`-colored foreground scaled by `ratio`, and a light border outline.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fill : @raylib.Color,
   back : @raylib.Color,
@@ -684,7 +688,7 @@ fn draw_bar(
   @raylib.draw_rectangle(x, y, w, h, back)
 
   let r : Float = @types.clampf(ratio, 0.0, 1.0)
-  let fw : Int = (Float::from_int(w) * r).to_int()
+  let fw : Int32 = (Float::from_int(w) * r).to_int()
   if fw > 0 {
     @raylib.draw_rectangle(x, y, fw, h, fill)
   }
@@ -893,8 +897,8 @@ fn draw_touch_button(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
-  rect : (Int, Int, Int, Int),
+  touch_count : Int32,
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   c_idle : @raylib.Color,
   c_on : @raylib.Color,
@@ -921,8 +925,8 @@ fn draw_touch_button(
     @raylib.Color::new(218, 236, 248, 190),
   )
 
-  let fs : Int = if rect.3 <= 96 { 24 } else { 30 }
-  let tw : Int = @draw.measure_text(label, fs)
+  let fs : Int32 = if rect.3 <= 96 { 24 } else { 30 }
+  let tw : Int32 = @draw.measure_text(label, fs)
   @draw.draw_text(
     label,
     rect.0 + (rect.2 - tw) / 2,
@@ -942,7 +946,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let mx : Float = game.mouse_x
   let my : Float = game.mouse_y
   let hold : Bool = game.mouse_hold
-  let touch_count : Int = game.touch_count
+  let touch_count : Int32 = game.touch_count
 
   draw_touch_button(
     mx,
@@ -1034,15 +1038,15 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     return
   }
 
-  let a : Int = if game.msg_t > 1.0 {
+  let a : Int32 = if game.msg_t > 1.0 {
     228
   } else {
     90 + (game.msg_t * 138.0).to_int()
   }
 
-  let w : Int = @draw.measure_text(game.msg, 28) + 38
-  let x : Int = @types.world_x0 + (@types.world_w - w) / 2
-  let y : Int = @types.world_y0 + 18
+  let w : Int32 = @draw.measure_text(game.msg, 28) + 38
+  let x : Int32 = @types.world_x0 + (@types.world_w - w) / 2
+  let y : Int32 = @types.world_y0 + 18
 
   @raylib.draw_rectangle(x, y, w, 46, @raylib.Color::new(22, 32, 50, a))
   @raylib.draw_rectangle_lines(
@@ -1067,7 +1071,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx : Float = game.mouse_x
   let my : Float = game.mouse_y
   let hold : Bool = game.mouse_hold
-  let touch_count : Int = game.touch_count
+  let touch_count : Int32 = game.touch_count
 
   @raylib.draw_rectangle(
     0,
@@ -1150,7 +1154,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let mx : Float = game.mouse_x
   let my : Float = game.mouse_y
   let hold : Bool = game.mouse_hold
-  let touch_count : Int = game.touch_count
+  let touch_count : Int32 = game.touch_count
 
   @raylib.draw_rectangle(
     0,
@@ -1270,8 +1274,8 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_background()
 
-  let ox : Int = game.shake_x()
-  let oy : Int = game.shake_y()
+  let ox : Int32 = game.shake_x()
+  let oy : Int32 = game.shake_y()
 
   draw_world_back(game, ox, oy)
   game.draw_storm(ox, oy)

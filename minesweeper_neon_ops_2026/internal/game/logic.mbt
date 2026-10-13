@@ -23,7 +23,7 @@ fn @types.Game::spawn_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for spark in game.sparks {
     if spark.active {
@@ -48,8 +48,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.spawn_spark(
@@ -99,16 +99,20 @@ fn @types.Game::clear_board(game : @types.Game) -> Unit {
 
 ///|
 /// Counts the number of mines in the eight neighbours of cell (`x`, `y`).
-fn @types.Game::adjacent_mines(game : @types.Game, x : Int, y : Int) -> Int {
-  let mut n : Int = 0
+fn @types.Game::adjacent_mines(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Int32 {
+  let mut n : Int32 = 0
 
   for oy in -1..<=1 {
     for ox in -1..<=1 {
       if ox == 0 && oy == 0 {
         continue
       }
-      let nx : Int = x + ox
-      let ny : Int = y + oy
+      let nx : Int32 = x + ox
+      let ny : Int32 = y + oy
       if !@types.in_board(nx, ny) {
         continue
       }
@@ -126,7 +130,7 @@ fn @types.Game::adjacent_mines(game : @types.Game, x : Int, y : Int) -> Int {
 fn @types.Game::recompute_around(game : @types.Game) -> Unit {
   for y in 0..<@types.board_h {
     for x in 0..<@types.board_w {
-      let i : Int = @types.idx(x, y)
+      let i : Int32 = @types.idx(x, y)
       if game.cells[i].mine {
         game.cells[i].around = -1
       } else {
@@ -138,7 +142,12 @@ fn @types.Game::recompute_around(game : @types.Game) -> Unit {
 
 ///|
 /// Returns true if (`x`, `y`) is within the 3x3 safe zone around the first-click seed cell.
-fn is_safe_seed_cell(seed_x : Int, seed_y : Int, x : Int, y : Int) -> Bool {
+fn is_safe_seed_cell(
+  seed_x : Int32,
+  seed_y : Int32,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   Float::from_int(seed_x - x).abs() <= 1.0 &&
   Float::from_int(seed_y - y).abs() <= 1.0
 }
@@ -147,20 +156,20 @@ fn is_safe_seed_cell(seed_x : Int, seed_y : Int, x : Int, y : Int) -> Bool {
 /// Randomly places the required number of mines, guaranteeing the 3x3 area around (`safe_x`, `safe_y`) is mine-free.
 fn @types.Game::place_mines(
   game : @types.Game,
-  safe_x : Int,
-  safe_y : Int,
+  safe_x : Int32,
+  safe_y : Int32,
 ) -> Unit {
-  let mut placed : Int = 0
+  let mut placed : Int32 = 0
 
   while placed < game.mine_count {
-    let x : Int = @raylib.get_random_value(0, @types.board_w - 1)
-    let y : Int = @raylib.get_random_value(0, @types.board_h - 1)
+    let x : Int32 = @raylib.get_random_value(0, @types.board_w - 1)
+    let y : Int32 = @raylib.get_random_value(0, @types.board_h - 1)
 
     if is_safe_seed_cell(safe_x, safe_y, x, y) {
       continue
     }
 
-    let i : Int = @types.idx(x, y)
+    let i : Int32 = @types.idx(x, y)
     if game.cells[i].mine {
       continue
     }
@@ -222,8 +231,8 @@ fn @types.Game::reveal_all_mines(game : @types.Game) -> Unit {
 
 ///|
 /// Calculates the score awarded for revealing a safe cell, scaled by adjacency count and current combo.
-fn score_for_reveal(around : Int, combo : Int) -> Int {
-  let base : Int = if around <= 0 { 18 } else { 12 + around * 8 }
+fn score_for_reveal(around : Int32, combo : Int32) -> Int32 {
+  let base : Int32 = if around <= 0 { 18 } else { 12 + around * 8 }
   base + combo * 5
 }
 
@@ -248,8 +257,8 @@ fn @types.Game::reset_combo(game : @types.Game) -> Unit {
 /// Returns the pixel centre of cell (`x`, `y`) in world coordinates, using the current board metrics.
 fn @types.Game::cell_world_center(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> (Float, Float) {
   let (bx, by, tile) = @types.board_metrics(game)
   (
@@ -260,12 +269,12 @@ fn @types.Game::cell_world_center(
 
 ///|
 /// Reveals a single cell at (`x`, `y`): awards score or deducts a life on mine hit, emits particles, and may trigger game over.
-fn @types.Game::reveal_single(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::reveal_single(game : @types.Game, x : Int32, y : Int32) -> Bool {
   if !@types.in_board(x, y) {
     return false
   }
 
-  let i : Int = @types.idx(x, y)
+  let i : Int32 = @types.idx(x, y)
   if game.cells[i].revealed || game.cells[i].flagged {
     return false
   }
@@ -306,7 +315,7 @@ fn @types.Game::reveal_single(game : @types.Game, x : Int, y : Int) -> Bool {
   game.revealed_safe = game.revealed_safe + 1
   game.award_combo()
 
-  let bonus : Int = score_for_reveal(game.cells[i].around, game.combo)
+  let bonus : Int32 = score_for_reveal(game.cells[i].around, game.combo)
   game.score = game.score + bonus
 
   game.burst(wx, wy, if game.cells[i].around == 0 { 9 } else { 6 }, 0)
@@ -315,24 +324,28 @@ fn @types.Game::reveal_single(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// BFS flood-reveals all connected zero-adjacency cells starting from (`sx`, `sy`), stopping if the game ends mid-flood.
-fn @types.Game::flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
-  let mut qh : Int = 0
-  let mut qt : Int = 0
+fn @types.Game::flood_reveal(
+  game : @types.Game,
+  sx : Int32,
+  sy : Int32,
+) -> Unit {
+  let mut qh : Int32 = 0
+  let mut qt : Int32 = 0
 
   game.queue_x[qt] = sx
   game.queue_y[qt] = sy
   qt = qt + 1
 
   while qh < qt {
-    let x : Int = game.queue_x[qh]
-    let y : Int = game.queue_y[qh]
+    let x : Int32 = game.queue_x[qh]
+    let y : Int32 = game.queue_y[qh]
     qh = qh + 1
 
     if !@types.in_board(x, y) {
       continue
     }
 
-    let i : Int = @types.idx(x, y)
+    let i : Int32 = @types.idx(x, y)
     if game.cells[i].revealed || game.cells[i].flagged {
       continue
     }
@@ -355,8 +368,8 @@ fn @types.Game::flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
           continue
         }
 
-        let nx : Int = x + ox
-        let ny : Int = y + oy
+        let nx : Int32 = x + ox
+        let ny : Int32 = y + oy
         if !@types.in_board(nx, ny) {
           continue
         }
@@ -400,7 +413,7 @@ fn @types.Game::check_clear(game : @types.Game) -> Bool {
 
 ///|
 /// Attempts to reveal cell (`x`, `y`): places mines on first move, flood-reveals if around == 0, and checks for board clear.
-fn @types.Game::reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::reveal_cell(game : @types.Game, x : Int32, y : Int32) -> Bool {
   if game.state != Play {
     return false
   }
@@ -409,7 +422,7 @@ fn @types.Game::reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
     return false
   }
 
-  let i0 : Int = @types.idx(x, y)
+  let i0 : Int32 = @types.idx(x, y)
   if game.cells[i0].flagged {
     @types.set_msg(game, "Flag removed first", 0.8)
     return false
@@ -439,7 +452,7 @@ fn @types.Game::reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Toggles the flag on the unrevealed cell at (`x`, `y`), enforcing the mine count budget.
-fn @types.Game::toggle_flag(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::toggle_flag(game : @types.Game, x : Int32, y : Int32) -> Bool {
   if game.state != Play {
     return false
   }
@@ -447,7 +460,7 @@ fn @types.Game::toggle_flag(game : @types.Game, x : Int, y : Int) -> Bool {
     return false
   }
 
-  let i : Int = @types.idx(x, y)
+  let i : Int32 = @types.idx(x, y)
   if game.cells[i].revealed {
     return false
   }
@@ -476,13 +489,13 @@ fn @types.Game::toggle_flag(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Searches for a random unrevealed, unflagged, safe cell to use as a hint target; falls back to a sequential scan if random probing fails.
-fn @types.Game::safe_hint_target(game : @types.Game) -> (Bool, Int, Int) {
-  let mut tries : Int = 0
+fn @types.Game::safe_hint_target(game : @types.Game) -> (Bool, Int32, Int32) {
+  let mut tries : Int32 = 0
 
   while tries < 900 {
-    let x : Int = @raylib.get_random_value(0, @types.board_w - 1)
-    let y : Int = @raylib.get_random_value(0, @types.board_h - 1)
-    let i : Int = @types.idx(x, y)
+    let x : Int32 = @raylib.get_random_value(0, @types.board_w - 1)
+    let y : Int32 = @raylib.get_random_value(0, @types.board_h - 1)
+    let i : Int32 = @types.idx(x, y)
 
     if !game.cells[i].mine && !game.cells[i].revealed && !game.cells[i].flagged {
       return (true, x, y)
@@ -493,7 +506,7 @@ fn @types.Game::safe_hint_target(game : @types.Game) -> (Bool, Int, Int) {
 
   for y in 0..<@types.board_h {
     for x in 0..<@types.board_w {
-      let i : Int = @types.idx(x, y)
+      let i : Int32 = @types.idx(x, y)
       if !game.cells[i].mine &&
         !game.cells[i].revealed &&
         !game.cells[i].flagged {
@@ -530,8 +543,8 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   game.hints = game.hints - 1
   game.score = (0).max(game.score - 60)
 
-  let x : Int = pick.1
-  let y : Int = pick.2
+  let x : Int32 = pick.1
+  let y : Int32 = pick.2
 
   game.cursor_x = x
   game.cursor_y = y
@@ -548,11 +561,11 @@ fn @types.Game::click_to_cell(
   game : @types.Game,
   mx : Float,
   my : Float,
-) -> (Bool, Int, Int) {
+) -> (Bool, Int32, Int32) {
   let (bx, by, tile) = @types.board_metrics(game)
 
-  let x : Int = (mx.to_int() - bx) / tile
-  let y : Int = (my.to_int() - by) / tile
+  let x : Int32 = (mx.to_int() - bx) / tile
+  let y : Int32 = (my.to_int() - by) / tile
 
   if @types.in_board(x, y) {
     (true, x, y)

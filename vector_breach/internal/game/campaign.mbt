@@ -182,7 +182,10 @@ pub fn build_campaign_map() -> @types.CampaignMap {
 
 ///|
 /// Check if a node is available to select (connected from a completed node).
-pub fn is_node_available(campaign : @types.CampaignMap, node_id : Int) -> Bool {
+pub fn is_node_available(
+  campaign : @types.CampaignMap,
+  node_id : Int32,
+) -> Bool {
   // The first node is always available if nothing completed
   if campaign.completed_nodes.length() == 0 && node_id == 0 {
     return true
@@ -204,7 +207,10 @@ pub fn is_node_available(campaign : @types.CampaignMap, node_id : Int) -> Bool {
 
 ///|
 /// Check if a node is already completed.
-pub fn is_node_completed(campaign : @types.CampaignMap, node_id : Int) -> Bool {
+pub fn is_node_completed(
+  campaign : @types.CampaignMap,
+  node_id : Int32,
+) -> Bool {
   for i = 0; i < campaign.completed_nodes.length(); i = i + 1 {
     if campaign.completed_nodes[i] == node_id {
       return true
@@ -215,7 +221,10 @@ pub fn is_node_completed(campaign : @types.CampaignMap, node_id : Int) -> Bool {
 
 ///|
 /// Get the mission ID for a campaign node.
-pub fn get_node_mission_id(campaign : @types.CampaignMap, node_id : Int) -> Int {
+pub fn get_node_mission_id(
+  campaign : @types.CampaignMap,
+  node_id : Int32,
+) -> Int32 {
   if node_id < 0 || node_id >= campaign.nodes.length() {
     return 0
   }
@@ -243,8 +252,8 @@ pub fn get_node_name(node : @types.CampaignNode) -> String {
 
 ///|
 /// Get available (selectable) node IDs for the player.
-pub fn get_available_nodes(campaign : @types.CampaignMap) -> Array[Int] {
-  let available : Array[Int] = []
+pub fn get_available_nodes(campaign : @types.CampaignMap) -> Array[Int32] {
+  let available : Array[Int32] = []
   for i = 0; i < campaign.nodes.length(); i = i + 1 {
     if is_node_available(campaign, i) && !is_node_completed(campaign, i) {
       available.push(i)
@@ -317,7 +326,7 @@ pub fn update_campaign(game : @types.Game) -> Unit {
         }
         Shop => {
           // Shop: offer 3 augments to buy with GP
-          let seed : Ref[UInt] = {
+          let seed : Ref[UInt32] = {
             val: (node_id * 7919 + 42).reinterpret_as_uint(),
           }
           game.run.offered_augments = @content.pick_random_augments(
@@ -364,7 +373,7 @@ pub fn update_campaign(game : @types.Game) -> Unit {
 
 ///|
 /// Set up a battle from a mission definition (used by campaign).
-pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
+pub fn setup_mission_from_def(game : @types.Game, mission_id : Int32) -> Unit {
   let def = @content.get_mission_def(mission_id)
   let battle = @types.new_battle(def.objective)
   battle.mission_id = mission_id
@@ -546,8 +555,10 @@ fn apply_rest_heal(game : @types.Game) -> Unit {
 
 ///|
 /// Apply a random event node.
-fn apply_event_node(game : @types.Game, node_id : Int) -> Unit {
-  let seed : Ref[UInt] = { val: (node_id * 3571 + 137).reinterpret_as_uint(), }
+fn apply_event_node(game : @types.Game, node_id : Int32) -> Unit {
+  let seed : Ref[UInt32] = {
+    val: (node_id * 3571 + 137).reinterpret_as_uint(),
+  }
   let event_roll = @types.rand_range(seed, 0, 2)
   match event_roll {
     0 => {

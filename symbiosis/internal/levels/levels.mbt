@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(world : Int, index : Int) -> @types.Level {
+pub fn get_level(world : Int32, index : Int32) -> @types.Level {
   match (world, index) {
     (0, 0) => level_1_1()
     (0, 1) => level_1_2()
@@ -36,7 +36,7 @@ pub fn get_level(world : Int, index : Int) -> @types.Level {
 ///|
 pub fn world_unlocked(
   scores : Array[Array[@types.LevelScore]],
-  world : Int,
+  world : Int32,
 ) -> Bool {
   if world <= 0 {
     return true
@@ -58,8 +58,8 @@ pub fn world_unlocked(
 ///|
 pub fn level_unlocked(
   scores : Array[Array[@types.LevelScore]],
-  world : Int,
-  level : Int,
+  world : Int32,
+  level : Int32,
 ) -> Bool {
   if !world_unlocked(scores, world) {
     return false

@@ -11,7 +11,7 @@ fn @types.Game::set_message(
 
 ///|
 /// Adds `delta` to the score, clamping the result to a minimum of zero.
-fn @types.Game::add_score(game : @types.Game, delta : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, delta : Int32) -> Unit {
   game.score = (0).max(game.score + delta)
 }
 
@@ -91,7 +91,7 @@ fn @types.Game::reset_run(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the player's current race rank by counting rivals ahead of the player.
-fn @types.Game::current_rank(game : @types.Game) -> Int {
+fn @types.Game::current_rank(game : @types.Game) -> Int32 {
   @utils.count_by(game.rivals, fn(rival) {
     rival.active && rival.dist > game.distance
   }) +
@@ -107,7 +107,7 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
     }
 
     let kind_roll = @raylib.get_random_value(0, 99)
-    let kind : Int = if kind_roll < 58 {
+    let kind : Int32 = if kind_roll < 58 {
       @types.hazard_debris
     } else {
       @types.hazard_wave
@@ -402,7 +402,7 @@ fn @types.Game::update_rivals(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  let rank : Int = game.current_rank()
+  let rank : Int32 = game.current_rank()
   if rank < game.best_rank {
     game.best_rank = rank
     if rank == 1 {
@@ -448,7 +448,7 @@ fn @types.Game::finish_run(game : @types.Game) -> Unit {
   game.finish_time = game.game_t
   game.finish_rank = game.current_rank()
 
-  let place_bonus : Int = if game.finish_rank == 1 {
+  let place_bonus : Int32 = if game.finish_rank == 1 {
     650
   } else if game.finish_rank == 2 {
     460
@@ -458,10 +458,10 @@ fn @types.Game::finish_run(game : @types.Game) -> Unit {
     200
   }
 
-  let streak_bonus : Int = game.best_streak * 22
-  let clean_bonus : Int = (0).max(280 - game.hit_count * 70)
-  let checkpoint_bonus : Int = game.checkpoint_idx * 110
-  let time_bonus : Int = (0).max(420 - game.finish_time.to_int() * 8)
+  let streak_bonus : Int32 = game.best_streak * 22
+  let clean_bonus : Int32 = (0).max(280 - game.hit_count * 70)
+  let checkpoint_bonus : Int32 = game.checkpoint_idx * 110
+  let time_bonus : Int32 = (0).max(420 - game.finish_time.to_int() * 8)
 
   game.score = (0).max(
     game.score +

@@ -547,9 +547,9 @@ fn draw_enemies(floor : @types.Floor, beat : @types.BeatState) -> Unit {
 ///|
 fn draw_enemy_intent(
   enemy : @types.Enemy,
-  sx : Int,
-  sy : Int,
-  ts : Int,
+  sx : Int32,
+  sy : Int32,
+  ts : Int32,
 ) -> Unit {
   let cx = sx + ts / 2
   let cy = sy + ts / 2
@@ -1267,9 +1267,9 @@ fn draw_shop(game : @types.Game) -> Unit {
 ///|
 fn draw_centered(
   text : String,
-  cx : Int,
-  y : Int,
-  size : Int,
+  cx : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, size)
@@ -1279,9 +1279,9 @@ fn draw_centered(
 ///|
 fn draw_centered_at(
   text : String,
-  cx : Int,
-  cy : Int,
-  size : Int,
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, size)
@@ -2011,9 +2011,9 @@ fn draw_achievement_toasts(game : @types.Game) -> Unit {
 ///|
 fn draw_elite_indicator(
   enemy : @types.Enemy,
-  sx : Int,
-  sy : Int,
-  ts : Int,
+  sx : Int32,
+  sy : Int32,
+  ts : Int32,
 ) -> Unit {
   if enemy.is_elite {
     // Golden outline

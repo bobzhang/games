@@ -8,10 +8,10 @@ struct PatrolCraft {
   battery_max : Float
   mut hull : Float
   hull_max : Float
-  mut wire : Int
-  mut fuse : Int
-  wire_cap : Int
-  fuse_cap : Int
+  mut wire : Int32
+  mut fuse : Int32
+  wire_cap : Int32
+  fuse_cap : Int32
   mut action_cd : Float
   mut pulse_cd : Float
   mut pulse_t : Float
@@ -39,7 +39,7 @@ struct Substation {
 struct Tower {
   mut x : Float
   mut y : Float
-  id : Int
+  id : Int32
   mut stress : Float
   mut alarm_t : Float
 }
@@ -47,14 +47,14 @@ struct Tower {
 ///|
 struct Fault {
   mut active : Bool
-  mut id : Int
-  mut tower_id : Int
-  mut severity : Int
+  mut id : Int32
+  mut tower_id : Int32
+  mut severity : Int32
   mut deadline : Float
   mut max_deadline : Float
-  mut need_wire : Int
-  mut need_fuse : Int
-  mut reward : Int
+  mut need_wire : Int32
+  mut need_fuse : Int32
+  mut reward : Int32
   mut pulse : Float
 }
 
@@ -91,8 +91,8 @@ struct SupplyDrop {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
-  mut amount : Int
+  mut kind : Int32
+  mut amount : Int32
   mut life : Float
   mut pulse : Float
 }
@@ -106,7 +106,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -145,7 +145,7 @@ fn randf(lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn randi(lo : Int, hi : Int) -> Int {
+fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
@@ -172,10 +172,10 @@ fn inside_rectf(
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -188,11 +188,11 @@ fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let mut hit : Bool = false
 
@@ -217,7 +217,7 @@ fn pointer_on_circle(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   cx : Float,
   cy : Float,
   r : Float,
@@ -324,7 +324,7 @@ fn spawn_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if part.active {
@@ -348,8 +348,8 @@ fn burst_particles(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_particle(
@@ -510,7 +510,7 @@ fn init_winds(
 }
 
 ///|
-fn tower_has_fault(faults : Array[Fault], tower_id : Int) -> Bool {
+fn tower_has_fault(faults : Array[Fault], tower_id : Int32) -> Bool {
   let mut out : Bool = false
   for fault in faults {
     if fault.active && fault.tower_id == tower_id {
@@ -524,8 +524,8 @@ fn tower_has_fault(faults : Array[Fault], tower_id : Int) -> Bool {
 fn spawn_fault(
   faults : Array[Fault],
   towers : Array[Tower],
-  wave : Int,
-  serial : Int,
+  wave : Int32,
+  serial : Int32,
 ) -> Bool {
   let mut placed : Bool = false
 
@@ -534,8 +534,8 @@ fn spawn_fault(
       continue
     }
 
-    let mut tower_id : Int = randi(0, towers.length() - 1)
-    let mut tries : Int = 0
+    let mut tower_id : Int32 = randi(0, towers.length() - 1)
+    let mut tries : Int32 = 0
     while tower_has_fault(faults, tower_id) && tries < 10 {
       tower_id = randi(0, towers.length() - 1)
       tries = tries + 1
@@ -545,7 +545,7 @@ fn spawn_fault(
       continue
     }
 
-    let sev : Int = if randi(0, 99) < 50 {
+    let sev : Int32 = if randi(0, 99) < 50 {
       1
     } else if randi(0, 99) < 82 {
       2
@@ -607,7 +607,7 @@ fn spawn_storm_cell(
       continue
     }
 
-    let edge : Int = randi(0, 3)
+    let edge : Int32 = randi(0, 3)
     if edge == 0 {
       storm.x = world_l - 24.0
       storm.y = randf(world_t + 60.0, world_b - 60.0)
@@ -688,13 +688,13 @@ fn nearest_fault_index(
   x : Float,
   y : Float,
   radius : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<faults.length(); found = -1, best = radius * radius {
     if !faults[i].active {
       continue
     }
 
-    let tid : Int = faults[i].tower_id
+    let tid : Int32 = faults[i].tower_id
     let d2v : Float = dist2(x, y, towers[tid].x, towers[tid].y)
     if d2v <= best {
       continue i, d2v
@@ -706,10 +706,10 @@ fn nearest_fault_index(
 
 ///|
 fn draw_sky_background(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
   scene_t : Float,
 ) -> Unit {
   @raylib.draw_rectangle_gradient_v(
@@ -727,7 +727,7 @@ fn draw_sky_background(
     let wave : Float = @math.sinf(scene_t * 1.5 + Float::from_int(i) * 0.42) *
       0.5 +
       0.5
-    let alpha : Int = 12 + (wave * 22.0).to_int()
+    let alpha : Int32 = 12 + (wave * 22.0).to_int()
     @raylib.draw_rectangle(
       world_x,
       y0.to_int(),
@@ -740,23 +740,23 @@ fn draw_sky_background(
 
 ///|
 fn draw_city_blocks(
-  world_x : Int,
-  world_y : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_h : Int32,
   scene_t : Float,
 ) -> Unit {
-  let base_y : Int = world_y + world_h - 36
+  let base_y : Int32 = world_y + world_h - 36
   for i in 0..<24 {
-    let bw : Int = 42 + i % 4 * 16
-    let bh : Int = 62 + i * 9 % 7 * 20
-    let bx : Int = world_x + i * 66 - 14
-    let by : Int = base_y - bh
+    let bw : Int32 = 42 + i % 4 * 16
+    let bh : Int32 = 62 + i * 9 % 7 * 20
+    let bx : Int32 = world_x + i * 66 - 14
+    let by : Int32 = base_y - bh
 
     @raylib.draw_rectangle(bx, by, bw, bh, @raylib.Color::new(24, 30, 44, 226))
 
     for j in 0..<3 {
-      let wx : Int = bx + 6 + j * 12
-      let mut wy : Int = by + 8
+      let wx : Int32 = bx + 6 + j * 12
+      let mut wy : Int32 = by + 8
       while wy < by + bh - 8 {
         let blink : Float = @math.sinf(
             scene_t * 2.8 +
@@ -855,13 +855,13 @@ fn draw_power_lines(
   faults : Array[Fault],
   scene_t : Float,
 ) -> Unit {
-  fn edge_fault_level(faults : Array[Fault], a : Int, b : Int) -> Float {
+  fn edge_fault_level(faults : Array[Fault], a : Int32, b : Int32) -> Float {
     let mut v : Float = 0.0
     for fault in faults {
       if !fault.active {
         continue
       }
-      let t : Int = fault.tower_id
+      let t : Int32 = fault.tower_id
       if t == a || t == b {
         v = v + Float::from_int(fault.severity)
       }
@@ -872,8 +872,8 @@ fn draw_power_lines(
   fn draw_edge(
     towers : Array[Tower],
     faults : Array[Fault],
-    a : Int,
-    b : Int,
+    a : Int32,
+    b : Int32,
     scene_t : Float,
   ) -> Unit {
     let level : Float = edge_fault_level(faults, a, b)
@@ -918,7 +918,7 @@ fn draw_towers(
 ) -> Unit {
   for i in 0..<towers.length() {
     let mut has_fault : Bool = false
-    let mut sev_sum : Int = 0
+    let mut sev_sum : Int32 = 0
 
     for fault in faults {
       if fault.active && fault.tower_id == towers[i].id {
@@ -1094,7 +1094,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
       continue
     }
 
-    let a : Int = clampf(part.life * 255.0, 0.0, 255.0).to_int()
+    let a : Int32 = clampf(part.life * 255.0, 0.0, 255.0).to_int()
     let c = if part.kind == 0 {
       @raylib.Color::new(160, 226, 252, a)
     } else if part.kind == 1 {
@@ -1151,9 +1151,9 @@ fn draw_glider(glider : PatrolCraft, scene_t : Float) -> Unit {
 
 ///|
 fn draw_faults_panel(
-  panel_x : Int,
-  panel_y : Int,
-  panel_w : Int,
+  panel_x : Int32,
+  panel_y : Int32,
+  panel_w : Int32,
   faults : Array[Fault],
   scene_t : Float,
 ) -> Unit {
@@ -1165,7 +1165,7 @@ fn draw_faults_panel(
     @raylib.Color::new(236, 246, 255, 238),
   )
 
-  let mut y : Int = panel_y + 426
+  let mut y : Int32 = panel_y + 426
   for fault in faults {
     if !fault.active {
       continue
@@ -1178,7 +1178,7 @@ fn draw_faults_panel(
     }
 
     let blink : Float = @math.sinf(scene_t * 8.0 + fault.pulse) * 0.5 + 0.5
-    let row_h : Int = 78
+    let row_h : Int32 = 78
 
     @raylib.draw_rectangle(
       panel_x + 12,
@@ -1261,21 +1261,21 @@ fn draw_faults_panel(
 
 ///|
 fn draw_hud(
-  panel_x : Int,
-  panel_y : Int,
-  panel_w : Int,
-  panel_h : Int,
+  panel_x : Int32,
+  panel_y : Int32,
+  panel_w : Int32,
+  panel_h : Int32,
   timer : Float,
-  score : Int,
-  target : Int,
+  score : Int32,
+  target : Int32,
   grid_health : Float,
   hull : Float,
   fuel : Float,
-  wire : Int,
-  fuse : Int,
-  combo : Int,
-  fixed : Int,
-  failed : Int,
+  wire : Int32,
+  fuse : Int32,
+  combo : Int32,
+  fixed : Int32,
+  failed : Int32,
   msg : String,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -1301,8 +1301,8 @@ fn draw_hud(
     @raylib.Color::new(236, 246, 255, 242),
   )
 
-  let mm : Int = timer.to_int() / 60
-  let ss : Int = timer.to_int() % 60
+  let mm : Int32 = timer.to_int() / 60
+  let ss : Int32 = timer.to_int() % 60
   let ss_txt : String = if ss < 10 { "0\{ss}" } else { "\{ss}" }
 
   @draw.draw_text(
@@ -1338,10 +1338,10 @@ fn draw_hud(
     title : String,
     value : Float,
     max_value : Float,
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     col : @raylib.Color,
   ) -> Unit {
     let p : Float = if max_value <= 0.001 {
@@ -1445,16 +1445,16 @@ fn draw_hud(
 
 ///|
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mouse_x : Float,
   mouse_y : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Unit {
-  let pad_x : Int = 28
-  let pad_y : Int = sh - 210
-  let cell : Int = 72
+  let pad_x : Int32 = 28
+  let pad_y : Int32 = sh - 210
+  let cell : Int32 = 72
 
   let up = pointer_on_rect(
     mouse_x,
@@ -1497,7 +1497,7 @@ fn draw_touch_controls(
     cell,
   )
 
-  fn pad(x : Int, y : Int, label : String, active : Bool) -> Unit {
+  fn pad(x : Int32, y : Int32, label : String, active : Bool) -> Unit {
     @raylib.draw_rectangle(
       x,
       y,
@@ -1553,9 +1553,9 @@ fn draw_touch_controls(
     r : Float,
     label : String,
     active : Bool,
-    cr : Int,
-    cg : Int,
-    cb : Int,
+    cr : Int32,
+    cg : Int32,
+    cb : Int32,
   ) -> Unit {
     @raylib.draw_circle_v(
       @raylib.Vector2::new(x, y),
@@ -1587,13 +1587,13 @@ fn draw_touch_controls(
 }
 
 ///|
-fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
+fn draw_menu(sw : Int32, sh : Int32, scene_t : Float) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 16, 28, 255))
 
   for i in 0..<24 {
     let yy : Float = Float::from_int(i) / 24.0
     let wave : Float = @math.sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
-    let alpha : Int = 18 + (wave * 44.0).to_int()
+    let alpha : Int32 = 18 + (wave * 44.0).to_int()
     @raylib.draw_rectangle(
       0,
       (yy * Float::from_int(sh)).to_int(),
@@ -1624,10 +1624,10 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
   )
 
   let pulse : Float = @math.sinf(scene_t * 3.8) * 0.5 + 0.5
-  let bw : Int = 476
-  let bh : Int = 94
-  let bx : Int = sw / 2 - bw / 2
-  let by : Int = 468
+  let bw : Int32 = 476
+  let bh : Int32 = 94
+  let bx : Int32 = sw / 2 - bw / 2
+  let by : Int32 = 468
   @raylib.draw_rectangle(
     bx,
     by,
@@ -1661,14 +1661,14 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 
 ///|
 fn draw_end(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   win : Bool,
-  score : Int,
-  target : Int,
+  score : Int32,
+  target : Int32,
   grid : Float,
-  fixed : Int,
-  failed : Int,
+  fixed : Int32,
+  failed : Int32,
 ) -> Unit {
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 224))
 
@@ -1717,19 +1717,19 @@ fn draw_end(
 
 ///|
 fn main {
-  let sw : Int = 1700
-  let sh : Int = 960
+  let sw : Int32 = 1700
+  let sh : Int32 = 960
   @raylib.init_window(sw, sh, "raylib [game] powerline repair patrol 2026")
   @draw.cleanup()
   defer @raylib.close_window()
   @raylib.set_target_fps(120)
   @draw.init_font()
 
-  let world_x : Int = 20
-  let world_y : Int = 20
-  let panel_w : Int = 460
-  let world_w : Int = sw - panel_w - 40
-  let world_h : Int = sh - 40
+  let world_x : Int32 = 20
+  let world_y : Int32 = 20
+  let panel_w : Int32 = 460
+  let world_w : Int32 = sw - panel_w - 40
+  let world_h : Int32 = sh - 40
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
@@ -1844,20 +1844,20 @@ fn main {
     step_t: 0.0,
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 430.0
   let mut scene_t : Float = 0.0
 
-  let mut score : Int = 0
-  let mut score_target : Int = 9800
+  let mut score : Int32 = 0
+  let mut score_target : Int32 = 9800
   let mut grid_health : Float = 92.0
-  let mut combo : Int = 0
-  let mut fixed_count : Int = 0
-  let mut failed_count : Int = 0
-  let mut failed_limit : Int = 24
-  let mut wave : Int = 1
+  let mut combo : Int32 = 0
+  let mut fixed_count : Int32 = 0
+  let mut failed_count : Int32 = 0
+  let mut failed_limit : Int32 = 24
+  let mut wave : Int32 = 1
 
-  let mut fault_serial : Int = 1
+  let mut fault_serial : Int32 = 1
   let mut fault_spawn_cd : Float = 1.2
   let mut storm_spawn_cd : Float = 3.0
   let mut drop_spawn_cd : Float = 12.0
@@ -1930,7 +1930,7 @@ fn main {
     let mouse = @raylib.get_mouse_position()
     let click : Bool = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
     let hold : Bool = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
-    let mut touch_count : Int = @raylib.get_touch_point_count()
+    let mut touch_count : Int32 = @raylib.get_touch_point_count()
     if touch_count > 10 {
       touch_count = 10
     }
@@ -2399,8 +2399,8 @@ fn main {
         let mut did : Bool = false
 
         if at_depot {
-          let add_w : Int = craft.wire_cap - craft.wire
-          let add_f : Int = craft.fuse_cap - craft.fuse
+          let add_w : Int32 = craft.wire_cap - craft.wire
+          let add_f : Int32 = craft.fuse_cap - craft.fuse
           if add_w > 0 || add_f > 0 {
             craft.wire = craft.wire_cap
             craft.fuse = craft.fuse_cap
@@ -2421,7 +2421,7 @@ fn main {
         }
 
         if !did {
-          let fi : Int = nearest_fault_index(
+          let fi : Int32 = nearest_fault_index(
             faults,
             towers,
             craft.x,
@@ -2434,8 +2434,8 @@ fn main {
               craft.wire = craft.wire - faults[fi].need_wire
               craft.fuse = craft.fuse - faults[fi].need_fuse
 
-              let bonus : Int = (faults[fi].deadline * 2.1).to_int()
-              let gain : Int = faults[fi].reward + combo * 10 + bonus
+              let bonus : Int32 = (faults[fi].deadline * 2.1).to_int()
+              let gain : Int32 = faults[fi].reward + combo * 10 + bonus
               score = score + gain
               fixed_count = fixed_count + 1
               combo = (30).min(combo + 1)
@@ -2543,10 +2543,10 @@ fn main {
       draw_particles(parts)
       draw_glider(craft, scene_t)
 
-      let panel_x : Int = world_x + world_w + 10
-      let panel_y : Int = world_y
-      let panel_w2 : Int = panel_w - 10
-      let panel_h : Int = world_h
+      let panel_x : Int32 = world_x + world_w + 10
+      let panel_y : Int32 = world_y
+      let panel_w2 : Int32 = panel_w - 10
+      let panel_h : Int32 = world_h
 
       draw_hud(
         panel_x,
@@ -2593,6 +2593,6 @@ fn main {
 }
 
 ///|
-fn active_faults_count(faults : Array[Fault]) -> Int {
+fn active_faults_count(faults : Array[Fault]) -> Int32 {
   @utils.count_by(faults, fn(fault) { fault.active })
 }

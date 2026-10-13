@@ -1,42 +1,42 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Gameplay tuning constant for arena x0.
-pub let arena_x0 : Int = 78
+pub let arena_x0 : Int32 = 78
 
 ///|
 /// Gameplay tuning constant for arena y0.
-pub let arena_y0 : Int = 84
+pub let arena_y0 : Int32 = 84
 
 ///|
 /// Gameplay tuning constant for arena w.
-pub let arena_w : Int = 1124
+pub let arena_w : Int32 = 1124
 
 ///|
 /// Gameplay tuning constant for arena h.
-pub let arena_h : Int = 574
+pub let arena_h : Int32 = 574
 
 ///|
 /// Gameplay tuning constant for arena x1.
-pub let arena_x1 : Int = arena_x0 + arena_w
+pub let arena_x1 : Int32 = arena_x0 + arena_w
 
 ///|
 /// Gameplay tuning constant for arena y1.
-pub let arena_y1 : Int = arena_y0 + arena_h
+pub let arena_y1 : Int32 = arena_y0 + arena_h
 
 ///|
 /// Gameplay tuning constant for surface band h.
-pub let surface_band_h : Int = 86
+pub let surface_band_h : Int32 = 86
 
 ///|
 /// World layout coordinate for surface band y.
@@ -58,31 +58,31 @@ pub let hot_zone_r : Float = 148.0
 
 ///|
 /// Minimum or floor value used for mission min.
-pub let mission_min : Int = 1
+pub let mission_min : Int32 = 1
 
 ///|
 /// Maximum value configured for mission max.
-pub let mission_max : Int = 9
+pub let mission_max : Int32 = 9
 
 ///|
 /// Upper bound for max mines in gameplay systems.
-pub let max_mines : Int = 54
+pub let max_mines : Int32 = 54
 
 ///|
 /// Upper bound for max targets in gameplay systems.
-pub let max_targets : Int = 16
+pub let max_targets : Int32 = 16
 
 ///|
 /// Progression and scoring constant for base target goal.
-pub let base_target_goal : Int = 4
+pub let base_target_goal : Int32 = 4
 
 ///|
 /// Progression and scoring constant for target goal cap.
-pub let target_goal_cap : Int = 12
+pub let target_goal_cap : Int32 = 12
 
 ///|
 /// Gameplay tuning constant for base mine count.
-pub let base_mine_count : Int = 16
+pub let base_mine_count : Int32 = 16
 
 ///|
 /// World layout coordinate for sub start x.

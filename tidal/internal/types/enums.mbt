@@ -26,7 +26,7 @@ pub(all) enum TileKind {
   Empty
   Wall
   Target
-  Emitter(Int) // phase 0-3
+  Emitter(Int32) // phase 0-3
   Reflector
   PhaseShifter
   Absorber

@@ -1,34 +1,34 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate used by the game loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Maximum rooftop segments allocated in the segment pool.
-pub let max_segments : Int = 96
+pub let max_segments : Int32 = 96
 
 ///|
 /// Maximum obstacles allocated in the obstacle pool.
-pub let max_obstacles : Int = 160
+pub let max_obstacles : Int32 = 160
 
 ///|
 /// Maximum collectible chips allocated in the chip pool.
-pub let max_chips : Int = 220
+pub let max_chips : Int32 = 220
 
 ///|
 /// Maximum grapple anchors allocated in the anchor pool.
-pub let max_anchors : Int = 80
+pub let max_anchors : Int32 = 80
 
 ///|
 /// Maximum particles allocated for visual effects.
-pub let max_particles : Int = 320
+pub let max_particles : Int32 = 320
 
 ///|
 /// Gravity acceleration applied to the player.
@@ -108,7 +108,7 @@ pub let ui_button_gap : Float = 14.0
 
 ///|
 /// Number of skyline parallax layers to draw.
-pub let skyline_layers : Int = 3
+pub let skyline_layers : Int32 = 3
 
 ///|
 /// Identifies the type of obstacle hazard on a rooftop.

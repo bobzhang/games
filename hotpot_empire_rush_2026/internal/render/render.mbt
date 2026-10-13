@@ -133,7 +133,7 @@ fn station_color(station : @types.Station) -> @raylib.Color {
 
 ///|
 /// Returns the source-cell index for a station icon in the generated 4x3 sheet.
-fn station_icon_index(station : @types.Station) -> Int {
+fn station_icon_index(station : @types.Station) -> Int32 {
   match station {
     Broth => 0
     Protein => 1
@@ -152,7 +152,11 @@ fn station_icon_index(station : @types.Station) -> Int {
 
 ///|
 /// Draws the generated station counter tile with a station-specific color wash.
-fn draw_station_tile_art(station : @types.Station, x : Int, y : Int) -> Bool {
+fn draw_station_tile_art(
+  station : @types.Station,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   match tex_station_counter_tile.val {
     Some(texture) => {
       draw_texture_cover(
@@ -178,7 +182,7 @@ fn draw_station_tile_art(station : @types.Station, x : Int, y : Int) -> Bool {
 
 ///|
 /// Draws the generated station icon from the shared station icon sheet.
-fn draw_station_icon(station : @types.Station, x : Int, y : Int) -> Bool {
+fn draw_station_icon(station : @types.Station, x : Int32, y : Int32) -> Bool {
   match tex_station_icons.val {
     Some(texture) => {
       let index = station_icon_index(station)
@@ -207,10 +211,10 @@ fn draw_station_icon(station : @types.Station, x : Int, y : Int) -> Bool {
 ///|
 /// Draws a horizontal progress bar with background, foreground fill, and outline.
 fn draw_meter(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   bg : @raylib.Color,
   fg : @raylib.Color,
@@ -229,7 +233,7 @@ fn draw_meter(
 
 ///|
 /// Returns the broth name for a slot value, or "--" when empty.
-fn broth_slot_text(v : Int) -> String {
+fn broth_slot_text(v : Int32) -> String {
   if v >= 0 {
     @types.broth_name(v)
   } else {
@@ -239,7 +243,7 @@ fn broth_slot_text(v : Int) -> String {
 
 ///|
 /// Returns the protein name for a slot value, or "--" when empty.
-fn protein_slot_text(v : Int) -> String {
+fn protein_slot_text(v : Int32) -> String {
   if v >= 0 {
     @types.protein_name(v)
   } else {
@@ -249,7 +253,7 @@ fn protein_slot_text(v : Int) -> String {
 
 ///|
 /// Returns the veg name for a slot value, or "--" when empty.
-fn veg_slot_text(v : Int) -> String {
+fn veg_slot_text(v : Int32) -> String {
   if v >= 0 {
     @types.veg_name(v)
   } else {
@@ -352,8 +356,8 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 fn @types.Game::draw_station_info(
   game : @types.Game,
   station : @types.Station,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   let text_color = @raylib.Color::new(238, 244, 252, 246)
 
@@ -633,11 +637,11 @@ fn @types.Game::draw_kitchen(game : @types.Game) -> Unit {
 /// Draws a single customer order card at the given screen position.
 fn @types.Game::draw_order_card(
   game : @types.Game,
-  i : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  i : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Unit {
   if !game.orders[i].active {
     @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(28, 34, 48, 192))

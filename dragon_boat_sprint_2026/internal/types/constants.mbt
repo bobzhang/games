@@ -1,58 +1,58 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1720
+pub let screen_w : Int32 = 1720
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 980
+pub let screen_h : Int32 = 980
 
 ///|
 /// Target frame rate for race simulation.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Hazard id for floating debris.
-pub let hazard_debris : Int = 0
+pub let hazard_debris : Int32 = 0
 
 ///|
 /// Hazard id for destabilizing wave rings.
-pub let hazard_wave : Int = 1
+pub let hazard_wave : Int32 = 1
 
 ///|
 /// Maximum number of active hazards.
-pub let max_hazards : Int = 96
+pub let max_hazards : Int32 = 96
 
 ///|
 /// Number of rival boats in a race.
-pub let max_rivals : Int = 4
+pub let max_rivals : Int32 = 4
 
 ///|
 /// Left edge of the river playfield.
-pub let river_x : Int = 56
+pub let river_x : Int32 = 56
 
 ///|
 /// Top edge of the river playfield.
-pub let river_y : Int = 56
+pub let river_y : Int32 = 56
 
 ///|
 /// River playfield width in pixels.
-pub let river_w : Int = 1188
+pub let river_w : Int32 = 1188
 
 ///|
 /// River playfield height in pixels.
-pub let river_h : Int = 868
+pub let river_h : Int32 = 868
 
 ///|
 /// Left edge of the right-side HUD panel.
-pub let hud_x : Int = river_x + river_w + 24
+pub let hud_x : Int32 = river_x + river_w + 24
 
 ///|
 /// Width of the right-side HUD panel.
-pub let hud_w : Int = screen_w - hud_x - 24
+pub let hud_w : Int32 = screen_w - hud_x - 24
 
 ///|
 /// Fixed Y position of the player's boat on screen.
-pub let boat_y : Int = river_y + river_h - 138
+pub let boat_y : Int32 = river_y + river_h - 138
 
 ///|
 /// Horizontal pixel scale from lane value to screen X.
@@ -76,7 +76,7 @@ pub let checkpoint_gap : Float = 1040.0
 
 ///|
 /// Number of checkpoints in a full run.
-pub let checkpoint_count : Int = 4
+pub let checkpoint_count : Int32 = 4
 
 ///|
 /// Rhythm beat period in seconds.
@@ -96,6 +96,6 @@ pub let base_speed : Float = 132.0
 
 ///|
 /// Returns world distance for a checkpoint index.
-pub fn checkpoint_distance(index : Int) -> Float {
+pub fn checkpoint_distance(index : Int32) -> Float {
   checkpoint_gap * Float::from_int(index + 1)
 }

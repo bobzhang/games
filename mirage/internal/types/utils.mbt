@@ -29,7 +29,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -63,7 +63,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -72,7 +72,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -81,22 +81,22 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn tile_index(x : Int, y : Int) -> Int {
+pub fn tile_index(x : Int32, y : Int32) -> Int32 {
   y * grid_cols + x
 }
 
 ///|
-pub fn valid_pos(x : Int, y : Int) -> Bool {
+pub fn valid_pos(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < grid_cols && y >= 0 && y < grid_rows
 }
 
 ///|
-pub fn grid_to_pixel_x(gx : Int) -> Float {
+pub fn grid_to_pixel_x(gx : Int32) -> Float {
   Float::from_int(grid_offset_x + gx * tile_size)
 }
 
 ///|
-pub fn grid_to_pixel_y(gy : Int) -> Float {
+pub fn grid_to_pixel_y(gy : Int32) -> Float {
   Float::from_int(grid_offset_y + gy * tile_size)
 }
 
@@ -121,7 +121,7 @@ pub fn is_solid_in_layer(tile : Tile, layer : Layer) -> Bool {
 }
 
 ///|
-pub fn get_tile(tiles : Array[Tile], x : Int, y : Int) -> Tile {
+pub fn get_tile(tiles : Array[Tile], x : Int32, y : Int32) -> Tile {
   if valid_pos(x, y) {
     tiles[tile_index(x, y)]
   } else {
@@ -130,7 +130,7 @@ pub fn get_tile(tiles : Array[Tile], x : Int, y : Int) -> Tile {
 }
 
 ///|
-pub fn set_tile(tiles : Array[Tile], x : Int, y : Int, t : Tile) -> Unit {
+pub fn set_tile(tiles : Array[Tile], x : Int32, y : Int32, t : Tile) -> Unit {
   if valid_pos(x, y) {
     tiles[tile_index(x, y)] = t
   }
@@ -170,7 +170,7 @@ pub fn anim_progress(anim : Animation) -> Float {
 }
 
 ///|
-pub fn new_player(x : Int, y : Int, layer : Layer) -> Player {
+pub fn new_player(x : Int32, y : Int32, layer : Layer) -> Player {
   {
     grid_x: x,
     grid_y: y,
@@ -236,7 +236,7 @@ pub fn tier_name(tier : Tier) -> String {
 }
 
 ///|
-pub fn tier_for_level(level : Int) -> Tier {
+pub fn tier_for_level(level : Int32) -> Tier {
   if level < tier1_count {
     Reflection
   } else if level < tier1_count + tier2_count {
@@ -247,7 +247,7 @@ pub fn tier_for_level(level : Int) -> Tier {
 }
 
 ///|
-pub fn level_unlocked(results : Array[LevelResult], level : Int) -> Bool {
+pub fn level_unlocked(results : Array[LevelResult], level : Int32) -> Bool {
   if level == 0 {
     true
   } else if level < results.length() {

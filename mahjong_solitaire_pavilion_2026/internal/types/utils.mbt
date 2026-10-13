@@ -17,19 +17,19 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Converts 1-based board coordinates into a flat row-major index.
-pub fn idx(x : Int, y : Int) -> Int {
+pub fn idx(x : Int32, y : Int32) -> Int32 {
   (y - 1) * max_cols + (x - 1)
 }
 
 ///|
 /// Returns true when `(x, y)` is inside the active board bounds.
-pub fn in_board(game : Game, x : Int, y : Int) -> Bool {
+pub fn in_board(game : Game, x : Int32, y : Int32) -> Bool {
   x >= 1 && x <= game.board_w && y >= 1 && y <= game.board_h
 }
 
 ///|
 /// Returns whether a board slot is active in the current layout.
-pub fn active_at(game : Game, x : Int, y : Int) -> Bool {
+pub fn active_at(game : Game, x : Int32, y : Int32) -> Bool {
   if in_board(game, x, y) {
     game.active[idx(x, y)]
   } else {
@@ -39,7 +39,7 @@ pub fn active_at(game : Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Reads an active tile kind, returning `0` for empty/inactive/out-of-bounds.
-pub fn cell_at(game : Game, x : Int, y : Int) -> Int {
+pub fn cell_at(game : Game, x : Int32, y : Int32) -> Int32 {
   if in_board(game, x, y) && game.active[idx(x, y)] {
     game.cells[idx(x, y)]
   } else {
@@ -49,7 +49,7 @@ pub fn cell_at(game : Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Writes a tile value when coordinates refer to an active board slot.
-pub fn set_cell(game : Game, x : Int, y : Int, value : Int) -> Unit {
+pub fn set_cell(game : Game, x : Int32, y : Int32, value : Int32) -> Unit {
   if in_board(game, x, y) && game.active[idx(x, y)] {
     game.cells[idx(x, y)] = value
   }
@@ -117,22 +117,22 @@ pub fn clear_hint(game : Game) -> Unit {
 
 ///|
 /// Computes board origin and tile size, including active shake offsets.
-pub fn board_metrics(game : Game) -> (Int, Int, Int) {
-  let area_x : Int = 24
-  let area_y : Int = 22
-  let area_w : Int = screen_w - 460
-  let area_h : Int = screen_h - 44
+pub fn board_metrics(game : Game) -> (Int32, Int32, Int32) {
+  let area_x : Int32 = 24
+  let area_y : Int32 = 22
+  let area_w : Int32 = screen_w - 460
+  let area_h : Int32 = screen_h - 44
 
-  let safe_w : Int = (1).max(game.board_w)
-  let safe_h : Int = (1).max(game.board_h)
+  let safe_w : Int32 = (1).max(game.board_w)
+  let safe_h : Int32 = (1).max(game.board_h)
 
-  let tile_x : Int = (area_w - 24) / safe_w
-  let tile_y : Int = (area_h - 24) / safe_h
-  let mut tile : Int = tile_x.min(tile_y)
+  let tile_x : Int32 = (area_w - 24) / safe_w
+  let tile_y : Int32 = (area_h - 24) / safe_h
+  let mut tile : Int32 = tile_x.min(tile_y)
   tile = tile.clamp(min=36, max=86)
 
-  let mut board_x : Int = area_x + (area_w - safe_w * tile) / 2
-  let mut board_y : Int = area_y + (area_h - safe_h * tile) / 2
+  let mut board_x : Int32 = area_x + (area_w - safe_w * tile) / 2
+  let mut board_y : Int32 = area_y + (area_h - safe_h * tile) / 2
 
   if game.shake_t > 0.0 {
     board_x = board_x + @raylib.get_random_value(-3, 3)
@@ -144,7 +144,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
 
 ///|
 /// Returns tile center in world space and tile size as float.
-pub fn world_center(game : Game, x : Int, y : Int) -> (Float, Float, Float) {
+pub fn world_center(game : Game, x : Int32, y : Int32) -> (Float, Float, Float) {
   let (board_x, board_y, tile) = board_metrics(game)
   let cx : Float = Float::from_int(board_x + (x - 1) * tile + tile / 2)
   let cy : Float = Float::from_int(board_y + (y - 1) * tile + tile / 2)
@@ -161,7 +161,7 @@ pub fn spawn_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for spark in game.sparks {
     if spark.active {
@@ -184,10 +184,10 @@ pub fn spawn_spark(
 /// Emits a burst of spark particles around a tile center.
 pub fn burst_tile(
   game : Game,
-  x : Int,
-  y : Int,
-  amount : Int,
-  kind : Int,
+  x : Int32,
+  y : Int32,
+  amount : Int32,
+  kind : Int32,
 ) -> Unit {
   let (cx, cy, tilef) = world_center(game, x, y)
   let spread : Float = maxf(8.0, tilef * 0.22)
@@ -229,11 +229,11 @@ pub fn update_sparks(game : Game, dt : Float) -> Unit {
 
 ///|
 /// Shuffles an integer array in place using Fisher-Yates.
-pub fn shuffle_ints(arr : Array[Int]) -> Unit {
-  let mut i : Int = arr.length() - 1
+pub fn shuffle_ints(arr : Array[Int32]) -> Unit {
+  let mut i : Int32 = arr.length() - 1
   while i > 0 {
-    let j : Int = @raylib.get_random_value(0, i)
-    let t : Int = arr[i]
+    let j : Int32 = @raylib.get_random_value(0, i)
+    let t : Int32 = arr[i]
     arr[i] = arr[j]
     arr[j] = t
     i = i - 1
@@ -242,8 +242,8 @@ pub fn shuffle_ints(arr : Array[Int]) -> Unit {
 
 ///|
 /// Counts currently active board slots.
-pub fn active_count(game : Game) -> Int {
-  let mut n : Int = 0
+pub fn active_count(game : Game) -> Int32 {
+  let mut n : Int32 = 0
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {
       if active_at(game, x, y) {
@@ -256,8 +256,8 @@ pub fn active_count(game : Game) -> Int {
 
 ///|
 /// Returns true when a tile is free (not blocked on both left and right).
-pub fn free_tile(game : Game, x : Int, y : Int) -> Bool {
-  let k : Int = cell_at(game, x, y)
+pub fn free_tile(game : Game, x : Int32, y : Int32) -> Bool {
+  let k : Int32 = cell_at(game, x, y)
   if k <= 0 {
     return false
   }
@@ -275,8 +275,8 @@ pub fn free_tile(game : Game, x : Int, y : Int) -> Bool {
 ///|
 /// Returns level configuration tuple for campaign level `id`.
 pub fn configure_level(
-  id : Int,
-) -> (Int, Int, Int, Float, Int, Int, Int, Int, String) {
+  id : Int32,
+) -> (Int32, Int32, Int32, Float, Int32, Int32, Int32, Int32, String) {
   if id == 0 {
     (10, 6, 12, 120.0, 4, 4, 3, 0, "Courtyard Warmup")
   } else if id == 1 {
@@ -305,10 +305,10 @@ pub fn configure_level(
 pub fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -322,11 +322,11 @@ pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_flag : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let mut hit : Bool = false
 
@@ -348,72 +348,72 @@ pub fn pointer_on_rect(
 
 ///|
 /// Returns the x origin of the side panel.
-pub fn panel_x() -> Int {
+pub fn panel_x() -> Int32 {
   screen_w - 420
 }
 
 ///|
 /// Returns the x center of the touch D-pad.
-pub fn dpad_center_x() -> Int {
+pub fn dpad_center_x() -> Int32 {
   162
 }
 
 ///|
 /// Returns the y center of the touch D-pad.
-pub fn dpad_center_y() -> Int {
+pub fn dpad_center_y() -> Int32 {
   screen_h - 184
 }
 
 ///|
 /// Returns the half-size used to draw D-pad arms.
-pub fn dpad_size() -> Int {
+pub fn dpad_size() -> Int32 {
   78
 }
 
 ///|
 /// Returns the rectangle for the select action button.
-pub fn select_button_rect() -> (Int, Int, Int, Int) {
+pub fn select_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 24, screen_h - 256, 170, 72)
 }
 
 ///|
 /// Returns the rectangle for the hint action button.
-pub fn hint_button_rect() -> (Int, Int, Int, Int) {
+pub fn hint_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 214, screen_h - 256, 170, 72)
 }
 
 ///|
 /// Returns the rectangle for the shuffle action button.
-pub fn shuffle_button_rect() -> (Int, Int, Int, Int) {
+pub fn shuffle_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 24, screen_h - 172, 170, 72)
 }
 
 ///|
 /// Returns the rectangle for the undo action button.
-pub fn undo_button_rect() -> (Int, Int, Int, Int) {
+pub fn undo_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 214, screen_h - 172, 170, 72)
 }
 
 ///|
 /// Returns the rectangle for resetting the current level.
-pub fn reset_button_rect() -> (Int, Int, Int, Int) {
+pub fn reset_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 24, screen_h - 88, 170, 72)
 }
 
 ///|
 /// Returns the rectangle for clearing selection state.
-pub fn clear_button_rect() -> (Int, Int, Int, Int) {
+pub fn clear_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 214, screen_h - 88, 170, 72)
 }
 
 ///|
 /// Returns the rectangle for next/restart campaign actions in overlays.
-pub fn next_button_rect() -> (Int, Int, Int, Int) {
+pub fn next_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 24, screen_h - 88, 360, 72)
 }
 
 ///|
 /// Returns the title-screen start button rectangle.
-pub fn start_button_rect() -> (Int, Int, Int, Int) {
+pub fn start_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 230, screen_h - 158, 460, 96)
 }

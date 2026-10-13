@@ -99,7 +99,7 @@ pub fn get_all_levels() -> Array[@types.Level] {
 
 ///|
 /// Get a specific level by index (0-19).
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   let levels = get_all_levels()
   levels[index]
 }

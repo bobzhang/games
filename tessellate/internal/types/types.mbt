@@ -1,7 +1,7 @@
 ///|
 pub(all) struct Vec2i {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -18,9 +18,9 @@ pub(all) struct Piece {
 
 ///|
 pub(all) struct PlacedPiece {
-  piece_index : Int
+  piece_index : Int32
   position : Vec2i
-  rotation : Int
+  rotation : Int32
   flipped : Bool
 } derive(Debug)
 
@@ -29,8 +29,8 @@ pub extend PlacedPiece with Debug::{to_repr}
 
 ///|
 pub(all) struct Region {
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   active : Array[Array[Bool]]
 } derive(Debug)
 
@@ -41,8 +41,8 @@ pub extend Region with Debug::{to_repr}
 pub(all) struct Level {
   region : Region
   pieces : Array[Piece]
-  par_time : Int
-  par_rotations : Int
+  par_time : Int32
+  par_rotations : Int32
 } derive(Debug)
 
 ///|
@@ -50,10 +50,10 @@ pub extend Level with Debug::{to_repr}
 
 ///|
 pub(all) struct LevelScore {
-  mut stars : Int
+  mut stars : Int32
   mut completed : Bool
-  mut best_time : Int
-  mut best_rotations : Int
+  mut best_time : Int32
+  mut best_rotations : Int32
 } derive(Debug)
 
 ///|
@@ -64,21 +64,21 @@ pub(all) struct Game {
   mut screen : Screen
   mut play_state : PlayState
   mut current_tier : Tier
-  mut current_level : Int
-  mut selected_piece : Int
-  mut hover_x : Int
-  mut hover_y : Int
-  mut rotation : Int
+  mut current_level : Int32
+  mut selected_piece : Int32
+  mut hover_x : Int32
+  mut hover_y : Int32
+  mut rotation : Int32
   mut flipped : Bool
   mut placed_pieces : Array[PlacedPiece]
-  mut grid : Array[Array[Int]]
+  mut grid : Array[Array[Int32]]
   mut timer : Float
-  mut rotation_count : Int
+  mut rotation_count : Int32
   mut level_scores : Array[LevelScore]
-  mut frame_count : Int
+  mut frame_count : Int32
   mut message : String
   mut message_timer : Float
-  mut tier_page : Int
+  mut tier_page : Int32
 }
 
 ///|

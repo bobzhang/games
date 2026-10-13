@@ -29,32 +29,32 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns true when `(x, y)` is inside the minefield.
-pub fn in_board(x : Int, y : Int) -> Bool {
+pub fn in_board(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < board_w && y >= 0 && y < board_h
 }
 
 ///|
 /// Converts board coordinates into a flat row-major index.
-pub fn idx(x : Int, y : Int) -> Int {
+pub fn idx(x : Int32, y : Int32) -> Int32 {
   y * board_w + x
 }
 
 ///|
 /// Computes board origin and tile size, including active shake offsets.
-pub fn board_metrics(game : Game) -> (Int, Int, Int) {
-  let area_x : Int = board_area_x()
-  let area_y : Int = board_area_y()
-  let area_w : Int = board_area_w()
-  let area_h : Int = board_area_h()
+pub fn board_metrics(game : Game) -> (Int32, Int32, Int32) {
+  let area_x : Int32 = board_area_x()
+  let area_y : Int32 = board_area_y()
+  let area_w : Int32 = board_area_w()
+  let area_h : Int32 = board_area_h()
 
-  let tile_x : Int = area_w / board_w
-  let tile_y : Int = area_h / board_h
+  let tile_x : Int32 = area_w / board_w
+  let tile_y : Int32 = area_h / board_h
 
-  let mut tile : Int = tile_x.min(tile_y)
+  let mut tile : Int32 = tile_x.min(tile_y)
   tile = tile.clamp(min=36, max=56)
 
-  let mut x0 : Int = area_x + (area_w - board_w * tile) / 2
-  let mut y0 : Int = area_y + (area_h - board_h * tile) / 2
+  let mut x0 : Int32 = area_x + (area_w - board_w * tile) / 2
+  let mut y0 : Int32 = area_y + (area_h - board_h * tile) / 2
 
   if game.shake_t > 0.0 {
     x0 = x0 + @raylib.get_random_value(-3, 3)
@@ -77,11 +77,11 @@ pub fn pointer_on_rect(
   x : Float,
   y : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if !hold && touch_count <= 0 {
     return false
@@ -97,20 +97,20 @@ pub fn pointer_on_rect(
 
 ///|
 /// Returns the number of non-mine cells in the current board.
-pub fn safe_cells_total(game : Game) -> Int {
+pub fn safe_cells_total(game : Game) -> Int32 {
   board_w * board_h - game.mine_count
 }
 
 ///|
 /// Returns how many flags are still available based on mine budget.
-pub fn flags_left(game : Game) -> Int {
+pub fn flags_left(game : Game) -> Int32 {
   game.mine_count - game.flagged_count
 }
 
 ///|
 /// Returns remaining safe cells that still need to be revealed.
-pub fn unrevealed_safe_cells(game : Game) -> Int {
-  let left : Int = safe_cells_total(game) - game.revealed_safe
+pub fn unrevealed_safe_cells(game : Game) -> Int32 {
+  let left : Int32 = safe_cells_total(game) - game.revealed_safe
   if left < 0 {
     0
   } else {
@@ -120,13 +120,13 @@ pub fn unrevealed_safe_cells(game : Game) -> Int {
 
 ///|
 /// Returns board-clear progress as an integer percentage.
-pub fn clear_ratio_pct(game : Game) -> Int {
-  let total : Int = safe_cells_total(game)
+pub fn clear_ratio_pct(game : Game) -> Int32 {
+  let total : Int32 = safe_cells_total(game)
   if total <= 0 {
     return 0
   }
 
-  let mut pct : Int = game.revealed_safe * 100 / total
+  let mut pct : Int32 = game.revealed_safe * 100 / total
   if pct < 0 {
     pct = 0
   }
@@ -139,12 +139,12 @@ pub fn clear_ratio_pct(game : Game) -> Int {
 ///|
 /// Computes final grade from score, elapsed time, mistakes, and lives left.
 pub fn compute_grade(
-  score : Int,
-  time_s : Int,
-  mistakes : Int,
-  lives : Int,
+  score : Int32,
+  time_s : Int32,
+  mistakes : Int32,
+  lives : Int32,
 ) -> Grade {
-  let mut v : Int = score
+  let mut v : Int32 = score
 
   if time_s <= 130 {
     v = v + 380

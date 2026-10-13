@@ -83,7 +83,7 @@ fn draw_texture_cover(
 ///|
 /// Draws one cell from the generated 3x2 sprite sheet.
 fn draw_sprite_cell(
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -162,12 +162,12 @@ struct ConvoyShip {
   mut vy : Float
   mut speed : Float
   mut hp : Float
-  mut cargo : Int
-  mut route_i : Int
+  mut cargo : Int32
+  mut route_i : Int32
   mut stuck_t : Float
   mut panic : Float
   mut blink_t : Float
-  mut id : Int
+  mut id : Int32
 }
 
 ///|
@@ -194,7 +194,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -256,10 +256,10 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -340,7 +340,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if !part.active {
@@ -377,8 +377,8 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -418,10 +418,10 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 /// Fills the route array with eight waypoints that form an S-curve path across the world.
 fn init_route(
   route : Array[Waypoint],
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
   route.clear()
 
@@ -471,8 +471,8 @@ fn setup_ice_field(
 ) -> Unit {
   clear_ice(ice)
 
-  let mut filled : Int = 0
-  let target : Int = ice.length() - 35
+  let mut filled : Int32 = 0
+  let target : Int32 = ice.length() - 35
 
   while filled < target {
     let x : Float = randf(world_l + 28.0, world_r - 28.0)
@@ -525,15 +525,15 @@ fn setup_ice_field(
 fn spawn_convoy(
   convoys : Array[ConvoyShip],
   route : Array[Waypoint],
-  tier : Int,
-  serial : Int,
+  tier : Int32,
+  serial : Int32,
 ) -> Bool {
   for convoy in convoys {
     if convoy.active {
       continue
     }
 
-    let cargo : Int = 8 + @raylib.get_random_value(0, 8 + tier * 3)
+    let cargo : Int32 = 8 + @raylib.get_random_value(0, 8 + tier * 3)
     convoy.active = true
     convoy.x = route[0].x - randf(50.0, 120.0)
     convoy.y = route[0].y + randf(-30.0, 30.0)
@@ -560,14 +560,14 @@ fn spawn_storm(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
+  tier : Int32,
 ) -> Bool {
   for storm in storms {
     if storm.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       storm.x = world_l - 40.0
       storm.y = randf(world_t + 20.0, world_b - 20.0)
@@ -602,19 +602,19 @@ fn spawn_storm(
 
 ///|
 /// Returns the count of active ice chunks.
-fn active_ice_count(ice : Array[IceChunk]) -> Int {
+fn active_ice_count(ice : Array[IceChunk]) -> Int32 {
   @utils.count_by(ice, fn(ice_elem) { ice_elem.active })
 }
 
 ///|
 /// Returns the count of active convoy ships.
-fn active_convoy_count(convoys : Array[ConvoyShip]) -> Int {
+fn active_convoy_count(convoys : Array[ConvoyShip]) -> Int32 {
   @utils.count_by(convoys, fn(convoy) { convoy.active })
 }
 
 ///|
 /// Returns the count of active storm cells.
-fn active_storm_count(storms : Array[StormCell]) -> Int {
+fn active_storm_count(storms : Array[StormCell]) -> Int32 {
   @utils.count_by(storms, fn(storm) { storm.active })
 }
 
@@ -781,7 +781,7 @@ fn carve_ice_with_cutter(
   parts : Array[Particle],
   dt : Float,
   cutting : Bool,
-) -> (Int, Float) {
+) -> (Int32, Float) {
   if !cutting || ship.energy <= 0.0 {
     ship.cutter_heat = maxf(0.0, ship.cutter_heat - dt * 1.7)
     (0, 0.0)
@@ -789,7 +789,7 @@ fn carve_ice_with_cutter(
     ship.cutter_heat = minf(1.0, ship.cutter_heat + dt * 1.6)
     ship.energy = maxf(0.0, ship.energy - dt * (6.0 + ship.cutter_heat * 9.0))
 
-    let mut cleared : Int = 0
+    let mut cleared : Int32 = 0
     let mut score_gain : Float = 0.0
 
     for ice_elem in ice {
@@ -831,11 +831,11 @@ fn repair_nearby_convoys(
   convoys : Array[ConvoyShip],
   parts : Array[Particle],
   energy_cost : Float,
-) -> Int {
+) -> Int32 {
   if ship.energy < energy_cost || ship.repair_cd > 0.0 {
     0
   } else {
-    let mut count : Int = 0
+    let mut count : Int32 = 0
     for convoy in convoys {
       if !convoy.active {
         continue
@@ -871,14 +871,14 @@ fn scan_hazards(
   ship : PlayerShip,
   ice : Array[IceChunk],
   storms : Array[StormCell],
-) -> (Bool, Float, Float, Int) {
+) -> (Bool, Float, Float, Int32) {
   if ship.sonar_cd > 0.0 {
     (false, ship.ping_x, ship.ping_y, 0)
   } else {
     let mut best_x : Float = ship.x
     let mut best_y : Float = ship.y
     let mut best_d2 : Float = 999999999.0
-    let mut kind : Int = 0
+    let mut kind : Int32 = 0
 
     for ice_elem in ice {
       if !ice_elem.active || ice_elem.hard < 24.0 {
@@ -928,10 +928,10 @@ fn update_convoys(
   storms : Array[StormCell],
   parts : Array[Particle],
   dt : Float,
-) -> (Int, Int, Int, Float) {
-  let mut delivered : Int = 0
-  let mut sunk : Int = 0
-  let mut score_gain : Int = 0
+) -> (Int32, Int32, Int32, Float) {
+  let mut delivered : Int32 = 0
+  let mut sunk : Int32 = 0
+  let mut score_gain : Int32 = 0
   let mut wait_accum : Float = 0.0
 
   for convoy in convoys {
@@ -1043,10 +1043,10 @@ fn update_convoys(
 ///|
 /// Draws the ocean background with animated horizontal gradient bands.
 fn draw_ocean(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
   scene_t : Float,
 ) -> Unit {
   match tex_arctic_background.val {
@@ -1076,16 +1076,16 @@ fn draw_ocean(
         @raylib.Color::new(12, 34, 58, 255),
       )
 
-      let mut y : Int = world_y
+      let mut y : Int32 = world_y
       while y < world_y + world_h {
         let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
         let wave : Float = @math.sinf(scene_t * 0.8 + Float::from_int(y) * 0.02) *
           0.5 +
           0.5
 
-        let c0 : Int = 24 + (p * 24.0).to_int() + (wave * 5.0).to_int()
-        let c1 : Int = 62 + (p * 42.0).to_int() + (wave * 8.0).to_int()
-        let c2 : Int = 98 + (p * 28.0).to_int() + (wave * 10.0).to_int()
+        let c0 : Int32 = 24 + (p * 24.0).to_int() + (wave * 5.0).to_int()
+        let c1 : Int32 = 62 + (p * 42.0).to_int() + (wave * 8.0).to_int()
+        let c2 : Int32 = 98 + (p * 28.0).to_int() + (wave * 10.0).to_int()
 
         @raylib.draw_rectangle(
           world_x,
@@ -1112,10 +1112,10 @@ fn draw_ocean(
 /// Draws all route waypoints as dots connected by a blue guide line.
 fn draw_route(route : Array[Waypoint]) -> Unit {
   for i in 0..<(route.length() - 1) {
-    let ax : Int = route[i].x.to_int()
-    let ay : Int = route[i].y.to_int()
-    let bx : Int = route[i + 1].x.to_int()
-    let by : Int = route[i + 1].y.to_int()
+    let ax : Int32 = route[i].x.to_int()
+    let ay : Int32 = route[i].y.to_int()
+    let bx : Int32 = route[i + 1].x.to_int()
+    let by : Int32 = route[i + 1].y.to_int()
 
     @raylib.draw_line(ax, ay, bx, by, @raylib.Color::new(88, 140, 186, 170))
     @raylib.draw_line(
@@ -1149,9 +1149,9 @@ fn draw_ice(ice : Array[IceChunk], scene_t : Float) -> Unit {
     let pulse : Float = 0.82 +
       0.2 * (@math.sinf(scene_t * 1.8 + ice_elem.tone * 12.0) * 0.5 + 0.5)
 
-    let cr : Int = 158 + (hard01 * 48.0).to_int()
-    let cg : Int = 198 + (hard01 * 42.0).to_int()
-    let cb : Int = 222 + (pulse * 25.0).to_int()
+    let cr : Int32 = 158 + (hard01 * 48.0).to_int()
+    let cg : Int32 = 198 + (hard01 * 42.0).to_int()
+    let cb : Int32 = 222 + (pulse * 25.0).to_int()
 
     let used_art = draw_sprite_cell(
       2,
@@ -1212,8 +1212,8 @@ fn draw_storms(storms : Array[StormCell], scene_t : Float) -> Unit {
     let r0 : Float = storm.radius * pulse
     let r1 : Float = storm.radius * (0.62 + pulse * 0.16)
 
-    let alpha0 : Int = 56 + (storm.intensity * 58.0).to_int()
-    let alpha1 : Int = 26 + (storm.intensity * 32.0).to_int()
+    let alpha0 : Int32 = 56 + (storm.intensity * 58.0).to_int()
+    let alpha1 : Int32 = 26 + (storm.intensity * 32.0).to_int()
 
     @raylib.draw_circle(
       storm.x.to_int(),
@@ -1239,9 +1239,9 @@ fn draw_storms(storms : Array[StormCell], scene_t : Float) -> Unit {
       ),
     )
 
-    let bolt_x : Int = (storm.x +
+    let bolt_x : Int32 = (storm.x +
     @math.sinf(scene_t * 4.0 + storm.phase) * storm.radius * 0.28).to_int()
-    let bolt_y : Int = (storm.y +
+    let bolt_y : Int32 = (storm.y +
     @math.cosf(scene_t * 3.2 + storm.phase * 0.7) * storm.radius * 0.24).to_int()
     @raylib.draw_circle(
       bolt_x,
@@ -1258,13 +1258,13 @@ fn convoy_color(hp : Float, panic : Float) -> @raylib.Color {
   let hp01 : Float = clampf(hp / 100.0, 0.0, 1.0)
   let panic01 : Float = clampf(panic / 4.0, 0.0, 1.0)
 
-  let r : Int = 94 +
+  let r : Int32 = 94 +
     ((Float::from_int(1) - hp01) * 116.0).to_int() +
     (panic01 * 22.0).to_int()
-  let g : Int = 188 -
+  let g : Int32 = 188 -
     ((Float::from_int(1) - hp01) * 88.0).to_int() -
     (panic01 * 24.0).to_int()
-  let b : Int = 236 - (panic01 * 34.0).to_int()
+  let b : Int32 = 236 - (panic01 * 34.0).to_int()
 
   @raylib.Color::new(r, g, b, 248)
 }
@@ -1283,8 +1283,8 @@ fn draw_convoys(convoys : Array[ConvoyShip]) -> Unit {
       convoy_color(convoy.hp, convoy.panic)
     }
 
-    let x : Int = convoy.x.to_int()
-    let y : Int = convoy.y.to_int()
+    let x : Int32 = convoy.x.to_int()
+    let y : Int32 = convoy.y.to_int()
 
     let rotation : Float = if convoy.vx * convoy.vx + convoy.vy * convoy.vy >
       0.01 {
@@ -1436,14 +1436,14 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 ///|
 /// Draws the left harbor and right destination port with berth columns and labels.
 fn draw_harbors(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
-  let left_x : Int = world_x + 12
-  let right_x : Int = world_x + world_w - 94
-  let mid_y : Int = world_y + world_h / 2
+  let left_x : Int32 = world_x + 12
+  let right_x : Int32 = world_x + world_w - 94
+  let mid_y : Int32 = world_y + world_h / 2
 
   if !draw_sprite_cell(
       4,
@@ -1542,20 +1542,20 @@ fn draw_harbors(
 ///|
 /// Draws the D-pad and action button overlay for touch/mouse controls.
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mouse_x : Float,
   mouse_y : Float,
   hold : Bool,
 ) -> Unit {
-  let pad_x : Int = 32
-  let pad_y : Int = sh - 204
+  let pad_x : Int32 = 32
+  let pad_y : Int32 = sh - 204
 
   fn dpad_box(
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     label : String,
     active : Bool,
   ) -> Unit {
@@ -1675,8 +1675,8 @@ fn draw_touch_controls(
 ///|
 /// Draws a labeled horizontal status bar with value and max for hull, energy, or cooldowns.
 fn draw_action_bar(
-  panel_x : Int,
-  y : Int,
+  panel_x : Int32,
+  y : Int32,
   label : String,
   value : Float,
   maxv : Float,
@@ -1701,7 +1701,7 @@ fn draw_action_bar(
   } else {
     clampf(value / maxv, 0.0, 1.0)
   }
-  let fw : Int = (Float::from_int(370) * p01).to_int()
+  let fw : Int32 = (Float::from_int(370) * p01).to_int()
   @raylib.draw_rectangle(panel_x + 18, y + 28, fw, 20, color)
   @raylib.draw_rectangle_lines(
     panel_x + 18,
@@ -1722,10 +1722,10 @@ fn draw_action_bar(
 ///|
 /// Draws a rectangular push button with active/idle fill and centered label.
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   active : Bool,
 ) -> Unit {
@@ -1755,8 +1755,8 @@ fn draw_button(
 ///|
 /// Initializes the window, allocates all entity arrays, runs the game loop, and handles input and rendering.
 fn main {
-  let sw : Int = 1680
-  let sh : Int = 940
+  let sw : Int32 = 1680
+  let sh : Int32 = 940
   @raylib.init_window(
     sw, sh, "raylib [core] example - icebreaker convoy command",
   )
@@ -1768,11 +1768,11 @@ fn main {
   load_assets()
   defer unload_assets()
 
-  let world_x : Int = 20
-  let world_y : Int = 20
-  let panel_w : Int = 420
-  let world_w : Int = sw - panel_w - 40
-  let world_h : Int = sh - 40
+  let world_x : Int32 = 20
+  let world_y : Int32 = 20
+  let panel_w : Int32 = 420
+  let world_w : Int32 = sw - panel_w - 40
+  let world_h : Int32 = sh - 40
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
@@ -1860,19 +1860,19 @@ fn main {
     wake_t: randf(0.0, 20.0),
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 420.0
-  let mut delivered : Int = 0
-  let mut target_delivered : Int = 34
-  let mut sunk : Int = 0
-  let mut sunk_limit : Int = 10
-  let mut score : Int = 0
-  let mut tier : Int = 1
-  let mut convoy_serial : Int = 1
+  let mut delivered : Int32 = 0
+  let mut target_delivered : Int32 = 34
+  let mut sunk : Int32 = 0
+  let mut sunk_limit : Int32 = 10
+  let mut score : Int32 = 0
+  let mut tier : Int32 = 1
+  let mut convoy_serial : Int32 = 1
   let mut spawn_cd : Float = 2.0
   let mut storm_cd : Float = 5.0
   let mut wait_accum : Float = 0.0
-  let mut ice_cleared : Int = 0
+  let mut ice_cleared : Int32 = 0
   let mut scene_t : Float = 0.0
   let mut msg : String = ""
   let mut msg_t : Float = 0.0
@@ -2004,8 +2004,8 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyH)
 
       if hold {
-        let pad_x : Int = 32
-        let pad_y : Int = sh - 204
+        let pad_x : Int32 = 32
+        let pad_y : Int32 = sh - 204
 
         if inside_rect(mouse.x, mouse.y, pad_x + 84, pad_y, 76, 56) {
           move_u = true
@@ -2104,7 +2104,7 @@ fn main {
       }
 
       if repair_press {
-        let fixed : Int = repair_nearby_convoys(ship, convoys, parts, 9.0)
+        let fixed : Int32 = repair_nearby_convoys(ship, convoys, parts, 9.0)
         if fixed > 0 {
           score = score + fixed * 24
           msg = "Patched \{fixed} convoy ship(s)"
@@ -2180,7 +2180,7 @@ fn main {
 
       storm_cd = storm_cd - dt
       if storm_cd <= 0.0 {
-        let max_storms : Int = 2 + tier / 2
+        let max_storms : Int32 = 2 + tier / 2
         if active_storm_count(storms) < max_storms {
           ignore(spawn_storm(storms, world_l, world_t, world_r, world_b, tier))
         }
@@ -2192,7 +2192,7 @@ fn main {
 
       // Keep pressure if player over-clears all ice lanes
       if active_ice_count(ice) < 38 {
-        let mut refill : Int = 0
+        let mut refill : Int32 = 0
         while refill < 10 {
           let x : Float = randf(world_l + 20.0, world_r - 20.0)
           let y : Float = randf(world_t + 20.0, world_b - 20.0)
@@ -2282,7 +2282,7 @@ fn main {
 
     draw_particles(parts)
 
-    let panel_x : Int = world_x + world_w + 16
+    let panel_x : Int32 = world_x + world_w + 16
     @raylib.draw_rectangle(
       panel_x,
       world_y,
@@ -2519,8 +2519,8 @@ fn main {
     draw_touch_controls(sw, sh, mouse.x, mouse.y, hold)
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = world_x + world_w / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = world_x + world_w / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         18,

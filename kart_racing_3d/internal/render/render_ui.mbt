@@ -18,7 +18,9 @@ fn get_item_display_name(item_type : @types.PowerupKind) -> String {
 // Get item color for display (r, g, b)
 
 ///|
-fn get_item_display_color(item_type : @types.PowerupKind) -> (Int, Int, Int) {
+fn get_item_display_color(
+  item_type : @types.PowerupKind,
+) -> (Int32, Int32, Int32) {
   match item_type {
     Boost => (255, 200, 0)
     Shield => (80, 180, 255)
@@ -309,7 +311,7 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
     stats_sel.3 / 1.5,
     stats_sel.4 / 1.5,
   ]
-  let bar_colors : Array[(Int, Int, Int)] = [
+  let bar_colors : Array[(Int32, Int32, Int32)] = [
     (255, 100, 100),
     (100, 255, 100),
     (100, 100, 255),
@@ -808,7 +810,7 @@ fn @types.Game::draw_cup_results(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 200, 220, 255),
   )
   // Sort by cup points descending
-  let order : Array[Int] = Array::make(@types.max_karts, 0)
+  let order : Array[Int32] = Array::make(@types.max_karts, 0)
   for i in 0..<@types.max_karts {
     order[i] = i
   }

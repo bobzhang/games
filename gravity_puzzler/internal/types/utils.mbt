@@ -1,5 +1,5 @@
 ///|
-pub fn gravity_vector(dir : GravityDir) -> (Int, Int) {
+pub fn gravity_vector(dir : GravityDir) -> (Int32, Int32) {
   match dir {
     Down => (0, 1)
     Up => (0, -1)
@@ -9,7 +9,9 @@ pub fn gravity_vector(dir : GravityDir) -> (Int, Int) {
 }
 
 ///|
-pub fn gravity_perp_vectors(dir : GravityDir) -> ((Int, Int), (Int, Int)) {
+pub fn gravity_perp_vectors(
+  dir : GravityDir,
+) -> ((Int32, Int32), (Int32, Int32)) {
   match dir {
     Down | Up => ((-1, 0), (1, 0))
     Left | Right => ((0, -1), (0, 1))
@@ -37,7 +39,7 @@ pub fn rotate_gravity_ccw(dir : GravityDir) -> GravityDir {
 }
 
 ///|
-pub fn get_tile(level : Level, x : Int, y : Int) -> TileKind {
+pub fn get_tile(level : Level, x : Int32, y : Int32) -> TileKind {
   if x < 0 || x >= level.width || y < 0 || y >= level.height {
     Wall
   } else {
@@ -46,7 +48,7 @@ pub fn get_tile(level : Level, x : Int, y : Int) -> TileKind {
 }
 
 ///|
-pub fn set_tile(level : Level, x : Int, y : Int, tile : TileKind) -> Unit {
+pub fn set_tile(level : Level, x : Int32, y : Int32, tile : TileKind) -> Unit {
   if x >= 0 && x < level.width && y >= 0 && y < level.height {
     level.tiles[y * level.width + x] = tile
   }
@@ -72,7 +74,7 @@ pub fn gravity_dir_to_angle(dir : GravityDir) -> Float {
 }
 
 ///|
-pub fn mirror_reflect(dir : GravityDir, mirror_id : Int) -> GravityDir {
+pub fn mirror_reflect(dir : GravityDir, mirror_id : Int32) -> GravityDir {
   // mirror_id 1 = "/" diagonal, mirror_id 2 = "\" diagonal
   match (dir, mirror_id) {
     (Down, 1) => Left
@@ -88,7 +90,7 @@ pub fn mirror_reflect(dir : GravityDir, mirror_id : Int) -> GravityDir {
 }
 
 ///|
-pub fn tile_kind_index(tile : TileKind) -> Int {
+pub fn tile_kind_index(tile : TileKind) -> Int32 {
   match tile {
     Empty => 0
     Wall => 1
@@ -109,7 +111,7 @@ pub fn tile_kind_index(tile : TileKind) -> Int {
 }
 
 ///|
-pub fn tile_from_index(idx : Int) -> TileKind {
+pub fn tile_from_index(idx : Int32) -> TileKind {
   match idx {
     0 => Empty
     1 => Wall
@@ -132,7 +134,7 @@ pub fn tile_from_index(idx : Int) -> TileKind {
 }
 
 ///|
-pub fn entity_kind_from_index(idx : Int) -> EntityKind {
+pub fn entity_kind_from_index(idx : Int32) -> EntityKind {
   match idx {
     0 => Player
     1 => Box
@@ -144,7 +146,7 @@ pub fn entity_kind_from_index(idx : Int) -> EntityKind {
 }
 
 ///|
-pub fn is_blocking(level : Level, x : Int, y : Int) -> Bool {
+pub fn is_blocking(level : Level, x : Int32, y : Int32) -> Bool {
   let tile = get_tile(level, x, y)
   if is_solid(tile) {
     return true
@@ -153,7 +155,7 @@ pub fn is_blocking(level : Level, x : Int, y : Int) -> Bool {
 }
 
 ///|
-pub fn entity_at(level : Level, x : Int, y : Int) -> Entity? {
+pub fn entity_at(level : Level, x : Int32, y : Int32) -> Entity? {
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
     if e.active && e.x == x && e.y == y {
@@ -166,9 +168,9 @@ pub fn entity_at(level : Level, x : Int, y : Int) -> Entity? {
 ///|
 pub fn entity_at_except(
   level : Level,
-  x : Int,
-  y : Int,
-  exclude_id : Int,
+  x : Int32,
+  y : Int32,
+  exclude_id : Int32,
 ) -> Entity? {
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
@@ -203,7 +205,7 @@ pub fn find_enemies(level : Level) -> Array[Entity] {
 }
 
 ///|
-pub fn count_active_enemies(level : Level) -> Int {
+pub fn count_active_enemies(level : Level) -> Int32 {
   let mut count = 0
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
@@ -216,7 +218,7 @@ pub fn count_active_enemies(level : Level) -> Int {
 
 ///|
 pub fn save_snapshot(level : Level) -> LevelSnapshot {
-  let states : Array[(Int, Bool, Int, Int)] = []
+  let states : Array[(Int32, Bool, Int32, Int32)] = []
   for i in 0..<level.entities.length() {
     let e = level.entities[i]
     states.push((e.id, e.active, e.x, e.y))
@@ -265,7 +267,7 @@ pub fn restore_snapshot(level : Level, snap : LevelSnapshot) -> Unit {
 }
 
 ///|
-pub fn calc_stars(moves : Int, par : Int) -> Int {
+pub fn calc_stars(moves : Int32, par : Int32) -> Int32 {
   if moves <= par {
     3
   } else if moves <= par + 3 {
@@ -278,12 +280,12 @@ pub fn calc_stars(moves : Int, par : Int) -> Int {
 }
 
 ///|
-pub fn tile_to_pixel_x(tx : Int) -> Float {
+pub fn tile_to_pixel_x(tx : Int32) -> Float {
   Float::from_int(grid_offset_x + tx * tile_size)
 }
 
 ///|
-pub fn tile_to_pixel_y(ty : Int) -> Float {
+pub fn tile_to_pixel_y(ty : Int32) -> Float {
   Float::from_int(grid_offset_y + ty * tile_size)
 }
 
@@ -293,7 +295,7 @@ pub fn lerp(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-pub fn rand_next(game : Game) -> UInt {
+pub fn rand_next(game : Game) -> UInt32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -305,10 +307,10 @@ pub fn rand_next(game : Game) -> UInt {
 ///|
 pub fn find_matching_portal(
   level : Level,
-  id : Int,
-  ex : Int,
-  ey : Int,
-) -> (Int, Int) {
+  id : Int32,
+  ex : Int32,
+  ey : Int32,
+) -> (Int32, Int32) {
   for y in 0..<level.height {
     for x in 0..<level.width {
       if (x != ex || y != ey) && get_tile(level, x, y) == Portal(id) {
@@ -320,7 +322,7 @@ pub fn find_matching_portal(
 }
 
 ///|
-pub fn count_gates(level : Level, id : Int) -> Int {
+pub fn count_gates(level : Level, id : Int32) -> Int32 {
   let mut count = 0
   for i in 0..<level.tiles.length() {
     if level.tiles[i] == Gate(id) {
@@ -331,7 +333,7 @@ pub fn count_gates(level : Level, id : Int) -> Int {
 }
 
 ///|
-pub fn toggle_gates(level : Level, id : Int) -> Unit {
+pub fn toggle_gates(level : Level, id : Int32) -> Unit {
   for i in 0..<level.tiles.length() {
     if level.tiles[i] == Gate(id) {
       level.tiles[i] = Empty
@@ -343,7 +345,7 @@ pub fn toggle_gates(level : Level, id : Int) -> Unit {
 }
 
 ///|
-pub fn open_gates(level : Level, id : Int) -> Unit {
+pub fn open_gates(level : Level, id : Int32) -> Unit {
   for i in 0..<level.tiles.length() {
     if level.tiles[i] == Gate(id) {
       level.tiles[i] = Empty

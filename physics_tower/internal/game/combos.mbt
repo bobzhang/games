@@ -4,7 +4,7 @@
 pub fn check_combos(world : @types.World) -> Array[@types.ActiveCombo] {
   let combos : Array[@types.ActiveCombo] = Array(capacity=32)
   // Track which body pairs we have already evaluated to avoid duplicates
-  let checked : Array[(Int, Int)] = Array(capacity=64)
+  let checked : Array[(Int32, Int32)] = Array(capacity=64)
   for joint in world.joints {
     if !joint.active || joint.broken {
       continue
@@ -49,8 +49,8 @@ pub fn check_combos(world : @types.World) -> Array[@types.ActiveCombo] {
 fn detect_combo(
   mat_a : @types.Material,
   mat_b : @types.Material,
-  id_a : Int,
-  id_b : Int,
+  id_a : Int32,
+  id_b : Int32,
 ) -> @types.ActiveCombo? {
   match (mat_a, mat_b) {
     // Wood+Steel or Steel+Wood: flex bonus (joint strength *1.5)
@@ -133,8 +133,8 @@ pub fn apply_combo_bonuses(
 /// Flex combo: joints between body_a and body_b get strength multiplied.
 fn apply_flex_combo(
   world : @types.World,
-  id_a : Int,
-  id_b : Int,
+  id_a : Int32,
+  id_b : Int32,
   mult : Float,
 ) -> Unit {
   for joint in world.joints {
@@ -153,8 +153,8 @@ fn apply_flex_combo(
 /// Monolith combo: stone bodies adjacent get stress tolerance boost.
 fn apply_monolith_combo(
   world : @types.World,
-  id_a : Int,
-  id_b : Int,
+  id_a : Int32,
+  id_b : Int32,
   mult : Float,
 ) -> Unit {
   for body in world.bodies {
@@ -171,8 +171,8 @@ fn apply_monolith_combo(
 /// Reinforced combo: steel-steel pairs get mass reduction.
 fn apply_reinforced_combo(
   world : @types.World,
-  id_a : Int,
-  id_b : Int,
+  id_a : Int32,
+  id_b : Int32,
   mass_mult : Float,
 ) -> Unit {
   for body in world.bodies {
@@ -196,8 +196,8 @@ fn apply_reinforced_combo(
 /// Lightweight combo: wood-wood pairs get slight mass reduction.
 fn apply_lightweight_combo(
   world : @types.World,
-  id_a : Int,
-  id_b : Int,
+  id_a : Int32,
+  id_b : Int32,
 ) -> Unit {
   for body in world.bodies {
     if body.id == id_a || body.id == id_b {
@@ -239,7 +239,7 @@ pub fn combo_description(kind : @types.ComboKind) -> String {
 
 ///|
 /// Returns the highlight color for a combo kind as (r, g, b).
-pub fn combo_color(kind : @types.ComboKind) -> (Int, Int, Int) {
+pub fn combo_color(kind : @types.ComboKind) -> (Int32, Int32, Int32) {
   match kind {
     FlexCombo => (100, 255, 180) // green-cyan
     MonolithCombo => (200, 200, 255) // light purple
@@ -250,7 +250,9 @@ pub fn combo_color(kind : @types.ComboKind) -> (Int, Int, Int) {
 
 ///|
 /// Counts the number of active combos of each type.
-pub fn count_combos(combos : Array[@types.ActiveCombo]) -> (Int, Int, Int, Int) {
+pub fn count_combos(
+  combos : Array[@types.ActiveCombo],
+) -> (Int32, Int32, Int32, Int32) {
   let mut flex = 0
   let mut mono = 0
   let mut rein = 0

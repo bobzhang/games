@@ -1,6 +1,6 @@
 ///|
 /// Load a level by index (0-19)
-pub fn load_level(index : Int) -> @types.LevelGoal {
+pub fn load_level(index : Int32) -> @types.LevelGoal {
   match index {
     0 => level_01()
     1 => level_02()
@@ -27,7 +27,7 @@ pub fn load_level(index : Int) -> @types.LevelGoal {
 }
 
 ///|
-pub fn level_name(index : Int) -> String {
+pub fn level_name(index : Int32) -> String {
   match index {
     0 => "First Furrow"
     1 => "Spring Meadow"
@@ -54,7 +54,7 @@ pub fn level_name(index : Int) -> String {
 }
 
 ///|
-pub fn level_tier(index : Int) -> String {
+pub fn level_tier(index : Int32) -> String {
   if index < 7 {
     "Beginner"
   } else if index < 14 {
@@ -65,10 +65,16 @@ pub fn level_tier(index : Int) -> String {
 }
 
 ///|
-fn uniform_soil(n : Int, p : Int, k : Int) -> Array[Array[(Int, Int, Int)]] {
-  let data : Array[Array[(Int, Int, Int)]] = Array(capacity=@types.grid_rows)
+fn uniform_soil(
+  n : Int32,
+  p : Int32,
+  k : Int32,
+) -> Array[Array[(Int32, Int32, Int32)]] {
+  let data : Array[Array[(Int32, Int32, Int32)]] = Array(
+    capacity=@types.grid_rows,
+  )
   for _r in 0..<@types.grid_rows {
-    let row : Array[(Int, Int, Int)] = Array(capacity=@types.grid_cols)
+    let row : Array[(Int32, Int32, Int32)] = Array(capacity=@types.grid_cols)
     for _c in 0..<@types.grid_cols {
       row.push((n, p, k))
     }
@@ -79,14 +85,16 @@ fn uniform_soil(n : Int, p : Int, k : Int) -> Array[Array[(Int, Int, Int)]] {
 
 ///|
 fn varied_soil(
-  base_n : Int,
-  base_p : Int,
-  base_k : Int,
-  variation : Int,
-) -> Array[Array[(Int, Int, Int)]] {
-  let data : Array[Array[(Int, Int, Int)]] = Array(capacity=@types.grid_rows)
+  base_n : Int32,
+  base_p : Int32,
+  base_k : Int32,
+  variation : Int32,
+) -> Array[Array[(Int32, Int32, Int32)]] {
+  let data : Array[Array[(Int32, Int32, Int32)]] = Array(
+    capacity=@types.grid_rows,
+  )
   for r in 0..<@types.grid_rows {
-    let row : Array[(Int, Int, Int)] = Array(capacity=@types.grid_cols)
+    let row : Array[(Int32, Int32, Int32)] = Array(capacity=@types.grid_cols)
     for c in 0..<@types.grid_cols {
       let offset = ((r + c) % 3 - 1) * variation
       let n = @types.clampi(base_n + offset, 0, 100)

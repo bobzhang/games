@@ -1,5 +1,5 @@
 ///|
-pub fn rotate_orientation(o : Orientation, steps : Int) -> Orientation {
+pub fn rotate_orientation(o : Orientation, steps : Int32) -> Orientation {
   let idx = orientation_index(o)
   let new_idx = (idx + steps % 4 + 4) % 4
   index_to_orientation(new_idx)
@@ -54,7 +54,7 @@ pub fn copy_tile(t : Tile) -> Tile {
 }
 
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
@@ -74,12 +74,12 @@ pub fn is_hole(grid : MosaicGrid, pos : Vec2i) -> Bool {
 }
 
 ///|
-pub fn grid_index(x : Int, y : Int, width : Int) -> Int {
+pub fn grid_index(x : Int32, y : Int32, width : Int32) -> Int32 {
   y * width + x
 }
 
 ///|
-pub fn get_tile(grid : MosaicGrid, x : Int, y : Int) -> Tile? {
+pub fn get_tile(grid : MosaicGrid, x : Int32, y : Int32) -> Tile? {
   if x < 0 || x >= grid.width || y < 0 || y >= grid.height {
     return None
   }
@@ -87,14 +87,14 @@ pub fn get_tile(grid : MosaicGrid, x : Int, y : Int) -> Tile? {
 }
 
 ///|
-pub fn set_tile(grid : MosaicGrid, x : Int, y : Int, tile : Tile?) -> Unit {
+pub fn set_tile(grid : MosaicGrid, x : Int32, y : Int32, tile : Tile?) -> Unit {
   if x >= 0 && x < grid.width && y >= 0 && y < grid.height {
     grid.tiles[grid_index(x, y, grid.width)] = tile
   }
 }
 
 ///|
-pub fn new_grid(width : Int, height : Int) -> MosaicGrid {
+pub fn new_grid(width : Int32, height : Int32) -> MosaicGrid {
   let tiles : Array[Tile?] = Array::make(width * height, None)
   { width, height, tiles, holes: [], }
 }
@@ -168,7 +168,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_index(t : Tier) -> Int {
+pub fn tier_index(t : Tier) -> Int32 {
   match t {
     Repair => 0
     Restore => 1
@@ -177,7 +177,7 @@ pub fn tier_index(t : Tier) -> Int {
 }
 
 ///|
-pub fn index_to_tier(i : Int) -> Tier {
+pub fn index_to_tier(i : Int32) -> Tier {
   match i {
     0 => Repair
     1 => Restore
@@ -198,7 +198,7 @@ pub fn symmetry_name(s : SymmetryKind) -> String {
 }
 
 ///|
-pub fn symmetry_index(s : SymmetryKind) -> Int {
+pub fn symmetry_index(s : SymmetryKind) -> Int32 {
   match s {
     MirrorH => 0
     MirrorV => 1
@@ -210,7 +210,7 @@ pub fn symmetry_index(s : SymmetryKind) -> Int {
 }
 
 ///|
-pub fn index_to_symmetry(i : Int) -> SymmetryKind {
+pub fn index_to_symmetry(i : Int32) -> SymmetryKind {
   match i {
     0 => MirrorH
     1 => MirrorV
@@ -237,7 +237,7 @@ pub fn all_orientations() -> Array[Orientation] {
 }
 
 ///|
-pub fn clamp_int(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clamp_int(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -279,8 +279,8 @@ pub fn new_game(levels : Array[Level]) -> Game {
 }
 
 ///|
-pub fn levels_for_tier(game : Game, tier : Tier) -> Array[Int] {
-  let result : Array[Int] = []
+pub fn levels_for_tier(game : Game, tier : Tier) -> Array[Int32] {
+  let result : Array[Int32] = []
   for i in 0..<game.levels.length() {
     if game.levels[i].tier == tier {
       result.push(i)
@@ -301,7 +301,7 @@ pub fn tier_completed(game : Game, tier : Tier) -> Bool {
 }
 
 ///|
-pub fn total_stars(game : Game) -> Int {
+pub fn total_stars(game : Game) -> Int32 {
   let mut total = 0
   for i in 0..<game.scores.length() {
     total = total + game.scores[i].stars
@@ -316,7 +316,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn count_remaining_holes(game : Game) -> Int {
+pub fn count_remaining_holes(game : Game) -> Int32 {
   let level = game.levels[game.current_level]
   let mut count = 0
   for i in 0..<level.grid.holes.length() {

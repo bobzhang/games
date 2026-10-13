@@ -1,10 +1,10 @@
 ///|
-pub fn manhattan_distance(a : Vec2i, b : Vec2i) -> Int {
+pub fn manhattan_distance(a : Vec2i, b : Vec2i) -> Int32 {
   absi(a.x - b.x) + absi(a.y - b.y)
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -13,7 +13,7 @@ pub fn absi(v : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -22,7 +22,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -74,17 +74,17 @@ pub fn is_between(target : Vec2i, end_a : Vec2i, end_b : Vec2i) -> Bool {
 }
 
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
 ///|
-pub fn pos_to_index(pos : Vec2i, size : Int) -> Int {
+pub fn pos_to_index(pos : Vec2i, size : Int32) -> Int32 {
   pos.y * size + pos.x
 }
 
 ///|
-pub fn index_to_pos(idx : Int, size : Int) -> Vec2i {
+pub fn index_to_pos(idx : Int32, size : Int32) -> Vec2i {
   { x: idx % size, y: idx / size, }
 }
 
@@ -141,12 +141,12 @@ pub fn compass_name(dir : CompassDir) -> String {
 pub fn new_clue(
   kind : ClueKind,
   feature_a : FeatureKind,
-  feature_b? : FeatureKind = Mountain,
-  distance? : Int = 0,
-  direction? : CompassDir = N,
-  row_col? : Int = 0,
-  count? : Int = 0,
-  text? : String = "",
+  feature_b~ : FeatureKind = Mountain,
+  distance~ : Int32 = 0,
+  direction~ : CompassDir = N,
+  row_col~ : Int32 = 0,
+  count~ : Int32 = 0,
+  text~ : String = "",
 ) -> Clue {
   {
     kind,
@@ -167,8 +167,8 @@ pub fn new_level(
   tier : Tier,
   features : Array[FeatureKind],
   clues : Array[Clue],
-  par : Int,
-  description? : String = "",
+  par : Int32,
+  description~ : String = "",
 ) -> Level {
   {
     name,
@@ -260,7 +260,7 @@ pub fn reset_level(game : Game) -> Unit {
 ///|
 pub fn find_feature_pos(
   grid : Array[FeatureKind?],
-  size : Int,
+  size : Int32,
   kind : FeatureKind,
 ) -> Vec2i? {
   for i in 0..<grid.length() {
@@ -275,7 +275,7 @@ pub fn find_feature_pos(
 ///|
 pub fn find_all_feature_positions(
   grid : Array[FeatureKind?],
-  size : Int,
+  size : Int32,
   kind : FeatureKind,
 ) -> Array[Vec2i] {
   let result : Array[Vec2i] = []
@@ -289,7 +289,7 @@ pub fn find_all_feature_positions(
 }
 
 ///|
-pub fn tier_level_range(tier : Tier) -> (Int, Int) {
+pub fn tier_level_range(tier : Tier) -> (Int32, Int32) {
   match tier {
     Surveyor => (0, 8)
     Explorer => (8, 17)
@@ -306,8 +306,8 @@ pub fn clue_references_feature(clue : Clue, kind : FeatureKind) -> Bool {
 pub fn clues_referencing_feature(
   clues : Array[Clue],
   kind : FeatureKind,
-) -> Array[Int] {
-  let result : Array[Int] = []
+) -> Array[Int32] {
+  let result : Array[Int32] = []
   for i in 0..<clues.length() {
     if clue_references_feature(clues[i], kind) {
       result.push(i)
@@ -320,7 +320,7 @@ pub fn clues_referencing_feature(
 pub fn cells_referenced_by_clue(
   clue : Clue,
   grid : Array[FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> Array[Vec2i] {
   let cells : Array[Vec2i] = []
   // Always include positions of feature_a and feature_b if placed
@@ -354,7 +354,7 @@ pub fn cells_referenced_by_clue(
 }
 
 ///|
-pub fn level_tier(level_index : Int) -> Tier {
+pub fn level_tier(level_index : Int32) -> Tier {
   if level_index < 8 {
     Surveyor
   } else if level_index < 17 {

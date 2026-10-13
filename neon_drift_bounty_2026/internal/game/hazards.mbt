@@ -15,7 +15,7 @@ fn @types.Game::clear_hazards(game : @types.Game) -> Unit {
 
 ///|
 /// Allocates a hazard slot, returning its index.
-fn @types.Game::alloc_hazard(game : @types.Game) -> Int {
+fn @types.Game::alloc_hazard(game : @types.Game) -> Int32 {
   for i, slot in game.hazards {
     if !slot.active {
       break i

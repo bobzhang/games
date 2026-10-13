@@ -69,9 +69,9 @@ pub fn draw_tiles(game : @types.Game) -> Unit {
 
 ///|
 fn draw_spring(
-  cx : Int,
-  cy : Int,
-  half : Int,
+  cx : Int32,
+  cy : Int32,
+  half : Int32,
   has_water : Bool,
   anim_timer : Float,
 ) -> Unit {
@@ -112,9 +112,9 @@ fn draw_spring(
 
 ///|
 fn draw_fountain(
-  cx : Int,
-  cy : Int,
-  half : Int,
+  cx : Int32,
+  cy : Int32,
+  half : Int32,
   filled : Bool,
   anim_timer : Float,
 ) -> Unit {
@@ -152,7 +152,12 @@ fn draw_fountain(
 }
 
 ///|
-fn draw_aqueduct(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
+fn draw_aqueduct(
+  sx : Int32,
+  sy : Int32,
+  cs : Int32,
+  tile : @types.Tile,
+) -> Unit {
   let color = if tile.has_water {
     @types.color_aqueduct_wet
   } else {
@@ -198,7 +203,12 @@ fn draw_aqueduct(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
 }
 
 ///|
-fn draw_reservoir(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
+fn draw_reservoir(
+  sx : Int32,
+  sy : Int32,
+  cs : Int32,
+  tile : @types.Tile,
+) -> Unit {
   let color = if tile.has_water {
     @types.color_reservoir_full
   } else {
@@ -264,7 +274,7 @@ fn draw_reservoir(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
 }
 
 ///|
-fn draw_dam(sx : Int, sy : Int, cs : Int, tile : @types.Tile) -> Unit {
+fn draw_dam(sx : Int32, sy : Int32, cs : Int32, tile : @types.Tile) -> Unit {
   let inset = cs / 5
   @raylib.draw_rectangle(
     sx + inset,

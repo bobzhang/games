@@ -337,7 +337,7 @@ pub fn get_all_levels() -> Array[@types.LevelDef] {
 }
 
 ///|
-pub fn get_level(world : Int, level : Int) -> @types.LevelDef? {
+pub fn get_level(world : Int32, level : Int32) -> @types.LevelDef? {
   let all = get_all_levels()
   for l in all {
     if l.world == world && l.level == level {

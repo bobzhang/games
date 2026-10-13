@@ -101,7 +101,7 @@ fn draw_texture_rect(
 /// Draws one 4x3 generated icon-sheet cell centered on the destination point.
 fn draw_icon_cell(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,

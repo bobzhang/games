@@ -1,6 +1,9 @@
 ///|
 /// Count liberties (empty adjacent cells) for a group containing the given stone
-pub fn count_liberties(board : @types.HexBoard, coord : @types.HexCoord) -> Int {
+pub fn count_liberties(
+  board : @types.HexBoard,
+  coord : @types.HexCoord,
+) -> Int32 {
   let state = @types.get_cell(board, coord)
   match state {
     Empty => 0
@@ -95,7 +98,7 @@ pub fn resolve_captures(
 fn count_group_liberties(
   board : @types.HexBoard,
   group : Array[@types.HexCoord],
-) -> Int {
+) -> Int32 {
   let mut liberties = 0
   let counted : Array[@types.HexCoord] = []
   for gi in 0..<group.length() {
@@ -149,7 +152,7 @@ pub fn evaluate_captures(
   board : @types.HexBoard,
   coord : @types.HexCoord,
   player : @types.Player,
-) -> Int {
+) -> Int32 {
   let test_board = @types.clone_board(board)
   @types.set_cell(test_board, coord, Occupied(player))
   let captured = resolve_captures(test_board, player)

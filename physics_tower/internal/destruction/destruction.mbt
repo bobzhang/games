@@ -271,7 +271,7 @@ pub fn clear_destruction(dest : @types.DestructionState) -> Unit {
 
 ///|
 /// Returns color for debris particles based on material.
-fn debris_color(mat : @types.Material) -> (Int, Int, Int) {
+fn debris_color(mat : @types.Material) -> (Int32, Int32, Int32) {
   match mat {
     Wood => (180, 140, 60)
     Stone => (160, 160, 170)
@@ -281,7 +281,7 @@ fn debris_color(mat : @types.Material) -> (Int, Int, Int) {
 
 ///|
 /// Counts the number of active particles.
-pub fn particle_count(dest : @types.DestructionState) -> Int {
+pub fn particle_count(dest : @types.DestructionState) -> Int32 {
   dest.particles.length()
 }
 

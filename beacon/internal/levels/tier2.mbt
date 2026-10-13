@@ -12,7 +12,7 @@ pub fn level_09() -> @types.LevelData {
   g[3][5] = Mountain
   g[2][4] = Mountain
   g[4][5] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -43,7 +43,7 @@ pub fn level_10() -> @types.LevelData {
   g[3][4] = Mountain
   g[4][4] = Mountain
   g[5][4] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -77,7 +77,7 @@ pub fn level_11() -> @types.LevelData {
   g[5][5] = Mountain
   g[5][6] = Mountain
   g[5][7] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -117,7 +117,7 @@ pub fn level_12() -> @types.LevelData {
   g[5][6] = Mountain
   g[6][6] = Mountain
   g[7][6] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -149,7 +149,7 @@ pub fn level_13() -> @types.LevelData {
   g[3][3] = Mountain
   g[3][7] = Mountain
   g[5][5] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -189,7 +189,7 @@ pub fn level_14() -> @types.LevelData {
   g[7][6] = Mountain
   g[2][8] = Mountain
   g[6][2] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -226,7 +226,7 @@ pub fn level_15() -> @types.LevelData {
   g[3][7] = Mountain
   g[5][7] = Mountain
   g[6][7] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -265,7 +265,7 @@ pub fn level_16() -> @types.LevelData {
   g[4][4] = Mountain
   g[4][5] = Mountain
   g[4][6] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -302,7 +302,7 @@ pub fn level_17() -> @types.LevelData {
   g[5][7] = Mountain
   g[1][5] = Mountain
   g[6][5] = Mountain
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }

@@ -30,7 +30,7 @@ pub extend GemKind with Eq::{not_equal, equal}
 
 ///|
 /// Maps a random integer bucket to a playable gem color.
-pub fn GemKind::from_int(i : Int) -> GemKind {
+pub fn GemKind::from_int(i : Int32) -> GemKind {
   match i {
     0 => Red
     1 => Green
@@ -78,23 +78,23 @@ pub fn Gem::empty() -> Gem {
 pub(all) struct Game {
   board : Array[Gem]
   mut state : GameState
-  mut score : Int
-  mut best_score : Int
-  mut moves_left : Int
-  mut target_score : Int
-  mut level : Int
-  mut combo : Int
-  mut max_combo : Int
-  mut sel_r : Int // selected row (-1 = none)
-  mut sel_c : Int // selected col (-1 = none)
-  mut swap_r1 : Int
-  mut swap_c1 : Int
-  mut swap_r2 : Int
-  mut swap_c2 : Int
-  mut hint_r1 : Int
-  mut hint_c1 : Int
-  mut hint_r2 : Int
-  mut hint_c2 : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut moves_left : Int32
+  mut target_score : Int32
+  mut level : Int32
+  mut combo : Int32
+  mut max_combo : Int32
+  mut sel_r : Int32 // selected row (-1 = none)
+  mut sel_c : Int32 // selected col (-1 = none)
+  mut swap_r1 : Int32
+  mut swap_c1 : Int32
+  mut swap_r2 : Int32
+  mut swap_c2 : Int32
+  mut hint_r1 : Int32
+  mut hint_c1 : Int32
+  mut hint_r2 : Int32
+  mut hint_c2 : Int32
   mut hint_t : Float
   mut msg : String
   mut msg_t : Float

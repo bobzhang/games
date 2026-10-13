@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(id : Int) -> @types.LevelDef {
+pub fn get_level(id : Int32) -> @types.LevelDef {
   if id >= 0 && id < all_levels.length() {
     all_levels[id]
   } else {
@@ -8,7 +8,7 @@ pub fn get_level(id : Int) -> @types.LevelDef {
 }
 
 ///|
-pub fn level_count() -> Int {
+pub fn level_count() -> Int32 {
   all_levels.length()
 }
 

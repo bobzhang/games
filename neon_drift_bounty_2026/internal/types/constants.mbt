@@ -1,38 +1,38 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Upper bound for max entities in gameplay systems.
-pub let max_entities : Int = 380
+pub let max_entities : Int32 = 380
 
 ///|
 /// Upper bound for max bullets in gameplay systems.
-pub let max_bullets : Int = 440
+pub let max_bullets : Int32 = 440
 
 ///|
 /// Upper bound for max sparks in gameplay systems.
-pub let max_sparks : Int = 760
+pub let max_sparks : Int32 = 760
 
 ///|
 /// Upper bound for max glow rings in gameplay systems.
-pub let max_glow_rings : Int = 80
+pub let max_glow_rings : Int32 = 80
 
 ///|
 /// Upper bound for max afterimages in gameplay systems.
-pub let max_afterimages : Int = 220
+pub let max_afterimages : Int32 = 220
 
 ///|
 /// Gameplay tuning constant for lanes count.
-pub let lanes_count : Int = 5
+pub let lanes_count : Int32 = 5
 
 ///|
 /// Gameplay tuning constant for lane gap.
@@ -172,7 +172,7 @@ pub let invuln_after_hit : Float = 0.62
 
 ///|
 /// Gameplay tuning constant for ui panel h.
-pub let ui_panel_h : Int = 112
+pub let ui_panel_h : Int32 = 112
 
 ///|
 /// Duration of the oil slick control reduction effect.
@@ -232,7 +232,7 @@ pub let boss_hp_per_stage : Float = 40.0
 
 ///|
 /// Score bonus for defeating a boss.
-pub let boss_kill_bonus : Int = 800
+pub let boss_kill_bonus : Int32 = 800
 
 ///|
 /// Spread upgrade extra bullet angle in degrees.
@@ -240,7 +240,7 @@ pub let spread_angle : Float = 14.0
 
 ///|
 /// Chance (percent) for elite enemies to drop a weapon module.
-pub let elite_drop_chance : Int = 18
+pub let elite_drop_chance : Int32 = 18
 
 ///|
 /// Duration of the stage transition effect.

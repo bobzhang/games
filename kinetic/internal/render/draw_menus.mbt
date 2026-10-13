@@ -69,7 +69,7 @@ fn draw_title_single_gear(
   cx : Float,
   cy : Float,
   r : Float,
-  teeth : Int,
+  teeth : Int32,
   color : @raylib.Color,
   a : Float,
 ) -> Unit {

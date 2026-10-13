@@ -41,7 +41,7 @@ pub(all) struct Obj {
   mut shot_cd : Float
   mut spin : Float
   mut cloak : Bool
-  mut reward : Int
+  mut reward : Int32
 }
 
 ///|
@@ -55,7 +55,7 @@ pub(all) struct Shot {
   mut vy : Float
   mut life : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -68,7 +68,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -79,7 +79,7 @@ pub(all) struct ShockRing {
   mut y : Float
   mut r : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -92,7 +92,7 @@ pub(all) struct Ghost {
   mut h : Float
   mut rot : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -121,14 +121,14 @@ pub(all) struct Game {
   ghosts : Array[Ghost]
   hero : Player
   mut state : GameState
-  mut stage : Int
+  mut stage : Int32
   mut distance : Float
   mut stage_goal : Float
-  mut score : Int
-  mut best_score : Int
-  mut coins : Int
-  mut kills : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut coins : Int32
+  mut kills : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut armor : Float
   mut heat : Float
@@ -157,7 +157,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

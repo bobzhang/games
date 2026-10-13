@@ -163,7 +163,7 @@ fn draw_world_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn count_world_stars(game : @types.Game, world : Int) -> Int {
+fn count_world_stars(game : @types.Game, world : Int32) -> Int32 {
   let mut total = 0
   if world < game.scores.length() {
     for l in 0..<game.scores[world].length() {
@@ -174,7 +174,7 @@ fn count_world_stars(game : @types.Game, world : Int) -> Int {
 }
 
 ///|
-fn count_world_completed(game : @types.Game, world : Int) -> Int {
+fn count_world_completed(game : @types.Game, world : Int32) -> Int32 {
   let mut total = 0
   if world < game.scores.length() {
     for l in 0..<game.scores[world].length() {

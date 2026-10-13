@@ -27,7 +27,7 @@ pub fn validate_all(
 }
 
 ///|
-fn validate_row_sum(grid : @types.Grid, params : Array[Int]) -> Bool {
+fn validate_row_sum(grid : @types.Grid, params : Array[Int32]) -> Bool {
   // params: [row, target_sum]
   let row = params[0]
   let target = params[1]
@@ -47,7 +47,7 @@ fn validate_row_sum(grid : @types.Grid, params : Array[Int]) -> Bool {
 }
 
 ///|
-fn validate_col_product(grid : @types.Grid, params : Array[Int]) -> Bool {
+fn validate_col_product(grid : @types.Grid, params : Array[Int32]) -> Bool {
   // params: [col, target_product]
   let col = params[0]
   let target = params[1]
@@ -68,7 +68,7 @@ fn validate_col_product(grid : @types.Grid, params : Array[Int]) -> Bool {
 }
 
 ///|
-fn validate_adjacent(grid : @types.Grid, params : Array[Int]) -> Bool {
+fn validate_adjacent(grid : @types.Grid, params : Array[Int32]) -> Bool {
   // params: [row1, col1, row2, col2]
   let v1 = @types.grid_get(grid, params[0], params[1])
   let v2 = @types.grid_get(grid, params[2], params[3])
@@ -79,7 +79,7 @@ fn validate_adjacent(grid : @types.Grid, params : Array[Int]) -> Bool {
 }
 
 ///|
-fn validate_no_prime_pair(grid : @types.Grid, params : Array[Int]) -> Bool {
+fn validate_no_prime_pair(grid : @types.Grid, params : Array[Int32]) -> Bool {
   // params: [row] - check entire row for adjacent primes
   let row = params[0]
   let mut has_empty = false
@@ -122,7 +122,7 @@ fn validate_no_prime_pair(grid : @types.Grid, params : Array[Int]) -> Bool {
 }
 
 ///|
-fn validate_divisible(grid : @types.Grid, params : Array[Int]) -> Bool {
+fn validate_divisible(grid : @types.Grid, params : Array[Int32]) -> Bool {
   // params: [row_a, col_a, row_b, col_b] - cell A divisible by cell B
   let va = @types.grid_get(grid, params[0], params[1])
   let vb = @types.grid_get(grid, params[2], params[3])
@@ -133,7 +133,7 @@ fn validate_divisible(grid : @types.Grid, params : Array[Int]) -> Bool {
 }
 
 ///|
-fn validate_unique(grid : @types.Grid, params : Array[Int]) -> Bool {
+fn validate_unique(grid : @types.Grid, params : Array[Int32]) -> Bool {
   // params: [0, index] for row, [1, index] for col
   let is_row = params[0] == 0
   let index = params[1]
@@ -162,8 +162,8 @@ fn validate_unique(grid : @types.Grid, params : Array[Int]) -> Bool {
 ///|
 pub fn check_cell_conflicts(
   grid : @types.Grid,
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
   constraints : Array[@types.Constraint],
 ) -> Bool {
   // Check if placing a value at (row,col) causes any currently-checkable conflict

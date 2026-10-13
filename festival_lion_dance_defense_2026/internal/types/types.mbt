@@ -24,8 +24,8 @@ pub extend Action with Eq::{not_equal, equal}
 ///|
 /// Per-frame input state captured for gameplay logic.
 pub(all) struct InputState {
-  mut move_x : Int
-  mut move_y : Int
+  mut move_x : Int32
+  mut move_y : Int32
   mut press_strike : Bool
   mut press_guard : Bool
   mut press_burst : Bool
@@ -53,7 +53,7 @@ pub fn InputState::InputState() -> InputState {
 /// Incoming threat entity moving along the parade street.
 pub(all) struct Threat {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut speed : Float
@@ -85,12 +85,12 @@ pub(all) struct Game {
   mut state : GameState
   mut troupe_x : Float
   mut troupe_y : Float
-  mut troupe_lane : Int
-  mut score : Int
-  mut best_score : Int
-  mut cleared : Int
-  mut leaked : Int
-  mut combo : Int
+  mut troupe_lane : Int32
+  mut score : Int32
+  mut best_score : Int32
+  mut cleared : Int32
+  mut leaked : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut hype : Float
   mut morale : Float

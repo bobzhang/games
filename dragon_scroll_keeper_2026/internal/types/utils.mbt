@@ -24,7 +24,7 @@ pub fn chamber_center_y() -> Float {
 
 ///|
 /// Returns a derived gameplay metric for room name.
-pub fn room_name(room : Int) -> String {
+pub fn room_name(room : Int32) -> String {
   if room == 0 {
     "Ember Archive"
   } else if room == 1 {
@@ -36,7 +36,7 @@ pub fn room_name(room : Int) -> String {
 
 ///|
 /// Returns world-space coordinates for breach anchor x.
-pub fn breach_anchor_x(room : Int) -> Float {
+pub fn breach_anchor_x(room : Int32) -> Float {
   if room == 0 {
     chamber_left + chamber_w * 0.82
   } else if room == 1 {
@@ -48,7 +48,7 @@ pub fn breach_anchor_x(room : Int) -> Float {
 
 ///|
 /// Returns world-space coordinates for breach anchor y.
-pub fn breach_anchor_y(room : Int) -> Float {
+pub fn breach_anchor_y(room : Int32) -> Float {
   if room == 0 {
     chamber_top + chamber_h * 0.24
   } else if room == 1 {
@@ -72,7 +72,7 @@ pub fn vault_core_y() -> Float {
 
 ///|
 /// Returns world-space coordinates for raider goal x.
-pub fn raider_goal_x(room : Int) -> Float {
+pub fn raider_goal_x(room : Int32) -> Float {
   if room < vault_room {
     chamber_right() - 18.0
   } else if room > vault_room {
@@ -84,7 +84,7 @@ pub fn raider_goal_x(room : Int) -> Float {
 
 ///|
 /// Returns world-space coordinates for raider goal y.
-pub fn raider_goal_y(room : Int) -> Float {
+pub fn raider_goal_y(room : Int32) -> Float {
   if room == vault_room {
     vault_core_y()
   } else {
@@ -94,7 +94,7 @@ pub fn raider_goal_y(room : Int) -> Float {
 
 ///|
 /// Returns a derived gameplay metric for wave duration.
-pub fn wave_duration(wave : Int) -> Float {
+pub fn wave_duration(wave : Int32) -> Float {
   wave_duration_base + Float::from_int(wave - 1) * wave_duration_step
 }
 
@@ -153,6 +153,6 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }

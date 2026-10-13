@@ -87,7 +87,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   game.current_level = level_idx
   game.islands = level.islands
@@ -178,7 +178,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_left_click(game : @types.Game, mx : Int, my : Int) -> Unit {
+fn handle_left_click(game : @types.Game, mx : Int32, my : Int32) -> Unit {
   let clicked = @types.find_nearest_island(game.islands, game.grid_size, mx, my)
   if game.selected_island < 0 {
     // Nothing selected - select island
@@ -239,7 +239,7 @@ fn handle_left_click(game : @types.Game, mx : Int, my : Int) -> Unit {
 }
 
 ///|
-fn handle_right_click(game : @types.Game, mx : Int, my : Int) -> Unit {
+fn handle_right_click(game : @types.Game, mx : Int32, my : Int32) -> Unit {
   // Find if clicking near a bridge
   let bridge_idx = find_bridge_at(game, mx, my)
   if bridge_idx >= 0 {
@@ -262,7 +262,7 @@ fn handle_right_click(game : @types.Game, mx : Int, my : Int) -> Unit {
 }
 
 ///|
-fn find_bridge_at(game : @types.Game, mx : Int, my : Int) -> Int {
+fn find_bridge_at(game : @types.Game, mx : Int32, my : Int32) -> Int32 {
   let click_dist : Float = 12.0
   for i, br in game.bridges {
     let ia = game.islands[br.island_a]

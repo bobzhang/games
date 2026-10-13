@@ -158,7 +158,7 @@ pub fn find_shadow_y(game : Game, px : Float, py : Float, pz : Float) -> Float {
 
 ///|
 /// Computes shadow alpha (0-255) from vertical distance to the support surface.
-pub fn shadow_alpha(py : Float, shadow_y : Float) -> Int {
+pub fn shadow_alpha(py : Float, shadow_y : Float) -> Int32 {
   let height = py - shadow_y
   if height < 0.0 {
     return 0
@@ -189,7 +189,7 @@ pub fn shadow_scale(py : Float, shadow_y : Float) -> Float {
 
 ///|
 /// Returns the first inactive particle slot index, or `-1` if full.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
@@ -200,10 +200,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -238,14 +238,14 @@ pub fn spawn_particles_dir(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
   dvx : Float,
   dvy : Float,
   dvz : Float,
   spread : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -280,12 +280,12 @@ pub fn spawn_particle_ring(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
   radius : Float,
   speed : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -318,7 +318,7 @@ pub fn spawn_particle_ring(
 
 ///|
 /// Returns the first inactive projectile slot index, or `-1` if full.
-pub fn alloc_projectile(game : Game) -> Int {
+pub fn alloc_projectile(game : Game) -> Int32 {
   @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
@@ -330,7 +330,7 @@ pub fn alloc_projectile(game : Game) -> Int {
 
 ///|
 /// Adds score using the current combo multiplier and refreshes combo timing.
-pub fn add_score(game : Game, base : Int) -> Unit {
+pub fn add_score(game : Game, base : Int32) -> Unit {
   let mult_score = Float::from_int(base) * game.combo_mult
   game.score = game.score + mult_score.to_int()
   game.combo_count += 1
@@ -358,7 +358,7 @@ pub fn trigger_cam_shake(
 
 ///|
 /// Advances the game RNG state and returns the next pseudo-random integer.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -372,7 +372,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer in the inclusive range `[low, high]`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -412,10 +412,10 @@ pub fn pulse(timer : Float, speed : Float) -> Float {
 /// - 3 stars: Complete with all gems AND under the time limit AND no deaths.
 pub fn calc_stars(
   time : Float,
-  gems : Int,
-  total_gems : Int,
-  deaths : Int,
-) -> Int {
+  gems : Int32,
+  total_gems : Int32,
+  deaths : Int32,
+) -> Int32 {
   let all_gems = gems == total_gems
   let under_time = time < star_time_threshold_1
   let no_deaths = deaths == 0
@@ -430,7 +430,7 @@ pub fn calc_stars(
 
 ///|
 /// Converts an integer decoration kind to the corresponding Deco enum value.
-pub fn deco_from_int(v : Int) -> Deco {
+pub fn deco_from_int(v : Int32) -> Deco {
   match v {
     0 => Tree
     1 => Rock

@@ -1,14 +1,14 @@
 ///|
-let sw : Int = 1200
+let sw : Int32 = 1200
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
-let lanes : Int = 4
+let lanes : Int32 = 4
 
 ///|
-fn lane_y(lane : Int) -> Float {
+fn lane_y(lane : Int32) -> Float {
   190.0 + Float::from_int(lane) * 120.0
 }
 
@@ -16,19 +16,19 @@ fn lane_y(lane : Int) -> Float {
 struct Train {
   mut alive : Bool
   mut x : Float
-  mut lane : Int
-  mut dir : Int
+  mut lane : Int32
+  mut dir : Int32
   mut speed : Float
-  mut cargo : Int // 0 red, 1 blue
-  mut gate_mask : Int
+  mut cargo : Int32 // 0 red, 1 blue
+  mut gate_mask : Int32
 }
 
 ///|
 fn spawn_train(
   trains : Array[Train],
   from_left : Bool,
-  lane : Int,
-  cargo : Int,
+  lane : Int32,
+  cargo : Int32,
 ) -> Unit {
   for train in trains {
     if !train.alive {
@@ -45,7 +45,7 @@ fn spawn_train(
 }
 
 ///|
-fn gate_bit(i : Int) -> Int {
+fn gate_bit(i : Int32) -> Int32 {
   if i == 0 {
     1
   } else if i == 1 {
@@ -56,7 +56,7 @@ fn gate_bit(i : Int) -> Int {
 }
 
 ///|
-fn apply_gate(train : Train, gate_i : Int, enabled : Bool) -> Unit {
+fn apply_gate(train : Train, gate_i : Int32, enabled : Bool) -> Unit {
   let bit = gate_bit(gate_i)
   if (train.gate_mask & bit) != 0 {
     return
@@ -87,7 +87,7 @@ fn apply_gate(train : Train, gate_i : Int, enabled : Bool) -> Unit {
 }
 
 ///|
-fn target_lane(dir : Int, cargo : Int) -> Int {
+fn target_lane(dir : Int32, cargo : Int32) -> Int32 {
   if dir > 0 {
     if cargo == 0 {
       0
@@ -109,7 +109,7 @@ fn reset_trains(trains : Array[Train]) -> Unit {
 }
 
 ///|
-fn train_color(cargo : Int) -> @raylib.Color {
+fn train_color(cargo : Int32) -> @raylib.Color {
   if cargo == 0 {
     @raylib.red
   } else {

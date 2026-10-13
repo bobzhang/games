@@ -1,5 +1,5 @@
 ///|
-fn get_node_total_mass(game : @types.Game, node_id : Int) -> Float {
+fn get_node_total_mass(game : @types.Game, node_id : Int32) -> Float {
   let mut mass : Float = 0.0
   for i in 0..<game.weights.length() {
     if game.weights[i].active && game.weights[i].node_id == node_id {
@@ -22,9 +22,9 @@ fn get_node_total_mass(game : @types.Game, node_id : Int) -> Float {
 ///|
 fn find_connected_node(
   game : @types.Game,
-  pulley_id : Int,
+  pulley_id : Int32,
   side : @types.RopeSide,
-) -> Int {
+) -> Int32 {
   for i in 0..<game.ropes.length() {
     if game.ropes[i].active && !game.ropes[i].broken {
       let r = game.ropes[i]
@@ -42,9 +42,9 @@ fn find_connected_node(
 ///|
 fn compute_side_mass_depth(
   game : @types.Game,
-  pulley_id : Int,
+  pulley_id : Int32,
   side : @types.RopeSide,
-  depth : Int,
+  depth : Int32,
 ) -> Float {
   if depth > 10 {
     return 0.0
@@ -66,7 +66,7 @@ fn compute_side_mass_depth(
 ///|
 fn compute_side_mass(
   game : @types.Game,
-  pulley_id : Int,
+  pulley_id : Int32,
   side : @types.RopeSide,
 ) -> Float {
   compute_side_mass_depth(game, pulley_id, side, 0)
@@ -75,7 +75,7 @@ fn compute_side_mass(
 ///|
 fn apply_height_change(
   game : @types.Game,
-  node_id : Int,
+  node_id : Int32,
   delta : Float,
 ) -> Unit {
   let node = game.nodes[node_id]
@@ -236,8 +236,8 @@ pub fn check_targets(game : @types.Game) -> Bool {
 ///|
 pub fn validate_connection(
   game : @types.Game,
-  from_id : Int,
-  to_id : Int,
+  from_id : Int32,
+  to_id : Int32,
 ) -> Bool {
   if from_id == to_id {
     return false

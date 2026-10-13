@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1200
+let sw : Int32 = 1200
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 /// Y coordinate of the ground line separating sky from grass.
@@ -28,7 +28,7 @@ struct Target {
   y : Float
   r : Float
   mut vx : Float
-  points : Int
+  points : Int32
 }
 
 ///|

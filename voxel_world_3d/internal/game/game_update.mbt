@@ -446,9 +446,9 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::find_surface_height(
   game : @types.Game,
-  wx : Int,
-  wz : Int,
-) -> Int {
+  wx : Int32,
+  wz : Int32,
+) -> Int32 {
   for y = @types.chunk_y - 1; y >= 0; y = y - 1 {
     let block = @types.get_world_block(game, wx, y, wz)
     if @types.is_solid(block) {
@@ -568,7 +568,7 @@ fn @types.Game::update_player_stats(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Applies incoming damage to the player, respecting invulnerability windows,
 /// and transitions to game-over state on lethal hits.
-pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
+pub fn damage_player(game : @types.Game, amount : Int32) -> Unit {
   let player = game.player
   if player.invulnerable_timer > 0.0 {
     return

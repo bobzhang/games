@@ -2,9 +2,9 @@
 /// Buildable defense node placed on a board cell.
 pub(all) struct Node {
   active : Bool
-  gx : Int
-  gy : Int
-  mut level : Int
+  gx : Int32
+  gy : Int32
+  mut level : Int32
   mut facing : Dir
   mut cooldown : Float
   mut pulse : Float
@@ -23,7 +23,7 @@ pub(all) struct Enemy {
   max_hp : Float
   speed : Float
   radius : Float
-  reward : Int
+  reward : Int32
   gate_damage : Float
   mut phase : Float
 }
@@ -49,7 +49,7 @@ pub(all) struct PulseFx {
   mut radius : Float
   mut life : Float
   max_life : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
@@ -60,28 +60,28 @@ pub(all) struct Game {
   bolts : Array[Bolt]
   pulses : Array[PulseFx]
   mut state : GameState
-  mut score : Int
-  mut best_score : Int
-  mut kills : Int
-  mut wave : Int
-  mut pending_spawns : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut kills : Int32
+  mut wave : Int32
+  mut pending_spawns : Int32
   mut spawn_cd : Float
   mut wave_delay : Float
   mut gate_hp : Float
   mut energy : Float
   mut barrier_charge : Float
   mut barrier_flash : Float
-  mut combo : Int
+  mut combo : Int32
   mut combo_timer : Float
   mut time_s : Float
   mut shake_t : Float
-  mut cursor_x : Int
-  mut cursor_y : Int
+  mut cursor_x : Int32
+  mut cursor_y : Int32
   mut cursor_dir : Dir
   mut status_text : String
   mut status_t : Float
-  mut input_move_x : Int
-  mut input_move_y : Int
+  mut input_move_x : Int32
+  mut input_move_y : Int32
   mut input_place_press : Bool
   mut input_cancel_press : Bool
   mut input_barrier_press : Bool

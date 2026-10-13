@@ -527,7 +527,7 @@ fn draw_polygon(
   cx : Float,
   cy : Float,
   radius : Float,
-  sides : Int,
+  sides : Int32,
   angle : Float,
   color : @raylib.Color,
 ) -> Unit {

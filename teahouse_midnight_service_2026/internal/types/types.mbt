@@ -3,13 +3,13 @@
 pub(all) struct Customer {
   mut active : Bool
   mut tea_type : Tea
-  mut slot : Int
+  mut slot : Int32
   mut x : Float
   mut y : Float
   mut patience : Float
   mut patience_max : Float
   mut life : Float
-  mut reward : Int
+  mut reward : Int32
   mut mood : Float
   mut served_t : Float
   mut angry : Bool
@@ -25,7 +25,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -36,7 +36,7 @@ pub(all) struct Ring {
   mut y : Float
   mut r : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -78,13 +78,13 @@ pub(all) struct Game {
   shadows : Array[Shadow]
   player : Player
   mut state : GameState
-  mut stage : Int
-  mut stage_goal : Int
-  mut score : Int
-  mut best_score : Int
-  mut served : Int
-  mut missed : Int
-  mut combo : Int
+  mut stage : Int32
+  mut stage_goal : Int32
+  mut score : Int32
+  mut best_score : Int32
+  mut served : Int32
+  mut missed : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut reputation : Float
   mut focus : Float
@@ -113,7 +113,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

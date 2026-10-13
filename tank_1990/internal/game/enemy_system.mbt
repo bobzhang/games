@@ -1,6 +1,6 @@
 ///|
 /// Finds the first inactive score popup slot and returns its index, or -1 if all slots are full.
-fn alloc_popup(game : @types.Game) -> Int {
+fn alloc_popup(game : @types.Game) -> Int32 {
   for i, slot in game.score_popups {
     if !slot.active {
       break i
@@ -12,7 +12,7 @@ fn alloc_popup(game : @types.Game) -> Int {
 
 ///|
 /// Returns the x-coordinate for an enemy spawn point based on the given lane slot (0, 1, or 2).
-fn enemy_spawn_x(slot : Int) -> Float {
+fn enemy_spawn_x(slot : Int32) -> Float {
   if slot == 0 {
     @types.enemy_spawn_x0
   } else if slot == 1 {
@@ -24,7 +24,7 @@ fn enemy_spawn_x(slot : Int) -> Float {
 
 ///|
 /// Finds the first inactive enemy slot in the enemies array and returns its index, or -1 if all slots are in use.
-fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int32 {
   for i, slot in game.enemies {
     if !slot.active {
       break i
@@ -72,7 +72,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
 fn @types.Game::choose_enemy_target_player(
   game : @types.Game,
   enemy : @types.Tank,
-) -> Int {
+) -> Int32 {
   for
     i in 0..<@types.max_players
     best_idx = -1, best_dist = Float::from_int(1000000000) {
@@ -135,7 +135,7 @@ fn @types.Game::enemy_desired_dir(
 /// Tries to move the enemy tank at the given index one step in the specified direction. Returns true if the move succeeded, or false if the path is blocked by walls, other enemies, or players.
 fn @types.Game::try_move_enemy(
   game : @types.Game,
-  enemy_index : Int,
+  enemy_index : Int32,
   dir : @types.Dir,
   dt : Float,
 ) -> Bool {
@@ -163,7 +163,7 @@ fn @types.Game::try_move_enemy(
 /// Checks whether the enemy tank at the given index should fire a bullet this frame. It considers line-of-sight to players and the base, reload cooldown, and a random chance that varies by enemy type.
 fn @types.Game::enemy_shoot_if_ready(
   game : @types.Game,
-  enemy_index : Int,
+  enemy_index : Int32,
 ) -> Unit {
   let enemy = game.enemies[enemy_index]
   if enemy.reload_timer > 0.0 || enemy.invuln_timer > 0.0 {
@@ -265,7 +265,7 @@ fn @types.Game::enemy_shoot_if_ready(
 
 ///|
 /// Activates a spawn warning indicator at the given lane position.
-fn activate_spawn_warning(game : @types.Game, lane : Int) -> Unit {
+fn activate_spawn_warning(game : @types.Game, lane : Int32) -> Unit {
   if lane >= 0 && lane < game.spawn_warnings.length() {
     game.spawn_warnings[lane].active = true
     game.spawn_warnings[lane].x = enemy_spawn_x(lane)
@@ -384,7 +384,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 /// Removes the enemy at the given index from play, awards score to the killing team with a combo multiplier, triggers an explosion effect, and may drop a random powerup.
 fn @types.Game::destroy_enemy(
   game : @types.Game,
-  enemy_index : Int,
+  enemy_index : Int32,
   killer_team : @types.Team,
 ) -> Unit {
   if !game.enemies[enemy_index].active {

@@ -76,7 +76,7 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
     let corner_angle = @types.angle_between_segments(
       cur_wp_pos, next_wp, next2_wp,
     )
-    let look_ahead : Int = if corner_angle > 30.0 { 1 } else { 2 }
+    let look_ahead : Int32 = if corner_angle > 30.0 { 1 } else { 2 }
     // Blend primary (next wp) and secondary (lookahead wp) targets
     let primary_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)
     let secondary_wp = @types.get_waypoint(
@@ -325,7 +325,7 @@ fn update_ai_timers(kart : @types.Kart, dt : Float) -> Unit {
 fn ai_scan_corners(
   game : @types.Game,
   kart : @types.Kart,
-) -> (Float, Int, Float, Float, Float) {
+) -> (Float, Int32, Float, Float, Float) {
   let wc = game.waypoint_count
   if wc < 3 {
     return (1.0, 0, 0.0, 0.0, 100.0)
@@ -374,7 +374,7 @@ fn ai_scan_corners(
 /// Updates pack racing behavior: drafting, overtaking, blocking, and local avoidance.
 fn ai_update_pack_racing(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
   dt : Float,
 ) -> Unit {
   let kart = game.karts[kart_idx]
@@ -576,7 +576,7 @@ fn ai_update_pack_racing(
 /// Updates hazard detection and avoidance for an AI kart.
 fn ai_update_hazard_avoidance(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
   dt : Float,
 ) -> Unit {
   let kart = game.karts[kart_idx]
@@ -671,7 +671,7 @@ fn ai_update_hazard_avoidance(
 fn ai_estimate_dist_to_segment(
   game : @types.Game,
   kart : @types.Kart,
-  target_seg : Int,
+  target_seg : Int32,
 ) -> Float {
   let wc = game.waypoint_count
   let mut dist = 0.0F
@@ -698,7 +698,7 @@ fn ai_estimate_dist_to_segment(
 fn ai_avoid_falling_rocks(
   game : @types.Game,
   kart : @types.Kart,
-  seg_idx : Int,
+  seg_idx : Int32,
 ) -> Unit {
   for r in 0..<game.falling_rocks_count {
     let rock = game.falling_rocks[r]
@@ -784,7 +784,7 @@ fn ai_avoid_dropped_items(game : @types.Game, kart : @types.Kart) -> Unit {
 ///|
 fn @types.Game::ai_use_item(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
   dt : Float,
 ) -> Unit {
   let kart = game.karts[kart_idx]
@@ -882,7 +882,7 @@ fn @types.Game::ai_use_item(
 ///|
 fn @types.Game::has_nearby_opponent(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
   range : Float,
 ) -> Bool {
   let kart = game.karts[kart_idx]
@@ -906,7 +906,7 @@ fn @types.Game::has_nearby_opponent(
 ///|
 fn @types.Game::has_nearby_opponent_behind(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
   range : Float,
 ) -> Bool {
   let kart = game.karts[kart_idx]

@@ -1,14 +1,14 @@
 ///|
-pub fn new_tile(kind : TileKind, elevation : Int) -> Tile {
+pub fn new_tile(kind : TileKind, elevation : Int32) -> Tile {
   { kind, elevation, has_signal: false, signal_anim: 0.0, }
 }
 
 ///|
 pub fn new_signal_path(
-  from_col : Int,
-  from_row : Int,
-  to_col : Int,
-  to_row : Int,
+  from_col : Int32,
+  from_row : Int32,
+  to_col : Int32,
+  to_row : Int32,
 ) -> SignalPath {
   { from_col, from_row, to_col, to_row, progress: 0.0, active: true, }
 }
@@ -65,42 +65,42 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn tile_screen_x(col : Int) -> Int {
+pub fn tile_screen_x(col : Int32) -> Int32 {
   grid_offset_x + col * tile_size
 }
 
 ///|
-pub fn tile_screen_y(row : Int) -> Int {
+pub fn tile_screen_y(row : Int32) -> Int32 {
   grid_offset_y + row * tile_size
 }
 
 ///|
-pub fn tile_center_x(col : Int) -> Float {
+pub fn tile_center_x(col : Int32) -> Float {
   Float::from_int(tile_screen_x(col)) + Float::from_int(tile_size) / 2.0
 }
 
 ///|
-pub fn tile_center_y(row : Int) -> Float {
+pub fn tile_center_y(row : Int32) -> Float {
   Float::from_int(tile_screen_y(row)) + Float::from_int(tile_size) / 2.0
 }
 
 ///|
-pub fn screen_to_grid_col(x : Int) -> Int {
+pub fn screen_to_grid_col(x : Int32) -> Int32 {
   (x - grid_offset_x) / tile_size
 }
 
 ///|
-pub fn screen_to_grid_row(y : Int) -> Int {
+pub fn screen_to_grid_row(y : Int32) -> Int32 {
   (y - grid_offset_y) / tile_size
 }
 
 ///|
-pub fn in_grid(col : Int, row : Int) -> Bool {
+pub fn in_grid(col : Int32, row : Int32) -> Bool {
   col >= 0 && col < grid_cols && row >= 0 && row < grid_rows
 }
 
 ///|
-pub fn tower_range(elevation : Int) -> Int {
+pub fn tower_range(elevation : Int32) -> Int32 {
   base_range + elevation
 }
 
@@ -132,7 +132,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -141,7 +141,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -166,7 +166,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn star_count(rating : StarRating) -> Int {
+pub fn star_count(rating : StarRating) -> Int32 {
   match rating {
     None => 0
     One => 1

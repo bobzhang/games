@@ -1,5 +1,5 @@
 ///|
-fn @types.Game::alloc_bomb(game : @types.Game) -> Int {
+fn @types.Game::alloc_bomb(game : @types.Game) -> Int32 {
   for i, slot in game.bombs {
     if !slot.active {
       break i
@@ -12,7 +12,7 @@ fn @types.Game::alloc_bomb(game : @types.Game) -> Int {
 ///|
 fn @types.Game::can_player_place_bomb(
   game : @types.Game,
-  player_index : Int,
+  player_index : Int32,
 ) -> Bool {
   let player = game.players[player_index]
   if !player.active {
@@ -48,7 +48,7 @@ fn @types.Game::can_player_place_bomb(
 ///|
 fn @types.Game::place_player_bomb(
   game : @types.Game,
-  player_index : Int,
+  player_index : Int32,
 ) -> Unit {
   if !game.can_player_place_bomb(player_index) {
     return
@@ -91,8 +91,8 @@ fn is_blast_blocking_tile(tile : @types.TileKind) -> Bool {
 ///|
 fn @types.Game::mark_chain_bombs(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   for b in game.bombs {
     if !b.active || b.exploding {
@@ -110,8 +110,8 @@ fn @types.Game::mark_chain_bombs(
 fn @types.Game::hit_entities_on_tile(
   game : @types.Game,
   team : @types.Team,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   for i in 0..<game.enemies.length() {
     let enemy = game.enemies[i]
@@ -140,8 +140,8 @@ fn @types.Game::hit_entities_on_tile(
 fn @types.Game::detonate_tile(
   game : @types.Game,
   team : @types.Team,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Bool {
   if !@types.in_tile_bounds(tx, ty) {
     return false
@@ -174,7 +174,7 @@ fn @types.Game::detonate_tile(
 }
 
 ///|
-fn @types.Game::trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
+fn @types.Game::trigger_bomb(game : @types.Game, bomb_index : Int32) -> Unit {
   if bomb_index < 0 || bomb_index >= game.bombs.length() {
     return
   }

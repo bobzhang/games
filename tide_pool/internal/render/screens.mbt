@@ -66,7 +66,7 @@ pub fn draw_title_screen(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_wave_decoration(game : @types.Game, y : Int) -> Unit {
+fn draw_wave_decoration(game : @types.Game, y : Int32) -> Unit {
   let frame = game.frame_count
   let wave_count = @types.screen_width / 4
   for i in 0..<wave_count {
@@ -292,10 +292,10 @@ pub fn draw_results_screen(game : @types.Game) -> Unit {
 ///|
 pub fn draw_button(
   text : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   _game : @types.Game,
 ) -> Unit {
   let mx = @raylib.get_mouse_x()

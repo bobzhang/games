@@ -1,18 +1,18 @@
 ///|
-let sw : Int = 1120
+let sw : Int32 = 1120
 
 ///|
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 struct Song {
-  mood : Int // 0 chill, 1 pop, 2 rock, 3 classic
+  mood : Int32 // 0 chill, 1 pop, 2 rock, 3 classic
   len : Float
-  energy : Int
+  energy : Int32
 }
 
 ///|
-fn mood_name(m : Int) -> String {
+fn mood_name(m : Int32) -> String {
   if m == 0 {
     "Chill"
   } else if m == 1 {
@@ -25,7 +25,7 @@ fn mood_name(m : Int) -> String {
 }
 
 ///|
-fn mood_color(m : Int) -> @raylib.Color {
+fn mood_color(m : Int32) -> @raylib.Color {
   if m == 0 {
     @raylib.skyblue
   } else if m == 1 {
@@ -46,7 +46,7 @@ fn random_song() -> Song {
 }
 
 ///|
-fn take_song(queue : Array[Song], slot : Int) -> Song {
+fn take_song(queue : Array[Song], slot : Int32) -> Song {
   let picked = queue[slot]
   if slot <= 0 {
     queue[0] = queue[1]

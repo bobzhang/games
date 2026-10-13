@@ -99,7 +99,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   game.current_level = level_idx
   game.grid = @types.make_grid(
@@ -110,7 +110,7 @@ fn start_level(game : @types.Game, level_idx : Int) -> Unit {
   )
   game.placed_sources = []
   // Copy source budget
-  let budget : Array[(@types.SourceKind, Int)] = []
+  let budget : Array[(@types.SourceKind, Int32)] = []
   for i in 0..<level.source_budget.length() {
     let (k, c) = level.source_budget[i]
     budget.push((k, c))

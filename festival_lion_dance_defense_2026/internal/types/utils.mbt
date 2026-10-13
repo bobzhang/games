@@ -1,24 +1,24 @@
 ///|
 /// Returns street width in pixels.
-pub fn street_w() -> Int {
+pub fn street_w() -> Int32 {
   street_right - street_left
 }
 
 ///|
 /// Returns total lane field height in pixels.
-pub fn street_h() -> Int {
+pub fn street_h() -> Int32 {
   (lane_count - 1) * lane_gap + lane_height
 }
 
 ///|
 /// Converts a lane index into its center Y coordinate.
-pub fn lane_y(lane : Int) -> Float {
+pub fn lane_y(lane : Int32) -> Float {
   Float::from_int(lane_top + lane * lane_gap + lane_height / 2)
 }
 
 ///|
 /// Converts world Y position into nearest lane index.
-pub fn lane_from_y(y : Float) -> Int {
+pub fn lane_from_y(y : Float) -> Int32 {
   let raw = ((y - Float::from_int(lane_top)) / Float::from_int(lane_gap)).to_int()
   raw.clamp(min=0, max=lane_count - 1)
 }

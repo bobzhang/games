@@ -294,7 +294,7 @@ fn damage_player_from_enemy(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_shell_enemy_hits(game : @types.Game, shell_index : Int) -> Unit {
+fn check_shell_enemy_hits(game : @types.Game, shell_index : Int32) -> Unit {
   let shell = game.enemies[shell_index]
   let shw = shell.width / 2.0
   let s_left = shell.x - shw

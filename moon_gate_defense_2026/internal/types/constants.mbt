@@ -1,50 +1,50 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1420
+pub let screen_w : Int32 = 1420
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 900
+pub let screen_h : Int32 = 900
 
 ///|
 /// Target frame rate for the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Number of horizontal cells on the defense board.
-pub let grid_cols : Int = 11
+pub let grid_cols : Int32 = 11
 
 ///|
 /// Number of vertical cells on the defense board.
-pub let grid_rows : Int = 7
+pub let grid_rows : Int32 = 7
 
 ///|
 /// Size of a single board cell in pixels.
-pub let cell_size : Int = 82
+pub let cell_size : Int32 = 82
 
 ///|
 /// Total board width in pixels.
-pub let board_w : Int = grid_cols * cell_size
+pub let board_w : Int32 = grid_cols * cell_size
 
 ///|
 /// Total board height in pixels.
-pub let board_h : Int = grid_rows * cell_size
+pub let board_h : Int32 = grid_rows * cell_size
 
 ///|
 /// Left edge of the board in screen coordinates.
-pub let board_x : Int = (screen_w - board_w) / 2
+pub let board_x : Int32 = (screen_w - board_w) / 2
 
 ///|
 /// Top edge of the board in screen coordinates.
-pub let board_y : Int = 168
+pub let board_y : Int32 = 168
 
 ///|
 /// Gate column index on the board grid.
-pub let gate_gx : Int = grid_cols / 2
+pub let gate_gx : Int32 = grid_cols / 2
 
 ///|
 /// Gate row index on the board grid.
-pub let gate_gy : Int = grid_rows / 2
+pub let gate_gy : Int32 = grid_rows / 2
 
 ///|
 /// Visual radius of the gate core.
@@ -60,23 +60,23 @@ pub let gate_hp_max : Float = 260.0
 
 ///|
 /// Maximum number of node slots allocated in the pool.
-pub let max_nodes : Int = grid_cols * grid_rows
+pub let max_nodes : Int32 = grid_cols * grid_rows
 
 ///|
 /// Maximum number of enemies tracked at once.
-pub let max_enemies : Int = 200
+pub let max_enemies : Int32 = 200
 
 ///|
 /// Maximum number of projectile bolts tracked at once.
-pub let max_bolts : Int = 300
+pub let max_bolts : Int32 = 300
 
 ///|
 /// Maximum number of pulse effects tracked at once.
-pub let max_pulses : Int = 320
+pub let max_pulses : Int32 = 320
 
 ///|
 /// Highest upgrade level available to a node.
-pub let node_max_level : Int = 3
+pub let node_max_level : Int32 = 3
 
 ///|
 /// Energy cost to build a level 1 node.
@@ -168,11 +168,11 @@ pub let wave_intro_delay : Float = 0.8
 
 ///|
 /// Base enemy count for the first wave.
-pub let wave_spawn_count_base : Int = 7
+pub let wave_spawn_count_base : Int32 = 7
 
 ///|
 /// Additional enemies added per wave step.
-pub let wave_spawn_count_step : Int = 3
+pub let wave_spawn_count_step : Int32 = 3
 
 ///|
 /// Initial enemy spawn interval.
@@ -212,7 +212,7 @@ pub let combo_window : Float = 2.5
 
 ///|
 /// Bonus score gained for each combo step.
-pub let combo_score_step : Int = 4
+pub let combo_score_step : Int32 = 4
 
 ///|
 /// Charge required to activate the barrier burst.
@@ -228,7 +228,7 @@ pub let barrier_charge_combo : Float = 1.8
 
 ///|
 /// Maximum combo count that contributes to barrier charge.
-pub let barrier_charge_combo_cap : Int = 12
+pub let barrier_charge_combo_cap : Int32 = 12
 
 ///|
 /// Effective radius of the barrier burst.
@@ -286,7 +286,7 @@ pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Returns the integer ordinal of an enemy kind.
-pub fn EnemyKind::to_int(self : EnemyKind) -> Int {
+pub fn EnemyKind::to_int(self : EnemyKind) -> Int32 {
   match self {
     Skitter => 0
     Carapace => 1

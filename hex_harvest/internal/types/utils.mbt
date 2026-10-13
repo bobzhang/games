@@ -23,7 +23,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -43,7 +43,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -72,7 +72,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -81,7 +81,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -97,7 +97,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 // Hex coordinate math for flat-top hexagons with odd-r offset
 
 ///|
-pub fn hex_to_pixel_x(col : Int, row : Int) -> Float {
+pub fn hex_to_pixel_x(col : Int32, row : Int32) -> Float {
   let size = Float::from_int(hex_size)
   let x_offset = Float::from_int(grid_offset_x)
   let col_f = Float::from_int(col)
@@ -110,7 +110,7 @@ pub fn hex_to_pixel_x(col : Int, row : Int) -> Float {
 }
 
 ///|
-pub fn hex_to_pixel_y(col~ : Int, row : Int) -> Float {
+pub fn hex_to_pixel_y(col~ : Int32, row : Int32) -> Float {
   ignore(col)
   let size = Float::from_int(hex_size)
   let y_offset = Float::from_int(grid_offset_y)
@@ -119,7 +119,7 @@ pub fn hex_to_pixel_y(col~ : Int, row : Int) -> Float {
 }
 
 ///|
-pub fn pixel_to_hex(px : Float, py : Float) -> (Int, Int) {
+pub fn pixel_to_hex(px : Float, py : Float) -> (Int32, Int32) {
   let size = Float::from_int(hex_size)
   // Search all tiles for closest center
   let mut best_col = -1
@@ -143,15 +143,15 @@ pub fn pixel_to_hex(px : Float, py : Float) -> (Int, Int) {
 }
 
 ///|
-pub fn hex_in_bounds(col : Int, row : Int) -> Bool {
+pub fn hex_in_bounds(col : Int32, row : Int32) -> Bool {
   col >= 0 && col < grid_cols && row >= 0 && row < grid_rows
 }
 
 // Get the 6 neighbors of a hex in odd-r offset coordinates
 
 ///|
-pub fn hex_neighbors(col : Int, row : Int) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = []
+pub fn hex_neighbors(col : Int32, row : Int32) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = []
   if row % 2 == 0 {
     // Even row neighbors
     result.push((col, row - 1)) // NE  -> (col, row-1) for even
@@ -173,7 +173,7 @@ pub fn hex_neighbors(col : Int, row : Int) -> Array[(Int, Int)] {
 }
 
 ///|
-pub fn hex_distance(c1 : Int, r1 : Int, c2 : Int, r2 : Int) -> Int {
+pub fn hex_distance(c1 : Int32, r1 : Int32, c2 : Int32, r2 : Int32) -> Int32 {
   // Convert offset to cube coordinates
   let (x1, y1, z1) = offset_to_cube(c1, r1)
   let (x2, y2, z2) = offset_to_cube(c2, r2)
@@ -181,7 +181,7 @@ pub fn hex_distance(c1 : Int, r1 : Int, c2 : Int, r2 : Int) -> Int {
 }
 
 ///|
-pub fn offset_to_cube(col : Int, row : Int) -> (Int, Int, Int) {
+pub fn offset_to_cube(col : Int32, row : Int32) -> (Int32, Int32, Int32) {
   let x = col - (row - (row & 1)) / 2
   let z = row
   let y = -x - z
@@ -191,15 +191,15 @@ pub fn offset_to_cube(col : Int, row : Int) -> (Int, Int, Int) {
 // RNG
 
 ///|
-let rng_state : Ref[Int] = { val: 42, }
+let rng_state : Ref[Int32] = { val: 42, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -210,7 +210,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -221,7 +221,7 @@ pub fn rng_int(max : Int) -> Int {
 // Constructors
 
 ///|
-pub fn new_tile(kind : TileKind, height : Int) -> HexTile {
+pub fn new_tile(kind : TileKind, height : Int32) -> HexTile {
   {
     kind,
     height,
@@ -240,7 +240,7 @@ pub fn new_tile(kind : TileKind, height : Int) -> HexTile {
 }
 
 ///|
-pub fn new_grid(width : Int, height : Int) -> HexGrid {
+pub fn new_grid(width : Int32, height : Int32) -> HexGrid {
   let tiles : Array[Array[HexTile]] = Array(capacity=height)
   for _r in 0..<height {
     let row : Array[HexTile] = Array(capacity=width)
@@ -326,7 +326,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn crop_grow_time(kind : CropKind) -> Int {
+pub fn crop_grow_time(kind : CropKind) -> Int32 {
   match kind {
     Wheat => 2
     Corn => 3
@@ -336,7 +336,7 @@ pub fn crop_grow_time(kind : CropKind) -> Int {
 }
 
 ///|
-pub fn crop_base_yield(kind : CropKind) -> Int {
+pub fn crop_base_yield(kind : CropKind) -> Int32 {
   match kind {
     Wheat => 1
     Corn => 2
@@ -398,7 +398,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn world_name(world : Int) -> String {
+pub fn world_name(world : Int32) -> String {
   match world {
     0 => "Valley"
     1 => "Hills"
@@ -454,7 +454,7 @@ pub fn restore_grid_tiles(
 }
 
 ///|
-pub fn height_color_mod(height : Int) -> Int {
+pub fn height_color_mod(height : Int32) -> Int32 {
   // Stronger contour shading - higher tiles are noticeably brighter
   match height {
     0 => -35
@@ -468,7 +468,7 @@ pub fn height_color_mod(height : Int) -> Int {
 ///|
 pub fn tile_color_with_height(
   base : @raylib.Color,
-  height : Int,
+  height : Int32,
 ) -> @raylib.Color {
   let m = height_color_mod(height)
   @raylib.Color::new(

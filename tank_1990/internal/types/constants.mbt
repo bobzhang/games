@@ -1,46 +1,46 @@
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 980
+pub let screen_width : Int32 = 980
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 760
+pub let screen_height : Int32 = 760
 
 ///|
 /// Map width in tiles.
-pub let map_tiles_w : Int = 26
+pub let map_tiles_w : Int32 = 26
 
 ///|
 /// Map height in tiles.
-pub let map_tiles_h : Int = 26
+pub let map_tiles_h : Int32 = 26
 
 ///|
 /// Tile size in pixels.
-pub let tile_size : Int = 24
+pub let tile_size : Int32 = 24
 
 ///|
 /// Map width in pixels.
-pub let map_pixel_w : Int = map_tiles_w * tile_size
+pub let map_pixel_w : Int32 = map_tiles_w * tile_size
 
 ///|
 /// Map height in pixels.
-pub let map_pixel_h : Int = map_tiles_h * tile_size
+pub let map_pixel_h : Int32 = map_tiles_h * tile_size
 
 ///|
 /// Horizontal pixel offset of the map from the window edge.
-pub let map_offset_x : Int = 36
+pub let map_offset_x : Int32 = 36
 
 ///|
 /// Vertical pixel offset of the map from the window edge.
-pub let map_offset_y : Int = 50
+pub let map_offset_y : Int32 = 50
 
 ///|
 /// Horizontal pixel position of the side panel.
-pub let panel_x : Int = map_offset_x + map_pixel_w + 20
+pub let panel_x : Int32 = map_offset_x + map_pixel_w + 20
 
 ///|
 /// Width of the side panel in pixels.
-pub let panel_w : Int = screen_width - panel_x - 24
+pub let panel_w : Int32 = screen_width - panel_x - 24
 
 ///|
 /// Tank body size in pixels.
@@ -56,31 +56,31 @@ pub let bullet_radius : Float = 3.0
 
 ///|
 /// Maximum number of simultaneous players.
-pub let max_players : Int = 2
+pub let max_players : Int32 = 2
 
 ///|
 /// Maximum number of enemy tank slots.
-pub let max_enemies : Int = 42
+pub let max_enemies : Int32 = 42
 
 ///|
 /// Maximum number of active bullets.
-pub let max_bullets : Int = 320
+pub let max_bullets : Int32 = 320
 
 ///|
 /// Maximum number of active particles.
-pub let max_particles : Int = 960
+pub let max_particles : Int32 = 960
 
 ///|
 /// Maximum number of active powerups on the field.
-pub let max_powerups : Int = 32
+pub let max_powerups : Int32 = 32
 
 ///|
 /// Total number of map tile cells.
-pub let max_tiles : Int = map_tiles_w * map_tiles_h
+pub let max_tiles : Int32 = map_tiles_w * map_tiles_h
 
 ///|
 /// Maximum enemy tanks allowed on the field simultaneously.
-pub let enemy_on_field_limit : Int = 8
+pub let enemy_on_field_limit : Int32 = 8
 
 ///|
 /// Duration of the stage introduction overlay in seconds.
@@ -160,15 +160,15 @@ pub let speed_enemy_sniper : Float = 84.0
 
 ///|
 /// Maximum number of floating score popup slots.
-pub let max_score_popups : Int = 16
+pub let max_score_popups : Int32 = 16
 
 ///|
 /// Tile X coordinate of the player base.
-pub let base_tile_x : Int = 12
+pub let base_tile_x : Int32 = 12
 
 ///|
 /// Tile Y coordinate of the player base.
-pub let base_tile_y : Int = 24
+pub let base_tile_y : Int32 = 24
 
 ///|
 /// Blink speed for menu selection cursor.
@@ -184,11 +184,11 @@ pub let camera_shake_power : Float = 7.5
 
 ///|
 /// Total number of campaign levels.
-pub let level_count : Int = 96
+pub let level_count : Int32 = 96
 
 ///|
 /// Number of distinct map tile patterns.
-pub let map_pattern_count : Int = 48
+pub let map_pattern_count : Int32 = 48
 
 ///|
 /// Team affiliation.
@@ -216,7 +216,7 @@ pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Convert an integer to a direction.
-pub fn Dir::from_int(v : Int) -> Dir {
+pub fn Dir::from_int(v : Int32) -> Dir {
   match v {
     0 => Up
     1 => Right
@@ -315,24 +315,24 @@ pub let player2_spawn_y : Float = 24.0 * Float::from_int(tile_size) + tank_half
 
 ///|
 /// Number of rows in the enemy icon grid on the side panel.
-pub let enemy_icon_rows : Int = 10
+pub let enemy_icon_rows : Int32 = 10
 
 ///|
 /// Number of columns in the enemy icon grid on the side panel.
-pub let enemy_icon_cols : Int = 2
+pub let enemy_icon_cols : Int32 = 2
 
 ///|
 /// Number of tiles forming the protective ring around the base.
-pub let base_ring_count : Int = 14
+pub let base_ring_count : Int32 = 14
 
 ///|
 /// Tile X coordinates of the base protective ring.
-pub let base_ring_x : Array[Int] = [
+pub let base_ring_x : Array[Int32] = [
   11, 12, 13, 14, 11, 14, 11, 14, 11, 12, 13, 14, 12, 13,
 ]
 
 ///|
 /// Tile Y coordinates of the base protective ring.
-pub let base_ring_y : Array[Int] = [
+pub let base_ring_y : Array[Int32] = [
   22, 22, 22, 22, 23, 23, 24, 24, 25, 25, 25, 25, 24, 24,
 ]

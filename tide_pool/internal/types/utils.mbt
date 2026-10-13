@@ -32,7 +32,7 @@ pub fn new_game() -> Game {
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }
-  let organisms_placed : Array[Int] = []
+  let organisms_placed : Array[Int32] = []
   for _i in 0..<num_organisms {
     organisms_placed.push(0)
   }
@@ -80,12 +80,12 @@ pub fn clear_grid(game : Game) -> Unit {
 }
 
 ///|
-pub fn in_grid(row : Int, col : Int) -> Bool {
+pub fn in_grid(row : Int32, col : Int32) -> Bool {
   row >= 0 && row < grid_rows && col >= 0 && col < grid_cols
 }
 
 ///|
-pub fn is_cell_rock(level : LevelDef, row : Int, col : Int) -> Bool {
+pub fn is_cell_rock(level : LevelDef, row : Int32, col : Int32) -> Bool {
   for i in 0..<level.rock_cells.length() {
     let (rr, rc) = level.rock_cells[i]
     if rr == row && rc == col {
@@ -96,7 +96,7 @@ pub fn is_cell_rock(level : LevelDef, row : Int, col : Int) -> Bool {
 }
 
 ///|
-pub fn get_depth_at_col(game : Game, col : Int) -> Int {
+pub fn get_depth_at_col(game : Game, col : Int32) -> Int32 {
   match game.current_level {
     Some(level) =>
       if col >= 0 && col < level.depth_profile.length() {
@@ -109,13 +109,13 @@ pub fn get_depth_at_col(game : Game, col : Int) -> Int {
 }
 
 ///|
-pub fn is_submerged(tide_level : Int, depth : Int, row : Int) -> Bool {
+pub fn is_submerged(tide_level : Int32, depth : Int32, row : Int32) -> Bool {
   let water_row = grid_rows - tide_level - depth
   row >= water_row
 }
 
 ///|
-pub fn get_tide_for_turn(turn : Int) -> (Int, TidePhase) {
+pub fn get_tide_for_turn(turn : Int32) -> (Int32, TidePhase) {
   let phase_in_cycle = turn % cycle_length
   match phase_in_cycle {
     0 => (1, Low)
@@ -126,7 +126,7 @@ pub fn get_tide_for_turn(turn : Int) -> (Int, TidePhase) {
 }
 
 ///|
-pub fn count_organism_on_grid(game : Game, kind : OrganismKind) -> Int {
+pub fn count_organism_on_grid(game : Game, kind : OrganismKind) -> Int32 {
   let mut count = 0
   for r in 0..<grid_rows {
     for c in 0..<grid_cols {
@@ -140,7 +140,7 @@ pub fn count_organism_on_grid(game : Game, kind : OrganismKind) -> Int {
 }
 
 ///|
-pub fn get_available_count(game : Game, kind : OrganismKind) -> Int {
+pub fn get_available_count(game : Game, kind : OrganismKind) -> Int32 {
   match game.current_level {
     None => 0
     Some(level) => {
@@ -181,7 +181,7 @@ pub fn tier_color(tier : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn compute_stars(cycles_survived : Int, total_organisms : Int) -> Int {
+pub fn compute_stars(cycles_survived : Int32, total_organisms : Int32) -> Int32 {
   if cycles_survived < total_cycles {
     0
   } else if total_organisms <= 3 {
@@ -194,7 +194,7 @@ pub fn compute_stars(cycles_survived : Int, total_organisms : Int) -> Int {
 }
 
 ///|
-pub fn total_stars(scores : Array[LevelScore]) -> Int {
+pub fn total_stars(scores : Array[LevelScore]) -> Int32 {
   let mut total = 0
   for i in 0..<scores.length() {
     total += scores[i].stars
@@ -203,7 +203,7 @@ pub fn total_stars(scores : Array[LevelScore]) -> Int {
 }
 
 ///|
-pub fn levels_completed(scores : Array[LevelScore]) -> Int {
+pub fn levels_completed(scores : Array[LevelScore]) -> Int32 {
   let mut count = 0
   for i in 0..<scores.length() {
     if scores[i].completed {
@@ -214,7 +214,7 @@ pub fn levels_completed(scores : Array[LevelScore]) -> Int {
 }
 
 ///|
-pub fn is_level_unlocked(scores : Array[LevelScore], level_id : Int) -> Bool {
+pub fn is_level_unlocked(scores : Array[LevelScore], level_id : Int32) -> Bool {
   if level_id == 0 {
     return true
   }

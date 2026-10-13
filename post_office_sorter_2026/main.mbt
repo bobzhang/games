@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1140
+let sw : Int32 = 1140
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
 /// Number of conveyor lanes on the sorting floor.
-let lane_count : Int = 4
+let lane_count : Int32 = 4
 
 ///|
 /// Returns the vertical pixel center for a given lane index.
-fn lane_y(lane : Int) -> Float {
+fn lane_y(lane : Int32) -> Float {
   220.0 + Float::from_int(lane) * 105.0
 }
 
@@ -22,8 +22,8 @@ struct Package {
   mut alive : Bool
   mut x : Float
   mut y : Float
-  mut lane : Int
-  mut code : Int // 0..3 destination
+  mut lane : Int32
+  mut code : Int32 // 0..3 destination
   mut speed : Float
 }
 
@@ -54,7 +54,7 @@ fn spawn_package(ps : Array[Package]) -> Unit {
 
 ///|
 /// Returns the display color associated with a destination code (0=red, 1=sky, 2=lime, 3=gold).
-fn code_color(code : Int) -> @raylib.Color {
+fn code_color(code : Int32) -> @raylib.Color {
   if code == 0 {
     @raylib.red
   } else if code == 1 {
@@ -68,7 +68,7 @@ fn code_color(code : Int) -> @raylib.Color {
 
 ///|
 /// Returns the single-letter label for a destination code (0=A, 1=B, 2=C, 3=D).
-fn code_label(code : Int) -> String {
+fn code_label(code : Int32) -> String {
   if code == 0 {
     "A"
   } else if code == 1 {
@@ -95,7 +95,7 @@ fn main {
   let mut sorter_x : Float = 560.0
   let sorter_width : Float = 120.0
 
-  let mut chute_map : Array[Int] = [0, 1, 2, 3] // lane->code
+  let mut chute_map : Array[Int32] = [0, 1, 2, 3] // lane->code
 
   let mut spawn_tick : Float = 0.0
   let mut score = 0

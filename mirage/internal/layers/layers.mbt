@@ -18,7 +18,7 @@ pub fn inactive_tiles(game : @types.Game) -> Array[@types.Tile] {
 
 ///|
 /// Check if a position is walkable in the current state
-pub fn can_walk(game : @types.Game, x : Int, y : Int) -> Bool {
+pub fn can_walk(game : @types.Game, x : Int32, y : Int32) -> Bool {
   if !@types.valid_pos(x, y) {
     return false
   }
@@ -68,7 +68,7 @@ pub fn toggle_merge(game : @types.Game) -> Unit {
 
 ///|
 /// Activate a switch: toggle Platform tiles in the specified group
-pub fn activate_switch(game : @types.Game, switch_id : Int) -> Unit {
+pub fn activate_switch(game : @types.Game, switch_id : Int32) -> Unit {
   if switch_id < game.switch_states.length() {
     game.switch_states[switch_id] = !game.switch_states[switch_id]
   }
@@ -81,7 +81,7 @@ pub fn activate_switch(game : @types.Game, switch_id : Int) -> Unit {
 ///|
 fn toggle_platforms_for_switch(
   tiles : Array[@types.Tile],
-  _switch_id : Int,
+  _switch_id : Int32,
 ) -> Unit {
   for i in 0..<tiles.length() {
     match tiles[i] {
@@ -131,7 +131,7 @@ pub fn check_gem(game : @types.Game) -> Bool {
 
 ///|
 /// Check if the player is on a switch tile and return its ID
-pub fn check_switch(game : @types.Game) -> Int {
+pub fn check_switch(game : @types.Game) -> Int32 {
   let x = game.player.grid_x
   let y = game.player.grid_y
   let tiles = active_tiles(game)
@@ -163,10 +163,10 @@ pub fn collect_gem(game : @types.Game) -> Unit {
 ///|
 /// Calculate stars for level completion
 pub fn calc_stars(
-  swap_count : Int,
-  par_swaps : Int,
+  swap_count : Int32,
+  par_swaps : Int32,
   gem_collected : Bool,
-) -> Int {
+) -> Int32 {
   let mut stars = 1 // Always get 1 star for completing
   if swap_count <= par_swaps {
     stars = 2

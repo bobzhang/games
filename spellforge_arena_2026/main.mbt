@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 let world_w : Float = 3400.0
@@ -11,16 +11,16 @@ let world_w : Float = 3400.0
 let world_h : Float = 2400.0
 
 ///|
-let max_enemies : Int = 68
+let max_enemies : Int32 = 68
 
 ///|
-let max_projectiles : Int = 620
+let max_projectiles : Int32 = 620
 
 ///|
-let max_orbs : Int = 96
+let max_orbs : Int32 = 96
 
 ///|
-let max_particles : Int = 1500
+let max_particles : Int32 = 1500
 
 ///|
 struct Mage {
@@ -40,14 +40,14 @@ struct Mage {
   mut hit_cd : Float
   mut flash_t : Float
   mut shake_t : Float
-  mut score : Int
-  mut combo : Int
+  mut score : Int32
+  mut combo : Int32
 }
 
 ///|
 struct Enemy {
   mut active : Bool
-  kind : Int
+  kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -62,7 +62,7 @@ struct Enemy {
 ///|
 struct Projectile {
   mut active : Bool
-  kind : Int
+  kind : Int32
   from_player : Bool
   mut x : Float
   mut y : Float
@@ -75,10 +75,10 @@ struct Projectile {
 ///|
 struct Orb {
   mut active : Bool
-  kind : Int
+  kind : Int32
   x : Float
   y : Float
-  value : Int
+  value : Int32
   mut t : Float
   mut life : Float
 }
@@ -93,7 +93,7 @@ struct Particle {
   size : Float
   mut t : Float
   life : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
@@ -124,10 +124,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(x)
   let y0 : Float = Float::from_int(y)
@@ -145,7 +145,7 @@ fn emit_particle(
   vy : Float,
   size : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
@@ -160,9 +160,9 @@ fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _ in 0..<count {
     let mut dx : Float = randf(-1.0, 1.0)
@@ -193,7 +193,7 @@ fn burst_particles(
 ///|
 fn spawn_projectile(
   projectiles : FixedArray[Projectile],
-  kind : Int,
+  kind : Int32,
   from_player : Bool,
   x : Float,
   y : Float,
@@ -225,8 +225,8 @@ fn spawn_orb(
   orbs : FixedArray[Orb],
   x : Float,
   y : Float,
-  kind : Int,
-  value : Int,
+  kind : Int32,
+  value : Int32,
 ) -> Unit {
   for i in 0..<orbs.length() {
     if !orbs[i].active {
@@ -239,14 +239,14 @@ fn spawn_orb(
 ///|
 fn spawn_enemy(
   enemies : FixedArray[Enemy],
-  level : Int,
+  level : Int32,
   center_x : Float,
   center_y : Float,
 ) -> Unit {
   for i in 0..<enemies.length() {
     if !enemies[i].active {
-      let edge : Int = @raylib.get_random_value(0, 3)
-      let kind : Int = if @raylib.get_random_value(0, 100) < 25 + level * 6 {
+      let edge : Int32 = @raylib.get_random_value(0, 3)
+      let kind : Int32 = if @raylib.get_random_value(0, 100) < 25 + level * 6 {
         1
       } else {
         0
@@ -300,14 +300,14 @@ fn spawn_enemy(
 ///|
 fn init_wave(
   enemies : FixedArray[Enemy],
-  level : Int,
+  level : Int32,
   center_x : Float,
   center_y : Float,
 ) -> Unit {
   for enemy in enemies {
     enemy.active = false
   }
-  let initial : Int = 14 + level * 4
+  let initial : Int32 = 14 + level * 4
   for _ in 0..<initial {
     spawn_enemy(enemies, level, center_x, center_y)
   }
@@ -315,10 +315,10 @@ fn init_wave(
 
 ///|
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fg : @raylib.Color,
   bg : @raylib.Color,
@@ -347,9 +347,9 @@ fn draw_touch_controls(show : Bool) -> Unit {
     return
   }
 
-  let pad_x : Int = 24
-  let pad_y : Int = sh - 228
-  let act_x : Int = sw - 234
+  let pad_x : Int32 = 24
+  let pad_y : Int32 = sh - 228
+  let act_x : Int32 = sw - 234
 
   @raylib.draw_rectangle(
     pad_x,
@@ -552,13 +552,13 @@ fn main {
     combo: 0,
   }
 
-  let mut level : Int = 1
+  let mut level : Int32 = 1
   let mut timer : Float = 164.0
   let mut spawn_cd : Float = 1.0
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut announce_t : Float = 0.0
 
-  let reset_round = fn(new_level : Int) {
+  let reset_round = fn(new_level : Int32) {
     level = new_level
 
     timer = 168.0 - Float::from_int(level - 1) * 9.0
@@ -644,9 +644,9 @@ fn main {
     let mut dash_press : Bool = @raylib.is_key_pressed(@raylib.KeySpace) ||
       @raylib.is_key_pressed(@raylib.KeyLeftShift)
 
-    let pad_x : Int = 24
-    let pad_y : Int = sh - 228
-    let act_x : Int = sw - 234
+    let pad_x : Int32 = 24
+    let pad_y : Int32 = sh - 228
+    let act_x : Int32 = sw - 234
 
     if touching {
       if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 62, 78, 78) {
@@ -882,7 +882,7 @@ fn main {
       if storm_press && mage.storm_cd <= 0.0 && mage.mana >= 60.0 {
         mage.mana = mage.mana - 60.0
         mage.storm_cd = 7.2
-        let mut hits : Int = 0
+        let mut hits : Int32 = 0
         for _j in 0..<8 {
           for i, enemy in enemies; best = -1, best_d2 = 99999999.0F {
             if !enemy.active {
@@ -1074,19 +1074,19 @@ fn main {
 
         if enemy.hp <= 0.0 {
           enemy.active = false
-          let orb_kind : Int = if @raylib.get_random_value(0, 100) < 30 {
+          let orb_kind : Int32 = if @raylib.get_random_value(0, 100) < 30 {
             1
           } else {
             0
           }
-          let orb_value : Int = if orb_kind == 0 {
+          let orb_value : Int32 = if orb_kind == 0 {
             20 + level * 4
           } else {
             26 + level * 5
           }
           spawn_orb(orbs, enemy.x, enemy.y, orb_kind, orb_value)
 
-          let kill_score : Int = if enemy.kind == 0 { 24 } else { 52 }
+          let kill_score : Int32 = if enemy.kind == 0 { 24 } else { 52 }
           mage.score = mage.score + kill_score + mage.combo
           mage.combo = mage.combo + 1
           if mage.combo > 60 {
@@ -1209,7 +1209,7 @@ fn main {
 
     let mut gx : Float = 0.0
     while gx <= world_w {
-      let sx : Int = (gx - cam_x + shake_x).to_int()
+      let sx : Int32 = (gx - cam_x + shake_x).to_int()
       if sx >= -2 && sx <= sw + 2 {
         @raylib.draw_line(sx, 0, sx, sh, @raylib.Color::new(44, 62, 86, 110))
       }
@@ -1218,7 +1218,7 @@ fn main {
 
     let mut gy : Float = 0.0
     while gy <= world_h {
-      let sy : Int = (gy - cam_y + shake_y).to_int()
+      let sy : Int32 = (gy - cam_y + shake_y).to_int()
       if sy >= -2 && sy <= sh + 2 {
         @raylib.draw_line(0, sy, sw, sy, @raylib.Color::new(44, 62, 86, 110))
       }
@@ -1370,7 +1370,7 @@ fn main {
         continue
       }
       let life_r : Float = 1.0 - particle.t / particle.life
-      let alpha : Int = clampf(life_r * 220.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(life_r * 220.0, 0.0, 220.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(252, 184, 122, alpha)
       } else if particle.kind == 1 {
@@ -1503,7 +1503,7 @@ fn main {
     )
 
     if announce_t > 0.0 {
-      let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
       @draw.draw_text(
         "Chain spell effects to build combo and survive the arena.",
         sw / 2 - 372,

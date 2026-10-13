@@ -4,7 +4,7 @@ pub fn new_cell() -> TreeCell {
 }
 
 ///|
-pub fn new_grid(w : Int, h : Int) -> TreeGrid {
+pub fn new_grid(w : Int32, h : Int32) -> TreeGrid {
   let cells : Array[TreeCell] = Array(capacity=w * h)
   for _i in 0..<(w * h) {
     cells.push(new_cell())
@@ -13,25 +13,25 @@ pub fn new_grid(w : Int, h : Int) -> TreeGrid {
 }
 
 ///|
-pub fn grid_index(g : TreeGrid, x : Int, y : Int) -> Int {
+pub fn grid_index(g : TreeGrid, x : Int32, y : Int32) -> Int32 {
   y * g.width + x
 }
 
 ///|
-pub fn grid_in_bounds(g : TreeGrid, x : Int, y : Int) -> Bool {
+pub fn grid_in_bounds(g : TreeGrid, x : Int32, y : Int32) -> Bool {
   x >= 0 && x < g.width && y >= 0 && y < g.height
 }
 
 ///|
-pub fn grid_get(g : TreeGrid, x : Int, y : Int) -> TreeCell {
+pub fn grid_get(g : TreeGrid, x : Int32, y : Int32) -> TreeCell {
   g.cells[grid_index(g, x, y)]
 }
 
 ///|
 pub fn grid_set_kind(
   g : TreeGrid,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   kind : CellKind,
   dir : GrowthDir,
 ) -> Unit {
@@ -83,7 +83,7 @@ pub fn restore_grid(g : TreeGrid, snap : GridSnapshot) -> Unit {
 }
 
 ///|
-pub fn fork_interval(species : Species) -> Int {
+pub fn fork_interval(species : Species) -> Int32 {
   match species {
     Pine => pine_fork_interval
     Maple => maple_fork_interval
@@ -119,7 +119,7 @@ pub fn tier_species(tier : Tier) -> Species {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Tier1 => 8
     Tier2 => 9
@@ -128,7 +128,7 @@ pub fn tier_level_count(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_offset(tier : Tier) -> Int {
+pub fn tier_level_offset(tier : Tier) -> Int32 {
   match tier {
     Tier1 => 0
     Tier2 => 8
@@ -171,27 +171,27 @@ pub fn is_solid(kind : CellKind) -> Bool {
 }
 
 ///|
-pub fn cell_screen_x(gx : Int) -> Int {
+pub fn cell_screen_x(gx : Int32) -> Int32 {
   grid_offset_x + gx * cell_render_size
 }
 
 ///|
-pub fn cell_screen_y(gy : Int) -> Int {
+pub fn cell_screen_y(gy : Int32) -> Int32 {
   grid_offset_y + gy * cell_render_size
 }
 
 ///|
-pub fn screen_to_grid_x(sx : Int) -> Int {
+pub fn screen_to_grid_x(sx : Int32) -> Int32 {
   (sx - grid_offset_x) / cell_render_size
 }
 
 ///|
-pub fn screen_to_grid_y(sy : Int) -> Int {
+pub fn screen_to_grid_y(sy : Int32) -> Int32 {
   (sy - grid_offset_y) / cell_render_size
 }
 
 ///|
-pub fn dir_dx(dir : GrowthDir) -> Int {
+pub fn dir_dx(dir : GrowthDir) -> Int32 {
   match dir {
     Up => 0
     UpLeft => -1
@@ -202,7 +202,7 @@ pub fn dir_dx(dir : GrowthDir) -> Int {
 }
 
 ///|
-pub fn dir_dy(dir : GrowthDir) -> Int {
+pub fn dir_dy(dir : GrowthDir) -> Int32 {
   match dir {
     Up => -1
     UpLeft => -1
@@ -253,7 +253,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -262,7 +262,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -271,7 +271,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn absi(a : Int) -> Int {
+pub fn absi(a : Int32) -> Int32 {
   if a < 0 {
     -a
   } else {

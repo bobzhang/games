@@ -833,7 +833,7 @@ fn draw_hud(level : @types.Level, game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star_rating(x : Int, y : Int, stars : Int, size : Float) -> Unit {
+fn draw_star_rating(x : Int32, y : Int32, stars : Int32, size : Float) -> Unit {
   for i in 0..<3 {
     let sx = Float::from_int(x + i * (size.to_int() + 8))
     let sy = Float::from_int(y)
@@ -1197,10 +1197,10 @@ fn draw_statistics(game : @types.Game) -> Unit {
 /// Draw the level select screen with best moves info
 fn draw_level_best_info(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  world : Int,
-  level : Int,
+  bx : Int32,
+  by : Int32,
+  world : Int32,
+  level : Int32,
 ) -> Unit {
   let best = @game.get_best_moves(game, world, level)
   if best < 999 {
@@ -1291,7 +1291,7 @@ fn draw_high_contrast_overlays(level : @types.Level) -> Unit {
 
 ///|
 /// Get text size based on accessibility mode
-fn get_text_size(game : @types.Game, base : Int) -> Int {
+fn get_text_size(game : @types.Game, base : Int32) -> Int32 {
   match game.accessibility {
     LargeText => {
       let scaled = (Float::from_int(base) * 1.4).to_int()
@@ -1303,7 +1303,7 @@ fn get_text_size(game : @types.Game, base : Int) -> Int {
 
 ///|
 /// Count unlocked achievements (used by render)
-fn count_achievements_unlocked(game : @types.Game) -> Int {
+fn count_achievements_unlocked(game : @types.Game) -> Int32 {
   let mut count = 0
   for i in 0..<game.achievement_state.achievements.length() {
     if game.achievement_state.achievements[i].unlocked {

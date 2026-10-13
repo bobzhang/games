@@ -3,13 +3,13 @@
 ///|
 fn mk3(
   name : String,
-  top : Array[Int],
-  front : Array[Int],
-  side : Array[Int],
-  budget : Int,
+  top : Array[Int32],
+  front : Array[Int32],
+  side : Array[Int32],
+  budget : Int32,
   connected : Bool,
-  par_moves : Int,
-  par_voxels : Int,
+  par_moves : Int32,
+  par_voxels : Int32,
   tier : @types.Tier,
 ) -> @types.Level {
   let t = @types.silhouette_from_bits(3, 3, top)
@@ -32,13 +32,13 @@ fn mk3(
 ///|
 fn mk4(
   name : String,
-  top : Array[Int],
-  front : Array[Int],
-  side : Array[Int],
-  budget : Int,
+  top : Array[Int32],
+  front : Array[Int32],
+  side : Array[Int32],
+  budget : Int32,
   connected : Bool,
-  par_moves : Int,
-  par_voxels : Int,
+  par_moves : Int32,
+  par_voxels : Int32,
   tier : @types.Tier,
 ) -> @types.Level {
   let t = @types.silhouette_from_bits(4, 4, top)
@@ -61,13 +61,13 @@ fn mk4(
 ///|
 fn mk5(
   name : String,
-  top : Array[Int],
-  front : Array[Int],
-  side : Array[Int],
-  budget : Int,
+  top : Array[Int32],
+  front : Array[Int32],
+  side : Array[Int32],
+  budget : Int32,
   connected : Bool,
-  par_moves : Int,
-  par_voxels : Int,
+  par_moves : Int32,
+  par_voxels : Int32,
   tier : @types.Tier,
 ) -> @types.Level {
   let t = @types.silhouette_from_bits(5, 5, top)
@@ -456,7 +456,7 @@ pub fn get_all_levels() -> Array[@types.Level] {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   let levels = get_all_levels()
   levels[index]
 }

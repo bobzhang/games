@@ -75,12 +75,12 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_bg_gears(frame : Int) -> Unit {
+fn draw_bg_gears(frame : Int32) -> Unit {
   let time = Float::from_int(frame) * 0.01
   let gx : Array[Float] = [150.0, 400.0, 900.0, 1100.0, 700.0]
   let gy : Array[Float] = [200.0, 500.0, 150.0, 450.0, 600.0]
   let gr : Array[Float] = [60.0, 40.0, 50.0, 45.0, 55.0]
-  let gt : Array[Int] = [12, 8, 10, 9, 11]
+  let gt : Array[Int32] = [12, 8, 10, 9, 11]
   for i in 0..<5 {
     let fi = Float::from_int(i)
     let dir : Float = if i % 2 == 0 { 1.0 } else { -1.0 }
@@ -99,10 +99,10 @@ fn draw_bg_gears(frame : Int) -> Unit {
 
 ///|
 fn draw_gear_shape(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   radius : Float,
-  teeth : Int,
+  teeth : Int32,
   angle : Float,
   color : @raylib.Color,
 ) -> Unit {
@@ -236,7 +236,12 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star(cx : Int, cy : Int, size : Float, color : @raylib.Color) -> Unit {
+fn draw_star(
+  cx : Int32,
+  cy : Int32,
+  size : Float,
+  color : @raylib.Color,
+) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   // Simple 5-point star
@@ -366,8 +371,8 @@ fn draw_components(game : @types.Game) -> Unit {
 
 ///|
 fn draw_gear_component(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   size : @types.GearSize,
   comp : @types.Component,
 ) -> Unit {
@@ -393,7 +398,7 @@ fn draw_gear_component(
 }
 
 ///|
-fn draw_cam_component(cx : Int, cy : Int, comp : @types.Component) -> Unit {
+fn draw_cam_component(cx : Int32, cy : Int32, comp : @types.Component) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   // Cam body - ellipse-like shape
@@ -426,7 +431,11 @@ fn draw_cam_component(cx : Int, cy : Int, comp : @types.Component) -> Unit {
 }
 
 ///|
-fn draw_spring_component(cx : Int, cy : Int, comp : @types.Component) -> Unit {
+fn draw_spring_component(
+  cx : Int32,
+  cy : Int32,
+  comp : @types.Component,
+) -> Unit {
   let r : Float = 18.0
   // Spring coils
   let energy = comp.spring_energy
@@ -480,8 +489,8 @@ fn draw_spring_component(cx : Int, cy : Int, comp : @types.Component) -> Unit {
 
 ///|
 fn draw_escapement_component(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   comp : @types.Component,
 ) -> Unit {
   let fcx = Float::from_int(cx)
@@ -519,7 +528,7 @@ fn draw_escapement_component(
 }
 
 ///|
-fn draw_bell_component(cx : Int, cy : Int, comp : @types.Component) -> Unit {
+fn draw_bell_component(cx : Int32, cy : Int32, comp : @types.Component) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   let ringing = comp.bell_ring_timer > 0.0
@@ -816,7 +825,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_bell_rung_at(game : @types.Game, target_tick : Int) -> Bool {
+fn check_bell_rung_at(game : @types.Game, target_tick : Int32) -> Bool {
   for i in 0..<game.sim.bells_rung.length() {
     if game.sim.bells_rung[i] == target_tick {
       return true

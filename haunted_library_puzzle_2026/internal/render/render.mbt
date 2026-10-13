@@ -179,7 +179,7 @@ fn draw_texture_fit(
 
 ///|
 /// Returns a random horizontal pixel offset when the screen-shake timer is active, or 0 otherwise.
-fn @types.Game::shake_dx(game : @types.Game) -> Int {
+fn @types.Game::shake_dx(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -189,7 +189,7 @@ fn @types.Game::shake_dx(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical pixel offset when the screen-shake timer is active, or 0 otherwise.
-fn @types.Game::shake_dy(game : @types.Game) -> Int {
+fn @types.Game::shake_dy(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -206,8 +206,8 @@ fn @types.Game::pulse(game : @types.Game, f : Float) -> Float {
 ///|
 /// Draws the deep-blue gradient background and the dark board backing rectangle.
 fn @types.Game::draw_background(game : @types.Game) -> Unit {
-  let a0 : Int = 24 + (game.pulse(0.34) * 20.0).to_int()
-  let a1 : Int = 36 + (game.pulse(0.52) * 26.0).to_int()
+  let a0 : Int32 = 24 + (game.pulse(0.34) * 20.0).to_int()
+  let a1 : Int32 = 36 + (game.pulse(0.52) * 26.0).to_int()
 
   @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
@@ -259,11 +259,15 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the base grid of floor and wall tiles with checkerboard shading and border lines.
-fn @types.Game::draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_grid_base(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
-      let rx : Int = @types.board_px(x) + ox
-      let ry : Int = @types.board_py(y) + oy
+      let rx : Int32 = @types.board_px(x) + ox
+      let ry : Int32 = @types.board_py(y) + oy
       let t : @types.Tile = game.map[y * @types.grid_w + x]
 
       match t {
@@ -279,7 +283,7 @@ fn @types.Game::draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
                 @raylib.white,
               )
             None => {
-              let shade : Int = if (x + y) % 2 == 0 { 62 } else { 72 }
+              let shade : Int32 = if (x + y) % 2 == 0 { 62 } else { 72 }
               @raylib.draw_rectangle(
                 rx,
                 ry,
@@ -328,7 +332,7 @@ fn @types.Game::draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
               )
             }
             None => {
-              let floor_tint : Int = if (x + y) % 2 == 0 { 34 } else { 38 }
+              let floor_tint : Int32 = if (x + y) % 2 == 0 { 34 } else { 38 }
               @raylib.draw_rectangle(
                 rx,
                 ry,
@@ -353,7 +357,11 @@ fn @types.Game::draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Returns the shelf index at grid cell `(x, y)` for rendering purposes, or -1 if absent.
-fn @types.Game::shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::shelf_index_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Int32 {
   for i in 0..<game.shelf_n {
     if game.shelf_x[i] == x && game.shelf_y[i] == y {
       return i
@@ -364,7 +372,7 @@ fn @types.Game::shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Returns the seal index for grid cell `(x, y)`, or -1 if the cell is not a seal position.
-fn seal_index_at(x : Int, y : Int) -> Int {
+fn seal_index_at(x : Int32, y : Int32) -> Int32 {
   for i in 0..<@types.seal_need {
     let p = @types.seal_pos(i)
     if p.0 == x && p.1 == y {
@@ -376,14 +384,14 @@ fn seal_index_at(x : Int, y : Int) -> Int {
 
 ///|
 /// Draws the three arcane seal circles with pulsing glow; filled green when a shelf is on top.
-fn @types.Game::draw_seals(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_seals(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   for i in 0..<@types.seal_need {
     let p = @types.seal_pos(i)
-    let cx : Int = @types.board_px(p.0) + @types.cell / 2 + ox
-    let cy : Int = @types.board_py(p.1) + @types.cell / 2 + oy
+    let cx : Int32 = @types.board_px(p.0) + @types.cell / 2 + ox
+    let cy : Int32 = @types.board_py(p.1) + @types.cell / 2 + oy
     let on : Bool = game.shelf_index_at(p.0, p.1) >= 0
 
-    let glow : Int = if on {
+    let glow : Int32 = if on {
       210
     } else {
       100 + (game.pulse(2.0 + Float::from_int(i)) * 66.0).to_int()
@@ -445,18 +453,18 @@ fn @types.Game::draw_seals(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all uncollected pages as parchment rectangles with ruled lines and a soft glow aura.
-fn @types.Game::draw_pages(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_pages(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   for i in 0..<@types.max_pages {
     if game.page_taken[i] {
       continue
     }
 
-    let x : Int = game.page_x[i]
-    let y : Int = game.page_y[i]
-    let rx : Int = @types.board_px(x) + 14 + ox
-    let ry : Int = @types.board_py(y) + 12 + oy
+    let x : Int32 = game.page_x[i]
+    let y : Int32 = game.page_y[i]
+    let rx : Int32 = @types.board_px(x) + 14 + ox
+    let ry : Int32 = @types.board_py(y) + 12 + oy
 
-    let glow : Int = 156 +
+    let glow : Int32 = 156 +
       (game.pulse(1.6 + Float::from_int(i) * 0.4) * 70.0).to_int()
 
     @raylib.draw_circle(
@@ -514,12 +522,16 @@ fn @types.Game::draw_pages(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all movable bookshelves; highlights in a warmer tone when positioned on a seal circle.
-fn @types.Game::draw_shelves(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_shelves(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for i in 0..<game.shelf_n {
-    let x : Int = game.shelf_x[i]
-    let y : Int = game.shelf_y[i]
-    let rx : Int = @types.board_px(x) + 6 + ox
-    let ry : Int = @types.board_py(y) + 8 + oy
+    let x : Int32 = game.shelf_x[i]
+    let y : Int32 = game.shelf_y[i]
+    let rx : Int32 = @types.board_px(x) + 6 + ox
+    let ry : Int32 = @types.board_py(y) + 8 + oy
 
     let on_seal : Bool = seal_index_at(x, y) >= 0
 
@@ -589,9 +601,9 @@ fn @types.Game::draw_shelves(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the exit gate tile: green open state with a glowing dot, or locked blue-grey with crossed lines.
-fn @types.Game::draw_gate(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  let rx : Int = @types.board_px(@types.exit_x) + 4 + ox
-  let ry : Int = @types.board_py(@types.exit_y) + 4 + oy
+fn @types.Game::draw_gate(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
+  let rx : Int32 = @types.board_px(@types.exit_x) + 4 + ox
+  let ry : Int32 = @types.board_py(@types.exit_y) + 4 + oy
 
   let gate_col = if game.gate_open {
     @raylib.Color::new(118, 210, 146, 232)
@@ -664,9 +676,9 @@ fn @types.Game::draw_gate(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the player character as a blue circle with face details; blinks during invincibility flash.
-fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  let cx : Int = @types.cell_center_x(game.player.fx) + ox
-  let cy : Int = @types.cell_center_y(game.player.fy) + oy
+fn @types.Game::draw_player(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
+  let cx : Int32 = @types.cell_center_x(game.player.fx) + ox
+  let cy : Int32 = @types.cell_center_y(game.player.fy) + oy
 
   let blink : Bool = game.flash_t > 0.0 &&
     (game.flash_t * 14.0).to_int() % 2 == 0
@@ -730,18 +742,18 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 fn draw_ghost(
   g : @types.Ghost,
   game : @types.Game,
-  ox : Int,
-  oy : Int,
-  i : Int,
+  ox : Int32,
+  oy : Int32,
+  i : Int32,
 ) -> Unit {
   if !g.active {
     return
   }
 
-  let cx : Int = @types.cell_center_x(g.body.fx) + ox
-  let cy : Int = @types.cell_center_y(g.body.fy) + oy
+  let cx : Int32 = @types.cell_center_x(g.body.fx) + ox
+  let cy : Int32 = @types.cell_center_y(g.body.fy) + oy
 
-  let bob : Int = (game.pulse(4.6 + Float::from_int(i)) * 5.0).to_int()
+  let bob : Int32 = (game.pulse(4.6 + Float::from_int(i)) * 5.0).to_int()
 
   let body_col = match g.mode {
     Stunned => @raylib.Color::new(146, 132, 248, 214)
@@ -791,7 +803,11 @@ fn draw_ghost(
 
 ///|
 /// Draws all active particles as coloured circles at their interpolated positions.
-fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for particle in game.particles {
     if !particle.active {
       continue
@@ -814,7 +830,7 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the complete board: grid, seals, pages, shelves, gate, ghosts, player, and particles.
-fn @types.Game::draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_board(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   game.draw_grid_base(ox, oy)
   game.draw_seals(ox, oy)
   game.draw_pages(ox, oy)
@@ -843,8 +859,8 @@ fn draw_touch_button(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
-  rect : (Int, Int, Int, Int),
+  touch_count : Int32,
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   c_idle : @raylib.Color,
   c_on : @raylib.Color,
@@ -880,8 +896,8 @@ fn draw_touch_button(
     @raylib.Color::new(216, 232, 248, 186),
   )
 
-  let fs : Int = if rect.3 >= 100 { 32 } else { 22 }
-  let tw : Int = @draw.measure_text(label, fs)
+  let fs : Int32 = if rect.3 >= 100 { 32 } else { 22 }
+  let tw : Int32 = @draw.measure_text(label, fs)
   @draw.draw_text(
     label,
     rect.0 + rect.2 / 2 - tw / 2,
@@ -1365,8 +1381,8 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_background()
 
-  let ox : Int = game.shake_dx()
-  let oy : Int = game.shake_dy()
+  let ox : Int32 = game.shake_dx()
+  let oy : Int32 = game.shake_dy()
 
   game.draw_board(ox, oy)
   game.draw_panel()

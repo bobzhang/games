@@ -1,6 +1,6 @@
 ///|
 /// Get level definition by index (0-24)
-pub fn get_level(id : Int) -> @types.LevelDef {
+pub fn get_level(id : Int32) -> @types.LevelDef {
   match id {
     0 => level_01()
     1 => level_02()
@@ -33,7 +33,7 @@ pub fn get_level(id : Int) -> @types.LevelDef {
 
 ///|
 /// Get tier name for a level
-pub fn get_tier_name(id : Int) -> String {
+pub fn get_tier_name(id : Int32) -> String {
   if id < @types.tier1_count {
     "Basics"
   } else if id < @types.tier1_count + @types.tier2_count {
@@ -45,7 +45,7 @@ pub fn get_tier_name(id : Int) -> String {
 
 ///|
 /// Get tier for a level
-pub fn get_tier(id : Int) -> @types.Tier {
+pub fn get_tier(id : Int32) -> @types.Tier {
   if id < @types.tier1_count {
     Basics
   } else if id < @types.tier1_count + @types.tier2_count {
@@ -57,7 +57,7 @@ pub fn get_tier(id : Int) -> @types.Tier {
 
 ///|
 /// Load a level into playable state
-pub fn load_level(id : Int) -> @types.LevelState {
+pub fn load_level(id : Int32) -> @types.LevelState {
   let def = get_level(id)
   let state = @types.new_level_state(
     def.battery_budget,

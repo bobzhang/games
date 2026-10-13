@@ -1,34 +1,34 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate for gameplay.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Maximum entities tracked in the pool.
-pub let max_ents : Int = 380
+pub let max_ents : Int32 = 380
 
 ///|
 /// Maximum projectiles tracked in the pool.
-pub let max_shots : Int = 460
+pub let max_shots : Int32 = 460
 
 ///|
 /// Maximum spark effects tracked in the pool.
-pub let max_fx : Int = 800
+pub let max_fx : Int32 = 800
 
 ///|
 /// Maximum ring effects tracked in the pool.
-pub let max_rings : Int = 76
+pub let max_rings : Int32 = 76
 
 ///|
 /// Maximum shadow effects tracked in the pool.
-pub let max_shadows : Int = 220
+pub let max_shadows : Int32 = 220
 
 ///|
 /// Player collision width.
@@ -140,7 +140,7 @@ pub let spawn_gap_max : Float = 220.0
 
 ///|
 /// Number of vertical lanes on the train route.
-pub let lane_count : Int = 3
+pub let lane_count : Int32 = 3
 
 ///|
 /// Distance between adjacent lane centers.
@@ -180,7 +180,7 @@ pub let stage_clear_wait : Float = 1.86
 
 ///|
 /// Height of the HUD area in pixels.
-pub let hud_h : Int = 112
+pub let hud_h : Int32 = 112
 
 ///|
 /// Returns the square size used by touch controls.

@@ -1,9 +1,9 @@
 ///|
 pub(all) struct MinimapConfig {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
   scale : Float
-  room_size : Int
+  room_size : Int32
 }
 
 ///|

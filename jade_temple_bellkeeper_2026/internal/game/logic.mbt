@@ -110,7 +110,7 @@ fn @types.Game::reset_hero(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of a free foe slot, or the slot with the shortest remaining life if the pool is full.
-fn @types.Game::alloc_foe(game : @types.Game) -> Int {
+fn @types.Game::alloc_foe(game : @types.Game) -> Int32 {
   for i, slot in game.foes {
     if !slot.active {
       break i
@@ -127,7 +127,7 @@ fn @types.Game::alloc_foe(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free bolt slot, or the slot with the shortest remaining life if the pool is full.
-fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
+fn @types.Game::alloc_bolt(game : @types.Game) -> Int32 {
   for i, slot in game.bolts {
     if !slot.active {
       break i
@@ -144,7 +144,7 @@ fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free spark slot, or the slot with the shortest remaining life if the pool is full.
-fn @types.Game::alloc_spark(game : @types.Game) -> Int {
+fn @types.Game::alloc_spark(game : @types.Game) -> Int32 {
   for i, slot in game.sparks {
     if !slot.active {
       break i
@@ -161,7 +161,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free ring slot, or the slot with the shortest remaining life if the pool is full.
-fn @types.Game::alloc_ring(game : @types.Game) -> Int {
+fn @types.Game::alloc_ring(game : @types.Game) -> Int32 {
   for i, slot in game.rings {
     if !slot.active {
       break i
@@ -178,7 +178,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free echo slot, or the slot with the shortest remaining life if the pool is full.
-fn @types.Game::alloc_echo(game : @types.Game) -> Int {
+fn @types.Game::alloc_echo(game : @types.Game) -> Int32 {
   for i, slot in game.echoes {
     if !slot.active {
       break i
@@ -203,7 +203,7 @@ fn @types.Game::emit_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_spark()
   game.sparks[i].active = true
@@ -222,8 +222,8 @@ fn @types.Game::burst_sparks(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_spark(
@@ -246,7 +246,7 @@ fn @types.Game::spawn_ring(
   y : Float,
   r : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_ring()
   game.rings[i].active = true
@@ -288,7 +288,7 @@ fn @types.Game::spawn_bolt(
   vy : Float,
   life : Float,
   dmg : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_bolt()
   game.bolts[i].active = true
@@ -315,7 +315,7 @@ fn @types.Game::spawn_foe(
   hp : Float,
   life : Float,
   shot_cd : Float,
-  reward : Int,
+  reward : Int32,
 ) -> Unit {
   let i = game.alloc_foe()
   game.foes[i].active = true
@@ -337,14 +337,14 @@ fn @types.Game::spawn_foe(
 
 ///|
 /// Computes the actual score gained from a base value, scaled by the current combo multiplier.
-fn @types.Game::score_gain(game : @types.Game, base : Int) -> Int {
+fn @types.Game::score_gain(game : @types.Game, base : Int32) -> Int32 {
   let bonus = base * game.combo / 6
   base + bonus
 }
 
 ///|
 /// Adds combo-scaled score to the game total and updates the best score if exceeded.
-fn @types.Game::add_score(game : @types.Game, base : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, base : Int32) -> Unit {
   let g = game.score_gain(base)
   game.score = game.score + g
   if game.score > game.best_score {
@@ -392,7 +392,7 @@ fn @types.Game::hurt_hero(game : @types.Game, dmg : Float) -> Unit {
 
 ///|
 /// Triggers a bell shockwave if not on cooldown and sufficient spirit is available, damaging foes and destroying bolts in range.
-fn @types.Game::ring_bell(game : @types.Game, bell_i : Int) -> Unit {
+fn @types.Game::ring_bell(game : @types.Game, bell_i : Int32) -> Unit {
   if bell_i < 0 || bell_i >= @types.bell_count {
     return
   }
@@ -495,7 +495,7 @@ fn @types.Game::ring_bell(game : @types.Game, bell_i : Int) -> Unit {
 
 ///|
 /// Returns the index of the bell within ring reach of the hero, or -1 if none is close enough.
-fn @types.Game::find_nearest_bell(game : @types.Game) -> Int {
+fn @types.Game::find_nearest_bell(game : @types.Game) -> Int32 {
   for
     i in 0..<@types.bell_count
     best = -1, best_d2 = @types.bell_ring_reach * @types.bell_ring_reach {
@@ -777,9 +777,9 @@ fn @types.Game::fire_shaman_bolt(game : @types.Game, f : @types.Foe) -> Unit {
 /// Deactivates foe at index `i`, awards score, pushes the combo, and spawns death ring and spark effects.
 fn @types.Game::kill_foe(
   game : @types.Game,
-  i : Int,
-  reward : Int,
-  kind : Int,
+  i : Int32,
+  reward : Int32,
+  kind : Int32,
 ) -> Unit {
   let x = game.foes[i].x
   let y = game.foes[i].y
@@ -1158,7 +1158,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
 
 ///|
 /// Resets entities, sets the Play state for the given stage, and scales goal, time, and starting resources.
-fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_foes()
   game.clear_bolts()
   game.clear_sparks()

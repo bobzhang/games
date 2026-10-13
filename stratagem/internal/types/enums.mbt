@@ -152,7 +152,7 @@ pub extend FogState with Show::{to_string, output}
 ///|
 pub(all) enum VictoryCondition {
   EliminateAll
-  CaptureFlag(Int, Int)
+  CaptureFlag(Int32, Int32)
 } derive(Eq, Debug)
 
 ///|

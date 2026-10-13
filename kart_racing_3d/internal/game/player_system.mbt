@@ -360,7 +360,7 @@ fn update_kart_timers(kart : @types.Kart, dt : Float) -> Unit {
 /// Applies steering rotation, forward movement, gravity, and track boundary clamping to a kart.
 pub fn apply_kart_physics(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
   dt : Float,
 ) -> Unit {
   let kart = game.karts[kart_idx]
@@ -459,7 +459,7 @@ pub fn apply_kart_physics(
 ///|
 fn @types.Game::clamp_kart_to_track_bounds(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
 ) -> Unit {
   let kart = game.karts[kart_idx]
   let wc = game.waypoint_count
@@ -500,7 +500,7 @@ fn @types.Game::clamp_kart_to_track_bounds(
 
 ///|
 /// Activates the held powerup for the specified kart and clears it from inventory.
-pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
+pub fn use_powerup(game : @types.Game, kart_idx : Int32) -> Unit {
   let kart = game.karts[kart_idx]
   if kart.held_powerup == NoPowerup {
     return
@@ -583,7 +583,7 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::fire_missile(game : @types.Game, kart_idx : Int) -> Unit {
+fn @types.Game::fire_missile(game : @types.Game, kart_idx : Int32) -> Unit {
   let kart = game.karts[kart_idx]
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
@@ -607,7 +607,7 @@ fn @types.Game::fire_missile(game : @types.Game, kart_idx : Int) -> Unit {
 ///|
 fn @types.Game::drop_item(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
   item_type : @types.PowerupKind,
 ) -> Unit {
   let kart = game.karts[kart_idx]
@@ -635,7 +635,7 @@ fn @types.Game::drop_item(
 ///|
 fn @types.Game::activate_lightning(
   game : @types.Game,
-  source_kart : Int,
+  source_kart : Int32,
 ) -> Unit {
   game.lightning_active = true
   game.lightning_timer = @types.lightning_duration

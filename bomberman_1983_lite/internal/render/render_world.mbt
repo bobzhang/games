@@ -39,8 +39,8 @@ fn draw_world_backdrop(shake_x : Float, shake_y : Float) -> Unit {
 ///|
 fn @types.Game::draw_single_tile(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
   tile : @types.TileKind,
   shake_x : Float,
   shake_y : Float,
@@ -625,11 +625,11 @@ fn @types.Game::draw_powerups(
 /// being included, Steel/Water/Base stop without being included).
 fn get_blast_tiles(
   game : @types.Game,
-  cx : Int,
-  cy : Int,
-  blast_range : Int,
-) -> Array[(Int, Int)] {
-  let tiles : Array[(Int, Int)] = []
+  cx : Int32,
+  cy : Int32,
+  blast_range : Int32,
+) -> Array[(Int32, Int32)] {
+  let tiles : Array[(Int32, Int32)] = []
   // Center tile.
   if @types.in_tile_bounds(cx, cy) {
     tiles.push((cx, cy))

@@ -33,7 +33,7 @@ pub fn try_hack_terminal(game : @types.Game) -> Unit {
 
 ///|
 /// Complete a hack on a terminal
-pub fn complete_hack(game : @types.Game, terminal_index : Int) -> Unit {
+pub fn complete_hack(game : @types.Game, terminal_index : Int32) -> Unit {
   let t = game.level.terminals[terminal_index]
   t.hacked = true
   game.player.hacked_terminals += 1
@@ -43,7 +43,7 @@ pub fn complete_hack(game : @types.Game, terminal_index : Int) -> Unit {
 
 ///|
 /// Start the hack minigame for high-security terminals
-fn start_hack_minigame(game : @types.Game, terminal_index : Int) -> Unit {
+fn start_hack_minigame(game : @types.Game, terminal_index : Int32) -> Unit {
   let hg = game.hack_game
   hg.active = true
   hg.target_terminal = terminal_index
@@ -89,7 +89,7 @@ pub fn update_hack_minigame(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Process input for hack minigame (0 or 1)
-pub fn hack_input(game : @types.Game, value : Int) -> Unit {
+pub fn hack_input(game : @types.Game, value : Int32) -> Unit {
   let hg = game.hack_game
   if !hg.active || hg.success || hg.failed {
     return

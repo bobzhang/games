@@ -1,6 +1,6 @@
 ///|
 /// Returns the fill color for a tile value in the 2048 palette.
-pub fn tile_color(value : Int) -> @raylib.Color {
+pub fn tile_color(value : Int32) -> @raylib.Color {
   match value {
     2 => @raylib.Color::new(238, 228, 218, 255)
     4 => @raylib.Color::new(237, 224, 200, 255)
@@ -19,7 +19,7 @@ pub fn tile_color(value : Int) -> @raylib.Color {
 
 ///|
 /// Returns a readable text color for the given tile value.
-pub fn tile_text_color(value : Int) -> @raylib.Color {
+pub fn tile_text_color(value : Int32) -> @raylib.Color {
   if value <= 4 {
     @raylib.Color::new(119, 110, 101, 255)
   } else {
@@ -29,7 +29,7 @@ pub fn tile_text_color(value : Int) -> @raylib.Color {
 
 ///|
 /// Chooses tile font size based on number of digits.
-pub fn tile_font_size(value : Int) -> Int {
+pub fn tile_font_size(value : Int32) -> Int32 {
   if value < 100 {
     40
   } else if value < 1000 {
@@ -61,19 +61,19 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 
 ///|
 /// Converts a board column index to screen-space X.
-pub fn cell_screen_x(col : Int) -> Float {
+pub fn cell_screen_x(col : Int32) -> Float {
   Float::from_int(board_left + board_padding + col * (cell_size + cell_gap))
 }
 
 ///|
 /// Converts a board row index to screen-space Y.
-pub fn cell_screen_y(row : Int) -> Float {
+pub fn cell_screen_y(row : Int32) -> Float {
   Float::from_int(board_top + board_padding + row * (cell_size + cell_gap))
 }
 
 ///|
 /// Builds a rectangle from integer pixel coordinates.
-pub fn rect(x : Int, y : Int, w : Int, h : Int) -> @raylib.Rectangle {
+pub fn rect(x : Int32, y : Int32, w : Int32, h : Int32) -> @raylib.Rectangle {
   @raylib.Rectangle::new(
     Float::from_int(x),
     Float::from_int(y),

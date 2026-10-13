@@ -17,28 +17,28 @@ pub fn draw_clouds(game : @types.Game) -> Unit {
     }
     // Determine cloud color based on weather and time of day
     let tod = game.weather_state.time_of_day
-    let base_gray : Int = match game.weather_state.kind {
+    let base_gray : Int32 = match game.weather_state.kind {
       Storm => 80
       Rain => 120
       Night => 40
       _ => 220
     }
     // Time of day tint
-    let r_tint : Int = if tod < 0.2 {
+    let r_tint : Int32 = if tod < 0.2 {
       30
     } else if tod > 0.8 {
       255
     } else {
       base_gray
     }
-    let g_tint : Int = if tod < 0.2 {
+    let g_tint : Int32 = if tod < 0.2 {
       20
     } else if tod > 0.8 {
       180
     } else {
       base_gray
     }
-    let b_tint : Int = if tod < 0.2 { 50 } else { base_gray }
+    let b_tint : Int32 = if tod < 0.2 { 50 } else { base_gray }
     let cloud_r = r_tint.clamp(min=0, max=255)
     let cloud_g = g_tint.clamp(min=0, max=255)
     let cloud_b = b_tint.clamp(min=0, max=255)
@@ -97,7 +97,7 @@ pub fn draw_rain_effect(game : @types.Game) -> Unit {
     let wind_offset_x = ws.wind_dir_x * ws.wind_speed * 0.1
     let wind_offset_z = ws.wind_dir_z * ws.wind_speed * 0.1
     // Rain line: from (rx,ry,rz) downward with wind
-    let rain_alpha : Int = (ws.rain_intensity * 150.0).to_int()
+    let rain_alpha : Int32 = (ws.rain_intensity * 150.0).to_int()
     let ra = rain_alpha.clamp(min=30, max=180)
     @raylib.draw_line_3d(
       @raylib.Vector3::new(rx, ry, rz),
@@ -128,7 +128,7 @@ pub fn draw_fog_overlay(game : @types.Game) -> Unit {
       let fog_x = player.x + @math.sinf(seed_f * 2.1) * 40.0
       let fog_z = player.z + @math.cosf(seed_f * 1.7) * 40.0
       let fog_y = @types.terrain_height_at(fog_x, fog_z) + 3.0
-      let fog_alpha : Int = if ws.kind == Fog { 60 } else { 40 }
+      let fog_alpha : Int32 = if ws.kind == Fog { 60 } else { 40 }
       let fog_size_x : Float = 20.0 + @math.sinf(seed_f * 0.9) * 8.0
       let fog_size_y : Float = 4.0 + @math.cosf(seed_f * 1.3) * 2.0
       let fog_size_z : Float = 18.0 + @math.cosf(seed_f * 0.7) * 6.0
@@ -308,21 +308,27 @@ pub fn draw_celestial_body(game : @types.Game) -> Unit {
   if tod > 0.15 && tod < 0.85 {
     // Daytime: draw sun
     let sun_size : Float = 8.0
-    let sun_r : Int = if tod < 0.3 {
+    let sun_r : Int32 = if tod < 0.3 {
       255
     } else if tod > 0.7 {
       255
     } else {
       255
     }
-    let sun_g : Int = if tod < 0.3 {
+    let sun_g : Int32 = if tod < 0.3 {
       150
     } else if tod > 0.7 {
       160
     } else {
       220
     }
-    let sun_b : Int = if tod < 0.3 { 50 } else if tod > 0.7 { 60 } else { 100 }
+    let sun_b : Int32 = if tod < 0.3 {
+      50
+    } else if tod > 0.7 {
+      60
+    } else {
+      100
+    }
     // Sun glow (larger, dimmer)
     @raylib.draw_sphere(
       @raylib.Vector3::new(sun_x, sun_y, sun_z),

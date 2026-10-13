@@ -50,7 +50,11 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_level_select_click(game : @types.Game, mx : Int, my : Int) -> Unit {
+fn handle_level_select_click(
+  game : @types.Game,
+  mx : Int32,
+  my : Int32,
+) -> Unit {
   let start_y = 80
   let row_height = 50
   for i in 0..<@types.total_levels {
@@ -72,7 +76,7 @@ fn handle_level_select_click(game : @types.Game, mx : Int, my : Int) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_id : Int) -> Unit {
+fn start_level(game : @types.Game, level_id : Int32) -> Unit {
   match @levels.get_level(level_id) {
     Some(def) => {
       game.current_level = level_id
@@ -171,8 +175,8 @@ fn handle_mouse_input(game : @types.Game, state : @types.LevelState) -> Unit {
 fn handle_place_waystone(
   game : @types.Game,
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Unit {
   if @raylib.is_mouse_button_pressed(0) {
     if state.grid[row][col].kind is Empty {
@@ -191,8 +195,8 @@ fn handle_place_waystone(
 fn handle_remove_waystone(
   game : @types.Game,
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Unit {
   if @raylib.is_mouse_button_pressed(0) {
     if state.grid[row][col].kind is Waystone {
@@ -220,8 +224,8 @@ fn handle_remove_waystone(
 fn handle_draw_line(
   _game : @types.Game,
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Unit {
   if @raylib.is_mouse_button_pressed(0) {
     if @types.is_connectable(state.grid[row][col].kind) {
@@ -248,8 +252,8 @@ fn handle_draw_line(
 fn handle_erase_line(
   _game : @types.Game,
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Unit {
   if @raylib.is_mouse_button_pressed(0) {
     if @types.is_connectable(state.grid[row][col].kind) {
@@ -271,8 +275,8 @@ fn handle_erase_line(
 ///|
 fn remove_connections_at(
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Unit {
   let new_conns : Array[@types.Connection] = []
   for i in 0..<state.connections.length() {
@@ -288,10 +292,10 @@ fn remove_connections_at(
 ///|
 fn remove_specific_connection(
   state : @types.LevelState,
-  c1 : Int,
-  r1 : Int,
-  c2 : Int,
-  r2 : Int,
+  c1 : Int32,
+  r1 : Int32,
+  c2 : Int32,
+  r2 : Int32,
 ) -> Unit {
   let new_conns : Array[@types.Connection] = []
   for i in 0..<state.connections.length() {
@@ -363,7 +367,7 @@ fn calculate_stars(
 }
 
 ///|
-fn star_value(rating : @types.StarRating) -> Int {
+fn star_value(rating : @types.StarRating) -> Int32 {
   match rating {
     None => 0
     Bronze => 1

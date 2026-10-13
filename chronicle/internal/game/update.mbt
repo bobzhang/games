@@ -81,7 +81,7 @@ fn update_case_select(game : @types.Game) -> Unit {
 fn start_case(game : @types.Game) -> Unit {
   let case_ = @levels.get_case(game.current_tier, game.current_case_index)
   let num_slots = case_.cards.length()
-  let slots : Array[Int] = []
+  let slots : Array[Int32] = []
   for _i in 0..<num_slots {
     slots.push(-1)
   }
@@ -308,7 +308,7 @@ fn update_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_slot_at(case_ : @types.Case, mx : Float, my : Float) -> Int {
+fn get_slot_at(case_ : @types.Case, mx : Float, my : Float) -> Int32 {
   let num_slots = case_.cards.length()
   let total_width = Float::from_int(num_slots) * @types.slot_width +
     Float::from_int(num_slots - 1) * @types.card_gap
@@ -338,7 +338,7 @@ fn get_tray_card_at(
   case_ : @types.Case,
   mx : Float,
   my : Float,
-) -> Int {
+) -> Int32 {
   let mut col = 0
   for i in 0..<case_.cards.length() {
     let card = case_.cards[i]
@@ -358,7 +358,7 @@ fn get_tray_card_at(
 }
 
 ///|
-fn get_timeline_card_at(game : @types.Game, mx : Float, my : Float) -> Int {
+fn get_timeline_card_at(game : @types.Game, mx : Float, my : Float) -> Int32 {
   // Check if mouse is over any card in the timeline
   let case_ = @levels.get_case(game.current_tier, game.current_case_index)
   let num_slots = case_.cards.length()

@@ -117,7 +117,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star_rating(rating : @types.StarRating, x : Int, y : Int) -> Unit {
+fn draw_star_rating(rating : @types.StarRating, x : Int32, y : Int32) -> Unit {
   let (count, color) = match rating {
     None => (0, text_dim_color)
     Bronze => (1, bronze_color)

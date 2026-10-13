@@ -1,5 +1,5 @@
 ///|
-pub fn total_stars(stars : Array[StarRating]) -> Int {
+pub fn total_stars(stars : Array[StarRating]) -> Int32 {
   let mut total = 0
   for star in stars {
     total += star_rating_value(star)
@@ -8,7 +8,7 @@ pub fn total_stars(stars : Array[StarRating]) -> Int {
 }
 
 ///|
-pub fn levels_completed(stars : Array[StarRating]) -> Int {
+pub fn levels_completed(stars : Array[StarRating]) -> Int32 {
   let mut count = 0
   for star in stars {
     if star_rating_value(star) > 0 {
@@ -19,7 +19,7 @@ pub fn levels_completed(stars : Array[StarRating]) -> Int {
 }
 
 ///|
-pub fn three_star_count(stars : Array[StarRating]) -> Int {
+pub fn three_star_count(stars : Array[StarRating]) -> Int32 {
   let mut count = 0
   for star in stars {
     if star is Three {
@@ -30,7 +30,7 @@ pub fn three_star_count(stars : Array[StarRating]) -> Int {
 }
 
 ///|
-pub fn progress_percent(stars : Array[StarRating]) -> Int {
+pub fn progress_percent(stars : Array[StarRating]) -> Int32 {
   let completed = levels_completed(stars)
   completed * 100 / total_levels
 }

@@ -13,6 +13,6 @@ pub fn draw_frame(game : @types.Game) -> Unit {
 }
 
 ///|
-fn fi(v : Int) -> Float {
+fn fi(v : Int32) -> Float {
   Float::from_int(v)
 }

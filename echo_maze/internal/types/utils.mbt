@@ -1,5 +1,5 @@
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
@@ -24,7 +24,7 @@ pub fn dir_to_delta(dir : Direction) -> Vec2i {
 }
 
 ///|
-pub fn in_bounds(pos : Vec2i, width : Int, height : Int) -> Bool {
+pub fn in_bounds(pos : Vec2i, width : Int32, height : Int32) -> Bool {
   pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height
 }
 
@@ -57,7 +57,7 @@ pub fn ghost_color_value(gc : GhostColor) -> @raylib.Color {
 }
 
 ///|
-pub fn ghost_color_for_index(idx : Int) -> GhostColor {
+pub fn ghost_color_for_index(idx : Int32) -> GhostColor {
   match idx % 3 {
     0 => Green
     1 => Yellow
@@ -66,12 +66,12 @@ pub fn ghost_color_for_index(idx : Int) -> GhostColor {
 }
 
 ///|
-pub fn tile_to_screen_x(gx : Int) -> Int {
+pub fn tile_to_screen_x(gx : Int32) -> Int32 {
   grid_offset_x + gx * tile_size
 }
 
 ///|
-pub fn tile_to_screen_y(gy : Int) -> Int {
+pub fn tile_to_screen_y(gy : Int32) -> Int32 {
   grid_offset_y + gy * tile_size
 }
 
@@ -91,7 +91,7 @@ pub fn new_ghost(
 
 ///|
 pub fn new_maze_state(maze : Maze) -> MazeState {
-  let door_ids : Array[Int] = []
+  let door_ids : Array[Int32] = []
   for row in maze.tiles {
     for tile in row {
       match tile.kind {
@@ -204,7 +204,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -213,7 +213,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -222,7 +222,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -256,7 +256,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn world_stars(game : Game, world : Int) -> Int {
+pub fn world_stars(game : Game, world : Int32) -> Int32 {
   let mut total = 0
   if world < game.level_scores.length() {
     let scores = game.level_scores[world]
@@ -268,7 +268,7 @@ pub fn world_stars(game : Game, world : Int) -> Int {
 }
 
 ///|
-pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
+pub fn is_world_unlocked(game : Game, world : Int32) -> Bool {
   if world == 0 {
     return true
   }
@@ -277,7 +277,7 @@ pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
 }
 
 ///|
-pub fn manhattan_dist(a : Vec2i, b : Vec2i) -> Int {
+pub fn manhattan_dist(a : Vec2i, b : Vec2i) -> Int32 {
   let dx = a.x - b.x
   let dy = a.y - b.y
   (if dx < 0 { -dx } else { dx }) + (if dy < 0 { -dy } else { dy })
@@ -298,7 +298,7 @@ pub fn update_door_animations(maze_state : MazeState, dt : Float) -> Unit {
 }
 
 ///|
-pub fn is_level_unlocked(game : Game, world : Int, level : Int) -> Bool {
+pub fn is_level_unlocked(game : Game, world : Int32, level : Int32) -> Bool {
   if level == 0 {
     return is_world_unlocked(game, world)
   }

@@ -24,7 +24,7 @@ pub extend Screen with Show::{to_string, output}
 ///|
 pub(all) enum TileKind {
   Empty
-  House(Int) // color_id
+  House(Int32) // color_id
   Road
   Water
 } derive(Eq, Debug)

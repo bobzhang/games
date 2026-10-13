@@ -23,7 +23,7 @@ pub fn try_move(state : @types.LevelState, dir : @types.Direction) -> Unit {
 }
 
 ///|
-fn handle_tile_effect(state : @types.LevelState, x : Int, y : Int) -> Unit {
+fn handle_tile_effect(state : @types.LevelState, x : Int32, y : Int32) -> Unit {
   let tile = state.data.grid[y][x]
   match tile {
     Lighthouse => {

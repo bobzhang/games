@@ -6,7 +6,7 @@
 
 ///|
 /// Resolves the enemy kind for a specific spawn index inside a wave composition.
-pub fn get_wave_enemy_kind(wave : Int, spawn_idx : Int) -> Int {
+pub fn get_wave_enemy_kind(wave : Int32, spawn_idx : Int32) -> Int32 {
   let kinds = get_wave_kinds(wave)
   let counts = get_wave_counts(wave)
   let mut total = 0
@@ -22,7 +22,7 @@ pub fn get_wave_enemy_kind(wave : Int, spawn_idx : Int) -> Int {
 
 ///|
 /// Returns total number of enemies scheduled for a wave.
-pub fn get_wave_total_enemies(wave : Int) -> Int {
+pub fn get_wave_total_enemies(wave : Int32) -> Int32 {
   let counts = get_wave_counts(wave)
   let mut total = 0
   for count in counts {
@@ -33,7 +33,7 @@ pub fn get_wave_total_enemies(wave : Int) -> Int {
 
 ///|
 /// Returns ordered enemy-kind buckets used by wave spawning logic.
-pub fn get_wave_kinds(wave : Int) -> Array[Int] {
+pub fn get_wave_kinds(wave : Int32) -> Array[Int32] {
   if wave == 0 {
     [0] // Zombies
   } else if wave == 1 {
@@ -99,7 +99,7 @@ pub fn get_wave_kinds(wave : Int) -> Array[Int] {
 
 ///|
 /// Returns spawn counts matching `get_wave_kinds` for the same wave.
-pub fn get_wave_counts(wave : Int) -> Array[Int] {
+pub fn get_wave_counts(wave : Int32) -> Array[Int32] {
   if wave == 0 {
     [6]
   } else if wave == 1 {
@@ -165,7 +165,7 @@ pub fn get_wave_counts(wave : Int) -> Array[Int] {
 
 ///|
 /// Returns per-wave health multiplier for progressive difficulty scaling.
-pub fn get_wave_hp_mult(wave : Int) -> Float {
+pub fn get_wave_hp_mult(wave : Int32) -> Float {
   let base : Float = 1.0
   let scale = Float::from_int(wave) * 0.08
   base + scale
@@ -173,7 +173,7 @@ pub fn get_wave_hp_mult(wave : Int) -> Float {
 
 ///|
 /// Returns per-wave movement-speed multiplier with a capped upper bound.
-pub fn get_wave_speed_mult(wave : Int) -> Float {
+pub fn get_wave_speed_mult(wave : Int32) -> Float {
   let base : Float = 1.0
   let scale = Float::from_int(wave) * 0.025
   let result = base + scale
@@ -188,7 +188,7 @@ pub fn get_wave_speed_mult(wave : Int) -> Float {
 
 ///|
 /// Returns base hit points for an enemy archetype id.
-pub fn enemy_base_hp(kind : Int) -> Float {
+pub fn enemy_base_hp(kind : Int32) -> Float {
   if kind == 0 {
     30.0 // Zombie
   } else if kind == 1 {
@@ -212,7 +212,7 @@ pub fn enemy_base_hp(kind : Int) -> Float {
 
 ///|
 /// Returns base movement speed for an enemy archetype id.
-pub fn enemy_base_speed(kind : Int) -> Float {
+pub fn enemy_base_speed(kind : Int32) -> Float {
   if kind == 0 {
     3.0 // Zombie
   } else if kind == 1 {
@@ -236,7 +236,7 @@ pub fn enemy_base_speed(kind : Int) -> Float {
 
 ///|
 /// Returns base attack damage for an enemy archetype id.
-pub fn enemy_base_damage(kind : Int) -> Float {
+pub fn enemy_base_damage(kind : Int32) -> Float {
   if kind == 0 {
     8.0 // Zombie
   } else if kind == 1 {
@@ -260,7 +260,7 @@ pub fn enemy_base_damage(kind : Int) -> Float {
 
 ///|
 /// Returns attack range for an enemy archetype id.
-pub fn enemy_attack_range(kind : Int) -> Float {
+pub fn enemy_attack_range(kind : Int32) -> Float {
   if kind == 0 {
     2.0 // Zombie (melee)
   } else if kind == 1 {
@@ -284,7 +284,7 @@ pub fn enemy_attack_range(kind : Int) -> Float {
 
 ///|
 /// Returns render/collision size scale for an enemy archetype id.
-pub fn enemy_size(kind : Int) -> Float {
+pub fn enemy_size(kind : Int32) -> Float {
   if kind == 0 {
     0.6 // Zombie
   } else if kind == 1 {
@@ -308,7 +308,7 @@ pub fn enemy_size(kind : Int) -> Float {
 
 ///|
 /// Returns gold payout granted when an enemy archetype is defeated.
-pub fn enemy_gold_value(kind : Int) -> Int {
+pub fn enemy_gold_value(kind : Int32) -> Int32 {
   if kind == 0 {
     10 // Zombie
   } else if kind == 1 {
@@ -332,7 +332,7 @@ pub fn enemy_gold_value(kind : Int) -> Int {
 
 ///|
 /// Returns score reward granted when an enemy archetype is defeated.
-pub fn enemy_score_value(kind : Int) -> Int {
+pub fn enemy_score_value(kind : Int32) -> Int32 {
   if kind == 0 {
     10 // Zombie
   } else if kind == 1 {
@@ -356,7 +356,7 @@ pub fn enemy_score_value(kind : Int) -> Int {
 
 ///|
 /// Returns ranged-ability cooldown for enemy types that use projectiles or revive.
-pub fn enemy_spit_cooldown(kind : Int) -> Float {
+pub fn enemy_spit_cooldown(kind : Int32) -> Float {
   if kind == 3 {
     2.5 // Spitter
   } else if kind == 5 {
@@ -370,7 +370,7 @@ pub fn enemy_spit_cooldown(kind : Int) -> Float {
 
 ///|
 /// Returns between-wave bonus gold for a cleared wave index.
-pub fn wave_bonus(wave : Int) -> Int {
+pub fn wave_bonus(wave : Int32) -> Int32 {
   50 + wave * 20
 }
 
@@ -378,7 +378,7 @@ pub fn wave_bonus(wave : Int) -> Int {
 
 ///|
 /// Returns pickup drop chance for a defeated enemy archetype.
-pub fn enemy_drop_chance(kind : Int) -> Float {
+pub fn enemy_drop_chance(kind : Int32) -> Float {
   if kind == 0 {
     0.08 // Zombie - low chance
   } else if kind == 1 {
@@ -402,7 +402,7 @@ pub fn enemy_drop_chance(kind : Int) -> Float {
 
 ///|
 /// Maps a 0-99 roll to a weighted pickup type.
-pub fn random_pickup_kind(roll : Int) -> Int {
+pub fn random_pickup_kind(roll : Int32) -> Int32 {
   let r = roll % 100
   if r < 35 {
     0 // Health pack - 35%
@@ -426,7 +426,7 @@ pub fn random_pickup_kind(roll : Int) -> Int {
 
 ///|
 /// Returns the number of purchasable shop entries shown between waves.
-pub fn shop_item_count() -> Int {
+pub fn shop_item_count() -> Int32 {
   15
 }
 
@@ -436,7 +436,7 @@ pub fn shop_item_count() -> Int {
 /// Returns purchase cost for a shop item index.
 /// For weapon upgrade items (7-9), the cost depends on the player's current level.
 /// Pass -1 for upgrade_level when the item is not an upgrade.
-pub fn shop_item_cost(idx : Int) -> Int {
+pub fn shop_item_cost(idx : Int32) -> Int32 {
   if idx == 0 {
     50
   } else if idx == 1 {
@@ -477,7 +477,7 @@ pub fn shop_item_cost(idx : Int) -> Int {
 
 ///|
 /// Returns boss active ability cooldown for a phase.
-pub fn boss_ability_cooldown(phase : Int) -> Float {
+pub fn boss_ability_cooldown(phase : Int32) -> Float {
   if phase == 0 {
     5.0
   } else if phase == 1 {
@@ -491,7 +491,7 @@ pub fn boss_ability_cooldown(phase : Int) -> Float {
 
 ///|
 /// Returns boss charge-speed multiplier for a phase.
-pub fn boss_charge_speed_mult(phase : Int) -> Float {
+pub fn boss_charge_speed_mult(phase : Int32) -> Float {
   if phase == 0 {
     2.0
   } else if phase == 1 {

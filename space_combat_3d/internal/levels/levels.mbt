@@ -3,7 +3,7 @@
 
 ///|
 /// Returns the base mission definition as fighters, cruisers, asteroids, HP mult, and speed mult.
-pub fn get_mission_def(mission : Int) -> (Int, Int, Int, Float, Float) {
+pub fn get_mission_def(mission : Int32) -> (Int32, Int32, Int32, Float, Float) {
   if mission == 0 {
     (4, 0, 6, 1.0, 1.0)
   } else if mission == 1 {
@@ -37,8 +37,8 @@ pub fn get_mission_def(mission : Int) -> (Int, Int, Int, Float, Float) {
 ///|
 /// Returns the extended mission definition with interceptors, bombers, capitals, stations, power-ups, and waves.
 pub fn get_mission_extended(
-  mission : Int,
-) -> (Int, Int, Int, Int, Int, Int, Int) {
+  mission : Int32,
+) -> (Int32, Int32, Int32, Int32, Int32, Int32, Int32) {
   if mission == 0 {
     // Patrol Sweep: basic fighters only, one wave
     (0, 0, 0, 0, 0, 1, 1)
@@ -82,7 +82,7 @@ pub fn get_mission_extended(
 
 ///|
 /// Returns the display name for the given `mission` number.
-pub fn mission_name(mission : Int) -> String {
+pub fn mission_name(mission : Int32) -> String {
   if mission == 0 {
     "Patrol Sweep"
   } else if mission == 1 {
@@ -114,7 +114,7 @@ pub fn mission_name(mission : Int) -> String {
 
 ///|
 /// Returns the narrative briefing text for the given `mission` number.
-pub fn mission_briefing(mission : Int) -> String {
+pub fn mission_briefing(mission : Int32) -> String {
   if mission == 0 {
     "A routine patrol sweep of Sector 7. Clear out any hostiles you encounter. This should be straightforward - perfect for getting your bearings."
   } else if mission == 1 {
@@ -146,7 +146,7 @@ pub fn mission_briefing(mission : Int) -> String {
 
 ///|
 /// Returns the objective type for the given `mission` number.
-pub fn mission_objective_type(mission : Int) -> @types.Objective {
+pub fn mission_objective_type(mission : Int32) -> @types.Objective {
   if mission == 0 {
     DestroyAll
   } else if mission == 1 {
@@ -178,7 +178,7 @@ pub fn mission_objective_type(mission : Int) -> @types.Objective {
 
 ///|
 /// Returns the target kill count for destroy-count objectives on the given `mission`.
-pub fn mission_objective_target(mission : Int) -> Int {
+pub fn mission_objective_target(mission : Int32) -> Int32 {
   if mission == 5 {
     15
   } else if mission == 9 {
@@ -192,7 +192,7 @@ pub fn mission_objective_target(mission : Int) -> Int {
 
 ///|
 /// Returns the bonus score reward for completing the given `mission`.
-pub fn mission_reward(mission : Int) -> Int {
+pub fn mission_reward(mission : Int32) -> Int32 {
   (mission + 1) * 500
 }
 
@@ -200,7 +200,7 @@ pub fn mission_reward(mission : Int) -> Int {
 
 ///|
 /// Returns the enemy formation pattern for the given `mission`.
-pub fn mission_formation(mission : Int) -> @types.Formation {
+pub fn mission_formation(mission : Int32) -> @types.Formation {
   if mission == 0 {
     V
   } else if mission == 1 {
@@ -235,7 +235,10 @@ pub fn mission_formation(mission : Int) -> @types.Formation {
 
 ///|
 /// Returns the spawn position for the station at the given `index` in the `mission`.
-pub fn mission_station_pos(mission : Int, index : Int) -> (Float, Float, Float) {
+pub fn mission_station_pos(
+  mission : Int32,
+  index : Int32,
+) -> (Float, Float, Float) {
   if mission == 2 && index == 0 {
     (50.0, 0.0, 80.0)
   } else if mission == 3 && index == 0 {
@@ -268,7 +271,7 @@ pub fn mission_station_pos(mission : Int, index : Int) -> (Float, Float, Float) 
 
 ///|
 /// Returns the boss spawn position and HP multiplier for boss fight missions.
-pub fn mission_boss_config(mission : Int) -> (Float, Float, Float, Float) {
+pub fn mission_boss_config(mission : Int32) -> (Float, Float, Float, Float) {
   if mission == 7 {
     (0.0, 0.0, 200.0, 1.0)
   } else if mission == 10 {
@@ -284,7 +287,7 @@ pub fn mission_boss_config(mission : Int) -> (Float, Float, Float, Float) {
 
 ///|
 /// Returns the delay in seconds before spawning the given `wave` number.
-pub fn wave_spawn_delay(mission : Int, wave : Int) -> Float {
+pub fn wave_spawn_delay(mission : Int32, wave : Int32) -> Float {
   ignore(mission)
   if wave == 0 {
     0.0
@@ -302,7 +305,10 @@ pub fn wave_spawn_delay(mission : Int, wave : Int) -> Float {
 
 ///|
 /// Returns the enemy composition for a wave as fighters, interceptors, bombers, and cruisers.
-pub fn wave_composition(mission : Int, wave : Int) -> (Int, Int, Int, Int) {
+pub fn wave_composition(
+  mission : Int32,
+  wave : Int32,
+) -> (Int32, Int32, Int32, Int32) {
   if wave == 0 {
     // First wave is the main mission def
     let def = get_mission_def(mission)
@@ -335,8 +341,8 @@ pub fn wave_composition(mission : Int, wave : Int) -> (Int, Int, Int, Int) {
 ///|
 /// Returns the spawn position and type for the power-up at the given `index`.
 pub fn powerup_spawn_pos(
-  mission : Int,
-  index : Int,
+  mission : Int32,
+  index : Int32,
 ) -> (Float, Float, Float, @types.PowerupKind) {
   // Returns (x, y, z, type)
   ignore(mission)
@@ -359,7 +365,7 @@ pub fn powerup_spawn_pos(
 
 ///|
 /// Returns the difficulty label for the given `mission` number.
-pub fn mission_difficulty_text(mission : Int) -> String {
+pub fn mission_difficulty_text(mission : Int32) -> String {
   if mission < 3 {
     "Easy"
   } else if mission < 6 {
@@ -377,7 +383,7 @@ pub fn mission_difficulty_text(mission : Int) -> String {
 
 ///|
 /// Returns the time limit for survive-type missions.
-pub fn mission_survive_time(mission : Int) -> Float {
+pub fn mission_survive_time(mission : Int32) -> Float {
   if mission == 4 {
     @types.survive_time_limit
   } else {
@@ -388,8 +394,8 @@ pub fn mission_survive_time(mission : Int) -> Float {
 ///|
 /// Returns the patrol waypoint position for the given mission and waypoint index.
 pub fn mission_patrol_waypoint(
-  mission : Int,
-  index : Int,
+  mission : Int32,
+  index : Int32,
 ) -> (Float, Float, Float) {
   if mission == 1 {
     if index == 0 {
@@ -428,9 +434,9 @@ pub fn mission_patrol_waypoint(
 /// Returns the mid-mission event definition for the given mission and event index.
 /// Returns (event_type, trigger_kill_fraction, message).
 pub fn mission_mid_event(
-  mission : Int,
-  event_index : Int,
-) -> (Int, Float, String) {
+  mission : Int32,
+  event_index : Int32,
+) -> (Int32, Float, String) {
   if mission <= 2 {
     if event_index == 0 {
       (1, 0.5, "Command: Good work. Keep it up!")
@@ -456,7 +462,7 @@ pub fn mission_mid_event(
 
 ///|
 /// Returns the number of mid-mission events for the given mission.
-pub fn mission_mid_event_count(mission : Int) -> Int {
+pub fn mission_mid_event_count(mission : Int32) -> Int32 {
   if mission <= 2 {
     1
   } else {
@@ -466,7 +472,7 @@ pub fn mission_mid_event_count(mission : Int) -> Int {
 
 ///|
 /// Returns a short objective summary string for the briefing screen.
-pub fn mission_objective_summary(mission : Int) -> String {
+pub fn mission_objective_summary(mission : Int32) -> String {
   let obj = mission_objective_type(mission)
   match obj {
     DestroyAll => "Eliminate all hostile forces in the area"
@@ -487,7 +493,7 @@ pub fn mission_objective_summary(mission : Int) -> String {
 
 ///|
 /// Returns the number of enemy waves as a display string.
-pub fn mission_wave_info(mission : Int) -> String {
+pub fn mission_wave_info(mission : Int32) -> String {
   let ext = get_mission_extended(mission)
   let waves = ext.6
   if waves == 1 {
@@ -499,7 +505,7 @@ pub fn mission_wave_info(mission : Int) -> String {
 
 ///|
 /// Returns the total estimated enemy count for the mission as a display string.
-pub fn mission_enemy_estimate(mission : Int) -> String {
+pub fn mission_enemy_estimate(mission : Int32) -> String {
   let def = get_mission_def(mission)
   let ext = get_mission_extended(mission)
   let base = def.0 + ext.0 + ext.1 + def.1 + ext.2

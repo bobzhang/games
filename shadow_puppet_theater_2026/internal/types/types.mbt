@@ -13,15 +13,15 @@ pub extend GameState with Eq::{not_equal, equal}
 ///|
 /// Two-axis puppet pose state.
 pub(all) struct Pose {
-  mut ax : Int
-  mut ay : Int
+  mut ax : Int32
+  mut ay : Int32
 }
 
 ///|
 /// Per-frame sampled input actions.
 pub(all) struct Input {
-  mut axis_dx : Int
-  mut axis_dy : Int
+  mut axis_dx : Int32
+  mut axis_dy : Int32
   mut lock_pressed : Bool
   mut undo_pressed : Bool
   mut burst_pressed : Bool
@@ -37,16 +37,16 @@ pub(all) struct Game {
   sequence : Array[Pose]
   history : Array[Pose]
   mut state : GameState
-  mut stage : Int
-  mut score : Int
-  mut best_score : Int
-  mut combo : Int
-  mut best_combo : Int
+  mut stage : Int32
+  mut score : Int32
+  mut best_score : Int32
+  mut combo : Int32
+  mut best_combo : Int32
   mut excitement : Float
   mut spotlight : Float
   mut cue_time_left : Float
   mut cue_time_limit : Float
-  mut target_idx : Int
+  mut target_idx : Int32
   current_pose : Pose
   mut burst_t : Float
   mut burst_cd : Float
@@ -54,15 +54,15 @@ pub(all) struct Game {
   mut beat_t : Float
   mut scene_t : Float
   mut result_t : Float
-  mut hit_count : Int
-  mut miss_count : Int
+  mut hit_count : Int32
+  mut miss_count : Int32
   mut message : String
   mut message_t : Float
 }
 
 ///|
 /// Creates a pose with explicit axis values.
-pub fn Pose::Pose(ax : Int, ay : Int) -> Pose {
+pub fn Pose::Pose(ax : Int32, ay : Int32) -> Pose {
   { ax, ay, }
 }
 

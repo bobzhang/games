@@ -1,41 +1,41 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let cell_size : Int = 52
+pub let cell_size : Int32 = 52
 
 ///|
-pub let grid_cols : Int = 12
+pub let grid_cols : Int32 = 12
 
 ///|
-pub let grid_rows : Int = 10
+pub let grid_rows : Int32 = 10
 
 ///|
-pub let grid_offset_x : Int = 40
+pub let grid_offset_x : Int32 = 40
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
-pub let ui_panel_x : Int = 680
+pub let ui_panel_x : Int32 = 680
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 ///|
 pub let guess_tolerance : Float = 2.0
@@ -47,7 +47,7 @@ pub let broad_range : Float = 8.0
 pub let broad_uncertainty : Float = 2.0
 
 ///|
-pub let broad_cost : Int = 1
+pub let broad_cost : Int32 = 1
 
 ///|
 pub let precise_range : Float = 5.0
@@ -56,7 +56,7 @@ pub let precise_range : Float = 5.0
 pub let precise_uncertainty : Float = 1.0
 
 ///|
-pub let precise_cost : Int = 2
+pub let precise_cost : Int32 = 2
 
 ///|
 pub let directional_range : Float = 6.0
@@ -65,7 +65,7 @@ pub let directional_range : Float = 6.0
 pub let directional_uncertainty : Float = 1.0
 
 ///|
-pub let directional_cost : Int = 3
+pub let directional_cost : Int32 = 3
 
 ///|
 pub let directional_angle : Float = 90.0

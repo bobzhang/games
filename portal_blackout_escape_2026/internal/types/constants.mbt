@@ -1,74 +1,74 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1780
+pub let screen_w : Int32 = 1780
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 1000
+pub let screen_h : Int32 = 1000
 
 ///|
 /// Target frame rate used by the simulation loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Left edge of the board area in pixels.
-pub let board_x0 : Int = 28
+pub let board_x0 : Int32 = 28
 
 ///|
 /// Top edge of the board area in pixels.
-pub let board_y0 : Int = 86
+pub let board_y0 : Int32 = 86
 
 ///|
 /// Size of one grid cell in pixels.
-pub let cell : Int = 60
+pub let cell : Int32 = 60
 
 ///|
 /// Number of grid columns on the board.
-pub let grid_w : Int = 23
+pub let grid_w : Int32 = 23
 
 ///|
 /// Number of grid rows on the board.
-pub let grid_h : Int = 13
+pub let grid_h : Int32 = 13
 
 ///|
 /// Width of the playable board area in pixels.
-pub let board_w : Int = grid_w * cell
+pub let board_w : Int32 = grid_w * cell
 
 ///|
 /// Height of the playable board area in pixels.
-pub let board_h : Int = grid_h * cell
+pub let board_h : Int32 = grid_h * cell
 
 ///|
 /// Left edge of the side panel in pixels.
-pub let panel_x0 : Int = board_x0 + board_w + 24
+pub let panel_x0 : Int32 = board_x0 + board_w + 24
 
 ///|
 /// Width of the side panel in pixels.
-pub let panel_w : Int = screen_w - panel_x0 - 24
+pub let panel_w : Int32 = screen_w - panel_x0 - 24
 
 ///|
 /// Maximum drones allocated in the drone pool.
-pub let max_drones : Int = 5
+pub let max_drones : Int32 = 5
 
 ///|
 /// Maximum portal cores allocated in the core pool.
-pub let max_cores : Int = 8
+pub let max_cores : Int32 = 8
 
 ///|
 /// Maximum active flare devices allocated.
-pub let max_flares : Int = 6
+pub let max_flares : Int32 = 6
 
 ///|
 /// Maximum particles allocated for visual effects.
-pub let max_particles : Int = 420
+pub let max_particles : Int32 = 420
 
 ///|
 /// Number of cores required to activate the exit.
-pub let core_need : Int = 6
+pub let core_need : Int32 = 6
 
 ///|
 /// Number of lives available at run start.
-pub let max_lives : Int = 3
+pub let max_lives : Int32 = 3
 
 ///|
 /// Time limit for one blackout round in seconds.
@@ -76,35 +76,35 @@ pub let round_time_limit : Float = 210.0
 
 ///|
 /// Player start cell X coordinate.
-pub let start_x : Int = 2
+pub let start_x : Int32 = 2
 
 ///|
 /// Player start cell Y coordinate.
-pub let start_y : Int = 11
+pub let start_y : Int32 = 11
 
 ///|
 /// Exit cell X coordinate.
-pub let exit_x : Int = 21
+pub let exit_x : Int32 = 21
 
 ///|
 /// Exit cell Y coordinate.
-pub let exit_y : Int = 1
+pub let exit_y : Int32 = 1
 
 ///|
 /// Portal A cell X coordinate.
-pub let portal_ax : Int = 4
+pub let portal_ax : Int32 = 4
 
 ///|
 /// Portal A cell Y coordinate.
-pub let portal_ay : Int = 10
+pub let portal_ay : Int32 = 10
 
 ///|
 /// Portal B cell X coordinate.
-pub let portal_bx : Int = 18
+pub let portal_bx : Int32 = 18
 
 ///|
 /// Portal B cell Y coordinate.
-pub let portal_by : Int = 3
+pub let portal_by : Int32 = 3
 
 ///|
 /// Duration of one player tile move in seconds.
@@ -128,19 +128,19 @@ pub let flare_stun_t : Float = 2.3
 
 ///|
 /// Score gained when collecting one core.
-pub let score_core : Int = 180
+pub let score_core : Int32 = 180
 
 ///|
 /// Score gained when using a portal teleport.
-pub let score_teleport : Int = 90
+pub let score_teleport : Int32 = 90
 
 ///|
 /// Score gained when stunning a drone.
-pub let score_stun : Int = 60
+pub let score_stun : Int32 = 60
 
 ///|
 /// Bonus score granted on successful escape.
-pub let score_win : Int = 1100
+pub let score_win : Int32 = 1100
 
 ///|
 /// Behavior mode of a patrol drone: patrol, hunt, or stunned.
@@ -188,7 +188,7 @@ pub extend CoreKind with Eq::{not_equal, equal}
 
 ///|
 /// Converts an integer (from level data) to a CoreKind.
-pub fn CoreKind::from_int(v : Int) -> CoreKind {
+pub fn CoreKind::from_int(v : Int32) -> CoreKind {
   if v == 1 {
     Blue
   } else if v == 2 {

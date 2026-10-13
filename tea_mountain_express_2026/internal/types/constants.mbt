@@ -1,26 +1,26 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1440
+pub let screen_w : Int32 = 1440
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 900
+pub let screen_h : Int32 = 900
 
 ///|
 /// Target frame rate used by the game loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Number of drivable lanes on the mountain route.
-pub let lane_count : Int = 3
+pub let lane_count : Int32 = 3
 
 ///|
 /// Maximum hazards allocated in the hazard pool.
-pub let max_hazards : Int = 72
+pub let max_hazards : Int32 = 72
 
 ///|
 /// Top Y position of the road perspective region.
-pub let road_top_y_i : Int = 130
+pub let road_top_y_i : Int32 = 130
 
 ///|
 /// Fixed Y position of the tea cart on screen.
@@ -192,8 +192,8 @@ pub let delivery_reputation_loss_durability : Float = 5.0
 
 ///|
 /// Base score awarded for successful delivery.
-pub let delivery_score_base : Int = 180
+pub let delivery_score_base : Int32 = 180
 
 ///|
 /// Maximum score multiplier level.
-pub let delivery_multiplier_max : Int = 6
+pub let delivery_multiplier_max : Int32 = 6

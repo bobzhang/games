@@ -1,6 +1,6 @@
 ///|
 /// Activates board slots using a geometric pattern, ensuring the count is even.
-fn @types.Game::set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
+fn @types.Game::set_pattern_active(game : @types.Game, pattern : Int32) -> Unit {
   @types.clear_board(game)
 
   let cx : Float = (Float::from_int(game.board_w) + 1.0) * 0.5
@@ -65,7 +65,7 @@ fn @types.Game::set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
     }
   }
 
-  let mut n : Int = @types.active_count(game)
+  let mut n : Int32 = @types.active_count(game)
   if n % 2 == 1 {
     let mut removed : Bool = false
     for y = game.board_h; y >= 1; y = y - 1 {
@@ -102,19 +102,19 @@ fn @types.Game::set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
 ///|
 /// Fills all active board slots with shuffled matching pairs of tile kinds.
 fn @types.Game::fill_board_with_pairs(game : @types.Game) -> Unit {
-  let active_n : Int = @types.active_count(game)
-  let pair_n : Int = active_n / 2
+  let active_n : Int32 = @types.active_count(game)
+  let pair_n : Int32 = active_n / 2
 
-  let vals : Array[Int] = []
+  let vals : Array[Int32] = []
   for i in 0..<pair_n {
-    let kind : Int = i % (2).max(game.kind_count) + 1
+    let kind : Int32 = i % (2).max(game.kind_count) + 1
     vals.push(kind)
     vals.push(kind)
   }
 
   @types.shuffle_ints(vals)
 
-  let mut p : Int = 0
+  let mut p : Int32 = 0
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {
       if @types.active_at(game, x, y) {
@@ -129,17 +129,19 @@ fn @types.Game::fill_board_with_pairs(game : @types.Game) -> Unit {
 
 ///|
 /// Scans the board for any valid free-tile pair match, returning found status and the two tile coordinates.
-fn @types.Game::find_any_move(game : @types.Game) -> (Bool, Int, Int, Int, Int) {
+fn @types.Game::find_any_move(
+  game : @types.Game,
+) -> (Bool, Int32, Int32, Int32, Int32) {
   for y1 in 1..<=game.board_h {
     for x1 in 1..<=game.board_w {
-      let k1 : Int = @types.cell_at(game, x1, y1)
+      let k1 : Int32 = @types.cell_at(game, x1, y1)
       if k1 <= 0 || !@types.free_tile(game, x1, y1) {
         continue
       }
 
-      let mut y2 : Int = y1
+      let mut y2 : Int32 = y1
       while y2 <= game.board_h {
-        let mut x2 : Int = if y2 == y1 { x1 + 1 } else { 1 }
+        let mut x2 : Int32 = if y2 == y1 { x1 + 1 } else { 1 }
         while x2 <= game.board_w {
           if @types.cell_at(game, x2, y2) == k1 &&
             @types.free_tile(game, x2, y2) {
@@ -168,10 +170,10 @@ fn @types.Game::reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
     return false
   }
 
-  let vals : Array[Int] = []
+  let vals : Array[Int32] = []
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {
-      let k : Int = @types.cell_at(game, x, y)
+      let k : Int32 = @types.cell_at(game, x, y)
       if k > 0 {
         vals.push(k)
       }
@@ -186,7 +188,7 @@ fn @types.Game::reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
   for _t in 0..<32 {
     @types.shuffle_ints(vals)
 
-    let mut p : Int = 0
+    let mut p : Int32 = 0
     for y in 1..<=game.board_h {
       for x in 1..<=game.board_w {
         if @types.active_at(game, x, y) && @types.cell_at(game, x, y) > 0 {
@@ -269,8 +271,8 @@ fn @types.Game::push_undo_pair(
 
 ///|
 /// Calculates and adds the score for a successful tile match, returning the points earned.
-fn @types.Game::award_match(game : @types.Game, kind : Int) -> Int {
-  let gain : Int = 90 + game.combo * 25 + kind % 8 * 6
+fn @types.Game::award_match(game : @types.Game, kind : Int32) -> Int32 {
+  let gain : Int32 = 90 + game.combo * 25 + kind % 8 * 6
   game.score = game.score + gain
   gain
 }
@@ -279,11 +281,11 @@ fn @types.Game::award_match(game : @types.Game, kind : Int) -> Int {
 /// Handles a successful pair match: saves undo state, removes tiles, updates score and combo, spawns particles, and checks for level/campaign completion.
 fn @types.Game::on_match(
   game : @types.Game,
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
-  kind : Int,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
+  kind : Int32,
 ) -> Unit {
   let step : @types.UndoPair = {
     valid: true,
@@ -306,7 +308,7 @@ fn @types.Game::on_match(
   game.remaining = game.remaining - 2
   game.combo = game.combo + 1
 
-  let gain : Int = game.award_match(kind)
+  let gain : Int32 = game.award_match(kind)
   game.timer = game.timer + 2.1 + Float::from_int(game.combo) * 0.18
   if game.timer > game.time_limit {
     game.timer = game.time_limit
@@ -342,7 +344,7 @@ fn @types.Game::on_match(
 
 ///|
 /// Handles an invalid tile pick attempt: resets combo, shows a message, shakes the board, and emits particles.
-fn @types.Game::on_bad_pick(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::on_bad_pick(game : @types.Game, x : Int32, y : Int32) -> Unit {
   game.combo = 0
   game.message = "Tile blocked"
   game.message_t = 0.6
@@ -352,12 +354,12 @@ fn @types.Game::on_bad_pick(game : @types.Game, x : Int, y : Int) -> Unit {
 
 ///|
 /// Handles a player tile selection at (x, y), either setting the first tile or attempting a match with the previously selected tile.
-fn @types.Game::pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::pick_tile(game : @types.Game, x : Int32, y : Int32) -> Unit {
   if game.state != Play {
     return
   }
 
-  let kind : Int = @types.cell_at(game, x, y)
+  let kind : Int32 = @types.cell_at(game, x, y)
   if kind <= 0 {
     return
   }
@@ -386,9 +388,9 @@ fn @types.Game::pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
     return
   }
 
-  let sx : Int = game.select_x
-  let sy : Int = game.select_y
-  let sk : Int = @types.cell_at(game, sx, sy)
+  let sx : Int32 = game.select_x
+  let sy : Int32 = game.select_y
+  let sk : Int32 = @types.cell_at(game, sx, sy)
 
   if sk <= 0 || !@types.free_tile(game, sx, sy) {
     game.select_x = x
@@ -625,8 +627,8 @@ fn @types.Game::place_cursor_on_first_tile(game : @types.Game) -> Unit {
 
 ///|
 /// Loads a campaign level by id, configuring board dimensions, tile kinds, time limit, power-ups, and generating a solvable board.
-fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
-  let mut id : Int = level_id
+fn @types.Game::load_level(game : @types.Game, level_id : Int32) -> Unit {
+  let mut id : Int32 = level_id
   if id < 0 {
     id = 0
   }
@@ -714,7 +716,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.mouse_y = mouse.y
   game.mouse_hold = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
   game.mouse_press = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let mut tc : Int = @raylib.get_touch_point_count()
+  let mut tc : Int32 = @raylib.get_touch_point_count()
   if tc < 0 {
     tc = 0
   }

@@ -1,18 +1,18 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate for the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// HUD strip height in pixels.
-pub let hud_h : Int = 112
+pub let hud_h : Int32 = 112
 
 ///|
 /// Left boundary of the playable area.
@@ -50,7 +50,7 @@ pub fn bell_orbit_r() -> Float {
 
 ///|
 /// Returns world coordinates for bell index `i`.
-pub fn bell_pos(i : Int) -> (Float, Float) {
+pub fn bell_pos(i : Int32) -> (Float, Float) {
   let cx = shrine_x()
   let cy = shrine_y()
   let r = bell_orbit_r()
@@ -81,23 +81,23 @@ pub extend FoeKind with Eq::{not_equal, equal}
 
 ///|
 /// Maximum foe records in the pool.
-pub let max_foes : Int = 380
+pub let max_foes : Int32 = 380
 
 ///|
 /// Maximum bolt records in the pool.
-pub let max_bolts : Int = 420
+pub let max_bolts : Int32 = 420
 
 ///|
 /// Maximum spark records in the pool.
-pub let max_sparks : Int = 900
+pub let max_sparks : Int32 = 900
 
 ///|
 /// Maximum ring records in the pool.
-pub let max_rings : Int = 96
+pub let max_rings : Int32 = 96
 
 ///|
 /// Maximum echo records in the pool.
-pub let max_echoes : Int = 320
+pub let max_echoes : Int32 = 320
 
 ///|
 /// Hero collision width.
@@ -141,7 +141,7 @@ pub let dash_speed : Float = 700.0
 
 ///|
 /// Number of bells guarding the shrine.
-pub let bell_count : Int = 4
+pub let bell_count : Int32 = 4
 
 ///|
 /// Activation reach distance for bell ringing.
@@ -193,11 +193,11 @@ pub let spirit_dash_cost : Float = 12.0
 
 ///|
 /// Base score goal for stage 1.
-pub let stage_goal_base : Int = 1200
+pub let stage_goal_base : Int32 = 1200
 
 ///|
 /// Additional score goal added per stage.
-pub let stage_goal_bonus : Int = 760
+pub let stage_goal_bonus : Int32 = 760
 
 ///|
 /// Base stage timer in seconds.

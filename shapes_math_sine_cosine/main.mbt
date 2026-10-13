@@ -2,7 +2,7 @@
 let deg2rad : Float = Float::from_double(@math.PI) / 180.0
 
 ///|
-let wave_points : Int = 36
+let wave_points : Int32 = 36
 
 ///|
 fn clamp(value : Float, min : Float, max : Float) -> Float {

@@ -20,7 +20,7 @@ pub fn generate_enemy_intents(battle : @types.BattleState) -> Unit {
 /// Fire/Summon/AreaBlast/MinePlace.
 fn generate_intent_for(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   // Immobilized enemies can only perform stationary actions
@@ -66,7 +66,7 @@ fn generate_intent_for(
 /// Rammer: March toward nearest player mech, then charge in a line.
 fn generate_rammer_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_nearest_unit(battle, u.x, u.y, Player)
@@ -91,7 +91,7 @@ fn generate_rammer_intent(
 /// Artillery: Fire at the most damaged player mech in a 3x3 area.
 fn generate_artillery_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_most_damaged_unit(battle, Player)
@@ -106,7 +106,7 @@ fn generate_artillery_intent(
 /// BeamTurret: Fire beam in the direction of nearest player (entire row/col).
 fn generate_beam_turret_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_nearest_unit(battle, u.x, u.y, Player)
@@ -130,7 +130,7 @@ fn generate_beam_turret_intent(
 /// Leaper: Jump to tile adjacent to weakest player mech.
 fn generate_leaper_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_weakest_unit(battle, Player)
@@ -163,7 +163,7 @@ fn generate_leaper_intent(
 /// MineLayer: Place mine on floor between self and nearest player.
 fn generate_mine_layer_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_nearest_unit(battle, u.x, u.y, Player)
@@ -181,7 +181,7 @@ fn generate_mine_layer_intent(
 /// ShieldDrone: Shield nearest ally with lowest HP.
 fn generate_shield_drone_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   // Find weakest enemy ally (not self)
@@ -216,7 +216,7 @@ fn generate_shield_drone_intent(
 /// Splitter: March toward nearest player. (On death, handled by kill logic.)
 fn generate_splitter_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_nearest_unit(battle, u.x, u.y, Player)
@@ -232,7 +232,7 @@ fn generate_splitter_intent(
 /// Boss: Alternates between area blast and charge.
 fn generate_boss_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_nearest_unit(battle, u.x, u.y, Player)
@@ -269,7 +269,7 @@ pub fn resolve_all_enemy_intents(battle : @types.BattleState) -> Unit {
 
 ///|
 /// Resolve a single enemy's intent.
-fn resolve_single_intent(battle : @types.BattleState, unit_id : Int) -> Unit {
+fn resolve_single_intent(battle : @types.BattleState, unit_id : Int32) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
   match u.intent {
@@ -290,10 +290,10 @@ fn resolve_single_intent(battle : @types.BattleState, unit_id : Int) -> Unit {
 /// March: Move 1 tile toward target.
 fn resolve_march(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   name : String,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   if is_walkable(battle, tx, ty) {
     move_unit_to(battle, unit_id, tx, ty)
@@ -326,10 +326,10 @@ fn resolve_march(
 /// Charge: Move in a direction until hitting something, deal damage.
 fn resolve_charge(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   name : String,
-  dx : Int,
-  dy : Int,
+  dx : Int32,
+  dy : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   battle.turn_log.push("\{name} charges!")
@@ -369,11 +369,11 @@ fn resolve_charge(
 /// FireLine: Fire a beam along a row/column.
 fn resolve_fire_line(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   name : String,
-  dx : Int,
-  dy : Int,
-  range : Int,
+  dx : Int32,
+  dy : Int32,
+  range : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   battle.turn_log.push("\{name} fires a beam!")
@@ -402,10 +402,10 @@ fn resolve_fire_line(
 /// Leap: Jump to target tile.
 fn resolve_leap(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   name : String,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   if is_walkable(battle, tx, ty) {
     move_unit_to(battle, unit_id, tx, ty)
@@ -437,11 +437,11 @@ fn resolve_leap(
 /// AreaBlast: Deal damage in radius around target.
 fn resolve_area_blast(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   name : String,
-  tx : Int,
-  ty : Int,
-  radius : Int,
+  tx : Int32,
+  ty : Int32,
+  radius : Int32,
 ) -> Unit {
   battle.turn_log.push("\{name} fires area blast at (\{tx}, \{ty})!")
   for dy = -radius; dy <= radius; dy = dy + 1 {
@@ -467,11 +467,11 @@ fn resolve_area_blast(
 /// Summon: Shield Drone applies shield to ally at (tx, ty).
 fn resolve_summon(
   battle : @types.BattleState,
-  _unit_id : Int,
+  _unit_id : Int32,
   name : String,
-  tx : Int,
-  ty : Int,
-  amount : Int,
+  tx : Int32,
+  ty : Int32,
+  amount : Int32,
 ) -> Unit {
   let ally_id = unit_at(battle, tx, ty)
   if ally_id >= 0 {
@@ -488,8 +488,8 @@ fn resolve_summon(
 fn resolve_mine_place(
   battle : @types.BattleState,
   name : String,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   if battle.grid.in_bounds(tx, ty) {
     let tile = battle.grid.get(tx, ty)
@@ -507,7 +507,7 @@ fn resolve_mine_place(
 /// fall back to stationary attacks if possible.
 fn generate_immobilized_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   match u.enemy_type {
@@ -539,7 +539,7 @@ fn generate_immobilized_intent(
 /// pushes through units instead of stopping on first hit.
 fn generate_rammer_unstoppable_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_nearest_unit(battle, u.x, u.y, Player)
@@ -565,7 +565,7 @@ fn generate_rammer_unstoppable_intent(
 /// Represented as AreaBlast with radius 0 at two targets.
 fn generate_artillery_cluster_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   // Target the two weakest player mechs
@@ -583,7 +583,7 @@ fn generate_artillery_cluster_intent(
 /// Fires in two perpendicular directions.
 fn generate_beam_rotating_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_nearest_unit(battle, u.x, u.y, Player)
@@ -611,7 +611,7 @@ fn generate_beam_rotating_intent(
 /// Phase 3 (<30% HP): "Overload" - fast movement, cardinal fire, lava hazards.
 fn generate_siege_engine_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_nearest_unit(battle, u.x, u.y, Player)
@@ -633,7 +633,7 @@ fn generate_siege_engine_intent(
 /// - Summons 1 Rammer every 3 turns
 fn generate_siege_phase1(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   target : @types.CombatUnit,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
@@ -666,7 +666,7 @@ fn generate_siege_phase1(
 /// - Fires beam across entire row each turn
 fn generate_siege_phase2(
   battle : @types.BattleState,
-  _unit_id : Int,
+  _unit_id : Int32,
   target : @types.CombatUnit,
 ) -> @types.Intent {
   let u = battle.units[_unit_id]
@@ -695,7 +695,7 @@ fn generate_siege_phase2(
 /// - Lava hazards appear on random tiles
 fn generate_siege_phase3(
   battle : @types.BattleState,
-  _unit_id : Int,
+  _unit_id : Int32,
   target : @types.CombatUnit,
 ) -> @types.Intent {
   let u = battle.units[_unit_id]
@@ -723,7 +723,7 @@ fn generate_siege_phase3(
 /// Phase 3 (<25% HP): "Last Stand" - absorbs minions, immobile, beam in all directions, mines.
 fn generate_hivemind_intent(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
   let target_id = find_most_damaged_unit(battle, Player)
@@ -744,7 +744,7 @@ fn generate_hivemind_intent(
 /// - Minions shield the Hivemind (damage halving is handled in resolver)
 fn generate_hivemind_phase1(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   target : @types.CombatUnit,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
@@ -765,7 +765,7 @@ fn generate_hivemind_phase1(
 /// - AoE pulse every turn (2 damage in 2-tile radius)
 fn generate_hivemind_phase2(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   target : @types.CombatUnit,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
@@ -785,7 +785,7 @@ fn generate_hivemind_phase2(
 /// - Spawns mines on random floor tiles
 fn generate_hivemind_phase3(
   _battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   _target : @types.CombatUnit,
 ) -> @types.Intent {
   let u = _battle.units[unit_id]

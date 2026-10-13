@@ -24,7 +24,7 @@ pub(all) struct Rock {
   mut vx : Float
   mut vy : Float
   mut radius : Float
-  mut size : Int
+  mut size : Int32
 }
 
 ///|
@@ -46,9 +46,9 @@ pub(all) struct Game {
   mut thrusting : Bool
   bullets : Array[Bullet]
   rocks : Array[Rock]
-  mut score : Int
-  mut lives : Int
-  mut wave : Int
+  mut score : Int32
+  mut lives : Int32
+  mut wave : Int32
   mut game_over : Bool
 }
 

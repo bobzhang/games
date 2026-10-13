@@ -74,7 +74,7 @@ fn can_connect(c1 : @types.Component, c2 : @types.Component) -> Bool {
 ///|
 pub fn propagate_rotation(
   game : @types.Game,
-  source_idx : Int,
+  source_idx : Int32,
   speed : Float,
   clockwise : Bool,
   visited : Array[Bool],
@@ -329,7 +329,7 @@ fn check_completion(game : @types.Game) -> Unit {
 }
 
 ///|
-fn max_target_tick(game : @types.Game) -> Int {
+fn max_target_tick(game : @types.Game) -> Int32 {
   let mut max_t = 0
   for i in 0..<game.components.length() {
     let c = game.components[i]
@@ -344,7 +344,7 @@ fn max_target_tick(game : @types.Game) -> Int {
 }
 
 ///|
-pub fn calculate_stars(game : @types.Game) -> Int {
+pub fn calculate_stars(game : @types.Game) -> Int32 {
   let sim = game.sim
   if sim.state != Complete {
     return 0

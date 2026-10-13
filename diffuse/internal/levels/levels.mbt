@@ -2,11 +2,11 @@
 fn build_level(
   name : String,
   tier : @types.Tier,
-  par : Int,
-  cyan_budget : Int,
-  magenta_budget : Int,
-  yellow_budget : Int,
-  layout : Array[(Int, Int, @types.TileKind, @types.InkColor)],
+  par : Int32,
+  cyan_budget : Int32,
+  magenta_budget : Int32,
+  yellow_budget : Int32,
+  layout : Array[(Int32, Int32, @types.TileKind, @types.InkColor)],
 ) -> @types.Level {
   let grid = @types.make_grid(@types.grid_width, @types.grid_height)
   for i in 0..<layout.length() {
@@ -432,7 +432,7 @@ fn level_24() -> @types.Level {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_00()
     1 => level_01()
@@ -463,7 +463,7 @@ pub fn get_level(index : Int) -> @types.Level {
 }
 
 ///|
-pub fn load_level_into_game(game : @types.Game, index : Int) -> Unit {
+pub fn load_level_into_game(game : @types.Game, index : Int32) -> Unit {
   let level = get_level(index)
   // Deep copy the grid
   let new_tiles = @types.clone_tiles(level.grid.tiles)

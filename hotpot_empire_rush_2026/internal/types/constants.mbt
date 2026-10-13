@@ -1,62 +1,62 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1680
+pub let screen_w : Int32 = 1680
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 960
+pub let screen_h : Int32 = 960
 
 ///|
 /// Target frame rate used by the game loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Number of station columns in the kitchen grid.
-pub let station_cols : Int = 4
+pub let station_cols : Int32 = 4
 
 ///|
 /// Number of station rows in the kitchen grid.
-pub let station_rows : Int = 3
+pub let station_rows : Int32 = 3
 
 ///|
 /// Width of one station tile in pixels.
-pub let station_tile_w : Int = 232
+pub let station_tile_w : Int32 = 232
 
 ///|
 /// Height of one station tile in pixels.
-pub let station_tile_h : Int = 178
+pub let station_tile_h : Int32 = 178
 
 ///|
 /// Gap between adjacent station tiles in pixels.
-pub let station_gap : Int = 14
+pub let station_gap : Int32 = 14
 
 ///|
 /// Left edge of the kitchen grid in pixels.
-pub let kitchen_left : Int = 52
+pub let kitchen_left : Int32 = 52
 
 ///|
 /// Top edge of the kitchen grid in pixels.
-pub let kitchen_top : Int = 130
+pub let kitchen_top : Int32 = 130
 
 ///|
 /// Number of broth variants available.
-pub let broth_count : Int = 3
+pub let broth_count : Int32 = 3
 
 ///|
 /// Number of protein variants available.
-pub let protein_count : Int = 3
+pub let protein_count : Int32 = 3
 
 ///|
 /// Number of vegetable variants available.
-pub let veg_count : Int = 3
+pub let veg_count : Int32 = 3
 
 ///|
 /// Number of spice intensity levels.
-pub let spice_levels : Int = 3
+pub let spice_levels : Int32 = 3
 
 ///|
 /// Maximum concurrent customer orders.
-pub let max_orders : Int = 6
+pub let max_orders : Int32 = 6
 
 ///|
 /// Maximum reputation meter value.
@@ -84,7 +84,7 @@ pub let rep_loss_discard_pot : Float = 3.0
 
 ///|
 /// Base score awarded for one correct serve.
-pub let score_base_serve : Int = 120
+pub let score_base_serve : Int32 = 120
 
 ///|
 /// Time window in seconds to preserve combo chain.

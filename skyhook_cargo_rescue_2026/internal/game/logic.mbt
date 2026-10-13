@@ -63,7 +63,7 @@ fn @types.Game::emit_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for particle in game.particles {
     if particle.active {
@@ -87,8 +87,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
@@ -222,7 +222,7 @@ fn @types.Game::spawn_survivor(game : @types.Game) -> Bool {
     survivor.active = true
     survivor.carried = false
 
-    let lane : Int = @raylib.get_random_value(0, 4)
+    let lane : Int32 = @raylib.get_random_value(0, 4)
     survivor.x = @types.world_left() +
       110.0 +
       Float::from_int(lane) * (Float::from_int(@types.world_w) - 220.0) / 4.0 +
@@ -247,7 +247,7 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
       continue
     }
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     let kind : @types.HazardKind = if roll < 52 {
       Cloud
     } else if roll < 82 {
@@ -256,7 +256,7 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
       Ice
     }
 
-    let side : Int = @raylib.get_random_value(0, 2)
+    let side : Int32 = @raylib.get_random_value(0, 2)
     if side == 0 {
       hazard.x = @types.randf(
         @types.world_left() + 30.0,
@@ -326,7 +326,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
     pickup.vy = @types.randf(100.0, 160.0)
     pickup.phase = @types.randf(0.0, 6.28)
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 52 {
       Fuel
     } else if roll < 82 {
@@ -342,7 +342,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
 }
 
 ///|
-fn @types.Game::count_active_survivors(game : @types.Game) -> Int {
+fn @types.Game::count_active_survivors(game : @types.Game) -> Int32 {
   @utils.count_by(game.survivors, fn(survivor) { survivor.active })
 }
 
@@ -435,7 +435,7 @@ fn @types.Game::drop_carried_survivor(game : @types.Game) -> Unit {
     return
   }
 
-  let idx : Int = game.carrying_idx
+  let idx : Int32 = game.carrying_idx
   if game.survivors[idx].active {
     game.survivors[idx].active = false
     game.survivors[idx].carried = false
@@ -457,7 +457,7 @@ fn @types.Game::rescue_carried_survivor(game : @types.Game) -> Unit {
     return
   }
 
-  let idx : Int = game.carrying_idx
+  let idx : Int32 = game.carrying_idx
   if game.survivors[idx].active {
     game.survivors[idx].active = false
     game.survivors[idx].carried = false
@@ -466,7 +466,7 @@ fn @types.Game::rescue_carried_survivor(game : @types.Game) -> Unit {
     game.combo = (15).min(game.combo + 1)
     game.combo_t = 2.3
 
-    let bonus : Int = 24 + game.wave + game.combo * 2
+    let bonus : Int32 = 24 + game.wave + game.combo * 2
     game.score = game.score + bonus
 
     if game.score > game.best_score {
@@ -606,7 +606,7 @@ fn @types.Game::update_hook(game : @types.Game, dt : Float) -> Float {
   }
 
   if game.carrying_idx >= 0 && game.carrying_idx < game.survivors.length() {
-    let idx : Int = game.carrying_idx
+    let idx : Int32 = game.carrying_idx
 
     if game.survivors[idx].active {
       game.survivors[idx].x = game.survivors[idx].x +
@@ -765,7 +765,7 @@ fn @types.Game::update_hazards(
     }
 
     if game.carrying_idx >= 0 && game.carrying_idx < game.survivors.length() {
-      let idx : Int = game.carrying_idx
+      let idx : Int32 = game.carrying_idx
       if game.survivors[idx].active {
         let rr_car : Float = hazard.r + @types.survivor_r
         if @types.dist2(

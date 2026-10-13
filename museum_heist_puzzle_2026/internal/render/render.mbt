@@ -2,9 +2,9 @@
 /// Draws text horizontally centred around `center_x` at the given y coordinate.
 fn draw_centered_text(
   text : String,
-  center_x : Int,
-  y : Int,
-  size : Int,
+  center_x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -442,10 +442,10 @@ fn @types.Game::draw_side_panel(game : @types.Game, art : GameArt) -> Unit {
 /// Draws a rounded action button with optional danger colouring and hover highlight.
 fn draw_action_button(
   art : GameArt,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   hot : Bool,
   danger : Bool,
@@ -491,10 +491,10 @@ fn draw_action_button(
 /// Draws a rounded D-pad direction button with hover highlight.
 fn draw_dpad_button(
   art : GameArt,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   hot : Bool,
 ) -> Unit {

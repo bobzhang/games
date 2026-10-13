@@ -55,13 +55,13 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Random integer sampled uniformly from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
 /// Return true with approximately `p` percent probability.
-pub fn chance(p : Int) -> Bool {
+pub fn chance(p : Int32) -> Bool {
   randi(0, 99) < p
 }
 
@@ -81,7 +81,7 @@ pub fn proj_scale(z : Float) -> Float {
 
 ///|
 /// Convert lane index to centered world x coordinate.
-pub fn lane_world_x(lane : Int) -> Float {
+pub fn lane_world_x(lane : Int32) -> Float {
   let half = Float::from_int(lane_count - 1) * 0.5
   (Float::from_int(lane) - half) * 220.0
 }

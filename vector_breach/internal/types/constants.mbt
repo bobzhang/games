@@ -1,47 +1,47 @@
 ///|
-pub let grid_w : Int = 8
+pub let grid_w : Int32 = 8
 
 ///|
-pub let grid_h : Int = 8
+pub let grid_h : Int32 = 8
 
 ///|
-pub let tile_size : Int = 64
+pub let tile_size : Int32 = 64
 
 ///|
-pub let screen_w : Int = 960
+pub let screen_w : Int32 = 960
 
 ///|
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
-pub let max_units : Int = 32
+pub let max_units : Int32 = 32
 
 ///|
-pub let max_heat : Int = 3
+pub let max_heat : Int32 = 3
 
 ///|
-pub let overclock_heat_cost : Int = 2
+pub let overclock_heat_cost : Int32 = 2
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
-pub let ui_panel_x : Int = 600
+pub let ui_panel_x : Int32 = 600
 
 ///|
-pub let ui_panel_w : Int = 340
+pub let ui_panel_w : Int32 = 340
 
 ///|
-pub let font_title : Int = 48
+pub let font_title : Int32 = 48
 
 ///|
-pub let font_body : Int = 20
+pub let font_body : Int32 = 20
 
 ///|
-pub let font_small : Int = 16
+pub let font_small : Int32 = 16
 
 ///|
 pub let max_frame_dt : Float = 0.05
@@ -130,4 +130,4 @@ pub let float_text_duration : Float = 1.2
 pub let particle_life : Float = 0.8
 
 ///|
-pub let total_missions : Int = 8
+pub let total_missions : Int32 = 8

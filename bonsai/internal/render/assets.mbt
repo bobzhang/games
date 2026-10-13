@@ -159,7 +159,7 @@ fn draw_board_art() -> Bool {
 }
 
 ///|
-fn draw_trunk_art(sx : Int, sy : Int) -> Bool {
+fn draw_trunk_art(sx : Int32, sy : Int32) -> Bool {
   match tex_trunk_sprite.val {
     Some(texture) => {
       let cs = Float::from_int(@types.cell_render_size)
@@ -179,7 +179,7 @@ fn draw_trunk_art(sx : Int, sy : Int) -> Bool {
 }
 
 ///|
-fn draw_branch_art(sx : Int, sy : Int, dir : @types.GrowthDir) -> Bool {
+fn draw_branch_art(sx : Int32, sy : Int32, dir : @types.GrowthDir) -> Bool {
   match tex_branch_sprite.val {
     Some(texture) => {
       let cs = Float::from_int(@types.cell_render_size)
@@ -199,7 +199,7 @@ fn draw_branch_art(sx : Int, sy : Int, dir : @types.GrowthDir) -> Bool {
 }
 
 ///|
-fn draw_leaf_art(sx : Int, sy : Int, species : @types.Species) -> Bool {
+fn draw_leaf_art(sx : Int32, sy : Int32, species : @types.Species) -> Bool {
   match leaf_art(species) {
     Some(texture) => {
       let cs = Float::from_int(@types.cell_render_size)
@@ -219,7 +219,7 @@ fn draw_leaf_art(sx : Int, sy : Int, species : @types.Species) -> Bool {
 }
 
 ///|
-fn draw_pruned_art(sx : Int, sy : Int) -> Bool {
+fn draw_pruned_art(sx : Int32, sy : Int32) -> Bool {
   match tex_pruned_stump.val {
     Some(texture) => {
       let cs = Float::from_int(@types.cell_render_size)
@@ -239,7 +239,7 @@ fn draw_pruned_art(sx : Int, sy : Int) -> Bool {
 }
 
 ///|
-fn draw_title_bonsai_art(cx : Int, cy : Int, time : Float) -> Bool {
+fn draw_title_bonsai_art(cx : Int32, cy : Int32, time : Float) -> Bool {
   match tex_title_bonsai.val {
     Some(texture) => {
       let pulse = @types.sinf(time * 1.1) * 5.0

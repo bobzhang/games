@@ -1,47 +1,47 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1200
+let sw : Int32 = 1200
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Number of grid columns in the crossing board.
-let cols : Int = 11
+let cols : Int32 = 11
 
 ///|
 /// Number of grid rows in the crossing board.
-let rows : Int = 11
+let rows : Int32 = 11
 
 ///|
 /// Size of each grid cell in pixels.
-let cell : Int = 56
+let cell : Int32 = 56
 
 ///|
 /// Horizontal pixel offset for the grid origin.
-let ox : Int = 292
+let ox : Int32 = 292
 
 ///|
 /// Vertical pixel offset for the grid origin.
-let oy : Int = 120
+let oy : Int32 = 120
 
 ///|
 /// Represents a traffic car with position, row, width, speed, and colour index.
 struct Car {
   mut x : Float
-  row : Int
-  w : Int
+  row : Int32
+  w : Int32
   speed : Float
-  color : Int
+  color : Int32
 }
 
 ///|
 /// Represents a floating log on the river with position, row, width, and speed.
 struct Log {
   mut x : Float
-  row : Int
-  w : Int
+  row : Int32
+  w : Int32
   speed : Float
 }
 
@@ -62,10 +62,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -77,12 +77,12 @@ fn inside_rect(
 /// Sets the properties of a car at index i in the cars array.
 fn set_car(
   cars : Array[Car],
-  i : Int,
+  i : Int32,
   x : Float,
-  row : Int,
-  w : Int,
+  row : Int32,
+  w : Int32,
   speed : Float,
-  color : Int,
+  color : Int32,
 ) -> Unit {
   cars[i] = { x, row, w, speed, color, }
 }
@@ -91,10 +91,10 @@ fn set_car(
 /// Sets the properties of a log at index i in the logs array.
 fn set_log(
   logs : Array[Log],
-  i : Int,
+  i : Int32,
   x : Float,
-  row : Int,
-  w : Int,
+  row : Int32,
+  w : Int32,
   speed : Float,
 ) -> Unit {
   logs[i] = { x, row, w, speed, }
@@ -154,7 +154,7 @@ fn homes_done(homes : Array[Bool]) -> Bool {
 
 ///|
 /// Returns the column index for home slot i.
-fn slot_col(i : Int) -> Int {
+fn slot_col(i : Int32) -> Int32 {
   if i == 0 {
     1
   } else if i == 1 {
@@ -170,25 +170,25 @@ fn slot_col(i : Int) -> Int {
 
 ///|
 /// Returns the pixel x-coordinate of the center of home slot i.
-fn slot_center_x(i : Int) -> Float {
+fn slot_center_x(i : Int32) -> Float {
   Float::from_int(ox + slot_col(i) * cell + cell / 2)
 }
 
 ///|
 /// Returns the grid row index for the given y pixel coordinate.
-fn row_from_y(y : Float) -> Int {
+fn row_from_y(y : Float) -> Int32 {
   (y - Float::from_int(oy)).to_int() / cell
 }
 
 ///|
 /// Returns true if the given row index is a river row.
-fn is_river_row(row : Int) -> Bool {
+fn is_river_row(row : Int32) -> Bool {
   row >= 1 && row <= 3
 }
 
 ///|
 /// Returns true if the given row index is a road row.
-fn is_road_row(row : Int) -> Bool {
+fn is_road_row(row : Int32) -> Bool {
   row == 5 || row == 6 || row == 7 || row == 9
 }
 

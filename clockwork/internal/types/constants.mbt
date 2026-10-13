@@ -1,26 +1,26 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 8
+pub let grid_cols : Int32 = 8
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let cell_size : Int = 64
+pub let cell_size : Int32 = 64
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
 pub let pi : Float = 3.14159265
@@ -38,13 +38,13 @@ pub let gear_medium_radius : Float = 36.0
 pub let gear_large_radius : Float = 48.0
 
 ///|
-pub let gear_small_teeth : Int = 8
+pub let gear_small_teeth : Int32 = 8
 
 ///|
-pub let gear_medium_teeth : Int = 12
+pub let gear_medium_teeth : Int32 = 12
 
 ///|
-pub let gear_large_teeth : Int = 16
+pub let gear_large_teeth : Int32 = 16
 
 ///|
 pub let gear_small_speed_ratio : Float = 2.0
@@ -80,22 +80,22 @@ pub let bell_trigger_distance : Float = 16.0
 pub let bell_ring_duration : Float = 0.5
 
 ///|
-pub let max_components : Int = 20
+pub let max_components : Int32 = 20
 
 ///|
-pub let max_bells : Int = 6
+pub let max_bells : Int32 = 6
 
 ///|
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 ///|
-pub let tier1_levels : Int = 7
+pub let tier1_levels : Int32 = 7
 
 ///|
-pub let tier2_levels : Int = 7
+pub let tier2_levels : Int32 = 7
 
 ///|
-pub let tier3_levels : Int = 6
+pub let tier3_levels : Int32 = 6
 
 // Colors - Clockwork aesthetic
 

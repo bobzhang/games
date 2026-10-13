@@ -125,7 +125,7 @@ pub(all) struct Game {
   // ──── Player resources ────
   /// Number of remaining lives. Starts at 3 per run.
   /// Decremented when suit HP reaches zero; the run ends when lives reach 0.
-  mut lives : Int
+  mut lives : Int32
   /// Current suit hit points, ranging from 0.0 to 100.0.
   /// Damaged by enemy contact (reduced 28% during overdrive) and drained when
   /// fuel is empty. Healed by medkit pickups and the repair action.
@@ -144,7 +144,7 @@ pub(all) struct Game {
   /// Current ammunition count. Starts at 180 per run; max ~460.
   /// Each shot consumes 1 ammo. Replenished by ammo crate pickups (+48)
   /// and the repair action (+10). Cannot fire when ammo is 0.
-  mut ammo : Int
+  mut ammo : Int32
   // ──── Cooldowns and timers ────
   /// Remaining overdrive duration in seconds. When > 0 the player fires
   /// faster pierce bullets, moves faster, and takes 28% less damage.
@@ -159,18 +159,18 @@ pub(all) struct Game {
   // ──── Score and progression ────
   /// Current run score. Earned by killing enemies (base + combo bonus),
   /// collecting pickups, and repairing the core. Deducted slightly by hint use (-6).
-  mut score : Int
+  mut score : Int32
   /// Highest score achieved across all runs in this session.
   /// Updated at end of run and continuously during play when score exceeds it.
-  mut best_score : Int
+  mut best_score : Int32
   /// Current difficulty wave, ranging from 1 to 12.
   /// Advances every ~22 seconds of game time (wave = 1 + game_t/22, capped at 12).
   /// Controls enemy spawn rate, enemy stats, fuel drain, and pickup fall speed.
-  mut wave : Int
+  mut wave : Int32
   /// Current combo counter. Incremented by killing enemies or collecting pickups.
   /// Capped at 18 for kills, 12 for pickups. Resets to 0 when `combo_t` expires
   /// or when the player takes damage. Multiplies kill score bonus by 2 per combo.
-  mut combo : Int
+  mut combo : Int32
   /// Remaining combo window in seconds. Set to 2.4s on kill, 2.1s on pickup.
   /// When it reaches 0, `combo` resets to 0. Ticks down each frame.
   mut combo_t : Float
@@ -198,7 +198,7 @@ pub(all) struct Game {
   /// Number of tactical hint charges remaining. Starts at 3 per run.
   /// Each use marks the safest lane or nearest needed supply on screen
   /// and deducts 6 score points.
-  mut hint_left : Int
+  mut hint_left : Int32
   /// Remaining display time for the current hint marker, in seconds.
   /// Set to 2.8s when a hint is used; the marker fades when this reaches 0.
   mut hint_t : Float
@@ -243,7 +243,7 @@ pub(all) struct Game {
   /// Number of active touch points this frame (0 on desktop).
   /// Written by the main loop from `get_touch_point_count()` each frame.
   /// Used by `pointer_on_rect` to iterate over touch positions.
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

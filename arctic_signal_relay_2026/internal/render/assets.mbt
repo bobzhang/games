@@ -123,10 +123,10 @@ fn draw_art_fit(
 /// Draws a texture stretched into an axis-aligned screen rectangle.
 fn draw_art_stretched(
   texture : @raylib.Texture,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   @raylib.draw_texture_pro(

@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1120
+let sw : Int32 = 1120
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 /// Generated city background texture.
@@ -61,7 +61,7 @@ fn reset_orbs(orbs : Array[Orb]) -> Unit {
 
 ///|
 /// Returns a random screen coordinate with the given pixel margin from each edge.
-fn random_point(margin : Int) -> (Float, Float) {
+fn random_point(margin : Int32) -> (Float, Float) {
   (
     Float::from_int(@raylib.get_random_value(margin, sw - margin)),
     Float::from_int(@raylib.get_random_value(margin + 60, sh - margin)),
@@ -225,7 +225,7 @@ fn draw_city_background_art() -> Bool {
 
 ///|
 /// Draws the generated pickup pad art.
-fn draw_pickup_art(x : Int, y : Int) -> Bool {
+fn draw_pickup_art(x : Int32, y : Int32) -> Bool {
   match tex_pickup_pad.val {
     Some(texture) => {
       draw_texture_fit(
@@ -244,7 +244,7 @@ fn draw_pickup_art(x : Int, y : Int) -> Bool {
 
 ///|
 /// Draws the generated drop-off pad art.
-fn draw_dropoff_art(x : Int, y : Int) -> Bool {
+fn draw_dropoff_art(x : Int32, y : Int32) -> Bool {
   match tex_dropoff_pad.val {
     Some(texture) => {
       draw_texture_fit(
@@ -263,7 +263,7 @@ fn draw_dropoff_art(x : Int, y : Int) -> Bool {
 
 ///|
 /// Draws the generated shock orb art.
-fn draw_shock_orb_art(x : Int, y : Int) -> Bool {
+fn draw_shock_orb_art(x : Int32, y : Int32) -> Bool {
   match tex_shock_orb.val {
     Some(texture) => {
       draw_texture_fit(
@@ -282,7 +282,12 @@ fn draw_shock_orb_art(x : Int, y : Int) -> Bool {
 
 ///|
 /// Draws the generated drone art.
-fn draw_drone_art(x : Int, y : Int, has_package : Bool, turbo : Bool) -> Bool {
+fn draw_drone_art(
+  x : Int32,
+  y : Int32,
+  has_package : Bool,
+  turbo : Bool,
+) -> Bool {
   match tex_drone.val {
     Some(texture) => {
       @raylib.draw_ellipse(

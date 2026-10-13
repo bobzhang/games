@@ -1,40 +1,40 @@
 ///|
 pub(all) struct Entity {
-  mut id : Int
+  mut id : Int32
   mut active : Bool
   kind : EntityKind
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
   mut falling : Bool
   mut slide_timer : Float
-  mut from_x : Int
-  mut from_y : Int
+  mut from_x : Int32
+  mut from_y : Int32
 }
 
 ///|
 pub(all) struct LevelSnapshot {
   gravity : GravityDir
-  moves : Int
-  gems_collected : Int
-  keys_collected : Int
-  entity_states : Array[(Int, Bool, Int, Int)]
+  moves : Int32
+  gems_collected : Int32
+  keys_collected : Int32
+  entity_states : Array[(Int32, Bool, Int32, Int32)]
   tile_states : Array[TileKind]
 }
 
 ///|
 pub(all) struct Level {
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   tiles : Array[TileKind]
   entities : Array[Entity]
   mut gravity : GravityDir
-  mut moves : Int
-  mut gems_collected : Int
-  mut gems_total : Int
-  mut keys_collected : Int
-  par_moves : Int
-  world : Int
-  level_num : Int
+  mut moves : Int32
+  mut gems_collected : Int32
+  mut gems_total : Int32
+  mut keys_collected : Int32
+  par_moves : Int32
+  world : Int32
+  level_num : Int32
   name : String
   mut completed : Bool
   mut player_dead : Bool
@@ -49,34 +49,34 @@ pub(all) struct Particle {
   mut life : Float
   mut max_life : Float
   mut size : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
-  mut kind : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
+  mut kind : Int32
 }
 
 ///|
 pub(all) struct ReplayFrame {
   direction : GravityDir
-  move_type : Int
-  dx : Int
-  dy : Int
+  move_type : Int32
+  dx : Int32
+  dy : Int32
 }
 
 ///|
 pub(all) struct GhostState {
   mut active : Bool
-  mut frame_index : Int
-  mut ghost_x : Int
-  mut ghost_y : Int
+  mut frame_index : Int32
+  mut ghost_x : Int32
+  mut ghost_y : Int32
   mut ghost_timer : Float
   mut replay_frames : Array[ReplayFrame]
-  mut best_moves : Int
+  mut best_moves : Int32
 }
 
 ///|
 pub(all) struct HintState {
-  mut hints_remaining : Array[Int]
+  mut hints_remaining : Array[Int32]
   mut hint_active : Bool
   mut hint_dir : GravityDir
   mut hint_timer : Float
@@ -85,13 +85,13 @@ pub(all) struct HintState {
 ///|
 pub(all) struct EditorState {
   mut active : Bool
-  mut cursor_x : Int
-  mut cursor_y : Int
-  mut selected_tile : Int
-  mut selected_entity : Int
-  mut mode : Int
-  mut grid_w : Int
-  mut grid_h : Int
+  mut cursor_x : Int32
+  mut cursor_y : Int32
+  mut selected_tile : Int32
+  mut selected_entity : Int32
+  mut mode : Int32
+  mut grid_w : Int32
+  mut grid_h : Int32
   mut tiles : Array[TileKind]
   mut entities : Array[Entity]
   mut test_playing : Bool
@@ -115,55 +115,55 @@ pub(all) struct Achievement {
 ///|
 pub(all) struct AchievementState {
   achievements : Array[Achievement]
-  mut toast_queue : Array[Int]
+  mut toast_queue : Array[Int32]
   mut toast_timer : Float
-  mut current_toast : Int
+  mut current_toast : Int32
 }
 
 ///|
 pub(all) struct SaveData {
-  star_ratings : Array[Array[Int]]
-  best_moves : Array[Array[Int]]
+  star_ratings : Array[Array[Int32]]
+  best_moves : Array[Array[Int32]]
   mut achievements_unlocked : Array[Bool]
   mut total_play_time : Float
-  levels_unlocked : Array[Int]
+  levels_unlocked : Array[Int32]
 }
 
 ///|
 pub(all) struct GameStats {
-  mut total_moves : Int
-  mut total_gravity_rotations : Int
-  mut total_levels_completed : Int
-  mut total_stars_earned : Int
+  mut total_moves : Int32
+  mut total_gravity_rotations : Int32
+  mut total_levels_completed : Int32
+  mut total_stars_earned : Int32
   mut total_time_played : Float
-  mut total_deaths : Int
-  mut total_undos : Int
-  mut total_gems_collected : Int
-  mut total_keys_collected : Int
-  mut best_streak : Int
-  mut current_streak : Int
-  mut levels_with_3_stars : Int
-  mut total_ice_slides : Int
-  mut hint_uses : Int
+  mut total_deaths : Int32
+  mut total_undos : Int32
+  mut total_gems_collected : Int32
+  mut total_keys_collected : Int32
+  mut best_streak : Int32
+  mut current_streak : Int32
+  mut levels_with_3_stars : Int32
+  mut total_ice_slides : Int32
+  mut hint_uses : Int32
 }
 
 ///|
 pub(all) struct Game {
   mut screen : Screen
   mut level : Level?
-  mut current_world : Int
-  mut current_level : Int
+  mut current_world : Int32
+  mut current_level : Int32
   mut undo_stack : Array[LevelSnapshot]
-  mut frame_count : Int
-  mut rng_state : UInt
+  mut frame_count : Int32
+  mut rng_state : UInt32
   mut anim_timer : Float
   mut gravity_anim_timer : Float
   mut gravity_anim_from : GravityDir
   mut message_text : String
   mut message_timer : Float
-  mut total_stars : Int
-  mut level_stars : Array[Int]
-  levels_unlocked : Array[Int]
+  mut total_stars : Int32
+  mut level_stars : Array[Int32]
+  levels_unlocked : Array[Int32]
   mut settling : Bool
   mut settle_timer : Float
   particles : Array[Particle]
@@ -179,7 +179,7 @@ pub(all) struct Game {
   mut bounce_timers : Array[Float]
   mut lava_timer : Float
   mut wind_timer : Float
-  mut wind_beat : Int
+  mut wind_beat : Int32
   achievement_state : AchievementState
   save_data : SaveData
   stats : GameStats
@@ -189,7 +189,12 @@ pub(all) struct Game {
 }
 
 ///|
-pub fn Entity::new(id : Int, kind : EntityKind, x : Int, y : Int) -> Entity {
+pub fn Entity::new(
+  id : Int32,
+  kind : EntityKind,
+  x : Int32,
+  y : Int32,
+) -> Entity {
   {
     id,
     active: true,
@@ -226,10 +231,10 @@ pub fn Particle::new(
   vy : Float,
   life : Float,
   size : Float,
-  r : Int,
-  g : Int,
-  b : Int,
-  kind : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
+  kind : Int32,
 ) -> Particle {
   { x, y, vx, vy, life, max_life: life, size, r, g, b, kind, }
 }
@@ -408,11 +413,11 @@ fn init_achievements() -> Array[Achievement] {
 
 ///|
 pub fn SaveData::new() -> SaveData {
-  let star_ratings : Array[Array[Int]] = []
-  let best_moves : Array[Array[Int]] = []
+  let star_ratings : Array[Array[Int32]] = []
+  let best_moves : Array[Array[Int32]] = []
   for _w in 0..<num_worlds {
-    let stars_row : Array[Int] = Array::make(levels_per_world, 0)
-    let moves_row : Array[Int] = Array::make(levels_per_world, 999)
+    let stars_row : Array[Int32] = Array::make(levels_per_world, 0)
+    let moves_row : Array[Int32] = Array::make(levels_per_world, 999)
     star_ratings.push(stars_row)
     best_moves.push(moves_row)
   }

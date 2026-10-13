@@ -30,7 +30,7 @@ pub(all) struct Trap {
   cycle : Float
   hot_window : Float
   phase : Float
-  kind : Int
+  kind : Int32
   label : String
   mut timer : Float
 }
@@ -42,7 +42,7 @@ pub(all) struct Hazard {
   y : Float
   w : Float
   h : Float
-  kind : Int
+  kind : Int32
   label : String
 }
 
@@ -63,7 +63,7 @@ pub(all) struct Door {
   y : Float
   w : Float
   h : Float
-  plate_index : Int
+  plate_index : Int32
   hold_time : Float
   mut timer : Float
   mut open : Bool
@@ -131,18 +131,18 @@ pub(all) struct Game {
   /// Zero-based index of the current stage (0..stage_count-1).
   /// Used to select the stage layout and to decide whether clearing the
   /// stage triggers `StageClear` or `Victory`.
-  mut stage_index : Int
+  mut stage_index : Int32
   /// Total number of stages in a full run (constant `stage_total`, currently 3).
   /// Used as the upper bound when checking whether more stages remain.
-  stage_count : Int
+  stage_count : Int32
   // ──── Relic tracking ────
   /// Number of relics that must be collected to unlock the exit in the
   /// current stage. Set to the length of the stage's relic array on load.
-  mut required_relics : Int
+  mut required_relics : Int32
   /// Number of relics the player has collected so far in the current stage.
   /// Incremented by `collect_relics`; compared against `required_relics`
   /// to decide if the exit gate is unlocked.
-  mut collected_relics : Int
+  mut collected_relics : Int32
   // ──── Exit gate geometry ────
   /// Left edge X of the exit gate rectangle in world pixels.
   /// Set from the stage layout; tested against the player's bounding box
@@ -218,7 +218,7 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   /// Number of active touch points this frame (0 on desktop).
   /// When > 0, activates `touch_mode` and enables on-screen controls.
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|
@@ -290,7 +290,7 @@ pub fn make_trap(
   cycle : Float,
   hot_window : Float,
   phase : Float,
-  kind : Int,
+  kind : Int32,
   label : String,
 ) -> Trap {
   { x, y, w, h, cycle, hot_window, phase, kind, label, timer: 0.0, }
@@ -303,7 +303,7 @@ pub fn make_hazard(
   y : Float,
   w : Float,
   h : Float,
-  kind : Int,
+  kind : Int32,
   label : String,
 ) -> Hazard {
   { x, y, w, h, kind, label, }
@@ -322,7 +322,7 @@ pub fn make_door(
   y : Float,
   w : Float,
   h : Float,
-  plate_index : Int,
+  plate_index : Int32,
   hold_time : Float,
 ) -> Door {
   { x, y, w, h, plate_index, hold_time, timer: 0.0, open: false, }

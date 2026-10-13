@@ -89,7 +89,7 @@ pub fn simulate_tick(
   planets : Array[@types.Planet],
   station : @types.Station,
   waypoints : Array[@types.Waypoint],
-  tick : Int,
+  tick : Int32,
 ) -> TickResult {
   if !probe.active {
     return Continue

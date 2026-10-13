@@ -109,9 +109,9 @@ fn draw_metal_palette(game : @types.Game, level : @types.LevelDef) -> Unit {
 ///|
 fn draw_metal_token(
   metal : @types.MetalKind,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   rotation : Float,
 ) -> Unit {
   @raylib.draw_rectangle(x, y, size, size, @raylib.Color::new(24, 22, 30, 255))
@@ -138,9 +138,9 @@ fn draw_metal_token(
 
 ///|
 fn draw_mini_bar(
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
   value : Float,
   color : @raylib.Color,
 ) -> Unit {
@@ -308,8 +308,8 @@ fn draw_target_panel(game : @types.Game, level : @types.LevelDef) -> Unit {
 
 ///|
 fn draw_property_target(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   name : String,
   range : @types.PropertyRange,
   color : @raylib.Color,
@@ -383,8 +383,8 @@ fn draw_property_target(
 
 ///|
 fn draw_blend_preview(
-  x : Int,
-  base_y : Int,
+  x : Int32,
+  base_y : Int32,
   preview : @types.BlendResult,
   level : @types.LevelDef,
 ) -> Unit {
@@ -455,9 +455,9 @@ fn draw_blend_preview(
 
 ///|
 fn draw_value_marker(
-  bar_x : Int,
-  bar_y : Int,
-  bar_w : Int,
+  bar_x : Int32,
+  bar_y : Int32,
+  bar_w : Int32,
   value : Float,
   in_range : Bool,
 ) -> Unit {

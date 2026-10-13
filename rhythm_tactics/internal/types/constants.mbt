@@ -1,23 +1,23 @@
 ///|
-pub let screen_w : Int = 960
+pub let screen_w : Int32 = 960
 
 ///|
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
-pub let grid_w : Int = 10
+pub let grid_w : Int32 = 10
 
 ///|
-pub let grid_h : Int = 10
+pub let grid_h : Int32 = 10
 
 ///|
-pub let tile_size : Int = 48
+pub let tile_size : Int32 = 48
 
 ///|
-pub let grid_offset_x : Int = 240
+pub let grid_offset_x : Int32 = 240
 
 ///|
-pub let grid_offset_y : Int = 60
+pub let grid_offset_y : Int32 = 60
 
 ///|
 pub let default_bpm : Float = 120.0
@@ -29,7 +29,7 @@ pub let beat_window_perfect : Float = 0.08
 pub let beat_window_good : Float = 0.15
 
 ///|
-pub let max_combo : Int = 99
+pub let max_combo : Int32 = 99
 
 ///|
 pub let combo_damage_bonus : Float = 0.1
@@ -80,25 +80,25 @@ pub let color_hud_bg : @raylib.Color = @raylib.Color::new(20, 20, 35, 200)
 pub let color_gold : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
 
 ///|
-pub let beat_indicator_y : Int = 660
+pub let beat_indicator_y : Int32 = 660
 
 ///|
-pub let beat_indicator_h : Int = 40
+pub let beat_indicator_h : Int32 = 40
 
 ///|
-pub let miss_damage : Int = 1
+pub let miss_damage : Int32 = 1
 
 ///|
-pub let spike_damage : Int = 1
+pub let spike_damage : Int32 = 1
 
 ///|
 pub let message_duration : Float = 1.5
 
 ///|
-pub let max_enemies_per_floor : Int = 12
+pub let max_enemies_per_floor : Int32 = 12
 
 ///|
-pub let max_floor : Int = 20
+pub let max_floor : Int32 = 20
 
 // --- BPM Scaling ---
 
@@ -131,36 +131,36 @@ pub let good_window_late : Float = 0.10
 // --- Shop Prices ---
 
 ///|
-pub let price_health_potion : Int = 20
+pub let price_health_potion : Int32 = 20
 
 ///|
-pub let price_shield : Int = 30
+pub let price_shield : Int32 = 30
 
 ///|
-pub let price_weapon_upgrade : Int = 50
+pub let price_weapon_upgrade : Int32 = 50
 
 ///|
-pub let price_special_charge : Int = 25
+pub let price_special_charge : Int32 = 25
 
 ///|
-pub let price_beat_window : Int = 40
+pub let price_beat_window : Int32 = 40
 
 // --- Boss constants ---
 
 ///|
-pub let boss_arena_size : Int = 8
+pub let boss_arena_size : Int32 = 8
 
 ///|
-pub let beat_dragon_hp : Int = 30
+pub let beat_dragon_hp : Int32 = 30
 
 ///|
-pub let rhythm_lich_hp : Int = 40
+pub let rhythm_lich_hp : Int32 = 40
 
 ///|
-pub let beat_dragon_damage : Int = 3
+pub let beat_dragon_damage : Int32 = 3
 
 ///|
-pub let rhythm_lich_damage : Int = 2
+pub let rhythm_lich_damage : Int32 = 2
 
 ///|
 pub let boss_intro_duration : Float = 2.0
@@ -171,7 +171,7 @@ pub let floor_transition_duration : Float = 1.5
 // --- Particle constants ---
 
 ///|
-pub let particle_count_death : Int = 12
+pub let particle_count_death : Int32 = 12
 
 ///|
 pub let particle_life : Float = 0.6
@@ -179,7 +179,7 @@ pub let particle_life : Float = 0.6
 // --- Score constants ---
 
 ///|
-pub let score_kill_base_mult : Int = 10
+pub let score_kill_base_mult : Int32 = 10
 
 ///|
 pub let score_perfect_mult : Float = 3.0
@@ -191,36 +191,36 @@ pub let score_good_mult : Float = 1.5
 pub let score_miss_mult : Float = 0.5
 
 ///|
-pub let score_combo_bonus : Int = 5
+pub let score_combo_bonus : Int32 = 5
 
 ///|
-pub let score_floor_hp_mult : Int = 100
+pub let score_floor_hp_mult : Int32 = 100
 
 ///|
-pub let score_floor_gold_mult : Int = 10
+pub let score_floor_gold_mult : Int32 = 10
 
 ///|
-pub let grade_s_threshold : Int = 5000
+pub let grade_s_threshold : Int32 = 5000
 
 ///|
-pub let grade_a_threshold : Int = 3000
+pub let grade_a_threshold : Int32 = 3000
 
 ///|
-pub let grade_b_threshold : Int = 1500
+pub let grade_b_threshold : Int32 = 1500
 
 // --- Item pickup gold amounts ---
 
 ///|
-pub let item_gold_amount : Int = 15
+pub let item_gold_amount : Int32 = 15
 
 ///|
-pub let speed_boost_duration : Int = 10
+pub let speed_boost_duration : Int32 = 10
 
 ///|
-pub let beat_freeze_duration : Int = 3
+pub let beat_freeze_duration : Int32 = 3
 
 ///|
-pub let bomb_radius : Int = 1
+pub let bomb_radius : Int32 = 1
 
 ///|
 pub let color_lava : @raylib.Color = @raylib.Color::new(255, 80, 20, 255)
@@ -236,42 +236,42 @@ pub let color_shop_highlight : @raylib.Color = @raylib.Color::new(
 // --- Combo milestone constants ---
 
 ///|
-pub let fever_duration : Int = 2
+pub let fever_duration : Int32 = 2
 
 ///|
-pub let frenzy_duration : Int = 4
+pub let frenzy_duration : Int32 = 4
 
 ///|
-pub let heal_beat_threshold : Int = 16
+pub let heal_beat_threshold : Int32 = 16
 
 ///|
-pub let shield_combo_threshold : Int = 8
+pub let shield_combo_threshold : Int32 = 8
 
 ///|
-pub let shadow_dodge_chance : Int = 30
+pub let shadow_dodge_chance : Int32 = 30
 
 ///|
-pub let lava_damage : Int = 2
+pub let lava_damage : Int32 = 2
 
 // --- Spell constants ---
 
 ///|
-pub let mana_regen_on_perfect : Int = 1
+pub let mana_regen_on_perfect : Int32 = 1
 
 ///|
-pub let spell_drop_chance : Int = 25
+pub let spell_drop_chance : Int32 = 25
 
 ///|
-pub let elite_hp_mult : Int = 2
+pub let elite_hp_mult : Int32 = 2
 
 ///|
-pub let elite_drop_bonus : Int = 2
+pub let elite_drop_bonus : Int32 = 2
 
 ///|
-pub let elite_gold_drop : Int = 30
+pub let elite_gold_drop : Int32 = 30
 
 ///|
-pub let elite_floor_threshold : Int = 4
+pub let elite_floor_threshold : Int32 = 4
 
 ///|
 pub let damage_number_life : Float = 0.8
@@ -283,7 +283,7 @@ pub let damage_number_speed : Float = 40.0
 pub let trail_particle_life : Float = 0.3
 
 ///|
-pub let trail_particle_count : Int = 3
+pub let trail_particle_count : Int32 = 3
 
 ///|
 pub let color_elite_outline : @raylib.Color = @raylib.Color::new(
@@ -324,25 +324,25 @@ pub let lich_phase3_threshold : Float = 0.5
 // --- Boss phase timing ---
 
 ///|
-pub let dragon_charge_interval : Int = 6
+pub let dragon_charge_interval : Int32 = 6
 
 ///|
-pub let dragon_4dir_fire_interval : Int = 5
+pub let dragon_4dir_fire_interval : Int32 = 5
 
 ///|
-pub let lich_summon_interval_p1 : Int = 6
+pub let lich_summon_interval_p1 : Int32 = 6
 
 ///|
-pub let lich_summon_interval_p2 : Int = 3
+pub let lich_summon_interval_p2 : Int32 = 3
 
 ///|
-pub let lich_aoe_interval_p2 : Int = 8
+pub let lich_aoe_interval_p2 : Int32 = 8
 
 ///|
-pub let lich_aoe_interval_p3 : Int = 4
+pub let lich_aoe_interval_p3 : Int32 = 4
 
 ///|
-pub let lich_teleport_interval : Int = 5
+pub let lich_teleport_interval : Int32 = 5
 
 // --- Floor wipe effect ---
 

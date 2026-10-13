@@ -32,7 +32,7 @@ pub fn draw_title(game : @types.Game) -> Unit {
   let stw = @draw.measure_text(start, 24)
   let flash : Float = @types.sinf(game.title_pulse * 4.0)
   let alpha_f : Float = 180.0 + 75.0 * flash
-  let alpha : Int = alpha_f.to_int()
+  let alpha : Int32 = alpha_f.to_int()
   @draw.draw_text(
     start,
     (@types.screen_width - stw) / 2,

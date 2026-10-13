@@ -1,6 +1,6 @@
 ///|
 /// Convert an order slot index to its node y position.
-pub fn order_node_y(slot : Int) -> Float {
+pub fn order_node_y(slot : Int32) -> Float {
   orders_y0 +
   Float::from_int(slot.clamp(min=0, max=max_orders - 1)) * orders_gap
 }
@@ -66,7 +66,7 @@ pub fn dish_lane(dish : Dish) -> Lane {
 
 ///|
 /// Base score reward when a dish is served.
-pub fn dish_base_reward(dish : Dish) -> Int {
+pub fn dish_base_reward(dish : Dish) -> Int32 {
   match dish {
     Skewers => 120
     Noodles => 140
@@ -131,6 +131,6 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Uniform random integer in `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }

@@ -143,7 +143,7 @@ fn update_precision(
 /// Applies a hazard for the survival round.
 fn apply_survival_hazard(
   world : @types.World,
-  round : Int,
+  round : Int32,
   intensity : Float,
 ) -> Unit {
   // Rounds alternate between wind, earthquake, and impact with increasing intensity
@@ -193,7 +193,7 @@ pub fn get_challenge_modes() -> Array[@types.ChallengeMode] {
 
 ///|
 /// Returns the score rating (1-3 stars) for a challenge result.
-pub fn challenge_stars(cs : @types.ChallengeState) -> Int {
+pub fn challenge_stars(cs : @types.ChallengeState) -> Int32 {
   if cs.challenge_score >= 800 {
     3
   } else if cs.challenge_score >= 400 {
@@ -232,7 +232,9 @@ pub fn challenge_status_text(cs : @types.ChallengeState) -> String {
 
 ///|
 /// Gets the inventory for challenge modes (generous supply).
-pub fn challenge_inventory() -> Array[(@types.PieceKind, @types.Material, Int)] {
+pub fn challenge_inventory() -> Array[
+  (@types.PieceKind, @types.Material, Int32),
+] {
   [
     (Block, Wood, 30),
     (Block, Stone, 20),

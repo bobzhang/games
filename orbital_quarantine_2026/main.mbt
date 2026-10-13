@@ -1,26 +1,26 @@
 ///|
-let screen_w : Int = 1320
+let screen_w : Int32 = 1320
 
 ///|
-let screen_h : Int = 860
+let screen_h : Int32 = 860
 
 ///|
-let cols : Int = 4
+let cols : Int32 = 4
 
 ///|
-let rows : Int = 3
+let rows : Int32 = 3
 
 ///|
-let room_w : Int = 220
+let room_w : Int32 = 220
 
 ///|
-let room_h : Int = 170
+let room_h : Int32 = 170
 
 ///|
-let grid_x : Int = 170
+let grid_x : Int32 = 170
 
 ///|
-let grid_y : Int = 170
+let grid_y : Int32 = 170
 
 ///|
 let power_regen_rate : Float = 11.5F
@@ -44,17 +44,17 @@ let sector_power_refresh : Float = 24.0F
 let sector_integrity_refresh : Float = 14.0F
 
 ///|
-fn room_idx(x : Int, y : Int) -> Int {
+fn room_idx(x : Int32, y : Int32) -> Int32 {
   y * cols + x
 }
 
 ///|
-fn hdoor_idx(x : Int, y : Int) -> Int {
+fn hdoor_idx(x : Int32, y : Int32) -> Int32 {
   y * (cols - 1) + x
 }
 
 ///|
-fn vdoor_idx(x : Int, y : Int) -> Int {
+fn vdoor_idx(x : Int32, y : Int32) -> Int32 {
   y * cols + x
 }
 
@@ -62,10 +62,10 @@ fn vdoor_idx(x : Int, y : Int) -> Int {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -96,7 +96,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn room_rect(x : Int, y : Int) -> (Int, Int, Int, Int) {
+fn room_rect(x : Int32, y : Int32) -> (Int32, Int32, Int32, Int32) {
   (grid_x + x * room_w, grid_y + y * room_h, room_w - 18, room_h - 18)
 }
 
@@ -117,7 +117,7 @@ fn avg_crew(rooms : Array[Room]) -> Float {
 
 ///|
 fn reset_sector(
-  sector : Int,
+  sector : Int32,
   rooms : Array[Room],
   hdoors : Array[Bool],
   vdoors : Array[Bool],
@@ -170,7 +170,7 @@ fn reset_sector(
 }
 
 ///|
-fn room_from_mouse(mx : Float, my : Float) -> Int {
+fn room_from_mouse(mx : Float, my : Float) -> Int32 {
   for y in 0..<rows {
     for x in 0..<cols {
       let rect = room_rect(x, y)
@@ -233,7 +233,7 @@ fn update_systems(
   hdoors : Array[Bool],
   vdoors : Array[Bool],
   dt : Float,
-  sector : Int,
+  sector : Int32,
   power : Float,
   integrity : Float,
 ) -> (Float, Float) {
@@ -308,9 +308,9 @@ fn update_systems(
 
 ///|
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
   value : Float,
   col : @raylib.Color,
 ) -> Unit {

@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1100
+let sw : Int32 = 1100
 
 ///|
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
 let river_half_width : Float = 180.0
@@ -18,27 +18,27 @@ struct Bullet {
 ///|
 struct Enemy {
   mut alive : Bool
-  mut kind : Int // 0 drone, 1 gunboat, 2 fuel crate
+  mut kind : Int32 // 0 drone, 1 gunboat, 2 fuel crate
   mut x : Float
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut hp : Int
+  mut hp : Int32
 }
 
 ///|
-fn river_center_at(y : Int, center : Float, curve : Float) -> Float {
+fn river_center_at(y : Int32, center : Float, curve : Float) -> Float {
   let yf = Float::from_int(y)
   center + curve * (yf / Float::from_int(sh) - 0.5)
 }
 
 ///|
-fn left_bank(y : Int, center : Float, curve : Float) -> Float {
+fn left_bank(y : Int32, center : Float, curve : Float) -> Float {
   river_center_at(y, center, curve) - river_half_width
 }
 
 ///|
-fn right_bank(y : Int, center : Float, curve : Float) -> Float {
+fn right_bank(y : Int32, center : Float, curve : Float) -> Float {
   river_center_at(y, center, curve) + river_half_width
 }
 
@@ -58,7 +58,7 @@ fn spawn_bullet(bullets : Array[Bullet], x : Float, y : Float) -> Unit {
 ///|
 fn spawn_enemy(
   enemies : Array[Enemy],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
 ) -> Unit {

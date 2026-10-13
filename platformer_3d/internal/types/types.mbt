@@ -86,7 +86,7 @@ pub fn Platform::restore(self : Platform, snap : PlatformSnapshot) -> Unit {
 /// Runtime platform entity with movement, phase, and visual state used by level simulation.
 pub(all) struct Platform {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -113,9 +113,9 @@ pub(all) struct Platform {
   // Rotation angle
   mut rot_angle : Float
   // Color
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -154,7 +154,7 @@ pub fn Platform::inactive() -> Platform {
 /// Runtime enemy entity storing movement, AI timers, hit state, and render tint.
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -167,14 +167,14 @@ pub(all) struct Enemy {
   mut patrol_range : Float
   mut patrol_dir : Float
   mut timer : Float
-  mut health : Int
+  mut health : Int32
   mut stunned : Bool
   mut stun_timer : Float
   mut anim_timer : Float
   mut size : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -210,7 +210,7 @@ pub fn Enemy::inactive() -> Enemy {
 /// Runtime collectible entity with bobbing/rotation timers and collection flags.
 pub(all) struct Collectible {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -240,7 +240,7 @@ pub fn Collectible::inactive() -> Collectible {
 /// Runtime power-up pickup entity with world transform and animation timers.
 pub(all) struct PowerUp {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -268,7 +268,7 @@ pub fn PowerUp::inactive() -> PowerUp {
 /// Runtime hazard entity with dimensions, activation state, and optional motion parameters.
 pub(all) struct Hazard {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -335,11 +335,11 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -373,9 +373,9 @@ pub(all) struct Decoration {
   mut z : Float
   mut scale : Float
   mut rot_y : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -399,7 +399,7 @@ pub fn Decoration::inactive() -> Decoration {
 /// Runtime projectile entity with velocity, lifetime, and tint data.
 pub(all) struct Projectile {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -407,9 +407,9 @@ pub(all) struct Projectile {
   mut vy : Float
   mut vz : Float
   mut life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
 }
 
 ///|
@@ -437,7 +437,7 @@ pub(all) struct ScoreFly {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut value : Int
+  mut value : Int32
   mut timer : Float
   mut max_time : Float
 }
@@ -464,11 +464,11 @@ pub(all) struct Game {
   mut coyote_timer : Float
   mut jump_buffer_timer : Float
   mut on_ice : Bool
-  mut lives : Int
-  mut score : Int
-  mut gems_collected : Int
-  mut gems_total : Int
-  mut stars_collected : Int
+  mut lives : Int32
+  mut score : Int32
+  mut gems_collected : Int32
+  mut gems_total : Int32
+  mut stars_collected : Int32
   mut facing_x : Float
   mut facing_z : Float
 
@@ -491,24 +491,24 @@ pub(all) struct Game {
   mut invincible_timer : Float
 
   // Power-ups
-  mut powerup_type : Int
+  mut powerup_type : Int32
   mut powerup_timer : Float
   mut has_shield : Bool
 
   // Combo
-  mut combo_count : Int
+  mut combo_count : Int32
   mut combo_timer : Float
   mut combo_mult : Float
 
   // Deaths in level
-  mut level_deaths : Int
+  mut level_deaths : Int32
   mut level_time : Float
 
   // Coins collected
-  mut coins_collected : Int
-  mut keys_collected : Int
-  mut total_coins : Int
-  mut total_keys : Int
+  mut coins_collected : Int32
+  mut keys_collected : Int32
+  mut total_coins : Int32
+  mut total_keys : Int32
 
   // Checkpoint
   mut checkpoint_x : Float
@@ -529,8 +529,8 @@ pub(all) struct Game {
   mut cam_target_z : Float
 
   // Level
-  mut current_world : Int
-  mut current_level : Int
+  mut current_world : Int32
+  mut current_level : Int32
   mut goal_x : Float
   mut goal_y : Float
   mut goal_z : Float
@@ -548,13 +548,13 @@ pub(all) struct Game {
   score_flies : Array[ScoreFly]
 
   // UI
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
   mut complete_timer : Float
   mut death_timer : Float
-  mut world_select_cursor : Int
-  mut level_select_cursor : Int
-  mut pause_cursor : Int
+  mut world_select_cursor : Int32
+  mut level_select_cursor : Int32
+  mut pause_cursor : Int32
   mut ui_fade : Float
   mut world_intro_timer : Float
 
@@ -565,17 +565,17 @@ pub(all) struct Game {
   mut speed_trail_timer : Float
 
   // Level stars earned (0-3 per level)
-  level_stars : Array[Int]
+  level_stars : Array[Int32]
 
   // Stars from the most recent run (for completion screen)
-  mut last_run_stars : Int
+  mut last_run_stars : Int32
 
   // Platform snapshots at last checkpoint (for respawn restore)
   checkpoint_platform_snapshots : Array[PlatformSnapshot]
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 }
 
 ///|

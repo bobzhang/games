@@ -353,7 +353,7 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn star_value(s : @types.StarRating) -> Int {
+fn star_value(s : @types.StarRating) -> Int32 {
   match s {
     Zero => 0
     One => 1

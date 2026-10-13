@@ -1,5 +1,5 @@
 ///|
-pub fn compute_column_harmony(grid : @types.Grid, col : Int) -> Int {
+pub fn compute_column_harmony(grid : @types.Grid, col : Int32) -> Int32 {
   let notes = @types.column_notes(grid, col)
   let mut score = 0
   for i in 0..<notes.length() {
@@ -11,7 +11,7 @@ pub fn compute_column_harmony(grid : @types.Grid, col : Int) -> Int {
 }
 
 ///|
-pub fn compute_total_harmony(grid : @types.Grid) -> Int {
+pub fn compute_total_harmony(grid : @types.Grid) -> Int32 {
   let mut score = 0
   for c in 0..<grid.cols {
     score += compute_column_harmony(grid, c)
@@ -31,12 +31,12 @@ pub fn check_all_targets(
 pub fn count_matched(
   grid : @types.Grid,
   targets : Array[@types.TargetPos],
-) -> Int {
+) -> Int32 {
   @types.count_targets_matched(grid, targets)
 }
 
 ///|
-pub fn compute_stars(grid : @types.Grid, level : @types.Level) -> Int {
+pub fn compute_stars(grid : @types.Grid, level : @types.Level) -> Int32 {
   let targets_ok = check_all_targets(grid, level.targets)
   if !targets_ok {
     return 0
@@ -60,10 +60,10 @@ pub fn compute_stars(grid : @types.Grid, level : @types.Level) -> Int {
 ///|
 pub fn column_interval_pairs(
   grid : @types.Grid,
-  col : Int,
-) -> Array[(Int, Int, Int)] {
+  col : Int32,
+) -> Array[(Int32, Int32, Int32)] {
   let notes = @types.column_notes(grid, col)
-  let pairs : Array[(Int, Int, Int)] = []
+  let pairs : Array[(Int32, Int32, Int32)] = []
   for i in 0..<notes.length() {
     for j = i + 1; j < notes.length(); j = j + 1 {
       let sc = @types.harmony_between(notes[i], notes[j])
@@ -74,7 +74,11 @@ pub fn column_interval_pairs(
 }
 
 ///|
-pub fn evaluate_placement(grid : @types.Grid, col : Int, row : Int) -> Int {
+pub fn evaluate_placement(
+  grid : @types.Grid,
+  col : Int32,
+  row : Int32,
+) -> Int32 {
   // Compute harmony change if a note were added at (col, row)
   let notes = @types.column_notes(grid, col)
   let mut delta = 0

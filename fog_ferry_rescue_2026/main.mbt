@@ -10,8 +10,8 @@ struct Player {
   hull_max : Float
   mut fuel : Float
   fuel_max : Float
-  mut passengers : Int
-  capacity : Int
+  mut passengers : Int32
+  capacity : Int32
   mut rescue_cd : Float
   mut ping_cd : Float
   mut ping_t : Float
@@ -28,7 +28,7 @@ struct Dock {
   mut y : Float
   mut queue : Float
   mut decay : Float
-  mut id : Int
+  mut id : Int32
 }
 
 ///|
@@ -37,12 +37,12 @@ struct Group {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut count : Int
+  mut count : Int32
   mut panic : Float
   mut drift_x : Float
   mut drift_y : Float
   mut flare_t : Float
-  mut id : Int
+  mut id : Int32
 }
 
 ///|
@@ -82,7 +82,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -147,10 +147,10 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -271,7 +271,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if part.active {
@@ -312,8 +312,8 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -354,10 +354,10 @@ fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
 /// Initializes dock positions spread around the world area with preset queue sizes.
 fn init_docks(
   docks : Array[Dock],
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
   clear_docks(docks)
 
@@ -433,8 +433,8 @@ fn init_debris(
 ) -> Unit {
   clear_debris(debris)
 
-  let mut filled : Int = 0
-  let target : Int = debris.length() - 12
+  let mut filled : Int32 = 0
+  let target : Int32 = debris.length() - 12
 
   while filled < target {
     let x : Float = randf(world_l + 26.0, world_r - 26.0)
@@ -494,15 +494,15 @@ fn spawn_group(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
-  serial : Int,
+  tier : Int32,
+  serial : Int32,
 ) -> Bool {
   for group in groups {
     if group.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       group.x = world_l + randf(26.0, 60.0)
       group.y = randf(world_t + 30.0, world_b - 30.0)
@@ -544,14 +544,14 @@ fn spawn_fog(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  tier : Int,
+  tier : Int32,
 ) -> Bool {
   for fog in fogs {
     if fog.active {
       continue
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       fog.x = world_l - 80.0
       fog.y = randf(world_t + 20.0, world_b - 20.0)
@@ -587,19 +587,19 @@ fn spawn_fog(
 
 ///|
 /// Returns the count of currently active survivor groups.
-fn active_groups(groups : Array[Group]) -> Int {
+fn active_groups(groups : Array[Group]) -> Int32 {
   @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
 /// Returns the count of currently active fog cells.
-fn active_fogs(fogs : Array[FogCell]) -> Int {
+fn active_fogs(fogs : Array[FogCell]) -> Int32 {
   @utils.count_by(fogs, fn(fog) { fog.active })
 }
 
 ///|
 /// Returns the count of active groups with panic level at or above 70.
-fn active_panic(groups : Array[Group]) -> Int {
+fn active_panic(groups : Array[Group]) -> Int32 {
   @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
@@ -713,8 +713,8 @@ fn update_groups(
   world_b : Float,
   harbor_x : Float,
   harbor_y : Float,
-) -> (Int, Float) {
-  let mut lost : Int = 0
+) -> (Int32, Float) {
+  let mut lost : Int32 = 0
   let mut panic_sum : Float = 0.0
 
   for group in groups {
@@ -778,12 +778,12 @@ fn rescue_groups(
   player : Player,
   groups : Array[Group],
   parts : Array[Particle],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   if player.rescue_cd > 0.0 || player.passengers >= player.capacity {
     (0, 0)
   } else {
-    let mut rescued_people : Int = 0
-    let mut group_count : Int = 0
+    let mut rescued_people : Int32 = 0
+    let mut group_count : Int32 = 0
 
     for group in groups {
       if !group.active || group.count <= 0 {
@@ -795,12 +795,12 @@ fn rescue_groups(
         continue
       }
 
-      let cap_left : Int = player.capacity - player.passengers
+      let cap_left : Int32 = player.capacity - player.passengers
       if cap_left <= 0 {
         break
       }
 
-      let take : Int = group.count.min(cap_left.min(8))
+      let take : Int32 = group.count.min(cap_left.min(8))
       if take <= 0 {
         continue
       }
@@ -859,10 +859,10 @@ fn nearest_urgent_group(
 ///|
 /// Draws the animated water background with gradient wave strips and a border.
 fn draw_water(
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
   t : Float,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -873,15 +873,15 @@ fn draw_water(
     @raylib.Color::new(8, 30, 52, 255),
   )
 
-  let mut y : Int = world_y
+  let mut y : Int32 = world_y
   while y < world_y + world_h {
     let p : Float = Float::from_int(y - world_y) / Float::from_int(world_h)
     let wave : Float = @math.sinf(t * 0.9 + Float::from_int(y) * 0.02) * 0.5 +
       0.5
 
-    let r : Int = 14 + (p * 22.0).to_int() + (wave * 6.0).to_int()
-    let g : Int = 56 + (p * 42.0).to_int() + (wave * 8.0).to_int()
-    let b : Int = 100 + (p * 38.0).to_int() + (wave * 12.0).to_int()
+    let r : Int32 = 14 + (p * 22.0).to_int() + (wave * 6.0).to_int()
+    let g : Int32 = 56 + (p * 42.0).to_int() + (wave * 8.0).to_int()
+    let b : Int32 = 100 + (p * 38.0).to_int() + (wave * 12.0).to_int()
 
     @raylib.draw_rectangle(
       world_x,
@@ -904,7 +904,7 @@ fn draw_water(
 
 ///|
 /// Draws the safe harbor rectangle with vertical stripe decoration and a label below.
-fn draw_harbor(hx : Int, hy : Int, hw : Int, hh : Int) -> Unit {
+fn draw_harbor(hx : Int32, hy : Int32, hw : Int32, hh : Int32) -> Unit {
   @raylib.draw_rectangle(hx, hy, hw, hh, @raylib.Color::new(42, 78, 114, 236))
   @raylib.draw_rectangle_lines(
     hx,
@@ -914,7 +914,7 @@ fn draw_harbor(hx : Int, hy : Int, hw : Int, hh : Int) -> Unit {
     @raylib.Color::new(176, 214, 244, 246),
   )
 
-  let mut x : Int = hx + 10
+  let mut x : Int32 = hx + 10
   while x < hx + hw - 8 {
     @raylib.draw_line(
       x,
@@ -1086,8 +1086,8 @@ fn draw_fogs(fogs : Array[FogCell], t : Float) -> Unit {
     let r0 : Float = fog.radius * pulse
     let r1 : Float = fog.radius * (0.58 + pulse * 0.18)
 
-    let a0 : Int = 22 + (fog.density * 42.0).to_int()
-    let a1 : Int = 12 + (fog.density * 24.0).to_int()
+    let a0 : Int32 = 22 + (fog.density * 42.0).to_int()
+    let a1 : Int32 = 12 + (fog.density * 24.0).to_int()
 
     @raylib.draw_circle(
       fog.x.to_int(),
@@ -1197,10 +1197,10 @@ fn draw_player(player : Player, t : Float, art : GameArt) -> Unit {
     ferry_tint,
   )
 
-  let shown : Int = player.passengers.min(6)
+  let shown : Int32 = player.passengers.min(6)
   for i in 0..<shown {
-    let px : Int = (x - 10.0 + Float::from_int(i % 3) * 8.0).to_int()
-    let py : Int = (y + 3.0 + Float::from_int(i / 3) * 5.0).to_int()
+    let px : Int32 = (x - 10.0 + Float::from_int(i % 3) * 8.0).to_int()
+    let py : Int32 = (y + 3.0 + Float::from_int(i / 3) * 5.0).to_int()
     @raylib.draw_rectangle(px, py, 6, 4, @raylib.Color::new(222, 176, 120, 236))
   }
 
@@ -1238,20 +1238,20 @@ fn draw_parts(parts : Array[Particle]) -> Unit {
 ///|
 /// Draws the on-screen touch D-pad, boost, rescue, and ping buttons with visual active states.
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mx : Float,
   my : Float,
   hold : Bool,
 ) -> Unit {
-  let pad_x : Int = 30
-  let pad_y : Int = sh - 198
+  let pad_x : Int32 = 30
+  let pad_y : Int32 = sh - 198
 
   fn dpad_box(
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     text : String,
     active : Bool,
   ) -> Unit {
@@ -1371,8 +1371,8 @@ fn draw_touch_controls(
 ///|
 /// Draws a labeled progress bar at (panel_x, y) showing value/maxv filled with the given color.
 fn draw_bar(
-  panel_x : Int,
-  y : Int,
+  panel_x : Int32,
+  y : Int32,
   label : String,
   value : Float,
   maxv : Float,
@@ -1398,7 +1398,7 @@ fn draw_bar(
   } else {
     clampf(value / maxv, 0.0, 1.0)
   }
-  let fw : Int = (Float::from_int(364) * p01).to_int()
+  let fw : Int32 = (Float::from_int(364) * p01).to_int()
 
   @raylib.draw_rectangle(panel_x + 16, y + 28, fw, 20, col)
   @raylib.draw_rectangle_lines(
@@ -1421,10 +1421,10 @@ fn draw_bar(
 ///|
 /// Draws a rectangular button with a centered text label and highlighted active state.
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   hover : Bool,
 ) -> Unit {
@@ -1481,8 +1481,8 @@ fn draw_centered_art(
 /// Draws the generated title artwork full-bleed without distorting its source aspect ratio.
 fn draw_title_art(
   title_art : @raylib.Texture,
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   let source_w : Float = Float::from_int(title_art.width())
@@ -1518,8 +1518,8 @@ fn draw_title_art(
 ///|
 /// Initializes and runs the Fog Ferry Rescue 2026 game loop.
 fn main {
-  let sw : Int = 1680
-  let sh : Int = 940
+  let sw : Int32 = 1680
+  let sh : Int32 = 940
   @raylib.init_window(sw, sh, "raylib [game] fog ferry rescue 2026")
   @draw.cleanup()
   defer @raylib.close_window()
@@ -1529,21 +1529,21 @@ fn main {
 
   let art = load_game_art()
 
-  let world_x : Int = 20
-  let world_y : Int = 20
-  let panel_w : Int = 420
-  let world_w : Int = sw - panel_w - 40
-  let world_h : Int = sh - 40
+  let world_x : Int32 = 20
+  let world_y : Int32 = 20
+  let panel_w : Int32 = 420
+  let world_w : Int32 = sw - panel_w - 40
+  let world_h : Int32 = sh - 40
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
   let world_r : Float = Float::from_int(world_x + world_w)
   let world_b : Float = Float::from_int(world_y + world_h)
 
-  let harbor_x : Int = world_x + 18
-  let harbor_y : Int = world_y + world_h / 2 - 72
-  let harbor_w : Int = 128
-  let harbor_h : Int = 144
+  let harbor_x : Int32 = world_x + 18
+  let harbor_y : Int32 = world_y + world_h / 2 - 72
+  let harbor_w : Int32 = 128
+  let harbor_h : Int32 = 144
 
   let harbor_cx : Float = Float::from_int(harbor_x + harbor_w / 2)
   let harbor_cy : Float = Float::from_int(harbor_y + harbor_h / 2)
@@ -1626,15 +1626,15 @@ fn main {
     wake_t: randf(0.0, 20.0),
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 420.0
-  let mut rescued_total : Int = 0
-  let mut target_rescued : Int = 620
-  let mut score : Int = 0
-  let mut tier : Int = 1
+  let mut rescued_total : Int32 = 0
+  let mut target_rescued : Int32 = 620
+  let mut score : Int32 = 0
+  let mut tier : Int32 = 1
 
-  let mut lost_people : Int = 0
-  let mut lost_limit : Int = 150
+  let mut lost_people : Int32 = 0
+  let mut lost_limit : Int32 = 150
 
   let mut spawn_cd : Float = 1.2
   let mut fog_cd : Float = 4.8
@@ -1647,8 +1647,8 @@ fn main {
   let mut harbor_queue_max : Float = 260.0
   let mut unload_cd : Float = 0.0
 
-  let mut group_serial : Int = 1
-  let mut urgent_peak : Int = 0
+  let mut group_serial : Int32 = 1
+  let mut urgent_peak : Int32 = 0
 
   fn reset_run() -> Unit {
     init_docks(docks, world_x, world_y, world_w, world_h)
@@ -1786,8 +1786,8 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyH)
 
       if hold {
-        let pad_x : Int = 30
-        let pad_y : Int = sh - 198
+        let pad_x : Int32 = 30
+        let pad_y : Int32 = sh - 198
 
         if inside_rect(mouse.x, mouse.y, pad_x + 84, pad_y, 76, 56) {
           move_u = true
@@ -1898,7 +1898,7 @@ fn main {
         player.hull = minf(player.hull_max, player.hull + dt * 5.4)
 
         if player.passengers > 0 && unload_cd <= 0.0 {
-          let unload_n : Int = player.passengers.min(3)
+          let unload_n : Int32 = player.passengers.min(3)
           player.passengers = player.passengers - unload_n
           rescued_total = rescued_total + unload_n
           score = score + unload_n * 10
@@ -2037,7 +2037,7 @@ fn main {
 
       fog_cd = fog_cd - dt
       if fog_cd <= 0.0 {
-        let max_fogs : Int = 2 + tier / 2
+        let max_fogs : Int32 = 2 + tier / 2
         if active_fogs(fogs) < max_fogs {
           ignore(spawn_fog(fogs, world_l, world_t, world_r, world_b, tier))
         }
@@ -2047,7 +2047,7 @@ fn main {
         }
       }
 
-      let urgent_now : Int = active_panic(groups)
+      let urgent_now : Int32 = active_panic(groups)
       if urgent_now > urgent_peak {
         urgent_peak = urgent_now
       }
@@ -2123,7 +2123,7 @@ fn main {
 
     draw_parts(parts)
 
-    let panel_x : Int = world_x + world_w + 16
+    let panel_x : Int32 = world_x + world_w + 16
     @raylib.draw_rectangle(
       panel_x,
       world_y,
@@ -2375,8 +2375,8 @@ fn main {
     draw_touch_controls(sw, sh, mouse.x, mouse.y, hold)
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = world_x + world_w / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = world_x + world_w / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         18,

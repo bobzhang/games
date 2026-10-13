@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1100
+let sw : Int32 = 1100
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
 /// Generated lake background texture.
@@ -37,7 +37,7 @@ struct Fish {
   mut x : Float
   mut y : Float
   mut vx : Float
-  mut kind : Int // 0 common, 1 silver, 2 golden
+  mut kind : Int32 // 0 common, 1 silver, 2 golden
   mut size : Float
 }
 
@@ -205,7 +205,7 @@ fn draw_lake_background() -> Bool {
 
 ///|
 /// Returns the waterline used for subtle background tinting and fallback water.
-fn boat_waterline() -> Int {
+fn boat_waterline() -> Int32 {
   180
 }
 
@@ -260,7 +260,7 @@ fn draw_hook_art(hook_x : Float, hook_y : Float) -> Bool {
 
 ///|
 /// Returns the generated fish texture for the given fish kind.
-fn fish_texture(kind : Int) -> @raylib.Texture? {
+fn fish_texture(kind : Int32) -> @raylib.Texture? {
   if kind == 0 {
     tex_fish_common.val
   } else if kind == 1 {
@@ -293,7 +293,7 @@ fn draw_fish_art(fish : Fish) -> Bool {
 
 ///|
 /// Returns the display color for a fish based on its kind (0 common, 1 silver, 2 golden).
-fn fish_color(kind : Int) -> @raylib.Color {
+fn fish_color(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @raylib.lime
   } else if kind == 1 {
@@ -305,7 +305,7 @@ fn fish_color(kind : Int) -> @raylib.Color {
 
 ///|
 /// Returns the coin value earned when selling a caught fish of the given kind.
-fn fish_value(kind : Int) -> Int {
+fn fish_value(kind : Int32) -> Int32 {
   if kind == 0 {
     18
   } else if kind == 1 {
@@ -317,7 +317,7 @@ fn fish_value(kind : Int) -> Int {
 
 ///|
 /// Spawns a new fish in the first available slot, choosing rarity based on rare_bonus.
-fn spawn_fish(fishes : Array[Fish], rare_bonus : Int) -> Unit {
+fn spawn_fish(fishes : Array[Fish], rare_bonus : Int32) -> Unit {
   for fish in fishes {
     if !fish.alive {
       let roll = @raylib.get_random_value(0, 99)

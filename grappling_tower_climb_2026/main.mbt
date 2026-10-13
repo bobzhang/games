@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Left boundary X coordinate of the tower play area.
@@ -24,27 +24,27 @@ let gravity : Float = 760.0
 
 ///|
 /// Maximum number of platforms that can exist in the level at once.
-let max_platforms : Int = 260
+let max_platforms : Int32 = 260
 
 ///|
 /// Maximum number of grapple anchor points that can exist simultaneously.
-let max_anchors : Int = 260
+let max_anchors : Int32 = 260
 
 ///|
 /// Maximum number of enemy drones that can be active at one time.
-let max_drones : Int = 140
+let max_drones : Int32 = 140
 
 ///|
 /// Maximum number of bullets that can be in flight simultaneously.
-let max_bullets : Int = 560
+let max_bullets : Int32 = 560
 
 ///|
 /// Maximum number of collectible crystals that can exist in the level at once.
-let max_crystals : Int = 200
+let max_crystals : Int32 = 200
 
 ///|
 /// Maximum number of visual particles that can be active at any one time.
-let max_particles : Int = 1000
+let max_particles : Int32 = 1000
 
 ///|
 /// Represents the player-controlled pilot with physics, health, energy, grapple state, and score tracking.
@@ -53,7 +53,7 @@ struct Pilot {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut face : Int
+  mut face : Int32
   mut hp : Float
   mut energy : Float
   mut dash_t : Float
@@ -68,8 +68,8 @@ struct Pilot {
   mut coyote_t : Float
   mut jump_buf_t : Float
   mut flash_t : Float
-  mut score : Int
-  mut combo : Int
+  mut score : Int32
+  mut combo : Int32
   mut best_h : Float
 }
 
@@ -99,7 +99,7 @@ struct Anchor {
 /// Represents an enemy drone with position, health, fire cooldown, stun state, and patrol behaviour.
 struct Drone {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut base_y : Float
@@ -120,7 +120,7 @@ struct Bullet {
   mut vy : Float
   mut dmg : Float
   mut life : Float
-  mut team : Int
+  mut team : Int32
 }
 
 ///|
@@ -129,7 +129,7 @@ struct Crystal {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut value : Int
+  mut value : Int32
   mut t : Float
   mut life : Float
 }
@@ -145,7 +145,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -180,10 +180,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -289,7 +289,7 @@ fn add_platform(
   amp : Float,
   speed : Float,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<platforms.length() {
     if !platforms[i].active {
       slot = i
@@ -316,7 +316,7 @@ fn add_platform(
 ///|
 /// Adds a new grapple anchor at (x, y) to the first available slot and returns true on success.
 fn add_anchor(anchors : Array[Anchor], x : Float, y : Float) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<anchors.length() {
     if !anchors[i].active {
       slot = i
@@ -340,10 +340,10 @@ fn add_drone(
   drones : Array[Drone],
   x : Float,
   y : Float,
-  kind : Int,
-  level : Int,
+  kind : Int32,
+  level : Int32,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<drones.length() {
     if !drones[i].active {
       slot = i
@@ -380,9 +380,9 @@ fn add_bullet(
   vy : Float,
   dmg : Float,
   life : Float,
-  team : Int,
+  team : Int32,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<bullets.length() {
     if !bullets[i].active {
       slot = i
@@ -411,9 +411,9 @@ fn add_crystal(
   crystals : Array[Crystal],
   x : Float,
   y : Float,
-  value : Int,
+  value : Int32,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<crystals.length() {
     if !crystals[i].active {
       slot = i
@@ -440,9 +440,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut left = n
   for part in parts {
@@ -472,7 +472,7 @@ fn generate_layer(
   crystals : Array[Crystal],
   drones : Array[Drone],
   y : Float,
-  level : Int,
+  level : Int32,
 ) -> Unit {
   let px = randf(tower_l + 90.0, tower_r - 90.0)
   let w = randf(142.0, 246.0)
@@ -633,7 +633,7 @@ fn main {
     }
   })
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
 
   let mut cam_y : Float = -310.0
   let mut gen_top_y : Float = 140.0
@@ -771,7 +771,7 @@ fn main {
         pilot.best_h = height_now
       }
 
-      let level : Int = pilot.best_h.to_int() / 380 + 1
+      let level : Int32 = pilot.best_h.to_int() / 380 + 1
 
       pilot.energy = pilot.energy + dt * 15.0
       if pilot.energy > 100.0 {
@@ -816,10 +816,10 @@ fn main {
       let mut dash_press : Bool = @raylib.is_key_pressed(@raylib.KeyK)
       let mut bomb_press : Bool = @raylib.is_key_pressed(@raylib.KeyL)
 
-      let pad_x : Int = 20
-      let pad_y : Int = sh - 198
-      let btn_x : Int = sw - 296
-      let btn_y : Int = sh - 236
+      let pad_x : Int32 = 20
+      let pad_y : Int32 = sh - 198
+      let btn_x : Int32 = sw - 296
+      let btn_y : Int32 = sh - 236
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 58, 78, 58) {

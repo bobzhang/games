@@ -2,25 +2,25 @@
 
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1024
+pub let screen_width : Int32 = 1024
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 // Grid dimensions
 
 ///|
 /// Grid dimension value for grid width in cells.
-pub let grid_w : Int = 32
+pub let grid_w : Int32 = 32
 
 ///|
 /// Grid dimension value for grid height in cells.
-pub let grid_h : Int = 32
+pub let grid_h : Int32 = 32
 
 ///|
 /// Grid dimension value for grid total in cells.
-pub let grid_total : Int = 1024 // grid_w * grid_h
+pub let grid_total : Int32 = 1024 // grid_w * grid_h
 
 ///|
 /// Size or distance value for cell size in world units.
@@ -34,43 +34,43 @@ pub let wall_height : Float = 3.0
 
 ///|
 /// Numeric id for tile wall.
-pub let tile_wall : Int = 1
+pub let tile_wall : Int32 = 1
 
 ///|
 /// Numeric id for tile floor.
-pub let tile_floor : Int = 2
+pub let tile_floor : Int32 = 2
 
 ///|
 /// Numeric id for tile door.
-pub let tile_door : Int = 3
+pub let tile_door : Int32 = 3
 
 ///|
 /// Numeric id for tile stairs.
-pub let tile_stairs : Int = 4
+pub let tile_stairs : Int32 = 4
 
 ///|
 /// Numeric id for tile chest.
-pub let tile_chest : Int = 5
+pub let tile_chest : Int32 = 5
 
 ///|
 /// Numeric id for tile trap.
-pub let tile_trap : Int = 6
+pub let tile_trap : Int32 = 6
 
 ///|
 /// Numeric id for tile shrine.
-pub let tile_shrine : Int = 7
+pub let tile_shrine : Int32 = 7
 
 ///|
 /// Numeric id for tile shop.
-pub let tile_shop : Int = 8
+pub let tile_shop : Int32 = 8
 
 ///|
 /// Numeric id for tile locked door.
-pub let tile_locked_door : Int = 9
+pub let tile_locked_door : Int32 = 9
 
 ///|
 /// Numeric id for tile boss door.
-pub let tile_boss_door : Int = 10
+pub let tile_boss_door : Int32 = 10
 
 // Enemy types
 
@@ -78,85 +78,85 @@ pub let tile_boss_door : Int = 10
 
 ///|
 /// Numeric id for idle.
-pub let ai_idle : Int = 0
+pub let ai_idle : Int32 = 0
 
 ///|
 /// Numeric id for chase.
-pub let ai_chase : Int = 2
+pub let ai_chase : Int32 = 2
 
 ///|
 /// Numeric id for special.
-pub let ai_special : Int = 6
+pub let ai_special : Int32 = 6
 
 ///|
 /// Numeric id for retreating AI state.
-pub let ai_retreat : Int = 7
+pub let ai_retreat : Int32 = 7
 
 ///|
 /// Numeric id for strafing AI state.
-pub let ai_strafe : Int = 8
+pub let ai_strafe : Int32 = 8
 
 ///|
 /// Numeric id for ambush (lurking) AI state.
-pub let ai_ambush : Int = 9
+pub let ai_ambush : Int32 = 9
 
 ///|
 /// Numeric id for telegraph (wind-up) AI state.
-pub let ai_telegraph : Int = 10
+pub let ai_telegraph : Int32 = 10
 
 // Loot types
 
 ///|
 /// Numeric id for none.
-pub let loot_none : Int = 0
+pub let loot_none : Int32 = 0
 
 ///|
 /// Numeric id for health potion.
-pub let loot_health_potion : Int = 1
+pub let loot_health_potion : Int32 = 1
 
 ///|
 /// Numeric id for damage boost.
-pub let loot_damage_boost : Int = 2
+pub let loot_damage_boost : Int32 = 2
 
 ///|
 /// Numeric id for armor.
-pub let loot_armor : Int = 3
+pub let loot_armor : Int32 = 3
 
 ///|
 /// Numeric id for mana potion.
-pub let loot_mana_potion : Int = 4
+pub let loot_mana_potion : Int32 = 4
 
 ///|
 /// Numeric id for speed potion.
-pub let loot_speed_potion : Int = 5
+pub let loot_speed_potion : Int32 = 5
 
 ///|
 /// Numeric id for strength potion.
-pub let loot_strength_potion : Int = 6
+pub let loot_strength_potion : Int32 = 6
 
 ///|
 /// Numeric id for gold pile.
-pub let loot_gold_pile : Int = 7
+pub let loot_gold_pile : Int32 = 7
 
 ///|
 /// Numeric id for key.
-pub let loot_key : Int = 8
+pub let loot_key : Int32 = 8
 
 ///|
 /// Numeric id for boss key.
-pub let loot_boss_key : Int = 9
+pub let loot_boss_key : Int32 = 9
 
 ///|
 /// Numeric id for equipment weapon drop.
-pub let loot_equip_weapon : Int = 10
+pub let loot_equip_weapon : Int32 = 10
 
 ///|
 /// Numeric id for equipment armor drop.
-pub let loot_equip_armor : Int = 11
+pub let loot_equip_armor : Int32 = 11
 
 ///|
 /// Numeric id for equipment ring drop.
-pub let loot_equip_ring : Int = 12
+pub let loot_equip_ring : Int32 = 12
 
 // Weapon types
 
@@ -164,23 +164,23 @@ pub let loot_equip_ring : Int = 12
 
 ///|
 /// Numeric id for none.
-pub let armor_none : Int = 0
+pub let armor_none : Int32 = 0
 
 ///|
 /// Numeric id for robes.
-pub let armor_robes : Int = 1
+pub let armor_robes : Int32 = 1
 
 ///|
 /// Numeric id for leather.
-pub let armor_leather : Int = 2
+pub let armor_leather : Int32 = 2
 
 ///|
 /// Numeric id for chain.
-pub let armor_chain : Int = 3
+pub let armor_chain : Int32 = 3
 
 ///|
 /// Numeric id for plate.
-pub let armor_plate : Int = 4
+pub let armor_plate : Int32 = 4
 
 // Spell types
 
@@ -190,17 +190,17 @@ pub let armor_plate : Int = 4
 
 ///|
 /// Numeric id for common.
-pub let rarity_common : Int = 0
+pub let rarity_common : Int32 = 0
 
 ///|
 /// Numeric id for uncommon.
-pub let rarity_uncommon : Int = 1
+pub let rarity_uncommon : Int32 = 1
 
 // Floor themes
 
 ///|
 /// Numeric id for crypt.
-pub let theme_crypt : Int = 0
+pub let theme_crypt : Int32 = 0
 
 // Game states
 
@@ -224,7 +224,7 @@ pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Convert a game state to an integer.
-pub fn GameState::to_int(self : GameState) -> Int {
+pub fn GameState::to_int(self : GameState) -> Int32 {
   match self {
     StateMenu => 0
     StatePlaying => 1
@@ -241,7 +241,7 @@ pub fn GameState::to_int(self : GameState) -> Int {
 
 ///|
 /// Convert an integer to a game state.
-pub fn GameState::from_int(v : Int) -> GameState {
+pub fn GameState::from_int(v : Int32) -> GameState {
   match v {
     0 => StateMenu
     1 => StatePlaying
@@ -262,65 +262,65 @@ pub fn GameState::from_int(v : Int) -> GameState {
 
 ///|
 /// Count limit or quantity for max enemies.
-pub let max_enemies : Int = 64
+pub let max_enemies : Int32 = 64
 
 ///|
 /// Count limit or quantity for max projectiles.
-pub let max_projectiles : Int = 128
+pub let max_projectiles : Int32 = 128
 
 ///|
 /// Count limit or quantity for max particles.
-pub let max_particles : Int = 256
+pub let max_particles : Int32 = 256
 
 ///|
 /// Count limit or quantity for max loot.
-pub let max_loot : Int = 32
+pub let max_loot : Int32 = 32
 
 ///|
 /// Count limit or quantity for max floors.
-pub let max_floors : Int = 10
+pub let max_floors : Int32 = 10
 
 ///|
 /// Count limit or quantity for max inventory.
-pub let max_inventory : Int = 20
+pub let max_inventory : Int32 = 20
 
 ///|
 /// Count limit or quantity for max spells.
-pub let max_spells : Int = 6
+pub let max_spells : Int32 = 6
 
 ///|
 /// Count limit or quantity for max messages.
-pub let max_messages : Int = 8
+pub let max_messages : Int32 = 8
 
 ///|
 /// Count limit or quantity for max traps.
-pub let max_traps : Int = 24
+pub let max_traps : Int32 = 24
 
 ///|
 /// Count limit or quantity for max shop items.
-pub let max_shop_items : Int = 6
+pub let max_shop_items : Int32 = 6
 
 ///|
 /// Count limit or quantity for max torches.
-pub let max_torches : Int = 32
+pub let max_torches : Int32 = 32
 
 // BSP dungeon generation
 
 ///|
 /// Size or distance value for min room size in world units.
-pub let min_room_size : Int = 4
+pub let min_room_size : Int32 = 4
 
 ///|
 /// Count limit or quantity for max room size.
-pub let max_room_size : Int = 10
+pub let max_room_size : Int32 = 10
 
 ///|
 /// Count limit or quantity for max rooms.
-pub let max_rooms : Int = 12
+pub let max_rooms : Int32 = 12
 
 ///|
 /// Size or distance value for corridor width in world units.
-pub let corridor_width : Int = 1
+pub let corridor_width : Int32 = 1
 
 // Player defaults
 
@@ -334,31 +334,31 @@ pub let player_sprint_mult : Float = 1.5
 
 ///|
 /// Hit-point value for player start hp.
-pub let player_start_hp : Int = 100
+pub let player_start_hp : Int32 = 100
 
 ///|
 /// Mana-related value for player start mana.
-pub let player_start_mana : Int = 50
+pub let player_start_mana : Int32 = 50
 
 ///|
 /// Player defaults setting for player start atk.
-pub let player_start_atk : Int = 10
+pub let player_start_atk : Int32 = 10
 
 ///|
 /// Player defaults setting for player start def.
-pub let player_start_def : Int = 5
+pub let player_start_def : Int32 = 5
 
 ///|
 /// Player defaults setting for player start str.
-pub let player_start_str : Int = 8
+pub let player_start_str : Int32 = 8
 
 ///|
 /// Player defaults setting for player start dex.
-pub let player_start_dex : Int = 8
+pub let player_start_dex : Int32 = 8
 
 ///|
 /// Player defaults setting for player start int stat.
-pub let player_start_int_stat : Int = 8
+pub let player_start_int_stat : Int32 = 8
 
 ///|
 /// Size or distance value for player eye height in world units.
@@ -498,11 +498,11 @@ pub let minotaur_charge_speed : Float = 8.0
 
 ///|
 /// Mana-related value for fireball mana cost.
-pub let fireball_mana_cost : Int = 15
+pub let fireball_mana_cost : Int32 = 15
 
 ///|
 /// Damage value for fireball damage.
-pub let fireball_damage : Int = 25
+pub let fireball_damage : Int32 = 25
 
 ///|
 /// Size or distance value for fireball radius in world units.
@@ -510,11 +510,11 @@ pub let fireball_radius : Float = 2.5
 
 ///|
 /// Mana-related value for ice bolt mana cost.
-pub let ice_bolt_mana_cost : Int = 10
+pub let ice_bolt_mana_cost : Int32 = 10
 
 ///|
 /// Damage value for ice bolt damage.
-pub let ice_bolt_damage : Int = 15
+pub let ice_bolt_damage : Int32 = 15
 
 ///|
 /// Time value for ice bolt slow duration in seconds.
@@ -522,15 +522,15 @@ pub let ice_bolt_slow_duration : Float = 3.0
 
 ///|
 /// Mana-related value for heal mana cost.
-pub let heal_mana_cost : Int = 20
+pub let heal_mana_cost : Int32 = 20
 
 ///|
 /// Spell costs and values setting for heal amount.
-pub let heal_amount : Int = 40
+pub let heal_amount : Int32 = 40
 
 ///|
 /// Mana-related value for shield mana cost.
-pub let shield_mana_cost : Int = 12
+pub let shield_mana_cost : Int32 = 12
 
 ///|
 /// Time value for shield duration in seconds.
@@ -538,15 +538,15 @@ pub let shield_duration : Float = 8.0
 
 ///|
 /// Scoring or progression value for shield defense bonus.
-pub let shield_defense_bonus : Int = 10
+pub let shield_defense_bonus : Int32 = 10
 
 ///|
 /// Mana-related value for lightning mana cost.
-pub let lightning_mana_cost : Int = 25
+pub let lightning_mana_cost : Int32 = 25
 
 ///|
 /// Damage value for lightning damage.
-pub let lightning_damage : Int = 35
+pub let lightning_damage : Int32 = 35
 
 ///|
 /// Size or distance value for lightning chain range in world units.
@@ -554,25 +554,25 @@ pub let lightning_chain_range : Float = 4.0
 
 ///|
 /// Mana-related value for teleport mana cost.
-pub let teleport_mana_cost : Int = 8
+pub let teleport_mana_cost : Int32 = 8
 
 // Trap values
 
 ///|
 /// Damage value for spike damage.
-pub let spike_damage : Int = 15
+pub let spike_damage : Int32 = 15
 
 ///|
 /// Damage value for arrow trap damage.
-pub let arrow_trap_damage : Int = 20
+pub let arrow_trap_damage : Int32 = 20
 
 ///|
 /// Damage value for flame damage.
-pub let flame_damage : Int = 25
+pub let flame_damage : Int32 = 25
 
 ///|
 /// Damage value for poison damage per sec.
-pub let poison_damage_per_sec : Int = 5
+pub let poison_damage_per_sec : Int32 = 5
 
 ///|
 /// Time value for poison duration in seconds.
@@ -580,7 +580,7 @@ pub let poison_duration : Float = 5.0
 
 ///|
 /// Damage value for pitfall damage.
-pub let pitfall_damage : Int = 30
+pub let pitfall_damage : Int32 = 30
 
 ///|
 /// Time value for trap cooldown in seconds.
@@ -590,85 +590,85 @@ pub let trap_cooldown : Float = 3.0
 
 ///|
 /// Scoring or progression value for xp per skeleton.
-pub let xp_per_skeleton : Int = 20
+pub let xp_per_skeleton : Int32 = 20
 
 ///|
 /// Scoring or progression value for xp per archer.
-pub let xp_per_archer : Int = 30
+pub let xp_per_archer : Int32 = 30
 
 ///|
 /// Scoring or progression value for xp per golem.
-pub let xp_per_golem : Int = 50
+pub let xp_per_golem : Int32 = 50
 
 ///|
 /// Scoring or progression value for xp per wraith.
-pub let xp_per_wraith : Int = 40
+pub let xp_per_wraith : Int32 = 40
 
 ///|
 /// Scoring or progression value for xp per dragon.
-pub let xp_per_dragon : Int = 200
+pub let xp_per_dragon : Int32 = 200
 
 ///|
 /// Scoring or progression value for xp per slime.
-pub let xp_per_slime : Int = 10
+pub let xp_per_slime : Int32 = 10
 
 ///|
 /// Scoring or progression value for xp per bat.
-pub let xp_per_bat : Int = 15
+pub let xp_per_bat : Int32 = 15
 
 ///|
 /// Scoring or progression value for xp per spider.
-pub let xp_per_spider : Int = 25
+pub let xp_per_spider : Int32 = 25
 
 ///|
 /// Scoring or progression value for xp per minotaur.
-pub let xp_per_minotaur : Int = 60
+pub let xp_per_minotaur : Int32 = 60
 
 ///|
 /// Scoring or progression value for xp per lich.
-pub let xp_per_lich : Int = 80
+pub let xp_per_lich : Int32 = 80
 
 ///|
 /// Scoring or progression value for xp per mimic.
-pub let xp_per_mimic : Int = 45
+pub let xp_per_mimic : Int32 = 45
 
 ///|
 /// Scoring or progression value for xp per level.
-pub let xp_per_level : Int = 100
+pub let xp_per_level : Int32 = 100
 
 ///|
 /// Hit-point value for hp per level.
-pub let hp_per_level : Int = 15
+pub let hp_per_level : Int32 = 15
 
 ///|
 /// Mana-related value for mana per level.
-pub let mana_per_level : Int = 8
+pub let mana_per_level : Int32 = 8
 
 ///|
 /// XP and leveling setting for atk per level.
-pub let atk_per_level : Int = 3
+pub let atk_per_level : Int32 = 3
 
 ///|
 /// XP and leveling setting for def per level.
-pub let def_per_level : Int = 2
+pub let def_per_level : Int32 = 2
 
 // Loot values
 
 ///|
 /// Hit-point value for health potion heal.
-pub let health_potion_heal : Int = 40
+pub let health_potion_heal : Int32 = 40
 
 ///|
 /// Mana-related value for mana potion restore.
-pub let mana_potion_restore : Int = 30
+pub let mana_potion_restore : Int32 = 30
 
 ///|
 /// Damage value for damage boost amount.
-pub let damage_boost_amount : Int = 5
+pub let damage_boost_amount : Int32 = 5
 
 ///|
 /// Numeric id for boost amount.
-pub let armor_boost_amount : Int = 3
+pub let armor_boost_amount : Int32 = 3
 
 ///|
 /// Time value for speed potion duration in seconds.
@@ -680,33 +680,33 @@ pub let strength_potion_duration : Float = 10.0
 
 ///|
 /// Scoring or progression value for strength potion bonus.
-pub let strength_potion_bonus : Int = 8
+pub let strength_potion_bonus : Int32 = 8
 
 ///|
 /// Loot values setting for gold pile min.
-pub let gold_pile_min : Int = 10
+pub let gold_pile_min : Int32 = 10
 
 ///|
 /// Loot values setting for gold pile max.
-pub let gold_pile_max : Int = 50
+pub let gold_pile_max : Int32 = 50
 
 // Armor defense values
 
 ///|
 /// Armor defense values setting for robes defense.
-pub let robes_defense : Int = 2
+pub let robes_defense : Int32 = 2
 
 ///|
 /// Armor defense values setting for leather defense.
-pub let leather_defense : Int = 5
+pub let leather_defense : Int32 = 5
 
 ///|
 /// Armor defense values setting for chain defense.
-pub let chain_defense : Int = 8
+pub let chain_defense : Int32 = 8
 
 ///|
 /// Armor defense values setting for plate defense.
-pub let plate_defense : Int = 12
+pub let plate_defense : Int32 = 12
 
 // Shop prices
 
@@ -714,25 +714,25 @@ pub let plate_defense : Int = 12
 
 ///|
 /// Shrine buffs setting for shrine options.
-pub let shrine_options : Int = 3
+pub let shrine_options : Int32 = 3
 
 // Minimap
 
 ///|
 /// UI sizing value for minimap size in pixels.
-pub let minimap_size : Int = 160
+pub let minimap_size : Int32 = 160
 
 ///|
 /// UI sizing value for minimap x in pixels.
-pub let minimap_x : Int = 854 // screen_width - minimap_size - 10
+pub let minimap_x : Int32 = 854 // screen_width - minimap_size - 10
 
 ///|
 /// UI sizing value for minimap y in pixels.
-pub let minimap_y : Int = 10
+pub let minimap_y : Int32 = 10
 
 ///|
 /// UI sizing value for minimap cell in pixels.
-pub let minimap_cell : Int = 5
+pub let minimap_cell : Int32 = 5
 
 // UI
 
@@ -859,23 +859,23 @@ pub let enemy_telegraph_duration : Float = 0.4
 
 ///|
 /// Ring effect: mana regeneration bonus.
-pub let ring_mana_regen : Int = 0
+pub let ring_mana_regen : Int32 = 0
 
 ///|
 /// Ring effect: life steal percentage.
-pub let ring_life_steal : Int = 1
+pub let ring_life_steal : Int32 = 1
 
 ///|
 /// Ring effect: thorns (damage reflect).
-pub let ring_thorns : Int = 2
+pub let ring_thorns : Int32 = 2
 
 ///|
 /// Ring effect: bonus gold find.
-pub let ring_gold_find : Int = 3
+pub let ring_gold_find : Int32 = 3
 
 ///|
 /// Ring effect: critical hit chance bonus.
-pub let ring_crit_chance : Int = 4
+pub let ring_crit_chance : Int32 = 4
 
 // Weapon affixes
 
@@ -910,23 +910,23 @@ pub fn get_affix_name(affix : WeaponAffix) -> String {
 
 ///|
 /// Total number of non-None affixes.
-pub let affix_count : Int = 6
+pub let affix_count : Int32 = 6
 
 ///|
 /// Maximum discovered weapon slots.
-pub let max_discovered_weapons : Int = 6
+pub let max_discovered_weapons : Int32 = 6
 
 ///|
 /// Maximum level-up card choices.
-pub let max_levelup_cards : Int = 3
+pub let max_levelup_cards : Int32 = 3
 
 ///|
 /// Total number of possible level-up card types.
-pub let levelup_card_count : Int = 6
+pub let levelup_card_count : Int32 = 6
 
 ///|
 /// Fire DOT damage per tick.
-pub let fire_dot_damage : Int = 3
+pub let fire_dot_damage : Int32 = 3
 
 ///|
 /// Fire DOT duration in seconds.

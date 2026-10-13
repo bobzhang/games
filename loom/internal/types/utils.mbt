@@ -1,14 +1,14 @@
 ///|
-pub fn new_heddle_row(cols : Int) -> HeddleRow {
+pub fn new_heddle_row(cols : Int32) -> HeddleRow {
   { raised: Array::make(cols, false), }
 }
 
 ///|
 pub fn new_fabric_pattern(
-  rows : Int,
-  cols : Int,
-  warp_colors : Array[Int],
-  weft_colors : Array[Int],
+  rows : Int32,
+  cols : Int32,
+  warp_colors : Array[Int32],
+  weft_colors : Array[Int32],
 ) -> FabricPattern {
   let cells : Array[FabricCell] = Array::make(rows * cols, {
     state: WeftOver,
@@ -18,15 +18,15 @@ pub fn new_fabric_pattern(
 }
 
 ///|
-pub fn pattern_get(p : FabricPattern, row : Int, col : Int) -> FabricCell {
+pub fn pattern_get(p : FabricPattern, row : Int32, col : Int32) -> FabricCell {
   p.cells[row * p.cols + col]
 }
 
 ///|
 pub fn pattern_set(
   p : FabricPattern,
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
   cell : FabricCell,
 ) -> Unit {
   p.cells[row * p.cols + col] = cell
@@ -107,7 +107,7 @@ pub fn build_player_fabric(game : Game) -> FabricPattern {
 
 ///|
 /// Count how many cells match between player fabric and target
-pub fn count_matches(player : FabricPattern, target : FabricPattern) -> Int {
+pub fn count_matches(player : FabricPattern, target : FabricPattern) -> Int32 {
   let mut matches = 0
   let total = target.rows * target.cols
   for i in 0..<total {
@@ -134,7 +134,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_levels(t : Tier) -> (Int, Int) {
+pub fn tier_levels(t : Tier) -> (Int32, Int32) {
   match t {
     Apprentice => (0, tier1_count)
     Journeyman => (tier1_count, tier2_count)
@@ -155,7 +155,7 @@ pub fn weave_type_name(w : WeaveType) -> String {
 }
 
 ///|
-pub fn cell_color(ci : Int) -> @raylib.Color {
+pub fn cell_color(ci : Int32) -> @raylib.Color {
   if ci >= 0 && ci < thread_colors.length() {
     thread_colors[ci]
   } else {
@@ -164,7 +164,7 @@ pub fn cell_color(ci : Int) -> @raylib.Color {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -173,7 +173,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -200,7 +200,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {

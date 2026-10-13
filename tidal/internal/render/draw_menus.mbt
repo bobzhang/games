@@ -5,7 +5,7 @@ fn draw_title(game : @types.Game) -> Unit {
   for i in 0..<8 {
     let fi : Float = Float::from_int(i)
     let y_base : Float = 200.0 + fi * 80.0
-    let alpha : Int = 30 - i * 3
+    let alpha : Int32 = 30 - i * 3
     let col = @raylib.Color::new(0, 180, 255, if alpha > 0 { alpha } else { 5 })
     for x in 0..<128 {
       let xf : Float = Float::from_int(x) * 10.0
@@ -37,7 +37,7 @@ fn draw_title(game : @types.Game) -> Unit {
   let prompt = "Press ENTER to start"
   let pulse : Float = @types.absf(@types.sinf(frame_f * 0.05))
   let base_alpha : Float = 120.0
-  let alpha_val : Int = (base_alpha + pulse * 135.0).to_int()
+  let alpha_val : Int32 = (base_alpha + pulse * 135.0).to_int()
   let prompt_col = @raylib.Color::new(200, 220, 255, alpha_val)
   let pw = @draw.measure_text(prompt, 22)
   @draw.draw_text(prompt, (@types.screen_width - pw) / 2, 400, 22, prompt_col)
@@ -213,7 +213,7 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars(x : Int, y : Int, count : Int) -> Unit {
+fn draw_stars(x : Int32, y : Int32, count : Int32) -> Unit {
   for i in 0..<3 {
     let col = if i < count {
       @types.color_star_gold

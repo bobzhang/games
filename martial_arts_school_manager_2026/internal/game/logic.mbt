@@ -17,7 +17,7 @@ fn random_unit() -> Float {
 
 ///|
 /// Computes a random delay until the next incident for the given week, using base gap plus random jitter.
-fn random_incident_delay(week : Int) -> Float {
+fn random_incident_delay(week : Int32) -> Float {
   let base = @types.incident_gap_for(week)
   let jitter = (random_unit() * 2.0 - 1.0) * @types.incident_gap_jitter
   @types.maxf(@types.incident_gap_min, base + jitter)
@@ -173,7 +173,7 @@ fn @types.Game::start_new_run(game : @types.Game) -> Unit {
 
 ///|
 /// Moves the assignment grid cursor by (dx, dy), clamping to valid row and column ranges.
-fn @types.Game::move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
+fn @types.Game::move_cursor(game : @types.Game, dx : Int32, dy : Int32) -> Unit {
   game.cursor_col = (game.cursor_col + dx).clamp(
     min=0,
     max=@types.room_count - 1,

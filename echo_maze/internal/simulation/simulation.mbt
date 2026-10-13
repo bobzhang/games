@@ -1,6 +1,9 @@
 ///|
 /// Load and parse a maze from level definition for testing/validation
-pub fn load_maze(world : Int, level : Int) -> (@types.Maze, @types.MazeState)? {
+pub fn load_maze(
+  world : Int32,
+  level : Int32,
+) -> (@types.Maze, @types.MazeState)? {
   match @maze.get_level(world, level) {
     Some(level_def) => {
       let maze = @maze.parse_maze(level_def)
@@ -32,7 +35,7 @@ pub fn is_walkable(
 
 ///|
 /// Check if a specific door is open
-pub fn is_door_open(maze_state : @types.MazeState, door_id : Int) -> Bool {
+pub fn is_door_open(maze_state : @types.MazeState, door_id : Int32) -> Bool {
   for ds in maze_state.door_states {
     if ds.door_id == door_id {
       return ds.open
@@ -65,7 +68,7 @@ pub fn advance_ghost(
   ghost : @types.Ghost,
   maze : @types.Maze,
   maze_state : @types.MazeState,
-  tick : Int,
+  tick : Int32,
 ) -> Unit {
   if !ghost.active {
     return
@@ -127,7 +130,7 @@ pub fn update_buttons(
 }
 
 ///|
-fn mark_button_pressed(maze_state : @types.MazeState, btn_id : Int) -> Unit {
+fn mark_button_pressed(maze_state : @types.MazeState, btn_id : Int32) -> Unit {
   if btn_id < maze_state.button_pressed.length() {
     maze_state.button_pressed[btn_id] = true
   }
@@ -166,7 +169,7 @@ pub fn update_doors(maze : @types.Maze, maze_state : @types.MazeState) -> Unit {
 pub fn update_timed_doors(
   maze : @types.Maze,
   maze_state : @types.MazeState,
-  tick : Int,
+  tick : Int32,
 ) -> Unit {
   for y in 0..<maze.height {
     for x in 0..<maze.width {
@@ -187,7 +190,7 @@ pub fn update_timed_doors(
 ///|
 fn set_door_open(
   maze_state : @types.MazeState,
-  door_id : Int,
+  door_id : Int32,
   open : Bool,
 ) -> Unit {
   for ds in maze_state.door_states {
@@ -309,7 +312,7 @@ pub fn check_collectibles(
   player : @types.Player,
   maze : @types.Maze,
   maze_state : @types.MazeState,
-) -> Int {
+) -> Int32 {
   let mut collected = 0
   for i in 0..<maze.collectible_positions.length() {
     if !maze_state.collectibles_collected[i] &&
@@ -328,7 +331,7 @@ pub fn run_tick(
   maze_state : @types.MazeState,
   player : @types.Player,
   ghosts : Array[@types.Ghost],
-  tick : Int,
+  tick : Int32,
   move_dir : @types.Direction?,
 ) -> TickResult {
   // 1. Move player
@@ -372,8 +375,8 @@ pub fn run_tick(
 
 ///|
 pub(all) enum TickResult {
-  Continue(Int) // collected count this tick
-  Completed(Int) // level complete, collected count
+  Continue(Int32) // collected count this tick
+  Completed(Int32) // level complete, collected count
   Failed // player caught
 } derive(Debug, Eq)
 
@@ -393,7 +396,7 @@ pub extend TickResult with Show::{to_string, output}
 
 ///|
 /// Count total collectibles obtained
-pub fn count_collectibles(maze_state : @types.MazeState) -> Int {
+pub fn count_collectibles(maze_state : @types.MazeState) -> Int32 {
   let mut count = 0
   for c in maze_state.collectibles_collected {
     if c {
@@ -408,8 +411,8 @@ pub fn count_collectibles(maze_state : @types.MazeState) -> Int {
 pub fn detect_ghost_button_presses(
   maze : @types.Maze,
   ghosts : Array[@types.Ghost],
-) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = [] // (ghost_index, button_id)
+) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = [] // (ghost_index, button_id)
   for y in 0..<maze.height {
     for x in 0..<maze.width {
       match maze.tiles[y][x].kind {
@@ -434,8 +437,8 @@ pub fn detect_ghost_button_presses(
 pub fn preview_ghost_guard_collisions(
   ghosts : Array[@types.Ghost],
   maze_state : @types.MazeState,
-) -> Array[(Int, Int)] {
-  let collisions : Array[(Int, Int)] = []
+) -> Array[(Int32, Int32)] {
+  let collisions : Array[(Int32, Int32)] = []
   for gi, ghost in ghosts {
     if !ghost.active {
       continue
@@ -550,11 +553,11 @@ pub fn validate_level_structure(
 ///|
 /// Calculate star rating for a completed level
 pub fn calculate_stars(
-  loop_count : Int,
-  par_loops : Int,
-  collectibles_got : Int,
-  collectibles_total : Int,
-) -> Int {
+  loop_count : Int32,
+  par_loops : Int32,
+  collectibles_got : Int32,
+  collectibles_total : Int32,
+) -> Int32 {
   let mut stars = 1 // 1 star for completing
   // 2 stars if completed within par
   if loop_count <= par_loops {

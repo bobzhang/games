@@ -1,30 +1,30 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 800
+let sh : Int32 = 800
 
 ///|
 /// Left edge X position of the play table in screen coordinates.
-let table_x : Int = 80
+let table_x : Int32 = 80
 
 ///|
 /// Top edge Y position of the play table in screen coordinates.
-let table_y : Int = 110
+let table_y : Int32 = 110
 
 ///|
 /// Width of the play table in pixels.
-let table_w : Int = 1120
+let table_w : Int32 = 1120
 
 ///|
 /// Height of the play table in pixels.
-let table_h : Int = 620
+let table_h : Int32 = 620
 
 ///|
 /// Vertical height of each goal opening on the left and right sides.
-let goal_h : Int = 220
+let goal_h : Int32 = 220
 
 ///|
 /// Radius of each paddle circle in pixels.
@@ -36,7 +36,7 @@ let puck_r : Float = 14.0
 
 ///|
 /// Maximum number of spark particles in the pool.
-let max_sparks : Int = 180
+let max_sparks : Int32 = 180
 
 ///|
 /// A spark particle emitted on puck collisions, holding position, velocity, time-to-live, and active state.
@@ -66,10 +66,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -133,7 +133,7 @@ fn spawn_spark(
   x : Float,
   y : Float,
   speed_scale : Float,
-  color_bias : Int,
+  color_bias : Int32,
 ) -> Unit {
   let mut placed = false
   for spark in sparks {
@@ -170,9 +170,9 @@ fn spawn_burst(
   sparks : Array[Spark],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed_scale : Float,
-  color_bias : Int,
+  color_bias : Int32,
 ) -> Unit {
   for _ in 0..<n {
     spawn_spark(sparks, x, y, speed_scale, color_bias)

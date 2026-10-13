@@ -99,7 +99,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   game.current_level_index = level_idx
   game.screen = Playing
@@ -362,7 +362,7 @@ fn refund_element(budget : @types.ElementBudget, elem : @types.Element) -> Unit 
 }
 
 ///|
-fn element_palette_index(elem : @types.Element) -> Int {
+fn element_palette_index(elem : @types.Element) -> Int32 {
   match elem {
     Fire => 0
     Water => 1

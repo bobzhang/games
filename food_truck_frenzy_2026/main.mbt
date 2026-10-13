@@ -19,18 +19,18 @@ struct Station {
   y : Float
   w : Float
   h : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
 /// Represents a customer order with deadline, reward, recipe kind, and pulse animation state.
 struct Order {
   mut active : Bool
-  mut id : Int
-  mut kind : Int
+  mut id : Int32
+  mut kind : Int32
   mut deadline : Float
   mut max_deadline : Float
-  mut reward : Int
+  mut reward : Int32
   mut pulse : Float
 }
 
@@ -38,7 +38,7 @@ struct Order {
 /// Represents an active cooking slot on the stove with recipe kind, progress, and quality tracking.
 struct StoveSlot {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut progress : Float
   mut need : Float
   mut quality : Float
@@ -51,8 +51,8 @@ struct SupplyBox {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
-  mut amount : Int
+  mut kind : Int32
+  mut amount : Int32
   mut life : Float
   mut pulse : Float
 }
@@ -67,7 +67,7 @@ struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -111,7 +111,7 @@ fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a random Int uniformly distributed in [lo, hi].
-fn randi(lo : Int, hi : Int) -> Int {
+fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
@@ -141,10 +141,10 @@ fn inside_rectf(
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -158,11 +158,11 @@ fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let mut hit : Bool = false
 
@@ -188,7 +188,7 @@ fn pointer_on_circle(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   cx : Float,
   cy : Float,
   r : Float,
@@ -213,7 +213,7 @@ fn pointer_on_circle(
 
 ///|
 /// Returns the display name for an ingredient by its kind index.
-fn ingredient_name(kind : Int) -> String {
+fn ingredient_name(kind : Int32) -> String {
   match kind {
     0 => "Bun"
     1 => "Meat"
@@ -225,7 +225,7 @@ fn ingredient_name(kind : Int) -> String {
 
 ///|
 /// Returns the abbreviated display name for a recipe by its kind index.
-fn recipe_short(kind : Int) -> String {
+fn recipe_short(kind : Int32) -> String {
   match kind {
     0 => "Burger"
     1 => "Skewer"
@@ -237,7 +237,7 @@ fn recipe_short(kind : Int) -> String {
 
 ///|
 /// Returns the base score reward for completing an order of the given recipe kind.
-fn recipe_reward(kind : Int) -> Int {
+fn recipe_reward(kind : Int32) -> Int32 {
   match kind {
     0 => 110
     1 => 128
@@ -249,7 +249,7 @@ fn recipe_reward(kind : Int) -> Int {
 
 ///|
 /// Returns the cooking time in seconds required for the given recipe kind.
-fn recipe_cook_time(kind : Int) -> Float {
+fn recipe_cook_time(kind : Int32) -> Float {
   match kind {
     0 => 5.2
     1 => 4.4
@@ -261,7 +261,7 @@ fn recipe_cook_time(kind : Int) -> Float {
 
 ///|
 /// Returns the display color associated with a recipe kind.
-fn recipe_color(kind : Int) -> @raylib.Color {
+fn recipe_color(kind : Int32) -> @raylib.Color {
   match kind {
     0 => @raylib.Color::new(246, 180, 92, 232)
     1 => @raylib.Color::new(250, 118, 94, 232)
@@ -273,7 +273,7 @@ fn recipe_color(kind : Int) -> @raylib.Color {
 
 ///|
 /// Returns the quantity of the given ingredient index needed to prepare a recipe of the given kind.
-fn recipe_need(kind : Int, ingredient : Int) -> Int {
+fn recipe_need(kind : Int32, ingredient : Int32) -> Int32 {
   match kind {
     0 =>
       match ingredient {
@@ -320,7 +320,7 @@ fn recipe_need(kind : Int, ingredient : Int) -> Int {
 
 ///|
 /// Returns true if the current ingredient inventory satisfies all requirements for the given recipe kind.
-fn recipe_can_make(kind : Int, ingredients : Array[Int]) -> Bool {
+fn recipe_can_make(kind : Int32, ingredients : Array[Int32]) -> Bool {
   let mut ok : Bool = true
   for i in 0..<ingredients.length() {
     if ingredients[i] < recipe_need(kind, i) {
@@ -332,9 +332,9 @@ fn recipe_can_make(kind : Int, ingredients : Array[Int]) -> Bool {
 
 ///|
 /// Deducts the required ingredients from inventory when preparing a recipe of the given kind.
-fn recipe_consume(kind : Int, ingredients : Array[Int]) -> Unit {
+fn recipe_consume(kind : Int32, ingredients : Array[Int32]) -> Unit {
   for i in 0..<ingredients.length() {
-    let need : Int = recipe_need(kind, i)
+    let need : Int32 = recipe_need(kind, i)
     ingredients[i] = (0).max(ingredients[i] - need)
   }
 }
@@ -405,7 +405,7 @@ fn spawn_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if part.active {
@@ -429,8 +429,8 @@ fn burst_particles(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
-  kind : Int,
+  count : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     spawn_particle(
@@ -467,7 +467,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 
 ///|
 /// Spawns a new customer order in the first available slot with wave-scaled deadline and reward.
-fn spawn_order(orders : Array[Order], wave : Int, serial : Int) -> Bool {
+fn spawn_order(orders : Array[Order], wave : Int32, serial : Int32) -> Bool {
   let mut placed : Bool = false
 
   for order in orders {
@@ -475,8 +475,8 @@ fn spawn_order(orders : Array[Order], wave : Int, serial : Int) -> Bool {
       continue
     }
 
-    let roll : Int = randi(0, 99)
-    let kind : Int = if roll < 24 {
+    let roll : Int32 = randi(0, 99)
+    let kind : Int32 = if roll < 24 {
       0
     } else if roll < 44 {
       1
@@ -542,13 +542,13 @@ fn spawn_supply_box(
 
 ///|
 /// Returns the count of active orders waiting for the given recipe kind.
-fn find_pending_for_kind(orders : Array[Order], kind : Int) -> Int {
+fn find_pending_for_kind(orders : Array[Order], kind : Int32) -> Int32 {
   @utils.count_by(orders, fn(order) { order.active && order.kind == kind })
 }
 
 ///|
 /// Returns the count of active stove slots currently cooking the given recipe kind.
-fn find_cooking_for_kind(stoves : Array[StoveSlot], kind : Int) -> Int {
+fn find_cooking_for_kind(stoves : Array[StoveSlot], kind : Int32) -> Int32 {
   @utils.count_by(stoves, fn(stove) { stove.active && stove.kind == kind })
 }
 
@@ -557,17 +557,17 @@ fn find_cooking_for_kind(stoves : Array[StoveSlot], kind : Int) -> Int {
 fn choose_recipe_for_cook(
   orders : Array[Order],
   stoves : Array[StoveSlot],
-  meals : Array[Int],
-  ingredients : Array[Int],
-) -> Int {
+  meals : Array[Int32],
+  ingredients : Array[Int32],
+) -> Int32 {
   let best_kind = for order in orders; best_kind = -1, best_time = 10000.0F {
     if !order.active {
       continue
     }
-    let k : Int = order.kind
-    let ready : Int = meals[k]
-    let cooking : Int = find_cooking_for_kind(stoves, k)
-    let pending : Int = find_pending_for_kind(orders, k)
+    let k : Int32 = order.kind
+    let ready : Int32 = meals[k]
+    let cooking : Int32 = find_cooking_for_kind(stoves, k)
+    let pending : Int32 = find_pending_for_kind(orders, k)
 
     if ready + cooking >= pending {
       continue
@@ -598,7 +598,7 @@ fn choose_recipe_for_cook(
 
 ///|
 /// Returns the index of the first inactive stove slot, or -1 if all slots are busy.
-fn open_stove_slot(stoves : Array[StoveSlot]) -> Int {
+fn open_stove_slot(stoves : Array[StoveSlot]) -> Int32 {
   for i in 0..<stoves.length() {
     if !stoves[i].active {
       break i
@@ -612,8 +612,8 @@ fn open_stove_slot(stoves : Array[StoveSlot]) -> Int {
 /// Returns the index of the active order with the earliest deadline for which a ready meal exists, or -1 if none.
 fn earliest_servable_order_index(
   orders : Array[Order],
-  meals : Array[Int],
-) -> Int {
+  meals : Array[Int32],
+) -> Int32 {
   for i in 0..<orders.length(); idx = -1, best_deadline = 10000.0F {
     if !orders[i].active {
       continue
@@ -632,10 +632,10 @@ fn earliest_servable_order_index(
 ///|
 /// Draws an animated floor grid with pulsing cell borders over the kitchen area.
 fn draw_floor_grid(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   scene_t : Float,
   art : GameArt,
 ) -> Unit {
@@ -649,20 +649,20 @@ fn draw_floor_grid(
   )
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(8, 12, 18, 44))
 
-  let cell : Int = 54
-  let cols : Int = w / cell + 1
-  let rows : Int = h / cell + 1
+  let cell : Int32 = 54
+  let cols : Int32 = w / cell + 1
+  let rows : Int32 = h / cell + 1
 
   for r in 0..<rows {
     for c in 0..<cols {
-      let px : Int = x + c * cell
-      let py : Int = y + r * cell
+      let px : Int32 = x + c * cell
+      let py : Int32 = y + r * cell
       let wave : Float = @math.sinf(
           scene_t * 1.8 + Float::from_int(r + c) * 0.45,
         ) *
         0.5 +
         0.5
-      let alpha : Int = 8 + (wave * 16.0).to_int()
+      let alpha : Int32 = 8 + (wave * 16.0).to_int()
       @raylib.draw_rectangle_lines(
         px,
         py,
@@ -767,11 +767,11 @@ fn draw_chef(chef : Chef, scene_t : Float, art : GameArt) -> Unit {
 ///|
 /// Draws the orders panel listing all active customer orders with urgency bars and ready state indicators.
 fn draw_orders_panel(
-  panel_x : Int,
-  panel_y : Int,
-  panel_w : Int,
+  panel_x : Int32,
+  panel_y : Int32,
+  panel_w : Int32,
   orders : Array[Order],
-  meals : Array[Int],
+  meals : Array[Int32],
   scene_t : Float,
 ) -> Unit {
   @draw.draw_text(
@@ -782,7 +782,7 @@ fn draw_orders_panel(
     @raylib.Color::new(236, 246, 255, 244),
   )
 
-  let mut draw_y : Int = panel_y + 56
+  let mut draw_y : Int32 = panel_y + 56
   for order in orders {
     if !order.active {
       continue
@@ -794,7 +794,7 @@ fn draw_orders_panel(
       clampf(1.0 - order.deadline / order.max_deadline, 0.0, 1.0)
     }
     let blink : Float = @math.sinf(scene_t * 8.0 + order.pulse) * 0.5 + 0.5
-    let card_h : Int = 86
+    let card_h : Int32 = 86
 
     @raylib.draw_rectangle(
       panel_x + 12,
@@ -866,7 +866,7 @@ fn draw_orders_panel(
       },
     )
 
-    let bar_w : Int = 220
+    let bar_w : Int32 = 220
     @raylib.draw_rectangle(
       panel_x + panel_w - bar_w - 24,
       draw_y + 48,
@@ -899,10 +899,10 @@ fn draw_orders_panel(
 ///|
 /// Draws the inventory panel showing current ingredient counts and ready meal quantities.
 fn draw_inventory_panel(
-  panel_x : Int,
-  panel_y : Int,
-  ingredients : Array[Int],
-  meals : Array[Int],
+  panel_x : Int32,
+  panel_y : Int32,
+  ingredients : Array[Int32],
+  meals : Array[Int32],
 ) -> Unit {
   @draw.draw_text(
     "Inventory",
@@ -912,7 +912,7 @@ fn draw_inventory_panel(
     @raylib.Color::new(236, 246, 255, 240),
   )
 
-  let mut y0 : Int = panel_y + 604
+  let mut y0 : Int32 = panel_y + 604
   for i in 0..<ingredients.length() {
     let text : String = "\{ingredient_name(i)}: \{ingredients[i]}"
     @draw.draw_text(
@@ -1049,7 +1049,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
     if !part.active {
       continue
     }
-    let alpha : Int = clampf(part.life * 255.0, 0.0, 255.0).to_int()
+    let alpha : Int32 = clampf(part.life * 255.0, 0.0, 255.0).to_int()
     let color = if part.kind == 0 {
       @raylib.Color::new(148, 218, 254, alpha)
     } else if part.kind == 1 {
@@ -1068,16 +1068,16 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 ///|
 /// Draws the on-screen touch D-pad and action buttons with visual active states.
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mouse_x : Float,
   mouse_y : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Unit {
-  let pad_x : Int = 26
-  let pad_y : Int = sh - 214
-  let cell : Int = 72
+  let pad_x : Int32 = 26
+  let pad_y : Int32 = sh - 214
+  let cell : Int32 = 72
 
   let up = pointer_on_rect(
     mouse_x,
@@ -1120,7 +1120,7 @@ fn draw_touch_controls(
     cell,
   )
 
-  fn draw_pad(x : Int, y : Int, label : String, active : Bool) -> Unit {
+  fn draw_pad(x : Int32, y : Int32, label : String, active : Bool) -> Unit {
     @raylib.draw_rectangle(
       x,
       y,
@@ -1171,9 +1171,9 @@ fn draw_touch_controls(
     r : Float,
     label : String,
     active : Bool,
-    cr : Int,
-    cg : Int,
-    cb : Int,
+    cr : Int32,
+    cg : Int32,
+    cb : Int32,
   ) -> Unit {
     @raylib.draw_circle_v(
       @raylib.Vector2::new(x, y),
@@ -1206,20 +1206,20 @@ fn draw_touch_controls(
 ///|
 /// Draws the main HUD panel with score, timer, reputation and condition meters, and status message.
 fn draw_hud(
-  panel_x : Int,
-  panel_y : Int,
-  panel_w : Int,
-  panel_h : Int,
+  panel_x : Int32,
+  panel_y : Int32,
+  panel_w : Int32,
+  panel_h : Int32,
   timer : Float,
-  score : Int,
-  score_target : Int,
+  score : Int32,
+  score_target : Int32,
   rep : Float,
   heat : Float,
   clean : Float,
-  combo : Int,
-  served : Int,
-  lost : Int,
-  queue_size : Int,
+  combo : Int32,
+  served : Int32,
+  lost : Int32,
+  queue_size : Int32,
   msg : String,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -1245,8 +1245,8 @@ fn draw_hud(
     @raylib.Color::new(238, 246, 255, 244),
   )
 
-  let mm : Int = timer.to_int() / 60
-  let ss : Int = timer.to_int() % 60
+  let mm : Int32 = timer.to_int() / 60
+  let ss : Int32 = timer.to_int() % 60
   let ss_txt : String = if ss < 10 { "0\{ss}" } else { "\{ss}" }
 
   @draw.draw_text(
@@ -1282,10 +1282,10 @@ fn draw_hud(
     title : String,
     value : Float,
     max_value : Float,
-    x : Int,
-    y : Int,
-    w : Int,
-    h : Int,
+    x : Int32,
+    y : Int32,
+    w : Int32,
+    h : Int32,
     c : @raylib.Color,
   ) -> Unit {
     let p : Float = if max_value <= 0.001 {
@@ -1389,7 +1389,7 @@ fn draw_hud(
 
 ///|
 /// Draws the main menu screen with animated background and start prompt.
-fn draw_menu(sw : Int, sh : Int, scene_t : Float, art : GameArt) -> Unit {
+fn draw_menu(sw : Int32, sh : Int32, scene_t : Float, art : GameArt) -> Unit {
   draw_texture_cover(
     art.title_art,
     0.0,
@@ -1432,10 +1432,10 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float, art : GameArt) -> Unit {
   )
 
   let pulse : Float = @math.sinf(scene_t * 3.6) * 0.5 + 0.5
-  let bw : Int = 470
-  let bh : Int = 96
-  let bx : Int = sw / 2 - bw / 2
-  let by : Int = 470
+  let bw : Int32 = 470
+  let bh : Int32 = 96
+  let bx : Int32 = sw / 2 - bw / 2
+  let by : Int32 = 470
   @raylib.draw_rectangle(
     bx,
     by,
@@ -1471,14 +1471,14 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float, art : GameArt) -> Unit {
 ///|
 /// Draws the end-of-shift screen with win/lose title, final score, reputation, and served/lost counts.
 fn draw_end(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   win : Bool,
-  score : Int,
-  target : Int,
+  score : Int32,
+  target : Int32,
   rep : Float,
-  served : Int,
-  lost : Int,
+  served : Int32,
+  lost : Int32,
   art : GameArt,
 ) -> Unit {
   draw_texture_cover(
@@ -1552,8 +1552,8 @@ fn draw_end(
 ///|
 /// Initializes and runs the Food Truck Frenzy 2026 game loop.
 fn main {
-  let sw : Int = 1680
-  let sh : Int = 960
+  let sw : Int32 = 1680
+  let sh : Int32 = 960
   @raylib.init_window(sw, sh, "raylib [game] food truck frenzy 2026")
   @draw.cleanup()
   defer @raylib.close_window()
@@ -1562,11 +1562,11 @@ fn main {
   let art = load_game_art()
   defer unload_game_art(art)
 
-  let world_x : Int = 22
-  let world_y : Int = 22
-  let panel_w : Int = 460
-  let world_w : Int = sw - panel_w - 42
-  let world_h : Int = sh - 44
+  let world_x : Int32 = 22
+  let world_y : Int32 = 22
+  let panel_w : Int32 = 460
+  let world_w : Int32 = sw - panel_w - 42
+  let world_h : Int32 = sh - 44
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
@@ -1633,8 +1633,8 @@ fn main {
     }
   })
 
-  let ingredients : Array[Int] = Array::makei(5, fn(_i) { 0 })
-  let meals : Array[Int] = Array::makei(5, fn(_i) { 0 })
+  let ingredients : Array[Int32] = Array::makei(5, fn(_i) { 0 })
+  let meals : Array[Int32] = Array::makei(5, fn(_i) { 0 })
   let bin_cd : Array[Float] = Array::makei(5, fn(_i) { 0.0 })
 
   let chef : Chef = {
@@ -1649,20 +1649,20 @@ fn main {
     step_t: 0.0,
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut scene_t : Float = 0.0
   let mut timer : Float = 360.0
-  let mut score : Int = 0
-  let mut score_target : Int = 9200
+  let mut score : Int32 = 0
+  let mut score_target : Int32 = 9200
   let mut rep : Float = 88.0
   let mut heat : Float = 18.0
   let mut clean : Float = 96.0
-  let mut combo : Int = 0
-  let mut served : Int = 0
-  let mut lost : Int = 0
-  let mut wave : Int = 1
+  let mut combo : Int32 = 0
+  let mut served : Int32 = 0
+  let mut lost : Int32 = 0
+  let mut wave : Int32 = 1
 
-  let mut order_serial : Int = 1
+  let mut order_serial : Int32 = 1
   let mut order_spawn_cd : Float = 1.2
   let mut supply_spawn_cd : Float = 10.0
 
@@ -1722,7 +1722,7 @@ fn main {
     let mouse = @raylib.get_mouse_position()
     let click : Bool = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
     let hold : Bool = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
-    let mut touch_count : Int = @raylib.get_touch_point_count()
+    let mut touch_count : Int32 = @raylib.get_touch_point_count()
     if touch_count > 10 {
       touch_count = 10
     }
@@ -1955,7 +1955,7 @@ fn main {
       }
 
       // Orders tick
-      let mut active_orders : Int = 0
+      let mut active_orders : Int32 = 0
       for order in orders {
         if !order.active {
           continue
@@ -2043,7 +2043,7 @@ fn main {
               stations[k].h,
             ) &&
             bin_cd[k] <= 0.0 {
-            let amount : Int = randi(2, 4)
+            let amount : Int32 = randi(2, 4)
             ingredients[k] = (24).min(ingredients[k] + amount)
             bin_cd[k] = 0.42
             did_action = true
@@ -2063,9 +2063,9 @@ fn main {
             stations[5].w,
             stations[5].h,
           ) {
-          let slot : Int = open_stove_slot(stoves)
+          let slot : Int32 = open_stove_slot(stoves)
           if slot >= 0 {
-            let pick : Int = choose_recipe_for_cook(
+            let pick : Int32 = choose_recipe_for_cook(
               orders, stoves, meals, ingredients,
             )
             if pick >= 0 {
@@ -2101,12 +2101,12 @@ fn main {
             stations[6].w,
             stations[6].h,
           ) {
-          let oi : Int = earliest_servable_order_index(orders, meals)
+          let oi : Int32 = earliest_servable_order_index(orders, meals)
           if oi >= 0 {
-            let k : Int = orders[oi].kind
+            let k : Int32 = orders[oi].kind
             meals[k] = meals[k] - 1
-            let bonus : Int = (orders[oi].deadline * 2.0).to_int()
-            let gain : Int = orders[oi].reward + combo * 12 + bonus
+            let bonus : Int32 = (orders[oi].deadline * 2.0).to_int()
+            let gain : Int32 = orders[oi].reward + combo * 12 + bonus
             score = score + gain
             served = served + 1
             combo = (30).min(combo + 1)
@@ -2245,10 +2245,10 @@ fn main {
       draw_particles(parts)
       draw_chef(chef, scene_t, art)
 
-      let panel_x : Int = world_x + world_w + 10
-      let panel_y : Int = world_y
-      let panel_w2 : Int = panel_w - 12
-      let panel_h : Int = world_h
+      let panel_x : Int32 = world_x + world_w + 10
+      let panel_y : Int32 = world_y
+      let panel_w2 : Int32 = panel_w - 12
+      let panel_h : Int32 = world_h
 
       draw_hud(
         panel_x,

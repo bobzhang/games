@@ -104,7 +104,7 @@ fn reset_player(hero : @types.Player) -> Unit {
 
 ///|
 /// Returns the index of the first inactive segment slot, or the rightmost active segment if all slots are occupied.
-fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int32 {
   for i, slot in game.segments {
     if !slot.active {
       break i
@@ -121,7 +121,7 @@ fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive obstacle slot, or evicts the farthest right active obstacle if all slots are occupied.
-fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int32 {
   for i, slot in game.obstacles {
     if !slot.active {
       break i
@@ -138,7 +138,7 @@ fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive chip slot, or evicts the farthest right active chip if all slots are occupied.
-fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int32 {
   for i, slot in game.chips {
     if !slot.active {
       break i
@@ -155,7 +155,7 @@ fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive anchor slot, or evicts the farthest right active anchor if all slots are occupied.
-fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int32 {
   for i, slot in game.anchors {
     if !slot.active {
       break i
@@ -172,7 +172,7 @@ fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive particle slot, or evicts the shortest-lived active particle if all slots are occupied.
-fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int32 {
   for i, slot in game.particles {
     if !slot.active {
       break i
@@ -192,7 +192,7 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive ghost slot, or evicts the shortest-lived active ghost if all slots are occupied.
-fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int32 {
   for i, slot in game.ghosts {
     if !slot.active {
       break i
@@ -218,9 +218,9 @@ fn @types.Game::spawn_segment(
   y : Float,
   w : Float,
   h : Float,
-  skin : Int,
-  neon : Int,
-  window_seed : Int,
+  skin : Int32,
+  neon : Int32,
+  window_seed : Int32,
 ) -> Unit {
   let i = game.alloc_segment_slot()
   game.segments[i].active = true
@@ -306,7 +306,7 @@ fn @types.Game::burst_particles(
   game : @types.Game,
   x : Float,
   y : Float,
-  amount : Int,
+  amount : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<amount {
@@ -849,7 +849,7 @@ fn @types.Game::score_multiplier(game : @types.Game) -> Float {
 
 ///|
 /// Increments the combo counter by `amount` (clamped to 999) and resets the combo expiry timer to 4 seconds.
-fn @types.Game::gain_combo(game : @types.Game, amount : Int) -> Unit {
+fn @types.Game::gain_combo(game : @types.Game, amount : Int32) -> Unit {
   game.combo = (game.combo + amount).clamp(min=0, max=999)
   game.combo_t = 4.0
 }
@@ -1024,7 +1024,7 @@ fn @types.Game::update_combo_and_score(
 
 ///|
 /// Begins the given stage number by setting the scroll speed, stage goal distance, progress counter, and intro timer, and partially restoring the player's health.
-fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_stage(game : @types.Game, stage : Int32) -> Unit {
   game.stage = stage
   game.stage_goal = @types.stage_base_goal +
     Float::from_int(stage - 1) * @types.stage_goal_growth

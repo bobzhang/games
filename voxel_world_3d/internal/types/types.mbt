@@ -3,23 +3,23 @@
 ///|
 /// Voxel chunk data for one `(cx, cz)` column, including block storage and biome tag.
 pub(all) struct Chunk {
-  blocks : Array[Int]
-  cx : Int
-  cz : Int
+  blocks : Array[Int32]
+  cx : Int32
+  cz : Int32
   mut dirty : Bool
   mut biome : Biome
 }
 
 ///|
 /// Creates a new empty chunk initialized with `block_air`.
-pub fn Chunk::Chunk(cx : Int, cz : Int) -> Chunk {
+pub fn Chunk::Chunk(cx : Int32, cz : Int32) -> Chunk {
   let size = chunk_x * chunk_y * chunk_z
   { blocks: Array::make(size, block_air), cx, cz, dirty: true, biome: Plains, }
 }
 
 ///|
 /// Returns block id at local chunk coordinates, treating out-of-bounds as air.
-pub fn Chunk::get_block(self : Chunk, x : Int, y : Int, z : Int) -> Int {
+pub fn Chunk::get_block(self : Chunk, x : Int32, y : Int32, z : Int32) -> Int32 {
   if x < 0 || x >= chunk_x || y < 0 || y >= chunk_y || z < 0 || z >= chunk_z {
     block_air
   } else {
@@ -31,10 +31,10 @@ pub fn Chunk::get_block(self : Chunk, x : Int, y : Int, z : Int) -> Int {
 /// Writes a block id at local chunk coordinates and marks the chunk as dirty.
 pub fn Chunk::set_block(
   self : Chunk,
-  x : Int,
-  y : Int,
-  z : Int,
-  block : Int,
+  x : Int32,
+  y : Int32,
+  z : Int32,
+  block : Int32,
 ) -> Unit {
   if x >= 0 && x < chunk_x && y >= 0 && y < chunk_y && z >= 0 && z < chunk_z {
     self.blocks[y * chunk_x * chunk_z + z * chunk_x + x] = block
@@ -47,8 +47,8 @@ pub fn Chunk::set_block(
 ///|
 /// One inventory slot containing an item id and stack count.
 pub(all) struct ItemSlot {
-  mut item_id : Int
-  mut count : Int
+  mut item_id : Int32
+  mut count : Int32
 }
 
 ///|
@@ -59,7 +59,7 @@ pub fn ItemSlot::empty() -> ItemSlot {
 
 ///|
 /// Creates an item slot with `item_id` and `count`.
-pub fn ItemSlot::make(item_id : Int, count : Int) -> ItemSlot {
+pub fn ItemSlot::make(item_id : Int32, count : Int32) -> ItemSlot {
   { item_id, count, }
 }
 
@@ -69,7 +69,7 @@ pub fn ItemSlot::make(item_id : Int, count : Int) -> ItemSlot {
 /// Player inventory model with fixed slot array and selected hotbar index.
 pub(all) struct Inventory {
   slots : Array[ItemSlot]
-  mut selected : Int
+  mut selected : Int32
 }
 
 ///|
@@ -97,7 +97,11 @@ pub fn Inventory::Inventory() -> Inventory {
 
 ///|
 /// Attempts to add stackable items, returning any leftover count that could not fit.
-pub fn Inventory::add_item(self : Inventory, item_id : Int, count : Int) -> Int {
+pub fn Inventory::add_item(
+  self : Inventory,
+  item_id : Int32,
+  count : Int32,
+) -> Int32 {
   let mut remaining = count
   // First try to stack with existing slots
   for i in 0..<inventory_slots {
@@ -150,22 +154,22 @@ pub(all) struct Player {
   mut pitch : Float
   mut on_ground : Bool
   mut sprint : Bool
-  mut selected_block : Int
+  mut selected_block : Int32
   mut bob_timer : Float
   // Health and hunger
-  mut health : Int
-  mut hunger : Int
+  mut health : Int32
+  mut hunger : Int32
   mut hunger_timer : Float
-  mut air : Int
+  mut air : Int32
   // Mining
-  mut mining_block_x : Int
-  mut mining_block_y : Int
-  mut mining_block_z : Int
+  mut mining_block_x : Int32
+  mut mining_block_y : Int32
+  mut mining_block_z : Int32
   mut mining_progress : Float
   mut mining_active : Bool
   // Tool
-  mut equipped_tool : Int
-  mut tool_durability : Int
+  mut equipped_tool : Int32
+  mut tool_durability : Int32
   // Combat
   mut attack_cooldown : Float
   mut invulnerable_timer : Float
@@ -229,12 +233,12 @@ pub fn Player::Player() -> Player {
 /// Result of raycast block targeting, including hit block and face normal.
 pub(all) struct BlockHit {
   mut hit : Bool
-  mut bx : Int
-  mut by : Int
-  mut bz : Int
-  mut nx : Int
-  mut ny : Int
-  mut nz : Int
+  mut bx : Int32
+  mut by : Int32
+  mut bz : Int32
+  mut nx : Int32
+  mut ny : Int32
+  mut nz : Int32
   mut distance : Float
 }
 
@@ -250,15 +254,15 @@ pub fn BlockHit::BlockHit() -> BlockHit {
 /// Runtime mob/entity state used by world AI and combat systems.
 pub(all) struct Entity {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
   mut vx : Float
   mut vy : Float
   mut vz : Float
-  mut health : Int
-  mut max_health : Int
+  mut health : Int32
+  mut max_health : Int32
   mut ai_state : AiState
   mut ai_timer : Float
   mut target_x : Float
@@ -310,9 +314,9 @@ pub(all) struct Particle {
   mut vz : Float
   mut lifetime : Float
   mut max_lifetime : Float
-  mut color_r : Int
-  mut color_g : Int
-  mut color_b : Int
+  mut color_r : Int32
+  mut color_g : Int32
+  mut color_b : Int32
   mut size : Float
 }
 
@@ -349,8 +353,8 @@ pub(all) struct Projectile {
   mut vy : Float
   mut vz : Float
   mut lifetime : Float
-  mut damage : Int
-  mut owner_kind : Int
+  mut damage : Int32
+  mut owner_kind : Int32
 }
 
 ///|
@@ -379,11 +383,11 @@ pub(all) struct DamageNumber {
   mut x : Float
   mut y : Float
   mut z : Float
-  mut amount : Int
+  mut amount : Int32
   mut timer : Float
-  mut color_r : Int
-  mut color_g : Int
-  mut color_b : Int
+  mut color_r : Int32
+  mut color_g : Int32
+  mut color_b : Int32
 }
 
 ///|
@@ -404,32 +408,32 @@ pub fn DamageNumber::inactive() -> DamageNumber {
 
 ///|
 /// Maximum damage number pool size.
-pub let damage_number_max : Int = 16
+pub let damage_number_max : Int32 = 16
 
 // Crafting recipe
 
 ///|
 /// Crafting recipe definition with up to two inputs and one output.
 pub(all) struct CraftingRecipe {
-  input1_id : Int
-  input1_count : Int
-  input2_id : Int
-  input2_count : Int
-  output_id : Int
-  output_count : Int
+  input1_id : Int32
+  input1_count : Int32
+  input2_id : Int32
+  input2_count : Int32
+  output_id : Int32
+  output_count : Int32
   name : String
-  station : Int
+  station : Int32
 }
 
 ///|
 /// Constructs a crafting recipe record (defaults to no station required).
 pub fn CraftingRecipe::CraftingRecipe(
-  in1_id : Int,
-  in1_count : Int,
-  in2_id : Int,
-  in2_count : Int,
-  out_id : Int,
-  out_count : Int,
+  in1_id : Int32,
+  in1_count : Int32,
+  in2_id : Int32,
+  in2_count : Int32,
+  out_id : Int32,
+  out_count : Int32,
   name : String,
 ) -> CraftingRecipe {
   {
@@ -447,14 +451,14 @@ pub fn CraftingRecipe::CraftingRecipe(
 ///|
 /// Creates a crafting recipe that requires a specific station.
 pub fn CraftingRecipe::with_station(
-  in1_id : Int,
-  in1_count : Int,
-  in2_id : Int,
-  in2_count : Int,
-  out_id : Int,
-  out_count : Int,
+  in1_id : Int32,
+  in1_count : Int32,
+  in2_id : Int32,
+  in2_count : Int32,
+  out_id : Int32,
+  out_count : Int32,
   name : String,
-  station : Int,
+  station : Int32,
 ) -> CraftingRecipe {
   {
     input1_id: in1_id,
@@ -473,18 +477,18 @@ pub fn CraftingRecipe::with_station(
 ///|
 /// Biome generation/render parameters for terrain shaping and coloring.
 pub(all) struct BiomeParams {
-  id : Int
+  id : Int32
   name : String
   height_base : Float
   height_amplitude : Float
   tree_density : Float
-  surface_block : Int
-  sub_surface_block : Int
+  surface_block : Int32
+  sub_surface_block : Int32
   has_snow : Bool
   has_cactus : Bool
-  water_color_r : Int
-  water_color_g : Int
-  water_color_b : Int
+  water_color_r : Int32
+  water_color_g : Int32
+  water_color_b : Int32
 }
 
 // Main Game struct
@@ -513,10 +517,10 @@ pub(all) struct Game {
 
   // Day/night cycle
   mut day_timer : Float
-  mut day_count : Int
-  mut sky_r : Int
-  mut sky_g : Int
-  mut sky_b : Int
+  mut day_count : Int32
+  mut sky_r : Int32
+  mut sky_g : Int32
+  mut sky_b : Int32
   mut sun_angle : Float
   mut is_night : Bool
 
@@ -525,8 +529,8 @@ pub(all) struct Game {
   mut message_timer : Float
   mut message_text : String
   mut show_debug : Bool
-  mut crafting_selection : Int
-  mut crafting_scroll_offset : Int
+  mut crafting_selection : Int32
+  mut crafting_scroll_offset : Int32
 
   // Entities
   entities : Array[Entity]
@@ -542,23 +546,23 @@ pub(all) struct Game {
   mut water_spread_timer : Float
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // Difficulty
-  mut difficulty : Int
+  mut difficulty : Int32
 
   // Stats
-  mut blocks_broken : Int
-  mut blocks_placed : Int
-  mut mobs_killed : Int
+  mut blocks_broken : Int32
+  mut blocks_placed : Int32
+  mut mobs_killed : Int32
   mut distance_walked : Float
   mut prev_pos_x : Float
   mut prev_pos_z : Float
 
   // Death screen
   mut death_timer : Float
-  mut respawn_count : Int
+  mut respawn_count : Int32
 
   // Inventory full warning
   mut inv_full_timer : Float
@@ -572,13 +576,13 @@ pub(all) struct Game {
   // Night danger indicators
   mut night_warning_timer : Float
   mut night_danger_alpha : Float
-  mut nearby_enemy_count : Int
+  mut nearby_enemy_count : Int32
 
   // Player poison timer (from rotten flesh)
   mut poison_timer : Float
 
   // World seed
-  mut world_seed : Int
+  mut world_seed : Int32
 }
 
 ///|

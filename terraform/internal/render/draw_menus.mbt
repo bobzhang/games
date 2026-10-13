@@ -150,7 +150,7 @@ fn draw_orbit_trail(
   rx : Float,
   ry : Float,
   _time : Float,
-  segments : Int,
+  segments : Int32,
 ) -> Unit {
   for i in 0..<segments {
     let a = Float::from_int(i) * @types.pi * 2.0 / Float::from_int(segments)
@@ -233,17 +233,17 @@ fn draw_tier_select(game : @types.Game) -> Unit {
 
 ///|
 fn draw_tier_card(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   name : String,
   desc : String,
   color : @raylib.Color,
-  num : Int,
-  stars : Int,
-  completed : Int,
-  total : Int,
+  num : Int32,
+  stars : Int32,
+  completed : Int32,
+  total : Int32,
 ) -> Unit {
   // Card background
   @raylib.draw_rectangle(x, y, w, h, @types.color_panel)
@@ -312,7 +312,7 @@ fn draw_tier_card(
 }
 
 ///|
-fn count_tier_stars(game : @types.Game, tier : @types.Tier) -> Int {
+fn count_tier_stars(game : @types.Game, tier : @types.Tier) -> Int32 {
   let (start, end) = @types.tier_level_range(tier)
   let mut total = 0
   for i in start..<end {
@@ -322,7 +322,7 @@ fn count_tier_stars(game : @types.Game, tier : @types.Tier) -> Int {
 }
 
 ///|
-fn count_tier_completed(game : @types.Game, tier : @types.Tier) -> Int {
+fn count_tier_completed(game : @types.Game, tier : @types.Tier) -> Int32 {
   let (start, end) = @types.tier_level_range(tier)
   let mut total = 0
   for i in start..<end {
@@ -391,11 +391,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
 
 ///|
 fn draw_level_card(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
-  num : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
+  num : Int32,
   score : @types.LevelScore,
   tier_color : @raylib.Color,
 ) -> Unit {
@@ -446,7 +446,7 @@ fn draw_level_card(
 }
 
 ///|
-fn draw_star(x : Int, y : Int, size : Int, color : @raylib.Color) -> Unit {
+fn draw_star(x : Int32, y : Int32, size : Int32, color : @raylib.Color) -> Unit {
   let cx = Float::from_int(x) + Float::from_int(size) / 2.0
   let cy = Float::from_int(y) + Float::from_int(size) / 2.0
   let outer = Float::from_int(size) / 2.0
@@ -711,8 +711,8 @@ fn draw_results(game : @types.Game) -> Unit {
 
 ///|
 fn draw_result_ratio(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   label : String,
   current : Float,
   min : Float,

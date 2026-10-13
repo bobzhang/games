@@ -1,8 +1,8 @@
 ///|
 fn make_level(
   tier : @types.Tier,
-  level_index : Int,
-  prefilled : Array[(Int, Int, Int)],
+  level_index : Int32,
+  prefilled : Array[(Int32, Int32, Int32)],
   constraints : Array[@types.Constraint],
   par_time : Float,
 ) -> @types.Level {
@@ -16,7 +16,7 @@ fn make_level(
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_01()
     1 => level_02()

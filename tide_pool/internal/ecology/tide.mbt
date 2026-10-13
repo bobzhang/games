@@ -17,6 +17,6 @@ pub fn update_submersion(game : @types.Game) -> Unit {
 }
 
 ///|
-pub fn get_water_row(tide_level : Int, depth : Int) -> Int {
+pub fn get_water_row(tide_level : Int32, depth : Int32) -> Int32 {
   @types.grid_rows - tide_level - depth
 }

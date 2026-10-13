@@ -124,25 +124,25 @@ fn @types.Game::end_run_game_over(game : @types.Game, reason : String) -> Unit {
 
 ///|
 /// Returns the index of the first inactive lantern slot, or -1 if all slots are in use.
-fn @types.Game::free_lantern_slot(game : @types.Game) -> Int {
+fn @types.Game::free_lantern_slot(game : @types.Game) -> Int32 {
   @utils.first_index_by(game.lanterns, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive gust slot, or -1 if all slots are in use.
-fn @types.Game::free_gust_slot(game : @types.Game) -> Int {
+fn @types.Game::free_gust_slot(game : @types.Game) -> Int32 {
   @utils.first_index_by(game.gusts, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive spark slot, or -1 if all slots are in use.
-fn @types.Game::free_spark_slot(game : @types.Game) -> Int {
+fn @types.Game::free_spark_slot(game : @types.Game) -> Int32 {
   @utils.first_index_by(game.sparks, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive thief slot, or -1 if all slots are in use.
-fn @types.Game::free_thief_slot(game : @types.Game) -> Int {
+fn @types.Game::free_thief_slot(game : @types.Game) -> Int32 {
   @utils.first_index_by(game.thieves, fn(slot) { !slot.active })
 }
 
@@ -246,7 +246,7 @@ fn @types.Game::nearest_active_lantern(
   x : Float,
   y : Float,
   max_d2 : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<game.lanterns.length(); best = -1, best_d2 = max_d2 {
     if !game.lanterns[i].active || game.lanterns[i].flame <= 0.0 {
       continue
@@ -320,7 +320,7 @@ fn @types.Game::release_escort(game : @types.Game) -> Unit {
 
 ///|
 /// Links the patrol to lantern at `idx` as its current escort, releasing any previous link.
-fn @types.Game::set_escort(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::set_escort(game : @types.Game, idx : Int32) -> Unit {
   if idx < 0 || idx >= game.lanterns.length() || !game.lanterns[idx].active {
     return
   }
@@ -332,7 +332,7 @@ fn @types.Game::set_escort(game : @types.Game, idx : Int) -> Unit {
 
 ///|
 /// Awards score for delivering lantern `idx` to its shrine, updates combo, and deactivates the lantern.
-fn @types.Game::deliver_lantern(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::deliver_lantern(game : @types.Game, idx : Int32) -> Unit {
   if idx < 0 || idx >= game.lanterns.length() || !game.lanterns[idx].active {
     return
   }
@@ -364,7 +364,7 @@ fn @types.Game::deliver_lantern(game : @types.Game, idx : Int) -> Unit {
 
 ///|
 /// Deactivates lantern `idx` when its flame reaches zero, increments the extinguished count, and resets combo.
-fn @types.Game::extinguish_lantern(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::extinguish_lantern(game : @types.Game, idx : Int32) -> Unit {
   if idx < 0 || idx >= game.lanterns.length() || !game.lanterns[idx].active {
     return
   }

@@ -69,13 +69,13 @@ pub fn trace_all_beams(grid : @types.Grid) -> Array[@types.BeamSegment] {
 ///|
 fn trace_beam(
   grid : @types.Grid,
-  start_x : Int,
-  start_y : Int,
+  start_x : Int32,
+  start_y : Int32,
   dir : @types.Direction,
   color : @types.BeamColor,
   segments : Array[@types.BeamSegment],
   combiner_inputs : Array[@types.BeamColor],
-  depth : Int,
+  depth : Int32,
 ) -> Unit {
   if depth > 50 || @types.beam_color_is_black(color) {
     return
@@ -290,7 +290,7 @@ fn trace_beam(
 ///|
 fn get_split_direction(
   incoming : @types.Direction,
-  index : Int,
+  index : Int32,
 ) -> @types.Direction {
   match index {
     0 => incoming
@@ -326,7 +326,7 @@ pub fn check_all_receivers(grid : @types.Grid) -> Bool {
 }
 
 ///|
-pub fn count_beam_crossings(beams : Array[@types.BeamSegment]) -> Int {
+pub fn count_beam_crossings(beams : Array[@types.BeamSegment]) -> Int32 {
   let mut crossings = 0
   for i in 0..<beams.length() {
     let j_start = i + 1

@@ -5,7 +5,7 @@ pub fn compute_preview(
   level : @types.Level,
   start_pos : @types.Vec2,
   aim_angle : Float,
-  max_preview_bounces : Int,
+  max_preview_bounces : Int32,
 ) -> Array[@types.PreviewPoint] {
   let points : Array[@types.PreviewPoint] = []
   let mut px = start_pos.x

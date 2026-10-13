@@ -139,7 +139,7 @@ fn @types.Game::update_play_input(game : @types.Game, _dt : Float) -> Unit {
   let mx : Float = game.mouse_x
   let my : Float = game.mouse_y
   let hold : Bool = game.mouse_hold
-  let touch_count : Int = game.touch_count
+  let touch_count : Int32 = game.touch_count
 
   let mut move_x : Float = 0.0
   let mut move_y : Float = 0.0

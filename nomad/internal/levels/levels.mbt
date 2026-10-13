@@ -36,14 +36,14 @@ pub fn create_all_levels() -> Array[@types.Level] {
 fn build_level(
   name : String,
   tier : @types.Tier,
-  start_col : Int,
-  start_row : Int,
-  dest_col : Int,
-  dest_row : Int,
-  starting_water : Int,
-  gold_target : Int,
-  total_artifacts : Int,
-  tile_data : Array[(Int, Int, @types.TileKind)],
+  start_col : Int32,
+  start_row : Int32,
+  dest_col : Int32,
+  dest_row : Int32,
+  starting_water : Int32,
+  gold_target : Int32,
+  total_artifacts : Int32,
+  tile_data : Array[(Int32, Int32, @types.TileKind)],
 ) -> @types.Level {
   let map = @types.new_hex_map(@types.map_width, @types.map_height)
   for i in 0..<tile_data.length() {

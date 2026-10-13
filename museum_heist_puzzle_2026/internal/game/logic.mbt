@@ -151,7 +151,7 @@ fn @types.Game::setup_level_3(game : @types.Game) -> Unit {
 
 ///|
 /// Clears entities, fills the board as floor, adds border walls, and calls the level-specific setup function.
-fn @types.Game::load_level(game : @types.Game, level_idx : Int) -> Unit {
+fn @types.Game::load_level(game : @types.Game, level_idx : Int32) -> Unit {
   let safe_idx = level_idx.clamp(min=0, max=game.level_count - 1)
   game.level_index = safe_idx
 
@@ -258,7 +258,10 @@ fn @types.Game::collect_artifacts(game : @types.Game) -> Unit {
 
 ///|
 /// Steps a guard one tile toward its next patrol waypoint.
-fn @types.Game::advance_guard_once(game : @types.Game, guard_idx : Int) -> Unit {
+fn @types.Game::advance_guard_once(
+  game : @types.Game,
+  guard_idx : Int32,
+) -> Unit {
   let path_len = game.guards[guard_idx].path.length()
   if path_len == 0 {
     return
@@ -282,8 +285,8 @@ fn @types.Game::advance_guard_once(game : @types.Game, guard_idx : Int) -> Unit 
     ty = @types.cell_y(target)
   }
 
-  let mut dx : Int = 0
-  let mut dy : Int = 0
+  let mut dx : Int32 = 0
+  let mut dy : Int32 = 0
   if game.guards[guard_idx].x < tx {
     dx = 1
   } else if game.guards[guard_idx].x > tx {

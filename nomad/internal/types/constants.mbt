@@ -1,20 +1,20 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 pub let hex_size : Float = 38.0
 
 ///|
-pub let map_width : Int = 10
+pub let map_width : Int32 = 10
 
 ///|
-pub let map_height : Int = 8
+pub let map_height : Int32 = 8
 
 ///|
 pub let map_offset_x : Float = 80.0
@@ -26,7 +26,7 @@ pub let map_offset_y : Float = 60.0
 pub let move_speed : Float = 0.25
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 // Desert color theme
 

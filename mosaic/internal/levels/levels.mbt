@@ -17,7 +17,7 @@ fn build_level(
   tiles : Array[@types.Tile?],
   holes : Array[@types.Vec2i],
   sym : @types.SymmetryKind,
-  par : Int,
+  par : Int32,
   tier : @types.Tier,
   name : String,
 ) -> @types.Level {
@@ -36,7 +36,7 @@ fn build_level(
 }
 
 ///|
-fn v(x : Int, y : Int) -> @types.Vec2i {
+fn v(x : Int32, y : Int32) -> @types.Vec2i {
   @types.vec2i(x, y)
 }
 
@@ -316,7 +316,7 @@ fn level_11() -> @types.Level {
     }
   }
   // 4 symmetric quadrant accents
-  let accent_positions : Array[(Int, Int, @types.TileColor)] = [
+  let accent_positions : Array[(Int32, Int32, @types.TileColor)] = [
     (1, 1, Red),
     (6, 1, Red),
     (1, 6, Red),
@@ -555,7 +555,7 @@ fn level_17() -> @types.Level {
     }
   }
   // Spiral arms in 4-fold symmetry
-  let arm : Array[(Int, Int, @types.Orientation)] = [
+  let arm : Array[(Int32, Int32, @types.Orientation)] = [
     (3, 0, N),
     (3, 1, N),
     (3, 2, N),

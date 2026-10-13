@@ -62,7 +62,7 @@ pub fn compute_all_intersections(
 pub fn match_intersections_to_targets(
   intersections : Array[@types.Intersection],
   targets : Array[@types.TargetDot],
-) -> Int {
+) -> Int32 {
   // Reset all
   for i in 0..<targets.length() {
     targets[i].hit = false

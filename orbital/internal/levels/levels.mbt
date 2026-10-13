@@ -488,11 +488,11 @@ pub fn get_levels() -> Array[@types.Level] {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   get_levels()[index]
 }
 
 ///|
-pub fn level_count() -> Int {
+pub fn level_count() -> Int32 {
   get_levels().length()
 }

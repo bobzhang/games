@@ -27,7 +27,7 @@ fn main {
     game.mouse_hold = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
     game.mouse_press = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
 
-    let mut touch_count : Int = @raylib.get_touch_point_count()
+    let mut touch_count : Int32 = @raylib.get_touch_point_count()
     if touch_count < 0 {
       touch_count = 0
     }

@@ -2,31 +2,31 @@
 
 ///|
 /// Backbuffer width in pixels for the puzzle viewport.
-pub let screen_width : Int = 1024
+pub let screen_width : Int32 = 1024
 
 ///|
 /// Backbuffer height in pixels for the puzzle viewport.
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 // Grid dimensions
 
 ///|
 /// Number of logical columns in each floor grid.
-pub let grid_w : Int = 12
+pub let grid_w : Int32 = 12
 
 ///|
 /// Number of logical rows in each floor grid.
-pub let grid_h : Int = 12
+pub let grid_h : Int32 = 12
 
 // World counts
 
 ///|
 /// Total number of world themes in the campaign.
-pub let num_worlds : Int = 5
+pub let num_worlds : Int32 = 5
 
 ///|
 /// Number of floors grouped under each world theme.
-pub let floors_per_world : Int = 6
+pub let floors_per_world : Int32 = 6
 
 // Animation
 
@@ -50,7 +50,7 @@ pub let spike_cycle_time : Float = 2.0
 
 ///|
 /// Move-count threshold for earning exactly two stars.
-pub let star_threshold_2 : Int = 15
+pub let star_threshold_2 : Int32 = 15
 
 // Camera
 
@@ -70,27 +70,27 @@ pub let camera_fovy : Float = 20.0
 
 ///|
 /// Capacity of pooled particle slots.
-pub let max_particles : Int = 512
+pub let max_particles : Int32 = 512
 
 ///|
 /// Maximum number of undo snapshots retained.
-pub let max_undo : Int = 200
+pub let max_undo : Int32 = 200
 
 ///|
 /// Capacity of pooled floor entities (blocks, keys, gems).
-pub let max_entities : Int = 64
+pub let max_entities : Int32 = 64
 
 ///|
 /// Total campaign floor count.
-pub let max_floors : Int = 30
+pub let max_floors : Int32 = 30
 
 ///|
 /// Capacity of cached laser beam segments.
-pub let max_laser_segments : Int = 32
+pub let max_laser_segments : Int32 = 32
 
 ///|
 /// Capacity of pooled decorative props.
-pub let max_decorations : Int = 48
+pub let max_decorations : Int32 = 48
 
 // UI
 
@@ -106,7 +106,7 @@ pub let transition_time : Float = 0.5
 
 ///|
 /// Flattened tile count (`grid_w * grid_h`) used for fixed-size buffers.
-pub let grid_total : Int = 144 // grid_w * grid_h
+pub let grid_total : Int32 = 144 // grid_w * grid_h
 
 // Particle constants
 
@@ -120,367 +120,367 @@ pub let particle_drag : Float = 0.98
 
 ///|
 /// Number of particles emitted when a teleport triggers.
-pub let teleport_particle_count : Int = 16
+pub let teleport_particle_count : Int32 = 16
 
 ///|
 /// Number of particles emitted when a gate toggles.
-pub let gate_particle_count : Int = 12
+pub let gate_particle_count : Int32 = 12
 
 ///|
 /// Number of particles emitted on floor completion burst.
-pub let complete_particle_count : Int = 32
+pub let complete_particle_count : Int32 = 32
 
 ///|
 /// Number of particles emitted when collecting key objectives.
-pub let collect_particle_count : Int = 12
+pub let collect_particle_count : Int32 = 12
 
 // World theme: Dungeon colors
 
 ///|
 /// Red channel for dungeon floor material color.
-pub let dungeon_floor_r : Int = 80
+pub let dungeon_floor_r : Int32 = 80
 
 ///|
 /// Green channel for dungeon floor material color.
-pub let dungeon_floor_g : Int = 90
+pub let dungeon_floor_g : Int32 = 90
 
 ///|
 /// Blue channel for dungeon floor material color.
-pub let dungeon_floor_b : Int = 110
+pub let dungeon_floor_b : Int32 = 110
 
 ///|
 /// Red channel for dungeon wall material color.
-pub let dungeon_wall_r : Int = 45
+pub let dungeon_wall_r : Int32 = 45
 
 ///|
 /// Green channel for dungeon wall material color.
-pub let dungeon_wall_g : Int = 50
+pub let dungeon_wall_g : Int32 = 50
 
 ///|
 /// Blue channel for dungeon wall material color.
-pub let dungeon_wall_b : Int = 65
+pub let dungeon_wall_b : Int32 = 65
 
 ///|
 /// Red channel for dungeon accent light color.
-pub let dungeon_accent_r : Int = 160
+pub let dungeon_accent_r : Int32 = 160
 
 ///|
 /// Green channel for dungeon accent light color.
-pub let dungeon_accent_g : Int = 130
+pub let dungeon_accent_g : Int32 = 130
 
 ///|
 /// Blue channel for dungeon accent light color.
-pub let dungeon_accent_b : Int = 80
+pub let dungeon_accent_b : Int32 = 80
 
 // World theme: Ice colors
 
 ///|
 /// Red channel for ice floor material color.
-pub let ice_floor_r : Int = 180
+pub let ice_floor_r : Int32 = 180
 
 ///|
 /// Green channel for ice floor material color.
-pub let ice_floor_g : Int = 210
+pub let ice_floor_g : Int32 = 210
 
 ///|
 /// Blue channel for ice floor material color.
-pub let ice_floor_b : Int = 235
+pub let ice_floor_b : Int32 = 235
 
 ///|
 /// Red channel for ice wall material color.
-pub let ice_wall_r : Int = 120
+pub let ice_wall_r : Int32 = 120
 
 ///|
 /// Green channel for ice wall material color.
-pub let ice_wall_g : Int = 150
+pub let ice_wall_g : Int32 = 150
 
 ///|
 /// Blue channel for ice wall material color.
-pub let ice_wall_b : Int = 180
+pub let ice_wall_b : Int32 = 180
 
 ///|
 /// Red channel for ice world accent lighting.
-pub let ice_accent_r : Int = 100
+pub let ice_accent_r : Int32 = 100
 
 ///|
 /// Green channel for ice world accent lighting.
-pub let ice_accent_g : Int = 200
+pub let ice_accent_g : Int32 = 200
 
 ///|
 /// Blue channel for ice world accent lighting.
-pub let ice_accent_b : Int = 255
+pub let ice_accent_b : Int32 = 255
 
 // World theme: Lava colors
 
 ///|
 /// Red channel for lava floor material color.
-pub let lava_floor_r : Int = 100
+pub let lava_floor_r : Int32 = 100
 
 ///|
 /// Green channel for lava floor material color.
-pub let lava_floor_g : Int = 60
+pub let lava_floor_g : Int32 = 60
 
 ///|
 /// Blue channel for lava floor material color.
-pub let lava_floor_b : Int = 50
+pub let lava_floor_b : Int32 = 50
 
 ///|
 /// Red channel for lava wall material color.
-pub let lava_wall_r : Int = 70
+pub let lava_wall_r : Int32 = 70
 
 ///|
 /// Green channel for lava wall material color.
-pub let lava_wall_g : Int = 35
+pub let lava_wall_g : Int32 = 35
 
 ///|
 /// Blue channel for lava wall material color.
-pub let lava_wall_b : Int = 30
+pub let lava_wall_b : Int32 = 30
 
 ///|
 /// Red channel for lava world accent lighting.
-pub let lava_accent_r : Int = 255
+pub let lava_accent_r : Int32 = 255
 
 ///|
 /// Green channel for lava world accent lighting.
-pub let lava_accent_g : Int = 120
+pub let lava_accent_g : Int32 = 120
 
 ///|
 /// Blue channel for lava world accent lighting.
-pub let lava_accent_b : Int = 30
+pub let lava_accent_b : Int32 = 30
 
 // World theme: Garden colors
 
 ///|
 /// Red channel for garden floor material color.
-pub let garden_floor_r : Int = 70
+pub let garden_floor_r : Int32 = 70
 
 ///|
 /// Green channel for garden floor material color.
-pub let garden_floor_g : Int = 120
+pub let garden_floor_g : Int32 = 120
 
 ///|
 /// Blue channel for garden floor material color.
-pub let garden_floor_b : Int = 65
+pub let garden_floor_b : Int32 = 65
 
 ///|
 /// Red channel for garden wall material color.
-pub let garden_wall_r : Int = 55
+pub let garden_wall_r : Int32 = 55
 
 ///|
 /// Green channel for garden wall material color.
-pub let garden_wall_g : Int = 85
+pub let garden_wall_g : Int32 = 85
 
 ///|
 /// Blue channel for garden wall material color.
-pub let garden_wall_b : Int = 50
+pub let garden_wall_b : Int32 = 50
 
 ///|
 /// Red channel for garden accent lighting.
-pub let garden_accent_r : Int = 200
+pub let garden_accent_r : Int32 = 200
 
 ///|
 /// Green channel for garden accent lighting.
-pub let garden_accent_g : Int = 230
+pub let garden_accent_g : Int32 = 230
 
 ///|
 /// Blue channel for garden accent lighting.
-pub let garden_accent_b : Int = 100
+pub let garden_accent_b : Int32 = 100
 
 // World theme: Void colors
 
 ///|
 /// Red channel for void floor material color.
-pub let void_floor_r : Int = 50
+pub let void_floor_r : Int32 = 50
 
 ///|
 /// Green channel for void floor material color.
-pub let void_floor_g : Int = 40
+pub let void_floor_g : Int32 = 40
 
 ///|
 /// Blue channel for void floor material color.
-pub let void_floor_b : Int = 80
+pub let void_floor_b : Int32 = 80
 
 ///|
 /// Red channel for void wall material color.
-pub let void_wall_r : Int = 30
+pub let void_wall_r : Int32 = 30
 
 ///|
 /// Green channel for void wall material color.
-pub let void_wall_g : Int = 25
+pub let void_wall_g : Int32 = 25
 
 ///|
 /// Blue channel for void wall material color.
-pub let void_wall_b : Int = 55
+pub let void_wall_b : Int32 = 55
 
 ///|
 /// Red channel for void accent lighting.
-pub let void_accent_r : Int = 180
+pub let void_accent_r : Int32 = 180
 
 ///|
 /// Green channel for void accent lighting.
-pub let void_accent_g : Int = 100
+pub let void_accent_g : Int32 = 100
 
 ///|
 /// Blue channel for void accent lighting.
-pub let void_accent_b : Int = 255
+pub let void_accent_b : Int32 = 255
 
 // Common colors
 
 ///|
 /// Red channel for pressure plate highlight.
-pub let color_plate_r : Int = 200
+pub let color_plate_r : Int32 = 200
 
 ///|
 /// Green channel for pressure plate highlight.
-pub let color_plate_g : Int = 180
+pub let color_plate_g : Int32 = 180
 
 ///|
 /// Blue channel for pressure plate highlight.
-pub let color_plate_b : Int = 50
+pub let color_plate_b : Int32 = 50
 
 ///|
 /// Red channel for opened-exit visual color.
-pub let color_exit_r : Int = 50
+pub let color_exit_r : Int32 = 50
 
 ///|
 /// Green channel for opened-exit visual color.
-pub let color_exit_g : Int = 200
+pub let color_exit_g : Int32 = 200
 
 ///|
 /// Blue channel for opened-exit visual color.
-pub let color_exit_b : Int = 100
+pub let color_exit_b : Int32 = 100
 
 ///|
 /// Red channel used by ice tile overlays.
-pub let color_ice_r : Int = 150
+pub let color_ice_r : Int32 = 150
 
 ///|
 /// Green channel used by ice tile overlays.
-pub let color_ice_g : Int = 210
+pub let color_ice_g : Int32 = 210
 
 ///|
 /// Blue channel used by ice tile overlays.
-pub let color_ice_b : Int = 240
+pub let color_ice_b : Int32 = 240
 
 ///|
 /// Red channel for movable block tint.
-pub let color_block_r : Int = 180
+pub let color_block_r : Int32 = 180
 
 ///|
 /// Green channel for movable block tint.
-pub let color_block_g : Int = 120
+pub let color_block_g : Int32 = 120
 
 ///|
 /// Blue channel for movable block tint.
-pub let color_block_b : Int = 60
+pub let color_block_b : Int32 = 60
 
 ///|
 /// Red channel for collectible diamond tint.
-pub let color_diamond_r : Int = 100
+pub let color_diamond_r : Int32 = 100
 
 ///|
 /// Green channel for collectible diamond tint.
-pub let color_diamond_g : Int = 200
+pub let color_diamond_g : Int32 = 200
 
 ///|
 /// Blue channel for collectible diamond tint.
-pub let color_diamond_b : Int = 255
+pub let color_diamond_b : Int32 = 255
 
 ///|
 /// Red channel for key collectible tint.
-pub let color_key_r : Int = 255
+pub let color_key_r : Int32 = 255
 
 ///|
 /// Green channel for key collectible tint.
-pub let color_key_g : Int = 215
+pub let color_key_g : Int32 = 215
 
 ///|
 /// Blue channel for key collectible tint.
-pub let color_key_b : Int = 0
+pub let color_key_b : Int32 = 0
 
 ///|
 /// Red channel for conveyor surface tint.
-pub let color_conveyor_r : Int = 150
+pub let color_conveyor_r : Int32 = 150
 
 ///|
 /// Green channel for conveyor surface tint.
-pub let color_conveyor_g : Int = 150
+pub let color_conveyor_g : Int32 = 150
 
 ///|
 /// Blue channel for conveyor surface tint.
-pub let color_conveyor_b : Int = 170
+pub let color_conveyor_b : Int32 = 170
 
 ///|
 /// Red channel for bridge tile tint.
-pub let color_bridge_r : Int = 140
+pub let color_bridge_r : Int32 = 140
 
 ///|
 /// Green channel for bridge tile tint.
-pub let color_bridge_g : Int = 100
+pub let color_bridge_g : Int32 = 100
 
 ///|
 /// Blue channel for bridge tile tint.
-pub let color_bridge_b : Int = 60
+pub let color_bridge_b : Int32 = 60
 
 ///|
 /// Red channel for gate tile tint.
-pub let color_gate_r : Int = 160
+pub let color_gate_r : Int32 = 160
 
 ///|
 /// Green channel for gate tile tint.
-pub let color_gate_g : Int = 160
+pub let color_gate_g : Int32 = 160
 
 ///|
 /// Blue channel for gate tile tint.
-pub let color_gate_b : Int = 180
+pub let color_gate_b : Int32 = 180
 
 ///|
 /// Red channel for mirror tile tint.
-pub let color_mirror_r : Int = 200
+pub let color_mirror_r : Int32 = 200
 
 ///|
 /// Green channel for mirror tile tint.
-pub let color_mirror_g : Int = 220
+pub let color_mirror_g : Int32 = 220
 
 ///|
 /// Blue channel for mirror tile tint.
-pub let color_mirror_b : Int = 255
+pub let color_mirror_b : Int32 = 255
 
 ///|
 /// Red channel for laser beam emission color.
-pub let color_laser_r : Int = 255
+pub let color_laser_r : Int32 = 255
 
 ///|
 /// Green channel for laser beam emission color.
-pub let color_laser_g : Int = 50
+pub let color_laser_g : Int32 = 50
 
 ///|
 /// Blue channel for laser beam emission color.
-pub let color_laser_b : Int = 50
+pub let color_laser_b : Int32 = 50
 
 ///|
 /// Red channel for laser target highlight.
-pub let color_target_r : Int = 255
+pub let color_target_r : Int32 = 255
 
 ///|
 /// Green channel for laser target highlight.
-pub let color_target_g : Int = 200
+pub let color_target_g : Int32 = 200
 
 ///|
 /// Blue channel for laser target highlight.
-pub let color_target_b : Int = 80
+pub let color_target_b : Int32 = 80
 
 ///|
 /// Red channel for rotate-platform glow.
-pub let color_rotate_r : Int = 130
+pub let color_rotate_r : Int32 = 130
 
 ///|
 /// Green channel for rotate-platform glow.
-pub let color_rotate_g : Int = 100
+pub let color_rotate_g : Int32 = 100
 
 ///|
 /// Blue channel for rotate-platform glow.
-pub let color_rotate_b : Int = 170
+pub let color_rotate_b : Int32 = 170
 
 // Tutorial messages
 
@@ -524,19 +524,19 @@ pub let tutorial_msg_diamond : String = "Collect all gems to open the exit"
 
 ///|
 /// Achievement id granted on first floor clear.
-pub let achievement_first_clear : Int = 0
+pub let achievement_first_clear : Int32 = 0
 
 ///|
 /// Achievement id granted for completing world 1.
-pub let achievement_world_1 : Int = 1
+pub let achievement_world_1 : Int32 = 1
 
 ///|
 /// Achievement id for clearing while avoiding undo usage.
-pub let achievement_no_undo : Int = 8
+pub let achievement_no_undo : Int32 = 8
 
 ///|
 /// Total count of supported achievements.
-pub let max_achievements : Int = 9
+pub let max_achievements : Int32 = 9
 
 // World names
 
@@ -564,19 +564,19 @@ pub let world_name_4 : String = "The Void"
 
 ///|
 /// Stars needed from World 1 to unlock World 2.
-pub let world_2_star_req : Int = 5
+pub let world_2_star_req : Int32 = 5
 
 ///|
 /// Stars needed total to unlock World 3.
-pub let world_3_star_req : Int = 10
+pub let world_3_star_req : Int32 = 10
 
 ///|
 /// Stars needed total to unlock World 4.
-pub let world_4_star_req : Int = 16
+pub let world_4_star_req : Int32 = 16
 
 ///|
 /// Stars needed total to unlock World 5.
-pub let world_5_star_req : Int = 22
+pub let world_5_star_req : Int32 = 22
 
 ///|
 /// Duration of undo flash overlay in seconds.

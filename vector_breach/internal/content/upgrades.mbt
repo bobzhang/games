@@ -5,14 +5,14 @@
 pub(all) struct UpgradeDef {
   name : String
   description : String
-  cost : Int
-  tier : Int
+  cost : Int32
+  tier : Int32
   mech_class : @types.MechClass
 }
 
 ///|
 /// Get upgrade definition for a mech class at a specific tier (1-3).
-pub fn get_upgrade_def(class_ : @types.MechClass, tier : Int) -> UpgradeDef {
+pub fn get_upgrade_def(class_ : @types.MechClass, tier : Int32) -> UpgradeDef {
   match class_ {
     Vanguard =>
       match tier {
@@ -100,7 +100,7 @@ pub fn get_upgrade_def(class_ : @types.MechClass, tier : Int) -> UpgradeDef {
 
 ///|
 /// Get the cost of the next upgrade for a mech class given current tier.
-pub fn get_next_upgrade_cost(current_tier : Int) -> Int {
+pub fn get_next_upgrade_cost(current_tier : Int32) -> Int32 {
   match current_tier {
     0 => 2
     1 => 4
@@ -111,7 +111,7 @@ pub fn get_next_upgrade_cost(current_tier : Int) -> Int {
 
 ///|
 /// Get the mech class index (0=Vanguard, 1=Striker, 2=Sentinel).
-pub fn mech_class_index(class_ : @types.MechClass) -> Int {
+pub fn mech_class_index(class_ : @types.MechClass) -> Int32 {
   match class_ {
     Vanguard => 0
     Striker => 1
@@ -144,7 +144,7 @@ pub fn try_purchase_upgrade(
 pub fn get_upgrade_tier(
   run : @types.RunState,
   class_ : @types.MechClass,
-) -> Int {
+) -> Int32 {
   let idx = mech_class_index(class_)
   run.upgrade_tiers[idx]
 }
@@ -153,12 +153,12 @@ pub fn get_upgrade_tier(
 /// Apply tier 1 stat bonuses to mech stats.
 pub fn apply_upgrade_stats(
   class_ : @types.MechClass,
-  tier : Int,
-  hp : Int,
-  move_range : Int,
-  ability_range : Int,
-  ability_damage : Int,
-) -> (Int, Int, Int, Int) {
+  tier : Int32,
+  hp : Int32,
+  move_range : Int32,
+  ability_range : Int32,
+  ability_damage : Int32,
+) -> (Int32, Int32, Int32, Int32) {
   match class_ {
     Vanguard =>
       if tier >= 1 {

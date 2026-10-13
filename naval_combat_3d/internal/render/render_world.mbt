@@ -48,7 +48,7 @@ fn @types.Game::draw_ocean(game : @types.Game) -> Unit {
   for i in 0..<20 {
     let offset = Float::from_int(i) * 10.0 - 95.0
     let wave_h = @math.sinf(time + Float::from_int(i) * 0.7) * 0.15
-    let alpha : Int = 40 +
+    let alpha : Int32 = 40 +
       (@math.sinf(time + Float::from_int(i) * 0.5) * 20.0).to_int()
     let a = alpha.clamp(min=20, max=80)
     @raylib.draw_cube(
@@ -210,7 +210,7 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
     @raylib.Color::new(80, 60, 30, 255),
   )
   if ship.sail_hp > 0.0 {
-    let sail_alpha : Int = (ship.sail_hp / ship.max_hp * 200.0).to_int() + 55
+    let sail_alpha : Int32 = (ship.sail_hp / ship.max_hp * 200.0).to_int() + 55
     let sa = sail_alpha.clamp(min=55, max=255)
     @raylib.draw_cube(
       @raylib.Vector3::new(

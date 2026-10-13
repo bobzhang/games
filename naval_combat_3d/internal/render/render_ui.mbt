@@ -368,7 +368,7 @@ fn @types.Game::draw_message_log(game : @types.Game) -> Unit {
   let log_x = 10
   let log_base_y = @types.screen_height - 140
   // Collect active message indices with their timers
-  let active : Array[(Int, Float)] = []
+  let active : Array[(Int32, Float)] = []
   for i in 0..<game.messages.length() {
     let m = game.messages[i]
     if m.active && m.timer > 0.0 {
@@ -495,16 +495,16 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
 
 ///|
 fn draw_hp_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   hp : Float,
   max_hp : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let pct : Float = if max_hp > 0.0 { hp / max_hp } else { 0.0 }
   let clamped = @types.clampf(pct, 0.0, 1.0)

@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 let world_w : Float = 3600.0
@@ -11,22 +11,22 @@ let world_w : Float = 3600.0
 let world_h : Float = 2600.0
 
 ///|
-let max_enemies : Int = 56
+let max_enemies : Int32 = 56
 
 ///|
-let max_bullets : Int = 520
+let max_bullets : Int32 = 520
 
 ///|
-let max_drops : Int = 84
+let max_drops : Int32 = 84
 
 ///|
-let max_turrets : Int = 8
+let max_turrets : Int32 = 8
 
 ///|
-let max_particles : Int = 1500
+let max_particles : Int32 = 1500
 
 ///|
-let pad_count : Int = 6
+let pad_count : Int32 = 6
 
 ///|
 struct Hero {
@@ -44,8 +44,8 @@ struct Hero {
   mut hit_cd : Float
   mut flash_t : Float
   mut shake_t : Float
-  mut scrap : Int
-  mut score : Int
+  mut scrap : Int32
+  mut score : Int32
 }
 
 ///|
@@ -59,7 +59,7 @@ struct Core {
 ///|
 struct Enemy {
   mut active : Bool
-  kind : Int
+  kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -72,7 +72,7 @@ struct Enemy {
 ///|
 struct Bullet {
   mut active : Bool
-  kind : Int
+  kind : Int32
   mut x : Float
   mut y : Float
   vx : Float
@@ -86,7 +86,7 @@ struct Drop {
   mut active : Bool
   x : Float
   y : Float
-  value : Int
+  value : Int32
   mut t : Float
   mut life : Float
 }
@@ -110,7 +110,7 @@ struct Particle {
   size : Float
   mut t : Float
   life : Float
-  kind : Int
+  kind : Int32
 }
 
 ///|
@@ -141,10 +141,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(x)
   let y0 : Float = Float::from_int(y)
@@ -162,7 +162,7 @@ fn emit_particle(
   vy : Float,
   size : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<particles.length() {
     if !particles[i].active {
@@ -177,9 +177,9 @@ fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _ in 0..<count {
     let mut dx : Float = randf(-1.0, 1.0)
@@ -210,7 +210,7 @@ fn burst_particles(
 ///|
 fn spawn_bullet(
   bullets : FixedArray[Bullet],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -231,7 +231,7 @@ fn spawn_drop(
   drops : FixedArray[Drop],
   x : Float,
   y : Float,
-  value : Int,
+  value : Int32,
 ) -> Unit {
   for i in 0..<drops.length() {
     if !drops[i].active {
@@ -244,14 +244,14 @@ fn spawn_drop(
 ///|
 fn spawn_enemy(
   enemies : FixedArray[Enemy],
-  level : Int,
+  level : Int32,
   core_x : Float,
   core_y : Float,
 ) -> Unit {
   for i in 0..<enemies.length() {
     if !enemies[i].active {
-      let edge : Int = @raylib.get_random_value(0, 3)
-      let kind : Int = if @raylib.get_random_value(0, 100) < 22 + level * 6 {
+      let edge : Int32 = @raylib.get_random_value(0, 3)
+      let kind : Int32 = if @raylib.get_random_value(0, 100) < 22 + level * 6 {
         1
       } else {
         0
@@ -302,14 +302,14 @@ fn spawn_enemy(
 ///|
 fn init_enemy_wave(
   enemies : FixedArray[Enemy],
-  level : Int,
+  level : Int32,
   core_x : Float,
   core_y : Float,
 ) -> Unit {
   for enemy in enemies {
     enemy.active = false
   }
-  let initial : Int = 12 + level * 3
+  let initial : Int32 = 12 + level * 3
   for _ in 0..<initial {
     spawn_enemy(enemies, level, core_x, core_y)
   }
@@ -317,10 +317,10 @@ fn init_enemy_wave(
 
 ///|
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fg : @raylib.Color,
   bg : @raylib.Color,
@@ -349,9 +349,9 @@ fn draw_touch_controls(show : Bool) -> Unit {
     return
   }
 
-  let pad_x : Int = 24
-  let pad_y : Int = sh - 228
-  let act_x : Int = sw - 214
+  let pad_x : Int32 = 24
+  let pad_y : Int32 = sh - 228
+  let act_x : Int32 = sw - 214
 
   @raylib.draw_rectangle(
     pad_x,
@@ -559,13 +559,13 @@ fn main {
     score: 0,
   }
 
-  let mut level : Int = 1
+  let mut level : Int32 = 1
   let mut timer : Float = 152.0
   let mut spawn_cd : Float = 1.2
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut announce_t : Float = 0.0
 
-  let reset_round = fn(new_level : Int) {
+  let reset_round = fn(new_level : Int32) {
     level = new_level
     timer = 158.0 - Float::from_int(level - 1) * 10.0
     if timer < 86.0 {
@@ -666,9 +666,9 @@ fn main {
     let mut pulse_press : Bool = @raylib.is_key_pressed(@raylib.KeyQ)
     let mut build_press : Bool = @raylib.is_key_pressed(@raylib.KeyE)
 
-    let pad_x : Int = 24
-    let pad_y : Int = sh - 228
-    let act_x : Int = sw - 214
+    let pad_x : Int32 = 24
+    let pad_y : Int32 = sh - 228
+    let act_x : Int32 = sw - 214
 
     if touching {
       if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 62, 78, 78) {
@@ -890,7 +890,7 @@ fn main {
       }
 
       if build_press {
-        let mut build_idx : Int = -1
+        let mut build_idx : Int32 = -1
         for i in 0..<pad_count {
           let d2 : Float = dist2(hero.x, hero.y, pad_xs[i], pad_ys[i])
           if d2 <= 78.0 * 78.0 {
@@ -900,7 +900,7 @@ fn main {
         }
 
         if build_idx >= 0 {
-          let mut slot : Int = build_idx
+          let mut slot : Int32 = build_idx
           if slot >= turrets.length() {
             slot = turrets.length() - 1
           }
@@ -1144,7 +1144,7 @@ fn main {
             } else {
               enemy.stun_t = enemy.stun_t + 0.14
             }
-            let hit_fx_kind : Int = if bullet.kind == 0 { 1 } else { 2 }
+            let hit_fx_kind : Int32 = if bullet.kind == 0 { 1 } else { 2 }
             burst_particles(particles, bullet.x, bullet.y, 6, 55.0, hit_fx_kind)
             bullet.active = false
             hit = true
@@ -1164,13 +1164,13 @@ fn main {
 
         if enemy.hp <= 0.0 {
           enemy.active = false
-          let drop_v : Int = if enemy.kind == 0 {
+          let drop_v : Int32 = if enemy.kind == 0 {
             34 + level * 6
           } else {
             66 + level * 10
           }
           spawn_drop(drops, enemy.x, enemy.y, drop_v)
-          let kill_score : Int = if enemy.kind == 0 { 18 } else { 42 }
+          let kill_score : Int32 = if enemy.kind == 0 { 18 } else { 42 }
           hero.score = hero.score + kill_score
           burst_particles(particles, enemy.x, enemy.y, 20, 96.0, 2)
         }
@@ -1263,7 +1263,7 @@ fn main {
 
     let mut gx : Float = 0.0
     while gx <= world_w {
-      let sx : Int = (gx - cam_x + shake_x).to_int()
+      let sx : Int32 = (gx - cam_x + shake_x).to_int()
       if sx >= -2 && sx <= sw + 2 {
         @raylib.draw_line(sx, 0, sx, sh, @raylib.Color::new(44, 62, 82, 110))
       }
@@ -1272,7 +1272,7 @@ fn main {
 
     let mut gy : Float = 0.0
     while gy <= world_h {
-      let sy : Int = (gy - cam_y + shake_y).to_int()
+      let sy : Int32 = (gy - cam_y + shake_y).to_int()
       if sy >= -2 && sy <= sh + 2 {
         @raylib.draw_line(0, sy, sw, sy, @raylib.Color::new(44, 62, 82, 110))
       }
@@ -1491,7 +1491,7 @@ fn main {
       }
 
       let life_r : Float = 1.0 - particle.t / particle.life
-      let alpha : Int = clampf(life_r * 220.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(life_r * 220.0, 0.0, 220.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(198, 216, 236, alpha)
       } else if particle.kind == 1 {
@@ -1625,7 +1625,7 @@ fn main {
     )
 
     if announce_t > 0.0 {
-      let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
+      let alpha : Int32 = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
       @draw.draw_text(
         "Hold the perimeter. Build turrets on pads near the core.",
         sw / 2 - 372,

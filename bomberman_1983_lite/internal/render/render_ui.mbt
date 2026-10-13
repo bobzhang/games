@@ -1,8 +1,8 @@
 ///|
 fn @types.Game::draw_enemy_counter(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   let pending = game.enemies_to_spawn - game.enemies_spawned
   let remaining = game.enemies_alive + (if pending > 0 { pending } else { 0 })
@@ -25,9 +25,9 @@ fn @types.Game::draw_enemy_counter(
 ///|
 fn @types.Game::draw_player_card(
   game : @types.Game,
-  player_index : Int,
-  x : Int,
-  y : Int,
+  player_index : Int32,
+  x : Int32,
+  y : Int32,
   label : String,
   accent : @raylib.Color,
 ) -> Unit {

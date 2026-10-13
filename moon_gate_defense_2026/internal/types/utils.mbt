@@ -39,7 +39,7 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a random integer in `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
@@ -77,13 +77,13 @@ pub fn board_bottom() -> Float {
 
 ///|
 /// Returns the x-coordinate of a grid cell center.
-pub fn cell_center_x(gx : Int) -> Float {
+pub fn cell_center_x(gx : Int32) -> Float {
   Float::from_int(board_x + gx * cell_size + cell_size / 2)
 }
 
 ///|
 /// Returns the y-coordinate of a grid cell center.
-pub fn cell_center_y(gy : Int) -> Float {
+pub fn cell_center_y(gy : Int32) -> Float {
   Float::from_int(board_y + gy * cell_size + cell_size / 2)
 }
 
@@ -101,13 +101,13 @@ pub fn gate_y() -> Float {
 
 ///|
 /// Returns whether the given grid cell is the gate cell.
-pub fn is_gate_cell(gx : Int, gy : Int) -> Bool {
+pub fn is_gate_cell(gx : Int32, gy : Int32) -> Bool {
   gx == gate_gx && gy == gate_gy
 }
 
 ///|
 /// Returns the energy cost to reach `next_level`.
-pub fn node_upgrade_cost(next_level : Int) -> Float {
+pub fn node_upgrade_cost(next_level : Int32) -> Float {
   if next_level <= 1 {
     node_build_cost
   } else if next_level == 2 {
@@ -119,7 +119,7 @@ pub fn node_upgrade_cost(next_level : Int) -> Float {
 
 ///|
 /// Returns the total energy invested in a node level.
-pub fn node_total_cost(level : Int) -> Float {
+pub fn node_total_cost(level : Int32) -> Float {
   if level <= 0 {
     0.0
   } else if level == 1 {
@@ -133,13 +133,13 @@ pub fn node_total_cost(level : Int) -> Float {
 
 ///|
 /// Returns sell refund for a node at `level`.
-pub fn node_sell_refund(level : Int) -> Float {
+pub fn node_sell_refund(level : Int32) -> Float {
   node_total_cost(level) * node_sell_ratio
 }
 
 ///|
 /// Returns node range for the provided level.
-pub fn node_range(level : Int) -> Float {
+pub fn node_range(level : Int32) -> Float {
   if level <= 1 {
     node_range_l1
   } else if level == 2 {
@@ -151,7 +151,7 @@ pub fn node_range(level : Int) -> Float {
 
 ///|
 /// Returns node projectile damage for the provided level.
-pub fn node_damage(level : Int) -> Float {
+pub fn node_damage(level : Int32) -> Float {
   if level <= 1 {
     node_damage_l1
   } else if level == 2 {
@@ -163,7 +163,7 @@ pub fn node_damage(level : Int) -> Float {
 
 ///|
 /// Returns node firing cooldown for the provided level.
-pub fn node_fire_cd(level : Int) -> Float {
+pub fn node_fire_cd(level : Int32) -> Float {
   if level <= 1 {
     node_fire_cd_l1
   } else if level == 2 {
@@ -175,14 +175,14 @@ pub fn node_fire_cd(level : Int) -> Float {
 
 ///|
 /// Returns how many enemies should spawn for a wave.
-pub fn wave_spawn_count(wave : Int) -> Int {
+pub fn wave_spawn_count(wave : Int32) -> Int32 {
   let w = maxf(Float::from_int(wave), 1.0).to_int()
   wave_spawn_count_base + (w - 1) * wave_spawn_count_step + (w - 1) / 2
 }
 
 ///|
 /// Returns the spawn cooldown used for a wave.
-pub fn wave_spawn_cd(wave : Int) -> Float {
+pub fn wave_spawn_cd(wave : Int32) -> Float {
   let reduction = Float::from_int(maxf(Float::from_int(wave - 1), 0.0).to_int()) *
     0.06
   clampf(spawn_cd_base - reduction, spawn_cd_min, spawn_cd_base)
@@ -256,7 +256,7 @@ pub fn col_enemy(kind : EnemyKind) -> @raylib.Color {
 
 ///|
 /// Returns the tint color for a node level.
-pub fn col_node(level : Int) -> @raylib.Color {
+pub fn col_node(level : Int32) -> @raylib.Color {
   if level == 1 {
     @raylib.Color::new(112, 192, 246, 255)
   } else if level == 2 {

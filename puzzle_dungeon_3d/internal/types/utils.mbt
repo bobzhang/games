@@ -42,7 +42,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 
 ///|
 /// Returns the grid-x step (`-1`, `0`, `1`) represented by a direction.
-pub fn dir_dx(dir : Dir) -> Int {
+pub fn dir_dx(dir : Dir) -> Int32 {
   match dir {
     DirRight => 1
     DirLeft => -1
@@ -52,7 +52,7 @@ pub fn dir_dx(dir : Dir) -> Int {
 
 ///|
 /// Returns the grid-y step (`-1`, `0`, `1`) represented by a direction.
-pub fn dir_dy(dir : Dir) -> Int {
+pub fn dir_dy(dir : Dir) -> Int32 {
   match dir {
     DirDown => 1
     DirUp => -1
@@ -64,19 +64,19 @@ pub fn dir_dy(dir : Dir) -> Int {
 
 ///|
 /// Checks whether a grid coordinate is inside the playable board bounds.
-pub fn in_bounds(gx : Int, gy : Int) -> Bool {
+pub fn in_bounds(gx : Int32, gy : Int32) -> Bool {
   gx >= 0 && gy >= 0 && gx < grid_w && gy < grid_h
 }
 
 ///|
 /// Converts `(gx, gy)` to the packed one-dimensional tile-array index.
-pub fn tile_index(gx : Int, gy : Int) -> Int {
+pub fn tile_index(gx : Int32, gy : Int32) -> Int32 {
   gy * grid_w + gx
 }
 
 ///|
 /// Reads a tile at grid coordinates, treating out-of-bounds as solid wall.
-pub fn get_tile(game : Game, gx : Int, gy : Int) -> Tile {
+pub fn get_tile(game : Game, gx : Int32, gy : Int32) -> Tile {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)]
   } else {
@@ -86,7 +86,7 @@ pub fn get_tile(game : Game, gx : Int, gy : Int) -> Tile {
 
 ///|
 /// Writes a tile at grid coordinates if the destination is in bounds.
-pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Tile) -> Unit {
+pub fn set_tile(game : Game, gx : Int32, gy : Int32, tile : Tile) -> Unit {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)] = tile
   }
@@ -249,7 +249,7 @@ pub fn mirror_reflect(tile : Tile, incoming_dir : Dir) -> Dir {
 
 ///|
 /// Returns index of an active entity at `(gx, gy)`, or `-1` when empty.
-pub fn entity_at(game : Game, gx : Int, gy : Int) -> Int {
+pub fn entity_at(game : Game, gx : Int32, gy : Int32) -> Int32 {
   @utils.first_index_by(game.entities, fn(entity) {
     entity.active && entity.gx == gx && entity.gy == gy
   })
@@ -257,7 +257,7 @@ pub fn entity_at(game : Game, gx : Int, gy : Int) -> Int {
 
 ///|
 /// Finds a free particle slot in the pooled particle array.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
@@ -265,7 +265,7 @@ pub fn alloc_particle(game : Game) -> Int {
 
 ///|
 /// Advances the deterministic xorshift RNG and returns the next integer.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -279,7 +279,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns an integer random value in inclusive range `[low, high]`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -318,10 +318,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -355,10 +355,10 @@ pub fn spawn_ambient_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   spread : Float,
   speed : Float,
 ) -> Unit {
@@ -389,7 +389,7 @@ pub fn spawn_ambient_particles(
 
 ///|
 /// Counts pressure plates currently occupied by active block entities.
-pub fn count_active_plates(game : Game) -> Int {
+pub fn count_active_plates(game : Game) -> Int32 {
   let mut count = 0
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
@@ -408,7 +408,7 @@ pub fn count_active_plates(game : Game) -> Int {
 
 ///|
 /// Counts total pressure plates present in the current floor layout.
-pub fn count_plates(game : Game) -> Int {
+pub fn count_plates(game : Game) -> Int32 {
   let mut count = 0
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
@@ -424,7 +424,7 @@ pub fn count_plates(game : Game) -> Int {
 
 ///|
 /// Counts active diamond entities that remain on the floor.
-pub fn count_diamonds(game : Game) -> Int {
+pub fn count_diamonds(game : Game) -> Int32 {
   let mut count = 0
   for entity in game.entities {
     if entity.active && entity.kind == EntityDiamond {
@@ -438,7 +438,7 @@ pub fn count_diamonds(game : Game) -> Int {
 
 ///|
 /// Counts laser target tiles present in the grid.
-pub fn count_laser_targets(game : Game) -> Int {
+pub fn count_laser_targets(game : Game) -> Int32 {
   let mut count = 0
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
@@ -454,7 +454,7 @@ pub fn count_laser_targets(game : Game) -> Int {
 
 ///|
 /// Maps a floor index to its world theme.
-pub fn get_world_for_floor(floor : Int) -> World {
+pub fn get_world_for_floor(floor : Int32) -> World {
   int_to_world(floor / floors_per_world)
 }
 
@@ -462,7 +462,7 @@ pub fn get_world_for_floor(floor : Int) -> World {
 
 ///|
 /// Returns the `(r, g, b)` floor color tuple for a world theme.
-pub fn get_world_floor_color(world : World) -> (Int, Int, Int) {
+pub fn get_world_floor_color(world : World) -> (Int32, Int32, Int32) {
   match world {
     WorldIce => (ice_floor_r, ice_floor_g, ice_floor_b)
     WorldLava => (lava_floor_r, lava_floor_g, lava_floor_b)
@@ -474,7 +474,7 @@ pub fn get_world_floor_color(world : World) -> (Int, Int, Int) {
 
 ///|
 /// Returns the `(r, g, b)` wall color tuple for a world theme.
-pub fn get_world_wall_color(world : World) -> (Int, Int, Int) {
+pub fn get_world_wall_color(world : World) -> (Int32, Int32, Int32) {
   match world {
     WorldIce => (ice_wall_r, ice_wall_g, ice_wall_b)
     WorldLava => (lava_wall_r, lava_wall_g, lava_wall_b)
@@ -486,7 +486,7 @@ pub fn get_world_wall_color(world : World) -> (Int, Int, Int) {
 
 ///|
 /// Returns the `(r, g, b)` accent color tuple for a world theme.
-pub fn get_world_accent_color(world : World) -> (Int, Int, Int) {
+pub fn get_world_accent_color(world : World) -> (Int32, Int32, Int32) {
   match world {
     WorldIce => (ice_accent_r, ice_accent_g, ice_accent_b)
     WorldLava => (lava_accent_r, lava_accent_g, lava_accent_b)
@@ -533,7 +533,12 @@ pub fn calculate_laser_paths(game : Game) -> Unit {
 }
 
 ///|
-fn trace_laser(game : Game, start_gx : Int, start_gy : Int, dir : Dir) -> Unit {
+fn trace_laser(
+  game : Game,
+  start_gx : Int32,
+  start_gy : Int32,
+  dir : Dir,
+) -> Unit {
   let mut cx = start_gx
   let mut cy = start_gy
   let mut current_dir = dir
@@ -617,10 +622,10 @@ fn trace_laser(game : Game, start_gx : Int, start_gy : Int, dir : Dir) -> Unit {
 ///|
 fn add_laser_segment(
   game : Game,
-  sx : Int,
-  sy : Int,
-  ex : Int,
-  ey : Int,
+  sx : Int32,
+  sy : Int32,
+  ex : Int32,
+  ey : Int32,
   dir : Dir,
 ) -> Unit {
   if game.laser_segment_count >= max_laser_segments {
@@ -684,7 +689,7 @@ pub fn resolve_conveyors(game : Game) -> Unit {
 
 ///|
 /// Slides an entity across ice in `dir` until collision, pit, or non-ice tile.
-pub fn ice_slide_entity(game : Game, entity_idx : Int, dir : Dir) -> Unit {
+pub fn ice_slide_entity(game : Game, entity_idx : Int32, dir : Dir) -> Unit {
   let e = game.entities[entity_idx]
   let dx = dir_dx(dir)
   let dy = dir_dy(dir)
@@ -781,7 +786,7 @@ pub fn toggle_bridges(game : Game) -> Unit {
 
 ///|
 /// Returns tutorial hint text for a floor, or empty string when no hint applies.
-pub fn get_tutorial_for_floor(floor : Int) -> String {
+pub fn get_tutorial_for_floor(floor : Int32) -> String {
   if floor == 0 {
     tutorial_msg_move
   } else if floor == 1 {
@@ -851,7 +856,7 @@ pub fn setup_decorations(game : Game) -> Unit {
 
 ///|
 /// Sums all earned stars across campaign floors.
-pub fn count_total_stars(game : Game) -> Int {
+pub fn count_total_stars(game : Game) -> Int32 {
   let mut total = 0
   for i in 0..<max_floors {
     total += game.floor_info[i].stars
@@ -863,7 +868,7 @@ pub fn count_total_stars(game : Game) -> Int {
 
 ///|
 /// Returns the star requirement to unlock a specific world index.
-pub fn world_star_requirement(world : Int) -> Int {
+pub fn world_star_requirement(world : Int32) -> Int32 {
   if world <= 0 {
     0
   } else if world == 1 {
@@ -879,7 +884,7 @@ pub fn world_star_requirement(world : Int) -> Int {
 
 ///|
 /// Returns whether a world index is unlocked based on cumulative stars earned.
-pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
+pub fn is_world_unlocked(game : Game, world : Int32) -> Bool {
   if world == 0 {
     return true
   }
@@ -889,7 +894,7 @@ pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
 
 ///|
 /// Counts stars earned within a specific world (by world index).
-pub fn count_world_stars(game : Game, world_idx : Int) -> Int {
+pub fn count_world_stars(game : Game, world_idx : Int32) -> Int32 {
   let floor_start = world_idx * floors_per_world
   let mut total = 0
   for i in floor_start..<(floor_start + floors_per_world) {

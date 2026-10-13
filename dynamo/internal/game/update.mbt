@@ -75,7 +75,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_id : Int) -> Unit {
+fn start_level(game : @types.Game, level_id : Int32) -> Unit {
   game.current_level = level_id
   game.level_state = Some(@levels.load_level(level_id))
   game.cursor_col = 0

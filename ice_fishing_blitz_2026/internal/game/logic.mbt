@@ -87,7 +87,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -222,7 +222,7 @@ fn @types.Game::spawn_fish(game : @types.Game) -> Bool {
       continue
     }
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     let kind : @types.FishKind = if roll < 58 {
       Trout
     } else if roll < 90 {
@@ -231,7 +231,7 @@ fn @types.Game::spawn_fish(game : @types.Game) -> Bool {
       Gold
     }
 
-    let side : Int = @raylib.get_random_value(0, 1)
+    let side : Int32 = @raylib.get_random_value(0, 1)
     if side == 0 {
       fish_elem.x = @types.world_left() + 20.0
       fish_elem.vx = @types.randf(60.0, 130.0)
@@ -277,7 +277,7 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
       continue
     }
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     let kind : @types.HazardKind = if roll < 46 {
       Jelly
     } else if roll < 78 {
@@ -351,7 +351,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
     pickup.vy = @types.randf(-16.0, 40.0)
     pickup.phase = @types.randf(0.0, 6.28)
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 46 {
       Bait
     } else if roll < 80 {
@@ -425,7 +425,7 @@ fn @types.Game::drop_carrying_fish(game : @types.Game) -> Unit {
     return
   }
 
-  let idx : Int = game.carrying_idx
+  let idx : Int32 = game.carrying_idx
   if game.fish[idx].active {
     game.fish[idx].hooked = false
     game.fish[idx].vx = @types.randf(-140.0, 140.0)
@@ -447,7 +447,7 @@ fn @types.Game::land_carrying_fish(game : @types.Game) -> Unit {
     return
   }
 
-  let idx : Int = game.carrying_idx
+  let idx : Int32 = game.carrying_idx
   if !game.fish[idx].active {
     game.carrying_idx = -1
     return
@@ -460,7 +460,7 @@ fn @types.Game::land_carrying_fish(game : @types.Game) -> Unit {
   game.combo = (20).min(game.combo + 1)
   game.combo_t = 2.2
 
-  let bonus : Int = game.fish[idx].value + game.combo * 2 + game.wave
+  let bonus : Int32 = game.fish[idx].value + game.combo * 2 + game.wave
   game.score = game.score + bonus
   if game.score > game.best_score {
     game.best_score = game.score
@@ -582,7 +582,7 @@ fn @types.Game::update_hook(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Advances all active fish: follows hook if hooked, swims with sway, bounces off walls, detects hook collision.
 fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
-  let mut active_count : Int = 0
+  let mut active_count : Int32 = 0
 
   for i in 0..<game.fish.length() {
     if !game.fish[i].active {
@@ -747,7 +747,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
     if hazard.kind == Eel &&
       game.carrying_idx >= 0 &&
       game.carrying_idx < game.fish.length() {
-      let idx : Int = game.carrying_idx
+      let idx : Int32 = game.carrying_idx
       if game.fish[idx].active {
         let r2 : Float = hazard.r + game.fish[idx].r
         if @types.dist2(hazard.x, hazard.y, game.fish[idx].x, game.fish[idx].y) <=

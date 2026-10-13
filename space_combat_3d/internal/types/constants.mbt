@@ -2,11 +2,11 @@
 
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 // Game states
 
@@ -28,7 +28,7 @@ pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Converts a GameState to its integer value.
-pub fn GameState::to_int(self : GameState) -> Int {
+pub fn GameState::to_int(self : GameState) -> Int32 {
   match self {
     StateMenu => 0
     StatePlaying => 1
@@ -43,7 +43,7 @@ pub fn GameState::to_int(self : GameState) -> Int {
 
 ///|
 /// Converts an integer to a GameState.
-pub fn GameState::from_int(v : Int) -> GameState {
+pub fn GameState::from_int(v : Int32) -> GameState {
   match v {
     0 => StateMenu
     1 => StatePlaying
@@ -89,23 +89,23 @@ pub extend WeaponKind with Eq::{not_equal, equal}
 
 ///|
 /// Enemy type identifier for standard fighter craft.
-pub let enemy_fighter : Int = 0
+pub let enemy_fighter : Int32 = 0
 
 ///|
 /// Enemy type identifier for heavily armored cruiser.
-pub let enemy_cruiser : Int = 1
+pub let enemy_cruiser : Int32 = 1
 
 ///|
 /// Enemy type identifier for fast interceptor craft.
-pub let enemy_interceptor : Int = 3
+pub let enemy_interceptor : Int32 = 3
 
 ///|
 /// Enemy type identifier for slow heavy bomber.
-pub let enemy_bomber : Int = 4
+pub let enemy_bomber : Int32 = 4
 
 ///|
 /// Enemy type identifier for boss-class capital ship.
-pub let enemy_capital : Int = 5
+pub let enemy_capital : Int32 = 5
 
 // Enemy AI states
 
@@ -149,15 +149,15 @@ pub extend PowerupKind with Eq::{not_equal, equal}
 
 ///|
 /// Size tier for large breakable asteroids.
-pub let asteroid_large : Int = 0
+pub let asteroid_large : Int32 = 0
 
 ///|
 /// Size tier for medium asteroids from breaking large ones.
-pub let asteroid_medium : Int = 1
+pub let asteroid_medium : Int32 = 1
 
 ///|
 /// Size tier for small non-breakable asteroid fragments.
-pub let asteroid_small : Int = 2
+pub let asteroid_small : Int32 = 2
 
 // Formation patterns
 
@@ -195,39 +195,39 @@ pub extend Objective with Eq::{not_equal, equal}
 
 ///|
 /// Maximum number of concurrent enemy entities.
-pub let max_enemies : Int = 64
+pub let max_enemies : Int32 = 64
 
 ///|
 /// Maximum number of concurrent projectiles in flight.
-pub let max_projectiles : Int = 128
+pub let max_projectiles : Int32 = 128
 
 ///|
 /// Maximum number of concurrent particle effects.
-pub let max_particles : Int = 512
+pub let max_particles : Int32 = 512
 
 ///|
 /// Maximum number of concurrent asteroids in the field.
-pub let max_asteroids : Int = 96
+pub let max_asteroids : Int32 = 96
 
 ///|
 /// Maximum number of background stars.
-pub let max_stars : Int = 200
+pub let max_stars : Int32 = 200
 
 ///|
 /// Maximum number of concurrent power-up pickups.
-pub let max_powerups : Int = 16
+pub let max_powerups : Int32 = 16
 
 ///|
 /// Maximum number of concurrent space stations.
-pub let max_stations : Int = 4
+pub let max_stations : Int32 = 4
 
 ///|
 /// Maximum number of concurrent debris fragments.
-pub let max_debris : Int = 64
+pub let max_debris : Int32 = 64
 
 ///|
 /// Maximum number of concurrent shock ring effects.
-pub let max_shock_rings : Int = 8
+pub let max_shock_rings : Int32 = 8
 
 // Ship class stats: hull, shield, speed, turn_rate, boost_speed
 // Fighter - balanced
@@ -447,7 +447,7 @@ pub let missile_prox_radius : Float = 3.0
 
 ///|
 /// Maximum missile ammunition the player can carry.
-pub let missile_max_ammo : Int = 24
+pub let missile_max_ammo : Int32 = 24
 
 // Railgun: very slow, very high damage, piercing, energy cost
 
@@ -515,7 +515,7 @@ pub let fighter_damage : Float = 5.0
 
 ///|
 /// Score awarded for destroying an enemy fighter.
-pub let fighter_score : Int = 100
+pub let fighter_score : Int32 = 100
 
 ///|
 /// Distance at which enemy fighters detect the player.
@@ -551,7 +551,7 @@ pub let interceptor_damage : Float = 4.0
 
 ///|
 /// Score awarded for destroying an enemy interceptor.
-pub let interceptor_score : Int = 150
+pub let interceptor_score : Int32 = 150
 
 ///|
 /// Distance at which enemy interceptors detect the player.
@@ -575,7 +575,7 @@ pub let bomber_damage : Float = 20.0
 
 ///|
 /// Score awarded for destroying an enemy bomber.
-pub let bomber_score : Int = 250
+pub let bomber_score : Int32 = 250
 
 ///|
 /// Enemy cruiser base hull hit points.
@@ -595,7 +595,7 @@ pub let cruiser_damage : Float = 12.0
 
 ///|
 /// Score awarded for destroying an enemy cruiser.
-pub let cruiser_score : Int = 500
+pub let cruiser_score : Int32 = 500
 
 ///|
 /// Enemy capital ship base hull hit points.
@@ -615,7 +615,7 @@ pub let capital_damage : Float = 25.0
 
 ///|
 /// Score awarded for destroying an enemy capital ship.
-pub let capital_score : Int = 2000
+pub let capital_score : Int32 = 2000
 
 ///|
 /// Hit points of each capital ship weak point.
@@ -623,7 +623,7 @@ pub let capital_weak_point_hp : Float = 80.0
 
 ///|
 /// Score awarded for destroying an asteroid.
-pub let asteroid_score : Int = 25
+pub let asteroid_score : Int32 = 25
 
 ///|
 /// Hit points for a large asteroid.
@@ -651,7 +651,7 @@ pub let asteroid_small_size : Float = 1.2
 
 ///|
 /// Number of smaller fragments spawned when an asteroid breaks apart.
-pub let asteroid_break_count : Int = 3
+pub let asteroid_break_count : Int32 = 3
 
 // Station parameters
 
@@ -661,11 +661,11 @@ pub let station_hp : Float = 300.0
 
 ///|
 /// Station allegiance identifier for friendly stations.
-pub let station_friendly : Int = 0
+pub let station_friendly : Int32 = 0
 
 ///|
 /// Station allegiance identifier for hostile stations.
-pub let station_enemy : Int = 1
+pub let station_enemy : Int32 = 1
 
 // Power-up parameters
 
@@ -801,7 +801,7 @@ pub let two_pi : Float = 6.2831853
 
 ///|
 /// Total number of playable missions in the campaign.
-pub let total_missions : Int = 12
+pub let total_missions : Int32 = 12
 
 // Combo system
 
@@ -829,7 +829,7 @@ pub let combo_mult_8 : Float = 5.0
 
 ///|
 /// Maximum number of visible kill feed entries on screen.
-pub let max_kill_feed : Int = 5
+pub let max_kill_feed : Int32 = 5
 
 ///|
 /// Duration in seconds a kill feed entry remains visible.
@@ -839,7 +839,7 @@ pub let kill_feed_duration : Float = 3.0
 
 ///|
 /// Maximum number of floating damage numbers displayed simultaneously.
-pub let max_damage_numbers : Int = 16
+pub let max_damage_numbers : Int32 = 16
 
 ///|
 /// Duration in seconds a floating damage number stays visible.
@@ -857,19 +857,19 @@ pub let damage_flash_duration : Float = 0.3
 
 ///|
 /// Returns the enemy HP scaling multiplier for the given `mission` number.
-pub fn mission_difficulty_hp_mult(mission : Int) -> Float {
+pub fn mission_difficulty_hp_mult(mission : Int32) -> Float {
   1.0 + Float::from_int(mission) * 0.15
 }
 
 ///|
 /// Returns the enemy speed scaling multiplier for the given `mission` number.
-pub fn mission_difficulty_speed_mult(mission : Int) -> Float {
+pub fn mission_difficulty_speed_mult(mission : Int32) -> Float {
   1.0 + Float::from_int(mission) * 0.05
 }
 
 ///|
 /// Returns the AI difficulty level (0-3) for a mission. Higher = smarter enemies.
-pub fn mission_ai_difficulty(mission : Int) -> Int {
+pub fn mission_ai_difficulty(mission : Int32) -> Int32 {
   if mission < 3 {
     0
   } else if mission < 6 {
@@ -883,13 +883,13 @@ pub fn mission_ai_difficulty(mission : Int) -> Int {
 
 ///|
 /// Returns the AI evasion skill for a given difficulty level.
-pub fn ai_difficulty_evasion(difficulty : Int) -> Float {
+pub fn ai_difficulty_evasion(difficulty : Int32) -> Float {
   Float::from_int(difficulty) * 0.25
 }
 
 ///|
 /// Returns the AI aim accuracy bonus for a given difficulty level.
-pub fn ai_difficulty_accuracy(difficulty : Int) -> Float {
+pub fn ai_difficulty_accuracy(difficulty : Int32) -> Float {
   Float::from_int(difficulty) * 0.15
 }
 
@@ -899,7 +899,7 @@ pub let survive_time_limit : Float = 90.0
 
 ///|
 /// Number of patrol waypoints in patrol missions.
-pub let patrol_waypoint_count : Int = 4
+pub let patrol_waypoint_count : Int32 = 4
 
 ///|
 /// Radius to reach a patrol waypoint.
@@ -1002,7 +1002,7 @@ pub fn objective_type_name(obj_type : Objective) -> String {
 
 ///|
 /// Converts an integer to a ShipKind enum value.
-pub fn ship_kind_from_int(v : Int) -> ShipKind {
+pub fn ship_kind_from_int(v : Int32) -> ShipKind {
   if v == 0 {
     Fighter
   } else if v == 1 {
@@ -1018,7 +1018,7 @@ pub fn ship_kind_from_int(v : Int) -> ShipKind {
 
 ///|
 /// Converts an integer to a PowerupKind enum value.
-pub fn powerup_kind_from_int(v : Int) -> PowerupKind {
+pub fn powerup_kind_from_int(v : Int32) -> PowerupKind {
   if v == 0 {
     Health
   } else if v == 1 {
@@ -1032,7 +1032,7 @@ pub fn powerup_kind_from_int(v : Int) -> PowerupKind {
 
 ///|
 /// Converts an integer to a Formation enum value.
-pub fn formation_from_int(v : Int) -> Formation {
+pub fn formation_from_int(v : Int32) -> Formation {
   if v == 0 {
     V
   } else if v == 1 {
@@ -1046,7 +1046,7 @@ pub fn formation_from_int(v : Int) -> Formation {
 
 ///|
 /// Converts an integer to an Objective enum value.
-pub fn objective_from_int(v : Int) -> Objective {
+pub fn objective_from_int(v : Int32) -> Objective {
   if v == 0 {
     DestroyAll
   } else if v == 1 {
@@ -1102,4 +1102,4 @@ pub let capital_phase_death_spiral : Float = 0.10
 
 ///|
 /// Number of weak points on a capital ship.
-pub let capital_weak_point_count : Int = 3
+pub let capital_weak_point_count : Int32 = 3

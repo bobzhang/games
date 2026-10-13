@@ -113,7 +113,7 @@ pub fn generate_smart_rewards(game : @types.Game) -> Array[@types.RewardChoice] 
 
 ///|
 /// Get an offer that completes an unfinished synergy
-fn get_on_build_offer(p : @types.Player, rng : UInt) -> @types.RewardChoice {
+fn get_on_build_offer(p : @types.Player, rng : UInt32) -> @types.RewardChoice {
   // Check which synergies are 1 passive away from completion
   let missing = find_missing_synergy_passives(p)
   if missing.length() > 0 {
@@ -236,7 +236,7 @@ fn find_missing_synergy_passives(
 }
 
 ///|
-fn get_synergy_weapon(p : @types.Player, rng : UInt) -> @types.WeaponKind {
+fn get_synergy_weapon(p : @types.Player, rng : UInt32) -> @types.WeaponKind {
   // Pick a weapon that synergizes with existing passives
   let candidates : Array[@types.WeaponKind] = []
   if p.passives.contains(CritUp) && p.weapon != Daggers {
@@ -272,8 +272,8 @@ fn get_synergy_weapon(p : @types.Player, rng : UInt) -> @types.WeaponKind {
 fn generate_unique_offer(
   p : @types.Player,
   existing : Array[@types.RewardChoice],
-  rng : UInt,
-) -> (@types.RewardChoice, UInt) {
+  rng : UInt32,
+) -> (@types.RewardChoice, UInt32) {
   let all = all_passives()
   // Filter out already-offered passives and player's existing passives
   let available : Array[@types.PassiveKind] = []
@@ -323,7 +323,10 @@ fn generate_unique_offer(
 
 ///|
 /// Generate a build-directed elite drop item kind
-fn get_on_build_drop(p : @types.Player, rng : UInt) -> (@types.ItemKind, UInt) {
+fn get_on_build_drop(
+  p : @types.Player,
+  rng : UInt32,
+) -> (@types.ItemKind, UInt32) {
   let missing = find_missing_synergy_passives(p)
   let (s1, f) = @types.rng_next(rng)
   if missing.length() > 0 {
@@ -342,8 +345,8 @@ fn get_on_build_drop(p : @types.Player, rng : UInt) -> (@types.ItemKind, UInt) {
 /// Generate a build-biased passive for the gamble shrine
 fn get_gamble_passive(
   p : @types.Player,
-  rng : UInt,
-) -> (@types.PassiveKind, UInt) {
+  rng : UInt32,
+) -> (@types.PassiveKind, UInt32) {
   let missing = find_missing_synergy_passives(p)
   let (s1, f) = @types.rng_next(rng)
   // 60% chance to pick a synergy-completing passive if available

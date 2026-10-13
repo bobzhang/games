@@ -15,7 +15,7 @@ fn @types.Game::refill_bag(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::take_bag_piece(game : @types.Game) -> Int {
+fn @types.Game::take_bag_piece(game : @types.Game) -> Int32 {
   if game.bag_pos >= @types.bag_size {
     game.refill_bag()
   }
@@ -41,7 +41,7 @@ fn @types.Game::lock_piece(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::clear_lines(game : @types.Game) -> Int {
+fn @types.Game::clear_lines(game : @types.Game) -> Int32 {
   let mut cleared = 0
   let mut y = @types.board_rows - 1
   while y >= 0 {
@@ -82,7 +82,7 @@ fn @types.Game::recalc_speed(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::apply_line_score(game : @types.Game, cleared : Int) -> Unit {
+fn @types.Game::apply_line_score(game : @types.Game, cleared : Int32) -> Unit {
   if cleared <= 0 {
     return
   }
@@ -140,7 +140,7 @@ fn @types.Game::hard_drop(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::try_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::try_move(game : @types.Game, dx : Int32, dy : Int32) -> Bool {
   let nx = game.piece_x + dx
   let ny = game.piece_y + dy
   if @types.collides(game, game.piece_kind, game.piece_rot, nx, ny) {
@@ -152,9 +152,9 @@ fn @types.Game::try_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
 }
 
 ///|
-fn @types.Game::try_rotate(game : @types.Game, dir : Int) -> Unit {
+fn @types.Game::try_rotate(game : @types.Game, dir : Int32) -> Unit {
   let new_rot = @types.normalize_rot(game.piece_rot + dir)
-  let kicks : Array[Int] = [0, -1, 1, -2, 2]
+  let kicks : Array[Int32] = [0, -1, 1, -2, 2]
   for kick in kicks {
     let x = game.piece_x + kick
     if !@types.collides(game, game.piece_kind, new_rot, x, game.piece_y) {
