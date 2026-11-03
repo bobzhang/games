@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,10 +12,11 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct Placement {
   pos : Vec2i
   feature : FeatureKind
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Placement with Eq::{not_equal, equal}
@@ -23,6 +25,7 @@ pub extend Placement with Eq::{not_equal, equal}
 pub extend Placement with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Clue {
   kind : ClueKind
   feature_a : FeatureKind
@@ -33,7 +36,7 @@ pub(all) struct Clue {
   count : Int32
   text : String
   mut status : ClueStatus
-} derive(Debug)
+}
 
 ///|
 pub extend Clue with Debug::{to_repr}
@@ -50,11 +53,12 @@ pub(all) struct Level {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int32
   mut best_placements : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}

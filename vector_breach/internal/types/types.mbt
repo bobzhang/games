@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Cell {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Cell with Eq::{not_equal, equal}
@@ -207,12 +208,13 @@ pub(all) struct UnitSnapshot {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct PreviewTile {
   x : Int32
   y : Int32
   effect : EffectKind
   affected_unit : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend PreviewTile with Debug::{to_repr}

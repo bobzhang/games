@@ -2,13 +2,14 @@
 
 ///|
 /// Global gameplay states for menu, active waves, downtime shop, pause, and defeat.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   Playing
   WaveComplete
   Paused
   GameOver
-} derive(Eq)
+}
 
 // Player entity
 

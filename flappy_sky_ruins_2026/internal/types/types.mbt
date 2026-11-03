@@ -37,11 +37,12 @@ pub(all) struct Particle {
 
 ///|
 /// High-level phase of a flappy run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

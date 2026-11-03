@@ -1,33 +1,36 @@
 ///|
 /// High-level phase of a minesweeper session.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Action mode used when selecting a board cell.
+#derive(Eq)
 pub(all) enum PlayMode {
   Reveal
   Flag
-} derive(Eq)
+}
 
 ///|
 pub extend PlayMode with Eq::{not_equal, equal}
 
 ///|
 /// End-of-run performance grade.
+#derive(Eq)
 pub(all) enum Grade {
   GradeS
   GradeA
   GradeB
   GradeC
   GradeD
-} derive(Eq)
+}
 
 ///|
 pub extend Grade with Eq::{not_equal, equal}

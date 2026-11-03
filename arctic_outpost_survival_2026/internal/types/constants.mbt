@@ -136,44 +136,48 @@ pub fn btn_restart() -> (Int32, Int32, Int32, Int32) {
 
 ///|
 /// Classifies the three enemy archetypes in the arctic outpost.
+#derive(Eq)
 pub(all) enum EnemyKind {
   Wolf
   Brute
   Shard
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies the four supply pickup types that can spawn.
+#derive(Eq)
 pub(all) enum PickupKind {
   Fuel
   Medkit
   Ammo
   Overdrive
-} derive(Eq)
+}
 
 ///|
 pub extend PickupKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies the two projectile types the player can fire.
+#derive(Eq)
 pub(all) enum BulletKind {
   Normal
   Pierce
-} derive(Eq)
+}
 
 ///|
 pub extend BulletKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies the three visual particle effect categories.
+#derive(Eq)
 pub(all) enum ParticleKind {
   Default
   Damage
   OverdriveEffect
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}

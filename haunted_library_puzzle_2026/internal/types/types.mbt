@@ -1,43 +1,47 @@
 ///|
 /// High-level flow state for a haunted library run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Tile classification used by pathing and collision.
+#derive(Eq)
 pub(all) enum Tile {
   Floor
   Wall
   Exit
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Ghost behavior mode used by AI updates.
+#derive(Eq)
 pub(all) enum GhostMode {
   Patrol
   Hunt
   Stunned
-} derive(Eq)
+}
 
 ///|
 pub extend GhostMode with Eq::{not_equal, equal}
 
 ///|
 /// Particle effect category for rendering.
+#derive(Eq)
 pub(all) enum ParticleKind {
   Dust
   Gold
   Purple
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}

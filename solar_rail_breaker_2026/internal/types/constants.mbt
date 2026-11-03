@@ -112,18 +112,20 @@ pub let tau : Float = 6.28318530
 
 ///|
 /// Represents the current phase of the game lifecycle.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Classifies enemy behavior and visual style.
+#derive(Eq)
 pub(all) enum EnemyKind {
   /// Basic enemy: square shape, standard chase, moderate fire rate.
   Basic
@@ -131,23 +133,25 @@ pub(all) enum EnemyKind {
   Heavy
   /// Orbiter enemy: pulsing mine, offset orbit, contact damage.
   Orbiter
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies player bullet visual and behavior style.
+#derive(Eq)
 pub(all) enum BulletKind {
   /// Standard player bullet with cyan trail.
   Standard
-} derive(Eq)
+}
 
 ///|
 pub extend BulletKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies enemy bullet visual style based on firing enemy type.
+#derive(Eq)
 pub(all) enum EnemyBulletKind {
   /// Pink bullet fired by basic enemies.
   BasicShot
@@ -155,13 +159,14 @@ pub(all) enum EnemyBulletKind {
   HeavyShot
   /// Green bullet fired by orbiter enemies.
   OrbiterShot
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyBulletKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies particle visual style by color.
+#derive(Eq)
 pub(all) enum ParticleKind {
   /// Cyan spark from player fire.
   Spark
@@ -169,7 +174,7 @@ pub(all) enum ParticleKind {
   Flash
   /// Pink burst from damage.
   Damage
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}

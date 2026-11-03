@@ -1,12 +1,13 @@
 ///|
 /// Main state machine for title, run, and outcomes.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   Failed
   Victory
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

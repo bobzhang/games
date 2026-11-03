@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum TickResult {
   Continue
   HitPlanet
   ReachedStation
   OutOfBounds
   MaxTicks
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TickResult with Eq::{not_equal, equal}

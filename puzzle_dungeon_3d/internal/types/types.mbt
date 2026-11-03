@@ -2,6 +2,7 @@
 
 ///|
 /// Tile categories used by puzzle logic and world rendering for each grid cell.
+#derive(Eq)
 pub(all) enum Tile {
   TileEmpty
   TileWall
@@ -36,39 +37,42 @@ pub(all) enum Tile {
   TileLaserSourceUp
   TileLaserTarget
   TileRotatePlatform
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Entity kinds that can occupy tiles independently from base terrain.
+#derive(Eq)
 pub(all) enum EntityKind {
   EntityNone
   EntityBlock
   EntityDiamond
   EntityKey
   EntityBomb
-} derive(Eq)
+}
 
 ///|
 pub extend EntityKind with Eq::{not_equal, equal}
 
 ///|
 /// Cardinal movement and facing directions used by player, conveyors, and lasers.
+#derive(Eq)
 pub(all) enum Dir {
   DirNone
   DirUp
   DirRight
   DirDown
   DirLeft
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// High-level game states that drive update and UI render dispatch.
+#derive(Eq)
 pub(all) enum GameState {
   StateMenu
   StatePlaying
@@ -79,20 +83,21 @@ pub(all) enum GameState {
   StateCampaignComplete
   StateWorldSelect
   StateTutorial
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// The five campaign themes that map floors to mechanics and visual palettes.
+#derive(Eq)
 pub(all) enum World {
   WorldDungeon
   WorldIce
   WorldLava
   WorldGarden
   WorldVoid
-} derive(Eq)
+}
 
 ///|
 pub extend World with Eq::{not_equal, equal}
@@ -127,6 +132,7 @@ pub fn world_to_int(w : World) -> Int32 {
 
 ///|
 /// Decorative prop categories used to flavor each world theme.
+#derive(Eq)
 pub(all) enum DecoKind {
   DecoTorch
   DecoCrystal
@@ -136,7 +142,7 @@ pub(all) enum DecoKind {
   DecoPillar
   DecoMushroom
   DecoVine
-} derive(Eq)
+}
 
 // Entity on the grid (block, diamond, key, bomb)
 

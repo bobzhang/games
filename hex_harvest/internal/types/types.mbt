@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct HexCoord {
   col : Int32
   row : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HexCoord with Eq::{not_equal, equal}
@@ -11,6 +12,7 @@ pub extend HexCoord with Eq::{not_equal, equal}
 pub extend HexCoord with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct HexTile {
   mut kind : TileKind
   mut height : Int32
@@ -19,40 +21,44 @@ pub(all) struct HexTile {
   mut crop_state : CropState
   mut crop_turns : Int32
   mut has_channel : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend HexTile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct HexGrid {
   width : Int32
   height : Int32
   tiles : Array[Array[HexTile]]
-} derive(Debug)
+}
 
 ///|
 pub extend HexGrid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct WaterSource {
   col : Int32
   row : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend WaterSource with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct GoalPos {
   col : Int32
   row : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend GoalPos with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   mut grid : HexGrid
   mut water_sources : Array[WaterSource]
@@ -62,12 +68,13 @@ pub(all) struct Level {
   mut par_turns : Int32
   mut name : String
   mut world : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut yield_collected : Int32
   mut target_yield : Int32
@@ -77,23 +84,25 @@ pub(all) struct LevelScore {
   mut goals_collected : Int32
   mut total_goals : Int32
   mut stars : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct UndoState {
   mut tiles : Array[Array[HexTile]]
   mut turn : Int32
   mut yield_collected : Int32
   mut goals_collected : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend UndoState with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut level : Level
@@ -126,7 +135,7 @@ pub(all) struct Game {
   mut click_feedback_timer : Float
   mut click_feedback_col : Int32
   mut click_feedback_row : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

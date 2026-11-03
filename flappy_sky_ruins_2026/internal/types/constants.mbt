@@ -96,23 +96,25 @@ pub fn btn_hint_rect() -> (Int32, Int32, Int32, Int32) {
 
 ///|
 /// Kind of obstacle in the scrolling world.
+#derive(Eq)
 pub(all) enum ObstacleKind {
   Gate
   Beam
   Spinner
-} derive(Eq)
+}
 
 ///|
 pub extend ObstacleKind with Eq::{not_equal, equal}
 
 ///|
 /// Kind of collectible pickup item.
+#derive(Eq)
 pub(all) enum PickupKind {
   Score
   Boost
   Shield
   Heart
-} derive(Eq)
+}
 
 ///|
 pub extend PickupKind with Eq::{not_equal, equal}

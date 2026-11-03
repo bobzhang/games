@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,63 +12,70 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Robot {
   mut pos : Vec2i
   mut dir : Direction
   mut alive : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Robot with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Command {
   mut kind : CommandKind
-} derive(Debug)
+}
 
 ///|
 pub extend Command with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Program {
   mut commands : Array[Command]
   mut max_slots : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Program with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Tile {
   mut kind : TileKind
-} derive(Debug)
+}
 
 ///|
 pub extend Tile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Grid {
   mut tiles : Array[Array[Tile]]
   mut width : Int32
   mut height : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Grid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   mut grid : Grid
   mut robot : Robot
   mut goals : Array[Vec2i]
   mut goals_collected : Array[Bool]
   mut blocks : Array[Vec2i]
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelDef {
   world : Int32
   index : Int32
@@ -80,12 +88,13 @@ pub(all) struct LevelDef {
   optimal : Int32
   hint : String
   available_commands : Array[CommandKind]
-} derive(Debug)
+}
 
 ///|
 pub extend LevelDef with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct RobotState {
   mut pos : Vec2i
   mut dir : Direction
@@ -93,32 +102,35 @@ pub(all) struct RobotState {
   mut goals_collected : Array[Bool]
   mut blocks : Array[Vec2i]
   mut cmd_index : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend RobotState with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct ExecutionTrace {
   mut states : Array[RobotState]
   mut success : Bool
   mut fail_reason : String
-} derive(Debug)
+}
 
 ///|
 pub extend ExecutionTrace with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_instructions : Int32
   mut medal : Medal
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct EditorState {
   mut cursor : Int32
   mut palette_cursor : Int32
@@ -126,12 +138,13 @@ pub(all) struct EditorState {
   mut palette_commands : Array[CommandKind]
   mut loop_count : Int32
   mut condition_index : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend EditorState with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut current_world : Int32
@@ -151,7 +164,7 @@ pub(all) struct Game {
   mut message_timer : Float
   mut title_anim : Float
   mut total_stars : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

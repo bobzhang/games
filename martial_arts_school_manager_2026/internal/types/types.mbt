@@ -1,11 +1,12 @@
 ///|
 /// High-level lifecycle states for a school run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

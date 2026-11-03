@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Clue {
   kind : ClueKind
   param_a : Int32
   param_b : Int32
   text : String
   mut satisfied : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Clue with Eq::{not_equal, equal}
@@ -14,32 +15,35 @@ pub extend Clue with Eq::{not_equal, equal}
 pub extend Clue with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   tier : Tier
   name : String
   rocks : Array[RockKind]
   clues : Array[Clue]
   par_moves : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut stars : Int32
   mut completed : Bool
   mut best_moves : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct UndoEntry {
   slots : Array[RockKind?]
   tray : Array[RockKind]
-} derive(Debug)
+}
 
 ///|
 pub extend UndoEntry with Debug::{to_repr}

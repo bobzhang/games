@@ -206,6 +206,7 @@ pub let theme_crypt : Int32 = 0
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   StateMenu
   StatePlaying
@@ -217,7 +218,7 @@ pub(all) enum GameState {
   StateShrine
   StateClassSelect
   StateEquipPopup
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
@@ -766,17 +767,19 @@ pub let mana_regen_rate : Float = 1.5
 
 ///|
 /// Player class.
+#derive(Eq)
 pub(all) enum ShipClass {
   Warrior
   Rogue
   Mage
-} derive(Eq)
+}
 
 ///|
 pub extend ShipClass with Eq::{not_equal, equal}
 
 ///|
 /// Enemy variant.
+#derive(Eq)
 pub(all) enum EnemyKind {
   None
   Skeleton
@@ -790,13 +793,14 @@ pub(all) enum EnemyKind {
   Minotaur
   Lich
   Mimic
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Spell type.
+#derive(Eq)
 pub(all) enum Spell {
   None
   Fireball
@@ -805,26 +809,28 @@ pub(all) enum Spell {
   Shield
   Lightning
   Teleport
-} derive(Eq)
+}
 
 ///|
 pub extend Spell with Eq::{not_equal, equal}
 
 ///|
 /// Trap variant.
+#derive(Eq)
 pub(all) enum TrapKind {
   Spike
   Arrow
   Flame
   Poison
   Pitfall
-} derive(Eq)
+}
 
 ///|
 pub extend TrapKind with Eq::{not_equal, equal}
 
 ///|
 /// Weapon variant.
+#derive(Eq)
 pub(all) enum WeaponKind {
   Sword
   Axe
@@ -832,7 +838,7 @@ pub(all) enum WeaponKind {
   Dagger
   Staff
   Bow
-} derive(Eq)
+}
 
 // Boss phase thresholds
 
@@ -881,6 +887,7 @@ pub let ring_crit_chance : Int32 = 4
 
 ///|
 /// Weapon affix variant.
+#derive(Eq)
 pub(all) enum WeaponAffix {
   AffixNone
   AffixVampiric
@@ -889,7 +896,7 @@ pub(all) enum WeaponAffix {
   AffixSwift
   AffixHeavy
   AffixKeen
-} derive(Eq)
+}
 
 ///|
 pub extend WeaponAffix with Eq::{not_equal, equal}

@@ -69,12 +69,13 @@ pub fn bell_pos(i : Int32) -> (Float, Float) {
 
 ///|
 /// Categorizes foe entities into hostile spirit types and rescuable relics.
+#derive(Eq)
 pub(all) enum FoeKind {
   Wisp
   Brute
   Shaman
   Relic
-} derive(Eq)
+}
 
 ///|
 pub extend FoeKind with Eq::{not_equal, equal}

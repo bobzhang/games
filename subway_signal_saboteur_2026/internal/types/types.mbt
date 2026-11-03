@@ -1,55 +1,60 @@
 ///|
 /// High-level phase of the game loop.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Tile type stored in the subway board grid.
+#derive(Eq)
 pub(all) enum Tile {
   Void
   Floor
   Track
   Wall
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Current AI behavior mode for an inspector.
+#derive(Eq)
 pub(all) enum InspectorMode {
   Patrol
   Hunt
   Stunned
-} derive(Eq)
+}
 
 ///|
 pub extend InspectorMode with Eq::{not_equal, equal}
 
 ///|
 /// Visual effect category for pooled particles.
+#derive(Eq)
 pub(all) enum ParticleKind {
   Spark
   Gold
   Smoke
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}
 
 ///|
 /// Lane color tag used by trains and route goals.
+#derive(Eq)
 pub(all) enum TrainColor {
   Red
   Blue
   Green
-} derive(Eq)
+}
 
 ///|
 pub extend TrainColor with Eq::{not_equal, equal}

@@ -32,10 +32,11 @@ pub let max_rivals : Int32 = 2
 
 ///|
 /// Food type for pickups in the arena.
+#derive(Eq)
 pub(all) enum FoodKind {
   Normal
   Gold
-} derive(Eq)
+}
 
 ///|
 pub extend FoodKind with Eq::{not_equal, equal}
@@ -128,34 +129,37 @@ pub fn btn_hint() -> (Int32, Int32, Int32, Int32) {
 
 ///|
 /// Visual spark particle category.
+#derive(Eq)
 pub(all) enum SparkKind {
   Splash
   Eat
   Death
-} derive(Eq)
+}
 
 ///|
 pub extend SparkKind with Eq::{not_equal, equal}
 
 ///|
 /// Cardinal movement direction for snakes.
+#derive(Eq)
 pub(all) enum Dir {
   Left
   Right
   Up
   Down
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Top-level game screen state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

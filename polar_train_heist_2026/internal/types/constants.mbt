@@ -336,6 +336,7 @@ pub fn heat_col() -> @raylib.Color {
 
 ///|
 /// Entity kind for enemies and pickups.
+#derive(Eq)
 pub(all) enum EntityKind {
   Guard
   Drone
@@ -344,19 +345,20 @@ pub(all) enum EntityKind {
   Medkit
   Battery
   Signal
-} derive(Eq)
+}
 
 ///|
 pub extend EntityKind with Eq::{not_equal, equal}
 
 ///|
 /// Game state machine states.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

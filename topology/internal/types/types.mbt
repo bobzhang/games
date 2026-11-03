@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug, Compare)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug, Compare)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -14,9 +15,10 @@ pub extend Vec2i with Debug::{to_repr}
 pub extend Vec2i with Compare::{op_lt, op_le, op_ge, compare, op_gt}
 
 ///|
+#derive(Debug)
 pub(all) struct Shape {
   mut cells : Array[Vec2i]
-} derive(Debug)
+}
 
 ///|
 pub extend Shape with Debug::{to_repr}

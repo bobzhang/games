@@ -1,17 +1,19 @@
 ///|
 /// Drift boost charge level from none through mini, super, and ultra.
+#derive(Eq)
 pub(all) enum DriftLevel {
   DriftNone
   Mini
   Super
   Ultra
-} derive(Eq)
+}
 
 ///|
 pub extend DriftLevel with Eq::{not_equal, equal}
 
 ///|
 /// Types of powerup items that can be held or used.
+#derive(Eq)
 pub(all) enum PowerupKind {
   NoPowerup
   Boost
@@ -22,13 +24,14 @@ pub(all) enum PowerupKind {
   Star
   Banana
   TripleMushroom
-} derive(Eq)
+}
 
 ///|
 pub extend PowerupKind with Eq::{not_equal, equal}
 
 ///|
 /// Track surface material types affecting grip and speed.
+#derive(Eq)
 pub(all) enum Surface {
   Road
   Dirt
@@ -36,13 +39,14 @@ pub(all) enum Surface {
   BoostPad
   Oil
   SurfaceIce
-} derive(Eq)
+}
 
 ///|
 pub extend Surface with Eq::{not_equal, equal}
 
 ///|
 /// Visual theme categories for track environments.
+#derive(Eq)
 pub(all) enum Theme {
   Circuit
   Beach
@@ -52,13 +56,14 @@ pub(all) enum Theme {
   ThemeIce
   Night
   Volcano
-} derive(Eq)
+}
 
 ///|
 pub extend Theme with Eq::{not_equal, equal}
 
 ///|
 /// Hazard event types that can be assigned to track segments.
+#derive(Eq, Debug)
 pub(all) enum HazardKind {
   NoHazard
   LavaBurst
@@ -66,7 +71,7 @@ pub(all) enum HazardKind {
   WaterCurrent
   IceSheet
   Shortcut
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HazardKind with Eq::{not_equal, equal}

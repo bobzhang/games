@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct BeamColor {
   r : Bool
   g : Bool
   b : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend BeamColor with Eq::{not_equal, equal}
@@ -12,10 +13,11 @@ pub extend BeamColor with Eq::{not_equal, equal}
 pub extend BeamColor with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct HexCoord {
   q : Int32
   r : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HexCoord with Eq::{not_equal, equal}

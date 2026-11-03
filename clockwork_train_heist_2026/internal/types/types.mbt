@@ -1,55 +1,60 @@
 ///|
 /// High-level flow state for a train heist run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Board tile classification used for movement and collision.
+#derive(Eq)
 pub(all) enum TileKind {
   Wall
   Floor
   Door
   Exit
-} derive(Eq)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
 
 ///|
 /// AI behavior mode for guard updates.
+#derive(Eq)
 pub(all) enum GuardMode {
   Patrol
   Hunt
   Stunned
-} derive(Eq)
+}
 
 ///|
 pub extend GuardMode with Eq::{not_equal, equal}
 
 ///|
 /// Loot category used for scoring and progression.
+#derive(Eq)
 pub(all) enum LootKind {
   Blueprint
   Keycard
   Gold
-} derive(Eq)
+}
 
 ///|
 pub extend LootKind with Eq::{not_equal, equal}
 
 ///|
 /// Particle effect category for rendering.
+#derive(Eq)
 pub(all) enum ParticleKind {
   Spark
   Glitter
   Smoke
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}

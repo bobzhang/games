@@ -429,11 +429,12 @@ pub fn count_symbol_frequency(inscription : Inscription, sym : Symbol) -> Int32 
 }
 
 ///|
+#derive(Debug)
 pub(all) struct SymbolPosition {
   x : Int32
   y : Int32
   symbol : Symbol?
-} derive(Debug)
+}
 
 ///|
 pub extend SymbolPosition with Debug::{to_repr}

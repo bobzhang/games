@@ -1,48 +1,52 @@
 ///|
 /// Top-level phase of the Sokoban campaign.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   LevelClear
   CampaignClear
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Cardinal movement direction plus no-input state.
+#derive(Eq)
 pub(all) enum Direction {
   None
   Left
   Right
   Up
   Down
-} derive(Eq)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
 
 ///|
 /// Base terrain tile kind for each cell.
+#derive(Eq)
 pub(all) enum Tile {
   Void
   Floor
   Wall
   Goal
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Visual style for transient spark particles.
+#derive(Eq)
 pub(all) enum SparkKind {
   Gold
   Orange
   Red
   Blue
-} derive(Eq)
+}
 
 ///|
 pub extend SparkKind with Eq::{not_equal, equal}

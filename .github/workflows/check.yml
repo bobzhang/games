@@ -8,11 +8,15 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        moonbit: [latest, pre-release]
     steps:
       - uses: actions/checkout@v5
       - name: Install MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- "${{ matrix.moonbit }}"
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - run: moon version --all
       - run: moon update
@@ -20,3 +24,24 @@ jobs:
         run: moon check --deny-warn --target native
       - name: moon fmt (no diff)
         run: moon fmt --check
+      - name: Run tests
+        run: moon test --target native
+
+  website:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        moonbit: [latest, pre-release]
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- "${{ matrix.moonbit }}"
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - run: moon check --target js --deny-warn
+      - run: moon fmt --check
+      - run: moon test --target js

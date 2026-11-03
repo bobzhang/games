@@ -1,33 +1,36 @@
 ///|
 /// High-level phase of a Neon 2048 run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Input direction for slide operations.
+#derive(Eq)
 pub(all) enum Direction {
   DirLeft
   DirRight
   DirUp
   DirDown
-} derive(Eq)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
 
 ///|
 /// Visual spark effect category.
+#derive(Eq)
 pub(all) enum SparkKind {
   SparkDefault
   SparkMerge
   SparkExplosion
-} derive(Eq)
+}
 
 ///|
 pub extend SparkKind with Eq::{not_equal, equal}

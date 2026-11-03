@@ -12,6 +12,7 @@ pub let target_fps : Int32 = 120
 
 ///|
 /// Track object type.
+#derive(Eq)
 pub(all) enum ObjKind {
   Wall
   Orb
@@ -19,7 +20,7 @@ pub(all) enum ObjKind {
   GateBeta
   Boost
   JumpBar
-} derive(Eq)
+}
 
 ///|
 pub extend ObjKind with Eq::{not_equal, equal}
@@ -86,12 +87,13 @@ pub let combo_decay_time : Float = 3.8
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

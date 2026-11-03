@@ -2,6 +2,7 @@
 
 ///|
 /// Possible states of the game state machine.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   Countdown
@@ -11,7 +12,7 @@ pub(all) enum GameState {
   CupComplete
   KartSelect
   TrackPreview
-} derive(Eq)
+}
 
 // Waypoint for track definition
 

@@ -9,3 +9,5 @@ import {
 license = "MIT"
 
 preferred_target = "js"
+
+supported_targets = "js"

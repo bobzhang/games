@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   LevelSelect
@@ -6,7 +7,7 @@ pub(all) enum Screen {
   Simulating
   LevelComplete
   LevelFailed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -23,6 +24,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ComponentKind {
   Empty
   Battery
@@ -30,7 +32,7 @@ pub(all) enum ComponentKind {
   Wire
   Fuse(Float)
   Switch(Bool)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ComponentKind with Eq::{not_equal, equal}
@@ -47,12 +49,13 @@ pub impl Show for ComponentKind with fn output(self, logger) {
 pub extend ComponentKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
@@ -69,6 +72,7 @@ pub impl Show for Direction with fn output(self, logger) {
 pub extend Direction with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ToolMode {
   PlaceBattery
   PlaceWire
@@ -76,7 +80,7 @@ pub(all) enum ToolMode {
   PlaceSwitch
   Erase
   ToggleSwitch
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ToolMode with Eq::{not_equal, equal}
@@ -93,11 +97,12 @@ pub impl Show for ToolMode with fn output(self, logger) {
 pub extend ToolMode with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Basics
   Parallel
   Networks
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

@@ -1,20 +1,22 @@
 ///|
+#derive(Debug)
 pub(all) struct Cell {
   mut terrain : Terrain?
   mut fence_top : Bool
   mut fence_left : Bool
   mut animal : Species?
-} derive(Debug)
+}
 
 ///|
 pub extend Cell with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Grid {
   cells : Array[Array[Cell]]
   cols : Int32
   rows : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Grid with Debug::{to_repr}
@@ -107,16 +109,18 @@ pub fn Grid::clear(self : Grid) -> Unit {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct Enclosure {
   id : Int32
   cells : Array[(Int32, Int32)]
   mut species : Species?
-} derive(Debug)
+}
 
 ///|
 pub extend Enclosure with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelDef {
   id : Int32
   tier : Int32
@@ -126,12 +130,13 @@ pub(all) struct LevelDef {
   description : String
   preset_terrain : Array[(Int32, Int32, Terrain)]
   preset_fences : Array[(Int32, Int32, Bool, Bool)]
-} derive(Debug)
+}
 
 ///|
 pub extend LevelDef with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelResult {
   mut stars : StarRating
   mut all_needs_met : Bool
@@ -139,7 +144,7 @@ pub(all) struct LevelResult {
   mut par_tiles : Int32
   mut bonus_met : Bool
   mut messages : Array[String]
-} derive(Debug)
+}
 
 ///|
 pub extend LevelResult with Debug::{to_repr}
@@ -152,6 +157,7 @@ pub(all) struct ToolSlot {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   grid : Grid
@@ -172,16 +178,17 @@ pub(all) struct Game {
   mut levels_completed : Int32
   mut level_select_scroll : Int32
   mut show_needs_panel : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum FenceMode {
   Horizontal
   Vertical
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend FenceMode with Eq::{not_equal, equal}

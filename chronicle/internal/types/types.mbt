@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct EventCard {
   id : Int32
   text : String
@@ -6,7 +7,7 @@ pub(all) struct EventCard {
   action : String
   time_hint : String
   fixed_slot : Int32 // -1 means not fixed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend EventCard with Eq::{not_equal, equal}
@@ -15,10 +16,11 @@ pub extend EventCard with Eq::{not_equal, equal}
 pub extend EventCard with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct CauseLink {
   from_id : Int32
   to_id : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend CauseLink with Eq::{not_equal, equal}
@@ -27,12 +29,13 @@ pub extend CauseLink with Eq::{not_equal, equal}
 pub extend CauseLink with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct Clue {
   kind : ClueKind
   card_a : Int32
   card_b : Int32
   text : String
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Clue with Eq::{not_equal, equal}
@@ -41,6 +44,7 @@ pub extend Clue with Eq::{not_equal, equal}
 pub extend Clue with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Case {
   cards : Array[EventCard]
   solution_order : Array[Int32]
@@ -50,12 +54,13 @@ pub(all) struct Case {
   tier : Tier
   title : String
   theme : String
-} derive(Debug)
+}
 
 ///|
 pub extend Case with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct CaseScore {
   mut order_correct : Bool
   mut links_correct : Bool
@@ -63,12 +68,13 @@ pub(all) struct CaseScore {
   mut stars : Int32
   mut order_count : Int32
   mut link_count : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend CaseScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut play_state : PlayState
@@ -93,7 +99,7 @@ pub(all) struct Game {
   mut message : String
   mut message_timer : Float
   mut title_pulse : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

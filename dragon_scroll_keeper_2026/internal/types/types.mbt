@@ -33,12 +33,13 @@ pub(all) struct Flame {
 
 ///|
 /// Enumerates high-level states in the game flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

@@ -1,44 +1,48 @@
 ///|
 /// High-level game states for a session.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Dish catalog identifiers used by orders and cooking.
+#derive(Eq)
 pub(all) enum Dish {
   DishNone
   Skewers
   Noodles
   Squid
   FriedRice
-} derive(Eq)
+}
 
 ///|
 pub extend Dish with Eq::{not_equal, equal}
 
 ///|
 /// Cooking lane assignment for a dish.
+#derive(Eq)
 pub(all) enum Lane {
   Grill
   Wok
-} derive(Eq)
+}
 
 ///|
 pub extend Lane with Eq::{not_equal, equal}
 
 ///|
 /// Two-step cooking phase state.
+#derive(Eq)
 pub(all) enum CookStage {
   Prep
   Heat
-} derive(Eq)
+}
 
 ///|
 pub extend CookStage with Eq::{not_equal, equal}

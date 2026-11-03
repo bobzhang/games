@@ -160,12 +160,13 @@ pub let burst_time_multiplier : Float = 3.5
 
 ///|
 /// Assignable room types for student placement.
+#derive(Eq)
 pub(all) enum Room {
   Rest
   Train
   Sparring
   Defense
-} derive(Eq)
+}
 
 ///|
 pub extend Room with Eq::{not_equal, equal}

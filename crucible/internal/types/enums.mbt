@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,6 +23,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Element {
   Fire
   Water
@@ -39,7 +41,7 @@ pub(all) enum Element {
   Storm
   Obsidian
   Clay
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Element with Eq::{not_equal, equal}
@@ -56,13 +58,14 @@ pub impl Show for Element with fn output(self, logger) {
 pub extend Element with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Idle
   Adding
   Reacting
   Success
   Destroyed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -79,11 +82,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Apprentice
   Journeyman
   Master
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}
@@ -100,11 +104,12 @@ pub impl Show for Tier with fn output(self, logger) {
 pub extend Tier with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ReactionResult {
   Transform(Element)
   Destroy
   NoReaction
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ReactionResult with Eq::{not_equal, equal}

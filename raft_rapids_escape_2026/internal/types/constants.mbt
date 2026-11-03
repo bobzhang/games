@@ -110,45 +110,49 @@ pub fn btn_hint() -> (Int32, Int32, Int32, Int32) {
 
 ///|
 /// Kind of obstacle entity in the river lane.
+#derive(Eq)
 pub(all) enum ObstacleKind {
   Rock
   Log
   Mine
-} derive(Eq)
+}
 
 ///|
 pub extend ObstacleKind with Eq::{not_equal, equal}
 
 ///|
 /// Kind of collectible pickup entity.
+#derive(Eq)
 pub(all) enum PickupKind {
   Coin
   Fuel
   Shield
   Repair
-} derive(Eq)
+}
 
 ///|
 pub extend PickupKind with Eq::{not_equal, equal}
 
 ///|
 /// Kind of visual particle effect.
+#derive(Eq)
 pub(all) enum ParticleKind {
   Water
   Hit
   Bubble
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}
 
 ///|
 /// High-level game screen state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

@@ -97,12 +97,13 @@ pub(all) struct Hero {
 
 ///|
 /// High-level state machine for scene flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

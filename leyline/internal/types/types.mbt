@@ -6,6 +6,7 @@ pub(all) struct Cell {
 }
 
 ///|
+#derive(Debug, Eq)
 pub(all) struct Connection {
   from_col : Int32
   from_row : Int32
@@ -13,7 +14,7 @@ pub(all) struct Connection {
   to_row : Int32
   mut energy_flow : Float
   mut flow_anim : Float
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend Connection with Debug::{to_repr}
@@ -22,6 +23,7 @@ pub extend Connection with Debug::{to_repr}
 pub extend Connection with Eq::{not_equal, equal}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelDef {
   id : Int32
   name : String
@@ -31,7 +33,7 @@ pub(all) struct LevelDef {
   par_waystones : Int32
   gold_threshold : Float
   silver_threshold : Float
-} derive(Debug)
+}
 
 ///|
 pub extend LevelDef with Debug::{to_repr}

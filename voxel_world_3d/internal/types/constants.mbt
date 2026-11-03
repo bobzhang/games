@@ -728,19 +728,21 @@ pub let gravity_block_interval : Float = 0.15
 
 ///|
 /// AI behavior state.
+#derive(Eq)
 pub(all) enum AiState {
   Idle
   Wander
   Flee
   Chase
   Attack
-} derive(Eq)
+}
 
 ///|
 pub extend AiState with Eq::{not_equal, equal}
 
 ///|
 /// World biome type.
+#derive(Eq)
 pub(all) enum Biome {
   Plains
   Forest
@@ -748,13 +750,14 @@ pub(all) enum Biome {
   Mountains
   Tundra
   Swamp
-} derive(Eq)
+}
 
 ///|
 pub extend Biome with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   Playing
@@ -762,7 +765,7 @@ pub(all) enum GameState {
   Inventory
   Crafting
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

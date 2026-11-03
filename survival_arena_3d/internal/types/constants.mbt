@@ -630,6 +630,7 @@ pub let pi : Float = 3.14159265
 
 ///|
 /// Enemy variant.
+#derive(Eq)
 pub(all) enum EnemyKind {
   Zombie
   Runner
@@ -639,13 +640,14 @@ pub(all) enum EnemyKind {
   Necromancer
   Shielded
   Boss
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Particle effect type.
+#derive(Eq)
 pub(all) enum ParticleKind {
   Blood
   Muzzle
@@ -653,24 +655,26 @@ pub(all) enum ParticleKind {
   Shell
   Spark
   Heal
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}
 
 ///|
 /// Trap type.
+#derive(Eq)
 pub(all) enum Trap {
   Spike
   Flame
   Electric
-} derive(Eq)
+}
 
 ///|
 pub extend Trap with Eq::{not_equal, equal}
 
 ///|
 /// Weapon variant.
+#derive(Eq)
 pub(all) enum WeaponKind {
   Pistol
   Shotgun
@@ -678,7 +682,7 @@ pub(all) enum WeaponKind {
   Sniper
   Rocket
   Minigun
-} derive(Eq)
+}
 
 // Minimap
 

@@ -252,12 +252,13 @@ pub let shake_time_hit : Float = 0.22
 
 ///|
 /// Cardinal direction used for node facing and cursor movement.
+#derive(Eq)
 pub(all) enum Dir {
   Up
   Right
   Down
   Left
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}
@@ -275,11 +276,12 @@ pub fn Dir::rotate_cw(self : Dir) -> Dir {
 
 ///|
 /// Enemy type that determines stats and visual appearance.
+#derive(Eq)
 pub(all) enum EnemyKind {
   Skitter
   Carapace
   Wraith
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
@@ -296,12 +298,13 @@ pub fn EnemyKind::to_int(self : EnemyKind) -> Int32 {
 
 ///|
 /// Top-level game state controlling which screen is active.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

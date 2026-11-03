@@ -112,35 +112,38 @@ pub let skyline_layers : Int32 = 3
 
 ///|
 /// Identifies the type of obstacle hazard on a rooftop.
+#derive(Eq)
 pub(all) enum ObstacleKind {
   Vent
   Sign
   Drone
   Laser
-} derive(Eq)
+}
 
 ///|
 pub extend ObstacleKind with Eq::{not_equal, equal}
 
 ///|
 /// Identifies the visual kind of a particle effect.
+#derive(Eq)
 pub(all) enum ParticleKind {
   Spark
   Glow
   Hurt
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}
 
 ///|
 /// Represents the current high-level game state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   Playing
@@ -10,7 +11,7 @@ pub(all) enum Screen {
   WeaponSelect
   BossIntro
   Victory
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -27,6 +28,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum WeaponKind {
   Laser
   Shotgun
@@ -34,7 +36,7 @@ pub(all) enum WeaponKind {
   Railgun
   Flak
   Beam
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend WeaponKind with Eq::{not_equal, equal}
@@ -51,6 +53,7 @@ pub impl Show for WeaponKind with fn output(self, logger) {
 pub extend WeaponKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ModKind {
   Piercing
   Homing
@@ -60,7 +63,7 @@ pub(all) enum ModKind {
   Freezing
   Bouncing
   Overcharge
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ModKind with Eq::{not_equal, equal}
@@ -77,12 +80,13 @@ pub impl Show for ModKind with fn output(self, logger) {
 pub extend ModKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum UtilityMod {
   ShieldDrain
   Vampire
   HeatSink
   Accelerator
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend UtilityMod with Eq::{not_equal, equal}
@@ -99,6 +103,7 @@ pub impl Show for UtilityMod with fn output(self, logger) {
 pub extend UtilityMod with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum EnemyKind {
   Drone
   Fighter
@@ -108,7 +113,7 @@ pub(all) enum EnemyKind {
   Carrier
   Bomber
   ShieldBearer
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
@@ -125,11 +130,12 @@ pub impl Show for EnemyKind with fn output(self, logger) {
 pub extend EnemyKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum BossKind {
   Leviathan
   Hive
   Dreadnought
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend BossKind with Eq::{not_equal, equal}
@@ -146,6 +152,7 @@ pub impl Show for BossKind with fn output(self, logger) {
 pub extend BossKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SectorKind {
   Asteroids
   Nebula
@@ -153,7 +160,7 @@ pub(all) enum SectorKind {
   BossArena
   EliteZone
   EmptySpace
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend SectorKind with Eq::{not_equal, equal}
@@ -170,12 +177,13 @@ pub impl Show for SectorKind with fn output(self, logger) {
 pub extend SectorKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum HazardKind {
   AsteroidField
   RadiationZone
   GravityWell
   MineField
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HazardKind with Eq::{not_equal, equal}
@@ -192,6 +200,7 @@ pub impl Show for HazardKind with fn output(self, logger) {
 pub extend HazardKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PickupKind {
   HealthPack
   ShieldRecharge
@@ -200,7 +209,7 @@ pub(all) enum PickupKind {
   Credits(Int32)
   HeatVent
   WeaponDrop(WeaponKind)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PickupKind with Eq::{not_equal, equal}
@@ -217,6 +226,7 @@ pub impl Show for PickupKind with fn output(self, logger) {
 pub extend PickupKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SoundEvent {
   PlayerShoot
   PlayerHit
@@ -232,7 +242,7 @@ pub(all) enum SoundEvent {
   ShieldBreak
   OverheatWarn
   SectorEnter
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend SoundEvent with Eq::{not_equal, equal}
@@ -249,12 +259,13 @@ pub impl Show for SoundEvent with fn output(self, logger) {
 pub extend SoundEvent with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum MetaUnlock {
   UnlockWeapon(WeaponKind)
   UnlockMod(ModKind)
   UnlockUtility(UtilityMod)
   UnlockShip(Int32)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend MetaUnlock with Eq::{not_equal, equal}
@@ -271,12 +282,13 @@ pub impl Show for MetaUnlock with fn output(self, logger) {
 pub extend MetaUnlock with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}

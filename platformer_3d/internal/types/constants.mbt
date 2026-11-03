@@ -1192,6 +1192,7 @@ pub let pu_slow_fall_b : Int32 = 200
 
 ///|
 /// Decoration type.
+#derive(Eq)
 pub(all) enum Deco {
   Tree
   Rock
@@ -1203,13 +1204,14 @@ pub(all) enum Deco {
   Cloud
   Bush
   Lamp
-} derive(Eq)
+}
 
 ///|
 pub extend Deco with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   Playing
@@ -1221,7 +1223,7 @@ pub(all) enum GameState {
   LevelSelect
   DeathAnim
   WorldIntro
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

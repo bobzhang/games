@@ -1,28 +1,31 @@
 ///|
+#derive(Debug)
 pub(all) struct NoteCell {
   mut has_note : Bool
   mut is_target : Bool
   mut is_locked : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend NoteCell with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Grid {
   cols : Int32
   rows : Int32
   cells : Array[Array[NoteCell]]
-} derive(Debug)
+}
 
 ///|
 pub extend Grid with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct TargetPos {
   col : Int32
   row : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TargetPos with Eq::{not_equal, equal}

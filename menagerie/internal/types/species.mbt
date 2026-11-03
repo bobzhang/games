@@ -1,4 +1,5 @@
 ///|
+#derive(Debug)
 pub(all) struct SpeciesNeeds {
   name : String
   terrain_primary : Terrain
@@ -10,7 +11,7 @@ pub(all) struct SpeciesNeeds {
   min_space : Int32
   is_predator : Bool
   fears_predators : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend SpeciesNeeds with Debug::{to_repr}

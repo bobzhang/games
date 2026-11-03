@@ -128,29 +128,32 @@ pub let msg_ttl : Float = 2.4
 
 ///|
 /// Kind of ingredient the player can carry.
+#derive(Eq)
 pub(all) enum Ingredient {
   None
   Protein
   Veg
-} derive(Eq)
+}
 
 ///|
 pub extend Ingredient with Eq::{not_equal, equal}
 
 ///|
 /// High-level game phase.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Kitchen grid station identity.
+#derive(Eq)
 pub(all) enum Station {
   Broth
   Protein
@@ -164,7 +167,7 @@ pub(all) enum Station {
   Queue
   Reputation
   Storage
-} derive(Eq)
+}
 
 ///|
 pub extend Station with Eq::{not_equal, equal}

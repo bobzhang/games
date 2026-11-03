@@ -1,25 +1,27 @@
 ///|
 /// High-level phase of the mahjong-solitaire campaign.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   LevelClear
   CampaignClear
   Fail
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Directional input used for cursor movement repeat logic.
+#derive(Eq)
 pub(all) enum Dir {
   DirNone
   Left
   Right
   Up
   Down
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}

@@ -703,6 +703,7 @@ pub let fleet_follow_dist : Float = 15.0
 
 ///|
 /// AI behavior state.
+#derive(Eq)
 pub(all) enum AiState {
   Patrol
   Chase
@@ -710,75 +711,81 @@ pub(all) enum AiState {
   Retreat
   Flank
   BroadsideRun
-} derive(Eq)
+}
 
 ///|
 pub extend AiState with Eq::{not_equal, equal}
 
 ///|
 /// AI personality type.
+#derive(Eq)
 pub(all) enum AiPersonality {
   Aggressive
   Defensive
   Flanker
   Retreater
   Berserker
-} derive(Eq)
+}
 
 ///|
 pub extend AiPersonality with Eq::{not_equal, equal}
 
 ///|
 /// Cannon type.
+#derive(Eq)
 pub(all) enum Cannon {
   Light
   Medium
   Heavy
   Mortar
   ChainShot
-} derive(Eq)
+}
 
 ///|
 pub extend Cannon with Eq::{not_equal, equal}
 
 ///|
 /// Ship class.
+#derive(Eq)
 pub(all) enum ShipClass {
   Sloop
   Brigantine
   Frigate
   Galleon
   ManOfWar
-} derive(Eq)
+}
 
 ///|
 pub extend ShipClass with Eq::{not_equal, equal}
 
 ///|
 /// Island variant.
+#derive(Eq)
 pub(all) enum IslandKind {
   Small
   Medium
   Large
   Fortress
-} derive(Eq)
+}
 
 ///|
 pub extend IslandKind with Eq::{not_equal, equal}
 
 ///|
 /// Sail configuration.
+#derive(Eq)
 pub(all) enum Sail {
   Furled
   Half
   Full
-} derive(Eq)
+}
 
 ///|
 pub extend Sail with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   Playing
@@ -786,7 +793,7 @@ pub(all) enum GameState {
   BattleComplete
   GameOver
   BattleSelect
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

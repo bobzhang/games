@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,6 +12,7 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Gear {
   mut pos : Vec2i
   mut kind : GearKind
@@ -19,55 +21,60 @@ pub(all) struct Gear {
   mut dir : RotDir
   mut angle : Float
   mut active : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Gear with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Connection {
   from : Int32
   to : Int32
   ratio : Float
   flips_dir : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Connection with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Output {
   pos : Vec2i
   target_rpm : Float
   target_dir : RotDir
   mut satisfied : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Output with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct InputGear {
   pos : Vec2i
   rpm : Float
   dir : RotDir
   radius : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend InputGear with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct BeltLink {
   mut from_pos : Vec2i
   mut to_pos : Vec2i
   mut active : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend BeltLink with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   name : String
   tier : Tier
@@ -77,22 +84,24 @@ pub(all) struct Level {
   gear_budget : Int32
   par_gears : Int32
   hint : String
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut stars : Int32
   mut gears_used : Int32
   mut completed : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut selected_tier : Tier
@@ -112,7 +121,7 @@ pub(all) struct Game {
   mut message_timer : Float
   mut anim_timer : Float
   mut title_gear_angle : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

@@ -29,22 +29,24 @@ pub(all) struct Hazard {
 
 ///|
 /// High-level game state of an ice fishing run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Pickup category available in the water.
+#derive(Eq)
 pub(all) enum PickupKind {
   Bait
   Repair
   Thermos
-} derive(Eq)
+}
 
 ///|
 pub extend PickupKind with Eq::{not_equal, equal}

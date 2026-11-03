@@ -178,33 +178,36 @@ pub fn btn_repair() -> (Int32, Int32, Int32, Int32) {
 
 ///|
 /// Fish kind enum.
+#derive(Eq)
 pub(all) enum FishKind {
   Trout
   Salmon
   Gold
-} derive(Eq)
+}
 
 ///|
 pub extend FishKind with Eq::{not_equal, equal}
 
 ///|
 /// Hazard kind enum.
+#derive(Eq)
 pub(all) enum HazardKind {
   Jelly
   Eel
   Ice
-} derive(Eq)
+}
 
 ///|
 pub extend HazardKind with Eq::{not_equal, equal}
 
 ///|
 /// Particle kind enum: splash (blue), spark (red), shimmer (purple).
+#derive(Eq)
 pub(all) enum ParticleKind {
   Splash
   Spark
   Shimmer
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}

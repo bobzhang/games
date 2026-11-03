@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct HexCoord {
   col : Int32
   row : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HexCoord with Eq::{not_equal, equal}
@@ -11,10 +12,11 @@ pub extend HexCoord with Eq::{not_equal, equal}
 pub extend HexCoord with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct HexTile {
   mut biome : BiomeKind
   locked : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HexTile with Eq::{not_equal, equal}
@@ -23,27 +25,30 @@ pub extend HexTile with Eq::{not_equal, equal}
 pub extend HexTile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct HexGrid {
   width : Int32
   height : Int32
   tiles : Array[HexTile]
   wraps_horizontal : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend HexGrid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct PaintBudget {
   mut forest : Int32
   mut ocean : Int32
   mut desert : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend PaintBudget with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct TargetRatio {
   forest_min : Float
   forest_max : Float
@@ -51,12 +56,13 @@ pub(all) struct TargetRatio {
   ocean_max : Float
   desert_min : Float
   desert_max : Float
-} derive(Debug)
+}
 
 ///|
 pub extend TargetRatio with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   tier : Tier
   tier_index : Int32
@@ -66,46 +72,50 @@ pub(all) struct Level {
   budget : PaintBudget
   targets : TargetRatio
   par_turns : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut stars : Int32
   mut completed : Bool
   mut best_turns : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct UndoEntry {
   col : Int32
   row : Int32
   prev_biome : BiomeKind
   biome_used : BiomeKind
-} derive(Debug)
+}
 
 ///|
 pub extend UndoEntry with Debug::{to_repr}
 
 ///|
 /// Full grid snapshot for undoing ecosystem resolution steps.
+#derive(Debug)
 pub(all) struct ResolveSnapshot {
   biomes : Array[BiomeKind]
   budget_forest : Int32
   budget_ocean : Int32
   budget_desert : Int32
   turn : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend ResolveSnapshot with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut play_state : PlayState
@@ -145,7 +155,7 @@ pub(all) struct Game {
   // Target ratio pulse feedback
   mut ratio_pulse_timer : Float
   mut ratio_just_entered : Array[Bool]
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

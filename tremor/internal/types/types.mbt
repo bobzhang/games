@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,11 +12,12 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct Sensor {
   pos : Vec2i
   kind : SensorKind
   direction : CompassDir
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Sensor with Eq::{not_equal, equal}
@@ -24,6 +26,7 @@ pub extend Sensor with Eq::{not_equal, equal}
 pub extend Sensor with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct SensorReading {
   center : Vec2i
   min_dist : Float
@@ -31,29 +34,32 @@ pub(all) struct SensorReading {
   direction : CompassDir
   angle : Float
   kind : SensorKind
-} derive(Debug)
+}
 
 ///|
 pub extend SensorReading with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Epicenter {
   pos : Vec2i
   mut found : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Epicenter with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct TileInfo {
   kind : TileKind
-} derive(Debug)
+}
 
 ///|
 pub extend TileInfo with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   grid : Array[Array[TileInfo]]
   epicenters : Array[Epicenter]
@@ -64,18 +70,19 @@ pub(all) struct Level {
   towns : Array[Vec2i]
   level_index : Int32
   name : String
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut stars : Int32
   mut completed : Bool
   mut best_budget_used : Int32
   mut best_guesses : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}

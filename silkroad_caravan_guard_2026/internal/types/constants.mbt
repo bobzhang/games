@@ -184,24 +184,26 @@ pub let caravan_center_y : Float = Float::from_int(screen_h) * 0.57
 
 ///|
 /// Distinguishes raider archetypes with different stats.
+#derive(Eq)
 pub(all) enum RaiderKind {
   Skirmisher
   Brute
   Rider
-} derive(Eq)
+}
 
 ///|
 pub extend RaiderKind with Eq::{not_equal, equal}
 
 ///|
 /// Tracks the current phase of the game session.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Pause
   GameOver
   Victory
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

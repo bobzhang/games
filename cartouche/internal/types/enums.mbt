@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   TabletSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,6 +23,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug, Compare)
 pub(all) enum Symbol {
   Circle
   Triangle
@@ -43,7 +45,7 @@ pub(all) enum Symbol {
   River
   Tree
   Flame
-} derive(Eq, Debug, Compare)
+}
 
 ///|
 pub extend Symbol with Eq::{not_equal, equal}
@@ -63,11 +65,12 @@ pub impl Show for Symbol with fn output(self, logger) {
 pub extend Symbol with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Decoding
   Checking
   Solved
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -84,11 +87,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Fragments
   Scrolls
   Monuments
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

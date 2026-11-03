@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   Playing
@@ -12,7 +13,7 @@ pub(all) enum Screen {
   AbilityChoice
   RunSummary
   CurseOffer
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -29,6 +30,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileKind {
   Floor
   Wall
@@ -37,7 +39,7 @@ pub(all) enum TileKind {
   Ice
   Exit
   Lava
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -54,12 +56,13 @@ pub impl Show for TileKind with fn output(self, logger) {
 pub extend TileKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   North
   South
   East
   West
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
@@ -76,6 +79,7 @@ pub impl Show for Direction with fn output(self, logger) {
 pub extend Direction with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum EnemyKind {
   Slime
   Skeleton
@@ -87,7 +91,7 @@ pub(all) enum EnemyKind {
   Boss
   BeatDragon
   RhythmLich
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
@@ -104,11 +108,12 @@ pub impl Show for EnemyKind with fn output(self, logger) {
 pub extend EnemyKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum BeatRating {
   Perfect
   Good
   Miss
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend BeatRating with Eq::{not_equal, equal}
@@ -125,12 +130,13 @@ pub impl Show for BeatRating with fn output(self, logger) {
 pub extend BeatRating with Show::{to_string, output}
 
 ///|
+#derive(Debug)
 pub(all) enum PlayerAction {
   Move(Direction)
   Attack(Direction)
   Special
   Wait
-} derive(Debug)
+}
 
 ///|
 pub extend PlayerAction with Debug::{to_repr}
@@ -144,6 +150,7 @@ pub impl Show for PlayerAction with fn output(self, logger) {
 pub extend PlayerAction with Show::{to_string, output}
 
 ///|
+#derive(Debug)
 pub(all) enum EnemyIntent {
   Move(Direction)
   Attack(Direction, Int32)
@@ -152,7 +159,7 @@ pub(all) enum EnemyIntent {
   BreathFire(Direction, Int32)
   AoeFreeze(Int32)
   Wait
-} derive(Debug)
+}
 
 ///|
 pub extend EnemyIntent with Debug::{to_repr}
@@ -166,6 +173,7 @@ pub impl Show for EnemyIntent with fn output(self, logger) {
 pub extend EnemyIntent with Show::{to_string, output}
 
 ///|
+#derive(Debug)
 pub(all) enum ItemKind {
   Gold(Int32)
   HealthPotion
@@ -175,7 +183,7 @@ pub(all) enum ItemKind {
   BeatFreeze
   SpecialCharge
   Bomb
-} derive(Debug)
+}
 
 ///|
 pub extend ItemKind with Debug::{to_repr}
@@ -189,6 +197,7 @@ pub impl Show for ItemKind with fn output(self, logger) {
 pub extend ItemKind with Show::{to_string, output}
 
 ///|
+#derive(Debug)
 pub(all) enum ShopItemKind {
   ShopHealthPotion
   ShopShield
@@ -198,7 +207,7 @@ pub(all) enum ShopItemKind {
   ShopWeapon(WeaponKind)
   ShopSpell(SpellKind)
   ShopManaPotion
-} derive(Debug)
+}
 
 ///|
 pub extend ShopItemKind with Debug::{to_repr}
@@ -212,6 +221,7 @@ pub impl Show for ShopItemKind with fn output(self, logger) {
 pub extend ShopItemKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum WeaponKind {
   Sword
   Spear
@@ -219,7 +229,7 @@ pub(all) enum WeaponKind {
   Hammer
   Bow
   Staff
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend WeaponKind with Eq::{not_equal, equal}
@@ -236,13 +246,14 @@ pub impl Show for WeaponKind with fn output(self, logger) {
 pub extend WeaponKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum AbilityKind {
   DoubleStep
   CounterAttack
   HealBeat
   ShadowDodge
   RhythmShield
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend AbilityKind with Eq::{not_equal, equal}
@@ -259,6 +270,7 @@ pub impl Show for AbilityKind with fn output(self, logger) {
 pub extend AbilityKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum FloorTheme {
   Meadow
   Cave
@@ -266,7 +278,7 @@ pub(all) enum FloorTheme {
   IceDungeon
   Volcano
   FinalArena
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend FloorTheme with Eq::{not_equal, equal}
@@ -283,12 +295,13 @@ pub impl Show for FloorTheme with fn output(self, logger) {
 pub extend FloorTheme with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ComboMilestone {
   Fever
   Frenzy
   PerfectStorm
   NoMilestone
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ComboMilestone with Eq::{not_equal, equal}
@@ -305,12 +318,13 @@ pub impl Show for ComboMilestone with fn output(self, logger) {
 pub extend ComboMilestone with Show::{to_string, output}
 
 ///|
+#derive(Debug)
 pub(all) enum ScoreGrade {
   GradeS
   GradeA
   GradeB
   GradeC
-} derive(Debug)
+}
 
 ///|
 pub extend ScoreGrade with Debug::{to_repr}
@@ -324,12 +338,13 @@ pub impl Show for ScoreGrade with fn output(self, logger) {
 pub extend ScoreGrade with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Element {
   Fire
   Ice
   Lightning
   Dark
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Element with Eq::{not_equal, equal}
@@ -346,6 +361,7 @@ pub impl Show for Element with fn output(self, logger) {
 pub extend Element with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SpellKind {
   Fireball
   FrostNova
@@ -355,7 +371,7 @@ pub(all) enum SpellKind {
   Blizzard
   ThunderStrike
   VoidPulse
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend SpellKind with Eq::{not_equal, equal}
@@ -372,12 +388,13 @@ pub impl Show for SpellKind with fn output(self, logger) {
 pub extend SpellKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CurseKind {
   DoubleTime
   GlassCannon
   BlindBeat
   Swarm
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend CurseKind with Eq::{not_equal, equal}
@@ -394,6 +411,7 @@ pub impl Show for CurseKind with fn output(self, logger) {
 pub extend CurseKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum AchievementKind {
   FirstBlood
   Perfect10
@@ -401,7 +419,7 @@ pub(all) enum AchievementKind {
   ComboKing
   SpeedDemon
   Pacifist
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend AchievementKind with Eq::{not_equal, equal}
@@ -418,6 +436,7 @@ pub impl Show for AchievementKind with fn output(self, logger) {
 pub extend AchievementKind with Show::{to_string, output}
 
 ///|
+#derive(Debug)
 pub(all) enum SoundEvent {
   BeatTick
   BeatPerfect
@@ -435,7 +454,7 @@ pub(all) enum SoundEvent {
   WeaponSwitch
   BossRoar
   CurseAccepted
-} derive(Debug)
+}
 
 ///|
 pub extend SoundEvent with Debug::{to_repr}
@@ -449,11 +468,12 @@ pub impl Show for SoundEvent with fn output(self, logger) {
 pub extend SoundEvent with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum BossPhase {
   Phase1
   Phase2
   Phase3
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend BossPhase with Eq::{not_equal, equal}

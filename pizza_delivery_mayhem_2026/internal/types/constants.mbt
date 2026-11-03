@@ -12,33 +12,36 @@ pub let target_fps : Int32 = 120
 
 ///|
 /// Represents the high-level game screen state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Represents the kind of traffic vehicle.
+#derive(Eq)
 pub(all) enum TrafficKind {
   Sedan
   Bus
   Van
-} derive(Eq)
+}
 
 ///|
 pub extend TrafficKind with Eq::{not_equal, equal}
 
 ///|
 /// Represents the kind of pickup item.
+#derive(Eq)
 pub(all) enum PickupKind {
   Fuel
   Repair
   Speed
-} derive(Eq)
+}
 
 ///|
 pub extend PickupKind with Eq::{not_equal, equal}

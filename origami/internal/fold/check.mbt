@@ -1,9 +1,10 @@
 ///|
+#derive(Debug)
 pub(all) struct CheckResult {
   silhouette_match : Bool
   layers_match : Bool
   checks_detail : Array[Bool]
-} derive(Debug)
+}
 
 ///|
 pub extend CheckResult with Debug::{to_repr}

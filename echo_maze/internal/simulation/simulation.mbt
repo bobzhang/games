@@ -374,11 +374,12 @@ pub fn run_tick(
 }
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum TickResult {
   Continue(Int32) // collected count this tick
   Completed(Int32) // level complete, collected count
   Failed // player caught
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend TickResult with Debug::{to_repr}

@@ -776,29 +776,32 @@ pub let warning_altitude_rate : Float = 5.0
 
 ///|
 /// AI behavior state.
+#derive(Eq)
 pub(all) enum AiState {
   Patrol
   Engage
   Evade
   Flee
-} derive(Eq)
+}
 
 ///|
 pub extend AiState with Eq::{not_equal, equal}
 
 ///|
 /// Camera view mode.
+#derive(Eq)
 pub(all) enum CameraMode {
   Chase
   Cockpit
   Free
-} derive(Eq)
+}
 
 ///|
 pub extend CameraMode with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   Playing
@@ -807,24 +810,26 @@ pub(all) enum GameState {
   GameOver
   AircraftSelect
   MissionBriefing
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Weapon variant.
+#derive(Eq)
 pub(all) enum WeaponKind {
   MachineGun
   Rockets
   Bombs
-} derive(Eq)
+}
 
 ///|
 pub extend WeaponKind with Eq::{not_equal, equal}
 
 ///|
 /// Weather condition.
+#derive(Eq)
 pub(all) enum Weather {
   Clear
   Cloudy
@@ -832,7 +837,7 @@ pub(all) enum Weather {
   Rain
   Storm
   Night
-} derive(Eq)
+}
 
 // Combat feedback constants
 

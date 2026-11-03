@@ -112,13 +112,14 @@ pub let pass_y : Float = 312.0
 
 ///|
 /// Navigation node identifiers for cursor placement.
+#derive(Eq)
 pub(all) enum NavNode {
   OrderSlot(Int32)
   PrepStation
   GrillStation
   WokStation
   PassStation
-} derive(Eq)
+}
 
 ///|
 pub extend NavNode with Eq::{not_equal, equal}

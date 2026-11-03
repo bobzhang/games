@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,10 +12,11 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2f {
   mut x : Float
   mut y : Float
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2f with Eq::{not_equal, equal}
@@ -23,11 +25,12 @@ pub extend Vec2f with Eq::{not_equal, equal}
 pub extend Vec2f with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct ArcPoint {
   gx : Int32
   gy : Int32
   angle : Float
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ArcPoint with Eq::{not_equal, equal}
@@ -36,16 +39,18 @@ pub extend ArcPoint with Eq::{not_equal, equal}
 pub extend ArcPoint with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Rope {
   mut anchor : Vec2i
   mut length : Int32
   mut wrapped_pegs : Array[Vec2i]
-} derive(Debug)
+}
 
 ///|
 pub extend Rope with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Weight {
   mut pos : Vec2i
   mut state : WeightState
@@ -53,12 +58,13 @@ pub(all) struct Weight {
   mut arc_index : Int32
   mut launch_vel : Vec2f
   mut launch_pos : Vec2f
-} derive(Debug)
+}
 
 ///|
 pub extend Weight with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   id : Int32
   tier : Tier
@@ -71,23 +77,25 @@ pub(all) struct Level {
   collectibles : Array[Vec2i]
   par_ticks : Int32
   rope_length : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int32
   mut best_ticks : Int32
   mut collectibles_got : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut selected_tier : Tier
@@ -106,12 +114,13 @@ pub(all) struct Game {
   mut frame_count : Int32
   mut anim_timer : Float
   mut title_angle : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct HistoryEntry {
   weight_pos : Vec2i
   weight_state : WeightState
@@ -124,7 +133,7 @@ pub(all) struct HistoryEntry {
   collected : Array[Bool]
   launch_vel : Vec2f
   launch_pos : Vec2f
-} derive(Debug)
+}
 
 ///|
 pub extend HistoryEntry with Debug::{to_repr}

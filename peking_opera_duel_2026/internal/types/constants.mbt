@@ -156,12 +156,13 @@ pub let lane_step_y : Int32 = 120
 
 ///|
 /// Available stance types for player and rival.
+#derive(Eq)
 pub(all) enum Stance {
   Spear
   Fan
   Guard
   Sleeve
-} derive(Eq)
+}
 
 ///|
 pub extend Stance with Eq::{not_equal, equal}

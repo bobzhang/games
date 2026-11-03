@@ -582,6 +582,7 @@ pub let max_attack_beams : Int32 = 32
 
 ///|
 /// Enemy variant.
+#derive(Eq)
 pub(all) enum EnemyKind {
   Basic
   Fast
@@ -593,13 +594,14 @@ pub(all) enum EnemyKind {
   Shield
   Camo
   Splitter
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   Playing
@@ -610,25 +612,27 @@ pub(all) enum GameState {
   Building
   MapSelect
   TowerInfo
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Tower targeting priority.
+#derive(Eq)
 pub(all) enum TargetPriority {
   First
   Last
   Strongest
   Closest
-} derive(Eq)
+}
 
 ///|
 pub extend TargetPriority with Eq::{not_equal, equal}
 
 ///|
 /// Map tile type.
+#derive(Eq)
 pub(all) enum Tile {
   Grass
   Path
@@ -636,13 +640,14 @@ pub(all) enum Tile {
   End
   Water
   Rock
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Tower variant.
+#derive(Eq)
 pub(all) enum TowerKind {
   Arrow
   Cannon
@@ -652,7 +657,7 @@ pub(all) enum TowerKind {
   Sniper
   Splash
   Buff
-} derive(Eq)
+}
 
 ///|
 pub extend TowerKind with Eq::{not_equal, equal}

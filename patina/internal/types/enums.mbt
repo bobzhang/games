@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,12 +23,13 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum DamageKind {
   Crack
   Stain
   Fade
   Flake
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend DamageKind with Eq::{not_equal, equal}
@@ -44,12 +46,13 @@ pub impl Show for DamageKind with fn output(self, logger) {
 pub extend DamageKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ToolKind {
   Clean
   Fill
   Retouch
   Seal
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ToolKind with Eq::{not_equal, equal}
@@ -66,6 +69,7 @@ pub impl Show for ToolKind with fn output(self, logger) {
 pub extend ToolKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum RegionState {
   Pristine
   Damaged
@@ -73,7 +77,7 @@ pub(all) enum RegionState {
   Restored
   Worsened
   Sealed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend RegionState with Eq::{not_equal, equal}
@@ -90,11 +94,12 @@ pub impl Show for RegionState with fn output(self, logger) {
 pub extend RegionState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Selecting
   Animating
   LevelComplete
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -111,11 +116,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Sketches
   Paintings
   Masterworks
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

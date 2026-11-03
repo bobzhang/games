@@ -12,6 +12,7 @@ pub let screen_height : Int32 = 720
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   StateMenu
   StatePlaying
@@ -21,7 +22,7 @@ pub(all) enum GameState {
   StateMissionBriefing
   StateMissionSelect
   StateLoadout
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
@@ -60,13 +61,14 @@ pub fn GameState::from_int(v : Int32) -> GameState {
 
 ///|
 /// Player and enemy ship class identifiers.
+#derive(Eq)
 pub(all) enum ShipKind {
   Fighter
   Interceptor
   Bomber
   Cruiser
   CapitalShip
-} derive(Eq)
+}
 
 // Weapon types
 
@@ -75,12 +77,13 @@ pub extend ShipKind with Eq::{not_equal, equal}
 
 ///|
 /// Weapon type identifiers for projectiles.
+#derive(Eq)
 pub(all) enum WeaponKind {
   Laser
   Missile
   Plasma
   Railgun
-} derive(Eq)
+}
 
 // Enemy types
 
@@ -111,6 +114,7 @@ pub let enemy_capital : Int32 = 5
 
 ///|
 /// Enemy AI behavior state identifiers.
+#derive(Eq)
 pub(all) enum AiState {
   Idle
   Patrol
@@ -126,7 +130,7 @@ pub(all) enum AiState {
   Reposition // Looping back for another pass
   OvershootRecover // Overshot target, pulling away
   PincerFlank // Wingman flanking from opposite side
-} derive(Eq)
+}
 
 // Power-up types
 
@@ -135,12 +139,13 @@ pub extend AiState with Eq::{not_equal, equal}
 
 ///|
 /// Power-up pickup type identifiers.
+#derive(Eq)
 pub(all) enum PowerupKind {
   Health
   Shield
   WeaponBoost
   SpeedBoost
-} derive(Eq)
+}
 
 // Asteroid size tiers
 
@@ -163,12 +168,13 @@ pub let asteroid_small : Int32 = 2
 
 ///|
 /// Enemy squad formation pattern identifiers.
+#derive(Eq)
 pub(all) enum Formation {
   V
   Line
   Circle
   Wedge
-} derive(Eq)
+}
 
 // Mission objective types
 
@@ -177,6 +183,7 @@ pub extend Formation with Eq::{not_equal, equal}
 
 ///|
 /// Mission objective type identifiers.
+#derive(Eq)
 pub(all) enum Objective {
   DestroyAll
   Escort
@@ -186,7 +193,7 @@ pub(all) enum Objective {
   PatrolMission
   Survive
   DestroyCount
-} derive(Eq)
+}
 
 // Pool sizes
 

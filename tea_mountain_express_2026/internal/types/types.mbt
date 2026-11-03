@@ -1,22 +1,24 @@
 ///|
 /// High-level flow state for the tea delivery run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Kind of route hazard the cart can encounter.
+#derive(Eq)
 pub(all) enum HazardKind {
   Rock
   Landslide
   Crosswind
-} derive(Eq)
+}
 
 ///|
 pub extend HazardKind with Eq::{not_equal, equal}

@@ -1,46 +1,50 @@
 ///|
 /// Top-level game phase for the gomoku duel flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Occupant of a board cell.
+#derive(Eq)
 pub(all) enum Player {
   Empty
   Human
   AI
-} derive(Eq)
+}
 
 ///|
 pub extend Player with Eq::{not_equal, equal}
 
 ///|
 /// Direction used for cursor movement and hold-repeat input.
+#derive(Eq)
 pub(all) enum Dir {
   DirNone
   Left
   Right
   Up
   Down
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Visual category for spark effects.
+#derive(Eq)
 pub(all) enum SparkKind {
   SparkAI
   SparkHuman
   SparkUndo
   SparkHint
-} derive(Eq)
+}
 
 ///|
 pub extend SparkKind with Eq::{not_equal, equal}

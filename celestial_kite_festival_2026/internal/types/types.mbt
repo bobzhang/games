@@ -1,12 +1,13 @@
 ///|
 /// Enumerates ObjKind variants used by runtime state.
+#derive(Eq)
 pub(all) enum ObjKind {
   Lantern
   Bird
   Storm
   Orb
   Koi
-} derive(Eq)
+}
 
 ///|
 pub extend ObjKind with Eq::{not_equal, equal}
@@ -68,12 +69,13 @@ pub(all) struct Trail {
 
 ///|
 /// Enumerates high-level states in the game flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

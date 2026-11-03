@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   WorldSelect
@@ -6,7 +7,7 @@ pub(all) enum Screen {
   Programming
   Results
   Sandbox
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -23,6 +24,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CommandKind {
   Move
   TurnLeft
@@ -31,7 +33,7 @@ pub(all) enum CommandKind {
   Push
   If(Condition)
   Loop(Int32)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend CommandKind with Eq::{not_equal, equal}
@@ -48,12 +50,13 @@ pub impl Show for CommandKind with fn output(self, logger) {
 pub extend CommandKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   North
   South
   East
   West
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
@@ -70,6 +73,7 @@ pub impl Show for Direction with fn output(self, logger) {
 pub extend Direction with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileKind {
   Floor
   Wall
@@ -78,7 +82,7 @@ pub(all) enum TileKind {
   ColorTile(TileColor)
   Block
   Start
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -95,11 +99,12 @@ pub impl Show for TileKind with fn output(self, logger) {
 pub extend TileKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileColor {
   Red
   Blue
   Green
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileColor with Eq::{not_equal, equal}
@@ -116,12 +121,13 @@ pub impl Show for TileColor with fn output(self, logger) {
 pub extend TileColor with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Condition {
   PathAhead
   WallAhead
   AtGoal
   OnColor(TileColor)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Condition with Eq::{not_equal, equal}
@@ -138,13 +144,14 @@ pub impl Show for Condition with fn output(self, logger) {
 pub extend Condition with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum RunState {
   Editing
   Running
   Stepping
   Complete
   Failed(String)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend RunState with Eq::{not_equal, equal}
@@ -161,12 +168,13 @@ pub impl Show for RunState with fn output(self, logger) {
 pub extend RunState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Medal {
   None_
   Bronze
   Silver
   Gold
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Medal with Eq::{not_equal, equal}

@@ -1,24 +1,26 @@
 ///|
 /// Identifies the current top-level scene or phase of the game loop.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Identifies a tea variety for orders, brewing, and serving.
+#derive(Eq)
 pub(all) enum Tea {
   Jasmine
   Oolong
   Puer
   Matcha
   Berry
-} derive(Eq)
+}
 
 ///|
 pub extend Tea with Eq::{not_equal, equal}

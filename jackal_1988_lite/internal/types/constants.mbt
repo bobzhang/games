@@ -296,12 +296,13 @@ pub let base_ring_y : Array[Int32] = [
 
 ///|
 /// Cardinal movement direction.
+#derive(Eq)
 pub(all) enum Dir {
   Up
   Right
   Down
   Left
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}
@@ -319,18 +320,20 @@ pub fn Dir::from_int(v : Int32) -> Dir {
 
 ///|
 /// Identifies the variant of enemy tank.
+#derive(Eq)
 pub(all) enum EnemyKind {
   Basic
   Fast
   Heavy
   Sniper
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Identifies the type of powerup pickup.
+#derive(Eq)
 pub(all) enum PowerupKind {
   Shield
   Star
@@ -338,13 +341,14 @@ pub(all) enum PowerupKind {
   Clock
   Shovel
   Tank
-} derive(Eq)
+}
 
 ///|
 pub extend PowerupKind with Eq::{not_equal, equal}
 
 ///|
 /// High-level game state for the campaign state machine.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   StageIntro
@@ -353,19 +357,20 @@ pub(all) enum GameState {
   StageClear
   GameOver
   CampaignClear
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Identifies which team owns a bullet or scores points.
+#derive(Eq)
 pub(all) enum Team {
   None
   Player1
   Player2
   Enemy
-} derive(Eq)
+}
 
 ///|
 pub extend Team with Eq::{not_equal, equal}

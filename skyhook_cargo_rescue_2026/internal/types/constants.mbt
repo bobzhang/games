@@ -152,33 +152,36 @@ pub fn btn_restart() -> (Int32, Int32, Int32, Int32) {
 
 ///|
 /// Distinguishes the kind of hazard entity.
+#derive(Eq)
 pub(all) enum HazardKind {
   Cloud
   Drone
   Ice
-} derive(Eq)
+}
 
 ///|
 pub extend HazardKind with Eq::{not_equal, equal}
 
 ///|
 /// Distinguishes the kind of pickup entity.
+#derive(Eq)
 pub(all) enum PickupKind {
   Fuel
   Medkit
   Turbo
-} derive(Eq)
+}
 
 ///|
 pub extend PickupKind with Eq::{not_equal, equal}
 
 ///|
 /// Identifies the current phase of the game loop.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

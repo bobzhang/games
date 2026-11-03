@@ -1,4 +1,5 @@
 ///|
+#derive(Debug, ToJson)
 pub(all) struct OrganismState {
   kind : OrganismKind
   row : Int32
@@ -6,7 +7,7 @@ pub(all) struct OrganismState {
   mut alive : Bool
   mut health : Float
   mut submerged : Bool
-} derive(Debug, ToJson)
+}
 
 ///|
 pub extend OrganismState with Debug::{to_repr}
@@ -15,6 +16,7 @@ pub extend OrganismState with Debug::{to_repr}
 pub extend OrganismState with ToJson::{to_json}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelDef {
   id : Int32
   name : String
@@ -25,34 +27,37 @@ pub(all) struct LevelDef {
   organism_counts : Array[Int32]
   target_species : Array[OrganismKind]
   rock_cells : Array[(Int32, Int32)]
-} derive(Debug)
+}
 
 ///|
 pub extend LevelDef with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_cycles_survived : Int32
   mut stars : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct TurnLog {
   turn : Int32
   tide_level : Int32
   phase : TidePhase
   events : Array[String]
   organisms_alive : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend TurnLog with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut selected_level : Int32
@@ -75,7 +80,7 @@ pub(all) struct Game {
   mut sim_speed_timer : Float
   mut organisms_placed : Array[Int32]
   mut anim_timer : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

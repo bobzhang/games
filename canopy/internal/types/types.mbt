@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,56 +12,62 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Branch {
   mut row : Int32
   mut col_offset : Int32
   mut pruned : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Branch with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Tree {
   mut col : Int32
   mut height : Int32
   branches : Array[Branch]
   mut growth_timer : Int32
   mut shadowed : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Tree with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct GroundTile {
   mut water : Int32
   mut has_seed : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend GroundTile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Grid {
   width : Int32
   height : Int32
   cells : Array[Array[CellKind]]
-} derive(Debug)
+}
 
 ///|
 pub extend Grid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Target {
   tree_index : Int32
   required_height : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Target with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   seed_columns : Array[Int32]
   targets : Array[Target]
@@ -70,29 +77,31 @@ pub(all) struct Level {
   par_turns : Int32
   tier : Tier
   water_levels : Array[Int32]
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut stars : Int32
   mut completed : Bool
   mut turns_used : Int32
   mut prunes_used : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct UndoState {
   trees : Array[Tree]
   turn : Int32
   prunes_used : Int32
   ground : Array[GroundTile]
-} derive(Debug)
+}
 
 ///|
 pub extend UndoState with Debug::{to_repr}

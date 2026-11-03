@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,36 +12,40 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct TreeCell {
   mut kind : CellKind
   mut growth_dir : GrowthDir
   mut age : Int32
   mut stagnant_turns : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend TreeCell with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct TreeGrid {
   width : Int32
   height : Int32
   cells : Array[TreeCell]
-} derive(Debug)
+}
 
 ///|
 pub extend TreeGrid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Zone {
   positions : Array[Vec2i]
   kind : ZoneKind
-} derive(Debug)
+}
 
 ///|
 pub extend Zone with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   species : Species
   initial_branches : Array[BranchSeed]
@@ -50,43 +55,47 @@ pub(all) struct Level {
   par_prunes : Int32
   tier : Tier
   level_index : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct BranchSeed {
   x : Int32
   y : Int32
   dir : GrowthDir
-} derive(Debug)
+}
 
 ///|
 pub extend BranchSeed with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut stars : Int32
   mut completed : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct PruneAction {
   pos : Vec2i
   turn : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend PruneAction with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct GridSnapshot {
   cells : Array[TreeCell]
-} derive(Debug)
+}
 
 ///|
 pub extend GridSnapshot with Debug::{to_repr}

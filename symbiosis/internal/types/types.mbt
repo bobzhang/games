@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,21 +12,23 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Character {
   mut pos : Vec2i
   mut on_anchor : Bool
   mut reached_exit : Bool
   mut alive : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Character with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct SwitchLink {
   switch_id : Int32
   door_id : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend SwitchLink with Eq::{not_equal, equal}
@@ -34,6 +37,7 @@ pub extend SwitchLink with Eq::{not_equal, equal}
 pub extend SwitchLink with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   world : Int32
   index : Int32
@@ -48,23 +52,25 @@ pub(all) struct Level {
   par_moves : Int32
   gems : Array[Vec2i]
   ceiling_gems : Array[Vec2i]
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut best_moves : Int32
   mut stars : Int32
   mut gem_collected : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Snapshot {
   luna_pos : Vec2i
   sol_pos : Vec2i
@@ -75,12 +81,13 @@ pub(all) struct Snapshot {
   sol_on_anchor : Bool
   luna_reached_exit : Bool
   sol_reached_exit : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Snapshot with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut selected_world : Int32
@@ -98,7 +105,7 @@ pub(all) struct Game {
   mut frame_count : Int32
   mut message : String
   mut message_timer : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

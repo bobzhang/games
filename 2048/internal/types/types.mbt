@@ -1,11 +1,12 @@
 ///|
 /// High-level phase of a 2048 run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Won
   Over
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

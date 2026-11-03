@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct BeamColor {
   r : Bool
   g : Bool
   b : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend BeamColor with Eq::{not_equal, equal}
@@ -12,10 +13,11 @@ pub extend BeamColor with Eq::{not_equal, equal}
 pub extend BeamColor with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}

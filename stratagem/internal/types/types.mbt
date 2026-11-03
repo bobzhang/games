@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct HexCoord {
   col : Int32
   row : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HexCoord with Eq::{not_equal, equal}

@@ -1,34 +1,37 @@
 ///|
 /// High-level progression state for the trial flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
   Victory
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Tile category used for collision and hazards.
+#derive(Eq)
 pub(all) enum TileKind {
   Solid
   Hazard
-} derive(Eq)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
 
 ///|
 /// Reason a run ended in failure.
+#derive(Eq)
 pub(all) enum LoseReason {
   None
   Time
   Fall
   HitHazard
-} derive(Eq)
+}
 
 ///|
 pub extend LoseReason with Eq::{not_equal, equal}

@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tile {
   Empty
   Floor
@@ -8,7 +9,7 @@ pub(all) enum Tile {
   Switch(Int32)
   Platform
   Gem
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
@@ -25,6 +26,7 @@ pub impl Show for Tile with fn output(self, logger) {
 pub extend Tile with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   Playing
@@ -32,7 +34,7 @@ pub(all) enum Screen {
   LevelComplete
   GameComplete
   Paused
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -49,10 +51,11 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Layer {
   Foreground
   Background
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Layer with Eq::{not_equal, equal}
@@ -69,12 +72,13 @@ pub impl Show for Layer with fn output(self, logger) {
 pub extend Layer with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
@@ -91,11 +95,12 @@ pub impl Show for Direction with fn output(self, logger) {
 pub extend Direction with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Reflection
   Overlap
   Illusion
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}
@@ -112,10 +117,11 @@ pub impl Show for Tier with fn output(self, logger) {
 pub extend Tier with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum MergeState {
   Split
   Merged
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend MergeState with Eq::{not_equal, equal}
@@ -132,6 +138,7 @@ pub impl Show for MergeState with fn output(self, logger) {
 pub extend MergeState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum AnimKind {
   LayerSwap
   Merge
@@ -139,7 +146,7 @@ pub(all) enum AnimKind {
   SwitchToggle
   LevelClear
   GemCollect
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend AnimKind with Eq::{not_equal, equal}

@@ -1,11 +1,12 @@
 ///|
 /// High-level state of the dragon boat race flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Paused
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

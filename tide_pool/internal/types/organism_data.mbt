@@ -1,4 +1,5 @@
 ///|
+#derive(Debug)
 pub(all) struct OrganismProfile {
   kind : OrganismKind
   name : String
@@ -12,7 +13,7 @@ pub(all) struct OrganismProfile {
   health_decay_submerged : Float
   health_decay_exposed : Float
   health_regen : Float
-} derive(Debug)
+}
 
 ///|
 pub extend OrganismProfile with Debug::{to_repr}

@@ -1,4 +1,5 @@
 ///|
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
@@ -7,17 +8,18 @@ pub(all) enum GameState {
   Victory
   MetaScreen
   StarterSelect
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum StarterKit {
   Vanguard
   Cutpurse
   Invoker
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend StarterKit with Eq::{not_equal, equal}
@@ -34,13 +36,14 @@ pub impl Show for StarterKit with fn output(self, logger) {
 pub extend StarterKit with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PactKind {
   BloodPrice
   GlassStep
   MerchantsDebt
   CursedStrength
   VoidHeart
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PactKind with Eq::{not_equal, equal}
@@ -57,6 +60,7 @@ pub impl Show for PactKind with fn output(self, logger) {
 pub extend PactKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum MetaUpgrade {
   StartingHpUp
   StartingShieldUp
@@ -64,7 +68,7 @@ pub(all) enum MetaUpgrade {
   WeaponMastery
   DashMastery
   PotionEfficiency
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend MetaUpgrade with Eq::{not_equal, equal}
@@ -81,22 +85,24 @@ pub impl Show for MetaUpgrade with fn output(self, logger) {
 pub extend MetaUpgrade with Show::{to_string, output}
 
 ///|
+#derive(Eq)
 pub(all) enum RoomState {
   Idle
   Sealed
   Cleared
-} derive(Eq)
+}
 
 ///|
 pub extend RoomState with Eq::{not_equal, equal}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum WeaponKind {
   Sword
   Daggers
   Bow
   Staff
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend WeaponKind with Eq::{not_equal, equal}
@@ -113,6 +119,7 @@ pub impl Show for WeaponKind with fn output(self, logger) {
 pub extend WeaponKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum EnemyKind {
   Slime
   SlimeSmall
@@ -123,7 +130,7 @@ pub(all) enum EnemyKind {
   Golem
   BroodMother
   LichKing
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
@@ -140,12 +147,13 @@ pub impl Show for EnemyKind with fn output(self, logger) {
 pub extend EnemyKind with Show::{to_string, output}
 
 ///|
+#derive(Debug)
 pub(all) enum ItemKind {
   HealthPotion
   WeaponPickup(WeaponKind)
   Gold(Int32)
   PassiveItem(PassiveKind)
-} derive(Debug)
+}
 
 ///|
 pub extend ItemKind with Debug::{to_repr}
@@ -159,6 +167,7 @@ pub impl Show for ItemKind with fn output(self, logger) {
 pub extend ItemKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PassiveKind {
   MaxHpUp
   DamageUp
@@ -174,7 +183,7 @@ pub(all) enum PassiveKind {
   GlassCannon
   Vampiric
   ChainLightning
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PassiveKind with Eq::{not_equal, equal}
@@ -191,6 +200,7 @@ pub impl Show for PassiveKind with fn output(self, logger) {
 pub extend PassiveKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum RoomKind {
   Start
   Combat
@@ -200,7 +210,7 @@ pub(all) enum RoomKind {
   Shrine
   EliteVault
   Challenge
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend RoomKind with Eq::{not_equal, equal}
@@ -217,6 +227,7 @@ pub impl Show for RoomKind with fn output(self, logger) {
 pub extend RoomKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum EncounterType {
   Standard
   Swarm
@@ -225,7 +236,7 @@ pub(all) enum EncounterType {
   SurvivalWave
   PoisonNest
   Ambush
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend EncounterType with Eq::{not_equal, equal}
@@ -255,13 +266,14 @@ pub fn encounter_name(encounter : EncounterType) -> String {
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ShrineKind {
   BloodAltar
   HealingSpring
   GambleShrine
   CursedChest
   ReforgeAnvil
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ShrineKind with Eq::{not_equal, equal}
@@ -278,12 +290,13 @@ pub impl Show for ShrineKind with fn output(self, logger) {
 pub extend ShrineKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
@@ -300,6 +313,7 @@ pub impl Show for Direction with fn output(self, logger) {
 pub extend Direction with Show::{to_string, output}
 
 ///|
+#derive(Debug)
 pub(all) enum GameEvent {
   Hit(Float, Float, Int32, Bool)
   Kill(EnemyKind, Float, Float)
@@ -310,7 +324,7 @@ pub(all) enum GameEvent {
   DashUsed(Float, Float, Float, Float)
   WeaponSwing(Float, Float, Float)
   SynergyUnlocked(String)
-} derive(Debug)
+}
 
 ///|
 pub extend GameEvent with Debug::{to_repr}
@@ -324,17 +338,19 @@ pub impl Show for GameEvent with fn output(self, logger) {
 pub extend GameEvent with Show::{to_string, output}
 
 ///|
+#derive(Eq)
 pub(all) enum AttackState {
   Idle
   Windup(Float)
   Active(Float)
   Recovery(Float)
-} derive(Eq)
+}
 
 ///|
 pub extend AttackState with Eq::{not_equal, equal}
 
 ///|
+#derive(Eq)
 pub(all) enum EnemyState {
   Idle
   Patrol
@@ -342,18 +358,19 @@ pub(all) enum EnemyState {
   Attack(Float)
   Hurt(Float)
   Dead(Float)
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyState with Eq::{not_equal, equal}
 
 ///|
+#derive(Debug)
 pub(all) enum StatusEffect {
   Slow(Float)
   Poison(Float)
   Shield(Float)
   Haste(Float)
-} derive(Debug)
+}
 
 ///|
 pub extend StatusEffect with Debug::{to_repr}
@@ -367,6 +384,7 @@ pub impl Show for StatusEffect with fn output(self, logger) {
 pub extend StatusEffect with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum EliteAffix {
   None
   Fast
@@ -374,7 +392,7 @@ pub(all) enum EliteAffix {
   Splitting
   Vampiric
   Explosive
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend EliteAffix with Eq::{not_equal, equal}
@@ -391,13 +409,14 @@ pub impl Show for EliteAffix with fn output(self, logger) {
 pub extend EliteAffix with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum FloorPath {
   Hunter
   Pilgrim
   Rot
   Forge
   Gauntlet
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend FloorPath with Eq::{not_equal, equal}

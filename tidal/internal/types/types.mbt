@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,16 +12,18 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct WaveFront {
   mut amplitude : Float
   mut phase : Int32
   mut direction : Int32 // 0=up,1=right,2=down,3=left, -1=omnidirectional
-} derive(Debug)
+}
 
 ///|
 pub extend WaveFront with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct WaveTile {
   mut amplitude : Float
   mut phase : Int32
@@ -34,32 +37,35 @@ pub(all) struct WaveTile {
   mut target_satisfied : Bool
   // wave fronts arriving this tick
   mut wave_fronts : Array[WaveFront]
-} derive(Debug)
+}
 
 ///|
 pub extend WaveTile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct WaveGrid {
   width : Int32
   height : Int32
   tiles : Array[WaveTile]
-} derive(Debug)
+}
 
 ///|
 pub extend WaveGrid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct PlaceableBudget {
   mut kind : PlaceableKind
   mut total : Int32
   mut used : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend PlaceableBudget with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   tier : Int32
   index : Int32 // within tier
@@ -70,45 +76,49 @@ pub(all) struct Level {
   budget : Array[PlaceableBudget]
   par_objects : Int32
   par_ticks : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct TargetDef {
   x : Int32
   y : Int32
   min_amp : Float
   max_amp : Float
   phase : Int32 // -1 = any
-} derive(Debug)
+}
 
 ///|
 pub extend TargetDef with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct PrePlaced {
   x : Int32
   y : Int32
   kind : TileKind
-} derive(Debug)
+}
 
 ///|
 pub extend PrePlaced with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int32
   mut objects_used : Int32
   mut ticks_used : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut grid : WaveGrid
@@ -128,7 +138,7 @@ pub(all) struct Game {
   mut message : String
   mut message_timer : Float
   mut sim_speed : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

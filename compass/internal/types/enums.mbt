@@ -1,4 +1,5 @@
 ///|
+#derive(Debug, Eq, ToJson)
 pub(all) enum Tile {
   Ocean
   Land
@@ -6,7 +7,7 @@ pub(all) enum Tile {
   Reef
   Landmark
   Current(Direction)
-} derive(Debug, Eq, ToJson)
+}
 
 ///|
 pub extend Tile with Debug::{to_repr}
@@ -26,12 +27,13 @@ pub impl Show for Tile with fn output(self, logger) {
 pub extend Tile with Show::{to_string, output}
 
 ///|
+#derive(Debug, Eq, ToJson)
 pub(all) enum Direction {
   North
   South
   East
   West
-} derive(Debug, Eq, ToJson)
+}
 
 ///|
 pub extend Direction with Debug::{to_repr}
@@ -51,13 +53,14 @@ pub impl Show for Direction with fn output(self, logger) {
 pub extend Direction with Show::{to_string, output}
 
 ///|
+#derive(Debug, Eq, ToJson)
 pub(all) enum GamePhase {
   Menu
   Playing
   LevelComplete
   GameOver
   LevelSelect
-} derive(Debug, Eq, ToJson)
+}
 
 ///|
 pub extend GamePhase with Debug::{to_repr}
@@ -77,12 +80,13 @@ pub impl Show for GamePhase with fn output(self, logger) {
 pub extend GamePhase with Show::{to_string, output}
 
 ///|
+#derive(Debug, Eq, ToJson)
 pub(all) enum StarRating {
   None
   One
   Two
   Three
-} derive(Debug, Eq, ToJson)
+}
 
 ///|
 pub extend StarRating with Debug::{to_repr}

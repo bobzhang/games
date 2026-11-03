@@ -1,17 +1,19 @@
 ///|
 /// High-level state of the abyss run flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Spawnable world object category.
+#derive(Eq)
 pub(all) enum ObjKind {
   Rock
   Mine
@@ -19,7 +21,7 @@ pub(all) enum ObjKind {
   Oxygen
   Current
   Scrap
-} derive(Eq)
+}
 
 ///|
 pub extend ObjKind with Eq::{not_equal, equal}

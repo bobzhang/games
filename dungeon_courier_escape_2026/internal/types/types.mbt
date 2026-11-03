@@ -1,10 +1,11 @@
 ///|
 /// Enumerates high-level states in the game flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Retry
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug, ToJson)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug, ToJson)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -14,6 +15,7 @@ pub extend Vec2i with Debug::{to_repr}
 pub extend Vec2i with ToJson::{to_json}
 
 ///|
+#derive(Debug)
 pub(all) struct Agent {
   mut gx : Int32
   mut gy : Int32
@@ -30,12 +32,13 @@ pub(all) struct Agent {
   mut detected_count : Int32
   mut alert_triggered : Bool
   mut in_shadow : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Agent with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Guard {
   mut gx : Int32
   mut gy : Int32
@@ -63,12 +66,13 @@ pub(all) struct Guard {
   mut search_index : Int32
   mut searching : Bool
   mut look_timer : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Guard with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Camera {
   mut gx : Int32
   mut gy : Int32
@@ -77,12 +81,13 @@ pub(all) struct Camera {
   mut vision_range : Float
   mut active : Bool
   mut powered : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Camera with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Terminal {
   mut gx : Int32
   mut gy : Int32
@@ -90,24 +95,26 @@ pub(all) struct Terminal {
   mut high_security : Bool
   mut connected_id : Int32
   mut data_value : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Terminal with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Door {
   mut gx : Int32
   mut gy : Int32
   mut open : Bool
   mut locked : Bool
   mut power_id : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Door with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LaserGrid {
   mut gx : Int32
   mut gy : Int32
@@ -115,24 +122,26 @@ pub(all) struct LaserGrid {
   mut power_id : Int32
   mut horizontal : Bool
   mut length : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LaserGrid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct PowerNode {
   mut gx : Int32
   mut gy : Int32
   mut powered : Bool
   mut node_id : Int32
   mut connected_ids : Array[Int32]
-} derive(Debug)
+}
 
 ///|
 pub extend PowerNode with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut base_score : Int32
   mut ghost_bonus : Int32
@@ -145,12 +154,13 @@ pub(all) struct LevelScore {
   mut all_data : Bool
   mut ghost : Bool
   mut no_alerts : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct HackMiniGame {
   mut active : Bool
   mut sequence : Array[Int32]
@@ -161,12 +171,13 @@ pub(all) struct HackMiniGame {
   mut success : Bool
   mut failed : Bool
   mut target_terminal : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend HackMiniGame with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   mut name : String
   mut tier : Tier
@@ -185,12 +196,13 @@ pub(all) struct Level {
   mut exit_y : Int32
   mut par_time : Float
   mut total_data : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut player : Agent
@@ -223,7 +235,7 @@ pub(all) struct Game {
   // Smooth camera offset
   mut camera_offset_x : Float
   mut camera_offset_y : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

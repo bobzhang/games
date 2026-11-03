@@ -1,5 +1,6 @@
 ///|
 /// Top-level game phase.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   LevelIntro
@@ -11,24 +12,26 @@ pub(all) enum GameState {
   Victory
   LevelTally
   BonusRoom
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Mario's current power-up state.
+#derive(Eq)
 pub(all) enum PowerState {
   Small
   Big
   Fire
-} derive(Eq)
+}
 
 ///|
 pub extend PowerState with Eq::{not_equal, equal}
 
 ///|
 /// Tile types that make up the level map.
+#derive(Eq)
 pub(all) enum TileKind {
   Empty
   Ground
@@ -55,13 +58,14 @@ pub(all) enum TileKind {
   HiddenBonusCoin
   HiddenBonusOneUp
   BridgeTile
-} derive(Eq)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
 
 ///|
 /// Enemy varieties.
+#derive(Eq)
 pub(all) enum EnemyKind {
   Goomba
   KoopaTroopa
@@ -70,20 +74,21 @@ pub(all) enum EnemyKind {
   BuzzyBeetle
   Firebar
   BowserLite
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Collectible item varieties.
+#derive(Eq)
 pub(all) enum ItemKind {
   Mushroom
   FireFlower
   Star
   OneUp
   CoinPopup
-} derive(Eq)
+}
 
 ///|
 pub extend ItemKind with Eq::{not_equal, equal}
@@ -445,12 +450,13 @@ pub fn BumpedBlock::new() -> BumpedBlock {
 
 ///|
 /// Bridge tile state for collapsing bridge segments.
+#derive(Eq)
 pub(all) enum BridgePhase {
   Stable
   Shaking
   Falling
   Gone
-} derive(Eq)
+}
 
 ///|
 pub extend BridgePhase with Eq::{not_equal, equal}

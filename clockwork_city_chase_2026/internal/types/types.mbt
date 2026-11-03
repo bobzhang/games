@@ -1,17 +1,19 @@
 ///|
 /// Enumerates high-level states in the game flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Enumerates ObjKind variants used by runtime state.
+#derive(Eq)
 pub(all) enum ObjKind {
   Scout
   Spinner
@@ -20,7 +22,7 @@ pub(all) enum ObjKind {
   Coin
   Coolant
   EmpCell
-} derive(Eq)
+}
 
 ///|
 pub extend ObjKind with Eq::{not_equal, equal}

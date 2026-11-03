@@ -68,12 +68,13 @@ pub let touch_action_cooldown : Float = 0.1
 
 ///|
 /// Kind of special candy effect applied to a board cell.
+#derive(Eq)
 pub(all) enum Special {
   None
   Row
   Col
   Bomb
-} derive(Eq)
+}
 
 ///|
 pub extend Special with Eq::{not_equal, equal}

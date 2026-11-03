@@ -1,11 +1,12 @@
 ///|
 /// High-level phase of a candy-crush session.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   LevelClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

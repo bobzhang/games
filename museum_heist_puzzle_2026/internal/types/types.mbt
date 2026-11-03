@@ -1,35 +1,38 @@
 ///|
 /// High-level flow state for museum campaign progression.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Win
   Lose
   CampaignClear
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Direction input used for grid movement.
+#derive(Eq)
 pub(all) enum Direction {
   DirNone
   Left
   Right
   Up
   Down
-} derive(Eq)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
 
 ///|
 /// Board tile kind used for movement and visibility checks.
+#derive(Eq)
 pub(all) enum TileKind {
   Floor
   Wall
-} derive(Eq)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}

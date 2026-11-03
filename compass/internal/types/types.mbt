@@ -1,8 +1,9 @@
 ///|
+#derive(Debug, Eq, ToJson, Hash, Compare)
 pub(all) struct Pos {
   x : Int32
   y : Int32
-} derive(Debug, Eq, ToJson, Hash, Compare)
+}
 
 ///|
 pub extend Pos with Debug::{to_repr}
@@ -20,6 +21,7 @@ pub extend Pos with Hash::{hash, hash_combine}
 pub extend Pos with Compare::{op_lt, op_le, op_ge, compare, op_gt}
 
 ///|
+#derive(Debug, ToJson)
 pub(all) struct LevelData {
   grid : Array[Array[Tile]]
   start : Pos
@@ -27,7 +29,7 @@ pub(all) struct LevelData {
   par_steps : Int32
   landmark_count : Int32
   tier : Int32
-} derive(Debug, ToJson)
+}
 
 ///|
 pub extend LevelData with Debug::{to_repr}
@@ -36,13 +38,14 @@ pub extend LevelData with Debug::{to_repr}
 pub extend LevelData with ToJson::{to_json}
 
 ///|
+#derive(Debug, ToJson)
 pub(all) struct Ship {
   mut pos : Pos
   mut hp : Int32
   mut steps : Int32
   mut heading : Float
   mut landmarks_found : Int32
-} derive(Debug, ToJson)
+}
 
 ///|
 pub extend Ship with Debug::{to_repr}
@@ -51,6 +54,7 @@ pub extend Ship with Debug::{to_repr}
 pub extend Ship with ToJson::{to_json}
 
 ///|
+#derive(Debug, ToJson)
 pub(all) struct LevelState {
   data : LevelData
   mut revealed : Array[Array[Bool]]
@@ -60,7 +64,7 @@ pub(all) struct LevelState {
   mut message_timer : Float
   mut compass_beep : Bool
   mut near_land_dir : Direction
-} derive(Debug, ToJson)
+}
 
 ///|
 pub extend LevelState with Debug::{to_repr}
@@ -69,6 +73,7 @@ pub extend LevelState with Debug::{to_repr}
 pub extend LevelState with ToJson::{to_json}
 
 ///|
+#derive(Debug, ToJson)
 pub(all) struct GameState {
   mut current_level : Int32
   mut phase : GamePhase
@@ -76,7 +81,7 @@ pub(all) struct GameState {
   mut stars : Array[StarRating]
   mut anim_timer : Float
   mut frame_count : Int32
-} derive(Debug, ToJson)
+}
 
 ///|
 pub extend GameState with Debug::{to_repr}

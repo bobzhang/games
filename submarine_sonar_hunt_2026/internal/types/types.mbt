@@ -1,23 +1,25 @@
 ///|
 /// Enumerates high-level states in the game flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Win
   Lose
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Enumerates LoseReason variants used by runtime state.
+#derive(Eq)
 pub(all) enum LoseReason {
   None
   Oxygen
   Fuel
   Hull
-} derive(Eq)
+}
 
 ///|
 pub extend LoseReason with Eq::{not_equal, equal}

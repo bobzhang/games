@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug, Compare, Hash)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug, Compare, Hash)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -31,11 +32,12 @@ pub(all) struct House {
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct FenceEdge {
   row : Int32
   col : Int32
   orient : Orientation
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend FenceEdge with Eq::{not_equal, equal}

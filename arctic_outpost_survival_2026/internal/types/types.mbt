@@ -53,11 +53,12 @@ pub(all) struct Particle {
 
 ///|
 /// High-level state of the game flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

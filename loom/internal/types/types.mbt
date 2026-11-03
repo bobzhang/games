@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct FabricCell {
   state : CellState
   color_index : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend FabricCell with Eq::{not_equal, equal}
@@ -12,27 +13,30 @@ pub extend FabricCell with Debug::{to_repr}
 
 ///|
 /// The target pattern the player must match
+#derive(Debug)
 pub(all) struct FabricPattern {
   rows : Int32
   cols : Int32
   cells : Array[FabricCell]
   warp_colors : Array[Int32]
   weft_colors : Array[Int32]
-} derive(Debug)
+}
 
 ///|
 pub extend FabricPattern with Debug::{to_repr}
 
 ///|
 /// A single heddle row configuration: which warps are raised
+#derive(Debug)
 pub(all) struct HeddleRow {
   mut raised : Array[Bool]
-} derive(Debug)
+}
 
 ///|
 pub extend HeddleRow with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   target : FabricPattern
   warp_colors : Array[Int32]
@@ -42,17 +46,18 @@ pub(all) struct Level {
   tier : Tier
   level_num : Int32
   hint : String
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut stars : Int32
   mut completed : Bool
   mut best_changes : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}

@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug, Hash, Compare)
 pub(all) struct Pos {
   x : Int32
   y : Int32
-} derive(Eq, Debug, Hash, Compare)
+}
 
 ///|
 pub extend Pos with Eq::{not_equal, equal}
@@ -17,18 +18,20 @@ pub extend Pos with Hash::{hash, hash_combine}
 pub extend Pos with Compare::{op_lt, op_le, op_ge, compare, op_gt}
 
 ///|
+#derive(Debug)
 pub(all) struct Tile {
   mut kind : TileKind
   elevation : Int32
   mut has_water : Bool
   mut water_level : Int32
   mut connections : Array[Direction]
-} derive(Debug)
+}
 
 ///|
 pub extend Tile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   name : String
   tier : Tier
@@ -40,32 +43,35 @@ pub(all) struct Level {
   reservoirs : Array[Pos]
   dams : Array[(Pos, Direction)]
   par_segments : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int32
   mut segments_used : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct UndoEntry {
   pos : Pos
   prev_kind : TileKind
   prev_connections : Array[Direction]
-} derive(Debug)
+}
 
 ///|
 pub extend UndoEntry with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut play_state : PlayState
@@ -87,7 +93,7 @@ pub(all) struct Game {
   mut total_fountains : Int32
   mut anim_timer : Float
   mut water_sources : Array[Pos]
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

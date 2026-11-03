@@ -1,10 +1,11 @@
 ///|
 /// Base properties of a metal
+#derive(Debug, Eq)
 pub(all) struct MetalProps {
   hardness : Float
   flexibility : Float
   conductivity : Float
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend MetalProps with Debug::{to_repr}
@@ -14,42 +15,46 @@ pub extend MetalProps with Eq::{not_equal, equal}
 
 ///|
 /// An ingredient added to the crucible
+#derive(Debug)
 pub(all) struct Ingredient {
   metal : MetalKind
   mut amount : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Ingredient with Debug::{to_repr}
 
 ///|
 /// A range for one property in a target alloy
+#derive(Debug)
 pub(all) struct PropertyRange {
   min : Float
   max : Float
-} derive(Debug)
+}
 
 ///|
 pub extend PropertyRange with Debug::{to_repr}
 
 ///|
 /// Target alloy requirements
+#derive(Debug)
 pub(all) struct TargetAlloy {
   hardness : PropertyRange
   flexibility : PropertyRange
   conductivity : PropertyRange
-} derive(Debug)
+}
 
 ///|
 pub extend TargetAlloy with Debug::{to_repr}
 
 ///|
 /// Result of blending
+#derive(Debug, Eq)
 pub(all) struct BlendResult {
   hardness : Float
   flexibility : Float
   conductivity : Float
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend BlendResult with Debug::{to_repr}
@@ -59,6 +64,7 @@ pub extend BlendResult with Eq::{not_equal, equal}
 
 ///|
 /// A level definition
+#derive(Debug)
 pub(all) struct LevelDef {
   id : Int32
   name : String
@@ -67,29 +73,31 @@ pub(all) struct LevelDef {
   target : TargetAlloy
   par_ingredients : Int32
   hint : String
-} derive(Debug)
+}
 
 ///|
 pub extend LevelDef with Debug::{to_repr}
 
 ///|
 /// Scoring result
+#derive(Debug)
 pub(all) struct LevelResult {
   mut stars : StarRating
   mut ingredients_used : Int32
   mut blend : BlendResult
   mut all_in_range : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend LevelResult with Debug::{to_repr}
 
 ///|
 /// Progress for a single level
+#derive(Debug)
 pub(all) struct LevelProgress {
   mut best_stars : StarRating
   mut completed : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend LevelProgress with Debug::{to_repr}

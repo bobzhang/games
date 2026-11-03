@@ -264,12 +264,13 @@ pub let base_ring_y : Array[Int32] = [
 
 ///|
 /// Cardinal direction for tank movement and turret facing.
+#derive(Eq)
 pub(all) enum Dir {
   Up
   Right
   Down
   Left
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}

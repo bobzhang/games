@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
   x : Int32
   y : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,10 +12,11 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct PaperCell {
   mut has_paper : Bool
   mut layers : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PaperCell with Eq::{not_equal, equal}
@@ -23,20 +25,22 @@ pub extend PaperCell with Eq::{not_equal, equal}
 pub extend PaperCell with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Paper {
   width : Int32
   height : Int32
   cells : Array[PaperCell]
-} derive(Debug)
+}
 
 ///|
 pub extend Paper with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct LayerCheck {
   pos : Vec2i
   required_layers : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend LayerCheck with Eq::{not_equal, equal}
@@ -45,6 +49,7 @@ pub extend LayerCheck with Eq::{not_equal, equal}
 pub extend LayerCheck with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   initial_paper : Paper
   target_silhouette : Paper
@@ -52,27 +57,29 @@ pub(all) struct Level {
   par_folds : Int32
   tier : Tier
   name : String
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : StarRating
   mut folds_used : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct FoldAction {
   dir : FoldDir
   line_pos : Int32
   paper_before : Paper
-} derive(Debug)
+}
 
 ///|
 pub extend FoldAction with Debug::{to_repr}

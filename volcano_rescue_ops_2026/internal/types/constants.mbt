@@ -84,47 +84,51 @@ pub let step_interval : Float = 0.22
 
 ///|
 /// Movement direction.
+#derive(Eq)
 pub(all) enum Dir {
   None
   Up
   Down
   Left
   Right
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Game outcome.
+#derive(Eq)
 pub(all) enum GameResult {
   None
   Win
   Lose
-} derive(Eq)
+}
 
 ///|
 pub extend GameResult with Eq::{not_equal, equal}
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Map tile type.
+#derive(Eq)
 pub(all) enum Tile {
   Ground
   Rock
   Depot
   Shelter
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}

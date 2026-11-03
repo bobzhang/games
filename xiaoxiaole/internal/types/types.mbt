@@ -1,5 +1,6 @@
 ///|
 /// Phase of a Xiao Xiao Le run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
@@ -8,13 +9,14 @@ pub(all) enum GameState {
   Fall
   Over
   Clear
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Logical gem identity stored in each board slot.
+#derive(Eq)
 pub(all) enum GemKind {
   Empty
   Red
@@ -23,7 +25,7 @@ pub(all) enum GemKind {
   Yellow
   Purple
   Orange
-} derive(Eq)
+}
 
 ///|
 pub extend GemKind with Eq::{not_equal, equal}

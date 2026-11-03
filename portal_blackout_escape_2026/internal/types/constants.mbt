@@ -144,44 +144,48 @@ pub let score_win : Int32 = 1100
 
 ///|
 /// Behavior mode of a patrol drone: patrol, hunt, or stunned.
+#derive(Eq)
 pub(all) enum DroneMode {
   Patrol
   Hunt
   Stunned
-} derive(Eq)
+}
 
 ///|
 pub extend DroneMode with Eq::{not_equal, equal}
 
 ///|
 /// Top-level game state: title screen, active play, or result screen.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Grid tile type: impassable wall, walkable floor, or extraction exit.
+#derive(Eq)
 pub(all) enum Tile {
   Wall
   Floor
   Exit
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Core kind enum: orange, blue, or green energy core.
+#derive(Eq)
 pub(all) enum CoreKind {
   Orange
   Blue
   Green
-} derive(Eq)
+}
 
 ///|
 pub extend CoreKind with Eq::{not_equal, equal}
@@ -200,11 +204,12 @@ pub fn CoreKind::from_int(v : Int32) -> CoreKind {
 
 ///|
 /// Particle kind enum: blue, yellow, or purple effect.
+#derive(Eq)
 pub(all) enum ParticleKind {
   BluePulse
   YellowFlash
   PurpleSmoke
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}

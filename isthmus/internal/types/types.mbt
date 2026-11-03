@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Tile {
   mut height : Int32
   mut is_settlement : Bool
   mut is_sand : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
@@ -12,16 +13,18 @@ pub extend Tile with Eq::{not_equal, equal}
 pub extend Tile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Grid {
   width : Int32
   height : Int32
   tiles : Array[Tile]
-} derive(Debug)
+}
 
 ///|
 pub extend Grid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   grid_width : Int32
   grid_height : Int32
@@ -32,31 +35,34 @@ pub(all) struct Level {
   par_sand : Int32
   name : String
   tier : Tier
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct GridSnapshot {
   tiles : Array[Tile]
   sea_level : Int32
   sand_remaining : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend GridSnapshot with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut play_state : PlayState
@@ -78,7 +84,7 @@ pub(all) struct Game {
   mut hover_y : Int32
   mut rising_anim : Float
   mut show_flood_preview : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

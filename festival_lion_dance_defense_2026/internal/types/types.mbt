@@ -1,22 +1,24 @@
 ///|
 /// High-level state of the lion dance defense loop.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Player action identifiers used by UI and input mapping.
+#derive(Eq)
 pub(all) enum Action {
   Strike
   Guard
   Burst
-} derive(Eq)
+}
 
 ///|
 pub extend Action with Eq::{not_equal, equal}

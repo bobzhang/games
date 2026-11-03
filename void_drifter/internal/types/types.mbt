@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2 {
   mut x : Float
   mut y : Float
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Vec2 with Eq::{not_equal, equal}

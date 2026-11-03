@@ -1,5 +1,6 @@
 ///|
 /// High-level state machine for menu and campaign flow.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   StageIntro
@@ -8,25 +9,27 @@ pub(all) enum GameState {
   StageClear
   GameOver
   CampaignClear
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Team affiliation used for friendly-fire and scoring.
+#derive(Eq)
 pub(all) enum Team {
   None
   Player1
   Player2
   Enemy
-} derive(Eq)
+}
 
 ///|
 pub extend Team with Eq::{not_equal, equal}
 
 ///|
 /// Tile categories used by map collision and rendering.
+#derive(Eq)
 pub(all) enum TileKind {
   Empty
   Brick
@@ -35,25 +38,27 @@ pub(all) enum TileKind {
   Bush
   Ice
   Base
-} derive(Eq)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
 
 ///|
 /// Enemy behavior archetypes.
+#derive(Eq)
 pub(all) enum EnemyKind {
   Basic
   Fast
   Heavy
   Sniper
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Collectible powerup categories.
+#derive(Eq)
 pub(all) enum PowerupKind {
   Shield
   Star
@@ -61,7 +66,7 @@ pub(all) enum PowerupKind {
   Clock
   Shovel
   ExtraLife
-} derive(Eq)
+}
 
 ///|
 pub extend PowerupKind with Eq::{not_equal, equal}

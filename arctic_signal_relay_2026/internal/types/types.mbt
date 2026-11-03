@@ -24,11 +24,12 @@ pub(all) struct Storm {
 
 ///|
 /// Top-level state machine for the arctic relay session.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Grid {
   size : Int32
   cells : Array[Bool]
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Grid with Eq::{not_equal, equal}
@@ -11,12 +12,13 @@ pub extend Grid with Eq::{not_equal, equal}
 pub extend Grid with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct ForceBudget {
   mut water : Int32
   mut wind : Int32
   mut frost : Int32
   mut heat : Int32
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ForceBudget with Eq::{not_equal, equal}
@@ -25,6 +27,7 @@ pub extend ForceBudget with Eq::{not_equal, equal}
 pub extend ForceBudget with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   tier : Tier
   name : String
@@ -32,37 +35,40 @@ pub(all) struct Level {
   target_shape : Grid
   budget : ForceBudget
   par_forces : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut stars : Int32
   mut completed : Bool
   mut forces_used : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct ForceAction {
   kind : ForceKind
-} derive(Debug)
+}
 
 ///|
 pub extend ForceAction with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct MatchResult {
   matching : Int32
   over_eroded : Int32
   under_eroded : Int32
   total_target_empty : Int32
   total_target_solid : Int32
-} derive(Debug)
+}
 
 ///|
 pub extend MatchResult with Debug::{to_repr}

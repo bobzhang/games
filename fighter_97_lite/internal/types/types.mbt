@@ -1,5 +1,6 @@
 ///|
 /// High-level game state machine.
+#derive(Eq, Debug)
 pub(all) enum GameState {
   StateTitle
   StateSelect
@@ -8,7 +9,7 @@ pub(all) enum GameState {
   StateRoundOver
   StateMatchOver
   StatePause
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
@@ -26,6 +27,7 @@ pub extend GameState with Show::{to_string, output}
 
 ///|
 /// Fighter action state machine.
+#derive(Eq)
 pub(all) enum Action {
   ActionIdle
   ActionWalkForward
@@ -42,13 +44,14 @@ pub(all) enum Action {
   ActionVictory
   ActionIntro
   ActionThrow
-} derive(Eq)
+}
 
 ///|
 pub extend Action with Eq::{not_equal, equal}
 
 ///|
 /// Attack identifiers used by move specs and hit logic.
+#derive(Eq)
 pub(all) enum AttackId {
   AttackNone
   AttackLp
@@ -58,47 +61,51 @@ pub(all) enum AttackId {
   AttackSpecialQcf
   AttackSpecialDp
   AttackSuper
-} derive(Eq)
+}
 
 ///|
 pub extend AttackId with Eq::{not_equal, equal}
 
 ///|
 /// Move category for normal/special/super behavior.
+#derive(Eq)
 pub(all) enum MoveKind {
   MoveKindNormal
   MoveKindSpecial
   MoveKindSuper
-} derive(Eq)
+}
 
 ///|
 pub extend MoveKind with Eq::{not_equal, equal}
 
 ///|
 /// CPU behavior mode selector.
+#derive(Eq)
 pub(all) enum AiMode {
   AiModeIdle
   AiModeRush
   AiModeZone
   AiModeEvade
-} derive(Eq)
+}
 
 ///|
 pub extend AiMode with Eq::{not_equal, equal}
 
 ///|
 /// Parsed directional motion command.
+#derive(Eq)
 pub(all) enum Motion {
   MotionNone
   MotionQcf
   MotionDp
-} derive(Eq)
+}
 
 ///|
 pub extend Motion with Eq::{not_equal, equal}
 
 ///|
 /// Direction entries stored in input history.
+#derive(Eq)
 pub(all) enum Direction {
   DirNeutral
   DirUp
@@ -107,29 +114,31 @@ pub(all) enum Direction {
   DirForward
   DirDownBack
   DirDownForward
-} derive(Eq)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
 
 ///|
 /// Hit spark visual category.
+#derive(Eq)
 pub(all) enum SparkKind {
   SparkKindHit
   SparkKindBlock
   SparkKindSuper
-} derive(Eq)
+}
 
 ///|
 pub extend SparkKind with Eq::{not_equal, equal}
 
 ///|
 /// CPU difficulty level.
+#derive(Eq, Debug)
 pub(all) enum AiDifficulty {
   Easy
   Normal
   Hard
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend AiDifficulty with Eq::{not_equal, equal}

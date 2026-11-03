@@ -156,12 +156,13 @@ pub let block_hit_score : Int32 = 50
 
 ///|
 /// Game state machine phases.
+#derive(Eq, Debug)
 pub(all) enum GameState {
   Title
   Playing
   Win
   GameOver
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
@@ -179,6 +180,7 @@ pub extend GameState with Show::{to_string, output}
 
 ///|
 /// Tile types used in the level grid.
+#derive(Eq)
 pub(all) enum Tile {
   Empty
   Ground
@@ -188,7 +190,7 @@ pub(all) enum Tile {
   Pipe
   FlagPole
   Castle
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}

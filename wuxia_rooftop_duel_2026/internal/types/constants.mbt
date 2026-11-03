@@ -216,36 +216,39 @@ pub let spawn_interval_min : Float = 0.30
 
 ///|
 /// Player attack type.
+#derive(Eq)
 pub(all) enum Attack {
   None
   Light
   Heavy
-} derive(Eq)
+}
 
 ///|
 pub extend Attack with Eq::{not_equal, equal}
 
 ///|
 /// Enemy AI behavior state.
+#derive(Eq)
 pub(all) enum EnemyState {
   Seek
   Telegraph
   Strike
   Recover
   Stunned
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyState with Eq::{not_equal, equal}
 
 ///|
 /// Top-level game state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

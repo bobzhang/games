@@ -1,17 +1,19 @@
 ///|
 /// Enumerates high-level states in the game flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Enumerates EntityKind variants used by runtime state.
+#derive(Eq)
 pub(all) enum EntityKind {
   FoeBike
   FoeDrone
@@ -20,7 +22,7 @@ pub(all) enum EntityKind {
   ItemCredit
   ItemBattery
   ItemHackcell
-} derive(Eq)
+}
 
 ///|
 pub extend EntityKind with Eq::{not_equal, equal}
