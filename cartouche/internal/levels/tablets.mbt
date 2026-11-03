@@ -1,5 +1,5 @@
 ///|
-fn build_mapping(pairs : Array[(Int, Int)]) -> @types.Mapping {
+fn build_mapping(pairs : Array[(Int32, Int32)]) -> @types.Mapping {
   let m = @types.new_mapping()
   for i in 0..<pairs.length() {
     let (sym_idx, letter_idx) = pairs[i]
@@ -1283,7 +1283,7 @@ fn tablet_20() -> @types.Tablet {
 }
 
 ///|
-pub fn get_tablet(index : Int) -> @types.Tablet {
+pub fn get_tablet(index : Int32) -> @types.Tablet {
   match index {
     0 => tablet_01()
     1 => tablet_02()
@@ -1309,10 +1309,10 @@ pub fn get_tablet(index : Int) -> @types.Tablet {
 }
 
 ///|
-pub fn get_tier_tablets(tier : @types.Tier) -> Array[Int] {
+pub fn get_tier_tablets(tier : @types.Tier) -> Array[Int32] {
   let offset = @types.tier_tablet_offset(tier)
   let count = @types.tier_tablet_count(tier)
-  let result : Array[Int] = []
+  let result : Array[Int32] = []
   for i in offset..<(offset + count) {
     result.push(i)
   }

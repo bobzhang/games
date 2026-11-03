@@ -1,11 +1,11 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 pub let frame_radius : Float = 280.0
@@ -17,10 +17,10 @@ pub let frame_center_x : Float = 480.0
 pub let frame_center_y : Float = 360.0
 
 ///|
-pub let peg_count : Int = 24
+pub let peg_count : Int32 = 24
 
 ///|
-pub let max_strings : Int = 8
+pub let max_strings : Int32 = 8
 
 ///|
 pub let tolerance : Float = 15.0
@@ -29,7 +29,7 @@ pub let tolerance : Float = 15.0
 pub let tight_tolerance : Float = 8.0
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
 pub let pi : Float = 3.14159265

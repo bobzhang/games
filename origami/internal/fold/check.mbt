@@ -1,9 +1,10 @@
 ///|
+#derive(Debug)
 pub(all) struct CheckResult {
   silhouette_match : Bool
   layers_match : Bool
   checks_detail : Array[Bool]
-} derive(Debug)
+}
 
 ///|
 pub extend CheckResult with Debug::{to_repr}
@@ -32,8 +33,8 @@ pub fn check_completion(
 ///|
 pub fn compute_stars(
   result : CheckResult,
-  folds_used : Int,
-  par_folds : Int,
+  folds_used : Int32,
+  par_folds : Int32,
 ) -> @types.StarRating {
   if !result.silhouette_match {
     return Zero

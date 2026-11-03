@@ -69,7 +69,7 @@ fn @types.Game::enter_game_over(game : @types.Game, reason : String) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_hazard_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_hazard_slot(game : @types.Game) -> Int32 {
   for i, slot in game.hazards {
     if !slot.active {
       break i
@@ -119,7 +119,7 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::handle_hazard_collision(game : @types.Game, i : Int) -> Unit {
+fn @types.Game::handle_hazard_collision(game : @types.Game, i : Int32) -> Unit {
   let kind = game.hazards[i].kind
   let tilt_gap = (game.tilt - @types.hazard_tilt_bias(kind)).abs()
 

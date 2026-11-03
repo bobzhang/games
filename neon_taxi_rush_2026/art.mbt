@@ -101,7 +101,7 @@ fn draw_texture_rect(
 /// Draws one 4x3 sprite-sheet cell centered on the destination point.
 fn draw_sprite_cell_rotated(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -132,7 +132,7 @@ fn draw_sprite_cell_rotated(
 /// Draws one 4x3 sprite-sheet cell without rotation.
 fn draw_sprite_cell(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,

@@ -1,26 +1,26 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1600
+pub let screen_w : Int32 = 1600
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 960
+pub let screen_h : Int32 = 960
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Minimum axis value for pose components.
-pub let pose_axis_min : Int = -2
+pub let pose_axis_min : Int32 = -2
 
 ///|
 /// Maximum axis value for pose components.
-pub let pose_axis_max : Int = 2
+pub let pose_axis_max : Int32 = 2
 
 ///|
 /// Maximum target sequence length at high stages.
-pub let max_sequence_len : Int = 8
+pub let max_sequence_len : Int32 = 8
 
 ///|
 /// Upper bound of the spotlight meter.
@@ -92,23 +92,23 @@ pub let correct_excitement_gain : Float = 8.0
 
 ///|
 /// X coordinate of the stage projection screen.
-pub let stage_screen_x : Int = 248
+pub let stage_screen_x : Int32 = 248
 
 ///|
 /// Y coordinate of the stage projection screen.
-pub let stage_screen_y : Int = 126
+pub let stage_screen_y : Int32 = 126
 
 ///|
 /// Width of the stage projection screen.
-pub let stage_screen_w : Int = 980
+pub let stage_screen_w : Int32 = 980
 
 ///|
 /// Height of the stage projection screen.
-pub let stage_screen_h : Int = 682
+pub let stage_screen_h : Int32 = 682
 
 ///|
 /// Returns cue response time for a stage after difficulty scaling.
-pub fn cue_time_for_stage(stage : Int) -> Float {
+pub fn cue_time_for_stage(stage : Int32) -> Float {
   let raw = cue_base_time - Float::from_int(stage - 1) * cue_drop_per_stage
   if raw < cue_min_time {
     cue_min_time
@@ -119,7 +119,7 @@ pub fn cue_time_for_stage(stage : Int) -> Float {
 
 ///|
 /// Returns sequence length target for a stage after difficulty scaling.
-pub fn sequence_len_for_stage(stage : Int) -> Int {
+pub fn sequence_len_for_stage(stage : Int32) -> Int32 {
   let raw = 3 + (stage - 1) / 2
   if raw > max_sequence_len {
     max_sequence_len

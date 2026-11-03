@@ -1,6 +1,6 @@
 ///|
 /// Returns the integer index for a Theme value.
-pub fn theme_to_int(t : Theme) -> Int {
+pub fn theme_to_int(t : Theme) -> Int32 {
   match t {
     Circuit => 0
     Beach => 1
@@ -15,7 +15,7 @@ pub fn theme_to_int(t : Theme) -> Int {
 
 ///|
 /// Returns a PowerupKind from its integer index.
-pub fn powerup_kind_from_int(i : Int) -> PowerupKind {
+pub fn powerup_kind_from_int(i : Int32) -> PowerupKind {
   match i {
     1 => Boost
     2 => Shield
@@ -31,7 +31,7 @@ pub fn powerup_kind_from_int(i : Int) -> PowerupKind {
 
 ///|
 /// Returns the integer rank for a DriftLevel value (for ordering comparisons).
-pub fn drift_level_to_int(level : DriftLevel) -> Int {
+pub fn drift_level_to_int(level : DriftLevel) -> Int32 {
   match level {
     DriftNone => 0
     Mini => 1
@@ -196,7 +196,7 @@ pub fn calc_drift_level(drift_time : Float) -> DriftLevel {
 
 ///|
 /// Returns the RGB color for drift spark particles at the given drift `level`.
-pub fn get_drift_spark_color(level : DriftLevel) -> (Int, Int, Int) {
+pub fn get_drift_spark_color(level : DriftLevel) -> (Int32, Int32, Int32) {
   match level {
     Mini => (80, 150, 255) // Blue
     Super => (255, 180, 50) // Orange
@@ -267,7 +267,7 @@ pub fn get_kart_drift_boost_mult(kart : Kart) -> Float {
 
 ///|
 /// Advances the game RNG state and returns the next pseudorandom positive integer.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -281,7 +281,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer in the inclusive range from `low` to `high`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -300,19 +300,19 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if full.
-pub fn alloc_projectile(game : Game) -> Int {
+pub fn alloc_projectile(game : Game) -> Int32 {
   @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive particle slot, or -1 if full.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive dropped item slot, or -1 if full.
-pub fn alloc_dropped_item(game : Game) -> Int {
+pub fn alloc_dropped_item(game : Game) -> Int32 {
   @utils.first_index_by(game.dropped_items, fn(slot) { !slot.active })
 }
 
@@ -323,10 +323,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -358,14 +358,14 @@ pub fn spawn_particles(
 /// Spawns particles of the given `ptype` at the specified position with custom color, size, and lifespan.
 pub fn spawn_typed_particles(
   game : Game,
-  ptype : Int,
+  ptype : Int32,
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   size : Float,
   life : Float,
 ) -> Unit {
@@ -397,7 +397,7 @@ pub fn spawn_typed_particles(
 
 ///|
 /// Returns the waypoint at `idx` with wrap-around for looping tracks.
-pub fn get_waypoint(game : Game, idx : Int) -> Waypoint {
+pub fn get_waypoint(game : Game, idx : Int32) -> Waypoint {
   let wc = game.waypoint_count
   if wc == 0 {
     return { x: 0.0, y: 0.0, z: 0.0, }
@@ -413,7 +413,7 @@ pub fn get_waypoint(game : Game, idx : Int) -> Waypoint {
 
 ///|
 /// Returns the track segment at `idx` with wrap-around for looping tracks.
-pub fn get_segment(game : Game, idx : Int) -> TrackSegment {
+pub fn get_segment(game : Game, idx : Int32) -> TrackSegment {
   let wc = game.waypoint_count
   if wc == 0 {
     return TrackSegment::default()
@@ -429,7 +429,7 @@ pub fn get_segment(game : Game, idx : Int) -> TrackSegment {
 
 ///|
 /// Returns the total race progress for `kart` used for position ranking.
-pub fn calc_total_progress(kart : Kart, waypoint_count : Int) -> Float {
+pub fn calc_total_progress(kart : Kart, waypoint_count : Int32) -> Float {
   Float::from_int(kart.lap * waypoint_count + kart.waypoint_idx) +
   kart.waypoint_progress
 }
@@ -438,7 +438,7 @@ pub fn calc_total_progress(kart : Kart, waypoint_count : Int) -> Float {
 
 ///|
 /// Returns the cup points awarded for the given finishing `place`.
-pub fn position_points(place : Int) -> Int {
+pub fn position_points(place : Int32) -> Int32 {
   if place >= 1 && place <= cup_points_table.length() {
     cup_points_table[place - 1]
   } else {
@@ -538,7 +538,7 @@ pub fn is_wrong_way(game : Game, kart : Kart) -> Bool {
 
 ///|
 /// Returns the index of the nearest opponent ahead of `kart_idx`, or the nearest behind if none ahead.
-pub fn find_target_ahead(game : Game, kart_idx : Int) -> Int {
+pub fn find_target_ahead(game : Game, kart_idx : Int32) -> Int32 {
   let kart = game.karts[kart_idx]
   for i in 0..<max_karts; best_idx = -1, best_dist = 99999.0F {
     if i == kart_idx {
@@ -592,7 +592,7 @@ pub fn find_target_ahead(game : Game, kart_idx : Int) -> Int {
 pub fn calc_rubber_band_mult(
   ai_progress : Float,
   player_progress : Float,
-  difficulty : Int,
+  difficulty : Int32,
 ) -> Float {
   let stats = ai_difficulty_stats[difficulty.clamp(min=0, max=3)]
   let base_mult = stats.0
@@ -636,7 +636,7 @@ pub fn format_time(t : Float) -> String {
 
 ///|
 /// Returns the ordinal string for position `n` such as "1st" or "3rd".
-pub fn ordinal_suffix(n : Int) -> String {
+pub fn ordinal_suffix(n : Int32) -> String {
   if n == 1 {
     "1st"
   } else if n == 2 {
@@ -671,7 +671,7 @@ pub fn angle_between_segments(
 
 ///|
 /// Returns the index of the nearest waypoint to position (`x`, `z`), or -1 if no waypoints.
-pub fn find_nearest_waypoint(game : Game, x : Float, z : Float) -> Int {
+pub fn find_nearest_waypoint(game : Game, x : Float, z : Float) -> Int32 {
   let wc = game.waypoint_count
   if wc == 0 {
     return -1
@@ -691,7 +691,7 @@ pub fn find_nearest_waypoint(game : Game, x : Float, z : Float) -> Int {
 
 ///|
 /// Returns the normalized track direction vector on the XZ plane at `seg_idx`.
-pub fn get_track_direction(game : Game, seg_idx : Int) -> (Float, Float) {
+pub fn get_track_direction(game : Game, seg_idx : Int32) -> (Float, Float) {
   let wc = game.waypoint_count
   if wc < 2 {
     return (0.0, 1.0)
@@ -711,7 +711,7 @@ pub fn get_track_direction(game : Game, seg_idx : Int) -> (Float, Float) {
 
 ///|
 /// Returns the perpendicular direction to the track on the XZ plane at `seg_idx`.
-pub fn get_track_perpendicular(game : Game, seg_idx : Int) -> (Float, Float) {
+pub fn get_track_perpendicular(game : Game, seg_idx : Int32) -> (Float, Float) {
   let dir = get_track_direction(game, seg_idx)
   (-dir.1, dir.0)
 }
@@ -771,7 +771,7 @@ pub fn add_skid_mark(
 ///|
 /// Returns a position-weighted powerup for the given race position (1-8).
 /// Worse positions get better items for natural rubber-banding.
-pub fn roll_position_weighted_item(game : Game, place : Int) -> PowerupKind {
+pub fn roll_position_weighted_item(game : Game, place : Int32) -> PowerupKind {
   let roll = rand_range(game, 1, 100)
   if place <= 1 {
     // 1st: Banana 30%, Green Shell (Missile) 30%, Coin (Shield) 20%, Mushroom 20%
@@ -874,14 +874,14 @@ pub fn turn_direction(a : Waypoint, b : Waypoint, c : Waypoint) -> Float {
 
 ///|
 /// Returns the distance from kart's current position to a specific waypoint index.
-pub fn distance_to_waypoint(game : Game, kart : Kart, wp_idx : Int) -> Float {
+pub fn distance_to_waypoint(game : Game, kart : Kart, wp_idx : Int32) -> Float {
   let wp = get_waypoint(game, wp_idx)
   distance2d(kart.x, kart.z, wp.x, wp.z)
 }
 
 ///|
 /// Returns the estimated segment length between two consecutive waypoints.
-pub fn segment_length(game : Game, seg_idx : Int) -> Float {
+pub fn segment_length(game : Game, seg_idx : Int32) -> Float {
   let wc = game.waypoint_count
   let wp0 = get_waypoint(game, seg_idx)
   let wp1 = get_waypoint(game, (seg_idx + 1) % wc)
@@ -890,7 +890,7 @@ pub fn segment_length(game : Game, seg_idx : Int) -> Float {
 
 ///|
 /// Returns the dust particle RGB color for the given track theme.
-pub fn get_theme_dust_color(theme : Theme) -> (Int, Int, Int) {
+pub fn get_theme_dust_color(theme : Theme) -> (Int32, Int32, Int32) {
   match theme {
     Desert => (180, 150, 90)
     ThemeIce => (200, 215, 230)

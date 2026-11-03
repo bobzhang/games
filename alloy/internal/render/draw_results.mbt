@@ -118,8 +118,8 @@ fn draw_level_failed(game : @types.Game) -> Unit {
 
 ///|
 fn draw_result_property(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   name : String,
   value : Float,
   range : @types.PropertyRange,

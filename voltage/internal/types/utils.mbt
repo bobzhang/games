@@ -26,7 +26,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -35,7 +35,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -55,7 +55,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -81,15 +81,15 @@ pub fn cosf(a : Float) -> Float {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 12345, }
+let rng_state : Ref[Int32] = { val: 12345, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -100,7 +100,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -146,10 +146,10 @@ pub fn new_cell_with(comp : ComponentKind, is_fixed : Bool) -> Cell {
 
 ///|
 pub fn new_level_state(
-  budget : Int,
-  par : Int,
-  fuse_b : Int,
-  switch_b : Int,
+  budget : Int32,
+  par : Int32,
+  fuse_b : Int32,
+  switch_b : Int32,
 ) -> LevelState {
   let cells : Array[Array[Cell]] = []
   for _r in 0..<grid_rows {
@@ -229,12 +229,12 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn cell_center_x(col : Int) -> Float {
+pub fn cell_center_x(col : Int32) -> Float {
   Float::from_int(grid_offset_x + col * cell_size + cell_size / 2)
 }
 
 ///|
-pub fn cell_center_y(row : Int) -> Float {
+pub fn cell_center_y(row : Int32) -> Float {
   Float::from_int(grid_offset_y + row * cell_size + cell_size / 2)
 }
 
@@ -245,7 +245,7 @@ pub fn set_message(game : Game, msg : String, dur : Float) -> Unit {
 }
 
 ///|
-pub fn alloc_spark(sparks : Array[Spark]) -> Int {
+pub fn alloc_spark(sparks : Array[Spark]) -> Int32 {
   for i in 0..<sparks.length() {
     if !sparks[i].active {
       return i
@@ -259,7 +259,7 @@ pub fn spawn_sparks(
   sparks : Array[Spark],
   cx : Float,
   cy : Float,
-  count : Int,
+  count : Int32,
   color : @raylib.Color,
 ) -> Unit {
   for _i in 0..<count {
@@ -278,7 +278,7 @@ pub fn spawn_sparks(
 }
 
 ///|
-pub fn direction_index(d : Direction) -> Int {
+pub fn direction_index(d : Direction) -> Int32 {
   match d {
     Up => 0
     Down => 1
@@ -298,7 +298,7 @@ pub fn opposite_direction(d : Direction) -> Direction {
 }
 
 ///|
-pub fn direction_delta(d : Direction) -> (Int, Int) {
+pub fn direction_delta(d : Direction) -> (Int32, Int32) {
   match d {
     Up => (0, -1)
     Down => (0, 1)
@@ -313,7 +313,7 @@ pub fn all_directions() -> Array[Direction] {
 }
 
 ///|
-pub fn in_bounds(col : Int, row : Int) -> Bool {
+pub fn in_bounds(col : Int32, row : Int32) -> Bool {
   col >= 0 && col < grid_cols && row >= 0 && row < grid_rows
 }
 

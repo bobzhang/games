@@ -144,7 +144,7 @@ fn draw_backdrop_art() -> Bool {
 
 ///|
 /// Returns generated asteroid art for a size tier.
-fn asteroid_art(size : Int) -> @raylib.Texture? {
+fn asteroid_art(size : Int32) -> @raylib.Texture? {
   match size {
     2 => tex_asteroid_large.val
     1 => tex_asteroid_medium.val

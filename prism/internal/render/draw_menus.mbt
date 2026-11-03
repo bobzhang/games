@@ -290,9 +290,9 @@ fn draw_results(game : @types.Game) -> Unit {
 
 ///|
 fn draw_star_shape(
-  cx : Int,
-  cy : Int,
-  size : Int,
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let s = Float::from_int(size)

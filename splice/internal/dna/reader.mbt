@@ -9,12 +9,12 @@ pub fn read_and_compare(
 }
 
 ///|
-pub fn find_start_codon(seq : Array[@types.Base]) -> Int {
+pub fn find_start_codon(seq : Array[@types.Base]) -> Int32 {
   @types.find_start_codon(seq)
 }
 
 ///|
-pub fn find_stop_codon(seq : Array[@types.Base], from : Int) -> Int {
+pub fn find_stop_codon(seq : Array[@types.Base], from : Int32) -> Int32 {
   let mut pos = from
   while pos + 2 < seq.length() {
     if seq[pos] == T && seq[pos + 1] == G && seq[pos + 2] == A {
@@ -53,7 +53,7 @@ pub fn get_codon_groups(seq : Array[@types.Base]) -> Array[@types.CodonResult] {
 pub fn count_matching_traits(
   produced : Array[@types.Trait],
   target : Array[@types.Trait],
-) -> Int {
+) -> Int32 {
   let mut count = 0
   let len = if produced.length() < target.length() {
     produced.length()

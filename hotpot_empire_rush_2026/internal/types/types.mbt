@@ -1,8 +1,8 @@
 ///|
 /// Per-frame player input state used by game logic.
 pub(all) struct InputState {
-  mut move_x : Int
-  mut move_y : Int
+  mut move_x : Int32
+  mut move_y : Int32
   mut press_interact : Bool
   mut press_serve_cancel : Bool
   mut press_boost : Bool
@@ -30,11 +30,11 @@ pub fn InputState::InputState() -> InputState {
 /// Customer order specification and patience timers.
 pub(all) struct Order {
   mut active : Bool
-  mut id : Int
-  mut broth : Int
-  mut protein : Int
-  mut veg : Int
-  mut spice : Int
+  mut id : Int32
+  mut broth : Int32
+  mut protein : Int32
+  mut veg : Int32
+  mut spice : Int32
   mut patience : Float
   mut max_patience : Float
   mut pulse : Float
@@ -42,7 +42,7 @@ pub(all) struct Order {
 
 ///|
 /// Creates an inactive order entry with the given stable id.
-pub fn Order::Order(id : Int) -> Order {
+pub fn Order::Order(id : Int32) -> Order {
   {
     active: false,
     id,
@@ -60,7 +60,7 @@ pub fn Order::Order(id : Int) -> Order {
 /// Item currently carried by the player hand.
 pub(all) struct Item {
   mut kind : Ingredient
-  mut flavor : Int
+  mut flavor : Int32
   mut prepped : Bool
 }
 
@@ -75,12 +75,12 @@ pub fn Item::empty() -> Item {
 pub(all) struct PrepState {
   mut active : Bool
   mut kind : Ingredient
-  mut flavor : Int
+  mut flavor : Int32
   mut progress : Float
   mut target : Float
   mut output_ready : Bool
   mut out_kind : Ingredient
-  mut out_flavor : Int
+  mut out_flavor : Int32
 }
 
 ///|
@@ -101,10 +101,10 @@ pub fn PrepState::PrepState() -> PrepState {
 ///|
 /// Hotpot cooking state with selected ingredients and progress.
 pub(all) struct PotState {
-  mut broth : Int
-  mut protein : Int
-  mut veg : Int
-  mut spice : Int
+  mut broth : Int32
+  mut protein : Int32
+  mut veg : Int32
+  mut spice : Int32
   mut cooking : Bool
   mut progress : Float
   mut target : Float
@@ -158,23 +158,23 @@ pub(all) struct Game {
   mut state : GameState
   /// Column index of the player's cursor on the 4x3 kitchen station grid.
   /// Range: 0..`station_cols`-1 (0..3). Moved by WASD/arrow keys.
-  mut cursor_x : Int
+  mut cursor_x : Int32
   /// Row index of the player's cursor on the 4x3 kitchen station grid.
   /// Range: 0..`station_rows`-1 (0..2). Moved by WASD/arrow keys.
-  mut cursor_y : Int
+  mut cursor_y : Int32
 
   // ──── Scoring and combo ────
 
   /// Cumulative score for the current run. Increases on correct serves
   /// (base + patience bonus + combo bonus) and resets to 0 on run start.
-  mut score : Int
+  mut score : Int32
   /// Highest score achieved across all runs in this session.
   /// Persists across restarts; updated whenever `score` exceeds it.
-  mut best_score : Int
+  mut best_score : Int32
   /// Current combo streak count. Incremented on each correct serve,
   /// reset to 0 on wrong serve, timeout, or queue overflow.
   /// Each combo level adds 20 bonus points to the next serve.
-  mut combo : Int
+  mut combo : Int32
   /// Remaining seconds before the combo streak expires.
   /// Set to `combo_keep_time` (4.2 s) on each successful serve;
   /// when it reaches 0 the combo counter resets to 0.
@@ -212,7 +212,7 @@ pub(all) struct Game {
   mut spawn_cd : Float
   /// Monotonically increasing serial number assigned to each new order.
   /// Used as the order's display id. Incremented after every `spawn_order`.
-  mut order_serial : Int
+  mut order_serial : Int32
 
   // ──── Session timing and stats ────
 
@@ -222,21 +222,21 @@ pub(all) struct Game {
   mut elapsed : Float
   /// Number of orders successfully served this run.
   /// Purely a statistics counter displayed on the HUD and game-over screen.
-  mut served : Int
+  mut served : Int32
   /// Number of orders that failed (timed out, wrong serve, or overflow).
   /// Purely a statistics counter displayed on the HUD and game-over screen.
-  mut failed : Int
+  mut failed : Int32
 
   // ──── Ingredient rotation ────
 
   /// Index of the next protein flavor to dispense from the Protein Crate.
   /// Range: 0..`protein_count`-1 (0..2). Cycles sequentially,
   /// randomised on run start and when the Storage station is used.
-  mut next_protein_pick : Int
+  mut next_protein_pick : Int32
   /// Index of the next vegetable flavor to dispense from the Veg Basket.
   /// Range: 0..`veg_count`-1 (0..2). Cycles sequentially,
   /// randomised on run start and when the Storage station is used.
-  mut next_veg_pick : Int
+  mut next_veg_pick : Int32
 
   // ──── HUD feedback ────
 

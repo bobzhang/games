@@ -181,7 +181,7 @@ pub fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn level_name_for(index : Int) -> String {
+fn level_name_for(index : Int32) -> String {
   match index {
     0 => "Lobby Infiltration"
     1 => "Server Room"
@@ -337,9 +337,9 @@ pub fn draw_results(game : @types.Game) -> Unit {
 ///|
 fn draw_score_line(
   label : String,
-  value : Int,
-  x : Int,
-  y : Int,
+  value : Int32,
+  x : Int32,
+  y : Int32,
   color : @raylib.Color,
 ) -> Unit {
   @draw.draw_text(label, x, y, 18, color)

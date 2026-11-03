@@ -153,10 +153,10 @@ fn draw_art_fit(
 /// Draws a texture stretched into an axis-aligned screen rectangle.
 fn draw_art_stretched(
   texture : @raylib.Texture,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   @raylib.draw_texture_pro(
@@ -226,7 +226,7 @@ fn draw_backdrop_art() -> Bool {
 
 ///|
 /// Draws the generated snowfield texture into the play area when loaded.
-fn draw_snowfield_art(ox : Int, oy : Int) -> Bool {
+fn draw_snowfield_art(ox : Int32, oy : Int32) -> Bool {
   match tex_snowfield_texture.val {
     Some(texture) => {
       draw_art_stretched(

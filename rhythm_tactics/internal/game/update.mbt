@@ -997,7 +997,7 @@ fn update_combo_state(game : @types.Game) -> Unit {
 }
 
 ///|
-fn process_combo_milestone(game : @types.Game, combo : Int) -> Unit {
+fn process_combo_milestone(game : @types.Game, combo : Int32) -> Unit {
   // Achievement: Combo King
   if combo >= 50 {
     let _ = @types.check_achievement(game.achievements, ComboKing)
@@ -1314,7 +1314,7 @@ fn offer_ability_choices(game : @types.Game) -> Unit {
   game.ability_choices.clear()
   let rng = @types.game_rng(game)
   let count = if available.length() < 3 { available.length() } else { 3 }
-  let used : Array[Int] = []
+  let used : Array[Int32] = []
   for _ in 0..<count {
     for _ in 0..<20 {
       let idx = @types.rand_range(rng, 0, available.length() - 1)
@@ -1468,7 +1468,7 @@ fn start_new_game(game : @types.Game) -> Unit {
 
 ///|
 fn handle_spell_input(game : @types.Game, floor : @types.Floor) -> Unit {
-  let keys : Array[Int] = [
+  let keys : Array[Int32] = [
     @raylib.KeyOne,
     @raylib.KeyTwo,
     @raylib.KeyThree,
@@ -1496,7 +1496,7 @@ fn cast_spell(
   game : @types.Game,
   floor : @types.Floor,
   kind : @types.SpellKind,
-  slot : Int,
+  slot : Int32,
 ) -> Unit {
   let data = @types.spell_data(kind)
   let player = game.player
@@ -1762,7 +1762,7 @@ fn cast_spell(
 fn handle_enemy_death(
   game : @types.Game,
   floor : @types.Floor,
-  ei : Int,
+  ei : Int32,
   rating : @types.BeatRating,
 ) -> Unit {
   let enemy = floor.enemies[ei]

@@ -184,11 +184,11 @@ fn draw_completion_banner(game : @types.Game) -> Unit {
 
 ///|
 pub fn draw_stars(
-  x : Int,
-  y : Int,
-  count : Int,
-  max_stars : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  count : Int32,
+  max_stars : Int32,
+  size : Int32,
 ) -> Unit {
   for i in 0..<max_stars {
     let sx = x + i * (size + 4)
@@ -202,7 +202,12 @@ pub fn draw_stars(
 }
 
 ///|
-fn draw_star_shape(x : Int, y : Int, size : Int, color : @raylib.Color) -> Unit {
+fn draw_star_shape(
+  x : Int32,
+  y : Int32,
+  size : Int32,
+  color : @raylib.Color,
+) -> Unit {
   let cx = Float::from_int(x + size / 2)
   let cy = Float::from_int(y + size / 2)
   let outer = Float::from_int(size) / 2.0

@@ -1,6 +1,6 @@
 ///|
 /// Get a level by global index (0-24)
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => pine_1()
     1 => pine_2()

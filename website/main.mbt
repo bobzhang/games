@@ -41,13 +41,13 @@ fn update(msg : Msg, model : Model) -> Model {
 }
 
 ///|
-fn view(dispatch : @rabbita.Dispatch[Msg], model : Model) -> @rabbita.Html {
+fn view(dispatch : @rabbita.Emit[Msg], model : Model) -> @rabbita.Html {
   // Always show main view - games open in new tab via direct navigation
   main_view(dispatch, model)
 }
 
 ///|
-fn main_view(dispatch : @rabbita.Dispatch[Msg], model : Model) -> @rabbita.Html {
+fn main_view(dispatch : @rabbita.Emit[Msg], model : Model) -> @rabbita.Html {
   let is_searching = model.search != ""
   let is_filtered = model.category != "all"
   div(class="app", [
@@ -70,10 +70,7 @@ fn main_view(dispatch : @rabbita.Dispatch[Msg], model : Model) -> @rabbita.Html 
 }
 
 ///|
-fn render_header(
-  dispatch : @rabbita.Dispatch[Msg],
-  model : Model,
-) -> @rabbita.Html {
+fn render_header(dispatch : @rabbita.Emit[Msg], model : Model) -> @rabbita.Html {
   header(class="site-header", [
     div(class="header-inner", [
       div(class="logo", [
@@ -136,7 +133,7 @@ fn render_hero() -> @rabbita.Html {
 }
 
 ///|
-fn render_featured(dispatch : @rabbita.Dispatch[Msg]) -> @rabbita.Html {
+fn render_featured(dispatch : @rabbita.Emit[Msg]) -> @rabbita.Html {
   let games = get_all_games()
   let featured : Array[GameInfo] = []
   for i in 0..<games.length() {
@@ -155,7 +152,7 @@ fn render_featured(dispatch : @rabbita.Dispatch[Msg]) -> @rabbita.Html {
 
 ///|
 fn featured_card(
-  _dispatch : @rabbita.Dispatch[Msg],
+  _dispatch : @rabbita.Emit[Msg],
   game : GameInfo,
 ) -> @rabbita.Html {
   a(
@@ -196,7 +193,7 @@ fn featured_card(
 
 ///|
 fn render_categories(
-  dispatch : @rabbita.Dispatch[Msg],
+  dispatch : @rabbita.Emit[Msg],
   model : Model,
 ) -> @rabbita.Html {
   let categories = [
@@ -225,7 +222,7 @@ fn render_categories(
 
 ///|
 fn render_game_grid(
-  dispatch : @rabbita.Dispatch[Msg],
+  dispatch : @rabbita.Emit[Msg],
   model : Model,
 ) -> @rabbita.Html {
   let games = get_filtered_games(model)
@@ -236,10 +233,7 @@ fn render_game_grid(
 }
 
 ///|
-fn game_card(
-  _dispatch : @rabbita.Dispatch[Msg],
-  game : GameInfo,
-) -> @rabbita.Html {
+fn game_card(_dispatch : @rabbita.Emit[Msg], game : GameInfo) -> @rabbita.Html {
   a(class="game-card", href="games/\{game.id}/\{game.id}.html", escape=true, [
     // Mini thumbnail with gradient + icon
     div(

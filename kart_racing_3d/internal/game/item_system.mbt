@@ -126,7 +126,7 @@ pub fn check_dropped_item_collisions(game : @types.Game) -> Unit {
 // Apply banana peel hit effect - causes spin
 
 ///|
-fn @types.Game::apply_banana_hit(game : @types.Game, kart_idx : Int) -> Unit {
+fn @types.Game::apply_banana_hit(game : @types.Game, kart_idx : Int32) -> Unit {
   let kart = game.karts[kart_idx]
   kart.spin_timer = @types.spin_duration
   kart.speed = kart.speed * 0.4
@@ -155,7 +155,10 @@ fn @types.Game::apply_banana_hit(game : @types.Game, kart_idx : Int) -> Unit {
 // Apply oil slick hit effect - causes sliding and speed loss
 
 ///|
-fn @types.Game::apply_oil_slick_hit(game : @types.Game, kart_idx : Int) -> Unit {
+fn @types.Game::apply_oil_slick_hit(
+  game : @types.Game,
+  kart_idx : Int32,
+) -> Unit {
   let kart = game.karts[kart_idx]
   kart.stunned_timer = 1.2
   kart.speed = kart.speed * 0.5

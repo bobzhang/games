@@ -54,10 +54,10 @@ pub fn draw_grid(game : @types.Game) -> Unit {
 ///|
 fn draw_weather_icon(
   weather : @types.WeatherState,
-  x : Int,
-  y : Int,
-  cs : Int,
-  frame : Int,
+  x : Int32,
+  y : Int32,
+  cs : Int32,
+  frame : Int32,
 ) -> Unit {
   let cx = x + cs / 2
   let cy = y + cs / 2
@@ -180,10 +180,10 @@ fn draw_weather_icon(
 ///|
 fn draw_target_indicator(
   tile : @types.Tile,
-  x : Int,
-  y : Int,
-  cs : Int,
-  frame : Int,
+  x : Int32,
+  y : Int32,
+  cs : Int32,
+  frame : Int32,
 ) -> Unit {
   let pulse = @types.sinf(Float::from_int(frame) * 0.08) * 0.3 + 0.7
   let alpha = (pulse * 200.0).to_int()

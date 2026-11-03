@@ -11,8 +11,8 @@ pub fn make_ocean_grid() -> Array[Array[@types.Tile]] {
 ///|
 pub fn set_tile(
   grid : Array[Array[@types.Tile]],
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   tile : @types.Tile,
 ) -> Unit {
   grid[y][x] = tile
@@ -21,10 +21,10 @@ pub fn set_tile(
 ///|
 pub fn set_land_rect(
   grid : Array[Array[@types.Tile]],
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Unit {
   for dy in 0..<h {
     for dx in 0..<w {
@@ -34,7 +34,7 @@ pub fn set_land_rect(
 }
 
 ///|
-pub fn count_landmarks(grid : Array[Array[@types.Tile]]) -> Int {
+pub fn count_landmarks(grid : Array[Array[@types.Tile]]) -> Int32 {
   let mut count = 0
   for row in grid {
     for tile in row {

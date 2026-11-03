@@ -54,10 +54,10 @@ pub fn resolve_ecosystem(grid : @types.HexGrid) -> Array[Bool] {
 ///|
 fn apply_rules(
   current : @types.BiomeKind,
-  ocean_n : Int,
-  desert_n : Int,
-  forest_n : Int,
-  barren_n : Int,
+  ocean_n : Int32,
+  desert_n : Int32,
+  forest_n : Int32,
+  barren_n : Int32,
 ) -> @types.BiomeKind {
   ignore(barren_n)
   match current {
@@ -93,7 +93,7 @@ fn apply_rules(
 
 ///|
 /// Run multiple resolution steps, returning the changed tiles from the last step.
-pub fn resolve_n_steps(grid : @types.HexGrid, steps : Int) -> Array[Bool] {
+pub fn resolve_n_steps(grid : @types.HexGrid, steps : Int32) -> Array[Bool] {
   let mut last_changed : Array[Bool] = Array::make(
     grid.width * grid.height,
     false,
@@ -119,7 +119,7 @@ pub fn is_stable(grid : @types.HexGrid) -> Bool {
 
 ///|
 /// Count how many tiles would change in the next ecosystem step.
-pub fn count_pending_changes(grid : @types.HexGrid) -> Int {
+pub fn count_pending_changes(grid : @types.HexGrid) -> Int32 {
   let test_grid = @types.clone_grid(grid)
   let changed = resolve_ecosystem(test_grid)
   let mut count = 0
@@ -136,8 +136,8 @@ pub fn count_pending_changes(grid : @types.HexGrid) -> Int {
 /// Returns the number of steps taken and the final changed tiles.
 pub fn resolve_until_stable(
   grid : @types.HexGrid,
-  max_steps : Int,
-) -> (Int, Array[Bool]) {
+  max_steps : Int32,
+) -> (Int32, Array[Bool]) {
   let mut steps = 0
   let mut last_changed : Array[Bool] = Array::make(
     grid.width * grid.height,
@@ -166,11 +166,11 @@ pub fn resolve_until_stable(
 /// Returns an array of (grid_index, new_biome) for tiles that will change.
 pub fn preview_tile_changes(
   grid : @types.HexGrid,
-) -> Array[(Int, @types.BiomeKind)] {
+) -> Array[(Int32, @types.BiomeKind)] {
   let w = grid.width
   let h = grid.height
   let snapshot = @types.snapshot_biomes(grid)
-  let result : Array[(Int, @types.BiomeKind)] = []
+  let result : Array[(Int32, @types.BiomeKind)] = []
   for row in 0..<h {
     for col in 0..<w {
       let idx = @types.grid_index(col, row, w)
@@ -214,7 +214,7 @@ pub fn preview_tile_changes(
 /// Get a summary of what would happen in the next step.
 /// Returns (tiles_gaining_forest, tiles_losing_forest, tiles_gaining_desert,
 ///          tiles_losing_desert).
-pub fn preview_next_step(grid : @types.HexGrid) -> (Int, Int, Int, Int) {
+pub fn preview_next_step(grid : @types.HexGrid) -> (Int32, Int32, Int32, Int32) {
   let w = grid.width
   let h = grid.height
   let snapshot = @types.snapshot_biomes(grid)

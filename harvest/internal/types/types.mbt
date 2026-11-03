@@ -1,101 +1,108 @@
 ///|
+#derive(Debug)
 pub(all) struct Soil {
-  mut nitrogen : Int
-  mut phosphorus : Int
-  mut potassium : Int
-} derive(Debug)
+  mut nitrogen : Int32
+  mut phosphorus : Int32
+  mut potassium : Int32
+}
 
 ///|
 pub extend Soil with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Plot {
   mut crop : CropKind
   mut state : CropState
-  mut growth_turns : Int
+  mut growth_turns : Int32
   mut soil : Soil
   mut season_planted : Season
-} derive(Debug)
+}
 
 ///|
 pub extend Plot with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct CropInfo {
   name : String
   plant_season : Season?
-  growth_time : Int
+  growth_time : Int32
   harvest_season : Season
-  value : Int
-  n_cost : Int
-  p_cost : Int
-  k_cost : Int
-} derive(Debug)
+  value : Int32
+  n_cost : Int32
+  p_cost : Int32
+  k_cost : Int32
+}
 
 ///|
 pub extend CropInfo with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelGoal {
-  target_value : Int
-  bronze_threshold : Int
-  silver_threshold : Int
-  gold_threshold : Int
+  target_value : Int32
+  bronze_threshold : Int32
+  silver_threshold : Int32
+  gold_threshold : Int32
   hint : String
-  locked_plots : Array[(Int, Int)]
-  initial_soil : Array[Array[(Int, Int, Int)]]
-} derive(Debug)
+  locked_plots : Array[(Int32, Int32)]
+  initial_soil : Array[Array[(Int32, Int32, Int32)]]
+}
 
 ///|
 pub extend LevelGoal with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
-  mut value_earned : Int
-  mut target_value : Int
+  mut value_earned : Int32
+  mut target_value : Int32
   mut tier : Tier?
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct SeasonPlan {
   mut crops : Array[Array[CropKind]]
-} derive(Debug)
+}
 
 ///|
 pub extend SeasonPlan with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
-  mut level_index : Int
+  mut level_index : Int32
   mut grid : Array[Array[Plot]]
   mut season : Season
-  mut season_index : Int
+  mut season_index : Int32
   mut plans : Array[SeasonPlan]
-  mut planning_season : Int
+  mut planning_season : Int32
   mut selected_crop : CropKind
-  mut hover_col : Int
-  mut hover_row : Int
+  mut hover_col : Int32
+  mut hover_row : Int32
   mut hover_valid : Bool
-  mut total_value : Int
-  mut season_value : Int
+  mut total_value : Int32
+  mut season_value : Int32
   mut level_scores : Array[LevelScore?]
   mut message : String
   mut message_timer : Float
-  mut frame_count : Int
-  mut menu_selection : Int
+  mut frame_count : Int32
+  mut menu_selection : Int32
   mut sim_timer : Float
-  mut sim_season : Int
-  mut sim_step : Int
+  mut sim_season : Int32
+  mut sim_step : Int32
   mut fade_timer : Float
-  mut scroll_offset : Int
+  mut scroll_offset : Int32
   mut anim_timer : Float
   mut harvest_flash : Array[Array[Float]]
   mut growth_anim : Array[Array[Float]]
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

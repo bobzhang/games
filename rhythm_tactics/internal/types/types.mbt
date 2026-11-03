@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Cell {
-  x : Int
-  y : Int
-} derive(Eq, Debug)
+  x : Int32
+  y : Int32
+}
 
 ///|
 pub extend Cell with Eq::{not_equal, equal}
@@ -11,12 +12,13 @@ pub extend Cell with Eq::{not_equal, equal}
 pub extend Cell with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Tile {
   mut kind : TileKind
   mut has_item : Bool
-  mut item_kind : Int
+  mut item_kind : Int32
   mut item : ItemKind?
-} derive(Debug)
+}
 
 ///|
 pub extend Tile with Debug::{to_repr}
@@ -32,34 +34,35 @@ pub fn Tile::wall() -> Tile {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct Enemy {
-  id : Int
+  id : Int32
   mut active : Bool
   kind : EnemyKind
-  mut x : Int
-  mut y : Int
-  mut hp : Int
-  max_hp : Int
-  damage : Int
+  mut x : Int32
+  mut y : Int32
+  mut hp : Int32
+  max_hp : Int32
+  damage : Int32
   mut intent : EnemyIntent
   beat_pattern : Array[Bool]
-  mut pattern_idx : Int
+  mut pattern_idx : Int32
   mut is_elite : Bool
-  mut frozen_beats : Int
-  mut stunned_beats : Int
-} derive(Debug)
+  mut frozen_beats : Int32
+  mut stunned_beats : Int32
+}
 
 ///|
 pub extend Enemy with Debug::{to_repr}
 
 ///|
 pub fn Enemy::new(
-  id : Int,
+  id : Int32,
   kind : EnemyKind,
-  x : Int,
-  y : Int,
-  hp~ : Int,
-  damage~ : Int,
+  x : Int32,
+  y : Int32,
+  hp~ : Int32,
+  damage~ : Int32,
   beat_pattern~ : Array[Bool],
 ) -> Enemy {
   {
@@ -81,45 +84,47 @@ pub fn Enemy::new(
 }
 
 ///|
+#derive(Debug)
 pub(all) struct Weapon {
   kind : WeaponKind
-  damage : Int
-  range : Int
-  beat_cost : Int
+  damage : Int32
+  range : Int32
+  beat_cost : Int32
   name : String
-} derive(Debug)
+}
 
 ///|
 pub extend Weapon with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Player {
-  mut x : Int
-  mut y : Int
-  mut hp : Int
-  mut max_hp : Int
-  mut gold : Int
-  mut combo : Int
-  mut max_combo : Int
-  mut weapon_damage : Int
-  mut shield : Int
-  mut special_charges : Int
+  mut x : Int32
+  mut y : Int32
+  mut hp : Int32
+  mut max_hp : Int32
+  mut gold : Int32
+  mut combo : Int32
+  mut max_combo : Int32
+  mut weapon_damage : Int32
+  mut shield : Int32
+  mut special_charges : Int32
   mut beat_multiplier : Float
-  mut speed_boost_beats : Int
-  mut beat_freeze_beats : Int
+  mut speed_boost_beats : Int32
+  mut beat_freeze_beats : Int32
   mut weapon : WeaponKind
-  mut weapon_beat_counter : Int
+  mut weapon_beat_counter : Int32
   abilities : Array[AbilityKind]
-  mut consecutive_perfects : Int
+  mut consecutive_perfects : Int32
   mut facing : Direction
-  mut invincible_beats : Int
-  mut double_damage_beats : Int
-  mut mana : Int
-  mut max_mana : Int
+  mut invincible_beats : Int32
+  mut double_damage_beats : Int32
+  mut mana : Int32
+  mut max_mana : Int32
   spell_slots : SpellSlots
   learned_spells : Array[SpellKind]
-  mut floor_attacks : Int
-} derive(Debug)
+  mut floor_attacks : Int32
+}
 
 ///|
 pub extend Player with Debug::{to_repr}
@@ -156,17 +161,18 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct Grid {
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   tiles : Array[Tile]
-} derive(Debug)
+}
 
 ///|
 pub extend Grid with Debug::{to_repr}
 
 ///|
-pub fn Grid::new(width : Int, height : Int) -> Grid {
+pub fn Grid::new(width : Int32, height : Int32) -> Grid {
   let tiles : Array[Tile] = []
   for _ in 0..<(width * height) {
     tiles.push(Tile::floor())
@@ -175,18 +181,19 @@ pub fn Grid::new(width : Int, height : Int) -> Grid {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct BeatState {
   mut bpm : Float
   mut beat_timer : Float
-  mut beat_count : Int
+  mut beat_count : Int32
   mut beat_window : Float
   mut in_window : Bool
   mut last_rating : BeatRating
-  mut combo : Int
-  mut max_combo : Int
+  mut combo : Int32
+  mut max_combo : Int32
   mut perfect_window : Float
   mut good_window : Float
-} derive(Debug)
+}
 
 ///|
 pub extend BeatState with Debug::{to_repr}
@@ -208,19 +215,20 @@ pub fn BeatState::new(bpm : Float) -> BeatState {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct Floor {
   grid : Grid
   enemies : Array[Enemy]
-  floor_num : Int
-  exit_x : Int
-  exit_y : Int
-} derive(Debug)
+  floor_num : Int32
+  exit_x : Int32
+  exit_y : Int32
+}
 
 ///|
 pub extend Floor with Debug::{to_repr}
 
 ///|
-pub fn Floor::new(floor_num : Int) -> Floor {
+pub fn Floor::new(floor_num : Int32) -> Floor {
   {
     grid: Grid::new(grid_w, grid_h),
     enemies: [],
@@ -231,6 +239,7 @@ pub fn Floor::new(floor_num : Int) -> Floor {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct Particle {
   mut x : Float
   mut y : Float
@@ -238,34 +247,36 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut max_life : Float
-  r : Int
-  g : Int
-  b : Int
+  r : Int32
+  g : Int32
+  b : Int32
   mut size : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Particle with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct ShopEntry {
   kind : ShopItemKind
-  price : Int
+  price : Int32
   name : String
   desc : String
-} derive(Debug)
+}
 
 ///|
 pub extend ShopEntry with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct ScoreState {
-  mut base_kills : Int
-  mut beat_bonus : Int
-  mut combo_bonus : Int
-  mut floor_bonus : Int
-  mut total : Int
-} derive(Debug)
+  mut base_kills : Int32
+  mut beat_bonus : Int32
+  mut combo_bonus : Int32
+  mut floor_bonus : Int32
+  mut total : Int32
+}
 
 ///|
 pub extend ScoreState with Debug::{to_repr}
@@ -286,15 +297,16 @@ pub(all) struct FloorThemeData {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct ComboState {
   mut fever_active : Bool
-  mut fever_beats : Int
+  mut fever_beats : Int32
   mut frenzy_active : Bool
-  mut frenzy_beats : Int
+  mut frenzy_beats : Int32
   mut storm_triggered : Bool
   mut last_milestone : ComboMilestone
   mut milestone_flash_timer : Float
-} derive(Debug)
+}
 
 ///|
 pub extend ComboState with Debug::{to_repr}
@@ -313,25 +325,26 @@ pub fn ComboState::new() -> ComboState {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct MetaProgress {
-  mut best_score : Int
-  mut highest_combo : Int
-  mut floors_cleared : Int
-  mut bosses_defeated : Int
-  mut total_runs : Int
-  mut total_kills : Int
-  mut total_perfects : Int
+  mut best_score : Int32
+  mut highest_combo : Int32
+  mut floors_cleared : Int32
+  mut bosses_defeated : Int32
+  mut total_runs : Int32
+  mut total_kills : Int32
+  mut total_perfects : Int32
   unlocked_weapons : Array[WeaponKind]
-  floor_mastery : Array[Int]
+  floor_mastery : Array[Int32]
   run_history : Array[RunRecord]
-} derive(Debug)
+}
 
 ///|
 pub extend MetaProgress with Debug::{to_repr}
 
 ///|
 pub fn MetaProgress::new() -> MetaProgress {
-  let mastery : Array[Int] = []
+  let mastery : Array[Int32] = []
   for _ in 0..<max_floor {
     mastery.push(0)
   }
@@ -350,23 +363,25 @@ pub fn MetaProgress::new() -> MetaProgress {
 }
 
 ///|
+#derive(Debug)
 pub(all) struct RunRecord {
-  score : Int
-  max_combo : Int
-  floors : Int
+  score : Int32
+  max_combo : Int32
+  floors : Int32
   weapon : WeaponKind
   grade : ScoreGrade
-} derive(Debug)
+}
 
 ///|
 pub extend RunRecord with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct AbilityChoice {
   ability : AbilityKind
   name : String
   desc : String
-} derive(Debug)
+}
 
 // === Spell System ===
 
@@ -374,26 +389,28 @@ pub(all) struct AbilityChoice {
 pub extend AbilityChoice with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct SpellData {
   kind : SpellKind
   element : Element
   name : String
   desc : String
-  mana_cost : Int
-  beat_cooldown : Int
-  damage : Int
-  range : Int
-  aoe_radius : Int
-} derive(Debug)
+  mana_cost : Int32
+  beat_cooldown : Int32
+  damage : Int32
+  range : Int32
+  aoe_radius : Int32
+}
 
 ///|
 pub extend SpellData with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct SpellSlots {
   spells : Array[SpellKind?]
-  mut cooldowns : Array[Int]
-} derive(Debug)
+  mut cooldowns : Array[Int32]
+}
 
 ///|
 pub extend SpellSlots with Debug::{to_repr}
@@ -406,9 +423,10 @@ pub fn SpellSlots::new() -> SpellSlots {
 // === Curse / Run Modifier System ===
 
 ///|
+#derive(Debug)
 pub(all) struct CurseState {
   active_curses : Array[CurseKind]
-} derive(Debug)
+}
 
 ///|
 pub extend CurseState with Debug::{to_repr}
@@ -421,30 +439,33 @@ pub fn CurseState::new() -> CurseState {
 // === Achievement System ===
 
 ///|
+#derive(Debug)
 pub(all) struct Achievement {
   kind : AchievementKind
   name : String
   desc : String
   mut unlocked : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Achievement with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct AchievementState {
   achievements : Array[Achievement]
   toasts : Array[AchievementToast]
-} derive(Debug)
+}
 
 ///|
 pub extend AchievementState with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct AchievementToast {
   text : String
   mut timer : Float
-} derive(Debug)
+}
 
 ///|
 pub extend AchievementToast with Debug::{to_repr}
@@ -500,13 +521,14 @@ pub(all) struct DamageNumber {
   mut y : Float
   mut vy : Float
   mut life : Float
-  value : Int
+  value : Int32
   color : @raylib.Color
 }
 
 // === Weapon Visual Effects ===
 
 ///|
+#derive(Debug)
 pub(all) struct WeaponEffect {
   kind : WeaponKind
   mut x : Float
@@ -514,7 +536,7 @@ pub(all) struct WeaponEffect {
   direction : Direction
   mut timer : Float
   max_timer : Float
-} derive(Debug)
+}
 
 ///|
 pub extend WeaponEffect with Debug::{to_repr}
@@ -532,14 +554,15 @@ pub fn WeaponEffect::new(
 // === Boss Phase Tracking ===
 
 ///|
+#derive(Debug)
 pub(all) struct BossPhaseState {
   mut dragon_phase : BossPhase
   mut lich_phase : BossPhase
-  mut dragon_charge_cooldown : Int
-  mut lich_teleport_cooldown : Int
-  mut dragon_4dir_cooldown : Int
+  mut dragon_charge_cooldown : Int32
+  mut lich_teleport_cooldown : Int32
+  mut dragon_4dir_cooldown : Int32
   mut lich_double_summon : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend BossPhaseState with Debug::{to_repr}
@@ -559,21 +582,22 @@ pub fn BossPhaseState::new() -> BossPhaseState {
 // === Per-Floor Run Statistics ===
 
 ///|
+#derive(Debug)
 pub(all) struct FloorStats {
-  mut floor_num : Int
-  mut enemies_killed : Int
-  mut perfects_hit : Int
-  mut items_collected : Int
-  mut spells_cast : Int
-  mut damage_taken : Int
-  mut damage_dealt : Int
-} derive(Debug)
+  mut floor_num : Int32
+  mut enemies_killed : Int32
+  mut perfects_hit : Int32
+  mut items_collected : Int32
+  mut spells_cast : Int32
+  mut damage_taken : Int32
+  mut damage_dealt : Int32
+}
 
 ///|
 pub extend FloorStats with Debug::{to_repr}
 
 ///|
-pub fn FloorStats::new(floor_num : Int) -> FloorStats {
+pub fn FloorStats::new(floor_num : Int32) -> FloorStats {
   {
     floor_num,
     enemies_killed: 0,
@@ -588,15 +612,16 @@ pub fn FloorStats::new(floor_num : Int) -> FloorStats {
 // === Run Statistics Detail ===
 
 ///|
+#derive(Debug)
 pub(all) struct RunStats {
   floor_history : Array[FloorStats]
-  mut weapon_usage : Array[(WeaponKind, Int)]
-  mut spell_usage : Array[(SpellKind, Int)]
-  mut total_items : Int
-  mut total_spells_cast : Int
-  mut total_damage_dealt : Int
-  mut total_damage_taken : Int
-} derive(Debug)
+  mut weapon_usage : Array[(WeaponKind, Int32)]
+  mut spell_usage : Array[(SpellKind, Int32)]
+  mut total_items : Int32
+  mut total_spells_cast : Int32
+  mut total_damage_dealt : Int32
+  mut total_damage_taken : Int32
+}
 
 ///|
 pub extend RunStats with Debug::{to_repr}
@@ -627,10 +652,10 @@ pub(all) struct Game {
   player : Player
   beat : BeatState
   mut floor : Floor?
-  mut frame_count : Int
-  mut rng_state : Int
-  mut score : Int
-  mut floors_cleared : Int
+  mut frame_count : Int32
+  mut rng_state : Int32
+  mut score : Int32
+  mut floors_cleared : Int32
   mut message_text : String
   mut message_timer : Float
   mut anim_timer : Float
@@ -639,29 +664,29 @@ pub(all) struct Game {
   mut border_flash_timer : Float
   mut combo_scale : Float
   mut transition_timer : Float
-  mut transition_floor : Int
+  mut transition_floor : Int32
   mut boss_intro_timer : Float
   mut screen_shake : Float
   shop_items : Array[ShopEntry]
-  mut shop_cursor : Int
+  mut shop_cursor : Int32
   score_state : ScoreState
   mut is_boss_floor : Bool
   combo_state : ComboState
   meta : MetaProgress
   mut floor_theme : FloorThemeData?
   ability_choices : Array[AbilityChoice]
-  mut ability_cursor : Int
+  mut ability_cursor : Int32
   mut choosing_ability : Bool
   mut combo_visual_intensity : Float
-  mut run_perfects : Int
-  mut run_kills : Int
+  mut run_perfects : Int32
+  mut run_kills : Int32
   curses : CurseState
   achievements : AchievementState
   damage_numbers : Array[DamageNumber]
   trail_particles : Array[Particle]
   mut pending_death_explosions : Array[(Float, Float, @raylib.Color)]
   curse_offers : Array[CurseKind]
-  mut curse_cursor : Int
+  mut curse_cursor : Int32
   mut showing_curse_offer : Bool
   mut bpm_anim_value : Float
   mut bpm_anim_target : Float

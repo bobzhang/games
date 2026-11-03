@@ -89,7 +89,7 @@ fn draw_texture_cover(
 ///|
 /// Draws one symbol from the generated horizontal symbol sheet.
 fn draw_symbol_sprite(
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -122,8 +122,8 @@ fn draw_symbol_sprite(
 /// Draws text centered horizontally at the given y position.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -134,9 +134,9 @@ fn draw_center_text(
 /// Draws text right-aligned so its right edge touches x.
 fn draw_right_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -145,7 +145,7 @@ fn draw_right_text(
 
 ///|
 /// Returns a copy of `c` with alpha clamped to `[0, 255]`.
-fn a_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn a_col(c : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),
@@ -156,7 +156,7 @@ fn a_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
 
 ///|
 /// Returns the distinctive color assigned to a suspect index.
-fn suspect_col(index : Int) -> @raylib.Color {
+fn suspect_col(index : Int32) -> @raylib.Color {
   if index == 0 {
     @raylib.Color::new(236, 118, 124, 255)
   } else if index == 1 {
@@ -535,10 +535,10 @@ fn @types.Game::draw_cursor(game : @types.Game) -> Unit {
 ///|
 /// Draws a labeled horizontal progress bar with background, fill, and outline.
 fn draw_meter(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fg : @raylib.Color,
   label : String,
@@ -569,7 +569,7 @@ fn draw_meter(
 
 ///|
 /// Returns the count of currently active incidents.
-fn @types.Game::active_incident_count(game : @types.Game) -> Int {
+fn @types.Game::active_incident_count(game : @types.Game) -> Int32 {
   let mut count = 0
   for incident in game.incidents {
     if incident.active {
@@ -581,7 +581,7 @@ fn @types.Game::active_incident_count(game : @types.Game) -> Int {
 
 ///|
 /// Returns the number of fully completed evidence chains for `suspect`.
-fn @types.Game::completed_chains(game : @types.Game, suspect : Int) -> Int {
+fn @types.Game::completed_chains(game : @types.Game, suspect : Int32) -> Int32 {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
   }
@@ -598,7 +598,10 @@ fn @types.Game::completed_chains(game : @types.Game, suspect : Int) -> Int {
 
 ///|
 /// Returns the total confidence score for `suspect`.
-fn @types.Game::suspect_confidence(game : @types.Game, suspect : Int) -> Int {
+fn @types.Game::suspect_confidence(
+  game : @types.Game,
+  suspect : Int32,
+) -> Int32 {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
   }

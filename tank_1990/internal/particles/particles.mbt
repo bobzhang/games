@@ -1,6 +1,6 @@
 ///|
 /// Finds and returns the index of the first inactive particle slot, or -1 if all slots are full.
-fn @types.Game::alloc_particle(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle(game : @types.Game) -> Int32 {
   for i, slot in game.particles {
     if !slot.active {
       break i
@@ -46,7 +46,7 @@ pub fn spawn_spark_burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for _i in 0..<count {
     let angle = @types.rand_rangef(game, 0.0, 6.28318)

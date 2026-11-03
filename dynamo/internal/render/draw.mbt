@@ -1,5 +1,5 @@
 ///|
-fn alpha_color(r : Int, g : Int, b : Int, a : Int) -> @raylib.Color {
+fn alpha_color(r : Int32, g : Int32, b : Int32, a : Int32) -> @raylib.Color {
   @raylib.Color::new(r, g, b, a)
 }
 
@@ -101,7 +101,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_magnet_icon(cx : Int, cy : Int, size : Float) -> Unit {
+fn draw_magnet_icon(cx : Int32, cy : Int32, size : Float) -> Unit {
   let x = Float::from_int(cx)
   let y = Float::from_int(cy)
   let s = size * 0.5
@@ -223,7 +223,12 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star(cx : Int, cy : Int, radius : Float, color : @raylib.Color) -> Unit {
+fn draw_star(
+  cx : Int32,
+  cy : Int32,
+  radius : Float,
+  color : @raylib.Color,
+) -> Unit {
   let x = Float::from_int(cx)
   let y = Float::from_int(cy)
   let r = radius
@@ -570,7 +575,12 @@ fn draw_connections(state : @types.LevelState, game : @types.Game) -> Unit {
 }
 
 ///|
-fn wire_color(powered : Bool, time : Float, c : Int, r : Int) -> @raylib.Color {
+fn wire_color(
+  powered : Bool,
+  time : Float,
+  c : Int32,
+  r : Int32,
+) -> @raylib.Color {
   if powered {
     let pulse = @types.sinf(time + Float::from_int(c + r) * 0.5) * 0.3 + 0.7
     let rr = (Float::from_int(@types.color_wire_powered.r.to_int()) * pulse).to_int()

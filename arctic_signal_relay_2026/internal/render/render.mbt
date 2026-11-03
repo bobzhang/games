@@ -2,8 +2,8 @@
 /// Draws `text` horizontally centred at the given `y` coordinate with the specified font size and color.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -12,7 +12,7 @@ fn draw_center_text(
 
 ///|
 /// Returns a copy of color `c` with its alpha channel replaced by `a` (clamped to 0–255).
-fn col_a(c : @raylib.Color, a : Int) -> @raylib.Color {
+fn col_a(c : @raylib.Color, a : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),
@@ -24,10 +24,10 @@ fn col_a(c : @raylib.Color, a : Int) -> @raylib.Color {
 ///|
 /// Draws a filled rectangle only when both `w` and `h` are positive, used to avoid zero-size draw calls for the whiteout mask.
 fn draw_mask_rect(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   col : @raylib.Color,
 ) -> Unit {
   if w <= 0 || h <= 0 {
@@ -582,10 +582,10 @@ fn @types.Game::draw_whiteout(game : @types.Game) -> Unit {
 /// Draws a labelled resource bar with a filled region proportional to `value / maxv` inside a fixed-size rectangle.
 fn draw_bar(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   maxv : Float,
   col : @raylib.Color,
@@ -784,7 +784,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 /// Draws a single on-screen touch button rectangle with a label, adjusting fill color based on whether it is held and whether touch mode is active.
 fn draw_touch_btn(
   label : String,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   held : Bool,
   bright : Bool,
 ) -> Unit {
@@ -891,7 +891,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
 ///|
 /// Draws a UI button rectangle with a centred label, using brighter fill when `bold` and highlighted fill when `hover`.
 fn draw_button(
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   hover : Bool,
   bold : Bool,

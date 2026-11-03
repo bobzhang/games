@@ -2,7 +2,7 @@
 /// Returns the tile pattern bytes for the level at the given `index`.
 /// Each array contains 26 rows (matching `@types.map_tiles_h`),
 /// where each row is 26 bytes wide (matching `@types.map_tiles_w`).
-pub fn level_pattern(index : Int) -> Array[Bytes] {
+pub fn level_pattern(index : Int32) -> Array[Bytes] {
   match index % @types.map_pattern_count {
     0 =>
       [

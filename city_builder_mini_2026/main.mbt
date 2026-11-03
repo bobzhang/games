@@ -1,46 +1,46 @@
 ///|
 /// Grid width in number of columns.
-let gw : Int = 16
+let gw : Int32 = 16
 
 ///|
 /// Grid height in number of rows.
-let gh : Int = 12
+let gh : Int32 = 12
 
 ///|
 /// Size of each grid cell in pixels.
-let cell : Int = 44
+let cell : Int32 = 44
 
 ///|
 /// Horizontal pixel offset for the grid origin.
-let ox : Int = 36
+let ox : Int32 = 36
 
 ///|
 /// Vertical pixel offset for the grid origin.
-let oy : Int = 90
+let oy : Int32 = 90
 
 ///|
 /// Screen width computed from grid dimensions and horizontal offset.
-let sw : Int = ox * 2 + gw * cell
+let sw : Int32 = ox * 2 + gw * cell
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 700
+let sh : Int32 = 700
 
 ///|
 /// Returns the flat array index for a grid cell at column x, row y.
-fn gidx(x : Int, y : Int) -> Int {
+fn gidx(x : Int32, y : Int32) -> Int32 {
   y * gw + x
 }
 
 ///|
 /// Returns true if the given grid coordinates are within bounds.
-fn inb(x : Int, y : Int) -> Bool {
+fn inb(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < gw && y >= 0 && y < gh
 }
 
 ///|
 /// Returns the money cost to place the given zone tool type.
-fn zone_cost(tool : Int) -> Int {
+fn zone_cost(tool : Int32) -> Int32 {
   match tool {
     1 => 5 // road
     2 => 22 // residential
@@ -52,7 +52,7 @@ fn zone_cost(tool : Int) -> Int {
 
 ///|
 /// Returns the display color for a given zone type identifier.
-fn zone_color(zone : Int) -> @raylib.Color {
+fn zone_color(zone : Int32) -> @raylib.Color {
   match zone {
     1 => @raylib.darkgray
     2 => @raylib.green
@@ -64,7 +64,7 @@ fn zone_color(zone : Int) -> @raylib.Color {
 
 ///|
 /// Returns the display color for a given terrain type identifier.
-fn terrain_color(t : Int) -> @raylib.Color {
+fn terrain_color(t : Int32) -> @raylib.Color {
   if t == 1 {
     @raylib.Color::new(92, 92, 102, 255)
   } else {
@@ -74,8 +74,8 @@ fn terrain_color(t : Int) -> @raylib.Color {
 
 ///|
 /// Returns the number of road tiles orthogonally adjacent to the cell at (x, y).
-fn adjacent_roads(zone : Array[Int], x : Int, y : Int) -> Int {
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+fn adjacent_roads(zone : Array[Int32], x : Int32, y : Int32) -> Int32 {
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
   let mut count = 0
   for dir in dirs {
     let (dx, dy) = dir
@@ -90,7 +90,7 @@ fn adjacent_roads(zone : Array[Int], x : Int, y : Int) -> Int {
 
 ///|
 /// Regenerates the terrain and clears all zones to start a new city layout.
-fn regen_world(terrain : Array[Int], zone : Array[Int]) -> Unit {
+fn regen_world(terrain : Array[Int32], zone : Array[Int32]) -> Unit {
   for y in 0..<gh {
     for x in 0..<gw {
       let i = gidx(x, y)
@@ -114,8 +114,8 @@ fn main {
   let art = load_game_art()
   defer unload_game_art(art)
 
-  let terrain : Array[Int] = Array::make(gw * gh, 0)
-  let zone : Array[Int] = Array::make(gw * gh, 0)
+  let terrain : Array[Int32] = Array::make(gw * gh, 0)
+  let zone : Array[Int32] = Array::make(gw * gh, 0)
   regen_world(terrain, zone)
 
   let mut money = 420

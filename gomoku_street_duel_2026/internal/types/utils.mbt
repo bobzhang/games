@@ -17,19 +17,19 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Converts board coordinates to linear index.
-pub fn board_index(x : Int, y : Int) -> Int {
+pub fn board_index(x : Int32, y : Int32) -> Int32 {
   y * board_n + x
 }
 
 ///|
 /// Returns whether `(x, y)` lies inside the gomoku board.
-pub fn in_board(x : Int, y : Int) -> Bool {
+pub fn in_board(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < board_n && y >= 0 && y < board_n
 }
 
 ///|
 /// Reads cell occupant at `(x, y)` or `Empty` when out of bounds.
-pub fn cell_at(game : Game, x : Int, y : Int) -> Player {
+pub fn cell_at(game : Game, x : Int32, y : Int32) -> Player {
   if in_board(x, y) {
     game.board[board_index(x, y)]
   } else {
@@ -39,7 +39,7 @@ pub fn cell_at(game : Game, x : Int, y : Int) -> Player {
 
 ///|
 /// Writes cell occupant when `(x, y)` is inside the board.
-pub fn set_cell(game : Game, x : Int, y : Int, p : Player) -> Unit {
+pub fn set_cell(game : Game, x : Int32, y : Int32, p : Player) -> Unit {
   if in_board(x, y) {
     game.board[board_index(x, y)] = p
   }
@@ -92,20 +92,20 @@ pub fn spawn_spark(
 
 ///|
 /// Calculates board placement metrics `(x, y, tile_size)` for rendering.
-pub fn board_metrics(game : Game) -> (Int, Int, Int) {
-  let area_x : Int = 24
-  let area_y : Int = 22
-  let area_w : Int = screen_w - 460
-  let area_h : Int = screen_h - 44
+pub fn board_metrics(game : Game) -> (Int32, Int32, Int32) {
+  let area_x : Int32 = 24
+  let area_y : Int32 = 22
+  let area_w : Int32 = screen_w - 460
+  let area_h : Int32 = screen_h - 44
 
-  let tile_x : Int = (area_w - 24) / board_n
-  let tile_y : Int = (area_h - 24) / board_n
+  let tile_x : Int32 = (area_w - 24) / board_n
+  let tile_y : Int32 = (area_h - 24) / board_n
 
-  let mut tile : Int = tile_x.min(tile_y)
+  let mut tile : Int32 = tile_x.min(tile_y)
   tile = tile.clamp(min=42, max=72)
 
-  let mut board_x : Int = area_x + (area_w - board_n * tile) / 2
-  let mut board_y : Int = area_y + (area_h - board_n * tile) / 2
+  let mut board_x : Int32 = area_x + (area_w - board_n * tile) / 2
+  let mut board_y : Int32 = area_y + (area_h - board_n * tile) / 2
 
   if game.shake_t > 0.0 {
     board_x = board_x + @raylib.get_random_value(-3, 3)
@@ -117,7 +117,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
 
 ///|
 /// Returns world-space center and tile size for a board cell.
-pub fn world_center(game : Game, x : Int, y : Int) -> (Float, Float, Float) {
+pub fn world_center(game : Game, x : Int32, y : Int32) -> (Float, Float, Float) {
   let (bx, by, tile) = board_metrics(game)
   let cx : Float = Float::from_int(bx + x * tile + tile / 2)
   let cy : Float = Float::from_int(by + y * tile + tile / 2)
@@ -128,9 +128,9 @@ pub fn world_center(game : Game, x : Int, y : Int) -> (Float, Float, Float) {
 /// Emits a burst of move-feedback sparks at board coordinates.
 pub fn burst_move(
   game : Game,
-  x : Int,
-  y : Int,
-  amount : Int,
+  x : Int32,
+  y : Int32,
+  amount : Int32,
   kind : SparkKind,
 ) -> Unit {
   let (cx, cy, tilef) = world_center(game, x, y)
@@ -155,10 +155,10 @@ pub fn burst_move(
 pub fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -172,11 +172,11 @@ pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_flag : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let mut hit : Bool = false
 
@@ -198,66 +198,66 @@ pub fn pointer_on_rect(
 
 ///|
 /// Left X coordinate of the side panel.
-pub fn panel_x() -> Int {
+pub fn panel_x() -> Int32 {
   screen_w - 420
 }
 
 ///|
 /// X center of the mobile D-pad.
-pub fn dpad_center_x() -> Int {
+pub fn dpad_center_x() -> Int32 {
   162
 }
 
 ///|
 /// Y center of the mobile D-pad.
-pub fn dpad_center_y() -> Int {
+pub fn dpad_center_y() -> Int32 {
   screen_h - 184
 }
 
 ///|
 /// Radius-like size unit for D-pad buttons.
-pub fn dpad_size() -> Int {
+pub fn dpad_size() -> Int32 {
   78
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the place button.
-pub fn place_button_rect() -> (Int, Int, Int, Int) {
+pub fn place_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 24, screen_h - 256, 170, 72)
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the hint button.
-pub fn hint_button_rect() -> (Int, Int, Int, Int) {
+pub fn hint_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 214, screen_h - 256, 170, 72)
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the undo button.
-pub fn undo_button_rect() -> (Int, Int, Int, Int) {
+pub fn undo_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 24, screen_h - 172, 170, 72)
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the clear-hint button.
-pub fn clear_button_rect() -> (Int, Int, Int, Int) {
+pub fn clear_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 214, screen_h - 172, 170, 72)
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the reset button.
-pub fn reset_button_rect() -> (Int, Int, Int, Int) {
+pub fn reset_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 24, screen_h - 88, 170, 72)
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the next-round button.
-pub fn next_button_rect() -> (Int, Int, Int, Int) {
+pub fn next_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x() + 24, screen_h - 88, 360, 72)
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the title start button.
-pub fn start_button_rect() -> (Int, Int, Int, Int) {
+pub fn start_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 230, screen_h - 158, 460, 96)
 }

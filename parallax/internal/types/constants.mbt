@@ -1,22 +1,22 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 // View cell sizes based on grid size
 
 ///|
-pub let cell_size_3 : Int = 40
+pub let cell_size_3 : Int32 = 40
 
 ///|
-pub let cell_size_4 : Int = 30
+pub let cell_size_4 : Int32 = 30
 
 ///|
-pub let cell_size_5 : Int = 24
+pub let cell_size_5 : Int32 = 24
 
 // Isometric projection
 
@@ -33,40 +33,40 @@ pub let iso_y_factor : Float = 0.5
 // Top view: top-left area
 
 ///|
-pub let view_top_x : Int = 40
+pub let view_top_x : Int32 = 40
 
 ///|
-pub let view_top_y : Int = 60
+pub let view_top_y : Int32 = 60
 
 // Front view: top-right area
 
 ///|
-pub let view_front_x : Int = 660
+pub let view_front_x : Int32 = 660
 
 ///|
-pub let view_front_y : Int = 60
+pub let view_front_y : Int32 = 60
 
 // Side view: bottom-left area
 
 ///|
-pub let view_side_x : Int = 40
+pub let view_side_x : Int32 = 40
 
 ///|
-pub let view_side_y : Int = 400
+pub let view_side_y : Int32 = 400
 
 // Isometric view: bottom-right area
 
 ///|
-pub let view_iso_x : Int = 660
+pub let view_iso_x : Int32 = 660
 
 ///|
-pub let view_iso_y : Int = 400
+pub let view_iso_y : Int32 = 400
 
 ///|
-pub let iso_center_x : Int = 900
+pub let iso_center_x : Int32 = 900
 
 ///|
-pub let iso_center_y : Int = 550
+pub let iso_center_y : Int32 = 550
 
 // Colors
 
@@ -153,7 +153,7 @@ pub let color_tier_sculptures : @raylib.Color = @raylib.Color::new(
 pub let color_complete : @raylib.Color = @raylib.Color::new(50, 255, 120, 255)
 
 ///|
-pub let total_levels : Int = 30
+pub let total_levels : Int32 = 30
 
 ///|
-pub let levels_per_tier : Int = 10
+pub let levels_per_tier : Int32 = 10

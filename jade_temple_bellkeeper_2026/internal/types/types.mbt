@@ -24,7 +24,7 @@ pub(all) struct Foe {
   mut life : Float
   mut phase : Float
   mut shot_cd : Float
-  mut reward : Int
+  mut reward : Int32
   mut marked : Bool
 }
 
@@ -38,7 +38,7 @@ pub(all) struct Bolt {
   mut vy : Float
   mut life : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -51,7 +51,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -62,7 +62,7 @@ pub(all) struct Ring {
   mut y : Float
   mut r : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -97,12 +97,13 @@ pub(all) struct Hero {
 
 ///|
 /// High-level state machine for scene flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
@@ -118,13 +119,13 @@ pub(all) struct Game {
   echoes : Array[Echo]
   hero : Hero
   mut state : GameState
-  mut stage : Int
-  mut stage_goal : Int
-  mut score : Int
-  mut best_score : Int
-  mut defeats : Int
-  mut rescued : Int
-  mut combo : Int
+  mut stage : Int32
+  mut stage_goal : Int32
+  mut score : Int32
+  mut best_score : Int32
+  mut defeats : Int32
+  mut rescued : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut shrine_hp : Float
   mut spirit : Float
@@ -148,7 +149,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

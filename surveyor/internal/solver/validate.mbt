@@ -98,9 +98,9 @@ pub fn all_constraints_satisfied(
 ///|
 pub fn compute_stars(
   level : @types.LevelDef,
-  fence_count : Int,
+  fence_count : Int32,
   satisfied : Bool,
-) -> Int {
+) -> Int32 {
   if !satisfied {
     return 0
   }

@@ -21,7 +21,7 @@ fn main {
 
   // Palettes: arrays of RGB triplets as ivec3
   // 3-BIT RGB
-  let palette0 : Array[(Int, Int, Int)] = [
+  let palette0 : Array[(Int32, Int32, Int32)] = [
     (0, 0, 0),
     (255, 0, 0),
     (0, 255, 0),
@@ -32,7 +32,7 @@ fn main {
     (255, 255, 255),
   ]
   // AMMO-8 (GameBoy-like)
-  let palette1 : Array[(Int, Int, Int)] = [
+  let palette1 : Array[(Int32, Int32, Int32)] = [
     (4, 12, 6),
     (17, 35, 24),
     (30, 58, 41),
@@ -43,7 +43,7 @@ fn main {
     (238, 255, 204),
   ]
   // RKBV (2-strip film)
-  let palette2 : Array[(Int, Int, Int)] = [
+  let palette2 : Array[(Int32, Int32, Int32)] = [
     (21, 25, 26),
     (138, 76, 88),
     (217, 98, 117),
@@ -54,7 +54,9 @@ fn main {
     (255, 245, 247),
   ]
 
-  let palettes : Array[Array[(Int, Int, Int)]] = [palette0, palette1, palette2]
+  let palettes : Array[Array[(Int32, Int32, Int32)]] = [
+    palette0, palette1, palette2,
+  ]
   let palette_text : Array[String] = [
     "3-BIT RGB", "AMMO-8 (GameBoy-like)", "RKBV (2-strip film)",
   ]

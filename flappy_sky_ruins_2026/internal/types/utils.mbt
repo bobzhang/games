@@ -64,11 +64,11 @@ pub fn pointer_on_rect(
   x : Float,
   y : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if !hold && touch_count <= 0 {
     return false

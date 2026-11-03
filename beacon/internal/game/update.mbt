@@ -62,7 +62,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn detect_level_click(game : @types.Game, mx : Int, my : Int) -> Int {
+fn detect_level_click(game : @types.Game, mx : Int32, my : Int32) -> Int32 {
   let start_y = 120 - game.scroll_offset * 200
   let mut cy = start_y
   for tier in 1..<=3 {
@@ -86,7 +86,7 @@ fn detect_level_click(game : @types.Game, mx : Int, my : Int) -> Int {
 }
 
 ///|
-fn start_level(game : @types.Game, index : Int) -> Unit {
+fn start_level(game : @types.Game, index : Int32) -> Unit {
   let data = @levels.get_level(index)
   let state = @types.new_level_state(data)
   game.current_level = index
@@ -162,7 +162,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn can_place_tower(state : @types.LevelState, col : Int, row : Int) -> Bool {
+fn can_place_tower(state : @types.LevelState, col : Int32, row : Int32) -> Bool {
   if !@types.in_grid(col, row) {
     return false
   }
@@ -177,8 +177,8 @@ fn place_tower(
   game : @types.Game,
   data : @types.LevelData,
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Unit {
   state.grid[row][col].kind = Tower
   state.towers_placed += 1
@@ -215,8 +215,8 @@ fn remove_tower(
   _game : @types.Game,
   data : @types.LevelData,
   state : @types.LevelState,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Unit {
   state.grid[row][col].kind = Empty
   state.towers_placed -= 1

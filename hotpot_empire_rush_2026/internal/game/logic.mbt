@@ -103,7 +103,7 @@ fn spawn_patience(elapsed : Float) -> Float {
 
 ///|
 /// Returns the count of currently active orders in the queue.
-fn @types.Game::active_order_count(game : @types.Game) -> Int {
+fn @types.Game::active_order_count(game : @types.Game) -> Int32 {
   let mut count = 0
   for i in 0..<@types.max_orders {
     if game.orders[i].active {
@@ -115,7 +115,7 @@ fn @types.Game::active_order_count(game : @types.Game) -> Int {
 
 ///|
 /// Removes the order at `idx`, shifting remaining orders left and clearing the tail slot.
-fn @types.Game::remove_order_at(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::remove_order_at(game : @types.Game, idx : Int32) -> Unit {
   if idx < 0 || idx >= @types.max_orders {
     return
   }
@@ -188,7 +188,7 @@ fn @types.Game::spawn_order(game : @types.Game) -> Bool {
 
 ///|
 /// Moves the cursor by `(dx, dy)` within grid bounds and updates the HUD message.
-fn @types.Game::move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
+fn @types.Game::move_cursor(game : @types.Game, dx : Int32, dy : Int32) -> Unit {
   game.cursor_x = (game.cursor_x + dx).clamp(min=0, max=@types.station_cols - 1)
   game.cursor_y = (game.cursor_y + dy).clamp(min=0, max=@types.station_rows - 1)
   @types.set_message(

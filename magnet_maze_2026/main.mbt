@@ -1,52 +1,52 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1220
+let sw : Int32 = 1220
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Grid width in cells.
-let gw : Int = 14
+let gw : Int32 = 14
 
 ///|
 /// Grid height in cells.
-let gh : Int = 10
+let gh : Int32 = 10
 
 ///|
 /// Size of each grid cell in pixels.
-let cell : Int = 64
+let cell : Int32 = 64
 
 ///|
 /// Horizontal pixel offset of the grid origin.
-let ox : Int = 162
+let ox : Int32 = 162
 
 ///|
 /// Vertical pixel offset of the grid origin.
-let oy : Int = 104
+let oy : Int32 = 104
 
 ///|
 /// Maximum number of magnetic orbs on the board at once.
-let max_orbs : Int = 4
+let max_orbs : Int32 = 4
 
 ///|
 /// Represents a magnetic orb with its board position and active state.
 struct Orb {
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
   active : Bool
 }
 
 ///|
 /// Converts 2D grid coordinates into a flat array index.
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * gw + x
 }
 
 ///|
 /// Returns the sign of an integer as -1, 0, or 1.
-fn signi(x : Int) -> Int {
+fn signi(x : Int32) -> Int32 {
   if x < 0 {
     -1
   } else if x > 0 {
@@ -58,7 +58,7 @@ fn signi(x : Int) -> Int {
 
 ///|
 /// Returns true when the given grid coordinates are within the playfield.
-fn in_bounds(x : Int, y : Int) -> Bool {
+fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < gw && y >= 0 && y < gh
 }
 
@@ -67,10 +67,10 @@ fn in_bounds(x : Int, y : Int) -> Bool {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -96,18 +96,18 @@ fn clear_orbs(orbs : Array[Orb]) -> Unit {
 
 ///|
 /// Places orb `i` at board position (x, y) and marks it active.
-fn set_orb(orbs : Array[Orb], i : Int, x : Int, y : Int) -> Unit {
+fn set_orb(orbs : Array[Orb], i : Int32, x : Int32, y : Int32) -> Unit {
   orbs[i] = { x, y, active: true, }
 }
 
 ///|
 /// Records goal position `i` at board coordinates (x, y).
 fn set_goal(
-  goals_x : Array[Int],
-  goals_y : Array[Int],
-  i : Int,
-  x : Int,
-  y : Int,
+  goals_x : Array[Int32],
+  goals_y : Array[Int32],
+  i : Int32,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   goals_x[i] = x
   goals_y[i] = y
@@ -115,7 +115,7 @@ fn set_goal(
 
 ///|
 /// Returns true when (x, y) is out of bounds or occupied by a wall.
-fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
+fn is_wall(walls : Array[Bool], x : Int32, y : Int32) -> Bool {
   if !in_bounds(x, y) {
     true
   } else {
@@ -125,7 +125,7 @@ fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns true if any active orb other than `skip` occupies position (x, y).
-fn orb_at(orbs : Array[Orb], skip : Int, x : Int, y : Int) -> Bool {
+fn orb_at(orbs : Array[Orb], skip : Int32, x : Int32, y : Int32) -> Bool {
   @utils.first_indexi_by(orbs, fn(i, orb) {
     i != skip && orb.active && orb.x == x && orb.y == y
   }) >=
@@ -135,10 +135,10 @@ fn orb_at(orbs : Array[Orb], skip : Int, x : Int, y : Int) -> Bool {
 ///|
 /// Returns true if any goal position matches (x, y).
 fn goal_at(
-  goals_x : Array[Int],
-  goals_y : Array[Int],
-  x : Int,
-  y : Int,
+  goals_x : Array[Int32],
+  goals_y : Array[Int32],
+  x : Int32,
+  y : Int32,
 ) -> Bool {
   let mut found = false
   for i in 0..<goals_x.length() {
@@ -153,9 +153,9 @@ fn goal_at(
 /// Counts how many active orbs are currently sitting on a goal position.
 fn goals_completed(
   orbs : Array[Orb],
-  goals_x : Array[Int],
-  goals_y : Array[Int],
-) -> Int {
+  goals_x : Array[Int32],
+  goals_y : Array[Int32],
+) -> Int32 {
   let mut c = 0
   for orb in orbs {
     if orb.active && goal_at(goals_x, goals_y, orb.x, orb.y) {
@@ -169,8 +169,8 @@ fn goals_completed(
 /// Returns true when every active orb rests on a goal, completing the level.
 fn all_orbs_on_goals(
   orbs : Array[Orb],
-  goals_x : Array[Int],
-  goals_y : Array[Int],
+  goals_x : Array[Int32],
+  goals_y : Array[Int32],
 ) -> Bool {
   goals_completed(orbs, goals_x, goals_y) == orbs.length()
 }
@@ -178,12 +178,12 @@ fn all_orbs_on_goals(
 ///|
 /// Initialises walls, orbs, and goals for the given level, returning the player start position and turn budget.
 fn setup_level(
-  level : Int,
+  level : Int32,
   walls : Array[Bool],
   orbs : Array[Orb],
-  goals_x : Array[Int],
-  goals_y : Array[Int],
-) -> (Int, Int, Int) {
+  goals_x : Array[Int32],
+  goals_y : Array[Int32],
+) -> (Int32, Int32, Int32) {
   clear_walls(walls)
   clear_orbs(orbs)
 
@@ -281,11 +281,11 @@ fn setup_level(
 fn try_move_player(
   walls : Array[Bool],
   orbs : Array[Orb],
-  px : Int,
-  py : Int,
-  dx : Int,
-  dy : Int,
-) -> (Int, Int, Bool) {
+  px : Int32,
+  py : Int32,
+  dx : Int32,
+  dy : Int32,
+) -> (Int32, Int32, Bool) {
   let nx = px + dx
   let ny = py + dy
   if !in_bounds(nx, ny) || is_wall(walls, nx, ny) || orb_at(orbs, -1, nx, ny) {
@@ -300,10 +300,10 @@ fn try_move_player(
 fn apply_pulse(
   orbs : Array[Orb],
   walls : Array[Bool],
-  px : Int,
-  py : Int,
+  px : Int32,
+  py : Int32,
   attract : Bool,
-) -> Int {
+) -> Int32 {
   let mut moved = 0
 
   for i in 0..<orbs.length() {
@@ -365,8 +365,8 @@ fn main {
   let orbs : Array[Orb] = Array::makei(max_orbs, fn(_i) {
     { x: 0, y: 0, active: false, }
   })
-  let goals_x : Array[Int] = Array::make(max_orbs, 0)
-  let goals_y : Array[Int] = Array::make(max_orbs, 0)
+  let goals_x : Array[Int32] = Array::make(max_orbs, 0)
+  let goals_y : Array[Int32] = Array::make(max_orbs, 0)
 
   let mut level = 1
   let mut px = 0

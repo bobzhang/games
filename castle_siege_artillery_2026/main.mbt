@@ -1,14 +1,14 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Y-coordinate of the ground surface where castles stand.
-let ground_y : Int = 640
+let ground_y : Int32 = 640
 
 ///|
 /// Downward acceleration applied to projectiles in pixels per second squared.
@@ -16,31 +16,31 @@ let gravity : Float = 360.0
 
 ///|
 /// Width of each castle in pixels.
-let castle_w : Int = 120
+let castle_w : Int32 = 120
 
 ///|
 /// Height of each castle in pixels.
-let castle_h : Int = 130
+let castle_h : Int32 = 130
 
 ///|
 /// X-coordinate of the player's castle.
-let player_x : Int = 90
+let player_x : Int32 = 90
 
 ///|
 /// X-coordinate of the enemy's castle.
-let enemy_x : Int = sw - 210
+let enemy_x : Int32 = sw - 210
 
 ///|
 /// X-coordinate of the left edge of the central mountain obstacle.
-let mountain_x : Int = sw / 2 - 72
+let mountain_x : Int32 = sw / 2 - 72
 
 ///|
 /// Width of the central mountain obstacle in pixels.
-let mountain_w : Int = 144
+let mountain_w : Int32 = 144
 
 ///|
 /// Height of the central mountain obstacle in pixels.
-let mountain_h : Int = 220
+let mountain_h : Int32 = 220
 
 ///|
 /// Clamps a float value to the inclusive range [lo, hi].
@@ -59,10 +59,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -112,7 +112,7 @@ fn launch(
 
 ///|
 /// Calculates the blast damage dealt to a castle center based on the explosion's distance from it.
-fn blast_damage(ex : Float, ey : Float, cx : Float, cy : Float) -> Int {
+fn blast_damage(ex : Float, ey : Float, cx : Float, cy : Float) -> Int32 {
   let dx = ex - cx
   let dy = ey - cy
   let d = @math.hypotf(dx, dy)

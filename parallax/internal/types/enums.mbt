@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,11 +23,12 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ViewKind {
   Top
   Front
   Side
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ViewKind with Eq::{not_equal, equal}
@@ -43,10 +45,11 @@ pub impl Show for ViewKind with fn output(self, logger) {
 pub extend ViewKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Editing
   Complete
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -63,11 +66,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Shapes
   Structures
   Sculptures
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

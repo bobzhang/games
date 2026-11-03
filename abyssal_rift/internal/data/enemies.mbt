@@ -1,17 +1,20 @@
 ///|
 pub(all) struct EnemyStats {
-  hp : Int
+  hp : Int32
   speed : Float
-  damage : Int
+  damage : Int32
   attack_range : Float
   attack_cooldown : Float
   radius : Float
   sight_range : Float
-  reward_gold : Int
+  reward_gold : Int32
 }
 
 ///|
-pub fn get_enemy_stats(kind : @types.EnemyKind, floor_num : Int) -> EnemyStats {
+pub fn get_enemy_stats(
+  kind : @types.EnemyKind,
+  floor_num : Int32,
+) -> EnemyStats {
   let floor_bonus = (floor_num - 1) * 2
   match kind {
     Slime =>

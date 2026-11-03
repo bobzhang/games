@@ -1,26 +1,26 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1366
+pub let screen_w : Int32 = 1366
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 768
+pub let screen_h : Int32 = 768
 
 ///|
 /// Target frame rate used by the game loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Number of stages in the full parkour trial.
-pub let stage_count : Int = 3
+pub let stage_count : Int32 = 3
 
 ///|
 /// Maximum solid/hazard tiles allocated.
-pub let max_tiles : Int = 128
+pub let max_tiles : Int32 = 128
 
 ///|
 /// Maximum checkpoints allocated.
-pub let max_checkpoints : Int = 12
+pub let max_checkpoints : Int32 = 12
 
 ///|
 /// Player collider width in world units.
@@ -112,7 +112,7 @@ pub let stage_fail_y_pad : Float = 210.0
 
 ///|
 /// Returns initial timer budget for a stage index.
-pub fn stage_initial_time(stage : Int) -> Float {
+pub fn stage_initial_time(stage : Int32) -> Float {
   if stage <= 1 {
     42.0
   } else if stage == 2 {
@@ -124,7 +124,7 @@ pub fn stage_initial_time(stage : Int) -> Float {
 
 ///|
 /// Returns checkpoint bonus seconds granted on stage clear.
-pub fn stage_clear_bonus(stage : Int) -> Int {
+pub fn stage_clear_bonus(stage : Int32) -> Int32 {
   if stage == 1 {
     9
   } else if stage == 2 {

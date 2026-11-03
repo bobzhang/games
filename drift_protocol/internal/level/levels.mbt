@@ -109,7 +109,7 @@ fn level_8() -> @types.Level {
 }
 
 ///|
-pub fn load_level(index : Int) -> @types.Level {
+pub fn load_level(index : Int32) -> @types.Level {
   match index {
     0 => level_1()
     1 => level_2()
@@ -124,7 +124,7 @@ pub fn load_level(index : Int) -> @types.Level {
 }
 
 ///|
-pub fn level_name(index : Int) -> String {
+pub fn level_name(index : Int32) -> String {
   match index {
     0 => "1: Lobby Infiltration"
     1 => "2: Server Room"
@@ -139,7 +139,7 @@ pub fn level_name(index : Int) -> String {
 }
 
 ///|
-pub fn level_tier(index : Int) -> @types.Tier {
+pub fn level_tier(index : Int32) -> @types.Tier {
   if index < 4 {
     Corporate
   } else {

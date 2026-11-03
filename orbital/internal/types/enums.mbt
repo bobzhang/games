@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,12 +23,13 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Aiming
   Flying
   Won
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -44,11 +46,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Launch
   Slingshot
   Navigation
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

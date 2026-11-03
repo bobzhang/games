@@ -373,7 +373,7 @@ fn move_player_y(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn handle_block_bump(game : @types.Game, tx : Int32, ty : Int32) -> Unit {
   let tile = @types.get_tile(game, tx, ty)
   let wx = @types.tile_to_world_x(tx) + @types.tile_sizef / 2.0
   let wy = @types.tile_to_world_y(ty)
@@ -466,7 +466,7 @@ fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
-fn kill_enemies_on_block(game : @types.Game, tx : Int, _ty : Int) -> Unit {
+fn kill_enemies_on_block(game : @types.Game, tx : Int32, _ty : Int32) -> Unit {
   let bx = @types.tile_to_world_x(tx) + @types.tile_sizef / 2.0
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]

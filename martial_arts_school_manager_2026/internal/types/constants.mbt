@@ -1,22 +1,22 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1600
+pub let screen_w : Int32 = 1600
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 960
+pub let screen_h : Int32 = 960
 
 ///|
 /// Fixed simulation and rendering target frequency.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Total number of assignable rooms.
-pub let room_count : Int = 4
+pub let room_count : Int32 = 4
 
 ///|
 /// Number of students managed each week.
-pub let student_count : Int = 6
+pub let student_count : Int32 = 6
 
 ///|
 /// Starting funds for a new run.
@@ -160,12 +160,13 @@ pub let burst_time_multiplier : Float = 3.5
 
 ///|
 /// Assignable room types for student placement.
+#derive(Eq)
 pub(all) enum Room {
   Rest
   Train
   Sparring
   Defense
-} derive(Eq)
+}
 
 ///|
 pub extend Room with Eq::{not_equal, equal}

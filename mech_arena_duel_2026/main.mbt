@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1120
+let sw : Int32 = 1120
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 /// A projectile fired by either the player mech or an enemy bot.
@@ -23,7 +23,7 @@ struct Bot {
   mut alive : Bool
   mut x : Float
   mut y : Float
-  mut hp : Int
+  mut hp : Int32
   mut fire_cd : Float
   mut dir_x : Float
   mut dir_y : Float
@@ -54,7 +54,7 @@ fn spawn_shot(
 
 ///|
 /// Activates the first inactive bot slot, placing it at a random arena position with HP and fire cooldown scaled to the current wave.
-fn spawn_bot(bots : Array[Bot], wave : Int) -> Unit {
+fn spawn_bot(bots : Array[Bot], wave : Int32) -> Unit {
   for bot in bots {
     if !bot.alive {
       bot.alive = true

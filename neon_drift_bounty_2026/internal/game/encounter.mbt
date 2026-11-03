@@ -171,7 +171,7 @@ fn @types.Game::spawn_boss(game : @types.Game, center : Float) -> Unit {
 ///|
 /// Returns balanced enemy HP for a given stage with base and per-stage gain.
 /// Uses diminishing returns to avoid late-game HP inflation.
-fn scaled_foe_hp(stage : Int, base : Float, per_stage : Float) -> Float {
+fn scaled_foe_hp(stage : Int32, base : Float, per_stage : Float) -> Float {
   let s = Float::from_int((stage - 1).clamp(min=0, max=20))
   // Diminishing returns: sqrt scaling after stage 4
   let linear = @types.minf(s, 3.0) * per_stage

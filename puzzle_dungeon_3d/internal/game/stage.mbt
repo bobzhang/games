@@ -3,7 +3,7 @@
 ///|
 /// Loads a floor layout into runtime state, resets per-floor progress trackers,
 /// and rebuilds derived systems such as decorations, lasers, and tutorial prompts.
-pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
+pub fn load_floor(game : @types.Game, floor : Int32) -> Unit {
   game.current_floor = floor
   game.current_world = @types.get_world_for_floor(floor)
   game.moves = 0
@@ -117,8 +117,8 @@ pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
 ///|
 fn parse_tile_char(
   ch : Byte,
-  _gx : Int,
-  _gy : Int,
+  _gx : Int32,
+  _gy : Int32,
 ) -> (@types.Tile, @types.EntityKind, Bool) {
   // Returns (tile_type, entity_type (EntityNone for none), is_player_spawn)
   if ch == b'#' {

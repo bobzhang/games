@@ -3,22 +3,22 @@
 
 ///|
 pub(all) struct MissionDef {
-  id : Int
+  id : Int32
   name : String
   description : String
   briefing : String
   debrief : String
   objective : @types.Objective
-  grid_template : Int // terrain layout id
-  enemy_types : Array[(@types.EnemyType, Int, Int)] // (type, x, y)
-  special_tiles : Array[(Int, Int, @types.TileKind)] // (x, y, tile kind)
-  hazard_tiles : Array[(Int, Int, @types.HazardKind)] // (x, y, hazard)
-  turns_limit : Int
-  reward_tier : Int // 1=basic, 2=good, 3=great
+  grid_template : Int32 // terrain layout id
+  enemy_types : Array[(@types.EnemyType, Int32, Int32)] // (type, x, y)
+  special_tiles : Array[(Int32, Int32, @types.TileKind)] // (x, y, tile kind)
+  hazard_tiles : Array[(Int32, Int32, @types.HazardKind)] // (x, y, hazard)
+  turns_limit : Int32
+  reward_tier : Int32 // 1=basic, 2=good, 3=great
 }
 
 ///|
-pub fn get_mission_def(id : Int) -> MissionDef {
+pub fn get_mission_def(id : Int32) -> MissionDef {
   match id {
     0 => mission_first_contact()
     1 => mission_minefield()
@@ -34,7 +34,7 @@ pub fn get_mission_def(id : Int) -> MissionDef {
 }
 
 ///|
-pub fn get_mission_count() -> Int {
+pub fn get_mission_count() -> Int32 {
   9
 }
 
@@ -247,7 +247,7 @@ fn mission_boss_hivemind() -> MissionDef {
 
 ///|
 /// Get the boss HP for a specific boss mission.
-pub fn get_boss_hp(mission_id : Int) -> Int {
+pub fn get_boss_hp(mission_id : Int32) -> Int32 {
   match mission_id {
     4 => 12 // Siege Engine - tanky
     8 => 10 // Hivemind - moderate but regenerates
@@ -257,6 +257,6 @@ pub fn get_boss_hp(mission_id : Int) -> Int {
 
 ///|
 /// Check if a mission is a boss mission.
-pub fn is_boss_mission(mission_id : Int) -> Bool {
+pub fn is_boss_mission(mission_id : Int32) -> Bool {
   mission_id == 4 || mission_id == 8
 }

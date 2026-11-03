@@ -1,17 +1,19 @@
 ///|
 /// Enumerates high-level states in the game flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Enumerates EntityKind variants used by runtime state.
+#derive(Eq)
 pub(all) enum EntityKind {
   FoeBike
   FoeDrone
@@ -20,7 +22,7 @@ pub(all) enum EntityKind {
   ItemCredit
   ItemBattery
   ItemHackcell
-} derive(Eq)
+}
 
 ///|
 pub extend EntityKind with Eq::{not_equal, equal}
@@ -41,7 +43,7 @@ pub(all) struct Entity {
   mut shot_cd : Float
   mut spin : Float
   mut cloak : Bool
-  mut reward : Int
+  mut reward : Int32
 }
 
 ///|
@@ -55,7 +57,7 @@ pub(all) struct Bullet {
   mut vy : Float
   mut life : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -68,7 +70,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -79,7 +81,7 @@ pub(all) struct GlowRing {
   mut y : Float
   mut r : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -92,7 +94,7 @@ pub(all) struct Afterimage {
   mut h : Float
   mut rot : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -121,14 +123,14 @@ pub(all) struct Game {
   images : Array[Afterimage]
   hero : Player
   mut state : GameState
-  mut stage : Int
+  mut stage : Int32
   mut distance : Float
   mut stage_goal : Float
-  mut score : Int
-  mut best_score : Int
-  mut credits : Int
-  mut kills : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut credits : Int32
+  mut kills : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut shield : Float
   mut energy : Float
@@ -157,10 +159,10 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
   hazards : Array[Hazard]
   mut weapon : WeaponUpgrade?
-  mut weapon_level : Int
+  mut weapon_level : Int32
   mut oil_t : Float
   mut stage_trans_t : Float
   mut boss_active : Bool

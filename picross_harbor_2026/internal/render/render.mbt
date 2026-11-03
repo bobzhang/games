@@ -21,8 +21,8 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   )
 
   for i in 0..<16 {
-    let y : Int = i * 66 - 20
-    let alpha : Int = 16 + i * 9 % 30
+    let y : Int32 = i * 66 - 20
+    let alpha : Int32 = 16 + i * 9 % 30
     @raylib.draw_rectangle(
       0,
       y,
@@ -40,7 +40,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the clamped font size for clue numbers based on the current tile size.
-fn board_font_size(tile : Int) -> Int {
+fn board_font_size(tile : Int32) -> Int32 {
   (tile / 2).clamp(min=14, max=24)
 }
 
@@ -75,12 +75,12 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
     game,
   )
 
-  let fs : Int = board_font_size(tile)
+  let fs : Int32 = board_font_size(tile)
 
-  let clue_w : Int = clue_l * tile
-  let clue_h : Int = clue_t * tile
-  let board_w : Int = game.grid_w * tile
-  let board_h : Int = game.grid_h * tile
+  let clue_w : Int32 = clue_l * tile
+  let clue_h : Int32 = clue_t * tile
+  let board_w : Int32 = game.grid_w * tile
+  let board_h : Int32 = game.grid_h * tile
 
   @raylib.draw_rectangle(
     origin_x - 10,
@@ -122,12 +122,12 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 
   for y in 0..<game.grid_h {
     let solved : Bool = @types.row_solved(game, y)
-    let count : Int = game.row_clue_counts[y]
+    let count : Int32 = game.row_clue_counts[y]
 
     for k in 0..<count {
-      let val : Int = game.row_clues[y * @types.max_board + (count - 1 - k)]
-      let tx : Int = board_x - (k + 1) * tile + tile / 2
-      let ty : Int = board_y + y * tile + tile / 2 - fs / 2
+      let val : Int32 = game.row_clues[y * @types.max_board + (count - 1 - k)]
+      let tx : Int32 = board_x - (k + 1) * tile + tile / 2
+      let ty : Int32 = board_y + y * tile + tile / 2 - fs / 2
       let text : String = if val == 0 { "-" } else { "\{val}" }
 
       @draw.draw_text(
@@ -146,12 +146,12 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 
   for x in 0..<game.grid_w {
     let solved : Bool = @types.col_solved(game, x)
-    let count : Int = game.col_clue_counts[x]
+    let count : Int32 = game.col_clue_counts[x]
 
     for k in 0..<count {
-      let val : Int = game.col_clues[x * @types.max_board + (count - 1 - k)]
-      let tx : Int = board_x + x * tile + tile / 2
-      let ty : Int = board_y - (k + 1) * tile + tile / 2 - fs / 2
+      let val : Int32 = game.col_clues[x * @types.max_board + (count - 1 - k)]
+      let tx : Int32 = board_x + x * tile + tile / 2
+      let ty : Int32 = board_y - (k + 1) * tile + tile / 2 - fs / 2
       let text : String = if val == 0 { "-" } else { "\{val}" }
 
       @draw.draw_text(
@@ -170,8 +170,8 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
-      let px : Int = board_x + x * tile
-      let py : Int = board_y + y * tile
+      let px : Int32 = board_x + x * tile
+      let py : Int32 = board_y + y * tile
 
       let sol : Bool = @types.solution_at(game, x, y)
       let state : @types.Cell = @types.cell_at(game, x, y)
@@ -246,8 +246,8 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
   }
 
   if game.state == Play {
-    let cx : Int = board_x + game.cursor_x * tile
-    let cy : Int = board_y + game.cursor_y * tile
+    let cx : Int32 = board_x + game.cursor_x * tile
+    let cy : Int32 = board_y + game.cursor_y * tile
     @raylib.draw_rectangle_lines_ex(
       @raylib.Rectangle::new(
         Float::from_int(cx + 1),
@@ -267,10 +267,10 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 /// Draws a labeled rectangular button, filling it with the accent color when active or a dark default when inactive.
 fn draw_button(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   active : Bool,
   accent : @raylib.Color,
 ) -> Unit {
@@ -289,7 +289,7 @@ fn draw_button(
     @raylib.Color::new(190, 218, 242, 236),
   )
 
-  let fs : Int = 28
+  let fs : Int32 = 28
   @draw.draw_text(
     label,
     x + w / 2 - @draw.measure_text(label, fs) / 2,
@@ -302,10 +302,10 @@ fn draw_button(
 ///|
 /// Draws the right-side HUD panel showing level info, stats, progress bar, keyboard reference, and action buttons.
 fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
-  let px : Int = @types.right_panel_x()
-  let py : Int = 20
-  let pw : Int = 396
-  let ph : Int = @types.screen_h - 40
+  let px : Int32 = @types.right_panel_x()
+  let py : Int32 = 20
+  let pw : Int32 = 396
+  let ph : Int32 = @types.screen_h - 40
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(12, 18, 28, 242))
   @raylib.draw_rectangle_lines(
@@ -373,10 +373,10 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   } else {
     Float::from_int(game.filled_correct) / Float::from_int(game.solution_total)
   }
-  let bar_x : Int = px + 20
-  let bar_y : Int = py + 314
-  let bar_w : Int = pw - 40
-  let bar_h : Int = 24
+  let bar_x : Int32 = px + 20
+  let bar_y : Int32 = py + 314
+  let bar_w : Int32 = pw - 40
+  let bar_h : Int32 = 24
 
   @raylib.draw_rectangle(
     bar_x,
@@ -567,9 +567,9 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
 ///|
 /// Draws the on-screen D-pad directional buttons, highlighting any that are currently pressed.
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  let cx : Int = @types.dpad_center_x()
-  let cy : Int = @types.dpad_center_y()
-  let s : Int = @types.dpad_size()
+  let cx : Int32 = @types.dpad_center_x()
+  let cy : Int32 = @types.dpad_center_y()
+  let s : Int32 = @types.dpad_size()
 
   let left_on : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -779,10 +779,10 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(6, 10, 18, 166),
   )
 
-  let pw : Int = 760
-  let ph : Int = 420
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 760
+  let ph : Int32 = 420
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 26, 36, 244))
   @raylib.draw_rectangle_lines(
@@ -871,10 +871,10 @@ fn @types.Game::draw_level_fail_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(10, 4, 4, 168),
   )
 
-  let pw : Int = 760
-  let ph : Int = 400
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 760
+  let ph : Int32 = 400
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(40, 20, 20, 244))
   @raylib.draw_rectangle_lines(
@@ -940,10 +940,10 @@ fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(6, 10, 16, 176),
   )
 
-  let pw : Int = 920
-  let ph : Int = 540
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 920
+  let ph : Int32 = 540
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 25, 35, 246))
   @raylib.draw_rectangle_lines(

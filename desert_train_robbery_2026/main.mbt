@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Y coordinate of the ground surface where the player and train run.
@@ -12,19 +12,19 @@ let ground_y : Float = 710.0
 
 ///|
 /// Number of train wagons in the level.
-let wagon_n : Int = 6
+let wagon_n : Int32 = 6
 
 ///|
 /// Maximum number of concurrent sheriff enemies.
-let sheriff_n : Int = 18
+let sheriff_n : Int32 = 18
 
 ///|
 /// Maximum number of concurrent bullets in the bullet pool.
-let bullet_n : Int = 320
+let bullet_n : Int32 = 320
 
 ///|
 /// Maximum number of concurrent particles in the particle pool.
-let particle_n : Int = 620
+let particle_n : Int32 = 620
 
 ///|
 /// Represents the player-controlled outlaw rider with position, health, ammo, and cooldown state.
@@ -33,9 +33,9 @@ struct Rider {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut hp : Int
+  mut hp : Int32
   mut stamina : Float
-  mut ammo : Int
+  mut ammo : Int32
   mut shoot_cd : Float
   mut reload_t : Float
   mut dash_t : Float
@@ -50,15 +50,15 @@ struct Wagon {
   mut x : Float
   mut len : Float
   mut roof_y : Float
-  mut loot : Int
+  mut loot : Int32
 }
 
 ///|
 /// Represents a sheriff enemy patrolling a wagon with health and shooting cooldown state.
 struct Sheriff {
-  mut wagon_idx : Int
+  mut wagon_idx : Int32
   mut rel_x : Float
-  mut hp : Int
+  mut hp : Int32
   mut shoot_cd : Float
   mut hit_cd : Float
   mut active : Bool
@@ -72,7 +72,7 @@ struct Bullet {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut owner : Int
+  mut owner : Int32
   mut active : Bool
 }
 
@@ -84,7 +84,7 @@ struct Particle {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -113,10 +113,10 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -172,7 +172,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for ps_elem in ps {
@@ -199,9 +199,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_particle(ps, x, y, speed, kind)
@@ -216,7 +216,7 @@ fn spawn_bullet(
   y : Float,
   dx : Float,
   dy : Float,
-  owner : Int,
+  owner : Int32,
   speed : Float,
 ) -> Unit {
   let d2 = dx * dx + dy * dy
@@ -297,13 +297,13 @@ fn reset_player(p : Rider) -> Unit {
 ///|
 /// Resets all entities for the given level and returns (target_loot, timer, train_speed, sheriff_cd).
 fn setup_level(
-  level : Int,
+  level : Int32,
   player : Rider,
   wagons : Array[Wagon],
   sheriffs : Array[Sheriff],
   bullets : Array[Bullet],
   particles : Array[Particle],
-) -> (Int, Float, Float, Float) {
+) -> (Int32, Float, Float, Float) {
   reset_player(player)
   init_wagons(wagons)
   clear_sheriffs(sheriffs)
@@ -324,7 +324,7 @@ fn setup_level(
 fn spawn_sheriff(
   sheriffs : Array[Sheriff],
   wagons : Array[Wagon],
-  level : Int,
+  level : Int32,
 ) -> Unit {
   let idx = @raylib.get_random_value(0, wagons.length() - 1)
 
@@ -351,7 +351,7 @@ fn spawn_sheriff(
 
 ///|
 /// Returns the index of the wagon the player is standing on top of, or -1 if none.
-fn player_support_wagon(player : Rider, wagons : Array[Wagon]) -> Int {
+fn player_support_wagon(player : Rider, wagons : Array[Wagon]) -> Int32 {
   for i in 0..<wagons.length(); idx = -1 {
     let left = wagons[i].x + 10.0
     let right = wagons[i].x + wagons[i].len - 10.0

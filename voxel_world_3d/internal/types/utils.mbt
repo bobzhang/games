@@ -18,7 +18,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 
 ///|
 /// Integer interpolation helper based on float interpolation.
-pub fn lerpi(a : Int, b : Int, t : Float) -> Int {
+pub fn lerpi(a : Int32, b : Int32, t : Float) -> Int32 {
   (Float::from_int(a) + Float::from_int(b - a) * t).to_int()
 }
 
@@ -29,7 +29,7 @@ pub fn lerpi(a : Int, b : Int, t : Float) -> Int {
 // Hash function for noise generation
 
 ///|
-fn hash_int(x_in : Int) -> Int {
+fn hash_int(x_in : Int32) -> Int32 {
   let mut x = x_in.reinterpret_as_uint()
   x = x ^ (x >> 16)
   x = x * 73244475U // 0x45d9f3b
@@ -47,7 +47,7 @@ fn hash_int(x_in : Int) -> Int {
 // 2D hash combining two coordinates
 
 ///|
-fn hash_2d(x : Int, z : Int) -> Int {
+fn hash_2d(x : Int32, z : Int32) -> Int32 {
   hash_int(x * 374761393 + z * 668265263 + 1274126177)
 }
 
@@ -80,7 +80,7 @@ pub fn value_noise_2d(x : Float, z : Float) -> Float {
 
 ///|
 /// Multi-octave fractal noise over value noise base.
-pub fn fractal_noise_2d(x : Float, z : Float, octaves : Int) -> Float {
+pub fn fractal_noise_2d(x : Float, z : Float, octaves : Int32) -> Float {
   let mut amplitude : Float = 1.0
   let mut frequency : Float = 1.0
   let mut value : Float = 0.0
@@ -155,7 +155,7 @@ pub fn moisture_noise(wx : Float, wz : Float) -> Float {
 
 ///|
 /// Returns biome id for world coordinates `(wx, wz)`.
-pub fn get_biome_at(wx : Int, wz : Int) -> Biome {
+pub fn get_biome_at(wx : Int32, wz : Int32) -> Biome {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
   let temp = temperature_noise(fx, fz)
@@ -179,7 +179,7 @@ pub fn get_biome_at(wx : Int, wz : Int) -> Biome {
 
 ///|
 /// Returns biome-specific terrain height at `(wx, wz)` for known biome id.
-pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Biome) -> Int {
+pub fn get_biome_terrain_height(wx : Int32, wz : Int32, biome : Biome) -> Int32 {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
   let n = terrain_noise(fx, fz)
@@ -223,7 +223,7 @@ pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Biome) -> Int {
 
 ///|
 /// Returns whether a tree should spawn at `(wx, wz)` for a biome.
-pub fn should_place_tree(wx : Int, wz : Int, biome : Biome) -> Bool {
+pub fn should_place_tree(wx : Int32, wz : Int32, biome : Biome) -> Bool {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
   let v = @math.sinf(fx * 0.73 + 5.1) * @math.cosf(fz * 0.91 + 3.7)
@@ -243,7 +243,7 @@ pub fn should_place_tree(wx : Int, wz : Int, biome : Biome) -> Bool {
 
 ///|
 /// Returns whether `(wx, wy, wz)` should be carved as cave space.
-pub fn is_cave(wx : Int, wy : Int, wz : Int) -> Bool {
+pub fn is_cave(wx : Int32, wy : Int32, wz : Int32) -> Bool {
   if wy < cave_min_height || wy > cave_max_height {
     return false
   }
@@ -260,11 +260,11 @@ pub fn is_cave(wx : Int, wy : Int, wz : Int) -> Bool {
 ///|
 /// Returns whether ore block `ore` should spawn at `(wx, wy, wz)`.
 pub fn should_place_ore(
-  wx : Int,
-  wy : Int,
-  wz : Int,
-  ore_type : Int,
-  rng : Int,
+  wx : Int32,
+  wy : Int32,
+  wz : Int32,
+  ore_type : Int32,
+  rng : Int32,
 ) -> Bool {
   let fx = Float::from_int(wx)
   let fy = Float::from_int(wy)
@@ -400,7 +400,7 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
       if height >= base_height - 1 && should_place_tree(wx, wz, local_biome) {
         if surface_block == block_grass || surface_block == block_snow {
           // Place trunk (variable height)
-          let trunk_height : Int = match local_biome {
+          let trunk_height : Int32 = match local_biome {
             Forest => 5
             Tundra => 3
             _ => 4
@@ -561,7 +561,12 @@ fn generate_structures_in_chunk(chunk : Chunk, game : Game) -> Unit {
 
 ///|
 /// Places a ruined camp: small cleared area with campfire and 1-2 chests.
-fn place_ruined_camp(chunk : Chunk, lx : Int, lz : Int, height : Int) -> Unit {
+fn place_ruined_camp(
+  chunk : Chunk,
+  lx : Int32,
+  lz : Int32,
+  height : Int32,
+) -> Unit {
   // Clear area (3x3) and place floor
   let neg2 = -2
   for dz in neg2..<=2 {
@@ -602,7 +607,12 @@ fn place_ruined_camp(chunk : Chunk, lx : Int, lz : Int, height : Int) -> Unit {
 
 ///|
 /// Places a watchtower: tall stone/wood column with ladders and view platform.
-fn place_watchtower(chunk : Chunk, lx : Int, lz : Int, height : Int) -> Unit {
+fn place_watchtower(
+  chunk : Chunk,
+  lx : Int32,
+  lz : Int32,
+  height : Int32,
+) -> Unit {
   let tower_height = 10
   // Four corner pillars
   for dy in 0..<tower_height {
@@ -672,9 +682,9 @@ fn place_watchtower(chunk : Chunk, lx : Int, lz : Int, height : Int) -> Unit {
 /// Places an abandoned mine entrance: tunnel entrance with rails and exposed ore.
 fn place_abandoned_mine(
   chunk : Chunk,
-  lx : Int,
-  lz : Int,
-  height : Int,
+  lx : Int32,
+  lz : Int32,
+  height : Int32,
 ) -> Unit {
   // Entrance: 3-wide, 3-tall opening going down into the ground
   let neg1 = -1
@@ -748,7 +758,7 @@ fn place_abandoned_mine(
 
 ///|
 /// Places a shrine: stone circle with rare loot in center.
-fn place_shrine(chunk : Chunk, lx : Int, lz : Int, height : Int) -> Unit {
+fn place_shrine(chunk : Chunk, lx : Int32, lz : Int32, height : Int32) -> Unit {
   // Stone ring (radius 3)
   let radius = 3
   let neg_r = -radius
@@ -795,10 +805,10 @@ fn place_shrine(chunk : Chunk, lx : Int, lz : Int, height : Int) -> Unit {
 /// Places a concentrated ore pocket underground.
 fn place_ore_pocket(
   chunk : Chunk,
-  lx : Int,
-  ly : Int,
-  lz : Int,
-  roll : Int,
+  lx : Int32,
+  ly : Int32,
+  lz : Int32,
+  roll : Int32,
 ) -> Unit {
   // Determine ore type based on depth and roll
   let ore_type = if ly < 12 {
@@ -854,7 +864,12 @@ fn place_ore_pocket(
 
 ///|
 /// Reads world block id at absolute coordinates, returning air out of bounds.
-pub fn get_world_block(game : Game, wx : Int, wy : Int, wz : Int) -> Int {
+pub fn get_world_block(
+  game : Game,
+  wx : Int32,
+  wy : Int32,
+  wz : Int32,
+) -> Int32 {
   if wy < 0 || wy >= chunk_y {
     return block_air
   }
@@ -874,10 +889,10 @@ pub fn get_world_block(game : Game, wx : Int, wy : Int, wz : Int) -> Int {
 /// Writes world block id at absolute coordinates if in bounds.
 pub fn set_world_block(
   game : Game,
-  wx : Int,
-  wy : Int,
-  wz : Int,
-  block : Int,
+  wx : Int32,
+  wy : Int32,
+  wz : Int32,
+  block : Int32,
 ) -> Unit {
   if wy < 0 || wy >= chunk_y {
     return
@@ -897,7 +912,7 @@ pub fn set_world_block(
 
 ///|
 /// Returns whether a block id is considered collision-solid.
-pub fn is_solid(block : Int) -> Bool {
+pub fn is_solid(block : Int32) -> Bool {
   block != block_air &&
   block != block_water &&
   block != block_flower_red &&
@@ -911,7 +926,7 @@ pub fn is_solid(block : Int) -> Bool {
 
 ///|
 /// Returns whether a block id should be rendered as transparent/translucent.
-pub fn is_transparent(block : Int) -> Bool {
+pub fn is_transparent(block : Int32) -> Bool {
   block == block_air ||
   block == block_water ||
   block == block_glass ||
@@ -929,7 +944,7 @@ pub fn is_transparent(block : Int) -> Bool {
 
 ///|
 /// Returns whether a block id is decorative foliage/prop content.
-pub fn is_decoration(block : Int) -> Bool {
+pub fn is_decoration(block : Int32) -> Bool {
   block == block_flower_red ||
   block == block_flower_yellow ||
   block == block_tall_grass ||
@@ -943,7 +958,7 @@ pub fn is_decoration(block : Int) -> Bool {
 
 ///|
 /// Returns whether a block id is affected by gravity physics.
-pub fn is_gravity_block(block : Int) -> Bool {
+pub fn is_gravity_block(block : Int32) -> Bool {
   block == block_sand || block == block_gravel
 }
 
@@ -951,7 +966,7 @@ pub fn is_gravity_block(block : Int) -> Bool {
 
 ///|
 /// Returns display name for a block id.
-pub fn block_name(kind : Int) -> String {
+pub fn block_name(kind : Int32) -> String {
   if kind == block_air {
     "Air"
   } else if kind == block_dirt {
@@ -1041,7 +1056,7 @@ pub fn block_name(kind : Int) -> String {
 
 ///|
 /// Returns display name for a tool id.
-pub fn tool_name(kind : Int) -> String {
+pub fn tool_name(kind : Int32) -> String {
   if kind == tool_hand {
     "Hand"
   } else if kind == tool_wooden_pickaxe {
@@ -1077,7 +1092,7 @@ pub fn tool_name(kind : Int) -> String {
 
 ///|
 /// Returns display name for an entity/mob id.
-pub fn entity_name(kind : Int) -> String {
+pub fn entity_name(kind : Int32) -> String {
   if kind == entity_pig {
     "Pig"
   } else if kind == entity_cow {
@@ -1112,7 +1127,7 @@ pub fn biome_name(kind : Biome) -> String {
 
 ///|
 /// Returns whether an item id represents a tool.
-pub fn is_tool_item(id : Int) -> Bool {
+pub fn is_tool_item(id : Int32) -> Bool {
   id == tool_wooden_pickaxe ||
   id == tool_stone_pickaxe ||
   id == tool_iron_pickaxe ||
@@ -1129,7 +1144,7 @@ pub fn is_tool_item(id : Int) -> Bool {
 
 ///|
 /// Returns the total count of an item across all inventory slots.
-pub fn Inventory::count_item(self : Inventory, item_id : Int) -> Int {
+pub fn Inventory::count_item(self : Inventory, item_id : Int32) -> Int32 {
   let mut total = 0
   for i in 0..<inventory_slots {
     if self.slots[i].item_id == item_id && self.slots[i].count > 0 {
@@ -1144,9 +1159,9 @@ pub fn Inventory::count_item(self : Inventory, item_id : Int) -> Int {
 /// Returns the number actually removed.
 pub fn Inventory::remove_item(
   self : Inventory,
-  item_id : Int,
-  count : Int,
-) -> Int {
+  item_id : Int32,
+  count : Int32,
+) -> Int32 {
   let mut remaining = count
   for i in 0..<inventory_slots {
     if remaining <= 0 {
@@ -1173,8 +1188,8 @@ pub fn Inventory::remove_item(
 /// Returns true if the inventory has room for the given item and count.
 pub fn Inventory::has_space_for(
   self : Inventory,
-  item_id : Int,
-  count : Int,
+  item_id : Int32,
+  count : Int32,
 ) -> Bool {
   let mut remaining = count
   // Check existing stacks
@@ -1208,7 +1223,7 @@ pub fn Inventory::has_space_for(
 
 ///|
 /// Returns mining duration (seconds) for block/tool pair.
-pub fn get_mining_time(block : Int, tool : Int) -> Float {
+pub fn get_mining_time(block : Int32, tool : Int32) -> Float {
   let base : Float = if block == block_dirt ||
     block == block_sand ||
     block == block_clay {
@@ -1259,7 +1274,7 @@ pub fn get_mining_time(block : Int, tool : Int) -> Float {
 
 ///|
 /// Returns the tool tier: 0=hand, 1=wood, 2=stone, 3=iron.
-pub fn get_tool_tier(tool : Int) -> Int {
+pub fn get_tool_tier(tool : Int32) -> Int32 {
   if tool == tool_wooden_pickaxe ||
     tool == tool_wooden_axe ||
     tool == tool_wooden_shovel ||
@@ -1284,7 +1299,7 @@ pub fn get_tool_tier(tool : Int) -> Int {
 /// Returns the minimum pickaxe tier needed to mine a block.
 /// 0 = hand, 1 = wood pick, 2 = stone pick, 3 = iron pick.
 /// Returns -1 if not an ore/hard block needing a pickaxe.
-pub fn required_pick_tier(block : Int) -> Int {
+pub fn required_pick_tier(block : Int32) -> Int32 {
   if block == block_stone || block == block_cobblestone {
     1
   } else if block == block_ore_iron {
@@ -1299,7 +1314,7 @@ pub fn required_pick_tier(block : Int) -> Int {
 ///|
 /// Returns whether a tool can mine a specific block at all.
 /// Wrong pickaxe tier for ore means the block won't drop.
-pub fn can_mine_block(tool : Int, block : Int) -> Bool {
+pub fn can_mine_block(tool : Int32, block : Int32) -> Bool {
   let required = required_pick_tier(block)
   if required <= 0 {
     return true
@@ -1317,7 +1332,7 @@ pub fn can_mine_block(tool : Int, block : Int) -> Bool {
 ///|
 /// Returns mining speed multiplier based on tool vs block match.
 /// Wrong tool = 4x slower. Correct tool class = bonus speed.
-pub fn mining_speed_multiplier(tool : Int, block : Int) -> Float {
+pub fn mining_speed_multiplier(tool : Int32, block : Int32) -> Float {
   let is_pick = tool == tool_wooden_pickaxe ||
     tool == tool_stone_pickaxe ||
     tool == tool_iron_pickaxe
@@ -1411,7 +1426,7 @@ pub fn is_near_furnace(game : Game) -> Bool {
 
 ///|
 /// Returns whether a block is placeable (includes workbench, furnace, chest).
-pub fn is_placeable_item(id : Int) -> Bool {
+pub fn is_placeable_item(id : Int32) -> Bool {
   id == item_workbench || id == item_furnace
 }
 
@@ -1419,7 +1434,7 @@ pub fn is_placeable_item(id : Int) -> Bool {
 
 ///|
 /// Returns dropped item id when a block is mined.
-pub fn get_block_drop(block : Int) -> Int {
+pub fn get_block_drop(block : Int32) -> Int32 {
   if block == block_stone {
     block_cobblestone
   } else if block == block_grass {
@@ -1447,7 +1462,7 @@ pub fn get_block_drop(block : Int) -> Int {
 
 ///|
 /// Returns whether an entity kind is hostile toward player.
-pub fn is_hostile(kind : Int) -> Bool {
+pub fn is_hostile(kind : Int32) -> Bool {
   kind == entity_zombie || kind == entity_skeleton || kind == entity_spider
 }
 
@@ -1455,7 +1470,7 @@ pub fn is_hostile(kind : Int) -> Bool {
 
 ///|
 /// Returns max health value for a given entity kind.
-pub fn get_entity_max_health(kind : Int) -> Int {
+pub fn get_entity_max_health(kind : Int32) -> Int32 {
   if kind == entity_pig {
     pig_health
   } else if kind == entity_cow {
@@ -1477,7 +1492,7 @@ pub fn get_entity_max_health(kind : Int) -> Int {
 
 ///|
 /// Advances game RNG and returns next pseudo-random integer.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -1513,7 +1528,7 @@ pub fn show_message(game : Game, text : String, duration : Float) -> Unit {
 
 ///|
 /// Returns whether face adjacent to block at `(wx, wy, wz)` should be visible.
-pub fn is_face_visible(game : Game, wx : Int, wy : Int, wz : Int) -> Bool {
+pub fn is_face_visible(game : Game, wx : Int32, wy : Int32, wz : Int32) -> Bool {
   let block = get_world_block(game, wx, wy, wz)
   is_transparent(block)
 }
@@ -1530,9 +1545,9 @@ pub fn spawn_particle(
   pvx : Float,
   pvy : Float,
   pvz : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   size : Float,
   lifetime : Float,
 ) -> Unit {
@@ -1563,12 +1578,12 @@ pub fn spawn_particle(
 /// Spawns a burst of break particles centered on a broken block.
 pub fn spawn_break_particles(
   game : Game,
-  wx : Int,
-  wy : Int,
-  wz : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  wx : Int32,
+  wy : Int32,
+  wz : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let cx = Float::from_int(wx) + 0.5
   let cy = Float::from_int(wy) + 0.5
@@ -1638,7 +1653,7 @@ pub fn facing_direction(yaw : Float) -> String {
 
 ///|
 /// Returns the maximum durability for a given tool id.
-pub fn get_tool_max_durability(tool : Int) -> Int {
+pub fn get_tool_max_durability(tool : Int32) -> Int32 {
   if tool == tool_wooden_pickaxe ||
     tool == tool_wooden_axe ||
     tool == tool_wooden_shovel ||
@@ -1684,10 +1699,10 @@ pub fn spawn_damage_number(
   x : Float,
   y : Float,
   z : Float,
-  amount : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  amount : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<damage_number_max {
     if !game.damage_numbers[i].active {
@@ -1712,12 +1727,12 @@ pub fn spawn_damage_number(
 /// Spawns a few small particles around the mined block as cracks progress.
 pub fn spawn_mining_crack_particles(
   game : Game,
-  wx : Int,
-  wy : Int,
-  wz : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  wx : Int32,
+  wy : Int32,
+  wz : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let cx = Float::from_int(wx) + 0.5
   let cy = Float::from_int(wy) + 0.5

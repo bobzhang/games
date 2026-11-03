@@ -11,7 +11,7 @@ pub fn push_camera_shake(game : @types.Game, amount : Float) -> Unit {
 
 ///|
 /// Returns an available particle slot index, or `-1` if full.
-pub fn allocate_particle_slot(list : Array[@types.Particle]) -> Int {
+pub fn allocate_particle_slot(list : Array[@types.Particle]) -> Int32 {
   @utils.first_index_by(list, fn(slot) { !slot.active })
 }
 
@@ -49,7 +49,7 @@ pub fn spawn_hit_spark(
   x : Float,
   y : Float,
   kind : @types.SparkKind,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   let color = match kind {
     SparkKindBlock => @raylib.Color::new(135, 186, 255, 255)

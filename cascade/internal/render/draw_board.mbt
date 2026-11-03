@@ -23,7 +23,7 @@ fn draw_board(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_topple_sequence(game : @types.Game, display_tick : Int) -> Unit {
+fn draw_topple_sequence(game : @types.Game, display_tick : Int32) -> Unit {
   // Show numbered sequence badges next to each domino that has toppled,
   // indicating the order in which they fell.
   let events = game.events
@@ -97,7 +97,7 @@ fn ease_out_bounce(t : Float) -> Float {
 }
 
 ///|
-fn draw_domino(d : @types.Domino, display_tick : Int) -> Unit {
+fn draw_domino(d : @types.Domino, display_tick : Int32) -> Unit {
   let sx = Float::from_int(@types.socket_to_screen_x(d.pos.x))
   let sy = Float::from_int(@types.socket_to_screen_y(d.pos.y))
   let angle = @types.orientation_angle(d.orientation)

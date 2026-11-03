@@ -1,5 +1,5 @@
 ///|
-pub fn handle_enemy_death(game : @types.Game, enemy_idx : Int) -> Unit {
+pub fn handle_enemy_death(game : @types.Game, enemy_idx : Int32) -> Unit {
   let e = game.enemies[enemy_idx]
   let p = game.player
   let syn = game.synergies
@@ -80,8 +80,8 @@ pub fn handle_enemy_death(game : @types.Game, enemy_idx : Int) -> Unit {
 ///|
 pub fn apply_damage_to_enemy(
   game : @types.Game,
-  enemy_idx : Int,
-  damage : Int,
+  enemy_idx : Int32,
+  damage : Int32,
   is_crit : Bool,
   knockback : Float,
 ) -> Unit {
@@ -296,10 +296,10 @@ fn spawn_chain_projectile(
   game : @types.Game,
   ox : Float,
   oy : Float,
-  base_damage : Int,
+  base_damage : Int32,
 ) -> Unit {
   let mut best_d2 : Float = 999999.0
-  let mut best_idx : Int = -1
+  let mut best_idx : Int32 = -1
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
     if !e.active {

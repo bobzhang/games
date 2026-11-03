@@ -1,42 +1,42 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Gameplay tuning constant for ring count.
-pub let ring_count : Int = 4
+pub let ring_count : Int32 = 4
 
 ///|
 /// Upper bound for max enemies in gameplay systems.
-pub let max_enemies : Int = 160
+pub let max_enemies : Int32 = 160
 
 ///|
 /// Upper bound for max bullets in gameplay systems.
-pub let max_bullets : Int = 240
+pub let max_bullets : Int32 = 240
 
 ///|
 /// Upper bound for max enemy bullets in gameplay systems.
-pub let max_enemy_bullets : Int = 260
+pub let max_enemy_bullets : Int32 = 260
 
 ///|
 /// Upper bound for max flares in gameplay systems.
-pub let max_flares : Int = 24
+pub let max_flares : Int32 = 24
 
 ///|
 /// Upper bound for max particles in gameplay systems.
-pub let max_particles : Int = 520
+pub let max_particles : Int32 = 520
 
 ///|
 /// Upper bound for max shocks in gameplay systems.
-pub let max_shocks : Int = 180
+pub let max_shocks : Int32 = 180
 
 ///|
 /// Spatial tuning constant for base radius.
@@ -112,18 +112,20 @@ pub let tau : Float = 6.28318530
 
 ///|
 /// Represents the current phase of the game lifecycle.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Classifies enemy behavior and visual style.
+#derive(Eq)
 pub(all) enum EnemyKind {
   /// Basic enemy: square shape, standard chase, moderate fire rate.
   Basic
@@ -131,23 +133,25 @@ pub(all) enum EnemyKind {
   Heavy
   /// Orbiter enemy: pulsing mine, offset orbit, contact damage.
   Orbiter
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies player bullet visual and behavior style.
+#derive(Eq)
 pub(all) enum BulletKind {
   /// Standard player bullet with cyan trail.
   Standard
-} derive(Eq)
+}
 
 ///|
 pub extend BulletKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies enemy bullet visual style based on firing enemy type.
+#derive(Eq)
 pub(all) enum EnemyBulletKind {
   /// Pink bullet fired by basic enemies.
   BasicShot
@@ -155,13 +159,14 @@ pub(all) enum EnemyBulletKind {
   HeavyShot
   /// Green bullet fired by orbiter enemies.
   OrbiterShot
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyBulletKind with Eq::{not_equal, equal}
 
 ///|
 /// Classifies particle visual style by color.
+#derive(Eq)
 pub(all) enum ParticleKind {
   /// Cyan spark from player fire.
   Spark
@@ -169,7 +174,7 @@ pub(all) enum ParticleKind {
   Flash
   /// Pink burst from damage.
   Damage
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}

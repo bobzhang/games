@@ -215,8 +215,8 @@ fn has_player_boat_art() -> Bool {
 ///|
 /// Draws a generated player or rival boat when available.
 fn draw_boat_art(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   scale : Float,
   hull : @raylib.Color,
   show_flag : Bool,
@@ -267,7 +267,7 @@ fn draw_boat_art(
 
 ///|
 /// Draws generated debris log art when available.
-fn draw_debris_art(x : Int, y : Int, w : Int, h : Int) -> Bool {
+fn draw_debris_art(x : Int32, y : Int32, w : Int32, h : Int32) -> Bool {
   match tex_debris_log.val {
     Some(texture) => {
       draw_texture_fit(
@@ -286,7 +286,7 @@ fn draw_debris_art(x : Int, y : Int, w : Int, h : Int) -> Bool {
 
 ///|
 /// Draws generated wave-ring art when available.
-fn draw_wave_art(x : Int, y : Int, r : Float) -> Bool {
+fn draw_wave_art(x : Int32, y : Int32, r : Float) -> Bool {
   match tex_wave_ring.val {
     Some(texture) => {
       draw_texture_fit(

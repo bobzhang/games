@@ -1,17 +1,17 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let alphabet_size : Int = 26
+pub let alphabet_size : Int32 = 26
 
 ///|
-pub let unmapped : Int = -1
+pub let unmapped : Int32 = -1
 
 // English letter frequencies (percent, A-Z)
 
@@ -82,77 +82,77 @@ pub let color_white : @raylib.Color = @raylib.Color::new(240, 245, 255, 255)
 // Layout constants
 
 ///|
-pub let msg_area_x : Int = 40
+pub let msg_area_x : Int32 = 40
 
 ///|
-pub let msg_area_y : Int = 60
+pub let msg_area_y : Int32 = 60
 
 ///|
-pub let msg_area_w : Int = 840
+pub let msg_area_w : Int32 = 840
 
 ///|
-pub let tool_panel_x : Int = 900
+pub let tool_panel_x : Int32 = 900
 
 ///|
-pub let tool_panel_w : Int = 360
+pub let tool_panel_w : Int32 = 360
 
 ///|
-pub let char_cell_w : Int = 28
+pub let char_cell_w : Int32 = 28
 
 ///|
-pub let char_cell_h : Int = 36
+pub let char_cell_h : Int32 = 36
 
 ///|
-pub let max_undo : Int = 100
+pub let max_undo : Int32 = 100
 
 // Tool panel shared layout (used by both update hit-testing and render)
 
 ///|
-pub let tool_panel_y : Int = 55
+pub let tool_panel_y : Int32 = 55
 
 ///|
-pub let tool_tab_h : Int = 30
+pub let tool_tab_h : Int32 = 30
 
 ///|
-pub let tool_content_offset_y : Int = 40
+pub let tool_content_offset_y : Int32 = 40
 
 ///|
-pub let swap_grid_offset_y : Int = 72
+pub let swap_grid_offset_y : Int32 = 72
 
 ///|
-pub let swap_cell_size : Int = 40
+pub let swap_cell_size : Int32 = 40
 
 ///|
-pub let swap_cell_gap : Int = 4
+pub let swap_cell_gap : Int32 = 4
 
 ///|
-pub let swap_cols : Int = 7
+pub let swap_cols : Int32 = 7
 
 ///|
-pub let swap_grid_inset_x : Int = 15
+pub let swap_grid_inset_x : Int32 = 15
 
 ///|
-pub let pattern_content_offset_y : Int = 50
+pub let pattern_content_offset_y : Int32 = 50
 
 ///|
-pub let pattern_row_height : Int = 20
+pub let pattern_row_height : Int32 = 20
 
 ///|
-pub let pattern_row_top : Int = 20
+pub let pattern_row_top : Int32 = 20
 
 ///|
-pub let pattern_max_show : Int = 10
+pub let pattern_max_show : Int32 = 10
 
 // Alphabet strip layout
 
 ///|
-pub let strip_y_offset : Int = 65
+pub let strip_y_offset : Int32 = 65
 
 ///|
-pub let strip_cell_w : Int = 42
+pub let strip_cell_w : Int32 = 42
 
 ///|
-pub let strip_cell_h : Int = 44
+pub let strip_cell_h : Int32 = 44
 
 ///|
-pub let strip_x : Int = 40
+pub let strip_x : Int32 = 40

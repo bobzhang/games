@@ -55,7 +55,7 @@ fn @types.Game::reset_keeper(game : @types.Game) -> Unit {
 /// Increases the severity of the specified room's breach by `amount` (clamped to the max), and primes the raider and ember cooldowns if they are nearly expired.
 fn @types.Game::raise_breach(
   game : @types.Game,
-  room : Int,
+  room : Int32,
   amount : Float,
 ) -> Unit {
   let idx = room.clamp(min=0, max=@types.chamber_count - 1)
@@ -135,7 +135,7 @@ fn @types.Game::enter_game_over(game : @types.Game, reason : String) -> Unit {
 
 ///|
 /// Returns the index of the first inactive raider slot, or -1 if all slots are occupied.
-fn @types.Game::alloc_raider(game : @types.Game) -> Int {
+fn @types.Game::alloc_raider(game : @types.Game) -> Int32 {
   for i, slot in game.raiders {
     if !slot.active {
       break i
@@ -147,7 +147,7 @@ fn @types.Game::alloc_raider(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive flame slot, or -1 if all slots are occupied.
-fn @types.Game::alloc_flame(game : @types.Game) -> Int {
+fn @types.Game::alloc_flame(game : @types.Game) -> Int32 {
   for i, slot in game.flames {
     if !slot.active {
       break i
@@ -159,7 +159,10 @@ fn @types.Game::alloc_flame(game : @types.Game) -> Int {
 
 ///|
 /// Allocates a raider slot, positions it near the specified room's breach anchor with wave-scaled HP, and returns whether the spawn succeeded.
-fn @types.Game::spawn_raider_from_room(game : @types.Game, room : Int) -> Bool {
+fn @types.Game::spawn_raider_from_room(
+  game : @types.Game,
+  room : Int32,
+) -> Bool {
   let slot = game.alloc_raider()
   if slot < 0 {
     return false
@@ -198,7 +201,7 @@ fn @types.Game::spawn_raider_from_room(game : @types.Game, room : Int) -> Bool {
 /// Allocates a flame slot, clamping the position inside chamber bounds and the intensity to [10, 120], and returns whether the spawn succeeded.
 fn @types.Game::spawn_flame(
   game : @types.Game,
-  room : Int,
+  room : Int32,
   x : Float,
   y : Float,
   intensity : Float,
@@ -233,8 +236,8 @@ fn @types.Game::spawn_flame(
 /// Deactivates a raider, increments the defeat counter, adds the score bonus, and partially replenishes the keeper's ink shield stock.
 fn @types.Game::defeat_raider(
   game : @types.Game,
-  idx : Int,
-  score_bonus : Int,
+  idx : Int32,
+  score_bonus : Int32,
 ) -> Unit {
   if idx < 0 || idx >= game.raiders.length() || !game.raiders[idx].active {
     return
@@ -253,11 +256,11 @@ fn @types.Game::defeat_raider(
 /// Returns the index of the nearest breach with positive severity in the given room within squared distance `max_d2`, or -1 if none qualify.
 fn @types.Game::nearest_open_breach_index(
   game : @types.Game,
-  room : Int,
+  room : Int32,
   x : Float,
   y : Float,
   max_d2 : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<game.breaches.length(); best = -1, best_d2 = max_d2 {
     if game.breaches[i].room != room || game.breaches[i].severity <= 0.0 {
       continue
@@ -281,11 +284,11 @@ fn @types.Game::nearest_open_breach_index(
 /// Returns the index of the nearest active raider in the given room within squared distance `max_d2`, or -1 if none qualify.
 fn @types.Game::nearest_raider_index(
   game : @types.Game,
-  room : Int,
+  room : Int32,
   x : Float,
   y : Float,
   max_d2 : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<game.raiders.length(); best = -1, best_d2 = max_d2 {
     if !game.raiders[i].active || game.raiders[i].room != room {
       continue
@@ -304,11 +307,11 @@ fn @types.Game::nearest_raider_index(
 /// Returns the index of the nearest active flame in the given room within squared distance `max_d2`, or -1 if none qualify.
 fn @types.Game::nearest_flame_index(
   game : @types.Game,
-  room : Int,
+  room : Int32,
   x : Float,
   y : Float,
   max_d2 : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<game.flames.length(); best = -1, best_d2 = max_d2 {
     if !game.flames[i].active || game.flames[i].room != room {
       continue

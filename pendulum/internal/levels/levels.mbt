@@ -1,6 +1,6 @@
 ///|
 fn build_level(
-  id : Int,
+  id : Int32,
   tier : @types.Tier,
   name : String,
   anchor : @types.Vec2i,
@@ -8,8 +8,8 @@ fn build_level(
   pegs : Array[@types.Vec2i],
   walls : Array[@types.Vec2i],
   collectibles : Array[@types.Vec2i],
-  par_ticks : Int,
-  rope_length : Int,
+  par_ticks : Int32,
+  rope_length : Int32,
 ) -> @types.Level {
   let grid = @types.new_empty_grid()
   grid[anchor.y][anchor.x] = Anchor
@@ -39,7 +39,7 @@ fn build_level(
 }
 
 ///|
-fn p(x : Int, y : Int) -> @types.Vec2i {
+fn p(x : Int32, y : Int32) -> @types.Vec2i {
   @types.vec2i(x, y)
 }
 
@@ -410,7 +410,7 @@ fn level_3_8() -> @types.Level {
 }
 
 ///|
-pub fn get_level(id : Int) -> @types.Level {
+pub fn get_level(id : Int32) -> @types.Level {
   match id {
     0 => level_1_1()
     1 => level_1_2()

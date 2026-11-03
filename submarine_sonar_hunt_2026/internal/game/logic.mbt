@@ -26,7 +26,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
 }
 
 ///|
-fn target_goal_for_mission(mission : Int) -> Int {
+fn target_goal_for_mission(mission : Int32) -> Int32 {
   (@types.base_target_goal + mission - 1).clamp(
     min=@types.base_target_goal,
     max=@types.target_goal_cap,
@@ -34,7 +34,7 @@ fn target_goal_for_mission(mission : Int) -> Int {
 }
 
 ///|
-fn mine_count_for_mission(mission : Int) -> Int {
+fn mine_count_for_mission(mission : Int32) -> Int32 {
   (@types.base_mine_count + (mission - 1) * 4).clamp(
     min=@types.base_mine_count,
     max=@types.max_mines,
@@ -186,7 +186,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
+fn @types.Game::start_mission(game : @types.Game, mission : Int32) -> Unit {
   let clamped_mission = mission.clamp(
     min=@types.mission_min,
     max=@types.mission_max,

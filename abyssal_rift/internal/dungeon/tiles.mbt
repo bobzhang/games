@@ -1,20 +1,20 @@
 ///|
-pub fn is_wall(tile : Int) -> Bool {
+pub fn is_wall(tile : Int32) -> Bool {
   tile == 0
 }
 
 ///|
-pub fn is_floor(tile : Int) -> Bool {
+pub fn is_floor(tile : Int32) -> Bool {
   tile == 1
 }
 
 ///|
-pub fn is_door(tile : Int) -> Bool {
+pub fn is_door(tile : Int32) -> Bool {
   tile == 2
 }
 
 ///|
-pub fn is_walkable(tile : Int) -> Bool {
+pub fn is_walkable(tile : Int32) -> Bool {
   tile == 1 || tile == 2
 }
 
@@ -25,7 +25,7 @@ pub fn get_tile_at(
   floor : @types.Floor,
   world_x : Float,
   world_y : Float,
-) -> Int {
+) -> Int32 {
   let ts = @types.tile_sizef
   for i in 0..<floor.rooms.length() {
     let room = floor.rooms[i]
@@ -46,7 +46,7 @@ pub fn get_tile_at(
 
 ///|
 /// Find which room index the world position is inside, or -1 if none.
-pub fn room_at(floor : @types.Floor, world_x : Float, world_y : Float) -> Int {
+pub fn room_at(floor : @types.Floor, world_x : Float, world_y : Float) -> Int32 {
   let ts = @types.tile_sizef
   for i in 0..<floor.rooms.length() {
     let room = floor.rooms[i]

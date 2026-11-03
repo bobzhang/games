@@ -86,7 +86,7 @@ test "campaign units not placed on water" {
 test "campaign units have no overlapping positions" {
   for i in 0..<@types.total_campaign_levels {
     let level = @levels.get_campaign_level(i)
-    let positions : Array[(Int, Int)] = []
+    let positions : Array[(Int32, Int32)] = []
     for j in 0..<level.player_units.length() {
       let (_, col, row) = level.player_units[j]
       positions.push((col, row))
@@ -141,7 +141,7 @@ test "campaign victory conditions are solvable - player can reach enemies" {
     for _k in 0..<total {
       visited.push(false)
     }
-    let queue : Array[(Int, Int)] = [(pc, pr)]
+    let queue : Array[(Int32, Int32)] = [(pc, pr)]
     let start_idx = pr * w + pc
     visited[start_idx] = true
     let mut qi = 0

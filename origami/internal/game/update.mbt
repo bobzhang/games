@@ -70,7 +70,7 @@ fn update_tier_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn select_tier(game : @types.Game, idx : Int) -> Unit {
+fn select_tier(game : @types.Game, idx : Int32) -> Unit {
   let tiers : Array[@types.Tier] = [Folds, Layers, Craft]
   if idx >= 0 && idx < 3 {
     game.current_tier = tiers[idx]
@@ -128,7 +128,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   game.target = level
   game.current_paper = @types.clone_paper(level.initial_paper)
@@ -205,7 +205,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn adjust_fold_line(game : @types.Game, delta : Int) -> Unit {
+fn adjust_fold_line(game : @types.Game, delta : Int32) -> Unit {
   let max_line = match game.fold_dir {
     Left | Right => game.current_paper.width - 1
     Up | Down => game.current_paper.height - 1
@@ -265,7 +265,7 @@ fn execute_fold_action(game : @types.Game) -> Unit {
 }
 
 ///|
-fn star_val(s : @types.StarRating) -> Int {
+fn star_val(s : @types.StarRating) -> Int32 {
   match s {
     Zero => 0
     One => 1

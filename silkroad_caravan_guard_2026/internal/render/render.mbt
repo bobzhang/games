@@ -1,8 +1,8 @@
 ///|
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, size)
@@ -12,9 +12,9 @@ fn draw_center_text(
 ///|
 fn draw_right_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, size)
@@ -32,7 +32,7 @@ fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
-fn @types.Game::lane_y(game : @types.Game, index : Int) -> Float {
+fn @types.Game::lane_y(game : @types.Game, index : Int32) -> Float {
   let i = index.clamp(min=0, max=@types.lane_count - 1)
   let fi = Float::from_int(i)
   let base = @types.lane_base_y(i)
@@ -46,7 +46,7 @@ fn @types.Game::lane_y(game : @types.Game, index : Int) -> Float {
 }
 
 ///|
-fn @types.Game::active_raider_count(game : @types.Game) -> Int {
+fn @types.Game::active_raider_count(game : @types.Game) -> Int32 {
   let mut c = 0
   for raider in game.raiders {
     if raider.active {
@@ -559,10 +559,10 @@ fn @types.Game::draw_player(
 ///|
 fn draw_bar(
   name : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fill : @raylib.Color,
   value_text : String,

@@ -7,8 +7,8 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 13, 20, 255))
 
   for i in 0..<18 {
-    let y : Int = i * 60 - 18
-    let alpha : Int = 18 + i * 13 % 32
+    let y : Int32 = i * 60 - 18
+    let alpha : Int32 = 18 + i * 13 % 32
     @raylib.draw_rectangle(
       0,
       y,
@@ -38,22 +38,22 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::board_layout(game : @types.Game) -> (Int, Int, Int) {
-  let area_x : Int = 28
-  let area_y : Int = 28
-  let area_w : Int = @types.screen_w - 396
-  let area_h : Int = @types.screen_h - 56
+fn @types.Game::board_layout(game : @types.Game) -> (Int32, Int32, Int32) {
+  let area_x : Int32 = 28
+  let area_y : Int32 = 28
+  let area_w : Int32 = @types.screen_w - 396
+  let area_h : Int32 = @types.screen_h - 56
 
-  let safe_w : Int = (1).max(game.grid_w)
-  let safe_h : Int = (1).max(game.grid_h)
+  let safe_w : Int32 = (1).max(game.grid_w)
+  let safe_h : Int32 = (1).max(game.grid_h)
 
-  let tile_x : Int = (area_w - 24) / safe_w
-  let tile_y : Int = (area_h - 24) / safe_h
-  let mut tile : Int = tile_x.min(tile_y)
+  let tile_x : Int32 = (area_w - 24) / safe_w
+  let tile_y : Int32 = (area_h - 24) / safe_h
+  let mut tile : Int32 = tile_x.min(tile_y)
   tile = tile.clamp(min=28, max=66)
 
-  let mut left : Int = area_x + (area_w - safe_w * tile) / 2
-  let mut top : Int = area_y + (area_h - safe_h * tile) / 2
+  let mut left : Int32 = area_x + (area_w - safe_w * tile) / 2
+  let mut top : Int32 = area_y + (area_h - safe_h * tile) / 2
 
   if game.shake_t > 0.0 {
     left = left + @raylib.get_random_value(-3, 3)
@@ -64,7 +64,7 @@ fn @types.Game::board_layout(game : @types.Game) -> (Int, Int, Int) {
 }
 
 ///|
-fn draw_cell_floor(px : Int, py : Int, tile : Int, goal : Bool) -> Unit {
+fn draw_cell_floor(px : Int32, py : Int32, tile : Int32, goal : Bool) -> Unit {
   if goal {
     @raylib.draw_rectangle(
       px,
@@ -111,7 +111,7 @@ fn draw_cell_floor(px : Int, py : Int, tile : Int, goal : Bool) -> Unit {
 }
 
 ///|
-fn draw_cell_wall(px : Int, py : Int, tile : Int) -> Unit {
+fn draw_cell_wall(px : Int32, py : Int32, tile : Int32) -> Unit {
   @raylib.draw_rectangle(
     px,
     py,
@@ -136,7 +136,7 @@ fn draw_cell_wall(px : Int, py : Int, tile : Int) -> Unit {
 }
 
 ///|
-fn draw_box(px : Int, py : Int, tile : Int, on_goal : Bool) -> Unit {
+fn draw_box(px : Int32, py : Int32, tile : Int32, on_goal : Bool) -> Unit {
   let body = if on_goal {
     @raylib.Color::new(186, 136, 72, 255)
   } else {
@@ -155,8 +155,8 @@ fn draw_box(px : Int, py : Int, tile : Int, on_goal : Bool) -> Unit {
 }
 
 ///|
-fn draw_player(px : Int, py : Int, tile : Int, pulse_t : Float) -> Unit {
-  let bob : Int = Float::from_double(
+fn draw_player(px : Int32, py : Int32, tile : Int32, pulse_t : Float) -> Unit {
+  let bob : Int32 = Float::from_double(
     @math.sin((pulse_t * 8.4).to_double()) * 2.0,
   ).to_int()
 
@@ -202,8 +202,8 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
       let t = @types.tile_at(game, x, y)
-      let px : Int = left + x * tile
-      let py : Int = top + y * tile
+      let px : Int32 = left + x * tile
+      let py : Int32 = top + y * tile
 
       if t == Void {
         @raylib.draw_rectangle(
@@ -228,8 +228,8 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
     }
   }
 
-  let ppx : Int = left + game.player_x * tile
-  let ppy : Int = top + game.player_y * tile
+  let ppx : Int32 = left + game.player_x * tile
+  let ppy : Int32 = top + game.player_y * tile
   draw_player(ppx, ppy, tile, game.pulse_t)
 
   for spark in game.sparks {
@@ -237,8 +237,8 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
       continue
     }
 
-    let sx : Int = left + (spark.x * Float::from_int(tile)).to_int()
-    let sy : Int = top + (spark.y * Float::from_int(tile)).to_int()
+    let sx : Int32 = left + (spark.x * Float::from_int(tile)).to_int()
+    let sy : Int32 = top + (spark.y * Float::from_int(tile)).to_int()
     let sr : Float = @types.maxf(1.0, Float::from_int(tile) * spark.size)
 
     let c = match spark.kind {
@@ -254,10 +254,10 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
-  let panel_x : Int = @types.screen_w - 352
-  let panel_y : Int = 20
-  let panel_w : Int = 324
-  let panel_h : Int = @types.screen_h - 40
+  let panel_x : Int32 = @types.screen_w - 352
+  let panel_y : Int32 = 20
+  let panel_w : Int32 = 324
+  let panel_h : Int32 = @types.screen_h - 40
 
   @raylib.draw_rectangle(
     panel_x,
@@ -304,7 +304,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(248, 220, 142, 245),
   )
 
-  let goals_done : Int = @types.goal_filled_count(game)
+  let goals_done : Int32 = @types.goal_filled_count(game)
   @draw.draw_text(
     "Goals \{goals_done}/\{game.goals_total}",
     panel_x + 22,
@@ -412,9 +412,9 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
-  let cx : Int = @types.dpad_center_x()
-  let cy : Int = @types.dpad_center_y()
-  let s : Int = @types.dpad_size()
+  let cx : Int32 = @types.dpad_center_x()
+  let cy : Int32 = @types.dpad_center_y()
+  let s : Int32 = @types.dpad_size()
 
   let left_hit : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -540,10 +540,10 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(236, 246, 255, 250),
   )
 
-  let ux : Int = @types.action_panel_x()
-  let uy : Int = @types.action_panel_y()
-  let uw : Int = @types.action_panel_w()
-  let uh : Int = @types.action_panel_h()
+  let ux : Int32 = @types.action_panel_x()
+  let uy : Int32 = @types.action_panel_y()
+  let uw : Int32 = @types.action_panel_w()
+  let uh : Int32 = @types.action_panel_h()
 
   @raylib.draw_rectangle(ux, uy, uw, uh, @raylib.Color::new(58, 74, 98, 178))
   @raylib.draw_rectangle_lines(ux, uy, uw, uh, border)
@@ -670,10 +670,10 @@ fn @types.Game::draw_level_clear_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(4, 8, 14, 154),
   )
 
-  let pw : Int = 760
-  let ph : Int = 430
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 760
+  let ph : Int32 = 430
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(20, 28, 40, 242))
   @raylib.draw_rectangle_lines(
@@ -777,10 +777,10 @@ fn @types.Game::draw_campaign_clear(game : @types.Game) -> Unit {
     @raylib.Color::new(6, 10, 16, 170),
   )
 
-  let pw : Int = 880
-  let ph : Int = 520
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 880
+  let ph : Int32 = 520
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(18, 25, 35, 245))
   @raylib.draw_rectangle_lines(

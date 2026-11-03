@@ -72,7 +72,7 @@ pub fn sim_step(game : @types.Game) -> Bool {
   }
   // Propagate water from sources (springs and wet tiles)
   // Use a visited set to avoid infinite loops
-  let newly_wet : Array[(@types.Pos, Int)] = []
+  let newly_wet : Array[(@types.Pos, Int32)] = []
   for y in 0..<rows {
     for x in 0..<cols {
       let pos : @types.Pos = { x, y, }
@@ -172,7 +172,7 @@ pub fn reset_water(game : @types.Game) -> Unit {
 
 ///|
 /// Calculate the star rating for the current level.
-pub fn calculate_stars(game : @types.Game) -> Int {
+pub fn calculate_stars(game : @types.Game) -> Int32 {
   let level = game.levels[game.current_level]
   if game.fountains_filled < game.total_fountains {
     return 0

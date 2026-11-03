@@ -42,14 +42,14 @@ let max_sparks = 280
 /// Represents a port, factory, market, or hub node with stock, demand, production, and outage state.
 struct Node {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut r : Float
-  mut raw : Int
-  mut goods : Int
-  mut demand : Int
-  mut delivered : Int
+  mut raw : Int32
+  mut goods : Int32
+  mut demand : Int32
+  mut delivered : Int32
   mut prod_cd : Float
   mut pulse : Float
   mut outage_t : Float
@@ -60,9 +60,9 @@ struct Node {
 /// Represents a bidirectional cargo route between two nodes with level, integrity, and truck spawn cooldown.
 struct Route {
   mut active : Bool
-  mut a : Int
-  mut b : Int
-  mut level : Int
+  mut a : Int32
+  mut b : Int32
+  mut level : Int32
   mut hp : Float
   mut spawn_cd : Float
   mut blink : Float
@@ -72,12 +72,12 @@ struct Route {
 /// Represents a truck moving along a route with cargo, direction, speed, and stuck state.
 struct Truck {
   mut active : Bool
-  mut route : Int
+  mut route : Int32
   mut t : Float
-  mut dir : Int
+  mut dir : Int32
   mut speed : Float
-  mut cargo_kind : Int
-  mut cargo : Int
+  mut cargo_kind : Int32
+  mut cargo : Int32
   mut blink : Float
   mut stuck_t : Float
 }
@@ -92,7 +92,7 @@ struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -127,10 +127,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -160,7 +160,7 @@ fn maxf(a : Float, b : Float) -> Float {
 
 ///|
 /// Returns the display label for a node kind (0=PORT, 1=FACTORY, 2=MARKET, 3=HUB).
-fn node_kind_name(kind : Int) -> String {
+fn node_kind_name(kind : Int32) -> String {
   if kind == 0 {
     "PORT"
   } else if kind == 1 {
@@ -174,7 +174,7 @@ fn node_kind_name(kind : Int) -> String {
 
 ///|
 /// Returns the fill colour for a node based on its kind (port=blue, factory=orange, market=green, hub=purple).
-fn node_color(kind : Int) -> @raylib.Color {
+fn node_color(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @raylib.Color::new(98, 190, 250, 255)
   } else if kind == 1 {
@@ -188,7 +188,7 @@ fn node_color(kind : Int) -> @raylib.Color {
 
 ///|
 /// Returns the colour for a cargo kind (0=empty/grey, 1=raw/blue, 2=goods/yellow).
-fn cargo_color(kind : Int) -> @raylib.Color {
+fn cargo_color(kind : Int32) -> @raylib.Color {
   if kind == 1 {
     @raylib.Color::new(112, 206, 252, 252)
   } else if kind == 2 {
@@ -267,12 +267,12 @@ fn clear_sparks(sp : Array[Spark]) -> Unit {
 /// Activates the first free node slot with the given kind, position, radius, and name.
 fn add_node(
   nodes : Array[Node],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   r : Float,
   name : String,
-) -> Int {
+) -> Int32 {
   let i = @utils.first_index_by(nodes, fn(node) { !node.active })
   if i < 0 {
     return -1
@@ -295,7 +295,7 @@ fn add_node(
 
 ///|
 /// Returns the index of an active route connecting nodes a and b (either direction), or -1 if none exists.
-fn find_route(routes : Array[Route], a : Int, b : Int) -> Int {
+fn find_route(routes : Array[Route], a : Int32, b : Int32) -> Int32 {
   @utils.first_index_by(routes, fn(route) {
     route.active &&
     ((route.a == a && route.b == b) || (route.a == b && route.b == a))
@@ -304,7 +304,7 @@ fn find_route(routes : Array[Route], a : Int, b : Int) -> Int {
 
 ///|
 /// Activates the first free route slot connecting nodes a and b at level 1 with full HP.
-fn add_route(routes : Array[Route], a : Int, b : Int) -> Int {
+fn add_route(routes : Array[Route], a : Int32, b : Int32) -> Int32 {
   let i = @utils.first_index_by(routes, fn(route) { !route.active })
   if i < 0 {
     return -1
@@ -321,13 +321,13 @@ fn add_route(routes : Array[Route], a : Int, b : Int) -> Int {
 
 ///|
 /// Returns the number of currently active routes.
-fn count_active_routes(routes : Array[Route]) -> Int {
+fn count_active_routes(routes : Array[Route]) -> Int32 {
   @utils.count_by(routes, fn(route) { route.active })
 }
 
 ///|
 /// Returns the number of currently active trucks.
-fn count_active_trucks(trucks : Array[Truck]) -> Int {
+fn count_active_trucks(trucks : Array[Truck]) -> Int32 {
   @utils.count_by(trucks, fn(truck) { truck.active })
 }
 
@@ -335,10 +335,10 @@ fn count_active_trucks(trucks : Array[Truck]) -> Int {
 /// Activates the first free truck slot assigned to the given route, direction, and upgrade level.
 fn add_truck(
   trucks : Array[Truck],
-  route_id : Int,
-  dir : Int,
-  level : Int,
-) -> Int {
+  route_id : Int32,
+  dir : Int32,
+  level : Int32,
+) -> Int32 {
   let i = @utils.first_index_by(trucks, fn(truck) { !truck.active })
   if i < 0 {
     return -1
@@ -357,7 +357,7 @@ fn add_truck(
 
 ///|
 /// Activates the first free spark slot at position (x, y) with a random velocity, lifetime, and size.
-fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int) -> Unit {
+fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int32) -> Unit {
   for sp_elem in sp {
     if !sp_elem.active {
       sp_elem.active = true
@@ -381,8 +381,8 @@ fn burst_sparks(
   sp : Array[Spark],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_spark(sp, x, y, kind)
@@ -460,7 +460,7 @@ fn point_seg_dist2(
 
 ///|
 /// Returns the index of the first active node whose radius contains the pointer position, or -1.
-fn pick_node(nodes : Array[Node], mx : Float, my : Float) -> Int {
+fn pick_node(nodes : Array[Node], mx : Float, my : Float) -> Int32 {
   @utils.first_index_by(nodes, fn(node) {
     node.active && dist2(mx, my, node.x, node.y) <= node.r * node.r
   })
@@ -473,13 +473,13 @@ fn pick_route(
   nodes : Array[Node],
   mx : Float,
   my : Float,
-) -> Int {
+) -> Int32 {
   for i, route in routes; best = -1, best_d2 = 99999999.0F {
     if !route.active {
       continue
     }
-    let a : Int = route.a
-    let b : Int = route.b
+    let a : Int32 = route.a
+    let b : Int32 = route.b
     if a < 0 || b < 0 || !nodes[a].active || !nodes[b].active {
       continue
     }
@@ -568,9 +568,9 @@ fn setup_map(
 fn load_from_node_to_target(
   nodes : Array[Node],
   truck : Truck,
-  from_idx : Int,
-  to_idx : Int,
-  capacity : Int,
+  from_idx : Int32,
+  to_idx : Int32,
+  capacity : Int32,
 ) -> Unit {
   truck.cargo_kind = 0
   truck.cargo = 0
@@ -579,16 +579,16 @@ fn load_from_node_to_target(
     return
   }
 
-  let target_kind : Int = nodes[to_idx].kind
-  let source_kind : Int = nodes[from_idx].kind
+  let target_kind : Int32 = nodes[to_idx].kind
+  let source_kind : Int32 = nodes[from_idx].kind
 
   if target_kind == 1 {
-    let mut amount : Int = nodes[from_idx].raw
+    let mut amount : Int32 = nodes[from_idx].raw
     if source_kind == 3 && amount == 0 {
       amount = nodes[from_idx].raw
     }
     if amount > 0 {
-      let take : Int = amount.clamp(min=0, max=capacity)
+      let take : Int32 = amount.clamp(min=0, max=capacity)
       truck.cargo_kind = 1
       truck.cargo = take
       nodes[from_idx].raw = nodes[from_idx].raw - take
@@ -597,12 +597,12 @@ fn load_from_node_to_target(
   }
 
   if target_kind == 2 {
-    let mut amount : Int = nodes[from_idx].goods
+    let mut amount : Int32 = nodes[from_idx].goods
     if source_kind == 3 && amount == 0 {
       amount = nodes[from_idx].goods
     }
     if amount > 0 {
-      let take : Int = amount.clamp(min=0, max=capacity)
+      let take : Int32 = amount.clamp(min=0, max=capacity)
       truck.cargo_kind = 2
       truck.cargo = take
       nodes[from_idx].goods = nodes[from_idx].goods - take
@@ -612,7 +612,7 @@ fn load_from_node_to_target(
 
   if target_kind == 3 {
     if source_kind == 0 && nodes[from_idx].raw > 0 {
-      let take : Int = nodes[from_idx].raw.clamp(min=0, max=capacity)
+      let take : Int32 = nodes[from_idx].raw.clamp(min=0, max=capacity)
       truck.cargo_kind = 1
       truck.cargo = take
       nodes[from_idx].raw = nodes[from_idx].raw - take
@@ -620,7 +620,7 @@ fn load_from_node_to_target(
     }
 
     if source_kind == 1 && nodes[from_idx].goods > 0 {
-      let take : Int = nodes[from_idx].goods.clamp(min=0, max=capacity)
+      let take : Int32 = nodes[from_idx].goods.clamp(min=0, max=capacity)
       truck.cargo_kind = 2
       truck.cargo = take
       nodes[from_idx].goods = nodes[from_idx].goods - take
@@ -630,7 +630,7 @@ fn load_from_node_to_target(
 
   if target_kind == 0 {
     if source_kind == 1 && nodes[from_idx].raw > 0 {
-      let take : Int = nodes[from_idx].raw.clamp(min=0, max=capacity)
+      let take : Int32 = nodes[from_idx].raw.clamp(min=0, max=capacity)
       truck.cargo_kind = 1
       truck.cargo = take
       nodes[from_idx].raw = nodes[from_idx].raw - take
@@ -641,9 +641,13 @@ fn load_from_node_to_target(
 
 ///|
 /// Advances all active node production cycles by dt and returns the delivery gain and bonus cash earned this frame.
-fn update_nodes(nodes : Array[Node], dt : Float, cycle : Int) -> (Int, Int) {
-  let mut delivery_gain : Int = 0
-  let mut bonus_cash : Int = 0
+fn update_nodes(
+  nodes : Array[Node],
+  dt : Float,
+  cycle : Int32,
+) -> (Int32, Int32) {
+  let mut delivery_gain : Int32 = 0
+  let mut bonus_cash : Int32 = 0
 
   for node in nodes {
     if !node.active {
@@ -710,8 +714,8 @@ fn update_nodes(nodes : Array[Node], dt : Float, cycle : Int) -> (Int, Int) {
 
 ///|
 /// Ticks route blink timers and storm damage, deactivates broken routes, and returns the number of routes destroyed this frame.
-fn update_routes(routes : Array[Route], dt : Float, storm_t : Float) -> Int {
-  let mut broken_n : Int = 0
+fn update_routes(routes : Array[Route], dt : Float, storm_t : Float) -> Int32 {
+  let mut broken_n : Int32 = 0
 
   for route in routes {
     if !route.active {
@@ -762,7 +766,7 @@ fn update_trucks(
       continue
     }
 
-    let rid : Int = truck.route
+    let rid : Int32 = truck.route
     if rid < 0 || rid >= routes.length() || !routes[rid].active {
       truck.active = false
       continue
@@ -794,8 +798,8 @@ fn update_trucks(
     truck.t = truck.t + dt * step * dirf
 
     if truck.t > 1.0 || truck.t < 0.0 {
-      let mut arrive : Int = routes[rid].a
-      let mut depart : Int = routes[rid].b
+      let mut arrive : Int32 = routes[rid].a
+      let mut depart : Int32 = routes[rid].b
       if truck.t >= 1.0 {
         truck.t = 1.0
         arrive = routes[rid].b
@@ -820,7 +824,7 @@ fn update_trucks(
       truck.cargo = 0
       truck.cargo_kind = 0
 
-      let capacity : Int = 2 + routes[rid].level
+      let capacity : Int32 = 2 + routes[rid].level
       load_from_node_to_target(nodes, truck, arrive, depart, capacity)
       truck.blink = 0.18
     }
@@ -829,9 +833,9 @@ fn update_trucks(
 
 ///|
 /// Randomly picks an active route and reduces its HP by amount, deactivating it if HP drops to zero.
-fn damage_random_route(routes : Array[Route], amount : Float) -> Int {
+fn damage_random_route(routes : Array[Route], amount : Float) -> Int32 {
   for _try_i in 0..<48 {
-    let idx : Int = @raylib.get_random_value(0, routes.length() - 1)
+    let idx : Int32 = @raylib.get_random_value(0, routes.length() - 1)
     if !routes[idx].active {
       continue
     }
@@ -868,10 +872,10 @@ fn truck_pos(
 ///|
 /// Draws a labelled rectangular button with enabled/hover colour variants and centred text.
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   enabled : Bool,
   hover : Bool,
@@ -893,7 +897,7 @@ fn draw_button(
     @raylib.Color::new(220, 232, 252, 246),
   )
 
-  let tw : Int = @draw.measure_text(label, 25)
+  let tw : Int32 = @draw.measure_text(label, 25)
   @draw.draw_text(
     label,
     x + (w - tw) / 2,
@@ -953,15 +957,15 @@ fn draw_world_bg(t : Float) -> Unit {
 fn draw_routes(
   routes : Array[Route],
   nodes : Array[Node],
-  selected_route : Int,
+  selected_route : Int32,
   storm_t : Float,
 ) -> Unit {
   for i in 0..<routes.length() {
     if !routes[i].active {
       continue
     }
-    let a : Int = routes[i].a
-    let b : Int = routes[i].b
+    let a : Int32 = routes[i].a
+    let b : Int32 = routes[i].b
     if a < 0 || b < 0 || !nodes[a].active || !nodes[b].active {
       continue
     }
@@ -995,7 +999,7 @@ fn draw_routes(
     )
 
     if routes[i].blink > 0.0 {
-      let alpha : Int = (routes[i].blink * 420.0).to_int()
+      let alpha : Int32 = (routes[i].blink * 420.0).to_int()
       @raylib.draw_line_ex(
         @raylib.Vector2::new(nodes[a].x, nodes[a].y),
         @raylib.Vector2::new(nodes[b].x, nodes[b].y),
@@ -1006,7 +1010,7 @@ fn draw_routes(
 
     let mx : Float = (nodes[a].x + nodes[b].x) * 0.5
     let my : Float = (nodes[a].y + nodes[b].y) * 0.5
-    let hp_txt : Int = routes[i].hp.to_int()
+    let hp_txt : Int32 = routes[i].hp.to_int()
     @draw.draw_text(
       "L\{routes[i].level} \{hp_txt}%",
       (mx - 42.0).to_int(),
@@ -1019,7 +1023,7 @@ fn draw_routes(
 
 ///|
 /// Draws all active nodes as pulsing coloured circles with name, kind label, stock counts, and selection ring.
-fn draw_nodes(nodes : Array[Node], selected_node : Int) -> Unit {
+fn draw_nodes(nodes : Array[Node], selected_node : Int32) -> Unit {
   for i in 0..<nodes.length() {
     if !nodes[i].active {
       continue
@@ -1179,7 +1183,7 @@ fn draw_trucks(
       continue
     }
 
-    let rid : Int = truck.route
+    let rid : Int32 = truck.route
     if rid < 0 || rid >= routes.length() || !routes[rid].active {
       continue
     }
@@ -1225,15 +1229,15 @@ fn draw_trucks(
 /// Draws the right-side HUD panel showing timer, budget, deliveries, load tier, storm bar, selected route info, and instructions.
 fn draw_ui_panel(
   timer : Float,
-  budget : Int,
-  delivered : Int,
-  goal : Int,
-  cycle : Int,
-  route_n : Int,
-  truck_n : Int,
+  budget : Int32,
+  delivered : Int32,
+  goal : Int32,
+  cycle : Int32,
+  route_n : Int32,
+  truck_n : Int32,
   storm_t : Float,
   storm_cd : Float,
-  selected_route : Int,
+  selected_route : Int32,
   routes : Array[Route],
 ) -> Unit {
   @raylib.draw_rectangle(968, 22, 376, 724, @raylib.Color::new(18, 22, 34, 242))
@@ -1334,7 +1338,7 @@ fn draw_ui_panel(
   } else {
     0.0
   }
-  let swid : Int = (Float::from_int(326) * storm01).to_int()
+  let swid : Int32 = (Float::from_int(326) * storm01).to_int()
   @raylib.draw_rectangle(984, 328, 326, 20, @raylib.Color::new(26, 32, 46, 255))
   @raylib.draw_rectangle(
     984,
@@ -1386,7 +1390,7 @@ fn draw_ui_panel(
       84,
       @raylib.Color::new(178, 204, 248, 242),
     )
-    let hp_txt : Int = routes[selected_route].hp.to_int()
+    let hp_txt : Int32 = routes[selected_route].hp.to_int()
     @draw.draw_text(
       "Selected Route #\{selected_route}",
       998,
@@ -1457,13 +1461,13 @@ fn draw_ui_panel(
 
 ///|
 /// Returns the budget cost to build a new route given the current number of existing routes.
-fn route_build_cost(route_n : Int) -> Int {
+fn route_build_cost(route_n : Int32) -> Int32 {
   34 + route_n * 2
 }
 
 ///|
 /// Returns the budget cost to upgrade a route to the next level given its current level.
-fn route_upgrade_cost(level : Int) -> Int {
+fn route_upgrade_cost(level : Int32) -> Int32 {
   42 + level * 34
 }
 
@@ -1531,16 +1535,16 @@ fn main {
     }
   })
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
 
   let mut timer : Float = 260.0
-  let mut budget : Int = 118
-  let mut delivered_total : Int = 0
-  let mut goal : Int = 260
-  let mut cycle : Int = 1
+  let mut budget : Int32 = 118
+  let mut delivered_total : Int32 = 0
+  let mut goal : Int32 = 260
+  let mut cycle : Int32 = 1
 
-  let mut selected_node : Int = -1
-  let mut selected_route : Int = -1
+  let mut selected_node : Int32 = -1
+  let mut selected_route : Int32 = -1
 
   let mut storm_cd : Float = 18.0
   let mut storm_t : Float = 0.0
@@ -1626,7 +1630,7 @@ fn main {
         burst_sparks(sparks, 866.0, 360.0, 12, 2)
       }
 
-      let broken_n : Int = update_routes(routes, dt, storm_t)
+      let broken_n : Int32 = update_routes(routes, dt, storm_t)
       if broken_n > 0 {
         msg = "\{broken_n} route(s) collapsed"
         msg_t = 1.5
@@ -1637,24 +1641,24 @@ fn main {
           continue
         }
         if routes[i].spawn_cd <= 0.0 {
-          let dir : Int = if @raylib.get_random_value(0, 1) == 0 {
+          let dir : Int32 = if @raylib.get_random_value(0, 1) == 0 {
             -1
           } else {
             1
           }
-          let tid : Int = add_truck(trucks, i, dir, routes[i].level)
+          let tid : Int32 = add_truck(trucks, i, dir, routes[i].level)
           if tid >= 0 {
-            let from_idx : Int = if trucks[tid].dir > 0 {
+            let from_idx : Int32 = if trucks[tid].dir > 0 {
               routes[i].a
             } else {
               routes[i].b
             }
-            let to_idx : Int = if trucks[tid].dir > 0 {
+            let to_idx : Int32 = if trucks[tid].dir > 0 {
               routes[i].b
             } else {
               routes[i].a
             }
-            let cap : Int = 2 + routes[i].level
+            let cap : Int32 = 2 + routes[i].level
             load_from_node_to_target(nodes, trucks[tid], from_idx, to_idx, cap)
           }
           let mut next_cd : Float = 2.9 -
@@ -1685,12 +1689,12 @@ fn main {
         }
         storm_cd = next
 
-        let strike_n : Int = 1 + @raylib.get_random_value(0, 2)
+        let strike_n : Int32 = 1 + @raylib.get_random_value(0, 2)
         for _i in 0..<strike_n {
-          let damaged : Int = damage_random_route(routes, randf(20.0, 36.0))
+          let damaged : Int32 = damage_random_route(routes, randf(20.0, 36.0))
           if damaged >= 0 {
-            let a : Int = routes[damaged].a
-            let b : Int = routes[damaged].b
+            let a : Int32 = routes[damaged].a
+            let b : Int32 = routes[damaged].b
             if a >= 0 && b >= 0 && nodes[a].active && nodes[b].active {
               burst_sparks(
                 sparks,
@@ -1719,7 +1723,7 @@ fn main {
 
       maint_cd = maint_cd - dt
       if maint_cd <= 0.0 {
-        let upkeep : Int = count_active_routes(routes)
+        let upkeep : Int32 = count_active_routes(routes)
         budget = budget - upkeep
         maint_cd = 1.8
       }
@@ -1730,10 +1734,10 @@ fn main {
           selected_route = -1
         }
 
-        let route_n : Int = count_active_routes(routes)
-        let build_cost : Int = route_build_cost(route_n)
+        let route_n : Int32 = count_active_routes(routes)
+        let build_cost : Int32 = route_build_cost(route_n)
 
-        let upgrade_cost : Int = if selected_route >= 0 &&
+        let upgrade_cost : Int32 = if selected_route >= 0 &&
           selected_route < routes.length() {
           route_upgrade_cost(routes[selected_route].level)
         } else {
@@ -1807,12 +1811,12 @@ fn main {
           }
         }
 
-        let repair_cost : Int = 40
+        let repair_cost : Int32 = 40
         let trigger_repair : Bool = @raylib.is_key_pressed(@raylib.KeyF) ||
           (click && repair_hover)
         if trigger_repair {
           if budget >= repair_cost {
-            let mut repaired : Int = 0
+            let mut repaired : Int32 = 0
             for route in routes {
               if !route.active {
                 continue
@@ -1832,7 +1836,7 @@ fn main {
           }
         }
 
-        let surge_cost : Int = 44
+        let surge_cost : Int32 = 44
         let trigger_surge : Bool = @raylib.is_key_pressed(@raylib.KeyB) ||
           (click && surge_hover)
         if trigger_surge {
@@ -1847,7 +1851,7 @@ fn main {
               } else if node.kind == 1 {
                 node.goods = (node.goods + 4).clamp(min=0, max=120)
               } else if node.kind == 2 {
-                let nd : Int = node.demand - 3
+                let nd : Int32 = node.demand - 3
                 node.demand = if nd < 0 { 0 } else { nd }
               }
               burst_sparks(sparks, node.x, node.y, 4, 1)
@@ -1869,7 +1873,7 @@ fn main {
         }
 
         if click && !upgrade_hover && !repair_hover && !surge_hover {
-          let n : Int = pick_node(nodes, mouse.x, mouse.y)
+          let n : Int32 = pick_node(nodes, mouse.x, mouse.y)
           if n >= 0 {
             if selected_node < 0 {
               selected_node = n
@@ -1881,14 +1885,14 @@ fn main {
               msg = "Node selection cleared"
               msg_t = 0.6
             } else {
-              let existing : Int = find_route(routes, selected_node, n)
+              let existing : Int32 = find_route(routes, selected_node, n)
               if existing >= 0 {
                 selected_route = existing
                 selected_node = -1
                 msg = "Route already exists (#\{existing})"
                 msg_t = 0.9
               } else if budget >= build_cost {
-                let idx : Int = add_route(routes, selected_node, n)
+                let idx : Int32 = add_route(routes, selected_node, n)
                 if idx >= 0 {
                   budget = budget - build_cost
                   selected_route = idx
@@ -1912,7 +1916,7 @@ fn main {
               }
             }
           } else {
-            let rid : Int = pick_route(routes, nodes, mouse.x, mouse.y)
+            let rid : Int32 = pick_route(routes, nodes, mouse.x, mouse.y)
             if rid >= 0 {
               selected_route = rid
               selected_node = -1
@@ -1959,15 +1963,15 @@ fn main {
     draw_nodes(nodes, selected_node)
     draw_sparks(sparks)
 
-    let route_n : Int = count_active_routes(routes)
-    let truck_n : Int = count_active_trucks(trucks)
+    let route_n : Int32 = count_active_routes(routes)
+    let truck_n : Int32 = count_active_trucks(trucks)
     draw_ui_panel(
       timer, budget, delivered_total, goal, cycle, route_n, truck_n, storm_t, storm_cd,
       selected_route, routes,
     )
 
-    let build_cost : Int = route_build_cost(route_n)
-    let upgrade_cost : Int = if selected_route >= 0 &&
+    let build_cost : Int32 = route_build_cost(route_n)
+    let upgrade_cost : Int32 = if selected_route >= 0 &&
       selected_route < routes.length() {
       route_upgrade_cost(routes[selected_route].level)
     } else {
@@ -2023,8 +2027,8 @@ fn main {
     )
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = sw / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         16,

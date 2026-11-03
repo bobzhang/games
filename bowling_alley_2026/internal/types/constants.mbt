@@ -1,30 +1,30 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1720
+pub let screen_w : Int32 = 1720
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 980
+pub let screen_h : Int32 = 980
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Left x coordinate of the bowling lane area.
-pub let lane_x : Int = 90
+pub let lane_x : Int32 = 90
 
 ///|
 /// Top y coordinate of the bowling lane area.
-pub let lane_y : Int = 40
+pub let lane_y : Int32 = 40
 
 ///|
 /// Width of the bowling lane in pixels.
-pub let lane_w : Int = 970
+pub let lane_w : Int32 = 970
 
 ///|
 /// Height of the bowling lane in pixels.
-pub let lane_h : Int = 900
+pub let lane_h : Int32 = 900
 
 ///|
 /// Lane left edge as float for physics calculations.
@@ -92,64 +92,64 @@ pub let spin_max : Float = 1.0
 
 ///|
 /// Maximum number of roll entries stored in score history.
-pub let max_rolls : Int = 24
+pub let max_rolls : Int32 = 24
 
 ///|
 /// Number of pooled spark particles for impact effects.
-pub let max_sparks : Int = 1200
+pub let max_sparks : Int32 = 1200
 
 ///|
 /// Left x coordinate of the side panel.
-pub let panel_x0 : Int = lane_x + lane_w + 24
+pub let panel_x0 : Int32 = lane_x + lane_w + 24
 
 ///|
 /// Width of the side panel.
-pub let panel_w : Int = screen_w - panel_x0 - 28
+pub let panel_w : Int32 = screen_w - panel_x0 - 28
 
 ///|
 /// Returns the full panel rectangle `(x, y, w, h)`.
-pub fn panel_rect() -> (Int, Int, Int, Int) {
+pub fn panel_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0, 20, panel_w, screen_h - 40)
 }
 
 ///|
 /// Returns the title-screen start button rectangle.
-pub fn title_start_button() -> (Int, Int, Int, Int) {
+pub fn title_start_button() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 240, 600, 480, 116)
 }
 
 ///|
 /// Returns the result-screen retry button rectangle.
-pub fn retry_button() -> (Int, Int, Int, Int) {
+pub fn retry_button() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 220, 650, 440, 104)
 }
 
 ///|
 /// Returns the touch rectangle for aiming left.
-pub fn touch_aim_left_rect() -> (Int, Int, Int, Int) {
+pub fn touch_aim_left_rect() -> (Int32, Int32, Int32, Int32) {
   (72, screen_h - 170, 128, 96)
 }
 
 ///|
 /// Returns the touch rectangle for aiming right.
-pub fn touch_aim_right_rect() -> (Int, Int, Int, Int) {
+pub fn touch_aim_right_rect() -> (Int32, Int32, Int32, Int32) {
   (216, screen_h - 170, 128, 96)
 }
 
 ///|
 /// Returns the touch rectangle for decreasing spin.
-pub fn touch_spin_left_rect() -> (Int, Int, Int, Int) {
+pub fn touch_spin_left_rect() -> (Int32, Int32, Int32, Int32) {
   (370, screen_h - 170, 128, 96)
 }
 
 ///|
 /// Returns the touch rectangle for increasing spin.
-pub fn touch_spin_right_rect() -> (Int, Int, Int, Int) {
+pub fn touch_spin_right_rect() -> (Int32, Int32, Int32, Int32) {
   (514, screen_h - 170, 128, 96)
 }
 
 ///|
 /// Returns the touch rectangle for throw power input.
-pub fn touch_power_rect() -> (Int, Int, Int, Int) {
+pub fn touch_power_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 316, screen_h - 212, 252, 150)
 }

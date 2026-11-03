@@ -45,7 +45,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.SparkKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -84,11 +84,11 @@ fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::player_segment_at(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   ignore_tail : Bool,
 ) -> Bool {
-  let mut end : Int = game.p_len
+  let mut end : Int32 = game.p_len
   if ignore_tail && game.p_grow <= 0 {
     end = (0).max(end - 1)
   }
@@ -105,9 +105,9 @@ fn @types.Game::player_segment_at(
 ///|
 fn @types.Game::rival_segment_at(
   game : @types.Game,
-  x : Int,
-  y : Int,
-  ignore_rid : Int,
+  x : Int32,
+  y : Int32,
+  ignore_rid : Int32,
   ignore_tail : Bool,
 ) -> Bool {
   for rid in 0..<game.rivals.length() {
@@ -117,7 +117,7 @@ fn @types.Game::rival_segment_at(
 
     if ignore_rid >= 0 && rid == ignore_rid {
       if ignore_tail {
-        let end : Int = if game.rivals[rid].grow <= 0 {
+        let end : Int32 = if game.rivals[rid].grow <= 0 {
           (0).max(game.rivals[rid].len - 1)
         } else {
           game.rivals[rid].len
@@ -143,12 +143,12 @@ fn @types.Game::rival_segment_at(
 }
 
 ///|
-fn @types.Game::trap_at(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::trap_at(game : @types.Game, x : Int32, y : Int32) -> Bool {
   game.trap_active && game.trap_x == x && game.trap_y == y
 }
 
 ///|
-fn @types.Game::is_cell_empty(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::is_cell_empty(game : @types.Game, x : Int32, y : Int32) -> Bool {
   if game.player_segment_at(x, y, false) {
     return false
   }
@@ -165,8 +165,8 @@ fn @types.Game::is_cell_empty(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn @types.Game::random_empty_cell(game : @types.Game) -> (Bool, Int, Int) {
-  let mut empty_count : Int = 0
+fn @types.Game::random_empty_cell(game : @types.Game) -> (Bool, Int32, Int32) {
+  let mut empty_count : Int32 = 0
 
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
@@ -180,8 +180,8 @@ fn @types.Game::random_empty_cell(game : @types.Game) -> (Bool, Int, Int) {
     return (false, 0, 0)
   }
 
-  let pick : Int = @raylib.get_random_value(0, empty_count - 1)
-  let mut seen : Int = 0
+  let pick : Int32 = @raylib.get_random_value(0, empty_count - 1)
+  let mut seen : Int32 = 0
 
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
@@ -241,7 +241,11 @@ fn @types.Game::spawn_trap(game : @types.Game) -> Bool {
 }
 
 ///|
-fn @types.Game::reset_player(game : @types.Game, cx : Int, cy : Int) -> Unit {
+fn @types.Game::reset_player(
+  game : @types.Game,
+  cx : Int32,
+  cy : Int32,
+) -> Unit {
   game.p_alive = true
   game.p_len = 5
   game.p_dir = Right
@@ -262,9 +266,9 @@ fn @types.Game::reset_player(game : @types.Game, cx : Int, cy : Int) -> Unit {
 ///|
 fn @types.Game::reset_rival(
   game : @types.Game,
-  rid : Int,
-  cx : Int,
-  cy : Int,
+  rid : Int32,
+  cx : Int32,
+  cy : Int32,
   dir : @types.Dir,
 ) -> Unit {
   let rival = game.rivals[rid]
@@ -280,7 +284,7 @@ fn @types.Game::reset_rival(
   }
 
   for i in 0..<rival.len {
-    let offset : Int = match dir {
+    let offset : Int32 = match dir {
       Left => i
       _ => -i
     }
@@ -331,7 +335,11 @@ fn @types.Game::start_match(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::cell_hits_player(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::cell_hits_player(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   game.player_segment_at(x, y, false)
 }
 
@@ -364,15 +372,15 @@ fn @types.Game::damage_player(game : @types.Game, msg : String) -> Unit {
 }
 
 ///|
-fn @types.Game::rival_respawn(game : @types.Game, rid : Int) -> Unit {
+fn @types.Game::rival_respawn(game : @types.Game, rid : Int32) -> Unit {
   if rid < 0 || rid >= game.rivals.length() {
     return
   }
 
   game.rivals[rid].deaths = game.rivals[rid].deaths + 1
 
-  let sx : Int = if rid % 2 == 0 { 3 } else { @types.grid_w - 4 }
-  let sy : Int = if rid % 2 == 0 { 3 } else { @types.grid_h - 4 }
+  let sx : Int32 = if rid % 2 == 0 { 3 } else { @types.grid_w - 4 }
+  let sy : Int32 = if rid % 2 == 0 { 3 } else { @types.grid_h - 4 }
   let dir : @types.Dir = if rid % 2 == 0 { Right } else { Left }
   game.reset_rival(rid, sx, sy, dir)
 }
@@ -410,10 +418,10 @@ fn @types.Game::grow_player_after_food(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::shift_player_forward(
   game : @types.Game,
-  nx : Int,
-  ny : Int,
+  nx : Int32,
+  ny : Int32,
 ) -> Unit {
-  let cap : Int = game.p_len.min(@types.max_segments - 1)
+  let cap : Int32 = game.p_len.min(@types.max_segments - 1)
 
   for i = cap; i > 0; i = i - 1 {
     game.p_seg_x[i] = game.p_seg_x[i - 1]
@@ -439,8 +447,8 @@ fn @types.Game::player_step(game : @types.Game) -> Unit {
     game.p_dir = game.p_next_dir
   }
 
-  let nx : Int = @types.wrap_x(game.p_seg_x[0] + @types.dir_dx(game.p_dir))
-  let ny : Int = @types.wrap_y(game.p_seg_y[0] + @types.dir_dy(game.p_dir))
+  let nx : Int32 = @types.wrap_x(game.p_seg_x[0] + @types.dir_dx(game.p_dir))
+  let ny : Int32 = @types.wrap_y(game.p_seg_y[0] + @types.dir_dy(game.p_dir))
 
   let self_hit : Bool = game.player_segment_at(nx, ny, true)
   let rival_hit : Bool = game.rival_segment_at(nx, ny, -1, false)
@@ -463,12 +471,12 @@ fn @types.Game::player_step(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::shift_rival_forward(
   game : @types.Game,
-  rid : Int,
-  nx : Int,
-  ny : Int,
+  rid : Int32,
+  nx : Int32,
+  ny : Int32,
 ) -> Unit {
   let rival = game.rivals[rid]
-  let cap : Int = rival.len.min(@types.max_segments - 1)
+  let cap : Int32 = rival.len.min(@types.max_segments - 1)
 
   for i = cap; i > 0; i = i - 1 {
     rival.seg_x[i] = rival.seg_x[i - 1]
@@ -487,9 +495,9 @@ fn @types.Game::shift_rival_forward(
 ///|
 fn @types.Game::rival_would_collide(
   game : @types.Game,
-  rid : Int,
-  nx : Int,
-  ny : Int,
+  rid : Int32,
+  nx : Int32,
+  ny : Int32,
 ) -> Bool {
   if game.player_segment_at(nx, ny, false) {
     return true
@@ -503,7 +511,7 @@ fn @types.Game::rival_would_collide(
 }
 
 ///|
-fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
+fn @types.Game::rival_step(game : @types.Game, rid : Int32) -> Unit {
   if rid < 0 || rid >= game.rivals.length() {
     return
   }
@@ -518,8 +526,8 @@ fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
     rival.dir = rival.next_dir
   }
 
-  let nx : Int = @types.wrap_x(rival.seg_x[0] + @types.dir_dx(rival.dir))
-  let ny : Int = @types.wrap_y(rival.seg_y[0] + @types.dir_dy(rival.dir))
+  let nx : Int32 = @types.wrap_x(rival.seg_x[0] + @types.dir_dx(rival.dir))
+  let ny : Int32 = @types.wrap_y(rival.seg_y[0] + @types.dir_dy(rival.dir))
 
   let hits_player : Bool = game.cell_hits_player(nx, ny)
   let hits_rival : Bool = game.rival_segment_at(nx, ny, rid, true)
@@ -551,9 +559,9 @@ fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
   game.shift_rival_forward(rid, nx, ny)
 
   if nx == game.food_x && ny == game.food_y {
-    let grow_gain : Int = if game.food_kind == Gold { 2 } else { 1 }
-    let score_gain : Int = if game.food_kind == Gold { 140 } else { 64 }
-    let burst_count : Int = if game.food_kind == Gold { 14 } else { 8 }
+    let grow_gain : Int32 = if game.food_kind == Gold { 2 } else { 1 }
+    let score_gain : Int32 = if game.food_kind == Gold { 140 } else { 64 }
+    let burst_count : Int32 = if game.food_kind == Gold { 14 } else { 8 }
 
     rival.grow = rival.grow + grow_gain
     rival.score = rival.score + score_gain
@@ -569,8 +577,8 @@ fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::rival_total_score(game : @types.Game) -> Int {
-  let mut s : Int = 0
+fn @types.Game::rival_total_score(game : @types.Game) -> Int32 {
+  let mut s : Int32 = 0
   for rival in game.rivals {
     s = s + rival.score
   }
@@ -610,8 +618,8 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   game.hint_left = game.hint_left - 1
   game.p_next_dir = best_dir
 
-  let nx : Int = @types.wrap_x(game.p_seg_x[0] + @types.dir_dx(best_dir))
-  let ny : Int = @types.wrap_y(game.p_seg_y[0] + @types.dir_dy(best_dir))
+  let nx : Int32 = @types.wrap_x(game.p_seg_x[0] + @types.dir_dx(best_dir))
+  let ny : Int32 = @types.wrap_y(game.p_seg_y[0] + @types.dir_dy(best_dir))
   game.hint_x = nx
   game.hint_y = ny
   game.hint_t = 1.4

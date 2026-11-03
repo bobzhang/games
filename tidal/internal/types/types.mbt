@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
-  x : Int
-  y : Int
-} derive(Eq, Debug)
+  x : Int32
+  y : Int32
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,124 +12,133 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct WaveFront {
   mut amplitude : Float
-  mut phase : Int
-  mut direction : Int // 0=up,1=right,2=down,3=left, -1=omnidirectional
-} derive(Debug)
+  mut phase : Int32
+  mut direction : Int32 // 0=up,1=right,2=down,3=left, -1=omnidirectional
+}
 
 ///|
 pub extend WaveFront with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct WaveTile {
   mut amplitude : Float
-  mut phase : Int
+  mut phase : Int32
   mut has_wall : Bool
   mut object : TileKind
   // target fields
   mut is_target : Bool
   mut target_min : Float
   mut target_max : Float
-  mut target_phase : Int // -1 = any
+  mut target_phase : Int32 // -1 = any
   mut target_satisfied : Bool
   // wave fronts arriving this tick
   mut wave_fronts : Array[WaveFront]
-} derive(Debug)
+}
 
 ///|
 pub extend WaveTile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct WaveGrid {
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   tiles : Array[WaveTile]
-} derive(Debug)
+}
 
 ///|
 pub extend WaveGrid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct PlaceableBudget {
   mut kind : PlaceableKind
-  mut total : Int
-  mut used : Int
-} derive(Debug)
+  mut total : Int32
+  mut used : Int32
+}
 
 ///|
 pub extend PlaceableBudget with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
-  tier : Int
-  index : Int // within tier
+  tier : Int32
+  index : Int32 // within tier
   name : String
-  grid_template : Array[Int] // encoded: 0=empty,1=wall,2+=special
+  grid_template : Array[Int32] // encoded: 0=empty,1=wall,2+=special
   targets : Array[TargetDef]
   pre_placed : Array[PrePlaced]
   budget : Array[PlaceableBudget]
-  par_objects : Int
-  par_ticks : Int
-} derive(Debug)
+  par_objects : Int32
+  par_ticks : Int32
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct TargetDef {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
   min_amp : Float
   max_amp : Float
-  phase : Int // -1 = any
-} derive(Debug)
+  phase : Int32 // -1 = any
+}
 
 ///|
 pub extend TargetDef with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct PrePlaced {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
   kind : TileKind
-} derive(Debug)
+}
 
 ///|
 pub extend PrePlaced with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
-  mut stars : Int
-  mut objects_used : Int
-  mut ticks_used : Int
-} derive(Debug)
+  mut stars : Int32
+  mut objects_used : Int32
+  mut ticks_used : Int32
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut grid : WaveGrid
   mut edit_grid : WaveGrid // snapshot for reset
-  mut current_level : Int // index into all_levels
-  mut current_tier : Int
+  mut current_level : Int32 // index into all_levels
+  mut current_tier : Int32
   mut play_state : PlayState
-  mut sim_tick : Int
+  mut sim_tick : Int32
   mut sim_timer : Float
-  mut selected_slot : Int // index into budget array
-  mut cursor_x : Int
-  mut cursor_y : Int
+  mut selected_slot : Int32 // index into budget array
+  mut cursor_x : Int32
+  mut cursor_y : Int32
   mut scores : Array[LevelScore]
-  mut frame_count : Int
-  mut objects_placed : Int
-  mut emitter_phase : Int // phase for next emitter placement
+  mut frame_count : Int32
+  mut objects_placed : Int32
+  mut emitter_phase : Int32 // phase for next emitter placement
   mut message : String
   mut message_timer : Float
   mut sim_speed : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

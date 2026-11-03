@@ -30,7 +30,7 @@ pub fn simulate_turn(
     }
     let sc = src.col
     let sr = src.row
-    let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     for d in 0..<dirs.length() {
       let (dx, dy) = dirs[d]
       let nc = sc + dx
@@ -56,7 +56,7 @@ pub fn simulate_turn(
     let sc = src.col
     let sr = src.row
     let src_height = grid.tiles[@types.grid_index(sc, sr, w)].height
-    let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     for d in 0..<dirs.length() {
       let (dx, dy) = dirs[d]
       let nc = sc + dx
@@ -84,7 +84,7 @@ pub fn simulate_turn(
         let idx = @types.grid_index(c, r, w)
         if next[idx] == Rainy {
           let tile_h = grid.tiles[idx].height
-          let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+          let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
           for d in 0..<dirs.length() {
             let (dx, dy) = dirs[d]
             let nc = c + dx
@@ -131,7 +131,7 @@ pub fn simulate_turn(
     let wdy = @types.wind_dir_dy(src.wind_dir)
     // Push clouds: scan in reverse to avoid double-moving
     // We need a separate pass to find clouds then move them
-    let cloud_positions : Array[(Int, Int)] = []
+    let cloud_positions : Array[(Int32, Int32)] = []
     for r in 0..<h {
       for c in 0..<w {
         let idx = @types.grid_index(c, r, w)
@@ -171,7 +171,7 @@ pub fn simulate_turn(
     }
     let sc = src.col
     let sr = src.row
-    let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     for d in 0..<dirs.length() {
       let (dx, dy) = dirs[d]
       let nc = sc + dx

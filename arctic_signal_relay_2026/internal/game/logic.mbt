@@ -28,26 +28,26 @@ fn @types.Game::clear_storms(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the mission time limit in seconds for the given stage, clamped to `timer_floor`.
-fn stage_timer_limit(stage : Int) -> Float {
+fn stage_timer_limit(stage : Int32) -> Float {
   let raw = @types.timer_base - Float::from_int(stage - 1) * @types.timer_step
   @types.maxf(@types.timer_floor, raw)
 }
 
 ///|
 /// Returns the number of relay towers to spawn for the given stage, clamped to `[3, max_towers]`.
-fn stage_tower_count(stage : Int) -> Int {
+fn stage_tower_count(stage : Int32) -> Int32 {
   (2 + stage).clamp(min=3, max=@types.max_towers)
 }
 
 ///|
 /// Returns the number of storm cells to spawn for the given stage, clamped to `[1, max_storms]`.
-fn stage_storm_count(stage : Int) -> Int {
+fn stage_storm_count(stage : Int32) -> Int32 {
   (1 + stage / 2).clamp(min=1, max=@types.max_storms)
 }
 
 ///|
 /// Returns the number of power cells a tower at `idx` requires for the given stage.
-fn stage_tower_need(stage : Int, idx : Int) -> Int {
+fn stage_tower_need(stage : Int32, idx : Int32) -> Int32 {
   let base = 1 + (stage - 1) / 2
   (base + idx % 2).clamp(min=1, max=4)
 }
@@ -67,7 +67,7 @@ fn @types.Game::set_hint(
 /// Returns true if the candidate position `(x, y)` is far enough from the depot and all previously placed towers to be a valid tower spawn location.
 fn @types.Game::tower_spot_ok(
   game : @types.Game,
-  placed : Int,
+  placed : Int32,
   x : Float,
   y : Float,
 ) -> Bool {
@@ -82,7 +82,7 @@ fn @types.Game::tower_spot_ok(
 
 ///|
 /// Resets and configures towers, storms, rover state, and objectives for the given stage number, then transitions the game to the Play state.
-fn @types.Game::setup_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::setup_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_towers()
   game.clear_storms()
 
@@ -251,7 +251,7 @@ fn @types.Game::closest_pending_tower(
   game : @types.Game,
   x : Float,
   y : Float,
-) -> Int {
+) -> Int32 {
   for
     i in 0..<game.towers.length()
     best_idx = -1,

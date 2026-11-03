@@ -3,7 +3,10 @@
 
 ///|
 /// Returns the world position of checkpoint `index` for the given `mission`.
-pub fn get_checkpoint_pos(mission : Int, index : Int) -> (Float, Float, Float) {
+pub fn get_checkpoint_pos(
+  mission : Int32,
+  index : Int32,
+) -> (Float, Float, Float) {
   if mission == 0 {
     // Training: simple ring around start
     if index == 0 {
@@ -84,8 +87,8 @@ pub fn get_checkpoint_pos(mission : Int, index : Int) -> (Float, Float, Float) {
 ///|
 /// Returns the spawn position of ground enemy `index` for the given `mission`.
 pub fn get_ground_enemy_pos(
-  mission : Int,
-  index : Int,
+  mission : Int32,
+  index : Int32,
 ) -> (Float, Float, Float) {
   let base_x = Float::from_int(mission * 17 + index * 31) * 0.7
   let base_z = Float::from_int(mission * 23 + index * 41) * 0.5
@@ -99,7 +102,10 @@ pub fn get_ground_enemy_pos(
 
 ///|
 /// Returns the spawn position of air enemy `index` for the given `mission`.
-pub fn get_air_enemy_pos(mission : Int, index : Int) -> (Float, Float, Float) {
+pub fn get_air_enemy_pos(
+  mission : Int32,
+  index : Int32,
+) -> (Float, Float, Float) {
   let denom = if index + 1 > 1 { index + 1 } else { 1 }
   let angle : Float = 3.14159265 *
     2.0 *
@@ -114,7 +120,7 @@ pub fn get_air_enemy_pos(mission : Int, index : Int) -> (Float, Float, Float) {
 
 ///|
 /// Returns the spawn position of turret `index` for the given `mission`.
-pub fn get_turret_pos(mission : Int, index : Int) -> (Float, Float, Float) {
+pub fn get_turret_pos(mission : Int32, index : Int32) -> (Float, Float, Float) {
   let angle : Float = 3.14159265 * 2.0 * Float::from_int(index) / 6.0
   let dist : Float = 20.0 + Float::from_int(mission) * 3.0
   let tx : Float = dist * @math.cosf(angle + Float::from_int(mission) * 0.5)
@@ -126,9 +132,9 @@ pub fn get_turret_pos(mission : Int, index : Int) -> (Float, Float, Float) {
 ///|
 /// Returns the position and building type of building `index` for the given `mission`.
 pub fn get_building_info(
-  mission : Int,
-  index : Int,
-) -> (Float, Float, Float, Int) {
+  mission : Int32,
+  index : Int32,
+) -> (Float, Float, Float, Int32) {
   // Mission-specific building layouts
   if mission == 1 {
     // Ground Strike: clustered base
@@ -239,7 +245,7 @@ pub fn get_building_info(
 
 ///|
 /// Returns the briefing text lines displayed before the given `mission` starts.
-pub fn get_mission_briefing_lines(mission : Int) -> Array[String] {
+pub fn get_mission_briefing_lines(mission : Int32) -> Array[String] {
   if mission == 0 {
     [
       "MISSION: Training Flight", "OBJECTIVE: Fly through all checkpoint rings",

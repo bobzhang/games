@@ -1,5 +1,9 @@
 ///|
-fn draw_hud(state : @types.LevelState, level_num : Int, frame : Int) -> Unit {
+fn draw_hud(
+  state : @types.LevelState,
+  level_num : Int32,
+  frame : Int32,
+) -> Unit {
   // Left panel background
   @raylib.draw_rectangle(0, 0, 310, @types.screen_height, panel_bg)
   @raylib.draw_rectangle(310, 0, 2, @types.screen_height, panel_border)
@@ -38,7 +42,7 @@ fn draw_hud(state : @types.LevelState, level_num : Int, frame : Int) -> Unit {
 }
 
 ///|
-fn draw_hp(state : @types.LevelState, x : Int, y : Int) -> Unit {
+fn draw_hp(state : @types.LevelState, x : Int32, y : Int32) -> Unit {
   @draw.draw_text("Hull:", x, y, @types.hud_font_size, text_bright)
   for i in 0..<@types.max_hp {
     let hx = x + 65 + i * 30
@@ -59,7 +63,7 @@ fn draw_hp(state : @types.LevelState, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_controls(x : Int, y : Int) -> Unit {
+fn draw_controls(x : Int32, y : Int32) -> Unit {
   @draw.draw_text("Controls:", x, y, @types.info_font_size, text_dim)
   @draw.draw_text("W - North", x + 10, y + 20, @types.info_font_size, text_dim)
   @draw.draw_text("S - South", x + 10, y + 38, @types.info_font_size, text_dim)
@@ -82,7 +86,7 @@ fn draw_controls(x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_level_complete(state : @types.LevelState, frame : Int) -> Unit {
+fn draw_level_complete(state : @types.LevelState, frame : Int32) -> Unit {
   // Overlay
   @raylib.draw_rectangle(
     0,
@@ -113,7 +117,7 @@ fn draw_level_complete(state : @types.LevelState, frame : Int) -> Unit {
 }
 
 ///|
-fn draw_game_over(frame : Int) -> Unit {
+fn draw_game_over(frame : Int32) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -134,7 +138,11 @@ fn draw_game_over(frame : Int) -> Unit {
 }
 
 ///|
-fn draw_star_display(cx : Int, cy : Int, rating : @types.StarRating) -> Unit {
+fn draw_star_display(
+  cx : Int32,
+  cy : Int32,
+  rating : @types.StarRating,
+) -> Unit {
   let count = @types.star_rating_value(rating)
   for i in 0..<3 {
     let sx = cx - 45 + i * 35

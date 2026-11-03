@@ -1,5 +1,5 @@
 ///|
-pub fn get_skirmish_map(index : Int) -> @types.LevelDef {
+pub fn get_skirmish_map(index : Int32) -> @types.LevelDef {
   match index {
     0 => skirmish_plains()
     1 => skirmish_forest()
@@ -10,7 +10,7 @@ pub fn get_skirmish_map(index : Int) -> @types.LevelDef {
 }
 
 ///|
-pub fn skirmish_map_name(index : Int) -> String {
+pub fn skirmish_map_name(index : Int32) -> String {
   match index {
     0 => "Open Plains"
     1 => "Dense Forest"
@@ -100,10 +100,13 @@ fn skirmish_fortress() -> @types.LevelDef {
 
 ///|
 pub fn generate_skirmish_units(
-  army_size : Int,
-) -> (Array[(@types.UnitKind, Int, Int)], Array[(@types.UnitKind, Int, Int)]) {
-  let player : Array[(@types.UnitKind, Int, Int)] = []
-  let enemy : Array[(@types.UnitKind, Int, Int)] = []
+  army_size : Int32,
+) -> (
+  Array[(@types.UnitKind, Int32, Int32)],
+  Array[(@types.UnitKind, Int32, Int32)],
+) {
+  let player : Array[(@types.UnitKind, Int32, Int32)] = []
+  let enemy : Array[(@types.UnitKind, Int32, Int32)] = []
   for i = 0; i < army_size; i = i + 1 {
     let kind : @types.UnitKind = match i % 3 {
       0 => Infantry

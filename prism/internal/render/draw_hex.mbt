@@ -362,6 +362,6 @@ fn hex_dir_to_angle(dir : @types.HexDir) -> Float {
 }
 
 ///|
-fn fade_color(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn fade_color(c : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), alpha)
 }

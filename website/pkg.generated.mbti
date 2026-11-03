@@ -1,0 +1,29 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games-website"
+
+// Values
+pub fn genre_color(String) -> String
+
+pub fn genre_gradient(String) -> String
+
+pub fn get_all_games() -> Array[GameInfo]
+
+// Errors
+
+// Types and methods
+pub(all) struct GameInfo {
+  id : String
+  title : String
+  genre : String
+  desc : String
+  icon : String
+  featured : Bool
+}
+
+type Model
+
+type Msg
+
+// Type aliases
+
+// Traits

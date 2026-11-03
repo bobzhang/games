@@ -1,5 +1,5 @@
 ///|
-pub fn cut(seq : Array[@types.Base], pos : Int) -> Array[@types.Base] {
+pub fn cut(seq : Array[@types.Base], pos : Int32) -> Array[@types.Base] {
   if pos < 0 || pos >= seq.length() {
     return @types.copy_sequence(seq)
   }
@@ -15,7 +15,7 @@ pub fn cut(seq : Array[@types.Base], pos : Int) -> Array[@types.Base] {
 ///|
 pub fn insert(
   seq : Array[@types.Base],
-  pos : Int,
+  pos : Int32,
   base : @types.Base,
 ) -> Array[@types.Base] {
   let p = if pos < 0 {
@@ -39,8 +39,8 @@ pub fn insert(
 ///|
 pub fn duplicate(
   seq : Array[@types.Base],
-  start : Int,
-  end : Int,
+  start : Int32,
+  end : Int32,
 ) -> Array[@types.Base] {
   let s = if start < 0 { 0 } else { start }
   let e = if end > seq.length() { seq.length() } else { end }
@@ -64,8 +64,8 @@ pub fn duplicate(
 ///|
 pub fn invert(
   seq : Array[@types.Base],
-  start : Int,
-  end : Int,
+  start : Int32,
+  end : Int32,
 ) -> Array[@types.Base] {
   let s = if start < 0 { 0 } else { start }
   let e = if end > seq.length() { seq.length() } else { end }
@@ -91,8 +91,8 @@ pub fn invert(
 ///|
 pub fn delete(
   seq : Array[@types.Base],
-  start : Int,
-  end : Int,
+  start : Int32,
+  end : Int32,
 ) -> Array[@types.Base] {
   let s = if start < 0 { 0 } else { start }
   let e = if end > seq.length() { seq.length() } else { end }
@@ -112,8 +112,8 @@ pub fn delete(
 ///|
 pub fn get_removed(
   seq : Array[@types.Base],
-  start : Int,
-  end : Int,
+  start : Int32,
+  end : Int32,
 ) -> Array[@types.Base] {
   let s = if start < 0 { 0 } else { start }
   let e = if end > seq.length() { seq.length() } else { end }

@@ -1,7 +1,7 @@
 ///|
 pub fn compute_hints(
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
   features_to_place : Array[@types.FeatureKind],
   clues : Array[@types.Clue],
 ) -> Array[@types.Vec2i] {
@@ -37,12 +37,12 @@ fn get_needed_features(
 ) -> Array[@types.FeatureKind] {
   let needed : Array[@types.FeatureKind] = []
   // Count how many of each feature type we need
-  let required : Array[Int] = Array::make(7, 0)
+  let required : Array[Int32] = Array::make(7, 0)
   for i in 0..<features_to_place.length() {
     required[feature_kind_to_index(features_to_place[i])] += 1
   }
   // Count how many are placed
-  let placed : Array[Int] = Array::make(7, 0)
+  let placed : Array[Int32] = Array::make(7, 0)
   for i in 0..<grid.length() {
     match grid[i] {
       Some(f) => placed[feature_kind_to_index(f)] += 1
@@ -62,7 +62,7 @@ fn get_needed_features(
 ///|
 fn find_valid_positions(
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
   clues : Array[@types.Clue],
   feature : @types.FeatureKind,
 ) -> Array[@types.Vec2i] {
@@ -89,7 +89,7 @@ fn find_valid_positions(
 pub fn get_feature_placement_count(
   features_to_place : Array[@types.FeatureKind],
   kind : @types.FeatureKind,
-) -> Int {
+) -> Int32 {
   let mut count = 0
   for i in 0..<features_to_place.length() {
     if features_to_place[i] == kind {
@@ -102,7 +102,7 @@ pub fn get_feature_placement_count(
 ///|
 pub fn compute_narrow_hint(
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
   features_to_place : Array[@types.FeatureKind],
   clues : Array[@types.Clue],
 ) -> (Array[@types.Vec2i], @types.FeatureKind?) {
@@ -126,7 +126,7 @@ pub fn compute_narrow_hint(
 ///|
 pub fn compute_reveal_hint(
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
   features_to_place : Array[@types.FeatureKind],
   clues : Array[@types.Clue],
 ) -> (@types.Vec2i?, @types.FeatureKind?) {
@@ -161,7 +161,7 @@ pub fn get_needed_features_pub(
 ///|
 pub fn find_valid_positions_pub(
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
   clues : Array[@types.Clue],
   feature : @types.FeatureKind,
 ) -> Array[@types.Vec2i] {

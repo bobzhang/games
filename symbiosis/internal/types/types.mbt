@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct Vec2i {
-  x : Int
-  y : Int
-} derive(Eq, Debug)
+  x : Int32
+  y : Int32
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -11,21 +12,23 @@ pub extend Vec2i with Eq::{not_equal, equal}
 pub extend Vec2i with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Character {
   mut pos : Vec2i
   mut on_anchor : Bool
   mut reached_exit : Bool
   mut alive : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Character with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct SwitchLink {
-  switch_id : Int
-  door_id : Int
-} derive(Eq, Debug)
+  switch_id : Int32
+  door_id : Int32
+}
 
 ///|
 pub extend SwitchLink with Eq::{not_equal, equal}
@@ -34,9 +37,10 @@ pub extend SwitchLink with Eq::{not_equal, equal}
 pub extend SwitchLink with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
-  world : Int
-  index : Int
+  world : Int32
+  index : Int32
   floor_tiles : Array[Array[TileKind]]
   ceiling_tiles : Array[Array[TileKind]]
   switch_links : Array[SwitchLink]
@@ -45,26 +49,28 @@ pub(all) struct Level {
   floor_exit : Vec2i
   ceiling_exit : Vec2i
   goal : GoalKind
-  par_moves : Int
+  par_moves : Int32
   gems : Array[Vec2i]
   ceiling_gems : Array[Vec2i]
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
-  mut best_moves : Int
-  mut stars : Int
+  mut best_moves : Int32
+  mut stars : Int32
   mut gem_collected : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Snapshot {
   luna_pos : Vec2i
   sol_pos : Vec2i
@@ -75,30 +81,31 @@ pub(all) struct Snapshot {
   sol_on_anchor : Bool
   luna_reached_exit : Bool
   sol_reached_exit : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Snapshot with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
-  mut selected_world : Int
-  mut selected_level : Int
+  mut selected_world : Int32
+  mut selected_level : Int32
   mut current_level : Level?
   luna : Character
   sol : Character
   mut door_states : Array[Bool]
   mut floor_gems_collected : Array[Bool]
   mut ceiling_gems_collected : Array[Bool]
-  mut move_count : Int
+  mut move_count : Int32
   mut play_state : PlayState
   mut history : Array[Snapshot]
   mut scores : Array[Array[LevelScore]]
-  mut frame_count : Int
+  mut frame_count : Int32
   mut message : String
   mut message_timer : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

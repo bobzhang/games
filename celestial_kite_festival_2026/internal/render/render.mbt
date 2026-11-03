@@ -2,8 +2,8 @@
 /// Draws `text` horizontally centred on screen at the given vertical position, font size, and colour.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -14,9 +14,9 @@ fn draw_center_text(
 /// Draws `text` right-aligned so its right edge sits at `x`, at the given vertical position, font size, and colour.
 fn draw_right_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -722,7 +722,7 @@ fn @types.Game::draw_kite(
 
 ///|
 /// Maps a spark kind integer to its display colour: 0 = amber, 1 = pink, 2 = cyan, 3+ = white-blue.
-fn spark_col(kind : Int) -> @raylib.Color {
+fn spark_col(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @types.amber()
   } else if kind == 1 {
@@ -799,10 +799,10 @@ fn @types.Game::draw_sparks(
 ///|
 /// Draws a labelled horizontal progress bar with a dark background, a filled segment proportional to `value/maxv`, and a border.
 fn draw_hud_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   maxv : Float,
   label : String,

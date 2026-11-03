@@ -160,8 +160,8 @@ test "solvable: each level has enough matching edge potential" {
     // This means the total pool of edge patterns must support pairing.
     let patterns = @types.all_patterns()
     let pat_count = patterns.length()
-    let east_counts : Array[Int] = Array::make(pat_count, 0)
-    let south_counts : Array[Int] = Array::make(pat_count, 0)
+    let east_counts : Array[Int32] = Array::make(pat_count, 0)
+    let south_counts : Array[Int32] = Array::make(pat_count, 0)
     let mut wildcard_count = 0
     for j in 0..<level.patches.length() {
       let p = level.patches[j]

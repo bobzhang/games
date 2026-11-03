@@ -1,10 +1,10 @@
 ///|
-pub fn mirror_h_pos(pos : @types.Vec2i, grid_h : Int) -> @types.Vec2i {
+pub fn mirror_h_pos(pos : @types.Vec2i, grid_h : Int32) -> @types.Vec2i {
   @types.vec2i(pos.x, grid_h - 1 - pos.y)
 }
 
 ///|
-pub fn mirror_v_pos(pos : @types.Vec2i, grid_w : Int) -> @types.Vec2i {
+pub fn mirror_v_pos(pos : @types.Vec2i, grid_w : Int32) -> @types.Vec2i {
   @types.vec2i(grid_w - 1 - pos.x, pos.y)
 }
 
@@ -16,8 +16,8 @@ pub fn mirror_d_pos(pos : @types.Vec2i) -> @types.Vec2i {
 ///|
 pub fn rotate2_pos(
   pos : @types.Vec2i,
-  grid_w : Int,
-  grid_h : Int,
+  grid_w : Int32,
+  grid_h : Int32,
 ) -> @types.Vec2i {
   @types.vec2i(grid_w - 1 - pos.x, grid_h - 1 - pos.y)
 }
@@ -25,8 +25,8 @@ pub fn rotate2_pos(
 ///|
 pub fn rotate4_pos_90(
   pos : @types.Vec2i,
-  grid_w : Int,
-  _grid_h : Int,
+  grid_w : Int32,
+  _grid_h : Int32,
 ) -> @types.Vec2i {
   @types.vec2i(grid_w - 1 - pos.y, pos.x)
 }
@@ -34,8 +34,8 @@ pub fn rotate4_pos_90(
 ///|
 pub fn rotate4_pos_180(
   pos : @types.Vec2i,
-  grid_w : Int,
-  grid_h : Int,
+  grid_w : Int32,
+  grid_h : Int32,
 ) -> @types.Vec2i {
   rotate2_pos(pos, grid_w, grid_h)
 }
@@ -43,14 +43,14 @@ pub fn rotate4_pos_180(
 ///|
 pub fn rotate4_pos_270(
   pos : @types.Vec2i,
-  _grid_w : Int,
-  grid_h : Int,
+  _grid_w : Int32,
+  grid_h : Int32,
 ) -> @types.Vec2i {
   @types.vec2i(pos.y, grid_h - 1 - pos.x)
 }
 
 ///|
-pub fn glide_pos(pos : @types.Vec2i, grid_w : Int) -> @types.Vec2i {
+pub fn glide_pos(pos : @types.Vec2i, grid_w : Int32) -> @types.Vec2i {
   let shifted_x = (pos.x + grid_w / 2) % grid_w
   @types.vec2i(shifted_x, grid_w - 1 - pos.y)
 }
@@ -80,8 +80,8 @@ pub fn transform_tile(
 pub fn get_symmetric_pos(
   pos : @types.Vec2i,
   sym : @types.SymmetryKind,
-  grid_w : Int,
-  grid_h : Int,
+  grid_w : Int32,
+  grid_h : Int32,
 ) -> Array[@types.Vec2i] {
   match sym {
     MirrorH => [mirror_h_pos(pos, grid_h)]

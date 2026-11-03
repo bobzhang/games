@@ -2,7 +2,7 @@
 pub fn type_advantage(
   attacker : @types.UnitKind,
   defender : @types.UnitKind,
-) -> Int {
+) -> Int32 {
   match (attacker, defender) {
     (Infantry, Artillery) => 2
     (Cavalry, Infantry) => 2
@@ -19,7 +19,7 @@ pub fn calc_damage(
   battle : @types.Battle,
   attacker : @types.GameUnit,
   defender : @types.GameUnit,
-) -> Int {
+) -> Int32 {
   let base_atk = attacker.atk
   let type_bonus = type_advantage(attacker.kind, defender.kind)
   // Terrain bonuses
@@ -64,9 +64,9 @@ pub fn can_attack(
 ///|
 pub fn resolve_attack(
   battle : @types.Battle,
-  attacker_id : Int,
-  defender_id : Int,
-) -> (Int, Bool) {
+  attacker_id : Int32,
+  defender_id : Int32,
+) -> (Int32, Bool) {
   // Returns (damage_dealt, defender_killed)
   let attacker = match @types.get_unit(battle, attacker_id) {
     Some(u) => u
@@ -107,7 +107,7 @@ pub fn compute_move_range(
   let h = battle.map.height
   // BFS
   let total = w * h
-  let costs : Array[Int] = Array(capacity=total)
+  let costs : Array[Int32] = Array(capacity=total)
   for _i in 0..<total {
     costs.push(999)
   }
@@ -201,7 +201,7 @@ pub fn compute_attack_targets(
 ///|
 pub fn move_unit(
   battle : @types.Battle,
-  unit_id : Int,
+  unit_id : Int32,
   target : @types.HexCoord,
 ) -> Bool {
   let unit = match @types.get_unit(battle, unit_id) {
@@ -268,7 +268,7 @@ pub fn check_victory(battle : @types.Battle) -> @types.GameResult {
 // Calculate score for a battle
 
 ///|
-pub fn calc_score(battle : @types.Battle, was_victory : Bool) -> Int {
+pub fn calc_score(battle : @types.Battle, was_victory : Bool) -> Int32 {
   if !was_victory {
     return 0
   }

@@ -72,9 +72,9 @@ fn draw_texture_rect(
 /// Draws the generated terrain texture for a grid cell.
 fn draw_terrain_tile_art(
   art : GameArt,
-  terrain : Int,
-  px : Int,
-  py : Int,
+  terrain : Int32,
+  px : Int32,
+  py : Int32,
 ) -> Unit {
   @raylib.draw_rectangle(px, py, cell, cell, terrain_color(terrain))
   let texture = if terrain == 1 { art.terrain_rock } else { art.terrain_grass }
@@ -91,7 +91,12 @@ fn draw_terrain_tile_art(
 
 ///|
 /// Draws the generated art for a placed zone tile.
-fn draw_zone_tile_art(art : GameArt, zone : Int, px : Int, py : Int) -> Unit {
+fn draw_zone_tile_art(
+  art : GameArt,
+  zone : Int32,
+  px : Int32,
+  py : Int32,
+) -> Unit {
   if zone == 1 {
     draw_texture_rect(
       art.zone_road,

@@ -232,7 +232,7 @@ fn @types.Game::draw_doors(game : @types.Game) -> Unit {
       0.0
     }
 
-    let open_alpha : Int = 96 + (ratio * Float::from_int(90)).to_int()
+    let open_alpha : Int32 = 96 + (ratio * Float::from_int(90)).to_int()
     let door_col = if door.open {
       @raylib.Color::new(62, 174, 140, open_alpha)
     } else {
@@ -285,7 +285,7 @@ fn @types.Game::draw_relics(game : @types.Game) -> Unit {
       continue
     }
 
-    let pulse : Int = 5 +
+    let pulse : Int32 = 5 +
       (game.stage_time * 12.0 + Float::from_int(i) * 1.4).to_int() % 4
     @raylib.draw_circle(
       game.relics[i].x.to_int(),
@@ -451,9 +451,9 @@ fn @types.Game::draw_world(game : @types.Game) -> Unit {
 /// Draws a labeled horizontal bar at `(x, y)` with a dark background and a colored fill scaled by `ratio`, plus a border outline.
 fn draw_meter(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
   ratio : Float,
   fill : @raylib.Color,
 ) -> Unit {
@@ -603,10 +603,10 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 /// Draws a UI button with a centered label, using the `accent` color fill when `hot` and a neutral gray otherwise.
 fn draw_button(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   accent : @raylib.Color,
   hot : Bool,
 ) -> Unit {
@@ -641,10 +641,10 @@ fn draw_button(
 /// Draws a semi-transparent touch d-pad button that brightens when `active`, with a centered label.
 fn draw_touch_button(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   active : Bool,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -778,7 +778,7 @@ fn @types.Game::draw_banner(game : @types.Game) -> Unit {
   }
 
   let alpha = @types.clampf(game.banner_t / 1.4, 0.0, 1.0)
-  let a : Int = (alpha * 210.0).to_int()
+  let a : Int32 = (alpha * 210.0).to_int()
 
   let bw = @draw.measure_text(game.banner_text, 30) + 56
   let bx = @types.screen_w / 2 - bw / 2

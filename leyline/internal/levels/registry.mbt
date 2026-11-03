@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(id : Int) -> @types.LevelDef? {
+pub fn get_level(id : Int32) -> @types.LevelDef? {
   match id {
     0 => Some(level_0())
     1 => Some(level_1())
@@ -26,7 +26,7 @@ pub fn get_level(id : Int) -> @types.LevelDef? {
 }
 
 ///|
-pub fn level_name(id : Int) -> String {
+pub fn level_name(id : Int32) -> String {
   match get_level(id) {
     Some(def) => def.name
     None => "Unknown"

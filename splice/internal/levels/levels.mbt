@@ -8,7 +8,7 @@ let tier2_ops : Array[@types.OpKind] = [Cut, Insert, Duplicate, Delete]
 let tier3_ops : Array[@types.OpKind] = [Cut, Insert, Duplicate, Invert, Delete]
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     // === TIER 1: Lab Basics (levels 0-7) ===
     // Level 1: Hello Gene - Just verify an existing correct sequence
@@ -338,10 +338,10 @@ pub fn get_level(index : Int) -> @types.Level {
 }
 
 ///|
-pub fn get_tier_levels(tier : Int) -> Array[Int] {
+pub fn get_tier_levels(tier : Int32) -> Array[Int32] {
   let offset = @types.tier_level_offset(tier)
   let count = @types.tier_level_count(tier)
-  let result : Array[Int] = Array(capacity=count)
+  let result : Array[Int32] = Array(capacity=count)
   for i in 0..<count {
     result.push(offset + i)
   }
@@ -349,7 +349,10 @@ pub fn get_tier_levels(tier : Int) -> Array[Int] {
 }
 
 ///|
-pub fn is_tier_unlocked(tier : Int, scores : Array[@types.LevelScore]) -> Bool {
+pub fn is_tier_unlocked(
+  tier : Int32,
+  scores : Array[@types.LevelScore],
+) -> Bool {
   if tier == 0 {
     return true
   }
@@ -366,7 +369,7 @@ pub fn is_tier_unlocked(tier : Int, scores : Array[@types.LevelScore]) -> Bool {
 }
 
 ///|
-pub fn tier_stars(tier : Int, scores : Array[@types.LevelScore]) -> Int {
+pub fn tier_stars(tier : Int32, scores : Array[@types.LevelScore]) -> Int32 {
   let offset = @types.tier_level_offset(tier)
   let count = @types.tier_level_count(tier)
   let mut total = 0
@@ -377,7 +380,7 @@ pub fn tier_stars(tier : Int, scores : Array[@types.LevelScore]) -> Int {
 }
 
 ///|
-pub fn tier_completed(tier : Int, scores : Array[@types.LevelScore]) -> Int {
+pub fn tier_completed(tier : Int32, scores : Array[@types.LevelScore]) -> Int32 {
   let offset = @types.tier_level_offset(tier)
   let count = @types.tier_level_count(tier)
   let mut total = 0

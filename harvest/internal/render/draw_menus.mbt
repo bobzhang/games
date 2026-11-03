@@ -67,7 +67,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_level_unlocked(game : @types.Game, index : Int) -> Bool {
+fn is_level_unlocked(game : @types.Game, index : Int32) -> Bool {
   if index == 0 {
     return true
   }
@@ -112,11 +112,11 @@ fn draw_level_select(game : @types.Game) -> Unit {
 ///|
 fn draw_level_button(
   game : @types.Game,
-  i : Int,
-  x : Int,
-  y : Int,
-  btn_w : Int,
-  btn_h : Int,
+  i : Int32,
+  x : Int32,
+  y : Int32,
+  btn_w : Int32,
+  btn_h : Int32,
 ) -> Unit {
   let is_hover = game.menu_selection == i
   let unlocked = is_level_unlocked(game, i)
@@ -266,7 +266,12 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star(cx : Int, cy : Int, radius : Int, color : @raylib.Color) -> Unit {
+fn draw_star(
+  cx : Int32,
+  cy : Int32,
+  radius : Int32,
+  color : @raylib.Color,
+) -> Unit {
   // Draw a simple star shape using triangles
   let r = Float::from_int(radius)
   let fcx = Float::from_int(cx)

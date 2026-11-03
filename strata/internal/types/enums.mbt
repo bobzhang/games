@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,6 +23,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum RockKind {
   Sandstone
   Limestone
@@ -31,7 +33,7 @@ pub(all) enum RockKind {
   Coal
   Chalk
   Slate
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend RockKind with Eq::{not_equal, equal}
@@ -48,13 +50,14 @@ pub impl Show for RockKind with fn output(self, logger) {
 pub extend RockKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ClueKind {
   FossilAge
   Superposition
   Dating
   Intrusion
   Unconformity
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ClueKind with Eq::{not_equal, equal}
@@ -71,12 +74,13 @@ pub impl Show for ClueKind with fn output(self, logger) {
 pub extend ClueKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Arranging
   Checking
   Solved
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -93,11 +97,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Surface
   Bedrock
   DeepCore
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

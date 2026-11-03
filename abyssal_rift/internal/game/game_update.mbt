@@ -319,7 +319,7 @@ fn show_path_choices(game : @types.Game) -> Unit {
 
 ///|
 fn update_path_selection(game : @types.Game) -> Unit {
-  let keys : Array[Int] = [@raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree]
+  let keys : Array[Int32] = [@raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree]
   for i in 0..<3 {
     if i < game.path_choices.length() && @raylib.is_key_pressed(keys[i]) {
       game.current_path = Some(game.path_choices[i])
@@ -429,10 +429,10 @@ pub fn spawn_particles_burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for _i in 0..<count {
     let idx = @types.alloc_particle(game.particles)
@@ -476,7 +476,7 @@ fn process_events(game : @types.Game) -> Unit {
 }
 
 ///|
-fn earn_tokens(game : @types.Game) -> Int {
+fn earn_tokens(game : @types.Game) -> Int32 {
   let floor_bonus = game.floor_num * 3
   let kill_bonus = game.enemies_killed / 5
   let boss_bonus = (if game.floor_num >= 5 { 10 } else { 0 }) +

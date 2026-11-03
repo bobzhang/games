@@ -96,7 +96,7 @@ fn reset_player(player : @types.Player) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy(game : @types.Game) -> Int32 {
   for i, slot in game.enemies {
     if !slot.active {
       break i
@@ -112,7 +112,7 @@ fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
+fn @types.Game::alloc_bullet(game : @types.Game) -> Int32 {
   for i, slot in game.bullets {
     if !slot.active {
       break i
@@ -128,7 +128,7 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_enemy_bullet(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy_bullet(game : @types.Game) -> Int32 {
   for i, slot in game.enemy_bullets {
     if !slot.active {
       break i
@@ -146,7 +146,7 @@ fn @types.Game::alloc_enemy_bullet(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_flare(game : @types.Game) -> Int {
+fn @types.Game::alloc_flare(game : @types.Game) -> Int32 {
   for i, slot in game.flares {
     if !slot.active {
       break i
@@ -162,7 +162,7 @@ fn @types.Game::alloc_flare(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_particle(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle(game : @types.Game) -> Int32 {
   for i, slot in game.particles {
     if !slot.active {
       break i
@@ -178,7 +178,7 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_shock(game : @types.Game) -> Int {
+fn @types.Game::alloc_shock(game : @types.Game) -> Int32 {
   for i, slot in game.shocks {
     if !slot.active {
       break i
@@ -197,11 +197,11 @@ fn @types.Game::alloc_shock(game : @types.Game) -> Int {
 fn @types.Game::spawn_enemy(
   game : @types.Game,
   kind : @types.EnemyKind,
-  ring : Int,
+  ring : Int32,
   angle : Float,
   ang_v : Float,
   hp : Float,
-  phase_mask : Int,
+  phase_mask : Int32,
 ) -> Unit {
   let i = game.alloc_enemy()
   game.enemies[i].active = true
@@ -223,7 +223,7 @@ fn @types.Game::spawn_enemy(
 ///|
 fn @types.Game::spawn_flare(
   game : @types.Game,
-  ring : Int,
+  ring : Int32,
   angle : Float,
   span : Float,
   spin_v : Float,
@@ -310,7 +310,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -329,7 +329,7 @@ fn @types.Game::burst(
 ///|
 fn @types.Game::spawn_shock(
   game : @types.Game,
-  ring : Int,
+  ring : Int32,
   a0 : Float,
   a1 : Float,
   life : Float,
@@ -357,7 +357,7 @@ fn @types.Game::stage_enemy_hp(
 }
 
 ///|
-fn @types.Game::begin_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::begin_stage(game : @types.Game, stage : Int32) -> Unit {
   game.stage = stage
   game.stage_time_left = @types.stage_time + Float::from_int(stage - 1) * 2.0
   game.stage_goal = 22 + (stage - 1) * 6
@@ -435,7 +435,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::add_combo_score(game : @types.Game, base : Int) -> Unit {
+fn @types.Game::add_combo_score(game : @types.Game, base : Int32) -> Unit {
   game.combo = (game.combo + 1).clamp(min=0, max=999)
   game.combo_t = 3.8
   let mul = @types.f(1) + Float::from_int(game.combo) * 0.08
@@ -472,7 +472,7 @@ fn @types.Game::apply_damage(game : @types.Game, dmg : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::kill_enemy(game : @types.Game, i : Int) -> Unit {
+fn @types.Game::kill_enemy(game : @types.Game, i : Int32) -> Unit {
   if !game.enemies[i].active {
     return
   }
@@ -619,7 +619,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn enemy_phase_mask_random() -> Int {
+fn enemy_phase_mask_random() -> Int32 {
   let pick = @types.randi(0, 99)
   if pick < 52 {
     0

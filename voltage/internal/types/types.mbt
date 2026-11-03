@@ -10,21 +10,21 @@ pub(all) struct Cell {
 
 ///|
 pub(all) struct LevelDef {
-  id : Int
+  id : Int32
   name : String
   tier : Tier
   description : String
-  battery_budget : Int
-  par_batteries : Int
+  battery_budget : Int32
+  par_batteries : Int32
   fixed_cells : Array[CellPlacement]
-  fuse_budget : Int
-  switch_budget : Int
+  fuse_budget : Int32
+  switch_budget : Int32
 }
 
 ///|
 pub(all) struct CellPlacement {
-  col : Int
-  row : Int
+  col : Int32
+  row : Int32
   component : ComponentKind
   connections : Array[Bool]
 }
@@ -43,43 +43,43 @@ pub(all) struct Spark {
 ///|
 pub(all) struct LevelState {
   mut cells : Array[Array[Cell]]
-  mut batteries_used : Int
-  mut battery_budget : Int
-  mut fuses_used : Int
-  mut fuse_budget : Int
-  mut switches_used : Int
-  mut switch_budget : Int
-  mut par_batteries : Int
-  mut devices_total : Int
-  mut devices_satisfied : Int
+  mut batteries_used : Int32
+  mut battery_budget : Int32
+  mut fuses_used : Int32
+  mut fuse_budget : Int32
+  mut switches_used : Int32
+  mut switch_budget : Int32
+  mut par_batteries : Int32
+  mut devices_total : Int32
+  mut devices_satisfied : Int32
   mut any_fuse_blown : Bool
   mut simulated : Bool
 }
 
 ///|
 pub(all) struct LevelResult {
-  mut stars : Int
+  mut stars : Int32
   mut completed : Bool
-  mut devices_powered : Int
-  mut devices_total : Int
-  mut batteries_used : Int
-  mut fuses_blown : Int
+  mut devices_powered : Int32
+  mut devices_total : Int32
+  mut batteries_used : Int32
+  mut fuses_blown : Int32
 }
 
 ///|
 pub(all) struct Game {
   mut screen : Screen
-  mut current_level : Int
+  mut current_level : Int32
   mut level_state : LevelState?
   mut level_results : Array[LevelResult]
-  mut cursor_col : Int
-  mut cursor_row : Int
+  mut cursor_col : Int32
+  mut cursor_row : Int32
   mut tool : ToolMode
   mut sparks : Array[Spark]
   mut animation_timer : Float
   mut message : String
   mut message_timer : Float
-  mut frame_count : Int
-  mut level_select_scroll : Int
+  mut frame_count : Int32
+  mut level_select_scroll : Int32
   mut show_help : Bool
 }

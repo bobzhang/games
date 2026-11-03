@@ -42,8 +42,8 @@ pub fn check_boss_phase_transition(battle : @types.BattleState) -> Unit {
 /// Apply visual and mechanical effects when a boss changes phase.
 fn apply_phase_transition(
   battle : @types.BattleState,
-  boss_id : Int,
-  new_phase : Int,
+  boss_id : Int32,
+  new_phase : Int32,
 ) -> Unit {
   // Screen effects: large shake + white flash + hitstop + ring
   @types.emit_shake(battle, 12.0)
@@ -74,8 +74,8 @@ fn apply_phase_transition(
 /// Siege Engine phase transition effects.
 fn apply_siege_engine_transition(
   battle : @types.BattleState,
-  boss_id : Int,
-  new_phase : Int,
+  boss_id : Int32,
+  new_phase : Int32,
 ) -> Unit {
   match new_phase {
     2 => {
@@ -109,8 +109,8 @@ fn apply_siege_engine_transition(
 /// Hivemind phase transition effects.
 fn apply_hivemind_transition(
   battle : @types.BattleState,
-  boss_id : Int,
-  new_phase : Int,
+  boss_id : Int32,
+  new_phase : Int32,
 ) -> Unit {
   match new_phase {
     2 => {
@@ -151,7 +151,7 @@ fn apply_hivemind_transition(
 
 ///|
 /// Find the boss unit in the battle. Returns -1 if not found.
-fn find_boss_unit(battle : @types.BattleState) -> Int {
+fn find_boss_unit(battle : @types.BattleState) -> Int32 {
   for i = 0; i < battle.units.length(); i = i + 1 {
     let u = battle.units[i]
     if u.active && u.hp > 0 && u.team == Enemy && u.enemy_type == Boss {
@@ -163,7 +163,7 @@ fn find_boss_unit(battle : @types.BattleState) -> Int {
 
 ///|
 /// Deploy a wall tile at the given position, tracking it for later explosion.
-fn deploy_wall(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+fn deploy_wall(battle : @types.BattleState, x : Int32, y : Int32) -> Unit {
   if battle.grid.in_bounds(x, y) {
     let tile = battle.grid.get(x, y)
     if tile.kind == Floor && tile.occupied_by < 0 {
@@ -209,7 +209,7 @@ fn explode_deployed_walls(battle : @types.BattleState) -> Unit {
 
 ///|
 /// Spawn a lava tile at the given position.
-fn spawn_lava_hazard(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+fn spawn_lava_hazard(battle : @types.BattleState, x : Int32, y : Int32) -> Unit {
   if battle.grid.in_bounds(x, y) {
     let tile = battle.grid.get(x, y)
     if tile.kind != Wall && tile.kind != Chasm {
@@ -225,7 +225,7 @@ fn spawn_lava_hazard(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 
 ///|
 /// Hivemind absorbs all remaining minions: gains their HP, kills them.
-fn absorb_minions(battle : @types.BattleState, boss_id : Int) -> Unit {
+fn absorb_minions(battle : @types.BattleState, boss_id : Int32) -> Unit {
   let boss = battle.units[boss_id]
   let mut absorbed_hp = 0
   for i = 0; i < battle.units.length(); i = i + 1 {
@@ -268,7 +268,7 @@ pub fn resolve_boss_turn_effects(battle : @types.BattleState) -> Unit {
 /// Siege Engine per-turn effects based on phase.
 fn resolve_siege_turn_effects(
   battle : @types.BattleState,
-  boss_id : Int,
+  boss_id : Int32,
 ) -> Unit {
   let boss = battle.units[boss_id]
   match battle.boss_phase {
@@ -304,7 +304,7 @@ fn resolve_siege_turn_effects(
 /// Hivemind per-turn effects based on phase.
 fn resolve_hivemind_turn_effects(
   battle : @types.BattleState,
-  boss_id : Int,
+  boss_id : Int32,
 ) -> Unit {
   let boss = battle.units[boss_id]
   match battle.boss_phase {
@@ -355,8 +355,8 @@ fn resolve_hivemind_turn_effects(
 /// Fire beams in all 4 cardinal directions from a unit, dealing damage.
 fn resolve_cardinal_fire(
   battle : @types.BattleState,
-  unit_id : Int,
-  damage : Int,
+  unit_id : Int32,
+  damage : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -393,8 +393,8 @@ fn resolve_cardinal_fire(
 /// Spawn a minion enemy unit adjacent to the boss.
 fn spawn_boss_minion(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   etype : @types.EnemyType,
 ) -> Unit {
   // Find a free tile near the requested position

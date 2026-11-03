@@ -1,6 +1,8 @@
 ///|
 /// Returns board width, height, kind count, time limit, hint count, shuffle count, and name for a campaign level by id.
-fn configure_level(id : Int) -> (Int, Int, Int, Float, Int, Int, String) {
+fn configure_level(
+  id : Int32,
+) -> (Int32, Int32, Int32, Float, Int32, Int32, String) {
   if id == 0 {
     (8, 6, 8, 118.0, 4, 4, "Harbor Warmup")
   } else if id == 1 {

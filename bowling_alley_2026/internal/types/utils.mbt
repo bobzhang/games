@@ -47,11 +47,11 @@ pub fn pointer_on_rect(
   x : Float,
   y : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if !hold && touch_count <= 0 {
     return false
@@ -71,7 +71,7 @@ pub fn title_start_hover(
   mouse_x : Float,
   mouse_y : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Bool {
   let (x, y, w, h) = title_start_button()
   pointer_on_rect(mouse_x, mouse_y, hold, touch_count, x, y, w, h)
@@ -83,7 +83,7 @@ pub fn result_retry_hover(
   mouse_x : Float,
   mouse_y : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Bool {
   let (x, y, w, h) = retry_button()
   pointer_on_rect(mouse_x, mouse_y, hold, touch_count, x, y, w, h)

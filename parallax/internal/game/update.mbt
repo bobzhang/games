@@ -87,7 +87,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_index : Int) -> Unit {
+fn start_level(game : @types.Game, level_index : Int32) -> Unit {
   let level = @levels.get_level(level_index)
   game.current_level = level_index
   game.grid = @types.new_voxel_grid(level.size)
@@ -165,11 +165,11 @@ fn update_playing(game : @types.Game) -> Unit {
 fn check_view_interaction(
   game : @types.Game,
   view : @types.ViewKind,
-  panel_x : Int,
-  panel_y : Int,
+  panel_x : Int32,
+  panel_y : Int32,
   level : @types.Level,
-  mx : Int,
-  my : Int,
+  mx : Int32,
+  my : Int32,
 ) -> Unit {
   let size = level.size
   let cs = @types.cell_size_for_grid(size)
@@ -207,8 +207,8 @@ fn check_view_interaction(
 fn do_toggle(
   game : @types.Game,
   view : @types.ViewKind,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   level : @types.Level,
 ) -> Unit {
   // Check voxel budget before adding

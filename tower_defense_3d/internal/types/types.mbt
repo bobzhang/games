@@ -3,7 +3,7 @@
 ///|
 /// Active debuff or buff applied to an enemy with duration and strength.
 pub(all) struct StatusEffect {
-  mut kind : Int
+  mut kind : Int32
   mut duration : Float
   mut strength : Float
   mut tick_timer : Float
@@ -18,7 +18,7 @@ pub fn StatusEffect::none() -> StatusEffect {
 ///|
 /// Creates a status effect with the given `kind`, `duration`, and `strength`.
 pub fn StatusEffect::StatusEffect(
-  kind : Int,
+  kind : Int32,
   duration : Float,
   strength : Float,
 ) -> StatusEffect {
@@ -32,21 +32,21 @@ pub fn StatusEffect::StatusEffect(
 pub(all) struct Tower {
   mut active : Bool
   mut kind : TowerKind
-  mut gx : Int
-  mut gy : Int
-  mut level : Int
+  mut gx : Int32
+  mut gy : Int32
+  mut level : Int32
   mut reload_timer : Float
-  mut target_idx : Int
+  mut target_idx : Int32
   mut angle : Float
   mut targeting_mode : TargetPriority
-  mut kills : Int
+  mut kills : Int32
   mut total_damage : Float
   mut special_timer : Float
   mut special_active : Bool
   mut buff_damage : Float
   mut buff_range : Float
   mut buff_rate : Float
-  mut sell_value : Int
+  mut sell_value : Int32
 }
 
 ///|
@@ -75,7 +75,7 @@ pub fn Tower::inactive() -> Tower {
 
 ///|
 /// Creates a new active tower of the given `kind` at grid position (`gx`, `gy`).
-pub fn Tower::Tower(kind : TowerKind, gx : Int, gy : Int) -> Tower {
+pub fn Tower::Tower(kind : TowerKind, gx : Int32, gy : Int32) -> Tower {
   {
     active: true,
     kind,
@@ -112,7 +112,7 @@ pub(all) struct Enemy {
   mut speed : Float
   mut base_speed : Float
   mut armor : Float
-  mut path_index : Int
+  mut path_index : Int32
   mut path_progress : Float
   mut slow_timer : Float
   mut slow_factor : Float
@@ -124,7 +124,7 @@ pub(all) struct Enemy {
   mut armor_broken : Bool
   mut chilled : Bool
   mut chill_timer : Float
-  mut gold_value : Int
+  mut gold_value : Int32
   mut flying : Bool
   mut is_boss : Bool
   mut is_camo : Bool
@@ -133,7 +133,7 @@ pub(all) struct Enemy {
   mut shield_regen_timer : Float
   mut heal_timer : Float
   mut spawn_children : Bool
-  mut score_value : Int
+  mut score_value : Int32
 }
 
 ///|
@@ -185,7 +185,7 @@ pub(all) struct Projectile {
   mut x : Float
   mut y : Float
   mut z : Float
-  mut target_idx : Int
+  mut target_idx : Int32
   mut damage : Float
   mut speed : Float
   mut splash_radius : Float
@@ -195,10 +195,10 @@ pub(all) struct Projectile {
   mut burn_duration : Float
   mut stun_chance : Float
   mut stun_duration : Float
-  mut chain_count : Int
+  mut chain_count : Int32
   mut chain_range : Float
   mut is_crit : Bool
-  mut tower_idx : Int
+  mut tower_idx : Int32
 }
 
 ///|
@@ -241,11 +241,11 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -273,31 +273,31 @@ pub fn Particle::inactive() -> Particle {
 
 ///|
 /// Particle kind for generic visual effects.
-pub let particle_normal : Int = 0
+pub let particle_normal : Int32 = 0
 
 ///|
 /// Particle kind for flame and burn effects.
-pub let particle_fire : Int = 1
+pub let particle_fire : Int32 = 1
 
 ///|
 /// Particle kind for frost and ice effects.
-pub let particle_ice : Int = 2
+pub let particle_ice : Int32 = 2
 
 ///|
 /// Particle kind for electrical discharge effects.
-pub let particle_lightning : Int = 3
+pub let particle_lightning : Int32 = 3
 
 ///|
 /// Particle kind for gold collection visual feedback.
-pub let particle_gold : Int = 4
+pub let particle_gold : Int32 = 4
 
 ///|
 /// Particle kind for tower construction effects.
-pub let particle_build : Int = 5
+pub let particle_build : Int32 = 5
 
 ///|
 /// Particle kind for explosion and impact effects.
-pub let particle_explosion : Int = 6
+pub let particle_explosion : Int32 = 6
 
 // Path node
 
@@ -314,7 +314,7 @@ pub(all) struct PathNode {
 /// Single enemy group within a wave with type, count, and spawn timing.
 pub(all) struct WaveSpawnEntry {
   enemy_kind : EnemyKind
-  count : Int
+  count : Int32
   hp_mult : Float
   speed_mult : Float
   spawn_delay : Float
@@ -326,7 +326,7 @@ pub(all) struct WaveSpawnEntry {
 /// Simple wave definition with enemy type, count, and scaling multipliers.
 pub(all) struct WaveDef {
   enemy_kind : EnemyKind
-  count : Int
+  count : Int32
   hp_mult : Float
   speed_mult : Float
 }
@@ -338,7 +338,7 @@ pub(all) struct WaveDef {
 pub(all) struct WaveInfo {
   entries : Array[WaveSpawnEntry]
   is_boss_wave : Bool
-  bonus_gold : Int
+  bonus_gold : Int32
   wave_message : String
 }
 
@@ -348,10 +348,10 @@ pub(all) struct WaveInfo {
 /// Map metadata including name, difficulty rating, and layout data.
 pub(all) struct MapInfo {
   name : String
-  difficulty : Int
+  difficulty : Int32
   layout : Array[String]
   description : String
-  starting_gold_bonus : Int
+  starting_gold_bonus : Int32
 }
 
 // Tower upgrade info
@@ -359,7 +359,7 @@ pub(all) struct MapInfo {
 ///|
 /// Tower upgrade details including cost, stat multipliers, and description.
 pub(all) struct UpgradeInfo {
-  cost : Int
+  cost : Int32
   damage_mult : Float
   range_mult : Float
   rate_mult : Float
@@ -375,36 +375,36 @@ pub(all) struct Game {
   mut prev_state : GameState
 
   // Economy
-  mut gold : Int
-  mut lives : Int
-  mut score : Int
+  mut gold : Int32
+  mut lives : Int32
+  mut score : Int32
   mut interest_timer : Float
-  mut total_gold_earned : Int
-  mut total_gold_spent : Int
+  mut total_gold_earned : Int32
+  mut total_gold_spent : Int32
 
   // Wave system
-  mut current_wave : Int
+  mut current_wave : Int32
   mut wave_timer : Float
   mut spawn_timer : Float
-  mut enemies_to_spawn : Int
-  mut enemies_spawned : Int
+  mut enemies_to_spawn : Int32
+  mut enemies_spawned : Int32
   mut wave_enemy_kind : EnemyKind
   mut wave_hp_mult : Float
   mut wave_speed_mult : Float
-  mut wave_spawn_group : Int
-  mut enemies_killed_this_wave : Int
+  mut wave_spawn_group : Int32
+  mut enemies_killed_this_wave : Int32
   mut wave_active : Bool
 
   // Multi-group wave system
   mut spawn_groups : Array[WaveSpawnEntry]
-  mut current_group : Int
-  mut group_spawned : Int
+  mut current_group : Int32
+  mut group_spawned : Int32
   mut group_delay_timer : Float
 
   // Map
   tiles : Array[Tile]
   path_nodes : Array[PathNode]
-  mut path_count : Int
+  mut path_count : Int32
 
   // Entity pools
   towers : Array[Tower]
@@ -414,8 +414,8 @@ pub(all) struct Game {
 
   // Building mode
   mut selected_tower_type : TowerKind
-  mut hover_gx : Int
-  mut hover_gy : Int
+  mut hover_gx : Int32
+  mut hover_gy : Int32
   mut hover_valid : Bool
 
   // Camera
@@ -426,36 +426,36 @@ pub(all) struct Game {
   mut camera_target_z : Float
 
   // UI
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
   mut show_ranges : Bool
-  mut selected_tower_idx : Int
+  mut selected_tower_idx : Int32
   mut upgrade_preview : Bool
-  mut tower_info_scroll : Int
+  mut tower_info_scroll : Int32
   mut notification_timer : Float
   mut notification_text : String
   mut show_minimap : Bool
 
   // Speed control
   mut speed_multiplier : Float
-  mut speed_setting : Int
+  mut speed_setting : Int32
 
   // Difficulty
-  mut difficulty : Int
+  mut difficulty : Int32
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // Current map
-  mut current_map : Int
+  mut current_map : Int32
 
   // Stats tracking
-  mut towers_built : Int
-  mut towers_sold : Int
-  mut total_kills : Int
+  mut towers_built : Int32
+  mut towers_sold : Int32
+  mut total_kills : Int32
   mut damage_dealt : Float
-  mut longest_wave : Int
+  mut longest_wave : Int32
 
   // Wave message display
   mut wave_message : String
@@ -463,7 +463,7 @@ pub(all) struct Game {
 
   // Lightning chain visualization
   mut chain_lines : Array[ChainLine]
-  mut chain_line_count : Int
+  mut chain_line_count : Int32
 
   // Synergy combo visualization
   synergy_lines : Array[SynergyLine]
@@ -477,7 +477,7 @@ pub(all) struct Game {
   mut wave_complete_timer : Float
   mut leak_warning_timer : Float
   mut gold_flash_timer : Float
-  mut prev_gold : Int
+  mut prev_gold : Int32
 }
 
 // Chain lightning visual line
@@ -523,9 +523,9 @@ pub(all) struct SynergyLine {
   mut y2 : Float
   mut z2 : Float
   mut life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut label : String
 }
 
@@ -560,10 +560,10 @@ pub(all) struct FloatingText {
   mut vy : Float
   mut life : Float
   mut max_life : Float
-  mut value : Int
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut value : Int32
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut is_gold : Bool
 }
 
@@ -596,9 +596,9 @@ pub(all) struct BreakFlash {
   mut y : Float
   mut z : Float
   mut life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut radius : Float
 }
 
@@ -631,9 +631,9 @@ pub(all) struct AttackBeam {
   mut y2 : Float
   mut z2 : Float
   mut life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut kind : TowerKind
 }
 

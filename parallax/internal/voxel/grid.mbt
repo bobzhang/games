@@ -1,5 +1,5 @@
 ///|
-pub fn get_voxel(g : @types.VoxelGrid, x : Int, y : Int, z : Int) -> Bool {
+pub fn get_voxel(g : @types.VoxelGrid, x : Int32, y : Int32, z : Int32) -> Bool {
   if x < 0 || x >= g.size || y < 0 || y >= g.size || z < 0 || z >= g.size {
     return false
   }
@@ -9,9 +9,9 @@ pub fn get_voxel(g : @types.VoxelGrid, x : Int, y : Int, z : Int) -> Bool {
 ///|
 pub fn set_voxel(
   g : @types.VoxelGrid,
-  x : Int,
-  y : Int,
-  z : Int,
+  x : Int32,
+  y : Int32,
+  z : Int32,
   val : Bool,
 ) -> Unit {
   if x >= 0 && x < g.size && y >= 0 && y < g.size && z >= 0 && z < g.size {
@@ -20,7 +20,7 @@ pub fn set_voxel(
 }
 
 ///|
-pub fn count_filled(g : @types.VoxelGrid) -> Int {
+pub fn count_filled(g : @types.VoxelGrid) -> Int32 {
   let mut count = 0
   for i in 0..<g.cells.length() {
     if g.cells[i] {
@@ -133,8 +133,8 @@ pub fn check_completion(
 ///|
 pub fn ray_toggle_top(
   g : @types.VoxelGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Vec3i? {
   let x = col
   let z = row
@@ -161,8 +161,8 @@ pub fn ray_toggle_top(
 ///|
 pub fn ray_toggle_front(
   g : @types.VoxelGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Vec3i? {
   let x = col
   let y = g.size - 1 - row
@@ -189,8 +189,8 @@ pub fn ray_toggle_front(
 ///|
 pub fn ray_toggle_side(
   g : @types.VoxelGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Vec3i? {
   let z = col
   let y = g.size - 1 - row
@@ -215,8 +215,8 @@ pub fn ray_toggle_side(
 pub fn ray_toggle(
   g : @types.VoxelGrid,
   view : @types.ViewKind,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Vec3i? {
   match view {
     Top => ray_toggle_top(g, col, row)
@@ -230,8 +230,8 @@ pub fn ray_toggle(
 ///|
 pub fn ray_preview_top(
   g : @types.VoxelGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Vec3i? {
   let x = col
   let z = row
@@ -251,8 +251,8 @@ pub fn ray_preview_top(
 ///|
 pub fn ray_preview_front(
   g : @types.VoxelGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Vec3i? {
   let x = col
   let y = g.size - 1 - row
@@ -272,8 +272,8 @@ pub fn ray_preview_front(
 ///|
 pub fn ray_preview_side(
   g : @types.VoxelGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Vec3i? {
   let z = col
   let y = g.size - 1 - row
@@ -294,8 +294,8 @@ pub fn ray_preview_side(
 pub fn ray_preview(
   g : @types.VoxelGrid,
   view : @types.ViewKind,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Vec3i? {
   match view {
     Top => ray_preview_top(g, col, row)
@@ -324,7 +324,7 @@ pub fn check_connected(g : @types.VoxelGrid) -> Bool {
     return true
   }
   let visited : Array[Bool] = Array::make(g.cells.length(), false)
-  let stack : Array[Int] = [start_idx]
+  let stack : Array[Int32] = [start_idx]
   visited[start_idx] = true
   let mut visited_count = 1
   while stack.length() > 0 {

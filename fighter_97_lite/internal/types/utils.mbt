@@ -54,7 +54,7 @@ pub fn approachf(current : Float, target : Float, delta : Float) -> Float {
 
 ///|
 /// Advances and returns the PRNG state.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -68,7 +68,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer in `[low, high]`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -97,7 +97,7 @@ pub fn fighter_archetype(game : Game, fighter : Fighter) -> CharacterArchetype {
 
 ///|
 /// Returns the other fighter slot index.
-pub fn other_slot(slot : Int) -> Int {
+pub fn other_slot(slot : Int32) -> Int32 {
   if slot == 0 {
     1
   } else {
@@ -107,7 +107,7 @@ pub fn other_slot(slot : Int) -> Int {
 
 ///|
 /// Converts facing sign int to normalized float direction.
-pub fn facing_sign(facing : Int) -> Float {
+pub fn facing_sign(facing : Int32) -> Float {
   if facing < 0 {
     -1.0
   } else {
@@ -163,9 +163,9 @@ pub fn attack_hitbox_for(fighter : Fighter, mv : MoveSpec) -> @raylib.Rectangle 
 /// Draws text with a black shadow offset.
 pub fn draw_shadow_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   @draw.draw_text(text, x + 2, y + 2, size, @raylib.black)
@@ -176,9 +176,9 @@ pub fn draw_shadow_text(
 /// Draws centered text with a black shadow offset.
 pub fn draw_center_shadow_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, size)
@@ -199,7 +199,7 @@ pub fn countdown_color(timer : Float) -> @raylib.Color {
 
 ///|
 /// Returns total guard capacity for an archetype.
-pub fn fighter_total_guard(archetype : CharacterArchetype) -> Int {
+pub fn fighter_total_guard(archetype : CharacterArchetype) -> Int32 {
   guard_max + archetype.max_guard_bonus
 }
 
@@ -229,7 +229,7 @@ pub fn action_name(action : Action) -> String {
 /// Adds super meter scaled by archetype gain multiplier.
 pub fn add_meter(
   fighter : Fighter,
-  value : Int,
+  value : Int32,
   archetype : CharacterArchetype,
 ) -> Unit {
   let scaled = Float::from_int(value) * archetype.meter_mul
@@ -329,7 +329,7 @@ pub fn fighter_is_throw_vulnerable(fighter : Fighter) -> Bool {
 
 ///|
 /// Formats frame advantage with explicit sign.
-pub fn signed_frames_text(frames : Int) -> String {
+pub fn signed_frames_text(frames : Int32) -> String {
   if frames > 0 {
     "+\{frames}"
   } else {
@@ -351,9 +351,9 @@ pub fn set_training_note(game : Game, text : String) -> Unit {
 /// Writes a formatted frame-advantage training note.
 pub fn set_training_frame_adv(
   game : Game,
-  attacker_slot : Int,
+  attacker_slot : Int32,
   label : String,
-  advantage : Int,
+  advantage : Int32,
 ) -> Unit {
   set_training_note(
     game,
@@ -398,9 +398,9 @@ pub fn camera_project_size(game : Game, size : Float) -> Float {
 pub fn set_combat_badge(
   game : Game,
   text : String,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   duration : Float,
 ) -> Unit {
   game.combat_badge_text = text

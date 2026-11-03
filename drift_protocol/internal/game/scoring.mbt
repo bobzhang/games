@@ -49,7 +49,7 @@ pub fn calculate_score(game : @types.Game) -> @types.LevelScore {
 
 ///|
 /// Get total score across all levels
-pub fn total_score(game : @types.Game) -> Int {
+pub fn total_score(game : @types.Game) -> Int32 {
   let mut total = 0
   for i in 0..<game.level_scores.length() {
     match game.level_scores[i] {

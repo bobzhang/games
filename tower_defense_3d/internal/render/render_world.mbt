@@ -285,7 +285,7 @@ fn @types.Game::draw_towers(game : @types.Game) -> Unit {
 fn draw_arrow_tower(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   color : @raylib.Color,
   game : @types.Game,
 ) -> Unit {
@@ -335,7 +335,7 @@ fn draw_arrow_tower(
 fn draw_cannon_tower(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   angle : Float,
   color : @raylib.Color,
   game : @types.Game,
@@ -377,7 +377,7 @@ fn draw_cannon_tower(
 fn draw_frost_tower(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   color : @raylib.Color,
   game : @types.Game,
 ) -> Unit {
@@ -431,7 +431,7 @@ fn draw_frost_tower(
 fn draw_lightning_tower(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   color : @raylib.Color,
   game : @types.Game,
 ) -> Unit {
@@ -478,7 +478,7 @@ fn draw_lightning_tower(
 fn draw_flame_tower(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   color : @raylib.Color,
   game : @types.Game,
 ) -> Unit {
@@ -540,7 +540,7 @@ fn draw_flame_tower(
 fn draw_sniper_tower(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   angle : Float,
   color : @raylib.Color,
   game : @types.Game,
@@ -593,7 +593,7 @@ fn draw_sniper_tower(
 fn draw_splash_tower(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   color : @raylib.Color,
   game : @types.Game,
 ) -> Unit {
@@ -616,7 +616,7 @@ fn draw_splash_tower(
     color,
   )
   // Multiple barrels pointing outward
-  let barrel_count : Int = 3 + level
+  let barrel_count : Int32 = 3 + level
   for b in 0..<barrel_count {
     let ba = Float::from_int(b) * 6.28 / Float::from_int(barrel_count)
     let bx = wx + @math.cosf(ba) * 0.5
@@ -650,7 +650,7 @@ fn draw_splash_tower(
 fn draw_buff_tower(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   color : @raylib.Color,
   game : @types.Game,
 ) -> Unit {
@@ -718,7 +718,7 @@ fn draw_buff_tower(
 fn draw_level_indicators(
   wx : Float,
   wz : Float,
-  level : Int,
+  level : Int32,
   color : @raylib.Color,
 ) -> Unit {
   if level >= 2 {
@@ -759,7 +759,7 @@ fn @types.Game::draw_tower_range_indicators(game : @types.Game) -> Unit {
     let wz = @types.grid_to_world_z(tower.gy)
     let range = @types.tower_effective_range(tower)
     let color = tower_color(tower.kind)
-    let alpha : Int = if i == game.selected_tower_idx { 100 } else { 50 }
+    let alpha : Int32 = if i == game.selected_tower_idx { 100 } else { 50 }
     @raylib.draw_circle_3d(
       @raylib.Vector3::new(wx, 0.1, wz),
       range,

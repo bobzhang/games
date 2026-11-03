@@ -5,10 +5,10 @@ pub fn new_cell(kind : CellKind) -> Cell {
 
 ///|
 pub fn new_connection(
-  from_col : Int,
-  from_row : Int,
-  to_col : Int,
-  to_row : Int,
+  from_col : Int32,
+  from_row : Int32,
+  to_col : Int32,
+  to_row : Int32,
 ) -> Connection {
   { from_col, from_row, to_col, to_row, energy_flow: 0.0, flow_anim: 0.0, }
 }
@@ -77,27 +77,27 @@ pub fn init_level_state(def : LevelDef) -> LevelState {
 }
 
 ///|
-pub fn cell_screen_x(col : Int) -> Int {
+pub fn cell_screen_x(col : Int32) -> Int32 {
   grid_offset_x + col * cell_size
 }
 
 ///|
-pub fn cell_screen_y(row : Int) -> Int {
+pub fn cell_screen_y(row : Int32) -> Int32 {
   grid_offset_y + row * cell_size
 }
 
 ///|
-pub fn cell_center_x(col : Int) -> Float {
+pub fn cell_center_x(col : Int32) -> Float {
   Float::from_int(grid_offset_x + col * cell_size + cell_size / 2)
 }
 
 ///|
-pub fn cell_center_y(row : Int) -> Float {
+pub fn cell_center_y(row : Int32) -> Float {
   Float::from_int(grid_offset_y + row * cell_size + cell_size / 2)
 }
 
 ///|
-pub fn is_adjacent(c1 : Int, r1 : Int, c2 : Int, r2 : Int) -> Bool {
+pub fn is_adjacent(c1 : Int32, r1 : Int32, c2 : Int32, r2 : Int32) -> Bool {
   let dc = if c1 > c2 { c1 - c2 } else { c2 - c1 }
   let dr = if r1 > r2 { r1 - r2 } else { r2 - r1 }
   (dc == 1 && dr == 0) || (dc == 0 && dr == 1)
@@ -112,17 +112,17 @@ pub fn is_connectable(kind : CellKind) -> Bool {
 }
 
 ///|
-pub fn in_grid(col : Int, row : Int) -> Bool {
+pub fn in_grid(col : Int32, row : Int32) -> Bool {
   col >= 0 && col < grid_cols && row >= 0 && row < grid_rows
 }
 
 ///|
 pub fn connection_exists(
   connections : Array[Connection],
-  c1 : Int,
-  r1 : Int,
-  c2 : Int,
-  r2 : Int,
+  c1 : Int32,
+  r1 : Int32,
+  c2 : Int32,
+  r2 : Int32,
 ) -> Bool {
   for i in 0..<connections.length() {
     let conn = connections[i]
@@ -145,7 +145,7 @@ pub fn connection_exists(
 }
 
 ///|
-pub fn tier_for_level(level_id : Int) -> Int {
+pub fn tier_for_level(level_id : Int32) -> Int32 {
   if level_id < tier1_count {
     1
   } else if level_id < tier1_count + tier2_count {
@@ -156,7 +156,10 @@ pub fn tier_for_level(level_id : Int) -> Int {
 }
 
 ///|
-pub fn level_unlocked(progress : Array[LevelProgress], level_id : Int) -> Bool {
+pub fn level_unlocked(
+  progress : Array[LevelProgress],
+  level_id : Int32,
+) -> Bool {
   if level_id == 0 {
     return true
   }
@@ -170,10 +173,10 @@ pub fn level_unlocked(progress : Array[LevelProgress], level_id : Int) -> Bool {
 ///|
 pub fn neighbor_connections(
   connections : Array[Connection],
-  col : Int,
-  row : Int,
-) -> Array[(Int, Int)] {
-  let neighbors : Array[(Int, Int)] = []
+  col : Int32,
+  row : Int32,
+) -> Array[(Int32, Int32)] {
+  let neighbors : Array[(Int32, Int32)] = []
   for i in 0..<connections.length() {
     let c = connections[i]
     if c.from_col == col && c.from_row == row {

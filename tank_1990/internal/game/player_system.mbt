@@ -1,7 +1,7 @@
 ///|
 /// Checks whether the player at the given index is enabled. Player 0 is always
 /// enabled; player 1 is only enabled when co-op mode is turned on.
-fn @types.Game::is_player_enabled(game : @types.Game, index : Int) -> Bool {
+fn @types.Game::is_player_enabled(game : @types.Game, index : Int32) -> Bool {
   if index == 0 {
     true
   } else {
@@ -13,7 +13,7 @@ fn @types.Game::is_player_enabled(game : @types.Game, index : Int) -> Bool {
 /// Reads the keyboard to determine which direction the player wants to move.
 /// Player 0 uses the arrow keys; player 1 uses W/A/S/D. Returns None if no
 /// movement key is held down.
-fn read_player_move_dir(index : Int) -> @types.Dir? {
+fn read_player_move_dir(index : Int32) -> @types.Dir? {
   if index == 0 {
     if @raylib.is_key_down(@raylib.KeyUp) {
       Some(Up)
@@ -42,7 +42,7 @@ fn read_player_move_dir(index : Int) -> @types.Dir? {
 ///|
 /// Returns true if the shoot key for the given player is currently held down.
 /// Player 0 shoots with Right Shift or Enter; player 1 shoots with Space.
-fn is_player_shoot_pressed(index : Int) -> Bool {
+fn is_player_shoot_pressed(index : Int32) -> Bool {
   if index == 0 {
     @raylib.is_key_down(@raylib.KeyRightShift) ||
     @raylib.is_key_down(@raylib.KeyEnter)
@@ -67,7 +67,7 @@ fn @types.Game::player_is_on_ice(
 /// Determines whether the player is allowed to fire a bullet right now. A player
 /// cannot fire if the tank is inactive, the reload cooldown has not expired, or
 /// the maximum number of active bullets for this player has been reached.
-fn @types.Game::can_player_fire(game : @types.Game, index : Int) -> Bool {
+fn @types.Game::can_player_fire(game : @types.Game, index : Int32) -> Bool {
   let player = game.players[index]
   if !player.active {
     return false
@@ -133,7 +133,7 @@ fn @types.Game::update_player_reload_timers(
 /// enemy tank.
 fn @types.Game::try_move_player(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dir : @types.Dir,
   dt : Float,
 ) -> Unit {
@@ -229,7 +229,7 @@ fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
 /// invulnerability or a shield active the hit is absorbed with a spark effect.
 /// Otherwise the tank is destroyed: lives are decremented, weapon level drops,
 /// an explosion is spawned, and a respawn timer begins.
-fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
+fn @types.Game::on_player_destroyed(game : @types.Game, index : Int32) -> Unit {
   let player = game.players[index]
   if !player.active {
     return

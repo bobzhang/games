@@ -1,6 +1,6 @@
 ///|
 /// Generate a floor with procedural layout and enemies.
-pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
+pub fn generate_floor(game : @types.Game, floor_num : Int32) -> @types.Floor {
   if @types.is_boss_floor(floor_num) {
     return generate_boss_floor(game, floor_num)
   }
@@ -85,11 +85,11 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
 /// Place hazards based on floor theme.
 fn place_theme_hazards(
   grid : @types.Grid,
-  rng : Ref[Int],
-  floor_num : Int,
+  rng : Ref[Int32],
+  floor_num : Int32,
   theme : @types.FloorTheme,
-  w : Int,
-  h : Int,
+  w : Int32,
+  h : Int32,
 ) -> Unit {
   match theme {
     Meadow =>
@@ -182,7 +182,7 @@ fn place_theme_hazards(
 ///|
 /// Get themed enemy roster for a floor.
 fn themed_enemy_kinds(
-  floor_num : Int,
+  floor_num : Int32,
   theme : @types.FloorTheme,
 ) -> Array[@types.EnemyKind] {
   match theme {
@@ -198,11 +198,11 @@ fn themed_enemy_kinds(
 /// Place a weapon item pickup on the floor.
 fn place_weapon_item(
   grid : @types.Grid,
-  rng : Ref[Int],
-  w : Int,
-  h : Int,
-  exit_x : Int,
-  exit_y : Int,
+  rng : Ref[Int32],
+  w : Int32,
+  h : Int32,
+  exit_x : Int32,
+  exit_y : Int32,
 ) -> Unit {
   for _ in 0..<20 {
     let ix = @types.rand_range(rng, 1, w - 2)
@@ -225,12 +225,12 @@ fn place_weapon_item(
 /// Place varied items on a grid.
 fn place_items(
   grid : @types.Grid,
-  rng : Ref[Int],
-  count : Int,
-  w : Int,
-  h : Int,
-  exit_x : Int,
-  exit_y : Int,
+  rng : Ref[Int32],
+  count : Int32,
+  w : Int32,
+  h : Int32,
+  exit_x : Int32,
+  exit_y : Int32,
 ) -> Unit {
   let item_kinds : Array[@types.ItemKind] = [
     Gold(15),
@@ -264,7 +264,7 @@ fn place_items(
 
 ///|
 /// Generate a boss floor with special arena layout.
-fn generate_boss_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
+fn generate_boss_floor(game : @types.Game, floor_num : Int32) -> @types.Floor {
   let w = @types.boss_arena_size
   let h = @types.boss_arena_size
   let grid = @types.Grid::new(w, h)
@@ -300,10 +300,10 @@ fn generate_boss_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
 /// Compute enemy intents for the upcoming beat.
 pub fn compute_enemy_intents(
   floor : @types.Floor,
-  px : Int,
-  py : Int,
-  rng : Ref[Int],
-  beat_count : Int,
+  px : Int32,
+  py : Int32,
+  rng : Ref[Int32],
+  beat_count : Int32,
 ) -> Unit {
   for enemy in floor.enemies {
     if !enemy.active {
@@ -368,10 +368,10 @@ pub fn compute_enemy_intents(
 fn compute_beat_dragon_intent(
   enemy : @types.Enemy,
   floor : @types.Floor,
-  px : Int,
-  py : Int,
-  rng : Ref[Int],
-  beat_count : Int,
+  px : Int32,
+  py : Int32,
+  rng : Ref[Int32],
+  beat_count : Int32,
 ) -> Unit {
   let phase = @types.boss_phase_from_hp(BeatDragon, enemy.hp, enemy.max_hp)
   let dist = @types.manhattan_dist(enemy.x, enemy.y, px, py)
@@ -434,9 +434,9 @@ fn compute_beat_dragon_intent(
 fn dragon_move_toward(
   enemy : @types.Enemy,
   floor : @types.Floor,
-  px : Int,
-  py : Int,
-  rng : Ref[Int],
+  px : Int32,
+  py : Int32,
+  rng : Ref[Int32],
 ) -> Unit {
   let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
   let nx = enemy.x + @types.dir_dx(dir)
@@ -475,10 +475,10 @@ fn dragon_move_toward(
 fn compute_rhythm_lich_intent(
   enemy : @types.Enemy,
   floor : @types.Floor,
-  px : Int,
-  py : Int,
-  rng : Ref[Int],
-  beat_count : Int,
+  px : Int32,
+  py : Int32,
+  rng : Ref[Int32],
+  beat_count : Int32,
 ) -> Unit {
   let phase = @types.boss_phase_from_hp(RhythmLich, enemy.hp, enemy.max_hp)
   let dist = @types.manhattan_dist(enemy.x, enemy.y, px, py)
@@ -560,9 +560,9 @@ fn compute_rhythm_lich_intent(
 fn lich_move_toward(
   enemy : @types.Enemy,
   floor : @types.Floor,
-  px : Int,
-  py : Int,
-  rng : Ref[Int],
+  px : Int32,
+  py : Int32,
+  rng : Ref[Int32],
 ) -> Unit {
   let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
   let nx = enemy.x + @types.dir_dx(dir)

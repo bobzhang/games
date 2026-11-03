@@ -1,58 +1,58 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 8
+pub let grid_cols : Int32 = 8
 
 ///|
-pub let grid_rows : Int = 7
+pub let grid_rows : Int32 = 7
 
 ///|
-pub let cell_width : Int = 80
+pub let cell_width : Int32 = 80
 
 ///|
-pub let cell_height : Int = 60
+pub let cell_height : Int32 = 60
 
 ///|
-pub let grid_offset_x : Int = 200
+pub let grid_offset_x : Int32 = 200
 
 ///|
-pub let grid_offset_y : Int = 120
+pub let grid_offset_y : Int32 = 120
 
 ///|
 pub let playback_speed : Float = 0.4
 
 ///|
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 // Interval scores
 
 ///|
-pub let score_unison : Int = 0
+pub let score_unison : Int32 = 0
 
 ///|
-pub let score_second : Int = -1
+pub let score_second : Int32 = -1
 
 ///|
-pub let score_third : Int = 2
+pub let score_third : Int32 = 2
 
 ///|
-pub let score_tritone : Int = -2
+pub let score_tritone : Int32 = -2
 
 ///|
-pub let score_fifth : Int = 3
+pub let score_fifth : Int32 = 3
 
 ///|
-pub let score_sixth : Int = 2
+pub let score_sixth : Int32 = 2
 
 ///|
-pub let score_seventh : Int = -1
+pub let score_seventh : Int32 = -1
 
 // Note colors (rainbow per pitch)
 

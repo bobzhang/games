@@ -104,8 +104,8 @@ fn draw_hex_grid(game : @types.Game) -> Unit {
 /// Check if a tile has any neighbor with a different height
 fn has_adjacent_height_diff(
   grid : @types.HexGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Bool {
   let h = grid.tiles[row][col].height
   let neighbors = @hex.valid_neighbors(col, row)
@@ -324,8 +324,8 @@ fn draw_crop_growing(
   cy : Float,
   hex_size : Float,
   kind : @types.CropKind,
-  turns : Int,
-  _frame : Int,
+  turns : Int32,
+  _frame : Int32,
 ) -> Unit {
   let color = @types.crop_color(kind)
   let grow_time = @types.crop_grow_time(kind)
@@ -394,7 +394,7 @@ fn draw_crop_mature(
   cy : Float,
   hex_size : Float,
   kind : @types.CropKind,
-  frame : Int,
+  frame : Int32,
 ) -> Unit {
   let color = @types.crop_color(kind)
   let s = hex_size * 0.4

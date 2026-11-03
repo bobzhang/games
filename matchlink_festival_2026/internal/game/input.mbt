@@ -16,9 +16,9 @@ fn @types.Game::detect_held_dir(game : @types.Game) -> @types.Direction {
     dir = Down
   }
 
-  let cx : Int = @types.dpad_center_x()
-  let cy : Int = @types.dpad_center_y()
-  let s : Int = @types.dpad_size()
+  let cx : Int32 = @types.dpad_center_x()
+  let cy : Int32 = @types.dpad_center_y()
+  let s : Int32 = @types.dpad_size()
 
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -233,22 +233,22 @@ fn @types.Game::detect_next_press(game : @types.Game) -> Bool {
 
 ///|
 /// Detects a mouse click or touch point that lands inside the board area and returns found status with the mapped tile column and row.
-fn @types.Game::detect_board_tap(game : @types.Game) -> (Bool, Int, Int) {
+fn @types.Game::detect_board_tap(game : @types.Game) -> (Bool, Int32, Int32) {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
-  let bw : Int = game.board_w * tile
-  let bh : Int = game.board_h * tile
+  let bw : Int32 = game.board_w * tile
+  let bh : Int32 = game.board_h * tile
 
-  fn map_to_cell(px : Float, py : Float) -> (Bool, Int, Int) {
+  fn map_to_cell(px : Float, py : Float) -> (Bool, Int32, Int32) {
     if !@types.inside_rect(px, py, board_x, board_y, bw, bh) {
       return (false, 0, 0)
     }
 
-    let cx : Int = ((px.to_int() - board_x) / tile + 1).clamp(
+    let cx : Int32 = ((px.to_int() - board_x) / tile + 1).clamp(
       min=1,
       max=game.board_w,
     )
-    let cy : Int = ((py.to_int() - board_y) / tile + 1).clamp(
+    let cy : Int32 = ((py.to_int() - board_y) / tile + 1).clamp(
       min=1,
       max=game.board_h,
     )

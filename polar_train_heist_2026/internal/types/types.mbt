@@ -10,11 +10,11 @@ pub(all) struct Ent {
   mut w : Float
   mut h : Float
   mut hp : Float
-  mut lane : Int
+  mut lane : Int32
   mut shot_cd : Float
   mut spin : Float
   mut cloak : Bool
-  mut reward : Int
+  mut reward : Int32
   mut max_hp : Float
 }
 
@@ -29,7 +29,7 @@ pub(all) struct Shot {
   mut vy : Float
   mut life : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -42,7 +42,7 @@ pub(all) struct Fx {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -53,7 +53,7 @@ pub(all) struct Ring {
   mut y : Float
   mut r : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -66,7 +66,7 @@ pub(all) struct Shadow {
   mut h : Float
   mut rot : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -78,7 +78,7 @@ pub(all) struct Player {
   mut vy : Float
   mut w : Float
   mut h : Float
-  mut lane : Int
+  mut lane : Int32
   mut ground_y : Float
   mut grounded : Bool
   mut coyote_t : Float
@@ -100,14 +100,14 @@ pub(all) struct Game {
   shadows : Array[Shadow]
   hero : Player
   mut state : GameState
-  mut stage : Int
+  mut stage : Int32
   mut distance : Float
   mut stage_goal : Float
-  mut score : Int
-  mut best_score : Int
-  mut loot : Int
-  mut kills : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut loot : Int32
+  mut kills : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut armor : Float
   mut heat : Float
@@ -137,7 +137,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

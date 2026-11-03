@@ -1,23 +1,23 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 // Base colors
 
@@ -146,25 +146,25 @@ pub let color_op_delete : @raylib.Color = @raylib.Color::new(255, 60, 60, 255)
 // Layout
 
 ///|
-pub let seq_base_size : Int = 36
+pub let seq_base_size : Int32 = 36
 
 ///|
-pub let seq_base_gap : Int = 4
+pub let seq_base_gap : Int32 = 4
 
 ///|
-pub let seq_y : Int = 200
+pub let seq_y : Int32 = 200
 
 ///|
-pub let seq_x_start : Int = 40
+pub let seq_x_start : Int32 = 40
 
 ///|
-pub let trait_y : Int = 340
+pub let trait_y : Int32 = 340
 
 ///|
-pub let target_y : Int = 440
+pub let target_y : Int32 = 440
 
 ///|
-pub let ops_panel_y : Int = 560
+pub let ops_panel_y : Int32 = 560
 
 ///|
-pub let ops_panel_x : Int = 40
+pub let ops_panel_x : Int32 = 40

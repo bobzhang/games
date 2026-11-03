@@ -91,49 +91,49 @@ pub fn tower_interact_r() -> Float {
 
 ///|
 /// Returns the screen rectangle `(x, y, w, h)` for the title screen start button.
-pub fn title_start_rect() -> (Int, Int, Int, Int) {
+pub fn title_start_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 220, screen_h / 2 + 128, 440, 92)
 }
 
 ///|
 /// Returns the screen rectangle `(x, y, w, h)` for the primary action button on the result screen.
-pub fn result_primary_rect() -> (Int, Int, Int, Int) {
+pub fn result_primary_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 236, screen_h / 2 + 116, 472, 88)
 }
 
 ///|
 /// Returns the screen rectangle `(x, y, w, h)` for the secondary action button on the result screen.
-pub fn result_secondary_rect() -> (Int, Int, Int, Int) {
+pub fn result_secondary_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 236, screen_h / 2 + 224, 472, 74)
 }
 
 ///|
 /// Returns the screen rectangle `(x, y, w, h)` for the touch left-movement button in the panel.
-pub fn touch_left_rect() -> (Int, Int, Int, Int) {
+pub fn touch_left_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + 24, screen_h - 190, 76, 76)
 }
 
 ///|
 /// Returns the screen rectangle `(x, y, w, h)` for the touch right-movement button in the panel.
-pub fn touch_right_rect() -> (Int, Int, Int, Int) {
+pub fn touch_right_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + 184, screen_h - 190, 76, 76)
 }
 
 ///|
 /// Returns the screen rectangle `(x, y, w, h)` for the touch up-movement button in the panel.
-pub fn touch_up_rect() -> (Int, Int, Int, Int) {
+pub fn touch_up_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + 104, screen_h - 270, 76, 76)
 }
 
 ///|
 /// Returns the screen rectangle `(x, y, w, h)` for the touch down-movement button in the panel.
-pub fn touch_down_rect() -> (Int, Int, Int, Int) {
+pub fn touch_down_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + 104, screen_h - 110, 76, 76)
 }
 
 ///|
 /// Returns the screen rectangle `(x, y, w, h)` for the touch action button in the panel.
-pub fn touch_action_rect() -> (Int, Int, Int, Int) {
+pub fn touch_action_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x0 + panel_w - 128, screen_h - 228, 104, 104)
 }
 
@@ -142,10 +142,10 @@ pub fn touch_action_rect() -> (Int, Int, Int, Int) {
 pub fn point_in_rect(
   x : Float,
   y : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let fx0 = Float::from_int(rx)
   let fy0 = Float::from_int(ry)
@@ -160,11 +160,11 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if hold && point_in_rect(mx, my, rx, ry, rw, rh) {
     return true

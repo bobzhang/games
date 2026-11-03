@@ -16,7 +16,7 @@ pub fn codon_to_trait(b0 : Base, b1 : Base, b2 : Base) -> Trait {
 }
 
 ///|
-pub fn find_start_codon(seq : Array[Base]) -> Int {
+pub fn find_start_codon(seq : Array[Base]) -> Int32 {
   for i in 0..<(seq.length() - 2) {
     if seq[i] == A && seq[i + 1] == T && seq[i + 2] == G {
       return i
@@ -156,7 +156,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_from_index(i : Int) -> Tier {
+pub fn tier_from_index(i : Int32) -> Tier {
   if i == 0 {
     LabBasics
   } else if i == 1 {
@@ -167,7 +167,7 @@ pub fn tier_from_index(i : Int) -> Tier {
 }
 
 ///|
-pub fn tier_level_count(tier : Int) -> Int {
+pub fn tier_level_count(tier : Int32) -> Int32 {
   if tier == 0 {
     tier1_count
   } else if tier == 1 {
@@ -178,7 +178,7 @@ pub fn tier_level_count(tier : Int) -> Int {
 }
 
 ///|
-pub fn tier_level_offset(tier : Int) -> Int {
+pub fn tier_level_offset(tier : Int32) -> Int32 {
   if tier == 0 {
     0
   } else if tier == 1 {
@@ -246,7 +246,7 @@ pub fn has_selection(game : Game) -> Bool {
 }
 
 ///|
-pub fn selection_min(game : Game) -> Int {
+pub fn selection_min(game : Game) -> Int32 {
   if game.selection_start < game.selection_end {
     game.selection_start
   } else {
@@ -255,7 +255,7 @@ pub fn selection_min(game : Game) -> Int {
 }
 
 ///|
-pub fn selection_max(game : Game) -> Int {
+pub fn selection_max(game : Game) -> Int32 {
   if game.selection_start > game.selection_end {
     game.selection_start
   } else {
@@ -281,12 +281,12 @@ pub fn clear_selection(game : Game) -> Unit {
 }
 
 ///|
-pub fn color_with_alpha(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+pub fn color_with_alpha(c : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), alpha)
 }
 
 ///|
-pub fn compute_stars(edit_count : Int, par : Int, min : Int) -> Int {
+pub fn compute_stars(edit_count : Int32, par : Int32, min : Int32) -> Int32 {
   if edit_count <= min {
     3
   } else if edit_count <= par {

@@ -1,5 +1,5 @@
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
@@ -14,7 +14,7 @@ pub fn vec2i_eq(a : Vec2i, b : Vec2i) -> Bool {
 }
 
 ///|
-pub fn dir_dx(d : Direction) -> Int {
+pub fn dir_dx(d : Direction) -> Int32 {
   match d {
     East => 1
     West => -1
@@ -23,7 +23,7 @@ pub fn dir_dx(d : Direction) -> Int {
 }
 
 ///|
-pub fn dir_dy(d : Direction) -> Int {
+pub fn dir_dy(d : Direction) -> Int32 {
   match d {
     South => 1
     North => -1
@@ -67,7 +67,7 @@ pub fn dir_name(d : Direction) -> String {
 }
 
 ///|
-pub fn new_grid(w : Int, h : Int) -> Grid {
+pub fn new_grid(w : Int32, h : Int32) -> Grid {
   let tiles : Array[Array[Tile]] = []
   for _y in 0..<h {
     let row : Array[Tile] = []
@@ -80,12 +80,12 @@ pub fn new_grid(w : Int, h : Int) -> Grid {
 }
 
 ///|
-pub fn grid_in_bounds(g : Grid, x : Int, y : Int) -> Bool {
+pub fn grid_in_bounds(g : Grid, x : Int32, y : Int32) -> Bool {
   x >= 0 && x < g.width && y >= 0 && y < g.height
 }
 
 ///|
-pub fn grid_get(g : Grid, x : Int, y : Int) -> TileKind {
+pub fn grid_get(g : Grid, x : Int32, y : Int32) -> TileKind {
   if grid_in_bounds(g, x, y) {
     g.tiles[y][x].kind
   } else {
@@ -94,14 +94,14 @@ pub fn grid_get(g : Grid, x : Int, y : Int) -> TileKind {
 }
 
 ///|
-pub fn grid_set(g : Grid, x : Int, y : Int, kind : TileKind) -> Unit {
+pub fn grid_set(g : Grid, x : Int32, y : Int32, kind : TileKind) -> Unit {
   if grid_in_bounds(g, x, y) {
     g.tiles[y][x].kind = kind
   }
 }
 
 ///|
-pub fn new_robot(x : Int, y : Int, dir : Direction) -> Robot {
+pub fn new_robot(x : Int32, y : Int32, dir : Direction) -> Robot {
   { pos: vec2i(x, y), dir, alive: true, }
 }
 
@@ -155,7 +155,7 @@ pub fn make_robot_state(
   robot : Robot,
   goals_collected : Array[Bool],
   blocks : Array[Vec2i],
-  cmd_index : Int,
+  cmd_index : Int32,
 ) -> RobotState {
   {
     pos: vec2i(robot.pos.x, robot.pos.y),
@@ -178,7 +178,7 @@ pub fn all_goals_collected(gc : Array[Bool]) -> Bool {
 }
 
 ///|
-pub fn count_goals_collected(gc : Array[Bool]) -> Int {
+pub fn count_goals_collected(gc : Array[Bool]) -> Int32 {
   let mut count = 0
   for i in 0..<gc.length() {
     if gc[i] {
@@ -208,7 +208,11 @@ pub fn condition_name(c : Condition) -> String {
 }
 
 ///|
-pub fn medal_from_instructions(count : Int, par : Int, optimal : Int) -> Medal {
+pub fn medal_from_instructions(
+  count : Int32,
+  par : Int32,
+  optimal : Int32,
+) -> Medal {
   if count <= optimal {
     Gold
   } else if count <= par {
@@ -219,7 +223,7 @@ pub fn medal_from_instructions(count : Int, par : Int, optimal : Int) -> Medal {
 }
 
 ///|
-pub fn medal_stars(m : Medal) -> Int {
+pub fn medal_stars(m : Medal) -> Int32 {
   match m {
     Gold => 3
     Silver => 2
@@ -229,7 +233,7 @@ pub fn medal_stars(m : Medal) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -238,7 +242,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -313,7 +317,7 @@ pub fn is_tile_gap(kind : TileKind) -> Bool {
 }
 
 ///|
-pub fn has_block_at(blocks : Array[Vec2i], x : Int, y : Int) -> Bool {
+pub fn has_block_at(blocks : Array[Vec2i], x : Int32, y : Int32) -> Bool {
   for i in 0..<blocks.length() {
     if blocks[i].x == x && blocks[i].y == y {
       return true
@@ -323,7 +327,7 @@ pub fn has_block_at(blocks : Array[Vec2i], x : Int, y : Int) -> Bool {
 }
 
 ///|
-pub fn find_block_index(blocks : Array[Vec2i], x : Int, y : Int) -> Int {
+pub fn find_block_index(blocks : Array[Vec2i], x : Int32, y : Int32) -> Int32 {
   for i in 0..<blocks.length() {
     if blocks[i].x == x && blocks[i].y == y {
       return i
@@ -333,27 +337,27 @@ pub fn find_block_index(blocks : Array[Vec2i], x : Int, y : Int) -> Int {
 }
 
 ///|
-pub fn tile_screen_x(gx : Int) -> Int {
+pub fn tile_screen_x(gx : Int32) -> Int32 {
   grid_offset_x + gx * tile_size
 }
 
 ///|
-pub fn tile_screen_y(gy : Int) -> Int {
+pub fn tile_screen_y(gy : Int32) -> Int32 {
   grid_offset_y + gy * tile_size
 }
 
 ///|
-pub fn tile_center_x(gx : Int) -> Int {
+pub fn tile_center_x(gx : Int32) -> Int32 {
   grid_offset_x + gx * tile_size + tile_size / 2
 }
 
 ///|
-pub fn tile_center_y(gy : Int) -> Int {
+pub fn tile_center_y(gy : Int32) -> Int32 {
   grid_offset_y + gy * tile_size + tile_size / 2
 }
 
 ///|
-pub fn world_color(world : Int) -> @raylib.Color {
+pub fn world_color(world : Int32) -> @raylib.Color {
   match world {
     0 => color_world1
     1 => color_world2
@@ -364,7 +368,7 @@ pub fn world_color(world : Int) -> @raylib.Color {
 }
 
 ///|
-pub fn world_name(world : Int) -> String {
+pub fn world_name(world : Int32) -> String {
   match world {
     0 => "Basics"
     1 => "Leaps"
@@ -375,7 +379,7 @@ pub fn world_name(world : Int) -> String {
 }
 
 ///|
-pub fn calculate_total_stars(scores : Array[Array[LevelScore]]) -> Int {
+pub fn calculate_total_stars(scores : Array[Array[LevelScore]]) -> Int32 {
   let mut total = 0
   for w in 0..<scores.length() {
     for l in 0..<scores[w].length() {

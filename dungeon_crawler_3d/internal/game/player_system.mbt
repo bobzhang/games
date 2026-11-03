@@ -843,7 +843,7 @@ fn @types.Game::cast_teleport(game : @types.Game) -> Unit {
 
 ///|
 /// Handles enemy death rewards, drop generation, and related kill-side effects.
-pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
+pub fn kill_enemy(game : @types.Game, idx : Int32) -> Unit {
   let e = game.enemies[idx]
   // Award XP
   game.player_xp += e.xp_value
@@ -854,7 +854,7 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
   let is_elite = e.kind == Lich || e.kind == Minotaur || e.kind == Golem
   let particle_count = if is_boss { 32 } else if is_elite { 20 } else { 12 }
   // Enemy-type-colored death particles
-  let death_colors : (Int, Int, Int) = match e.kind {
+  let death_colors : (Int32, Int32, Int32) = match e.kind {
     Skeleton => (200, 190, 170)
     Archer => (80, 120, 60)
     Golem => (140, 120, 100)
@@ -967,7 +967,7 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
       l.z = e.z
       l.bob_phase = @types.rand_rangef(game, 0.0, 6.28)
       // Higher rarity from stronger enemies
-      let rarity_weights : Array[Int] = [
+      let rarity_weights : Array[Int32] = [
         @levels.get_rarity_weight_common(game.current_floor),
         @levels.get_rarity_weight_uncommon(game.current_floor),
         @levels.get_rarity_weight_rare(game.current_floor),
@@ -1446,7 +1446,7 @@ fn @types.Game::level_up(game : @types.Game) -> Unit {
 
 ///|
 /// Applies incoming damage after defense (including equipment), updates hit feedback, and clamps HP at zero.
-pub fn damage_player(game : @types.Game, raw_damage : Int) -> Unit {
+pub fn damage_player(game : @types.Game, raw_damage : Int32) -> Unit {
   let total_def = @types.calc_player_defense_with_equip(game)
   let mut damage = (1).max(raw_damage - total_def)
   // Mana Shield: absorb damage with mana first

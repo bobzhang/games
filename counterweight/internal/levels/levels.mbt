@@ -1,7 +1,7 @@
 ///|
 fn make_rope(
-  from_n : Int,
-  to_n : Int,
+  from_n : Int32,
+  to_n : Int32,
   from_s : @types.RopeSide,
   to_s : @types.RopeSide,
 ) -> @types.Rope {
@@ -19,8 +19,8 @@ fn make_rope(
 
 ///|
 fn make_breakable_rope(
-  from_n : Int,
-  to_n : Int,
+  from_n : Int32,
+  to_n : Int32,
   from_s : @types.RopeSide,
   to_s : @types.RopeSide,
   max_load : Float,
@@ -38,7 +38,7 @@ fn make_breakable_rope(
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.LevelDef {
+pub fn get_level(index : Int32) -> @types.LevelDef {
   match index {
     0 => level_01()
     1 => level_02()
@@ -69,7 +69,7 @@ pub fn get_level(index : Int) -> @types.LevelDef {
 }
 
 ///|
-pub fn get_level_name(index : Int) -> String {
+pub fn get_level_name(index : Int32) -> String {
   match index {
     0 => "First Balance"
     1 => "Heavy Lift"

@@ -1,10 +1,10 @@
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
 ///|
-pub fn rotate_cell(cell : Vec2i, times : Int) -> Vec2i {
+pub fn rotate_cell(cell : Vec2i, times : Int32) -> Vec2i {
   let mut cx = cell.x
   let mut cy = cell.y
   let n = (times % 4 + 4) % 4
@@ -24,7 +24,7 @@ pub fn flip_cell(cell : Vec2i) -> Vec2i {
 ///|
 pub fn transform_cells(
   cells : Array[Vec2i],
-  rotation : Int,
+  rotation : Int32,
   flipped : Bool,
 ) -> Array[Vec2i] {
   let result : Array[Vec2i] = []
@@ -40,7 +40,7 @@ pub fn transform_cells(
 }
 
 ///|
-pub fn piece_bounds(cells : Array[Vec2i]) -> (Int, Int, Int, Int) {
+pub fn piece_bounds(cells : Array[Vec2i]) -> (Int32, Int32, Int32, Int32) {
   let mut min_x = 100
   let mut min_y = 100
   let mut max_x = -100
@@ -65,8 +65,8 @@ pub fn piece_bounds(cells : Array[Vec2i]) -> (Int, Int, Int, Int) {
 
 ///|
 pub fn new_region(
-  width : Int,
-  height : Int,
+  width : Int32,
+  height : Int32,
   active_cells : Array[Vec2i],
 ) -> Region {
   let active : Array[Array[Bool]] = []
@@ -87,7 +87,7 @@ pub fn new_region(
 }
 
 ///|
-pub fn full_region(width : Int, height : Int) -> Region {
+pub fn full_region(width : Int32, height : Int32) -> Region {
   let active : Array[Array[Bool]] = []
   for _r in 0..<height {
     let row : Array[Bool] = []
@@ -100,7 +100,7 @@ pub fn full_region(width : Int, height : Int) -> Region {
 }
 
 ///|
-pub fn rect_region(x : Int, y : Int, w : Int, h : Int) -> Region {
+pub fn rect_region(x : Int32, y : Int32, w : Int32, h : Int32) -> Region {
   let cells : Array[Vec2i] = []
   for row in y..<(y + h) {
     for col in x..<(x + w) {
@@ -111,7 +111,7 @@ pub fn rect_region(x : Int, y : Int, w : Int, h : Int) -> Region {
 }
 
 ///|
-pub fn count_active_cells(region : Region) -> Int {
+pub fn count_active_cells(region : Region) -> Int32 {
   let mut count = 0
   for r in 0..<region.height {
     for c in 0..<region.width {
@@ -289,10 +289,10 @@ pub fn new_level_score() -> LevelScore {
 }
 
 ///|
-pub fn new_grid() -> Array[Array[Int]] {
-  let grid : Array[Array[Int]] = []
+pub fn new_grid() -> Array[Array[Int32]] {
+  let grid : Array[Array[Int32]] = []
   for _r in 0..<grid_rows {
-    let row : Array[Int] = []
+    let row : Array[Int32] = []
     for _c in 0..<grid_cols {
       row.push(-1)
     }
@@ -346,7 +346,7 @@ pub fn reset_level(game : Game) -> Unit {
 }
 
 ///|
-pub fn tier_index(tier : Tier) -> Int {
+pub fn tier_index(tier : Tier) -> Int32 {
   match tier {
     Squares => 0
     Shapes => 1
@@ -355,7 +355,7 @@ pub fn tier_index(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_from_index(i : Int) -> Tier {
+pub fn tier_from_index(i : Int32) -> Tier {
   match i {
     0 => Squares
     1 => Shapes
@@ -373,12 +373,12 @@ pub fn tier_name(tier : Tier) -> String {
 }
 
 ///|
-pub fn level_index(tier : Tier, level_in_tier : Int) -> Int {
+pub fn level_index(tier : Tier, level_in_tier : Int32) -> Int32 {
   tier_index(tier) * levels_per_tier + level_in_tier
 }
 
 ///|
-pub fn piece_color_by_index(index : Int) -> @raylib.Color {
+pub fn piece_color_by_index(index : Int32) -> @raylib.Color {
   let colors : Array[@raylib.Color] = [
     piece_color_red, piece_color_blue, piece_color_green, piece_color_yellow, piece_color_purple,
     piece_color_orange, piece_color_cyan, piece_color_pink, piece_color_lime, piece_color_teal,

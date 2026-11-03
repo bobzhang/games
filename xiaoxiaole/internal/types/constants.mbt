@@ -1,46 +1,46 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 680
+pub let screen_w : Int32 = 680
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 800
+pub let screen_h : Int32 = 800
 
 ///|
 /// Target frame rate for gameplay updates.
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 /// Number of columns in the gem board.
-pub let grid_cols : Int = 8
+pub let grid_cols : Int32 = 8
 
 ///|
 /// Number of rows in the gem board.
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
 /// Total number of board slots.
-pub let cell_count : Int = grid_cols * grid_rows
+pub let cell_count : Int32 = grid_cols * grid_rows
 
 ///|
 /// Number of non-empty gem colors used for generation.
-pub let num_colors : Int = 6
+pub let num_colors : Int32 = 6
 
 ///|
 /// Pixel size of one gem cell.
-pub let cell_px : Int = 64
+pub let cell_px : Int32 = 64
 
 ///|
 /// Pixel spacing between adjacent cells.
-pub let cell_gap : Int = 4
+pub let cell_gap : Int32 = 4
 
 ///|
 /// Left edge of the board in screen coordinates.
-pub let board_left : Int = 36
+pub let board_left : Int32 = 36
 
 ///|
 /// Top edge of the board in screen coordinates.
-pub let board_top : Int = 160
+pub let board_top : Int32 = 160
 
 ///|
 /// Speed factor for swap interpolation.
@@ -56,11 +56,11 @@ pub let flash_duration : Float = 0.25
 
 ///|
 /// Starting move budget for level 1.
-pub let base_moves : Int = 30
+pub let base_moves : Int32 = 30
 
 ///|
 /// Starting target score for level 1.
-pub let base_target : Int = 1000
+pub let base_target : Int32 = 1000
 
 ///|
 /// Returns base fill color for a gem kind.

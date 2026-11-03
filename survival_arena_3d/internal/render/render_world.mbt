@@ -919,7 +919,7 @@ fn draw_exploder(
   enemy : @types.Enemy,
   color : @raylib.Color,
   size : Float,
-  frame : Int,
+  frame : Int32,
 ) -> Unit {
   // Exploder: bloated body, glowing cracks
   let base_color = if enemy.explode_triggered {
@@ -983,7 +983,7 @@ fn draw_necromancer(
   enemy : @types.Enemy,
   color : @raylib.Color,
   size : Float,
-  frame : Int,
+  frame : Int32,
 ) -> Unit {
   // Necromancer: robed figure with staff
   // Robe body (wider at bottom)
@@ -1113,7 +1113,7 @@ fn draw_boss(
   enemy : @types.Enemy,
   color : @raylib.Color,
   size : Float,
-  frame : Int,
+  frame : Int32,
 ) -> Unit {
   // Boss: imposing, with crown-like features, phased appearance
   let phase_color = if enemy.boss_phase >= 3 {

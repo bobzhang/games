@@ -4,7 +4,7 @@ pub fn fire_weapon(
   weapon : @types.Weapon,
   origin : @types.Vec2,
   aim_angle : Float,
-  mod_kind? : @types.ModKind? = None,
+  mod_kind~ : @types.ModKind? = None,
 ) -> Unit {
   if weapon.fire_timer > 0.0 {
     return
@@ -85,7 +85,7 @@ pub fn fire_enemy_projectile(
   origin : @types.Vec2,
   target : @types.Vec2,
   speed : Float,
-  damage : Int,
+  damage : Int32,
 ) -> Unit {
   let idx = @types.alloc_projectile(game.projectiles)
   if idx < 0 {

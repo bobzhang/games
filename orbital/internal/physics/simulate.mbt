@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum TickResult {
   Continue
   HitPlanet
   ReachedStation
   OutOfBounds
   MaxTicks
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TickResult with Eq::{not_equal, equal}
@@ -89,7 +90,7 @@ pub fn simulate_tick(
   planets : Array[@types.Planet],
   station : @types.Station,
   waypoints : Array[@types.Waypoint],
-  tick : Int,
+  tick : Int32,
 ) -> TickResult {
   if !probe.active {
     return Continue

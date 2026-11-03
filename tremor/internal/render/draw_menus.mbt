@@ -184,7 +184,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars(x : Int, y : Int, filled : Int, total : Int) -> Unit {
+fn draw_stars(x : Int32, y : Int32, filled : Int32, total : Int32) -> Unit {
   for i in 0..<total {
     let sx = x + i * 28
     let color = if i < filled {

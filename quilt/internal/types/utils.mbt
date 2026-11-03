@@ -1,13 +1,13 @@
 ///|
-let rng_state : Ref[Int] = { val: 12345, }
+let rng_state : Ref[Int32] = { val: 12345, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -18,7 +18,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -104,13 +104,13 @@ pub fn edges_match(
 }
 
 ///|
-pub fn new_board(size : Int) -> Board {
+pub fn new_board(size : Int32) -> Board {
   let cells : Array[Patch?] = Array::make(size * size, None)
   { size, cells, }
 }
 
 ///|
-pub fn board_get(board : Board, row : Int, col : Int) -> Patch? {
+pub fn board_get(board : Board, row : Int32, col : Int32) -> Patch? {
   if row >= 0 && row < board.size && col >= 0 && col < board.size {
     board.cells[row * board.size + col]
   } else {
@@ -119,14 +119,19 @@ pub fn board_get(board : Board, row : Int, col : Int) -> Patch? {
 }
 
 ///|
-pub fn board_set(board : Board, row : Int, col : Int, patch : Patch?) -> Unit {
+pub fn board_set(
+  board : Board,
+  row : Int32,
+  col : Int32,
+  patch : Patch?,
+) -> Unit {
   if row >= 0 && row < board.size && col >= 0 && col < board.size {
     board.cells[row * board.size + col] = patch
   }
 }
 
 ///|
-pub fn cell_size_for(board_size : Int) -> Int {
+pub fn cell_size_for(board_size : Int32) -> Int32 {
   if board_size <= 3 {
     cell_size_3x3
   } else if board_size <= 4 {
@@ -170,7 +175,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_levels(t : Tier) -> (Int, Int) {
+pub fn tier_levels(t : Tier) -> (Int32, Int32) {
   match t {
     Scraps => (0, tier1_count)
     Quilting => (tier1_count, tier2_count)
@@ -224,7 +229,7 @@ pub fn all_patterns() -> Array[EdgePattern] {
 }
 
 ///|
-pub fn pattern_at(idx : Int) -> EdgePattern {
+pub fn pattern_at(idx : Int32) -> EdgePattern {
   let pats = all_patterns()
   pats[idx % pats.length()]
 }
@@ -257,7 +262,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -266,7 +271,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {

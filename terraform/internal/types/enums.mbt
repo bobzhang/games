@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,12 +23,13 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum BiomeKind {
   Barren
   Forest
   Ocean
   Desert
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend BiomeKind with Eq::{not_equal, equal}
@@ -44,12 +46,13 @@ pub impl Show for BiomeKind with fn output(self, logger) {
 pub extend BiomeKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Painting
   Resolving
   Complete
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -66,11 +69,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Seeds
   Balance
   Harmony
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

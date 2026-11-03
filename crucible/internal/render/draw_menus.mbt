@@ -14,7 +14,7 @@ fn draw_title(game : @types.Game) -> Unit {
       @types.sinf(time + fi) * 10.0
     let size : Float = 6.0 + @types.sinf(fi + time * 2.0) * 3.0
     let alpha_f : Float = 180.0 - fi * 8.0
-    let alpha : Int = alpha_f.to_int()
+    let alpha : Int32 = alpha_f.to_int()
     let a = if alpha > 0 { alpha } else { 0 }
     @raylib.draw_circle(
       bx.to_int(),
@@ -28,7 +28,7 @@ fn draw_title(game : @types.Game) -> Unit {
   @raylib.draw_circle(w / 2, h / 2 + 80, 85.0, @types.color_cauldron_inner)
   // Glowing liquid
   let glow_f : Float = 180.0 + @types.sinf(time * 2.0) * 60.0
-  let glow_alpha : Int = glow_f.to_int()
+  let glow_alpha : Int32 = glow_f.to_int()
   @raylib.draw_circle(
     w / 2,
     h / 2 + 80,
@@ -39,7 +39,7 @@ fn draw_title(game : @types.Game) -> Unit {
   let title = "CRUCIBLE"
   let title_w = @draw.measure_text(title, 64)
   let pulse : Float = @types.sinf(time * 1.5) * 0.15 + 0.85
-  let ta : Int = (pulse * 255.0).to_int()
+  let ta : Int32 = (pulse * 255.0).to_int()
   @draw.draw_text(
     title,
     (w - title_w) / 2,

@@ -123,7 +123,12 @@ fn draw_art_centered(
 }
 
 ///|
-fn draw_tablet_surface_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
+fn draw_tablet_surface_art(
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
+) -> Bool {
   match tex_tablet_surface.val {
     Some(texture) => {
       draw_art_top_left(
@@ -142,10 +147,10 @@ fn draw_tablet_surface_art(x : Int, y : Int, width : Int, height : Int) -> Bool 
 
 ///|
 fn draw_title_cartouche_art(
-  cx : Int,
-  cy : Int,
-  width : Int,
-  height : Int,
+  cx : Int32,
+  cy : Int32,
+  width : Int32,
+  height : Int32,
 ) -> Bool {
   match tex_title_cartouche.val {
     Some(texture) => {
@@ -176,10 +181,10 @@ fn tier_texture(tier : @types.Tier) -> @raylib.Texture? {
 ///|
 fn draw_tier_card_art(
   tier : @types.Tier,
-  x : Int,
-  y : Int,
-  width : Int,
-  height : Int,
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
 ) -> Bool {
   match tier_texture(tier) {
     Some(texture) => {
@@ -198,7 +203,12 @@ fn draw_tier_card_art(
 }
 
 ///|
-fn draw_decoder_panel_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
+fn draw_decoder_panel_art(
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
+) -> Bool {
   match tex_decoder_panel.val {
     Some(texture) => {
       draw_art_top_left(
@@ -217,9 +227,9 @@ fn draw_decoder_panel_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
 
 ///|
 fn draw_glyph_backplate_art(
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   tint : @raylib.Color,
 ) -> Bool {
   match tex_glyph_backplate.val {
@@ -239,7 +249,7 @@ fn draw_glyph_backplate_art(
 }
 
 ///|
-fn draw_selection_glow_art(x : Int, y : Int, size : Int) -> Bool {
+fn draw_selection_glow_art(x : Int32, y : Int32, size : Int32) -> Bool {
   match tex_selection_glow.val {
     Some(texture) => {
       draw_art_top_left(
@@ -257,7 +267,7 @@ fn draw_selection_glow_art(x : Int, y : Int, size : Int) -> Bool {
 }
 
 ///|
-fn draw_hint_glow_art(x : Int, y : Int, size : Int) -> Bool {
+fn draw_hint_glow_art(x : Int32, y : Int32, size : Int32) -> Bool {
   match tex_hint_glow.val {
     Some(texture) => {
       draw_art_top_left(

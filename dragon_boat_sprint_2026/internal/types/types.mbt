@@ -1,11 +1,12 @@
 ///|
 /// High-level state of the dragon boat race flow.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Paused
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
@@ -26,7 +27,7 @@ pub(all) struct Input {
 /// Spawned hazard instance on the river track.
 pub(all) struct Hazard {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut lane : Float
   mut dist : Float
   mut size : Float
@@ -38,7 +39,7 @@ pub(all) struct Hazard {
 /// AI competitor boat state.
 pub(all) struct Rival {
   mut active : Bool
-  mut id : Int
+  mut id : Int32
   mut lane : Float
   mut dist : Float
   mut speed_bias : Float
@@ -58,17 +59,17 @@ pub(all) struct Game {
   mut rhythm_t : Float
   mut stroke_cd : Float
   mut since_paddle_t : Float
-  mut streak : Int
-  mut best_streak : Int
+  mut streak : Int32
+  mut best_streak : Int32
   mut rhythm_meter : Float
   mut burst_t : Float
   mut wave_t : Float
   mut wobble : Float
-  mut checkpoint_idx : Int
-  mut score : Int
-  mut hit_count : Int
-  mut best_rank : Int
-  mut finish_rank : Int
+  mut checkpoint_idx : Int32
+  mut score : Int32
+  mut hit_count : Int32
+  mut best_rank : Int32
+  mut finish_rank : Int32
   mut finish_time : Float
   mut game_t : Float
   mut ui_t : Float

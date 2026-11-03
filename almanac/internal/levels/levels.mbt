@@ -1,6 +1,6 @@
 ///|
-fn flat_heights() -> Array[Int] {
-  let h : Array[Int] = []
+fn flat_heights() -> Array[Int32] {
+  let h : Array[Int32] = []
   for _i in 0..<80 {
     h.push(0)
   }
@@ -8,8 +8,8 @@ fn flat_heights() -> Array[Int] {
 }
 
 ///|
-fn make_heights(data : Array[Int]) -> Array[Int] {
-  let h : Array[Int] = []
+fn make_heights(data : Array[Int32]) -> Array[Int32] {
+  let h : Array[Int32] = []
   for i in 0..<80 {
     if i < data.length() {
       h.push(data[i])
@@ -21,7 +21,7 @@ fn make_heights(data : Array[Int]) -> Array[Int] {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     // === TIER 1: SPRING (levels 0-7) - Sun + Rain only, flat terrain ===
     0 =>
@@ -408,7 +408,7 @@ pub fn get_level(index : Int) -> @types.Level {
 }
 
 ///|
-pub fn level_tier(index : Int) -> @types.Tier {
+pub fn level_tier(index : Int32) -> @types.Tier {
   if index < 8 {
     Spring
   } else if index < 17 {
@@ -419,7 +419,7 @@ pub fn level_tier(index : Int) -> @types.Tier {
 }
 
 ///|
-pub fn tier_levels(tier : @types.Tier) -> (Int, Int) {
+pub fn tier_levels(tier : @types.Tier) -> (Int32, Int32) {
   match tier {
     Spring => (0, 8)
     Summer => (8, 17)

@@ -149,7 +149,7 @@ fn draw_kitchen_backdrop_art() -> Bool {
 
 ///|
 /// Returns generated ingredient art for a gameplay kind index.
-fn ingredient_art(kind : Int) -> @raylib.Texture? {
+fn ingredient_art(kind : Int32) -> @raylib.Texture? {
   if kind == 0 {
     tex_ingredient_tomato.val
   } else if kind == 1 {
@@ -165,7 +165,7 @@ fn ingredient_art(kind : Int) -> @raylib.Texture? {
 
 ///|
 /// Draws a generated falling ingredient or trash hazard sprite if loaded.
-fn draw_drop_art(kind : Int, x : Float, y : Float) -> Bool {
+fn draw_drop_art(kind : Int32, x : Float, y : Float) -> Bool {
   match ingredient_art(kind) {
     Some(texture) => {
       @raylib.draw_ellipse(

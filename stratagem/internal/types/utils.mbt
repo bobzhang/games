@@ -41,7 +41,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -50,7 +50,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -59,7 +59,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -68,15 +68,15 @@ pub fn absi(v : Int) -> Int {
 }
 
 ///|
-let rng_state : Ref[Int] = { val: 12345, }
+let rng_state : Ref[Int32] = { val: 12345, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -87,7 +87,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -103,22 +103,22 @@ pub fn rng_float() -> Float {
 // Hex coordinate math - odd-r offset (flat-top hexes)
 
 ///|
-pub fn hex(col : Int, row : Int) -> HexCoord {
+pub fn hex(col : Int32, row : Int32) -> HexCoord {
   { col, row, }
 }
 
 ///|
-pub fn hex_valid(c : HexCoord, w : Int, h : Int) -> Bool {
+pub fn hex_valid(c : HexCoord, w : Int32, h : Int32) -> Bool {
   c.col >= 0 && c.col < w && c.row >= 0 && c.row < h
 }
 
 ///|
-pub fn hex_index(c : HexCoord, w : Int) -> Int {
+pub fn hex_index(c : HexCoord, w : Int32) -> Int32 {
   c.row * w + c.col
 }
 
 ///|
-pub fn hex_from_index(idx : Int, w : Int) -> HexCoord {
+pub fn hex_from_index(idx : Int32, w : Int32) -> HexCoord {
   { col: idx % w, row: idx / w, }
 }
 
@@ -149,7 +149,7 @@ pub fn hex_neighbors(c : HexCoord) -> Array[HexCoord] {
 // Convert hex to cube coordinates for distance calc
 
 ///|
-pub fn hex_to_cube(c : HexCoord) -> (Int, Int, Int) {
+pub fn hex_to_cube(c : HexCoord) -> (Int32, Int32, Int32) {
   let x = c.col - (c.row - c.row % 2) / 2
   let z = c.row
   let y = -x - z
@@ -157,7 +157,7 @@ pub fn hex_to_cube(c : HexCoord) -> (Int, Int, Int) {
 }
 
 ///|
-pub fn hex_distance(a : HexCoord, b : HexCoord) -> Int {
+pub fn hex_distance(a : HexCoord, b : HexCoord) -> Int32 {
   let (ax, ay, az) = hex_to_cube(a)
   let (bx, by, bz) = hex_to_cube(b)
   (absi(ax - bx) + absi(ay - by) + absi(az - bz)) / 2
@@ -249,7 +249,7 @@ pub fn has_line_of_sight(map : HexMap, from : HexCoord, to : HexCoord) -> Bool {
 // Terrain cost for movement
 
 ///|
-pub fn terrain_move_cost(t : Terrain) -> Int {
+pub fn terrain_move_cost(t : Terrain) -> Int32 {
   match t {
     Plains => 1
     Forest => 2
@@ -261,7 +261,7 @@ pub fn terrain_move_cost(t : Terrain) -> Int {
 // Unit stat lookups
 
 ///|
-pub fn unit_base_hp(kind : UnitKind) -> Int {
+pub fn unit_base_hp(kind : UnitKind) -> Int32 {
   match kind {
     Infantry => 3
     Cavalry => 2
@@ -270,7 +270,7 @@ pub fn unit_base_hp(kind : UnitKind) -> Int {
 }
 
 ///|
-pub fn unit_base_atk(kind : UnitKind) -> Int {
+pub fn unit_base_atk(kind : UnitKind) -> Int32 {
   match kind {
     Infantry => 2
     Cavalry => 3
@@ -279,7 +279,7 @@ pub fn unit_base_atk(kind : UnitKind) -> Int {
 }
 
 ///|
-pub fn unit_base_move(kind : UnitKind) -> Int {
+pub fn unit_base_move(kind : UnitKind) -> Int32 {
   match kind {
     Infantry => 2
     Cavalry => 4
@@ -288,7 +288,7 @@ pub fn unit_base_move(kind : UnitKind) -> Int {
 }
 
 ///|
-pub fn unit_base_range(kind : UnitKind) -> Int {
+pub fn unit_base_range(kind : UnitKind) -> Int32 {
   match kind {
     Infantry => 1
     Cavalry => 1
@@ -297,7 +297,7 @@ pub fn unit_base_range(kind : UnitKind) -> Int {
 }
 
 ///|
-pub fn unit_base_sight(kind : UnitKind) -> Int {
+pub fn unit_base_sight(kind : UnitKind) -> Int32 {
   match kind {
     Infantry => 2
     Cavalry => 3
@@ -327,7 +327,7 @@ pub fn terrain_name(t : Terrain) -> String {
 // Constructors
 
 ///|
-pub fn unit_base_def(kind : UnitKind) -> Int {
+pub fn unit_base_def(kind : UnitKind) -> Int32 {
   match kind {
     Infantry => 1
     Cavalry => 0
@@ -337,11 +337,11 @@ pub fn unit_base_def(kind : UnitKind) -> Int {
 
 ///|
 pub fn new_unit(
-  id : Int,
+  id : Int32,
   kind : UnitKind,
   team : Team,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> GameUnit {
   let move_r = unit_base_move(kind)
   {
@@ -368,7 +368,7 @@ pub fn new_tile(terrain : Terrain) -> HexTile {
 }
 
 ///|
-pub fn new_hex_map(w : Int, h : Int) -> HexMap {
+pub fn new_hex_map(w : Int32, h : Int32) -> HexMap {
   let tiles : Array[HexTile] = Array(capacity=w * h)
   let total = w * h
   for _i in 0..<total {
@@ -406,7 +406,7 @@ pub fn new_battle() -> Battle {
 
 ///|
 pub fn new_campaign() -> CampaignState {
-  let scores : Array[Int] = Array(capacity=total_campaign_levels)
+  let scores : Array[Int32] = Array(capacity=total_campaign_levels)
   for _i in 0..<total_campaign_levels {
     scores.push(0)
   }
@@ -465,7 +465,7 @@ pub fn remove_unit_from_map(battle : Battle, unit : GameUnit) -> GameUnit {
 // Get unit by id
 
 ///|
-pub fn get_unit(battle : Battle, id : Int) -> GameUnit? {
+pub fn get_unit(battle : Battle, id : Int32) -> GameUnit? {
   for i in 0..<battle.units.length() {
     if battle.units[i].id == id && battle.units[i].active {
       return Some(battle.units[i])
@@ -491,7 +491,7 @@ pub fn get_unit_at(battle : Battle, c : HexCoord) -> GameUnit? {
 // Count active units for a team
 
 ///|
-pub fn count_team_units(battle : Battle, team : Team) -> Int {
+pub fn count_team_units(battle : Battle, team : Team) -> Int32 {
   let mut count = 0
   for i in 0..<battle.units.length() {
     if battle.units[i].active && battle.units[i].team == team {
@@ -561,7 +561,7 @@ pub fn update_fog_of_war(battle : Battle) -> Unit {
 // Get terrain defense bonus
 
 ///|
-pub fn terrain_def_bonus(terrain : Terrain, kind : UnitKind) -> Int {
+pub fn terrain_def_bonus(terrain : Terrain, kind : UnitKind) -> Int32 {
   match (terrain, kind) {
     (Forest, Infantry) => 2
     (Forest, _) => 1
@@ -578,7 +578,7 @@ pub fn terrain_def_bonus(terrain : Terrain, kind : UnitKind) -> Int {
 pub fn terrain_atk_bonus(
   attacker_terrain : Terrain,
   _defender_terrain : Terrain,
-) -> Int {
+) -> Int32 {
   match attacker_terrain {
     Hills => 1
     _ => 0
@@ -588,7 +588,7 @@ pub fn terrain_atk_bonus(
 // Get movement penalty from terrain for a unit kind
 
 ///|
-pub fn terrain_move_penalty(terrain : Terrain, kind : UnitKind) -> Int {
+pub fn terrain_move_penalty(terrain : Terrain, kind : UnitKind) -> Int32 {
   match (terrain, kind) {
     (Forest, Cavalry) => 1
     _ => 0
@@ -598,7 +598,7 @@ pub fn terrain_move_penalty(terrain : Terrain, kind : UnitKind) -> Int {
 // Artillery range bonus on hills
 
 ///|
-pub fn terrain_range_bonus(terrain : Terrain, kind : UnitKind) -> Int {
+pub fn terrain_range_bonus(terrain : Terrain, kind : UnitKind) -> Int32 {
   match (terrain, kind) {
     (Hills, Artillery) => 1
     _ => 0
@@ -608,7 +608,7 @@ pub fn terrain_range_bonus(terrain : Terrain, kind : UnitKind) -> Int {
 // Sight bonus on hills
 
 ///|
-pub fn terrain_sight_bonus(terrain : Terrain) -> Int {
+pub fn terrain_sight_bonus(terrain : Terrain) -> Int32 {
   match terrain {
     Hills => 1
     _ => 0
@@ -618,7 +618,7 @@ pub fn terrain_sight_bonus(terrain : Terrain) -> Int {
 // Get effective move range for unit
 
 ///|
-pub fn effective_move_range(battle : Battle, unit : GameUnit) -> Int {
+pub fn effective_move_range(battle : Battle, unit : GameUnit) -> Int32 {
   let terrain_idx = hex_index(unit.pos, battle.map.width)
   let terrain = battle.map.tiles[terrain_idx].terrain
   let penalty = terrain_move_penalty(terrain, unit.kind)
@@ -628,7 +628,7 @@ pub fn effective_move_range(battle : Battle, unit : GameUnit) -> Int {
 // Get effective attack range for unit
 
 ///|
-pub fn effective_attack_range(battle : Battle, unit : GameUnit) -> Int {
+pub fn effective_attack_range(battle : Battle, unit : GameUnit) -> Int32 {
   let terrain_idx = hex_index(unit.pos, battle.map.width)
   let terrain = battle.map.tiles[terrain_idx].terrain
   unit.attack_range + terrain_range_bonus(terrain, unit.kind)
@@ -637,14 +637,14 @@ pub fn effective_attack_range(battle : Battle, unit : GameUnit) -> Int {
 // Get effective sight range for unit
 
 ///|
-pub fn effective_sight_range(unit : GameUnit, terrain : Terrain) -> Int {
+pub fn effective_sight_range(unit : GameUnit, terrain : Terrain) -> Int32 {
   unit.sight_range + terrain_sight_bonus(terrain)
 }
 
 // Terrain int code to enum
 
 ///|
-pub fn terrain_from_int(v : Int) -> Terrain {
+pub fn terrain_from_int(v : Int32) -> Terrain {
   match v {
     0 => Plains
     1 => Forest

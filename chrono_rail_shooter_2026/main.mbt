@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
 /// Left boundary X coordinate of the player's movement rail.
@@ -16,23 +16,23 @@ let rail_r : Float = 1060.0
 
 ///|
 /// Maximum number of enemies that can be active simultaneously.
-let max_enemies : Int = 240
+let max_enemies : Int32 = 240
 
 ///|
 /// Maximum number of bullets that can be active simultaneously.
-let max_bullets : Int = 960
+let max_bullets : Int32 = 960
 
 ///|
 /// Maximum number of pickups that can be active simultaneously.
-let max_pickups : Int = 160
+let max_pickups : Int32 = 160
 
 ///|
 /// Maximum number of particle effects that can be active simultaneously.
-let max_particles : Int = 1300
+let max_particles : Int32 = 1300
 
 ///|
 /// Maximum number of track panels that can be active simultaneously.
-let max_panels : Int = 240
+let max_panels : Int32 = 240
 
 ///|
 /// Represents the player ship with position, velocity, stats, cooldowns, and scoring state.
@@ -51,9 +51,9 @@ struct Player {
   mut emp_cd : Float
   mut inv_t : Float
   mut shield_on : Bool
-  mut score : Int
-  mut combo : Int
-  mut best_combo : Int
+  mut score : Int32
+  mut combo : Int32
+  mut best_combo : Int32
   mut distance : Float
 }
 
@@ -61,7 +61,7 @@ struct Player {
 /// Represents an enemy unit with position, velocity, HP, and behavior state.
 struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -76,8 +76,8 @@ struct Enemy {
 /// Represents a projectile with team ownership, position, velocity, damage, and remaining lifetime.
 struct Bullet {
   mut active : Bool
-  mut team : Int
-  mut kind : Int
+  mut team : Int32
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -91,7 +91,7 @@ struct Bullet {
 /// Represents a collectible item dropped by enemies with position, kind, and fall velocity.
 struct Pickup {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vy : Float
@@ -102,7 +102,7 @@ struct Pickup {
 /// Represents a visual particle effect with position, velocity, size, and remaining lifetime.
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -171,10 +171,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -184,7 +184,7 @@ fn inside_rect(
 
 ///|
 /// Returns the collision radius for an enemy of the given kind.
-fn enemy_radius(kind : Int) -> Float {
+fn enemy_radius(kind : Int32) -> Float {
   if kind == 0 {
     16.0
   } else if kind == 1 {
@@ -196,7 +196,7 @@ fn enemy_radius(kind : Int) -> Float {
 
 ///|
 /// Returns the starting HP for an enemy of the given kind and difficulty level.
-fn enemy_hp(kind : Int, level : Int) -> Float {
+fn enemy_hp(kind : Int32, level : Int32) -> Float {
   if kind == 0 {
     22.0 + Float::from_int(level) * 2.0
   } else if kind == 1 {
@@ -288,10 +288,10 @@ fn clear_panels(panels : Array[Panel]) -> Unit {
 /// Activates an idle enemy from the pool at the given position with the specified kind and level, returning true on success.
 fn add_enemy(
   enemies : Array[Enemy],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
-  level : Int,
+  level : Int32,
 ) -> Bool {
   for enemy in enemies {
     if !enemy.active {
@@ -321,8 +321,8 @@ fn add_enemy(
 /// Activates an idle bullet from the pool with the given properties, returning true on success.
 fn add_bullet(
   bullets : Array[Bullet],
-  team : Int,
-  kind : Int,
+  team : Int32,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -353,7 +353,7 @@ fn add_bullet(
 /// Activates an idle pickup from the pool at the given position with the specified kind and fall velocity, returning true on success.
 fn add_pickup(
   pickups : Array[Pickup],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vy : Float,
@@ -376,7 +376,7 @@ fn add_pickup(
 /// Activates an idle particle from the pool with the given position, velocity, size, and lifetime, returning true on success.
 fn add_particle(
   parts : Array[Particle],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -434,9 +434,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     let ang = randf(0.0, 6.283)
@@ -458,15 +458,15 @@ fn burst(
 
 ///|
 /// Draws the on-screen touch control pad and action buttons when the game is in the playing state.
-fn draw_touch_ui(state : Int) -> Unit {
+fn draw_touch_ui(state : Int32) -> Unit {
   if state != 1 {
     ignore(())
   } else {
-    let pad_x : Int = 24
-    let pad_y : Int = sh - 220
+    let pad_x : Int32 = 24
+    let pad_y : Int32 = sh - 220
 
-    let btn_x : Int = sw - 334
-    let btn_y : Int = sh - 230
+    let btn_x : Int32 = sw - 334
+    let btn_y : Int32 = sh - 230
 
     @raylib.draw_rectangle(
       pad_x,
@@ -720,7 +720,7 @@ fn main {
     t: 0.0,
   }
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut enemy_cd : Float = 0.6
   let mut pickup_cd : Float = 2.2
   let mut panel_cd : Float = 0.28
@@ -838,7 +838,7 @@ fn main {
         reset_run()
       }
     } else if state == 1 {
-      let level : Int = player.distance.to_int() / 900 + 1
+      let level : Int32 = player.distance.to_int() / 900 + 1
       let mut scroll_speed : Float = 220.0 + Float::from_int(level) * 14.0
       if boss.active {
         scroll_speed = 210.0
@@ -904,10 +904,10 @@ fn main {
       let mut emp_press : Bool = @raylib.is_key_pressed(@raylib.KeyL)
       let mut shield_hold : Bool = @raylib.is_key_down(@raylib.KeyRightShift)
 
-      let pad_x : Int = 24
-      let pad_y : Int = sh - 220
-      let btn_x : Int = sw - 334
-      let btn_y : Int = sh - 230
+      let pad_x : Int32 = 24
+      let pad_y : Int32 = sh - 220
+      let btn_x : Int32 = sw - 334
+      let btn_y : Int32 = sh - 230
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x + 14, pad_y + 74, 56, 56) {
@@ -1597,7 +1597,7 @@ fn main {
     if boss.active {
       draw_boss_art(boss, art)
 
-      let boss_fill : Int = (clampf(boss.hp / boss.max_hp, 0.0, 1.0) * 420.0).to_int()
+      let boss_fill : Int32 = (clampf(boss.hp / boss.max_hp, 0.0, 1.0) * 420.0).to_int()
 
       @raylib.draw_rectangle(
         432,
@@ -1653,7 +1653,7 @@ fn main {
       }
 
       let life01 : Float = clampf(particle.life / 0.8, 0.0, 1.0)
-      let alpha : Int = (life01 * 255.0).to_int()
+      let alpha : Int32 = (life01 * 255.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(104, 220, 254, alpha)
       } else if particle.kind == 1 {
@@ -1720,9 +1720,9 @@ fn main {
       @raylib.Color::new(170, 210, 236, 220),
     )
 
-    let hp_fill : Int = (clampf(player.hp / 100.0, 0.0, 1.0) * 236.0).to_int()
-    let en_fill : Int = (clampf(player.energy / 100.0, 0.0, 1.0) * 236.0).to_int()
-    let heat_fill : Int = (clampf(player.heat / 100.0, 0.0, 1.0) * 236.0).to_int()
+    let hp_fill : Int32 = (clampf(player.hp / 100.0, 0.0, 1.0) * 236.0).to_int()
+    let en_fill : Int32 = (clampf(player.energy / 100.0, 0.0, 1.0) * 236.0).to_int()
+    let heat_fill : Int32 = (clampf(player.heat / 100.0, 0.0, 1.0) * 236.0).to_int()
 
     @raylib.draw_rectangle(16, 84, 236, 12, @raylib.Color::new(24, 26, 38, 255))
     @raylib.draw_rectangle(

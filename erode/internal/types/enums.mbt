@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,13 +23,14 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ForceKind {
   Water
   WindLeft
   WindRight
   Frost
   Heat
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ForceKind with Eq::{not_equal, equal}
@@ -45,13 +47,14 @@ pub impl Show for ForceKind with fn output(self, logger) {
 pub extend ForceKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Selecting
   Previewing(ForceKind)
   Animating
   Won
   Lost
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -68,11 +71,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Clay
   Stone
   Crystal
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

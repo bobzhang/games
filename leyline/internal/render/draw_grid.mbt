@@ -39,7 +39,12 @@ pub fn draw_cells(state : @types.LevelState, phase : Float) -> Unit {
 }
 
 ///|
-fn draw_cell(cell : @types.Cell, col : Int, row : Int, phase : Float) -> Unit {
+fn draw_cell(
+  cell : @types.Cell,
+  col : Int32,
+  row : Int32,
+  phase : Float,
+) -> Unit {
   let x = @types.cell_screen_x(col)
   let y = @types.cell_screen_y(row)
   let cx = @types.cell_center_x(col)

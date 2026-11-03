@@ -1,35 +1,38 @@
 ///|
 /// High-level flow state for museum campaign progression.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Win
   Lose
   CampaignClear
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Direction input used for grid movement.
+#derive(Eq)
 pub(all) enum Direction {
   DirNone
   Left
   Right
   Up
   Down
-} derive(Eq)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
 
 ///|
 /// Board tile kind used for movement and visibility checks.
+#derive(Eq)
 pub(all) enum TileKind {
   Floor
   Wall
-} derive(Eq)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -37,21 +40,21 @@ pub extend TileKind with Eq::{not_equal, equal}
 ///|
 /// Collectible artifact placed on the board.
 pub(all) struct Artifact {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
   mut taken : Bool
 }
 
 ///|
 /// Guard patrol state and viewing parameters.
 pub(all) struct Guard {
-  mut x : Int
-  mut y : Int
-  mut dir_x : Int
-  mut dir_y : Int
-  view_range : Int
-  path : Array[Int]
-  mut path_index : Int
+  mut x : Int32
+  mut y : Int32
+  mut dir_x : Int32
+  mut dir_y : Int32
+  view_range : Int32
+  path : Array[Int32]
+  mut path_index : Int32
   mut step_timer : Float
 }
 
@@ -72,15 +75,15 @@ pub(all) struct Game {
   mut artifacts : Array[Artifact]
   mut guards : Array[Guard]
   mut state : GameState
-  mut level_index : Int
-  level_count : Int
+  mut level_index : Int32
+  level_count : Int32
   mut level_name : String
-  mut player_x : Int
-  mut player_y : Int
-  mut exit_x : Int
-  mut exit_y : Int
-  mut artifacts_total : Int
-  mut artifacts_collected : Int
+  mut player_x : Int32
+  mut player_y : Int32
+  mut exit_x : Int32
+  mut exit_y : Int32
+  mut artifacts_total : Int32
+  mut artifacts_collected : Int32
   mut player_step_t : Float
   mut state_t : Float
   mut pulse_t : Float
@@ -89,7 +92,7 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut mouse_press : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

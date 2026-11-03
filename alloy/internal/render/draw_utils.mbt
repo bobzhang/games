@@ -1,5 +1,5 @@
 ///|
-fn draw_stars_small(x : Int, y : Int, rating : @types.StarRating) -> Unit {
+fn draw_stars_small(x : Int32, y : Int32, rating : @types.StarRating) -> Unit {
   let count = @types.star_count(rating)
   for i in 0..<3 {
     let color = if i < count {
@@ -12,7 +12,7 @@ fn draw_stars_small(x : Int, y : Int, rating : @types.StarRating) -> Unit {
 }
 
 ///|
-fn draw_stars_large(x : Int, y : Int, rating : @types.StarRating) -> Unit {
+fn draw_stars_large(x : Int32, y : Int32, rating : @types.StarRating) -> Unit {
   let count = @types.star_count(rating)
   for i in 0..<3 {
     let color = if i < count {
@@ -35,7 +35,7 @@ fn cosf(a : Float) -> Float {
 }
 
 ///|
-fn format_float(v : Float, decimals : Int) -> String {
+fn format_float(v : Float, decimals : Int32) -> String {
   if decimals <= 0 {
     return v.to_int().to_string()
   }

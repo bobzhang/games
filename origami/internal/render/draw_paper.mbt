@@ -4,29 +4,29 @@ fn sinf(a : Float) -> Float {
 }
 
 ///|
-fn paper_origin_x() -> Int {
+fn paper_origin_x() -> Int32 {
   // Center the grid in the left portion of the screen
   100
 }
 
 ///|
-fn paper_origin_y() -> Int {
+fn paper_origin_y() -> Int32 {
   (@types.screen_height - @types.grid_size * @types.cell_size) / 2
 }
 
 ///|
-fn target_origin_x() -> Int {
+fn target_origin_x() -> Int32 {
   // Target shown to the right
   @types.screen_width - @types.grid_size * @types.cell_size - 100
 }
 
 ///|
-fn target_origin_y() -> Int {
+fn target_origin_y() -> Int32 {
   paper_origin_y()
 }
 
 ///|
-fn layer_color(layers : Int, max_l : Int) -> @raylib.Color {
+fn layer_color(layers : Int32, max_l : Int32) -> @raylib.Color {
   // Interpolate from paper_base (light) to paper_dark based on layer ratio
   let base_r = @types.color_paper_base.r.to_int()
   let base_g = @types.color_paper_base.g.to_int()
@@ -38,19 +38,19 @@ fn layer_color(layers : Int, max_l : Int) -> @raylib.Color {
   let t : Double = if layers <= 1 {
     0.0
   } else {
-    Int::to_double(layers - 1) / Int::to_double(clamped_max)
+    Int32::to_double(layers - 1) / Int32::to_double(clamped_max)
   }
-  let r = base_r + (Int::to_double(dark_r - base_r) * t).to_int()
-  let g = base_g + (Int::to_double(dark_g - base_g) * t).to_int()
-  let b = base_b + (Int::to_double(dark_b - base_b) * t).to_int()
+  let r = base_r + (Int32::to_double(dark_r - base_r) * t).to_int()
+  let g = base_g + (Int32::to_double(dark_g - base_g) * t).to_int()
+  let b = base_b + (Int32::to_double(dark_b - base_b) * t).to_int()
   @raylib.Color::new(r, g, b, 255)
 }
 
 ///|
 fn draw_paper_grid(
   paper : @types.Paper,
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
   show_layers : Bool,
 ) -> Unit {
   let cs = @types.cell_size
@@ -84,7 +84,7 @@ fn draw_paper_grid(
 }
 
 ///|
-fn draw_target_ghost(target : @types.Paper, ox : Int, oy : Int) -> Unit {
+fn draw_target_ghost(target : @types.Paper, ox : Int32, oy : Int32) -> Unit {
   let cs = @types.cell_size
   for y in 0..<target.height {
     for x in 0..<target.width {
@@ -102,7 +102,7 @@ fn draw_target_ghost(target : @types.Paper, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_fold_line_preview(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn draw_fold_line_preview(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   let cs = @types.cell_size
   let gs = @types.grid_size
   let line = game.fold_line
@@ -135,9 +135,9 @@ fn draw_fold_line_preview(game : @types.Game, ox : Int, oy : Int) -> Unit {
 ///|
 fn draw_fold_arrow(
   dir : @types.FoldDir,
-  cx : Int,
-  cy : Int,
-  size : Int,
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
 ) -> Unit {
   let s = size / 3
   let col = @types.color_fold_line
@@ -199,7 +199,7 @@ fn draw_fold_arrow(
 }
 
 ///|
-fn draw_layer_checks(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn draw_layer_checks(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   let cs = @types.cell_size
   let checks = game.target.layer_checks
   for i in 0..<checks.length() {
@@ -236,7 +236,7 @@ fn draw_layer_checks(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_target_layer_checks(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn draw_target_layer_checks(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   let cs = @types.cell_size
   let checks = game.target.layer_checks
   for i in 0..<checks.length() {

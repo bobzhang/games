@@ -59,7 +59,7 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   rx : Float,
   ry : Float,
   rw : Float,

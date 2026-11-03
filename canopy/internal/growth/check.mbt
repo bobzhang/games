@@ -13,7 +13,7 @@ pub fn check_targets(game : @types.Game) -> Bool {
 }
 
 ///|
-pub fn target_met(game : @types.Game, target_index : Int) -> Bool {
+pub fn target_met(game : @types.Game, target_index : Int32) -> Bool {
   if target_index < 0 || target_index >= game.targets.length() {
     return false
   }
@@ -25,7 +25,7 @@ pub fn target_met(game : @types.Game, target_index : Int) -> Bool {
 }
 
 ///|
-pub fn calculate_stars(game : @types.Game) -> Int {
+pub fn calculate_stars(game : @types.Game) -> Int32 {
   if !check_targets(game) {
     return 0
   }

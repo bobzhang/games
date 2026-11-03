@@ -7,7 +7,10 @@
 /// 3. Guarantee a start cell and a boss/stairs cell.
 /// 4. Connect adjacent occupied cells with corridor rooms.
 /// 5. Assign room kinds and build tile data from templates.
-pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
+pub fn generate_floor(
+  floor_num : Int32,
+  rng : UInt32,
+) -> (@types.Floor, UInt32) {
   let mut state = rng
   let grid_cols = 4
   let grid_rows = 3
@@ -63,7 +66,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
   ensure_connectivity(grid, grid_cols, grid_rows)
 
   // --- collect occupied cells in order ---------------------------------------
-  let cell_indices : Array[Int] = []
+  let cell_indices : Array[Int32] = []
   for i in 0..<cell_count {
     if grid[i] {
       cell_indices.push(i)
@@ -141,7 +144,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
 
   // Store world-space door positions keyed as (grid_index * 4 + dir_index).
   // dir_index: 0=Up, 1=Down, 2=Left, 3=Right
-  let door_positions : Array[(Int, Int, Int)] = [] // (key, world_x, world_y)
+  let door_positions : Array[(Int32, Int32, Int32)] = [] // (key, world_x, world_y)
 
   for ci in 0..<cell_indices.length() {
     let idx = cell_indices[ci]
@@ -150,7 +153,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     let kind = room_kinds[ci]
 
     // Pick a template based on kind
-    let template_idx : Int = match kind {
+    let template_idx : Int32 = match kind {
       Start => 9
       Boss => 8
       Treasure => 7
@@ -232,7 +235,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
   // --- generate corridor rooms between connected cells -----------------------
   // Corridors now use actual door world-space positions as endpoints, creating
   // L-shaped paths when doors don't share the same row/column.
-  let corridor_set : Array[(Int, Int)] = []
+  let corridor_set : Array[(Int32, Int32)] = []
   for ci in 0..<cell_indices.length() {
     let idx = cell_indices[ci]
     let gx = idx % grid_cols
@@ -304,7 +307,7 @@ pub fn generate_test_floor() -> @types.Floor {
 // ---------------------------------------------------------------------------
 
 ///|
-fn corridor_exists(set : Array[(Int, Int)], a : Int, b : Int) -> Bool {
+fn corridor_exists(set : Array[(Int32, Int32)], a : Int32, b : Int32) -> Bool {
   for i in 0..<set.length() {
     let (sa, sb) = set[i]
     if (sa == a && sb == b) || (sa == b && sb == a) {
@@ -316,7 +319,10 @@ fn corridor_exists(set : Array[(Int, Int)], a : Int, b : Int) -> Bool {
 
 ///|
 /// Look up a door's world-space position by key in the flat array.
-fn lookup_door(positions : Array[(Int, Int, Int)], key : Int) -> (Int, Int)? {
+fn lookup_door(
+  positions : Array[(Int32, Int32, Int32)],
+  key : Int32,
+) -> (Int32, Int32)? {
   for i in 0..<positions.length() {
     let (k, x, y) = positions[i]
     if k == key {
@@ -328,7 +334,13 @@ fn lookup_door(positions : Array[(Int, Int, Int)], key : Int) -> (Int, Int)? {
 
 ///|
 /// Set a tile to floor (1) if it is within bounds.
-fn carve(tiles : Array[Int], cw : Int, ch : Int, x : Int, y : Int) -> Unit {
+fn carve(
+  tiles : Array[Int32],
+  cw : Int32,
+  ch : Int32,
+  x : Int32,
+  y : Int32,
+) -> Unit {
   if x >= 0 && x < cw && y >= 0 && y < ch {
     tiles[y * cw + x] = 1
   }
@@ -338,12 +350,12 @@ fn carve(tiles : Array[Int], cw : Int, ch : Int, x : Int, y : Int) -> Unit {
 /// Carve a 3-wide horizontal strip of floor tiles from x_start to x_end
 /// (inclusive) centred on row cy.
 fn carve_h_strip(
-  tiles : Array[Int],
-  cw : Int,
-  ch : Int,
-  x_start : Int,
-  x_end : Int,
-  cy : Int,
+  tiles : Array[Int32],
+  cw : Int32,
+  ch : Int32,
+  x_start : Int32,
+  x_end : Int32,
+  cy : Int32,
 ) -> Unit {
   let lo = @types.mini(x_start, x_end)
   let hi = @types.maxi(x_start, x_end)
@@ -360,12 +372,12 @@ fn carve_h_strip(
 /// Carve a 3-wide vertical strip of floor tiles from y_start to y_end
 /// (inclusive) centred on column cx.
 fn carve_v_strip(
-  tiles : Array[Int],
-  cw : Int,
-  ch : Int,
-  cx : Int,
-  y_start : Int,
-  y_end : Int,
+  tiles : Array[Int32],
+  cw : Int32,
+  ch : Int32,
+  cx : Int32,
+  y_start : Int32,
+  y_end : Int32,
 ) -> Unit {
   let lo = @types.mini(y_start, y_end)
   let hi = @types.maxi(y_start, y_end)
@@ -389,10 +401,10 @@ fn carve_v_strip(
 /// cross-axis.  If the two doors are not aligned on the cross-axis the path
 /// makes a single L-bend at the midpoint of the primary axis.
 fn create_corridor_between(
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
   horizontal : Bool,
 ) -> @types.Room {
   // Padding: 1 tile of wall on each side of the 1-tile-wide walkable centre.
@@ -482,11 +494,11 @@ fn create_corridor_between(
 ///|
 /// Ensure every occupied cell is reachable from cell 0 by enabling bridge
 /// cells along the shortest grid path when disconnected components exist.
-fn ensure_connectivity(grid : Array[Bool], cols : Int, rows : Int) -> Unit {
+fn ensure_connectivity(grid : Array[Bool], cols : Int32, rows : Int32) -> Unit {
   let count = cols * rows
   let visited : Array[Bool] = Array::make(count, false)
   // BFS from cell 0
-  let queue : Array[Int] = [0]
+  let queue : Array[Int32] = [0]
   visited[0] = true
   let mut head = 0
   while head < queue.length() {
@@ -495,7 +507,7 @@ fn ensure_connectivity(grid : Array[Bool], cols : Int, rows : Int) -> Unit {
     let gx = idx % cols
     let gy = idx / cols
     // Four neighbours
-    let neighbours : Array[Int] = []
+    let neighbours : Array[Int32] = []
     if gx > 0 {
       neighbours.push(gy * cols + gx - 1)
     }

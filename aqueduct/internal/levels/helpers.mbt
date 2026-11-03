@@ -1,16 +1,16 @@
 ///|
 /// Create a flat grid filled with a single elevation value.
-pub fn make_flat_grid(cols : Int, rows : Int, elev : Int) -> Array[Int] {
+pub fn make_flat_grid(cols : Int32, rows : Int32, elev : Int32) -> Array[Int32] {
   Array::make(cols * rows, elev)
 }
 
 ///|
 /// Set a specific row of elevations.
 pub fn set_row(
-  elevations : Array[Int],
-  cols : Int,
-  row : Int,
-  values : Array[Int],
+  elevations : Array[Int32],
+  cols : Int32,
+  row : Int32,
+  values : Array[Int32],
 ) -> Unit {
   let offset = row * cols
   for i, v in values {

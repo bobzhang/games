@@ -73,13 +73,13 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
 /// Returns true with the given percent chance.
-pub fn chance(percent : Int) -> Bool {
+pub fn chance(percent : Int32) -> Bool {
   randi(0, 99) < percent
 }
 

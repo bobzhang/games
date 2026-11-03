@@ -1,4 +1,5 @@
 ///|
+#derive(Debug, Eq)
 pub(all) enum CellKind {
   Empty
   Source
@@ -6,7 +7,7 @@ pub(all) enum CellKind {
   Waystone
   Amplifier
   Void
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend CellKind with Debug::{to_repr}
@@ -23,13 +24,14 @@ pub impl Show for CellKind with fn output(self, logger) {
 pub extend CellKind with Show::{to_string, output}
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum Screen {
   Title
   LevelSelect
   Playing
   LevelComplete
   LevelFailed
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend Screen with Debug::{to_repr}
@@ -46,12 +48,13 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum Tool {
   PlaceWaystone
   RemoveWaystone
   DrawLine
   EraseLine
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend Tool with Debug::{to_repr}
@@ -68,12 +71,13 @@ pub impl Show for Tool with fn output(self, logger) {
 pub extend Tool with Show::{to_string, output}
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum StarRating {
   None
   Bronze
   Silver
   Gold
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend StarRating with Debug::{to_repr}
@@ -90,12 +94,13 @@ pub impl Show for StarRating with fn output(self, logger) {
 pub extend StarRating with Show::{to_string, output}
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Debug, Eq)
+}
 
 ///|
 pub extend Direction with Debug::{to_repr}

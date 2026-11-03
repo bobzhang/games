@@ -122,7 +122,12 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars_large(x : Int, y : Int, filled : Int, total : Int) -> Unit {
+fn draw_stars_large(
+  x : Int32,
+  y : Int32,
+  filled : Int32,
+  total : Int32,
+) -> Unit {
   for i in 0..<total {
     let sx = x + i * 50
     let color = if i < filled {
@@ -135,7 +140,12 @@ fn draw_stars_large(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 }
 
 ///|
-fn draw_result_pattern(game : @types.Game, x : Int, y : Int, cs : Int) -> Unit {
+fn draw_result_pattern(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+  cs : Int32,
+) -> Unit {
   let target = game.target
   @draw.draw_text("Your Fabric:", x, y - 25, 14, @types.color_text_light)
   // Frame

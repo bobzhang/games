@@ -1,6 +1,6 @@
 ///|
 /// Returns the configured stage profile for a campaign index.
-pub fn get_stage_profile(index : Int) -> @types.StageProfile {
+pub fn get_stage_profile(index : Int32) -> @types.StageProfile {
   match index % @types.level_count {
     0 =>
       StageProfile(

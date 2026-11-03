@@ -62,7 +62,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_pattern(x : Int, y : Int, w : Int, h : Int) -> Unit {
+fn draw_title_pattern(x : Int32, y : Int32, w : Int32, h : Int32) -> Unit {
   // Draw a decorative plain weave preview
   let cs = 15
   let cols = w / cs
@@ -206,7 +206,12 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars_small(x : Int, y : Int, filled : Int, total : Int) -> Unit {
+fn draw_stars_small(
+  x : Int32,
+  y : Int32,
+  filled : Int32,
+  total : Int32,
+) -> Unit {
   for i in 0..<total {
     let sx = x + i * 22
     let color = if i < filled {
@@ -220,9 +225,9 @@ fn draw_stars_small(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 
 ///|
 fn draw_star_shape(
-  cx : Int,
-  cy : Int,
-  radius : Int,
+  cx : Int32,
+  cy : Int32,
+  radius : Int32,
   color : @raylib.Color,
 ) -> Unit {
   // Simple star as a filled circle with rays

@@ -1,6 +1,6 @@
 ///|
 /// Returns the roll value at `idx`, or 0 when the index is out of the recorded range.
-fn safe_roll(rolls : ArrayView[Int], idx : Int) -> Int {
+fn safe_roll(rolls : ArrayView[Int32], idx : Int32) -> Int32 {
   if idx >= 0 && idx < rolls.length() {
     rolls[idx]
   } else {
@@ -10,7 +10,7 @@ fn safe_roll(rolls : ArrayView[Int], idx : Int) -> Int {
 
 ///|
 /// Returns the roll value at `idx`, or -2 when the index is beyond recorded rolls.
-fn maybe_roll(rolls : ArrayView[Int], idx : Int) -> Int {
+fn maybe_roll(rolls : ArrayView[Int32], idx : Int32) -> Int32 {
   if idx >= 0 && idx < rolls.length() {
     rolls[idx]
   } else {
@@ -20,7 +20,7 @@ fn maybe_roll(rolls : ArrayView[Int], idx : Int) -> Int {
 
 ///|
 /// Converts a pin-count integer to its display symbol: empty for pending, `-` for zero, or the digit.
-fn show_roll(v : Int) -> String {
+fn show_roll(v : Int32) -> String {
   if v < 0 {
     ""
   } else if v == 0 {
@@ -45,7 +45,7 @@ fn @types.Game::clear_rolls(game : @types.Game) -> Unit {
 
 ///|
 /// Appends a knocked-pin count to the roll log if capacity allows.
-fn @types.Game::push_roll(game : @types.Game, knocked : Int) -> Unit {
+fn @types.Game::push_roll(game : @types.Game, knocked : Int32) -> Unit {
   if game.roll_count >= game.rolls.length() {
     return
   }
@@ -61,8 +61,8 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
   }
 
   let rolls = game.rolls[0:game.roll_count]
-  let mut idx : Int = 0
-  let mut total : Int = 0
+  let mut idx : Int32 = 0
+  let mut total : Int32 = 0
 
   for frame in 0..<10 {
     if idx >= rolls.length() {
@@ -70,7 +70,7 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
     }
 
     if frame < 9 {
-      let a : Int = safe_roll(rolls, idx)
+      let a : Int32 = safe_roll(rolls, idx)
       if a == 10 {
         if idx + 2 >= rolls.length() {
           break
@@ -86,7 +86,7 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
           break
         }
 
-        let b : Int = safe_roll(rolls, idx + 1)
+        let b : Int32 = safe_roll(rolls, idx + 1)
         if a + b == 10 {
           if idx + 2 >= rolls.length() {
             break
@@ -104,9 +104,9 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
         break
       }
 
-      let a : Int = safe_roll(rolls, idx)
-      let b : Int = safe_roll(rolls, idx + 1)
-      let mut frame_total : Int = a + b
+      let a : Int32 = safe_roll(rolls, idx)
+      let b : Int32 = safe_roll(rolls, idx + 1)
+      let mut frame_total : Int32 = a + b
 
       if a == 10 || a + b == 10 {
         if idx + 2 >= rolls.length() {
@@ -129,7 +129,10 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the roll-log index of the first delivery in the given frame number.
-fn @types.Game::frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
+fn @types.Game::frame_start_roll_idx(
+  game : @types.Game,
+  target : Int32,
+) -> Int32 {
   let rolls = game.rolls[0:game.roll_count]
   for frame in 0..<target; idx = 0 {
     if frame >= 9 {
@@ -152,12 +155,15 @@ fn @types.Game::frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
 
 ///|
 /// Returns formatted roll marks for a frame as displayed on the scoreboard.
-pub fn frame_marks(game : @types.Game, frame : Int) -> (String, String, String) {
+pub fn frame_marks(
+  game : @types.Game,
+  frame : Int32,
+) -> (String, String, String) {
   let rolls = game.rolls[0:game.roll_count]
-  let idx : Int = game.frame_start_roll_idx(frame)
-  let a : Int = maybe_roll(rolls, idx)
-  let b : Int = maybe_roll(rolls, idx + 1)
-  let c : Int = maybe_roll(rolls, idx + 2)
+  let idx : Int32 = game.frame_start_roll_idx(frame)
+  let a : Int32 = maybe_roll(rolls, idx)
+  let b : Int32 = maybe_roll(rolls, idx + 1)
+  let c : Int32 = maybe_roll(rolls, idx + 2)
 
   if frame < 9 {
     if a == 10 {

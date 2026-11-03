@@ -68,7 +68,7 @@ pub fn clear_entities(game : Game) -> Unit {
 /// Activates one free rock slot with provided kinematic parameters.
 pub fn spawn_rock(
   game : Game,
-  size : Int,
+  size : Int32,
   x : Float,
   y : Float,
   vx : Float,

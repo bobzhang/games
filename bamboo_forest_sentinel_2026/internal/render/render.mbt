@@ -2,8 +2,8 @@
 /// Draws `text` horizontally centered on the screen at the given y coordinate with the specified size and color.
 fn draw_centered(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let width = @draw.measure_text(text, size)
@@ -14,9 +14,9 @@ fn draw_centered(
 /// Draws a labeled green-bordered progress bar at `(x, y)` with a dark background fill and a colored fill scaled by `ratio`.
 fn draw_meter(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
   ratio : Float,
   fill : @raylib.Color,
 ) -> Unit {

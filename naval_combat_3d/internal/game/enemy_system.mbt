@@ -165,7 +165,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_ai_state(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dist_to_player : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
@@ -249,7 +249,7 @@ fn @types.Game::update_ai_state(
 ///|
 fn @types.Game::update_patrol(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
@@ -287,7 +287,7 @@ fn @types.Game::update_patrol(
 ///|
 fn @types.Game::update_chase(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
   tx : Float,
   tz : Float,
@@ -332,7 +332,7 @@ fn @types.Game::update_chase(
 ///|
 fn @types.Game::update_attack(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
   tx : Float,
   tz : Float,
@@ -390,7 +390,7 @@ fn @types.Game::update_attack(
 ///|
 fn @types.Game::update_retreat(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
   px : Float,
   pz : Float,
@@ -449,7 +449,7 @@ fn @types.Game::update_retreat(
 ///|
 fn @types.Game::update_flank(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
   tx : Float,
   tz : Float,
@@ -494,7 +494,7 @@ fn @types.Game::update_flank(
 ///|
 fn @types.Game::update_broadside_run(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
   tx : Float,
   tz : Float,
@@ -544,7 +544,7 @@ fn @types.Game::update_broadside_run(
 /// toward the windward side so it can gain a positional advantage.
 fn @types.Game::apply_windward_bias(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
   px : Float,
   pz : Float,
@@ -565,7 +565,7 @@ fn @types.Game::apply_windward_bias(
 ///|
 fn @types.Game::maybe_target_convoy(
   game : @types.Game,
-  enemy_idx : Int,
+  enemy_idx : Int32,
   dt : Float,
 ) -> Unit {
   ignore(dt)
@@ -601,7 +601,7 @@ fn @types.Game::maybe_target_convoy(
 ///|
 fn @types.Game::fire_enemy_broadside(
   game : @types.Game,
-  enemy_idx : Int,
+  enemy_idx : Int32,
 ) -> Unit {
   let enemy = game.enemies[enemy_idx]
   // Pick the actual target position -- convoy or player
@@ -619,7 +619,7 @@ fn @types.Game::fire_enemy_broadside(
     enemy.heading - @types.pi / 2.0
   }
   // Number of cannonballs based on cannon count
-  let shots : Int = (enemy.cannon_count / 2).min(4)
+  let shots : Int32 = (enemy.cannon_count / 2).min(4)
   for i in 0..<shots {
     let idx = @types.alloc_cannonball(game)
     if idx < 0 {

@@ -9,27 +9,27 @@ pub(all) struct Tile {
 ///|
 pub(all) struct Grid {
   tiles : Array[Array[Tile]]
-  size : Int
+  size : Int32
 }
 
 ///|
 pub(all) struct LevelDef {
-  id : Int
+  id : Int32
   name : String
-  tier : Int
-  par_materials : Int
-  par_turns : Int
-  sources : Array[(Int, Int, Float)]
-  targets : Array[(Int, Int, Float, Float)]
-  locked_tiles : Array[(Int, Int, Material)]
+  tier : Int32
+  par_materials : Int32
+  par_turns : Int32
+  sources : Array[(Int32, Int32, Float)]
+  targets : Array[(Int32, Int32, Float, Float)]
+  locked_tiles : Array[(Int32, Int32, Material)]
   available_materials : Array[Material]
 }
 
 ///|
 pub(all) struct LevelResult {
   mut stars : StarRating
-  mut materials_used : Int
-  mut turns_taken : Int
+  mut materials_used : Int32
+  mut turns_taken : Int32
   mut all_targets_met : Bool
 }
 
@@ -43,17 +43,17 @@ pub(all) struct LevelProgress {
 pub(all) struct Game {
   mut screen : Screen
   grid : Grid
-  mut current_level : Int
+  mut current_level : Int32
   mut tool_mode : ToolMode
-  mut sim_turn : Int
+  mut sim_turn : Int32
   mut sim_timer : Float
   mut sim_running : Bool
   level_progress : Array[LevelProgress]
   mut result : LevelResult
-  mut frame_count : Int
-  mut hover_row : Int
-  mut hover_col : Int
+  mut frame_count : Int32
+  mut hover_row : Int32
+  mut hover_col : Int32
   mut message : String
   mut message_timer : Float
-  mut total_stars : Int
+  mut total_stars : Int32
 }

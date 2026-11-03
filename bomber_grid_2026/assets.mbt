@@ -72,9 +72,9 @@ fn unload_assets() -> Unit {
 /// Draws a texture inside one grid tile with the requested inset padding.
 fn draw_art_cell(
   texture : @raylib.Texture,
-  px : Int,
-  py : Int,
-  inset : Int,
+  px : Int32,
+  py : Int32,
+  inset : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   @raylib.draw_texture_pro(
@@ -99,7 +99,7 @@ fn draw_art_cell(
 
 ///|
 /// Draws the generated floor tile when loaded.
-fn draw_floor_art(px : Int, py : Int) -> Bool {
+fn draw_floor_art(px : Int32, py : Int32) -> Bool {
   match tex_floor_tile.val {
     Some(texture) => {
       draw_art_cell(texture, px, py, 0, @raylib.white)
@@ -111,7 +111,7 @@ fn draw_floor_art(px : Int, py : Int) -> Bool {
 
 ///|
 /// Draws the generated permanent wall block when loaded.
-fn draw_wall_art(px : Int, py : Int) -> Bool {
+fn draw_wall_art(px : Int32, py : Int32) -> Bool {
   match tex_wall_block.val {
     Some(texture) => {
       draw_art_cell(texture, px, py, 1, @raylib.white)
@@ -123,7 +123,7 @@ fn draw_wall_art(px : Int, py : Int) -> Bool {
 
 ///|
 /// Draws the generated breakable crate block when loaded.
-fn draw_crate_art(px : Int, py : Int) -> Bool {
+fn draw_crate_art(px : Int32, py : Int32) -> Bool {
   match tex_crate_block.val {
     Some(texture) => {
       draw_art_cell(texture, px, py, 3, @raylib.white)
@@ -135,7 +135,7 @@ fn draw_crate_art(px : Int, py : Int) -> Bool {
 
 ///|
 /// Draws the generated player sprite when loaded.
-fn draw_player_art(px : Int, py : Int) -> Bool {
+fn draw_player_art(px : Int32, py : Int32) -> Bool {
   match tex_player_sprite.val {
     Some(texture) => {
       draw_art_cell(texture, px, py, 5, @raylib.white)
@@ -147,7 +147,7 @@ fn draw_player_art(px : Int, py : Int) -> Bool {
 
 ///|
 /// Draws the generated enemy sprite when loaded.
-fn draw_enemy_art(px : Int, py : Int) -> Bool {
+fn draw_enemy_art(px : Int32, py : Int32) -> Bool {
   match tex_enemy_sprite.val {
     Some(texture) => {
       draw_art_cell(texture, px, py, 4, @raylib.white)
@@ -159,7 +159,7 @@ fn draw_enemy_art(px : Int, py : Int) -> Bool {
 
 ///|
 /// Draws the generated bomb sprite when loaded.
-fn draw_bomb_art(px : Int, py : Int) -> Bool {
+fn draw_bomb_art(px : Int32, py : Int32) -> Bool {
   match tex_bomb_sprite.val {
     Some(texture) => {
       draw_art_cell(texture, px, py, 7, @raylib.white)
@@ -171,7 +171,7 @@ fn draw_bomb_art(px : Int, py : Int) -> Bool {
 
 ///|
 /// Draws the generated explosion fire sprite when loaded.
-fn draw_fire_art(px : Int, py : Int) -> Bool {
+fn draw_fire_art(px : Int32, py : Int32) -> Bool {
   match tex_fire_sprite.val {
     Some(texture) => {
       draw_art_cell(texture, px, py, 1, @raylib.white)

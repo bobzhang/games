@@ -120,7 +120,7 @@ fn draw_mine_backdrop(art : GameArt) -> Unit {
 
 ///|
 /// Draws one code-native rail lane above the generated mine backdrop.
-fn draw_track_lane(lane : Int, scroll : Int) -> Unit {
+fn draw_track_lane(lane : Int32, scroll : Int32) -> Unit {
   let y = lane_y(lane).to_int()
   @raylib.draw_rectangle(0, y - 30, sw, 32, @raylib.Color::new(34, 26, 20, 190))
   for i in 0..<24 {

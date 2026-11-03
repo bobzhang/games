@@ -139,7 +139,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   game.current_level = level_idx
   game.current_tier = level.tier
@@ -342,7 +342,7 @@ fn update_painting(game : @types.Game) -> Unit {
 }
 
 ///|
-fn try_paint(game : @types.Game, col : Int, row : Int) -> Unit {
+fn try_paint(game : @types.Game, col : Int32, row : Int32) -> Unit {
   if col < 0 || row < 0 || col >= game.grid.width || row >= game.grid.height {
     return
   }
@@ -440,7 +440,7 @@ fn update_resolving(game : @types.Game, dt : Float) -> Unit {
     // Apply one ecosystem step
     game.changed_tiles = @biome.resolve_ecosystem(game.grid)
     // Build spread queue from changed tiles for one-by-one animation
-    let queue : Array[Int] = []
+    let queue : Array[Int32] = []
     let mut any_change = false
     for i in 0..<game.changed_tiles.length() {
       if game.changed_tiles[i] {

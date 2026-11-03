@@ -1,5 +1,6 @@
 ///|
 /// High-level state machine for menu and campaign flow.
+#derive(Eq)
 pub(all) enum GameState {
   Menu
   StageIntro
@@ -8,25 +9,27 @@ pub(all) enum GameState {
   StageClear
   GameOver
   CampaignClear
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Cardinal movement directions.
+#derive(Eq)
 pub(all) enum Dir {
   Up
   Right
   Down
   Left
-} derive(Eq)
+}
 
 ///|
 pub extend Dir with Eq::{not_equal, equal}
 
 ///|
 /// Tile categories used by map collision and rendering.
+#derive(Eq)
 pub(all) enum Tile {
   Empty
   Brick
@@ -35,37 +38,40 @@ pub(all) enum Tile {
   Bush
   Ice
   Base
-} derive(Eq)
+}
 
 ///|
 pub extend Tile with Eq::{not_equal, equal}
 
 ///|
 /// Team affiliation used for friendly-fire and scoring.
+#derive(Eq)
 pub(all) enum Team {
   TeamNone
   Player1
   Player2
   Enemy
-} derive(Eq)
+}
 
 ///|
 pub extend Team with Eq::{not_equal, equal}
 
 ///|
 /// Enemy behavior archetypes.
+#derive(Eq)
 pub(all) enum EnemyKind {
   Basic
   Fast
   Heavy
   Sniper
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyKind with Eq::{not_equal, equal}
 
 ///|
 /// Collectible powerup categories.
+#derive(Eq)
 pub(all) enum PowerupKind {
   Shield
   Star
@@ -73,7 +79,7 @@ pub(all) enum PowerupKind {
   Clock
   Shovel
   ExtraLife
-} derive(Eq)
+}
 
 ///|
 pub extend PowerupKind with Eq::{not_equal, equal}
@@ -98,7 +104,7 @@ pub(all) struct Tank {
   mut y : Float
   mut dir : Dir
   mut move_speed : Float
-  mut hp : Int
+  mut hp : Int32
   mut reload_timer : Float
   mut reload_delay : Float
   mut ai_move_timer : Float
@@ -107,9 +113,9 @@ pub(all) struct Tank {
   mut shield_timer : Float
   mut invuln_timer : Float
   mut respawn_timer : Float
-  mut lives : Int
-  mut score : Int
-  mut weapon_level : Int
+  mut lives : Int32
+  mut score : Int32
+  mut weapon_level : Int32
   mut blink_timer : Float
   mut skid_timer : Float
 }
@@ -143,7 +149,11 @@ pub fn Tank::inactive() -> Tank {
 
 ///|
 /// Creates a player-controlled tank at a spawn point.
-pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank {
+pub fn Tank::new_player(
+  _index : Int32,
+  spawn_x : Float,
+  spawn_y : Float,
+) -> Tank {
   {
     active: true,
     enemy_kind: Basic,
@@ -215,8 +225,8 @@ pub(all) struct Bullet {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut damage : Int
-  mut power : Int
+  mut damage : Int32
+  mut power : Int32
   mut radius : Float
 }
 
@@ -301,8 +311,8 @@ pub(all) struct BioCore {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut hp : Int
-  mut max_hp : Int
+  mut hp : Int32
+  mut max_hp : Int32
   mut pulse : Float
   mut flash : Float
 }
@@ -333,9 +343,9 @@ pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
 pub(all) struct StageProfile {
   title : String
   subtitle : String
-  enemy_bonus : Int
+  enemy_bonus : Int32
   spawn_scale : Float
-  drop_bonus : Int
+  drop_bonus : Int32
   sky_top : @raylib.Color
   sky_bottom : @raylib.Color
   fog_alpha : Float
@@ -347,9 +357,9 @@ pub(all) struct StageProfile {
 pub fn StageProfile::StageProfile(
   title : String,
   subtitle : String,
-  enemy_bonus : Int,
+  enemy_bonus : Int32,
   spawn_scale : Float,
-  drop_bonus : Int,
+  drop_bonus : Int32,
   sky_top : @raylib.Color,
   sky_bottom : @raylib.Color,
   fog_alpha : Float,
@@ -390,12 +400,12 @@ pub(all) struct Game {
   mut state : GameState
   mut coop_enabled : Bool
   mut demo_mode : Bool
-  mut demo_runs : Int
+  mut demo_runs : Int32
   mut demo_elapsed : Float
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
-  mut frame_counter : Int
-  mut stage_index : Int
+  mut frame_counter : Int32
+  mut stage_index : Int32
   mut stage_intro_timer : Float
   mut stage_clear_timer : Float
   mut game_over_timer : Float
@@ -409,19 +419,19 @@ pub(all) struct Game {
   mut base_alive : Bool
   mut base_flash : Float
   base_tiles_cached : Array[Tile]
-  mut score_total : Int
-  mut high_score : Int
-  mut cores_goal : Int
-  mut cores_destroyed : Int
-  mut enemies_to_spawn : Int
-  mut enemies_spawned : Int
-  mut enemies_alive : Int
+  mut score_total : Int32
+  mut high_score : Int32
+  mut cores_goal : Int32
+  mut cores_destroyed : Int32
+  mut enemies_to_spawn : Int32
+  mut enemies_spawned : Int32
+  mut enemies_alive : Int32
   mut spawn_timer : Float
-  mut kill_combo : Int
+  mut kill_combo : Int32
   mut combo_timer : Float
-  mut rng_state : Int
+  mut rng_state : Int32
   map_tiles : Array[Tile]
-  map_hp : Array[Int]
+  map_hp : Array[Int32]
   players : Array[Tank]
   enemies : Array[Tank]
   bullets : Array[Bullet]
@@ -494,7 +504,7 @@ pub fn Game::new() -> Game {
 
 ///|
 /// Returns the team enum for a player index.
-pub fn team_of_player(index : Int) -> Team {
+pub fn team_of_player(index : Int32) -> Team {
   if index == 0 {
     Player1
   } else {

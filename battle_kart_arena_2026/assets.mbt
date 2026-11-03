@@ -144,7 +144,7 @@ fn draw_arena_art() -> Bool {
 
 ///|
 /// Returns a tint color for a kart index.
-fn kart_tint(index : Int) -> @raylib.Color {
+fn kart_tint(index : Int32) -> @raylib.Color {
   if index == 0 {
     @raylib.Color::new(180, 238, 255, 255)
   } else if index == 1 {
@@ -158,7 +158,7 @@ fn kart_tint(index : Int) -> @raylib.Color {
 
 ///|
 /// Draws a generated kart sprite when available.
-fn draw_kart_art(index : Int, x : Float, y : Float, angle : Float) -> Bool {
+fn draw_kart_art(index : Int32, x : Float, y : Float, angle : Float) -> Bool {
   match tex_kart_sprite.val {
     Some(texture) => {
       draw_art_fit(texture, x, y, 54.0, 40.0, angle, kart_tint(index))
@@ -170,7 +170,7 @@ fn draw_kart_art(index : Int, x : Float, y : Float, angle : Float) -> Bool {
 
 ///|
 /// Returns generated pickup art for a pickup kind.
-fn pickup_art(kind : Int) -> @raylib.Texture? {
+fn pickup_art(kind : Int32) -> @raylib.Texture? {
   if kind == 0 {
     tex_pickup_ammo.val
   } else if kind == 1 {
@@ -182,7 +182,7 @@ fn pickup_art(kind : Int) -> @raylib.Texture? {
 
 ///|
 /// Draws a generated pickup sprite when available.
-fn draw_pickup_art(kind : Int, x : Float, y : Float) -> Bool {
+fn draw_pickup_art(kind : Int32, x : Float, y : Float) -> Bool {
   match pickup_art(kind) {
     Some(texture) => {
       let tint = if kind == 0 {
@@ -206,7 +206,7 @@ fn draw_projectile_art(
   y : Float,
   vx : Float,
   vy : Float,
-  owner : Int,
+  owner : Int32,
 ) -> Bool {
   match tex_projectile_sprite.val {
     Some(texture) => {

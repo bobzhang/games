@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1160
+let sw : Int32 = 1160
 
 ///|
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 struct Torpedo {
@@ -18,7 +18,7 @@ struct Enemy {
   mut x : Float
   mut y : Float
   mut vx : Float
-  mut hp : Int
+  mut hp : Int32
   mut shoot_cd : Float
   mut stealth : Bool
 }

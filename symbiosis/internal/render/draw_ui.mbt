@@ -89,7 +89,7 @@ fn draw_center_message(msg : String, color : @raylib.Color) -> Unit {
 }
 
 ///|
-fn stars_string(n : Int) -> String {
+fn stars_string(n : Int32) -> String {
   let mut s = ""
   for _i in 0..<n {
     s = s + "*"

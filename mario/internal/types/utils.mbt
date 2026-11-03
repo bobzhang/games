@@ -1,18 +1,18 @@
 ///|
 /// Convert tile column to world-pixel X (left edge of tile).
-pub fn tile_to_world_x(tx : Int) -> Float {
+pub fn tile_to_world_x(tx : Int32) -> Float {
   Float::from_int(tx * tile_size)
 }
 
 ///|
 /// Convert tile row to world-pixel Y (top edge of tile).
-pub fn tile_to_world_y(ty : Int) -> Float {
+pub fn tile_to_world_y(ty : Int32) -> Float {
   Float::from_int(ty * tile_size)
 }
 
 ///|
 /// Convert world X to tile column.
-pub fn world_to_tile_x(wx : Float) -> Int {
+pub fn world_to_tile_x(wx : Float) -> Int32 {
   let i = (wx / tile_sizef).to_int()
   if wx < 0.0 {
     i - 1
@@ -23,7 +23,7 @@ pub fn world_to_tile_x(wx : Float) -> Int {
 
 ///|
 /// Convert world Y to tile row.
-pub fn world_to_tile_y(wy : Float) -> Int {
+pub fn world_to_tile_y(wy : Float) -> Int32 {
   let i = (wy / tile_sizef).to_int()
   if wy < 0.0 {
     i - 1
@@ -74,7 +74,7 @@ pub fn is_bumpable(tile : TileKind) -> Bool {
 
 ///|
 /// Get tile at (tx, ty) from the game map, returning Empty for out-of-bounds.
-pub fn get_tile(game : Game, tx : Int, ty : Int) -> TileKind {
+pub fn get_tile(game : Game, tx : Int32, ty : Int32) -> TileKind {
   if tx < 0 || tx >= game.map_width || ty < 0 || ty >= game.map_height {
     Empty
   } else {
@@ -84,7 +84,7 @@ pub fn get_tile(game : Game, tx : Int, ty : Int) -> TileKind {
 
 ///|
 /// Set tile at (tx, ty).
-pub fn set_tile(game : Game, tx : Int, ty : Int, tile : TileKind) -> Unit {
+pub fn set_tile(game : Game, tx : Int32, ty : Int32, tile : TileKind) -> Unit {
   if tx >= 0 && tx < game.map_width && ty >= 0 && ty < game.map_height {
     game.map_tiles[ty * game.map_width + tx] = tile
   }
@@ -92,7 +92,7 @@ pub fn set_tile(game : Game, tx : Int, ty : Int, tile : TileKind) -> Unit {
 
 ///|
 /// Deterministic xorshift PRNG — returns a non-negative Int.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -106,7 +106,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Random integer in [low, high] inclusive.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -123,7 +123,7 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 ///|
 /// Count all coin tiles in the current map (for tally screen).
-pub fn count_coin_tiles(game : Game) -> Int {
+pub fn count_coin_tiles(game : Game) -> Int32 {
   let mut count = 0
   for i in 0..<game.map_tiles.length() {
     match game.map_tiles[i] {

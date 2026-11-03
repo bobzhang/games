@@ -2,7 +2,7 @@
 pub fn find_forced_bridge(
   islands : Array[@types.Island],
   bridges : Array[@types.Bridge],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   // For each unsatisfied island, check if it has only enough possible
   // connections to exactly meet its requirement
   for i in 0..<islands.length() {
@@ -12,7 +12,7 @@ pub fn find_forced_bridge(
       continue
     }
     // Find all possible neighbors for this island
-    let possible : Array[(Int, Int)] = [] // (neighbor_idx, max_additional)
+    let possible : Array[(Int32, Int32)] = [] // (neighbor_idx, max_additional)
     for j in 0..<islands.length() {
       if i == j {
         continue
@@ -58,7 +58,7 @@ pub fn find_forced_bridge(
 pub fn find_hint(
   islands : Array[@types.Island],
   bridges : Array[@types.Bridge],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   // First try forced bridges
   let (a, b) = find_forced_bridge(islands, bridges)
   if a >= 0 {

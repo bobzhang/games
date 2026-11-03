@@ -1,56 +1,56 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let tile_size : Int = 56
+pub let tile_size : Int32 = 56
 
 ///|
-pub let grid_width : Int = 12
+pub let grid_width : Int32 = 12
 
 ///|
-pub let grid_height : Int = 9
+pub let grid_height : Int32 = 9
 
 ///|
-pub let grid_offset_x : Int = 16
+pub let grid_offset_x : Int32 = 16
 
 ///|
-pub let grid_offset_y : Int = 36
+pub let grid_offset_y : Int32 = 36
 
 ///|
-pub let max_instructions : Int = 20
+pub let max_instructions : Int32 = 20
 
 ///|
-pub let max_steps : Int = 200
+pub let max_steps : Int32 = 200
 
 ///|
-pub let num_worlds : Int = 4
+pub let num_worlds : Int32 = 4
 
 ///|
-pub let levels_per_world : Int = 9
+pub let levels_per_world : Int32 = 9
 
 ///|
-pub let program_panel_x : Int = 700
+pub let program_panel_x : Int32 = 700
 
 ///|
-pub let program_panel_y : Int = 36
+pub let program_panel_y : Int32 = 36
 
 ///|
-pub let program_panel_width : Int = 564
+pub let program_panel_width : Int32 = 564
 
 ///|
-pub let program_slot_height : Int = 30
+pub let program_slot_height : Int32 = 30
 
 ///|
-pub let palette_x : Int = 700
+pub let palette_x : Int32 = 700
 
 ///|
-pub let palette_y : Int = 500
+pub let palette_y : Int32 = 500
 
 // Colors
 

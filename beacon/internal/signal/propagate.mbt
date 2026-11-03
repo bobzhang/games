@@ -3,10 +3,10 @@
 /// by mountains. Uses step-by-step traversal along cardinal direction.
 pub fn line_of_sight(
   grid : Array[Array[@types.Tile]],
-  fc : Int,
-  fr : Int,
-  tc : Int,
-  tr : Int,
+  fc : Int32,
+  fr : Int32,
+  tc : Int32,
+  tr : Int32,
 ) -> Bool {
   let dc = if tc > fc { 1 } else if tc < fc { -1 } else { 0 }
   let dr = if tr > fr { 1 } else if tr < fr { -1 } else { 0 }
@@ -30,11 +30,11 @@ pub fn line_of_sight(
 /// given the source's range.
 pub fn can_reach(
   grid : Array[Array[@types.Tile]],
-  sc : Int,
-  sr : Int,
-  tc : Int,
-  tr : Int,
-  range : Int,
+  sc : Int32,
+  sr : Int32,
+  tc : Int32,
+  tr : Int32,
+  range : Int32,
 ) -> Bool {
   // Must be along cardinal direction
   if sc != tc && sr != tr {
@@ -64,7 +64,7 @@ pub fn can_reach(
 pub fn propagate(
   state : @types.LevelState,
   data : @types.LevelData,
-) -> (Bool, Int, Array[@types.SignalPath]) {
+) -> (Bool, Int32, Array[@types.SignalPath]) {
   let grid = state.grid
   // Reset signal state
   for r in 0..<@types.grid_rows {
@@ -73,7 +73,7 @@ pub fn propagate(
     }
   }
   // BFS queue: (col, row, chain_depth)
-  let queue : Array[(Int, Int, Int)] = []
+  let queue : Array[(Int32, Int32, Int32)] = []
   let visited : Array[Array[Bool]] = []
   for _r in 0..<@types.grid_rows {
     let row : Array[Bool] = []
@@ -101,7 +101,7 @@ pub fn propagate(
     let elev = data.elevations[sr][sc]
     let range = @types.tower_range(elev)
     // Check all 4 cardinal directions
-    let dirs : Array[(Int, Int)] = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+    let dirs : Array[(Int32, Int32)] = [(0, -1), (0, 1), (-1, 0), (1, 0)]
     for d in 0..<dirs.length() {
       let (dc, dr) = dirs[d]
       // Scan tiles in this direction up to range
@@ -162,10 +162,10 @@ pub fn propagate(
 ///|
 /// Compute star rating for a completed level
 pub fn compute_stars(
-  towers_placed : Int,
-  chain_length : Int,
-  par_towers : Int,
-  par_chain : Int,
+  towers_placed : Int32,
+  chain_length : Int32,
+  par_towers : Int32,
+  par_chain : Int32,
 ) -> @types.StarRating {
   if towers_placed <= par_towers && chain_length <= par_chain {
     Three

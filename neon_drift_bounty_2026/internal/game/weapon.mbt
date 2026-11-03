@@ -234,7 +234,10 @@ fn @types.Game::try_drop_weapon(
 
 ///|
 /// Returns fire rate multiplier when boost interacts with weapon upgrades.
-fn weapon_boost_fire_mult(weapon : @types.WeaponUpgrade?, level : Int) -> Float {
+fn weapon_boost_fire_mult(
+  weapon : @types.WeaponUpgrade?,
+  level : Int32,
+) -> Float {
   match weapon {
     Some(Spread) => 0.55 - Float::from_int(level) * 0.03
     Some(Piercing) => 0.7
@@ -245,7 +248,10 @@ fn weapon_boost_fire_mult(weapon : @types.WeaponUpgrade?, level : Int) -> Float 
 
 ///|
 /// Returns hack pulse damage bonus from weapon upgrades.
-pub fn weapon_hack_bonus(weapon : @types.WeaponUpgrade?, level : Int) -> Float {
+pub fn weapon_hack_bonus(
+  weapon : @types.WeaponUpgrade?,
+  level : Int32,
+) -> Float {
   match weapon {
     Some(Spread) => Float::from_int(level) * 10.0
     Some(Piercing) => Float::from_int(level) * 18.0

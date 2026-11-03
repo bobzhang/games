@@ -4,11 +4,11 @@ pub let game_title : String = "raylib [game] fighter 97 lite"
 
 ///|
 /// Window width in pixels.
-pub let screen_width : Int = 1360
+pub let screen_width : Int32 = 1360
 
 ///|
 /// Window height in pixels.
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 ///|
 /// World y-coordinate of the ground plane.
@@ -40,51 +40,51 @@ pub let max_frame_dt : Float = 0.05
 
 ///|
 /// Number of fighter slots in a match.
-pub let max_players : Int = 2
+pub let max_players : Int32 = 2
 
 ///|
 /// Number of characters in the roster.
-pub let roster_count : Int = 6
+pub let roster_count : Int32 = 6
 
 ///|
 /// Maximum stage particle slots.
-pub let max_particles : Int = 860
+pub let max_particles : Int32 = 860
 
 ///|
 /// Maximum hit spark slots.
-pub let max_hit_sparks : Int = 360
+pub let max_hit_sparks : Int32 = 360
 
 ///|
 /// Direction history buffer size for motion parsing.
-pub let direction_buffer_size : Int = 42
+pub let direction_buffer_size : Int32 = 42
 
 ///|
 /// Sentinel winner value for no winner yet.
-pub let winner_none : Int = -1
+pub let winner_none : Int32 = -1
 
 ///|
 /// Sentinel winner value for draw result.
-pub let winner_draw : Int = -2
+pub let winner_draw : Int32 = -2
 
 ///|
 /// Facing value for left.
-pub let facing_left : Int = -1
+pub let facing_left : Int32 = -1
 
 ///|
 /// Facing value for right.
-pub let facing_right : Int = 1
+pub let facing_right : Int32 = 1
 
 ///|
 /// Motion id for quarter-circle-forward command.
-pub let motion_qcf : Int = 1
+pub let motion_qcf : Int32 = 1
 
 ///|
 /// Motion id for dragon-punch command.
-pub let motion_dp : Int = 2
+pub let motion_dp : Int32 = 2
 
 ///|
 /// Rounds required to win a match.
-pub let max_round_wins : Int = 2
+pub let max_round_wins : Int32 = 2
 
 ///|
 /// Round timer start value in seconds.
@@ -140,7 +140,7 @@ pub let dash_back_speed : Float = -430.0
 
 ///|
 /// Dash duration in frames.
-pub let dash_duration_frames : Int = 14
+pub let dash_duration_frames : Int32 = 14
 
 ///|
 /// Visual body width for fighter rendering.
@@ -172,19 +172,19 @@ pub let fighter_push_radius : Float = 46.0
 
 ///|
 /// Maximum fighter health.
-pub let health_max : Int = 1000
+pub let health_max : Int32 = 1000
 
 ///|
 /// Base guard meter maximum.
-pub let guard_max : Int = 100
+pub let guard_max : Int32 = 100
 
 ///|
 /// Super meter maximum.
-pub let super_max : Int = 100
+pub let super_max : Int32 = 100
 
 ///|
 /// Super meter cost for using super move.
-pub let super_cost : Int = 100
+pub let super_cost : Int32 = 100
 
 ///|
 /// Guard recovery per second.
@@ -192,19 +192,19 @@ pub let guard_recover_per_sec : Float = 9.0
 
 ///|
 /// Meter gain when an attack is blocked.
-pub let meter_gain_blocked : Int = 4
+pub let meter_gain_blocked : Int32 = 4
 
 ///|
 /// Meter gain when taking a hit.
-pub let meter_gain_hit_taken : Int = 7
+pub let meter_gain_hit_taken : Int32 = 7
 
 ///|
 /// Default hitstop frames.
-pub let hitstop_default : Int = 8
+pub let hitstop_default : Int32 = 8
 
 ///|
 /// Hitstop frames for super attacks.
-pub let hitstop_super : Int = 14
+pub let hitstop_super : Int32 = 14
 
 ///|
 /// Combo damage scaling step per hit.
@@ -212,7 +212,7 @@ pub let combo_decay_step : Float = 0.075
 
 ///|
 /// Combo timeout window in frames.
-pub let combo_timeout_frames : Int = 34
+pub let combo_timeout_frames : Int32 = 34
 
 ///|
 /// Damage multiplier for counter hits.
@@ -228,11 +228,11 @@ pub let throw_vertical_tolerance : Float = 44.0
 
 ///|
 /// Damage dealt by throws.
-pub let throw_damage : Int = 118
+pub let throw_damage : Int32 = 118
 
 ///|
 /// Knockdown duration after throw.
-pub let throw_knockdown_frames : Int = 42
+pub let throw_knockdown_frames : Int32 = 42
 
 ///|
 /// Horizontal push applied on successful throw.
@@ -244,7 +244,7 @@ pub let throw_launch_y : Float = -200.0
 
 ///|
 /// Throw tech timing window in frames.
-pub let throw_tech_window_frames : Int = 8
+pub let throw_tech_window_frames : Int32 = 8
 
 ///|
 /// Horizontal push applied during throw tech.
@@ -252,7 +252,7 @@ pub let throw_tech_push_x : Float = 136.0
 
 ///|
 /// Invulnerability frames granted by throw tech.
-pub let throw_tech_invuln_frames : Int = 6
+pub let throw_tech_invuln_frames : Int32 = 6
 
 ///|
 /// Minimum free corner space required for throws.
@@ -264,7 +264,7 @@ pub let throw_corner_escape_ratio : Float = 0.58
 
 ///|
 /// Invulnerability frames during wakeup.
-pub let wakeup_invuln_frames : Int = 10
+pub let wakeup_invuln_frames : Int32 = 10
 
 ///|
 /// Health regeneration rate in training mode.
@@ -332,20 +332,20 @@ pub let camera_zoom_far : Float = 0.95
 
 ///|
 /// Number of columns in character select grid.
-pub let select_grid_columns : Int = 3
+pub let select_grid_columns : Int32 = 3
 
 ///|
 /// Width of quote dialog box.
-pub let quote_box_w : Int = 520
+pub let quote_box_w : Int32 = 520
 
 ///|
 /// Height of quote dialog box.
-pub let quote_box_h : Int = 76
+pub let quote_box_h : Int32 = 76
 
 ///|
 /// Font size for large titles.
-pub let font_title : Int = 62
+pub let font_title : Int32 = 62
 
 ///|
 /// Font size for subtitles.
-pub let font_subtitle : Int = 28
+pub let font_subtitle : Int32 = 28

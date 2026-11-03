@@ -1,8 +1,8 @@
 ///|
 fn draw_single_grid(
   grid : @types.Grid,
-  ox : Int,
-  oy : Int,
+  ox : Int32,
+  oy : Int32,
   label : String,
   preview : Array[Bool]?,
   target : @types.Grid?,
@@ -125,7 +125,7 @@ fn draw_single_grid(
 }
 
 ///|
-fn draw_target_grid(target : @types.Grid, ox : Int, oy : Int) -> Unit {
+fn draw_target_grid(target : @types.Grid, ox : Int32, oy : Int32) -> Unit {
   let cs = @types.cell_size
   let size = target.size
   let label = "TARGET"

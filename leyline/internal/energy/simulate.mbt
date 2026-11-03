@@ -58,16 +58,16 @@ fn reset_energy(state : @types.LevelState) -> Unit {
 ///|
 fn propagate_from_source(
   state : @types.LevelState,
-  src_col : Int,
-  src_row : Int,
+  src_col : Int32,
+  src_row : Int32,
 ) -> Unit {
   let grid = state.grid
   let connections = state.connections
   let energy = @types.source_energy
   grid[src_row][src_col].energy_received = energy
   // BFS propagation
-  let queue : Array[(Int, Int, Float)] = [(src_col, src_row, energy)]
-  let visited : Array[(Int, Int)] = [(src_col, src_row)]
+  let queue : Array[(Int32, Int32, Float)] = [(src_col, src_row, energy)]
+  let visited : Array[(Int32, Int32)] = [(src_col, src_row)]
   for head = 0; head < queue.length(); head = head + 1 {
     let (col, row, incoming_energy) = queue[head]
     let neighbors = @types.neighbor_connections(connections, col, row)
@@ -103,9 +103,9 @@ fn propagate_from_source(
 
 ///|
 fn count_unvisited(
-  neighbors : Array[(Int, Int)],
-  visited : Array[(Int, Int)],
-) -> Int {
+  neighbors : Array[(Int32, Int32)],
+  visited : Array[(Int32, Int32)],
+) -> Int32 {
   let mut count = 0
   for i in 0..<neighbors.length() {
     let (c, r) = neighbors[i]
@@ -117,7 +117,11 @@ fn count_unvisited(
 }
 
 ///|
-fn is_visited(visited : Array[(Int, Int)], col : Int, row : Int) -> Bool {
+fn is_visited(
+  visited : Array[(Int32, Int32)],
+  col : Int32,
+  row : Int32,
+) -> Bool {
   for i in 0..<visited.length() {
     let (vc, vr) = visited[i]
     if vc == col && vr == row {
@@ -130,10 +134,10 @@ fn is_visited(visited : Array[(Int, Int)], col : Int, row : Int) -> Bool {
 ///|
 fn set_connection_flow(
   connections : Array[@types.Connection],
-  c1 : Int,
-  r1 : Int,
-  c2 : Int,
-  r2 : Int,
+  c1 : Int32,
+  r1 : Int32,
+  c2 : Int32,
+  r2 : Int32,
   flow : Float,
 ) -> Unit {
   for i in 0..<connections.length() {

@@ -66,7 +66,7 @@ pub fn check_victory(game : @types.Game) -> @types.PlayResult {
 }
 
 ///|
-pub fn count_alive(game : @types.Game) -> Int {
+pub fn count_alive(game : @types.Game) -> Int32 {
   let mut count = 0
   for i in 0..<game.organisms.length() {
     if game.organisms[i].alive {

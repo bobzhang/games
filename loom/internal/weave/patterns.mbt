@@ -1,10 +1,10 @@
 ///|
 /// Generate a plain weave pattern: alternating warp/weft in checkerboard
 pub fn generate_plain(
-  rows : Int,
-  cols : Int,
-  warp_colors : Array[Int],
-  weft_colors : Array[Int],
+  rows : Int32,
+  cols : Int32,
+  warp_colors : Array[Int32],
+  weft_colors : Array[Int32],
 ) -> @types.FabricPattern {
   let p = @types.new_fabric_pattern(rows, cols, warp_colors, weft_colors)
   for row in 0..<rows {
@@ -25,11 +25,11 @@ pub fn generate_plain(
 ///|
 /// Generate a 2/2 twill pattern: diagonal lines going right
 pub fn generate_twill(
-  rows : Int,
-  cols : Int,
-  warp_colors : Array[Int],
-  weft_colors : Array[Int],
-  twill_width : Int,
+  rows : Int32,
+  cols : Int32,
+  warp_colors : Array[Int32],
+  weft_colors : Array[Int32],
+  twill_width : Int32,
 ) -> @types.FabricPattern {
   let p = @types.new_fabric_pattern(rows, cols, warp_colors, weft_colors)
   let w = if twill_width < 1 { 2 } else { twill_width }
@@ -53,12 +53,12 @@ pub fn generate_twill(
 ///|
 /// Generate a satin weave: warp floats spread evenly, with offset
 pub fn generate_satin(
-  rows : Int,
-  cols : Int,
-  warp_colors : Array[Int],
-  weft_colors : Array[Int],
-  repeat : Int,
-  offset : Int,
+  rows : Int32,
+  cols : Int32,
+  warp_colors : Array[Int32],
+  weft_colors : Array[Int32],
+  repeat : Int32,
+  offset : Int32,
 ) -> @types.FabricPattern {
   let p = @types.new_fabric_pattern(rows, cols, warp_colors, weft_colors)
   let r = if repeat < 2 { 5 } else { repeat }
@@ -82,11 +82,11 @@ pub fn generate_satin(
 ///|
 /// Generate a herringbone pattern: twill that reverses direction
 pub fn generate_herringbone(
-  rows : Int,
-  cols : Int,
-  warp_colors : Array[Int],
-  weft_colors : Array[Int],
-  width : Int,
+  rows : Int32,
+  cols : Int32,
+  warp_colors : Array[Int32],
+  weft_colors : Array[Int32],
+  width : Int32,
 ) -> @types.FabricPattern {
   let p = @types.new_fabric_pattern(rows, cols, warp_colors, weft_colors)
   let w = if width < 2 { 4 } else { width }
@@ -113,11 +113,11 @@ pub fn generate_herringbone(
 ///|
 /// Generate a diamond twill pattern
 pub fn generate_diamond(
-  rows : Int,
-  cols : Int,
-  warp_colors : Array[Int],
-  weft_colors : Array[Int],
-  size : Int,
+  rows : Int32,
+  cols : Int32,
+  warp_colors : Array[Int32],
+  weft_colors : Array[Int32],
+  size : Int32,
 ) -> @types.FabricPattern {
   let p = @types.new_fabric_pattern(rows, cols, warp_colors, weft_colors)
   let s = if size < 2 { 4 } else { size }
@@ -160,7 +160,7 @@ pub fn heddles_from_pattern(
 
 ///|
 /// Count minimum heddle changes between consecutive rows
-pub fn count_heddle_changes(heddles : Array[@types.HeddleRow]) -> Int {
+pub fn count_heddle_changes(heddles : Array[@types.HeddleRow]) -> Int32 {
   let mut changes = 0
   for i in 1..<heddles.length() {
     let prev = heddles[i - 1]

@@ -1,8 +1,9 @@
 ///|
+#derive(Debug, Eq, ToJson, Hash, Compare)
 pub(all) struct Pos {
-  x : Int
-  y : Int
-} derive(Debug, Eq, ToJson, Hash, Compare)
+  x : Int32
+  y : Int32
+}
 
 ///|
 pub extend Pos with Debug::{to_repr}
@@ -20,14 +21,15 @@ pub extend Pos with Hash::{hash, hash_combine}
 pub extend Pos with Compare::{op_lt, op_le, op_ge, compare, op_gt}
 
 ///|
+#derive(Debug, ToJson)
 pub(all) struct LevelData {
   grid : Array[Array[Tile]]
   start : Pos
   lighthouse : Pos
-  par_steps : Int
-  landmark_count : Int
-  tier : Int
-} derive(Debug, ToJson)
+  par_steps : Int32
+  landmark_count : Int32
+  tier : Int32
+}
 
 ///|
 pub extend LevelData with Debug::{to_repr}
@@ -36,13 +38,14 @@ pub extend LevelData with Debug::{to_repr}
 pub extend LevelData with ToJson::{to_json}
 
 ///|
+#derive(Debug, ToJson)
 pub(all) struct Ship {
   mut pos : Pos
-  mut hp : Int
-  mut steps : Int
+  mut hp : Int32
+  mut steps : Int32
   mut heading : Float
-  mut landmarks_found : Int
-} derive(Debug, ToJson)
+  mut landmarks_found : Int32
+}
 
 ///|
 pub extend Ship with Debug::{to_repr}
@@ -51,6 +54,7 @@ pub extend Ship with Debug::{to_repr}
 pub extend Ship with ToJson::{to_json}
 
 ///|
+#derive(Debug, ToJson)
 pub(all) struct LevelState {
   data : LevelData
   mut revealed : Array[Array[Bool]]
@@ -60,7 +64,7 @@ pub(all) struct LevelState {
   mut message_timer : Float
   mut compass_beep : Bool
   mut near_land_dir : Direction
-} derive(Debug, ToJson)
+}
 
 ///|
 pub extend LevelState with Debug::{to_repr}
@@ -69,14 +73,15 @@ pub extend LevelState with Debug::{to_repr}
 pub extend LevelState with ToJson::{to_json}
 
 ///|
+#derive(Debug, ToJson)
 pub(all) struct GameState {
-  mut current_level : Int
+  mut current_level : Int32
   mut phase : GamePhase
   mut level_state : LevelState?
   mut stars : Array[StarRating]
   mut anim_timer : Float
-  mut frame_count : Int
-} derive(Debug, ToJson)
+  mut frame_count : Int32
+}
 
 ///|
 pub extend GameState with Debug::{to_repr}
@@ -103,7 +108,7 @@ pub fn new_game() -> GameState {
 }
 
 ///|
-pub fn direction_dx(dir : Direction) -> Int {
+pub fn direction_dx(dir : Direction) -> Int32 {
   match dir {
     North => 0
     South => 0
@@ -113,7 +118,7 @@ pub fn direction_dx(dir : Direction) -> Int {
 }
 
 ///|
-pub fn direction_dy(dir : Direction) -> Int {
+pub fn direction_dy(dir : Direction) -> Int32 {
   match dir {
     North => -1
     South => 1
@@ -168,12 +173,12 @@ pub fn bearing_to_degrees(rad : Float) -> Float {
 }
 
 ///|
-pub fn in_bounds(x : Int, y : Int) -> Bool {
+pub fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < grid_cols && y >= 0 && y < grid_rows
 }
 
 ///|
-pub fn star_rating_value(star : StarRating) -> Int {
+pub fn star_rating_value(star : StarRating) -> Int32 {
   match star {
     None => 0
     One => 1

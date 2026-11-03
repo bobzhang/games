@@ -52,7 +52,7 @@ test "get_level with invalid ID returns level 0" {
 
 ///|
 test "all levels have unique IDs" {
-  let ids : Array[Int] = []
+  let ids : Array[Int32] = []
   for i in 0..<@levels.level_count() {
     let level = @levels.get_level(i)
     assert_true(ids.contains(level.id) == false)
