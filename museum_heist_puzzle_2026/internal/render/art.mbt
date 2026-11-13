@@ -44,10 +44,10 @@ pub fn unload_game_art(art : GameArt) -> Unit {
 /// Draws a texture stretched into the full destination rectangle.
 fn draw_texture_rect(
   texture : @raylib.Texture,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   @raylib.draw_texture_pro(
@@ -112,7 +112,7 @@ fn draw_texture_cover(
 /// Draws one 3x2 sprite sheet cell centered on the destination point.
 fn draw_sprite_cell(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,

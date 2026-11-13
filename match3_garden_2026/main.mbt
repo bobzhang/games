@@ -1,34 +1,34 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1080
+let sw : Int32 = 1080
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
 /// Number of columns on the match-3 board.
-let board_w : Int = 8
+let board_w : Int32 = 8
 
 ///|
 /// Number of rows on the match-3 board.
-let board_h : Int = 8
+let board_h : Int32 = 8
 
 ///|
 /// Number of distinct tile colours.
-let tile_count : Int = 6
+let tile_count : Int32 = 6
 
 ///|
 /// Size of each board cell in pixels.
-let cell : Int = 64
+let cell : Int32 = 64
 
 ///|
 /// Horizontal pixel offset of the board origin.
-let board_px : Int = 284
+let board_px : Int32 = 284
 
 ///|
 /// Vertical pixel offset of the board origin.
-let board_py : Int = 112
+let board_py : Int32 = 112
 
 ///|
 /// Generated art resources used by the renderer.
@@ -44,7 +44,7 @@ struct GameArt {
 
 ///|
 /// Returns a copy of `color` with the alpha channel replaced by `alpha`.
-fn with_alpha(color : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn with_alpha(color : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(
     color.r.to_int(),
     color.g.to_int(),
@@ -154,7 +154,7 @@ fn draw_texture_cover(
 
 ///|
 /// Returns the generated texture associated with a tile type.
-fn tile_texture(art : GameArt, tile : Int) -> @raylib.Texture {
+fn tile_texture(art : GameArt, tile : Int32) -> @raylib.Texture {
   if tile == 0 {
     art.rose
   } else if tile == 1 {
@@ -187,7 +187,7 @@ fn draw_background(art : GameArt) -> Unit {
 
 ///|
 /// Draws the top status bar.
-fn draw_hud(score : Int, moves_left : Int, best_combo : Int) -> Unit {
+fn draw_hud(score : Int32, moves_left : Int32, best_combo : Int32) -> Unit {
   @raylib.draw_rectangle_rounded(
     @raylib.Rectangle::new(22.0, 18.0, 1036.0, 72.0),
     0.18,
@@ -234,11 +234,11 @@ fn draw_hud(score : Int, moves_left : Int, best_combo : Int) -> Unit {
 ///|
 /// Draws the complete board, including generated tile icons and selection highlights.
 fn draw_board(
-  board : Array[Int],
-  cur_x : Int,
-  cur_y : Int,
-  sel_x : Int,
-  sel_y : Int,
+  board : Array[Int32],
+  cur_x : Int32,
+  cur_y : Int32,
+  sel_x : Int32,
+  sel_y : Int32,
   art : GameArt,
 ) -> Unit {
   let board_size = board_w * cell
@@ -363,7 +363,7 @@ fn draw_message(msg : String) -> Unit {
 
 ///|
 /// Draws the final score overlay once the move budget is exhausted.
-fn draw_game_over(score : Int) -> Unit {
+fn draw_game_over(score : Int32) -> Unit {
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 116))
   @raylib.draw_rectangle_rounded(
     @raylib.Rectangle::new(270.0, 244.0, 540.0, 190.0),
@@ -385,13 +385,13 @@ fn draw_game_over(score : Int) -> Unit {
 
 ///|
 /// Converts 2D board coordinates into a flat row-major index.
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * board_w + x
 }
 
 ///|
 /// Returns the display colour for a tile type integer.
-fn tile_color(t : Int) -> @raylib.Color {
+fn tile_color(t : Int32) -> @raylib.Color {
   if t == 0 {
     @raylib.red
   } else if t == 1 {
@@ -409,13 +409,13 @@ fn tile_color(t : Int) -> @raylib.Color {
 
 ///|
 /// Returns a random tile type in the range [0, tile_count - 1].
-fn random_tile() -> Int {
+fn random_tile() -> Int32 {
   @raylib.get_random_value(0, tile_count - 1)
 }
 
 ///|
 /// Fills the board with random tiles, retrying each cell up to 30 times to avoid placing an immediate 3-in-a-row.
-fn fill_board_no_matches(board : Array[Int]) -> Unit {
+fn fill_board_no_matches(board : Array[Int32]) -> Unit {
   for y in 0..<board_h {
     for x in 0..<board_w {
       let mut t = random_tile()
@@ -449,7 +449,7 @@ fn fill_board_no_matches(board : Array[Int]) -> Unit {
 
 ///|
 /// Scans the board for horizontal and vertical runs of 3 or more identical tiles, marking them in `marks`, and returns the total count of marked tiles.
-fn mark_matches(board : Array[Int], marks : Array[Bool]) -> Int {
+fn mark_matches(board : Array[Int32], marks : Array[Bool]) -> Int32 {
   for i in 0..<marks.length() {
     marks[i] = false
   }
@@ -507,7 +507,7 @@ fn mark_matches(board : Array[Int], marks : Array[Bool]) -> Int {
 
 ///|
 /// Removes all marked tiles, drops remaining tiles downward per column, fills empty top slots with new random tiles, and returns the number of tiles removed.
-fn apply_matches_and_refill(board : Array[Int], marks : Array[Bool]) -> Int {
+fn apply_matches_and_refill(board : Array[Int32], marks : Array[Bool]) -> Int32 {
   let mut removed = 0
   for i in 0..<board.length() {
     if marks[i] {
@@ -537,11 +537,11 @@ fn apply_matches_and_refill(board : Array[Int], marks : Array[Bool]) -> Int {
 ///|
 /// Swaps the tile values at board positions (x1, y1) and (x2, y2).
 fn swap_tiles(
-  board : Array[Int],
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  board : Array[Int32],
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
 ) -> Unit {
   let a = idx(x1, y1)
   let b = idx(x2, y2)
@@ -561,7 +561,7 @@ fn main {
   let art = load_game_art()
   defer unload_game_art(art)
 
-  let board : Array[Int] = Array::make(board_w * board_h, 0)
+  let board : Array[Int32] = Array::make(board_w * board_h, 0)
   fill_board_no_matches(board)
   let marks : Array[Bool] = Array::make(board_w * board_h, false)
 

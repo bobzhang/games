@@ -1,6 +1,6 @@
 ///|
 /// All 25 levels. Returns the level definition by index (0-24).
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     // === Tier 1: Apprentice (8 levels) - Single reactions ===
     // Level 1: Make Steam (Fire + Water)

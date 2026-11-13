@@ -24,7 +24,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   )
 
   for i in 0..<14 {
-    let y : Int = i * 74
+    let y : Int32 = i * 74
     @raylib.draw_rectangle(
       0,
       y,
@@ -43,12 +43,12 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_board_back(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
-  let bw : Int = @types.grid_w * tile
-  let bh : Int = @types.grid_h * tile
+  let bw : Int32 = @types.grid_w * tile
+  let bh : Int32 = @types.grid_h * tile
 
   @raylib.draw_rectangle(
     bx - 18,
@@ -79,17 +79,17 @@ fn @types.Game::draw_board_back(
 }
 
 ///|
-fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
-  let bw : Int = @types.grid_w * tile
-  let bh : Int = @types.grid_h * tile
+fn draw_grid_lines(bx : Int32, by : Int32, tile : Int32) -> Unit {
+  let bw : Int32 = @types.grid_w * tile
+  let bh : Int32 = @types.grid_h * tile
 
   for x in 0..<=@types.grid_w {
-    let px : Int = bx + x * tile
+    let px : Int32 = bx + x * tile
     @raylib.draw_line(px, by, px, by + bh, @raylib.Color::new(76, 106, 136, 98))
   }
 
   for y in 0..<=@types.grid_h {
-    let py : Int = by + y * tile
+    let py : Int32 = by + y * tile
     @raylib.draw_line(bx, py, bx + bw, py, @raylib.Color::new(76, 106, 136, 98))
   }
 }
@@ -97,12 +97,12 @@ fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
 ///|
 fn @types.Game::draw_food(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
-  let cx : Int = bx + game.food_x * tile + tile / 2
-  let cy : Int = by + game.food_y * tile + tile / 2
+  let cx : Int32 = bx + game.food_x * tile + tile / 2
+  let cy : Int32 = by + game.food_y * tile + tile / 2
   let r : Float = Float::from_int(tile) * 0.33
 
   if game.food_kind == Gold {
@@ -129,16 +129,16 @@ fn @types.Game::draw_food(
 ///|
 fn @types.Game::draw_trap(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   if !game.trap_active {
     return
   }
 
-  let cx : Int = bx + game.trap_x * tile + tile / 2
-  let cy : Int = by + game.trap_y * tile + tile / 2
+  let cx : Int32 = bx + game.trap_x * tile + tile / 2
+  let cy : Int32 = by + game.trap_y * tile + tile / 2
 
   let pulse : Float = Float::from_double(
     @math.sin((game.trap_flash * 8.0).to_double()),
@@ -170,7 +170,7 @@ fn @types.Game::draw_trap(
 }
 
 ///|
-fn player_segment_color(i : Int) -> @raylib.Color {
+fn player_segment_color(i : Int32) -> @raylib.Color {
   if i == 0 {
     @raylib.Color::new(94, 226, 158, 252)
   } else {
@@ -179,7 +179,7 @@ fn player_segment_color(i : Int) -> @raylib.Color {
 }
 
 ///|
-fn rival_segment_color(kind : Int, head : Bool) -> @raylib.Color {
+fn rival_segment_color(kind : Int32, head : Bool) -> @raylib.Color {
   if kind % 2 == 0 {
     if head {
       @raylib.Color::new(236, 134, 124, 252)
@@ -196,13 +196,13 @@ fn rival_segment_color(kind : Int, head : Bool) -> @raylib.Color {
 ///|
 fn @types.Game::draw_player(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   for i = game.p_len - 1; i >= 0; i = i - 1 {
-    let x : Int = bx + game.p_seg_x[i] * tile
-    let y : Int = by + game.p_seg_y[i] * tile
+    let x : Int32 = bx + game.p_seg_x[i] * tile
+    let y : Int32 = by + game.p_seg_y[i] * tile
 
     @raylib.draw_rectangle(
       x + 3,
@@ -221,9 +221,9 @@ fn @types.Game::draw_player(
         @raylib.Color::new(224, 255, 236, 236),
       )
 
-      let ex0 : Int = x + tile / 2 - 7
-      let ex1 : Int = x + tile / 2 + 3
-      let ey : Int = y + tile / 2 - 3
+      let ex0 : Int32 = x + tile / 2 - 7
+      let ex1 : Int32 = x + tile / 2 + 3
+      let ey : Int32 = y + tile / 2 - 3
       @raylib.draw_rectangle(ex0, ey, 4, 4, @raylib.Color::new(14, 24, 18, 228))
       @raylib.draw_rectangle(ex1, ey, 4, 4, @raylib.Color::new(14, 24, 18, 228))
     }
@@ -233,10 +233,10 @@ fn @types.Game::draw_player(
 ///|
 fn @types.Game::draw_rival(
   game : @types.Game,
-  rid : Int,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  rid : Int32,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   let rival = game.rivals[rid]
   if !rival.alive {
@@ -244,8 +244,8 @@ fn @types.Game::draw_rival(
   }
 
   for i = rival.len - 1; i >= 0; i = i - 1 {
-    let x : Int = bx + rival.seg_x[i] * tile
-    let y : Int = by + rival.seg_y[i] * tile
+    let x : Int32 = bx + rival.seg_x[i] * tile
+    let y : Int32 = by + rival.seg_y[i] * tile
 
     @raylib.draw_rectangle(
       x + 3,
@@ -263,9 +263,9 @@ fn @types.Game::draw_rival(
         tile - 6,
         @raylib.Color::new(236, 228, 255, 216),
       )
-      let ex0 : Int = x + tile / 2 - 7
-      let ex1 : Int = x + tile / 2 + 3
-      let ey : Int = y + tile / 2 - 3
+      let ex0 : Int32 = x + tile / 2 - 7
+      let ex1 : Int32 = x + tile / 2 + 3
+      let ey : Int32 = y + tile / 2 - 3
       @raylib.draw_rectangle(ex0, ey, 4, 4, @raylib.Color::new(22, 20, 28, 220))
       @raylib.draw_rectangle(ex1, ey, 4, 4, @raylib.Color::new(22, 20, 28, 220))
     }
@@ -275,16 +275,16 @@ fn @types.Game::draw_rival(
 ///|
 fn @types.Game::draw_hint(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
 
-  let x : Int = bx + game.hint_x * tile + tile / 2
-  let y : Int = by + game.hint_y * tile + tile / 2
+  let x : Int32 = bx + game.hint_x * tile + tile / 2
+  let y : Int32 = by + game.hint_y * tile + tile / 2
 
   let pulse : Float = Float::from_double(
     @math.sin((game.ui_t * 8.0).to_double()),
@@ -301,7 +301,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
       continue
     }
 
-    let a : Int = if spark.life > 0.7 {
+    let a : Int32 = if spark.life > 0.7 {
       236
     } else if spark.life > 0.4 {
       190
@@ -322,7 +322,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 ///|
 fn draw_touch_button(
   label : String,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   active : Bool,
   tint : @raylib.Color,
 ) -> Unit {
@@ -476,10 +476,10 @@ fn @types.Game::draw_controls(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_panel(game : @types.Game) -> Unit {
-  let px : Int = @types.panel_x0
-  let py : Int = 20
-  let pw : Int = @types.panel_w
-  let ph : Int = @types.screen_h - 40
+  let px : Int32 = @types.panel_x0
+  let py : Int32 = 20
+  let pw : Int32 = @types.panel_w
+  let ph : Int32 = @types.screen_h - 40
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(14, 22, 36, 244))
   @raylib.draw_rectangle_lines(
@@ -738,10 +738,10 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(6, 10, 16, 170),
   )
 
-  let pw : Int = 840
-  let ph : Int = 490
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 840
+  let ph : Int32 = 490
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(16, 24, 36, 246))
   @raylib.draw_rectangle_lines(
@@ -798,8 +798,8 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::rival_total_score(game : @types.Game) -> Int {
-  let mut s : Int = 0
+fn @types.Game::rival_total_score(game : @types.Game) -> Int32 {
+  let mut s : Int32 = 0
   for rival in game.rivals {
     s = s + rival.score
   }

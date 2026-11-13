@@ -333,7 +333,7 @@ fn @types.Game::update_tower_info(game : @types.Game, dt : Float) -> Unit {
   // Navigate between towers with Left/Right
   if @raylib.is_key_pressed(@raylib.KeyLeft) ||
     @raylib.is_key_pressed(@raylib.KeyRight) {
-    let dir : Int = if @raylib.is_key_pressed(@raylib.KeyRight) {
+    let dir : Int32 = if @raylib.is_key_pressed(@raylib.KeyRight) {
       1
     } else {
       -1

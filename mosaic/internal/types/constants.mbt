@@ -1,35 +1,35 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let cell_size : Int = 64
+pub let cell_size : Int32 = 64
 
 ///|
-pub let grid_cols : Int = 8
+pub let grid_cols : Int32 = 8
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let grid_offset_x : Int = 180
+pub let grid_offset_x : Int32 = 180
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
-pub let palette_x : Int = 740
+pub let palette_x : Int32 = 740
 
 ///|
-pub let palette_y : Int = 100
+pub let palette_y : Int32 = 100
 
 ///|
-pub let swatch_size : Int = 48
+pub let swatch_size : Int32 = 48
 
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(25, 22, 35, 255)
@@ -107,7 +107,7 @@ pub fn tile_color_to_raylib(c : TileColor) -> @raylib.Color {
 }
 
 ///|
-pub fn tile_color_index(c : TileColor) -> Int {
+pub fn tile_color_index(c : TileColor) -> Int32 {
   match c {
     Red => 0
     Blue => 1
@@ -119,7 +119,7 @@ pub fn tile_color_index(c : TileColor) -> Int {
 }
 
 ///|
-pub fn index_to_tile_color(i : Int) -> TileColor {
+pub fn index_to_tile_color(i : Int32) -> TileColor {
   match i {
     0 => Red
     1 => Blue
@@ -131,7 +131,7 @@ pub fn index_to_tile_color(i : Int) -> TileColor {
 }
 
 ///|
-pub fn tile_shape_index(s : TileShape) -> Int {
+pub fn tile_shape_index(s : TileShape) -> Int32 {
   match s {
     Square => 0
     Triangle => 1
@@ -143,7 +143,7 @@ pub fn tile_shape_index(s : TileShape) -> Int {
 }
 
 ///|
-pub fn index_to_tile_shape(i : Int) -> TileShape {
+pub fn index_to_tile_shape(i : Int32) -> TileShape {
   match i {
     0 => Square
     1 => Triangle
@@ -155,7 +155,7 @@ pub fn index_to_tile_shape(i : Int) -> TileShape {
 }
 
 ///|
-pub fn orientation_index(o : Orientation) -> Int {
+pub fn orientation_index(o : Orientation) -> Int32 {
   match o {
     N => 0
     E => 1
@@ -165,7 +165,7 @@ pub fn orientation_index(o : Orientation) -> Int {
 }
 
 ///|
-pub fn index_to_orientation(i : Int) -> Orientation {
+pub fn index_to_orientation(i : Int32) -> Orientation {
   match i % 4 {
     0 => N
     1 => E

@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,6 +23,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CellKind {
   Empty
   Anchor
@@ -29,7 +31,7 @@ pub(all) enum CellKind {
   Goal
   Wall
   Collectible
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend CellKind with Eq::{not_equal, equal}
@@ -46,10 +48,11 @@ pub impl Show for CellKind with fn output(self, logger) {
 pub extend CellKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SwingDir {
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend SwingDir with Eq::{not_equal, equal}
@@ -66,12 +69,13 @@ pub impl Show for SwingDir with fn output(self, logger) {
 pub extend SwingDir with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum WeightState {
   Swinging
   Launched
   Stopped
   AtGoal
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend WeightState with Eq::{not_equal, equal}
@@ -88,12 +92,13 @@ pub impl Show for WeightState with fn output(self, logger) {
 pub extend WeightState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Ready
   Simulating
   Won
   Lost
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -110,11 +115,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Swing
   Wrap
   Launch
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

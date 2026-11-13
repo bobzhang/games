@@ -2,7 +2,7 @@
 pub fn check_clue(
   clue : @types.Clue,
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> @types.ClueStatus {
   match clue.kind {
     Distance => check_distance_clue(clue, grid, size)
@@ -18,7 +18,7 @@ pub fn check_clue(
 fn check_distance_clue(
   clue : @types.Clue,
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> @types.ClueStatus {
   let pos_a = @types.find_feature_pos(grid, size, clue.feature_a)
   let pos_b = @types.find_feature_pos(grid, size, clue.feature_b)
@@ -39,7 +39,7 @@ fn check_distance_clue(
 fn check_direction_clue(
   clue : @types.Clue,
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> @types.ClueStatus {
   let pos_a = @types.find_feature_pos(grid, size, clue.feature_a)
   let pos_b = @types.find_feature_pos(grid, size, clue.feature_b)
@@ -58,7 +58,7 @@ fn check_direction_clue(
 fn check_adjacent_clue(
   clue : @types.Clue,
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> @types.ClueStatus {
   let pos_a = @types.find_feature_pos(grid, size, clue.feature_a)
   let pos_b = @types.find_feature_pos(grid, size, clue.feature_b)
@@ -77,7 +77,7 @@ fn check_adjacent_clue(
 fn check_count_clue(
   clue : @types.Clue,
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> @types.ClueStatus {
   let mut count = 0
   for i in 0..<size {
@@ -116,7 +116,7 @@ fn check_count_clue(
 fn check_between_clue(
   clue : @types.Clue,
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> @types.ClueStatus {
   // feature_a is between feature_b and the third feature
   // We use feature_b for one endpoint and row_col encodes the third feature index
@@ -140,7 +140,7 @@ fn check_between_clue(
 fn check_not_clue(
   clue : @types.Clue,
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> @types.ClueStatus {
   // No feature_a in row or column specified by row_col
   // direction N = row, S = column
@@ -159,7 +159,7 @@ fn check_not_clue(
 }
 
 ///|
-pub fn feature_kind_from_index(idx : Int) -> @types.FeatureKind {
+pub fn feature_kind_from_index(idx : Int32) -> @types.FeatureKind {
   match idx {
     0 => Mountain
     1 => River
@@ -172,7 +172,7 @@ pub fn feature_kind_from_index(idx : Int) -> @types.FeatureKind {
 }
 
 ///|
-pub fn feature_kind_to_index(kind : @types.FeatureKind) -> Int {
+pub fn feature_kind_to_index(kind : @types.FeatureKind) -> Int32 {
   match kind {
     Mountain => 0
     River => 1
@@ -188,7 +188,7 @@ pub fn feature_kind_to_index(kind : @types.FeatureKind) -> Int {
 pub fn validate_all_clues(
   clues : Array[@types.Clue],
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
 ) -> Unit {
   for i in 0..<clues.length() {
     clues[i].status = check_clue(clues[i], grid, size)
@@ -218,7 +218,7 @@ pub fn any_clue_violated(clues : Array[@types.Clue]) -> Bool {
 ///|
 pub fn check_placement_consistent(
   grid : Array[@types.FeatureKind?],
-  size : Int,
+  size : Int32,
   clues : Array[@types.Clue],
   pos : @types.Vec2i,
   feature : @types.FeatureKind,
@@ -245,7 +245,7 @@ pub fn check_placement_consistent(
 pub fn count_placed_features(
   grid : Array[@types.FeatureKind?],
   kind : @types.FeatureKind,
-) -> Int {
+) -> Int32 {
   let mut count = 0
   for i in 0..<grid.length() {
     match grid[i] {
@@ -262,12 +262,12 @@ pub fn all_features_placed(
   features : Array[@types.FeatureKind],
 ) -> Bool {
   // Count required features
-  let counts : Array[Int] = Array::make(7, 0)
+  let counts : Array[Int32] = Array::make(7, 0)
   for i in 0..<features.length() {
     counts[feature_kind_to_index(features[i])] += 1
   }
   // Count placed features
-  let placed : Array[Int] = Array::make(7, 0)
+  let placed : Array[Int32] = Array::make(7, 0)
   for i in 0..<grid.length() {
     match grid[i] {
       Some(f) => placed[feature_kind_to_index(f)] += 1

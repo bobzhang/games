@@ -55,7 +55,7 @@ fn reset_hero(hero : @types.Player) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int32 {
   for i, slot in game.objs {
     if !slot.active {
       break i
@@ -71,7 +71,7 @@ fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int32 {
   for i, slot in game.particles {
     if !slot.active {
       break i
@@ -87,7 +87,7 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int32 {
   for i, slot in game.trails {
     if !slot.active {
       break i
@@ -106,12 +106,12 @@ fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
 fn @types.Game::spawn_obj(
   game : @types.Game,
   kind : @types.ObjKind,
-  lane : Int,
+  lane : Int32,
   z : Float,
   y_off : Float,
   w : Float,
   h : Float,
-  phase_only : Int,
+  phase_only : Int32,
 ) -> Unit {
   let i = game.alloc_obj_slot()
   game.objs[i].active = true
@@ -135,7 +135,7 @@ fn @types.Game::spawn_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_particle_slot()
   game.particles[i].active = true
@@ -153,8 +153,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  amount : Int,
-  kind : Int,
+  amount : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<amount {
     game.spawn_particle(
@@ -187,7 +187,7 @@ fn @types.Game::spawn_trail(
 }
 
 ///|
-fn @types.Game::set_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::set_stage(game : @types.Game, stage : Int32) -> Unit {
   game.stage = stage
   game.stage_goal = @types.stage_base_distance +
     Float::from_int(stage - 1) * @types.stage_distance_growth
@@ -200,8 +200,8 @@ fn @types.Game::set_stage(game : @types.Game, stage : Int) -> Unit {
 fn @types.Game::spawn_orb_strip(
   game : @types.Game,
   z0 : Float,
-  len : Int,
-  lane : Int,
+  len : Int32,
+  lane : Int32,
 ) -> Unit {
   for i in 0..<len {
     game.spawn_obj(

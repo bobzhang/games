@@ -65,7 +65,7 @@ fn update_campaign(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_campaign_battle(game : @types.Game, level : Int) -> Unit {
+fn start_campaign_battle(game : @types.Game, level : Int32) -> Unit {
   let def = @levels.get_campaign_level(level)
   let battle = setup_battle_from_def(game, def)
   game.battle = Some(battle)

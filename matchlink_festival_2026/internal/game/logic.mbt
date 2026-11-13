@@ -1,12 +1,12 @@
 ///|
 /// Fills the board with shuffled paired tile kinds and sets the remaining count to the total cell count.
 fn @types.Game::build_level_board(game : @types.Game) -> Unit {
-  let total : Int = game.board_w * game.board_h
-  let pair_count : Int = total / 2
+  let total : Int32 = game.board_w * game.board_h
+  let pair_count : Int32 = total / 2
 
-  let vals : Array[Int] = []
+  let vals : Array[Int32] = []
   for i in 0..<pair_count {
-    let kind : Int = i % game.kind_count + 1
+    let kind : Int32 = i % game.kind_count + 1
     vals.push(kind)
     vals.push(kind)
   }
@@ -14,7 +14,7 @@ fn @types.Game::build_level_board(game : @types.Game) -> Unit {
   @types.shuffle_ints(vals)
 
   @types.clear_board(game)
-  let mut p : Int = 0
+  let mut p : Int32 = 0
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {
       @types.set_cell(game, x, y, vals[p])
@@ -27,9 +27,14 @@ fn @types.Game::build_level_board(game : @types.Game) -> Unit {
 
 ///|
 /// Appends (x, y) to the path coordinate arrays, skipping the push if it duplicates the last point.
-fn push_point(xs : Array[Int], ys : Array[Int], x : Int, y : Int) -> Unit {
+fn push_point(
+  xs : Array[Int32],
+  ys : Array[Int32],
+  x : Int32,
+  y : Int32,
+) -> Unit {
   if xs.length() > 0 {
-    let last : Int = xs.length() - 1
+    let last : Int32 = xs.length() - 1
     if xs[last] == x && ys[last] == y {
       return
     }
@@ -41,8 +46,8 @@ fn push_point(xs : Array[Int], ys : Array[Int], x : Int, y : Int) -> Unit {
 
 ///|
 /// Constructs a `LinkPath` struct from coordinate arrays, returning an empty path when fewer than two points are present.
-fn make_path(xs : Array[Int], ys : Array[Int]) -> @types.LinkPath {
-  let n : Int = xs.length()
+fn make_path(xs : Array[Int32], ys : Array[Int32]) -> @types.LinkPath {
+  let n : Int32 = xs.length()
   if n < 2 {
     return @types.empty_path()
   }
@@ -89,10 +94,10 @@ fn make_path(xs : Array[Int], ys : Array[Int]) -> @types.LinkPath {
 /// Returns true when the axis-aligned segment from (x1, y1) to (x2, y2) contains no non-empty cells between the endpoints.
 fn @types.Game::line_clear(
   game : @types.Game,
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
 ) -> Bool {
   if x1 == x2 && y1 == y2 {
     return true
@@ -103,8 +108,8 @@ fn @types.Game::line_clear(
   }
 
   if x1 == x2 {
-    let step : Int = if y2 > y1 { 1 } else { -1 }
-    let mut y : Int = y1 + step
+    let step : Int32 = if y2 > y1 { 1 } else { -1 }
+    let mut y : Int32 = y1 + step
     while y != y2 {
       if @types.cell_at(game, x1, y) != 0 {
         return false
@@ -114,8 +119,8 @@ fn @types.Game::line_clear(
     return true
   }
 
-  let step : Int = if x2 > x1 { 1 } else { -1 }
-  let mut x : Int = x1 + step
+  let step : Int32 = if x2 > x1 { 1 } else { -1 }
+  let mut x : Int32 = x1 + step
   while x != x2 {
     if @types.cell_at(game, x, y1) != 0 {
       return false
@@ -130,10 +135,10 @@ fn @types.Game::line_clear(
 /// Returns true when cell (x, y) is the target tile or is empty, used to validate corner waypoints.
 fn @types.Game::empty_or_target(
   game : @types.Game,
-  x : Int,
-  y : Int,
-  tx : Int,
-  ty : Int,
+  x : Int32,
+  y : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Bool {
   (x == tx && y == ty) || @types.cell_at(game, x, y) == 0
 }
@@ -142,39 +147,39 @@ fn @types.Game::empty_or_target(
 /// Tries to connect anchor (ax, ay) to (bx, by) via a straight line or a single L-shaped turn, returning the path if found.
 fn @types.Game::direct_or_one_turn_from_anchor(
   game : @types.Game,
-  ax : Int,
-  ay : Int,
-  bx : Int,
-  by : Int,
+  ax : Int32,
+  ay : Int32,
+  bx : Int32,
+  by : Int32,
 ) -> @types.LinkPath {
   if game.line_clear(ax, ay, bx, by) {
-    let xs : Array[Int] = []
-    let ys : Array[Int] = []
+    let xs : Array[Int32] = []
+    let ys : Array[Int32] = []
     push_point(xs, ys, ax, ay)
     push_point(xs, ys, bx, by)
     return make_path(xs, ys)
   }
 
-  let c1x : Int = ax
-  let c1y : Int = by
+  let c1x : Int32 = ax
+  let c1y : Int32 = by
   if game.empty_or_target(c1x, c1y, bx, by) &&
     game.line_clear(ax, ay, c1x, c1y) &&
     game.line_clear(c1x, c1y, bx, by) {
-    let xs : Array[Int] = []
-    let ys : Array[Int] = []
+    let xs : Array[Int32] = []
+    let ys : Array[Int32] = []
     push_point(xs, ys, ax, ay)
     push_point(xs, ys, c1x, c1y)
     push_point(xs, ys, bx, by)
     return make_path(xs, ys)
   }
 
-  let c2x : Int = bx
-  let c2y : Int = ay
+  let c2x : Int32 = bx
+  let c2y : Int32 = ay
   if game.empty_or_target(c2x, c2y, bx, by) &&
     game.line_clear(ax, ay, c2x, c2y) &&
     game.line_clear(c2x, c2y, bx, by) {
-    let xs : Array[Int] = []
-    let ys : Array[Int] = []
+    let xs : Array[Int32] = []
+    let ys : Array[Int32] = []
     push_point(xs, ys, ax, ay)
     push_point(xs, ys, c2x, c2y)
     push_point(xs, ys, bx, by)
@@ -187,16 +192,16 @@ fn @types.Game::direct_or_one_turn_from_anchor(
 ///|
 /// Prepends point (ax, ay) to a tail path, building a combined polyline.
 fn compose_with_start(
-  ax : Int,
-  ay : Int,
+  ax : Int32,
+  ay : Int32,
   tail : @types.LinkPath,
 ) -> @types.LinkPath {
   if !tail.found {
     return @types.empty_path()
   }
 
-  let xs : Array[Int] = []
-  let ys : Array[Int] = []
+  let xs : Array[Int32] = []
+  let ys : Array[Int32] = []
   push_point(xs, ys, ax, ay)
 
   for i in 0..<tail.points {
@@ -211,17 +216,17 @@ fn compose_with_start(
 /// Searches for a valid link path between (ax, ay) and (bx, by) using direct, one-turn, and two-turn routes, returning the path if found.
 fn @types.Game::find_link_path(
   game : @types.Game,
-  ax : Int,
-  ay : Int,
-  bx : Int,
-  by : Int,
+  ax : Int32,
+  ay : Int32,
+  bx : Int32,
+  by : Int32,
 ) -> @types.LinkPath {
   if ax == bx && ay == by {
     return @types.empty_path()
   }
 
-  let a : Int = @types.cell_at(game, ax, ay)
-  let b : Int = @types.cell_at(game, bx, by)
+  let a : Int32 = @types.cell_at(game, ax, ay)
+  let b : Int32 = @types.cell_at(game, bx, by)
   if a <= 0 || a != b {
     return @types.empty_path()
   }
@@ -306,10 +311,10 @@ fn @types.Game::set_path_flash(
 /// Activates a hint highlight for the tile pair at (x0, y0) and (x1, y1) with a fixed display TTL.
 fn @types.Game::set_hint_pair(
   game : @types.Game,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Unit {
   game.hint_active = true
   game.hint_ttl = 2.8
@@ -323,18 +328,18 @@ fn @types.Game::set_hint_pair(
 /// Scans the entire board for any linkable matching tile pair, returning found status, the two coordinates, and the path.
 fn @types.Game::find_any_move(
   game : @types.Game,
-) -> (Bool, Int, Int, Int, Int, @types.LinkPath) {
+) -> (Bool, Int32, Int32, Int32, Int32, @types.LinkPath) {
   for y1 in 1..<=game.board_h {
     for x1 in 1..<=game.board_w {
-      let k1 : Int = @types.cell_at(game, x1, y1)
+      let k1 : Int32 = @types.cell_at(game, x1, y1)
       if k1 == 0 {
         continue
       }
 
-      let mut y2 : Int = y1
+      let mut y2 : Int32 = y1
       while y2 <= game.board_h {
-        let start_x : Int = if y2 == y1 { x1 + 1 } else { 1 }
-        let mut x2 : Int = start_x
+        let start_x : Int32 = if y2 == y1 { x1 + 1 } else { 1 }
+        let mut x2 : Int32 = start_x
         while x2 <= game.board_w {
           if @types.cell_at(game, x2, y2) == k1 {
             let p : @types.LinkPath = game.find_link_path(x1, y1, x2, y2)
@@ -368,10 +373,10 @@ fn @types.Game::reshuffle_board(
     return false
   }
 
-  let vals : Array[Int] = []
+  let vals : Array[Int32] = []
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {
-      let k : Int = @types.cell_at(game, x, y)
+      let k : Int32 = @types.cell_at(game, x, y)
       if k > 0 {
         vals.push(k)
       }
@@ -386,7 +391,7 @@ fn @types.Game::reshuffle_board(
   for _t in 0..<28 {
     @types.shuffle_ints(vals)
 
-    let mut p : Int = 0
+    let mut p : Int32 = 0
     for y in 1..<=game.board_h {
       for x in 1..<=game.board_w {
         if @types.cell_at(game, x, y) > 0 {
@@ -495,11 +500,11 @@ fn @types.Game::ensure_move_exists(game : @types.Game) -> Unit {
 /// Removes the matched pair from the board, updates score and combo, grants bonus time, triggers sparks and path flash, and checks for level completion or a follow-up ensure_move_exists.
 fn @types.Game::on_pair_matched(
   game : @types.Game,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
-  kind : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
+  kind : Int32,
   path : @types.LinkPath,
 ) -> Unit {
   @types.set_cell(game, x0, y0, 0)
@@ -508,7 +513,7 @@ fn @types.Game::on_pair_matched(
   game.remaining = game.remaining - 2
   game.combo = game.combo + 1
 
-  let gain : Int = 90 + game.combo * 20 + kind * 4
+  let gain : Int32 = 90 + game.combo * 20 + kind * 4
   game.score = game.score + gain
 
   game.timer = game.timer + 2.2 + Float::from_int(game.combo) * 0.18
@@ -536,7 +541,11 @@ fn @types.Game::on_pair_matched(
 
 ///|
 /// Resets the combo, shows a "Path blocked" message, and emits a shake and spark effect at the attempted cell.
-fn @types.Game::on_pair_failed(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::on_pair_failed(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Unit {
   game.combo = 0
   game.message = "Path blocked"
   game.message_t = 0.62
@@ -546,12 +555,12 @@ fn @types.Game::on_pair_failed(game : @types.Game, x : Int, y : Int) -> Unit {
 
 ///|
 /// Handles a tile pick at (x, y): selects the first tile, deselects on re-tap, switches selection to a different kind, or attempts to match the pair if kinds match.
-fn @types.Game::pick_cell(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::pick_cell(game : @types.Game, x : Int32, y : Int32) -> Unit {
   if game.state != Play {
     return
   }
 
-  let k : Int = @types.cell_at(game, x, y)
+  let k : Int32 = @types.cell_at(game, x, y)
   if k <= 0 {
     return
   }
@@ -575,9 +584,9 @@ fn @types.Game::pick_cell(game : @types.Game, x : Int, y : Int) -> Unit {
     return
   }
 
-  let sx : Int = game.select_x
-  let sy : Int = game.select_y
-  let sk : Int = @types.cell_at(game, sx, sy)
+  let sx : Int32 = game.select_x
+  let sy : Int32 = game.select_y
+  let sk : Int32 = @types.cell_at(game, sx, sy)
 
   if sk <= 0 || sk != k {
     game.select_x = x
@@ -735,8 +744,8 @@ fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Configures and initialises a campaign level by id: sets board dimensions, time limit, hint and shuffle counts, builds the board, and ensures at least one valid move exists before entering Play state.
-fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
-  let mut id : Int = level_id
+fn @types.Game::load_level(game : @types.Game, level_id : Int32) -> Unit {
+  let mut id : Int32 = level_id
   if id < 0 {
     id = 0
   }
@@ -821,7 +830,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.mouse_y = mouse.y
   game.mouse_hold = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
   game.mouse_press = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let mut tc : Int = @raylib.get_touch_point_count()
+  let mut tc : Int32 = @raylib.get_touch_point_count()
   if tc < 0 {
     tc = 0
   }

@@ -42,7 +42,7 @@ fn @types.Game::snap_positions(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::spawn_tile(game : @types.Game) -> Unit {
-  let empty : Array[Int] = []
+  let empty : Array[Int32] = []
   for i in 0..<@types.cell_count {
     if game.tiles[i].value == 0 {
       empty.push(i)
@@ -96,10 +96,10 @@ fn @types.Game::undo(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
+fn @types.Game::try_move(game : @types.Game, dr : Int32, dc : Int32) -> Bool {
   let old_can_undo = game.can_undo
   let old_prev_score = game.prev_score
-  let old_prev : Array[Int] = Array::make(@types.cell_count, 0)
+  let old_prev : Array[Int32] = Array::make(@types.cell_count, 0)
   for i in 0..<@types.cell_count {
     old_prev[i] = game.prev_values[i]
   }

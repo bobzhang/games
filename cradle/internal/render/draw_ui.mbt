@@ -94,7 +94,7 @@ fn draw_playing_ui(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_separator(y : Int) -> Unit {
+fn draw_separator(y : Int32) -> Unit {
   @raylib.draw_line_ex(
     @raylib.Vector2::new(820.0, Float::from_int(y)),
     @raylib.Vector2::new(1260.0, Float::from_int(y)),
@@ -104,7 +104,7 @@ fn draw_separator(y : Int) -> Unit {
 }
 
 ///|
-fn draw_star_display(x : Int, y : Int, stars : Int, size : Int) -> Unit {
+fn draw_star_display(x : Int32, y : Int32, stars : Int32, size : Int32) -> Unit {
   for i in 0..<3 {
     let sx = x + i * (size + 8)
     let color = if i < stars {

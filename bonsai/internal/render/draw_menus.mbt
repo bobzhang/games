@@ -42,7 +42,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_tree(cx : Int, cy : Int, time : Float) -> Unit {
+fn draw_title_tree(cx : Int32, cy : Int32, time : Float) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   // Trunk
@@ -253,7 +253,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_level_unlocked(game : @types.Game, index : Int) -> Bool {
+fn is_level_unlocked(game : @types.Game, index : Int32) -> Bool {
   if index == 0 {
     return true
   }

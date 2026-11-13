@@ -2,11 +2,11 @@
 fn make_level(
   name : String,
   tier : @types.Tier,
-  heights : Array[Int],
-  settlements : Array[Int],
-  max_sea_level : Int,
-  sand_budget : Int,
-  par_sand : Int,
+  heights : Array[Int32],
+  settlements : Array[Int32],
+  max_sea_level : Int32,
+  sand_budget : Int32,
+  par_sand : Int32,
 ) -> @types.Level {
   {
     grid_width: @types.grid_cols,
@@ -409,7 +409,7 @@ fn level_20() -> @types.Level {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_01()
     1 => level_02()
@@ -436,11 +436,11 @@ pub fn get_level(index : Int) -> @types.Level {
 }
 
 ///|
-pub fn level_name(index : Int) -> String {
+pub fn level_name(index : Int32) -> String {
   get_level(index).name
 }
 
 ///|
-pub fn level_tier(index : Int) -> @types.Tier {
+pub fn level_tier(index : Int32) -> @types.Tier {
   get_level(index).tier
 }

@@ -10,7 +10,7 @@ fn string_to_bytes(s : String) -> Bytes {
 }
 
 ///|
-fn int_to_hex(n : Int) -> String {
+fn int_to_hex(n : Int32) -> String {
   let hex = "0123456789ABCDEF"
   let mut result = ""
   let u = n.reinterpret_as_uint()

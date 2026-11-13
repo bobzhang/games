@@ -96,7 +96,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, index : Int) -> Unit {
+fn start_level(game : @types.Game, index : Int32) -> Unit {
   let level = @levels.get_level(index)
   game.current_level = Some(level)
   game.target_grid = level.target
@@ -187,7 +187,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn find_glaze_in_allowed(game : @types.Game) -> Int {
+fn find_glaze_in_allowed(game : @types.Game) -> Int32 {
   for i in 0..<game.allowed_glazes.length() {
     if game.allowed_glazes[i] == game.selected_glaze {
       return i
@@ -197,7 +197,7 @@ fn find_glaze_in_allowed(game : @types.Game) -> Int {
 }
 
 ///|
-fn place_glaze(game : @types.Game, row : Int, col : Int) -> Unit {
+fn place_glaze(game : @types.Game, row : Int32, col : Int32) -> Unit {
   if game.moves_used >= game.max_moves {
     set_message(game, "No moves left! Fire or undo.")
     return
@@ -213,7 +213,7 @@ fn place_glaze(game : @types.Game, row : Int, col : Int) -> Unit {
 }
 
 ///|
-fn erase_glaze(game : @types.Game, row : Int, col : Int) -> Unit {
+fn erase_glaze(game : @types.Game, row : Int32, col : Int32) -> Unit {
   let cell = @types.get_cell(game.grid, row, col)
   if cell.glaze is Empty {
     return

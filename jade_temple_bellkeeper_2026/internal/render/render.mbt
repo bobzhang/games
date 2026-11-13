@@ -91,7 +91,7 @@ fn draw_texture_cover(
 ///|
 /// Draws one cell from the generated 4x2 sprite sheet.
 fn draw_sprite_cell(
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -128,8 +128,8 @@ fn draw_sprite_cell(
 /// Draws `text` horizontally centered on screen at the given y position, size, and color.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -140,9 +140,9 @@ fn draw_center_text(
 /// Draws `text` right-aligned so its right edge is at `x`, at the given y position, size, and color.
 fn draw_right_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -411,7 +411,7 @@ fn @types.Game::draw_shrine(
 
 ///|
 /// Draws a single bell with glow halo, body, clapper, and charge bar beneath it.
-fn draw_bell(b : @types.Bell, i : Int, cam_x : Float, cam_y : Float) -> Unit {
+fn draw_bell(b : @types.Bell, i : Int32, cam_x : Float, cam_y : Float) -> Unit {
   let x = b.x + cam_x
   let y = b.y + cam_y
   let pulse : Float = 0.5 +
@@ -893,10 +893,10 @@ fn @types.Game::draw_fx(
 ///|
 /// Draws a labeled progress bar filled proportionally to `value / maxv` in the given color.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   maxv : Float,
   label : String,
@@ -1098,7 +1098,7 @@ fn draw_button_visual(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Unit {
   let hot = @types.pointer_on_rect(
     mx,

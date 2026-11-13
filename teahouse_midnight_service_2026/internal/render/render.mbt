@@ -1,8 +1,8 @@
 ///|
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -12,9 +12,9 @@ fn draw_center_text(
 ///|
 fn draw_right_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -711,10 +711,10 @@ fn @types.Game::draw_sparks(
 
 ///|
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   maxv : Float,
   label : String,
@@ -898,7 +898,7 @@ fn draw_button_visual(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Unit {
   let hot = @types.pointer_on_rect(
     mx,

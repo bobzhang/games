@@ -15,9 +15,9 @@ fn @types.Game::detect_hold_direction(game : @types.Game) -> @types.Direction {
     dir = Down
   }
 
-  let cx : Int = @types.dpad_center_x()
-  let cy : Int = @types.dpad_center_y()
-  let s : Int = @types.dpad_size()
+  let cx : Int32 = @types.dpad_center_x()
+  let cy : Int32 = @types.dpad_center_y()
+  let s : Int32 = @types.dpad_size()
 
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -76,10 +76,10 @@ fn @types.Game::detect_undo_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyZ) ||
     @raylib.is_key_pressed(@raylib.KeyBackspace)
 
-  let x : Int = @types.action_panel_x()
-  let y : Int = @types.action_panel_y()
-  let w : Int = @types.action_panel_w()
-  let h : Int = @types.action_panel_h()
+  let x : Int32 = @types.action_panel_x()
+  let y : Int32 = @types.action_panel_y()
+  let w : Int32 = @types.action_panel_w()
+  let h : Int32 = @types.action_panel_h()
 
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -101,10 +101,10 @@ fn @types.Game::detect_undo_press(game : @types.Game) -> Bool {
 fn @types.Game::detect_reset_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyR)
 
-  let x : Int = @types.action_panel_x()
-  let y : Int = @types.action_panel_y() + @types.action_panel_h() + 14
-  let w : Int = @types.action_panel_w()
-  let h : Int = @types.action_panel_h()
+  let x : Int32 = @types.action_panel_x()
+  let y : Int32 = @types.action_panel_y() + @types.action_panel_h() + 14
+  let w : Int32 = @types.action_panel_w()
+  let h : Int32 = @types.action_panel_h()
 
   if @types.pointer_on_rect(
       game.mouse_x,

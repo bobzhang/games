@@ -6,7 +6,7 @@ fn e10() -> Array[@types.TileKind] {
 
 ///|
 /// Helper: create a row of zero elevations
-fn z10() -> Array[Int] {
+fn z10() -> Array[Int32] {
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
@@ -19,7 +19,7 @@ pub fn level_01() -> @types.LevelData {
   }
   g[3][1] = Transmitter
   g[3][8] = Receiver
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -45,7 +45,7 @@ pub fn level_02() -> @types.LevelData {
   g[4][0] = Transmitter
   g[1][5] = Receiver
   g[7][5] = Receiver
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -70,7 +70,7 @@ pub fn level_03() -> @types.LevelData {
   }
   g[0][0] = Transmitter
   g[7][9] = Receiver
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -97,7 +97,7 @@ pub fn level_04() -> @types.LevelData {
   g[4][0] = Receiver
   g[4][9] = Receiver
   g[7][5] = Receiver
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -123,7 +123,7 @@ pub fn level_05() -> @types.LevelData {
   g[0][0] = Transmitter
   g[7][0] = Receiver
   g[0][9] = Receiver
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -151,7 +151,7 @@ pub fn level_06() -> @types.LevelData {
   g[0][9] = Receiver
   g[7][0] = Receiver
   g[7][9] = Receiver
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -178,7 +178,7 @@ pub fn level_07() -> @types.LevelData {
   g[4][9] = Receiver
   g[0][9] = Receiver
   g[7][9] = Receiver
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }
@@ -207,7 +207,7 @@ pub fn level_08() -> @types.LevelData {
   g[4][0] = Receiver
   g[4][9] = Receiver
   g[0][0] = Receiver
-  let e : Array[Array[Int]] = []
+  let e : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
     e.push(z10())
   }

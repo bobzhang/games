@@ -31,7 +31,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_animated_hull_bg(w : Int, h : Int, time : Float) -> Unit {
+fn draw_animated_hull_bg(w : Int32, h : Int32, time : Float) -> Unit {
   // Draw a slowly morphing convex hull in the background
   let cx = Float::from_int(w) / 2.0
   let cy = Float::from_int(h) / 2.0 + 30.0
@@ -84,7 +84,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     "Simple shapes - place points at corners", "Tricky edges with interior distractors",
     "Remove excess points to sculpt the hull",
   ]
-  let counts : Array[Int] = [
+  let counts : Array[Int32] = [
     @types.tier1_count, @types.tier2_count, @types.tier3_count,
   ]
   let mx = @raylib.get_mouse_x()

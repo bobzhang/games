@@ -100,7 +100,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   game.board = @types.new_board(level.board_size)
   game.current_level = level_idx + 1
@@ -225,7 +225,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_tray_click(game : @types.Game, mx : Int, my : Int) -> Int {
+fn check_tray_click(game : @types.Game, mx : Int32, my : Int32) -> Int32 {
   let tx = @types.tray_x
   let ty = @types.tray_y
   let ps = @types.tray_patch_size
@@ -244,7 +244,7 @@ fn check_tray_click(game : @types.Game, mx : Int, my : Int) -> Int {
 }
 
 ///|
-fn handle_tray_click(game : @types.Game, idx : Int) -> Unit {
+fn handle_tray_click(game : @types.Game, idx : Int32) -> Unit {
   match game.play_state {
     Placing => {
       game.selected_tray = idx
@@ -261,7 +261,7 @@ fn handle_tray_click(game : @types.Game, idx : Int) -> Unit {
 }
 
 ///|
-fn handle_grid_click(game : @types.Game, row : Int, col : Int) -> Unit {
+fn handle_grid_click(game : @types.Game, row : Int32, col : Int32) -> Unit {
   let board = game.board
   let idx = row * board.size + col
   match game.play_state {
@@ -344,7 +344,7 @@ fn handle_grid_click(game : @types.Game, row : Int, col : Int) -> Unit {
 }
 
 ///|
-fn handle_remove(game : @types.Game, row : Int, col : Int) -> Unit {
+fn handle_remove(game : @types.Game, row : Int32, col : Int32) -> Unit {
   let board = game.board
   match @types.board_get(board, row, col) {
     Some(patch) =>

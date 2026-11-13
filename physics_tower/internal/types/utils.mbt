@@ -43,7 +43,7 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
@@ -91,7 +91,7 @@ pub fn material_strength(mat : Material) -> Float {
 
 ///|
 pub fn new_body(
-  id : Int,
+  id : Int32,
   kind : PieceKind,
   material : Material,
   x : Float,
@@ -123,8 +123,8 @@ pub fn new_body(
 ///|
 pub fn new_joint(
   kind : JointKind,
-  body_a : Int,
-  body_b : Int,
+  body_a : Int32,
+  body_b : Int32,
   lxa : Float,
   lya : Float,
   lxb : Float,
@@ -168,9 +168,9 @@ pub fn new_particle(
   vy : Float,
   life : Float,
   size : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Particle {
   { x, y, vx, vy, life, max_life: life, size, r, g, b, }
 }
@@ -344,7 +344,7 @@ pub fn new_tutorial_state() -> TutorialState {
 }
 
 ///|
-pub fn new_statistics(level_count : Int) -> Statistics {
+pub fn new_statistics(level_count : Int32) -> Statistics {
   let best = Array(capacity=level_count)
   let stars = Array(capacity=level_count)
   for _i in 0..<level_count {
@@ -433,10 +433,10 @@ pub fn new_game() -> Game {
 pub fn pointer_in_rect(
   mx : Float,
   my : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 = Float::from_int(rx)
   let y0 = Float::from_int(ry)

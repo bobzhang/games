@@ -153,8 +153,8 @@ fn draw_ocean_art() -> Bool {
 
 ///|
 fn draw_island_art(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   radius : Float,
   tint : @raylib.Color,
 ) -> Bool {

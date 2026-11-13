@@ -1,10 +1,11 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Season {
   Spring
   Summer
   Fall
   Winter
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Season with Eq::{not_equal, equal}
@@ -21,6 +22,7 @@ pub impl Show for Season with fn output(self, logger) {
 pub extend Season with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CropKind {
   Wheat
   Corn
@@ -30,7 +32,7 @@ pub(all) enum CropKind {
   Pumpkin
   Clover
   Fallow
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend CropKind with Eq::{not_equal, equal}
@@ -47,6 +49,7 @@ pub impl Show for CropKind with fn output(self, logger) {
 pub extend CropKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CropState {
   Empty
   Planted
@@ -54,7 +57,7 @@ pub(all) enum CropState {
   Mature
   Harvested
   Withered
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend CropState with Eq::{not_equal, equal}
@@ -71,13 +74,14 @@ pub impl Show for CropState with fn output(self, logger) {
 pub extend CropState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   LevelSelect
   Planning
   Simulate
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -94,11 +98,12 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Nutrient {
   Nitrogen
   Phosphorus
   Potassium
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Nutrient with Eq::{not_equal, equal}
@@ -115,11 +120,12 @@ pub impl Show for Nutrient with fn output(self, logger) {
 pub extend Nutrient with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Bronze
   Silver
   Gold
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

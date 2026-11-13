@@ -10,11 +10,11 @@ pub fn check_all_crates_placed(game : @types.Game) -> Bool {
 
 ///|
 pub fn compute_stars(
-  connections_used : Int,
-  rehooks : Int,
-  par_connections : Int,
-  par_rehooks : Int,
-) -> Int {
+  connections_used : Int32,
+  rehooks : Int32,
+  par_connections : Int32,
+  par_rehooks : Int32,
+) -> Int32 {
   // 1 star: complete
   // 2 star: within par connections
   // 3 star: par connections + fewest rehooks
@@ -28,7 +28,11 @@ pub fn compute_stars(
 }
 
 ///|
-pub fn is_rope_valid(game : @types.Game, from_id : Int, to_id : Int) -> Bool {
+pub fn is_rope_valid(
+  game : @types.Game,
+  from_id : Int32,
+  to_id : Int32,
+) -> Bool {
   // Basic validation
   if from_id < 0 || to_id < 0 {
     return false

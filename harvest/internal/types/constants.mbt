@@ -1,35 +1,35 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 6
+pub let grid_cols : Int32 = 6
 
 ///|
-pub let grid_rows : Int = 4
+pub let grid_rows : Int32 = 4
 
 ///|
-pub let cell_size : Int = 100
+pub let cell_size : Int32 = 100
 
 ///|
-pub let grid_offset_x : Int = 60
+pub let grid_offset_x : Int32 = 60
 
 ///|
-pub let grid_offset_y : Int = 120
+pub let grid_offset_y : Int32 = 120
 
 ///|
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 ///|
-pub let seasons_per_year : Int = 4
+pub let seasons_per_year : Int32 = 4
 
 ///|
-pub let max_nutrient : Int = 100
+pub let max_nutrient : Int32 = 100
 
 ///|
 pub let pi : Float = 3.14159265

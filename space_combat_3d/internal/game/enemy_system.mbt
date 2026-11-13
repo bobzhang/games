@@ -184,7 +184,7 @@ fn has_overshot_target(
 ///|
 fn @types.Game::update_ai_state(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dist : Float,
   dt : Float,
 ) -> Unit {
@@ -323,7 +323,7 @@ fn @types.Game::update_ai_state(
 
 ///|
 /// Returns the speed for an enemy kind, applying mission difficulty scaling.
-fn enemy_speed_scaled(game : @types.Game, kind : Int) -> Float {
+fn enemy_speed_scaled(game : @types.Game, kind : Int32) -> Float {
   let base : Float = if kind == @types.enemy_fighter {
     @types.fighter_speed
   } else if kind == @types.enemy_interceptor {
@@ -351,7 +351,7 @@ fn update_enemy_facing(e : @types.Enemy) -> Unit {
 ///|
 fn @types.Game::update_fighter_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dy : Float,
   dz : Float,
@@ -543,7 +543,7 @@ fn @types.Game::update_fighter_ai(
 ///|
 fn @types.Game::update_interceptor_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dy : Float,
   dz : Float,
@@ -680,7 +680,7 @@ fn @types.Game::update_interceptor_ai(
 ///|
 fn @types.Game::update_bomber_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dy : Float,
   dz : Float,
@@ -743,7 +743,7 @@ fn @types.Game::update_bomber_ai(
 ///|
 fn @types.Game::update_cruiser_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dy : Float,
   dz : Float,
@@ -793,7 +793,7 @@ fn @types.Game::update_cruiser_ai(
 ///|
 fn @types.Game::update_capital_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dy : Float,
   dz : Float,
@@ -832,7 +832,7 @@ fn @types.Game::update_capital_ai(
 ///|
 fn @types.Game::enemy_fire(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dy : Float,
   dz : Float,
@@ -932,12 +932,12 @@ fn @types.Game::enemy_fire(
 ///|
 fn @types.Game::capital_turret_fire(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dy : Float,
   dz : Float,
   dist : Float,
-  turret : Int,
+  turret : Int32,
 ) -> Unit {
   let e = game.enemies[idx]
   let pidx = @types.alloc_projectile(game)
@@ -972,7 +972,7 @@ fn @types.Game::capital_turret_fire(
 
 ///|
 /// Applies `damage` to the enemy at `idx`, absorbing with shields first, and handles destruction.
-pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
+pub fn damage_enemy(game : @types.Game, idx : Int32, damage : Float) -> Unit {
   let e = game.enemies[idx]
 
   // Apply damage to shield first
@@ -1020,12 +1020,12 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
     // Kill feed
     let type_name = @types.enemy_type_name(e.kind)
     let feed_text = "\{type_name} +\{combo_score}"
-    let fr : Int = if e.kind == @types.enemy_capital { 255 } else { 200 }
-    let fg : Int = if e.kind == @types.enemy_capital { 255 } else { 200 }
+    let fr : Int32 = if e.kind == @types.enemy_capital { 255 } else { 200 }
+    let fg : Int32 = if e.kind == @types.enemy_capital { 255 } else { 200 }
     @types.add_kill_feed(game, feed_text, fr, fg, 100)
 
     // Directional explosion using velocity as impact direction
-    let exp_count : Int = if e.kind == @types.enemy_capital {
+    let exp_count : Int32 = if e.kind == @types.enemy_capital {
       50
     } else if e.kind == @types.enemy_cruiser {
       30
@@ -1034,8 +1034,8 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
     } else {
       15
     }
-    let r : Int = if e.kind == @types.enemy_fighter { 255 } else { 200 }
-    let g : Int = if e.kind == @types.enemy_fighter { 150 } else { 100 }
+    let r : Int32 = if e.kind == @types.enemy_fighter { 255 } else { 200 }
+    let g : Int32 = if e.kind == @types.enemy_fighter { 150 } else { 100 }
     // Use direction from player to enemy as explosion direction
     let exp_dx = e.x - game.player.x
     let exp_dy = e.y - game.player.y
@@ -1055,15 +1055,15 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
     )
 
     // Burning debris with fire trails
-    let debris_count : Int = if e.kind == @types.enemy_capital {
+    let debris_count : Int32 = if e.kind == @types.enemy_capital {
       5
     } else if e.kind == @types.enemy_cruiser {
       4
     } else {
       3
     }
-    let dr : Int = if e.kind == @types.enemy_fighter { 220 } else { 150 }
-    let dg : Int = if e.kind == @types.enemy_fighter { 60 } else { 80 }
+    let dr : Int32 = if e.kind == @types.enemy_fighter { 220 } else { 150 }
+    let dg : Int32 = if e.kind == @types.enemy_fighter { 60 } else { 80 }
     @types.spawn_burning_debris(game, e.x, e.y, e.z, debris_count, dr, dg, 60)
 
     // Shock rings for large enemy deaths
@@ -1172,7 +1172,7 @@ pub fn update_asteroids(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::destroy_asteroid(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::destroy_asteroid(game : @types.Game, idx : Int32) -> Unit {
   let a = game.asteroids[idx]
   a.active = false
   game.score += @types.asteroid_score
@@ -1180,7 +1180,7 @@ fn @types.Game::destroy_asteroid(game : @types.Game, idx : Int) -> Unit {
 
   // Break into smaller asteroids if breakable
   if a.breakable && a.size_tier != @types.asteroid_small {
-    let new_tier : Int = if a.size_tier == @types.asteroid_large {
+    let new_tier : Int32 = if a.size_tier == @types.asteroid_large {
       @types.asteroid_medium
     } else {
       @types.asteroid_small
@@ -1224,7 +1224,7 @@ fn @types.Game::destroy_asteroid(game : @types.Game, idx : Int) -> Unit {
 
 ///|
 /// Applies `damage` to the asteroid at `idx` and destroys it if health reaches zero.
-pub fn damage_asteroid(game : @types.Game, idx : Int, damage : Float) -> Unit {
+pub fn damage_asteroid(game : @types.Game, idx : Int32, damage : Float) -> Unit {
   let a = game.asteroids[idx]
   a.hp -= damage
   if a.hp <= 0.0 {
@@ -1242,7 +1242,7 @@ pub fn damage_asteroid(game : @types.Game, idx : Int, damage : Float) -> Unit {
 /// direction change that makes them much harder to track.
 fn @types.Game::apply_evasion_behavior(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dy : Float,
   dz : Float,
@@ -1317,7 +1317,7 @@ fn @types.Game::apply_evasion_behavior(
 /// opposite side. The roles swap when the flanker gets close enough.
 fn @types.Game::apply_wing_pair_cohesion(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dt : Float,
 ) -> Unit {
   let e = game.enemies[idx]
@@ -1401,7 +1401,10 @@ fn @types.Game::apply_wing_pair_cohesion(
 
 ///|
 /// Adjusts fire rate based on AI difficulty. Higher difficulty fires faster.
-fn difficulty_adjusted_fire_rate(base_rate : Float, difficulty : Int) -> Float {
+fn difficulty_adjusted_fire_rate(
+  base_rate : Float,
+  difficulty : Int32,
+) -> Float {
   let reduction = @types.ai_difficulty_accuracy(difficulty)
   let adjusted : Float = base_rate - base_rate * reduction
   let minimum : Float = base_rate * 0.5

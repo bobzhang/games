@@ -1,15 +1,19 @@
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
 ///|
-pub fn make_grid(width : Int, height : Int, tiles : Array[TileKind]) -> Grid {
+pub fn make_grid(
+  width : Int32,
+  height : Int32,
+  tiles : Array[TileKind],
+) -> Grid {
   { width, height, tiles, }
 }
 
 ///|
-pub fn grid_get(g : Grid, x : Int, y : Int) -> TileKind {
+pub fn grid_get(g : Grid, x : Int32, y : Int32) -> TileKind {
   if x < 0 || x >= g.width || y < 0 || y >= g.height {
     Water // out of bounds treated as impassable
   } else {
@@ -18,19 +22,24 @@ pub fn grid_get(g : Grid, x : Int, y : Int) -> TileKind {
 }
 
 ///|
-pub fn grid_set(g : Grid, x : Int, y : Int, tile : TileKind) -> Unit {
+pub fn grid_set(g : Grid, x : Int32, y : Int32, tile : TileKind) -> Unit {
   if x >= 0 && x < g.width && y >= 0 && y < g.height {
     g.tiles[y * g.width + x] = tile
   }
 }
 
 ///|
-pub fn make_house(x : Int, y : Int, color_id : Int, area : Int) -> House {
+pub fn make_house(
+  x : Int32,
+  y : Int32,
+  color_id : Int32,
+  area : Int32,
+) -> House {
   { pos: vec2i(x, y), color_id, required_area: area, }
 }
 
 ///|
-pub fn make_fence(row : Int, col : Int, orient : Orientation) -> FenceEdge {
+pub fn make_fence(row : Int32, col : Int32, orient : Orientation) -> FenceEdge {
   { row, col, orient, }
 }
 
@@ -85,8 +94,8 @@ pub fn make_level(
   grid : Grid,
   houses : Array[House],
   constraints : LevelConstraint,
-  par_fences : Int,
-  par_length : Int,
+  par_fences : Int32,
+  par_length : Int32,
   tier : Tier,
   name : String,
 ) -> LevelDef {
@@ -99,7 +108,7 @@ pub fn new_level_score() -> LevelScore {
 }
 
 ///|
-pub fn new_constraint_status(idx : Int) -> ConstraintStatus {
+pub fn new_constraint_status(idx : Int32) -> ConstraintStatus {
   {
     house_idx: idx,
     one_house: Unchecked,
@@ -146,7 +155,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_start_idx(t : Tier) -> Int {
+pub fn tier_start_idx(t : Tier) -> Int32 {
   match t {
     Plots => 0
     Districts => tier1_count
@@ -155,7 +164,7 @@ pub fn tier_start_idx(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(t : Tier) -> Int {
+pub fn tier_level_count(t : Tier) -> Int32 {
   match t {
     Plots => tier1_count
     Districts => tier2_count
@@ -234,7 +243,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -243,7 +252,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {

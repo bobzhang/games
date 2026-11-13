@@ -1,12 +1,12 @@
 ///|
 pub(all) struct WeaponStats {
   name : String
-  base_damage : Int
+  base_damage : Int32
   attack_speed : Float
   range : Float
   arc_angle : Float
   knockback : Float
-  combo_count : Int
+  combo_count : Int32
   is_ranged : Bool
   projectile_speed : Float
   crit_bonus : Float
@@ -71,7 +71,7 @@ pub fn get_weapon_stats(kind : @types.WeaponKind) -> WeaponStats {
 }
 
 ///|
-pub fn get_windup_time(kind : @types.WeaponKind, combo : Int) -> Float {
+pub fn get_windup_time(kind : @types.WeaponKind, combo : Int32) -> Float {
   match kind {
     Sword => if combo == 2 { 0.12 } else { 0.08 }
     Daggers => 0.04
@@ -91,7 +91,7 @@ pub fn get_active_time(kind : @types.WeaponKind) -> Float {
 }
 
 ///|
-pub fn get_recovery_time(kind : @types.WeaponKind, combo : Int) -> Float {
+pub fn get_recovery_time(kind : @types.WeaponKind, combo : Int32) -> Float {
   match kind {
     Sword => if combo == 2 { 0.25 } else { 0.15 }
     Daggers => 0.08

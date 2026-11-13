@@ -94,7 +94,7 @@ fn advance_plot(plot : @types.Plot, current_season : @types.Season) -> Unit {
 pub fn harvest_mature(
   grid : Array[Array[@types.Plot]],
   flash : Array[Array[Float]],
-) -> Int {
+) -> Int32 {
   let mut total = 0
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
@@ -134,7 +134,7 @@ pub fn apply_plan(
   grid : Array[Array[@types.Plot]],
   plan : @types.SeasonPlan,
   season : @types.Season,
-) -> Int {
+) -> Int32 {
   let mut planted = 0
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
@@ -154,7 +154,7 @@ pub fn apply_plan(
 pub fn count_state(
   grid : Array[Array[@types.Plot]],
   state : @types.CropState,
-) -> Int {
+) -> Int32 {
   let mut count = 0
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
@@ -168,7 +168,7 @@ pub fn count_state(
 
 ///|
 /// Calculate total potential value of current mature crops
-pub fn total_mature_value(grid : Array[Array[@types.Plot]]) -> Int {
+pub fn total_mature_value(grid : Array[Array[@types.Plot]]) -> Int32 {
   let mut total = 0
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
@@ -189,7 +189,7 @@ pub fn soil_viable(soil : @types.Soil) -> Bool {
 
 ///|
 /// Count plots with viable soil
-pub fn count_viable_plots(grid : Array[Array[@types.Plot]]) -> Int {
+pub fn count_viable_plots(grid : Array[Array[@types.Plot]]) -> Int32 {
   let mut count = 0
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
@@ -203,7 +203,7 @@ pub fn count_viable_plots(grid : Array[Array[@types.Plot]]) -> Int {
 
 ///|
 /// Average soil quality across the grid
-pub fn average_soil_quality(grid : Array[Array[@types.Plot]]) -> Int {
+pub fn average_soil_quality(grid : Array[Array[@types.Plot]]) -> Int32 {
   let mut total = 0
   let count = @types.grid_rows * @types.grid_cols
   for r in 0..<@types.grid_rows {
@@ -220,7 +220,7 @@ pub fn simulate_year(
   grid : Array[Array[@types.Plot]],
   plans : Array[@types.SeasonPlan],
   flash : Array[Array[Float]],
-) -> Int {
+) -> Int32 {
   let mut total = 0
   for s in 0..<4 {
     let season = @types.season_from_index(s)
@@ -241,7 +241,7 @@ pub fn simulate_year(
 /// Reset grid to initial state with given soil
 pub fn reset_grid(
   grid : Array[Array[@types.Plot]],
-  soil_data : Array[Array[(Int, Int, Int)]],
+  soil_data : Array[Array[(Int32, Int32, Int32)]],
 ) -> Unit {
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {

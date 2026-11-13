@@ -12,7 +12,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 
 ///|
 /// Advances the xorshift RNG and returns the next non-negative random integer.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -26,7 +26,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer in the inclusive `[low, high]` range.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -49,19 +49,19 @@ pub fn rand_dir(game : Game) -> Dir {
 
 ///|
 /// Converts tile coordinates to a linear map index.
-pub fn tile_index(tx : Int, ty : Int) -> Int {
+pub fn tile_index(tx : Int32, ty : Int32) -> Int32 {
   ty * map_tiles_w + tx
 }
 
 ///|
 /// Returns whether the tile coordinates are within the map bounds.
-pub fn in_tile_bounds(tx : Int, ty : Int) -> Bool {
+pub fn in_tile_bounds(tx : Int32, ty : Int32) -> Bool {
   tx >= 0 && ty >= 0 && tx < map_tiles_w && ty < map_tiles_h
 }
 
 ///|
 /// Returns the tile type at the given tile coordinates, or steel if out of bounds.
-pub fn Game::get_tile(game : Game, tx : Int, ty : Int) -> Tile {
+pub fn Game::get_tile(game : Game, tx : Int32, ty : Int32) -> Tile {
   if in_tile_bounds(tx, ty) {
     game.map_tiles[tile_index(tx, ty)]
   } else {
@@ -73,10 +73,10 @@ pub fn Game::get_tile(game : Game, tx : Int, ty : Int) -> Tile {
 /// Sets the tile type and hit points at the given tile coordinates.
 pub fn Game::set_tile(
   game : Game,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
   tile : Tile,
-  hp : Int,
+  hp : Int32,
 ) -> Unit {
   if in_tile_bounds(tx, ty) {
     let idx = tile_index(tx, ty)
@@ -87,49 +87,49 @@ pub fn Game::set_tile(
 
 ///|
 /// Converts a world X coordinate to the corresponding tile column.
-pub fn world_x_to_tile(x : Float) -> Int {
+pub fn world_x_to_tile(x : Float) -> Int32 {
   (x / Float::from_int(tile_size)).to_int().clamp(min=0, max=map_tiles_w - 1)
 }
 
 ///|
 /// Converts a world Y coordinate to the corresponding tile row.
-pub fn world_y_to_tile(y : Float) -> Int {
+pub fn world_y_to_tile(y : Float) -> Int32 {
   (y / Float::from_int(tile_size)).to_int().clamp(min=0, max=map_tiles_h - 1)
 }
 
 ///|
 /// Returns the world X center of a tile column.
-pub fn tile_center_x(tx : Int) -> Float {
+pub fn tile_center_x(tx : Int32) -> Float {
   Float::from_int(tx * tile_size + tile_size / 2)
 }
 
 ///|
 /// Returns the world Y center of a tile row.
-pub fn tile_center_y(ty : Int) -> Float {
+pub fn tile_center_y(ty : Int32) -> Float {
   Float::from_int(ty * tile_size + tile_size / 2)
 }
 
 ///|
 /// Converts a world X coordinate to a screen X coordinate with camera shake.
-pub fn world_to_screen_x(x : Float, shake_x : Float) -> Int {
+pub fn world_to_screen_x(x : Float, shake_x : Float) -> Int32 {
   map_offset_x + x.to_int() + shake_x.to_int()
 }
 
 ///|
 /// Converts a world Y coordinate to a screen Y coordinate with camera shake.
-pub fn world_to_screen_y(y : Float, shake_y : Float) -> Int {
+pub fn world_to_screen_y(y : Float, shake_y : Float) -> Int32 {
   map_offset_y + y.to_int() + shake_y.to_int()
 }
 
 ///|
 /// Converts a tile column to a screen X coordinate with camera shake.
-pub fn tile_to_screen_x(tx : Int, shake_x : Float) -> Int {
+pub fn tile_to_screen_x(tx : Int32, shake_x : Float) -> Int32 {
   map_offset_x + tx * tile_size + shake_x.to_int()
 }
 
 ///|
 /// Converts a tile row to a screen Y coordinate with camera shake.
-pub fn tile_to_screen_y(ty : Int, shake_y : Float) -> Int {
+pub fn tile_to_screen_y(ty : Int32, shake_y : Float) -> Int32 {
   map_offset_y + ty * tile_size + shake_y.to_int()
 }
 
@@ -199,7 +199,7 @@ pub fn is_tile_solid_for_bullet(tile : Tile) -> Bool {
 
 ///|
 /// Returns the score value awarded for destroying an enemy of the given `kind`.
-pub fn enemy_score(kind : EnemyKind) -> Int {
+pub fn enemy_score(kind : EnemyKind) -> Int32 {
   match kind {
     Fast => 200
     Heavy => 400
@@ -221,7 +221,7 @@ pub fn enemy_color(kind : EnemyKind) -> @raylib.Color {
 
 ///|
 /// Returns the team identifier for the given player `index`.
-pub fn team_of_player(index : Int) -> Team {
+pub fn team_of_player(index : Int32) -> Team {
   if index == 0 {
     Player1
   } else {
@@ -233,9 +233,9 @@ pub fn team_of_player(index : Int) -> Team {
 /// Draws text horizontally centered at `center_x` with a given `y` position.
 pub fn draw_centered_text(
   text : String,
-  center_x : Int,
-  y : Int,
-  font_size : Int,
+  center_x : Int32,
+  y : Int32,
+  font_size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, font_size)
@@ -246,9 +246,9 @@ pub fn draw_centered_text(
 /// Draws text with a black drop shadow offset by two pixels.
 pub fn draw_shadow_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   @draw.draw_text(text, x + 2, y + 2, size, @raylib.black)

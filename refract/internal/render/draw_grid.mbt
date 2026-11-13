@@ -64,9 +64,9 @@ fn draw_grid(game : @types.Game) -> Unit {
 
 ///|
 fn draw_component(
-  px : Int,
-  py : Int,
-  cs : Int,
+  px : Int32,
+  py : Int32,
+  cs : Int32,
   kind : @types.ComponentKind,
   dir : @types.Direction,
   filter_color : @types.FilterColor?,
@@ -227,9 +227,9 @@ fn draw_component(
 
 ///|
 fn draw_direction_arrow(
-  cx : Int,
-  cy : Int,
-  half : Int,
+  cx : Int32,
+  cy : Int32,
+  half : Int32,
   dir : @types.Direction,
   color : @raylib.Color,
 ) -> Unit {

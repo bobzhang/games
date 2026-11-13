@@ -107,8 +107,8 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
     game.cycle_hint()
   }
 
-  let mut dx : Int = 0
-  let mut dy : Int = 0
+  let mut dx : Int32 = 0
+  let mut dy : Int32 = 0
 
   if @raylib.is_key_down(@raylib.KeyA) || @raylib.is_key_down(@raylib.KeyLeft) {
     dx = dx - 1

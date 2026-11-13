@@ -112,7 +112,7 @@ fn draw_texture_centered_facing(
   w : Float,
   h : Float,
   rotation : Float,
-  facing : Int,
+  facing : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   let source_w = Float::from_int(texture.width())
@@ -169,7 +169,7 @@ fn draw_texture_cover(
 
 ///|
 /// Returns the generated drone texture associated with the gameplay drone kind.
-fn drone_texture(art : GameArt, kind : Int) -> @raylib.Texture {
+fn drone_texture(art : GameArt, kind : Int32) -> @raylib.Texture {
   match kind {
     1 => art.drone_hunter_sprite
     2 => art.drone_brute_sprite

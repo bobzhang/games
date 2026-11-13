@@ -2,9 +2,9 @@
 /// Returns true if any cell within Manhattan radius `r` of `(x, y)` is occupied.
 fn @types.Game::has_neighbor(
   game : @types.Game,
-  x : Int,
-  y : Int,
-  r : Int,
+  x : Int32,
+  y : Int32,
+  r : Int32,
 ) -> Bool {
   for yy in (y - r)..<=(y + r) {
     for xx in (x - r)..<=(x + r) {
@@ -25,15 +25,15 @@ fn @types.Game::has_neighbor(
 /// Counts consecutive cells belonging to `p` from `(x, y)` in direction `(dx, dy)` and returns `(count, 1)` if the next cell is empty or `(count, 0)` otherwise.
 fn @types.Game::count_chain_and_open(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
-  dx : Int,
-  dy : Int,
-) -> (Int, Int) {
-  let mut cx : Int = x + dx
-  let mut cy : Int = y + dy
-  let mut c : Int = 0
+  dx : Int32,
+  dy : Int32,
+) -> (Int32, Int32) {
+  let mut cx : Int32 = x + dx
+  let mut cy : Int32 = y + dy
+  let mut c : Int32 = 0
 
   while @types.in_board(cx, cy) && @types.cell_at(game, cx, cy) == p {
     c = c + 1
@@ -41,7 +41,7 @@ fn @types.Game::count_chain_and_open(
     cy = cy + dy
   }
 
-  let open : Int = if @types.in_board(cx, cy) &&
+  let open : Int32 = if @types.in_board(cx, cy) &&
     @types.cell_at(game, cx, cy) == Empty {
     1
   } else {
@@ -53,7 +53,7 @@ fn @types.Game::count_chain_and_open(
 
 ///|
 /// Returns a threat score for a line segment of length `total` with `open` open ends, using predefined thresholds for four, three, two, and one in a row.
-fn line_pattern_score(total : Int, open : Int) -> Int {
+fn line_pattern_score(total : Int32, open : Int32) -> Int32 {
   if total >= 4 {
     220000
   } else if total == 3 && open == 2 {
@@ -77,17 +77,17 @@ fn line_pattern_score(total : Int, open : Int) -> Int {
 /// Evaluates the threat score for player `p` along one axis direction `(dx, dy)` from `(x, y)` by combining counts on both sides with `line_pattern_score`.
 fn @types.Game::score_dir(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
-  dx : Int,
-  dy : Int,
-) -> Int {
+  dx : Int32,
+  dy : Int32,
+) -> Int32 {
   let left = game.count_chain_and_open(x, y, p, -dx, -dy)
   let right = game.count_chain_and_open(x, y, p, dx, dy)
 
-  let total : Int = left.0 + right.0
-  let open : Int = left.1 + right.1
+  let total : Int32 = left.0 + right.0
+  let open : Int32 = left.1 + right.1
 
   line_pattern_score(total, open) + total * 11 + open * 5
 }
@@ -96,22 +96,22 @@ fn @types.Game::score_dir(
 /// Returns a heuristic placement score for player `p` at empty cell `(x, y)`, summing directional threat scores and a center-proximity bonus; returns -1 if the cell is occupied.
 fn @types.Game::score_cell_for(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
-) -> Int {
+) -> Int32 {
   if @types.cell_at(game, x, y) != Empty {
     return -1
   }
 
-  let mut score : Int = 0
+  let mut score : Int32 = 0
   score = score + game.score_dir(x, y, p, 1, 0)
   score = score + game.score_dir(x, y, p, 0, 1)
   score = score + game.score_dir(x, y, p, 1, 1)
   score = score + game.score_dir(x, y, p, 1, -1)
 
-  let cx : Int = @types.board_n / 2
-  let dist : Int = Float::from_int(x - cx).abs().to_int() +
+  let cx : Int32 = @types.board_n / 2
+  let dist : Int32 = Float::from_int(x - cx).abs().to_int() +
     Float::from_int(y - cx).abs().to_int()
   score = score + (0).max(50 - dist * 3)
 
@@ -122,8 +122,8 @@ fn @types.Game::score_cell_for(
 /// Returns true if placing player `p` at `(x, y)` would immediately complete a five-in-a-row.
 fn @types.Game::would_win_if_place(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   p : @types.Player,
 ) -> Bool {
   if @types.cell_at(game, x, y) != Empty {
@@ -142,20 +142,20 @@ fn @types.Game::best_move_for(
   game : @types.Game,
   p : @types.Player,
   opp : @types.Player,
-) -> (Bool, Int, Int, Int) {
+) -> (Bool, Int32, Int32, Int32) {
   if game.move_count == 0 {
     return (true, @types.board_n / 2, @types.board_n / 2, 100)
   }
 
-  let total_cells : Int = @types.board_n * @types.board_n
+  let total_cells : Int32 = @types.board_n * @types.board_n
   let (found, best_score, best_x, best_y) = for
     idx in 0..<total_cells
     found = false,
     best_score = -1,
     best_x = @types.board_n / 2,
     best_y = @types.board_n / 2 {
-    let y : Int = idx / @types.board_n
-    let x : Int = idx % @types.board_n
+    let y : Int32 = idx / @types.board_n
+    let x : Int32 = idx % @types.board_n
     if @types.cell_at(game, x, y) != Empty {
       continue
     }
@@ -164,15 +164,15 @@ fn @types.Game::best_move_for(
       continue
     }
 
-    let mut s : Int = 0
+    let mut s : Int32 = 0
 
     if game.would_win_if_place(x, y, p) {
       s = 1000000
     } else if game.would_win_if_place(x, y, opp) {
       s = 760000
     } else {
-      let off : Int = game.score_cell_for(x, y, p)
-      let def : Int = game.score_cell_for(x, y, opp)
+      let off : Int32 = game.score_cell_for(x, y, p)
+      let def : Int32 = game.score_cell_for(x, y, opp)
       s = off + def * 11 / 10
     }
 
@@ -215,8 +215,8 @@ fn @types.Game::ai_step(game : @types.Game) -> Unit {
     return
   }
 
-  let x : Int = mv.1
-  let y : Int = mv.2
+  let x : Int32 = mv.1
+  let y : Int32 = mv.2
   ignore(game.place_stone(x, y, AI))
 
   if game.state == Play {

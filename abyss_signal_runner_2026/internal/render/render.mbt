@@ -2,8 +2,8 @@
 /// Draws `text` horizontally centered on screen at the given y coordinate.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -14,9 +14,9 @@ fn draw_center_text(
 /// Draws `text` right-aligned so its rightmost character ends at x.
 fn draw_right_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -162,10 +162,10 @@ fn draw_title_art(title_art : @raylib.Texture, tint : @raylib.Color) -> Unit {
 ///|
 /// Draws a labeled progress bar filled proportionally to `value` out of 100, with a dark background, colored fill, and a border outline.
 fn draw_value_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   col : @raylib.Color,
   label : String,

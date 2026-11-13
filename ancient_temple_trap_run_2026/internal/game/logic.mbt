@@ -179,7 +179,7 @@ fn stage_layout_three() -> @types.StageLayout {
 
 ///|
 /// Returns the stage layout for the given zero-based index, defaulting to layout three for any out-of-range value.
-fn stage_layout(index : Int) -> @types.StageLayout {
+fn stage_layout(index : Int32) -> @types.StageLayout {
   match index {
     0 => stage_layout_one()
     1 => stage_layout_two()
@@ -192,7 +192,7 @@ fn stage_layout(index : Int) -> @types.StageLayout {
 fn @types.Game::apply_layout(
   game : @types.Game,
   layout : @types.StageLayout,
-  stage_index : Int,
+  stage_index : Int32,
 ) -> Unit {
   game.stage_index = stage_index
   game.relics = layout.relics
@@ -218,8 +218,8 @@ fn @types.Game::apply_layout(
 
 ///|
 /// Clamps the requested stage index to a valid range, retrieves the corresponding layout, and applies it to the game state.
-fn @types.Game::load_stage(game : @types.Game, stage_index : Int) -> Unit {
-  let i : Int = if stage_index < 0 {
+fn @types.Game::load_stage(game : @types.Game, stage_index : Int32) -> Unit {
+  let i : Int32 = if stage_index < 0 {
     0
   } else if stage_index >= game.stage_count {
     game.stage_count - 1

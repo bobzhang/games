@@ -416,7 +416,7 @@ pub fn start_earthquake(
 /// Fires an impact projectile at the rightmost body in the tower.
 pub fn fire_impact(world : @types.World, force : Float) -> Unit {
   let mut best_x : Float = -1.0
-  let mut best_idx : Int = -1
+  let mut best_idx : Int32 = -1
   for i, body in world.bodies {
     if body.active && !body.broken {
       // Find the tallest body (lowest y means highest)
@@ -450,7 +450,7 @@ pub fn measure_tower_height(world : @types.World) -> Float {
 
 ///|
 /// Counts how many active, non-broken bodies remain.
-pub fn count_active_bodies(world : @types.World) -> Int {
+pub fn count_active_bodies(world : @types.World) -> Int32 {
   let mut count = 0
   for body in world.bodies {
     if body.active && !body.broken {
@@ -462,7 +462,7 @@ pub fn count_active_bodies(world : @types.World) -> Int {
 
 ///|
 /// Counts how many broken bodies exist.
-pub fn count_broken_bodies(world : @types.World) -> Int {
+pub fn count_broken_bodies(world : @types.World) -> Int32 {
   let mut count = 0
   for body in world.bodies {
     if body.broken {
@@ -522,7 +522,7 @@ pub fn add_body(
   x : Float,
   y : Float,
   angle : Float,
-) -> Int {
+) -> Int32 {
   let id = world.bodies.length()
   let body = @types.new_body(id, kind, material, x, y, angle)
   world.bodies.push(body)
@@ -531,7 +531,7 @@ pub fn add_body(
 
 ///|
 /// Tries to auto-create joints between the new body and nearby bodies.
-pub fn auto_join(world : @types.World, new_id : Int) -> Unit {
+pub fn auto_join(world : @types.World, new_id : Int32) -> Unit {
   let new_body = world.bodies[new_id]
   let radius = @types.auto_joint_radius
   for body in world.bodies {
@@ -566,7 +566,7 @@ pub fn auto_join(world : @types.World, new_id : Int) -> Unit {
 
 ///|
 /// Finds a body by id.
-pub fn find_body(world : @types.World, id : Int) -> @types.Body? {
+pub fn find_body(world : @types.World, id : Int32) -> @types.Body? {
   for body in world.bodies {
     if body.id == id {
       return Some(body)

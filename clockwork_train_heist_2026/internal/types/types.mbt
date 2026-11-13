@@ -1,55 +1,60 @@
 ///|
 /// High-level flow state for a train heist run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Result
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Board tile classification used for movement and collision.
+#derive(Eq)
 pub(all) enum TileKind {
   Wall
   Floor
   Door
   Exit
-} derive(Eq)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
 
 ///|
 /// AI behavior mode for guard updates.
+#derive(Eq)
 pub(all) enum GuardMode {
   Patrol
   Hunt
   Stunned
-} derive(Eq)
+}
 
 ///|
 pub extend GuardMode with Eq::{not_equal, equal}
 
 ///|
 /// Loot category used for scoring and progression.
+#derive(Eq)
 pub(all) enum LootKind {
   Blueprint
   Keycard
   Gold
-} derive(Eq)
+}
 
 ///|
 pub extend LootKind with Eq::{not_equal, equal}
 
 ///|
 /// Particle effect category for rendering.
+#derive(Eq)
 pub(all) enum ParticleKind {
   Spark
   Glitter
   Smoke
-} derive(Eq)
+}
 
 ///|
 pub extend ParticleKind with Eq::{not_equal, equal}
@@ -57,12 +62,12 @@ pub extend ParticleKind with Eq::{not_equal, equal}
 ///|
 /// Grid actor state with interpolation data for smooth movement.
 pub(all) struct Actor {
-  mut x : Int
-  mut y : Int
-  mut from_x : Int
-  mut from_y : Int
-  mut to_x : Int
-  mut to_y : Int
+  mut x : Int32
+  mut y : Int32
+  mut from_x : Int32
+  mut from_y : Int32
+  mut to_x : Int32
+  mut to_y : Int32
   mut fx : Float
   mut fy : Float
   mut t : Float
@@ -77,31 +82,31 @@ pub(all) struct Guard {
   mut mode : GuardMode
   mut move_cd : Float
   mut stun_t : Float
-  mut dir_x : Int
-  mut dir_y : Int
-  mut patrol_min : Int
-  mut patrol_max : Int
-  mut seed : Int
+  mut dir_x : Int32
+  mut dir_y : Int32
+  mut patrol_min : Int32
+  mut patrol_max : Int32
+  mut seed : Int32
   mut alert_t : Float
-  mut color_id : Int
+  mut color_id : Int32
 }
 
 ///|
 /// Collectible loot entity placed on the map.
 pub(all) struct Loot {
   mut active : Bool
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
   mut kind : LootKind
-  mut value : Int
+  mut value : Int32
 }
 
 ///|
 /// Smoke cloud entity used for stealth and stun interactions.
 pub(all) struct Smoke {
   mut active : Bool
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
   mut t : Float
 }
 
@@ -155,16 +160,16 @@ pub(all) struct Game {
   /// Remaining lives for the current run. Starts at 3.
   /// Decremented when a non-stunned guard catches the player.
   /// Reaching 0 ends the run as a loss.
-  mut lives : Int
+  mut lives : Int32
   /// Accumulated score for the current run, in points.
   /// Increased by collecting loot, stunning guards, and escaping.
-  mut score : Int
+  mut score : Int32
   /// Highest score achieved across all runs in this session.
   /// Updated at the end of each run if `score` exceeds it.
-  mut best_score : Int
+  mut best_score : Int32
   /// Number of loot items the player has collected this run.
   /// When it reaches `loot_need` (6), the exit is unlocked.
-  mut loot_taken : Int
+  mut loot_taken : Int32
   /// Whether the escape exit tile is passable.
   /// Set to `true` once `loot_taken >= loot_need`; otherwise the
   /// Exit tile blocks movement like a wall.
@@ -178,10 +183,10 @@ pub(all) struct Game {
 
   /// Requested horizontal move direction from input: -1, 0, or 1.
   /// Written by the input system each frame; read by `try_move_player`.
-  mut req_dx : Int
+  mut req_dx : Int32
   /// Requested vertical move direction from input: -1, 0, or 1.
   /// Written by the input system each frame; read by `try_move_player`.
-  mut req_dy : Int
+  mut req_dy : Int32
   /// Whether the action key/button is currently held down this frame.
   /// Used together with `action_pressed` to detect rising edges.
   mut action_down : Bool
@@ -230,7 +235,7 @@ pub(all) struct Game {
   /// Index of the last hint shown, cycling 0..3.
   /// Pressing H or the hint touch button advances this and shows
   /// the corresponding hint text via `hint_text(hint_i)`.
-  mut hint_i : Int
+  mut hint_i : Int32
 
   // ──── Run outcome ────
 
@@ -258,7 +263,7 @@ pub(all) struct Game {
   /// Number of active touch points this frame (0 on desktop).
   /// `pointer_on_rect` iterates `0..<touch_count` to check each touch
   /// against UI button rectangles.
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|

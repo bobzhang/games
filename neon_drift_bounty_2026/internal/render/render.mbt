@@ -2,8 +2,8 @@
 /// Draws text horizontally centered on the screen at the given Y position, font size, and color.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -14,9 +14,9 @@ fn draw_center_text(
 /// Draws text right-aligned so that its right edge is at `x`.
 fn draw_right_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -26,10 +26,10 @@ fn draw_right_text(
 ///|
 /// Draws a labeled progress bar at `(x, y)` showing `value / maxv` filled with `col`, with a dark background and outline.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   maxv : Float,
   label : String,
@@ -68,7 +68,7 @@ fn draw_bar(
 
 ///|
 /// Returns a copy of color `c` with its alpha channel replaced by the clamped value `a`.
-fn alpha_color(c : @raylib.Color, a : Int) -> @raylib.Color {
+fn alpha_color(c : @raylib.Color, a : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),

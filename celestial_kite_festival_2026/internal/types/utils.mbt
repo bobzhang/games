@@ -53,13 +53,13 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
 /// Returns a computed helper value for chance.
-pub fn chance(pct : Int) -> Bool {
+pub fn chance(pct : Int32) -> Bool {
   randi(0, 99) < pct
 }
 
@@ -90,7 +90,7 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   rx : Float,
   ry : Float,
   rw : Float,
@@ -286,7 +286,7 @@ pub fn kite_anchor_y() -> Float {
 
 ///|
 /// Returns the configured UI or gameplay color for a col.
-pub fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
+pub fn a_col(c : @raylib.Color, a : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),

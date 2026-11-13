@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,12 +23,13 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Base {
   A
   T
   G
   C
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Base with Eq::{not_equal, equal}
@@ -44,6 +46,7 @@ pub impl Show for Base with fn output(self, logger) {
 pub extend Base with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Trait {
   Start
   Stop
@@ -56,7 +59,7 @@ pub(all) enum Trait {
   Armor
   Vision
   Neutral
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Trait with Eq::{not_equal, equal}
@@ -73,13 +76,14 @@ pub impl Show for Trait with fn output(self, logger) {
 pub extend Trait with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum OpKind {
   Cut
   Insert
   Duplicate
   Invert
   Delete
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend OpKind with Eq::{not_equal, equal}
@@ -96,11 +100,12 @@ pub impl Show for OpKind with fn output(self, logger) {
 pub extend OpKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Editing
   Verified
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -117,11 +122,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   LabBasics
   GeneEditing
   Mastery
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

@@ -23,7 +23,7 @@ fn @types.Game::spawn_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for particle in game.particles {
     if particle.active {
@@ -48,8 +48,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.spawn_particle(
@@ -192,7 +192,7 @@ fn @types.Game::spawn_obstacle(game : @types.Game) -> Bool {
       Float::from_int(game.level) * 4.0
     obstacle.gap_h = @types.clampf(obstacle.gap_h, 170.0, 340.0)
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     obstacle.kind = if roll < 62 {
       Gate
     } else if roll < 86 {
@@ -225,7 +225,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
       @types.world_bottom() - 120.0,
     )
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 56 {
       Score
     } else if roll < 78 {
@@ -246,7 +246,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
 
 ///|
 /// Awards score and increments the combo counter when the player's position has fully passed obstacle `i` for the first time.
-fn @types.Game::score_obstacle(game : @types.Game, i : Int) -> Unit {
+fn @types.Game::score_obstacle(game : @types.Game, i : Int32) -> Unit {
   if game.obstacles[i].scored {
     return
   }
@@ -357,7 +357,7 @@ fn @types.Game::damage_player(game : @types.Game, msg : String) -> Unit {
 
 ///|
 /// Deactivates pickup `i`, emits a collection burst, and applies its effect: score bonus, boost refill, shield activation, or extra life.
-fn @types.Game::collect_pickup(game : @types.Game, i : Int) -> Unit {
+fn @types.Game::collect_pickup(game : @types.Game, i : Int32) -> Unit {
   if !game.pickups[i].active {
     return
   }
@@ -534,7 +534,7 @@ fn @types.Game::update_spawns(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Recalculates the current level from the score, updates `game.level`, and shows a level-up message when the level changes.
 fn @types.Game::check_level_up(game : @types.Game) -> Unit {
-  let lv : Int = (1 + game.score / 520).clamp(min=1, max=10)
+  let lv : Int32 = (1 + game.score / 520).clamp(min=1, max=10)
   if lv != game.level {
     game.level = lv
     @types.set_msg(game, "Level \{game.level}", 0.8)

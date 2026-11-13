@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   LevelSelect
   Playing
   Won
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,13 +23,14 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileKind {
   Empty
   Mountain
   Transmitter
   Receiver
   Tower
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -45,12 +47,13 @@ pub impl Show for TileKind with fn output(self, logger) {
 pub extend TileKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
@@ -67,12 +70,13 @@ pub impl Show for Direction with fn output(self, logger) {
 pub extend Direction with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum StarRating {
   None
   One
   Two
   Three
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend StarRating with Eq::{not_equal, equal}

@@ -1,30 +1,30 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate used by the simulation loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Maximum world objects allocated in the object pool.
-pub let max_objs : Int = 420
+pub let max_objs : Int32 = 420
 
 ///|
 /// Maximum particles allocated in the particle pool.
-pub let max_particles : Int = 560
+pub let max_particles : Int32 = 560
 
 ///|
 /// Maximum sonar ripple effects allocated.
-pub let max_ripples : Int = 64
+pub let max_ripples : Int32 = 64
 
 ///|
 /// Maximum trail segments allocated for movement streaks.
-pub let max_trails : Int = 180
+pub let max_trails : Int32 = 180
 
 ///|
 /// Collision radius of the player submarine.

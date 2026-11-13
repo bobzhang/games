@@ -1,6 +1,6 @@
 ///|
 /// Attempts to purchase an upgrade. Returns true if successful.
-pub fn purchase_upgrade(game : @types.Game, index : Int) -> Bool {
+pub fn purchase_upgrade(game : @types.Game, index : Int32) -> Bool {
   if index < 0 || index >= game.upgrades.length() {
     return false
   }
@@ -116,7 +116,7 @@ pub fn apply_joint_upgrades(game : @types.Game, joint : @types.Joint) -> Unit {
 
 ///|
 /// Returns the number of unpurchased upgrades.
-pub fn available_upgrade_count(game : @types.Game) -> Int {
+pub fn available_upgrade_count(game : @types.Game) -> Int32 {
   let mut count = 0
   for upgrade in game.upgrades {
     if !upgrade.purchased {
@@ -128,7 +128,7 @@ pub fn available_upgrade_count(game : @types.Game) -> Int {
 
 ///|
 /// Returns the total number of purchased upgrades.
-pub fn purchased_upgrade_count(game : @types.Game) -> Int {
+pub fn purchased_upgrade_count(game : @types.Game) -> Int32 {
   let mut count = 0
   for upgrade in game.upgrades {
     if upgrade.purchased {
@@ -142,7 +142,7 @@ pub fn purchased_upgrade_count(game : @types.Game) -> Int {
 /// Returns upgrade info formatted for display.
 pub fn upgrade_display_info(
   upgrade : @types.Upgrade,
-  total_score : Int,
+  total_score : Int32,
 ) -> (String, String, Bool) {
   let name_with_cost = upgrade.name + " [" + upgrade.cost.to_string() + "]"
   let can_buy = !upgrade.purchased && total_score >= upgrade.cost

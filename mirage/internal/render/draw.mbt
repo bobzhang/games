@@ -127,9 +127,9 @@ fn draw_tier_section(
   game : @types.Game,
   _tier : @types.Tier,
   label : String,
-  start_idx : Int,
-  count : Int,
-  y_offset : Int,
+  start_idx : Int32,
+  count : Int32,
+  y_offset : Int32,
 ) -> Unit {
   let w = @types.screen_width
   // Tier label
@@ -191,7 +191,7 @@ fn draw_tier_section(
 }
 
 ///|
-fn draw_stars_small(x : Int, y : Int, count : Int) -> Unit {
+fn draw_stars_small(x : Int32, y : Int32, count : Int32) -> Unit {
   for i in 0..<3 {
     let color = if i < count {
       @types.color_star_filled
@@ -332,15 +332,15 @@ fn draw_merged_view(game : @types.Game) -> Unit {
 }
 
 ///|
-fn alpha_f(base : Int, mult : Float) -> Int {
+fn alpha_f(base : Int32, mult : Float) -> Int32 {
   (Float::from_int(base) * mult).to_int()
 }
 
 ///|
 fn draw_tile(
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   tile : @types.Tile,
   is_fg : Bool,
   alpha_mult : Float,
@@ -600,7 +600,7 @@ fn draw_level_complete(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars_large(x : Int, y : Int, count : Int) -> Unit {
+fn draw_stars_large(x : Int32, y : Int32, count : Int32) -> Unit {
   for i in 0..<3 {
     let color = if i < count {
       @types.color_star_filled

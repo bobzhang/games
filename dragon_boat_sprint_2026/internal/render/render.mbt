@@ -44,7 +44,7 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
   )
 
   for i in 0..<15 {
-    let y : Int = i * 72
+    let y : Int32 = i * 72
     @raylib.draw_rectangle(
       0,
       y,
@@ -83,7 +83,7 @@ fn @types.Game::draw_river_surface(game : @types.Game) -> Unit {
 
   for i in 0..<5 {
     let lane : Float = -1.0 + Float::from_int(i) * 0.5
-    let x : Int = lane_to_x(lane).to_int()
+    let x : Int32 = lane_to_x(lane).to_int()
     @raylib.draw_line(
       x,
       @types.river_y + 8,
@@ -94,7 +94,7 @@ fn @types.Game::draw_river_surface(game : @types.Game) -> Unit {
   }
 
   for i in 0..<22 {
-    let y_wave : Int = @types.river_y +
+    let y_wave : Int32 = @types.river_y +
       14 +
       i * 40 +
       (@math.sinf(game.ui_t * 1.3 + Float::from_int(i) * 0.45) * 12.0).to_int()
@@ -119,8 +119,8 @@ fn @types.Game::draw_checkpoint_lines(game : @types.Game) -> Unit {
       continue
     }
 
-    let y : Int = game.world_y(dist).to_int()
-    let alpha : Int = (Float::from_int(220) - rel.abs() * 0.08)
+    let y : Int32 = game.world_y(dist).to_int()
+    let alpha : Int32 = (Float::from_int(220) - rel.abs() * 0.08)
       .to_int()
       .clamp(min=50, max=220)
 
@@ -156,15 +156,15 @@ fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
       continue
     }
 
-    let x : Int = lane_to_x(
+    let x : Int32 = lane_to_x(
       hazard.lane + @math.sinf(game.ui_t * 0.9 + hazard.phase) * 0.03,
     ).to_int()
 
-    let y : Int = game.world_y(hazard.dist).to_int()
+    let y : Int32 = game.world_y(hazard.dist).to_int()
 
     if hazard.kind == @types.hazard_debris {
-      let w : Int = (hazard.size * 1.7).to_int()
-      let h : Int = (hazard.size * 0.8).to_int()
+      let w : Int32 = (hazard.size * 1.7).to_int()
+      let h : Int32 = (hazard.size * 0.8).to_int()
 
       if !draw_debris_art(x, y, w, h) {
         @raylib.draw_rectangle(
@@ -224,8 +224,8 @@ fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
 ///|
 /// Draws a scaled dragon boat hull with paddler strokes and an optional mast flag.
 fn draw_boat(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   scale : Float,
   hull : @raylib.Color,
   trim : @raylib.Color,
@@ -239,8 +239,8 @@ fn draw_boat(
   @raylib.draw_circle(x - (scale * 54.0).to_int(), y, scale * 18.0, hull)
   @raylib.draw_circle(x + (scale * 54.0).to_int(), y, scale * 18.0, hull)
 
-  let deck_w : Int = (scale * 112.0).to_int()
-  let deck_h : Int = (scale * 16.0).to_int()
+  let deck_w : Int32 = (scale * 112.0).to_int()
+  let deck_h : Int32 = (scale * 16.0).to_int()
   @raylib.draw_rectangle(
     x - deck_w / 2,
     y - deck_h / 2,
@@ -256,7 +256,7 @@ fn draw_boat(
 
   for i in 0..<8 {
     let t : Float = Float::from_int(i) / 7.0
-    let px : Int = (Float::from_int(x) - scale * 44.0 + t * 88.0 * scale).to_int()
+    let px : Int32 = (Float::from_int(x) - scale * 44.0 + t * 88.0 * scale).to_int()
 
     @raylib.draw_line(
       px,
@@ -268,8 +268,8 @@ fn draw_boat(
   }
 
   if show_flag {
-    let mast_x : Int = x - (scale * 8.0).to_int()
-    let mast_top : Int = y - (scale * 48.0).to_int()
+    let mast_x : Int32 = x - (scale * 8.0).to_int()
+    let mast_top : Int32 = y - (scale * 48.0).to_int()
 
     @raylib.draw_line(
       mast_x,
@@ -296,7 +296,7 @@ fn draw_boat(
 
 ///|
 /// Returns a unique hull color for a rival boat based on its id.
-fn rival_hull_color(id : Int) -> @raylib.Color {
+fn rival_hull_color(id : Int32) -> @raylib.Color {
   if id == 1 {
     @raylib.Color::new(230, 126, 98, 246)
   } else if id == 2 {
@@ -321,8 +321,8 @@ fn @types.Game::draw_rivals(game : @types.Game) -> Unit {
       continue
     }
 
-    let y : Int = game.world_y(rival.dist).to_int()
-    let x : Int = lane_to_x(rival.lane).to_int()
+    let y : Int32 = game.world_y(rival.dist).to_int()
+    let x : Int32 = lane_to_x(rival.lane).to_int()
 
     let scale : Float = @types.clampf(
       0.72 + rel / @types.visible_distance * 0.42,
@@ -346,8 +346,8 @@ fn @types.Game::draw_rivals(game : @types.Game) -> Unit {
 ///|
 /// Draws the player's boat with burst and stabilise tints, a flag, and a rhythm-pulse ring.
 fn @types.Game::draw_player_boat(game : @types.Game) -> Unit {
-  let x : Int = lane_to_x(game.lane).to_int()
-  let y : Int = @types.boat_y
+  let x : Int32 = lane_to_x(game.lane).to_int()
+  let y : Int32 = @types.boat_y
 
   let hull : @raylib.Color = if game.burst_t > 0.0 {
     @raylib.Color::new(250, 142, 92, 250)
@@ -404,7 +404,7 @@ fn @types.Game::draw_player_boat(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the player's current race rank by counting rivals ahead of the player.
-fn @types.Game::current_rank(game : @types.Game) -> Int {
+fn @types.Game::current_rank(game : @types.Game) -> Int32 {
   @utils.count_by(game.rivals, fn(rival) {
     rival.active && rival.dist > game.distance
   }) +
@@ -444,7 +444,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(188, 218, 238, 238),
   )
 
-  let rank_now : Int = match game.state {
+  let rank_now : Int32 = match game.state {
     Result => game.finish_rank
     _ => game.current_rank()
   }
@@ -511,10 +511,10 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(222, 214, 208, 236),
   )
 
-  let meter_x : Int = @types.hud_x + 24
-  let meter_y : Int = @types.river_y + 392
-  let meter_w : Int = @types.hud_w - 48
-  let meter_h : Int = 30
+  let meter_x : Int32 = @types.hud_x + 24
+  let meter_y : Int32 = @types.river_y + 392
+  let meter_w : Int32 = @types.hud_w - 48
+  let meter_h : Int32 = 30
 
   @draw.draw_text(
     "Rhythm Meter",
@@ -533,7 +533,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
   )
 
   let fill_ratio : Float = @types.clampf(game.rhythm_meter / 100.0, 0.0, 1.0)
-  let fill_w : Int = (Float::from_int(meter_w) * fill_ratio).to_int()
+  let fill_w : Int32 = (Float::from_int(meter_w) * fill_ratio).to_int()
 
   @raylib.draw_rectangle(
     meter_x,
@@ -571,10 +571,10 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(246, 222, 164, 236),
   )
 
-  let beat_x : Int = meter_x
-  let beat_y : Int = meter_y + 92
-  let beat_w : Int = meter_w
-  let beat_h : Int = 18
+  let beat_x : Int32 = meter_x
+  let beat_y : Int32 = meter_y + 92
+  let beat_w : Int32 = meter_w
+  let beat_h : Int32 = 18
 
   @draw.draw_text(
     "Beat Lane",
@@ -611,7 +611,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     0.0,
     1.0,
   )
-  let marker_x : Int = beat_x + (Float::from_int(beat_w) * phase).to_int()
+  let marker_x : Int32 = beat_x + (Float::from_int(beat_w) * phase).to_int()
 
   @raylib.draw_line(
     marker_x,
@@ -695,13 +695,13 @@ fn @types.Game::draw_message_banner(game : @types.Game) -> Unit {
     return
   }
 
-  let alpha : Int = (Float::from_int(90) + game.msg_t * 120.0)
+  let alpha : Int32 = (Float::from_int(90) + game.msg_t * 120.0)
     .to_int()
     .clamp(min=0, max=230)
-  let box_w : Int = 680
-  let box_h : Int = 56
-  let x : Int = @types.river_x + @types.river_w / 2 - box_w / 2
-  let y : Int = @types.river_y + 20
+  let box_w : Int32 = 680
+  let box_h : Int32 = 56
+  let x : Int32 = @types.river_x + @types.river_w / 2 - box_w / 2
+  let y : Int32 = @types.river_y + 20
 
   @raylib.draw_rectangle(
     x,

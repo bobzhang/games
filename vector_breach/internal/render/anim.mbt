@@ -154,11 +154,11 @@ fn update_particles(battle : @types.BattleState, dt : Float) -> Unit {
 ///|
 pub fn queue_move_anim(
   battle : @types.BattleState,
-  unit_id : Int,
-  sx : Int,
-  sy : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  sx : Int32,
+  sy : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let anim = @types.new_anim(AnimMove, unit_id, sx, sy, tx, ty)
   battle.anim_queue.push(anim)
@@ -167,9 +167,9 @@ pub fn queue_move_anim(
 ///|
 pub fn queue_attack_anim(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let anim = @types.new_anim(AnimAttack, unit_id, tx, ty, tx, ty)
   battle.anim_queue.push(anim)
@@ -178,11 +178,11 @@ pub fn queue_attack_anim(
 ///|
 pub fn queue_push_anim(
   battle : @types.BattleState,
-  unit_id : Int,
-  sx : Int,
-  sy : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  sx : Int32,
+  sy : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let anim = @types.new_anim(AnimPush, unit_id, sx, sy, tx, ty)
   battle.anim_queue.push(anim)
@@ -191,9 +191,9 @@ pub fn queue_push_anim(
 ///|
 pub fn queue_death_anim(
   battle : @types.BattleState,
-  unit_id : Int,
-  x : Int,
-  y : Int,
+  unit_id : Int32,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   let anim = @types.new_anim(AnimDeath, unit_id, x, y, x, y)
   battle.anim_queue.push(anim)
@@ -218,10 +218,10 @@ pub fn trigger_shake(battle : @types.BattleState, intensity : Float) -> Unit {
 ///|
 pub fn trigger_flash(
   battle : @types.BattleState,
-  r : Int,
-  g : Int,
-  b : Int,
-  alpha : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
+  alpha : Int32,
 ) -> Unit {
   battle.screen_fx.flash_timer = @types.flash_duration
   battle.screen_fx.flash_r = r
@@ -247,9 +247,9 @@ pub fn trigger_pulse(battle : @types.BattleState) -> Unit {
 ///|
 pub fn spawn_damage_text(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
-  amount : Int,
+  x : Int32,
+  y : Int32,
+  amount : Int32,
 ) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 20.0F
@@ -269,7 +269,11 @@ pub fn spawn_damage_text(
 }
 
 ///|
-pub fn spawn_shield_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn spawn_shield_text(
+  battle : @types.BattleState,
+  x : Int32,
+  y : Int32,
+) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 20.0F
   let ft : @types.FloatingText = {
@@ -290,9 +294,9 @@ pub fn spawn_shield_text(battle : @types.BattleState, x : Int, y : Int) -> Unit 
 ///|
 pub fn spawn_chain_text(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
-  chain_count : Int,
+  x : Int32,
+  y : Int32,
+  chain_count : Int32,
 ) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 20.0F
@@ -313,7 +317,11 @@ pub fn spawn_chain_text(
 }
 
 ///|
-pub fn spawn_stun_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn spawn_stun_text(
+  battle : @types.BattleState,
+  x : Int32,
+  y : Int32,
+) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 20.0F
   let ft : @types.FloatingText = {
@@ -336,7 +344,11 @@ pub fn spawn_stun_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 // ============================================================================
 
 ///|
-pub fn spawn_kill_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn spawn_kill_text(
+  battle : @types.BattleState,
+  x : Int32,
+  y : Int32,
+) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 30.0F
   let ft : @types.FloatingText = {
@@ -357,8 +369,8 @@ pub fn spawn_kill_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 ///|
 pub fn spawn_overclock_text(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 35.0F
@@ -381,8 +393,8 @@ pub fn spawn_overclock_text(
 pub fn spawn_combo_text(
   battle : @types.BattleState,
   text : String,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 40.0F
@@ -408,13 +420,13 @@ pub fn spawn_combo_text(
 ///|
 pub fn spawn_ring(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   max_r : Float,
   dur : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
@@ -490,10 +502,10 @@ pub fn trigger_hitstop(battle : @types.BattleState, ms : Float) -> Unit {
 ///|
 pub fn trigger_tint(
   battle : @types.BattleState,
-  r : Int,
-  g : Int,
-  b : Int,
-  alpha : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
+  alpha : Int32,
   duration : Float,
 ) -> Unit {
   battle.screen_fx.tint_timer = duration
@@ -509,7 +521,7 @@ pub fn trigger_tint(
 
 ///|
 /// Normal hit: 60ms hitstop + small shake
-pub fn fx_normal_hit(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn fx_normal_hit(battle : @types.BattleState, x : Int32, y : Int32) -> Unit {
   trigger_hitstop(battle, 60.0)
   trigger_shake(battle, 2.0)
   spawn_directional_particles(battle, x, y, 0, 0, 10, 255, 200, 100)
@@ -519,10 +531,10 @@ pub fn fx_normal_hit(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 /// Push collision: 80ms hitstop + larger burst + shake
 pub fn fx_push_collision(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
-  dx : Int,
-  dy : Int,
+  x : Int32,
+  y : Int32,
+  dx : Int32,
+  dy : Int32,
 ) -> Unit {
   trigger_hitstop(battle, 80.0)
   trigger_shake(battle, 4.0)
@@ -532,7 +544,7 @@ pub fn fx_push_collision(
 
 ///|
 /// Chasm kill: 120ms hitstop + slow-motion + ring
-pub fn fx_chasm_kill(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn fx_chasm_kill(battle : @types.BattleState, x : Int32, y : Int32) -> Unit {
   trigger_hitstop(battle, 120.0)
   trigger_slowmo(battle, 0.3)
   trigger_shake(battle, 5.0)
@@ -544,8 +556,8 @@ pub fn fx_chasm_kill(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 /// Boss phase transition: 150ms hitstop + screen flash
 pub fn fx_boss_phase_transition(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   trigger_hitstop(battle, 150.0)
   trigger_flash(battle, 255, 255, 255, 180)
@@ -555,7 +567,7 @@ pub fn fx_boss_phase_transition(
 
 ///|
 /// Overclock activation: 100ms hitstop + blue flash + ring
-pub fn fx_overclock(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn fx_overclock(battle : @types.BattleState, x : Int32, y : Int32) -> Unit {
   trigger_hitstop(battle, 100.0)
   trigger_flash(battle, 80, 140, 255, 100)
   trigger_tint(battle, 40, 80, 200, 40, 0.4)
@@ -569,8 +581,8 @@ pub fn fx_overclock(battle : @types.BattleState, x : Int, y : Int) -> Unit {
 /// Kill flourish: ring + colored explosion + slowmo + text
 pub fn fx_kill(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   is_enemy : Bool,
 ) -> Unit {
   trigger_hitstop(battle, 60.0)
@@ -589,15 +601,17 @@ pub fn fx_kill(
 ///|
 pub fn spawn_death_particles(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  x : Int32,
+  y : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
-  let seed : Ref[UInt] = { val: (x * 31 + y * 97 + 42).reinterpret_as_uint(), }
+  let seed : Ref[UInt32] = {
+    val: (x * 31 + y * 97 + 42).reinterpret_as_uint(),
+  }
   for i = 0; i < 12; i = i + 1 {
     ignore(i)
     let angle = Float::from_int(@types.rand_range(seed, 0, 628)) / 100.0F
@@ -622,8 +636,8 @@ pub fn spawn_death_particles(
 ///|
 pub fn spawn_explosion_particles(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   spawn_death_particles(battle, x, y, 255, 140, 40)
 }
@@ -631,8 +645,8 @@ pub fn spawn_explosion_particles(
 ///|
 pub fn spawn_lava_particles(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   spawn_death_particles(battle, x, y, 255, 80, 20)
 }
@@ -641,18 +655,18 @@ pub fn spawn_lava_particles(
 /// Directional particle burst: spray in (dx, dy) direction with spread.
 pub fn spawn_directional_particles(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
-  dx : Int,
-  dy : Int,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  x : Int32,
+  y : Int32,
+  dx : Int32,
+  dy : Int32,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
-  let seed : Ref[UInt] = {
+  let seed : Ref[UInt32] = {
     val: (x * 47 + y * 83 + count * 13).reinterpret_as_uint(),
   }
   let base_angle : Float = if dx == 0 && dy == 0 {
@@ -697,12 +711,12 @@ pub fn spawn_directional_particles(
 /// Heat particles rising upward from a mech (for overclock).
 pub fn spawn_heat_particles(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   let cx = Float::from_int(@types.tile_center_x(x))
   let cy = Float::from_int(@types.tile_center_y(y))
-  let seed : Ref[UInt] = { val: (x * 19 + y * 53 + 7).reinterpret_as_uint(), }
+  let seed : Ref[UInt32] = { val: (x * 19 + y * 53 + 7).reinterpret_as_uint(), }
   for i = 0; i < 15; i = i + 1 {
     ignore(i)
     let offset_x = Float::from_int(@types.rand_range(seed, -16, 16))
@@ -915,7 +929,7 @@ fn ease_in_quad(t : Float) -> Float {
 
 ///|
 /// Get screen shake offset for this frame.
-pub fn get_shake_offset(fx : @types.ScreenFX) -> (Int, Int) {
+pub fn get_shake_offset(fx : @types.ScreenFX) -> (Int32, Int32) {
   if fx.shake_timer <= 0.0F {
     return (0, 0)
   }
@@ -934,9 +948,9 @@ pub fn get_shake_offset(fx : @types.ScreenFX) -> (Int, Int) {
 ///|
 pub fn draw_objective_progress_bar(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
 ) -> Unit {
   let (current, target) = match battle.objective {
     DefendGrid(n) => (battle.turn, n)
@@ -991,8 +1005,8 @@ pub fn draw_objective_progress_bar(
 ///|
 pub fn draw_turn_countdown(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   let remaining = match battle.objective {
     DefendGrid(n) => n - battle.turn + 1

@@ -1,44 +1,48 @@
 ///|
 /// High-level game states for a session.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Dish catalog identifiers used by orders and cooking.
+#derive(Eq)
 pub(all) enum Dish {
   DishNone
   Skewers
   Noodles
   Squid
   FriedRice
-} derive(Eq)
+}
 
 ///|
 pub extend Dish with Eq::{not_equal, equal}
 
 ///|
 /// Cooking lane assignment for a dish.
+#derive(Eq)
 pub(all) enum Lane {
   Grill
   Wok
-} derive(Eq)
+}
 
 ///|
 pub extend Lane with Eq::{not_equal, equal}
 
 ///|
 /// Two-step cooking phase state.
+#derive(Eq)
 pub(all) enum CookStage {
   Prep
   Heat
-} derive(Eq)
+}
 
 ///|
 pub extend CookStage with Eq::{not_equal, equal}
@@ -50,15 +54,15 @@ pub(all) struct Order {
   mut dish : Dish
   mut patience : Float
   mut patience_max : Float
-  mut reward : Int
-  mut ticket_no : Int
+  mut reward : Int32
+  mut ticket_no : Int32
 }
 
 ///|
 /// Per-frame input snapshot for menu and cooking actions.
 pub(all) struct InputState {
-  mut move_x : Int
-  mut move_y : Int
+  mut move_x : Int32
+  mut move_y : Int32
   mut press_j : Bool
   mut press_k : Bool
   mut press_space : Bool
@@ -86,16 +90,16 @@ pub(all) struct Game {
   cooking : CookingState
   mut state : GameState
   mut cursor : NavNode
-  mut selected_order : Int
+  mut selected_order : Int32
   mut ready_dish : Dish
   mut ready_quality : Float
-  mut score : Int
-  mut best_score : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut combo : Int32
   mut combo_timer : Float
-  mut served_orders : Int
-  mut failed_orders : Int
-  mut next_order_id : Int
+  mut served_orders : Int32
+  mut failed_orders : Int32
+  mut next_order_id : Int32
   mut spawn_t : Float
   mut elapsed_t : Float
   mut boost_t : Float

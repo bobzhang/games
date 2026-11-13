@@ -194,8 +194,8 @@ fn @types.Game::draw_plate(
   game : @types.Game,
   wx : Float,
   wz : Float,
-  gx : Int,
-  gy : Int,
+  gx : Int32,
+  gy : Int32,
   world : @types.World,
 ) -> Unit {
   draw_floor(wx, wz, world)

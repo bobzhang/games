@@ -78,7 +78,7 @@ pub fn unload_assets() -> Unit {
 
 ///|
 /// Returns the generated chamber texture for the room index.
-fn room_texture(room : Int) -> @raylib.Texture? {
+fn room_texture(room : Int32) -> @raylib.Texture? {
   if room == 0 {
     tex_room_ember.val
   } else if room == 1 {
@@ -90,7 +90,7 @@ fn room_texture(room : Int) -> @raylib.Texture? {
 
 ///|
 /// Returns a soft readability overlay colour for the room art.
-fn room_art_overlay(room : Int, alpha : Int) -> @raylib.Color {
+fn room_art_overlay(room : Int32, alpha : Int32) -> @raylib.Color {
   if room == 0 {
     @raylib.Color::new(54, 28, 18, alpha)
   } else if room == 1 {
@@ -215,7 +215,7 @@ fn draw_background_art(game : @types.Game) -> Bool {
 
 ///|
 /// Draws generated art inside the active chamber viewport.
-fn draw_chamber_art(room : Int) -> Bool {
+fn draw_chamber_art(room : Int32) -> Bool {
   match room_texture(room) {
     Some(texture) => {
       draw_texture_cover(
@@ -237,7 +237,7 @@ fn draw_chamber_art(room : Int) -> Bool {
 
 ///|
 /// Draws the generated dragon scroll core art.
-fn draw_scroll_core_art(x : Int, y : Int, pulse : Float) -> Bool {
+fn draw_scroll_core_art(x : Int32, y : Int32, pulse : Float) -> Bool {
   match tex_scroll_core.val {
     Some(texture) => {
       draw_texture_fit(
@@ -256,7 +256,7 @@ fn draw_scroll_core_art(x : Int, y : Int, pulse : Float) -> Bool {
 
 ///|
 /// Draws the generated breach portal art.
-fn draw_breach_art(x : Int, y : Int, ratio : Float) -> Bool {
+fn draw_breach_art(x : Int32, y : Int32, ratio : Float) -> Bool {
   match tex_breach.val {
     Some(texture) => {
       let size : Float = 76.0 + ratio * 74.0
@@ -276,7 +276,7 @@ fn draw_breach_art(x : Int, y : Int, ratio : Float) -> Bool {
 
 ///|
 /// Draws the generated flame art.
-fn draw_flame_art(x : Int, y : Int, heat : Float) -> Bool {
+fn draw_flame_art(x : Int32, y : Int32, heat : Float) -> Bool {
   match tex_flame.val {
     Some(texture) => {
       draw_texture_fit(
@@ -295,7 +295,7 @@ fn draw_flame_art(x : Int, y : Int, heat : Float) -> Bool {
 
 ///|
 /// Draws the generated raider art.
-fn draw_raider_art(x : Int, y : Int, panicked : Bool) -> Bool {
+fn draw_raider_art(x : Int32, y : Int32, panicked : Bool) -> Bool {
   match tex_raider.val {
     Some(texture) => {
       @raylib.draw_ellipse(
@@ -325,7 +325,7 @@ fn draw_raider_art(x : Int, y : Int, panicked : Bool) -> Bool {
 
 ///|
 /// Draws the generated keeper art.
-fn draw_keeper_art(x : Int, y : Int, extinguisher_mode : Bool) -> Bool {
+fn draw_keeper_art(x : Int32, y : Int32, extinguisher_mode : Bool) -> Bool {
   match tex_keeper.val {
     Some(texture) => {
       @raylib.draw_ellipse(

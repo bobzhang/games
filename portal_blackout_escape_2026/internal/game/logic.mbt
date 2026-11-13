@@ -1,18 +1,22 @@
 ///|
 /// Converts grid coordinates to a flat map array index.
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * @types.grid_w + x
 }
 
 ///|
 /// Returns true if `(x, y)` is within the grid dimensions.
-fn in_bounds(x : Int, y : Int) -> Bool {
+fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < @types.grid_w && y >= 0 && y < @types.grid_h
 }
 
 ///|
 /// Returns the tile type at `(x, y)`, returning `tile_wall` for out-of-bounds coordinates.
-fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
+fn @types.Game::tile_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> @types.Tile {
   if !in_bounds(x, y) {
     Wall
   } else {
@@ -24,8 +28,8 @@ fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
 /// Writes tile type `t` into the map at `(x, y)`, ignoring out-of-bounds coordinates.
 fn @types.Game::set_tile(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   t : @types.Tile,
 ) -> Unit {
   if !in_bounds(x, y) {
@@ -43,7 +47,7 @@ fn @types.Game::set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
 
 ///|
 /// Instantly places actor `a` at tile `(x, y)`, clearing all interpolation state.
-fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
+fn actor_place(a : @types.Actor, x : Int32, y : Int32) -> Unit {
   a.x = x
   a.y = y
   a.from_x = x
@@ -58,7 +62,7 @@ fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
 
 ///|
 /// Begins smooth movement of actor `a` toward tile `(tx, ty)`, resetting the interpolation counter.
-fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
+fn actor_start_move(a : @types.Actor, tx : Int32, ty : Int32) -> Unit {
   if a.x == tx && a.y == ty {
     return
   }
@@ -145,7 +149,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -187,13 +191,17 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns true if any active flare is within Manhattan distance 2 of `(x, y)`, hiding the player from drone detection.
-fn @types.Game::flare_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::flare_cover_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   for flare in game.flares {
     if !flare.active {
       continue
     }
 
-    let d : Int = @types.manhattan(x, y, flare.x, flare.y)
+    let d : Int32 = @types.manhattan(x, y, flare.x, flare.y)
     if d <= 2 {
       return true
     }
@@ -204,7 +212,11 @@ fn @types.Game::flare_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns the index of the active core at tile `(x, y)`, or -1 if none present.
-fn @types.Game::core_index_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::core_index_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Int32 {
   @utils.first_index_by(game.cores, fn(core) {
     core.active && core.x == x && core.y == y
   })
@@ -214,10 +226,10 @@ fn @types.Game::core_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 /// Returns the index of an active drone occupying tile `(x, y)`, skipping drone index `skip`, or -1 if none.
 fn @types.Game::drone_index_at(
   game : @types.Game,
-  x : Int,
-  y : Int,
-  skip : Int,
-) -> Int {
+  x : Int32,
+  y : Int32,
+  skip : Int32,
+) -> Int32 {
   @utils.first_indexi_by(game.drones, fn(i, drone) {
     i != skip && drone.active && drone.body.x == x && drone.body.y == y
   })
@@ -254,7 +266,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
     }
   }
 
-  let extra_walls : Array[(Int, Int)] = [
+  let extra_walls : Array[(Int32, Int32)] = [
     (20, 2),
     (20, 3),
     (20, 4),
@@ -280,7 +292,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
 ///|
 /// Places eight energy cores at their fixed tile positions and activates them in the pool.
 fn @types.Game::init_cores(game : @types.Game) -> Unit {
-  let plan : Array[(Int, Int, Int)] = [
+  let plan : Array[(Int32, Int32, Int32)] = [
     (5, 11, 0),
     (8, 9, 1),
     (12, 7, 2),
@@ -308,7 +320,7 @@ fn @types.Game::init_cores(game : @types.Game) -> Unit {
 ///|
 /// Places five patrol drones at their fixed starting tiles with individual patrol ranges and colors.
 fn @types.Game::init_drones(game : @types.Game) -> Unit {
-  let plan : Array[(Int, Int, Int, Int, Int, Int, Int)] = [
+  let plan : Array[(Int32, Int32, Int32, Int32, Int32, Int32, Int32)] = [
     (6, 2, 1, 0, 5, 9, 0),
     (10, 6, 0, 1, 4, 10, 1),
     (14, 10, 1, 0, 13, 18, 2),
@@ -454,7 +466,11 @@ fn @types.Game::cycle_hint(game : @types.Game) -> Unit {
 
 ///|
 /// Returns true if tile `(x, y)` is a wall or a locked exit (exit tile when portal is offline).
-fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_by_map(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   if !in_bounds(x, y) {
     return true
   }
@@ -469,7 +485,11 @@ fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns true if the given tile is impassable for the player (currently delegates to `blocked_by_map`).
-fn @types.Game::blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_for_actor(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   if game.blocked_by_map(x, y) {
     return true
   }
@@ -479,7 +499,11 @@ fn @types.Game::blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool 
 
 ///|
 /// Attempts to move the player one tile in direction `(dx, dy)`, returning true if the move was accepted.
-fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::try_move_player(
+  game : @types.Game,
+  dx : Int32,
+  dy : Int32,
+) -> Bool {
   if dx == 0 && dy == 0 {
     return false
   }
@@ -487,8 +511,8 @@ fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool 
     return false
   }
 
-  let tx : Int = game.player.x + dx
-  let ty : Int = game.player.y + dy
+  let tx : Int32 = game.player.x + dx
+  let ty : Int32 = game.player.y + dy
 
   if game.blocked_for_actor(tx, ty) {
     return false
@@ -507,7 +531,7 @@ fn @types.Game::collect_core(game : @types.Game) -> Unit {
     return
   }
 
-  let i : Int = game.core_index_at(game.player.x, game.player.y)
+  let i : Int32 = game.core_index_at(game.player.x, game.player.y)
   if i < 0 {
     return
   }
@@ -558,14 +582,14 @@ fn @types.Game::collect_core(game : @types.Game) -> Unit {
 /// Returns true if there is an unobstructed horizontal or vertical line of sight between `(x0, y0)` and `(x1, y1)`.
 fn @types.Game::line_of_sight(
   game : @types.Game,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   if x0 == x1 {
-    let y_min : Int = y0.min(y1)
-    let y_max : Int = y0.max(y1)
+    let y_min : Int32 = y0.min(y1)
+    let y_max : Int32 = y0.max(y1)
 
     for y in (y_min + 1)..<y_max {
       if game.tile_at(x0, y) == Wall {
@@ -577,8 +601,8 @@ fn @types.Game::line_of_sight(
   }
 
   if y0 == y1 {
-    let x_min : Int = x0.min(x1)
-    let x_max : Int = x0.max(x1)
+    let x_min : Int32 = x0.min(x1)
+    let x_max : Int32 = x0.max(x1)
 
     for x in (x_min + 1)..<x_max {
       if game.tile_at(x, y0) == Wall {
@@ -594,8 +618,8 @@ fn @types.Game::line_of_sight(
 
 ///|
 /// Advances a drone's LCG pseudo-random seed and returns the next value (always positive).
-fn drone_seed_next(seed : Int) -> Int {
-  let n : Int = (seed * 48271 + 97) % 2147483647
+fn drone_seed_next(seed : Int32) -> Int32 {
+  let n : Int32 = (seed * 48271 + 97) % 2147483647
   if n <= 0 {
     1
   } else {
@@ -607,28 +631,31 @@ fn drone_seed_next(seed : Int) -> Int {
 /// Returns true if tile `(x, y)` is impassable for drone `gid` (wall, locked exit, or occupied by another drone).
 fn @types.Game::blocked_for_drone(
   game : @types.Game,
-  gid : Int,
-  x : Int,
-  y : Int,
+  gid : Int32,
+  x : Int32,
+  y : Int32,
 ) -> Bool {
   if game.blocked_by_map(x, y) {
     return true
   }
 
-  let g2 : Int = game.drone_index_at(x, y, gid)
+  let g2 : Int32 = game.drone_index_at(x, y, gid)
   g2 >= 0
 }
 
 ///|
 /// Determines the next movement step for drone `i`: hunts toward the player when in range or line-of-sight, otherwise bounces along its patrol axis.
-fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
+fn @types.Game::choose_drone_step(
+  game : @types.Game,
+  i : Int32,
+) -> (Int32, Int32) {
   let d = game.drones[i]
-  let gx : Int = d.body.x
-  let gy : Int = d.body.y
-  let px : Int = game.player.x
-  let py : Int = game.player.y
+  let gx : Int32 = d.body.x
+  let gy : Int32 = d.body.y
+  let px : Int32 = game.player.x
+  let py : Int32 = game.player.y
 
-  let dist : Int = @types.manhattan(gx, gy, px, py)
+  let dist : Int32 = @types.manhattan(gx, gy, px, py)
   let sees : Bool = game.line_of_sight(gx, gy, px, py)
   let flare_cover : Bool = game.flare_cover_at(px, py)
 
@@ -642,17 +669,17 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
     }
   }
 
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
   if d.mode == Hunt {
     let best_k = for k in 0..<4; best_k = -1, best_d = 999999 {
-      let nx : Int = gx + dirs[k].0
-      let ny : Int = gy + dirs[k].1
+      let nx : Int32 = gx + dirs[k].0
+      let ny : Int32 = gy + dirs[k].1
       if game.blocked_for_drone(i, nx, ny) {
         continue
       }
 
-      let dd : Int = @types.manhattan(nx, ny, px, py)
+      let dd : Int32 = @types.manhattan(nx, ny, px, py)
       if dd < best_d {
         continue k, dd
       }
@@ -666,7 +693,7 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
   }
 
   if d.dir_x != 0 {
-    let mut nx : Int = gx + d.dir_x
+    let mut nx : Int32 = gx + d.dir_x
     if nx < d.patrol_min ||
       nx > d.patrol_max ||
       game.blocked_for_drone(i, nx, gy) {
@@ -682,7 +709,7 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
   }
 
   if d.dir_y != 0 {
-    let mut ny : Int = gy + d.dir_y
+    let mut ny : Int32 = gy + d.dir_y
     if ny < d.patrol_min ||
       ny > d.patrol_max ||
       game.blocked_for_drone(i, gx, ny) {
@@ -698,12 +725,12 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
   }
 
   d.seed = drone_seed_next(d.seed)
-  let start : Int = d.seed % 4
+  let start : Int32 = d.seed % 4
 
   for t in 0..<4 {
-    let k : Int = (start + t) % 4
-    let nx : Int = gx + dirs[k].0
-    let ny : Int = gy + dirs[k].1
+    let k : Int32 = (start + t) % 4
+    let nx : Int32 = gx + dirs[k].0
+    let ny : Int32 = gy + dirs[k].1
     if game.blocked_for_drone(i, nx, ny) {
       continue
     }
@@ -800,7 +827,7 @@ fn @types.Game::deploy_flare(game : @types.Game) -> Bool {
     return false
   }
 
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<game.flares.length() {
     if !game.flares[i].active {
       slot = i
@@ -824,13 +851,13 @@ fn @types.Game::deploy_flare(game : @types.Game) -> Bool {
   )
   game.action_cd = 0.34
 
-  let mut stunned : Int = 0
+  let mut stunned : Int32 = 0
   for drone in game.drones {
     if !drone.active || drone.mode == Stunned {
       continue
     }
 
-    let d : Int = @types.manhattan(
+    let d : Int32 = @types.manhattan(
       game.player.x,
       game.player.y,
       drone.body.x,

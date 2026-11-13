@@ -1,6 +1,6 @@
 ///|
 /// Returns a level by global index (0-29).
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_1()
     1 => level_2()
@@ -38,7 +38,7 @@ pub fn get_level(index : Int) -> @types.Level {
 
 ///|
 /// World names.
-pub fn world_name(world : Int) -> String {
+pub fn world_name(world : Int32) -> String {
   match world {
     0 => "Lines"
     1 => "Splits"
@@ -49,7 +49,7 @@ pub fn world_name(world : Int) -> String {
 
 ///|
 /// Level display name.
-pub fn level_name(world : Int, level : Int) -> String {
+pub fn level_name(world : Int32, level : Int32) -> String {
   let num = level + 1
   match world {
     0 => "\{num}"

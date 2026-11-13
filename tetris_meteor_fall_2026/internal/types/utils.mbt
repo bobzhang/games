@@ -1,12 +1,18 @@
 ///|
 /// Converts board coordinates to a linear board array index.
-pub fn board_index(x : Int, y : Int) -> Int {
+pub fn board_index(x : Int32, y : Int32) -> Int32 {
   y * board_cols + x
 }
 
 ///|
 /// Returns whether a piece at `(px, py)` intersects walls or locked blocks.
-pub fn collides(game : Game, kind : Int, rot : Int, px : Int, py : Int) -> Bool {
+pub fn collides(
+  game : Game,
+  kind : Int32,
+  rot : Int32,
+  px : Int32,
+  py : Int32,
+) -> Bool {
   for i in 0..<4 {
     let c = piece_cell(kind, rot, i)
     let x = px + c.x

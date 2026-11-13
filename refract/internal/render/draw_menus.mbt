@@ -298,9 +298,9 @@ fn draw_results(game : @types.Game) -> Unit {
 
 ///|
 fn draw_star_shape(
-  cx : Int,
-  cy : Int,
-  size : Int,
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   // Simple 5-pointed star approximation using triangles
@@ -322,6 +322,6 @@ fn draw_star_shape(
 }
 
 ///|
-fn fade_color(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn fade_color(c : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), alpha)
 }

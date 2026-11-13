@@ -155,10 +155,10 @@ fn draw_backdrop_art() -> Bool {
 /// Draws the generated duelist portrait if it is loaded.
 fn draw_portrait_art(
   is_player : Bool,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let texture_ref = if is_player {
     tex_player_portrait.val
@@ -183,7 +183,7 @@ fn draw_portrait_art(
 
 ///|
 /// Returns the generated card icon texture for the given card index.
-fn card_icon(card : Int) -> @raylib.Texture? {
+fn card_icon(card : Int32) -> @raylib.Texture? {
   match card {
     0 => tex_icon_strike.val
     1 => tex_icon_guard.val
@@ -195,7 +195,7 @@ fn card_icon(card : Int) -> @raylib.Texture? {
 
 ///|
 /// Draws the generated card frame if it is loaded.
-fn draw_card_frame_art(x : Int, y : Int, w : Int, h : Int) -> Bool {
+fn draw_card_frame_art(x : Int32, y : Int32, w : Int32, h : Int32) -> Bool {
   match tex_card_frame.val {
     Some(texture) => {
       draw_art_top_left(
@@ -214,7 +214,12 @@ fn draw_card_frame_art(x : Int, y : Int, w : Int, h : Int) -> Bool {
 
 ///|
 /// Draws the generated icon for the given card index if it is loaded.
-fn draw_card_icon_art(card : Int, cx : Int, cy : Int, size : Int) -> Bool {
+fn draw_card_icon_art(
+  card : Int32,
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
+) -> Bool {
   match card_icon(card) {
     Some(texture) => {
       draw_art_centered(

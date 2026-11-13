@@ -142,7 +142,7 @@ fn draw_texture_cover(
 
 ///|
 /// Returns the generated texture for a tile kind.
-fn texture_for_tile(art : GameArt, tile : Int) -> @raylib.Texture {
+fn texture_for_tile(art : GameArt, tile : Int32) -> @raylib.Texture {
   if tile == tile_empty {
     art.empty_tunnel_tile
   } else if tile == tile_dirt {
@@ -188,10 +188,10 @@ fn draw_world_bg(art : GameArt, t : Float) -> Unit {
 
   for i in 0..<28 {
     let fi : Float = Float::from_int(i)
-    let x : Int = (fi * 72.0 + t * (14.0 + Float::from_int(i % 5) * 4.0)).to_int() %
+    let x : Int32 = (fi * 72.0 + t * (14.0 + Float::from_int(i % 5) * 4.0)).to_int() %
       world_w +
       world_x
-    let y : Int = (fi * 133.0 + t * 18.0).to_int() % world_h + world_y
+    let y : Int32 = (fi * 133.0 + t * 18.0).to_int() % world_h + world_y
     @raylib.draw_circle(
       x,
       y,
@@ -205,11 +205,11 @@ fn draw_world_bg(art : GameArt, t : Float) -> Unit {
 /// Draws one generated tile and its gameplay-state glow.
 fn draw_tile_art(
   art : GameArt,
-  tile : Int,
-  tx : Int,
-  ty : Int,
-  gx : Int,
-  gy : Int,
+  tile : Int32,
+  tx : Int32,
+  ty : Int32,
+  gx : Int32,
+  gy : Int32,
   t : Float,
 ) -> Unit {
   let tint = if tile == tile_empty {

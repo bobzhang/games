@@ -12,21 +12,21 @@ fn main {
     let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
     @game.update_game(game, dt)
     @raylib.begin_drawing()
-    let sky_b : Int = if game.weather == Storm {
+    let sky_b : Int32 = if game.weather == Storm {
       80
     } else if game.weather == Fog {
       160
     } else {
       235
     }
-    let sky_g : Int = if game.weather == Storm {
+    let sky_g : Int32 = if game.weather == Storm {
       80
     } else if game.weather == Fog {
       170
     } else {
       206
     }
-    let sky_r : Int = if game.weather == Storm {
+    let sky_r : Int32 = if game.weather == Storm {
       60
     } else if game.weather == Fog {
       180

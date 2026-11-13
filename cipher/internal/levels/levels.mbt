@@ -1,9 +1,9 @@
 ///|
 fn make_caesar(
-  id : Int,
+  id : Int32,
   plaintext : String,
-  shift : Int,
-  par : Int,
+  shift : Int32,
+  par : Int32,
   hint : String,
 ) -> @types.Level {
   let ciphertext = @crypto.caesar_encrypt(plaintext, shift)
@@ -20,7 +20,7 @@ fn make_caesar(
 }
 
 ///|
-fn make_sub_key() -> Array[Int] {
+fn make_sub_key() -> Array[Int32] {
   // Fixed substitution alphabet: QWERTYUIOPASDFGHJKLZXCVBNM
   // A->Q, B->W, C->E, D->R, E->T, F->Y, G->U, H->I, I->O, J->P,
   // K->A, L->S, M->D, N->F, O->G, P->H, Q->J, R->K, S->L, T->Z,
@@ -32,7 +32,7 @@ fn make_sub_key() -> Array[Int] {
 }
 
 ///|
-fn make_sub_key2() -> Array[Int] {
+fn make_sub_key2() -> Array[Int32] {
   // ZYXWVUTSRQPONMLKJIHGFEDCBA (reverse)
   [
     25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5,
@@ -41,7 +41,7 @@ fn make_sub_key2() -> Array[Int] {
 }
 
 ///|
-fn make_sub_key3() -> Array[Int] {
+fn make_sub_key3() -> Array[Int32] {
   // JFMAEHOQCTGYSWZDLPNRIVUBKX
   [
     9, 5, 12, 0, 4, 7, 14, 16, 2, 19, 6, 24, 18, 22, 25, 3, 11, 15, 13, 17, 8, 21,
@@ -51,10 +51,10 @@ fn make_sub_key3() -> Array[Int] {
 
 ///|
 fn make_substitution(
-  id : Int,
+  id : Int32,
   plaintext : String,
-  key : Array[Int],
-  par : Int,
+  key : Array[Int32],
+  par : Int32,
   hint : String,
 ) -> @types.Level {
   let ciphertext = @crypto.substitution_encrypt(plaintext, key)
@@ -72,10 +72,10 @@ fn make_substitution(
 
 ///|
 fn make_vigenere(
-  id : Int,
+  id : Int32,
   plaintext : String,
   key : String,
-  par : Int,
+  par : Int32,
   hint : String,
 ) -> @types.Level {
   let ciphertext = @crypto.vigenere_encrypt(plaintext, key)
@@ -231,12 +231,12 @@ pub fn get_all_levels() -> Array[@types.Level] {
 }
 
 ///|
-pub fn get_level(id : Int) -> @types.Level {
+pub fn get_level(id : Int32) -> @types.Level {
   let all = get_all_levels()
   all[id]
 }
 
 ///|
-pub fn total_levels() -> Int {
+pub fn total_levels() -> Int32 {
   25
 }

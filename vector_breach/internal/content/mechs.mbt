@@ -2,12 +2,12 @@
 pub(all) struct MechStats {
   name : String
   mech_class : @types.MechClass
-  hp : Int
-  max_heat : Int
-  move_range : Int
+  hp : Int32
+  max_heat : Int32
+  move_range : Int32
   ability_name : String
-  ability_range : Int
-  ability_damage : Int
+  ability_range : Int32
+  ability_damage : Int32
 }
 
 ///|
@@ -50,7 +50,7 @@ pub fn get_mech_stats(class_ : @types.MechClass) -> MechStats {
 }
 
 ///|
-pub fn get_enemy_hp(etype : @types.EnemyType) -> Int {
+pub fn get_enemy_hp(etype : @types.EnemyType) -> Int32 {
   match etype {
     Rammer => 3
     Artillery => 2

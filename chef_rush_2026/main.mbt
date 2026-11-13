@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1080
+let sw : Int32 = 1080
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
 /// Total number of ingredient-drop lanes on the kitchen floor.
-let lane_count : Int = 5
+let lane_count : Int32 = 5
 
 ///|
 /// Returns the horizontal center X position in pixels for the given lane index.
-fn lane_x(lane : Int) -> Float {
+fn lane_x(lane : Int32) -> Float {
   160.0 + Float::from_int(lane) * 185.0
 }
 
@@ -20,16 +20,16 @@ fn lane_x(lane : Int) -> Float {
 /// Represents a falling ingredient or trash item dropping down a lane.
 struct Drop {
   mut alive : Bool
-  mut lane : Int
+  mut lane : Int32
   mut x : Float
   mut y : Float
-  mut kind : Int // 0 tomato, 1 beef, 2 fish, 3 lettuce, 4 trash
+  mut kind : Int32 // 0 tomato, 1 beef, 2 fish, 3 lettuce, 4 trash
   mut vy : Float
 }
 
 ///|
 /// Returns the display name of the ingredient identified by the given kind index.
-fn ingredient_name(kind : Int) -> String {
+fn ingredient_name(kind : Int32) -> String {
   if kind == 0 {
     "Tomato"
   } else if kind == 1 {
@@ -45,7 +45,7 @@ fn ingredient_name(kind : Int) -> String {
 
 ///|
 /// Returns the display color associated with the given ingredient kind.
-fn ingredient_color(kind : Int) -> @raylib.Color {
+fn ingredient_color(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @raylib.red
   } else if kind == 1 {
@@ -71,8 +71,8 @@ fn reset_drops(drops : Array[Drop]) -> Unit {
 /// Activates an idle drop from the pool, placing it at the top of the specified lane with the given kind and speed.
 fn spawn_drop(
   drops : Array[Drop],
-  lane : Int,
-  kind : Int,
+  lane : Int32,
+  kind : Int32,
   speed : Float,
 ) -> Unit {
   for drop in drops {
@@ -90,7 +90,7 @@ fn spawn_drop(
 
 ///|
 /// Generates a new random order specifying a required ingredient kind and the quantity needed.
-fn next_order() -> (Int, Int) {
+fn next_order() -> (Int32, Int32) {
   (@raylib.get_random_value(0, 3), @raylib.get_random_value(2, 4))
 }
 

@@ -27,8 +27,8 @@ pub fn draw_tiles(game : @types.Game) -> Unit {
 fn tile_color(
   tile : @types.TileKind,
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> @raylib.Color {
   match tile {
     Floor => @types.color_floor

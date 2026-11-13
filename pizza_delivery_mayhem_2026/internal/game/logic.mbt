@@ -65,7 +65,7 @@ fn @types.Game::emit_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for particle in game.particles {
     if particle.active {
@@ -89,8 +89,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
@@ -201,7 +201,7 @@ fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
 
 ///|
 /// Returns the number of currently active delivery orders.
-fn @types.Game::active_orders(game : @types.Game) -> Int {
+fn @types.Game::active_orders(game : @types.Game) -> Int32 {
   @utils.count_by(game.orders, fn(order) { order.active })
 }
 
@@ -212,7 +212,7 @@ fn @types.Game::spawn_order(game : @types.Game) -> Bool {
     if order.active {
       continue
     }
-    let src : Int = @raylib.get_random_value(0, 2)
+    let src : Int32 = @raylib.get_random_value(0, 2)
     let mut tx : Float = @types.randf(
       @types.world_left() + 70.0,
       @types.world_right() - 70.0,
@@ -254,7 +254,7 @@ fn @types.Game::spawn_traffic(game : @types.Game) -> Bool {
     if traffic_elem.active {
       continue
     }
-    let kind_roll : Int = @raylib.get_random_value(0, 99)
+    let kind_roll : Int32 = @raylib.get_random_value(0, 99)
     let kind : @types.TrafficKind = if kind_roll < 58 {
       Sedan
     } else if kind_roll < 84 {
@@ -262,7 +262,7 @@ fn @types.Game::spawn_traffic(game : @types.Game) -> Bool {
     } else {
       Bus
     }
-    let lane : Int = @raylib.get_random_value(0, 1)
+    let lane : Int32 = @raylib.get_random_value(0, 1)
     if lane == 0 {
       let y_lane : Float = @types.world_top() +
         Float::from_int(
@@ -359,7 +359,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
     pickup.vx = @types.randf(-32.0, 32.0)
     pickup.vy = @types.randf(-32.0, 32.0)
     pickup.phase = @types.randf(0.0, 6.28)
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 46 {
       Fuel
     } else if roll < 78 {
@@ -465,7 +465,7 @@ fn @types.Game::hurt_rider(game : @types.Game, dmg : Float) -> Unit {
     game.set_msg("Scooter wrecked. Life lost.", 1.4)
     game.burst(game.rider_x, game.rider_y, 30, 1)
     if game.cargo_idx >= 0 {
-      let idx : Int = game.cargo_idx
+      let idx : Int32 = game.cargo_idx
       if idx < game.orders.length() && game.orders[idx].active {
         game.orders[idx].picked = false
         game.orders[idx].x_from = game.rider_x
@@ -619,7 +619,7 @@ fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns true when the rider is within pickup range of order i's source restaurant.
-fn @types.Game::near_order_pick(game : @types.Game, i : Int) -> Bool {
+fn @types.Game::near_order_pick(game : @types.Game, i : Int32) -> Bool {
   @types.dist2(
     game.rider_x,
     game.rider_y,
@@ -631,7 +631,7 @@ fn @types.Game::near_order_pick(game : @types.Game, i : Int) -> Bool {
 
 ///|
 /// Returns true when the rider is within drop-off range of order i's delivery destination.
-fn @types.Game::near_order_drop(game : @types.Game, i : Int) -> Bool {
+fn @types.Game::near_order_drop(game : @types.Game, i : Int32) -> Bool {
   @types.dist2(
     game.rider_x,
     game.rider_y,
@@ -643,7 +643,7 @@ fn @types.Game::near_order_drop(game : @types.Game, i : Int) -> Bool {
 
 ///|
 /// Returns a time-bonus score based on how much time remains on an order when it is delivered.
-fn order_time_bonus(timer_left : Float) -> Int {
+fn order_time_bonus(timer_left : Float) -> Int32 {
   if timer_left > 24.0 {
     36
   } else if timer_left > 16.0 {
@@ -685,8 +685,8 @@ fn @types.Game::update_orders(game : @types.Game, dt : Float) -> Unit {
         game.burst(game.orders[i].x_from, game.orders[i].y_from, 14, 0)
       }
     } else if game.cargo_idx == i && game.action_on && game.near_order_drop(i) {
-      let bonus : Int = order_time_bonus(game.orders[i].timer)
-      let gain : Int = game.orders[i].value + bonus + game.combo * 3
+      let bonus : Int32 = order_time_bonus(game.orders[i].timer)
+      let gain : Int32 = game.orders[i].value + bonus + game.combo * 3
       game.orders[i].active = false
       game.cargo_idx = -1
       game.delivered = game.delivered + 1

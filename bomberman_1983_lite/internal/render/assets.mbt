@@ -219,7 +219,7 @@ fn dir_rotation(dir : @types.Dir) -> Float {
 
 ///|
 /// Draws the generated floor tile when loaded.
-fn draw_floor_art(sx : Int, sy : Int) -> Bool {
+fn draw_floor_art(sx : Int32, sy : Int32) -> Bool {
   match tex_floor_tile.val {
     Some(texture) => {
       draw_art_centered(
@@ -261,8 +261,8 @@ fn tile_art(tile : @types.TileKind, base_alive : Bool) -> @raylib.Texture? {
 fn draw_tile_art(
   tile : @types.TileKind,
   base_alive : Bool,
-  sx : Int,
-  sy : Int,
+  sx : Int32,
+  sy : Int32,
 ) -> Bool {
   match tile_art(tile, base_alive) {
     Some(texture) => {
@@ -283,7 +283,7 @@ fn draw_tile_art(
 
 ///|
 /// Returns the generated tank texture for a player slot.
-fn player_tank_art(index : Int) -> @raylib.Texture? {
+fn player_tank_art(index : Int32) -> @raylib.Texture? {
   if index == 0 {
     tex_player1_tank.val
   } else {
@@ -325,7 +325,7 @@ fn draw_tank_art(
 ///|
 /// Draws a generated player tank sprite when loaded.
 fn draw_player_tank_art(
-  index : Int,
+  index : Int32,
   tank : @types.Tank,
   shake_x : Float,
   shake_y : Float,
@@ -358,7 +358,7 @@ fn draw_enemy_tank_art(
 
 ///|
 /// Draws a generated bomb sprite when loaded.
-fn draw_bomb_art(center_x : Int, center_y : Int, pulse : Float) -> Bool {
+fn draw_bomb_art(center_x : Int32, center_y : Int32, pulse : Float) -> Bool {
   match tex_bomb_sprite.val {
     Some(texture) => {
       let size = 20.0F + pulse * 2.0F
@@ -379,7 +379,7 @@ fn draw_bomb_art(center_x : Int, center_y : Int, pulse : Float) -> Bool {
 
 ///|
 /// Draws a generated blast cell when loaded.
-fn draw_blast_art(sx : Int, sy : Int, alpha : Float) -> Bool {
+fn draw_blast_art(sx : Int32, sy : Int32, alpha : Float) -> Bool {
   match tex_blast_sprite.val {
     Some(texture) => {
       draw_art_centered(
@@ -447,8 +447,8 @@ fn powerup_art(kind : @types.PowerupKind) -> @raylib.Texture? {
 /// Draws a generated powerup sprite when loaded.
 fn draw_powerup_art(
   kind : @types.PowerupKind,
-  sx : Int,
-  sy : Int,
+  sx : Int32,
+  sy : Int32,
   pulse : Float,
 ) -> Bool {
   match powerup_art(kind) {

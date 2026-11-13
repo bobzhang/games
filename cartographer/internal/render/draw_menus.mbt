@@ -81,7 +81,7 @@ fn draw_tier_select(game : @types.Game) -> Unit {
     40,
     @types.color_desert,
   )
-  let tiers : Array[(@types.Tier, String, String, Int, Int)] = [
+  let tiers : Array[(@types.Tier, String, String, Int32, Int32)] = [
     (Surveyor, "Surveyor", "Levels 1-8: Distance & Direction", 0, 8),
     (Explorer, "Explorer", "Levels 9-17: All Clue Types", 8, 17),
     (Master, "Master", "Levels 18-25: Tight Constraints", 17, 25),
@@ -295,7 +295,12 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars_inline(x : Int, y : Int, filled : Int, total : Int) -> Unit {
+fn draw_stars_inline(
+  x : Int32,
+  y : Int32,
+  filled : Int32,
+  total : Int32,
+) -> Unit {
   let display_total = if total > 9 { 9 } else { total }
   for i in 0..<display_total {
     let sx = x + i * 18
@@ -309,7 +314,12 @@ fn draw_stars_inline(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 }
 
 ///|
-fn draw_star(cx : Int, cy : Int, size : Int, color : @raylib.Color) -> Unit {
+fn draw_star(
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
+  color : @raylib.Color,
+) -> Unit {
   if !draw_star_art(cx, cy, size * 2, color) {
     // Simple 5-point star using triangles
     @raylib.draw_poly(

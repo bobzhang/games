@@ -180,8 +180,8 @@ fn draw_title_backdrop_art() -> Bool {
 /// Draws a generated board tile if the texture is loaded.
 fn draw_cell_texture(
   texture : @raylib.Texture,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   let (rx, ry, rw, rh) = cell_rect(x, y)
@@ -197,7 +197,7 @@ fn draw_cell_texture(
 
 ///|
 /// Draws the generated floor tile if loaded.
-fn draw_floor_art(x : Int, y : Int) -> Bool {
+fn draw_floor_art(x : Int32, y : Int32) -> Bool {
   match tex_floor_tile.val {
     Some(texture) => {
       draw_cell_texture(texture, x, y, @raylib.white)
@@ -209,7 +209,7 @@ fn draw_floor_art(x : Int, y : Int) -> Bool {
 
 ///|
 /// Draws the generated wall tile if loaded.
-fn draw_wall_art(x : Int, y : Int) -> Bool {
+fn draw_wall_art(x : Int32, y : Int32) -> Bool {
   match tex_wall_tile.val {
     Some(texture) => {
       draw_cell_texture(texture, x, y, @raylib.white)
@@ -223,8 +223,8 @@ fn draw_wall_art(x : Int, y : Int) -> Bool {
 /// Draws a generated centered object sprite if loaded.
 fn draw_cell_object_art(
   texture_opt : @raylib.Texture?,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   size : Float,
   tint : @raylib.Color,
 ) -> Bool {
@@ -245,22 +245,22 @@ fn draw_cell_object_art(
 }
 
 ///|
-fn draw_vault_art(x : Int, y : Int) -> Bool {
+fn draw_vault_art(x : Int32, y : Int32) -> Bool {
   draw_cell_object_art(tex_vault_sprite.val, x, y, 64.0, @raylib.white)
 }
 
 ///|
-fn draw_exit_art(x : Int, y : Int) -> Bool {
+fn draw_exit_art(x : Int32, y : Int32) -> Bool {
   draw_cell_object_art(tex_exit_sprite.val, x, y, 64.0, @raylib.white)
 }
 
 ///|
-fn draw_key_art(x : Int, y : Int) -> Bool {
+fn draw_key_art(x : Int32, y : Int32) -> Bool {
   draw_cell_object_art(tex_key_sprite.val, x, y, 48.0, @raylib.white)
 }
 
 ///|
-fn draw_door_art(x : Int, y : Int, open : Bool) -> Bool {
+fn draw_door_art(x : Int32, y : Int32, open : Bool) -> Bool {
   let tint = if open {
     @raylib.Color::new(175, 255, 198, 255)
   } else {
@@ -270,17 +270,17 @@ fn draw_door_art(x : Int, y : Int, open : Bool) -> Bool {
 }
 
 ///|
-fn draw_pressure_plate_art(x : Int, y : Int) -> Bool {
+fn draw_pressure_plate_art(x : Int32, y : Int32) -> Bool {
   draw_cell_object_art(tex_pressure_plate_sprite.val, x, y, 62.0, @raylib.white)
 }
 
 ///|
-fn draw_player_art(x : Int, y : Int) -> Bool {
+fn draw_player_art(x : Int32, y : Int32) -> Bool {
   draw_cell_object_art(tex_player_sprite.val, x, y, 54.0, @raylib.white)
 }
 
 ///|
-fn draw_ghost_art(x : Int, y : Int) -> Bool {
+fn draw_ghost_art(x : Int32, y : Int32) -> Bool {
   draw_cell_object_art(
     tex_ghost_sprite.val,
     x,
@@ -291,6 +291,6 @@ fn draw_ghost_art(x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn draw_guard_art(x : Int, y : Int) -> Bool {
+fn draw_guard_art(x : Int32, y : Int32) -> Bool {
   draw_cell_object_art(tex_guard_sprite.val, x, y, 64.0, @raylib.white)
 }

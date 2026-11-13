@@ -143,12 +143,12 @@ fn @types.Game::draw_header(game : @types.Game) -> Unit {
 
 ///|
 fn draw_score_box(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
-  value : Int,
+  value : Int32,
 ) -> Unit {
   @raylib.draw_rectangle_rounded(
     @types.rect(x, y, w, h),

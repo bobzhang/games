@@ -24,7 +24,7 @@ pub fn validate_route_step(
 pub fn calculate_route_water_cost(
   map : @types.HexMap,
   route : Array[@types.HexCoord],
-) -> Int {
+) -> Int32 {
   let mut total = 0
   for i in 0..<route.length() {
     let coord = route[i]
@@ -117,11 +117,11 @@ pub fn is_route_valid(
 ///|
 pub fn calculate_stars(
   reached_dest : Bool,
-  gold : Int,
-  gold_target : Int,
-  artifacts : Int,
-  total_artifacts : Int,
-) -> Int {
+  gold : Int32,
+  gold_target : Int32,
+  artifacts : Int32,
+  total_artifacts : Int32,
+) -> Int32 {
   if !reached_dest {
     return 0
   }

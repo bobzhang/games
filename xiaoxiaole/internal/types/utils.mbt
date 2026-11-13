@@ -18,18 +18,18 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 
 ///|
 /// Converts a column index to screen-space X.
-pub fn cell_x(col : Int) -> Float {
+pub fn cell_x(col : Int32) -> Float {
   Float::from_int(board_left + col * (cell_px + cell_gap))
 }
 
 ///|
 /// Converts a row index to screen-space Y.
-pub fn cell_y(row : Int) -> Float {
+pub fn cell_y(row : Int32) -> Float {
   Float::from_int(board_top + row * (cell_px + cell_gap))
 }
 
 ///|
 /// Converts row and column to linear board index.
-pub fn idx(r : Int, c : Int) -> Int {
+pub fn idx(r : Int32, c : Int32) -> Int32 {
   r * grid_cols + c
 }

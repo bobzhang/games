@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Left boundary of the outer track rectangle.
@@ -40,23 +40,23 @@ let inner_b : Float = 570.0
 
 ///|
 /// Number of waypoints defining the racing circuit.
-let wp_n : Int = 8
+let wp_n : Int32 = 8
 
 ///|
 /// Total number of karts in the race (player plus AI).
-let kart_n : Int = 4
+let kart_n : Int32 = 4
 
 ///|
 /// Maximum number of simultaneous projectile shots in the pool.
-let max_shots : Int = 200
+let max_shots : Int32 = 200
 
 ///|
 /// Maximum number of pickup items on the track at one time.
-let max_pickups : Int = 6
+let max_pickups : Int32 = 6
 
 ///|
 /// Maximum number of simultaneous spark particles in the pool.
-let max_sparks : Int = 260
+let max_sparks : Int32 = 260
 
 ///|
 /// Represents a kart with position, orientation, speed, health, lap progress, and shoot cooldown.
@@ -65,9 +65,9 @@ struct Kart {
   mut y : Float
   mut angle : Float
   mut speed : Float
-  mut hp : Int
-  mut lap : Int
-  mut next_wp : Int
+  mut hp : Int32
+  mut lap : Int32
+  mut next_wp : Int32
   mut shoot_cd : Float
 }
 
@@ -79,7 +79,7 @@ struct Shot {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut owner : Int
+  mut owner : Int32
   mut active : Bool
 }
 
@@ -88,7 +88,7 @@ struct Shot {
 struct Pickup {
   x : Float
   y : Float
-  kind : Int
+  kind : Int32
   mut active : Bool
   mut respawn : Float
 }
@@ -101,7 +101,7 @@ struct Spark {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -122,10 +122,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -170,7 +170,7 @@ fn track_contains(x : Float, y : Float, margin : Float) -> Bool {
 fn set_wp(
   wx : Array[Float],
   wy : Array[Float],
-  i : Int,
+  i : Int32,
   x : Float,
   y : Float,
 ) -> Unit {
@@ -254,10 +254,10 @@ fn clear_shots(shots : Array[Shot]) -> Unit {
 /// Initialises a single pickup entry at the given index with position and kind.
 fn set_pickup(
   pickups : Array[Pickup],
-  i : Int,
+  i : Int32,
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   pickups[i] = { x, y, kind, active: true, respawn: 0.0, }
 }
@@ -294,7 +294,7 @@ fn spawn_spark(
   x : Float,
   y : Float,
   speed_scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for spark in sparks {
@@ -323,9 +323,9 @@ fn burst(
   sparks : Array[Spark],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed_scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_spark(sparks, x, y, speed_scale, kind)
@@ -340,7 +340,7 @@ fn spawn_shot(
   y : Float,
   dx : Float,
   dy : Float,
-  owner : Int,
+  owner : Int32,
 ) -> Unit {
   let d2 = dx * dx + dy * dy
   if d2 <= 0.0001 {
@@ -432,7 +432,7 @@ fn resolve_track_collision(kart : Kart) -> Unit {
 
 ///|
 /// Teleports a destroyed kart back to its starting position and resets its motion.
-fn respawn_kart(karts : Array[Kart], i : Int) -> Unit {
+fn respawn_kart(karts : Array[Kart], i : Int32) -> Unit {
   if i == 0 {
     karts[i].x = 236.0
     karts[i].y = 412.0

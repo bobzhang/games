@@ -54,10 +54,10 @@ fn @types.Game::draw_stage_sky(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_city_layer(
   game : @types.Game,
-  layer : Int,
-  y_base : Int,
-  height_min : Int,
-  height_max : Int,
+  layer : Int32,
+  y_base : Int32,
+  height_min : Int32,
+  height_max : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let parallax = @types.f(0.1) + Float::from_int(layer) * @types.f(0.1)

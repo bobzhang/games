@@ -1,22 +1,24 @@
 ///|
 /// High-level flow state for the tea delivery run.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
 
 ///|
 /// Kind of route hazard the cart can encounter.
+#derive(Eq)
 pub(all) enum HazardKind {
   Rock
   Landslide
   Crosswind
-} derive(Eq)
+}
 
 ///|
 pub extend HazardKind with Eq::{not_equal, equal}
@@ -25,7 +27,7 @@ pub extend HazardKind with Eq::{not_equal, equal}
 /// Hazard entity moving down a lane toward the cart.
 pub(all) struct Hazard {
   mut active : Bool
-  mut lane : Int
+  mut lane : Int32
   mut y : Float
   mut speed : Float
   mut size : Float
@@ -38,22 +40,22 @@ pub(all) struct Hazard {
 pub(all) struct Game {
   hazards : Array[Hazard]
   mut state : GameState
-  mut lane : Int
+  mut lane : Int32
   mut lane_x : Float
   mut tilt : Float
   mut speed : Float
   mut distance : Float
   mut next_checkpoint_distance : Float
-  mut checkpoint_index : Int
+  mut checkpoint_index : Int32
   mut schedule_s : Float
   mut cargo_quality : Float
   mut durability : Float
   mut reputation : Float
-  mut multiplier : Int
-  mut score : Int
-  mut best_score : Int
-  mut successful_deliveries : Int
-  mut failed_deliveries : Int
+  mut multiplier : Int32
+  mut score : Int32
+  mut best_score : Int32
+  mut successful_deliveries : Int32
+  mut failed_deliveries : Int32
   mut boost_cd : Float
   mut boost_heat : Float
   mut boost_timer : Float
@@ -61,9 +63,9 @@ pub(all) struct Game {
   mut world_t : Float
   mut message : String
   mut message_t : Float
-  mut near_miss_combo : Int
-  mut input_steer : Int
-  mut input_tilt : Int
+  mut near_miss_combo : Int32
+  mut input_steer : Int32
+  mut input_tilt : Int32
   mut input_brake_press : Bool
   mut input_stabilize_hold : Bool
   mut input_boost_press : Bool

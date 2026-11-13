@@ -340,7 +340,7 @@ test "AchievementState::new has 6 achievements" {
 
 ///|
 test "should_spawn_elite respects floor threshold" {
-  let rng : Ref[Int] = { val: 12345, }
+  let rng : Ref[Int32] = { val: 12345, }
   // Below threshold
   inspect(@types.should_spawn_elite(2, rng), content="false")
   inspect(@types.should_spawn_elite(3, rng), content="false")

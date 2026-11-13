@@ -1,17 +1,18 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1366
+pub let screen_w : Int32 = 1366
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 768
+pub let screen_h : Int32 = 768
 
 ///|
 /// Fixed update/render target frequency.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Track object type.
+#derive(Eq)
 pub(all) enum ObjKind {
   Wall
   Orb
@@ -19,26 +20,26 @@ pub(all) enum ObjKind {
   GateBeta
   Boost
   JumpBar
-} derive(Eq)
+}
 
 ///|
 pub extend ObjKind with Eq::{not_equal, equal}
 
 ///|
 /// Number of lateral lanes on the track.
-pub let lane_count : Int = 5
+pub let lane_count : Int32 = 5
 
 ///|
 /// Capacity of active track objects.
-pub let max_objs : Int = 360
+pub let max_objs : Int32 = 360
 
 ///|
 /// Capacity of particle effects.
-pub let max_particles : Int = 460
+pub let max_particles : Int32 = 460
 
 ///|
 /// Capacity of after-image trail segments.
-pub let max_trails : Int = 180
+pub let max_trails : Int32 = 180
 
 ///|
 /// Base forward speed in world units per second.
@@ -86,12 +87,13 @@ pub let combo_decay_time : Float = 3.8
 
 ///|
 /// Current game state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Play
   StageClear
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

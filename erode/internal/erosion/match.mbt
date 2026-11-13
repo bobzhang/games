@@ -46,7 +46,7 @@ pub fn is_perfect_match(current : @types.Grid, target : @types.Grid) -> Bool {
 
 ///|
 /// Calculate match percentage (0-100).
-pub fn match_percentage(current : @types.Grid, target : @types.Grid) -> Int {
+pub fn match_percentage(current : @types.Grid, target : @types.Grid) -> Int32 {
   let result = compare_grids(current, target)
   let total = result.matching + result.over_eroded + result.under_eroded
   if total == 0 {
@@ -64,9 +64,9 @@ pub fn match_percentage(current : @types.Grid, target : @types.Grid) -> Int {
 pub fn calculate_stars(
   current : @types.Grid,
   target : @types.Grid,
-  forces_used : Int,
-  par_forces : Int,
-) -> Int {
+  forces_used : Int32,
+  par_forces : Int32,
+) -> Int32 {
   let result = compare_grids(current, target)
   if result.under_eroded > 0 || result.over_eroded > 0 {
     // Not a match at all

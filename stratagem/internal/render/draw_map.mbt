@@ -1,12 +1,12 @@
 ///|
-fn hex_corner_x(cx : Float, size : Float, i : Int) -> Float {
+fn hex_corner_x(cx : Float, size : Float, i : Int32) -> Float {
   let angle = Float::from_double(@math.PI) / 3.0 * Float::from_int(i) +
     Float::from_double(@math.PI) / 6.0
   cx + size * @types.cosf(angle)
 }
 
 ///|
-fn hex_corner_y(cy : Float, size : Float, i : Int) -> Float {
+fn hex_corner_y(cy : Float, size : Float, i : Int32) -> Float {
   let angle = Float::from_double(@math.PI) / 3.0 * Float::from_int(i) +
     Float::from_double(@math.PI) / 6.0
   cy + size * @types.sinf(angle)
@@ -329,8 +329,8 @@ fn draw_unit_icon(
 fn draw_hp_bar(
   cx : Float,
   cy : Float,
-  hp : Int,
-  max_hp : Int,
+  hp : Int32,
+  max_hp : Int32,
   unit_size : Float,
 ) -> Unit {
   let bar_w = (unit_size * 1.8).to_int()

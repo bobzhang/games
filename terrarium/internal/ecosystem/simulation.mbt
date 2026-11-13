@@ -22,11 +22,11 @@ pub fn check_organism_alive(
 ///|
 pub fn count_adjacent_plants(
   grid : Array[Array[@types.CellContent]],
-  row : Int,
-  col : Int,
-) -> Int {
+  row : Int32,
+  col : Int32,
+) -> Int32 {
   let mut count = 0
-  let offsets : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let offsets : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
   for i in 0..<offsets.length() {
     let (dr, dc) = offsets[i]
     let nr = row + dr
@@ -44,8 +44,8 @@ pub fn count_adjacent_plants(
 ///|
 pub fn herbivore_has_food(
   grid : Array[Array[@types.CellContent]],
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
 ) -> Bool {
   count_adjacent_plants(grid, row, col) > 0
 }
@@ -128,7 +128,7 @@ pub fn check_resource_deaths(
 }
 
 ///|
-pub fn count_alive(organisms : Array[@types.OrganismState]) -> Int {
+pub fn count_alive(organisms : Array[@types.OrganismState]) -> Int32 {
   let mut c = 0
   for i in 0..<organisms.length() {
     if organisms[i].alive {

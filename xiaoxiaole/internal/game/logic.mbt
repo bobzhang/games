@@ -89,10 +89,10 @@ fn @types.Game::snap_positions(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::try_swap(
   game : @types.Game,
-  r1 : Int,
-  c1 : Int,
-  r2 : Int,
-  c2 : Int,
+  r1 : Int32,
+  c1 : Int32,
+  r2 : Int32,
+  c2 : Int32,
 ) -> Unit {
   // Check adjacency
   let dr = if r2 > r1 { r2 - r1 } else { r1 - r2 }
@@ -142,7 +142,7 @@ fn @types.Game::undo_swap(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::find_matches(game : @types.Game) -> Int {
+fn @types.Game::find_matches(game : @types.Game) -> Int32 {
   let mut count = 0
   // Clear matched flags
   for i in 0..<@types.cell_count {
@@ -192,7 +192,7 @@ fn @types.Game::find_matches(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::remove_matched(game : @types.Game) -> Int {
+fn @types.Game::remove_matched(game : @types.Game) -> Int32 {
   let mut removed = 0
   for i in 0..<@types.cell_count {
     if game.board[i].matched {
@@ -314,10 +314,10 @@ fn @types.Game::find_hint(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::swap_kinds(
   game : @types.Game,
-  r1 : Int,
-  c1 : Int,
-  r2 : Int,
-  c2 : Int,
+  r1 : Int32,
+  c1 : Int32,
+  r2 : Int32,
+  c2 : Int32,
 ) -> Unit {
   let i1 = @types.idx(r1, c1)
   let i2 = @types.idx(r2, c2)

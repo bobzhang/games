@@ -1,38 +1,38 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let slot_height : Int = 60
+pub let slot_height : Int32 = 60
 
 ///|
-pub let slot_width : Int = 400
+pub let slot_width : Int32 = 400
 
 ///|
-pub let section_x : Int = 80
+pub let section_x : Int32 = 80
 
 ///|
-pub let section_y : Int = 80
+pub let section_y : Int32 = 80
 
 ///|
-pub let tray_x : Int = 80
+pub let tray_x : Int32 = 80
 
 ///|
-pub let tray_y : Int = 600
+pub let tray_y : Int32 = 600
 
 ///|
-pub let clue_panel_x : Int = 560
+pub let clue_panel_x : Int32 = 560
 
 ///|
-pub let clue_panel_y : Int = 80
+pub let clue_panel_y : Int32 = 80
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 // Earth-tone palette
 

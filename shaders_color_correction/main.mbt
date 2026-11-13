@@ -38,7 +38,7 @@ fn main {
     "", "resources/shaders/glsl330/color_correction.fs",
   )
 
-  let image_index : Ref[Int] = { val: 0, }
+  let image_index : Ref[Int32] = { val: 0, }
 
   let contrast : Ref[Float] = { val: 0.0, }
   let saturation : Ref[Float] = { val: 0.0, }

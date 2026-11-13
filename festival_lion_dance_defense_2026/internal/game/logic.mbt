@@ -125,11 +125,11 @@ fn @types.Game::spawn_threat(game : @types.Game) -> Unit {
 ///|
 /// Computes score gained for clearing one threat, accounting for kind, current combo depth, action type, and stun bonus.
 fn score_for_clear(
-  kind : Int,
-  combo : Int,
+  kind : Int32,
+  combo : Int32,
   action : @types.Action,
   stunned : Bool,
-) -> Int {
+) -> Int32 {
   let mut score = if kind == @types.threat_firecracker {
     @types.score_firecracker
   } else {
@@ -158,8 +158,8 @@ fn score_for_clear(
 ///|
 /// Computes hype gained for clearing one threat, accounting for kind, combo, action type, and stun bonus.
 fn hype_for_clear(
-  kind : Int,
-  combo : Int,
+  kind : Int32,
+  combo : Int32,
   action : @types.Action,
   stunned : Bool,
 ) -> Float {
@@ -185,7 +185,7 @@ fn hype_for_clear(
 /// Records a successful threat clear: increments the combo counter, adds score and hype, and restores crowd order.
 fn @types.Game::register_clear(
   game : @types.Game,
-  kind : Int,
+  kind : Int32,
   action : @types.Action,
   stunned : Bool,
 ) -> Unit {
@@ -221,7 +221,7 @@ fn @types.Game::register_clear(
 /// Deactivates the threat at index `i` and calls `register_clear` to update score, hype, and combo.
 fn @types.Game::clear_threat_at(
   game : @types.Game,
-  i : Int,
+  i : Int32,
   action : @types.Action,
 ) -> Unit {
   if i < 0 || i >= game.threats.length() {
@@ -266,7 +266,7 @@ fn @types.Game::lose_order(
 
 ///|
 /// Applies the crowd-order and morale penalty for a threat that reached the left boundary without being stopped.
-fn @types.Game::breach_penalty(game : @types.Game, kind : Int) -> Unit {
+fn @types.Game::breach_penalty(game : @types.Game, kind : Int32) -> Unit {
   if kind == @types.threat_firecracker {
     game.lose_order(
       @types.breach_order_loss_firecracker, @types.breach_morale_loss_firecracker,
@@ -281,7 +281,7 @@ fn @types.Game::breach_penalty(game : @types.Game, kind : Int) -> Unit {
 
 ///|
 /// Applies the crowd-order and morale penalty for a threat that collided with the troupe while unguarded.
-fn @types.Game::contact_penalty(game : @types.Game, kind : Int) -> Unit {
+fn @types.Game::contact_penalty(game : @types.Game, kind : Int32) -> Unit {
   if kind == @types.threat_firecracker {
     game.lose_order(
       6.0, @types.collision_morale_loss_firecracker, "Blast near the troupe!",

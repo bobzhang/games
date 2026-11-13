@@ -183,7 +183,7 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_melee_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dz : Float,
   dist : Float,
@@ -222,7 +222,7 @@ fn @types.Game::update_melee_ai(
 ///|
 fn @types.Game::update_runner_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dz : Float,
   dist : Float,
@@ -270,7 +270,7 @@ fn @types.Game::update_runner_ai(
 ///|
 fn @types.Game::update_brute_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dz : Float,
   dist : Float,
@@ -336,7 +336,7 @@ fn @types.Game::update_brute_ai(
 ///|
 fn @types.Game::update_spitter_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dz : Float,
   dist : Float,
@@ -385,7 +385,7 @@ fn @types.Game::update_spitter_ai(
 ///|
 fn @types.Game::update_exploder_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dz : Float,
   dist : Float,
@@ -442,7 +442,7 @@ fn @types.Game::update_exploder_ai(
 ///|
 fn @types.Game::update_necromancer_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dz : Float,
   dist : Float,
@@ -542,7 +542,7 @@ fn @types.Game::update_necromancer_ai(
 ///|
 fn @types.Game::update_shielded_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dz : Float,
   dist : Float,
@@ -581,7 +581,7 @@ fn @types.Game::update_shielded_ai(
 ///|
 fn @types.Game::update_boss_ai(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   dx : Float,
   dz : Float,
   dist : Float,
@@ -735,7 +735,7 @@ fn @types.Game::update_boss_ai(
 }
 
 ///|
-fn @types.Game::fire_spit(game : @types.Game, enemy_idx : Int) -> Unit {
+fn @types.Game::fire_spit(game : @types.Game, enemy_idx : Int32) -> Unit {
   let enemy = game.enemies[enemy_idx]
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
@@ -824,7 +824,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::kill_enemy(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::kill_enemy(game : @types.Game, idx : Int32) -> Unit {
   let enemy = game.enemies[idx]
   enemy.active = false
   // Save death position for necromancer
@@ -920,7 +920,7 @@ fn @types.Game::kill_enemy(game : @types.Game, idx : Int) -> Unit {
 ///|
 fn @types.Game::damage_enemy(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   damage : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
@@ -939,7 +939,7 @@ fn @types.Game::damage_enemy(
 ///|
 fn @types.Game::damage_enemy_headshot(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   damage : Float,
 ) -> Unit {
   let final_damage = damage * @types.headshot_mult
@@ -976,7 +976,7 @@ fn @types.Game::damage_enemy_headshot(
 ///|
 fn @types.Game::damage_shielded_enemy(
   game : @types.Game,
-  idx : Int,
+  idx : Int32,
   damage : Float,
   proj_dx : Float,
   proj_dz : Float,

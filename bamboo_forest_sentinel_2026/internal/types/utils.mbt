@@ -55,7 +55,7 @@ pub fn normalize2(x : Float, y : Float) -> (Float, Float) {
 
 ///|
 /// Returns world-space coordinates for lane y.
-pub fn lane_y(lane : Int) -> Float {
+pub fn lane_y(lane : Int32) -> Float {
   match lane.clamp(min=0, max=corridor_lanes - 1) {
     0 => Float::from_int(lane_top_y)
     1 => Float::from_int(lane_mid_y)
@@ -65,7 +65,7 @@ pub fn lane_y(lane : Int) -> Float {
 
 ///|
 /// Returns world-space coordinates for beacon position.
-pub fn beacon_position(index : Int) -> (Float, Float) {
+pub fn beacon_position(index : Int32) -> (Float, Float) {
   match index.clamp(min=0, max=beacon_count - 1) {
     0 => (Float::from_int(world_x + 760), lane_y(0))
     1 => (Float::from_int(world_x + 900), lane_y(1))
@@ -75,7 +75,7 @@ pub fn beacon_position(index : Int) -> (Float, Float) {
 
 ///|
 /// Returns world-space coordinates for trap slot position.
-pub fn trap_slot_position(index : Int) -> (Float, Float) {
+pub fn trap_slot_position(index : Int32) -> (Float, Float) {
   let normalized = index.clamp(min=0, max=trap_slot_count - 1)
   let row = normalized / trap_slot_cols
   let col = normalized % trap_slot_cols
@@ -86,7 +86,7 @@ pub fn trap_slot_position(index : Int) -> (Float, Float) {
 
 ///|
 /// Returns derived layout data for spawn route count.
-pub fn spawn_route_count(night : Int) -> Int {
+pub fn spawn_route_count(night : Int32) -> Int32 {
   if night >= 4 {
     8
   } else {
@@ -96,7 +96,7 @@ pub fn spawn_route_count(night : Int) -> Int {
 
 ///|
 /// Returns world-space coordinates for spawn route position.
-pub fn spawn_route_position(route : Int) -> (Float, Float) {
+pub fn spawn_route_position(route : Int32) -> (Float, Float) {
   let mid_x = world_x + world_w / 2
   match route {
     0 => (Float::from_int(world_x + 12), lane_y(0))
@@ -112,7 +112,7 @@ pub fn spawn_route_position(route : Int) -> (Float, Float) {
 
 ///|
 /// Returns derived layout data for spawn route target.
-pub fn spawn_route_target(route : Int) -> Int {
+pub fn spawn_route_target(route : Int32) -> Int32 {
   match route {
     0 => 0
     1 => 1
@@ -127,7 +127,7 @@ pub fn spawn_route_target(route : Int) -> Int {
 
 ///|
 /// Returns derived layout data for spawn interval for night.
-pub fn spawn_interval_for_night(night : Int) -> Float {
+pub fn spawn_interval_for_night(night : Int32) -> Float {
   let level = Float::from_int((night - 1).clamp(min=0, max=999))
   clampf(
     spawn_interval_start - spawn_interval_decay * level,
@@ -138,7 +138,7 @@ pub fn spawn_interval_for_night(night : Int) -> Float {
 
 ///|
 /// Returns collision or positioning data for enemy hit radius.
-pub fn enemy_hit_radius(kind : Int) -> Float {
+pub fn enemy_hit_radius(kind : Int32) -> Float {
   match kind {
     1 => 12.0
     2 => 18.0
@@ -148,7 +148,7 @@ pub fn enemy_hit_radius(kind : Int) -> Float {
 
 ///|
 /// Returns a derived gameplay metric for active enemy count.
-pub fn active_enemy_count(game : Game) -> Int {
+pub fn active_enemy_count(game : Game) -> Int32 {
   let mut total = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -160,7 +160,7 @@ pub fn active_enemy_count(game : Game) -> Int {
 
 ///|
 /// Returns a derived gameplay metric for living beacon count.
-pub fn living_beacon_count(game : Game) -> Int {
+pub fn living_beacon_count(game : Game) -> Int32 {
   let mut total = 0
   for beacon in game.beacons {
     if beacon.integrity > 0.0 {

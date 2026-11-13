@@ -1,11 +1,11 @@
 ///|
 /// Draws a stick-figure duelist at the given position, adjusting arm and prop geometry based on stance and lane lean, with an optional guard-flash glow ring.
 fn draw_duelist(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   stance : @types.Stance,
-  lane_x : Int,
-  lane_y : Int,
+  lane_x : Int32,
+  lane_y : Int32,
   body : @raylib.Color,
   accent : @raylib.Color,
   guard_flash_t : Float,
@@ -311,10 +311,10 @@ fn @types.Game::draw_active_prompt(game : @types.Game) -> Unit {
 ///|
 /// Draws a labeled progress bar at the specified position showing the ratio of value to max_value with the given fill color.
 fn draw_meter(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value : Float,
   max_value : Float,
   label : String,

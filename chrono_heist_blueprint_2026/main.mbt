@@ -1,125 +1,125 @@
 ///|
-let screen_w : Int = 1280
+let screen_w : Int32 = 1280
 
 ///|
-let screen_h : Int = 860
+let screen_h : Int32 = 860
 
 ///|
-let grid_w : Int = 12
+let grid_w : Int32 = 12
 
 ///|
-let grid_h : Int = 8
+let grid_h : Int32 = 8
 
 ///|
-let cell : Int = 72
+let cell : Int32 = 72
 
 ///|
-let board_x : Int = 150
+let board_x : Int32 = 150
 
 ///|
-let board_y : Int = 150
+let board_y : Int32 = 150
 
 ///|
-let loop_len : Int = 9
+let loop_len : Int32 = 9
 
 ///|
-let max_ghosts : Int = 6
+let max_ghosts : Int32 = 6
 
 ///|
-let tile_empty : Int = 0
+let tile_empty : Int32 = 0
 
 ///|
-let tile_wall : Int = 1
+let tile_wall : Int32 = 1
 
 ///|
-let tile_vault : Int = 2
+let tile_vault : Int32 = 2
 
 ///|
-let tile_exit : Int = 3
+let tile_exit : Int32 = 3
 
 ///|
-let tile_key : Int = 4
+let tile_key : Int32 = 4
 
 ///|
-let action_wait : Int = 0
+let action_wait : Int32 = 0
 
 ///|
-let action_up : Int = 1
+let action_up : Int32 = 1
 
 ///|
-let action_down : Int = 2
+let action_down : Int32 = 2
 
 ///|
-let action_left : Int = 3
+let action_left : Int32 = 3
 
 ///|
-let action_right : Int = 4
+let action_right : Int32 = 4
 
 ///|
-let max_guards : Int = 4
+let max_guards : Int32 = 4
 
 ///|
-let max_doors : Int = 3
+let max_doors : Int32 = 3
 
 ///|
 struct Actor {
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
 }
 
 ///|
 struct Guard {
   mut active : Bool
-  mut x : Int
-  mut y : Int
-  ax : Int
-  ay : Int
-  bx : Int
-  by : Int
+  mut x : Int32
+  mut y : Int32
+  ax : Int32
+  ay : Int32
+  bx : Int32
+  by : Int32
   mut to_b : Bool
-  mut alert_x : Int
-  mut alert_y : Int
-  mut alert_t : Int
+  mut alert_x : Int32
+  mut alert_y : Int32
+  mut alert_t : Int32
 }
 
 ///|
 struct Door {
   mut active : Bool
-  x : Int
-  y : Int
-  plate_x : Int
-  plate_y : Int
+  x : Int32
+  y : Int32
+  plate_x : Int32
+  plate_y : Int32
   title : String
 }
 
 ///|
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * grid_w + x
 }
 
 ///|
-fn in_bounds(x : Int, y : Int) -> Bool {
+fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && y >= 0 && x < grid_w && y < grid_h
 }
 
 ///|
-fn cell_rect(x : Int, y : Int) -> (Int, Int, Int, Int) {
+fn cell_rect(x : Int32, y : Int32) -> (Int32, Int32, Int32, Int32) {
   (board_x + x * cell, board_y + y * cell, cell, cell)
 }
 
 ///|
-fn screen_center_x(x : Int) -> Int {
+fn screen_center_x(x : Int32) -> Int32 {
   board_x + x * cell + cell / 2
 }
 
 ///|
-fn screen_center_y(y : Int) -> Int {
+fn screen_center_y(y : Int32) -> Int32 {
   board_y + y * cell + cell / 2
 }
 
 ///|
 fn clear_level(
-  tiles : Array[Int],
+  tiles : Array[Int32],
   guards : Array[Guard],
   doors : Array[Door],
 ) -> Unit {
@@ -149,14 +149,24 @@ fn clear_level(
 }
 
 ///|
-fn set_wall_row(tiles : Array[Int], y : Int, x0 : Int, x1 : Int) -> Unit {
+fn set_wall_row(
+  tiles : Array[Int32],
+  y : Int32,
+  x0 : Int32,
+  x1 : Int32,
+) -> Unit {
   for x in x0..<=x1 {
     tiles[idx(x, y)] = tile_wall
   }
 }
 
 ///|
-fn set_wall_col(tiles : Array[Int], x : Int, y0 : Int, y1 : Int) -> Unit {
+fn set_wall_col(
+  tiles : Array[Int32],
+  x : Int32,
+  y0 : Int32,
+  y1 : Int32,
+) -> Unit {
   for y in y0..<=y1 {
     tiles[idx(x, y)] = tile_wall
   }
@@ -165,13 +175,13 @@ fn set_wall_col(tiles : Array[Int], x : Int, y0 : Int, y1 : Int) -> Unit {
 ///|
 fn set_guard_patrol(
   guards : Array[Guard],
-  i : Int,
-  x : Int,
-  y : Int,
-  ax : Int,
-  ay : Int,
-  bx : Int,
-  by : Int,
+  i : Int32,
+  x : Int32,
+  y : Int32,
+  ax : Int32,
+  ay : Int32,
+  bx : Int32,
+  by : Int32,
 ) -> Unit {
   guards[i] = {
     active: true,
@@ -191,11 +201,11 @@ fn set_guard_patrol(
 ///|
 fn set_door(
   doors : Array[Door],
-  i : Int,
-  x : Int,
-  y : Int,
-  px : Int,
-  py : Int,
+  i : Int32,
+  x : Int32,
+  y : Int32,
+  px : Int32,
+  py : Int32,
   title : String,
 ) -> Unit {
   doors[i] = { active: true, x, y, plate_x: px, plate_y: py, title, }
@@ -203,11 +213,11 @@ fn set_door(
 
 ///|
 fn setup_level(
-  level : Int,
-  tiles : Array[Int],
+  level : Int32,
+  tiles : Array[Int32],
   guards : Array[Guard],
   doors : Array[Door],
-) -> (Int, Int, Int, Int, Int, Int, String) {
+) -> (Int32, Int32, Int32, Int32, Int32, Int32, String) {
   clear_level(tiles, guards, doors)
 
   if level == 1 {
@@ -256,7 +266,7 @@ fn setup_level(
 }
 
 ///|
-fn action_dir(action : Int) -> (Int, Int) {
+fn action_dir(action : Int32) -> (Int32, Int32) {
   if action == action_up {
     (0, -1)
   } else if action == action_down {
@@ -273,10 +283,10 @@ fn action_dir(action : Int) -> (Int, Int) {
 ///|
 fn door_is_open(
   doors : Array[Door],
-  door_i : Int,
+  door_i : Int32,
   player : Actor,
   ghosts : Array[Actor],
-  ghost_count : Int,
+  ghost_count : Int32,
 ) -> Bool {
   if !doors[door_i].active {
     return false
@@ -295,13 +305,13 @@ fn door_is_open(
 
 ///|
 fn tile_blocked(
-  tiles : Array[Int],
+  tiles : Array[Int32],
   doors : Array[Door],
   player : Actor,
   ghosts : Array[Actor],
-  ghost_count : Int,
-  x : Int,
-  y : Int,
+  ghost_count : Int32,
+  x : Int32,
+  y : Int32,
 ) -> Bool {
   if !in_bounds(x, y) {
     return true
@@ -323,12 +333,12 @@ fn tile_blocked(
 ///|
 fn step_actor(
   actor : Actor,
-  action : Int,
-  tiles : Array[Int],
+  action : Int32,
+  tiles : Array[Int32],
   doors : Array[Door],
   player : Actor,
   ghosts : Array[Actor],
-  ghost_count : Int,
+  ghost_count : Int32,
 ) -> Unit {
   let (dx, dy) = action_dir(action)
   let nx = actor.x + dx
@@ -342,15 +352,15 @@ fn step_actor(
 
 ///|
 fn line_clear(
-  tiles : Array[Int],
+  tiles : Array[Int32],
   doors : Array[Door],
   player : Actor,
   ghosts : Array[Actor],
-  ghost_count : Int,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  ghost_count : Int32,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   if x0 == x1 {
     let lo = if y0 < y1 { y0 + 1 } else { y1 + 1 }
@@ -380,10 +390,10 @@ fn nearest_seen_target(
   guard_val : Guard,
   player : Actor,
   ghosts : Array[Actor],
-  ghost_count : Int,
-  tiles : Array[Int],
+  ghost_count : Int32,
+  tiles : Array[Int32],
   doors : Array[Door],
-) -> (Bool, Int, Int) {
+) -> (Bool, Int32, Int32) {
   let mut best_seen = false
   let mut best_x = 0
   let mut best_y = 0
@@ -439,7 +449,7 @@ fn nearest_seen_target(
 }
 
 ///|
-fn guard_target_cell(guard_val : Guard) -> (Int, Int) {
+fn guard_target_cell(guard_val : Guard) -> (Int32, Int32) {
   if guard_val.alert_t > 0 {
     (guard_val.alert_x, guard_val.alert_y)
   } else if guard_val.to_b {
@@ -452,11 +462,11 @@ fn guard_target_cell(guard_val : Guard) -> (Int, Int) {
 ///|
 fn step_guard(
   guard_val : Guard,
-  tiles : Array[Int],
+  tiles : Array[Int32],
   doors : Array[Door],
   player : Actor,
   ghosts : Array[Actor],
-  ghost_count : Int,
+  ghost_count : Int32,
 ) -> Unit {
   if !guard_val.active {
     return
@@ -517,8 +527,8 @@ fn player_spotted(
   guards : Array[Guard],
   player : Actor,
   ghosts : Array[Actor],
-  ghost_count : Int,
-  tiles : Array[Int],
+  ghost_count : Int32,
+  tiles : Array[Int32],
   doors : Array[Door],
 ) -> Bool {
   for guard_val in guards {
@@ -547,7 +557,7 @@ fn player_spotted(
 }
 
 ///|
-fn draw_tile(x : Int, y : Int, col : @raylib.Color) -> Unit {
+fn draw_tile(x : Int32, y : Int32, col : @raylib.Color) -> Unit {
   let (rx, ry, rw, rh) = cell_rect(x, y)
   @raylib.draw_rectangle(rx + 2, ry + 2, rw - 4, rh - 4, col)
 }
@@ -559,7 +569,7 @@ fn main {
   @draw.init_font()
   load_assets()
 
-  let tiles : Array[Int] = Array::make(grid_w * grid_h, tile_empty)
+  let tiles : Array[Int32] = Array::make(grid_w * grid_h, tile_empty)
   let guards : Array[Guard] = Array::makei(max_guards, fn(_i) {
     {
       active: false,
@@ -581,10 +591,10 @@ fn main {
   let ghosts : Array[Actor] = Array::makei(max_ghosts, fn(_i) {
     { x: 0, y: 0, }
   })
-  let ghost_actions : Array[Array[Int]] = Array::makei(max_ghosts, fn(_i) {
+  let ghost_actions : Array[Array[Int32]] = Array::makei(max_ghosts, fn(_i) {
     Array::makei(loop_len, fn(_j) { action_wait })
   })
-  let current_actions : Array[Int] = Array::makei(loop_len, fn(_i) {
+  let current_actions : Array[Int32] = Array::makei(loop_len, fn(_i) {
     action_wait
   })
 

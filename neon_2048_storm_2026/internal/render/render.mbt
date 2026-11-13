@@ -42,7 +42,7 @@ fn @types.Game::draw_bg(game : @types.Game, art : GameArt) -> Unit {
   )
 
   for i in 0..<15 {
-    let y : Int = i * 68
+    let y : Int32 = i * 68
     @raylib.draw_rectangle(
       0,
       y,
@@ -60,7 +60,7 @@ fn @types.Game::draw_bg(game : @types.Game, art : GameArt) -> Unit {
 
 ///|
 /// Returns the fill colour for a tile of value `v`.
-fn tile_body_color(v : Int) -> @raylib.Color {
+fn tile_body_color(v : Int32) -> @raylib.Color {
   if v <= 0 {
     @raylib.Color::new(30, 40, 58, 236)
   } else if v == 2 {
@@ -92,7 +92,7 @@ fn tile_body_color(v : Int) -> @raylib.Color {
 
 ///|
 /// Returns the label text colour for a tile of value `v`.
-fn tile_text_color(v : Int) -> @raylib.Color {
+fn tile_text_color(v : Int32) -> @raylib.Color {
   if v >= 2048 {
     @raylib.Color::new(56, 42, 20, 255)
   } else {
@@ -104,12 +104,12 @@ fn tile_text_color(v : Int) -> @raylib.Color {
 /// Draws the board background panel and, when shaking, an orange border highlight.
 fn @types.Game::draw_board_panel(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
-  let bw : Int = @types.board_n * tile
-  let bh : Int = @types.board_n * tile
+  let bw : Int32 = @types.board_n * tile
+  let bh : Int32 = @types.board_n * tile
 
   @raylib.draw_rectangle(
     bx - 18,
@@ -144,17 +144,17 @@ fn @types.Game::draw_board_panel(
 fn @types.Game::draw_cell(
   game : @types.Game,
   art : GameArt,
-  x : Int,
-  y : Int,
-  tile : Int,
-  bx : Int,
-  by : Int,
+  x : Int32,
+  y : Int32,
+  tile : Int32,
+  bx : Int32,
+  by : Int32,
 ) -> Unit {
-  let i : Int = @types.idx(x, y)
-  let px : Int = bx + x * tile
-  let py : Int = by + y * tile
+  let i : Int32 = @types.idx(x, y)
+  let px : Int32 = bx + x * tile
+  let py : Int32 = by + y * tile
 
-  let v : Int = game.board[i]
+  let v : Int32 = game.board[i]
 
   if v == @types.blocker_value {
     @raylib.draw_rectangle(
@@ -233,7 +233,7 @@ fn @types.Game::draw_cell(
       @raylib.Color::new(255, 255, 255, 46),
     )
     let s : String = v.to_string()
-    let fs : Int = if v < 100 { 54 } else if v < 1000 { 46 } else { 40 }
+    let fs : Int32 = if v < 100 { 54 } else if v < 1000 { 46 } else { 40 }
     @draw.draw_text(
       s,
       px + tile / 2 - @draw.measure_text(s, fs) / 2,
@@ -249,9 +249,9 @@ fn @types.Game::draw_cell(
 fn @types.Game::draw_grid(
   game : @types.Game,
   art : GameArt,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
@@ -259,11 +259,11 @@ fn @types.Game::draw_grid(
     }
   }
 
-  let bw : Int = @types.board_n * tile
-  let bh : Int = @types.board_n * tile
+  let bw : Int32 = @types.board_n * tile
+  let bh : Int32 = @types.board_n * tile
 
   for i in 0..<=@types.board_n {
-    let px : Int = bx + i * tile
+    let px : Int32 = bx + i * tile
     @raylib.draw_line(
       px,
       by,
@@ -272,7 +272,7 @@ fn @types.Game::draw_grid(
       @raylib.Color::new(82, 110, 142, 110),
     )
 
-    let py : Int = by + i * tile
+    let py : Int32 = by + i * tile
     @raylib.draw_line(
       bx,
       py,
@@ -287,16 +287,16 @@ fn @types.Game::draw_grid(
 /// Draws the cursor selection rectangle, tinted gold when zap is ready.
 fn @types.Game::draw_cursor(
   game : @types.Game,
-  bx : Int,
-  by : Int,
-  tile : Int,
+  bx : Int32,
+  by : Int32,
+  tile : Int32,
 ) -> Unit {
   if game.state != Play {
     return
   }
 
-  let px : Int = bx + game.cursor_x * tile
-  let py : Int = by + game.cursor_y * tile
+  let px : Int32 = bx + game.cursor_x * tile
+  let py : Int32 = by + game.cursor_y * tile
 
   @raylib.draw_rectangle_lines_ex(
     @raylib.Rectangle::new(
@@ -322,7 +322,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
       continue
     }
 
-    let alpha : Int = if spark.life > 0.7 {
+    let alpha : Int32 = if spark.life > 0.7 {
       236
     } else if spark.life > 0.4 {
       196
@@ -345,15 +345,15 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 fn draw_touch_button(
   art : GameArt,
   label : String,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   active : Bool,
   tint : @raylib.Color,
-  icon_index : Int,
+  icon_index : Int32,
 ) -> Unit {
-  let x : Int = rect.0
-  let y : Int = rect.1
-  let w : Int = rect.2
-  let h : Int = rect.3
+  let x : Int32 = rect.0
+  let y : Int32 = rect.1
+  let w : Int32 = rect.2
+  let h : Int32 = rect.3
 
   @raylib.draw_rectangle(
     x,
@@ -547,10 +547,10 @@ fn @types.Game::draw_controls(game : @types.Game, art : GameArt) -> Unit {
 ///|
 /// Draws the right-side HUD panel with score, stats, zap charge bar, controls legend, and transient messages.
 fn @types.Game::draw_panel(game : @types.Game, art : GameArt) -> Unit {
-  let px : Int = @types.panel_x0
-  let py : Int = 24
-  let pw : Int = @types.panel_w
-  let ph : Int = @types.screen_h - 48
+  let px : Int32 = @types.panel_x0
+  let py : Int32 = 24
+  let pw : Int32 = @types.panel_w
+  let ph : Int32 = @types.screen_h - 48
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(14, 22, 36, 244))
   @raylib.draw_rectangle_lines(
@@ -864,10 +864,10 @@ fn @types.Game::draw_result_overlay(game : @types.Game, art : GameArt) -> Unit {
     @raylib.Color::new(6, 10, 16, 176),
   )
 
-  let pw : Int = 840
-  let ph : Int = 500
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 840
+  let ph : Int32 = 500
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(16, 24, 36, 246))
   @raylib.draw_rectangle_lines(

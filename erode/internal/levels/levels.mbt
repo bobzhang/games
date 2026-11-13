@@ -10,11 +10,11 @@ fn make_level(
   name : String,
   initial : Array[Array[Bool]],
   target : Array[Array[Bool]],
-  water~ : Int,
-  wind~ : Int,
-  frost~ : Int,
-  heat~ : Int,
-  par~ : Int,
+  water~ : Int32,
+  wind~ : Int32,
+  frost~ : Int32,
+  heat~ : Int32,
+  par~ : Int32,
 ) -> @types.Level {
   let size = 8
   {
@@ -756,11 +756,11 @@ pub fn get_all_levels() -> Array[@types.Level] {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   get_all_levels()[index]
 }
 
 ///|
-pub fn level_count() -> Int {
+pub fn level_count() -> Int32 {
   get_all_levels().length()
 }

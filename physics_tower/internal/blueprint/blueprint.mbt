@@ -1,6 +1,6 @@
 ///|
 /// Returns the total cost of a blueprint in inventory pieces.
-pub fn blueprint_cost(bp : @types.Blueprint, game : @types.Game) -> Int {
+pub fn blueprint_cost(bp : @types.Blueprint, game : @types.Game) -> Int32 {
   ignore(game)
   bp.cost
 }
@@ -9,7 +9,7 @@ pub fn blueprint_cost(bp : @types.Blueprint, game : @types.Game) -> Int {
 /// Checks if the player has enough inventory to place a blueprint.
 pub fn can_afford_blueprint(bp : @types.Blueprint, game : @types.Game) -> Bool {
   // Count required pieces by kind+material
-  let needs : Array[((@types.PieceKind, @types.Material), Int)] = Array(
+  let needs : Array[((@types.PieceKind, @types.Material), Int32)] = Array(
     capacity=bp.pieces.length(),
   )
   for p in bp.pieces {
@@ -52,12 +52,12 @@ pub fn place_blueprint(
   game : @types.Game,
   cx : Float,
   cy : Float,
-) -> Int {
+) -> Int32 {
   if !can_afford_blueprint(bp, game) {
     return 0
   }
   let mut placed = 0
-  let ids : Array[Int] = Array(capacity=bp.pieces.length())
+  let ids : Array[Int32] = Array(capacity=bp.pieces.length())
   for p in bp.pieces {
     let (kind, mat, ox, oy, angle) = p
     let wx = cx + ox
@@ -239,7 +239,7 @@ pub fn validate_blueprint(bp : @types.Blueprint) -> Bool {
 
 ///|
 /// Creates a column blueprint with the specified material and block count.
-pub fn make_column(mat : @types.Material, count : Int) -> @types.Blueprint {
+pub fn make_column(mat : @types.Material, count : Int32) -> @types.Blueprint {
   let pieces : Array[(@types.PieceKind, @types.Material, Float, Float, Float)] = Array(
     capacity=count,
   )

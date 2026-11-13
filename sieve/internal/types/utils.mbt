@@ -1,5 +1,5 @@
 ///|
-pub fn is_prime(n : Int) -> Bool {
+pub fn is_prime(n : Int32) -> Bool {
   if n < 2 {
     return false
   }
@@ -13,7 +13,7 @@ pub fn is_prime(n : Int) -> Bool {
 }
 
 ///|
-pub fn gcd(a : Int, b : Int) -> Int {
+pub fn gcd(a : Int32, b : Int32) -> Int32 {
   let mut x = a
   let mut y = b
   if x < 0 {
@@ -31,7 +31,7 @@ pub fn gcd(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn divisible_by(a : Int, b : Int) -> Bool {
+pub fn divisible_by(a : Int32, b : Int32) -> Bool {
   if b == 0 {
     return false
   }
@@ -39,7 +39,7 @@ pub fn divisible_by(a : Int, b : Int) -> Bool {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -48,7 +48,7 @@ pub fn absi(v : Int) -> Int {
 }
 
 ///|
-pub fn new_cell(value : Int, locked : Bool) -> Cell {
+pub fn new_cell(value : Int32, locked : Bool) -> Cell {
   { value, locked, }
 }
 
@@ -62,22 +62,22 @@ pub fn new_grid() -> Grid {
 }
 
 ///|
-pub fn grid_get(g : Grid, row : Int, col : Int) -> Int {
+pub fn grid_get(g : Grid, row : Int32, col : Int32) -> Int32 {
   g.cells[row * g.size + col].value
 }
 
 ///|
-pub fn grid_set(g : Grid, row : Int, col : Int, value : Int) -> Unit {
+pub fn grid_set(g : Grid, row : Int32, col : Int32, value : Int32) -> Unit {
   g.cells[row * g.size + col].value = value
 }
 
 ///|
-pub fn grid_is_locked(g : Grid, row : Int, col : Int) -> Bool {
+pub fn grid_is_locked(g : Grid, row : Int32, col : Int32) -> Bool {
   g.cells[row * g.size + col].locked
 }
 
 ///|
-pub fn grid_lock(g : Grid, row : Int, col : Int) -> Unit {
+pub fn grid_lock(g : Grid, row : Int32, col : Int32) -> Unit {
   g.cells[row * g.size + col].locked = true
 }
 
@@ -92,7 +92,10 @@ pub fn grid_is_full(g : Grid) -> Bool {
 }
 
 ///|
-pub fn new_constraint(kind : ConstraintKind, params : Array[Int]) -> Constraint {
+pub fn new_constraint(
+  kind : ConstraintKind,
+  params : Array[Int32],
+) -> Constraint {
   { kind, params, satisfied: false, }
 }
 
@@ -120,7 +123,7 @@ pub fn tier_name(tier : Tier) -> String {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Primes => tier1_count
     Factors => tier2_count
@@ -129,7 +132,7 @@ pub fn tier_level_count(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_start_index(tier : Tier) -> Int {
+pub fn tier_start_index(tier : Tier) -> Int32 {
   match tier {
     Primes => 0
     Factors => tier1_count
@@ -161,8 +164,8 @@ pub fn clone_grid(g : Grid) -> Grid {
 ///|
 pub fn cell_candidates(
   grid : Grid,
-  row : Int,
-  col : Int,
+  row : Int32,
+  col : Int32,
   constraints : Array[Constraint],
 ) -> Array[Bool] {
   // Returns array of size 10 where index n is true if n is a valid candidate

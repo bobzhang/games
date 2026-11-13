@@ -129,10 +129,10 @@ fn draw_art_fit(
 /// Draws a generated texture stretched into a screen rectangle.
 fn draw_art_stretched(
   texture : @raylib.Texture,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   @raylib.draw_texture_pro(
@@ -190,7 +190,7 @@ fn draw_corridor_art() -> Bool {
 
 ///|
 /// Returns generated enemy art for an enemy kind.
-fn enemy_art(kind : Int) -> @raylib.Texture? {
+fn enemy_art(kind : Int32) -> @raylib.Texture? {
   match kind {
     1 => tex_enemy_swift.val
     2 => tex_enemy_heavy.val

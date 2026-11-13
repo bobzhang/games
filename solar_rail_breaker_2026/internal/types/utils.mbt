@@ -1,6 +1,6 @@
 ///|
 /// Returns a computed helper value for f.
-pub fn f(i : Int) -> Float {
+pub fn f(i : Int32) -> Float {
   Float::from_int(i)
 }
 
@@ -51,7 +51,7 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
@@ -82,7 +82,7 @@ pub fn angle_dist(a : Float, b : Float) -> Float {
 
 ///|
 /// Returns a computed helper value for ring radius.
-pub fn ring_radius(ring : Int) -> Float {
+pub fn ring_radius(ring : Int32) -> Float {
   base_radius + Float::from_int(ring) * ring_gap
 }
 
@@ -247,7 +247,7 @@ pub fn player_world_xy(player : Player) -> (Float, Float) {
 
 ///|
 /// Returns whether phase mask active is true for the current query.
-pub fn phase_mask_active(mask : Int, beta : Bool) -> Bool {
+pub fn phase_mask_active(mask : Int32, beta : Bool) -> Bool {
   if mask == 1 {
     !beta
   } else if mask == 2 {
@@ -276,7 +276,7 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   rx : Float,
   ry : Float,
   rw : Float,

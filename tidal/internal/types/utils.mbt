@@ -47,7 +47,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -56,7 +56,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -65,12 +65,12 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
 ///|
-pub fn phase_color(phase : Int) -> @raylib.Color {
+pub fn phase_color(phase : Int32) -> @raylib.Color {
   match phase % 4 {
     0 => color_emitter_p0
     1 => color_emitter_p1
@@ -106,47 +106,47 @@ pub fn new_wave_grid() -> WaveGrid {
 }
 
 ///|
-pub fn grid_index(x : Int, y : Int) -> Int {
+pub fn grid_index(x : Int32, y : Int32) -> Int32 {
   y * grid_width + x
 }
 
 ///|
-pub fn grid_get(grid : WaveGrid, x : Int, y : Int) -> WaveTile {
+pub fn grid_get(grid : WaveGrid, x : Int32, y : Int32) -> WaveTile {
   grid.tiles[grid_index(x, y)]
 }
 
 ///|
-pub fn grid_in_bounds(x : Int, y : Int) -> Bool {
+pub fn grid_in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < grid_width && y >= 0 && y < grid_height
 }
 
 ///|
-pub fn tile_screen_x(gx : Int) -> Float {
+pub fn tile_screen_x(gx : Int32) -> Float {
   Float::from_int(grid_offset_x + gx * tile_size)
 }
 
 ///|
-pub fn tile_screen_y(gy : Int) -> Float {
+pub fn tile_screen_y(gy : Int32) -> Float {
   Float::from_int(grid_offset_y + gy * tile_size)
 }
 
 ///|
-pub fn tile_center_x(gx : Int) -> Float {
+pub fn tile_center_x(gx : Int32) -> Float {
   Float::from_int(grid_offset_x + gx * tile_size + tile_size / 2)
 }
 
 ///|
-pub fn tile_center_y(gy : Int) -> Float {
+pub fn tile_center_y(gy : Int32) -> Float {
   Float::from_int(grid_offset_y + gy * tile_size + tile_size / 2)
 }
 
 ///|
-pub fn screen_to_grid_x(sx : Int) -> Int {
+pub fn screen_to_grid_x(sx : Int32) -> Int32 {
   (sx - grid_offset_x) / tile_size
 }
 
 ///|
-pub fn screen_to_grid_y(sy : Int) -> Int {
+pub fn screen_to_grid_y(sy : Int32) -> Int32 {
   (sy - grid_offset_y) / tile_size
 }
 
@@ -240,7 +240,7 @@ pub fn tile_kind_name(k : TileKind) -> String {
 // Direction helpers: dx, dy for direction index 0-3
 
 ///|
-pub fn dir_dx(d : Int) -> Int {
+pub fn dir_dx(d : Int32) -> Int32 {
   match d {
     0 => 0 // up
     1 => 1 // right
@@ -251,7 +251,7 @@ pub fn dir_dx(d : Int) -> Int {
 }
 
 ///|
-pub fn dir_dy(d : Int) -> Int {
+pub fn dir_dy(d : Int32) -> Int32 {
   match d {
     0 => -1 // up
     1 => 0 // right
@@ -262,12 +262,12 @@ pub fn dir_dy(d : Int) -> Int {
 }
 
 ///|
-pub fn opposite_dir(d : Int) -> Int {
+pub fn opposite_dir(d : Int32) -> Int32 {
   (d + 2) % 4
 }
 
 ///|
-pub fn count_target_info(grid : WaveGrid) -> (Int, Int) {
+pub fn count_target_info(grid : WaveGrid) -> (Int32, Int32) {
   let mut satisfied = 0
   let mut total = 0
   for y in 0..<grid.height {

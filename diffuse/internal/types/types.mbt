@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct InkColor {
   mut c : Bool
   mut m : Bool
   mut y : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend InkColor with Eq::{not_equal, equal}
@@ -12,88 +13,95 @@ pub extend InkColor with Eq::{not_equal, equal}
 pub extend InkColor with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Tile {
   mut kind : TileKind
   mut ink : InkColor
   mut target_color : InkColor
-} derive(Debug)
+}
 
 ///|
 pub extend Tile with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Grid {
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   tiles : Array[Tile]
-} derive(Debug)
+}
 
 ///|
 pub extend Grid with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct InkBudget {
-  mut cyan : Int
-  mut magenta : Int
-  mut yellow : Int
-} derive(Debug)
+  mut cyan : Int32
+  mut magenta : Int32
+  mut yellow : Int32
+}
 
 ///|
 pub extend InkBudget with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Level {
   grid : Grid
   budget : InkBudget
-  par_drops : Int
+  par_drops : Int32
   tier : Tier
   name : String
-} derive(Debug)
+}
 
 ///|
 pub extend Level with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct LevelScore {
   mut completed : Bool
   mut stars : StarRating
-  mut drops_used : Int
-} derive(Debug)
+  mut drops_used : Int32
+}
 
 ///|
 pub extend LevelScore with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct HistoryEntry {
   tiles : Array[Tile]
   budget : InkBudget
-  drops_used : Int
-} derive(Debug)
+  drops_used : Int32
+}
 
 ///|
 pub extend HistoryEntry with Debug::{to_repr}
 
 ///|
+#derive(Debug)
 pub(all) struct Game {
   mut screen : Screen
   mut selected_tier : Tier
-  mut selected_level : Int
+  mut selected_level : Int32
   mut grid : Grid
   mut budget : InkBudget
-  mut par_drops : Int
-  mut drops_used : Int
-  mut turn : Int
+  mut par_drops : Int32
+  mut drops_used : Int32
+  mut turn : Int32
   mut selected_channel : InkChannel
   mut play_state : PlayState
   mut level_name : String
   scores : Array[LevelScore]
   history : Array[HistoryEntry]
-  mut hover_col : Int
-  mut hover_row : Int
-  mut frame_count : Int
+  mut hover_col : Int32
+  mut hover_row : Int32
+  mut frame_count : Int32
   mut spread_timer : Float
   mut show_preview : Bool
-} derive(Debug)
+}
 
 ///|
 pub extend Game with Debug::{to_repr}

@@ -102,7 +102,7 @@ pub fn player_spawn_y() -> Float {
 
 ///|
 /// Returns helper data for default exit pos.
-pub fn default_exit_pos(i : Int) -> (Float, Float) {
+pub fn default_exit_pos(i : Int32) -> (Float, Float) {
   if i % max_exits == 0 {
     (world_left + 104.0, world_top + 84.0)
   } else if i % max_exits == 1 {

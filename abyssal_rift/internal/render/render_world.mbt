@@ -1,6 +1,6 @@
 ///|
 fn get_floor_colors(
-  floor_num : Int,
+  floor_num : Int32,
 ) -> (@raylib.Color, @raylib.Color, @raylib.Color, @raylib.Color) {
   if floor_num <= 5 {
     // Stone Crypt
@@ -22,7 +22,7 @@ fn get_floor_colors(
 }
 
 ///|
-fn draw_wall_shadow(px : Int, py : Int, ts : Int) -> Unit {
+fn draw_wall_shadow(px : Int32, py : Int32, ts : Int32) -> Unit {
   @raylib.draw_rectangle(
     px,
     py + ts - 3,
@@ -33,7 +33,12 @@ fn draw_wall_shadow(px : Int, py : Int, ts : Int) -> Unit {
 }
 
 ///|
-fn draw_door_glow(px : Int, py : Int, ts : Int, floor_num : Int) -> Unit {
+fn draw_door_glow(
+  px : Int32,
+  py : Int32,
+  ts : Int32,
+  floor_num : Int32,
+) -> Unit {
   let glow_color = if floor_num <= 5 {
     @raylib.Color::new(150, 130, 80, 60)
   } else {
@@ -44,11 +49,11 @@ fn draw_door_glow(px : Int, py : Int, ts : Int, floor_num : Int) -> Unit {
 
 ///|
 fn draw_floor_decoration(
-  px : Int,
-  py : Int,
-  ts : Int,
-  tx : Int,
-  ty : Int,
+  px : Int32,
+  py : Int32,
+  ts : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   // Simple hash based on tile position to get pseudo-random decorations
   let hash = (tx * 7919 + ty * 6271) % 100

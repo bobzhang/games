@@ -39,13 +39,13 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
 /// Returns true with probability `p` percent.
-pub fn chance(p : Int) -> Bool {
+pub fn chance(p : Int32) -> Bool {
   randi(0, 99) < p
 }
 
@@ -75,7 +75,7 @@ pub fn cave_center(y : Float, t : Float) -> Float {
 
 ///|
 /// Computes cave half-width at depth/time with stage-based narrowing.
-pub fn cave_half_width(y : Float, t : Float, stage : Int) -> Float {
+pub fn cave_half_width(y : Float, t : Float, stage : Int32) -> Float {
   let wobble = @math.sinf(y * 0.0033 + t * 0.7 + 0.9) * 62.0
   let shrink = Float::from_int(stage - 1) * 8.0
   clampf(cave_max_half + wobble - shrink, cave_min_half, cave_max_half)
@@ -226,7 +226,7 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   rx : Float,
   ry : Float,
   rw : Float,
@@ -289,7 +289,7 @@ pub fn cave_edges(game : Game, y : Float) -> (Float, Float) {
 
 ///|
 /// Finds a free trail slot or reuses the shortest-lived active trail.
-pub fn alloc_trail(game : Game) -> Int {
+pub fn alloc_trail(game : Game) -> Int32 {
   let best = @utils.first_index_by(game.trails, fn(slot) { !slot.active })
   if best >= 0 {
     return best
@@ -312,7 +312,7 @@ pub fn emit_trail(
   w : Float,
   h : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = alloc_trail(game)
   game.trails[i].active = true

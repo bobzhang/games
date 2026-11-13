@@ -1,5 +1,5 @@
 ///|
-fn bool_to_int(v : Bool) -> Int {
+fn bool_to_int(v : Bool) -> Int32 {
   if v {
     1
   } else {
@@ -8,7 +8,9 @@ fn bool_to_int(v : Bool) -> Int {
 }
 
 ///|
-fn control_keys(slot : Int) -> (Int, Int, Int, Int, Int, Int, Int, Int, Int) {
+fn control_keys(
+  slot : Int32,
+) -> (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32) {
   if slot == 0 {
     (
       @raylib.KeyA,
@@ -38,9 +40,9 @@ fn control_keys(slot : Int) -> (Int, Int, Int, Int, Int, Int, Int, Int, Int) {
 
 ///|
 fn encode_relative_direction(
-  x : Int,
-  y : Int,
-  facing : Int,
+  x : Int32,
+  y : Int32,
+  facing : Int32,
 ) -> @types.Direction {
   let rx = if facing == @types.facing_right { x } else { -x }
   if y > 0 {
@@ -75,7 +77,7 @@ fn push_direction_history(
 }
 
 ///|
-fn recent_direction(input : @types.InputState, age : Int) -> @types.Direction {
+fn recent_direction(input : @types.InputState, age : Int32) -> @types.Direction {
   let len = input.dir_history.length()
   let mut idx = input.dir_head - 1 - age
   while idx < 0 {
@@ -176,7 +178,11 @@ fn set_button_state(
 }
 
 ///|
-fn sample_human_input(fighter : @types.Fighter, slot : Int, dt : Float) -> Unit {
+fn sample_human_input(
+  fighter : @types.Fighter,
+  slot : Int32,
+  dt : Float,
+) -> Unit {
   let input = fighter.input
   let (
     key_left,
@@ -351,8 +357,8 @@ fn input_press_super(fighter : @types.Fighter) -> Unit {
 ///|
 fn push_cpu_direction(
   fighter : @types.Fighter,
-  desired_x : Int,
-  desired_y : Int,
+  desired_x : Int32,
+  desired_y : Int32,
 ) -> Unit {
   let input = fighter.input
   input.prev_x = input.x

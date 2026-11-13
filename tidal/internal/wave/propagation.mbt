@@ -192,7 +192,7 @@ pub fn simulate_tick(grid : @types.WaveGrid) -> Unit {
 }
 
 ///|
-fn resolve_interference(contribs : Array[@types.WaveFront]) -> (Float, Int) {
+fn resolve_interference(contribs : Array[@types.WaveFront]) -> (Float, Int32) {
   // Use vector addition with phase as angle
   // phase 0 = 0 deg, 1 = 90 deg, 2 = 180 deg, 3 = 270 deg
   let mut sum_x : Float = 0.0

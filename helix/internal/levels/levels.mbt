@@ -4,17 +4,17 @@ fn p() -> @types.Cell {
 }
 
 ///|
-fn s(link : Int) -> @types.Cell {
+fn s(link : Int32) -> @types.Cell {
   @types.make_cell(Switch, switch_link_id=link)
 }
 
 ///|
-fn g(link : Int) -> @types.Cell {
+fn g(link : Int32) -> @types.Cell {
   @types.make_cell(Gate, gate_open=false, switch_link_id=link)
 }
 
 ///|
-fn go(link : Int) -> @types.Cell {
+fn go(link : Int32) -> @types.Cell {
   @types.make_cell(Gate, gate_open=true, switch_link_id=link)
 }
 
@@ -24,12 +24,12 @@ fn sy() -> @types.Cell {
 }
 
 ///|
-fn os(link : Int) -> @types.Cell {
+fn os(link : Int32) -> @types.Cell {
   @types.make_cell(OneShotSwitch, switch_link_id=link)
 }
 
 ///|
-fn pa(offset : Int) -> @types.Cell {
+fn pa(offset : Int32) -> @types.Cell {
   @types.make_cell(Path, arrow_offset=offset)
 }
 
@@ -39,7 +39,7 @@ fn pp() -> @types.Cell {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_1_1()
     1 => level_1_2()

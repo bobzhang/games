@@ -115,7 +115,7 @@ fn draw_texture_cover(
 
 ///|
 /// Returns the generated enemy texture associated with the gameplay ship kind.
-fn enemy_texture(art : GameArt, kind : Int) -> @raylib.Texture {
+fn enemy_texture(art : GameArt, kind : Int32) -> @raylib.Texture {
   match kind {
     1 => art.enemy_frigate_sprite
     2 => art.enemy_dreadnought_sprite

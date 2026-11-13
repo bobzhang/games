@@ -183,21 +183,21 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   let rgt = (p.ori_rx, p.ori_ry, p.ori_rz)
 
   // Ship color based on class
-  let body_r : Int = match p.ship_class {
+  let body_r : Int32 = match p.ship_class {
     Fighter => 100
     Interceptor => 70
     Bomber => 140
     Cruiser => 120
     _ => 150
   }
-  let body_g : Int = match p.ship_class {
+  let body_g : Int32 = match p.ship_class {
     Fighter => 150
     Interceptor => 200
     Bomber => 100
     Cruiser => 130
     _ => 150
   }
-  let body_b : Int = match p.ship_class {
+  let body_b : Int32 = match p.ship_class {
     Fighter => 220
     Interceptor => 255
     Bomber => 80
@@ -207,9 +207,9 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
 
   // Damage flash tint
   let flash = p.damage_flash
-  let fr : Int = if flash > 0.0 {
+  let fr : Int32 = if flash > 0.0 {
     let fv : Float = 255.0 * flash
-    let v : Int = body_r + fv.to_int()
+    let v : Int32 = body_r + fv.to_int()
     if v > 255 {
       255
     } else {
@@ -218,9 +218,9 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   } else {
     body_r
   }
-  let fg : Int = if flash > 0.0 {
+  let fg : Int32 = if flash > 0.0 {
     let fv : Float = 100.0 * flash
-    let v : Int = body_g - fv.to_int()
+    let v : Int32 = body_g - fv.to_int()
     if v < 0 {
       0
     } else {
@@ -229,9 +229,9 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   } else {
     body_g
   }
-  let fb : Int = if flash > 0.0 {
+  let fb : Int32 = if flash > 0.0 {
     let fv : Float = 100.0 * flash
-    let v : Int = body_b - fv.to_int()
+    let v : Int32 = body_b - fv.to_int()
     if v < 0 {
       0
     } else {
@@ -395,8 +395,8 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   if p.shield > 0.0 {
     let shield_alpha_f : Float = p.shield / p.max_shield * 50.0
     let shield_alpha = shield_alpha_f.to_int()
-    let shield_r : Int = if p.damage_flash > 0.0 { 200 } else { 50 }
-    let shield_g : Int = if p.damage_flash > 0.0 { 100 } else { 100 }
+    let shield_r : Int32 = if p.damage_flash > 0.0 { 200 } else { 50 }
+    let shield_g : Int32 = if p.damage_flash > 0.0 { 100 } else { 100 }
     @raylib.draw_sphere(
       @raylib.Vector3::new(p.x, p.y, p.z),
       2.5 * scale,
@@ -429,7 +429,7 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
 
     // Damage flash tint
     let flash = e.damage_flash
-    let flash_add : Int = (flash * 150.0).to_int()
+    let flash_add : Int32 = (flash * 150.0).to_int()
 
     if e.kind == @types.enemy_fighter {
       draw_fighter_ship(e, flash_add, game)
@@ -500,12 +500,12 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
 ///|
 fn draw_fighter_ship(
   e : @types.Enemy,
-  flash_add : Int,
+  flash_add : Int32,
   game : @types.Game,
 ) -> Unit {
   ignore(game)
-  let br : Int = (220 + flash_add).clamp(min=0, max=255)
-  let bg : Int = (60).clamp(min=0, max=255)
+  let br : Int32 = (220 + flash_add).clamp(min=0, max=255)
+  let bg : Int32 = (60).clamp(min=0, max=255)
   // Body
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
@@ -538,12 +538,12 @@ fn draw_fighter_ship(
 ///|
 fn draw_interceptor_ship(
   e : @types.Enemy,
-  flash_add : Int,
+  flash_add : Int32,
   game : @types.Game,
 ) -> Unit {
   ignore(game)
   // Interceptor: sleek, narrow, fast-looking
-  let br : Int = (200 + flash_add).clamp(min=0, max=255)
+  let br : Int32 = (200 + flash_add).clamp(min=0, max=255)
   // Narrow body
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
@@ -576,12 +576,12 @@ fn draw_interceptor_ship(
 ///|
 fn draw_bomber_ship(
   e : @types.Enemy,
-  flash_add : Int,
+  flash_add : Int32,
   game : @types.Game,
 ) -> Unit {
   ignore(game)
   // Bomber: bulky, heavy-looking
-  let br : Int = (180 + flash_add).clamp(min=0, max=255)
+  let br : Int32 = (180 + flash_add).clamp(min=0, max=255)
   // Wide body
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
@@ -631,12 +631,12 @@ fn draw_bomber_ship(
 ///|
 fn draw_cruiser_ship(
   e : @types.Enemy,
-  flash_add : Int,
+  flash_add : Int32,
   game : @types.Game,
 ) -> Unit {
   ignore(game)
   // Cruiser: large blocky ship
-  let br : Int = (150 + flash_add).clamp(min=0, max=255)
+  let br : Int32 = (150 + flash_add).clamp(min=0, max=255)
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
     2.0,
@@ -676,11 +676,11 @@ fn draw_cruiser_ship(
 ///|
 fn draw_capital_ship(
   e : @types.Enemy,
-  flash_add : Int,
+  flash_add : Int32,
   game : @types.Game,
 ) -> Unit {
   // Capital ship: massive, multi-section
-  let br : Int = (120 + flash_add).clamp(min=0, max=255)
+  let br : Int32 = (120 + flash_add).clamp(min=0, max=255)
   // Main hull
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
@@ -822,21 +822,21 @@ fn @types.Game::draw_asteroids(game : @types.Game) -> Unit {
     }
 
     // Color varies by size tier
-    let base_r : Int = if a.size_tier == @types.asteroid_large {
+    let base_r : Int32 = if a.size_tier == @types.asteroid_large {
       130
     } else if a.size_tier == @types.asteroid_medium {
       120
     } else {
       100
     }
-    let base_g : Int = if a.size_tier == @types.asteroid_large {
+    let base_g : Int32 = if a.size_tier == @types.asteroid_large {
       120
     } else if a.size_tier == @types.asteroid_medium {
       105
     } else {
       90
     }
-    let base_b : Int = if a.size_tier == @types.asteroid_large {
+    let base_b : Int32 = if a.size_tier == @types.asteroid_large {
       100
     } else if a.size_tier == @types.asteroid_medium {
       85
@@ -910,9 +910,9 @@ fn @types.Game::draw_stations(game : @types.Game) -> Unit {
     let is_friendly = s.kind == @types.station_friendly
 
     // Station colors
-    let hub_r : Int = if is_friendly { 80 } else { 180 }
-    let hub_g : Int = if is_friendly { 140 } else { 60 }
-    let hub_b : Int = if is_friendly { 200 } else { 60 }
+    let hub_r : Int32 = if is_friendly { 80 } else { 180 }
+    let hub_g : Int32 = if is_friendly { 140 } else { 60 }
+    let hub_b : Int32 = if is_friendly { 200 } else { 60 }
 
     // Central hub
     @raylib.draw_cube(
@@ -967,7 +967,7 @@ fn @types.Game::draw_stations(game : @types.Game) -> Unit {
 
     // Lights
     let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.1) * 0.3
-    let light_alpha : Int = if is_friendly { 200 } else { 180 }
+    let light_alpha : Int32 = if is_friendly { 200 } else { 180 }
     @raylib.draw_sphere(
       @raylib.Vector3::new(s.x, s.y + 2.5, s.z),
       0.4 + pulse,

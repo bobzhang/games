@@ -13,8 +13,8 @@ fn draw_sprite(
   src_y : Float,
   src_w : Float,
   src_h : Float,
-  dst_x : Int,
-  dst_y : Int,
+  dst_x : Int32,
+  dst_y : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   let src = @raylib.Rectangle::new(src_x, src_y, src_w, src_h)
@@ -42,9 +42,9 @@ fn draw_sprite_anim(
   src_y : Float,
   frame_w : Float,
   frame_h : Float,
-  frame : Int,
-  dst_x : Int,
-  dst_y : Int,
+  frame : Int32,
+  dst_x : Int32,
+  dst_y : Int32,
   tint : @raylib.Color,
 ) -> Unit {
   draw_sprite(

@@ -1,5 +1,5 @@
 ///|
-fn fi(v : Int) -> Float {
+fn fi(v : Int32) -> Float {
   Float::from_int(v)
 }
 
@@ -111,10 +111,10 @@ pub fn draw_grid(game : @types.Game) -> Unit {
 
 ///|
 fn draw_house_tile(
-  px : Int,
-  py : Int,
-  cs : Int,
-  cid : Int,
+  px : Int32,
+  py : Int32,
+  cs : Int32,
+  cid : Int32,
   houses : Array[@types.House],
 ) -> Unit {
   let color = @types.house_color(cid)

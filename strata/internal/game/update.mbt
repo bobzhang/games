@@ -96,7 +96,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   game.current_level = level_idx
   let level = @levels.get_level(level_idx)
   // Initialize empty slots
@@ -313,7 +313,7 @@ fn handle_mouse_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_tray_at_mouse(game : @types.Game, mx : Int, my : Int) -> Int {
+fn get_tray_at_mouse(game : @types.Game, mx : Int32, my : Int32) -> Int32 {
   let tx = @types.tray_x
   let ty = @types.tray_y
   let rock_w = 120
@@ -330,7 +330,7 @@ fn get_tray_at_mouse(game : @types.Game, mx : Int, my : Int) -> Int {
 }
 
 ///|
-fn get_slot_at_mouse(game : @types.Game, mx : Int, my : Int) -> Int {
+fn get_slot_at_mouse(game : @types.Game, mx : Int32, my : Int32) -> Int32 {
   let sx = @types.section_x
   let sy = @types.section_y
   let sw = @types.slot_width
@@ -347,7 +347,11 @@ fn get_slot_at_mouse(game : @types.Game, mx : Int, my : Int) -> Int {
 }
 
 ///|
-fn place_from_tray(game : @types.Game, tray_idx : Int, slot_idx : Int) -> Unit {
+fn place_from_tray(
+  game : @types.Game,
+  tray_idx : Int32,
+  slot_idx : Int32,
+) -> Unit {
   if tray_idx < 0 || tray_idx >= game.tray.length() {
     return
   }
@@ -378,7 +382,7 @@ fn place_from_tray(game : @types.Game, tray_idx : Int, slot_idx : Int) -> Unit {
 }
 
 ///|
-fn swap_slots(game : @types.Game, slot_a : Int, slot_b : Int) -> Unit {
+fn swap_slots(game : @types.Game, slot_a : Int32, slot_b : Int32) -> Unit {
   @types.save_undo(game)
   let tmp = game.slots[slot_a]
   game.slots[slot_a] = game.slots[slot_b]
@@ -388,7 +392,7 @@ fn swap_slots(game : @types.Game, slot_a : Int, slot_b : Int) -> Unit {
 }
 
 ///|
-fn return_to_tray(game : @types.Game, slot_idx : Int) -> Unit {
+fn return_to_tray(game : @types.Game, slot_idx : Int32) -> Unit {
   match game.slots[slot_idx] {
     Some(rock) => {
       @types.save_undo(game)
@@ -402,7 +406,7 @@ fn return_to_tray(game : @types.Game, slot_idx : Int) -> Unit {
 }
 
 ///|
-fn move_to_empty_slot(game : @types.Game, from : Int, to : Int) -> Unit {
+fn move_to_empty_slot(game : @types.Game, from : Int32, to : Int32) -> Unit {
   match game.slots[from] {
     Some(_) => {
       @types.save_undo(game)

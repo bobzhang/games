@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   Playing
@@ -8,7 +9,7 @@ pub(all) enum Screen {
   Paused
   Editor
   Statistics
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -25,12 +26,13 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum GravityDir {
   Down
   Up
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend GravityDir with Eq::{not_equal, equal}
@@ -47,23 +49,24 @@ pub impl Show for GravityDir with fn output(self, logger) {
 pub extend GravityDir with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileKind {
   Empty
   Wall
   Exit
   Spike
   Ice
-  Portal(Int)
-  Switch(Int)
-  Gate(Int)
+  Portal(Int32)
+  Switch(Int32)
+  Gate(Int32)
   Crumble
   Conveyor(GravityDir)
-  PressurePlate(Int)
-  Mirror(Int)
+  PressurePlate(Int32)
+  Mirror(Int32)
   GravityWell
   TimedLava
   WindGust(GravityDir)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -80,6 +83,7 @@ pub impl Show for TileKind with fn output(self, logger) {
 pub extend TileKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum EntityKind {
   Player
   Box
@@ -87,7 +91,7 @@ pub(all) enum EntityKind {
   Key
   Gem
   Enemy
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend EntityKind with Eq::{not_equal, equal}
@@ -104,13 +108,14 @@ pub impl Show for EntityKind with fn output(self, logger) {
 pub extend EntityKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum WorldTheme {
   Stone
   Crystal
   Void
   Magma
   Sky
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend WorldTheme with Eq::{not_equal, equal}
@@ -127,9 +132,10 @@ pub impl Show for WorldTheme with fn output(self, logger) {
 pub extend WorldTheme with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum AchievementKind {
   FirstStep
-  WorldMaster(Int)
+  WorldMaster(Int32)
   Speedster
   Perfectionist
   NoHints
@@ -143,7 +149,7 @@ pub(all) enum AchievementKind {
   GravitySpinner
   IceSlider
   Completionist
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend AchievementKind with Eq::{not_equal, equal}
@@ -160,11 +166,12 @@ pub impl Show for AchievementKind with fn output(self, logger) {
 pub extend AchievementKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum AccessibilityMode {
   Normal
   HighContrast
   LargeText
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend AccessibilityMode with Eq::{not_equal, equal}

@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Left boundary of the play arena.
@@ -36,27 +36,27 @@ let core_r : Float = 44.0
 
 ///|
 /// Maximum number of enemies that can exist simultaneously.
-let max_enemies : Int = 260
+let max_enemies : Int32 = 260
 
 ///|
 /// Maximum number of bullets that can exist simultaneously.
-let max_bullets : Int = 1200
+let max_bullets : Int32 = 1200
 
 ///|
 /// Maximum number of player-placed turrets allowed.
-let max_turrets : Int = 120
+let max_turrets : Int32 = 120
 
 ///|
 /// Maximum number of scrap pickups that can exist simultaneously.
-let max_scraps : Int = 320
+let max_scraps : Int32 = 320
 
 ///|
 /// Maximum number of particles in the effects pool.
-let max_particles : Int = 1800
+let max_particles : Int32 = 1800
 
 ///|
 /// Total number of waves in a full game run.
-let max_waves : Int = 10
+let max_waves : Int32 = 10
 
 ///|
 /// Represents the player character with position, velocity, aim direction, health, energy, and combat timers.
@@ -75,17 +75,17 @@ struct Player {
   mut dash_cd : Float
   mut dash_t : Float
   mut bomb_cd : Float
-  mut scrap : Int
-  mut score : Int
-  mut combo : Int
-  mut best_combo : Int
+  mut scrap : Int32
+  mut score : Int32
+  mut combo : Int32
+  mut best_combo : Int32
 }
 
 ///|
 /// Represents an enemy unit with position, velocity, health, fire cooldown, and kind.
 struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -99,8 +99,8 @@ struct Enemy {
 /// Represents a projectile with team, kind, position, velocity, damage, radius, and remaining lifetime.
 struct Bullet {
   mut active : Bool
-  mut team : Int
-  mut kind : Int
+  mut team : Int32
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -114,7 +114,7 @@ struct Bullet {
 /// Represents a player-placed defensive turret with kind, position, health, and fire cooldown.
 struct Turret {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut hp : Float
@@ -126,12 +126,12 @@ struct Turret {
 /// Represents a collectible scrap pickup dropped by defeated enemies with value and lifetime.
 struct Scrap {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut value : Int
+  mut value : Int32
   mut life : Float
   mut t : Float
 }
@@ -140,7 +140,7 @@ struct Scrap {
 /// Represents a visual particle effect with kind, position, velocity, size, lifetime, and elapsed time.
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -318,7 +318,7 @@ fn draw_cover_art(texture : @raylib.Texture) -> Unit {
 
 ///|
 /// Returns generated turret texture for a turret kind.
-fn turret_art(kind : Int) -> @raylib.Texture? {
+fn turret_art(kind : Int32) -> @raylib.Texture? {
   if kind == 0 {
     tex_auto_turret.val
   } else {
@@ -328,7 +328,7 @@ fn turret_art(kind : Int) -> @raylib.Texture? {
 
 ///|
 /// Returns generated enemy texture for an enemy kind.
-fn enemy_art(kind : Int) -> @raylib.Texture? {
+fn enemy_art(kind : Int32) -> @raylib.Texture? {
   if kind == 0 {
     tex_enemy_drone.val
   } else if kind == 1 {
@@ -370,10 +370,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -383,7 +383,7 @@ fn inside_rect(
 
 ///|
 /// Returns the collision radius for an enemy of the given kind.
-fn enemy_radius(kind : Int) -> Float {
+fn enemy_radius(kind : Int32) -> Float {
   if kind == 0 {
     15.0
   } else if kind == 1 {
@@ -395,7 +395,7 @@ fn enemy_radius(kind : Int) -> Float {
 
 ///|
 /// Returns the starting health points for an enemy of the given kind and current wave.
-fn enemy_hp(kind : Int, wave : Int) -> Float {
+fn enemy_hp(kind : Int32, wave : Int32) -> Float {
   if kind == 0 {
     24.0 + Float::from_int(wave) * 2.8
   } else if kind == 1 {
@@ -407,7 +407,7 @@ fn enemy_hp(kind : Int, wave : Int) -> Float {
 
 ///|
 /// Returns the scrap cost to build a turret of the given kind.
-fn turret_cost(kind : Int) -> Int {
+fn turret_cost(kind : Int32) -> Int32 {
   if kind == 0 {
     12
   } else {
@@ -417,7 +417,7 @@ fn turret_cost(kind : Int) -> Int {
 
 ///|
 /// Returns the firing range for a turret of the given kind.
-fn turret_range(kind : Int) -> Float {
+fn turret_range(kind : Int32) -> Float {
   if kind == 0 {
     220.0
   } else {
@@ -508,10 +508,10 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 /// Activates the first available enemy slot with the specified kind, position, and wave-scaled stats.
 fn add_enemy(
   enemies : Array[Enemy],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
-  wave : Int,
+  wave : Int32,
 ) -> Bool {
   for enemy in enemies {
     if !enemy.active {
@@ -540,8 +540,8 @@ fn add_enemy(
 /// Activates the first available bullet slot with the specified team, kind, position, velocity, damage, radius, and lifetime.
 fn add_bullet(
   bullets : Array[Bullet],
-  team : Int,
-  kind : Int,
+  team : Int32,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -572,7 +572,7 @@ fn add_bullet(
 /// Activates the first available turret slot with the specified kind and position.
 fn add_turret(
   turrets : Array[Turret],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
 ) -> Bool {
@@ -600,12 +600,12 @@ fn add_turret(
 /// Activates the first available scrap slot with the specified kind, position, velocity, value, and lifetime.
 fn add_scrap(
   scraps : Array[Scrap],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
   vy : Float,
-  value : Int,
+  value : Int32,
   life : Float,
 ) -> Bool {
   for scrap in scraps {
@@ -629,7 +629,7 @@ fn add_scrap(
 /// Activates the first available particle slot with the specified properties.
 fn add_particle(
   parts : Array[Particle],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -660,9 +660,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     let ang : Float = randf(0.0, 6.283)
@@ -684,7 +684,7 @@ fn burst(
 
 ///|
 /// Returns the number of currently active enemies.
-fn count_active_enemies(enemies : Array[Enemy]) -> Int {
+fn count_active_enemies(enemies : Array[Enemy]) -> Int32 {
   @utils.count_by(enemies, fn(enemy) { enemy.active })
 }
 
@@ -716,15 +716,15 @@ fn can_place_turret(turrets : Array[Turret], x : Float, y : Float) -> Bool {
 
 ///|
 /// Draws the touch UI overlay with d-pad and action buttons when the game is in play state.
-fn draw_touch_ui(state : Int) -> Unit {
+fn draw_touch_ui(state : Int32) -> Unit {
   if state != 1 {
     ignore(())
   } else {
-    let pad_x : Int = 20
-    let pad_y : Int = sh - 220
+    let pad_x : Int32 = 20
+    let pad_y : Int32 = sh - 220
 
-    let btn_x : Int = sw - 338
-    let btn_y : Int = sh - 236
+    let btn_x : Int32 = sw - 338
+    let btn_y : Int32 = sh - 236
 
     @raylib.draw_rectangle(
       pad_x,
@@ -964,18 +964,18 @@ fn main {
     }
   })
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
 
   let mut core_hp : Float = 260.0
   let mut core_max_hp : Float = 260.0
 
-  let mut wave : Int = 1
+  let mut wave : Int32 = 1
   let mut wave_active : Bool = false
   let mut wave_pre_t : Float = 1.8
-  let mut to_spawn : Int = 0
+  let mut to_spawn : Int32 = 0
   let mut spawn_cd : Float = 0.0
 
-  let mut selected_turret : Int = 0
+  let mut selected_turret : Int32 = 0
   let mut build_mode : Bool = false
   let mut place_cd : Float = 0.0
 
@@ -1147,7 +1147,7 @@ fn main {
       } else {
         spawn_cd = spawn_cd - dt
         if to_spawn > 0 && spawn_cd <= 0.0 {
-          let edge : Int = @raylib.get_random_value(0, 3)
+          let edge : Int32 = @raylib.get_random_value(0, 3)
           let mut ex : Float = 0.0
           let mut ey : Float = 0.0
           if edge == 0 {
@@ -1164,8 +1164,8 @@ fn main {
             ey = randf(arena_t, arena_b)
           }
 
-          let roll : Int = @raylib.get_random_value(0, 99)
-          let mut kind : Int = 0
+          let roll : Int32 = @raylib.get_random_value(0, 99)
+          let mut kind : Int32 = 0
           if wave >= 3 && roll >= 48 {
             kind = 1
           }
@@ -1221,10 +1221,10 @@ fn main {
       }
 
       // Touch UI zones.
-      let pad_x : Int = 20
-      let pad_y : Int = sh - 220
-      let btn_x : Int = sw - 338
-      let btn_y : Int = sh - 236
+      let pad_x : Int32 = 20
+      let pad_y : Int32 = sh - 220
+      let btn_x : Int32 = sw - 338
+      let btn_y : Int32 = sh - 236
 
       if touch_down {
         if inside_rect(mouse.x, mouse.y, pad_x + 12, pad_y + 70, 60, 60) {
@@ -1396,7 +1396,7 @@ fn main {
             )
           ) &&
           place_cd <= 0.0 {
-          let cost : Int = turret_cost(selected_turret)
+          let cost : Int32 = turret_cost(selected_turret)
           if player.scrap < cost {
             msg = "Not enough scrap"
             msg_t = 0.5
@@ -1759,16 +1759,16 @@ fn main {
         }
 
         if enemy.hp <= 0.0 {
-          let reward : Int = 44 + enemy.kind * 24 + player.combo * 2
+          let reward : Int32 = 44 + enemy.kind * 24 + player.combo * 2
           player.score = player.score + reward
           player.combo = player.combo + 1
           if player.combo > player.best_combo {
             player.best_combo = player.combo
           }
 
-          let drop_n : Int = 1 + @raylib.get_random_value(0, 2)
+          let drop_n : Int32 = 1 + @raylib.get_random_value(0, 2)
           for _ in 0..<drop_n {
-            let val : Int = 1 + @raylib.get_random_value(0, 2)
+            let val : Int32 = 1 + @raylib.get_random_value(0, 2)
             ignore(
               add_scrap(
                 scraps,
@@ -1941,26 +1941,26 @@ fn main {
       }
     } else {
       for gy in 0..<14 {
-        let y : Int = 92 + gy * 48
+        let y : Int32 = 92 + gy * 48
         @raylib.draw_line(0, y, sw, y, @raylib.Color::new(20, 30, 46, 130))
       }
       for gx in 0..<26 {
-        let x : Int = gx * 50
+        let x : Int32 = gx * 50
         @raylib.draw_line(x, 92, x, sh, @raylib.Color::new(20, 30, 46, 106))
       }
     }
 
     for i in 0..<160 {
       let fi : Float = Float::from_int(i)
-      let sx : Int = ((
+      let sx : Int32 = ((
         fi * 79.0 + stars_t * (0.2 + Float::from_int(i % 7) * 0.08)
       ) %
       Float::from_int(sw)).to_int()
-      let sy : Int = ((
+      let sy : Int32 = ((
         fi * 137.0 + stars_t * (0.16 + Float::from_int(i % 5) * 0.09)
       ) %
       Float::from_int(sh)).to_int()
-      let br : Int = 72 + i % 10 * 12
+      let br : Int32 = 72 + i % 10 * 12
       @raylib.draw_circle(
         sx,
         sy,
@@ -2271,7 +2271,7 @@ fn main {
       if !particle.active {
         continue
       }
-      let alpha : Int = (clampf(particle.life / 0.82, 0.0, 1.0) * 255.0).to_int()
+      let alpha : Int32 = (clampf(particle.life / 0.82, 0.0, 1.0) * 255.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(112, 224, 252, alpha)
       } else if particle.kind == 1 {
@@ -2348,10 +2348,10 @@ fn main {
       @raylib.Color::new(178, 216, 240, 218),
     )
 
-    let core_fill : Int = (clampf(core_hp / core_max_hp, 0.0, 1.0) * 290.0).to_int()
-    let hp_fill : Int = (clampf(player.hp / 120.0, 0.0, 1.0) * 230.0).to_int()
-    let en_fill : Int = (clampf(player.energy / 100.0, 0.0, 1.0) * 230.0).to_int()
-    let heat_fill : Int = (clampf(player.heat / 100.0, 0.0, 1.0) * 230.0).to_int()
+    let core_fill : Int32 = (clampf(core_hp / core_max_hp, 0.0, 1.0) * 290.0).to_int()
+    let hp_fill : Int32 = (clampf(player.hp / 120.0, 0.0, 1.0) * 230.0).to_int()
+    let en_fill : Int32 = (clampf(player.energy / 100.0, 0.0, 1.0) * 230.0).to_int()
+    let heat_fill : Int32 = (clampf(player.heat / 100.0, 0.0, 1.0) * 230.0).to_int()
 
     @raylib.draw_rectangle(16, 96, 290, 12, @raylib.Color::new(22, 28, 40, 255))
     @raylib.draw_rectangle(

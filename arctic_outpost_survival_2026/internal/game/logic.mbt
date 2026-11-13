@@ -86,7 +86,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -217,7 +217,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
       continue
     }
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     let kind : @types.EnemyKind = if roll < 56 {
       Wolf
     } else if roll < 84 {
@@ -226,7 +226,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
       Shard
     }
 
-    let side : Int = @raylib.get_random_value(0, 3)
+    let side : Int32 = @raylib.get_random_value(0, 3)
     if side == 0 {
       enemy.x = @types.randf(
         @types.world_left() + 20.0,
@@ -300,7 +300,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
     pickup.vy = @types.randf(112.0, 170.0)
     pickup.phase = @types.randf(0.0, 6.28)
 
-    let roll : Int = @raylib.get_random_value(0, 99)
+    let roll : Int32 = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 38 {
       Fuel
     } else if roll < 62 {
@@ -581,8 +581,8 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 /// Applies bullet damage to the target enemy, deactivates normal bullets on hit or degrades pierce bullets until below the kill threshold, and on enemy death awards combo-scaled score and may spawn a pickup.
 fn @types.Game::bullet_hit_enemy(
   game : @types.Game,
-  bi : Int,
-  ei : Int,
+  bi : Int32,
+  ei : Int32,
 ) -> Unit {
   game.enemies[ei].hp = game.enemies[ei].hp - game.bullets[bi].power
 
@@ -601,7 +601,7 @@ fn @types.Game::bullet_hit_enemy(
     let kind : @types.EnemyKind = game.enemies[ei].kind
     game.enemies[ei].active = false
 
-    let base_score : Int = match kind {
+    let base_score : Int32 = match kind {
       Brute => 26
       Wolf => 15
       Shard => 12

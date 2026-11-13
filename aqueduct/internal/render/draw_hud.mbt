@@ -32,7 +32,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_tool_panel(game : @types.Game, px : Int, py : Int) -> Unit {
+fn draw_tool_panel(game : @types.Game, px : Int32, py : Int32) -> Unit {
   @draw.draw_text("Tools:", px, py, 20, @types.color_hud_text)
   let tools : Array[(@types.TileKind, String)] = [
     (Aqueduct, "Aqueduct"),
@@ -76,7 +76,7 @@ fn draw_tool_panel(game : @types.Game, px : Int, py : Int) -> Unit {
 }
 
 ///|
-fn draw_controls(px : Int, py : Int) -> Unit {
+fn draw_controls(px : Int32, py : Int32) -> Unit {
   let controls = [
     "Click: Place/Remove", "1/2/3: Select tool", "Space: Run water", "R: Reset water",
     "U: Undo", "C: Clear all", "Esc: Back",
@@ -89,7 +89,12 @@ fn draw_controls(px : Int, py : Int) -> Unit {
 
 ///|
 /// Draw star rating.
-pub fn draw_stars(x : Int, y : Int, count : Int, max_count : Int) -> Unit {
+pub fn draw_stars(
+  x : Int32,
+  y : Int32,
+  count : Int32,
+  max_count : Int32,
+) -> Unit {
   for i in 0..<max_count {
     let sx = x + i * 30
     let color = if i < count {

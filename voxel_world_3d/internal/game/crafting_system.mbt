@@ -11,7 +11,7 @@
 
 ///|
 /// Returns whether a tool id is any pickaxe variant.
-pub fn is_pickaxe(tool : Int) -> Bool {
+pub fn is_pickaxe(tool : Int32) -> Bool {
   tool == @types.tool_wooden_pickaxe ||
   tool == @types.tool_stone_pickaxe ||
   tool == @types.tool_iron_pickaxe
@@ -21,7 +21,7 @@ pub fn is_pickaxe(tool : Int) -> Bool {
 
 ///|
 /// Returns whether a tool id is any axe variant.
-pub fn is_axe(tool : Int) -> Bool {
+pub fn is_axe(tool : Int32) -> Bool {
   tool == @types.tool_wooden_axe ||
   tool == @types.tool_stone_axe ||
   tool == @types.tool_iron_axe
@@ -31,7 +31,7 @@ pub fn is_axe(tool : Int) -> Bool {
 
 ///|
 /// Returns whether a tool id is any shovel variant.
-pub fn is_shovel(tool : Int) -> Bool {
+pub fn is_shovel(tool : Int32) -> Bool {
   tool == @types.tool_wooden_shovel ||
   tool == @types.tool_stone_shovel ||
   tool == @types.tool_iron_shovel
@@ -41,7 +41,7 @@ pub fn is_shovel(tool : Int) -> Bool {
 
 ///|
 /// Returns whether a tool id is any sword variant.
-pub fn is_sword(tool : Int) -> Bool {
+pub fn is_sword(tool : Int32) -> Bool {
   tool == @types.tool_wooden_sword ||
   tool == @types.tool_stone_sword ||
   tool == @types.tool_iron_sword

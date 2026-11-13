@@ -1,46 +1,46 @@
 ///|
 /// Window width in pixels.
-pub let screen_w : Int = 1440
+pub let screen_w : Int32 = 1440
 
 ///|
 /// Window height in pixels.
-pub let screen_h : Int = 900
+pub let screen_h : Int32 = 900
 
 ///|
 /// Target rendering frame rate in frames per second.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Left edge X coordinate of the world viewport in pixels.
-pub let world_x0 : Int = 24
+pub let world_x0 : Int32 = 24
 
 ///|
 /// Top edge Y coordinate of the world viewport in pixels.
-pub let world_y0 : Int = 24
+pub let world_y0 : Int32 = 24
 
 ///|
 /// Width of the world viewport in pixels.
-pub let world_w : Int = 980
+pub let world_w : Int32 = 980
 
 ///|
 /// Height of the world viewport in pixels.
-pub let world_h : Int = 852
+pub let world_h : Int32 = 852
 
 ///|
 /// Left edge X coordinate of the side information panel in pixels.
-pub let panel_x0 : Int = world_x0 + world_w + 20
+pub let panel_x0 : Int32 = world_x0 + world_w + 20
 
 ///|
 /// Width of the side information panel in pixels.
-pub let panel_w : Int = screen_w - panel_x0 - 24
+pub let panel_w : Int32 = screen_w - panel_x0 - 24
 
 ///|
 /// Maximum number of relay towers that can be active simultaneously.
-pub let max_towers : Int = 6
+pub let max_towers : Int32 = 6
 
 ///|
 /// Maximum number of storm cells that can be active simultaneously.
-pub let max_storms : Int = 5
+pub let max_storms : Int32 = 5
 
 ///|
 /// Collision and body radius of the rover in pixels.
@@ -68,7 +68,7 @@ pub let storm_control_penalty : Float = 0.45
 
 ///|
 /// Maximum number of power cells the rover can carry at once.
-pub let cargo_capacity : Int = 3
+pub let cargo_capacity : Int32 = 3
 
 ///|
 /// Maximum rover energy capacity.

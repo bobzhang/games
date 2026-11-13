@@ -1,9 +1,9 @@
 ///|
 pub(all) struct AiAction {
-  unit_id : Int
+  unit_id : Int32
   move_to : @types.HexCoord?
-  attack_target : Int
-  score : Int
+  attack_target : Int32
+  score : Int32
 }
 
 ///|
@@ -11,7 +11,7 @@ fn evaluate_attack(
   battle : @types.Battle,
   unit : @types.GameUnit,
   target : @types.GameUnit,
-) -> Int {
+) -> Int32 {
   let type_bonus = @combat.type_advantage(unit.kind, target.kind)
   let damage = @combat.calc_damage(battle, unit, target)
   let kill_bonus = if target.hp <= damage { 50 } else { 0 }
@@ -26,7 +26,7 @@ fn evaluate_position_hard(
   battle : @types.Battle,
   unit : @types.GameUnit,
   pos : @types.HexCoord,
-) -> Int {
+) -> Int32 {
   let mut score = 0
   let w = battle.map.width
   let h = battle.map.height

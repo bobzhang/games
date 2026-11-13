@@ -1,11 +1,11 @@
 ///|
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
-pub let screen_h : Int = 800
+pub let screen_h : Int32 = 800
 
 ///|
-pub let tile_size : Int = 40
+pub let tile_size : Int32 = 40
 
 ///|
 pub let tile_sizef : Float = 40.0
@@ -65,19 +65,19 @@ pub let camera_lead : Float = 30.0
 
 ///|
 /// Pool sizes
-pub let max_enemies : Int = 128
+pub let max_enemies : Int32 = 128
 
 ///|
-pub let max_projectiles : Int = 256
+pub let max_projectiles : Int32 = 256
 
 ///|
-pub let max_items : Int = 64
+pub let max_items : Int32 = 64
 
 ///|
-pub let max_particles : Int = 600
+pub let max_particles : Int32 = 600
 
 ///|
-pub let max_damage_nums : Int = 32
+pub let max_damage_nums : Int32 = 32
 
 ///|
 /// Player hitbox

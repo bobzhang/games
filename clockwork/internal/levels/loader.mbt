@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(id : Int) -> @types.LevelDef {
+pub fn get_level(id : Int32) -> @types.LevelDef {
   match id {
     0 => make_level_1()
     1 => make_level_2()
@@ -26,7 +26,7 @@ pub fn get_level(id : Int) -> @types.LevelDef {
 }
 
 ///|
-pub fn load_level(game : @types.Game, level_id : Int) -> Unit {
+pub fn load_level(game : @types.Game, level_id : Int32) -> Unit {
   let def = get_level(level_id)
   game.current_level = level_id
   game.level_def = def
@@ -49,7 +49,7 @@ pub fn load_level(game : @types.Game, level_id : Int) -> Unit {
 }
 
 ///|
-pub fn level_tier(id : Int) -> @types.Tier {
+pub fn level_tier(id : Int32) -> @types.Tier {
   if id < @types.tier1_levels {
     Ticks
   } else if id < @types.tier1_levels + @types.tier2_levels {
@@ -60,12 +60,12 @@ pub fn level_tier(id : Int) -> @types.Tier {
 }
 
 ///|
-pub fn level_name(id : Int) -> String {
+pub fn level_name(id : Int32) -> String {
   get_level(id).name
 }
 
 ///|
-pub fn levels_in_tier(tier : @types.Tier) -> (Int, Int) {
+pub fn levels_in_tier(tier : @types.Tier) -> (Int32, Int32) {
   match tier {
     Ticks => (0, @types.tier1_levels)
     Timing => (@types.tier1_levels, @types.tier1_levels + @types.tier2_levels)

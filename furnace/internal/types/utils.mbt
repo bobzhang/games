@@ -75,7 +75,7 @@ pub fn reset_temperatures(grid : Grid) -> Unit {
 }
 
 ///|
-pub fn count_placed_materials(grid : Grid) -> Int {
+pub fn count_placed_materials(grid : Grid) -> Int32 {
   let mut count = 0
   for r in 0..<grid.size {
     for c in 0..<grid.size {
@@ -99,7 +99,7 @@ pub fn new_level_progress() -> LevelProgress {
 }
 
 ///|
-pub fn star_count(rating : StarRating) -> Int {
+pub fn star_count(rating : StarRating) -> Int32 {
   match rating {
     Zero => 0
     One => 1
@@ -177,7 +177,7 @@ pub fn sinf(a : Float) -> Float {
 }
 
 ///|
-pub fn is_level_unlocked(game : Game, level : Int) -> Bool {
+pub fn is_level_unlocked(game : Game, level : Int32) -> Bool {
   if level == 0 {
     true
   } else {
@@ -213,10 +213,10 @@ pub fn check_all_targets(grid : Grid) -> Bool {
 ///|
 pub fn calculate_stars(
   all_met : Bool,
-  materials_used : Int,
-  turns : Int,
-  par_materials : Int,
-  par_turns : Int,
+  materials_used : Int32,
+  turns : Int32,
+  par_materials : Int32,
+  par_turns : Int32,
 ) -> StarRating {
   if !all_met {
     Zero

@@ -1,10 +1,10 @@
 ///|
-pub fn new_cell(has_paper : Bool, layers : Int) -> PaperCell {
+pub fn new_cell(has_paper : Bool, layers : Int32) -> PaperCell {
   { has_paper, layers, }
 }
 
 ///|
-pub fn new_paper(width : Int, height : Int) -> Paper {
+pub fn new_paper(width : Int32, height : Int32) -> Paper {
   let cells : Array[PaperCell] = Array(capacity=width * height)
   let total = width * height
   for _i in 0..<total {
@@ -14,7 +14,7 @@ pub fn new_paper(width : Int, height : Int) -> Paper {
 }
 
 ///|
-pub fn full_paper(width : Int, height : Int) -> Paper {
+pub fn full_paper(width : Int32, height : Int32) -> Paper {
   let cells : Array[PaperCell] = Array(capacity=width * height)
   let total = width * height
   for _i in 0..<total {
@@ -24,7 +24,7 @@ pub fn full_paper(width : Int, height : Int) -> Paper {
 }
 
 ///|
-pub fn get_cell(paper : Paper, x : Int, y : Int) -> PaperCell {
+pub fn get_cell(paper : Paper, x : Int32, y : Int32) -> PaperCell {
   if x >= 0 && x < paper.width && y >= 0 && y < paper.height {
     paper.cells[y * paper.width + x]
   } else {
@@ -35,10 +35,10 @@ pub fn get_cell(paper : Paper, x : Int, y : Int) -> PaperCell {
 ///|
 pub fn set_cell(
   paper : Paper,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   has_paper : Bool,
-  layers : Int,
+  layers : Int32,
 ) -> Unit {
   if x >= 0 && x < paper.width && y >= 0 && y < paper.height {
     let idx = y * paper.width + x
@@ -94,7 +94,7 @@ pub fn single_layer_check_ok(paper : Paper, chk : LayerCheck) -> Bool {
 }
 
 ///|
-pub fn count_paper_cells(paper : Paper) -> Int {
+pub fn count_paper_cells(paper : Paper) -> Int32 {
   let mut count = 0
   for i in 0..<paper.cells.length() {
     if paper.cells[i].has_paper {
@@ -105,7 +105,7 @@ pub fn count_paper_cells(paper : Paper) -> Int {
 }
 
 ///|
-pub fn max_layers(paper : Paper) -> Int {
+pub fn max_layers(paper : Paper) -> Int32 {
   let mut mx = 0
   for i in 0..<paper.cells.length() {
     if paper.cells[i].has_paper && paper.cells[i].layers > mx {
@@ -117,12 +117,12 @@ pub fn max_layers(paper : Paper) -> Int {
 
 ///|
 pub fn make_rect_paper(
-  width : Int,
-  height : Int,
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  width : Int32,
+  height : Int32,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
 ) -> Paper {
   let p = new_paper(width, height)
   for y in y1..<y2 {
@@ -157,7 +157,7 @@ pub fn tier_name(tier : Tier) -> String {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Folds => tier1_count
     Layers => tier2_count
@@ -166,7 +166,7 @@ pub fn tier_level_count(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_start_index(tier : Tier) -> Int {
+pub fn tier_start_index(tier : Tier) -> Int32 {
   match tier {
     Folds => 0
     Layers => tier1_count
@@ -175,7 +175,7 @@ pub fn tier_start_index(tier : Tier) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -184,7 +184,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -193,7 +193,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn absi(a : Int) -> Int {
+pub fn absi(a : Int32) -> Int32 {
   if a < 0 {
     -a
   } else {
@@ -202,7 +202,7 @@ pub fn absi(a : Int) -> Int {
 }
 
 ///|
-pub fn clamp_int(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clamp_int(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {

@@ -1,7 +1,7 @@
 // Level descriptions for display in level select
 
 ///|
-pub fn get_level_description(index : Int) -> String {
+pub fn get_level_description(index : Int32) -> String {
   match index {
     0 => "Place a single column of voxels"
     1 => "Build a plus sign visible from all angles"
@@ -39,7 +39,7 @@ pub fn get_level_description(index : Int) -> String {
 // Tier descriptions with constraints explained
 
 ///|
-pub fn get_tier_description(tier : Int) -> String {
+pub fn get_tier_description(tier : Int32) -> String {
   match tier {
     0 =>
       "Learn the basics of perspective matching.\nSimple 3x3x3 grids, no constraints.\nMatch all three silhouettes to complete each level."
@@ -89,7 +89,7 @@ pub fn validate_level_targets(level : @types.Level) -> Bool {
 // Get difficulty rating for a level (1-5)
 
 ///|
-pub fn get_difficulty(index : Int) -> Int {
+pub fn get_difficulty(index : Int32) -> Int32 {
   let level = get_level(index)
   let size = level.size
   let mut rating = 1
@@ -113,7 +113,7 @@ pub fn get_difficulty(index : Int) -> Int {
 // Count total filled cells across all three targets
 
 ///|
-pub fn target_cell_count(level : @types.Level) -> Int {
+pub fn target_cell_count(level : @types.Level) -> Int32 {
   let s = level.size
   let mut count = 0
   let total = s * s

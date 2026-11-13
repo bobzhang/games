@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,6 +23,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileKind {
   Sand
   Dunes
@@ -30,7 +32,7 @@ pub(all) enum TileKind {
   Ruins
   Sandstorm
   Destination
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -47,12 +49,13 @@ pub impl Show for TileKind with fn output(self, logger) {
 pub extend TileKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Planning
   Executing
   Complete
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -69,11 +72,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   OasisTrail
   DuneSea
   LostCity
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

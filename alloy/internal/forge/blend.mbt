@@ -116,8 +116,8 @@ pub fn distance_to_center(
 pub fn calculate_stars(
   result : @types.BlendResult,
   target : @types.TargetAlloy,
-  ingredients_used : Int,
-  par_ingredients : Int,
+  ingredients_used : Int32,
+  par_ingredients : Int32,
 ) -> @types.StarRating {
   if !check_target(result, target) {
     return Zero

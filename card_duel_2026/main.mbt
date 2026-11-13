@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 980
+let sw : Int32 = 980
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 700
+let sh : Int32 = 700
 
 ///|
 /// Total number of distinct card types available in the deck.
-let card_count : Int = 5
+let card_count : Int32 = 5
 
 ///|
 /// Returns the display name of the card identified by the given index.
-fn card_name(card : Int) -> String {
+fn card_name(card : Int32) -> String {
   match card {
     0 => "Strike"
     1 => "Guard"
@@ -24,7 +24,7 @@ fn card_name(card : Int) -> String {
 
 ///|
 /// Returns the energy cost required to play the given card.
-fn card_cost(card : Int) -> Int {
+fn card_cost(card : Int32) -> Int32 {
   match card {
     0 => 1
     1 => 1
@@ -36,7 +36,7 @@ fn card_cost(card : Int) -> Int {
 
 ///|
 /// Returns the short effect description for the given card index.
-fn card_desc(card : Int) -> String {
+fn card_desc(card : Int32) -> String {
   match card {
     0 => "Deal 6"
     1 => "Gain 7 block"
@@ -48,7 +48,7 @@ fn card_desc(card : Int) -> String {
 
 ///|
 /// Applies damage to a target, absorbing it through block first, and returns the updated HP and block values.
-fn deal_damage(hp : Int, block : Int, dmg : Int) -> (Int, Int) {
+fn deal_damage(hp : Int32, block : Int32, dmg : Int32) -> (Int32, Int32) {
   let mut hp2 = hp
   let mut block2 = block
   let absorbed = if block2 < dmg { block2 } else { dmg }
@@ -60,7 +60,7 @@ fn deal_damage(hp : Int, block : Int, dmg : Int) -> (Int, Int) {
 
 ///|
 /// Clears the current hand and fills it with three randomly drawn cards.
-fn roll_hand(hand : Array[Int]) -> Unit {
+fn roll_hand(hand : Array[Int32]) -> Unit {
   hand.clear()
   for _ in 0..<3 {
     hand.push(@raylib.get_random_value(0, card_count - 1))
@@ -70,12 +70,12 @@ fn roll_hand(hand : Array[Int]) -> Unit {
 ///|
 /// Executes the enemy's two actions for the turn, applying damage or healing effects, and returns updated HP, block values, and an action log string.
 fn enemy_turn(
-  p_hp : Int,
-  p_block : Int,
-  e_hp : Int,
-  e_block : Int,
-  turn_no : Int,
-) -> (Int, Int, Int, Int, String) {
+  p_hp : Int32,
+  p_block : Int32,
+  e_hp : Int32,
+  e_block : Int32,
+  turn_no : Int32,
+) -> (Int32, Int32, Int32, Int32, String) {
   let mut p_hp = p_hp
   let mut p_block = p_block
   let mut e_hp = e_hp
@@ -110,12 +110,12 @@ fn enemy_turn(
 ///|
 /// Draws a bounded stat bar with a filled fraction based on the current value.
 fn draw_stat_bar(
-  x : Int,
-  y : Int,
-  width : Int,
-  height : Int,
-  value : Int,
-  max_value : Int,
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
+  value : Int32,
+  max_value : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let safe_value = if value < 0 {
@@ -146,14 +146,14 @@ fn draw_stat_bar(
 ///|
 /// Draws one duelist status panel with portrait, HP, and block information.
 fn draw_duelist_panel(
-  x : Int,
-  y : Int,
-  width : Int,
-  height : Int,
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
   is_player : Bool,
-  hp : Int,
-  max_hp : Int,
-  block : Int,
+  hp : Int32,
+  max_hp : Int32,
+  block : Int32,
 ) -> Unit {
   let accent = if is_player {
     @raylib.Color::new(80, 170, 255, 255)
@@ -192,7 +192,7 @@ fn draw_duelist_panel(
 
 ///|
 /// Draws one card in the player's current hand.
-fn draw_hand_card(slot : Int, card : Int) -> Unit {
+fn draw_hand_card(slot : Int32, card : Int32) -> Unit {
   let x = 120 + slot * 260
   let y = 360
   if !draw_card_frame_art(x, y, 220, 190) {
@@ -228,7 +228,7 @@ fn main {
   @draw.init_font()
   load_assets()
 
-  let hand : Array[Int] = []
+  let hand : Array[Int32] = []
   let mut player_hp = 80
   let mut player_block = 0
   let mut enemy_hp = 95

@@ -1,34 +1,34 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1520
+pub let screen_w : Int32 = 1520
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 920
+pub let screen_h : Int32 = 920
 
 ///|
 /// Target frame rate used by the game loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Maximum enemies allocated in the enemy pool.
-pub let max_enemy_slots : Int = 84
+pub let max_enemy_slots : Int32 = 84
 
 ///|
 /// Arena left pixel coordinate.
-pub let arena_x : Int = 120
+pub let arena_x : Int32 = 120
 
 ///|
 /// Arena top pixel coordinate.
-pub let arena_y : Int = 90
+pub let arena_y : Int32 = 90
 
 ///|
 /// Arena width in pixels.
-pub let arena_w : Int = 1280
+pub let arena_w : Int32 = 1280
 
 ///|
 /// Arena height in pixels.
-pub let arena_h : Int = 760
+pub let arena_h : Int32 = 760
 
 ///|
 /// Returns arena left boundary in world coordinates.
@@ -216,36 +216,39 @@ pub let spawn_interval_min : Float = 0.30
 
 ///|
 /// Player attack type.
+#derive(Eq)
 pub(all) enum Attack {
   None
   Light
   Heavy
-} derive(Eq)
+}
 
 ///|
 pub extend Attack with Eq::{not_equal, equal}
 
 ///|
 /// Enemy AI behavior state.
+#derive(Eq)
 pub(all) enum EnemyState {
   Seek
   Telegraph
   Strike
   Recover
   Stunned
-} derive(Eq)
+}
 
 ///|
 pub extend EnemyState with Eq::{not_equal, equal}
 
 ///|
 /// Top-level game state.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}

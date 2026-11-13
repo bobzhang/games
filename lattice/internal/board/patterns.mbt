@@ -18,7 +18,7 @@ pub fn find_all_patterns(
 
 ///|
 /// Calculate total pattern score for a player
-pub fn score_patterns(board : @types.HexBoard, player : @types.Player) -> Int {
+pub fn score_patterns(board : @types.HexBoard, player : @types.Player) -> Int32 {
   let patterns = find_all_patterns(board, player)
   let mut total = 0
   for i in 0..<patterns.length() {
@@ -35,7 +35,7 @@ fn find_bridges(
   player : @types.Player,
   result : Array[@types.Pattern],
 ) -> Unit {
-  let found : Array[(Int, Int, Int, Int)] = []
+  let found : Array[(Int32, Int32, Int32, Int32)] = []
   for r in 0..<board.size {
     for c in 0..<board.size {
       let coord : @types.HexCoord = { row: r, col: c, }
@@ -124,7 +124,7 @@ fn find_chains(
 }
 
 ///|
-fn next_in_direction(coord : @types.HexCoord, dir : Int) -> @types.HexCoord {
+fn next_in_direction(coord : @types.HexCoord, dir : Int32) -> @types.HexCoord {
   let row = coord.row
   let col = coord.col
   let parity = row % 2
@@ -149,7 +149,7 @@ fn next_in_direction(coord : @types.HexCoord, dir : Int) -> @types.HexCoord {
 }
 
 ///|
-fn prev_in_direction(coord : @types.HexCoord, dir : Int) -> @types.HexCoord {
+fn prev_in_direction(coord : @types.HexCoord, dir : Int32) -> @types.HexCoord {
   let row = coord.row
   let col = coord.col
   let parity = row % 2
@@ -175,7 +175,7 @@ fn check_chain_dir(
   board : @types.HexBoard,
   player : @types.Player,
   start : @types.HexCoord,
-  dir : Int,
+  dir : Int32,
   result : Array[@types.Pattern],
   found_set : Array[String],
 ) -> Unit {
@@ -298,7 +298,7 @@ fn find_triangles(
 }
 
 ///|
-fn coord_key(c : @types.HexCoord) -> Int {
+fn coord_key(c : @types.HexCoord) -> Int32 {
   c.row * 100 + c.col
 }
 
@@ -553,7 +553,7 @@ fn check_wall_edge(
   board : @types.HexBoard,
   player : @types.Player,
   result : Array[@types.Pattern],
-  row : Int,
+  row : Int32,
   _is_row : Bool,
 ) -> Unit {
   let mut run : Array[@types.HexCoord] = []
@@ -582,7 +582,7 @@ fn check_wall_edge_col(
   board : @types.HexBoard,
   player : @types.Player,
   result : Array[@types.Pattern],
-  col : Int,
+  col : Int32,
 ) -> Unit {
   let mut run : Array[@types.HexCoord] = []
   for r in 0..<board.size {

@@ -18,7 +18,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -38,7 +38,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -67,7 +67,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -76,7 +76,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -92,29 +92,29 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 // Grid coordinate helpers
 
 ///|
-pub fn cell_x(col : Int) -> Int {
+pub fn cell_x(col : Int32) -> Int32 {
   grid_offset_x + col * cell_size
 }
 
 ///|
-pub fn cell_y(row : Int) -> Int {
+pub fn cell_y(row : Int32) -> Int32 {
   grid_offset_y + row * cell_size
 }
 
 ///|
-pub fn pixel_to_grid(px : Int, py : Int) -> (Int, Int) {
+pub fn pixel_to_grid(px : Int32, py : Int32) -> (Int32, Int32) {
   let col = (px - grid_offset_x) / cell_size
   let row = (py - grid_offset_y) / cell_size
   (col, row)
 }
 
 ///|
-pub fn in_bounds(col : Int, row : Int) -> Bool {
+pub fn in_bounds(col : Int32, row : Int32) -> Bool {
   col >= 0 && col < grid_cols && row >= 0 && row < grid_rows
 }
 
 ///|
-pub fn in_grid_area(px : Int, py : Int) -> Bool {
+pub fn in_grid_area(px : Int32, py : Int32) -> Bool {
   px >= grid_offset_x &&
   px < grid_offset_x + grid_cols * cell_size &&
   py >= grid_offset_y &&
@@ -134,7 +134,7 @@ pub fn season_name(s : Season) -> String {
 }
 
 ///|
-pub fn season_from_index(i : Int) -> Season {
+pub fn season_from_index(i : Int32) -> Season {
   match i % 4 {
     0 => Spring
     1 => Summer
@@ -144,7 +144,7 @@ pub fn season_from_index(i : Int) -> Season {
 }
 
 ///|
-pub fn season_index(s : Season) -> Int {
+pub fn season_index(s : Season) -> Int32 {
   match s {
     Spring => 0
     Summer => 1
@@ -305,7 +305,7 @@ pub fn can_plant_in_season(kind : CropKind, season : Season) -> Bool {
 // Soil helpers
 
 ///|
-pub fn new_soil(n : Int, p : Int, k : Int) -> Soil {
+pub fn new_soil(n : Int32, p : Int32, k : Int32) -> Soil {
   { nitrogen: n, phosphorus: p, potassium: k, }
 }
 
@@ -315,7 +315,7 @@ pub fn default_soil() -> Soil {
 }
 
 ///|
-pub fn soil_quality(soil : Soil) -> Int {
+pub fn soil_quality(soil : Soil) -> Int32 {
   (soil.nitrogen + soil.phosphorus + soil.potassium) / 3
 }
 
@@ -356,7 +356,7 @@ pub fn soil_color(soil : Soil) -> @raylib.Color {
 // Crop yield calculation based on soil quality
 
 ///|
-pub fn crop_yield_value(kind : CropKind, soil : Soil) -> Int {
+pub fn crop_yield_value(kind : CropKind, soil : Soil) -> Int32 {
   let info = crop_info(kind)
   let quality = soil_quality(soil)
   let base = info.value
@@ -386,7 +386,7 @@ pub fn new_plot() -> Plot {
 }
 
 ///|
-pub fn new_plot_with_soil(n : Int, p : Int, k : Int) -> Plot {
+pub fn new_plot_with_soil(n : Int32, p : Int32, k : Int32) -> Plot {
   {
     crop: Fallow,
     state: Empty,
@@ -413,7 +413,7 @@ pub fn new_grid() -> Array[Array[Plot]] {
 
 ///|
 pub fn new_grid_with_soil(
-  soil_data : Array[Array[(Int, Int, Int)]],
+  soil_data : Array[Array[(Int32, Int32, Int32)]],
 ) -> Array[Array[Plot]] {
   let grid : Array[Array[Plot]] = Array(capacity=grid_rows)
   for r in 0..<grid_rows {
@@ -521,10 +521,10 @@ pub fn tier_name(t : Tier) -> String {
 
 ///|
 pub fn tier_from_value(
-  value : Int,
-  bronze : Int,
-  silver : Int,
-  gold : Int,
+  value : Int32,
+  bronze : Int32,
+  silver : Int32,
+  gold : Int32,
 ) -> Tier? {
   if value >= gold {
     Some(Gold)
@@ -538,7 +538,7 @@ pub fn tier_from_value(
 }
 
 ///|
-pub fn tier_stars(t : Tier?) -> Int {
+pub fn tier_stars(t : Tier?) -> Int32 {
   match t {
     Some(Gold) => 3
     Some(Silver) => 2

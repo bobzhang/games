@@ -147,7 +147,7 @@ fn draw_backdrop_art() -> Bool {
 
 ///|
 /// Returns generated brick art for a hit-point tier.
-fn brick_art(hp : Int) -> @raylib.Texture? {
+fn brick_art(hp : Int32) -> @raylib.Texture? {
   match hp {
     3 => tex_brick_hp3.val
     2 => tex_brick_hp2.val

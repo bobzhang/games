@@ -137,7 +137,7 @@ fn draw_texture_cover(
 
 ///|
 /// Returns the generated hazard texture associated with the gameplay hazard kind.
-fn hazard_texture(art : GameArt, kind : Int) -> @raylib.Texture {
+fn hazard_texture(art : GameArt, kind : Int32) -> @raylib.Texture {
   if kind == 0 {
     art.ice_hazard_sprite
   } else {

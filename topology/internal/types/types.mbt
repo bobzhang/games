@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, Debug, Compare)
 pub(all) struct Vec2i {
-  x : Int
-  y : Int
-} derive(Eq, Debug, Compare)
+  x : Int32
+  y : Int32
+}
 
 ///|
 pub extend Vec2i with Eq::{not_equal, equal}
@@ -14,9 +15,10 @@ pub extend Vec2i with Debug::{to_repr}
 pub extend Vec2i with Compare::{op_lt, op_le, op_ge, compare, op_gt}
 
 ///|
+#derive(Debug)
 pub(all) struct Shape {
   mut cells : Array[Vec2i]
-} derive(Debug)
+}
 
 ///|
 pub extend Shape with Debug::{to_repr}
@@ -25,8 +27,8 @@ pub extend Shape with Debug::{to_repr}
 pub(all) struct Level {
   initial_shape : Shape
   target_shape : Shape
-  par_cost : Int
-  min_cost : Int
+  par_cost : Int32
+  min_cost : Int32
   available_ops : Array[OpKind]
   tier : Tier
   name : String
@@ -35,13 +37,13 @@ pub(all) struct Level {
 ///|
 pub(all) struct OpRecord {
   kind : OpKind
-  cost : Int
+  cost : Int32
 }
 
 ///|
 pub(all) struct LevelScore {
   mut completed : Bool
-  mut best_cost : Int
+  mut best_cost : Int32
   mut stars : StarRating
 }
 
@@ -52,16 +54,16 @@ pub(all) struct Game {
   mut target_shape : Shape
   mut ops_history : Array[OpRecord]
   mut shape_history : Array[Shape]
-  mut total_cost : Int
+  mut total_cost : Int32
   mut play_state : PlayState
   mut selected_op : OpKind?
-  mut current_level_idx : Int
+  mut current_level_idx : Int32
   mut current_tier : Tier
   mut level_scores : Array[LevelScore]
   mut hover_cell : Vec2i?
   mut message : String
   mut message_timer : Float
-  mut frame_count : Int
+  mut frame_count : Int32
   mut anim_timer : Float
   mut anim_shape_before : Shape?
 }

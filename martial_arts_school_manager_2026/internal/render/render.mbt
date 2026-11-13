@@ -1,6 +1,6 @@
 ///|
 /// Returns a copy of `color` with the alpha channel replaced by `alpha`.
-fn with_alpha(color : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn with_alpha(color : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(
     color.r.to_int(),
     color.g.to_int(),
@@ -35,10 +35,10 @@ fn fatigue_color(value : Float) -> @raylib.Color {
 ///|
 /// Draws a horizontal progress bar filled proportionally to `ratio` (0.0–1.0) with the given fill colour.
 fn draw_meter(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fill_color : @raylib.Color,
 ) -> Unit {
@@ -517,7 +517,7 @@ fn @types.Game::draw_week_banner(game : @types.Game) -> Unit {
 fn draw_overlay_card(
   title : String,
   lines : Array[String],
-  y : Int,
+  y : Int32,
   border : @raylib.Color,
   art : GameArt,
 ) -> Unit {

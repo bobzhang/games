@@ -163,7 +163,7 @@ fn draw_forest_board_art(_game : @types.Game) -> Bool {
 }
 
 ///|
-fn draw_title_tree_art(cx : Int, base_y : Int, time : Float) -> Bool {
+fn draw_title_tree_art(cx : Int32, base_y : Int32, time : Float) -> Bool {
   match tex_title_tree.val {
     Some(texture) => {
       let pulse = sinf(time * 1.4) * 5.0
@@ -190,7 +190,7 @@ fn draw_title_tree_art(cx : Int, base_y : Int, time : Float) -> Bool {
 }
 
 ///|
-fn draw_trunk_art(x : Int, y : Int) -> Bool {
+fn draw_trunk_art(x : Int32, y : Int32) -> Bool {
   match tex_trunk_sprite.val {
     Some(texture) => {
       let cs = Float::from_int(@types.cell_size)
@@ -210,7 +210,7 @@ fn draw_trunk_art(x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn draw_branch_art(x : Int, y : Int, pulse : Float) -> Bool {
+fn draw_branch_art(x : Int32, y : Int32, pulse : Float) -> Bool {
   match tex_branch_sprite.val {
     Some(texture) => {
       let cs = Float::from_int(@types.cell_size)
@@ -230,7 +230,7 @@ fn draw_branch_art(x : Int, y : Int, pulse : Float) -> Bool {
 }
 
 ///|
-fn draw_leaf_art(x : Int, y : Int, pulse : Float) -> Bool {
+fn draw_leaf_art(x : Int32, y : Int32, pulse : Float) -> Bool {
   match tex_leaf_cluster.val {
     Some(texture) => {
       let cs = Float::from_int(@types.cell_size)
@@ -250,7 +250,7 @@ fn draw_leaf_art(x : Int, y : Int, pulse : Float) -> Bool {
 }
 
 ///|
-fn draw_shadow_art(x : Int, y : Int) -> Bool {
+fn draw_shadow_art(x : Int32, y : Int32) -> Bool {
   match tex_shadow_overlay.val {
     Some(texture) => {
       draw_art_centered(
@@ -269,7 +269,7 @@ fn draw_shadow_art(x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn draw_ground_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
+fn draw_ground_art(x : Int32, y : Int32, width : Int32, height : Int32) -> Bool {
   match tex_ground_water_strip.val {
     Some(texture) => {
       draw_art_top_left(
@@ -287,7 +287,7 @@ fn draw_ground_art(x : Int, y : Int, width : Int, height : Int) -> Bool {
 }
 
 ///|
-fn draw_target_marker_art(cx : Int, cy : Int, met : Bool) -> Bool {
+fn draw_target_marker_art(cx : Int32, cy : Int32, met : Bool) -> Bool {
   match tex_target_marker.val {
     Some(texture) => {
       let tint = if met {
@@ -311,7 +311,7 @@ fn draw_target_marker_art(cx : Int, cy : Int, met : Bool) -> Bool {
 }
 
 ///|
-fn tier_icon_art(index : Int) -> @raylib.Texture? {
+fn tier_icon_art(index : Int32) -> @raylib.Texture? {
   if index == 0 {
     tex_tier_seedling.val
   } else if index == 1 {
@@ -322,7 +322,12 @@ fn tier_icon_art(index : Int) -> @raylib.Texture? {
 }
 
 ///|
-fn draw_tier_icon_art(index : Int, cx : Int, cy : Int, size : Int) -> Bool {
+fn draw_tier_icon_art(
+  index : Int32,
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
+) -> Bool {
   match tier_icon_art(index) {
     Some(texture) => {
       draw_art_centered(
@@ -341,7 +346,7 @@ fn draw_tier_icon_art(index : Int, cx : Int, cy : Int, size : Int) -> Bool {
 }
 
 ///|
-fn draw_star_art(cx : Int, cy : Int, filled : Bool, size : Int) -> Bool {
+fn draw_star_art(cx : Int32, cy : Int32, filled : Bool, size : Int32) -> Bool {
   match tex_star_icon.val {
     Some(texture) => {
       let tint = if filled {
@@ -365,7 +370,7 @@ fn draw_star_art(cx : Int, cy : Int, filled : Bool, size : Int) -> Bool {
 }
 
 ///|
-fn draw_prune_shears_art(cx : Int, cy : Int) -> Bool {
+fn draw_prune_shears_art(cx : Int32, cy : Int32) -> Bool {
   match tex_prune_shears.val {
     Some(texture) => {
       draw_art_centered(

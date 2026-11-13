@@ -3,7 +3,7 @@
 
 ///|
 /// Returns red channel for top-face color of a block id.
-pub fn block_color_r(kind : Int) -> Int {
+pub fn block_color_r(kind : Int32) -> Int32 {
   if kind == @types.block_dirt {
     139
   } else if kind == @types.block_grass {
@@ -89,7 +89,7 @@ pub fn block_color_r(kind : Int) -> Int {
 
 ///|
 /// Returns green channel for top-face color of a block id.
-pub fn block_color_g(kind : Int) -> Int {
+pub fn block_color_g(kind : Int32) -> Int32 {
   if kind == @types.block_dirt {
     90
   } else if kind == @types.block_grass {
@@ -175,7 +175,7 @@ pub fn block_color_g(kind : Int) -> Int {
 
 ///|
 /// Returns blue channel for top-face color of a block id.
-pub fn block_color_b(kind : Int) -> Int {
+pub fn block_color_b(kind : Int32) -> Int32 {
   if kind == @types.block_dirt {
     43
   } else if kind == @types.block_grass {
@@ -267,7 +267,7 @@ pub fn block_color_b(kind : Int) -> Int {
 
 ///|
 /// Returns alpha channel for a block id (`255` opaque, lower for translucency).
-pub fn block_alpha(kind : Int) -> Int {
+pub fn block_alpha(kind : Int32) -> Int32 {
   if kind == @types.block_water {
     160
   } else if kind == @types.block_glass {
@@ -285,7 +285,7 @@ pub fn block_alpha(kind : Int) -> Int {
 
 ///|
 /// Returns fog red channel for day/night state.
-pub fn fog_color_r(is_night : Bool) -> Int {
+pub fn fog_color_r(is_night : Bool) -> Int32 {
   if is_night {
     15
   } else {
@@ -295,7 +295,7 @@ pub fn fog_color_r(is_night : Bool) -> Int {
 
 ///|
 /// Returns fog green channel for day/night state.
-pub fn fog_color_g(is_night : Bool) -> Int {
+pub fn fog_color_g(is_night : Bool) -> Int32 {
   if is_night {
     15
   } else {
@@ -305,7 +305,7 @@ pub fn fog_color_g(is_night : Bool) -> Int {
 
 ///|
 /// Returns fog blue channel for day/night state.
-pub fn fog_color_b(is_night : Bool) -> Int {
+pub fn fog_color_b(is_night : Bool) -> Int32 {
   if is_night {
     40
   } else {
@@ -528,8 +528,8 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
 pub fn get_spawn_type_for_biome(
   biome : @types.Biome,
   is_night : Bool,
-  rng_val : Int,
-) -> Int {
+  rng_val : Int32,
+) -> Int32 {
   let r = rng_val % 100
   if is_night {
     // Hostile mobs at night
@@ -629,7 +629,7 @@ pub fn get_spawn_type_for_biome(
 
 ///|
 /// Returns melee damage dealt by a tool when used as a weapon.
-pub fn get_weapon_damage(tool : Int) -> Int {
+pub fn get_weapon_damage(tool : Int32) -> Int32 {
   if tool == @types.tool_wooden_sword {
     4
   } else if tool == @types.tool_stone_sword {

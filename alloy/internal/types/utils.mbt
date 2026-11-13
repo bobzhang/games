@@ -1,5 +1,5 @@
 ///|
-pub fn star_count(rating : StarRating) -> Int {
+pub fn star_count(rating : StarRating) -> Int32 {
   match rating {
     Zero => 0
     One => 1
@@ -74,7 +74,7 @@ pub fn add_ingredient(game : Game, metal : MetalKind) -> Unit {
 }
 
 ///|
-pub fn remove_ingredient(game : Game, slot : Int) -> Unit {
+pub fn remove_ingredient(game : Game, slot : Int32) -> Unit {
   if slot >= 0 && slot < game.crucible.length() {
     let ing = game.crucible[slot]
     if ing.amount > 1 {
@@ -89,7 +89,7 @@ pub fn remove_ingredient(game : Game, slot : Int) -> Unit {
 }
 
 ///|
-pub fn total_ingredient_count(game : Game) -> Int {
+pub fn total_ingredient_count(game : Game) -> Int32 {
   let mut total = 0
   for i in 0..<game.crucible.length() {
     total += game.crucible[i].amount
@@ -98,7 +98,7 @@ pub fn total_ingredient_count(game : Game) -> Int {
 }
 
 ///|
-pub fn is_level_unlocked(game : Game, level : Int) -> Bool {
+pub fn is_level_unlocked(game : Game, level : Int32) -> Bool {
   if level == 0 {
     true
   } else {

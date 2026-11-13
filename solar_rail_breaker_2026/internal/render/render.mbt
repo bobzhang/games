@@ -1,8 +1,8 @@
 ///|
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -30,7 +30,7 @@ fn world_to_screen(
 }
 
 ///|
-fn @types.Game::ring_color(game : @types.Game, ring : Int) -> @raylib.Color {
+fn @types.Game::ring_color(game : @types.Game, ring : Int32) -> @raylib.Color {
   let phase = game.time_s * 1.2 + Float::from_int(ring) * 0.9
   let pulse : Float = 0.5 + 0.5 * @math.sinf(phase)
   if game.phase_beta {

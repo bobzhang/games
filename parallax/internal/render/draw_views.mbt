@@ -4,8 +4,8 @@
 fn draw_view_panel(
   game : @types.Game,
   view : @types.ViewKind,
-  panel_x : Int,
-  panel_y : Int,
+  panel_x : Int32,
+  panel_y : Int32,
   level : @types.Level,
 ) -> Unit {
   let size = level.size

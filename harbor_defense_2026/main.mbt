@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// World width used for entity boundary clamping.
@@ -20,23 +20,23 @@ let harbor_y : Float = 632.0
 
 ///|
 /// Maximum number of simultaneous enemy ship slots.
-let max_enemies : Int = 120
+let max_enemies : Int32 = 120
 
 ///|
 /// Maximum number of simultaneous civilian boat slots.
-let max_boats : Int = 42
+let max_boats : Int32 = 42
 
 ///|
 /// Maximum number of simultaneous projectile slots.
-let max_projectiles : Int = 520
+let max_projectiles : Int32 = 520
 
 ///|
 /// Maximum number of simultaneous pickup slots.
-let max_pickups : Int = 92
+let max_pickups : Int32 = 92
 
 ///|
 /// Maximum number of simultaneous particle slots.
-let max_particles : Int = 980
+let max_particles : Int32 = 980
 
 ///|
 /// Player-controlled harbor cannon with position, velocity, HP, heat gauge, cooldowns, overheat flag, score, kill count, and combo multiplier.
@@ -51,16 +51,16 @@ struct Cannon {
   mut shield_cd : Float
   mut shield_t : Float
   mut overheated : Bool
-  mut score : Int
-  mut kills : Int
-  mut combo : Int
+  mut score : Int32
+  mut kills : Int32
+  mut combo : Int32
 }
 
 ///|
 /// Enemy vessel descending from above; tracks type, position, velocity, HP, fire cooldown, and elapsed time for lateral phase-drift.
 struct EnemyShip {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -78,7 +78,7 @@ struct CivilianBoat {
   mut y : Float
   mut vx : Float
   mut hp : Float
-  mut value : Int
+  mut value : Int32
   mut panic_t : Float
 }
 
@@ -93,7 +93,7 @@ struct Projectile {
   mut dmg : Float
   mut life : Float
   mut from_enemy : Bool
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -103,7 +103,7 @@ struct Pickup {
   mut x : Float
   mut y : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : Int32
   mut t : Float
 }
 
@@ -118,7 +118,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -153,10 +153,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -241,8 +241,8 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 
 ///|
 /// Finds a free enemy slot and initialises a random enemy ship scaled to the current wave; returns false if no slot is available.
-fn spawn_enemy(enemies : Array[EnemyShip], wave : Int) -> Bool {
-  let mut slot : Int = -1
+fn spawn_enemy(enemies : Array[EnemyShip], wave : Int32) -> Bool {
+  let mut slot : Int32 = -1
   for i in 0..<enemies.length() {
     if !enemies[i].active {
       slot = i
@@ -253,8 +253,8 @@ fn spawn_enemy(enemies : Array[EnemyShip], wave : Int) -> Bool {
   if slot < 0 {
     false
   } else {
-    let kind : Int = @raylib.get_random_value(0, 2)
-    let side : Int = @raylib.get_random_value(0, 1)
+    let kind : Int32 = @raylib.get_random_value(0, 2)
+    let side : Int32 = @raylib.get_random_value(0, 1)
     let dir : Float = if side == 0 { 1.0 } else { -1.0 }
     let start_x : Float = if side == 0 {
       randf(64.0, 300.0)
@@ -282,7 +282,7 @@ fn spawn_enemy(enemies : Array[EnemyShip], wave : Int) -> Bool {
 ///|
 /// Finds a free slot and spawns a civilian boat entering from a random screen side; returns false if no slot is available.
 fn spawn_boat(boats : Array[CivilianBoat]) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<boats.length() {
     if !boats[i].active {
       slot = i
@@ -319,10 +319,10 @@ fn spawn_projectile(
   vy : Float,
   dmg : Float,
   from_enemy : Bool,
-  kind : Int,
+  kind : Int32,
   life : Float,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<projectiles.length() {
     if !projectiles[i].active {
       slot = i
@@ -349,7 +349,7 @@ fn spawn_projectile(
 ///|
 /// Finds a free slot and spawns a randomly-typed pickup near the given position with downward velocity and blinking timer; returns false if no slot is available.
 fn spawn_pickup(pickups : Array[Pickup], x : Float, y : Float) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<pickups.length() {
     if !pickups[i].active {
       slot = i
@@ -376,9 +376,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut left = n
   for part in parts {
@@ -561,14 +561,14 @@ fn main {
     }
   })
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut timer : Float = 240.0
-  let mut target_kills : Int = 82
+  let mut target_kills : Int32 = 82
   let mut enemy_spawn_cd : Float = 0.55
   let mut boat_spawn_cd : Float = 1.2
-  let mut civilians_lost : Int = 0
-  let mut civilians_escaped : Int = 0
-  let mut wave : Int = 1
+  let mut civilians_lost : Int32 = 0
+  let mut civilians_escaped : Int32 = 0
+  let mut wave : Int32 = 1
 
   let mut message : String = "Protect civilian boats and repel raiders"
   let mut message_t : Float = 3.6
@@ -696,16 +696,16 @@ fn main {
       let mut bomb_press : Bool = @raylib.is_key_pressed(@raylib.KeyK)
       let mut shield_press : Bool = @raylib.is_key_pressed(@raylib.KeyL)
 
-      let pad_y : Int = sh - 154
-      let left_x : Int = 22
-      let right_x : Int = 142
+      let pad_y : Int32 = sh - 154
+      let left_x : Int32 = 22
+      let right_x : Int32 = 142
 
-      let fire_x : Int = sw - 200
-      let fire_y : Int = sh - 208
-      let bomb_x : Int = sw - 340
-      let bomb_y : Int = sh - 144
-      let shield_x : Int = sw - 340
-      let shield_y : Int = sh - 234
+      let fire_x : Int32 = sw - 200
+      let fire_y : Int32 = sh - 208
+      let bomb_x : Int32 = sw - 340
+      let bomb_y : Int32 = sh - 144
+      let shield_x : Int32 = sw - 340
+      let shield_y : Int32 = sh - 234
 
       if touching {
         if inside_rect(mouse.x, mouse.y, left_x, pad_y, 104, 92) {
@@ -781,7 +781,7 @@ fn main {
         message_t = 0.62
         burst(particles, cannon.x, cannon.y - 38.0, 26, 0.24, 2)
 
-        let mut blast_kills : Int = 0
+        let mut blast_kills : Int32 = 0
         for enemy in enemies {
           if enemy.active &&
             dist2(cannon.x, cannon.y - 40.0, enemy.x, enemy.y) <= 220.0 * 220.0 {

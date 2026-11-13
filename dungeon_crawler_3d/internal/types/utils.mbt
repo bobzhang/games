@@ -38,19 +38,19 @@ pub fn signf(v : Float) -> Float {
 
 ///|
 /// Returns whether the grid coordinate lies inside dungeon bounds.
-pub fn in_bounds(gx : Int, gy : Int) -> Bool {
+pub fn in_bounds(gx : Int32, gy : Int32) -> Bool {
   gx >= 0 && gy >= 0 && gx < grid_w && gy < grid_h
 }
 
 ///|
 /// Converts a grid coordinate to the flat tile array index.
-pub fn tile_index(gx : Int, gy : Int) -> Int {
+pub fn tile_index(gx : Int32, gy : Int32) -> Int32 {
   gy * grid_w + gx
 }
 
 ///|
 /// Returns the tile id at grid coordinate, or `tile_wall` when out of bounds.
-pub fn get_tile(game : Game, gx : Int, gy : Int) -> Int {
+pub fn get_tile(game : Game, gx : Int32, gy : Int32) -> Int32 {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)]
   } else {
@@ -60,7 +60,7 @@ pub fn get_tile(game : Game, gx : Int, gy : Int) -> Int {
 
 ///|
 /// Sets a tile id when the grid coordinate is in bounds.
-pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Int) -> Unit {
+pub fn set_tile(game : Game, gx : Int32, gy : Int32, tile : Int32) -> Unit {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)] = tile
   }
@@ -68,7 +68,7 @@ pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Int) -> Unit {
 
 ///|
 /// Returns whether a tile id can be traversed by actors.
-pub fn is_walkable(tile : Int) -> Bool {
+pub fn is_walkable(tile : Int32) -> Bool {
   tile == tile_floor ||
   tile == tile_door ||
   tile == tile_stairs ||
@@ -82,13 +82,13 @@ pub fn is_walkable(tile : Int) -> Bool {
 
 ///|
 /// Converts world X position to grid X index.
-pub fn world_to_grid_x(wx : Float) -> Int {
+pub fn world_to_grid_x(wx : Float) -> Int32 {
   (wx / cell_size).to_int()
 }
 
 ///|
 /// Converts world Z position to grid Y index.
-pub fn world_to_grid_z(wz : Float) -> Int {
+pub fn world_to_grid_z(wz : Float) -> Int32 {
   (wz / cell_size).to_int()
 }
 
@@ -96,13 +96,13 @@ pub fn world_to_grid_z(wz : Float) -> Int {
 
 ///|
 /// Converts grid X index to world-space cell center X.
-pub fn grid_to_world_x(gx : Int) -> Float {
+pub fn grid_to_world_x(gx : Int32) -> Float {
   Float::from_int(gx) * cell_size + cell_size / 2.0
 }
 
 ///|
 /// Converts grid Y index to world-space cell center Z.
-pub fn grid_to_world_z(gy : Int) -> Float {
+pub fn grid_to_world_z(gy : Int32) -> Float {
   Float::from_int(gy) * cell_size + cell_size / 2.0
 }
 
@@ -155,7 +155,7 @@ pub fn dist2d_sq(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 
 ///|
 /// Advances RNG state and returns the next pseudo-random integer.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -169,7 +169,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer in the inclusive range `[low, high]`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -188,7 +188,7 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 ///|
 /// Selects an index using weighted random sampling.
-pub fn rand_weighted(game : Game, weights : Array[Int]) -> Int {
+pub fn rand_weighted(game : Game, weights : Array[Int32]) -> Int32 {
   let mut total = 0
   for weight in weights {
     total += weight
@@ -210,37 +210,37 @@ pub fn rand_weighted(game : Game, weights : Array[Int]) -> Int {
 
 ///|
 /// Returns the first inactive enemy slot index, or `-1` if none.
-pub fn alloc_enemy(game : Game) -> Int {
+pub fn alloc_enemy(game : Game) -> Int32 {
   @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive projectile slot index, or `-1` if none.
-pub fn alloc_projectile(game : Game) -> Int {
+pub fn alloc_projectile(game : Game) -> Int32 {
   @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive particle slot index, or `-1` if none.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive loot slot index, or `-1` if none.
-pub fn alloc_loot(game : Game) -> Int {
+pub fn alloc_loot(game : Game) -> Int32 {
   @utils.first_index_by(game.loot, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive trap slot index, or `-1` if none.
-pub fn alloc_trap(game : Game) -> Int {
+pub fn alloc_trap(game : Game) -> Int32 {
   @utils.first_index_by(game.traps, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive torch slot index, or `-1` if none.
-pub fn alloc_torch(game : Game) -> Int {
+pub fn alloc_torch(game : Game) -> Int32 {
   @utils.first_index_by(game.torches, fn(slot) { !slot.active })
 }
 
@@ -253,10 +253,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -292,10 +292,10 @@ pub fn spawn_directional_particles(
   wz : Float,
   dir_x : Float,
   dir_z : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   speed : Float,
 ) -> Unit {
   for i in 0..<count {
@@ -344,7 +344,7 @@ pub fn update_explored(game : Game) -> Unit {
 
 ///|
 /// Counts currently active enemies.
-pub fn count_active_enemies(game : Game) -> Int {
+pub fn count_active_enemies(game : Game) -> Int32 {
   let mut count = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -363,9 +363,9 @@ pub fn count_active_enemies(game : Game) -> Int {
 pub fn add_message(
   game : Game,
   text : String,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   // Shift messages down
   for i = game.messages.length() - 1; i > 0; i = i - 1 {
@@ -443,7 +443,7 @@ pub fn get_weapon_name(weapon_type : WeaponKind) -> String {
 
 ///|
 /// Returns defense value granted by an armor type.
-pub fn get_armor_defense(armor_type : Int) -> Int {
+pub fn get_armor_defense(armor_type : Int32) -> Int32 {
   if armor_type == armor_robes {
     robes_defense
   } else if armor_type == armor_leather {
@@ -473,7 +473,7 @@ pub fn get_spell_name(spell_type : Spell) -> String {
 
 ///|
 /// Returns mana cost for a spell type.
-pub fn get_spell_mana_cost(spell_type : Spell) -> Int {
+pub fn get_spell_mana_cost(spell_type : Spell) -> Int32 {
   match spell_type {
     Fireball => fireball_mana_cost
     IceBolt => ice_bolt_mana_cost
@@ -489,7 +489,7 @@ pub fn get_spell_mana_cost(spell_type : Spell) -> Int {
 
 ///|
 /// Computes total player defense including armor and active shield buffs.
-pub fn calc_player_defense(game : Game) -> Int {
+pub fn calc_player_defense(game : Game) -> Int32 {
   let mut total = game.player_def + get_armor_defense(game.player_armor)
   for buff in game.buffs {
     if buff.active && buff.kind == buff_shield {
@@ -503,7 +503,7 @@ pub fn calc_player_defense(game : Game) -> Int {
 
 ///|
 /// Computes total player attack including stats, weapon multiplier, and buffs.
-pub fn calc_player_attack(game : Game) -> Int {
+pub fn calc_player_attack(game : Game) -> Int32 {
   let base = game.player_atk + game.player_str / 3
   let mult = get_weapon_damage_mult(game.player_weapon)
   let base_f = Float::from_int(base) * mult
@@ -592,7 +592,7 @@ pub fn pathfind_step(
 
 ///|
 /// Returns whether the player currently has an active buff kind.
-pub fn has_buff(game : Game, kind : Int) -> Bool {
+pub fn has_buff(game : Game, kind : Int32) -> Bool {
   @utils.any_by(game.buffs, fn(buff) { buff.active && buff.kind == kind })
 }
 
@@ -600,7 +600,12 @@ pub fn has_buff(game : Game, kind : Int) -> Bool {
 
 ///|
 /// Adds or refreshes a player buff with duration and value.
-pub fn add_buff(game : Game, kind : Int, duration : Float, value : Int) -> Unit {
+pub fn add_buff(
+  game : Game,
+  kind : Int32,
+  duration : Float,
+  value : Int32,
+) -> Unit {
   // Check if already have this buff, refresh it
   for buff in game.buffs {
     if buff.active && buff.kind == kind {
@@ -657,7 +662,7 @@ pub fn update_messages(game : Game, dt : Float) -> Unit {
 
 ///|
 /// Returns display name for a loot kind id.
-pub fn get_loot_name(kind : Int) -> String {
+pub fn get_loot_name(kind : Int32) -> String {
   if kind == loot_health_potion {
     "Health Potion"
   } else if kind == loot_mana_potion {
@@ -689,7 +694,7 @@ pub fn get_loot_name(kind : Int) -> String {
 
 ///|
 /// Converts an integer to a TrapKind enum value.
-pub fn trap_kind_from_int(n : Int) -> TrapKind {
+pub fn trap_kind_from_int(n : Int32) -> TrapKind {
   if n == 0 {
     Spike
   } else if n == 1 {
@@ -720,7 +725,7 @@ pub fn next_weapon(w : WeaponKind) -> WeaponKind {
 
 ///|
 /// Converts an integer to a Spell enum value.
-pub fn spell_from_int(n : Int) -> Spell {
+pub fn spell_from_int(n : Int32) -> Spell {
   if n == 1 {
     Fireball
   } else if n == 2 {
@@ -740,7 +745,7 @@ pub fn spell_from_int(n : Int) -> Spell {
 
 ///|
 /// Converts an integer to a ShipClass enum value.
-pub fn ship_class_from_int(n : Int) -> ShipClass {
+pub fn ship_class_from_int(n : Int32) -> ShipClass {
   if n == 0 {
     Warrior
   } else if n == 1 {
@@ -794,7 +799,7 @@ pub fn get_shake_offset(game : Game) -> (Float, Float) {
 
 ///|
 /// Returns the first inactive damage number slot index, or `-1` if none.
-pub fn alloc_damage_number(game : Game) -> Int {
+pub fn alloc_damage_number(game : Game) -> Int32 {
   @utils.first_index_by(game.damage_numbers, fn(slot) { !slot.active })
 }
 
@@ -805,10 +810,10 @@ pub fn spawn_damage_number(
   wx : Float,
   wy : Float,
   wz : Float,
-  value : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  value : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   is_crit : Bool,
 ) -> Unit {
   let idx = alloc_damage_number(game)
@@ -875,7 +880,7 @@ pub fn apply_knockback(
 
 ///|
 /// Returns rarity display name.
-pub fn get_rarity_name(rarity : Int) -> String {
+pub fn get_rarity_name(rarity : Int32) -> String {
   if rarity == 0 {
     "Common"
   } else if rarity == 1 {
@@ -893,7 +898,7 @@ pub fn get_rarity_name(rarity : Int) -> String {
 
 ///|
 /// Returns rarity color R component.
-pub fn get_rarity_color_r(rarity : Int) -> Int {
+pub fn get_rarity_color_r(rarity : Int32) -> Int32 {
   if rarity == 0 {
     200
   } else if rarity == 1 {
@@ -911,7 +916,7 @@ pub fn get_rarity_color_r(rarity : Int) -> Int {
 
 ///|
 /// Returns rarity color G component.
-pub fn get_rarity_color_g(rarity : Int) -> Int {
+pub fn get_rarity_color_g(rarity : Int32) -> Int32 {
   if rarity == 0 {
     200
   } else if rarity == 1 {
@@ -929,7 +934,7 @@ pub fn get_rarity_color_g(rarity : Int) -> Int {
 
 ///|
 /// Returns rarity color B component.
-pub fn get_rarity_color_b(rarity : Int) -> Int {
+pub fn get_rarity_color_b(rarity : Int32) -> Int32 {
   if rarity == 0 {
     200
   } else if rarity == 1 {
@@ -947,7 +952,7 @@ pub fn get_rarity_color_b(rarity : Int) -> Int {
 
 ///|
 /// Returns ring effect display name.
-pub fn get_ring_name(kind : Int) -> String {
+pub fn get_ring_name(kind : Int32) -> String {
   if kind == ring_mana_regen {
     "Ring of Wisdom"
   } else if kind == ring_life_steal {
@@ -965,14 +970,14 @@ pub fn get_ring_name(kind : Int) -> String {
 
 ///|
 /// Computes total player attack including equipment weapon bonus.
-pub fn calc_player_attack_with_equip(game : Game) -> Int {
+pub fn calc_player_attack_with_equip(game : Game) -> Int32 {
   let base = calc_player_attack(game)
   base + game.equip_weapon_bonus
 }
 
 ///|
 /// Computes total player defense including equipment armor bonus.
-pub fn calc_player_defense_with_equip(game : Game) -> Int {
+pub fn calc_player_defense_with_equip(game : Game) -> Int32 {
   let base = calc_player_defense(game)
   base + game.equip_armor_bonus
 }
@@ -1012,7 +1017,7 @@ pub fn has_line_of_sight(
 
 ///|
 /// Returns the boss phase (1, 2, or 3) based on current HP fraction.
-pub fn get_boss_phase(hp : Int, max_hp : Int) -> Int {
+pub fn get_boss_phase(hp : Int32, max_hp : Int32) -> Int32 {
   let frac = Float::from_int(hp) / Float::from_int(max_hp)
   if frac > boss_phase2_threshold {
     1
@@ -1049,7 +1054,7 @@ pub fn update_hitstop(game : Game, dt : Float) -> Bool {
 
 ///|
 /// Returns a short display name for a buff kind.
-pub fn get_buff_name(kind : Int) -> String {
+pub fn get_buff_name(kind : Int32) -> String {
   if kind == buff_speed {
     "SPD"
   } else if kind == buff_strength {
@@ -1063,7 +1068,7 @@ pub fn get_buff_name(kind : Int) -> String {
 
 ///|
 /// Returns RGB color for a buff kind.
-pub fn get_buff_color(kind : Int) -> (Int, Int, Int) {
+pub fn get_buff_color(kind : Int32) -> (Int32, Int32, Int32) {
   if kind == buff_speed {
     (100, 255, 100)
   } else if kind == buff_strength {
@@ -1079,7 +1084,7 @@ pub fn get_buff_color(kind : Int) -> (Int, Int, Int) {
 
 ///|
 /// Returns the weapon kind index (0..5) for discovered_weapons array.
-pub fn weapon_kind_index(w : WeaponKind) -> Int {
+pub fn weapon_kind_index(w : WeaponKind) -> Int32 {
   match w {
     Sword => 0
     Axe => 1
@@ -1092,7 +1097,7 @@ pub fn weapon_kind_index(w : WeaponKind) -> Int {
 
 ///|
 /// Returns weapon kind from index.
-pub fn weapon_kind_from_index(i : Int) -> WeaponKind {
+pub fn weapon_kind_from_index(i : Int32) -> WeaponKind {
   if i == 0 {
     Sword
   } else if i == 1 {
@@ -1124,7 +1129,7 @@ pub fn next_discovered_weapon(game : Game) -> WeaponKind {
 
 ///|
 /// Rolls a random weapon affix for rare+ items.
-pub fn roll_affix(game : Game, rarity : Int) -> WeaponAffix {
+pub fn roll_affix(game : Game, rarity : Int32) -> WeaponAffix {
   if rarity < 2 {
     return AffixNone
   }
@@ -1163,7 +1168,7 @@ pub fn roll_levelup_cards(game : Game) -> Unit {
 
 ///|
 /// Returns name and description for a level-up card type.
-pub fn get_levelup_card_text(card_id : Int) -> (String, String) {
+pub fn get_levelup_card_text(card_id : Int32) -> (String, String) {
   if card_id == 0 {
     ("+5 Max HP", "Increases maximum health by 5")
   } else if card_id == 1 {
@@ -1210,14 +1215,14 @@ pub fn generate_shrine_boons(game : Game) -> Unit {
 
 ///|
 /// Buff kind id for berserker fury effect.
-pub let buff_berserker : Int = 3
+pub let buff_berserker : Int32 = 3
 
 ///|
 /// Buff kind id for mana shield effect.
-pub let buff_mana_shield : Int = 4
+pub let buff_mana_shield : Int32 = 4
 
 ///|
 /// Buff kind id for shadow step effect.
-pub let buff_shadow_step : Int = 5
+pub let buff_shadow_step : Int32 = 5
 
 // Get theme name

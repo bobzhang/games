@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-pub let screen_w : Int = 960
+pub let screen_w : Int32 = 960
 
 ///|
 /// Screen height in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate.
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 /// Tile size in pixels.
-pub let tile_size : Int = 48
+pub let tile_size : Int32 = 48
 
 ///|
 /// Tile size as Float.
@@ -84,7 +84,7 @@ pub let shell_speed : Float = 500.0
 
 ///|
 /// Maximum simultaneous active enemies.
-pub let max_enemies : Int = 32
+pub let max_enemies : Int32 = 32
 
 // ── New enemies ────────────────────────────────────────
 
@@ -118,7 +118,7 @@ pub let firebar_rotation_speed : Float = 1.8
 
 ///|
 /// Number of fire segments in a firebar.
-pub let firebar_num_segments : Int = 5
+pub let firebar_num_segments : Int32 = 5
 
 ///|
 /// Radius of each firebar segment.
@@ -134,7 +134,7 @@ pub let bowser_speed : Float = 45.0
 
 ///|
 /// BowserLite hit points.
-pub let bowser_hp : Int = 5
+pub let bowser_hp : Int32 = 5
 
 ///|
 /// BowserLite fire breath rate (seconds between shots).
@@ -150,7 +150,7 @@ pub let bowser_patrol_range : Float = 120.0
 
 ///|
 /// Maximum active Bowser fire breath projectiles.
-pub let max_bowser_fireballs : Int = 8
+pub let max_bowser_fireballs : Int32 = 8
 
 // ── Items ───────────────────────────────────────────────
 
@@ -180,11 +180,11 @@ pub let fireball_gravity : Float = 1500.0
 
 ///|
 /// Maximum active items on screen.
-pub let max_items : Int = 16
+pub let max_items : Int32 = 16
 
 ///|
 /// Maximum active fireballs.
-pub let max_fireballs : Int = 8
+pub let max_fireballs : Int32 = 8
 
 // ── Player ──────────────────────────────────────────────
 
@@ -220,31 +220,31 @@ pub let shrink_duration : Float = 0.4
 
 ///|
 /// Maximum active particles.
-pub let max_particles : Int = 200
+pub let max_particles : Int32 = 200
 
 ///|
 /// Maximum active score popups.
-pub let max_score_popups : Int = 16
+pub let max_score_popups : Int32 = 16
 
 ///|
 /// Maximum simultaneously bumping blocks.
-pub let max_bumped_blocks : Int = 8
+pub let max_bumped_blocks : Int32 = 8
 
 ///|
 /// Maximum moving platforms.
-pub let max_platforms : Int = 16
+pub let max_platforms : Int32 = 16
 
 ///|
 /// Maximum lift platforms.
-pub let max_lifts : Int = 8
+pub let max_lifts : Int32 = 8
 
 ///|
 /// Maximum bridge state trackers.
-pub let max_bridges : Int = 32
+pub let max_bridges : Int32 = 32
 
 ///|
 /// Platform thickness in pixels.
-pub let platform_thickness : Int = 16
+pub let platform_thickness : Int32 = 16
 
 ///|
 /// Time before a bridge tile starts shaking (seconds).
@@ -272,23 +272,23 @@ pub let camera_offset_x : Float = 300.0
 
 ///|
 /// Points for collecting a coin.
-pub let score_coin : Int = 200
+pub let score_coin : Int32 = 200
 
 ///|
 /// Points for breaking a brick.
-pub let score_brick : Int = 50
+pub let score_brick : Int32 = 50
 
 ///|
 /// Points for collecting a mushroom.
-pub let score_mushroom : Int = 1000
+pub let score_mushroom : Int32 = 1000
 
 ///|
 /// Points for collecting a fire flower.
-pub let score_fire_flower : Int = 1000
+pub let score_fire_flower : Int32 = 1000
 
 ///|
 /// Points for collecting a star.
-pub let score_star : Int = 1000
+pub let score_star : Int32 = 1000
 
 ///|
 /// Starting countdown timer per level.
@@ -296,11 +296,11 @@ pub let level_time : Float = 400.0
 
 ///|
 /// Number of levels in the game.
-pub let total_levels : Int = 4
+pub let total_levels : Int32 = 4
 
 ///|
 /// Returns points awarded for the nth consecutive stomp without touching ground.
-pub fn stomp_score(combo : Int) -> Int {
+pub fn stomp_score(combo : Int32) -> Int32 {
   match combo {
     0 => 100
     1 => 200
@@ -316,7 +316,7 @@ pub fn stomp_score(combo : Int) -> Int {
 
 ///|
 /// Returns a cycling rainbow color for star-power visual effect.
-pub fn star_color(index : Int) -> @raylib.Color {
+pub fn star_color(index : Int32) -> @raylib.Color {
   match index % 5 {
     0 => @raylib.Color::new(252, 252, 0, 255)
     1 => @raylib.Color::new(0, 252, 0, 255)

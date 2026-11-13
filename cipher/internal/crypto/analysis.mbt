@@ -1,6 +1,6 @@
 ///|
-pub fn letter_frequency(text : String) -> Array[Int] {
-  let counts : Array[Int] = Array(capacity=26)
+pub fn letter_frequency(text : String) -> Array[Int32] {
+  let counts : Array[Int32] = Array(capacity=26)
   for _i in 0..<26 {
     counts.push(0)
   }
@@ -36,7 +36,7 @@ pub fn letter_frequency_pct(text : String) -> Array[Float] {
 }
 
 ///|
-pub fn count_letters(text : String) -> Int {
+pub fn count_letters(text : String) -> Int32 {
   let mut count = 0
   for i in 0..<text.length() {
     let c = @types.str_char_at(text, i)
@@ -50,12 +50,12 @@ pub fn count_letters(text : String) -> Int {
 ///|
 pub fn find_repeated_patterns(
   text : String,
-  min_len : Int,
-  max_len : Int,
+  min_len : Int32,
+  max_len : Int32,
 ) -> Array[@types.PatternMatch] {
   let results : Array[@types.PatternMatch] = []
   let letters = StringBuilder()
-  let positions : Array[Int] = []
+  let positions : Array[Int32] = []
   for i in 0..<text.length() {
     let c = @types.str_char_at(text, i)
     if @types.is_upper(c) {
@@ -67,7 +67,7 @@ pub fn find_repeated_patterns(
   let len = clean.length()
   for n = min_len; n <= max_len && n <= len; n = n + 1 {
     let seen_patterns : Array[String] = []
-    let seen_positions : Array[Array[Int]] = []
+    let seen_positions : Array[Array[Int32]] = []
     for i = 0; i <= len - n; i = i + 1 {
       let pat = str_substring(clean, i, i + n)
       let mut found = -1
@@ -118,7 +118,7 @@ pub fn find_repeated_patterns(
 }
 
 ///|
-fn str_substring(s : String, start : Int, end_ : Int) -> String {
+fn str_substring(s : String, start : Int32, end_ : Int32) -> String {
   let buf = StringBuilder()
   for i = start; i < end_ && i < s.length(); i = i + 1 {
     buf.write_char(@types.str_char_at(s, i))
@@ -127,7 +127,7 @@ fn str_substring(s : String, start : Int, end_ : Int) -> String {
 }
 
 ///|
-pub fn suggest_caesar_shift(ciphertext : String) -> Int {
+pub fn suggest_caesar_shift(ciphertext : String) -> Int32 {
   let cipher_freq = letter_frequency_pct(ciphertext)
   let mut best_shift = 0
   let mut best_score : Float = 99999.0
@@ -151,7 +151,7 @@ pub fn get_hint_mapping(
   ciphertext : String,
   plaintext : String,
   current : @types.Mapping,
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   for i in 0..<ciphertext.length() {
     let c = @types.str_char_at(ciphertext, i)
     if @types.is_upper(c) {

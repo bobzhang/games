@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   LevelSelect
@@ -7,7 +8,7 @@ pub(all) enum Screen {
   Hacking
   Results
   Victory
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -24,6 +25,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileKind {
   Floor
   Wall
@@ -36,7 +38,7 @@ pub(all) enum TileKind {
   Exit
   CameraTile
   Start
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -53,11 +55,12 @@ pub impl Show for TileKind with fn output(self, logger) {
 pub extend TileKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum GuardKind {
   Patrol
   Sentinel
   Hunter
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend GuardKind with Eq::{not_equal, equal}
@@ -74,11 +77,12 @@ pub impl Show for GuardKind with fn output(self, logger) {
 pub extend GuardKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum AlertState {
   Patrolling
   Suspicious
   Alert
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend AlertState with Eq::{not_equal, equal}
@@ -95,13 +99,14 @@ pub impl Show for AlertState with fn output(self, logger) {
 pub extend AlertState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum HackState {
   None
   Instant
   Sequencing
   Complete
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HackState with Eq::{not_equal, equal}
@@ -118,12 +123,13 @@ pub impl Show for HackState with fn output(self, logger) {
 pub extend HackState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   Up
   Down
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
@@ -140,6 +146,7 @@ pub impl Show for Direction with fn output(self, logger) {
 pub extend Direction with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SoundEvent {
   Footstep
   Run
@@ -149,7 +156,7 @@ pub(all) enum SoundEvent {
   AlertTriggered
   CoinToss
   LevelComplete
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend SoundEvent with Eq::{not_equal, equal}
@@ -166,12 +173,13 @@ pub impl Show for SoundEvent with fn output(self, logger) {
 pub extend SoundEvent with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ScoreGrade {
   S
   A
   B
   C
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ScoreGrade with Eq::{not_equal, equal}
@@ -188,10 +196,11 @@ pub impl Show for ScoreGrade with fn output(self, logger) {
 pub extend ScoreGrade with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Corporate
   Military
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

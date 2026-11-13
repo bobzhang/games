@@ -101,7 +101,7 @@ fn @types.Game::base_patience(game : @types.Game, dish : @types.Dish) -> Float {
 
 ///|
 /// Returns the index of the first inactive order slot, or -1 if all slots are occupied.
-fn @types.Game::find_free_order_slot(game : @types.Game) -> Int {
+fn @types.Game::find_free_order_slot(game : @types.Game) -> Int32 {
   @utils.first_index_by(game.orders, fn(slot) { !slot.active })
 }
 
@@ -161,7 +161,7 @@ fn @types.Game::ensure_selected_order(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the selected order index if valid, otherwise the active order with the least patience remaining.
-fn @types.Game::choose_target_order(game : @types.Game) -> Int {
+fn @types.Game::choose_target_order(game : @types.Game) -> Int32 {
   game.ensure_selected_order()
   if game.selected_order >= 0 {
     return game.selected_order
@@ -215,7 +215,7 @@ fn @types.Game::update_orders(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::find_matching_order(
   game : @types.Game,
   dish : @types.Dish,
-) -> Int {
+) -> Int32 {
   game.ensure_selected_order()
 
   if game.selected_order >= 0 {
@@ -407,8 +407,8 @@ fn @types.Game::apply_press_k(game : @types.Game) -> Unit {
 /// Moves the navigation cursor to the nearest node in the given direction using a distance-and-alignment heuristic.
 fn @types.Game::move_cursor(
   game : @types.Game,
-  dir_x : Int,
-  dir_y : Int,
+  dir_x : Int32,
+  dir_y : Int32,
 ) -> Unit {
   if dir_x == 0 && dir_y == 0 {
     return

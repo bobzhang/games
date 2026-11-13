@@ -1,11 +1,11 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 pub let space_width : Float = 800.0
@@ -20,31 +20,31 @@ pub let gravity_g : Float = 5000.0
 pub let launch_speed : Float = 3.0
 
 ///|
-pub let tick_rate : Int = 3
+pub let tick_rate : Int32 = 3
 
 ///|
-pub let preview_ticks : Int = 100
+pub let preview_ticks : Int32 = 100
 
 ///|
-pub let max_ticks : Int = 600
+pub let max_ticks : Int32 = 600
 
 ///|
-pub let trail_max : Int = 300
+pub let trail_max : Int32 = 300
 
 ///|
 pub let angle_step : Float = 0.03
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 // Colors
 

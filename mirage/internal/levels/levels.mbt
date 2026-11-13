@@ -3,11 +3,11 @@
 /// Grid strings: W=Wall, .=Floor, _=Gap, E=Exit, S=Switch, P=Platform, G=Gem, space=Empty
 fn make_level(
   tier : @types.Tier,
-  index : Int,
+  index : Int32,
   name : String,
-  par : Int,
-  px : Int,
-  py : Int,
+  par : Int32,
+  px : Int32,
+  py : Int32,
   pl : @types.Layer,
   fg_str : String,
   bg_str : String,
@@ -57,7 +57,7 @@ fn parse_grid(s : String) -> Array[@types.Tile] {
 }
 
 ///|
-pub fn get_level(index : Int) -> @types.LevelDef {
+pub fn get_level(index : Int32) -> @types.LevelDef {
   match index {
     0 => level_01()
     1 => level_02()

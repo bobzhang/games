@@ -6,7 +6,7 @@
 /// Execute a single player command for the mech at `mech_idx` in the player roster.
 pub fn execute_player_command(
   battle : @types.BattleState,
-  mech_idx : Int,
+  mech_idx : Int32,
   command : @types.Command,
 ) -> Unit {
   // Find the mech_idx-th player unit
@@ -35,7 +35,7 @@ pub fn execute_player_command(
 
 ///|
 /// Find the ID of the nth player unit (0-indexed).
-fn find_player_unit_id(battle : @types.BattleState, idx : Int) -> Int {
+fn find_player_unit_id(battle : @types.BattleState, idx : Int32) -> Int32 {
   let mut count = 0
   for i = 0; i < battle.units.length(); i = i + 1 {
     if battle.units[i].team == Player {
@@ -52,9 +52,9 @@ fn find_player_unit_id(battle : @types.BattleState, idx : Int) -> Int {
 /// Move command: validate and move the unit to target tile.
 fn execute_move(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -88,10 +88,10 @@ fn execute_move(
 /// Attack command: dispatch to the correct ability based on mech class.
 fn execute_attack(
   battle : @types.BattleState,
-  unit_id : Int,
-  ability_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  ability_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   // Terrain manipulation abilities (shared across classes)
@@ -156,9 +156,9 @@ fn execute_attack(
 /// Vanguard ability 0: Ram - move 1 tile toward target, push target 2 tiles, deal 2 damage.
 fn attack_vanguard_ram(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -210,9 +210,9 @@ fn attack_vanguard_ram(
 /// Vanguard ability 1: Tractor Beam - pull target 2 tiles toward self.
 fn attack_vanguard_tractor(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -236,9 +236,9 @@ fn attack_vanguard_tractor(
 /// Tier 3 Execute: double damage to targets below 25% HP.
 fn attack_striker_blade(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -278,9 +278,9 @@ fn attack_striker_blade(
 /// Tier 2 Phase Dash: dash passes through enemies, dealing damage to each.
 fn attack_striker_dash(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -371,9 +371,9 @@ fn attack_striker_dash(
 /// Sentinel ability 0: Cannon - 3 damage at range 4, requires line of sight.
 fn attack_sentinel_cannon(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -411,9 +411,9 @@ fn attack_sentinel_cannon(
 /// Sentinel ability 1: Artillery - 2 damage in 3x3 area, ignores LOS.
 fn attack_sentinel_artillery(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let name = get_unit_name(battle, unit_id)
   let u = battle.units[unit_id]
@@ -452,8 +452,8 @@ fn attack_sentinel_artillery(
 /// Overclock: repeat the previous ability at heat cost.
 fn execute_overclock(
   battle : @types.BattleState,
-  unit_id : Int,
-  ability_id : Int,
+  unit_id : Int32,
+  ability_id : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -494,7 +494,7 @@ fn execute_overclock(
 
 ///|
 /// Wait: do nothing, cool down heat by 1.
-fn execute_wait(battle : @types.BattleState, unit_id : Int) -> Unit {
+fn execute_wait(battle : @types.BattleState, unit_id : Int32) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
   if u.heat > 0 {
@@ -509,10 +509,10 @@ fn execute_wait(battle : @types.BattleState, unit_id : Int) -> Unit {
 /// Push command: push an adjacent unit in a direction.
 fn execute_push_command(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
-  dir : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
+  dir : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -536,7 +536,7 @@ fn execute_push_command(
 
 ///|
 /// Decode an integer direction to (dx, dy).
-fn decode_direction(dir : Int) -> (Int, Int) {
+fn decode_direction(dir : Int32) -> (Int32, Int32) {
   match dir {
     0 => (0, -1) // North
     1 => (0, 1) // South
@@ -549,10 +549,10 @@ fn decode_direction(dir : Int) -> (Int, Int) {
 /// Find an adjacent enemy to a position (for dash strike).
 fn find_adjacent_enemy(
   battle : @types.BattleState,
-  self_id : Int,
-  x : Int,
-  y : Int,
-) -> Int {
+  self_id : Int32,
+  x : Int32,
+  y : Int32,
+) -> Int32 {
   let dx_arr = [0, 0, 1, -1]
   let dy_arr = [-1, 1, 0, 0]
   for d = 0; d < 4; d = d + 1 {
@@ -575,9 +575,9 @@ fn find_adjacent_enemy(
 /// Check if a unit stepped onto a hazard tile and apply its effect.
 fn check_hazard_on_tile(
   battle : @types.BattleState,
-  unit_id : Int,
-  x : Int,
-  y : Int,
+  unit_id : Int32,
+  x : Int32,
+  y : Int32,
 ) -> Unit {
   if !battle.grid.in_bounds(x, y) {
     return
@@ -612,9 +612,9 @@ fn check_hazard_on_tile(
 /// Vanguard ability 6: Barricade - place a wall tile adjacent to self.
 fn ability_barricade(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -640,9 +640,9 @@ fn ability_barricade(
 /// Striker ability 7: Detonate - destroy a wall tile, dealing 2 damage to adjacent units.
 fn ability_detonate(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -687,9 +687,9 @@ fn ability_detonate(
 /// Sentinel ability 8: Deploy Mine - place mine hazard on empty floor tile.
 fn ability_deploy_mine(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
@@ -720,7 +720,7 @@ fn ability_deploy_mine(
 
 ///|
 /// Vanguard Tier 2: Fortress Mode - skip move, gain 3 shield.
-fn ability_fortress_mode(battle : @types.BattleState, unit_id : Int) -> Unit {
+fn ability_fortress_mode(battle : @types.BattleState, unit_id : Int32) -> Unit {
   let name = get_unit_name(battle, unit_id)
   apply_shield(battle, unit_id, 3)
   battle.turn_log.push("\{name} enters Fortress Mode! +3 Shield!")
@@ -728,7 +728,7 @@ fn ability_fortress_mode(battle : @types.BattleState, unit_id : Int) -> Unit {
 
 ///|
 /// Vanguard Tier 3: Gravity Well - pull ALL adjacent enemies 1 tile toward self.
-fn ability_gravity_well(battle : @types.BattleState, unit_id : Int) -> Unit {
+fn ability_gravity_well(battle : @types.BattleState, unit_id : Int32) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
   battle.turn_log.push("\{name} activates Gravity Well!")
@@ -750,9 +750,9 @@ fn ability_gravity_well(battle : @types.BattleState, unit_id : Int) -> Unit {
 /// Sentinel Tier 3: Orbital Strike - once per mission, deal 5 damage in 5x5 area.
 fn ability_orbital_strike(
   battle : @types.BattleState,
-  unit_id : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)

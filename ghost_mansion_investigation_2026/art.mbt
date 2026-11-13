@@ -118,7 +118,7 @@ fn draw_texture_cover(
 
 ///|
 /// Returns the ghost texture associated with the gameplay ghost kind.
-fn ghost_texture(art : GameArt, kind : Int) -> @raylib.Texture {
+fn ghost_texture(art : GameArt, kind : Int32) -> @raylib.Texture {
   match kind {
     1 => art.ghost_banshee_sprite
     2 => art.ghost_brute_sprite
@@ -128,7 +128,7 @@ fn ghost_texture(art : GameArt, kind : Int) -> @raylib.Texture {
 
 ///|
 /// Returns the clue texture associated with the gameplay clue kind.
-fn clue_texture(art : GameArt, kind : Int) -> @raylib.Texture {
+fn clue_texture(art : GameArt, kind : Int32) -> @raylib.Texture {
   match kind {
     1 => art.clue_relic_sprite
     2 => art.clue_doll_sprite

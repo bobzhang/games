@@ -128,7 +128,7 @@ pub fn make_target_tile(target : InkColor) -> Tile {
 }
 
 ///|
-pub fn make_grid(w : Int, h : Int) -> Grid {
+pub fn make_grid(w : Int32, h : Int32) -> Grid {
   let tiles : Array[Tile] = []
   for i = 0; i < w * h; i = i + 1 {
     tiles.push(make_tile(Paper))
@@ -137,22 +137,22 @@ pub fn make_grid(w : Int, h : Int) -> Grid {
 }
 
 ///|
-pub fn grid_index(g : Grid, col : Int, row : Int) -> Int {
+pub fn grid_index(g : Grid, col : Int32, row : Int32) -> Int32 {
   row * g.width + col
 }
 
 ///|
-pub fn grid_get(g : Grid, col : Int, row : Int) -> Tile {
+pub fn grid_get(g : Grid, col : Int32, row : Int32) -> Tile {
   g.tiles[grid_index(g, col, row)]
 }
 
 ///|
-pub fn grid_set(g : Grid, col : Int, row : Int, tile : Tile) -> Unit {
+pub fn grid_set(g : Grid, col : Int32, row : Int32, tile : Tile) -> Unit {
   g.tiles[grid_index(g, col, row)] = tile
 }
 
 ///|
-pub fn grid_in_bounds(g : Grid, col : Int, row : Int) -> Bool {
+pub fn grid_in_bounds(g : Grid, col : Int32, row : Int32) -> Bool {
   col >= 0 && col < g.width && row >= 0 && row < g.height
 }
 
@@ -184,7 +184,7 @@ pub fn clone_budget(b : InkBudget) -> InkBudget {
 }
 
 ///|
-pub fn budget_get(b : InkBudget, ch : InkChannel) -> Int {
+pub fn budget_get(b : InkBudget, ch : InkChannel) -> Int32 {
   match ch {
     Cyan => b.cyan
     Magenta => b.magenta
@@ -202,7 +202,7 @@ pub fn budget_use(b : InkBudget, ch : InkChannel) -> Unit {
 }
 
 ///|
-pub fn tier_for_level(idx : Int) -> Tier {
+pub fn tier_for_level(idx : Int32) -> Tier {
   if idx < tier1_count {
     Watercolor
   } else if idx < tier1_count + tier2_count {
@@ -222,7 +222,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_start_index(t : Tier) -> Int {
+pub fn tier_start_index(t : Tier) -> Int32 {
   match t {
     Watercolor => 0
     Pigment => tier1_count
@@ -231,7 +231,7 @@ pub fn tier_start_index(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(t : Tier) -> Int {
+pub fn tier_level_count(t : Tier) -> Int32 {
   match t {
     Watercolor => tier1_count
     Pigment => tier2_count
@@ -274,7 +274,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn star_count(s : StarRating) -> Int {
+pub fn star_count(s : StarRating) -> Int32 {
   match s {
     Zero => 0
     One => 1

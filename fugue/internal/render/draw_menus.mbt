@@ -46,7 +46,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_decorative_notes(y : Int) -> Unit {
+fn draw_decorative_notes(y : Int32) -> Unit {
   let notes = ["C", "D", "E", "F", "G", "A", "B"]
   let colors = [
     @types.color_note_c, @types.color_note_d, @types.color_note_e, @types.color_note_f,
@@ -193,7 +193,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_level_name(id : Int) -> String {
+fn get_level_name(id : Int32) -> String {
   match id {
     0 => "First Steps"
     1 => "Scale Up"

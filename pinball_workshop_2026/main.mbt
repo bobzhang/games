@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let screen_w : Int = 900
+let screen_w : Int32 = 900
 
 ///|
 /// Screen height in pixels.
-let screen_h : Int = 700
+let screen_h : Int32 = 700
 
 ///|
 /// Downward acceleration applied to the ball each frame.

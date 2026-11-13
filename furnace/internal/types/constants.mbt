@@ -1,29 +1,29 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_size : Int = 8
+pub let grid_size : Int32 = 8
 
 ///|
-pub let cell_size : Int = 64
+pub let cell_size : Int32 = 64
 
 ///|
-pub let grid_offset_x : Int = 40
+pub let grid_offset_x : Int32 = 40
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
-pub let toolbar_x : Int = 600
+pub let toolbar_x : Int32 = 600
 
 ///|
-pub let toolbar_y : Int = 80
+pub let toolbar_y : Int32 = 80
 
 ///|
 pub let ambient_temp : Float = 20.0
@@ -32,22 +32,22 @@ pub let ambient_temp : Float = 20.0
 pub let heat_spread_rate : Float = 0.15
 
 ///|
-pub let max_sim_turns : Int = 100
+pub let max_sim_turns : Int32 = 100
 
 ///|
 pub let sim_speed : Float = 0.15
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 // Colors
 

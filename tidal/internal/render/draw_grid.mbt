@@ -24,8 +24,8 @@ fn draw_grid(game : @types.Game) -> Unit {
         let cycle : Float = @types.sinf(
           frame_f * 0.04 + Float::from_int(tile.phase) * 1.57,
         )
-        let r_shift : Int = (cycle * 15.0).to_int()
-        let g_shift : Int = (cycle * 10.0).to_int()
+        let r_shift : Int32 = (cycle * 15.0).to_int()
+        let g_shift : Int32 = (cycle * 10.0).to_int()
         let adj_r = @types.mini(
           @types.maxi(base_color.r.to_int() + r_shift, 0),
           255,
@@ -34,7 +34,7 @@ fn draw_grid(game : @types.Game) -> Unit {
           @types.maxi(base_color.g.to_int() + g_shift, 0),
           255,
         )
-        let alpha_val : Int = (tile.amplitude * 180.0).to_int()
+        let alpha_val : Int32 = (tile.amplitude * 180.0).to_int()
         let alpha = @types.mini(alpha_val, 255)
         let wave_color = @raylib.Color::new(
           adj_r,
@@ -60,7 +60,7 @@ fn draw_grid(game : @types.Game) -> Unit {
           let ripple_r : Float = (ts / 2.0 - 4.0) *
             @types.absf(@types.sinf(ripple_phase))
           if ripple_r > 2.0 {
-            let ripple_alpha : Int = (tile.amplitude *
+            let ripple_alpha : Int32 = (tile.amplitude *
             100.0 *
             @types.absf(@types.cosf(ripple_phase))).to_int()
             let ra = @types.mini(@types.maxi(ripple_alpha, 0), 255)
@@ -99,7 +99,7 @@ fn draw_tile_object(
   sx : Float,
   sy : Float,
   ts : Float,
-  frame : Int,
+  frame : Int32,
 ) -> Unit {
   let cx = sx + ts / 2.0
   let cy = sy + ts / 2.0

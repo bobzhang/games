@@ -1,11 +1,12 @@
 ///|
 /// Top-level flow states for a duel session.
+#derive(Eq)
 pub(all) enum GameState {
   Title
   Playing
   Paused
   GameOver
-} derive(Eq)
+}
 
 ///|
 pub extend GameState with Eq::{not_equal, equal}
@@ -13,8 +14,8 @@ pub extend GameState with Eq::{not_equal, equal}
 ///|
 /// Per-frame input snapshot used by game logic.
 pub(all) struct InputState {
-  mut axis_x : Int
-  mut axis_y : Int
+  mut axis_x : Int32
+  mut axis_y : Int32
   mut hit_pressed : Bool
   mut defend_pressed : Bool
   mut burst_pressed : Bool
@@ -26,8 +27,8 @@ pub(all) struct InputState {
 ///|
 /// Active opponent prompt with lane, stance, and remaining time.
 pub(all) struct Prompt {
-  lane_x : Int
-  lane_y : Int
+  lane_x : Int32
+  lane_y : Int32
   stance : Stance
   mut time_left : Float
 }
@@ -37,23 +38,23 @@ pub(all) struct Prompt {
 pub(all) struct Game {
   input : InputState
   mut state : GameState
-  mut lane_x : Int
-  mut lane_y : Int
+  mut lane_x : Int32
+  mut lane_y : Int32
   mut stance : Stance
   mut health : Float
   mut harmony : Float
-  mut acclaim : Int
-  mut combo : Int
-  mut best_combo : Int
-  mut hits : Int
-  mut misses : Int
+  mut acclaim : Int32
+  mut combo : Int32
+  mut best_combo : Int32
+  mut hits : Int32
+  mut misses : Int32
   mut duel_time_left : Float
   mut elapsed : Float
   mut beat_interval : Float
   mut next_prompt_t : Float
   mut prompt_active : Bool
   mut prompt : Prompt
-  mut prompt_serial : Int
+  mut prompt_serial : Int32
   mut burst_t : Float
   mut burst_cd : Float
   mut guard_flash_t : Float
@@ -81,8 +82,8 @@ pub fn InputState::InputState() -> InputState {
 ///|
 /// Construct a prompt at the given lane and stance.
 pub fn Prompt::Prompt(
-  lane_x : Int,
-  lane_y : Int,
+  lane_x : Int32,
+  lane_y : Int32,
   stance : Stance,
   time_left : Float,
 ) -> Prompt {

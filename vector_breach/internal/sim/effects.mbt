@@ -5,9 +5,9 @@
 /// Move a unit on the grid, updating tile occupancy.
 pub fn move_unit_to(
   battle : @types.BattleState,
-  unit_id : Int,
-  nx : Int,
-  ny : Int,
+  unit_id : Int32,
+  nx : Int32,
+  ny : Int32,
 ) -> Unit {
   let u = battle.units[unit_id]
   // Clear old tile
@@ -31,9 +31,9 @@ pub fn move_unit_to(
 /// Optional attacker_id is used for augment effects (chain lightning, vampire core).
 pub fn apply_damage(
   battle : @types.BattleState,
-  unit_id : Int,
-  amount : Int,
-) -> Int {
+  unit_id : Int32,
+  amount : Int32,
+) -> Int32 {
   apply_damage_from(battle, unit_id, amount, -1)
 }
 
@@ -41,10 +41,10 @@ pub fn apply_damage(
 /// Deal damage from a specific attacker. Enables augment triggers.
 pub fn apply_damage_from(
   battle : @types.BattleState,
-  unit_id : Int,
-  amount : Int,
-  attacker_id : Int,
-) -> Int {
+  unit_id : Int32,
+  amount : Int32,
+  attacker_id : Int32,
+) -> Int32 {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return 0
   }
@@ -106,7 +106,7 @@ pub fn apply_damage_from(
 
 ///|
 /// VampireCore heal effect: heal 1 HP on kill (capped at max).
-fn apply_vampire_heal(battle : @types.BattleState, unit_id : Int) -> Unit {
+fn apply_vampire_heal(battle : @types.BattleState, unit_id : Int32) -> Unit {
   let u = battle.units[unit_id]
   if u.hp < u.max_hp {
     u.hp += 1
@@ -120,8 +120,8 @@ fn apply_vampire_heal(battle : @types.BattleState, unit_id : Int) -> Unit {
 /// and deal 1 damage to the first one found.
 pub fn apply_chain_lightning(
   battle : @types.BattleState,
-  target_id : Int,
-  attacker_id : Int,
+  target_id : Int32,
+  attacker_id : Int32,
 ) -> Unit {
   if target_id < 0 || target_id >= battle.units.length() {
     return
@@ -154,7 +154,7 @@ pub fn apply_chain_lightning(
 /// EmergencyRepair: auto-heal 1 HP when below 25%.
 pub fn check_emergency_repair(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
 ) -> Unit {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return
@@ -177,7 +177,7 @@ pub fn check_emergency_repair(
 ///|
 /// Kill a unit - mark inactive and clear grid occupancy.
 /// Emits kill flourish: ring + slowmo + floating text.
-pub fn kill_unit(battle : @types.BattleState, unit_id : Int) -> Unit {
+pub fn kill_unit(battle : @types.BattleState, unit_id : Int32) -> Unit {
   let u = battle.units[unit_id]
   let kill_x = u.x
   let kill_y = u.y
@@ -206,8 +206,8 @@ pub fn kill_unit(battle : @types.BattleState, unit_id : Int) -> Unit {
 /// Apply shield to a unit.
 pub fn apply_shield(
   battle : @types.BattleState,
-  unit_id : Int,
-  amount : Int,
+  unit_id : Int32,
+  amount : Int32,
 ) -> Unit {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return
@@ -223,7 +223,7 @@ pub fn apply_shield(
 
 ///|
 /// Stun a unit - it will skip its next action.
-pub fn apply_stun(battle : @types.BattleState, unit_id : Int) -> Unit {
+pub fn apply_stun(battle : @types.BattleState, unit_id : Int32) -> Unit {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return
   }
@@ -240,8 +240,8 @@ pub fn apply_stun(battle : @types.BattleState, unit_id : Int) -> Unit {
 /// Add heat to a unit.
 pub fn apply_heat(
   battle : @types.BattleState,
-  unit_id : Int,
-  amount : Int,
+  unit_id : Int32,
+  amount : Int32,
 ) -> Unit {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return
@@ -264,10 +264,10 @@ pub fn apply_heat(
 /// OverchargedPush augment adds +1 distance.
 pub fn try_push(
   battle : @types.BattleState,
-  unit_id : Int,
-  dx : Int,
-  dy : Int,
-  distance : Int,
+  unit_id : Int32,
+  dx : Int32,
+  dy : Int32,
+  distance : Int32,
 ) -> Unit {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return
@@ -413,7 +413,7 @@ pub fn try_push(
 /// Apply a status effect to a unit.
 pub fn apply_status(
   battle : @types.BattleState,
-  unit_id : Int,
+  unit_id : Int32,
   status : @types.StatusEffect,
 ) -> Unit {
   if unit_id < 0 || unit_id >= battle.units.length() {
@@ -477,7 +477,7 @@ pub fn is_immobilized(u : @types.CombatUnit) -> Bool {
 /// Add combo score with floating text and gold glow popoff.
 pub fn add_combo_score(
   battle : @types.BattleState,
-  points : Int,
+  points : Int32,
   text : String,
 ) -> Unit {
   battle.score += points
@@ -505,10 +505,10 @@ pub fn add_combo_score(
 /// Pull direction is computed from unit toward puller.
 pub fn try_pull(
   battle : @types.BattleState,
-  unit_id : Int,
-  toward_x : Int,
-  toward_y : Int,
-  distance : Int,
+  unit_id : Int32,
+  toward_x : Int32,
+  toward_y : Int32,
+  distance : Int32,
 ) -> Unit {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return
@@ -534,8 +534,8 @@ pub fn try_pull(
 /// Place a hazard on a tile.
 pub fn place_hazard(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   hazard : @types.HazardKind,
 ) -> Unit {
   if !battle.grid.in_bounds(x, y) {
@@ -550,7 +550,7 @@ pub fn place_hazard(
 
 ///|
 /// Get a display name for a unit.
-pub fn get_unit_name(battle : @types.BattleState, unit_id : Int) -> String {
+pub fn get_unit_name(battle : @types.BattleState, unit_id : Int32) -> String {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return "Unknown"
   }
@@ -566,7 +566,7 @@ pub fn get_unit_name(battle : @types.BattleState, unit_id : Int) -> String {
 
 ///|
 /// Utility: sign of an integer (-1, 0, 1).
-pub fn sign(v : Int) -> Int {
+pub fn sign(v : Int32) -> Int32 {
   if v > 0 {
     1
   } else if v < 0 {
@@ -578,7 +578,7 @@ pub fn sign(v : Int) -> Int {
 
 ///|
 /// Find the unit occupying a tile, or -1.
-pub fn unit_at(battle : @types.BattleState, x : Int, y : Int) -> Int {
+pub fn unit_at(battle : @types.BattleState, x : Int32, y : Int32) -> Int32 {
   if !battle.grid.in_bounds(x, y) {
     return -1
   }
@@ -587,7 +587,7 @@ pub fn unit_at(battle : @types.BattleState, x : Int, y : Int) -> Int {
 
 ///|
 /// Check if a tile is walkable (floor-like, not wall/chasm, not occupied).
-pub fn is_walkable(battle : @types.BattleState, x : Int, y : Int) -> Bool {
+pub fn is_walkable(battle : @types.BattleState, x : Int32, y : Int32) -> Bool {
   if !battle.grid.in_bounds(x, y) {
     return false
   }
@@ -600,7 +600,7 @@ pub fn is_walkable(battle : @types.BattleState, x : Int, y : Int) -> Bool {
 
 ///|
 /// Check if a tile blocks movement (wall or out of bounds).
-pub fn is_blocked(battle : @types.BattleState, x : Int, y : Int) -> Bool {
+pub fn is_blocked(battle : @types.BattleState, x : Int32, y : Int32) -> Bool {
   if !battle.grid.in_bounds(x, y) {
     return true
   }
@@ -613,10 +613,10 @@ pub fn is_blocked(battle : @types.BattleState, x : Int, y : Int) -> Bool {
 /// Returns true if no wall tiles block the path.
 pub fn has_line_of_sight(
   battle : @types.BattleState,
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
 ) -> Bool {
   let mut cx = x1
   let mut cy = y1
@@ -651,10 +651,10 @@ pub fn has_line_of_sight(
 /// Returns the unit id, or -1 if none found.
 pub fn find_nearest_unit(
   battle : @types.BattleState,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   team : @types.UnitTeam,
-) -> Int {
+) -> Int32 {
   let mut best_id = -1
   let mut best_dist = 9999
   for i = 0; i < battle.units.length(); i = i + 1 {
@@ -675,7 +675,7 @@ pub fn find_nearest_unit(
 pub fn find_weakest_unit(
   battle : @types.BattleState,
   team : @types.UnitTeam,
-) -> Int {
+) -> Int32 {
   let mut best_id = -1
   let mut best_hp = 9999
   for i = 0; i < battle.units.length(); i = i + 1 {
@@ -695,7 +695,7 @@ pub fn find_weakest_unit(
 pub fn find_most_damaged_unit(
   battle : @types.BattleState,
   team : @types.UnitTeam,
-) -> Int {
+) -> Int32 {
   let mut best_id = -1
   let mut best_damage = -1
   for i = 0; i < battle.units.length(); i = i + 1 {
@@ -718,11 +718,11 @@ pub fn find_most_damaged_unit(
 ///|
 /// Step one tile toward a target (returns dx, dy).
 pub fn step_toward(
-  from_x : Int,
-  from_y : Int,
-  to_x : Int,
-  to_y : Int,
-) -> (Int, Int) {
+  from_x : Int32,
+  from_y : Int32,
+  to_x : Int32,
+  to_y : Int32,
+) -> (Int32, Int32) {
   let raw_dx = to_x - from_x
   let raw_dy = to_y - from_y
   let adx = @types.abs_int(raw_dx)

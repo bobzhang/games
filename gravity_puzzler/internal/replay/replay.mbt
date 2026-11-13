@@ -15,7 +15,7 @@ pub fn record_gravity_rotate(
 
 ///|
 /// Record a player movement into the move history
-pub fn record_player_move(game : @types.Game, dx : Int, dy : Int) -> Unit {
+pub fn record_player_move(game : @types.Game, dx : Int32, dy : Int32) -> Unit {
   let frame : @types.ReplayFrame = { direction: Down, move_type: 1, dx, dy, }
   game.move_history.push(frame)
 }
@@ -189,7 +189,7 @@ pub fn decode_replay(data : String) -> Array[@types.ReplayFrame] {
       continue
     }
     let first = part[0]
-    let ch = Int::unsafe_to_char(first.to_int())
+    let ch = Int32::unsafe_to_char(first.to_int())
     match ch {
       'D' => frames.push({ direction: Down, move_type: 0, dx: 0, dy: 0, })
       'U' => frames.push({ direction: Up, move_type: 0, dx: 0, dy: 0, })
@@ -216,7 +216,7 @@ fn split_by_comma(s : String) -> Array[String] {
   let parts : Array[String] = []
   let buf = StringBuilder()
   for i in 0..<s.length() {
-    let ch = Int::unsafe_to_char(s[i].to_int())
+    let ch = Int32::unsafe_to_char(s[i].to_int())
     if ch == ',' {
       parts.push(buf.to_string())
       buf.reset()
@@ -232,11 +232,11 @@ fn split_by_comma(s : String) -> Array[String] {
 }
 
 ///|
-fn parse_move_coords(s : String) -> (Int, Int) {
+fn parse_move_coords(s : String) -> (Int32, Int32) {
   // Format: Mdx:dy
   let mut colon_pos = -1
   for i in 1..<s.length() {
-    let ch = Int::unsafe_to_char(s[i].to_int())
+    let ch = Int32::unsafe_to_char(s[i].to_int())
     if ch == ':' {
       colon_pos = i
     }
@@ -250,22 +250,22 @@ fn parse_move_coords(s : String) -> (Int, Int) {
 }
 
 ///|
-fn substring(s : String, start : Int, end : Int) -> String {
+fn substring(s : String, start : Int32, end : Int32) -> String {
   let buf = StringBuilder()
   for i in start..<end {
     if i < s.length() {
-      buf.write_char(Int::unsafe_to_char(s[i].to_int()))
+      buf.write_char(Int32::unsafe_to_char(s[i].to_int()))
     }
   }
   buf.to_string()
 }
 
 ///|
-fn parse_int_safe(s : String) -> Int {
+fn parse_int_safe(s : String) -> Int32 {
   let mut result = 0
   let mut negative = false
   for i in 0..<s.length() {
-    let ch = Int::unsafe_to_char(s[i].to_int())
+    let ch = Int32::unsafe_to_char(s[i].to_int())
     if ch == '-' && i == 0 {
       negative = true
     } else if ch >= '0' && ch <= '9' {

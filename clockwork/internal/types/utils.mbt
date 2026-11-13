@@ -57,7 +57,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -66,7 +66,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -94,7 +94,7 @@ pub fn gear_radius(size : GearSize) -> Float {
 }
 
 ///|
-pub fn gear_teeth(size : GearSize) -> Int {
+pub fn gear_teeth(size : GearSize) -> Int32 {
   match size {
     Small => gear_small_teeth
     Medium => gear_medium_teeth
@@ -112,12 +112,12 @@ pub fn gear_speed_ratio(size : GearSize) -> Float {
 }
 
 ///|
-pub fn cell_center_x(col : Int) -> Float {
+pub fn cell_center_x(col : Int32) -> Float {
   Float::from_int(grid_offset_x + col * cell_size + cell_size / 2)
 }
 
 ///|
-pub fn cell_center_y(row : Int) -> Float {
+pub fn cell_center_y(row : Int32) -> Float {
   Float::from_int(grid_offset_y + row * cell_size + cell_size / 2)
 }
 
@@ -144,7 +144,11 @@ pub fn tier_name(tier : Tier) -> String {
 }
 
 ///|
-pub fn new_component(kind : ComponentKind, col : Int, row : Int) -> Component {
+pub fn new_component(
+  kind : ComponentKind,
+  col : Int32,
+  row : Int32,
+) -> Component {
   {
     active: true,
     kind,
@@ -171,8 +175,8 @@ pub fn new_component(kind : ComponentKind, col : Int, row : Int) -> Component {
 ///|
 pub fn new_fixed_component(
   kind : ComponentKind,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Component {
   let c = new_component(kind, col, row)
   c.fixed = true
@@ -180,7 +184,7 @@ pub fn new_fixed_component(
 }
 
 ///|
-pub fn new_bell(col : Int, row : Int, target_tick : Int) -> Component {
+pub fn new_bell(col : Int32, row : Int32, target_tick : Int32) -> Component {
   let c = new_fixed_component(Bell, col, row)
   c.bell_target_tick = target_tick
   c
@@ -192,13 +196,13 @@ pub fn new_palette() -> Palette {
 }
 
 ///|
-pub fn palette_add(p : Palette, kind : ComponentKind, count : Int) -> Unit {
+pub fn palette_add(p : Palette, kind : ComponentKind, count : Int32) -> Unit {
   p.available.push(kind)
   p.counts.push(count)
 }
 
 ///|
-pub fn palette_remaining(p : Palette, idx : Int) -> Int {
+pub fn palette_remaining(p : Palette, idx : Int32) -> Int32 {
   if idx >= 0 && idx < p.counts.length() {
     p.counts[idx]
   } else {
@@ -245,10 +249,10 @@ pub fn reset_simulation(sim : Simulation) -> Unit {
 }
 
 ///|
-pub fn new_grid() -> Array[Array[Int]] {
-  let grid : Array[Array[Int]] = []
+pub fn new_grid() -> Array[Array[Int32]] {
+  let grid : Array[Array[Int32]] = []
   for _r in 0..<grid_rows {
-    let row : Array[Int] = []
+    let row : Array[Int32] = []
     for _c in 0..<grid_cols {
       row.push(-1)
     }
@@ -259,7 +263,7 @@ pub fn new_grid() -> Array[Array[Int]] {
 
 ///|
 pub fn new_game() -> Game {
-  let stars : Array[Int] = []
+  let stars : Array[Int32] = []
   for _i in 0..<total_levels {
     stars.push(0)
   }
@@ -289,12 +293,12 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn grid_valid(col : Int, row : Int) -> Bool {
+pub fn grid_valid(col : Int32, row : Int32) -> Bool {
   col >= 0 && col < grid_cols && row >= 0 && row < grid_rows
 }
 
 ///|
-pub fn grid_get(game : Game, col : Int, row : Int) -> Int {
+pub fn grid_get(game : Game, col : Int32, row : Int32) -> Int32 {
   if grid_valid(col, row) {
     game.grid[row][col]
   } else {
@@ -303,7 +307,7 @@ pub fn grid_get(game : Game, col : Int, row : Int) -> Int {
 }
 
 ///|
-pub fn grid_set(game : Game, col : Int, row : Int, idx : Int) -> Unit {
+pub fn grid_set(game : Game, col : Int32, row : Int32, idx : Int32) -> Unit {
   if grid_valid(col, row) {
     game.grid[row][col] = idx
   }
@@ -319,7 +323,7 @@ pub fn clear_grid(game : Game) -> Unit {
 }
 
 ///|
-pub fn count_placed_components(game : Game) -> Int {
+pub fn count_placed_components(game : Game) -> Int32 {
   let mut count = 0
   for i in 0..<game.components.length() {
     if game.components[i].active && !game.components[i].fixed {
@@ -330,11 +334,11 @@ pub fn count_placed_components(game : Game) -> Int {
 }
 
 ///|
-pub fn mouse_to_grid_col(mx : Int) -> Int {
+pub fn mouse_to_grid_col(mx : Int32) -> Int32 {
   (mx - grid_offset_x) / cell_size
 }
 
 ///|
-pub fn mouse_to_grid_row(my : Int) -> Int {
+pub fn mouse_to_grid_row(my : Int32) -> Int32 {
   (my - grid_offset_y) / cell_size
 }

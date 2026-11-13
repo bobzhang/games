@@ -145,10 +145,10 @@ fn @types.Game::carve_room(game : @types.Game, room : @types.Room) -> Unit {
 ///|
 fn @types.Game::carve_corridor(
   game : @types.Game,
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
 ) -> Unit {
   let mut cx = x1
   let mut cy = y1
@@ -378,10 +378,10 @@ fn @types.Game::place_extended_enemies(game : @types.Game) -> Unit {
 fn @types.Game::spawn_enemy_in_room(
   game : @types.Game,
   kind : @types.EnemyKind,
-  hp : Int,
-  atk : Int,
-  def : Int,
-  xp_value : Int,
+  hp : Int32,
+  atk : Int32,
+  def : Int32,
+  xp_value : Int32,
 ) -> Unit {
   let idx = @types.alloc_enemy(game)
   if idx < 0 {
@@ -446,7 +446,7 @@ fn @types.Game::place_loot(game : @types.Game) -> Unit {
     let l = game.loot[idx]
     l.active = true
     // Determine rarity
-    let rarity_weights : Array[Int] = [
+    let rarity_weights : Array[Int32] = [
       @levels.get_rarity_weight_common(game.current_floor),
       @levels.get_rarity_weight_uncommon(game.current_floor),
       @levels.get_rarity_weight_rare(game.current_floor),

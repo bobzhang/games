@@ -88,7 +88,7 @@ fn draw_mission_briefing(game : @types.Game) -> Unit {
   )
   let mut line_y = enemy_y + 34
   let type_names : Array[String] = []
-  let type_counts : Array[Int] = []
+  let type_counts : Array[Int32] = []
   for i = 0; i < def.enemy_types.length(); i = i + 1 {
     let (etype, _, _) = def.enemy_types[i]
     let name = @content.get_enemy_name(etype)
@@ -401,7 +401,7 @@ fn draw_run_summary(game : @types.Game) -> Unit {
 }
 
 ///|
-fn compute_rating(score : Int, missions_completed : Int) -> String {
+fn compute_rating(score : Int32, missions_completed : Int32) -> String {
   let base = if missions_completed > 0 { missions_completed * 100 } else { 100 }
   if score >= base * 3 {
     "S"
@@ -418,8 +418,8 @@ fn compute_rating(score : Int, missions_completed : Int) -> String {
 fn draw_stat_line(
   label : String,
   value : String,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   value_color : @raylib.Color,
 ) -> Unit {
   @types.draw_shadow_text(
@@ -453,10 +453,10 @@ fn format_objective(obj : @types.Objective) -> String {
 ///|
 fn draw_wrapped_text(
   text : String,
-  x : Int,
-  y : Int,
-  max_width : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  max_width : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let words = split_by_space(text)

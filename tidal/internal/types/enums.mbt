@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,15 +23,16 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileKind {
   Empty
   Wall
   Target
-  Emitter(Int) // phase 0-3
+  Emitter(Int32) // phase 0-3
   Reflector
   PhaseShifter
   Absorber
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -47,13 +49,14 @@ pub impl Show for TileKind with fn output(self, logger) {
 pub extend TileKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Editing
   Simulating
   Stepping
   Complete
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -70,12 +73,13 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlaceableKind {
   PlaceEmitter
   PlaceReflector
   PlacePhaseShifter
   PlaceAbsorber
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlaceableKind with Eq::{not_equal, equal}

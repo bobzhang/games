@@ -1,87 +1,87 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
-let map_w : Int = 20
+let map_w : Int32 = 20
 
 ///|
-let map_h : Int = 12
+let map_h : Int32 = 12
 
 ///|
-let tile : Int = 52
+let tile : Int32 = 52
 
 ///|
-let map_x : Int = 120
+let map_x : Int32 = 120
 
 ///|
-let map_y : Int = 72
+let map_y : Int32 = 72
 
 ///|
-let max_crates : Int = 20
+let max_crates : Int32 = 20
 
 ///|
-let max_plates : Int = 10
+let max_plates : Int32 = 10
 
 ///|
-let max_relics : Int = 18
+let max_relics : Int32 = 18
 
 ///|
-let max_enemies : Int = 42
+let max_enemies : Int32 = 42
 
 ///|
-let max_spikes : Int = 30
+let max_spikes : Int32 = 30
 
 ///|
-let max_particles : Int = 900
+let max_particles : Int32 = 900
 
 ///|
 struct Player {
-  mut gx : Int
-  mut gy : Int
+  mut gx : Int32
+  mut gy : Int32
   mut hp : Float
   mut stamina : Float
   mut slash_cd : Float
   mut dash_cd : Float
   mut bomb_cd : Float
   mut hurt_t : Float
-  mut face_x : Int
-  mut face_y : Int
-  mut score : Int
-  mut combo : Int
+  mut face_x : Int32
+  mut face_y : Int32
+  mut score : Int32
+  mut combo : Int32
 }
 
 ///|
 struct Crate {
   mut active : Bool
-  mut gx : Int
-  mut gy : Int
+  mut gx : Int32
+  mut gy : Int32
 }
 
 ///|
 struct Plate {
   mut active : Bool
-  mut gx : Int
-  mut gy : Int
+  mut gx : Int32
+  mut gy : Int32
   mut pressed : Bool
 }
 
 ///|
 struct Relic {
   mut active : Bool
-  mut gx : Int
-  mut gy : Int
+  mut gx : Int32
+  mut gy : Int32
   mut taken : Bool
 }
 
 ///|
 struct Enemy {
   mut active : Bool
-  mut kind : Int
-  mut gx : Int
-  mut gy : Int
+  mut kind : Int32
+  mut gx : Int32
+  mut gy : Int32
   mut hp : Float
   mut move_cd : Float
   mut atk_cd : Float
@@ -92,8 +92,8 @@ struct Enemy {
 ///|
 struct Spike {
   mut active : Bool
-  mut gx : Int
-  mut gy : Int
+  mut gx : Int32
+  mut gy : Int32
   mut t : Float
 }
 
@@ -107,7 +107,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -128,12 +128,12 @@ fn randf(lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn idx(gx : Int, gy : Int) -> Int {
+fn idx(gx : Int32, gy : Int32) -> Int32 {
   gy * map_w + gx
 }
 
 ///|
-fn in_bounds(gx : Int, gy : Int) -> Bool {
+fn in_bounds(gx : Int32, gy : Int32) -> Bool {
   gx >= 0 && gy >= 0 && gx < map_w && gy < map_h
 }
 
@@ -141,10 +141,10 @@ fn in_bounds(gx : Int, gy : Int) -> Bool {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -153,12 +153,12 @@ fn inside_rect(
 }
 
 ///|
-fn cell_center_x(gx : Int) -> Float {
+fn cell_center_x(gx : Int32) -> Float {
   Float::from_int(map_x + gx * tile + tile / 2)
 }
 
 ///|
-fn cell_center_y(gy : Int) -> Float {
+fn cell_center_y(gy : Int32) -> Float {
   Float::from_int(map_y + gy * tile + tile / 2)
 }
 
@@ -232,8 +232,8 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
-fn crate_at(crates : Array[Crate], gx : Int, gy : Int) -> Int {
-  let mut found : Int = -1
+fn crate_at(crates : Array[Crate], gx : Int32, gy : Int32) -> Int32 {
+  let mut found : Int32 = -1
   for i in 0..<crates.length() {
     if crates[i].active && crates[i].gx == gx && crates[i].gy == gy {
       found = i
@@ -244,8 +244,8 @@ fn crate_at(crates : Array[Crate], gx : Int, gy : Int) -> Int {
 }
 
 ///|
-fn enemy_at(enemies : Array[Enemy], gx : Int, gy : Int) -> Int {
-  let mut found : Int = -1
+fn enemy_at(enemies : Array[Enemy], gx : Int32, gy : Int32) -> Int32 {
+  let mut found : Int32 = -1
   for i in 0..<enemies.length() {
     if enemies[i].active && enemies[i].gx == gx && enemies[i].gy == gy {
       found = i
@@ -256,8 +256,8 @@ fn enemy_at(enemies : Array[Enemy], gx : Int, gy : Int) -> Int {
 }
 
 ///|
-fn relic_at(relics : Array[Relic], gx : Int, gy : Int) -> Int {
-  let mut found : Int = -1
+fn relic_at(relics : Array[Relic], gx : Int32, gy : Int32) -> Int32 {
+  let mut found : Int32 = -1
   for i in 0..<relics.length() {
     if relics[i].active &&
       !relics[i].taken &&
@@ -271,8 +271,8 @@ fn relic_at(relics : Array[Relic], gx : Int, gy : Int) -> Int {
 }
 
 ///|
-fn spike_at(spikes : Array[Spike], gx : Int, gy : Int) -> Int {
-  let mut found : Int = -1
+fn spike_at(spikes : Array[Spike], gx : Int32, gy : Int32) -> Int32 {
+  let mut found : Int32 = -1
   for i in 0..<spikes.length() {
     if spikes[i].active && spikes[i].gx == gx && spikes[i].gy == gy {
       found = i
@@ -287,9 +287,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut left = n
   for part in parts {
@@ -317,7 +317,7 @@ fn main {
   @raylib.set_target_fps(60)
   @draw.init_font()
 
-  let tiles : Array[Int] = Array::makei(map_w * map_h, fn(_i) { 0 })
+  let tiles : Array[Int32] = Array::makei(map_w * map_h, fn(_i) { 0 })
 
   let crates : Array[Crate] = Array::makei(max_crates, fn(_i) {
     { active: false, gx: 0, gy: 0, }
@@ -378,25 +378,25 @@ fn main {
     combo: 0,
   }
 
-  let mut state : Int = 0
-  let mut stage : Int = 1
-  let max_stage : Int = 5
+  let mut state : Int32 = 0
+  let mut stage : Int32 = 1
+  let max_stage : Int32 = 5
   let mut total_time : Float = 420.0
   let mut stage_time : Float = 96.0
 
-  let mut relic_left : Int = 0
-  let mut plate_goal : Int = 0
-  let mut plates_pressed : Int = 0
-  let mut exit_x : Int = map_w - 2
-  let mut exit_y : Int = 1
+  let mut relic_left : Int32 = 0
+  let mut plate_goal : Int32 = 0
+  let mut plates_pressed : Int32 = 0
+  let mut exit_x : Int32 = map_w - 2
+  let mut exit_y : Int32 = 1
   let mut exit_open : Bool = false
-  let mut losses : Int = 0
+  let mut losses : Int32 = 0
 
   let mut msg : String = "Find relics, solve plates, reach the gate"
   let mut msg_t : Float = 3.0
   let mut move_repeat_t : Float = 0.0
 
-  let can_walk = fn(gx : Int, gy : Int) -> Bool {
+  let can_walk = fn(gx : Int32, gy : Int32) -> Bool {
     if !in_bounds(gx, gy) {
       false
     } else if tiles[idx(gx, gy)] == 1 {
@@ -406,7 +406,11 @@ fn main {
     }
   }
 
-  let cell_free_for_spawn = fn(gx : Int, gy : Int, min_dist : Int) -> Bool {
+  let cell_free_for_spawn = fn(
+    gx : Int32,
+    gy : Int32,
+    min_dist : Int32,
+  ) -> Bool {
     if !can_walk(gx, gy) {
       false
     } else if (gx - player.gx).abs() + (gy - player.gy).abs() < min_dist {
@@ -436,7 +440,7 @@ fn main {
     }
   }
 
-  let setup_stage = fn(stage_i : Int) {
+  let setup_stage = fn(stage_i : Int32) {
     for y in 0..<map_h {
       for x in 0..<map_w {
         if x == 0 || y == 0 || x == map_w - 1 || y == map_h - 1 {
@@ -468,7 +472,7 @@ fn main {
     exit_open = false
 
     // Interior stone blocks.
-    let stone_count : Int = 10 + stage_i * 6
+    let stone_count : Int32 = 10 + stage_i * 6
     for i in 0..<stone_count {
       ignore(i)
       let mut placed = false
@@ -501,7 +505,7 @@ fn main {
         let gx = @raylib.get_random_value(1, map_w - 2)
         let gy = @raylib.get_random_value(1, map_h - 2)
         if cell_free_for_spawn(gx, gy, 4) {
-          let mut slot : Int = -1
+          let mut slot : Int32 = -1
           for k in 0..<plates.length() {
             if !plates[k].active {
               slot = k
@@ -519,14 +523,14 @@ fn main {
       }
     }
 
-    let crate_count : Int = (plate_goal + 1).clamp(min=3, max=8)
+    let crate_count : Int32 = (plate_goal + 1).clamp(min=3, max=8)
     for i in 0..<crate_count {
       ignore(i)
       for _a in 0..<220 {
         let gx = @raylib.get_random_value(1, map_w - 2)
         let gy = @raylib.get_random_value(1, map_h - 2)
         if cell_free_for_spawn(gx, gy, 3) {
-          let mut slot : Int = -1
+          let mut slot : Int32 = -1
           for k in 0..<crates.length() {
             if !crates[k].active {
               slot = k
@@ -550,7 +554,7 @@ fn main {
         let gx = @raylib.get_random_value(1, map_w - 2)
         let gy = @raylib.get_random_value(1, map_h - 2)
         if cell_free_for_spawn(gx, gy, 5) {
-          let mut slot : Int = -1
+          let mut slot : Int32 = -1
           for k in 0..<relics.length() {
             if !relics[k].active {
               slot = k
@@ -568,14 +572,14 @@ fn main {
       }
     }
 
-    let enemy_count : Int = (4 + stage_i * 3).clamp(min=4, max=28)
+    let enemy_count : Int32 = (4 + stage_i * 3).clamp(min=4, max=28)
     for i in 0..<enemy_count {
       ignore(i)
       for _a in 0..<220 {
         let gx = @raylib.get_random_value(1, map_w - 2)
         let gy = @raylib.get_random_value(1, map_h - 2)
         if cell_free_for_spawn(gx, gy, 6) {
-          let mut slot : Int = -1
+          let mut slot : Int32 = -1
           for k in 0..<enemies.length() {
             if !enemies[k].active {
               slot = k
@@ -601,7 +605,7 @@ fn main {
       }
     }
 
-    let spike_count : Int = (3 + stage_i * 2).clamp(min=3, max=18)
+    let spike_count : Int32 = (3 + stage_i * 2).clamp(min=3, max=18)
     for i in 0..<spike_count {
       ignore(i)
       for _a in 0..<220 {
@@ -621,7 +625,7 @@ fn main {
               }
             }
             if !exists {
-              let mut slot : Int = -1
+              let mut slot : Int32 = -1
               for k in 0..<spikes.length() {
                 if !spikes[k].active {
                   slot = k
@@ -703,7 +707,7 @@ fn main {
     }
   }
 
-  let kill_enemy = fn(slot : Int, bonus : Int) {
+  let kill_enemy = fn(slot : Int32, bonus : Int32) {
     enemies[slot].active = false
     player.combo = player.combo + 1
     player.score = player.score + bonus + player.combo * 4 + stage * 3
@@ -717,7 +721,7 @@ fn main {
     )
   }
 
-  let attempt_move = fn(dx : Int, dy : Int) {
+  let attempt_move = fn(dx : Int32, dy : Int32) {
     if dx == 0 && dy == 0 {
       ignore(())
     } else {
@@ -879,8 +883,8 @@ fn main {
         }
       }
 
-      let mut dx : Int = 0
-      let mut dy : Int = 0
+      let mut dx : Int32 = 0
+      let mut dy : Int32 = 0
       if move_l {
         dx = -1
       } else if move_r {
@@ -915,7 +919,7 @@ fn main {
 
       if slash_press && player.slash_cd <= 0.0 {
         player.slash_cd = 0.32
-        let mut hit_count : Int = 0
+        let mut hit_count : Int32 = 0
 
         for step in 1..<=2 {
           let tx = player.gx + player.face_x * step
@@ -1015,7 +1019,7 @@ fn main {
         player.bomb_cd = 5.4
         player.stamina = player.stamina - 40.0
 
-        let mut bomb_hits : Int = 0
+        let mut bomb_hits : Int32 = 0
         for i in 0..<enemies.length() {
           if enemies[i].active {
             let dxi = (enemies[i].gx - player.gx).abs()

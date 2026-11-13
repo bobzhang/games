@@ -155,7 +155,7 @@ fn draw_texture_cover(
 
 ///|
 /// Returns the generated station texture associated with the gameplay station kind.
-fn station_texture(art : GameArt, kind : Int) -> @raylib.Texture {
+fn station_texture(art : GameArt, kind : Int32) -> @raylib.Texture {
   match kind {
     0 => art.station_bun_module
     1 => art.station_meat_module

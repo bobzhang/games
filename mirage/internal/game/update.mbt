@@ -144,7 +144,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn try_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn try_move(game : @types.Game, dx : Int32, dy : Int32) -> Bool {
   let new_x = game.player.grid_x + dx
   let new_y = game.player.grid_y + dy
   if @layers.can_walk(game, new_x, new_y) {
@@ -233,7 +233,7 @@ fn complete_level(game : @types.Game) -> Unit {
 }
 
 ///|
-pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
+pub fn load_level(game : @types.Game, level_index : Int32) -> Unit {
   let idx = @types.clampi(level_index, 0, @types.total_levels - 1)
   let level_def = @levels.get_level(idx)
   game.current_level = idx

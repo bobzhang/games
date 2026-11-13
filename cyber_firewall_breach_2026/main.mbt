@@ -1,26 +1,26 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Left edge x-coordinate of the gameplay arena.
-let arena_x : Int = 210
+let arena_x : Int32 = 210
 
 ///|
 /// Top edge y-coordinate of the gameplay arena.
-let arena_y : Int = 118
+let arena_y : Int32 = 118
 
 ///|
 /// Width of the gameplay arena in pixels.
-let arena_w : Int = 1020
+let arena_w : Int32 = 1020
 
 ///|
 /// Height of the gameplay arena in pixels.
-let arena_h : Int = 628
+let arena_h : Int32 = 628
 
 ///|
 /// X-coordinate of the firewall core node.
@@ -32,15 +32,15 @@ let player_x : Float = 132.0
 
 ///|
 /// Maximum number of enemy entities that can be active simultaneously.
-let max_enemies : Int = 84
+let max_enemies : Int32 = 84
 
 ///|
 /// Maximum number of projectile shots in flight at one time.
-let max_shots : Int = 180
+let max_shots : Int32 = 180
 
 ///|
 /// Maximum number of visual particle effects active at one time.
-let max_parts : Int = 220
+let max_parts : Int32 = 220
 
 ///|
 /// Represents a malware enemy entity with position, velocity, health, and type.
@@ -49,8 +49,8 @@ struct Enemy {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut hp : Int
-  mut kind : Int
+  mut hp : Int32
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -72,7 +72,7 @@ struct Part {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -93,10 +93,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -106,7 +106,7 @@ fn inside_rect(
 
 ///|
 /// Returns the starting hit points for an enemy of the given kind.
-fn enemy_hp(kind : Int) -> Int {
+fn enemy_hp(kind : Int32) -> Int32 {
   if kind == 0 {
     1
   } else if kind == 1 {
@@ -118,7 +118,7 @@ fn enemy_hp(kind : Int) -> Int {
 
 ///|
 /// Returns the core damage dealt per hit by an enemy of the given kind.
-fn enemy_damage(kind : Int) -> Int {
+fn enemy_damage(kind : Int32) -> Int32 {
   if kind == 0 {
     8
   } else if kind == 1 {
@@ -130,7 +130,7 @@ fn enemy_damage(kind : Int) -> Int {
 
 ///|
 /// Returns the score points awarded for destroying an enemy of the given kind.
-fn enemy_score(kind : Int) -> Int {
+fn enemy_score(kind : Int32) -> Int32 {
   if kind == 0 {
     26
   } else if kind == 1 {
@@ -142,7 +142,7 @@ fn enemy_score(kind : Int) -> Int {
 
 ///|
 /// Returns the collision radius for an enemy of the given kind.
-fn enemy_r(kind : Int) -> Float {
+fn enemy_r(kind : Int32) -> Float {
   if kind == 0 {
     11.0
   } else if kind == 1 {
@@ -199,7 +199,7 @@ fn spawn_part(
   x : Float,
   y : Float,
   speed_scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for part in parts {
@@ -228,9 +228,9 @@ fn burst(
   parts : Array[Part],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed_scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     spawn_part(parts, x, y, speed_scale, kind)
@@ -258,7 +258,7 @@ fn spawn_shot(shots : Array[Shot], x : Float, y : Float) -> Unit {
 
 ///|
 /// Spawns a new enemy of random kind at the right edge of the arena, scaled to the current sector.
-fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
+fn spawn_enemy(enemies : Array[Enemy], sector : Int32) -> Unit {
   let kind_roll = @raylib.get_random_value(0, 99)
   let kind = if kind_roll < 56 { 0 } else if kind_roll < 86 { 1 } else { 2 }
 
@@ -298,7 +298,7 @@ fn spawn_split(
   enemies : Array[Enemy],
   x : Float,
   y : Float,
-  sector : Int,
+  sector : Int32,
 ) -> Unit {
   for _k in 0..<2 {
     let mut done = false
@@ -324,7 +324,7 @@ fn spawn_split(
 
 ///|
 /// Returns a random spawn interval in seconds, decreasing with higher sector numbers.
-fn spawn_interval(sector : Int) -> Float {
+fn spawn_interval(sector : Int32) -> Float {
   let mut lo = 48 - sector * 8
   if lo < 16 {
     lo = 16

@@ -72,7 +72,7 @@ fn reset_hero(hero : @types.Player) -> Unit {
 
 ///|
 /// Finds and returns the index of the first inactive object slot, or evicts the slot with the largest Y value if the pool is full.
-fn @types.Game::alloc_obj(game : @types.Game) -> Int {
+fn @types.Game::alloc_obj(game : @types.Game) -> Int32 {
   for i, slot in game.objs {
     if !slot.active {
       break i
@@ -89,7 +89,7 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
 
 ///|
 /// Finds and returns the index of the first inactive particle slot, or evicts the slot with the shortest remaining lifetime if the pool is full.
-fn @types.Game::alloc_particle(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle(game : @types.Game) -> Int32 {
   for i, slot in game.particles {
     if !slot.active {
       break i
@@ -106,7 +106,7 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
 
 ///|
 /// Finds and returns the index of the first inactive ripple slot, or evicts the slot with the shortest remaining lifetime if the pool is full.
-fn @types.Game::alloc_ripple(game : @types.Game) -> Int {
+fn @types.Game::alloc_ripple(game : @types.Game) -> Int32 {
   for i, slot in game.ripples {
     if !slot.active {
       break i
@@ -131,7 +131,7 @@ fn @types.Game::emit_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_particle()
   game.particles[i].active = true
@@ -150,8 +150,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
@@ -174,7 +174,7 @@ fn @types.Game::spawn_ripple(
   y : Float,
   r : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_ripple()
   game.ripples[i].active = true
@@ -233,14 +233,14 @@ fn @types.Game::object_spawn_x(
 
 ///|
 /// Computes the score gained for a base value scaled by the current combo multiplier.
-fn @types.Game::score_gain(game : @types.Game, base : Int) -> Int {
+fn @types.Game::score_gain(game : @types.Game, base : Int32) -> Int32 {
   let bonus = base * game.combo / 4
   base + bonus
 }
 
 ///|
 /// Adds combo-scaled score for a base reward and updates the all-time best if exceeded.
-fn @types.Game::add_score(game : @types.Game, base : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, base : Int32) -> Unit {
   let gained = game.score_gain(base)
   game.score = game.score + gained
   if game.score > game.best_score {
@@ -280,7 +280,7 @@ fn @types.Game::hurt_hero(game : @types.Game, dmg : Float) -> Unit {
 
 ///|
 /// Clears all pools, resets the hero, and initializes stage counters, scroll speed, and resource values for the given stage number.
-fn @types.Game::start_new_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_new_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_objs()
   game.clear_particles()
   game.clear_ripples()
@@ -599,9 +599,9 @@ fn @types.Game::resolve_cave_hit(game : @types.Game) -> Unit {
 /// Deactivates the object at index `i`, awards combo-scaled score, and emits a particle burst and ripple at the object's position.
 fn @types.Game::hit_obj(
   game : @types.Game,
-  i : Int,
-  base_score : Int,
-  burst_kind : Int,
+  i : Int32,
+  base_score : Int32,
+  burst_kind : Int32,
 ) -> Unit {
   let x = game.objs[i].x
   let y = game.objs[i].y

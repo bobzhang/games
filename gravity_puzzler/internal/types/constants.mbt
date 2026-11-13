@@ -1,29 +1,29 @@
 ///|
-pub let screen_w : Int = 960
+pub let screen_w : Int32 = 960
 
 ///|
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let tile_size : Int = 48
+pub let tile_size : Int32 = 48
 
 ///|
 pub let tile_sizef : Float = 48.0
 
 ///|
-pub let grid_max_w : Int = 12
+pub let grid_max_w : Int32 = 12
 
 ///|
-pub let grid_max_h : Int = 12
+pub let grid_max_h : Int32 = 12
 
 ///|
-pub let grid_offset_x : Int = 96
+pub let grid_offset_x : Int32 = 96
 
 ///|
-pub let grid_offset_y : Int = 72
+pub let grid_offset_y : Int32 = 72
 
 ///|
 pub let anim_speed : Float = 8.0
@@ -38,13 +38,13 @@ pub let gravity_anim_duration : Float = 0.25
 pub let message_duration : Float = 2.0
 
 ///|
-pub let num_worlds : Int = 5
+pub let num_worlds : Int32 = 5
 
 ///|
-pub let levels_per_world : Int = 10
+pub let levels_per_world : Int32 = 10
 
 ///|
-pub let total_levels : Int = 50
+pub let total_levels : Int32 = 50
 
 ///|
 pub fn world_bg_color(theme : WorldTheme) -> @raylib.Color {
@@ -80,7 +80,7 @@ pub fn world_floor_color(theme : WorldTheme) -> @raylib.Color {
 }
 
 ///|
-pub fn world_theme_of(index : Int) -> WorldTheme {
+pub fn world_theme_of(index : Int32) -> WorldTheme {
   match index {
     0 => Stone
     1 => Crystal
@@ -91,7 +91,7 @@ pub fn world_theme_of(index : Int) -> WorldTheme {
 }
 
 ///|
-pub fn world_name(index : Int) -> String {
+pub fn world_name(index : Int32) -> String {
   match index {
     0 => "Stone Ruins"
     1 => "Crystal Caverns"
@@ -191,7 +191,7 @@ pub let wind_beat_period : Float = 2.0
 pub let ambient_spawn_rate : Float = 0.15
 
 ///|
-pub let max_particles : Int = 256
+pub let max_particles : Int32 = 256
 
 ///|
 pub let gravity_rot_speed : Float = 6.0
@@ -200,10 +200,10 @@ pub let gravity_rot_speed : Float = 6.0
 pub let bounce_duration : Float = 0.3
 
 ///|
-pub let editor_tile_count : Int = 15
+pub let editor_tile_count : Int32 = 15
 
 ///|
-pub let editor_entity_count : Int = 6
+pub let editor_entity_count : Int32 = 6
 
 ///|
 pub let color_enemy : @raylib.Color = @raylib.Color::new(220, 50, 50, 255)

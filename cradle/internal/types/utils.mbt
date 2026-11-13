@@ -53,7 +53,7 @@ pub fn vec2f_dist(a : Vec2f, b : Vec2f) -> Float {
 }
 
 ///|
-pub fn peg_position(index : Int) -> Vec2f {
+pub fn peg_position(index : Int32) -> Vec2f {
   let angle = Float::from_int(index) * 2.0 * pi / Float::from_int(peg_count) -
     pi / 2.0
   let x = frame_center_x + frame_radius * cosf(angle)
@@ -71,7 +71,7 @@ pub fn make_pegs() -> Array[Peg] {
 }
 
 ///|
-pub fn tier_for_level(level_index : Int) -> Tier {
+pub fn tier_for_level(level_index : Int32) -> Tier {
   if level_index < 8 {
     Lines
   } else if level_index < 17 {
@@ -82,7 +82,7 @@ pub fn tier_for_level(level_index : Int) -> Tier {
 }
 
 ///|
-pub fn tier_start_level(tier : Tier) -> Int {
+pub fn tier_start_level(tier : Tier) -> Int32 {
   match tier {
     Lines => 0
     Weave => 8
@@ -91,7 +91,7 @@ pub fn tier_start_level(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Lines => 8
     Weave => 9
@@ -149,7 +149,7 @@ pub fn new_game(levels : Array[Level]) -> Game {
 }
 
 ///|
-pub fn start_level(game : Game, level_index : Int) -> Unit {
+pub fn start_level(game : Game, level_index : Int32) -> Unit {
   game.current_level = level_index
   game.play_state = Placing
   game.strings = []
@@ -174,7 +174,11 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn count_stars(game : Game, level_index : Int, strings_used : Int) -> Int {
+pub fn count_stars(
+  game : Game,
+  level_index : Int32,
+  strings_used : Int32,
+) -> Int32 {
   let level = game.level_data[level_index]
   // Check all targets hit
   let mut all_hit = true

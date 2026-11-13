@@ -1,10 +1,10 @@
 ///|
 pub fn parse_level(
   data : String,
-  world : Int,
-  level_num : Int,
+  world : Int32,
+  level_num : Int32,
   name : String,
-  par_moves : Int,
+  par_moves : Int32,
 ) -> @types.Level {
   let rows = split_lines(data)
   let height = rows.length()
@@ -22,7 +22,7 @@ pub fn parse_level(
   for y in 0..<height {
     let row = rows[y]
     for x in 0..<row.length() {
-      let ch = Int::unsafe_to_char(row[x].to_int())
+      let ch = Int32::unsafe_to_char(row[x].to_int())
       let idx = y * width + x
       match ch {
         '#' => tiles[idx] = Wall
@@ -95,7 +95,7 @@ fn split_lines(s : String) -> Array[String] {
   let buf = StringBuilder()
   for i in 0..<s.length() {
     let b = s[i]
-    let ch = Int::unsafe_to_char(b.to_int())
+    let ch = Int32::unsafe_to_char(b.to_int())
     if ch == '\n' {
       lines.push(buf.to_string())
       buf.reset()
@@ -114,7 +114,7 @@ fn split_lines(s : String) -> Array[String] {
 }
 
 ///|
-pub fn get_level(world : Int, level : Int) -> @types.Level {
+pub fn get_level(world : Int32, level : Int32) -> @types.Level {
   let index = world * @types.levels_per_world + level
   match index {
     0 => w1_l01()
@@ -172,7 +172,7 @@ pub fn get_level(world : Int, level : Int) -> @types.Level {
 
 ///|
 /// Get a hint text for a specific level
-pub fn get_level_hint(world : Int, level : Int) -> String {
+pub fn get_level_hint(world : Int32, level : Int32) -> String {
   let index = world * @types.levels_per_world + level
   match index {
     // World 1: Stone Ruins
@@ -1069,7 +1069,7 @@ fn w5_l10() -> @types.Level {
 
 ///|
 /// Get par moves for a specific level (useful for persistence)
-pub fn get_par_moves(world : Int, level : Int) -> Int {
+pub fn get_par_moves(world : Int32, level : Int32) -> Int32 {
   let index = world * @types.levels_per_world + level
   match index {
     // World 1
@@ -1132,7 +1132,7 @@ pub fn get_par_moves(world : Int, level : Int) -> Int {
 
 ///|
 /// Get level name by index
-pub fn get_level_name(world : Int, level : Int) -> String {
+pub fn get_level_name(world : Int32, level : Int32) -> String {
   let index = world * @types.levels_per_world + level
   match index {
     0 => "First Steps"
@@ -1210,7 +1210,7 @@ pub fn validate_level(level : @types.Level) -> Bool {
 /// Count total entities of each kind in a level
 pub fn count_entities_by_kind(
   level : @types.Level,
-) -> (Int, Int, Int, Int, Int, Int) {
+) -> (Int32, Int32, Int32, Int32, Int32, Int32) {
   let mut players = 0
   let mut boxes = 0
   let mut boulders = 0
@@ -1237,7 +1237,7 @@ pub fn count_entities_by_kind(
 /// Count total tiles of each special kind in a level
 pub fn count_special_tiles(
   level : @types.Level,
-) -> (Int, Int, Int, Int, Int, Int) {
+) -> (Int32, Int32, Int32, Int32, Int32, Int32) {
   let mut portals = 0
   let mut switches = 0
   let mut gates = 0

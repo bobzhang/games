@@ -51,7 +51,7 @@ pub fn draw_aim(game : @types.Game) -> Unit {
           // Fade alpha based on distance in preview
           let alpha_raw : Float = 1.0 -
             Float::from_int(i) / Float::from_int(points.length())
-          let alpha : Int = (alpha_raw * 100.0).to_int()
+          let alpha : Int32 = (alpha_raw * 100.0).to_int()
           let col = @raylib.Color::new(0, 255, 255, alpha)
           @raylib.draw_line_ex(
             @raylib.Vector2::new(sx1, sy1),
@@ -100,7 +100,7 @@ pub fn draw_aim(game : @types.Game) -> Unit {
             let ay = by + ndy * arrow_len
             let alpha_ratio : Float = 1.0 -
               Float::from_int(i) / Float::from_int(points.length())
-            let alpha_val : Int = (alpha_ratio * 80.0).to_int()
+            let alpha_val : Int32 = (alpha_ratio * 80.0).to_int()
             @raylib.draw_line_ex(
               @raylib.Vector2::new(bx, by),
               @raylib.Vector2::new(ax, ay),
@@ -161,7 +161,7 @@ pub fn draw_balls(game : @types.Game) -> Unit {
       let tp = ball.trail[t]
       let alpha_raw : Float = Float::from_int(t) /
         Float::from_int(ball.trail.length())
-      let alpha : Int = (alpha_raw * 150.0).to_int()
+      let alpha : Int32 = (alpha_raw * 150.0).to_int()
       let size : Float = @types.ball_radius * alpha_raw * 0.8
       @raylib.draw_circle(
         (ox + tp.x).to_int(),

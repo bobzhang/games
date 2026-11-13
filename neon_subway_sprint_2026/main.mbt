@@ -1,39 +1,39 @@
 ///|
 /// Window width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Number of parallel running lanes.
-let lane_n : Int = 3
+let lane_n : Int32 = 3
 
 ///|
 /// Maximum simultaneous active obstacles.
-let max_obstacles : Int = 150
+let max_obstacles : Int32 = 150
 
 ///|
 /// Maximum simultaneous active coins.
-let max_coins : Int = 220
+let max_coins : Int32 = 220
 
 ///|
 /// Maximum simultaneous active powerup items.
-let max_powerups : Int = 32
+let max_powerups : Int32 = 32
 
 ///|
 /// Maximum simultaneous active particles.
-let max_particles : Int = 420
+let max_particles : Int32 = 420
 
 ///|
 /// Player runner state: position, lane, vertical velocity, HP, and ability timers.
 struct Runner {
   x : Float
   mut y : Float
-  mut lane : Int
+  mut lane : Int32
   mut vy : Float
-  mut hp : Int
+  mut hp : Int32
   mut lane_cd : Float
   mut dash_t : Float
   mut invuln_t : Float
@@ -43,12 +43,12 @@ struct Runner {
 /// A scrolling obstacle on a lane: position, size, kind, HP, and active flag.
 struct Obstacle {
   mut x : Float
-  mut lane : Int
-  mut kind : Int
+  mut lane : Int32
+  mut kind : Int32
   mut w : Float
   mut h : Float
   mut y_off : Float
-  mut hp : Int
+  mut hp : Int32
   mut active : Bool
 }
 
@@ -56,9 +56,9 @@ struct Obstacle {
 /// A collectible coin on a lane: position, vertical offset, value, and active flag.
 struct Coin {
   mut x : Float
-  mut lane : Int
+  mut lane : Int32
   mut y_off : Float
-  mut value : Int
+  mut value : Int32
   mut active : Bool
 }
 
@@ -66,8 +66,8 @@ struct Coin {
 /// A powerup item on a lane: position, kind (heal/battery/magnet), and active flag.
 struct Powerup {
   mut x : Float
-  mut lane : Int
-  mut kind : Int
+  mut lane : Int32
+  mut kind : Int32
   mut y_off : Float
   mut active : Bool
 }
@@ -80,7 +80,7 @@ struct Particle {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
-  mut kind : Int
+  mut kind : Int32
   mut active : Bool
 }
 
@@ -88,7 +88,7 @@ struct Particle {
 /// A high-speed express train event with warning period and sweep position.
 struct TrainEvent {
   mut active : Bool
-  mut lane : Int
+  mut lane : Int32
   mut x : Float
   mut warning_t : Float
   mut speed : Float
@@ -119,10 +119,10 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -132,7 +132,7 @@ fn inside_rect(
 
 ///|
 /// Returns the screen Y coordinate for the centre of the given lane index.
-fn lane_y(lane : Int) -> Float {
+fn lane_y(lane : Int32) -> Float {
   if lane <= 0 {
     490.0
   } else if lane == 1 {
@@ -214,7 +214,7 @@ fn burst_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for particle in particles {
@@ -241,9 +241,9 @@ fn burst(
   particles : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     burst_particle(particles, x, y, speed, kind)
@@ -252,7 +252,7 @@ fn burst(
 
 ///|
 /// Sets the size, vertical offset, and HP of an obstacle based on its kind index.
-fn set_obstacle_shape(ob : Obstacle, kind : Int) -> Unit {
+fn set_obstacle_shape(ob : Obstacle, kind : Int32) -> Unit {
   ob.kind = kind
   if kind == 0 {
     ob.w = 52.0
@@ -281,7 +281,7 @@ fn set_obstacle_shape(ob : Obstacle, kind : Int) -> Unit {
 /// Activates a new obstacle from the pool in a random lane, with kind constrained by level and a wave wobble offset.
 fn spawn_obstacle(
   obstacles : Array[Obstacle],
-  level : Int,
+  level : Int32,
   wave_t : Float,
 ) -> Unit {
   let lane = @raylib.get_random_value(0, lane_n - 1)
@@ -310,7 +310,7 @@ fn spawn_obstacle(
 
 ///|
 /// Activates a new coin from the pool in a random lane, with value weighted by level and a bob offset.
-fn spawn_coin(coins : Array[Coin], level : Int, wave_t : Float) -> Unit {
+fn spawn_coin(coins : Array[Coin], level : Int32, wave_t : Float) -> Unit {
   let lane = @raylib.get_random_value(0, lane_n - 1)
   let mut y_off = Float::from_int(@raylib.get_random_value(-62, -18))
   if @raylib.get_random_value(0, 100) < 35 {
@@ -374,7 +374,7 @@ fn spawn_powerup(powerups : Array[Powerup]) -> Unit {
 
 ///|
 /// Initialises a train event on a random lane with a warning period and speed scaled to the current level.
-fn spawn_train(train : TrainEvent, level : Int) -> Unit {
+fn spawn_train(train : TrainEvent, level : Int32) -> Unit {
   train.active = true
   train.lane = @raylib.get_random_value(0, lane_n - 1)
   train.warning_t = Float::from_int(@raylib.get_random_value(120, 200)) / 100.0
@@ -387,14 +387,14 @@ fn spawn_train(train : TrainEvent, level : Int) -> Unit {
 ///|
 /// Resets all entities and returns `(target_score, timer, speed, spawn_factor)` tuned for the given level.
 fn setup_level(
-  level : Int,
+  level : Int32,
   runner : Runner,
   obstacles : Array[Obstacle],
   coins : Array[Coin],
   powerups : Array[Powerup],
   particles : Array[Particle],
   train : TrainEvent,
-) -> (Int, Float, Float, Float) {
+) -> (Int32, Float, Float, Float) {
   reset_runner(runner)
   clear_obstacles(obstacles)
   clear_coins(coins)

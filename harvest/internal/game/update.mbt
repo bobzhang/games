@@ -136,7 +136,7 @@ fn process_level_select_input(game : @types.Game) -> Unit {
 }
 
 ///|
-pub fn is_level_unlocked(game : @types.Game, index : Int) -> Bool {
+pub fn is_level_unlocked(game : @types.Game, index : Int32) -> Bool {
   if index == 0 {
     return true
   }
@@ -147,7 +147,7 @@ pub fn is_level_unlocked(game : @types.Game, index : Int) -> Bool {
 }
 
 ///|
-fn try_start_level(game : @types.Game, index : Int) -> Unit {
+fn try_start_level(game : @types.Game, index : Int32) -> Unit {
   if is_level_unlocked(game, index) {
     start_level(game, index)
   } else {
@@ -158,7 +158,7 @@ fn try_start_level(game : @types.Game, index : Int) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, index : Int) -> Unit {
+fn start_level(game : @types.Game, index : Int32) -> Unit {
   game.level_index = index
   let goal = @levels.load_level(index)
   // Reset grid with level soil
@@ -233,7 +233,11 @@ fn update_hover(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_plot_locked(col : Int, row : Int, locked : Array[(Int, Int)]) -> Bool {
+fn is_plot_locked(
+  col : Int32,
+  row : Int32,
+  locked : Array[(Int32, Int32)],
+) -> Bool {
   for i in 0..<locked.length() {
     let (lc, lr) = locked[i]
     if lc == col && lr == row {

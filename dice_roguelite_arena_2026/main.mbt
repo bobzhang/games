@@ -17,34 +17,34 @@ let max_sparks = 180
 ///|
 /// Represents the player's combat state including health, shield, poison, energy, gold, and progression.
 struct Player {
-  mut hp : Int
-  mut max_hp : Int
-  mut shield : Int
-  mut poison : Int
-  mut energy : Int
-  mut gold : Int
-  mut floor : Int
-  mut wins : Int
+  mut hp : Int32
+  mut max_hp : Int32
+  mut shield : Int32
+  mut poison : Int32
+  mut energy : Int32
+  mut gold : Int32
+  mut floor : Int32
+  mut wins : Int32
 }
 
 ///|
 /// Represents an enemy with kind, health, shield, poison, rage, and declared next intent.
 struct Enemy {
-  mut kind : Int
-  mut hp : Int
-  mut max_hp : Int
-  mut shield : Int
-  mut poison : Int
-  mut rage : Int
-  mut intent_kind : Int
-  mut intent_value : Int
+  mut kind : Int32
+  mut hp : Int32
+  mut max_hp : Int32
+  mut shield : Int32
+  mut poison : Int32
+  mut rage : Int32
+  mut intent_kind : Int32
+  mut intent_value : Int32
 }
 
 ///|
 /// Represents a single die with its rolled value, face type, used state, position, and pulse animation timer.
 struct Dice {
-  mut value : Int
-  mut face : Int
+  mut value : Int32
+  mut face : Int32
   mut used : Bool
   mut x : Float
   mut y : Float
@@ -54,8 +54,8 @@ struct Dice {
 ///|
 /// Represents a post-battle upgrade card with kind, numeric value, title, and description text.
 struct RewardCard {
-  mut kind : Int
-  mut value : Int
+  mut kind : Int32
+  mut value : Int32
   mut title : String
   mut desc : String
 }
@@ -63,15 +63,15 @@ struct RewardCard {
 ///|
 /// Holds accumulated player artifact bonuses that modify dice face weights and combat values.
 struct Artifacts {
-  mut atk_bonus : Int
-  mut guard_bonus : Int
-  mut heal_bonus : Int
-  mut venom_bonus : Int
-  mut focus_bonus : Int
-  mut crush_bonus : Int
-  mut reroll_bonus : Int
-  mut start_shield : Int
-  mut crit_chance : Int
+  mut atk_bonus : Int32
+  mut guard_bonus : Int32
+  mut heal_bonus : Int32
+  mut venom_bonus : Int32
+  mut focus_bonus : Int32
+  mut crush_bonus : Int32
+  mut reroll_bonus : Int32
+  mut start_shield : Int32
+  mut crit_chance : Int32
 }
 
 ///|
@@ -84,7 +84,7 @@ struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -111,10 +111,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -124,7 +124,7 @@ fn inside_rect(
 
 ///|
 /// Returns the display name string for the given enemy kind index.
-fn enemy_name(kind : Int) -> String {
+fn enemy_name(kind : Int32) -> String {
   if kind == 0 {
     "Scrap Berserker"
   } else if kind == 1 {
@@ -138,7 +138,7 @@ fn enemy_name(kind : Int) -> String {
 
 ///|
 /// Returns the display name for the given dice face index.
-fn face_name(face : Int) -> String {
+fn face_name(face : Int32) -> String {
   if face == 0 {
     "STRIKE"
   } else if face == 1 {
@@ -156,7 +156,7 @@ fn face_name(face : Int) -> String {
 
 ///|
 /// Returns a short description of the effect for the given dice face index.
-fn face_desc(face : Int) -> String {
+fn face_desc(face : Int32) -> String {
   if face == 0 {
     "Deal damage"
   } else if face == 1 {
@@ -189,7 +189,7 @@ fn clear_sparks(sp : Array[Spark]) -> Unit {
 
 ///|
 /// Activates an inactive spark at (x, y) with a random velocity and lifetime.
-fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int) -> Unit {
+fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int32) -> Unit {
   for sp_elem in sp {
     if !sp_elem.active {
       sp_elem.active = true
@@ -213,8 +213,8 @@ fn burst_sparks(
   sp : Array[Spark],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_spark(sp, x, y, kind)
@@ -269,7 +269,7 @@ fn draw_sparks(sp : Array[Spark]) -> Unit {
 
 ///|
 /// Returns the display color for the given enemy kind index.
-fn enemy_color(kind : Int) -> @raylib.Color {
+fn enemy_color(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @raylib.Color::new(242, 118, 106, 255)
   } else if kind == 1 {
@@ -283,8 +283,8 @@ fn enemy_color(kind : Int) -> @raylib.Color {
 
 ///|
 /// Randomizes the enemy kind and sets HP and intent for the given floor level.
-fn set_enemy(enemy : Enemy, floor : Int) -> Unit {
-  let mut kind : Int = @raylib.get_random_value(0, 3)
+fn set_enemy(enemy : Enemy, floor : Int32) -> Unit {
+  let mut kind : Int32 = @raylib.get_random_value(0, 3)
   if floor >= 9 && @raylib.get_random_value(0, 99) < 46 {
     kind = 3
   }
@@ -311,8 +311,8 @@ fn set_enemy(enemy : Enemy, floor : Int) -> Unit {
 
 ///|
 /// Randomly selects and sets the enemy's next intended action based on its kind and the current floor.
-fn roll_enemy_intent(enemy : Enemy, floor : Int) -> Unit {
-  let r : Int = @raylib.get_random_value(0, 99)
+fn roll_enemy_intent(enemy : Enemy, floor : Int32) -> Unit {
+  let r : Int32 = @raylib.get_random_value(0, 99)
 
   if enemy.kind == 0 {
     if r < 58 {
@@ -378,24 +378,24 @@ fn intent_text(enemy : Enemy) -> String {
 
 ///|
 /// Returns a randomly weighted dice face index influenced by the player's artifact bonuses.
-fn roll_face(art : Artifacts) -> Int {
-  let r : Int = @raylib.get_random_value(0, 999)
+fn roll_face(art : Artifacts) -> Int32 {
+  let r : Int32 = @raylib.get_random_value(0, 999)
 
-  let strike_w : Int = 280 + art.atk_bonus * 4
-  let guard_w : Int = 220 + art.guard_bonus * 3
-  let focus_w : Int = 150 + art.focus_bonus * 12
-  let mend_w : Int = 120 + art.heal_bonus * 8
-  let venom_w : Int = 120 + art.venom_bonus * 10
-  let crush_w : Int = 110 + art.crush_bonus * 4
+  let strike_w : Int32 = 280 + art.atk_bonus * 4
+  let guard_w : Int32 = 220 + art.guard_bonus * 3
+  let focus_w : Int32 = 150 + art.focus_bonus * 12
+  let mend_w : Int32 = 120 + art.heal_bonus * 8
+  let venom_w : Int32 = 120 + art.venom_bonus * 10
+  let crush_w : Int32 = 110 + art.crush_bonus * 4
 
-  let s0 : Int = strike_w
-  let s1 : Int = s0 + guard_w
-  let s2 : Int = s1 + focus_w
-  let s3 : Int = s2 + mend_w
-  let s4 : Int = s3 + venom_w
-  let total : Int = s4 + crush_w
+  let s0 : Int32 = strike_w
+  let s1 : Int32 = s0 + guard_w
+  let s2 : Int32 = s1 + focus_w
+  let s3 : Int32 = s2 + mend_w
+  let s4 : Int32 = s3 + venom_w
+  let total : Int32 = s4 + crush_w
 
-  let p : Int = r % total
+  let p : Int32 = r % total
 
   if p < s0 {
     0
@@ -440,12 +440,12 @@ fn roll_dice(dice : Array[Dice], art : Artifacts, force_all : Bool) -> Unit {
 
 ///|
 /// Applies damage to the enemy, absorbing from shield first, and returns the HP damage dealt.
-fn compute_damage_to_enemy(enemy : Enemy, damage : Int) -> Int {
+fn compute_damage_to_enemy(enemy : Enemy, damage : Int32) -> Int32 {
   if damage <= enemy.shield {
     enemy.shield = enemy.shield - damage
     0
   } else {
-    let left : Int = damage - enemy.shield
+    let left : Int32 = damage - enemy.shield
     enemy.shield = 0
     enemy.hp = enemy.hp - left
     left
@@ -454,12 +454,12 @@ fn compute_damage_to_enemy(enemy : Enemy, damage : Int) -> Int {
 
 ///|
 /// Applies damage to the player, absorbing from shield first, and returns the HP damage dealt.
-fn compute_damage_to_player(player : Player, damage : Int) -> Int {
+fn compute_damage_to_player(player : Player, damage : Int32) -> Int32 {
   if damage <= player.shield {
     player.shield = player.shield - damage
     0
   } else {
-    let left : Int = damage - player.shield
+    let left : Int32 = damage - player.shield
     player.shield = 0
     player.hp = player.hp - left
     left
@@ -469,17 +469,17 @@ fn compute_damage_to_player(player : Player, damage : Int) -> Int {
 ///|
 /// Applies the effect of a played dice face to the player and enemy, returning a result message and damage dealt.
 fn apply_face(
-  face : Int,
-  value : Int,
+  face : Int32,
+  value : Int32,
   player : Player,
   enemy : Enemy,
   art : Artifacts,
   crit_flash : Array[Spark],
-  msg_slot : Int,
-) -> (String, Int) {
+  msg_slot : Int32,
+) -> (String, Int32) {
   if face == 0 {
-    let mut dmg : Int = value * 4 + art.atk_bonus * 2
-    let crit_roll : Int = @raylib.get_random_value(0, 99)
+    let mut dmg : Int32 = value * 4 + art.atk_bonus * 2
+    let crit_roll : Int32 = @raylib.get_random_value(0, 99)
     if crit_roll < art.crit_chance {
       dmg = dmg + value * 2 + art.atk_bonus
       burst_sparks(crit_flash, 978.0, 360.0, 12, 0)
@@ -491,18 +491,18 @@ fn apply_face(
       ("Strike \{dmg}", dealt)
     }
   } else if face == 1 {
-    let gain : Int = value * 3 + 3 + art.guard_bonus * 2
+    let gain : Int32 = value * 3 + 3 + art.guard_bonus * 2
     player.shield = player.shield + gain
     burst_sparks(crit_flash, 330.0, 470.0, 8, 1)
     ("Shield +\{gain}", 0)
   } else if face == 2 {
-    let gain : Int = 1 + value / 2 + art.focus_bonus
+    let gain : Int32 = 1 + value / 2 + art.focus_bonus
     player.energy = player.energy + gain
     player.energy = player.energy.clamp(min=0, max=9)
     burst_sparks(crit_flash, 330.0, 470.0, 6, 3)
     ("Energy +\{gain}", 0)
   } else if face == 3 {
-    let heal : Int = value * 2 + art.heal_bonus * 3
+    let heal : Int32 = value * 2 + art.heal_bonus * 3
     player.hp = player.hp + heal
     if player.hp > player.max_hp {
       player.hp = player.max_hp
@@ -510,13 +510,13 @@ fn apply_face(
     burst_sparks(crit_flash, 330.0, 470.0, 8, 1)
     ("Heal +\{heal}", 0)
   } else if face == 4 {
-    let p : Int = value + art.venom_bonus
+    let p : Int32 = value + art.venom_bonus
     enemy.poison = enemy.poison + p
     burst_sparks(crit_flash, 978.0, 360.0, 7, 2)
     ("Poison +\{p}", 0)
   } else {
-    let base : Int = value * 5 + 5 + art.crush_bonus * 2
-    let mut dmg : Int = base
+    let base : Int32 = value * 5 + 5 + art.crush_bonus * 2
+    let mut dmg : Int32 = base
     if player.shield > 0 {
       dmg = dmg + player.shield / 3
     }
@@ -532,7 +532,7 @@ fn apply_face(
 
 ///|
 /// Sets the reward card's kind, value, title, and description for the given upgrade type.
-fn set_reward_card(card : RewardCard, kind : Int, value : Int) -> Unit {
+fn set_reward_card(card : RewardCard, kind : Int32, value : Int32) -> Unit {
   card.kind = kind
   card.value = value
 
@@ -571,14 +571,14 @@ fn set_reward_card(card : RewardCard, kind : Int, value : Int) -> Unit {
 
 ///|
 /// Fills the reward card array with randomly chosen upgrade options scaled to the current floor.
-fn generate_rewards(cards : Array[RewardCard], floor : Int) -> Unit {
+fn generate_rewards(cards : Array[RewardCard], floor : Int32) -> Unit {
   for card in cards {
-    let mut kind : Int = @raylib.get_random_value(0, 9)
+    let mut kind : Int32 = @raylib.get_random_value(0, 9)
     if floor <= 2 && kind == 8 {
       kind = 1
     }
 
-    let value : Int = if kind == 0 {
+    let value : Int32 = if kind == 0 {
       @raylib.get_random_value(8, 14)
     } else if kind == 1 {
       @raylib.get_random_value(1, 2)
@@ -650,10 +650,10 @@ fn apply_reward(card : RewardCard, player : Player, art : Artifacts) -> String {
 ///|
 /// Draws a dark filled rectangle panel with a colored border at the given bounds.
 fn draw_panel(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   border : @raylib.Color,
 ) -> Unit {
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(20, 24, 36, 236))
@@ -663,10 +663,10 @@ fn draw_panel(
 ///|
 /// Draws a styled button at (x, y) with the given label, adjusting color for enabled and hover states.
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   enabled : Bool,
   hover : Bool,
@@ -688,7 +688,7 @@ fn draw_button(
     @raylib.Color::new(194, 214, 252, 235),
   )
 
-  let tw : Int = @draw.measure_text(label, 26)
+  let tw : Int32 = @draw.measure_text(label, 26)
   @draw.draw_text(
     label,
     x + (w - tw) / 2,
@@ -701,18 +701,18 @@ fn draw_button(
 ///|
 /// Draws a filled health or resource bar at (x, y) proportional to value/max_v with the given fill color.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
-  value : Int,
-  max_v : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
+  value : Int32,
+  max_v : Int32,
   fill : @raylib.Color,
 ) -> Unit {
-  let safe_max : Int = if max_v <= 0 { 1 } else { max_v }
+  let safe_max : Int32 = if max_v <= 0 { 1 } else { max_v }
   let mut n : Float = Float::from_int(value) / Float::from_int(safe_max)
   n = clampf(n, 0.0, 1.0)
-  let fw : Int = (Float::from_int(w) * n).to_int()
+  let fw : Int32 = (Float::from_int(w) * n).to_int()
 
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(18, 24, 34, 255))
   @raylib.draw_rectangle(x, y, fw, h, fill)
@@ -728,10 +728,10 @@ fn draw_bar(
 ///|
 /// Draws the visual icon for a dice face inside a square of size s at (x, y) using the given color.
 fn draw_dice_face(
-  face : Int,
-  x : Int,
-  y : Int,
-  s : Int,
+  face : Int32,
+  x : Int32,
+  y : Int32,
+  s : Int32,
   col : @raylib.Color,
 ) -> Unit {
   if face == 0 {
@@ -804,8 +804,8 @@ fn main {
   let visuals = load_game_art()
   defer unload_game_art(visuals)
 
-  let mut state : Int = 0 // 0 menu, 1 battle, 2 reward, 3 game over, 4 victory
-  let mut turn : Int = 0 // 0 player turn, 1 enemy anim
+  let mut state : Int32 = 0 // 0 menu, 1 battle, 2 reward, 3 game over, 4 victory
+  let mut turn : Int32 = 0 // 0 player turn, 1 enemy anim
 
   let player : Player = {
     hp: 120,
@@ -862,12 +862,12 @@ fn main {
     }
   })
 
-  let mut rerolls_left : Int = 2
+  let mut rerolls_left : Int32 = 2
   let mut msg : String = ""
   let mut msg_t : Float = 0.0
   let mut enemy_anim_t : Float = 0.0
   let mut bg_t : Float = 0.0
-  let mut combo_hits : Int = 0
+  let mut combo_hits : Int32 = 0
 
   fn begin_new_run() -> Unit {
     player.hp = 120
@@ -911,7 +911,7 @@ fn main {
     turn = 0
 
     if player.poison > 0 {
-      let pdmg : Int = player.poison
+      let pdmg : Int32 = player.poison
       let taken = compute_damage_to_player(player, pdmg)
       player.poison = player.poison - 1
       msg = "Poison dealt \{taken} to you"
@@ -944,7 +944,7 @@ fn main {
     enemy_anim_t = 0.55
 
     if enemy.poison > 0 {
-      let pdmg : Int = enemy.poison
+      let pdmg : Int32 = enemy.poison
       let dealt = compute_damage_to_enemy(enemy, pdmg)
       enemy.poison = enemy.poison - 1
       if dealt > 0 {
@@ -959,7 +959,7 @@ fn main {
     }
 
     if enemy.intent_kind == 0 {
-      let dmg : Int = enemy.intent_value + enemy.rage
+      let dmg : Int32 = enemy.intent_value + enemy.rage
       let taken = compute_damage_to_player(player, dmg)
       msg = "Enemy attacked for \{dmg}"
       msg_t = 1.2
@@ -1052,14 +1052,14 @@ fn main {
           }
         }
 
-        let mut clicked_die : Int = -1
-        let mut hovered_die : Int = -1
+        let mut clicked_die : Int32 = -1
+        let mut hovered_die : Int32 = -1
 
         for i in 0..<dice.length() {
-          let col : Int = i % 3
-          let row : Int = i / 3
-          let dx : Int = 458 + col * 154
-          let dy : Int = 444 + row * 154
+          let col : Int32 = i % 3
+          let row : Int32 = i / 3
+          let dx : Int32 = 458 + col * 154
+          let dy : Int32 = 444 + row * 154
           dice[i].x = Float::from_int(dx)
           dice[i].y = Float::from_int(dy)
 
@@ -1181,7 +1181,7 @@ fn main {
         msg_t = 2.6
       }
     } else if state == 2 {
-      let mut picked : Int = -1
+      let mut picked : Int32 = -1
 
       for i in 0..<3 {
         let x = 213 + i * 340
@@ -1207,7 +1207,7 @@ fn main {
       }
 
       if picked >= 0 {
-        let idx : Int = picked.clamp(min=0, max=2)
+        let idx : Int32 = picked.clamp(min=0, max=2)
         let t = apply_reward(rewards[idx], player, art)
         msg = t
         msg_t = 1.8
@@ -1359,7 +1359,7 @@ fn main {
     @raylib.draw_circle(330, 540, 62.0, @raylib.Color::new(48, 96, 180, 76))
     draw_player_avatar_art(visuals, 330, 454)
 
-    let mut enemy_x : Int = 978
+    let mut enemy_x : Int32 = 978
     if turn == 1 {
       enemy_x = enemy_x + (@math.sinf(enemy_anim_t * 34.0) * 18.0).to_int()
     }
@@ -1374,8 +1374,8 @@ fn main {
 
     if state == 1 {
       for dice_elem in dice {
-        let x : Int = dice_elem.x.to_int()
-        let y : Int = dice_elem.y.to_int()
+        let x : Int32 = dice_elem.x.to_int()
+        let y : Int32 = dice_elem.y.to_int()
 
         let over : Bool = inside_rect(mouse.x, mouse.y, x, y, 132, 132)
         draw_dice_tile_art(

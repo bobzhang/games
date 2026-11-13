@@ -1,5 +1,5 @@
 ///|
-fn @types.Game::is_player_enabled(game : @types.Game, index : Int) -> Bool {
+fn @types.Game::is_player_enabled(game : @types.Game, index : Int32) -> Bool {
   if index == 0 {
     true
   } else {
@@ -8,7 +8,7 @@ fn @types.Game::is_player_enabled(game : @types.Game, index : Int) -> Bool {
 }
 
 ///|
-fn read_player_move_dir(index : Int) -> @types.Dir? {
+fn read_player_move_dir(index : Int32) -> @types.Dir? {
   if index == 0 {
     if @raylib.is_key_down(@raylib.KeyUp) {
       Some(Up)
@@ -35,7 +35,7 @@ fn read_player_move_dir(index : Int) -> @types.Dir? {
 }
 
 ///|
-fn is_player_shoot_pressed(index : Int) -> Bool {
+fn is_player_shoot_pressed(index : Int32) -> Bool {
   if index == 0 {
     @raylib.is_key_down(@raylib.KeyRightShift) ||
     @raylib.is_key_down(@raylib.KeyEnter)
@@ -55,7 +55,7 @@ fn @types.Game::player_is_on_ice(
 }
 
 ///|
-fn @types.Game::can_player_fire(game : @types.Game, index : Int) -> Bool {
+fn @types.Game::can_player_fire(game : @types.Game, index : Int32) -> Bool {
   let player = game.players[index]
   if !player.active {
     return false
@@ -115,7 +115,7 @@ fn @types.Game::update_player_reload_timers(
 ///|
 fn @types.Game::try_move_player(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dir : @types.Dir,
   dt : Float,
 ) -> Unit {
@@ -204,7 +204,7 @@ fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
+fn @types.Game::on_player_destroyed(game : @types.Game, index : Int32) -> Unit {
   let player = game.players[index]
   if !player.active {
     return

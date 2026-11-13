@@ -1,46 +1,46 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1600
+pub let screen_w : Int32 = 1600
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 960
+pub let screen_h : Int32 = 960
 
 ///|
 /// Target frame rate used by the game loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Threat id for fast firecracker projectiles.
-pub let threat_firecracker : Int = 0
+pub let threat_firecracker : Int32 = 0
 
 ///|
 /// Threat id for heavier street incidents.
-pub let threat_incident : Int = 1
+pub let threat_incident : Int32 = 1
 
 ///|
 /// Number of parade lanes.
-pub let lane_count : Int = 6
+pub let lane_count : Int32 = 6
 
 ///|
 /// Top pixel coordinate of the first lane.
-pub let lane_top : Int = 170
+pub let lane_top : Int32 = 170
 
 ///|
 /// Vertical spacing between lane centers in pixels.
-pub let lane_gap : Int = 108
+pub let lane_gap : Int32 = 108
 
 ///|
 /// Visual lane height in pixels.
-pub let lane_height : Int = 70
+pub let lane_height : Int32 = 70
 
 ///|
 /// Left boundary of the defended street.
-pub let street_left : Int = 120
+pub let street_left : Int32 = 120
 
 ///|
 /// Right boundary of the defended street.
-pub let street_right : Int = 1480
+pub let street_right : Int32 = 1480
 
 ///|
 /// Width of the lion troupe hitbox.
@@ -52,11 +52,11 @@ pub let troupe_move_speed : Float = 620.0
 
 ///|
 /// Initial lane index for the troupe.
-pub let troupe_start_lane : Int = 2
+pub let troupe_start_lane : Int32 = 2
 
 ///|
 /// Maximum concurrent threats allocated in the pool.
-pub let max_threats : Int = 96
+pub let max_threats : Int32 = 96
 
 ///|
 /// Initial spawn interval at the beginning of a run.
@@ -192,15 +192,15 @@ pub let collision_morale_loss_incident : Float = 11.0
 
 ///|
 /// Score awarded for clearing a firecracker.
-pub let score_firecracker : Int = 120
+pub let score_firecracker : Int32 = 120
 
 ///|
 /// Score awarded for clearing an incident.
-pub let score_incident : Int = 170
+pub let score_incident : Int32 = 170
 
 ///|
 /// Bonus score for stunning via guard.
-pub let score_guard_stun : Int = 24
+pub let score_guard_stun : Int32 = 24
 
 ///|
 /// Hype gained when clearing a firecracker.

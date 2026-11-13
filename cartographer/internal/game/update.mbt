@@ -205,7 +205,7 @@ fn update_playing(game : @types.Game) -> Unit {
                   @types.grid_size,
                 )
                 // Trigger satisfied clue animation
-                let newly_satisfied : Array[Int] = []
+                let newly_satisfied : Array[Int32] = []
                 for ci in 0..<level.clues.length() {
                   if level.clues[ci].status == Satisfied {
                     newly_satisfied.push(ci)
@@ -447,7 +447,7 @@ fn handle_grid_click(game : @types.Game, pos : @types.Vec2i) -> Unit {
         game.flash_is_error = false
       }
       // Trigger clue satisfaction animation for newly satisfied clues
-      let newly_satisfied : Array[Int] = []
+      let newly_satisfied : Array[Int32] = []
       for ci in 0..<level.clues.length() {
         if level.clues[ci].status == Satisfied && !prev_satisfied[ci] {
           newly_satisfied.push(ci)

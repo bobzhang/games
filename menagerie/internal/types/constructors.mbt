@@ -2,7 +2,7 @@
 pub fn new_game() -> Game {
   let grid = Grid::new(grid_cols, grid_rows)
   let level_results : Array[LevelResult?] = []
-  let stars_earned : Array[Int] = []
+  let stars_earned : Array[Int32] = []
   for _i in 0..<total_levels {
     level_results.push(None)
     stars_earned.push(0)
@@ -62,7 +62,7 @@ pub fn set_message(game : Game, msg : String) -> Unit {
 }
 
 ///|
-pub fn Game::is_level_unlocked(self : Game, level_id : Int) -> Bool {
+pub fn Game::is_level_unlocked(self : Game, level_id : Int32) -> Bool {
   if level_id == 0 {
     return true
   }
@@ -73,7 +73,7 @@ pub fn Game::is_level_unlocked(self : Game, level_id : Int) -> Bool {
 }
 
 ///|
-pub fn tier_label(tier : Int) -> String {
+pub fn tier_label(tier : Int32) -> String {
   match tier {
     1 => "I"
     2 => "II"

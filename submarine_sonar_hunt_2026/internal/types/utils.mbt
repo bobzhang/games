@@ -71,67 +71,67 @@ pub fn arena_bottom() -> Float {
 
 ///|
 /// Returns the touch or HUD hit area for title start button rect.
-pub fn title_start_button_rect() -> (Int, Int, Int, Int) {
+pub fn title_start_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 180, screen_h / 2 + 112, 360, 72)
 }
 
 ///|
 /// Returns the touch or HUD hit area for result restart button rect.
-pub fn result_restart_button_rect() -> (Int, Int, Int, Int) {
+pub fn result_restart_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 190, screen_h / 2 + 84, 180, 64)
 }
 
 ///|
 /// Returns the touch or HUD hit area for result next button rect.
-pub fn result_next_button_rect() -> (Int, Int, Int, Int) {
+pub fn result_next_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 + 10, screen_h / 2 + 84, 180, 64)
 }
 
 ///|
 /// Returns the touch or HUD hit area for result title button rect.
-pub fn result_title_button_rect() -> (Int, Int, Int, Int) {
+pub fn result_title_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 110, screen_h / 2 + 160, 220, 52)
 }
 
 ///|
 /// Returns the touch or HUD hit area for mobile left btn.
-pub fn mobile_left_btn() -> (Int, Int, Int, Int) {
+pub fn mobile_left_btn() -> (Int32, Int32, Int32, Int32) {
   (34, screen_h - 146, 66, 66)
 }
 
 ///|
 /// Returns the touch or HUD hit area for mobile right btn.
-pub fn mobile_right_btn() -> (Int, Int, Int, Int) {
+pub fn mobile_right_btn() -> (Int32, Int32, Int32, Int32) {
   (182, screen_h - 146, 66, 66)
 }
 
 ///|
 /// Returns the touch or HUD hit area for mobile up btn.
-pub fn mobile_up_btn() -> (Int, Int, Int, Int) {
+pub fn mobile_up_btn() -> (Int32, Int32, Int32, Int32) {
   (108, screen_h - 220, 66, 66)
 }
 
 ///|
 /// Returns the touch or HUD hit area for mobile down btn.
-pub fn mobile_down_btn() -> (Int, Int, Int, Int) {
+pub fn mobile_down_btn() -> (Int32, Int32, Int32, Int32) {
   (108, screen_h - 72, 66, 66)
 }
 
 ///|
 /// Returns the touch or HUD hit area for mobile sonar btn.
-pub fn mobile_sonar_btn() -> (Int, Int, Int, Int) {
+pub fn mobile_sonar_btn() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 184, screen_h - 152, 148, 66)
 }
 
 ///|
 /// Returns the touch or HUD hit area for mobile boost btn.
-pub fn mobile_boost_btn() -> (Int, Int, Int, Int) {
+pub fn mobile_boost_btn() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 184, screen_h - 76, 148, 58)
 }
 
 ///|
 /// Returns the touch or HUD hit area for mobile restart btn.
-pub fn mobile_restart_btn() -> (Int, Int, Int, Int) {
+pub fn mobile_restart_btn() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 148, 20, 128, 46)
 }
 
@@ -146,10 +146,10 @@ pub fn in_hot_zone_xy(x : Float, y : Float) -> Bool {
 pub fn point_in_rect(
   x : Float,
   y : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 = Float::from_int(rx)
   let y0 = Float::from_int(ry)
@@ -164,11 +164,11 @@ pub fn pointer_on_rect(
   mx : Float,
   my : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if hold && point_in_rect(mx, my, rx, ry, rw, rh) {
     return true

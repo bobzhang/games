@@ -419,7 +419,7 @@ pub fn load_level(game : @types.Game) -> Unit {
 }
 
 ///|
-fn is_pre_placed(level : @types.Level, x : Int, y : Int) -> Bool {
+fn is_pre_placed(level : @types.Level, x : Int32, y : Int32) -> Bool {
   for pp in level.pre_placed {
     if pp.x == x && pp.y == y {
       return true

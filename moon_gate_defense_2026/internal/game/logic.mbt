@@ -43,7 +43,7 @@ fn @types.Game::clear_pulses(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of the first inactive node slot, or -1 if the pool is full.
-fn @types.Game::alloc_node(game : @types.Game) -> Int {
+fn @types.Game::alloc_node(game : @types.Game) -> Int32 {
   for i, slot in game.nodes {
     if !slot.active {
       break i
@@ -55,7 +55,7 @@ fn @types.Game::alloc_node(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if the pool is full.
-fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy(game : @types.Game) -> Int32 {
   for i, slot in game.enemies {
     if !slot.active {
       break i
@@ -67,7 +67,7 @@ fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive bolt slot, or -1 if the pool is full.
-fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
+fn @types.Game::alloc_bolt(game : @types.Game) -> Int32 {
   for i, slot in game.bolts {
     if !slot.active {
       break i
@@ -79,7 +79,7 @@ fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive pulse slot, or -1 if the pool is full.
-fn @types.Game::alloc_pulse(game : @types.Game) -> Int {
+fn @types.Game::alloc_pulse(game : @types.Game) -> Int32 {
   for i, slot in game.pulses {
     if !slot.active {
       break i
@@ -97,7 +97,7 @@ fn @types.Game::emit_pulse(
   y : Float,
   start_radius : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_pulse()
   if i < 0 {
@@ -117,7 +117,7 @@ fn @types.Game::emit_pulse(
 
 ///|
 /// Returns the number of currently active enemies.
-fn @types.Game::active_enemy_count(game : @types.Game) -> Int {
+fn @types.Game::active_enemy_count(game : @types.Game) -> Int32 {
   let mut count = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -194,7 +194,11 @@ fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of the node at grid cell `(gx, gy)`, or -1 if none exists.
-fn @types.Game::find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
+fn @types.Game::find_node_at(
+  game : @types.Game,
+  gx : Int32,
+  gy : Int32,
+) -> Int32 {
   @utils.first_index_by(game.nodes, fn(node) {
     node.active && node.gx == gx && node.gy == gy
   })
@@ -496,7 +500,7 @@ fn @types.Game::spawn_bolt(
 /// Deactivates an enemy, awards score with combo multiplier, restores energy, and contributes to barrier charge.
 fn @types.Game::kill_enemy(
   game : @types.Game,
-  enemy_index : Int,
+  enemy_index : Int32,
   by_barrier : Bool,
 ) -> Unit {
   if enemy_index < 0 || !game.enemies[enemy_index].active {

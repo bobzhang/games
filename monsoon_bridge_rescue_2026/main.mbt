@@ -10,10 +10,10 @@ struct RescueBoat {
   hull_max : Float
   mut fuel : Float
   fuel_max : Float
-  mut kits : Int
-  kit_max : Int
-  mut passengers : Int
-  capacity : Int
+  mut kits : Int32
+  kit_max : Int32
+  mut passengers : Int32
+  capacity : Int32
   mut action_cd : Float
   mut siren_cd : Float
   mut siren_t : Float
@@ -26,8 +26,8 @@ struct RescueBoat {
 struct SupplyDock {
   x : Float
   y : Float
-  w : Int
-  h : Int
+  w : Int32
+  h : Int32
 }
 
 ///|
@@ -35,8 +35,8 @@ struct SupplyDock {
 struct EvacCamp {
   x : Float
   y : Float
-  w : Int
-  h : Int
+  w : Int32
+  h : Int32
 }
 
 ///|
@@ -49,7 +49,7 @@ struct BridgeSpan {
   mut integrity : Float
   mut stress : Float
   mut alarm_t : Float
-  id : Int
+  id : Int32
 }
 
 ///|
@@ -80,7 +80,7 @@ struct RaftGroup {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut survivors : Int
+  mut survivors : Int32
   mut panic : Float
   mut flare_t : Float
 }
@@ -119,8 +119,8 @@ struct SupplyCrate {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
-  mut amount : Int
+  mut kind : Int32
+  mut amount : Int32
   mut blink : Float
 }
 
@@ -133,7 +133,7 @@ struct RainDrop {
   mut vy : Float
   mut len : Float
   mut life : Float
-  mut alpha : Int
+  mut alpha : Int32
 }
 
 ///|
@@ -146,7 +146,7 @@ struct WakeParticle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -190,7 +190,7 @@ fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer in the inclusive range [lo, hi].
-fn randi(lo : Int, hi : Int) -> Int {
+fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
@@ -207,10 +207,10 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -249,11 +249,11 @@ fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let mut hit : Bool = false
 
@@ -279,7 +279,7 @@ fn pointer_on_circle(
   mouse_x : Float,
   mouse_y : Float,
   mouse_hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
   cx : Float,
   cy : Float,
   r : Float,
@@ -395,19 +395,19 @@ fn clear_wakes(wakes : Array[WakeParticle]) -> Unit {
 /// Initialises the river current grid cells with position, size, and randomised velocity.
 fn init_currents(
   cells : Array[CurrentCell],
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
-  let cols : Int = 4
-  let rows : Int = 3
+  let cols : Int32 = 4
+  let rows : Int32 = 3
   let cw : Float = Float::from_int(world_w) / Float::from_int(cols)
   let ch : Float = Float::from_int(world_h) / Float::from_int(rows)
 
   for i in 0..<cells.length() {
-    let c : Int = i % cols
-    let r : Int = i / cols
+    let c : Int32 = i % cols
+    let r : Int32 = i / cols
     cells[i].x = Float::from_int(world_x) + Float::from_int(c) * cw
     cells[i].y = Float::from_int(world_y) + Float::from_int(r) * ch
     cells[i].w = cw
@@ -426,10 +426,10 @@ fn init_currents(
 /// Initialises bridge span positions and starting integrity values within the world area.
 fn init_bridge(
   spans : Array[BridgeSpan],
-  world_x : Int,
-  world_y : Int,
-  world_w : Int,
-  world_h : Int,
+  world_x : Int32,
+  world_y : Int32,
+  world_w : Int32,
+  world_h : Int32,
 ) -> Unit {
   let cx : Float = Float::from_int(world_x + world_w / 2)
   let step : Float = Float::from_int(world_h - 170) /
@@ -497,7 +497,7 @@ fn spawn_raft(
   world_t : Float,
   world_r : Float,
   world_b : Float,
-  _serial : Int,
+  _serial : Int32,
 ) -> Bool {
   let mut placed : Bool = false
 
@@ -506,7 +506,7 @@ fn spawn_raft(
       continue
     }
 
-    let lane : Int = randi(0, 2)
+    let lane : Int32 = randi(0, 2)
     let py : Float = if lane == 0 {
       randf(world_t + 24.0, world_t + (world_b - world_t) * 0.3)
     } else if lane == 1 {
@@ -634,7 +634,7 @@ fn spawn_wake(
   vx : Float,
   vy : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for wake in wakes {
     if wake.active {
@@ -737,7 +737,7 @@ fn nearest_span_index(
   x : Float,
   y : Float,
   radius : Float,
-) -> Int {
+) -> Int32 {
   for i in 0..<spans.length(); found = -1, best = radius * radius {
     let cx : Float = spans[i].x + spans[i].w * 0.5
     let cy : Float = spans[i].y + spans[i].h * 0.5
@@ -764,22 +764,22 @@ fn min_bridge_integrity(spans : Array[BridgeSpan]) -> Float {
 /// Draws the generated river backdrop with scrolling wave stripes and storm tinting.
 fn draw_river(
   art : GameArt,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   scene_t : Float,
   storm : Float,
 ) -> Unit {
   draw_monsoon_backdrop(art, x, y, w, h, storm)
 
-  let stripe_count : Int = 46
+  let stripe_count : Int32 = 46
   let seg_h : Float = Float::from_int(h) / Float::from_int(stripe_count)
   for i in 0..<stripe_count {
     let py : Float = Float::from_int(y) + Float::from_int(i) * seg_h
     let wave : Float = @math.sinf(scene_t * 2.4 + Float::from_int(i) * 0.42)
-    let shift : Int = (wave * 18.0).to_int()
-    let alpha : Int = 18 +
+    let shift : Int32 = (wave * 18.0).to_int()
+    let alpha : Int32 = 18 +
       ((wave + 1.0) * 10.0).to_int() +
       (storm * 26.0).to_int()
     @raylib.draw_rectangle(
@@ -797,7 +797,7 @@ fn draw_river(
 fn draw_current_grid(cells : Array[CurrentCell], storm : Float) -> Unit {
   for cell in cells {
     let wave : Float = @math.sinf(cell.pulse)
-    let tone : Int = 34 +
+    let tone : Int32 = 34 +
       ((wave + 1.0) * 28.0).to_int() +
       (storm * 34.0).to_int()
     @raylib.draw_rectangle_lines(
@@ -947,7 +947,7 @@ fn draw_wakes(wakes : Array[WakeParticle]) -> Unit {
     if !wake.active {
       continue
     }
-    let alpha : Int = clampf(wake.life * 255.0, 0.0, 255.0).to_int()
+    let alpha : Int32 = clampf(wake.life * 255.0, 0.0, 255.0).to_int()
     let color = if wake.kind == 0 {
       @raylib.Color::new(188, 226, 244, alpha)
     } else {
@@ -984,10 +984,10 @@ fn draw_hud_meter(
   title : String,
   value : Float,
   max_value : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   fg : @raylib.Color,
 ) -> Unit {
   let p : Float = if max_value <= 0.001 {
@@ -1017,16 +1017,16 @@ fn draw_hud_meter(
 ///|
 /// Draws the on-screen D-pad and circular action buttons with active-state highlighting.
 fn draw_touch_controls(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   mouse_x : Float,
   mouse_y : Float,
   hold : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> Unit {
-  let pad_x : Int = 28
-  let pad_y : Int = sh - 210
-  let cell : Int = 72
+  let pad_x : Int32 = 28
+  let pad_y : Int32 = sh - 210
+  let cell : Int32 = 72
 
   let up = pointer_on_rect(
     mouse_x,
@@ -1069,7 +1069,7 @@ fn draw_touch_controls(
     cell,
   )
 
-  fn draw_pad(x : Int, y : Int, label : String, active : Bool) -> Unit {
+  fn draw_pad(x : Int32, y : Int32, label : String, active : Bool) -> Unit {
     @raylib.draw_rectangle(
       x,
       y,
@@ -1125,9 +1125,9 @@ fn draw_touch_controls(
     r : Float,
     label : String,
     active : Bool,
-    cr : Int,
-    cg : Int,
-    cb : Int,
+    cr : Int32,
+    cg : Int32,
+    cb : Int32,
   ) -> Unit {
     @raylib.draw_circle_v(
       @raylib.Vector2::new(cx, cy),
@@ -1161,19 +1161,19 @@ fn draw_touch_controls(
 ///|
 /// Draws the right-side HUD panel with all meters, mission stats, control legend, and status message.
 fn draw_panel(
-  panel_x : Int,
-  panel_y : Int,
-  panel_w : Int,
-  panel_h : Int,
+  panel_x : Int32,
+  panel_y : Int32,
+  panel_w : Int32,
+  panel_h : Int32,
   boat : RescueBoat,
-  rescued : Int,
-  rescue_target : Int,
-  lost : Int,
-  lost_limit : Int,
+  rescued : Int32,
+  rescue_target : Int32,
+  lost : Int32,
+  lost_limit : Int32,
   min_integrity : Float,
   bridge_goal : Float,
   timer : Float,
-  wave : Int,
+  wave : Int32,
   msg : String,
 ) -> Unit {
   @raylib.draw_rectangle(
@@ -1266,8 +1266,8 @@ fn draw_panel(
     @raylib.Color::new(194, 232, 198, 236),
   )
 
-  let mm : Int = timer.to_int() / 60
-  let ss : Int = timer.to_int() % 60
+  let mm : Int32 = timer.to_int() / 60
+  let ss : Int32 = timer.to_int() % 60
   let ss_txt : String = if ss < 10 { "0\{ss}" } else { "\{ss}" }
   @draw.draw_text(
     "Time \{mm}:\{ss_txt}  |  Storm Wave \{wave}",
@@ -1317,12 +1317,12 @@ fn draw_panel(
 
 ///|
 /// Draws the animated title / menu screen with instructions and a pulsing start button.
-fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
+fn draw_menu(sw : Int32, sh : Int32, scene_t : Float) -> Unit {
   @raylib.clear_background(@raylib.Color::new(9, 16, 26, 255))
   for i in 0..<26 {
     let yy : Float = Float::from_int(i) / 26.0
     let wave : Float = @math.sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
-    let alpha : Int = 20 + (wave * 54.0).to_int()
+    let alpha : Int32 = 20 + (wave * 54.0).to_int()
     @raylib.draw_rectangle(
       0,
       (yy * Float::from_int(sh)).to_int(),
@@ -1366,10 +1366,10 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
   )
 
   let pulse : Float = @math.sinf(scene_t * 3.7) * 0.5 + 0.5
-  let bw : Int = 460
-  let bh : Int = 92
-  let bx : Int = sw / 2 - bw / 2
-  let by : Int = 470
+  let bw : Int32 = 460
+  let bh : Int32 = 92
+  let bx : Int32 = sw / 2 - bw / 2
+  let by : Int32 = 470
   @raylib.draw_rectangle(
     bx,
     by,
@@ -1406,14 +1406,14 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 ///|
 /// Draws the win or loss end screen overlay showing rescue stats and mission outcome.
 fn draw_end_screen(
-  sw : Int,
-  sh : Int,
+  sw : Int32,
+  sh : Int32,
   win : Bool,
-  rescued : Int,
-  target : Int,
+  rescued : Int32,
+  target : Int32,
   min_integrity : Float,
   goal : Float,
-  lost : Int,
+  lost : Int32,
   timer : Float,
 ) -> Unit {
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 14, 22, 222))
@@ -1472,8 +1472,8 @@ fn draw_end_screen(
 ///|
 /// Initialises the Raylib window, sets up all game state, and drives the main game loop until close.
 fn main {
-  let sw : Int = 1700
-  let sh : Int = 960
+  let sw : Int32 = 1700
+  let sh : Int32 = 960
   @raylib.init_window(sw, sh, "raylib [game] monsoon bridge rescue 2026")
   defer @raylib.close_window()
   @raylib.set_target_fps(120)
@@ -1482,11 +1482,11 @@ fn main {
   let art = load_game_art()
   defer unload_game_art(art)
 
-  let world_x : Int = 24
-  let world_y : Int = 24
-  let panel_w : Int = 432
-  let world_w : Int = sw - panel_w - 48
-  let world_h : Int = sh - 48
+  let world_x : Int32 = 24
+  let world_y : Int32 = 24
+  let panel_w : Int32 = 432
+  let world_w : Int32 = sw - panel_w - 48
+  let world_h : Int32 = sh - 48
 
   let world_l : Float = Float::from_int(world_x)
   let world_t : Float = Float::from_int(world_y)
@@ -1613,18 +1613,18 @@ fn main {
     wake_t: 0.0,
   }
 
-  let mut state : Int = 0 // 0 menu, 1 play, 2 win, 3 lose
+  let mut state : Int32 = 0 // 0 menu, 1 play, 2 win, 3 lose
   let mut timer : Float = 460.0
   let mut scene_t : Float = 0.0
   let mut msg : String = ""
   let mut msg_t : Float = 0.0
-  let mut rescued_total : Int = 0
-  let mut rescue_target : Int = 160
-  let mut lost_total : Int = 0
-  let mut lost_limit : Int = 190
+  let mut rescued_total : Int32 = 0
+  let mut rescue_target : Int32 = 160
+  let mut lost_total : Int32 = 0
+  let mut lost_limit : Int32 = 190
   let mut bridge_goal : Float = 84.0
-  let mut raft_serial : Int = 1
-  let mut wave : Int = 1
+  let mut raft_serial : Int32 = 1
+  let mut wave : Int32 = 1
 
   let mut raft_spawn_cd : Float = 2.0
   let mut debris_spawn_cd : Float = 0.28
@@ -1687,7 +1687,7 @@ fn main {
     let mouse = @raylib.get_mouse_position()
     let click : Bool = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
     let hold : Bool = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
-    let mut touch_count : Int = @raylib.get_touch_point_count()
+    let mut touch_count : Int32 = @raylib.get_touch_point_count()
     if touch_count > 10 {
       touch_count = 10
     }
@@ -2246,9 +2246,11 @@ fn main {
           nearest_raft
         }
         if nearest_raft >= 0 {
-          let can_take : Int = boat.capacity - boat.passengers
+          let can_take : Int32 = boat.capacity - boat.passengers
           if can_take > 0 {
-            let taken : Int = can_take.min(rafts[nearest_raft].survivors.min(5))
+            let taken : Int32 = can_take.min(
+              rafts[nearest_raft].survivors.min(5),
+            )
             boat.passengers = boat.passengers + taken
             rafts[nearest_raft].survivors = rafts[nearest_raft].survivors -
               taken
@@ -2270,7 +2272,7 @@ fn main {
 
         // Repair nearest span
         if !did_action {
-          let si : Int = nearest_span_index(spans, boat.x, boat.y, 68.0)
+          let si : Int32 = nearest_span_index(spans, boat.x, boat.y, 68.0)
           if si >= 0 && boat.kits > 0 {
             let repair : Float = randf(8.0, 14.0)
             spans[si].integrity = minf(100.0, spans[si].integrity + repair)

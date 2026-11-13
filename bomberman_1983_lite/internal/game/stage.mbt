@@ -26,7 +26,7 @@ fn @types.Game::clear_entities_for_stage(game : @types.Game) -> Unit {
 }
 
 ///|
-fn stage_enemy_total(stage : Int) -> Int {
+fn stage_enemy_total(stage : Int32) -> Int32 {
   let wave = stage + 1
   (16 + wave * 2).clamp(min=18, max=44)
 }
@@ -34,8 +34,8 @@ fn stage_enemy_total(stage : Int) -> Int {
 ///|
 fn @types.Game::stage_enemy_kind(
   game : @types.Game,
-  stage : Int,
-  spawned_index : Int,
+  stage : Int32,
+  spawned_index : Int32,
 ) -> @types.EnemyKind {
   let wave = stage + 1
   let roll = @types.rand_range(game, 0, 99)
@@ -76,7 +76,7 @@ fn @types.Game::stage_enemy_kind(
 }
 
 ///|
-fn parse_level_char(ch : Byte) -> (@types.TileKind, Int) {
+fn parse_level_char(ch : Byte) -> (@types.TileKind, Int32) {
   if ch == b'#' {
     (Brick, 1)
   } else if ch == b'@' {
@@ -133,7 +133,7 @@ fn @types.Game::restore_base_ring(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::respawn_player_tank(game : @types.Game, index : Int) -> Unit {
+fn @types.Game::respawn_player_tank(game : @types.Game, index : Int32) -> Unit {
   let spawn_x = if index == 0 {
     @types.player1_spawn_x
   } else {
@@ -186,7 +186,7 @@ fn @types.Game::prepare_players_for_stage(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::load_stage_map(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::load_stage_map(game : @types.Game, stage : Int32) -> Unit {
   let rows = @levels.level_pattern(stage)
   for y in 0..<@types.map_tiles_h {
     let row = rows[y]
@@ -232,7 +232,7 @@ fn @types.Game::reset_campaign(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::load_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::load_stage(game : @types.Game, stage : Int32) -> Unit {
   game.profile = @levels.get_stage_profile(stage)
   game.clear_entities_for_stage()
   game.load_stage_map(stage)

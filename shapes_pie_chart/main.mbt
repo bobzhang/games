@@ -11,7 +11,7 @@ fn main {
     screen_width, screen_height, "raylib [shapes] example - pie chart",
   )
 
-  let slice_count : Ref[Int] = Ref(7)
+  let slice_count : Ref[Int32] = Ref(7)
   let donut_inner_radius : Ref[Float] = Ref(25.0)
   let values : Array[Ref[Float]] = Array::make(max_pie_slices, Ref(0.0))
   // Re-initialize each element to have its own Ref

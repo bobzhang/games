@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(id : Int) -> @types.LevelDef {
+pub fn get_level(id : Int32) -> @types.LevelDef {
   match id {
     0 => level_01()
     1 => level_02()
@@ -26,7 +26,7 @@ pub fn get_level(id : Int) -> @types.LevelDef {
 }
 
 ///|
-pub fn load_level(game : @types.Game, id : Int) -> Unit {
+pub fn load_level(game : @types.Game, id : Int32) -> Unit {
   let _level = get_level(id)
   game.current_level = id
   @types.clear_crucible(game)

@@ -96,7 +96,7 @@ fn reset_player(hero : @types.Player) -> Unit {
 
 ///|
 /// Returns the index of a free object slot, evicting the slot with the largest y (furthest off screen) if all are active.
-fn @types.Game::alloc_obj(game : @types.Game) -> Int {
+fn @types.Game::alloc_obj(game : @types.Game) -> Int32 {
   for i, slot in game.objs {
     if !slot.active {
       break i
@@ -113,7 +113,7 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free shot slot, evicting the slot with the lowest remaining life if all are active.
-fn @types.Game::alloc_shot(game : @types.Game) -> Int {
+fn @types.Game::alloc_shot(game : @types.Game) -> Int32 {
   for i, slot in game.shots {
     if !slot.active {
       break i
@@ -130,7 +130,7 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free spark slot, evicting the slot with the lowest remaining life if all are active.
-fn @types.Game::alloc_spark(game : @types.Game) -> Int {
+fn @types.Game::alloc_spark(game : @types.Game) -> Int32 {
   for i, slot in game.sparks {
     if !slot.active {
       break i
@@ -147,7 +147,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free ring slot, evicting the slot with the lowest remaining life if all are active.
-fn @types.Game::alloc_ring(game : @types.Game) -> Int {
+fn @types.Game::alloc_ring(game : @types.Game) -> Int32 {
   for i, slot in game.rings {
     if !slot.active {
       break i
@@ -164,7 +164,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free ghost slot, evicting the slot with the lowest remaining life if all are active.
-fn @types.Game::alloc_ghost(game : @types.Game) -> Int {
+fn @types.Game::alloc_ghost(game : @types.Game) -> Int32 {
   for i, slot in game.ghosts {
     if !slot.active {
       break i
@@ -189,7 +189,7 @@ fn @types.Game::emit_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_spark()
   game.sparks[i].active = true
@@ -208,8 +208,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  count : Int,
-  kind : Int,
+  count : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     game.emit_spark(
@@ -232,7 +232,7 @@ fn @types.Game::spawn_ring(
   y : Float,
   r : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_ring()
   game.rings[i].active = true
@@ -253,7 +253,7 @@ fn @types.Game::emit_ghost(
   h : Float,
   rot : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_ghost()
   game.ghosts[i].active = true
@@ -277,7 +277,7 @@ fn @types.Game::spawn_shot(
   vy : Float,
   life : Float,
   dmg : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_shot()
   game.shots[i].active = true
@@ -305,7 +305,7 @@ fn @types.Game::spawn_obj(
   hp : Float,
   shot_cd : Float,
   cloak : Bool,
-  reward : Int,
+  reward : Int32,
 ) -> Unit {
   let i = game.alloc_obj()
   game.objs[i].active = true
@@ -326,14 +326,14 @@ fn @types.Game::spawn_obj(
 
 ///|
 /// Returns the combo-scaled score delta for the given base value.
-fn @types.Game::score_gain(game : @types.Game, base : Int) -> Int {
+fn @types.Game::score_gain(game : @types.Game, base : Int32) -> Int32 {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
 /// Adds a combo-scaled amount to the session score and updates best-score if the total exceeds it.
-fn @types.Game::add_score(game : @types.Game, base : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, base : Int32) -> Unit {
   let g = game.score_gain(base)
   game.score = game.score + g
   if game.score > game.best_score {
@@ -379,7 +379,7 @@ fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
 
 ///|
 /// Clears all entities, transitions to Play, sets stage-scaled distance goal and scroll speed, resets all cooldowns, and fully restores or partially replenishes armor and heat depending on whether this is the first stage.
-fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_objs()
   game.clear_shots()
   game.clear_sparks()
@@ -879,9 +879,9 @@ fn @types.Game::enemy_fire(game : @types.Game, o : @types.Obj) -> Unit {
 /// Deactivates an enemy object, awards score, increments kills, pushes the combo, and emits a burst and ring at the object's position.
 fn @types.Game::kill_obj(
   game : @types.Game,
-  i : Int,
-  base : Int,
-  burst_kind : Int,
+  i : Int32,
+  base : Int32,
+  burst_kind : Int32,
 ) -> Unit {
   let x = game.objs[i].x
   let y = game.objs[i].y

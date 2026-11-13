@@ -73,7 +73,7 @@ fn draw_texture_cover(
 /// Draws one 3x2 sprite sheet cell centered on the destination point.
 fn draw_sprite_cell(
   art : GameArt,
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,

@@ -92,7 +92,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   game.current_level = level_idx + 1
   game.current_tier = level.tier
@@ -190,7 +190,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn toggle_heddle(game : @types.Game, row : Int, col : Int) -> Unit {
+fn toggle_heddle(game : @types.Game, row : Int32, col : Int32) -> Unit {
   if row >= 0 && row < @types.grid_rows && col >= 0 && col < @types.grid_cols {
     let h = game.heddles[row]
     h.raised[col] = !h.raised[col]
@@ -199,7 +199,7 @@ fn toggle_heddle(game : @types.Game, row : Int, col : Int) -> Unit {
 }
 
 ///|
-fn apply_alternate_pattern(game : @types.Game, row : Int) -> Unit {
+fn apply_alternate_pattern(game : @types.Game, row : Int32) -> Unit {
   let h = game.heddles[row]
   let offset = row % 2
   for col in 0..<@types.grid_cols {
@@ -209,7 +209,7 @@ fn apply_alternate_pattern(game : @types.Game, row : Int) -> Unit {
 }
 
 ///|
-fn copy_heddle_row(game : @types.Game, src : Int, dst : Int) -> Unit {
+fn copy_heddle_row(game : @types.Game, src : Int32, dst : Int32) -> Unit {
   let s = game.heddles[src]
   let d = game.heddles[dst]
   for col in 0..<@types.grid_cols {
@@ -219,7 +219,7 @@ fn copy_heddle_row(game : @types.Game, src : Int, dst : Int) -> Unit {
 }
 
 ///|
-fn invert_heddle_row(game : @types.Game, row : Int) -> Unit {
+fn invert_heddle_row(game : @types.Game, row : Int32) -> Unit {
   let h = game.heddles[row]
   for col in 0..<@types.grid_cols {
     h.raised[col] = !h.raised[col]
@@ -228,7 +228,7 @@ fn invert_heddle_row(game : @types.Game, row : Int) -> Unit {
 }
 
 ///|
-fn shift_heddle_row(game : @types.Game, row : Int, dir : Int) -> Unit {
+fn shift_heddle_row(game : @types.Game, row : Int32, dir : Int32) -> Unit {
   let h = game.heddles[row]
   let cols = @types.grid_cols
   let old : Array[Bool] = Array::make(cols, false)

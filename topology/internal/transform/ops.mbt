@@ -1,11 +1,11 @@
 ///|
 pub fn shift(s : @types.Shape, dir : @types.Direction) -> @types.Shape {
-  let dx : Int = match dir {
+  let dx : Int32 = match dir {
     E => 1
     W => -1
     _ => 0
   }
-  let dy : Int = match dir {
+  let dy : Int32 = match dir {
     S => 1
     N => -1
     _ => 0
@@ -194,7 +194,7 @@ fn is_connected(cells : Array[@types.Vec2i]) -> Bool {
   for _i in 0..<cells.length() {
     visited.push(false)
   }
-  let queue : Array[Int] = [0]
+  let queue : Array[Int32] = [0]
   visited[0] = true
   let mut visited_count = 1
   let dirs = [

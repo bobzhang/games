@@ -128,7 +128,7 @@ pub fn clear_program(
 pub fn add_command_by_index(
   editor : @types.EditorState,
   program : @types.Program,
-  index : Int,
+  index : Int32,
 ) -> Bool {
   if index >= 0 && index < editor.palette_commands.length() {
     let kind = editor.palette_commands[index]

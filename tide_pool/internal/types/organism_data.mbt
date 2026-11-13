@@ -1,4 +1,5 @@
 ///|
+#derive(Debug)
 pub(all) struct OrganismProfile {
   kind : OrganismKind
   name : String
@@ -12,7 +13,7 @@ pub(all) struct OrganismProfile {
   health_decay_submerged : Float
   health_decay_exposed : Float
   health_regen : Float
-} derive(Debug)
+}
 
 ///|
 pub extend OrganismProfile with Debug::{to_repr}
@@ -126,7 +127,7 @@ pub fn organism_color(kind : OrganismKind) -> @raylib.Color {
 }
 
 ///|
-pub fn organism_index(kind : OrganismKind) -> Int {
+pub fn organism_index(kind : OrganismKind) -> Int32 {
   match kind {
     Barnacle => 0
     Anemone => 1
@@ -138,7 +139,7 @@ pub fn organism_index(kind : OrganismKind) -> Int {
 }
 
 ///|
-pub fn organism_from_index(idx : Int) -> OrganismKind {
+pub fn organism_from_index(idx : Int32) -> OrganismKind {
   match idx {
     0 => Barnacle
     1 => Anemone

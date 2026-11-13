@@ -256,7 +256,7 @@ fn @types.Game::draw_map_select(game : @types.Game) -> Unit {
 
 ///|
 /// Returns a star string representation for the given difficulty level `diff`.
-fn difficulty_stars(diff : Int) -> String {
+fn difficulty_stars(diff : Int32) -> String {
   if diff == 1 {
     "*"
   } else if diff == 2 {
@@ -272,10 +272,10 @@ fn difficulty_stars(diff : Int) -> String {
 /// Draws a miniature map layout preview at the specified screen position and size.
 fn draw_map_preview(
   info : @types.MapInfo,
-  px : Int,
-  py : Int,
-  pw : Int,
-  ph : Int,
+  px : Int32,
+  py : Int32,
+  pw : Int32,
+  ph : Int32,
 ) -> Unit {
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(30, 35, 45, 255))
   @raylib.draw_rectangle_lines(
@@ -725,7 +725,7 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
     1,
     @raylib.Color::new(60, 80, 110, 255),
   )
-  let tower_types : Array[(@types.TowerKind, String, Int, String)] = [
+  let tower_types : Array[(@types.TowerKind, String, Int32, String)] = [
     (Arrow, "1: Arrow", @types.cost_arrow, "Fast single"),
     (Cannon, "2: Cannon", @types.cost_cannon, "Splash dmg"),
     (Frost, "3: Frost", @types.cost_frost, "Slows"),

@@ -1,29 +1,29 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 10
+pub let grid_cols : Int32 = 10
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let cell_size : Int = 60
+pub let cell_size : Int32 = 60
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(30, 35, 50, 255)
@@ -96,10 +96,10 @@ pub let color_star_on : @raylib.Color = @raylib.Color::new(255, 220, 50, 255)
 pub let color_star_off : @raylib.Color = @raylib.Color::new(80, 80, 90, 255)
 
 ///|
-pub let palette_x : Int = 720
+pub let palette_x : Int32 = 720
 
 ///|
-pub let palette_y : Int = 100
+pub let palette_y : Int32 = 100
 
 ///|
-pub let palette_item_h : Int = 60
+pub let palette_item_h : Int32 = 60

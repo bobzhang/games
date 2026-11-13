@@ -396,7 +396,7 @@ fn @types.Game::update_clouds(game : @types.Game) -> Unit {
     }
   }
   // Spawn new clouds if below target count
-  let target_clouds : Int = match game.weather_state.kind {
+  let target_clouds : Int32 = match game.weather_state.kind {
     Clear => 8
     Cloudy | Rain => 25
     Storm => 30
@@ -416,7 +416,7 @@ fn @types.Game::update_clouds(game : @types.Game) -> Unit {
         c.size_x = @types.rand_rangef(game, 6.0, 15.0)
         c.size_y = @types.rand_rangef(game, 2.0, 5.0)
         c.size_z = @types.rand_rangef(game, 5.0, 12.0)
-        let base_alpha : Int = if game.weather_state.kind == Storm {
+        let base_alpha : Int32 = if game.weather_state.kind == Storm {
           160
         } else {
           100
@@ -769,7 +769,7 @@ fn @types.Game::update_weather_effects(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Initializes and starts the mission at `mission_idx`, resetting all entities and spawning level data.
-pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
+pub fn start_mission(game : @types.Game, mission_idx : Int32) -> Unit {
   game.current_mission = mission_idx
   let mission = game.missions[mission_idx]
   mission.targets_done = 0
@@ -866,7 +866,7 @@ pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
   if mission.kind == @types.mission_checkpoint ||
     mission.kind == @types.mission_canyon_run ||
     mission.kind == @types.mission_recon {
-    let cp_count : Int = if mission.kind == @types.mission_recon {
+    let cp_count : Int32 = if mission.kind == @types.mission_recon {
       mission.target_count
     } else {
       mission.target_count

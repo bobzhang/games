@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,12 +23,13 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Placing
   Simulating
   Complete
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -44,11 +46,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Tier1
   Tier2
   Tier3
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}
@@ -65,6 +68,7 @@ pub impl Show for Tier with fn output(self, logger) {
 pub extend Tier with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileKind {
   Empty
   Spring
@@ -72,7 +76,7 @@ pub(all) enum TileKind {
   Aqueduct
   Reservoir
   Dam
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileKind with Eq::{not_equal, equal}
@@ -89,12 +93,13 @@ pub impl Show for TileKind with fn output(self, logger) {
 pub extend TileKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   North
   East
   South
   West
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}
@@ -121,7 +126,7 @@ pub fn Direction::opposite(self : Direction) -> Direction {
 }
 
 ///|
-pub fn Direction::dx(self : Direction) -> Int {
+pub fn Direction::dx(self : Direction) -> Int32 {
   match self {
     East => 1
     West => -1
@@ -130,7 +135,7 @@ pub fn Direction::dx(self : Direction) -> Int {
 }
 
 ///|
-pub fn Direction::dy(self : Direction) -> Int {
+pub fn Direction::dy(self : Direction) -> Int32 {
   match self {
     South => 1
     North => -1

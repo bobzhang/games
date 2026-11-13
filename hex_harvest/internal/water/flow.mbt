@@ -15,7 +15,7 @@ pub fn flow_water(grid : @types.HexGrid) -> Array[@types.HexCoord] {
     }
   }
   // Collect all currently watered tiles
-  let watered_tiles : Array[(Int, Int)] = []
+  let watered_tiles : Array[(Int32, Int32)] = []
   for r in 0..<grid.height {
     for c in 0..<grid.width {
       if grid.tiles[r][c].watered {
@@ -74,8 +74,8 @@ pub fn preview_water_flow(grid : @types.HexGrid) -> Array[@types.HexCoord] {
 /// Check if a tile would be watered if a channel were placed at (col, row)
 pub fn would_channel_bring_water(
   grid : @types.HexGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> Bool {
   let tile = grid.tiles[row][col]
   // Check if any neighbor is watered and at higher or equal height
@@ -98,7 +98,7 @@ pub fn would_channel_bring_water(
 
 ///|
 /// Count how many tiles are currently watered
-pub fn count_watered(grid : @types.HexGrid) -> Int {
+pub fn count_watered(grid : @types.HexGrid) -> Int32 {
   let mut count = 0
   for r in 0..<grid.height {
     for c in 0..<grid.width {
