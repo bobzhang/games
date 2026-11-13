@@ -2,7 +2,11 @@
 /// Calculate adjacency bonus for a crop at (col, row)
 /// Same-type neighbors give +1 each
 /// Special combos: Wheat+Corn=+2, Berry+Flower=+3
-pub fn adjacency_bonus(grid : @types.HexGrid, col : Int, row : Int) -> Int {
+pub fn adjacency_bonus(
+  grid : @types.HexGrid,
+  col : Int32,
+  row : Int32,
+) -> Int32 {
   let tile = grid.tiles[row][col]
   let crop_kind = match tile.crop {
     Some(k) => k
@@ -95,7 +99,7 @@ pub fn grow_crops(grid : @types.HexGrid) -> Array[@types.HexCoord] {
 
 ///|
 /// Harvest all mature crops, returning total yield with adjacency bonuses
-pub fn harvest_mature(grid : @types.HexGrid) -> (Int, Array[@types.HexCoord]) {
+pub fn harvest_mature(grid : @types.HexGrid) -> (Int32, Array[@types.HexCoord]) {
   let mut total_yield = 0
   let harvested : Array[@types.HexCoord] = []
   for r in 0..<grid.height {
@@ -119,7 +123,7 @@ pub fn harvest_mature(grid : @types.HexGrid) -> (Int, Array[@types.HexCoord]) {
 
 ///|
 /// Calculate projected yield if all current crops matured
-pub fn projected_yield(grid : @types.HexGrid) -> Int {
+pub fn projected_yield(grid : @types.HexGrid) -> Int32 {
   let mut total = 0
   for r in 0..<grid.height {
     for c in 0..<grid.width {
@@ -143,7 +147,7 @@ pub fn projected_yield(grid : @types.HexGrid) -> Int {
 
 ///|
 /// Count crops in each state
-pub fn count_crops(grid : @types.HexGrid) -> (Int, Int, Int, Int) {
+pub fn count_crops(grid : @types.HexGrid) -> (Int32, Int32, Int32, Int32) {
   let mut seeds = 0
   let mut growing = 0
   let mut mature = 0
@@ -170,12 +174,12 @@ pub fn count_crops(grid : @types.HexGrid) -> (Int, Int, Int, Int) {
 /// Get adjacent tiles that would boost a crop placed at (col, row) of given kind
 pub fn adjacency_preview(
   grid : @types.HexGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   kind : @types.CropKind,
-) -> Array[(Int, Int)] {
+) -> Array[(Int32, Int32)] {
   let neighbors = @hex.valid_neighbors(col, row)
-  let result : Array[(Int, Int)] = []
+  let result : Array[(Int32, Int32)] = []
   for i in 0..<neighbors.length() {
     let (nc, nr) = neighbors[i]
     let ntile = grid.tiles[nr][nc]

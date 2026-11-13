@@ -13,7 +13,7 @@ pub fn find_enclosures(grid : @types.Grid) -> Array[@types.Enclosure] {
   for r in 0..<grid.rows {
     for c in 0..<grid.cols {
       if visited[r][c] == false {
-        let cells : Array[(Int, Int)] = []
+        let cells : Array[(Int32, Int32)] = []
         flood_fill(grid, c, r, visited, cells)
         if cells.length() > 0 {
           let enc : @types.Enclosure = { id: next_id, cells, species: None, }
@@ -29,10 +29,10 @@ pub fn find_enclosures(grid : @types.Grid) -> Array[@types.Enclosure] {
 ///|
 fn flood_fill(
   grid : @types.Grid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   visited : Array[Array[Bool]],
-  cells : Array[(Int, Int)],
+  cells : Array[(Int32, Int32)],
 ) -> Unit {
   if col < 0 || col >= grid.cols || row < 0 || row >= grid.rows {
     return
@@ -83,8 +83,8 @@ pub fn assign_animals_to_enclosures(
 ///|
 pub fn find_enclosure_at(
   enclosures : Array[@types.Enclosure],
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
 ) -> @types.Enclosure? {
   for enc in enclosures {
     for cell in enc.cells {
@@ -101,7 +101,7 @@ pub fn count_terrain_in_enclosure(
   grid : @types.Grid,
   enc : @types.Enclosure,
   terrain : @types.Terrain,
-) -> Int {
+) -> Int32 {
   let mut count = 0
   for cell in enc.cells {
     let (c, r) = cell
@@ -114,7 +114,10 @@ pub fn count_terrain_in_enclosure(
 }
 
 ///|
-pub fn count_water_adjacent(grid : @types.Grid, enc : @types.Enclosure) -> Int {
+pub fn count_water_adjacent(
+  grid : @types.Grid,
+  enc : @types.Enclosure,
+) -> Int32 {
   let mut count = 0
   for cell in enc.cells {
     let (c, r) = cell
@@ -130,7 +133,7 @@ pub fn count_water_adjacent(grid : @types.Grid, enc : @types.Enclosure) -> Int {
 }
 
 ///|
-fn has_adjacent_water(grid : @types.Grid, col : Int, row : Int) -> Bool {
+fn has_adjacent_water(grid : @types.Grid, col : Int32, row : Int32) -> Bool {
   let neighbors = [
     (col - 1, row),
     (col + 1, row),
@@ -147,7 +150,7 @@ fn has_adjacent_water(grid : @types.Grid, col : Int, row : Int) -> Bool {
 }
 
 ///|
-pub fn count_tiles_used(grid : @types.Grid) -> Int {
+pub fn count_tiles_used(grid : @types.Grid) -> Int32 {
   let mut count = 0
   for r in 0..<grid.rows {
     for c in 0..<grid.cols {
@@ -161,7 +164,7 @@ pub fn count_tiles_used(grid : @types.Grid) -> Int {
 }
 
 ///|
-pub fn count_fences_used(grid : @types.Grid) -> Int {
+pub fn count_fences_used(grid : @types.Grid) -> Int32 {
   let mut count = 0
   for r in 0..<grid.rows {
     for c in 0..<grid.cols {

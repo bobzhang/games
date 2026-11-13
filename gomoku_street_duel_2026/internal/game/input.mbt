@@ -16,9 +16,9 @@ fn @types.Game::detect_held_dir(game : @types.Game) -> @types.Dir {
     dir = Down
   }
 
-  let cx : Int = @types.dpad_center_x()
-  let cy : Int = @types.dpad_center_y()
-  let s : Int = @types.dpad_size()
+  let cx : Int32 = @types.dpad_center_x()
+  let cy : Int32 = @types.dpad_center_y()
+  let s : Int32 = @types.dpad_size()
 
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -234,21 +234,21 @@ fn @types.Game::detect_next_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns `(true, col, row)` if the current mouse click or touch point maps to a board cell, otherwise `(false, 0, 0)`.
-fn @types.Game::detect_board_tap(game : @types.Game) -> (Bool, Int, Int) {
+fn @types.Game::detect_board_tap(game : @types.Game) -> (Bool, Int32, Int32) {
   let (board_x, board_y, tile) = @types.board_metrics(game)
-  let bw : Int = @types.board_n * tile
-  let bh : Int = @types.board_n * tile
+  let bw : Int32 = @types.board_n * tile
+  let bh : Int32 = @types.board_n * tile
 
-  fn map(px : Float, py : Float) -> (Bool, Int, Int) {
+  fn map(px : Float, py : Float) -> (Bool, Int32, Int32) {
     if !@types.inside_rect(px, py, board_x, board_y, bw, bh) {
       return (false, 0, 0)
     }
 
-    let cx : Int = ((px.to_int() - board_x) / tile).clamp(
+    let cx : Int32 = ((px.to_int() - board_x) / tile).clamp(
       min=0,
       max=@types.board_n - 1,
     )
-    let cy : Int = ((py.to_int() - board_y) / tile).clamp(
+    let cy : Int32 = ((py.to_int() - board_y) / tile).clamp(
       min=0,
       max=@types.board_n - 1,
     )

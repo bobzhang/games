@@ -17,13 +17,13 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Converts board coordinates to linear storage index.
-pub fn board_index(x : Int, y : Int) -> Int {
+pub fn board_index(x : Int32, y : Int32) -> Int32 {
   y * board_cols + x
 }
 
 ///|
 /// Returns tile value at `(x, y)` or `Void` when out of bounds.
-pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
+pub fn tile_at(game : Game, x : Int32, y : Int32) -> Tile {
   if x < 0 || x >= board_cols || y < 0 || y >= board_rows {
     Void
   } else {
@@ -33,7 +33,7 @@ pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
 
 ///|
 /// Writes a tile value when `(x, y)` is inside board bounds.
-pub fn set_tile(game : Game, x : Int, y : Int, tile : Tile) -> Unit {
+pub fn set_tile(game : Game, x : Int32, y : Int32, tile : Tile) -> Unit {
   if x < 0 || x >= board_cols || y < 0 || y >= board_rows {
     return
   }
@@ -42,7 +42,7 @@ pub fn set_tile(game : Game, x : Int, y : Int, tile : Tile) -> Unit {
 
 ///|
 /// Returns whether a crate occupies `(x, y)`.
-pub fn box_at(game : Game, x : Int, y : Int) -> Bool {
+pub fn box_at(game : Game, x : Int32, y : Int32) -> Bool {
   if x < 0 || x >= board_cols || y < 0 || y >= board_rows {
     false
   } else {
@@ -52,7 +52,7 @@ pub fn box_at(game : Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Sets crate occupancy at `(x, y)` when inside board bounds.
-pub fn set_box(game : Game, x : Int, y : Int, has_box : Bool) -> Unit {
+pub fn set_box(game : Game, x : Int32, y : Int32, has_box : Bool) -> Unit {
   if x < 0 || x >= board_cols || y < 0 || y >= board_rows {
     return
   }
@@ -67,8 +67,8 @@ pub fn walkable_tile(tile : Tile) -> Bool {
 
 ///|
 /// Counts how many goal tiles currently hold crates.
-pub fn goal_filled_count(game : Game) -> Int {
-  let mut n : Int = 0
+pub fn goal_filled_count(game : Game) -> Int32 {
+  let mut n : Int32 = 0
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
       if tile_at(game, x, y) == Goal && box_at(game, x, y) {
@@ -84,10 +84,10 @@ pub fn goal_filled_count(game : Game) -> Int {
 pub fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -101,11 +101,11 @@ pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_flag : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   let mut hit : Bool = false
 
@@ -127,54 +127,54 @@ pub fn pointer_on_rect(
 
 ///|
 /// X center of the on-screen D-pad.
-pub fn dpad_center_x() -> Int {
+pub fn dpad_center_x() -> Int32 {
   160
 }
 
 ///|
 /// Y center of the on-screen D-pad.
-pub fn dpad_center_y() -> Int {
+pub fn dpad_center_y() -> Int32 {
   screen_h - 180
 }
 
 ///|
 /// Half-size used for D-pad button layout.
-pub fn dpad_size() -> Int {
+pub fn dpad_size() -> Int32 {
   76
 }
 
 ///|
 /// Left X of the right-side action button column.
-pub fn action_panel_x() -> Int {
+pub fn action_panel_x() -> Int32 {
   screen_w - 300
 }
 
 ///|
 /// Top Y of the right-side action button column.
-pub fn action_panel_y() -> Int {
+pub fn action_panel_y() -> Int32 {
   screen_h - 252
 }
 
 ///|
 /// Width of each action button rectangle.
-pub fn action_panel_w() -> Int {
+pub fn action_panel_w() -> Int32 {
   118
 }
 
 ///|
 /// Height of each action button rectangle.
-pub fn action_panel_h() -> Int {
+pub fn action_panel_h() -> Int32 {
   74
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the level-advance button.
-pub fn next_button_rect() -> (Int, Int, Int, Int) {
+pub fn next_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w - 348, screen_h - 130, 310, 84)
 }
 
 ///|
 /// Returns `(x, y, w, h)` for the title-screen start button.
-pub fn title_start_rect() -> (Int, Int, Int, Int) {
+pub fn title_start_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 220, screen_h - 170, 440, 92)
 }

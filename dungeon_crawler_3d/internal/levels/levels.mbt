@@ -3,7 +3,9 @@
 
 ///|
 /// Returns base floor generation parameters `(rooms, skeletons, archers, golems, wraiths, has_boss, loot_count)`.
-pub fn get_floor_config(floor : Int) -> (Int, Int, Int, Int, Int, Bool, Int) {
+pub fn get_floor_config(
+  floor : Int32,
+) -> (Int32, Int32, Int32, Int32, Int32, Bool, Int32) {
   if floor == 0 {
     // Floor 1: Tutorial - crypt
     (4, 3, 0, 0, 0, false, 3)
@@ -42,7 +44,9 @@ pub fn get_floor_config(floor : Int) -> (Int, Int, Int, Int, Int, Bool, Int) {
 
 ///|
 /// Returns extended enemy counts `(slimes, bats, spiders, minotaurs, liches)` for a floor.
-pub fn get_extended_enemy_config(floor : Int) -> (Int, Int, Int, Int, Int) {
+pub fn get_extended_enemy_config(
+  floor : Int32,
+) -> (Int32, Int32, Int32, Int32, Int32) {
   if floor == 0 {
     (2, 1, 0, 0, 0)
   } else if floor == 1 {
@@ -70,7 +74,7 @@ pub fn get_extended_enemy_config(floor : Int) -> (Int, Int, Int, Int, Int) {
 
 ///|
 /// Maps a floor index to its theme id.
-pub fn get_floor_theme(floor : Int) -> Int {
+pub fn get_floor_theme(floor : Int32) -> Int32 {
   // theme values: crypt=0, sewer=1, cavern=2, library=3, prison=4,
   // throne_room=5, mine=6, temple=7, abyss=8, final_chamber=9
   floor
@@ -80,7 +84,7 @@ pub fn get_floor_theme(floor : Int) -> Int {
 
 ///|
 /// Returns the display name for a floor index.
-pub fn get_floor_name(floor : Int) -> String {
+pub fn get_floor_name(floor : Int32) -> String {
   if floor == 0 {
     "The Crypt"
   } else if floor == 1 {
@@ -108,19 +112,19 @@ pub fn get_floor_name(floor : Int) -> String {
 
 ///|
 /// Returns additive HP scaling applied to enemies on this floor.
-pub fn get_enemy_hp_scale(floor : Int) -> Int {
+pub fn get_enemy_hp_scale(floor : Int32) -> Int32 {
   10 + floor * 5
 }
 
 ///|
 /// Returns additive attack scaling applied to enemies on this floor.
-pub fn get_enemy_atk_scale(floor : Int) -> Int {
+pub fn get_enemy_atk_scale(floor : Int32) -> Int32 {
   3 + floor * 2
 }
 
 ///|
 /// Returns additive defense scaling applied to enemies on this floor.
-pub fn get_enemy_def_scale(floor : Int) -> Int {
+pub fn get_enemy_def_scale(floor : Int32) -> Int32 {
   1 + floor
 }
 
@@ -134,7 +138,7 @@ pub fn get_enemy_def_scale(floor : Int) -> Int {
 
 ///|
 /// Returns how many traps should be spawned on a floor.
-pub fn get_floor_trap_count(floor : Int) -> Int {
+pub fn get_floor_trap_count(floor : Int32) -> Int32 {
   if floor == 0 {
     1
   } else if floor <= 2 {
@@ -155,7 +159,7 @@ pub fn get_floor_trap_count(floor : Int) -> Int {
 
 ///|
 /// Chooses a trap type for the floor using the provided random roll.
-pub fn get_available_trap_type(floor : Int, roll : Int) -> Int {
+pub fn get_available_trap_type(floor : Int32, roll : Int32) -> Int32 {
   if floor <= 1 {
     0
   } else if floor <= 3 {
@@ -204,7 +208,7 @@ pub fn get_available_trap_type(floor : Int, roll : Int) -> Int {
 
 ///|
 /// Returns the common-rarity drop weight for a floor.
-pub fn get_rarity_weight_common(floor : Int) -> Int {
+pub fn get_rarity_weight_common(floor : Int32) -> Int32 {
   if floor <= 2 {
     60
   } else if floor <= 5 {
@@ -216,7 +220,7 @@ pub fn get_rarity_weight_common(floor : Int) -> Int {
 
 ///|
 /// Returns the uncommon-rarity drop weight for a floor.
-pub fn get_rarity_weight_uncommon(floor : Int) -> Int {
+pub fn get_rarity_weight_uncommon(floor : Int32) -> Int32 {
   if floor <= 2 {
     30
   } else if floor <= 5 {
@@ -228,7 +232,7 @@ pub fn get_rarity_weight_uncommon(floor : Int) -> Int {
 
 ///|
 /// Returns the rare-rarity drop weight for a floor.
-pub fn get_rarity_weight_rare(floor : Int) -> Int {
+pub fn get_rarity_weight_rare(floor : Int32) -> Int32 {
   if floor <= 2 {
     8
   } else if floor <= 5 {
@@ -240,7 +244,7 @@ pub fn get_rarity_weight_rare(floor : Int) -> Int {
 
 ///|
 /// Returns the epic-rarity drop weight for a floor.
-pub fn get_rarity_weight_epic(floor : Int) -> Int {
+pub fn get_rarity_weight_epic(floor : Int32) -> Int32 {
   if floor <= 2 {
     2
   } else if floor <= 5 {
@@ -252,7 +256,7 @@ pub fn get_rarity_weight_epic(floor : Int) -> Int {
 
 ///|
 /// Returns the legendary-rarity drop weight for a floor.
-pub fn get_rarity_weight_legendary(floor : Int) -> Int {
+pub fn get_rarity_weight_legendary(floor : Int32) -> Int32 {
   if floor <= 2 {
     0
   } else if floor <= 5 {
@@ -266,7 +270,7 @@ pub fn get_rarity_weight_legendary(floor : Int) -> Int {
 
 ///|
 /// Returns the boss HP value for a floor.
-pub fn get_boss_hp(floor : Int) -> Int {
+pub fn get_boss_hp(floor : Int32) -> Int32 {
   if floor == 4 {
     150 + get_enemy_hp_scale(floor) * 3
   } else if floor == 9 {
@@ -278,7 +282,7 @@ pub fn get_boss_hp(floor : Int) -> Int {
 
 ///|
 /// Returns the boss attack value for a floor.
-pub fn get_boss_atk(floor : Int) -> Int {
+pub fn get_boss_atk(floor : Int32) -> Int32 {
   if floor == 4 {
     12 + get_enemy_atk_scale(floor) * 2
   } else if floor == 9 {
@@ -290,7 +294,7 @@ pub fn get_boss_atk(floor : Int) -> Int {
 
 ///|
 /// Returns the boss defense value for a floor.
-pub fn get_boss_def(floor : Int) -> Int {
+pub fn get_boss_def(floor : Int32) -> Int32 {
   if floor == 4 {
     6 + get_enemy_def_scale(floor) * 2
   } else if floor == 9 {
@@ -306,7 +310,7 @@ pub fn get_boss_def(floor : Int) -> Int {
 
 ///|
 /// Returns the shop item type id for a shop slot.
-pub fn get_shop_item_type(slot : Int) -> Int {
+pub fn get_shop_item_type(slot : Int32) -> Int32 {
   if slot == 0 {
     1
   } else if slot == 1 {
@@ -324,7 +328,7 @@ pub fn get_shop_item_type(slot : Int) -> Int {
 
 ///|
 /// Returns the shop price in gold for a shop slot.
-pub fn get_shop_item_price(slot : Int) -> Int {
+pub fn get_shop_item_price(slot : Int32) -> Int32 {
   if slot == 0 {
     25
   } else if slot == 1 {
@@ -345,7 +349,7 @@ pub fn get_shop_item_price(slot : Int) -> Int {
 ///|
 /// Returns a randomized shop item (kind, price) based on floor and a random roll.
 /// Higher floors have access to better items.
-pub fn get_random_shop_item(floor : Int, roll : Int) -> (Int, Int) {
+pub fn get_random_shop_item(floor : Int32, roll : Int32) -> (Int32, Int32) {
   let r = if roll < 0 { -roll } else { roll }
   if floor <= 2 {
     // Early floors: basic consumables
@@ -408,7 +412,7 @@ pub fn get_random_shop_item(floor : Int, roll : Int) -> (Int, Int) {
 
 ///|
 /// Returns total XP required to reach the provided player level.
-pub fn get_xp_for_level(level : Int) -> Int {
+pub fn get_xp_for_level(level : Int32) -> Int32 {
   100 + (level - 1) * 50
 }
 
@@ -416,7 +420,7 @@ pub fn get_xp_for_level(level : Int) -> Int {
 
 ///|
 /// Returns how many locked doors to place on a floor.
-pub fn get_locked_door_count(floor : Int) -> Int {
+pub fn get_locked_door_count(floor : Int32) -> Int32 {
   if floor <= 1 {
     0
   } else if floor <= 4 {
@@ -432,7 +436,7 @@ pub fn get_locked_door_count(floor : Int) -> Int {
 
 ///|
 /// Returns whether this floor should generate a shop room.
-pub fn floor_has_shop(floor : Int) -> Bool {
+pub fn floor_has_shop(floor : Int32) -> Bool {
   floor == 2 || floor == 5 || floor == 7
 }
 
@@ -440,7 +444,7 @@ pub fn floor_has_shop(floor : Int) -> Bool {
 
 ///|
 /// Returns whether this floor should generate a shrine room.
-pub fn floor_has_shrine(floor : Int) -> Bool {
+pub fn floor_has_shrine(floor : Int32) -> Bool {
   floor == 1 || floor == 3 || floor == 6 || floor == 8
 }
 
@@ -448,7 +452,7 @@ pub fn floor_has_shrine(floor : Int) -> Bool {
 
 ///|
 /// Returns the number of torches to place per room for a theme.
-pub fn get_torches_per_room(theme : Int) -> Int {
+pub fn get_torches_per_room(theme : Int32) -> Int32 {
   if theme == 0 {
     2
   } else if theme == 1 {

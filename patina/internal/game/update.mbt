@@ -93,7 +93,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   // Deep copy regions for the working copy
   let regions : Array[@types.Region] = []
@@ -180,7 +180,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_region_at(mx : Int, my : Int) -> Int {
+fn get_region_at(mx : Int32, my : Int32) -> Int32 {
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
   let sz = @types.region_size
@@ -214,7 +214,7 @@ fn get_region_at(mx : Int, my : Int) -> Int {
 fn try_apply_tool(
   game : @types.Game,
   level : @types.Level,
-  region_idx : Int,
+  region_idx : Int32,
 ) -> Unit {
   let budget = match game.current_budget {
     Some(b) => b
@@ -315,7 +315,7 @@ fn undo_last(game : @types.Game) -> Unit {
 fn restore_region_damage(
   game : @types.Game,
   _level : @types.Level,
-  region_idx : Int,
+  region_idx : Int32,
   _prev_treatments : Array[@types.ToolKind],
 ) -> Unit {
   // Get the original level data to restore damage types

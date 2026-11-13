@@ -1,26 +1,26 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 820
+let sh : Int32 = 820
 
 ///|
 /// Left edge of the billiard table in pixels.
-let table_x : Int = 90
+let table_x : Int32 = 90
 
 ///|
 /// Top edge of the billiard table in pixels.
-let table_y : Int = 120
+let table_y : Int32 = 120
 
 ///|
 /// Width of the billiard table in pixels.
-let table_w : Int = 1100
+let table_w : Int32 = 1100
 
 ///|
 /// Height of the billiard table in pixels.
-let table_h : Int = 620
+let table_h : Int32 = 620
 
 ///|
 /// Radius of each billiard ball in pixels.
@@ -32,7 +32,7 @@ let portal_r : Float = 30.0
 
 ///|
 /// Maximum number of balls in the simulation pool (cue ball + target balls).
-let max_balls : Int = 12
+let max_balls : Int32 = 12
 
 ///|
 /// A billiard ball with position, velocity, active state, identity, and portal cooldown.
@@ -42,7 +42,7 @@ struct Ball {
   mut vx : Float
   mut vy : Float
   mut active : Bool
-  id : Int
+  id : Int32
   mut portal_cd : Float
 }
 
@@ -63,10 +63,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -78,11 +78,11 @@ fn inside_rect(
 /// Writes a new ball entry at index `i` with the given position, active flag, and id; velocities and portal cooldown reset to zero.
 fn set_ball(
   balls : Array[Ball],
-  i : Int,
+  i : Int32,
   x : Float,
   y : Float,
   active : Bool,
-  id : Int,
+  id : Int32,
 ) -> Unit {
   balls[i] = { x, y, vx: 0.0, vy: 0.0, active, id, portal_cd: 0.0, }
 }
@@ -109,7 +109,7 @@ fn cue_spawn_y() -> Float {
 
 ///|
 /// Clears all balls, places the cue ball, arranges target balls in a triangle rack sized for the given level, and returns the shot allowance.
-fn reset_level(level : Int, balls : Array[Ball]) -> Int {
+fn reset_level(level : Int32, balls : Array[Ball]) -> Int32 {
   clear_balls(balls)
 
   let cx = cue_spawn_x()
@@ -175,7 +175,7 @@ fn moving_any(balls : Array[Ball]) -> Bool {
 
 ///|
 /// Returns the X pixel coordinate of pocket `i` (0-2 top row, 3-5 bottom row).
-fn pocket_x(i : Int) -> Float {
+fn pocket_x(i : Int32) -> Float {
   if i == 0 {
     Float::from_int(table_x + 8)
   } else if i == 1 {
@@ -193,7 +193,7 @@ fn pocket_x(i : Int) -> Float {
 
 ///|
 /// Returns the Y pixel coordinate of pocket `i` (top rail for 0-2, bottom rail for 3-5).
-fn pocket_y(i : Int) -> Float {
+fn pocket_y(i : Int32) -> Float {
   if i <= 2 {
     Float::from_int(table_y + 8)
   } else {
@@ -235,7 +235,7 @@ fn goal_opening(y : Float) -> Bool {
 
 ///|
 /// Returns the paired portal index for the given portal (0↔1 and 2↔3).
-fn portal_pair(idx : Int) -> Int {
+fn portal_pair(idx : Int32) -> Int32 {
   if idx == 0 {
     1
   } else if idx == 1 {
@@ -249,7 +249,7 @@ fn portal_pair(idx : Int) -> Int {
 
 ///|
 /// Returns the current pixel position `(x, y)` of portal `idx` using sinusoidal drift driven by time `t`.
-fn portal_pos(t : Float, idx : Int) -> (Float, Float) {
+fn portal_pos(t : Float, idx : Int32) -> (Float, Float) {
   let left = Float::from_int(table_x)
   let top = Float::from_int(table_y)
   let right = Float::from_int(table_x + table_w)
@@ -278,7 +278,7 @@ fn portal_pos(t : Float, idx : Int) -> (Float, Float) {
 
 ///|
 /// Returns the index of the first portal whose center is within `portal_r` of `(x, y)`, or -1 if none.
-fn nearest_portal_idx(t : Float, x : Float, y : Float) -> Int {
+fn nearest_portal_idx(t : Float, x : Float, y : Float) -> Int32 {
   let mut result = -1
   for i in 0..<4 {
     let (px, py) = portal_pos(t, i)
@@ -294,7 +294,7 @@ fn nearest_portal_idx(t : Float, x : Float, y : Float) -> Int {
 
 ///|
 /// Returns the render color for ball `i` (0=white cue, 1-5 cycling through gold/cyan/red/green/pink, 6=yellow).
-fn color_for_id(i : Int) -> @raylib.Color {
+fn color_for_id(i : Int32) -> @raylib.Color {
   if i == 0 {
     @raylib.Color::new(246, 246, 250, 255)
   } else if i % 6 == 1 {

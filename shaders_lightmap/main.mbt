@@ -1,5 +1,5 @@
 ///|
-const MapSize : Int = 10
+const MapSize : Int32 = 10
 
 ///|
 fn float_array_to_fixed(arr : @raylib.FloatArray) -> FixedArray[Float] {

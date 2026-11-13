@@ -1,10 +1,10 @@
 ///|
-fn cell_x(col : Int) -> Int {
+fn cell_x(col : Int32) -> Int32 {
   @types.grid_offset_x + col * @types.cell_size
 }
 
 ///|
-fn cell_y(row : Int) -> Int {
+fn cell_y(row : Int32) -> Int32 {
   @types.grid_offset_y + row * @types.cell_size
 }
 

@@ -33,7 +33,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-pub fn abs_int(v : Int) -> Int {
+pub fn abs_int(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -42,12 +42,12 @@ pub fn abs_int(v : Int) -> Int {
 }
 
 ///|
-pub fn manhattan(x1 : Int, y1 : Int, x2 : Int, y2 : Int) -> Int {
+pub fn manhattan(x1 : Int32, y1 : Int32, x2 : Int32, y2 : Int32) -> Int32 {
   abs_int(x1 - x2) + abs_int(y1 - y2)
 }
 
 ///|
-pub fn direction_dx(dir : Direction) -> Int {
+pub fn direction_dx(dir : Direction) -> Int32 {
   match dir {
     North => 0
     South => 0
@@ -57,7 +57,7 @@ pub fn direction_dx(dir : Direction) -> Int {
 }
 
 ///|
-pub fn direction_dy(dir : Direction) -> Int {
+pub fn direction_dy(dir : Direction) -> Int32 {
   match dir {
     North => -1
     South => 1
@@ -67,7 +67,7 @@ pub fn direction_dy(dir : Direction) -> Int {
 }
 
 ///|
-pub fn direction_from_delta(dx : Int, dy : Int) -> Direction {
+pub fn direction_from_delta(dx : Int32, dy : Int32) -> Direction {
   if abs_int(dx) >= abs_int(dy) {
     if dx >= 0 {
       East
@@ -92,7 +92,7 @@ pub fn opposite_direction(dir : Direction) -> Direction {
 }
 
 ///|
-pub fn rand_next(state : Ref[UInt]) -> UInt {
+pub fn rand_next(state : Ref[UInt32]) -> UInt32 {
   let mut x = state.val
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -102,7 +102,7 @@ pub fn rand_next(state : Ref[UInt]) -> UInt {
 }
 
 ///|
-pub fn rand_range(state : Ref[UInt], low : Int, high : Int) -> Int {
+pub fn rand_range(state : Ref[UInt32], low : Int32, high : Int32) -> Int32 {
   if high <= low {
     return low
   }
@@ -112,41 +112,41 @@ pub fn rand_range(state : Ref[UInt], low : Int, high : Int) -> Int {
 }
 
 ///|
-pub fn tile_to_screen_x(gx : Int) -> Int {
+pub fn tile_to_screen_x(gx : Int32) -> Int32 {
   grid_offset_x + gx * tile_size
 }
 
 ///|
-pub fn tile_to_screen_y(gy : Int) -> Int {
+pub fn tile_to_screen_y(gy : Int32) -> Int32 {
   grid_offset_y + gy * tile_size
 }
 
 ///|
-pub fn screen_to_tile_x(sx : Int) -> Int {
+pub fn screen_to_tile_x(sx : Int32) -> Int32 {
   (sx - grid_offset_x) / tile_size
 }
 
 ///|
-pub fn screen_to_tile_y(sy : Int) -> Int {
+pub fn screen_to_tile_y(sy : Int32) -> Int32 {
   (sy - grid_offset_y) / tile_size
 }
 
 ///|
-pub fn tile_center_x(gx : Int) -> Int {
+pub fn tile_center_x(gx : Int32) -> Int32 {
   grid_offset_x + gx * tile_size + tile_size / 2
 }
 
 ///|
-pub fn tile_center_y(gy : Int) -> Int {
+pub fn tile_center_y(gy : Int32) -> Int32 {
   grid_offset_y + gy * tile_size + tile_size / 2
 }
 
 ///|
 pub fn draw_shadow_text(
   text : String,
-  x : Int,
-  y : Int,
-  size : Int,
+  x : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   @draw.draw_text(text, x + 1, y + 1, size, @raylib.black)
@@ -156,9 +156,9 @@ pub fn draw_shadow_text(
 ///|
 pub fn draw_center_text(
   text : String,
-  cx : Int,
-  y : Int,
-  size : Int,
+  cx : Int32,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let w = @draw.measure_text(text, size)
@@ -167,10 +167,10 @@ pub fn draw_center_text(
 
 ///|
 pub fn make_default_unit(
-  id : Int,
+  id : Int32,
   team : UnitTeam,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> CombatUnit {
   let (hp, max_hp, max_heat, mech_class, enemy_type) = match team {
     Player => (5, 5, max_heat, Vanguard, Rammer)
@@ -246,11 +246,11 @@ pub fn battle_has_augment(battle : BattleState, kind : AugmentKind) -> Bool {
 ///|
 pub fn new_anim(
   kind : AnimKind,
-  unit_id : Int,
-  sx : Int,
-  sy : Int,
-  tx : Int,
-  ty : Int,
+  unit_id : Int32,
+  sx : Int32,
+  sy : Int32,
+  tx : Int32,
+  ty : Int32,
 ) -> AnimState {
   {
     playing: false,
@@ -290,10 +290,10 @@ pub fn emit_shake(battle : BattleState, intensity : Float) -> Unit {
 /// Emit a screen flash.
 pub fn emit_flash(
   battle : BattleState,
-  r : Int,
-  g : Int,
-  b : Int,
-  alpha : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
+  alpha : Int32,
 ) -> Unit {
   battle.screen_fx.flash_timer = flash_duration
   battle.screen_fx.flash_r = r
@@ -314,10 +314,10 @@ pub fn emit_slowmo(battle : BattleState, seconds : Float) -> Unit {
 /// Emit a screen tint overlay.
 pub fn emit_tint(
   battle : BattleState,
-  r : Int,
-  g : Int,
-  b : Int,
-  alpha : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
+  alpha : Int32,
   dur : Float,
 ) -> Unit {
   battle.screen_fx.tint_timer = dur
@@ -331,13 +331,13 @@ pub fn emit_tint(
 /// Emit an expanding ring effect at grid position.
 pub fn emit_ring(
   battle : BattleState,
-  gx : Int,
-  gy : Int,
+  gx : Int32,
+  gy : Int32,
   max_r : Float,
   dur : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let cx = Float::from_int(tile_center_x(gx))
   let cy = Float::from_int(tile_center_y(gy))
@@ -358,12 +358,12 @@ pub fn emit_ring(
 /// Emit a floating text at grid position.
 pub fn emit_float_text(
   battle : BattleState,
-  gx : Int,
-  gy : Int,
+  gx : Int32,
+  gy : Int32,
   text : String,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
   sc : Float,
   gl : Bool,
 ) -> Unit {

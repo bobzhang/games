@@ -1,6 +1,6 @@
 ///|
 /// Get a hint for the given level.
-pub fn get_level_hint(index : Int) -> String {
+pub fn get_level_hint(index : Int32) -> String {
   match index {
     0 => "Place forest next to the ocean to watch it grow."
     1 => "Ocean blocks desert spread. Place water strategically."
@@ -33,7 +33,7 @@ pub fn get_level_hint(index : Int) -> String {
 
 ///|
 /// Get level description text for the level select.
-pub fn get_level_description(index : Int) -> String {
+pub fn get_level_description(index : Int32) -> String {
   match index {
     0 => "Plant your first forest near water"
     1 => "Create an oasis in the desert"
@@ -66,7 +66,7 @@ pub fn get_level_description(index : Int) -> String {
 
 ///|
 /// Get level definition by index (0-24).
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_0()
     1 => level_1()

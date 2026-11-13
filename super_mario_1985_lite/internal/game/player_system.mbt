@@ -9,8 +9,8 @@ fn @types.Game::collect_coin(game : @types.Game, x : Float, y : Float) -> Unit {
 ///|
 fn @types.Game::on_player_hit_block(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
+  tx : Int32,
+  ty : Int32,
   tile : @types.Tile,
 ) -> Unit {
   let player = game.player

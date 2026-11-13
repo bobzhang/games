@@ -63,7 +63,7 @@ fn draw_goal_progress(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_current_goals_count(game : @types.Game) -> Int {
+fn get_current_goals_count(game : @types.Game) -> Int32 {
   match game.trace {
     Some(trace) =>
       if game.trace_step >= 0 && game.trace_step < trace.states.length() {
@@ -101,7 +101,7 @@ fn draw_medal_info(game : @types.Game, def : @types.LevelDef) -> Unit {
 }
 
 ///|
-pub fn draw_star(x : Int, y : Int, filled : Bool) -> Unit {
+pub fn draw_star(x : Int32, y : Int32, filled : Bool) -> Unit {
   let col = if filled { @types.color_gold } else { @types.color_text_dim }
   // Simple star as a small filled circle for now
   @raylib.draw_circle(x, y, 8.0, col)
@@ -111,7 +111,7 @@ pub fn draw_star(x : Int, y : Int, filled : Bool) -> Unit {
 }
 
 ///|
-pub fn draw_stars(x : Int, y : Int, count : Int) -> Unit {
+pub fn draw_stars(x : Int32, y : Int32, count : Int32) -> Unit {
   for i in 0..<3 {
     draw_star(x + i * 22, y, i < count)
   }

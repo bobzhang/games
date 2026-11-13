@@ -340,7 +340,7 @@ fn @types.Game::draw_dust_trails(game : @types.Game) -> Unit {
     let dust_size : Float = 0.3 * speed_factor
     let dust_alpha_f : Float = 120.0 * speed_factor
     let dust_alpha = dust_alpha_f.to_int()
-    let dc : (Int, Int, Int) = if kart.on_surface_type == Dirt {
+    let dc : (Int32, Int32, Int32) = if kart.on_surface_type == Dirt {
       (160, 130, 80)
     } else {
       (80, 140, 60)
@@ -636,7 +636,7 @@ fn @types.Game::draw_drift_smoke(game : @types.Game) -> Unit {
     let drift_side : Float = if kart.drift_left { 1.0 } else { -1.0 }
     // Smoke amount scales with drift duration
     let smoke_intensity = @types.clampf(kart.drift_timer / 2.0, 0.3, 1.0)
-    let smoke_count : Int = if game.frame_counter % 2 == 0 { 2 } else { 1 }
+    let smoke_count : Int32 = if game.frame_counter % 2 == 0 { 2 } else { 1 }
     for s in 0..<smoke_count {
       let sf2 = Float::from_int(s) * 0.15
       // Behind rear wheel on drift side

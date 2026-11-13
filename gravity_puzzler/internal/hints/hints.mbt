@@ -11,7 +11,7 @@ pub fn hints_available(game : @types.Game) -> Bool {
 
 ///|
 /// Get remaining hints for current world
-pub fn hints_remaining(game : @types.Game) -> Int {
+pub fn hints_remaining(game : @types.Game) -> Int32 {
   let world = game.current_world
   if world >= 0 && world < game.hints.hints_remaining.length() {
     game.hints.hints_remaining[world]
@@ -70,13 +70,13 @@ pub fn get_current_level_hint_text(game : @types.Game) -> String {
 ///|
 /// Get hint text for a specific world and level.
 /// Delegates to the single canonical hint database in the content package.
-pub fn get_hint_text_for_level(world : Int, level : Int) -> String {
+pub fn get_hint_text_for_level(world : Int32, level : Int32) -> String {
   @content.get_level_hint(world, level)
 }
 
 ///|
 /// Get difficulty rating for a level (1-5 stars)
-pub fn get_level_difficulty(world : Int, level : Int) -> Int {
+pub fn get_level_difficulty(world : Int32, level : Int32) -> Int32 {
   // Difficulty increases across worlds and within worlds
   let base_diff = world + 1
   let level_diff = level / 3

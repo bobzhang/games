@@ -1,46 +1,46 @@
 ///|
 /// Window width in pixels for the 2048 scene.
-pub let screen_w : Int = 560
+pub let screen_w : Int32 = 560
 
 ///|
 /// Window height in pixels for the 2048 scene.
-pub let screen_h : Int = 740
+pub let screen_h : Int32 = 740
 
 ///|
 /// Target refresh rate used by the main loop.
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 /// Number of tiles per row and column on the board.
-pub let grid_size : Int = 4
+pub let grid_size : Int32 = 4
 
 ///|
 /// Total number of cells in the board grid.
-pub let cell_count : Int = grid_size * grid_size
+pub let cell_count : Int32 = grid_size * grid_size
 
 ///|
 /// Inner padding between board frame and first cell.
-pub let board_padding : Int = 16
+pub let board_padding : Int32 = 16
 
 ///|
 /// Pixel gap between adjacent cells.
-pub let cell_gap : Int = 12
+pub let cell_gap : Int32 = 12
 
 ///|
 /// Top edge of the board area in screen coordinates.
-pub let board_top : Int = 200
+pub let board_top : Int32 = 200
 
 ///|
 /// Left edge of the board area in screen coordinates.
-pub let board_left : Int = 16
+pub let board_left : Int32 = 16
 
 ///|
 /// Board side length in pixels.
-pub let board_size : Int = screen_w - board_left * 2
+pub let board_size : Int32 = screen_w - board_left * 2
 
 ///|
 /// Side length of a single cell in pixels after spacing is applied.
-pub let cell_size : Int = (
+pub let cell_size : Int32 = (
     board_size - board_padding * 2 - cell_gap * (grid_size - 1)
   ) /
   grid_size

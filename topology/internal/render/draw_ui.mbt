@@ -103,7 +103,7 @@ fn draw_ui(game : @types.Game) -> Unit {
 }
 
 ///|
-fn calc_match_pct(game : @types.Game) -> Int {
+fn calc_match_pct(game : @types.Game) -> Int32 {
   let current = game.current_shape
   let target = game.target_shape
   if target.cells.length() == 0 && current.cells.length() == 0 {
@@ -127,7 +127,7 @@ fn calc_match_pct(game : @types.Game) -> Int {
 }
 
 ///|
-fn draw_operations(game : @types.Game, base_x : Int, base_y : Int) -> Unit {
+fn draw_operations(game : @types.Game, base_x : Int32, base_y : Int32) -> Unit {
   @draw.draw_text("OPERATIONS", base_x, base_y, 18, @types.color_text)
   let ops : Array[@types.OpKind] = [Shift, Rotate, Flip, Grow, Shrink]
   let level_idx = game.current_level_idx
@@ -211,7 +211,7 @@ fn op_is_available(
 }
 
 ///|
-fn draw_direction_selector(base_x : Int, base_y : Int) -> Unit {
+fn draw_direction_selector(base_x : Int32, base_y : Int32) -> Unit {
   @draw.draw_text("DIRECTION", base_x, base_y, 16, @types.color_text)
   let dirs = ["N (W)", "E (D)", "S (S)", "W (A)"]
   for i in 0..<dirs.length() {
@@ -225,7 +225,7 @@ fn draw_direction_selector(base_x : Int, base_y : Int) -> Unit {
 }
 
 ///|
-fn draw_flip_selector(base_x : Int, base_y : Int) -> Unit {
+fn draw_flip_selector(base_x : Int32, base_y : Int32) -> Unit {
   @draw.draw_text("FLIP AXIS", base_x, base_y, 16, @types.color_text)
   let axes = ["H - Horizontal", "V - Vertical"]
   for i in 0..<axes.length() {
@@ -239,7 +239,7 @@ fn draw_flip_selector(base_x : Int, base_y : Int) -> Unit {
 }
 
 ///|
-fn draw_history(game : @types.Game, base_x : Int, base_y : Int) -> Unit {
+fn draw_history(game : @types.Game, base_x : Int32, base_y : Int32) -> Unit {
   @draw.draw_text("HISTORY", base_x, base_y, 16, @types.color_text)
   let history = game.ops_history
   let max_show = @types.mini(history.length(), 8)
@@ -265,7 +265,7 @@ fn draw_history(game : @types.Game, base_x : Int, base_y : Int) -> Unit {
 }
 
 ///|
-fn draw_controls(base_x : Int, base_y : Int) -> Unit {
+fn draw_controls(base_x : Int32, base_y : Int32) -> Unit {
   @draw.draw_text(
     "Z - Undo    R - Restart    ESC - Back", base_x, base_y, 14, @types.color_text_dim,
   )

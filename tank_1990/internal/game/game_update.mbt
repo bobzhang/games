@@ -17,7 +17,7 @@ fn @types.Game::damage_tile_at_point(
   game : @types.Game,
   world_x : Float,
   world_y : Float,
-  power : Int,
+  power : Int32,
 ) -> Bool {
   if !@world.point_in_world(world_x, world_y) {
     return true

@@ -1,41 +1,41 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 6
+pub let grid_cols : Int32 = 6
 
 ///|
-pub let grid_rows : Int = 6
+pub let grid_rows : Int32 = 6
 
 ///|
-pub let cell_size : Int = 72
+pub let cell_size : Int32 = 72
 
 ///|
-pub let cell_gap : Int = 4
+pub let cell_gap : Int32 = 4
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 100
+pub let grid_offset_y : Int32 = 100
 
 ///|
-pub let target_offset_x : Int = 740
+pub let target_offset_x : Int32 = 740
 
 ///|
-pub let target_offset_y : Int = 100
+pub let target_offset_y : Int32 = 100
 
 ///|
-pub let target_cell_size : Int = 48
+pub let target_cell_size : Int32 = 48
 
 ///|
-pub let target_cell_gap : Int = 2
+pub let target_cell_gap : Int32 = 2
 
 // Background and UI colors
 

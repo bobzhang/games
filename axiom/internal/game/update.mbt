@@ -84,7 +84,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, world : Int, index : Int) -> Unit {
+fn start_level(game : @types.Game, world : Int32, index : Int32) -> Unit {
   let def = @levels.get_level_def(world, index)
   let level = @levels.parse_level(def)
   game.level_def = Some(def)

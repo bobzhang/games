@@ -36,7 +36,7 @@ pub fn max_detection_meter(game : @types.Game) -> Float {
 
 ///|
 /// Count guards in each alert state
-pub fn count_alert_guards(game : @types.Game) -> (Int, Int, Int) {
+pub fn count_alert_guards(game : @types.Game) -> (Int32, Int32, Int32) {
   let mut patrolling = 0
   let mut suspicious = 0
   let mut alert = 0

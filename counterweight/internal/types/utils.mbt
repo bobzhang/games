@@ -52,7 +52,7 @@ pub fn cosf(a : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -61,7 +61,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -70,43 +70,43 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
 ///|
-pub fn grid_to_screen_x(gx : Int, offset_x : Int) -> Int {
+pub fn grid_to_screen_x(gx : Int32, offset_x : Int32) -> Int32 {
   offset_x + gx * cell_size + cell_size / 2
 }
 
 ///|
-pub fn grid_to_screen_y(gy : Int, offset_y : Int) -> Int {
+pub fn grid_to_screen_y(gy : Int32, offset_y : Int32) -> Int32 {
   offset_y + gy * cell_size + cell_size / 2
 }
 
 ///|
-pub fn node_screen_x(node : Node, offset_x : Int) -> Int {
+pub fn node_screen_x(node : Node, offset_x : Int32) -> Int32 {
   grid_to_screen_x(node.pos.x, offset_x)
 }
 
 ///|
-pub fn node_screen_y(node : Node, offset_y : Int) -> Int {
+pub fn node_screen_y(node : Node, offset_y : Int32) -> Int32 {
   grid_to_screen_y(node.pos.y, offset_y) +
   (node.height * Float::from_int(cell_size)).to_int()
 }
 
 ///|
-pub fn screen_to_grid_x(sx : Int, offset_x : Int) -> Int {
+pub fn screen_to_grid_x(sx : Int32, offset_x : Int32) -> Int32 {
   (sx - offset_x) / cell_size
 }
 
 ///|
-pub fn screen_to_grid_y(sy : Int, offset_y : Int) -> Int {
+pub fn screen_to_grid_y(sy : Int32, offset_y : Int32) -> Int32 {
   (sy - offset_y) / cell_size
 }
 
 ///|
-pub fn new_node(id : Int, gx : Int, gy : Int, kind : NodeKind) -> Node {
+pub fn new_node(id : Int32, gx : Int32, gy : Int32, kind : NodeKind) -> Node {
   {
     id,
     pos: vec2i(gx, gy),
@@ -134,7 +134,7 @@ pub fn new_rope() -> Rope {
 }
 
 ///|
-pub fn new_weight(node_id : Int, mass : Float) -> Weight {
+pub fn new_weight(node_id : Int32, mass : Float) -> Weight {
   {
     active: true,
     node_id,
@@ -146,7 +146,7 @@ pub fn new_weight(node_id : Int, mass : Float) -> Weight {
 }
 
 ///|
-pub fn new_crate(node_id : Int, mass : Float, target_height : Float) -> Crate {
+pub fn new_crate(node_id : Int32, mass : Float, target_height : Float) -> Crate {
   {
     active: true,
     node_id,
@@ -159,13 +159,13 @@ pub fn new_crate(node_id : Int, mass : Float, target_height : Float) -> Crate {
 }
 
 ///|
-pub fn new_platform(node_id : Int, width : Float) -> Platform {
+pub fn new_platform(node_id : Int32, width : Float) -> Platform {
   { active: true, node_id, width, height_val: 0.0, connected_to: -1, }
 }
 
 ///|
 pub fn new_bucket(
-  node_id : Int,
+  node_id : Int32,
   mass : Float,
   max_mass : Float,
   fill_rate : Float,
@@ -239,7 +239,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_from_index(i : Int) -> Tier {
+pub fn tier_from_index(i : Int32) -> Tier {
   if i == 0 {
     Basics
   } else if i == 1 {
@@ -250,7 +250,7 @@ pub fn tier_from_index(i : Int) -> Tier {
 }
 
 ///|
-pub fn level_index_for_tier(tier : Int, idx : Int) -> Int {
+pub fn level_index_for_tier(tier : Int32, idx : Int32) -> Int32 {
   if tier == 0 {
     idx
   } else if tier == 1 {
@@ -261,7 +261,7 @@ pub fn level_index_for_tier(tier : Int, idx : Int) -> Int {
 }
 
 ///|
-pub fn levels_in_tier(tier : Int) -> Int {
+pub fn levels_in_tier(tier : Int32) -> Int32 {
   if tier == 0 {
     tier1_levels
   } else if tier == 1 {
@@ -272,7 +272,7 @@ pub fn levels_in_tier(tier : Int) -> Int {
 }
 
 ///|
-pub fn tier_unlocked(scores : Array[LevelScore], tier : Int) -> Bool {
+pub fn tier_unlocked(scores : Array[LevelScore], tier : Int32) -> Bool {
   if tier == 0 {
     true
   } else if tier == 1 {
@@ -295,7 +295,7 @@ pub fn tier_unlocked(scores : Array[LevelScore], tier : Int) -> Bool {
 }
 
 ///|
-pub fn total_stars(scores : Array[LevelScore]) -> Int {
+pub fn total_stars(scores : Array[LevelScore]) -> Int32 {
   let mut total = 0
   for i in 0..<scores.length() {
     total += scores[i].stars
@@ -310,7 +310,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn find_node_at(nodes : Array[Node], gx : Int, gy : Int) -> Int {
+pub fn find_node_at(nodes : Array[Node], gx : Int32, gy : Int32) -> Int32 {
   for i in 0..<nodes.length() {
     if nodes[i].pos.x == gx && nodes[i].pos.y == gy {
       return i
@@ -328,7 +328,7 @@ pub fn can_connect(node : Node, side : RopeSide) -> Bool {
 }
 
 ///|
-pub fn get_mass_on_side(game : Game, node_id : Int, side : RopeSide) -> Float {
+pub fn get_mass_on_side(game : Game, node_id : Int32, side : RopeSide) -> Float {
   let conn = match side {
     LeftSide => game.nodes[node_id].left_conn
     RightSide => game.nodes[node_id].right_conn
@@ -357,7 +357,7 @@ pub fn get_mass_on_side(game : Game, node_id : Int, side : RopeSide) -> Float {
 }
 
 ///|
-pub fn count_connections(game : Game) -> Int {
+pub fn count_connections(game : Game) -> Int32 {
   let mut count = 0
   for i in 0..<game.ropes.length() {
     if game.ropes[i].active && !game.ropes[i].broken {

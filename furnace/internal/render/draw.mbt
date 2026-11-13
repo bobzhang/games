@@ -267,7 +267,12 @@ fn draw_grid(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_heat_source_icon(x : Int, y : Int, cs : Int, frame : Int) -> Unit {
+fn draw_heat_source_icon(
+  x : Int32,
+  y : Int32,
+  cs : Int32,
+  frame : Int32,
+) -> Unit {
   let cx = x + cs / 2
   let cy = y + cs / 2
   let time = Float::from_int(frame) * 0.05
@@ -278,9 +283,9 @@ fn draw_heat_source_icon(x : Int, y : Int, cs : Int, frame : Int) -> Unit {
 
 ///|
 fn draw_target_icon(
-  x : Int,
-  y : Int,
-  cs : Int,
+  x : Int32,
+  y : Int32,
+  cs : Int32,
   temp : Float,
   lo : Float,
   hi : Float,
@@ -599,7 +604,7 @@ fn draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars_small(x : Int, y : Int, rating : @types.StarRating) -> Unit {
+fn draw_stars_small(x : Int32, y : Int32, rating : @types.StarRating) -> Unit {
   let count = @types.star_count(rating)
   for i in 0..<3 {
     let color = if i < count {
@@ -612,7 +617,7 @@ fn draw_stars_small(x : Int, y : Int, rating : @types.StarRating) -> Unit {
 }
 
 ///|
-fn draw_stars_large(x : Int, y : Int, rating : @types.StarRating) -> Unit {
+fn draw_stars_large(x : Int32, y : Int32, rating : @types.StarRating) -> Unit {
   let count = @types.star_count(rating)
   for i in 0..<3 {
     let color = if i < count {
@@ -626,10 +631,10 @@ fn draw_stars_large(x : Int, y : Int, rating : @types.StarRating) -> Unit {
 
 ///|
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   color : @raylib.Color,
 ) -> Unit {
@@ -656,7 +661,7 @@ fn sinf(a : Float) -> Float {
 }
 
 ///|
-fn format_float(v : Float, decimals : Int) -> String {
+fn format_float(v : Float, decimals : Int32) -> String {
   if decimals <= 0 {
     return v.to_int().to_string()
   }

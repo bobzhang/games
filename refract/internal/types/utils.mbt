@@ -61,7 +61,7 @@ pub fn beam_color_is_black(c : BeamColor) -> Bool {
 }
 
 ///|
-pub fn beam_color_channel_count(c : BeamColor) -> Int {
+pub fn beam_color_channel_count(c : BeamColor) -> Int32 {
   let mut n = 0
   if c.r {
     n += 1
@@ -134,7 +134,7 @@ pub fn direction_ccw(d : Direction) -> Direction {
 }
 
 ///|
-pub fn direction_dx(d : Direction) -> Int {
+pub fn direction_dx(d : Direction) -> Int32 {
   match d {
     N => 0
     E => 1
@@ -144,7 +144,7 @@ pub fn direction_dx(d : Direction) -> Int {
 }
 
 ///|
-pub fn direction_dy(d : Direction) -> Int {
+pub fn direction_dy(d : Direction) -> Int32 {
   match d {
     N => -1
     E => 0
@@ -164,7 +164,7 @@ pub fn direction_name(d : Direction) -> String {
 }
 
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
@@ -191,7 +191,7 @@ pub fn new_grid() -> Grid {
 }
 
 ///|
-pub fn grid_get(grid : Grid, x : Int, y : Int) -> GridCell? {
+pub fn grid_get(grid : Grid, x : Int32, y : Int32) -> GridCell? {
   if x >= 0 && x < grid.width && y >= 0 && y < grid.height {
     Some(grid.cells[y * grid.width + x])
   } else {
@@ -200,7 +200,7 @@ pub fn grid_get(grid : Grid, x : Int, y : Int) -> GridCell? {
 }
 
 ///|
-pub fn grid_in_bounds(grid : Grid, x : Int, y : Int) -> Bool {
+pub fn grid_in_bounds(grid : Grid, x : Int32, y : Int32) -> Bool {
   x >= 0 && x < grid.width && y >= 0 && y < grid.height
 }
 
@@ -260,7 +260,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_index(t : Tier) -> Int {
+pub fn tier_index(t : Tier) -> Int32 {
   match t {
     Spectrum => 0
     Prisms => 1
@@ -269,7 +269,7 @@ pub fn tier_index(t : Tier) -> Int {
 }
 
 ///|
-pub fn index_to_tier(i : Int) -> Tier {
+pub fn index_to_tier(i : Int32) -> Tier {
   match i {
     0 => Spectrum
     1 => Prisms
@@ -321,7 +321,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn count_placed_components(grid : Grid) -> Int {
+pub fn count_placed_components(grid : Grid) -> Int32 {
   let mut count = 0
   for i in 0..<grid.cells.length() {
     let cell = grid.cells[i]

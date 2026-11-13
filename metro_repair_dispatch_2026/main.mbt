@@ -1,26 +1,26 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1366
+let sw : Int32 = 1366
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 768
+let sh : Int32 = 768
 
 ///|
 /// Left x coordinate of the metro network world area.
-let world_x : Int = 24
+let world_x : Int32 = 24
 
 ///|
 /// Top y coordinate of the metro network world area.
-let world_y : Int = 24
+let world_y : Int32 = 24
 
 ///|
 /// Width of the metro network world area in pixels.
-let world_w : Int = 930
+let world_w : Int32 = 930
 
 ///|
 /// Height of the metro network world area in pixels.
-let world_h : Int = 720
+let world_h : Int32 = 720
 
 ///|
 /// Left boundary of the world area as a float.
@@ -40,27 +40,27 @@ let world_b : Float = Float::from_int(world_y + world_h)
 
 ///|
 /// Left x coordinate of the right-side information panel.
-let panel_x : Int = world_x + world_w + 16
+let panel_x : Int32 = world_x + world_w + 16
 
 ///|
 /// Width of the right-side information panel in pixels.
-let panel_w : Int = sw - panel_x - 20
+let panel_w : Int32 = sw - panel_x - 20
 
 ///|
 /// Maximum number of metro stations.
-let max_stations : Int = 16
+let max_stations : Int32 = 16
 
 ///|
 /// Maximum number of track segments.
-let max_segments : Int = 36
+let max_segments : Int32 = 36
 
 ///|
 /// Maximum number of active trains.
-let max_trains : Int = 14
+let max_trains : Int32 = 14
 
 ///|
 /// Maximum particle pool size for visual effects.
-let max_particles : Int = 420
+let max_particles : Int32 = 420
 
 ///|
 /// The player-controlled maintenance drone with physics, energy, hull, repair cooldown, and scan state.
@@ -76,7 +76,7 @@ struct Drone {
   mut repair_cd : Float
   mut scan_cd : Float
   mut scan_t : Float
-  mut target_seg : Int
+  mut target_seg : Int32
   wobble : Float
 }
 
@@ -86,8 +86,8 @@ struct Station {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut line_mask : Int
-  mut crowd : Int
+  mut line_mask : Int32
+  mut crowd : Int32
   mut spawn_cd : Float
   mut wait_t : Float
   mut strain : Float
@@ -98,9 +98,9 @@ struct Station {
 /// A track segment between two stations with health, fault timer, wear, and traffic load.
 struct Segment {
   mut active : Bool
-  mut a : Int
-  mut b : Int
-  mut line : Int
+  mut a : Int32
+  mut b : Int32
+  mut line : Int32
   mut health : Float
   mut fault_t : Float
   mut wear : Float
@@ -112,23 +112,23 @@ struct Segment {
 /// A train travelling a route with passenger capacity, delay accumulation, and visual blink state.
 struct Train {
   mut active : Bool
-  mut route_id : Int
-  mut route_pos : Int
-  mut dir : Int
+  mut route_id : Int32
+  mut route_pos : Int32
+  mut dir : Int32
   mut t : Float
   mut speed : Float
-  mut passengers : Int
-  mut capacity : Int
+  mut passengers : Int32
+  mut capacity : Int32
   mut delay_t : Float
   mut blink_t : Float
-  mut color_id : Int
+  mut color_id : Int32
 }
 
 ///|
 /// A short-lived visual particle with kind, velocity, size, life, and pulse phase.
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -190,10 +190,10 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -273,10 +273,10 @@ fn add_station(
   stations : Array[Station],
   x : Float,
   y : Float,
-  line_mask : Int,
-  crowd : Int,
+  line_mask : Int32,
+  crowd : Int32,
   name : String,
-) -> Int {
+) -> Int32 {
   let i = @utils.first_index_by(stations, fn(station) { !station.active })
   if i < 0 {
     return -1
@@ -295,7 +295,12 @@ fn add_station(
 
 ///|
 /// Activates the first free segment slot connecting stations `a` and `b` on the given line, and returns its index.
-fn add_segment(segments : Array[Segment], a : Int, b : Int, line : Int) -> Int {
+fn add_segment(
+  segments : Array[Segment],
+  a : Int32,
+  b : Int32,
+  line : Int32,
+) -> Int32 {
   let i = @utils.first_index_by(segments, fn(segment) { !segment.active })
   if i < 0 {
     return -1
@@ -316,13 +321,13 @@ fn add_segment(segments : Array[Segment], a : Int, b : Int, line : Int) -> Int {
 /// Activates the first free train slot with the given route, position, direction, speed, capacity, and color, returning its index.
 fn add_train(
   trains : Array[Train],
-  route_id : Int,
-  route_pos : Int,
-  dir : Int,
+  route_id : Int32,
+  route_pos : Int32,
+  dir : Int32,
   speed : Float,
-  capacity : Int,
-  color_id : Int,
-) -> Int {
+  capacity : Int32,
+  color_id : Int32,
+) -> Int32 {
   let i = @utils.first_index_by(trains, fn(train) { !train.active })
   if i < 0 {
     return -1
@@ -347,7 +352,7 @@ fn add_particle(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for part in parts {
     if !part.active {
@@ -373,8 +378,8 @@ fn burst_particles(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  n : Int,
-  kind : Int,
+  n : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<n {
     add_particle(parts, x, y, kind)
@@ -434,21 +439,25 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 
 ///|
 /// Returns the number of stations in the given route array.
-fn route_len(route : Array[Int]) -> Int {
+fn route_len(route : Array[Int32]) -> Int32 {
   route.length()
 }
 
 ///|
 /// Returns the station index at position `pos` in the route, clamped to valid bounds.
-fn route_station(route : Array[Int], pos : Int) -> Int {
+fn route_station(route : Array[Int32], pos : Int32) -> Int32 {
   route[pos.clamp(min=0, max=route.length() - 1)]
 }
 
 ///|
 /// Advances the route position by `dir`, reversing direction at the ends; returns the new position and direction.
-fn next_route_pos(route : Array[Int], pos : Int, dir : Int) -> (Int, Int) {
-  let mut ndir : Int = if dir >= 0 { 1 } else { -1 }
-  let mut npos : Int = pos + ndir
+fn next_route_pos(
+  route : Array[Int32],
+  pos : Int32,
+  dir : Int32,
+) -> (Int32, Int32) {
+  let mut ndir : Int32 = if dir >= 0 { 1 } else { -1 }
+  let mut npos : Int32 = pos + ndir
 
   if npos < 0 || npos >= route.length() {
     ndir = -ndir
@@ -460,7 +469,7 @@ fn next_route_pos(route : Array[Int], pos : Int, dir : Int) -> (Int, Int) {
 
 ///|
 /// Returns the index of the active segment connecting stations `a` and `b` (in either order), or -1 if not found.
-fn find_segment(segments : Array[Segment], a : Int, b : Int) -> Int {
+fn find_segment(segments : Array[Segment], a : Int32, b : Int32) -> Int32 {
   @utils.first_index_by(segments, fn(segment) {
     segment.active &&
     ((segment.a == a && segment.b == b) || (segment.a == b && segment.b == a))
@@ -469,7 +478,7 @@ fn find_segment(segments : Array[Segment], a : Int, b : Int) -> Int {
 
 ///|
 /// Returns the world position `(x, y)` of the station at index `sid`.
-fn station_pos(stations : Array[Station], sid : Int) -> (Float, Float) {
+fn station_pos(stations : Array[Station], sid : Int32) -> (Float, Float) {
   (stations[sid].x, stations[sid].y)
 }
 
@@ -478,15 +487,15 @@ fn station_pos(stations : Array[Station], sid : Int) -> (Float, Float) {
 fn train_segment_points(
   train : Train,
   stations : Array[Station],
-  route0 : Array[Int],
-  route1 : Array[Int],
-) -> (Float, Float, Float, Float, Int, Int) {
-  let route : Array[Int] = if train.route_id == 0 { route0 } else { route1 }
-  let cur_pos : Int = train.route_pos.clamp(min=0, max=route.length() - 1)
-  let cur_sid : Int = route_station(route, cur_pos)
+  route0 : Array[Int32],
+  route1 : Array[Int32],
+) -> (Float, Float, Float, Float, Int32, Int32) {
+  let route : Array[Int32] = if train.route_id == 0 { route0 } else { route1 }
+  let cur_pos : Int32 = train.route_pos.clamp(min=0, max=route.length() - 1)
+  let cur_sid : Int32 = route_station(route, cur_pos)
 
   let (next_pos, _ndir) = next_route_pos(route, cur_pos, train.dir)
-  let next_sid : Int = route_station(route, next_pos)
+  let next_sid : Int32 = route_station(route, next_pos)
 
   let (ax, ay) = station_pos(stations, cur_sid)
   let (bx, by) = station_pos(stations, next_sid)
@@ -499,7 +508,7 @@ fn setup_network(
   stations : Array[Station],
   segments : Array[Segment],
   trains : Array[Train],
-) -> (Array[Int], Array[Int]) {
+) -> (Array[Int32], Array[Int32]) {
   clear_stations(stations)
   clear_segments(segments)
   clear_trains(trains)
@@ -519,8 +528,8 @@ fn setup_network(
   ignore(add_station(stations, 742.0, 472.0, 2, 14, "Garden")) // 9
   ignore(add_station(stations, 888.0, 588.0, 2, 18, "Bay End")) // 10
 
-  let route0 : Array[Int] = [0, 1, 2, 3, 4, 5]
-  let route1 : Array[Int] = [6, 7, 2, 8, 9, 10]
+  let route0 : Array[Int32] = [0, 1, 2, 3, 4, 5]
+  let route1 : Array[Int32] = [6, 7, 2, 8, 9, 10]
 
   for i = 0; i + 1 < route0.length(); i = i + 1 {
     ignore(add_segment(segments, route0[i], route0[i + 1], 0))
@@ -546,7 +555,7 @@ fn setup_network(
 
 ///|
 /// Returns the number of active segments that currently have an active fault.
-fn count_faults(segments : Array[Segment]) -> Int {
+fn count_faults(segments : Array[Segment]) -> Int32 {
   @utils.count_by(segments, fn(segment) {
     segment.active && segment.fault_t > 0.0
   })
@@ -554,13 +563,17 @@ fn count_faults(segments : Array[Segment]) -> Int {
 
 ///|
 /// Returns the total number of active track segments.
-fn count_active_segments(segments : Array[Segment]) -> Int {
+fn count_active_segments(segments : Array[Segment]) -> Int32 {
   @utils.count_by(segments, fn(segment) { segment.active })
 }
 
 ///|
 /// Ticks all stations: accumulates crowd passengers, updates strain, and returns the total network strain.
-fn update_stations(stations : Array[Station], dt : Float, tier : Int) -> Float {
+fn update_stations(
+  stations : Array[Station],
+  dt : Float,
+  tier : Int32,
+) -> Float {
   let mut total_strain : Float = 0.0
 
   for station in stations {
@@ -570,7 +583,7 @@ fn update_stations(stations : Array[Station], dt : Float, tier : Int) -> Float {
 
     station.spawn_cd = station.spawn_cd - dt
     if station.spawn_cd <= 0.0 {
-      let add_n : Int = @raylib.get_random_value(0, 2 + tier / 2)
+      let add_n : Int32 = @raylib.get_random_value(0, 2 + tier / 2)
       station.crowd = station.crowd + add_n
       station.crowd = station.crowd.clamp(min=0, max=180)
 
@@ -601,10 +614,10 @@ fn update_segments(
   segments : Array[Segment],
   stations : Array[Station],
   dt : Float,
-  tier : Int,
+  tier : Int32,
   parts : Array[Particle],
-) -> (Int, Float) {
-  let mut new_faults : Int = 0
+) -> (Int32, Float) {
+  let mut new_faults : Int32 = 0
   let mut health_sum : Float = 0.0
 
   for segment in segments {
@@ -669,14 +682,14 @@ fn update_trains(
   trains : Array[Train],
   segments : Array[Segment],
   stations : Array[Station],
-  route0 : Array[Int],
-  route1 : Array[Int],
+  route0 : Array[Int32],
+  route1 : Array[Int32],
   dt : Float,
   parts : Array[Particle],
-) -> (Int, Float, Int) {
-  let mut delivered_gain : Int = 0
+) -> (Int32, Float, Int32) {
+  let mut delivered_gain : Int32 = 0
   let mut delay_gain : Float = 0.0
-  let mut boarded_gain : Int = 0
+  let mut boarded_gain : Int32 = 0
 
   for train in trains {
     if !train.active {
@@ -690,14 +703,14 @@ fn update_trains(
       }
     }
 
-    let route : Array[Int] = if train.route_id == 0 { route0 } else { route1 }
-    let cur_pos : Int = train.route_pos.clamp(min=0, max=route_len(route) - 1)
-    let cur_sid : Int = route_station(route, cur_pos)
+    let route : Array[Int32] = if train.route_id == 0 { route0 } else { route1 }
+    let cur_pos : Int32 = train.route_pos.clamp(min=0, max=route_len(route) - 1)
+    let cur_sid : Int32 = route_station(route, cur_pos)
 
     let (next_pos, ndir) = next_route_pos(route, cur_pos, train.dir)
-    let next_sid : Int = route_station(route, next_pos)
+    let next_sid : Int32 = route_station(route, next_pos)
 
-    let seg_id : Int = find_segment(segments, cur_sid, next_sid)
+    let seg_id : Int32 = find_segment(segments, cur_sid, next_sid)
     if seg_id < 0 {
       train.delay_t = train.delay_t + dt
       delay_gain = delay_gain + dt
@@ -737,7 +750,7 @@ fn update_trains(
       delivered_gain = delivered_gain + train.passengers
       train.passengers = 0
 
-      let board : Int = if stations[next_sid].crowd < train.capacity {
+      let board : Int32 = if stations[next_sid].crowd < train.capacity {
         stations[next_sid].crowd
       } else {
         train.capacity
@@ -769,7 +782,7 @@ fn nearest_faulty_segment(
   stations : Array[Station],
   x : Float,
   y : Float,
-) -> (Int, Float, Float, Float) {
+) -> (Int32, Float, Float, Float) {
   for
     i in 0..<segments.length()
     best = -1, best_d2 = 99999999.0F, best_x = x, best_y = y {
@@ -797,12 +810,12 @@ fn apply_repair(
   segments : Array[Segment],
   stations : Array[Station],
   parts : Array[Particle],
-) -> Int {
+) -> Int32 {
   if drone.repair_cd > 0.0 || drone.energy <= 0.0 {
     return 0
   }
 
-  let mut repaired : Int = 0
+  let mut repaired : Int32 = 0
 
   for segment in segments {
     if !segment.active {
@@ -864,10 +877,10 @@ fn draw_world_bg(art : GameArt, t : Float) -> Unit {
 
   for i in 0..<36 {
     let fi : Float = Float::from_int(i)
-    let x : Int = (fi * 70.0 + t * (16.0 + Float::from_int(i % 5) * 4.0)).to_int() %
+    let x : Int32 = (fi * 70.0 + t * (16.0 + Float::from_int(i % 5) * 4.0)).to_int() %
       world_w +
       world_x
-    let y : Int = (fi * 122.0 + t * 22.0).to_int() % world_h + world_y
+    let y : Int32 = (fi * 122.0 + t * 22.0).to_int() % world_h + world_y
     @raylib.draw_circle(
       x,
       y,
@@ -878,7 +891,7 @@ fn draw_world_bg(art : GameArt, t : Float) -> Unit {
 
   // road grid hint
   for i in 0..<14 {
-    let y : Int = world_y + i * 52
+    let y : Int32 = world_y + i * 52
     @raylib.draw_line(
       world_x,
       y,
@@ -888,7 +901,7 @@ fn draw_world_bg(art : GameArt, t : Float) -> Unit {
     )
   }
   for i in 0..<18 {
-    let x : Int = world_x + i * 52
+    let x : Int32 = world_x + i * 52
     @raylib.draw_line(
       x,
       world_y,
@@ -932,7 +945,7 @@ fn segment_color(seg : Segment, selected : Bool) -> @raylib.Color {
 fn draw_segments(
   segments : Array[Segment],
   stations : Array[Station],
-  selected_fault : Int,
+  selected_fault : Int32,
   t : Float,
 ) -> Unit {
   for i in 0..<segments.length() {
@@ -975,8 +988,8 @@ fn draw_segments(
     }
 
     // tiny health tag
-    let mx : Int = ((ax + bx) * 0.5).to_int()
-    let my : Int = ((ay + by) * 0.5).to_int()
+    let mx : Int32 = ((ax + bx) * 0.5).to_int()
+    let my : Int32 = ((ay + by) * 0.5).to_int()
     @draw.draw_text(
       "\{segments[i].health.to_int()}%",
       mx - 22,
@@ -1027,7 +1040,7 @@ fn draw_stations(art : GameArt, stations : Array[Station]) -> Unit {
 
 ///|
 /// Returns the display colour for a train based on its color_id index.
-fn train_color(id : Int) -> @raylib.Color {
+fn train_color(id : Int32) -> @raylib.Color {
   if id % 5 == 0 {
     @raylib.Color::new(246, 194, 118, 252)
   } else if id % 5 == 1 {
@@ -1047,8 +1060,8 @@ fn draw_trains(
   art : GameArt,
   trains : Array[Train],
   stations : Array[Station],
-  route0 : Array[Int],
-  route1 : Array[Int],
+  route0 : Array[Int32],
+  route1 : Array[Int32],
 ) -> Unit {
   for train in trains {
     if !train.active {
@@ -1078,7 +1091,7 @@ fn draw_trains(
     )
 
     if train.blink_t > 0.0 {
-      let a : Int = (train.blink_t * 400.0).to_int().clamp(min=0, max=255)
+      let a : Int32 = (train.blink_t * 400.0).to_int().clamp(min=0, max=255)
       @raylib.draw_circle(
         x.to_int(),
         y.to_int(),
@@ -1115,8 +1128,8 @@ fn draw_drone(art : GameArt, drone : Drone, t : Float) -> Unit {
 ///|
 /// Draws the on-screen directional pad and FIX/SCAN action buttons for touch/mouse input.
 fn draw_touch_ui() -> Unit {
-  let pad_x : Int = 30
-  let pad_y : Int = sh - 194
+  let pad_x : Int32 = 30
+  let pad_y : Int32 = sh - 194
 
   @raylib.draw_rectangle(
     pad_x + 84,
@@ -1183,8 +1196,8 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(236, 244, 255, 238),
   )
 
-  let repair_x : Int = sw - 286
-  let repair_y : Int = sh - 178
+  let repair_x : Int32 = sw - 286
+  let repair_y : Int32 = sh - 178
   @raylib.draw_circle(
     repair_x,
     repair_y,
@@ -1199,8 +1212,8 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(250, 246, 244, 248),
   )
 
-  let scan_x : Int = sw - 158
-  let scan_y : Int = sh - 248
+  let scan_x : Int32 = sw - 158
+  let scan_y : Int32 = sh - 248
   @raylib.draw_circle(
     scan_x,
     scan_y,
@@ -1219,10 +1232,10 @@ fn draw_touch_ui() -> Unit {
 ///|
 /// Draws a labelled rectangular button with enabled/disabled and hover highlight states.
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   enabled : Bool,
   hover : Bool,
@@ -1243,7 +1256,7 @@ fn draw_button(
     h,
     @raylib.Color::new(214, 228, 252, 246),
   )
-  let tw : Int = @draw.measure_text(label, 23)
+  let tw : Int32 = @draw.measure_text(label, 23)
   @draw.draw_text(
     label,
     x + (w - tw) / 2,
@@ -1322,8 +1335,8 @@ fn main {
     }
   })
 
-  let route0 : Array[Int] = []
-  let route1 : Array[Int] = []
+  let route0 : Array[Int32] = []
+  let route1 : Array[Int32] = []
 
   let drone : Drone = {
     x: 130.0,
@@ -1341,16 +1354,16 @@ fn main {
     wobble: randf(0.0, 20.0),
   }
 
-  let mut state : Int = 0 // 0 menu 1 play 2 win 3 lose
+  let mut state : Int32 = 0 // 0 menu 1 play 2 win 3 lose
   let mut timer : Float = 320.0
-  let mut delivered : Int = 0
-  let mut target_delivered : Int = 920
-  let mut score : Int = 0
-  let mut tier : Int = 1
+  let mut delivered : Int32 = 0
+  let mut target_delivered : Int32 = 920
+  let mut score : Int32 = 0
+  let mut tier : Int32 = 1
   let mut strain_total : Float = 0.0
   let mut delay_accum : Float = 0.0
-  let mut outages_handled : Int = 0
-  let mut crowd_peak : Int = 0
+  let mut outages_handled : Int32 = 0
+  let mut crowd_peak : Int32 = 0
 
   let mut event_cd : Float = 8.0
 
@@ -1476,8 +1489,8 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyH)
 
       if hold {
-        let pad_x : Int = 30
-        let pad_y : Int = sh - 194
+        let pad_x : Int32 = 30
+        let pad_y : Int32 = sh - 194
         if inside_rect(mouse.x, mouse.y, pad_x + 84, pad_y, 76, 58) {
           move_u = true
         }
@@ -1544,10 +1557,10 @@ fn main {
       }
 
       // auto-recharge around depot area
-      let depot_x : Int = world_x + 20
-      let depot_y : Int = world_y + 20
-      let depot_w : Int = 180
-      let depot_h : Int = 110
+      let depot_x : Int32 = world_x + 20
+      let depot_y : Int32 = world_y + 20
+      let depot_w : Int32 = 180
+      let depot_h : Int32 = 110
       if inside_rect(drone.x, drone.y, depot_x, depot_y, depot_w, depot_h) {
         drone.energy = minf(drone.energy_max, drone.energy + dt * 22.0)
         drone.hull = minf(drone.hull_max, drone.hull + dt * 8.0)
@@ -1555,7 +1568,7 @@ fn main {
 
       // repair action
       if repair_action {
-        let repaired : Int = apply_repair(drone, segments, stations, parts)
+        let repaired : Int32 = apply_repair(drone, segments, stations, parts)
         if repaired > 0 {
           outages_handled = outages_handled + repaired
           score = score + repaired * 26
@@ -1576,7 +1589,7 @@ fn main {
           drone.target_seg = sid
           drone.scan_t = 2.0
           drone.scan_cd = 2.4
-          let d : Int = d2.sqrt().to_int()
+          let d : Int32 = d2.sqrt().to_int()
           msg = "Scan lock: fault \{d}m"
           msg_t = 1.0
           burst_particles(parts, drone.x, drone.y, 10, 2)
@@ -1620,11 +1633,11 @@ fn main {
           event_cd = 2.5
         }
 
-        let shock_n : Int = 1 + @raylib.get_random_value(0, tier / 3)
-        let mut affected : Int = 0
+        let shock_n : Int32 = 1 + @raylib.get_random_value(0, tier / 3)
+        let mut affected : Int32 = 0
 
         for _i in 0..<shock_n {
-          let sid : Int = @raylib.get_random_value(0, segments.length() - 1)
+          let sid : Int32 = @raylib.get_random_value(0, segments.length() - 1)
           if !segments[sid].active {
             continue
           }
@@ -1655,7 +1668,7 @@ fn main {
       }
 
       // crowd peak
-      let mut crowd_now : Int = 0
+      let mut crowd_now : Int32 = 0
       for station in stations {
         if station.active {
           crowd_now = crowd_now + station.crowd
@@ -1665,7 +1678,7 @@ fn main {
         crowd_peak = crowd_now
       }
 
-      let seg_n : Int = count_active_segments(segments)
+      let seg_n : Int32 = count_active_segments(segments)
       let avg_health : Float = if seg_n > 0 {
         health_sum / Float::from_int(seg_n)
       } else {
@@ -1725,16 +1738,16 @@ fn main {
 
     draw_world_bg(art, scene_t)
 
-    let selected_fault : Int = drone.target_seg
+    let selected_fault : Int32 = drone.target_seg
     draw_segments(segments, stations, selected_fault, scene_t)
     draw_stations(art, stations)
     draw_trains(art, trains, stations, route0, route1)
 
     // depot
-    let depot_x : Int = world_x + 20
-    let depot_y : Int = world_y + 20
-    let depot_w : Int = 180
-    let depot_h : Int = 110
+    let depot_x : Int32 = world_x + 20
+    let depot_y : Int32 = world_y + 20
+    let depot_w : Int32 = 180
+    let depot_h : Int32 = 110
     @raylib.draw_rectangle(
       depot_x,
       depot_y,
@@ -1781,7 +1794,7 @@ fn main {
           stations[segments[drone.target_seg].b].y
         ) *
         0.5
-      let alpha : Int = (drone.scan_t * 130.0).to_int().clamp(min=0, max=220)
+      let alpha : Int32 = (drone.scan_t * 130.0).to_int().clamp(min=0, max=220)
       @raylib.draw_line_ex(
         @raylib.Vector2::new(drone.x, drone.y),
         @raylib.Vector2::new(tx, ty),
@@ -1964,7 +1977,7 @@ fn main {
     )
 
     fn draw_bar(
-      y : Int,
+      y : Int32,
       label : String,
       value : Float,
       maxv : Float,
@@ -1985,7 +1998,7 @@ fn main {
         @raylib.Color::new(24, 32, 48, 255),
       )
       let p01 : Float = clampf(value / maxv, 0.0, 1.0)
-      let fw : Int = (Float::from_int(panel_w - 32) * p01).to_int()
+      let fw : Int32 = (Float::from_int(panel_w - 32) * p01).to_int()
       @raylib.draw_rectangle(panel_x + 16, y + 28, fw, 22, col)
       @raylib.draw_rectangle_lines(
         panel_x + 16,
@@ -2065,8 +2078,8 @@ fn main {
     )
 
     if msg_t > 0.0 {
-      let bw : Int = @draw.measure_text(msg, 30) + 44
-      let bx : Int = sw / 2 - bw / 2
+      let bw : Int32 = @draw.measure_text(msg, 30) + 44
+      let bx : Int32 = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
         16,

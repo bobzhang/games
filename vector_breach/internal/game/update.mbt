@@ -59,7 +59,7 @@ fn update_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn setup_battle(game : @types.Game, mission_id : Int) -> Unit {
+fn setup_battle(game : @types.Game, mission_id : Int32) -> Unit {
   let objective : @types.Objective = match mission_id % 3 {
     0 => DefendGrid(5)
     1 => Survive(6)
@@ -115,10 +115,10 @@ fn setup_battle(game : @types.Game, mission_id : Int) -> Unit {
 }
 
 ///|
-fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
+fn place_terrain(battle : @types.BattleState, mission_id : Int32) -> Unit {
   let tier = get_difficulty_tier(mission_id)
   // Set some tiles based on mission layout
-  let seed : Ref[UInt] = {
+  let seed : Ref[UInt32] = {
     val: (mission_id * 7919 + 1234).reinterpret_as_uint(),
   }
   // Add walls - more on harder missions
@@ -182,7 +182,7 @@ fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
 
 ///|
 /// Get the difficulty tier for a mission (0=Easy, 1=Medium, 2=Hard, 3=Expert).
-fn get_difficulty_tier(mission_id : Int) -> Int {
+fn get_difficulty_tier(mission_id : Int32) -> Int32 {
   if mission_id <= 2 {
     0 // Easy: missions 1-2
   } else if mission_id <= 4 {
@@ -197,7 +197,7 @@ fn get_difficulty_tier(mission_id : Int) -> Int {
 ///|
 /// Scale enemy HP based on mission difficulty.
 /// Formula: base * (1.0 + mission * 0.15), rounded.
-fn scale_enemy_hp(base_hp : Int, mission_id : Int) -> Int {
+fn scale_enemy_hp(base_hp : Int32, mission_id : Int32) -> Int32 {
   let scale = 1.0F + Float::from_int(mission_id) * 0.15F
   let scaled = Float::from_int(base_hp) * scale
   let result = scaled.to_int()
@@ -210,7 +210,7 @@ fn scale_enemy_hp(base_hp : Int, mission_id : Int) -> Int {
 
 ///|
 /// Get available enemy types based on mission difficulty tier.
-fn get_available_enemy_types(tier : Int) -> Array[@types.EnemyType] {
+fn get_available_enemy_types(tier : Int32) -> Array[@types.EnemyType] {
   match tier {
     0 => [Rammer, Artillery, Leaper] // Easy: basic enemies
     1 => [Rammer, Artillery, Leaper, BeamTurret, MineLayer] // Medium
@@ -222,7 +222,7 @@ fn get_available_enemy_types(tier : Int) -> Array[@types.EnemyType] {
 }
 
 ///|
-fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
+fn spawn_enemies(battle : @types.BattleState, mission_id : Int32) -> Unit {
   let tier = get_difficulty_tier(mission_id)
   let base_count = 3 + mission_id / 2
   let max_enemies = match tier {
@@ -237,7 +237,7 @@ fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
     base_count
   }
   let available_types = get_available_enemy_types(tier)
-  let seed : Ref[UInt] = {
+  let seed : Ref[UInt32] = {
     val: (mission_id * 31337 + 42).reinterpret_as_uint(),
   }
   for i = 0; i < enemy_count; i = i + 1 {
@@ -328,7 +328,7 @@ fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
 
 ///|
 fn generate_enemy_intents(battle : @types.BattleState) -> Unit {
-  let seed : Ref[UInt] = {
+  let seed : Ref[UInt32] = {
     val: (battle.turn * 9973 + 5381).reinterpret_as_uint(),
   }
   for i = 0; i < battle.units.length(); i = i + 1 {
@@ -563,8 +563,8 @@ fn update_battle(game : @types.Game, dt : Float) -> Unit {
 fn handle_mouse_click(
   game : @types.Game,
   battle : @types.BattleState,
-  gx : Int,
-  gy : Int,
+  gx : Int32,
+  gy : Int32,
 ) -> Unit {
   let mech = match get_selected_unit(battle) {
     Some(u) => u
@@ -675,7 +675,7 @@ fn cycle_selected_mech(battle : @types.BattleState) -> Unit {
 
 ///|
 /// Count how many player mechs died in this battle.
-fn count_dead_player_mechs(battle : @types.BattleState) -> Int {
+fn count_dead_player_mechs(battle : @types.BattleState) -> Int32 {
   let mut count = 0
   for i = 0; i < battle.units.length(); i = i + 1 {
     let u = battle.units[i]
@@ -687,8 +687,8 @@ fn count_dead_player_mechs(battle : @types.BattleState) -> Int {
 }
 
 ///|
-fn get_player_ids(battle : @types.BattleState) -> Array[Int] {
-  let ids : Array[Int] = []
+fn get_player_ids(battle : @types.BattleState) -> Array[Int32] {
+  let ids : Array[Int32] = []
   for i = 0; i < battle.units.length(); i = i + 1 {
     if battle.units[i].team == Player &&
       battle.units[i].active &&
@@ -716,7 +716,7 @@ fn get_selected_unit(battle : @types.BattleState) -> @types.CombatUnit? {
 /// Vanguard: 0=Ram (adjacent/close), 1=Tractor Beam (range)
 /// Striker:  0=Blade (adjacent), 1=Dash Strike (range)
 /// Sentinel: 0=Cannon (range), 1=Artillery (area/far)
-fn select_ability_id(class_ : @types.MechClass, dist : Int) -> Int {
+fn select_ability_id(class_ : @types.MechClass, dist : Int32) -> Int32 {
   match class_ {
     Vanguard => if dist <= 1 { 0 } else { 1 }
     Striker => if dist <= 1 { 0 } else { 1 }
@@ -727,7 +727,7 @@ fn select_ability_id(class_ : @types.MechClass, dist : Int) -> Int {
 ///|
 /// Encode a (dx, dy) direction delta into an integer.
 /// 0=North, 1=South, 2=East, 3=West.
-fn encode_direction(dx : Int, dy : Int) -> Int {
+fn encode_direction(dx : Int32, dy : Int32) -> Int32 {
   if @types.abs_int(dy) > @types.abs_int(dx) {
     if dy < 0 {
       0
@@ -1041,7 +1041,7 @@ fn update_enemy_turn(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn find_unit_at(battle : @types.BattleState, x : Int, y : Int) -> Int? {
+fn find_unit_at(battle : @types.BattleState, x : Int32, y : Int32) -> Int32? {
   if !battle.grid.in_bounds(x, y) {
     return None
   }
@@ -1057,7 +1057,7 @@ fn find_unit_at(battle : @types.BattleState, x : Int, y : Int) -> Int? {
 fn update_reward(game : @types.Game) -> Unit {
   // Generate offered augments if empty
   if game.run.offered_augments.length() == 0 {
-    let seed : Ref[UInt] = { val: game.rng_state, }
+    let seed : Ref[UInt32] = { val: game.rng_state, }
     game.run.offered_augments = @content.pick_random_augments(
       seed,
       game.run.augments,
@@ -1218,7 +1218,7 @@ fn go_to_next_mission(game : @types.Game) -> Unit {
 fn handle_terrain_ability(
   game : @types.Game,
   battle : @types.BattleState,
-  ability_id : Int,
+  ability_id : Int32,
 ) -> Unit {
   let mech = match get_selected_unit(battle) {
     Some(u) => u
@@ -1376,7 +1376,11 @@ fn update_run_summary(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_hover_info(battle : @types.BattleState, cx : Int, cy : Int) -> String {
+fn get_hover_info(
+  battle : @types.BattleState,
+  cx : Int32,
+  cy : Int32,
+) -> String {
   if !battle.grid.in_bounds(cx, cy) {
     return ""
   }

@@ -616,8 +616,8 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::fire_fleet_broadside(
   game : @types.Game,
-  fleet_idx : Int,
-  enemy_idx : Int,
+  fleet_idx : Int32,
+  enemy_idx : Int32,
 ) -> Unit {
   let fs = game.fleet_ships[fleet_idx]
   let target = game.enemies[enemy_idx]
@@ -628,7 +628,7 @@ fn @types.Game::fire_fleet_broadside(
   } else {
     fs.heading - @types.pi / 2.0
   }
-  let shots : Int = (fs.cannon_count / 2).min(3)
+  let shots : Int32 = (fs.cannon_count / 2).min(3)
   for i in 0..<shots {
     let idx = @types.alloc_cannonball(game)
     if idx < 0 {
@@ -758,7 +758,7 @@ fn @types.Game::update_fortress_combat(game : @types.Game, dt : Float) -> Unit {
       island.fortress_fire_timer = @types.fortress_fire_rate
       // Fire from fortress
       let cannon_count = island.fortress_cannons_active
-      let shots : Int = cannon_count.min(3)
+      let shots : Int32 = cannon_count.min(3)
       for j in 0..<shots {
         let idx = @types.alloc_cannonball(game)
         if idx < 0 {
@@ -902,7 +902,7 @@ fn @types.Game::complete_battle(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::start_battle(game : @types.Game, battle : Int) -> Unit {
+fn @types.Game::start_battle(game : @types.Game, battle : Int32) -> Unit {
   // Clear pools
   for i in 0..<game.enemies.length() {
     game.enemies[i] = @types.EnemyShip::inactive()

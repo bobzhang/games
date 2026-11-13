@@ -308,7 +308,10 @@ fn @types.Game::update_camera_chase(game : @types.Game, dt : Float) -> Unit {
 // Update kart surface detection
 
 ///|
-fn @types.Game::update_kart_surface(game : @types.Game, kart_idx : Int) -> Unit {
+fn @types.Game::update_kart_surface(
+  game : @types.Game,
+  kart_idx : Int32,
+) -> Unit {
   let kart = game.karts[kart_idx]
   if !kart.active {
     return
@@ -328,7 +331,7 @@ fn @types.Game::update_kart_surface(game : @types.Game, kart_idx : Int) -> Unit 
 ///|
 fn @types.Game::update_kart_wrong_way(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
   dt : Float,
 ) -> Unit {
   let kart = game.karts[kart_idx]
@@ -410,7 +413,7 @@ fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
     // Dust on dirt/grass
     if kart.on_surface_type == Dirt || kart.on_surface_type == Grass {
       if game.frame_counter % 6 == i % 6 {
-        let dc : (Int, Int, Int) = if kart.on_surface_type == Dirt {
+        let dc : (Int32, Int32, Int32) = if kart.on_surface_type == Dirt {
           (160, 130, 80)
         } else {
           (80, 140, 60)
@@ -699,7 +702,7 @@ fn @types.Game::spawn_falling_rocks(game : @types.Game) -> Unit {
 /// Checks if a kart collides with any falling rock obstacle and applies effects.
 fn @types.Game::check_falling_rock_collision(
   game : @types.Game,
-  kart_idx : Int,
+  kart_idx : Int32,
 ) -> Unit {
   let kart = game.karts[kart_idx]
   let seg_idx = kart.waypoint_idx

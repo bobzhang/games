@@ -106,7 +106,7 @@ fn check_room_transition(game : @types.Game, floor : @types.Floor) -> Unit {
 }
 
 ///|
-fn reveal_adjacent_rooms(floor : @types.Floor, room_idx : Int) -> Unit {
+fn reveal_adjacent_rooms(floor : @types.Floor, room_idx : Int32) -> Unit {
   let r = floor.rooms[room_idx]
   let ts = @types.tile_sizef
   let rpx = Float::from_int(r.x) * ts
@@ -135,12 +135,12 @@ fn reveal_adjacent_rooms(floor : @types.Floor, room_idx : Int) -> Unit {
 }
 
 ///|
-fn has_been_cleared(floor : @types.Floor, room_idx : Int) -> Bool {
+fn has_been_cleared(floor : @types.Floor, room_idx : Int32) -> Bool {
   floor.rooms[room_idx].state == Cleared
 }
 
 ///|
-fn spawn_wave(game : @types.Game, wave_num : Int) -> Unit {
+fn spawn_wave(game : @types.Game, wave_num : Int32) -> Unit {
   match game.floor {
     None => ()
     Some(floor) => {
@@ -221,9 +221,9 @@ fn seal_room(game : @types.Game) -> Unit {
 
 ///|
 fn get_encounter_pack(
-  floor_num : Int,
-  rng : UInt,
-) -> (Array[@types.EnemyKind], UInt) {
+  floor_num : Int32,
+  rng : UInt32,
+) -> (Array[@types.EnemyKind], UInt32) {
   let (s, roll) = @types.rng_next(rng)
   let pack : Array[@types.EnemyKind] = if floor_num <= 3 {
     // Early floors: simple packs
@@ -265,7 +265,7 @@ fn get_encounter_pack(
 }
 
 ///|
-fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
+fn spawn_room_enemies(game : @types.Game, budget : Int32) -> Unit {
   match game.floor {
     None => ()
     Some(floor) => {
@@ -318,7 +318,7 @@ fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
           game.rng_state = s_affix
           let affix = affixes[affix_idx]
           // Find a random active non-boss enemy to upgrade
-          let candidates : Array[Int] = []
+          let candidates : Array[Int32] = []
           for i in 0..<game.enemies.length() {
             let ei = game.enemies[i]
             if ei.active &&

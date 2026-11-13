@@ -95,7 +95,7 @@ fn reset_player(hero : @types.Player) -> Unit {
 
 ///|
 /// Returns the index of a free entity slot, or evicts the lowest-priority active entity if the pool is full.
-fn @types.Game::alloc_entity(game : @types.Game) -> Int {
+fn @types.Game::alloc_entity(game : @types.Game) -> Int32 {
   for i, slot in game.entities {
     if !slot.active {
       break i
@@ -112,7 +112,7 @@ fn @types.Game::alloc_entity(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free bullet slot, or evicts the shortest-lived active bullet if the pool is full.
-fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
+fn @types.Game::alloc_bullet(game : @types.Game) -> Int32 {
   for i, slot in game.bullets {
     if !slot.active {
       break i
@@ -129,7 +129,7 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free spark slot, or evicts the shortest-lived active spark if the pool is full.
-fn @types.Game::alloc_spark(game : @types.Game) -> Int {
+fn @types.Game::alloc_spark(game : @types.Game) -> Int32 {
   for i, slot in game.sparks {
     if !slot.active {
       break i
@@ -146,7 +146,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free glow ring slot, or evicts the shortest-lived active ring if the pool is full.
-fn @types.Game::alloc_ring(game : @types.Game) -> Int {
+fn @types.Game::alloc_ring(game : @types.Game) -> Int32 {
   for i, slot in game.rings {
     if !slot.active {
       break i
@@ -163,7 +163,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of a free afterimage slot, or evicts the shortest-lived active afterimage if the pool is full.
-fn @types.Game::alloc_image(game : @types.Game) -> Int {
+fn @types.Game::alloc_image(game : @types.Game) -> Int32 {
   for i, slot in game.images {
     if !slot.active {
       break i
@@ -188,7 +188,7 @@ fn @types.Game::emit_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_spark()
   game.sparks[i].active = true
@@ -207,8 +207,8 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  count : Int,
-  kind : Int,
+  count : Int32,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     game.emit_spark(
@@ -231,7 +231,7 @@ fn @types.Game::spawn_ring(
   y : Float,
   r : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_ring()
   game.rings[i].active = true
@@ -252,7 +252,7 @@ fn @types.Game::emit_image(
   h : Float,
   rot : Float,
   life : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_image()
   game.images[i].active = true
@@ -276,7 +276,7 @@ fn @types.Game::spawn_bullet(
   vy : Float,
   life : Float,
   dmg : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let i = game.alloc_bullet()
   game.bullets[i].active = true
@@ -304,7 +304,7 @@ fn @types.Game::spawn_entity(
   hp : Float,
   shot_cd : Float,
   cloak : Bool,
-  reward : Int,
+  reward : Int32,
 ) -> Unit {
   let i = game.alloc_entity()
   game.entities[i].active = true
@@ -325,14 +325,14 @@ fn @types.Game::spawn_entity(
 
 ///|
 /// Computes the combo-scaled score gain for a base point value.
-fn @types.Game::score_gain(game : @types.Game, base : Int) -> Int {
+fn @types.Game::score_gain(game : @types.Game, base : Int32) -> Int32 {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
 /// Adds combo-scaled points to the running score and updates the best score if exceeded.
-fn @types.Game::add_score(game : @types.Game, base : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, base : Int32) -> Unit {
   let gained = game.score_gain(base)
   game.score = game.score + gained
   if game.score > game.best_score {
@@ -378,7 +378,7 @@ fn @types.Game::damage_player(game : @types.Game, dmg : Float) -> Unit {
 
 ///|
 /// Clears all pools, resets the player, and configures speed, distance goal, and resource levels for the given stage number.
-fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_entities()
   game.clear_bullets()
   game.clear_sparks()
@@ -750,9 +750,9 @@ fn @types.Game::entity_fire(game : @types.Game, e : @types.Entity) -> Unit {
 /// Deactivates entity `i`, awards score, increments the kill count, spawns effects, and may drop weapon modules.
 fn @types.Game::kill_entity(
   game : @types.Game,
-  i : Int,
-  bonus : Int,
-  burst_kind : Int,
+  i : Int32,
+  bonus : Int32,
+  burst_kind : Int32,
 ) -> Unit {
   let x = game.entities[i].x
   let y = game.entities[i].y

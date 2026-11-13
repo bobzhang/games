@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1160
+let sw : Int32 = 1160
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Y-coordinate of the water surface boundary.
@@ -17,7 +17,7 @@ struct Relic {
   mut x : Float
   mut y : Float
   mut size : Float
-  mut value : Int
+  mut value : Int32
 }
 
 ///|

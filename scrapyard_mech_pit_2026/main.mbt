@@ -1,29 +1,29 @@
 ///|
-let screen_w : Int = 1280
+let screen_w : Int32 = 1280
 
 ///|
-let screen_h : Int = 840
+let screen_h : Int32 = 840
 
 ///|
-let arena_x : Int = 90
+let arena_x : Int32 = 90
 
 ///|
-let arena_y : Int = 90
+let arena_y : Int32 = 90
 
 ///|
-let arena_w : Int = 920
+let arena_w : Int32 = 920
 
 ///|
-let arena_h : Int = 660
+let arena_h : Int32 = 660
 
 ///|
-let max_bullets : Int = 360
+let max_bullets : Int32 = 360
 
 ///|
-let max_enemies : Int = 80
+let max_enemies : Int32 = 80
 
 ///|
-let max_scrap : Int = 128
+let max_scrap : Int32 = 128
 
 ///|
 let salvage_heal : Float = 24.0F
@@ -47,7 +47,7 @@ struct Bullet {
 ///|
 struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut hp : Float
@@ -60,7 +60,7 @@ struct Scrap {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut value : Int
+  mut value : Int32
 }
 
 ///|
@@ -94,7 +94,7 @@ fn dist2(x1 : Float, y1 : Float, x2 : Float, y2 : Float) -> Float {
 }
 
 ///|
-fn weapon_name(kind : Int) -> String {
+fn weapon_name(kind : Int32) -> String {
   if kind == 0 {
     "Rivet Cannon"
   } else if kind == 1 {
@@ -105,7 +105,7 @@ fn weapon_name(kind : Int) -> String {
 }
 
 ///|
-fn chassis_name(kind : Int) -> String {
+fn chassis_name(kind : Int32) -> String {
   if kind == 0 {
     "Balanced Hull"
   } else if kind == 1 {
@@ -116,7 +116,7 @@ fn chassis_name(kind : Int) -> String {
 }
 
 ///|
-fn booster_name(kind : Int) -> String {
+fn booster_name(kind : Int32) -> String {
   if kind == 0 {
     "Dash Jets"
   } else if kind == 1 {
@@ -127,19 +127,19 @@ fn booster_name(kind : Int) -> String {
 }
 
 ///|
-fn weapon_fire_cd(kind : Int, overclock : Int) -> Float {
+fn weapon_fire_cd(kind : Int32, overclock : Int32) -> Float {
   let base = if kind == 0 { 0.22F } else if kind == 1 { 0.32F } else { 0.12F }
   clampf(base - Float::from_int(overclock) * 0.015F, 0.08F, 0.45F)
 }
 
 ///|
-fn weapon_damage(kind : Int, overclock : Int) -> Float {
+fn weapon_damage(kind : Int32, overclock : Int32) -> Float {
   let base = if kind == 0 { 18.0F } else if kind == 1 { 10.0F } else { 8.0F }
   base + Float::from_int(overclock) * 2.5F
 }
 
 ///|
-fn move_speed(chassis : Int, booster : Int) -> Float {
+fn move_speed(chassis : Int32, booster : Int32) -> Float {
   let base = if chassis == 1 {
     180.0F
   } else if chassis == 2 {
@@ -155,7 +155,7 @@ fn move_speed(chassis : Int, booster : Int) -> Float {
 }
 
 ///|
-fn max_hp(chassis : Int, plating : Int) -> Float {
+fn max_hp(chassis : Int32, plating : Int32) -> Float {
   let base = if chassis == 1 {
     180.0F
   } else if chassis == 2 {
@@ -167,7 +167,7 @@ fn max_hp(chassis : Int, plating : Int) -> Float {
 }
 
 ///|
-fn dash_force(booster : Int) -> Float {
+fn dash_force(booster : Int32) -> Float {
   if booster == 0 {
     240.0F
   } else if booster == 1 {
@@ -178,7 +178,7 @@ fn dash_force(booster : Int) -> Float {
 }
 
 ///|
-fn magnet_range(booster : Int) -> Float {
+fn magnet_range(booster : Int32) -> Float {
   if booster == 2 {
     210.0F
   } else {
@@ -187,7 +187,7 @@ fn magnet_range(booster : Int) -> Float {
 }
 
 ///|
-fn enemy_color(kind : Int) -> @raylib.Color {
+fn enemy_color(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @raylib.Color::new(244, 112, 90, 255)
   } else if kind == 1 {
@@ -198,7 +198,7 @@ fn enemy_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
-fn choice_name(choice : Int) -> String {
+fn choice_name(choice : Int32) -> String {
   if choice == 0 {
     "Weapon: Rivet Cannon"
   } else if choice == 1 {
@@ -225,7 +225,7 @@ fn choice_name(choice : Int) -> String {
 }
 
 ///|
-fn choice_desc(choice : Int) -> String {
+fn choice_desc(choice : Int32) -> String {
   if choice == 0 {
     "Balanced single-shot cannon with heavy impact."
   } else if choice == 1 {
@@ -252,7 +252,7 @@ fn choice_desc(choice : Int) -> String {
 }
 
 ///|
-fn choice_color(choice : Int) -> @raylib.Color {
+fn choice_color(choice : Int32) -> @raylib.Color {
   if choice <= 2 {
     @raylib.Color::new(104, 176, 255, 255)
   } else if choice <= 5 {
@@ -294,7 +294,7 @@ fn spawn_bullet(
 }
 
 ///|
-fn spawn_enemy(enemies : Array[Enemy], wave : Int) -> Unit {
+fn spawn_enemy(enemies : Array[Enemy], wave : Int32) -> Unit {
   for enemy in enemies {
     if enemy.active {
       continue
@@ -349,7 +349,7 @@ fn spawn_scrap(
   scraps : Array[Scrap],
   x : Float,
   y : Float,
-  value : Int,
+  value : Int32,
 ) -> Unit {
   for scrap in scraps {
     if scrap.active {
@@ -364,7 +364,7 @@ fn spawn_scrap(
 }
 
 ///|
-fn gen_choices(choices : Array[Int]) -> Unit {
+fn gen_choices(choices : Array[Int32]) -> Unit {
   for i in 0..<choices.length() {
     let mut c = @raylib.get_random_value(0, 10)
     let mut tries = 0
@@ -387,13 +387,13 @@ fn gen_choices(choices : Array[Int]) -> Unit {
 
 ///|
 fn apply_choice(
-  choice : Int,
-  weapon : Int,
-  chassis : Int,
-  booster : Int,
-  plating : Int,
-  overclock : Int,
-) -> (Int, Int, Int, Int, Int) {
+  choice : Int32,
+  weapon : Int32,
+  chassis : Int32,
+  booster : Int32,
+  plating : Int32,
+  overclock : Int32,
+) -> (Int32, Int32, Int32, Int32, Int32) {
   if choice <= 2 {
     (choice, chassis, booster, plating, overclock)
   } else if choice <= 5 {
@@ -440,7 +440,7 @@ fn main {
   let scraps : Array[Scrap] = Array::makei(max_scrap, fn(_i) {
     { active: false, x: 0.0F, y: 0.0F, value: 0, }
   })
-  let choices : Array[Int] = Array::make(3, 0)
+  let choices : Array[Int32] = Array::make(3, 0)
 
   let mut title = true
   let mut over = false

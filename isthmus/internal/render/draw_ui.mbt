@@ -65,7 +65,7 @@ fn draw_ui(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_sea_level_meter(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_sea_level_meter(game : @types.Game, x : Int32, y : Int32) -> Unit {
   @draw.draw_text("Sea Level", x, y, 20, @types.color_ui_text)
   let bar_x = x
   let bar_y = y + 30
@@ -120,7 +120,7 @@ fn draw_sea_level_meter(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_sand_budget(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_sand_budget(game : @types.Game, x : Int32, y : Int32) -> Unit {
   @draw.draw_text("Sand Budget", x, y, 20, @types.color_ui_text)
   let level = @levels.get_level(game.selected_level)
   let total = level.sand_budget
@@ -166,7 +166,7 @@ fn draw_sand_budget(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_connectivity_status(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_connectivity_status(game : @types.Game, x : Int32, y : Int32) -> Unit {
   let (connected, total) = @terrain.count_connected_settlements(
     game.grid,
     game.sea_level,
@@ -204,7 +204,7 @@ fn draw_connectivity_status(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_controls(x : Int, y : Int) -> Unit {
+fn draw_controls(x : Int32, y : Int32) -> Unit {
   let color = @raylib.Color::new(150, 160, 180, 255)
   @draw.draw_text("Controls:", x, y, 20, @types.color_ui_text)
   @draw.draw_text("Click  - Place sand", x, y + 28, 16, color)

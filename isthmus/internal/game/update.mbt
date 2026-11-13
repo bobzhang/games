@@ -92,7 +92,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_idx : Int) -> Unit {
+fn start_level(game : @types.Game, level_idx : Int32) -> Unit {
   let level = @levels.get_level(level_idx)
   game.selected_level = level_idx
   game.grid = @types.grid_from_level(level)
@@ -269,7 +269,7 @@ fn finalize_game(game : @types.Game) -> Unit {
 }
 
 ///|
-fn compute_stars(game : @types.Game) -> Int {
+fn compute_stars(game : @types.Game) -> Int32 {
   let level = @levels.get_level(game.selected_level)
   let mut stars = 1
   if game.sand_remaining >= level.par_sand {

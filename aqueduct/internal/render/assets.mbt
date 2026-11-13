@@ -101,7 +101,7 @@ fn draw_art_fit(
 }
 
 ///|
-fn draw_cover_art(texture : @raylib.Texture, sw : Int, sh : Int) -> Unit {
+fn draw_cover_art(texture : @raylib.Texture, sw : Int32, sh : Int32) -> Unit {
   let source_w : Float = Float::from_int(texture.width())
   let source_h : Float = Float::from_int(texture.height())
   let screen_w : Float = Float::from_int(sw)

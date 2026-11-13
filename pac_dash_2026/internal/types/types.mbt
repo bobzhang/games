@@ -1,24 +1,24 @@
 ///|
 /// Ghost actor state, including movement direction and scatter home.
 pub(all) struct Ghost {
-  mut x : Int
-  mut y : Int
-  mut dir_x : Int
-  mut dir_y : Int
-  start_x : Int
-  start_y : Int
-  scatter_x : Int
-  scatter_y : Int
+  mut x : Int32
+  mut y : Int32
+  mut dir_x : Int32
+  mut dir_y : Int32
+  start_x : Int32
+  start_y : Int32
+  scatter_x : Int32
+  scatter_y : Int32
   color : @raylib.Color
 }
 
 ///|
 /// Creates a ghost at spawn with its scatter target and color.
 pub fn Ghost::Ghost(
-  x : Int,
-  y : Int,
-  scatter_x : Int,
-  scatter_y : Int,
+  x : Int32,
+  y : Int32,
+  scatter_x : Int32,
+  scatter_y : Int32,
   color : @raylib.Color,
 ) -> Ghost {
   {
@@ -37,18 +37,18 @@ pub fn Ghost::Ghost(
 ///|
 /// Complete runtime state for one Pac Dash session.
 pub(all) struct Game {
-  walls : Array[Int]
-  pellets : Array[Int]
-  mut player_x : Int
-  mut player_y : Int
-  mut dir_x : Int
-  mut dir_y : Int
-  mut want_x : Int
-  mut want_y : Int
+  walls : Array[Int32]
+  pellets : Array[Int32]
+  mut player_x : Int32
+  mut player_y : Int32
+  mut dir_x : Int32
+  mut dir_y : Int32
+  mut want_x : Int32
+  mut want_y : Int32
   ghosts : Array[Ghost]
-  mut score : Int
-  mut lives : Int
-  mut pellets_left : Int
+  mut score : Int32
+  mut lives : Int32
+  mut pellets_left : Int32
   mut frightened_timer : Float
   mut phase_timer : Float
   mut chase_mode : Bool

@@ -102,9 +102,9 @@ let all_augment_kinds : Array[@types.AugmentKind] = [
 ///|
 /// Pick `count` random augments that the player does not already have.
 pub fn pick_random_augments(
-  seed : Ref[UInt],
+  seed : Ref[UInt32],
   owned : Array[@types.AugmentKind],
-  count : Int,
+  count : Int32,
 ) -> Array[@types.AugmentKind] {
   // Build pool of unowned augments
   let pool : Array[@types.AugmentKind] = []
@@ -144,11 +144,11 @@ pub fn pick_random_augments(
 /// Called during battle setup to adjust base stats.
 pub fn apply_augment_to_stats(
   kind : @types.AugmentKind,
-  hp : Int,
-  max_heat : Int,
-  move_range : Int,
-  ability_range : Int,
-) -> (Int, Int, Int, Int) {
+  hp : Int32,
+  max_heat : Int32,
+  move_range : Int32,
+  ability_range : Int32,
+) -> (Int32, Int32, Int32, Int32) {
   // Returns (hp_delta, max_heat_delta, move_range_delta, ability_range_delta)
   match kind {
     ExtendedBarrel => (hp, max_heat, move_range, ability_range + 1)

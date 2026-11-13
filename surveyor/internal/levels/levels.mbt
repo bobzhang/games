@@ -1,5 +1,5 @@
 ///|
-fn make_grid_from(w : Int, h : Int, data : Array[Int]) -> @types.Grid {
+fn make_grid_from(w : Int32, h : Int32, data : Array[Int32]) -> @types.Grid {
   let tiles : Array[@types.TileKind] = Array(capacity=w * h)
   for i in 0..<data.length() {
     let t : @types.TileKind = match data[i] {
@@ -22,7 +22,7 @@ fn make_grid_from(w : Int, h : Int, data : Array[Int]) -> @types.Grid {
 }
 
 ///|
-fn mk_house(x : Int, y : Int, cid : Int, area : Int) -> @types.House {
+fn mk_house(x : Int32, y : Int32, cid : Int32, area : Int32) -> @types.House {
   @types.make_house(x, y, cid, area)
 }
 
@@ -32,8 +32,8 @@ fn mk_level(
   houses : Array[@types.House],
   rect : Bool,
   no_water : Bool,
-  par_f : Int,
-  par_l : Int,
+  par_f : Int32,
+  par_l : Int32,
   tier : @types.Tier,
   name : String,
 ) -> @types.LevelDef {
@@ -482,7 +482,7 @@ pub fn get_all_levels() -> Array[@types.LevelDef] {
 }
 
 ///|
-pub fn get_level(idx : Int) -> @types.LevelDef {
+pub fn get_level(idx : Int32) -> @types.LevelDef {
   let all = get_all_levels()
   if idx >= 0 && idx < all.length() {
     all[idx]

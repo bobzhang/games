@@ -77,13 +77,17 @@ fn @types.Game::board_hover_cell(
   game : @types.Game,
   mx : Float,
   my : Float,
-) -> (Bool, Int, Int) {
+) -> (Bool, Int32, Int32) {
   game.click_to_cell(mx, my)
 }
 
 ///|
 /// Performs the current action mode (reveal or flag) on the cell at (`x`, `y`).
-fn @types.Game::do_action_on_cell(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::do_action_on_cell(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   match game.mode {
     Reveal => game.reveal_cell(x, y)
     Flag => game.toggle_flag(x, y)
@@ -92,7 +96,7 @@ fn @types.Game::do_action_on_cell(game : @types.Game, x : Int, y : Int) -> Bool 
 
 ///|
 /// Moves the keyboard cursor by (`dx`, `dy`) clamped to the board bounds.
-fn @types.Game::move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
+fn @types.Game::move_cursor(game : @types.Game, dx : Int32, dy : Int32) -> Unit {
   game.cursor_x = (game.cursor_x + dx).clamp(min=0, max=@types.board_w - 1)
   game.cursor_y = (game.cursor_y + dy).clamp(min=0, max=@types.board_h - 1)
 }

@@ -31,6 +31,6 @@ pub fn find_hint(
 }
 
 ///|
-pub fn get_hint_letter(tablet : @types.Tablet, sym : @types.Symbol) -> Int {
+pub fn get_hint_letter(tablet : @types.Tablet, sym : @types.Symbol) -> Int32 {
   @types.mapping_get(tablet.solution_mapping, sym)
 }

@@ -1,11 +1,11 @@
 ///|
-pub fn new_grid(size : Int, fill : Bool) -> Grid {
+pub fn new_grid(size : Int32, fill : Bool) -> Grid {
   let cells : Array[Bool] = Array::make(size * size, fill)
   { size, cells, }
 }
 
 ///|
-pub fn grid_from_rows(size : Int, rows : Array[Array[Bool]]) -> Grid {
+pub fn grid_from_rows(size : Int32, rows : Array[Array[Bool]]) -> Grid {
   let cells : Array[Bool] = Array::make(size * size, false)
   for r in 0..<size {
     for c in 0..<size {
@@ -27,7 +27,7 @@ pub fn clone_grid(g : Grid) -> Grid {
 }
 
 ///|
-pub fn grid_get(g : Grid, row : Int, col : Int) -> Bool {
+pub fn grid_get(g : Grid, row : Int32, col : Int32) -> Bool {
   if row < 0 || row >= g.size || col < 0 || col >= g.size {
     false
   } else {
@@ -36,19 +36,19 @@ pub fn grid_get(g : Grid, row : Int, col : Int) -> Bool {
 }
 
 ///|
-pub fn grid_set(g : Grid, row : Int, col : Int, val : Bool) -> Unit {
+pub fn grid_set(g : Grid, row : Int32, col : Int32, val : Bool) -> Unit {
   if row >= 0 && row < g.size && col >= 0 && col < g.size {
     g.cells[row * g.size + col] = val
   }
 }
 
 ///|
-pub fn grid_in_bounds(g : Grid, row : Int, col : Int) -> Bool {
+pub fn grid_in_bounds(g : Grid, row : Int32, col : Int32) -> Bool {
   row >= 0 && row < g.size && col >= 0 && col < g.size
 }
 
 ///|
-pub fn count_empty_neighbors(g : Grid, row : Int, col : Int) -> Int {
+pub fn count_empty_neighbors(g : Grid, row : Int32, col : Int32) -> Int32 {
   let mut count = 0
   // up
   if row == 0 || !grid_get(g, row - 1, col) {
@@ -70,17 +70,17 @@ pub fn count_empty_neighbors(g : Grid, row : Int, col : Int) -> Int {
 }
 
 ///|
-pub fn is_top_exposed(g : Grid, row : Int, col : Int) -> Bool {
+pub fn is_top_exposed(g : Grid, row : Int32, col : Int32) -> Bool {
   grid_get(g, row, col) && (row == 0 || !grid_get(g, row - 1, col))
 }
 
 ///|
-pub fn is_left_exposed(g : Grid, row : Int, col : Int) -> Bool {
+pub fn is_left_exposed(g : Grid, row : Int32, col : Int32) -> Bool {
   grid_get(g, row, col) && (col == 0 || !grid_get(g, row, col - 1))
 }
 
 ///|
-pub fn is_right_exposed(g : Grid, row : Int, col : Int) -> Bool {
+pub fn is_right_exposed(g : Grid, row : Int32, col : Int32) -> Bool {
   grid_get(g, row, col) && (col == g.size - 1 || !grid_get(g, row, col + 1))
 }
 
@@ -125,7 +125,7 @@ pub fn force_name(kind : ForceKind) -> String {
 }
 
 ///|
-pub fn force_budget_remaining(budget : ForceBudget, kind : ForceKind) -> Int {
+pub fn force_budget_remaining(budget : ForceBudget, kind : ForceKind) -> Int32 {
   match kind {
     Water => budget.water
     WindLeft => budget.wind
@@ -165,7 +165,7 @@ pub fn tier_color(tier : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn tier_level_range(tier : Tier) -> (Int, Int) {
+pub fn tier_level_range(tier : Tier) -> (Int32, Int32) {
   match tier {
     Clay => (0, tier1_count - 1)
     Stone => (tier1_count, tier1_count + tier2_count - 1)

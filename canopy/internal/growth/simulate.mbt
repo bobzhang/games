@@ -17,7 +17,7 @@ pub fn simulate_turn(game : @types.Game) -> Unit {
 }
 
 ///|
-fn grow_tree(game : @types.Game, i : Int) -> Unit {
+fn grow_tree(game : @types.Game, i : Int32) -> Unit {
   let tree = game.trees[i]
   if tree.col < 0 || tree.col >= game.ground.length() {
     return
@@ -102,8 +102,8 @@ fn apply_rain(game : @types.Game) -> Unit {
 ///|
 pub fn prune_branch(
   game : @types.Game,
-  tree_index : Int,
-  branch_index : Int,
+  tree_index : Int32,
+  branch_index : Int32,
 ) -> Bool {
   if tree_index < 0 || tree_index >= game.trees.length() {
     return false
@@ -132,9 +132,9 @@ pub fn prune_branch(
 ///|
 pub fn find_branch_at(
   game : @types.Game,
-  grid_col : Int,
-  grid_row : Int,
-) -> (Int, Int) {
+  grid_col : Int32,
+  grid_row : Int32,
+) -> (Int32, Int32) {
   // Returns (tree_index, branch_index) or (-1, -1)
   for i in 0..<game.trees.length() {
     let tree = game.trees[i]

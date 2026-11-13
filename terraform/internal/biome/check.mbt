@@ -20,7 +20,7 @@ pub fn check_targets(
 pub fn ratio_status(
   grid : @types.HexGrid,
   targets : @types.TargetRatio,
-) -> (Int, Int, Int) {
+) -> (Int32, Int32, Int32) {
   let forest_r = @types.biome_ratio(grid, Forest)
   let ocean_r = @types.biome_ratio(grid, Ocean)
   let desert_r = @types.biome_ratio(grid, Desert)
@@ -90,9 +90,9 @@ pub fn calculate_stars(
   grid : @types.HexGrid,
   targets : @types.TargetRatio,
   budget : @types.PaintBudget,
-  turns : Int,
-  par : Int,
-) -> Int {
+  turns : Int32,
+  par : Int32,
+) -> Int32 {
   if !check_targets(grid, targets) {
     return 0
   }

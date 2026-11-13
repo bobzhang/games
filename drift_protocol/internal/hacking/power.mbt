@@ -1,6 +1,6 @@
 ///|
 /// Toggle a power node and all connected subsystems
-pub fn toggle_power_node(game : @types.Game, node_index : Int) -> Unit {
+pub fn toggle_power_node(game : @types.Game, node_index : Int32) -> Unit {
   let pn = game.level.power_nodes[node_index]
   pn.powered = !pn.powered
   @types.push_sound(game, Hack)
@@ -31,7 +31,7 @@ pub fn toggle_power_node(game : @types.Game, node_index : Int) -> Unit {
 ///|
 fn toggle_door_by_power_id(
   game : @types.Game,
-  power_id : Int,
+  power_id : Int32,
   powered : Bool,
 ) -> Unit {
   for i in 0..<game.level.doors.length() {
@@ -49,7 +49,7 @@ fn toggle_door_by_power_id(
 ///|
 fn toggle_laser_by_power_id(
   game : @types.Game,
-  power_id : Int,
+  power_id : Int32,
   powered : Bool,
 ) -> Unit {
   for i in 0..<game.level.lasers.length() {
@@ -76,7 +76,7 @@ pub fn all_terminals_hacked(game : @types.Game) -> Bool {
 
 ///|
 /// Get the total data value of hacked terminals
-pub fn hacked_data_value(game : @types.Game) -> Int {
+pub fn hacked_data_value(game : @types.Game) -> Int32 {
   let mut total = 0
   for i in 0..<game.level.terminals.length() {
     if game.level.terminals[i].hacked {

@@ -45,7 +45,7 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
@@ -77,7 +77,7 @@ pub fn road_center_x(world_t : Float, y : Float) -> Float {
 
 ///|
 /// Returns lane center X for lane index at screen Y.
-pub fn lane_center_x(world_t : Float, lane : Int, y : Float) -> Float {
+pub fn lane_center_x(world_t : Float, lane : Int32, y : Float) -> Float {
   let span = Float::from_int(lane_count - 1)
   let t = Float::from_int(lane.clamp(min=0, max=lane_count - 1)) / span
   let offset = (t - 0.5) * 2.0
@@ -88,14 +88,14 @@ pub fn lane_center_x(world_t : Float, lane : Int, y : Float) -> Float {
 
 ///|
 /// Returns route distance covered by a checkpoint segment index.
-pub fn checkpoint_segment_distance(index : Int) -> Float {
+pub fn checkpoint_segment_distance(index : Int32) -> Float {
   checkpoint_distance_base +
   Float::from_int(index - 1) * checkpoint_distance_step
 }
 
 ///|
 /// Returns allowed time budget for a checkpoint index.
-pub fn checkpoint_time_limit(index : Int) -> Float {
+pub fn checkpoint_time_limit(index : Int32) -> Float {
   clampf(
     checkpoint_timer_base - Float::from_int(index - 1) * checkpoint_timer_decay,
     checkpoint_timer_min,

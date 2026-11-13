@@ -75,7 +75,7 @@ fn update_tablet_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_tablet(game : @types.Game, index : Int) -> Unit {
+fn start_tablet(game : @types.Game, index : Int32) -> Unit {
   let tablet = @levels.get_tablet(index)
   game.current_tablet_index = index
   game.current_mapping = @types.copy_mapping(tablet.given_mapping)
@@ -179,7 +179,7 @@ fn update_playing(game : @types.Game) -> Unit {
 fn handle_assign_letter(
   game : @types.Game,
   tablet : @types.Tablet,
-  letter_idx : Int,
+  letter_idx : Int32,
 ) -> Unit {
   match game.selected_symbol {
     None => @types.set_message(game, "Select a symbol first", 1.5)
@@ -315,8 +315,8 @@ fn handle_clear(game : @types.Game, tablet : @types.Tablet) -> Unit {
 ///|
 fn find_clicked_symbol(
   tablet : @types.Tablet,
-  mouse_x : Int,
-  mouse_y : Int,
+  mouse_x : Int32,
+  mouse_y : Int32,
 ) -> @types.Symbol? {
   let base_x = @types.tablet_x + @types.inscription_margin_x
   let base_y = @types.tablet_y + @types.inscription_margin_y
@@ -347,7 +347,7 @@ fn find_clicked_symbol(
 }
 
 ///|
-fn find_clicked_letter(mouse_x : Int, mouse_y : Int) -> Int {
+fn find_clicked_letter(mouse_x : Int32, mouse_y : Int32) -> Int32 {
   let btn_size = @types.palette_btn_size
   for i in 0..<@types.symbol_count {
     let (bx, by) = @types.palette_button_pos(

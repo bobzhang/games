@@ -29,7 +29,7 @@ pub fn simulate(game : @types.Game) -> Unit {
   for _i in 0..<game.placed_gears.length() {
     visited.push(false)
   }
-  let queue : Array[Int] = [input_idx]
+  let queue : Array[Int32] = [input_idx]
   visited[input_idx] = true
   while queue.length() > 0 {
     let curr = queue.remove(0)
@@ -95,10 +95,10 @@ pub fn simulate(game : @types.Game) -> Unit {
 ///|
 fn find_belt_target(
   game : @types.Game,
-  curr_idx : Int,
+  curr_idx : Int32,
   curr_gear : @types.Gear,
   belt : @types.BeltLink,
-) -> Int {
+) -> Int32 {
   if curr_gear.pos == belt.from_pos {
     let idx = @types.find_gear_at(game.placed_gears, belt.to_pos)
     if idx >= 0 && idx != curr_idx {
@@ -237,7 +237,7 @@ pub fn can_place_gear(
 }
 
 ///|
-pub fn all_outputs_count(game : @types.Game) -> (Int, Int) {
+pub fn all_outputs_count(game : @types.Game) -> (Int32, Int32) {
   let level = match game.current_level {
     Some(l) => l
     None => return (0, 0)

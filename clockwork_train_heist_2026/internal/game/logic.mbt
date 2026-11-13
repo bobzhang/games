@@ -1,12 +1,12 @@
 ///|
 /// Converts board grid coordinates to a flat row-major map index.
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * @types.grid_w + x
 }
 
 ///|
 /// Returns true when `(x, y)` is within the grid boundaries.
-fn in_bounds(x : Int, y : Int) -> Bool {
+fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < @types.grid_w && y >= 0 && y < @types.grid_h
 }
 
@@ -14,8 +14,8 @@ fn in_bounds(x : Int, y : Int) -> Bool {
 /// Returns the tile kind at `(x, y)`, treating out-of-bounds positions as Wall.
 fn @types.Game::tile_at(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
 ) -> @types.TileKind {
   if !in_bounds(x, y) {
     Wall
@@ -28,8 +28,8 @@ fn @types.Game::tile_at(
 /// Writes a tile kind into the map at `(x, y)`, ignoring out-of-bounds positions.
 fn @types.Game::set_tile(
   game : @types.Game,
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   t : @types.TileKind,
 ) -> Unit {
   if !in_bounds(x, y) {
@@ -47,7 +47,7 @@ fn @types.Game::set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
 
 ///|
 /// Teleports an actor to `(x, y)` instantly, resetting all interpolation state.
-fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
+fn actor_place(a : @types.Actor, x : Int32, y : Int32) -> Unit {
   a.x = x
   a.y = y
   a.from_x = x
@@ -62,7 +62,7 @@ fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
 
 ///|
 /// Begins smooth tile-to-tile movement from the actor's current position toward `(tx, ty)`.
-fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
+fn actor_start_move(a : @types.Actor, tx : Int32, ty : Int32) -> Unit {
   if a.x == tx && a.y == ty {
     return
   }
@@ -149,7 +149,7 @@ fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
-  n : Int,
+  n : Int32,
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
@@ -197,13 +197,17 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns true if any active smoke cloud covers the cell at `(x, y)` within Manhattan distance 1.
-fn @types.Game::smoke_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::smoke_cover_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   for smoke in game.smokes {
     if !smoke.active {
       continue
     }
 
-    let d : Int = @types.manhattan(x, y, smoke.x, smoke.y)
+    let d : Int32 = @types.manhattan(x, y, smoke.x, smoke.y)
     if d <= 1 {
       return true
     }
@@ -216,10 +220,10 @@ fn @types.Game::smoke_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
 /// Returns the index of an active guard occupying `(x, y)`, skipping guard `skip`, or -1 if none found.
 fn @types.Game::guard_index_at(
   game : @types.Game,
-  x : Int,
-  y : Int,
-  skip : Int,
-) -> Int {
+  x : Int32,
+  y : Int32,
+  skip : Int32,
+) -> Int32 {
   @utils.first_indexi_by(game.guards, fn(i, slot) {
     i != skip && slot.active && slot.body.x == x && slot.body.y == y
   })
@@ -227,7 +231,11 @@ fn @types.Game::guard_index_at(
 
 ///|
 /// Returns the index of an active loot item at `(x, y)`, or -1 if none is present.
-fn @types.Game::loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::loot_index_at(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Int32 {
   @utils.first_index_by(game.loots, fn(loot) {
     loot.active && loot.x == x && loot.y == y
   })
@@ -235,7 +243,11 @@ fn @types.Game::loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Returns true if the tile at `(x, y)` is impassable for the player, considering the vault-open state for the exit.
-fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_by_map(
+  game : @types.Game,
+  x : Int32,
+  y : Int32,
+) -> Bool {
   if !in_bounds(x, y) {
     return true
   }
@@ -251,15 +263,15 @@ fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 /// Returns true if the cell `(x, y)` is impassable for guard `gid`, accounting for map tiles and other guards.
 fn @types.Game::blocked_for_guard(
   game : @types.Game,
-  gid : Int,
-  x : Int,
-  y : Int,
+  gid : Int32,
+  x : Int32,
+  y : Int32,
 ) -> Bool {
   if game.blocked_by_map(x, y) {
     return true
   }
 
-  let g2 : Int = game.guard_index_at(x, y, gid)
+  let g2 : Int32 = game.guard_index_at(x, y, gid)
   g2 >= 0
 }
 
@@ -273,8 +285,8 @@ fn @types.Game::clear_map(game : @types.Game) -> Unit {
   }
 
   for car in 0..<5 {
-    let x0 : Int = 1 + car * 5
-    let x1 : Int = x0 + 3
+    let x0 : Int32 = 1 + car * 5
+    let x1 : Int32 = x0 + 3
 
     for y in 2..<=10 {
       for x in x0..<=x1 {
@@ -284,13 +296,13 @@ fn @types.Game::clear_map(game : @types.Game) -> Unit {
   }
 
   for car in 0..<4 {
-    let door_x : Int = 5 + car * 5
+    let door_x : Int32 = 5 + car * 5
     game.set_tile(door_x, 6, Door)
     game.set_tile(door_x, 5, Floor)
     game.set_tile(door_x, 7, Floor)
   }
 
-  let crate_cells : Array[(Int, Int)] = [
+  let crate_cells : Array[(Int32, Int32)] = [
     (2, 4),
     (3, 8),
     (7, 3),
@@ -315,7 +327,7 @@ fn @types.Game::clear_map(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the score value associated with a particular loot kind.
-fn loot_score(kind : @types.LootKind) -> Int {
+fn loot_score(kind : @types.LootKind) -> Int32 {
   match kind {
     Blueprint => @types.score_blueprint
     Keycard => @types.score_keycard
@@ -326,7 +338,7 @@ fn loot_score(kind : @types.LootKind) -> Int {
 ///|
 /// Places loot items on the map according to the predefined loot layout plan.
 fn @types.Game::load_loot(game : @types.Game) -> Unit {
-  let loot_plan : Array[(Int, Int, @types.LootKind)] = [
+  let loot_plan : Array[(Int32, Int32, @types.LootKind)] = [
     (3, 3, Blueprint),
     (8, 8, Gold),
     (12, 6, Keycard),
@@ -357,7 +369,7 @@ fn @types.Game::load_loot(game : @types.Game) -> Unit {
 ///|
 /// Initializes all guard entities from the predefined patrol plan, positioning and seeding each one.
 fn @types.Game::load_guards(game : @types.Game) -> Unit {
-  let plan : Array[(Int, Int, Int, Int, Int, Int, Int)] = [
+  let plan : Array[(Int32, Int32, Int32, Int32, Int32, Int32, Int32)] = [
     (6, 6, 1, 0, 6, 9, 0),
     (12, 4, 1, 0, 11, 14, 1),
     (17, 8, 1, 0, 16, 19, 2),
@@ -375,8 +387,8 @@ fn @types.Game::load_guards(game : @types.Game) -> Unit {
     game.guards[i].alert_t = 0.0
 
     if game.guards[i].active {
-      let px : Int = plan[i].0
-      let py : Int = plan[i].1
+      let px : Int32 = plan[i].0
+      let py : Int32 = plan[i].1
       actor_place(game.guards[i].body, px, py)
 
       game.guards[i].dir_x = plan[i].2
@@ -512,7 +524,7 @@ fn @types.Game::deploy_smoke(game : @types.Game) -> Bool {
     return false
   }
 
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<game.smokes.length() {
     if !game.smokes[i].active {
       slot = i
@@ -536,13 +548,13 @@ fn @types.Game::deploy_smoke(game : @types.Game) -> Bool {
   )
   game.action_cd = 0.35
 
-  let mut stunned : Int = 0
+  let mut stunned : Int32 = 0
   for guard_val in game.guards {
     if !guard_val.active || guard_val.mode == Stunned {
       continue
     }
 
-    let d : Int = @types.manhattan(
+    let d : Int32 = @types.manhattan(
       guard_val.body.x,
       guard_val.body.y,
       game.player.x,
@@ -611,14 +623,14 @@ fn @types.Game::update_smokes(game : @types.Game, dt : Float) -> Unit {
 /// Returns true if two axis-aligned positions share an unobstructed straight line, considering walls and smoke.
 fn @types.Game::line_of_sight(
   game : @types.Game,
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
 ) -> Bool {
   if x0 == x1 {
-    let y_min : Int = y0.min(y1)
-    let y_max : Int = y0.max(y1)
+    let y_min : Int32 = y0.min(y1)
+    let y_max : Int32 = y0.max(y1)
 
     for y in (y_min + 1)..<y_max {
       let t = game.tile_at(x0, y)
@@ -631,8 +643,8 @@ fn @types.Game::line_of_sight(
   }
 
   if y0 == y1 {
-    let x_min : Int = x0.min(x1)
-    let x_max : Int = x0.max(x1)
+    let x_min : Int32 = x0.min(x1)
+    let x_max : Int32 = x0.max(x1)
 
     for x in (x_min + 1)..<x_max {
       let t = game.tile_at(x, y0)
@@ -649,8 +661,8 @@ fn @types.Game::line_of_sight(
 
 ///|
 /// Advances the guard's pseudo-random seed using a linear congruential step.
-fn guard_seed_next(seed : Int) -> Int {
-  let n : Int = (seed * 48271 + 131) % 2147483647
+fn guard_seed_next(seed : Int32) -> Int32 {
+  let n : Int32 = (seed * 48271 + 131) % 2147483647
   if n <= 0 {
     1
   } else {
@@ -662,25 +674,25 @@ fn guard_seed_next(seed : Int) -> Int {
 /// Selects the best adjacent step toward the player for a guard in Hunt mode using Manhattan distance.
 fn @types.Game::guard_choose_chase_step(
   game : @types.Game,
-  gid : Int,
-) -> (Int, Int) {
-  let gx : Int = game.guards[gid].body.x
-  let gy : Int = game.guards[gid].body.y
+  gid : Int32,
+) -> (Int32, Int32) {
+  let gx : Int32 = game.guards[gid].body.x
+  let gy : Int32 = game.guards[gid].body.y
 
-  let px : Int = game.player.x
-  let py : Int = game.player.y
+  let px : Int32 = game.player.x
+  let py : Int32 = game.player.y
 
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
   let best_i = for i in 0..<4; best_i = -1, best_d = 999999 {
-    let nx : Int = gx + dirs[i].0
-    let ny : Int = gy + dirs[i].1
+    let nx : Int32 = gx + dirs[i].0
+    let ny : Int32 = gy + dirs[i].1
 
     if game.blocked_for_guard(gid, nx, ny) {
       continue
     }
 
-    let d : Int = @types.manhattan(nx, ny, px, py)
+    let d : Int32 = @types.manhattan(nx, ny, px, py)
     if d < best_d {
       continue i, d
     }
@@ -699,14 +711,14 @@ fn @types.Game::guard_choose_chase_step(
 /// Selects the next patrol step for a guard, reversing direction at patrol boundaries or when blocked.
 fn @types.Game::guard_choose_patrol_step(
   game : @types.Game,
-  gid : Int,
-) -> (Int, Int) {
+  gid : Int32,
+) -> (Int32, Int32) {
   let g = game.guards[gid]
-  let gx : Int = g.body.x
-  let gy : Int = g.body.y
+  let gx : Int32 = g.body.x
+  let gy : Int32 = g.body.y
 
   if g.dir_x != 0 {
-    let mut nx : Int = gx + g.dir_x
+    let mut nx : Int32 = gx + g.dir_x
     if nx < g.patrol_min ||
       nx > g.patrol_max ||
       game.blocked_for_guard(gid, nx, gy) {
@@ -722,7 +734,7 @@ fn @types.Game::guard_choose_patrol_step(
   }
 
   if g.dir_y != 0 {
-    let mut ny : Int = gy + g.dir_y
+    let mut ny : Int32 = gy + g.dir_y
     if ny < g.patrol_min ||
       ny > g.patrol_max ||
       game.blocked_for_guard(gid, gx, ny) {
@@ -738,13 +750,13 @@ fn @types.Game::guard_choose_patrol_step(
   }
 
   g.seed = guard_seed_next(g.seed)
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-  let start : Int = g.seed % 4
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let start : Int32 = g.seed % 4
 
   for t in 0..<4 {
-    let k : Int = (start + t) % 4
-    let nx : Int = gx + dirs[k].0
-    let ny : Int = gy + dirs[k].1
+    let k : Int32 = (start + t) % 4
+    let nx : Int32 = gx + dirs[k].0
+    let ny : Int32 = gy + dirs[k].1
     if game.blocked_for_guard(gid, nx, ny) {
       continue
     }
@@ -791,7 +803,7 @@ fn @types.Game::update_guards(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    let d : Int = @types.manhattan(
+    let d : Int32 = @types.manhattan(
       game.guards[i].body.x,
       game.guards[i].body.y,
       game.player.x,
@@ -831,7 +843,11 @@ fn @types.Game::update_guards(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Attempts to move the player one tile in direction `(dx, dy)`, emitting a spark burst on success; returns true if moved.
-fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::try_move_player(
+  game : @types.Game,
+  dx : Int32,
+  dy : Int32,
+) -> Bool {
   if dx == 0 && dy == 0 {
     return false
   }
@@ -839,8 +855,8 @@ fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool 
     return false
   }
 
-  let tx : Int = game.player.x + dx
-  let ty : Int = game.player.y + dy
+  let tx : Int32 = game.player.x + dx
+  let ty : Int32 = game.player.y + dy
 
   if game.blocked_by_map(tx, ty) {
     return false
@@ -866,7 +882,7 @@ fn @types.Game::collect_loot(game : @types.Game) -> Unit {
     return
   }
 
-  let i : Int = game.loot_index_at(game.player.x, game.player.y)
+  let i : Int32 = game.loot_index_at(game.player.x, game.player.y)
   if i < 0 {
     return
   }

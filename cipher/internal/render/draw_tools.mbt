@@ -44,9 +44,9 @@ fn draw_tool_panel(game : @types.Game, level : @types.Level) -> Unit {
 fn draw_frequency_chart(
   game : @types.Game,
   level : @types.Level,
-  px : Int,
-  py : Int,
-  pw : Int,
+  px : Int32,
+  py : Int32,
+  pw : Int32,
 ) -> Unit {
   @draw.draw_text("FREQUENCY ANALYSIS", px + 10, py, 14, @types.color_text)
   let cipher_freq = @crypto.letter_frequency_pct(level.ciphertext)
@@ -203,9 +203,9 @@ fn draw_frequency_chart(
 fn draw_letter_swap(
   game : @types.Game,
   level : @types.Level,
-  px : Int,
-  py : Int,
-  _pw : Int,
+  px : Int32,
+  py : Int32,
+  _pw : Int32,
 ) -> Unit {
   ignore(level)
   @draw.draw_text("LETTER MAPPING", px + 10, py, 14, @types.color_text)
@@ -281,9 +281,9 @@ fn draw_letter_swap(
 fn draw_pattern_finder(
   game : @types.Game,
   level : @types.Level,
-  px : Int,
-  py : Int,
-  pw : Int,
+  px : Int32,
+  py : Int32,
+  pw : Int32,
 ) -> Unit {
   @draw.draw_text("PATTERN ANALYSIS", px + 10, py, 14, @types.color_text)
   // Show cipher kind info
@@ -409,7 +409,7 @@ fn draw_pattern_finder(
 }
 
 ///|
-fn positions_to_string(positions : Array[Int]) -> String {
+fn positions_to_string(positions : Array[Int32]) -> String {
   let buf = StringBuilder()
   for i in 0..<positions.length() {
     if i > 0 {
@@ -422,10 +422,10 @@ fn positions_to_string(positions : Array[Int]) -> String {
 
 ///|
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   color : @raylib.Color,
 ) -> Unit {

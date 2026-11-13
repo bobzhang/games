@@ -19,7 +19,7 @@ pub fn generate_movement_noise(game : @types.Game) -> Unit {
 
 ///|
 /// Generate noise from a coin toss
-pub fn generate_coin_noise(game : @types.Game, tx : Int, ty : Int) -> Unit {
+pub fn generate_coin_noise(game : @types.Game, tx : Int32, ty : Int32) -> Unit {
   if game.player.coins <= 0 {
     return
   }

@@ -73,7 +73,7 @@ pub fn reset_level(game : @types.Game) -> Unit {
 
 ///|
 /// Load a specific level into the game
-pub fn load_level(game : @types.Game, world : Int, level : Int) -> Bool {
+pub fn load_level(game : @types.Game, world : Int32, level : Int32) -> Bool {
   match @maze.get_level(world, level) {
     Some(level_def) => {
       let maze = @maze.parse_maze(level_def)

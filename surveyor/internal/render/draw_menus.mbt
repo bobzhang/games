@@ -264,10 +264,10 @@ pub fn draw_results(game : @types.Game) -> Unit {
 
 ///|
 fn draw_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
   enabled : Bool,
 ) -> Unit {
@@ -291,7 +291,7 @@ fn draw_button(
 }
 
 ///|
-fn is_mouse_in_rect(x : Int, y : Int, w : Int, h : Int) -> Bool {
+fn is_mouse_in_rect(x : Int32, y : Int32, w : Int32, h : Int32) -> Bool {
   let mx = @raylib.get_mouse_x()
   let my = @raylib.get_mouse_y()
   mx >= x && mx < x + w && my >= y && my < y + h

@@ -41,7 +41,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -50,7 +50,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -59,7 +59,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -68,7 +68,7 @@ pub fn absi(v : Int) -> Int {
 }
 
 ///|
-pub fn gear_radius(kind : GearKind) -> Int {
+pub fn gear_radius(kind : GearKind) -> Int32 {
   match kind {
     Small => 1
     Medium => 2
@@ -84,7 +84,7 @@ pub fn gear_pixel_radius(kind : GearKind) -> Float {
 }
 
 ///|
-pub fn gear_tooth_count(kind : GearKind) -> Int {
+pub fn gear_tooth_count(kind : GearKind) -> Int32 {
   match kind {
     Small => 8
     Medium => 12
@@ -95,20 +95,20 @@ pub fn gear_tooth_count(kind : GearKind) -> Int {
 }
 
 ///|
-pub fn can_mesh(r1 : Int, r2 : Int, dist_sq : Int) -> Bool {
+pub fn can_mesh(r1 : Int32, r2 : Int32, dist_sq : Int32) -> Bool {
   let mesh_dist = r1 + r2
   dist_sq == mesh_dist * mesh_dist
 }
 
 ///|
-pub fn grid_dist_sq(a : Vec2i, b : Vec2i) -> Int {
+pub fn grid_dist_sq(a : Vec2i, b : Vec2i) -> Int32 {
   let dx = a.x - b.x
   let dy = a.y - b.y
   dx * dx + dy * dy
 }
 
 ///|
-pub fn speed_ratio(driving_radius : Int, driven_radius : Int) -> Float {
+pub fn speed_ratio(driving_radius : Int32, driven_radius : Int32) -> Float {
   if driven_radius == 0 {
     1.0
   } else {
@@ -125,12 +125,12 @@ pub fn flip_dir(d : RotDir) -> RotDir {
 }
 
 ///|
-pub fn peg_screen_x(col : Int) -> Float {
+pub fn peg_screen_x(col : Int32) -> Float {
   Float::from_int(grid_offset_x + col * peg_spacing)
 }
 
 ///|
-pub fn peg_screen_y(row : Int) -> Float {
+pub fn peg_screen_y(row : Int32) -> Float {
   Float::from_int(grid_offset_y + row * peg_spacing)
 }
 
@@ -237,7 +237,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_level_offset(t : Tier) -> Int {
+pub fn tier_level_offset(t : Tier) -> Int32 {
   match t {
     Gears => 0
     Trains => tier1_count
@@ -246,7 +246,7 @@ pub fn tier_level_offset(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(t : Tier) -> Int {
+pub fn tier_level_count(t : Tier) -> Int32 {
   match t {
     Gears => tier1_count
     Trains => tier2_count
@@ -269,7 +269,7 @@ pub fn check_output(output : Output, rpm : Float, dir : RotDir) -> Bool {
 }
 
 ///|
-pub fn count_placed_gears(gears : Array[Gear]) -> Int {
+pub fn count_placed_gears(gears : Array[Gear]) -> Int32 {
   let mut count = 0
   for i in 0..<gears.length() {
     if gears[i].active {
@@ -280,7 +280,7 @@ pub fn count_placed_gears(gears : Array[Gear]) -> Int {
 }
 
 ///|
-pub fn find_gear_at(gears : Array[Gear], pos : Vec2i) -> Int {
+pub fn find_gear_at(gears : Array[Gear], pos : Vec2i) -> Int32 {
   for i in 0..<gears.length() {
     if gears[i].active && gears[i].pos == pos {
       return i

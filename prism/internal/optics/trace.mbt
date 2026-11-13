@@ -27,12 +27,12 @@ pub fn trace_all_beams(grid : @types.HexGrid) -> Array[@types.BeamSegment] {
 ///|
 fn trace_beam(
   grid : @types.HexGrid,
-  start_q : Int,
-  start_r : Int,
+  start_q : Int32,
+  start_r : Int32,
   dir : @types.HexDir,
   color : @types.BeamColor,
   segments : Array[@types.BeamSegment],
-  depth : Int,
+  depth : Int32,
 ) -> Unit {
   if depth > 60 || @types.beam_color_is_black(color) {
     return

@@ -1,37 +1,37 @@
 ///|
-let sw : Int = 1120
+let sw : Int32 = 1120
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
-let gw : Int = 12
+let gw : Int32 = 12
 
 ///|
-let gh : Int = 9
+let gh : Int32 = 9
 
 ///|
-let cell : Int = 64
+let cell : Int32 = 64
 
 ///|
-let ox : Int = 170
+let ox : Int32 = 170
 
 ///|
-let oy : Int = 120
+let oy : Int32 = 120
 
 ///|
 struct Pos {
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
 }
 
 ///|
-fn gidx(x : Int, y : Int) -> Int {
+fn gidx(x : Int32, y : Int32) -> Int32 {
   y * gw + x
 }
 
 ///|
-fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
+fn is_wall(walls : Array[Bool], x : Int32, y : Int32) -> Bool {
   if x < 0 || x >= gw || y < 0 || y >= gh {
     true
   } else {
@@ -40,12 +40,12 @@ fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn crate_at(crates : Array[Pos], x : Int, y : Int) -> Int {
+fn crate_at(crates : Array[Pos], x : Int32, y : Int32) -> Int32 {
   @utils.first_index_by(crates, fn(crate_) { crate_.x == x && crate_.y == y })
 }
 
 ///|
-fn is_target(targets : Array[Pos], x : Int, y : Int) -> Bool {
+fn is_target(targets : Array[Pos], x : Int32, y : Int32) -> Bool {
   @utils.any_by(targets, fn(target) { target.x == x && target.y == y })
 }
 
@@ -64,7 +64,7 @@ fn reset_level(
   walls : Array[Bool],
   crates : Array[Pos],
   targets : Array[Pos],
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   for i in 0..<walls.length() {
     walls[i] = false
   }

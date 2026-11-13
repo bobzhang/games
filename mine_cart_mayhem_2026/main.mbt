@@ -1,18 +1,18 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1120
+let sw : Int32 = 1120
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
 /// Number of parallel track lanes the cart can occupy.
-let lane_count : Int = 3
+let lane_count : Int32 = 3
 
 ///|
 /// Returns the vertical screen position of the given track lane index.
-fn lane_y(lane : Int) -> Float {
+fn lane_y(lane : Int32) -> Float {
   250.0 + Float::from_int(lane) * 140.0
 }
 
@@ -21,8 +21,8 @@ fn lane_y(lane : Int) -> Float {
 struct Hazard {
   mut alive : Bool
   mut x : Float
-  mut lane : Int
-  mut kind : Int // 0 low rock, 1 high wall, 2 coin
+  mut lane : Int32
+  mut kind : Int32 // 0 low rock, 1 high wall, 2 coin
 }
 
 ///|
@@ -35,7 +35,7 @@ fn reset_hazards(hazards : Array[Hazard]) -> Unit {
 
 ///|
 /// Activates the first free hazard slot and places it off the right edge of the screen on the specified lane.
-fn spawn_hazard(hazards : Array[Hazard], lane : Int, kind : Int) -> Unit {
+fn spawn_hazard(hazards : Array[Hazard], lane : Int32, kind : Int32) -> Unit {
   for hazard in hazards {
     if !hazard.alive {
       hazard.alive = true

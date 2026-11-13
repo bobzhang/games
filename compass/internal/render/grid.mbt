@@ -1,5 +1,5 @@
 ///|
-fn draw_grid(state : @types.LevelState, frame : Int) -> Unit {
+fn draw_grid(state : @types.LevelState, frame : Int32) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y
@@ -60,10 +60,10 @@ fn tile_color(tile : @types.Tile) -> @raylib.Color {
 ///|
 fn draw_tile_detail(
   tile : @types.Tile,
-  px : Int,
-  py : Int,
-  ts : Int,
-  frame : Int,
+  px : Int32,
+  py : Int32,
+  ts : Int32,
+  frame : Int32,
 ) -> Unit {
   match tile {
     Lighthouse => {
@@ -115,7 +115,7 @@ fn draw_tile_detail(
 }
 
 ///|
-fn draw_ship(state : @types.LevelState, frame : Int) -> Unit {
+fn draw_ship(state : @types.LevelState, frame : Int32) -> Unit {
   let ts = @types.tile_size
   let ox = @types.grid_offset_x
   let oy = @types.grid_offset_y

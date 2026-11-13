@@ -90,7 +90,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
 
 ///|
 /// Draw star rating display.
-fn draw_stars(x : Int, y : Int, stars : Int, size : Int) -> Unit {
+fn draw_stars(x : Int32, y : Int32, stars : Int32, size : Int32) -> Unit {
   for i in 0..<3 {
     let sx = x + i * (size + 4)
     let col = if i < stars {

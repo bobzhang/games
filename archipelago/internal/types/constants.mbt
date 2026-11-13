@@ -1,26 +1,26 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_offset_x : Int = 340
+pub let grid_offset_x : Int32 = 340
 
 ///|
-pub let grid_offset_y : Int = 60
+pub let grid_offset_y : Int32 = 60
 
 ///|
-pub let cell_size_5 : Int = 100
+pub let cell_size_5 : Int32 = 100
 
 ///|
-pub let cell_size_7 : Int = 75
+pub let cell_size_7 : Int32 = 75
 
 ///|
-pub let cell_size_9 : Int = 60
+pub let cell_size_9 : Int32 = 60
 
 ///|
 pub let island_radius_5 : Float = 30.0
@@ -38,16 +38,16 @@ pub let bridge_thickness : Float = 4.0
 pub let double_bridge_gap : Float = 6.0
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 // Colors - Ocean/Island theme
 

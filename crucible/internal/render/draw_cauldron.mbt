@@ -188,11 +188,11 @@ fn draw_message(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     let w = @types.screen_width
     let alpha : Float = @types.minf(game.message_timer * 3.0, 1.0)
-    let a : Int = (alpha * 255.0).to_int()
+    let a : Int32 = (alpha * 255.0).to_int()
     let mw = @draw.measure_text(game.message, 24)
     let mx = (w - mw) / 2
     let my = 60
-    let bg_alpha : Int = (Float::from_int(a) * 0.8).to_int()
+    let bg_alpha : Int32 = (Float::from_int(a) * 0.8).to_int()
     @raylib.draw_rectangle(
       mx - 15,
       my - 5,
@@ -223,7 +223,7 @@ fn draw_animations(game : @types.Game) -> Unit {
       let t : Float = 1.0 - game.anim.timer / @types.destroy_anim_duration
       let ring_r : Float = @types.cauldron_radius * (0.5 + t * 1.5)
       let inv_t : Float = 1.0 - t
-      let alpha : Int = (inv_t * 200.0).to_int()
+      let alpha : Int32 = (inv_t * 200.0).to_int()
       let a = if alpha > 0 { alpha } else { 0 }
       @raylib.draw_circle_lines(
         cx.to_int(),
@@ -258,7 +258,7 @@ fn draw_animations(game : @types.Game) -> Unit {
       let t : Float = 1.0 - game.anim.timer / @types.success_anim_duration
       let glow_r : Float = @types.cauldron_radius + t * 40.0
       let inv_t : Float = 1.0 - t
-      let alpha : Int = (inv_t * 150.0).to_int()
+      let alpha : Int32 = (inv_t * 150.0).to_int()
       let a = if alpha > 0 { alpha } else { 0 }
       @raylib.draw_circle(
         cx.to_int(),
@@ -282,7 +282,7 @@ fn draw_animations(game : @types.Game) -> Unit {
           let color = @types.element_color(elem)
           let size : Float = @types.lerpf(20.0, 8.0, t)
           let inv_fade : Float = 1.0 - t * 0.3
-          let alpha : Int = (inv_fade * 255.0).to_int()
+          let alpha : Int32 = (inv_fade * 255.0).to_int()
           @raylib.draw_circle(
             cx.to_int(),
             drop_y.to_int(),

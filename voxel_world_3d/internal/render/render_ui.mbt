@@ -232,7 +232,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   game.draw_hotbar()
   // Message
   if game.message_timer > 0.0 {
-    let msg_alpha : Int = if game.message_timer < 1.0 {
+    let msg_alpha : Int32 = if game.message_timer < 1.0 {
       (game.message_timer * 255.0).to_int()
     } else {
       255
@@ -405,12 +405,12 @@ fn @types.Game::draw_health_hunger_bars(game : @types.Game) -> Unit {
   let health_pct = Float::from_int(player.health) /
     Float::from_int(@types.player_max_health)
   let health_fill = (Float::from_int(bar_width) * health_pct).to_int()
-  let hr : Int = if health_pct > 0.5 {
+  let hr : Int32 = if health_pct > 0.5 {
     @types.lerpi(255, 0, (health_pct - 0.5) * 2.0)
   } else {
     255
   }
-  let hg : Int = if health_pct > 0.5 {
+  let hg : Int32 = if health_pct > 0.5 {
     200
   } else {
     @types.lerpi(0, 200, health_pct * 2.0)
@@ -452,9 +452,9 @@ fn @types.Game::draw_health_hunger_bars(game : @types.Game) -> Unit {
   let hunger_pct = Float::from_int(player.hunger) /
     Float::from_int(@types.player_max_hunger)
   let hunger_fill = (Float::from_int(bar_width) * hunger_pct).to_int()
-  let hunger_r : Int = if hunger_pct < 0.3 { 200 } else { 180 }
-  let hunger_g : Int = if hunger_pct < 0.3 { 100 } else { 130 }
-  let hunger_b : Int = if hunger_pct < 0.3 { 30 } else { 50 }
+  let hunger_r : Int32 = if hunger_pct < 0.3 { 200 } else { 180 }
+  let hunger_g : Int32 = if hunger_pct < 0.3 { 100 } else { 130 }
+  let hunger_b : Int32 = if hunger_pct < 0.3 { 30 } else { 50 }
   @raylib.draw_rectangle(
     hunger_x,
     start_y,
@@ -1074,7 +1074,7 @@ fn @types.Game::draw_game_over_screen(game : @types.Game) -> Unit {
   let title = "YOU DIED"
   let tw = @draw.measure_text(title, 64)
   // Fade in
-  let alpha : Int = (game.death_timer * 200.0).to_int().min(255)
+  let alpha : Int32 = (game.death_timer * 200.0).to_int().min(255)
   @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
@@ -1136,7 +1136,7 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 120),
   )
   // Biome color indicator dot
-  let dot_r : Int = match biome {
+  let dot_r : Int32 = match biome {
     Plains => 100
     Forest => 30
     Desert => 210
@@ -1144,7 +1144,7 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     Tundra => 200
     Swamp => 60
   }
-  let dot_g : Int = match biome {
+  let dot_g : Int32 = match biome {
     Plains => 180
     Forest => 120
     Desert => 180
@@ -1152,7 +1152,7 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     Tundra => 220
     Swamp => 100
   }
-  let dot_b : Int = match biome {
+  let dot_b : Int32 = match biome {
     Plains => 80
     Forest => 50
     Desert => 100
@@ -1197,7 +1197,7 @@ fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   let n_offset = @math.sinf(yaw) * 40.0
   let n_x = cx + n_offset.to_int()
   // Draw N marker
-  let n_alpha : Int = if n_offset.abs() < 30.0 { 255 } else { 100 }
+  let n_alpha : Int32 = if n_offset.abs() < 30.0 { 255 } else { 100 }
   @draw.draw_text(
     "N",
     n_x - 4,
@@ -1208,7 +1208,7 @@ fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   // South indicator
   let s_offset = @math.sinf(yaw + @types.pi) * 40.0
   let s_x = cx + s_offset.to_int()
-  let s_alpha : Int = if s_offset.abs() < 30.0 { 255 } else { 100 }
+  let s_alpha : Int32 = if s_offset.abs() < 30.0 { 255 } else { 100 }
   @draw.draw_text(
     "S",
     s_x - 4,
@@ -1219,7 +1219,7 @@ fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   // East indicator
   let e_offset = @math.sinf(yaw + @types.pi * 0.5) * 40.0
   let e_x = cx + e_offset.to_int()
-  let e_alpha : Int = if e_offset.abs() < 30.0 { 200 } else { 80 }
+  let e_alpha : Int32 = if e_offset.abs() < 30.0 { 200 } else { 80 }
   @draw.draw_text(
     "E",
     e_x - 4,
@@ -1230,7 +1230,7 @@ fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   // West indicator
   let w_offset = @math.sinf(yaw - @types.pi * 0.5) * 40.0
   let w_x = cx + w_offset.to_int()
-  let w_alpha : Int = if w_offset.abs() < 30.0 { 200 } else { 80 }
+  let w_alpha : Int32 = if w_offset.abs() < 30.0 { 200 } else { 80 }
   @draw.draw_text(
     "W",
     w_x - 4,
@@ -1290,12 +1290,12 @@ fn @types.Game::draw_tool_durability(game : @types.Game) -> Unit {
   }
   let fill = (Float::from_int(bar_width) * dur_pct).to_int()
   // Color: green -> yellow -> red
-  let dur_r : Int = if dur_pct > 0.5 {
+  let dur_r : Int32 = if dur_pct > 0.5 {
     @types.lerpi(255, 50, (dur_pct - 0.5) * 2.0)
   } else {
     255
   }
-  let dur_g : Int = if dur_pct > 0.5 {
+  let dur_g : Int32 = if dur_pct > 0.5 {
     200
   } else if dur_pct > 0.25 {
     @types.lerpi(80, 200, (dur_pct - 0.25) * 4.0)
@@ -1435,7 +1435,7 @@ fn @types.Game::draw_inventory_full_warning(game : @types.Game) -> Unit {
   let cy = @types.screen_height / 2 - 60
   // Flash effect: pulse alpha
   let flash = @math.sinf(game.inv_full_timer * 8.0)
-  let alpha : Int = if flash > 0.0 { 255 } else { 180 }
+  let alpha : Int32 = if flash > 0.0 { 255 } else { 180 }
   // Background
   @raylib.draw_rectangle(
     cx - 10,
@@ -1585,7 +1585,7 @@ fn @types.Game::draw_enemy_count_indicator(game : @types.Game) -> Unit {
   )
   // Pulsing warning color
   let pulse = @math.sinf(game.day_timer * 4.0)
-  let pr : Int = if pulse > 0.0 { 255 } else { 200 }
+  let pr : Int32 = if pulse > 0.0 { 255 } else { 200 }
   @draw.draw_text(text, tx, ty, 16, @raylib.Color::new(pr, 80, 80, 240))
 }
 

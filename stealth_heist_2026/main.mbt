@@ -1,51 +1,51 @@
 ///|
-let sw : Int = 1080
+let sw : Int32 = 1080
 
 ///|
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
-let map_w : Int = 18
+let map_w : Int32 = 18
 
 ///|
-let map_h : Int = 12
+let map_h : Int32 = 12
 
 ///|
-let tile : Int = 48
+let tile : Int32 = 48
 
 ///|
-let map_x : Int = 108
+let map_x : Int32 = 108
 
 ///|
-let map_y : Int = 92
+let map_y : Int32 = 92
 
 ///|
 struct Guard {
-  mut x : Int
-  mut y : Int
-  mut dir : Int
-  mut stunned : Int
+  mut x : Int32
+  mut y : Int32
+  mut dir : Int32
+  mut stunned : Int32
 }
 
 ///|
 struct Card {
-  mut x : Int
-  mut y : Int
+  mut x : Int32
+  mut y : Int32
   mut collected : Bool
 }
 
 ///|
-fn idx(x : Int, y : Int) -> Int {
+fn idx(x : Int32, y : Int32) -> Int32 {
   y * map_w + x
 }
 
 ///|
-fn set_wall(map : Array[Int], x : Int, y : Int) -> Unit {
+fn set_wall(map : Array[Int32], x : Int32, y : Int32) -> Unit {
   map[idx(x, y)] = 1
 }
 
 ///|
-fn is_wall(map : Array[Int], x : Int, y : Int) -> Bool {
+fn is_wall(map : Array[Int32], x : Int32, y : Int32) -> Bool {
   if x < 0 || x >= map_w || y < 0 || y >= map_h {
     true
   } else {
@@ -54,7 +54,7 @@ fn is_wall(map : Array[Int], x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn build_map(map : Array[Int]) -> Unit {
+fn build_map(map : Array[Int32]) -> Unit {
   for i in 0..<map.length() {
     map[i] = 0
   }
@@ -122,11 +122,11 @@ fn reset_guards(guards : Array[Guard]) -> Unit {
 
 ///|
 fn has_line_of_sight(
-  map : Array[Int],
-  gx : Int,
-  gy : Int,
-  px : Int,
-  py : Int,
+  map : Array[Int32],
+  gx : Int32,
+  gy : Int32,
+  px : Int32,
+  py : Int32,
 ) -> Bool {
   if gx == px {
     let step = if py > gy { 1 } else { -1 }
@@ -154,7 +154,12 @@ fn has_line_of_sight(
 }
 
 ///|
-fn try_step(map : Array[Int], x : Int, y : Int, dir : Int) -> (Int, Int, Bool) {
+fn try_step(
+  map : Array[Int32],
+  x : Int32,
+  y : Int32,
+  dir : Int32,
+) -> (Int32, Int32, Bool) {
   let mut nx = x
   let mut ny = y
   if dir == 0 {
@@ -175,10 +180,10 @@ fn try_step(map : Array[Int], x : Int, y : Int, dir : Int) -> (Int, Int, Bool) {
 
 ///|
 fn move_guard_toward_player(
-  map : Array[Int],
+  map : Array[Int32],
   sentry : Guard,
-  px : Int,
-  py : Int,
+  px : Int32,
+  py : Int32,
 ) -> Unit {
   if sentry.x == px {
     let dir = if py > sentry.y { 1 } else { 3 }
@@ -208,7 +213,7 @@ fn all_cards_collected(cards : Array[Card]) -> Bool {
 }
 
 ///|
-fn collected_cards(cards : Array[Card]) -> Int {
+fn collected_cards(cards : Array[Card]) -> Int32 {
   let mut count = 0
   for card in cards {
     if card.collected {
@@ -224,7 +229,7 @@ fn main {
   @raylib.set_target_fps(60)
   @draw.init_font()
 
-  let map : Array[Int] = Array::make(map_w * map_h, 0)
+  let map : Array[Int32] = Array::make(map_w * map_h, 0)
   build_map(map)
 
   let guards : Array[Guard] = Array::makei(4, fn(_i) {

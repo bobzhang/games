@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum MetalKind {
   Iron
   Copper
@@ -6,7 +7,7 @@ pub(all) enum MetalKind {
   Gold
   Carbon
   Zinc
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend MetalKind with Eq::{not_equal, equal}
@@ -23,11 +24,12 @@ pub impl Show for MetalKind with fn output(self, logger) {
 pub extend MetalKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Temperature {
   Low
   Medium
   High
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Temperature with Eq::{not_equal, equal}
@@ -44,6 +46,7 @@ pub impl Show for Temperature with fn output(self, logger) {
 pub extend Temperature with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   LevelSelect
@@ -51,7 +54,7 @@ pub(all) enum Screen {
   Blending
   LevelComplete
   LevelFailed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -68,12 +71,13 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum StarRating {
   Zero
   One
   Two
   Three
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend StarRating with Eq::{not_equal, equal}

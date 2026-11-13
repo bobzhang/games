@@ -14,7 +14,7 @@ pub fn all_targets_satisfied(grid : @types.Grid) -> Bool {
 }
 
 ///|
-pub fn count_targets_satisfied(grid : @types.Grid) -> (Int, Int) {
+pub fn count_targets_satisfied(grid : @types.Grid) -> (Int32, Int32) {
   // Returns (satisfied, total)
   let mut satisfied = 0
   let mut total = 0
@@ -33,7 +33,7 @@ pub fn count_targets_satisfied(grid : @types.Grid) -> (Int, Int) {
 }
 
 ///|
-pub fn count_waste(grid : @types.Grid) -> Int {
+pub fn count_waste(grid : @types.Grid) -> Int32 {
   // Count non-target tiles that have ink on them
   let mut waste = 0
   for row in 0..<grid.height {
@@ -50,8 +50,8 @@ pub fn count_waste(grid : @types.Grid) -> Int {
 ///|
 pub fn compute_stars(
   grid : @types.Grid,
-  drops_used : Int,
-  par_drops : Int,
+  drops_used : Int32,
+  par_drops : Int32,
 ) -> @types.StarRating {
   if !all_targets_satisfied(grid) {
     return Zero

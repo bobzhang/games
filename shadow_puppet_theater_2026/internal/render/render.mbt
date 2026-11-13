@@ -1,9 +1,9 @@
 ///|
 fn draw_thick_line(
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
   color : @raylib.Color,
 ) -> Unit {
   @raylib.draw_line(x0, y0, x1, y1, color)
@@ -133,8 +133,8 @@ fn @types.Game::draw_stage_screen(game : @types.Game) -> Unit {
 
 ///|
 fn draw_pose_shadow(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   scale : Float,
   pose : @types.Pose,
   body : @raylib.Color,
@@ -354,9 +354,9 @@ fn @types.Game::draw_sequence_strip(game : @types.Game) -> Unit {
 ///|
 fn draw_meter(
   label : String,
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
   value : Float,
   max_value : Float,
   fg : @raylib.Color,
@@ -367,7 +367,7 @@ fn draw_meter(
   } else {
     @types.clampf(value / max_value, 0.0, 1.0)
   }
-  let fill_w : Int = (Float::from_int(w) * ratio).to_int()
+  let fill_w : Int32 = (Float::from_int(w) * ratio).to_int()
 
   @draw.draw_text(label, x, y, 22, @raylib.Color::new(246, 242, 234, 255))
   @raylib.draw_rectangle(x, y + 27, w, 16, bg)

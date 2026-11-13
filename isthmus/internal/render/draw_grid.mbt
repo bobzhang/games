@@ -1,5 +1,5 @@
 ///|
-fn water_color(depth : Int) -> @raylib.Color {
+fn water_color(depth : Int32) -> @raylib.Color {
   if depth <= 1 {
     @types.color_water_shallow
   } else if depth <= 2 {
@@ -10,7 +10,7 @@ fn water_color(depth : Int) -> @raylib.Color {
 }
 
 ///|
-fn land_color(height : Int, sea_level : Int) -> @raylib.Color {
+fn land_color(height : Int32, sea_level : Int32) -> @raylib.Color {
   let above = height - sea_level
   if above <= 1 {
     @types.color_land_low
@@ -25,11 +25,11 @@ fn land_color(height : Int, sea_level : Int) -> @raylib.Color {
 
 ///|
 fn draw_tile(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   tile : @types.Tile,
-  sea_level : Int,
-  frame : Int,
+  sea_level : Int32,
+  frame : Int32,
 ) -> Unit {
   let px = @types.grid_offset_x + x * @types.cell_size
   let py = @types.grid_offset_y + y * @types.cell_size
@@ -86,7 +86,7 @@ fn draw_tile(
 }
 
 ///|
-fn draw_settlement(px : Int, py : Int, cs : Int) -> Unit {
+fn draw_settlement(px : Int32, py : Int32, cs : Int32) -> Unit {
   let cx = px + cs / 2
   let cy = py + cs / 2
   let size = cs / 3

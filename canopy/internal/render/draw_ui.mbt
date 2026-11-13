@@ -158,7 +158,7 @@ fn draw_play_state_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars(count : Int, cx : Int, cy : Int) -> Unit {
+fn draw_stars(count : Int32, cx : Int32, cy : Int32) -> Unit {
   for i in 0..<3 {
     let x = cx - 60 + i * 45
     let color = if i < count {

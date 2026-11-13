@@ -8,7 +8,7 @@ fn @types.Game::clear_cores(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_core_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_core_slot(game : @types.Game) -> Int32 {
   for i, slot in game.cores {
     if !slot.active {
       break i
@@ -23,7 +23,7 @@ fn @types.Game::spawn_core_entity(
   game : @types.Game,
   x : Float,
   y : Float,
-  hp : Int,
+  hp : Int32,
 ) -> Bool {
   let slot = game.alloc_core_slot()
   if slot < 0 {
@@ -42,7 +42,7 @@ fn @types.Game::spawn_core_entity(
 }
 
 ///|
-fn core_goal_for_stage(stage : Int) -> Int {
+fn core_goal_for_stage(stage : Int32) -> Int32 {
   let wave = stage + 1
   (3 + wave / 4).clamp(min=3, max=8)
 }
@@ -58,9 +58,9 @@ fn tile_is_core_spawnable(tile : @types.Tile) -> Bool {
 ///|
 fn @types.Game::try_spawn_core_at_tile(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
-  hp : Int,
+  tx : Int32,
+  ty : Int32,
+  hp : Int32,
 ) -> Bool {
   if !@types.in_tile_bounds(tx, ty) {
     return false
@@ -91,7 +91,7 @@ fn @types.Game::try_spawn_core_at_tile(
 }
 
 ///|
-fn @types.Game::seed_stage_cores(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::seed_stage_cores(game : @types.Game, stage : Int32) -> Unit {
   game.clear_cores()
   let wave = stage + 1
   let hp = @types.core_hp_base + wave * 2
@@ -144,9 +144,9 @@ fn @types.Game::core_objective_done(game : @types.Game) -> Bool {
 ///|
 fn @types.Game::damage_core(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   team : @types.Team,
-  power : Int,
+  power : Int32,
 ) -> Bool {
   if index < 0 || index >= game.cores.length() {
     return false

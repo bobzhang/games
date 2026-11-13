@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
@@ -6,7 +7,7 @@ pub(all) enum Screen {
   Playing
   Firing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -23,6 +24,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug, ToJson)
 pub(all) enum GlazeColor {
   Red
   Blue
@@ -31,7 +33,7 @@ pub(all) enum GlazeColor {
   White
   Black
   Empty
-} derive(Eq, Debug, ToJson)
+}
 
 ///|
 pub extend GlazeColor with Eq::{not_equal, equal}
@@ -51,6 +53,7 @@ pub impl Show for GlazeColor with fn output(self, logger) {
 pub extend GlazeColor with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug, ToJson)
 pub(all) enum FiredColor {
   FRed
   FBlue
@@ -67,7 +70,7 @@ pub(all) enum FiredColor {
   FDeepBlack
   FCracked
   FEmpty
-} derive(Eq, Debug, ToJson)
+}
 
 ///|
 pub extend FiredColor with Eq::{not_equal, equal}
@@ -87,11 +90,12 @@ pub impl Show for FiredColor with fn output(self, logger) {
 pub extend FiredColor with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Placing
   ReadyToFire
   LevelComplete
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -108,11 +112,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Beginner
   Intermediate
   Advanced
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

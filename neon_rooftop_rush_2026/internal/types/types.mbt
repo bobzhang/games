@@ -6,9 +6,9 @@ pub(all) struct Segment {
   mut y : Float
   mut w : Float
   mut h : Float
-  mut skin : Int
-  mut neon : Int
-  mut window_seed : Int
+  mut skin : Int32
+  mut neon : Int32
+  mut window_seed : Int32
 }
 
 ///|
@@ -80,7 +80,7 @@ pub(all) struct Player {
   mut grounded : Bool
   mut coyote_t : Float
   mut jump_buf_t : Float
-  mut air_jumps : Int
+  mut air_jumps : Int32
   mut slide_t : Float
   mut grapple_t : Float
   mut grapple_target_y : Float
@@ -106,12 +106,12 @@ pub(all) struct Game {
   mut time_s : Float
   mut speed : Float
   mut distance : Float
-  mut score : Int
-  mut best_score : Int
-  mut chips_collected : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut chips_collected : Int32
+  mut combo : Int32
   mut combo_t : Float
-  mut stage : Int
+  mut stage : Int32
   mut stage_goal : Float
   mut stage_progress : Float
   mut health : Float
@@ -121,7 +121,7 @@ pub(all) struct Game {
   mut last_segment_end : Float
   mut hint_t : Float
   mut result_t : Float
-  mut stage_clear_bonus : Int
+  mut stage_clear_bonus : Int32
   mut input_jump_press : Bool
   mut input_jump_hold : Bool
   mut input_slide_hold : Bool
@@ -129,7 +129,7 @@ pub(all) struct Game {
   mut input_pause_press : Bool
   mut input_restart_press : Bool
   mut touch_mode : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
   mut touch_jump_prev : Bool
   mut touch_grapple_prev : Bool
   mut touch_restart_prev : Bool

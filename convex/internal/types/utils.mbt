@@ -241,7 +241,7 @@ pub fn tier_name(tier : Tier) -> String {
 }
 
 ///|
-pub fn tier_start_index(tier : Tier) -> Int {
+pub fn tier_start_index(tier : Tier) -> Int32 {
   match tier {
     Vertices => 0
     Edges => tier1_count
@@ -250,7 +250,7 @@ pub fn tier_start_index(tier : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(tier : Tier) -> Int {
+pub fn tier_level_count(tier : Tier) -> Int32 {
   match tier {
     Vertices => tier1_count
     Edges => tier2_count

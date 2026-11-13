@@ -395,8 +395,8 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
     let ex = p.x - p.ori_fx * 1.5
     let ey = p.y - p.ori_fy * 1.5
     let ez = p.z - p.ori_fz * 1.5
-    let r : Int = if p.boosting { 100 } else { 50 }
-    let g : Int = if p.boosting { 180 } else { 120 }
+    let r : Int32 = if p.boosting { 100 } else { 50 }
+    let g : Int32 = if p.boosting { 180 } else { 120 }
     @types.spawn_particles(game, ex, ey, ez, 1, r, g, 255)
   }
 

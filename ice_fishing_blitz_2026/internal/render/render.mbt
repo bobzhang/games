@@ -120,7 +120,7 @@ fn draw_texture_centered(
 ///|
 /// Draws a cell from the generated 3x3 entity sheet centered on a point.
 fn draw_entity_sprite(
-  index : Int,
+  index : Int32,
   cx : Float,
   cy : Float,
   w : Float,
@@ -167,7 +167,7 @@ fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
 
 ///|
 /// Returns a random horizontal shake offset when shake is active, else 0.
-fn @types.Game::shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -177,7 +177,7 @@ fn @types.Game::shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical shake offset when shake is active, else 0.
-fn @types.Game::shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int32 {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -232,7 +232,7 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
       )
 
       for i in 0..<16 {
-        let y : Int = i * 64
+        let y : Int32 = i * 64
         @raylib.draw_rectangle(
           0,
           y,
@@ -252,7 +252,11 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the ice sheet, water area, grid lines, hole, and catch zone with shake offset.
-fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_world_back(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   match tex_ice_world_panel.val {
     Some(texture) => {
       draw_texture_cover(
@@ -299,8 +303,8 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
   )
 
   for i in 0..<18 {
-    let y : Int = @types.water_top + oy + i * 42
-    let shift : Int = (game.bg_wave(1.1 + Float::from_int(i) * 0.07) * 20.0).to_int()
+    let y : Int32 = @types.water_top + oy + i * 42
+    let shift : Int32 = (game.bg_wave(1.1 + Float::from_int(i) * 0.07) * 20.0).to_int()
 
     @raylib.draw_line(
       @types.world_x0 + ox + 12,
@@ -312,7 +316,7 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
   }
 
   for i in 0..<24 {
-    let x : Int = @types.world_x0 + ox + i * 48
+    let x : Int32 = @types.world_x0 + ox + i * 48
     @raylib.draw_line(
       x,
       @types.water_top + oy + 6,
@@ -322,11 +326,14 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
     )
   }
 
-  let crack_wobble : Int = (game.bg_wave(1.9) * 8.0).to_int()
+  let crack_wobble : Int32 = (game.bg_wave(1.9) * 8.0).to_int()
 
   for i in 0..<9 {
-    let sx : Int = @types.world_x0 + 120 + i * 108 + crack_wobble
-    let sy : Int = @types.water_top - 14 + oy + @raylib.get_random_value(-3, 3)
+    let sx : Int32 = @types.world_x0 + 120 + i * 108 + crack_wobble
+    let sy : Int32 = @types.water_top -
+      14 +
+      oy +
+      @raylib.get_random_value(-3, 3)
     @raylib.draw_line(
       sx + ox,
       sy,
@@ -385,7 +392,7 @@ fn fish_color(kind : @types.FishKind) -> @raylib.Color {
 
 ///|
 /// Returns the generated sprite-sheet cell index for a fish kind.
-fn fish_sprite_index(kind : @types.FishKind) -> Int {
+fn fish_sprite_index(kind : @types.FishKind) -> Int32 {
   match kind {
     Trout => 0
     Salmon => 1
@@ -395,13 +402,13 @@ fn fish_sprite_index(kind : @types.FishKind) -> Int {
 
 ///|
 /// Draws one fish entity with body, tail, eye, and hook glow if hooked.
-fn draw_fish(f : @types.Fish, ox : Int, oy : Int) -> Unit {
+fn draw_fish(f : @types.Fish, ox : Int32, oy : Int32) -> Unit {
   if !f.active {
     return
   }
 
-  let x : Int = f.x.to_int() + ox
-  let y : Int = f.y.to_int() + oy
+  let x : Int32 = f.x.to_int() + ox
+  let y : Int32 = f.y.to_int() + oy
 
   let c0 : @raylib.Color = fish_color(f.kind)
 
@@ -418,7 +425,7 @@ fn draw_fish(f : @types.Fish, ox : Int, oy : Int) -> Unit {
   if !used_art {
     @raylib.draw_ellipse(x, y, f.r + 4.0, f.r * 0.68, c0)
 
-    let dir : Int = if f.vx >= 0.0 { 1 } else { -1 }
+    let dir : Int32 = if f.vx >= 0.0 { 1 } else { -1 }
 
     @raylib.draw_triangle(
       @raylib.Vector2::new(
@@ -471,7 +478,7 @@ fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
 
 ///|
 /// Returns the generated sprite-sheet cell index for a hazard kind.
-fn hazard_sprite_index(kind : @types.HazardKind) -> Int {
+fn hazard_sprite_index(kind : @types.HazardKind) -> Int32 {
   match kind {
     Jelly => 3
     Eel => 4
@@ -481,13 +488,13 @@ fn hazard_sprite_index(kind : @types.HazardKind) -> Int {
 
 ///|
 /// Draws one hazard entity with kind-specific shape: jellyfish, eel, or ice chunk.
-fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
+fn draw_hazard(h : @types.Hazard, ox : Int32, oy : Int32) -> Unit {
   if !h.active {
     return
   }
 
-  let x : Int = h.x.to_int() + ox
-  let y : Int = h.y.to_int() + oy
+  let x : Int32 = h.x.to_int() + ox
+  let y : Int32 = h.y.to_int() + oy
   let c0 : @raylib.Color = hazard_color(h.kind)
 
   let used_art = match h.kind {
@@ -531,7 +538,7 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
       @raylib.draw_circle(x, y, h.r, c0)
 
       for k in 0..<5 {
-        let px : Int = x - h.r.to_int() + 8 + k * 8
+        let px : Int32 = x - h.r.to_int() + 8 + k * 8
         @raylib.draw_line(
           px,
           y + h.r.to_int() - 2,
@@ -603,7 +610,7 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 
 ///|
 /// Returns the generated sprite-sheet cell index for a pickup kind.
-fn pickup_sprite_index(kind : @types.PickupKind) -> Int {
+fn pickup_sprite_index(kind : @types.PickupKind) -> Int32 {
   match kind {
     Bait => 6
     Repair => 7
@@ -613,13 +620,13 @@ fn pickup_sprite_index(kind : @types.PickupKind) -> Int {
 
 ///|
 /// Draws one pickup entity with pulsing circle and kind-specific icon.
-fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
+fn draw_pickup(p : @types.Pickup, ox : Int32, oy : Int32) -> Unit {
   if !p.active {
     return
   }
 
-  let x : Int = p.x.to_int() + ox
-  let y : Int = p.y.to_int() + oy
+  let x : Int32 = p.x.to_int() + ox
+  let y : Int32 = p.y.to_int() + oy
   let pulse : Float = @math.sinf(p.phase * 2.6)
   let rr : Float = 15.0 + pulse * 1.6
 
@@ -680,13 +687,17 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active particles with opacity based on remaining lifetime.
-fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  ox : Int32,
+  oy : Int32,
+) -> Unit {
   for particle in game.particles {
     if !particle.active {
       continue
     }
 
-    let a : Int = if particle.life > 0.7 {
+    let a : Int32 = if particle.life > 0.7 {
       236
     } else if particle.life > 0.4 {
       184
@@ -711,11 +722,11 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the fishing line, hook circle, barb lines, and boost glow.
-fn @types.Game::draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  let hx : Int = game.hook_x.to_int() + ox
-  let hy : Int = game.hook_y.to_int() + oy
+fn @types.Game::draw_hook(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
+  let hx : Int32 = game.hook_x.to_int() + ox
+  let hy : Int32 = game.hook_y.to_int() + oy
 
-  let line_a : Int = if game.grab_on { 240 } else { 190 }
+  let line_a : Int32 = if game.grab_on { 240 } else { 190 }
 
   @raylib.draw_line(
     @types.hole_x + ox,
@@ -787,13 +798,13 @@ fn @types.Game::draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the hint marker circle and guide line to the hook if hint timer is active.
-fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int32, oy : Int32) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
 
   let pulse : Float = @math.sinf(game.ui_t * 10.0)
-  let alpha : Int = if game.hint_t > 1.2 {
+  let alpha : Int32 = if game.hint_t > 1.2 {
     238
   } else {
     100 + (game.hint_t * 110.0).to_int()
@@ -817,10 +828,10 @@ fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
 ///|
 /// Draws a labeled horizontal progress bar with background, fill, and outline.
 fn draw_bar(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   ratio : Float,
   fill : @raylib.Color,
   back : @raylib.Color,
@@ -828,7 +839,7 @@ fn draw_bar(
   @raylib.draw_rectangle(x, y, w, h, back)
 
   let rr : Float = @types.clampf(ratio, 0.0, 1.0)
-  let fw : Int = (Float::from_int(w) * rr).to_int()
+  let fw : Int32 = (Float::from_int(w) * rr).to_int()
   if fw > 0 {
     @raylib.draw_rectangle(x, y, fw, h, fill)
   }
@@ -1032,7 +1043,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 /// Draws a single touch button with active/idle fill color and centered label.
 fn @types.Game::draw_touch_button(
   game : @types.Game,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   label : String,
   c_idle : @raylib.Color,
   c_on : @raylib.Color,
@@ -1067,8 +1078,8 @@ fn @types.Game::draw_touch_button(
     @raylib.Color::new(220, 236, 248, 190),
   )
 
-  let fs : Int = if rect.3 <= 96 { 24 } else { 30 }
-  let tw : Int = @draw.measure_text(label, fs)
+  let fs : Int32 = if rect.3 <= 96 { 24 } else { 30 }
+  let tw : Int32 = @draw.measure_text(label, fs)
   @draw.draw_text(
     label,
     rect.0 + (rect.2 - tw) / 2,
@@ -1157,15 +1168,15 @@ fn @types.Game::draw_msg(game : @types.Game) -> Unit {
     return
   }
 
-  let a : Int = if game.msg_t > 1.0 {
+  let a : Int32 = if game.msg_t > 1.0 {
     228
   } else {
     90 + (game.msg_t * 136.0).to_int()
   }
 
-  let w : Int = @draw.measure_text(game.msg, 28) + 38
-  let x : Int = @types.world_x0 + (@types.world_w - w) / 2
-  let y : Int = @types.world_y0 + 16
+  let w : Int32 = @draw.measure_text(game.msg, 28) + 38
+  let x : Int32 = @types.world_x0 + (@types.world_w - w) / 2
+  let y : Int32 = @types.world_y0 + 16
 
   @raylib.draw_rectangle(x, y, w, 46, @raylib.Color::new(22, 34, 52, a))
   @raylib.draw_rectangle_lines(
@@ -1389,8 +1400,8 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_background()
 
-  let ox : Int = game.shake_x()
-  let oy : Int = game.shake_y()
+  let ox : Int32 = game.shake_x()
+  let oy : Int32 = game.shake_y()
 
   game.draw_world_back(ox, oy)
 

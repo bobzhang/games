@@ -1,10 +1,10 @@
 ///|
 /// Window width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Window height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// World width in pixels (matches window width).
@@ -16,23 +16,23 @@ let world_h : Float = 760.0
 
 ///|
 /// Maximum simultaneous active traffic vehicles.
-let max_traffic : Int = 120
+let max_traffic : Int32 = 120
 
 ///|
 /// Maximum simultaneous active passenger entities.
-let max_passengers : Int = 36
+let max_passengers : Int32 = 36
 
 ///|
 /// Maximum simultaneous active fuel pickup items.
-let max_fuels : Int = 24
+let max_fuels : Int32 = 24
 
 ///|
 /// Maximum simultaneous active particles.
-let max_particles : Int = 760
+let max_particles : Int32 = 760
 
 ///|
 /// Maximum road intersection marker slots.
-let max_markers : Int = 32
+let max_markers : Int32 = 32
 
 ///|
 /// Player taxi state: position, velocity, HP, fuel, cash, combo, rating, boosts, and carried passenger.
@@ -43,14 +43,14 @@ struct Taxi {
   mut vy : Float
   mut hp : Float
   mut fuel : Float
-  mut cash : Int
-  mut combo : Int
+  mut cash : Int32
+  mut combo : Int32
   mut rating : Float
   mut flash_t : Float
   mut boost_t : Float
   mut boost_cd : Float
   mut horn_cd : Float
-  mut carry_idx : Int
+  mut carry_idx : Int32
   mut drop_x : Float
   mut drop_y : Float
   mut meter : Float
@@ -65,7 +65,7 @@ struct Traffic {
   mut vx : Float
   mut vy : Float
   mut speed : Float
-  mut lane : Int
+  mut lane : Int32
   mut size : Float
   mut horn_t : Float
 }
@@ -78,9 +78,9 @@ struct Passenger {
   mut y : Float
   mut dx : Float
   mut dy : Float
-  mut fare : Int
+  mut fare : Int32
   mut wait_t : Float
-  mut state : Int
+  mut state : Int32
   mut pulse_t : Float
 }
 
@@ -106,7 +106,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -141,10 +141,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -163,7 +163,7 @@ fn randf(lo : Float, hi : Float) -> Float {
 ///|
 /// Formats a driver rating float as a one-decimal string (e.g. 4.2).
 fn rating_str(r : Float) -> String {
-  let v : Int = (r * 10.0).to_int()
+  let v : Int32 = (r * 10.0).to_int()
   "\{v / 10}.\{v % 10}"
 }
 
@@ -268,7 +268,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for ps_elem in ps {
@@ -297,9 +297,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<count {
     ignore(i)
@@ -309,7 +309,7 @@ fn burst(
 
 ///|
 /// Populates the marker array with the 20 road intersection positions and returns the count.
-fn setup_markers(ms : Array[Marker]) -> Int {
+fn setup_markers(ms : Array[Marker]) -> Int32 {
   clear_markers(ms)
   let mut n = 0
 
@@ -350,7 +350,7 @@ fn setup_markers(ms : Array[Marker]) -> Int {
 
 ///|
 /// Activates a new traffic vehicle in a random lane with speed scaled to the current wave.
-fn spawn_traffic(ts : Array[Traffic], wave : Int) -> Bool {
+fn spawn_traffic(ts : Array[Traffic], wave : Int32) -> Bool {
   let mut slot = -1
   for i in 0..<ts.length() {
     if slot < 0 && !ts[i].active {
@@ -435,8 +435,8 @@ fn spawn_traffic(ts : Array[Traffic], wave : Int) -> Bool {
 fn spawn_passenger(
   ps : Array[Passenger],
   markers : Array[Marker],
-  marker_count : Int,
-  wave : Int,
+  marker_count : Int32,
+  wave : Int32,
 ) -> Bool {
   let mut slot = -1
   for i in 0..<ps.length() {
@@ -480,7 +480,7 @@ fn spawn_passenger(
 fn spawn_fuel(
   fs : Array[FuelPickup],
   markers : Array[Marker],
-  marker_count : Int,
+  marker_count : Int32,
 ) -> Bool {
   let mut slot = -1
   for i in 0..<fs.length() {
@@ -586,10 +586,10 @@ fn main {
     meter: 0.0,
   }
 
-  let mut state : Int = 0
-  let mut wave : Int = 1
+  let mut state : Int32 = 0
+  let mut wave : Int32 = 1
   let mut timer : Float = 210.0
-  let mut target_cash : Int = 1600
+  let mut target_cash : Int32 = 1600
   let mut msg : String = "Pick up passengers and beat city traffic"
   let mut msg_t : Float = 3.0
 
@@ -597,8 +597,8 @@ fn main {
   let mut passenger_cd : Float = 1.4
   let mut fuel_cd : Float = 5.2
 
-  let mut served : Int = 0
-  let mut misses : Int = 0
+  let mut served : Int32 = 0
+  let mut misses : Int32 = 0
 
   let reset_game = fn() {
     taxi.x = 640.0
@@ -715,10 +715,10 @@ fn main {
       let mut pick_press : Bool = @raylib.is_key_pressed(@raylib.KeyL) ||
         @raylib.is_key_pressed(@raylib.KeyEnter)
 
-      let pad_x : Int = 22
-      let pad_y : Int = sh - 194
-      let btx : Int = sw - 240
-      let bty : Int = sh - 222
+      let pad_x : Int32 = 22
+      let pad_y : Int32 = sh - 194
+      let btx : Int32 = sw - 240
+      let bty : Int32 = sh - 222
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x + 80, pad_y, 72, 56) {
@@ -1238,7 +1238,7 @@ fn main {
       }
 
       let k = particle.t / particle.life
-      let a : Int = ((Float::from_int(1) - k) * 220.0).to_int()
+      let a : Int32 = ((Float::from_int(1) - k) * 220.0).to_int()
       let mut c = @raylib.Color::new(120, 230, 252, a)
       if particle.kind == 1 {
         c = @raylib.Color::new(136, 248, 176, a)

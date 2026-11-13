@@ -47,7 +47,7 @@ pub fn draw_stress_heatmap(game : @types.Game) -> Unit {
 
 ///|
 /// Converts stress ratio (0-1) to a green-yellow-red color.
-fn stress_to_color(ratio : Float) -> (Int, Int, Int) {
+fn stress_to_color(ratio : Float) -> (Int32, Int32, Int32) {
   if ratio < 0.5 {
     // Green to yellow
     let t = ratio * 2.0
@@ -233,9 +233,9 @@ pub fn draw_star_tally(game : @types.Game) -> Unit {
 ///|
 /// Draws a simple star shape using triangles.
 fn draw_star_shape(
-  cx : Int,
-  cy : Int,
-  size : Int,
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let s = Float::from_int(size)
@@ -564,9 +564,9 @@ pub fn draw_challenge_results(game : @types.Game) -> Unit {
 ///|
 /// Draws stars at a specific position with animation.
 fn draw_star_tally_at(
-  x : Int,
-  y : Int,
-  stars : Int,
+  x : Int32,
+  y : Int32,
+  stars : Int32,
   anim_timer : Float,
 ) -> Unit {
   let anim_t = @types.clampf(anim_timer / @types.star_anim_duration, 0.0, 1.0)

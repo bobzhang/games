@@ -2,8 +2,8 @@
 /// Draws text horizontally centred on the screen at the given y coordinate.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -12,7 +12,7 @@ fn draw_center_text(
 
 ///|
 /// Returns a copy of `c` with the alpha channel set to the clamped `alpha` value.
-fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn alpha_col(c : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),
@@ -330,7 +330,7 @@ fn @types.Game::draw_bolts(
 
 ///|
 /// Returns the colour for a ring pulse of the given kind (gate, energy, or barrier).
-fn pulse_col(kind : Int) -> @raylib.Color {
+fn pulse_col(kind : Int32) -> @raylib.Color {
   if kind == 0 {
     @types.col_gate()
   } else if kind == 1 {
@@ -416,9 +416,9 @@ fn @types.Game::draw_cursor(
 fn draw_meter(
   label : String,
   value_text : String,
-  x : Int,
-  y : Int,
-  w : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
   ratio : Float,
   col : @raylib.Color,
 ) -> Unit {

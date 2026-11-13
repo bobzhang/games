@@ -29,7 +29,7 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Return x-step delta for a direction.
-pub fn dir_dx(dir : Dir) -> Int {
+pub fn dir_dx(dir : Dir) -> Int32 {
   match dir {
     Left => -1
     Right => 1
@@ -40,7 +40,7 @@ pub fn dir_dx(dir : Dir) -> Int {
 
 ///|
 /// Return y-step delta for a direction.
-pub fn dir_dy(dir : Dir) -> Int {
+pub fn dir_dy(dir : Dir) -> Int32 {
   match dir {
     Up => -1
     Down => 1
@@ -60,7 +60,7 @@ pub fn opposite_dir(a : Dir, b : Dir) -> Bool {
 
 ///|
 /// Convert an integer (0..3) to a Dir value.
-pub fn Dir::from_int(v : Int) -> Dir {
+pub fn Dir::from_int(v : Int32) -> Dir {
   match v {
     0 => Left
     1 => Right
@@ -71,7 +71,7 @@ pub fn Dir::from_int(v : Int) -> Dir {
 
 ///|
 /// Wrap x coordinate around horizontal grid bounds.
-pub fn wrap_x(x : Int) -> Int {
+pub fn wrap_x(x : Int32) -> Int32 {
   if x < 0 {
     grid_w - 1
   } else if x >= grid_w {
@@ -83,7 +83,7 @@ pub fn wrap_x(x : Int) -> Int {
 
 ///|
 /// Wrap y coordinate around vertical grid bounds.
-pub fn wrap_y(y : Int) -> Int {
+pub fn wrap_y(y : Int32) -> Int32 {
   if y < 0 {
     grid_h - 1
   } else if y >= grid_h {
@@ -95,15 +95,15 @@ pub fn wrap_y(y : Int) -> Int {
 
 ///|
 /// Compute board origin and tile size for rendering.
-pub fn board_metrics(shake_t : Float) -> (Int, Int, Int) {
-  let tile_x : Int = board_area_w / grid_w
-  let tile_y : Int = board_area_h / grid_h
+pub fn board_metrics(shake_t : Float) -> (Int32, Int32, Int32) {
+  let tile_x : Int32 = board_area_w / grid_w
+  let tile_y : Int32 = board_area_h / grid_h
 
-  let mut tile : Int = tile_x.min(tile_y)
+  let mut tile : Int32 = tile_x.min(tile_y)
   tile = tile.clamp(min=30, max=45)
 
-  let mut bx : Int = board_area_x + (board_area_w - grid_w * tile) / 2
-  let mut by : Int = board_area_y + (board_area_h - grid_h * tile) / 2
+  let mut bx : Int32 = board_area_x + (board_area_w - grid_w * tile) / 2
+  let mut by : Int32 = board_area_y + (board_area_h - grid_h * tile) / 2
 
   if shake_t > 0.0 {
     bx = bx + @raylib.get_random_value(-3, 3)
@@ -115,7 +115,7 @@ pub fn board_metrics(shake_t : Float) -> (Int, Int, Int) {
 
 ///|
 /// Return world-space center of a grid cell.
-pub fn cell_world_center(game : Game, x : Int, y : Int) -> (Float, Float) {
+pub fn cell_world_center(game : Game, x : Int32, y : Int32) -> (Float, Float) {
   let (bx, by, tile) = board_metrics(game.shake_t)
   (
     Float::from_int(bx + x * tile + tile / 2),
@@ -136,11 +136,11 @@ pub fn pointer_on_rect(
   x : Float,
   y : Float,
   hold : Bool,
-  touch_count : Int,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  touch_count : Int32,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   if !hold && touch_count <= 0 {
     return false

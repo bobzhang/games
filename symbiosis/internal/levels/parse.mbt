@@ -52,13 +52,13 @@ pub fn parse_grid(
 
 ///|
 pub fn make_level(
-  world : Int,
-  index : Int,
+  world : Int32,
+  index : Int32,
   floor_lines : Array[String],
   ceiling_lines : Array[String],
   switch_links : Array[@types.SwitchLink],
   goal : @types.GoalKind,
-  par_moves : Int,
+  par_moves : Int32,
 ) -> @types.Level {
   let (floor_tiles, floor_start, floor_exit, floor_gems) = parse_grid(
     floor_lines,

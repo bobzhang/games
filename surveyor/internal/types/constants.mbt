@@ -1,26 +1,26 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 8
+pub let grid_cols : Int32 = 8
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let cell_size : Int = 64
+pub let cell_size : Int32 = 64
 
 ///|
-pub let grid_offset_x : Int = 80
+pub let grid_offset_x : Int32 = 80
 
 ///|
-pub let grid_offset_y : Int = 80
+pub let grid_offset_y : Int32 = 80
 
 ///|
 pub let fence_thickness : Float = 6.0
@@ -29,16 +29,16 @@ pub let fence_thickness : Float = 6.0
 pub let fence_hover_thickness : Float = 4.0
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 // Colors
 
@@ -109,7 +109,7 @@ pub let color_button_hover : @raylib.Color = @raylib.Color::new(
 // House colors (for different color_id values)
 
 ///|
-pub fn house_color(id : Int) -> @raylib.Color {
+pub fn house_color(id : Int32) -> @raylib.Color {
   match id {
     0 => @raylib.Color::new(200, 60, 60, 255) // red
     1 => @raylib.Color::new(60, 100, 200, 255) // blue
@@ -124,7 +124,7 @@ pub fn house_color(id : Int) -> @raylib.Color {
 }
 
 ///|
-pub fn region_shade(id : Int) -> @raylib.Color {
+pub fn region_shade(id : Int32) -> @raylib.Color {
   match id {
     0 => @raylib.Color::new(200, 60, 60, 50)
     1 => @raylib.Color::new(60, 100, 200, 50)

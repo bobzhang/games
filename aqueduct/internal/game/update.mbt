@@ -69,7 +69,7 @@ fn update_level_select(game : @types.Game) -> Unit {
   }
   let tier_lvls = @types.tier_levels(game.levels, game.current_tier)
   // Number keys 1-7 for level selection
-  let key_offsets : Array[(Int, Int)] = [
+  let key_offsets : Array[(Int32, Int32)] = [
     (@raylib.KeyOne, 0),
     (@raylib.KeyTwo, 1),
     (@raylib.KeyThree, 2),

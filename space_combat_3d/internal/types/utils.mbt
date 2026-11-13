@@ -206,7 +206,7 @@ pub fn lead_target(
 
 ///|
 /// Returns the next pseudo-random positive integer and advances the RNG state.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -220,7 +220,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer in the inclusive range [`low`, `high`].
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -243,43 +243,43 @@ pub fn rand_bool(game : Game, chance : Float) -> Bool {
 
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if the pool is full.
-pub fn alloc_enemy(game : Game) -> Int {
+pub fn alloc_enemy(game : Game) -> Int32 {
   @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if the pool is full.
-pub fn alloc_projectile(game : Game) -> Int {
+pub fn alloc_projectile(game : Game) -> Int32 {
   @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive particle slot, or -1 if the pool is full.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive asteroid slot, or -1 if the pool is full.
-pub fn alloc_asteroid(game : Game) -> Int {
+pub fn alloc_asteroid(game : Game) -> Int32 {
   @utils.first_index_by(game.asteroids, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive power-up slot, or -1 if the pool is full.
-pub fn alloc_powerup(game : Game) -> Int {
+pub fn alloc_powerup(game : Game) -> Int32 {
   @utils.first_index_by(game.powerups, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive station slot, or -1 if the pool is full.
-pub fn alloc_station(game : Game) -> Int {
+pub fn alloc_station(game : Game) -> Int32 {
   @utils.first_index_by(game.stations, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive debris slot, or -1 if the pool is full.
-pub fn alloc_debris(game : Game) -> Int {
+pub fn alloc_debris(game : Game) -> Int32 {
   @utils.first_index_by(game.debris, fn(slot) { !slot.active })
 }
 
@@ -290,10 +290,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -326,10 +326,10 @@ pub fn spawn_explosion(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -364,7 +364,7 @@ pub fn spawn_shield_hit(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -399,10 +399,10 @@ pub fn spawn_debris(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_debris(game)
@@ -433,7 +433,7 @@ pub fn spawn_debris(
 
 ///|
 /// Returns the number of currently active enemies in the pool.
-pub fn count_active_enemies(game : Game) -> Int {
+pub fn count_active_enemies(game : Game) -> Int32 {
   let mut count = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -447,7 +447,7 @@ pub fn count_active_enemies(game : Game) -> Int {
 
 ///|
 /// Returns the number of active enemies matching the given `kind`.
-pub fn count_enemies_of_type(game : Game, kind : Int) -> Int {
+pub fn count_enemies_of_type(game : Game, kind : Int32) -> Int32 {
   let mut count = 0
   for enemy in game.enemies {
     if enemy.active && enemy.kind == kind {
@@ -461,7 +461,12 @@ pub fn count_enemies_of_type(game : Game, kind : Int) -> Int {
 
 ///|
 /// Returns the index of the nearest active enemy to the given position, or -1 if none.
-pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
+pub fn find_nearest_enemy(
+  game : Game,
+  x : Float,
+  y : Float,
+  z : Float,
+) -> Int32 {
   for i, e in game.enemies; best_idx = -1, best_dist = 999999.0F {
     if !e.active {
       continue
@@ -531,7 +536,7 @@ pub fn weapon_proj_speed(weapon : WeaponKind) -> Float {
 
 ///|
 /// Returns the display name for the given enemy `kind`.
-pub fn enemy_type_name(kind : Int) -> String {
+pub fn enemy_type_name(kind : Int32) -> String {
   if kind == enemy_fighter {
     "Fighter"
   } else if kind == enemy_cruiser {
@@ -569,9 +574,9 @@ pub fn wrap_coord(v : Float) -> Float {
 pub fn add_kill_feed(
   game : Game,
   text : String,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   // Shift existing entries up
   for i = max_kill_feed - 1; i > 0; i = i - 1 {
@@ -599,10 +604,10 @@ pub fn spawn_damage_number(
   x : Float,
   y : Float,
   z : Float,
-  value : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  value : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<max_damage_numbers {
     if !game.damage_numbers[i].active {
@@ -661,7 +666,7 @@ pub fn register_kill_combo(game : Game) -> Unit {
 /// Returns the 3D position offset for a unit at the given `index` in a formation `pattern`.
 pub fn formation_offset(
   pattern : Formation,
-  index : Int,
+  index : Int32,
   spacing : Float,
 ) -> (Float, Float, Float) {
   let fi = Float::from_int(index)
@@ -699,7 +704,7 @@ pub fn formation_offset(
 pub fn check_objective_progress(
   game : Game,
   obj_type : Objective,
-  increment : Int,
+  increment : Int32,
 ) -> Unit {
   for i in 0..<game.objectives_count {
     let obj = game.objectives[i]
@@ -731,10 +736,10 @@ pub fn spawn_directional_explosion(
   hit_dx : Float,
   hit_dy : Float,
   hit_dz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let norm = normalize3d(hit_dx, hit_dy, hit_dz)
   for i in 0..<count {
@@ -773,10 +778,10 @@ pub fn spawn_burning_debris(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   let actual = minf(Float::from_int(count), 5.0).to_int()
   for i in 0..<actual {
@@ -813,9 +818,9 @@ pub fn spawn_shock_ring(
   wz : Float,
   max_radius : Float,
   life : Float,
-  r : Int,
-  g : Int,
-  b : Int,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for ring in game.shock_rings {
     if !ring.active {
@@ -837,7 +842,7 @@ pub fn spawn_shock_ring(
 
 ///|
 /// Returns the 3D offset for a capital ship weak point at the given index.
-pub fn capital_weak_point_offset(index : Int) -> (Float, Float, Float) {
+pub fn capital_weak_point_offset(index : Int32) -> (Float, Float, Float) {
   if index == 0 {
     // Underside center
     (0.0, -1.8, 0.0)

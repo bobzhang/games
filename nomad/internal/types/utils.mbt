@@ -57,7 +57,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -66,7 +66,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -77,15 +77,15 @@ pub fn mini(a : Int, b : Int) -> Int {
 // RNG
 
 ///|
-let rng_state : Ref[Int] = { val: 12345, }
+let rng_state : Ref[Int32] = { val: 12345, }
 
 ///|
-pub fn seed_rng(s : Int) -> Unit {
+pub fn seed_rng(s : Int32) -> Unit {
   rng_state.val = s
 }
 
 ///|
-pub fn rng_next() -> Int {
+pub fn rng_next() -> Int32 {
   rng_state.val = rng_state.val * 1103515245 + 12345
   let v = rng_state.val / 65536
   if v < 0 {
@@ -96,7 +96,7 @@ pub fn rng_next() -> Int {
 }
 
 ///|
-pub fn rng_int(max : Int) -> Int {
+pub fn rng_int(max : Int32) -> Int32 {
   if max <= 0 {
     0
   } else {
@@ -151,7 +151,7 @@ pub fn hex_are_adjacent(a : HexCoord, b : HexCoord) -> Bool {
 }
 
 ///|
-pub fn hex_in_bounds(coord : HexCoord, width : Int, height : Int) -> Bool {
+pub fn hex_in_bounds(coord : HexCoord, width : Int32, height : Int32) -> Bool {
   coord.col >= 0 && coord.col < width && coord.row >= 0 && coord.row < height
 }
 
@@ -203,7 +203,7 @@ pub fn pixel_to_hex(px : Float, py : Float, size : Float) -> HexCoord {
 }
 
 ///|
-pub fn water_cost(kind : TileKind) -> Int {
+pub fn water_cost(kind : TileKind) -> Int32 {
   match kind {
     Sand => 1
     Dunes => 2
@@ -238,7 +238,7 @@ pub fn tier_name(tier : Tier) -> String {
 }
 
 ///|
-pub fn tier_level_range(tier : Tier) -> (Int, Int) {
+pub fn tier_level_range(tier : Tier) -> (Int32, Int32) {
   match tier {
     OasisTrail => (0, 7)
     DuneSea => (8, 16)
@@ -247,7 +247,7 @@ pub fn tier_level_range(tier : Tier) -> (Int, Int) {
 }
 
 ///|
-pub fn level_tier(level_idx : Int) -> Tier {
+pub fn level_tier(level_idx : Int32) -> Tier {
   if level_idx < 8 {
     OasisTrail
   } else if level_idx < 17 {
@@ -265,7 +265,7 @@ pub fn new_hex_tile(kind : TileKind) -> HexTile {
 }
 
 ///|
-pub fn new_hex_map(width : Int, height : Int) -> HexMap {
+pub fn new_hex_map(width : Int32, height : Int32) -> HexMap {
   let tiles : Array[Array[HexTile]] = []
   for _r in 0..<height {
     let row : Array[HexTile] = []
@@ -278,7 +278,7 @@ pub fn new_hex_map(width : Int, height : Int) -> HexMap {
 }
 
 ///|
-pub fn new_caravan(start : HexCoord, water : Int) -> Caravan {
+pub fn new_caravan(start : HexCoord, water : Int32) -> Caravan {
   {
     pos: start,
     water,

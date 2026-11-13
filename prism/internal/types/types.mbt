@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) struct BeamColor {
   r : Bool
   g : Bool
   b : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend BeamColor with Eq::{not_equal, equal}
@@ -12,10 +13,11 @@ pub extend BeamColor with Eq::{not_equal, equal}
 pub extend BeamColor with Debug::{to_repr}
 
 ///|
+#derive(Eq, Debug)
 pub(all) struct HexCoord {
-  q : Int
-  r : Int
-} derive(Eq, Debug)
+  q : Int32
+  r : Int32
+}
 
 ///|
 pub extend HexCoord with Eq::{not_equal, equal}
@@ -36,7 +38,7 @@ pub(all) struct HexCell {
 
 ///|
 pub(all) struct HexGrid {
-  radius : Int
+  radius : Int32
   cells : Map[String, HexCell]
 }
 
@@ -53,7 +55,7 @@ pub(all) struct AvailableComponent {
   kind : ComponentKind
   mut filter_color : FilterColor?
   mut crystal_face : CrystalFace?
-  mut count : Int
+  mut count : Int32
 }
 
 ///|
@@ -61,37 +63,45 @@ pub(all) struct Level {
   name : String
   tier : Tier
   grid_template : Array[
-    (Int, Int, ComponentKind, HexDir, FilterColor?, CrystalFace?, BeamColor?),
+    (
+      Int32,
+      Int32,
+      ComponentKind,
+      HexDir,
+      FilterColor?,
+      CrystalFace?,
+      BeamColor?,
+    ),
   ]
   available : Array[AvailableComponent]
-  par_count : Int
+  par_count : Int32
 }
 
 ///|
 pub(all) struct LevelScore {
-  mut stars : Int
+  mut stars : Int32
   mut solved : Bool
-  mut components_used : Int
+  mut components_used : Int32
 }
 
 ///|
 pub(all) struct Game {
   mut screen : Screen
   mut selected_tier : Tier
-  mut selected_level : Int
+  mut selected_level : Int32
   grid : HexGrid
   mut beams : Array[BeamSegment]
   mut play_state : PlayState
   mut palette : Array[AvailableComponent]
-  mut selected_palette : Int
-  mut current_level_index : Int
-  mut current_tier_index : Int
-  mut hover_q : Int
-  mut hover_r : Int
+  mut selected_palette : Int32
+  mut current_level_index : Int32
+  mut current_tier_index : Int32
+  mut hover_q : Int32
+  mut hover_r : Int32
   mut hover_valid : Bool
   mut scores : Array[LevelScore]
-  mut frame_count : Int
-  mut par_count : Int
+  mut frame_count : Int32
+  mut par_count : Int32
   mut level_name : String
   mut show_help : Bool
 }

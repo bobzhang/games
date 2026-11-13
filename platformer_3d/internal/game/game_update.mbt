@@ -655,7 +655,7 @@ fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
       pu.active = false
       game.activate_powerup(pu.kind)
       // Particles
-      let pr : Int = if pu.kind == @types.powerup_double_jump {
+      let pr : Int32 = if pu.kind == @types.powerup_double_jump {
         @types.pu_double_jump_r
       } else if pu.kind == @types.powerup_speed {
         @types.pu_speed_r
@@ -666,7 +666,7 @@ fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
       } else {
         @types.pu_slow_fall_r
       }
-      let pg : Int = if pu.kind == @types.powerup_double_jump {
+      let pg : Int32 = if pu.kind == @types.powerup_double_jump {
         @types.pu_double_jump_g
       } else if pu.kind == @types.powerup_speed {
         @types.pu_speed_g
@@ -677,7 +677,7 @@ fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
       } else {
         @types.pu_slow_fall_g
       }
-      let pb : Int = if pu.kind == @types.powerup_double_jump {
+      let pb : Int32 = if pu.kind == @types.powerup_double_jump {
         @types.pu_double_jump_b
       } else if pu.kind == @types.powerup_speed {
         @types.pu_speed_b
@@ -705,7 +705,7 @@ fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::activate_powerup(game : @types.Game, kind : Int) -> Unit {
+fn @types.Game::activate_powerup(game : @types.Game, kind : Int32) -> Unit {
   game.powerup_type = kind
   game.powerup_timer = @types.powerup_duration
   if kind == @types.powerup_double_jump {

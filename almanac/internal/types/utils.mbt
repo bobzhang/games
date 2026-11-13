@@ -59,7 +59,7 @@ pub fn tier_color(t : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn tier_level_count(t : Tier) -> Int {
+pub fn tier_level_count(t : Tier) -> Int32 {
   match t {
     Spring => 8
     Summer => 9
@@ -68,7 +68,7 @@ pub fn tier_level_count(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_offset(t : Tier) -> Int {
+pub fn tier_level_offset(t : Tier) -> Int32 {
   match t {
     Spring => 0
     Summer => 8
@@ -77,7 +77,7 @@ pub fn tier_level_offset(t : Tier) -> Int {
 }
 
 ///|
-pub fn height_color(h : Int) -> @raylib.Color {
+pub fn height_color(h : Int32) -> @raylib.Color {
   if h <= 0 {
     color_height0
   } else if h == 1 {
@@ -88,22 +88,27 @@ pub fn height_color(h : Int) -> @raylib.Color {
 }
 
 ///|
-pub fn grid_index(col : Int, row : Int, width : Int) -> Int {
+pub fn grid_index(col : Int32, row : Int32, width : Int32) -> Int32 {
   row * width + col
 }
 
 ///|
-pub fn grid_get(g : Grid, col : Int, row : Int) -> Tile {
+pub fn grid_get(g : Grid, col : Int32, row : Int32) -> Tile {
   g.tiles[grid_index(col, row, g.width)]
 }
 
 ///|
-pub fn in_bounds(col : Int, row : Int, width : Int, height : Int) -> Bool {
+pub fn in_bounds(
+  col : Int32,
+  row : Int32,
+  width : Int32,
+  height : Int32,
+) -> Bool {
   col >= 0 && col < width && row >= 0 && row < height
 }
 
 ///|
-pub fn wind_dir_dx(d : WindDir) -> Int {
+pub fn wind_dir_dx(d : WindDir) -> Int32 {
   match d {
     East => 1
     West => -1
@@ -112,7 +117,7 @@ pub fn wind_dir_dx(d : WindDir) -> Int {
 }
 
 ///|
-pub fn wind_dir_dy(d : WindDir) -> Int {
+pub fn wind_dir_dy(d : WindDir) -> Int32 {
   match d {
     South => 1
     North => -1
@@ -122,10 +127,10 @@ pub fn wind_dir_dy(d : WindDir) -> Int {
 
 ///|
 pub fn make_grid(
-  width : Int,
-  height : Int,
-  heights : Array[Int],
-  targets : Array[(Int, Int, WeatherState)],
+  width : Int32,
+  height : Int32,
+  heights : Array[Int32],
+  targets : Array[(Int32, Int32, WeatherState)],
 ) -> Grid {
   let tiles : Array[Tile] = []
   for r in 0..<height {
@@ -237,7 +242,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -246,7 +251,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {

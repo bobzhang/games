@@ -1,29 +1,29 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let cell_size : Int = 64
+pub let cell_size : Int32 = 64
 
 ///|
-pub let grid_size : Int = 8
+pub let grid_size : Int32 = 8
 
 ///|
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 ///|
-pub let tier1_count : Int = 7
+pub let tier1_count : Int32 = 7
 
 ///|
-pub let tier2_count : Int = 7
+pub let tier2_count : Int32 = 7
 
 ///|
-pub let tier3_count : Int = 6
+pub let tier3_count : Int32 = 6
 
 ///|
 pub let anim_duration : Float = 0.3
@@ -31,13 +31,13 @@ pub let anim_duration : Float = 0.3
 // Grid drawing offsets - current grid on left, target on right
 
 ///|
-pub let grid_left_x : Int = 80
+pub let grid_left_x : Int32 = 80
 
 ///|
-pub let grid_top_y : Int = 100
+pub let grid_top_y : Int32 = 100
 
 ///|
-pub let grid_right_x : Int = 700
+pub let grid_right_x : Int32 = 700
 
 // Colors
 

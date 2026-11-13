@@ -232,7 +232,7 @@ fn draw_tree(grid : @types.TreeGrid, species : @types.Species) -> Unit {
 }
 
 ///|
-fn min(a : Int, b : Int) -> Int {
+fn min(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {

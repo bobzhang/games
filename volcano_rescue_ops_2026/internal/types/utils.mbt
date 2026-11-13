@@ -12,19 +12,19 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 
 ///|
 /// Converts a grid coordinate to a linear cell index.
-pub fn cell_index(x : Int, y : Int) -> Int {
+pub fn cell_index(x : Int32, y : Int32) -> Int32 {
   y * grid_w + x
 }
 
 ///|
 /// Returns whether a grid coordinate is inside map bounds.
-pub fn in_bounds(x : Int, y : Int) -> Bool {
+pub fn in_bounds(x : Int32, y : Int32) -> Bool {
   x >= 0 && x < grid_w && y >= 0 && y < grid_h
 }
 
 ///|
 /// Returns terrain id at `(x, y)`, treating out-of-bounds as rock.
-pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
+pub fn tile_at(game : Game, x : Int32, y : Int32) -> Tile {
   if in_bounds(x, y) {
     game.terrain[cell_index(x, y)]
   } else {
@@ -34,7 +34,7 @@ pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
 
 ///|
 /// Returns whether lava is present at `(x, y)`.
-pub fn lava_at(game : Game, x : Int, y : Int) -> Bool {
+pub fn lava_at(game : Game, x : Int32, y : Int32) -> Bool {
   if in_bounds(x, y) {
     game.lava[cell_index(x, y)]
   } else {
@@ -44,7 +44,7 @@ pub fn lava_at(game : Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns x-direction delta for a route direction id.
-pub fn route_dx(dir : Dir) -> Int {
+pub fn route_dx(dir : Dir) -> Int32 {
   match dir {
     Left => -1
     Right => 1
@@ -54,7 +54,7 @@ pub fn route_dx(dir : Dir) -> Int {
 
 ///|
 /// Returns y-direction delta for a route direction id.
-pub fn route_dy(dir : Dir) -> Int {
+pub fn route_dy(dir : Dir) -> Int32 {
   match dir {
     Up => -1
     Down => 1
@@ -64,8 +64,8 @@ pub fn route_dy(dir : Dir) -> Int {
 
 ///|
 /// Sums waiting civilians across all active sites.
-pub fn total_waiting(game : Game) -> Int {
-  let mut total : Int = 0
+pub fn total_waiting(game : Game) -> Int32 {
+  let mut total : Int32 = 0
   for i in 0..<game.site_count {
     if game.sites[i].active && game.sites[i].waiting > 0 {
       total = total + game.sites[i].waiting
@@ -76,7 +76,7 @@ pub fn total_waiting(game : Game) -> Int {
 
 ///|
 /// Returns the display name for a level index.
-pub fn level_title(index : Int) -> String {
+pub fn level_title(index : Int32) -> String {
   if index == 0 {
     "North Ridge Lift"
   } else if index == 1 {
@@ -113,10 +113,10 @@ pub fn has_next_level(game : Game) -> Bool {
 pub fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -130,11 +130,11 @@ pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
   mouse_flag : Bool,
-  touch_count : Int,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  touch_count : Int32,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   if mouse_flag && inside_rect(mouse_x, mouse_y, x, y, w, h) {
     return true
@@ -156,7 +156,7 @@ pub fn sample_pointer(
   mouse_x : Float,
   mouse_y : Float,
   mouse_flag : Bool,
-  touch_count : Int,
+  touch_count : Int32,
 ) -> (Bool, Float, Float) {
   if mouse_flag {
     return (true, mouse_x, mouse_y)
@@ -172,94 +172,94 @@ pub fn sample_pointer(
 
 ///|
 /// Returns the map drawing rectangle.
-pub fn map_rect() -> (Int, Int, Int, Int) {
+pub fn map_rect() -> (Int32, Int32, Int32, Int32) {
   (map_x, map_y, grid_w * tile_size, grid_h * tile_size)
 }
 
 ///|
 /// Returns the execute-route button rectangle.
-pub fn execute_button_rect() -> (Int, Int, Int, Int) {
+pub fn execute_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x + 250, screen_h - 238, panel_w - 274, 68)
 }
 
 ///|
 /// Returns the clear-route button rectangle.
-pub fn clear_route_button_rect() -> (Int, Int, Int, Int) {
+pub fn clear_route_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x + 250, screen_h - 158, panel_w - 274, 62)
 }
 
 ///|
 /// Returns the coolant action button rectangle.
-pub fn coolant_button_rect() -> (Int, Int, Int, Int) {
+pub fn coolant_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x + 250, screen_h - 84, panel_w - 274, 56)
 }
 
 ///|
 /// Returns the in-mission restart button rectangle.
-pub fn restart_button_rect() -> (Int, Int, Int, Int) {
+pub fn restart_button_rect() -> (Int32, Int32, Int32, Int32) {
   (panel_x + 24, 184, panel_w - 48, 52)
 }
 
 ///|
 /// Returns the title-screen start button rectangle.
-pub fn title_start_button_rect() -> (Int, Int, Int, Int) {
+pub fn title_start_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 240, screen_h - 182, 480, 98)
 }
 
 ///|
 /// Returns the result-screen restart button rectangle.
-pub fn result_restart_button_rect() -> (Int, Int, Int, Int) {
+pub fn result_restart_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 - 290, screen_h - 198, 250, 94)
 }
 
 ///|
 /// Returns the result-screen next-level button rectangle.
-pub fn result_next_button_rect() -> (Int, Int, Int, Int) {
+pub fn result_next_button_rect() -> (Int32, Int32, Int32, Int32) {
   (screen_w / 2 + 40, screen_h - 198, 250, 94)
 }
 
 ///|
 /// Returns the d-pad center x-position.
-pub fn dpad_center_x() -> Int {
+pub fn dpad_center_x() -> Int32 {
   panel_x + 118
 }
 
 ///|
 /// Returns the d-pad center y-position.
-pub fn dpad_center_y() -> Int {
+pub fn dpad_center_y() -> Int32 {
   screen_h - 142
 }
 
 ///|
 /// Returns the square size for each d-pad button.
-pub fn dpad_size() -> Int {
+pub fn dpad_size() -> Int32 {
   78
 }
 
 ///|
 /// Returns the d-pad left button rectangle.
-pub fn dpad_left_rect() -> (Int, Int, Int, Int) {
-  let s : Int = dpad_size()
+pub fn dpad_left_rect() -> (Int32, Int32, Int32, Int32) {
+  let s : Int32 = dpad_size()
   (dpad_center_x() - s - 24, dpad_center_y() - s / 2, s, s)
 }
 
 ///|
 /// Returns the d-pad right button rectangle.
-pub fn dpad_right_rect() -> (Int, Int, Int, Int) {
-  let s : Int = dpad_size()
+pub fn dpad_right_rect() -> (Int32, Int32, Int32, Int32) {
+  let s : Int32 = dpad_size()
   (dpad_center_x() + 24, dpad_center_y() - s / 2, s, s)
 }
 
 ///|
 /// Returns the d-pad up button rectangle.
-pub fn dpad_up_rect() -> (Int, Int, Int, Int) {
-  let s : Int = dpad_size()
+pub fn dpad_up_rect() -> (Int32, Int32, Int32, Int32) {
+  let s : Int32 = dpad_size()
   (dpad_center_x() - s / 2, dpad_center_y() - s - 24, s, s)
 }
 
 ///|
 /// Returns the d-pad down button rectangle.
-pub fn dpad_down_rect() -> (Int, Int, Int, Int) {
-  let s : Int = dpad_size()
+pub fn dpad_down_rect() -> (Int32, Int32, Int32, Int32) {
+  let s : Int32 = dpad_size()
   (dpad_center_x() - s / 2, dpad_center_y() + 24, s, s)
 }

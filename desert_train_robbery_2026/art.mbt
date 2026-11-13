@@ -177,7 +177,7 @@ fn draw_wagon_art(art : GameArt, wagon : Wagon, shake_x : Float) -> Unit {
 
 ///|
 /// Draws generated loot cargo and the remaining-loot count.
-fn draw_loot_art(art : GameArt, x : Float, y : Float, loot : Int) -> Unit {
+fn draw_loot_art(art : GameArt, x : Float, y : Float, loot : Int32) -> Unit {
   draw_texture_centered(art.loot_crate, x, y, 38.0, 28.0, @raylib.white)
   @draw.draw_text(
     "\{loot}",
@@ -190,7 +190,7 @@ fn draw_loot_art(art : GameArt, x : Float, y : Float, loot : Int) -> Unit {
 
 ///|
 /// Draws a generated sheriff enemy sprite.
-fn draw_sheriff_art(art : GameArt, sx : Int, sy : Int, hit : Bool) -> Unit {
+fn draw_sheriff_art(art : GameArt, sx : Int32, sy : Int32, hit : Bool) -> Unit {
   let tint = if hit {
     @raylib.Color::new(255, 238, 148, 255)
   } else {
@@ -219,8 +219,8 @@ fn draw_sheriff_art(art : GameArt, sx : Int, sy : Int, hit : Bool) -> Unit {
 fn draw_player_art(
   art : GameArt,
   player : Rider,
-  px : Int,
-  py : Int,
+  px : Int32,
+  py : Int32,
   dash_active : Bool,
 ) -> Unit {
   if dash_active {

@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   WorldSelect
@@ -6,7 +7,7 @@ pub(all) enum Screen {
   Playing
   Results
   Paused
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -23,6 +24,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ObjectKind {
   Wall
   Target
@@ -30,7 +32,7 @@ pub(all) enum ObjectKind {
   OneWayGate
   Bumper
   Pickup
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ObjectKind with Eq::{not_equal, equal}
@@ -47,12 +49,13 @@ pub impl Show for ObjectKind with fn output(self, logger) {
 pub extend ObjectKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum BallState {
   Aiming
   Moving
   Complete
   Failed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend BallState with Eq::{not_equal, equal}

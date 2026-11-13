@@ -1,18 +1,18 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1280
+pub let screen_w : Int32 = 1280
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 720
+pub let screen_h : Int32 = 720
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Gameplay tuning constant for hud h.
-pub let hud_h : Int = 110
+pub let hud_h : Int32 = 110
 
 ///|
 /// World layout coordinate for play top.
@@ -32,19 +32,19 @@ pub let play_right : Float = Float::from_int(screen_w) - 42.0
 
 ///|
 /// Upper bound for max objs in gameplay systems.
-pub let max_objs : Int = 360
+pub let max_objs : Int32 = 360
 
 ///|
 /// Upper bound for max sparks in gameplay systems.
-pub let max_sparks : Int = 900
+pub let max_sparks : Int32 = 900
 
 ///|
 /// Upper bound for max halos in gameplay systems.
-pub let max_halos : Int = 90
+pub let max_halos : Int32 = 90
 
 ///|
 /// Upper bound for max trails in gameplay systems.
-pub let max_trails : Int = 320
+pub let max_trails : Int32 = 320
 
 ///|
 /// Gameplay tuning constant for kite w.
@@ -116,11 +116,11 @@ pub let stage_time_bonus : Float = 12.0
 
 ///|
 /// Base value before difficulty or progression scaling for stage goal base.
-pub let stage_goal_base : Int = 1300
+pub let stage_goal_base : Int32 = 1300
 
 ///|
 /// Progression and scoring constant for stage goal bonus.
-pub let stage_goal_bonus : Int = 720
+pub let stage_goal_bonus : Int32 = 720
 
 ///|
 /// Maximum value configured for calm max.

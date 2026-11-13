@@ -199,7 +199,7 @@ fn draw_board_panel_art() -> Bool {
 
 ///|
 /// Returns generated candy art for a kind id.
-fn candy_art(kind : Int) -> @raylib.Texture? {
+fn candy_art(kind : Int32) -> @raylib.Texture? {
   if kind == 0 {
     tex_candy_red.val
   } else if kind == 1 {
@@ -217,7 +217,7 @@ fn candy_art(kind : Int) -> @raylib.Texture? {
 
 ///|
 /// Draws a generated candy sprite if loaded.
-fn draw_candy_art(cx : Int, cy : Int, kind : Int) -> Bool {
+fn draw_candy_art(cx : Int32, cy : Int32, kind : Int32) -> Bool {
   match candy_art(kind) {
     Some(texture) => {
       let size = Float::from_int(@types.cell_px) * 0.82
@@ -238,7 +238,7 @@ fn draw_candy_art(cx : Int, cy : Int, kind : Int) -> Bool {
 
 ///|
 /// Draws the generated jelly overlay if loaded.
-fn draw_jelly_art(left : Int, top : Int) -> Bool {
+fn draw_jelly_art(left : Int32, top : Int32) -> Bool {
   match tex_jelly_overlay.val {
     Some(texture) => {
       draw_art_centered(
@@ -269,7 +269,7 @@ fn special_art(sp : @types.Special) -> @raylib.Texture? {
 
 ///|
 /// Draws a generated special-candy overlay if loaded.
-fn draw_special_art(cx : Int, cy : Int, sp : @types.Special) -> Bool {
+fn draw_special_art(cx : Int32, cy : Int32, sp : @types.Special) -> Bool {
   match special_art(sp) {
     Some(texture) => {
       draw_art_centered(

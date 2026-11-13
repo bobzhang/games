@@ -65,7 +65,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_island(x : Int, y : Int, frame : Int) -> Unit {
+fn draw_title_island(x : Int32, y : Int32, frame : Int32) -> Unit {
   let wave = Float::from_double(
     @math.sin(Float::from_int(frame).to_double() * 0.03),
   )
@@ -234,7 +234,7 @@ fn is_tier_unlocked(game : @types.Game, tier : @types.Tier) -> Bool {
 }
 
 ///|
-fn tier_stars(game : @types.Game, tier : @types.Tier) -> (Int, Int) {
+fn tier_stars(game : @types.Game, tier : @types.Tier) -> (Int32, Int32) {
   let start = @types.tier_start_level(tier)
   let count = @types.tier_level_count(tier)
   let mut earned = 0
@@ -476,7 +476,7 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-pub fn compute_stars(game : @types.Game) -> Int {
+pub fn compute_stars(game : @types.Game) -> Int32 {
   let level = @levels.get_level(game.selected_level)
   if game.play_state != Won {
     return 0

@@ -150,7 +150,7 @@ pub fn check_all_epicenters(
   guess : @types.Vec2i,
   epicenters : Array[@types.Epicenter],
   tolerance : Float,
-) -> Int {
+) -> Int32 {
   let mut found_index = -1
   for i in 0..<epicenters.length() {
     if !epicenters[i].found && check_guess(guess, epicenters[i].pos, tolerance) {

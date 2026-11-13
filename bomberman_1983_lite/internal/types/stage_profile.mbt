@@ -3,9 +3,9 @@
 pub(all) struct StageProfile {
   title : String
   subtitle : String
-  enemy_bonus : Int
+  enemy_bonus : Int32
   spawn_scale : Float
-  drop_bonus : Int
+  drop_bonus : Int32
   sky_top : @raylib.Color
   sky_bottom : @raylib.Color
   fog_alpha : Float
@@ -17,9 +17,9 @@ pub(all) struct StageProfile {
 pub fn StageProfile::StageProfile(
   title : String,
   subtitle : String,
-  enemy_bonus : Int,
+  enemy_bonus : Int32,
   spawn_scale : Float,
-  drop_bonus : Int,
+  drop_bonus : Int32,
   sky_top : @raylib.Color,
   sky_bottom : @raylib.Color,
   fog_alpha : Float,

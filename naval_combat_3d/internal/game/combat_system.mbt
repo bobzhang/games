@@ -29,7 +29,7 @@ fn @types.Game::update_cannonballs(game : @types.Game, dt : Float) -> Unit {
     // Check if hit water (y <= 0)
     if cb.y <= 0.0 {
       // Water splash - bigger for heavier shots
-      let splash_count : Int = match cb.cannon_type {
+      let splash_count : Int32 = match cb.cannon_type {
         Heavy => 10
         Mortar => 12
         _ => 6
@@ -68,7 +68,7 @@ fn @types.Game::update_cannonballs(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::check_cannonball_vs_enemies(
   game : @types.Game,
-  cb_idx : Int,
+  cb_idx : Int32,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if !cb.active {
@@ -162,7 +162,7 @@ fn @types.Game::check_cannonball_vs_enemies(
 ///|
 fn @types.Game::check_cannonball_vs_player(
   game : @types.Game,
-  cb_idx : Int,
+  cb_idx : Int32,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if !cb.active {
@@ -248,7 +248,7 @@ fn @types.Game::check_cannonball_vs_player(
 ///|
 fn @types.Game::check_cannonball_vs_fleet(
   game : @types.Game,
-  cb_idx : Int,
+  cb_idx : Int32,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if !cb.active {
@@ -280,7 +280,7 @@ fn @types.Game::check_cannonball_vs_fleet(
 ///|
 fn @types.Game::check_cannonball_vs_convoy(
   game : @types.Game,
-  cb_idx : Int,
+  cb_idx : Int32,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if !cb.active {
@@ -312,7 +312,7 @@ fn @types.Game::check_cannonball_vs_convoy(
 ///|
 fn @types.Game::check_cannonball_vs_fortress(
   game : @types.Game,
-  cb_idx : Int,
+  cb_idx : Int32,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if !cb.active {

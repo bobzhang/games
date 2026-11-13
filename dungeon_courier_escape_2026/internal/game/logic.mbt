@@ -114,7 +114,7 @@ fn @types.Game::far_from_active_parcels(
   x : Float,
   y : Float,
   min_dist : Float,
-  upto : Int,
+  upto : Int32,
 ) -> Bool {
   let min_d2 = min_dist * min_dist
   !@utils.any_by_view(game.parcels[0:upto], fn(parcel) {
@@ -124,7 +124,7 @@ fn @types.Game::far_from_active_parcels(
 
 ///|
 /// Clears existing parcels and places `count` new ones at valid random world positions, with a fallback grid layout if placement fails.
-fn @types.Game::setup_parcels(game : @types.Game, count : Int) -> Unit {
+fn @types.Game::setup_parcels(game : @types.Game, count : Int32) -> Unit {
   game.clear_parcels()
 
   for i in 0..<count {
@@ -175,8 +175,8 @@ fn @types.Game::setup_parcels(game : @types.Game, count : Int) -> Unit {
 /// Clears existing guards and spawns `count` new patrol guards with speed, cone range, and cone angle scaled by `wave`.
 fn @types.Game::setup_guards(
   game : @types.Game,
-  wave : Int,
-  count : Int,
+  wave : Int32,
+  count : Int32,
 ) -> Unit {
   game.clear_guards()
 
@@ -232,8 +232,8 @@ fn @types.Game::setup_guards(
 /// Clears existing traps and places `count` new traps at random world positions away from exits and spawn, with a fallback grid layout if placement fails.
 fn @types.Game::setup_traps(
   game : @types.Game,
-  _wave : Int,
-  count : Int,
+  _wave : Int32,
+  count : Int32,
 ) -> Unit {
   game.clear_traps()
 
@@ -276,7 +276,7 @@ fn @types.Game::setup_traps(
 
 ///|
 /// Initialises all wave-level state: resets player position, computes delivery targets and timer, and spawns parcels, guards, and traps for `wave`.
-fn @types.Game::setup_wave(game : @types.Game, wave : Int) -> Unit {
+fn @types.Game::setup_wave(game : @types.Game, wave : Int32) -> Unit {
   game.state = Play
   game.wave = wave
   game.delivered_wave = 0
@@ -374,7 +374,7 @@ fn @types.Game::fail_mission(game : @types.Game, reason : String) -> Unit {
 
 ///|
 /// Returns the index of a free smoke slot, or the slot with the least remaining life if none are available.
-fn @types.Game::alloc_smoke_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_smoke_slot(game : @types.Game) -> Int32 {
   for i, slot in game.smokes {
     if !slot.active {
       break i
@@ -413,7 +413,7 @@ fn @types.Game::deploy_smoke(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of the closest active, undelivered parcel within squared distance `max_d2` of the player, or -1 if none qualify.
-fn @types.Game::nearest_parcel(game : @types.Game, max_d2 : Float) -> Int {
+fn @types.Game::nearest_parcel(game : @types.Game, max_d2 : Float) -> Int32 {
   for i in 0..<game.parcels.length(); best = -1, best_d2 = max_d2 {
     if !game.parcels[i].active || game.parcels[i].delivered {
       continue
@@ -435,7 +435,7 @@ fn @types.Game::nearest_parcel(game : @types.Game, max_d2 : Float) -> Int {
 
 ///|
 /// Returns the index of the closest active exit within squared distance `max_d2` of the player, or -1 if none qualify.
-fn @types.Game::nearest_exit(game : @types.Game, max_d2 : Float) -> Int {
+fn @types.Game::nearest_exit(game : @types.Game, max_d2 : Float) -> Int32 {
   for i in 0..<game.exits.length(); best = -1, best_d2 = max_d2 {
     if !game.exits[i].active {
       continue

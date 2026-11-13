@@ -1,5 +1,5 @@
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
@@ -52,7 +52,7 @@ pub fn shape_center_y(s : Shape) -> Float {
 }
 
 ///|
-pub fn shape_min_x(s : Shape) -> Int {
+pub fn shape_min_x(s : Shape) -> Int32 {
   let mut mn = 999
   for i in 0..<s.cells.length() {
     if s.cells[i].x < mn {
@@ -63,7 +63,7 @@ pub fn shape_min_x(s : Shape) -> Int {
 }
 
 ///|
-pub fn shape_min_y(s : Shape) -> Int {
+pub fn shape_min_y(s : Shape) -> Int32 {
   let mut mn = 999
   for i in 0..<s.cells.length() {
     if s.cells[i].y < mn {
@@ -74,7 +74,7 @@ pub fn shape_min_y(s : Shape) -> Int {
 }
 
 ///|
-pub fn shape_max_x(s : Shape) -> Int {
+pub fn shape_max_x(s : Shape) -> Int32 {
   let mut mx = -999
   for i in 0..<s.cells.length() {
     if s.cells[i].x > mx {
@@ -85,7 +85,7 @@ pub fn shape_max_x(s : Shape) -> Int {
 }
 
 ///|
-pub fn shape_max_y(s : Shape) -> Int {
+pub fn shape_max_y(s : Shape) -> Int32 {
   let mut mx = -999
   for i in 0..<s.cells.length() {
     if s.cells[i].y > mx {
@@ -146,7 +146,7 @@ pub fn shape_exact_match(a : Shape, b : Shape) -> Bool {
 }
 
 ///|
-pub fn shape_match_count(current : Shape, target : Shape) -> Int {
+pub fn shape_match_count(current : Shape, target : Shape) -> Int32 {
   let mut count = 0
   for i in 0..<current.cells.length() {
     if shape_contains(target, current.cells[i]) {
@@ -207,7 +207,7 @@ pub fn shape_edge_cells(s : Shape) -> Array[Vec2i] {
 }
 
 ///|
-pub fn op_cost(kind : OpKind) -> Int {
+pub fn op_cost(kind : OpKind) -> Int32 {
   match kind {
     Shift => cost_shift
     Rotate => cost_rotate
@@ -247,7 +247,7 @@ pub fn tier_color(t : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn star_count(s : StarRating) -> Int {
+pub fn star_count(s : StarRating) -> Int32 {
   match s {
     Zero => 0
     One => 1
@@ -289,7 +289,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn tier_start_index(t : Tier) -> Int {
+pub fn tier_start_index(t : Tier) -> Int32 {
   match t {
     Morph => 0
     Sculpt => morph_levels
@@ -298,7 +298,7 @@ pub fn tier_start_index(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_count(t : Tier) -> Int {
+pub fn tier_level_count(t : Tier) -> Int32 {
   match t {
     Morph => morph_levels
     Sculpt => sculpt_levels
@@ -307,7 +307,7 @@ pub fn tier_level_count(t : Tier) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -316,7 +316,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -325,7 +325,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn absi(a : Int) -> Int {
+pub fn absi(a : Int32) -> Int32 {
   if a < 0 {
     -a
   } else {
@@ -346,7 +346,7 @@ pub fn set_level_data(levels : Array[Level]) -> Unit {
 }
 
 ///|
-pub fn get_level_par_and_min(idx : Int) -> (Int, Int) {
+pub fn get_level_par_and_min(idx : Int32) -> (Int32, Int32) {
   match level_data.val {
     Some(levels) =>
       if idx >= 0 && idx < levels.length() {
@@ -359,7 +359,7 @@ pub fn get_level_par_and_min(idx : Int) -> (Int, Int) {
 }
 
 ///|
-pub fn get_level_available_ops(idx : Int) -> Array[OpKind] {
+pub fn get_level_available_ops(idx : Int32) -> Array[OpKind] {
   match level_data.val {
     Some(levels) =>
       if idx >= 0 && idx < levels.length() {

@@ -1,20 +1,20 @@
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
 ///|
-pub fn new_branch(row : Int, col_offset : Int) -> Branch {
+pub fn new_branch(row : Int32, col_offset : Int32) -> Branch {
   { row, col_offset, pruned: false, }
 }
 
 ///|
-pub fn new_tree(col : Int) -> Tree {
+pub fn new_tree(col : Int32) -> Tree {
   { col, height: 0, branches: [], growth_timer: 0, shadowed: false, }
 }
 
 ///|
-pub fn new_ground_tile(water : Int) -> GroundTile {
+pub fn new_ground_tile(water : Int32) -> GroundTile {
   { water, has_seed: false, }
 }
 
@@ -251,7 +251,7 @@ pub fn compute_shadows(game : Game) -> Unit {
 }
 
 ///|
-pub fn water_consumption(tree : Tree) -> Int {
+pub fn water_consumption(tree : Tree) -> Int32 {
   // Base consumption of 1, plus 1 for every 2 active branches
   let mut active_branches = 0
   for b in 0..<tree.branches.length() {
@@ -296,7 +296,7 @@ pub fn new_game() -> Game {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -305,7 +305,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -314,7 +314,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn absi(a : Int) -> Int {
+pub fn absi(a : Int32) -> Int32 {
   if a < 0 {
     -a
   } else {

@@ -1,31 +1,31 @@
 ///|
-let lanes : Int = 5
+let lanes : Int32 = 5
 
 ///|
-let slots : Int = 8
+let slots : Int32 = 8
 
 ///|
-let lane_h : Int = 100
+let lane_h : Int32 = 100
 
 ///|
-let grid_x : Int = 80
+let grid_x : Int32 = 80
 
 ///|
-let grid_y : Int = 90
+let grid_y : Int32 = 90
 
 ///|
-let cell_w : Int = 90
+let cell_w : Int32 = 90
 
 ///|
-let screen_w : Int = 980
+let screen_w : Int32 = 980
 
 ///|
-let screen_h : Int = 650
+let screen_h : Int32 = 650
 
 ///|
 struct Enemy {
   mut alive : Bool
-  mut lane : Int
+  mut lane : Int32
   mut x : Float
   mut hp : Float
   mut speed : Float
@@ -34,13 +34,13 @@ struct Enemy {
 ///|
 struct Tower {
   mut built : Bool
-  lane : Int
-  slot : Int
+  lane : Int32
+  slot : Int32
   mut cooldown : Float
 }
 
 ///|
-fn tower_index(l : Int, s : Int) -> Int {
+fn tower_index(l : Int32, s : Int32) -> Int32 {
   l * slots + s
 }
 

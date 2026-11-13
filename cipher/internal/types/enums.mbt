@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,11 +23,12 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CipherKind {
   Caesar
   Substitution
   Vigenere
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend CipherKind with Eq::{not_equal, equal}
@@ -43,11 +45,12 @@ pub impl Show for CipherKind with fn output(self, logger) {
 pub extend CipherKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Solving
   Solved
   GaveUp
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -64,11 +67,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Recruit
   Agent
   Cryptographer
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}
@@ -85,11 +89,12 @@ pub impl Show for Tier with fn output(self, logger) {
 pub extend Tier with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tool {
   FrequencyChart
   LetterSwap
   PatternFinder
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tool with Eq::{not_equal, equal}

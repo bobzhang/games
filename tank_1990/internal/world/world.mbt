@@ -40,7 +40,7 @@ pub fn tank_hits_players(
   game : @types.Game,
   x : Float,
   y : Float,
-  ignore_player : Int,
+  ignore_player : Int32,
 ) -> Bool {
   let hitbox = @types.tank_rect_at(x, y)
   for i in 0..<game.players.length() {
@@ -62,7 +62,7 @@ pub fn tank_hits_enemies(
   game : @types.Game,
   x : Float,
   y : Float,
-  ignore_enemy_index : Int,
+  ignore_enemy_index : Int32,
 ) -> Bool {
   let hitbox = @types.tank_rect_at(x, y)
   for i in 0..<game.enemies.length() {

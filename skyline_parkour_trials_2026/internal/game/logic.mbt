@@ -55,7 +55,7 @@ fn @types.Game::push_checkpoint(
   y : Float,
   w : Float,
   h : Float,
-  bonus_s : Int,
+  bonus_s : Int32,
 ) -> Unit {
   if game.checkpoint_count >= @types.max_checkpoints {
     return
@@ -199,7 +199,7 @@ fn @types.Game::setup_stage_3(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::load_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::load_stage(game : @types.Game, stage : Int32) -> Unit {
   game.clear_stage_data()
   game.stage = stage.clamp(min=1, max=@types.stage_count)
   game.pending_next_stage = 0
@@ -249,7 +249,7 @@ fn @types.Game::fail_run(
 }
 
 ///|
-fn @types.Game::add_bonus_time(game : @types.Game, amount_s : Int) -> Unit {
+fn @types.Game::add_bonus_time(game : @types.Game, amount_s : Int32) -> Unit {
   game.timer_s = @types.minf(
     @types.timer_cap,
     game.timer_s + Float::from_int(amount_s),

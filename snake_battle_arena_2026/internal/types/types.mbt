@@ -15,53 +15,53 @@ pub(all) struct Spark {
 /// AI-controlled rival snake state and segment buffers.
 pub(all) struct Rival {
   mut alive : Bool
-  mut len : Int
+  mut len : Int32
   mut dir : Dir
   mut next_dir : Dir
-  mut grow : Int
-  mut score : Int
-  mut deaths : Int
-  color_kind : Int
-  seg_x : Array[Int]
-  seg_y : Array[Int]
+  mut grow : Int32
+  mut score : Int32
+  mut deaths : Int32
+  color_kind : Int32
+  seg_x : Array[Int32]
+  seg_y : Array[Int32]
 }
 
 ///|
 /// Full mutable state for one snake battle match.
 pub(all) struct Game {
-  p_seg_x : Array[Int]
-  p_seg_y : Array[Int]
+  p_seg_x : Array[Int32]
+  p_seg_y : Array[Int32]
   sparks : Array[Spark]
   mut p_alive : Bool
-  mut p_len : Int
+  mut p_len : Int32
   mut p_dir : Dir
   mut p_next_dir : Dir
-  mut p_grow : Int
+  mut p_grow : Int32
   rivals : Array[Rival]
-  mut food_x : Int
-  mut food_y : Int
+  mut food_x : Int32
+  mut food_y : Int32
   mut food_kind : FoodKind
-  mut trap_x : Int
-  mut trap_y : Int
+  mut trap_x : Int32
+  mut trap_y : Int32
   mut trap_active : Bool
   mut trap_ttl : Float
   mut trap_flash : Float
   mut state : GameState
-  mut score : Int
-  mut best_score : Int
-  mut lives : Int
-  mut total_kills : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut lives : Int32
+  mut total_kills : Int32
+  mut combo : Int32
   mut combo_t : Float
   mut step_acc : Float
   mut game_t : Float
   mut ui_t : Float
   mut boost_meter : Float
   mut boost_on : Bool
-  mut hint_left : Int
+  mut hint_left : Int32
   mut hint_t : Float
-  mut hint_x : Int
-  mut hint_y : Int
+  mut hint_x : Int32
+  mut hint_y : Int32
   mut msg : String
   mut msg_t : Float
   mut shake_t : Float
@@ -70,7 +70,7 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
 }
 
 ///|
@@ -90,7 +90,7 @@ pub fn Spark::Spark() -> Spark {
 
 ///|
 /// Create a rival snake with initial direction and buffers.
-pub fn Rival::Rival(kind : Int) -> Rival {
+pub fn Rival::Rival(kind : Int32) -> Rival {
   {
     alive: true,
     len: 4,

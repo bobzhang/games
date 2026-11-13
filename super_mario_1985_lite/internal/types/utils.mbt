@@ -12,7 +12,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns the sign of `v` as `-1`, `0`, or `1`.
-pub fn signf(v : Float) -> Int {
+pub fn signf(v : Float) -> Int32 {
   if v < 0.0 {
     -1
   } else if v > 0.0 {
@@ -24,37 +24,37 @@ pub fn signf(v : Float) -> Int {
 
 ///|
 /// Converts tile coordinates to a linear tile array index.
-pub fn tile_index(tx : Int, ty : Int) -> Int {
+pub fn tile_index(tx : Int32, ty : Int32) -> Int32 {
   ty * world_tiles_w + tx
 }
 
 ///|
 /// Returns the world x-coordinate of a tile's left edge.
-pub fn tile_left(tx : Int) -> Float {
+pub fn tile_left(tx : Int32) -> Float {
   Float::from_int(tx * tile_size)
 }
 
 ///|
 /// Returns the world y-coordinate of a tile's top edge.
-pub fn tile_top(ty : Int) -> Float {
+pub fn tile_top(ty : Int32) -> Float {
   Float::from_int(ty * tile_size)
 }
 
 ///|
 /// Returns the world x-coordinate of a tile center.
-pub fn tile_center_x(tx : Int) -> Float {
+pub fn tile_center_x(tx : Int32) -> Float {
   tile_left(tx) + tile_size_f * 0.5
 }
 
 ///|
 /// Returns the world y-coordinate of a tile center.
-pub fn tile_center_y(ty : Int) -> Float {
+pub fn tile_center_y(ty : Int32) -> Float {
   tile_top(ty) + tile_size_f * 0.5
 }
 
 ///|
 /// Converts world x to a clamped tile x index.
-pub fn world_to_tile_x(x : Float) -> Int {
+pub fn world_to_tile_x(x : Float) -> Int32 {
   if x <= 0.0 {
     0
   } else {
@@ -64,7 +64,7 @@ pub fn world_to_tile_x(x : Float) -> Int {
 
 ///|
 /// Converts world y to a clamped tile y index.
-pub fn world_to_tile_y(y : Float) -> Int {
+pub fn world_to_tile_y(y : Float) -> Int32 {
   if y <= 0.0 {
     0
   } else {
@@ -74,7 +74,7 @@ pub fn world_to_tile_y(y : Float) -> Int {
 
 ///|
 /// Writes a tile value if coordinates are inside bounds.
-pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Tile) -> Unit {
+pub fn set_tile(game : Game, tx : Int32, ty : Int32, tile : Tile) -> Unit {
   if tx < 0 || tx >= world_tiles_w || ty < 0 || ty >= world_tiles_h {
     return
   }
@@ -83,7 +83,7 @@ pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Tile) -> Unit {
 
 ///|
 /// Reads a tile value with out-of-bounds defaults.
-pub fn get_tile(game : Game, tx : Int, ty : Int) -> Tile {
+pub fn get_tile(game : Game, tx : Int32, ty : Int32) -> Tile {
   if tx < 0 || tx >= world_tiles_w {
     return Ground
   }
@@ -100,10 +100,10 @@ pub fn get_tile(game : Game, tx : Int, ty : Int) -> Tile {
 /// Fills a tile rectangle with a tile id.
 pub fn fill_rect_tile(
   game : Game,
-  tx0 : Int,
-  ty0 : Int,
-  tw : Int,
-  th : Int,
+  tx0 : Int32,
+  ty0 : Int32,
+  tw : Int32,
+  th : Int32,
   tile : Tile,
 ) -> Unit {
   for y in ty0..<(ty0 + th) {
@@ -186,7 +186,7 @@ pub fn randf(minv : Float, maxv : Float) -> Float {
 
 ///|
 /// Counts active coins remaining in the level.
-pub fn remaining_coins(game : Game) -> Int {
+pub fn remaining_coins(game : Game) -> Int32 {
   let mut count = 0
   for coin in game.coins {
     if coin.active {
@@ -198,7 +198,7 @@ pub fn remaining_coins(game : Game) -> Int {
 
 ///|
 /// Counts active enemies in the level.
-pub fn active_enemy_count(game : Game) -> Int {
+pub fn active_enemy_count(game : Game) -> Int32 {
   let mut count = 0
   for enemy in game.enemies {
     if enemy.active {

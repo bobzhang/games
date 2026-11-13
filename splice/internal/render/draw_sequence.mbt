@@ -172,7 +172,7 @@ fn draw_sequence(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_codon_brackets(game : @types.Game, sx_start : Int, y : Int) -> Unit {
+fn draw_codon_brackets(game : @types.Game, sx_start : Int32, y : Int32) -> Unit {
   let seq = game.current_sequence
   let base_size = @types.seq_base_size
   let gap = @types.seq_base_gap
@@ -372,7 +372,7 @@ fn draw_target_comparison(game : @types.Game, level : @types.Level) -> Unit {
 }
 
 ///|
-fn draw_trait_arrow(x : Int, y : Int) -> Unit {
+fn draw_trait_arrow(x : Int32, y : Int32) -> Unit {
   @raylib.draw_triangle(
     @raylib.Vector2::new(Float::from_int(x + 10), Float::from_int(y)),
     @raylib.Vector2::new(Float::from_int(x + 2), Float::from_int(y - 5)),

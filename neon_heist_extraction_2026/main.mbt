@@ -1,10 +1,10 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 /// Left boundary X of the playfield in pixels.
@@ -24,35 +24,35 @@ let world_b : Float = Float::from_int(sh) - 34.0
 
 ///|
 /// Maximum number of guard slots in the guard pool.
-let max_guards : Int = 220
+let max_guards : Int32 = 220
 
 ///|
 /// Maximum number of bullet slots in the bullet pool.
-let max_bullets : Int = 1200
+let max_bullets : Int32 = 1200
 
 ///|
 /// Maximum number of surveillance camera units in the camera pool.
-let max_cameras : Int = 18
+let max_cameras : Int32 = 18
 
 ///|
 /// Maximum number of hackable terminal slots.
-let max_terminals : Int = 8
+let max_terminals : Int32 = 8
 
 ///|
 /// Maximum number of vault slots that can hold loot.
-let max_vaults : Int = 8
+let max_vaults : Int32 = 8
 
 ///|
 /// Maximum number of loot item slots in the loot pool.
-let max_loot : Int = 360
+let max_loot : Int32 = 360
 
 ///|
 /// Maximum number of wall segments in the wall pool.
-let max_walls : Int = 80
+let max_walls : Int32 = 80
 
 ///|
 /// Maximum number of visual particle slots in the particle pool.
-let max_particles : Int = 1800
+let max_particles : Int32 = 1800
 
 ///|
 /// X coordinate of the extraction zone center.
@@ -68,7 +68,7 @@ let extraction_r : Float = 72.0
 
 ///|
 /// Total loot pieces the player must deliver to the extraction zone to win the run.
-let loot_goal : Int = 42
+let loot_goal : Int32 = 42
 
 ///|
 /// Holds all mutable runtime state for the player character including position, velocity, aim, resources, cooldowns, and score.
@@ -87,25 +87,25 @@ struct Player {
   mut dash_cd : Float
   mut dash_t : Float
   mut emp_cd : Float
-  mut loot : Int
-  mut delivered : Int
-  mut score : Int
-  mut combo : Int
-  mut best_combo : Int
+  mut loot : Int32
+  mut delivered : Int32
+  mut score : Int32
+  mut combo : Int32
+  mut best_combo : Int32
 }
 
 ///|
 /// Holds runtime state for a single guard enemy including kind, position, velocity, HP, AI state, home position, stun timer, and targeting data.
 struct Guard {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
   mut vy : Float
   mut hp : Float
   mut fire_cd : Float
-  mut state : Int
+  mut state : Int32
   mut home_x : Float
   mut home_y : Float
   mut target_x : Float
@@ -118,8 +118,8 @@ struct Guard {
 /// Holds runtime state for a projectile including team, kind, position, velocity, damage, radius, and remaining lifetime.
 struct Bullet {
   mut active : Bool
-  mut team : Int
-  mut kind : Int
+  mut team : Int32
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -169,12 +169,12 @@ struct Vault {
 /// Holds runtime state for a loot piece including kind, position, velocity, point value, remaining lifetime, and animation timer.
 struct Loot {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut value : Int
+  mut value : Int32
   mut life : Float
   mut t : Float
 }
@@ -193,7 +193,7 @@ struct Wall {
 /// Holds runtime state for a visual particle including kind, position, velocity, size, remaining lifetime, and animation timer.
 struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -235,10 +235,10 @@ fn randf(lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
 ) -> Bool {
   px >= Float::from_int(x) &&
   px <= Float::from_int(x + w) &&
@@ -248,7 +248,7 @@ fn inside_rect(
 
 ///|
 /// Returns the collision radius for a guard based on its kind: 15 for kind 0, 20 for kind 1, 26 for kind 2.
-fn guard_radius(kind : Int) -> Float {
+fn guard_radius(kind : Int32) -> Float {
   if kind == 0 {
     15.0
   } else if kind == 1 {
@@ -260,7 +260,7 @@ fn guard_radius(kind : Int) -> Float {
 
 ///|
 /// Returns the starting HP for a guard based on its kind and current wave number, scaling linearly with wave.
-fn guard_hp(kind : Int, wave : Int) -> Float {
+fn guard_hp(kind : Int32, wave : Int32) -> Float {
   if kind == 0 {
     26.0 + Float::from_int(wave) * 2.8
   } else if kind == 1 {
@@ -451,12 +451,12 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 /// Activates the first free guard slot with the given kind, position, home position, and wave-scaled HP.
 fn add_guard(
   guards : Array[Guard],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   home_x : Float,
   home_y : Float,
-  wave : Int,
+  wave : Int32,
 ) -> Bool {
   for guard_val in guards {
     if !guard_val.active {
@@ -485,8 +485,8 @@ fn add_guard(
 /// Activates the first free bullet slot with the given team, kind, position, velocity, damage, radius, and lifetime.
 fn add_bullet(
   bullets : Array[Bullet],
-  team : Int,
-  kind : Int,
+  team : Int32,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -580,12 +580,12 @@ fn add_vault(vaults : Array[Vault], x : Float, y : Float) -> Bool {
 /// Activates the first free loot slot at position `(x, y)` with the given kind, velocity, point value, and lifetime.
 fn add_loot(
   loot : Array[Loot],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
   vy : Float,
-  value : Int,
+  value : Int32,
   life : Float,
 ) -> Bool {
   for loot_elem in loot {
@@ -631,7 +631,7 @@ fn add_wall(
 /// Activates the first free particle slot with the given kind, position, velocity, size, and lifetime.
 fn add_particle(
   parts : Array[Particle],
-  kind : Int,
+  kind : Int32,
   x : Float,
   y : Float,
   vx : Float,
@@ -662,9 +662,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   scale : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for _i in 0..<count {
     let ang : Float = randf(0.0, 6.283)
@@ -686,19 +686,19 @@ fn burst(
 
 ///|
 /// Returns the number of active terminals that have been fully hacked.
-fn count_hacked(terminals : Array[Terminal]) -> Int {
+fn count_hacked(terminals : Array[Terminal]) -> Int32 {
   @utils.count_by(terminals, fn(terminal) { terminal.active && terminal.hacked })
 }
 
 ///|
 /// Returns the total number of active terminals in the pool.
-fn count_terminals(terminals : Array[Terminal]) -> Int {
+fn count_terminals(terminals : Array[Terminal]) -> Int32 {
   @utils.count_by(terminals, fn(terminal) { terminal.active })
 }
 
 ///|
 /// Returns the total number of currently active guards in the pool.
-fn count_active_guards(guards : Array[Guard]) -> Int {
+fn count_active_guards(guards : Array[Guard]) -> Int32 {
   @utils.count_by(guards, fn(guard_val) { guard_val.active })
 }
 
@@ -757,15 +757,15 @@ fn setup_map(
 
 ///|
 /// Draws on-screen touch control buttons for movement and actions when the game state is active play.
-fn draw_touch_ui(state : Int) -> Unit {
+fn draw_touch_ui(state : Int32) -> Unit {
   if state != 1 {
     ignore(())
   } else {
-    let pad_x : Int = 20
-    let pad_y : Int = sh - 220
+    let pad_x : Int32 = 20
+    let pad_y : Int32 = sh - 220
 
-    let btn_x : Int = sw - 338
-    let btn_y : Int = sh - 236
+    let btn_x : Int32 = sw - 338
+    let btn_y : Int32 = sh - 236
 
     @raylib.draw_rectangle(
       pad_x,
@@ -1039,12 +1039,12 @@ fn main {
     best_combo: 0,
   }
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
 
   let mut timer : Float = 430.0
   let mut alarm : Float = 0.0
   let mut reinforce_cd : Float = 2.0
-  let mut wave : Int = 1
+  let mut wave : Int32 = 1
 
   let mut msg : String = "Hack all terminals and extract loot"
   let mut msg_t : Float = 3.0
@@ -1209,7 +1209,7 @@ fn main {
           reinforce_cd = clampf(2.8 - Float::from_int(wave) * 0.22, 1.0, 2.8)
           wave = wave + 1
 
-          let edge : Int = @raylib.get_random_value(0, 3)
+          let edge : Int32 = @raylib.get_random_value(0, 3)
           let mut gx : Float = 0.0
           let mut gy : Float = 0.0
           if edge == 0 {
@@ -1226,8 +1226,8 @@ fn main {
             gy = randf(world_t + 20.0, world_b - 20.0)
           }
 
-          let roll : Int = @raylib.get_random_value(0, 99)
-          let mut kind : Int = 0
+          let roll : Int32 = @raylib.get_random_value(0, 99)
+          let mut kind : Int32 = 0
           if wave >= 4 && roll >= 45 {
             kind = 1
           }
@@ -1260,10 +1260,10 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeyRightShift)
       let mut emp_press : Bool = @raylib.is_key_pressed(@raylib.KeyO)
 
-      let pad_x : Int = 20
-      let pad_y : Int = sh - 220
-      let btn_x : Int = sw - 338
-      let btn_y : Int = sh - 236
+      let pad_x : Int32 = 20
+      let pad_y : Int32 = sh - 220
+      let btn_x : Int32 = sw - 338
+      let btn_y : Int32 = sh - 236
 
       if touch_down {
         if inside_rect(mouse.x, mouse.y, pad_x + 12, pad_y + 70, 60, 60) {
@@ -1822,14 +1822,14 @@ fn main {
         }
 
         if guard_val.hp <= 0.0 {
-          let reward : Int = 54 + guard_val.kind * 28 + player.combo * 2
+          let reward : Int32 = 54 + guard_val.kind * 28 + player.combo * 2
           player.score = player.score + reward
           player.combo = player.combo + 1
           if player.combo > player.best_combo {
             player.best_combo = player.combo
           }
 
-          let drops : Int = 1 + @raylib.get_random_value(0, 2)
+          let drops : Int32 = 1 + @raylib.get_random_value(0, 2)
           for _ in 0..<drops {
             ignore(
               add_loot(
@@ -1884,7 +1884,7 @@ fn main {
         extraction_r * extraction_r &&
         player.loot > 0 &&
         count_hacked(terminals) == count_terminals(terminals) {
-        let deposit_n : Int = player.loot
+        let deposit_n : Int32 = player.loot
         player.delivered = player.delivered + deposit_n
         player.score = player.score + deposit_n * 18
         player.loot = 0
@@ -2044,25 +2044,25 @@ fn main {
     @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(4, 8, 16, 70))
 
     for gy in 0..<15 {
-      let y : Int = 90 + gy * 44
+      let y : Int32 = 90 + gy * 44
       @raylib.draw_line(0, y, sw, y, @raylib.Color::new(54, 92, 130, 72))
     }
     for gx in 0..<26 {
-      let x : Int = gx * 50
+      let x : Int32 = gx * 50
       @raylib.draw_line(x, 90, x, sh, @raylib.Color::new(54, 92, 130, 60))
     }
 
     for i in 0..<170 {
       let fi : Float = Float::from_int(i)
-      let sx : Int = ((
+      let sx : Int32 = ((
         fi * 79.0 + stars_t * (0.2 + Float::from_int(i % 7) * 0.08)
       ) %
       Float::from_int(sw)).to_int()
-      let sy : Int = ((
+      let sy : Int32 = ((
         fi * 137.0 + stars_t * (0.16 + Float::from_int(i % 5) * 0.09)
       ) %
       Float::from_int(sh)).to_int()
-      let br : Int = 70 + i % 10 * 12
+      let br : Int32 = 70 + i % 10 * 12
       @raylib.draw_circle(
         sx,
         sy,
@@ -2177,7 +2177,7 @@ fn main {
       )
 
       if !terminal.hacked {
-        let prog_fill : Int = (clampf(terminal.progress / 100.0, 0.0, 1.0) *
+        let prog_fill : Int32 = (clampf(terminal.progress / 100.0, 0.0, 1.0) *
         40.0).to_int()
         @raylib.draw_rectangle(
           (terminal.x - 20.0).to_int(),
@@ -2431,7 +2431,7 @@ fn main {
       if !particle.active {
         continue
       }
-      let alpha : Int = (clampf(particle.life / 0.84, 0.0, 1.0) * 255.0).to_int()
+      let alpha : Int32 = (clampf(particle.life / 0.84, 0.0, 1.0) * 255.0).to_int()
       let col = if particle.kind == 0 {
         @raylib.Color::new(114, 224, 252, alpha)
       } else if particle.kind == 1 {
@@ -2508,10 +2508,10 @@ fn main {
       @raylib.Color::new(178, 216, 240, 218),
     )
 
-    let hp_fill : Int = (clampf(player.hp / 100.0, 0.0, 1.0) * 230.0).to_int()
-    let en_fill : Int = (clampf(player.energy / 100.0, 0.0, 1.0) * 230.0).to_int()
-    let heat_fill : Int = (clampf(player.heat / 100.0, 0.0, 1.0) * 230.0).to_int()
-    let alarm_fill : Int = (clampf(alarm / 100.0, 0.0, 1.0) * 290.0).to_int()
+    let hp_fill : Int32 = (clampf(player.hp / 100.0, 0.0, 1.0) * 230.0).to_int()
+    let en_fill : Int32 = (clampf(player.energy / 100.0, 0.0, 1.0) * 230.0).to_int()
+    let heat_fill : Int32 = (clampf(player.heat / 100.0, 0.0, 1.0) * 230.0).to_int()
+    let alarm_fill : Int32 = (clampf(alarm / 100.0, 0.0, 1.0) * 290.0).to_int()
 
     @raylib.draw_rectangle(16, 94, 290, 12, @raylib.Color::new(22, 28, 40, 255))
     @raylib.draw_rectangle(

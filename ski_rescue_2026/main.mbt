@@ -1,14 +1,14 @@
 ///|
-let sw : Int = 1080
+let sw : Int32 = 1080
 
 ///|
-let sh : Int = 720
+let sh : Int32 = 720
 
 ///|
-let lane_count : Int = 5
+let lane_count : Int32 = 5
 
 ///|
-fn lane_x(lane : Int) -> Float {
+fn lane_x(lane : Int32) -> Float {
   180.0 + Float::from_int(lane) * 180.0
 }
 
@@ -17,8 +17,8 @@ struct Obj {
   mut alive : Bool
   mut x : Float
   mut y : Float
-  mut lane : Int
-  mut kind : Int // 0 tree, 1 rock, 2 rescue, 3 boost
+  mut lane : Int32
+  mut kind : Int32 // 0 tree, 1 rock, 2 rescue, 3 boost
 }
 
 ///|
@@ -29,7 +29,7 @@ fn reset_objs(objs : Array[Obj]) -> Unit {
 }
 
 ///|
-fn spawn_obj(objs : Array[Obj], lane : Int, kind : Int) -> Unit {
+fn spawn_obj(objs : Array[Obj], lane : Int32, kind : Int32) -> Unit {
   for obj in objs {
     if !obj.alive {
       obj.alive = true

@@ -96,7 +96,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, level_id : Int) -> Unit {
+fn start_level(game : @types.Game, level_id : Int32) -> Unit {
   let level = @levels.get_level(level_id)
   game.current_level = Some(level)
   game.screen = Playing

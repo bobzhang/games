@@ -1,10 +1,10 @@
 ///|
-fn fi(v : Int) -> Float {
+fn fi(v : Int32) -> Float {
   Float::from_int(v)
 }
 
 ///|
-fn vec2(x : Int, y : Int) -> @raylib.Vector2 {
+fn vec2(x : Int32, y : Int32) -> @raylib.Vector2 {
   @raylib.Vector2::new(fi(x), fi(y))
 }
 
@@ -279,10 +279,10 @@ fn draw_playing(game : @types.Game) -> Unit {
 
 ///|
 fn draw_feature(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   feature : @types.FeatureKind,
-  size : Int,
+  size : Int32,
 ) -> Unit {
   let color = @types.feature_color(feature)
   draw_feature_with_color(cx, cy, feature, size, color)
@@ -290,10 +290,10 @@ fn draw_feature(
 
 ///|
 fn draw_feature_with_color(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   feature : @types.FeatureKind,
-  size : Int,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   if !draw_feature_art(cx, cy, feature, size, color.a.to_int()) {
@@ -481,7 +481,7 @@ fn draw_feature_with_color(
 }
 
 ///|
-fn draw_compass_rose(cx : Int, cy : Int) -> Unit {
+fn draw_compass_rose(cx : Int32, cy : Int32) -> Unit {
   if !draw_compass_rose_art(cx, cy, 76) {
     let size = 28
     let ring = @types.color_compass_ring

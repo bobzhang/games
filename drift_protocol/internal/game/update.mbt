@@ -116,7 +116,7 @@ fn update_hacking(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Start a level
-pub fn start_level(game : @types.Game, index : Int) -> Unit {
+pub fn start_level(game : @types.Game, index : Int32) -> Unit {
   game.level_index = index
   game.level = @level.load_level(index)
   game.player = @types.new_agent(game.level.start_x, game.level.start_y)

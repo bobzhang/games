@@ -30,7 +30,7 @@ fn @types.Game::update_weapon_cooldowns(game : @types.Game, dt : Float) -> Unit 
 }
 
 ///|
-fn @types.Game::try_reload(game : @types.Game, weapon : Int) -> Unit {
+fn @types.Game::try_reload(game : @types.Game, weapon : Int32) -> Unit {
   let ws = game.weapons[weapon]
   if ws.reloading {
     return
@@ -126,7 +126,7 @@ fn @types.Game::handle_shooting(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
+fn @types.Game::fire_weapon(game : @types.Game, weapon : Int32) -> Unit {
   let player = game.player
   // Calculate look direction
   let cos_yaw = @math.cosf(player.yaw)
@@ -292,7 +292,7 @@ fn @types.Game::fire_projectile(
   dx : Float,
   dy : Float,
   dz : Float,
-  weapon : Int,
+  weapon : Int32,
 ) -> Unit {
   let idx = @types.alloc_projectile(game)
   if idx < 0 {

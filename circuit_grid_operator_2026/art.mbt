@@ -119,7 +119,7 @@ fn draw_texture_cover(
 
 ///|
 /// Draws the generated operator room backdrop under the interactive UI.
-fn draw_operator_room_backdrop(art : GameArt, state : Int) -> Unit {
+fn draw_operator_room_backdrop(art : GameArt, state : Int32) -> Unit {
   draw_texture_cover(
     art.operator_room_backdrop,
     0.0,
@@ -143,8 +143,8 @@ fn draw_operator_room_backdrop(art : GameArt, state : Int) -> Unit {
 /// Draws the generated tile shell for a grid cell.
 fn draw_cell_shell_art(
   art : GameArt,
-  gx : Int,
-  gy : Int,
+  gx : Int32,
+  gy : Int32,
   base : @raylib.Color,
 ) -> Unit {
   @raylib.draw_rectangle(gx + 1, gy + 1, cell_sz - 2, cell_sz - 2, base)
@@ -162,7 +162,7 @@ fn draw_cell_shell_art(
 /// Draws a generated source or sink device on top of the wire glyph.
 fn draw_terminal_node_art(
   art : GameArt,
-  kind : Int,
+  kind : Int32,
   cx : Float,
   cy : Float,
 ) -> Unit {
@@ -181,7 +181,7 @@ fn draw_fault_marker_art(
   cy : Float,
   flash : Float,
 ) -> Unit {
-  let alpha : Int = 170 + (flash * 70.0).to_int()
+  let alpha : Int32 = 170 + (flash * 70.0).to_int()
   draw_texture_centered(
     art.fault_marker,
     cx,

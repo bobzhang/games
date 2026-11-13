@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,6 +23,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum FeatureKind {
   Mountain
   River
@@ -30,7 +32,7 @@ pub(all) enum FeatureKind {
   Lake
   Desert
   Road
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend FeatureKind with Eq::{not_equal, equal}
@@ -47,6 +49,7 @@ pub impl Show for FeatureKind with fn output(self, logger) {
 pub extend FeatureKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ClueKind {
   Distance
   Direction
@@ -54,7 +57,7 @@ pub(all) enum ClueKind {
   Count
   Between
   Not
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ClueKind with Eq::{not_equal, equal}
@@ -71,11 +74,12 @@ pub impl Show for ClueKind with fn output(self, logger) {
 pub extend ClueKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Placing
   Complete
   Checking
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -92,11 +96,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Surveyor
   Explorer
   Master
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}
@@ -113,6 +118,7 @@ pub impl Show for Tier with fn output(self, logger) {
 pub extend Tier with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CompassDir {
   N
   S
@@ -122,7 +128,7 @@ pub(all) enum CompassDir {
   NW
   SE
   SW
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend CompassDir with Eq::{not_equal, equal}
@@ -139,11 +145,12 @@ pub impl Show for CompassDir with fn output(self, logger) {
 pub extend CompassDir with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum ClueStatus {
   Pending
   Satisfied
   Violated
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend ClueStatus with Eq::{not_equal, equal}
@@ -160,12 +167,13 @@ pub impl Show for ClueStatus with fn output(self, logger) {
 pub extend ClueStatus with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum HintLevel {
   None
   Narrow // First hint: highlight possible cells for a feature
   Reveal // Second hint: highlight a specific cell
   Answer // Third hint: auto-place the answer
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HintLevel with Eq::{not_equal, equal}

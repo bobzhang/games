@@ -1,41 +1,41 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 12
+pub let grid_cols : Int32 = 12
 
 ///|
-pub let grid_rows : Int = 10
+pub let grid_rows : Int32 = 10
 
 ///|
-pub let cell_size : Int = 48
+pub let cell_size : Int32 = 48
 
 ///|
-pub let grid_offset_x : Int = 200
+pub let grid_offset_x : Int32 = 200
 
 ///|
-pub let grid_offset_y : Int = 100
+pub let grid_offset_y : Int32 = 100
 
 ///|
-pub let max_water : Int = 3
+pub let max_water : Int32 = 3
 
 ///|
-pub let rain_interval : Int = 5
+pub let rain_interval : Int32 = 5
 
 ///|
-pub let branch_interval : Int = 3
+pub let branch_interval : Int32 = 3
 
 ///|
-pub let shadow_growth_delay : Int = 2
+pub let shadow_growth_delay : Int32 = 2
 
 ///|
-pub let total_levels : Int = 20
+pub let total_levels : Int32 = 20
 
 ///|
 pub let color_bg : @raylib.Color = @raylib.Color::new(30, 40, 55, 255)

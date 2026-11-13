@@ -48,10 +48,10 @@ fn draw_paint_palette(game : @types.Game) -> Unit {
 
 ///|
 fn draw_palette_entry(
-  x : Int,
-  y : Int,
+  x : Int32,
+  y : Int32,
   biome : @types.BiomeKind,
-  remaining : Int,
+  remaining : Int32,
   selected : Bool,
 ) -> Unit {
   let color = @types.biome_color(biome)

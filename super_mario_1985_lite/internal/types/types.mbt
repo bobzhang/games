@@ -16,16 +16,16 @@ pub(all) struct Player {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut facing : Int
+  mut facing : Int32
   mut on_ground : Bool
   mut coyote_t : Float
   mut jump_buf_t : Float
   mut invuln_t : Float
-  mut lives : Int
-  mut coins : Int
-  mut score : Int
+  mut lives : Int32
+  mut coins : Int32
+  mut score : Int32
   mut reached_flag : Bool
-  mut flag_phase : Int
+  mut flag_phase : Int32
 }
 
 ///|
@@ -59,7 +59,7 @@ pub(all) struct Enemy {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut dir : Int
+  mut dir : Int32
 }
 
 ///|
@@ -79,7 +79,7 @@ pub fn Enemy::inactive() -> Enemy {
 
 ///|
 /// Creates an active enemy at position `x,y` moving in `dir`.
-pub fn Enemy::spawn(x : Float, y : Float, dir : Int) -> Enemy {
+pub fn Enemy::spawn(x : Float, y : Float, dir : Int32) -> Enemy {
   {
     active: true,
     squashed: false,
@@ -150,7 +150,7 @@ pub(all) struct Game {
   mut state : GameState
   mut elapsed : Float
   mut time_accum : Float
-  mut time_left : Int
+  mut time_left : Int32
   mut camera_x : Float
   mut flag_x : Float
   mut flag_top_y : Float

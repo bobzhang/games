@@ -105,7 +105,7 @@ fn draw_controls_help(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stars(x : Int, y : Int, count : Int, max : Int) -> Unit {
+fn draw_stars(x : Int32, y : Int32, count : Int32, max : Int32) -> Unit {
   for i in 0..<max {
     let sx = x + i * 30
     let color = if i < count {

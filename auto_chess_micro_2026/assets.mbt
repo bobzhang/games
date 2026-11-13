@@ -132,7 +132,7 @@ fn draw_arena_art() -> Bool {
 
 ///|
 /// Returns generated unit art for a role.
-fn role_art(role : Int) -> @raylib.Texture? {
+fn role_art(role : Int32) -> @raylib.Texture? {
   match role {
     0 => tex_unit_tank.val
     1 => tex_unit_archer.val
@@ -142,7 +142,7 @@ fn role_art(role : Int) -> @raylib.Texture? {
 
 ///|
 /// Returns sprite tint for a unit based on team and role.
-fn unit_tint(team : Int, role : Int) -> @raylib.Color {
+fn unit_tint(team : Int32, role : Int32) -> @raylib.Color {
   if team == 0 {
     match role {
       0 => @raylib.Color::new(214, 232, 255, 255)
@@ -161,10 +161,10 @@ fn unit_tint(team : Int, role : Int) -> @raylib.Color {
 ///|
 /// Draws a generated unit sprite for a role and team when available.
 fn draw_unit_art(
-  role : Int,
-  team : Int,
-  px : Int,
-  py : Int,
+  role : Int32,
+  team : Int32,
+  px : Int32,
+  py : Int32,
   pulse : Float,
 ) -> Bool {
   match role_art(role) {

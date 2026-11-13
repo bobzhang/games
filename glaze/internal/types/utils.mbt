@@ -13,17 +13,22 @@ pub fn new_grid() -> Grid {
 }
 
 ///|
-pub fn grid_index(row : Int, col : Int) -> Int {
+pub fn grid_index(row : Int32, col : Int32) -> Int32 {
   row * grid_cols + col
 }
 
 ///|
-pub fn get_cell(grid : Grid, row : Int, col : Int) -> Cell {
+pub fn get_cell(grid : Grid, row : Int32, col : Int32) -> Cell {
   grid.cells[grid_index(row, col)]
 }
 
 ///|
-pub fn set_glaze(grid : Grid, row : Int, col : Int, color : GlazeColor) -> Unit {
+pub fn set_glaze(
+  grid : Grid,
+  row : Int32,
+  col : Int32,
+  color : GlazeColor,
+) -> Unit {
   grid.cells[grid_index(row, col)].glaze = color
 }
 
@@ -48,7 +53,7 @@ pub fn new_score() -> LevelScore {
 
 ///|
 pub fn new_game() -> Game {
-  let scores : Array[Int] = []
+  let scores : Array[Int32] = []
   for _i in 0..<20 {
     scores.push(0)
   }
@@ -156,7 +161,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_index(t : Tier) -> Int {
+pub fn tier_index(t : Tier) -> Int32 {
   match t {
     Beginner => 0
     Intermediate => 1
@@ -165,7 +170,7 @@ pub fn tier_index(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_from_index(i : Int) -> Tier {
+pub fn tier_from_index(i : Int32) -> Tier {
   if i == 0 {
     Beginner
   } else if i == 1 {
@@ -176,7 +181,7 @@ pub fn tier_from_index(i : Int) -> Tier {
 }
 
 ///|
-pub fn tier_level_range(t : Tier) -> (Int, Int) {
+pub fn tier_level_range(t : Tier) -> (Int32, Int32) {
   match t {
     Beginner => (0, 7)
     Intermediate => (7, 14)
@@ -222,7 +227,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -231,7 +236,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -240,7 +245,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
+pub fn clampi(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -251,7 +256,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
-pub fn glaze_index(g : GlazeColor) -> Int {
+pub fn glaze_index(g : GlazeColor) -> Int32 {
   match g {
     Red => 0
     Blue => 1
@@ -264,7 +269,7 @@ pub fn glaze_index(g : GlazeColor) -> Int {
 }
 
 ///|
-pub fn glaze_from_index(i : Int) -> GlazeColor {
+pub fn glaze_from_index(i : Int32) -> GlazeColor {
   match i {
     0 => Red
     1 => Blue

@@ -85,7 +85,12 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_crucible_icon(cx : Int, cy : Int, size : Int, frame : Int) -> Unit {
+fn draw_crucible_icon(
+  cx : Int32,
+  cy : Int32,
+  size : Int32,
+  frame : Int32,
+) -> Unit {
   let time = Float::from_int(frame) * 0.04
   let half = size / 2
   match tex_crucible.val {

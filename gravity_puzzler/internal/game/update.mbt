@@ -173,7 +173,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, world : Int, level : Int) -> Unit {
+fn start_level(game : @types.Game, world : Int32, level : Int32) -> Unit {
   let lvl = @content.get_level(world, level)
   game.level = Some(lvl)
   game.current_world = world

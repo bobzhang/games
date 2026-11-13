@@ -46,7 +46,7 @@ pub fn new_game() -> Game {
   for _i in 0..<total_levels {
     scores.push(new_level_score())
   }
-  let organisms_placed : Array[Int] = []
+  let organisms_placed : Array[Int32] = []
   for _i in 0..<num_organisms {
     organisms_placed.push(0)
   }
@@ -92,7 +92,7 @@ pub fn clear_grid(game : Game) -> Unit {
 }
 
 ///|
-pub fn is_cell_locked(level : LevelDef, row : Int, col : Int) -> Bool {
+pub fn is_cell_locked(level : LevelDef, row : Int32, col : Int32) -> Bool {
   for i in 0..<level.locked_cells.length() {
     let (lr, lc) = level.locked_cells[i]
     if lr == row && lc == col {
@@ -103,12 +103,12 @@ pub fn is_cell_locked(level : LevelDef, row : Int, col : Int) -> Bool {
 }
 
 ///|
-pub fn in_grid(row : Int, col : Int) -> Bool {
+pub fn in_grid(row : Int32, col : Int32) -> Bool {
   row >= 0 && row < grid_size && col >= 0 && col < grid_size
 }
 
 ///|
-pub fn count_organism_on_grid(game : Game, kind : OrganismKind) -> Int {
+pub fn count_organism_on_grid(game : Game, kind : OrganismKind) -> Int32 {
   let mut count = 0
   for r in 0..<grid_size {
     for c in 0..<grid_size {
@@ -122,7 +122,7 @@ pub fn count_organism_on_grid(game : Game, kind : OrganismKind) -> Int {
 }
 
 ///|
-pub fn get_available_count(game : Game, kind : OrganismKind) -> Int {
+pub fn get_available_count(game : Game, kind : OrganismKind) -> Int32 {
   match game.current_level {
     None => 0
     Some(level) => {
@@ -163,7 +163,7 @@ pub fn tier_color(tier : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn compute_stars(turns_survived : Int, par : Int) -> Int {
+pub fn compute_stars(turns_survived : Int32, par : Int32) -> Int32 {
   if turns_survived < max_turns {
     0
   } else if turns_survived >= max_turns && par > 0 {
@@ -181,7 +181,7 @@ pub fn compute_stars(turns_survived : Int, par : Int) -> Int {
 }
 
 ///|
-pub fn total_stars(scores : Array[LevelScore]) -> Int {
+pub fn total_stars(scores : Array[LevelScore]) -> Int32 {
   let mut total = 0
   for i in 0..<scores.length() {
     total += scores[i].stars
@@ -190,7 +190,7 @@ pub fn total_stars(scores : Array[LevelScore]) -> Int {
 }
 
 ///|
-pub fn levels_completed(scores : Array[LevelScore]) -> Int {
+pub fn levels_completed(scores : Array[LevelScore]) -> Int32 {
   let mut count = 0
   for i in 0..<scores.length() {
     if scores[i].completed {
@@ -201,7 +201,7 @@ pub fn levels_completed(scores : Array[LevelScore]) -> Int {
 }
 
 ///|
-pub fn is_level_unlocked(scores : Array[LevelScore], level_id : Int) -> Bool {
+pub fn is_level_unlocked(scores : Array[LevelScore], level_id : Int32) -> Bool {
   if level_id == 0 {
     return true
   }

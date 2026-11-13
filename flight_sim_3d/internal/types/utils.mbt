@@ -214,7 +214,7 @@ pub fn chase_camera_pos(
 
 ///|
 /// Returns the next pseudo-random integer and advances the RNG state.
-pub fn rand_next(game : Game) -> Int {
+pub fn rand_next(game : Game) -> Int32 {
   let mut x = game.rng_state
   x = x ^ (x << 13)
   x = x ^ (x >> 17)
@@ -228,7 +228,7 @@ pub fn rand_next(game : Game) -> Int {
 
 ///|
 /// Returns a random integer in the inclusive range [`low`, `high`].
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
+pub fn rand_range(game : Game, low : Int32, high : Int32) -> Int32 {
   if high <= low {
     low
   } else {
@@ -247,43 +247,43 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 ///|
 /// Returns the index of a free enemy slot, or -1 if none available.
-pub fn alloc_enemy(game : Game) -> Int {
+pub fn alloc_enemy(game : Game) -> Int32 {
   @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free turret slot, or -1 if none available.
-pub fn alloc_turret(game : Game) -> Int {
+pub fn alloc_turret(game : Game) -> Int32 {
   @utils.first_index_by(game.turrets, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free projectile slot, or -1 if none available.
-pub fn alloc_projectile(game : Game) -> Int {
+pub fn alloc_projectile(game : Game) -> Int32 {
   @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free particle slot, or -1 if none available.
-pub fn alloc_particle(game : Game) -> Int {
+pub fn alloc_particle(game : Game) -> Int32 {
   @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free checkpoint slot, or -1 if none available.
-pub fn alloc_checkpoint(game : Game) -> Int {
+pub fn alloc_checkpoint(game : Game) -> Int32 {
   @utils.first_index_by(game.checkpoints, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free building slot, or -1 if none available.
-pub fn alloc_building(game : Game) -> Int {
+pub fn alloc_building(game : Game) -> Int32 {
   @utils.first_index_by(game.buildings, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free cloud slot, or -1 if none available.
-pub fn alloc_cloud(game : Game) -> Int {
+pub fn alloc_cloud(game : Game) -> Int32 {
   @utils.first_index_by(game.clouds, fn(slot) { !slot.active })
 }
 
@@ -296,10 +296,10 @@ pub fn spawn_particles(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
-  r : Int,
-  g : Int,
-  b : Int,
+  count : Int32,
+  r : Int32,
+  g : Int32,
+  b : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -334,7 +334,7 @@ pub fn spawn_smoke(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -369,7 +369,7 @@ pub fn spawn_fire(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -404,7 +404,7 @@ pub fn spawn_debris(
   wx : Float,
   wy : Float,
   wz : Float,
-  count : Int,
+  count : Int32,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -507,7 +507,7 @@ pub fn push_message(
   game : Game,
   text : String,
   duration : Float,
-  priority : Int,
+  priority : Int32,
 ) -> Unit {
   // Find empty slot or lowest priority
   let mut lowest_pri = 999
@@ -540,7 +540,7 @@ pub fn push_message(
 
 ///|
 /// Returns the number of currently active buildings.
-pub fn count_active_buildings(game : Game) -> Int {
+pub fn count_active_buildings(game : Game) -> Int32 {
   let mut count = 0
   for building in game.buildings {
     if building.active {
@@ -582,7 +582,7 @@ pub fn get_right(yaw : Float, roll : Float) -> (Float, Float, Float) {
 
 ///|
 /// Returns the hit accuracy as a percentage from `shots_fired` and `shots_hit`.
-pub fn calculate_accuracy(shots_fired : Int, shots_hit : Int) -> Float {
+pub fn calculate_accuracy(shots_fired : Int32, shots_hit : Int32) -> Float {
   if shots_fired <= 0 {
     0.0
   } else {
@@ -594,7 +594,7 @@ pub fn calculate_accuracy(shots_fired : Int, shots_hit : Int) -> Float {
 
 ///|
 /// Returns the letter rating grade for a mission based on `score`.
-pub fn calculate_rating(score : Int) -> String {
+pub fn calculate_rating(score : Int32) -> String {
   if score >= rating_s_threshold {
     "S"
   } else if score >= rating_a_threshold {
@@ -624,7 +624,7 @@ pub fn weapon_name(kind : WeaponKind) -> String {
 
 ///|
 /// Returns the remaining ammo count for the player's currently equipped weapon.
-pub fn get_ammo(player : Player) -> Int {
+pub fn get_ammo(player : Player) -> Int32 {
   match player.current_weapon {
     MachineGun => player.ammo_mg
     Rockets => player.ammo_rockets
@@ -651,7 +651,7 @@ pub fn weather_name(kind : Weather) -> String {
 
 ///|
 /// Allocates a floating damage number slot, returning its index or -1 if full.
-pub fn alloc_floating_damage(game : Game) -> Int {
+pub fn alloc_floating_damage(game : Game) -> Int32 {
   for i in 0..<game.floating_damage.length() {
     if !game.floating_damage[i].active {
       return i
@@ -667,7 +667,7 @@ pub fn spawn_floating_damage(
   wx : Float,
   wy : Float,
   wz : Float,
-  amount : Int,
+  amount : Int32,
 ) -> Unit {
   let idx = alloc_floating_damage(game)
   if idx < 0 {
@@ -718,7 +718,7 @@ pub fn trigger_damage_feedback(
 
 ///|
 /// Returns a star-rating string representing the difficulty `level`.
-pub fn difficulty_str(level : Int) -> String {
+pub fn difficulty_str(level : Int32) -> String {
   if level <= 1 {
     "*"
   } else if level <= 2 {

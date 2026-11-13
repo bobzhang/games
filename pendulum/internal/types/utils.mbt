@@ -23,7 +23,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn absi(v : Int) -> Int {
+pub fn absi(v : Int32) -> Int32 {
   if v < 0 {
     -v
   } else {
@@ -50,7 +50,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -59,7 +59,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -68,7 +68,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
@@ -83,17 +83,17 @@ pub fn vec2f_zero() -> Vec2f {
 }
 
 ///|
-pub fn grid_to_screen_x(gx : Int) -> Float {
+pub fn grid_to_screen_x(gx : Int32) -> Float {
   Float::from_int(grid_offset_x + gx * cell_size + cell_size / 2)
 }
 
 ///|
-pub fn grid_to_screen_y(gy : Int) -> Float {
+pub fn grid_to_screen_y(gy : Int32) -> Float {
   Float::from_int(grid_offset_y + gy * cell_size + cell_size / 2)
 }
 
 ///|
-pub fn screen_to_grid_x(sx : Float) -> Int {
+pub fn screen_to_grid_x(sx : Float) -> Int32 {
   let v = (sx.to_int() - grid_offset_x) / cell_size
   if v < 0 {
     0
@@ -105,7 +105,7 @@ pub fn screen_to_grid_x(sx : Float) -> Int {
 }
 
 ///|
-pub fn screen_to_grid_y(sy : Float) -> Int {
+pub fn screen_to_grid_y(sy : Float) -> Int32 {
   let v = (sy.to_int() - grid_offset_y) / cell_size
   if v < 0 {
     0
@@ -129,7 +129,7 @@ pub fn atan2f(y : Float, x : Float) -> Float {
 }
 
 ///|
-pub fn floorf(v : Float) -> Int {
+pub fn floorf(v : Float) -> Int32 {
   let d = v.to_double()
   let i = d.to_int()
   if d < 0.0 && Float::from_int(i) != v {
@@ -140,12 +140,12 @@ pub fn floorf(v : Float) -> Int {
 }
 
 ///|
-pub fn roundf(v : Float) -> Int {
+pub fn roundf(v : Float) -> Int32 {
   floorf(v + 0.5)
 }
 
 ///|
-pub fn compute_arc_points(anchor : Vec2i, length : Int) -> Array[ArcPoint] {
+pub fn compute_arc_points(anchor : Vec2i, length : Int32) -> Array[ArcPoint] {
   let points : Array[ArcPoint] = []
   if length <= 0 {
     return points
@@ -275,7 +275,7 @@ pub fn new_rope() -> Rope {
 pub fn new_history_entry(
   w : Weight,
   r : Rope,
-  tick : Int,
+  tick : Int32,
   collected : Array[Bool],
 ) -> HistoryEntry {
   let wp : Array[Vec2i] = []
@@ -307,7 +307,7 @@ pub fn restore_from_history(
   w : Weight,
   r : Rope,
   collected : Array[Bool],
-) -> Int {
+) -> Int32 {
   w.pos = entry.weight_pos
   w.state = entry.weight_state
   w.swing_dir = entry.swing_dir
@@ -372,7 +372,7 @@ pub fn tier_color(t : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn tier_level_count(t : Tier) -> Int {
+pub fn tier_level_count(t : Tier) -> Int32 {
   match t {
     Swing => tier1_count
     Wrap => tier2_count
@@ -381,7 +381,7 @@ pub fn tier_level_count(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_level_offset(t : Tier) -> Int {
+pub fn tier_level_offset(t : Tier) -> Int32 {
   match t {
     Swing => 0
     Wrap => tier1_count
@@ -390,7 +390,7 @@ pub fn tier_level_offset(t : Tier) -> Int {
 }
 
 ///|
-pub fn find_arc_index_for_pos(arc : Array[ArcPoint], pos : Vec2i) -> Int {
+pub fn find_arc_index_for_pos(arc : Array[ArcPoint], pos : Vec2i) -> Int32 {
   for i = 0; i < arc.length(); i = i + 1 {
     if arc[i].gx == pos.x && arc[i].gy == pos.y {
       return i

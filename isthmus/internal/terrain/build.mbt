@@ -1,9 +1,9 @@
 ///|
 pub fn can_place_sand(
   grid : @types.Grid,
-  x : Int,
-  y : Int,
-  sea_level : Int,
+  x : Int32,
+  y : Int32,
+  sea_level : Int32,
 ) -> Bool {
   if !@types.grid_in_bounds(grid, x, y) {
     return false
@@ -22,11 +22,11 @@ pub fn can_place_sand(
 ///|
 fn has_adjacent_land(
   grid : @types.Grid,
-  x : Int,
-  y : Int,
-  sea_level : Int,
+  x : Int32,
+  y : Int32,
+  sea_level : Int32,
 ) -> Bool {
-  let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  let dirs : Array[(Int32, Int32)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
   for i in 0..<dirs.length() {
     let (dx, dy) = dirs[i]
     let nx = x + dx
@@ -44,9 +44,9 @@ fn has_adjacent_land(
 ///|
 pub fn place_sand(
   grid : @types.Grid,
-  x : Int,
-  y : Int,
-  sea_level : Int,
+  x : Int32,
+  y : Int32,
+  sea_level : Int32,
 ) -> Bool {
   if !can_place_sand(grid, x, y, sea_level) {
     return false
@@ -67,9 +67,9 @@ pub fn place_sand(
 ///|
 pub fn valid_placements(
   grid : @types.Grid,
-  sea_level : Int,
-) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = []
+  sea_level : Int32,
+) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = []
   for y in 0..<grid.height {
     for x in 0..<grid.width {
       if can_place_sand(grid, x, y, sea_level) {
@@ -81,7 +81,7 @@ pub fn valid_placements(
 }
 
 ///|
-pub fn count_land_tiles(grid : @types.Grid, sea_level : Int) -> Int {
+pub fn count_land_tiles(grid : @types.Grid, sea_level : Int32) -> Int32 {
   let mut count = 0
   for i in 0..<grid.tiles.length() {
     if grid.tiles[i].height > sea_level {

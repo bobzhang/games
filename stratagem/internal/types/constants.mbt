@@ -1,20 +1,20 @@
 ///|
-pub let screen_width : Int = 1280
+pub let screen_width : Int32 = 1280
 
 ///|
-pub let screen_height : Int = 720
+pub let screen_height : Int32 = 720
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
 pub let hex_size : Float = 38.0
 
 ///|
-pub let grid_width : Int = 10
+pub let grid_width : Int32 = 10
 
 ///|
-pub let grid_height : Int = 8
+pub let grid_height : Int32 = 8
 
 ///|
 pub let map_offset_x : Float = 80.0
@@ -23,16 +23,16 @@ pub let map_offset_x : Float = 80.0
 pub let map_offset_y : Float = 60.0
 
 ///|
-pub let ui_panel_x : Int = 880
+pub let ui_panel_x : Int32 = 880
 
 ///|
-pub let ui_panel_width : Int = 380
+pub let ui_panel_width : Int32 = 380
 
 ///|
-pub let total_campaign_levels : Int = 12
+pub let total_campaign_levels : Int32 = 12
 
 ///|
-pub let total_skirmish_maps : Int = 4
+pub let total_skirmish_maps : Int32 = 4
 
 // Colors
 

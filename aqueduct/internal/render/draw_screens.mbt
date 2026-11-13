@@ -105,7 +105,7 @@ pub fn draw_tier_select(game : @types.Game) -> Unit {
     40,
     @types.color_hud_text,
   )
-  let tiers : Array[(@types.Tier, String, Int)] = [
+  let tiers : Array[(@types.Tier, String, Int32)] = [
     (Tier1, "Tier 1: Downhill", 1),
     (Tier2, "Tier 2: Reservoirs", 2),
     (Tier3, "Tier 3: Mastery", 3),

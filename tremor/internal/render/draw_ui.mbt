@@ -174,7 +174,7 @@ fn draw_ui_panel(game : @types.Game, level : @types.Level) -> Unit {
 }
 
 ///|
-fn draw_sensor_palette(game : @types.Game, x : Int, y : Int) -> Unit {
+fn draw_sensor_palette(game : @types.Game, x : Int32, y : Int32) -> Unit {
   let sensors : Array[@types.SensorKind] = [Broad, Precise, Directional]
   let names : Array[String] = ["1: Broad", "2: Precise", "3: Directional"]
   let costs : Array[String] = ["Cost: 1", "Cost: 2", "Cost: 3"]

@@ -1,49 +1,49 @@
 // Minesweeper — 16x16 grid, 40 mines
 
 ///|
-const Rows : Int = 16
+const Rows : Int32 = 16
 
 ///|
-const Cols : Int = 16
+const Cols : Int32 = 16
 
 ///|
-const MineCount : Int = 40
+const MineCount : Int32 = 40
 
 ///|
-const CellSize : Int = 30
+const CellSize : Int32 = 30
 
 ///|
-const GridOffsetX : Int = 10
+const GridOffsetX : Int32 = 10
 
 ///|
-const GridOffsetY : Int = 60
+const GridOffsetY : Int32 = 60
 
 // Game states
 
 ///|
-const StateWaiting : Int = 0 // before first click
+const StateWaiting : Int32 = 0 // before first click
 
 ///|
-const StatePlaying : Int = 1
+const StatePlaying : Int32 = 1
 
 ///|
-const StateWon : Int = 2
+const StateWon : Int32 = 2
 
 ///|
-const StateLost : Int = 3
+const StateLost : Int32 = 3
 
 ///|
-fn cell_index(row : Int, col : Int) -> Int {
+fn cell_index(row : Int32, col : Int32) -> Int32 {
   row * Cols + col
 }
 
 ///|
-fn in_bounds(row : Int, col : Int) -> Bool {
+fn in_bounds(row : Int32, col : Int32) -> Bool {
   row >= 0 && row < Rows && col >= 0 && col < Cols
 }
 
 ///|
-fn count_adjacent(mines : Array[Int], row : Int, col : Int) -> Int {
+fn count_adjacent(mines : Array[Int32], row : Int32, col : Int32) -> Int32 {
   let mut count = 0
   for dr in -1..<=1 {
     for dc in -1..<=1 {
@@ -60,7 +60,7 @@ fn count_adjacent(mines : Array[Int], row : Int, col : Int) -> Int {
 }
 
 ///|
-fn number_color(n : Int) -> @raylib.Color {
+fn number_color(n : Int32) -> @raylib.Color {
   match n {
     1 => @raylib.Color::new(0, 0, 255, 255) // blue
     2 => @raylib.Color::new(0, 128, 0, 255) // green
@@ -76,10 +76,10 @@ fn number_color(n : Int) -> @raylib.Color {
 
 ///|
 fn generate_mines(
-  mines : Array[Int],
-  adjacent : Array[Int],
-  safe_row : Int,
-  safe_col : Int,
+  mines : Array[Int32],
+  adjacent : Array[Int32],
+  safe_row : Int32,
+  safe_col : Int32,
 ) -> Unit {
   let total = Rows * Cols
   // Clear
@@ -115,12 +115,12 @@ fn generate_mines(
 
 ///|
 fn flood_fill(
-  mines : Array[Int],
-  revealed : Array[Int],
-  flagged : Array[Int],
-  adjacent : Array[Int],
-  row : Int,
-  col : Int,
+  mines : Array[Int32],
+  revealed : Array[Int32],
+  flagged : Array[Int32],
+  adjacent : Array[Int32],
+  row : Int32,
+  col : Int32,
 ) -> Unit {
   if !in_bounds(row, col) {
     return
@@ -142,7 +142,7 @@ fn flood_fill(
 }
 
 ///|
-fn check_win(mines : Array[Int], revealed : Array[Int]) -> Bool {
+fn check_win(mines : Array[Int32], revealed : Array[Int32]) -> Bool {
   let total = Rows * Cols
   for i in 0..<total {
     if mines[i] == 0 && revealed[i] == 0 {
@@ -154,10 +154,10 @@ fn check_win(mines : Array[Int], revealed : Array[Int]) -> Bool {
 
 ///|
 fn reset_game(
-  mines : Array[Int],
-  revealed : Array[Int],
-  flagged : Array[Int],
-  adjacent : Array[Int],
+  mines : Array[Int32],
+  revealed : Array[Int32],
+  flagged : Array[Int32],
+  adjacent : Array[Int32],
 ) -> Unit {
   let total = Rows * Cols
   for i in 0..<total {
@@ -177,10 +177,10 @@ fn main {
   @draw.init_font()
 
   let total = Rows * Cols
-  let mines : Array[Int] = Array::make(total, 0)
-  let revealed : Array[Int] = Array::make(total, 0)
-  let flagged : Array[Int] = Array::make(total, 0)
-  let adjacent : Array[Int] = Array::make(total, 0)
+  let mines : Array[Int32] = Array::make(total, 0)
+  let revealed : Array[Int32] = Array::make(total, 0)
+  let flagged : Array[Int32] = Array::make(total, 0)
+  let adjacent : Array[Int32] = Array::make(total, 0)
 
   let mut game_state = StateWaiting
   let mut flags_placed = 0

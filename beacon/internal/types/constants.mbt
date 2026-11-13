@@ -1,44 +1,44 @@
 ///|
-pub let screen_width : Int = 1024
+pub let screen_width : Int32 = 1024
 
 ///|
-pub let screen_height : Int = 768
+pub let screen_height : Int32 = 768
 
 ///|
-pub let target_fps : Int = 60
+pub let target_fps : Int32 = 60
 
 ///|
-pub let grid_cols : Int = 10
+pub let grid_cols : Int32 = 10
 
 ///|
-pub let grid_rows : Int = 8
+pub let grid_rows : Int32 = 8
 
 ///|
-pub let tile_size : Int = 64
+pub let tile_size : Int32 = 64
 
 ///|
-pub let grid_offset_x : Int = 112
+pub let grid_offset_x : Int32 = 112
 
 ///|
-pub let grid_offset_y : Int = 100
+pub let grid_offset_y : Int32 = 100
 
 ///|
-pub let base_range : Int = 3
+pub let base_range : Int32 = 3
 
 ///|
-pub let max_elevation : Int = 3
+pub let max_elevation : Int32 = 3
 
 ///|
-pub let total_levels : Int = 25
+pub let total_levels : Int32 = 25
 
 ///|
-pub let tier1_count : Int = 8
+pub let tier1_count : Int32 = 8
 
 ///|
-pub let tier2_count : Int = 9
+pub let tier2_count : Int32 = 9
 
 ///|
-pub let tier3_count : Int = 8
+pub let tier3_count : Int32 = 8
 
 ///|
 pub let anim_speed : Float = 2.0

@@ -58,12 +58,12 @@ fn draw_water_preview(game : @types.Game) -> Unit {
 /// Draw a small arrow from the watered neighbor toward this cell
 fn draw_flow_arrow(
   game : @types.Game,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   cx : Float,
   cy : Float,
   size : Float,
-  alpha : Int,
+  alpha : Int32,
 ) -> Unit {
   let neighbors = @hex.valid_neighbors(col, row)
   for i in 0..<neighbors.length() {

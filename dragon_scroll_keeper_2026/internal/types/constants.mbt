@@ -1,22 +1,22 @@
 ///|
 /// Width of the game window in pixels.
-pub let screen_w : Int = 1366
+pub let screen_w : Int32 = 1366
 
 ///|
 /// Height of the game window in pixels.
-pub let screen_h : Int = 768
+pub let screen_h : Int32 = 768
 
 ///|
 /// Target frame rate used by the main loop.
-pub let target_fps : Int = 120
+pub let target_fps : Int32 = 120
 
 ///|
 /// Gameplay tuning constant for chamber count.
-pub let chamber_count : Int = 3
+pub let chamber_count : Int32 = 3
 
 ///|
 /// Gameplay tuning constant for vault room.
-pub let vault_room : Int = 1
+pub let vault_room : Int32 = 1
 
 ///|
 /// World layout coordinate for chamber left.
@@ -140,15 +140,15 @@ pub let scroll_integrity_max : Float = 100.0
 
 ///|
 /// Gameplay tuning constant for seal charges start.
-pub let seal_charges_start : Int = 4
+pub let seal_charges_start : Int32 = 4
 
 ///|
 /// Per-step progression tuning for seal charges wave gain.
-pub let seal_charges_wave_gain : Int = 1
+pub let seal_charges_wave_gain : Int32 = 1
 
 ///|
 /// Maximum value configured for seal charges max.
-pub let seal_charges_max : Int = 7
+pub let seal_charges_max : Int32 = 7
 
 ///|
 /// Maximum value configured for breach severity max.
@@ -256,8 +256,8 @@ pub let wave_duration_step : Float = 3.8
 
 ///|
 /// Upper bound for max raiders in gameplay systems.
-pub let max_raiders : Int = 160
+pub let max_raiders : Int32 = 160
 
 ///|
 /// Upper bound for max flames in gameplay systems.
-pub let max_flames : Int = 220
+pub let max_flames : Int32 = 220

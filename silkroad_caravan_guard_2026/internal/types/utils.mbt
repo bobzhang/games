@@ -59,37 +59,37 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 
 ///|
 /// Returns a pseudo-random integer sampled from `[lo, hi]`.
-pub fn randi(lo : Int, hi : Int) -> Int {
+pub fn randi(lo : Int32, hi : Int32) -> Int32 {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
 /// Returns a computed helper value for chance.
-pub fn chance(pct : Int) -> Bool {
+pub fn chance(pct : Int32) -> Bool {
   randi(0, 99) < pct
 }
 
 ///|
 /// Returns derived layout data for checkpoint span.
-pub fn checkpoint_span(idx : Int) -> Float {
+pub fn checkpoint_span(idx : Int32) -> Float {
   checkpoint_base_span + Float::from_int(idx.max(0)) * checkpoint_span_step
 }
 
 ///|
 /// Returns a derived gameplay metric for caravan speed.
-pub fn caravan_speed(checkpoint : Int) -> Float {
+pub fn caravan_speed(checkpoint : Int32) -> Float {
   caravan_speed_base + Float::from_int(checkpoint.max(0)) * caravan_speed_step
 }
 
 ///|
 /// Returns world-space coordinates for wagon slot x.
-pub fn wagon_slot_x(index : Int) -> Float {
+pub fn wagon_slot_x(index : Int32) -> Float {
   caravan_center_x + Float::from_int(index - wagon_count / 2) * wagon_gap
 }
 
 ///|
 /// Returns world-space coordinates for wagon slot y.
-pub fn wagon_slot_y(index : Int) -> Float {
+pub fn wagon_slot_y(index : Int32) -> Float {
   if index % 2 == 0 {
     caravan_center_y - 24.0
   } else {
@@ -99,7 +99,7 @@ pub fn wagon_slot_y(index : Int) -> Float {
 
 ///|
 /// Returns world-space coordinates for lane base y.
-pub fn lane_base_y(index : Int) -> Float {
+pub fn lane_base_y(index : Int32) -> Float {
   desert_lane_top +
   Float::from_int(index.clamp(min=0, max=lane_count - 1)) * desert_lane_gap
 }

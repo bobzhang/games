@@ -379,7 +379,7 @@ fn consume_ammo(ship : @types.Ship) -> Unit {
 }
 
 ///|
-fn get_ammo_name(ammo_type : Int) -> String {
+fn get_ammo_name(ammo_type : Int32) -> String {
   if ammo_type == @types.ammo_round_shot {
     "Round Shot"
   } else if ammo_type == @types.ammo_chain_shot {
@@ -392,7 +392,7 @@ fn get_ammo_name(ammo_type : Int) -> String {
 }
 
 ///|
-fn @types.Game::set_fleet_order(game : @types.Game, order : Int) -> Unit {
+fn @types.Game::set_fleet_order(game : @types.Game, order : Int32) -> Unit {
   for fs in game.fleet_ships {
     if !fs.active {
       continue
@@ -419,7 +419,7 @@ fn @types.Game::set_fleet_order(game : @types.Game, order : Int) -> Unit {
 fn @types.Game::fire_player_broadside(
   game : @types.Game,
   port : Bool,
-  active_cannons : Int,
+  active_cannons : Int32,
 ) -> Unit {
   let ship = game.player
   // Port is left side (heading - pi/2), starboard is right (heading + pi/2)
@@ -429,7 +429,7 @@ fn @types.Game::fire_player_broadside(
     ship.heading + @types.pi / 2.0
   }
   // Number of balls based on active cannons
-  let shots : Int = (active_cannons / 2).min(4)
+  let shots : Int32 = (active_cannons / 2).min(4)
   let cannon_spd = @types.get_cannon_speed(ship.cannon_type)
   let cannon_arc = @types.get_cannon_arc(ship.cannon_type)
   for i in 0..<shots {

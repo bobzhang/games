@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
@@ -6,7 +7,7 @@ pub(all) enum Screen {
   Playing
   Results
   Daily
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -23,6 +24,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum EdgePattern {
   Zigzag
   Dots
@@ -30,7 +32,7 @@ pub(all) enum EdgePattern {
   Waves
   Diamonds
   Stars
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend EdgePattern with Eq::{not_equal, equal}
@@ -47,12 +49,13 @@ pub impl Show for EdgePattern with fn output(self, logger) {
 pub extend EdgePattern with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Placing
   Selecting
   Swapping
   Complete
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -69,11 +72,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Scraps
   Quilting
   Masterwork
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}
@@ -90,12 +94,13 @@ pub impl Show for Tier with fn output(self, logger) {
 pub extend Tier with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Direction {
   North
   East
   South
   West
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Direction with Eq::{not_equal, equal}

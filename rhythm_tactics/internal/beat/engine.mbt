@@ -117,10 +117,10 @@ pub fn advance_enemy_pattern(enemy : @types.Enemy) -> Unit {
 ///|
 /// Compute damage accounting for combo bonus and beat rating.
 pub fn compute_damage(
-  base_damage : Int,
+  base_damage : Int32,
   beat : @types.BeatState,
   rating : @types.BeatRating,
-) -> Int {
+) -> Int32 {
   let mult = combo_multiplier(beat)
   let rating_mult : Float = match rating {
     Perfect => 1.5

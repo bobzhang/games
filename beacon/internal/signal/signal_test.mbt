@@ -14,10 +14,10 @@ fn make_test_grid(
 }
 
 ///|
-fn make_flat_elevations() -> Array[Array[Int]] {
-  let elevs : Array[Array[Int]] = []
+fn make_flat_elevations() -> Array[Array[Int32]] {
+  let elevs : Array[Array[Int32]] = []
   for _r in 0..<@types.grid_rows {
-    let row : Array[Int] = []
+    let row : Array[Int32] = []
     for _c in 0..<@types.grid_cols {
       row.push(0)
     }

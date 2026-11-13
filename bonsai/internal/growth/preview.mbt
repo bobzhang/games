@@ -4,7 +4,7 @@
 pub fn compute_preview(
   g : @types.TreeGrid,
   species : @types.Species,
-  turns : Int,
+  turns : Int32,
 ) -> @types.TreeGrid {
   let mut current = @types.clone_grid(g)
   for _i in 0..<turns {

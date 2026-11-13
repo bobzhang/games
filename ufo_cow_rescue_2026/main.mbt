@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 let ground_y : Float = 648.0
@@ -14,19 +14,19 @@ let world_w : Float = 1280.0
 let world_h : Float = 760.0
 
 ///|
-let max_cows : Int = 96
+let max_cows : Int32 = 96
 
 ///|
-let max_farmers : Int = 72
+let max_farmers : Int32 = 72
 
 ///|
-let max_bullets : Int = 420
+let max_bullets : Int32 = 420
 
 ///|
-let max_pickups : Int = 80
+let max_pickups : Int32 = 80
 
 ///|
-let max_particles : Int = 960
+let max_particles : Int32 = 960
 
 ///|
 struct Ufo {
@@ -41,9 +41,9 @@ struct Ufo {
   mut dash_cd : Float
   mut emp_cd : Float
   mut flash_t : Float
-  mut score : Int
-  mut combo : Int
-  mut rescued : Int
+  mut score : Int32
+  mut combo : Int32
+  mut rescued : Int32
 }
 
 ///|
@@ -52,7 +52,7 @@ struct Cow {
   mut x : Float
   mut y : Float
   mut vx : Float
-  mut state : Int
+  mut state : Int32
   mut t : Float
   mut panic_t : Float
 }
@@ -84,7 +84,7 @@ struct Pickup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : Int32
   mut t : Float
 }
 
@@ -98,7 +98,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -123,10 +123,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -212,7 +212,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done = false
   for part in parts {
@@ -239,9 +239,9 @@ fn burst(
   parts : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<count {
     ignore(i)
@@ -251,7 +251,7 @@ fn burst(
 
 ///|
 fn spawn_cow(cows : Array[Cow]) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<cows.length() {
     if slot < 0 && !cows[i].active {
       slot = i
@@ -273,8 +273,8 @@ fn spawn_cow(cows : Array[Cow]) -> Bool {
 }
 
 ///|
-fn spawn_farmer(farmers : Array[Farmer], level : Int) -> Bool {
-  let mut slot : Int = -1
+fn spawn_farmer(farmers : Array[Farmer], level : Int32) -> Bool {
+  let mut slot : Int32 = -1
   for i in 0..<farmers.length() {
     if slot < 0 && !farmers[i].active {
       slot = i
@@ -304,7 +304,7 @@ fn spawn_enemy_bullet(
   ty : Float,
   dmg : Float,
 ) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<bullets.length() {
     if slot < 0 && !bullets[i].active {
       slot = i
@@ -332,7 +332,7 @@ fn spawn_enemy_bullet(
 
 ///|
 fn spawn_pickup(items : Array[Pickup]) -> Bool {
-  let mut slot : Int = -1
+  let mut slot : Int32 = -1
   for i in 0..<items.length() {
     if slot < 0 && !items[i].active {
       slot = i
@@ -343,7 +343,7 @@ fn spawn_pickup(items : Array[Pickup]) -> Bool {
     false
   } else {
     let roll = @raylib.get_random_value(0, 99)
-    let kind : Int = if roll < 60 { 0 } else if roll < 90 { 1 } else { 2 }
+    let kind : Int32 = if roll < 60 { 0 } else if roll < 90 { 1 } else { 2 }
 
     items[slot].active = true
     items[slot].x = randf(60.0, world_w - 60.0)
@@ -415,12 +415,12 @@ fn main {
     }
   })
 
-  let mut state : Int = 0
-  let mut level : Int = 1
+  let mut state : Int32 = 0
+  let mut level : Int32 = 1
   let mut timer : Float = 224.0
-  let mut target : Int = 22
-  let mut kills : Int = 0
-  let mut missed : Int = 0
+  let mut target : Int32 = 22
+  let mut kills : Int32 = 0
+  let mut missed : Int32 = 0
 
   let mut spawn_cow_cd : Float = 0.45
   let mut spawn_farmer_cd : Float = 0.72
@@ -557,10 +557,10 @@ fn main {
       let mut dash_press : Bool = @raylib.is_key_pressed(@raylib.KeyK)
       let mut emp_press : Bool = @raylib.is_key_pressed(@raylib.KeyL)
 
-      let pad_x : Int = 20
-      let pad_y : Int = sh - 198
-      let btn_x : Int = sw - 274
-      let btn_y : Int = sh - 236
+      let pad_x : Int32 = 20
+      let pad_y : Int32 = sh - 198
+      let btn_x : Int32 = sw - 274
+      let btn_y : Int32 = sh - 236
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 58, 78, 58) {
@@ -1023,7 +1023,7 @@ fn main {
       if !pickup.active {
         continue
       }
-      let blink : Int = if (pickup.t * 8.0).to_int() % 2 == 0 {
+      let blink : Int32 = if (pickup.t * 8.0).to_int() % 2 == 0 {
         255
       } else {
         180
@@ -1110,7 +1110,7 @@ fn main {
         continue
       }
       let k = particle.t / particle.life
-      let a : Int = ((Float::from_int(1) - k) * 220.0).to_int()
+      let a : Int32 = ((Float::from_int(1) - k) * 220.0).to_int()
       let mut c = @raylib.Color::new(124, 224, 252, a)
       if particle.kind == 1 {
         c = @raylib.Color::new(142, 246, 182, a)
@@ -1154,7 +1154,7 @@ fn main {
     )
 
     if ufo.beam_t > 0.0 {
-      let beam_alpha : Int = (ufo.beam_t * 240.0).to_int()
+      let beam_alpha : Int32 = (ufo.beam_t * 240.0).to_int()
       @raylib.draw_triangle(
         @raylib.Vector2::new(ufo.x - 24.0, ufo.y + 18.0),
         @raylib.Vector2::new(ufo.x + 24.0, ufo.y + 18.0),

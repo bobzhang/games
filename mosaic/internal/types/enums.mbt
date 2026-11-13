@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Screen {
   Title
   TierSelect
   LevelSelect
   Playing
   Results
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Screen with Eq::{not_equal, equal}
@@ -22,6 +23,7 @@ pub impl Show for Screen with fn output(self, logger) {
 pub extend Screen with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileColor {
   Red
   Blue
@@ -29,7 +31,7 @@ pub(all) enum TileColor {
   Gold
   Purple
   White
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileColor with Eq::{not_equal, equal}
@@ -46,6 +48,7 @@ pub impl Show for TileColor with fn output(self, logger) {
 pub extend TileColor with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum TileShape {
   Square
   Triangle
@@ -53,7 +56,7 @@ pub(all) enum TileShape {
   Diamond
   Circle
   Cross
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend TileShape with Eq::{not_equal, equal}
@@ -70,12 +73,13 @@ pub impl Show for TileShape with fn output(self, logger) {
 pub extend TileShape with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Orientation {
   N
   E
   S
   W
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Orientation with Eq::{not_equal, equal}
@@ -92,6 +96,7 @@ pub impl Show for Orientation with fn output(self, logger) {
 pub extend Orientation with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum SymmetryKind {
   MirrorH
   MirrorV
@@ -99,7 +104,7 @@ pub(all) enum SymmetryKind {
   Rotate2
   Rotate4
   Glide
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend SymmetryKind with Eq::{not_equal, equal}
@@ -116,11 +121,12 @@ pub impl Show for SymmetryKind with fn output(self, logger) {
 pub extend SymmetryKind with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum PlayState {
   Placing
   GuessSymmetry
   Complete
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend PlayState with Eq::{not_equal, equal}
@@ -137,11 +143,12 @@ pub impl Show for PlayState with fn output(self, logger) {
 pub extend PlayState with Show::{to_string, output}
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Tier {
   Repair
   Restore
   Master
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Tier with Eq::{not_equal, equal}

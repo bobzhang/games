@@ -1,5 +1,5 @@
 ///|
-fn draw_menu(game : @types.GameState, frame : Int) -> Unit {
+fn draw_menu(game : @types.GameState, frame : Int32) -> Unit {
   @raylib.clear_background(menu_bg)
   let cx = @types.screen_width / 2
   // Title with wave effect
@@ -45,12 +45,12 @@ fn draw_menu(game : @types.GameState, frame : Int) -> Unit {
 
 ///|
 fn draw_menu_button(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   text : String,
-  _frame : Int,
+  _frame : Int32,
 ) -> Unit {
   @raylib.draw_rectangle(x, y, w, h, button_color)
   @raylib.draw_rectangle_lines(x, y, w, h, panel_border)
@@ -59,7 +59,7 @@ fn draw_menu_button(
 }
 
 ///|
-fn draw_level_select(game : @types.GameState, frame : Int) -> Unit {
+fn draw_level_select(game : @types.GameState, frame : Int32) -> Unit {
   @raylib.clear_background(menu_bg)
   let cx = @types.screen_width / 2
   @draw.draw_text("SELECT LEVEL", cx - 90, 30, 32, text_bright)
@@ -92,11 +92,11 @@ fn draw_level_select(game : @types.GameState, frame : Int) -> Unit {
 
 ///|
 fn draw_level_button(
-  x : Int,
-  y : Int,
-  level : Int,
+  x : Int32,
+  y : Int32,
+  level : Int32,
   star : @types.StarRating,
-  _frame : Int,
+  _frame : Int32,
 ) -> Unit {
   let w = 110
   let h = 140
@@ -130,7 +130,7 @@ fn draw_level_button(
 }
 
 ///|
-fn compute_total_stars(game : @types.GameState) -> Int {
+fn compute_total_stars(game : @types.GameState) -> Int32 {
   let mut total = 0
   for star in game.stars {
     total += @types.star_rating_value(star)

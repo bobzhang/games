@@ -1,11 +1,12 @@
 ///|
 /// Enumerates scripted enemy formation patterns used by the encounter director.
+#derive(Eq, Debug)
 pub(all) enum Formation {
   VShape
   ColumnRush
   FlankingPairs
   Random
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Formation with Eq::{not_equal, equal}
@@ -23,11 +24,12 @@ pub extend Formation with Show::{to_string, output}
 
 ///|
 /// Enumerates themed road zone types that affect gameplay feel.
+#derive(Eq, Debug)
 pub(all) enum RoadZone {
   NeonAlley
   IndustrialStrip
   HighwayOverpass
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend RoadZone with Eq::{not_equal, equal}
@@ -45,11 +47,12 @@ pub extend RoadZone with Show::{to_string, output}
 
 ///|
 /// Enumerates weapon upgrade paths the player can obtain.
+#derive(Eq, Debug)
 pub(all) enum WeaponUpgrade {
   Spread
   Piercing
   Homing
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend WeaponUpgrade with Eq::{not_equal, equal}
@@ -67,11 +70,12 @@ pub extend WeaponUpgrade with Show::{to_string, output}
 
 ///|
 /// Enumerates road hazard types that appear on the road surface.
+#derive(Eq, Debug)
 pub(all) enum HazardKind {
   OilSlick
   BarrierGate
   BlastZone
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend HazardKind with Eq::{not_equal, equal}
@@ -89,6 +93,7 @@ pub extend HazardKind with Show::{to_string, output}
 
 ///|
 /// Stores runtime data for a road hazard.
+#derive(Debug)
 pub(all) struct Hazard {
   mut active : Bool
   mut kind : HazardKind
@@ -98,7 +103,7 @@ pub(all) struct Hazard {
   mut h : Float
   mut timer : Float
   mut warn_t : Float
-} derive(Debug)
+}
 
 ///|
 pub extend Hazard with Debug::{to_repr}
@@ -113,7 +118,7 @@ pub extend Hazard with Show::{to_string, output}
 
 ///|
 /// Maximum number of active road hazards.
-pub let max_hazards : Int = 40
+pub let max_hazards : Int32 = 40
 
 ///|
 /// Creates a default inactive Hazard.
@@ -132,7 +137,7 @@ pub fn Hazard::new() -> Hazard {
 
 ///|
 /// Returns the road zone for a given stage number.
-pub fn road_zone_for_stage(stage : Int) -> RoadZone {
+pub fn road_zone_for_stage(stage : Int32) -> RoadZone {
   match stage % 3 {
     1 => NeonAlley
     2 => IndustrialStrip
@@ -142,13 +147,13 @@ pub fn road_zone_for_stage(stage : Int) -> RoadZone {
 
 ///|
 /// Returns true if the given stage number is a boss stage (every 3rd).
-pub fn is_boss_stage(stage : Int) -> Bool {
+pub fn is_boss_stage(stage : Int32) -> Bool {
   stage >= 3 && stage % 3 == 0
 }
 
 ///|
 /// Selects a formation based on stage progression and a roll value 0..99.
-pub fn select_formation(stage : Int, roll : Int) -> Formation {
+pub fn select_formation(stage : Int32, roll : Int32) -> Formation {
   if stage <= 2 {
     // Early stages: mostly random, occasional V-shape
     if roll < 70 {

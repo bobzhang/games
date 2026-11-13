@@ -1,8 +1,8 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 760
+let sh : Int32 = 760
 
 ///|
 let world_w : Float = 1280.0
@@ -11,16 +11,16 @@ let world_w : Float = 1280.0
 let rider_screen_y : Float = 540.0
 
 ///|
-let max_gates : Int = 72
+let max_gates : Int32 = 72
 
 ///|
-let max_obstacles : Int = 280
+let max_obstacles : Int32 = 280
 
 ///|
-let max_pickups : Int = 120
+let max_pickups : Int32 = 120
 
 ///|
-let max_particles : Int = 920
+let max_particles : Int32 = 920
 
 ///|
 struct Rider {
@@ -35,8 +35,8 @@ struct Rider {
   mut boost_t : Float
   mut boost_cd : Float
   mut flash_t : Float
-  mut score : Int
-  mut combo : Int
+  mut score : Int32
+  mut combo : Int32
 }
 
 ///|
@@ -45,7 +45,7 @@ struct Gate {
   mut x : Float
   mut y : Float
   mut w : Float
-  mut state : Int
+  mut state : Int32
   mut pulse_t : Float
 }
 
@@ -54,7 +54,7 @@ struct Obstacle {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : Int32
   mut size : Float
 }
 
@@ -63,7 +63,7 @@ struct Pickup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : Int32
   mut t : Float
 }
 
@@ -77,7 +77,7 @@ struct Particle {
   mut size : Float
   mut t : Float
   mut life : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -102,10 +102,10 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   let x0 : Float = Float::from_int(rx)
   let y0 : Float = Float::from_int(ry)
@@ -175,7 +175,7 @@ fn spawn_particle(
   x : Float,
   y : Float,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   let mut done : Bool = false
   for ps_elem in ps {
@@ -203,9 +203,9 @@ fn burst(
   ps : Array[Particle],
   x : Float,
   y : Float,
-  count : Int,
+  count : Int32,
   speed : Float,
-  kind : Int,
+  kind : Int32,
 ) -> Unit {
   for i in 0..<count {
     ignore(i)
@@ -216,7 +216,7 @@ fn burst(
 ///|
 fn nearest_gate_y(
   gates : Array[Gate],
-  gate_count : Int,
+  gate_count : Int32,
   rider_y : Float,
 ) -> Float {
   for i in 0..<gate_count; best = 9999999.0F {
@@ -236,12 +236,12 @@ fn setup_course(
   gates : Array[Gate],
   obs : Array[Obstacle],
   pickups : Array[Pickup],
-) -> (Int, Float) {
+) -> (Int32, Float) {
   clear_gates(gates)
   clear_obstacles(obs)
   clear_pickups(pickups)
 
-  let gate_count : Int = 66
+  let gate_count : Int32 = 66
   let mut y : Float = 460.0
 
   for i in 0..<gate_count {
@@ -334,14 +334,14 @@ fn main {
     }
   })
 
-  let mut gate_count : Int = 0
+  let mut gate_count : Int32 = 0
   let mut course_end : Float = 0.0
 
-  let mut state : Int = 0
+  let mut state : Int32 = 0
   let mut time_left : Float = 240.0
-  let mut gates_clean : Int = 0
-  let mut gates_miss : Int = 0
-  let mut wave : Int = 1
+  let mut gates_clean : Int32 = 0
+  let mut gates_miss : Int32 = 0
+  let mut wave : Int32 = 1
 
   let mut msg : String = "Ski through gates, avoid obstacles, land tricks"
   let mut msg_t : Float = 3.4
@@ -435,10 +435,10 @@ fn main {
         @raylib.is_key_pressed(@raylib.KeySpace)
       let mut boost_press : Bool = @raylib.is_key_pressed(@raylib.KeyK)
 
-      let pad_x : Int = 28
-      let pad_y : Int = sh - 186
-      let btn_x : Int = sw - 248
-      let btn_y : Int = sh - 212
+      let pad_x : Int32 = 28
+      let pad_y : Int32 = sh - 186
+      let btn_x : Int32 = sw - 248
+      let btn_y : Int32 = sh - 212
 
       if touching {
         if inside_rect(mouse.x, mouse.y, pad_x, pad_y + 54, 92, 72) {
@@ -458,7 +458,7 @@ fn main {
         }
       }
 
-      let steer_axis : Int = if move_l && !move_r {
+      let steer_axis : Int32 = if move_l && !move_r {
         -1
       } else if move_r && !move_l {
         1
@@ -537,7 +537,7 @@ fn main {
 
       if rider.air_t <= 0.0 && rider.trick_t > 0.0 {
         if rider.trick_t >= 0.26 {
-          let trick_pts : Int = (rider.trick_t * 480.0).to_int() +
+          let trick_pts : Int32 = (rider.trick_t * 480.0).to_int() +
             rider.combo * 7
           rider.score = rider.score + trick_pts
           rider.combo = rider.combo + 1
@@ -835,7 +835,7 @@ fn main {
 
       let sy = particle.y - cam_y
       let k = particle.t / particle.life
-      let a : Int = ((Float::from_int(1) - k) * 220.0).to_int()
+      let a : Int32 = ((Float::from_int(1) - k) * 220.0).to_int()
       let mut c = @raylib.Color::new(118, 220, 252, a)
       if particle.kind == 1 {
         c = @raylib.Color::new(142, 248, 188, a)

@@ -9,9 +9,9 @@ fn setup_level(
   input_pos : @types.Vec2i,
   input_rpm : Float,
   input_dir : @types.RotDir,
-  input_radius : Int,
+  input_radius : Int32,
   outputs : Array[@types.Output],
-  budget : Int,
+  budget : Int32,
 ) -> Unit {
   let input_kind : @types.GearKind = match input_radius {
     1 => Small

@@ -1,5 +1,5 @@
 ///|
-pub fn caesar_encrypt(plaintext : String, shift : Int) -> String {
+pub fn caesar_encrypt(plaintext : String, shift : Int32) -> String {
   let buf = StringBuilder()
   let s = (shift % 26 + 26) % 26
   for i in 0..<plaintext.length() {
@@ -16,12 +16,12 @@ pub fn caesar_encrypt(plaintext : String, shift : Int) -> String {
 }
 
 ///|
-pub fn caesar_decrypt(ciphertext : String, shift : Int) -> String {
+pub fn caesar_decrypt(ciphertext : String, shift : Int32) -> String {
   caesar_encrypt(ciphertext, 26 - (shift % 26 + 26) % 26)
 }
 
 ///|
-pub fn substitution_encrypt(plaintext : String, key : Array[Int]) -> String {
+pub fn substitution_encrypt(plaintext : String, key : Array[Int32]) -> String {
   let buf = StringBuilder()
   for i in 0..<plaintext.length() {
     let c = @types.str_char_at(plaintext, i)
@@ -36,8 +36,8 @@ pub fn substitution_encrypt(plaintext : String, key : Array[Int]) -> String {
 }
 
 ///|
-pub fn substitution_decrypt(ciphertext : String, key : Array[Int]) -> String {
-  let inv : Array[Int] = Array(capacity=26)
+pub fn substitution_decrypt(ciphertext : String, key : Array[Int32]) -> String {
+  let inv : Array[Int32] = Array(capacity=26)
   for _i in 0..<26 {
     inv.push(0)
   }

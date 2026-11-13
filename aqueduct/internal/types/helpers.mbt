@@ -1,15 +1,15 @@
 ///|
-pub fn pos_to_index(p : Pos, cols : Int) -> Int {
+pub fn pos_to_index(p : Pos, cols : Int32) -> Int32 {
   p.y * cols + p.x
 }
 
 ///|
-pub fn index_to_pos(i : Int, cols : Int) -> Pos {
+pub fn index_to_pos(i : Int32, cols : Int32) -> Pos {
   { x: i % cols, y: i / cols, }
 }
 
 ///|
-pub fn in_bounds(p : Pos, cols : Int, rows : Int) -> Bool {
+pub fn in_bounds(p : Pos, cols : Int32, rows : Int32) -> Bool {
   p.x >= 0 && p.x < cols && p.y >= 0 && p.y < rows
 }
 
@@ -29,7 +29,7 @@ pub fn get_tile(game : Game, p : Pos) -> Tile? {
 }
 
 ///|
-pub fn new_tile(elevation : Int) -> Tile {
+pub fn new_tile(elevation : Int32) -> Tile {
   { kind: Empty, elevation, has_water: false, water_level: 0, connections: [], }
 }
 
@@ -126,8 +126,8 @@ pub fn can_place_at(game : Game, p : Pos) -> Bool {
 }
 
 ///|
-pub fn tier_levels(levels : Array[Level], t : Tier) -> Array[Int] {
-  let result : Array[Int] = []
+pub fn tier_levels(levels : Array[Level], t : Tier) -> Array[Int32] {
+  let result : Array[Int32] = []
   for i, lv in levels {
     if lv.tier == t {
       result.push(i)
@@ -137,7 +137,7 @@ pub fn tier_levels(levels : Array[Level], t : Tier) -> Array[Int] {
 }
 
 ///|
-pub fn screen_to_grid(mx : Int, my : Int) -> Pos? {
+pub fn screen_to_grid(mx : Int32, my : Int32) -> Pos? {
   let gx = (mx - grid_offset_x) / cell_size
   let gy = (my - grid_offset_y) / cell_size
   if gx >= 0 && gx < grid_cols && gy >= 0 && gy < grid_rows {
@@ -148,12 +148,12 @@ pub fn screen_to_grid(mx : Int, my : Int) -> Pos? {
 }
 
 ///|
-pub fn grid_to_screen(p : Pos) -> (Int, Int) {
+pub fn grid_to_screen(p : Pos) -> (Int32, Int32) {
   (grid_offset_x + p.x * cell_size, grid_offset_y + p.y * cell_size)
 }
 
 ///|
-pub fn count_segments(game : Game) -> Int {
+pub fn count_segments(game : Game) -> Int32 {
   let mut count = 0
   for tile in game.grid {
     if tile.kind is Aqueduct {

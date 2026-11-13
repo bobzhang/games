@@ -190,7 +190,7 @@ pub fn all_gems_collected(game : Game) -> Bool {
 }
 
 ///|
-pub fn compute_stars(game : Game) -> Int {
+pub fn compute_stars(game : Game) -> Int32 {
   match game.current_level {
     None => 0
     Some(level) => {
@@ -207,7 +207,7 @@ pub fn compute_stars(game : Game) -> Int {
 }
 
 ///|
-pub fn world_name(w : Int) -> String {
+pub fn world_name(w : Int32) -> String {
   match w {
     0 => "Mirror"
     1 => "Switches"

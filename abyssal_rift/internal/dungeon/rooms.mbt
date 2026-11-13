@@ -3,7 +3,7 @@
 /// Tile values: 0 = wall, 1 = floor, 2 = door placeholder.
 
 ///|
-pub fn get_template(index : Int) -> (Array[Int], Int, Int) {
+pub fn get_template(index : Int32) -> (Array[Int32], Int32, Int32) {
   match index {
     0 => small_arena()
     1 => medium_arena()
@@ -20,13 +20,13 @@ pub fn get_template(index : Int) -> (Array[Int], Int, Int) {
 }
 
 ///|
-pub fn template_count() -> Int {
+pub fn template_count() -> Int32 {
   10
 }
 
 ///|
 /// 12x10 open room
-fn small_arena() -> (Array[Int], Int, Int) {
+fn small_arena() -> (Array[Int32], Int32, Int32) {
   let w = 12
   let h = 10
   let tiles = Array::make(w * h, 1)
@@ -42,7 +42,7 @@ fn small_arena() -> (Array[Int], Int, Int) {
 
 ///|
 /// 16x12 open room
-fn medium_arena() -> (Array[Int], Int, Int) {
+fn medium_arena() -> (Array[Int32], Int32, Int32) {
   let w = 16
   let h = 12
   let tiles = Array::make(w * h, 1)
@@ -58,7 +58,7 @@ fn medium_arena() -> (Array[Int], Int, Int) {
 
 ///|
 /// 20x15 open room
-fn large_arena() -> (Array[Int], Int, Int) {
+fn large_arena() -> (Array[Int32], Int32, Int32) {
   let w = 20
   let h = 15
   let tiles = Array::make(w * h, 1)
@@ -83,7 +83,7 @@ fn large_arena() -> (Array[Int], Int, Int) {
 
 ///|
 /// 16x12 room with four 2x2 pillars
-fn pillared_arena() -> (Array[Int], Int, Int) {
+fn pillared_arena() -> (Array[Int32], Int32, Int32) {
   let w = 16
   let h = 12
   let tiles = Array::make(w * h, 1)
@@ -95,7 +95,12 @@ fn pillared_arena() -> (Array[Int], Int, Int) {
     }
   }
   // Four symmetrical 2x2 pillars
-  let pillar_positions : Array[(Int, Int)] = [(4, 3), (10, 3), (4, 7), (10, 7)]
+  let pillar_positions : Array[(Int32, Int32)] = [
+    (4, 3),
+    (10, 3),
+    (4, 7),
+    (10, 7),
+  ]
   for i in 0..<pillar_positions.length() {
     let (px, py) = pillar_positions[i]
     tiles[py * w + px] = 0
@@ -108,7 +113,7 @@ fn pillared_arena() -> (Array[Int], Int, Int) {
 
 ///|
 /// 16x16 L-shaped room (top-right corner blocked)
-fn l_shaped_room() -> (Array[Int], Int, Int) {
+fn l_shaped_room() -> (Array[Int32], Int32, Int32) {
   let w = 16
   let h = 16
   let tiles = Array::make(w * h, 1)
@@ -140,7 +145,7 @@ fn l_shaped_room() -> (Array[Int], Int, Int) {
 
 ///|
 /// 12x6 horizontal corridor
-fn corridor_h() -> (Array[Int], Int, Int) {
+fn corridor_h() -> (Array[Int32], Int32, Int32) {
   let w = 12
   let h = 6
   let tiles = Array::make(w * h, 1)
@@ -161,7 +166,7 @@ fn corridor_h() -> (Array[Int], Int, Int) {
 
 ///|
 /// 6x12 vertical corridor
-fn corridor_v() -> (Array[Int], Int, Int) {
+fn corridor_v() -> (Array[Int32], Int32, Int32) {
   let w = 6
   let h = 12
   let tiles = Array::make(w * h, 1)
@@ -182,7 +187,7 @@ fn corridor_v() -> (Array[Int], Int, Int) {
 
 ///|
 /// 10x10 treasure room with alcoves on sides
-fn treasure_room() -> (Array[Int], Int, Int) {
+fn treasure_room() -> (Array[Int32], Int32, Int32) {
   let w = 10
   let h = 10
   let tiles = Array::make(w * h, 1)
@@ -207,7 +212,7 @@ fn treasure_room() -> (Array[Int], Int, Int) {
 
 ///|
 /// 24x20 large boss arena with pillars and open center
-fn boss_arena() -> (Array[Int], Int, Int) {
+fn boss_arena() -> (Array[Int32], Int32, Int32) {
   let w = 24
   let h = 20
   let tiles = Array::make(w * h, 1)
@@ -219,7 +224,7 @@ fn boss_arena() -> (Array[Int], Int, Int) {
     }
   }
   // Four large 2x2 pillars near corners
-  let pillar_positions : Array[(Int, Int)] = [
+  let pillar_positions : Array[(Int32, Int32)] = [
     (5, 4),
     (17, 4),
     (5, 14),
@@ -242,7 +247,7 @@ fn boss_arena() -> (Array[Int], Int, Int) {
 
 ///|
 /// 14x10 starting room - safe, with door on right side
-fn start_room() -> (Array[Int], Int, Int) {
+fn start_room() -> (Array[Int32], Int32, Int32) {
   let w = 14
   let h = 10
   let tiles = Array::make(w * h, 1)
@@ -260,11 +265,11 @@ fn start_room() -> (Array[Int], Int, Int) {
 /// Place door markers on a room's tile array at the given edge.
 /// Returns the tile-local (x, y) of one door cell for corridor connection.
 pub fn place_door(
-  tiles : Array[Int],
-  w : Int,
-  h : Int,
+  tiles : Array[Int32],
+  w : Int32,
+  h : Int32,
   dir : @types.Direction,
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   match dir {
     Up => {
       let mx = w / 2

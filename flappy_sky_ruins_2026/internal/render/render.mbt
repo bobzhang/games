@@ -222,10 +222,10 @@ fn obstacle_pillar_texture(kind : @types.ObstacleKind) -> @raylib.Texture? {
 /// Draws generated obstacle pillar art into a collision rectangle.
 fn draw_obstacle_pillar_art(
   kind : @types.ObstacleKind,
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   flip_y : Bool,
 ) -> Bool {
   if h <= 0 {
@@ -304,7 +304,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   )
 
   for i in 0..<16 {
-    let y : Int = i * 64
+    let y : Int32 = i * 64
     @raylib.draw_rectangle(
       0,
       y,
@@ -363,7 +363,7 @@ fn @types.Game::draw_world_back(game : @types.Game) -> Unit {
   let wave : Float = game.bg_wave(1.5)
   if tex_sky_ruins_background.val is None {
     for i in 0..<20 {
-      let y : Int = @types.world_y0 + i * 48
+      let y : Int32 = @types.world_y0 + i * 48
       @raylib.draw_rectangle(
         @types.world_x0 + 6,
         y,
@@ -398,12 +398,12 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
   let gy : Float = @types.obstacle_gap_mid(ob)
   let gh : Float = ob.gap_h
 
-  let top_h : Int = (gy - gh / 2.0 - @types.world_top()).to_int()
-  let bot_y : Int = (gy + gh / 2.0).to_int()
-  let bot_h : Int = (@types.world_bottom() - gy - gh / 2.0).to_int()
+  let top_h : Int32 = (gy - gh / 2.0 - @types.world_top()).to_int()
+  let bot_y : Int32 = (gy + gh / 2.0).to_int()
+  let bot_h : Int32 = (@types.world_bottom() - gy - gh / 2.0).to_int()
 
-  let x : Int = ob.x.to_int()
-  let w : Int = ob.w.to_int()
+  let x : Int32 = ob.x.to_int()
+  let w : Int32 = ob.w.to_int()
 
   let c0 : @raylib.Color = match ob.kind {
     Beam => @raylib.Color::new(170, 104, 96, 244)
@@ -439,9 +439,9 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
 
   match ob.kind {
     Spinner => {
-      let cx : Int = x + w / 2
-      let cy : Int = gy.to_int()
-      let arm : Int = (gh * 0.40).to_int()
+      let cx : Int32 = x + w / 2
+      let cy : Int32 = gy.to_int()
+      let arm : Int32 = (gh * 0.40).to_int()
 
       match tex_spinner_core.val {
         Some(texture) =>
@@ -456,9 +456,9 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
           )
         None => {
           let ang : Float = ob.phase
-          let ax : Int = (Float::from_int(cx) +
+          let ax : Int32 = (Float::from_int(cx) +
           @math.cosf(ang) * Float::from_int(arm)).to_int()
-          let ay : Int = (Float::from_int(cy) +
+          let ay : Int32 = (Float::from_int(cy) +
           @math.sinf(ang) * Float::from_int(arm)).to_int()
 
           @raylib.draw_line(
@@ -580,7 +580,7 @@ fn @types.Game::draw_player(game : @types.Game) -> Unit {
         @raylib.Color::new(210, 252, 230, 186),
       )
 
-      let wing_y : Int = (game.py + tilt * 26.0).to_int()
+      let wing_y : Int32 = (game.py + tilt * 26.0).to_int()
       @raylib.draw_triangle(
         @raylib.Vector2::new(game.px - 6.0, Float::from_int(wing_y)),
         @raylib.Vector2::new(game.px - 30.0, Float::from_int(wing_y - 12)),
@@ -617,8 +617,8 @@ fn @types.Game::draw_hint(game : @types.Game) -> Unit {
     return
   }
 
-  let x : Int = @types.world_x0 + @types.world_w / 2
-  let y : Int = game.hint_y.to_int()
+  let x : Int32 = @types.world_x0 + @types.world_w / 2
+  let y : Int32 = game.hint_y.to_int()
   let pulse : Float = Float::from_double(
     @math.sin((game.ui_t * 9.0).to_double()),
   )
@@ -639,7 +639,7 @@ fn @types.Game::draw_particles(game : @types.Game) -> Unit {
       continue
     }
 
-    let a : Int = if particle.life > 0.7 {
+    let a : Int32 = if particle.life > 0.7 {
       236
     } else if particle.life > 0.4 {
       196
@@ -668,7 +668,7 @@ fn @types.Game::draw_particles(game : @types.Game) -> Unit {
 /// Draws a touch button rectangle at `rect` with `label` centered inside, using `tint` when `active` and a default dark fill otherwise.
 fn draw_touch_button(
   label : String,
-  rect : (Int, Int, Int, Int),
+  rect : (Int32, Int32, Int32, Int32),
   active : Bool,
   tint : @raylib.Color,
 ) -> Unit {
@@ -782,10 +782,10 @@ fn @types.Game::draw_controls(game : @types.Game) -> Unit {
 ///|
 /// Draws the side panel with title, score, best score, lives, level, time, distance, combo, boost bar, shield status, control reference, and the transient message box.
 fn @types.Game::draw_panel(game : @types.Game) -> Unit {
-  let px : Int = @types.panel_x0
-  let py : Int = 20
-  let pw : Int = @types.panel_w
-  let ph : Int = @types.screen_h - 40
+  let px : Int32 = @types.panel_x0
+  let py : Int32 = 20
+  let pw : Int32 = @types.panel_w
+  let ph : Int32 = @types.screen_h - 40
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(14, 22, 36, 244))
   @raylib.draw_rectangle_lines(
@@ -1024,10 +1024,10 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(6, 10, 16, 170),
   )
 
-  let pw : Int = 840
-  let ph : Int = 500
-  let px : Int = @types.screen_w / 2 - pw / 2
-  let py : Int = @types.screen_h / 2 - ph / 2
+  let pw : Int32 = 840
+  let ph : Int32 = 500
+  let px : Int32 = @types.screen_w / 2 - pw / 2
+  let py : Int32 = @types.screen_h / 2 - ph / 2
 
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(16, 24, 36, 246))
   @raylib.draw_rectangle_lines(

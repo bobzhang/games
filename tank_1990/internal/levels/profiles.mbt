@@ -1,6 +1,6 @@
 ///|
 /// Returns the visual and gameplay profile for the stage at `index`.
-pub fn get_stage_profile(index : Int) -> @types.StageProfile {
+pub fn get_stage_profile(index : Int32) -> @types.StageProfile {
   match index % @types.level_count {
     0 =>
       StageProfile(

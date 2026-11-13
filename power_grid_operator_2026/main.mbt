@@ -1,25 +1,25 @@
 ///|
 /// Screen width in pixels.
-let sw : Int = 1140
+let sw : Int32 = 1140
 
 ///|
 /// Screen height in pixels.
-let sh : Int = 740
+let sh : Int32 = 740
 
 ///|
 /// Number of city sectors tracked for power demand.
-let sector_n : Int = 4
+let sector_n : Int32 = 4
 
 ///|
 /// A city sector with a current demand value and a drift trend.
 struct Sector {
-  mut demand : Int
-  mut trend : Int
+  mut demand : Int32
+  mut trend : Int32
 }
 
 ///|
 /// Clamps an integer to the inclusive `[lo, hi]` range.
-fn clamp_int(v : Int, lo : Int, hi : Int) -> Int {
+fn clamp_int(v : Int32, lo : Int32, hi : Int32) -> Int32 {
   if v < lo {
     lo
   } else if v > hi {
@@ -31,7 +31,7 @@ fn clamp_int(v : Int, lo : Int, hi : Int) -> Int {
 
 ///|
 /// Returns the sum of demand across all sectors.
-fn total_demand(sectors : Array[Sector]) -> Int {
+fn total_demand(sectors : Array[Sector]) -> Int32 {
   let mut t = 0
   for sector in sectors {
     t = t + sector.demand
@@ -41,7 +41,7 @@ fn total_demand(sectors : Array[Sector]) -> Int {
 
 ///|
 /// Returns total supply from all plants, adding 90 if emergency battery is active.
-fn total_supply(plant_output : Array[Int], emergency_time : Float) -> Int {
+fn total_supply(plant_output : Array[Int32], emergency_time : Float) -> Int32 {
   let mut t = 0
   for plant_output_elem in plant_output {
     t = t + plant_output_elem
@@ -74,7 +74,7 @@ fn main {
   })
   reset_sector_values(sectors)
 
-  let mut plant_output : Array[Int] = [110, 100, 90]
+  let mut plant_output : Array[Int32] = [110, 100, 90]
 
   let mut score = 0
   let mut lives = 5

@@ -1290,7 +1290,7 @@ pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns RGB color tuple for spell hit effects.
-fn get_spell_hit_colors(kind : @types.Spell) -> (Int, Int, Int) {
+fn get_spell_hit_colors(kind : @types.Spell) -> (Int32, Int32, Int32) {
   match kind {
     Fireball => (255, 120, 30)
     IceBolt => (150, 220, 255)
@@ -1306,9 +1306,9 @@ fn @types.Game::apply_aoe_damage(
   cx : Float,
   cz : Float,
   radius : Float,
-  base_damage : Int,
+  base_damage : Int32,
   kind : @types.Spell,
-  skip_idx : Int,
+  skip_idx : Int32,
 ) -> Unit {
   let colors = get_spell_hit_colors(kind)
   for j in 0..<game.enemies.length() {

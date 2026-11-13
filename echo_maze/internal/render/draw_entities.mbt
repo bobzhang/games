@@ -151,12 +151,12 @@ pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
     )
     // Guard vision cone (highlight tiles in patrol direction)
     let vision_range = 2
-    let vision_alpha : Int = match gs.alert {
+    let vision_alpha : Int32 = match gs.alert {
       Idle => 20
       Alert => 40
       Chasing => 60
     }
-    let dir_x : Int = if gs.forward { 1 } else { -1 }
+    let dir_x : Int32 = if gs.forward { 1 } else { -1 }
     for v in 1..<=vision_range {
       let vx = gs.pos.x + dir_x * v
       let vy = gs.pos.y
@@ -183,7 +183,7 @@ pub fn draw_guards(maze_state : @types.MazeState, game : @types.Game) -> Unit {
     }
     let pulse = @types.sinf(Float::from_int(game.frame_count) * pulse_speed) *
       pulse_size
-    let ring_alpha : Int = match gs.alert {
+    let ring_alpha : Int32 = match gs.alert {
       Idle => 30
       Alert => 60
       Chasing => 100

@@ -87,7 +87,7 @@ fn update_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_level(game : @types.Game, index : Int) -> Unit {
+fn start_level(game : @types.Game, index : Int32) -> Unit {
   let level = @levels.get_level(index)
   game.level = Some(level)
   game.current_level_index = index
@@ -263,7 +263,7 @@ fn handle_guess_click(game : @types.Game, tile : @types.Vec2i) -> Unit {
 }
 
 ///|
-fn count_remaining(level : @types.Level) -> Int {
+fn count_remaining(level : @types.Level) -> Int32 {
   let mut remaining = 0
   for i in 0..<level.epicenters.length() {
     if !level.epicenters[i].found {

@@ -180,7 +180,7 @@ fn check_switches(game : @types.Game, level : @types.Level) -> Unit {
 fn toggle_linked_doors(
   game : @types.Game,
   level : @types.Level,
-  switch_id : Int,
+  switch_id : Int32,
 ) -> Unit {
   for i in 0..<level.switch_links.length() {
     let link = level.switch_links[i]

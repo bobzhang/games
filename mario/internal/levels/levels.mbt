@@ -1,6 +1,6 @@
 ///|
 /// Returns the normalized row data for the given level index.
-pub fn level_rows(index : Int) -> Array[String] {
+pub fn level_rows(index : Int32) -> Array[String] {
   match index {
     0 => build_1_1()
     1 => build_1_2()
@@ -11,7 +11,7 @@ pub fn level_rows(index : Int) -> Array[String] {
 
 ///|
 /// Returns the bonus room row data for a given level.
-pub fn bonus_room_rows(level_index : Int) -> Array[String] {
+pub fn bonus_room_rows(level_index : Int32) -> Array[String] {
   match level_index {
     0 => build_bonus_1()
     1 => build_bonus_2()
@@ -23,7 +23,7 @@ pub fn bonus_room_rows(level_index : Int) -> Array[String] {
 // ── Grid helpers ────────────────────────────────────────────
 
 ///|
-fn make_grid(w : Int, h : Int) -> Array[Array[Char]] {
+fn make_grid(w : Int32, h : Int32) -> Array[Array[Char]] {
   Array::makei(h, fn(_i) { Array::make(w, '.') })
 }
 
@@ -41,7 +41,7 @@ fn grid_to_rows(g : Array[Array[Char]]) -> Array[String] {
 }
 
 ///|
-fn set(g : Array[Array[Char]], x : Int, y : Int, ch : Char) -> Unit {
+fn set(g : Array[Array[Char]], x : Int32, y : Int32, ch : Char) -> Unit {
   if y >= 0 && y < g.length() && x >= 0 && x < g[0].length() {
     g[y][x] = ch
   }
@@ -49,7 +49,13 @@ fn set(g : Array[Array[Char]], x : Int, y : Int, ch : Char) -> Unit {
 
 ///|
 /// Fill a horizontal run of the same character.
-fn hrun(g : Array[Array[Char]], x : Int, y : Int, len : Int, ch : Char) -> Unit {
+fn hrun(
+  g : Array[Array[Char]],
+  x : Int32,
+  y : Int32,
+  len : Int32,
+  ch : Char,
+) -> Unit {
   for i in 0..<len {
     set(g, x + i, y, ch)
   }
@@ -57,7 +63,7 @@ fn hrun(g : Array[Array[Char]], x : Int, y : Int, len : Int, ch : Char) -> Unit 
 
 ///|
 /// Place ground on rows 13-14 from x_start to x_end (exclusive).
-fn ground(g : Array[Array[Char]], x0 : Int, x1 : Int) -> Unit {
+fn ground(g : Array[Array[Char]], x0 : Int32, x1 : Int32) -> Unit {
   for x in x0..<x1 {
     set(g, x, 13, '#')
     set(g, x, 14, '#')
@@ -66,7 +72,7 @@ fn ground(g : Array[Array[Char]], x0 : Int, x1 : Int) -> Unit {
 
 ///|
 /// Place a pipe at column x, top at row top_y, body extends to row 12.
-fn pipe(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
+fn pipe(g : Array[Array[Char]], x : Int32, top_y : Int32) -> Unit {
   set(g, x, top_y, '[')
   set(g, x + 1, top_y, ']')
   let mut y = top_y + 1
@@ -79,7 +85,7 @@ fn pipe(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
 
 ///|
 /// Place a pipe entrance (enterable with Down key) at column x.
-fn pipe_entrance(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
+fn pipe_entrance(g : Array[Array[Char]], x : Int32, top_y : Int32) -> Unit {
   set(g, x, top_y, 'E')
   set(g, x + 1, top_y, ']')
   let mut y = top_y + 1
@@ -92,9 +98,14 @@ fn pipe_entrance(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
 
 ///|
 /// Place a short string of tile chars at (x, y). Spaces are skipped.
-fn tiles(g : Array[Array[Char]], x : Int, y : Int, pattern : String) -> Unit {
+fn tiles(
+  g : Array[Array[Char]],
+  x : Int32,
+  y : Int32,
+  pattern : String,
+) -> Unit {
   for i in 0..<pattern.length() {
-    let ch = Int::unsafe_to_char(pattern[i].to_int())
+    let ch = Int32::unsafe_to_char(pattern[i].to_int())
     if ch != ' ' {
       set(g, x + i, y, ch)
     }
@@ -103,7 +114,7 @@ fn tiles(g : Array[Array[Char]], x : Int, y : Int, pattern : String) -> Unit {
 
 ///|
 /// Place a castle at column x (6 wide, rows 4-14).
-fn castle(g : Array[Array[Char]], x : Int) -> Unit {
+fn castle(g : Array[Array[Char]], x : Int32) -> Unit {
   hrun(g, x, 4, 6, 'T')
   for row in 5..<=7 {
     hrun(g, x, row, 6, 'C')
@@ -120,7 +131,7 @@ fn castle(g : Array[Array[Char]], x : Int) -> Unit {
 
 ///|
 /// Place a flagpole from top_y to row 13 at column x, with flag ball at top.
-fn flagpole(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
+fn flagpole(g : Array[Array[Char]], x : Int32, top_y : Int32) -> Unit {
   set(g, x, top_y, '^')
   let mut y = top_y + 1
   while y <= 13 {
@@ -131,7 +142,7 @@ fn flagpole(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
 
 ///|
 /// Place an ascending staircase from right to left, base at (x, 12), height blocks tall.
-fn staircase(g : Array[Array[Char]], x : Int, height : Int) -> Unit {
+fn staircase(g : Array[Array[Char]], x : Int32, height : Int32) -> Unit {
   for step in 1..<=height {
     for row in 0..<step {
       set(g, x + height - step, 12 - row, '#')
@@ -141,7 +152,7 @@ fn staircase(g : Array[Array[Char]], x : Int, height : Int) -> Unit {
 
 ///|
 /// Place a horizontal run of coins at the given row.
-fn coin_run(g : Array[Array[Char]], x : Int, y : Int, len : Int) -> Unit {
+fn coin_run(g : Array[Array[Char]], x : Int32, y : Int32, len : Int32) -> Unit {
   for i in 0..<len {
     set(g, x + i, y, 'c')
   }
@@ -149,7 +160,12 @@ fn coin_run(g : Array[Array[Char]], x : Int, y : Int, len : Int) -> Unit {
 
 ///|
 /// Place a coin arc over a gap (parabolic coin trail).
-fn coin_arc(g : Array[Array[Char]], x : Int, base_y : Int, len : Int) -> Unit {
+fn coin_arc(
+  g : Array[Array[Char]],
+  x : Int32,
+  base_y : Int32,
+  len : Int32,
+) -> Unit {
   for i in 0..<len {
     let mid = len / 2
     let dy = if i <= mid { mid - i } else { i - mid }

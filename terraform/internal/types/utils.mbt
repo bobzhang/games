@@ -57,7 +57,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -66,7 +66,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -78,7 +78,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 // In odd-r: odd rows are shifted right by half a hex width.
 
 ///|
-pub fn hex_to_pixel(col : Int, row : Int) -> (Float, Float) {
+pub fn hex_to_pixel(col : Int32, row : Int32) -> (Float, Float) {
   let w = hex_size * sqrtf(3.0)
   let h = hex_size * 2.0
   let x_offset = if row % 2 == 1 { w / 2.0 } else { 0.0 }
@@ -91,9 +91,9 @@ pub fn hex_to_pixel(col : Int, row : Int) -> (Float, Float) {
 pub fn pixel_to_hex(
   px : Float,
   py : Float,
-  grid_width : Int,
-  grid_height : Int,
-) -> (Int, Int) {
+  grid_width : Int32,
+  grid_height : Int32,
+) -> (Int32, Int32) {
   let w = hex_size * sqrtf(3.0)
   let h = hex_size * 2.0
   // Rough row estimate
@@ -132,13 +132,13 @@ pub fn pixel_to_hex(
 
 ///|
 pub fn hex_neighbors(
-  col : Int,
-  row : Int,
-  width : Int,
-  height : Int,
+  col : Int32,
+  row : Int32,
+  width : Int32,
+  height : Int32,
   wrap_h : Bool,
-) -> Array[(Int, Int)] {
-  let result : Array[(Int, Int)] = []
+) -> Array[(Int32, Int32)] {
+  let result : Array[(Int32, Int32)] = []
   // odd-r neighbor offsets
   // Even row neighbors:
   // (-1,-1),(0,-1),(-1,0),(1,0),(-1,1),(0,1)
@@ -173,12 +173,12 @@ pub fn hex_neighbors(
 // Grid helpers
 
 ///|
-pub fn grid_index(col : Int, row : Int, width : Int) -> Int {
+pub fn grid_index(col : Int32, row : Int32, width : Int32) -> Int32 {
   row * width + col
 }
 
 ///|
-pub fn new_grid(width : Int, height : Int, wrap_h : Bool) -> HexGrid {
+pub fn new_grid(width : Int32, height : Int32, wrap_h : Bool) -> HexGrid {
   let tiles : Array[HexTile] = []
   for _i in 0..<(width * height) {
     tiles.push({ biome: Barren, locked: false, })
@@ -187,22 +187,22 @@ pub fn new_grid(width : Int, height : Int, wrap_h : Bool) -> HexGrid {
 }
 
 ///|
-pub fn get_tile(grid : HexGrid, col : Int, row : Int) -> HexTile {
+pub fn get_tile(grid : HexGrid, col : Int32, row : Int32) -> HexTile {
   grid.tiles[grid_index(col, row, grid.width)]
 }
 
 ///|
 pub fn set_biome(
   grid : HexGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   biome : BiomeKind,
 ) -> Unit {
   grid.tiles[grid_index(col, row, grid.width)].biome = biome
 }
 
 ///|
-pub fn count_biome(grid : HexGrid, biome : BiomeKind) -> Int {
+pub fn count_biome(grid : HexGrid, biome : BiomeKind) -> Int32 {
   let mut count = 0
   for i in 0..<grid.tiles.length() {
     if grid.tiles[i].biome == biome {
@@ -215,10 +215,10 @@ pub fn count_biome(grid : HexGrid, biome : BiomeKind) -> Int {
 ///|
 pub fn count_neighbor_biome(
   grid : HexGrid,
-  col : Int,
-  row : Int,
+  col : Int32,
+  row : Int32,
   biome : BiomeKind,
-) -> Int {
+) -> Int32 {
   let neighbors = hex_neighbors(
     col,
     row,
@@ -294,7 +294,7 @@ pub fn tier_color(tier : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn tier_level_range(tier : Tier) -> (Int, Int) {
+pub fn tier_level_range(tier : Tier) -> (Int32, Int32) {
   match tier {
     Seeds => (0, tier1_count)
     Balance => (tier1_count, tier1_count + tier2_count)
@@ -303,7 +303,7 @@ pub fn tier_level_range(tier : Tier) -> (Int, Int) {
 }
 
 ///|
-pub fn level_name(index : Int) -> String {
+pub fn level_name(index : Int32) -> String {
   match index {
     0 => "First Growth"
     1 => "Oasis"
@@ -361,7 +361,7 @@ pub fn snapshot_biomes(grid : HexGrid) -> Array[BiomeKind] {
 pub fn new_resolve_snapshot(
   grid : HexGrid,
   budget : PaintBudget,
-  turn : Int,
+  turn : Int32,
 ) -> ResolveSnapshot {
   {
     biomes: snapshot_biomes(grid),
@@ -373,7 +373,7 @@ pub fn new_resolve_snapshot(
 }
 
 ///|
-pub fn new_budget(forest : Int, ocean : Int, desert : Int) -> PaintBudget {
+pub fn new_budget(forest : Int32, ocean : Int32, desert : Int32) -> PaintBudget {
   { forest, ocean, desert, }
 }
 
@@ -402,7 +402,7 @@ pub fn new_level_score() -> LevelScore {
 }
 
 ///|
-pub fn budget_remaining(budget : PaintBudget, biome : BiomeKind) -> Int {
+pub fn budget_remaining(budget : PaintBudget, biome : BiomeKind) -> Int32 {
   match biome {
     Forest => budget.forest
     Ocean => budget.ocean
@@ -432,7 +432,7 @@ pub fn add_budget(budget : PaintBudget, biome : BiomeKind) -> Unit {
 }
 
 ///|
-pub fn total_budget(budget : PaintBudget) -> Int {
+pub fn total_budget(budget : PaintBudget) -> Int32 {
   budget.forest + budget.ocean + budget.desert
 }
 

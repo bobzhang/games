@@ -1,5 +1,5 @@
 ///|
-pub fn get_level(index : Int) -> @types.Level {
+pub fn get_level(index : Int32) -> @types.Level {
   match index {
     0 => level_01()
     1 => level_02()
@@ -683,7 +683,7 @@ fn level_25() -> @types.Level {
 // Helper to set all paper cells in a target to a uniform layer count
 
 ///|
-fn set_target_layers(paper : @types.Paper, layers : Int) -> Unit {
+fn set_target_layers(paper : @types.Paper, layers : Int32) -> Unit {
   for i in 0..<paper.cells.length() {
     if paper.cells[i].has_paper {
       paper.cells[i].layers = layers

@@ -3,12 +3,12 @@
 pub(all) struct TrackObj {
   mut active : Bool
   mut kind : ObjKind
-  mut lane : Int
+  mut lane : Int32
   mut z : Float
   mut y_off : Float
   mut w : Float
   mut h : Float
-  mut phase_only : Int
+  mut phase_only : Int32
   mut spin : Float
   mut hit_lock : Float
 }
@@ -40,7 +40,7 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : Int32
 }
 
 ///|
@@ -79,7 +79,7 @@ pub fn Trail::Trail() -> Trail {
 ///|
 /// Player kinematics and short-lived combat state.
 pub(all) struct Player {
-  mut lane : Int
+  mut lane : Int32
   mut lane_f : Float
   mut y : Float
   mut vy : Float
@@ -114,18 +114,18 @@ pub(all) struct Game {
   trails : Array[Trail]
   hero : Player
   mut state : GameState
-  mut stage : Int
+  mut stage : Int32
   mut stage_goal : Float
   mut stage_progress : Float
   mut speed : Float
   mut speed_mul : Float
   mut boost_t : Float
-  mut score : Int
-  mut best_score : Int
-  mut stage_bonus : Int
-  mut combo : Int
+  mut score : Int32
+  mut best_score : Int32
+  mut stage_bonus : Int32
+  mut combo : Int32
   mut combo_t : Float
-  mut orbs : Int
+  mut orbs : Int32
   mut health : Float
   mut phase_energy : Float
   mut phase_beta : Bool
@@ -136,14 +136,14 @@ pub(all) struct Game {
   mut result_t : Float
   mut hint_t : Float
   mut next_spawn_z : Float
-  mut input_move : Int
+  mut input_move : Int32
   mut input_jump_press : Bool
   mut input_jump_hold : Bool
   mut input_phase_press : Bool
   mut input_restart_press : Bool
   mut input_pause_press : Bool
   mut touch_mode : Bool
-  mut touch_count : Int
+  mut touch_count : Int32
   mut pointer_x : Float
   mut pointer_y : Float
   mut touch_left_prev : Bool

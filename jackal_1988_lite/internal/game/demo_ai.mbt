@@ -47,7 +47,7 @@ fn @types.Game::demo_nearest_enemy(
   game : @types.Game,
   x : Float,
   y : Float,
-) -> (Int, Float) {
+) -> (Int32, Float) {
   for
     i, enemy in game.enemies
     best_idx = -1, best_dist = Float::from_int(1000000000) {
@@ -68,7 +68,7 @@ fn @types.Game::demo_nearest_powerup(
   game : @types.Game,
   x : Float,
   y : Float,
-) -> (Int, Float) {
+) -> (Int32, Float) {
   for
     i, powerup in game.powerups
     best_idx = -1, best_dist = Float::from_int(1000000000) {
@@ -87,7 +87,7 @@ fn @types.Game::demo_nearest_powerup(
 ///|
 fn @types.Game::demo_can_step(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dir : @types.Dir,
   dt : Float,
 ) -> Bool {
@@ -115,7 +115,7 @@ fn @types.Game::demo_can_step(
 ///|
 fn @types.Game::demo_priority_dir(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dt : Float,
   a : @types.Dir,
   b : @types.Dir,
@@ -138,7 +138,7 @@ fn @types.Game::demo_priority_dir(
 ///|
 fn @types.Game::demo_choose_move_dir(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dt : Float,
   target_x : Float,
   target_y : Float,
@@ -206,9 +206,9 @@ fn demo_line_shot_dir(
 fn @types.Game::demo_target_position(
   game : @types.Game,
   player : @types.Tank,
-  nearest_enemy : Int,
+  nearest_enemy : Int32,
   enemy_dist : Float,
-  nearest_powerup : Int,
+  nearest_powerup : Int32,
   powerup_dist : Float,
 ) -> (Float, Float) {
   if nearest_powerup >= 0 &&
@@ -231,7 +231,7 @@ fn @types.Game::demo_target_position(
 ///|
 fn @types.Game::demo_player_command(
   game : @types.Game,
-  index : Int,
+  index : Int32,
   dt : Float,
 ) -> (@types.Dir?, Bool) {
   let player = game.players[index]

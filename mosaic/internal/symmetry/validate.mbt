@@ -63,7 +63,7 @@ pub fn count_correct_placements(
   grid : @types.MosaicGrid,
   placed : Array[(@types.Vec2i, @types.Tile)],
   sym : @types.SymmetryKind,
-) -> Int {
+) -> Int32 {
   let mut correct = 0
   for i in 0..<placed.length() {
     let (pos, tile) = placed[i]

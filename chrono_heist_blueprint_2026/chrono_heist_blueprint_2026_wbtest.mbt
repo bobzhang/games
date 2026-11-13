@@ -1,5 +1,5 @@
 ///|
-fn make_tiles() -> Array[Int] {
+fn make_tiles() -> Array[Int32] {
   Array::make(grid_w * grid_h, tile_empty)
 }
 

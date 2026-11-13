@@ -1,5 +1,5 @@
 ///|
-pub fn orientation_dx(o : Orientation) -> Int {
+pub fn orientation_dx(o : Orientation) -> Int32 {
   match o {
     N => 0
     NE => 1
@@ -13,7 +13,7 @@ pub fn orientation_dx(o : Orientation) -> Int {
 }
 
 ///|
-pub fn orientation_dy(o : Orientation) -> Int {
+pub fn orientation_dy(o : Orientation) -> Int32 {
   match o {
     N => -1
     NE => -1
@@ -106,7 +106,7 @@ pub fn kind_name(kind : DominoKind) -> String {
 }
 
 ///|
-pub fn kind_range(kind : DominoKind) -> Int {
+pub fn kind_range(kind : DominoKind) -> Int32 {
   match kind {
     Normal => 1
     Heavy => 2
@@ -134,7 +134,7 @@ pub fn tier_color(t : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn tier_index(t : Tier) -> Int {
+pub fn tier_index(t : Tier) -> Int32 {
   match t {
     Chains => 0
     Splits => 1
@@ -143,7 +143,7 @@ pub fn tier_index(t : Tier) -> Int {
 }
 
 ///|
-pub fn index_to_tier(i : Int) -> Tier {
+pub fn index_to_tier(i : Int32) -> Tier {
   match i {
     0 => Chains
     1 => Splits
@@ -152,34 +152,34 @@ pub fn index_to_tier(i : Int) -> Tier {
 }
 
 ///|
-pub fn socket_to_screen_x(gx : Int) -> Int {
+pub fn socket_to_screen_x(gx : Int32) -> Int32 {
   grid_offset_x + gx * socket_spacing
 }
 
 ///|
-pub fn socket_to_screen_y(gy : Int) -> Int {
+pub fn socket_to_screen_y(gy : Int32) -> Int32 {
   grid_offset_y + gy * socket_spacing
 }
 
 ///|
-pub fn screen_to_socket_x(sx : Int) -> Int {
+pub fn screen_to_socket_x(sx : Int32) -> Int32 {
   let rel = sx - grid_offset_x + socket_spacing / 2
   rel / socket_spacing
 }
 
 ///|
-pub fn screen_to_socket_y(sy : Int) -> Int {
+pub fn screen_to_socket_y(sy : Int32) -> Int32 {
   let rel = sy - grid_offset_y + socket_spacing / 2
   rel / socket_spacing
 }
 
 ///|
-pub fn in_grid(gx : Int, gy : Int) -> Bool {
+pub fn in_grid(gx : Int32, gy : Int32) -> Bool {
   gx >= 0 && gx < grid_cols && gy >= 0 && gy < grid_rows
 }
 
 ///|
-pub fn vec2i(x : Int, y : Int) -> Vec2i {
+pub fn vec2i(x : Int32, y : Int32) -> Vec2i {
   { x, y, }
 }
 
@@ -234,7 +234,7 @@ pub fn clone_dominoes(arr : Array[Domino]) -> Array[Domino] {
 }
 
 ///|
-pub fn find_domino_at(dominoes : Array[Domino], pos : Vec2i) -> Int {
+pub fn find_domino_at(dominoes : Array[Domino], pos : Vec2i) -> Int32 {
   for i in 0..<dominoes.length() {
     if vec2i_eq(dominoes[i].pos, pos) {
       return i
@@ -244,7 +244,7 @@ pub fn find_domino_at(dominoes : Array[Domino], pos : Vec2i) -> Int {
 }
 
 ///|
-pub fn count_targets(dominoes : Array[Domino]) -> Int {
+pub fn count_targets(dominoes : Array[Domino]) -> Int32 {
   let mut count = 0
   for i in 0..<dominoes.length() {
     if dominoes[i].is_target {
@@ -255,7 +255,7 @@ pub fn count_targets(dominoes : Array[Domino]) -> Int {
 }
 
 ///|
-pub fn count_fallen_targets(dominoes : Array[Domino]) -> Int {
+pub fn count_fallen_targets(dominoes : Array[Domino]) -> Int32 {
   let mut count = 0
   for i in 0..<dominoes.length() {
     if dominoes[i].is_target && dominoes[i].state == Fallen {
@@ -266,7 +266,7 @@ pub fn count_fallen_targets(dominoes : Array[Domino]) -> Int {
 }
 
 ///|
-pub fn budget_for_kind(budget : DominoBudget, kind : DominoKind) -> Int {
+pub fn budget_for_kind(budget : DominoBudget, kind : DominoKind) -> Int32 {
   match kind {
     Normal => budget.normal
     Heavy => budget.heavy
@@ -280,7 +280,7 @@ pub fn budget_remaining(
   budget : DominoBudget,
   dominoes : Array[Domino],
   kind : DominoKind,
-) -> Int {
+) -> Int32 {
   let total = budget_for_kind(budget, kind)
   let mut placed = 0
   for i in 0..<dominoes.length() {
@@ -295,10 +295,10 @@ pub fn budget_remaining(
 
 ///|
 pub fn new_budget(
-  normal : Int,
-  heavy : Int,
-  splitter : Int,
-  delay : Int,
+  normal : Int32,
+  heavy : Int32,
+  splitter : Int32,
+  delay : Int32,
 ) -> DominoBudget {
   { normal, heavy, splitter, delay, }
 }
@@ -309,7 +309,7 @@ pub fn new_level_score() -> LevelScore {
 }
 
 ///|
-pub fn level_index(tier : Tier, level_in_tier : Int) -> Int {
+pub fn level_index(tier : Tier, level_in_tier : Int32) -> Int32 {
   tier_index(tier) * levels_per_tier + level_in_tier
 }
 
@@ -339,7 +339,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -348,7 +348,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {

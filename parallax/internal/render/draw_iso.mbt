@@ -16,14 +16,14 @@ fn iso_project(
 
 ///|
 fn draw_quad(
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
-  x3 : Int,
-  y3 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
+  x3 : Int32,
+  y3 : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let v0 = @raylib.Vector2::new(Float::from_int(x0), Float::from_int(y0))
@@ -38,14 +38,14 @@ fn draw_quad(
 
 ///|
 fn draw_quad_outline(
-  x0 : Int,
-  y0 : Int,
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
-  x3 : Int,
-  y3 : Int,
+  x0 : Int32,
+  y0 : Int32,
+  x1 : Int32,
+  y1 : Int32,
+  x2 : Int32,
+  y2 : Int32,
+  x3 : Int32,
+  y3 : Int32,
   color : @raylib.Color,
 ) -> Unit {
   @raylib.draw_line(x0, y0, x1, y1, color)
@@ -63,7 +63,7 @@ fn shade_color(base : @raylib.Color, factor : Float) -> @raylib.Color {
 }
 
 ///|
-fn lighten_color(base : @raylib.Color, amount : Int) -> @raylib.Color {
+fn lighten_color(base : @raylib.Color, amount : Int32) -> @raylib.Color {
   let r = @types.mini(base.r.to_int() + amount, 255)
   let g = @types.mini(base.g.to_int() + amount, 255)
   let b = @types.mini(base.b.to_int() + amount, 255)
@@ -75,9 +75,9 @@ fn lighten_color(base : @raylib.Color, amount : Int) -> @raylib.Color {
 ///|
 fn is_top_face_visible(
   grid : @types.VoxelGrid,
-  x : Int,
-  y : Int,
-  z : Int,
+  x : Int32,
+  y : Int32,
+  z : Int32,
 ) -> Bool {
   !@voxel.get_voxel(grid, x, y + 1, z)
 }
@@ -85,9 +85,9 @@ fn is_top_face_visible(
 ///|
 fn is_left_face_visible(
   grid : @types.VoxelGrid,
-  x : Int,
-  y : Int,
-  z : Int,
+  x : Int32,
+  y : Int32,
+  z : Int32,
 ) -> Bool {
   !@voxel.get_voxel(grid, x - 1, y, z)
 }
@@ -95,9 +95,9 @@ fn is_left_face_visible(
 ///|
 fn is_right_face_visible(
   grid : @types.VoxelGrid,
-  x : Int,
-  y : Int,
-  z : Int,
+  x : Int32,
+  y : Int32,
+  z : Int32,
 ) -> Bool {
   !@voxel.get_voxel(grid, x, y, z + 1)
 }
@@ -106,8 +106,8 @@ fn is_right_face_visible(
 
 ///|
 fn draw_iso_cube(
-  cx : Int,
-  cy : Int,
+  cx : Int32,
+  cy : Int32,
   x : Float,
   y : Float,
   z : Float,
@@ -115,11 +115,11 @@ fn draw_iso_cube(
   top_color : @raylib.Color,
   left_color : @raylib.Color,
   right_color : @raylib.Color,
-  draw_edges? : Bool = true,
+  draw_edges~ : Bool = true,
   grid? : @types.VoxelGrid,
-  vx? : Int,
-  vy? : Int,
-  vz? : Int,
+  vx? : Int32,
+  vy? : Int32,
+  vz? : Int32,
 ) -> Unit {
   let (sx, sy) = iso_project(x, y, z, scale)
   let px = Float::from_int(cx) + sx

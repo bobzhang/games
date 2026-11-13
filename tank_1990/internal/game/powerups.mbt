@@ -1,6 +1,6 @@
 ///|
 /// Finds and returns the index of the first inactive powerup slot, or -1 if all slots are full.
-fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
+fn @types.Game::alloc_powerup(game : @types.Game) -> Int32 {
   for i, slot in game.powerups {
     if !slot.active {
       break i
@@ -91,7 +91,7 @@ fn @types.Game::clear_all_enemies_by_grenade(
 /// Activates a collected powerup effect on the specified player, such as granting a shield, upgrading weapons, or adding a life.
 fn @types.Game::apply_powerup(
   game : @types.Game,
-  player_index : Int,
+  player_index : Int32,
   kind : @types.PowerupKind,
 ) -> Unit {
   let player = game.players[player_index]

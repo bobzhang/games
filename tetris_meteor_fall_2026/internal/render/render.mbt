@@ -1,5 +1,5 @@
 ///|
-fn draw_board_cell(x : Int, y : Int, color_id : Int) -> Unit {
+fn draw_board_cell(x : Int32, y : Int32, color_id : Int32) -> Unit {
   let px = @types.board_x + x * @types.board_cell
   let py = @types.board_y + y * @types.board_cell
   let color = @types.piece_color(color_id)
@@ -20,7 +20,7 @@ fn draw_board_cell(x : Int, y : Int, color_id : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::ghost_y(game : @types.Game) -> Int {
+fn @types.Game::ghost_y(game : @types.Game) -> Int32 {
   let mut y = game.piece_y
   while !@types.collides(
           game,
@@ -36,13 +36,13 @@ fn @types.Game::ghost_y(game : @types.Game) -> Int {
 
 ///|
 fn draw_piece_blocks(
-  kind : Int,
-  rot : Int,
-  px : Int,
-  py : Int,
-  cell_size : Int,
-  offset_x : Int,
-  offset_y : Int,
+  kind : Int32,
+  rot : Int32,
+  px : Int32,
+  py : Int32,
+  cell_size : Int32,
+  offset_x : Int32,
+  offset_y : Int32,
   shade : @raylib.Color,
 ) -> Unit {
   for i in 0..<4 {
@@ -66,7 +66,7 @@ fn draw_piece_blocks(
 }
 
 ///|
-fn draw_preview(kind : Int, x : Int, y : Int, title : String) -> Unit {
+fn draw_preview(kind : Int32, x : Int32, y : Int32, title : String) -> Unit {
   @draw.draw_text(title, x, y, 24, @raylib.raywhite)
   @raylib.draw_rectangle_lines(x - 8, y + 30, 120, 120, @raylib.darkgray)
   if kind < 0 {

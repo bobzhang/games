@@ -414,7 +414,7 @@ fn draw_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_star(x : Int, y : Int, size : Int, color : @raylib.Color) -> Unit {
+fn draw_star(x : Int32, y : Int32, size : Int32, color : @raylib.Color) -> Unit {
   let s = Float::from_int(size)
   let fx = Float::from_int(x)
   let fy = Float::from_int(y)

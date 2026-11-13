@@ -272,7 +272,7 @@ fn resolve_overwatch(battle : @types.BattleState) -> Unit {
 
 ///|
 /// Count active units on a team.
-fn count_active(battle : @types.BattleState, team : @types.UnitTeam) -> Int {
+fn count_active(battle : @types.BattleState, team : @types.UnitTeam) -> Int32 {
   let mut n = 0
   for i = 0; i < battle.units.length(); i = i + 1 {
     let u = battle.units[i]

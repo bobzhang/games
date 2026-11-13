@@ -9,7 +9,7 @@ fn @types.Game::clear_dynamic_world(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy(game : @types.Game) -> Int32 {
   for i, slot in game.enemies {
     if !slot.active {
       break i
@@ -20,7 +20,7 @@ fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::alloc_coin(game : @types.Game) -> Int {
+fn @types.Game::alloc_coin(game : @types.Game) -> Int32 {
   for i, slot in game.coins {
     if !slot.active {
       break i
@@ -33,9 +33,9 @@ fn @types.Game::alloc_coin(game : @types.Game) -> Int {
 ///|
 fn @types.Game::add_enemy_spawn(
   game : @types.Game,
-  tx : Int,
-  stand_tile_y : Int,
-  dir : Int,
+  tx : Int32,
+  stand_tile_y : Int32,
+  dir : Int32,
 ) -> Unit {
   let idx = game.alloc_enemy()
   if idx < 0 {
@@ -47,7 +47,11 @@ fn @types.Game::add_enemy_spawn(
 }
 
 ///|
-fn @types.Game::add_coin_spawn(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn @types.Game::add_coin_spawn(
+  game : @types.Game,
+  tx : Int32,
+  ty : Int32,
+) -> Unit {
   let idx = game.alloc_coin()
   if idx < 0 {
     return
@@ -58,7 +62,7 @@ fn @types.Game::add_coin_spawn(game : @types.Game, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::carve_gap(game : @types.Game, tx0 : Int, tx1 : Int) -> Unit {
+fn @types.Game::carve_gap(game : @types.Game, tx0 : Int32, tx1 : Int32) -> Unit {
   for x in tx0..<=tx1 {
     for y in @types.ground_row..<@types.world_tiles_h {
       @types.set_tile(game, x, y, Empty)
@@ -67,7 +71,11 @@ fn @types.Game::carve_gap(game : @types.Game, tx0 : Int, tx1 : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::add_pipe(game : @types.Game, tx : Int, height : Int) -> Unit {
+fn @types.Game::add_pipe(
+  game : @types.Game,
+  tx : Int32,
+  height : Int32,
+) -> Unit {
   let top = @types.ground_row - height
   @types.fill_rect_tile(game, tx, top, 2, height, Pipe)
 }
@@ -75,9 +83,9 @@ fn @types.Game::add_pipe(game : @types.Game, tx : Int, height : Int) -> Unit {
 ///|
 fn @types.Game::add_brick_row(
   game : @types.Game,
-  tx : Int,
-  ty : Int,
-  len : Int,
+  tx : Int32,
+  ty : Int32,
+  len : Int32,
 ) -> Unit {
   for x in tx..<(tx + len) {
     @types.set_tile(game, x, ty, Brick)
@@ -85,7 +93,11 @@ fn @types.Game::add_brick_row(
 }
 
 ///|
-fn @types.Game::add_question(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn @types.Game::add_question(
+  game : @types.Game,
+  tx : Int32,
+  ty : Int32,
+) -> Unit {
   @types.set_tile(game, tx, ty, Question)
 }
 

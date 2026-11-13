@@ -60,7 +60,7 @@ pub fn tier_name(t : Tier) -> String {
 }
 
 ///|
-pub fn tier_level_count(t : Tier) -> Int {
+pub fn tier_level_count(t : Tier) -> Int32 {
   match t {
     Apprentice => 8
     Journeyman => 9
@@ -69,7 +69,7 @@ pub fn tier_level_count(t : Tier) -> Int {
 }
 
 ///|
-pub fn tier_start_index(t : Tier) -> Int {
+pub fn tier_start_index(t : Tier) -> Int32 {
   match t {
     Apprentice => 0
     Journeyman => 8
@@ -79,12 +79,12 @@ pub fn tier_start_index(t : Tier) -> Int {
 
 ///|
 pub fn new_budget(
-  fire : Int,
-  water : Int,
-  earth : Int,
-  air : Int,
-  light : Int,
-  shadow : Int,
+  fire : Int32,
+  water : Int32,
+  earth : Int32,
+  air : Int32,
+  light : Int32,
+  shadow : Int32,
 ) -> ElementBudget {
   { fire, water, earth, air, light, shadow, }
 }
@@ -102,7 +102,7 @@ pub fn copy_budget(b : ElementBudget) -> ElementBudget {
 }
 
 ///|
-pub fn budget_get(b : ElementBudget, e : Element) -> Int {
+pub fn budget_get(b : ElementBudget, e : Element) -> Int32 {
   match e {
     Fire => b.fire
     Water => b.water
@@ -279,7 +279,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -288,7 +288,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {

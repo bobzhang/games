@@ -3,7 +3,7 @@
 ///|
 /// Aircraft configuration with flight characteristics and loadout.
 pub(all) struct AircraftStats {
-  kind : Int
+  kind : Int32
   name : String
   max_speed : Float
   min_speed : Float
@@ -12,9 +12,9 @@ pub(all) struct AircraftStats {
   climb_rate : Float
   fuel_capacity : Float
   max_hp : Float
-  ammo_mg : Int
-  ammo_rockets : Int
-  ammo_bombs : Int
+  ammo_mg : Int32
+  ammo_rockets : Int32
+  ammo_bombs : Int32
   pitch_rate : Float
   yaw_rate : Float
   acceleration : Float
@@ -115,7 +115,7 @@ pub fn AircraftStats::interceptor() -> AircraftStats {
 
 ///|
 /// Returns the stats configuration for the given aircraft type `kind`.
-pub fn get_aircraft_stats(kind : Int) -> AircraftStats {
+pub fn get_aircraft_stats(kind : Int32) -> AircraftStats {
   if kind == aircraft_trainer {
     AircraftStats::trainer()
   } else if kind == aircraft_fighter {
@@ -147,10 +147,10 @@ pub(all) struct Player {
   mut fire_timer : Float
   mut damage_flash : Float
   mut alive : Bool
-  mut aircraft_type : Int
-  mut ammo_mg : Int
-  mut ammo_rockets : Int
-  mut ammo_bombs : Int
+  mut aircraft_type : Int32
+  mut ammo_mg : Int32
+  mut ammo_rockets : Int32
+  mut ammo_bombs : Int32
   mut current_weapon : WeaponKind
   mut stalling : Bool
   mut stall_timer : Float
@@ -161,8 +161,8 @@ pub(all) struct Player {
   mut trim : Float
   mut gforce : Float
   mut prev_vy : Float
-  mut shots_fired : Int
-  mut shots_hit : Int
+  mut shots_fired : Int32
+  mut shots_hit : Int32
   mut weapon_switch_timer : Float
 }
 
@@ -224,7 +224,7 @@ pub fn Player::apply_stats(self : Player, stats : AircraftStats) -> Unit {
 /// Enemy entity with position, velocity, AI state, and combat attributes.
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -243,7 +243,7 @@ pub(all) struct Enemy {
   mut ai_state : AiState
   mut patrol_cx : Float
   mut patrol_cz : Float
-  mut patrol_index : Int
+  mut patrol_index : Int32
   mut aggression : Float
   mut maneuver_timer : Float
   mut evade_timer : Float
@@ -324,7 +324,7 @@ pub fn Turret::inactive() -> Turret {
 /// Projectile entity with position, direction, and damage properties.
 pub(all) struct Projectile {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -366,7 +366,7 @@ pub fn Projectile::inactive() -> Projectile {
 /// Building or structure with dimensions, type, and destructibility.
 pub(all) struct Building {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -404,7 +404,7 @@ pub fn Building::inactive() -> Building {
 /// Visual particle with position, velocity, color, and lifetime.
 pub(all) struct Particle {
   mut active : Bool
-  mut kind : Int
+  mut kind : Int32
   mut x : Float
   mut y : Float
   mut z : Float
@@ -413,9 +413,9 @@ pub(all) struct Particle {
   mut vz : Float
   mut life : Float
   mut max_life : Float
-  mut r : Int
-  mut g : Int
-  mut b : Int
+  mut r : Int32
+  mut g : Int32
+  mut b : Int32
   mut size : Float
 }
 
@@ -451,7 +451,7 @@ pub(all) struct Checkpoint {
   mut z : Float
   mut radius : Float
   mut collected : Bool
-  mut order : Int
+  mut order : Int32
 }
 
 ///|
@@ -474,12 +474,12 @@ pub fn Checkpoint::inactive() -> Checkpoint {
 /// Single terrain column with height and color data.
 pub(all) struct TerrainChunk {
   mut active : Bool
-  mut grid_x : Int
-  mut grid_z : Int
+  mut grid_x : Int32
+  mut grid_z : Int32
   mut height : Float
-  mut color_r : Int
-  mut color_g : Int
-  mut color_b : Int
+  mut color_r : Int32
+  mut color_g : Int32
+  mut color_b : Int32
 }
 
 ///|
@@ -508,7 +508,7 @@ pub(all) struct Cloud {
   mut size_x : Float
   mut size_y : Float
   mut size_z : Float
-  mut alpha : Int
+  mut alpha : Int32
 }
 
 ///|
@@ -615,7 +615,7 @@ pub fn WeatherState::set_weather(self : WeatherState, kind : Weather) -> Unit {
 pub(all) struct GameMessage {
   mut text : String
   mut timer : Float
-  mut priority : Int
+  mut priority : Int32
 }
 
 ///|
@@ -630,20 +630,20 @@ pub fn GameMessage::empty() -> GameMessage {
 /// Mission definition with objectives, weather, enemy counts, and scoring.
 pub(all) struct Mission {
   name : String
-  kind : Int
+  kind : Int32
   description : String
-  mut target_count : Int
-  mut targets_done : Int
+  mut target_count : Int32
+  mut targets_done : Int32
   weather : Weather
-  enemy_count : Int
-  enemy_air_count : Int
+  enemy_count : Int32
+  enemy_air_count : Int32
   has_landing : Bool
   landing_x : Float
   landing_z : Float
-  turret_count : Int
-  building_count : Int
-  difficulty : Int
-  allowed_aircraft : Int
+  turret_count : Int32
+  building_count : Int32
+  difficulty : Int32
+  allowed_aircraft : Int32
   time_limit : Float
   briefing : String
 }
@@ -668,11 +668,11 @@ pub(all) struct Game {
   mut camera_mode : CameraMode
 
   // Mission
-  mut current_mission : Int
+  mut current_mission : Int32
   mut mission_timer : Float
-  mut missions_completed : Int
+  mut missions_completed : Int32
   missions : Array[Mission]
-  mut selected_aircraft : Int
+  mut selected_aircraft : Int32
 
   // Entity pools
   enemies : Array[Enemy]
@@ -685,8 +685,8 @@ pub(all) struct Game {
   clouds : Array[Cloud]
 
   // Terrain tracking
-  mut last_terrain_cx : Int
-  mut last_terrain_cz : Int
+  mut last_terrain_cx : Int32
+  mut last_terrain_cz : Int32
 
   // Weather
   weather_state : WeatherState
@@ -694,13 +694,13 @@ pub(all) struct Game {
   mut draw_distance : Float
 
   // Score
-  mut score : Int
-  mut kills : Int
-  mut buildings_destroyed : Int
-  mut mission_score : Int
+  mut score : Int32
+  mut kills : Int32
+  mut buildings_destroyed : Int32
+  mut mission_score : Int32
 
   // UI
-  mut menu_cursor : Int
+  mut menu_cursor : Int32
   mut menu_blink : Float
   mut message_text : String
   mut message_timer : Float
@@ -715,8 +715,8 @@ pub(all) struct Game {
   mut warning_flash_timer : Float
 
   // RNG
-  mut rng_state : Int
-  mut frame_counter : Int
+  mut rng_state : Int32
+  mut frame_counter : Int32
 
   // Landing
   mut landing_approach : Bool
@@ -724,14 +724,14 @@ pub(all) struct Game {
 
   // Recon capture
   mut recon_capture_timer : Float
-  mut recon_capture_target : Int
+  mut recon_capture_target : Int32
 
   // Mission rating
   mut accuracy_pct : Float
   mut mission_rating : String
 
   // Best scores per mission
-  best_scores : Array[Int]
+  best_scores : Array[Int32]
 
   // Combat feedback
   mut hit_marker_timer : Float
@@ -752,7 +752,7 @@ pub(all) struct FloatingDamage {
   mut x : Float
   mut y : Float
   mut z : Float
-  mut amount : Int
+  mut amount : Int32
   mut timer : Float
 }
 

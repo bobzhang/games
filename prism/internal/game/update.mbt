@@ -190,7 +190,7 @@ fn update_playing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_grid_click(game : @types.Game, gq : Int, gr : Int) -> Unit {
+fn handle_grid_click(game : @types.Game, gq : Int32, gr : Int32) -> Unit {
   match @types.grid_get(game.grid, gq, gr) {
     Some(cell) => {
       if cell.locked {

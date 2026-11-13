@@ -2,8 +2,8 @@
 /// Draws `text` horizontally centred on the screen at the given Y position, font size, and colour.
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   color : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -12,7 +12,7 @@ fn draw_center_text(
 
 ///|
 /// Returns a copy of colour `c` with its alpha channel replaced by `alpha` (clamped to [0, 255]).
-fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
+fn alpha_col(c : @raylib.Color, alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
     c.g.to_int(),
@@ -23,7 +23,7 @@ fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
 
 ///|
 /// Returns the background fill colour for the given room index: warm red-brown for room 0, cool dark-blue for room 1, and deep purple for all others.
-fn room_fill_color(room : Int) -> @raylib.Color {
+fn room_fill_color(room : Int32) -> @raylib.Color {
   if room == 0 {
     @raylib.Color::new(64, 34, 24, 255)
   } else if room == 1 {
@@ -357,7 +357,10 @@ fn @types.Game::draw_keeper(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the count of active raiders currently in the specified room.
-fn @types.Game::count_raiders_in_room(game : @types.Game, room : Int) -> Int {
+fn @types.Game::count_raiders_in_room(
+  game : @types.Game,
+  room : Int32,
+) -> Int32 {
   let mut count = 0
   for raider in game.raiders {
     if raider.active && raider.room == room {
@@ -369,7 +372,7 @@ fn @types.Game::count_raiders_in_room(game : @types.Game, room : Int) -> Int {
 
 ///|
 /// Returns the count of active flames currently in the specified room.
-fn @types.Game::count_flames_in_room(game : @types.Game, room : Int) -> Int {
+fn @types.Game::count_flames_in_room(game : @types.Game, room : Int32) -> Int32 {
   let mut count = 0
   for flame in game.flames {
     if flame.active && flame.room == room {
@@ -475,10 +478,10 @@ fn @types.Game::draw_room_minimap(game : @types.Game) -> Unit {
 ///|
 /// Draws a labelled meter bar with a dark background, coloured fill proportional to `ratio`, a border, and a right-side value text string.
 fn draw_meter(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   label : String,
   ratio : Float,
   col : @raylib.Color,

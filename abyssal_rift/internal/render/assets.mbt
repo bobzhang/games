@@ -99,7 +99,7 @@ pub fn unload_art() -> Unit {
 }
 
 ///|
-fn white_alpha(alpha : Int) -> @raylib.Color {
+fn white_alpha(alpha : Int32) -> @raylib.Color {
   @raylib.Color::new(255, 255, 255, @types.clampi(alpha, 0, 255))
 }
 
@@ -220,7 +220,7 @@ fn draw_item_art(
   x : Float,
   y : Float,
   size : Float,
-  alpha : Int,
+  alpha : Int32,
 ) -> Bool {
   match kind {
     Gold(_) =>

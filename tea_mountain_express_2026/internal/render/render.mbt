@@ -1,8 +1,8 @@
 ///|
 fn draw_center_text(
   text : String,
-  y : Int,
-  size : Int,
+  y : Int32,
+  size : Int32,
   col : @raylib.Color,
 ) -> Unit {
   let tw = @draw.measure_text(text, size)
@@ -11,10 +11,10 @@ fn draw_center_text(
 
 ///|
 fn draw_meter(
-  x : Int,
-  y : Int,
-  w : Int,
-  h : Int,
+  x : Int32,
+  y : Int32,
+  w : Int32,
+  h : Int32,
   value_100 : Float,
   fill : @raylib.Color,
   label : String,

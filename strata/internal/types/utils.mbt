@@ -27,7 +27,7 @@ pub fn rock_name(kind : RockKind) -> String {
 }
 
 ///|
-pub fn rock_index(kind : RockKind) -> Int {
+pub fn rock_index(kind : RockKind) -> Int32 {
   match kind {
     Sandstone => 0
     Limestone => 1
@@ -41,7 +41,7 @@ pub fn rock_index(kind : RockKind) -> Int {
 }
 
 ///|
-pub fn rock_from_index(idx : Int) -> RockKind {
+pub fn rock_from_index(idx : Int32) -> RockKind {
   match idx {
     0 => Sandstone
     1 => Limestone
@@ -73,7 +73,7 @@ pub fn tier_color(t : Tier) -> @raylib.Color {
 }
 
 ///|
-pub fn tier_level_range(t : Tier) -> (Int, Int) {
+pub fn tier_level_range(t : Tier) -> (Int32, Int32) {
   match t {
     Surface => (0, 7)
     Bedrock => (8, 16)
@@ -82,7 +82,7 @@ pub fn tier_level_range(t : Tier) -> (Int, Int) {
 }
 
 ///|
-pub fn tier_from_level(idx : Int) -> Tier {
+pub fn tier_from_level(idx : Int32) -> Tier {
   if idx < 8 {
     Surface
   } else if idx < 17 {
@@ -106,8 +106,8 @@ pub fn clue_kind_name(kind : ClueKind) -> String {
 ///|
 pub fn new_clue(
   kind : ClueKind,
-  param_a : Int,
-  param_b : Int,
+  param_a : Int32,
+  param_b : Int32,
   text : String,
 ) -> Clue {
   { kind, param_a, param_b, text, satisfied: false, }
@@ -119,7 +119,7 @@ pub fn new_level(
   name : String,
   rocks : Array[RockKind],
   clues : Array[Clue],
-  par_moves : Int,
+  par_moves : Int32,
 ) -> Level {
   { tier, name, rocks, clues, par_moves, }
 }
@@ -188,7 +188,7 @@ pub fn set_message(game : Game, msg : String, duration : Float) -> Unit {
 }
 
 ///|
-pub fn find_rock_slot(slots : Array[RockKind?], rock : RockKind) -> Int {
+pub fn find_rock_slot(slots : Array[RockKind?], rock : RockKind) -> Int32 {
   for i in 0..<slots.length() {
     match slots[i] {
       Some(r) => if r == rock { return i }
@@ -199,7 +199,7 @@ pub fn find_rock_slot(slots : Array[RockKind?], rock : RockKind) -> Int {
 }
 
 ///|
-pub fn count_filled_slots(slots : Array[RockKind?]) -> Int {
+pub fn count_filled_slots(slots : Array[RockKind?]) -> Int32 {
   let mut count = 0
   for i in 0..<slots.length() {
     match slots[i] {
@@ -216,7 +216,7 @@ pub fn all_slots_filled(slots : Array[RockKind?]) -> Bool {
 }
 
 ///|
-pub fn mini(a : Int, b : Int) -> Int {
+pub fn mini(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -225,7 +225,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-pub fn maxi(a : Int, b : Int) -> Int {
+pub fn maxi(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {

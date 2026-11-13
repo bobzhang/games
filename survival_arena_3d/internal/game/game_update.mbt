@@ -85,7 +85,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::switch_weapon(game : @types.Game, weapon : Int) -> Unit {
+fn @types.Game::switch_weapon(game : @types.Game, weapon : Int32) -> Unit {
   let wk = @types.WeaponKind::from_int(weapon)
   if game.player.current_weapon != wk {
     game.player.current_weapon = wk
@@ -101,7 +101,7 @@ fn @types.Game::switch_weapon(game : @types.Game, weapon : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::cycle_weapon(game : @types.Game, direction : Int) -> Unit {
+fn @types.Game::cycle_weapon(game : @types.Game, direction : Int32) -> Unit {
   let mut next = game.player.current_weapon.to_int() + direction
   // Wrap around and find next owned weapon
   for _attempts in 0..<@types.weapon_count {
@@ -307,7 +307,7 @@ fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::apply_pickup(game : @types.Game, kind : Int) -> Unit {
+fn @types.Game::apply_pickup(game : @types.Game, kind : Int32) -> Unit {
   if kind == @types.pickup_health {
     let heal : Float = 30.0
     game.player.hp = @types.minf(game.player.hp + heal, @types.player_max_hp)
@@ -527,7 +527,7 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::start_wave(game : @types.Game, wave : Int) -> Unit {
+fn @types.Game::start_wave(game : @types.Game, wave : Int32) -> Unit {
   game.enemies_to_spawn = @levels.get_wave_total_enemies(wave)
   game.wave_hp_mult = @levels.get_wave_hp_mult(wave)
   game.wave_speed_mult = @levels.get_wave_speed_mult(wave)
@@ -543,7 +543,7 @@ fn @types.Game::start_wave(game : @types.Game, wave : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
+fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int32) -> Unit {
   let wi = game.player.current_weapon.to_int()
   // For upgrade items, compute dynamic cost based on current level
   let cost = if item_idx == 7 {

@@ -1,20 +1,20 @@
 ///|
-let sw : Int = 1280
+let sw : Int32 = 1280
 
 ///|
-let sh : Int = 800
+let sh : Int32 = 800
 
 ///|
-let ground_y : Int = 642
+let ground_y : Int32 = 642
 
 ///|
-let max_bullets : Int = 140
+let max_bullets : Int32 = 140
 
 ///|
-let max_drones : Int = 64
+let max_drones : Int32 = 64
 
 ///|
-let max_bombs : Int = 96
+let max_bombs : Int32 = 96
 
 ///|
 struct Bullet {
@@ -32,8 +32,8 @@ struct Drone {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut hp : Int
-  mut kind : Int
+  mut hp : Int32
+  mut kind : Int32
   mut drop_cd : Float
   mut active : Bool
 }
@@ -61,10 +61,10 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 fn inside_rect(
   px : Float,
   py : Float,
-  rx : Int,
-  ry : Int,
-  rw : Int,
-  rh : Int,
+  rx : Int32,
+  ry : Int32,
+  rw : Int32,
+  rh : Int32,
 ) -> Bool {
   px >= Float::from_int(rx) &&
   px <= Float::from_int(rx + rw) &&
@@ -149,7 +149,12 @@ fn spawn_bullet(
 }
 
 ///|
-fn spawn_bomb(bombs : Array[Bomb], x : Float, y : Float, sector : Int) -> Unit {
+fn spawn_bomb(
+  bombs : Array[Bomb],
+  x : Float,
+  y : Float,
+  sector : Int32,
+) -> Unit {
   let mut done = false
   for bomb in bombs {
     if done {
@@ -166,7 +171,7 @@ fn spawn_bomb(bombs : Array[Bomb], x : Float, y : Float, sector : Int) -> Unit {
 }
 
 ///|
-fn spawn_drone(drones : Array[Drone], sector : Int) -> Unit {
+fn spawn_drone(drones : Array[Drone], sector : Int32) -> Unit {
   let mut done = false
   for drone in drones {
     if done {
@@ -200,7 +205,7 @@ fn spawn_drone(drones : Array[Drone], sector : Int) -> Unit {
 }
 
 ///|
-fn random_spawn_cd(sector : Int) -> Float {
+fn random_spawn_cd(sector : Int32) -> Float {
   let mut lo = 58 - sector * 8
   if lo < 26 {
     lo = 26
